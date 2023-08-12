@@ -10,6 +10,15 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    < 3.8.4
+    Home page line graph reset if selected graph deleted
+    Add all selected transactions to a category
+    Date time modified wasn't properly updated on some queries
+    Improved reordering of titles
+    Polished and improved delete process of everything
+    Original due date stored when transaction paid
+    Fixed left safe area
+    New navbar on Android
     < 3.8.3
     Select wallet and select budget now uses radio buttons bottom popup
     Added rounding to decimal precision when converting to money

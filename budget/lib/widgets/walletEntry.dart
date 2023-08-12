@@ -4,6 +4,7 @@ import 'package:budget/pages/addWalletPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/openContainerNavigation.dart';
+import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -147,7 +148,12 @@ class WalletEntry extends StatelessWidget {
               }
             },
             onLongPress: () {
-              pushRoute(context, AddWalletPage(wallet: wallet));
+              pushRoute(
+                  context,
+                  AddWalletPage(
+                    wallet: wallet,
+                    routesToPopAfterDelete: RoutesToPopAfterDelete.All,
+                  ));
             },
           );
         },

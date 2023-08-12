@@ -8,6 +8,7 @@ import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/notificationsGlobal.dart';
 import 'package:budget/struct/settings.dart';
+import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/settingsContainers.dart';
 import 'package:budget/widgets/util/showTimePicker.dart';
 import 'package:drift/drift.dart' hide Column;
@@ -168,6 +169,8 @@ class _UpcomingTransactionsNotificationsSettingsState
                                   context,
                                   AddTransactionPage(
                                     transaction: transaction,
+                                    routesToPopAfterDelete:
+                                        RoutesToPopAfterDelete.One,
                                   ),
                                 );
                               },

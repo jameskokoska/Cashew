@@ -12,7 +12,6 @@ import 'package:budget/widgets/fab.dart';
 import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/widgets/framework/popupFramework.dart';
 import 'package:budget/widgets/globalSnackBar.dart';
-import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/noResults.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
@@ -74,7 +73,9 @@ class _EditCategoriesPageState extends State<EditCategoriesPage> {
                 bottom: MediaQuery.of(context).viewPadding.bottom),
             child: FAB(
               tooltip: "add-category".tr(),
-              openPage: AddCategoryPage(),
+              openPage: AddCategoryPage(
+                routesToPopAfterDelete: RoutesToPopAfterDelete.None,
+              ),
             ),
           ),
         ),
@@ -211,10 +212,15 @@ class _EditCategoriesPageState extends State<EditCategoriesPage> {
                       ),
                       index: index,
                       onDelete: () {
-                        deleteCategoryPopup(context, category);
+                        deleteCategoryPopup(
+                          context,
+                          category: category,
+                          routesToPopAfterDelete: RoutesToPopAfterDelete.None,
+                        );
                       },
                       openPage: AddCategoryPage(
                         category: category,
+                        routesToPopAfterDelete: RoutesToPopAfterDelete.One,
                       ),
                     );
                   },
@@ -346,24 +352,18 @@ class RefreshButtonState extends State<RefreshButton>
   }
 }
 
-void deleteCategoryPopup(context, TransactionCategory category,
-    {Function? afterDelete}) async {
-  dynamic result = await openPopup(
+void deleteCategoryPopup(
+  BuildContext context, {
+  required TransactionCategory category,
+  required RoutesToPopAfterDelete routesToPopAfterDelete,
+}) async {
+  DeletePopupAction? action = await openDeletePopup(
     context,
-    title: "Delete " + category.name + " category?",
-    description:
-        "This will delete all transactions associated with this category.",
-    icon: Icons.delete_rounded,
-    onCancel: () {
-      Navigator.pop(context);
-    },
-    onCancelLabel: "cancel".tr(),
-    onSubmit: () async {
-      Navigator.pop(context, true);
-    },
-    onSubmitLabel: "delete".tr(),
+    title: "delete-category-question".tr(),
+    subtitle: category.name,
+    description: "delete-category-question-description".tr(),
   );
-  if (result == true) {
+  if (action == DeletePopupAction.Delete) {
     int transactionsFromCategoryLength =
         (await database.getAllTransactionsFromCategory(category.categoryPk))
             .length;
@@ -371,9 +371,8 @@ void deleteCategoryPopup(context, TransactionCategory category,
     if (transactionsFromCategoryLength > 0) {
       result = await openPopup(
         context,
-        title: "Delete all " + category.name + " transactions?",
-        description:
-            "Deleting a category will delete all transactions associated with this category. Merge the category to move transactions to another category.",
+        title: "delete-all-transactions-question".tr(),
+        description: "delete-category-merge-warning".tr(),
         icon: Icons.warning_amber_rounded,
         onCancel: () {
           Navigator.pop(context, false);
@@ -382,30 +381,43 @@ void deleteCategoryPopup(context, TransactionCategory category,
         onSubmit: () async {
           Navigator.pop(context, true);
         },
-        onExtra2: () {
+        onExtra2: () async {
           Navigator.pop(context, false);
-          mergeCategoryPopup(context, category);
+          mergeCategoryPopup(
+            context,
+            categoryOriginal: category,
+            routesToPopAfterDelete: routesToPopAfterDelete,
+          );
         },
-        onExtraLabel2: "merge-category".tr(),
+        onExtraLabel2: "move-transactions".tr(),
         onSubmitLabel: "delete".tr(),
       );
     }
     if (result == true) {
-      loadingIndeterminateKey.currentState!.setVisibility(true);
-      await database.deleteCategory(category.categoryPk, category.order);
-      await database.deleteCategoryTransactions(category.categoryPk);
-      loadingIndeterminateKey.currentState!.setVisibility(false);
-      Navigator.pop(context, true);
-      openSnackbar(
-        SnackbarMessage(title: "Deleted " + category.name, icon: Icons.delete),
-      );
-      if (afterDelete != null) afterDelete();
+      if (routesToPopAfterDelete == RoutesToPopAfterDelete.All) {
+        Navigator.of(context).popUntil((route) => route.isFirst);
+      } else if (routesToPopAfterDelete == RoutesToPopAfterDelete.One) {
+        Navigator.of(context).pop();
+      }
+      openLoadingPopupTryCatch(() async {
+        await database.deleteCategory(category.categoryPk, category.order);
+        openSnackbar(
+          SnackbarMessage(
+            title: "deleted-category".tr(),
+            icon: Icons.delete,
+            description: category.name,
+          ),
+        );
+      });
     }
   }
 }
 
 void mergeCategoryPopup(
-    BuildContext context, TransactionCategory categoryOriginal) {
+  BuildContext context, {
+  required TransactionCategory categoryOriginal,
+  required RoutesToPopAfterDelete routesToPopAfterDelete,
+}) {
   openBottomSheet(
     context,
     PopupFramework(
@@ -431,12 +443,22 @@ void mergeCategoryPopup(
               },
             );
             if (result == true) {
-              Navigator.pop(context);
-              openLoadingPopup(context);
-              await database.mergeAndDeleteCategory(categoryOriginal, category);
-              openSnackbar(
-                  SnackbarMessage(title: "Merged into " + category.name));
-              Navigator.pop(navigatorKey.currentContext!);
+              if (routesToPopAfterDelete == RoutesToPopAfterDelete.All) {
+                Navigator.of(context).popUntil((route) => route.isFirst);
+              } else if (routesToPopAfterDelete == RoutesToPopAfterDelete.One) {
+                Navigator.of(context).pop();
+              }
+              openLoadingPopupTryCatch(() async {
+                await database.mergeAndDeleteCategory(
+                    categoryOriginal, category);
+                openSnackbar(
+                  SnackbarMessage(
+                    title: "merged-category".tr(),
+                    icon: Icons.merge_rounded,
+                    description: categoryOriginal.name + " → " + category.name,
+                  ),
+                );
+              });
             }
           });
         },

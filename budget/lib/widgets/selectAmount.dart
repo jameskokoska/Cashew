@@ -9,6 +9,7 @@ import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/globalSnackBar.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
+import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/openSnackbar.dart';
 import 'package:budget/widgets/selectChips.dart';
 import 'package:budget/widgets/tappable.dart';
@@ -692,6 +693,8 @@ class _SelectAmountState extends State<SelectAmount> {
                             context,
                             AddWalletPage(
                               wallet: item,
+                              routesToPopAfterDelete:
+                                  RoutesToPopAfterDelete.PreventDelete,
                             ),
                           );
                         },
@@ -746,7 +749,9 @@ class _SelectAmountState extends State<SelectAmount> {
                           width: 40,
                           padding:
                               EdgeInsets.symmetric(horizontal: 5, vertical: 1),
-                          openPage: AddWalletPage(),
+                          openPage: AddWalletPage(
+                            routesToPopAfterDelete: RoutesToPopAfterDelete.None,
+                          ),
                           borderRadius: 8,
                         ),
                       ),

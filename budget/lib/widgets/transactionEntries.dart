@@ -1,6 +1,7 @@
 import 'package:budget/database/tables.dart';
 import 'package:budget/pages/transactionsSearchPage.dart';
 import 'package:budget/widgets/dateDivider.dart';
+import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/transactionEntry/transactionEntry.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/struct/settings.dart';
@@ -207,6 +208,8 @@ class TransactionEntries extends StatelessWidget {
                                 openPage: AddTransactionPage(
                                   transaction:
                                       transactionList[realIndex].transaction,
+                                  routesToPopAfterDelete:
+                                      RoutesToPopAfterDelete.One,
                                 ),
                                 transaction:
                                     transactionList[realIndex].transaction,
@@ -267,6 +270,8 @@ class TransactionEntries extends StatelessWidget {
                               openPage: AddTransactionPage(
                                 transaction:
                                     transactionList[realIndex].transaction,
+                                routesToPopAfterDelete:
+                                    RoutesToPopAfterDelete.One,
                               ),
                               transaction:
                                   transactionList[realIndex].transaction,
@@ -313,6 +318,8 @@ class TransactionEntries extends StatelessWidget {
                               category: item.category,
                               openPage: AddTransactionPage(
                                 transaction: item.transaction,
+                                routesToPopAfterDelete:
+                                    RoutesToPopAfterDelete.One,
                               ),
                               transaction: item.transaction,
                               onSelected:

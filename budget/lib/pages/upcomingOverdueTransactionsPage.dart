@@ -5,6 +5,7 @@ import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/subscriptionsPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/noResults.dart';
+import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/selectedTransactionsActionBar.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/widgets/textWidgets.dart';
@@ -84,6 +85,8 @@ class UpcomingOverdueTransactions extends StatelessWidget {
                               TransactionEntry(
                                 openPage: AddTransactionPage(
                                   transaction: transaction,
+                                  routesToPopAfterDelete:
+                                      RoutesToPopAfterDelete.One,
                                 ),
                                 transaction: transaction,
                                 listID: pageId,

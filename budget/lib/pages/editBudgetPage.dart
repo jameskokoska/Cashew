@@ -74,7 +74,9 @@ class _EditBudgetPageState extends State<EditBudgetPage> {
                 bottom: MediaQuery.of(context).viewPadding.bottom),
             child: FAB(
               tooltip: "add-budget".tr(),
-              openPage: AddBudgetPage(),
+              openPage: AddBudgetPage(
+                routesToPopAfterDelete: RoutesToPopAfterDelete.None,
+              ),
             ),
           ),
         ),
@@ -164,10 +166,16 @@ class _EditBudgetPageState extends State<EditBudgetPage> {
                               currentReorder != -1 && currentReorder != index,
                           accentColor: accentColor,
                           onDelete: () {
-                            deleteBudgetPopup(context, budget);
+                            deleteBudgetPopup(
+                              context,
+                              budget: budget,
+                              routesToPopAfterDelete:
+                                  RoutesToPopAfterDelete.None,
+                            );
                           },
                           openPage: AddBudgetPage(
                             budget: budget,
+                            routesToPopAfterDelete: RoutesToPopAfterDelete.One,
                           ),
                           content: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -371,42 +379,58 @@ class _EditBudgetPageState extends State<EditBudgetPage> {
   }
 }
 
-Future<dynamic> deleteBudgetPopup(context, Budget budget,
-    {Function? afterDelete}) async {
-  return openPopup(
-    context,
-    title: "delete".tr().capitalizeFirst + " " + budget.name + "?",
-    icon: Icons.delete_rounded,
-    onCancel: () {
-      Navigator.pop(context, false);
-    },
-    onCancelLabel: "cancel".tr(),
-    onSubmit: () async {
-      Navigator.pop(context, true);
-      int result = await database.deleteBudget(context, budget);
-      if (result == -1) return;
-      openSnackbar(SnackbarMessage(title: "deleted-budget".tr()));
-      if (afterDelete != null) afterDelete();
-    },
-    onSubmitLabel: "delete".tr(),
-  );
-}
-
-Future<dynamic> deleteAddedTransactionsOnlyBudgetPopup(context, Budget budget) {
-  return openPopup(
+void deleteBudgetPopup(
+  BuildContext context, {
+  required Budget budget,
+  required RoutesToPopAfterDelete routesToPopAfterDelete,
+}) async {
+  DeletePopupAction? action = await openDeletePopup(
     context,
     title: "delete-budget-question".tr(),
-    description: "delete-budget-added-warning".tr(),
-    icon: Icons.delete_rounded,
-    onCancel: () {
-      Navigator.pop(context, false);
-    },
-    onCancelLabel: "cancel".tr(),
-    onSubmit: () async {
-      Navigator.pop(context, true);
-    },
-    onSubmitLabel: "delete".tr(),
+    subtitle: budget.name,
   );
+  if (action == DeletePopupAction.Delete) {
+    dynamic result = true;
+    if (budget.sharedKey != null) {
+      result = await deleteSharedBudgetPopup(context, budget);
+    } else if (budget.addedTransactionsOnly) {
+      int? numTransactions =
+          await database.getTotalCountOfTransactionsInBudget(budget.budgetPk);
+      if (numTransactions != null && numTransactions > 0) {
+        result = await openPopup(
+          context,
+          title: "remove-transactions-from-added-budget-question".tr(),
+          description: "delete-budget-added-warning".tr(),
+          icon: Icons.warning_amber_rounded,
+          onCancel: () {
+            Navigator.pop(context, false);
+          },
+          onCancelLabel: "cancel".tr(),
+          onSubmit: () async {
+            Navigator.pop(context, true);
+          },
+          onSubmitLabel: "delete-budget".tr(),
+        );
+      }
+    }
+    if (result == true) {
+      if (routesToPopAfterDelete == RoutesToPopAfterDelete.All) {
+        Navigator.of(context).popUntil((route) => route.isFirst);
+      } else if (routesToPopAfterDelete == RoutesToPopAfterDelete.One) {
+        Navigator.of(context).pop();
+      }
+      openLoadingPopupTryCatch(() async {
+        await database.deleteBudget(context, budget);
+        openSnackbar(
+          SnackbarMessage(
+            title: "deleted-budget".tr(),
+            icon: Icons.delete,
+            description: budget.name,
+          ),
+        );
+      });
+    }
+  }
 }
 
 Future<dynamic> deleteSharedBudgetPopup(context, Budget budget) {
@@ -514,6 +538,7 @@ Future<dynamic> selectAddableBudgetPopup(BuildContext context,
                         context,
                         AddBudgetPage(
                           isAddedOnlyBudget: true,
+                          routesToPopAfterDelete: RoutesToPopAfterDelete.None,
                         ),
                       );
                     },

@@ -38,11 +38,14 @@ class AddBudgetPage extends StatefulWidget {
     Key? key,
     this.budget,
     this.isAddedOnlyBudget = false,
+    required this.routesToPopAfterDelete,
   }) : super(key: key);
   final bool isAddedOnlyBudget;
 
-  //When a transaction is passed in, we are editing that transaction
+  //When a budget is passed in, we are editing that budget
   final Budget? budget;
+
+  final RoutesToPopAfterDelete routesToPopAfterDelete;
 
   @override
   _AddBudgetPageState createState() => _AddBudgetPageState();
@@ -458,17 +461,19 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
               showButtons: widget.budget == null || enableDoubleColumn(context),
               keepOutFirst: true,
               items: [
-                if (widget.budget != null)
+                if (widget.budget != null &&
+                    widget.routesToPopAfterDelete !=
+                        RoutesToPopAfterDelete.PreventDelete)
                   DropdownItemMenu(
                     id: "delete-budget",
                     label: "delete-budget".tr(),
                     icon: Icons.delete_rounded,
                     action: () {
-                      deleteBudgetPopup(context, widget.budget!,
-                          afterDelete: () {
-                        Navigator.of(context)
-                            .popUntil((route) => route.isFirst);
-                      });
+                      deleteBudgetPopup(
+                        context,
+                        budget: widget.budget!,
+                        routesToPopAfterDelete: widget.routesToPopAfterDelete,
+                      );
                     },
                   ),
                 DropdownItemMenu(

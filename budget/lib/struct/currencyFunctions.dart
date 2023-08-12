@@ -32,6 +32,7 @@ Future<bool> getExchangeRates() async {
 
 double? amountRatioToPrimaryCurrencyGivenPk(
     AllWallets allWallets, String walletPk) {
+  if (allWallets.indexedByPk[walletPk] == null) return null;
   return amountRatioToPrimaryCurrency(
       allWallets, allWallets.indexedByPk[walletPk]?.currency);
 }
@@ -48,6 +49,10 @@ double? amountRatioToPrimaryCurrency(
       walletCurrency) {
     return 1;
   }
+  if (allWallets.indexedByPk[appStateSettings["selectedWalletPk"]] == null) {
+    return 1;
+  }
+
   double exchangeRateFromUSDToTarget =
       appStateSettings["cachedCurrencyExchange"][allWallets
               .indexedByPk[appStateSettings["selectedWalletPk"]]?.currency]

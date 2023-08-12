@@ -2,8 +2,8 @@ import 'package:budget/database/tables.dart';
 import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/subscriptionsPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
+import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/transactionEntry/transactionEntry.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 class HomeUpcomingTransactionSlivers extends StatelessWidget {
@@ -42,6 +42,7 @@ class HomeUpcomingTransactionSlivers extends StatelessWidget {
                         useHorizontalPaddingConstrained: false,
                         openPage: AddTransactionPage(
                           transaction: transaction,
+                          routesToPopAfterDelete: RoutesToPopAfterDelete.One,
                         ),
                         transaction: transaction,
                       ),

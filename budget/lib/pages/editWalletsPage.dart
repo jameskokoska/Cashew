@@ -71,7 +71,9 @@ class _EditWalletsPageState extends State<EditWalletsPage> {
                 bottom: MediaQuery.of(context).viewPadding.bottom),
             child: FAB(
               tooltip: "add-wallet".tr(),
-              openPage: AddWalletPage(),
+              openPage: AddWalletPage(
+                routesToPopAfterDelete: RoutesToPopAfterDelete.None,
+              ),
             ),
           ),
         ),
@@ -139,7 +141,7 @@ class _EditWalletsPageState extends State<EditWalletsPage> {
                       onExtra: () async {
                         setPrimaryWallet(wallet.walletPk);
                       },
-                      canDelete: (wallet.walletPk != 0),
+                      canDelete: (wallet.walletPk != "0"),
                       canReorder: searchValue == "" &&
                           (snapshot.data ?? []).length != 1,
                       currentReorder:
@@ -202,11 +204,15 @@ class _EditWalletsPageState extends State<EditWalletsPage> {
                         ],
                       ),
                       onDelete: () {
-                        deleteWalletPopup(context, wallet);
+                        deleteWalletPopup(
+                          context,
+                          wallet: wallet,
+                          routesToPopAfterDelete: RoutesToPopAfterDelete.None,
+                        );
                       },
                       openPage: AddWalletPage(
-                        wallet: wallet,
-                      ),
+                          wallet: wallet,
+                          routesToPopAfterDelete: RoutesToPopAfterDelete.One),
                       key: ValueKey(index),
                     );
                   },
@@ -239,54 +245,96 @@ class _EditWalletsPageState extends State<EditWalletsPage> {
   }
 }
 
-void deleteWalletPopup(context, TransactionWallet wallet,
-    {Function? afterDelete}) {
-  openPopup(
+void deleteWalletPopup(
+  BuildContext context, {
+  required TransactionWallet wallet,
+  required RoutesToPopAfterDelete routesToPopAfterDelete,
+}) async {
+  DeletePopupAction? action = await openDeletePopup(
     context,
-    title: "delete".tr().capitalizeFirst + " " + wallet.name + "?",
-    description: "delete-wallet-description".tr(),
-    icon: Icons.delete_rounded,
-    onCancel: () {
-      Navigator.pop(context);
-    },
-    onCancelLabel: "cancel".tr(),
-    onExtraLabel2: "move-to-other-wallet-button".tr(),
-    onExtra2: () async {
-      Navigator.pop(context);
-      var result =
-          await selectWalletPopup(context, removeWalletPk: wallet.walletPk);
-      if (result != null) {
-        await database.moveWalletTransactons(
-          Provider.of<AllWallets>(context, listen: false),
-          wallet.walletPk,
-          result.walletPk,
-        );
-        if (appStateSettings["selectedWalletPk"] == wallet.walletPk) {
-          setPrimaryWallet("0");
-        }
-        database.deleteWallet(wallet.walletPk, wallet.order);
-        Navigator.pop(context);
-        openSnackbar(
-          SnackbarMessage(title: "Deleted " + wallet.name, icon: Icons.delete),
-        );
-        if (afterDelete != null) afterDelete();
-      }
-    },
-    onSubmit: () async {
-      await database.deleteWalletsTransactions(wallet.walletPk);
-      // If we delete the selected wallet, set it back to the default
-      if (appStateSettings["selectedWalletPk"] == wallet.walletPk) {
-        setPrimaryWallet("0");
-      }
-      database.deleteWallet(wallet.walletPk, wallet.order);
-      Navigator.pop(context);
-      openSnackbar(
-        SnackbarMessage(title: "Deleted " + wallet.name, icon: Icons.delete),
-      );
-      if (afterDelete != null) afterDelete();
-    },
-    onSubmitLabel: "delete".tr(),
+    title: "delete-wallet-question".tr(),
+    subtitle: wallet.name,
+    description: "delete-wallet-question-description".tr(),
   );
+  if (action == DeletePopupAction.Delete) {
+    int transactionsFromWalletLength =
+        (await database.getAllTransactionsFromWallet(wallet.walletPk)).length;
+    dynamic result = true;
+    if (transactionsFromWalletLength > 0) {
+      result = await openPopup(
+        context,
+        title: "delete-all-transactions-question".tr(),
+        description: "delete-wallet-merge-warning".tr(),
+        icon: Icons.warning_amber_rounded,
+        onCancel: () {
+          Navigator.pop(context, false);
+        },
+        onCancelLabel: "cancel".tr(),
+        onSubmit: () async {
+          Navigator.pop(context, true);
+        },
+        onExtra2: () {
+          Navigator.pop(context, false);
+          mergeWalletPopup(
+            context,
+            walletOriginal: wallet,
+            routesToPopAfterDelete: routesToPopAfterDelete,
+          );
+        },
+        onExtraLabel2: "move-transactions".tr(),
+        onSubmitLabel: "delete".tr(),
+      );
+    }
+    if (result == true) {
+      if (routesToPopAfterDelete == RoutesToPopAfterDelete.All) {
+        Navigator.of(context).popUntil((route) => route.isFirst);
+      } else if (routesToPopAfterDelete == RoutesToPopAfterDelete.One) {
+        Navigator.of(context).pop();
+      }
+      openLoadingPopupTryCatch(() async {
+        await database.deleteWallet(wallet.walletPk, wallet.order);
+        openSnackbar(
+          SnackbarMessage(
+            title: "deleted-wallet".tr(),
+            icon: Icons.delete,
+            description: wallet.name,
+          ),
+        );
+      });
+    }
+  }
+}
+
+void mergeWalletPopup(
+  BuildContext context, {
+  required TransactionWallet walletOriginal,
+  required RoutesToPopAfterDelete routesToPopAfterDelete,
+}) async {
+  var result =
+      await selectWalletPopup(context, removeWalletPk: walletOriginal.walletPk);
+  if (result != null) {
+    if (routesToPopAfterDelete == RoutesToPopAfterDelete.All) {
+      Navigator.of(context).popUntil((route) => route.isFirst);
+    } else if (routesToPopAfterDelete == RoutesToPopAfterDelete.One) {
+      Navigator.of(context).pop();
+    }
+    openLoadingPopupTryCatch(() async {
+      await database.moveWalletTransactions(
+        Provider.of<AllWallets>(context, listen: false),
+        walletOriginal.walletPk,
+        result.walletPk,
+      );
+      await database.deleteWallet(
+          walletOriginal.walletPk, walletOriginal.order);
+      openSnackbar(
+        SnackbarMessage(
+          title: "deleted-wallet".tr(),
+          icon: Icons.delete,
+          description: walletOriginal.name,
+        ),
+      );
+    });
+  }
 }
 
 Future<TransactionWallet?> selectWalletPopup(BuildContext context,

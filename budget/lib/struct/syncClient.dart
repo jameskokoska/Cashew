@@ -13,6 +13,7 @@ import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openSnackbar.dart';
 import 'package:budget/widgets/util/debouncer.dart';
 import 'package:budget/widgets/walletEntry.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
@@ -381,9 +382,9 @@ Future<bool> syncData(BuildContext context) async {
       print(e.toString());
       openSnackbar(
         SnackbarMessage(
-          title: "Sync failed",
-          description: "Mismatching schema versions",
-          icon: Icons.warning_amber_rounded,
+          title: "syncing-failed".tr(),
+          description: "sync-fail-reason".tr(),
+          icon: Icons.sync_problem_rounded,
         ),
       );
       filesSyncing.remove(file);

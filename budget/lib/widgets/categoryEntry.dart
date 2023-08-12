@@ -6,6 +6,7 @@ import 'package:budget/pages/addCategoryPage.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/categoryIcon.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
+import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -315,6 +316,8 @@ class CategoryEntry extends StatelessWidget {
                             context,
                             AddCategoryPage(
                               category: category,
+                              routesToPopAfterDelete:
+                                  RoutesToPopAfterDelete.One,
                             ),
                           ),
                   color: Colors.transparent,

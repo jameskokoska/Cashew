@@ -667,7 +667,11 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
                       ),
                 safeToIgnoreBG
                     ? Opacity(
-                        opacity: 1 - percent,
+                        opacity: (1 - percent) < 0
+                            ? 0
+                            : (1 - percent) > 1
+                                ? 1
+                                : (1 - percent),
                         child: Container(
                           color: appBarBackgroundColorStart == null
                               ? Theme.of(context).canvasColor
@@ -678,7 +682,11 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
                 safeToIgnoreBG
                     ? SizedBox.shrink()
                     : Opacity(
-                        opacity: percent,
+                        opacity: (percent) < 0
+                            ? 0
+                            : (percent) > 1
+                                ? 1
+                                : (percent),
                         child: Container(
                           color: appBarBGColorCalculated,
                         ),
@@ -770,7 +778,8 @@ class BlurBehind extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (getPlatform() != PlatformOS.isIOS) return child;
+    if (getPlatform() != PlatformOS.isIOS || appStateSettings["disableBlur"])
+      return child;
     return ClipRRect(
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 0.5, sigmaY: 0.5),

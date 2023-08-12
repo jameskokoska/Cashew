@@ -20,7 +20,6 @@ import 'package:budget/widgets/settingsContainers.dart';
 import 'package:budget/widgets/statusBox.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/main.dart';
@@ -318,14 +317,6 @@ Future<void> parseEmailsInBackground(context,
             title: templateFound!.templateName + ": " + "From Email",
             description: title,
             icon: Icons.payments_rounded,
-            onTap: () {
-              pushRoute(
-                context,
-                AddTransactionPage(
-                  transaction: transactionToAdd,
-                ),
-              );
-            },
           ),
         );
         // TODO have setting so they can choose if the emails are markes as read
@@ -626,27 +617,22 @@ class ScannerTemplateEntry extends StatelessWidget {
                   ),
                   ButtonIcon(
                     onTap: () async {
-                      openPopup(
+                      DeletePopupAction? action = await openDeletePopup(
                         context,
-                        title: "Delete " + scannerTemplate.templateName + "?",
-                        icon: Icons.delete_rounded,
-                        onCancel: () {
-                          Navigator.pop(context);
-                        },
-                        onCancelLabel: "cancel".tr(),
-                        onSubmit: () async {
-                          await database.deleteScannerTemplate(
-                              scannerTemplate.scannerTemplatePk);
-                          Navigator.pop(context);
-                          openSnackbar(
-                            SnackbarMessage(
-                              title: "Deleted " + scannerTemplate.templateName,
-                              icon: Icons.delete,
-                            ),
-                          );
-                        },
-                        onSubmitLabel: "delete".tr(),
+                        title: "Delete template?",
+                        subtitle: scannerTemplate.templateName,
                       );
+                      if (action == DeletePopupAction.Delete) {
+                        await database.deleteScannerTemplate(
+                            scannerTemplate.scannerTemplatePk);
+                        Navigator.pop(context);
+                        openSnackbar(
+                          SnackbarMessage(
+                            title: "Deleted " + scannerTemplate.templateName,
+                            icon: Icons.delete,
+                          ),
+                        );
+                      }
                     },
                     icon: Icons.delete_rounded,
                   )

@@ -1,8 +1,11 @@
 import 'package:budget/functions.dart';
+import 'package:budget/main.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
+import 'package:budget/widgets/globalSnackBar.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
+import 'package:budget/widgets/openSnackbar.dart';
 import 'package:drift/drift.dart' hide Column;
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +16,7 @@ Future<T?> openPopup<T extends Object?>(
   BuildContext context, {
   IconData? icon,
   String? title,
+  String? subtitle,
   String? description,
   String? onSubmitLabel,
   String? onCancelLabel,
@@ -98,28 +102,46 @@ Future<T?> openPopup<T extends Object?>(
                                     ),
                                   )
                                 : SizedBox.shrink(),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 8.0, horizontal: 10),
-                              child: TextFont(
-                                textAlign: TextAlign.center,
-                                text: title ?? "",
-                                fontSize: 23,
-                                fontWeight: FontWeight.bold,
-                                maxLines: 5,
-                                textColor: Theme.of(context)
-                                    .colorScheme
-                                    .onPrimaryContainer,
-                              ),
-                            ),
-                            description != "" && description != null
+                            title != null
+                                ? Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 8.0, horizontal: 10),
+                                    child: TextFont(
+                                      textAlign: TextAlign.center,
+                                      text: title,
+                                      fontSize: 23,
+                                      fontWeight: FontWeight.bold,
+                                      maxLines: 5,
+                                      textColor: Theme.of(context)
+                                          .colorScheme
+                                          .onPrimaryContainer,
+                                    ),
+                                  )
+                                : SizedBox.shrink(),
+                            subtitle != null
+                                ? Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 8.0, horizontal: 10),
+                                    child: TextFont(
+                                      textAlign: TextAlign.center,
+                                      text: subtitle,
+                                      fontSize: 21,
+                                      fontWeight: FontWeight.bold,
+                                      maxLines: 5,
+                                      textColor: Theme.of(context)
+                                          .colorScheme
+                                          .onTertiaryContainer,
+                                    ),
+                                  )
+                                : SizedBox.shrink(),
+                            description != null
                                 ? Padding(
                                     padding: const EdgeInsets.symmetric(
                                         vertical: 8.0, horizontal: 10),
                                     child: TextFont(
                                       textAlign: TextAlign.center,
                                       text: description,
-                                      fontSize: 17,
+                                      fontSize: 16.5,
                                       maxLines: 100,
                                     ),
                                   )
@@ -227,6 +249,49 @@ Future<T?> openPopup<T extends Object?>(
   );
 }
 
+enum DeletePopupAction {
+  Cancel,
+  Delete,
+  Extra,
+}
+
+enum RoutesToPopAfterDelete {
+  None,
+  One,
+  All,
+  PreventDelete,
+}
+
+Future<DeletePopupAction?> openDeletePopup(
+  BuildContext context, {
+  String? title,
+  String? subtitle,
+  String? description,
+  String? extraLabel,
+}) async {
+  dynamic result = await openPopup(
+    context,
+    title: title,
+    subtitle: subtitle,
+    description: description,
+    icon: Icons.delete_rounded,
+    onCancel: () {
+      Navigator.pop(context, DeletePopupAction.Cancel);
+    },
+    onCancelLabel: "cancel".tr(),
+    onSubmit: () async {
+      Navigator.pop(context, DeletePopupAction.Delete);
+    },
+    onSubmitLabel: "delete".tr(),
+    onExtraLabel2: extraLabel,
+    onExtra2: () async {
+      Navigator.pop(context, DeletePopupAction.Extra);
+    },
+  );
+  if (result is DeletePopupAction) return result;
+  return null;
+}
+
 Future<T?> openPopupCustom<T extends Object?>(
   BuildContext context, {
   String? title,
@@ -301,7 +366,7 @@ Future<T?> openPopupCustom<T extends Object?>(
   );
 }
 
-Future<T?> openLoadingPopup<T extends Object?>(context) {
+Future<T?> openLoadingPopup<T extends Object?>(BuildContext context) {
   return showGeneralDialog(
     context: context,
     barrierDismissible: false,
@@ -349,6 +414,23 @@ Future<T?> openLoadingPopup<T extends Object?>(context) {
       );
     },
   );
+}
+
+Future openLoadingPopupTryCatch(Future Function() function,
+    {BuildContext? context}) async {
+  openLoadingPopup(context ?? navigatorKey.currentContext!);
+  try {
+    await function();
+  } catch (e) {
+    openSnackbar(
+      SnackbarMessage(
+        title: "an-error-occured".tr(),
+        icon: Icons.warning_amber_rounded,
+        description: e.toString(),
+      ),
+    );
+  }
+  Navigator.of(context ?? navigatorKey.currentContext!).pop();
 }
 
 void discardChangesPopup(context,

@@ -28,6 +28,7 @@ import 'package:budget/widgets/fab.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/notificationsSettings.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
+import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/ratingPopup.dart';
 import 'package:budget/widgets/showChangelog.dart';
 import 'package:budget/struct/initializeNotifications.dart';
@@ -280,16 +281,24 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
             alignment: Alignment.bottomRight,
             child: Padding(
               padding: EdgeInsets.only(
-                bottom: (getIsFullScreen(context) == false
-                        ? 75 +
-                            MediaQuery.of(context).viewPadding.bottom -
-                            (getPlatform() != PlatformOS.isIOS &&
-                                    MediaQuery.of(context).viewPadding.bottom >
-                                        10
-                                ? 10
-                                : 0)
-                        : 15 + MediaQuery.of(context).viewPadding.bottom) +
-                    (getPlatform() == PlatformOS.isIOS ? 7 : 0),
+                bottom: appStateSettings["oldAndroidNavbar"] == true
+                    ? ((getIsFullScreen(context) == false
+                            ? 75 +
+                                MediaQuery.of(context).viewPadding.bottom -
+                                (getPlatform() != PlatformOS.isIOS &&
+                                        MediaQuery.of(context)
+                                                .viewPadding
+                                                .bottom >
+                                            10
+                                    ? 10
+                                    : 0)
+                            : 15 + MediaQuery.of(context).viewPadding.bottom) +
+                        (getPlatform() == PlatformOS.isIOS ? 7 : 0))
+                    : (getIsFullScreen(context) == false
+                            ? 95 + MediaQuery.of(context).viewPadding.bottom
+                            : 15 + MediaQuery.of(context).viewPadding.bottom) -
+                        // iOS navbar is lower
+                        (getPlatform() == PlatformOS.isIOS ? 10 : 0),
                 right: 15,
               ),
               child: Stack(
@@ -355,7 +364,10 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
                             key: ValueKey(1),
                             fab: FAB(
                               tooltip: "add-transaction".tr(),
-                              openPage: AddTransactionPage(),
+                              openPage: AddTransactionPage(
+                                routesToPopAfterDelete:
+                                    RoutesToPopAfterDelete.None,
+                              ),
                             ),
                             condition: currentPage == 0 || currentPage == 1,
                           )
@@ -363,7 +375,10 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
                             key: ValueKey(2),
                             fab: FAB(
                               tooltip: "add-budget".tr(),
-                              openPage: AddBudgetPage(),
+                              openPage: AddBudgetPage(
+                                routesToPopAfterDelete:
+                                    RoutesToPopAfterDelete.None,
+                              ),
                             ),
                             condition: currentPage == 2,
                           ),

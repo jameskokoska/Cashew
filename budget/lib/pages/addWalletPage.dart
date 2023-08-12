@@ -25,10 +25,12 @@ class AddWalletPage extends StatefulWidget {
   AddWalletPage({
     Key? key,
     this.wallet,
+    required this.routesToPopAfterDelete,
   }) : super(key: key);
 
   //When a wallet is passed in, we are editing that wallet
   final TransactionWallet? wallet;
+  final RoutesToPopAfterDelete routesToPopAfterDelete;
 
   @override
   _AddWalletPageState createState() => _AddWalletPageState();
@@ -299,17 +301,20 @@ class _AddWalletPageState extends State<AddWalletPage> {
               },
               icon: Icon(Icons.info),
             ),
-            ...(widget.wallet != null && widget.wallet!.walletPk != 0
+            ...(widget.wallet != null &&
+                    widget.wallet!.walletPk != "0" &&
+                    widget.routesToPopAfterDelete !=
+                        RoutesToPopAfterDelete.PreventDelete
                 ? [
                     IconButton(
                       padding: EdgeInsets.all(15),
                       tooltip: "Delete wallet",
                       onPressed: () {
-                        deleteWalletPopup(context, widget.wallet!,
-                            afterDelete: () {
-                          Navigator.of(context)
-                              .popUntil((route) => route.isFirst);
-                        });
+                        deleteWalletPopup(
+                          context,
+                          wallet: widget.wallet!,
+                          routesToPopAfterDelete: widget.routesToPopAfterDelete,
+                        );
                       },
                       icon: Icon(Icons.delete_rounded),
                     )

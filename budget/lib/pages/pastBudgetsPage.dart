@@ -18,6 +18,7 @@ import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openContainerNavigation.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/widgets/framework/popupFramework.dart';
+import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/selectCategory.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
@@ -284,6 +285,7 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
               context,
               AddBudgetPage(
                 budget: widget.budget,
+                routesToPopAfterDelete: RoutesToPopAfterDelete.All,
               ),
             );
           },
@@ -1179,6 +1181,7 @@ class PastBudgetContainer extends StatelessWidget {
                 context,
                 AddBudgetPage(
                   budget: budget,
+                  routesToPopAfterDelete: RoutesToPopAfterDelete.All,
                 ),
               );
             },
@@ -1225,6 +1228,7 @@ class CategoryAverageSpent extends StatelessWidget {
           context,
           AddCategoryPage(
             category: category,
+            routesToPopAfterDelete: RoutesToPopAfterDelete.One,
           ),
         );
       },

@@ -1,13 +1,13 @@
 import 'package:budget/database/tables.dart';
 import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/addCategoryPage.dart';
-import 'package:budget/pages/budgetPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/keepAliveClientMixin.dart';
 import 'package:budget/widgets/budgetContainer.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
+import 'package:budget/widgets/openPopup.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 
@@ -41,7 +41,9 @@ class _HomePageBudgetsState extends State<HomePageBudgets> {
                       width: null,
                       padding: const EdgeInsets.only(
                           left: 13, right: 13, bottom: 13),
-                      openPage: AddBudgetPage(),
+                      openPage: AddBudgetPage(
+                        routesToPopAfterDelete: RoutesToPopAfterDelete.None,
+                      ),
                     );
             }
             // if (snapshot.data!.length == 1) {
@@ -71,7 +73,9 @@ class _HomePageBudgetsState extends State<HomePageBudgets> {
                   height: null,
                   width: null,
                   padding: EdgeInsets.all(0),
-                  openPage: AddBudgetPage(),
+                  openPage: AddBudgetPage(
+                    routesToPopAfterDelete: RoutesToPopAfterDelete.None,
+                  ),
                 ),
               ),
             ];

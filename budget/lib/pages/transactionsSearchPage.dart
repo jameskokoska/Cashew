@@ -7,6 +7,7 @@ import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/fab.dart';
 import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/struct/databaseGlobal.dart';
+import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/selectedTransactionsActionBar.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
@@ -137,7 +138,9 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
                       bottom: MediaQuery.of(context).viewPadding.bottom),
                   child: FAB(
                     tooltip: "add-transaction".tr(),
-                    openPage: AddTransactionPage(),
+                    openPage: AddTransactionPage(
+                      routesToPopAfterDelete: RoutesToPopAfterDelete.None,
+                    ),
                   ),
                 ),
               ),
@@ -853,6 +856,8 @@ class _TransactionFiltersSelectionState
                     context,
                     AddWalletPage(
                       wallet: item,
+                      routesToPopAfterDelete:
+                          RoutesToPopAfterDelete.PreventDelete,
                     ),
                   );
                 },
@@ -900,6 +905,8 @@ class _TransactionFiltersSelectionState
                     context,
                     AddBudgetPage(
                       budget: item,
+                      routesToPopAfterDelete:
+                          RoutesToPopAfterDelete.PreventDelete,
                     ),
                   );
                 },

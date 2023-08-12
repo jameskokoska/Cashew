@@ -63,12 +63,14 @@ class AddTransactionPage extends StatefulWidget {
     this.transaction,
     this.selectedBudget,
     this.selectedType,
+    required this.routesToPopAfterDelete,
   }) : super(key: key);
 
   //When a transaction is passed in, we are editing that transaction
   final Transaction? transaction;
   final Budget? selectedBudget;
   final TransactionSpecialType? selectedType;
+  final RoutesToPopAfterDelete routesToPopAfterDelete;
 
   @override
   _AddTransactionPageState createState() => _AddTransactionPageState();
@@ -422,6 +424,9 @@ class _AddTransactionPageState extends State<AddTransactionPage>
       upcomingTransactionNotification: widget.transaction != null
           ? widget.transaction!.upcomingTransactionNotification
           : null,
+      originalDateDue: widget.transaction != null
+          ? widget.transaction!.originalDateDue
+          : null,
     );
 
     if (widget.transaction != null &&
@@ -712,6 +717,8 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                     context,
                     AddCategoryPage(
                       category: selectedCategory,
+                      routesToPopAfterDelete:
+                          RoutesToPopAfterDelete.PreventDelete,
                     ),
                   );
                   if (selectedCategory != null) {
@@ -1109,28 +1116,11 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                     padding: EdgeInsets.all(15),
                     tooltip: "delete-transaction".tr(),
                     onPressed: () {
-                      openPopup(
+                      deleteTransactionPopup(
                         context,
-                        title: "delete-transaction-question".tr(),
-                        description: "delete-transaction-description".tr(),
-                        icon: Icons.delete_rounded,
-                        onCancel: () {
-                          Navigator.pop(context);
-                        },
-                        onCancelLabel: "cancel".tr(),
-                        onSubmit: () {
-                          openSnackbar(
-                            SnackbarMessage(
-                              title: "deleted-transaction".tr(),
-                              icon: Icons.delete_rounded,
-                            ),
-                          );
-                          Navigator.pop(context);
-                          database.deleteTransaction(
-                              widget.transaction!.transactionPk);
-                          Navigator.pop(context);
-                        },
-                        onSubmitLabel: "delete".tr(),
+                        transaction: widget.transaction!,
+                        category: selectedCategory,
+                        routesToPopAfterDelete: widget.routesToPopAfterDelete,
                       );
                     },
                     icon: Icon(Icons.delete_rounded),
@@ -1462,6 +1452,9 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                           context,
                                           AddWalletPage(
                                             wallet: wallet,
+                                            routesToPopAfterDelete:
+                                                RoutesToPopAfterDelete
+                                                    .PreventDelete,
                                           ),
                                         );
                                       },
@@ -1509,7 +1502,10 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                         width: 40,
                                         padding: EdgeInsets.symmetric(
                                             horizontal: 5, vertical: 1),
-                                        openPage: AddWalletPage(),
+                                        openPage: AddWalletPage(
+                                          routesToPopAfterDelete:
+                                              RoutesToPopAfterDelete.None,
+                                        ),
                                         borderRadius: 8,
                                       ),
                                     ),
@@ -2375,6 +2371,8 @@ class _SelectAddedBudgetState extends State<SelectAddedBudget> {
                       context,
                       AddBudgetPage(
                         budget: item,
+                        routesToPopAfterDelete:
+                            RoutesToPopAfterDelete.PreventDelete,
                       ),
                     );
                   },
@@ -2384,6 +2382,7 @@ class _SelectAddedBudgetState extends State<SelectAddedBudget> {
                     padding: EdgeInsets.symmetric(horizontal: 5, vertical: 1),
                     openPage: AddBudgetPage(
                       isAddedOnlyBudget: true,
+                      routesToPopAfterDelete: RoutesToPopAfterDelete.One,
                     ),
                     borderRadius: 8,
                   ),
@@ -2464,4 +2463,74 @@ void showIncomeCannotBeAddedToBudgetWarning() {
       timeout: Duration(milliseconds: 5000),
     ),
   );
+}
+
+void deleteTransactionPopup(
+  BuildContext context, {
+  required Transaction transaction,
+  required TransactionCategory? category,
+  required RoutesToPopAfterDelete routesToPopAfterDelete,
+}) async {
+  String? transactionName =
+      transaction.name.trim() == "" ? category?.name ?? null : transaction.name;
+  DeletePopupAction? action = await openDeletePopup(
+    context,
+    title: "delete-transaction-question".tr(),
+    subtitle: transactionName,
+  );
+  if (action == DeletePopupAction.Delete) {
+    if (routesToPopAfterDelete == RoutesToPopAfterDelete.All) {
+      Navigator.of(context).popUntil((route) => route.isFirst);
+    } else if (routesToPopAfterDelete == RoutesToPopAfterDelete.One) {
+      Navigator.of(context).pop();
+    }
+    openLoadingPopupTryCatch(() async {
+      await database.deleteTransaction(transaction.transactionPk);
+      openSnackbar(
+        SnackbarMessage(
+          title: "deleted-transaction".tr(),
+          icon: Icons.delete,
+          description: transactionName,
+        ),
+      );
+    });
+  }
+}
+
+Future deleteTransactionsPopup(
+  BuildContext context, {
+  required List<String> transactionPks,
+  required RoutesToPopAfterDelete routesToPopAfterDelete,
+}) async {
+  DeletePopupAction? action = await openDeletePopup(
+    context,
+    title: "delete-selected-transactions".tr(),
+    subtitle: transactionPks.length.toString() +
+        " " +
+        (transactionPks.length == 1
+            ? "transaction".tr().toLowerCase()
+            : "transactions".tr().toLowerCase()),
+  );
+  if (action == DeletePopupAction.Delete) {
+    if (routesToPopAfterDelete == RoutesToPopAfterDelete.All) {
+      Navigator.of(context).popUntil((route) => route.isFirst);
+    } else if (routesToPopAfterDelete == RoutesToPopAfterDelete.One) {
+      Navigator.of(context).pop();
+    }
+    openLoadingPopupTryCatch(() async {
+      await database.deleteTransactions(transactionPks);
+      openSnackbar(
+        SnackbarMessage(
+          title: "deleted-transactions".tr(),
+          icon: Icons.delete,
+          description: transactionPks.length.toString() +
+              " " +
+              (transactionPks.length == 1
+                  ? "transaction".tr().toLowerCase()
+                  : "transactions".tr().toLowerCase()),
+        ),
+      );
+    });
+  }
+  return action;
 }

@@ -3,6 +3,7 @@ import 'package:budget/database/tables.dart';
 import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
+import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/selectedTransactionsActionBar.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/fab.dart';
@@ -60,6 +61,7 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
                   tooltip: "add-subscription".tr(),
                   openPage: AddTransactionPage(
                     selectedType: TransactionSpecialType.subscription,
+                    routesToPopAfterDelete: RoutesToPopAfterDelete.None,
                   ),
                 ),
               ),
@@ -261,6 +263,8 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
                               TransactionEntry(
                                 openPage: AddTransactionPage(
                                   transaction: transaction,
+                                  routesToPopAfterDelete:
+                                      RoutesToPopAfterDelete.One,
                                 ),
                                 transaction: transaction,
                                 listID: "Subscriptions",

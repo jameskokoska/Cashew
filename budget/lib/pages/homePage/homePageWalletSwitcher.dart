@@ -5,8 +5,8 @@ import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/keepAliveClientMixin.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
+import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/walletEntry.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 class HomePageWalletSwitcher extends StatelessWidget {
@@ -58,7 +58,10 @@ class HomePageWalletSwitcher extends StatelessWidget {
                             padding: const EdgeInsets.only(left: 6, right: 6),
                             child: AddButton(
                               onTap: () {},
-                              openPage: AddWalletPage(),
+                              openPage: AddWalletPage(
+                                routesToPopAfterDelete:
+                                    RoutesToPopAfterDelete.None,
+                              ),
                             ),
                           ),
                         ),

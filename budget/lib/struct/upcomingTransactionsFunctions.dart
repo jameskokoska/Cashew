@@ -57,7 +57,10 @@ createNewSubscriptionTransaction(context, Transaction transaction) async {
             onTap: () {
               pushRoute(
                 context,
-                AddTransactionPage(transaction: newTransaction),
+                AddTransactionPage(
+                  transaction: newTransaction,
+                  routesToPopAfterDelete: RoutesToPopAfterDelete.One,
+                ),
               );
             },
           ),
@@ -121,6 +124,7 @@ Future openPayPopup(
         paid: true,
         dateCreated: DateTime.now(),
         createdAnotherFutureTransaction: Value(true),
+        originalDateDue: Value(transaction.dateCreated),
       );
       Navigator.pop(context, true);
       await database.createOrUpdateTransaction(transactionNew);

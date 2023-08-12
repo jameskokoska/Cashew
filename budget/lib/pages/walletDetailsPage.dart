@@ -5,6 +5,7 @@ import 'package:budget/pages/homePage/homePageLineGraph.dart';
 import 'package:budget/pages/transactionsSearchPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
+import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/selectedTransactionsActionBar.dart';
 import 'package:budget/widgets/categoryEntry.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
@@ -84,6 +85,7 @@ class _WalletDetailsPageState extends State<WalletDetailsPage> {
                     context,
                     AddWalletPage(
                       wallet: widget.wallet,
+                      routesToPopAfterDelete: RoutesToPopAfterDelete.All,
                     ),
                   );
                 },

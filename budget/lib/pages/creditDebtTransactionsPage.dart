@@ -5,6 +5,7 @@ import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/fab.dart';
 import 'package:budget/widgets/noResults.dart';
+import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/selectedTransactionsActionBar.dart';
 import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
@@ -47,6 +48,7 @@ class CreditDebtTransactions extends StatelessWidget {
                     selectedType: isCredit
                         ? TransactionSpecialType.credit
                         : TransactionSpecialType.debt,
+                    routesToPopAfterDelete: RoutesToPopAfterDelete.None,
                   ),
                 ),
               ),
@@ -152,6 +154,8 @@ class CreditDebtTransactions extends StatelessWidget {
                           child: TransactionEntry(
                             openPage: AddTransactionPage(
                               transaction: item,
+                              routesToPopAfterDelete:
+                                  RoutesToPopAfterDelete.One,
                             ),
                             transaction: item,
                             listID: pageId,

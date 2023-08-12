@@ -4,6 +4,7 @@ import "package:budget/main.dart";
 import "package:budget/pages/addTransactionPage.dart";
 import "package:budget/pages/budgetPage.dart";
 import "package:budget/struct/databaseGlobal.dart";
+import "package:budget/widgets/openPopup.dart";
 import "package:easy_localization/easy_localization.dart";
 import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
@@ -17,7 +18,9 @@ void runQuickActionsPayLoads(context) async {
       if (quickAction == "addTransaction") {
         pushRoute(
           context,
-          AddTransactionPage(),
+          AddTransactionPage(
+            routesToPopAfterDelete: RoutesToPopAfterDelete.None,
+          ),
         );
       } else if (quickAction.contains("openBudget")) {
         String budgetPk = quickAction.replaceAll("openBudget-", "");

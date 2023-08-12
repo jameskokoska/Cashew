@@ -5,6 +5,7 @@ import 'package:budget/pages/upcomingOverdueTransactionsPage.dart';
 import 'package:budget/struct/notificationsGlobal.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/notificationsSettings.dart';
+import 'package:budget/widgets/openPopup.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -47,7 +48,9 @@ runNotificationPayLoadsNoContext(payloadData) {
   if (payloadData == "addTransaction") {
     navigatorKey.currentState!.push(
       MaterialPageRoute(
-        builder: (context) => AddTransactionPage(),
+        builder: (context) => AddTransactionPage(
+          routesToPopAfterDelete: RoutesToPopAfterDelete.None,
+        ),
       ),
     );
   } else if (payloadData == "upcomingTransaction") {
@@ -66,7 +69,9 @@ void runNotificationPayLoads(context) {
   if (notificationPayload == "addTransaction") {
     pushRoute(
       context,
-      AddTransactionPage(),
+      AddTransactionPage(
+        routesToPopAfterDelete: RoutesToPopAfterDelete.None,
+      ),
     );
   } else if (notificationPayload == "upcomingTransaction") {
     pushRoute(

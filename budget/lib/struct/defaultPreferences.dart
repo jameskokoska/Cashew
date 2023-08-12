@@ -101,5 +101,6 @@ Future<Map<String, dynamic>> getDefaultPreferences() async {
     "premiumPopupAddTransactionLastShown": DateTime.now().toString(),
     "disableBlur": true,
     "previewDemo": false,
+    "oldAndroidNavbar": false,
   };
 }

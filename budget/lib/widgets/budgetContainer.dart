@@ -10,6 +10,7 @@ import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/countNumber.dart';
 import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/widgets/openContainerNavigation.dart';
+import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -390,6 +391,7 @@ class BudgetContainer extends StatelessWidget {
                       context,
                       AddBudgetPage(
                         budget: budget,
+                        routesToPopAfterDelete: RoutesToPopAfterDelete.One,
                       ),
                     );
                   }

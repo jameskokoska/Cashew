@@ -209,28 +209,11 @@ class _EditAssociatedTitlesPageState extends State<EditAssociatedTitlesPage> {
                               ],
                             ),
                             onDelete: () {
-                              openPopup(
+                              deleteAssociatedTitlePopup(
                                 context,
-                                title: "Delete " + associatedTitle.title + "?",
-                                icon: Icons.delete_rounded,
-                                onCancel: () {
-                                  Navigator.pop(context);
-                                },
-                                onCancelLabel: "cancel".tr(),
-                                onSubmit: () async {
-                                  await database.deleteAssociatedTitle(
-                                      associatedTitle.associatedTitlePk,
-                                      associatedTitle.order);
-                                  Navigator.pop(context);
-                                  openSnackbar(
-                                    SnackbarMessage(
-                                        title: "deleted".tr() +
-                                            " " +
-                                            associatedTitle.title,
-                                        icon: Icons.delete),
-                                  );
-                                },
-                                onSubmitLabel: "delete".tr(),
+                                title: associatedTitle,
+                                routesToPopAfterDelete:
+                                    RoutesToPopAfterDelete.None,
                               );
                             },
                             openPage: Container(),
@@ -271,5 +254,35 @@ class _EditAssociatedTitlesPageState extends State<EditAssociatedTitlesPage> {
         ],
       ),
     );
+  }
+}
+
+void deleteAssociatedTitlePopup(
+  BuildContext context, {
+  required TransactionAssociatedTitle title,
+  required RoutesToPopAfterDelete routesToPopAfterDelete,
+}) async {
+  DeletePopupAction? action = await openDeletePopup(
+    context,
+    title: "delete-title-question".tr(),
+    subtitle: title.title,
+  );
+  if (action == DeletePopupAction.Delete) {
+    if (routesToPopAfterDelete == RoutesToPopAfterDelete.All) {
+      Navigator.of(context).popUntil((route) => route.isFirst);
+    } else if (routesToPopAfterDelete == RoutesToPopAfterDelete.One) {
+      Navigator.of(context).pop();
+    }
+    openLoadingPopupTryCatch(() async {
+      await database.deleteAssociatedTitle(
+          title.associatedTitlePk, title.order);
+      openSnackbar(
+        SnackbarMessage(
+          title: "deleted-title".tr(),
+          icon: Icons.delete,
+          description: title.title,
+        ),
+      );
+    });
   }
 }

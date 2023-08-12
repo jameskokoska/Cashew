@@ -1015,6 +1015,14 @@ class $TransactionsTable extends Transactions
           type: DriftSqlType.dateTime,
           requiredDuringInsert: false,
           defaultValue: Constant(DateTime.now()));
+  static const VerificationMeta _originalDateDueMeta =
+      const VerificationMeta('originalDateDue');
+  @override
+  late final GeneratedColumn<DateTime> originalDateDue =
+      GeneratedColumn<DateTime>('original_date_due', aliasedName, true,
+          type: DriftSqlType.dateTime,
+          requiredDuringInsert: false,
+          defaultValue: Constant(DateTime.now()));
   static const VerificationMeta _incomeMeta = const VerificationMeta('income');
   @override
   late final GeneratedColumn<bool> income =
@@ -1166,6 +1174,7 @@ class $TransactionsTable extends Transactions
         walletFk,
         dateCreated,
         dateTimeModified,
+        originalDateDue,
         income,
         periodLength,
         reoccurrence,
@@ -1241,6 +1250,12 @@ class $TransactionsTable extends Transactions
           _dateTimeModifiedMeta,
           dateTimeModified.isAcceptableOrUnknown(
               data['date_time_modified']!, _dateTimeModifiedMeta));
+    }
+    if (data.containsKey('original_date_due')) {
+      context.handle(
+          _originalDateDueMeta,
+          originalDateDue.isAcceptableOrUnknown(
+              data['original_date_due']!, _originalDateDueMeta));
     }
     if (data.containsKey('income')) {
       context.handle(_incomeMeta,
@@ -1339,6 +1354,8 @@ class $TransactionsTable extends Transactions
           .read(DriftSqlType.dateTime, data['${effectivePrefix}date_created'])!,
       dateTimeModified: attachedDatabase.typeMapping.read(
           DriftSqlType.dateTime, data['${effectivePrefix}date_time_modified']),
+      originalDateDue: attachedDatabase.typeMapping.read(
+          DriftSqlType.dateTime, data['${effectivePrefix}original_date_due']),
       income: attachedDatabase.typeMapping
           .read(DriftSqlType.bool, data['${effectivePrefix}income'])!,
       periodLength: attachedDatabase.typeMapping
@@ -1418,6 +1435,7 @@ class Transaction extends DataClass implements Insertable<Transaction> {
   final String walletFk;
   final DateTime dateCreated;
   final DateTime? dateTimeModified;
+  final DateTime? originalDateDue;
   final bool income;
   final int? periodLength;
   final BudgetReoccurence? reoccurrence;
@@ -1443,6 +1461,7 @@ class Transaction extends DataClass implements Insertable<Transaction> {
       required this.walletFk,
       required this.dateCreated,
       this.dateTimeModified,
+      this.originalDateDue,
       required this.income,
       this.periodLength,
       this.reoccurrence,
@@ -1471,6 +1490,9 @@ class Transaction extends DataClass implements Insertable<Transaction> {
     map['date_created'] = Variable<DateTime>(dateCreated);
     if (!nullToAbsent || dateTimeModified != null) {
       map['date_time_modified'] = Variable<DateTime>(dateTimeModified);
+    }
+    if (!nullToAbsent || originalDateDue != null) {
+      map['original_date_due'] = Variable<DateTime>(originalDateDue);
     }
     map['income'] = Variable<bool>(income);
     if (!nullToAbsent || periodLength != null) {
@@ -1537,6 +1559,9 @@ class Transaction extends DataClass implements Insertable<Transaction> {
       dateTimeModified: dateTimeModified == null && nullToAbsent
           ? const Value.absent()
           : Value(dateTimeModified),
+      originalDateDue: originalDateDue == null && nullToAbsent
+          ? const Value.absent()
+          : Value(originalDateDue),
       income: Value(income),
       periodLength: periodLength == null && nullToAbsent
           ? const Value.absent()
@@ -1596,6 +1621,7 @@ class Transaction extends DataClass implements Insertable<Transaction> {
       dateCreated: serializer.fromJson<DateTime>(json['dateCreated']),
       dateTimeModified:
           serializer.fromJson<DateTime?>(json['dateTimeModified']),
+      originalDateDue: serializer.fromJson<DateTime?>(json['originalDateDue']),
       income: serializer.fromJson<bool>(json['income']),
       periodLength: serializer.fromJson<int?>(json['periodLength']),
       reoccurrence: $TransactionsTable.$converterreoccurrencen
@@ -1636,6 +1662,7 @@ class Transaction extends DataClass implements Insertable<Transaction> {
       'walletFk': serializer.toJson<String>(walletFk),
       'dateCreated': serializer.toJson<DateTime>(dateCreated),
       'dateTimeModified': serializer.toJson<DateTime?>(dateTimeModified),
+      'originalDateDue': serializer.toJson<DateTime?>(originalDateDue),
       'income': serializer.toJson<bool>(income),
       'periodLength': serializer.toJson<int?>(periodLength),
       'reoccurrence': serializer.toJson<int?>(
@@ -1673,6 +1700,7 @@ class Transaction extends DataClass implements Insertable<Transaction> {
           String? walletFk,
           DateTime? dateCreated,
           Value<DateTime?> dateTimeModified = const Value.absent(),
+          Value<DateTime?> originalDateDue = const Value.absent(),
           bool? income,
           Value<int?> periodLength = const Value.absent(),
           Value<BudgetReoccurence?> reoccurrence = const Value.absent(),
@@ -1700,6 +1728,9 @@ class Transaction extends DataClass implements Insertable<Transaction> {
         dateTimeModified: dateTimeModified.present
             ? dateTimeModified.value
             : this.dateTimeModified,
+        originalDateDue: originalDateDue.present
+            ? originalDateDue.value
+            : this.originalDateDue,
         income: income ?? this.income,
         periodLength:
             periodLength.present ? periodLength.value : this.periodLength,
@@ -1744,6 +1775,7 @@ class Transaction extends DataClass implements Insertable<Transaction> {
           ..write('walletFk: $walletFk, ')
           ..write('dateCreated: $dateCreated, ')
           ..write('dateTimeModified: $dateTimeModified, ')
+          ..write('originalDateDue: $originalDateDue, ')
           ..write('income: $income, ')
           ..write('periodLength: $periodLength, ')
           ..write('reoccurrence: $reoccurrence, ')
@@ -1777,6 +1809,7 @@ class Transaction extends DataClass implements Insertable<Transaction> {
         walletFk,
         dateCreated,
         dateTimeModified,
+        originalDateDue,
         income,
         periodLength,
         reoccurrence,
@@ -1806,6 +1839,7 @@ class Transaction extends DataClass implements Insertable<Transaction> {
           other.walletFk == this.walletFk &&
           other.dateCreated == this.dateCreated &&
           other.dateTimeModified == this.dateTimeModified &&
+          other.originalDateDue == this.originalDateDue &&
           other.income == this.income &&
           other.periodLength == this.periodLength &&
           other.reoccurrence == this.reoccurrence &&
@@ -1836,6 +1870,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
   final Value<String> walletFk;
   final Value<DateTime> dateCreated;
   final Value<DateTime?> dateTimeModified;
+  final Value<DateTime?> originalDateDue;
   final Value<bool> income;
   final Value<int?> periodLength;
   final Value<BudgetReoccurence?> reoccurrence;
@@ -1862,6 +1897,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
     this.walletFk = const Value.absent(),
     this.dateCreated = const Value.absent(),
     this.dateTimeModified = const Value.absent(),
+    this.originalDateDue = const Value.absent(),
     this.income = const Value.absent(),
     this.periodLength = const Value.absent(),
     this.reoccurrence = const Value.absent(),
@@ -1889,6 +1925,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
     required String walletFk,
     this.dateCreated = const Value.absent(),
     this.dateTimeModified = const Value.absent(),
+    this.originalDateDue = const Value.absent(),
     this.income = const Value.absent(),
     this.periodLength = const Value.absent(),
     this.reoccurrence = const Value.absent(),
@@ -1920,6 +1957,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
     Expression<String>? walletFk,
     Expression<DateTime>? dateCreated,
     Expression<DateTime>? dateTimeModified,
+    Expression<DateTime>? originalDateDue,
     Expression<bool>? income,
     Expression<int>? periodLength,
     Expression<int>? reoccurrence,
@@ -1947,6 +1985,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
       if (walletFk != null) 'wallet_fk': walletFk,
       if (dateCreated != null) 'date_created': dateCreated,
       if (dateTimeModified != null) 'date_time_modified': dateTimeModified,
+      if (originalDateDue != null) 'original_date_due': originalDateDue,
       if (income != null) 'income': income,
       if (periodLength != null) 'period_length': periodLength,
       if (reoccurrence != null) 'reoccurrence': reoccurrence,
@@ -1981,6 +2020,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
       Value<String>? walletFk,
       Value<DateTime>? dateCreated,
       Value<DateTime?>? dateTimeModified,
+      Value<DateTime?>? originalDateDue,
       Value<bool>? income,
       Value<int?>? periodLength,
       Value<BudgetReoccurence?>? reoccurrence,
@@ -2007,6 +2047,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
       walletFk: walletFk ?? this.walletFk,
       dateCreated: dateCreated ?? this.dateCreated,
       dateTimeModified: dateTimeModified ?? this.dateTimeModified,
+      originalDateDue: originalDateDue ?? this.originalDateDue,
       income: income ?? this.income,
       periodLength: periodLength ?? this.periodLength,
       reoccurrence: reoccurrence ?? this.reoccurrence,
@@ -2058,6 +2099,9 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
     }
     if (dateTimeModified.present) {
       map['date_time_modified'] = Variable<DateTime>(dateTimeModified.value);
+    }
+    if (originalDateDue.present) {
+      map['original_date_due'] = Variable<DateTime>(originalDateDue.value);
     }
     if (income.present) {
       map['income'] = Variable<bool>(income.value);
@@ -2133,6 +2177,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
           ..write('walletFk: $walletFk, ')
           ..write('dateCreated: $dateCreated, ')
           ..write('dateTimeModified: $dateTimeModified, ')
+          ..write('originalDateDue: $originalDateDue, ')
           ..write('income: $income, ')
           ..write('periodLength: $periodLength, ')
           ..write('reoccurrence: $reoccurrence, ')

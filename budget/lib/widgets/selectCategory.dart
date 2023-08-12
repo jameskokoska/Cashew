@@ -5,6 +5,7 @@ import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/categoryIcon.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
+import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -275,7 +276,10 @@ class _SelectCategoryState extends State<SelectCategory> {
                           child: AddButton(
                             onTap: () {},
                             padding: EdgeInsets.zero,
-                            openPage: AddCategoryPage(),
+                            openPage: AddCategoryPage(
+                              routesToPopAfterDelete:
+                                  RoutesToPopAfterDelete.None,
+                            ),
                             width: 70,
                           ),
                         ),
@@ -387,7 +391,10 @@ class _SelectCategoryState extends State<SelectCategory> {
                                         onTap: () {},
                                         height: constraints.maxWidth,
                                         width: constraints.maxWidth,
-                                        openPage: AddCategoryPage(),
+                                        openPage: AddCategoryPage(
+                                          routesToPopAfterDelete:
+                                              RoutesToPopAfterDelete.None,
+                                        ),
                                       );
                                     },
                                   ),

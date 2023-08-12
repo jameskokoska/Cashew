@@ -169,49 +169,17 @@ class SelectedTransactionsActionBar extends StatelessWidget {
                             id: "delete-transactions",
                             label: "delete-transactions".tr(),
                             icon: Icons.delete,
-                            action: () {
-                              openPopup(
+                            action: () async {
+                              dynamic result = await deleteTransactionsPopup(
                                 context,
-                                title: "delete-selected-transactions".tr(),
-                                description:
-                                    "delete-selected-transactions-description"
-                                            .tr() +
-                                        (value)[pageID]!.length.toString() +
-                                        " " +
-                                        ((value)[pageID]!.length == 1
-                                            ? "transaction".tr().toLowerCase()
-                                            : "transactions"
-                                                .tr()
-                                                .toLowerCase()) +
-                                        "?",
-                                icon: Icons.delete_rounded,
-                                onCancel: () {
-                                  Navigator.pop(context);
-                                },
-                                onCancelLabel: "cancel".tr(),
-                                onSubmit: () async {
-                                  await database
-                                      .deleteTransactions(value[pageID]!);
-                                  openSnackbar(
-                                    SnackbarMessage(
-                                      title: "deleted".tr() +
-                                          " " +
-                                          value[pageID]!.length.toString() +
-                                          " " +
-                                          ((value)[pageID]!.length == 1
-                                              ? "transaction".tr().toLowerCase()
-                                              : "transactions"
-                                                  .tr()
-                                                  .toLowerCase()),
-                                      icon: Icons.delete_rounded,
-                                    ),
-                                  );
-                                  globalSelectedID.value[pageID] = [];
-                                  globalSelectedID.notifyListeners();
-                                  Navigator.pop(context);
-                                },
-                                onSubmitLabel: "delete".tr(),
+                                transactionPks: value[pageID]!,
+                                routesToPopAfterDelete:
+                                    RoutesToPopAfterDelete.None,
                               );
+                              if (result == DeletePopupAction.Delete) {
+                                globalSelectedID.value[pageID] = [];
+                                globalSelectedID.notifyListeners();
+                              }
                             },
                           ),
                           if (value[pageID]?.length == 1)
@@ -224,8 +192,9 @@ class SelectedTransactionsActionBar extends StatelessWidget {
                                 Transaction transaction = await database
                                     .getTransactionFromPk(value[pageID]!.first);
                                 await database.createOrUpdateTransaction(
-                                    transaction,
-                                    insert: true);
+                                  transaction,
+                                  insert: true,
+                                );
                                 String transactionName = transaction.name;
                                 if (transactionName.trim() == "") {
                                   transactionName =
@@ -255,7 +224,7 @@ class SelectedTransactionsActionBar extends StatelessWidget {
                               if (wallet == null) return;
                               List<Transaction> transactions = await database
                                   .getTransactionsFromPk(value[pageID]!);
-                              await database.moveWalletTransactons(
+                              await database.moveWalletTransactions(
                                 Provider.of<AllWallets>(context, listen: false),
                                 null,
                                 wallet.walletPk,
@@ -322,6 +291,51 @@ class SelectedTransactionsActionBar extends StatelessWidget {
                                 ),
                               );
 
+                              globalSelectedID.value[pageID] = [];
+                              globalSelectedID.notifyListeners();
+                            },
+                          ),
+                          DropdownItemMenu(
+                            id: "change-category",
+                            label: "change-category".tr(),
+                            icon: Icons.category_rounded,
+                            action: () async {
+                              TransactionCategory? category =
+                                  await openBottomSheet(
+                                context,
+                                PopupFramework(
+                                  title: "select-category".tr(),
+                                  child: SelectCategory(
+                                    selectedCategory: null,
+                                    setSelectedCategory:
+                                        (TransactionCategory category) {
+                                      Navigator.pop(context, category);
+                                    },
+                                    popRoute: false,
+                                    addButton: false,
+                                  ),
+                                ),
+                              );
+                              if (category == null) return;
+                              List<Transaction> transactions = await database
+                                  .getTransactionsFromPk(value[pageID]!);
+                              await database.moveTransactionsToCategory(
+                                transactions,
+                                category.categoryPk,
+                              );
+                              openSnackbar(
+                                SnackbarMessage(
+                                  icon: Icons.account_balance_wallet_rounded,
+                                  title: "changed-category".tr(),
+                                  description: "for".tr().capitalizeFirst +
+                                      " " +
+                                      transactions.length.toString() +
+                                      " " +
+                                      (transactions.length == 1
+                                          ? "transaction".tr().toLowerCase()
+                                          : "transactions".tr().toLowerCase()),
+                                ),
+                              );
                               globalSelectedID.value[pageID] = [];
                               globalSelectedID.notifyListeners();
                             },

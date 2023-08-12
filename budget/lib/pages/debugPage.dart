@@ -173,6 +173,17 @@ class DebugPage extends StatelessWidget {
           icon: Icons.all_inbox_rounded,
         ),
         SettingsContainerSwitch(
+          title: "Old Android Navbar",
+          description: "Change the navbar style when on Android theme",
+          onSwitched: (value) {
+            updateSettings("oldAndroidNavbar", value,
+                pagesNeedingRefresh: [1], updateGlobalState: false);
+          },
+          initialValue: appStateSettings["oldAndroidNavbar"],
+          icon: Icons.dock_rounded,
+        ),
+
+        SettingsContainerSwitch(
           title: "Emulate iOS",
           description: "Enables scroll behaviour and icons from iOS",
           onSwitched: (value) {

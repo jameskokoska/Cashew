@@ -34,9 +34,9 @@ import 'firebase_options.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 // Requires hot reload when changed
-bool enableDevicePreview = false && kDebugMode;
+bool enableDevicePreview = true && kDebugMode;
 bool allowDebugFlags = true || kIsWeb;
-bool premiumPopupEnabled = true && !kIsWeb;
+bool premiumPopupEnabled = false && !kIsWeb;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -266,8 +266,12 @@ class App extends StatelessWidget {
                               hasRightSafeArea || hasLeftSafeArea
                                   ? Padding(
                                       padding: EdgeInsets.only(
-                                        right: rightPaddingSafeArea,
-                                        left: leftPaddingSafeArea,
+                                        right: hasRightSafeArea
+                                            ? rightPaddingSafeArea
+                                            : 0,
+                                        left: hasLeftSafeArea
+                                            ? leftPaddingSafeArea
+                                            : 0,
                                       ),
                                       child: ClipRRect(
                                           borderRadius: BorderRadius.horizontal(

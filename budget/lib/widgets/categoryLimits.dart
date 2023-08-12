@@ -7,6 +7,7 @@ import 'package:budget/widgets/categoryEntry.dart';
 import 'package:budget/widgets/categoryIcon.dart';
 import 'package:budget/widgets/countNumber.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
+import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/selectAmount.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
@@ -126,7 +127,10 @@ class _CategoryLimitsState extends State<CategoryLimits> {
                           child: AddButton(
                             onTap: () {},
                             padding: EdgeInsets.zero,
-                            openPage: AddCategoryPage(),
+                            openPage: AddCategoryPage(
+                              routesToPopAfterDelete:
+                                  RoutesToPopAfterDelete.None,
+                            ),
                             width: null,
                           ),
                         ),
@@ -200,10 +204,12 @@ class _CategoryLimitEntryState extends State<CategoryLimitEntry> {
       },
       onLongPress: () {
         pushRoute(
-            context,
-            AddCategoryPage(
-              category: widget.category,
-            ));
+          context,
+          AddCategoryPage(
+            category: widget.category,
+            routesToPopAfterDelete: RoutesToPopAfterDelete.One,
+          ),
+        );
       },
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 3),

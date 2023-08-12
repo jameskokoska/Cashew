@@ -1,6 +1,7 @@
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/pages/addTransactionPage.dart';
+import 'package:budget/pages/editAssociatedTitlesPage.dart';
 import 'package:budget/pages/editCategoriesPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
@@ -27,10 +28,12 @@ class AddCategoryPage extends StatefulWidget {
   AddCategoryPage({
     Key? key,
     this.category,
+    required this.routesToPopAfterDelete,
   }) : super(key: key);
 
   //When a category is passed in, we are editing that transaction
   final TransactionCategory? category;
+  final RoutesToPopAfterDelete routesToPopAfterDelete;
 
   @override
   _AddCategoryPageState createState() => _AddCategoryPageState();
@@ -232,16 +235,18 @@ class _AddCategoryPageState extends State<AddCategoryPage>
             }
           },
           actions: [
-            widget.category != null
+            widget.category != null &&
+                    widget.routesToPopAfterDelete !=
+                        RoutesToPopAfterDelete.PreventDelete
                 ? IconButton(
                     padding: EdgeInsets.all(15),
                     tooltip: "Delete category",
                     onPressed: () {
-                      deleteCategoryPopup(context, widgetCategory!,
-                          afterDelete: () {
-                        Navigator.of(context)
-                            .popUntil((route) => route.isFirst);
-                      });
+                      deleteCategoryPopup(
+                        context,
+                        category: widgetCategory!,
+                        routesToPopAfterDelete: widget.routesToPopAfterDelete,
+                      );
                     },
                     icon: Icon(Icons.delete_rounded),
                   )
@@ -433,7 +438,9 @@ class _AddCategoryPageState extends State<AddCategoryPage>
               ),
             ),
             SizedBox(height: 20),
-            widgetCategory == null
+            widgetCategory == null ||
+                    widget.routesToPopAfterDelete ==
+                        RoutesToPopAfterDelete.PreventDelete
                 ? SizedBox.shrink()
                 : Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -442,7 +449,12 @@ class _AddCategoryPageState extends State<AddCategoryPage>
                       label: "merge-category".tr(),
                       onTap: () async {
                         if (widget.category != null)
-                          mergeCategoryPopup(context, widget.category!);
+                          mergeCategoryPopup(
+                            context,
+                            categoryOriginal: widget.category!,
+                            routesToPopAfterDelete:
+                                widget.routesToPopAfterDelete,
+                          );
                       },
                       color: Theme.of(context).colorScheme.secondaryContainer,
                       textColor:
@@ -534,7 +546,7 @@ class _AddCategoryPageState extends State<AddCategoryPage>
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 15),
                               child: AssociatedTitleContainer(
-                                title: associatedTitle.title,
+                                title: associatedTitle,
                                 setTitle: (text) async {
                                   await database.createOrUpdateAssociatedTitle(
                                     TransactionAssociatedTitle(
@@ -551,11 +563,6 @@ class _AddCategoryPageState extends State<AddCategoryPage>
                                       order: associatedTitle.order,
                                     ),
                                   );
-                                },
-                                onDelete: () async {
-                                  await database.deleteAssociatedTitle(
-                                      snapshot.data![i].associatedTitlePk,
-                                      snapshot.data![i].order);
                                 },
                               ),
                             ),
@@ -576,16 +583,14 @@ class _AddCategoryPageState extends State<AddCategoryPage>
 }
 
 class AssociatedTitleContainer extends StatefulWidget {
-  const AssociatedTitleContainer(
-      {Key? key,
-      required this.title,
-      required this.setTitle,
-      required this.onDelete})
-      : super(key: key);
+  const AssociatedTitleContainer({
+    Key? key,
+    required this.title,
+    required this.setTitle,
+  }) : super(key: key);
 
-  final String title;
+  final TransactionAssociatedTitle title;
   final Function(String) setTitle;
-  final VoidCallback onDelete;
 
   @override
   State<AssociatedTitleContainer> createState() =>
@@ -593,12 +598,12 @@ class AssociatedTitleContainer extends StatefulWidget {
 }
 
 class _AssociatedTitleContainerState extends State<AssociatedTitleContainer> {
-  String title = "";
+  String titleName = "";
 
   @override
   void initState() {
     super.initState();
-    title = widget.title;
+    titleName = widget.title.title;
   }
 
   @override
@@ -613,11 +618,11 @@ class _AssociatedTitleContainerState extends State<AssociatedTitleContainer> {
               title: "set-title".tr(),
               child: SelectText(
                 setSelectedText: (text) {
-                  title = text;
+                  titleName = text;
                   widget.setTitle(text);
                 },
                 labelText: "set-title".tr(),
-                selectedText: title,
+                selectedText: titleName,
                 placeholder: "title-placeholder".tr(),
               ),
             ),
@@ -633,27 +638,17 @@ class _AssociatedTitleContainerState extends State<AssociatedTitleContainer> {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 25, vertical: 15),
                 child: TextFont(
-                  text: widget.title,
+                  text: titleName,
                   fontSize: 18,
                 ),
               ),
             ),
             Tappable(
               onTap: () async {
-                await openPopup(
+                deleteAssociatedTitlePopup(
                   context,
-                  title: "Delete Title?",
-                  description: "Are you sure you want to delete this title?",
-                  icon: Icons.delete_rounded,
-                  onSubmitLabel: "delete".tr(),
-                  onSubmit: () {
-                    Navigator.pop(context);
-                    widget.onDelete();
-                  },
-                  onCancelLabel: "cancel".tr(),
-                  onCancel: () {
-                    Navigator.pop(context);
-                  },
+                  title: widget.title,
+                  routesToPopAfterDelete: RoutesToPopAfterDelete.None,
                 );
               },
               borderRadius: 15,

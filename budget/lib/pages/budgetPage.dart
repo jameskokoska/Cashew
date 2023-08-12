@@ -8,6 +8,7 @@ import 'package:budget/pages/premiumPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/dropdownSelect.dart';
+import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/selectedTransactionsActionBar.dart';
 import 'package:budget/widgets/budgetContainer.dart';
 import 'package:budget/widgets/categoryEntry.dart';
@@ -193,6 +194,7 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                             widget.budget.addedTransactionsOnly == true
                         ? widget.budget
                         : null,
+                    routesToPopAfterDelete: RoutesToPopAfterDelete.One,
                   ),
                   color: budgetColorScheme.secondary,
                   colorPlus: budgetColorScheme.onSecondary,
@@ -213,6 +215,7 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                         context,
                         AddBudgetPage(
                           budget: widget.budget,
+                          routesToPopAfterDelete: RoutesToPopAfterDelete.All,
                         ),
                       );
                     },
