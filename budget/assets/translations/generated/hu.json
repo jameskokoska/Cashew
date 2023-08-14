@@ -104,7 +104,8 @@
   "rate-app": "Értékeld az {app}",
   "rate-app-subtitle": "Ossza meg visszajelzését a fejlesztővel, hogy javítsa a {app}",
   "rate-app-privacy": "Csak a csillagok, a visszajelzések és a dátum megosztják.",
-  "feedback": "Visszacsatolás",
+  "rate-app-privacy-email": "Csak a csillagok, a visszajelzés (e -mail, ha rendelkezésre állnak) és a dátumot megosztják.",
+  "feedback-and-suggestions": "Visszajelzés és javaslatok",
   "submit": "Beküldés",
   "select-color": "Válassza ki a színt",
   "use-system-color": "Használja a rendszer színét",
@@ -458,5 +459,11 @@
   "an-error-occured": "Hiba történt",
   "more": "Több",
   "syncing-failed": "A szinkronizálás sikertelen",
-  "sync-fail-reason": "A nem megfelelő adatbázis -séma verziók"
+  "sync-fail-reason": "A nem megfelelő adatbázis -séma verziók",
+  "feedback-shared": "A visszajelzés megosztva!",
+  "thank-you": "Köszönöm!",
+  "email-optional": "E -mail (opcionális)",
+  "feedback": "Visszacsatolás",
+  "backup-created": "Biztonsági másolat létrehozott",
+  "delete-sync-backup-warning": "Az ügyfelek közötti szinkronizálási problémák elkerülése érdekében érdemes szinkronizálni az összes többi aktív eszközt a törlés előtt."
 }

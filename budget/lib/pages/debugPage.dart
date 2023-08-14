@@ -1,5 +1,6 @@
 import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
+import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
@@ -267,6 +268,58 @@ class DebugPage extends StatelessWidget {
             updateSettings("animationSpeed", value, updateGlobalState: true);
           },
         ),
+        SizedBox(height: 20),
+        Button(
+            label: "View Delete Logs",
+            onTap: () async {
+              pushRoute(
+                context,
+                PageFramework(
+                  title: "Delete logs",
+                  slivers: [
+                    StreamBuilder<List<DeleteLog>>(
+                      stream: database.watchAllDeleteLogs(),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          return SliverPadding(
+                            padding: EdgeInsets.symmetric(
+                                vertical: 7, horizontal: 13),
+                            sliver: SliverList(
+                              delegate: SliverChildBuilderDelegate(
+                                (BuildContext context, int index) {
+                                  DeleteLog deletelog = snapshot.data![index];
+                                  return Padding(
+                                    padding: const EdgeInsets.only(bottom: 4),
+                                    child: TextFont(
+                                      text: (index + 1).toString() +
+                                          ") " +
+                                          deletelog.type.toString() +
+                                          " " +
+                                          deletelog.dateTimeModified
+                                              .toString() +
+                                          ": " +
+                                          deletelog.deleteLogPk +
+                                          " for " +
+                                          deletelog.entryPk,
+                                      maxLines: 10,
+                                      fontSize: 12,
+                                    ),
+                                  );
+                                },
+                                childCount: snapshot.data?.length,
+                              ),
+                            ),
+                          );
+                        } else {
+                          return SliverToBoxAdapter();
+                        }
+                      },
+                    ),
+                  ],
+                ),
+              );
+            }),
+        SizedBox(height: 20),
         Button(
             label: "Send Notification",
             onTap: () async {

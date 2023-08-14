@@ -123,7 +123,8 @@ class _AutoTransactionsPageEmailState extends State<AutoTransactionsPageEmail> {
 
 Future<void> parseEmailsInBackground(context,
     {bool sayUpdates = false, bool forceParse = false}) async {
-  if (appStateSettings["currentUserEmail"] == "") return;
+  if (appStateSettings["hasSignedIn"] == false) return;
+  if (errorSigningInDuringCloud == true) return;
   if (appStateSettings["emailScanning"] == false) return;
   // Prevent sign-in on web - background sign-in cannot access Google Drive etc.
   if (kIsWeb && !entireAppLoaded) return;

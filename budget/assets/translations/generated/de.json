@@ -104,7 +104,8 @@
   "rate-app": "Bewertungs App",
   "rate-app-subtitle": "Teilen Sie Ihr Feedback mit dem Entwickler, um {app} zu verbessern",
   "rate-app-privacy": "Nur die Sterne, das Feedback und das Datum werden geteilt.",
-  "feedback": "Rückmeldung",
+  "rate-app-privacy-email": "Nur die Sterne, Feedback (E -Mail, falls vorgesehen) und das Datum werden freigegeben.",
+  "feedback-and-suggestions": "Feedback und Vorschläge",
   "submit": "Einreichen",
   "select-color": "Wähle Farbe",
   "use-system-color": "Verwenden Sie die Systemfarbe",
@@ -430,7 +431,7 @@
   "changed-wallet": "Brieftasche geändert",
   "added-to-budget": "Zu Budget hinzugefügt",
   "no-addable-budgets": "Keine Budgets zum Hinzufügen von Transaktionen zu",
-  "create-addable-budget": "Erstellen Sie \"nur\" Budget \"nur\" hinzugefügt \"",
+  "create-addable-budget": "Erstellen Sie das Budget \"nur\" hinzugefügt \"",
   "delete-budget-added-warning": "Zu diesem Budget hinzugefügte Transaktionen werden nicht mehr mit diesem Budget in Verbindung gebracht. Sie werden nicht gelöscht.",
   "removed-from-budget": "Aus dem Budget entfernt",
   "pinned-to-homepage": "An Homepage festgehalten",
@@ -458,5 +459,11 @@
   "an-error-occured": "Es ist ein Fehler aufgetreten",
   "more": "Mehr",
   "syncing-failed": "Synchronisierung fehlgeschlagen",
-  "sync-fail-reason": "Nichtübereinstimmungsdatenbankschema -Versionen"
+  "sync-fail-reason": "Nichtübereinstimmungsdatenbankschema -Versionen",
+  "feedback-shared": "Feedback geteilt!",
+  "thank-you": "Danke schön!",
+  "email-optional": "E-Mail optional)",
+  "feedback": "Rückmeldung",
+  "backup-created": "Backup erstellt",
+  "delete-sync-backup-warning": "Um Synchronisationsprobleme zwischen Kunden zu verhindern, ist es eine gute Idee, alle anderen aktiven Geräte vor dem Löschen zu synchronisieren."
 }

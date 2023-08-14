@@ -20,6 +20,7 @@ class SettingsContainerSwitch extends StatefulWidget {
     this.verticalPadding,
     this.syncWithInitialValue = true,
     this.onLongPress,
+    this.onTap,
     this.enableBorderRadius = false,
     Key? key,
   }) : super(key: key);
@@ -33,6 +34,7 @@ class SettingsContainerSwitch extends StatefulWidget {
   final double? verticalPadding;
   final bool syncWithInitialValue;
   final VoidCallback? onLongPress;
+  final VoidCallback? onTap;
   final bool enableBorderRadius;
 
   @override
@@ -87,7 +89,7 @@ class _SettingsContainerSwitchState extends State<SettingsContainerSwitch> {
       child: SettingsContainer(
         enableBorderRadius: widget.enableBorderRadius,
         onLongPress: widget.onLongPress,
-        onTap: () => {toggleSwitch()},
+        onTap: widget.onTap ?? () => {toggleSwitch()},
         title: widget.title,
         description: description,
         afterWidget: Padding(

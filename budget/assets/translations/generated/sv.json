@@ -104,7 +104,8 @@
   "rate-app": "Betygsätt {app}",
   "rate-app-subtitle": "Dela din feedback med utvecklaren för att förbättra {app}",
   "rate-app-privacy": "Endast stjärnorna, feedbacken och datumet kommer att delas.",
-  "feedback": "Respons",
+  "rate-app-privacy-email": "Endast stjärnorna, feedbacken, (e -post om det tillhandahålls) och datum kommer att delas.",
+  "feedback-and-suggestions": "Feedback och förslag",
   "submit": "Skicka in",
   "select-color": "Välj färg",
   "use-system-color": "Använd systemfärg",
@@ -417,7 +418,7 @@
   "activate": "Aktivera",
   "preview-demo-warning": "Förhandsvisningsdemo är för närvarande aktiv och auto-genererade data används. Det rekommenderas inte att använda applikationen i demoläge, eftersom det kan leda till dataförlust. För att ta bort genererade data och exitförhandsgranskning, tryck här.",
   "exit-demo": "Utgångsdemo",
-  "not-available-in-preview-demo": "Ej tillgängligt i förhandsgranskning",
+  "not-available-in-preview-demo": "Ej tillgängligt i förhandsgranskning Demo",
   "not-available-in-preview-demo-description": "Inaktivera förhandsvisningsdemo -läge för att använda den här funktionen.",
   "copied": "Kopierad",
   "created-copy": "Skapad kopia",
@@ -458,5 +459,11 @@
   "an-error-occured": "Ett fel inträffade",
   "more": "Mer",
   "syncing-failed": "Synkronisering misslyckades",
-  "sync-fail-reason": "Misstämning av databasschemaversioner"
+  "sync-fail-reason": "Misstämning av databasschemaversioner",
+  "feedback-shared": "Feedback delad!",
+  "thank-you": "Tack!",
+  "email-optional": "E -post (valfritt)",
+  "feedback": "Respons",
+  "backup-created": "Säkerhetskopiering skapad",
+  "delete-sync-backup-warning": "För att förhindra synkroniseringsproblem mellan klienter är det en bra idé att synkronisera alla andra aktiva enheter innan du tar bort."
 }

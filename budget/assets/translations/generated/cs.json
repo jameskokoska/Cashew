@@ -104,7 +104,8 @@
   "rate-app": "Ohodnoťte aplikaci",
   "rate-app-subtitle": "Sdílejte svou zpětnou vazbu s vývojářem, abyste pomohli zlepšit {app}",
   "rate-app-privacy": "Budou sdíleny pouze hvězdy, zpětná vazba a datum.",
-  "feedback": "Zpětná vazba",
+  "rate-app-privacy-email": "Budou sdíleny pouze hvězdy, zpětná vazba (e -mail) a datum.",
+  "feedback-and-suggestions": "Zpětná vazba a návrhy",
   "submit": "Předložit",
   "select-color": "Vyberte barvu",
   "use-system-color": "Použijte barvu systému",
@@ -458,5 +459,11 @@
   "an-error-occured": "Nastala chyba",
   "more": "Více",
   "syncing-failed": "Synchronizace selhala",
-  "sync-fail-reason": "Verze schématu neshodné databáze"
+  "sync-fail-reason": "Verze schématu neshodné databáze",
+  "feedback-shared": "Sdílená zpětná vazba!",
+  "thank-you": "Děkuji!",
+  "email-optional": "E -mail (volitelné)",
+  "feedback": "Zpětná vazba",
+  "backup-created": "Zálohování vytvořeno",
+  "delete-sync-backup-warning": "Aby se zabránilo problémům se synchronizací mezi klienty, je dobré synchronizovat všechna ostatní aktivní zařízení před odstraněním."
 }

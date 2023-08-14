@@ -53,7 +53,9 @@ Future deletePreviewData({bool resetOnboard = false}) async {
     customDateTimeModified: DateTime(0),
   );
 
-  setPrimaryWallet("0");
+  await setPrimaryWallet("0");
+
+  await database.deleteAllDeleteLogs();
 
   loadingIndeterminateKey.currentState?.setVisibility(false);
   updateSettings("previewDemo", false, updateGlobalState: false);

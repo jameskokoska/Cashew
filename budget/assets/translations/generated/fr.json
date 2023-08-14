@@ -104,7 +104,8 @@
   "rate-app": "Application de taux",
   "rate-app-subtitle": "Partagez vos commentaires avec le développeur pour aider à améliorer {app}",
   "rate-app-privacy": "Seules les étoiles, les commentaires et la date seront partagés.",
-  "feedback": "Retour",
+  "rate-app-privacy-email": "Seules les étoiles, les commentaires (e-mail si elles sont fournies) et la date seront partagées.",
+  "feedback-and-suggestions": "Commentaires et suggestions",
   "submit": "Soumettre",
   "select-color": "Choisissez la couleur",
   "use-system-color": "Utiliser la couleur du système",
@@ -458,5 +459,11 @@
   "an-error-occured": "Une erreur s'est produite",
   "more": "Plus",
   "syncing-failed": "La synchronisation a échoué",
-  "sync-fail-reason": "Versions de schéma de base de données incompatibles"
+  "sync-fail-reason": "Versions de schéma de base de données incompatibles",
+  "feedback-shared": "Commentaires partagés!",
+  "thank-you": "Merci!",
+  "email-optional": "E-mail (facultatif)",
+  "feedback": "Retour",
+  "backup-created": "Sauvegarde créée",
+  "delete-sync-backup-warning": "Pour éviter les problèmes de synchronisation entre les clients, c'est une bonne idée de synchroniser tous les autres appareils actifs avant la suppression."
 }

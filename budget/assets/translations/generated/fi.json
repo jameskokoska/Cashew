@@ -104,7 +104,8 @@
   "rate-app": "Arvostele {app}",
   "rate-app-subtitle": "Jaa palautetta kehittäjän kanssa parantaa {app}",
   "rate-app-privacy": "Vain tähdet, palaute ja päivämäärä jaetaan.",
-  "feedback": "Palaute",
+  "rate-app-privacy-email": "Vain tähdet, palaute (sähköposti, jos ne toimitetaan) ja päivämäärä jaetaan.",
+  "feedback-and-suggestions": "Palaute ja ehdotukset",
   "submit": "Lähetä",
   "select-color": "Valitse väri",
   "use-system-color": "Käytä järjestelmän väriä",
@@ -458,5 +459,11 @@
   "an-error-occured": "Tapahtui virhe",
   "more": "Lisää",
   "syncing-failed": "Synkronointi epäonnistui",
-  "sync-fail-reason": "Sopimaton tietokantakaavioversiot"
+  "sync-fail-reason": "Sopimaton tietokantakaavioversiot",
+  "feedback-shared": "Jaettu palaute!",
+  "thank-you": "Kiitos!",
+  "email-optional": "Sähköposti (valinnainen)",
+  "feedback": "Palaute",
+  "backup-created": "Varmuuskopio luotu",
+  "delete-sync-backup-warning": "Asiakkaiden välisten synkronointikysymysten estämiseksi on hyvä idea synkronoida kaikki muut aktiiviset laitteet ennen poistoa."
 }

@@ -104,7 +104,8 @@
   "rate-app": "I -rate ang {app}",
   "rate-app-subtitle": "Ibahagi ang iyong puna sa developer upang makatulong na mapabuti ang {app}",
   "rate-app-privacy": "Tanging ang mga bituin, puna at petsa ang ibabahagi.",
-  "feedback": "Feedback",
+  "rate-app-privacy-email": "Tanging ang mga bituin, puna, (email kung ibinigay), at petsa ay ibabahagi.",
+  "feedback-and-suggestions": "Feedback at mungkahi",
   "submit": "Ipasa",
   "select-color": "Piliin ang Kulay",
   "use-system-color": "Gumamit ng kulay ng system",
@@ -424,7 +425,7 @@
   "duplicate": "Kopyahin",
   "delete-transactions": "Tanggalin ang mga transaksyon",
   "change-wallet": "Baguhin ang pitaka",
-  "add-to-budget": "Idagdag sa badyet",
+  "add-to-budget": "Idagdag sa Budget",
   "select-wallet": "Piliin ang Wallet",
   "move-to-other-wallet-button": "Ilipat ang mga transaksyon sa isa pang pitaka at tanggalin",
   "changed-wallet": "Binago ang pitaka",
@@ -458,5 +459,11 @@
   "an-error-occured": "May naganap na error",
   "more": "Higit pa",
   "syncing-failed": "Nabigo ang pag -sync",
-  "sync-fail-reason": "Mga bersyon ng Schema ng Mismatching Database"
+  "sync-fail-reason": "Mga bersyon ng Schema ng Mismatching Database",
+  "feedback-shared": "Ibinahagi ang feedback!",
+  "thank-you": "Salamat!",
+  "email-optional": "Email (Opsyonal)",
+  "feedback": "Feedback",
+  "backup-created": "Nilikha ang backup",
+  "delete-sync-backup-warning": "Upang maiwasan ang mga isyu sa pag -synchronise sa pagitan ng mga kliyente, magandang ideya na i -sync ang lahat ng iba pang mga aktibong aparato bago matanggal."
 }

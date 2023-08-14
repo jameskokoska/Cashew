@@ -510,7 +510,7 @@ class AnimatedGooBackground extends StatelessWidget {
     }
     // Transform slightly to remove graphic artifacts
     return Transform(
-      transform: Matrix4.skewX(0.0001),
+      transform: Matrix4.skewX(0.001),
       child: Container(
         decoration: BoxDecoration(
           color: Colors.white.withAlpha(200),
@@ -737,9 +737,18 @@ class BudgetProgress extends StatelessWidget {
         ),
         todayPercent < 0 || todayPercent > 100
             ? Container(height: 39)
-            : TodayIndicator(
-                percent: todayPercent,
-                large: large,
+            : Stack(
+                alignment: Alignment.bottomCenter,
+                children: [
+                  TodayIndicatorLabel(
+                    percent: todayPercent,
+                    large: large,
+                  ),
+                  TodayIndicator(
+                    percent: todayPercent,
+                    large: large,
+                  ),
+                ],
               ),
       ],
     );
@@ -875,10 +884,12 @@ class _AnimatedProgressState extends State<AnimatedProgress> {
   }
 }
 
-class TodayIndicator extends StatelessWidget {
-  TodayIndicator({Key? key, required this.percent, this.large = false})
-      : super(key: key);
-
+class TodayIndicatorLabel extends StatelessWidget {
+  const TodayIndicatorLabel({
+    required this.percent,
+    this.large = false,
+    super.key,
+  });
   final double percent;
   final bool large;
 
@@ -887,8 +898,6 @@ class TodayIndicator extends StatelessWidget {
     return Align(
       alignment: FractionalOffset(percent / 100, 0),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        mainAxisSize: MainAxisSize.min,
         children: [
           SlideFadeTransition(
             child: Container(
@@ -909,8 +918,10 @@ class TodayIndicator extends StatelessWidget {
               ),
             ),
           ),
-          FadeIn(
+          Opacity(
+            opacity: 0,
             child: Container(
+              margin: EdgeInsets.symmetric(horizontal: 8),
               width: 3,
               height: large ? 27 : 22,
               decoration: BoxDecoration(
@@ -920,6 +931,32 @@ class TodayIndicator extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class TodayIndicator extends StatelessWidget {
+  TodayIndicator({Key? key, required this.percent, this.large = false})
+      : super(key: key);
+
+  final double percent;
+  final bool large;
+
+  @override
+  Widget build(BuildContext context) {
+    return Align(
+      alignment: FractionalOffset(percent / 100, 0),
+      child: FadeIn(
+        child: Container(
+          margin: EdgeInsets.symmetric(horizontal: 8),
+          width: 3,
+          height: large ? 27 : 22,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.vertical(bottom: Radius.circular(5)),
+            color: getColor(context, "black").withOpacity(0.4),
+          ),
+        ),
       ),
     );
   }

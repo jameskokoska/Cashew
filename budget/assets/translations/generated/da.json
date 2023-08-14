@@ -104,7 +104,8 @@
   "rate-app": "Bedøm {app}",
   "rate-app-subtitle": "Del din feedback med udvikleren for at hjælpe med at forbedre {app}",
   "rate-app-privacy": "Kun stjerner, feedback og dato deles.",
-  "feedback": "Feedback",
+  "rate-app-privacy-email": "Kun stjernerne, feedback, (e -mail, hvis den leveres), og dato deles.",
+  "feedback-and-suggestions": "Feedback og forslag",
   "submit": "Indsend",
   "select-color": "Vælg farve",
   "use-system-color": "Brug systemfarve",
@@ -434,7 +435,7 @@
   "delete-budget-added-warning": "Transaktioner tilføjet til dette budget vil ikke længere være knyttet til dette budget. De vil ikke blive slettet.",
   "removed-from-budget": "Fjernet fra budgettet",
   "pinned-to-homepage": "Fastgjort til hjemmesiden",
-  "unpinned-to-homepage": "Ubesættet fra hjemmesiden",
+  "unpinned-to-homepage": "Ubegrænset fra hjemmesiden",
   "expenses-only": "Kun udgifter",
   "expenses-only-description": "Kun udgifter kan føjes til et budget",
   "delete-category-question": "Slet kategori?",
@@ -458,5 +459,11 @@
   "an-error-occured": "En fejl opstod",
   "more": "Mere",
   "syncing-failed": "Synkronisering mislykkedes",
-  "sync-fail-reason": "Uoverensstemmende databaseskema -versioner"
+  "sync-fail-reason": "Uoverensstemmende databaseskema -versioner",
+  "feedback-shared": "Feedback delt!",
+  "thank-you": "Tak skal du have!",
+  "email-optional": "E -mail (valgfrit)",
+  "feedback": "Feedback",
+  "backup-created": "Backup oprettet",
+  "delete-sync-backup-warning": "For at forhindre synkroniseringsproblemer mellem klienter er det en god ide at synkronisere alle andre aktive enheder, før de slettes."
 }

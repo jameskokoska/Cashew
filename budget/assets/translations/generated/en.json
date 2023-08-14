@@ -103,8 +103,9 @@
   "import-csv-description": "Import an external CSV data source",
   "rate-app": "Rate {app}",
   "rate-app-subtitle": "Share your feedback with the developer to help improve {app}",
-  "rate-app-privacy": "Only the stars, feedback and date will be shared.",
-  "feedback": "Feedback",
+  "rate-app-privacy": "Only the stars, feedback, and date will be shared.",
+  "rate-app-privacy-email": "Only the stars, feedback, (email if provided), and date will be shared.",
+  "feedback-and-suggestions": "Feedback and suggestions",
   "submit": "Submit",
   "select-color": "Select Color",
   "use-system-color": "Use System Color",
@@ -458,5 +459,11 @@
   "an-error-occured": "An error occured",
   "more": "More",
   "syncing-failed": "Syncing Failed",
-  "sync-fail-reason": "Mismatching database schema versions"
+  "sync-fail-reason": "Mismatching database schema versions",
+  "feedback-shared": "Feedback Shared!",
+  "thank-you": "Thank you!",
+  "email-optional": "Email (optional)",
+  "feedback": "Feedback",
+  "backup-created": "Backup Created",
+  "delete-sync-backup-warning": "To prevent synchronization issues between clients, it's a good idea to sync all other active devices before deleting."
 }

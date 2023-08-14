@@ -1,13 +1,12 @@
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
-import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/categoryIcon.dart';
 import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/widgets/openContainerNavigation.dart';
 import 'package:budget/widgets/tappable.dart';
-import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntry/transactionEntryTypeButton.dart';
+import 'package:budget/widgets/transactionEntry/transactionLabel.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -337,34 +336,11 @@ class TransactionEntry extends StatelessWidget {
                                             : 16.5;
                                     return Padding(
                                       padding: const EdgeInsets.only(left: 3),
-                                      child: transaction.name != ""
-                                          ? TextFont(
-                                              text: transaction
-                                                  .name.capitalizeFirst,
-                                              fontSize: fontSize,
-                                            )
-                                          : category == null
-                                              ? StreamBuilder<
-                                                  TransactionCategory>(
-                                                  stream: database
-                                                      .getCategory(transaction
-                                                          .categoryFk)
-                                                      .$1,
-                                                  builder: (context, snapshot) {
-                                                    if (snapshot.hasData) {
-                                                      return TextFont(
-                                                        text:
-                                                            snapshot.data!.name,
-                                                        fontSize: fontSize,
-                                                      );
-                                                    }
-                                                    return Container();
-                                                  },
-                                                )
-                                              : TextFont(
-                                                  text: category!.name,
-                                                  fontSize: fontSize,
-                                                ),
+                                      child: TransactionLabel(
+                                        fontSize: fontSize,
+                                        transaction: transaction,
+                                        category: category,
+                                      ),
                                     );
                                   }),
                                   transaction.sharedReferenceBudgetPk != null &&

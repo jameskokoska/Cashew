@@ -47,6 +47,7 @@ class TransactionEntries extends StatelessWidget {
     this.noSearchResultsVariation = false,
     this.noResultsMessage,
     this.searchFilters,
+    this.pastDaysLimitToShow,
     super.key,
   });
 
@@ -76,6 +77,7 @@ class TransactionEntries extends StatelessWidget {
   final bool noSearchResultsVariation;
   final String? noResultsMessage;
   final SearchFilters? searchFilters;
+  final int? pastDaysLimitToShow;
 
   @override
   Widget build(BuildContext context) {
@@ -124,6 +126,7 @@ class TransactionEntries extends StatelessWidget {
           }
           List<Widget> transactionsWidgets = [];
           DateTime previousDate = DateTime(1900);
+          int count = 0;
           for (DateTime? dateNullable in snapshot.data!.reversed) {
             DateTime date = dateNullable ?? DateTime.now();
             if (previousDate.day == date.day &&
@@ -135,6 +138,13 @@ class TransactionEntries extends StatelessWidget {
             //   child: GhostTransactions(i: random.nextInt(100)),
             // );
             previousDate = date;
+
+            if (pastDaysLimitToShow != null && pastDaysLimitToShow! <= count) {
+              continue;
+            }
+
+            count++;
+
             transactionsWidgets.add(
               StreamBuilder<List<TransactionWithCategory>>(
                 stream: database.getTransactionCategoryWithDay(

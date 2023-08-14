@@ -10,6 +10,22 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    < 3.8.5
+    Homepage now shows the past 7 days with transactions within the past month
+    If sign-in fails on launch, it will retry on next launch
+    If sign-in fails on user action, it will not retry on next launch
+    Number backups is remembered for loading shimmer
+    View delete logs in debug flags page
+    All delete logs erased after exiting preview mode - this would create issues if user syncs
+    Fixed reset language on backup load
+    Today indicator in budget more accurately shows the current day progress
+    In edit home, tapping container toggles switch
+    Fixed notification transaction name
+    Tapping upcoming notification transaction, opens transaction details
+    Leave rating loading popup
+    Title of pages capitalized
+    Fixed system language reset when restoring backup
+    Removed maybePop because it causes will pop scope to activate (save changes popup)
     < 3.8.4
     Home page line graph reset if selected graph deleted
     Add all selected transactions to a category

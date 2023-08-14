@@ -622,6 +622,7 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
                     MediaQuery.of(context).padding.top) /
                 (expandedHeightCalculated - collapsedHeight);
         if (collapsedHeight == expandedHeightCalculated) percent = 1;
+        String titleString = title.capitalizeFirst;
         return BlurBehindAppBar(
           child: FlexibleSpaceBar(
             centerTitle: enableDoubleColumn(context) ? true : false,
@@ -641,9 +642,9 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
                   child: titleWidget ??
                       TextFont(
                         text: getIsFullScreen(context) == false &&
-                                title.length > 20
-                            ? title.split(" ")[0]
-                            : title,
+                                titleString.length > 20
+                            ? titleString.split(" ")[0]
+                            : titleString,
                         fontSize: 22,
                         fontWeight: FontWeight.bold,
                         textColor: textColor == null

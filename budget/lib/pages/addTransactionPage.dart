@@ -25,6 +25,7 @@ import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/selectChips.dart';
 import 'package:budget/widgets/saveBottomButton.dart';
 import 'package:budget/widgets/transactionEntry/transactionEntryTypeButton.dart';
+import 'package:budget/widgets/transactionEntry/transactionLabel.dart';
 import 'package:budget/widgets/util/contextMenu.dart';
 import 'package:budget/widgets/util/showDatePicker.dart';
 import 'package:budget/widgets/util/widgetSize.dart';
@@ -1227,7 +1228,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                   : textAddTransaction ?? "",
                               onTap: () async {
                                 bool result = await addTransaction();
-                                if (result) Navigator.of(context).maybePop();
+                                if (result) Navigator.of(context).pop();
                               },
                             ),
                 ),
@@ -1270,8 +1271,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                     await addTransaction();
                                   },
                                 );
-                                if (result == true)
-                                  Navigator.of(context).maybePop();
+                                if (result == true) Navigator.of(context).pop();
                               },
                             ),
                           );
@@ -2473,7 +2473,7 @@ void deleteTransactionPopup(
   required RoutesToPopAfterDelete routesToPopAfterDelete,
 }) async {
   String? transactionName =
-      transaction.name.trim() == "" ? category?.name ?? null : transaction.name;
+      await getTransactionLabel(transaction, category: category);
   DeletePopupAction? action = await openDeletePopup(
     context,
     title: "delete-transaction-question".tr(),

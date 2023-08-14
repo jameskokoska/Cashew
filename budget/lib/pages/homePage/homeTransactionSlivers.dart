@@ -20,8 +20,8 @@ class HomeTransactionSlivers extends StatelessWidget {
             showNoResults: false,
             DateTime(
               DateTime.now().year,
-              DateTime.now().month,
-              DateTime.now().day - 7,
+              DateTime.now().month - 1,
+              DateTime.now().day,
             ),
             DateTime(
               DateTime.now().year,
@@ -37,6 +37,7 @@ class HomeTransactionSlivers extends StatelessWidget {
             slivers: false,
             dateDividerColor: Colors.transparent,
             useHorizontalPaddingConstrained: false,
+            pastDaysLimitToShow: 7,
           ),
         ),
       ),

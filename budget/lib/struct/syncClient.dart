@@ -77,7 +77,8 @@ Debouncer backupDebounce = Debouncer(milliseconds: 5000);
 Future<bool> createSyncBackup(
     {bool changeMadeSync = false,
     bool changeMadeSyncWaitForDebounce = true}) async {
-  if (appStateSettings["currentUserEmail"] == "") return false;
+  if (appStateSettings["hasSignedIn"] == false) return false;
+  if (errorSigningInDuringCloud == true) return false;
   if (appStateSettings["backupSync"] == false) return false;
   if (changeMadeSync == true && appStateSettings["syncEveryChange"] == false)
     return false;
@@ -175,7 +176,8 @@ class SyncLog {
 // load the latest backup and import any newly modified data into the db
 Future<bool> syncData(BuildContext context) async {
   if (appStateSettings["backupSync"] == false) return false;
-  if (appStateSettings["currentUserEmail"] == "") return false;
+  if (appStateSettings["hasSignedIn"] == false) return false;
+  if (errorSigningInDuringCloud == true) return false;
   // Prevent sign-in on web - background sign-in cannot access Google Drive etc.
   if (kIsWeb && !entireAppLoaded) return false;
 

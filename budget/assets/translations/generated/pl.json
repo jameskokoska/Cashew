@@ -104,7 +104,8 @@
   "rate-app": "Oceń aplikację",
   "rate-app-subtitle": "Podziel się swoją opinią z programistą, aby ulepszyć {app}",
   "rate-app-privacy": "Tylko gwiazdy, opinie i data zostaną udostępnione.",
-  "feedback": "Informacja zwrotna",
+  "rate-app-privacy-email": "Tylko gwiazdy, opinia (e -mail, jeśli podano) i datę zostaną udostępnione.",
+  "feedback-and-suggestions": "Informacje zwrotne i sugestie",
   "submit": "Składać",
   "select-color": "Wybierz kolor",
   "use-system-color": "Użyj koloru systemu",
@@ -458,5 +459,11 @@
   "an-error-occured": "Wystąpił błąd",
   "more": "Więcej",
   "syncing-failed": "Synchronizacja nie powiodła się",
-  "sync-fail-reason": "Wersje schematu bazy danych niedopasowania"
+  "sync-fail-reason": "Wersje schematu bazy danych niedopasowania",
+  "feedback-shared": "Udostępniono informacje zwrotne!",
+  "thank-you": "Dziękuję!",
+  "email-optional": "Email opcjonalny)",
+  "feedback": "Informacja zwrotna",
+  "backup-created": "Utworzona kopia zapasowa",
+  "delete-sync-backup-warning": "Aby zapobiec problemom synchronizacji między klientami, dobrym pomysłem jest synchronizacja wszystkich innych aktywnych urządzeń przed usunięciem."
 }

@@ -95,7 +95,7 @@ class SettingsPageState extends State<SettingsPage>
                 title: "share-feedback".tr(),
                 icon: Icons.rate_review_rounded,
                 onTap: () {
-                  openBottomSheet(context, RatingPopup());
+                  openBottomSheet(context, RatingPopup(), fullSnap: true);
                 },
               )
             : SizedBox.shrink(),
@@ -299,7 +299,8 @@ class MorePages extends StatelessWidget {
                             EdgeInsets.symmetric(vertical: 5, horizontal: 4),
                         child: SettingsContainer(
                           onTap: () {
-                            openBottomSheet(context, RatingPopup());
+                            openBottomSheet(context, RatingPopup(),
+                                fullSnap: true);
                           },
                           title: "feedback".tr(),
                           icon: Icons.rate_review_rounded,

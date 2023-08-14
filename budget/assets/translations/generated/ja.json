@@ -104,7 +104,8 @@
   "rate-app": "アプリを評価",
   "rate-app-subtitle": "開発者とフィードバックを共有して、{app}を改善するのに役立ちます",
   "rate-app-privacy": "星、フィー​​ドバック、日付のみが共有されます。",
-  "feedback": "フィードバック",
+  "rate-app-privacy-email": "星、フィー​​ドバック、（提供されている場合は電子メール）、および日付のみが共有されます。",
+  "feedback-and-suggestions": "フィードバックと提案",
   "submit": "送信",
   "select-color": "色を選択します",
   "use-system-color": "システムの色を使用します",
@@ -440,7 +441,7 @@
   "delete-category-question": "カテゴリを削除しますか？",
   "delete-category-question-description": "これにより、このカテゴリに関連付けられたすべてのトランザクションが削除されます。",
   "delete-all-transactions-question": "すべてのトランザクションを削除しますか？",
-  "delete-category-merge-warning": "カテゴリを削除すると、このカテゴリのすべてのトランザクションが削除されます。これを回避するために、トランザクションを別のカテゴリに移動します。",
+  "delete-category-merge-warning": "カテゴリを削除すると、このカテゴリのすべてのトランザクションが削除されます。これを避けるために、トランザクションを別のカテゴリに移動します。",
   "deleted-category": "削除されたカテゴリ",
   "delete-wallet-question": "ウォレットを削除しますか？",
   "delete-wallet-question-description": "これにより、このウォレットに関連付けられたすべてのトランザクションが削除されます。",
@@ -458,5 +459,11 @@
   "an-error-occured": "エラーが発生した",
   "more": "もっと",
   "syncing-failed": "同期に失敗しました",
-  "sync-fail-reason": "データベーススキーマバージョンの不一致"
+  "sync-fail-reason": "データベーススキーマバージョンの不一致",
+  "feedback-shared": "共有されたフィードバック！",
+  "thank-you": "ありがとう！",
+  "email-optional": "メール（オプション）",
+  "feedback": "フィードバック",
+  "backup-created": "作成されたバックアップ",
+  "delete-sync-backup-warning": "クライアント間の同期の問題を防ぐために、削除する前に他のすべてのアクティブなデバイスを同期することをお勧めします。"
 }

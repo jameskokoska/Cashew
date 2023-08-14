@@ -34,7 +34,7 @@ import 'firebase_options.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 // Requires hot reload when changed
-bool enableDevicePreview = true && kDebugMode;
+bool enableDevicePreview = false && kDebugMode;
 bool allowDebugFlags = true || kIsWeb;
 bool premiumPopupEnabled = false && !kIsWeb;
 

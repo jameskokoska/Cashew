@@ -104,7 +104,8 @@
   "rate-app": "قيم التطبيق",
   "rate-app-subtitle": "شارك ملاحظاتك مع المطور للمساعدة في تحسين {app}",
   "rate-app-privacy": "سيتم مشاركة النجوم والتعليقات والتاريخ فقط.",
-  "feedback": "تعليق",
+  "rate-app-privacy-email": "سيتم مشاركة النجوم فقط ، والتعليقات ، (البريد الإلكتروني إذا تم توفيرها) ، والتاريخ.",
+  "feedback-and-suggestions": "ردود الفعل والاقتراحات",
   "submit": "يُقدِّم",
   "select-color": "إختر لون",
   "use-system-color": "استخدام لون النظام",
@@ -443,7 +444,7 @@
   "delete-category-merge-warning": "سيؤدي حذف فئة إلى حذف جميع المعاملات في هذه الفئة. نقل المعاملات إلى فئة أخرى لتجنب ذلك.",
   "deleted-category": "فئة المحذوفة",
   "delete-wallet-question": "حذف محفظة؟",
-  "delete-wallet-question-description": "سيؤدي ذلك إلى حذف جميع المعاملات المرتبطة بهذه المحفظة.",
+  "delete-wallet-question-description": "سيؤدي هذا إلى حذف جميع المعاملات المرتبطة بهذه المحفظة.",
   "move-transactions": "نقل المعاملات",
   "delete-wallet-merge-warning": "سيحذف حذف محفظة جميع المعاملات في هذه المحفظة. نقل المعاملات إلى محفظة أخرى لتجنب ذلك.",
   "deleted-wallet": "محفظة محذوفة",
@@ -458,5 +459,11 @@
   "an-error-occured": "حدث خطأ",
   "more": "أكثر",
   "syncing-failed": "فشل مزامنة",
-  "sync-fail-reason": "عدم تطابق إصدارات مخطط قاعدة البيانات"
+  "sync-fail-reason": "عدم تطابق إصدارات مخطط قاعدة البيانات",
+  "feedback-shared": "ردود الفعل مشتركة!",
+  "thank-you": "شكرًا لك!",
+  "email-optional": "البريد الإلكتروني اختياري)",
+  "feedback": "تعليق",
+  "backup-created": "خلق النسخ الاحتياطي",
+  "delete-sync-backup-warning": "لمنع مشكلات التزامن بين العملاء ، من الجيد مزامنة جميع الأجهزة النشطة الأخرى قبل الحذف."
 }

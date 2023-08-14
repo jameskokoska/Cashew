@@ -75,10 +75,12 @@ GlobalKey<GlobalLoadingIndeterminateState> loadingIndeterminateKey =
 GlobalKey<GlobalSnackbarState> snackbarKey = GlobalKey();
 
 bool runningCloudFunctions = false;
+bool errorSigningInDuringCloud = false;
 Future<bool> runAllCloudFunctions(BuildContext context,
     {bool forceSignIn = false}) async {
   print("Running All Cloud Functions");
   runningCloudFunctions = true;
+  errorSigningInDuringCloud = false;
   try {
     loadingIndeterminateKey.currentState!.setVisibility(true);
     await syncData(context);
@@ -114,6 +116,7 @@ Future<bool> runAllCloudFunctions(BuildContext context,
   Future.delayed(Duration(milliseconds: 2000), () {
     runningCloudFunctions = false;
   });
+  errorSigningInDuringCloud = false;
   return true;
 }
 
@@ -153,7 +156,7 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
       await showChangelog(context);
       if ((appStateSettings["numLogins"] + 1) % 10 == 0 &&
           appStateSettings["submittedFeedback"] != true) {
-        openBottomSheet(context, RatingPopup());
+        openBottomSheet(context, RatingPopup(), fullSnap: true);
       }
       await initializeDefaultDatabase();
       await markSubscriptionsAsPaid();

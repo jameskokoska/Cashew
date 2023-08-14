@@ -104,7 +104,8 @@
   "rate-app": "Kadar {app}",
   "rate-app-subtitle": "Kongsi maklum balas anda dengan pemaju untuk membantu meningkatkan {app}",
   "rate-app-privacy": "Hanya bintang, maklum balas dan tarikh akan dikongsi.",
-  "feedback": "Maklum balas",
+  "rate-app-privacy-email": "Hanya bintang, maklum balas, (e -mel jika disediakan), dan tarikh akan dikongsi.",
+  "feedback-and-suggestions": "Maklum balas dan cadangan",
   "submit": "Hantar",
   "select-color": "Pilih warna",
   "use-system-color": "Gunakan warna sistem",
@@ -458,5 +459,11 @@
   "an-error-occured": "Ralat berlaku",
   "more": "Lebih",
   "syncing-failed": "Penyegerakan gagal",
-  "sync-fail-reason": "Versi skema pangkalan data yang tidak sepadan"
+  "sync-fail-reason": "Versi skema pangkalan data yang tidak sepadan",
+  "feedback-shared": "Maklum balas dikongsi!",
+  "thank-you": "Terima kasih!",
+  "email-optional": "E -mel (pilihan)",
+  "feedback": "Maklum balas",
+  "backup-created": "Sandaran dibuat",
+  "delete-sync-backup-warning": "Untuk mengelakkan isu penyegerakan antara pelanggan, adalah idea yang baik untuk menyegerakkan semua peranti aktif lain sebelum memadam."
 }

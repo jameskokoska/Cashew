@@ -104,7 +104,8 @@
   "rate-app": "Nilai {app}",
   "rate-app-subtitle": "Bagikan umpan balik Anda dengan pengembang untuk membantu meningkatkan {app}",
   "rate-app-privacy": "Hanya bintang, umpan balik, dan tanggal yang akan dibagikan.",
-  "feedback": "Masukan",
+  "rate-app-privacy-email": "Hanya bintang, umpan balik, (email jika disediakan), dan tanggal yang akan dibagikan.",
+  "feedback-and-suggestions": "Umpan balik dan saran",
   "submit": "Kirim",
   "select-color": "Pilih Warna",
   "use-system-color": "Gunakan warna sistem",
@@ -436,7 +437,7 @@
   "pinned-to-homepage": "Disematkan ke beranda",
   "unpinned-to-homepage": "Dibuka dari beranda",
   "expenses-only": "Hanya pengeluaran",
-  "expenses-only-description": "Hanya pengeluaran yang dapat ditambahkan ke anggaran",
+  "expenses-only-description": "Hanya biaya yang dapat ditambahkan ke anggaran",
   "delete-category-question": "Hapus kategori?",
   "delete-category-question-description": "Ini akan menghapus semua transaksi yang terkait dengan kategori ini.",
   "delete-all-transactions-question": "Hapus semua transaksi?",
@@ -458,5 +459,11 @@
   "an-error-occured": "Kesalahan terjadi",
   "more": "Lagi",
   "syncing-failed": "Sinkronisasi gagal",
-  "sync-fail-reason": "Versi skema database yang tidak cocok"
+  "sync-fail-reason": "Versi skema database yang tidak cocok",
+  "feedback-shared": "Umpan Balik Dibagi!",
+  "thank-you": "Terima kasih!",
+  "email-optional": "Email (opsional)",
+  "feedback": "Masukan",
+  "backup-created": "Cadangan dibuat",
+  "delete-sync-backup-warning": "Untuk mencegah masalah sinkronisasi antara klien, itu ide yang baik untuk menyinkronkan semua perangkat aktif lainnya sebelum dihapus."
 }

@@ -340,6 +340,15 @@ class _EditHomePageState extends State<EditHomePage> {
           },
           itemBuilder: (context, index) {
             String key = keyOrder[index];
+            toggleSwitch() {
+              editHomePageItems[key]
+                  ?.onSwitched(!(editHomePageItems[key]?.isEnabled ?? false));
+              setState(() {
+                editHomePageItems[key]?.isEnabled =
+                    !(editHomePageItems[key]?.isEnabled ?? false);
+              });
+            }
+
             return EditRowEntry(
               canReorder: true,
               currentReorder: currentReorder != -1 && currentReorder != index,
@@ -350,22 +359,16 @@ class _EditHomePageState extends State<EditHomePage> {
                   getPlatform() == PlatformOS.isIOS
                       ? CupertinoSwitch(
                           activeColor: Theme.of(context).colorScheme.primary,
-                          value: editHomePageItems[key]!.isEnabled,
+                          value: editHomePageItems[key]?.isEnabled ?? false,
                           onChanged: (value) {
-                            editHomePageItems[key]!.onSwitched(value);
-                            setState(() {
-                              editHomePageItems[key]!.isEnabled = value;
-                            });
+                            toggleSwitch();
                           },
                         )
                       : Switch(
                           activeColor: Theme.of(context).colorScheme.primary,
-                          value: editHomePageItems[key]!.isEnabled,
+                          value: editHomePageItems[key]?.isEnabled ?? false,
                           onChanged: (value) {
-                            editHomePageItems[key]!.onSwitched(value);
-                            setState(() {
-                              editHomePageItems[key]!.isEnabled = value;
-                            });
+                            toggleSwitch();
                           },
                           materialTapTargetSize:
                               MaterialTapTargetSize.shrinkWrap,
@@ -405,7 +408,10 @@ class _EditHomePageState extends State<EditHomePage> {
               canDelete: false,
               index: index,
               onDelete: () {},
-              onTap: editHomePageItems[key]?.onTap ?? () {},
+              onTap: editHomePageItems[key]?.onTap ??
+                  () {
+                    toggleSwitch();
+                  },
               openPage: Container(),
             );
           },

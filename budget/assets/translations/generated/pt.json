@@ -104,7 +104,8 @@
   "rate-app": "Avalie {app}",
   "rate-app-subtitle": "Compartilhe seu feedback com o desenvolvedor para ajudar a melhorar {app}",
   "rate-app-privacy": "Somente as estrelas, o feedback e a data serão compartilhados.",
-  "feedback": "Opinião",
+  "rate-app-privacy-email": "Somente as estrelas, o feedback (email se fornecido) e a data serão compartilhados.",
+  "feedback-and-suggestions": "Feedback e sugestões",
   "submit": "Enviar",
   "select-color": "Selecione a cor",
   "use-system-color": "Use a cor do sistema",
@@ -458,5 +459,11 @@
   "an-error-occured": "Um erro ocorreu",
   "more": "Mais",
   "syncing-failed": "A sincronização falhou",
-  "sync-fail-reason": "Versões de esquema de banco de dados incompatíveis"
+  "sync-fail-reason": "Versões de esquema de banco de dados incompatíveis",
+  "feedback-shared": "Feedback compartilhado!",
+  "thank-you": "Obrigado!",
+  "email-optional": "E-mail opcional)",
+  "feedback": "Opinião",
+  "backup-created": "Backup criado",
+  "delete-sync-backup-warning": "Para evitar problemas de sincronização entre os clientes, é uma boa ideia sincronizar todos os outros dispositivos ativos antes de excluir."
 }

@@ -3972,4 +3972,12 @@ class FinanceDatabase extends _$FinanceDatabase {
     }
     return true;
   }
+
+  Future deleteAllDeleteLogs() async {
+    await delete(deleteLogs).go();
+  }
+
+  Stream<List<DeleteLog>> watchAllDeleteLogs() {
+    return (select(deleteLogs)).watch();
+  }
 }

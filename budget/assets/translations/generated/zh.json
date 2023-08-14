@@ -104,7 +104,8 @@
   "rate-app": "评价应用",
   "rate-app-subtitle": "与开发人员分享您的反馈，以帮助改进{app}",
   "rate-app-privacy": "只有星星，反馈和日期才能共享。",
-  "feedback": "反馈",
+  "rate-app-privacy-email": "只有星星，反馈，（提供的电子邮件），将共享日期。",
+  "feedback-and-suggestions": "反馈和建议",
   "submit": "提交",
   "select-color": "选择颜色",
   "use-system-color": "使用系统颜色",
@@ -458,5 +459,11 @@
   "an-error-occured": "发生错误",
   "more": "更多的",
   "syncing-failed": "同步失败",
-  "sync-fail-reason": "不匹配数据库架构版本"
+  "sync-fail-reason": "不匹配数据库架构版本",
+  "feedback-shared": "分享反馈！",
+  "thank-you": "谢谢你！",
+  "email-optional": "电子邮件（可选）",
+  "feedback": "反馈",
+  "backup-created": "创建了备份",
+  "delete-sync-backup-warning": "为了防止客户端之间的同步问题，在删除所有其他活动设备之前，是一个好主意。"
 }

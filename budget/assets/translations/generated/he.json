@@ -104,7 +104,8 @@
   "rate-app": "דרג אפליקציה}",
   "rate-app-subtitle": "שתף את המשוב שלך עם המפתח כדי לעזור בשיפור {app}",
   "rate-app-privacy": "רק הכוכבים, המשוב והתאריך ישותפו.",
-  "feedback": "מָשׁוֹב",
+  "rate-app-privacy-email": "רק הכוכבים, המשוב, (דוא\"ל אם מסופק) ותאריך ישותפו.",
+  "feedback-and-suggestions": "משוב והצעות",
   "submit": "שלח",
   "select-color": "בחר צבע",
   "use-system-color": "השתמש בצבע מערכת",
@@ -458,5 +459,11 @@
   "an-error-occured": "חלה שגיאה",
   "more": "יותר",
   "syncing-failed": "סנכרון נכשל",
-  "sync-fail-reason": "גרסאות סכימת מסד נתונים לא תואמות"
+  "sync-fail-reason": "גרסאות סכימת מסד נתונים לא תואמות",
+  "feedback-shared": "משוב משותף!",
+  "thank-you": "תודה!",
+  "email-optional": "דוא\"ל (אופציונלי)",
+  "feedback": "מָשׁוֹב",
+  "backup-created": "גיבוי נוצר",
+  "delete-sync-backup-warning": "כדי למנוע בעיות סנכרון בין לקוחות, כדאי לסנכרן את כל המכשירים הפעילים האחרים לפני המחיקה."
 }

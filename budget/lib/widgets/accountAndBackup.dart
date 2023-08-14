@@ -159,9 +159,8 @@ Future<bool> signInGoogle(
       Navigator.of(context).pop();
     next != null ? next() : 0;
 
-    if (appStateSettings["hasSignedInOnce"] == false) {
-      updateSettings("hasSignedInOnce", true, updateGlobalState: false);
-      updateSettings("autoBackups", true, updateGlobalState: false);
+    if (appStateSettings["hasSignedIn"] == false) {
+      updateSettings("hasSignedIn", true, updateGlobalState: false);
     }
 
     return true;
@@ -179,6 +178,11 @@ Future<bool> signInGoogle(
       ),
     );
     updateSettings("currentUserEmail", "", updateGlobalState: true);
+    if (runningCloudFunctions) {
+      errorSigningInDuringCloud = true;
+    } else {
+      updateSettings("hasSignedIn", false, updateGlobalState: false);
+    }
     throw ("Error signing in");
   }
 }
@@ -203,6 +207,7 @@ Future<bool> signOutGoogle() async {
   await googleSignIn?.signOut();
   googleUser = null;
   updateSettings("currentUserEmail", "", updateGlobalState: true);
+  updateSettings("hasSignedIn", false, updateGlobalState: false);
   print("Signedout");
   return true;
 }
@@ -214,7 +219,8 @@ Future<bool> refreshGoogleSignIn() async {
 }
 
 Future<void> createBackupInBackground(context) async {
-  if (appStateSettings["currentUserEmail"] == "") return;
+  if (appStateSettings["hasSignedIn"] == false) return;
+  if (errorSigningInDuringCloud == true) return;
   if (kIsWeb && !entireAppLoaded) return;
   // print(entireAppLoaded);
   print("Last backup: " + appStateSettings["lastBackup"]);
@@ -326,7 +332,7 @@ Future<void> createBackup(
     if (clientIDForSync == null)
       openSnackbar(
         SnackbarMessage(
-          title: "Backup Created",
+          title: "backup-created".tr(),
           description: driveFile.name,
           icon: Icons.backup_rounded,
         ),
@@ -730,12 +736,15 @@ class _BackupManagementState extends State<BackupManagement> {
         print(appStateSettings["devicesHaveBeenSynced"]);
         filesState =
             filesState.where((file) => isSyncBackupFile(file.name)).toList();
-        appStateSettings["devicesHaveBeenSynced"] = filesState.length;
+        updateSettings("devicesHaveBeenSynced", filesState.length,
+            updateGlobalState: false);
       }
     } else {
       if (filesState.length > 0) {
         filesState =
             filesState.where((file) => !isSyncBackupFile(file.name)).toList();
+        updateSettings("numBackups", filesState.length,
+            updateGlobalState: false);
       }
     }
     Iterable<dynamic> filesMap = filesState.asMap().entries;
@@ -930,7 +939,7 @@ class _BackupManagementState extends State<BackupManagement> {
                         i <
                             (widget.isClientSync
                                 ? appStateSettings["devicesHaveBeenSynced"]
-                                : appStateSettings["backupLimit"]);
+                                : appStateSettings["numBackups"]);
                         i++)
                       LoadingShimmerDriveFiles(
                           isManaging: widget.isManaging, i: i),
@@ -1031,6 +1040,7 @@ class _BackupManagementState extends State<BackupManagement> {
                                                 ),
                                                 fontSize: 18,
                                                 fontWeight: FontWeight.bold,
+                                                maxLines: 2,
                                               ),
                                               TextFont(
                                                 text: (isSyncBackupFile(
@@ -1112,10 +1122,14 @@ class _BackupManagementState extends State<BackupManagement> {
                                                     context,
                                                     icon: Icons.delete_rounded,
                                                     title: "delete-backup".tr(),
-                                                    description: "Backup " +
-                                                        (file.value.name ??
-                                                            "No name") +
-                                                        " created " +
+                                                    subtitle: file.value.name ??
+                                                        "No name",
+                                                    description: (widget
+                                                                .isClientSync
+                                                            ? "delete-sync-backup-warning"
+                                                                    .tr() +
+                                                                "\n"
+                                                            : "") +
                                                         getWordedDateShortMore(
                                                             (file.value.modifiedTime ??
                                                                     DateTime
@@ -1157,6 +1171,15 @@ class _BackupManagementState extends State<BackupManagement> {
                                                                 1,
                                                             updateGlobalState:
                                                                 false);
+                                                      if (widget.isManaging) {
+                                                        updateSettings(
+                                                            "numBackups",
+                                                            appStateSettings[
+                                                                    "numBackups"] -
+                                                                1,
+                                                            updateGlobalState:
+                                                                false);
+                                                      }
                                                       loadingIndeterminateKey
                                                           .currentState!
                                                           .setVisibility(false);

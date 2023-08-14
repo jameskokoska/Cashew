@@ -104,7 +104,8 @@
   "rate-app": "Vurder {app}",
   "rate-app-subtitle": "Del tilbakemeldingene dine med utvikleren for å forbedre {app}",
   "rate-app-privacy": "Bare stjernene, tilbakemeldingene og datoen vil bli delt.",
-  "feedback": "Tilbakemelding",
+  "rate-app-privacy-email": "Bare stjernene, tilbakemeldinger, (e -post hvis gitt) og dato vil bli delt.",
+  "feedback-and-suggestions": "Tilbakemelding og forslag",
   "submit": "Sende inn",
   "select-color": "Velg farge",
   "use-system-color": "Bruk systemfarge",
@@ -458,5 +459,11 @@
   "an-error-occured": "En feil oppstod",
   "more": "Mer",
   "syncing-failed": "Synkronisering mislyktes",
-  "sync-fail-reason": "Uoverensstemmende databaseskjemaversjoner"
+  "sync-fail-reason": "Uoverensstemmende databaseskjemaversjoner",
+  "feedback-shared": "Tilbakemelding delt!",
+  "thank-you": "Takk skal du ha!",
+  "email-optional": "E -post (valgfritt)",
+  "feedback": "Tilbakemelding",
+  "backup-created": "Sikkerhetskopiering opprettet",
+  "delete-sync-backup-warning": "For å forhindre synkroniseringsproblemer mellom klienter, er det lurt å synkronisere alle andre aktive enheter før du sletter."
 }

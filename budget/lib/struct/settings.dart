@@ -30,9 +30,9 @@ Future<bool> initializeSettings() async {
           userSettings[key] = userPreferencesDefault[key];
         }
       });
-      // Always reset the language when restoring a backup
-      userSettings["language"] = "System";
-      updateSettings("databaseJustImported", false, updateGlobalState: false);
+      // Always reset the language/locale when restoring a backup
+      userSettings["locale"] = "System";
+      userSettings["databaseJustImported"] = false;
       print("Settings were restored");
     } catch (e) {
       print("Error restoring imported settings " + e.toString());

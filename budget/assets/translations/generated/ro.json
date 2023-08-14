@@ -104,7 +104,8 @@
   "rate-app": "Rata {app}",
   "rate-app-subtitle": "Împărtășește -ți feedback -ul cu dezvoltatorul pentru a ajuta la îmbunătățirea {app}",
   "rate-app-privacy": "Doar stelele, feedback -ul și data vor fi partajate.",
-  "feedback": "Părere",
+  "rate-app-privacy-email": "Vor fi partajate doar stelele, feedback -ul (e -mailul dacă este furnizat) și data.",
+  "feedback-and-suggestions": "Feedback și sugestii",
   "submit": "Trimite",
   "select-color": "Selectați culoare",
   "use-system-color": "Folosiți culoarea sistemului",
@@ -448,7 +449,7 @@
   "delete-wallet-merge-warning": "Ștergerea unui portofel va șterge toate tranzacțiile din acest portofel. Mutați tranzacțiile într -un alt portofel pentru a evita acest lucru.",
   "deleted-wallet": "Portofel șters",
   "delete-title-question": "Ștergeți titlul?",
-  "deleted-title": "Titlul șters",
+  "deleted-title": "Titlu șters",
   "remove-transactions-from-added-budget-question": "Eliminați tranzacțiile?",
   "deleted-transactions": "Tranzacții șterse",
   "deleted-transaction": "Tranzacția ștersă",
@@ -458,5 +459,11 @@
   "an-error-occured": "A aparut o eroare",
   "more": "Mai mult",
   "syncing-failed": "Sincronizarea a eșuat",
-  "sync-fail-reason": "Nepotrivirea versiunilor de scheme de baze de date"
+  "sync-fail-reason": "Nepotrivirea versiunilor de scheme de baze de date",
+  "feedback-shared": "Feedback împărtășit!",
+  "thank-you": "Mulțumesc!",
+  "email-optional": "E -mail (opțional)",
+  "feedback": "Părere",
+  "backup-created": "Creat de rezervă",
+  "delete-sync-backup-warning": "Pentru a preveni problemele de sincronizare între clienți, este o idee bună să sincronizați toate celelalte dispozitive active înainte de a șterge."
 }

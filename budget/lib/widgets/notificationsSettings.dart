@@ -10,6 +10,7 @@ import 'package:budget/struct/notificationsGlobal.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/settingsContainers.dart';
+import 'package:budget/widgets/transactionEntry/transactionLabel.dart';
 import 'package:budget/widgets/util/showTimePicker.dart';
 import 'package:drift/drift.dart' hide Column;
 import 'package:easy_localization/easy_localization.dart';
@@ -163,38 +164,60 @@ class _UpcomingTransactionsNotificationsSettingsState
                       return Column(
                         children: [
                           for (Transaction transaction in snapshot.data!)
-                            SettingsContainerSwitch(
-                              onLongPress: () {
-                                pushRoute(
-                                  context,
-                                  AddTransactionPage(
-                                    transaction: transaction,
-                                    routesToPopAfterDelete:
-                                        RoutesToPopAfterDelete.One,
-                                  ),
-                                );
+                            StreamBuilder<TransactionCategory>(
+                              stream: database
+                                  .getCategory(transaction.categoryFk)
+                                  .$1,
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData) {
+                                  return SettingsContainerSwitch(
+                                    onLongPress: () {
+                                      pushRoute(
+                                        context,
+                                        AddTransactionPage(
+                                          transaction: transaction,
+                                          routesToPopAfterDelete:
+                                              RoutesToPopAfterDelete.One,
+                                        ),
+                                      );
+                                    },
+                                    onTap: () {
+                                      pushRoute(
+                                        context,
+                                        AddTransactionPage(
+                                          transaction: transaction,
+                                          routesToPopAfterDelete:
+                                              RoutesToPopAfterDelete.One,
+                                        ),
+                                      );
+                                    },
+                                    icon: getTransactionTypeIcon(
+                                        transaction.type),
+                                    title: getTransactionLabelSync(
+                                        transaction, snapshot.data!),
+                                    description: getWordedDateShortMore(
+                                            transaction.dateCreated) +
+                                        ", " +
+                                        getWordedTime(transaction.dateCreated),
+                                    onSwitched: (value) async {
+                                      await database.createOrUpdateTransaction(
+                                          transaction.copyWith(
+                                              upcomingTransactionNotification:
+                                                  Value(value)));
+                                      await initializeNotificationsPlatform();
+                                      await scheduleUpcomingTransactionsNotification(
+                                          context);
+                                      return;
+                                    },
+                                    syncWithInitialValue: false,
+                                    initialValue: transaction
+                                            .upcomingTransactionNotification ??
+                                        true,
+                                  );
+                                }
+                                return Container();
                               },
-                              icon: getTransactionTypeIcon(transaction.type),
-                              title: transaction.name,
-                              description: getWordedDateShortMore(
-                                      transaction.dateCreated) +
-                                  ", " +
-                                  getWordedTime(transaction.dateCreated),
-                              onSwitched: (value) async {
-                                await database.createOrUpdateTransaction(
-                                    transaction.copyWith(
-                                        upcomingTransactionNotification:
-                                            Value(value)));
-                                await initializeNotificationsPlatform();
-                                await scheduleUpcomingTransactionsNotification(
-                                    context);
-                                return;
-                              },
-                              syncWithInitialValue: false,
-                              initialValue:
-                                  transaction.upcomingTransactionNotification ??
-                                      true,
-                            ),
+                            )
                         ],
                       );
                     }
@@ -314,7 +337,7 @@ Future<bool> scheduleUpcomingTransactionsNotification(context) async {
                     DateTime.now().minute))) {
       continue;
     }
-    String chosenMessage = upcomingTransaction.name;
+    String chosenMessage = await getTransactionLabel(upcomingTransaction);
     tz.TZDateTime dateTime = tz.TZDateTime(
       tz.local,
       upcomingTransaction.dateCreated.year,

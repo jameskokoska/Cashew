@@ -7,6 +7,7 @@ import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/widgets/globalSnackBar.dart';
 import 'package:budget/widgets/navigationFramework.dart';
+import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/openSnackbar.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textInput.dart';
@@ -30,7 +31,9 @@ class RatingPopup extends StatefulWidget {
 
 class _RatingPopupState extends State<RatingPopup> {
   int? selectedStars = null;
+  bool writingFeedback = false;
   TextEditingController _feedbackController = TextEditingController();
+  TextEditingController _feedbackControllerEmail = TextEditingController();
 
   @override
   void initState() {
@@ -92,18 +95,42 @@ class _RatingPopupState extends State<RatingPopup> {
           ),
           SizedBox(height: 15),
           TextInput(
-            labelText: "feedback".tr(),
+            labelText: "feedback-and-suggestions".tr(),
             keyboardType: TextInputType.multiline,
             maxLines: null,
             minLines: 3,
             padding: EdgeInsets.zero,
             controller: _feedbackController,
+            onChanged: (value) {
+              if (writingFeedback == false) {
+                setState(() {
+                  writingFeedback = true;
+                });
+                bottomSheetControllerGlobal.snapToExtent(0);
+              }
+            },
           ),
           SizedBox(height: 10),
+          AnimatedSize(
+            duration: Duration(milliseconds: 500),
+            curve: Curves.easeInOutCubicEmphasized,
+            child: writingFeedback
+                ? Padding(
+                    padding: const EdgeInsets.only(bottom: 10),
+                    child: TextInput(
+                      labelText: "email-optional".tr(),
+                      padding: EdgeInsets.zero,
+                      controller: _feedbackControllerEmail,
+                    ),
+                  )
+                : Container(),
+          ),
           Opacity(
             opacity: 0.4,
             child: TextFont(
-              text: "rate-app-privacy".tr(),
+              text: writingFeedback
+                  ? "rate-app-privacy-email".tr()
+                  : "rate-app-privacy".tr(),
               textAlign: TextAlign.center,
               fontSize: 12,
               maxLines: 5,
@@ -113,10 +140,8 @@ class _RatingPopupState extends State<RatingPopup> {
           Button(
             label: "submit".tr(),
             onTap: () async {
-              shareFeedback(selectedStars, _feedbackController.text, "rating");
-              updateSettings("submittedFeedback", true,
-                  pagesNeedingRefresh: [], updateGlobalState: false);
               Navigator.pop(context);
+              shareFeedback(selectedStars, _feedbackController.text, "rating");
             },
             disabled: selectedStars == null,
           )
@@ -128,20 +153,19 @@ class _RatingPopupState extends State<RatingPopup> {
 
 Future<bool> shareFeedback(selectedStars, feedbackText, feedbackType) async {
   loadingIndeterminateKey.currentState!.setVisibility(true);
+  bool error = false;
+
   try {
-    if ((selectedStars ?? 0) >= 4 && await inAppReview.isAvailable()) {
-      inAppReview.requestReview();
+    if ((selectedStars ?? 0) >= 4) {
+      openLoadingPopup(navbarStateKey.currentContext!);
+      if (await inAppReview.isAvailable()) inAppReview.requestReview();
     }
   } catch (e) {
-    loadingIndeterminateKey.currentState!.setVisibility(false);
-    print("Error leaving review on store");
-    openSnackbar(SnackbarMessage(
-        title: "Error Sharing Feedback",
-        description: "Please try again later",
-        icon: Icons.warning_amber_rounded,
-        timeout: Duration(milliseconds: 2500)));
-    return false;
+    print(e.toString());
+    error = true;
   }
+  Navigator.pop(navbarStateKey.currentContext!);
+
   try {
     FirebaseFirestore? db = await firebaseGetDBInstanceAnonymous();
     if (db == null) {
@@ -158,20 +182,28 @@ Future<bool> shareFeedback(selectedStars, feedbackText, feedbackType) async {
         await db.collection("feedback").add(feedbackEntry);
 
     openSnackbar(SnackbarMessage(
-        title: "Feedback Shared",
-        description: "Thank you!",
+        title: "feedback-shared".tr(),
+        description: "thank-you".tr(),
         icon: Icons.rate_review_rounded,
         timeout: Duration(milliseconds: 2500)));
   } catch (e) {
-    loadingIndeterminateKey.currentState!.setVisibility(false);
-    print("There was an error sharing feedback");
+    print(e.toString());
+    error = true;
+  }
+  if (error == true) {
+    print("Error leaving review on store");
     openSnackbar(SnackbarMessage(
         title: "Error Sharing Feedback",
         description: "Please try again later",
         icon: Icons.warning_amber_rounded,
         timeout: Duration(milliseconds: 2500)));
-    return false;
   }
   loadingIndeterminateKey.currentState!.setVisibility(false);
+
+  if (selectedStars != -1) {
+    updateSettings("submittedFeedback", true,
+        pagesNeedingRefresh: [], updateGlobalState: false);
+  }
+
   return true;
 }
