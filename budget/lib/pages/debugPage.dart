@@ -19,6 +19,8 @@ import 'package:flutter/scheduler.dart';
 import 'package:universal_html/html.dart' as html;
 import 'package:budget/struct/randomConstants.dart';
 
+import '../widgets/sliderSelector.dart';
+
 class DebugPage extends StatelessWidget {
   const DebugPage({Key? key}) : super(key: key);
   @override
@@ -98,14 +100,16 @@ class DebugPage extends StatelessWidget {
           initialValue: appStateSettings["batterySaver"],
           icon: Icons.battery_charging_full_rounded,
         ),
-        SettingsContainerSwitch(
-          title: "Mass edit selected transactions",
-          onSwitched: (value) {
-            updateSettings("massEditSelectedTransactions", value,
-                pagesNeedingRefresh: [0], updateGlobalState: false);
-          },
-          initialValue: appStateSettings["massEditSelectedTransactions"],
-          icon: Icons.edit,
+        DangerousDebugFlag(
+          child: SettingsContainerSwitch(
+            title: "Mass edit selected transactions",
+            onSwitched: (value) {
+              updateSettings("massEditSelectedTransactions", value,
+                  pagesNeedingRefresh: [0], updateGlobalState: false);
+            },
+            initialValue: appStateSettings["massEditSelectedTransactions"],
+            icon: Icons.edit,
+          ),
         ),
         SettingsContainerDropdown(
           title: "Font",
@@ -127,36 +131,42 @@ class DebugPage extends StatelessWidget {
           initialValue: appStateSettings["colorTintCategoryIcon"],
           icon: Icons.category_rounded,
         ),
-        SettingsContainerSwitch(
-          onSwitched: (value) async {
-            updateSettings("emailScanning", value,
-                updateGlobalState: false, pagesNeedingRefresh: [3]);
-          },
-          title: "Enable Email Scanning",
-          description: "Not verified by Google. Still in testing.",
-          initialValue: appStateSettings["emailScanning"],
-          icon: Icons.mark_email_unread_rounded,
+        DangerousDebugFlag(
+          child: SettingsContainerSwitch(
+            onSwitched: (value) async {
+              updateSettings("emailScanning", value,
+                  updateGlobalState: false, pagesNeedingRefresh: [3]);
+            },
+            title: "Enable Email Scanning",
+            description: "Not verified by Google. Still in testing.",
+            initialValue: appStateSettings["emailScanning"],
+            icon: Icons.mark_email_unread_rounded,
+          ),
         ),
-        SettingsContainerSwitch(
-          onSwitched: (value) async {
-            updateSettings("emailScanningPullToRefresh", value,
-                pagesNeedingRefresh: [], updateGlobalState: false);
-          },
-          title: "Email Scanning Pull to Refresh",
-          description: "May increase API usage",
-          initialValue: appStateSettings["emailScanningPullToRefresh"],
-          icon: Icons.mark_email_unread_rounded,
+        DangerousDebugFlag(
+          child: SettingsContainerSwitch(
+            onSwitched: (value) async {
+              updateSettings("emailScanningPullToRefresh", value,
+                  pagesNeedingRefresh: [], updateGlobalState: false);
+            },
+            title: "Email Scanning Pull to Refresh",
+            description: "May increase API usage",
+            initialValue: appStateSettings["emailScanningPullToRefresh"],
+            icon: Icons.mark_email_unread_rounded,
+          ),
         ),
-        SettingsContainerSwitch(
-          onSwitched: (value) async {
-            updateSettings("sharedBudgets", value,
-                updateGlobalState: true, pagesNeedingRefresh: [0, 1, 2, 3]);
-          },
-          title: "Enable Shared Budgets",
-          description:
-              "In testing, share budgets and transactions with other users.",
-          initialValue: appStateSettings["sharedBudgets"],
-          icon: Icons.share_rounded,
+        DangerousDebugFlag(
+          child: SettingsContainerSwitch(
+            onSwitched: (value) async {
+              updateSettings("sharedBudgets", value,
+                  updateGlobalState: true, pagesNeedingRefresh: [0, 1, 2, 3]);
+            },
+            title: "Enable Shared Budgets",
+            description:
+                "In testing, share budgets and transactions with other users.",
+            initialValue: appStateSettings["sharedBudgets"],
+            icon: Icons.share_rounded,
+          ),
         ),
         SettingsContainerSwitch(
           enableBorderRadius: true,
@@ -338,13 +348,15 @@ class DebugPage extends StatelessWidget {
               );
             }),
         SizedBox(height: 20),
-        Button(
-            label: "Create preview data",
-            onTap: () async {
-              generatePreviewData();
-            }),
+        DangerousDebugFlag(
+            child: Button(
+                label: "Create preview data",
+                onTap: () async {
+                  generatePreviewData();
+                })),
         SizedBox(height: 10),
-        Button(
+        DangerousDebugFlag(
+          child: Button(
             label: "Create random transactions",
             onTap: () async {
               List<TransactionCategory> categories =
@@ -367,7 +379,9 @@ class DebugPage extends StatelessWidget {
                   ),
                 );
               }
-            }),
+            },
+          ),
+        ),
         SizedBox(height: 20),
         Button(
             label: "Snackbar Test",
@@ -489,50 +503,20 @@ class DebugPage extends StatelessWidget {
   }
 }
 
-class SliderSelector extends StatefulWidget {
-  const SliderSelector({
-    super.key,
-    required this.onChange,
-    this.onFinished,
-    required this.initialValue,
-    this.divisions,
-    required this.min,
-    required this.max,
-  });
+class DangerousDebugFlag extends StatelessWidget {
+  const DangerousDebugFlag({required this.child, super.key});
+  final Widget child;
 
-  final Function(double) onChange;
-  final Function(double)? onFinished;
-  final double initialValue;
-  final int? divisions;
-  final double min;
-  final double max;
-
-  @override
-  State<SliderSelector> createState() => _SliderSelectorState();
-}
-
-class _SliderSelectorState extends State<SliderSelector> {
-  late double _currentSliderValue = widget.initialValue;
   @override
   Widget build(BuildContext context) {
-    return Slider(
-      min: widget.min,
-      max: widget.max,
-      value: _currentSliderValue,
-      divisions: widget.divisions,
-      label: _currentSliderValue.toStringAsFixed(1).toString(),
-      onChanged: (double value) {
-        widget.onChange(value);
-        setState(() {
-          _currentSliderValue = value;
-        });
-      },
-      onChangeEnd: (double value) {
-        if (widget.onFinished != null) {
-          widget.onFinished!(value);
-        }
-      },
-    );
+    if (allowDangerousDebugFlags) {
+      return Container(
+        color: Colors.red.withOpacity(0.3),
+        child: child,
+      );
+    } else {
+      return SizedBox.shrink();
+    }
   }
 }
 

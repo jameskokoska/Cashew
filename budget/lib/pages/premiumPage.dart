@@ -1,13 +1,16 @@
+import 'dart:async';
+
 import 'package:budget/colors.dart';
 import 'package:budget/functions.dart';
-import 'package:budget/main.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/languageMap.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/breathingAnimation.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/widgets/moreIcons.dart';
+import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
+import 'package:budget/widgets/statusBox.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -15,11 +18,20 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:sa3_liquid/sa3_liquid.dart';
 import 'package:budget/widgets/openContainerNavigation.dart';
+import 'package:in_app_purchase/in_app_purchase.dart';
 
-class PremiumPage extends StatelessWidget {
+bool premiumPopupEnabled = kIsWeb == false;
+// A user has paid is appStateSettings["purchaseID"] is not null
+
+class PremiumPage extends StatefulWidget {
   const PremiumPage({this.canDismiss = false, super.key});
   final bool canDismiss;
 
+  @override
+  State<PremiumPage> createState() => _PremiumPageState();
+}
+
+class _PremiumPageState extends State<PremiumPage> {
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -27,17 +39,17 @@ class PremiumPage extends StatelessWidget {
         PremiumBackground(),
         PageFramework(
           enableHeader: false,
-          dragDownToDismiss: canDismiss,
+          dragDownToDismiss: widget.canDismiss,
           dragDownToDissmissBackground: Colors.transparent,
           bottomPadding: false,
           backgroundColor: Colors.transparent,
           slivers: [
             SliverFillRemaining(
               hasScrollBody: false,
-              child: Center(
-                child: Stack(
-                  children: [
-                    Padding(
+              child: Stack(
+                children: [
+                  Center(
+                    child: Padding(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 20, vertical: 30),
                       child: Column(
@@ -51,40 +63,7 @@ class PremiumPage extends StatelessWidget {
                               ),
                               Column(
                                 children: [
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      TextFont(
-                                        text: globalAppName,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 35,
-                                        textColor: Colors.black,
-                                      ),
-                                      SizedBox(width: 4),
-                                      Container(
-                                        margin:
-                                            EdgeInsets.symmetric(horizontal: 5),
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 12, vertical: 5),
-                                        decoration: BoxDecoration(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .primary,
-                                          borderRadius:
-                                              BorderRadius.circular(100),
-                                          boxShadow: boxShadowGeneral(context),
-                                        ),
-                                        child: TextFont(
-                                          text: "Pro",
-                                          textColor: Theme.of(context)
-                                              .colorScheme
-                                              .onPrimary,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 21,
-                                        ),
-                                      )
-                                    ],
-                                  ),
+                                  CashewProBanner(large: true),
                                   SizedBox(height: 4),
                                   TextFont(
                                     text: "budget-like-a-pro".tr() +
@@ -132,49 +111,14 @@ class PremiumPage extends StatelessWidget {
                                 ]),
                               ),
                               SizedBox(
-                                  height: 15 +
+                                  height: 13 +
                                       MediaQuery.of(context).size.height *
-                                          0.024),
-                              Padding(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: getHorizontalPaddingConstrained(
-                                            context) +
-                                        20),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(20),
-                                  child: Column(
-                                    children: [
-                                      SubscriptionOption(
-                                        label: "Yearly",
-                                        price: "\$19.99 / year",
-                                        extraPadding:
-                                            EdgeInsets.only(top: 13 / 2),
-                                      ),
-                                      SubscriptionOption(
-                                        label: "Monthly",
-                                        price: "\$1.99 / month",
-                                      ),
-                                      SubscriptionOption(
-                                        label: "One Time",
-                                        price: "\$29.99",
-                                        extraPadding:
-                                            EdgeInsets.only(bottom: 13 / 2),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              SizedBox(height: 7),
-                              TextFont(
-                                text: "Just one coffee a month! ☕",
-                                fontSize: 17,
-                                fontWeight: FontWeight.bold,
-                                textColor: Colors.black,
-                              ),
+                                          0.022),
+                              Products(key: purchasesStateKey),
                               SizedBox(height: 15),
                             ],
                           ),
-                          canDismiss
+                          widget.canDismiss
                               ? SizedBox.shrink()
                               : Opacity(
                                   opacity: 0.5,
@@ -206,35 +150,460 @@ class PremiumPage extends StatelessWidget {
                         ],
                       ),
                     ),
-                    Align(
-                      alignment: Alignment.topLeft,
-                      child: Padding(
-                        padding: EdgeInsets.only(
-                          left: MediaQuery.of(context).viewPadding.left,
-                          top: MediaQuery.of(context).viewPadding.top,
+                  ),
+                  Align(
+                    alignment: Alignment.topLeft,
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                        left: MediaQuery.of(context).viewPadding.left,
+                        top: MediaQuery.of(context).viewPadding.top,
+                        right: MediaQuery.of(context).viewPadding.right,
+                      ),
+                      child: IconButton(
+                        padding: EdgeInsets.all(15),
+                        icon: Icon(
+                          getPlatform() == PlatformOS.isIOS
+                              ? Icons.chevron_left_rounded
+                              : Icons.arrow_back_rounded,
+                          color: Colors.black
+                              .withOpacity(widget.canDismiss ? 0.9 : 0.16),
                         ),
-                        child: IconButton(
-                          padding: EdgeInsets.all(15),
-                          icon: Icon(
-                            getPlatform() == PlatformOS.isIOS
-                                ? Icons.chevron_left_rounded
-                                : Icons.arrow_back_rounded,
-                            color: Colors.black
-                                .withOpacity(canDismiss ? 0.9 : 0.16),
-                          ),
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                        ),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ],
         ),
       ],
+    );
+  }
+}
+
+class CashewProBanner extends StatelessWidget {
+  const CashewProBanner({this.large = false, this.fontColor, super.key});
+  final bool large;
+  final Color? fontColor;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        TextFont(
+          text: globalAppName,
+          fontWeight: FontWeight.bold,
+          fontSize: large ? 35 : 23,
+          textColor: fontColor ?? Colors.black,
+        ),
+        SizedBox(width: 2),
+        Container(
+          margin: EdgeInsets.symmetric(horizontal: 5),
+          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.primary,
+            borderRadius: BorderRadius.circular(100),
+            boxShadow: boxShadowGeneral(context),
+          ),
+          child: TextFont(
+            text: "Pro",
+            textColor: Theme.of(context).colorScheme.onPrimary,
+            fontWeight: FontWeight.bold,
+            fontSize: large ? 21 : 15,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class ManageSubscription extends StatelessWidget {
+  const ManageSubscription({super.key});
+
+  openManagePurchase() {
+    if (appStateSettings["purchaseID"] == "cashew.pro.lifetime") {
+      return;
+    } else if (appStateSettings["purchaseID"] == "cashew.pro.monthly") {
+      openUrl(
+          "https://play.google.com/store/account/subscriptions?sku=cashew.pro.monthly&package=com.budget.tracker_app");
+    } else if (appStateSettings["purchaseID"] == "cashew.pro.yearly") {
+      openUrl(
+          "https://play.google.com/store/account/subscriptions?sku=cashew.pro.yearly&package=com.budget.tracker_app");
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    String? currentPlanName;
+    if (appStateSettings["purchaseID"] == "cashew.pro.lifetime") {
+      currentPlanName = "lifetime".tr();
+    } else if (appStateSettings["purchaseID"] == "cashew.pro.monthly") {
+      currentPlanName = "monthly".tr().capitalizeFirst;
+    } else if (appStateSettings["purchaseID"] == "cashew.pro.yearly") {
+      currentPlanName = "yearly".tr().capitalizeFirst;
+    }
+    return Tappable(
+      onTap: () {
+        openManagePurchase();
+      },
+      color: dynamicPastel(
+        context,
+        Theme.of(context).colorScheme.primaryContainer,
+        amountDark: 0.2,
+        amountLight: 0.6,
+      ).withOpacity(0.45),
+      borderRadius: 15,
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 35, vertical: 15),
+        child: Column(
+          children: [
+            appStateSettings["purchaseID"] == "cashew.pro.lifetime"
+                ? TextFont(
+                    text: "already-purchased".tr(),
+                    fontSize: 16,
+                  )
+                : TextFont(
+                    text: "current-plan".tr(),
+                    fontSize: 16,
+                  ),
+            SizedBox(height: 10),
+            CashewProBanner(fontColor: Colors.white),
+            TextFont(
+              text: currentPlanName ?? "",
+              fontSize: 23,
+              fontWeight: FontWeight.bold,
+            ),
+            SizedBox(height: 10),
+            appStateSettings["purchaseID"] == "cashew.pro.lifetime"
+                ? SizedBox.shrink()
+                : Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                    child: Tappable(
+                      borderRadius: 15,
+                      color: dynamicPastel(
+                        context,
+                        Theme.of(context).colorScheme.primaryContainer,
+                        amountDark: 0.2,
+                        amountLight: 0.6,
+                      ).withOpacity(0.45),
+                      onTap: () async {
+                        openManagePurchase();
+                      },
+                      child: Container(
+                        padding:
+                            EdgeInsets.symmetric(vertical: 6, horizontal: 13),
+                        child: TextFont(
+                          text: "manage".tr(),
+                          fontSize: 12,
+                          textColor:
+                              getColor(context, "black").withOpacity(0.5),
+                        ),
+                      ),
+                    ),
+                  ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+bool tryStoreEnabled = kIsWeb == false;
+StreamSubscription<List<PurchaseDetails>>? purchaseListener;
+Map<String, ProductDetails> storeProducts = {};
+const Set<String> productIDs = <String>{
+  'cashew.pro.yearly',
+  'cashew.pro.monthly',
+  'cashew.pro.lifetime',
+};
+
+void listenToPurchaseUpdated(
+    List<PurchaseDetails> purchaseDetailsList, BuildContext context) {
+  // ignore: avoid_function_literals_in_foreach_calls
+  purchaseDetailsList.forEach((PurchaseDetails purchaseDetails) async {
+    if (productIDs.contains(purchaseDetails.productID)) {
+      if (purchaseDetails.status == PurchaseStatus.purchased ||
+          purchaseDetails.status == PurchaseStatus.restored) {
+        updateSettings("purchaseID", purchaseDetails.productID,
+            updateGlobalState: false, pagesNeedingRefresh: [3]);
+        print("Purchased " + purchaseDetails.productID);
+      }
+
+      if (purchaseDetails.status == PurchaseStatus.pending) {
+        print("Loading purchase");
+      } else {
+        if (purchaseDetails.status == PurchaseStatus.error ||
+            purchaseDetails.status == PurchaseStatus.canceled) {
+          SnackBar snackBar = SnackBar(
+            content: Text('error-processing-order'.tr()),
+          );
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        } else if (purchaseDetails.status == PurchaseStatus.purchased) {
+          SnackBar snackBar = SnackBar(
+            content: Text('order-confirmation'.tr()),
+          );
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        }
+        if (purchaseDetails.pendingCompletePurchase) {
+          await InAppPurchase.instance.completePurchase(purchaseDetails);
+        }
+      }
+    }
+  });
+}
+
+Future<Map<String, ProductDetails>> initializeStoreAndPurchases(
+    BuildContext context) async {
+  if (tryStoreEnabled == true) {
+    print("Loading Store");
+    final bool available = await InAppPurchase.instance.isAvailable();
+    if (available) {
+      //Reset any purchases if we can connect to the store, they will be restored if a purchase was made
+      updateSettings("purchaseID", null, updateGlobalState: false);
+
+      Stream<List<PurchaseDetails>> purchaseUpdated =
+          InAppPurchase.instance.purchaseStream;
+      purchaseListener = purchaseUpdated.listen((purchaseDetailsList) {
+        listenToPurchaseUpdated(purchaseDetailsList, context);
+      }, onDone: () {
+        purchaseListener?.cancel();
+      }, onError: (error) {
+        print(error);
+      });
+
+      final ProductDetailsResponse response =
+          await InAppPurchase.instance.queryProductDetails(productIDs);
+      if (response.notFoundIDs.isNotEmpty) {
+        print("Some products not found...");
+      } else {
+        storeProducts = {
+          for (var product in response.productDetails) product.id: product
+        };
+        print("Products Loaded");
+        print(storeProducts);
+      }
+      print("Restoring any purchases");
+      await InAppPurchase.instance.restorePurchases();
+      return storeProducts;
+    }
+  }
+
+  // Can't connect to store, don't show popup
+  premiumPopupEnabled = false;
+  return {};
+}
+
+Future restorePurchases(BuildContext context) async {
+  if (storeProducts.isEmpty) {
+    SnackBar snackBar = SnackBar(
+      content: Text('error-processing-order'.tr()),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  } else {
+    await InAppPurchase.instance.restorePurchases();
+    SnackBar snackBar = SnackBar(
+      content: Text('purchases-restored'.tr()),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+}
+
+bool hidePremiumPopup() {
+  return premiumPopupEnabled == false ||
+      appStateSettings["purchaseID"] != null ||
+      appStateSettings["previewDemo"] == true;
+}
+
+Future premiumPopupPushRoute(BuildContext context) async {
+  if (hidePremiumPopup()) return;
+  return pushRoute(context, PremiumPage());
+}
+
+void premiumPopupBudgets(BuildContext context) async {
+  if (hidePremiumPopup()) return;
+  if ((await database.getAllBudgets()).length > 0) {
+    pushRoute(context, PremiumPage());
+  }
+}
+
+void premiumPopupPastBudgets(BuildContext context) async {
+  if (hidePremiumPopup()) return;
+  pushRoute(context, PremiumPage());
+}
+
+Future premiumPopupAddTransaction(BuildContext context) async {
+  if (hidePremiumPopup()) return;
+  print("Checking premium before adding transaction - " +
+      appStateSettings["premiumPopupAddTransactionCount"].toString());
+  if (DateTime.parse(appStateSettings["premiumPopupAddTransactionLastShown"])
+          .add(Duration(days: 1))
+          .isBefore(DateTime.now()) &&
+      appStateSettings["premiumPopupAddTransactionCount"] > 5 == 0) {
+    updateSettings("premiumPopupAddTransactionCount", 0,
+        updateGlobalState: false);
+    updateSettings(
+        "premiumPopupAddTransactionLastShown", DateTime.now.toString(),
+        updateGlobalState: false);
+    await pushRoute(context, PremiumPage(canDismiss: true));
+  }
+}
+
+class Products extends StatefulWidget {
+  const Products({super.key});
+
+  @override
+  State<Products> createState() => ProductsState();
+}
+
+class ProductsState extends State<Products> {
+  bool hasProducts = storeProducts.isNotEmpty;
+  bool loading = true;
+
+  void refreshState() {
+    print("refresh products");
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    Future.delayed(Duration.zero, () async {
+      Map<String, ProductDetails> products =
+          await initializeStoreAndPurchases(context);
+      setState(() {
+        hasProducts = products.isNotEmpty;
+        loading = false;
+      });
+    });
+    Future.delayed(Duration(milliseconds: 3500), () async {
+      if (loading)
+        setState(() {
+          loading = false;
+        });
+    });
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedSwitcher(
+      duration: Duration(milliseconds: 700),
+      child: appStateSettings["purchaseID"] != null
+          ? ManageSubscription()
+          : kIsWeb || hasProducts == false
+              ? loading == true
+                  ? SizedBox.shrink()
+                  : StatusBox(
+                      title: "error-getting-products".tr(),
+                      description: "error-getting-products-description".tr(),
+                      icon: Icons.warning_rounded,
+                      color: Theme.of(context).colorScheme.error,
+                      onTap: () {},
+                    )
+              : Padding(
+                  padding: EdgeInsets.symmetric(
+                      horizontal:
+                          getHorizontalPaddingConstrained(context) + 20),
+                  child: Column(
+                    children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(20),
+                        child: Column(
+                          children: [
+                            storeProducts["cashew.pro.yearly"] == null
+                                ? SizedBox.shrink()
+                                : SubscriptionOption(
+                                    label: "yearly".tr().capitalizeFirst,
+                                    price: storeProducts["cashew.pro.yearly"]!
+                                            .price +
+                                        " / " +
+                                        "year".tr().toLowerCase(),
+                                    extraPadding: EdgeInsets.only(top: 13 / 2),
+                                    onTap: () {
+                                      InAppPurchase.instance.buyNonConsumable(
+                                        purchaseParam: PurchaseParam(
+                                          productDetails: storeProducts[
+                                              "cashew.pro.yearly"]!,
+                                        ),
+                                      );
+                                    },
+                                  ),
+                            storeProducts["cashew.pro.monthly"] == null
+                                ? SizedBox.shrink()
+                                : SubscriptionOption(
+                                    label: "monthly".tr().capitalizeFirst,
+                                    price: storeProducts["cashew.pro.monthly"]!
+                                            .price +
+                                        " / " +
+                                        "month".tr().toLowerCase(),
+                                    onTap: () {
+                                      InAppPurchase.instance.buyNonConsumable(
+                                        purchaseParam: PurchaseParam(
+                                          productDetails: storeProducts[
+                                              "cashew.pro.monthly"]!,
+                                        ),
+                                      );
+                                    },
+                                  ),
+                            storeProducts["cashew.pro.lifetime"] == null
+                                ? SizedBox.shrink()
+                                : SubscriptionOption(
+                                    label: "lifetime".tr().capitalizeFirst,
+                                    price: storeProducts["cashew.pro.lifetime"]!
+                                        .price,
+                                    extraPadding:
+                                        EdgeInsets.only(bottom: 13 / 2),
+                                    onTap: () {
+                                      InAppPurchase.instance.buyNonConsumable(
+                                        purchaseParam: PurchaseParam(
+                                          productDetails: storeProducts[
+                                              "cashew.pro.lifetime"]!,
+                                        ),
+                                      );
+                                    },
+                                  ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                        child: Tappable(
+                          borderRadius: 15,
+                          color: dynamicPastel(
+                            context,
+                            Theme.of(context).colorScheme.primaryContainer,
+                            amountDark: 0.2,
+                            amountLight: 0.6,
+                          ).withOpacity(0.45),
+                          onTap: () async {
+                            restorePurchases(context);
+                          },
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                                vertical: 6, horizontal: 13),
+                            child: TextFont(
+                              text: "restore-purchases".tr(),
+                              fontSize: 12,
+                              textColor:
+                                  getColor(context, "black").withOpacity(0.5),
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 7),
+                      TextFont(
+                        text: "one-coffee-a-month".tr() + " " + "☕",
+                        fontSize: 17,
+                        fontWeight: FontWeight.bold,
+                        textColor: Colors.black,
+                      ),
+                    ],
+                  ),
+                ),
     );
   }
 }
@@ -301,17 +670,19 @@ class SubscriptionOption extends StatelessWidget {
   const SubscriptionOption({
     required this.label,
     required this.price,
+    required this.onTap,
     this.extraPadding,
     super.key,
   });
   final String label;
   final String price;
+  final VoidCallback onTap;
   final EdgeInsets? extraPadding;
 
   @override
   Widget build(BuildContext context) {
     return Tappable(
-      onTap: () {},
+      onTap: onTap,
       color: dynamicPastel(
         context,
         Theme.of(context).colorScheme.primaryContainer,
@@ -376,44 +747,11 @@ class LockedFeature extends StatelessWidget {
   }
 }
 
-Future premiumPopupPushRoute(BuildContext context) async {
-  if (premiumPopupEnabled) {
-    return pushRoute(context, PremiumPage());
-  }
-}
-
-void premiumPopupBudgets(BuildContext context) async {
-  if (premiumPopupEnabled && (await database.getAllBudgets()).length > 0) {
-    pushRoute(context, PremiumPage());
-  }
-}
-
-void premiumPopupPastBudgets(BuildContext context) async {
-  if (premiumPopupEnabled) {
-    pushRoute(context, PremiumPage());
-  }
-}
-
-Future premiumPopupAddTransaction(BuildContext context) async {
-  print("Checking premium before adding transaction - " +
-      appStateSettings["premiumPopupAddTransactionCount"].toString());
-  if (premiumPopupEnabled &&
-      DateTime.parse(appStateSettings["premiumPopupAddTransactionLastShown"])
-          .add(Duration(days: 1))
-          .isBefore(DateTime.now()) &&
-      appStateSettings["premiumPopupAddTransactionCount"] > 5 == 0) {
-    updateSettings("premiumPopupAddTransactionCount", 0,
-        updateGlobalState: false);
-    updateSettings(
-        "premiumPopupAddTransactionLastShown", DateTime.now.toString(),
-        updateGlobalState: false);
-    await pushRoute(context, PremiumPage(canDismiss: true));
-  }
-}
-
 class PremiumBackground extends StatelessWidget {
-  const PremiumBackground({this.disableAnimation = false, super.key});
+  const PremiumBackground(
+      {this.disableAnimation = false, this.purchased = false, super.key});
   final bool disableAnimation;
+  final bool purchased;
 
   @override
   Widget build(BuildContext context) {
@@ -495,6 +833,8 @@ class PremiumBanner extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double borderRadius = 15;
+    bool purchased = appStateSettings["purchaseID"] != null;
+
     return Container(
       decoration: BoxDecoration(
           boxShadow: boxShadowSharp(context),
@@ -526,6 +866,7 @@ class PremiumBanner extends StatelessWidget {
                           ? 0.7
                           : 0.9,
                       child: PremiumBackground(
+                        purchased: purchased,
                         disableAnimation:
                             getPlatform() == PlatformOS.isIOS || kIsWeb,
                       ),
@@ -541,63 +882,70 @@ class PremiumBanner extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
-                                    TextFont(
-                                      text: globalAppName,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 23,
-                                      textColor: Colors.black,
-                                    ),
-                                    SizedBox(width: 2),
-                                    Container(
-                                      margin:
-                                          EdgeInsets.symmetric(horizontal: 5),
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: 12, vertical: 5),
-                                      decoration: BoxDecoration(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primary,
-                                        borderRadius:
-                                            BorderRadius.circular(100),
-                                        boxShadow: boxShadowGeneral(context),
-                                      ),
-                                      child: TextFont(
-                                        text: "Pro",
-                                        textColor: Theme.of(context)
-                                            .colorScheme
-                                            .onPrimary,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 15,
-                                      ),
-                                    )
+                                    CashewProBanner(),
+                                    purchased
+                                        ? Container(
+                                            margin: EdgeInsets.symmetric(
+                                                horizontal: 5),
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 12, vertical: 5),
+                                            decoration: BoxDecoration(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .secondaryContainer,
+                                              borderRadius:
+                                                  BorderRadius.circular(100),
+                                              boxShadow:
+                                                  boxShadowGeneral(context),
+                                            ),
+                                            child: TextFont(
+                                              text: appStateSettings[
+                                                          "purchaseID"] ==
+                                                      "cashew.pro.lifetime"
+                                                  ? "lifetime".tr()
+                                                  : "active".tr(),
+                                              textColor: Theme.of(context)
+                                                  .colorScheme
+                                                  .onSecondaryContainer
+                                                  .withOpacity(0.8),
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 15,
+                                            ),
+                                          )
+                                        : SizedBox.shrink(),
                                   ],
                                 ),
-                                Row(
-                                  children: [
-                                    Flexible(
-                                      child: TextFont(
-                                        text: "budget-like-a-pro".tr() +
-                                            " " +
-                                            globalAppName +
-                                            " " +
-                                            "Pro",
-                                        fontSize: 15,
-                                        maxLines: 3,
-                                        textColor: Colors.black,
+                                purchased
+                                    ? SizedBox.shrink()
+                                    : Row(
+                                        children: [
+                                          Flexible(
+                                            child: TextFont(
+                                              text: "budget-like-a-pro".tr() +
+                                                  " " +
+                                                  globalAppName +
+                                                  " " +
+                                                  "Pro",
+                                              fontSize: 15,
+                                              maxLines: 3,
+                                              textColor: Colors.black,
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                    ),
-                                  ],
-                                ),
                               ],
                             ),
                           ),
-                          Icon(
-                            Icons.arrow_forward_ios_rounded,
-                            color: Colors.black,
-                            size: 20,
-                          )
+                          appStateSettings["purchaseID"] != null
+                              ? SizedBox.shrink()
+                              : Icon(
+                                  Icons.arrow_forward_ios_rounded,
+                                  color: Colors.black,
+                                  size: 20,
+                                )
                         ],
                       ),
                     ),

@@ -36,7 +36,7 @@ import 'package:easy_localization/easy_localization.dart';
 // Requires hot reload when changed
 bool enableDevicePreview = false && kDebugMode;
 bool allowDebugFlags = true || kIsWeb;
-bool premiumPopupEnabled = false && !kIsWeb;
+bool allowDangerousDebugFlags = kDebugMode;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

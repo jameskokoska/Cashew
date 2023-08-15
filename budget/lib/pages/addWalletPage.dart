@@ -1,4 +1,5 @@
 import 'package:budget/database/tables.dart';
+import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
 import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/editWalletsPage.dart';
@@ -20,6 +21,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:budget/colors.dart';
+
+import 'exchangeRatesPage.dart';
 
 class AddWalletPage extends StatefulWidget {
   AddWalletPage({
@@ -297,6 +300,11 @@ class _AddWalletPageState extends State<AddWalletPage> {
                     Navigator.pop(context);
                   },
                   onCancelLabel: "ok".tr(),
+                  onSubmit: () {
+                    Navigator.pop(context);
+                    pushRoute(context, ExchangeRates());
+                  },
+                  onSubmitLabel: "exchange-rates".tr(),
                 );
               },
               icon: Icon(Icons.info),

@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
+import 'package:budget/widgets/tappable.dart';
+import 'package:budget/widgets/textWidgets.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:budget/struct/databaseGlobal.dart';
@@ -9,6 +11,11 @@ import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:budget/struct/languageMap.dart';
+import 'package:budget/widgets/openBottomSheet.dart';
+import 'package:budget/widgets/radioItems.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:budget/widgets/framework/popupFramework.dart';
 
 Map<String, dynamic> appStateSettings = {};
 
@@ -134,6 +141,8 @@ Future<bool> updateSettings(
         budgetsListPageStateKey.currentState?.refreshState();
       } else if (page == 3) {
         settingsPageStateKey.currentState?.refreshState();
+        settingsPageFrameworkStateKey.currentState?.refreshState();
+        purchasesStateKey.currentState?.refreshState();
       }
     }
   }
@@ -181,5 +190,118 @@ Future<Map<String, dynamic>> getUserSettings() async {
     await sharedPreferences.setString(
         'userSettings', json.encode(userPreferencesDefault));
     return userPreferencesDefault;
+  }
+}
+
+// Returns the name of the language given a key, if key is System will return system translated label
+String languageDisplayFilter(String languageKey) {
+  if (languageNamesJSON[languageKey] != null) {
+    return languageNamesJSON[languageKey].toString().capitalizeFirstofEach;
+  }
+  // if (supportedLanguagesSet.contains(item))
+  //   return supportedLanguagesSet[item];
+  if (languageKey == "System") return "system".tr();
+  return languageKey;
+}
+
+void openLanguagePicker(BuildContext context) {
+  openBottomSheet(
+    context,
+    PopupFramework(
+      title: "language".tr(),
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(bottom: 10),
+            child: TranslationsHelp(),
+          ),
+          RadioItems(
+            items: [
+              "System",
+              for (String languageCode in supportedLanguagesSet) languageCode,
+            ],
+            initial: appStateSettings["locale"].toString(),
+            displayFilter: languageDisplayFilter,
+            onChanged: (value) async {
+              if (value == "System") {
+                context.resetLocale();
+              } else {
+                context.setLocale(Locale(value));
+              }
+              updateSettings(
+                "locale",
+                value,
+                pagesNeedingRefresh: [3],
+                updateGlobalState: false,
+              );
+              await Future.delayed(Duration(milliseconds: 50));
+              Navigator.pop(context);
+            },
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
+void resetLanguageToSystem(BuildContext context) {
+  if (appStateSettings["locale"].toString() == "System") return;
+  context.resetLocale();
+  updateSettings(
+    "locale",
+    "System",
+    pagesNeedingRefresh: [],
+    updateGlobalState: false,
+  );
+}
+
+class TranslationsHelp extends StatelessWidget {
+  const TranslationsHelp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Tappable(
+      onTap: () {
+        openUrl('mailto:dapperappdeveloper@gmail.com');
+      },
+      color: Theme.of(context).colorScheme.secondaryContainer.withOpacity(0.7),
+      borderRadius: getPlatform() == PlatformOS.isIOS ? 10 : 15,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 12),
+        child: Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(right: 12),
+              child: Icon(
+                Icons.connect_without_contact_rounded,
+                color: Theme.of(context).colorScheme.secondary,
+                size: 31,
+              ),
+            ),
+            Expanded(
+              child: TextFont(
+                textColor: Theme.of(context).colorScheme.onSecondaryContainer,
+                richTextSpan: [
+                  TextSpan(
+                    text: 'dapperappdeveloper@gmail.com',
+                    style: TextStyle(
+                      decoration: TextDecoration.underline,
+                      decorationStyle: TextDecorationStyle.solid,
+                      decorationColor:
+                          getColor(context, "unPaidOverdue").withOpacity(0.8),
+                      color:
+                          getColor(context, "unPaidOverdue").withOpacity(0.8),
+                    ),
+                  ),
+                ],
+                text: "translations-help".tr() + " ",
+                maxLines: 5,
+                fontSize: 13,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

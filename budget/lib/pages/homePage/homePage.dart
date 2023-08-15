@@ -126,10 +126,8 @@ class HomePageState extends State<HomePage>
                             ? SizedBox(height: 78)
                             : IconButton(
                                 padding: EdgeInsets.all(15),
-                                onPressed: () async {
-                                  await pushRoute(context, EditHomePage());
-                                  // We need to refresh the home page when this route is popped
-                                  setState(() {});
+                                onPressed: () {
+                                  pushRoute(context, EditHomePage());
                                 },
                                 icon: Icon(Icons.more_vert_rounded),
                               ),

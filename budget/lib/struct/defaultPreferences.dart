@@ -103,5 +103,6 @@ Future<Map<String, dynamic>> getDefaultPreferences() async {
     "disableBlur": true,
     "previewDemo": false,
     "oldAndroidNavbar": false,
+    "purchaseID": null,
   };
 }

@@ -8,11 +8,13 @@ import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/struct/shareBudget.dart';
 import 'package:budget/widgets/dropdownSelect.dart';
+import 'package:budget/widgets/globalSnackBar.dart';
 import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
+import 'package:budget/widgets/openSnackbar.dart';
 import 'package:budget/widgets/selectChips.dart';
 import 'package:budget/widgets/framework/popupFramework.dart';
 import 'package:budget/widgets/radioItems.dart';
@@ -647,7 +649,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                           ],
                           getLabel: (String item) {
                             if (item == "Shared Group Budget")
-                              return item + " (Beta)";
+                              return item + " (Unsupported)";
                             else if (item == "All Transactions")
                               return "all-transactions".tr();
                             else if (item == "Added Only")
@@ -662,8 +664,13 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                               setAddedTransactionsOnly(true);
                               setSelectedShared(false);
                             } else if (item == "Shared Group Budget") {
-                              setAddedTransactionsOnly(true);
-                              setSelectedShared(true);
+                              if (kDebugMode) {
+                                setAddedTransactionsOnly(true);
+                                setSelectedShared(true);
+                              } else {
+                                openSnackbar(SnackbarMessage(
+                                    title: "Only allowed in debug mode"));
+                              }
                             }
                           },
                           getSelected: (String item) {

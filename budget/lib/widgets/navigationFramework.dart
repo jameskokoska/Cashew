@@ -12,6 +12,7 @@ import 'package:budget/pages/editBudgetPage.dart';
 import 'package:budget/pages/editWalletsPage.dart';
 import 'package:budget/pages/homePage/homePage.dart';
 import 'package:budget/pages/notificationsPage.dart';
+import 'package:budget/pages/premiumPage.dart';
 import 'package:budget/pages/settingsPage.dart';
 import 'package:budget/pages/subscriptionsPage.dart';
 import 'package:budget/pages/transactionsListPage.dart';
@@ -65,7 +66,10 @@ class PageNavigationFramework extends StatefulWidget {
 GlobalKey<HomePageState> homePageStateKey = GlobalKey();
 GlobalKey<TransactionsListPageState> transactionsListPageStateKey = GlobalKey();
 GlobalKey<BudgetsListPageState> budgetsListPageStateKey = GlobalKey();
-GlobalKey<SettingsPageState> settingsPageStateKey = GlobalKey();
+GlobalKey<MoreActionsPageState> settingsPageStateKey = GlobalKey();
+GlobalKey<SettingsPageFrameworkState> settingsPageFrameworkStateKey =
+    GlobalKey();
+GlobalKey<ProductsState> purchasesStateKey = GlobalKey();
 GlobalKey<AccountsPageState> accountsPageStateKey = GlobalKey();
 GlobalKey<BottomNavBarState> navbarStateKey = GlobalKey();
 GlobalKey<NavigationSidebarState> sidebarStateKey = GlobalKey();
@@ -162,6 +166,7 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
       await markSubscriptionsAsPaid();
       runNotificationPayLoads(context);
       runQuickActionsPayLoads(context);
+      initializeStoreAndPurchases(context);
       await initializeNotificationsPlatform();
       await setDailyNotificationOnLaunch(context);
       await setUpcomingNotifications(context);
@@ -198,10 +203,10 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
       HomePage(key: homePageStateKey), // 0
       TransactionsListPage(key: transactionsListPageStateKey), //1
       BudgetsListPage(key: budgetsListPageStateKey), //2
-      SettingsPage(key: settingsPageStateKey), //3
+      MoreActionsPage(key: settingsPageStateKey), //3
     ];
     pagesExtended = [
-      SettingsPage(hasMorePages: false), //4
+      MoreActionsPage(), //4
       SubscriptionsPage(), //5
       NotificationsPage(), //6
       WalletDetailsPage(wallet: null), //7

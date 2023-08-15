@@ -14,6 +14,7 @@ import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/openSnackbar.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/widgets/radioItems.dart';
+import 'package:budget/widgets/settingsContainers.dart';
 import 'package:budget/widgets/textInput.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/walletEntry.dart';
@@ -23,6 +24,7 @@ import 'package:flutter/services.dart' hide TextInput;
 import 'package:budget/widgets/editRowEntry.dart';
 import 'package:budget/modified/reorderable_list.dart';
 import 'package:provider/provider.dart';
+import 'exchangeRatesPage.dart';
 
 class EditWalletsPage extends StatefulWidget {
   EditWalletsPage({
@@ -96,6 +98,13 @@ class _EditWalletsPageState extends State<EditWalletsPage> {
                 },
                 autoFocus: false,
               ),
+            ),
+          ),
+          SliverToBoxAdapter(
+            child: SettingsContainerOpenPage(
+              openPage: ExchangeRates(),
+              title: "exchange-rates".tr(),
+              icon: Icons.account_balance_wallet_rounded,
             ),
           ),
           StreamBuilder<List<TransactionWallet>>(

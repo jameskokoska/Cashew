@@ -20,6 +20,8 @@ import 'package:budget/widgets/timeDigits.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/timezone.dart' as tz;
 
+bool notificationsGlobalEnabled = kIsWeb == false;
+
 class DailyNotificationsSettings extends StatefulWidget {
   const DailyNotificationsSettings({super.key});
 

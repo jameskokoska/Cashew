@@ -129,6 +129,7 @@ class SettingsContainerOpenPage extends StatelessWidget {
     this.iconScale,
     this.isOutlined,
     this.isOutlinedColumn,
+    this.isWideOutlined,
   }) : super(key: key);
 
   final Widget openPage;
@@ -139,12 +140,13 @@ class SettingsContainerOpenPage extends StatelessWidget {
   final double? iconScale;
   final bool? isOutlined;
   final bool? isOutlinedColumn;
+  final bool? isWideOutlined;
 
   @override
   Widget build(BuildContext context) {
     ColorScheme colorScheme = Theme.of(context).colorScheme;
     return Padding(
-      padding: isOutlined == false
+      padding: isOutlined == false || isOutlined == null
           ? EdgeInsets.zero
           : EdgeInsets.only(top: 5, bottom: 5, left: 4, right: 4),
       child: OpenContainerNavigation(
@@ -191,6 +193,7 @@ class SettingsContainerOpenPage extends StatelessWidget {
                   ),
             isOutlined: isOutlined,
             isOutlinedColumn: isOutlinedColumn,
+            isWideOutlined: isWideOutlined,
           );
         },
         openPage: openPage,
@@ -274,6 +277,7 @@ class SettingsContainerOutlined extends StatelessWidget {
     this.iconScale,
     this.isExpanded = true,
     this.isOutlinedColumn,
+    this.isWideOutlined,
   }) : super(key: key);
 
   final String title;
@@ -287,6 +291,7 @@ class SettingsContainerOutlined extends StatelessWidget {
   final double? iconScale;
   final bool isExpanded;
   final bool? isOutlinedColumn;
+  final bool? isWideOutlined;
 
   @override
   Widget build(BuildContext context) {
@@ -338,8 +343,7 @@ class SettingsContainerOutlined extends StatelessWidget {
           ? TextFont(
               fixParagraphMargin: true,
               text: title,
-              fontSize: isExpanded == false ? 16 : 15,
-              fontWeight: FontWeight.bold,
+              fontSize: isExpanded == false ? 16 : 14.5,
               maxLines: 1,
               overflow: TextOverflow.clip,
             )
@@ -351,7 +355,6 @@ class SettingsContainerOutlined extends StatelessWidget {
                   fixParagraphMargin: true,
                   text: title,
                   fontSize: 16,
-                  fontWeight: FontWeight.bold,
                   maxLines: 1,
                 ),
                 Container(height: 3),
@@ -402,6 +405,7 @@ class SettingsContainerOutlined extends StatelessWidget {
                       ),
                     ),
                   ),
+            isWideOutlined == true ? SizedBox(width: 3) : SizedBox.shrink(),
             isExpanded
                 ? Expanded(child: textContent)
                 : Flexible(
@@ -440,6 +444,7 @@ class SettingsContainer extends StatelessWidget {
     this.isOutlined,
     this.isOutlinedColumn,
     this.enableBorderRadius = false,
+    this.isWideOutlined,
   }) : super(key: key);
 
   final String title;
@@ -454,6 +459,7 @@ class SettingsContainer extends StatelessWidget {
   final bool? isOutlined;
   final bool? isOutlinedColumn;
   final bool enableBorderRadius;
+  final bool? isWideOutlined;
 
   @override
   Widget build(BuildContext context) {
@@ -474,6 +480,7 @@ class SettingsContainer extends StatelessWidget {
               onLongPress: onLongPress,
               verticalPadding: verticalPadding,
               isOutlinedColumn: isOutlinedColumn,
+              isWideOutlined: isWideOutlined,
             )
           : Tappable(
               color: Colors.transparent,

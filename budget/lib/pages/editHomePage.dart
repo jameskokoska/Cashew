@@ -6,6 +6,7 @@ import 'package:budget/modified/reorderable_list.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/editRowEntry.dart';
 import 'package:budget/widgets/moreIcons.dart';
+import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/radioItems.dart';
 import 'package:budget/widgets/selectItems.dart';
@@ -312,124 +313,132 @@ class _EditHomePageState extends State<EditHomePage> {
         keyOrder = List<String>.from(appStateSettings["homePageOrder"]
             .map((element) => element.toString()));
       });
-      super.initState();
     });
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return PageFramework(
-      horizontalPadding: getHorizontalPaddingConstrained(context),
-      dragDownToDismiss: true,
-      dragDownToDismissEnabled: dragDownToDismissEnabled,
-      title: "edit-home".tr(),
-      slivers: [
-        SliverReorderableList(
-          onReorderStart: (index) {
-            HapticFeedback.heavyImpact();
-            setState(() {
-              dragDownToDismissEnabled = false;
-              currentReorder = index;
-            });
-          },
-          onReorderEnd: (_) {
-            setState(() {
-              dragDownToDismissEnabled = true;
-              currentReorder = -1;
-            });
-          },
-          itemBuilder: (context, index) {
-            String key = keyOrder[index];
-            toggleSwitch() {
-              editHomePageItems[key]
-                  ?.onSwitched(!(editHomePageItems[key]?.isEnabled ?? false));
+    return WillPopScope(
+      onWillPop: () async {
+        // We need to refresh the home page when this route is popped
+        homePageStateKey.currentState?.refreshState();
+        return true;
+      },
+      child: PageFramework(
+        horizontalPadding: getHorizontalPaddingConstrained(context),
+        dragDownToDismiss: true,
+        dragDownToDismissEnabled: dragDownToDismissEnabled,
+        title: "edit-home".tr(),
+        slivers: [
+          SliverReorderableList(
+            onReorderStart: (index) {
+              HapticFeedback.heavyImpact();
               setState(() {
-                editHomePageItems[key]?.isEnabled =
-                    !(editHomePageItems[key]?.isEnabled ?? false);
+                dragDownToDismissEnabled = false;
+                currentReorder = index;
               });
-            }
-
-            return EditRowEntry(
-              canReorder: true,
-              currentReorder: currentReorder != -1 && currentReorder != index,
-              padding: EdgeInsets.only(left: 18, right: 0, top: 16, bottom: 16),
-              key: ValueKey(key),
-              extraWidget: Row(
-                children: [
-                  getPlatform() == PlatformOS.isIOS
-                      ? CupertinoSwitch(
-                          activeColor: Theme.of(context).colorScheme.primary,
-                          value: editHomePageItems[key]?.isEnabled ?? false,
-                          onChanged: (value) {
-                            toggleSwitch();
-                          },
-                        )
-                      : Switch(
-                          activeColor: Theme.of(context).colorScheme.primary,
-                          value: editHomePageItems[key]?.isEnabled ?? false,
-                          onChanged: (value) {
-                            toggleSwitch();
-                          },
-                          materialTapTargetSize:
-                              MaterialTapTargetSize.shrinkWrap,
-                        ),
-                ],
-              ),
-              content: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Icon(
-                    editHomePageItems[key]!.icon,
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                  SizedBox(width: 13),
-                  Expanded(
-                    child: TextFont(
-                      text: editHomePageItems[key]!.name,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 17,
-                      maxLines: 5,
-                    ),
-                  ),
-                  editHomePageItems[key]?.onTap == null
-                      ? SizedBox.shrink()
-                      : Padding(
-                          padding: const EdgeInsets.only(right: 8.0),
-                          child: Icon(
-                            Icons.more_horiz_rounded,
-                            size: 22,
-                            color: Theme.of(context).colorScheme.secondary,
-                          ),
-                        ),
-                ],
-              ),
-              extraWidgetsBelow: editHomePageItems[key]?.extraWidgetsBelow ??
-                  [SizedBox.shrink()],
-              canDelete: false,
-              index: index,
-              onDelete: () {},
-              onTap: editHomePageItems[key]?.onTap ??
-                  () {
-                    toggleSwitch();
-                  },
-              openPage: Container(),
-            );
-          },
-          itemCount: editHomePageItems.keys.length,
-          onReorder: (oldIndex, newIndex) async {
-            setState(() {
-              if (oldIndex < newIndex) {
-                newIndex -= 1;
+            },
+            onReorderEnd: (_) {
+              setState(() {
+                dragDownToDismissEnabled = true;
+                currentReorder = -1;
+              });
+            },
+            itemBuilder: (context, index) {
+              String key = keyOrder[index];
+              toggleSwitch() {
+                editHomePageItems[key]
+                    ?.onSwitched(!(editHomePageItems[key]?.isEnabled ?? false));
+                setState(() {
+                  editHomePageItems[key]?.isEnabled =
+                      !(editHomePageItems[key]?.isEnabled ?? false);
+                });
               }
-              final String item = keyOrder.removeAt(oldIndex);
-              keyOrder.insert(newIndex, item);
-            });
-            updateSettings("homePageOrder", keyOrder,
-                pagesNeedingRefresh: [], updateGlobalState: false);
-            return true;
-          },
-        ),
-      ],
+
+              return EditRowEntry(
+                canReorder: true,
+                currentReorder: currentReorder != -1 && currentReorder != index,
+                padding:
+                    EdgeInsets.only(left: 18, right: 0, top: 16, bottom: 16),
+                key: ValueKey(key),
+                extraWidget: Row(
+                  children: [
+                    getPlatform() == PlatformOS.isIOS
+                        ? CupertinoSwitch(
+                            activeColor: Theme.of(context).colorScheme.primary,
+                            value: editHomePageItems[key]?.isEnabled ?? false,
+                            onChanged: (value) {
+                              toggleSwitch();
+                            },
+                          )
+                        : Switch(
+                            activeColor: Theme.of(context).colorScheme.primary,
+                            value: editHomePageItems[key]?.isEnabled ?? false,
+                            onChanged: (value) {
+                              toggleSwitch();
+                            },
+                            materialTapTargetSize:
+                                MaterialTapTargetSize.shrinkWrap,
+                          ),
+                  ],
+                ),
+                content: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Icon(
+                      editHomePageItems[key]!.icon,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                    SizedBox(width: 13),
+                    Expanded(
+                      child: TextFont(
+                        text: editHomePageItems[key]!.name,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 17,
+                        maxLines: 5,
+                      ),
+                    ),
+                    editHomePageItems[key]?.onTap == null
+                        ? SizedBox.shrink()
+                        : Padding(
+                            padding: const EdgeInsets.only(right: 8.0),
+                            child: Icon(
+                              Icons.more_horiz_rounded,
+                              size: 22,
+                              color: Theme.of(context).colorScheme.secondary,
+                            ),
+                          ),
+                  ],
+                ),
+                extraWidgetsBelow: editHomePageItems[key]?.extraWidgetsBelow ??
+                    [SizedBox.shrink()],
+                canDelete: false,
+                index: index,
+                onDelete: () {},
+                onTap: editHomePageItems[key]?.onTap ??
+                    () {
+                      toggleSwitch();
+                    },
+                openPage: Container(),
+              );
+            },
+            itemCount: editHomePageItems.keys.length,
+            onReorder: (oldIndex, newIndex) async {
+              setState(() {
+                if (oldIndex < newIndex) {
+                  newIndex -= 1;
+                }
+                final String item = keyOrder.removeAt(oldIndex);
+                keyOrder.insert(newIndex, item);
+              });
+              updateSettings("homePageOrder", keyOrder,
+                  pagesNeedingRefresh: [], updateGlobalState: false);
+              return true;
+            },
+          ),
+        ],
+      ),
     );
   }
 }

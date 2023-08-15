@@ -10,6 +10,12 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    < 3.8.6
+    Disabled dangerous debug flags
+    Payment processing and plan management
+    Exchange rate info page
+    Rearranged about, more, and settings page
+    Settings page updates UI when orientation changed
     < 3.8.5
     Homepage now shows the past 7 days with transactions within the past month
     If sign-in fails on launch, it will retry on next launch

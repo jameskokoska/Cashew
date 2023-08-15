@@ -9,6 +9,8 @@ class MoreIcons {
 
   static const IconData chart_bar =
       IconData(0xf080, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData github =
+      IconData(0xf09b, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData money_bill =
       IconData(0xf0d6, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData google =
@@ -21,6 +23,8 @@ class MoreIcons {
       IconData(0xf201, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData google_drive =
       IconData(0xf3aa, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData google_play =
+      IconData(0xf3ab, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData money_bill_alt =
       IconData(0xf3d1, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData money_bill_wave =

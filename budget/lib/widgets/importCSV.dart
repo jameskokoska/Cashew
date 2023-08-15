@@ -78,21 +78,21 @@ class _ImportCSVState extends State<ImportCSV> {
         String dateFormat = "";
         Map<String, Map<String, dynamic>> assignedColumns = {
           "date": {
-            "displayName": "Date",
+            "displayName": "date",
             "headerValues": ["date"],
             "required": true,
             "setHeaderValue": "",
             "setHeaderIndex": -1,
           },
           "amount": {
-            "displayName": "Amount",
+            "displayName": "amount",
             "headerValues": ["amount"],
             "required": true,
             "setHeaderValue": "",
             "setHeaderIndex": -1,
           },
           "category": {
-            "displayName": "Category",
+            "displayName": "category",
             "headerValues": ["category", "category name"],
             // "extraOptions": ["Use Smart Categories"],
             //This will be implemented later... in the future
@@ -102,21 +102,21 @@ class _ImportCSVState extends State<ImportCSV> {
             "setHeaderIndex": -1,
           },
           "name": {
-            "displayName": "Title",
+            "displayName": "title",
             "headerValues": ["title", "name"],
             "required": false,
             "setHeaderValue": "",
             "setHeaderIndex": -1,
           },
           "note": {
-            "displayName": "Note",
+            "displayName": "note",
             "headerValues": ["note"],
             "required": false,
             "setHeaderValue": "",
             "setHeaderIndex": -1,
           },
           "wallet": {
-            "displayName": "Wallet",
+            "displayName": "wallet",
             "headerValues": ["wallet"],
             "required": true,
             "setHeaderValue": "",
@@ -140,7 +140,7 @@ class _ImportCSVState extends State<ImportCSV> {
         openBottomSheet(
           context,
           PopupFramework(
-            title: "Assign Columns",
+            title: "assign-columns".tr(),
             child: Column(
               children: [
                 ClipRRect(
@@ -242,17 +242,18 @@ class _ImportCSVState extends State<ImportCSV> {
                                           MainAxisAlignment.start,
                                       children: [
                                         TextFont(
-                                          text: "Date Format",
+                                          text: "date-format".tr(),
                                           fontSize: 15,
                                         ),
                                         TextFont(
-                                          text: "Example: dd/MM/yyyy HH:mm",
+                                          text: "example".tr() +
+                                              " " +
+                                              "dd/MM/yyyy HH:mm",
                                           fontSize: 12,
                                           maxLines: 5,
                                         ),
                                         TextFont(
-                                          text:
-                                              "Not needed if the CSV uses proper date formatting",
+                                          text: "date-format-note".tr(),
                                           maxLines: 5,
                                           fontSize: 12,
                                         ),
@@ -306,7 +307,8 @@ class _ImportCSVState extends State<ImportCSV> {
                                       TextFont(
                                         text:
                                             assignedColumns[key]!["displayName"]
-                                                .toString(),
+                                                .toString()
+                                                .tr(),
                                         fontSize: 15,
                                       ),
                                       SizedBox(width: 10),
@@ -332,6 +334,16 @@ class _ImportCSVState extends State<ImportCSV> {
                                           "~Current Wallet~",
                                           "~None~"
                                         ],
+                                        getLabel: (label) {
+                                          if (label == "~Current Wallet~") {
+                                            return "~" +
+                                                "current-wallet".tr() +
+                                                "~";
+                                          } else if (label == "~None~") {
+                                            return "~" + "none".tr() + "~";
+                                          }
+                                          return label;
+                                        },
                                         onChanged: (String setHeaderValue) {
                                           assignedColumns[key]![
                                                   "setHeaderValue"] =

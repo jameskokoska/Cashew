@@ -6,6 +6,7 @@ import 'package:budget/pages/onBoardingPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/languageMap.dart';
 import 'package:budget/widgets/button.dart';
+import 'package:budget/widgets/moreIcons.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
@@ -110,7 +111,7 @@ class AboutPage extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Icon(Icons.code_rounded),
+                      Icon(MoreIcons.github),
                       SizedBox(width: 10),
                       TextFont(
                         text: "app-is-open-source"
@@ -123,6 +124,55 @@ class AboutPage extends StatelessWidget {
                   ),
                 ],
               ),
+            ),
+          ),
+        ),
+        SizedBox(height: 7),
+        Row(
+          children: [
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(left: 15),
+                child: Button(
+                  label: "view-app-intro".tr(),
+                  onTap: () {
+                    pushRoute(
+                      context,
+                      OnBoardingPage(
+                        popNavigationWhenDone: true,
+                        showPreviewDemoButton: false,
+                      ),
+                    );
+                  },
+                  expandedLayout: true,
+                ),
+              ),
+            ),
+            SizedBox(width: 10),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(right: 15),
+                child: Button(
+                  label: "view-changelog".tr(),
+                  onTap: () {
+                    showChangelog(context, forceShow: true);
+                  },
+                  expandedLayout: true,
+                ),
+              ),
+            ),
+          ],
+        ),
+        SizedBox(height: 20),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 7),
+          child: Center(
+            child: TextFont(
+              text: "development-team".tr(),
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              textAlign: TextAlign.center,
+              maxLines: 5,
             ),
           ),
         ),
@@ -195,42 +245,6 @@ class AboutPage extends StatelessWidget {
             ),
           ),
         ),
-        SizedBox(height: 10),
-        Row(
-          children: [
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.only(left: 15),
-                child: Button(
-                  label: "view-app-intro".tr(),
-                  onTap: () {
-                    pushRoute(
-                      context,
-                      OnBoardingPage(
-                        popNavigationWhenDone: true,
-                        showPreviewDemoButton: false,
-                      ),
-                    );
-                  },
-                  expandedLayout: true,
-                ),
-              ),
-            ),
-            SizedBox(width: 10),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.only(right: 15),
-                child: Button(
-                  label: "view-changelog".tr(),
-                  onTap: () {
-                    showChangelog(context, forceShow: true);
-                  },
-                  expandedLayout: true,
-                ),
-              ),
-            ),
-          ],
-        ),
         SizedBox(height: 15),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 7),
@@ -286,10 +300,10 @@ class AboutPage extends StatelessWidget {
           link: "https://github.com/imaNNeoFighT/fl_chart",
         ),
         AboutInfoBox(
-          title: "Currency Rates API",
+          title: "exchange-rates-api".tr(),
           link: "https://github.com/fawazahmed0/currency-api",
         ),
-        SizedBox(height: 5),
+        SizedBox(height: 40),
         Row(
           children: [
             Expanded(
@@ -340,19 +354,7 @@ class AboutPage extends StatelessWidget {
         ),
         SizedBox(height: 10),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 7),
-          child: Center(
-            child: TextFont(
-              text: "made-in-canada".tr() + " 🍁",
-              fontSize: 14,
-              textAlign: TextAlign.center,
-              maxLines: 5,
-            ),
-          ),
-        ),
-        SizedBox(height: 50),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 7),
+          padding: const EdgeInsets.symmetric(horizontal: 15),
           child: Button(
             label: "delete-all-data".tr(),
             onTap: () {
@@ -395,6 +397,18 @@ class AboutPage extends StatelessWidget {
             },
             color: Theme.of(context).colorScheme.error,
             textColor: Theme.of(context).colorScheme.onError,
+          ),
+        ),
+        SizedBox(height: 10),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 7),
+          child: Center(
+            child: TextFont(
+              text: "made-in-canada".tr() + " " + "🍁",
+              fontSize: 14,
+              textAlign: TextAlign.center,
+              maxLines: 5,
+            ),
           ),
         ),
       ],
