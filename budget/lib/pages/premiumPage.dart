@@ -367,13 +367,21 @@ Future<Map<String, ProductDetails>> initializeStoreAndPurchases(
 
       Stream<List<PurchaseDetails>> purchaseUpdated =
           InAppPurchase.instance.purchaseStream;
-      purchaseListener = purchaseUpdated.listen((purchaseDetailsList) {
-        listenToPurchaseUpdated(purchaseDetailsList, context);
-      }, onDone: () {
-        purchaseListener?.cancel();
-      }, onError: (error) {
-        print(error);
-      });
+      if (purchaseListener == null) {
+        purchaseListener = purchaseUpdated.listen(
+          (purchaseDetailsList) {
+            listenToPurchaseUpdated(purchaseDetailsList, context);
+          },
+          onDone: () {
+            purchaseListener?.cancel();
+            purchaseListener = null;
+          },
+          onError: (error) {
+            print(error);
+            purchaseListener = null;
+          },
+        );
+      }
 
       final ProductDetailsResponse response =
           await InAppPurchase.instance.queryProductDetails(productIDs);
