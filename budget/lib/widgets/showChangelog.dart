@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
     < 3.8.7
+    Fixed associated title not updating in edit category page
     Today indicator always stays on screen and line follows
     < 3.8.6
     Disabled dangerous debug flags

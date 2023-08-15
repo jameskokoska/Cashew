@@ -1662,7 +1662,7 @@ class FinanceDatabase extends _$FinanceDatabase {
   ) {
     return (select(associatedTitles)
           ..where((t) => t.categoryFk.equals(categoryFk))
-          ..orderBy([(t) => OrderingTerm.asc(t.order)]))
+          ..orderBy([(t) => OrderingTerm.desc(t.order)]))
         .watch();
   }
 

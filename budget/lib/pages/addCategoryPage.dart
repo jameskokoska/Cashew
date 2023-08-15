@@ -240,7 +240,7 @@ class _AddCategoryPageState extends State<AddCategoryPage>
                         RoutesToPopAfterDelete.PreventDelete
                 ? IconButton(
                     padding: EdgeInsets.all(15),
-                    tooltip: "Delete category",
+                    tooltip: "delete-category".tr(),
                     onPressed: () {
                       deleteCategoryPopup(
                         context,
@@ -535,41 +535,42 @@ class _AddCategoryPageState extends State<AddCategoryPage>
                           : widget.category!.categoryPk,
                     ),
                     builder: (context, snapshot) {
+                      print(snapshot.data);
                       if (snapshot.hasData &&
                           (snapshot.data ?? []).length > 0) {
-                        List<Widget> associatedTitleWidgets = [];
-                        for (int i = 0; i < snapshot.data!.length; i++) {
-                          TransactionAssociatedTitle associatedTitle =
-                              snapshot.data![i];
-                          associatedTitleWidgets.add(
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 15),
-                              child: AssociatedTitleContainer(
-                                title: associatedTitle,
-                                setTitle: (text) async {
-                                  await database.createOrUpdateAssociatedTitle(
-                                    TransactionAssociatedTitle(
-                                      associatedTitlePk:
-                                          associatedTitle.associatedTitlePk,
-                                      categoryFk: widget.category == null
-                                          ? "-1"
-                                          : widget.category!.categoryPk,
-                                      isExactMatch:
-                                          associatedTitle.isExactMatch,
-                                      title: text.trim(),
-                                      dateCreated: DateTime.now(),
-                                      dateTimeModified: null,
-                                      order: associatedTitle.order,
-                                    ),
-                                  );
-                                },
-                              ),
-                            ),
-                          );
-                        }
                         return Column(
-                          children: [...associatedTitleWidgets],
+                          children: [
+                            for (int i = 0; i < snapshot.data!.length; i++)
+                              Builder(builder: (context) {
+                                TransactionAssociatedTitle associatedTitle =
+                                    snapshot.data![i];
+                                return Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 15),
+                                  child: AssociatedTitleContainer(
+                                    title: associatedTitle,
+                                    setTitle: (text) async {
+                                      await database
+                                          .createOrUpdateAssociatedTitle(
+                                        TransactionAssociatedTitle(
+                                          associatedTitlePk:
+                                              associatedTitle.associatedTitlePk,
+                                          categoryFk: widget.category == null
+                                              ? "-1"
+                                              : widget.category!.categoryPk,
+                                          isExactMatch:
+                                              associatedTitle.isExactMatch,
+                                          title: text.trim(),
+                                          dateCreated: DateTime.now(),
+                                          dateTimeModified: null,
+                                          order: associatedTitle.order,
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                );
+                              }),
+                          ],
                         );
                       }
                       return SizedBox();
@@ -582,7 +583,7 @@ class _AddCategoryPageState extends State<AddCategoryPage>
   }
 }
 
-class AssociatedTitleContainer extends StatefulWidget {
+class AssociatedTitleContainer extends StatelessWidget {
   const AssociatedTitleContainer({
     Key? key,
     required this.title,
@@ -593,21 +594,9 @@ class AssociatedTitleContainer extends StatefulWidget {
   final Function(String) setTitle;
 
   @override
-  State<AssociatedTitleContainer> createState() =>
-      _AssociatedTitleContainerState();
-}
-
-class _AssociatedTitleContainerState extends State<AssociatedTitleContainer> {
-  String titleName = "";
-
-  @override
-  void initState() {
-    super.initState();
-    titleName = widget.title.title;
-  }
-
-  @override
   Widget build(BuildContext context) {
+    String titleName = title.title;
+
     return Padding(
       padding: const EdgeInsets.only(bottom: 8.0),
       child: Tappable(
@@ -619,7 +608,7 @@ class _AssociatedTitleContainerState extends State<AssociatedTitleContainer> {
               child: SelectText(
                 setSelectedText: (text) {
                   titleName = text;
-                  widget.setTitle(text);
+                  setTitle(text);
                 },
                 labelText: "set-title".tr(),
                 selectedText: titleName,
@@ -638,7 +627,7 @@ class _AssociatedTitleContainerState extends State<AssociatedTitleContainer> {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 25, vertical: 15),
                 child: TextFont(
-                  text: titleName,
+                  text: title.title,
                   fontSize: 18,
                 ),
               ),
@@ -647,7 +636,7 @@ class _AssociatedTitleContainerState extends State<AssociatedTitleContainer> {
               onTap: () async {
                 deleteAssociatedTitlePopup(
                   context,
-                  title: widget.title,
+                  title: title,
                   routesToPopAfterDelete: RoutesToPopAfterDelete.None,
                 );
               },
