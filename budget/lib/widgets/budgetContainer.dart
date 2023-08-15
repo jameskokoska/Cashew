@@ -13,6 +13,7 @@ import 'package:budget/widgets/openContainerNavigation.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
+import 'package:budget/widgets/util/widgetSize.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -737,19 +738,7 @@ class BudgetProgress extends StatelessWidget {
         ),
         todayPercent < 0 || todayPercent > 100
             ? Container(height: 39)
-            : Stack(
-                alignment: Alignment.bottomCenter,
-                children: [
-                  TodayIndicatorLabel(
-                    percent: todayPercent,
-                    large: large,
-                  ),
-                  TodayIndicator(
-                    percent: todayPercent,
-                    large: large,
-                  ),
-                ],
-              ),
+            : TodayIndicator(percent: percent)
       ],
     );
   }
@@ -884,59 +873,7 @@ class _AnimatedProgressState extends State<AnimatedProgress> {
   }
 }
 
-class TodayIndicatorLabel extends StatelessWidget {
-  const TodayIndicatorLabel({
-    required this.percent,
-    this.large = false,
-    super.key,
-  });
-  final double percent;
-  final bool large;
-
-  @override
-  Widget build(BuildContext context) {
-    return Align(
-      alignment: FractionalOffset(percent / 100, 0),
-      child: Column(
-        children: [
-          SlideFadeTransition(
-            child: Container(
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(6),
-                  color: getColor(context, "black")),
-              child: Padding(
-                padding: EdgeInsets.only(top: 3, right: 5, left: 5, bottom: 3),
-                child: MediaQuery(
-                  child: TextFont(
-                    textAlign: TextAlign.center,
-                    text: "today".tr(),
-                    fontSize: large ? 10 : 9,
-                    textColor: getColor(context, "white"),
-                  ),
-                  data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
-                ),
-              ),
-            ),
-          ),
-          Opacity(
-            opacity: 0,
-            child: Container(
-              margin: EdgeInsets.symmetric(horizontal: 8),
-              width: 3,
-              height: large ? 27 : 22,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.vertical(bottom: Radius.circular(5)),
-                color: getColor(context, "black").withOpacity(0.4),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class TodayIndicator extends StatelessWidget {
+class TodayIndicator extends StatefulWidget {
   TodayIndicator({Key? key, required this.percent, this.large = false})
       : super(key: key);
 
@@ -944,20 +881,115 @@ class TodayIndicator extends StatelessWidget {
   final bool large;
 
   @override
+  State<TodayIndicator> createState() => _TodayIndicatorState();
+}
+
+class _TodayIndicatorState extends State<TodayIndicator> {
+  late double percent = widget.percent;
+  double horizontalMargin = 10;
+  // double percent = 0;
+  // @override
+  // void initState() {
+  //   Future.delayed(Duration.zero, () async {
+  //     for (int i = 1; i <= 300; i++) {
+  //       if (percent == 100) {
+  //         continue;
+  //       }
+  //       await Future.delayed(const Duration(milliseconds: 50));
+  //       percent += 0.5;
+  //       setState(() {});
+  //     }
+  //   });
+  //   super.initState();
+  // }
+
+  Size? todayIndicatorSize;
+  Size? progressSize;
+  @override
   Widget build(BuildContext context) {
-    return Align(
-      alignment: FractionalOffset(percent / 100, 0),
-      child: FadeIn(
-        child: Container(
-          margin: EdgeInsets.symmetric(horizontal: 8),
-          width: 3,
-          height: large ? 27 : 22,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.vertical(bottom: Radius.circular(5)),
-            color: getColor(context, "black").withOpacity(0.4),
+    double percentThreshold = 0;
+    double indicatorOffsetPercent = 0;
+    if (progressSize != null && todayIndicatorSize != null) {
+      double progressWidth = progressSize!.width - horizontalMargin;
+      double todayIndicatorWidth =
+          todayIndicatorSize!.width - horizontalMargin * 2;
+      percentThreshold = (todayIndicatorWidth / 2) / (progressWidth) * 100;
+      indicatorOffsetPercent =
+          (percent - percentThreshold) / (100 - percentThreshold * 2);
+    }
+    return Stack(
+      alignment: Alignment.bottomCenter,
+      children: [
+        WidgetSize(
+          onChange: (Size size) {
+            progressSize = size;
+          },
+          child: Align(
+            alignment: percent < percentThreshold
+                ? FractionalOffset(0, 0)
+                : indicatorOffsetPercent > 1
+                    ? FractionalOffset(1, 0)
+                    : FractionalOffset(indicatorOffsetPercent, 0),
+            child: Column(
+              children: [
+                SlideFadeTransition(
+                  child: WidgetSize(
+                    onChange: (Size size) {
+                      todayIndicatorSize = size;
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(6),
+                          color: getColor(context, "black")),
+                      child: Padding(
+                        padding: EdgeInsets.only(
+                            top: 3, right: 5, left: 5, bottom: 3),
+                        child: MediaQuery(
+                          child: TextFont(
+                            textAlign: TextAlign.center,
+                            text: "today".tr(),
+                            fontSize: widget.large ? 10 : 9,
+                            textColor: getColor(context, "white"),
+                          ),
+                          data: MediaQuery.of(context)
+                              .copyWith(textScaleFactor: 1.0),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Opacity(
+                  opacity: 0,
+                  child: Container(
+                    width: 3,
+                    margin: EdgeInsets.symmetric(horizontal: horizontalMargin),
+                    height: widget.large ? 27 : 22,
+                    decoration: BoxDecoration(
+                      borderRadius:
+                          BorderRadius.vertical(bottom: Radius.circular(5)),
+                      color: getColor(context, "black").withOpacity(0.4),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
-      ),
+        Align(
+          alignment: FractionalOffset(percent / 100, 0),
+          child: FadeIn(
+            child: Container(
+              margin: EdgeInsets.symmetric(horizontal: horizontalMargin),
+              width: 3,
+              height: widget.large ? 27 : 22,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.vertical(bottom: Radius.circular(5)),
+                color: getColor(context, "black").withOpacity(0.4),
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
