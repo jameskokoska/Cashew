@@ -3821,12 +3821,12 @@ class FinanceDatabase extends _$FinanceDatabase {
     return query.watch();
   }
 
-  Stream<List<int?>> watchTotalCountOfTransactionsInWalletInCategory(
-      String walletPk, String categoryPk) {
+  Stream<List<int?>> watchTotalCountOfTransactionsInCategory(
+      String categoryPk) {
     final totalCount = transactions.transactionPk.count();
     final query = selectOnly(transactions)
       ..addColumns([totalCount])
-      ..where(transactions.walletFk.equals(walletPk) &
+      ..where(
           transactions.categoryFk.equals(categoryPk));
     return query.map((row) => row.read(totalCount)).watch();
   }

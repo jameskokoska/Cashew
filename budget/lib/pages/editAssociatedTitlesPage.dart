@@ -1,8 +1,10 @@
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/pages/addAssociatedTitlePage.dart';
+import 'package:budget/pages/editBudgetPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
+import 'package:budget/widgets/animatedExpanded.dart';
 import 'package:budget/widgets/categoryIcon.dart';
 import 'package:budget/widgets/fab.dart';
 import 'package:budget/widgets/fadeIn.dart';
@@ -102,10 +104,16 @@ class _EditAssociatedTitlesPageState extends State<EditAssociatedTitlesPage> {
             ),
           ),
           SliverToBoxAdapter(
-            child: AskForTitlesToggle(),
+            child: AnimatedExpanded(
+              expand: hideIfSearching(searchValue, context) == false,
+              child: AskForTitlesToggle(),
+            ),
           ),
           SliverToBoxAdapter(
-            child: AutoTitlesToggle(),
+            child: AnimatedExpanded(
+              expand: hideIfSearching(searchValue, context) == false,
+              child: AutoTitlesToggle(),
+            ),
           ),
           StreamBuilder<Map<String, TransactionCategory>>(
               stream: database.watchAllCategoriesMapped(),

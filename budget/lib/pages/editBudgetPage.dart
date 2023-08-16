@@ -29,6 +29,31 @@ import 'package:flutter/services.dart' hide TextInput;
 import 'package:budget/modified/reorderable_list.dart';
 import 'package:provider/provider.dart';
 
+String? hiddenOnSearchValue;
+
+bool hideIfSearching(String? searchTerm, BuildContext context) {
+  // print(MediaQuery.of(context).size.height -
+  //     getKeyboardHeight(context) -
+  //     getExpandedHeaderHeight(context, null));
+
+  // If it was once hidden when a user was searching for this, don't show options
+  // We don't want the settings to pop in and out just because user decided to
+  // scroll through results and therefore minimized the keyboard
+  if (hiddenOnSearchValue != null && hiddenOnSearchValue == searchTerm) {
+    return true;
+  }
+  if (searchTerm == "" ||
+      searchTerm == null ||
+      MediaQuery.of(context).size.height -
+              getKeyboardHeight(context) -
+              getExpandedHeaderHeight(context, null) >
+          400) {
+    return false;
+  }
+  hiddenOnSearchValue = searchTerm;
+  return true;
+}
+
 class EditBudgetPage extends StatefulWidget {
   EditBudgetPage({
     Key? key,
@@ -115,7 +140,7 @@ class _EditBudgetPageState extends State<EditBudgetPage> {
           ),
           SliverToBoxAdapter(
             child: AnimatedExpanded(
-              expand: searchValue == "",
+              expand: hideIfSearching(searchValue, context) == false,
               child: BudgetTotalSpentToggle(),
             ),
           ),

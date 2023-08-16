@@ -2,8 +2,10 @@ import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/pages/addWalletPage.dart';
+import 'package:budget/pages/editBudgetPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
+import 'package:budget/widgets/animatedExpanded.dart';
 import 'package:budget/widgets/fab.dart';
 import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/widgets/framework/popupFramework.dart';
@@ -101,10 +103,13 @@ class _EditWalletsPageState extends State<EditWalletsPage> {
             ),
           ),
           SliverToBoxAdapter(
-            child: SettingsContainerOpenPage(
-              openPage: ExchangeRates(),
-              title: "exchange-rates".tr(),
-              icon: Icons.account_balance_wallet_rounded,
+            child: AnimatedExpanded(
+              expand: hideIfSearching(searchValue, context) == false,
+              child: SettingsContainerOpenPage(
+                openPage: ExchangeRates(),
+                title: "exchange-rates".tr(),
+                icon: Icons.account_balance_wallet_rounded,
+              ),
             ),
           ),
           StreamBuilder<List<TransactionWallet>>(

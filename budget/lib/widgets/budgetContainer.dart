@@ -943,7 +943,10 @@ class _TodayIndicatorState extends State<TodayIndicator> {
                     child: Container(
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(6),
-                          color: getColor(context, "black")),
+                          color:
+                              Theme.of(context).brightness == Brightness.light
+                                  ? Color(0xFF1F1F1F)
+                                  : getColor(context, "black")),
                       child: Padding(
                         padding: EdgeInsets.only(
                             top: 3, right: 5, left: 5, bottom: 3),

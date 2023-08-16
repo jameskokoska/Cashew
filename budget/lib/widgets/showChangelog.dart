@@ -10,6 +10,9 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    < 3.8.9
+    If not much height space when searching edit pages, the settings options are hidden
+    Category transaction count no longer considers wallet
     < 3.8.8
     New animated size animations
     Autocomplete fixed for titles
