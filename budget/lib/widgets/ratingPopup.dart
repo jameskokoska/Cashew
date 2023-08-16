@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:budget/struct/firebaseAuthGlobal.dart';
 import 'package:budget/struct/languageMap.dart';
 import 'package:budget/struct/settings.dart';
+import 'package:budget/widgets/animatedExpanded.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/widgets/globalSnackBar.dart';
@@ -111,19 +112,16 @@ class _RatingPopupState extends State<RatingPopup> {
             },
           ),
           SizedBox(height: 10),
-          AnimatedSize(
-            duration: Duration(milliseconds: 500),
-            curve: Curves.easeInOutCubicEmphasized,
-            child: writingFeedback
-                ? Padding(
-                    padding: const EdgeInsets.only(bottom: 10),
-                    child: TextInput(
-                      labelText: "email-optional".tr(),
-                      padding: EdgeInsets.zero,
-                      controller: _feedbackControllerEmail,
-                    ),
-                  )
-                : Container(),
+          AnimatedExpanded(
+            expand: writingFeedback,
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 10),
+              child: TextInput(
+                labelText: "email-optional".tr(),
+                padding: EdgeInsets.zero,
+                controller: _feedbackControllerEmail,
+              ),
+            ),
           ),
           Opacity(
             opacity: 0.4,

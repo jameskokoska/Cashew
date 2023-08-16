@@ -167,9 +167,6 @@
   "spending-graph": "Bruksgraf",
   "select-budget": "Velg budsjett",
   "select-budgets": "Velg budsjetter",
-  "total-spent": "Totalt brukt",
-  "total-spent-description-1": "Viser total brukt",
-  "total-spent-description-2": "Viser gjenværende beløp",
   "default-line-graph": "Standard (30 dager)",
   "select-category": "Velg kategori",
   "enter-title": "Skriv inn tittelen",
@@ -491,5 +488,14 @@
   "exchange-rates-api": "Valutakurser API",
   "exchange-rates": "Valutakurser",
   "active": "Aktiv",
-  "edit-home-page": "Rediger hjemmeside"
+  "edit-home-page": "Rediger hjemmeside",
+  "delete-category": "Slett kategori",
+  "manage": "Få til",
+  "restore-purchases": "Gjenopprette kjøp",
+  "backup-restored": "Sikkerhetskopiering gjenopprettet",
+  "budget-total-label": "Budsjetter total etikett",
+  "total-spent": "Totalt brukt",
+  "total-remaining": "Totalt gjenværende",
+  "total-spent-example": "Eksempel: 25 brukt på 100",
+  "total-remaining-example": "Eksempel: 75 venstre på 100"
 }

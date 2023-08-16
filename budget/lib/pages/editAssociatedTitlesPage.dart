@@ -102,31 +102,10 @@ class _EditAssociatedTitlesPageState extends State<EditAssociatedTitlesPage> {
             ),
           ),
           SliverToBoxAdapter(
-            child: SettingsContainerSwitch(
-              title: "ask-for-transaction-title".tr(),
-              description: "ask-for-transaction-title-description".tr(),
-              onSwitched: (value) {
-                updateSettings(
-                  "askForTransactionTitle",
-                  value,
-                  updateGlobalState: false,
-                );
-              },
-              initialValue: appStateSettings["askForTransactionTitle"],
-              icon: Icons.text_fields_rounded,
-            ),
+            child: AskForTitlesToggle(),
           ),
           SliverToBoxAdapter(
-            child: SettingsContainerSwitch(
-              title: "auto-add-titles".tr(),
-              description: "auto-add-titles-description".tr(),
-              onSwitched: (value) {
-                updateSettings("autoAddAssociatedTitles", value,
-                    pagesNeedingRefresh: [], updateGlobalState: false);
-              },
-              initialValue: appStateSettings["autoAddAssociatedTitles"],
-              icon: Icons.add_box_rounded,
-            ),
+            child: AutoTitlesToggle(),
           ),
           StreamBuilder<Map<String, TransactionCategory>>(
               stream: database.watchAllCategoriesMapped(),
@@ -284,5 +263,44 @@ void deleteAssociatedTitlePopup(
         ),
       );
     });
+  }
+}
+
+class AutoTitlesToggle extends StatelessWidget {
+  const AutoTitlesToggle({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return SettingsContainerSwitch(
+      title: "auto-add-titles".tr(),
+      description: "auto-add-titles-description".tr(),
+      onSwitched: (value) {
+        updateSettings("autoAddAssociatedTitles", value,
+            pagesNeedingRefresh: [], updateGlobalState: false);
+      },
+      initialValue: appStateSettings["autoAddAssociatedTitles"],
+      icon: Icons.add_box_rounded,
+    );
+  }
+}
+
+class AskForTitlesToggle extends StatelessWidget {
+  const AskForTitlesToggle({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return SettingsContainerSwitch(
+      title: "ask-for-transaction-title".tr(),
+      description: "ask-for-transaction-title-description".tr(),
+      onSwitched: (value) {
+        updateSettings(
+          "askForTransactionTitle",
+          value,
+          updateGlobalState: false,
+        );
+      },
+      initialValue: appStateSettings["askForTransactionTitle"],
+      icon: Icons.text_fields_rounded,
+    );
   }
 }

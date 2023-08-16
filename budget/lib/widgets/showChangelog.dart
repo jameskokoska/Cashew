@@ -10,6 +10,16 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    < 3.8.8
+    New animated size animations
+    Autocomplete fixed for titles
+    Related titles recommends categories again
+    Budget total label setting
+    Premium page formatting fixes
+    Fixed today indicator position
+    Translations
+    Changelog only shown if English
+    Color tweaks
     < 3.8.7
     Fixed purchase listeners getting duplicated
     Fixed associated title not updating in edit category page
@@ -1079,8 +1089,10 @@ end""";
         ),
       );
 
-    //Don't show changelog on first login
-    if (forceShow || appStateSettings["numLogins"] > 1) {
+    //Don't show changelog on first login and only show if english, unless forced
+    if (forceShow ||
+        (appStateSettings["numLogins"] > 1 &&
+            context.locale.toString() == "en")) {
       openBottomSheet(
         context,
         PopupFramework(

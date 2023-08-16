@@ -17,6 +17,8 @@ import 'package:budget/colors.dart';
 import 'package:provider/provider.dart';
 import 'package:budget/widgets/framework/popupFramework.dart';
 
+import 'sliverStickyLabelDivider.dart';
+
 class CategoryLimits extends StatefulWidget {
   const CategoryLimits({
     required this.budgetPk,
@@ -87,36 +89,29 @@ class _CategoryLimitsState extends State<CategoryLimits> {
                 children: [
                   SizedBox(height: 5),
                   for (TransactionCategory category in snapshot.data!)
-                    AnimatedSize(
-                      duration: Duration(milliseconds: 800),
-                      curve: Curves.easeInOutCubicEmphasized,
-                      child: AnimatedSwitcher(
-                        duration: Duration(milliseconds: 300),
-                        child: widget.selectedCategories.isEmpty ||
-                                widget.selectedCategories
-                                    .contains(category.categoryPk)
-                            ? StreamBuilder<CategoryBudgetLimit?>(
-                                stream: database
-                                    .getCategoryLimit(
-                                        widget.budgetPk, category.categoryPk)
-                                    .$1,
-                                builder: (context, snapshot) {
-                                  return CategoryLimitEntry(
-                                    category: category,
-                                    key: ValueKey(1),
-                                    budgetLimit: widget.budgetLimit,
-                                    categoryLimit: snapshot.data,
-                                    budgetPk: widget.budgetPk,
-                                    isAbsoluteSpendingLimit:
-                                        widget.isAbsoluteSpendingLimit,
-                                  );
-                                },
-                              )
-                            : Container(
-                                key: ValueKey(2),
-                              ),
-                      ),
-                    ),
+                    widget.selectedCategories.isEmpty ||
+                            widget.selectedCategories
+                                .contains(category.categoryPk)
+                        ? StreamBuilder<CategoryBudgetLimit?>(
+                            stream: database
+                                .getCategoryLimit(
+                                    widget.budgetPk, category.categoryPk)
+                                .$1,
+                            builder: (context, snapshot) {
+                              return CategoryLimitEntry(
+                                category: category,
+                                key: ValueKey(1),
+                                budgetLimit: widget.budgetLimit,
+                                categoryLimit: snapshot.data,
+                                budgetPk: widget.budgetPk,
+                                isAbsoluteSpendingLimit:
+                                    widget.isAbsoluteSpendingLimit,
+                              );
+                            },
+                          )
+                        : Container(
+                            key: ValueKey(2),
+                          ),
                   widget.showAddCategoryButton == false
                       ? SizedBox.shrink()
                       : Padding(

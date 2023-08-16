@@ -6,6 +6,7 @@ import 'package:budget/pages/editCategoriesPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/struct/shareBudget.dart';
+import 'package:budget/widgets/animatedExpanded.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/fab.dart';
 import 'package:budget/widgets/fadeIn.dart';
@@ -18,6 +19,7 @@ import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/openSnackbar.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/widgets/radioItems.dart';
+import 'package:budget/widgets/settingsContainers.dart';
 import 'package:budget/widgets/textInput.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/editRowEntry.dart';
@@ -109,6 +111,12 @@ class _EditBudgetPageState extends State<EditBudgetPage> {
                 },
                 autoFocus: false,
               ),
+            ),
+          ),
+          SliverToBoxAdapter(
+            child: AnimatedExpanded(
+              expand: searchValue == "",
+              child: BudgetTotalSpentToggle(),
             ),
           ),
           StreamBuilder<List<Budget>>(
@@ -555,4 +563,52 @@ Future<dynamic> selectAddableBudgetPopup(BuildContext context,
   if (budget is Budget) return budget;
   if (budget == "none") return "none";
   return null;
+}
+
+class BudgetTotalSpentToggle extends StatefulWidget {
+  const BudgetTotalSpentToggle({super.key});
+
+  @override
+  State<BudgetTotalSpentToggle> createState() => _BudgetTotalSpentToggleState();
+}
+
+class _BudgetTotalSpentToggleState extends State<BudgetTotalSpentToggle> {
+  @override
+  Widget build(BuildContext context) {
+    return SettingsContainer(
+      title: "budget-total-label".tr(),
+      description: appStateSettings["showTotalSpentForBudget"] == true
+          ? "total-spent".tr().toLowerCase().capitalizeFirst
+          : "total-remaining".tr().toLowerCase().capitalizeFirst,
+      onTap: () {
+        openBottomSheet(
+          context,
+          PopupFramework(
+            title: "budget-total-label".tr(),
+            child: RadioItems(
+              items: ["total-remaining", "total-spent"],
+              initial: appStateSettings["showTotalSpentForBudget"] == true
+                  ? "total-spent"
+                  : "total-remaining",
+              displayFilter: (label) {
+                return label.tr();
+              },
+              descriptions: [
+                "total-remaining-example".tr(),
+                "total-spent-example".tr()
+              ],
+              onChanged: (option) async {
+                bool result = option == "total-spent";
+                await updateSettings("showTotalSpentForBudget", result,
+                    pagesNeedingRefresh: [0, 2], updateGlobalState: false);
+                setState(() {});
+                Navigator.pop(context);
+              },
+            ),
+          ),
+        );
+      },
+      icon: Icons.center_focus_weak_rounded,
+    );
+  }
 }

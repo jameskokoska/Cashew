@@ -1,15 +1,10 @@
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/struct/currencyFunctions.dart';
+import 'package:budget/widgets/animatedExpanded.dart';
 import 'package:budget/widgets/countNumber.dart';
 import 'package:budget/widgets/textWidgets.dart';
-import 'package:flutter/src/material/icons.dart';
-import 'package:flutter/src/widgets/animated_size.dart';
-import 'package:flutter/src/widgets/basic.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/icon.dart';
-import 'package:flutter/src/widgets/implicit_animations.dart';
+import 'package:flutter/material.dart';
 import 'package:provider/src/provider.dart';
 
 class TransactionEntryAmount extends StatelessWidget {
@@ -44,24 +39,21 @@ class TransactionEntryAmount extends StatelessWidget {
                   children: [
                     Transform.translate(
                       offset: Offset(3, 0),
-                      child: AnimatedSize(
-                        curve: Curves.easeInOutCubicEmphasized,
-                        duration: Duration(milliseconds: 1000),
-                        child: (transaction.type ==
-                                        TransactionSpecialType.credit ||
-                                    transaction.type ==
-                                        TransactionSpecialType.debt) &&
-                                transaction.paid == false
-                            ? Container(width: 5)
-                            : AnimatedRotation(
-                                duration: Duration(milliseconds: 2000),
-                                curve: ElasticOutCurve(0.5),
-                                turns: transaction.income ? 0.5 : 0,
-                                child: Icon(
-                                  Icons.arrow_drop_down_rounded,
-                                  color: textColor,
-                                ),
-                              ),
+                      child: AnimatedExpanded(
+                        expand: !((transaction.type ==
+                                    TransactionSpecialType.credit ||
+                                transaction.type ==
+                                    TransactionSpecialType.debt) &&
+                            transaction.paid == false),
+                        child: AnimatedRotation(
+                          duration: Duration(milliseconds: 2000),
+                          curve: ElasticOutCurve(0.5),
+                          turns: transaction.income ? 0.5 : 0,
+                          child: Icon(
+                            Icons.arrow_drop_down_rounded,
+                            color: textColor,
+                          ),
+                        ),
                       ),
                     ),
                     TextFont(
@@ -80,10 +72,10 @@ class TransactionEntryAmount extends StatelessWidget {
             ),
           ],
         ),
-        AnimatedSize(
-          duration: Duration(milliseconds: 500),
+        AnimatedSizeSwitcher(
           child: showOtherCurrency
               ? Padding(
+                  key: ValueKey(1),
                   padding: const EdgeInsets.only(top: 1),
                   child: TextFont(
                     text: convertToMoney(
@@ -98,10 +90,14 @@ class TransactionEntryAmount extends StatelessWidget {
                           ?.currency,
                     ),
                     fontSize: 12,
-                    textColor: textColor.withOpacity(0.6),
+                    textColor: transaction.paid
+                        ? textColor.withOpacity(0.6)
+                        : textColor.withOpacity(0.35),
                   ),
                 )
-              : SizedBox.shrink(),
+              : Container(
+                  key: ValueKey(0),
+                ),
         ),
       ],
     );

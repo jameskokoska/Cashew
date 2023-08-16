@@ -4,6 +4,7 @@ import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/pages/addCategoryPage.dart';
 import 'package:budget/struct/settings.dart';
+import 'package:budget/widgets/animatedExpanded.dart';
 import 'package:budget/widgets/categoryIcon.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
@@ -297,56 +298,48 @@ class CategoryEntry extends StatelessWidget {
         }
         return true;
       },
-      child: AnimatedSize(
-        duration: Duration(milliseconds: 1000),
-        curve: Curves.easeInOutCubicEmphasized,
-        child: AnimatedSwitcher(
-          duration: Duration(milliseconds: 200),
-          child: !selected && !allSelected && isTiled == false
-              ? Container(
-                  key: ValueKey(2),
-                )
-              : Tappable(
-                  borderRadius: isTiled ? 15 : 0,
-                  key: ValueKey(isTiled),
-                  onTap: onTap,
-                  onLongPress: onLongPress != null
-                      ? () => onLongPress!()
-                      : () => pushRoute(
-                            context,
-                            AddCategoryPage(
-                              category: category,
-                              routesToPopAfterDelete:
-                                  RoutesToPopAfterDelete.One,
-                            ),
-                          ),
-                  color: Colors.transparent,
-                  child: AnimatedOpacity(
-                    duration: Duration(milliseconds: 300),
-                    opacity: allSelected
-                        ? 1
-                        : selected
-                            ? 1
-                            : 0.3,
-                    child: AnimatedContainer(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(isTiled ? 15 : 0),
-                        color: selected
-                            ? dynamicPastel(context, budgetColorScheme.primary,
-                                    amount: 0.3)
-                                .withAlpha(80)
-                            : Colors.transparent,
-                      ),
-                      curve: Curves.easeInOut,
-                      duration: Duration(milliseconds: 500),
-                      padding: isTiled
-                          ? null
-                          : EdgeInsets.only(
-                              left: 20, right: 25, top: 8, bottom: 8),
-                      child: component,
+      child: AnimatedExpanded(
+        expand: !(!selected && !allSelected && isTiled == false),
+        duration: Duration(milliseconds: 650),
+        sizeCurve: Curves.easeInOutCubic,
+        child: Tappable(
+          borderRadius: isTiled ? 15 : 0,
+          key: ValueKey(isTiled),
+          onTap: onTap,
+          onLongPress: onLongPress != null
+              ? () => onLongPress!()
+              : () => pushRoute(
+                    context,
+                    AddCategoryPage(
+                      category: category,
+                      routesToPopAfterDelete: RoutesToPopAfterDelete.One,
                     ),
                   ),
-                ),
+          color: Colors.transparent,
+          child: AnimatedOpacity(
+            duration: Duration(milliseconds: 300),
+            opacity: allSelected
+                ? 1
+                : selected
+                    ? 1
+                    : 0.3,
+            child: AnimatedContainer(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(isTiled ? 15 : 0),
+                color: selected
+                    ? dynamicPastel(context, budgetColorScheme.primary,
+                            amount: 0.3)
+                        .withAlpha(80)
+                    : Colors.transparent,
+              ),
+              curve: Curves.easeInOut,
+              duration: Duration(milliseconds: 500),
+              padding: isTiled
+                  ? null
+                  : EdgeInsets.only(left: 20, right: 25, top: 8, bottom: 8),
+              child: component,
+            ),
+          ),
         ),
       ),
     );

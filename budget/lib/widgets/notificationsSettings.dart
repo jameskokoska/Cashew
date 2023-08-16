@@ -8,6 +8,7 @@ import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/notificationsGlobal.dart';
 import 'package:budget/struct/settings.dart';
+import 'package:budget/widgets/animatedExpanded.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/settingsContainers.dart';
 import 'package:budget/widgets/transactionEntry/transactionLabel.dart';
@@ -60,44 +61,37 @@ class _DailyNotificationsSettingsState
           initialValue: appStateSettings["notifications"],
           icon: Icons.calendar_today_rounded,
         ),
-        AnimatedSize(
-          duration: Duration(milliseconds: 800),
-          curve: Curves.easeInOutCubicEmphasized,
-          child: AnimatedSwitcher(
-            duration: Duration(milliseconds: 300),
-            child: notificationsEnabled
-                ? SettingsContainer(
-                    key: ValueKey(1),
-                    title: "alert-time".tr(),
-                    icon: Icons.timer,
-                    onTap: () async {
-                      TimeOfDay? newTime =
-                          await showCustomTimePicker(context, timeOfDay);
-                      if (newTime != null) {
-                        await initializeNotificationsPlatform();
-                        await scheduleDailyNotification(context, newTime);
-                        setState(() {
-                          timeOfDay = newTime;
-                        });
-                        updateSettings(
-                          "notificationHour",
-                          timeOfDay.hour,
-                          pagesNeedingRefresh: [],
-                          updateGlobalState: false,
-                        );
-                        updateSettings(
-                          "notificationMinute",
-                          timeOfDay.minute,
-                          pagesNeedingRefresh: [],
-                          updateGlobalState: false,
-                        );
-                      }
-                    },
-                    afterWidget: TimeDigits(timeOfDay: timeOfDay),
-                  )
-                : Container(),
-          ),
-        ),
+        AnimatedExpanded(
+            expand: notificationsEnabled,
+            child: SettingsContainer(
+              key: ValueKey(1),
+              title: "alert-time".tr(),
+              icon: Icons.timer,
+              onTap: () async {
+                TimeOfDay? newTime =
+                    await showCustomTimePicker(context, timeOfDay);
+                if (newTime != null) {
+                  await initializeNotificationsPlatform();
+                  await scheduleDailyNotification(context, newTime);
+                  setState(() {
+                    timeOfDay = newTime;
+                  });
+                  updateSettings(
+                    "notificationHour",
+                    timeOfDay.hour,
+                    pagesNeedingRefresh: [],
+                    updateGlobalState: false,
+                  );
+                  updateSettings(
+                    "notificationMinute",
+                    timeOfDay.minute,
+                    pagesNeedingRefresh: [],
+                    updateGlobalState: false,
+                  );
+                }
+              },
+              afterWidget: TimeDigits(timeOfDay: timeOfDay),
+            )),
         Divider(
           indent: 20,
           endIndent: 20,

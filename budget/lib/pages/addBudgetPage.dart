@@ -32,8 +32,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:budget/colors.dart';
-import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:provider/provider.dart';
+import 'package:budget/widgets/animatedExpanded.dart';
+
+import '../widgets/sliverStickyLabelDivider.dart';
 
 class AddBudgetPage extends StatefulWidget {
   AddBudgetPage({
@@ -613,6 +615,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                 ),
               ]),
             ),
+            SliverToBoxAdapter(child: SizedBox(height: 8)),
             widget.budget != null
                 ? SliverToBoxAdapter(child: SizedBox.shrink())
                 : SliverStickyLabelDivider(
@@ -693,6 +696,9 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                       ],
                     ),
                   ),
+            widget.budget != null
+                ? SliverToBoxAdapter(child: SizedBox.shrink())
+                : SliverToBoxAdapter(child: SizedBox(height: 5)),
             SliverStickyLabelDivider(
               info: "select-categories".tr(),
               extraInfo: selectedCategoriesText.tr() +
@@ -704,30 +710,23 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                               widget.budget!.sharedKey == null &&
                               widget.budget!.addedTransactionsOnly == false) ||
                           widget.budget == null),
-              sliver: ColumnSliver(
-                children: [
-                  AnimatedSize(
-                    duration: Duration(milliseconds: 400),
-                    curve: Curves.easeInOut,
-                    child: AnimatedSwitcher(
-                      duration: Duration(milliseconds: 400),
-                      child: selectedShared == true ||
-                              selectedAddedTransactionsOnly
-                          ? Container(
-                              key: ValueKey(1),
-                            )
-                          : Container(
-                              height: 100,
-                              child: SelectCategory(
-                                horizontalList: true,
-                                selectedCategories: selectedCategoryPks,
-                                setSelectedCategories: setSelectedCategories,
-                                showSelectedAllCategoriesIfNoneSelected: true,
-                              ),
-                            ),
+              sliver: SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 5),
+                  child: AnimatedExpanded(
+                    expand: !(selectedShared == true ||
+                        selectedAddedTransactionsOnly),
+                    child: Container(
+                      height: 100,
+                      child: SelectCategory(
+                        horizontalList: true,
+                        selectedCategories: selectedCategoryPks,
+                        setSelectedCategories: setSelectedCategories,
+                        showSelectedAllCategoriesIfNoneSelected: true,
+                      ),
                     ),
                   ),
-                ],
+                ),
               ),
             ),
             SliverStickyLabelDivider(
@@ -740,154 +739,116 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                           widget.budget == null),
               sliver: ColumnSliver(
                 children: [
-                  AnimatedSize(
-                    duration: Duration(milliseconds: 400),
-                    curve: Curves.easeInOut,
-                    child: AnimatedSwitcher(
-                      duration: Duration(milliseconds: 400),
-                      child: selectedShared == true ||
-                              selectedAddedTransactionsOnly
-                          ? Container(
-                              key: ValueKey(1),
-                            )
-                          : Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                SizedBox(height: 5),
-                                SelectChips(
-                                  items: [
-                                    "All",
-                                    BudgetTransactionFilters.addedToOtherBudget,
-                                    ...(appStateSettings["sharedBudgets"]
-                                        ? [
-                                            BudgetTransactionFilters
-                                                .sharedToOtherBudget
-                                          ]
-                                        : []),
-                                  ],
-                                  getLabel: (dynamic item) {
-                                    if (item == "All") return "all".tr();
-                                    return item ==
-                                            BudgetTransactionFilters
-                                                .addedToOtherBudget
-                                        ? "added-to-other-budgets".tr()
-                                        : item ==
-                                                BudgetTransactionFilters
-                                                    .sharedToOtherBudget
-                                            ? "shared-to-other-budgets".tr()
-                                            : "";
-                                  },
-                                  onSelected: (dynamic item) {
-                                    if (item == "All" &&
-                                        selectedBudgetTransactionFilters ==
-                                            null) {
-                                      selectedBudgetTransactionFilters = [];
-                                      setState(() {});
-                                      determineBottomButton();
-                                      return;
-                                    } else if (item == "All" &&
-                                        selectedBudgetTransactionFilters !=
-                                            null) {
-                                      selectedBudgetTransactionFilters = null;
-                                      setState(() {});
-                                      determineBottomButton();
-                                      return;
-                                    }
-                                    if (selectedBudgetTransactionFilters ==
-                                        null)
-                                      selectedBudgetTransactionFilters = [];
-                                    if (selectedBudgetTransactionFilters!
-                                        .contains(item))
-                                      selectedBudgetTransactionFilters!
-                                          .remove(item);
-                                    else
-                                      selectedBudgetTransactionFilters!
-                                          .add(item);
-                                    setState(() {});
-                                    determineBottomButton();
-                                  },
-                                  getSelected: (dynamic item) {
-                                    if (item == "All" &&
-                                        selectedBudgetTransactionFilters ==
-                                            null) return true;
-                                    if (selectedBudgetTransactionFilters ==
-                                        null) return true;
-                                    return selectedBudgetTransactionFilters!
-                                        .contains(item);
-                                  },
-                                ),
-                                AnimatedSize(
-                                  duration: Duration(milliseconds: 400),
-                                  curve: Curves.easeInOut,
-                                  child: AnimatedSwitcher(
-                                    duration: Duration(milliseconds: 300),
-                                    child: appStateSettings["sharedBudgets"] ==
-                                                true &&
-                                            (selectedBudgetTransactionFilters ==
-                                                    null ||
-                                                selectedBudgetTransactionFilters!
-                                                    .contains(
-                                                        BudgetTransactionFilters
-                                                            .sharedToOtherBudget))
-                                        ? SelectChips(
-                                            key: ValueKey(2),
-                                            items: [
-                                              "All",
-                                              ...allMembersOfAllBudgets
-                                            ],
-                                            getLabel: (String item) {
-                                              return getMemberNickname(item);
-                                            },
-                                            onSelected: (String item) {
-                                              if (item == "All" &&
-                                                  selectedMemberTransactionFilters ==
-                                                      null) {
-                                                selectedMemberTransactionFilters =
-                                                    [];
-                                                setState(() {});
-                                                determineBottomButton();
-                                                return;
-                                              } else if (item == "All" &&
-                                                  selectedMemberTransactionFilters !=
-                                                      null) {
-                                                selectedMemberTransactionFilters =
-                                                    null;
-                                                setState(() {});
-                                                determineBottomButton();
-                                                return;
-                                              }
-                                              if (selectedMemberTransactionFilters ==
-                                                  null) {
-                                                selectedMemberTransactionFilters =
-                                                    [];
-                                              }
-                                              if (selectedMemberTransactionFilters!
-                                                  .contains(item)) {
-                                                selectedMemberTransactionFilters!
-                                                    .remove(item);
-                                              } else {
-                                                selectedMemberTransactionFilters!
-                                                    .add(item);
-                                              }
-                                              setState(() {});
-                                              determineBottomButton();
-                                            },
-                                            getSelected: (String item) {
-                                              if (item == "All" &&
-                                                  selectedMemberTransactionFilters ==
-                                                      null) return true;
-                                              if (item != "All" &&
-                                                  selectedMemberTransactionFilters ==
-                                                      null) return true;
-                                              return selectedMemberTransactionFilters!
-                                                  .contains(item);
-                                            },
-                                          )
-                                        : Container(key: ValueKey(1)),
-                                  ),
-                                ),
-                              ],
-                            ),
+                  AnimatedExpanded(
+                    expand: !(selectedShared == true ||
+                        selectedAddedTransactionsOnly),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(height: 5),
+                        SelectChips(
+                          items: [
+                            "All",
+                            BudgetTransactionFilters.addedToOtherBudget,
+                            ...(appStateSettings["sharedBudgets"]
+                                ? [BudgetTransactionFilters.sharedToOtherBudget]
+                                : []),
+                          ],
+                          getLabel: (dynamic item) {
+                            if (item == "All") return "all".tr();
+                            return item ==
+                                    BudgetTransactionFilters.addedToOtherBudget
+                                ? "added-to-other-budgets".tr()
+                                : item ==
+                                        BudgetTransactionFilters
+                                            .sharedToOtherBudget
+                                    ? "shared-to-other-budgets".tr()
+                                    : "";
+                          },
+                          onSelected: (dynamic item) {
+                            if (item == "All" &&
+                                selectedBudgetTransactionFilters == null) {
+                              selectedBudgetTransactionFilters = [];
+                              setState(() {});
+                              determineBottomButton();
+                              return;
+                            } else if (item == "All" &&
+                                selectedBudgetTransactionFilters != null) {
+                              selectedBudgetTransactionFilters = null;
+                              setState(() {});
+                              determineBottomButton();
+                              return;
+                            }
+                            if (selectedBudgetTransactionFilters == null)
+                              selectedBudgetTransactionFilters = [];
+                            if (selectedBudgetTransactionFilters!
+                                .contains(item))
+                              selectedBudgetTransactionFilters!.remove(item);
+                            else
+                              selectedBudgetTransactionFilters!.add(item);
+                            setState(() {});
+                            determineBottomButton();
+                          },
+                          getSelected: (dynamic item) {
+                            if (item == "All" &&
+                                selectedBudgetTransactionFilters == null)
+                              return true;
+                            if (selectedBudgetTransactionFilters == null)
+                              return true;
+                            return selectedBudgetTransactionFilters!
+                                .contains(item);
+                          },
+                        ),
+                        AnimatedExpanded(
+                          expand: appStateSettings["sharedBudgets"] == true &&
+                              (selectedBudgetTransactionFilters == null ||
+                                  selectedBudgetTransactionFilters!.contains(
+                                      BudgetTransactionFilters
+                                          .sharedToOtherBudget)),
+                          child: SelectChips(
+                            items: ["All", ...allMembersOfAllBudgets],
+                            getLabel: (String item) {
+                              return getMemberNickname(item);
+                            },
+                            onSelected: (String item) {
+                              if (item == "All" &&
+                                  selectedMemberTransactionFilters == null) {
+                                selectedMemberTransactionFilters = [];
+                                setState(() {});
+                                determineBottomButton();
+                                return;
+                              } else if (item == "All" &&
+                                  selectedMemberTransactionFilters != null) {
+                                selectedMemberTransactionFilters = null;
+                                setState(() {});
+                                determineBottomButton();
+                                return;
+                              }
+                              if (selectedMemberTransactionFilters == null) {
+                                selectedMemberTransactionFilters = [];
+                              }
+                              if (selectedMemberTransactionFilters!
+                                  .contains(item)) {
+                                selectedMemberTransactionFilters!.remove(item);
+                              } else {
+                                selectedMemberTransactionFilters!.add(item);
+                              }
+                              setState(() {});
+                              determineBottomButton();
+                            },
+                            getSelected: (String item) {
+                              if (item == "All" &&
+                                  selectedMemberTransactionFilters == null)
+                                return true;
+                              if (item != "All" &&
+                                  selectedMemberTransactionFilters == null)
+                                return true;
+                              return selectedMemberTransactionFilters!
+                                  .contains(item);
+                            },
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                   widget.budget != null && widget.budget!.addedTransactionsOnly
@@ -1015,80 +976,6 @@ class ColumnSliver extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment:
             centered ? CrossAxisAlignment.center : CrossAxisAlignment.start,
-      ),
-    );
-  }
-}
-
-class SliverStickyLabelDivider extends StatelessWidget {
-  SliverStickyLabelDivider({
-    Key? key,
-    required this.info,
-    this.extraInfo,
-    this.extraInfoWidget,
-    required this.sliver,
-    this.color,
-    this.visible = true,
-  }) : super(key: key);
-
-  final String info;
-  final String? extraInfo;
-  final Widget? extraInfoWidget;
-  final Widget? sliver;
-  final Color? color;
-  final bool visible;
-
-  @override
-  Widget build(BuildContext context) {
-    return SliverIgnorePointer(
-      ignoring: !visible,
-      sliver: SliverStickyHeader(
-        sliver: sliver,
-        header: Transform.translate(
-          offset: Offset(0, -1),
-          child: AnimatedSize(
-            duration: Duration(milliseconds: 500),
-            curve: Curves.easeInOut,
-            child: AnimatedSwitcher(
-              duration: Duration(milliseconds: 300),
-              child: visible && sliver != null
-                  ? Container(
-                      key: ValueKey(1),
-                      color:
-                          color == null ? Theme.of(context).canvasColor : color,
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-                      alignment: Alignment.centerLeft,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          TextFont(
-                            text: info,
-                            fontSize: 15,
-                            textColor: getColor(context, "textLight"),
-                          ),
-                          extraInfo == null
-                              ? SizedBox.shrink()
-                              : Expanded(
-                                  child: TextFont(
-                                    text: extraInfo ?? "",
-                                    fontSize: 15,
-                                    textColor: getColor(context, "textLight"),
-                                    textAlign: TextAlign.end,
-                                  ),
-                                ),
-                          extraInfoWidget == null
-                              ? SizedBox.shrink()
-                              : extraInfoWidget!,
-                        ],
-                      ),
-                    )
-                  : Container(
-                      key: ValueKey(2),
-                    ),
-            ),
-          ),
-        ),
       ),
     );
   }

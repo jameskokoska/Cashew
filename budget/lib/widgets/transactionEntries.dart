@@ -287,8 +287,8 @@ class TransactionEntries extends StatelessWidget {
                                   transactionList[realIndex].transaction,
                               onSelected:
                                   (Transaction transaction, bool selected) {
-                                onSelected ??
-                                    onSelected!(transaction, selected);
+                                if (onSelected != null)
+                                  onSelected!(transaction, selected);
                               },
                               listID: listID,
                             );
@@ -345,46 +345,19 @@ class TransactionEntries extends StatelessWidget {
                     if (sticky) {
                       return SliverStickyHeader(
                         header: Transform.translate(
-                          offset: Offset(0, -1),
-                          child: appStateSettings["batterySaver"] == true ||
-                                  simpleListRender == true
-                              ? transactionList.length > 0
-                                  ? DateDivider(
-                                      useHorizontalPaddingConstrained:
-                                          useHorizontalPaddingConstrained,
-                                      color: dateDividerColor,
-                                      key: ValueKey(date),
-                                      date: date,
-                                      info: transactionList.length > 1
-                                          ? convertToMoney(
-                                              Provider.of<AllWallets>(context),
-                                              totalSpentForDay)
-                                          : "")
-                                  : SizedBox.shrink()
-                              : AnimatedSize(
-                                  duration: Duration(milliseconds: 500),
-                                  curve: Curves.easeInOut,
-                                  child: transactionList.length > 0
-                                      ? AnimatedSwitcher(
-                                          duration: Duration(milliseconds: 300),
-                                          child: DateDivider(
-                                              useHorizontalPaddingConstrained:
-                                                  useHorizontalPaddingConstrained,
-                                              color: dateDividerColor,
-                                              key: ValueKey(date),
-                                              date: date,
-                                              info: transactionList.length > 1
-                                                  ? convertToMoney(
-                                                      Provider.of<AllWallets>(
-                                                          context),
-                                                      totalSpentForDay)
-                                                  : ""),
-                                        )
-                                      : Container(
-                                          key: ValueKey(2),
-                                        ),
-                                ),
-                        ),
+                            offset: Offset(0, -1),
+                            child: transactionList.length > 0
+                                ? DateDivider(
+                                    useHorizontalPaddingConstrained:
+                                        useHorizontalPaddingConstrained,
+                                    color: dateDividerColor,
+                                    date: date,
+                                    info: transactionList.length > 1
+                                        ? convertToMoney(
+                                            Provider.of<AllWallets>(context),
+                                            totalSpentForDay)
+                                        : "")
+                                : SizedBox.shrink()),
                         sticky: true,
                         sliver: sliverList,
                       );

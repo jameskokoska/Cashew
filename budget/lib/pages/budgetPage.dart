@@ -7,6 +7,7 @@ import 'package:budget/pages/pastBudgetsPage.dart';
 import 'package:budget/pages/premiumPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
+import 'package:budget/widgets/animatedExpanded.dart';
 import 'package:budget/widgets/dropdownSelect.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/selectedTransactionsActionBar.dart';
@@ -504,32 +505,23 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                 },
               ),
               SliverToBoxAdapter(
-                child: AnimatedSize(
-                  duration: Duration(milliseconds: 1000),
-                  curve: Curves.easeInOutCubicEmphasized,
-                  child: AnimatedSwitcher(
-                    duration: Duration(milliseconds: 300),
-                    child: selectedCategory != null
-                        ? Padding(
-                            key: ValueKey(1),
-                            padding: const EdgeInsets.only(
-                                left: 13, right: 15, top: 5, bottom: 15),
-                            child: Center(
-                              child: TextFont(
-                                text: "transactions-for-selected-category".tr(),
-                                maxLines: 10,
-                                textAlign: TextAlign.center,
-                                fontSize: 13,
-                                textColor: getColor(context, "textLight"),
-                                // fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          )
-                        : Container(
-                            key: ValueKey(0),
-                          ),
-                  ),
-                ),
+                child: AnimatedExpanded(
+                    expand: selectedCategory != null,
+                    child: Padding(
+                      key: ValueKey(1),
+                      padding: const EdgeInsets.only(
+                          left: 13, right: 15, top: 5, bottom: 15),
+                      child: Center(
+                        child: TextFont(
+                          text: "transactions-for-selected-category".tr(),
+                          maxLines: 10,
+                          textAlign: TextAlign.center,
+                          fontSize: 13,
+                          textColor: getColor(context, "textLight"),
+                          // fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    )),
               ),
               SliverToBoxAdapter(
                 child: Padding(

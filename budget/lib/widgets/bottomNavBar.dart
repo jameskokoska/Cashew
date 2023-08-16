@@ -216,11 +216,13 @@ class BottomNavBarState extends State<BottomNavBar> {
                 fontFamily: "Avenir",
                 fontSize: 13,
                 fontWeight: FontWeight.bold,
+                overflow: TextOverflow.clip,
               );
             } else {
               return TextStyle(
                 fontFamily: "Avenir",
                 fontSize: 13,
+                overflow: TextOverflow.clip,
               );
             }
           }),

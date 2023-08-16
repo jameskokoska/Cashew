@@ -498,6 +498,8 @@ class SettingsPageContent extends StatelessWidget {
               )
             : SizedBox.shrink(),
 
+        BudgetTotalSpentToggle(),
+
         biometricsAvailable
             ? SettingsContainerSwitch(
                 title: "require-biometrics".tr(),
@@ -560,30 +562,9 @@ class SettingsPageContent extends StatelessWidget {
           icon: getTransactionTypeIcon(TransactionSpecialType.subscription),
         ),
 
-        SettingsContainerSwitch(
-          title: "ask-for-transaction-title".tr(),
-          description: "ask-for-transaction-title-description".tr(),
-          onSwitched: (value) {
-            updateSettings(
-              "askForTransactionTitle",
-              value,
-              updateGlobalState: false,
-            );
-          },
-          initialValue: appStateSettings["askForTransactionTitle"],
-          icon: Icons.text_fields_rounded,
-        ),
+        AskForTitlesToggle(),
 
-        SettingsContainerSwitch(
-          title: "auto-add-titles".tr(),
-          description: "auto-add-titles-description".tr(),
-          onSwitched: (value) {
-            updateSettings("autoAddAssociatedTitles", value,
-                pagesNeedingRefresh: [], updateGlobalState: false);
-          },
-          initialValue: appStateSettings["autoAddAssociatedTitles"],
-          icon: Icons.add_box_rounded,
-        ),
+        AutoTitlesToggle(),
 
         ImportCSV(),
 

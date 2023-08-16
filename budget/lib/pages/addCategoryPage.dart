@@ -628,7 +628,7 @@ class AssociatedTitleContainer extends StatelessWidget {
                     const EdgeInsets.symmetric(horizontal: 25, vertical: 15),
                 child: TextFont(
                   text: title.title,
-                  fontSize: 18,
+                  fontSize: 16.5,
                 ),
               ),
             ),

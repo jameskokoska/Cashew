@@ -3,6 +3,7 @@ import 'package:budget/main.dart';
 import 'package:budget/pages/editCategoriesPage.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/accountAndBackup.dart';
+import 'package:budget/widgets/animatedExpanded.dart';
 import 'package:budget/widgets/moreIcons.dart';
 import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/tappable.dart';
@@ -295,98 +296,89 @@ class _SyncButtonState extends State<SyncButton> {
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedSize(
-      duration: Duration(milliseconds: 1500),
-      curve: Curves.easeInOutCubic,
-      child: AnimatedSwitcher(
-        duration: Duration(milliseconds: 300),
-        child: appStateSettings["currentUserEmail"] == "" ||
-                appStateSettings["backupSync"] == false
-            ? Container(
-                key: ValueKey(1),
-              )
-            : Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12),
-                child: Tappable(
-                  onTap: () async {
-                    refreshButtonKey.currentState?.startAnimation();
-                    await runAllCloudFunctions(
-                      context,
-                      forceSignIn: true,
-                    );
-                    refreshButtonKey.currentState?.startAnimation();
-                  },
-                  borderRadius: 15,
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                      right: 8,
-                      left: 5,
-                      top: 5,
-                      bottom: 5,
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Opacity(
-                          opacity: 0.7,
-                          child: RefreshButton(
-                            key: refreshButtonKey,
-                            halfAnimation: true,
-                            customIcon: Icons.sync_rounded,
-                            flipIcon: true,
-                            padding: EdgeInsets.all(8),
-                            onTap: () {
-                              runAllCloudFunctions(
-                                context,
-                                forceSignIn: true,
+    return AnimatedExpanded(
+      duration: Duration(milliseconds: 800),
+      expand: !(appStateSettings["currentUserEmail"] == "" ||
+          appStateSettings["backupSync"] == false),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 12),
+        child: Tappable(
+          onTap: () async {
+            refreshButtonKey.currentState?.startAnimation();
+            await runAllCloudFunctions(
+              context,
+              forceSignIn: true,
+            );
+            refreshButtonKey.currentState?.startAnimation();
+          },
+          borderRadius: 15,
+          child: Padding(
+            padding: const EdgeInsets.only(
+              right: 8,
+              left: 5,
+              top: 5,
+              bottom: 5,
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Opacity(
+                  opacity: 0.7,
+                  child: RefreshButton(
+                    key: refreshButtonKey,
+                    halfAnimation: true,
+                    customIcon: Icons.sync_rounded,
+                    flipIcon: true,
+                    padding: EdgeInsets.all(8),
+                    onTap: () {
+                      runAllCloudFunctions(
+                        context,
+                        forceSignIn: true,
+                      );
+                    },
+                  ),
+                ),
+                SizedBox(width: 6),
+                Expanded(
+                  child: Row(
+                    children: [
+                      AnimatedSwitcher(
+                        duration: Duration(milliseconds: 500),
+                        child: SizedBox(
+                          key: ValueKey(appStateSettings["lastSynced"]),
+                          child: TimerBuilder.periodic(
+                            Duration(seconds: 5),
+                            builder: (context) {
+                              DateTime? timeLastSynced = null;
+                              try {
+                                timeLastSynced = DateTime.parse(
+                                  appStateSettings["lastSynced"],
+                                );
+                              } catch (e) {
+                                print("Error parsing time last synced: " +
+                                    e.toString());
+                              }
+                              return TextFont(
+                                textColor: getColor(context, "textLight"),
+                                fontSize: 13,
+                                text: "synced".tr() +
+                                    " " +
+                                    (timeLastSynced == null
+                                        ? "never".tr()
+                                        : getTimeAgo(timeLastSynced)
+                                            .toLowerCase()),
                               );
                             },
                           ),
                         ),
-                        SizedBox(width: 6),
-                        Expanded(
-                          child: Row(
-                            children: [
-                              AnimatedSwitcher(
-                                duration: Duration(milliseconds: 500),
-                                child: SizedBox(
-                                  key: ValueKey(appStateSettings["lastSynced"]),
-                                  child: TimerBuilder.periodic(
-                                    Duration(seconds: 5),
-                                    builder: (context) {
-                                      DateTime? timeLastSynced = null;
-                                      try {
-                                        timeLastSynced = DateTime.parse(
-                                          appStateSettings["lastSynced"],
-                                        );
-                                      } catch (e) {
-                                        print(
-                                            "Error parsing time last synced: " +
-                                                e.toString());
-                                      }
-                                      return TextFont(
-                                        textColor:
-                                            getColor(context, "textLight"),
-                                        fontSize: 13,
-                                        text: "synced".tr() +
-                                            " " +
-                                            (timeLastSynced == null
-                                                ? "never".tr()
-                                                : getTimeAgo(timeLastSynced)
-                                                    .toLowerCase()),
-                                      );
-                                    },
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
-              ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -505,55 +497,49 @@ class _EdiDatatButtonsState extends State<EditDataButtons> {
         ),
         Padding(
           padding: const EdgeInsets.only(left: 8.0),
-          child: AnimatedSize(
-            duration: Duration(milliseconds: 400),
-            curve: Curves.easeInOutCubicEmphasized,
-            alignment: Alignment.topCenter,
-            child: AnimatedSwitcher(
-              duration: Duration(milliseconds: 300),
-              child: !showEditDataButtons
-                  ? Container(key: ValueKey(1))
-                  : Column(
-                      children: [
-                        NavigationSidebarButton(
-                          icon: Icons.account_balance_wallet_rounded,
-                          label: "wallet-details".tr(),
-                          isSelected: widget.selectedIndex == 9,
-                          onTap: () {
-                            pageNavigationFrameworkKey.currentState!
-                                .changePage(9, switchNavbar: true);
-                          },
-                        ),
-                        NavigationSidebarButton(
-                          icon: MoreIcons.chart_pie,
-                          label: "budgets-details".tr(),
-                          isSelected: widget.selectedIndex == 10,
-                          onTap: () {
-                            pageNavigationFrameworkKey.currentState!
-                                .changePage(10, switchNavbar: true);
-                          },
-                        ),
-                        NavigationSidebarButton(
-                          icon: Icons.category_rounded,
-                          label: "categories-details".tr(),
-                          isSelected: widget.selectedIndex == 11,
-                          onTap: () {
-                            pageNavigationFrameworkKey.currentState!
-                                .changePage(11, switchNavbar: true);
-                          },
-                        ),
-                        NavigationSidebarButton(
-                          icon: Icons.text_fields_rounded,
-                          label: "titles-details".tr(),
-                          isSelected: widget.selectedIndex == 12,
-                          onTap: () {
-                            pageNavigationFrameworkKey.currentState!
-                                .changePage(12, switchNavbar: true);
-                          },
-                        ),
-                      ],
-                    ),
-            ),
+          child: AnimatedSizeSwitcher(
+            child: !showEditDataButtons
+                ? Container(key: ValueKey(1))
+                : Column(
+                    children: [
+                      NavigationSidebarButton(
+                        icon: Icons.account_balance_wallet_rounded,
+                        label: "wallet-details".tr(),
+                        isSelected: widget.selectedIndex == 9,
+                        onTap: () {
+                          pageNavigationFrameworkKey.currentState!
+                              .changePage(9, switchNavbar: true);
+                        },
+                      ),
+                      NavigationSidebarButton(
+                        icon: MoreIcons.chart_pie,
+                        label: "budgets-details".tr(),
+                        isSelected: widget.selectedIndex == 10,
+                        onTap: () {
+                          pageNavigationFrameworkKey.currentState!
+                              .changePage(10, switchNavbar: true);
+                        },
+                      ),
+                      NavigationSidebarButton(
+                        icon: Icons.category_rounded,
+                        label: "categories-details".tr(),
+                        isSelected: widget.selectedIndex == 11,
+                        onTap: () {
+                          pageNavigationFrameworkKey.currentState!
+                              .changePage(11, switchNavbar: true);
+                        },
+                      ),
+                      NavigationSidebarButton(
+                        icon: Icons.text_fields_rounded,
+                        label: "titles-details".tr(),
+                        isSelected: widget.selectedIndex == 12,
+                        onTap: () {
+                          pageNavigationFrameworkKey.currentState!
+                              .changePage(12, switchNavbar: true);
+                        },
+                      ),
+                    ],
+                  ),
           ),
         ),
       ],

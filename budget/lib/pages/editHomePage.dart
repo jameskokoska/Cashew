@@ -1,5 +1,6 @@
 import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
+import 'package:budget/pages/editBudgetPage.dart';
 import 'package:budget/pages/homePage/homePageLineGraph.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/modified/reorderable_list.dart';
@@ -10,7 +11,6 @@ import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/radioItems.dart';
 import 'package:budget/widgets/selectItems.dart';
-import 'package:budget/widgets/settingsContainers.dart';
 import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/util/showDatePicker.dart';
@@ -91,20 +91,7 @@ class _EditHomePageState extends State<EditHomePage> {
                     children: [
                       ClipRRect(
                         borderRadius: BorderRadius.circular(15),
-                        child: SettingsContainerSwitch(
-                          title: "total-spent".tr(),
-                          descriptionWithValue: (value) => value
-                              ? "total-spent-description-1".tr()
-                              : "total-spent-description-2".tr(),
-                          onSwitched: (value) {
-                            updateSettings("showTotalSpentForBudget", value,
-                                pagesNeedingRefresh: [0, 2],
-                                updateGlobalState: false);
-                          },
-                          initialValue:
-                              appStateSettings["showTotalSpentForBudget"],
-                          icon: Icons.center_focus_weak_rounded,
-                        ),
+                        child: BudgetTotalSpentToggle(),
                       ),
                       SelectItems(
                         checkboxCustomIconSelected: Icons.push_pin_rounded,

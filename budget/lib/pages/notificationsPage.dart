@@ -1,3 +1,4 @@
+import 'package:budget/widgets/animatedExpanded.dart';
 import 'package:budget/widgets/notificationsSettings.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/widgets/statusBox.dart';
@@ -59,19 +60,18 @@ class _NotificationsPageState extends State<NotificationsPage>
       appBarBackgroundColor: Theme.of(context).colorScheme.secondaryContainer,
       appBarBackgroundColorStart: Theme.of(context).canvasColor,
       listWidgets: [
-        AnimatedSize(
+        AnimatedExpanded(
+          expand: notificationsEnabled == false,
           duration: Duration(milliseconds: 100),
-          child: notificationsEnabled == false
-              ? StatusBox(
-                  title: "notifications-disabled".tr(),
-                  description: "notifications-disabled-description".tr(),
-                  icon: Icons.warning_rounded,
-                  color: Theme.of(context).colorScheme.error,
-                  onTap: () {
-                    AppSettings.openNotificationSettings();
-                  },
-                )
-              : Container(),
+          child: StatusBox(
+            title: "notifications-disabled".tr(),
+            description: "notifications-disabled-description".tr(),
+            icon: Icons.warning_rounded,
+            color: Theme.of(context).colorScheme.error,
+            onTap: () {
+              AppSettings.openNotificationSettings();
+            },
+          ),
         ),
         AnimatedOpacity(
           opacity: notificationsEnabled ? 1 : 0.5,

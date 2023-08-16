@@ -106,19 +106,23 @@ class AboutPage extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 15),
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
                     children: [
                       Icon(MoreIcons.github),
                       SizedBox(width: 10),
-                      TextFont(
-                        text: "app-is-open-source"
-                            .tr(namedArgs: {"app": globalAppName}),
-                        fontSize: 18,
-                        textAlign: TextAlign.center,
-                        maxLines: 5,
+                      Flexible(
+                        child: TextFont(
+                          text: "app-is-open-source"
+                              .tr(namedArgs: {"app": globalAppName}),
+                          fontSize: 18,
+                          maxLines: 5,
+                        ),
                       ),
                     ],
                   ),

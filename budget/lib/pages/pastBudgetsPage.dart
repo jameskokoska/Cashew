@@ -32,6 +32,7 @@ import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:provider/provider.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 import 'package:budget/widgets/countNumber.dart';
+import 'package:budget/widgets/animatedExpanded.dart';
 
 class PastBudgetsPage extends StatelessWidget {
   const PastBudgetsPage({super.key, required String this.budgetPk});
@@ -743,31 +744,20 @@ class _PastBudgetContainerListState extends State<PastBudgetContainerList> {
                                     ? 0
                                     : 13.0,
                               ),
-                        child: AnimatedSize(
-                          duration: Duration(milliseconds: 1000),
-                          curve: Curves.easeInOutCubicEmphasized,
-                          child: AnimatedSwitcher(
-                            duration: Duration(milliseconds: 200),
-                            child: touchedBudgetIndex == null ||
-                                    widget.amountLoaded -
-                                            touchedBudgetIndex! -
-                                            1 ==
-                                        index
-                                ? PastBudgetContainer(
-                                    budget: widget.budget,
-                                    smallBudgetContainer: true,
-                                    showTodayForSmallBudget:
-                                        (index == 0 ? true : false),
-                                    dateForRange: datePast,
-                                    isPastBudget: index == 0 ? false : true,
-                                    isPastBudgetButCurrentPeriod: index == 0,
-                                    budgetColorScheme: widget.budgetColorScheme,
-                                    backgroundColor: widget.backgroundColor,
-                                  )
-                                : Container(
-                                    key: ValueKey(
-                                        datePast.millisecondsSinceEpoch),
-                                  ),
+                        child: AnimatedExpanded(
+                          expand: touchedBudgetIndex == null ||
+                              widget.amountLoaded - touchedBudgetIndex! - 1 ==
+                                  index,
+                          child: PastBudgetContainer(
+                            budget: widget.budget,
+                            smallBudgetContainer: true,
+                            showTodayForSmallBudget:
+                                (index == 0 ? true : false),
+                            dateForRange: datePast,
+                            isPastBudget: index == 0 ? false : true,
+                            isPastBudgetButCurrentPeriod: index == 0,
+                            budgetColorScheme: widget.budgetColorScheme,
+                            backgroundColor: widget.backgroundColor,
                           ),
                         ),
                       ),

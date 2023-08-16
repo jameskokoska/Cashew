@@ -38,6 +38,7 @@ import 'package:budget/widgets/util/showTimePicker.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/widgets/framework/popupFramework.dart';
 import 'package:budget/struct/currencyFunctions.dart';
+import 'package:budget/widgets/animatedExpanded.dart';
 
 //TODO
 //only show the tags that correspond to selected category
@@ -642,72 +643,66 @@ class _AddTransactionPageState extends State<AddTransactionPage>
       color: categoryColor,
       child: Column(
         children: [
-          AnimatedSize(
-            duration: Duration(milliseconds: 400),
-            curve: Curves.easeOutCubic,
-            child: AnimatedSwitcher(
-              duration: Duration(milliseconds: 400),
-              child: selectedType == TransactionSpecialType.credit ||
-                      selectedType == TransactionSpecialType.debt
-                  ? Container()
-                  : Material(
-                      color: Colors.black.withOpacity(0.2),
-                      child: Theme(
-                        data: ThemeData().copyWith(
-                          splashColor: Theme.of(context).splashColor,
-                        ),
-                        child: TabBar(
-                          splashFactory: Theme.of(context).splashFactory,
-                          controller: _incomeTabController,
-                          onTap: (value) {
-                            if (value == 1)
-                              setSelectedIncome(true);
-                            else
-                              setSelectedIncome(false);
-                          },
-                          dividerColor: Colors.transparent,
-                          indicatorColor: Colors.transparent,
-                          indicatorSize: TabBarIndicatorSize.tab,
-                          indicator: BoxDecoration(
-                            color: categoryColor,
+          AnimatedExpanded(
+            expand: !(selectedType == TransactionSpecialType.credit ||
+                selectedType == TransactionSpecialType.debt),
+            child: Material(
+              color: Colors.black.withOpacity(0.2),
+              child: Theme(
+                data: ThemeData().copyWith(
+                  splashColor: Theme.of(context).splashColor,
+                ),
+                child: TabBar(
+                  splashFactory: Theme.of(context).splashFactory,
+                  controller: _incomeTabController,
+                  onTap: (value) {
+                    if (value == 1)
+                      setSelectedIncome(true);
+                    else
+                      setSelectedIncome(false);
+                  },
+                  dividerColor: Colors.transparent,
+                  indicatorColor: Colors.transparent,
+                  indicatorSize: TabBarIndicatorSize.tab,
+                  indicator: BoxDecoration(
+                    color: categoryColor,
+                  ),
+                  labelColor: getColor(context, "black"),
+                  unselectedLabelColor: Colors.white.withOpacity(0.3),
+                  tabs: [
+                    Tab(
+                      child: Center(
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 5),
+                          child: Text(
+                            "expense".tr(),
+                            style: TextStyle(
+                              fontSize: 14.5,
+                              fontFamily: 'Avenir',
+                            ),
+                            textAlign: TextAlign.center,
                           ),
-                          labelColor: getColor(context, "black"),
-                          unselectedLabelColor: Colors.white.withOpacity(0.3),
-                          tabs: [
-                            Tab(
-                              child: Center(
-                                child: Padding(
-                                  padding: const EdgeInsets.only(top: 5),
-                                  child: Text(
-                                    "expense".tr(),
-                                    style: TextStyle(
-                                      fontSize: 14.5,
-                                      fontFamily: 'Avenir',
-                                    ),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Tab(
-                              child: Center(
-                                child: Padding(
-                                  padding: const EdgeInsets.only(top: 5),
-                                  child: Text(
-                                    "income".tr(),
-                                    style: TextStyle(
-                                      fontSize: 14.5,
-                                      fontFamily: 'Avenir',
-                                    ),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
                         ),
                       ),
                     ),
+                    Tab(
+                      child: Center(
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 5),
+                          child: Text(
+                            "income".tr(),
+                            style: TextStyle(
+                              fontSize: 14.5,
+                              fontFamily: 'Avenir',
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
           ),
           Row(
@@ -989,71 +984,65 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                     if (hasFocus == false) setState(() {});
                   },
                 ),
-                AnimatedSize(
-                  duration: Duration(milliseconds: 1000),
-                  curve: Curves.easeInOutCubicEmphasized,
-                  child: AnimatedSwitcher(
-                    duration: Duration(milliseconds: 300),
-                    child: extractLinks(selectedNote ?? "").length <= 0
-                        ? Container(
-                            key: ValueKey(1),
-                          )
-                        : Column(
-                            children: [
-                              for (String link
-                                  in extractLinks(selectedNote ?? ""))
-                                Tappable(
-                                  onTap: () {
-                                    if (link.contains("http://"))
-                                      link = "http://www." +
-                                          link
+                AnimatedSizeSwitcher(
+                  child: extractLinks(selectedNote ?? "").length <= 0
+                      ? Container(
+                          key: ValueKey(1),
+                        )
+                      : Column(
+                          children: [
+                            for (String link
+                                in extractLinks(selectedNote ?? ""))
+                              Tappable(
+                                onTap: () {
+                                  if (link.contains("http://"))
+                                    link = "http://www." +
+                                        link
+                                            .replaceFirst("www.", "")
+                                            .replaceFirst("http://", "");
+                                  else if (link.contains("https://"))
+                                    link = "https://www." +
+                                        link
+                                            .replaceFirst("www.", "")
+                                            .replaceFirst("https://", "");
+                                  else
+                                    link = "http://www." +
+                                        link
+                                            .replaceFirst("www.", "")
+                                            .replaceFirst("https://", "")
+                                            .replaceFirst("http://", "");
+                                  openUrl(link);
+                                },
+                                color: darkenPastel(
+                                    (appStateSettings["materialYou"]
+                                        ? Theme.of(context)
+                                            .colorScheme
+                                            .secondaryContainer
+                                        : getColor(context, "canvasContainer")),
+                                    amount: 0.2),
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 15, vertical: 10),
+                                  child: Row(
+                                    children: [
+                                      Icon(Icons.link_rounded),
+                                      SizedBox(width: 10),
+                                      Expanded(
+                                        child: TextFont(
+                                          text: link
                                               .replaceFirst("www.", "")
-                                              .replaceFirst("http://", "");
-                                    else if (link.contains("https://"))
-                                      link = "https://www." +
-                                          link
-                                              .replaceFirst("www.", "")
-                                              .replaceFirst("https://", "");
-                                    else
-                                      link = "http://www." +
-                                          link
-                                              .replaceFirst("www.", "")
-                                              .replaceFirst("https://", "")
-                                              .replaceFirst("http://", "");
-                                    openUrl(link);
-                                  },
-                                  color: darkenPastel(
-                                      (appStateSettings["materialYou"]
-                                          ? Theme.of(context)
-                                              .colorScheme
-                                              .secondaryContainer
-                                          : getColor(
-                                              context, "canvasContainer")),
-                                      amount: 0.2),
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 15, vertical: 10),
-                                    child: Row(
-                                      children: [
-                                        Icon(Icons.link_rounded),
-                                        SizedBox(width: 10),
-                                        Expanded(
-                                          child: TextFont(
-                                            text: link
-                                                .replaceFirst("www.", "")
-                                                .replaceFirst("http://", "")
-                                                .replaceFirst("https://", ""),
-                                            fontSize: 16,
-                                            maxLines: 1,
-                                          ),
+                                              .replaceFirst("http://", "")
+                                              .replaceFirst("https://", ""),
+                                          fontSize: 16,
+                                          maxLines: 1,
                                         ),
-                                      ],
-                                    ),
+                                      ),
+                                    ],
                                   ),
                                 ),
-                            ],
-                          ),
-                  ),
+                              ),
+                          ],
+                        ),
                 )
               ],
             ),
@@ -1370,75 +1359,74 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                               ),
                             ),
                           ),
-                          AnimatedSize(
-                            duration: Duration(milliseconds: 400),
-                            curve: Curves.easeOutCubic,
-                            child: AnimatedSwitcher(
-                              duration: Duration(milliseconds: 400),
-                              child: selectedType ==
-                                          TransactionSpecialType.repetitive ||
-                                      selectedType ==
-                                          TransactionSpecialType.subscription
-                                  ? Padding(
-                                      padding:
-                                          const EdgeInsets.only(bottom: 8.0),
-                                      child: Wrap(
-                                        key: ValueKey(1),
-                                        alignment: WrapAlignment.center,
-                                        crossAxisAlignment:
-                                            WrapCrossAlignment.center,
-                                        children: [
-                                          TextFont(
-                                            text: "repeat-every".tr(),
-                                            fontSize: 23,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                          Row(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              TappableTextEntry(
-                                                title: selectedPeriodLength
-                                                    .toString(),
-                                                placeholder: "0",
-                                                showPlaceHolderWhenTextEquals:
-                                                    "0",
-                                                onTap: () {
-                                                  selectPeriodLength(context);
-                                                },
-                                                fontSize: 23,
-                                                fontWeight: FontWeight.bold,
-                                                internalPadding:
-                                                    EdgeInsets.symmetric(
-                                                        vertical: 4,
-                                                        horizontal: 4),
-                                                padding: EdgeInsets.symmetric(
-                                                    vertical: 5, horizontal: 3),
-                                              ),
-                                              TappableTextEntry(
-                                                title: selectedRecurrenceDisplay
-                                                    .toString()
-                                                    .toLowerCase()
-                                                    .tr()
-                                                    .toLowerCase(),
-                                                placeholder: "",
-                                                onTap: () {
-                                                  selectRecurrence(context);
-                                                },
-                                                fontSize: 23,
-                                                fontWeight: FontWeight.bold,
-                                                internalPadding:
-                                                    EdgeInsets.symmetric(
-                                                        vertical: 4,
-                                                        horizontal: 4),
-                                                padding: EdgeInsets.symmetric(
-                                                    vertical: 5, horizontal: 3),
-                                              ),
-                                            ],
-                                          )
-                                        ],
-                                      ),
-                                    )
-                                  : Container(),
+                          AnimatedExpanded(
+                            expand: selectedType ==
+                                    TransactionSpecialType.repetitive ||
+                                selectedType ==
+                                    TransactionSpecialType.subscription,
+                            child: Padding(
+                              padding: const EdgeInsets.only(bottom: 8.0),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: Wrap(
+                                      key: ValueKey(1),
+                                      alignment: WrapAlignment.center,
+                                      crossAxisAlignment:
+                                          WrapCrossAlignment.center,
+                                      children: [
+                                        TextFont(
+                                          text: "repeat-every".tr(),
+                                          fontSize: 23,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                        Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            TappableTextEntry(
+                                              title: selectedPeriodLength
+                                                  .toString(),
+                                              placeholder: "0",
+                                              showPlaceHolderWhenTextEquals:
+                                                  "0",
+                                              onTap: () {
+                                                selectPeriodLength(context);
+                                              },
+                                              fontSize: 23,
+                                              fontWeight: FontWeight.bold,
+                                              internalPadding:
+                                                  EdgeInsets.symmetric(
+                                                      vertical: 4,
+                                                      horizontal: 4),
+                                              padding: EdgeInsets.symmetric(
+                                                  vertical: 5, horizontal: 3),
+                                            ),
+                                            TappableTextEntry(
+                                              title: selectedRecurrenceDisplay
+                                                  .toString()
+                                                  .toLowerCase()
+                                                  .tr()
+                                                  .toLowerCase(),
+                                              placeholder: "",
+                                              onTap: () {
+                                                selectRecurrence(context);
+                                              },
+                                              fontSize: 23,
+                                              fontWeight: FontWeight.bold,
+                                              internalPadding:
+                                                  EdgeInsets.symmetric(
+                                                      vertical: 4,
+                                                      horizontal: 4),
+                                              padding: EdgeInsets.symmetric(
+                                                  vertical: 5, horizontal: 3),
+                                            ),
+                                          ],
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                           Provider.of<AllWallets>(context).list.length <= 1
@@ -1512,51 +1500,38 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                     ),
                                   ),
                                 ),
-                          AnimatedSize(
-                            duration: Duration(milliseconds: 1000),
-                            curve: Curves.easeInOutCubicEmphasized,
-                            child: AnimatedSwitcher(
-                                duration: Duration(milliseconds: 300),
-                                child: canAddToBudget(
-                                        selectedIncome, selectedType)
-                                    ? SelectAddedBudget(
-                                        horizontalBreak: true,
-                                        selectedBudgetPk: selectedBudgetPk,
-                                        setSelectedBudget: setSelectedBudgetPk,
-                                      )
-                                    : Container(key: ValueKey(1))),
+                          AnimatedExpanded(
+                            expand:
+                                canAddToBudget(selectedIncome, selectedType),
+                            child: SelectAddedBudget(
+                              horizontalBreak: true,
+                              selectedBudgetPk: selectedBudgetPk,
+                              setSelectedBudget: setSelectedBudgetPk,
+                            ),
                           ),
-                          AnimatedSize(
-                            duration: Duration(milliseconds: 400),
-                            curve: Curves.easeInOut,
-                            child: AnimatedSwitcher(
-                              duration: Duration(milliseconds: 300),
-                              child: selectedBudgetPk != null &&
-                                      selectedBudgetIsShared == true
-                                  ? Padding(
-                                      padding: const EdgeInsets.only(top: 5),
-                                      child: SelectChips(
-                                          wrapped: enableDoubleColumn(context),
-                                          items: <String>[
-                                            ...(selectedBudget?.sharedMembers ??
-                                                [])
-                                          ],
-                                          getLabel: (String item) {
-                                            return getMemberNickname(item);
-                                          },
-                                          onSelected: (String item) {
-                                            setSelectedPayer(item);
-                                          },
-                                          getSelected: (String item) {
-                                            return selectedPayer == item;
-                                          },
-                                          onLongPress: (String item) {
-                                            memberPopup(context, item);
-                                          }),
-                                    )
-                                  : Container(
-                                      key: ValueKey(1),
-                                    ),
+                          AnimatedExpanded(
+                            expand: selectedBudgetPk != null &&
+                                selectedBudgetIsShared == true,
+                            child: Padding(
+                              padding: const EdgeInsets.only(top: 5),
+                              child: SelectChips(
+                                wrapped: enableDoubleColumn(context),
+                                items: <String>[
+                                  ...(selectedBudget?.sharedMembers ?? [])
+                                ],
+                                getLabel: (String item) {
+                                  return getMemberNickname(item);
+                                },
+                                onSelected: (String item) {
+                                  setSelectedPayer(item);
+                                },
+                                getSelected: (String item) {
+                                  return selectedPayer == item;
+                                },
+                                onLongPress: (String item) {
+                                  memberPopup(context, item);
+                                },
+                              ),
                             ),
                           ),
                           enableDoubleColumn(context)
@@ -1754,7 +1729,7 @@ class _SelectTitleState extends State<SelectTitle> {
   void selectTitle() {
     widget.setSelectedCategory(selectedCategory!);
     if (foundFromCategory == false)
-      widget.setSelectedTitle(selectedAssociatedTitle!.title);
+      widget.setSelectedTitle(selectedAssociatedTitle?.title ?? "");
     else
       widget.setSelectedTitle("");
     Navigator.pop(context);
@@ -1795,7 +1770,8 @@ class _SelectTitleState extends State<SelectTitle> {
                             input?.toString().trim().toLowerCase()) {
                           widget.setSelectedTitle("");
                         } else {
-                          widget.setSelectedTitle(input ?? "");
+                          widget.setSelectedTitle(
+                              selectedAssociatedTitle?.title ?? input ?? "");
                         }
 
                         if (selectedCategory != null) {
@@ -1851,61 +1827,58 @@ class _SelectTitleState extends State<SelectTitle> {
                       padding: EdgeInsets.zero,
                     ),
                   ),
-                  AnimatedSize(
-                    duration: Duration(milliseconds: 400),
-                    curve: Curves.easeInOut,
-                    child: AnimatedSwitcher(
-                      duration: Duration(milliseconds: 250),
-                      child: selectedCategory == null
-                          ? Container(
-                              key: ValueKey(0),
-                              width: getWidthBottomSheet(context) - 36,
-                            )
-                          : Container(
-                              key: ValueKey(selectedCategory!.categoryPk),
-                              width: getWidthBottomSheet(context) - 36,
-                              padding: EdgeInsets.only(top: 13),
-                              child: Tappable(
-                                borderRadius: 15,
-                                color: Colors.transparent,
-                                onTap: () {
-                                  selectTitle();
-                                },
-                                child: Row(
-                                  children: [
-                                    CategoryIcon(
-                                      categoryPk: "-1",
-                                      size: 40,
-                                      category: selectedCategory,
-                                      margin: EdgeInsets.zero,
-                                      onTap: () {
-                                        selectTitle();
-                                      },
-                                    ),
-                                    SizedBox(width: 10),
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        TextFont(
-                                          text: selectedCategory?.name ?? "",
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                        !foundFromCategory
-                                            ? TextFont(
-                                                text: selectedAssociatedTitle!
-                                                    .title,
-                                                fontSize: 16,
-                                              )
-                                            : Container(),
-                                      ],
-                                    )
-                                  ],
-                                ),
+                  AnimatedSizeSwitcher(
+                    sizeDuration: Duration(milliseconds: 400),
+                    sizeCurve: Curves.easeInOut,
+                    child: selectedCategory == null
+                        ? Container(
+                            key: ValueKey(0),
+                            width: getWidthBottomSheet(context) - 36,
+                          )
+                        : Container(
+                            key: ValueKey(selectedCategory!.categoryPk),
+                            width: getWidthBottomSheet(context) - 36,
+                            padding: EdgeInsets.only(top: 13),
+                            child: Tappable(
+                              borderRadius: 15,
+                              color: Colors.transparent,
+                              onTap: () {
+                                selectTitle();
+                              },
+                              child: Row(
+                                children: [
+                                  CategoryIcon(
+                                    categoryPk: "-1",
+                                    size: 40,
+                                    category: selectedCategory,
+                                    margin: EdgeInsets.zero,
+                                    onTap: () {
+                                      selectTitle();
+                                    },
+                                  ),
+                                  SizedBox(width: 10),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      TextFont(
+                                        text: selectedCategory?.name ?? "",
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                      !foundFromCategory
+                                          ? TextFont(
+                                              text: selectedAssociatedTitle!
+                                                  .title,
+                                              fontSize: 16,
+                                            )
+                                          : Container(),
+                                    ],
+                                  )
+                                ],
                               ),
                             ),
-                    ),
+                          ),
                   ),
                   getIsFullScreen(context)
                       ? Padding(
@@ -2243,27 +2216,29 @@ getRelatingAssociatedTitle(String text) async {
   // }
 
   bool foundFromCategoryLocal = false;
-  if (categoryFk != null) {
-    List<TransactionCategory> allCategories =
-        (await database.getAllCategories());
-    for (TransactionCategory category in allCategories) {
-      if (text.toLowerCase().contains(category.name.toLowerCase())) {
-        categoryFk = category.categoryPk;
-        selectedTitleLocal = TransactionAssociatedTitle(
-          associatedTitlePk: "-1",
-          title: category.name,
-          categoryFk: category.categoryPk,
-          dateCreated: category.dateCreated,
-          dateTimeModified: null,
-          order: category.order,
-          isExactMatch: false,
-        );
-        foundFromCategoryLocal = true;
+  // if (categoryFk != null) {
+  print("SEARCHING");
+  List<TransactionCategory> allCategories = (await database.getAllCategories());
+  print(allCategories);
+  for (TransactionCategory category in allCategories) {
+    if (text.toLowerCase().contains(category.name.toLowerCase())) {
+      categoryFk = category.categoryPk;
+      selectedTitleLocal = TransactionAssociatedTitle(
+        associatedTitlePk: "-1",
+        title: category.name,
+        categoryFk: category.categoryPk,
+        dateCreated: category.dateCreated,
+        dateTimeModified: null,
+        order: category.order,
+        isExactMatch: false,
+      );
+      foundFromCategoryLocal = true;
 
-        break;
-      }
+      break;
     }
   }
+  // }
+
   return [selectedTitleLocal, categoryFk, foundFromCategoryLocal];
 }
 

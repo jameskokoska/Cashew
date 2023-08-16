@@ -115,6 +115,7 @@ class MonthSelectorState extends State<MonthSelector> {
                           borderRadius: 10,
                           child: Container(
                             width: 100,
+                            padding: EdgeInsets.symmetric(horizontal: 5),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.center,
@@ -131,6 +132,9 @@ class MonthSelectorState extends State<MonthSelector> {
                                           fontWeight: isToday
                                               ? FontWeight.bold
                                               : FontWeight.normal,
+                                          overflow: TextOverflow.clip,
+                                          maxLines: 1,
+                                          textAlign: TextAlign.center,
                                         )
                                       : TextFont(
                                           key: ValueKey(2),
@@ -142,6 +146,9 @@ class MonthSelectorState extends State<MonthSelector> {
                                           fontWeight: isToday
                                               ? FontWeight.bold
                                               : FontWeight.normal,
+                                          overflow: TextOverflow.clip,
+                                          maxLines: 1,
+                                          textAlign: TextAlign.center,
                                         ),
                                 ),
                                 DateTime.now().year != currentDateTime.year

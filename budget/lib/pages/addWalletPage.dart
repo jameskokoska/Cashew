@@ -22,6 +22,7 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:budget/colors.dart';
 
+import '../widgets/sliverStickyLabelDivider.dart';
 import 'exchangeRatesPage.dart';
 
 class AddWalletPage extends StatefulWidget {

@@ -73,6 +73,8 @@ class _PremiumPageState extends State<PremiumPage> {
                                         "Pro",
                                     fontSize: 16,
                                     textColor: Colors.black,
+                                    maxLines: 3,
+                                    textAlign: TextAlign.center,
                                   ),
                                 ],
                               ),
@@ -191,8 +193,10 @@ class CashewProBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
+    return Wrap(
+      direction: Axis.horizontal,
+      alignment: WrapAlignment.center,
+      crossAxisAlignment: WrapCrossAlignment.center,
       children: [
         TextFont(
           text: globalAppName,
@@ -517,6 +521,15 @@ class ProductsState extends State<Products> {
                           getHorizontalPaddingConstrained(context) + 20),
                   child: Column(
                     children: [
+                      TextFont(
+                        text: "one-coffee-a-month".tr() + " " + "☕",
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        textColor: Colors.black.withOpacity(0.9),
+                        maxLines: 5,
+                        textAlign: TextAlign.center,
+                      ),
+                      SizedBox(height: 10),
                       ClipRRect(
                         borderRadius: BorderRadius.circular(20),
                         child: Column(
@@ -602,13 +615,6 @@ class ProductsState extends State<Products> {
                           ),
                         ),
                       ),
-                      SizedBox(height: 7),
-                      TextFont(
-                        text: "one-coffee-a-month".tr() + " " + "☕",
-                        fontSize: 17,
-                        fontWeight: FontWeight.bold,
-                        textColor: Colors.black,
-                      ),
                     ],
                   ),
                 ),
@@ -653,9 +659,10 @@ class SubscriptionFeature extends StatelessWidget {
               children: [
                 TextFont(
                   text: label,
-                  fontSize: 19,
+                  fontSize: 18,
                   fontWeight: FontWeight.bold,
                   textColor: Colors.black,
+                  maxLines: 3,
                 ),
                 description != null
                     ? TextFont(
@@ -689,37 +696,46 @@ class SubscriptionOption extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Tappable(
-      onTap: onTap,
-      color: dynamicPastel(
-        context,
-        Theme.of(context).colorScheme.primaryContainer,
-        amountDark: 0.2,
-        amountLight: 0.6,
-      ).withOpacity(0.45),
-      borderRadius: 0,
-      child: Padding(
-        padding: extraPadding ?? EdgeInsets.zero,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 13),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              TextFont(
-                text: label,
-                fontWeight: FontWeight.bold,
-                fontSize: 20,
-                textColor: getColor(context, "black"),
+    return Row(
+      children: [
+        Expanded(
+          child: Tappable(
+            onTap: onTap,
+            color: dynamicPastel(
+              context,
+              Theme.of(context).colorScheme.primaryContainer,
+              amountDark: 0.2,
+              amountLight: 0.6,
+            ).withOpacity(0.45),
+            borderRadius: 0,
+            child: Padding(
+              padding: extraPadding ?? EdgeInsets.zero,
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 28, vertical: 13),
+                child: Wrap(
+                  alignment: WrapAlignment.spaceBetween,
+                  direction: Axis.horizontal,
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  children: [
+                    TextFont(
+                      text: label,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                      textColor: getColor(context, "black"),
+                    ),
+                    TextFont(
+                      text: price,
+                      fontSize: 18,
+                      textColor: getColor(context, "black"),
+                    ),
+                  ],
+                ),
               ),
-              TextFont(
-                text: price,
-                fontSize: 18,
-                textColor: getColor(context, "black"),
-              ),
-            ],
+            ),
           ),
         ),
-      ),
+      ],
     );
   }
 }

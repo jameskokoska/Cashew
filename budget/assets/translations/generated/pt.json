@@ -167,9 +167,6 @@
   "spending-graph": "Gráfico de gastos",
   "select-budget": "Selecione Orçamento",
   "select-budgets": "Selecione orçamentos",
-  "total-spent": "Total gasto",
-  "total-spent-description-1": "Mostrando total gasto",
-  "total-spent-description-2": "Mostrando o valor restante",
   "default-line-graph": "Padrão (30 dias)",
   "select-category": "Selecione a Categoria",
   "enter-title": "Insira o título",
@@ -491,5 +488,14 @@
   "exchange-rates-api": "API das taxas de câmbio",
   "exchange-rates": "Taxas de câmbio",
   "active": "Ativo",
-  "edit-home-page": "Editar página inicial"
+  "edit-home-page": "Editar página inicial",
+  "delete-category": "Excluir categoria",
+  "manage": "Gerenciar",
+  "restore-purchases": "Restaurar compras",
+  "backup-restored": "Backup restaurado",
+  "budget-total-label": "Rótulo total dos orçamentos",
+  "total-spent": "Total gasto",
+  "total-remaining": "Total restante",
+  "total-spent-example": "Exemplo: 25 gasto de 100",
+  "total-remaining-example": "Exemplo: 75 à esquerda de 100"
 }

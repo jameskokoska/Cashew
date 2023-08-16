@@ -167,9 +167,6 @@
   "spending-graph": "Utgiftsgraf",
   "select-budget": "Välj budget",
   "select-budgets": "Välj budgetar",
-  "total-spent": "Totalt spenderat",
-  "total-spent-description-1": "Visar total spenderad",
-  "total-spent-description-2": "Visar återstående belopp",
   "default-line-graph": "Standard (30 dagar)",
   "select-category": "Välj kategori",
   "enter-title": "Ange titel",
@@ -491,5 +488,14 @@
   "exchange-rates-api": "Valutakurer API",
   "exchange-rates": "Växlingskurs",
   "active": "Aktiva",
-  "edit-home-page": "Redigera hemsida"
+  "edit-home-page": "Redigera hemsida",
+  "delete-category": "Radera kategori",
+  "manage": "Hantera",
+  "restore-purchases": "Återställa köp",
+  "backup-restored": "Säkerhetskopiering återställs",
+  "budget-total-label": "Budgetar Totalt etikett",
+  "total-spent": "Totalt spenderat",
+  "total-remaining": "Total kvarvarande",
+  "total-spent-example": "Exempel: 25 tillbringade 100",
+  "total-remaining-example": "Exempel: 75 kvar av 100"
 }

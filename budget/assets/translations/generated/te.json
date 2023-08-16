@@ -167,9 +167,6 @@
   "spending-graph": "ఖర్చు గ్రాఫ్",
   "select-budget": "బడ్జెట్‌ను ఎంచుకోండి",
   "select-budgets": "బడ్జెట్లను ఎంచుకోండి",
-  "total-spent": "మొత్తం ఖర్చు",
-  "total-spent-description-1": "మొత్తం ఖర్చు చేస్తున్నట్లు చూపిస్తుంది",
-  "total-spent-description-2": "మిగిలిన మొత్తాన్ని చూపిస్తుంది",
   "default-line-graph": "డిఫాల్ట్ (30 రోజులు)",
   "select-category": "వర్గం ఎంచుకోండి",
   "enter-title": "శీర్షికను నమోదు చేయండి",
@@ -491,5 +488,14 @@
   "exchange-rates-api": "మార్పిడి రేట్లు API",
   "exchange-rates": "మార్పిడి రేట్లు",
   "active": "క్రియాశీల",
-  "edit-home-page": "హోమ్ పేజీని సవరించండి"
+  "edit-home-page": "హోమ్ పేజీని సవరించండి",
+  "delete-category": "వర్గాన్ని తొలగించండి",
+  "manage": "నిర్వహించడానికి",
+  "restore-purchases": "కొనుగోళ్లు పునరుద్ధరించడానికి",
+  "backup-restored": "బ్యాకప్ పునరుద్ధరించబడింది",
+  "budget-total-label": "బడ్జెట్లు మొత్తం లేబుల్",
+  "total-spent": "మొత్తం ఖర్చు",
+  "total-remaining": "మొత్తం మిగిలి ఉంది",
+  "total-spent-example": "ఉదాహరణ: 100 ఖర్చు 25",
+  "total-remaining-example": "ఉదాహరణ: 100 కి 75 ఎడమ"
 }

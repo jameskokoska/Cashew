@@ -9,11 +9,11 @@ import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
 import 'package:budget/pages/aboutPage.dart';
 import 'package:budget/pages/accountsPage.dart';
-import 'package:budget/pages/settingsPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/struct/shareBudget.dart';
 import 'package:budget/struct/syncClient.dart';
+import 'package:budget/widgets/animatedExpanded.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/globalSnackBar.dart';
 import 'package:budget/widgets/moreIcons.dart';
@@ -473,7 +473,7 @@ Future<void> loadBackup(
         print(appStateSettings);
         openSnackbar(
           SnackbarMessage(
-              title: "Backup Restored",
+              title: "backup-restored".tr(),
               icon: Icons.settings_backup_restore_rounded),
         );
         Navigator.pop(context);
@@ -830,63 +830,49 @@ class _BackupManagementState extends State<BackupManagement> {
                 )
               : SizedBox.shrink(),
           // Only allow sync on every change for web
+          // Only on web, disabled automatically in initializeSettings if not web
           widget.isClientSync && kIsWeb
               ? Padding(
                   padding: const EdgeInsets.only(bottom: 10),
-                  child: AnimatedSize(
-                    duration: Duration(milliseconds: 800),
-                    curve: Curves.easeInOutCubicEmphasized,
-                    child: AnimatedSwitcher(
-                      duration: Duration(milliseconds: 300),
-                      child: backupSync
-                          ? SettingsContainerSwitch(
-                              enableBorderRadius: true,
-                              onSwitched: (value) {
-                                updateSettings("syncEveryChange", value,
-                                    pagesNeedingRefresh: [],
-                                    updateGlobalState: false);
-                              },
-                              initialValue: appStateSettings["syncEveryChange"],
-                              title: "sync-every-change".tr(),
-                              descriptionWithValue: (value) {
-                                return value
-                                    ? "sync-every-change-description1".tr()
-                                    : "sync-every-change-description2".tr();
-                              },
-                              icon: Icons.all_inbox_rounded,
-                            )
-                          : Container(),
+                  child: AnimatedExpanded(
+                    expand: backupSync,
+                    child: SettingsContainerSwitch(
+                      enableBorderRadius: true,
+                      onSwitched: (value) {
+                        updateSettings("syncEveryChange", value,
+                            pagesNeedingRefresh: [], updateGlobalState: false);
+                      },
+                      initialValue: appStateSettings["syncEveryChange"],
+                      title: "sync-every-change".tr(),
+                      descriptionWithValue: (value) {
+                        return value
+                            ? "sync-every-change-description1".tr()
+                            : "sync-every-change-description2".tr();
+                      },
+                      icon: Icons.all_inbox_rounded,
                     ),
                   ),
                 )
               : SizedBox.shrink(),
           widget.isManaging && widget.isClientSync == false
-              ? AnimatedSize(
-                  duration: Duration(milliseconds: 800),
-                  curve: Curves.easeInOutCubicEmphasized,
-                  child: AnimatedSwitcher(
-                    duration: Duration(milliseconds: 300),
-                    child: autoBackups
-                        ? Padding(
-                            key: ValueKey(1),
-                            padding: const EdgeInsets.only(bottom: 8),
-                            child: SettingsContainerDropdown(
-                              enableBorderRadius: true,
-                              items: ["1", "2", "3", "7", "10", "14"],
-                              onChanged: (value) {
-                                updateSettings(
-                                    "autoBackupsFrequency", int.parse(value),
-                                    pagesNeedingRefresh: [],
-                                    updateGlobalState: false);
-                              },
-                              initial: appStateSettings["autoBackupsFrequency"]
-                                  .toString(),
-                              title: "backup-frequency".tr(),
-                              description: "number-of-days".tr(),
-                              icon: Icons.event_repeat_rounded,
-                            ),
-                          )
-                        : Container(),
+              ? AnimatedExpanded(
+                  expand: autoBackups,
+                  child: Padding(
+                    key: ValueKey(1),
+                    padding: const EdgeInsets.only(bottom: 8),
+                    child: SettingsContainerDropdown(
+                      enableBorderRadius: true,
+                      items: ["1", "2", "3", "7", "10", "14"],
+                      onChanged: (value) {
+                        updateSettings("autoBackupsFrequency", int.parse(value),
+                            pagesNeedingRefresh: [], updateGlobalState: false);
+                      },
+                      initial:
+                          appStateSettings["autoBackupsFrequency"].toString(),
+                      title: "backup-frequency".tr(),
+                      description: "number-of-days".tr(),
+                      icon: Icons.event_repeat_rounded,
+                    ),
                   ),
                 )
               : SizedBox.shrink(),
@@ -948,11 +934,11 @@ class _BackupManagementState extends State<BackupManagement> {
               : SizedBox.shrink(),
           ...filesMap
               .map(
-                (file) => AnimatedSize(
-                  duration: Duration(milliseconds: 500),
-                  curve: Curves.easeInOutCubic,
+                (file) => AnimatedSizeSwitcher(
                   child: deletedIndices.contains(file.key)
-                      ? Container()
+                      ? Container(
+                          key: ValueKey(1),
+                        )
                       : Padding(
                           padding: const EdgeInsets.only(bottom: 8.0),
                           child: Tappable(

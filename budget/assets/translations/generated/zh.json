@@ -167,9 +167,6 @@
   "spending-graph": "支出图",
   "select-budget": "选择预算",
   "select-budgets": "选择预算",
-  "total-spent": "总支出",
-  "total-spent-description-1": "显示全部花费",
-  "total-spent-description-2": "显示剩余的金额",
   "default-line-graph": "默认（30天）",
   "select-category": "选择类别",
   "enter-title": "输入标题",
@@ -491,5 +488,14 @@
   "exchange-rates-api": "汇率API",
   "exchange-rates": "汇率",
   "active": "积极的",
-  "edit-home-page": "编辑主页"
+  "edit-home-page": "编辑主页",
+  "delete-category": "删除类别",
+  "manage": "管理",
+  "restore-purchases": "恢复购买",
+  "backup-restored": "备份恢复",
+  "budget-total-label": "预算总标签",
+  "total-spent": "总支出",
+  "total-remaining": "总剩余",
+  "total-spent-example": "示例：25支出100",
+  "total-remaining-example": "示例：75左100"
 }

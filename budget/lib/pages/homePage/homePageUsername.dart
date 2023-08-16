@@ -72,13 +72,16 @@ class HomePageUsername extends StatelessWidget {
           },
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 9),
-            child: TextFont(
-              text: !showUsername
-                  ? "home".tr()
-                  : appStateSettings["username"] ?? "",
-              fontWeight: FontWeight.bold,
-              fontSize: 33,
-              textColor: Theme.of(context).colorScheme.onPrimaryContainer,
+            child: MediaQuery(
+              data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+              child: TextFont(
+                text: !showUsername
+                    ? "home".tr()
+                    : appStateSettings["username"] ?? "",
+                fontWeight: FontWeight.bold,
+                fontSize: 33,
+                textColor: Theme.of(context).colorScheme.onPrimaryContainer,
+              ),
             ),
           ),
         ),

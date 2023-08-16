@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 class RadioItems<T> extends StatefulWidget {
   final T initial;
   final List<T> items;
+  final List<String>? descriptions;
   final Function(T item) onChanged;
   final String Function(T item)? displayFilter;
   final Color? Function(T item)? colorFilter;
@@ -16,6 +17,7 @@ class RadioItems<T> extends StatefulWidget {
     Key? key,
     required this.initial,
     required this.items,
+    this.descriptions,
     required this.onChanged,
     this.onLongPress,
     this.displayFilter,
@@ -39,10 +41,15 @@ class _RadioItemsState<T> extends State<RadioItems<T>> {
   @override
   Widget build(BuildContext context) {
     List<Widget> children = [];
+    int index = -1;
     for (T item in widget.items) {
+      index += 1;
       bool selected = false;
       if (currentValue == item) selected = true;
       if (item == null && widget.ifNullSelectNone == true) selected = false;
+      bool hasDescription = widget.descriptions == null ||
+          widget.descriptions!.length <= index ||
+          widget.descriptions![index] == "";
       children.add(
         AnimatedSwitcher(
           duration: Duration(milliseconds: 150),
@@ -64,12 +71,24 @@ class _RadioItemsState<T> extends State<RadioItems<T>> {
             child: ListTile(
               title: Transform.translate(
                 offset: Offset(-12, 0),
-                child: TextFont(
-                  fontSize: 18,
-                  text: widget.displayFilter == null
-                      ? item.toString()
-                      : widget.displayFilter!(item),
-                  maxLines: 3,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    TextFont(
+                      fontSize: hasDescription ? 16 : 18,
+                      text: widget.displayFilter == null
+                          ? item.toString()
+                          : widget.displayFilter!(item),
+                      maxLines: 3,
+                    ),
+                    hasDescription
+                        ? SizedBox.shrink()
+                        : TextFont(
+                            fontSize: 14,
+                            text: widget.descriptions![index],
+                            maxLines: 3,
+                          ),
+                  ],
                 ),
               ),
               dense: true,
