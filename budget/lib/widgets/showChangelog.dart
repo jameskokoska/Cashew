@@ -10,6 +10,8 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    < 3.9.0
+    Fixed locale loading for changelog
     < 3.8.9
     If not much height space when searching edit pages, the settings options are hidden
     Category transaction count no longer considers wallet
@@ -1095,7 +1097,7 @@ end""";
     //Don't show changelog on first login and only show if english, unless forced
     if (forceShow ||
         (appStateSettings["numLogins"] > 1 &&
-            context.locale.toString() == "en")) {
+            Localizations.localeOf(context).toString().toLowerCase() == "en")) {
       openBottomSheet(
         context,
         PopupFramework(
