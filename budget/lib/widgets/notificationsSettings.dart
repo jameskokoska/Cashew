@@ -409,15 +409,13 @@ Future<bool> initializeNotificationsPlatform() async {
   if (kIsWeb || Platform.isLinux) {
     return false;
   }
-  try {
-    if (Platform.isAndroid) await checkNotificationsPermissionAndroid();
-    if (Platform.isIOS) await checkNotificationsPermissionIOS();
-  } catch (e) {
-    print("Error setting up notifications: " + e.toString());
+  bool result = await checkNotificationsPermissionAll();
+  if (result) {
+    print("Notifications initialized");
+    return true;
+  } else {
     return false;
   }
-  print("Notifications initialized");
-  return true;
 }
 
 Future<bool> checkNotificationsPermissionIOS() async {
@@ -440,4 +438,15 @@ Future<bool> checkNotificationsPermissionAndroid() async {
       ?.requestPermission();
   if (result != true) return false;
   return true;
+}
+
+Future<bool> checkNotificationsPermissionAll() async {
+  try {
+    if (Platform.isAndroid) return await checkNotificationsPermissionAndroid();
+    if (Platform.isIOS) return await checkNotificationsPermissionIOS();
+  } catch (e) {
+    print("Error setting up notifications: " + e.toString());
+    return false;
+  }
+  return false;
 }

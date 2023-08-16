@@ -15,7 +15,7 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 3.9.0+138
+version: 3.9.0+139
 
 environment:
   sdk: ">= 3.0.0"
@@ -164,6 +164,11 @@ flutter:
       fonts:
         - asset: assets/fonts/AvenirLTStd-Roman.otf
         - asset: assets/fonts/AvenirLTStd-Black.otf
+          weight: 700
+    - family: SFProText
+      fonts:
+        - asset: assets/fonts/SF-Pro-Text-Regular.otf
+        - asset: assets/fonts/SF-Pro-Text-Bold.otf
           weight: 700
     - family: Inter
       fonts:

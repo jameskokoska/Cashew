@@ -46,7 +46,7 @@ class _NotificationsPageState extends State<NotificationsPage>
   }
 
   _checkNotificationEnabled() async {
-    bool status = await checkNotificationsPermissionAndroid();
+    bool status = await checkNotificationsPermissionAll();
     setState(() {
       notificationsEnabled = status;
     });

@@ -12,6 +12,8 @@ Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
     < 3.9.0
     Fixed locale loading for changelog
+    SF Pro font for iOS devices
+    Notification permission checks for iOS
     < 3.8.9
     If not much height space when searching edit pages, the settings options are hidden
     Category transaction count no longer considers wallet

@@ -213,14 +213,14 @@ class BottomNavBarState extends State<BottomNavBar> {
           labelTextStyle: MaterialStateProperty.resolveWith((states) {
             if (states.contains(MaterialState.selected)) {
               return TextStyle(
-                fontFamily: "Avenir",
+                fontFamily: appStateSettings["font"],
                 fontSize: 13,
                 fontWeight: FontWeight.bold,
                 overflow: TextOverflow.clip,
               );
             } else {
               return TextStyle(
-                fontFamily: "Avenir",
+                fontFamily: appStateSettings["font"],
                 fontSize: 13,
                 overflow: TextOverflow.clip,
               );

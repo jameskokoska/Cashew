@@ -60,6 +60,11 @@ Future<bool> initializeSettings() async {
     appStateSettings["syncEveryChange"] = false;
   }
 
+  // Load iOS font when iOS
+  if (getPlatform() == PlatformOS.isIOS) {
+    appStateSettings["font"] = "SFProText";
+  }
+
   if (appStateSettings["hasOnboarded"] == true) {
     updateSettings("numLogins", appStateSettings["numLogins"] + 1,
         updateGlobalState: false, pagesNeedingRefresh: []);
