@@ -5,6 +5,7 @@ import 'package:budget/colors.dart';
 import 'package:budget/database/binary_string_conversion.dart';
 import 'package:budget/database/generatePreviewData.dart';
 import 'package:budget/database/tables.dart';
+import 'package:budget/firebase_options.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
 import 'package:budget/pages/aboutPage.dart';
@@ -111,7 +112,7 @@ Future<bool> signInGoogle(
 
     if (waitForCompletion == true && context != null) openLoadingPopup(context);
     if (googleUser == null) {
-      googleSignIn = signIn.GoogleSignIn.standard(scopes: [
+      List<String> scopes = [
         ...(drivePermissions == true ? [drive.DriveApi.driveAppdataScope] : []),
         ...(gMailPermissions == true
             ? [
@@ -120,7 +121,12 @@ Future<bool> signInGoogle(
                     .gmailModifyScope //We do this so the emails can be marked read
               ]
             : [])
-      ]);
+      ];
+      googleSignIn = getPlatform() == PlatformOS.isIOS
+          ? signIn.GoogleSignIn(
+              clientId: DefaultFirebaseOptions.currentPlatform.iosClientId,
+              scopes: scopes)
+          : signIn.GoogleSignIn.standard(scopes: scopes);
       // googleSignIn?.currentUser?.clearAuthCache();
 
       final signIn.GoogleSignInAccount? account = silentSignIn == true

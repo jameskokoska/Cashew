@@ -31,14 +31,19 @@ class _NotificationsPageState extends State<NotificationsPage>
     super.dispose();
   }
 
-  late AppLifecycleState _lastState;
+  AppLifecycleState? _lastState;
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
 
+    if (_lastState == null) {
+      _lastState = state;
+    }
+
     // app resumed
     if (state == AppLifecycleState.resumed &&
-        _lastState == AppLifecycleState.paused) {
+        (_lastState == AppLifecycleState.paused ||
+            _lastState == AppLifecycleState.inactive)) {
       _checkNotificationEnabled();
     }
 
