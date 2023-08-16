@@ -497,5 +497,7 @@
   "total-spent": "Kabuuang ginugol",
   "total-remaining": "Kabuuang natitirang",
   "total-spent-example": "Halimbawa: 25 na ginugol ng 100",
-  "total-remaining-example": "Halimbawa: 75 Kaliwa ng 100"
+  "total-remaining-example": "Halimbawa: 75 Kaliwa ng 100",
+  "importing-loading": "Pag -import ...",
+  "successfully-imported": "Matagumpay na na -import"
 }

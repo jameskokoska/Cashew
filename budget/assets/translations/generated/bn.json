@@ -497,5 +497,7 @@
   "total-spent": "মোট খরচ",
   "total-remaining": "মোট বাকি",
   "total-spent-example": "উদাহরণ: 25 টি 100 ব্যয়",
-  "total-remaining-example": "উদাহরণ: 100 এর 75 বাম"
+  "total-remaining-example": "উদাহরণ: 100 এর 75 বাম",
+  "importing-loading": "আমদানি ...",
+  "successfully-imported": "সফলভাবে আমদানি করা"
 }

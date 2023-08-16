@@ -446,7 +446,7 @@
   "delete-wallet-merge-warning": "מחיקת ארנק תמחק את כל העסקאות בארנק זה. העבר עסקאות לארנק אחר כדי להימנע מכך.",
   "deleted-wallet": "ארנק שנמחק",
   "delete-title-question": "למחוק כותרת?",
-  "deleted-title": "כותרת נמחקת",
+  "deleted-title": "תואר נמחק",
   "remove-transactions-from-added-budget-question": "להסיר עסקאות?",
   "deleted-transactions": "עסקאות שנמחקו",
   "deleted-transaction": "עסקה שנמחקו",
@@ -473,7 +473,7 @@
   "wallet": "ארנק",
   "date-format": "פורמט תאריך",
   "example": "דוגמא:",
-  "date-format-note": "לא נחוץ אם ה- CSV משתמש בעיצוב תאריך מתאים",
+  "date-format-note": "אין צורך אם ה- CSV משתמש בעיצוב תאריך מתאים",
   "current-wallet": "ארנק נוכחי",
   "none": "אף אחד",
   "one-coffee-a-month": "רק קפה אחד בחודש!",
@@ -497,5 +497,7 @@
   "total-spent": "סה\"כ הוצא",
   "total-remaining": "סך הכל נותר",
   "total-spent-example": "דוגמה: 25 בילוי של 100",
-  "total-remaining-example": "דוגמה: 75 משמאל ל 100"
+  "total-remaining-example": "דוגמה: 75 משמאל ל 100",
+  "importing-loading": "יבוא ...",
+  "successfully-imported": "מיובא בהצלחה"
 }

@@ -497,5 +497,7 @@
   "total-spent": "మొత్తం ఖర్చు",
   "total-remaining": "మొత్తం మిగిలి ఉంది",
   "total-spent-example": "ఉదాహరణ: 100 ఖర్చు 25",
-  "total-remaining-example": "ఉదాహరణ: 100 కి 75 ఎడమ"
+  "total-remaining-example": "ఉదాహరణ: 100 కి 75 ఎడమ",
+  "importing-loading": "దిగుమతి ...",
+  "successfully-imported": "విజయవంతంగా దిగుమతి చేయబడింది"
 }

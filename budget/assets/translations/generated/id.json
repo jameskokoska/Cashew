@@ -497,5 +497,7 @@
   "total-spent": "Total dihabiskan",
   "total-remaining": "Total tersisa",
   "total-spent-example": "Contoh: 25 dihabiskan 100",
-  "total-remaining-example": "Contoh: 75 tersisa dari 100"
+  "total-remaining-example": "Contoh: 75 tersisa dari 100",
+  "importing-loading": "Pengimporan...",
+  "successfully-imported": "Berhasil diimpor"
 }

@@ -121,7 +121,8 @@ class DebugPage extends StatelessWidget {
             "Inter",
             "DMSans",
             "OpenSans",
-            "Metropolis"
+            "Metropolis",
+            "None (Default)",
           ],
           onChanged: (value) {
             updateSettings("font", value, updateGlobalState: true);
@@ -205,7 +206,11 @@ class DebugPage extends StatelessWidget {
           title: "Emulate iOS",
           description: "Enables scroll behaviour and icons from iOS",
           onSwitched: (value) {
-            updateSettings("font", "SFProText", updateGlobalState: false);
+            if (value == true) {
+              updateSettings("font", "SFProText", updateGlobalState: false);
+            } else {
+              updateSettings("font", "Avenir", updateGlobalState: false);
+            }
             updateSettings("iOSEmulate", value,
                 pagesNeedingRefresh: [], updateGlobalState: true);
           },

@@ -435,7 +435,7 @@
   "unpinned-to-homepage": "હોમપેજમાંથી અનપિન કરેલું",
   "expenses-only": "માત્ર ખર્ચ",
   "expenses-only-description": "બજેટમાં ફક્ત ખર્ચ ઉમેરી શકાય છે",
-  "delete-category-question": "કેટેગરી કા Delete ી નાંખો?",
+  "delete-category-question": "કેટેગરી કા Delete ી નાખો?",
   "delete-category-question-description": "આ આ કેટેગરી સાથે સંકળાયેલા તમામ વ્યવહારોને કા delete ી નાખશે.",
   "delete-all-transactions-question": "બધા વ્યવહારો કા delete ી નાખો?",
   "delete-category-merge-warning": "કેટેગરીને કા ting ી નાખવાથી આ કેટેગરીમાંના તમામ વ્યવહારોને કા delete ી નાખવામાં આવશે. આને ટાળવા માટે વ્યવહારોને બીજી કેટેગરીમાં ખસેડો.",
@@ -497,5 +497,7 @@
   "total-spent": "કુલ ખર્ચ",
   "total-remaining": "બાકી",
   "total-spent-example": "ઉદાહરણ: 25 100 ખર્ચ",
-  "total-remaining-example": "ઉદાહરણ: 100 ની 75 ડાબે"
+  "total-remaining-example": "ઉદાહરણ: 100 ની 75 ડાબે",
+  "importing-loading": "આયાત ...",
+  "successfully-imported": "સફળતાપૂર્વક આયાત"
 }

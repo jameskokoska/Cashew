@@ -425,13 +425,13 @@
   "add-to-budget": "予算に追加します",
   "select-wallet": "ウォレットを選択します",
   "move-to-other-wallet-button": "トランザクションを別のウォレットに移動して削除します",
-  "changed-wallet": "変更されたウォレット",
+  "changed-wallet": "ウォレットを変更しました",
   "added-to-budget": "予算に追加されました",
   "no-addable-budgets": "取引を追加する予算はありません",
   "create-addable-budget": "「追加のみ」予算を作成します",
   "delete-budget-added-warning": "この予算に追加された取引は、この予算に関連しなくなります。それらは削除されません。",
   "removed-from-budget": "予算から削除されました",
-  "pinned-to-homepage": "ホームページにピン留め",
+  "pinned-to-homepage": "ホームページに固定されています",
   "unpinned-to-homepage": "ホームページから調整されていません",
   "expenses-only": "費用のみ",
   "expenses-only-description": "予算に追加できます",
@@ -476,7 +476,7 @@
   "date-format-note": "CSVが適切な日付フォーマットを使用している場合、必要ありません",
   "current-wallet": "現在のウォレット",
   "none": "なし",
-  "one-coffee-a-month": "月に1回のコーヒー！",
+  "one-coffee-a-month": "月に1杯のコーヒー！",
   "error-getting-products": "製品の取得エラー",
   "error-getting-products-description": "App Storeに接続するエラーがありました。後でもう一度やり直してください。",
   "error-processing-order": "購入の処理エラーがありました。もう一度やり直してください。",
@@ -497,5 +497,7 @@
   "total-spent": "合計が費やされました",
   "total-remaining": "残りの合計",
   "total-spent-example": "例：100の25匹",
-  "total-remaining-example": "例：100の残り75"
+  "total-remaining-example": "例：100の残り75",
+  "importing-loading": "インポート...",
+  "successfully-imported": "正常にインポートされました"
 }

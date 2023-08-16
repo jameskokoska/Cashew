@@ -478,8 +478,8 @@
   "none": "没有任何",
   "one-coffee-a-month": "一个月只喝一杯咖啡！",
   "error-getting-products": "获取产品的错误",
-  "error-getting-products-description": "连接到App Store的错误。请稍后再试。",
-  "error-processing-order": "购买您的购买错误。请再试一次。",
+  "error-getting-products-description": "连接到App Store有一个错误。请稍后再试。",
+  "error-processing-order": "处理您的购买错误。请再试一次。",
   "order-confirmation": "感谢您支持腰果！",
   "purchases-restored": "购买恢复",
   "already-purchased": "已经购买",
@@ -497,5 +497,7 @@
   "total-spent": "总支出",
   "total-remaining": "总剩余",
   "total-spent-example": "示例：25支出100",
-  "total-remaining-example": "示例：75左100"
+  "total-remaining-example": "示例：75左100",
+  "importing-loading": "输入...",
+  "successfully-imported": "成功导入"
 }

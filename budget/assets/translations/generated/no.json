@@ -497,5 +497,7 @@
   "total-spent": "Totalt brukt",
   "total-remaining": "Totalt gjenværende",
   "total-spent-example": "Eksempel: 25 brukt på 100",
-  "total-remaining-example": "Eksempel: 75 venstre på 100"
+  "total-remaining-example": "Eksempel: 75 venstre på 100",
+  "importing-loading": "Import ...",
+  "successfully-imported": "Vellykket importert"
 }

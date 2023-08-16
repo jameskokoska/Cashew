@@ -497,5 +497,7 @@
   "total-spent": "Totalt spenderat",
   "total-remaining": "Total kvarvarande",
   "total-spent-example": "Exempel: 25 tillbringade 100",
-  "total-remaining-example": "Exempel: 75 kvar av 100"
+  "total-remaining-example": "Exempel: 75 kvar av 100",
+  "importing-loading": "Importerar ...",
+  "successfully-imported": "Importeras framgångsrikt"
 }

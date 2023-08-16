@@ -404,7 +404,7 @@
   "stored-backups": "Backup -urile vor fi stocate.",
   "lets-go": "Să mergem!",
   "transactions-for-selected-category": "Afișarea tranzacțiilor din categoria selectată",
-  "select-start-date": "Selectați data de început",
+  "select-start-date": "Selectați Data de început",
   "all-time": "Tot timpul",
   "icon-suggestion-details": "Nu găsiți o pictogramă pe care o doriți? Sugerați -vă unele și pot fi adăugate!",
   "suggestion": "Sugestie",
@@ -497,5 +497,7 @@
   "total-spent": "Total cheltuit",
   "total-remaining": "Total rămas",
   "total-spent-example": "Exemplu: 25 a cheltuit de 100",
-  "total-remaining-example": "Exemplu: 75 stânga de 100"
+  "total-remaining-example": "Exemplu: 75 stânga de 100",
+  "importing-loading": "Import ...",
+  "successfully-imported": "Importat cu succes"
 }

@@ -497,5 +497,7 @@
   "total-spent": "Jumlah yang dibelanjakan",
   "total-remaining": "Jumlah baki",
   "total-spent-example": "Contoh: 25 dibelanjakan sebanyak 100",
-  "total-remaining-example": "Contoh: 75 kiri 100"
+  "total-remaining-example": "Contoh: 75 kiri 100",
+  "importing-loading": "Mengimport ...",
+  "successfully-imported": "Berjaya diimport"
 }

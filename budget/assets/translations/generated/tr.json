@@ -440,7 +440,7 @@
   "delete-all-transactions-question": "Tüm işlemleri silin mi?",
   "delete-category-merge-warning": "Bir kategoriyi silmek bu kategorideki tüm işlemleri silecektir. Bundan kaçınmak için işlemleri başka bir kategoriye taşıyın.",
   "deleted-category": "Silinmiş kategori",
-  "delete-wallet-question": "Cüzdan'ı Sil?",
+  "delete-wallet-question": "Cüzdanı Sil?",
   "delete-wallet-question-description": "Bu, bu cüzdanla ilişkili tüm işlemleri silecektir.",
   "move-transactions": "İşlemleri Taşı",
   "delete-wallet-merge-warning": "Bir cüzdanın silinmesi, bu cüzdandaki tüm işlemleri silecektir. Bundan kaçınmak için işlemleri başka bir cüzdana taşıyın.",
@@ -465,7 +465,7 @@
   "delete-sync-backup-warning": "Müşteriler arasındaki senkronizasyon sorunlarını önlemek için, silmeden önce diğer tüm etkin cihazları senkronize etmek iyi bir fikirdir.",
   "development-team": "Geliştirme Takımı",
   "settings-and-customization": "Ayarlar ve Özelleştirme",
-  "assign-columns": "Sütunlar atayın",
+  "assign-columns": "Sütun atama",
   "date": "Tarih",
   "amount": "Miktar",
   "title": "Başlık",
@@ -497,5 +497,7 @@
   "total-spent": "Toplam harcama",
   "total-remaining": "Toplam kalan",
   "total-spent-example": "Örnek: 100'ün 25 harcanması",
-  "total-remaining-example": "Örnek: 100'ün 75'i sol"
+  "total-remaining-example": "Örnek: 100'ün 75'i sol",
+  "importing-loading": "İthalat ...",
+  "successfully-imported": "Başarıyla ithal edildi"
 }

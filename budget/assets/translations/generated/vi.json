@@ -432,7 +432,7 @@
   "delete-budget-added-warning": "Các giao dịch được thêm vào ngân sách này sẽ không còn được liên kết với ngân sách này. Họ sẽ không bị xóa.",
   "removed-from-budget": "Bị loại khỏi ngân sách",
   "pinned-to-homepage": "Ghim vào trang chủ",
-  "unpinned-to-homepage": "Chưa được xử lý từ trang chủ",
+  "unpinned-to-homepage": "Không được xử lý từ trang chủ",
   "expenses-only": "Chỉ chi phí",
   "expenses-only-description": "Chỉ có thể thêm chi phí vào ngân sách",
   "delete-category-question": "Xóa danh mục?",
@@ -449,7 +449,7 @@
   "deleted-title": "Đã xóa tiêu đề",
   "remove-transactions-from-added-budget-question": "Xóa giao dịch?",
   "deleted-transactions": "Đã xóa các giao dịch",
-  "deleted-transaction": "Giao dịch đã xóa",
+  "deleted-transaction": "Đã xóa giao dịch",
   "change-category": "Thay đổi danh mục",
   "changed-category": "Thay đổi danh mục",
   "merged-category": "Thể loại hợp nhất",
@@ -497,5 +497,7 @@
   "total-spent": "Tổng đã dành",
   "total-remaining": "Tổng số còn lại",
   "total-spent-example": "Ví dụ: 25 chi tiêu 100",
-  "total-remaining-example": "Ví dụ: 75 trái của 100"
+  "total-remaining-example": "Ví dụ: 75 trái của 100",
+  "importing-loading": "Nhập khẩu ...",
+  "successfully-imported": "Nhập thành công"
 }

@@ -416,7 +416,7 @@
   "preview-demo-warning": "Preview-demo er i øjeblikket aktiv, og der bruges auto-genererede data. Det anbefales ikke at bruge applikationen i demo -tilstand, da det kan føre til datatab. For at fjerne genererede data og exit -preview -demo skal du trykke på her.",
   "exit-demo": "Afslut demo",
   "not-available-in-preview-demo": "Ikke tilgængelig i preview -demo",
-  "not-available-in-preview-demo-description": "Deaktiver preview Demo -tilstand for at bruge denne funktion.",
+  "not-available-in-preview-demo-description": "Deaktiver preview -demo -tilstand for at bruge denne funktion.",
   "copied": "Kopieret",
   "created-copy": "Oprettet kopi",
   "duplicate": "Duplikere",
@@ -497,5 +497,7 @@
   "total-spent": "Samlet brugt",
   "total-remaining": "Samlet resterende",
   "total-spent-example": "Eksempel: 25 brugt på 100",
-  "total-remaining-example": "Eksempel: 75 tilbage af 100"
+  "total-remaining-example": "Eksempel: 75 tilbage af 100",
+  "importing-loading": "Import ...",
+  "successfully-imported": "Med succes importeret"
 }

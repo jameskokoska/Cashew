@@ -497,5 +497,7 @@
   "total-spent": "Всего потрачено",
   "total-remaining": "Всего осталось",
   "total-spent-example": "Пример: 25 потрачено по 100",
-  "total-remaining-example": "Пример: 75 слева от 100"
+  "total-remaining-example": "Пример: 75 слева от 100",
+  "importing-loading": "Импорт ...",
+  "successfully-imported": "Успешно импортируется"
 }

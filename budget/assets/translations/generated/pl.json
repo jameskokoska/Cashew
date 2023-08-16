@@ -497,5 +497,7 @@
   "total-spent": "Całkowite wydatki",
   "total-remaining": "Całkowita pozostała",
   "total-spent-example": "Przykład: 25 wydanych 100",
-  "total-remaining-example": "Przykład: 75 po lewej 100"
+  "total-remaining-example": "Przykład: 75 po lewej 100",
+  "importing-loading": "Importowanie...",
+  "successfully-imported": "Pomyślnie zaimportowany"
 }

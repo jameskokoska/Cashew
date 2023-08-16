@@ -462,7 +462,7 @@
   "email-optional": "ईमेल (पर्यायी)",
   "feedback": "अभिप्राय",
   "backup-created": "बॅकअप तयार केला",
-  "delete-sync-backup-warning": "ग्राहकांमधील सिंक्रोनाइझेशनच्या समस्यांपासून बचाव करण्यासाठी, हटविण्यापूर्वी इतर सर्व सक्रिय डिव्हाइस समक्रमित करणे चांगली कल्पना आहे.",
+  "delete-sync-backup-warning": "क्लायंटमधील सिंक्रोनाइझेशनच्या समस्यांपासून बचाव करण्यासाठी, हटविण्यापूर्वी इतर सर्व सक्रिय डिव्हाइस समक्रमित करणे चांगली कल्पना आहे.",
   "development-team": "विकास कार्यसंघ",
   "settings-and-customization": "सेटिंग्ज आणि सानुकूलन",
   "assign-columns": "स्तंभ नियुक्त करा",
@@ -497,5 +497,7 @@
   "total-spent": "एकूण खर्च",
   "total-remaining": "एकूण उर्वरित",
   "total-spent-example": "उदाहरणः 100 चा 25 खर्च",
-  "total-remaining-example": "उदाहरणः 100 चे 75 डावे"
+  "total-remaining-example": "उदाहरणः 100 चे 75 डावे",
+  "importing-loading": "आयात करीत आहे ...",
+  "successfully-imported": "यशस्वीरित्या आयात केले"
 }

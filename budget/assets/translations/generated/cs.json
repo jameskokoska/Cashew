@@ -432,7 +432,7 @@
   "delete-budget-added-warning": "Transakce přidané k tomuto rozpočtu již nebudou spojeny s tímto rozpočtem. Nebudou smazány.",
   "removed-from-budget": "Odstraněno z rozpočtu",
   "pinned-to-homepage": "Připnuto na domovskou stránku",
-  "unpinned-to-homepage": "Nepřistaveno z domovské stránky",
+  "unpinned-to-homepage": "Nepřízeno z domovské stránky",
   "expenses-only": "Pouze výdaje",
   "expenses-only-description": "K rozpočtu lze přidat pouze výdaje",
   "delete-category-question": "Odstranit kategorii?",
@@ -465,7 +465,7 @@
   "delete-sync-backup-warning": "Aby se zabránilo problémům se synchronizací mezi klienty, je dobré synchronizovat všechna ostatní aktivní zařízení před odstraněním.",
   "development-team": "Vývojářský tým",
   "settings-and-customization": "Nastavení a přizpůsobení",
-  "assign-columns": "Přiřadit sloupce",
+  "assign-columns": "Přiřaďte sloupce",
   "date": "datum",
   "amount": "Množství",
   "title": "Titul",
@@ -497,5 +497,7 @@
   "total-spent": "Celkem utracené",
   "total-remaining": "Celkem zbývající",
   "total-spent-example": "Příklad: 25 utracených ze 100",
-  "total-remaining-example": "Příklad: 75 vlevo ze 100"
+  "total-remaining-example": "Příklad: 75 vlevo ze 100",
+  "importing-loading": "Import ...",
+  "successfully-imported": "Úspěšně importováno"
 }

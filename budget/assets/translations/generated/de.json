@@ -461,7 +461,7 @@
   "thank-you": "Danke schön!",
   "email-optional": "E-Mail optional)",
   "feedback": "Rückmeldung",
-  "backup-created": "Backup erstellt",
+  "backup-created": "Sicherung erstellt",
   "delete-sync-backup-warning": "Um Synchronisationsprobleme zwischen Kunden zu verhindern, ist es eine gute Idee, alle anderen aktiven Geräte vor dem Löschen zu synchronisieren.",
   "development-team": "Entwicklungsteam",
   "settings-and-customization": "Einstellungen und Anpassung",
@@ -497,5 +497,7 @@
   "total-spent": "Gesamtausgaben",
   "total-remaining": "Total verbleibend",
   "total-spent-example": "Beispiel: 25 verbracht von 100 verbracht",
-  "total-remaining-example": "Beispiel: 75 links von 100"
+  "total-remaining-example": "Beispiel: 75 links von 100",
+  "importing-loading": "Importieren ...",
+  "successfully-imported": "Erfolgreich importiert"
 }

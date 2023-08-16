@@ -497,5 +497,7 @@
   "total-spent": "Total Spent",
   "total-remaining": "Total Remaining",
   "total-spent-example": "Example: 25 spent of 100",
-  "total-remaining-example": "Example: 75 left of 100"
+  "total-remaining-example": "Example: 75 left of 100",
+  "importing-loading": "Importing...",
+  "successfully-imported": "Successfully imported"
 }

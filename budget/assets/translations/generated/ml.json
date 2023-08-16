@@ -497,5 +497,7 @@
   "total-spent": "ആകെ ചെലവഴിച്ചു",
   "total-remaining": "ആകെ ശേഷിക്കുന്നു",
   "total-spent-example": "ഉദാഹരണം: 100 ചെലവഴിച്ച 25",
-  "total-remaining-example": "ഉദാഹരണം: 100 ന്റെ ഇടത് 75"
+  "total-remaining-example": "ഉദാഹരണം: 100 ന്റെ ഇടത് 75",
+  "importing-loading": "ഇറക്കുമതി ചെയ്യുന്നു ...",
+  "successfully-imported": "വിജയകരമായി ഇറക്കുമതി ചെയ്തു"
 }

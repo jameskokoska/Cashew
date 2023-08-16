@@ -418,7 +418,7 @@
   "not-available-in-preview-demo": "Niet beschikbaar in preview -demo",
   "not-available-in-preview-demo-description": "Schakel preview -demo -modus uit om deze functie te gebruiken.",
   "copied": "Gekopieerd",
-  "created-copy": "CREATE COPY",
+  "created-copy": "Creëer kopie",
   "duplicate": "Duplicaat",
   "delete-transactions": "Transacties verwijderen",
   "change-wallet": "Verander portemonnee",
@@ -497,5 +497,7 @@
   "total-spent": "Totaal uitgegeven",
   "total-remaining": "Totaal overgebleven",
   "total-spent-example": "Voorbeeld: 25 besteed van 100",
-  "total-remaining-example": "Voorbeeld: 75 links van 100"
+  "total-remaining-example": "Voorbeeld: 75 links van 100",
+  "importing-loading": "Importeren ...",
+  "successfully-imported": "Succesvol geïmporteerd"
 }

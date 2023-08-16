@@ -441,7 +441,7 @@
   "delete-category-merge-warning": "Видалення категорії видалить усі транзакції в цій категорії. Перемістіть транзакції до іншої категорії, щоб уникнути цього.",
   "deleted-category": "Видалена категорія",
   "delete-wallet-question": "Видалити гаманець?",
-  "delete-wallet-question-description": "Це видаляє всі транзакції, пов'язані з цим гаманцем.",
+  "delete-wallet-question-description": "Це видалити всі транзакції, пов'язані з цим гаманцем.",
   "move-transactions": "Перемістити транзакції",
   "delete-wallet-merge-warning": "Видалення гаманця видаляє всі транзакції в цьому гаманці. Перемістіть транзакції до іншого гаманця, щоб уникнути цього.",
   "deleted-wallet": "Видалений гаманець",
@@ -451,7 +451,7 @@
   "deleted-transactions": "Видалені транзакції",
   "deleted-transaction": "Видалена транзакція",
   "change-category": "Категорія змін",
-  "changed-category": "Змінено категорію",
+  "changed-category": "Змінена категорія",
   "merged-category": "Об'єднана категорія",
   "an-error-occured": "Сталася помилка",
   "more": "Більше",
@@ -497,5 +497,7 @@
   "total-spent": "Всього витрачений",
   "total-remaining": "Загальний залишок",
   "total-spent-example": "Приклад: 25 витрачено 100",
-  "total-remaining-example": "Приклад: 75 зліва від 100"
+  "total-remaining-example": "Приклад: 75 зліва від 100",
+  "importing-loading": "Імпорт ...",
+  "successfully-imported": "Успішно імпортований"
 }

@@ -16,8 +16,8 @@ class ProgressBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (_, boxConstraints) {
-        var x = boxConstraints.maxWidth;
-        var progressWidth = (currentPercent / 100) * x;
+        double x = boxConstraints.maxWidth;
+        double progressWidth = (currentPercent / 100) * x;
         return Stack(
           children: [
             Container(
@@ -25,7 +25,8 @@ class ProgressBar extends StatelessWidget {
               height: height,
               decoration: BoxDecoration(
                 color: getColor(context, "lightDarkAccentHeavy"),
-                shape: BoxShape.circle,
+                shape: BoxShape.rectangle,
+                borderRadius: BorderRadius.circular(100),
               ),
             ),
             AnimatedContainer(
@@ -34,7 +35,8 @@ class ProgressBar extends StatelessWidget {
               height: height,
               decoration: BoxDecoration(
                 color: color,
-                shape: BoxShape.circle,
+                shape: BoxShape.rectangle,
+                borderRadius: BorderRadius.circular(100),
               ),
             ),
           ],

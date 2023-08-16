@@ -143,12 +143,12 @@ class _ImportCSVState extends State<ImportCSV> {
             title: "assign-columns".tr(),
             child: Column(
               children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(10),
+                SingleChildScrollView(
+                  scrollDirection: Axis.vertical,
                   child: SingleChildScrollView(
-                    scrollDirection: Axis.vertical,
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
+                    scrollDirection: Axis.horizontal,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
                       child: Table(
                         defaultColumnWidth: IntrinsicColumnWidth(),
                         defaultVerticalAlignment:
@@ -171,6 +171,7 @@ class _ImportCSVState extends State<ImportCSV> {
                                     textColor: Theme.of(context)
                                         .colorScheme
                                         .onPrimaryContainer,
+                                    fontSize: 16,
                                   ),
                                 )
                             ],
@@ -190,7 +191,7 @@ class _ImportCSVState extends State<ImportCSV> {
                                       horizontal: 11.0, vertical: 5),
                                   child: TextFont(
                                     text: entry.toString(),
-                                    fontSize: 18,
+                                    fontSize: 15,
                                     textColor: appStateSettings["materialYou"]
                                         ? Theme.of(context)
                                             .colorScheme
@@ -267,6 +268,16 @@ class _ImportCSVState extends State<ImportCSV> {
                                         onChanged: (value) {
                                           dateFormat = value;
                                         },
+                                        backgroundColor:
+                                            appStateSettings["materialYou"]
+                                                ? null
+                                                : dynamicPastel(
+                                                    context,
+                                                    Theme.of(context)
+                                                        .colorScheme
+                                                        .secondaryContainer,
+                                                    amount: 0.2,
+                                                  ).withOpacity(0.4),
                                       ),
                                     )
                                   ],
@@ -414,7 +425,7 @@ class _ImportCSVState extends State<ImportCSV> {
     // This Widget opened will actually do the importing
     openPopupCustom(
       context,
-      title: "Importing...",
+      title: "importing-loading".tr(),
       child: ImportingEntriesPopup(
         dateFormat: dateFormat,
         assignedColumns: assignedColumns,
@@ -425,9 +436,12 @@ class _ImportCSVState extends State<ImportCSV> {
             context,
             icon: Icons.check_circle_outline_rounded,
             title: "done".tr() + "!",
-            description: "Successfully imported " +
+            description: "successfully-imported" +
+                " " +
                 fileContents.length.toString() +
-                " transactions.",
+                " " +
+                "transactions".tr().toLowerCase() +
+                ".",
             onSubmitLabel: "ok".tr(),
             onSubmit: () {
               Navigator.pop(context);
@@ -461,17 +475,13 @@ class _ImportCSVState extends State<ImportCSV> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        SettingsContainer(
-          onTap: () async {
-            await _chooseBackupFile();
-          },
-          title: "import-csv".tr(),
-          description: "import-csv-description".tr(),
-          icon: Icons.file_open_rounded,
-        ),
-      ],
+    return SettingsContainer(
+      onTap: () async {
+        await _chooseBackupFile();
+      },
+      title: "import-csv".tr(),
+      description: "import-csv-description".tr(),
+      icon: Icons.file_open_rounded,
     );
   }
 }
@@ -496,6 +506,8 @@ class ImportingEntriesPopup extends StatefulWidget {
 
 class _ImportingEntriesPopupState extends State<ImportingEntriesPopup> {
   double currentPercent = 0;
+  int currentFileLength = 0;
+  int currentEntryIndex = 0;
 
   @override
   void initState() {
@@ -504,8 +516,11 @@ class _ImportingEntriesPopupState extends State<ImportingEntriesPopup> {
         widget.assignedColumns, widget.dateFormat, widget.fileContents));
   }
 
-  Future<void> _importEntry(Map<String, Map<String, dynamic>> assignedColumns,
-      String dateFormat, List<String> row, int i) async {
+  Future<Transaction> _importEntry(
+      Map<String, Map<String, dynamic>> assignedColumns,
+      String dateFormat,
+      List<String> row,
+      int i) async {
     String name = "";
     if (assignedColumns["name"]!["setHeaderIndex"] != -1) {
       name = row[assignedColumns["name"]!["setHeaderIndex"]].toString();
@@ -607,42 +622,42 @@ class _ImportingEntriesPopupState extends State<ImportingEntriesPopup> {
 
     bool income = amount > 0;
 
-    await database.createOrUpdateTransaction(
-      insert: true,
-      Transaction(
-        transactionPk: "-1",
-        name: name,
-        amount: amount,
-        note: note,
-        categoryFk: categoryFk,
-        walletFk: walletFk,
-        dateCreated: dateCreated,
-        dateTimeModified: null,
-        income: income,
-        paid: true,
-        skipPaid: false,
-        methodAdded: MethodAdded.csv,
-      ),
+    return Transaction(
+      transactionPk: "-1",
+      name: name,
+      amount: amount,
+      note: note,
+      categoryFk: categoryFk,
+      walletFk: walletFk,
+      dateCreated: dateCreated,
+      dateTimeModified: null,
+      income: income,
+      paid: true,
+      skipPaid: false,
+      methodAdded: MethodAdded.csv,
     );
-
-    return;
   }
 
   Future<void> _importEntries(Map<String, Map<String, dynamic>> assignedColumns,
       String dateFormat, List<List<String>> fileContents) async {
     try {
+      List<Transaction> transactionsInserting = [];
       for (int i = 0; i < fileContents.length; i++) {
         if (i == 0) {
           continue;
         }
         setState(() {
           currentPercent = i / fileContents.length * 100;
+          currentEntryIndex = i;
+          currentFileLength = fileContents.length;
         });
         await Future.delayed(Duration(milliseconds: 0), () async {
           List<String> row = fileContents[i];
-          await _importEntry(assignedColumns, dateFormat, row, i);
+          transactionsInserting
+              .add(await _importEntry(assignedColumns, dateFormat, row, i));
         });
       }
+      await database.createOrUpdateBatchTransactionsOnly(transactionsInserting);
       widget.next();
     } catch (e) {
       openPopup(
@@ -662,9 +677,20 @@ class _ImportingEntriesPopupState extends State<ImportingEntriesPopup> {
 
   @override
   Widget build(BuildContext context) {
-    return ProgressBar(
-      currentPercent: currentPercent,
-      color: Theme.of(context).colorScheme.primary,
+    return Column(
+      children: [
+        ProgressBar(
+          currentPercent: currentPercent,
+          color: Theme.of(context).colorScheme.primary,
+        ),
+        SizedBox(height: 10),
+        TextFont(
+          fontSize: 15,
+          text: currentEntryIndex.toString() +
+              " / " +
+              currentFileLength.toString(),
+        )
+      ],
     );
   }
 }

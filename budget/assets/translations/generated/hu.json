@@ -104,7 +104,7 @@
   "rate-app": "Értékeld az {app}",
   "rate-app-subtitle": "Ossza meg visszajelzését a fejlesztővel, hogy javítsa a {app}",
   "rate-app-privacy": "Csak a csillagok, a visszajelzések és a dátum megosztják.",
-  "rate-app-privacy-email": "Csak a csillagok, a visszajelzés (e -mail, ha rendelkezésre állnak) és a dátumot megosztják.",
+  "rate-app-privacy-email": "Csak a csillagok, a visszajelzések (e -mail, ha rendelkezésre állnak) és a dátumot megosztják.",
   "feedback-and-suggestions": "Visszajelzés és javaslatok",
   "submit": "Beküldés",
   "select-color": "Válassza ki a színt",
@@ -497,5 +497,7 @@
   "total-spent": "Összesen elköltött",
   "total-remaining": "A fennmaradó teljes",
   "total-spent-example": "Példa: 25 költött 100 -at",
-  "total-remaining-example": "Példa: 75 maradt 100 -ból"
+  "total-remaining-example": "Példa: 75 maradt 100 -ból",
+  "importing-loading": "Importálás ...",
+  "successfully-imported": "Sikeresen importált"
 }

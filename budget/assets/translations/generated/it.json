@@ -410,11 +410,11 @@
   "suggestion": "Suggerimento",
   "icon-suggestion-privacy": "Solo il suggerimento e la data saranno condivisi.",
   "suggest-icon": "Suggerire l'icona",
-  "preview-demo": "Demo di anteprima",
+  "preview-demo": "Anteprima Demo",
   "preview-demo-description": "Fai un tour dell'interfaccia dell'app e funzionalità utilizzando dati di esempio generati casualmente. Esci dall'anteprima ogni volta che vuoi.",
   "activate": "Attivare",
   "preview-demo-warning": "La demo di anteprima è attualmente attiva e vengono utilizzati dati auto-generati. Non è consigliabile utilizzare l'applicazione in modalità demo, in quanto può portare alla perdita di dati. Per rimuovere i dati generati ed uscire dalla demo di anteprima, tocca qui.",
-  "exit-demo": "ESCI DEMO",
+  "exit-demo": "ESSERE DEMO",
   "not-available-in-preview-demo": "Non disponibile nella demo di anteprima",
   "not-available-in-preview-demo-description": "Disabilita l'anteprima della modalità demo per utilizzare questa funzione.",
   "copied": "Copiato",
@@ -452,7 +452,7 @@
   "deleted-transaction": "Transazione cancellata",
   "change-category": "Categoria di cambiamento",
   "changed-category": "Categoria modificata",
-  "merged-category": "Categoria unicata",
+  "merged-category": "Categoria unita",
   "an-error-occured": "Si è verificato un errore",
   "more": "Di più",
   "syncing-failed": "La sincronizzazione non è riuscita",
@@ -497,5 +497,7 @@
   "total-spent": "Spesa totale",
   "total-remaining": "Rimane totale",
   "total-spent-example": "Esempio: 25 speso di 100",
-  "total-remaining-example": "Esempio: 75 a sinistra di 100"
+  "total-remaining-example": "Esempio: 75 a sinistra di 100",
+  "importing-loading": "Importazione ...",
+  "successfully-imported": "Importato con successo"
 }
