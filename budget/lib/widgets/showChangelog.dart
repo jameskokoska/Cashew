@@ -10,6 +10,13 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    < 3.9.3
+    Connecting to store error dark text and tap to reload store
+    Removed re-snapping bottom sheet when entering amount
+    Scrollbar safe area removed (safe area is already applied in parent)
+    When restart popup, side navigation is disabled
+    New sync button on navbar, follows other navbar button styles
+    Material date pickers for iOS
     < 3.9.2
     Yearly plan savings (Disabled for now)
     Upgraded to support Flutter 3.13

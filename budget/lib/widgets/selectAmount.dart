@@ -243,7 +243,7 @@ class _SelectAmountState extends State<SelectAmount> {
   }
 
   addToAmount(String input) {
-    bottomSheetControllerGlobal.snapToExtent(0);
+    // bottomSheetControllerGlobal.snapToExtent(0);
     String amountClone = amount;
     if (input == "." &&
         !decimalCheck(operationsWithSpaces(amountClone + "."))) {
@@ -295,7 +295,7 @@ class _SelectAmountState extends State<SelectAmount> {
   }
 
   void removeToAmount() {
-    bottomSheetControllerGlobal.snapToExtent(0);
+    // bottomSheetControllerGlobal.snapToExtent(0);
     setState(() {
       if (amount.length > 0) {
         amount = amount.substring(0, amount.length - 1);

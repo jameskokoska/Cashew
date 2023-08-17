@@ -726,9 +726,10 @@ String pluralString(bool condition, String string) {
 restartApp(context) async {
   // For now, enforce this until better solution found
   if (kIsWeb || true) {
+    updateSettings("lockAppWaitForRestart", true, updateGlobalState: true);
     openPopup(
       context,
-      title: "Please Restart the Application",
+      title: "please-restart-the-application".tr(),
       icon: Icons.restart_alt_rounded,
       barrierDismissible: false,
     );

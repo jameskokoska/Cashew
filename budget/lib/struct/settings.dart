@@ -65,6 +65,9 @@ Future<bool> initializeSettings() async {
     appStateSettings["font"] = "SFProText";
   }
 
+  // Always unlock the app
+  appStateSettings["lockAppWaitForRestart"] = true;
+
   if (appStateSettings["hasOnboarded"] == true) {
     updateSettings("numLogins", appStateSettings["numLogins"] + 1,
         updateGlobalState: false, pagesNeedingRefresh: []);

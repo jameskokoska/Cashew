@@ -21,6 +21,15 @@ import 'package:budget/widgets/openContainerNavigation.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 
 bool premiumPopupEnabled = kIsWeb == false;
+bool tryStoreEnabled = kIsWeb == false;
+StreamSubscription<List<PurchaseDetails>>? purchaseListener;
+Map<String, ProductDetails> storeProducts = {};
+const Set<String> productIDs = <String>{
+  'cashew.pro.yearly',
+  'cashew.pro.monthly',
+  'cashew.pro.lifetime',
+};
+
 // A user has paid is appStateSettings["purchaseID"] is not null
 
 class PremiumPage extends StatefulWidget {
@@ -316,15 +325,6 @@ class ManageSubscription extends StatelessWidget {
   }
 }
 
-bool tryStoreEnabled = kIsWeb == false;
-StreamSubscription<List<PurchaseDetails>>? purchaseListener;
-Map<String, ProductDetails> storeProducts = {};
-const Set<String> productIDs = <String>{
-  'cashew.pro.yearly',
-  'cashew.pro.monthly',
-  'cashew.pro.lifetime',
-};
-
 void listenToPurchaseUpdated(
     List<PurchaseDetails> purchaseDetailsList, BuildContext context) {
   // ignore: avoid_function_literals_in_foreach_calls
@@ -513,7 +513,10 @@ class ProductsState extends State<Products> {
                       description: "error-getting-products-description".tr(),
                       icon: Icons.warning_rounded,
                       color: Theme.of(context).colorScheme.error,
-                      onTap: () {},
+                      onTap: () {
+                        initializeStoreAndPurchases(context);
+                      },
+                      forceDark: true,
                     )
               : Padding(
                   padding: EdgeInsets.symmetric(

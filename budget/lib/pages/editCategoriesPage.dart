@@ -258,6 +258,7 @@ class RefreshButton extends StatefulWidget {
   final IconData? customIcon;
   final bool? flipIcon;
   final bool? halfAnimation;
+  final bool iconOnly;
 
   RefreshButton({
     required this.onTap,
@@ -266,6 +267,7 @@ class RefreshButton extends StatefulWidget {
     this.customIcon,
     this.flipIcon,
     this.halfAnimation,
+    this.iconOnly = false,
     Key? key,
   }) : super(key: key);
 
@@ -334,13 +336,18 @@ class RefreshButtonState extends State<RefreshButton>
             child: Transform(
               alignment: Alignment.center,
               transform: Matrix4.rotationY(widget.flipIcon == true ? pi : 0),
-              child: IconButton(
-                padding: widget.padding ?? EdgeInsets.all(15),
-                icon: Icon(widget.customIcon ?? Icons.refresh_rounded),
-                color: Theme.of(context).colorScheme.secondary,
-                onPressed: () => _onTap(),
-                visualDensity: widget.visualDensity,
-              ),
+              child: widget.iconOnly == true
+                  ? Icon(
+                      widget.customIcon ?? Icons.refresh_rounded,
+                      color: Theme.of(context).colorScheme.secondary,
+                    )
+                  : IconButton(
+                      padding: widget.padding ?? EdgeInsets.all(15),
+                      icon: Icon(widget.customIcon ?? Icons.refresh_rounded),
+                      color: Theme.of(context).colorScheme.secondary,
+                      onPressed: () => _onTap(),
+                      visualDensity: widget.visualDensity,
+                    ),
             ),
           ),
         );

@@ -386,11 +386,14 @@ class _SelectCategoryState extends State<SelectCategory> {
                                   LayoutBuilder(
                                     builder:
                                         (context, BoxConstraints constraints) {
-                                      print(constraints);
                                       return AddButton(
                                         onTap: () {},
-                                        height: constraints.maxWidth,
-                                        width: constraints.maxWidth,
+                                        height: constraints.maxWidth < 70
+                                            ? constraints.maxWidth
+                                            : 70,
+                                        width: constraints.maxWidth < 70
+                                            ? constraints.maxWidth
+                                            : 70,
                                         openPage: AddCategoryPage(
                                           routesToPopAfterDelete:
                                               RoutesToPopAfterDelete.None,

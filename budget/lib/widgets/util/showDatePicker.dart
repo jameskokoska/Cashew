@@ -1,5 +1,11 @@
+import 'package:budget/functions.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:flutter/material.dart';
+
+// Currently there is a bug (Flutter 3.13) where the shadow behind date pickers
+// when using Material 3 is always white
+// For now, we disable the material 3 theming on iOS for date pickers
+// useMaterial3: getPlatform() != PlatformOS.isIOS,
 
 Future<DateTime?> showCustomDatePicker(
   BuildContext context,
@@ -19,7 +25,7 @@ Future<DateTime?> showCustomDatePicker(
       return Theme(
         data: Theme.of(context).brightness == Brightness.light
             ? ThemeData.light().copyWith(
-                useMaterial3: true,
+                useMaterial3: getPlatform() != PlatformOS.isIOS,
                 typography: Typography.material2021(),
                 primaryColor: Theme.of(context).colorScheme.primary,
                 colorScheme: ColorScheme.light(
@@ -28,7 +34,7 @@ Future<DateTime?> showCustomDatePicker(
                     ButtonThemeData(textTheme: ButtonTextTheme.primary),
               )
             : ThemeData.dark().copyWith(
-                useMaterial3: true,
+                useMaterial3: getPlatform() != PlatformOS.isIOS,
                 typography: Typography.material2021(),
                 primaryColor: Theme.of(context).colorScheme.secondary,
                 colorScheme: ColorScheme.dark(
@@ -59,7 +65,7 @@ Future<DateTimeRange?> showCustomDateRangePicker(
       return Theme(
         data: Theme.of(context).brightness == Brightness.light
             ? ThemeData.light().copyWith(
-                useMaterial3: true,
+                useMaterial3: getPlatform() != PlatformOS.isIOS,
                 typography: Typography.material2021(),
                 primaryColor: Theme.of(context).colorScheme.primary,
                 colorScheme: ColorScheme.light(
@@ -68,7 +74,7 @@ Future<DateTimeRange?> showCustomDateRangePicker(
                     ButtonThemeData(textTheme: ButtonTextTheme.primary),
               )
             : ThemeData.dark().copyWith(
-                useMaterial3: true,
+                useMaterial3: getPlatform() != PlatformOS.isIOS,
                 typography: Typography.material2021(),
                 primaryColor: Theme.of(context).colorScheme.secondary,
                 colorScheme: ColorScheme.dark(

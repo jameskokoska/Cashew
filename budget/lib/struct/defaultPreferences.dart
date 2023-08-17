@@ -104,5 +104,6 @@ Future<Map<String, dynamic>> getDefaultPreferences() async {
     "previewDemo": false,
     "oldAndroidNavbar": false,
     "purchaseID": null,
+    "lockAppWaitForRestart": false,
   };
 }

@@ -10,6 +10,7 @@ class StatusBox extends StatelessWidget {
     required this.icon,
     required this.color,
     this.onTap,
+    this.forceDark,
   }) : super(key: key);
 
   final String title;
@@ -17,6 +18,7 @@ class StatusBox extends StatelessWidget {
   final IconData icon;
   final Color color;
   final Function()? onTap;
+  final bool? forceDark;
 
   @override
   Widget build(BuildContext context) {
@@ -47,6 +49,7 @@ class StatusBox extends StatelessWidget {
                       maxLines: 10,
                       fontSize: 17,
                       fontWeight: FontWeight.bold,
+                      textColor: forceDark == true ? Colors.black : null,
                     ),
                     SizedBox(
                       height: 2,
@@ -55,6 +58,7 @@ class StatusBox extends StatelessWidget {
                       text: description,
                       maxLines: 10,
                       fontSize: 14,
+                      textColor: forceDark == true ? Colors.black : null,
                     ),
                   ],
                 ),

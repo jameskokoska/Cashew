@@ -78,10 +78,14 @@ class NavigationSidebarState extends State<NavigationSidebar> {
           padding:
               EdgeInsets.only(left: MediaQuery.of(context).viewPadding.left),
           child: IgnorePointer(
-            ignoring: appStateSettings["hasOnboarded"] == false,
+            ignoring: appStateSettings["hasOnboarded"] == false ||
+                appStateSettings["lockAppWaitForRestart"] == true,
             child: AnimatedOpacity(
               duration: Duration(milliseconds: 500),
-              opacity: appStateSettings["hasOnboarded"] == false ? 0.3 : 1,
+              opacity: appStateSettings["hasOnboarded"] == false ||
+                      appStateSettings["lockAppWaitForRestart"] == true
+                  ? 0.3
+                  : 1,
               child: SingleChildScrollView(
                 child: IntrinsicHeight(
                   child: ConstrainedBox(
@@ -297,12 +301,12 @@ class _SyncButtonState extends State<SyncButton> {
   @override
   Widget build(BuildContext context) {
     return AnimatedExpanded(
-      duration: Duration(milliseconds: 800),
       expand: !(appStateSettings["currentUserEmail"] == "" ||
           appStateSettings["backupSync"] == false),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12),
+        padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
         child: Tappable(
+          borderRadius: getPlatform() == PlatformOS.isIOS ? 10 : 50,
           onTap: () async {
             refreshButtonKey.currentState?.startAnimation();
             await runAllCloudFunctions(
@@ -311,25 +315,19 @@ class _SyncButtonState extends State<SyncButton> {
             );
             refreshButtonKey.currentState?.startAnimation();
           },
-          borderRadius: 15,
           child: Padding(
-            padding: const EdgeInsets.only(
-              right: 8,
-              left: 5,
-              top: 5,
-              bottom: 5,
-            ),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 13),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Opacity(
-                  opacity: 0.7,
+                  opacity: 0.6,
                   child: RefreshButton(
                     key: refreshButtonKey,
                     halfAnimation: true,
                     customIcon: Icons.sync_rounded,
                     flipIcon: true,
-                    padding: EdgeInsets.all(8),
+                    padding: EdgeInsets.zero,
+                    iconOnly: true,
                     onTap: () {
                       runAllCloudFunctions(
                         context,
@@ -338,41 +336,38 @@ class _SyncButtonState extends State<SyncButton> {
                     },
                   ),
                 ),
-                SizedBox(width: 6),
-                Expanded(
-                  child: Row(
-                    children: [
-                      AnimatedSwitcher(
-                        duration: Duration(milliseconds: 500),
-                        child: SizedBox(
-                          key: ValueKey(appStateSettings["lastSynced"]),
-                          child: TimerBuilder.periodic(
-                            Duration(seconds: 5),
-                            builder: (context) {
-                              DateTime? timeLastSynced = null;
-                              try {
-                                timeLastSynced = DateTime.parse(
-                                  appStateSettings["lastSynced"],
-                                );
-                              } catch (e) {
-                                print("Error parsing time last synced: " +
-                                    e.toString());
-                              }
-                              return TextFont(
-                                textColor: getColor(context, "textLight"),
-                                fontSize: 13,
-                                text: "synced".tr() +
-                                    " " +
-                                    (timeLastSynced == null
-                                        ? "never".tr()
-                                        : getTimeAgo(timeLastSynced)
-                                            .toLowerCase()),
-                              );
-                            },
-                          ),
-                        ),
+                SizedBox(width: 15),
+                Flexible(
+                  child: AnimatedSwitcher(
+                    duration: Duration(milliseconds: 500),
+                    child: SizedBox(
+                      key: ValueKey(appStateSettings["lastSynced"]),
+                      child: TimerBuilder.periodic(
+                        Duration(seconds: 5),
+                        builder: (context) {
+                          DateTime? timeLastSynced = null;
+                          try {
+                            timeLastSynced = DateTime.parse(
+                              appStateSettings["lastSynced"],
+                            );
+                          } catch (e) {
+                            print("Error parsing time last synced: " +
+                                e.toString());
+                          }
+                          return TextFont(
+                            textAlign: TextAlign.left,
+                            textColor: getColor(context, "textLight"),
+                            fontSize: 13,
+                            maxLines: 3,
+                            text: "synced".tr() +
+                                " " +
+                                (timeLastSynced == null
+                                    ? "never".tr()
+                                    : getTimeAgo(timeLastSynced).toLowerCase()),
+                          );
+                        },
                       ),
-                    ],
+                    ),
                   ),
                 ),
               ],

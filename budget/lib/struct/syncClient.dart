@@ -175,6 +175,10 @@ class SyncLog {
 
 // load the latest backup and import any newly modified data into the db
 Future<bool> syncData(BuildContext context) async {
+  // Syncing data seems to fail on iOS debug mode (at least on iPad).
+  // When actually creating the entries, it seems the device disconnects.
+  // It works on release though.
+
   if (appStateSettings["backupSync"] == false) return false;
   if (appStateSettings["hasSignedIn"] == false) return false;
   if (errorSigningInDuringCloud == true) return false;

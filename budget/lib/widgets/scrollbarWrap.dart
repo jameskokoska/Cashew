@@ -12,15 +12,20 @@ class ScrollbarWrap extends StatelessWidget {
     if (kIsWeb || kDebugMode) {
       return child;
     }
-    return RawScrollbar(
-      thumbColor: dynamicPastel(
-        context,
-        Theme.of(context).colorScheme.onSecondaryContainer.withOpacity(0.3),
-        amountDark: 0.3,
+    return MediaQuery.removePadding(
+      context: context,
+      removeLeft: true,
+      removeRight: true,
+      child: RawScrollbar(
+        thumbColor: dynamicPastel(
+          context,
+          Theme.of(context).colorScheme.onSecondaryContainer.withOpacity(0.3),
+          amountDark: 0.3,
+        ),
+        radius: Radius.circular(20),
+        thickness: 3,
+        child: child,
       ),
-      radius: Radius.circular(20),
-      thickness: 3,
-      child: child,
     );
   }
 }
