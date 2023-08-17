@@ -10,6 +10,12 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    < 3.9.5
+    Premium popup dismissed after purchase
+    Continue for free developer message
+    AnimatedExpanded is now fully expanded when first rendered, if set
+    Restart lock side navigation fix (Can't use settings since settings were most likely reset)
+    Safe area added for custom popups
     < 3.9.4
     Biometric popup instead of error container
     Biometric setting error container

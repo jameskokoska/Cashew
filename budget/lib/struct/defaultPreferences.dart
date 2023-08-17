@@ -100,10 +100,10 @@ Future<Map<String, dynamic>> getDefaultPreferences() async {
     "showBackupLimit": false,
     "premiumPopupAddTransactionCount": -5,
     "premiumPopupAddTransactionLastShown": DateTime.now().toString(),
+    "premiumPopupFreeSeen": false,
     "disableBlur": true,
     "previewDemo": false,
     "oldAndroidNavbar": false,
     "purchaseID": null,
-    "lockAppWaitForRestart": false,
   };
 }

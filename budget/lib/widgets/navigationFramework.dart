@@ -166,7 +166,8 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
       await markSubscriptionsAsPaid();
       runNotificationPayLoads(context);
       runQuickActionsPayLoads(context);
-      initializeStoreAndPurchases(context);
+      initializeStoreAndPurchases(
+          context: context, popRouteWithPurchase: false);
       await initializeNotificationsPlatform();
       await setDailyNotificationOnLaunch(context);
       await setUpcomingNotifications(context);

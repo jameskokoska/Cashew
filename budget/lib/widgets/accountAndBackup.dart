@@ -483,7 +483,7 @@ Future<void> loadBackup(
               icon: Icons.settings_backup_restore_rounded),
         );
         Navigator.pop(context);
-        restartApp(context);
+        restartAppPopup(context);
       },
       onError: (error) {
         openSnackbar(

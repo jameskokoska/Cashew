@@ -79,11 +79,11 @@ class NavigationSidebarState extends State<NavigationSidebar> {
               EdgeInsets.only(left: MediaQuery.of(context).viewPadding.left),
           child: IgnorePointer(
             ignoring: appStateSettings["hasOnboarded"] == false ||
-                appStateSettings["lockAppWaitForRestart"] == true,
+                lockAppWaitForRestart == true,
             child: AnimatedOpacity(
               duration: Duration(milliseconds: 500),
               opacity: appStateSettings["hasOnboarded"] == false ||
-                      appStateSettings["lockAppWaitForRestart"] == true
+                      lockAppWaitForRestart == true
                   ? 0.3
                   : 1,
               child: SingleChildScrollView(

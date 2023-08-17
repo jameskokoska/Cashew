@@ -384,7 +384,7 @@
   "unlimited-budgets": "Budget illimitati",
   "unlimited-budgets-description": "Crea più di 1 budget",
   "past-budget-periods": "Periodi di bilancio passati",
-  "past-budget-periods-description": "Visualizza i guasti del bilancio dei periodi passati",
+  "past-budget-periods-description": "Visualizza i guasti di spesa dei periodi passati",
   "unlimited-color-picker": "Raccoglitore a colori illimitato",
   "unlimited-color-picker-description": "Scegli qualsiasi colore che desideri",
   "continue-for-free": "Continua gratuitamente",
@@ -481,7 +481,7 @@
   "error-getting-products-description": "C'è stato un errore che si collega all'App Store. Per favore riprova più tardi.",
   "error-processing-order": "C'è stato un errore elaborando il tuo acquisto. Per favore riprova.",
   "order-confirmation": "Grazie per aver sostenuto gli anacardi!",
-  "purchases-restored": "Gli acquisti sono stati ripristinati",
+  "any-previous-purchases-restored": "Eventuali acquisti precedenti sono stati ripristinati",
   "already-purchased": "Già acquistato",
   "current-plan": "Piano attuale",
   "lifetime": "Tutta la vita",
@@ -504,5 +504,12 @@
   "biometrics-disabled": "Biometria disabilitata",
   "biometrics-disabled-description": "Tocca qui per abilitare la biometria nella pagina delle impostazioni e riprovare",
   "biometrics-error": "Errore di biometria",
-  "biometrics-error-description": "Si è verificato un errore utilizzando la biometria dei dispositivi"
+  "biometrics-error-description": "Si è verificato un errore utilizzando la biometria dei dispositivi",
+  "from-the-developer": "Dallo sviluppatore",
+  "developer-message-1": "Il benessere finanziario conta per tutti noi e siamo qui per sostenere il tuo viaggio verso una migliore gestione del denaro. Ecco perché ti offriamo funzionalità premium gratuitamente. Apparirà il popup premium, ma puoi licenziarlo per accedere alla funzione bloccata",
+  "developer-message-1-1": "(senza aspettare anche!)",
+  "developer-message-2": "Tuttavia, se possibile, considera di supportare lo sviluppo. Il tuo supporto svolge un ruolo cruciale nella crescita futura di questa applicazione. Grazie 😄",
+  "support": "Supporto",
+  "unlock-for-free": "Sblocca gratuitamente",
+  "no-free-stuff": "No, non voglio cose gratuite"
 }

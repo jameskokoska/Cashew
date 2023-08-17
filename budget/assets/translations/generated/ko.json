@@ -384,7 +384,7 @@
   "unlimited-budgets": "무제한 예산",
   "unlimited-budgets-description": "예산 1 개 이상을 만듭니다",
   "past-budget-periods": "과거 예산 기간",
-  "past-budget-periods-description": "지난 기간의 예산 분석을보십시오",
+  "past-budget-periods-description": "과거 기간의 지출 붕괴를 봅니다",
   "unlimited-color-picker": "무제한 컬러 피커",
   "unlimited-color-picker-description": "원하는 색상을 선택하십시오",
   "continue-for-free": "무료로 계속하십시오",
@@ -481,7 +481,7 @@
   "error-getting-products-description": "앱 스토어에 연결하는 오류가있었습니다. 나중에 다시 시도 해주십시오.",
   "error-processing-order": "구매를 처리하는 오류가있었습니다. 다시 시도하십시오.",
   "order-confirmation": "캐슈를 지원해 주셔서 감사합니다!",
-  "purchases-restored": "구매가 복원되었습니다",
+  "any-previous-purchases-restored": "이전 구매는 복원되었습니다",
   "already-purchased": "이미 구매했습니다",
   "current-plan": "현재 계획",
   "lifetime": "일생",
@@ -504,5 +504,12 @@
   "biometrics-disabled": "생체 인식이 비활성화되었습니다",
   "biometrics-disabled-description": "설정 페이지에서 생체 인식을 활성화하려면 여기를 탭하고 다시 시도하십시오.",
   "biometrics-error": "생체 인식 오류",
-  "biometrics-error-description": "장치 생체 인식을 사용하는 오류가있었습니다"
+  "biometrics-error-description": "장치 생체 인식을 사용하는 오류가있었습니다",
+  "from-the-developer": "개발자로부터",
+  "developer-message-1": "재정적 복지는 우리 모두에게 중요하며, 우리는 더 나은 돈 관리를 향한 여정을 지원하기 위해 여기에 있습니다. 그렇기 때문에 우리는 무료로 프리미엄 기능을 제공합니다. 프리미엄 팝업이 나타나지만 잠긴 기능에 액세스하기 위해 해산 할 수 있습니다.",
+  "developer-message-1-1": "(기다리지 않고!)",
+  "developer-message-2": "그러나 가능하면 개발 지원을 고려하십시오. 귀하의 지원은이 응용 프로그램의 미래 성장에서 중요한 역할을합니다. 감사합니다 😄",
+  "support": "지원하다",
+  "unlock-for-free": "무료로 잠금 해제",
+  "no-free-stuff": "아니, 나는 무료 물건을 원하지 않는다"
 }

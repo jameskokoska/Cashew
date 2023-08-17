@@ -328,7 +328,12 @@ Future<T?> openPopupCustom<T extends Object?>(
           child: Center(
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: 25, vertical: 20),
-              margin: EdgeInsets.symmetric(horizontal: 20),
+              margin: EdgeInsets.only(
+                left: 20,
+                right: 20,
+                top: MediaQuery.of(context).padding.top,
+                bottom: MediaQuery.of(context).padding.bottom,
+              ),
               decoration: BoxDecoration(
                 color: appStateSettings["materialYou"]
                     ? dynamicPastel(context,
@@ -397,7 +402,12 @@ Future<T?> openLoadingPopup<T extends Object?>(BuildContext context) {
           child: Center(
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-              margin: EdgeInsets.symmetric(horizontal: 20),
+              margin: EdgeInsets.only(
+                left: 20,
+                right: 20,
+                top: MediaQuery.of(context).padding.top,
+                bottom: MediaQuery.of(context).padding.bottom,
+              ),
               decoration: BoxDecoration(
                 color: appStateSettings["materialYou"]
                     ? dynamicPastel(context,

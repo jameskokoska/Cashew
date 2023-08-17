@@ -384,7 +384,7 @@
   "unlimited-budgets": "Unlimited budgets",
   "unlimited-budgets-description": "Create more than 1 budget",
   "past-budget-periods": "Past budget periods",
-  "past-budget-periods-description": "View budget breakdowns of past periods",
+  "past-budget-periods-description": "View spending breakdowns of past periods",
   "unlimited-color-picker": "Unlimited color picker",
   "unlimited-color-picker-description": "Pick any color you want",
   "continue-for-free": "Continue for free",
@@ -481,7 +481,7 @@
   "error-getting-products-description": "There was an error connecting to the app store. Please try again later.",
   "error-processing-order": "There was an error processing your purchase. Please try again.",
   "order-confirmation": "Thank you for supporting Cashew!",
-  "purchases-restored": "Purchases were restored",
+  "any-previous-purchases-restored": "Any previous purchases were restored",
   "already-purchased": "Already Purchased",
   "current-plan": "Current Plan",
   "lifetime": "Lifetime",
@@ -504,5 +504,12 @@
   "biometrics-disabled": "Biometrics Disabled",
   "biometrics-disabled-description": "Tap here to enable biometrics in the settings page and try again",
   "biometrics-error": "Biometrics Error",
-  "biometrics-error-description": "There was an error using the devices biometrics"
+  "biometrics-error-description": "There was an error using the devices biometrics",
+  "from-the-developer": "From the Developer",
+  "developer-message-1": "Financial well-being matters to all of us, and we're here to support your journey towards better money management. That's why we offer you premium features at no cost. The premium popup will appear, but you can dismiss it to access the locked feature",
+  "developer-message-1-1": "(with no waiting too!)",
+  "developer-message-2": "However, if possible, consider supporting the development. Your support plays a crucial role in this application's future growth. Thank you 😄",
+  "support": "Support",
+  "unlock-for-free": "Unlock for Free",
+  "no-free-stuff": "No, I don't want free stuff"
 }

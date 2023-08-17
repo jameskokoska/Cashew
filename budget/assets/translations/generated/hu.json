@@ -384,7 +384,7 @@
   "unlimited-budgets": "Korlátlan költségvetés",
   "unlimited-budgets-description": "Hozzon létre több mint 1 költségvetést",
   "past-budget-periods": "A múlt költségvetési periódusai",
-  "past-budget-periods-description": "A múltbeli időszakok költségvetési bontásainak megtekintése",
+  "past-budget-periods-description": "Tekintse meg az elmúlt időszakok kiadásának bontását",
   "unlimited-color-picker": "Korlátlan színválasztó",
   "unlimited-color-picker-description": "Válasszon bármilyen színt, amit szeretne",
   "continue-for-free": "Folytassa ingyen",
@@ -481,7 +481,7 @@
   "error-getting-products-description": "Hiba történt az App Store -hoz való csatlakozáshoz. Kérlek, próbáld újra később.",
   "error-processing-order": "Hiba történt a vásárlás feldolgozása. Kérlek próbáld újra.",
   "order-confirmation": "Köszönjük, hogy támogatta a kesudióját!",
-  "purchases-restored": "A vásárlásokat visszaállították",
+  "any-previous-purchases-restored": "Bármely korábbi vásárlás helyreállt",
   "already-purchased": "Már megvásárolt",
   "current-plan": "Aktuális terv",
   "lifetime": "Élettartam",
@@ -504,5 +504,12 @@
   "biometrics-disabled": "A biometria fogyatékkal élők",
   "biometrics-disabled-description": "Koppintson ide a biometria engedélyezéséhez a beállítások oldalon, és próbálkozzon újra",
   "biometrics-error": "Biometrikus hiba",
-  "biometrics-error-description": "Hiba történt az eszközök biometria használatával"
+  "biometrics-error-description": "Hiba történt az eszközök biometria használatával",
+  "from-the-developer": "A fejlesztőtől",
+  "developer-message-1": "A pénzügyi jólét mindannyiunk számára számít, és itt vagyunk, hogy támogassuk a jobb pénzkezelés felé vezető utat. Ezért kínálunk prémium funkciókat költség nélkül. Megjelenik a prémium felbukkanás, de elutasíthatja azt a zárolt funkció eléréséhez",
+  "developer-message-1-1": "(Várás nélkül is!)",
+  "developer-message-2": "Ha lehetséges, fontolja meg a fejlesztés támogatását. A támogatása döntő szerepet játszik az alkalmazás jövőbeli növekedésében. Köszönöm 😄",
+  "support": "Támogatás",
+  "unlock-for-free": "Nyissa ki ingyen",
+  "no-free-stuff": "Nem, nem akarok ingyenes cuccokat"
 }

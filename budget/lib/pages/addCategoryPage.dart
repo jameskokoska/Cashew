@@ -461,7 +461,7 @@ class _AddCategoryPageState extends State<AddCategoryPage>
                           Theme.of(context).colorScheme.onSecondaryContainer,
                     ),
                   ),
-            widgetCategory == null ? SizedBox.shrink() : SizedBox(height: 13),
+            widgetCategory == null ? SizedBox.shrink() : SizedBox(height: 20),
             widget.category == null
                 ? SizedBox.shrink()
                 : Padding(

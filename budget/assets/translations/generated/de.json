@@ -384,7 +384,7 @@
   "unlimited-budgets": "Unbegrenzte Budgets",
   "unlimited-budgets-description": "Erstellen Sie mehr als 1 Budget",
   "past-budget-periods": "Vergangene Haushaltszeiten",
-  "past-budget-periods-description": "Budget -Aufschlüsse der vergangenen Perioden anzeigen",
+  "past-budget-periods-description": "Zeigen Sie Ausgabenausgaben in den vergangenen Perioden an",
   "unlimited-color-picker": "Unbegrenzter Farbwähler",
   "unlimited-color-picker-description": "Wählen Sie jede Farbe, die Sie wollen",
   "continue-for-free": "Weiter kostenlos",
@@ -481,7 +481,7 @@
   "error-getting-products-description": "Es gab einen Fehler, der mit dem App Store verbunden wurde. Bitte versuchen Sie es später erneut.",
   "error-processing-order": "Es gab eine Fehlerabwicklung Ihres Kaufs. Bitte versuche es erneut.",
   "order-confirmation": "Vielen Dank, dass Sie Cashew unterstützt haben!",
-  "purchases-restored": "Einkäufe wurden wiederhergestellt",
+  "any-previous-purchases-restored": "Alle früheren Einkäufe wurden wiederhergestellt",
   "already-purchased": "Bereits gekauft",
   "current-plan": "Derzeitiger Plan",
   "lifetime": "Lebensdauer",
@@ -504,5 +504,12 @@
   "biometrics-disabled": "Biometrie deaktiviert",
   "biometrics-disabled-description": "Tippen Sie hier, um die Biometrie auf der Seite \"Einstellungen\" zu aktivieren, und versuchen Sie es erneut",
   "biometrics-error": "Biometriefehler",
-  "biometrics-error-description": "Es gab einen Fehler mit der Biometrie der Geräte"
+  "biometrics-error-description": "Es gab einen Fehler mit der Biometrie der Geräte",
+  "from-the-developer": "Vom Entwickler",
+  "developer-message-1": "Finanzielles Wohlergehen ist für uns alle wichtig, und wir sind hier, um Ihre Reise in Richtung eines besseren Geldmanagements zu unterstützen. Aus diesem Grund bieten wir Ihnen kostenlose Premium -Funktionen an. Das Premium -Popup wird angezeigt, aber Sie können es entlassen, um auf die gesperrte Funktion zuzugreifen",
+  "developer-message-1-1": "(Ohne noch zu warten!)",
+  "developer-message-2": "Wenn möglich, in Betracht ziehen, die Entwicklung zu unterstützen. Ihre Unterstützung spielt eine entscheidende Rolle für das zukünftige Wachstum dieser Anwendung. Danke 😄",
+  "support": "Unterstützung",
+  "unlock-for-free": "Kostenlos freischalten",
+  "no-free-stuff": "Nein, ich will keine kostenlosen Sachen"
 }

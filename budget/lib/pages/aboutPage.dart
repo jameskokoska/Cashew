@@ -383,7 +383,7 @@ class AboutPage extends StatelessWidget {
                       ]);
                       await database.close();
                       Navigator.pop(context);
-                      restartApp(context);
+                      restartAppPopup(context);
                     },
                     onSubmitLabel: "erase".tr(),
                     onCancelLabel: "cancel".tr(),

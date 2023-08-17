@@ -317,7 +317,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
   void initState() {
     super.initState();
     Future.delayed(Duration.zero, () async {
-      if (widget.budget == null) premiumPopupBudgets(context);
+      if (widget.budget == null) await premiumPopupBudgets(context);
 
       allMembersOfAllBudgets = await database.getAllMembersOfBudgets();
       if (widget.isAddedOnlyBudget) {

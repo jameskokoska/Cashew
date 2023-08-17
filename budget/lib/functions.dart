@@ -723,10 +723,14 @@ String pluralString(bool condition, String string) {
 //   }
 // }
 
-restartApp(context) async {
+bool lockAppWaitForRestart = false;
+void restartAppPopup(context) async {
   // For now, enforce this until better solution found
   if (kIsWeb || true) {
-    updateSettings("lockAppWaitForRestart", true, updateGlobalState: true);
+    // Lock the side navigation
+    lockAppWaitForRestart = true;
+    appStateKey.currentState?.refreshAppState();
+
     openPopup(
       context,
       title: "please-restart-the-application".tr(),

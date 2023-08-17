@@ -29,13 +29,13 @@ class _AnimatedExpandedState extends State<AnimatedExpanded>
   void initState() {
     super.initState();
     prepareAnimations();
-    _runExpandCheck();
   }
 
   void prepareAnimations() {
     expandController = AnimationController(
       vsync: this,
       duration: widget.duration,
+      value: widget.expand ? 1.0 : 0.0,
     );
     sizeAnimation = CurvedAnimation(
       parent: expandController,
@@ -45,6 +45,15 @@ class _AnimatedExpandedState extends State<AnimatedExpanded>
       parent: expandController,
       curve: Curves.easeInOut,
     );
+    if (widget.expand) {
+      expandController.value = 1.0;
+    }
+  }
+
+  @override
+  void didUpdateWidget(covariant AnimatedExpanded oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _runExpandCheck();
   }
 
   void _runExpandCheck() {
@@ -53,12 +62,6 @@ class _AnimatedExpandedState extends State<AnimatedExpanded>
     } else {
       expandController.reverse();
     }
-  }
-
-  @override
-  void didUpdateWidget(covariant AnimatedExpanded oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    _runExpandCheck();
   }
 
   @override
