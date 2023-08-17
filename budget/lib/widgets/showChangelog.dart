@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
     < 3.9.4
+    Biometric popup instead of error container
     Biometric setting error container
     Translations
     < 3.9.3

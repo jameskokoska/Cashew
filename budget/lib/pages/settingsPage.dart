@@ -7,7 +7,6 @@ import 'package:budget/pages/editHomePage.dart';
 import 'package:budget/pages/premiumPage.dart';
 import 'package:budget/pages/upcomingOverdueTransactionsPage.dart';
 import 'package:budget/struct/languageMap.dart';
-import 'package:budget/widgets/animatedExpanded.dart';
 import 'package:budget/widgets/dropdownSelect.dart';
 import 'package:budget/widgets/importCSV.dart';
 import 'package:budget/pages/autoTransactionsPageEmail.dart';
@@ -23,6 +22,7 @@ import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/notificationsSettings.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
+import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/ratingPopup.dart';
 import 'package:budget/widgets/selectColor.dart';
 import 'package:budget/widgets/settingsContainers.dart';
@@ -30,7 +30,6 @@ import 'package:budget/pages/walletDetailsPage.dart';
 import 'package:budget/struct/initializeBiometrics.dart';
 import 'package:budget/struct/initializeNotifications.dart';
 import 'package:budget/struct/upcomingTransactionsFunctions.dart';
-import 'package:budget/widgets/statusBox.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -575,44 +574,7 @@ class BiometricsSettingToggle extends StatefulWidget {
       _BiometricsSettingToggleState();
 }
 
-class _BiometricsSettingToggleState extends State<BiometricsSettingToggle>
-    with WidgetsBindingObserver {
-  bool error = false;
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addObserver(this);
-  }
-
-  @override
-  void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
-    super.dispose();
-  }
-
-  AppLifecycleState? _lastState;
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    super.didChangeAppLifecycleState(state);
-
-    if (_lastState == null) {
-      _lastState = state;
-    }
-
-    // app resumed
-    if (state == AppLifecycleState.resumed &&
-        (_lastState == AppLifecycleState.paused ||
-            _lastState == AppLifecycleState.inactive)) {
-      setState(() {
-        error = false;
-      });
-    }
-
-    _lastState = state;
-  }
-
+class _BiometricsSettingToggleState extends State<BiometricsSettingToggle> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -632,36 +594,38 @@ class _BiometricsSettingToggleState extends State<BiometricsSettingToggle>
                           updateGlobalState: false);
                     return result;
                   } catch (e) {
-                    setState(() {
-                      error = true;
-                    });
+                    openPopup(
+                      context,
+                      icon: Icons.warning_amber_rounded,
+                      title: getPlatform() == PlatformOS.isIOS
+                          ? "biometrics-disabled".tr()
+                          : "biometrics-error".tr(),
+                      description: getPlatform() == PlatformOS.isIOS
+                          ? "biometrics-disabled-description".tr()
+                          : "biometrics-error-description".tr(),
+                      onCancelLabel:
+                          getPlatform() == PlatformOS.isIOS ? "ok".tr() : null,
+                      onCancel: () {
+                        Navigator.pop(context);
+                      },
+                      onSubmitLabel: getPlatform() == PlatformOS.isIOS
+                          ? "open-settings".tr()
+                          : "ok".tr(),
+                      onSubmit: () {
+                        Navigator.pop(context);
+                        // On iOS the notification app settings page also has
+                        // the permission for biometrics
+                        if (getPlatform() == PlatformOS.isIOS) {
+                          AppSettings.openNotificationSettings();
+                        }
+                      },
+                    );
                   }
                 },
                 initialValue: appStateSettings["requireAuth"],
                 icon: Icons.lock_rounded,
               )
             : SizedBox.shrink(),
-        AnimatedExpanded(
-          expand: error,
-          duration: Duration(milliseconds: 100),
-          child: StatusBox(
-            title: getPlatform() == PlatformOS.isIOS
-                ? "biometrics-disabled".tr()
-                : "biometrics-error".tr(),
-            description: getPlatform() == PlatformOS.isIOS
-                ? "biometrics-disabled-description".tr()
-                : "biometrics-error-description".tr(),
-            icon: Icons.warning_rounded,
-            color: Theme.of(context).colorScheme.error,
-            onTap: () {
-              // On iOS the notification app settings page also has
-              // the permission for biometrics
-              if (getPlatform() == PlatformOS.isIOS) {
-                AppSettings.openNotificationSettings();
-              }
-            },
-          ),
-        ),
       ],
     );
   }
