@@ -66,7 +66,7 @@ Future<bool> initializeSettings() async {
   }
 
   // Always unlock the app
-  appStateSettings["lockAppWaitForRestart"] = true;
+  appStateSettings["lockAppWaitForRestart"] = false;
 
   if (appStateSettings["hasOnboarded"] == true) {
     updateSettings("numLogins", appStateSettings["numLogins"] + 1,
