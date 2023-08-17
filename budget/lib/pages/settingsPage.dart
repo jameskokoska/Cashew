@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart' hide AppSettings;
 import 'package:budget/pages/aboutPage.dart';
@@ -647,10 +645,10 @@ class _BiometricsSettingToggleState extends State<BiometricsSettingToggle>
           expand: error,
           duration: Duration(milliseconds: 100),
           child: StatusBox(
-            title: getPlatform() == Platform.isIOS
+            title: getPlatform() == PlatformOS.isIOS
                 ? "biometrics-disabled".tr()
                 : "biometrics-error".tr(),
-            description: getPlatform() == Platform.isIOS
+            description: getPlatform() == PlatformOS.isIOS
                 ? "biometrics-disabled-description".tr()
                 : "biometrics-error-description".tr(),
             icon: Icons.warning_rounded,
@@ -658,7 +656,7 @@ class _BiometricsSettingToggleState extends State<BiometricsSettingToggle>
             onTap: () {
               // On iOS the notification app settings page also has
               // the permission for biometrics
-              if (getPlatform() == Platform.isIOS) {
+              if (getPlatform() == PlatformOS.isIOS) {
                 AppSettings.openNotificationSettings();
               }
             },
