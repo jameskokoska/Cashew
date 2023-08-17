@@ -39,21 +39,22 @@ class TransactionEntryAmount extends StatelessWidget {
                   children: [
                     Transform.translate(
                       offset: Offset(3, 0),
-                      child: AnimatedExpanded(
-                        expand: !((transaction.type ==
-                                    TransactionSpecialType.credit ||
-                                transaction.type ==
-                                    TransactionSpecialType.debt) &&
-                            transaction.paid == false),
-                        child: AnimatedRotation(
-                          duration: Duration(milliseconds: 2000),
-                          curve: ElasticOutCurve(0.5),
-                          turns: transaction.income ? 0.5 : 0,
-                          child: Icon(
-                            Icons.arrow_drop_down_rounded,
-                            color: textColor,
-                          ),
-                        ),
+                      child: AnimatedSizeSwitcher(
+                        child: ((transaction.type ==
+                                        TransactionSpecialType.credit ||
+                                    transaction.type ==
+                                        TransactionSpecialType.debt) &&
+                                transaction.paid == false)
+                            ? SizedBox.shrink()
+                            : AnimatedRotation(
+                                duration: Duration(milliseconds: 2000),
+                                curve: ElasticOutCurve(0.5),
+                                turns: transaction.income ? 0.5 : 0,
+                                child: Icon(
+                                  Icons.arrow_drop_down_rounded,
+                                  color: textColor,
+                                ),
+                              ),
                       ),
                     ),
                     TextFont(

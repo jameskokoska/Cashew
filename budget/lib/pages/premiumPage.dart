@@ -534,24 +534,52 @@ class ProductsState extends State<Products> {
                         borderRadius: BorderRadius.circular(20),
                         child: Column(
                           children: [
-                            storeProducts["cashew.pro.yearly"] == null
-                                ? SizedBox.shrink()
-                                : SubscriptionOption(
-                                    label: "yearly".tr().capitalizeFirst,
-                                    price: storeProducts["cashew.pro.yearly"]!
-                                            .price +
-                                        " / " +
-                                        "year".tr().toLowerCase(),
-                                    extraPadding: EdgeInsets.only(top: 13 / 2),
-                                    onTap: () {
-                                      InAppPurchase.instance.buyNonConsumable(
-                                        purchaseParam: PurchaseParam(
-                                          productDetails: storeProducts[
-                                              "cashew.pro.yearly"]!,
-                                        ),
+                            Builder(
+                              builder: (context) {
+                                if (storeProducts["cashew.pro.yearly"] ==
+                                        null ||
+                                    storeProducts["cashew.pro.monthly"] ==
+                                        null) {
+                                  return SizedBox.shrink();
+                                }
+                                final double monthlyPrice =
+                                    storeProducts["cashew.pro.monthly"]!
+                                        .rawPrice;
+                                final double yearlyPrice =
+                                    storeProducts["cashew.pro.yearly"]!
+                                        .rawPrice;
+                                final double savings =
+                                    (monthlyPrice * 12) - yearlyPrice;
+                                return storeProducts["cashew.pro.yearly"] ==
+                                        null
+                                    ? SizedBox.shrink()
+                                    : SubscriptionOption(
+                                        label: "yearly".tr().capitalizeFirst,
+                                        price:
+                                            storeProducts["cashew.pro.yearly"]!
+                                                    .price +
+                                                " / " +
+                                                "year".tr().toLowerCase(),
+                                        extraPadding:
+                                            EdgeInsets.only(top: 13 / 2),
+                                        onTap: () {
+                                          InAppPurchase.instance
+                                              .buyNonConsumable(
+                                            purchaseParam: PurchaseParam(
+                                              productDetails: storeProducts[
+                                                  "cashew.pro.yearly"]!,
+                                            ),
+                                          );
+                                        },
+                                        // savings: "save".tr() +
+                                        //     " " +
+                                        //     storeProducts["cashew.pro.yearly"]!
+                                        //         .currencySymbol +
+                                        //     savings.toStringAsFixed(2),
+                                        savings: null,
                                       );
-                                    },
-                                  ),
+                              },
+                            ),
                             storeProducts["cashew.pro.monthly"] == null
                                 ? SizedBox.shrink()
                                 : SubscriptionOption(
@@ -685,12 +713,14 @@ class SubscriptionOption extends StatelessWidget {
   const SubscriptionOption({
     required this.label,
     required this.price,
+    this.savings,
     required this.onTap,
     this.extraPadding,
     super.key,
   });
   final String label;
   final String price;
+  final String? savings;
   final VoidCallback onTap;
   final EdgeInsets? extraPadding;
 
@@ -724,10 +754,31 @@ class SubscriptionOption extends StatelessWidget {
                       fontSize: 20,
                       textColor: getColor(context, "black"),
                     ),
-                    TextFont(
-                      text: price,
-                      fontSize: 18,
-                      textColor: getColor(context, "black"),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        TextFont(
+                          text: price,
+                          fontSize: 16,
+                          textColor: getColor(context, "black"),
+                        ),
+                        savings == null
+                            ? SizedBox.shrink()
+                            : Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .primaryContainer,
+                                ),
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 9, vertical: 2),
+                                child: TextFont(
+                                  text: savings ?? "",
+                                  fontSize: 11,
+                                ),
+                              ),
+                      ],
                     ),
                   ],
                 ),

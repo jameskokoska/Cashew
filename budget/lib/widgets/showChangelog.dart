@@ -10,6 +10,9 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    < 3.9.2
+    Yearly plan savings (Disabled for now)
+    Upgraded to support Flutter 3.13
     < 3.9.1
     Significantly improves speed of CSV import - use batching
     CSV progress fix

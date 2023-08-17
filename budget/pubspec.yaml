@@ -15,7 +15,7 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 3.9.0+139
+version: 3.9.1+140
 
 environment:
   sdk: ">= 3.0.0"
@@ -67,7 +67,7 @@ dependencies:
   cloud_firestore: ^4.4.4
   firebase_core_web: ^2.2.2
   firebase_auth_web: ^5.2.10
-  sliver_tools: ^0.2.8
+  sliver_tools: ^0.2.12
   reorderable_grid_view:
     git:
       url: https://github.com/jameskokoska/reorderable_grid_view

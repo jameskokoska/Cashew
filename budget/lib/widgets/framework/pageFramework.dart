@@ -606,7 +606,7 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
             )
           : Container(),
       backgroundColor: appBarBGColorCalculated,
-      floating: false,
+      floating: true,
       pinned: enableDoubleColumn(context) ? true : pinned,
       expandedHeight: getExpandedHeaderHeight(context, expandedHeight),
       collapsedHeight: collapsedHeight,

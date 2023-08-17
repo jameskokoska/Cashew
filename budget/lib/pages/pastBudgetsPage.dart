@@ -30,9 +30,9 @@ import 'package:budget/colors.dart';
 import 'package:async/async.dart' show StreamZip;
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:provider/provider.dart';
-import 'package:sliver_tools/sliver_tools.dart';
 import 'package:budget/widgets/countNumber.dart';
 import 'package:budget/widgets/animatedExpanded.dart';
+import 'package:sliver_tools/sliver_tools.dart';
 
 class PastBudgetsPage extends StatelessWidget {
   const PastBudgetsPage({super.key, required String this.budgetPk});
@@ -695,102 +695,24 @@ class _PastBudgetContainerListState extends State<PastBudgetContainerList> {
 
   @override
   Widget build(BuildContext context) {
-    return MultiSliver(children: [
-      getIsFullScreen(context) == false
-          ? SliverPadding(
-              padding: EdgeInsets.only(
-                bottom: 15,
-                left: getPlatform() == PlatformOS.isIOS ? 0 : 13,
-                right: getPlatform() == PlatformOS.isIOS ? 0 : 13,
-              ),
-              sliver: SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  (BuildContext context, int index) {
-                    DateTime datePast =
-                        getDatePastToDetermineBudgetDate(index, widget.budget);
-                    return FadeIn(
-                      duration: Duration(milliseconds: 400),
-                      child: AnimatedContainer(
-                        duration: Duration(milliseconds: 200),
-                        decoration: BoxDecoration(
-                          border: getPlatform() == PlatformOS.isIOS
-                              ? Border(
-                                  top: BorderSide(
-                                    color: getColor(context, "dividerColor"),
-                                    width: index == 0 ? 2 : 0,
-                                  ),
-                                  bottom: BorderSide(
-                                    color: getColor(context, "dividerColor"),
-                                    width: touchedBudgetIndex == null ? 2 : 0,
-                                  ),
-                                )
-                              : null,
-                          boxShadow: getPlatform() == PlatformOS.isIOS ||
-                                  appStateSettings["materialYou"]
-                              ? []
-                              : touchedBudgetIndex == null ||
-                                      widget.amountLoaded -
-                                              touchedBudgetIndex! -
-                                              1 ==
-                                          index
-                                  ? boxShadowCheck(boxShadowGeneral(context))
-                                  : [BoxShadow(color: Colors.transparent)],
-                        ),
-                        padding: getPlatform() == PlatformOS.isIOS
-                            ? EdgeInsets.zero
-                            : EdgeInsets.only(
-                                bottom: touchedBudgetIndex != null ||
-                                        index == widget.amountLoaded - 1
-                                    ? 0
-                                    : 13.0,
-                              ),
-                        child: AnimatedExpanded(
-                          expand: touchedBudgetIndex == null ||
-                              widget.amountLoaded - touchedBudgetIndex! - 1 ==
-                                  index,
-                          child: PastBudgetContainer(
-                            budget: widget.budget,
-                            smallBudgetContainer: true,
-                            showTodayForSmallBudget:
-                                (index == 0 ? true : false),
-                            dateForRange: datePast,
-                            isPastBudget: index == 0 ? false : true,
-                            isPastBudgetButCurrentPeriod: index == 0,
-                            budgetColorScheme: widget.budgetColorScheme,
-                            backgroundColor: widget.backgroundColor,
-                          ),
-                        ),
-                      ),
-                    );
-                  },
-                  childCount: widget.amountLoaded, //snapshot.data?.length
+    return MultiSliver(
+      children: [
+        getIsFullScreen(context) == false
+            ? SliverPadding(
+                padding: EdgeInsets.only(
+                  bottom: 15,
+                  left: getPlatform() == PlatformOS.isIOS ? 0 : 13,
+                  right: getPlatform() == PlatformOS.isIOS ? 0 : 13,
                 ),
-              ),
-            )
-          : SliverPadding(
-              padding: getPlatform() == PlatformOS.isIOS
-                  ? EdgeInsets.zero
-                  : EdgeInsets.only(bottom: 15, left: 13, right: 13),
-              sliver: SliverGrid(
-                gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                  maxCrossAxisExtent: 600,
-                  mainAxisExtent: 95,
-                  crossAxisSpacing: 10,
-                ),
-                delegate: SliverChildBuilderDelegate(
-                  (BuildContext context, int index) {
-                    DateTime datePast =
-                        getDatePastToDetermineBudgetDate(index, widget.budget);
-                    return FadeIn(
-                      duration: Duration(milliseconds: 400),
-                      child: AnimatedOpacity(
-                        duration: Duration(milliseconds: 200),
-                        opacity: touchedBudgetIndex == null ||
-                                widget.amountLoaded - touchedBudgetIndex! - 1 ==
-                                    index
-                            ? 1
-                            : 0.5,
-                        child: Container(
+                sliver: SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    (BuildContext context, int index) {
+                      DateTime datePast = getDatePastToDetermineBudgetDate(
+                          index, widget.budget);
+                      return FadeIn(
+                        duration: Duration(milliseconds: 400),
+                        child: AnimatedContainer(
+                          duration: Duration(milliseconds: 200),
                           decoration: BoxDecoration(
                             border: getPlatform() == PlatformOS.isIOS
                                 ? Border(
@@ -807,12 +729,26 @@ class _PastBudgetContainerListState extends State<PastBudgetContainerList> {
                             boxShadow: getPlatform() == PlatformOS.isIOS ||
                                     appStateSettings["materialYou"]
                                 ? []
-                                : boxShadowCheck(boxShadowGeneral(context)),
+                                : touchedBudgetIndex == null ||
+                                        widget.amountLoaded -
+                                                touchedBudgetIndex! -
+                                                1 ==
+                                            index
+                                    ? boxShadowCheck(boxShadowGeneral(context))
+                                    : [BoxShadow(color: Colors.transparent)],
                           ),
-                          child: Padding(
-                            padding: getPlatform() == PlatformOS.isIOS
-                                ? EdgeInsets.zero
-                                : EdgeInsets.only(bottom: 13.0),
+                          padding: getPlatform() == PlatformOS.isIOS
+                              ? EdgeInsets.zero
+                              : EdgeInsets.only(
+                                  bottom: touchedBudgetIndex != null ||
+                                          index == widget.amountLoaded - 1
+                                      ? 0
+                                      : 13.0,
+                                ),
+                          child: AnimatedExpanded(
+                            expand: touchedBudgetIndex == null ||
+                                widget.amountLoaded - touchedBudgetIndex! - 1 ==
+                                    index,
                             child: PastBudgetContainer(
                               budget: widget.budget,
                               smallBudgetContainer: true,
@@ -826,49 +762,120 @@ class _PastBudgetContainerListState extends State<PastBudgetContainerList> {
                             ),
                           ),
                         ),
-                      ),
-                    );
-                  },
-                  childCount: widget.amountLoaded,
-                ),
-              ),
-            ),
-      SliverToBoxAdapter(
-        child: Center(
-          child: Padding(
-            padding: const EdgeInsets.only(bottom: 30),
-            child: Opacity(
-              opacity: 0.5,
-              child: Tappable(
-                color: widget.budgetColorScheme.secondaryContainer,
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
-                  child: TextFont(
-                    text: "view-more".tr(),
-                    textAlign: TextAlign.center,
-                    fontSize: 16,
-                    textColor: widget.budgetColorScheme.onSecondaryContainer,
+                      );
+                    },
+                    childCount: widget.amountLoaded, //snapshot.data?.length
                   ),
                 ),
-                onTap: () {
-                  int amountMoreToLoad =
-                      getIsFullScreen(context) == false ? 3 : 5;
-                  widget.loadLines(widget.amountLoaded + amountMoreToLoad);
-                  widget
-                      .setAmountLoaded(widget.amountLoaded + amountMoreToLoad);
-                  Future.delayed(Duration(milliseconds: 150), () {
-                    budgetHistoryKey.currentState!
-                        .scrollToBottom(duration: 4000);
-                  });
-                },
-                borderRadius: 10,
+              )
+            : SliverPadding(
+                padding: getPlatform() == PlatformOS.isIOS
+                    ? EdgeInsets.zero
+                    : EdgeInsets.only(bottom: 15, left: 13, right: 13),
+                sliver: SliverGrid(
+                  gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                    maxCrossAxisExtent: 600,
+                    mainAxisExtent: 95,
+                    crossAxisSpacing: 10,
+                  ),
+                  delegate: SliverChildBuilderDelegate(
+                    (BuildContext context, int index) {
+                      DateTime datePast = getDatePastToDetermineBudgetDate(
+                          index, widget.budget);
+                      return FadeIn(
+                        duration: Duration(milliseconds: 400),
+                        child: AnimatedOpacity(
+                          duration: Duration(milliseconds: 200),
+                          opacity: touchedBudgetIndex == null ||
+                                  widget.amountLoaded -
+                                          touchedBudgetIndex! -
+                                          1 ==
+                                      index
+                              ? 1
+                              : 0.5,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              border: getPlatform() == PlatformOS.isIOS
+                                  ? Border(
+                                      top: BorderSide(
+                                        color:
+                                            getColor(context, "dividerColor"),
+                                        width: index == 0 ? 2 : 0,
+                                      ),
+                                      bottom: BorderSide(
+                                        color:
+                                            getColor(context, "dividerColor"),
+                                        width:
+                                            touchedBudgetIndex == null ? 2 : 0,
+                                      ),
+                                    )
+                                  : null,
+                              boxShadow: getPlatform() == PlatformOS.isIOS ||
+                                      appStateSettings["materialYou"]
+                                  ? []
+                                  : boxShadowCheck(boxShadowGeneral(context)),
+                            ),
+                            child: Padding(
+                              padding: getPlatform() == PlatformOS.isIOS
+                                  ? EdgeInsets.zero
+                                  : EdgeInsets.only(bottom: 13.0),
+                              child: PastBudgetContainer(
+                                budget: widget.budget,
+                                smallBudgetContainer: true,
+                                showTodayForSmallBudget:
+                                    (index == 0 ? true : false),
+                                dateForRange: datePast,
+                                isPastBudget: index == 0 ? false : true,
+                                isPastBudgetButCurrentPeriod: index == 0,
+                                budgetColorScheme: widget.budgetColorScheme,
+                                backgroundColor: widget.backgroundColor,
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                    childCount: widget.amountLoaded,
+                  ),
+                ),
+              ),
+        SliverToBoxAdapter(
+          child: Center(
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 30),
+              child: Opacity(
+                opacity: 0.5,
+                child: Tappable(
+                  color: widget.budgetColorScheme.secondaryContainer,
+                  child: Padding(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
+                    child: TextFont(
+                      text: "view-more".tr(),
+                      textAlign: TextAlign.center,
+                      fontSize: 16,
+                      textColor: widget.budgetColorScheme.onSecondaryContainer,
+                    ),
+                  ),
+                  onTap: () {
+                    int amountMoreToLoad =
+                        getIsFullScreen(context) == false ? 3 : 5;
+                    widget.loadLines(widget.amountLoaded + amountMoreToLoad);
+                    widget.setAmountLoaded(
+                        widget.amountLoaded + amountMoreToLoad);
+                    Future.delayed(Duration(milliseconds: 150), () {
+                      budgetHistoryKey.currentState!
+                          .scrollToBottom(duration: 4000);
+                    });
+                  },
+                  borderRadius: 10,
+                ),
               ),
             ),
           ),
         ),
-      ),
-    ]);
+      ],
+    );
   }
 }
 
