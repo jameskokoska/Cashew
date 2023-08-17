@@ -1,5 +1,7 @@
+import 'dart:io';
+
 import 'package:budget/colors.dart';
-import 'package:budget/database/tables.dart';
+import 'package:budget/database/tables.dart' hide AppSettings;
 import 'package:budget/pages/aboutPage.dart';
 import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/creditDebtTransactionsPage.dart';
@@ -7,6 +9,7 @@ import 'package:budget/pages/editHomePage.dart';
 import 'package:budget/pages/premiumPage.dart';
 import 'package:budget/pages/upcomingOverdueTransactionsPage.dart';
 import 'package:budget/struct/languageMap.dart';
+import 'package:budget/widgets/animatedExpanded.dart';
 import 'package:budget/widgets/dropdownSelect.dart';
 import 'package:budget/widgets/importCSV.dart';
 import 'package:budget/pages/autoTransactionsPageEmail.dart';
@@ -29,6 +32,7 @@ import 'package:budget/pages/walletDetailsPage.dart';
 import 'package:budget/struct/initializeBiometrics.dart';
 import 'package:budget/struct/initializeNotifications.dart';
 import 'package:budget/struct/upcomingTransactionsFunctions.dart';
+import 'package:budget/widgets/statusBox.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -37,6 +41,7 @@ import 'package:budget/main.dart';
 import '../functions.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/framework/popupFramework.dart';
+import 'package:app_settings/app_settings.dart';
 
 //To get SHA1 Key run
 // ./gradlew signingReport
@@ -500,24 +505,8 @@ class SettingsPageContent extends StatelessWidget {
 
         BudgetTotalSpentToggle(),
 
-        biometricsAvailable
-            ? SettingsContainerSwitch(
-                title: "require-biometrics".tr(),
-                description: "require-biometrics-description".tr(),
-                onSwitched: (value) async {
-                  bool result = await checkBiometrics(
-                    checkAlways: true,
-                    message: "verify-identity".tr(),
-                  );
-                  if (result)
-                    updateSettings("requireAuth", value,
-                        updateGlobalState: false);
-                  return result;
-                },
-                initialValue: appStateSettings["requireAuth"],
-                icon: Icons.lock_rounded,
-              )
-            : SizedBox.shrink(),
+        BiometricsSettingToggle(),
+
         Builder(builder: (context) {
           return SettingsContainer(
             title: "language".tr(),
@@ -575,6 +564,106 @@ class SettingsPageContent extends StatelessWidget {
                 icon: Icons.mark_email_unread_rounded,
               )
             : SizedBox.shrink(),
+      ],
+    );
+  }
+}
+
+class BiometricsSettingToggle extends StatefulWidget {
+  const BiometricsSettingToggle({super.key});
+
+  @override
+  State<BiometricsSettingToggle> createState() =>
+      _BiometricsSettingToggleState();
+}
+
+class _BiometricsSettingToggleState extends State<BiometricsSettingToggle>
+    with WidgetsBindingObserver {
+  bool error = false;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  AppLifecycleState? _lastState;
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+
+    if (_lastState == null) {
+      _lastState = state;
+    }
+
+    // app resumed
+    if (state == AppLifecycleState.resumed &&
+        (_lastState == AppLifecycleState.paused ||
+            _lastState == AppLifecycleState.inactive)) {
+      setState(() {
+        error = false;
+      });
+    }
+
+    _lastState = state;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        biometricsAvailable
+            ? SettingsContainerSwitch(
+                title: "require-biometrics".tr(),
+                description: "require-biometrics-description".tr(),
+                onSwitched: (value) async {
+                  try {
+                    bool result = await checkBiometrics(
+                      checkAlways: true,
+                      message: "verify-identity".tr(),
+                    );
+                    if (result)
+                      updateSettings("requireAuth", value,
+                          updateGlobalState: false);
+                    return result;
+                  } catch (e) {
+                    setState(() {
+                      error = true;
+                    });
+                  }
+                },
+                initialValue: appStateSettings["requireAuth"],
+                icon: Icons.lock_rounded,
+              )
+            : SizedBox.shrink(),
+        AnimatedExpanded(
+          expand: error,
+          duration: Duration(milliseconds: 100),
+          child: StatusBox(
+            title: getPlatform() == Platform.isIOS
+                ? "biometrics-disabled".tr()
+                : "biometrics-error".tr(),
+            description: getPlatform() == Platform.isIOS
+                ? "biometrics-disabled-description".tr()
+                : "biometrics-error-description".tr(),
+            icon: Icons.warning_rounded,
+            color: Theme.of(context).colorScheme.error,
+            onTap: () {
+              // On iOS the notification app settings page also has
+              // the permission for biometrics
+              if (getPlatform() == Platform.isIOS) {
+                AppSettings.openNotificationSettings();
+              }
+            },
+          ),
+        ),
       ],
     );
   }

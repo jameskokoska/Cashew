@@ -499,5 +499,10 @@
   "total-spent-example": "Esempio: 25 speso di 100",
   "total-remaining-example": "Esempio: 75 a sinistra di 100",
   "importing-loading": "Importazione ...",
-  "successfully-imported": "Importato con successo"
+  "successfully-imported": "Importato con successo",
+  "please-restart-the-application": "Si prega di riavviare l'applicazione",
+  "biometrics-disabled": "Biometria disabilitata",
+  "biometrics-disabled-description": "Tocca qui per abilitare la biometria nella pagina delle impostazioni e riprovare",
+  "biometrics-error": "Errore di biometria",
+  "biometrics-error-description": "Si è verificato un errore utilizzando la biometria dei dispositivi"
 }

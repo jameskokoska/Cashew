@@ -485,7 +485,7 @@
   "already-purchased": "Redan köpt",
   "current-plan": "Aktuell plan",
   "lifetime": "Livstid",
-  "exchange-rates-api": "Valutakurer API",
+  "exchange-rates-api": "Valutakurser API",
   "exchange-rates": "Växlingskurs",
   "active": "Aktiva",
   "edit-home-page": "Redigera hemsida",
@@ -499,5 +499,10 @@
   "total-spent-example": "Exempel: 25 tillbringade 100",
   "total-remaining-example": "Exempel: 75 kvar av 100",
   "importing-loading": "Importerar ...",
-  "successfully-imported": "Importeras framgångsrikt"
+  "successfully-imported": "Importeras framgångsrikt",
+  "please-restart-the-application": "Starta om applikationen",
+  "biometrics-disabled": "Biometri funktionshindrade",
+  "biometrics-disabled-description": "Tryck här för att aktivera biometri på inställningssidan och försök igen",
+  "biometrics-error": "Biometrifel",
+  "biometrics-error-description": "Det fanns ett fel med enhetens biometri"
 }

@@ -495,9 +495,14 @@
   "backup-restored": "Backup restaurado",
   "budget-total-label": "Rótulo total dos orçamentos",
   "total-spent": "Total gasto",
-  "total-remaining": "Total restante",
+  "total-remaining": "Restante total",
   "total-spent-example": "Exemplo: 25 gasto de 100",
   "total-remaining-example": "Exemplo: 75 à esquerda de 100",
   "importing-loading": "Importando ...",
-  "successfully-imported": "Importado com sucesso"
+  "successfully-imported": "Importado com sucesso",
+  "please-restart-the-application": "Por favor, reinicie o aplicativo",
+  "biometrics-disabled": "Biometria desativada",
+  "biometrics-disabled-description": "Toque aqui para ativar a biometria na página Configurações e tente novamente",
+  "biometrics-error": "Erro de biometria",
+  "biometrics-error-description": "Houve um erro usando os dispositivos Biometrics"
 }

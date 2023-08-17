@@ -428,7 +428,7 @@
   "changed-wallet": "Billetera cambiada",
   "added-to-budget": "Agregado al presupuesto",
   "no-addable-budgets": "No hay presupuestos para agregar transacciones a",
-  "create-addable-budget": "Crear un presupuesto 'agregado solo'",
+  "create-addable-budget": "Crear presupuesto 'agregado solo'",
   "delete-budget-added-warning": "Las transacciones agregadas a este presupuesto ya no estarán vinculadas a este presupuesto. No serán eliminados.",
   "removed-from-budget": "Eliminado del presupuesto",
   "pinned-to-homepage": "Añadado a la página de inicio",
@@ -499,5 +499,10 @@
   "total-spent-example": "Ejemplo: 25 gastado de 100",
   "total-remaining-example": "Ejemplo: 75 izquierda de 100",
   "importing-loading": "Importador...",
-  "successfully-imported": "Importado con éxito"
+  "successfully-imported": "Importado con éxito",
+  "please-restart-the-application": "Reinicie la solicitud",
+  "biometrics-disabled": "Biometría discapacitada",
+  "biometrics-disabled-description": "Toque aquí para habilitar biometría en la página de configuración e intente nuevamente",
+  "biometrics-error": "Error biométrico",
+  "biometrics-error-description": "Hubo un error usando los dispositivos Biometrics"
 }

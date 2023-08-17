@@ -499,5 +499,10 @@
   "total-spent-example": "ఉదాహరణ: 100 ఖర్చు 25",
   "total-remaining-example": "ఉదాహరణ: 100 కి 75 ఎడమ",
   "importing-loading": "దిగుమతి ...",
-  "successfully-imported": "విజయవంతంగా దిగుమతి చేయబడింది"
+  "successfully-imported": "విజయవంతంగా దిగుమతి చేయబడింది",
+  "please-restart-the-application": "దయచేసి దరఖాస్తును పున art ప్రారంభించండి",
+  "biometrics-disabled": "బయోమెట్రిక్స్ నిలిపివేయబడింది",
+  "biometrics-disabled-description": "సెట్టింగుల పేజీలో బయోమెట్రిక్‌లను ప్రారంభించడానికి ఇక్కడ నొక్కండి మరియు మళ్లీ ప్రయత్నించండి",
+  "biometrics-error": "బయోమెట్రిక్స్ లోపం",
+  "biometrics-error-description": "పరికరాల బయోమెట్రిక్స్ ఉపయోగించి లోపం ఉంది"
 }

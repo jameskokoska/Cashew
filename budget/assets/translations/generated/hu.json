@@ -499,5 +499,10 @@
   "total-spent-example": "Példa: 25 költött 100 -at",
   "total-remaining-example": "Példa: 75 maradt 100 -ból",
   "importing-loading": "Importálás ...",
-  "successfully-imported": "Sikeresen importált"
+  "successfully-imported": "Sikeresen importált",
+  "please-restart-the-application": "Kérjük, indítsa újra az alkalmazást",
+  "biometrics-disabled": "A biometria fogyatékkal élők",
+  "biometrics-disabled-description": "Koppintson ide a biometria engedélyezéséhez a beállítások oldalon, és próbálkozzon újra",
+  "biometrics-error": "Biometrikus hiba",
+  "biometrics-error-description": "Hiba történt az eszközök biometria használatával"
 }

@@ -436,7 +436,7 @@
   "expenses-only": "فقط هزینه ها",
   "expenses-only-description": "فقط هزینه ها را می توان به بودجه اضافه کرد",
   "delete-category-question": "دسته بندی را حذف کنید؟",
-  "delete-category-question-description": "با این کار تمام معاملات مرتبط با این گروه حذف می شود.",
+  "delete-category-question-description": "این همه معاملات مرتبط با این گروه را حذف می کند.",
   "delete-all-transactions-question": "همه معاملات را حذف کنید؟",
   "delete-category-merge-warning": "حذف یک دسته ، کلیه معاملات را در این گروه حذف می کند. برای جلوگیری از این کار ، معاملات را به دسته دیگری منتقل کنید.",
   "deleted-category": "دسته حذف شده",
@@ -479,7 +479,7 @@
   "one-coffee-a-month": "فقط یک ماه در ماه!",
   "error-getting-products": "خطا در گرفتن محصولات",
   "error-getting-products-description": "خطایی در اتصال به فروشگاه App وجود داشت. لطفا بعداً دوباره امتحان کنید.",
-  "error-processing-order": "یک خطای در حال پردازش خرید شما بود. لطفا دوباره تلاش کنید.",
+  "error-processing-order": "یک خطا در حال پردازش خرید شما بود. لطفا دوباره تلاش کنید.",
   "order-confirmation": "با تشکر از شما برای حمایت از بادام زمینی!",
   "purchases-restored": "خریدها ترمیم شدند",
   "already-purchased": "در حال حاضر خریداری",
@@ -499,5 +499,10 @@
   "total-spent-example": "مثال: 25 از 100 خرج شده",
   "total-remaining-example": "مثال: 75 سمت چپ از 100",
   "importing-loading": "واردات ...",
-  "successfully-imported": "با موفقیت وارداتی"
+  "successfully-imported": "با موفقیت وارداتی",
+  "please-restart-the-application": "لطفاً برنامه را مجدداً راه اندازی کنید",
+  "biometrics-disabled": "بیومتریک غیرفعال",
+  "biometrics-disabled-description": "برای فعال کردن بیومتریک در صفحه تنظیمات ، اینجا ضربه بزنید و دوباره امتحان کنید",
+  "biometrics-error": "خطای بیومتریک",
+  "biometrics-error-description": "با استفاده از بیومتریک دستگاه ها خطایی رخ داد"
 }

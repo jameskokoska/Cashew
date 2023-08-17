@@ -432,7 +432,7 @@
   "delete-budget-added-warning": "Οι συναλλαγές που προστίθενται σε αυτόν τον προϋπολογισμό δεν θα συνδέονται πλέον με αυτόν τον προϋπολογισμό. Δεν θα διαγραφούν.",
   "removed-from-budget": "Αφαιρέθηκε από τον προϋπολογισμό",
   "pinned-to-homepage": "Καρφώθηκε στην αρχική σελίδα",
-  "unpinned-to-homepage": "Untinned από την αρχική σελίδα",
+  "unpinned-to-homepage": "Μη εξαντλημένος από την αρχική σελίδα",
   "expenses-only": "Μόνο έξοδα",
   "expenses-only-description": "Μπορούν να προστεθούν μόνο τα έξοδα σε έναν προϋπολογισμό",
   "delete-category-question": "Διαγραφή κατηγορίας;",
@@ -478,7 +478,7 @@
   "none": "Κανένας",
   "one-coffee-a-month": "Μόνο ένας καφές το μήνα!",
   "error-getting-products": "Σφάλμα λήψης προϊόντων",
-  "error-getting-products-description": "Υπήρχε ένα σφάλμα που συνδέεται με το κατάστημα εφαρμογών. Παρακαλώ δοκιμάστε ξανά αργότερα.",
+  "error-getting-products-description": "Υπήρχε ένα σφάλμα που συνδέεται με το App Store. Παρακαλώ δοκιμάστε ξανά αργότερα.",
   "error-processing-order": "Υπήρχε ένα σφάλμα που επεξεργάζεται την αγορά σας. ΠΑΡΑΚΑΛΩ προσπαθησε ξανα.",
   "order-confirmation": "Σας ευχαριστούμε που υποστηρίξατε το Caseew!",
   "purchases-restored": "Οι αγορές αποκαταστάθηκαν",
@@ -499,5 +499,10 @@
   "total-spent-example": "Παράδειγμα: 25 δαπανώνται 100",
   "total-remaining-example": "Παράδειγμα: 75 αριστερά από τα 100",
   "importing-loading": "Εισαγωγή ...",
-  "successfully-imported": "Επιτυχώς εισαγάγει"
+  "successfully-imported": "Επιτυχώς εισαγάγει",
+  "please-restart-the-application": "Επανεκκινήστε την εφαρμογή",
+  "biometrics-disabled": "Η βιομετρία απενεργοποιείται",
+  "biometrics-disabled-description": "Πατήστε εδώ για να ενεργοποιήσετε τη βιομετρία στη σελίδα ρυθμίσεων και δοκιμάστε ξανά",
+  "biometrics-error": "Σφάλμα βιομετρίας",
+  "biometrics-error-description": "Υπήρχε σφάλμα χρησιμοποιώντας τις βιομετρικές συσκευές"
 }

@@ -430,7 +430,7 @@
   "no-addable-budgets": "লেনদেন যুক্ত করার জন্য কোনও বাজেট নেই",
   "create-addable-budget": "'কেবল যুক্ত' বাজেট তৈরি করুন",
   "delete-budget-added-warning": "এই বাজেটে যুক্ত লেনদেনগুলি আর এই বাজেটের সাথে যুক্ত হবে না। তারা মুছে ফেলা হবে না।",
-  "removed-from-budget": "বাজেট থেকে সরানো",
+  "removed-from-budget": "বাজেট থেকে সরানো হয়েছে",
   "pinned-to-homepage": "হোমপেজে পিন করা",
   "unpinned-to-homepage": "হোমপেজ থেকে অবিচ্ছিন্ন",
   "expenses-only": "শুধুমাত্র ব্যয়",
@@ -499,5 +499,10 @@
   "total-spent-example": "উদাহরণ: 25 টি 100 ব্যয়",
   "total-remaining-example": "উদাহরণ: 100 এর 75 বাম",
   "importing-loading": "আমদানি ...",
-  "successfully-imported": "সফলভাবে আমদানি করা"
+  "successfully-imported": "সফলভাবে আমদানি করা",
+  "please-restart-the-application": "আবেদনটি পুনরায় চালু করুন",
+  "biometrics-disabled": "বায়োমেট্রিক্স অক্ষম",
+  "biometrics-disabled-description": "সেটিংস পৃষ্ঠায় বায়োমেট্রিক্স সক্ষম করতে এখানে আলতো চাপুন এবং আবার চেষ্টা করুন",
+  "biometrics-error": "বায়োমেট্রিক্স ত্রুটি",
+  "biometrics-error-description": "ডিভাইসগুলি বায়োমেট্রিক্স ব্যবহার করে একটি ত্রুটি ছিল"
 }

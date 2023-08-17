@@ -455,7 +455,7 @@
   "merged-category": "マージされたカテゴリ",
   "an-error-occured": "エラーが発生した",
   "more": "もっと",
-  "syncing-failed": "同期に失敗しました",
+  "syncing-failed": "同期は失敗しました",
   "sync-fail-reason": "データベーススキーマバージョンの不一致",
   "feedback-shared": "共有されたフィードバック！",
   "thank-you": "ありがとう！",
@@ -476,7 +476,7 @@
   "date-format-note": "CSVが適切な日付フォーマットを使用している場合、必要ありません",
   "current-wallet": "現在のウォレット",
   "none": "なし",
-  "one-coffee-a-month": "月に1杯のコーヒー！",
+  "one-coffee-a-month": "月に1回のコーヒー！",
   "error-getting-products": "製品の取得エラー",
   "error-getting-products-description": "App Storeに接続するエラーがありました。後でもう一度やり直してください。",
   "error-processing-order": "購入の処理エラーがありました。もう一度やり直してください。",
@@ -499,5 +499,10 @@
   "total-spent-example": "例：100の25匹",
   "total-remaining-example": "例：100の残り75",
   "importing-loading": "インポート...",
-  "successfully-imported": "正常にインポートされました"
+  "successfully-imported": "正常にインポートされました",
+  "please-restart-the-application": "アプリケーションを再起動してください",
+  "biometrics-disabled": "生体認証が無効になっています",
+  "biometrics-disabled-description": "ここをタップして、[設定]ページで生体認証を有効にし、再試行してください",
+  "biometrics-error": "生体認証エラー",
+  "biometrics-error-description": "デバイスの生体認証を使用したエラーがありました"
 }

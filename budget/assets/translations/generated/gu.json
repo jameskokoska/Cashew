@@ -417,7 +417,7 @@
   "exit-demo": "બહાર નીકળવું",
   "not-available-in-preview-demo": "પૂર્વાવલોકન ડેમોમાં ઉપલબ્ધ નથી",
   "not-available-in-preview-demo-description": "આ સુવિધાનો ઉપયોગ કરવા માટે પૂર્વાવલોકન ડેમો મોડને અક્ષમ કરો.",
-  "copied": "Copઠવું",
+  "copied": "ક copપિચ કરવું",
   "created-copy": "બનાવેલી નકલ",
   "duplicate": "ઉઘાડું",
   "delete-transactions": "વ્યવહાર કા delete ી નાખો",
@@ -440,7 +440,7 @@
   "delete-all-transactions-question": "બધા વ્યવહારો કા delete ી નાખો?",
   "delete-category-merge-warning": "કેટેગરીને કા ting ી નાખવાથી આ કેટેગરીમાંના તમામ વ્યવહારોને કા delete ી નાખવામાં આવશે. આને ટાળવા માટે વ્યવહારોને બીજી કેટેગરીમાં ખસેડો.",
   "deleted-category": "કા deleted ી નાખેલી શ્રેણી",
-  "delete-wallet-question": "વ let લેટ કા Delete ી નાખો?",
+  "delete-wallet-question": "વ let લેટ કા delete ી નાખો?",
   "delete-wallet-question-description": "આ આ વ let લેટ સાથે સંકળાયેલા તમામ વ્યવહારોને કા delete ી નાખશે.",
   "move-transactions": "વ્યવહાર",
   "delete-wallet-merge-warning": "વ let લેટ કા ting ી નાખવું આ વ let લેટમાંના તમામ વ્યવહારોને કા delete ી નાખશે. આને ટાળવા માટે અન્ય વ let લેટમાં વ્યવહાર ખસેડો.",
@@ -499,5 +499,10 @@
   "total-spent-example": "ઉદાહરણ: 25 100 ખર્ચ",
   "total-remaining-example": "ઉદાહરણ: 100 ની 75 ડાબે",
   "importing-loading": "આયાત ...",
-  "successfully-imported": "સફળતાપૂર્વક આયાત"
+  "successfully-imported": "સફળતાપૂર્વક આયાત",
+  "please-restart-the-application": "કૃપા કરીને એપ્લિકેશન ફરીથી પ્રારંભ કરો",
+  "biometrics-disabled": "બાયોમેટ્રિક્સ અક્ષમ",
+  "biometrics-disabled-description": "સેટિંગ્સ પૃષ્ઠમાં બાયોમેટ્રિક્સને સક્ષમ કરવા માટે અહીં ટેપ કરો અને ફરીથી પ્રયાસ કરો",
+  "biometrics-error": "બાયોમેટ્રિક્સ ભૂલ",
+  "biometrics-error-description": "બાયોમેટ્રિક્સ ઉપકરણોનો ઉપયોગ કરીને ભૂલ હતી"
 }

@@ -427,7 +427,7 @@
   "move-to-other-wallet-button": "انقل المعاملات إلى محفظة أخرى وحذفها",
   "changed-wallet": "تم تغيير المحفظة",
   "added-to-budget": "إضافة إلى الميزانية",
-  "no-addable-budgets": "لا ميزانيات لإضافة المعاملات إلى",
+  "no-addable-budgets": "لا ميزانيات لإضافة معاملات إلى",
   "create-addable-budget": "إنشاء ميزانية \"إضافة فقط\"",
   "delete-budget-added-warning": "لن يتم ربط المعاملات التي تمت إضافتها إلى هذه الميزانية بهذه الميزانية. لن يتم حذفها.",
   "removed-from-budget": "تمت إزالته من الميزانية",
@@ -441,7 +441,7 @@
   "delete-category-merge-warning": "سيؤدي حذف فئة إلى حذف جميع المعاملات في هذه الفئة. نقل المعاملات إلى فئة أخرى لتجنب ذلك.",
   "deleted-category": "فئة المحذوفة",
   "delete-wallet-question": "حذف محفظة؟",
-  "delete-wallet-question-description": "سيؤدي ذلك إلى حذف جميع المعاملات المرتبطة بهذه المحفظة.",
+  "delete-wallet-question-description": "سيؤدي هذا إلى حذف جميع المعاملات المرتبطة بهذه المحفظة.",
   "move-transactions": "نقل المعاملات",
   "delete-wallet-merge-warning": "سيحذف حذف محفظة جميع المعاملات في هذه المحفظة. نقل المعاملات إلى محفظة أخرى لتجنب ذلك.",
   "deleted-wallet": "محفظة محذوفة",
@@ -450,7 +450,7 @@
   "remove-transactions-from-added-budget-question": "إزالة المعاملات؟",
   "deleted-transactions": "المعاملات المحذوفة",
   "deleted-transaction": "المعاملة المحذوفة",
-  "change-category": "تغيير فئة",
+  "change-category": "تغيير الفئة",
   "changed-category": "تم تغيير الفئة",
   "merged-category": "اندماج فئة",
   "an-error-occured": "حدث خطأ",
@@ -499,5 +499,10 @@
   "total-spent-example": "مثال: 25 تنفق من 100",
   "total-remaining-example": "مثال: 75 يسار 100",
   "importing-loading": "استيراد ...",
-  "successfully-imported": "تم استيرادها بنجاح"
+  "successfully-imported": "تم استيرادها بنجاح",
+  "please-restart-the-application": "الرجاء إعادة تشغيل التطبيق",
+  "biometrics-disabled": "القياسات الحيوية معاق",
+  "biometrics-disabled-description": "اضغط هنا لتمكين القياسات الحيوية في صفحة الإعدادات وحاول مرة أخرى",
+  "biometrics-error": "خطأ القياسات الحيوية",
+  "biometrics-error-description": "كان هناك خطأ باستخدام القياسات الحيوية للأجهزة"
 }

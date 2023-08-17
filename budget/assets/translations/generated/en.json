@@ -499,5 +499,10 @@
   "total-spent-example": "Example: 25 spent of 100",
   "total-remaining-example": "Example: 75 left of 100",
   "importing-loading": "Importing...",
-  "successfully-imported": "Successfully imported"
+  "successfully-imported": "Successfully imported",
+  "please-restart-the-application": "Please restart the application",
+  "biometrics-disabled": "Biometrics Disabled",
+  "biometrics-disabled-description": "Tap here to enable biometrics in the settings page and try again",
+  "biometrics-error": "Biometrics Error",
+  "biometrics-error-description": "There was an error using the devices biometrics"
 }

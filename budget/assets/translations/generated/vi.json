@@ -485,7 +485,7 @@
   "already-purchased": "Đã mua",
   "current-plan": "Kế hoạch hiện tại",
   "lifetime": "Cả đời",
-  "exchange-rates-api": "Tỷ giá hối đoái API",
+  "exchange-rates-api": "API tỷ giá hối đoái",
   "exchange-rates": "Tỷ giá hối đoái",
   "active": "Tích cực",
   "edit-home-page": "Chỉnh sửa trang chủ",
@@ -499,5 +499,10 @@
   "total-spent-example": "Ví dụ: 25 chi tiêu 100",
   "total-remaining-example": "Ví dụ: 75 trái của 100",
   "importing-loading": "Nhập khẩu ...",
-  "successfully-imported": "Nhập thành công"
+  "successfully-imported": "Nhập thành công",
+  "please-restart-the-application": "Vui lòng khởi động lại ứng dụng",
+  "biometrics-disabled": "Sinh trắc học vô hiệu hóa",
+  "biometrics-disabled-description": "Nhấn vào đây để bật sinh trắc học trong trang Cài đặt và thử lại",
+  "biometrics-error": "Lỗi sinh trắc học",
+  "biometrics-error-description": "Có một lỗi khi sử dụng sinh trắc học thiết bị"
 }

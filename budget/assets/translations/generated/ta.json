@@ -450,7 +450,7 @@
   "remove-transactions-from-added-budget-question": "பரிவர்த்தனைகளை அகற்றவா?",
   "deleted-transactions": "நீக்கப்பட்ட பரிவர்த்தனைகள்",
   "deleted-transaction": "நீக்கப்பட்ட பரிவர்த்தனை",
-  "change-category": "வகை",
+  "change-category": "வகை மாற்ற",
   "changed-category": "மாற்றப்பட்ட வகை",
   "merged-category": "இணைக்கப்பட்ட வகை",
   "an-error-occured": "ஒரு பிழை ஏற்பட்டது",
@@ -478,7 +478,7 @@
   "none": "எதுவுமில்லை",
   "one-coffee-a-month": "ஒரு மாதத்திற்கு ஒரு காபி!",
   "error-getting-products": "தயாரிப்புகளைப் பெறுவதில் பிழை",
-  "error-getting-products-description": "ஆப் ஸ்டோருடன் இணைக்கும் பிழை இருந்தது. தயவுசெய்து பின்னர் மீண்டும் முயற்சிக்கவும்.",
+  "error-getting-products-description": "ஆப் ஸ்டோருடன் இணைக்கும் பிழை இருந்தது. தயவுசெய்து பின்னர் முயற்சிக்கவும்.",
   "error-processing-order": "உங்கள் வாங்குதலை செயலாக்குவதில் பிழை ஏற்பட்டது. தயவு செய்து மீண்டும் முயற்சிக்கவும்.",
   "order-confirmation": "முந்திரி ஆதரித்ததற்கு நன்றி!",
   "purchases-restored": "கொள்முதல் மீட்டெடுக்கப்பட்டது",
@@ -499,5 +499,10 @@
   "total-spent-example": "எடுத்துக்காட்டு: 25 செலவழித்த 25",
   "total-remaining-example": "எடுத்துக்காட்டு: 100 இன் 75 இடது",
   "importing-loading": "இறக்குமதி ...",
-  "successfully-imported": "வெற்றிகரமாக இறக்குமதி செய்யப்பட்டது"
+  "successfully-imported": "வெற்றிகரமாக இறக்குமதி செய்யப்பட்டது",
+  "please-restart-the-application": "விண்ணப்பத்தை மறுதொடக்கம் செய்யுங்கள்",
+  "biometrics-disabled": "பயோமெட்ரிக்ஸ் முடக்கப்பட்டது",
+  "biometrics-disabled-description": "அமைப்புகள் பக்கத்தில் பயோமெட்ரிக்ஸை இயக்க இங்கே தட்டவும், மீண்டும் முயற்சிக்கவும்",
+  "biometrics-error": "பயோமெட்ரிக்ஸ் பிழை",
+  "biometrics-error-description": "சாதனங்கள் பயோமெட்ரிக்ஸைப் பயன்படுத்தி பிழை ஏற்பட்டது"
 }

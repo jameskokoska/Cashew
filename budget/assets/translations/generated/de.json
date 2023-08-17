@@ -491,7 +491,7 @@
   "edit-home-page": "Homepage bearbeiten",
   "delete-category": "Kategorie löschen",
   "manage": "Verwalten",
-  "restore-purchases": "Einkäufe wiederherstellen",
+  "restore-purchases": "Käufe wiederherstellen",
   "backup-restored": "Backup wiederhergestellt",
   "budget-total-label": "Budgets Gesamtetikett",
   "total-spent": "Gesamtausgaben",
@@ -499,5 +499,10 @@
   "total-spent-example": "Beispiel: 25 verbracht von 100 verbracht",
   "total-remaining-example": "Beispiel: 75 links von 100",
   "importing-loading": "Importieren ...",
-  "successfully-imported": "Erfolgreich importiert"
+  "successfully-imported": "Erfolgreich importiert",
+  "please-restart-the-application": "Bitte starten Sie die Bewerbung neu",
+  "biometrics-disabled": "Biometrie deaktiviert",
+  "biometrics-disabled-description": "Tippen Sie hier, um die Biometrie auf der Seite \"Einstellungen\" zu aktivieren, und versuchen Sie es erneut",
+  "biometrics-error": "Biometriefehler",
+  "biometrics-error-description": "Es gab einen Fehler mit der Biometrie der Geräte"
 }

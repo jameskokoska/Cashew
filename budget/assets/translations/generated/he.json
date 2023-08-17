@@ -483,7 +483,7 @@
   "order-confirmation": "תודה שתמכת בקשיו!",
   "purchases-restored": "רכישות שוחזרו",
   "already-purchased": "כבר נרכש",
-  "current-plan": "התוכנית הנוכחית",
+  "current-plan": "תוכנית נוכחית",
   "lifetime": "לכל החיים",
   "exchange-rates-api": "API בשערי חליפין",
   "exchange-rates": "שערי חליפין",
@@ -499,5 +499,10 @@
   "total-spent-example": "דוגמה: 25 בילוי של 100",
   "total-remaining-example": "דוגמה: 75 משמאל ל 100",
   "importing-loading": "יבוא ...",
-  "successfully-imported": "מיובא בהצלחה"
+  "successfully-imported": "מיובא בהצלחה",
+  "please-restart-the-application": "אנא הפעל מחדש את הבקשה",
+  "biometrics-disabled": "ביומטריה מושבתת",
+  "biometrics-disabled-description": "הקש כאן כדי לאפשר ביומטריה בדף ההגדרות ונסה שוב",
+  "biometrics-error": "שגיאת ביומטריה",
+  "biometrics-error-description": "הייתה שגיאה בשימוש במכשירים ביומטריה"
 }

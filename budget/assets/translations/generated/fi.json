@@ -456,7 +456,7 @@
   "an-error-occured": "Tapahtui virhe",
   "more": "Lisää",
   "syncing-failed": "Synkronointi epäonnistui",
-  "sync-fail-reason": "Sopimaton tietokantakaavioversiot",
+  "sync-fail-reason": "Epäsuhtata tietokantamallikerroksia",
   "feedback-shared": "Jaettu palaute!",
   "thank-you": "Kiitos!",
   "email-optional": "Sähköposti (valinnainen)",
@@ -499,5 +499,10 @@
   "total-spent-example": "Esimerkki: 25 käytettyä 100: sta",
   "total-remaining-example": "Esimerkki: 75 vasemmalla 100: sta",
   "importing-loading": "Tuo ...",
-  "successfully-imported": "Tuonti menestyksekkäästi"
+  "successfully-imported": "Tuonti onnistuneesti",
+  "please-restart-the-application": "Käynnistä sovellus uudelleen",
+  "biometrics-disabled": "Biometriset tiedot poistettu käytöstä",
+  "biometrics-disabled-description": "Napauta tätä, jotta biometriset tiedot otetaan käyttöön asetussivulla ja yritä uudelleen",
+  "biometrics-error": "Biometrinen virhe",
+  "biometrics-error-description": "Laitteiden biometriset tiedot olivat virhe"
 }

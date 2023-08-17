@@ -476,7 +476,7 @@
   "date-format-note": "ไม่จำเป็นหาก CSV ใช้การจัดรูปแบบวันที่ที่เหมาะสม",
   "current-wallet": "กระเป๋าเงินปัจจุบัน",
   "none": "ไม่มี",
-  "one-coffee-a-month": "แค่กาแฟเพียงหนึ่งเดือน!",
+  "one-coffee-a-month": "แค่กาแฟหนึ่งครั้งต่อเดือน!",
   "error-getting-products": "ข้อผิดพลาดในการรับสินค้า",
   "error-getting-products-description": "มีข้อผิดพลาดที่เชื่อมต่อกับ App Store กรุณาลองใหม่อีกครั้งในภายหลัง.",
   "error-processing-order": "มีข้อผิดพลาดในการประมวลผลการซื้อของคุณ กรุณาลองอีกครั้ง.",
@@ -499,5 +499,10 @@
   "total-spent-example": "ตัวอย่าง: 25 ใช้ 100",
   "total-remaining-example": "ตัวอย่าง: 75 ซ้าย 100",
   "importing-loading": "นำเข้า ...",
-  "successfully-imported": "นำเข้าสำเร็จ"
+  "successfully-imported": "นำเข้าสำเร็จ",
+  "please-restart-the-application": "โปรดรีสตาร์ทใบสมัคร",
+  "biometrics-disabled": "Biometrics ปิดใช้งาน",
+  "biometrics-disabled-description": "แตะที่นี่เพื่อเปิดใช้งาน Biometrics ในหน้าการตั้งค่าและลองอีกครั้ง",
+  "biometrics-error": "ข้อผิดพลาดทางชีวภาพ",
+  "biometrics-error-description": "มีข้อผิดพลาดโดยใช้อุปกรณ์ชีวภาพ"
 }

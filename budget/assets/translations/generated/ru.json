@@ -432,7 +432,7 @@
   "delete-budget-added-warning": "Транзакции, добавленные к этому бюджету, больше не будут связаны с этим бюджетом. Они не будут удалены.",
   "removed-from-budget": "Удалено из бюджета",
   "pinned-to-homepage": "Прикреплен на домашней странице",
-  "unpinned-to-homepage": "Непондент с домашней страницы",
+  "unpinned-to-homepage": "Непонтируется с домашней страницы",
   "expenses-only": "Только расходы",
   "expenses-only-description": "Только расходы могут быть добавлены в бюджет",
   "delete-category-question": "Удалить категорию?",
@@ -499,5 +499,10 @@
   "total-spent-example": "Пример: 25 потрачено по 100",
   "total-remaining-example": "Пример: 75 слева от 100",
   "importing-loading": "Импорт ...",
-  "successfully-imported": "Успешно импортируется"
+  "successfully-imported": "Успешно импортируется",
+  "please-restart-the-application": "Пожалуйста, перезапустите заявку",
+  "biometrics-disabled": "Биометрия отключена",
+  "biometrics-disabled-description": "Нажмите здесь, чтобы включить биометрию на странице настроек и попробуйте еще раз",
+  "biometrics-error": "Ошибка биометрии",
+  "biometrics-error-description": "Была ошибка с использованием биометрии устройств"
 }

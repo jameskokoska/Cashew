@@ -408,7 +408,7 @@
   "all-time": "تمام وقت",
   "icon-suggestion-details": "آپ چاہتے ہیں کوئی آئیکن نہیں مل سکتا؟ کچھ تجویز کریں اور انہیں شامل کیا جاسکتا ہے!",
   "suggestion": "مشورہ",
-  "icon-suggestion-privacy": "صرف مشورے اور تاریخ کا اشتراک کیا جائے گا۔",
+  "icon-suggestion-privacy": "صرف تجویز اور تاریخ ہی شیئر کی جائے گی۔",
   "suggest-icon": "آئیکن تجویز کریں",
   "preview-demo": "پیش نظارہ ڈیمو",
   "preview-demo-description": "تصادفی طور پر تیار کردہ نمونہ ڈیٹا کا استعمال کرتے ہوئے ایپ کے انٹرفیس اور خصوصیات کا دورہ کریں۔ جب بھی آپ چاہیں پیش نظارہ سے باہر نکلیں۔",
@@ -428,7 +428,7 @@
   "changed-wallet": "بٹوے کو تبدیل کیا",
   "added-to-budget": "بجٹ میں شامل کیا گیا",
   "no-addable-budgets": "لین دین کو شامل کرنے کے لئے کوئی بجٹ نہیں ہے",
-  "create-addable-budget": "'شامل' بجٹ بنائیں",
+  "create-addable-budget": "'صرف شامل' بجٹ بنائیں",
   "delete-budget-added-warning": "اس بجٹ میں شامل لین دین کو اب اس بجٹ سے منسلک نہیں کیا جائے گا۔ انہیں حذف نہیں کیا جائے گا۔",
   "removed-from-budget": "بجٹ سے ہٹا دیا گیا",
   "pinned-to-homepage": "ہوم پیج پر پن کیا گیا",
@@ -499,5 +499,10 @@
   "total-spent-example": "مثال کے طور پر: 100 کا 25 خرچ",
   "total-remaining-example": "مثال: 100 کے 75 بائیں",
   "importing-loading": "درآمد ...",
-  "successfully-imported": "کامیابی کے ساتھ درآمد"
+  "successfully-imported": "کامیابی کے ساتھ درآمد",
+  "please-restart-the-application": "براہ کرم درخواست کو دوبارہ شروع کریں",
+  "biometrics-disabled": "بایومیٹرکس غیر فعال",
+  "biometrics-disabled-description": "ترتیبات کے صفحے میں بائیو میٹرکس کو فعال کرنے کے لئے یہاں ٹیپ کریں اور دوبارہ کوشش کریں",
+  "biometrics-error": "بایومیٹرکس کی خرابی",
+  "biometrics-error-description": "ڈیوائسز بائیو میٹرکس کا استعمال کرتے ہوئے ایک غلطی تھی"
 }

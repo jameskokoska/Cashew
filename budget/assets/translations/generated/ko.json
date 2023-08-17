@@ -499,5 +499,10 @@
   "total-spent-example": "예 : 100을 25로 소비했습니다",
   "total-remaining-example": "예 : 100의 남은 75",
   "importing-loading": "수입 ...",
-  "successfully-imported": "성공적으로 가져 왔습니다"
+  "successfully-imported": "성공적으로 가져 왔습니다",
+  "please-restart-the-application": "신청서를 다시 시작하십시오",
+  "biometrics-disabled": "생체 인식이 비활성화되었습니다",
+  "biometrics-disabled-description": "설정 페이지에서 생체 인식을 활성화하려면 여기를 탭하고 다시 시도하십시오.",
+  "biometrics-error": "생체 인식 오류",
+  "biometrics-error-description": "장치 생체 인식을 사용하는 오류가있었습니다"
 }

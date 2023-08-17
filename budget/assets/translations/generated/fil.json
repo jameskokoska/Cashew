@@ -422,7 +422,7 @@
   "duplicate": "Kopyahin",
   "delete-transactions": "Tanggalin ang mga transaksyon",
   "change-wallet": "Baguhin ang pitaka",
-  "add-to-budget": "Idagdag sa Budget",
+  "add-to-budget": "Idagdag sa badyet",
   "select-wallet": "Piliin ang Wallet",
   "move-to-other-wallet-button": "Ilipat ang mga transaksyon sa isa pang pitaka at tanggalin",
   "changed-wallet": "Binago ang pitaka",
@@ -456,7 +456,7 @@
   "an-error-occured": "May naganap na error",
   "more": "Higit pa",
   "syncing-failed": "Nabigo ang pag -sync",
-  "sync-fail-reason": "Mga bersyon ng Mismatching Database Schema",
+  "sync-fail-reason": "Mga bersyon ng Schema ng Mismatching Database",
   "feedback-shared": "Ibinahagi ang feedback!",
   "thank-you": "Salamat!",
   "email-optional": "Email (Opsyonal)",
@@ -499,5 +499,10 @@
   "total-spent-example": "Halimbawa: 25 na ginugol ng 100",
   "total-remaining-example": "Halimbawa: 75 Kaliwa ng 100",
   "importing-loading": "Pag -import ...",
-  "successfully-imported": "Matagumpay na na -import"
+  "successfully-imported": "Matagumpay na na -import",
+  "please-restart-the-application": "Mangyaring i -restart ang application",
+  "biometrics-disabled": "Hindi pinagana ang Biometrics",
+  "biometrics-disabled-description": "Tapikin dito upang paganahin ang biometrics sa pahina ng mga setting at subukang muli",
+  "biometrics-error": "Error sa biometrics",
+  "biometrics-error-description": "Nagkaroon ng isang error gamit ang mga aparato ng biometrics"
 }

@@ -423,7 +423,7 @@
   "delete-transactions": "व्यवहार हटवा",
   "change-wallet": "पाकीट बदला",
   "add-to-budget": "बजेटमध्ये जोडा",
-  "select-wallet": "पाकीट निवडा",
+  "select-wallet": "वॉलेट निवडा",
   "move-to-other-wallet-button": "दुसर्‍या पाकीटात व्यवहार हलवा आणि हटवा",
   "changed-wallet": "पाकीट बदलले",
   "added-to-budget": "अर्थसंकल्पात जोडले",
@@ -499,5 +499,10 @@
   "total-spent-example": "उदाहरणः 100 चा 25 खर्च",
   "total-remaining-example": "उदाहरणः 100 चे 75 डावे",
   "importing-loading": "आयात करीत आहे ...",
-  "successfully-imported": "यशस्वीरित्या आयात केले"
+  "successfully-imported": "यशस्वीरित्या आयात केले",
+  "please-restart-the-application": "कृपया अर्ज पुन्हा सुरू करा",
+  "biometrics-disabled": "बायोमेट्रिक्स अक्षम",
+  "biometrics-disabled-description": "सेटिंग्ज पृष्ठामध्ये बायोमेट्रिक्स सक्षम करण्यासाठी येथे टॅप करा आणि पुन्हा प्रयत्न करा",
+  "biometrics-error": "बायोमेट्रिक्स त्रुटी",
+  "biometrics-error-description": "बायोमेट्रिक्स डिव्हाइस वापरुन एक त्रुटी आली"
 }

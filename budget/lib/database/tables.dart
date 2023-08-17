@@ -3826,8 +3826,7 @@ class FinanceDatabase extends _$FinanceDatabase {
     final totalCount = transactions.transactionPk.count();
     final query = selectOnly(transactions)
       ..addColumns([totalCount])
-      ..where(
-          transactions.categoryFk.equals(categoryPk));
+      ..where(transactions.categoryFk.equals(categoryPk));
     return query.map((row) => row.read(totalCount)).watch();
   }
 

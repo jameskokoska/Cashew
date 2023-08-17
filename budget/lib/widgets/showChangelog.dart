@@ -10,6 +10,9 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    < 3.9.4
+    Biometric setting error container
+    Translations
     < 3.9.3
     Connecting to store error dark text and tap to reload store
     Removed re-snapping bottom sheet when entering amount

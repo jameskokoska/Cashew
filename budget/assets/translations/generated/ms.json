@@ -464,7 +464,7 @@
   "backup-created": "Sandaran dibuat",
   "delete-sync-backup-warning": "Untuk mengelakkan isu penyegerakan antara pelanggan, adalah idea yang baik untuk menyegerakkan semua peranti aktif lain sebelum memadam.",
   "development-team": "Pasukan Pembangunan",
-  "settings-and-customization": "Tetapan dan Penyesuaian",
+  "settings-and-customization": "Tetapan dan penyesuaian",
   "assign-columns": "Berikan lajur",
   "date": "Tarikh",
   "amount": "Jumlah",
@@ -499,5 +499,10 @@
   "total-spent-example": "Contoh: 25 dibelanjakan sebanyak 100",
   "total-remaining-example": "Contoh: 75 kiri 100",
   "importing-loading": "Mengimport ...",
-  "successfully-imported": "Berjaya diimport"
+  "successfully-imported": "Berjaya diimport",
+  "please-restart-the-application": "Sila mulakan semula permohonan",
+  "biometrics-disabled": "Biometrik dilumpuhkan",
+  "biometrics-disabled-description": "Ketik di sini untuk membolehkan biometrik di halaman tetapan dan cuba lagi",
+  "biometrics-error": "Kesalahan biometrik",
+  "biometrics-error-description": "Terdapat ralat menggunakan biometrik peranti"
 }

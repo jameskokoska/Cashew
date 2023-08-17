@@ -434,7 +434,7 @@
   "pinned-to-homepage": "Disematkan ke beranda",
   "unpinned-to-homepage": "Dibuka dari beranda",
   "expenses-only": "Hanya pengeluaran",
-  "expenses-only-description": "Hanya biaya yang dapat ditambahkan ke anggaran",
+  "expenses-only-description": "Hanya pengeluaran yang dapat ditambahkan ke anggaran",
   "delete-category-question": "Hapus kategori?",
   "delete-category-question-description": "Ini akan menghapus semua transaksi yang terkait dengan kategori ini.",
   "delete-all-transactions-question": "Hapus semua transaksi?",
@@ -499,5 +499,10 @@
   "total-spent-example": "Contoh: 25 dihabiskan 100",
   "total-remaining-example": "Contoh: 75 tersisa dari 100",
   "importing-loading": "Pengimporan...",
-  "successfully-imported": "Berhasil diimpor"
+  "successfully-imported": "Berhasil diimpor",
+  "please-restart-the-application": "Harap mulai ulang aplikasi",
+  "biometrics-disabled": "Biometrik dinonaktifkan",
+  "biometrics-disabled-description": "Ketuk di sini untuk mengaktifkan biometrik di halaman Pengaturan dan coba lagi",
+  "biometrics-error": "Kesalahan biometrik",
+  "biometrics-error-description": "Ada kesalahan menggunakan biometrik perangkat"
 }

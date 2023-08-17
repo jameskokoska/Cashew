@@ -465,7 +465,7 @@
   "delete-sync-backup-warning": "Pour éviter les problèmes de synchronisation entre les clients, c'est une bonne idée de synchroniser tous les autres appareils actifs avant la suppression.",
   "development-team": "Équipe de développement",
   "settings-and-customization": "Paramètres et personnalisation",
-  "assign-columns": "Attribuer des colonnes",
+  "assign-columns": "Affecter les colonnes",
   "date": "Date",
   "amount": "Montant",
   "title": "Titre",
@@ -473,7 +473,7 @@
   "wallet": "Portefeuille",
   "date-format": "Format de date",
   "example": "Exemple:",
-  "date-format-note": "Pas nécessaire si le CSV utilise la mise en forme de date appropriée",
+  "date-format-note": "Pas nécessaire si le CSV utilise une mise en forme de date appropriée",
   "current-wallet": "Portefeuille actuel",
   "none": "Aucun",
   "one-coffee-a-month": "Juste un café par mois!",
@@ -499,5 +499,10 @@
   "total-spent-example": "Exemple: 25 dépensés de 100",
   "total-remaining-example": "Exemple: 75 à gauche de 100",
   "importing-loading": "Importation ...",
-  "successfully-imported": "Importé avec succès"
+  "successfully-imported": "Importé avec succès",
+  "please-restart-the-application": "Veuillez redémarrer la demande",
+  "biometrics-disabled": "Biométrie handicapée",
+  "biometrics-disabled-description": "Appuyez ici pour activer la biométrie dans la page des paramètres et réessayer",
+  "biometrics-error": "Erreur de biométrie",
+  "biometrics-error-description": "Il y a eu une erreur en utilisant les appareils biométriques"
 }

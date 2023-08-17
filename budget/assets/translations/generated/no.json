@@ -498,6 +498,11 @@
   "total-remaining": "Totalt gjenværende",
   "total-spent-example": "Eksempel: 25 brukt på 100",
   "total-remaining-example": "Eksempel: 75 venstre på 100",
-  "importing-loading": "Import ...",
-  "successfully-imported": "Vellykket importert"
+  "importing-loading": "Importere ...",
+  "successfully-imported": "Vellykket importert",
+  "please-restart-the-application": "Vennligst start søknaden på nytt",
+  "biometrics-disabled": "Biometri deaktivert",
+  "biometrics-disabled-description": "Trykk her for å aktivere biometri på innstillingssiden og prøv igjen",
+  "biometrics-error": "Biometrifeil",
+  "biometrics-error-description": "Det var en feil ved bruk av enhetene biometri"
 }
