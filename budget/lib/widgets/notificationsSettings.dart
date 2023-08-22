@@ -153,8 +153,7 @@ class _UpcomingTransactionsNotificationsSettingsState
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(15),
                 child: StreamBuilder<List<Transaction>>(
-                  stream: database.watchAllUpcomingTransactions(
-                      startDate: null, endDate: null),
+                  stream: database.watchAllOverdueUpcomingTransactions(false),
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
                       return Column(

@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:budget/colors.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/struct/settings.dart';
@@ -11,11 +12,17 @@ class SlidingSelectorIncomeExpense extends StatelessWidget {
     required this.onSelected,
     this.alternateTheme = false,
     this.useHorizontalPaddingConstrained = true,
+    this.customPadding,
+    this.options,
+    this.initialIndex,
   }) : super(key: key);
 
   final Function(int) onSelected;
   final bool alternateTheme;
   final bool useHorizontalPaddingConstrained;
+  final EdgeInsets? customPadding;
+  final List<String>? options;
+  final int? initialIndex;
 
   @override
   Widget build(BuildContext context) {
@@ -31,11 +38,13 @@ class SlidingSelectorIncomeExpense extends StatelessWidget {
                 ? 0
                 : getHorizontalPaddingConstrained(context)),
         child: Padding(
-          padding: alternateTheme
-              ? const EdgeInsets.symmetric(horizontal: 20)
-              : const EdgeInsets.symmetric(horizontal: 13),
+          padding: customPadding ??
+              (alternateTheme
+                  ? const EdgeInsets.symmetric(horizontal: 20)
+                  : const EdgeInsets.symmetric(horizontal: 13)),
           child: DefaultTabController(
-            length: 3,
+            length: options != null ? options!.length : 3,
+            initialIndex: initialIndex ?? 1,
             child: SizedBox(
               height: alternateTheme ? 40 : 45,
               child: Material(
@@ -65,44 +74,68 @@ class SlidingSelectorIncomeExpense extends StatelessWidget {
                     ),
                     labelColor: getColor(context, "black"),
                     unselectedLabelColor: getColor(context, "textLight"),
-                    tabs: [
-                      Tab(
-                        child: Padding(
-                          padding: const EdgeInsets.only(top: 5.0),
-                          child: Text(
-                            "all".tr(),
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontFamily: 'Avenir',
+                    tabs: options == null
+                        ? [
+                            Tab(
+                              child: Padding(
+                                padding: const EdgeInsets.only(top: 5.0),
+                                child: AutoSizeText(
+                                  minFontSize: 11,
+                                  maxLines: 1,
+                                  "all".tr(),
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontFamily: 'Avenir',
+                                  ),
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                      ),
-                      Tab(
-                        child: Padding(
-                          padding: const EdgeInsets.only(top: 5.0),
-                          child: Text(
-                            "expense".tr(),
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontFamily: 'Avenir',
+                            Tab(
+                              child: Padding(
+                                padding: const EdgeInsets.only(top: 5.0),
+                                child: AutoSizeText(
+                                  minFontSize: 11,
+                                  maxLines: 1,
+                                  "expense".tr(),
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontFamily: 'Avenir',
+                                  ),
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                      ),
-                      Tab(
-                        child: Padding(
-                          padding: const EdgeInsets.only(top: 5.0),
-                          child: Text(
-                            "income".tr(),
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontFamily: 'Avenir',
+                            Tab(
+                              child: Padding(
+                                padding: const EdgeInsets.only(top: 5.0),
+                                child: AutoSizeText(
+                                  minFontSize: 11,
+                                  maxLines: 1,
+                                  "income".tr(),
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontFamily: 'Avenir',
+                                  ),
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                      ),
-                    ],
+                          ]
+                        : [
+                            for (String option in options!)
+                              Tab(
+                                child: Padding(
+                                  padding: const EdgeInsets.only(top: 5.0),
+                                  child: AutoSizeText(
+                                    minFontSize: 11,
+                                    maxLines: 1,
+                                    option.tr(),
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      fontFamily: 'Avenir',
+                                    ),
+                                  ),
+                                ),
+                              ),
+                          ],
                   ),
                 ),
               ),

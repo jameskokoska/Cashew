@@ -34,7 +34,7 @@ class HomePageCreditDebts extends StatelessWidget {
                       ),
                       textColor: getColor(context, "unPaidUpcoming"),
                       transactionsAmountStream:
-                          database.watchCountOfCreditDebt(true),
+                          database.watchCountOfCreditDebt(true, null),
                       openPage: CreditDebtTransactions(isCredit: true),
                     ),
                   ),
@@ -48,7 +48,7 @@ class HomePageCreditDebts extends StatelessWidget {
                       ),
                       textColor: getColor(context, "unPaidOverdue"),
                       transactionsAmountStream:
-                          database.watchCountOfCreditDebt(false),
+                          database.watchCountOfCreditDebt(false, null),
                       openPage: CreditDebtTransactions(isCredit: false),
                     ),
                   ),

@@ -434,7 +434,7 @@
   "pinned-to-homepage": "Disematkan ke beranda",
   "unpinned-to-homepage": "Dibuka dari beranda",
   "expenses-only": "Hanya pengeluaran",
-  "expenses-only-description": "Hanya biaya yang dapat ditambahkan ke anggaran",
+  "expenses-only-description": "Hanya pengeluaran yang dapat ditambahkan ke anggaran",
   "delete-category-question": "Hapus kategori?",
   "delete-category-question-description": "Ini akan menghapus semua transaksi yang terkait dengan kategori ini.",
   "delete-all-transactions-question": "Hapus semua transaksi?",
@@ -476,7 +476,6 @@
   "date-format-note": "Tidak diperlukan jika CSV menggunakan pemformatan tanggal yang tepat",
   "current-wallet": "Dompet saat ini",
   "none": "Tidak ada",
-  "one-coffee-a-month": "Hanya satu kopi sebulan!",
   "error-getting-products": "Kesalahan mendapatkan produk",
   "error-getting-products-description": "Ada kesalahan yang menghubungkan ke App Store. Silakan coba lagi nanti.",
   "error-processing-order": "Ada kesalahan yang memproses pembelian Anda. Tolong coba lagi.",
@@ -508,8 +507,14 @@
   "from-the-developer": "Dari pengembang",
   "developer-message-1": "Kesejahteraan finansial penting bagi kita semua, dan kita di sini untuk mendukung perjalanan Anda menuju manajemen uang yang lebih baik. Itu sebabnya kami menawarkan fitur premium kepada Anda tanpa biaya. Popup premium akan muncul, tetapi Anda dapat mengabaikannya untuk mengakses fitur yang terkunci",
   "developer-message-1-1": "(tanpa menunggu juga!)",
-  "developer-message-2": "Namun, jika memungkinkan, pertimbangkan untuk mendukung pengembangan. Dukungan Anda memainkan peran penting dalam pertumbuhan aplikasi ini di masa depan. Terima kasih 😄",
+  "developer-message-2": "Namun, jika memungkinkan, pertimbangkan untuk mendukung pengembangan. Hanya satu kopi ☕ sebulan, dukungan Anda memainkan peran penting dalam pertumbuhan aplikasi di masa depan ini. Terima kasih 😄",
   "support": "Mendukung",
   "unlock-for-free": "Buka kunci gratis",
-  "no-free-stuff": "Tidak, saya tidak ingin barang gratis"
+  "no-free-stuff": "Tidak, saya tidak ingin barang gratis",
+  "search-transactions-placeholder": "Cari transaksi ...",
+  "scheduled": "Dijadwalkan",
+  "loans": "Pinjaman",
+  "add-credit": "Tambahkan kredit",
+  "add-debt": "Tambahkan hutang",
+  "add-upcoming": "Tambahkan mendatang"
 }

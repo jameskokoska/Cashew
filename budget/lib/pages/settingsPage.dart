@@ -212,53 +212,27 @@ class MorePages extends StatelessWidget {
           hasSideNavigation == false
               ? SizedBox.shrink()
               : Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
                     Expanded(
-                      flex: 1,
                       child: SettingsContainerOpenPage(
-                        isOutlinedColumn: true,
                         openPage: UpcomingOverdueTransactions(
-                            overdueTransactions: true),
-                        title: "overdue".tr(),
-                        icon: Icons.date_range_rounded,
-                        isOutlined: true,
-                      ),
-                    ),
-                    Expanded(
-                      flex: 1,
-                      child: SettingsContainerOpenPage(
-                        isOutlinedColumn: true,
-                        openPage: UpcomingOverdueTransactions(
-                            overdueTransactions: false),
-                        title: "upcoming".tr(),
+                            overdueTransactions: null),
+                        title: "scheduled".tr(),
                         icon: getTransactionTypeIcon(
                             TransactionSpecialType.upcoming),
                         isOutlined: true,
                       ),
                     ),
                     Expanded(
-                      flex: 1,
                       child: SettingsContainerOpenPage(
-                        isOutlinedColumn: true,
-                        openPage: CreditDebtTransactions(isCredit: true),
-                        title: "lent".tr(),
+                        openPage: CreditDebtTransactions(isCredit: null),
+                        title: "loans".tr(),
                         icon: getTransactionTypeIcon(
                             TransactionSpecialType.credit),
                         isOutlined: true,
                       ),
                     ),
-                    Expanded(
-                      flex: 1,
-                      child: SettingsContainerOpenPage(
-                        isOutlinedColumn: true,
-                        openPage: CreditDebtTransactions(isCredit: false),
-                        title: "borrowed".tr(),
-                        icon:
-                            getTransactionTypeIcon(TransactionSpecialType.debt),
-                        isOutlined: true,
-                      ),
-                    )
                   ],
                 ),
           hasSideNavigation == false

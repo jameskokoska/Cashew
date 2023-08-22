@@ -4,25 +4,44 @@ import 'package:budget/functions.dart';
 import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/subscriptionsPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
+import 'package:budget/widgets/animatedExpanded.dart';
+import 'package:budget/widgets/button.dart';
+import 'package:budget/widgets/fab.dart';
+import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/widgets/noResults.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/selectedTransactionsActionBar.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
+import 'package:budget/widgets/slidingSelectorIncomeExpense.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntry/transactionEntry.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:implicitly_animated_reorderable_list/implicitly_animated_reorderable_list.dart';
+import 'package:implicitly_animated_reorderable_list/transitions.dart';
 import 'package:provider/provider.dart';
 import 'package:budget/widgets/countNumber.dart';
+import 'package:budget/widgets/textInput.dart';
 
-class UpcomingOverdueTransactions extends StatelessWidget {
+class UpcomingOverdueTransactions extends StatefulWidget {
   const UpcomingOverdueTransactions(
       {required this.overdueTransactions, super.key});
-  final bool overdueTransactions;
+  final bool? overdueTransactions;
+
+  @override
+  State<UpcomingOverdueTransactions> createState() =>
+      _UpcomingOverdueTransactionsState();
+}
+
+class _UpcomingOverdueTransactionsState
+    extends State<UpcomingOverdueTransactions> {
+  late bool? overdueTransactions = widget.overdueTransactions;
+  String? searchValue;
+  FocusNode _searchFocusNode = FocusNode();
 
   @override
   Widget build(BuildContext context) {
-    String pageId = overdueTransactions ? "Overdue" : "Upcoming";
+    String pageId = "OverdueUpcoming";
     return WillPopScope(
       onWillPop: () async {
         if ((globalSelectedID.value[pageId] ?? []).length > 0) {
@@ -36,72 +55,174 @@ class UpcomingOverdueTransactions extends StatelessWidget {
       child: Stack(
         children: [
           PageFramework(
+            resizeToAvoidBottomInset: true,
+            floatingActionButton: AnimateFABDelayed(
+              enabled: overdueTransactions == null,
+              fab: Padding(
+                padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).viewPadding.bottom),
+                child: FAB(
+                  tooltip: "add-upcoming".tr(),
+                  openPage: AddTransactionPage(
+                    selectedType: TransactionSpecialType.upcoming,
+                    routesToPopAfterDelete: RoutesToPopAfterDelete.None,
+                  ),
+                ),
+              ),
+            ),
             listID: pageId,
-            title: overdueTransactions ? "overdue".tr() : "upcoming".tr(),
+            title: "scheduled".tr(),
             dragDownToDismiss: true,
             slivers: [
               SliverToBoxAdapter(
                   child: CenteredAmountAndNumTransactions(
-                numTransactionsStream: overdueTransactions
-                    ? database.watchCountOfOverdue()
-                    : database.watchCountOfUpcoming(),
+                numTransactionsStream: database.watchCountOfUpcomingOverdue(
+                    overdueTransactions,
+                    searchString: searchValue),
                 totalAmountStream: database.watchTotalOfUpcomingOverdue(
                   Provider.of<AllWallets>(context),
                   overdueTransactions,
+                  searchString: searchValue,
                 ),
-                textColor: overdueTransactions
-                    ? getColor(context, "unPaidOverdue")
-                    : getColor(context, "unPaidUpcoming"),
+                textColor: overdueTransactions == null
+                    ? getColor(context, "black")
+                    : overdueTransactions == true
+                        ? getColor(context, "unPaidOverdue")
+                        : getColor(context, "unPaidUpcoming"),
               )),
               SliverToBoxAdapter(
-                child: SizedBox(height: 20),
+                child: Row(
+                  children: [
+                    SizedBox(width: 13),
+                    Flexible(
+                      child: AnimatedSize(
+                        clipBehavior: Clip.none,
+                        duration: Duration(milliseconds: 500),
+                        child: SlidingSelectorIncomeExpense(
+                          initialIndex: overdueTransactions == null
+                              ? 0
+                              : overdueTransactions == false
+                                  ? 1
+                                  : 2,
+                          onSelected: (int index) {
+                            if (index == 1)
+                              overdueTransactions = null;
+                            else if (index == 2)
+                              overdueTransactions = false;
+                            else if (index == 3) overdueTransactions = true;
+                            setState(() {});
+                          },
+                          options: ["all", "upcoming", "overdue"],
+                          customPadding: EdgeInsets.zero,
+                        ),
+                      ),
+                    ),
+                    AnimatedSizeSwitcher(
+                      child: searchValue == null
+                          ? Padding(
+                              padding: const EdgeInsets.only(left: 7.0),
+                              child: ButtonIcon(
+                                key: ValueKey(1),
+                                onTap: () {
+                                  setState(() {
+                                    searchValue = "";
+                                  });
+                                  _searchFocusNode.requestFocus();
+                                },
+                                icon: Icons.search,
+                              ),
+                            )
+                          : Container(
+                              key: ValueKey(2),
+                            ),
+                    ),
+                    SizedBox(width: 13),
+                  ],
+                ),
+              ),
+              SliverToBoxAdapter(
+                child: AnimatedExpanded(
+                  expand: searchValue != null,
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 8.0, top: 8),
+                    child: TextInput(
+                      labelText: "search-transactions-placeholder".tr(),
+                      icon: Icons.search_rounded,
+                      focusNode: _searchFocusNode,
+                      onSubmitted: (value) {
+                        setState(() {
+                          searchValue = value == "" ? null : value;
+                        });
+                      },
+                      onChanged: (value) {
+                        setState(() {
+                          searchValue = value == "" ? null : value;
+                        });
+                      },
+                      autoFocus: false,
+                    ),
+                  ),
+                ),
+              ),
+              SliverToBoxAdapter(
+                child: SizedBox(height: 10),
               ),
               StreamBuilder<List<Transaction>>(
-                stream: overdueTransactions
-                    ? database.watchAllOverdueTransactions()
-                    : database.watchAllUpcomingTransactions(),
+                stream: database.watchAllOverdueUpcomingTransactions(
+                    overdueTransactions,
+                    searchString: searchValue),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     if (snapshot.data!.length <= 0) {
                       return SliverToBoxAdapter(
                         child: Center(
-                          child: NoResults(
-                            message: "No " +
-                                (overdueTransactions ? "overdue" : "upcoming") +
-                                " transactions.",
-                          ),
+                          child:
+                              NoResults(message: "no-transactions-found".tr()),
                         ),
                       );
                     }
-                    return SliverList(
-                      delegate: SliverChildBuilderDelegate(
-                        (BuildContext context, int index) {
-                          Transaction transaction = snapshot.data![index];
-                          return Column(
+                    return SliverImplicitlyAnimatedList<Transaction>(
+                      items: snapshot.data!,
+                      areItemsTheSame: (a, b) =>
+                          a.transactionPk == b.transactionPk,
+                      insertDuration: Duration(milliseconds: 500),
+                      removeDuration: Duration(milliseconds: 500),
+                      updateDuration: Duration(milliseconds: 500),
+                      itemBuilder: (BuildContext context,
+                          Animation<double> animation,
+                          Transaction item,
+                          int index) {
+                        return SizeFadeTransition(
+                          sizeFraction: 0.7,
+                          curve: Curves.easeInOut,
+                          animation: animation,
+                          child: Column(
+                            key: ValueKey(item.transactionPk),
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              UpcomingTransactionDateHeader(
-                                  transaction: transaction),
+                              UpcomingTransactionDateHeader(transaction: item),
                               TransactionEntry(
                                 openPage: AddTransactionPage(
-                                  transaction: transaction,
+                                  transaction: item,
                                   routesToPopAfterDelete:
                                       RoutesToPopAfterDelete.One,
                                 ),
-                                transaction: transaction,
+                                transaction: item,
                                 listID: pageId,
                               ),
                               SizedBox(height: 12),
                             ],
-                          );
-                        },
-                        childCount: snapshot.data?.length,
-                      ),
+                          ),
+                        );
+                      },
                     );
                   } else {
                     return SliverToBoxAdapter();
                   }
                 },
+              ),
+              SliverToBoxAdapter(
+                child: SizedBox(height: 75),
               ),
             ],
           ),
@@ -173,7 +294,7 @@ class CenteredAmountAndNumTransactions extends StatelessWidget {
             );
           },
         ),
-        SizedBox(height: 15),
+        SizedBox(height: 25),
       ],
     );
   }

@@ -416,7 +416,7 @@
   "preview-demo-warning": "Preview-esittely on tällä hetkellä aktiivinen, ja automaattisesti tuotettua tietoa käytetään. Sovellusta ei suositella käyttämään demotilassa, koska se voi johtaa tietojen menetykseen. Voit poistaa luodut tiedot ja poistua esikatselun esittelystä napauttamalla tätä.",
   "exit-demo": "Poistua esittelystä",
   "not-available-in-preview-demo": "Ei ole saatavana esikatselun esittelyssä",
-  "not-available-in-preview-demo-description": "Poista esikatselun esittelytila ​​käytöstä käyttääksesi tätä ominaisuutta.",
+  "not-available-in-preview-demo-description": "Poista esikatselu -esittelytila ​​käytöstä tämän ominaisuuden käyttämiseen.",
   "copied": "Kopioitu",
   "created-copy": "Luotu kopio",
   "duplicate": "Kopioida",
@@ -476,7 +476,6 @@
   "date-format-note": "Ei tarvita, jos CSV käyttää asianmukaista päivämäärän muotoilua",
   "current-wallet": "Nykyinen lompakko",
   "none": "Ei mitään",
-  "one-coffee-a-month": "Vain yksi kahvi kuukaudessa!",
   "error-getting-products": "Virhe saada tuotteita",
   "error-getting-products-description": "App Storeen yhdistäminen oli virhe. Yritä uudelleen myöhemmin.",
   "error-processing-order": "Ostosi käsitteli virhettä. Yritä uudelleen.",
@@ -508,8 +507,14 @@
   "from-the-developer": "Kehittäjältä",
   "developer-message-1": "Taloudelliset hyvinvointia koskevat asiat meille kaikille, ja olemme täällä tukemassa matkaa kohti parempaa rahanhallintaa. Siksi tarjoamme sinulle premium -ominaisuuksia ilmaiseksi. Premium -ponnahdusikkuna tulee näkyviin, mutta voit hylätä sen päästäksesi lukittuun ominaisuuteen",
   "developer-message-1-1": "(Myös odottamatta!)",
-  "developer-message-2": "Harkitse mahdollisuuksien mukaan kehityksen tukemista. Tukesi on ratkaiseva rooli tämän sovelluksen tulevassa kasvussa. Kiitos 😄",
+  "developer-message-2": "Harkitse mahdollisuuksien mukaan kehityksen tukemista. Vain yhdellä kahvilla ☕ kuukaudessa tuella on ratkaiseva rooli tämän sovelluksen tulevassa kasvussa. Kiitos 😄",
   "support": "Tuki",
   "unlock-for-free": "Avata ilmaiseksi",
-  "no-free-stuff": "Ei, en halua ilmaisia ​​juttuja"
+  "no-free-stuff": "Ei, en halua ilmaisia ​​juttuja",
+  "search-transactions-placeholder": "Hakutapahtumat ...",
+  "scheduled": "Suunniteltu",
+  "loans": "Lainat",
+  "add-credit": "Lisätä luottoa",
+  "add-debt": "Lisätä velkaa",
+  "add-upcoming": "Tulla tulossa"
 }

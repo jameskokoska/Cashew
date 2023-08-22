@@ -94,7 +94,7 @@ class PremiumPage extends StatelessWidget {
                               SizedBox(
                                   height: 15 +
                                       MediaQuery.of(context).size.height *
-                                          0.024),
+                                          0.028),
                               Padding(
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 8.0),
@@ -133,7 +133,7 @@ class PremiumPage extends StatelessWidget {
                               SizedBox(
                                   height: 13 +
                                       MediaQuery.of(context).size.height *
-                                          0.022),
+                                          0.028),
                               Products(
                                 key: purchasesStateKey,
                                 popRouteWithPurchase: popRouteWithPurchase,
@@ -144,7 +144,7 @@ class PremiumPage extends StatelessWidget {
                           canDismiss
                               ? SizedBox.shrink()
                               : Opacity(
-                                  opacity: 0.5,
+                                  opacity: 0.7,
                                   child: Padding(
                                     padding: const EdgeInsets.only(top: 4),
                                     child: Tappable(
@@ -164,10 +164,10 @@ class PremiumPage extends StatelessWidget {
                                       borderRadius: 15,
                                       child: Padding(
                                         padding: const EdgeInsets.symmetric(
-                                            horizontal: 12, vertical: 8),
+                                            horizontal: 13, vertical: 9),
                                         child: TextFont(
                                           text: "continue-for-free".tr(),
-                                          fontSize: 13,
+                                          fontSize: 13.5,
                                           textColor: Colors.white,
                                         ),
                                       ),
@@ -255,7 +255,7 @@ class _FreePremiumMessageState extends State<FreePremiumMessage> {
             text: "developer-message-1".tr() +
                 (appStateSettings["premiumPopupFreeSeen"]
                     ? "."
-                    : "developer-message-1-1".tr())),
+                    : " " + "developer-message-1-1".tr())),
         SizedBox(height: 10),
         TextFont(
             maxLines: 80,
@@ -720,15 +720,6 @@ class ProductsState extends State<Products> {
                     constraints: BoxConstraints(maxWidth: 300),
                     child: Column(
                       children: [
-                        TextFont(
-                          text: "one-coffee-a-month".tr() + " " + "☕",
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          textColor: Colors.black.withOpacity(0.9),
-                          maxLines: 5,
-                          textAlign: TextAlign.center,
-                        ),
-                        SizedBox(height: 10),
                         ClipRRect(
                           borderRadius: BorderRadius.circular(20),
                           child: Column(

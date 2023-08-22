@@ -89,6 +89,7 @@ class TransactionEntryAmount extends StatelessWidget {
                       currencyKey: Provider.of<AllWallets>(context)
                           .indexedByPk[transaction.walletFk]
                           ?.currency,
+                      addCurrencyName: true,
                     ),
                     fontSize: 12,
                     textColor: transaction.paid

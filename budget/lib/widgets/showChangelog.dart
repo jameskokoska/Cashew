@@ -10,6 +10,10 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    < 3.9.6
+    New scheduled and loans pages with search
+    Added currency name in transaction entry when multiple currencies used
+    Cleaned up Cashew Pro screen
     < 3.9.5
     Premium popup dismissed after purchase
     Continue for free developer message
@@ -643,7 +647,7 @@ Future<void> showChangelog(context, {forceShow = false}) async {
     Fixed month selector media query width position considers side navbar
     Fixed stack order, side panel always on top
     Fixed offset in last synced time race condition
-    (need to track the time you last synced with that specific client e.g. if change made on mobile, web syncs now, wait 5 seconds, then movile syncs, - web thinks that it got that latest version from mobile already changes not here!)
+    (need to track the time you last synced with that specific client e.g. if change made on mobile, web syncs now, wait 5 seconds, then mobile syncs, - web thinks that it got that latest version from mobile already changes not here!)
     Links listed below notes in transaction entry
     Added time and date to sidebar on web
     Web no longer asks for gmail permissions
@@ -1021,7 +1025,7 @@ Future<void> showChangelog(context, {forceShow = false}) async {
     Can no longer enter NaN or Infinite transaction amounts
     Associated titles not auto created when empty string
     Extra white space removed from associated titles
-    Colors discard changes discrepencies fixed
+    Colors discard changes discrepancies fixed
     Selected color selected properly when editing
     Can tap snackbar messages for some actions
     Email scanning redone

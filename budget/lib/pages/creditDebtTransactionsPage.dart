@@ -2,13 +2,17 @@ import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/pages/addTransactionPage.dart';
+import 'package:budget/pages/upcomingOverdueTransactionsPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
+import 'package:budget/widgets/animatedExpanded.dart';
+import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/fab.dart';
 import 'package:budget/widgets/noResults.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/selectedTransactionsActionBar.dart';
 import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
+import 'package:budget/widgets/slidingSelectorIncomeExpense.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntry/transactionEntry.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -17,14 +21,24 @@ import 'package:provider/provider.dart';
 import 'package:budget/widgets/countNumber.dart';
 import 'package:implicitly_animated_reorderable_list/implicitly_animated_reorderable_list.dart';
 import 'package:implicitly_animated_reorderable_list/transitions.dart';
+import 'package:budget/widgets/textInput.dart';
 
-class CreditDebtTransactions extends StatelessWidget {
+class CreditDebtTransactions extends StatefulWidget {
   const CreditDebtTransactions({required this.isCredit, super.key});
-  final bool isCredit;
+  final bool? isCredit;
+
+  @override
+  State<CreditDebtTransactions> createState() => _CreditDebtTransactionsState();
+}
+
+class _CreditDebtTransactionsState extends State<CreditDebtTransactions> {
+  late bool? isCredit = widget.isCredit;
+  String? searchValue;
+  FocusNode _searchFocusNode = FocusNode();
 
   @override
   Widget build(BuildContext context) {
-    String pageId = isCredit ? "Credit" : "Debt";
+    String pageId = "CreditDebt";
     return WillPopScope(
       onWillPop: () async {
         if ((globalSelectedID.value[pageId] ?? []).length > 0) {
@@ -38,14 +52,17 @@ class CreditDebtTransactions extends StatelessWidget {
       child: Stack(
         children: [
           PageFramework(
+            resizeToAvoidBottomInset: true,
             floatingActionButton: AnimateFABDelayed(
+              enabled: isCredit != null,
               fab: Padding(
                 padding: EdgeInsets.only(
                     bottom: MediaQuery.of(context).viewPadding.bottom),
                 child: FAB(
-                  tooltip: isCredit ? "Add Credit" : "Add Debt",
+                  tooltip:
+                      isCredit == true ? "add-credit".tr() : "add-debt".tr(),
                   openPage: AddTransactionPage(
-                    selectedType: isCredit
+                    selectedType: isCredit == true
                         ? TransactionSpecialType.credit
                         : TransactionSpecialType.debt,
                     routesToPopAfterDelete: RoutesToPopAfterDelete.None,
@@ -54,83 +71,115 @@ class CreditDebtTransactions extends StatelessWidget {
               ),
             ),
             listID: pageId,
-            title: isCredit ? "lent".tr() : "borrowed".tr(),
+            title: "loans".tr(),
             dragDownToDismiss: true,
             slivers: [
               SliverToBoxAdapter(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 8.0),
+                  child: CenteredAmountAndNumTransactions(
+                    numTransactionsStream:
+                        database.watchCountOfCreditDebt(isCredit, searchValue),
+                    totalAmountStream: database.watchTotalOfCreditDebt(
+                      Provider.of<AllWallets>(context),
+                      isCredit,
+                      searchString: searchValue,
+                    ),
+                    textColor: isCredit == null
+                        ? getColor(context, "black")
+                        : isCredit == true
+                            ? getColor(context, "unPaidUpcoming")
+                            : getColor(context, "unPaidOverdue"),
+                  ),
+                ),
+              ),
+              SliverToBoxAdapter(
+                child: Row(
                   children: [
-                    SizedBox(height: 20),
-                    StreamBuilder<double?>(
-                      stream: database.watchTotalOfCreditDebt(
-                        Provider.of<AllWallets>(context),
-                        isCredit,
-                      ),
-                      builder: (context, snapshot) {
-                        return CountNumber(
-                          count:
-                              snapshot.hasData == false || snapshot.data == null
-                                  ? 0
-                                  : (snapshot.data ?? 0).abs(),
-                          duration: Duration(milliseconds: 700),
-                          initialCount: (0),
-                          textBuilder: (number) {
-                            return TextFont(
-                              text: convertToMoney(
-                                  Provider.of<AllWallets>(context), number,
-                                  finalNumber: snapshot.hasData == false ||
-                                          snapshot.data == null
-                                      ? 0
-                                      : (snapshot.data ?? 0).abs()),
-                              fontSize: 30,
-                              textColor: isCredit
-                                  ? getColor(context, "unPaidUpcoming")
-                                  : getColor(context, "unPaidOverdue"),
-                              fontWeight: FontWeight.bold,
-                            );
+                    SizedBox(width: 13),
+                    Flexible(
+                      child: AnimatedSize(
+                        clipBehavior: Clip.none,
+                        duration: Duration(milliseconds: 500),
+                        child: SlidingSelectorIncomeExpense(
+                          initialIndex: isCredit == null
+                              ? 0
+                              : isCredit == true
+                                  ? 1
+                                  : 2,
+                          onSelected: (int index) {
+                            if (index == 1)
+                              isCredit = null;
+                            else if (index == 2)
+                              isCredit = true;
+                            else if (index == 3) isCredit = false;
+                            setState(() {});
                           },
-                        );
-                      },
+                          options: ["all", "lent", "borrowed"],
+                          customPadding: EdgeInsets.zero,
+                        ),
+                      ),
                     ),
-                    SizedBox(height: 5),
-                    StreamBuilder<List<int?>>(
-                      stream: database.watchCountOfCreditDebt(isCredit),
-                      builder: (context, snapshot) {
-                        return TextFont(
-                          text: snapshot.hasData == false ||
-                                  snapshot.data![0] == null
-                              ? "/"
-                              : snapshot.data![0].toString() +
-                                  " " +
-                                  (snapshot.data![0] == 1
-                                      ? "transaction".tr().toLowerCase()
-                                      : "transactions".tr().toLowerCase()),
-                          fontSize: 16,
-                          textColor: getColor(context, "textLight"),
-                        );
-                      },
+                    AnimatedSizeSwitcher(
+                      child: searchValue == null
+                          ? Padding(
+                              padding: const EdgeInsets.only(left: 7.0),
+                              child: ButtonIcon(
+                                key: ValueKey(1),
+                                onTap: () {
+                                  setState(() {
+                                    searchValue = "";
+                                  });
+                                  _searchFocusNode.requestFocus();
+                                },
+                                icon: Icons.search,
+                              ),
+                            )
+                          : Container(
+                              key: ValueKey(2),
+                            ),
                     ),
-                    SizedBox(height: 15),
+                    SizedBox(width: 13),
                   ],
                 ),
               ),
               SliverToBoxAdapter(
-                child: SizedBox(height: 20),
+                child: AnimatedExpanded(
+                  expand: searchValue != null,
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 8.0, top: 8),
+                    child: TextInput(
+                      labelText: "search-transactions-placeholder".tr(),
+                      icon: Icons.search_rounded,
+                      focusNode: _searchFocusNode,
+                      onSubmitted: (value) {
+                        setState(() {
+                          searchValue = value == "" ? null : value;
+                        });
+                      },
+                      onChanged: (value) {
+                        setState(() {
+                          searchValue = value == "" ? null : value;
+                        });
+                      },
+                      autoFocus: false,
+                    ),
+                  ),
+                ),
+              ),
+              SliverToBoxAdapter(
+                child: SizedBox(height: 10),
               ),
               StreamBuilder<List<Transaction>>(
-                stream:
-                    database.watchAllCreditDebtTransactions(isCredit, false),
+                stream: database.watchAllCreditDebtTransactions(
+                    isCredit, searchValue),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     if (snapshot.data!.length <= 0) {
                       return SliverToBoxAdapter(
                         child: Center(
                           child: NoResults(
-                            message: "No " +
-                                (isCredit ? "credit" : "debt") +
-                                " transactions.",
+                            message: "no-transactions-found".tr(),
                           ),
                         ),
                       );

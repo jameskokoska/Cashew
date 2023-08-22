@@ -428,7 +428,7 @@
   "changed-wallet": "Billetera cambiada",
   "added-to-budget": "Agregado al presupuesto",
   "no-addable-budgets": "No hay presupuestos para agregar transacciones a",
-  "create-addable-budget": "Crear un presupuesto 'agregado solo'",
+  "create-addable-budget": "Crear presupuesto 'agregado solo'",
   "delete-budget-added-warning": "Las transacciones agregadas a este presupuesto ya no estarán vinculadas a este presupuesto. No serán eliminados.",
   "removed-from-budget": "Eliminado del presupuesto",
   "pinned-to-homepage": "Añadado a la página de inicio",
@@ -476,7 +476,6 @@
   "date-format-note": "No es necesario si el CSV utiliza el formato de fecha adecuado",
   "current-wallet": "Cartera actual",
   "none": "Ninguno",
-  "one-coffee-a-month": "¡Solo un café al mes!",
   "error-getting-products": "Error a obtener productos",
   "error-getting-products-description": "Hubo un error que se conectaba a la App Store. Por favor, inténtelo de nuevo más tarde.",
   "error-processing-order": "Hubo un error procesando su compra. Inténtalo de nuevo.",
@@ -508,8 +507,14 @@
   "from-the-developer": "Del desarrollador",
   "developer-message-1": "El bienestar financiero es importante para todos nosotros, y estamos aquí para apoyar su viaje hacia una mejor administración del dinero. Es por eso que le ofrecemos funciones premium sin costo. Aparecerá la ventana emergente premium, pero puede descartarla para acceder a la función bloqueada",
   "developer-message-1-1": "(¡Sin esperar también!)",
-  "developer-message-2": "Sin embargo, si es posible, considere apoyar el desarrollo. Su apoyo juega un papel crucial en el crecimiento futuro de esta aplicación. Gracias 😄",
+  "developer-message-2": "Sin embargo, si es posible, considere apoyar el desarrollo. Con solo un café ☕ al mes, su apoyo juega un papel crucial en el crecimiento futuro de esta aplicación. Gracias 😄",
   "support": "Apoyo",
   "unlock-for-free": "Desbloquear gratis",
-  "no-free-stuff": "No, no quiero cosas gratis"
+  "no-free-stuff": "No, no quiero cosas gratis",
+  "search-transactions-placeholder": "Transacciones de búsqueda ...",
+  "scheduled": "Programado",
+  "loans": "Préstamos",
+  "add-credit": "Añadir crédito",
+  "add-debt": "Agregar deuda",
+  "add-upcoming": "Suma próxima"
 }

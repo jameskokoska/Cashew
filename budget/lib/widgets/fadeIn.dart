@@ -339,10 +339,12 @@ class AnimateFABDelayed extends StatefulWidget {
     Key? key,
     required this.fab,
     this.delay = const Duration(milliseconds: 250),
+    this.enabled,
   }) : super(key: key);
 
   final Widget fab;
   final Duration delay;
+  final bool? enabled;
 
   @override
   State<AnimateFABDelayed> createState() => _AnimateFABDelayedState();
@@ -364,7 +366,7 @@ class _AnimateFABDelayedState extends State<AnimateFABDelayed> {
   @override
   Widget build(BuildContext context) {
     return AnimateFAB(
-      condition: scaleIn,
+      condition: widget.enabled ?? scaleIn,
       fab: widget.fab,
     );
   }

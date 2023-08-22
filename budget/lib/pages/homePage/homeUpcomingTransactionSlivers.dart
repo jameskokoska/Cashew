@@ -18,6 +18,7 @@ class HomeUpcomingTransactionSlivers extends StatelessWidget {
               DateTime.now().day + 1),
           endDate: DateTime(DateTime.now().year, DateTime.now().month,
               DateTime.now().day + 4),
+          null,
         ),
         builder: (context, snapshot) {
           if (snapshot.hasData) {

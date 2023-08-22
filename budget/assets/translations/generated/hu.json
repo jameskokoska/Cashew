@@ -476,7 +476,6 @@
   "date-format-note": "Nincs szükség, ha a CSV megfelelő dátum formázást használ",
   "current-wallet": "Aktuális pénztárca",
   "none": "Egyik sem",
-  "one-coffee-a-month": "Csak egy kávét havonta!",
   "error-getting-products": "Hiba a termékek beszerzését",
   "error-getting-products-description": "Hiba történt az App Store -hoz való csatlakozáshoz. Kérlek, próbáld újra később.",
   "error-processing-order": "Hiba történt a vásárlás feldolgozása. Kérlek próbáld újra.",
@@ -508,8 +507,14 @@
   "from-the-developer": "A fejlesztőtől",
   "developer-message-1": "A pénzügyi jólét mindannyiunk számára számít, és itt vagyunk, hogy támogassuk a jobb pénzkezelés felé vezető utat. Ezért kínálunk prémium funkciókat költség nélkül. Megjelenik a prémium felbukkanás, de elutasíthatja azt a zárolt funkció eléréséhez",
   "developer-message-1-1": "(Várás nélkül is!)",
-  "developer-message-2": "Ha lehetséges, fontolja meg a fejlesztés támogatását. A támogatása döntő szerepet játszik az alkalmazás jövőbeli növekedésében. Köszönöm 😄",
+  "developer-message-2": "Ha lehetséges, fontolja meg a fejlesztés támogatását. Csak egy havonta egy kávénál a támogatása döntő szerepet játszik az alkalmazás jövőbeli növekedésében. Köszönöm 😄",
   "support": "Támogatás",
   "unlock-for-free": "Nyissa ki ingyen",
-  "no-free-stuff": "Nem, nem akarok ingyenes cuccokat"
+  "no-free-stuff": "Nem, nem akarok ingyenes cuccokat",
+  "search-transactions-placeholder": "Keresési tranzakciók ...",
+  "scheduled": "Ütemezett",
+  "loans": "Kölcsönök",
+  "add-credit": "Adjon hozzá hitelt",
+  "add-debt": "Adósságot ad",
+  "add-upcoming": "Adja hozzá a közelgő"
 }

@@ -141,7 +141,8 @@ class _EditHomePageState extends State<EditHomePage> {
           ),
           "creditDebts": EditHomePageItem(
             icon: getTransactionTypeIcon(TransactionSpecialType.credit),
-            name: "lent-and-borrowed".tr(),
+            // name: "lent-and-borrowed".tr(),
+            name: "loans".tr(),
             isEnabled: appStateSettings["showCreditDebt"],
             onSwitched: (value) {
               updateSettings("showCreditDebt", value,

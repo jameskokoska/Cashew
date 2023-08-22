@@ -476,7 +476,6 @@
   "date-format-note": "Ikke nødvendig hvis CSV bruker riktig datoformatering",
   "current-wallet": "Gjeldende lommebok",
   "none": "Ingen",
-  "one-coffee-a-month": "Bare en kaffe i måneden!",
   "error-getting-products": "Feil å få produkter",
   "error-getting-products-description": "Det var en feil som koblet seg til App Store. Prøv igjen senere.",
   "error-processing-order": "Det var en feilbehandling av kjøpet ditt. Vær så snill, prøv på nytt.",
@@ -498,7 +497,7 @@
   "total-remaining": "Totalt gjenværende",
   "total-spent-example": "Eksempel: 25 brukt på 100",
   "total-remaining-example": "Eksempel: 75 venstre på 100",
-  "importing-loading": "Import ...",
+  "importing-loading": "Importere ...",
   "successfully-imported": "Vellykket importert",
   "please-restart-the-application": "Vennligst start søknaden på nytt",
   "biometrics-disabled": "Biometri deaktivert",
@@ -508,8 +507,14 @@
   "from-the-developer": "Fra utvikleren",
   "developer-message-1": "Økonomisk velvære betyr noe for oss alle, og vi er her for å støtte reisen din mot bedre pengestyring. Derfor tilbyr vi deg premiumfunksjoner uten kostnad. Premium popup vil vises, men du kan avvise den for å få tilgang til den låste funksjonen",
   "developer-message-1-1": "(Uten å vente også!)",
-  "developer-message-2": "Imidlertid, hvis mulig, kan du vurdere å støtte utviklingen. Din støtte spiller en avgjørende rolle i denne applikasjonens fremtidige vekst. Takk 😄",
+  "developer-message-2": "Imidlertid, hvis mulig, kan du vurdere å støtte utviklingen. På bare en kaffe ☕ i måneden spiller støtten din en avgjørende rolle i denne applikasjonens fremtidige vekst. Takk 😄",
   "support": "Brukerstøtte",
   "unlock-for-free": "Lås opp gratis",
-  "no-free-stuff": "Nei, jeg vil ikke ha gratis ting"
+  "no-free-stuff": "Nei, jeg vil ikke ha gratis ting",
+  "search-transactions-placeholder": "Søk transaksjoner ...",
+  "scheduled": "Planlagt",
+  "loans": "Lån",
+  "add-credit": "Legg til kreditt",
+  "add-debt": "Legg til gjeld",
+  "add-upcoming": "Legg til kommende"
 }

@@ -820,15 +820,8 @@ class FinanceDatabase extends _$FinanceDatabase {
                 onlyShowIfMember(tbl, member) &
                 onlyShowIfCertainBudget(
                     tbl, onlyShowTransactionsBelongingToBudgetPk) &
-                (categories.name
-                        .lower()
-                        .like("%" + search.toLowerCase() + "%") |
-                    transactions.name
-                        .lower()
-                        .like("%" + search.toLowerCase() + "%") |
-                    transactions.note
-                        .lower()
-                        .like("%" + search.toLowerCase() + "%"));
+                onlyShowTransactionBasedOnSearchQuery(transactions, search,
+                    withCategories: true);
           })
           ..orderBy([
             (t) => OrderingTerm(
@@ -902,11 +895,8 @@ class FinanceDatabase extends _$FinanceDatabase {
       ..orderBy(limit == null
           ? [OrderingTerm.asc(transactions.dateCreated)]
           : [OrderingTerm.desc(transactions.dateCreated)])
-      ..where((categories.name.lower().like("%" + search.toLowerCase() + "%") |
-              transactions.name.lower().like("%" + search.toLowerCase() + "%") |
-              transactions.note
-                  .lower()
-                  .like("%" + search.toLowerCase() + "%")) &
+      ..where(onlyShowTransactionBasedOnSearchQuery(transactions, search,
+              withCategories: true) &
           onlyShowIfFollowsSearchFilters(transactions, searchFilters) &
           onlyShowIfFollowsFilters(transactions,
               budgetTransactionFilters: budgetTransactionFilters,
@@ -939,142 +929,142 @@ class FinanceDatabase extends _$FinanceDatabase {
     return query.map((row) => row.read(wallets.currency)).get();
   }
 
-  Stream<List<TransactionWithCategory>> getTransactionCategoryWithMonth(
-    DateTime date, {
-    String search = "",
-    // Search will be ignored... if these params are passed in
-    List<String> categoryFks = const [],
-  }) {
-    JoinedSelectStatement<HasResultSet, dynamic> query;
-    if (categoryFks.length > 0) {
-      query = (select(transactions)
-            ..where((tbl) {
-              final dateCreated = tbl.dateCreated;
-              return isOnDay(dateCreated, date) &
-                  tbl.categoryFk.isIn(categoryFks);
-            }))
-          .join([
-        leftOuterJoin(categories,
-            categories.categoryPk.equalsExp(transactions.categoryFk))
-      ]);
-    } else if (search == "") {
-      query = (select(transactions)
-            ..where((tbl) {
-              final dateCreated = tbl.dateCreated;
-              return isOnDay(dateCreated, date);
-            }))
-          .join([
-        leftOuterJoin(categories,
-            categories.categoryPk.equalsExp(transactions.categoryFk))
-      ]);
-    } else {
-      query = ((select(transactions)
-            ..where((tbl) {
-              final dateCreated = tbl.dateCreated;
-              return isOnDay(dateCreated, date);
-            }))
-          .join([
-        innerJoin(categories,
-            categories.categoryPk.equalsExp(transactions.categoryFk))
-      ]))
-        ..where(categories.name.lower().like("%" + search.toLowerCase() + "%") |
-            transactions.name.like("%" + search + "%"));
-    }
+  // Stream<List<TransactionWithCategory>> getTransactionCategoryWithMonth(
+  //   DateTime date, {
+  //   String search = "",
+  //   // Search will be ignored... if these params are passed in
+  //   List<String> categoryFks = const [],
+  // }) {
+  //   JoinedSelectStatement<HasResultSet, dynamic> query;
+  //   if (categoryFks.length > 0) {
+  //     query = (select(transactions)
+  //           ..where((tbl) {
+  //             final dateCreated = tbl.dateCreated;
+  //             return isOnDay(dateCreated, date) &
+  //                 tbl.categoryFk.isIn(categoryFks);
+  //           }))
+  //         .join([
+  //       leftOuterJoin(categories,
+  //           categories.categoryPk.equalsExp(transactions.categoryFk))
+  //     ]);
+  //   } else if (search == "") {
+  //     query = (select(transactions)
+  //           ..where((tbl) {
+  //             final dateCreated = tbl.dateCreated;
+  //             return isOnDay(dateCreated, date);
+  //           }))
+  //         .join([
+  //       leftOuterJoin(categories,
+  //           categories.categoryPk.equalsExp(transactions.categoryFk))
+  //     ]);
+  //   } else {
+  //     query = ((select(transactions)
+  //           ..where((tbl) {
+  //             final dateCreated = tbl.dateCreated;
+  //             return isOnDay(dateCreated, date);
+  //           }))
+  //         .join([
+  //       innerJoin(categories,
+  //           categories.categoryPk.equalsExp(transactions.categoryFk))
+  //     ]))
+  //       ..where(categories.name.lower().like("%" + search.toLowerCase() + "%") |
+  //           transactions.name.like("%" + search + "%"));
+  //   }
 
-    return query.watch().map((rows) => rows.map((row) {
-          return TransactionWithCategory(
-              category: row.readTable(categories),
-              transaction: row.readTable(transactions));
-        }).toList());
-  }
+  //   return query.watch().map((rows) => rows.map((row) {
+  //         return TransactionWithCategory(
+  //             category: row.readTable(categories),
+  //             transaction: row.readTable(transactions));
+  //       }).toList());
+  // }
 
   //get the days that a transaction occurs on, specify search term, categories, or time period to list these
-  Stream<List<DateTime?>> watchDatesOfTransaction(
-      {DateTime? startDate,
-      DateTime? endDate,
-      String search = "",
-      // Search will be ignored... if these params are passed in
-      List<String> categoryFks = const []}) {
-    if (categoryFks.length > 0) {
-      final query = (select(transactions)
-        ..where((tbl) {
-          if (startDate != null && endDate != null) {
-            return tbl.dateCreated.isBiggerOrEqualValue(startDate) &
-                tbl.dateCreated.isSmallerOrEqualValue(endDate) &
-                tbl.categoryFk.isIn(categoryFks);
-          } else {
-            return tbl.categoryFk.isIn(categoryFks);
-          }
-        })
-        ..orderBy([(t) => OrderingTerm.asc(t.dateCreated)]));
-      DateTime previousDate = DateTime.now();
-      return query.map((tbl) {
-        DateTime currentDate = DateTime(
-            tbl.dateCreated.year, tbl.dateCreated.month, tbl.dateCreated.day);
-        if (previousDate != currentDate) {
-          previousDate = currentDate;
-          return currentDate;
-        } else {
-          previousDate = currentDate;
-          return null;
-        }
-      }).watch();
-    } else if (search == "") {
-      final query = (select(transactions)
-        ..where((tbl) {
-          if (startDate != null && endDate != null) {
-            return tbl.dateCreated.isBiggerOrEqualValue(startDate) &
-                tbl.dateCreated.isSmallerOrEqualValue(endDate);
-          } else {
-            return tbl.walletFk.isNotNull();
-          }
-        })
-        ..orderBy([(t) => OrderingTerm.asc(t.dateCreated)]));
-      DateTime previousDate = DateTime.now();
-      return query.map((tbl) {
-        DateTime currentDate = DateTime(
-            tbl.dateCreated.year, tbl.dateCreated.month, tbl.dateCreated.day);
-        if (previousDate != currentDate) {
-          previousDate = currentDate;
-          return currentDate;
-        } else {
-          previousDate = currentDate;
-          return null;
-        }
-      }).watch();
-    } else {
-      final query = ((select(transactions)
-            ..where((tbl) {
-              if (startDate != null && endDate != null) {
-                return tbl.dateCreated.isBiggerOrEqualValue(startDate) &
-                    tbl.dateCreated.isSmallerOrEqualValue(endDate);
-              } else {
-                return tbl.walletFk.isNotNull();
-              }
-            })
-            ..orderBy([(t) => OrderingTerm.asc(t.dateCreated)]))
-          .join([
-        innerJoin(categories,
-            categories.categoryPk.equalsExp(transactions.categoryFk))
-      ]))
-        ..where(categories.name.lower().like("%" + search.toLowerCase() + "%") |
-            transactions.name.like("%" + search + "%"));
-      DateTime previousDate = DateTime.now();
-      return query.watch().map((rows) => rows.map((row) {
-            DateTime currentDate = DateTime(
-                row.readTable(transactions).dateCreated.year,
-                row.readTable(transactions).dateCreated.month,
-                row.readTable(transactions).dateCreated.day);
-            if (previousDate != currentDate) {
-              previousDate = currentDate;
-              return currentDate;
-            } else {
-              previousDate = currentDate;
-              return null;
-            }
-          }).toList());
-    }
-  }
+  // Stream<List<DateTime?>> watchDatesOfTransaction(
+  //     {DateTime? startDate,
+  //     DateTime? endDate,
+  //     String search = "",
+  //     // Search will be ignored... if these params are passed in
+  //     List<String> categoryFks = const []}) {
+  //   if (categoryFks.length > 0) {
+  //     final query = (select(transactions)
+  //       ..where((tbl) {
+  //         if (startDate != null && endDate != null) {
+  //           return tbl.dateCreated.isBiggerOrEqualValue(startDate) &
+  //               tbl.dateCreated.isSmallerOrEqualValue(endDate) &
+  //               tbl.categoryFk.isIn(categoryFks);
+  //         } else {
+  //           return tbl.categoryFk.isIn(categoryFks);
+  //         }
+  //       })
+  //       ..orderBy([(t) => OrderingTerm.asc(t.dateCreated)]));
+  //     DateTime previousDate = DateTime.now();
+  //     return query.map((tbl) {
+  //       DateTime currentDate = DateTime(
+  //           tbl.dateCreated.year, tbl.dateCreated.month, tbl.dateCreated.day);
+  //       if (previousDate != currentDate) {
+  //         previousDate = currentDate;
+  //         return currentDate;
+  //       } else {
+  //         previousDate = currentDate;
+  //         return null;
+  //       }
+  //     }).watch();
+  //   } else if (search == "") {
+  //     final query = (select(transactions)
+  //       ..where((tbl) {
+  //         if (startDate != null && endDate != null) {
+  //           return tbl.dateCreated.isBiggerOrEqualValue(startDate) &
+  //               tbl.dateCreated.isSmallerOrEqualValue(endDate);
+  //         } else {
+  //           return tbl.walletFk.isNotNull();
+  //         }
+  //       })
+  //       ..orderBy([(t) => OrderingTerm.asc(t.dateCreated)]));
+  //     DateTime previousDate = DateTime.now();
+  //     return query.map((tbl) {
+  //       DateTime currentDate = DateTime(
+  //           tbl.dateCreated.year, tbl.dateCreated.month, tbl.dateCreated.day);
+  //       if (previousDate != currentDate) {
+  //         previousDate = currentDate;
+  //         return currentDate;
+  //       } else {
+  //         previousDate = currentDate;
+  //         return null;
+  //       }
+  //     }).watch();
+  //   } else {
+  //     final query = ((select(transactions)
+  //           ..where((tbl) {
+  //             if (startDate != null && endDate != null) {
+  //               return tbl.dateCreated.isBiggerOrEqualValue(startDate) &
+  //                   tbl.dateCreated.isSmallerOrEqualValue(endDate);
+  //             } else {
+  //               return tbl.walletFk.isNotNull();
+  //             }
+  //           })
+  //           ..orderBy([(t) => OrderingTerm.asc(t.dateCreated)]))
+  //         .join([
+  //       innerJoin(categories,
+  //           categories.categoryPk.equalsExp(transactions.categoryFk))
+  //     ]))
+  //       ..where(categories.name.lower().like("%" + search.toLowerCase() + "%") |
+  //           transactions.name.like("%" + search + "%"));
+  //     DateTime previousDate = DateTime.now();
+  //     return query.watch().map((rows) => rows.map((row) {
+  //           DateTime currentDate = DateTime(
+  //               row.readTable(transactions).dateCreated.year,
+  //               row.readTable(transactions).dateCreated.month,
+  //               row.readTable(transactions).dateCreated.day);
+  //           if (previousDate != currentDate) {
+  //             previousDate = currentDate;
+  //             return currentDate;
+  //           } else {
+  //             previousDate = currentDate;
+  //             return null;
+  //           }
+  //         }).toList());
+  //   }
+  // }
 
   //watch all transactions sorted by date
   Stream<List<Transaction>> watchAllTransactions(
@@ -1105,24 +1095,6 @@ class FinanceDatabase extends _$FinanceDatabase {
     return (query.watch(), query.get());
   }
 
-  Stream<List<Transaction>> watchAllUpcomingTransactions(
-      {int? limit, DateTime? startDate, DateTime? endDate}) {
-    final query = select(transactions)
-      ..orderBy([(b) => OrderingTerm.asc(b.dateCreated)])
-      ..where((transaction) =>
-          transactions.skipPaid.equals(false) &
-          transactions.paid.equals(false) &
-          transactions.dateCreated
-              .isBiggerThanValue(startDate ?? DateTime.now()) &
-          transactions.dateCreated.isSmallerThanValue(
-              endDate ?? DateTime.now().add(Duration(days: 1000))) &
-          (transactions.type.equals(TransactionSpecialType.subscription.index) |
-              transactions.type
-                  .equals(TransactionSpecialType.repetitive.index) |
-              transactions.type.equals(TransactionSpecialType.upcoming.index)));
-    return query.watch();
-  }
-
   Future<List<Transaction>> getAllUpcomingTransactions(
       {int? limit, DateTime? startDate, DateTime? endDate}) {
     final query = select(transactions)
@@ -1141,19 +1113,49 @@ class FinanceDatabase extends _$FinanceDatabase {
     return query.get();
   }
 
-  Stream<List<Transaction>> watchAllOverdueTransactions(
+  Stream<List<Transaction>> watchAllUpcomingTransactions(String? searchString,
       {int? limit, DateTime? startDate, DateTime? endDate}) {
     final query = select(transactions)
       ..orderBy([(b) => OrderingTerm.asc(b.dateCreated)])
       ..where((transaction) =>
           transactions.skipPaid.equals(false) &
           transactions.paid.equals(false) &
-          transactions.dateCreated.isSmallerThanValue(DateTime.now()) &
+          transactions.dateCreated
+              .isBiggerThanValue(startDate ?? DateTime.now()) &
+          transactions.dateCreated.isSmallerThanValue(
+              endDate ?? DateTime.now().add(Duration(days: 1000))) &
           (transactions.type.equals(TransactionSpecialType.subscription.index) |
               transactions.type
                   .equals(TransactionSpecialType.repetitive.index) |
               transactions.type.equals(TransactionSpecialType.upcoming.index)));
     return query.watch();
+  }
+
+  Stream<List<Transaction>> watchAllOverdueUpcomingTransactions(
+      bool? isOverdueTransactions,
+      {int? limit,
+      String? searchString}) {
+    final query = select(transactions).join([
+      innerJoin(
+          categories, categories.categoryPk.equalsExp(transactions.categoryFk)),
+    ])
+      ..orderBy([OrderingTerm.asc(transactions.dateCreated)])
+      ..where(onlyShowTransactionBasedOnSearchQuery(transactions, searchString,
+              withCategories: true) &
+          transactions.skipPaid.equals(false) &
+          transactions.paid.equals(false) &
+          (isOverdueTransactions == null
+              ? Constant(true)
+              : isOverdueTransactions == true
+                  ? transactions.dateCreated.isSmallerThanValue(DateTime.now())
+                  : transactions.dateCreated
+                      .isBiggerThanValue(DateTime.now())) &
+          (transactions.type.equals(TransactionSpecialType.subscription.index) |
+              transactions.type
+                  .equals(TransactionSpecialType.repetitive.index) |
+              transactions.type.equals(TransactionSpecialType.upcoming.index)));
+
+    return query.map((row) => row.readTable(transactions)).watch();
   }
 
   //get dates of all transactions in the month and year
@@ -1195,9 +1197,7 @@ class FinanceDatabase extends _$FinanceDatabase {
     return (select(budgets)
           ..where((b) => (searchFor == null
               ? Constant(true)
-              : b.name
-                  .lower()
-                  .like("%" + (searchFor).toLowerCase().trim() + "%")))
+              : b.name.lower().like("%" + (searchFor).toLowerCase() + "%")))
           ..orderBy([(b) => OrderingTerm.asc(b.order)])
           ..limit(limit ?? DEFAULT_LIMIT, offset: offset ?? DEFAULT_OFFSET))
         .watch();
@@ -1206,8 +1206,8 @@ class FinanceDatabase extends _$FinanceDatabase {
   Future<List<TransactionAssociatedTitle>> getSimilarAssociatedTitles(
       {required String title, int? limit, int? offset}) {
     return (select(associatedTitles)
-          ..where((t) =>
-              (t.title.lower().like("%" + (title).toLowerCase().trim() + "%")))
+          ..where(
+              (t) => (t.title.lower().like("%" + (title).toLowerCase() + "%")))
           ..orderBy([(t) => OrderingTerm.desc(t.order)])
           ..limit(limit ?? DEFAULT_LIMIT, offset: offset ?? DEFAULT_OFFSET))
         .get();
@@ -3299,21 +3299,15 @@ class FinanceDatabase extends _$FinanceDatabase {
         : Constant(true);
 
     Expression<bool> isInDateTimeRange = onlyShowBasedOnTimeRange(
-        transactions,
+        tbl,
         searchFilters.dateTimeRange?.start,
         searchFilters.dateTimeRange?.end,
         null);
 
     String searchQuery = searchFilters.searchQuery ?? "";
-    Expression<bool> isInQuery = searchQuery == ""
-        ? Constant(true)
-        : (categories.name.lower().like("%" + searchQuery.toLowerCase() + "%") |
-            transactions.name
-                .lower()
-                .like("%" + searchQuery.toLowerCase() + "%") |
-            transactions.note
-                .lower()
-                .like("%" + searchQuery.toLowerCase() + "%"));
+    Expression<bool> isInQuery = onlyShowTransactionBasedOnSearchQuery(
+        tbl, searchQuery,
+        withCategories: true);
 
     return isInWalletPks &
         isInCategoryPks &
@@ -3326,6 +3320,21 @@ class FinanceDatabase extends _$FinanceDatabase {
         (includeShared | includeAdded) &
         isInAmountRange &
         isMethodAdded;
+  }
+
+  Expression<bool> onlyShowTransactionBasedOnSearchQuery(
+      $TransactionsTable tbl, String? searchQuery,
+      {required bool withCategories}) {
+    // If withCategories if true, you will need to use a join with categories!
+    return searchQuery == "" || searchQuery == null
+        ? Constant(true)
+        : ((withCategories == true
+                ? categories.name
+                    .lower()
+                    .like("%" + searchQuery.toLowerCase() + "%")
+                : Constant(false)) |
+            tbl.name.lower().like("%" + searchQuery.toLowerCase() + "%") |
+            tbl.note.lower().like("%" + searchQuery.toLowerCase() + "%"));
   }
 
   Expression<bool> onlyShowIfFollowsFilters($TransactionsTable tbl,
@@ -3713,21 +3722,30 @@ class FinanceDatabase extends _$FinanceDatabase {
   }
 
   Stream<double?> watchTotalOfUpcomingOverdue(
-    AllWallets allWallets,
-    bool isOverdue,
-  ) {
+      AllWallets allWallets, bool? isOverdueTransactions,
+      {String? searchString}) {
     List<Stream<double?>> mergedStreams = [];
     for (TransactionWallet wallet in allWallets.list) {
       final totalAmt = transactions.amount.sum();
       final query = selectOnly(transactions)
         ..addColumns([totalAmt])
-        ..where(transactions.income.equals(false) &
+        ..join([
+          innerJoin(categories,
+              categories.categoryPk.equalsExp(transactions.categoryFk))
+        ])
+        ..where(onlyShowTransactionBasedOnSearchQuery(
+                transactions, searchString, withCategories: true) &
+            // transactions.income.equals(false) &
             transactions.skipPaid.equals(false) &
             transactions.paid.equals(false) &
             transactions.walletFk.equals(wallet.walletPk) &
-            (isOverdue
-                ? transactions.dateCreated.isSmallerThanValue(DateTime.now())
-                : transactions.dateCreated.isBiggerThanValue(DateTime.now())) &
+            (isOverdueTransactions == null
+                ? Constant(true)
+                : isOverdueTransactions == true
+                    ? transactions.dateCreated
+                        .isSmallerThanValue(DateTime.now())
+                    : transactions.dateCreated
+                        .isBiggerThanValue(DateTime.now())) &
             (transactions.type
                     .equals(TransactionSpecialType.subscription.index) |
                 transactions.type
@@ -3743,14 +3761,26 @@ class FinanceDatabase extends _$FinanceDatabase {
     return totalDoubleStream(mergedStreams);
   }
 
-  Stream<List<int?>> watchCountOfUpcoming() {
+  Stream<List<int?>> watchCountOfUpcomingOverdue(bool? isOverdueTransactions,
+      {String? searchString}) {
     final totalCount = transactions.transactionPk.count();
 
     final query = selectOnly(transactions)
       ..addColumns([totalCount])
-      ..where(transactions.skipPaid.equals(false) &
+      ..join([
+        innerJoin(categories,
+            categories.categoryPk.equalsExp(transactions.categoryFk))
+      ])
+      ..where(onlyShowTransactionBasedOnSearchQuery(transactions, searchString,
+              withCategories: true) &
+          transactions.skipPaid.equals(false) &
           transactions.paid.equals(false) &
-          transactions.dateCreated.isBiggerThanValue(DateTime.now()) &
+          (isOverdueTransactions == null
+              ? Constant(true)
+              : isOverdueTransactions == true
+                  ? transactions.dateCreated.isSmallerThanValue(DateTime.now())
+                  : transactions.dateCreated
+                      .isBiggerThanValue(DateTime.now())) &
           (transactions.type.equals(TransactionSpecialType.subscription.index) |
               transactions.type
                   .equals(TransactionSpecialType.repetitive.index) |
@@ -3758,35 +3788,30 @@ class FinanceDatabase extends _$FinanceDatabase {
     return query.map((row) => row.read(totalCount)).watch();
   }
 
-  Stream<List<int?>> watchCountOfOverdue() {
-    final totalCount = transactions.transactionPk.count();
-
-    final query = selectOnly(transactions)
-      ..addColumns([totalCount])
-      ..where(transactions.skipPaid.equals(false) &
-          transactions.paid.equals(false) &
-          transactions.dateCreated.isSmallerThanValue(DateTime.now()) &
-          (transactions.type.equals(TransactionSpecialType.subscription.index) |
-              transactions.type
-                  .equals(TransactionSpecialType.repetitive.index) |
-              transactions.type.equals(TransactionSpecialType.upcoming.index)));
-    return query.map((row) => row.read(totalCount)).watch();
-  }
-
-  Stream<double?> watchTotalOfCreditDebt(
-    AllWallets allWallets,
-    bool isCredit,
-  ) {
+  Stream<double?> watchTotalOfCreditDebt(AllWallets allWallets, bool? isCredit,
+      {String? searchString}) {
     List<Stream<double?>> mergedStreams = [];
     for (TransactionWallet wallet in allWallets.list) {
       final totalAmt = transactions.amount.sum();
       final query = selectOnly(transactions)
         ..addColumns([totalAmt])
+        ..join([
+          innerJoin(categories,
+              categories.categoryPk.equalsExp(transactions.categoryFk))
+        ])
         ..where(transactions.paid.equals(true) &
+            onlyShowTransactionBasedOnSearchQuery(transactions, searchString,
+                withCategories: true) &
             transactions.walletFk.equals(wallet.walletPk) &
-            (isCredit
-                ? transactions.type.equals(TransactionSpecialType.credit.index)
-                : transactions.type.equals(TransactionSpecialType.debt.index)));
+            (isCredit == null
+                ? transactions.type
+                        .equals(TransactionSpecialType.credit.index) |
+                    transactions.type.equals(TransactionSpecialType.debt.index)
+                : isCredit
+                    ? transactions.type
+                        .equals(TransactionSpecialType.credit.index)
+                    : transactions.type
+                        .equals(TransactionSpecialType.debt.index)));
       mergedStreams.add(query
           .map((row) =>
               (row.read(totalAmt) ?? 0) *
@@ -3796,29 +3821,51 @@ class FinanceDatabase extends _$FinanceDatabase {
     return totalDoubleStream(mergedStreams);
   }
 
-  Stream<List<int?>> watchCountOfCreditDebt(bool isCredit) {
+  Stream<List<int?>> watchCountOfCreditDebt(
+      bool? isCredit, String? searchString) {
     final totalCount = transactions.transactionPk.count();
 
     final query = selectOnly(transactions)
       ..addColumns([totalCount])
+      ..join([
+        innerJoin(categories,
+            categories.categoryPk.equalsExp(transactions.categoryFk))
+      ])
       ..where(transactions.paid.equals(true) &
-          (isCredit
-              ? transactions.type.equals(TransactionSpecialType.credit.index)
-              : transactions.type.equals(TransactionSpecialType.debt.index)));
+          onlyShowTransactionBasedOnSearchQuery(transactions, searchString,
+              withCategories: true) &
+          (isCredit == null
+              ? transactions.type.equals(TransactionSpecialType.credit.index) |
+                  transactions.type.equals(TransactionSpecialType.debt.index)
+              : isCredit
+                  ? transactions.type
+                      .equals(TransactionSpecialType.credit.index)
+                  : transactions.type
+                      .equals(TransactionSpecialType.debt.index)));
     return query.map((row) => row.read(totalCount)).watch();
   }
 
   Stream<List<Transaction>> watchAllCreditDebtTransactions(
-      bool isCredit, bool? isSettled) {
-    final query = select(transactions)
+      bool? isCredit, String? searchString) {
+    final query = select(transactions).join([
+      innerJoin(
+          categories, categories.categoryPk.equalsExp(transactions.categoryFk)),
+    ])
       ..orderBy([
-        (b) => OrderingTerm.desc(b.paid),
-        (b) => OrderingTerm.asc(b.dateCreated),
+        OrderingTerm.desc(transactions.paid),
+        OrderingTerm.asc(transactions.dateCreated),
       ])
-      ..where((transaction) => (isCredit
-          ? transactions.type.equals(TransactionSpecialType.credit.index)
-          : transactions.type.equals(TransactionSpecialType.debt.index)));
-    return query.watch();
+      ..where(onlyShowTransactionBasedOnSearchQuery(transactions, searchString,
+              withCategories: true) &
+          (isCredit == null
+              ? transactions.type.equals(TransactionSpecialType.credit.index) |
+                  transactions.type.equals(TransactionSpecialType.debt.index)
+              : isCredit
+                  ? transactions.type
+                      .equals(TransactionSpecialType.credit.index)
+                  : transactions.type
+                      .equals(TransactionSpecialType.debt.index)));
+    return query.map((row) => row.readTable(transactions)).watch();
   }
 
   Stream<List<int?>> watchTotalCountOfTransactionsInCategory(

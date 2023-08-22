@@ -42,7 +42,7 @@ class HomePageUpcomingTransactions extends StatelessWidget {
                         ),
                         textColor: getColor(context, "unPaidUpcoming"),
                         transactionsAmountStream:
-                            database.watchCountOfUpcoming(),
+                            database.watchCountOfUpcomingOverdue(false),
                       ),
                     );
                   }),
@@ -60,7 +60,7 @@ class HomePageUpcomingTransactions extends StatelessWidget {
                         ),
                         textColor: getColor(context, "unPaidOverdue"),
                         transactionsAmountStream:
-                            database.watchCountOfOverdue(),
+                            database.watchCountOfUpcomingOverdue(true),
                       ),
                     );
                   }),

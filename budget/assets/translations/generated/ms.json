@@ -476,7 +476,6 @@
   "date-format-note": "Tidak diperlukan jika CSV menggunakan pemformatan tarikh yang betul",
   "current-wallet": "Dompet semasa",
   "none": "Tiada",
-  "one-coffee-a-month": "Hanya satu kopi sebulan!",
   "error-getting-products": "Ralat mendapatkan produk",
   "error-getting-products-description": "Terdapat ralat yang menyambung ke App Store. Sila cuba sebentar lagi.",
   "error-processing-order": "Terdapat ralat memproses pembelian anda. Sila cuba lagi.",
@@ -508,8 +507,14 @@
   "from-the-developer": "Dari pemaju",
   "developer-message-1": "Kesejahteraan kewangan penting kepada kita semua, dan kami di sini untuk menyokong perjalanan anda ke arah pengurusan wang yang lebih baik. Itulah sebabnya kami menawarkan ciri -ciri premium tanpa sebarang kos. Popup premium akan muncul, tetapi anda boleh menolaknya untuk mengakses ciri terkunci",
   "developer-message-1-1": "(tanpa menunggu juga!)",
-  "developer-message-2": "Walau bagaimanapun, jika boleh, pertimbangkan untuk menyokong pembangunan. Sokongan anda memainkan peranan penting dalam pertumbuhan masa depan aplikasi ini. Terima kasih 😄",
+  "developer-message-2": "Walau bagaimanapun, jika boleh, pertimbangkan untuk menyokong pembangunan. Hanya satu kopi ☕ sebulan, sokongan anda memainkan peranan penting dalam pertumbuhan masa depan aplikasi ini. Terima kasih 😄",
   "support": "Sokongan",
   "unlock-for-free": "Buka kunci secara percuma",
-  "no-free-stuff": "Tidak, saya tidak mahu barang percuma"
+  "no-free-stuff": "Tidak, saya tidak mahu barang percuma",
+  "search-transactions-placeholder": "Urus niaga cari ...",
+  "scheduled": "Dijadualkan",
+  "loans": "Pinjaman",
+  "add-credit": "Tambah kredit",
+  "add-debt": "Tambah hutang",
+  "add-upcoming": "Tambah akan datang"
 }

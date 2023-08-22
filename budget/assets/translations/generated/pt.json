@@ -476,7 +476,6 @@
   "date-format-note": "Não é necessário se o CSV usar a formatação de data adequada",
   "current-wallet": "Carteira atual",
   "none": "Nenhum",
-  "one-coffee-a-month": "Apenas um café por mês!",
   "error-getting-products": "Erro de obter produtos",
   "error-getting-products-description": "Houve um erro se conectando à App Store. Por favor, tente novamente mais tarde.",
   "error-processing-order": "Houve um erro de processamento de sua compra. Por favor, tente novamente.",
@@ -495,7 +494,7 @@
   "backup-restored": "Backup restaurado",
   "budget-total-label": "Rótulo total dos orçamentos",
   "total-spent": "Total gasto",
-  "total-remaining": "Total restante",
+  "total-remaining": "Restante total",
   "total-spent-example": "Exemplo: 25 gasto de 100",
   "total-remaining-example": "Exemplo: 75 à esquerda de 100",
   "importing-loading": "Importando ...",
@@ -508,8 +507,14 @@
   "from-the-developer": "Do desenvolvedor",
   "developer-message-1": "O bem-estar financeiro é importante para todos nós, e estamos aqui para apoiar sua jornada para uma melhor gestão de dinheiro. É por isso que oferecemos recursos premium sem nenhum custo. O pop -up premium aparecerá, mas você pode descartá -lo para acessar o recurso bloqueado",
   "developer-message-1-1": "(sem esperar também!)",
-  "developer-message-2": "No entanto, se possível, considere apoiar o desenvolvimento. Seu apoio desempenha um papel crucial no crescimento futuro deste aplicativo. Obrigado 😄",
+  "developer-message-2": "No entanto, se possível, considere apoiar o desenvolvimento. Em apenas um café ☕ por mês, seu apoio desempenha um papel crucial no crescimento futuro deste aplicativo. Obrigado 😄",
   "support": "Apoiar",
   "unlock-for-free": "Desbloquear de graça",
-  "no-free-stuff": "Não, eu não quero coisas grátis"
+  "no-free-stuff": "Não, eu não quero coisas grátis",
+  "search-transactions-placeholder": "Transações de pesquisa ...",
+  "scheduled": "Agendado",
+  "loans": "Empréstimos",
+  "add-credit": "Adicionar crédito",
+  "add-debt": "Adicione dívida",
+  "add-upcoming": "Adicionar próximo"
 }
