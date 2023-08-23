@@ -1007,8 +1007,8 @@ class LockedFeature extends StatelessWidget {
       );
     return Tappable(
       onTap: () async {
-        await premiumPopupPushRoute(context);
-        if (actionAfter != null) actionAfter!();
+        bool result = await premiumPopupPushRoute(context);
+        if (actionAfter != null && result == true) actionAfter!();
       },
       borderRadius: 20,
       color: Colors.transparent,
