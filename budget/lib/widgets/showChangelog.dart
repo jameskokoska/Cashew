@@ -10,6 +10,10 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    < 3.9.7
+    Max amount for budget, max period length for budget, period length cannot be zero
+    Fixed over-scroll stretch when keyboard opens with bottom sheet
+    Fixed color picker
     < 3.9.6
     New scheduled and loans pages with search
     Added currency name in transaction entry when multiple currencies used

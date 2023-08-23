@@ -78,6 +78,11 @@ class _EditAssociatedTitlesPageState extends State<EditAssociatedTitlesPage> {
                   fullSnap: true,
                   AddAssociatedTitlePage(),
                 );
+                Future.delayed(Duration(milliseconds: 100), () {
+                  // Fix over-scroll stretch when keyboard pops up quickly
+                  bottomSheetControllerGlobal.scrollTo(0,
+                      duration: Duration(milliseconds: 100));
+                });
               },
             ),
           ),
@@ -159,6 +164,11 @@ class _EditAssociatedTitlesPageState extends State<EditAssociatedTitlesPage> {
                                   associatedTitle: associatedTitle,
                                 ),
                               );
+                              Future.delayed(Duration(milliseconds: 100), () {
+                                // Fix over-scroll stretch when keyboard pops up quickly
+                                bottomSheetControllerGlobal.scrollTo(0,
+                                    duration: Duration(milliseconds: 100));
+                              });
                             },
                             padding: EdgeInsets.symmetric(
                                 vertical: 7,

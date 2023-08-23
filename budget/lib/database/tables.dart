@@ -1926,7 +1926,7 @@ class FinanceDatabase extends _$FinanceDatabase {
   }) async {
     if (updateSharedEntry == true && appStateSettings["sharedBudgets"] == false)
       updateSharedEntry = false;
-    double maxAmount = 10000000;
+    double maxAmount = 100000000;
     if (transaction.amount >= maxAmount)
       transaction = transaction.copyWith(amount: maxAmount);
     else if (transaction.amount <= -maxAmount)
@@ -2544,9 +2544,33 @@ class FinanceDatabase extends _$FinanceDatabase {
 
   Future<int> createOrUpdateBudget(Budget budget,
       {bool updateSharedEntry = true, bool insert = false}) async {
+    double maxAmount = 100000000;
+    if (budget.amount >= maxAmount) budget = budget.copyWith(amount: maxAmount);
+
+    int maxTimePeriodYears = 10;
+    int maxTimePeriodMonths = 100;
+    int maxTimePeriodWeeks = 500;
+    int maxTimePeriodDays = 1000;
+    if (budget.reoccurrence == BudgetReoccurence.yearly &&
+        budget.periodLength >= maxTimePeriodYears)
+      budget = budget.copyWith(periodLength: maxTimePeriodYears);
+    else if (budget.reoccurrence == BudgetReoccurence.monthly &&
+        budget.periodLength >= maxTimePeriodMonths)
+      budget = budget.copyWith(periodLength: maxTimePeriodMonths);
+    else if (budget.reoccurrence == BudgetReoccurence.weekly &&
+        budget.periodLength >= maxTimePeriodWeeks)
+      budget = budget.copyWith(periodLength: maxTimePeriodWeeks);
+    else if (budget.reoccurrence == BudgetReoccurence.daily &&
+        budget.periodLength >= maxTimePeriodDays)
+      budget = budget.copyWith(periodLength: maxTimePeriodDays);
+
+    if (budget.periodLength <= 0) budget = budget.copyWith(periodLength: 1);
+
     if (updateSharedEntry == true && appStateSettings["sharedBudgets"] == false)
       updateSharedEntry = false;
+
     print(budget);
+
     if (budget.sharedKey != null && updateSharedEntry == true) {
       FirebaseFirestore? db = await firebaseGetDBInstance();
       if (db == null) {

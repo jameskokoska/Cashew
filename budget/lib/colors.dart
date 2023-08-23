@@ -113,6 +113,8 @@ generateColors() {
   );
 }
 
+// Ensure you specify a shade, otherwise type will be of MaterialColor which can't be compared
+// when using in other widgets, such as the Color Picker
 extension ColorsDefined on ColorScheme {
   Color get selectableColorRed => Colors.red.shade400;
   Color get selectableColorGreen => Colors.green.shade400;
@@ -122,7 +124,7 @@ extension ColorsDefined on ColorScheme {
   Color get selectableColorBlueGrey => Colors.blueGrey.shade400;
   Color get selectableColorYellow => Colors.yellow.shade400;
   Color get selectableColorAqua => Colors.teal.shade400;
-  Color get selectableColorInidigo => Colors.indigo;
+  Color get selectableColorInidigo => Colors.indigo.shade500;
   Color get selectableColorGrey => Colors.grey.shade400;
   Color get selectableColorBrown => Colors.brown.shade400;
   Color get selectableColorDeepPurple => Colors.deepPurple.shade400;
