@@ -440,7 +440,7 @@
   "delete-all-transactions-question": "Tüm işlemleri silin mi?",
   "delete-category-merge-warning": "Bir kategoriyi silmek bu kategorideki tüm işlemleri silecektir. Bundan kaçınmak için işlemleri başka bir kategoriye taşıyın.",
   "deleted-category": "Silinmiş kategori",
-  "delete-wallet-question": "Cüzdan'ı Sil?",
+  "delete-wallet-question": "Cüzdanı Sil?",
   "delete-wallet-question-description": "Bu, bu cüzdanla ilişkili tüm işlemleri silecektir.",
   "move-transactions": "İşlemleri Taşı",
   "delete-wallet-merge-warning": "Bir cüzdanın silinmesi, bu cüzdandaki tüm işlemleri silecektir. Bundan kaçınmak için işlemleri başka bir cüzdana taşıyın.",
@@ -450,7 +450,7 @@
   "remove-transactions-from-added-budget-question": "İşlemleri Kaldır?",
   "deleted-transactions": "Silinen İşlemler",
   "deleted-transaction": "Silinen İşlem",
-  "change-category": "Değiştir kategorisi",
+  "change-category": "Kategoriyi Değiştir",
   "changed-category": "Değiştirilen kategori",
   "merged-category": "Birleştirilmiş kategori",
   "an-error-occured": "Bir hata oluştu",
@@ -516,5 +516,8 @@
   "loans": "Krediler",
   "add-credit": "Kredi ekle",
   "add-debt": "Borç ekle",
-  "add-upcoming": "Yaklaşan eklemek"
+  "add-upcoming": "Yaklaşan eklemek",
+  "you-owe": "A borçlusun",
+  "you-get": "Alırsın",
+  "heat-map": "Sıcaklık haritası"
 }

@@ -477,7 +477,7 @@
   "current-wallet": "Portofel curent",
   "none": "Nici unul",
   "error-getting-products": "Eroare la obținerea produselor",
-  "error-getting-products-description": "A fost o eroare de conectare la App Store. Vă rugăm să încercați din nou mai târziu.",
+  "error-getting-products-description": "A existat o eroare de conectare la App Store. Vă rugăm să încercați din nou mai târziu.",
   "error-processing-order": "A existat o eroare de procesare a achiziției. Vă rugăm să încercați din nou.",
   "order-confirmation": "Vă mulțumim că ați susținut anacard!",
   "any-previous-purchases-restored": "Orice achiziții anterioare au fost restaurate",
@@ -516,5 +516,8 @@
   "loans": "Împrumuturi",
   "add-credit": "Adăugați credit",
   "add-debt": "Adăugați datorii",
-  "add-upcoming": "Adăugare viitoare"
+  "add-upcoming": "Adăugare viitoare",
+  "you-owe": "Tu detii",
+  "you-get": "Primesti",
+  "heat-map": "Harta termografica"
 }

@@ -431,7 +431,7 @@
   "create-addable-budget": "「追加のみ」予算を作成します",
   "delete-budget-added-warning": "この予算に追加された取引は、この予算に関連しなくなります。それらは削除されません。",
   "removed-from-budget": "予算から削除されました",
-  "pinned-to-homepage": "ホームページに固定されています",
+  "pinned-to-homepage": "ホームページにピン留め",
   "unpinned-to-homepage": "ホームページから調整されていません",
   "expenses-only": "費用のみ",
   "expenses-only-description": "予算に追加できます",
@@ -516,5 +516,8 @@
   "loans": "ローン",
   "add-credit": "クレジットを追加します",
   "add-debt": "借金を追加します",
-  "add-upcoming": "今後も追加します"
+  "add-upcoming": "今後も追加します",
+  "you-owe": "あなたが借りています",
+  "you-get": "あなたは得ます",
+  "heat-map": "ヒートマップ"
 }

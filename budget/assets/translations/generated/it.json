@@ -452,11 +452,11 @@
   "deleted-transaction": "Transazione cancellata",
   "change-category": "Categoria di cambiamento",
   "changed-category": "Categoria modificata",
-  "merged-category": "Categoria unicata",
+  "merged-category": "Categoria unita",
   "an-error-occured": "Si è verificato un errore",
   "more": "Di più",
   "syncing-failed": "La sincronizzazione non è riuscita",
-  "sync-fail-reason": "Versioni di schema del database non corrispondente",
+  "sync-fail-reason": "Versioni dello schema del database non corrispondente",
   "feedback-shared": "Feedback condiviso!",
   "thank-you": "Grazie!",
   "email-optional": "Email (opzionale)",
@@ -506,7 +506,7 @@
   "biometrics-error-description": "Si è verificato un errore utilizzando la biometria dei dispositivi",
   "from-the-developer": "Dallo sviluppatore",
   "developer-message-1": "Il benessere finanziario conta per tutti noi e siamo qui per sostenere il tuo viaggio verso una migliore gestione del denaro. Ecco perché ti offriamo funzionalità premium gratuitamente. Apparirà il popup premium, ma puoi licenziarlo per accedere alla funzione bloccata",
-  "developer-message-1-1": "(anche senza aspettare!)",
+  "developer-message-1-1": "(senza aspettare anche!)",
   "developer-message-2": "Tuttavia, se possibile, considera di supportare lo sviluppo. Con un solo caffè ☕ al mese, il tuo supporto svolge un ruolo cruciale nella crescita futura di questa applicazione. Grazie 😄",
   "support": "Supporto",
   "unlock-for-free": "Sblocca gratuitamente",
@@ -516,5 +516,8 @@
   "loans": "Prestiti",
   "add-credit": "Aggiungi credito",
   "add-debt": "Aggiungi debito",
-  "add-upcoming": "Aggiungi imminente"
+  "add-upcoming": "Aggiungi imminente",
+  "you-owe": "Devi",
+  "you-get": "Ottieni",
+  "heat-map": "Mappa di calore"
 }

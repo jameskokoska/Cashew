@@ -490,7 +490,7 @@
   "edit-home-page": "Homepage bearbeiten",
   "delete-category": "Kategorie löschen",
   "manage": "Verwalten",
-  "restore-purchases": "Käufe wiederherstellen",
+  "restore-purchases": "Einkäufe wiederherstellen",
   "backup-restored": "Backup wiederhergestellt",
   "budget-total-label": "Budgets Gesamtetikett",
   "total-spent": "Gesamtausgaben",
@@ -516,5 +516,8 @@
   "loans": "Kredite",
   "add-credit": "Guthaben hinzufügen",
   "add-debt": "Schulden hinzufügen",
-  "add-upcoming": "Auf die bevorstehende Weise addieren"
+  "add-upcoming": "Auf die bevorstehende Weise addieren",
+  "you-owe": "Du schuldest",
+  "you-get": "Du erhältst",
+  "heat-map": "Heatmap"
 }

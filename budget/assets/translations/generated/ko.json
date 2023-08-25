@@ -478,7 +478,7 @@
   "none": "없음",
   "error-getting-products": "제품을 얻는 오류",
   "error-getting-products-description": "앱 스토어에 연결하는 오류가있었습니다. 나중에 다시 시도 해주십시오.",
-  "error-processing-order": "구매를 처리하는 오류가있었습니다. 다시 시도하십시오.",
+  "error-processing-order": "구매를 처리하는 오류가 발생했습니다. 다시 시도하십시오.",
   "order-confirmation": "캐슈를 지원해 주셔서 감사합니다!",
   "any-previous-purchases-restored": "이전 구매는 복원되었습니다",
   "already-purchased": "이미 구매했습니다",
@@ -516,5 +516,8 @@
   "loans": "대출",
   "add-credit": "신용을 추가하십시오",
   "add-debt": "부채 추가",
-  "add-upcoming": "다가오는 추가"
+  "add-upcoming": "다가오는 추가",
+  "you-owe": "너는 빚지고있다",
+  "you-get": "당신은 얻습니다",
+  "heat-map": "히트 맵"
 }

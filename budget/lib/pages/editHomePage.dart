@@ -297,6 +297,16 @@ class _EditHomePageState extends State<EditHomePage> {
               );
             },
           ),
+          "heatMap": EditHomePageItem(
+            icon: Icons.grid_on_rounded,
+            name: "heat-map".tr(),
+            isEnabled: appStateSettings["showHeatMap"],
+            onSwitched: (value) {
+              updateSettings("showHeatMap", value,
+                  pagesNeedingRefresh: [], updateGlobalState: false);
+            },
+            extraWidgetsBelow: [],
+          ),
         };
         keyOrder = List<String>.from(appStateSettings["homePageOrder"]
             .map((element) => element.toString()));

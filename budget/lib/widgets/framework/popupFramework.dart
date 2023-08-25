@@ -11,7 +11,8 @@ class PopupFramework extends StatelessWidget {
     required this.child,
     this.title,
     this.subtitle,
-    this.padding = true,
+    this.customSubtitleWidget,
+    this.hasPadding = true,
     this.underTitleSpace = true,
     this.showCloseButton = false,
     this.hasBottomSafeArea = true,
@@ -20,7 +21,8 @@ class PopupFramework extends StatelessWidget {
   final Widget child;
   final String? title;
   final String? subtitle;
-  final bool padding;
+  final Widget? customSubtitleWidget;
+  final bool hasPadding;
   final bool underTitleSpace;
   final bool showCloseButton;
   final bool hasBottomSafeArea;
@@ -61,17 +63,18 @@ class PopupFramework extends StatelessWidget {
                                       textAlign: TextAlign.center,
                                     ),
                                   ),
-                            subtitle == null
+                            subtitle == null && customSubtitleWidget == null
                                 ? SizedBox.shrink()
                                 : Padding(
                                     padding:
                                         EdgeInsets.symmetric(horizontal: 18),
-                                    child: TextFont(
-                                      text: subtitle ?? "",
-                                      fontSize: 14,
-                                      maxLines: 5,
-                                      textAlign: TextAlign.center,
-                                    ),
+                                    child: customSubtitleWidget ??
+                                        TextFont(
+                                          text: subtitle ?? "",
+                                          fontSize: 14,
+                                          maxLines: 5,
+                                          textAlign: TextAlign.center,
+                                        ),
                                   ),
                             Container(
                               height: 1.5,
@@ -110,16 +113,17 @@ class PopupFramework extends StatelessWidget {
                                         fontWeight: FontWeight.bold,
                                         maxLines: 5,
                                       ),
-                                subtitle == null
+                                subtitle == null && customSubtitleWidget == null
                                     ? SizedBox.shrink()
                                     : Padding(
                                         padding:
                                             EdgeInsets.only(left: 2, bottom: 4),
-                                        child: TextFont(
-                                          text: subtitle ?? "",
-                                          fontSize: 15,
-                                          maxLines: 5,
-                                        ),
+                                        child: customSubtitleWidget ??
+                                            TextFont(
+                                              text: subtitle ?? "",
+                                              fontSize: 15,
+                                              maxLines: 5,
+                                            ),
                                       ),
                               ],
                             ),
@@ -132,7 +136,7 @@ class PopupFramework extends StatelessWidget {
                   ? Container()
                   : Container(height: 13),
               Padding(
-                padding: padding
+                padding: hasPadding
                     ? EdgeInsets.only(left: 18, right: 18)
                     : EdgeInsets.zero,
                 child: child,

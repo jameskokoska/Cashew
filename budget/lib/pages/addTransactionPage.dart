@@ -549,7 +549,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
   Widget afterSetTitle() {
     return PopupFramework(
       title: "select-category".tr(),
-      padding: false,
+      hasPadding: false,
       child: Column(
         children: [
           Padding(
@@ -574,7 +574,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                   PopupFramework(
                     title: "enter-amount".tr(),
                     underTitleSpace: false,
-                    padding: false,
+                    hasPadding: false,
                     child: SelectAmount(
                       enableWalletPicker: true,
                       selectedWallet: selectedWallet,
@@ -812,7 +812,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                           context,
                           fullSnap: true,
                           PopupFramework(
-                            padding: false,
+                            hasPadding: false,
                             title: "enter-amount".tr(),
                             underTitleSpace: false,
                             child: SelectAmount(
@@ -1148,7 +1148,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                         fullSnap: true,
                                         PopupFramework(
                                           title: "enter-amount".tr(),
-                                          padding: false,
+                                          hasPadding: false,
                                           underTitleSpace: false,
                                           child: SelectAmount(
                                             enableWalletPicker: true,
@@ -1192,7 +1192,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                   fullSnap: true,
                                   PopupFramework(
                                     title: "enter-amount".tr(),
-                                    padding: false,
+                                    hasPadding: false,
                                     underTitleSpace: false,
                                     child: SelectAmount(
                                       enableWalletPicker: true,

@@ -516,5 +516,8 @@
   "loans": "Kölcsönök",
   "add-credit": "Adjon hozzá hitelt",
   "add-debt": "Adósságot ad",
-  "add-upcoming": "Adja hozzá a közelgő"
+  "add-upcoming": "Adja hozzá a közelgő",
+  "you-owe": "Tartozol",
+  "you-get": "Kapsz",
+  "heat-map": "Hőtérkép"
 }

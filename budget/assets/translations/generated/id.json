@@ -516,5 +516,8 @@
   "loans": "Pinjaman",
   "add-credit": "Tambahkan kredit",
   "add-debt": "Tambahkan hutang",
-  "add-upcoming": "Tambahkan mendatang"
+  "add-upcoming": "Tambahkan mendatang",
+  "you-owe": "Kamu berhutang",
+  "you-get": "Anda mendapatkan",
+  "heat-map": "Panas"
 }

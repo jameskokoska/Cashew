@@ -494,7 +494,7 @@
   "backup-restored": "Backup restaurado",
   "budget-total-label": "Rótulo total dos orçamentos",
   "total-spent": "Total gasto",
-  "total-remaining": "Restante total",
+  "total-remaining": "Total restante",
   "total-spent-example": "Exemplo: 25 gasto de 100",
   "total-remaining-example": "Exemplo: 75 à esquerda de 100",
   "importing-loading": "Importando ...",
@@ -516,5 +516,8 @@
   "loans": "Empréstimos",
   "add-credit": "Adicionar crédito",
   "add-debt": "Adicione dívida",
-  "add-upcoming": "Adicionar próximo"
+  "add-upcoming": "Adicionar próximo",
+  "you-owe": "Você deve",
+  "you-get": "Você recebe",
+  "heat-map": "Mapa de calor"
 }

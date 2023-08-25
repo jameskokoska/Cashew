@@ -417,7 +417,7 @@
   "exit-demo": "બહાર નીકળવું",
   "not-available-in-preview-demo": "પૂર્વાવલોકન ડેમોમાં ઉપલબ્ધ નથી",
   "not-available-in-preview-demo-description": "આ સુવિધાનો ઉપયોગ કરવા માટે પૂર્વાવલોકન ડેમો મોડને અક્ષમ કરો.",
-  "copied": "ક copપિચ કરવું",
+  "copied": "Copઠવું",
   "created-copy": "બનાવેલી નકલ",
   "duplicate": "ઉઘાડું",
   "delete-transactions": "વ્યવહાર કા delete ી નાખો",
@@ -488,7 +488,7 @@
   "exchange-rates": "વિનિમય દર",
   "active": "સક્રિય",
   "edit-home-page": "હોમ પેજ સંપાદિત કરો",
-  "delete-category": "કેટેગરી કા Delete ી નાંખો",
+  "delete-category": "કેટેગરી કા Delete ી નાખો",
   "manage": "સંચાલન કરવું",
   "restore-purchases": "ખરીદી પુન restore સ્થાપિત કરો",
   "backup-restored": "બેકઅપ પુન restored સ્થાપિત",
@@ -516,5 +516,8 @@
   "loans": "લોન",
   "add-credit": "ક્રેડિટ ઉમેરો",
   "add-debt": "દેવું ઉમેરો",
-  "add-upcoming": "આગામી ઉમેરો"
+  "add-upcoming": "આગામી ઉમેરો",
+  "you-owe": "તમે .ણી",
+  "you-get": "તમે મેળવો",
+  "heat-map": "હીટમેપ"
 }

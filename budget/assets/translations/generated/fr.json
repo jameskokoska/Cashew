@@ -456,7 +456,7 @@
   "an-error-occured": "Une erreur s'est produite",
   "more": "Plus",
   "syncing-failed": "La synchronisation a échoué",
-  "sync-fail-reason": "Versions de schéma de base de données de non-apparence",
+  "sync-fail-reason": "Versions de schéma de base de données incompatibles",
   "feedback-shared": "Commentaires partagés!",
   "thank-you": "Merci!",
   "email-optional": "E-mail (facultatif)",
@@ -503,7 +503,7 @@
   "biometrics-disabled": "Biométrie handicapée",
   "biometrics-disabled-description": "Appuyez ici pour activer la biométrie dans la page des paramètres et réessayer",
   "biometrics-error": "Erreur de biométrie",
-  "biometrics-error-description": "Il y a eu une erreur en utilisant les appareils biométriques",
+  "biometrics-error-description": "Il y avait une erreur en utilisant les appareils biométriques",
   "from-the-developer": "Du développeur",
   "developer-message-1": "Le bien-être financier est important pour nous tous, et nous sommes ici pour soutenir votre parcours vers une meilleure gestion de l'argent. C'est pourquoi nous vous offrons des fonctionnalités premium sans frais. La popup premium apparaîtra, mais vous pouvez le rejeter pour accéder à la fonctionnalité verrouillée",
   "developer-message-1-1": "(sans attente aussi!)",
@@ -516,5 +516,8 @@
   "loans": "Prêts",
   "add-credit": "Ajouter un crédit",
   "add-debt": "Ajouter de la dette",
-  "add-upcoming": "Ajouter à venir"
+  "add-upcoming": "Ajouter à venir",
+  "you-owe": "Vous devez",
+  "you-get": "Vous obtenez",
+  "heat-map": "Carte de chaleur"
 }

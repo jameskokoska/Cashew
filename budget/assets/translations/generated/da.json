@@ -432,7 +432,7 @@
   "delete-budget-added-warning": "Transaktioner tilføjet til dette budget vil ikke længere være knyttet til dette budget. De vil ikke blive slettet.",
   "removed-from-budget": "Fjernet fra budgettet",
   "pinned-to-homepage": "Fastgjort til hjemmesiden",
-  "unpinned-to-homepage": "Ubesættet fra hjemmesiden",
+  "unpinned-to-homepage": "Ubegrænset fra hjemmesiden",
   "expenses-only": "Kun udgifter",
   "expenses-only-description": "Kun udgifter kan føjes til et budget",
   "delete-category-question": "Slet kategori?",
@@ -477,7 +477,7 @@
   "current-wallet": "Nuværende tegnebog",
   "none": "Ingen",
   "error-getting-products": "Fejl ved at få produkter",
-  "error-getting-products-description": "Der var en fejl, der opretter forbindelse til App Store. Prøv igen senere.",
+  "error-getting-products-description": "Der var en fejl, der forbinder til App Store. Prøv igen senere.",
   "error-processing-order": "Der var en fejlbehandling af dit køb. Prøv igen.",
   "order-confirmation": "Tak fordi du støtter cashew!",
   "any-previous-purchases-restored": "Eventuelle tidligere køb blev gendannet",
@@ -492,7 +492,7 @@
   "manage": "Styre",
   "restore-purchases": "Genoprette indkøb",
   "backup-restored": "Backup gendannet",
-  "budget-total-label": "Budgetter samlet etiket",
+  "budget-total-label": "Budgetter samlet label",
   "total-spent": "Samlet brugt",
   "total-remaining": "Samlet resterende",
   "total-spent-example": "Eksempel: 25 brugt på 100",
@@ -516,5 +516,8 @@
   "loans": "Lån",
   "add-credit": "Tilføj kredit",
   "add-debt": "Tilføj gæld",
-  "add-upcoming": "Tilføj kommende"
+  "add-upcoming": "Tilføj kommende",
+  "you-owe": "Du skylder",
+  "you-get": "Du får",
+  "heat-map": "Heatmap"
 }

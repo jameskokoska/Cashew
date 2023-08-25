@@ -76,7 +76,7 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
       context,
       PopupFramework(
         title: "filters".tr(),
-        padding: false,
+        hasPadding: false,
         child: TransactionFiltersSelection(
           setSearchFilters: setSearchFilters,
           searchFilters: searchFilters,

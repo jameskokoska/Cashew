@@ -358,72 +358,75 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
               : SettingsContainerOutlined(
                   onTap: () async {
                     loadingIndeterminateKey.currentState?.setVisibility(true);
-                    try {
-                      await signInGoogle(
-                        context: context,
-                        waitForCompletion: false,
-                        drivePermissions: true,
-                        next: () {},
-                      );
-                      if (appStateSettings["username"] == "" &&
-                          googleUser != null) {
-                        updateSettings(
-                            "username", googleUser?.displayName ?? "",
-                            pagesNeedingRefresh: [0], updateGlobalState: false);
-                      }
+                    openLoadingPopupTryCatch(
+                      () async {
+                        await signInGoogle(
+                          context: context,
+                          waitForCompletion: false,
+                          drivePermissions: true,
+                          next: () {},
+                        );
+                        if (appStateSettings["username"] == "" &&
+                            googleUser != null) {
+                          updateSettings(
+                              "username", googleUser?.displayName ?? "",
+                              pagesNeedingRefresh: [0],
+                              updateGlobalState: false);
+                        }
+                        // If user has sync backups, but no real backups it will show up here
+                        // For now disable restoring of a backup popup, the sync backups will be restored automatically using the function call below
+                        // var result;
+                        // List<drive.File>? files = (await getDriveFiles()).$2;
+                        // if ((files?.length ?? 0) > 0) {
+                        //   result = await openPopup(
+                        //     context,
+                        //     icon: Icons.cloud_sync_rounded,
+                        //     title: "backup-found".tr(),
+                        //     description: "backup-found-description".tr(),
+                        //     onSubmit: () {
+                        //       Navigator.pop(context, true);
+                        //     },
+                        //     onCancel: () {
+                        //       Navigator.pop(context, false);
+                        //     },
+                        //     onSubmitLabel: "restore".tr(),
+                        //     onCancelLabel: "cancel".tr(),
+                        //   );
+                        // }
+                        // if (result == true) {
+                        //   chooseBackup(context, hideDownloadButton: true);
+                        // } else if (result == false && googleUser != null) {
+                        //   openLoadingPopup(context);
+                        //   // set this to true so cloud functions run
+                        //   entireAppLoaded = true;
+                        //   await runAllCloudFunctions(
+                        //     context,
+                        //     forceSignIn: true,
+                        //   );
+                        //   Navigator.pop(context);
+                        //   nextNavigation();
+                        // }
+                        // else {
+                        //   nextNavigation();
+                        // }
 
-                      // If user has sync backups, but no real backups it will show up here
-                      // For now disable restoring of a backup popup, the sync backups will be restored automatically using the function call below
-                      // var result;
-                      // List<drive.File>? files = (await getDriveFiles()).$2;
-                      // if ((files?.length ?? 0) > 0) {
-                      //   result = await openPopup(
-                      //     context,
-                      //     icon: Icons.cloud_sync_rounded,
-                      //     title: "backup-found".tr(),
-                      //     description: "backup-found-description".tr(),
-                      //     onSubmit: () {
-                      //       Navigator.pop(context, true);
-                      //     },
-                      //     onCancel: () {
-                      //       Navigator.pop(context, false);
-                      //     },
-                      //     onSubmitLabel: "restore".tr(),
-                      //     onCancelLabel: "cancel".tr(),
-                      //   );
-                      // }
-                      // if (result == true) {
-                      //   chooseBackup(context, hideDownloadButton: true);
-                      // } else if (result == false && googleUser != null) {
-                      //   openLoadingPopup(context);
-                      //   // set this to true so cloud functions run
-                      //   entireAppLoaded = true;
-                      //   await runAllCloudFunctions(
-                      //     context,
-                      //     forceSignIn: true,
-                      //   );
-                      //   Navigator.pop(context);
-                      //   nextNavigation();
-                      // }
-                      // else {
-                      //   nextNavigation();
-                      // }
-                      openLoadingPopup(context);
-                      // set this to true so cloud functions run
-                      entireAppLoaded = true;
-                      await runAllCloudFunctions(
-                        context,
-                        forceSignIn: true,
-                      );
-                      Navigator.pop(context);
-                      nextNavigation();
-                      loadingIndeterminateKey.currentState
-                          ?.setVisibility(false);
-                    } catch (e) {
-                      print("Error signing in: " + e.toString());
-                      loadingIndeterminateKey.currentState
-                          ?.setVisibility(false);
-                    }
+                        // set this to true so cloud functions run
+                        entireAppLoaded = true;
+                        await runAllCloudFunctions(
+                          context,
+                          forceSignIn: true,
+                        );
+
+                        nextNavigation();
+                        loadingIndeterminateKey.currentState
+                            ?.setVisibility(false);
+                      },
+                      onError: (e) {
+                        print("Error signing in: " + e.toString());
+                        loadingIndeterminateKey.currentState
+                            ?.setVisibility(false);
+                      },
+                    );
                   },
                   title: "sign-in-with-google".tr(),
                   icon: MoreIcons.google,

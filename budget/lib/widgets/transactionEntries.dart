@@ -48,6 +48,8 @@ class TransactionEntries extends StatelessWidget {
     this.noResultsMessage,
     this.searchFilters,
     this.pastDaysLimitToShow,
+    this.includeDateDivider = true,
+    this.allowSelect = true,
     super.key,
   });
 
@@ -78,6 +80,8 @@ class TransactionEntries extends StatelessWidget {
   final String? noResultsMessage;
   final SearchFilters? searchFilters;
   final int? pastDaysLimitToShow;
+  final bool includeDateDivider;
+  final bool allowSelect;
 
   @override
   Widget build(BuildContext context) {
@@ -184,17 +188,19 @@ class TransactionEntries extends StatelessWidget {
                         int realIndex = index - 1;
                         if (realIndex == -1) {
                           children.add(
-                            DateDivider(
-                              useHorizontalPaddingConstrained:
-                                  useHorizontalPaddingConstrained,
-                              color: dateDividerColor,
-                              date: date,
-                              info: transactionList.length > 1
-                                  ? convertToMoney(
-                                      Provider.of<AllWallets>(context),
-                                      totalSpentForDay)
-                                  : "",
-                            ),
+                            includeDateDivider == false
+                                ? SizedBox.shrink()
+                                : DateDivider(
+                                    useHorizontalPaddingConstrained:
+                                        useHorizontalPaddingConstrained,
+                                    color: dateDividerColor,
+                                    date: date,
+                                    info: transactionList.length > 1
+                                        ? convertToMoney(
+                                            Provider.of<AllWallets>(context),
+                                            totalSpentForDay)
+                                        : "",
+                                  ),
                           );
                         } else {
                           children.add(
@@ -229,6 +235,7 @@ class TransactionEntries extends StatelessWidget {
                                     onSelected!(transaction, selected);
                                 },
                                 listID: listID,
+                                allowSelect: allowSelect,
                               ),
                             ),
                           );
@@ -250,17 +257,20 @@ class TransactionEntries extends StatelessWidget {
                               if (sticky)
                                 return SizedBox.shrink();
                               else
-                                return DateDivider(
-                                  useHorizontalPaddingConstrained:
-                                      useHorizontalPaddingConstrained,
-                                  color: dateDividerColor,
-                                  date: date,
-                                  info: transactionList.length > 1
-                                      ? convertToMoney(
-                                          Provider.of<AllWallets>(context),
-                                          totalSpentForDay)
-                                      : "",
-                                );
+                                return includeDateDivider == false
+                                    ? SizedBox.shrink()
+                                    : DateDivider(
+                                        useHorizontalPaddingConstrained:
+                                            useHorizontalPaddingConstrained,
+                                        color: dateDividerColor,
+                                        date: date,
+                                        info: transactionList.length > 1
+                                            ? convertToMoney(
+                                                Provider.of<AllWallets>(
+                                                    context),
+                                                totalSpentForDay)
+                                            : "",
+                                      );
                             }
                             return TransactionEntry(
                               transactionBefore: nullIfIndexOutOfRange(
@@ -291,6 +301,7 @@ class TransactionEntries extends StatelessWidget {
                                   onSelected!(transaction, selected);
                               },
                               listID: listID,
+                              allowSelect: allowSelect,
                             );
                           },
                         ),
@@ -337,6 +348,7 @@ class TransactionEntries extends StatelessWidget {
                                 onSelected?.call(transaction, selected);
                               },
                               listID: listID,
+                              allowSelect: allowSelect,
                             ),
                           );
                         },
@@ -347,16 +359,19 @@ class TransactionEntries extends StatelessWidget {
                         header: Transform.translate(
                             offset: Offset(0, -1),
                             child: transactionList.length > 0
-                                ? DateDivider(
-                                    useHorizontalPaddingConstrained:
-                                        useHorizontalPaddingConstrained,
-                                    color: dateDividerColor,
-                                    date: date,
-                                    info: transactionList.length > 1
-                                        ? convertToMoney(
-                                            Provider.of<AllWallets>(context),
-                                            totalSpentForDay)
-                                        : "")
+                                ? includeDateDivider == false
+                                    ? SizedBox.shrink()
+                                    : DateDivider(
+                                        useHorizontalPaddingConstrained:
+                                            useHorizontalPaddingConstrained,
+                                        color: dateDividerColor,
+                                        date: date,
+                                        info: transactionList.length > 1
+                                            ? convertToMoney(
+                                                Provider.of<AllWallets>(
+                                                    context),
+                                                totalSpentForDay)
+                                            : "")
                                 : SizedBox.shrink()),
                         sticky: true,
                         sliver: sliverList,

@@ -492,7 +492,7 @@
   "manage": "Mengurus",
   "restore-purchases": "Memulihkan pembelian",
   "backup-restored": "Sandaran dipulihkan",
-  "budget-total-label": "Jumlah label belanjawan",
+  "budget-total-label": "Belanjawan Jumlah Label",
   "total-spent": "Jumlah yang dibelanjakan",
   "total-remaining": "Jumlah baki",
   "total-spent-example": "Contoh: 25 dibelanjakan sebanyak 100",
@@ -516,5 +516,8 @@
   "loans": "Pinjaman",
   "add-credit": "Tambah kredit",
   "add-debt": "Tambah hutang",
-  "add-upcoming": "Tambah akan datang"
+  "add-upcoming": "Tambah akan datang",
+  "you-owe": "Anda berhutang",
+  "you-get": "Anda mendapatkan",
+  "heat-map": "Peta haba"
 }

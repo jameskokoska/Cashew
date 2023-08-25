@@ -450,7 +450,7 @@
   "remove-transactions-from-added-budget-question": "பரிவர்த்தனைகளை அகற்றவா?",
   "deleted-transactions": "நீக்கப்பட்ட பரிவர்த்தனைகள்",
   "deleted-transaction": "நீக்கப்பட்ட பரிவர்த்தனை",
-  "change-category": "வகை",
+  "change-category": "வகை மாற்ற",
   "changed-category": "மாற்றப்பட்ட வகை",
   "merged-category": "இணைக்கப்பட்ட வகை",
   "an-error-occured": "ஒரு பிழை ஏற்பட்டது",
@@ -477,10 +477,10 @@
   "current-wallet": "தற்போதைய பணப்பையை",
   "none": "எதுவுமில்லை",
   "error-getting-products": "தயாரிப்புகளைப் பெறுவதில் பிழை",
-  "error-getting-products-description": "ஆப் ஸ்டோருடன் இணைக்கும் பிழை இருந்தது. தயவுசெய்து பின்னர் முயற்சிக்கவும்.",
+  "error-getting-products-description": "ஆப் ஸ்டோருடன் இணைக்கும் பிழை இருந்தது. தயவுசெய்து பின்னர் மீண்டும் முயற்சிக்கவும்.",
   "error-processing-order": "உங்கள் வாங்குதலை செயலாக்குவதில் பிழை ஏற்பட்டது. தயவு செய்து மீண்டும் முயற்சிக்கவும்.",
-  "order-confirmation": "முந்திரி ஆதரவளித்ததற்கு நன்றி!",
-  "any-previous-purchases-restored": "முந்தைய வாங்குதல்கள் மீட்டெடுக்கப்பட்டன",
+  "order-confirmation": "முந்திரி ஆதரித்ததற்கு நன்றி!",
+  "any-previous-purchases-restored": "முந்தைய வாங்குதல்கள் மீட்டமைக்கப்பட்டன",
   "already-purchased": "ஏற்கனவே வாங்கப்பட்டது",
   "current-plan": "தற்போதைய திட்டம்",
   "lifetime": "வாழ்நாள்",
@@ -516,5 +516,8 @@
   "loans": "கடன்கள்",
   "add-credit": "கடன் சேர்க்கவும்",
   "add-debt": "கடனைச் சேர்க்கவும்",
-  "add-upcoming": "வரவிருக்கும் சேர்க்கவும்"
+  "add-upcoming": "வரவிருக்கும் சேர்க்கவும்",
+  "you-owe": "நீங்கள் கடன்பட்டிருக்கிறீர்கள்",
+  "you-get": "நீங்கள் பெறுவீர்கள்",
+  "heat-map": "வெப்ப வரைபடம்"
 }

@@ -416,7 +416,7 @@
   "preview-demo-warning": "Preview-esittely on tällä hetkellä aktiivinen, ja automaattisesti tuotettua tietoa käytetään. Sovellusta ei suositella käyttämään demotilassa, koska se voi johtaa tietojen menetykseen. Voit poistaa luodut tiedot ja poistua esikatselun esittelystä napauttamalla tätä.",
   "exit-demo": "Poistua esittelystä",
   "not-available-in-preview-demo": "Ei ole saatavana esikatselun esittelyssä",
-  "not-available-in-preview-demo-description": "Poista esikatselu -esittelytila ​​käytöstä tämän ominaisuuden käyttämiseen.",
+  "not-available-in-preview-demo-description": "Poista esikatselun esittelytila ​​käytöstä käyttääksesi tätä ominaisuutta.",
   "copied": "Kopioitu",
   "created-copy": "Luotu kopio",
   "duplicate": "Kopioida",
@@ -498,7 +498,7 @@
   "total-spent-example": "Esimerkki: 25 käytettyä 100: sta",
   "total-remaining-example": "Esimerkki: 75 vasemmalla 100: sta",
   "importing-loading": "Tuo ...",
-  "successfully-imported": "Tuonti menestyksekkäästi",
+  "successfully-imported": "Tuonti onnistuneesti",
   "please-restart-the-application": "Käynnistä sovellus uudelleen",
   "biometrics-disabled": "Biometriset tiedot poistettu käytöstä",
   "biometrics-disabled-description": "Napauta tätä, jotta biometriset tiedot otetaan käyttöön asetussivulla ja yritä uudelleen",
@@ -516,5 +516,8 @@
   "loans": "Lainat",
   "add-credit": "Lisätä luottoa",
   "add-debt": "Lisätä velkaa",
-  "add-upcoming": "Tulla tulossa"
+  "add-upcoming": "Tulla tulossa",
+  "you-owe": "Sinä olet velkaa",
+  "you-get": "Saat",
+  "heat-map": "Lämpökartta"
 }

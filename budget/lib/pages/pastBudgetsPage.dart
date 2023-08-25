@@ -504,25 +504,28 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
                       top: 0,
                       child: Transform.translate(
                         offset: Offset(2, -2),
-                        child: IconButton(
-                          color: budgetColorScheme.primary,
-                          icon: Icon(
-                            Icons.history_rounded,
-                            size: 22,
-                            color: budgetColorScheme.primary.withOpacity(0.8),
+                        child: Tooltip(
+                          message: "view-more".tr(),
+                          child: IconButton(
+                            color: budgetColorScheme.primary,
+                            icon: Icon(
+                              Icons.history_rounded,
+                              size: 22,
+                              color: budgetColorScheme.primary.withOpacity(0.8),
+                            ),
+                            onPressed: () {
+                              int amountMoreToLoad =
+                                  getIsFullScreen(context) == false ? 3 : 5;
+                              loadLines(amountLoaded + amountMoreToLoad);
+                              setState(() {
+                                amountLoaded = amountLoaded + amountMoreToLoad;
+                              });
+                              // Future.delayed(Duration(milliseconds: 150), () {
+                              //   budgetHistoryKey.currentState!
+                              //       .scrollToBottom(duration: 4000);
+                              // });
+                            },
                           ),
-                          onPressed: () {
-                            int amountMoreToLoad =
-                                getIsFullScreen(context) == false ? 3 : 5;
-                            loadLines(amountLoaded + amountMoreToLoad);
-                            setState(() {
-                              amountLoaded = amountLoaded + amountMoreToLoad;
-                            });
-                            // Future.delayed(Duration(milliseconds: 150), () {
-                            //   budgetHistoryKey.currentState!
-                            //       .scrollToBottom(duration: 4000);
-                            // });
-                          },
                         ),
                       ),
                     ),

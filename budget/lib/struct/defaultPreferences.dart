@@ -35,6 +35,7 @@ Future<Map<String, dynamic>> getDefaultPreferences() async {
     "showOverdueUpcoming": false,
     "showCreditDebt": false,
     "showSpendingGraph": true,
+    "showHeatMap": false,
     "homePageOrder": [
       "wallets",
       "budgets",
@@ -42,6 +43,7 @@ Future<Map<String, dynamic>> getDefaultPreferences() async {
       "overdueUpcoming",
       "creditDebts",
       "spendingGraph",
+      "heatMap",
     ],
     "showTotalSpentForBudget": false,
     "showCumulativeSpending": true,

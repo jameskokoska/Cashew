@@ -59,6 +59,7 @@ class TransactionEntry extends StatelessWidget {
     this.categoryTintColor,
     this.transactionBefore,
     this.transactionAfter,
+    this.allowSelect,
   }) : super(key: key);
 
   final Widget openPage;
@@ -71,11 +72,13 @@ class TransactionEntry extends StatelessWidget {
   final Color? categoryTintColor;
   final Transaction? transactionBefore;
   final Transaction? transactionAfter;
+  final bool? allowSelect;
 
   final double fabSize = 50;
 
   void selectTransaction(
       Transaction transaction, bool selected, bool isSwiping) {
+    if (allowSelect == false) return;
     if (!selected) {
       globalSelectedID.value[listID ?? "0"]!.add(transaction.transactionPk);
       if (isSwiping) selectingTransactionsActive = 1;
@@ -96,29 +99,6 @@ class TransactionEntry extends StatelessWidget {
       globalSelectedID.value[listID ?? "0"] = [];
     }
 
-    Color textColor = (transaction.type == TransactionSpecialType.credit ||
-                transaction.type == TransactionSpecialType.debt) &&
-            transaction.paid
-        ? transaction.type == TransactionSpecialType.credit
-            ? getColor(context, "unPaidUpcoming")
-            : transaction.type == TransactionSpecialType.debt
-                ? getColor(context, "unPaidOverdue")
-                : getColor(context, "textLight")
-        : (transaction.type == TransactionSpecialType.credit ||
-                    transaction.type == TransactionSpecialType.debt) &&
-                transaction.paid == false
-            ? getColor(context, "textLight")
-            : transaction.paid
-                ? transaction.income == true
-                    ? getColor(context, "incomeAmount")
-                    : getColor(context, "expenseAmount")
-                : transaction.skipPaid
-                    ? getColor(context, "textLight")
-                    : transaction.dateCreated.millisecondsSinceEpoch <=
-                            DateTime.now().millisecondsSinceEpoch
-                        ? getColor(context, "textLight")
-                        // getColor(context, "unPaidOverdue")
-                        : getColor(context, "textLight");
     // getColor(context, "unPaidUpcoming");
     Color iconColor = dynamicPastel(
         context, Theme.of(context).colorScheme.primary,
@@ -373,7 +353,6 @@ class TransactionEntry extends StatelessWidget {
                             TransactionEntryAmount(
                               transaction: transaction,
                               showOtherCurrency: showOtherCurrency,
-                              textColor: textColor,
                             ),
                           ],
                         ),

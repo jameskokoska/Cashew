@@ -479,7 +479,7 @@ class _AddEmailTemplateState extends State<AddEmailTemplate> {
                             context,
                             PopupFramework(
                               title: "Select Email",
-                              padding: false,
+                              hasPadding: false,
                               child: EmailsList(
                                 backgroundColor: getColor(context, "white"),
                                 messagesList: widget.messagesList,

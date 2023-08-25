@@ -428,7 +428,7 @@
   "changed-wallet": "Ändrad plånbok",
   "added-to-budget": "Tillagd till budgeten",
   "no-addable-budgets": "Inga budgetar för att lägga till transaktioner till",
-  "create-addable-budget": "Skapa \"tillagd endast\" budget",
+  "create-addable-budget": "Skapa \"tillagda\" budget",
   "delete-budget-added-warning": "Transaktioner som läggs till denna budget kommer inte längre att kopplas till denna budget. De kommer inte att raderas.",
   "removed-from-budget": "Borttagen från budgeten",
   "pinned-to-homepage": "Fäst till hemsida",
@@ -449,7 +449,7 @@
   "deleted-title": "Raderad titel",
   "remove-transactions-from-added-budget-question": "Ta bort transaktioner?",
   "deleted-transactions": "Raderade transaktioner",
-  "deleted-transaction": "Borttagen transaktion",
+  "deleted-transaction": "Raderad transaktion",
   "change-category": "Ändringskategori",
   "changed-category": "Ändrad kategori",
   "merged-category": "Sammanslagen kategori",
@@ -484,7 +484,7 @@
   "already-purchased": "Redan köpt",
   "current-plan": "Aktuell plan",
   "lifetime": "Livstid",
-  "exchange-rates-api": "Valutakurser API",
+  "exchange-rates-api": "Valutakurer API",
   "exchange-rates": "Växlingskurs",
   "active": "Aktiva",
   "edit-home-page": "Redigera hemsida",
@@ -516,5 +516,8 @@
   "loans": "Lån",
   "add-credit": "Lägga till kredit",
   "add-debt": "Lägga till skuld",
-  "add-upcoming": "Lägga till kommande"
+  "add-upcoming": "Lägga till kommande",
+  "you-owe": "Du är skyldig",
+  "you-get": "Du får",
+  "heat-map": "Värmekarta"
 }

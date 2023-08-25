@@ -416,7 +416,7 @@
   "preview-demo-warning": "Preview Demo is momenteel actief en automatisch gegenereerde gegevens worden gebruikt. Het wordt niet aanbevolen om de toepassing in de demo -modus te gebruiken, omdat dit kan leiden tot gegevensverlies. Tik hier om gegenereerde gegevens en exit preview -demo te verwijderen.",
   "exit-demo": "Exit demo",
   "not-available-in-preview-demo": "Niet beschikbaar in preview -demo",
-  "not-available-in-preview-demo-description": "Schakel preview -demo -modus uit om deze functie te gebruiken.",
+  "not-available-in-preview-demo-description": "Schakel de voorbeeldmodus uit om deze functie te gebruiken.",
   "copied": "Gekopieerd",
   "created-copy": "CREATE COPY",
   "duplicate": "Duplicaat",
@@ -480,7 +480,7 @@
   "error-getting-products-description": "Er was een fout die verbinding maakte met de App Store. Probeer het later opnieuw.",
   "error-processing-order": "Er was een foutverwerking van uw aankoop. Probeer het opnieuw.",
   "order-confirmation": "Bedankt voor het steunen van Cashew!",
-  "any-previous-purchases-restored": "Eerdere aankopen zijn hersteld",
+  "any-previous-purchases-restored": "Eventuele eerdere aankopen werden hersteld",
   "already-purchased": "Al gekocht",
   "current-plan": "Huidige plan",
   "lifetime": "Levenslang",
@@ -501,7 +501,7 @@
   "successfully-imported": "Succesvol geïmporteerd",
   "please-restart-the-application": "Start de applicatie opnieuw op",
   "biometrics-disabled": "Biometrie uitgeschakeld",
-  "biometrics-disabled-description": "Tik hier om biometrie in de instellingenpagina in te schakelen en probeer het opnieuw",
+  "biometrics-disabled-description": "Tik hier om biometrie op de instellingenpagina in te schakelen en probeer het opnieuw",
   "biometrics-error": "Biometrische fout",
   "biometrics-error-description": "Er was een foutmelding met behulp van de biometrie van de apparaten",
   "from-the-developer": "Van de ontwikkelaar",
@@ -516,5 +516,8 @@
   "loans": "Leningen",
   "add-credit": "Voeg krediet toe",
   "add-debt": "Voeg schulden toe",
-  "add-upcoming": "Toevoegen aankomende"
+  "add-upcoming": "Toevoegen aankomende",
+  "you-owe": "U bent verschuldigd",
+  "you-get": "Jij krijgt",
+  "heat-map": "Hitte"
 }

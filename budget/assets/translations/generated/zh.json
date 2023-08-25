@@ -415,7 +415,7 @@
   "activate": "启用",
   "preview-demo-warning": "预览演示目前处于活动状态，并且正在使用自动生成数据。不建议在演示模式下使用该应用程序，因为它可能导致数据丢失。要删除生成的数据并退出预览演示，请点击此处。",
   "exit-demo": "退出演示",
-  "not-available-in-preview-demo": "预览演示中没有",
+  "not-available-in-preview-demo": "预览演示中不可用",
   "not-available-in-preview-demo-description": "禁用预览演示模式以使用此功能。",
   "copied": "复制",
   "created-copy": "创建的副本",
@@ -477,8 +477,8 @@
   "current-wallet": "当前的钱包",
   "none": "没有任何",
   "error-getting-products": "获取产品的错误",
-  "error-getting-products-description": "连接到App Store的错误。请稍后再试。",
-  "error-processing-order": "购买您的购买错误。请再试一次。",
+  "error-getting-products-description": "连接到App Store有一个错误。请稍后再试。",
+  "error-processing-order": "处理您的购买错误。请再试一次。",
   "order-confirmation": "感谢您支持腰果！",
   "any-previous-purchases-restored": "任何以前的购买都恢复了",
   "already-purchased": "已经购买",
@@ -516,5 +516,8 @@
   "loans": "贷款",
   "add-credit": "添加信用",
   "add-debt": "增加债务",
-  "add-upcoming": "加起来"
+  "add-upcoming": "加起来",
+  "you-owe": "你欠",
+  "you-get": "你得到",
+  "heat-map": "热图"
 }

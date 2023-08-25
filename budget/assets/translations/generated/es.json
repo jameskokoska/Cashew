@@ -428,7 +428,7 @@
   "changed-wallet": "Billetera cambiada",
   "added-to-budget": "Agregado al presupuesto",
   "no-addable-budgets": "No hay presupuestos para agregar transacciones a",
-  "create-addable-budget": "Crear presupuesto 'agregado solo'",
+  "create-addable-budget": "Crear un presupuesto 'agregado solo'",
   "delete-budget-added-warning": "Las transacciones agregadas a este presupuesto ya no estarán vinculadas a este presupuesto. No serán eliminados.",
   "removed-from-budget": "Eliminado del presupuesto",
   "pinned-to-homepage": "Añadado a la página de inicio",
@@ -516,5 +516,8 @@
   "loans": "Préstamos",
   "add-credit": "Añadir crédito",
   "add-debt": "Agregar deuda",
-  "add-upcoming": "Suma próxima"
+  "add-upcoming": "Suma próxima",
+  "you-owe": "Usted debe",
+  "you-get": "Usted obtiene",
+  "heat-map": "Mapa de calor"
 }

@@ -10,6 +10,11 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    < 3.9.8
+    New heatmap homepage widget! (disabled by default)
+    Fixed stuck loading on launch if Google Drive permission denied
+    Income and expense arrow for upcoming page
+    Hint text for loans page
     < 3.9.7
     Max amount for budget, max period length for budget, period length cannot be zero
     Fixed over-scroll stretch when keyboard opens with bottom sheet

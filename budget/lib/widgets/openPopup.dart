@@ -158,7 +158,7 @@ Future<T?> openPopup<T extends Object?>(
                                             ? IntrinsicWidth(
                                                 child: Padding(
                                                   padding: const EdgeInsets
-                                                          .symmetric(
+                                                      .symmetric(
                                                       horizontal: 8.0),
                                                   child: Button(
                                                     color: Theme.of(context)
@@ -177,7 +177,7 @@ Future<T?> openPopup<T extends Object?>(
                                             ? IntrinsicWidth(
                                                 child: Padding(
                                                   padding: const EdgeInsets
-                                                          .symmetric(
+                                                      .symmetric(
                                                       horizontal: 8.0),
                                                   child: Button(
                                                     expandedLayout: true,
@@ -197,7 +197,7 @@ Future<T?> openPopup<T extends Object?>(
                                             ? IntrinsicWidth(
                                                 child: Padding(
                                                   padding: const EdgeInsets
-                                                          .symmetric(
+                                                      .symmetric(
                                                       horizontal: 8.0),
                                                   child: Button(
                                                     color: Theme.of(context)
@@ -427,18 +427,21 @@ Future<T?> openLoadingPopup<T extends Object?>(BuildContext context) {
 }
 
 Future openLoadingPopupTryCatch(Future Function() function,
-    {BuildContext? context}) async {
+    {BuildContext? context, Function(dynamic error)? onError}) async {
   openLoadingPopup(context ?? navigatorKey.currentContext!);
   try {
     await function();
   } catch (e) {
-    openSnackbar(
-      SnackbarMessage(
-        title: "an-error-occured".tr(),
-        icon: Icons.warning_amber_rounded,
-        description: e.toString(),
-      ),
-    );
+    if (onError != null)
+      onError(e);
+    else
+      openSnackbar(
+        SnackbarMessage(
+          title: "an-error-occured".tr(),
+          icon: Icons.warning_amber_rounded,
+          description: e.toString(),
+        ),
+      );
   }
   Navigator.of(context ?? navigatorKey.currentContext!).pop();
 }

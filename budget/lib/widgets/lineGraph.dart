@@ -494,10 +494,11 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
 }
 
 class Pair {
-  Pair(this.x, this.y);
+  Pair(this.x, this.y, {this.dateTime});
 
   double x;
   double y;
+  DateTime? dateTime;
 }
 
 class LineChartWrapper extends StatelessWidget {

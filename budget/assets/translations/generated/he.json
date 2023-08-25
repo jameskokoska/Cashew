@@ -431,7 +431,7 @@
   "create-addable-budget": "צור תקציב 'נוסף בלבד'",
   "delete-budget-added-warning": "עסקאות שנוספו לתקציב זה כבר לא ייקשרו לתקציב זה. הם לא יימחקו.",
   "removed-from-budget": "הוסר מהתקציב",
-  "pinned-to-homepage": "מוצמד לדף הבית",
+  "pinned-to-homepage": "הוצמד לדף הבית",
   "unpinned-to-homepage": "לא הוגן מדף הבית",
   "expenses-only": "הוצאות בלבד",
   "expenses-only-description": "ניתן להוסיף רק הוצאות לתקציב",
@@ -516,5 +516,8 @@
   "loans": "הלוואות",
   "add-credit": "הוסף קרדיט",
   "add-debt": "הוסף חוב",
-  "add-upcoming": "הוסף מתקרב"
+  "add-upcoming": "הוסף מתקרב",
+  "you-owe": "אתה חייב",
+  "you-get": "אתה מקבל",
+  "heat-map": "מפת חום"
 }

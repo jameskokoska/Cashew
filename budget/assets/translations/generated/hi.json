@@ -484,7 +484,7 @@
   "already-purchased": "पहले से ही खरीदा",
   "current-plan": "वर्तमान योजना",
   "lifetime": "जीवनभर",
-  "exchange-rates-api": "विनिमय दर एपीआई",
+  "exchange-rates-api": "विनिमय दरों एपीआई",
   "exchange-rates": "विनिमय दरें",
   "active": "सक्रिय",
   "edit-home-page": "होम पेज संपादित करें",
@@ -516,5 +516,8 @@
   "loans": "ऋण",
   "add-credit": "क्रेडिट जोड़ने",
   "add-debt": "कर्ज जोड़ें",
-  "add-upcoming": "आगामी जोड़ें"
+  "add-upcoming": "आगामी जोड़ें",
+  "you-owe": "आप ऋणी हैं",
+  "you-get": "आपको मिला",
+  "heat-map": "गर्मी के नक्शे"
 }

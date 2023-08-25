@@ -516,5 +516,8 @@
   "loans": "Loans ণ",
   "add-credit": "ক্রেডিট যোগ করুন",
   "add-debt": "Debt ণ যোগ করুন",
-  "add-upcoming": "আসন্ন যোগ করুন"
+  "add-upcoming": "আসন্ন যোগ করুন",
+  "you-owe": "আপনি পাওনা",
+  "you-get": "তুমি পাও",
+  "heat-map": "তাপ মানচিত্র"
 }

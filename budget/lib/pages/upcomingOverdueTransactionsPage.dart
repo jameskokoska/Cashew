@@ -15,6 +15,7 @@ import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/widgets/slidingSelectorIncomeExpense.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntry/transactionEntry.dart';
+import 'package:budget/widgets/transactionEntry/transactionEntryAmount.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:implicitly_animated_reorderable_list/implicitly_animated_reorderable_list.dart';
@@ -236,15 +237,20 @@ class _UpcomingOverdueTransactionsState
 }
 
 class CenteredAmountAndNumTransactions extends StatelessWidget {
-  const CenteredAmountAndNumTransactions(
-      {required this.numTransactionsStream,
-      required this.totalAmountStream,
-      required this.textColor,
-      super.key});
+  const CenteredAmountAndNumTransactions({
+    required this.numTransactionsStream,
+    required this.totalAmountStream,
+    required this.textColor,
+    this.getInitialText,
+    this.showIncomeArrow = true,
+    super.key,
+  });
 
   final Stream<List<int?>> numTransactionsStream;
   final Stream<double?> totalAmountStream;
   final Color textColor;
+  final String Function(double totalAmount)? getInitialText;
+  final bool showIncomeArrow;
 
   @override
   Widget build(BuildContext context) {
@@ -252,28 +258,59 @@ class CenteredAmountAndNumTransactions extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        SizedBox(height: 20),
+        SizedBox(height: 15),
         StreamBuilder<double?>(
           stream: totalAmountStream,
           builder: (context, snapshot) {
-            return CountNumber(
-              count: snapshot.hasData == false || snapshot.data == null
-                  ? 0
-                  : (snapshot.data ?? 0).abs(),
-              duration: Duration(milliseconds: 700),
-              initialCount: (0),
-              textBuilder: (number) {
-                return TextFont(
-                  text: convertToMoney(Provider.of<AllWallets>(context), number,
-                      finalNumber:
-                          snapshot.hasData == false || snapshot.data == null
-                              ? 0
-                              : (snapshot.data ?? 0).abs()),
-                  fontSize: 30,
-                  textColor: textColor,
-                  fontWeight: FontWeight.bold,
-                );
-              },
+            double totalAmount =
+                snapshot.hasData == false || snapshot.data == null
+                    ? 0
+                    : (snapshot.data ?? 0);
+            return Column(
+              children: [
+                getInitialText != null
+                    ? TextFont(
+                        text: getInitialText!(totalAmount),
+                        fontSize: 16,
+                        textColor: getColor(context, "textLight"),
+                      )
+                    : SizedBox.shrink(),
+                SizedBox(height: 5),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    showIncomeArrow
+                        ? AnimatedSizeSwitcher(
+                            child: totalAmount == 0
+                                ? Container(
+                                    key: ValueKey(1),
+                                  )
+                                : IncomeOutcomeArrow(
+                                    key: ValueKey(2),
+                                    color: textColor,
+                                    isIncome: totalAmount > 0,
+                                    size: 30,
+                                  ),
+                          )
+                        : SizedBox.shrink(),
+                    CountNumber(
+                      count: totalAmount.abs(),
+                      duration: Duration(milliseconds: 450),
+                      initialCount: (0),
+                      textBuilder: (number) {
+                        return TextFont(
+                          text: convertToMoney(
+                              Provider.of<AllWallets>(context), number,
+                              finalNumber: totalAmount.abs()),
+                          fontSize: 30,
+                          textColor: textColor,
+                          fontWeight: FontWeight.bold,
+                        );
+                      },
+                    ),
+                  ],
+                ),
+              ],
             );
           },
         ),

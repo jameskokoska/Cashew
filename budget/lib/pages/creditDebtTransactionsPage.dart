@@ -85,6 +85,16 @@ class _CreditDebtTransactionsState extends State<CreditDebtTransactions> {
                       isCredit,
                       searchString: searchValue,
                     ),
+                    showIncomeArrow: false,
+                    getInitialText: (totalAmount) {
+                      if (totalAmount < 0) {
+                        return "you-get".tr();
+                      } else if (totalAmount > 0) {
+                        return "you-owe".tr();
+                      } else {
+                        return "";
+                      }
+                    },
                     textColor: isCredit == null
                         ? getColor(context, "black")
                         : isCredit == true

@@ -516,5 +516,8 @@
   "loans": "Loans",
   "add-credit": "Add Credit",
   "add-debt": "Add Debt",
-  "add-upcoming": "Add Upcoming"
+  "add-upcoming": "Add Upcoming",
+  "you-owe": "You owe",
+  "you-get": "You get",
+  "heat-map": "Heatmap"
 }

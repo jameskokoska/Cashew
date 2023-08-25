@@ -1,5 +1,8 @@
+import 'package:budget/colors.dart';
 import 'package:budget/database/generatePreviewData.dart';
+import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
+import 'package:budget/pages/homePage/homePageHeatmap.dart';
 import 'package:budget/pages/homePage/homePageLineGraph.dart';
 import 'package:budget/pages/homePage/homePageWalletSwitcher.dart';
 import 'package:budget/pages/homePage/homeTransactionSlivers.dart';
@@ -11,17 +14,31 @@ import 'package:budget/pages/homePage/homePageAllSpendingSummary.dart';
 import 'package:budget/pages/editHomePage.dart';
 import 'package:budget/pages/settingsPage.dart';
 import 'package:budget/pages/homePage/homePageCreditDebts.dart';
+import 'package:budget/struct/currencyFunctions.dart';
+import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/struct/shareBudget.dart';
+import 'package:budget/widgets/animatedExpanded.dart';
+import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
+import 'package:budget/widgets/framework/popupFramework.dart';
+import 'package:budget/widgets/lineGraph.dart';
+import 'package:budget/widgets/openBottomSheet.dart';
+import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/selectedTransactionsActionBar.dart';
 import 'package:budget/widgets/keepAliveClientMixin.dart';
+import 'package:budget/widgets/tappable.dart';
+import 'package:budget/widgets/textWidgets.dart';
+import 'package:budget/widgets/transactionEntries.dart';
 import 'package:budget/widgets/transactionEntry/swipeToSelectTransactions.dart';
+import 'package:budget/widgets/transactionEntry/transactionEntryAmount.dart';
 import 'package:budget/widgets/viewAllTransactionsButton.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/widgets/scrollbarWrap.dart';
 import 'package:budget/widgets/slidingSelectorIncomeExpense.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({
@@ -104,6 +121,7 @@ class HomePageState extends State<HomePage>
       "creditDebts": HomePageCreditDebts(),
       "spendingGraph":
           HomePageLineGraph(selectedSlidingSelector: selectedSlidingSelector),
+      "heatMap": HomePageHeatMap(),
     };
     return SwipeToSelectTransactions(
       listID: "0",
@@ -195,6 +213,9 @@ class HomePageState extends State<HomePage>
                                   : HomePageLineGraph(
                                       selectedSlidingSelector:
                                           selectedSlidingSelector),
+                              enableDoubleColumn(context) == false
+                                  ? SizedBox.shrink()
+                                  : HomePageHeatMap(),
                             ],
                           ),
                         ),

@@ -1,3 +1,4 @@
+import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/struct/currencyFunctions.dart';
@@ -10,12 +11,10 @@ import 'package:provider/src/provider.dart';
 class TransactionEntryAmount extends StatelessWidget {
   const TransactionEntryAmount({
     required this.transaction,
-    required this.textColor,
     required this.showOtherCurrency,
     super.key,
   });
   final Transaction transaction;
-  final Color textColor;
   final bool showOtherCurrency;
 
   @override
@@ -46,13 +45,11 @@ class TransactionEntryAmount extends StatelessWidget {
                                         TransactionSpecialType.debt) &&
                                 transaction.paid == false)
                             ? SizedBox.shrink()
-                            : AnimatedRotation(
-                                duration: Duration(milliseconds: 2000),
-                                curve: ElasticOutCurve(0.5),
-                                turns: transaction.income ? 0.5 : 0,
-                                child: Icon(
-                                  Icons.arrow_drop_down_rounded,
-                                  color: textColor,
+                            : IncomeOutcomeArrow(
+                                isIncome: transaction.income,
+                                color: getTransactionAmountColor(
+                                  context,
+                                  transaction,
                                 ),
                               ),
                       ),
@@ -65,7 +62,8 @@ class TransactionEntryAmount extends StatelessWidget {
                       ),
                       fontSize: 19 - (showOtherCurrency ? 1 : 0),
                       fontWeight: FontWeight.bold,
-                      textColor: textColor,
+                      textColor:
+                          getTransactionAmountColor(context, transaction),
                     ),
                   ],
                 );
@@ -93,8 +91,10 @@ class TransactionEntryAmount extends StatelessWidget {
                     ),
                     fontSize: 12,
                     textColor: transaction.paid
-                        ? textColor.withOpacity(0.6)
-                        : textColor.withOpacity(0.35),
+                        ? getTransactionAmountColor(context, transaction)
+                            .withOpacity(0.6)
+                        : getTransactionAmountColor(context, transaction)
+                            .withOpacity(0.35),
                   ),
                 )
               : Container(
@@ -104,4 +104,52 @@ class TransactionEntryAmount extends StatelessWidget {
       ],
     );
   }
+}
+
+class IncomeOutcomeArrow extends StatelessWidget {
+  const IncomeOutcomeArrow(
+      {required this.isIncome, required this.color, this.size, super.key});
+  final bool isIncome;
+  final Color color;
+  final double? size;
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedRotation(
+      duration: Duration(milliseconds: 1700),
+      curve: ElasticOutCurve(0.5),
+      turns: isIncome ? 0.5 : 0,
+      child: Icon(
+        Icons.arrow_drop_down_rounded,
+        color: color,
+        size: size,
+      ),
+    );
+  }
+}
+
+Color getTransactionAmountColor(BuildContext context, Transaction transaction) {
+  Color color = (transaction.type == TransactionSpecialType.credit ||
+              transaction.type == TransactionSpecialType.debt) &&
+          transaction.paid
+      ? transaction.type == TransactionSpecialType.credit
+          ? getColor(context, "unPaidUpcoming")
+          : transaction.type == TransactionSpecialType.debt
+              ? getColor(context, "unPaidOverdue")
+              : getColor(context, "textLight")
+      : (transaction.type == TransactionSpecialType.credit ||
+                  transaction.type == TransactionSpecialType.debt) &&
+              transaction.paid == false
+          ? getColor(context, "textLight")
+          : transaction.paid
+              ? transaction.income == true
+                  ? getColor(context, "incomeAmount")
+                  : getColor(context, "expenseAmount")
+              : transaction.skipPaid
+                  ? getColor(context, "textLight")
+                  : transaction.dateCreated.millisecondsSinceEpoch <=
+                          DateTime.now().millisecondsSinceEpoch
+                      ? getColor(context, "textLight")
+                      // getColor(context, "unPaidOverdue")
+                      : getColor(context, "textLight");
+  return color;
 }

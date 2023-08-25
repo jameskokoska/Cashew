@@ -497,7 +497,7 @@
   "total-remaining": "Totalt gjenværende",
   "total-spent-example": "Eksempel: 25 brukt på 100",
   "total-remaining-example": "Eksempel: 75 venstre på 100",
-  "importing-loading": "Importere ...",
+  "importing-loading": "Import ...",
   "successfully-imported": "Vellykket importert",
   "please-restart-the-application": "Vennligst start søknaden på nytt",
   "biometrics-disabled": "Biometri deaktivert",
@@ -516,5 +516,8 @@
   "loans": "Lån",
   "add-credit": "Legg til kreditt",
   "add-debt": "Legg til gjeld",
-  "add-upcoming": "Legg til kommende"
+  "add-upcoming": "Legg til kommende",
+  "you-owe": "Du skylder",
+  "you-get": "Du får",
+  "heat-map": "Varmekart"
 }
