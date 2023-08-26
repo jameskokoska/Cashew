@@ -487,42 +487,38 @@ Future<dynamic> openTransactionsOnDayBottomSheet(
                 : snapshot.data! > 0
                     ? getColor(context, "incomeAmount")
                     : getColor(context, "expenseAmount");
-            return Transform.translate(
-              offset: Offset(snapshot.data == 0 ? 0 : -8, 0),
-              child: Padding(
-                padding: EdgeInsets.only(
-                    top: getPlatform() == PlatformOS.isIOS ? 4 : 1),
-                child: Row(
-                  children: [
-                    AnimatedSizeSwitcher(
-                      child: snapshot.data == 0
-                          ? Container(
-                              key: ValueKey(1),
-                            )
-                          : Transform.translate(
-                              offset: Offset(3, 0),
-                              child: IncomeOutcomeArrow(
-                                key: ValueKey(2),
-                                color: textColor,
-                                isIncome: snapshot.data! > 0,
-                              ),
-                            ),
+            return Padding(
+              padding: EdgeInsets.only(
+                  top: getPlatform() == PlatformOS.isIOS ? 4 : 1),
+              child: Row(
+                children: [
+                  AnimatedSizeSwitcher(
+                    child: snapshot.data == 0
+                        ? Container(
+                            key: ValueKey(1),
+                          )
+                        : IncomeOutcomeArrow(
+                            key: ValueKey(2),
+                            color: textColor,
+                            isIncome: snapshot.data! > 0,
+                            width: 15,
+                            shift: 5.5,
+                          ),
+                  ),
+                  TextFont(
+                    text: convertToMoney(
+                      Provider.of<AllWallets>(context),
+                      snapshot.data!.abs(),
+                      finalNumber: snapshot.data!.abs(),
                     ),
-                    TextFont(
-                      text: convertToMoney(
-                        Provider.of<AllWallets>(context),
-                        snapshot.data!.abs(),
-                        finalNumber: snapshot.data!.abs(),
-                      ),
-                      fontSize: 19,
-                      fontWeight: FontWeight.bold,
-                      textAlign: getPlatform() == PlatformOS.isIOS
-                          ? TextAlign.center
-                          : TextAlign.left,
-                      textColor: textColor,
-                    ),
-                  ],
-                ),
+                    fontSize: 19,
+                    fontWeight: FontWeight.bold,
+                    textAlign: getPlatform() == PlatformOS.isIOS
+                        ? TextAlign.center
+                        : TextAlign.left,
+                    textColor: textColor,
+                  ),
+                ],
               ),
             );
           } else {

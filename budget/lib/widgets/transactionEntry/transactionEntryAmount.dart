@@ -36,23 +36,22 @@ class TransactionEntryAmount extends StatelessWidget {
               textBuilder: (number) {
                 return Row(
                   children: [
-                    Transform.translate(
-                      offset: Offset(3, 0),
-                      child: AnimatedSizeSwitcher(
-                        child: ((transaction.type ==
-                                        TransactionSpecialType.credit ||
-                                    transaction.type ==
-                                        TransactionSpecialType.debt) &&
-                                transaction.paid == false)
-                            ? SizedBox.shrink()
-                            : IncomeOutcomeArrow(
-                                isIncome: transaction.income,
-                                color: getTransactionAmountColor(
-                                  context,
-                                  transaction,
+                    AnimatedSizeSwitcher(
+                      child:
+                          ((transaction.type == TransactionSpecialType.credit ||
+                                      transaction.type ==
+                                          TransactionSpecialType.debt) &&
+                                  transaction.paid == false)
+                              ? SizedBox.shrink()
+                              : IncomeOutcomeArrow(
+                                  isIncome: transaction.income,
+                                  color: getTransactionAmountColor(
+                                    context,
+                                    transaction,
+                                  ),
+                                  width: 15,
+                                  shift: 5.5,
                                 ),
-                              ),
-                      ),
                     ),
                     TextFont(
                       text: convertToMoney(
@@ -107,21 +106,36 @@ class TransactionEntryAmount extends StatelessWidget {
 }
 
 class IncomeOutcomeArrow extends StatelessWidget {
-  const IncomeOutcomeArrow(
-      {required this.isIncome, required this.color, this.size, super.key});
+  const IncomeOutcomeArrow({
+    required this.isIncome,
+    required this.color,
+    this.iconSize,
+    this.width,
+    this.shift,
+    super.key,
+  });
   final bool isIncome;
   final Color color;
-  final double? size;
+  final double? iconSize;
+  final double? width;
+  final double? shift;
   @override
   Widget build(BuildContext context) {
-    return AnimatedRotation(
-      duration: Duration(milliseconds: 1700),
-      curve: ElasticOutCurve(0.5),
-      turns: isIncome ? 0.5 : 0,
-      child: Icon(
-        Icons.arrow_drop_down_rounded,
-        color: color,
-        size: size,
+    return Container(
+      // color: Colors.red,
+      width: width,
+      child: Transform.translate(
+        offset: Offset(-1 * (shift ?? 0), 0),
+        child: AnimatedRotation(
+          duration: Duration(milliseconds: 1700),
+          curve: ElasticOutCurve(0.5),
+          turns: isIncome ? 0.5 : 0,
+          child: Icon(
+            Icons.arrow_drop_down_rounded,
+            color: color,
+            size: iconSize,
+          ),
+        ),
       ),
     );
   }

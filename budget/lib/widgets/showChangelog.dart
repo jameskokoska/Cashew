@@ -10,6 +10,10 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    < 4.0.0
+    Fixed positioning and spacing of income/outcome arrow
+    Ability to copy amount of loans and scheduled total amount
+    Value copied to clipboard shown in snackbar
     < 3.9.9
     Select budget type popup and info when creating a budget
     Fixed loans and upcoming page search bar and tabs for larger screens

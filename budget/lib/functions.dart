@@ -941,6 +941,7 @@ void copyToClipboard(String text, {bool showSnackbar = true}) async {
     openSnackbar(
       SnackbarMessage(
         title: "copied-to-clipboard".tr(),
+        description: text,
         icon: Icons.copy_rounded,
         timeout: Duration(milliseconds: 2500),
       ),

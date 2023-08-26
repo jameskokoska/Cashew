@@ -93,7 +93,7 @@ class _CreditDebtTransactionsState extends State<CreditDebtTransactions> {
                       } else if (totalAmount > 0) {
                         return "you-owe".tr();
                       } else {
-                        return "";
+                        return null;
                       }
                     },
                     textColor: isCredit == null

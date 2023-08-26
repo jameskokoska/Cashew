@@ -114,7 +114,7 @@ class SelectedTransactionsActionBar extends StatelessWidget {
                                             ),
                                           ),
                                           Transform.translate(
-                                            offset: Offset(5, 0),
+                                            offset: Offset(10, 0),
                                             child: Tappable(
                                               color: Colors.transparent,
                                               borderRadius: 15,

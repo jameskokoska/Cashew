@@ -14,6 +14,7 @@ import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/selectedTransactionsActionBar.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/widgets/slidingSelectorIncomeExpense.dart';
+import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntry/transactionEntry.dart';
 import 'package:budget/widgets/transactionEntry/transactionEntryAmount.dart';
@@ -259,7 +260,7 @@ class CenteredAmountAndNumTransactions extends StatelessWidget {
   final Stream<List<int?>> numTransactionsStream;
   final Stream<double?> totalAmountStream;
   final Color textColor;
-  final String Function(double totalAmount)? getInitialText;
+  final String? Function(double totalAmount)? getInitialText;
   final bool showIncomeArrow;
 
   @override
@@ -268,7 +269,7 @@ class CenteredAmountAndNumTransactions extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        SizedBox(height: 15),
+        SizedBox(height: 10),
         StreamBuilder<double?>(
           stream: totalAmountStream,
           builder: (context, snapshot) {
@@ -278,53 +279,76 @@ class CenteredAmountAndNumTransactions extends StatelessWidget {
                     : (snapshot.data ?? 0);
             return Column(
               children: [
-                getInitialText != null
-                    ? TextFont(
-                        text: getInitialText!(totalAmount),
-                        fontSize: 16,
-                        textColor: getColor(context, "textLight"),
-                      )
-                    : SizedBox.shrink(),
-                SizedBox(height: 5),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    showIncomeArrow
-                        ? AnimatedSizeSwitcher(
-                            child: totalAmount == 0
-                                ? Container(
-                                    key: ValueKey(1),
-                                  )
-                                : IncomeOutcomeArrow(
-                                    key: ValueKey(2),
-                                    color: textColor,
-                                    isIncome: totalAmount > 0,
-                                    size: 30,
-                                  ),
-                          )
-                        : SizedBox.shrink(),
-                    CountNumber(
-                      count: totalAmount.abs(),
-                      duration: Duration(milliseconds: 450),
-                      initialCount: (0),
-                      textBuilder: (number) {
-                        return TextFont(
-                          text: convertToMoney(
-                              Provider.of<AllWallets>(context), number,
-                              finalNumber: totalAmount.abs()),
-                          fontSize: 30,
-                          textColor: textColor,
-                          fontWeight: FontWeight.bold,
-                        );
-                      },
+                AnimatedSizeSwitcher(
+                  child: getInitialText != null &&
+                          getInitialText!(totalAmount) != null
+                      ? TextFont(
+                          key: ValueKey(1),
+                          text: getInitialText!(totalAmount) ?? "",
+                          fontSize: 16,
+                          textColor: getColor(context, "textLight"),
+                        )
+                      : Container(
+                          key: ValueKey(2),
+                        ),
+                ),
+                Tappable(
+                  color: Colors.transparent,
+                  borderRadius: 15,
+                  onLongPress: () {
+                    copyToClipboard(
+                      convertToMoney(
+                        Provider.of<AllWallets>(context, listen: false),
+                        totalAmount.abs(),
+                        finalNumber: snapshot.hasData ? snapshot.data! : 0,
+                      ),
+                    );
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        showIncomeArrow
+                            ? AnimatedSizeSwitcher(
+                                child: totalAmount == 0
+                                    ? Container(
+                                        key: ValueKey(1),
+                                      )
+                                    : IncomeOutcomeArrow(
+                                        key: ValueKey(2),
+                                        color: textColor,
+                                        isIncome: totalAmount > 0,
+                                        iconSize: 30,
+                                        width: 20,
+                                        shift: 5,
+                                      ),
+                              )
+                            : SizedBox.shrink(),
+                        CountNumber(
+                          count: totalAmount.abs(),
+                          duration: Duration(milliseconds: 450),
+                          initialCount: (0),
+                          textBuilder: (number) {
+                            return TextFont(
+                              text: convertToMoney(
+                                  Provider.of<AllWallets>(context), number,
+                                  finalNumber: totalAmount.abs()),
+                              fontSize: 30,
+                              textColor: textColor,
+                              fontWeight: FontWeight.bold,
+                            );
+                          },
+                        ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
               ],
             );
           },
         ),
-        SizedBox(height: 5),
         StreamBuilder<List<int?>>(
           stream: numTransactionsStream,
           builder: (context, snapshot) {
@@ -341,7 +365,7 @@ class CenteredAmountAndNumTransactions extends StatelessWidget {
             );
           },
         ),
-        SizedBox(height: 25),
+        SizedBox(height: 20),
       ],
     );
   }
