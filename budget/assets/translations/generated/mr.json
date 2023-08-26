@@ -519,5 +519,12 @@
   "add-upcoming": "आगामी जोडा",
   "you-owe": "तुला देणं आहे",
   "you-get": "तुला मिळाले",
-  "heat-map": "उष्णतामॅप"
+  "heat-map": "उष्णतामॅप",
+  "select-budget-type": "बजेट प्रकार निवडा",
+  "added-only-description-1": "केवळ आपण जोडलेले व्यवहार",
+  "added-only-description-2": "सानुकूल कालावधीसह एक-वेळच्या बजेटसाठी उपयुक्त",
+  "added-only-description-3": "उदाहरणः 'सुट्टीतील' बजेट",
+  "all-transactions-description-1": "निवडलेल्या श्रेणी आणि फिल्टरमधील सर्व व्यवहार",
+  "all-transactions-description-2": "एकाधिक कालावधीत दीर्घकालीन बजेटसाठी उपयुक्त",
+  "all-transactions-description-3": "उदाहरणः 'मासिक खर्च' बजेट"
 }

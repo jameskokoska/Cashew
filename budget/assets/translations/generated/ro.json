@@ -456,7 +456,7 @@
   "an-error-occured": "A aparut o eroare",
   "more": "Mai mult",
   "syncing-failed": "Sincronizarea a eșuat",
-  "sync-fail-reason": "Nepotrivirea versiunilor de schemă a bazei de date",
+  "sync-fail-reason": "Nepotrivirea versiunilor de scheme de baze de date",
   "feedback-shared": "Feedback împărtășit!",
   "thank-you": "Mulțumesc!",
   "email-optional": "E -mail (opțional)",
@@ -519,5 +519,12 @@
   "add-upcoming": "Adăugare viitoare",
   "you-owe": "Tu detii",
   "you-get": "Primesti",
-  "heat-map": "Harta termografica"
+  "heat-map": "Harta termografica",
+  "select-budget-type": "Selectați tipul bugetar",
+  "added-only-description-1": "Doar tranzacțiile pe care le adăugați",
+  "added-only-description-2": "Util pentru bugetele unice cu perioade de timp personalizate",
+  "added-only-description-3": "Exemplu: bugetul „vacanță”",
+  "all-transactions-description-1": "Toate tranzacțiile din categoriile și filtrele selectate",
+  "all-transactions-description-2": "Util pentru bugetele pe termen lung pe mai multe perioade",
+  "all-transactions-description-3": "Exemplu: bugetul „cheltuieli lunare”"
 }

@@ -484,7 +484,7 @@
   "already-purchased": "Redan köpt",
   "current-plan": "Aktuell plan",
   "lifetime": "Livstid",
-  "exchange-rates-api": "Valutakurer API",
+  "exchange-rates-api": "Valutakurser API",
   "exchange-rates": "Växlingskurs",
   "active": "Aktiva",
   "edit-home-page": "Redigera hemsida",
@@ -519,5 +519,12 @@
   "add-upcoming": "Lägga till kommande",
   "you-owe": "Du är skyldig",
   "you-get": "Du får",
-  "heat-map": "Värmekarta"
+  "heat-map": "Värmekarta",
+  "select-budget-type": "Välj budgettyp",
+  "added-only-description-1": "Endast de transaktioner du lägger till",
+  "added-only-description-2": "Användbar för engångsbudget med anpassade tidsperioder",
+  "added-only-description-3": "Exempel: \"semester\" -budget",
+  "all-transactions-description-1": "Alla transaktioner inom utvalda kategorier och filter",
+  "all-transactions-description-2": "Användbar för långsiktiga budgetar under flera perioder",
+  "all-transactions-description-3": "Exempel: \"Månadsutgifter\" -budget"
 }

@@ -519,5 +519,12 @@
   "add-upcoming": "הוסף מתקרב",
   "you-owe": "אתה חייב",
   "you-get": "אתה מקבל",
-  "heat-map": "מפת חום"
+  "heat-map": "מפת חום",
+  "select-budget-type": "בחר סוג תקציב",
+  "added-only-description-1": "רק העסקאות שאתה מוסיף",
+  "added-only-description-2": "שימושי לתקציבים חד פעמיים עם תקופות זמן בהתאמה אישית",
+  "added-only-description-3": "דוגמה: תקציב 'חופשה'",
+  "all-transactions-description-1": "כל העסקאות בתוך קטגוריות ומסננים שנבחרו",
+  "all-transactions-description-2": "שימושי לתקציבים לטווח הארוך לאורך תקופות מרובות",
+  "all-transactions-description-3": "דוגמה: תקציב 'הוצאות חודשיות'"
 }

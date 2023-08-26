@@ -1,5 +1,6 @@
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
+import 'package:budget/pages/accountsPage.dart';
 import 'package:budget/pages/editBudgetLimitsPage.dart';
 import 'package:budget/pages/editBudgetPage.dart';
 import 'package:budget/pages/premiumPage.dart';
@@ -317,7 +318,16 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
   void initState() {
     super.initState();
     Future.delayed(Duration.zero, () async {
-      if (widget.budget == null) await premiumPopupBudgets(context);
+      if (widget.budget == null) {
+        bool result = await premiumPopupBudgets(context);
+        if (result == true) {
+          openBottomSheet(
+            context,
+            fullSnap: false,
+            SelectBudgetTypePopup(setBudgetType: setSelectedBudgetType),
+          );
+        }
+      }
 
       allMembersOfAllBudgets = await database.getAllMembersOfBudgets();
       if (widget.isAddedOnlyBudget) {
@@ -326,6 +336,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
       }
       setState(() {});
     });
+
     if (widget.budget != null) {
       //We are editing a budget
       //Fill in the information from the passed in budget
@@ -362,6 +373,23 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         updateInitial();
       });
+    }
+  }
+
+  setSelectedBudgetType(String item) {
+    if (item == "All Transactions") {
+      setSelectedShared(false);
+      setAddedTransactionsOnly(false);
+    } else if (item == "Added Only") {
+      setAddedTransactionsOnly(true);
+      setSelectedShared(false);
+    } else if (item == "Shared Group Budget") {
+      if (kDebugMode) {
+        setAddedTransactionsOnly(true);
+        setSelectedShared(true);
+      } else {
+        openSnackbar(SnackbarMessage(title: "Only allowed in debug mode"));
+      }
     }
   }
 
@@ -660,21 +688,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                             return item;
                           },
                           onSelected: (String item) {
-                            if (item == "All Transactions") {
-                              setSelectedShared(false);
-                              setAddedTransactionsOnly(false);
-                            } else if (item == "Added Only") {
-                              setAddedTransactionsOnly(true);
-                              setSelectedShared(false);
-                            } else if (item == "Shared Group Budget") {
-                              if (kDebugMode) {
-                                setAddedTransactionsOnly(true);
-                                setSelectedShared(true);
-                              } else {
-                                openSnackbar(SnackbarMessage(
-                                    title: "Only allowed in debug mode"));
-                              }
-                            }
+                            setSelectedBudgetType(item);
                           },
                           getSelected: (String item) {
                             if (selectedShared == true &&
@@ -1343,6 +1357,118 @@ class _BudgetDetailsState extends State<BudgetDetails> {
           ),
         ),
       ],
+    );
+  }
+}
+
+class SelectBudgetTypePopup extends StatelessWidget {
+  const SelectBudgetTypePopup({required this.setBudgetType, super.key});
+  final Function(String budgetTypeString) setBudgetType;
+
+  @override
+  Widget build(BuildContext context) {
+    return PopupFramework(
+      title: "select-budget-type".tr(),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Expanded(
+                child: OutlinedButtonStacked(
+                  alignLeft: true,
+                  alignBeside: true,
+                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                  text: "added-only".tr(),
+                  iconData: Icons.folder_rounded,
+                  onTap: () {
+                    setBudgetType("Added Only");
+                    Navigator.pop(context);
+                  },
+                  afterWidget: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      ListItem(
+                        "added-only-description-1".tr(),
+                      ),
+                      ListItem(
+                        "added-only-description-2".tr(),
+                      ),
+                      Opacity(
+                        opacity: 0.34,
+                        child: ListItem(
+                          "added-only-description-3".tr(),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 13),
+          Row(
+            children: [
+              Expanded(
+                child: OutlinedButtonStacked(
+                  alignLeft: true,
+                  alignBeside: true,
+                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                  text: "all-transactions".tr(),
+                  iconData: Icons.category_rounded,
+                  onTap: () async {
+                    setBudgetType("All Transactions");
+                    Navigator.pop(context);
+                  },
+                  afterWidget: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      ListItem(
+                        "all-transactions-description-1".tr(),
+                      ),
+                      ListItem("all-transactions-description-2".tr()),
+                      Opacity(
+                        opacity: 0.34,
+                        child: ListItem("all-transactions-description-3".tr()),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class ListItem extends StatelessWidget {
+  ListItem(this.text);
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 3),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          TextFont(
+            text: "• ",
+            maxLines: 1,
+            fontSize: 15.5,
+          ),
+          Expanded(
+            child: TextFont(
+              text: text,
+              maxLines: 50,
+              fontSize: 15.5,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

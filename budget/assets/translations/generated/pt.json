@@ -494,7 +494,7 @@
   "backup-restored": "Backup restaurado",
   "budget-total-label": "Rótulo total dos orçamentos",
   "total-spent": "Total gasto",
-  "total-remaining": "Total restante",
+  "total-remaining": "Restante total",
   "total-spent-example": "Exemplo: 25 gasto de 100",
   "total-remaining-example": "Exemplo: 75 à esquerda de 100",
   "importing-loading": "Importando ...",
@@ -518,6 +518,13 @@
   "add-debt": "Adicione dívida",
   "add-upcoming": "Adicionar próximo",
   "you-owe": "Você deve",
-  "you-get": "Você recebe",
-  "heat-map": "Mapa de calor"
+  "you-get": "Você consegue",
+  "heat-map": "Mapa de calor",
+  "select-budget-type": "Selecione Tipo de orçamento",
+  "added-only-description-1": "Apenas as transações que você adiciona",
+  "added-only-description-2": "Útil para orçamentos únicos com períodos de tempo personalizados",
+  "added-only-description-3": "Exemplo: Orçamento de 'férias'",
+  "all-transactions-description-1": "Todas as transações em categorias e filtros selecionados",
+  "all-transactions-description-2": "Útil para orçamentos de longo prazo em vários períodos",
+  "all-transactions-description-3": "Exemplo: Orçamento de 'gastos mensais'"
 }

@@ -432,7 +432,7 @@
   "delete-budget-added-warning": "Các giao dịch được thêm vào ngân sách này sẽ không còn được liên kết với ngân sách này. Họ sẽ không bị xóa.",
   "removed-from-budget": "Bị loại khỏi ngân sách",
   "pinned-to-homepage": "Ghim vào trang chủ",
-  "unpinned-to-homepage": "Không được xử lý từ trang chủ",
+  "unpinned-to-homepage": "Chưa được xử lý từ trang chủ",
   "expenses-only": "Chỉ chi phí",
   "expenses-only-description": "Chỉ có thể thêm chi phí vào ngân sách",
   "delete-category-question": "Xóa danh mục?",
@@ -453,7 +453,7 @@
   "change-category": "Thay đổi danh mục",
   "changed-category": "Thay đổi danh mục",
   "merged-category": "Thể loại hợp nhất",
-  "an-error-occured": "Một lỗi xảy ra",
+  "an-error-occured": "Một lỗi đã xảy ra",
   "more": "Hơn",
   "syncing-failed": "Đồng bộ hóa thất bại",
   "sync-fail-reason": "Phiên bản lược đồ cơ sở dữ liệu không phù hợp",
@@ -519,5 +519,12 @@
   "add-upcoming": "Thêm sắp tới",
   "you-owe": "Bạn nợ",
   "you-get": "Bạn lấy",
-  "heat-map": "Bản đồ nhiệt"
+  "heat-map": "Bản đồ nhiệt",
+  "select-budget-type": "Chọn loại ngân sách",
+  "added-only-description-1": "Chỉ các giao dịch bạn thêm",
+  "added-only-description-2": "Hữu ích cho ngân sách một lần với các khoảng thời gian tùy chỉnh",
+  "added-only-description-3": "Ví dụ: Ngân sách 'Kỳ nghỉ'",
+  "all-transactions-description-1": "Tất cả các giao dịch trong các danh mục và bộ lọc được chọn",
+  "all-transactions-description-2": "Hữu ích cho ngân sách dài hạn trong nhiều thời gian",
+  "all-transactions-description-3": "Ví dụ: Ngân sách 'Chi tiêu hàng tháng'"
 }

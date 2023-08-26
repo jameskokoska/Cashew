@@ -427,7 +427,7 @@
   "move-to-other-wallet-button": "انقل المعاملات إلى محفظة أخرى وحذفها",
   "changed-wallet": "تم تغيير المحفظة",
   "added-to-budget": "إضافة إلى الميزانية",
-  "no-addable-budgets": "لا ميزانيات لإضافة المعاملات إلى",
+  "no-addable-budgets": "لا ميزانيات لإضافة معاملات إلى",
   "create-addable-budget": "إنشاء ميزانية \"إضافة فقط\"",
   "delete-budget-added-warning": "لن يتم ربط المعاملات التي تمت إضافتها إلى هذه الميزانية بهذه الميزانية. لن يتم حذفها.",
   "removed-from-budget": "تمت إزالته من الميزانية",
@@ -441,7 +441,7 @@
   "delete-category-merge-warning": "سيؤدي حذف فئة إلى حذف جميع المعاملات في هذه الفئة. نقل المعاملات إلى فئة أخرى لتجنب ذلك.",
   "deleted-category": "فئة المحذوفة",
   "delete-wallet-question": "حذف محفظة؟",
-  "delete-wallet-question-description": "سيؤدي هذا إلى حذف جميع المعاملات المرتبطة بهذه المحفظة.",
+  "delete-wallet-question-description": "سيؤدي ذلك إلى حذف جميع المعاملات المرتبطة بهذه المحفظة.",
   "move-transactions": "نقل المعاملات",
   "delete-wallet-merge-warning": "سيحذف حذف محفظة جميع المعاملات في هذه المحفظة. نقل المعاملات إلى محفظة أخرى لتجنب ذلك.",
   "deleted-wallet": "محفظة محذوفة",
@@ -519,5 +519,12 @@
   "add-upcoming": "إضافة قادم",
   "you-owe": "أنت مدين",
   "you-get": "لقد حصلت",
-  "heat-map": "خريطة الحرارة"
+  "heat-map": "خريطة الحرارة",
+  "select-budget-type": "حدد نوع الميزانية",
+  "added-only-description-1": "فقط المعاملات التي تضيفها",
+  "added-only-description-2": "مفيد للميزانيات لمرة واحدة مع فترات زمنية مخصصة",
+  "added-only-description-3": "مثال: ميزانية \"الإجازة\"",
+  "all-transactions-description-1": "جميع المعاملات ضمن فئات ومرشحات محددة",
+  "all-transactions-description-2": "مفيد للميزانيات طويلة الأجل على مدار فترات متعددة",
+  "all-transactions-description-3": "مثال: ميزانية \"الإنفاق الشهري\""
 }

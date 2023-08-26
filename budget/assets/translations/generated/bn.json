@@ -430,7 +430,7 @@
   "no-addable-budgets": "লেনদেন যুক্ত করার জন্য কোনও বাজেট নেই",
   "create-addable-budget": "'কেবল যুক্ত' বাজেট তৈরি করুন",
   "delete-budget-added-warning": "এই বাজেটে যুক্ত লেনদেনগুলি আর এই বাজেটের সাথে যুক্ত হবে না। তারা মুছে ফেলা হবে না।",
-  "removed-from-budget": "বাজেট থেকে সরানো হয়েছে",
+  "removed-from-budget": "বাজেট থেকে সরানো",
   "pinned-to-homepage": "হোমপেজে পিন করা",
   "unpinned-to-homepage": "হোমপেজ থেকে অবিচ্ছিন্ন",
   "expenses-only": "শুধুমাত্র ব্যয়",
@@ -519,5 +519,12 @@
   "add-upcoming": "আসন্ন যোগ করুন",
   "you-owe": "আপনি পাওনা",
   "you-get": "তুমি পাও",
-  "heat-map": "তাপ মানচিত্র"
+  "heat-map": "তাপ মানচিত্র",
+  "select-budget-type": "বাজেটের ধরণ নির্বাচন করুন",
+  "added-only-description-1": "আপনি কেবল যুক্ত লেনদেন",
+  "added-only-description-2": "কাস্টম সময়কাল সহ এককালীন বাজেটের জন্য দরকারী",
+  "added-only-description-3": "উদাহরণ: 'অবকাশ' ​​বাজেট",
+  "all-transactions-description-1": "নির্বাচিত বিভাগ এবং ফিল্টারগুলির মধ্যে সমস্ত লেনদেন",
+  "all-transactions-description-2": "একাধিক সময়কালে দীর্ঘমেয়াদী বাজেটের জন্য দরকারী",
+  "all-transactions-description-3": "উদাহরণ: 'মাসিক ব্যয়' বাজেট"
 }

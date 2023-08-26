@@ -477,7 +477,7 @@
   "current-wallet": "Nuværende tegnebog",
   "none": "Ingen",
   "error-getting-products": "Fejl ved at få produkter",
-  "error-getting-products-description": "Der var en fejl, der forbinder til App Store. Prøv igen senere.",
+  "error-getting-products-description": "Der var en fejl, der opretter forbindelse til App Store. Prøv igen senere.",
   "error-processing-order": "Der var en fejlbehandling af dit køb. Prøv igen.",
   "order-confirmation": "Tak fordi du støtter cashew!",
   "any-previous-purchases-restored": "Eventuelle tidligere køb blev gendannet",
@@ -509,7 +509,7 @@
   "developer-message-1-1": "(uden ventetid også!)",
   "developer-message-2": "Hvis det er muligt, kan du overveje at støtte udviklingen. På kun en kaffe ☕ om måneden spiller din support en afgørende rolle i denne applikations fremtidige vækst. Tak 😄",
   "support": "Support",
-  "unlock-for-free": "Lås gratis op",
+  "unlock-for-free": "Lås op gratis",
   "no-free-stuff": "Nej, jeg vil ikke have gratis ting",
   "search-transactions-placeholder": "Søgningstransaktioner ...",
   "scheduled": "Planlagt",
@@ -519,5 +519,12 @@
   "add-upcoming": "Tilføj kommende",
   "you-owe": "Du skylder",
   "you-get": "Du får",
-  "heat-map": "Heatmap"
+  "heat-map": "Heatmap",
+  "select-budget-type": "Vælg budgettype",
+  "added-only-description-1": "Kun de transaktioner, du tilføjer",
+  "added-only-description-2": "Nyttig til engangsbudgetter med brugerdefinerede tidsperioder",
+  "added-only-description-3": "Eksempel: 'Ferie' budget",
+  "all-transactions-description-1": "Alle transaktioner inden for udvalgte kategorier og filtre",
+  "all-transactions-description-2": "Nyttigt til langsigtede budgetter over flere perioder",
+  "all-transactions-description-3": "Eksempel: 'Månedlige udgifter' Budget"
 }

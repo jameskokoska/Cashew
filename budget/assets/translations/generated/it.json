@@ -452,11 +452,11 @@
   "deleted-transaction": "Transazione cancellata",
   "change-category": "Categoria di cambiamento",
   "changed-category": "Categoria modificata",
-  "merged-category": "Categoria unita",
+  "merged-category": "Categoria unicata",
   "an-error-occured": "Si è verificato un errore",
   "more": "Di più",
   "syncing-failed": "La sincronizzazione non è riuscita",
-  "sync-fail-reason": "Versioni dello schema del database non corrispondente",
+  "sync-fail-reason": "Versioni di schema del database non corrispondente",
   "feedback-shared": "Feedback condiviso!",
   "thank-you": "Grazie!",
   "email-optional": "Email (opzionale)",
@@ -519,5 +519,12 @@
   "add-upcoming": "Aggiungi imminente",
   "you-owe": "Devi",
   "you-get": "Ottieni",
-  "heat-map": "Mappa di calore"
+  "heat-map": "Mappa di calore",
+  "select-budget-type": "Seleziona Tipo di budget",
+  "added-only-description-1": "Solo le transazioni che aggiungi",
+  "added-only-description-2": "Utile per budget una tantum con periodi di tempo personalizzati",
+  "added-only-description-3": "Esempio: budget \"vacanza\"",
+  "all-transactions-description-1": "Tutte le transazioni all'interno di categorie e filtri selezionati",
+  "all-transactions-description-2": "Utile per budget a lungo termine per più periodi",
+  "all-transactions-description-3": "Esempio: budget di \"spesa mensile\""
 }

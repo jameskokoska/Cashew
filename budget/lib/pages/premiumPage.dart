@@ -601,8 +601,9 @@ Future<bool> premiumPopupBudgets(BuildContext context) async {
       Navigator.pop(context);
       return false;
     }
+  } else {
+    return true;
   }
-  return false;
 }
 
 Future<bool> premiumPopupPastBudgets(BuildContext context) async {

@@ -477,8 +477,8 @@
   "current-wallet": "当前的钱包",
   "none": "没有任何",
   "error-getting-products": "获取产品的错误",
-  "error-getting-products-description": "连接到App Store有一个错误。请稍后再试。",
-  "error-processing-order": "处理您的购买错误。请再试一次。",
+  "error-getting-products-description": "连接到App Store的错误。请稍后再试。",
+  "error-processing-order": "购买您的购买错误。请再试一次。",
   "order-confirmation": "感谢您支持腰果！",
   "any-previous-purchases-restored": "任何以前的购买都恢复了",
   "already-purchased": "已经购买",
@@ -519,5 +519,12 @@
   "add-upcoming": "加起来",
   "you-owe": "你欠",
   "you-get": "你得到",
-  "heat-map": "热图"
+  "heat-map": "热图",
+  "select-budget-type": "选择预算类型",
+  "added-only-description-1": "仅您添加的交易",
+  "added-only-description-2": "适用于自定义时间段的一次性预算",
+  "added-only-description-3": "示例：“假期”预算",
+  "all-transactions-description-1": "选定类别和过滤器中的所有交易",
+  "all-transactions-description-2": "对于多个时期的长期预算有用",
+  "all-transactions-description-3": "示例：“每月支出”预算"
 }

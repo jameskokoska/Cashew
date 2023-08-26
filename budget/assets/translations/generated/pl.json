@@ -519,5 +519,12 @@
   "add-upcoming": "Dodaj nadchodzące",
   "you-owe": "Zawdzięczasz",
   "you-get": "Dostajesz",
-  "heat-map": "Mapa ciepła"
+  "heat-map": "Mapa ciepła",
+  "select-budget-type": "Wybierz typ budżetu",
+  "added-only-description-1": "Tylko dodane transakcje",
+  "added-only-description-2": "Przydatne dla jednorazowych budżetów z niestandardowymi okresami",
+  "added-only-description-3": "Przykład: budżet „wakacyjny”",
+  "all-transactions-description-1": "Wszystkie transakcje w wybranych kategoriach i filtry",
+  "all-transactions-description-2": "Przydatne dla długoterminowych budżetów w wielu okresach",
+  "all-transactions-description-3": "Przykład: budżet „miesięcznych wydatków”"
 }

@@ -432,7 +432,7 @@
   "delete-budget-added-warning": "Transaksi yang ditambah kepada belanjawan ini tidak lagi dikaitkan dengan belanjawan ini. Mereka tidak akan dipadamkan.",
   "removed-from-budget": "Dikeluarkan dari belanjawan",
   "pinned-to-homepage": "Disematkan ke laman utama",
-  "unpinned-to-homepage": "Tidak disokong dari laman web",
+  "unpinned-to-homepage": "Tidak diingini dari laman utama",
   "expenses-only": "Perbelanjaan sahaja",
   "expenses-only-description": "Hanya perbelanjaan yang boleh ditambah kepada anggaran",
   "delete-category-question": "Padam kategori?",
@@ -506,7 +506,7 @@
   "biometrics-error-description": "Terdapat ralat menggunakan biometrik peranti",
   "from-the-developer": "Dari pemaju",
   "developer-message-1": "Kesejahteraan kewangan penting kepada kita semua, dan kami di sini untuk menyokong perjalanan anda ke arah pengurusan wang yang lebih baik. Itulah sebabnya kami menawarkan ciri -ciri premium tanpa sebarang kos. Popup premium akan muncul, tetapi anda boleh menolaknya untuk mengakses ciri terkunci",
-  "developer-message-1-1": "(tanpa menunggu juga!)",
+  "developer-message-1-1": "(Tanpa menunggu juga!)",
   "developer-message-2": "Walau bagaimanapun, jika boleh, pertimbangkan untuk menyokong pembangunan. Hanya satu kopi ☕ sebulan, sokongan anda memainkan peranan penting dalam pertumbuhan masa depan aplikasi ini. Terima kasih 😄",
   "support": "Sokongan",
   "unlock-for-free": "Buka kunci secara percuma",
@@ -519,5 +519,12 @@
   "add-upcoming": "Tambah akan datang",
   "you-owe": "Anda berhutang",
   "you-get": "Anda mendapatkan",
-  "heat-map": "Peta haba"
+  "heat-map": "Peta haba",
+  "select-budget-type": "Pilih jenis belanjawan",
+  "added-only-description-1": "Hanya urus niaga yang anda tambahkan",
+  "added-only-description-2": "Berguna untuk belanjawan satu kali dengan tempoh masa tersuai",
+  "added-only-description-3": "Contoh: Belanjawan 'Percutian'",
+  "all-transactions-description-1": "Semua urus niaga dalam kategori dan penapis terpilih",
+  "all-transactions-description-2": "Berguna untuk belanjawan jangka panjang dalam pelbagai tempoh",
+  "all-transactions-description-3": "Contoh: Belanjawan 'perbelanjaan bulanan'"
 }

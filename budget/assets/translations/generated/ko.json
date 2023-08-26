@@ -519,5 +519,12 @@
   "add-upcoming": "다가오는 추가",
   "you-owe": "너는 빚지고있다",
   "you-get": "당신은 얻습니다",
-  "heat-map": "히트 맵"
+  "heat-map": "히트 맵",
+  "select-budget-type": "예산 유형을 선택하십시오",
+  "added-only-description-1": "추가 트랜잭션 만",
+  "added-only-description-2": "맞춤형 기간이있는 일회성 예산에 유용합니다",
+  "added-only-description-3": "예 : '휴가'예산",
+  "all-transactions-description-1": "선택한 카테고리 및 필터 내의 모든 트랜잭션",
+  "all-transactions-description-2": "여러 기간 동안 장기 예산에 유용합니다",
+  "all-transactions-description-3": "예 : '월간 지출'예산"
 }

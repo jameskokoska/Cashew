@@ -384,7 +384,7 @@
   "unlimited-budgets": "Walang limitasyong mga badyet",
   "unlimited-budgets-description": "Lumikha ng higit sa 1 badyet",
   "past-budget-periods": "Mga nakaraang panahon ng badyet",
-  "past-budget-periods-description": "Tingnan ang mga breakdown ng paggastos ng mga nakaraang panahon",
+  "past-budget-periods-description": "Tingnan ang mga pagbagsak ng paggastos ng mga nakaraang panahon",
   "unlimited-color-picker": "Walang limitasyong picker ng kulay",
   "unlimited-color-picker-description": "Pumili ng anumang kulay na gusto mo",
   "continue-for-free": "Magpatuloy nang libre",
@@ -428,7 +428,7 @@
   "changed-wallet": "Binago ang pitaka",
   "added-to-budget": "Idinagdag sa badyet",
   "no-addable-budgets": "Walang mga badyet upang magdagdag ng mga transaksyon sa",
-  "create-addable-budget": "Lumikha ng badyet na 'Idinagdag lamang'",
+  "create-addable-budget": "Lumikha ng 'idinagdag lamang' na badyet",
   "delete-budget-added-warning": "Ang mga transaksyon na idinagdag sa badyet na ito ay hindi na maiugnay sa badyet na ito. Hindi sila tatanggalin.",
   "removed-from-budget": "Tinanggal mula sa badyet",
   "pinned-to-homepage": "Naka -pin sa homepage",
@@ -519,5 +519,12 @@
   "add-upcoming": "Magdagdag ng paparating",
   "you-owe": "May utang ka",
   "you-get": "Nakuha mo",
-  "heat-map": "Heatmap"
+  "heat-map": "Heatmap",
+  "select-budget-type": "Piliin ang Uri ng Budget",
+  "added-only-description-1": "Tanging ang mga transaksyon na idinagdag mo",
+  "added-only-description-2": "Kapaki-pakinabang para sa isang beses na mga badyet na may pasadyang mga tagal ng oras",
+  "added-only-description-3": "Halimbawa: badyet ng 'bakasyon'",
+  "all-transactions-description-1": "Lahat ng mga transaksyon sa loob ng mga napiling kategorya at filter",
+  "all-transactions-description-2": "Kapaki -pakinabang para sa pangmatagalang mga badyet sa maraming mga panahon",
+  "all-transactions-description-3": "Halimbawa: 'Buwanang paggastos' na badyet"
 }

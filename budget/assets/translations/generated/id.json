@@ -478,7 +478,7 @@
   "none": "Tidak ada",
   "error-getting-products": "Kesalahan mendapatkan produk",
   "error-getting-products-description": "Ada kesalahan yang menghubungkan ke App Store. Silakan coba lagi nanti.",
-  "error-processing-order": "Ada kesalahan yang memproses pembelian Anda. Tolong coba lagi.",
+  "error-processing-order": "Ada kesalahan yang memproses pembelian Anda. Silakan coba lagi.",
   "order-confirmation": "Terima kasih telah mendukung Mete!",
   "any-previous-purchases-restored": "Pembelian sebelumnya dipulihkan",
   "already-purchased": "Telah dibeli",
@@ -519,5 +519,12 @@
   "add-upcoming": "Tambahkan mendatang",
   "you-owe": "Kamu berhutang",
   "you-get": "Anda mendapatkan",
-  "heat-map": "Panas"
+  "heat-map": "Panas",
+  "select-budget-type": "Pilih Jenis Anggaran",
+  "added-only-description-1": "Hanya transaksi yang Anda tambahkan",
+  "added-only-description-2": "Berguna untuk anggaran satu kali dengan periode waktu khusus",
+  "added-only-description-3": "Contoh: Anggaran 'Liburan'",
+  "all-transactions-description-1": "Semua transaksi dalam kategori dan filter yang dipilih",
+  "all-transactions-description-2": "Berguna untuk anggaran jangka panjang selama beberapa periode",
+  "all-transactions-description-3": "Contoh: Anggaran 'Pengeluaran Bulanan'"
 }

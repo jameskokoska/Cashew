@@ -8,6 +8,7 @@ import 'package:budget/widgets/animatedExpanded.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/fab.dart';
 import 'package:budget/widgets/noResults.dart';
+import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/selectedTransactionsActionBar.dart';
 import 'package:budget/widgets/fadeIn.dart';
@@ -104,75 +105,84 @@ class _CreditDebtTransactionsState extends State<CreditDebtTransactions> {
                 ),
               ),
               SliverToBoxAdapter(
-                child: Row(
-                  children: [
-                    SizedBox(width: 13),
-                    Flexible(
-                      child: AnimatedSize(
-                        clipBehavior: Clip.none,
-                        duration: Duration(milliseconds: 500),
-                        child: SlidingSelectorIncomeExpense(
-                          initialIndex: isCredit == null
-                              ? 0
-                              : isCredit == true
-                                  ? 1
-                                  : 2,
-                          onSelected: (int index) {
-                            if (index == 1)
-                              isCredit = null;
-                            else if (index == 2)
-                              isCredit = true;
-                            else if (index == 3) isCredit = false;
-                            setState(() {});
-                          },
-                          options: ["all", "lent", "borrowed"],
-                          customPadding: EdgeInsets.zero,
+                child: Padding(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: getHorizontalPaddingConstrained(context)),
+                  child: Row(
+                    children: [
+                      SizedBox(width: 13),
+                      Flexible(
+                        child: AnimatedSize(
+                          clipBehavior: Clip.none,
+                          duration: Duration(milliseconds: 500),
+                          child: SlidingSelectorIncomeExpense(
+                            useHorizontalPaddingConstrained: false,
+                            initialIndex: isCredit == null
+                                ? 0
+                                : isCredit == true
+                                    ? 1
+                                    : 2,
+                            onSelected: (int index) {
+                              if (index == 1)
+                                isCredit = null;
+                              else if (index == 2)
+                                isCredit = true;
+                              else if (index == 3) isCredit = false;
+                              setState(() {});
+                            },
+                            options: ["all", "lent", "borrowed"],
+                            customPadding: EdgeInsets.zero,
+                          ),
                         ),
                       ),
-                    ),
-                    AnimatedSizeSwitcher(
-                      child: searchValue == null
-                          ? Padding(
-                              padding: const EdgeInsets.only(left: 7.0),
-                              child: ButtonIcon(
-                                key: ValueKey(1),
-                                onTap: () {
-                                  setState(() {
-                                    searchValue = "";
-                                  });
-                                  _searchFocusNode.requestFocus();
-                                },
-                                icon: Icons.search,
+                      AnimatedSizeSwitcher(
+                        child: searchValue == null
+                            ? Padding(
+                                padding: const EdgeInsets.only(left: 7.0),
+                                child: ButtonIcon(
+                                  key: ValueKey(1),
+                                  onTap: () {
+                                    setState(() {
+                                      searchValue = "";
+                                    });
+                                    _searchFocusNode.requestFocus();
+                                  },
+                                  icon: Icons.search,
+                                ),
+                              )
+                            : Container(
+                                key: ValueKey(2),
                               ),
-                            )
-                          : Container(
-                              key: ValueKey(2),
-                            ),
-                    ),
-                    SizedBox(width: 13),
-                  ],
+                      ),
+                      SizedBox(width: 13),
+                    ],
+                  ),
                 ),
               ),
               SliverToBoxAdapter(
-                child: AnimatedExpanded(
-                  expand: searchValue != null,
-                  child: Padding(
-                    padding: const EdgeInsets.only(bottom: 8.0, top: 8),
-                    child: TextInput(
-                      labelText: "search-transactions-placeholder".tr(),
-                      icon: Icons.search_rounded,
-                      focusNode: _searchFocusNode,
-                      onSubmitted: (value) {
-                        setState(() {
-                          searchValue = value == "" ? null : value;
-                        });
-                      },
-                      onChanged: (value) {
-                        setState(() {
-                          searchValue = value == "" ? null : value;
-                        });
-                      },
-                      autoFocus: false,
+                child: Padding(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: getHorizontalPaddingConstrained(context)),
+                  child: AnimatedExpanded(
+                    expand: searchValue != null,
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: 8.0, top: 8),
+                      child: TextInput(
+                        labelText: "search-transactions-placeholder".tr(),
+                        icon: Icons.search_rounded,
+                        focusNode: _searchFocusNode,
+                        onSubmitted: (value) {
+                          setState(() {
+                            searchValue = value == "" ? null : value;
+                          });
+                        },
+                        onChanged: (value) {
+                          setState(() {
+                            searchValue = value == "" ? null : value;
+                          });
+                        },
+                        autoFocus: false,
+                      ),
                     ),
                   ),
                 ),

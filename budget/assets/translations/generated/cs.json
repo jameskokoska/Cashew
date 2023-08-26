@@ -432,7 +432,7 @@
   "delete-budget-added-warning": "Transakce přidané k tomuto rozpočtu již nebudou spojeny s tímto rozpočtem. Nebudou smazány.",
   "removed-from-budget": "Odstraněno z rozpočtu",
   "pinned-to-homepage": "Připnuto na domovskou stránku",
-  "unpinned-to-homepage": "Nepřistaveno z domovské stránky",
+  "unpinned-to-homepage": "Nepřízeno z domovské stránky",
   "expenses-only": "Pouze výdaje",
   "expenses-only-description": "K rozpočtu lze přidat pouze výdaje",
   "delete-category-question": "Odstranit kategorii?",
@@ -511,7 +511,7 @@
   "support": "Podpěra, podpora",
   "unlock-for-free": "Odemkněte zdarma",
   "no-free-stuff": "Ne, nechci věci zdarma",
-  "search-transactions-placeholder": "Vyhledávací transakce ...",
+  "search-transactions-placeholder": "Hledat transakce ...",
   "scheduled": "Naplánované",
   "loans": "Půjčky",
   "add-credit": "Přidejte kredit",
@@ -519,5 +519,12 @@
   "add-upcoming": "Přidat nadcházející",
   "you-owe": "Dlužíš",
   "you-get": "Dostaneš",
-  "heat-map": "Teplotní mapa"
+  "heat-map": "Teplotní mapa",
+  "select-budget-type": "Vyberte typ rozpočtu",
+  "added-only-description-1": "Pouze transakce, které přidáte",
+  "added-only-description-2": "Užitečné pro jednorázové rozpočty s vlastními časovými obdobími",
+  "added-only-description-3": "Příklad: Rozpočet „dovolené“",
+  "all-transactions-description-1": "Všechny transakce ve vybraných kategoriích a filtrech",
+  "all-transactions-description-2": "Užitečné pro dlouhodobé rozpočty po několik období",
+  "all-transactions-description-3": "Příklad: Rozpočet „Měsíční výdaje“"
 }

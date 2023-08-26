@@ -519,5 +519,12 @@
   "add-upcoming": "Add Upcoming",
   "you-owe": "You owe",
   "you-get": "You get",
-  "heat-map": "Heatmap"
+  "heat-map": "Heatmap",
+  "select-budget-type": "Select Budget Type",
+  "added-only-description-1": "Only the transactions you add",
+  "added-only-description-2": "Useful for one-time budgets with custom time periods",
+  "added-only-description-3": "Example: 'Vacation' budget",
+  "all-transactions-description-1": "All transactions within selected categories and filters",
+  "all-transactions-description-2": "Useful for long term budgets over multiple periods",
+  "all-transactions-description-3": "Example: 'Monthly Spending' budget"
 }

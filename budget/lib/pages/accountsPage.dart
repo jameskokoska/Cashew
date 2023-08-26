@@ -273,19 +273,29 @@ class AccountsPageState extends State<AccountsPage> {
 }
 
 class OutlinedButtonStacked extends StatelessWidget {
-  const OutlinedButtonStacked(
-      {super.key,
-      required this.text,
-      required this.onTap,
-      required this.iconData});
+  const OutlinedButtonStacked({
+    super.key,
+    required this.text,
+    required this.onTap,
+    required this.iconData,
+    this.afterWidget,
+    this.alignLeft = false,
+    this.padding,
+    this.alignBeside,
+  });
   final String text;
   final void Function()? onTap;
   final IconData iconData;
+  final Widget? afterWidget;
+  final bool alignLeft;
+  final EdgeInsets? padding;
+  final bool? alignBeside;
   @override
   Widget build(BuildContext context) {
     return Tappable(
       onTap: onTap,
       borderRadius: 15,
+      color: Colors.transparent,
       child: Container(
         decoration: BoxDecoration(
           border: Border.all(
@@ -296,25 +306,53 @@ class OutlinedButtonStacked extends StatelessWidget {
           ),
           borderRadius: BorderRadius.circular(15),
         ),
-        child: Column(
-          children: [
-            SizedBox(height: 30),
-            Icon(
-              iconData,
-              size: 35,
-              color: Theme.of(context).colorScheme.secondary,
-            ),
-            SizedBox(height: 10),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8),
-              child: TextFont(
-                text: text,
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            SizedBox(height: 30),
-          ],
+        child: Padding(
+          padding: padding ?? EdgeInsets.symmetric(horizontal: 8, vertical: 30),
+          child: Column(
+            crossAxisAlignment: alignLeft
+                ? CrossAxisAlignment.start
+                : CrossAxisAlignment.center,
+            children: [
+              alignBeside != true
+                  ? Column(
+                      crossAxisAlignment: alignLeft
+                          ? CrossAxisAlignment.start
+                          : CrossAxisAlignment.center,
+                      children: [
+                        Icon(
+                          iconData,
+                          size: 35,
+                          color: Theme.of(context).colorScheme.secondary,
+                        ),
+                        SizedBox(height: 10),
+                        TextFont(
+                          text: text,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          maxLines: 2,
+                        ),
+                      ],
+                    )
+                  : Row(
+                      children: [
+                        Icon(
+                          iconData,
+                          size: 28,
+                          color: Theme.of(context).colorScheme.secondary,
+                        ),
+                        SizedBox(width: 10),
+                        TextFont(
+                          text: text,
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                          maxLines: 2,
+                        ),
+                      ],
+                    ),
+              afterWidget == null ? SizedBox.shrink() : SizedBox(height: 8),
+              afterWidget ?? SizedBox.shrink(),
+            ],
+          ),
         ),
       ),
     );

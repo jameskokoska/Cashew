@@ -498,7 +498,7 @@
   "total-spent-example": "Esimerkki: 25 käytettyä 100: sta",
   "total-remaining-example": "Esimerkki: 75 vasemmalla 100: sta",
   "importing-loading": "Tuo ...",
-  "successfully-imported": "Tuonti onnistuneesti",
+  "successfully-imported": "Tuonti menestyksekkäästi",
   "please-restart-the-application": "Käynnistä sovellus uudelleen",
   "biometrics-disabled": "Biometriset tiedot poistettu käytöstä",
   "biometrics-disabled-description": "Napauta tätä, jotta biometriset tiedot otetaan käyttöön asetussivulla ja yritä uudelleen",
@@ -519,5 +519,12 @@
   "add-upcoming": "Tulla tulossa",
   "you-owe": "Sinä olet velkaa",
   "you-get": "Saat",
-  "heat-map": "Lämpökartta"
+  "heat-map": "Lämpökartta",
+  "select-budget-type": "Valitse budjettityyppi",
+  "added-only-description-1": "Vain lisäämäsi tapahtumat",
+  "added-only-description-2": "Hyödyllinen kertaluonteisiin budjeteihin mukautetuilla ajanjaksoilla",
+  "added-only-description-3": "Esimerkki: 'Loma' budjetti",
+  "all-transactions-description-1": "Kaikki tapahtumat valituissa luokissa ja suodattimissa",
+  "all-transactions-description-2": "Hyödyllinen pitkäaikaisissa budjetteissa useiden ajanjaksojen aikana",
+  "all-transactions-description-3": "Esimerkki: 'kuukausittaiset menot' budjetti"
 }

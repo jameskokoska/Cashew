@@ -10,6 +10,9 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    < 3.9.9
+    Select budget type popup and info when creating a budget
+    Fixed loans and upcoming page search bar and tabs for larger screens
     < 3.9.8
     New heatmap homepage widget! (disabled by default)
     Fixed stuck loading on launch if Google Drive permission denied

@@ -104,7 +104,7 @@
   "rate-app": "Vurder {app}",
   "rate-app-subtitle": "Del tilbakemeldingene dine med utvikleren for å forbedre {app}",
   "rate-app-privacy": "Bare stjernene, tilbakemeldingene og datoen vil bli delt.",
-  "rate-app-privacy-email": "Bare stjernene, tilbakemeldinger, (e -post hvis gitt) og dato vil bli delt.",
+  "rate-app-privacy-email": "Bare stjernene, tilbakemeldingene, (e -post hvis gitt) og dato vil bli delt.",
   "feedback-and-suggestions": "Tilbakemelding og forslag",
   "submit": "Sende inn",
   "select-color": "Velg farge",
@@ -497,7 +497,7 @@
   "total-remaining": "Totalt gjenværende",
   "total-spent-example": "Eksempel: 25 brukt på 100",
   "total-remaining-example": "Eksempel: 75 venstre på 100",
-  "importing-loading": "Import ...",
+  "importing-loading": "Importere ...",
   "successfully-imported": "Vellykket importert",
   "please-restart-the-application": "Vennligst start søknaden på nytt",
   "biometrics-disabled": "Biometri deaktivert",
@@ -519,5 +519,12 @@
   "add-upcoming": "Legg til kommende",
   "you-owe": "Du skylder",
   "you-get": "Du får",
-  "heat-map": "Varmekart"
+  "heat-map": "Varmekart",
+  "select-budget-type": "Velg budsjetttype",
+  "added-only-description-1": "Bare transaksjonene du legger til",
+  "added-only-description-2": "Nyttig for engangsbudsjetter med tilpassede tidsperioder",
+  "added-only-description-3": "Eksempel: 'Ferie' budsjett",
+  "all-transactions-description-1": "Alle transaksjoner innen utvalgte kategorier og filtre",
+  "all-transactions-description-2": "Nyttig for langsiktige budsjetter over flere perioder",
+  "all-transactions-description-3": "Eksempel: 'Månedlig utgifter' budsjett"
 }

@@ -519,5 +519,12 @@
   "add-upcoming": "Adja hozzá a közelgő",
   "you-owe": "Tartozol",
   "you-get": "Kapsz",
-  "heat-map": "Hőtérkép"
+  "heat-map": "Hőtérkép",
+  "select-budget-type": "Válassza a Költségvetés típusát",
+  "added-only-description-1": "Csak a hozzáadott tranzakciók",
+  "added-only-description-2": "Hasznos egyszeri költségvetéshez, egyedi időtartamokkal",
+  "added-only-description-3": "Példa: „Nyaralás” költségvetés",
+  "all-transactions-description-1": "Minden tranzakció a kiválasztott kategóriákon és szűrőkön belül",
+  "all-transactions-description-2": "Hasznos hosszú távú költségvetéshez több időszak alatt",
+  "all-transactions-description-3": "Példa: „Havi kiadások” költségvetés"
 }

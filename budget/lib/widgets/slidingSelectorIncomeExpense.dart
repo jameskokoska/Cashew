@@ -29,14 +29,14 @@ class SlidingSelectorIncomeExpense extends StatelessWidget {
     BorderRadius borderRadius = getPlatform() == PlatformOS.isIOS
         ? BorderRadius.circular(10)
         : BorderRadius.circular(15);
-    return Container(
-      decoration:
-          BoxDecoration(boxShadow: boxShadowCheck(boxShadowGeneral(context))),
-      child: Padding(
-        padding: EdgeInsets.symmetric(
-            horizontal: useHorizontalPaddingConstrained == false
-                ? 0
-                : getHorizontalPaddingConstrained(context)),
+    return Padding(
+      padding: EdgeInsets.symmetric(
+          horizontal: useHorizontalPaddingConstrained == false
+              ? 0
+              : getHorizontalPaddingConstrained(context)),
+      child: Container(
+        decoration:
+            BoxDecoration(boxShadow: boxShadowCheck(boxShadowGeneral(context))),
         child: Padding(
           padding: customPadding ??
               (alternateTheme

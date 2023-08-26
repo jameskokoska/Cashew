@@ -416,7 +416,7 @@
   "preview-demo-warning": "پیش نظارہ ڈیمو فی الحال فعال ہے ، اور آٹو تیار کردہ ڈیٹا استعمال کیا جارہا ہے۔ اس کی سفارش نہیں کی جاتی ہے کہ وہ ایپلی کیشن کو ڈیمو موڈ میں استعمال کریں ، کیونکہ اس سے ڈیٹا میں کمی واقع ہوسکتی ہے۔ تیار کردہ ڈیٹا کو دور کرنے اور پیش نظارہ ڈیمو سے باہر نکلنے کے لئے ، یہاں ٹیپ کریں۔",
   "exit-demo": "ڈیمو سے باہر نکلیں",
   "not-available-in-preview-demo": "پیش نظارہ ڈیمو میں دستیاب نہیں ہے",
-  "not-available-in-preview-demo-description": "اس خصوصیت کو استعمال کرنے کے لئے پیش نظارہ ڈیمو وضع کو غیر فعال کریں۔",
+  "not-available-in-preview-demo-description": "اس خصوصیت کو استعمال کرنے کے لئے پیش نظارہ ڈیمو موڈ کو غیر فعال کریں۔",
   "copied": "کاپی",
   "created-copy": "کاپی تیار کی",
   "duplicate": "نقل",
@@ -434,7 +434,7 @@
   "pinned-to-homepage": "ہوم پیج پر پن کیا گیا",
   "unpinned-to-homepage": "ہوم پیج سے غیر منقولہ",
   "expenses-only": "صرف اخراجات",
-  "expenses-only-description": "صرف بجٹ میں اخراجات شامل کیے جاسکتے ہیں",
+  "expenses-only-description": "بجٹ میں صرف اخراجات شامل کیے جاسکتے ہیں",
   "delete-category-question": "زمرہ حذف کریں؟",
   "delete-category-question-description": "یہ اس زمرے سے وابستہ تمام لین دین کو حذف کردے گا۔",
   "delete-all-transactions-question": "تمام لین دین کو حذف کریں؟",
@@ -519,5 +519,12 @@
   "add-upcoming": "آئندہ شامل کریں",
   "you-owe": "آپ کا مقروض ہے",
   "you-get": "تم سمجھے",
-  "heat-map": "حرارت کا نقشہ"
+  "heat-map": "حرارت کا نقشہ",
+  "select-budget-type": "بجٹ کی قسم منتخب کریں",
+  "added-only-description-1": "صرف ان لین دین میں جو آپ شامل کرتے ہیں",
+  "added-only-description-2": "کسٹم ٹائم پیریڈ کے ساتھ ایک وقتی بجٹ کے لئے مفید ہے",
+  "added-only-description-3": "مثال کے طور پر: 'تعطیلات' بجٹ",
+  "all-transactions-description-1": "منتخب کردہ زمرے اور فلٹرز کے اندر تمام لین دین",
+  "all-transactions-description-2": "متعدد ادوار میں طویل مدتی بجٹ کے لئے مفید ہے",
+  "all-transactions-description-3": "مثال: 'ماہانہ خرچ' بجٹ"
 }
