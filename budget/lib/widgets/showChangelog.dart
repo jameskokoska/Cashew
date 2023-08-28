@@ -13,6 +13,7 @@ Future<void> showChangelog(context, {forceShow = false}) async {
     < 4.0.1
     Fixed heatmap popup alignment for iOS
     Fixed background for premium products
+    Fixed updating the period length and type for transactions
     < 4.0.0
     Fixed positioning and spacing of income/outcome arrow
     Ability to copy amount of loans and scheduled total amount

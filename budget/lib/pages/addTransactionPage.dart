@@ -397,12 +397,8 @@ class _AddTransactionPageState extends State<AddTransactionPage>
       paid: paid,
       skipPaid: skipPaid,
       type: selectedType,
-      reoccurrence: widget.transaction != null
-          ? widget.transaction!.reoccurrence
-          : selectedRecurrenceEnum,
-      periodLength: widget.transaction != null
-          ? widget.transaction!.periodLength
-          : selectedPeriodLength,
+      reoccurrence: selectedRecurrenceEnum,
+      periodLength: selectedPeriodLength,
       methodAdded:
           widget.transaction != null ? widget.transaction!.methodAdded : null,
       createdAnotherFutureTransaction: createdAnotherFutureTransaction,
