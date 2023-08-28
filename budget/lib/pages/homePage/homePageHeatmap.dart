@@ -491,6 +491,9 @@ Future<dynamic> openTransactionsOnDayBottomSheet(
               padding: EdgeInsets.only(
                   top: getPlatform() == PlatformOS.isIOS ? 4 : 1),
               child: Row(
+                mainAxisAlignment: getPlatform() == PlatformOS.isIOS
+                    ? MainAxisAlignment.center
+                    : MainAxisAlignment.start,
                 children: [
                   AnimatedSizeSwitcher(
                     child: snapshot.data == 0

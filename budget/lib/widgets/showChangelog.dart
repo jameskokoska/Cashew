@@ -10,6 +10,9 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    < 4.0.1
+    Fixed heatmap popup alignment for iOS
+    Fixed background for premium products
     < 4.0.0
     Fixed positioning and spacing of income/outcome arrow
     Ability to copy amount of loans and scheduled total amount

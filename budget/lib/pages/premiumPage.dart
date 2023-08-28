@@ -723,83 +723,94 @@ class ProductsState extends State<Products> {
                       children: [
                         ClipRRect(
                           borderRadius: BorderRadius.circular(20),
-                          child: Column(
-                            children: [
-                              Builder(
-                                builder: (context) {
-                                  if (storeProducts["cashew.pro.yearly"] ==
-                                          null ||
-                                      storeProducts["cashew.pro.monthly"] ==
-                                          null) {
-                                    return SizedBox.shrink();
-                                  }
-                                  final double monthlyPrice =
-                                      storeProducts["cashew.pro.monthly"]!
-                                          .rawPrice;
-                                  final double monthlyPriceForYear =
-                                      (monthlyPrice * 12);
-                                  return storeProducts["cashew.pro.yearly"] ==
-                                          null
-                                      ? SizedBox.shrink()
-                                      : SubscriptionOption(
-                                          label: "yearly".tr().capitalizeFirst,
-                                          price: storeProducts[
-                                                  "cashew.pro.yearly"]!
-                                              .price,
-                                          extraPadding:
-                                              EdgeInsets.only(top: 13 / 2),
-                                          onTap: () {
-                                            InAppPurchase.instance
-                                                .buyNonConsumable(
-                                              purchaseParam: PurchaseParam(
-                                                productDetails: storeProducts[
-                                                    "cashew.pro.yearly"]!,
-                                              ),
-                                            );
-                                          },
-                                          originalPrice: storeProducts[
-                                                      "cashew.pro.yearly"]!
-                                                  .currencySymbol +
-                                              monthlyPriceForYear
-                                                  .toStringAsFixed(2),
-                                        );
-                                },
-                              ),
-                              storeProducts["cashew.pro.monthly"] == null
-                                  ? SizedBox.shrink()
-                                  : SubscriptionOption(
-                                      label: "monthly".tr().capitalizeFirst,
-                                      price:
-                                          storeProducts["cashew.pro.monthly"]!
-                                              .price,
-                                      onTap: () {
-                                        InAppPurchase.instance.buyNonConsumable(
-                                          purchaseParam: PurchaseParam(
-                                            productDetails: storeProducts[
-                                                "cashew.pro.monthly"]!,
-                                          ),
-                                        );
-                                      },
-                                    ),
-                              storeProducts["cashew.pro.lifetime"] == null
-                                  ? SizedBox.shrink()
-                                  : SubscriptionOption(
-                                      label: "lifetime".tr().capitalizeFirst,
-                                      price:
-                                          storeProducts["cashew.pro.lifetime"]!
-                                              .price,
-                                      extraPadding:
-                                          EdgeInsets.only(bottom: 13 / 2),
-                                      onTap: () {
-                                        InAppPurchase.instance.buyNonConsumable(
-                                          purchaseParam: PurchaseParam(
-                                            productDetails: storeProducts[
-                                                "cashew.pro.lifetime"]!,
-                                          ),
-                                        );
-                                      },
-                                    ),
-                            ],
+                          child: Container(
+                            color: dynamicPastel(
+                              context,
+                              Theme.of(context).colorScheme.primaryContainer,
+                              amountDark: 0.2,
+                              amountLight: 0.6,
+                            ).withOpacity(0.45),
+                            child: Column(
+                              children: [
+                                Builder(
+                                  builder: (context) {
+                                    if (storeProducts["cashew.pro.yearly"] ==
+                                            null ||
+                                        storeProducts["cashew.pro.monthly"] ==
+                                            null) {
+                                      return SizedBox.shrink();
+                                    }
+                                    final double monthlyPrice =
+                                        storeProducts["cashew.pro.monthly"]!
+                                            .rawPrice;
+                                    final double monthlyPriceForYear =
+                                        (monthlyPrice * 12);
+                                    return storeProducts["cashew.pro.yearly"] ==
+                                            null
+                                        ? SizedBox.shrink()
+                                        : SubscriptionOption(
+                                            label:
+                                                "yearly".tr().capitalizeFirst,
+                                            price: storeProducts[
+                                                    "cashew.pro.yearly"]!
+                                                .price,
+                                            extraPadding:
+                                                EdgeInsets.only(top: 13 / 2),
+                                            onTap: () {
+                                              InAppPurchase.instance
+                                                  .buyNonConsumable(
+                                                purchaseParam: PurchaseParam(
+                                                  productDetails: storeProducts[
+                                                      "cashew.pro.yearly"]!,
+                                                ),
+                                              );
+                                            },
+                                            originalPrice: storeProducts[
+                                                        "cashew.pro.yearly"]!
+                                                    .currencySymbol +
+                                                monthlyPriceForYear
+                                                    .toStringAsFixed(2),
+                                          );
+                                  },
+                                ),
+                                storeProducts["cashew.pro.monthly"] == null
+                                    ? SizedBox.shrink()
+                                    : SubscriptionOption(
+                                        label: "monthly".tr().capitalizeFirst,
+                                        price:
+                                            storeProducts["cashew.pro.monthly"]!
+                                                .price,
+                                        onTap: () {
+                                          InAppPurchase.instance
+                                              .buyNonConsumable(
+                                            purchaseParam: PurchaseParam(
+                                              productDetails: storeProducts[
+                                                  "cashew.pro.monthly"]!,
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                storeProducts["cashew.pro.lifetime"] == null
+                                    ? SizedBox.shrink()
+                                    : SubscriptionOption(
+                                        label: "lifetime".tr().capitalizeFirst,
+                                        price: storeProducts[
+                                                "cashew.pro.lifetime"]!
+                                            .price,
+                                        extraPadding:
+                                            EdgeInsets.only(bottom: 13 / 2),
+                                        onTap: () {
+                                          InAppPurchase.instance
+                                              .buyNonConsumable(
+                                            purchaseParam: PurchaseParam(
+                                              productDetails: storeProducts[
+                                                  "cashew.pro.lifetime"]!,
+                                            ),
+                                          );
+                                        },
+                                      ),
+                              ],
+                            ),
                           ),
                         ),
                         Padding(
@@ -917,12 +928,7 @@ class SubscriptionOption extends StatelessWidget {
         Expanded(
           child: Tappable(
             onTap: onTap,
-            color: dynamicPastel(
-              context,
-              Theme.of(context).colorScheme.primaryContainer,
-              amountDark: 0.2,
-              amountLight: 0.6,
-            ).withOpacity(0.45),
+            color: Colors.transparent,
             borderRadius: 0,
             child: Padding(
               padding: extraPadding ?? EdgeInsets.zero,
