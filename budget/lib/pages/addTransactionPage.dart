@@ -1257,16 +1257,20 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                         .tr()
                                     : "",
                                 onTap: () async {
-                                  dynamic result =
-                                      await openTransactionActionFromType(
-                                    context,
-                                    createTransaction(),
-                                    runBefore: () async {
-                                      await addTransaction();
-                                    },
-                                  );
-                                  if (result == true)
-                                    Navigator.of(context).pop();
+                                  if (widget.transaction != null &&
+                                      selectedType != null) {
+                                    dynamic result =
+                                        await openTransactionActionFromType(
+                                      context,
+                                      createTransaction(),
+                                      runBefore: () async {
+                                        await addTransaction();
+                                      },
+                                    );
+                                    if (result == true) {
+                                      Navigator.of(context).pop();
+                                    }
+                                  }
                                 },
                               ),
                             );
