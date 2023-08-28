@@ -1224,52 +1224,58 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                               },
                             ),
                 ),
-                widget.transaction != null && selectedType != null
-                    ? WidgetSizeBuilder(
-                        // Change the key to re-render the widget when transaction type changed
-                        key: ValueKey(widget.transaction != null
-                            ? getTransactionActionNameFromType(
-                                    createTransaction())
-                                .tr()
-                            : ""),
-                        widgetBuilder: (Size? size) {
-                          return Container(
-                            width: size?.width,
-                            child: SaveBottomButton(
-                              margin: EdgeInsets.only(left: 5),
-                              color: isTransactionActionDealtWith(
+                AnimatedSizeSwitcher(
+                  child: widget.transaction != null && selectedType != null
+                      ? WidgetSizeBuilder(
+                          // Change the key to re-render the widget when transaction type changed
+                          key: ValueKey(widget.transaction != null
+                              ? getTransactionActionNameFromType(
                                       createTransaction())
-                                  ? Theme.of(context)
-                                      .colorScheme
-                                      .tertiaryContainer
-                                  : null,
-                              labelColor: isTransactionActionDealtWith(
-                                      createTransaction())
-                                  ? Theme.of(context)
-                                      .colorScheme
-                                      .onTertiaryContainer
-                                  : null,
-                              label: widget.transaction != null
-                                  ? getTransactionActionNameFromType(
-                                          createTransaction())
-                                      .tr()
-                                  : "",
-                              onTap: () async {
-                                dynamic result =
-                                    await openTransactionActionFromType(
-                                  context,
-                                  createTransaction(),
-                                  runBefore: () async {
-                                    await addTransaction();
-                                  },
-                                );
-                                if (result == true) Navigator.of(context).pop();
-                              },
-                            ),
-                          );
-                        },
-                      )
-                    : SizedBox.shrink(),
+                                  .tr()
+                              : ""),
+                          widgetBuilder: (Size? size) {
+                            return Container(
+                              key: ValueKey(1),
+                              width: size?.width,
+                              child: SaveBottomButton(
+                                margin: EdgeInsets.only(left: 5),
+                                color: isTransactionActionDealtWith(
+                                        createTransaction())
+                                    ? Theme.of(context)
+                                        .colorScheme
+                                        .tertiaryContainer
+                                    : null,
+                                labelColor: isTransactionActionDealtWith(
+                                        createTransaction())
+                                    ? Theme.of(context)
+                                        .colorScheme
+                                        .onTertiaryContainer
+                                    : null,
+                                label: widget.transaction != null
+                                    ? getTransactionActionNameFromType(
+                                            createTransaction())
+                                        .tr()
+                                    : "",
+                                onTap: () async {
+                                  dynamic result =
+                                      await openTransactionActionFromType(
+                                    context,
+                                    createTransaction(),
+                                    runBefore: () async {
+                                      await addTransaction();
+                                    },
+                                  );
+                                  if (result == true)
+                                    Navigator.of(context).pop();
+                                },
+                              ),
+                            );
+                          },
+                        )
+                      : Container(
+                          key: ValueKey(2),
+                        ),
+                ),
               ],
             ),
           ),
