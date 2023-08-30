@@ -309,7 +309,8 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
           : currentInstance?.sharedKey != null
               ? null
               : selectedMemberTransactionFilters,
-      isAbsoluteSpendingLimit: currentInstance!.isAbsoluteSpendingLimit,
+      isAbsoluteSpendingLimit:
+          currentInstance?.isAbsoluteSpendingLimit ?? false,
     );
   }
 

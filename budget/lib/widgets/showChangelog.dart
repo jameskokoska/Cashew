@@ -10,6 +10,8 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    < 4.0.4
+    Hot fix for adding transactions and budgets
     < 4.0.3
     Fixed discard changes popup when transaction missing period length
     < 4.0.2

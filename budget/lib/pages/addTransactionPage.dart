@@ -390,8 +390,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
         skipPaid = false;
       }
     }
-    print("PERIOD LENGTH" + selectedPeriodLength.toString());
-    print("PERIOD LENGTH" + widget.transaction!.periodLength.toString());
+
     Transaction createdTransaction = Transaction(
       transactionPk:
           widget.transaction != null ? widget.transaction!.transactionPk : "-1",
