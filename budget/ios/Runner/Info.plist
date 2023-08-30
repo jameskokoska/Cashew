@@ -4,12 +4,16 @@
 <dict>
   <key>NSFaceIDUsageDescription</key>
   <string>Lock the application</string>
+  <key>NSPhotoLibraryUsageDescription</key>
+  <string>Photo library access</string>
+  <key>ITSAppUsesNonExemptEncryption</key>
+  <false/>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>Budget</string>
+	<string>Cashew</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
