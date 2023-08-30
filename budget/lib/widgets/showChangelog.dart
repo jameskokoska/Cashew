@@ -10,6 +10,8 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    < 4.0.3
+    Fixed discard changes popup when transaction missing period length
     < 4.0.2
     Fixed toggling between category spending limits when from edit budget page would cause inconsistent saving of data
     Fixed income arrow indicator width

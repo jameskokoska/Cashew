@@ -29,6 +29,7 @@ import 'package:budget/widgets/transactionEntry/transactionLabel.dart';
 import 'package:budget/widgets/util/contextMenu.dart';
 import 'package:budget/widgets/util/showDatePicker.dart';
 import 'package:budget/widgets/util/widgetSize.dart';
+import 'package:drift/drift.dart' hide Column;
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
@@ -312,6 +313,14 @@ class _AddTransactionPageState extends State<AddTransactionPage>
     });
   }
 
+  Transaction addDefaultMissingValues(Transaction transaction) {
+    return transaction.copyWith(
+      reoccurrence:
+          Value(transaction.reoccurrence ?? BudgetReoccurence.monthly),
+      periodLength: Value(transaction.periodLength ?? 1),
+    );
+  }
+
   Future<bool> addTransaction() async {
     print("Added transaction");
 
@@ -381,6 +390,8 @@ class _AddTransactionPageState extends State<AddTransactionPage>
         skipPaid = false;
       }
     }
+    print("PERIOD LENGTH" + selectedPeriodLength.toString());
+    print("PERIOD LENGTH" + widget.transaction!.periodLength.toString());
     Transaction createdTransaction = Transaction(
       transactionPk:
           widget.transaction != null ? widget.transaction!.transactionPk : "-1",
@@ -465,7 +476,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
       selectedWalletPk = widget.transaction!.walletFk;
       selectedAmount = widget.transaction!.amount.abs();
       selectedType = widget.transaction!.type;
-      selectedPeriodLength = widget.transaction!.periodLength ?? 0;
+      selectedPeriodLength = widget.transaction!.periodLength ?? 1;
       selectedRecurrenceEnum =
           widget.transaction!.reoccurrence ?? BudgetReoccurence.monthly;
       selectedRecurrence = enumRecurrence[selectedRecurrenceEnum];
@@ -1059,7 +1070,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
         if (widget.transaction != null) {
           discardChangesPopup(
             context,
-            previousObject: widget.transaction!,
+            previousObject: addDefaultMissingValues(widget.transaction!),
             currentObject: await createTransaction(),
           );
         } else {
@@ -1085,7 +1096,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
             if (widget.transaction != null) {
               discardChangesPopup(
                 context,
-                previousObject: widget.transaction!,
+                previousObject: addDefaultMissingValues(widget.transaction!),
                 currentObject: await createTransaction(),
               );
             } else {
@@ -1096,7 +1107,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
             if (widget.transaction != null) {
               discardChangesPopup(
                 context,
-                previousObject: widget.transaction!,
+                previousObject: addDefaultMissingValues(widget.transaction!),
                 currentObject: await createTransaction(),
               );
             } else {
