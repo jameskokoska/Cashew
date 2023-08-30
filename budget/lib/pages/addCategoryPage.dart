@@ -225,7 +225,7 @@ class _AddCategoryPageState extends State<AddCategoryPage>
               discardChangesPopup(context);
             }
           },
-          onDragDownToDissmiss: () async {
+          onDragDownToDismiss: () async {
             if (widget.category != null) {
               discardChangesPopup(context,
                   previousObject: widget.category!,

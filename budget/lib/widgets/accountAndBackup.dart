@@ -525,8 +525,8 @@ class _GoogleAccountLoginButtonState extends State<GoogleAccountLoginButton> {
         result = await openPopup(
           navigatorKey.currentContext!,
           icon: Icons.badge_rounded,
-          title: "google-login".tr(),
-          description: "google-login-apple-disclaimer".tr(),
+          title: "backups".tr(),
+          description: "google-drive-backup-disclaimer".tr(),
           onSubmitLabel: "continue".tr(),
           onSubmit: () {
             Navigator.pop(navigatorKey.currentContext!, true);

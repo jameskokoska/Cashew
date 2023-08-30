@@ -10,6 +10,16 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    < 4.0.2
+    Fixed toggling between category spending limits when from edit budget page would cause inconsistent saving of data
+    Fixed income arrow indicator width
+    Fixed swipe down background on backups page for iOS
+    Reworded Google Drive backup for iOS
+    Added per day indication for amount remaining
+    Fixed remaining days (added 1) to be more logical
+    Can swipe down to dismiss immediately with iOS scroll physics
+    Heatmap scroll to load now loads if greater than extent
+    Custom product IDs platform based support
     < 4.0.1
     Fixed heatmap popup alignment for iOS
     Fixed background for premium products

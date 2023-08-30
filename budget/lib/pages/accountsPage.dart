@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:budget/colors.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
@@ -60,8 +62,10 @@ class AccountsPageState extends State<AccountsPage> {
       appBarBackgroundColor: Theme.of(context).colorScheme.secondaryContainer,
       appBarBackgroundColorStart:
           Theme.of(context).colorScheme.secondaryContainer,
-      dragDownToDissmissBackground: getPlatform() == PlatformOS.isIOS
-          ? Colors.transparent
+      dragDownToDismissBackground: getPlatform() == PlatformOS.isIOS
+          ? dynamicPastel(
+              context, Theme.of(context).colorScheme.secondaryContainer,
+              amount: appStateSettings["materialYou"] ? 0.4 : 0.55)
           : Theme.of(context).colorScheme.secondaryContainer,
       bottomPadding: false,
       slivers: [
@@ -73,8 +77,12 @@ class AccountsPageState extends State<AccountsPage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       SettingsContainerOutlined(
-                        title: "sign-in-with-google".tr(),
-                        icon: MoreIcons.google,
+                        title: getPlatform() == PlatformOS.isIOS
+                            ? "google-drive-backup".tr()
+                            : "sign-in-with-google".tr(),
+                        icon: getPlatform() == PlatformOS.isIOS
+                            ? MoreIcons.google_drive
+                            : MoreIcons.google,
                         isExpanded: false,
                         onTap: () async {
                           loadingIndeterminateKey.currentState
@@ -217,8 +225,12 @@ class AccountsPageState extends State<AccountsPage> {
                           children: [
                             Expanded(
                               child: OutlinedButtonStacked(
-                                text: "sync".tr(),
-                                iconData: Icons.cloud_sync_rounded,
+                                text: getPlatform() == PlatformOS.isIOS
+                                    ? "devices".tr().capitalizeFirst
+                                    : "sync".tr(),
+                                iconData: getPlatform() == PlatformOS.isIOS
+                                    ? Icons.devices_rounded
+                                    : Icons.cloud_sync_rounded,
                                 onTap: () async {
                                   chooseBackup(context,
                                       isManaging: true, isClientSync: true);

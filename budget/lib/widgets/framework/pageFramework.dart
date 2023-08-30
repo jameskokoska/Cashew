@@ -36,9 +36,9 @@ class PageFramework extends StatefulWidget {
     this.textColor,
     this.dragDownToDismiss = false,
     this.dragDownToDismissEnabled = true,
-    this.dragDownToDissmissBackground,
+    this.dragDownToDismissBackground,
     this.onBackButton,
-    this.onDragDownToDissmiss,
+    this.onDragDownToDismiss,
     this.actions,
     this.expandedHeight,
     this.listID,
@@ -72,9 +72,9 @@ class PageFramework extends StatefulWidget {
   final Color? textColor;
   final bool dragDownToDismiss;
   final bool dragDownToDismissEnabled;
-  final Color? dragDownToDissmissBackground;
+  final Color? dragDownToDismissBackground;
   final VoidCallback? onBackButton;
-  final VoidCallback? onDragDownToDissmiss;
+  final VoidCallback? onDragDownToDismiss;
   final List<Widget>? actions;
   final double? expandedHeight;
   final String? listID;
@@ -235,7 +235,7 @@ class PageFrameworkState extends State<PageFramework>
   double calculatedYOffsetForY = 0;
 
   _onPointerMove(PointerMoveEvent ptr) {
-    if ((widget.onDragDownToDissmiss != null ||
+    if ((widget.onDragDownToDismiss != null ||
             Navigator.of(context).canPop()) &&
         widget.dragDownToDismissEnabled &&
         selectingTransactionsActive == 0) {
@@ -257,8 +257,8 @@ class PageFrameworkState extends State<PageFramework>
     if (widget.dragDownToDismissEnabled) {
       if ((totalDragX >= 90 || totalDragY >= 125) &&
           !(ModalRoute.of(context)?.isFirst ?? true)) {
-        if (widget.onDragDownToDissmiss != null) {
-          widget.onDragDownToDissmiss!();
+        if (widget.onDragDownToDismiss != null) {
+          widget.onDragDownToDismiss!();
         } else {
           await Navigator.of(context).maybePop();
         }
@@ -281,7 +281,7 @@ class PageFrameworkState extends State<PageFramework>
       isBackSideSwiping = true;
     }
 
-    if (_scrollController.offset != 0) {
+    if (_scrollController.offset > 0) {
       swipeDownToDismiss = false;
     } else {
       swipeDownToDismiss = true;
@@ -379,7 +379,7 @@ class PageFrameworkState extends State<PageFramework>
           children: [
             Scaffold(
               resizeToAvoidBottomInset: widget.resizeToAvoidBottomInset,
-              backgroundColor: widget.dragDownToDissmissBackground,
+              backgroundColor: widget.dragDownToDismissBackground,
               body: Stack(
                 children: [
                   AnimatedBuilder(

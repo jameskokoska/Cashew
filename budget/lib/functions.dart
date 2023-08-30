@@ -980,8 +980,8 @@ enum PlatformOS {
   web,
 }
 
-PlatformOS? getPlatform() {
-  if (appStateSettings["iOSEmulate"] == true) {
+PlatformOS? getPlatform({bool ignoreEmulation = false}) {
+  if (appStateSettings["iOSEmulate"] == true && ignoreEmulation == false) {
     return PlatformOS.isIOS;
   } else if (kIsWeb) {
     return PlatformOS.web;

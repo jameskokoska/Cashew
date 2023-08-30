@@ -39,6 +39,8 @@ import 'package:budget/widgets/scrollbarWrap.dart';
 import 'package:budget/widgets/slidingSelectorIncomeExpense.dart';
 import 'package:provider/provider.dart';
 
+import '../../widgets/transactionEntry/incomeAmountArrow.dart';
+
 class HomePageHeatMap extends StatelessWidget {
   const HomePageHeatMap({super.key});
 
@@ -262,7 +264,7 @@ class HeatMap extends StatelessWidget {
             NotificationListener<ScrollNotification>(
               onNotification: (ScrollNotification scrollNotification) {
                 if (loadMoreMonths != null &&
-                    scrollNotification.metrics.pixels ==
+                    scrollNotification.metrics.pixels >=
                         scrollNotification.metrics.maxScrollExtent) {
                   loadMoreMonths!(1);
                 }
@@ -505,7 +507,6 @@ Future<dynamic> openTransactionsOnDayBottomSheet(
                             color: textColor,
                             isIncome: snapshot.data! > 0,
                             width: 15,
-                            shift: 5.5,
                           ),
                   ),
                   TextFont(

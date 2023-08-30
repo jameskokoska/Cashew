@@ -410,7 +410,7 @@ class _AddEmailTemplateState extends State<AddEmailTemplate> {
                     discardChangesPopup(context);
                   }
                 },
-                onDragDownToDissmiss: () async {
+                onDragDownToDismiss: () async {
                   if (widget.scannerTemplate != null) {
                     discardChangesPopup(
                       context,

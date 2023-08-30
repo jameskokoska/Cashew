@@ -47,7 +47,7 @@ class _CategoryLimitsState extends State<CategoryLimits> {
       sliver: StreamBuilder<List<TransactionCategory>>(
         stream: database.watchAllCategories(),
         builder: (context, snapshot) {
-          if (snapshot.hasData) {
+          if (snapshot.hasData && snapshot.data != null) {
             List<String> allCategoryFks = [
               for (TransactionCategory category in snapshot.data!)
                 category.categoryPk
@@ -100,7 +100,7 @@ class _CategoryLimitsState extends State<CategoryLimits> {
                             builder: (context, snapshot) {
                               return CategoryLimitEntry(
                                 category: category,
-                                key: ValueKey(1),
+                                key: ValueKey(category.categoryPk),
                                 budgetLimit: widget.budgetLimit,
                                 categoryLimit: snapshot.data,
                                 budgetPk: widget.budgetPk,
@@ -110,7 +110,8 @@ class _CategoryLimitsState extends State<CategoryLimits> {
                             },
                           )
                         : Container(
-                            key: ValueKey(2),
+                            key: ValueKey(
+                                category.categoryPk.toString() + "Container"),
                           ),
                   widget.showAddCategoryButton == false
                       ? SizedBox.shrink()

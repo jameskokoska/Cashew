@@ -26,6 +26,8 @@ import 'package:provider/provider.dart';
 import 'package:budget/widgets/countNumber.dart';
 import 'package:budget/widgets/textInput.dart';
 
+import '../widgets/transactionEntry/incomeAmountArrow.dart';
+
 class UpcomingOverdueTransactions extends StatefulWidget {
   const UpcomingOverdueTransactions(
       {required this.overdueTransactions, super.key});
@@ -322,7 +324,6 @@ class CenteredAmountAndNumTransactions extends StatelessWidget {
                                         isIncome: totalAmount > 0,
                                         iconSize: 30,
                                         width: 20,
-                                        shift: 5,
                                       ),
                               )
                             : SizedBox.shrink(),

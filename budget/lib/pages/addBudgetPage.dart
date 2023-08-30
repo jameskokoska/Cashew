@@ -116,7 +116,6 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
   List<String> allMembersOfAllBudgets = [];
   List<String>? selectedMemberTransactionFilters;
   FocusNode _titleFocusNode = FocusNode();
-  bool selectedIsAbsoluteSpendingLimit = false;
 
   // BudgetsCompanion budget = BudgetsCompanion();
 
@@ -310,7 +309,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
           : currentInstance?.sharedKey != null
               ? null
               : selectedMemberTransactionFilters,
-      isAbsoluteSpendingLimit: selectedIsAbsoluteSpendingLimit,
+      isAbsoluteSpendingLimit: currentInstance!.isAbsoluteSpendingLimit,
     );
   }
 
@@ -359,8 +358,6 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
           widget.budget!.budgetTransactionFilters ?? null;
       selectedMemberTransactionFilters =
           widget.budget!.memberTransactionFilters ?? null;
-      selectedIsAbsoluteSpendingLimit =
-          widget.budget?.isAbsoluteSpendingLimit ?? false;
 
       var amountString = widget.budget!.amount.toStringAsFixed(2);
       if (amountString.substring(amountString.length - 2) == "00") {
@@ -440,11 +437,13 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
     discardChangesPopup(
       context,
       previousObject: widget.budget!.copyWith(
-          sharedKey: Value(currentInstance!.sharedKey),
-          sharedOwnerMember: Value(currentInstance.sharedOwnerMember),
-          sharedDateUpdated: Value(currentInstance.sharedDateUpdated),
-          sharedMembers: Value(currentInstance.sharedMembers),
-          sharedAllMembersEver: Value(currentInstance.sharedAllMembersEver)),
+        sharedKey: Value(currentInstance!.sharedKey),
+        sharedOwnerMember: Value(currentInstance.sharedOwnerMember),
+        sharedDateUpdated: Value(currentInstance.sharedDateUpdated),
+        sharedMembers: Value(currentInstance.sharedMembers),
+        sharedAllMembersEver: Value(currentInstance.sharedAllMembersEver),
+        isAbsoluteSpendingLimit: currentInstance.isAbsoluteSpendingLimit,
+      ),
       currentObject: await createBudget(),
     );
   }
@@ -481,7 +480,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
               discardChangesPopup(context, forceShow: true);
             }
           },
-          onDragDownToDissmiss: () async {
+          onDragDownToDismiss: () async {
             if (widget.budget != null) {
               discardChangesPopupIfBudgetPassed();
             } else {
@@ -525,11 +524,20 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                     id: "spending-goals",
                     label: "spending-goals".tr(),
                     icon: Icons.fact_check_rounded,
-                    action: () {
+                    action: () async {
+                      Budget budget = await createBudget();
                       pushRoute(
                         context,
-                        EditBudgetLimitsPage(
-                          budget: widget.budget!,
+                        StreamBuilder<Budget>(
+                          stream: database.getBudget(widget.budget!.budgetPk),
+                          builder: (context, snapshot) {
+                            if (snapshot.data == null) return SizedBox.shrink();
+                            return EditBudgetLimitsPage(
+                              budget: budget,
+                              currentIsAbsoluteSpendingLimit:
+                                  snapshot.data!.isAbsoluteSpendingLimit,
+                            );
+                          },
                         ),
                       );
                     },

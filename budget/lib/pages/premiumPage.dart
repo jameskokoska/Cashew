@@ -28,10 +28,16 @@ bool premiumPopupEnabled = kIsWeb == false;
 bool tryStoreEnabled = kIsWeb == false;
 StreamSubscription<List<PurchaseDetails>>? purchaseListener;
 Map<String, ProductDetails> storeProducts = {};
-const Set<String> productIDs = <String>{
-  'cashew.pro.yearly',
-  'cashew.pro.monthly',
-  'cashew.pro.lifetime',
+Map<String, String> productIDs = {
+  'yearly': getPlatform(ignoreEmulation: true) == PlatformOS.isIOS
+      ? 'cashew.pro.yearly' //iOS
+      : 'cashew.pro.yearly', //Android
+  'monthly': getPlatform(ignoreEmulation: true) == PlatformOS.isIOS
+      ? 'cashew.pro.monthly' //iOS
+      : 'cashew.pro.monthly', //Android
+  'lifetime': getPlatform(ignoreEmulation: true) == PlatformOS.isIOS
+      ? 'cashew.pro.life' //iOS
+      : 'cashew.pro.lifetime', //Android
 };
 
 // A user has paid is appStateSettings["purchaseID"] is not null
@@ -53,7 +59,7 @@ class PremiumPage extends StatelessWidget {
         PageFramework(
           enableHeader: false,
           dragDownToDismiss: canDismiss,
-          dragDownToDissmissBackground: Colors.transparent,
+          dragDownToDismissBackground: Colors.transparent,
           bottomPadding: false,
           backgroundColor: Colors.transparent,
           slivers: [
@@ -369,12 +375,14 @@ class ManageSubscription extends StatelessWidget {
   const ManageSubscription({super.key});
 
   openManagePurchase() {
-    if (appStateSettings["purchaseID"] == "cashew.pro.lifetime") {
+    if (appStateSettings["purchaseID"] == productIDs["lifetime"]) {
       return;
-    } else if (appStateSettings["purchaseID"] == "cashew.pro.monthly") {
+    } else if (getPlatform(ignoreEmulation: true) == PlatformOS.isIOS) {
+      openUrl("https://apps.apple.com/account/subscriptions");
+    } else if (appStateSettings["purchaseID"] == productIDs["monthly"]) {
       openUrl(
           "https://play.google.com/store/account/subscriptions?sku=cashew.pro.monthly&package=com.budget.tracker_app");
-    } else if (appStateSettings["purchaseID"] == "cashew.pro.yearly") {
+    } else if (appStateSettings["purchaseID"] == productIDs["yearly"]) {
       openUrl(
           "https://play.google.com/store/account/subscriptions?sku=cashew.pro.yearly&package=com.budget.tracker_app");
     }
@@ -383,11 +391,11 @@ class ManageSubscription extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String? currentPlanName;
-    if (appStateSettings["purchaseID"] == "cashew.pro.lifetime") {
+    if (appStateSettings["purchaseID"] == productIDs["lifetime"]) {
       currentPlanName = "lifetime".tr();
-    } else if (appStateSettings["purchaseID"] == "cashew.pro.monthly") {
+    } else if (appStateSettings["purchaseID"] == productIDs["monthly"]) {
       currentPlanName = "monthly".tr().capitalizeFirst;
-    } else if (appStateSettings["purchaseID"] == "cashew.pro.yearly") {
+    } else if (appStateSettings["purchaseID"] == productIDs["yearly"]) {
       currentPlanName = "yearly".tr().capitalizeFirst;
     }
     return Tappable(
@@ -405,7 +413,7 @@ class ManageSubscription extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: 35, vertical: 15),
         child: Column(
           children: [
-            appStateSettings["purchaseID"] == "cashew.pro.lifetime"
+            appStateSettings["purchaseID"] == productIDs["lifetime"]
                 ? TextFont(
                     text: "already-purchased".tr(),
                     fontSize: 16,
@@ -422,7 +430,7 @@ class ManageSubscription extends StatelessWidget {
               fontWeight: FontWeight.bold,
             ),
             SizedBox(height: 10),
-            appStateSettings["purchaseID"] == "cashew.pro.lifetime"
+            appStateSettings["purchaseID"] == productIDs["lifetime"]
                 ? SizedBox.shrink()
                 : Padding(
                     padding: EdgeInsets.symmetric(horizontal: 10, vertical: 4),
@@ -463,7 +471,7 @@ void listenToPurchaseUpdated({
 }) {
   // ignore: avoid_function_literals_in_foreach_calls
   purchaseDetailsList.forEach((PurchaseDetails purchaseDetails) async {
-    if (productIDs.contains(purchaseDetails.productID)) {
+    if (productIDs.values.toSet().contains(purchaseDetails.productID)) {
       if (purchaseDetails.status == PurchaseStatus.purchased ||
           purchaseDetails.status == PurchaseStatus.restored) {
         updateSettings("purchaseID", purchaseDetails.productID,
@@ -533,9 +541,8 @@ Future<Map<String, ProductDetails>> initializeStoreAndPurchases(
           purchaseListener = null;
         },
       );
-
-      final ProductDetailsResponse response =
-          await InAppPurchase.instance.queryProductDetails(productIDs);
+      final ProductDetailsResponse response = await InAppPurchase.instance
+          .queryProductDetails(productIDs.values.toSet());
       if (response.notFoundIDs.isNotEmpty) {
         print("Some products not found...");
       } else {
@@ -734,25 +741,26 @@ class ProductsState extends State<Products> {
                               children: [
                                 Builder(
                                   builder: (context) {
-                                    if (storeProducts["cashew.pro.yearly"] ==
+                                    if (storeProducts[productIDs["yearly"]] ==
                                             null ||
-                                        storeProducts["cashew.pro.monthly"] ==
+                                        storeProducts[productIDs["monthly"]] ==
                                             null) {
                                       return SizedBox.shrink();
                                     }
                                     final double monthlyPrice =
-                                        storeProducts["cashew.pro.monthly"]!
+                                        storeProducts[productIDs["monthly"]]!
                                             .rawPrice;
                                     final double monthlyPriceForYear =
                                         (monthlyPrice * 12);
-                                    return storeProducts["cashew.pro.yearly"] ==
+                                    return storeProducts[
+                                                productIDs["yearly"]] ==
                                             null
                                         ? SizedBox.shrink()
                                         : SubscriptionOption(
                                             label:
                                                 "yearly".tr().capitalizeFirst,
                                             price: storeProducts[
-                                                    "cashew.pro.yearly"]!
+                                                    productIDs["yearly"]]!
                                                 .price,
                                             extraPadding:
                                                 EdgeInsets.only(top: 13 / 2),
@@ -761,41 +769,41 @@ class ProductsState extends State<Products> {
                                                   .buyNonConsumable(
                                                 purchaseParam: PurchaseParam(
                                                   productDetails: storeProducts[
-                                                      "cashew.pro.yearly"]!,
+                                                      productIDs["yearly"]]!,
                                                 ),
                                               );
                                             },
                                             originalPrice: storeProducts[
-                                                        "cashew.pro.yearly"]!
+                                                        productIDs["yearly"]]!
                                                     .currencySymbol +
                                                 monthlyPriceForYear
                                                     .toStringAsFixed(2),
                                           );
                                   },
                                 ),
-                                storeProducts["cashew.pro.monthly"] == null
+                                storeProducts[productIDs["monthly"]] == null
                                     ? SizedBox.shrink()
                                     : SubscriptionOption(
                                         label: "monthly".tr().capitalizeFirst,
-                                        price:
-                                            storeProducts["cashew.pro.monthly"]!
-                                                .price,
+                                        price: storeProducts[
+                                                productIDs["monthly"]]!
+                                            .price,
                                         onTap: () {
                                           InAppPurchase.instance
                                               .buyNonConsumable(
                                             purchaseParam: PurchaseParam(
                                               productDetails: storeProducts[
-                                                  "cashew.pro.monthly"]!,
+                                                  productIDs["monthly"]]!,
                                             ),
                                           );
                                         },
                                       ),
-                                storeProducts["cashew.pro.lifetime"] == null
+                                storeProducts[productIDs["lifetime"]] == null
                                     ? SizedBox.shrink()
                                     : SubscriptionOption(
                                         label: "lifetime".tr().capitalizeFirst,
                                         price: storeProducts[
-                                                "cashew.pro.lifetime"]!
+                                                productIDs["lifetime"]]!
                                             .price,
                                         extraPadding:
                                             EdgeInsets.only(bottom: 13 / 2),
@@ -804,7 +812,7 @@ class ProductsState extends State<Products> {
                                               .buyNonConsumable(
                                             purchaseParam: PurchaseParam(
                                               productDetails: storeProducts[
-                                                  "cashew.pro.lifetime"]!,
+                                                  productIDs["lifetime"]]!,
                                             ),
                                           );
                                         },
@@ -1181,7 +1189,7 @@ class PremiumBanner extends StatelessWidget {
                                             child: TextFont(
                                               text: appStateSettings[
                                                           "purchaseID"] ==
-                                                      "cashew.pro.lifetime"
+                                                      productIDs["lifetime"]
                                                   ? "lifetime".tr()
                                                   : "active".tr(),
                                               textColor: Theme.of(context)

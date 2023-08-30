@@ -434,44 +434,39 @@ class DaySpending extends StatelessWidget {
     bool isOutOfRange = budgetRange.end.difference(DateTime.now()).inDays < 0 ||
         budgetRange.start.difference(DateTime.now()).inDays > 0;
     Widget textWidget = Padding(
-      padding: EdgeInsets.symmetric(horizontal: large ? 10 : 15),
+      padding: EdgeInsets.symmetric(horizontal: 6),
       child: large && isOutOfRange
           ? SizedBox(height: 1)
-          : TextFont(
-              textColor: getColor(context, "black").withAlpha(80),
-              text: isOutOfRange
-                  ? ""
-                  : amount < 0
-                      ? "saving-tracking".tr() +
-                          " " +
-                          convertToMoney(
-                              Provider.of<AllWallets>(context), amount.abs()) +
-                          " " +
-                          "for".tr() +
-                          " " +
-                          budgetRange.end
-                              .difference(DateTime.now())
-                              .inDays
-                              .toString() +
-                          " " +
-                          "more-days".tr()
-                      : "spending-tracking".tr() +
-                          " " +
-                          convertToMoney(
-                              Provider.of<AllWallets>(context), amount.abs()) +
-                          " " +
-                          "for".tr() +
-                          " " +
-                          budgetRange.end
-                              .difference(DateTime.now())
-                              .inDays
-                              .toString() +
-                          " " +
-                          "more-days".tr(),
-              fontSize: large ? 14 : 13,
-              textAlign: TextAlign.center,
-              maxLines: 4,
-            ),
+          : Builder(builder: (context) {
+              // Add one because if there are zero days left, we want to make it the last day
+              int remainingDays =
+                  budgetRange.end.difference(DateTime.now()).inDays + 1;
+              return TextFont(
+                textColor: getColor(context, "black").withAlpha(80),
+                text: isOutOfRange
+                    ? ""
+                    : (amount < 0
+                            ? "saving-tracking".tr()
+                            : "spending-tracking".tr()) +
+                        " " +
+                        convertToMoney(
+                            Provider.of<AllWallets>(context), amount.abs()) +
+                        "/" +
+                        "day".tr() +
+                        " "
+                                "for"
+                            .tr() +
+                        " " +
+                        remainingDays.toString() +
+                        " " +
+                        (remainingDays == 1
+                            ? "more-day".tr()
+                            : "more-days".tr()),
+                fontSize: large ? 14 : 13,
+                textAlign: TextAlign.center,
+                maxLines: 4,
+              );
+            }),
     );
     return Padding(
       padding: large && isOutOfRange ? EdgeInsets.zero : padding,

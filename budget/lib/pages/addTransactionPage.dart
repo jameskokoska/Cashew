@@ -1092,7 +1092,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
               Navigator.pop(context);
             }
           },
-          onDragDownToDissmiss: () async {
+          onDragDownToDismiss: () async {
             if (widget.transaction != null) {
               discardChangesPopup(
                 context,

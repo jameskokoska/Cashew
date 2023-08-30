@@ -301,7 +301,7 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
       appBarBackgroundColor: budgetColorScheme.secondaryContainer,
       textColor: getColor(context, "black"),
       dragDownToDismiss: true,
-      dragDownToDissmissBackground: Theme.of(context).canvasColor,
+      dragDownToDismissBackground: Theme.of(context).canvasColor,
       slivers: [
         SliverStickyHeader(
           header: Transform.translate(

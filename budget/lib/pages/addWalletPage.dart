@@ -276,7 +276,7 @@ class _AddWalletPageState extends State<AddWalletPage> {
               discardChangesPopup(context);
             }
           },
-          onDragDownToDissmiss: () async {
+          onDragDownToDismiss: () async {
             if (widget.wallet != null) {
               discardChangesPopup(
                 context,
