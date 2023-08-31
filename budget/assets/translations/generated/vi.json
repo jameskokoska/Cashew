@@ -526,5 +526,9 @@
   "added-only-description-3": "Ví dụ: Ngân sách 'Kỳ nghỉ'",
   "all-transactions-description-1": "Tất cả các giao dịch trong các danh mục và bộ lọc được chọn",
   "all-transactions-description-2": "Hữu ích cho ngân sách dài hạn trong nhiều thời gian",
-  "all-transactions-description-3": "Ví dụ: Ngân sách 'Chi tiêu hàng tháng'"
+  "all-transactions-description-3": "Ví dụ: Ngân sách 'Chi tiêu hàng tháng'",
+  "no-budgets-found": "Không tìm thấy ngân sách.",
+  "no-categories-found": "Không tìm thấy danh mục.",
+  "no-wallets-found": "Không tìm thấy ví.",
+  "no-titles-found": "Không tìm thấy tiêu đề."
 }

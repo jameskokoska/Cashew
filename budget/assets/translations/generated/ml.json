@@ -526,5 +526,9 @@
   "added-only-description-3": "ഉദാഹരണം: 'അവധിക്കാല' ബജറ്റ്",
   "all-transactions-description-1": "തിരഞ്ഞെടുത്ത വിഭാഗങ്ങളിലെ എല്ലാ ഇടപാടുകളും, ഫിൽട്ടറുകൾ",
   "all-transactions-description-2": "ഒന്നിലധികം കാലയളവുകളിൽ ദീർഘകാല ബജറ്റുകൾക്ക് ഉപയോഗപ്രദമാണ്",
-  "all-transactions-description-3": "ഉദാഹരണം: 'പ്രതിമാസ ചെലവ്' ബജറ്റ്"
+  "all-transactions-description-3": "ഉദാഹരണം: 'പ്രതിമാസ ചെലവ്' ബജറ്റ്",
+  "no-budgets-found": "ബജറ്റുകളൊന്നും കണ്ടെത്തിയില്ല.",
+  "no-categories-found": "വിഭാഗങ്ങളൊന്നും കണ്ടെത്തിയില്ല.",
+  "no-wallets-found": "വാലറ്റുകളൊന്നും കണ്ടെത്തിയില്ല.",
+  "no-titles-found": "ശീർഷകങ്ങളൊന്നും കണ്ടെത്തിയില്ല."
 }

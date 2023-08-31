@@ -526,5 +526,9 @@
   "added-only-description-3": "Ejemplo: presupuesto de 'vacaciones'",
   "all-transactions-description-1": "Todas las transacciones dentro de categorías y filtros seleccionados",
   "all-transactions-description-2": "Útil para presupuestos a largo plazo durante múltiples períodos",
-  "all-transactions-description-3": "Ejemplo: presupuesto de 'gasto mensual'"
+  "all-transactions-description-3": "Ejemplo: presupuesto de 'gasto mensual'",
+  "no-budgets-found": "No se encontraron presupuestos.",
+  "no-categories-found": "No se encontraron categorías.",
+  "no-wallets-found": "No se encontraron billeteras.",
+  "no-titles-found": "No se encontraron títulos."
 }

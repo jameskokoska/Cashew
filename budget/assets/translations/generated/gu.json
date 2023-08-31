@@ -526,5 +526,9 @@
   "added-only-description-3": "ઉદાહરણ: 'વેકેશન' બજેટ",
   "all-transactions-description-1": "પસંદ કરેલી કેટેગરીઝ અને ફિલ્ટર્સમાંના તમામ વ્યવહારો",
   "all-transactions-description-2": "બહુવિધ સમયગાળા દરમિયાન લાંબા ગાળાના બજેટ માટે ઉપયોગી",
-  "all-transactions-description-3": "ઉદાહરણ: 'માસિક ખર્ચ' બજેટ"
+  "all-transactions-description-3": "ઉદાહરણ: 'માસિક ખર્ચ' બજેટ",
+  "no-budgets-found": "કોઈ બજેટ મળ્યું નથી.",
+  "no-categories-found": "કોઈ વર્ગો મળી નથી.",
+  "no-wallets-found": "કોઈ વ lets લેટ્સ મળ્યાં નથી.",
+  "no-titles-found": "કોઈ ટાઇટલ મળ્યાં નથી."
 }

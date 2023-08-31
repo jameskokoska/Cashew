@@ -526,5 +526,9 @@
   "added-only-description-3": "Beispiel: 'Urlaub' Budget",
   "all-transactions-description-1": "Alle Transaktionen in ausgewählten Kategorien und Filtern",
   "all-transactions-description-2": "Nützlich für langfristige Budgets über mehrere Zeiträume",
-  "all-transactions-description-3": "Beispiel: \"Monatliche Ausgaben\" -Budget"
+  "all-transactions-description-3": "Beispiel: \"Monatliche Ausgaben\" -Budget",
+  "no-budgets-found": "Keine Budgets gefunden.",
+  "no-categories-found": "Keine Kategorien gefunden.",
+  "no-wallets-found": "Keine Brieftaschen gefunden.",
+  "no-titles-found": "Keine Titel gefunden."
 }

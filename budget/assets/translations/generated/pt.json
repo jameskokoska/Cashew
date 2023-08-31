@@ -526,5 +526,9 @@
   "added-only-description-3": "Exemplo: Orçamento de 'férias'",
   "all-transactions-description-1": "Todas as transações em categorias e filtros selecionados",
   "all-transactions-description-2": "Útil para orçamentos de longo prazo em vários períodos",
-  "all-transactions-description-3": "Exemplo: Orçamento de 'gastos mensais'"
+  "all-transactions-description-3": "Exemplo: Orçamento de 'gastos mensais'",
+  "no-budgets-found": "Nenhum orçamento encontrado.",
+  "no-categories-found": "Nenhuma categoria encontrada.",
+  "no-wallets-found": "Nenhuma carteira encontrada.",
+  "no-titles-found": "Nenhum título encontrado."
 }

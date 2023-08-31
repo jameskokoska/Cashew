@@ -526,5 +526,9 @@
   "added-only-description-3": "ตัวอย่าง: งบประมาณ 'วันหยุด'",
   "all-transactions-description-1": "ธุรกรรมทั้งหมดภายในหมวดหมู่และตัวกรองที่เลือก",
   "all-transactions-description-2": "มีประโยชน์สำหรับงบประมาณระยะยาวในหลายช่วงเวลา",
-  "all-transactions-description-3": "ตัวอย่าง: งบประมาณ 'การใช้จ่ายรายเดือน'"
+  "all-transactions-description-3": "ตัวอย่าง: งบประมาณ 'การใช้จ่ายรายเดือน'",
+  "no-budgets-found": "ไม่พบงบประมาณ",
+  "no-categories-found": "ไม่พบหมวดหมู่",
+  "no-wallets-found": "ไม่พบกระเป๋าเงิน",
+  "no-titles-found": "ไม่พบชื่อเรื่อง"
 }

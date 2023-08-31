@@ -350,48 +350,59 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
                   //     condition: currentPage == 0 || currentPage == 1,
                   //   ),
                   // ),
-                  AnimatedSwitcher(
-                    duration: Duration(milliseconds: 350),
-                    switchInCurve: Curves.easeOutCubic,
-                    switchOutCurve: Curves.ease,
-                    transitionBuilder:
-                        (Widget child, Animation<double> animation) {
-                      return FadeTransition(
-                        opacity: animation,
-                        child: ScaleTransition(
-                          scale: Tween<double>(begin: 0.4, end: 1.0)
-                              .animate(animation),
-                          child: child,
-                        ),
-                      );
-                    },
-                    child: currentPage == 0 ||
-                            currentPage == 1 ||
-                            (previousPage == 0 && currentPage != 2) ||
-                            (previousPage == 1 && currentPage != 2)
-                        ? AnimateFAB(
-                            key: ValueKey(1),
-                            fab: FAB(
-                              tooltip: "add-transaction".tr(),
-                              openPage: AddTransactionPage(
-                                routesToPopAfterDelete:
-                                    RoutesToPopAfterDelete.None,
-                              ),
-                            ),
-                            condition: currentPage == 0 || currentPage == 1,
-                          )
-                        : AnimateFAB(
-                            key: ValueKey(2),
-                            fab: FAB(
-                              tooltip: "add-budget".tr(),
-                              openPage: AddBudgetPage(
-                                routesToPopAfterDelete:
-                                    RoutesToPopAfterDelete.None,
-                              ),
-                            ),
-                            condition: currentPage == 2,
-                          ),
-                  ),
+
+                  // AnimatedSwitcher(
+                  //   duration: Duration(milliseconds: 350),
+                  //   switchInCurve: Curves.easeOutCubic,
+                  //   switchOutCurve: Curves.ease,
+                  //   transitionBuilder:
+                  //       (Widget child, Animation<double> animation) {
+                  //     return FadeTransition(
+                  //       opacity: animation,
+                  //       child: ScaleTransition(
+                  //         scale: Tween<double>(begin: 0.4, end: 1.0)
+                  //             .animate(animation),
+                  //         child: child,
+                  //       ),
+                  //     );
+                  //   },
+                  //   child: currentPage == 0 ||
+                  //           currentPage == 1 ||
+                  //           (previousPage == 0 && currentPage != 2) ||
+                  //           (previousPage == 1 && currentPage != 2)
+                  //       ? AnimateFAB(
+                  //           key: ValueKey(1),
+                  //           fab: FAB(
+                  //             tooltip: "add-transaction".tr(),
+                  //             openPage: AddTransactionPage(
+                  //               routesToPopAfterDelete:
+                  //                   RoutesToPopAfterDelete.None,
+                  //             ),
+                  //           ),
+                  //           condition: currentPage == 0 || currentPage == 1,
+                  //         )
+                  //       : AnimateFAB(
+                  //           key: ValueKey(2),
+                  //           fab: FAB(
+                  //             tooltip: "add-budget".tr(),
+                  //             openPage: AddBudgetPage(
+                  //               routesToPopAfterDelete:
+                  //                   RoutesToPopAfterDelete.None,
+                  //             ),
+                  //           ),
+                  //           condition: currentPage == 2,
+                  //         ),
+                  // ),
+                  AnimateFAB(
+                    key: ValueKey(1),
+                    fab: FAB(
+                      tooltip: "add-transaction".tr(),
+                      openPage: AddTransactionPage(
+                        routesToPopAfterDelete: RoutesToPopAfterDelete.None,
+                      ),
+                    ),
+                    condition: [0, 1, 2].contains(currentPage),
+                  )
                 ],
               ),
             ),

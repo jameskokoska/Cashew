@@ -156,8 +156,9 @@ class HomePageState extends State<HomePage>
 
                     ConstrainedBox(
                       constraints: BoxConstraints(
-                          minHeight:
-                              getExpandedHeaderHeight(context, null) / 1.34),
+                          minHeight: getExpandedHeaderHeight(context, null,
+                                  isHomePageSpace: true) /
+                              1.34),
                       child: Container(
                         // Subtract one (1) here because of the thickness of the wiper above
                         alignment: Alignment.bottomLeft,

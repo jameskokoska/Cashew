@@ -526,5 +526,9 @@
   "added-only-description-3": "Παράδειγμα: προϋπολογισμός «διακοπών»",
   "all-transactions-description-1": "Όλες οι συναλλαγές σε επιλεγμένες κατηγορίες και φίλτρα",
   "all-transactions-description-2": "Χρήσιμο για μακροπρόθεσμους προϋπολογισμούς σε πολλαπλές περιόδους",
-  "all-transactions-description-3": "Παράδειγμα: προϋπολογισμός «μηνιαίων δαπανών»"
+  "all-transactions-description-3": "Παράδειγμα: προϋπολογισμός «μηνιαίων δαπανών»",
+  "no-budgets-found": "Δεν βρέθηκαν προϋπολογισμοί.",
+  "no-categories-found": "Δεν βρέθηκαν κατηγορίες.",
+  "no-wallets-found": "Δεν βρέθηκαν πορτοφόλια.",
+  "no-titles-found": "Δεν βρέθηκαν τίτλοι."
 }

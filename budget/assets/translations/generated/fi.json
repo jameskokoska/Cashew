@@ -526,5 +526,9 @@
   "added-only-description-3": "Esimerkki: 'Loma' budjetti",
   "all-transactions-description-1": "Kaikki tapahtumat valituissa luokissa ja suodattimissa",
   "all-transactions-description-2": "Hyödyllinen pitkäaikaisissa budjetteissa useiden ajanjaksojen aikana",
-  "all-transactions-description-3": "Esimerkki: 'kuukausittaiset menot' budjetti"
+  "all-transactions-description-3": "Esimerkki: 'kuukausittaiset menot' budjetti",
+  "no-budgets-found": "Ei löytynyt budjetteja.",
+  "no-categories-found": "Luokkia ei löydy.",
+  "no-wallets-found": "Ei lompakkoja löydetty.",
+  "no-titles-found": "Ei nimikkeitä löydetty."
 }

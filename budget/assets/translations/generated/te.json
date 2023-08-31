@@ -526,5 +526,9 @@
   "added-only-description-3": "ఉదాహరణ: 'సెలవు' బడ్జెట్",
   "all-transactions-description-1": "ఎంచుకున్న వర్గాలు మరియు ఫిల్టర్లలోని అన్ని లావాదేవీలు",
   "all-transactions-description-2": "బహుళ కాలాలలో దీర్ఘకాలిక బడ్జెట్లకు ఉపయోగపడుతుంది",
-  "all-transactions-description-3": "ఉదాహరణ: 'నెలవారీ ఖర్చు' బడ్జెట్"
+  "all-transactions-description-3": "ఉదాహరణ: 'నెలవారీ ఖర్చు' బడ్జెట్",
+  "no-budgets-found": "బడ్జెట్లు కనుగొనబడలేదు.",
+  "no-categories-found": "వర్గాలు ఏవీ కనుగొనబడలేదు.",
+  "no-wallets-found": "వాలెట్లు కనుగొనబడలేదు.",
+  "no-titles-found": "శీర్షికలు కనుగొనబడలేదు."
 }

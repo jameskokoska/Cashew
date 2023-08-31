@@ -526,5 +526,9 @@
   "added-only-description-3": "उदाहरण: 'अवकाश' बजट",
   "all-transactions-description-1": "चयनित श्रेणियों और फिल्टर के भीतर सभी लेनदेन",
   "all-transactions-description-2": "कई अवधियों में दीर्घकालिक बजट के लिए उपयोगी है",
-  "all-transactions-description-3": "उदाहरण: 'मासिक खर्च' बजट"
+  "all-transactions-description-3": "उदाहरण: 'मासिक खर्च' बजट",
+  "no-budgets-found": "कोई बजट नहीं मिला।",
+  "no-categories-found": "कोई श्रेणियां नहीं मिली।",
+  "no-wallets-found": "कोई बटुए नहीं मिला।",
+  "no-titles-found": "कोई शीर्षक नहीं मिला।"
 }

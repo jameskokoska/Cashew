@@ -526,5 +526,9 @@
   "added-only-description-3": "例：「休暇」予算",
   "all-transactions-description-1": "選択したカテゴリとフィルター内のすべてのトランザクション",
   "all-transactions-description-2": "複数の期間にわたる長期予算に役立ちます",
-  "all-transactions-description-3": "例：「毎月の支出」予算"
+  "all-transactions-description-3": "例：「毎月の支出」予算",
+  "no-budgets-found": "予算は見つかりません。",
+  "no-categories-found": "カテゴリは見つかりません。",
+  "no-wallets-found": "ウォレットは見つかりません。",
+  "no-titles-found": "タイトルは見つかりませんでした。"
 }

@@ -526,5 +526,9 @@
   "added-only-description-3": "Eksempel: 'Ferie' budsjett",
   "all-transactions-description-1": "Alle transaksjoner innen utvalgte kategorier og filtre",
   "all-transactions-description-2": "Nyttig for langsiktige budsjetter over flere perioder",
-  "all-transactions-description-3": "Eksempel: 'Månedlig utgifter' budsjett"
+  "all-transactions-description-3": "Eksempel: 'Månedlig utgifter' budsjett",
+  "no-budgets-found": "Ingen budsjetter funnet.",
+  "no-categories-found": "Ingen kategorier funnet.",
+  "no-wallets-found": "Ingen lommebøker funnet.",
+  "no-titles-found": "Ingen titler funnet."
 }

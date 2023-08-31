@@ -34,6 +34,7 @@ class TextInput extends StatelessWidget {
   final double? topContentPadding;
   final TextCapitalization? textCapitalization;
   final BorderRadius? borderRadius;
+  final TextInputAction? textInputAction;
 
   const TextInput({
     Key? key,
@@ -65,6 +66,7 @@ class TextInput extends StatelessWidget {
     this.topContentPadding,
     this.textCapitalization,
     this.borderRadius,
+    this.textInputAction,
   }) : super(key: key);
 
   @override
@@ -84,6 +86,7 @@ class TextInput extends StatelessWidget {
         ),
         child: Center(
           child: TextFormField(
+            textInputAction: textInputAction,
             textCapitalization:
                 textCapitalization ?? TextCapitalization.sentences,
             textAlignVertical: kIsWeb ? TextAlignVertical.bottom : null,

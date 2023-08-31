@@ -116,6 +116,19 @@ class _EditBudgetPageState extends State<EditBudgetPage> {
                   await getCloudBudgets();
                   loadingIndeterminateKey.currentState!.setVisibility(false);
                 }),
+          IconButton(
+            padding: EdgeInsets.all(15),
+            tooltip: "add-budget".tr(),
+            onPressed: () {
+              pushRoute(
+                context,
+                AddBudgetPage(
+                  routesToPopAfterDelete: RoutesToPopAfterDelete.None,
+                ),
+              );
+            },
+            icon: Icon(Icons.add_rounded),
+          ),
         ],
         slivers: [
           SliverToBoxAdapter(
@@ -151,7 +164,7 @@ class _EditBudgetPageState extends State<EditBudgetPage> {
               if (snapshot.hasData && (snapshot.data ?? []).length <= 0) {
                 return SliverToBoxAdapter(
                   child: NoResults(
-                    message: "No budgets found.",
+                    message: "no-budgets-found".tr(),
                   ),
                 );
               }

@@ -10,6 +10,18 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    < 4.0.5
+    Animated text style
+    Added plus button to add category, title, budget, wallet in actions in edit page
+    FAB always adds a transaction on root page
+    New plus button for adding a budget
+    Fixed day counter in remaining days of budget
+    Discard changes popup when adding new transaction, category, and wallet
+    Fixed select category icon bottom sheet sizing
+    Fixed status bar icon color
+    Changed font for iOS back to default
+    Decreased vertical empty space in iOS
+    Added 'Done' button when editing multiline notes on transactions page for iOS to minimize keyboard
     < 4.0.4
     Hot fix for adding transactions and budgets
     < 4.0.3

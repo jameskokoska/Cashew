@@ -248,7 +248,7 @@ class _AddWalletPageState extends State<AddWalletPage> {
             currentObject: await createTransactionWallet(),
           );
         } else {
-          discardChangesPopup(context);
+          discardChangesPopup(context, forceShow: true);
         }
         return false;
       },
@@ -273,7 +273,7 @@ class _AddWalletPageState extends State<AddWalletPage> {
                 currentObject: await createTransactionWallet(),
               );
             } else {
-              discardChangesPopup(context);
+              discardChangesPopup(context, forceShow: true);
             }
           },
           onDragDownToDismiss: () async {
@@ -284,7 +284,7 @@ class _AddWalletPageState extends State<AddWalletPage> {
                 currentObject: await createTransactionWallet(),
               );
             } else {
-              discardChangesPopup(context);
+              discardChangesPopup(context, forceShow: true);
             }
           },
           actions: [

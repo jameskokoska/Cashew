@@ -526,5 +526,9 @@
   "added-only-description-3": "Esempio: budget \"vacanza\"",
   "all-transactions-description-1": "Tutte le transazioni all'interno di categorie e filtri selezionati",
   "all-transactions-description-2": "Utile per budget a lungo termine per più periodi",
-  "all-transactions-description-3": "Esempio: budget di \"spesa mensile\""
+  "all-transactions-description-3": "Esempio: budget di \"spesa mensile\"",
+  "no-budgets-found": "Nessun budget trovato.",
+  "no-categories-found": "Nessuna categorie trovata.",
+  "no-wallets-found": "Nessun portafoglio trovato.",
+  "no-titles-found": "Nessun titoli trovati."
 }

@@ -526,5 +526,9 @@
   "added-only-description-3": "Contoh: Belanjawan 'Percutian'",
   "all-transactions-description-1": "Semua urus niaga dalam kategori dan penapis terpilih",
   "all-transactions-description-2": "Berguna untuk belanjawan jangka panjang dalam pelbagai tempoh",
-  "all-transactions-description-3": "Contoh: Belanjawan 'perbelanjaan bulanan'"
+  "all-transactions-description-3": "Contoh: Belanjawan 'perbelanjaan bulanan'",
+  "no-budgets-found": "Tiada belanjawan yang dijumpai.",
+  "no-categories-found": "Tiada kategori yang dijumpai.",
+  "no-wallets-found": "Tiada dompet dijumpai.",
+  "no-titles-found": "Tiada tajuk yang dijumpai."
 }

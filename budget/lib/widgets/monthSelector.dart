@@ -1,3 +1,4 @@
+import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/widgets/tappable.dart';
@@ -191,8 +192,17 @@ class MonthSelectorState extends State<MonthSelector> {
                                         topRight: Radius.circular(40),
                                         topLeft: Radius.circular(40),
                                       ),
-                                      color:
-                                          getColor(context, "lightDarkAccent"),
+                                      color: appStateSettings["materialYou"]
+                                          ? dynamicPastel(
+                                              context,
+                                              Theme.of(context)
+                                                  .colorScheme
+                                                  .secondaryContainer,
+                                              amountDark: 0.5,
+                                              amountLight: 0,
+                                            )
+                                          : getColor(
+                                              context, "lightDarkAccent"),
                                     ),
                                     width: 75,
                                     height: 7,
@@ -206,7 +216,16 @@ class MonthSelectorState extends State<MonthSelector> {
                         child: Container(
                           width: 100,
                           height: 2,
-                          color: getColor(context, "lightDarkAccent"),
+                          color: appStateSettings["materialYou"]
+                              ? dynamicPastel(
+                                  context,
+                                  Theme.of(context)
+                                      .colorScheme
+                                      .secondaryContainer,
+                                  amountDark: 0.5,
+                                  amountLight: 0,
+                                )
+                              : getColor(context, "lightDarkAccent"),
                         ),
                       ),
                       Align(

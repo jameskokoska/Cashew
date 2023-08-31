@@ -526,5 +526,9 @@
   "added-only-description-3": "Példa: „Nyaralás” költségvetés",
   "all-transactions-description-1": "Minden tranzakció a kiválasztott kategóriákon és szűrőkön belül",
   "all-transactions-description-2": "Hasznos hosszú távú költségvetéshez több időszak alatt",
-  "all-transactions-description-3": "Példa: „Havi kiadások” költségvetés"
+  "all-transactions-description-3": "Példa: „Havi kiadások” költségvetés",
+  "no-budgets-found": "Nincs költségvetés.",
+  "no-categories-found": "Nincsenek kategóriák.",
+  "no-wallets-found": "Nincs pénztárca.",
+  "no-titles-found": "Nincs cím."
 }

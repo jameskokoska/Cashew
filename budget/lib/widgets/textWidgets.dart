@@ -72,49 +72,50 @@ class TextFont extends StatelessWidget {
           : [],
     );
     Widget textWidget(textPassed) {
-      return Transform.translate(
-        offset: Offset(0,
-            this.fontSize * (appStateSettings["font"] == "Avenir" ? 0.1 : 0)),
-        child: selectableText == true
-            ? SelectableText(
-                textPassed,
-                style: textStyle,
-                maxLines: maxLines,
-                textAlign: textAlign,
-                contextMenuBuilder: contextMenuBuilder,
-              )
-            : richTextSpan != null
-                ? RichText(
-                    text: TextSpan(
-                      text: textPassed,
-                      style: textStyle,
-                      children: richTextSpan,
-                    ),
-                  )
-                : autoSizeText
-                    ? AutoSizeText(
-                        textPassed,
-                        maxLines: maxLines,
-                        textAlign: textAlign,
-                        overflow: overflowReplacement != null
-                            ? null
-                            : overflow ?? TextOverflow.ellipsis,
-                        style: textStyle,
-                        minFontSize: minFontSize ?? fontSize - 10,
-                        maxFontSize: maxFontSize ?? fontSize + 10,
-                        softWrap: softWrap,
-                        overflowReplacement: overflowReplacement,
-                      )
-                    : Text(
-                        textPassed,
-                        maxLines: maxLines,
-                        textAlign: textAlign,
-                        overflow: overflow ?? TextOverflow.ellipsis,
-                        style: textStyle,
-                        softWrap: softWrap,
+      return AnimatedDefaultTextStyle(
+        duration: Duration(milliseconds: 200),
+        style: textStyle,
+        child: Transform.translate(
+          offset: Offset(0,
+              this.fontSize * (appStateSettings["font"] == "Avenir" ? 0.1 : 0)),
+          child: selectableText == true
+              ? SelectableText(
+                  textPassed,
+                  maxLines: maxLines,
+                  textAlign: textAlign,
+                  contextMenuBuilder: contextMenuBuilder,
+                )
+              : richTextSpan != null
+                  ? RichText(
+                      text: TextSpan(
+                        text: textPassed,
+                        children: richTextSpan,
                       ),
+                    )
+                  : autoSizeText
+                      ? AutoSizeText(
+                          textPassed,
+                          maxLines: maxLines,
+                          textAlign: textAlign,
+                          overflow: overflowReplacement != null
+                              ? null
+                              : overflow ?? TextOverflow.ellipsis,
+                          minFontSize: minFontSize ?? fontSize - 10,
+                          maxFontSize: maxFontSize ?? fontSize + 10,
+                          softWrap: softWrap,
+                          overflowReplacement: overflowReplacement,
+                        )
+                      : Text(
+                          textPassed,
+                          maxLines: maxLines,
+                          textAlign: textAlign,
+                          overflow: overflow ?? TextOverflow.ellipsis,
+                          softWrap: softWrap,
+                        ),
+        ),
       );
     }
+
     return textWidget(text);
   }
 }

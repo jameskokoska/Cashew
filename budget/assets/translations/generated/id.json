@@ -526,5 +526,9 @@
   "added-only-description-3": "Contoh: Anggaran 'Liburan'",
   "all-transactions-description-1": "Semua transaksi dalam kategori dan filter yang dipilih",
   "all-transactions-description-2": "Berguna untuk anggaran jangka panjang selama beberapa periode",
-  "all-transactions-description-3": "Contoh: Anggaran 'Pengeluaran Bulanan'"
+  "all-transactions-description-3": "Contoh: Anggaran 'Pengeluaran Bulanan'",
+  "no-budgets-found": "Tidak ada anggaran yang ditemukan.",
+  "no-categories-found": "Tidak ada kategori yang ditemukan.",
+  "no-wallets-found": "Tidak ada dompet yang ditemukan.",
+  "no-titles-found": "Tidak ada judul yang ditemukan."
 }

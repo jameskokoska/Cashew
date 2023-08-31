@@ -526,5 +526,9 @@
   "added-only-description-3": "مثال: بودجه \"تعطیلات\"",
   "all-transactions-description-1": "کلیه معاملات در دسته ها و فیلترهای منتخب",
   "all-transactions-description-2": "برای بودجه های بلند مدت در طی چندین دوره مفید است",
-  "all-transactions-description-3": "مثال: بودجه \"هزینه ماهانه\""
+  "all-transactions-description-3": "مثال: بودجه \"هزینه ماهانه\"",
+  "no-budgets-found": "هیچ بودجه ای پیدا نشده است.",
+  "no-categories-found": "هیچ دسته ای یافت نمی شود.",
+  "no-wallets-found": "هیچ کیف پولی پیدا نشده است.",
+  "no-titles-found": "هیچ عنوانی پیدا نشده است."
 }

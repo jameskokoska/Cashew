@@ -151,8 +151,12 @@ class App extends StatelessWidget {
                 getSettingConstants(appStateSettings)["accentColor"],
                 amount: 0.91)
             : Colors.white,
-        appBarTheme:
-            AppBarTheme(systemOverlayStyle: SystemUiOverlayStyle.light),
+        appBarTheme: AppBarTheme(
+          systemOverlayStyle: SystemUiOverlayStyle(
+            statusBarBrightness: Brightness.dark,
+            statusBarIconBrightness: Brightness.dark,
+          ),
+        ),
         splashColor: appStateSettings["materialYou"]
             ? darkenPastel(
                     lightenPastel(
@@ -187,7 +191,12 @@ class App extends StatelessWidget {
             ? darkenPastel(getSettingConstants(appStateSettings)["accentColor"],
                 amount: 0.92)
             : Colors.black,
-        appBarTheme: AppBarTheme(systemOverlayStyle: SystemUiOverlayStyle.dark),
+        appBarTheme: AppBarTheme(
+          systemOverlayStyle: SystemUiOverlayStyle(
+            statusBarBrightness: Brightness.light,
+            statusBarIconBrightness: Brightness.light,
+          ),
+        ),
         splashColor: getPlatform() == PlatformOS.isIOS
             ? Colors.transparent
             : appStateSettings["materialYou"]

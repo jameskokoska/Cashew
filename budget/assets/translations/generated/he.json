@@ -526,5 +526,9 @@
   "added-only-description-3": "דוגמה: תקציב 'חופשה'",
   "all-transactions-description-1": "כל העסקאות בתוך קטגוריות ומסננים שנבחרו",
   "all-transactions-description-2": "שימושי לתקציבים לטווח הארוך לאורך תקופות מרובות",
-  "all-transactions-description-3": "דוגמה: תקציב 'הוצאות חודשיות'"
+  "all-transactions-description-3": "דוגמה: תקציב 'הוצאות חודשיות'",
+  "no-budgets-found": "לא נמצא תקציבים.",
+  "no-categories-found": "לא נמצאו קטגוריות.",
+  "no-wallets-found": "לא נמצא ארנקים.",
+  "no-titles-found": "לא נמצאו כותרות."
 }

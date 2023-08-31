@@ -526,5 +526,9 @@
   "added-only-description-3": "Halimbawa: badyet ng 'bakasyon'",
   "all-transactions-description-1": "Lahat ng mga transaksyon sa loob ng mga napiling kategorya at filter",
   "all-transactions-description-2": "Kapaki -pakinabang para sa pangmatagalang mga badyet sa maraming mga panahon",
-  "all-transactions-description-3": "Halimbawa: 'Buwanang paggastos' na badyet"
+  "all-transactions-description-3": "Halimbawa: 'Buwanang paggastos' na badyet",
+  "no-budgets-found": "Walang nahanap na badyet.",
+  "no-categories-found": "Walang nahanap na kategorya.",
+  "no-wallets-found": "Walang nahanap na mga pitaka.",
+  "no-titles-found": "Walang nahanap na pamagat."
 }

@@ -526,5 +526,9 @@
   "added-only-description-3": "مثال کے طور پر: 'تعطیلات' بجٹ",
   "all-transactions-description-1": "منتخب کردہ زمرے اور فلٹرز کے اندر تمام لین دین",
   "all-transactions-description-2": "متعدد ادوار میں طویل مدتی بجٹ کے لئے مفید ہے",
-  "all-transactions-description-3": "مثال: 'ماہانہ خرچ' بجٹ"
+  "all-transactions-description-3": "مثال: 'ماہانہ خرچ' بجٹ",
+  "no-budgets-found": "کوئی بجٹ نہیں ملا۔",
+  "no-categories-found": "کوئی زمرے نہیں ملے۔",
+  "no-wallets-found": "کوئی بٹوے نہیں ملے۔",
+  "no-titles-found": "کوئی عنوان نہیں ملا۔"
 }

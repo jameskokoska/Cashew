@@ -526,5 +526,9 @@
   "added-only-description-3": "Exempel: \"semester\" -budget",
   "all-transactions-description-1": "Alla transaktioner inom utvalda kategorier och filter",
   "all-transactions-description-2": "Användbar för långsiktiga budgetar under flera perioder",
-  "all-transactions-description-3": "Exempel: \"Månadsutgifter\" -budget"
+  "all-transactions-description-3": "Exempel: \"Månadsutgifter\" -budget",
+  "no-budgets-found": "Inga budgetar hittades.",
+  "no-categories-found": "Inga kategorier hittades.",
+  "no-wallets-found": "Inga plånböcker hittades.",
+  "no-titles-found": "Inga titlar hittades."
 }

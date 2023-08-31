@@ -526,5 +526,9 @@
   "added-only-description-3": "Приклад: Бюджет \"відпустки\"",
   "all-transactions-description-1": "Усі транзакції в межах вибраних категорій та фільтрів",
   "all-transactions-description-2": "Корисно для довгострокових бюджетів протягом декількох періодів",
-  "all-transactions-description-3": "Приклад: Бюджет \"щомісячних витрат\""
+  "all-transactions-description-3": "Приклад: Бюджет \"щомісячних витрат\"",
+  "no-budgets-found": "Бюджетів не знайдено.",
+  "no-categories-found": "Категорій не знайдено.",
+  "no-wallets-found": "Не знайдено гаманців.",
+  "no-titles-found": "Натлів не знайдено."
 }

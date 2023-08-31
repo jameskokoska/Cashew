@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
+import 'package:budget/functions.dart';
 import 'package:budget/pages/addCategoryPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/categoryIcon.dart';
@@ -77,6 +78,21 @@ class _EditCategoriesPageState extends State<EditCategoriesPage> {
             ),
           ),
         ),
+        actions: [
+          IconButton(
+            padding: EdgeInsets.all(15),
+            tooltip: "add-category".tr(),
+            onPressed: () {
+              pushRoute(
+                context,
+                AddCategoryPage(
+                  routesToPopAfterDelete: RoutesToPopAfterDelete.None,
+                ),
+              );
+            },
+            icon: Icon(Icons.add_rounded),
+          ),
+        ],
         slivers: [
           SliverToBoxAdapter(
             child: Padding(
@@ -105,7 +121,7 @@ class _EditCategoriesPageState extends State<EditCategoriesPage> {
               if (snapshot.hasData && (snapshot.data ?? []).length <= 0) {
                 return SliverToBoxAdapter(
                   child: NoResults(
-                    message: "No categories found.",
+                    message: "no-categories-found".tr(),
                   ),
                 );
               }

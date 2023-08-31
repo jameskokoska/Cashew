@@ -15,7 +15,7 @@ class IncomeOutcomeArrow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AnimatedRotation(
-      duration: Duration(milliseconds: 11700),
+      duration: Duration(milliseconds: 1700),
       curve: ElasticOutCurve(0.5),
       turns: isIncome ? 0.5 : 0,
       child: Container(

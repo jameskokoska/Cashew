@@ -526,5 +526,9 @@
   "added-only-description-3": "Voorbeeld: 'vakantie' budget",
   "all-transactions-description-1": "Alle transacties binnen geselecteerde categorieën en filters",
   "all-transactions-description-2": "Nuttig voor langdurige budgetten over meerdere periodes",
-  "all-transactions-description-3": "Voorbeeld: 'Maandelijkse uitgaven' budget"
+  "all-transactions-description-3": "Voorbeeld: 'Maandelijkse uitgaven' budget",
+  "no-budgets-found": "Geen budgetten gevonden.",
+  "no-categories-found": "Geen categorieën gevonden.",
+  "no-wallets-found": "Geen portefeuilles gevonden.",
+  "no-titles-found": "Geen titels gevonden."
 }

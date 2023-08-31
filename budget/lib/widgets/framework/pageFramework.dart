@@ -138,8 +138,9 @@ class PageFrameworkState extends State<PageFramework>
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      double expandedHeaderHeight =
-          getExpandedHeaderHeight(context, widget.expandedHeight);
+      double expandedHeaderHeight = getExpandedHeaderHeight(
+          context, widget.expandedHeight,
+          hasSubtitle: widget.subtitle != null);
       _animationControllerShift = AnimationController(
         vsync: this,
         value: expandedHeaderHeight - 56 == 0 ? 1 : 0,
@@ -178,20 +179,29 @@ class PageFrameworkState extends State<PageFramework>
       widget.onBottomReached!();
     }
     double percent;
-    if (getExpandedHeaderHeight(context, widget.expandedHeight) - 56 == 0) {
+    if (getExpandedHeaderHeight(context, widget.expandedHeight,
+                hasSubtitle: widget.subtitle != null) -
+            56 ==
+        0) {
       percent = 100;
     } else {
       percent = _scrollController.offset /
-          (getExpandedHeaderHeight(context, widget.expandedHeight) - 56);
+          (getExpandedHeaderHeight(context, widget.expandedHeight,
+                  hasSubtitle: widget.subtitle != null) -
+              56);
     }
     if (widget.backButton == true || widget.subtitle != null && percent <= 1) {
       double offset = _scrollController.offset;
       if (percent < 0) offset = 0;
       _animationControllerShift.value = (offset /
-          (getExpandedHeaderHeight(context, widget.expandedHeight) - 56));
+          (getExpandedHeaderHeight(context, widget.expandedHeight,
+                  hasSubtitle: widget.subtitle != null) -
+              56));
       _animationControllerOpacity.value = 0.5 +
           (offset /
-              (getExpandedHeaderHeight(context, widget.expandedHeight) - 56) /
+              (getExpandedHeaderHeight(context, widget.expandedHeight,
+                      hasSubtitle: widget.subtitle != null) -
+                  56) /
               2);
     }
     if (widget.subtitle != null && percent <= 0.75) {
@@ -199,7 +209,8 @@ class PageFrameworkState extends State<PageFramework>
       if (percent < 0) offset = 0;
       _animationController0at50.value = 1 -
           (offset /
-                  (getExpandedHeaderHeight(context, widget.expandedHeight) -
+                  (getExpandedHeaderHeight(context, widget.expandedHeight,
+                          hasSubtitle: widget.subtitle != null) -
                       56)) *
               1.75;
     }
@@ -327,7 +338,8 @@ class PageFrameworkState extends State<PageFramework>
                           onBackButton: widget.onBackButton,
                           actions: widget.actions,
                           expandedHeight: getExpandedHeaderHeight(
-                              context, widget.expandedHeight),
+                              context, widget.expandedHeight,
+                              hasSubtitle: widget.subtitle != null),
                         )
                       ]
                     : []),
@@ -575,12 +587,6 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
           ? Theme.of(context).colorScheme.secondaryContainer
           : null,
       bottom: bottom,
-      systemOverlayStyle: SystemUiOverlayStyle(
-        statusBarIconBrightness:
-            determineBrightnessTheme(context) == Brightness.light
-                ? Brightness.dark
-                : Brightness.light,
-      ),
       shadowColor: safeToIgnoreBG &&
               getPlatform() == PlatformOS.isIOS &&
               appStateSettings["disableBlur"] == false
@@ -608,14 +614,16 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
       backgroundColor: appBarBGColorCalculated,
       floating: false,
       pinned: enableDoubleColumn(context) ? true : pinned,
-      expandedHeight: getExpandedHeaderHeight(context, expandedHeight),
+      expandedHeight: getExpandedHeaderHeight(context, expandedHeight,
+          hasSubtitle: subtitle != null),
       collapsedHeight: collapsedHeight,
       actions: pushActionsTogether(actions),
       flexibleSpace: LayoutBuilder(
           builder: (BuildContext context, BoxConstraints constraints) {
         // print('constraints=' + constraints.toString());
-        double expandedHeightCalculated =
-            getExpandedHeaderHeight(context, expandedHeight);
+        double expandedHeightCalculated = getExpandedHeaderHeight(
+            context, expandedHeight,
+            hasSubtitle: subtitle != null);
         double percent = 1 -
             (constraints.biggest.height -
                     collapsedHeight -
@@ -699,7 +707,8 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
                         animation: animationControllerShift!,
                         builder: (_, child) {
                           double expandedHeightHeaderPercent =
-                              getExpandedHeaderHeight(context, expandedHeight);
+                              getExpandedHeaderHeight(context, expandedHeight,
+                                  hasSubtitle: subtitle != null);
                           expandedHeightHeaderPercent =
                               (expandedHeightHeaderPercent - 100) / 100;
                           // print(expandedHeightHeaderPercent * 150 + 50);
@@ -811,14 +820,27 @@ class BlurBehind extends StatelessWidget {
 // },
 
 double getExpandedHeaderHeight(
-    BuildContext context, double? expandedHeightPassed) {
+    BuildContext context, double? expandedHeightPassed,
+    {bool? isHomePageSpace, bool? hasSubtitle}) {
   if (expandedHeightPassed != null) return expandedHeightPassed;
   double height = MediaQuery.of(context).size.height;
   double minHeight = 682.37;
   double maxHeight = 853.33;
 
-  double minHeaderHeight = 100;
-  double maxHeaderHeight = 200;
+  double minHeaderHeight = getPlatform() == PlatformOS.isIOS
+      ? isHomePageSpace == true
+          ? 0
+          : hasSubtitle == true
+              ? 120
+              : 100
+      : 100;
+  double maxHeaderHeight = getPlatform() == PlatformOS.isIOS
+      ? isHomePageSpace == true
+          ? 0
+          : hasSubtitle == true
+              ? 120
+              : 100
+      : 200;
 
   if (height >= maxHeight) {
     return maxHeaderHeight;

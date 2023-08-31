@@ -526,5 +526,9 @@
   "added-only-description-3": "উদাহরণ: 'অবকাশ' ​​বাজেট",
   "all-transactions-description-1": "নির্বাচিত বিভাগ এবং ফিল্টারগুলির মধ্যে সমস্ত লেনদেন",
   "all-transactions-description-2": "একাধিক সময়কালে দীর্ঘমেয়াদী বাজেটের জন্য দরকারী",
-  "all-transactions-description-3": "উদাহরণ: 'মাসিক ব্যয়' বাজেট"
+  "all-transactions-description-3": "উদাহরণ: 'মাসিক ব্যয়' বাজেট",
+  "no-budgets-found": "কোনও বাজেট পাওয়া যায় নি।",
+  "no-categories-found": "কোন বিভাগ পাওয়া যায় না।",
+  "no-wallets-found": "কোন মানিব্যাগ পাওয়া যায় না।",
+  "no-titles-found": "কোনও শিরোনাম পাওয়া যায় নি।"
 }

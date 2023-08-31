@@ -526,5 +526,9 @@
   "added-only-description-3": "示例：“假期”预算",
   "all-transactions-description-1": "选定类别和过滤器中的所有交易",
   "all-transactions-description-2": "对于多个时期的长期预算有用",
-  "all-transactions-description-3": "示例：“每月支出”预算"
+  "all-transactions-description-3": "示例：“每月支出”预算",
+  "no-budgets-found": "找不到预算。",
+  "no-categories-found": "找不到类别。",
+  "no-wallets-found": "找不到钱包。",
+  "no-titles-found": "找不到标题。"
 }

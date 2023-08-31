@@ -103,6 +103,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
   TransactionWallet? selectedWallet;
   late TabController _incomeTabController =
       TabController(length: 2, vsync: this);
+  bool notesInputFocused = false;
 
   String? textAddTransaction = "add-transaction".tr();
 
@@ -994,7 +995,15 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                     },
                   ),
                   onFocusChange: (hasFocus) {
-                    if (hasFocus == false) setState(() {});
+                    if (hasFocus == false && notesInputFocused == true) {
+                      setState(() {
+                        notesInputFocused = false;
+                      });
+                    } else if (hasFocus == true && notesInputFocused == false) {
+                      setState(() {
+                        notesInputFocused = true;
+                      });
+                    }
                   },
                 ),
                 AnimatedSizeSwitcher(
@@ -1073,7 +1082,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
             currentObject: await createTransaction(),
           );
         } else {
-          return true;
+          discardChangesPopup(context, forceShow: true);
         }
         return false;
       },
@@ -1099,7 +1108,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                 currentObject: await createTransaction(),
               );
             } else {
-              Navigator.pop(context);
+              discardChangesPopup(context, forceShow: true);
             }
           },
           onDragDownToDismiss: () async {
@@ -1110,7 +1119,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                 currentObject: await createTransaction(),
               );
             } else {
-              Navigator.pop(context);
+              discardChangesPopup(context, forceShow: true);
             }
           },
           actions: [
@@ -1281,6 +1290,35 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                       Navigator.of(context).pop();
                                     }
                                   }
+                                },
+                              ),
+                            );
+                          },
+                        )
+                      : Container(
+                          key: ValueKey(2),
+                        ),
+                ),
+                AnimatedSizeSwitcher(
+                  child: notesInputFocused && getPlatform() == PlatformOS.isIOS
+                      ? WidgetSizeBuilder(
+                          widgetBuilder: (Size? size) {
+                            return Container(
+                              key: ValueKey(1),
+                              width: size?.width,
+                              child: SaveBottomButton(
+                                margin: EdgeInsets.only(left: 5),
+                                color: isTransactionActionDealtWith(
+                                        createTransaction())
+                                    ? Theme.of(context).colorScheme.primary
+                                    : null,
+                                labelColor: isTransactionActionDealtWith(
+                                        createTransaction())
+                                    ? Theme.of(context).colorScheme.onPrimary
+                                    : null,
+                                label: "done".tr(),
+                                onTap: () async {
+                                  FocusManager.instance.primaryFocus?.unfocus();
                                 },
                               ),
                             );

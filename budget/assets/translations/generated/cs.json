@@ -526,5 +526,9 @@
   "added-only-description-3": "Příklad: Rozpočet „dovolené“",
   "all-transactions-description-1": "Všechny transakce ve vybraných kategoriích a filtrech",
   "all-transactions-description-2": "Užitečné pro dlouhodobé rozpočty po několik období",
-  "all-transactions-description-3": "Příklad: Rozpočet „Měsíční výdaje“"
+  "all-transactions-description-3": "Příklad: Rozpočet „Měsíční výdaje“",
+  "no-budgets-found": "Nebyly nalezeny žádné rozpočty.",
+  "no-categories-found": "Žádné kategorie nalezeny.",
+  "no-wallets-found": "Nalezeny žádné peněženky.",
+  "no-titles-found": "Žádné tituly."
 }

@@ -526,5 +526,9 @@
   "added-only-description-3": "उदाहरणः 'सुट्टीतील' बजेट",
   "all-transactions-description-1": "निवडलेल्या श्रेणी आणि फिल्टरमधील सर्व व्यवहार",
   "all-transactions-description-2": "एकाधिक कालावधीत दीर्घकालीन बजेटसाठी उपयुक्त",
-  "all-transactions-description-3": "उदाहरणः 'मासिक खर्च' बजेट"
+  "all-transactions-description-3": "उदाहरणः 'मासिक खर्च' बजेट",
+  "no-budgets-found": "कोणतेही बजेट सापडले नाही.",
+  "no-categories-found": "कोणत्याही श्रेणी आढळल्या नाहीत.",
+  "no-wallets-found": "कोणतीही पाकीट सापडली नाहीत.",
+  "no-titles-found": "कोणतीही शीर्षके सापडली नाहीत."
 }

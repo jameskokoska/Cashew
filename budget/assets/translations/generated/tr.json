@@ -526,5 +526,9 @@
   "added-only-description-3": "Örnek: 'Tatil' bütçesi",
   "all-transactions-description-1": "Seçilen kategoriler ve filtreler içindeki tüm işlemler",
   "all-transactions-description-2": "Birden fazla dönemde uzun vadeli bütçeler için kullanışlı",
-  "all-transactions-description-3": "Örnek: 'Aylık harcama' bütçesi"
+  "all-transactions-description-3": "Örnek: 'Aylık harcama' bütçesi",
+  "no-budgets-found": "Bütçe bulunamadı.",
+  "no-categories-found": "Kategori bulunamadı.",
+  "no-wallets-found": "Cüzdan bulunamadı.",
+  "no-titles-found": "Başlık bulunamadı."
 }

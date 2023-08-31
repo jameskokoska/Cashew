@@ -526,5 +526,9 @@
   "added-only-description-3": "Exemplu: buget „vacanță”",
   "all-transactions-description-1": "Toate tranzacțiile din categoriile și filtrele selectate",
   "all-transactions-description-2": "Util pentru bugetele pe termen lung pe mai multe perioade",
-  "all-transactions-description-3": "Exemplu: bugetul „cheltuieli lunare”"
+  "all-transactions-description-3": "Exemplu: bugetul „cheltuieli lunare”",
+  "no-budgets-found": "Nu au fost găsite bugete.",
+  "no-categories-found": "Nu s -au găsit categorii.",
+  "no-wallets-found": "Nu au fost găsite portofele.",
+  "no-titles-found": "Nu au fost găsite titluri."
 }

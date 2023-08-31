@@ -526,5 +526,9 @@
   "added-only-description-3": "예 : '휴가'예산",
   "all-transactions-description-1": "선택한 카테고리 및 필터 내의 모든 트랜잭션",
   "all-transactions-description-2": "여러 기간 동안 장기 예산에 유용합니다",
-  "all-transactions-description-3": "예 : '월간 지출'예산"
+  "all-transactions-description-3": "예 : '월간 지출'예산",
+  "no-budgets-found": "예산이 발견되지 않았습니다.",
+  "no-categories-found": "범주가 없습니다.",
+  "no-wallets-found": "지갑이 없습니다.",
+  "no-titles-found": "제목이 없습니다."
 }

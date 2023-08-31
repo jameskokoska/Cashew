@@ -87,6 +87,25 @@ class _EditAssociatedTitlesPageState extends State<EditAssociatedTitlesPage> {
             ),
           ),
         ),
+        actions: [
+          IconButton(
+            padding: EdgeInsets.all(15),
+            tooltip: "add-title".tr(),
+            onPressed: () {
+              openBottomSheet(
+                context,
+                fullSnap: true,
+                AddAssociatedTitlePage(),
+              );
+              Future.delayed(Duration(milliseconds: 100), () {
+                // Fix over-scroll stretch when keyboard pops up quickly
+                bottomSheetControllerGlobal.scrollTo(0,
+                    duration: Duration(milliseconds: 100));
+              });
+            },
+            icon: Icon(Icons.add_rounded),
+          ),
+        ],
         slivers: [
           SliverToBoxAdapter(
             child: Padding(
@@ -131,7 +150,7 @@ class _EditAssociatedTitlesPageState extends State<EditAssociatedTitlesPage> {
                     if (snapshot.hasData && (snapshot.data ?? []).length <= 0) {
                       return SliverToBoxAdapter(
                         child: NoResults(
-                          message: "No associated category titles found.",
+                          message: "no-titles-found".tr(),
                         ),
                       );
                     }

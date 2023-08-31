@@ -138,7 +138,7 @@ class _UpcomingOverdueTransactionsState
                                     });
                                     _searchFocusNode.requestFocus();
                                   },
-                                  icon: Icons.search,
+                                  icon: Icons.search_rounded,
                                 ),
                               )
                             : Container(

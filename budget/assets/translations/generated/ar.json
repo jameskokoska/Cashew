@@ -526,5 +526,9 @@
   "added-only-description-3": "مثال: ميزانية \"الإجازة\"",
   "all-transactions-description-1": "جميع المعاملات ضمن فئات ومرشحات محددة",
   "all-transactions-description-2": "مفيد للميزانيات طويلة الأجل على مدار فترات متعددة",
-  "all-transactions-description-3": "مثال: ميزانية \"الإنفاق الشهري\""
+  "all-transactions-description-3": "مثال: ميزانية \"الإنفاق الشهري\"",
+  "no-budgets-found": "لم يتم العثور على ميزانيات.",
+  "no-categories-found": "لم يتم العثور على فئات.",
+  "no-wallets-found": "لم يتم العثور على محافظ.",
+  "no-titles-found": "لم يتم العثور على ألقاب."
 }

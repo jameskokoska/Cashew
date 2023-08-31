@@ -207,7 +207,8 @@ class DebugPage extends StatelessWidget {
           description: "Enables scroll behaviour and icons from iOS",
           onSwitched: (value) {
             if (value == true) {
-              updateSettings("font", "SFProText", updateGlobalState: false);
+              // Disable iOS font for now... Avenir looks better
+              // updateSettings("font", "SFProText", updateGlobalState: false);
             } else {
               updateSettings("font", "Avenir", updateGlobalState: false);
             }

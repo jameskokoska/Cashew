@@ -81,6 +81,21 @@ class _EditWalletsPageState extends State<EditWalletsPage> {
             ),
           ),
         ),
+        actions: [
+          IconButton(
+            padding: EdgeInsets.all(15),
+            tooltip: "add-wallet".tr(),
+            onPressed: () {
+              pushRoute(
+                context,
+                AddWalletPage(
+                  routesToPopAfterDelete: RoutesToPopAfterDelete.None,
+                ),
+              );
+            },
+            icon: Icon(Icons.add_rounded),
+          ),
+        ],
         slivers: [
           SliverToBoxAdapter(
             child: Padding(
@@ -119,7 +134,7 @@ class _EditWalletsPageState extends State<EditWalletsPage> {
               if (snapshot.hasData && (snapshot.data ?? []).length <= 0) {
                 return SliverToBoxAdapter(
                   child: NoResults(
-                    message: "No wallets found.",
+                    message: "no-wallets-found".tr(),
                   ),
                 );
               }
