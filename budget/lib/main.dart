@@ -153,7 +153,7 @@ class App extends StatelessWidget {
             : Colors.white,
         appBarTheme: AppBarTheme(
           systemOverlayStyle: SystemUiOverlayStyle(
-            statusBarBrightness: Brightness.dark,
+            statusBarBrightness: Brightness.light,
             statusBarIconBrightness: Brightness.dark,
           ),
         ),
@@ -193,7 +193,7 @@ class App extends StatelessWidget {
             : Colors.black,
         appBarTheme: AppBarTheme(
           systemOverlayStyle: SystemUiOverlayStyle(
-            statusBarBrightness: Brightness.light,
+            statusBarBrightness: Brightness.dark,
             statusBarIconBrightness: Brightness.light,
           ),
         ),

@@ -301,6 +301,16 @@ class PageFrameworkState extends State<PageFramework>
 
   @override
   Widget build(BuildContext context) {
+    bool backButtonEnabled =
+        ModalRoute.of(context)?.isFirst == false && widget.backButton;
+    bool centeredTitle = getPlatform() == PlatformOS.isIOS && backButtonEnabled
+        ? true
+        : enableDoubleColumn(context)
+            ? true
+            : false;
+    bool centeredTitleSmall =
+        getPlatform() == PlatformOS.isIOS && backButtonEnabled;
+
     Widget scaffold = Scaffold(
       resizeToAvoidBottomInset: widget.resizeToAvoidBottomInset,
       backgroundColor: widget.backgroundColor,
@@ -340,6 +350,8 @@ class PageFrameworkState extends State<PageFramework>
                           expandedHeight: getExpandedHeaderHeight(
                               context, widget.expandedHeight,
                               hasSubtitle: widget.subtitle != null),
+                          centeredTitle: centeredTitle,
+                          centeredTitleSmall: centeredTitleSmall,
                         )
                       ]
                     : []),
@@ -391,7 +403,15 @@ class PageFrameworkState extends State<PageFramework>
           children: [
             Scaffold(
               resizeToAvoidBottomInset: widget.resizeToAvoidBottomInset,
-              backgroundColor: widget.dragDownToDismissBackground,
+              backgroundColor: widget.dragDownToDismissBackground ??
+                  (centeredTitleSmall == true
+                      ? (getPlatform() == PlatformOS.isIOS
+                          ? dynamicPastel(context,
+                              Theme.of(context).colorScheme.secondaryContainer,
+                              amount:
+                                  appStateSettings["materialYou"] ? 0.4 : 0.55)
+                          : Theme.of(context).colorScheme.secondaryContainer)
+                      : null),
               body: Stack(
                 children: [
                   AnimatedBuilder(
@@ -538,6 +558,8 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
     this.onBackButton,
     this.expandedHeight,
     this.bottom,
+    this.centeredTitle,
+    this.centeredTitleSmall,
   }) : super(key: key);
 
   final String title;
@@ -561,6 +583,8 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
   final double? expandedHeight;
   final double collapsedHeight = 56;
   final PreferredSizeWidget? bottom;
+  final bool? centeredTitle;
+  final bool? centeredTitleSmall;
   @override
   Widget build(BuildContext context) {
     bool safeToIgnoreBG = expandedHeight == collapsedHeight ||
@@ -582,170 +606,187 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
     }
     bool backButtonEnabled =
         ModalRoute.of(context)?.isFirst == false && backButton;
-    return SliverAppBar(
-      surfaceTintColor: safeToIgnoreBG
-          ? Theme.of(context).colorScheme.secondaryContainer
-          : null,
-      bottom: bottom,
-      shadowColor: safeToIgnoreBG &&
-              getPlatform() == PlatformOS.isIOS &&
-              appStateSettings["disableBlur"] == false
-          ? Colors.transparent
-          : Theme.of(context).shadowColor.withAlpha(130),
-      leading: backButtonEnabled == true && animationControllerOpacity != null
-          ? FadeTransition(
-              opacity: animationControllerOpacity!,
-              child: IconButton(
-                onPressed: () {
-                  if (onBackButton != null)
-                    onBackButton!();
-                  else
-                    Navigator.of(context).maybePop();
-                },
-                icon: Icon(
-                  getPlatform() == PlatformOS.isIOS
-                      ? Icons.chevron_left_rounded
-                      : Icons.arrow_back_rounded,
-                  color: getColor(context, "black"),
+    bool centeredTitleWithDefault =
+        centeredTitle ?? getPlatform() == PlatformOS.isIOS && backButtonEnabled
+            ? true
+            : enableDoubleColumn(context)
+                ? true
+                : false;
+    bool centeredTitleSmallWithDefault = centeredTitleSmall ??
+        getPlatform() == PlatformOS.isIOS && backButtonEnabled;
+
+    return SliverPadding(
+      padding: EdgeInsets.only(bottom: centeredTitleSmallWithDefault ? 10 : 0),
+      sliver: SliverAppBar(
+        surfaceTintColor: safeToIgnoreBG
+            ? Theme.of(context).colorScheme.secondaryContainer
+            : null,
+        bottom: bottom,
+        shadowColor: safeToIgnoreBG &&
+                getPlatform() == PlatformOS.isIOS &&
+                appStateSettings["disableBlur"] == false
+            ? Colors.transparent
+            : Theme.of(context).shadowColor.withAlpha(130),
+        leading: backButtonEnabled == true && animationControllerOpacity != null
+            ? FadeTransition(
+                opacity: animationControllerOpacity!,
+                child: IconButton(
+                  onPressed: () {
+                    if (onBackButton != null)
+                      onBackButton!();
+                    else
+                      Navigator.of(context).maybePop();
+                  },
+                  icon: Icon(
+                    getPlatform() == PlatformOS.isIOS
+                        ? Icons.chevron_left_rounded
+                        : Icons.arrow_back_rounded,
+                    color: getColor(context, "black"),
+                  ),
+                ),
+              )
+            : Container(),
+        backgroundColor: appBarBGColorCalculated,
+        floating: false,
+        pinned: enableDoubleColumn(context) ? true : pinned,
+        expandedHeight: centeredTitleSmallWithDefault
+            ? 0
+            : getExpandedHeaderHeight(context, expandedHeight,
+                hasSubtitle: subtitle != null),
+        collapsedHeight: collapsedHeight,
+        actions: pushActionsTogether(actions),
+        flexibleSpace: LayoutBuilder(
+            builder: (BuildContext context, BoxConstraints constraints) {
+          // print('constraints=' + constraints.toString());
+          double expandedHeightCalculated = getExpandedHeaderHeight(
+              context, expandedHeight,
+              hasSubtitle: subtitle != null);
+          double percent = 1 -
+              (constraints.biggest.height -
+                      collapsedHeight -
+                      MediaQuery.of(context).padding.top) /
+                  (expandedHeightCalculated - collapsedHeight);
+          if (collapsedHeight == expandedHeightCalculated) percent = 1;
+          String titleString = title.capitalizeFirst;
+
+          return BlurBehindAppBar(
+            child: FlexibleSpaceBar(
+              centerTitle: centeredTitleWithDefault,
+              titlePadding: EdgeInsets.symmetric(vertical: 15, horizontal: 18),
+              title: MediaQuery(
+                data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+                child: Transform.translate(
+                  offset: centeredTitleWithDefault
+                      ? Offset(0, centeredTitleSmallWithDefault ? -3.3 : 0)
+                      //  Offset(0, -(1 - percent) * 40)
+                      : Offset(
+                          backButtonEnabled ? 46 * percent : 10 * percent,
+                          -(subtitleSize ?? 0) * (1 - percent) + -0.5 * percent,
+                        ),
+                  child: Transform.scale(
+                    scale: percent * 0.15 + 1,
+                    child: titleWidget ??
+                        TextFont(
+                          text: getIsFullScreen(context) == false &&
+                                  titleString.length > 20
+                              ? titleString.split(" ")[0]
+                              : titleString,
+                          fontSize: centeredTitleSmallWithDefault ? 16 : 22,
+                          fontWeight: FontWeight.bold,
+                          textColor: textColor == null
+                              ? Theme.of(context)
+                                  .colorScheme
+                                  .onSecondaryContainer
+                              : textColor,
+                          textAlign: enableDoubleColumn(context)
+                              ? TextAlign.center
+                              : TextAlign.left,
+                        ),
+                  ),
                 ),
               ),
-            )
-          : Container(),
-      backgroundColor: appBarBGColorCalculated,
-      floating: false,
-      pinned: enableDoubleColumn(context) ? true : pinned,
-      expandedHeight: getExpandedHeaderHeight(context, expandedHeight,
-          hasSubtitle: subtitle != null),
-      collapsedHeight: collapsedHeight,
-      actions: pushActionsTogether(actions),
-      flexibleSpace: LayoutBuilder(
-          builder: (BuildContext context, BoxConstraints constraints) {
-        // print('constraints=' + constraints.toString());
-        double expandedHeightCalculated = getExpandedHeaderHeight(
-            context, expandedHeight,
-            hasSubtitle: subtitle != null);
-        double percent = 1 -
-            (constraints.biggest.height -
-                    collapsedHeight -
-                    MediaQuery.of(context).padding.top) /
-                (expandedHeightCalculated - collapsedHeight);
-        if (collapsedHeight == expandedHeightCalculated) percent = 1;
-        String titleString = title.capitalizeFirst;
-        return BlurBehindAppBar(
-          child: FlexibleSpaceBar(
-            centerTitle: enableDoubleColumn(context) ? true : false,
-            titlePadding: EdgeInsets.symmetric(vertical: 15, horizontal: 18),
-            title: MediaQuery(
-              data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
-              child: Transform.translate(
-                offset: enableDoubleColumn(context)
-                    ? Offset(0, 0)
-                    //  Offset(0, -(1 - percent) * 40)
-                    : Offset(
-                        backButtonEnabled ? 46 * percent : 10 * percent,
-                        -(subtitleSize ?? 0) * (1 - percent) + -0.5 * percent,
-                      ),
-                child: Transform.scale(
-                  scale: percent * 0.15 + 1,
-                  child: titleWidget ??
-                      TextFont(
-                        text: getIsFullScreen(context) == false &&
-                                titleString.length > 20
-                            ? titleString.split(" ")[0]
-                            : titleString,
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                        textColor: textColor == null
-                            ? Theme.of(context).colorScheme.onSecondaryContainer
-                            : textColor,
-                        textAlign: enableDoubleColumn(context)
-                            ? TextAlign.center
-                            : TextAlign.left,
-                      ),
-                ),
-              ),
-            ),
-            background: Stack(
-              children: [
-                safeToIgnoreBG
-                    ? SizedBox.shrink()
-                    : Container(
-                        color: appBarBackgroundColorStart == null
-                            ? Theme.of(context).canvasColor
-                            : appBarBackgroundColorStart,
-                      ),
-                safeToIgnoreBG
-                    ? Opacity(
-                        opacity: (1 - percent) < 0
-                            ? 0
-                            : (1 - percent) > 1
-                                ? 1
-                                : (1 - percent),
-                        child: Container(
+              background: Stack(
+                children: [
+                  safeToIgnoreBG
+                      ? SizedBox.shrink()
+                      : Container(
                           color: appBarBackgroundColorStart == null
                               ? Theme.of(context).canvasColor
                               : appBarBackgroundColorStart,
                         ),
-                      )
-                    : SizedBox.shrink(),
-                safeToIgnoreBG
-                    ? SizedBox.shrink()
-                    : Opacity(
-                        opacity: (percent) < 0
-                            ? 0
-                            : (percent) > 1
-                                ? 1
-                                : (percent),
-                        child: Container(
-                          color: appBarBGColorCalculated,
-                        ),
-                      ),
-                subtitle != null &&
-                        animationControllerShift != null &&
-                        animationController0at50 != null
-                    ? AnimatedBuilder(
-                        animation: animationControllerShift!,
-                        builder: (_, child) {
-                          double expandedHeightHeaderPercent =
-                              getExpandedHeaderHeight(context, expandedHeight,
-                                  hasSubtitle: subtitle != null);
-                          expandedHeightHeaderPercent =
-                              (expandedHeightHeaderPercent - 100) / 100;
-                          // print(expandedHeightHeaderPercent * 150 + 50);
-                          return Transform.translate(
-                            offset: Offset(
-                              0,
-                              -(animationControllerShift!.value) *
-                                  (subtitleAnimationSpeed ?? 100) *
-                                  (expandedHeightHeaderPercent * 150 + 50) /
-                                  200,
-                            ),
-                            child: child,
-                          );
-                        },
-                        child: Align(
-                          alignment: enableDoubleColumn(context)
-                              ? Alignment.center
-                              : subtitleAlignment,
-                          child: FadeTransition(
-                            opacity: animationController0at50!,
-                            child: subtitle,
+                  safeToIgnoreBG
+                      ? Opacity(
+                          opacity: (1 - percent) < 0
+                              ? 0
+                              : (1 - percent) > 1
+                                  ? 1
+                                  : (1 - percent),
+                          child: Container(
+                            color: appBarBackgroundColorStart == null
+                                ? Theme.of(context).canvasColor
+                                : appBarBackgroundColorStart,
+                          ),
+                        )
+                      : SizedBox.shrink(),
+                  safeToIgnoreBG
+                      ? SizedBox.shrink()
+                      : Opacity(
+                          opacity: (percent) < 0
+                              ? 0
+                              : (percent) > 1
+                                  ? 1
+                                  : (percent),
+                          child: Container(
+                            color: appBarBGColorCalculated,
                           ),
                         ),
-                      )
-                    : SizedBox(),
-              ],
+                  subtitle != null &&
+                          animationControllerShift != null &&
+                          animationController0at50 != null
+                      ? AnimatedBuilder(
+                          animation: animationControllerShift!,
+                          builder: (_, child) {
+                            double expandedHeightHeaderPercent =
+                                getExpandedHeaderHeight(context, expandedHeight,
+                                    hasSubtitle: subtitle != null);
+                            expandedHeightHeaderPercent =
+                                (expandedHeightHeaderPercent - 100) / 100;
+                            // print(expandedHeightHeaderPercent * 150 + 50);
+                            return Transform.translate(
+                              offset: Offset(
+                                0,
+                                -(animationControllerShift!.value) *
+                                    (subtitleAnimationSpeed ?? 100) *
+                                    (expandedHeightHeaderPercent * 150 + 50) /
+                                    200,
+                              ),
+                              child: child,
+                            );
+                          },
+                          child: Align(
+                            alignment: centeredTitleWithDefault
+                                ? Alignment.center
+                                : subtitleAlignment,
+                            child: FadeTransition(
+                              opacity: animationController0at50!,
+                              child: subtitle,
+                            ),
+                          ),
+                        )
+                      : SizedBox(),
+                ],
+              ),
             ),
-          ),
-        );
-      }),
-      // shape: RoundedRectangleBorder(
-      //   borderRadius: BorderRadius.vertical(
-      //     bottom: getWidthNavigationSidebar(context) > 0
-      //         ? Radius.circular(0)
-      //         : Radius.circular(15),
-      //   ),
-      // ),
+          );
+        }),
+        // shape: RoundedRectangleBorder(
+        //   borderRadius: BorderRadius.vertical(
+        //     bottom: getWidthNavigationSidebar(context) > 0
+        //         ? Radius.circular(0)
+        //         : Radius.circular(15),
+        //   ),
+        // ),
+      ),
     );
   }
 }

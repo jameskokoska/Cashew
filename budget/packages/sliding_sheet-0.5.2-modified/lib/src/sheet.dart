@@ -1114,8 +1114,11 @@ class _SlidingSheetState extends State<SlidingSheet>
           child: Opacity(
             opacity: opacity,
             child: Container(
-              width: double.infinity,
-              height: double.infinity,
+              // width: double.infinity,
+              // height: double.infinity,
+              // Fixes backdrop not fading correctly when using Impeller (iOS - Flutter v3.13)
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height - 1,
               color: widget.backdropColor,
             ),
           ),

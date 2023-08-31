@@ -10,6 +10,10 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    < 4.0.6
+    Secondary header to match iOS style
+    Fixed transition backdrop for popup sheet on iOS
+    Fixed mixup with status bar icon color on iOS
     < 4.0.5
     Animated text style
     Added plus button to add category, title, budget, wallet in actions in edit page
