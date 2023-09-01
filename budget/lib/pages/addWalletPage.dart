@@ -397,9 +397,10 @@ class _AddWalletPageState extends State<AddWalletPage> {
                   onSelected: setSelectedCurrency,
                   initialCurrency: selectedCurrency,
                   onHasFocus: () {
-                    Future.delayed(Duration(milliseconds: 500), () {
-                      addWalletPageKey.currentState?.scrollTo(250);
-                    });
+                    // Disable scroll when focus - because iOS header height is different than that of Android.
+                    // Future.delayed(Duration(milliseconds: 500), () {
+                    //   addWalletPageKey.currentState?.scrollTo(250);
+                    // });
                   },
                   extraButton: Row(
                     children: [

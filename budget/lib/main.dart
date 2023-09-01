@@ -155,6 +155,7 @@ class App extends StatelessWidget {
           systemOverlayStyle: SystemUiOverlayStyle(
             statusBarBrightness: Brightness.light,
             statusBarIconBrightness: Brightness.dark,
+            statusBarColor: kIsWeb ? Colors.black : Colors.transparent,
           ),
         ),
         splashColor: appStateSettings["materialYou"]
@@ -195,6 +196,7 @@ class App extends StatelessWidget {
           systemOverlayStyle: SystemUiOverlayStyle(
             statusBarBrightness: Brightness.dark,
             statusBarIconBrightness: Brightness.light,
+            statusBarColor: kIsWeb ? Colors.black : Colors.transparent,
           ),
         ),
         splashColor: getPlatform() == PlatformOS.isIOS

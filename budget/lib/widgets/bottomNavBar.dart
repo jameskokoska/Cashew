@@ -46,61 +46,57 @@ class BottomNavBarState extends State<BottomNavBar> {
   Widget build(BuildContext context) {
     if (getIsFullScreen(context)) return SizedBox.shrink();
     if (getPlatform() == PlatformOS.isIOS) {
-      return BlurBehindAppBar(
-        child: Container(
-          decoration: BoxDecoration(
-            color: appStateSettings["disableBlur"]
-                ? dynamicPastel(
-                    context, Theme.of(context).colorScheme.secondaryContainer,
-                    amount: appStateSettings["materialYou"] ? 0.4 : 0.55)
-                : getColor(context, "lightDarkAccent").withOpacity(0.6),
-            boxShadow: boxShadowSharp(context),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            mainAxisAlignment: MainAxisAlignment.end,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 25, vertical: 2),
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        NavBarIcon(
-                          onItemTapped: onItemTapped,
-                          icon: Icons.home_rounded,
-                          index: 0,
-                          currentIndex: selectedIndex,
-                        ),
-                        NavBarIcon(
-                          onItemTapped: onItemTapped,
-                          icon: Icons.payments_rounded,
-                          index: 1,
-                          currentIndex: selectedIndex,
-                        ),
-                        NavBarIcon(
-                          onItemTapped: onItemTapped,
-                          icon: MoreIcons.chart_pie,
-                          index: 2,
-                          currentIndex: selectedIndex,
-                          customIconScale: 0.87,
-                        ),
-                        NavBarIcon(
-                          onItemTapped: onItemTapped,
-                          icon: Icons.more_horiz_rounded,
-                          index: 3,
-                          currentIndex: selectedIndex,
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: MediaQuery.of(context).padding.bottom)
-                  ],
-                ),
-              )
-            ],
-          ),
+      return Container(
+        decoration: BoxDecoration(
+          color: dynamicPastel(
+              context, Theme.of(context).colorScheme.secondaryContainer,
+              amount: appStateSettings["materialYou"] ? 0.4 : 0.55),
+          boxShadow: boxShadowSharp(context),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          mainAxisAlignment: MainAxisAlignment.end,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 25, vertical: 2),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      NavBarIcon(
+                        onItemTapped: onItemTapped,
+                        icon: Icons.home_rounded,
+                        index: 0,
+                        currentIndex: selectedIndex,
+                      ),
+                      NavBarIcon(
+                        onItemTapped: onItemTapped,
+                        icon: Icons.payments_rounded,
+                        index: 1,
+                        currentIndex: selectedIndex,
+                      ),
+                      NavBarIcon(
+                        onItemTapped: onItemTapped,
+                        icon: MoreIcons.chart_pie,
+                        index: 2,
+                        currentIndex: selectedIndex,
+                        customIconScale: 0.87,
+                      ),
+                      NavBarIcon(
+                        onItemTapped: onItemTapped,
+                        icon: Icons.more_horiz_rounded,
+                        index: 3,
+                        currentIndex: selectedIndex,
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: MediaQuery.of(context).padding.bottom)
+                ],
+              ),
+            )
+          ],
         ),
       );
     }

@@ -1095,6 +1095,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
           }
         },
         child: PageFramework(
+          belowAppBarPaddingWhenCenteredTitleSmall: 0,
           resizeToAvoidBottomInset: true,
           title: widget.transaction == null
               ? "add-transaction".tr()

@@ -124,6 +124,7 @@ class TransactionsListPageState extends State<TransactionsListPage>
                         sliver: MultiSliver(
                           children: [
                             PageFrameworkSliverAppBar(
+                              belowAppBarPaddingWhenCenteredTitleSmall: 0,
                               title: "transactions".tr(),
                               actions: [
                                 IconButton(

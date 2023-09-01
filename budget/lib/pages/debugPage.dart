@@ -34,8 +34,6 @@ class DebugPage extends StatelessWidget {
       ),
       subtitleAlignment: Alignment.bottomLeft,
       subtitleSize: 10,
-      appBarBackgroundColor: Theme.of(context).colorScheme.secondaryContainer,
-      appBarBackgroundColorStart: Theme.of(context).canvasColor,
       listWidgets: [
         // Global context below,
         Container(
@@ -231,15 +229,6 @@ class DebugPage extends StatelessWidget {
           },
           initialValue: appStateSettings["iOSNavigation"],
           icon: Icons.apple_rounded,
-        ),
-        SettingsContainerSwitch(
-          title: "Disable blur",
-          onSwitched: (value) {
-            updateSettings("disableBlur", value,
-                pagesNeedingRefresh: [0], updateGlobalState: false);
-          },
-          initialValue: appStateSettings["disableBlur"],
-          icon: Icons.blur_off_rounded,
         ),
         SettingsContainerSwitch(
           onSwitched: (value) async {

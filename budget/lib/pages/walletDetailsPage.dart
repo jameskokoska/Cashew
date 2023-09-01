@@ -96,9 +96,6 @@ class _WalletDetailsPageState extends State<WalletDetailsPage> {
             title: widget.wallet == null
                 ? "all-spending".tr()
                 : widget.wallet!.name,
-            appBarBackgroundColor:
-                Theme.of(context).colorScheme.secondaryContainer,
-            appBarBackgroundColorStart: Theme.of(context).canvasColor,
             slivers: [
               SliverToBoxAdapter(
                 child: Column(

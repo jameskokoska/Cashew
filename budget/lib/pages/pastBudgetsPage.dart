@@ -186,15 +186,11 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
       backgroundColor: backgroundColor,
       key: budgetHistoryKey,
       title: "history".tr(),
-      subtitle: Padding(
-        padding: EdgeInsets.only(
-            left: enableDoubleColumn(context) ? 0 : 20, bottom: 6),
-        child: TextFont(
-          text: widget.budget.name,
-          fontSize: enableDoubleColumn(context) ? 30 : 20,
-          maxLines: 5,
-          fontWeight: FontWeight.bold,
-        ),
+      subtitle: TextFont(
+        text: widget.budget.name,
+        fontSize: enableDoubleColumn(context) ? 30 : 22,
+        maxLines: 5,
+        fontWeight: FontWeight.bold,
       ),
       actions: [
         IconButton(

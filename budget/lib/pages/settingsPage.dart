@@ -77,8 +77,6 @@ class MoreActionsPageState extends State<MoreActionsPage>
         key: pageState,
         title: "more-actions".tr(),
         backButton: false,
-        appBarBackgroundColor: Theme.of(context).colorScheme.secondaryContainer,
-        appBarBackgroundColorStart: Theme.of(context).canvasColor,
         horizontalPadding: getHorizontalPaddingConstrained(context),
         actions: [
           CustomPopupMenuButton(

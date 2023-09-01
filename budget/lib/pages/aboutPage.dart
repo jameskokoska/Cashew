@@ -26,8 +26,6 @@ class AboutPage extends StatelessWidget {
     return PageFramework(
       dragDownToDismiss: true,
       title: "about".tr(),
-      appBarBackgroundColor: Theme.of(context).colorScheme.secondaryContainer,
-      appBarBackgroundColorStart: Theme.of(context).canvasColor,
       horizontalPadding: getHorizontalPaddingConstrained(context),
       listWidgets: [
         Padding(

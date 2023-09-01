@@ -28,8 +28,6 @@ class _EditBudgetLimitsPageState extends State<EditBudgetLimitsPage> {
     return PageFramework(
       dragDownToDismiss: true,
       title: "spending-goals".tr(),
-      appBarBackgroundColor: Theme.of(context).colorScheme.secondaryContainer,
-      appBarBackgroundColorStart: Theme.of(context).canvasColor,
       slivers: [
         SliverToBoxAdapter(
           child: Padding(

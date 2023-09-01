@@ -62,8 +62,6 @@ class _NotificationsPageState extends State<NotificationsPage>
     return PageFramework(
       dragDownToDismiss: true,
       title: "notifications".tr(),
-      appBarBackgroundColor: Theme.of(context).colorScheme.secondaryContainer,
-      appBarBackgroundColorStart: Theme.of(context).canvasColor,
       listWidgets: [
         AnimatedExpanded(
           expand: notificationsEnabled == false,

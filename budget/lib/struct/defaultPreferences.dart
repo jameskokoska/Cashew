@@ -103,7 +103,6 @@ Future<Map<String, dynamic>> getDefaultPreferences() async {
     "premiumPopupAddTransactionCount": -5,
     "premiumPopupAddTransactionLastShown": DateTime.now().toString(),
     "premiumPopupFreeSeen": false,
-    "disableBlur": true,
     "previewDemo": false,
     "oldAndroidNavbar": false,
     "purchaseID": null,

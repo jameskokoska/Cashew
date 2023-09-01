@@ -59,8 +59,6 @@ class _AutoTransactionsPageEmailState extends State<AutoTransactionsPageEmail> {
     return PageFramework(
       dragDownToDismiss: true,
       title: "Auto Transactions",
-      appBarBackgroundColor: Theme.of(context).colorScheme.secondaryContainer,
-      appBarBackgroundColorStart: Theme.of(context).canvasColor,
       actions: [
         RefreshButton(onTap: () async {
           loadingIndeterminateKey.currentState!.setVisibility(true);

@@ -51,6 +51,7 @@ class PageFramework extends StatefulWidget {
     this.bottomPadding = true,
     this.enableHeader = true,
     this.scrollPhysics,
+    this.belowAppBarPaddingWhenCenteredTitleSmall,
   }) : super(key: key);
 
   final String title;
@@ -87,6 +88,7 @@ class PageFramework extends StatefulWidget {
   final bool bottomPadding;
   final bool enableHeader;
   final ScrollPhysics? scrollPhysics;
+  final double? belowAppBarPaddingWhenCenteredTitleSmall;
 
   @override
   State<PageFramework> createState() => PageFrameworkState();
@@ -138,9 +140,8 @@ class PageFrameworkState extends State<PageFramework>
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      double expandedHeaderHeight = getExpandedHeaderHeight(
-          context, widget.expandedHeight,
-          hasSubtitle: widget.subtitle != null);
+      double expandedHeaderHeight =
+          getExpandedHeaderHeight(context, widget.expandedHeight);
       _animationControllerShift = AnimationController(
         vsync: this,
         value: expandedHeaderHeight - 56 == 0 ? 1 : 0,
@@ -179,29 +180,20 @@ class PageFrameworkState extends State<PageFramework>
       widget.onBottomReached!();
     }
     double percent;
-    if (getExpandedHeaderHeight(context, widget.expandedHeight,
-                hasSubtitle: widget.subtitle != null) -
-            56 ==
-        0) {
+    if (getExpandedHeaderHeight(context, widget.expandedHeight) - 56 == 0) {
       percent = 100;
     } else {
       percent = _scrollController.offset /
-          (getExpandedHeaderHeight(context, widget.expandedHeight,
-                  hasSubtitle: widget.subtitle != null) -
-              56);
+          (getExpandedHeaderHeight(context, widget.expandedHeight) - 56);
     }
     if (widget.backButton == true || widget.subtitle != null && percent <= 1) {
       double offset = _scrollController.offset;
       if (percent < 0) offset = 0;
       _animationControllerShift.value = (offset /
-          (getExpandedHeaderHeight(context, widget.expandedHeight,
-                  hasSubtitle: widget.subtitle != null) -
-              56));
+          (getExpandedHeaderHeight(context, widget.expandedHeight) - 56));
       _animationControllerOpacity.value = 0.5 +
           (offset /
-              (getExpandedHeaderHeight(context, widget.expandedHeight,
-                      hasSubtitle: widget.subtitle != null) -
-                  56) /
+              (getExpandedHeaderHeight(context, widget.expandedHeight) - 56) /
               2);
     }
     if (widget.subtitle != null && percent <= 0.75) {
@@ -209,8 +201,7 @@ class PageFrameworkState extends State<PageFramework>
       if (percent < 0) offset = 0;
       _animationController0at50.value = 1 -
           (offset /
-                  (getExpandedHeaderHeight(context, widget.expandedHeight,
-                          hasSubtitle: widget.subtitle != null) -
+                  (getExpandedHeaderHeight(context, widget.expandedHeight) -
                       56)) *
               1.75;
     }
@@ -348,11 +339,16 @@ class PageFrameworkState extends State<PageFramework>
                           onBackButton: widget.onBackButton,
                           actions: widget.actions,
                           expandedHeight: getExpandedHeaderHeight(
-                              context, widget.expandedHeight,
-                              hasSubtitle: widget.subtitle != null),
+                              context, widget.expandedHeight),
                           centeredTitle: centeredTitle,
                           centeredTitleSmall: centeredTitleSmall,
-                        )
+                          belowAppBarPaddingWhenCenteredTitleSmall:
+                              widget.belowAppBarPaddingWhenCenteredTitleSmall,
+                        ),
+                        if (centeredTitleSmall)
+                          SliverToBoxAdapter(
+                            child: Center(child: widget.subtitle),
+                          )
                       ]
                     : []),
                 for (Widget sliver in widget.slivers)
@@ -401,45 +397,41 @@ class PageFrameworkState extends State<PageFramework>
         behavior: HitTestBehavior.opaque,
         child: Stack(
           children: [
-            Scaffold(
-              resizeToAvoidBottomInset: widget.resizeToAvoidBottomInset,
-              backgroundColor: widget.dragDownToDismissBackground ??
-                  (centeredTitleSmall == true
-                      ? (getPlatform() == PlatformOS.isIOS
-                          ? dynamicPastel(context,
-                              Theme.of(context).colorScheme.secondaryContainer,
-                              amount:
-                                  appStateSettings["materialYou"] ? 0.4 : 0.55)
-                          : Theme.of(context).colorScheme.secondaryContainer)
-                      : null),
-              body: Stack(
-                children: [
-                  AnimatedBuilder(
-                    animation: _animationControllerDragY,
-                    builder: (_, child) {
-                      return Transform.translate(
-                        offset: Offset(
-                            0,
-                            _animationControllerDragY.value *
-                                ((1 + 1 - _animationControllerDragY.value) *
-                                    50)),
-                        child: scaffold,
-                      );
-                    },
-                  ),
-                  widget.overlay ?? SizedBox.shrink(),
-                ],
-              ),
+            Stack(
+              children: [
+                ...getAppBarBackgroundColorLayers(
+                  animationControllerOpacity: _animationControllerOpacity,
+                  appBarBackgroundColor: widget.appBarBackgroundColor,
+                  appBarBackgroundColorStart: widget.appBarBackgroundColorStart,
+                  centeredTitle: centeredTitle,
+                  centeredTitleSmall: centeredTitleSmall,
+                  context: context,
+                  printValues: true,
+                ),
+                AnimatedBuilder(
+                  animation: _animationControllerDragY,
+                  builder: (_, child) {
+                    return Transform.translate(
+                      offset: Offset(
+                          0,
+                          _animationControllerDragY.value *
+                              ((1 + 1 - _animationControllerDragY.value) * 50)),
+                      child: scaffold,
+                    );
+                  },
+                ),
+                widget.overlay ?? SizedBox.shrink(),
+                // Catch any horizontal drag starts, we catch these so the use cannot scroll while back swiping
+                appStateSettings["iOSNavigation"]
+                    ? SizedBox.shrink()
+                    : Container(
+                        width: leftBackSwipeDetectionWidth,
+                        child: GestureDetector(
+                          onHorizontalDragStart: (details) => {},
+                        ),
+                      ),
+              ],
             ),
-            // Catch any horizontal drag starts, we catch these so the use cannot scroll while back swiping
-            appStateSettings["iOSNavigation"]
-                ? SizedBox.shrink()
-                : Container(
-                    width: leftBackSwipeDetectionWidth,
-                    child: GestureDetector(
-                      onHorizontalDragStart: (details) => {},
-                    ),
-                  ),
           ],
         ),
       );
@@ -560,6 +552,7 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
     this.bottom,
     this.centeredTitle,
     this.centeredTitleSmall,
+    this.belowAppBarPaddingWhenCenteredTitleSmall,
   }) : super(key: key);
 
   final String title;
@@ -585,25 +578,9 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
   final PreferredSizeWidget? bottom;
   final bool? centeredTitle;
   final bool? centeredTitleSmall;
+  final double? belowAppBarPaddingWhenCenteredTitleSmall;
   @override
   Widget build(BuildContext context) {
-    bool safeToIgnoreBG = expandedHeight == collapsedHeight ||
-        appBarBackgroundColorStart == null ||
-        appBarBackgroundColorStart == Theme.of(context).canvasColor;
-    Color? appBarBGColorCalculated = appBarBackgroundColor == null
-        ? Theme.of(context).colorScheme.secondaryContainer
-        : appBarBackgroundColor;
-    if (appBarBGColorCalculated != null &&
-        safeToIgnoreBG &&
-        getPlatform() == PlatformOS.isIOS) {
-      if (appStateSettings["disableBlur"] == false) {
-        appBarBGColorCalculated = Theme.of(context).canvasColor;
-      } else {
-        appBarBGColorCalculated = dynamicPastel(
-            context, Theme.of(context).colorScheme.secondaryContainer,
-            amount: appStateSettings["materialYou"] ? 0.4 : 0.55);
-      }
-    }
     bool backButtonEnabled =
         ModalRoute.of(context)?.isFirst == false && backButton;
     bool centeredTitleWithDefault =
@@ -615,180 +592,279 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
     bool centeredTitleSmallWithDefault = centeredTitleSmall ??
         getPlatform() == PlatformOS.isIOS && backButtonEnabled;
 
-    return SliverPadding(
-      padding: EdgeInsets.only(bottom: centeredTitleSmallWithDefault ? 10 : 0),
-      sliver: SliverAppBar(
-        surfaceTintColor: safeToIgnoreBG
-            ? Theme.of(context).colorScheme.secondaryContainer
-            : null,
-        bottom: bottom,
-        shadowColor: safeToIgnoreBG &&
-                getPlatform() == PlatformOS.isIOS &&
-                appStateSettings["disableBlur"] == false
-            ? Colors.transparent
-            : Theme.of(context).shadowColor.withAlpha(130),
-        leading: backButtonEnabled == true && animationControllerOpacity != null
-            ? FadeTransition(
-                opacity: animationControllerOpacity!,
-                child: IconButton(
-                  onPressed: () {
-                    if (onBackButton != null)
-                      onBackButton!();
-                    else
-                      Navigator.of(context).maybePop();
-                  },
-                  icon: Icon(
-                    getPlatform() == PlatformOS.isIOS
-                        ? Icons.chevron_left_rounded
-                        : Icons.arrow_back_rounded,
-                    color: getColor(context, "black"),
-                  ),
-                ),
-              )
-            : Container(),
-        backgroundColor: appBarBGColorCalculated,
-        floating: false,
-        pinned: enableDoubleColumn(context) ? true : pinned,
-        expandedHeight: centeredTitleSmallWithDefault
-            ? 0
-            : getExpandedHeaderHeight(context, expandedHeight,
-                hasSubtitle: subtitle != null),
-        collapsedHeight: collapsedHeight,
-        actions: pushActionsTogether(actions),
-        flexibleSpace: LayoutBuilder(
-            builder: (BuildContext context, BoxConstraints constraints) {
-          // print('constraints=' + constraints.toString());
-          double expandedHeightCalculated = getExpandedHeaderHeight(
-              context, expandedHeight,
-              hasSubtitle: subtitle != null);
-          double percent = 1 -
-              (constraints.biggest.height -
-                      collapsedHeight -
-                      MediaQuery.of(context).padding.top) /
-                  (expandedHeightCalculated - collapsedHeight);
-          if (collapsedHeight == expandedHeightCalculated) percent = 1;
-          String titleString = title.capitalizeFirst;
-
-          return BlurBehindAppBar(
-            child: FlexibleSpaceBar(
-              centerTitle: centeredTitleWithDefault,
-              titlePadding: EdgeInsets.symmetric(vertical: 15, horizontal: 18),
-              title: MediaQuery(
-                data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
-                child: Transform.translate(
-                  offset: centeredTitleWithDefault
-                      ? Offset(0, centeredTitleSmallWithDefault ? -3.3 : 0)
-                      //  Offset(0, -(1 - percent) * 40)
-                      : Offset(
-                          backButtonEnabled ? 46 * percent : 10 * percent,
-                          -(subtitleSize ?? 0) * (1 - percent) + -0.5 * percent,
-                        ),
-                  child: Transform.scale(
-                    scale: percent * 0.15 + 1,
-                    child: titleWidget ??
-                        TextFont(
-                          text: getIsFullScreen(context) == false &&
-                                  titleString.length > 20
-                              ? titleString.split(" ")[0]
-                              : titleString,
-                          fontSize: centeredTitleSmallWithDefault ? 16 : 22,
-                          fontWeight: FontWeight.bold,
-                          textColor: textColor == null
-                              ? Theme.of(context)
-                                  .colorScheme
-                                  .onSecondaryContainer
-                              : textColor,
-                          textAlign: enableDoubleColumn(context)
-                              ? TextAlign.center
-                              : TextAlign.left,
-                        ),
-                  ),
+    Widget appBar = SliverAppBar(
+      surfaceTintColor: Colors.transparent,
+      bottom: bottom,
+      shadowColor: getPlatform() == PlatformOS.isIOS
+          ? Colors.transparent
+          : Theme.of(context).shadowColor.withAlpha(130),
+      leading: backButtonEnabled == true && animationControllerOpacity != null
+          ? FadeTransition(
+              opacity: animationControllerOpacity!,
+              child: IconButton(
+                onPressed: () {
+                  if (onBackButton != null)
+                    onBackButton!();
+                  else
+                    Navigator.of(context).maybePop();
+                },
+                icon: Icon(
+                  getPlatform() == PlatformOS.isIOS
+                      ? Icons.chevron_left_rounded
+                      : Icons.arrow_back_rounded,
+                  color: getColor(context, "black"),
                 ),
               ),
-              background: Stack(
-                children: [
-                  safeToIgnoreBG
-                      ? SizedBox.shrink()
-                      : Container(
-                          color: appBarBackgroundColorStart == null
-                              ? Theme.of(context).canvasColor
-                              : appBarBackgroundColorStart,
-                        ),
-                  safeToIgnoreBG
-                      ? Opacity(
-                          opacity: (1 - percent) < 0
-                              ? 0
-                              : (1 - percent) > 1
-                                  ? 1
-                                  : (1 - percent),
-                          child: Container(
-                            color: appBarBackgroundColorStart == null
-                                ? Theme.of(context).canvasColor
-                                : appBarBackgroundColorStart,
+            )
+          : Container(),
+      backgroundColor: calculateAppBarBGColor(
+        context: context,
+        appBarBackgroundColor: appBarBackgroundColor,
+        centeredTitleSmall: centeredTitleSmallWithDefault,
+      ),
+      floating: false,
+      pinned: enableDoubleColumn(context) ? true : pinned,
+      expandedHeight: centeredTitleSmallWithDefault
+          ? 0
+          : getExpandedHeaderHeight(context, expandedHeight),
+      collapsedHeight: collapsedHeight,
+      actions: pushActionsTogether(actions),
+      flexibleSpace: LayoutBuilder(
+          builder: (BuildContext context, BoxConstraints constraints) {
+        // print('constraints=' + constraints.toString());
+        double expandedHeightCalculated =
+            getExpandedHeaderHeight(context, expandedHeight);
+        double percent = 1 -
+            (constraints.biggest.height -
+                    collapsedHeight -
+                    MediaQuery.of(context).padding.top) /
+                (expandedHeightCalculated - collapsedHeight);
+        if (collapsedHeight == expandedHeightCalculated) percent = 1;
+        String titleString = title.capitalizeFirst;
+        return FlexibleSpaceBar(
+          centerTitle: centeredTitleWithDefault,
+          titlePadding: EdgeInsets.symmetric(vertical: 15, horizontal: 18),
+          title: MediaQuery(
+            data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+            child: Transform.translate(
+              offset: centeredTitleWithDefault
+                  ? Offset(0, centeredTitleSmallWithDefault ? -3.3 : 0)
+                  //  Offset(0, -(1 - percent) * 40)
+                  : Offset(
+                      backButtonEnabled ? 46 * percent : 10 * percent,
+                      -(subtitleSize ?? 0) * (1 - percent) + -0.5 * percent,
+                    ),
+              child: Transform.scale(
+                scale: percent * 0.15 + 1,
+                child: titleWidget ??
+                    TextFont(
+                      text: getIsFullScreen(context) == false &&
+                              titleString.length > 20
+                          ? titleString.split(" ")[0]
+                          : titleString,
+                      fontSize: centeredTitleSmallWithDefault ? 16 : 22,
+                      fontWeight: FontWeight.bold,
+                      textColor: textColor == null
+                          ? Theme.of(context).colorScheme.onSecondaryContainer
+                          : textColor,
+                      textAlign: enableDoubleColumn(context)
+                          ? TextAlign.center
+                          : TextAlign.left,
+                    ),
+              ),
+            ),
+          ),
+          background: Stack(
+            children: [
+              ...getAppBarBackgroundColorLayers(
+                animationControllerOpacity: animationControllerOpacity,
+                appBarBackgroundColor: appBarBackgroundColor,
+                appBarBackgroundColorStart: appBarBackgroundColorStart,
+                centeredTitle: centeredTitleWithDefault,
+                centeredTitleSmall: centeredTitleSmallWithDefault,
+                context: context,
+              ),
+              subtitle != null &&
+                      animationControllerShift != null &&
+                      animationController0at50 != null &&
+                      centeredTitleSmallWithDefault == false
+                  ? AnimatedBuilder(
+                      animation: animationControllerShift!,
+                      builder: (_, child) {
+                        double expandedHeightHeaderPercent =
+                            getExpandedHeaderHeight(context, expandedHeight);
+                        expandedHeightHeaderPercent =
+                            (expandedHeightHeaderPercent - 100) / 100;
+                        // print(expandedHeightHeaderPercent * 150 + 50);
+                        return Transform.translate(
+                          offset: Offset(
+                            0,
+                            -(animationControllerShift!.value) *
+                                (subtitleAnimationSpeed ?? 100) *
+                                (expandedHeightHeaderPercent * 150 + 50) /
+                                200,
                           ),
-                        )
-                      : SizedBox.shrink(),
-                  safeToIgnoreBG
-                      ? SizedBox.shrink()
-                      : Opacity(
-                          opacity: (percent) < 0
-                              ? 0
-                              : (percent) > 1
-                                  ? 1
-                                  : (percent),
-                          child: Container(
-                            color: appBarBGColorCalculated,
-                          ),
-                        ),
-                  subtitle != null &&
-                          animationControllerShift != null &&
-                          animationController0at50 != null
-                      ? AnimatedBuilder(
-                          animation: animationControllerShift!,
-                          builder: (_, child) {
-                            double expandedHeightHeaderPercent =
-                                getExpandedHeaderHeight(context, expandedHeight,
-                                    hasSubtitle: subtitle != null);
-                            expandedHeightHeaderPercent =
-                                (expandedHeightHeaderPercent - 100) / 100;
-                            // print(expandedHeightHeaderPercent * 150 + 50);
-                            return Transform.translate(
-                              offset: Offset(
-                                0,
-                                -(animationControllerShift!.value) *
-                                    (subtitleAnimationSpeed ?? 100) *
-                                    (expandedHeightHeaderPercent * 150 + 50) /
-                                    200,
-                              ),
-                              child: child,
-                            );
-                          },
-                          child: Align(
-                            alignment: centeredTitleWithDefault
-                                ? Alignment.center
-                                : subtitleAlignment,
-                            child: FadeTransition(
-                              opacity: animationController0at50!,
+                          child: child,
+                        );
+                      },
+                      child: Align(
+                        alignment: centeredTitleWithDefault
+                            ? Alignment.bottomCenter
+                            : subtitleAlignment,
+                        child: FadeTransition(
+                          opacity: animationController0at50!,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 0),
+                            child: Transform.translate(
+                              offset: Offset(0, -4),
                               child: subtitle,
                             ),
                           ),
-                        )
-                      : SizedBox(),
-                ],
-              ),
-            ),
-          );
-        }),
-        // shape: RoundedRectangleBorder(
-        //   borderRadius: BorderRadius.vertical(
-        //     bottom: getWidthNavigationSidebar(context) > 0
-        //         ? Radius.circular(0)
-        //         : Radius.circular(15),
-        //   ),
-        // ),
-      ),
+                        ),
+                      ),
+                    )
+                  : SizedBox(),
+            ],
+          ),
+        );
+      }),
+      // shape: RoundedRectangleBorder(
+      //   borderRadius: BorderRadius.vertical(
+      //     bottom: getWidthNavigationSidebar(context) > 0
+      //         ? Radius.circular(0)
+      //         : Radius.circular(15),
+      //   ),
+      // ),
+    );
+
+    if (belowAppBarPaddingWhenCenteredTitleSmall == 0 ||
+        belowAppBarPaddingWhenCenteredTitleSmall == null) {
+      return appBar;
+    }
+    return SliverPadding(
+      padding: EdgeInsets.only(
+          bottom: centeredTitleSmallWithDefault
+              ? belowAppBarPaddingWhenCenteredTitleSmall ?? 10
+              : 0),
+      sliver: appBar,
     );
   }
+}
+
+Color calculateAppBarBGColor({
+  required BuildContext context,
+  required Color? appBarBackgroundColor,
+  required bool centeredTitleSmall,
+}) {
+  Color appBarBGColorCalculated = appBarBackgroundColor == null
+      ? Theme.of(context).colorScheme.secondaryContainer
+      : appBarBackgroundColor;
+  if (centeredTitleSmall && getPlatform() == PlatformOS.isIOS) {
+    appBarBGColorCalculated =
+        appBarBackgroundColor ?? Theme.of(context).canvasColor;
+  }
+  return appBarBGColorCalculated;
+}
+
+List<Widget> getAppBarBackgroundColorLayers({
+  required BuildContext context,
+  required AnimationController? animationControllerOpacity,
+  required Color? appBarBackgroundColor,
+  required Color? appBarBackgroundColorStart,
+  required bool centeredTitle,
+  required bool centeredTitleSmall,
+  bool? printValues = false,
+}) {
+  Color appBarBGColorCalculated = calculateAppBarBGColor(
+    context: context,
+    appBarBackgroundColor: appBarBackgroundColor,
+    centeredTitleSmall: centeredTitleSmall,
+  );
+  return [
+    animationControllerOpacity != null && centeredTitleSmall
+        ? AnimatedBuilder(
+            animation: animationControllerOpacity,
+            builder: (_, child) {
+              return Opacity(
+                opacity: (animationControllerOpacity.value - 0.5) / 0.5,
+                child: child,
+              );
+            },
+            child: Container(
+              color: appBarBackgroundColor ??
+                  dynamicPastel(
+                      context, Theme.of(context).colorScheme.secondaryContainer,
+                      amount: appStateSettings["materialYou"] ? 0.4 : 0.55),
+            ),
+          )
+        : SizedBox.shrink(),
+    animationControllerOpacity != null && centeredTitleSmall
+        ? AnimatedBuilder(
+            animation: animationControllerOpacity,
+            builder: (_, child) {
+              return Opacity(
+                opacity: (animationControllerOpacity.value - 0.5) / 0.5,
+                child: child,
+              );
+            },
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              child: Container(
+                height: 1.2,
+                color: dynamicPastel(
+                  context,
+                  appBarBackgroundColor != null
+                      ? appBarBackgroundColor
+                      : dynamicPastel(context,
+                          Theme.of(context).colorScheme.secondaryContainer,
+                          amount: appStateSettings["materialYou"] ? 0.4 : 0.55),
+                  inverse: true,
+                  amount: 0.05,
+                ),
+              ),
+            ),
+          )
+        : SizedBox.shrink(),
+    animationControllerOpacity != null && centeredTitleSmall == false
+        ? AnimatedBuilder(
+            animation: animationControllerOpacity,
+            builder: (_, child) {
+              return Opacity(
+                opacity: (animationControllerOpacity.value - 0.5) / 0.5,
+                child: child,
+              );
+            },
+            child: Container(
+              height: 1.2,
+              color: appBarBGColorCalculated,
+            ),
+          )
+        : SizedBox.shrink(),
+    centeredTitleSmall
+        ? SizedBox.shrink()
+        : Container(
+            color: appBarBackgroundColorStart == null
+                ? Theme.of(context).canvasColor
+                : appBarBackgroundColorStart,
+          ),
+    animationControllerOpacity != null && centeredTitleSmall == false
+        ? AnimatedBuilder(
+            animation: animationControllerOpacity,
+            builder: (_, child) {
+              if (printValues == true)
+                print((animationControllerOpacity.value - 0.5) / 0.5);
+              return Opacity(
+                opacity: (animationControllerOpacity.value - 0.5) / 0.5,
+                child: child,
+              );
+            },
+            child: Container(
+              color: appBarBGColorCalculated,
+            ),
+          )
+        : SizedBox.shrink(),
+  ];
 }
 
 List<Widget> pushActionsTogether(List<Widget>? actions) {
@@ -862,7 +938,7 @@ class BlurBehind extends StatelessWidget {
 
 double getExpandedHeaderHeight(
     BuildContext context, double? expandedHeightPassed,
-    {bool? isHomePageSpace, bool? hasSubtitle}) {
+    {bool? isHomePageSpace}) {
   if (expandedHeightPassed != null) return expandedHeightPassed;
   double height = MediaQuery.of(context).size.height;
   double minHeight = 682.37;
@@ -871,16 +947,12 @@ double getExpandedHeaderHeight(
   double minHeaderHeight = getPlatform() == PlatformOS.isIOS
       ? isHomePageSpace == true
           ? 0
-          : hasSubtitle == true
-              ? 120
-              : 100
+          : 100
       : 100;
   double maxHeaderHeight = getPlatform() == PlatformOS.isIOS
       ? isHomePageSpace == true
           ? 0
-          : hasSubtitle == true
-              ? 120
-              : 100
+          : 100
       : 200;
 
   if (height >= maxHeight) {

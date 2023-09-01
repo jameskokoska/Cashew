@@ -95,6 +95,7 @@ class _DailyNotificationsSettingsState
         Divider(
           indent: 20,
           endIndent: 20,
+          thickness: 2,
           color: getColor(context, "dividerColor"),
         ),
       ],

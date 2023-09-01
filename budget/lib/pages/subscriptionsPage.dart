@@ -68,9 +68,6 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
             ),
             dragDownToDismiss: true,
             title: "subscriptions".tr(),
-            appBarBackgroundColor:
-                Theme.of(context).colorScheme.secondaryContainer,
-            appBarBackgroundColorStart: Theme.of(context).canvasColor,
             slivers: [
               SliverToBoxAdapter(
                 child: Padding(

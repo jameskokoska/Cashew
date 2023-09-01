@@ -258,32 +258,24 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
         },
         // The global Widget stack
         child: Stack(children: [
-          AnnotatedRegion<SystemUiOverlayStyle>(
-            value: SystemUiOverlayStyle.light.copyWith(
-                statusBarIconBrightness:
-                    determineBrightnessTheme(context) == Brightness.light
-                        ? Brightness.dark
-                        : Brightness.light,
-                statusBarColor: kIsWeb ? Colors.black : Colors.transparent),
-            child: Scaffold(
-              body: FadeIndexedStack(
-                children: [...pages, ...pagesExtended],
-                index: currentPage,
-                duration: !kIsWeb
-                    ? Duration.zero
-                    : appStateSettings["batterySaver"]
-                        ? Duration.zero
-                        : Duration(milliseconds: 300),
-              ),
-              extendBody: true,
-              // resizeToAvoidBottomInset: false,
-              resizeToAvoidBottomInset: true,
-              bottomNavigationBar: BottomNavBar(
-                key: navbarStateKey,
-                onChanged: (index) {
-                  changePage(index);
-                },
-              ),
+          Scaffold(
+            body: FadeIndexedStack(
+              children: [...pages, ...pagesExtended],
+              index: currentPage,
+              duration: !kIsWeb
+                  ? Duration.zero
+                  : appStateSettings["batterySaver"]
+                      ? Duration.zero
+                      : Duration(milliseconds: 300),
+            ),
+            extendBody: true,
+            // resizeToAvoidBottomInset: false,
+            resizeToAvoidBottomInset: true,
+            bottomNavigationBar: BottomNavBar(
+              key: navbarStateKey,
+              onChanged: (index) {
+                changePage(index);
+              },
             ),
           ),
           Align(
