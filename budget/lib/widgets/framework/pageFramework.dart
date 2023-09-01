@@ -294,13 +294,10 @@ class PageFrameworkState extends State<PageFramework>
   Widget build(BuildContext context) {
     bool backButtonEnabled =
         ModalRoute.of(context)?.isFirst == false && widget.backButton;
-    bool centeredTitle = getPlatform() == PlatformOS.isIOS && backButtonEnabled
-        ? true
-        : enableDoubleColumn(context)
-            ? true
-            : false;
-    bool centeredTitleSmall =
-        getPlatform() == PlatformOS.isIOS && backButtonEnabled;
+    bool centeredTitle = getCenteredTitle(
+        context: context, backButtonEnabled: backButtonEnabled);
+    bool centeredTitleSmall = getCenteredTitleSmall(
+        context: context, backButtonEnabled: backButtonEnabled);
 
     Widget scaffold = Scaffold(
       resizeToAvoidBottomInset: widget.resizeToAvoidBottomInset,
@@ -342,7 +339,7 @@ class PageFrameworkState extends State<PageFramework>
                           belowAppBarPaddingWhenCenteredTitleSmall:
                               widget.belowAppBarPaddingWhenCenteredTitleSmall,
                         ),
-                        if (centeredTitleSmall)
+                        if (centeredTitleSmall || centeredTitle)
                           SliverToBoxAdapter(
                             child: Center(child: widget.subtitle),
                           )
@@ -581,14 +578,12 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
   Widget build(BuildContext context) {
     bool backButtonEnabled =
         ModalRoute.of(context)?.isFirst == false && backButton;
-    bool centeredTitleWithDefault =
-        centeredTitle ?? getPlatform() == PlatformOS.isIOS && backButtonEnabled
-            ? true
-            : enableDoubleColumn(context)
-                ? true
-                : false;
+    bool centeredTitleWithDefault = centeredTitle ??
+        getCenteredTitle(
+            context: context, backButtonEnabled: backButtonEnabled);
     bool centeredTitleSmallWithDefault = centeredTitleSmall ??
-        getPlatform() == PlatformOS.isIOS && backButtonEnabled;
+        getCenteredTitleSmall(
+            context: context, backButtonEnabled: backButtonEnabled);
 
     Widget appBar = SliverAppBar(
       surfaceTintColor: Colors.transparent,
@@ -646,7 +641,11 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
             data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
             child: Transform.translate(
               offset: centeredTitleWithDefault
-                  ? Offset(0, centeredTitleSmallWithDefault ? -3.3 : 0)
+                  ? Offset(
+                      0,
+                      centeredTitleSmallWithDefault
+                          ? (enableDoubleColumn(context) ? -1.3 : -3.3)
+                          : 0)
                   //  Offset(0, -(1 - percent) * 40)
                   : Offset(
                       backButtonEnabled ? 46 * percent : 10 * percent,
@@ -660,12 +659,14 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
                               titleString.length > 20
                           ? titleString.split(" ")[0]
                           : titleString,
-                      fontSize: centeredTitleSmallWithDefault ? 16 : 22,
+                      fontSize: centeredTitleSmallWithDefault
+                          ? (enableDoubleColumn(context) ? 19 : 16)
+                          : 22,
                       fontWeight: FontWeight.bold,
                       textColor: textColor == null
                           ? Theme.of(context).colorScheme.onSecondaryContainer
                           : textColor,
-                      textAlign: enableDoubleColumn(context)
+                      textAlign: centeredTitleWithDefault
                           ? TextAlign.center
                           : TextAlign.left,
                     ),
@@ -685,7 +686,8 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
               subtitle != null &&
                       animationControllerShift != null &&
                       animationController0at50 != null &&
-                      centeredTitleSmallWithDefault == false
+                      centeredTitleSmallWithDefault == false &&
+                      centeredTitleWithDefault == false
                   ? AnimatedBuilder(
                       animation: animationControllerShift!,
                       builder: (_, child) {
@@ -785,6 +787,17 @@ List<Widget> getAppBarBackgroundColorLayers({
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height - 1,
     ),
+    centeredTitleSmall && appBarBackgroundColorStart == null
+        ? SizedBox.shrink()
+        : Container(
+            // Fixes backdrop not fading correctly when using Impeller (iOS - Flutter v3.13)
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height - 1,
+
+            color: appBarBackgroundColorStart == null
+                ? Theme.of(context).canvasColor
+                : appBarBackgroundColorStart,
+          ),
     animationControllerOpacity != null && centeredTitleSmall
         ? AnimatedBuilder(
             animation: animationControllerOpacity,
@@ -806,7 +819,27 @@ List<Widget> getAppBarBackgroundColorLayers({
             ),
           )
         : SizedBox.shrink(),
-    animationControllerOpacity != null && centeredTitleSmall
+    animationControllerOpacity != null && centeredTitleSmall == false
+        ? AnimatedBuilder(
+            animation: animationControllerOpacity,
+            builder: (_, child) {
+              return Opacity(
+                opacity: (animationControllerOpacity.value - 0.5) / 0.5,
+                child: child,
+              );
+            },
+            child: Container(
+              // Fixes backdrop not fading correctly when using Impeller (iOS - Flutter v3.13)
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height - 1,
+
+              color: appBarBGColorCalculated,
+            ),
+          )
+        : SizedBox.shrink(),
+    animationControllerOpacity != null &&
+            centeredTitleSmall &&
+            getPlatform() == PlatformOS.isIOS
         ? AnimatedBuilder(
             animation: animationControllerOpacity,
             builder: (_, child) {
@@ -830,35 +863,6 @@ List<Widget> getAppBarBackgroundColorLayers({
                   amount: 0.05,
                 ),
               ),
-            ),
-          )
-        : SizedBox.shrink(),
-    centeredTitleSmall && appBarBackgroundColorStart == null
-        ? SizedBox.shrink()
-        : Container(
-            // Fixes backdrop not fading correctly when using Impeller (iOS - Flutter v3.13)
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height - 1,
-
-            color: appBarBackgroundColorStart == null
-                ? Theme.of(context).canvasColor
-                : appBarBackgroundColorStart,
-          ),
-    animationControllerOpacity != null && centeredTitleSmall == false
-        ? AnimatedBuilder(
-            animation: animationControllerOpacity,
-            builder: (_, child) {
-              return Opacity(
-                opacity: (animationControllerOpacity.value - 0.5) / 0.5,
-                child: child,
-              );
-            },
-            child: Container(
-              // Fixes backdrop not fading correctly when using Impeller (iOS - Flutter v3.13)
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height - 1,
-
-              color: appBarBGColorCalculated,
             ),
           )
         : SizedBox.shrink(),
@@ -912,51 +916,54 @@ class BlurBehind extends StatelessWidget {
   }
 }
 
-// customTitleBuilder: (_animationControllerShift) {
-//   return AnimatedBuilder(
-//     animation: _animationControllerShift,
-//     builder: (_, child) {
-//       return Transform.translate(
-//         offset: Offset(
-//           _animationControllerShift.value * 10,
-//           0,
-//         ),
-//         child: child,
-//       );
-//     },
-//     child: TextFont(
-//       text: "Test",
-//       fontSize: 26,
-//       fontWeight: FontWeight.bold,
-//     ),
-//   );
-// },
+double MIN_HEIGHT = 700;
+double MAX_HEIGHT = 855;
+
+bool getCenteredTitle(
+    {required BuildContext context, required bool backButtonEnabled}) {
+  if (getCenteredTitleSmall(
+          context: context, backButtonEnabled: backButtonEnabled) ==
+      true) {
+    return true;
+  } else if (enableDoubleColumn(context)) {
+    return true;
+  }
+  return false;
+}
+
+bool getCenteredTitleSmall(
+    {required BuildContext context, required bool backButtonEnabled}) {
+  if (backButtonEnabled && MediaQuery.of(context).size.height <= MIN_HEIGHT) {
+    return true;
+  } else if (backButtonEnabled && getPlatform() == PlatformOS.isIOS) {
+    return true;
+  }
+  return false;
+}
 
 double getExpandedHeaderHeight(
     BuildContext context, double? expandedHeightPassed,
     {bool? isHomePageSpace}) {
   if (expandedHeightPassed != null) return expandedHeightPassed;
   double height = MediaQuery.of(context).size.height;
-  double minHeight = 682.37;
-  double maxHeight = 853.33;
 
   double minHeaderHeight = getPlatform() == PlatformOS.isIOS
       ? isHomePageSpace == true
           ? 0
           : 100
-      : 100;
+      : 110;
   double maxHeaderHeight = getPlatform() == PlatformOS.isIOS
       ? isHomePageSpace == true
           ? 0
           : 100
       : 200;
 
-  if (height >= maxHeight) {
+  if (height >= MAX_HEIGHT) {
     return maxHeaderHeight;
-  } else if (height <= minHeight) {
+  } else if (height <= MIN_HEIGHT) {
     return minHeaderHeight;
   } else {
-    double heightPercentage = (height - minHeight) / (maxHeight - minHeight);
+    double heightPercentage = (height - MIN_HEIGHT) / (MAX_HEIGHT - MIN_HEIGHT);
     double expandedHeaderHeight = minHeaderHeight +
         heightPercentage * (maxHeaderHeight - minHeaderHeight);
     return expandedHeaderHeight;

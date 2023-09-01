@@ -372,15 +372,6 @@ class _AddCategoryPageState extends State<AddCategoryPage>
                       ),
                       showScrollbar: true,
                     );
-                    // Fix over-scroll stretch when keyboard pops up quickly
-                    Future.delayed(Duration(milliseconds: 100), () {
-                      bottomSheetControllerGlobal.scrollTo(0,
-                          duration: Duration(milliseconds: 100));
-                    });
-                    // Update the size of the bottom sheet
-                    Future.delayed(Duration(milliseconds: 500), () {
-                      bottomSheetControllerGlobal.snapToExtent(0);
-                    });
                   },
                   color: Colors.transparent,
                   child: Container(

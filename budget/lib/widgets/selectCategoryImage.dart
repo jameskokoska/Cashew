@@ -63,18 +63,33 @@ class _SelectCategoryImageState extends State<SelectCategoryImage> {
       child: Column(
         children: [
           context.locale.toString() == "en"
-              ? TextInput(
-                  labelText: "search-placeholder".tr(),
-                  icon: Icons.search_rounded,
-                  onSubmitted: (value) {},
-                  onChanged: (value) {
-                    setState(() {
-                      searchTerm = value;
-                    });
-                    bottomSheetControllerGlobal.snapToExtent(0);
+              ? Focus(
+                  onFocusChange: (value) {
+                    if (value) {
+                      // Fix over-scroll stretch when keyboard pops up quickly
+                      Future.delayed(Duration(milliseconds: 100), () {
+                        bottomSheetControllerGlobal.scrollTo(0,
+                            duration: Duration(milliseconds: 100));
+                      });
+                      // Update the size of the bottom sheet
+                      Future.delayed(Duration(milliseconds: 500), () {
+                        bottomSheetControllerGlobal.snapToExtent(0);
+                      });
+                    }
                   },
-                  padding: EdgeInsets.all(0),
-                  autoFocus: true,
+                  child: TextInput(
+                    labelText: "search-placeholder".tr(),
+                    icon: Icons.search_rounded,
+                    onSubmitted: (value) {},
+                    onChanged: (value) {
+                      setState(() {
+                        searchTerm = value;
+                      });
+                      bottomSheetControllerGlobal.snapToExtent(0);
+                    },
+                    padding: EdgeInsets.all(0),
+                    autoFocus: true,
+                  ),
                 )
               : SizedBox(height: 0),
           SizedBox(height: 5),
@@ -102,7 +117,8 @@ class _SelectCategoryImageState extends State<SelectCategoryImage> {
                     iconPath: "assets/categories/" + image.icon,
                     onTap: () {
                       widget.setSelectedImage(image.icon);
-                      widget.setSelectedTitle(image.mostLikelyCategoryName);
+                      if (context.locale.toString() == "en")
+                        widget.setSelectedTitle(image.mostLikelyCategoryName);
                       setState(() {
                         selectedImage = image.icon;
                       });
@@ -215,7 +231,7 @@ class _SuggestIconPopupState extends State<SuggestIconPopup> {
           Button(
             label: "submit".tr(),
             onTap: () async {
-              shareFeedback(-1, _feedbackController.text, "icon");
+              shareFeedback(_feedbackController.text, "icon");
               Navigator.pop(context);
             },
           )

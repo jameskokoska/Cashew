@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:budget/functions.dart';
+import 'package:budget/struct/iconObjects.dart';
 import 'package:budget/struct/keyboardIntents.dart';
 import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/struct/languageMap.dart';
@@ -56,6 +57,8 @@ void main() async {
   tz.initializeTimeZones();
   final String? locationName = await FlutterNativeTimezone.getLocalTimezone();
   tz.setLocalLocation(tz.getLocation(locationName ?? "America/New_York"));
+  iconObjects.sort((a, b) => (a.mostLikelyCategoryName ?? a.icon)
+      .compareTo((b.mostLikelyCategoryName ?? b.icon)));
   runApp(
     DevicePreview(
       enabled: enableDevicePreview,

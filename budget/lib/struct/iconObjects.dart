@@ -955,7 +955,8 @@ List<IconForCategory> iconObjects = [
       "land",
       "green",
       "gift",
-      "home"
+      "home",
+      "globe",
     ],
     mostLikelyCategoryName: "Nature",
   ),
@@ -1372,7 +1373,8 @@ List<IconForCategory> iconObjects = [
       "commencement",
       "congrats",
       "success",
-      "future"
+      "future",
+      "hat",
     ],
     mostLikelyCategoryName: "Education",
   ),
@@ -1901,7 +1903,8 @@ List<IconForCategory> iconObjects = [
       "payment",
       "income",
       "purchase",
-      "capital"
+      "capital",
+      "dollar",
     ],
     mostLikelyCategoryName: "Finance",
   ),
@@ -1917,7 +1920,8 @@ List<IconForCategory> iconObjects = [
       "investment",
       "piggy bank",
       "banking",
-      "finances"
+      "finances",
+      "dollar",
     ],
     mostLikelyCategoryName: "Finance",
   ),
@@ -1933,7 +1937,8 @@ List<IconForCategory> iconObjects = [
       "economy",
       "banking",
       "finances",
-      "payment"
+      "payment",
+      "dollar",
     ],
     mostLikelyCategoryName: "Finance",
   ),
@@ -2513,7 +2518,7 @@ List<IconForCategory> iconObjects = [
       "snowflake",
       "festive"
     ],
-    mostLikelyCategoryName: "Snow",
+    mostLikelyCategoryName: "Winter",
   ),
   IconForCategory(
     icon: "socket.png",
@@ -3089,7 +3094,8 @@ List<IconForCategory> iconObjects = [
       "coinage",
       "exchange",
       "wealth",
-      "monetary"
+      "monetary",
+      "dollar",
     ],
     mostLikelyCategoryName: "Finance",
   ),
@@ -3238,5 +3244,151 @@ List<IconForCategory> iconObjects = [
       "father"
     ],
     mostLikelyCategoryName: "Parents",
+  ),
+  IconForCategory(
+    icon: "dollar-coin.png",
+    tags: [
+      "dollar-coin",
+      "money",
+      "currency",
+      "payment",
+      "finance",
+      "cash",
+      "coinage",
+      "exchange",
+      "wealth",
+      "monetary",
+      "dollar",
+    ],
+    mostLikelyCategoryName: "Finance",
+  ),
+  IconForCategory(
+    icon: "cash-bill-dollar.png",
+    tags: [
+      "cash-bill-dollar",
+      "money",
+      "currency",
+      "payment",
+      "finance",
+      "cash",
+      "bills",
+      "wealth",
+      "monetary",
+      "currency-note"
+          "dollar",
+    ],
+    mostLikelyCategoryName: "Cash",
+  ),
+  IconForCategory(
+    icon: "internet-globe.png",
+    tags: [
+      "internet-globe",
+      "internet",
+      "web",
+      "online",
+      "network",
+      "connection",
+      "global",
+      "communication",
+      "technology",
+      "world wide web"
+    ],
+    mostLikelyCategoryName: "Internet",
+  ),
+  IconForCategory(
+    icon: "checker-chess-board.png",
+    tags: [
+      "checker-chess-board",
+      "chess",
+      "game",
+      "board",
+      "strategy",
+      "competition",
+      "checkers",
+      "king",
+      "pawn",
+      "rook"
+    ],
+    mostLikelyCategoryName: "Chess",
+  ),
+  IconForCategory(
+    icon: "portable-game-console.png",
+    tags: [
+      "portable-game-console",
+      "gaming",
+      "video games",
+      "entertainment",
+      "handheld",
+      "console",
+      "games",
+      "controller",
+      "gamer",
+      "device"
+    ],
+    mostLikelyCategoryName: "Gaming",
+  ),
+  IconForCategory(
+    icon: "bowling.png",
+    tags: [
+      "bowling",
+      "sport",
+      "game",
+      "strike",
+      "pins",
+      "alley",
+      "bowling ball",
+      "recreation",
+      "bowling pins",
+      "spare"
+    ],
+    mostLikelyCategoryName: "Entertainment",
+  ),
+  IconForCategory(
+    icon: "cap.png",
+    tags: [
+      "cap",
+      "hat",
+      "headwear",
+      "fashion",
+      "accessory",
+      "style",
+      "clothing",
+      "headgear",
+      "wearable",
+      "head"
+    ],
+    mostLikelyCategoryName: "Cap",
+  ),
+  IconForCategory(
+    icon: "winter-hat.png",
+    tags: [
+      "winter-hat",
+      "hat",
+      "cold",
+      "winter",
+      "headwear",
+      "fashion",
+      "accessory",
+      "style",
+      "clothing",
+      "head"
+    ],
+    mostLikelyCategoryName: "Winter",
+  ),
+  IconForCategory(
+    icon: "top-hat.png",
+    tags: [
+      "top-hat",
+      "hat",
+      "formal",
+      "headwear",
+      "fashion",
+      "accessory",
+      "style",
+      "clothing",
+      "head",
+      "elegant"
+    ],
+    mostLikelyCategoryName: "Formal",
   ),
 ];

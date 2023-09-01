@@ -456,16 +456,16 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                                         : null,
                                   ),
                                 ),
-                              Tooltip(
-                                message: "edit-spending-goals".tr(),
+                              Transform.translate(
+                                offset: Offset(
+                                    -9 -
+                                        getHorizontalPaddingConstrained(
+                                            context),
+                                    10),
                                 child: Align(
                                   alignment: Alignment.bottomRight,
-                                  child: Transform.translate(
-                                    offset: Offset(
-                                        -9 -
-                                            getHorizontalPaddingConstrained(
-                                                context),
-                                        10),
+                                  child: Tooltip(
+                                    message: "edit-spending-goals".tr(),
                                     child: IconButton(
                                       padding: EdgeInsets.all(15),
                                       onPressed: () {

@@ -10,6 +10,15 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    < 4.1.0
+    New category icons
+    Category icons sorted by recommended name
+    Applied new small header on smaller height phones
+    Fixed edit spending goals position on budget page
+    Fixed subtitle on large displays
+    Fixed background color when initial and final is custom color
+    Fixed separator app bar not showing up for custom background app bars
+    Fixed feedback sharing of optional email
     < 4.0.9
     Fixed discard changes popup
     < 4.0.8
