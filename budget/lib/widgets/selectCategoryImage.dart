@@ -156,7 +156,6 @@ class SuggestIcon extends StatelessWidget {
             Expanded(
               child: TextFont(
                 textColor: Theme.of(context).colorScheme.onSecondaryContainer,
-                richTextSpan: [],
                 text: "icon-suggestion-details".tr(),
                 maxLines: 5,
                 fontSize: 14,

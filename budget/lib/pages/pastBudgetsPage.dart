@@ -184,6 +184,8 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
 
     return PageFramework(
       backgroundColor: backgroundColor,
+      appBarBackgroundColor: budgetColorScheme.secondaryContainer,
+      appBarBackgroundColorStart: backgroundColor,
       key: budgetHistoryKey,
       title: "history".tr(),
       subtitle: TextFont(
@@ -294,10 +296,8 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
       ],
       subtitleSize: 10,
       subtitleAlignment: Alignment.bottomLeft,
-      appBarBackgroundColor: budgetColorScheme.secondaryContainer,
       textColor: getColor(context, "black"),
       dragDownToDismiss: true,
-      dragDownToDismissBackground: Theme.of(context).canvasColor,
       slivers: [
         SliverStickyHeader(
           header: Transform.translate(

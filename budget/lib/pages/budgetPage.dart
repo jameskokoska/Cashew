@@ -248,7 +248,6 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
             appBarBackgroundColorStart: budgetColorScheme.secondaryContainer,
             textColor: getColor(context, "black"),
             dragDownToDismiss: true,
-            dragDownToDismissBackground: budgetColorScheme.secondaryContainer,
             slivers: [
               StreamBuilder<double?>(
                 stream: database.watchTotalSpentByCurrentUserOnly(

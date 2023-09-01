@@ -59,13 +59,11 @@ class AccountsPageState extends State<AccountsPage> {
       title: getPlatform() == PlatformOS.isIOS
           ? "backup".tr()
           : "account-and-backup".tr(),
-      appBarBackgroundColor: Theme.of(context).colorScheme.secondaryContainer,
-      appBarBackgroundColorStart:
-          Theme.of(context).colorScheme.secondaryContainer,
-      dragDownToDismissBackground: getPlatform() == PlatformOS.isIOS
-          ? dynamicPastel(
-              context, Theme.of(context).colorScheme.secondaryContainer,
-              amount: appStateSettings["materialYou"] ? 0.4 : 0.55)
+      appBarBackgroundColor: getPlatform() == PlatformOS.isIOS
+          ? null
+          : Theme.of(context).colorScheme.secondaryContainer,
+      appBarBackgroundColorStart: getPlatform() == PlatformOS.isIOS
+          ? null
           : Theme.of(context).colorScheme.secondaryContainer,
       bottomPadding: false,
       slivers: [

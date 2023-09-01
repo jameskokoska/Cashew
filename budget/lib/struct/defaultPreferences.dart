@@ -9,7 +9,7 @@ import 'package:flutter/services.dart';
 // default settings, defaultSettings, initial settings
 Future<Map<String, dynamic>> getDefaultPreferences() async {
   int androidVersion = 11;
-  if (getPlatform() == PlatformOS.isAndroid) {
+  if (getPlatform(ignoreEmulation: true) == PlatformOS.isAndroid) {
     androidVersion = 0;
     AndroidDeviceInfo androidInfo = await DeviceInfoPlugin().androidInfo;
     String androidVersionString = androidInfo.version.release;

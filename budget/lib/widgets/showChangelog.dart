@@ -10,6 +10,13 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    < 4.0.7
+    Header color extended behind when swiping down to dismiss
+    New header for iOS
+    Removed blur components
+    New app bar color theming
+    Fixed font and colors for rich text
+    Upgraded to Flutter 3.13.2
     < 4.0.6
     Secondary header to match iOS style
     Fixed transition backdrop for popup sheet on iOS

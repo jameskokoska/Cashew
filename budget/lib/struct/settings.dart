@@ -287,8 +287,16 @@ class TranslationsHelp extends StatelessWidget {
             ),
             Expanded(
               child: TextFont(
-                textColor: Theme.of(context).colorScheme.onSecondaryContainer,
+                text: "",
+                textColor: getColor(context, "black"),
                 richTextSpan: [
+                  TextSpan(
+                    text: "translations-help".tr() + " ",
+                    style: TextStyle(
+                      color: getColor(context, "black"),
+                      fontFamily: appStateSettings["font"],
+                    ),
+                  ),
                   TextSpan(
                     text: 'dapperappdeveloper@gmail.com',
                     style: TextStyle(
@@ -298,10 +306,10 @@ class TranslationsHelp extends StatelessWidget {
                           getColor(context, "unPaidOverdue").withOpacity(0.8),
                       color:
                           getColor(context, "unPaidOverdue").withOpacity(0.8),
+                      fontFamily: appStateSettings["font"],
                     ),
                   ),
                 ],
-                text: "translations-help".tr() + " ",
                 maxLines: 5,
                 fontSize: 13,
               ),

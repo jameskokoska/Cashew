@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:flutter/material.dart';
@@ -173,7 +174,11 @@ class GlobalSnackbarState extends State<GlobalSnackbar>
                       animateOut();
                     },
                     borderRadius: 13,
-                    color: getColor(context, "lightDarkAccent"),
+                    color: appStateSettings["materialYou"]
+                        ? dynamicPastel(context,
+                            Theme.of(context).colorScheme.secondaryContainer,
+                            amountLight: 1, amountDark: 0)
+                        : getColor(context, "lightDarkAccent"),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 12, vertical: 8),

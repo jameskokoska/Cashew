@@ -1,3 +1,4 @@
+import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/pages/aboutPage.dart';
 import 'package:budget/struct/currencyFunctions.dart';
@@ -131,21 +132,30 @@ class _ExchangeRatesState extends State<ExchangeRates> {
                       child: Row(
                         children: [
                           TextFont(
-                            text: " = " +
-                                (1 /
-                                        ((amountRatioToPrimaryCurrency(
-                                                Provider.of<AllWallets>(
-                                                    context),
-                                                key) ??
-                                            1)))
-                                    .toStringAsFixed(15),
+                            text: "",
                             maxLines: 3,
                             fontSize: 18,
                             richTextSpan: [
                               TextSpan(
+                                text: " = " +
+                                    (1 /
+                                            ((amountRatioToPrimaryCurrency(
+                                                    Provider.of<AllWallets>(
+                                                        context),
+                                                    key) ??
+                                                1)))
+                                        .toStringAsFixed(15),
+                                style: TextStyle(
+                                  color: getColor(context, "black"),
+                                  fontFamily: appStateSettings["font"],
+                                ),
+                              ),
+                              TextSpan(
                                 text: " " + key.allCaps,
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
+                                  fontFamily: appStateSettings["font"],
+                                  color: getColor(context, "black"),
                                 ),
                               ),
                             ],

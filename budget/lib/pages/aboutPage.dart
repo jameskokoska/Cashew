@@ -5,6 +5,7 @@ import 'package:budget/pages/debugPage.dart';
 import 'package:budget/pages/onBoardingPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/languageMap.dart';
+import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/moreIcons.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
@@ -99,7 +100,11 @@ class AboutPage extends StatelessWidget {
             onTap: () {
               openUrl("https://github.com/jameskokoska/Cashew");
             },
-            color: getColor(context, "lightDarkAccent"),
+            color: appStateSettings["materialYou"]
+                ? dynamicPastel(
+                    context, Theme.of(context).colorScheme.secondaryContainer,
+                    amountLight: 0, amountDark: 0.6)
+                : getColor(context, "lightDarkAccent"),
             borderRadius: 15,
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 15),
@@ -184,7 +189,11 @@ class AboutPage extends StatelessWidget {
             onTap: () {
               openUrl('mailto:dapperappdeveloper@gmail.com');
             },
-            color: getColor(context, "lightDarkAccent"),
+            color: appStateSettings["materialYou"]
+                ? dynamicPastel(
+                    context, Theme.of(context).colorScheme.secondaryContainer,
+                    amountLight: 0, amountDark: 0.6)
+                : getColor(context, "lightDarkAccent"),
             borderRadius: 15,
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 15),
@@ -221,7 +230,11 @@ class AboutPage extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
           child: Tappable(
             onTap: () {},
-            color: getColor(context, "lightDarkAccent"),
+            color: appStateSettings["materialYou"]
+                ? dynamicPastel(
+                    context, Theme.of(context).colorScheme.secondaryContainer,
+                    amountLight: 0, amountDark: 0.6)
+                : getColor(context, "lightDarkAccent"),
             borderRadius: 15,
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 15),
@@ -444,7 +457,11 @@ class AboutInfoBox extends StatelessWidget {
         onLongPress: () {
           copyToClipboard(link);
         },
-        color: color ?? getColor(context, "lightDarkAccent"),
+        color: color ?? appStateSettings["materialYou"]
+            ? dynamicPastel(
+                context, Theme.of(context).colorScheme.secondaryContainer,
+                amountLight: 0, amountDark: 0.6)
+            : getColor(context, "lightDarkAccent"),
         borderRadius: 15,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 15),

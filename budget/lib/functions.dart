@@ -981,7 +981,6 @@ enum PlatformOS {
 }
 
 PlatformOS? getPlatform({bool ignoreEmulation = false}) {
-  return PlatformOS.isAndroid;
   if (appStateSettings["iOSEmulate"] == true && ignoreEmulation == false) {
     return PlatformOS.isIOS;
   } else if (kIsWeb) {

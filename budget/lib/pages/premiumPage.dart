@@ -59,9 +59,9 @@ class PremiumPage extends StatelessWidget {
         PageFramework(
           enableHeader: false,
           dragDownToDismiss: canDismiss,
-          dragDownToDismissBackground: Colors.transparent,
           bottomPadding: false,
           backgroundColor: Colors.transparent,
+          transparentAppBar: true,
           slivers: [
             SliverFillRemaining(
               hasScrollBody: false,
@@ -970,12 +970,14 @@ class SubscriptionOption extends StatelessWidget {
                                 color:
                                     getColor(context, "black").withOpacity(0.7),
                                 fontSize: 14,
+                                fontFamily: appStateSettings["font"],
                               ),
                             ),
                             TextSpan(
                               text: originalPrice == null ? null : "  ",
                               style: TextStyle(
                                 fontSize: 12,
+                                fontFamily: appStateSettings["font"],
                               ),
                             ),
                             TextSpan(
@@ -983,6 +985,7 @@ class SubscriptionOption extends StatelessWidget {
                               style: TextStyle(
                                 color: getColor(context, "black"),
                                 fontSize: 17,
+                                fontFamily: appStateSettings["font"],
                               ),
                             ),
                           ],

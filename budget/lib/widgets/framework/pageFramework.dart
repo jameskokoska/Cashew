@@ -36,7 +36,6 @@ class PageFramework extends StatefulWidget {
     this.textColor,
     this.dragDownToDismiss = false,
     this.dragDownToDismissEnabled = true,
-    this.dragDownToDismissBackground,
     this.onBackButton,
     this.onDragDownToDismiss,
     this.actions,
@@ -52,6 +51,7 @@ class PageFramework extends StatefulWidget {
     this.enableHeader = true,
     this.scrollPhysics,
     this.belowAppBarPaddingWhenCenteredTitleSmall,
+    this.transparentAppBar = false,
   }) : super(key: key);
 
   final String title;
@@ -73,7 +73,6 @@ class PageFramework extends StatefulWidget {
   final Color? textColor;
   final bool dragDownToDismiss;
   final bool dragDownToDismissEnabled;
-  final Color? dragDownToDismissBackground;
   final VoidCallback? onBackButton;
   final VoidCallback? onDragDownToDismiss;
   final List<Widget>? actions;
@@ -89,6 +88,7 @@ class PageFramework extends StatefulWidget {
   final bool enableHeader;
   final ScrollPhysics? scrollPhysics;
   final double? belowAppBarPaddingWhenCenteredTitleSmall;
+  final bool transparentAppBar;
 
   @override
   State<PageFramework> createState() => PageFrameworkState();
@@ -319,10 +319,7 @@ class PageFrameworkState extends State<PageFramework>
                           titleWidget: widget.titleWidget,
                           appBarBackgroundColor: widget.appBarBackgroundColor,
                           appBarBackgroundColorStart:
-                              widget.backgroundColor == null ||
-                                      widget.appBarBackgroundColorStart != null
-                                  ? widget.appBarBackgroundColorStart
-                                  : widget.backgroundColor,
+                              widget.appBarBackgroundColorStart,
                           backButton: widget.backButton,
                           subtitle: widget.subtitle,
                           subtitleSize: widget.subtitleSize,
@@ -388,9 +385,9 @@ class PageFrameworkState extends State<PageFramework>
         ],
       ),
     );
-    Widget? dragDownToDissmissScaffold = null;
+    Widget? dragDownToDismissScaffold = null;
     if (widget.dragDownToDismiss) {
-      dragDownToDissmissScaffold = Listener(
+      dragDownToDismissScaffold = Listener(
         onPointerMove: (ptr) => {_onPointerMove(ptr)},
         onPointerUp: (ptr) => {_onPointerUp(ptr)},
         onPointerDown: (ptr) => {_onPointerDown(ptr)},
@@ -399,15 +396,16 @@ class PageFrameworkState extends State<PageFramework>
           children: [
             Stack(
               children: [
-                ...getAppBarBackgroundColorLayers(
-                  animationControllerOpacity: _animationControllerOpacity,
-                  appBarBackgroundColor: widget.appBarBackgroundColor,
-                  appBarBackgroundColorStart: widget.appBarBackgroundColorStart,
-                  centeredTitle: centeredTitle,
-                  centeredTitleSmall: centeredTitleSmall,
-                  context: context,
-                  printValues: true,
-                ),
+                if (widget.transparentAppBar != true)
+                  ...getAppBarBackgroundColorLayers(
+                    animationControllerOpacity: _animationControllerOpacity,
+                    appBarBackgroundColor: widget.appBarBackgroundColor,
+                    appBarBackgroundColorStart:
+                        widget.appBarBackgroundColorStart,
+                    centeredTitle: centeredTitle,
+                    centeredTitleSmall: centeredTitleSmall,
+                    context: context,
+                  ),
                 AnimatedBuilder(
                   animation: _animationControllerDragY,
                   builder: (_, child) {
@@ -441,7 +439,7 @@ class PageFrameworkState extends State<PageFramework>
     if (widget.floatingActionButton != null) {
       child = Stack(
         children: [
-          dragDownToDissmissScaffold ?? scaffold,
+          dragDownToDismissScaffold ?? scaffold,
           Align(
             alignment: Alignment.bottomRight,
             child: Padding(
@@ -501,7 +499,7 @@ class PageFrameworkState extends State<PageFramework>
         ],
       );
     } else {
-      child = dragDownToDissmissScaffold ?? scaffold;
+      child = dragDownToDismissScaffold ?? scaffold;
     }
 
     child = SwipeToSelectTransactions(
@@ -774,7 +772,6 @@ List<Widget> getAppBarBackgroundColorLayers({
   required Color? appBarBackgroundColorStart,
   required bool centeredTitle,
   required bool centeredTitleSmall,
-  bool? printValues = false,
 }) {
   Color appBarBGColorCalculated = calculateAppBarBGColor(
     context: context,
@@ -782,6 +779,12 @@ List<Widget> getAppBarBackgroundColorLayers({
     centeredTitleSmall: centeredTitleSmall,
   );
   return [
+    Container(
+      color: appBarBackgroundColor ?? Theme.of(context).canvasColor,
+      // Fixes backdrop not fading correctly when using Impeller (iOS - Flutter v3.13)
+      width: MediaQuery.of(context).size.width,
+      height: MediaQuery.of(context).size.height - 1,
+    ),
     animationControllerOpacity != null && centeredTitleSmall
         ? AnimatedBuilder(
             animation: animationControllerOpacity,
@@ -792,6 +795,10 @@ List<Widget> getAppBarBackgroundColorLayers({
               );
             },
             child: Container(
+              // Fixes backdrop not fading correctly when using Impeller (iOS - Flutter v3.13)
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height - 1,
+
               color: appBarBackgroundColor ??
                   dynamicPastel(
                       context, Theme.of(context).colorScheme.secondaryContainer,
@@ -826,24 +833,13 @@ List<Widget> getAppBarBackgroundColorLayers({
             ),
           )
         : SizedBox.shrink(),
-    animationControllerOpacity != null && centeredTitleSmall == false
-        ? AnimatedBuilder(
-            animation: animationControllerOpacity,
-            builder: (_, child) {
-              return Opacity(
-                opacity: (animationControllerOpacity.value - 0.5) / 0.5,
-                child: child,
-              );
-            },
-            child: Container(
-              height: 1.2,
-              color: appBarBGColorCalculated,
-            ),
-          )
-        : SizedBox.shrink(),
-    centeredTitleSmall
+    centeredTitleSmall && appBarBackgroundColorStart == null
         ? SizedBox.shrink()
         : Container(
+            // Fixes backdrop not fading correctly when using Impeller (iOS - Flutter v3.13)
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height - 1,
+
             color: appBarBackgroundColorStart == null
                 ? Theme.of(context).canvasColor
                 : appBarBackgroundColorStart,
@@ -852,14 +848,16 @@ List<Widget> getAppBarBackgroundColorLayers({
         ? AnimatedBuilder(
             animation: animationControllerOpacity,
             builder: (_, child) {
-              if (printValues == true)
-                print((animationControllerOpacity.value - 0.5) / 0.5);
               return Opacity(
                 opacity: (animationControllerOpacity.value - 0.5) / 0.5,
                 child: child,
               );
             },
             child: Container(
+              // Fixes backdrop not fading correctly when using Impeller (iOS - Flutter v3.13)
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height - 1,
+
               color: appBarBGColorCalculated,
             ),
           )

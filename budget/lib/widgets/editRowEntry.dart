@@ -54,7 +54,8 @@ class EditRowEntry extends StatelessWidget {
             ? dynamicPastel(
                 context,
                 Theme.of(context).colorScheme.secondaryContainer,
-                amount: 0.5,
+                amountLight: 0.3,
+                amountDark: 0.6,
               )
             : getColor(context, "lightDarkAccentHeavyLight");
     double borderRadius = getPlatform() == PlatformOS.isIOS ? 0 : 18;
