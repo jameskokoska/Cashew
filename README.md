@@ -87,10 +87,19 @@ The translations are available here: https://docs.google.com/spreadsheets/d/1QQq
 ## Developer Notes
 
 ### Android Release
-* To build an app-bundle Android release, run `flutter build appbundle --release`
+* To build an app-bundle Android release, run `flutter build appbundle --release`.
+
+Note: required Android SDK.
+
+### iOS Release
+* To build an IPA iOS release, run `flutter build ipa`.
+
+Note: requires MacOS.
 
 ### Firebase Deployment
 * To deploy to firebase, run `firebase deploy`
+
+Note: required Firebase.
 
 ### Develop Wirelessly on Android
 * `adb tcpip 5555`
