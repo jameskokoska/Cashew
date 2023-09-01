@@ -361,7 +361,13 @@ class HeatMap extends StatelessWidget {
                                               decoration: BoxDecoration(
                                                 border: Border.all(
                                                   color: amount == null
-                                                      ? color.withOpacity(0.2)
+                                                      ? Theme.of(context)
+                                                                  .brightness ==
+                                                              Brightness.light
+                                                          ? color
+                                                              .withOpacity(0.05)
+                                                          : color
+                                                              .withOpacity(0.2)
                                                       : color.withOpacity(0.3),
                                                   width: 1,
                                                 ),

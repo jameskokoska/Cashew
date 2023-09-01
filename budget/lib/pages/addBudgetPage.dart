@@ -320,7 +320,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
     Future.delayed(Duration.zero, () async {
       if (widget.budget == null) {
         bool result = await premiumPopupBudgets(context);
-        if (result == true) {
+        if (result == true && widget.isAddedOnlyBudget != true) {
           openBottomSheet(
             context,
             fullSnap: false,

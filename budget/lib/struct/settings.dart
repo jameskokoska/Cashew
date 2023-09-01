@@ -263,7 +263,14 @@ void resetLanguageToSystem(BuildContext context) {
 }
 
 class TranslationsHelp extends StatelessWidget {
-  const TranslationsHelp({super.key});
+  const TranslationsHelp({
+    super.key,
+    this.showIcon = true,
+    this.backgroundColor,
+  });
+
+  final bool showIcon;
+  final Color? backgroundColor;
 
   @override
   Widget build(BuildContext context) {
@@ -271,20 +278,22 @@ class TranslationsHelp extends StatelessWidget {
       onTap: () {
         openUrl('mailto:dapperappdeveloper@gmail.com');
       },
-      color: Theme.of(context).colorScheme.secondaryContainer.withOpacity(0.7),
+      color: backgroundColor ??
+          Theme.of(context).colorScheme.secondaryContainer.withOpacity(0.7),
       borderRadius: getPlatform() == PlatformOS.isIOS ? 10 : 15,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 12),
         child: Row(
           children: [
-            Padding(
-              padding: const EdgeInsets.only(right: 12),
-              child: Icon(
-                Icons.connect_without_contact_rounded,
-                color: Theme.of(context).colorScheme.secondary,
-                size: 31,
+            if (showIcon)
+              Padding(
+                padding: const EdgeInsets.only(right: 12),
+                child: Icon(
+                  Icons.connect_without_contact_rounded,
+                  color: Theme.of(context).colorScheme.secondary,
+                  size: 31,
+                ),
               ),
-            ),
             Expanded(
               child: TextFont(
                 text: "",

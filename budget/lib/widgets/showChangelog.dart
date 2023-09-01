@@ -10,6 +10,11 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    < 4.1.1
+    Added translations team to About page
+    Select budget type popup only shown when not adding an initial Addable budget
+    Improved empty days color for heatmap
+    Fixed system color for launch screen on iOS
     < 4.1.0
     New category icons
     Category icons sorted by recommended name

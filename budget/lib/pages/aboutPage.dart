@@ -318,6 +318,34 @@ class AboutPage extends StatelessWidget {
           title: "exchange-rates-api".tr(),
           link: "https://github.com/fawazahmed0/currency-api",
         ),
+        Container(height: 15),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 7),
+          child: Center(
+            child: TextFont(
+              text: "translations".tr().capitalizeFirst,
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              textAlign: TextAlign.center,
+              maxLines: 5,
+            ),
+          ),
+        ),
+        AboutInfoBox(
+          title: "Italian",
+          list: ["Thomas B."],
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+          child: TranslationsHelp(
+            showIcon: false,
+            backgroundColor: (appStateSettings["materialYou"]
+                ? dynamicPastel(
+                    context, Theme.of(context).colorScheme.secondaryContainer,
+                    amountLight: 0, amountDark: 0.6)
+                : getColor(context, "lightDarkAccent")),
+          ),
+        ),
         SizedBox(height: 40),
         Row(
           children: [
@@ -435,13 +463,15 @@ class AboutInfoBox extends StatelessWidget {
   const AboutInfoBox({
     Key? key,
     required this.title,
-    required this.link,
+    this.link,
+    this.list,
     this.color,
     this.padding,
   }) : super(key: key);
 
   final String title;
-  final String link;
+  final String? link;
+  final List<String>? list;
   final Color? color;
   final EdgeInsets? padding;
 
@@ -452,10 +482,10 @@ class AboutInfoBox extends StatelessWidget {
           padding ?? const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
       child: Tappable(
         onTap: () async {
-          openUrl(link);
+          if (link != null) openUrl(link ?? "");
         },
         onLongPress: () {
-          copyToClipboard(link);
+          if (link != null) copyToClipboard(link ?? "");
         },
         color: color ??
             (appStateSettings["materialYou"]
@@ -476,12 +506,20 @@ class AboutInfoBox extends StatelessWidget {
                 maxLines: 5,
               ),
               SizedBox(height: 6),
-              TextFont(
-                text: link,
-                fontSize: 14,
-                textAlign: TextAlign.center,
-                textColor: getColor(context, "textLight"),
-              ),
+              if (link != null)
+                TextFont(
+                  text: link ?? "",
+                  fontSize: 14,
+                  textAlign: TextAlign.center,
+                  textColor: getColor(context, "textLight"),
+                ),
+              for (String item in list ?? [])
+                TextFont(
+                  text: item,
+                  fontSize: 14,
+                  textAlign: TextAlign.center,
+                  textColor: getColor(context, "textLight"),
+                ),
             ],
           ),
         ),
