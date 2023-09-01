@@ -605,6 +605,11 @@ class AssociatedTitleContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String titleName = title.title;
+    Color backgroundColor = appStateSettings["materialYou"]
+        ? dynamicPastel(
+            context, Theme.of(context).colorScheme.secondaryContainer,
+            amountLight: 0, amountDark: 0.6)
+        : getColor(context, "lightDarkAccent");
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 8.0),
@@ -627,7 +632,7 @@ class AssociatedTitleContainer extends StatelessWidget {
           );
         },
         borderRadius: 15,
-        color: getColor(context, "lightDarkAccent"),
+        color: backgroundColor,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -650,7 +655,7 @@ class AssociatedTitleContainer extends StatelessWidget {
                 );
               },
               borderRadius: 15,
-              color: getColor(context, "lightDarkAccent"),
+              color: backgroundColor,
               child: Padding(
                 padding: const EdgeInsets.all(14),
                 child: Icon(

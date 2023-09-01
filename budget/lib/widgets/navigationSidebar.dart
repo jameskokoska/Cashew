@@ -67,7 +67,11 @@ class NavigationSidebarState extends State<NavigationSidebar> {
         decoration: BoxDecoration(
           border: Border(
             right: BorderSide(
-              color: getColor(context, "lightDarkAccent"),
+              color: appStateSettings["materialYou"]
+                  ? dynamicPastel(
+                      context, Theme.of(context).colorScheme.secondaryContainer,
+                      amountLight: 0, amountDark: 0.6)
+                  : getColor(context, "lightDarkAccent"),
               width: 3,
             ),
           ),

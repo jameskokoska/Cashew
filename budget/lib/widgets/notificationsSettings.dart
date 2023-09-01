@@ -149,7 +149,11 @@ class _UpcomingTransactionsNotificationsSettingsState
               margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15),
-                color: getColor(context, "lightDarkAccent"),
+                color: appStateSettings["materialYou"]
+                    ? dynamicPastel(context,
+                        Theme.of(context).colorScheme.secondaryContainer,
+                        amountLight: 0, amountDark: 0.6)
+                    : getColor(context, "lightDarkAccent"),
               ),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(15),

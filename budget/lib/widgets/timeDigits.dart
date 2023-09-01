@@ -1,4 +1,5 @@
 import 'package:budget/colors.dart';
+import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -32,11 +33,16 @@ class TimeDigits extends StatelessWidget {
     minutes = timeOfDay.minute.toString().length == 1
         ? "0" + timeOfDay.minute.toString()
         : timeOfDay.minute.toString();
+    Color backgroundColor = appStateSettings["materialYou"]
+        ? dynamicPastel(
+            context, Theme.of(context).colorScheme.secondaryContainer,
+            amountLight: 0, amountDark: 0.6)
+        : getColor(context, "lightDarkAccent");
     return Row(
       children: [
         Container(
           decoration: BoxDecoration(
-            color: getColor(context, "lightDarkAccent"),
+            color: backgroundColor,
             borderRadius: BorderRadius.circular(5),
           ),
           padding: EdgeInsets.symmetric(horizontal: 7, vertical: 5),
@@ -56,7 +62,7 @@ class TimeDigits extends StatelessWidget {
         ),
         Container(
           decoration: BoxDecoration(
-            color: getColor(context, "lightDarkAccent"),
+            color: backgroundColor,
             borderRadius: BorderRadius.circular(5),
           ),
           padding: EdgeInsets.symmetric(horizontal: 7, vertical: 5),
@@ -73,7 +79,7 @@ class TimeDigits extends StatelessWidget {
             ? SizedBox.shrink()
             : Container(
                 decoration: BoxDecoration(
-                  color: getColor(context, "lightDarkAccent"),
+                  color: backgroundColor,
                   borderRadius: BorderRadius.circular(5),
                 ),
                 padding: EdgeInsets.symmetric(horizontal: 4, vertical: 5),

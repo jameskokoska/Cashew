@@ -226,7 +226,11 @@ class CurrencyItem extends StatelessWidget {
         borderRadius: 15,
         color: selected
             ? Theme.of(context).colorScheme.secondaryContainer
-            : getColor(context, "lightDarkAccent"),
+            : appStateSettings["materialYou"]
+                ? dynamicPastel(
+                    context, Theme.of(context).colorScheme.secondaryContainer,
+                    amountLight: 0.4, amountDark: 0.6)
+                : getColor(context, "lightDarkAccent"),
         child: AnimatedContainer(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(15),

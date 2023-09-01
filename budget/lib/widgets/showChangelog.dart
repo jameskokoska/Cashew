@@ -10,6 +10,8 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    < 4.0.8
+    Color fixes
     < 4.0.7
     Header color extended behind when swiping down to dismiss
     New header for iOS
