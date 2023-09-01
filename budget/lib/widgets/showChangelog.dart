@@ -10,6 +10,8 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    < 4.0.9
+    Fixed discard changes popup
     < 4.0.8
     Color fixes
     < 4.0.7

@@ -885,8 +885,7 @@ class BlurBehindAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (getPlatform() != PlatformOS.isIOS || appStateSettings["disableBlur"])
-      return child;
+    if (getPlatform() != PlatformOS.isIOS) return child;
     return ClipRect(
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
@@ -903,8 +902,7 @@ class BlurBehind extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (getPlatform() != PlatformOS.isIOS || appStateSettings["disableBlur"])
-      return child;
+    if (getPlatform() != PlatformOS.isIOS) return child;
     return ClipRRect(
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 0.5, sigmaY: 0.5),
