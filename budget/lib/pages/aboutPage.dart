@@ -457,11 +457,12 @@ class AboutInfoBox extends StatelessWidget {
         onLongPress: () {
           copyToClipboard(link);
         },
-        color: color ?? appStateSettings["materialYou"]
-            ? dynamicPastel(
-                context, Theme.of(context).colorScheme.secondaryContainer,
-                amountLight: 0, amountDark: 0.6)
-            : getColor(context, "lightDarkAccent"),
+        color: color ??
+            (appStateSettings["materialYou"]
+                ? dynamicPastel(
+                    context, Theme.of(context).colorScheme.secondaryContainer,
+                    amountLight: 0, amountDark: 0.6)
+                : getColor(context, "lightDarkAccent")),
         borderRadius: 15,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 15),
