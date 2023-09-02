@@ -530,5 +530,8 @@
   "no-budgets-found": "لم يتم العثور على ميزانيات.",
   "no-categories-found": "لم يتم العثور على فئات.",
   "no-wallets-found": "لم يتم العثور على محافظ.",
-  "no-titles-found": "لم يتم العثور على ألقاب."
+  "no-titles-found": "لم يتم العثور على ألقاب.",
+  "translations": "الترجمات",
+  "ask-for-notes-with-title": "اطلب ملاحظة مع العنوان",
+  "ask-for-notes-with-title-description": "عند إدخال العنوان"
 }

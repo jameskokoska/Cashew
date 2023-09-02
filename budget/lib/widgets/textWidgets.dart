@@ -87,6 +87,9 @@ class TextFont extends StatelessWidget {
                 )
               : richTextSpan != null
                   ? RichText(
+                      textAlign: textAlign,
+                      maxLines: maxLines,
+                      overflow: overflow ?? TextOverflow.ellipsis,
                       text: TextSpan(
                         text: textPassed,
                         children: richTextSpan,

@@ -530,5 +530,8 @@
   "no-budgets-found": "Bütçe bulunamadı.",
   "no-categories-found": "Kategori bulunamadı.",
   "no-wallets-found": "Cüzdan bulunamadı.",
-  "no-titles-found": "Başlık bulunamadı."
+  "no-titles-found": "Başlık bulunamadı.",
+  "translations": "Çeviriler",
+  "ask-for-notes-with-title": "Başlık ile not isteyin",
+  "ask-for-notes-with-title-description": "Başlığı girerken"
 }

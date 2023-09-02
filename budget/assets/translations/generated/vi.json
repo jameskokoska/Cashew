@@ -530,5 +530,8 @@
   "no-budgets-found": "Không tìm thấy ngân sách.",
   "no-categories-found": "Không tìm thấy danh mục.",
   "no-wallets-found": "Không tìm thấy ví.",
-  "no-titles-found": "Không tìm thấy tiêu đề."
+  "no-titles-found": "Không tìm thấy tiêu đề.",
+  "translations": "Bản dịch",
+  "ask-for-notes-with-title": "Yêu cầu ghi chú với tiêu đề",
+  "ask-for-notes-with-title-description": "Khi vào tiêu đề"
 }

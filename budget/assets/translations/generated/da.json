@@ -530,5 +530,8 @@
   "no-budgets-found": "Ingen budgetter fundet.",
   "no-categories-found": "Ingen kategorier fundet.",
   "no-wallets-found": "Ingen tegnebøger fundet.",
-  "no-titles-found": "Ingen titler fundet."
+  "no-titles-found": "Ingen titler fundet.",
+  "translations": "Oversættelser",
+  "ask-for-notes-with-title": "Bed om note med titlen",
+  "ask-for-notes-with-title-description": "Når du går ind i titlen"
 }

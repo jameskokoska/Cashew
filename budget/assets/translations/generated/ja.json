@@ -530,5 +530,8 @@
   "no-budgets-found": "予算は見つかりません。",
   "no-categories-found": "カテゴリは見つかりません。",
   "no-wallets-found": "ウォレットは見つかりません。",
-  "no-titles-found": "タイトルは見つかりませんでした。"
+  "no-titles-found": "タイトルは見つかりませんでした。",
+  "translations": "翻訳",
+  "ask-for-notes-with-title": "タイトルでメモを求めてください",
+  "ask-for-notes-with-title-description": "タイトルを入力するとき"
 }

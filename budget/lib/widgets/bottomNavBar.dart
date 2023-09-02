@@ -48,9 +48,11 @@ class BottomNavBarState extends State<BottomNavBar> {
     if (getPlatform() == PlatformOS.isIOS) {
       return Container(
         decoration: BoxDecoration(
-          color: dynamicPastel(
-              context, Theme.of(context).colorScheme.secondaryContainer,
-              amount: appStateSettings["materialYou"] ? 0.4 : 0.55),
+          color: getBottomNavbarBackgroundColor(
+            colorScheme: Theme.of(context).colorScheme,
+            brightness: Theme.of(context).brightness,
+            lightDarkAccent: getColor(context, "lightDarkAccent"),
+          ),
           boxShadow: boxShadowSharp(context),
         ),
         child: Column(
@@ -100,108 +102,18 @@ class BottomNavBarState extends State<BottomNavBar> {
         ),
       );
     }
-    if (appStateSettings["oldAndroidNavbar"] == true)
-      return Padding(
-        //Bottom padding is a container wrapped with absorb pointer
-        padding: const EdgeInsets.only(bottom: 0, left: 10, right: 10),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          mainAxisAlignment: MainAxisAlignment.end,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              constraints: BoxConstraints(
-                  maxWidth:
-                      MediaQuery.of(context).size.width >= 600 ? 350 : 600),
-              decoration: BoxDecoration(
-                boxShadow: boxShadowCheck(
-                  [
-                    BoxShadow(
-                      color: Theme.of(context).brightness == Brightness.light
-                          ? getColor(context, "shadowColorLight")
-                              .withOpacity(0.35)
-                          : Colors.black.withOpacity(0.8),
-                      blurRadius: 20,
-                      offset: Offset(0, 4),
-                      spreadRadius: 9,
-                    ),
-                  ],
-                ),
-              ),
-              child: Transform.translate(
-                offset: Offset(0, -MediaQuery.of(context).padding.bottom),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(15),
-                  child: NavigationBarTheme(
-                    data: NavigationBarThemeData(
-                      backgroundColor: appStateSettings["materialYou"]
-                          ? null
-                          : getColor(context, "lightDarkAccent"),
-                      surfaceTintColor: appStateSettings["materialYou"]
-                          ? null
-                          : getColor(context, "lightDarkAccent"),
-                      indicatorColor: appStateSettings["materialYou"]
-                          ? dynamicPastel(
-                              context, Theme.of(context).colorScheme.primary,
-                              amount: 0.6)
-                          : null,
-                      labelBehavior:
-                          NavigationDestinationLabelBehavior.alwaysHide,
-                      height: 50,
-                    ),
-                    child: Transform.translate(
-                      offset: Offset(0, MediaQuery.of(context).padding.bottom),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(15),
-                        child: NavigationBar(
-                          animationDuration: Duration(milliseconds: 1000),
-                          destinations: [
-                            NavigationDestination(
-                              icon: Icon(Icons.home_rounded),
-                              label: "home".tr(),
-                            ),
-                            NavigationDestination(
-                              icon: Icon(Icons.payments_rounded),
-                              label: "transactions".tr(),
-                            ),
-                            NavigationDestination(
-                              icon: Icon(MoreIcons.chart_pie, size: 20),
-                              label: "budgets".tr(),
-                            ),
-                            NavigationDestination(
-                              icon: Icon(Icons.more_horiz_rounded),
-                              label: "more-actions".tr(),
-                            ),
-                          ],
-                          selectedIndex: selectedIndex,
-                          onDestinationSelected: onItemTapped,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            AbsorbPointer(
-              child: Container(
-                height: MediaQuery.of(context).viewPadding.bottom > 10 ? 0 : 10,
-              ),
-            ),
-          ],
-        ),
-      );
     return Container(
       decoration: BoxDecoration(
         boxShadow: boxShadowSharp(context),
       ),
       child: NavigationBarTheme(
         data: NavigationBarThemeData(
-          backgroundColor: appStateSettings["materialYou"]
-              ? null
-              : getColor(context, "lightDarkAccent"),
-          surfaceTintColor: appStateSettings["materialYou"]
-              ? null
-              : getColor(context, "lightDarkAccent"),
+          backgroundColor: getBottomNavbarBackgroundColor(
+            colorScheme: Theme.of(context).colorScheme,
+            brightness: Theme.of(context).brightness,
+            lightDarkAccent: getColor(context, "lightDarkAccent"),
+          ),
+          surfaceTintColor: Colors.transparent,
           indicatorColor: appStateSettings["materialYou"]
               ? dynamicPastel(context, Theme.of(context).colorScheme.primary,
                   amount: 0.6)

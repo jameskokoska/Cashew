@@ -161,10 +161,12 @@ class GlobalSnackbarState extends State<GlobalSnackbar>
                 margin: EdgeInsets.symmetric(horizontal: 15),
                 decoration: BoxDecoration(boxShadow: [
                   BoxShadow(
-                    color: getColor(context, "shadowColorLight"),
-                    blurRadius: 20,
+                    color: Theme.of(context).brightness == Brightness.light
+                        ? getColor(context, "shadowColorLight")
+                        : getColor(context, "shadowColor").withOpacity(0.1),
+                    blurRadius: 15,
                     offset: Offset(0, 0),
-                    spreadRadius: 3,
+                    spreadRadius: 2,
                   ),
                 ]),
                 child: Tappable(
@@ -177,7 +179,7 @@ class GlobalSnackbarState extends State<GlobalSnackbar>
                     color: appStateSettings["materialYou"]
                         ? dynamicPastel(context,
                             Theme.of(context).colorScheme.secondaryContainer,
-                            amountLight: 1, amountDark: 0)
+                            amountLight: 1, amountDark: 0.4)
                         : getColor(context, "lightDarkAccent"),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(

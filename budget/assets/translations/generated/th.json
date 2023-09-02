@@ -530,5 +530,8 @@
   "no-budgets-found": "ไม่พบงบประมาณ",
   "no-categories-found": "ไม่พบหมวดหมู่",
   "no-wallets-found": "ไม่พบกระเป๋าเงิน",
-  "no-titles-found": "ไม่พบชื่อเรื่อง"
+  "no-titles-found": "ไม่พบชื่อเรื่อง",
+  "translations": "การแปล",
+  "ask-for-notes-with-title": "ขอบันทึกด้วยชื่อเรื่อง",
+  "ask-for-notes-with-title-description": "เมื่อป้อนชื่อ"
 }

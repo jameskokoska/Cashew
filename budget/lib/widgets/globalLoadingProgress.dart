@@ -24,22 +24,42 @@ class GlobalLoadingProgressState extends State<GlobalLoadingProgress> {
 
   @override
   Widget build(BuildContext context) {
+    // Make the loading bar height slightly higher than the indeterminate progress
+    // to ensure it gets covered fully
+    double loadingBarHeight = 3.1;
     return Align(
       alignment: getIsFullScreen(context) == false
           ? Alignment.bottomLeft
           : Alignment.topCenter,
-      child: AnimatedContainer(
+      child: AnimatedOpacity(
+        opacity: progressPercentage <= 0 || progressPercentage >= 1 ? 0 : 1,
         duration: Duration(milliseconds: 300),
-        curve: Curves.easeInOut,
-        height: progressPercentage <= 0 || progressPercentage >= 1 ? 0 : 3,
-        width: MediaQuery.of(context).size.width * progressPercentage,
-        decoration: BoxDecoration(
-          color: dynamicPastel(context, Theme.of(context).colorScheme.primary,
-              amount: 0.5),
-          borderRadius: BorderRadius.only(
-            bottomRight: Radius.circular(5),
-            topRight: Radius.circular(5),
-          ),
+        child: Stack(
+          children: [
+            Container(
+              color: getBottomNavbarBackgroundColor(
+                brightness: Theme.of(context).brightness,
+                colorScheme: Theme.of(context).colorScheme,
+                lightDarkAccent: getColor(context, "lightDarkAccent"),
+              ),
+              height: loadingBarHeight,
+            ),
+            AnimatedContainer(
+              duration: Duration(milliseconds: 300),
+              curve: Curves.easeInOut,
+              height: loadingBarHeight,
+              width: MediaQuery.of(context).size.width * progressPercentage,
+              decoration: BoxDecoration(
+                color: dynamicPastel(
+                    context, Theme.of(context).colorScheme.primary,
+                    amount: 0.5),
+                borderRadius: BorderRadius.only(
+                  bottomRight: Radius.circular(5),
+                  topRight: Radius.circular(5),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -107,7 +127,11 @@ class GlobalLoadingIndeterminateState
                 color: dynamicPastel(
                     context, Theme.of(context).colorScheme.primary,
                     amount: 0.5),
-                backgroundColor: getColor(context, "white"),
+                backgroundColor: getBottomNavbarBackgroundColor(
+                  brightness: Theme.of(context).brightness,
+                  colorScheme: Theme.of(context).colorScheme,
+                  lightDarkAccent: getColor(context, "lightDarkAccent"),
+                ),
                 minHeight: 3,
               ),
             ),

@@ -530,5 +530,8 @@
   "no-budgets-found": "బడ్జెట్లు కనుగొనబడలేదు.",
   "no-categories-found": "వర్గాలు ఏవీ కనుగొనబడలేదు.",
   "no-wallets-found": "వాలెట్లు కనుగొనబడలేదు.",
-  "no-titles-found": "శీర్షికలు కనుగొనబడలేదు."
+  "no-titles-found": "శీర్షికలు కనుగొనబడలేదు.",
+  "translations": "అనువాదాలు",
+  "ask-for-notes-with-title": "శీర్షికతో గమనిక కోసం అడగండి",
+  "ask-for-notes-with-title-description": "శీర్షికను నమోదు చేసేటప్పుడు"
 }

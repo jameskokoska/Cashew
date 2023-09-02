@@ -1255,7 +1255,7 @@ class CategoryAverageSpent extends StatelessWidget {
                 borderRadius: 1000,
               ),
               SizedBox(
-                width: 10,
+                width: 12,
               ),
               Expanded(
                 child: Container(
@@ -1266,7 +1266,7 @@ class CategoryAverageSpent extends StatelessWidget {
                       TextFont(
                         text: category.name,
                         fontSize: 17,
-                        maxLines: 2,
+                        maxLines: 1,
                       ),
                       SizedBox(
                         height: 1,
@@ -1289,7 +1289,7 @@ class CategoryAverageSpent extends StatelessWidget {
                                                   .abs()) +
                                       " " +
                                       "average-spent".tr().toLowerCase(),
-                                  fontSize: 13,
+                                  fontSize: 14,
                                   textColor: getColor(context, "textLight"),
                                 );
                               },
@@ -1312,6 +1312,7 @@ class CategoryAverageSpent extends StatelessWidget {
                   ),
                 ),
               ),
+              SizedBox(width: 10),
               CountNumber(
                 count: amountSpent.abs(),
                 duration: Duration(milliseconds: 400),

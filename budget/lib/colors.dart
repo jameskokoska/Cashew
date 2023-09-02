@@ -1,7 +1,9 @@
 import 'package:budget/functions.dart';
 import 'package:budget/struct/settings.dart';
+import 'package:budget/widgets/bottomNavBar.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:path/path.dart';
 import 'package:system_theme/system_theme.dart';
 
@@ -55,18 +57,10 @@ generateColors() {
       "lightDarkAccentHeavy": Color(0xFFEBEBEB),
       "shadowColor": const Color(0x655A5A5A),
       "shadowColorLight": const Color(0x2D5A5A5A), //
-      "unPaidUpcoming": appStateSettings["legacyTransactionAmountColors"]
-          ? Color(0xFFE2CE13)
-          : Color(0xFF58A4C2),
-      "unPaidOverdue": appStateSettings["legacyTransactionAmountColors"]
-          ? Color(0xFFEB4848)
-          : Color(0xFF6577E0),
-      "incomeAmount": appStateSettings["legacyTransactionAmountColors"]
-          ? Color(0xFF59A849)
-          : Color(0xFF59A849),
-      "expenseAmount": appStateSettings["legacyTransactionAmountColors"]
-          ? Colors.black
-          : Color(0xFFCA5A5A),
+      "unPaidUpcoming": Color(0xFF58A4C2),
+      "unPaidOverdue": Color(0xFF6577E0),
+      "incomeAmount": Color(0xFF59A849),
+      "expenseAmount": Color(0xFFCA5A5A),
       "starYellow": Color(0xFFFFD723),
       "dividerColor": appStateSettings["materialYou"]
           ? Color(0x0F000000)
@@ -93,18 +87,10 @@ generateColors() {
       "shadowColorLight": appStateSettings["materialYou"]
           ? Colors.transparent
           : Color(0x28747474),
-      "unPaidUpcoming": appStateSettings["legacyTransactionAmountColors"]
-          ? Color(0xFFDED583)
-          : Color(0xFF7DB6CC),
-      "unPaidOverdue": appStateSettings["legacyTransactionAmountColors"]
-          ? Color(0xFFDE8383)
-          : Color(0xFF8395FF),
-      "incomeAmount": appStateSettings["legacyTransactionAmountColors"]
-          ? Color(0xFF62CA77)
-          : Color(0xFF62CA77),
-      "expenseAmount": appStateSettings["legacyTransactionAmountColors"]
-          ? Colors.white
-          : Color(0xFFDA7272),
+      "unPaidUpcoming": Color(0xFF7DB6CC),
+      "unPaidOverdue": Color(0xFF8395FF),
+      "incomeAmount": Color(0xFF62CA77),
+      "expenseAmount": Color(0xFFDA7272),
       "starYellow": Colors.yellow,
       "dividerColor": appStateSettings["materialYou"]
           ? Color(0x13FFFFFF)
@@ -311,4 +297,84 @@ bool supportsSystemColor() {
   return defaultTargetPlatform.supportsAccentColor &&
       kIsWeb == false &&
       getPlatform() != PlatformOS.isIOS;
+}
+
+getColorScheme(Brightness brightness) {
+  if (brightness == Brightness.light) {
+    return ColorScheme.fromSeed(
+      seedColor: getSettingConstants(appStateSettings)["accentColor"],
+      brightness: Brightness.light,
+      background: appStateSettings["materialYou"]
+          ? lightenPastel(getSettingConstants(appStateSettings)["accentColor"],
+              amount: 0.91)
+          : Colors.white,
+    );
+  } else {
+    return ColorScheme.fromSeed(
+      seedColor: getSettingConstants(appStateSettings)["accentColor"],
+      brightness: Brightness.dark,
+      background: appStateSettings["materialYou"]
+          ? darkenPastel(getSettingConstants(appStateSettings)["accentColor"],
+              amount: 0.92)
+          : Colors.black,
+    );
+  }
+}
+
+SystemUiOverlayStyle getSystemUiOverlayStyle(Brightness brightness) {
+  if (brightness == Brightness.light) {
+    return SystemUiOverlayStyle(
+      statusBarBrightness: Brightness.light,
+      systemStatusBarContrastEnforced: false,
+      statusBarIconBrightness: Brightness.dark,
+      statusBarColor: kIsWeb ? Colors.black : Colors.transparent,
+      systemNavigationBarIconBrightness: Brightness.dark,
+      systemNavigationBarColor: getBottomNavbarBackgroundColor(
+        colorScheme: getColorScheme(brightness),
+        brightness: Brightness.light,
+        lightDarkAccent: appColorsLight.colors["lightDarkAccent"] ?? Colors.red,
+      ),
+    );
+  } else {
+    return SystemUiOverlayStyle(
+      statusBarBrightness: Brightness.dark,
+      systemStatusBarContrastEnforced: false,
+      statusBarIconBrightness: Brightness.light,
+      statusBarColor: kIsWeb ? Colors.black : Colors.transparent,
+      systemNavigationBarIconBrightness: Brightness.light,
+      systemNavigationBarColor: getBottomNavbarBackgroundColor(
+        colorScheme: getColorScheme(brightness),
+        brightness: Brightness.dark,
+        lightDarkAccent: appColorsDark.colors["lightDarkAccent"] ?? Colors.red,
+      ),
+    );
+  }
+}
+
+Color getBottomNavbarBackgroundColor({
+  required ColorScheme colorScheme,
+  required Brightness brightness,
+  required Color lightDarkAccent,
+}) {
+  if (getPlatform() == PlatformOS.isIOS) {
+    return brightness == Brightness.light
+        ? lightenPastel(colorScheme.secondaryContainer,
+            amount: appStateSettings["materialYou"] ? 0.4 : 0.55)
+        : darkenPastel(colorScheme.secondaryContainer,
+            amount: appStateSettings["materialYou"] ? 0.4 : 0.55);
+  } else if (appStateSettings["materialYou"] == true) {
+    if (brightness == Brightness.light) {
+      return lightenPastel(
+        colorScheme.secondaryContainer,
+        amount: 0.4,
+      );
+    } else {
+      return darkenPastel(
+        colorScheme.secondaryContainer,
+        amount: 0.45,
+      );
+    }
+  } else {
+    return lightDarkAccent;
+  }
 }

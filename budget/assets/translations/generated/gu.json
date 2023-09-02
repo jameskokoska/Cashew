@@ -530,5 +530,8 @@
   "no-budgets-found": "કોઈ બજેટ મળ્યું નથી.",
   "no-categories-found": "કોઈ વર્ગો મળી નથી.",
   "no-wallets-found": "કોઈ વ lets લેટ્સ મળ્યાં નથી.",
-  "no-titles-found": "કોઈ ટાઇટલ મળ્યાં નથી."
+  "no-titles-found": "કોઈ ટાઇટલ મળ્યાં નથી.",
+  "translations": "ભાષાંતર",
+  "ask-for-notes-with-title": "શીર્ષક સાથે નોંધ માટે પૂછો",
+  "ask-for-notes-with-title-description": "જ્યારે શીર્ષક દાખલ કરો"
 }

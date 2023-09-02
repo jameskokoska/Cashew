@@ -1928,7 +1928,8 @@ class _SelectTitleState extends State<SelectTitle> {
                     ),
                   ),
           ),
-          getIsFullScreen(context)
+          getIsFullScreen(context) ||
+                  appStateSettings["askForTransactionNoteWithTitle"]
               ? Padding(
                   padding: const EdgeInsets.only(top: 13),
                   child: Container(

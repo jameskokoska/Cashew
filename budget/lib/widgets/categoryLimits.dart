@@ -210,57 +210,54 @@ class _CategoryLimitEntryState extends State<CategoryLimitEntry> {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 3),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Row(
-              children: [
-                CategoryIconPercent(
-                  category: widget.category,
-                  percent: widget.isAbsoluteSpendingLimit
-                      ? (widget.budgetLimit == 0
-                          ? 0
-                          : (selectedAmount / widget.budgetLimit) * 100)
-                      : selectedAmount,
-                  progressBackgroundColor:
-                      getColor(context, "lightDarkAccentHeavy"),
-                  size: 28,
-                  insetPadding: 18,
-                ),
-                SizedBox(
-                  width: 13,
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    TextFont(
-                      text: widget.category.name,
-                      fontSize: 18,
-                    ),
-                    SizedBox(
-                      height: 1,
-                    ),
-                    TextFont(
-                      text: widget.isAbsoluteSpendingLimit
-                          ? (widget.budgetLimit == 0
-                                  ? "0"
-                                  : ((selectedAmount / widget.budgetLimit) *
-                                          100)
-                                      .toInt()
-                                      .toString()) +
-                              "%" +
-                              " " +
-                              "of-budget".tr()
-                          : (convertToMoney(Provider.of<AllWallets>(context),
-                                  widget.budgetLimit * selectedAmount / 100) +
-                              " " +
-                              "of-budget".tr()),
-                      fontSize: 14,
-                      textColor: getColor(context, "textLight"),
-                    ),
-                  ],
-                ),
-              ],
+            CategoryIconPercent(
+              category: widget.category,
+              percent: widget.isAbsoluteSpendingLimit
+                  ? (widget.budgetLimit == 0
+                      ? 0
+                      : (selectedAmount / widget.budgetLimit) * 100)
+                  : selectedAmount,
+              progressBackgroundColor:
+                  getColor(context, "lightDarkAccentHeavy"),
+              size: 28,
+              insetPadding: 18,
             ),
+            SizedBox(
+              width: 13,
+            ),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  TextFont(
+                    text: widget.category.name,
+                    fontSize: 17,
+                  ),
+                  SizedBox(
+                    height: 1,
+                  ),
+                  TextFont(
+                    text: widget.isAbsoluteSpendingLimit
+                        ? (widget.budgetLimit == 0
+                                ? "0"
+                                : ((selectedAmount / widget.budgetLimit) * 100)
+                                    .toInt()
+                                    .toString()) +
+                            "%" +
+                            " " +
+                            "of-budget".tr()
+                        : (convertToMoney(Provider.of<AllWallets>(context),
+                                widget.budgetLimit * selectedAmount / 100) +
+                            " " +
+                            "of-budget".tr()),
+                    fontSize: 14,
+                    textColor: getColor(context, "textLight"),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(width: 10),
             TappableTextEntry(
               title: widget.isAbsoluteSpendingLimit
                   ? convertToMoney(

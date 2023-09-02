@@ -530,5 +530,8 @@
   "no-budgets-found": "예산이 발견되지 않았습니다.",
   "no-categories-found": "범주가 없습니다.",
   "no-wallets-found": "지갑이 없습니다.",
-  "no-titles-found": "제목이 없습니다."
+  "no-titles-found": "제목이 없습니다.",
+  "translations": "번역",
+  "ask-for-notes-with-title": "제목으로 메모를 요청하십시오",
+  "ask-for-notes-with-title-description": "제목을 입력 할 때"
 }

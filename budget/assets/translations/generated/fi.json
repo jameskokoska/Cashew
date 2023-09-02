@@ -530,5 +530,8 @@
   "no-budgets-found": "Ei löytynyt budjetteja.",
   "no-categories-found": "Luokkia ei löydy.",
   "no-wallets-found": "Ei lompakkoja löydetty.",
-  "no-titles-found": "Ei nimikkeitä löydetty."
+  "no-titles-found": "Ei nimikkeitä löydetty.",
+  "translations": "Käännökset",
+  "ask-for-notes-with-title": "Pyydä muistiinpanoa otsikolla",
+  "ask-for-notes-with-title-description": "Otsikkoon siirryttäessä"
 }

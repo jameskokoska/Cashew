@@ -10,6 +10,7 @@ import 'package:budget/struct/defaultPreferences.dart';
 import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:budget/struct/languageMap.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
@@ -51,8 +52,9 @@ Future<bool> initializeSettings() async {
   packageInfoGlobal = await PackageInfo.fromPlatform();
 
   // Do some actions based on loaded settings
-
-  appStateSettings["accentColor"] = await getAccentColorSystemString();
+  if (appStateSettings["accentSystemColor"] == true) {
+    appStateSettings["accentColor"] = await getAccentColorSystemString();
+  }
 
   // Disable sync every change is not on web
   // It will still sync when user pulls down to refresh
@@ -298,6 +300,8 @@ class TranslationsHelp extends StatelessWidget {
               child: TextFont(
                 text: "",
                 textColor: getColor(context, "black"),
+                textAlign:
+                    showIcon == true ? TextAlign.start : TextAlign.center,
                 richTextSpan: [
                   TextSpan(
                     text: "translations-help".tr() + " ",

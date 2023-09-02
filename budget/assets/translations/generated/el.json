@@ -530,5 +530,8 @@
   "no-budgets-found": "Δεν βρέθηκαν προϋπολογισμοί.",
   "no-categories-found": "Δεν βρέθηκαν κατηγορίες.",
   "no-wallets-found": "Δεν βρέθηκαν πορτοφόλια.",
-  "no-titles-found": "Δεν βρέθηκαν τίτλοι."
+  "no-titles-found": "Δεν βρέθηκαν τίτλοι.",
+  "translations": "Μεταφράσεις",
+  "ask-for-notes-with-title": "Ζητήστε σημείωση με τίτλο",
+  "ask-for-notes-with-title-description": "Κατά την είσοδο στον τίτλο"
 }

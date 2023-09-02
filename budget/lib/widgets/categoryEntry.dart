@@ -142,35 +142,34 @@ class CategoryEntry extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        TextFont(
-                          text: category.name,
-                          fontSize: 17,
-                          maxLines: 2,
+                        Expanded(
+                          child: TextFont(
+                            text: category.name,
+                            fontSize: 17,
+                            maxLines: 1,
+                          ),
                         ),
+                        SizedBox(width: 10),
+                        categorySpent == 0 || showIncomeExpenseIcons == false
+                            ? SizedBox.shrink()
+                            : Transform.translate(
+                                offset: Offset(3, 0),
+                                child: Transform.rotate(
+                                  angle: categorySpent >= 0 ? pi : 0,
+                                  child: Icon(
+                                    Icons.arrow_drop_down_rounded,
+                                    color: showIncomeExpenseIcons
+                                        ? categorySpent > 0
+                                            ? getColor(context, "incomeAmount")
+                                            : getColor(context, "expenseAmount")
+                                        : getColor(context, "black"),
+                                  ),
+                                ),
+                              ),
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
-                            categorySpent == 0 ||
-                                    showIncomeExpenseIcons == false
-                                ? SizedBox.shrink()
-                                : Transform.translate(
-                                    offset: Offset(3, 0),
-                                    child: Transform.rotate(
-                                      angle: categorySpent >= 0 ? pi : 0,
-                                      child: Icon(
-                                        Icons.arrow_drop_down_rounded,
-                                        color: showIncomeExpenseIcons
-                                            ? categorySpent > 0
-                                                ? getColor(
-                                                    context, "incomeAmount")
-                                                : getColor(
-                                                    context, "expenseAmount")
-                                            : getColor(context, "black"),
-                                      ),
-                                    ),
-                                  ),
                             TextFont(
                               fontWeight: FontWeight.bold,
                               text: convertToMoney(
@@ -209,7 +208,6 @@ class CategoryEntry extends StatelessWidget {
                       height: 1,
                     ),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Expanded(
                           child: categoryBudgetLimit != null
@@ -275,7 +273,7 @@ class CategoryEntry extends StatelessWidget {
                               (transactionCount == 1
                                   ? "transaction".tr().toLowerCase()
                                   : "transactions".tr().toLowerCase()),
-                          fontSize: 13,
+                          fontSize: 14,
                           textColor: selected
                               ? getColor(context, "black").withOpacity(0.4)
                               : getColor(context, "textLight"),

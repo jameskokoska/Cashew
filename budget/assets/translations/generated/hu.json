@@ -530,5 +530,8 @@
   "no-budgets-found": "Nincs költségvetés.",
   "no-categories-found": "Nincsenek kategóriák.",
   "no-wallets-found": "Nincs pénztárca.",
-  "no-titles-found": "Nincs cím."
+  "no-titles-found": "Nincs cím.",
+  "translations": "Fordítás",
+  "ask-for-notes-with-title": "Kérjen jegyzetet a címmel",
+  "ask-for-notes-with-title-description": "Amikor beírja a címet"
 }

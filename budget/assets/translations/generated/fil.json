@@ -530,5 +530,8 @@
   "no-budgets-found": "Walang nahanap na badyet.",
   "no-categories-found": "Walang nahanap na kategorya.",
   "no-wallets-found": "Walang nahanap na mga pitaka.",
-  "no-titles-found": "Walang nahanap na pamagat."
+  "no-titles-found": "Walang nahanap na pamagat.",
+  "translations": "Mga Pagsasalin",
+  "ask-for-notes-with-title": "Humingi ng tala na may pamagat",
+  "ask-for-notes-with-title-description": "Kapag pumapasok sa pamagat"
 }

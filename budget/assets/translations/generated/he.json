@@ -530,5 +530,8 @@
   "no-budgets-found": "לא נמצא תקציבים.",
   "no-categories-found": "לא נמצאו קטגוריות.",
   "no-wallets-found": "לא נמצא ארנקים.",
-  "no-titles-found": "לא נמצאו כותרות."
+  "no-titles-found": "לא נמצאו כותרות.",
+  "translations": "תרגומים",
+  "ask-for-notes-with-title": "בקש הערה עם הכותרת",
+  "ask-for-notes-with-title-description": "כשנכנסים לתואר"
 }

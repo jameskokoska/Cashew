@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:budget/functions.dart';
 import 'package:budget/struct/iconObjects.dart';
 import 'package:budget/struct/keyboardIntents.dart';
+import 'package:budget/widgets/bottomNavBar.dart';
 import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/struct/languageMap.dart';
 import 'package:budget/struct/initializeBiometrics.dart';
@@ -116,6 +117,7 @@ class App extends StatelessWidget {
     // FeatureDiscovery(
     //   child:
     print("Rebuilt Material App");
+
     return MaterialApp(
       showPerformanceOverlay: kProfileMode,
       localizationsDelegates: context.localizationDelegates,
@@ -137,15 +139,7 @@ class App extends StatelessWidget {
           TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
         }),
         fontFamily: appStateSettings["font"],
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: getSettingConstants(appStateSettings)["accentColor"],
-          brightness: Brightness.light,
-          background: appStateSettings["materialYou"]
-              ? lightenPastel(
-                  getSettingConstants(appStateSettings)["accentColor"],
-                  amount: 0.91)
-              : Colors.white,
-        ),
+        colorScheme: getColorScheme(Brightness.light),
         useMaterial3: true,
         applyElevationOverlayColor: false,
         typography: Typography.material2014(),
@@ -155,11 +149,7 @@ class App extends StatelessWidget {
                 amount: 0.91)
             : Colors.white,
         appBarTheme: AppBarTheme(
-          systemOverlayStyle: SystemUiOverlayStyle(
-            statusBarBrightness: Brightness.light,
-            statusBarIconBrightness: Brightness.dark,
-            statusBarColor: kIsWeb ? Colors.black : Colors.transparent,
-          ),
+          systemOverlayStyle: getSystemUiOverlayStyle(Brightness.light),
         ),
         splashColor: appStateSettings["materialYou"]
             ? darkenPastel(
@@ -180,15 +170,7 @@ class App extends StatelessWidget {
           TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
         }),
         fontFamily: appStateSettings["font"],
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: getSettingConstants(appStateSettings)["accentColor"],
-          brightness: Brightness.dark,
-          background: appStateSettings["materialYou"]
-              ? darkenPastel(
-                  getSettingConstants(appStateSettings)["accentColor"],
-                  amount: 0.92)
-              : Colors.black,
-        ),
+        colorScheme: getColorScheme(Brightness.dark),
         useMaterial3: true,
         typography: Typography.material2014(),
         canvasColor: appStateSettings["materialYou"]
@@ -196,11 +178,7 @@ class App extends StatelessWidget {
                 amount: 0.92)
             : Colors.black,
         appBarTheme: AppBarTheme(
-          systemOverlayStyle: SystemUiOverlayStyle(
-            statusBarBrightness: Brightness.dark,
-            statusBarIconBrightness: Brightness.light,
-            statusBarColor: kIsWeb ? Colors.black : Colors.transparent,
-          ),
+          systemOverlayStyle: getSystemUiOverlayStyle(Brightness.dark),
         ),
         splashColor: getPlatform() == PlatformOS.isIOS
             ? Colors.transparent
@@ -353,8 +331,8 @@ class App extends StatelessWidget {
                   ),
                   NavigationSidebar(key: sidebarStateKey),
                   // The persistent global Widget stack (stays on navigation change)
+                  GlobalLoadingIndeterminate(key: loadingIndeterminateKey),
                   GlobalLoadingProgress(key: loadingProgressKey),
-                  GlobalLoadingIndeterminate(key: loadingIndeterminateKey)
                 ],
               ),
             ),

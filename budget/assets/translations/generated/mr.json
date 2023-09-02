@@ -530,5 +530,8 @@
   "no-budgets-found": "कोणतेही बजेट सापडले नाही.",
   "no-categories-found": "कोणत्याही श्रेणी आढळल्या नाहीत.",
   "no-wallets-found": "कोणतीही पाकीट सापडली नाहीत.",
-  "no-titles-found": "कोणतीही शीर्षके सापडली नाहीत."
+  "no-titles-found": "कोणतीही शीर्षके सापडली नाहीत.",
+  "translations": "भाषांतर",
+  "ask-for-notes-with-title": "शीर्षकासह नोटसाठी विचारा",
+  "ask-for-notes-with-title-description": "शीर्षक प्रविष्ट करताना"
 }

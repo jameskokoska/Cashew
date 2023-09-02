@@ -530,5 +530,8 @@
   "no-budgets-found": "Nebyly nalezeny žádné rozpočty.",
   "no-categories-found": "Žádné kategorie nalezeny.",
   "no-wallets-found": "Nalezeny žádné peněženky.",
-  "no-titles-found": "Žádné tituly."
+  "no-titles-found": "Žádné tituly.",
+  "translations": "Překlady",
+  "ask-for-notes-with-title": "Požádejte o poznámku s názvem",
+  "ask-for-notes-with-title-description": "Při vstupu do názvu"
 }

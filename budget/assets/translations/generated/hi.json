@@ -530,5 +530,8 @@
   "no-budgets-found": "कोई बजट नहीं मिला।",
   "no-categories-found": "कोई श्रेणियां नहीं मिली।",
   "no-wallets-found": "कोई बटुए नहीं मिला।",
-  "no-titles-found": "कोई शीर्षक नहीं मिला।"
+  "no-titles-found": "कोई शीर्षक नहीं मिला।",
+  "translations": "अनुवाद",
+  "ask-for-notes-with-title": "शीर्षक के साथ नोट के लिए पूछें",
+  "ask-for-notes-with-title-description": "शीर्षक में प्रवेश करते समय"
 }

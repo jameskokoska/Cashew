@@ -530,5 +530,8 @@
   "no-budgets-found": "Inga budgetar hittades.",
   "no-categories-found": "Inga kategorier hittades.",
   "no-wallets-found": "Inga plånböcker hittades.",
-  "no-titles-found": "Inga titlar hittades."
+  "no-titles-found": "Inga titlar hittades.",
+  "translations": "Översättningar",
+  "ask-for-notes-with-title": "Be om anteckning med titel",
+  "ask-for-notes-with-title-description": "När du går in i titeln"
 }

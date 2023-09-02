@@ -530,5 +530,8 @@
   "no-budgets-found": "找不到预算。",
   "no-categories-found": "找不到类别。",
   "no-wallets-found": "找不到钱包。",
-  "no-titles-found": "找不到标题。"
+  "no-titles-found": "找不到标题。",
+  "translations": "翻译",
+  "ask-for-notes-with-title": "索要标题",
+  "ask-for-notes-with-title-description": "输入标题时"
 }

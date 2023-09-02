@@ -28,10 +28,7 @@ class DebugPage extends StatelessWidget {
     return PageFramework(
       dragDownToDismiss: true,
       title: "Debug Flags",
-      subtitle: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 20),
-        child: TextFont(text: "Use at your own risk"),
-      ),
+      subtitle: TextFont(text: "Use at your own risk"),
       subtitleAlignment: Alignment.bottomLeft,
       subtitleSize: 10,
       listWidgets: [
@@ -189,16 +186,6 @@ class DebugPage extends StatelessWidget {
           },
           icon: Icons.all_inbox_rounded,
         ),
-        SettingsContainerSwitch(
-          title: "Old Android Navbar",
-          description: "Change the navbar style when on Android theme",
-          onSwitched: (value) {
-            updateSettings("oldAndroidNavbar", value,
-                pagesNeedingRefresh: [1], updateGlobalState: false);
-          },
-          initialValue: appStateSettings["oldAndroidNavbar"],
-          icon: Icons.dock_rounded,
-        ),
 
         SettingsContainerSwitch(
           title: "Emulate iOS",
@@ -229,18 +216,6 @@ class DebugPage extends StatelessWidget {
           },
           initialValue: appStateSettings["iOSNavigation"],
           icon: Icons.apple_rounded,
-        ),
-        SettingsContainerSwitch(
-          onSwitched: (value) async {
-            updateSettings("legacyTransactionAmountColors", value,
-                updateGlobalState: true);
-            generateColors();
-          },
-          title: "Legacy transaction amount colors",
-          description:
-              "Use a less traditional transaction amount color scheme.",
-          initialValue: appStateSettings["legacyTransactionAmountColors"],
-          icon: Icons.color_lens,
         ),
         SettingsContainerSwitch(
           onSwitched: (value) async {

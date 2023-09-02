@@ -530,5 +530,8 @@
   "no-budgets-found": "Бюджетів не знайдено.",
   "no-categories-found": "Категорій не знайдено.",
   "no-wallets-found": "Не знайдено гаманців.",
-  "no-titles-found": "Натлів не знайдено."
+  "no-titles-found": "Натлів не знайдено.",
+  "translations": "Переклади",
+  "ask-for-notes-with-title": "Попросіть записку з заголовком",
+  "ask-for-notes-with-title-description": "При введенні назви"
 }

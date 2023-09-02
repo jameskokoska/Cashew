@@ -321,23 +321,59 @@ class AutoTitlesToggle extends StatelessWidget {
   }
 }
 
-class AskForTitlesToggle extends StatelessWidget {
+class AskForTitlesToggle extends StatefulWidget {
   const AskForTitlesToggle({super.key});
+
+  @override
+  State<AskForTitlesToggle> createState() => _AskForTitlesToggleState();
+}
+
+class _AskForTitlesToggleState extends State<AskForTitlesToggle> {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        SettingsContainerSwitch(
+          title: "ask-for-transaction-title".tr(),
+          description: "ask-for-transaction-title-description".tr(),
+          onSwitched: (value) {
+            updateSettings(
+              "askForTransactionTitle",
+              value,
+              updateGlobalState: false,
+            );
+            setState(() {});
+          },
+          initialValue: appStateSettings["askForTransactionTitle"],
+          icon: Icons.text_fields_rounded,
+        ),
+        AnimatedExpanded(
+          expand: getIsFullScreen(context) == false &&
+              appStateSettings["askForTransactionTitle"] == true,
+          child: AskForNotesToggle(),
+        ),
+      ],
+    );
+  }
+}
+
+class AskForNotesToggle extends StatelessWidget {
+  const AskForNotesToggle({super.key});
 
   @override
   Widget build(BuildContext context) {
     return SettingsContainerSwitch(
-      title: "ask-for-transaction-title".tr(),
-      description: "ask-for-transaction-title-description".tr(),
+      title: "ask-for-notes-with-title".tr(),
+      description: "ask-for-notes-with-title-description".tr(),
       onSwitched: (value) {
         updateSettings(
-          "askForTransactionTitle",
+          "askForTransactionNoteWithTitle",
           value,
           updateGlobalState: false,
         );
       },
-      initialValue: appStateSettings["askForTransactionTitle"],
-      icon: Icons.text_fields_rounded,
+      initialValue: appStateSettings["askForTransactionNoteWithTitle"],
+      icon: Icons.sticky_note_2_rounded,
     );
   }
 }

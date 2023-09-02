@@ -530,5 +530,8 @@
   "no-budgets-found": "کوئی بجٹ نہیں ملا۔",
   "no-categories-found": "کوئی زمرے نہیں ملے۔",
   "no-wallets-found": "کوئی بٹوے نہیں ملے۔",
-  "no-titles-found": "کوئی عنوان نہیں ملا۔"
+  "no-titles-found": "کوئی عنوان نہیں ملا۔",
+  "translations": "ترجمہ",
+  "ask-for-notes-with-title": "عنوان کے ساتھ نوٹ کریں",
+  "ask-for-notes-with-title-description": "جب عنوان داخل کریں"
 }

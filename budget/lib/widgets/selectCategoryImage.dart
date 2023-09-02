@@ -216,6 +216,9 @@ class _SuggestIconPopupState extends State<SuggestIconPopup> {
             minLines: 3,
             padding: EdgeInsets.zero,
             controller: _feedbackController,
+            onChanged: (value) {
+              setState(() {});
+            },
           ),
           SizedBox(height: 10),
           Opacity(
@@ -234,6 +237,7 @@ class _SuggestIconPopupState extends State<SuggestIconPopup> {
               shareFeedback(_feedbackController.text, "icon");
               Navigator.pop(context);
             },
+            disabled: _feedbackController.text == "",
           )
         ],
       ),

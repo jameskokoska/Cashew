@@ -1,3 +1,4 @@
+import 'package:budget/colors.dart';
 import 'package:budget/database/initializeDefaultDatabase.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
@@ -130,7 +131,6 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
 
   int currentPage = 0;
   int previousPage = 0;
-  bool refresh = false;
 
   void changePage(int page, {bool switchNavbar = true}) {
     if (switchNavbar) {
@@ -141,14 +141,6 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
       previousPage = currentPage;
       currentPage = page;
     });
-    setState(() {
-      refresh = false;
-    });
-    Future.delayed(Duration(milliseconds: 50), () {
-      setState(() {
-        refresh = true;
-      });
-    });
   }
 
   @override
@@ -157,6 +149,9 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
 
     // Functions to run after entire UI loaded
     Future.delayed(Duration.zero, () async {
+      SystemChrome.setSystemUIOverlayStyle(
+          getSystemUiOverlayStyle(Theme.of(context).brightness));
+
       await showChangelog(context);
       if ((appStateSettings["numLogins"] + 1) % 10 == 0 &&
           appStateSettings["submittedFeedback"] != true) {
@@ -231,176 +226,158 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
 
   @override
   Widget build(BuildContext context) {
-    // Wipe all remaining pixels off - sometimes graphics artifacts are left behind
-    return AnimatedOpacity(
-      duration: Duration(milliseconds: 25),
-      opacity: refresh ? 1 : 0.99,
-      child: WillPopScope(
-        onWillPop: () async {
-          // Deselect selected transactions
-          int notEmpty = 0;
-          for (String key in globalSelectedID.value.keys) {
-            if (globalSelectedID.value[key]?.isNotEmpty == true) notEmpty++;
-            globalSelectedID.value[key] = [];
-          }
-          globalSelectedID.notifyListeners();
+    return WillPopScope(
+      onWillPop: () async {
+        // Deselect selected transactions
+        int notEmpty = 0;
+        for (String key in globalSelectedID.value.keys) {
+          if (globalSelectedID.value[key]?.isNotEmpty == true) notEmpty++;
+          globalSelectedID.value[key] = [];
+        }
+        globalSelectedID.notifyListeners();
 
-          // Allow the back button to exit the app when on home
-          if (notEmpty <= 0) {
-            if (currentPage == 0) {
-              return true;
-            } else {
-              changePage(0);
-            }
+        // Allow the back button to exit the app when on home
+        if (notEmpty <= 0) {
+          if (currentPage == 0) {
+            return true;
+          } else {
+            changePage(0);
           }
+        }
 
-          return false;
-        },
-        // The global Widget stack
-        child: Stack(children: [
-          Scaffold(
-            body: FadeIndexedStack(
-              children: [...pages, ...pagesExtended],
-              index: currentPage,
-              duration: !kIsWeb
-                  ? Duration.zero
-                  : appStateSettings["batterySaver"]
-                      ? Duration.zero
-                      : Duration(milliseconds: 300),
-            ),
-            extendBody: true,
-            // resizeToAvoidBottomInset: false,
-            resizeToAvoidBottomInset: true,
-            bottomNavigationBar: BottomNavBar(
-              key: navbarStateKey,
-              onChanged: (index) {
-                changePage(index);
-              },
-            ),
+        return false;
+      },
+      // The global Widget stack
+      child: Stack(children: [
+        Scaffold(
+          body: FadeIndexedStack(
+            children: [...pages, ...pagesExtended],
+            index: currentPage,
+            duration: !kIsWeb
+                ? Duration.zero
+                : appStateSettings["batterySaver"]
+                    ? Duration.zero
+                    : Duration(milliseconds: 300),
           ),
-          Align(
-            alignment: Alignment.bottomRight,
-            child: Padding(
-              padding: EdgeInsets.only(
-                bottom: appStateSettings["oldAndroidNavbar"] == true
-                    ? ((getIsFullScreen(context) == false
-                            ? 75 +
-                                MediaQuery.of(context).viewPadding.bottom -
-                                (getPlatform() != PlatformOS.isIOS &&
-                                        MediaQuery.of(context)
-                                                .viewPadding
-                                                .bottom >
-                                            10
-                                    ? 10
-                                    : 0)
-                            : 15 + MediaQuery.of(context).viewPadding.bottom) +
-                        (getPlatform() == PlatformOS.isIOS ? 7 : 0))
-                    : (getIsFullScreen(context) == false
-                            ? 95 + MediaQuery.of(context).viewPadding.bottom
-                            : 15 + MediaQuery.of(context).viewPadding.bottom) -
-                        // iOS navbar is lower
-                        (getPlatform() == PlatformOS.isIOS ? 10 : 0),
-                right: 15,
-              ),
-              child: Stack(
-                children: [
-                  // DescribedFeatureOverlay(
-                  //   featureId: 'add_transaction_button',
-                  //   tapTarget: IgnorePointer(
-                  //     child: AnimateFAB(
-                  //       fab: FAB(
-                  //         tooltip: "Add Transaction",
-                  //         openPage: AddTransactionPage(
-                  //
-                  //         ),
-                  //       ),
-                  //       condition: currentPage == 0 || currentPage == 1,
-                  //     ),
-                  //   ),
-                  //   pulseDuration: Duration(milliseconds: 3500),
-                  //   contentLocation: ContentLocation.above,
-                  //   title: TextFont(
-                  //     text: 'Add Transaction',
-                  //     fontWeight: FontWeight.bold,
-                  //     fontSize: 22,
-                  //     maxLines: 3,
-                  //   ),
-                  //   description: TextFont(
-                  //     text: 'Tap the plus to add a transaction',
-                  //     fontSize: 17,
-                  //     maxLines: 10,
-                  //   ),
-                  //   backgroundColor: Theme.of(context).primaryColor,
-                  //   textColor: Colors.white,
-                  //   child: AnimateFAB(
-                  //     fab: FAB(
-                  //       tooltip: "Add Transaction",
-                  //       openPage: AddTransactionPage(
-                  //
-                  //       ),
-                  //     ),
-                  //     condition: currentPage == 0 || currentPage == 1,
-                  //   ),
-                  // ),
+          extendBody: true,
+          // resizeToAvoidBottomInset: false,
+          resizeToAvoidBottomInset: true,
+          bottomNavigationBar: BottomNavBar(
+            key: navbarStateKey,
+            onChanged: (index) {
+              changePage(index);
+            },
+          ),
+        ),
+        Align(
+          alignment: Alignment.bottomRight,
+          child: Padding(
+            padding: EdgeInsets.only(
+              bottom: (getIsFullScreen(context) == false
+                      ? 95 + MediaQuery.of(context).viewPadding.bottom
+                      : 15 + MediaQuery.of(context).viewPadding.bottom) -
+                  // iOS navbar is lower
+                  (getPlatform() == PlatformOS.isIOS ? 10 : 0),
+              right: 15,
+            ),
+            child: Stack(
+              children: [
+                // DescribedFeatureOverlay(
+                //   featureId: 'add_transaction_button',
+                //   tapTarget: IgnorePointer(
+                //     child: AnimateFAB(
+                //       fab: FAB(
+                //         tooltip: "Add Transaction",
+                //         openPage: AddTransactionPage(
+                //
+                //         ),
+                //       ),
+                //       condition: currentPage == 0 || currentPage == 1,
+                //     ),
+                //   ),
+                //   pulseDuration: Duration(milliseconds: 3500),
+                //   contentLocation: ContentLocation.above,
+                //   title: TextFont(
+                //     text: 'Add Transaction',
+                //     fontWeight: FontWeight.bold,
+                //     fontSize: 22,
+                //     maxLines: 3,
+                //   ),
+                //   description: TextFont(
+                //     text: 'Tap the plus to add a transaction',
+                //     fontSize: 17,
+                //     maxLines: 10,
+                //   ),
+                //   backgroundColor: Theme.of(context).primaryColor,
+                //   textColor: Colors.white,
+                //   child: AnimateFAB(
+                //     fab: FAB(
+                //       tooltip: "Add Transaction",
+                //       openPage: AddTransactionPage(
+                //
+                //       ),
+                //     ),
+                //     condition: currentPage == 0 || currentPage == 1,
+                //   ),
+                // ),
 
-                  // AnimatedSwitcher(
-                  //   duration: Duration(milliseconds: 350),
-                  //   switchInCurve: Curves.easeOutCubic,
-                  //   switchOutCurve: Curves.ease,
-                  //   transitionBuilder:
-                  //       (Widget child, Animation<double> animation) {
-                  //     return FadeTransition(
-                  //       opacity: animation,
-                  //       child: ScaleTransition(
-                  //         scale: Tween<double>(begin: 0.4, end: 1.0)
-                  //             .animate(animation),
-                  //         child: child,
-                  //       ),
-                  //     );
-                  //   },
-                  //   child: currentPage == 0 ||
-                  //           currentPage == 1 ||
-                  //           (previousPage == 0 && currentPage != 2) ||
-                  //           (previousPage == 1 && currentPage != 2)
-                  //       ? AnimateFAB(
-                  //           key: ValueKey(1),
-                  //           fab: FAB(
-                  //             tooltip: "add-transaction".tr(),
-                  //             openPage: AddTransactionPage(
-                  //               routesToPopAfterDelete:
-                  //                   RoutesToPopAfterDelete.None,
-                  //             ),
-                  //           ),
-                  //           condition: currentPage == 0 || currentPage == 1,
-                  //         )
-                  //       : AnimateFAB(
-                  //           key: ValueKey(2),
-                  //           fab: FAB(
-                  //             tooltip: "add-budget".tr(),
-                  //             openPage: AddBudgetPage(
-                  //               routesToPopAfterDelete:
-                  //                   RoutesToPopAfterDelete.None,
-                  //             ),
-                  //           ),
-                  //           condition: currentPage == 2,
-                  //         ),
-                  // ),
-                  AnimateFAB(
-                    key: ValueKey(1),
-                    fab: FAB(
-                      tooltip: "add-transaction".tr(),
-                      openPage: AddTransactionPage(
-                        routesToPopAfterDelete: RoutesToPopAfterDelete.None,
-                      ),
+                // AnimatedSwitcher(
+                //   duration: Duration(milliseconds: 350),
+                //   switchInCurve: Curves.easeOutCubic,
+                //   switchOutCurve: Curves.ease,
+                //   transitionBuilder:
+                //       (Widget child, Animation<double> animation) {
+                //     return FadeTransition(
+                //       opacity: animation,
+                //       child: ScaleTransition(
+                //         scale: Tween<double>(begin: 0.4, end: 1.0)
+                //             .animate(animation),
+                //         child: child,
+                //       ),
+                //     );
+                //   },
+                //   child: currentPage == 0 ||
+                //           currentPage == 1 ||
+                //           (previousPage == 0 && currentPage != 2) ||
+                //           (previousPage == 1 && currentPage != 2)
+                //       ? AnimateFAB(
+                //           key: ValueKey(1),
+                //           fab: FAB(
+                //             tooltip: "add-transaction".tr(),
+                //             openPage: AddTransactionPage(
+                //               routesToPopAfterDelete:
+                //                   RoutesToPopAfterDelete.None,
+                //             ),
+                //           ),
+                //           condition: currentPage == 0 || currentPage == 1,
+                //         )
+                //       : AnimateFAB(
+                //           key: ValueKey(2),
+                //           fab: FAB(
+                //             tooltip: "add-budget".tr(),
+                //             openPage: AddBudgetPage(
+                //               routesToPopAfterDelete:
+                //                   RoutesToPopAfterDelete.None,
+                //             ),
+                //           ),
+                //           condition: currentPage == 2,
+                //         ),
+                // ),
+                AnimateFAB(
+                  key: ValueKey(1),
+                  fab: FAB(
+                    tooltip: "add-transaction".tr(),
+                    openPage: AddTransactionPage(
+                      routesToPopAfterDelete: RoutesToPopAfterDelete.None,
                     ),
-                    condition: [0, 1, 2].contains(currentPage),
-                  )
-                ],
-              ),
+                  ),
+                  condition: [0, 1, 2].contains(currentPage),
+                )
+              ],
             ),
           ),
-        ]),
-      ),
+        ),
+      ]),
     );
   }
 }

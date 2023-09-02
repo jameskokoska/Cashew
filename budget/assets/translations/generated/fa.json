@@ -530,5 +530,8 @@
   "no-budgets-found": "هیچ بودجه ای پیدا نشده است.",
   "no-categories-found": "هیچ دسته ای یافت نمی شود.",
   "no-wallets-found": "هیچ کیف پولی پیدا نشده است.",
-  "no-titles-found": "هیچ عنوانی پیدا نشده است."
+  "no-titles-found": "هیچ عنوانی پیدا نشده است.",
+  "translations": "ترجمه",
+  "ask-for-notes-with-title": "با عنوان یادداشت بخواهید",
+  "ask-for-notes-with-title-description": "هنگام ورود به عنوان"
 }

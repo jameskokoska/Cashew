@@ -530,5 +530,8 @@
   "no-budgets-found": "Nu au fost găsite bugete.",
   "no-categories-found": "Nu s -au găsit categorii.",
   "no-wallets-found": "Nu au fost găsite portofele.",
-  "no-titles-found": "Nu au fost găsite titluri."
+  "no-titles-found": "Nu au fost găsite titluri.",
+  "translations": "Traduceri",
+  "ask-for-notes-with-title": "Cere notă cu titlu",
+  "ask-for-notes-with-title-description": "Când introduceți titlul"
 }

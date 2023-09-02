@@ -10,6 +10,22 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    < 4.1.3
+    Loading indeterminate background color follows app bar color
+    Fixed snackbar background shadow and color on dark mode
+    Removed refresh pixels for navigation framework - removed the opacity jitter (however there still may be artifacts when the page is changed?)
+    Removed legacy transaction amount colors support (Debug Option)
+    Removed old Android Navbar support (Debug Option)
+    Navigation bar colors
+    2 Weeks of notifications scheduled instead of just 1
+    Can only request new icons if suggestion text field is not empty
+    Fixed overflow on category names for limits and entry
+    Added option to ask for note when selecting title for transaction
+    Fixed accent color resetting to always using system color
+    Status bar color reset to the proper color after launch
+    Centered translations help text if no icon
+    Navbar uses percent instead of animation controller value - if the height resizes the subtitle and background color does not follow the proper values of the scroll percentage (Only uses percentage if not using the small header)
+    The above is noticeable if selecting a budget history cycle from the line graph and the height resizes to fit content
     < 4.1.2
     Initial tab selected is 'All' instead of 'Expense' on home page
     Upcoming notifications cancelled when exiting Preview Demo

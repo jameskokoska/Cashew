@@ -530,5 +530,8 @@
   "no-budgets-found": "Бюджеты не найдены.",
   "no-categories-found": "Категорий не найдено.",
   "no-wallets-found": "Кошельки не найдены.",
-  "no-titles-found": "Название не найдено."
+  "no-titles-found": "Название не найдено.",
+  "translations": "Переводы",
+  "ask-for-notes-with-title": "Попросите примечание с заголовком",
+  "ask-for-notes-with-title-description": "При входе в название"
 }

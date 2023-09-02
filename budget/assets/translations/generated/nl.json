@@ -530,5 +530,8 @@
   "no-budgets-found": "Geen budgetten gevonden.",
   "no-categories-found": "Geen categorieën gevonden.",
   "no-wallets-found": "Geen portefeuilles gevonden.",
-  "no-titles-found": "Geen titels gevonden."
+  "no-titles-found": "Geen titels gevonden.",
+  "translations": "Vertalingen",
+  "ask-for-notes-with-title": "Vraag om notities met titel",
+  "ask-for-notes-with-title-description": "Bij het invoeren van de titel"
 }

@@ -102,7 +102,6 @@ class PageFrameworkState extends State<PageFramework>
   late AnimationController _animationControllerShift =
       AnimationController(vsync: this);
   late AnimationController _animationControllerOpacity;
-  late AnimationController _animationController0at50;
   late AnimationController _animationControllerDragY;
   late AnimationController _scrollToTopAnimationController =
       AnimationController(
@@ -149,7 +148,6 @@ class PageFrameworkState extends State<PageFramework>
     });
 
     _animationControllerOpacity = AnimationController(vsync: this, value: 0.5);
-    _animationController0at50 = AnimationController(vsync: this, value: 1);
     _animationControllerDragY = AnimationController(vsync: this, value: 0);
     _animationControllerDragY.duration = Duration(milliseconds: 1000);
     _scrollController = ScrollController();
@@ -196,15 +194,6 @@ class PageFrameworkState extends State<PageFramework>
               (getExpandedHeaderHeight(context, widget.expandedHeight) - 56) /
               2);
     }
-    if (widget.subtitle != null && percent <= 0.75) {
-      double offset = _scrollController.offset;
-      if (percent < 0) offset = 0;
-      _animationController0at50.value = 1 -
-          (offset /
-                  (getExpandedHeaderHeight(context, widget.expandedHeight) -
-                      56)) *
-              1.75;
-    }
     if (_scrollController.offset > 400 &&
         _scrollToTopAnimationController.value == 0) {
       _scrollToTopAnimationController.forward();
@@ -218,7 +207,6 @@ class PageFrameworkState extends State<PageFramework>
   void dispose() {
     _animationControllerShift.dispose();
     _animationControllerOpacity.dispose();
-    _animationController0at50.dispose();
     _animationControllerDragY.dispose();
     _scrollToTopAnimationController.dispose();
 
@@ -328,7 +316,6 @@ class PageFrameworkState extends State<PageFramework>
                           animationControllerOpacity:
                               _animationControllerOpacity,
                           animationControllerShift: _animationControllerShift,
-                          animationController0at50: _animationController0at50,
                           textColor: widget.textColor,
                           onBackButton: widget.onBackButton,
                           actions: widget.actions,
@@ -396,6 +383,7 @@ class PageFrameworkState extends State<PageFramework>
                 if (widget.transparentAppBar != true)
                   ...getAppBarBackgroundColorLayers(
                     animationControllerOpacity: _animationControllerOpacity,
+                    percent: null,
                     appBarBackgroundColor: widget.appBarBackgroundColor,
                     appBarBackgroundColorStart:
                         widget.appBarBackgroundColorStart,
@@ -539,7 +527,6 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
     // this.customTitleBuilder,
     this.animationControllerOpacity,
     this.animationControllerShift,
-    this.animationController0at50,
     this.actions,
     this.textColor,
     this.onBackButton,
@@ -564,7 +551,6 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
   // final Function(AnimationController _animationController)? customTitleBuilder;
   final AnimationController? animationControllerOpacity;
   final AnimationController? animationControllerShift;
-  final AnimationController? animationController0at50;
   final List<Widget>? actions;
   final Color? textColor;
   final VoidCallback? onBackButton;
@@ -676,7 +662,14 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
           background: Stack(
             children: [
               ...getAppBarBackgroundColorLayers(
-                animationControllerOpacity: animationControllerOpacity,
+                // If it is collapsed - there is no percent!
+                // we need to rely on the animation controller values
+                animationControllerOpacity:
+                    centeredTitleSmallWithDefault == false &&
+                            centeredTitleWithDefault == false
+                        ? null
+                        : animationControllerOpacity,
+                percent: percent,
                 appBarBackgroundColor: appBarBackgroundColor,
                 appBarBackgroundColorStart: appBarBackgroundColorStart,
                 centeredTitle: centeredTitleWithDefault,
@@ -684,46 +677,39 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
                 context: context,
               ),
               subtitle != null &&
-                      animationControllerShift != null &&
-                      animationController0at50 != null &&
                       centeredTitleSmallWithDefault == false &&
                       centeredTitleWithDefault == false
-                  ? AnimatedBuilder(
-                      animation: animationControllerShift!,
-                      builder: (_, child) {
-                        double expandedHeightHeaderPercent =
-                            getExpandedHeaderHeight(context, expandedHeight);
-                        expandedHeightHeaderPercent =
-                            (expandedHeightHeaderPercent - 100) / 100;
-                        // print(expandedHeightHeaderPercent * 150 + 50);
-                        return Transform.translate(
+                  ? Builder(builder: (context) {
+                      double expandedHeightHeaderPercent =
+                          getExpandedHeaderHeight(context, expandedHeight);
+                      expandedHeightHeaderPercent =
+                          (expandedHeightHeaderPercent - 100) / 100;
+                      // print(expandedHeightHeaderPercent * 150 + 50);
+                      return Transform.translate(
                           offset: Offset(
                             0,
-                            -(animationControllerShift!.value) *
+                            -(percent) *
                                 (subtitleAnimationSpeed ?? 100) *
                                 (expandedHeightHeaderPercent * 150 + 50) /
                                 200,
                           ),
-                          child: child,
-                        );
-                      },
-                      child: Align(
-                        alignment: centeredTitleWithDefault
-                            ? Alignment.bottomCenter
-                            : subtitleAlignment,
-                        child: FadeTransition(
-                          opacity: animationController0at50!,
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 0),
-                            child: Transform.translate(
-                              offset: Offset(0, -4),
-                              child: subtitle,
+                          child: Align(
+                            alignment: centeredTitleWithDefault
+                                ? Alignment.bottomCenter
+                                : subtitleAlignment,
+                            child: Opacity(
+                              opacity: 1 - clampDouble(percent, 0, 0.5) * 2,
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 20, vertical: 0),
+                                child: Transform.translate(
+                                  offset: Offset(0, -4),
+                                  child: subtitle,
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                      ),
-                    )
+                          ));
+                    })
                   : SizedBox(),
             ],
           ),
@@ -769,12 +755,16 @@ Color calculateAppBarBGColor({
 
 List<Widget> getAppBarBackgroundColorLayers({
   required BuildContext context,
-  required AnimationController? animationControllerOpacity,
   required Color? appBarBackgroundColor,
   required Color? appBarBackgroundColorStart,
   required bool centeredTitle,
   required bool centeredTitleSmall,
+  // Supply one of (animationControllerOpacity or percent)
+  required AnimationController? animationControllerOpacity,
+  required double? percent,
 }) {
+  // animationControllerOpacity does from top:1 to bottom: 0
+  // and to make it into a percent: we use (animationControllerOpacity.value - 0.5) / 0.5
   Color appBarBGColorCalculated = calculateAppBarBGColor(
     context: context,
     appBarBackgroundColor: appBarBackgroundColor,
@@ -798,72 +788,116 @@ List<Widget> getAppBarBackgroundColorLayers({
                 ? Theme.of(context).canvasColor
                 : appBarBackgroundColorStart,
           ),
-    animationControllerOpacity != null && centeredTitleSmall
-        ? AnimatedBuilder(
-            animation: animationControllerOpacity,
-            builder: (_, child) {
-              return Opacity(
-                opacity: (animationControllerOpacity.value - 0.5) / 0.5,
-                child: child,
-              );
-            },
-            child: Container(
-              // Fixes backdrop not fading correctly when using Impeller (iOS - Flutter v3.13)
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height - 1,
+    (animationControllerOpacity != null || percent != null) &&
+            centeredTitleSmall
+        ? Builder(
+            builder: (context) {
+              Widget container = Container(
+                // Fixes backdrop not fading correctly when using Impeller (iOS - Flutter v3.13)
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height - 1,
 
-              color: appBarBackgroundColor ??
-                  dynamicPastel(
-                      context, Theme.of(context).colorScheme.secondaryContainer,
-                      amount: appStateSettings["materialYou"] ? 0.4 : 0.55),
-            ),
+                color: appBarBackgroundColor ??
+                    dynamicPastel(
+                      context,
+                      Theme.of(context).colorScheme.secondaryContainer,
+                      amount: appStateSettings["materialYou"] ? 0.4 : 0.55,
+                    ),
+              );
+              return animationControllerOpacity != null
+                  ? AnimatedBuilder(
+                      animation: animationControllerOpacity,
+                      builder: (_, child) {
+                        return Opacity(
+                          opacity:
+                              (animationControllerOpacity.value - 0.5) / 0.5,
+                          child: child,
+                        );
+                      },
+                      child: container,
+                    )
+                  : percent != null
+                      ? Opacity(
+                          opacity: clampDouble(percent, 0, 1),
+                          child: container,
+                        )
+                      : SizedBox.shrink();
+            },
           )
         : SizedBox.shrink(),
-    animationControllerOpacity != null && centeredTitleSmall == false
-        ? AnimatedBuilder(
-            animation: animationControllerOpacity,
-            builder: (_, child) {
-              return Opacity(
-                opacity: (animationControllerOpacity.value - 0.5) / 0.5,
-                child: child,
-              );
-            },
-            child: Container(
-              // Fixes backdrop not fading correctly when using Impeller (iOS - Flutter v3.13)
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height - 1,
+    (animationControllerOpacity != null || percent != null) &&
+            centeredTitleSmall == false
+        ? Builder(
+            builder: (context) {
+              Widget container = Container(
+                // Fixes backdrop not fading correctly when using Impeller (iOS - Flutter v3.13)
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height - 1,
 
-              color: appBarBGColorCalculated,
-            ),
+                color: appBarBGColorCalculated,
+              );
+              return animationControllerOpacity != null
+                  ? AnimatedBuilder(
+                      animation: animationControllerOpacity,
+                      builder: (_, child) {
+                        return Opacity(
+                          opacity:
+                              (animationControllerOpacity.value - 0.5) / 0.5,
+                          child: child,
+                        );
+                      },
+                      child: container,
+                    )
+                  : percent != null
+                      ? Opacity(
+                          opacity: clampDouble(percent, 0, 1),
+                          child: container,
+                        )
+                      : SizedBox.shrink();
+            },
           )
         : SizedBox.shrink(),
-    animationControllerOpacity != null &&
+    (animationControllerOpacity != null || percent != null) &&
             centeredTitleSmall &&
             getPlatform() == PlatformOS.isIOS
-        ? AnimatedBuilder(
-            animation: animationControllerOpacity,
-            builder: (_, child) {
-              return Opacity(
-                opacity: (animationControllerOpacity.value - 0.5) / 0.5,
-                child: child,
-              );
-            },
-            child: Align(
-              alignment: Alignment.bottomCenter,
-              child: Container(
-                height: 1.2,
-                color: dynamicPastel(
-                  context,
-                  appBarBackgroundColor != null
-                      ? appBarBackgroundColor
-                      : dynamicPastel(context,
-                          Theme.of(context).colorScheme.secondaryContainer,
-                          amount: appStateSettings["materialYou"] ? 0.4 : 0.55),
-                  inverse: true,
-                  amount: 0.05,
+        ? Builder(
+            builder: (context) {
+              Widget container = Align(
+                alignment: Alignment.bottomCenter,
+                child: Container(
+                  height: 1.2,
+                  color: dynamicPastel(
+                    context,
+                    appBarBackgroundColor != null
+                        ? appBarBackgroundColor
+                        : dynamicPastel(context,
+                            Theme.of(context).colorScheme.secondaryContainer,
+                            amount:
+                                appStateSettings["materialYou"] ? 0.4 : 0.55),
+                    inverse: true,
+                    amount: 0.05,
+                  ),
                 ),
-              ),
-            ),
+              );
+              return animationControllerOpacity != null
+                  ? AnimatedBuilder(
+                      animation: animationControllerOpacity,
+                      builder: (_, child) {
+                        return Opacity(
+                          opacity:
+                              (animationControllerOpacity.value - 0.5) / 0.5,
+                          child: child,
+                        );
+                      },
+                      child: container,
+                    )
+                  : percent != null
+                      ? Opacity(
+                          opacity: clampDouble(percent, 0, 1),
+                          child: container,
+                        )
+                      : SizedBox.shrink();
+            },
           )
         : SizedBox.shrink(),
   ];

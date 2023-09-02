@@ -530,5 +530,8 @@
   "no-budgets-found": "ബജറ്റുകളൊന്നും കണ്ടെത്തിയില്ല.",
   "no-categories-found": "വിഭാഗങ്ങളൊന്നും കണ്ടെത്തിയില്ല.",
   "no-wallets-found": "വാലറ്റുകളൊന്നും കണ്ടെത്തിയില്ല.",
-  "no-titles-found": "ശീർഷകങ്ങളൊന്നും കണ്ടെത്തിയില്ല."
+  "no-titles-found": "ശീർഷകങ്ങളൊന്നും കണ്ടെത്തിയില്ല.",
+  "translations": "വിവർത്തനങ്ങൾ",
+  "ask-for-notes-with-title": "ശീർഷകത്തിൽ കുറിപ്പ് ചോദിക്കുക",
+  "ask-for-notes-with-title-description": "ശീർഷകം നൽകുമ്പോൾ"
 }

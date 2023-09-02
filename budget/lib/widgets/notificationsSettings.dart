@@ -255,8 +255,8 @@ Future<bool> scheduleDailyNotification(context, TimeOfDay timeOfDay,
   DarwinNotificationDetails darwinNotificationDetails =
       DarwinNotificationDetails(threadIdentifier: 'transactionReminders');
 
-  // schedule a week worth of notifications
-  for (int i = 1; i <= 7; i++) {
+  // schedule 2 weeks worth of notifications
+  for (int i = 1; i <= 14; i++) {
     String chosenMessage =
         _reminderStrings[Random().nextInt(_reminderStrings.length)].tr();
     tz.TZDateTime dateTime = _nextInstanceOfSetTime(timeOfDay, dayOffset: i);
@@ -293,7 +293,7 @@ Future<bool> scheduleDailyNotification(context, TimeOfDay timeOfDay,
 }
 
 Future<bool> cancelDailyNotification() async {
-  for (int i = 1; i <= 7; i++) {
+  for (int i = 1; i <= 14; i++) {
     await flutterLocalNotificationsPlugin.cancel(i);
   }
   print("Cancelled notifications for daily reminder");

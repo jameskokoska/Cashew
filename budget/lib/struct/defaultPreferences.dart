@@ -51,6 +51,7 @@ Future<Map<String, dynamic>> getDefaultPreferences() async {
     "ignorePastAmountSpent": false,
     // "askForTransactionTitle": androidVersion > 10,
     "askForTransactionTitle": true,
+    "askForTransactionNoteWithTitle": false,
     // "batterySaver": kIsWeb,
     "automaticallyPaySubscriptions": true,
     "batterySaver": false,
@@ -88,7 +89,6 @@ Future<Map<String, dynamic>> getDefaultPreferences() async {
     "sharedBudgets": false,
     "emailScanning": false,
     "emailScanningPullToRefresh": false,
-    "legacyTransactionAmountColors": false,
     "massEditSelectedTransactions": false,
     "incognitoKeyboard": false,
     // the key is the budgetPk (in String!)
@@ -104,7 +104,6 @@ Future<Map<String, dynamic>> getDefaultPreferences() async {
     "premiumPopupAddTransactionLastShown": DateTime.now().toString(),
     "premiumPopupFreeSeen": false,
     "previewDemo": false,
-    "oldAndroidNavbar": false,
     "purchaseID": null,
   };
 }

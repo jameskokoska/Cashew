@@ -530,5 +530,8 @@
   "no-budgets-found": "No budgets found.",
   "no-categories-found": "No categories found.",
   "no-wallets-found": "No wallets found.",
-  "no-titles-found": "No titles found."
+  "no-titles-found": "No titles found.",
+  "translations": "Translations",
+  "ask-for-notes-with-title": "Ask for Note With Title",
+  "ask-for-notes-with-title-description": "When entering the title"
 }

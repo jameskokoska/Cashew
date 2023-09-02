@@ -530,5 +530,8 @@
   "no-budgets-found": "Nenhum orçamento encontrado.",
   "no-categories-found": "Nenhuma categoria encontrada.",
   "no-wallets-found": "Nenhuma carteira encontrada.",
-  "no-titles-found": "Nenhum título encontrado."
+  "no-titles-found": "Nenhum título encontrado.",
+  "translations": "Traduções",
+  "ask-for-notes-with-title": "Peça nota com título",
+  "ask-for-notes-with-title-description": "Ao entrar no título"
 }

@@ -530,5 +530,8 @@
   "no-budgets-found": "Nessun budget trovato.",
   "no-categories-found": "Nessuna categorie trovata.",
   "no-wallets-found": "Nessun portafoglio trovato.",
-  "no-titles-found": "Nessun titoli trovati."
+  "no-titles-found": "Nessun titoli trovati.",
+  "translations": "Traduzioni",
+  "ask-for-notes-with-title": "Chiedi nota con titolo",
+  "ask-for-notes-with-title-description": "Quando si entra nel titolo"
 }

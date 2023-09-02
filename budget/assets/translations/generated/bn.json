@@ -530,5 +530,8 @@
   "no-budgets-found": "কোনও বাজেট পাওয়া যায় নি।",
   "no-categories-found": "কোন বিভাগ পাওয়া যায় না।",
   "no-wallets-found": "কোন মানিব্যাগ পাওয়া যায় না।",
-  "no-titles-found": "কোনও শিরোনাম পাওয়া যায় নি।"
+  "no-titles-found": "কোনও শিরোনাম পাওয়া যায় নি।",
+  "translations": "অনুবাদ",
+  "ask-for-notes-with-title": "শিরোনাম সহ নোটের জন্য জিজ্ঞাসা করুন",
+  "ask-for-notes-with-title-description": "শিরোনাম প্রবেশ করার সময়"
 }
