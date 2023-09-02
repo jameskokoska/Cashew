@@ -44,7 +44,7 @@ class SlidingSelectorIncomeExpense extends StatelessWidget {
                   : const EdgeInsets.symmetric(horizontal: 13)),
           child: DefaultTabController(
             length: options != null ? options!.length : 3,
-            initialIndex: initialIndex ?? 1,
+            initialIndex: initialIndex ?? 0,
             child: SizedBox(
               height: alternateTheme ? 40 : 45,
               child: Material(

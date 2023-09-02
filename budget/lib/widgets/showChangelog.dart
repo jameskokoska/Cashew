@@ -10,6 +10,9 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    < 4.1.2
+    Initial tab selected is 'All' instead of 'Expense' on home page
+    Upcoming notifications cancelled when exiting Preview Demo
     < 4.1.1
     Added translations team to About page
     Select budget type popup only shown when not adding an initial Addable budget
