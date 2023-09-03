@@ -12,24 +12,25 @@ import 'package:flutter/material.dart'
 import 'package:budget/modified/reorderable_list.dart';
 
 class EditRowEntry extends StatelessWidget {
-  const EditRowEntry(
-      {required this.index,
-      required this.content,
-      this.accentColor,
-      required this.openPage,
-      required this.onDelete,
-      this.onTap,
-      this.padding,
-      this.currentReorder = false,
-      this.canReorder = true,
-      this.canDelete = true,
-      this.extraIcon,
-      this.onExtra,
-      this.extraWidget,
-      this.extraWidgetsBelow,
-      this.showMoreWidget,
-      Key? key})
-      : super(key: key);
+  const EditRowEntry({
+    required this.index,
+    required this.content,
+    this.accentColor,
+    required this.openPage,
+    required this.onDelete,
+    this.onTap,
+    this.padding,
+    this.currentReorder = false,
+    this.canReorder = true,
+    this.canDelete = true,
+    this.extraIcon,
+    this.onExtra,
+    this.extraWidget,
+    this.extraWidgetsBelow,
+    this.showMoreWidget,
+    this.hideReorder = false,
+    Key? key,
+  }) : super(key: key);
   final int index;
   final Widget content;
   final Color? accentColor;
@@ -45,6 +46,7 @@ class EditRowEntry extends StatelessWidget {
   final List<Widget>? extraWidgetsBelow;
   final Function()? onTap;
   final Widget? showMoreWidget;
+  final bool? hideReorder;
 
   @override
   Widget build(BuildContext context) {
@@ -92,17 +94,21 @@ class EditRowEntry extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisSize: MainAxisSize.max,
                     children: [
-                      accentColor != null
-                          ? Container(
-                              width: getPlatform() == PlatformOS.isIOS ? 4 : 5,
-                              color: dynamicPastel(
-                                context,
-                                accentColor!,
-                                amount: 0.1,
-                                inverse: true,
-                              ),
-                            )
-                          : SizedBox.shrink(),
+                      AnimatedContainer(
+                        curve: Curves.easeInOutCubicEmphasized,
+                        duration: Duration(milliseconds: 1000),
+                        width: accentColor == null
+                            ? 0
+                            : getPlatform() == PlatformOS.isIOS
+                                ? 4
+                                : 5,
+                        color: dynamicPastel(
+                          context,
+                          accentColor ?? Colors.transparent,
+                          amount: 0.1,
+                          inverse: true,
+                        ),
+                      ),
                       Expanded(
                         child: Container(
                           padding: padding ??
@@ -138,36 +144,46 @@ class EditRowEntry extends StatelessWidget {
                               color: Colors.transparent,
                               borderRadius: borderRadius,
                               child: Container(
+                                  margin: EdgeInsets.only(
+                                    right: hideReorder == true &&
+                                            showMoreWidget == null
+                                        ? 10
+                                        : 0,
+                                  ),
                                   height: double.infinity,
                                   width: 40,
                                   child: Icon(Icons.delete_rounded)),
                               onTap: onDelete,
                             )
                           : SizedBox.shrink(),
-                      canReorder
-                          ? ReorderableDragStartListener(
-                              index: index,
-                              child: Tappable(
-                                color: Colors.transparent,
-                                borderRadius: borderRadius,
-                                child: Container(
-                                    margin: EdgeInsets.only(
-                                        right: showMoreWidget == null ? 10 : 0),
+                      hideReorder == true
+                          ? SizedBox.shrink()
+                          : canReorder
+                              ? ReorderableDragStartListener(
+                                  index: index,
+                                  child: Tappable(
+                                    color: Colors.transparent,
+                                    borderRadius: borderRadius,
+                                    child: Container(
+                                        margin: EdgeInsets.only(
+                                          right:
+                                              showMoreWidget == null ? 10 : 0,
+                                        ),
+                                        width: 40,
+                                        height: double.infinity,
+                                        child: Icon(Icons.drag_handle_rounded)),
+                                    onTap: () {},
+                                  ),
+                                )
+                              : Opacity(
+                                  opacity: 0.2,
+                                  child: Container(
+                                    margin: EdgeInsets.only(right: 10),
                                     width: 40,
                                     height: double.infinity,
-                                    child: Icon(Icons.drag_handle_rounded)),
-                                onTap: () {},
-                              ),
-                            )
-                          : Opacity(
-                              opacity: 0.2,
-                              child: Container(
-                                margin: EdgeInsets.only(right: 10),
-                                width: 40,
-                                height: double.infinity,
-                                child: Icon(Icons.drag_handle_rounded),
-                              ),
-                            ),
+                                    child: Icon(Icons.drag_handle_rounded),
+                                  ),
+                                ),
                       showMoreWidget ?? SizedBox.shrink(),
                     ],
                   ),

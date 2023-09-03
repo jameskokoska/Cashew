@@ -99,7 +99,7 @@ class CountNumber extends StatefulWidget {
   }) : super(key: key);
 
   final double count;
-  final Function(double) textBuilder;
+  final Widget Function(double amount) textBuilder;
   final double fontSize;
   final Duration duration;
   final Curve curve;

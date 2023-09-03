@@ -61,6 +61,7 @@ generateColors() {
       "unPaidOverdue": Color(0xFF6577E0),
       "incomeAmount": Color(0xFF59A849),
       "expenseAmount": Color(0xFFCA5A5A),
+      "warningOrange": Color(0xFFCA995A),
       "starYellow": Color(0xFFFFD723),
       "dividerColor": appStateSettings["materialYou"]
           ? Color(0x0F000000)
@@ -91,6 +92,7 @@ generateColors() {
       "unPaidOverdue": Color(0xFF8395FF),
       "incomeAmount": Color(0xFF62CA77),
       "expenseAmount": Color(0xFFDA7272),
+      "warningOrange": Color(0xFFDA9C72),
       "starYellow": Colors.yellow,
       "dividerColor": appStateSettings["materialYou"]
           ? Color(0x13FFFFFF)

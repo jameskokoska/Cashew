@@ -228,7 +228,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
     openBottomSheet(
       context,
       PopupFramework(
-        title: "Enter Period Length",
+        title: "enter-period-length".tr(),
         child: SelectAmountValue(
           amountPassed: selectedPeriodLength.toString(),
           setSelectedAmount: (amount, _) {
@@ -819,8 +819,8 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                           context,
                           fullSnap: true,
                           PopupFramework(
-                            hasPadding: false,
                             title: "enter-amount".tr(),
+                            hasPadding: false,
                             underTitleSpace: false,
                             child: SelectAmount(
                               enableWalletPicker: true,
@@ -2046,6 +2046,7 @@ class SelectText extends StatefulWidget {
     this.readOnly = false,
     this.textCapitalization = TextCapitalization.none,
     this.requestLateAutoFocus = false,
+    this.popContext = true,
   }) : super(key: key);
   final Function(String) setSelectedText;
   final String? selectedText;
@@ -2058,6 +2059,7 @@ class SelectText extends StatefulWidget {
   final bool readOnly;
   final TextCapitalization textCapitalization;
   final bool requestLateAutoFocus;
+  final bool popContext;
 
   @override
   _SelectTextState createState() => _SelectTextState();
@@ -2094,7 +2096,9 @@ class _SelectTextState extends State<SelectText> {
             readOnly: widget.readOnly,
             onEditingComplete: () {
               widget.setSelectedText(input ?? "");
-              Navigator.pop(context);
+              if (widget.popContext) {
+                Navigator.pop(context);
+              }
               if (widget.next != null) {
                 widget.next!();
               }

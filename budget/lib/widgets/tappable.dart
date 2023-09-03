@@ -12,6 +12,7 @@ class Tappable extends StatelessWidget {
     this.onTap,
     this.onHighlightChanged,
     this.borderRadius = 0,
+    this.customBorderRadius,
     this.color,
     this.type = MaterialType.canvas,
     required this.child,
@@ -19,6 +20,7 @@ class Tappable extends StatelessWidget {
   }) : super(key: key);
 
   final double borderRadius;
+  final BorderRadius? customBorderRadius;
   final VoidCallback? onTap;
   final ValueChanged<bool>? onHighlightChanged;
   final Color? color;
@@ -32,7 +34,7 @@ class Tappable extends StatelessWidget {
       return FadedButton(
         child: child,
         onTap: onTap,
-        borderRadius: BorderRadius.circular(borderRadius),
+        borderRadius: customBorderRadius ?? BorderRadius.circular(borderRadius),
         color: color ?? Theme.of(context).canvasColor,
         onLongPress: onLongPress != null
             ? () {
@@ -47,12 +49,12 @@ class Tappable extends StatelessWidget {
     Widget tappable = Material(
       color: color ?? Theme.of(context).canvasColor,
       type: type,
-      borderRadius: BorderRadius.circular(borderRadius),
+      borderRadius: customBorderRadius ?? BorderRadius.circular(borderRadius),
       child: InkWell(
         splashFactory: kIsWeb
             ? InkRipple.splashFactory
             : InkSparkle.constantTurbulenceSeedSplashFactory,
-        borderRadius: BorderRadius.circular(borderRadius),
+        borderRadius: customBorderRadius ?? BorderRadius.circular(borderRadius),
         onTap: onTap,
         onHighlightChanged: onHighlightChanged,
         child: child,

@@ -525,6 +525,11 @@ class _AddCategoryPageState extends State<AddCategoryPage>
                           ),
                         ),
                       );
+                      // Fix over-scroll stretch when keyboard pops up quickly
+                      Future.delayed(Duration(milliseconds: 100), () {
+                        bottomSheetControllerGlobal.scrollTo(0,
+                            duration: Duration(milliseconds: 100));
+                      });
                     }),
             widget.category == null
                 ? SizedBox.shrink()

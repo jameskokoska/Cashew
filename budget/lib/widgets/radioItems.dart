@@ -47,7 +47,7 @@ class _RadioItemsState<T> extends State<RadioItems<T>> {
       bool selected = false;
       if (currentValue == item) selected = true;
       if (item == null && widget.ifNullSelectNone == true) selected = false;
-      bool hasDescription = widget.descriptions == null ||
+      bool noDescription = widget.descriptions == null ||
           widget.descriptions!.length <= index ||
           widget.descriptions![index] == "";
       children.add(
@@ -75,13 +75,13 @@ class _RadioItemsState<T> extends State<RadioItems<T>> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     TextFont(
-                      fontSize: hasDescription ? 16 : 18,
+                      fontSize: noDescription ? 18 : 16,
                       text: widget.displayFilter == null
                           ? item.toString()
                           : widget.displayFilter!(item),
                       maxLines: 3,
                     ),
-                    hasDescription
+                    noDescription
                         ? SizedBox.shrink()
                         : TextFont(
                             fontSize: 14,
@@ -108,6 +108,149 @@ class _RadioItemsState<T> extends State<RadioItems<T>> {
                         (states) => widget.colorFilter!(item)!)
                     : null,
                 activeColor: Theme.of(context).colorScheme.primary,
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+    return Column(
+      children: children,
+    );
+  }
+}
+
+class CheckItems<T> extends StatefulWidget {
+  final List<T>? initial;
+  final List<T> items;
+  final Function(List<T> currentValues) onChanged;
+  final String Function(T item, int itemIndex)? displayFilter;
+  final Color? Function(T item)? colorFilter;
+  final Function(T item)? onLongPress;
+  final Widget Function(
+      List<T> currentValues,
+      T item,
+      bool selected,
+      void Function(T item) addItem,
+      void Function(T item) removeItem)? buildSuffix;
+  final double? minVerticalPadding;
+
+  const CheckItems({
+    Key? key,
+    this.initial,
+    required this.items,
+    required this.onChanged,
+    this.onLongPress,
+    this.displayFilter,
+    this.colorFilter,
+    this.buildSuffix,
+    this.minVerticalPadding,
+  }) : super(key: key);
+
+  @override
+  State<CheckItems<T>> createState() => _CheckItemsState<T>();
+}
+
+class _CheckItemsState<T> extends State<CheckItems<T>> {
+  List<T> currentValues = [];
+
+  @override
+  void initState() {
+    super.initState();
+    currentValues = widget.initial ?? [];
+    widget.onChanged(currentValues);
+  }
+
+  void addEntry(T item) {
+    int index = currentValues.indexOf(item);
+    if (index == -1) {
+      currentValues.add(item);
+    }
+    widget.onChanged(currentValues);
+  }
+
+  void removeEntry(T item) {
+    int index = currentValues.indexOf(item);
+    if (index != -1) {
+      currentValues.removeAt(index);
+    }
+    widget.onChanged(currentValues);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    List<Widget> children = [];
+    double borderRadius = getPlatform() == PlatformOS.isIOS ? 10 : 20;
+    for (int itemIndex = 0; itemIndex < widget.items.length; itemIndex++) {
+      T item = widget.items[itemIndex];
+      bool selected = false;
+      if (currentValues.contains(item)) selected = true;
+      bool isAfterSelected =
+          nullIfIndexOutOfRange(widget.items, itemIndex + 1) != null &&
+              currentValues.contains(widget.items[itemIndex + 1]);
+      bool isBeforeSelected =
+          nullIfIndexOutOfRange(widget.items, itemIndex - 1) != null &&
+              currentValues.contains(widget.items[itemIndex - 1]);
+      children.add(
+        AnimatedSwitcher(
+          duration: Duration(milliseconds: 150),
+          child: Tappable(
+            customBorderRadius: BorderRadius.vertical(
+              top: Radius.circular(
+                isBeforeSelected ? 0 : borderRadius,
+              ),
+              bottom: Radius.circular(
+                isAfterSelected ? 0 : borderRadius,
+              ),
+            ),
+            key: ValueKey(selected.toString()),
+            onLongPress: widget.onLongPress != null
+                ? () => widget.onLongPress!(item)
+                : null,
+            borderRadius: borderRadius,
+            color: selected
+                ? Theme.of(context).colorScheme.secondaryContainer
+                : Colors.transparent,
+            onTap: () {
+              setState(() {
+                int index = currentValues.indexOf(item);
+                if (index != -1) {
+                  currentValues.removeAt(index);
+                } else {
+                  currentValues.add(item);
+                }
+              });
+              widget.onChanged(currentValues);
+            },
+            child: ListTile(
+              minVerticalPadding: widget.minVerticalPadding,
+              title: Transform.translate(
+                offset: Offset(-12, 0),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: TextFont(
+                        fontSize: 18,
+                        text: widget.displayFilter == null
+                            ? item.toString()
+                            : widget.displayFilter!(item, itemIndex),
+                        maxLines: 3,
+                      ),
+                    ),
+                    widget.buildSuffix != null
+                        ? widget.buildSuffix!(currentValues, item, selected,
+                            addEntry, removeEntry)
+                        : SizedBox.shrink()
+                  ],
+                ),
+              ),
+              dense: true,
+              contentPadding: EdgeInsets.only(right: 0, left: 16),
+              leading: Padding(
+                padding: const EdgeInsets.only(right: 5),
+                child: selected
+                    ? Icon(Icons.check_box)
+                    : Icon(Icons.check_box_outline_blank),
               ),
             ),
           ),

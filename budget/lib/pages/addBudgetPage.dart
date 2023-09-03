@@ -8,6 +8,7 @@ import 'package:budget/pages/sharedBudgetSettings.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/struct/shareBudget.dart';
+import 'package:budget/widgets/countNumber.dart';
 import 'package:budget/widgets/dropdownSelect.dart';
 import 'package:budget/widgets/globalSnackBar.dart';
 import 'package:budget/widgets/navigationFramework.dart';
@@ -925,6 +926,8 @@ class TappableTextEntry extends StatelessWidget {
         const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
     this.autoSizeText = false,
     this.showPlaceHolderWhenTextEquals,
+    this.disabled = false,
+    this.customTitleBuilder,
   }) : super(key: key);
 
   final String? title;
@@ -936,46 +939,62 @@ class TappableTextEntry extends StatelessWidget {
   final FontWeight? fontWeight;
   final bool autoSizeText;
   final String? showPlaceHolderWhenTextEquals;
+  final bool disabled;
+  final Function(Widget Function(String? titlePassed) titleBuilder)?
+      customTitleBuilder;
 
   @override
   Widget build(BuildContext context) {
+    Widget titleBuilder(String? titlePassed) {
+      return TextFont(
+        autoSizeText: autoSizeText,
+        maxLines: 1,
+        minFontSize: 16,
+        textAlign: TextAlign.left,
+        fontSize: fontSize ?? 35,
+        fontWeight: fontWeight ?? FontWeight.bold,
+        text: titlePassed == null ||
+                titlePassed == "" ||
+                titlePassed == showPlaceHolderWhenTextEquals
+            ? placeholder
+            : titlePassed ?? "",
+        textColor: titlePassed == null ||
+                titlePassed == "" ||
+                titlePassed == showPlaceHolderWhenTextEquals
+            ? getColor(context, "textLight")
+            : getColor(context, "black"),
+      );
+    }
+
     return Tappable(
-      onTap: onTap,
+      onTap: disabled == true ? null : onTap,
       color: Colors.transparent,
       borderRadius: 15,
       child: Padding(
         padding: padding,
-        child: Container(
+        child: AnimatedContainer(
+          curve: Curves.easeInOut,
+          duration: Duration(milliseconds: 250),
           padding: internalPadding,
           decoration: BoxDecoration(
             border: Border(
                 bottom: BorderSide(
-                    width: 1.5,
-                    color: appStateSettings["materialYou"]
-                        ? Theme.of(context).colorScheme.primary.withOpacity(0.2)
-                        : getColor(context, "lightDarkAccentHeavy"))),
+                    width: disabled ? 0 : 1.5,
+                    color: disabled
+                        ? Colors.transparent
+                        : appStateSettings["materialYou"]
+                            ? Theme.of(context)
+                                .colorScheme
+                                .primary
+                                .withOpacity(0.2)
+                            : getColor(context, "lightDarkAccentHeavy"))),
           ),
           child: IntrinsicWidth(
             child: Align(
               alignment: Alignment.centerLeft,
-              child: TextFont(
-                autoSizeText: autoSizeText,
-                maxLines: 1,
-                minFontSize: 16,
-                textAlign: TextAlign.left,
-                fontSize: fontSize ?? 35,
-                fontWeight: fontWeight ?? FontWeight.bold,
-                text: title == null ||
-                        title == "" ||
-                        title == showPlaceHolderWhenTextEquals
-                    ? placeholder
-                    : title ?? "",
-                textColor: title == null ||
-                        title == "" ||
-                        title == showPlaceHolderWhenTextEquals
-                    ? getColor(context, "textLight")
-                    : getColor(context, "black"),
-              ),
+              child: customTitleBuilder != null
+                  ? customTitleBuilder!(titleBuilder)
+                  : titleBuilder(title),
             ),
           ),
         ),
@@ -1088,7 +1107,7 @@ class _BudgetDetailsState extends State<BudgetDetails> {
     openBottomSheet(
       context,
       PopupFramework(
-        title: "Enter Period Length",
+        title: "enter-period-length".tr(),
         child: SelectAmountValue(
           amountPassed: selectedPeriodLength.toString(),
           setSelectedAmount: (amount, _) {

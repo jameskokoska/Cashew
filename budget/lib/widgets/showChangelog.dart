@@ -10,6 +10,8 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    < 4.1.4
+    Started bill splitter
     < 4.1.3
     Loading indeterminate background color follows app bar color
     Fixed snackbar background shadow and color on dark mode

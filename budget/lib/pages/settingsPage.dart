@@ -2,6 +2,7 @@ import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart' hide AppSettings;
 import 'package:budget/pages/aboutPage.dart';
 import 'package:budget/pages/addTransactionPage.dart';
+import 'package:budget/pages/billSplitter.dart';
 import 'package:budget/pages/creditDebtTransactionsPage.dart';
 import 'package:budget/pages/editHomePage.dart';
 import 'package:budget/pages/premiumPage.dart';
@@ -34,6 +35,7 @@ import 'package:budget/struct/upcomingTransactionsFunctions.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/main.dart';
 import '../functions.dart';
@@ -283,6 +285,13 @@ class MorePages extends StatelessWidget {
                   ],
                 ),
           hasSideNavigation ? SizedBox.shrink() : SettingsPageContent(),
+          kDebugMode
+              ? SettingsContainerOpenPage(
+                  openPage: BillSplitter(),
+                  title: "Bill Splitter".tr(),
+                  icon: Icons.summarize_rounded,
+                )
+              : SizedBox.shrink(),
         ],
       ),
     );

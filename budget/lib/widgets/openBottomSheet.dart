@@ -49,6 +49,7 @@ Future openBottomSheet(
   bool resizeForKeyboard = true,
   bool showScrollbar = false,
   bool fullSnap = false,
+  bool isDismissable = true,
 }) async {
   //minimize keyboard when open
   FocusScope.of(context).unfocus();
@@ -65,6 +66,7 @@ Future openBottomSheet(
         MediaQuery.of(context).size.height / MediaQuery.of(context).size.width;
 
     return SlidingSheetDialog(
+      isDismissable: isDismissable,
       maxWidth: getWidthBottomSheet(context),
       scrollSpec: ScrollSpec(
         overscroll: false,
