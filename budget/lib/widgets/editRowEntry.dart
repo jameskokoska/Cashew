@@ -29,6 +29,7 @@ class EditRowEntry extends StatelessWidget {
     this.extraWidgetsBelow,
     this.showMoreWidget,
     this.hideReorder = false,
+    this.disableIntrinsicContentHeight = false,
     Key? key,
   }) : super(key: key);
   final int index;
@@ -47,6 +48,7 @@ class EditRowEntry extends StatelessWidget {
   final Function()? onTap;
   final Widget? showMoreWidget;
   final bool? hideReorder;
+  final bool disableIntrinsicContentHeight;
 
   @override
   Widget build(BuildContext context) {
@@ -89,8 +91,8 @@ class EditRowEntry extends StatelessWidget {
             },
             child: Column(
               children: [
-                IntrinsicHeight(
-                  child: Row(
+                Builder(builder: (context) {
+                  Widget child = Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisSize: MainAxisSize.max,
                     children: [
@@ -186,8 +188,12 @@ class EditRowEntry extends StatelessWidget {
                                 ),
                       showMoreWidget ?? SizedBox.shrink(),
                     ],
-                  ),
-                ),
+                  );
+                  if (disableIntrinsicContentHeight) return child;
+                  return IntrinsicHeight(
+                    child: child,
+                  );
+                }),
                 ...(extraWidgetsBelow ?? [])
               ],
             ),

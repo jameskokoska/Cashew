@@ -92,18 +92,21 @@ class AnimatedSizeSwitcher extends StatelessWidget {
     this.sizeCurve = Curves.easeInOutCubicEmphasized,
     this.sizeDuration = const Duration(milliseconds: 800),
     this.switcherDuration = const Duration(milliseconds: 250),
+    this.sizeAlignment = Alignment.center,
     super.key,
   });
   final Widget child;
   final Curve sizeCurve;
   final Duration sizeDuration;
   final Duration switcherDuration;
+  final Alignment sizeAlignment;
 
   @override
   Widget build(BuildContext context) {
     return AnimatedSize(
       duration: sizeDuration,
       curve: sizeCurve,
+      alignment: sizeAlignment,
       child: AnimatedSwitcher(
         duration: switcherDuration,
         child: child,

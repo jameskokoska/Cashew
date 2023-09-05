@@ -113,7 +113,7 @@ Future<bool> removedSharedFromBudget(Budget sharedBudget,
       sharedStatus: Value(null),
     ));
   }
-  await database.createOrUpdateBatchTransactionsOnly(allTransactionsToUpdate);
+  await database.updateBatchTransactionsOnly(allTransactionsToUpdate);
   await database.createOrUpdateBudget(
     sharedBudget.copyWith(
       sharedDateUpdated: Value(null),

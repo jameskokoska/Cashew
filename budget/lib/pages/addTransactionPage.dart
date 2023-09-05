@@ -24,6 +24,7 @@ import 'package:budget/widgets/textInput.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/selectChips.dart';
 import 'package:budget/widgets/saveBottomButton.dart';
+import 'package:budget/widgets/transactionEntry/transactionEntry.dart';
 import 'package:budget/widgets/transactionEntry/transactionEntryTypeButton.dart';
 import 'package:budget/widgets/transactionEntry/transactionLabel.dart';
 import 'package:budget/widgets/util/contextMenu.dart';
@@ -351,11 +352,28 @@ class _AddTransactionPageState extends State<AddTransactionPage>
       await setUpcomingNotifications(context);
     }
 
-    await database.createOrUpdateTransaction(
+    final int? rowId = await database.createOrUpdateTransaction(
       insert: widget.transaction == null,
       await createTransaction(),
       originalTransaction: widget.transaction,
     );
+
+    if (rowId != null) {
+      final Transaction transactionJustAdded =
+          await database.getTransactionFromRowId(rowId);
+      print("Transaction just added:");
+      print(transactionJustAdded);
+
+      // Do the flash animation only if new transaction or the date was changes
+      if (transactionJustAdded.dateCreated != widget.transaction?.dateCreated) {
+        recentlyAddedTransactionInfo.value.transactionPk =
+            transactionJustAdded.transactionPk;
+        recentlyAddedTransactionInfo.value.shouldAnimate = true;
+        recentlyAddedTransactionInfo.notifyListeners();
+      }
+    }
+
+    // recentlyAddedTransactionID.value =
 
     if (widget.transaction == null && appStateSettings["purchaseID"] == null) {
       updateSettings("premiumPopupAddTransactionCount",

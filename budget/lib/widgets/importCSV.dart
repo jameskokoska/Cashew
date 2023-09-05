@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
+import 'package:budget/functions.dart';
 import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
@@ -13,6 +14,7 @@ import 'package:budget/widgets/progressBar.dart';
 import 'package:budget/widgets/settingsContainers.dart';
 import 'package:budget/widgets/textInput.dart';
 import 'package:budget/widgets/textWidgets.dart';
+import 'package:drift/drift.dart' hide Column, Table;
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -319,7 +321,9 @@ class _ImportCSVState extends State<ImportCSV> {
                                         text:
                                             assignedColumns[key]!["displayName"]
                                                 .toString()
-                                                .tr(),
+                                                .tr()
+                                                .toString()
+                                                .capitalizeFirst,
                                         fontSize: 15,
                                       ),
                                       SizedBox(width: 10),
@@ -436,9 +440,10 @@ class _ImportCSVState extends State<ImportCSV> {
             context,
             icon: Icons.check_circle_outline_rounded,
             title: "done".tr() + "!",
-            description: "successfully-imported" +
+            description: "successfully-imported".tr() +
                 " " +
-                fileContents.length.toString() +
+                // Subtract one, since we don't count the header of the CSV as an entry
+                (fileContents.length - 1).toString() +
                 " " +
                 "transactions".tr().toLowerCase() +
                 ".",
@@ -479,7 +484,7 @@ class _ImportCSVState extends State<ImportCSV> {
       onTap: () async {
         await _chooseBackupFile();
       },
-      title: "import-csv".tr(),
+      title: "import-csv".tr() + " " + "(Beta)",
       description: "import-csv-description".tr(),
       icon: Icons.file_open_rounded,
     );
@@ -641,9 +646,11 @@ class _ImportingEntriesPopupState extends State<ImportingEntriesPopup> {
   Future<void> _importEntries(Map<String, Map<String, dynamic>> assignedColumns,
       String dateFormat, List<List<String>> fileContents) async {
     try {
-      List<Transaction> transactionsInserting = [];
+      List<TransactionsCompanion> transactionsInserting = [];
       for (int i = 0; i < fileContents.length; i++) {
         if (i == 0) {
+          // This is the first row where the headings are defined
+          // Dont import, it is not an entry
           continue;
         }
         setState(() {
@@ -651,13 +658,18 @@ class _ImportingEntriesPopupState extends State<ImportingEntriesPopup> {
           currentEntryIndex = i;
           currentFileLength = fileContents.length;
         });
-        await Future.delayed(Duration(milliseconds: 0), () async {
-          List<String> row = fileContents[i];
-          transactionsInserting
-              .add(await _importEntry(assignedColumns, dateFormat, row, i));
-        });
+        List<String> row = fileContents[i];
+        Transaction transactionToAdd =
+            await _importEntry(assignedColumns, dateFormat, row, i);
+        TransactionsCompanion companionToInsert =
+            transactionToAdd.toCompanion(true);
+        // Use auto incremented ID when inserting
+        companionToInsert =
+            companionToInsert.copyWith(transactionPk: Value.absent());
+
+        transactionsInserting.add(companionToInsert);
       }
-      await database.createOrUpdateBatchTransactionsOnly(transactionsInserting);
+      await database.createBatchTransactionsOnly(transactionsInserting);
       widget.next();
     } catch (e) {
       openPopup(

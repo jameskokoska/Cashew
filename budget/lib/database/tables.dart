@@ -1917,8 +1917,13 @@ class FinanceDatabase extends _$FinanceDatabase {
     return query.map((row) => row.read(totalCount)).get();
   }
 
+  Future<Transaction> getTransactionFromRowId(int rowId) {
+    return (select(transactions)..where((t) => t.rowId.equals(rowId)))
+        .getSingle();
+  }
+
   // create or update a new transaction
-  Future<int>? createOrUpdateTransaction(
+  Future<int?>? createOrUpdateTransaction(
     Transaction transaction, {
     bool insert = false,
     bool updateSharedEntry = true,
@@ -1935,7 +1940,7 @@ class FinanceDatabase extends _$FinanceDatabase {
     if (transaction.amount == double.infinity ||
         transaction.amount == double.negativeInfinity ||
         transaction.amount.isNaN) {
-      return 0;
+      return null;
     }
 
     // we are saying we still need this category! - for syncing
@@ -1955,7 +1960,7 @@ class FinanceDatabase extends _$FinanceDatabase {
           if (originalTransaction.sharedReferenceBudgetPk !=
               transaction.sharedReferenceBudgetPk) {
             await deleteTransaction(transaction.transactionPk);
-            await createOrUpdateTransaction(
+            return await createOrUpdateTransaction(
               insert: true,
               transaction.copyWith(
                 transactionPk: "-1",
@@ -1967,7 +1972,6 @@ class FinanceDatabase extends _$FinanceDatabase {
                 // sharedReferenceBudgetPk: Value(null),
               ),
             );
-            return 1;
           }
         }
 
@@ -1991,7 +1995,7 @@ class FinanceDatabase extends _$FinanceDatabase {
           } catch (e) {
             print(e.toString());
           }
-          await createOrUpdateTransaction(
+          return await createOrUpdateTransaction(
               insert: true,
               transaction.copyWith(
                 transactionPk: "-1",
@@ -2003,7 +2007,6 @@ class FinanceDatabase extends _$FinanceDatabase {
                 sharedReferenceBudgetPk: Value(null),
               ),
               updateSharedEntry: false);
-          return 1;
         }
       }
     }
@@ -2209,11 +2212,21 @@ class FinanceDatabase extends _$FinanceDatabase {
 
   // This doesn't handle shared transactions!
   // updateShared is always false
-  Future<bool> createOrUpdateBatchTransactionsOnly(
+  // This cannot create new entries, we need a companion for that! (use the function below!)
+  Future<bool> updateBatchTransactionsOnly(
       List<Transaction> transactionsInserting) async {
     await batch((batch) {
       batch.insertAll(transactions, transactionsInserting,
           mode: InsertMode.insertOrReplace);
+    });
+    return true;
+  }
+
+  Future<bool> createBatchTransactionsOnly(
+      List<TransactionsCompanion> transactionsInserting) async {
+    await batch((batch) {
+      batch.insertAll(transactions, transactionsInserting,
+          mode: InsertMode.insert);
     });
     return true;
   }
@@ -3019,7 +3032,7 @@ class FinanceDatabase extends _$FinanceDatabase {
         walletFk: toWalletPk,
       ));
     }
-    await createOrUpdateBatchTransactionsOnly(allTransactionsToUpdate);
+    await updateBatchTransactionsOnly(allTransactionsToUpdate);
     return true;
   }
 
@@ -3036,7 +3049,7 @@ class FinanceDatabase extends _$FinanceDatabase {
         ));
       }
     }
-    await createOrUpdateBatchTransactionsOnly(allTransactionsToUpdate);
+    await updateBatchTransactionsOnly(allTransactionsToUpdate);
     return allTransactionsToUpdate.length;
   }
 
@@ -3049,7 +3062,7 @@ class FinanceDatabase extends _$FinanceDatabase {
         dateTimeModified: Value(DateTime.now()),
       ));
     }
-    return await createOrUpdateBatchTransactionsOnly(allTransactionsToUpdate);
+    return await updateBatchTransactionsOnly(allTransactionsToUpdate);
   }
 
   Future deleteScannerTemplate(String scannerTemplatePk) async {
@@ -3099,7 +3112,7 @@ class FinanceDatabase extends _$FinanceDatabase {
           categoryFk: categoryTo.categoryPk,
           dateTimeModified: Value(DateTime.now())));
     }
-    await createOrUpdateBatchTransactionsOnly(transactionsEdited);
+    await updateBatchTransactionsOnly(transactionsEdited);
 
     List<TransactionAssociatedTitle> associatedTitlesToUpdate =
         await getAllAssociatedTitlesInCategory(categoryFrom.categoryPk);

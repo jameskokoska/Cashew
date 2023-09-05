@@ -13,6 +13,7 @@ import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
 import 'package:budget/colors.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
+import 'package:visibility_detector/visibility_detector.dart';
 
 import 'swipeToSelectTransactions.dart';
 import 'transactionEntryAmount.dart';
@@ -21,6 +22,34 @@ import 'associatedBudgetLabel.dart';
 
 ValueNotifier<Map<String, List<String>>> globalSelectedID =
     ValueNotifier<Map<String, List<String>>>({});
+
+class RecentlyAddedTransactionInfo {
+  RecentlyAddedTransactionInfo(
+    this.transactionPk,
+    this.shouldAnimate,
+  );
+
+  String? transactionPk;
+  bool shouldAnimate = false;
+
+  bool isRunningAnimation = false;
+  Duration totalFlashDuration = Duration(milliseconds: 4000);
+
+  void runAnimation() {
+    if (isRunningAnimation == false) {
+      Future.delayed(totalFlashDuration, () {
+        isRunningAnimation = false;
+        shouldAnimate = false;
+        recentlyAddedTransactionInfo.notifyListeners();
+      });
+    }
+    isRunningAnimation = true;
+  }
+}
+
+ValueNotifier<RecentlyAddedTransactionInfo> recentlyAddedTransactionInfo =
+    ValueNotifier<RecentlyAddedTransactionInfo>(
+        RecentlyAddedTransactionInfo(null, false));
 
 class TransactionEntryHitBox extends RenderProxyBox {
   String? transactionKey;
@@ -122,7 +151,7 @@ class TransactionEntry extends StatelessWidget {
         transactionKey: transaction.transactionPk,
         child: ValueListenableBuilder(
           valueListenable: globalSelectedID,
-          builder: (context, value, _) {
+          builder: (context, _, __) {
             bool? areTransactionsBeingSelected =
                 globalSelectedID.value[listID ?? "0"]?.isNotEmpty;
             bool selected = globalSelectedID.value[listID ?? "0"]!
@@ -134,238 +163,359 @@ class TransactionEntry extends StatelessWidget {
                 globalSelectedID.value[listID ?? "0"]!
                     .contains(transactionAfter?.transactionPk);
             double borderRadius = getPlatform() == PlatformOS.isIOS ? 7 : 12;
-            return Padding(
-              padding: enableSelectionCheckmark
-                  ? const EdgeInsets.only(left: 5, right: 5)
-                  : const EdgeInsets.only(left: 13, right: 13),
-              child: OpenContainerNavigation(
-                borderRadius: 0,
-                customBorderRadius: BorderRadius.vertical(
-                  top: Radius.circular(
-                    isTransactionBeforeSelected ? 0 : borderRadius,
-                  ),
-                  bottom: Radius.circular(
-                    isTransactionAfterSelected ? 0 : borderRadius,
-                  ),
-                ),
-                closedColor: containerColor == null
-                    ? Theme.of(context).canvasColor
-                    : containerColor,
-                button: (openContainer) {
-                  return Tappable(
-                    color: Colors.transparent,
-                    borderRadius: enableSelectionCheckmark ? 0 : borderRadius,
-                    onLongPress: () {
-                      selectTransaction(transaction, selected, true);
-                    },
-                    onTap: () async {
-                      openContainer();
-                    },
-                    child: AnimatedContainer(
-                      duration: const Duration(seconds: 1),
-                      curve: Curves.easeInOutCubicEmphasized,
-                      padding: EdgeInsets.only(
-                        left: enableSelectionCheckmark
-                            ? 0
-                            : selected
-                                ? 12 - 2
-                                : 10 - 2,
-                        right: !enableSelectionCheckmark && selected ? 12 : 10,
-                        top: !enableSelectionCheckmark &&
-                                selected &&
-                                isTransactionBeforeSelected == false
-                            ? 6
-                            : 4,
-                        bottom: !enableSelectionCheckmark &&
-                                selected &&
-                                isTransactionAfterSelected == false
-                            ? 6
-                            : 4,
+            return ValueListenableBuilder(
+              valueListenable: recentlyAddedTransactionInfo,
+              builder: (context, _, __) {
+                Color selectedColor = appStateSettings["materialYou"]
+                    ? categoryTintColor == null
+                        ? Theme.of(context)
+                            .colorScheme
+                            .secondaryContainer
+                            .withOpacity(0.8)
+                        : categoryTintColor!.withOpacity(0.2)
+                    : getColor(context, "black").withOpacity(0.1);
+                bool currentTransactionJustAdded = recentlyAddedTransactionInfo
+                            .value.transactionPk ==
+                        transaction.transactionPk &&
+                    recentlyAddedTransactionInfo.value.shouldAnimate == true;
+                Widget transactionEntryWidget = Padding(
+                  padding: enableSelectionCheckmark
+                      ? const EdgeInsets.only(left: 5, right: 5)
+                      : const EdgeInsets.only(left: 13, right: 13),
+                  child: OpenContainerNavigation(
+                    borderRadius: 0,
+                    customBorderRadius: BorderRadius.vertical(
+                      top: Radius.circular(
+                        isTransactionBeforeSelected ? 0 : borderRadius,
                       ),
-                      decoration: BoxDecoration(
-                        color: selected
-                            ? appStateSettings["materialYou"]
-                                ? categoryTintColor == null
-                                    ? Theme.of(context)
-                                        .colorScheme
-                                        .secondaryContainer
-                                        .withOpacity(0.8)
-                                    : categoryTintColor!.withOpacity(0.2)
-                                : getColor(context, "black").withOpacity(0.1)
-                            : Colors.transparent,
-                        borderRadius: BorderRadius.vertical(
-                          top: Radius.circular(
-                            isTransactionBeforeSelected ? 0 : borderRadius,
-                          ),
-                          bottom: Radius.circular(
-                            isTransactionAfterSelected ? 0 : borderRadius,
-                          ),
+                      bottom: Radius.circular(
+                        isTransactionAfterSelected ? 0 : borderRadius,
+                      ),
+                    ),
+                    closedColor: currentTransactionJustAdded == true
+                        ? Colors.transparent
+                        : containerColor == null
+                            ? Theme.of(context).canvasColor
+                            : containerColor,
+                    button: (openContainer) {
+                      return FlashingContainer(
+                        isAnimating: currentTransactionJustAdded,
+                        flashDuration: Duration(milliseconds: 500),
+                        backgroundColor: selectedColor.withOpacity(
+                          appStateSettings["materialYou"]
+                              ? 0.4
+                              : Theme.of(context).brightness == Brightness.light
+                                  ? 0.1
+                                  : 0.2,
                         ),
-                      ),
-                      child: Padding(
-                        padding: enableSelectionCheckmark
-                            ? const EdgeInsets.only(right: 7)
-                            : EdgeInsets.zero,
-                        child: Row(
-                          children: [
-                            enableSelectionCheckmark
-                                ? TransactionSelectionCheck(
-                                    areTransactionsBeingSelected:
-                                        areTransactionsBeingSelected,
-                                    selected: selected,
-                                    transaction: transaction,
-                                    listID: listID,
-                                    selectTransaction: selectTransaction,
-                                  )
-                                : SizedBox.shrink(),
-                            CategoryIcon(
-                              cacheImage: true,
-                              category: category,
-                              categoryPk: transaction.categoryFk,
-                              size: 27,
-                              sizePadding: 20,
-                              margin: EdgeInsets.zero,
-                              borderRadius: 100,
-                              onTap: () {
-                                openContainer();
-                              },
-                              tintColor: categoryTintColor,
+                        child: Tappable(
+                          color: Colors.transparent,
+                          borderRadius:
+                              enableSelectionCheckmark ? 0 : borderRadius,
+                          onLongPress: () {
+                            selectTransaction(transaction, selected, true);
+                          },
+                          onTap: () async {
+                            openContainer();
+                          },
+                          child: AnimatedContainer(
+                            duration: const Duration(seconds: 1),
+                            curve: Curves.easeInOutCubicEmphasized,
+                            padding: EdgeInsets.only(
+                              left: enableSelectionCheckmark
+                                  ? 0
+                                  : selected
+                                      ? 12 - 2
+                                      : 10 - 2,
+                              right: !enableSelectionCheckmark && selected
+                                  ? 12
+                                  : 10,
+                              top: !enableSelectionCheckmark &&
+                                      selected &&
+                                      isTransactionBeforeSelected == false
+                                  ? 6
+                                  : 4,
+                              bottom: !enableSelectionCheckmark &&
+                                      selected &&
+                                      isTransactionAfterSelected == false
+                                  ? 6
+                                  : 4,
                             ),
-                            transaction.type == null
-                                ? SizedBox(
-                                    width: 10,
-                                  )
-                                : Builder(builder: (context) {
-                                    Widget actionButton = Tooltip(
-                                      message: getTransactionActionNameFromType(
-                                          transaction),
-                                      child: GestureDetector(
-                                        onTap: () {
-                                          openTransactionActionFromType(
-                                              context, transaction);
-                                        },
-                                        child: Padding(
-                                          padding: const EdgeInsets.only(
-                                            left: 6,
-                                            top: 5.5,
-                                            bottom: 5.5,
-                                            right: 6,
-                                          ),
-                                          child: Transform.scale(
-                                            scale: isTransactionActionDealtWith(
-                                                    transaction)
-                                                ? 0.92
-                                                : 1,
-                                            child: Tappable(
-                                              color:
-                                                  !isTransactionActionDealtWith(
-                                                          transaction)
-                                                      ? Theme.of(context)
-                                                          .colorScheme
-                                                          .secondaryContainer
-                                                          .withOpacity(0.6)
-                                                      : iconColor
-                                                          .withOpacity(0.7),
+                            decoration: BoxDecoration(
+                              color:
+                                  selected ? selectedColor : Colors.transparent,
+                              borderRadius: BorderRadius.vertical(
+                                top: Radius.circular(
+                                  isTransactionBeforeSelected
+                                      ? 0
+                                      : borderRadius,
+                                ),
+                                bottom: Radius.circular(
+                                  isTransactionAfterSelected ? 0 : borderRadius,
+                                ),
+                              ),
+                            ),
+                            child: Padding(
+                              padding: enableSelectionCheckmark
+                                  ? const EdgeInsets.only(right: 7)
+                                  : EdgeInsets.zero,
+                              child: Row(
+                                children: [
+                                  enableSelectionCheckmark
+                                      ? TransactionSelectionCheck(
+                                          areTransactionsBeingSelected:
+                                              areTransactionsBeingSelected,
+                                          selected: selected,
+                                          transaction: transaction,
+                                          listID: listID,
+                                          selectTransaction: selectTransaction,
+                                        )
+                                      : SizedBox.shrink(),
+                                  CategoryIcon(
+                                    cacheImage: true,
+                                    category: category,
+                                    categoryPk: transaction.categoryFk,
+                                    size: 27,
+                                    sizePadding: 20,
+                                    margin: EdgeInsets.zero,
+                                    borderRadius: 100,
+                                    onTap: () {
+                                      openContainer();
+                                    },
+                                    tintColor: categoryTintColor,
+                                  ),
+                                  transaction.type == null
+                                      ? SizedBox(
+                                          width: 10,
+                                        )
+                                      : Builder(builder: (context) {
+                                          Widget actionButton = Tooltip(
+                                            message:
+                                                getTransactionActionNameFromType(
+                                                    transaction),
+                                            child: GestureDetector(
                                               onTap: () {
                                                 openTransactionActionFromType(
                                                     context, transaction);
                                               },
-                                              borderRadius: 100,
                                               child: Padding(
-                                                padding:
-                                                    const EdgeInsets.all(6),
-                                                child: Icon(
-                                                  getTransactionTypeIcon(
-                                                      transaction.type),
-                                                  color:
+                                                padding: const EdgeInsets.only(
+                                                  left: 6,
+                                                  top: 5.5,
+                                                  bottom: 5.5,
+                                                  right: 6,
+                                                ),
+                                                child: Transform.scale(
+                                                  scale:
                                                       isTransactionActionDealtWith(
                                                               transaction)
-                                                          ? (containerColor ==
-                                                                  null
-                                                              ? Theme.of(
-                                                                      context)
-                                                                  .canvasColor
-                                                              : containerColor)
-                                                          : iconColor
-                                                              .withOpacity(0.8),
-                                                  size: 23,
+                                                          ? 0.92
+                                                          : 1,
+                                                  child: Tappable(
+                                                    color: !isTransactionActionDealtWith(
+                                                            transaction)
+                                                        ? Theme.of(context)
+                                                            .colorScheme
+                                                            .secondaryContainer
+                                                            .withOpacity(0.6)
+                                                        : iconColor
+                                                            .withOpacity(0.7),
+                                                    onTap: () {
+                                                      openTransactionActionFromType(
+                                                          context, transaction);
+                                                    },
+                                                    borderRadius: 100,
+                                                    child: Padding(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              6),
+                                                      child: Icon(
+                                                        getTransactionTypeIcon(
+                                                            transaction.type),
+                                                        color: isTransactionActionDealtWith(
+                                                                transaction)
+                                                            ? (containerColor ==
+                                                                    null
+                                                                ? Theme.of(
+                                                                        context)
+                                                                    .canvasColor
+                                                                : containerColor)
+                                                            : iconColor
+                                                                .withOpacity(
+                                                                    0.8),
+                                                        size: 23,
+                                                      ),
+                                                    ),
+                                                  ),
                                                 ),
                                               ),
                                             ),
-                                          ),
-                                        ),
-                                      ),
-                                    );
-                                    return AnimatedSwitcher(
-                                      duration: Duration(milliseconds: 800),
-                                      child: isTransactionActionDealtWith(
-                                              transaction)
-                                          ? Container(child: actionButton)
-                                          : actionButton,
-                                    );
-                                  }),
-                            Expanded(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Builder(builder: (contextBuilder) {
-                                    double fontSize =
-                                        getIsFullScreen(context) == false
-                                            ? 15.5
-                                            : 16.5;
-                                    return Padding(
-                                      padding: const EdgeInsets.only(left: 3),
-                                      child: TransactionLabel(
-                                        fontSize: fontSize,
-                                        transaction: transaction,
-                                        category: category,
-                                      ),
-                                    );
-                                  }),
-                                  transaction.sharedReferenceBudgetPk != null &&
-                                          transaction.sharedKey == null &&
-                                          transaction.sharedStatus == null
-                                      ? AssociatedBudgetLabel(
-                                          transaction: transaction)
+                                          );
+                                          return AnimatedSwitcher(
+                                            duration:
+                                                Duration(milliseconds: 800),
+                                            child: isTransactionActionDealtWith(
+                                                    transaction)
+                                                ? Container(child: actionButton)
+                                                : actionButton,
+                                          );
+                                        }),
+                                  Expanded(
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Builder(builder: (contextBuilder) {
+                                          double fontSize =
+                                              getIsFullScreen(context) == false
+                                                  ? 15.5
+                                                  : 16.5;
+                                          return Padding(
+                                            padding:
+                                                const EdgeInsets.only(left: 3),
+                                            child: TransactionLabel(
+                                              fontSize: fontSize,
+                                              transaction: transaction,
+                                              category: category,
+                                            ),
+                                          );
+                                        }),
+                                        transaction.sharedReferenceBudgetPk !=
+                                                    null &&
+                                                transaction.sharedKey == null &&
+                                                transaction.sharedStatus == null
+                                            ? AssociatedBudgetLabel(
+                                                transaction: transaction)
+                                            : SizedBox.shrink(),
+                                        transaction.sharedKey != null ||
+                                                transaction.sharedStatus ==
+                                                    SharedStatus.waiting
+                                            ? SharedBudgetLabel(
+                                                transaction: transaction)
+                                            : SizedBox.shrink()
+                                      ],
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 7,
+                                  ),
+                                  getIsFullScreen(context)
+                                      ? TransactionEntryTypeButton(
+                                          transaction: transaction,
+                                        )
                                       : SizedBox.shrink(),
-                                  transaction.sharedKey != null ||
-                                          transaction.sharedStatus ==
-                                              SharedStatus.waiting
-                                      ? SharedBudgetLabel(
-                                          transaction: transaction)
-                                      : SizedBox.shrink()
+                                  TransactionEntryNote(
+                                    transaction: transaction,
+                                    iconColor: iconColor,
+                                  ),
+                                  TransactionEntryAmount(
+                                    transaction: transaction,
+                                    showOtherCurrency: showOtherCurrency,
+                                  ),
                                 ],
                               ),
                             ),
-                            SizedBox(
-                              width: 7,
-                            ),
-                            getIsFullScreen(context)
-                                ? TransactionEntryTypeButton(
-                                    transaction: transaction,
-                                  )
-                                : SizedBox.shrink(),
-                            TransactionEntryNote(
-                              transaction: transaction,
-                              iconColor: iconColor,
-                            ),
-                            TransactionEntryAmount(
-                              transaction: transaction,
-                              showOtherCurrency: showOtherCurrency,
-                            ),
-                          ],
+                          ),
                         ),
-                      ),
-                    ),
+                      );
+                    },
+                    openPage: openPage,
+                  ),
+                );
+                if (currentTransactionJustAdded) {
+                  return VisibilityDetector(
+                    key: ValueKey(transaction.transactionPk),
+                    child: transactionEntryWidget,
+                    onVisibilityChanged: (VisibilityInfo visibilityInfo) {
+                      final double visiblePercentage =
+                          visibilityInfo.visibleFraction * 100;
+                      if (visiblePercentage >= 90) {
+                        recentlyAddedTransactionInfo.value.runAnimation();
+                      }
+                    },
                   );
-                },
-                openPage: openPage,
-              ),
+                }
+                return transactionEntryWidget;
+              },
             );
           },
         ),
       ),
+    );
+  }
+}
+
+class FlashingContainer extends StatefulWidget {
+  final Widget child;
+  final Duration flashDuration;
+  final bool isAnimating;
+  final Color backgroundColor;
+
+  FlashingContainer({
+    required this.child,
+    this.flashDuration = const Duration(milliseconds: 500),
+    this.isAnimating = true,
+    this.backgroundColor = Colors.red,
+  });
+
+  @override
+  _FlashingContainerState createState() => _FlashingContainerState();
+}
+
+class _FlashingContainerState extends State<FlashingContainer>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<Color?> _colorTween;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: widget.flashDuration,
+    );
+
+    _colorTween = ColorTween(
+      begin: Colors.transparent,
+      end: widget.backgroundColor,
+    ).animate(_controller);
+
+    if (widget.isAnimating) {
+      _controller.repeat(reverse: true);
+    }
+  }
+
+  @override
+  void didUpdateWidget(covariant FlashingContainer oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (widget.isAnimating) {
+      if (!_controller.isAnimating) {
+        _controller.repeat(reverse: true);
+      }
+    } else {
+      _controller.stop();
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _colorTween,
+      builder: (context, child) {
+        return Container(
+          color: _colorTween.value ?? Colors.transparent,
+          child: widget.child,
+        );
+      },
     );
   }
 }

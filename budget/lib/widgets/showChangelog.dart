@@ -10,8 +10,12 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    < 4.1.5
+    Quickly find the transaction added/updated - Added flashing background to transactions after new one created/date changed
+    Fixed CSV import error, with batch inserting and fixed total transaction count
+    Bill splitter summary page (still in testing)
     < 4.1.4
-    Started bill splitter
+    Started bill splitter (still in testing)
     < 4.1.3
     Loading indeterminate background color follows app bar color
     Fixed snackbar background shadow and color on dark mode

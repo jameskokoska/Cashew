@@ -275,7 +275,7 @@ class _BillSplitterState extends State<BillSplitter> {
                 flex: 1,
                 child: SettingsContainerOpenPage(
                   isOutlinedColumn: true,
-                  title: "People".tr(),
+                  title: "Names".tr(),
                   icon: Icons.people_rounded,
                   isOutlined: true,
                   openPage: PeoplePage(
@@ -288,12 +288,14 @@ class _BillSplitterState extends State<BillSplitter> {
               SizedBox(width: 10),
               Expanded(
                 flex: 1,
-                child: SettingsContainer(
+                child: SettingsContainerOpenPage(
                   isOutlinedColumn: true,
                   title: "Summary".tr(),
                   icon: Icons.summarize_rounded,
                   isOutlined: true,
-                  onTap: () {},
+                  openPage: SummaryPage(
+                    billSplitterItems: billSplitterItems,
+                  ),
                 ),
               ),
             ],
@@ -366,162 +368,178 @@ class BillSplitterItemEntry extends StatelessWidget {
     return Stack(
       clipBehavior: Clip.none,
       children: [
-        EditRowEntry(
-          onDelete: () {
-            deleteBillSplitterItem(billSplitterItem);
-          },
-          canDelete: getPlatform() == PlatformOS.isIOS ? true : false,
-          accentColor: errorColor,
-          openPage: AddBillItemPage(
-            splitPersons: splitPersons,
-            billSplitterItem: billSplitterItem,
-            billSplitterItemIndex: billSplitterItemIndex,
-            addBillSplitterItem: addBillSplitterItem,
-            deleteBillSplitterItem: deleteBillSplitterItem,
-            updateBillSplitterItem: updateBillSplitterItem,
-            addPerson: addPerson,
-            deletePerson: deletePerson,
-          ),
-          canReorder: false,
-          hideReorder: true,
-          padding: EdgeInsets.symmetric(
-              vertical: 7,
-              horizontal: getPlatform() == PlatformOS.isIOS ? 17 : 7),
-          currentReorder: false,
-          index: 0,
-          content: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 15, vertical: 13),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
+        AnimatedSize(
+          duration: Duration(milliseconds: 300),
+          curve: Curves.easeInOut,
+          alignment: Alignment.topCenter,
+          child: EditRowEntry(
+            disableIntrinsicContentHeight: true,
+            onDelete: () {
+              deleteBillSplitterItem(billSplitterItem);
+            },
+            canDelete: getPlatform() == PlatformOS.isIOS ? true : false,
+            accentColor: errorColor,
+            openPage: AddBillItemPage(
+              splitPersons: splitPersons,
+              billSplitterItem: billSplitterItem,
+              billSplitterItemIndex: billSplitterItemIndex,
+              addBillSplitterItem: addBillSplitterItem,
+              deleteBillSplitterItem: deleteBillSplitterItem,
+              updateBillSplitterItem: updateBillSplitterItem,
+              addPerson: addPerson,
+              deletePerson: deletePerson,
+            ),
+            canReorder: false,
+            hideReorder: true,
+            padding: EdgeInsets.symmetric(
+                vertical: 7,
+                horizontal: getPlatform() == PlatformOS.isIOS ? 17 : 7),
+            currentReorder: false,
+            index: 0,
+            content: AnimatedSize(
+              duration: Duration(milliseconds: 300),
+              curve: Curves.easeInOut,
+              alignment: Alignment.topCenter,
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 15, vertical: 13),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Expanded(
-                      child: TextFont(
-                        text: billSplitterItem.name,
-                        fontSize: 23,
-                        fontWeight: FontWeight.bold,
-                        maxLines: 1,
-                      ),
-                    ),
                     Row(
-                      crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        TextFont(
-                          text: totalString,
-                          fontSize: 23,
-                          fontWeight: FontWeight.bold,
-                          textColor: errorColor,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 2),
+                        Expanded(
                           child: TextFont(
-                            text: " / " +
-                                convertToMoney(
-                                  Provider.of<AllWallets>(context),
-                                  billSplitterItem.cost,
-                                ),
-                            fontSize: 15,
-                            textColor: getColor(context, "textLight"),
+                            text: billSplitterItem.name,
+                            fontSize: 23,
+                            fontWeight: FontWeight.bold,
+                            maxLines: 1,
                           ),
+                        ),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            TextFont(
+                              text: totalString,
+                              fontSize: 23,
+                              fontWeight: FontWeight.bold,
+                              textColor: errorColor,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(bottom: 2),
+                              child: TextFont(
+                                text: " / " +
+                                    convertToMoney(
+                                      Provider.of<AllWallets>(context),
+                                      billSplitterItem.cost,
+                                    ),
+                                fontSize: 15,
+                                textColor: getColor(context, "textLight"),
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
-                  ],
-                ),
-                billSplitterItem.userAmounts.length <= 0
-                    ? SizedBox.shrink()
-                    : SizedBox(height: 7),
-                for (SplitPerson splitPerson in billSplitterItem.userAmounts)
-                  Builder(
-                    builder: (context) {
-                      double percentOfTotal = billSplitterItem.evenSplit
-                          ? billSplitterItem.userAmounts.length == 0
-                              ? 0
-                              : 1 / billSplitterItem.userAmounts.length
-                          : (splitPerson.percent ?? 0) / 100;
-                      double amountSpent =
-                          billSplitterItem.cost * percentOfTotal;
-                      if (amountSpent == 0) percentOfTotal = 0;
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(height: 7),
-                          Row(
+                    billSplitterItem.userAmounts.length <= 0
+                        ? SizedBox.shrink()
+                        : SizedBox(height: 7),
+                    for (SplitPerson splitPerson
+                        in billSplitterItem.userAmounts)
+                      Builder(
+                        builder: (context) {
+                          double percentOfTotal = billSplitterItem.evenSplit
+                              ? billSplitterItem.userAmounts.length == 0
+                                  ? 0
+                                  : 1 / billSplitterItem.userAmounts.length
+                              : (splitPerson.percent ?? 0) / 100;
+                          double amountSpent =
+                              billSplitterItem.cost * percentOfTotal;
+                          if (amountSpent == 0) percentOfTotal = 0;
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Expanded(
-                                child: TextFont(
-                                  text: splitPerson.name,
-                                  fontSize: 18,
-                                ),
-                              ),
-                              TextFont(
-                                text: convertToMoney(
-                                  Provider.of<AllWallets>(context),
-                                  amountSpent,
-                                ),
-                                fontSize: 18,
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 5),
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(100),
-                            child: Stack(
-                              children: [
-                                Container(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .secondaryContainer,
-                                  height: 5,
-                                ),
-                                AnimatedFractionallySizedBox(
-                                  duration: Duration(milliseconds: 1000),
-                                  curve: Curves.easeInOutCubicEmphasized,
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(100),
-                                    child: Container(
-                                      color:
-                                          Theme.of(context).colorScheme.primary,
-                                      height: 5,
+                              SizedBox(height: 7),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: TextFont(
+                                      text: splitPerson.name,
+                                      fontSize: 18,
                                     ),
                                   ),
-                                  widthFactor: percentOfTotal,
+                                  TextFont(
+                                    text: convertToMoney(
+                                      Provider.of<AllWallets>(context),
+                                      amountSpent,
+                                    ),
+                                    fontSize: 18,
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 5),
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(100),
+                                child: Stack(
+                                  children: [
+                                    Container(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .secondaryContainer,
+                                      height: 5,
+                                    ),
+                                    AnimatedFractionallySizedBox(
+                                      duration: Duration(milliseconds: 1500),
+                                      curve: Curves.easeInOutCubicEmphasized,
+                                      child: ClipRRect(
+                                        borderRadius:
+                                            BorderRadius.circular(100),
+                                        child: Container(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary,
+                                          height: 5,
+                                        ),
+                                      ),
+                                      widthFactor: percentOfTotal,
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
-                          ),
-                          SizedBox(height: 5),
-                        ],
-                      );
-                    },
+                              ),
+                              SizedBox(height: 5),
+                            ],
+                          );
+                        },
+                      ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+        getPlatform() == PlatformOS.isIOS
+            ? SizedBox.shrink()
+            : Positioned(
+                top: -11,
+                right: -2,
+                child: IconButton(
+                  onPressed: () {
+                    deleteBillSplitterItem(billSplitterItem);
+                  },
+                  icon: AnimatedContainer(
+                    duration: Duration(milliseconds: 500),
+                    decoration: BoxDecoration(
+                      color: dynamicPastel(
+                          context, Theme.of(context).colorScheme.error),
+                      borderRadius: BorderRadius.circular(100),
+                    ),
+                    padding: EdgeInsets.all(5),
+                    child: Icon(
+                      Icons.delete_rounded,
+                      color: Theme.of(context).colorScheme.onError,
+                    ),
                   ),
-              ],
-            ),
-          ),
-        ),
-        Positioned(
-          top: -11,
-          right: -2,
-          child: IconButton(
-            onPressed: () {
-              deleteBillSplitterItem(billSplitterItem);
-            },
-            icon: AnimatedContainer(
-              duration: Duration(milliseconds: 500),
-              decoration: BoxDecoration(
-                color:
-                    dynamicPastel(context, Theme.of(context).colorScheme.error),
-                borderRadius: BorderRadius.circular(100),
+                ),
               ),
-              padding: EdgeInsets.all(5),
-              child: Icon(
-                Icons.delete_rounded,
-                color: Theme.of(context).colorScheme.onError,
-              ),
-            ),
-          ),
-        ),
       ],
     );
   }
@@ -760,7 +778,7 @@ class _AddBillItemPageState extends State<AddBillItemPage> {
                     openBottomSheet(
                       context,
                       PopupFramework(
-                        title: "Enter Period Length",
+                        title: "Enter Amount",
                         child: SelectAmountValue(
                           amountPassed:
                               removeTrailingZeroes(percent.toString()),
@@ -943,6 +961,256 @@ class _PeoplePageState extends State<PeoplePage> {
                 addPerson: widget.addPerson,
               );
             },
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class SummaryPage extends StatelessWidget {
+  const SummaryPage({required this.billSplitterItems, super.key});
+
+  final List<BillSplitterItem> billSplitterItems;
+
+  @override
+  Widget build(BuildContext context) {
+    // Get all the users who participated
+    // We have to loop through the items, because if a user was deleted
+    // and they were enetered as paying for something their total wouldn't be there if we just checked the saved people!
+    Set<String> splitPersonsNames = {};
+    for (BillSplitterItem billSplitterItem in billSplitterItems) {
+      for (SplitPerson splitPerson in billSplitterItem.userAmounts) {
+        splitPersonsNames.add(splitPerson.name);
+      }
+    }
+
+    List<Widget> listWidgets = [];
+    for (String splitPersonName in splitPersonsNames) {
+      double total = 0;
+      for (BillSplitterItem billSplitterItem in billSplitterItems) {
+        SplitPerson? splitPerson;
+        for (SplitPerson splitPersonCheck in billSplitterItem.userAmounts) {
+          if (splitPersonCheck.name == splitPersonName) {
+            splitPerson = splitPersonCheck;
+            break;
+          }
+        }
+        if (splitPerson == null) continue;
+
+        double percentOfTotal = billSplitterItem.evenSplit
+            ? billSplitterItem.userAmounts.length == 0
+                ? 0
+                : 1 / billSplitterItem.userAmounts.length
+            : (splitPerson.percent ?? 0) / 100;
+        double amountSpent = billSplitterItem.cost * percentOfTotal;
+        if (amountSpent == 0) percentOfTotal = 0;
+        total += amountSpent;
+      }
+      listWidgets.add(
+        SummaryPersonRowEntry(
+          splitPersonName: splitPersonName,
+          total: total,
+          billSplitterItems: billSplitterItems,
+        ),
+      );
+    }
+
+    return PageFramework(
+      title: "Summary",
+      dragDownToDismiss: true,
+      listWidgets: listWidgets,
+    );
+  }
+}
+
+class SummaryPersonRowEntry extends StatefulWidget {
+  const SummaryPersonRowEntry({
+    required this.splitPersonName,
+    required this.total,
+    required this.billSplitterItems,
+    super.key,
+  });
+  final String splitPersonName;
+  final double total;
+  final List<BillSplitterItem> billSplitterItems;
+
+  @override
+  State<SummaryPersonRowEntry> createState() => _SummaryPersonRowEntryState();
+}
+
+class _SummaryPersonRowEntryState extends State<SummaryPersonRowEntry> {
+  bool isExpanded = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedSize(
+      duration: Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+      alignment: Alignment.topCenter,
+      child: EditRowEntry(
+        disableIntrinsicContentHeight: true,
+        onDelete: () {},
+        canDelete: false,
+        onTap: () {
+          setState(() {
+            isExpanded = !isExpanded;
+          });
+        },
+        openPage: Container(),
+        canReorder: false,
+        hideReorder: true,
+        padding: EdgeInsets.symmetric(
+          vertical: 7,
+          horizontal: getPlatform() == PlatformOS.isIOS ? 17 : 7,
+        ),
+        currentReorder: false,
+        index: 0,
+        content: Padding(
+          padding: EdgeInsets.only(left: 15),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                    child: TextFont(
+                      text: widget.splitPersonName,
+                      fontSize: 23,
+                      fontWeight: FontWeight.bold,
+                      maxLines: 1,
+                    ),
+                  ),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      TextFont(
+                        text: convertToMoney(
+                          Provider.of<AllWallets>(context),
+                          widget.total,
+                        ),
+                        fontSize: 23,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      AnimatedRotation(
+                        duration: Duration(milliseconds: 900),
+                        curve: ElasticOutCurve(0.6),
+                        turns: isExpanded ? 0.5 : 0,
+                        child: IconButton(
+                          onPressed: () {
+                            setState(() {
+                              isExpanded = !isExpanded;
+                            });
+                          },
+                          icon: Icon(Icons.arrow_drop_down_rounded),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              for (BillSplitterItem billSplitterItem
+                  in widget.billSplitterItems)
+                AnimatedSizeSwitcher(
+                  sizeAlignment: Alignment.topCenter,
+                  child: isExpanded == false
+                      ? Container(
+                          key: ValueKey(1),
+                        )
+                      : Builder(
+                          builder: (context) {
+                            SplitPerson? splitPerson;
+                            for (SplitPerson splitPersonCheck
+                                in billSplitterItem.userAmounts) {
+                              if (splitPersonCheck.name ==
+                                  widget.splitPersonName) {
+                                splitPerson = splitPersonCheck;
+                                break;
+                              }
+                            }
+                            if (splitPerson == null) return SizedBox.shrink();
+
+                            double percentOfTotal = billSplitterItem.evenSplit
+                                ? billSplitterItem.userAmounts.length == 0
+                                    ? 0
+                                    : 1 / billSplitterItem.userAmounts.length
+                                : (splitPerson.percent ?? 0) / 100;
+                            double amountSpent =
+                                billSplitterItem.cost * percentOfTotal;
+                            if (amountSpent == 0) percentOfTotal = 0;
+                            return Padding(
+                              padding: const EdgeInsets.only(right: 15),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  SizedBox(height: 7),
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: TextFont(
+                                          text: billSplitterItem.name,
+                                          fontSize: 18,
+                                        ),
+                                      ),
+                                      TextFont(
+                                        text: convertToMoney(
+                                          Provider.of<AllWallets>(context),
+                                          amountSpent,
+                                        ),
+                                        fontSize: 18,
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(height: 5),
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(100),
+                                    child: Stack(
+                                      children: [
+                                        Container(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .secondaryContainer,
+                                          height: 5,
+                                        ),
+                                        AnimatedFractionallySizedBox(
+                                          duration:
+                                              Duration(milliseconds: 1500),
+                                          curve:
+                                              Curves.easeInOutCubicEmphasized,
+                                          child: ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(100),
+                                            child: Container(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .primary,
+                                              height: 5,
+                                            ),
+                                          ),
+                                          widthFactor: percentOfTotal,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  SizedBox(height: 5),
+                                ],
+                              ),
+                            );
+                          },
+                        ),
+                ),
+              AnimatedSizeSwitcher(
+                sizeAlignment: Alignment.topCenter,
+                child: isExpanded
+                    ? Container(
+                        height: 10,
+                        key: ValueKey(1),
+                      )
+                    : Container(
+                        key: ValueKey(2),
+                      ),
+              ),
+            ],
           ),
         ),
       ),
