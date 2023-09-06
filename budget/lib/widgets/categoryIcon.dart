@@ -27,6 +27,7 @@ class CategoryIcon extends StatelessWidget {
     this.tintColor,
     this.tintEnabled = true,
     this.cacheImage = false,
+    this.enableTooltip = false,
   }) : super(key: key);
 
   final String? categoryPk;
@@ -44,9 +45,10 @@ class CategoryIcon extends StatelessWidget {
   final Color? tintColor;
   final bool tintEnabled;
   final bool cacheImage;
+  final bool enableTooltip;
 
-  categoryIconWidget(context, TransactionCategory? category) {
-    return Column(
+  Widget categoryIconWidget(context, TransactionCategory? category) {
+    Widget child = Column(
       children: [
         Stack(
           children: [
@@ -167,6 +169,15 @@ class CategoryIcon extends StatelessWidget {
               ),
       ],
     );
+    if (enableTooltip == true && category?.name != null) {
+      return Tooltip(
+        waitDuration: Duration(milliseconds: 100),
+        message: category?.name ?? "",
+        child: child,
+      );
+    } else {
+      return child;
+    }
   }
 
   @override

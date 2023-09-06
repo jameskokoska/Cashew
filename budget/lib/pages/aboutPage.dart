@@ -103,7 +103,7 @@ class AboutPage extends StatelessWidget {
             color: appStateSettings["materialYou"]
                 ? dynamicPastel(
                     context, Theme.of(context).colorScheme.secondaryContainer,
-                    amountLight: 0.4, amountDark: 0.6)
+                    amountLight: 0.2, amountDark: 0.6)
                 : getColor(context, "lightDarkAccent"),
             borderRadius: 15,
             child: Padding(
@@ -192,7 +192,7 @@ class AboutPage extends StatelessWidget {
             color: appStateSettings["materialYou"]
                 ? dynamicPastel(
                     context, Theme.of(context).colorScheme.secondaryContainer,
-                    amountLight: 0.4, amountDark: 0.6)
+                    amountLight: 0.2, amountDark: 0.6)
                 : getColor(context, "lightDarkAccent"),
             borderRadius: 15,
             child: Padding(
@@ -233,7 +233,7 @@ class AboutPage extends StatelessWidget {
             color: appStateSettings["materialYou"]
                 ? dynamicPastel(
                     context, Theme.of(context).colorScheme.secondaryContainer,
-                    amountLight: 0.4, amountDark: 0.6)
+                    amountLight: 0.2, amountDark: 0.6)
                 : getColor(context, "lightDarkAccent"),
             borderRadius: 15,
             child: Padding(
@@ -342,7 +342,7 @@ class AboutPage extends StatelessWidget {
             backgroundColor: (appStateSettings["materialYou"]
                 ? dynamicPastel(
                     context, Theme.of(context).colorScheme.secondaryContainer,
-                    amountLight: 0.4, amountDark: 0.6)
+                    amountLight: 0.2, amountDark: 0.6)
                 : getColor(context, "lightDarkAccent")),
           ),
         ),
@@ -491,7 +491,7 @@ class AboutInfoBox extends StatelessWidget {
             (appStateSettings["materialYou"]
                 ? dynamicPastel(
                     context, Theme.of(context).colorScheme.secondaryContainer,
-                    amountLight: 0.4, amountDark: 0.6)
+                    amountLight: 0.2, amountDark: 0.6)
                 : getColor(context, "lightDarkAccent")),
         borderRadius: 15,
         child: Padding(

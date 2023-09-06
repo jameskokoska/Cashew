@@ -924,8 +924,9 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                             .indexedByPk[appStateSettings[
                                                 "selectedWalletPk"]]
                                             ?.currency)
-                                ? AnimatedSwitcher(
-                                    duration: Duration(milliseconds: 350),
+                                ? AnimatedSizeSwitcher(
+                                    switcherDuration:
+                                        Duration(milliseconds: 350),
                                     child: Container(
                                       key: ValueKey(
                                           selectedCategory?.name ?? ""),
@@ -934,6 +935,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                         textAlign: TextAlign.right,
                                         fontSize: 18,
                                         text: selectedCategory?.name ?? "",
+                                        maxLines: 2,
                                       ),
                                     ),
                                   )

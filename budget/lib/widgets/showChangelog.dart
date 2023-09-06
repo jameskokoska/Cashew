@@ -10,6 +10,9 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    < 4.1.6
+    Hovering over a category selector with a long name will show full title
+    Category title in add transaction page has max 2 lines
     < 4.1.5
     Quickly find the transaction added/updated - Added flashing background to transactions after new one created/date changed
     Fixed CSV import error, with batch inserting and fixed total transaction count

@@ -254,52 +254,47 @@ class _BillSplitterState extends State<BillSplitter> {
             },
           ),
         ),
-        Padding(
-          padding: EdgeInsets.symmetric(
-            horizontal: getHorizontalPaddingConstrained(context) + 13,
-          ),
-          child: Row(
-            children: [
-              Expanded(
-                flex: 1,
-                child: SettingsContainer(
-                  isOutlinedColumn: true,
-                  title: "New Bill".tr(),
-                  icon: Icons.add_rounded,
-                  isOutlined: true,
-                  onTap: () {},
+        Row(
+          children: [
+            Expanded(
+              flex: 1,
+              child: SettingsContainer(
+                isOutlinedColumn: true,
+                title: "New Bill".tr(),
+                icon: Icons.add_rounded,
+                isOutlined: true,
+                onTap: () {},
+              ),
+            ),
+            SizedBox(width: 10),
+            Expanded(
+              flex: 1,
+              child: SettingsContainerOpenPage(
+                isOutlinedColumn: true,
+                title: "Names".tr(),
+                icon: Icons.people_rounded,
+                isOutlined: true,
+                openPage: PeoplePage(
+                  splitPersons: splitPersons,
+                  addPerson: addPerson,
+                  deletePerson: deletePerson,
                 ),
               ),
-              SizedBox(width: 10),
-              Expanded(
-                flex: 1,
-                child: SettingsContainerOpenPage(
-                  isOutlinedColumn: true,
-                  title: "Names".tr(),
-                  icon: Icons.people_rounded,
-                  isOutlined: true,
-                  openPage: PeoplePage(
-                    splitPersons: splitPersons,
-                    addPerson: addPerson,
-                    deletePerson: deletePerson,
-                  ),
+            ),
+            SizedBox(width: 10),
+            Expanded(
+              flex: 1,
+              child: SettingsContainerOpenPage(
+                isOutlinedColumn: true,
+                title: "Summary".tr(),
+                icon: Icons.summarize_rounded,
+                isOutlined: true,
+                openPage: SummaryPage(
+                  billSplitterItems: billSplitterItems,
                 ),
               ),
-              SizedBox(width: 10),
-              Expanded(
-                flex: 1,
-                child: SettingsContainerOpenPage(
-                  isOutlinedColumn: true,
-                  title: "Summary".tr(),
-                  icon: Icons.summarize_rounded,
-                  isOutlined: true,
-                  openPage: SummaryPage(
-                    billSplitterItems: billSplitterItems,
-                  ),
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
         SizedBox(height: 10),
         for (int i = 0; i < billSplitterItems.length; i++)
@@ -657,7 +652,7 @@ class _AddBillItemPageState extends State<AddBillItemPage> {
         child: PageFramework(
           title: widget.billSplitterItem == null ? "Add Item" : "Edit Item",
           dragDownToDismiss: true,
-          horizontalPadding: 13,
+          horizontalPadding: getHorizontalPaddingConstrained(context) + 13,
           actions: [
             widget.billSplitterItem != null
                 ? IconButton(
@@ -867,7 +862,7 @@ void openAddPersonPopup({
   openBottomSheet(
     context,
     PopupFramework(
-      title: "Add Person",
+      title: "Add Name",
       child: SelectText(
         popContext: false,
         setSelectedText: (_) {},
@@ -910,6 +905,7 @@ class _PeoplePageState extends State<PeoplePage> {
     return PageFramework(
       title: "People",
       dragDownToDismiss: true,
+      horizontalPadding: getHorizontalPaddingConstrained(context),
       listWidgets: [
         widget.splitPersons.length <= 0
             ? NoResults(
@@ -1020,6 +1016,7 @@ class SummaryPage extends StatelessWidget {
       title: "Summary",
       dragDownToDismiss: true,
       listWidgets: listWidgets,
+      horizontalPadding: getHorizontalPaddingConstrained(context),
     );
   }
 }

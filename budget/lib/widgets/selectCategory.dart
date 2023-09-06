@@ -144,42 +144,46 @@ class _SelectCategoryState extends State<SelectCategory> {
                                     : 0)
                             : 0,
                         right: index == snapshot.data!.length - 1 ? 12 - 4 : 0),
-                    child: CategoryIcon(
-                      categoryPk: category.categoryPk,
-                      size: 42,
-                      sizePadding: 28,
-                      label: widget.labelIcon,
-                      onTap: () {
-                        if (widget.setSelectedCategory != null) {
-                          widget.setSelectedCategory!(category);
-                          setState(() {
-                            selectedCategories = [];
-                            selectedCategories.add(category.categoryPk);
-                          });
-                          Future.delayed(Duration(milliseconds: 70), () {
-                            if (widget.popRoute) Navigator.pop(context);
-                            if (widget.next != null) {
-                              widget.next!();
-                            }
-                          });
-                        } else if (widget.setSelectedCategories != null) {
-                          // print(selectedCategories);
-                          if (selectedCategories
-                              .contains(category.categoryPk)) {
+                    child: Builder(builder: (context) {
+                      return CategoryIcon(
+                        enableTooltip: category.name.length > 10,
+                        categoryPk: category.categoryPk,
+                        size: 42,
+                        sizePadding: 28,
+                        label: widget.labelIcon,
+                        onTap: () {
+                          if (widget.setSelectedCategory != null) {
+                            widget.setSelectedCategory!(category);
                             setState(() {
-                              selectedCategories.remove(category.categoryPk);
-                            });
-                            widget.setSelectedCategories!(selectedCategories);
-                          } else {
-                            setState(() {
+                              selectedCategories = [];
                               selectedCategories.add(category.categoryPk);
                             });
-                            widget.setSelectedCategories!(selectedCategories);
+                            Future.delayed(Duration(milliseconds: 70), () {
+                              if (widget.popRoute) Navigator.pop(context);
+                              if (widget.next != null) {
+                                widget.next!();
+                              }
+                            });
+                          } else if (widget.setSelectedCategories != null) {
+                            // print(selectedCategories);
+                            if (selectedCategories
+                                .contains(category.categoryPk)) {
+                              setState(() {
+                                selectedCategories.remove(category.categoryPk);
+                              });
+                              widget.setSelectedCategories!(selectedCategories);
+                            } else {
+                              setState(() {
+                                selectedCategories.add(category.categoryPk);
+                              });
+                              widget.setSelectedCategories!(selectedCategories);
+                            }
                           }
-                        }
-                      },
-                      outline: selectedCategories.contains(category.categoryPk),
-                    ),
+                        },
+                        outline:
+                            selectedCategories.contains(category.categoryPk),
+                      );
+                    }),
                   ),
                 ));
                 index++;
@@ -312,6 +316,7 @@ class _SelectCategoryState extends State<SelectCategory> {
                       ? 0.86
                       : 1,
                   child: CategoryIcon(
+                    enableTooltip: category.name.length > 10,
                     canEditByLongPress: false,
                     categoryPk: category.categoryPk,
                     size: size,
