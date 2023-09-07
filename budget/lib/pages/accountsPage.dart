@@ -58,7 +58,7 @@ class AccountsPageState extends State<AccountsPage> {
       expandedHeight: 56,
       title: getPlatform() == PlatformOS.isIOS
           ? "backup".tr()
-          : "account-and-backup".tr(),
+          : "data-backup".tr(),
       appBarBackgroundColor: getPlatform() == PlatformOS.isIOS
           ? null
           : Theme.of(context).colorScheme.secondaryContainer,

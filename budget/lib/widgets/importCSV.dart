@@ -8,8 +8,10 @@ import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/dropdownSelect.dart';
+import 'package:budget/widgets/globalSnackBar.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
+import 'package:budget/widgets/openSnackbar.dart';
 import 'package:budget/widgets/progressBar.dart';
 import 'package:budget/widgets/settingsContainers.dart';
 import 'package:budget/widgets/textInput.dart';
@@ -23,6 +25,11 @@ import 'dart:io';
 import 'package:csv/csv.dart';
 import 'package:flutter_charset_detector/flutter_charset_detector.dart';
 import 'package:budget/widgets/framework/popupFramework.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:universal_html/html.dart' as html;
+import 'dart:io';
+import 'package:budget/struct/randomConstants.dart';
+import 'package:universal_html/html.dart' show AnchorElement;
 
 class ImportCSV extends StatefulWidget {
   const ImportCSV({Key? key}) : super(key: key);
@@ -81,7 +88,7 @@ class _ImportCSVState extends State<ImportCSV> {
         Map<String, Map<String, dynamic>> assignedColumns = {
           "date": {
             "displayName": "date",
-            "headerValues": ["date"],
+            "headerValues": ["date", "date created", "dateCreated"],
             "required": true,
             "setHeaderValue": "",
             "setHeaderIndex": -1,
@@ -95,7 +102,7 @@ class _ImportCSVState extends State<ImportCSV> {
           },
           "category": {
             "displayName": "category",
-            "headerValues": ["category", "category name"],
+            "headerValues": ["category", "category name", "categoryName"],
             // "extraOptions": ["Use Smart Categories"],
             //This will be implemented later... in the future
             //Use title to determine category. If smart category entry not found, ask user to select which category when importing. Save these selections to that category.
@@ -463,9 +470,9 @@ class _ImportCSVState extends State<ImportCSV> {
   String determineInitialValue(List<String> headerValues, List<String> headers,
       bool required, bool? canSelectCurrentWallet) {
     for (String header in headers) {
-      if (headerValues.contains(header.toLowerCase())) {
-        return header;
-      } else if (headerValues.contains(header.toLowerCase().trim())) {
+      if (headerValues.contains(header.toLowerCase()) ||
+          headerValues.contains(header) ||
+          headerValues.contains(header.toLowerCase().trim())) {
         return header;
       }
     }
@@ -485,7 +492,7 @@ class _ImportCSVState extends State<ImportCSV> {
         await _chooseBackupFile();
       },
       title: "import-csv".tr() + " " + "(Beta)",
-      description: "import-csv-description".tr(),
+      // description: "import-csv-description".tr(),
       icon: Icons.file_open_rounded,
     );
   }

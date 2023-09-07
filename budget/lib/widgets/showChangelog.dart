@@ -10,6 +10,10 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    < 4.1.7
+    Export to CSV file
+    Renamed 'Wallets' to 'Accounts'
+    More translations
     < 4.1.6
     Hovering over a category selector with a long name will show full title
     Category title in add transaction page has max 2 lines

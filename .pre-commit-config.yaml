@@ -1,0 +1,10 @@
+repos:
+-   repo: local
+    hooks:
+    -   id: update_translations
+        name: update_translations
+        entry: python budget\\assets\\translations\\generate-translations.py
+        language: python
+        additional_dependencies: [requests]
+        verbose: true
+        always_run: true

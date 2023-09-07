@@ -125,13 +125,16 @@ class _RatingPopupState extends State<RatingPopup> {
           ),
           Opacity(
             opacity: 0.4,
-            child: TextFont(
-              text: writingFeedback
-                  ? "rate-app-privacy-email".tr()
-                  : "rate-app-privacy".tr(),
-              textAlign: TextAlign.center,
-              fontSize: 12,
-              maxLines: 5,
+            child: AnimatedSizeSwitcher(
+              child: TextFont(
+                key: ValueKey(writingFeedback.toString()),
+                text: writingFeedback
+                    ? "rate-app-privacy-email".tr()
+                    : "rate-app-privacy".tr(),
+                textAlign: TextAlign.center,
+                fontSize: 12,
+                maxLines: 5,
+              ),
             ),
           ),
           SizedBox(height: 15),

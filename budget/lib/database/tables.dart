@@ -406,7 +406,14 @@ class ScannerTemplates extends Table {
 class TransactionWithCategory {
   final TransactionCategory category;
   final Transaction transaction;
-  TransactionWithCategory({required this.category, required this.transaction});
+  final TransactionWallet? wallet;
+  final Budget? budget;
+  TransactionWithCategory({
+    required this.category,
+    required this.transaction,
+    this.wallet,
+    this.budget,
+  });
 }
 
 class AllWallets {
@@ -1377,6 +1384,37 @@ class FinanceDatabase extends _$FinanceDatabase {
               tbl.dateTimeModified.isBiggerOrEqualValue(lastSynced) |
               tbl.dateTimeModified.isNull()))
         .get();
+  }
+
+  Future<List<TransactionWithCategory>>
+      getAllTransactionsWithCategoryWalletBudget() async {
+    final query = (select(transactions)
+          ..orderBy([(t) => OrderingTerm.desc(t.dateCreated)]))
+        .join([
+      innerJoin(
+        categories,
+        categories.categoryPk.equalsExp(transactions.categoryFk),
+      ),
+      innerJoin(
+        wallets,
+        wallets.walletPk.equalsExp(transactions.walletFk),
+      ),
+      leftOuterJoin(
+        budgets,
+        budgets.budgetPk.equalsExp(transactions.sharedReferenceBudgetPk),
+      ),
+    ]);
+
+    final rows = await query.get();
+
+    return rows.map((row) {
+      return TransactionWithCategory(
+        category: row.readTable(categories),
+        transaction: row.readTable(transactions),
+        wallet: row.readTableOrNull(wallets),
+        budget: row.readTableOrNull(budgets),
+      );
+    }).toList();
   }
 
   Future<List<TransactionCategory>> getAllNewCategories(DateTime lastSynced) {

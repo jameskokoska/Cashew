@@ -11,6 +11,7 @@ import 'package:budget/struct/languageMap.dart';
 import 'package:budget/widgets/animatedExpanded.dart';
 import 'package:budget/widgets/dropdownSelect.dart';
 import 'package:budget/widgets/importCSV.dart';
+import 'package:budget/widgets/exportCSV.dart';
 import 'package:budget/pages/autoTransactionsPageEmail.dart';
 import 'package:budget/pages/editAssociatedTitlesPage.dart';
 import 'package:budget/pages/editBudgetPage.dart';
@@ -535,6 +536,8 @@ class SettingsPageContent extends StatelessWidget {
         AutoTitlesToggle(),
 
         ImportCSV(),
+
+        ExportCSV(),
 
         appStateSettings["emailScanning"]
             ? SettingsContainerOpenPage(

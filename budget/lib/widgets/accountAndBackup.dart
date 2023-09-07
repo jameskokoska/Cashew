@@ -1338,14 +1338,14 @@ Future<bool> saveDriveFileToDevice(
     File savedFile = File(filePath);
     await savedFile.writeAsBytes(dataStore);
     openSnackbar(SnackbarMessage(
-      title: "Backup Downloaded to Device",
+      title: "backup-downloaded-success".tr(),
       description: fileName,
       icon: Icons.download_done_rounded,
     ));
     return true;
   } catch (e) {
     openSnackbar(SnackbarMessage(
-      title: "Error Downloading",
+      title: "error-downloading".tr(),
       description: e.toString(),
       icon: Icons.warning_amber_rounded,
     ));
