@@ -326,7 +326,6 @@
   "delete-transaction": "Xóa giao dịch",
   "delete-transaction-question": "Xóa giao dịch?",
   "daily-notifications": "Thông báo hàng ngày",
-  "daily-notifications-description": "Nếu ứng dụng không được mở",
   "alert-time": "Thời gian cảnh báo",
   "upcoming-transactions": "Giao dịch sắp tới",
   "notification-reminder-1": "Đừng quên thêm các giao dịch từ hôm nay!",
@@ -569,5 +568,10 @@
   "add-name": "Thêm tên",
   "delete-name-question": "Xóa tên?",
   "duplicate-name-warning": "Tên trùng lặp",
-  "duplicate-name-warning-description": "Vui lòng chọn tên khác"
+  "duplicate-name-warning-description": "Vui lòng chọn tên khác",
+  "notifications-reminder": "Thêm lời nhắc giao dịch",
+  "notifications-reminder-type": "Loại nhắc nhở",
+  "daily-notification-type-if-not-opened": "Nếu ứng dụng chưa được mở hôm nay",
+  "daily-notification-type-one-day-from-open": "24 giờ từ ứng dụng được mở",
+  "daily-notification-type-everyday": "Hằng ngày"
 }

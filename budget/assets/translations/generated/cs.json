@@ -326,7 +326,6 @@
   "delete-transaction": "Odstranit transakci",
   "delete-transaction-question": "Odstranit transakci?",
   "daily-notifications": "Denní oznámení",
-  "daily-notifications-description": "Pokud aplikace nebyla otevřena",
   "alert-time": "Varovný čas",
   "upcoming-transactions": "Nadcházející transakce",
   "notification-reminder-1": "Nezapomeňte přidat transakce ze dnešního dne!",
@@ -569,5 +568,10 @@
   "add-name": "Přidat jméno",
   "delete-name-question": "Smazat název?",
   "duplicate-name-warning": "Duplicitní jméno",
-  "duplicate-name-warning-description": "Vyberte prosím jiné jméno"
+  "duplicate-name-warning-description": "Vyberte prosím jiné jméno",
+  "notifications-reminder": "Přidejte připomenutí transakce",
+  "notifications-reminder-type": "Typ připomenutí",
+  "daily-notification-type-if-not-opened": "Pokud aplikace ještě nebyla otevřena",
+  "daily-notification-type-one-day-from-open": "Otevřeno 24 hodin od aplikace",
+  "daily-notification-type-everyday": "Každý den"
 }

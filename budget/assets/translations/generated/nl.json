@@ -326,7 +326,6 @@
   "delete-transaction": "Verwijder transactie",
   "delete-transaction-question": "Transactie verwijderen?",
   "daily-notifications": "Dagelijkse meldingen",
-  "daily-notifications-description": "Als de app niet is geopend",
   "alert-time": "Alert tijd",
   "upcoming-transactions": "Aankomende transacties",
   "notification-reminder-1": "Vergeet niet om transacties van vandaag toe te voegen!",
@@ -569,5 +568,10 @@
   "add-name": "Naam toevoegen",
   "delete-name-question": "Naam verwijderen?",
   "duplicate-name-warning": "Dubbele naam",
-  "duplicate-name-warning-description": "Kies een andere naam"
+  "duplicate-name-warning-description": "Kies een andere naam",
+  "notifications-reminder": "Toevoegen Transaction Herinnering",
+  "notifications-reminder-type": "Type herinneringstype",
+  "daily-notification-type-if-not-opened": "Als de app vandaag nog niet is geopend",
+  "daily-notification-type-one-day-from-open": "24 uur van de geopende app",
+  "daily-notification-type-everyday": "Elke dag"
 }

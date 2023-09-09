@@ -14,6 +14,8 @@ import 'package:flutter/material.dart';
 import 'package:budget/colors.dart';
 import 'package:flutter/services.dart';
 
+ValueNotifier<bool> isSwipingToDismissPageDown = ValueNotifier<bool>(false);
+
 class PageFramework extends StatefulWidget {
   const PageFramework({
     Key? key,
@@ -236,6 +238,11 @@ class PageFrameworkState extends State<PageFramework>
       if (swipeDownToDismiss) {
         totalDragY = totalDragY + ptr.delta.dy;
         calculatedYOffsetForY = totalDragY / 500;
+
+        if (totalDragY > 20) {
+          isSwipingToDismissPageDown.value = true;
+          isSwipingToDismissPageDown.notifyListeners();
+        }
       }
       _animationControllerDragY.value =
           max(calculatedYOffsetForX, calculatedYOffsetForY);
@@ -262,6 +269,8 @@ class PageFrameworkState extends State<PageFramework>
       calculatedYOffsetForX = 0;
       isBackSideSwiping = false;
       _animationControllerDragY.reverse();
+      isSwipingToDismissPageDown.value = false;
+      isSwipingToDismissPageDown.notifyListeners();
     }
   }
 

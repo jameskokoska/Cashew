@@ -326,7 +326,6 @@
   "delete-transaction": "트랜잭션 삭제",
   "delete-transaction-question": "트랜잭션 삭제?",
   "daily-notifications": "매일 알림",
-  "daily-notifications-description": "앱이 열리지 않은 경우",
   "alert-time": "경고 시간",
   "upcoming-transactions": "다가오는 거래",
   "notification-reminder-1": "오늘부터 거래를 추가하는 것을 잊지 마십시오!",
@@ -569,5 +568,10 @@
   "add-name": "이름을 추가하십시오",
   "delete-name-question": "이름 삭제?",
   "duplicate-name-warning": "중복 이름",
-  "duplicate-name-warning-description": "다른 이름을 선택하십시오"
+  "duplicate-name-warning-description": "다른 이름을 선택하십시오",
+  "notifications-reminder": "트랜잭션 알림을 추가하십시오",
+  "notifications-reminder-type": "알림 유형",
+  "daily-notification-type-if-not-opened": "오늘 앱이 아직 열리지 않은 경우",
+  "daily-notification-type-one-day-from-open": "앱에서 24 시간 동안 열렸습니다",
+  "daily-notification-type-everyday": "매일"
 }

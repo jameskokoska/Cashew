@@ -326,7 +326,6 @@
   "delete-transaction": "लेन -देन हटाएं",
   "delete-transaction-question": "लेनदेन हटाएं?",
   "daily-notifications": "दैनिक सूचनाएँ",
-  "daily-notifications-description": "अगर ऐप नहीं खोला गया था",
   "alert-time": "सतर्क समय",
   "upcoming-transactions": "आगामी लेनदेन",
   "notification-reminder-1": "आज से लेनदेन जोड़ना न भूलें!",
@@ -569,5 +568,10 @@
   "add-name": "नाम जोड़ें",
   "delete-name-question": "नाम हटाएं?",
   "duplicate-name-warning": "डुप्लिकेट नाम",
-  "duplicate-name-warning-description": "कृपया दूसरा नाम चुनें"
+  "duplicate-name-warning-description": "कृपया दूसरा नाम चुनें",
+  "notifications-reminder": "लेनदेन अनुस्मारक जोड़ें",
+  "notifications-reminder-type": "अनुस्मारक प्रकार",
+  "daily-notification-type-if-not-opened": "अगर ऐप आज ही नहीं खोला गया था",
+  "daily-notification-type-one-day-from-open": "ऐप से 24 घंटे खोले गए",
+  "daily-notification-type-everyday": "रोज रोज"
 }

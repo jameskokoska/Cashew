@@ -326,7 +326,6 @@
   "delete-transaction": "Poistaa tapahtuma",
   "delete-transaction-question": "Poistaa tapahtuma?",
   "daily-notifications": "Päivittäiset ilmoitukset",
-  "daily-notifications-description": "Jos sovellusta ei avata",
   "alert-time": "Hälytysaika",
   "upcoming-transactions": "Tulevat liiketoimet",
   "notification-reminder-1": "Älä unohda lisätä tapahtumia tänään!",
@@ -569,5 +568,10 @@
   "add-name": "Lisätä nimeä",
   "delete-name-question": "Poistaa nimi?",
   "duplicate-name-warning": "Päällekkäinen nimi",
-  "duplicate-name-warning-description": "Valitse toinen nimi"
+  "duplicate-name-warning-description": "Valitse toinen nimi",
+  "notifications-reminder": "Lisää transaktiomuistutus",
+  "notifications-reminder-type": "Muistutustyyppi",
+  "daily-notification-type-if-not-opened": "Jos sovellusta ei jo avattu tänään",
+  "daily-notification-type-one-day-from-open": "24 tuntia sovelluksesta avattiin",
+  "daily-notification-type-everyday": "Joka päivä"
 }

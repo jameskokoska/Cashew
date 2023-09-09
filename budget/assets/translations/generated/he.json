@@ -326,7 +326,6 @@
   "delete-transaction": "מחק עסקה",
   "delete-transaction-question": "למחוק עסקה?",
   "daily-notifications": "התראות יומיות",
-  "daily-notifications-description": "אם האפליקציה לא נפתחה",
   "alert-time": "זמן התראה",
   "upcoming-transactions": "עסקאות צפויות",
   "notification-reminder-1": "אל תשכח להוסיף עסקאות מהיום!",
@@ -569,5 +568,10 @@
   "add-name": "הוסף שם",
   "delete-name-question": "למחוק שם?",
   "duplicate-name-warning": "שם כפול",
-  "duplicate-name-warning-description": "אנא בחר שם אחר"
+  "duplicate-name-warning-description": "אנא בחר שם אחר",
+  "notifications-reminder": "הוסף תזכורת עסקה",
+  "notifications-reminder-type": "סוג תזכורת",
+  "daily-notification-type-if-not-opened": "אם האפליקציה כבר לא נפתחה היום",
+  "daily-notification-type-one-day-from-open": "24 שעות מהאפליקציה נפתחה",
+  "daily-notification-type-everyday": "כל יום"
 }

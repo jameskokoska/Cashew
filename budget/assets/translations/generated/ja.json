@@ -326,7 +326,6 @@
   "delete-transaction": "トランザクションを削除します",
   "delete-transaction-question": "トランザクションを削除しますか？",
   "daily-notifications": "毎日の通知",
-  "daily-notifications-description": "アプリが開かれていない場合",
   "alert-time": "アラート時間",
   "upcoming-transactions": "今後のトランザクション",
   "notification-reminder-1": "今日からトランザクションを追加することを忘れないでください！",
@@ -569,5 +568,10 @@
   "add-name": "名前を追加します",
   "delete-name-question": "名前を削除しますか？",
   "duplicate-name-warning": "重複した名前",
-  "duplicate-name-warning-description": "別の名前を選択してください"
+  "duplicate-name-warning-description": "別の名前を選択してください",
+  "notifications-reminder": "トランザクションリマインダーを追加します",
+  "notifications-reminder-type": "リマインダータイプ",
+  "daily-notification-type-if-not-opened": "アプリが今日まだ開いていない場合",
+  "daily-notification-type-one-day-from-open": "アプリが開いてから24時間",
+  "daily-notification-type-everyday": "毎日"
 }

@@ -149,7 +149,7 @@ class _EditCategoriesPageState extends State<EditCategoriesPage> {
                           currentReorder != -1 && currentReorder != index,
                       padding:
                           EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                      key: ValueKey(index),
+                      key: ValueKey(category.categoryPk),
                       content: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
@@ -224,12 +224,14 @@ class _EditCategoriesPageState extends State<EditCategoriesPage> {
                         ],
                       ),
                       index: index,
-                      onDelete: () {
-                        deleteCategoryPopup(
-                          context,
-                          category: category,
-                          routesToPopAfterDelete: RoutesToPopAfterDelete.None,
-                        );
+                      onDelete: () async {
+                        return (await deleteCategoryPopup(
+                              context,
+                              category: category,
+                              routesToPopAfterDelete:
+                                  RoutesToPopAfterDelete.None,
+                            )) ==
+                            DeletePopupAction.Delete;
                       },
                       openPage: AddCategoryPage(
                         category: category,
@@ -372,7 +374,7 @@ class RefreshButtonState extends State<RefreshButton>
   }
 }
 
-void deleteCategoryPopup(
+Future<DeletePopupAction?> deleteCategoryPopup(
   BuildContext context, {
   required TransactionCategory category,
   required RoutesToPopAfterDelete routesToPopAfterDelete,
@@ -431,6 +433,7 @@ void deleteCategoryPopup(
       });
     }
   }
+  return action;
 }
 
 void mergeCategoryPopup(

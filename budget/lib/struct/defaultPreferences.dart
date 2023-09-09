@@ -1,6 +1,7 @@
 import 'package:budget/colors.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/pages/homePage/homePageLineGraph.dart';
+import 'package:budget/widgets/notificationsSettings.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:device_info_plus/device_info_plus.dart';
@@ -72,6 +73,9 @@ Future<Map<String, dynamic>> getDefaultPreferences() async {
     "notificationHour": 20,
     "notificationMinute": 0,
     "notificationsUpcomingTransactions": true,
+    "notificationsReminderType": ReminderNotificationType.IfAppNotOpened.index,
+    "appOpenedHour": DateTime.now().hour,
+    "appOpenedMinute": DateTime.now().minute,
     "materialYou": supportsSystemColor(),
     "colorTintCategoryIcon": false,
     "sendTransactionsToServerQueue": {},

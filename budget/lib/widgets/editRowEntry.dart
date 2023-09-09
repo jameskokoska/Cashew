@@ -2,6 +2,7 @@ import 'package:budget/colors.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/fadeIn.dart';
+import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/widgets/openContainerNavigation.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:flutter/material.dart'
@@ -17,7 +18,7 @@ class EditRowEntry extends StatelessWidget {
     required this.content,
     this.accentColor,
     required this.openPage,
-    required this.onDelete,
+    this.onDelete,
     this.onTap,
     this.padding,
     this.currentReorder = false,
@@ -30,13 +31,16 @@ class EditRowEntry extends StatelessWidget {
     this.showMoreWidget,
     this.hideReorder = false,
     this.disableIntrinsicContentHeight = false,
+    this.extraButtonHeight,
+    this.iconAlignment,
+    this.hasMoreOptionsIcon = false,
     Key? key,
   }) : super(key: key);
   final int index;
   final Widget content;
   final Color? accentColor;
   final Widget openPage;
-  final VoidCallback onDelete;
+  final Future<bool> Function()? onDelete;
   final EdgeInsets? padding;
   final bool currentReorder;
   final bool canReorder;
@@ -49,6 +53,9 @@ class EditRowEntry extends StatelessWidget {
   final Widget? showMoreWidget;
   final bool? hideReorder;
   final bool disableIntrinsicContentHeight;
+  final double? extraButtonHeight;
+  final Alignment? iconAlignment;
+  final bool hasMoreOptionsIcon;
 
   @override
   Widget build(BuildContext context) {
@@ -62,6 +69,7 @@ class EditRowEntry extends StatelessWidget {
                 amountDark: 0.6,
               )
             : getColor(context, "lightDarkAccentHeavyLight");
+    bool useDismissToDelete = canDelete && onDelete != null;
     double borderRadius = getPlatform() == PlatformOS.isIOS ? 0 : 18;
     Widget container = Container(
       decoration: BoxDecoration(
@@ -74,10 +82,10 @@ class EditRowEntry extends StatelessWidget {
       child: OpenContainerNavigation(
         openPage: openPage,
         closedColor: containerColor,
-        borderRadius: borderRadius,
+        borderRadius: useDismissToDelete ? 0 : borderRadius,
         button: (openContainer) {
           return Tappable(
-            borderRadius: borderRadius,
+            borderRadius: useDismissToDelete ? 0 : borderRadius,
             color: containerColor,
             onTap: () {
               FocusScopeNode currentFocus = FocusScope.of(context);
@@ -89,121 +97,156 @@ class EditRowEntry extends StatelessWidget {
               else
                 openContainer();
             },
-            child: Column(
+            child: Stack(
               children: [
-                Builder(builder: (context) {
-                  Widget child = Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.max,
+                Positioned(
+                  bottom: 0,
+                  top: 0,
+                  child: AnimatedContainer(
+                    curve: Curves.easeInOutCubicEmphasized,
+                    duration: Duration(milliseconds: 1000),
+                    width: accentColor == null
+                        ? 0
+                        : getPlatform() == PlatformOS.isIOS
+                            ? 4
+                            : 5,
+                    color: dynamicPastel(
+                      context,
+                      accentColor ?? Colors.transparent,
+                      amount: 0.1,
+                      inverse: true,
+                    ),
+                  ),
+                ),
+                AnimatedPadding(
+                  curve: Curves.easeInOutCubicEmphasized,
+                  duration: Duration(milliseconds: 1000),
+                  padding: EdgeInsets.only(
+                    left: accentColor == null
+                        ? 0
+                        : getPlatform() == PlatformOS.isIOS
+                            ? 4
+                            : 5,
+                  ),
+                  child: Column(
                     children: [
-                      AnimatedContainer(
-                        curve: Curves.easeInOutCubicEmphasized,
-                        duration: Duration(milliseconds: 1000),
-                        width: accentColor == null
-                            ? 0
-                            : getPlatform() == PlatformOS.isIOS
-                                ? 4
-                                : 5,
-                        color: dynamicPastel(
-                          context,
-                          accentColor ?? Colors.transparent,
-                          amount: 0.1,
-                          inverse: true,
-                        ),
-                      ),
-                      Expanded(
-                        child: Container(
-                          padding: padding ??
-                              EdgeInsets.only(
-                                left: 25 - 3,
-                                right: 10,
-                                top: 15,
-                                bottom: 15,
-                              ),
-                          child: content,
-                        ),
-                      ),
-                      extraIcon != null
-                          ? Tappable(
-                              color: Colors.transparent,
-                              borderRadius: borderRadius,
+                      Builder(builder: (context) {
+                        Widget child = Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Expanded(
                               child: Container(
-                                height: disableIntrinsicContentHeight
-                                    ? null
-                                    : double.infinity,
-                                width: 40,
-                                child: ScaledAnimatedSwitcher(
-                                  keyToWatch: extraIcon.toString(),
-                                  child: Icon(
-                                    extraIcon,
-                                  ),
-                                ),
+                                padding: padding ??
+                                    EdgeInsets.only(
+                                      left: 25 - 3,
+                                      right: 10,
+                                      top: 15,
+                                      bottom: 15,
+                                    ),
+                                child: content,
                               ),
-                              onTap: onExtra,
-                            )
-                          : SizedBox.shrink(),
-                      extraWidget ?? SizedBox.shrink(),
-                      canDelete
-                          ? Tappable(
-                              color: Colors.transparent,
-                              borderRadius: borderRadius,
-                              child: Container(
-                                margin: EdgeInsets.only(
-                                  right: hideReorder == true &&
-                                          showMoreWidget == null
-                                      ? 10
-                                      : 0,
-                                ),
-                                height: disableIntrinsicContentHeight
-                                    ? null
-                                    : double.infinity,
-                                width: 40,
-                                child: Icon(Icons.delete_rounded),
-                              ),
-                              onTap: onDelete,
-                            )
-                          : SizedBox.shrink(),
-                      hideReorder == true
-                          ? SizedBox.shrink()
-                          : canReorder
-                              ? ReorderableDragStartListener(
-                                  index: index,
-                                  child: Tappable(
+                            ),
+                            extraIcon != null
+                                ? Tappable(
                                     color: Colors.transparent,
                                     borderRadius: borderRadius,
                                     child: Container(
-                                      margin: EdgeInsets.only(
-                                        right: showMoreWidget == null ? 10 : 0,
-                                      ),
-                                      width: 40,
+                                      alignment: iconAlignment,
                                       height: disableIntrinsicContentHeight
-                                          ? null
+                                          ? extraButtonHeight
                                           : double.infinity,
-                                      child: Icon(Icons.drag_handle_rounded),
+                                      width: 40,
+                                      child: ScaledAnimatedSwitcher(
+                                        keyToWatch: extraIcon.toString(),
+                                        child: Icon(
+                                          extraIcon,
+                                        ),
+                                      ),
                                     ),
-                                    onTap: () {},
-                                  ),
-                                )
-                              : Opacity(
-                                  opacity: 0.2,
-                                  child: Container(
-                                    margin: EdgeInsets.only(right: 10),
-                                    width: 40,
-                                    height: disableIntrinsicContentHeight
+                                    onTap: onExtra,
+                                  )
+                                : SizedBox.shrink(),
+                            hasMoreOptionsIcon
+                                ? HasMoreOptionsIcon()
+                                : SizedBox.shrink(),
+                            extraWidget ?? SizedBox.shrink(),
+                            canDelete
+                                ? Tappable(
+                                    color: Colors.transparent,
+                                    borderRadius: borderRadius,
+                                    child: Container(
+                                      alignment: iconAlignment,
+                                      margin: EdgeInsets.only(
+                                        right: hideReorder == true &&
+                                                showMoreWidget == null
+                                            ? 10
+                                            : 0,
+                                      ),
+                                      height: disableIntrinsicContentHeight
+                                          ? extraButtonHeight
+                                          : double.infinity,
+                                      width: 40,
+                                      child: Icon(Icons.delete_rounded),
+                                    ),
+                                    onTap: onDelete == null
                                         ? null
-                                        : double.infinity,
-                                    child: Icon(Icons.drag_handle_rounded),
-                                  ),
-                                ),
-                      showMoreWidget ?? SizedBox.shrink(),
+                                        : () async {
+                                            await onDelete!();
+                                          },
+                                  )
+                                : SizedBox.shrink(),
+                            hideReorder == true
+                                ? SizedBox.shrink()
+                                : canReorder
+                                    ? ReorderableDragStartListener(
+                                        index: index,
+                                        child: Tappable(
+                                          color: Colors.transparent,
+                                          borderRadius: borderRadius,
+                                          child: Container(
+                                            alignment: iconAlignment,
+                                            margin: EdgeInsets.only(
+                                              right: showMoreWidget == null
+                                                  ? 10
+                                                  : 0,
+                                            ),
+                                            width: 40,
+                                            height:
+                                                disableIntrinsicContentHeight
+                                                    ? extraButtonHeight
+                                                    : double.infinity,
+                                            child:
+                                                Icon(Icons.drag_handle_rounded),
+                                          ),
+                                          onTap: () {},
+                                        ),
+                                      )
+                                    : Opacity(
+                                        opacity: 0.2,
+                                        child: Container(
+                                          alignment: iconAlignment,
+                                          margin: EdgeInsets.only(right: 10),
+                                          width: 40,
+                                          height: disableIntrinsicContentHeight
+                                              ? null
+                                              : double.infinity,
+                                          child:
+                                              Icon(Icons.drag_handle_rounded),
+                                        ),
+                                      ),
+                            showMoreWidget ?? SizedBox.shrink(),
+                          ],
+                        );
+                        if (disableIntrinsicContentHeight) return child;
+                        return IntrinsicHeight(
+                          child: child,
+                        );
+                      }),
+                      ...(extraWidgetsBelow ?? [])
                     ],
-                  );
-                  if (disableIntrinsicContentHeight) return child;
-                  return IntrinsicHeight(
-                    child: child,
-                  );
-                }),
-                ...(extraWidgetsBelow ?? [])
+                  ),
+                ),
               ],
             ),
           );
@@ -310,6 +353,13 @@ class EditRowEntry extends StatelessWidget {
     //     );
     //   },
     // );
+    if (useDismissToDelete) {
+      container = DismissibleEditRowEntry(
+        widget: container,
+        onDelete: onDelete!,
+        borderRadius: borderRadius,
+      );
+    }
     if (!canReorder) {
       return Column(
         children: [
@@ -362,6 +412,79 @@ class EditRowEntry extends StatelessWidget {
               : SizedBox.shrink(),
         ],
       ),
+    );
+  }
+}
+
+class DismissibleEditRowEntry extends StatelessWidget {
+  const DismissibleEditRowEntry(
+      {super.key,
+      required this.widget,
+      required this.onDelete,
+      required this.borderRadius});
+  final Widget widget;
+  final Future<bool> Function() onDelete;
+  final double borderRadius;
+
+  @override
+  Widget build(BuildContext context) {
+    return ValueListenableBuilder(
+      valueListenable: isSwipingToDismissPageDown,
+      // Disable the dismiss action if we are swiping down to minimize the page!
+      builder: (context, value, _) {
+        return ClipRRect(
+          borderRadius: BorderRadius.circular(borderRadius),
+          child: Dismissible(
+            key: ValueKey(key),
+            background: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15),
+                color: Colors.red[700],
+              ),
+              padding: EdgeInsets.symmetric(horizontal: 15),
+              alignment: AlignmentDirectional.centerStart,
+              child: Icon(
+                Icons.delete_rounded,
+                color: Colors.white,
+              ),
+            ),
+            secondaryBackground: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15),
+                color: Colors.red[700],
+              ),
+              padding: EdgeInsets.symmetric(horizontal: 15),
+              alignment: AlignmentDirectional.centerEnd,
+              child: Icon(
+                Icons.delete_rounded,
+                color: Colors.white,
+              ),
+            ),
+            dismissThresholds: {
+              DismissDirection.startToEnd: value == true ? 10 : 0.5,
+              DismissDirection.endToStart: value == true ? 10 : 0.5,
+            },
+            onDismissed: (DismissDirection direction) {},
+            confirmDismiss: (direction) async {
+              return await onDelete();
+            },
+            child: widget,
+          ),
+        );
+      },
+    );
+  }
+}
+
+class HasMoreOptionsIcon extends StatelessWidget {
+  const HasMoreOptionsIcon({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Icon(
+      Icons.more_vert_rounded,
+      size: 22,
+      color: Theme.of(context).colorScheme.secondary.withOpacity(0.7),
     );
   }
 }

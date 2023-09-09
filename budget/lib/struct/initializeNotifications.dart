@@ -88,6 +88,14 @@ Future<void> setDailyNotificationOnLaunch(context) async {
   TimeOfDay timeOfDay = TimeOfDay(
       hour: appStateSettings["notificationHour"],
       minute: appStateSettings["notificationMinute"]);
+  if (ReminderNotificationType
+          .values[appStateSettings["notificationsReminderType"]] ==
+      ReminderNotificationType.DayFromOpen) {
+    timeOfDay = TimeOfDay(
+        hour: appStateSettings["appOpenedHour"],
+        minute: appStateSettings["appOpenedMinute"]);
+  }
+
   if (notificationsEnabled) {
     await scheduleDailyNotification(context, timeOfDay);
   }

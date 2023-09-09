@@ -326,7 +326,6 @@
   "delete-transaction": "સોદો કા delete ી નાખવો",
   "delete-transaction-question": "ટ્રાંઝેક્શન કા Delete ી નાખો?",
   "daily-notifications": "દૈનિક સૂચનાઓ",
-  "daily-notifications-description": "જો એપ્લિકેશન ખોલવામાં આવી ન હતી",
   "alert-time": "ચેતવણીનો સમય",
   "upcoming-transactions": "આગામી વ્યવહાર",
   "notification-reminder-1": "આજથી વ્યવહાર ઉમેરવાનું ભૂલશો નહીં!",
@@ -569,5 +568,10 @@
   "add-name": "નામ ઉમેરો",
   "delete-name-question": "નામ કા Delete ી નાખો?",
   "duplicate-name-warning": "નકલનું નામ",
-  "duplicate-name-warning-description": "કૃપા કરીને બીજું નામ પસંદ કરો"
+  "duplicate-name-warning-description": "કૃપા કરીને બીજું નામ પસંદ કરો",
+  "notifications-reminder": "ટ્રાન્ઝેક્શન રીમાઇન્ડર ઉમેરો",
+  "notifications-reminder-type": "રીલિડર પ્રકાર",
+  "daily-notification-type-if-not-opened": "જો એપ્લિકેશન આજે પહેલાથી ખોલવામાં આવી ન હતી",
+  "daily-notification-type-one-day-from-open": "એપ્લિકેશનથી 24 કલાક ખોલ્યો",
+  "daily-notification-type-everyday": "દરરોજ"
 }

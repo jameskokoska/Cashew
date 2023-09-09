@@ -326,7 +326,6 @@
   "delete-transaction": "حذف المعاملة",
   "delete-transaction-question": "حذف المعاملة؟",
   "daily-notifications": "الإخطارات اليومية",
-  "daily-notifications-description": "إذا لم يتم فتح التطبيق",
   "alert-time": "تنبيه الوقت",
   "upcoming-transactions": "المعاملات القادمة",
   "notification-reminder-1": "لا تنس إضافة معاملات من اليوم!",
@@ -569,5 +568,10 @@
   "add-name": "اضف اسما",
   "delete-name-question": "حذف الاسم؟",
   "duplicate-name-warning": "اسم مكرر",
-  "duplicate-name-warning-description": "الرجاء اختيار اسم آخر"
+  "duplicate-name-warning-description": "الرجاء اختيار اسم آخر",
+  "notifications-reminder": "أضف تذكير المعاملات",
+  "notifications-reminder-type": "نوع التذكير",
+  "daily-notification-type-if-not-opened": "إذا لم يتم فتح التطبيق بالفعل اليوم",
+  "daily-notification-type-one-day-from-open": "تم فتح 24 ساعة من التطبيق",
+  "daily-notification-type-everyday": "كل يوم"
 }

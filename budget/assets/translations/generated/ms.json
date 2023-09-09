@@ -326,7 +326,6 @@
   "delete-transaction": "Padam transaksi",
   "delete-transaction-question": "Padam transaksi?",
   "daily-notifications": "Pemberitahuan harian",
-  "daily-notifications-description": "Sekiranya aplikasi tidak dibuka",
   "alert-time": "Masa amaran",
   "upcoming-transactions": "Urus niaga yang akan datang",
   "notification-reminder-1": "Jangan lupa untuk menambah transaksi dari hari ini!",
@@ -569,5 +568,10 @@
   "add-name": "Tambah nama",
   "delete-name-question": "Padam Nama?",
   "duplicate-name-warning": "Nama pendua",
-  "duplicate-name-warning-description": "Sila pilih nama lain"
+  "duplicate-name-warning-description": "Sila pilih nama lain",
+  "notifications-reminder": "Tambah peringatan transaksi",
+  "notifications-reminder-type": "Jenis peringatan",
+  "daily-notification-type-if-not-opened": "Sekiranya aplikasi belum dibuka hari ini",
+  "daily-notification-type-one-day-from-open": "24 jam dari aplikasi dibuka",
+  "daily-notification-type-everyday": "Setiap hari"
 }

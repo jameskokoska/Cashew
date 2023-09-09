@@ -326,7 +326,6 @@
   "delete-transaction": "Видалити транзакцію",
   "delete-transaction-question": "Видалити транзакцію?",
   "daily-notifications": "Щоденні сповіщення",
-  "daily-notifications-description": "Якщо додаток не було відкрито",
   "alert-time": "Час попередження",
   "upcoming-transactions": "Майбутні транзакції",
   "notification-reminder-1": "Не забудьте додати транзакції з сьогоднішнього дня!",
@@ -569,5 +568,10 @@
   "add-name": "Додайте ім’я",
   "delete-name-question": "Видалити ім'я?",
   "duplicate-name-warning": "Дублікат назви",
-  "duplicate-name-warning-description": "Будь ласка, виберіть інше ім’я"
+  "duplicate-name-warning-description": "Будь ласка, виберіть інше ім’я",
+  "notifications-reminder": "Додайте нагадування про транзакції",
+  "notifications-reminder-type": "Тип нагадування",
+  "daily-notification-type-if-not-opened": "Якщо додаток сьогодні ще не було відкрито",
+  "daily-notification-type-one-day-from-open": "24 години від програми відкрили",
+  "daily-notification-type-everyday": "Повсякденний"
 }

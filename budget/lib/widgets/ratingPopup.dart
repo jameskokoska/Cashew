@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:budget/functions.dart';
 import 'package:budget/struct/firebaseAuthGlobal.dart';
 import 'package:budget/struct/languageMap.dart';
 import 'package:budget/struct/settings.dart';
@@ -184,6 +185,7 @@ Future<bool> shareFeedback(String feedbackText, String feedbackType,
       "dateTime": DateTime.now(),
       "feedbackType": feedbackType,
       "email": feedbackEmail,
+      "platform": getPlatform().toString(),
     };
 
     DocumentReference feedbackCreatedOnCloud =

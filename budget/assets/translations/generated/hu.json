@@ -326,7 +326,6 @@
   "delete-transaction": "Törölje a tranzakciót",
   "delete-transaction-question": "Törölje a tranzakciót?",
   "daily-notifications": "Napi értesítések",
-  "daily-notifications-description": "Ha az alkalmazást nem nyitották meg",
   "alert-time": "Riasztási idő",
   "upcoming-transactions": "Közelgő tranzakciók",
   "notification-reminder-1": "Ne felejtsd el hozzáadni a mai tranzakciókat!",
@@ -569,5 +568,10 @@
   "add-name": "Név hozzáadása",
   "delete-name-question": "Törölje a nevet?",
   "duplicate-name-warning": "Másolat név",
-  "duplicate-name-warning-description": "Kérjük, válasszon egy másik nevet"
+  "duplicate-name-warning-description": "Kérjük, válasszon egy másik nevet",
+  "notifications-reminder": "Adjon hozzá tranzakciós emlékeztetőt",
+  "notifications-reminder-type": "Emlékeztető típus",
+  "daily-notification-type-if-not-opened": "Ha az alkalmazást még ma még nem nyitották meg",
+  "daily-notification-type-one-day-from-open": "24 órát nyitott alkalmazástól",
+  "daily-notification-type-everyday": "Minden nap"
 }

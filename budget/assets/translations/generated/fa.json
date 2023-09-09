@@ -326,7 +326,6 @@
   "delete-transaction": "معامله را حذف کنید",
   "delete-transaction-question": "معامله را حذف کنید؟",
   "daily-notifications": "اعلان های روزانه",
-  "daily-notifications-description": "اگر برنامه باز نشده بود",
   "alert-time": "وقت هشدار",
   "upcoming-transactions": "معاملات آینده",
   "notification-reminder-1": "فراموش نکنید که از امروز معاملات اضافه کنید!",
@@ -569,5 +568,10 @@
   "add-name": "نام اضافه کردن",
   "delete-name-question": "نام را حذف کنید؟",
   "duplicate-name-warning": "نام کپی",
-  "duplicate-name-warning-description": "لطفا نام دیگری را انتخاب کنید"
+  "duplicate-name-warning-description": "لطفا نام دیگری را انتخاب کنید",
+  "notifications-reminder": "یادآوری معامله را اضافه کنید",
+  "notifications-reminder-type": "نوع یادآوری",
+  "daily-notification-type-if-not-opened": "اگر امروز برنامه باز نشده بود",
+  "daily-notification-type-one-day-from-open": "24 ساعت از برنامه باز شد",
+  "daily-notification-type-everyday": "هر روز"
 }

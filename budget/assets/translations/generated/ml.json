@@ -326,7 +326,6 @@
   "delete-transaction": "ഇടപാട് ഇല്ലാതാക്കുക",
   "delete-transaction-question": "ഇടപാട് ഇല്ലാതാക്കണോ?",
   "daily-notifications": "ദൈനംദിന അറിയിപ്പുകൾ",
-  "daily-notifications-description": "അപ്ലിക്കേഷൻ തുറന്നിട്ടില്ലെങ്കിൽ",
   "alert-time": "അലേർട്ട് സമയം",
   "upcoming-transactions": "വരാനിരിക്കുന്ന ഇടപാടുകൾ",
   "notification-reminder-1": "ഇന്ന് മുതൽ ഇടപാടുകൾ ചേർക്കാൻ മറക്കരുത്!",
@@ -569,5 +568,10 @@
   "add-name": "പേര് ചേർക്കുക",
   "delete-name-question": "പേര് ഇല്ലാതാക്കണോ?",
   "duplicate-name-warning": "തനിപ്പകർപ്പ് നാമം",
-  "duplicate-name-warning-description": "ദയവായി മറ്റൊരു പേര് തിരഞ്ഞെടുക്കുക"
+  "duplicate-name-warning-description": "ദയവായി മറ്റൊരു പേര് തിരഞ്ഞെടുക്കുക",
+  "notifications-reminder": "ഇടപാട് ഓർമ്മപ്പെടുത്തൽ ചേർക്കുക",
+  "notifications-reminder-type": "ഓർമ്മപ്പെടുത്തൽ തരം",
+  "daily-notification-type-if-not-opened": "അപ്ലിക്കേഷൻ ഇതിനകം തുറന്നിട്ടില്ലെങ്കിൽ",
+  "daily-notification-type-one-day-from-open": "അപ്ലിക്കേഷനിൽ നിന്ന് 24 മണിക്കൂർ തുറന്നു",
+  "daily-notification-type-everyday": "എല്ലാ ദിവസവും"
 }

@@ -326,7 +326,6 @@
   "delete-transaction": "ลบธุรกรรม",
   "delete-transaction-question": "ลบธุรกรรม?",
   "daily-notifications": "การแจ้งเตือนทุกวัน",
-  "daily-notifications-description": "หากแอปไม่ได้เปิด",
   "alert-time": "เวลาเตือน",
   "upcoming-transactions": "ธุรกรรมที่กำลังจะมาถึง",
   "notification-reminder-1": "อย่าลืมเพิ่มธุรกรรมตั้งแต่วันนี้!",
@@ -569,5 +568,10 @@
   "add-name": "เพิ่มชื่อ",
   "delete-name-question": "ลบชื่อ?",
   "duplicate-name-warning": "ชื่อซ้ำ",
-  "duplicate-name-warning-description": "กรุณาเลือกชื่ออื่น"
+  "duplicate-name-warning-description": "กรุณาเลือกชื่ออื่น",
+  "notifications-reminder": "เพิ่มการแจ้งเตือนการทำธุรกรรม",
+  "notifications-reminder-type": "ประเภทเตือนความจำ",
+  "daily-notification-type-if-not-opened": "หากแอปยังไม่เปิดในวันนี้",
+  "daily-notification-type-one-day-from-open": "เปิด 24 ชั่วโมงจากแอป",
+  "daily-notification-type-everyday": "ทุกวัน"
 }

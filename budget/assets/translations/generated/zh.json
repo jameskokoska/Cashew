@@ -326,7 +326,6 @@
   "delete-transaction": "删除交易",
   "delete-transaction-question": "删除交易？",
   "daily-notifications": "每日通知",
-  "daily-notifications-description": "如果该应用未打开",
   "alert-time": "机敏时间",
   "upcoming-transactions": "即将进行的交易",
   "notification-reminder-1": "不要忘记添加今天的交易！",
@@ -569,5 +568,10 @@
   "add-name": "添加名称",
   "delete-name-question": "删除名称？",
   "duplicate-name-warning": "重复名称",
-  "duplicate-name-warning-description": "请选择另一个名字"
+  "duplicate-name-warning-description": "请选择另一个名字",
+  "notifications-reminder": "添加交易提醒",
+  "notifications-reminder-type": "提醒类型",
+  "daily-notification-type-if-not-opened": "如果该应用程序今天尚未打开",
+  "daily-notification-type-one-day-from-open": "从应用程序开放24小时",
+  "daily-notification-type-everyday": "每天"
 }

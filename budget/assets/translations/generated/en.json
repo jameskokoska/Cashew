@@ -326,7 +326,6 @@
   "delete-transaction": "Delete transaction",
   "delete-transaction-question": "Delete transaction?",
   "daily-notifications": "Daily Notifications",
-  "daily-notifications-description": "If the app was not opened",
   "alert-time": "Alert Time",
   "upcoming-transactions": "Upcoming Transactions",
   "notification-reminder-1": "Don't forget to add transactions from today!",
@@ -569,5 +568,10 @@
   "add-name": "Add Name",
   "delete-name-question": "Delete Name?",
   "duplicate-name-warning": "Duplicate name",
-  "duplicate-name-warning-description": "Please choose another name"
+  "duplicate-name-warning-description": "Please choose another name",
+  "notifications-reminder": "Add Transaction Reminder",
+  "notifications-reminder-type": "Reminder Type",
+  "daily-notification-type-if-not-opened": "If the app was not already opened today",
+  "daily-notification-type-one-day-from-open": "24 hours from app opened",
+  "daily-notification-type-everyday": "Everyday"
 }

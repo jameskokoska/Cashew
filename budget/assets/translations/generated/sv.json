@@ -326,7 +326,6 @@
   "delete-transaction": "Ta bort transaktion",
   "delete-transaction-question": "Ta bort transaktion?",
   "daily-notifications": "Dagliga aviseringar",
-  "daily-notifications-description": "Om appen inte öppnades",
   "alert-time": "Varningstid",
   "upcoming-transactions": "Kommande transaktioner",
   "notification-reminder-1": "Glöm inte att lägga till transaktioner från idag!",
@@ -569,5 +568,10 @@
   "add-name": "Lägga till namn",
   "delete-name-question": "Ta bort namn?",
   "duplicate-name-warning": "Duplikatnamn",
-  "duplicate-name-warning-description": "Välj ett annat namn"
+  "duplicate-name-warning-description": "Välj ett annat namn",
+  "notifications-reminder": "Lägg till transaktionspåminnelse",
+  "notifications-reminder-type": "Påminnelsetyp",
+  "daily-notification-type-if-not-opened": "Om appen inte redan öppnades idag",
+  "daily-notification-type-one-day-from-open": "24 timmar från appen öppnade",
+  "daily-notification-type-everyday": "Varje dag"
 }

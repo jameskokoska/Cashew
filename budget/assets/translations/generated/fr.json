@@ -326,7 +326,6 @@
   "delete-transaction": "Supprimer la transaction",
   "delete-transaction-question": "Supprimer la transaction?",
   "daily-notifications": "Notifications quotidiennes",
-  "daily-notifications-description": "Si l'application n'a pas été ouverte",
   "alert-time": "Temps d'alerte",
   "upcoming-transactions": "Transactions à venir",
   "notification-reminder-1": "N'oubliez pas d'ajouter des transactions à partir d'aujourd'hui!",
@@ -569,5 +568,10 @@
   "add-name": "Ajouter un nom",
   "delete-name-question": "Supprimer le nom?",
   "duplicate-name-warning": "Nom en double",
-  "duplicate-name-warning-description": "Veuillez choisir un autre nom"
+  "duplicate-name-warning-description": "Veuillez choisir un autre nom",
+  "notifications-reminder": "Ajouter un rappel de transaction",
+  "notifications-reminder-type": "Type de rappel",
+  "daily-notification-type-if-not-opened": "Si l'application n'était pas déjà ouverte aujourd'hui",
+  "daily-notification-type-one-day-from-open": "24 heures de l'application ouverte",
+  "daily-notification-type-everyday": "Tous les jours"
 }

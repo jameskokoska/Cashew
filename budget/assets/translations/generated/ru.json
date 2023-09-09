@@ -326,7 +326,6 @@
   "delete-transaction": "Удалить транзакцию",
   "delete-transaction-question": "Удалить транзакцию?",
   "daily-notifications": "Ежедневные уведомления",
-  "daily-notifications-description": "Если приложение не было открыто",
   "alert-time": "Время предупреждения",
   "upcoming-transactions": "Предстоящие транзакции",
   "notification-reminder-1": "Не забудьте добавить транзакции с сегодняшнего дня!",
@@ -569,5 +568,10 @@
   "add-name": "Добавить имя",
   "delete-name-question": "Удалить имя?",
   "duplicate-name-warning": "Дубликат имя",
-  "duplicate-name-warning-description": "Пожалуйста, выберите другое имя"
+  "duplicate-name-warning-description": "Пожалуйста, выберите другое имя",
+  "notifications-reminder": "Добавить напоминание о транзакции",
+  "notifications-reminder-type": "Тип напоминания",
+  "daily-notification-type-if-not-opened": "Если приложение еще не было открыто сегодня",
+  "daily-notification-type-one-day-from-open": "24 часа после открытого приложения",
+  "daily-notification-type-everyday": "Каждый день"
 }

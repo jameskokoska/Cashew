@@ -326,7 +326,6 @@
   "delete-transaction": "لین دین کو حذف کریں",
   "delete-transaction-question": "لین دین کو حذف کریں؟",
   "daily-notifications": "روزانہ کی اطلاعات",
-  "daily-notifications-description": "اگر ایپ کو نہیں کھولا گیا تھا",
   "alert-time": "الرٹ ٹائم",
   "upcoming-transactions": "آئندہ لین دین",
   "notification-reminder-1": "آج سے لین دین شامل کرنا نہ بھولیں!",
@@ -569,5 +568,10 @@
   "add-name": "نام شامل کریں",
   "delete-name-question": "نام حذف کریں؟",
   "duplicate-name-warning": "ڈپلیکیٹ نام",
-  "duplicate-name-warning-description": "براہ کرم دوسرا نام منتخب کریں"
+  "duplicate-name-warning-description": "براہ کرم دوسرا نام منتخب کریں",
+  "notifications-reminder": "ٹرانزیکشن کی یاد دہانی شامل کریں",
+  "notifications-reminder-type": "یاد دہانی کی قسم",
+  "daily-notification-type-if-not-opened": "اگر آج پہلے ہی ایپ نہیں کھولی تھی",
+  "daily-notification-type-one-day-from-open": "ایپ سے 24 گھنٹے کھل گئے",
+  "daily-notification-type-everyday": "ہر روز"
 }

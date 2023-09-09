@@ -70,9 +70,14 @@ Future<bool> initializeSettings() async {
   }
 
   if (appStateSettings["hasOnboarded"] == true) {
-    updateSettings("numLogins", appStateSettings["numLogins"] + 1,
-        updateGlobalState: false, pagesNeedingRefresh: []);
+    appStateSettings["numLogins"] = appStateSettings["numLogins"] + 1;
   }
+
+  appStateSettings["appOpenedHour"] = DateTime.now().hour;
+  appStateSettings["appOpenedMinute"] = DateTime.now().minute;
+
+  await sharedPreferences.setString(
+      'userSettings', json.encode(appStateSettings));
 
   String? retrievedClientID = await sharedPreferences.getString("clientID");
   if (retrievedClientID == null) {

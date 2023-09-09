@@ -326,7 +326,6 @@
   "delete-transaction": "লেনদেন মুছুন",
   "delete-transaction-question": "লেনদেন মুছুন?",
   "daily-notifications": "দৈনিক বিজ্ঞপ্তি",
-  "daily-notifications-description": "অ্যাপটি খোলা না থাকলে",
   "alert-time": "সতর্ক সময়",
   "upcoming-transactions": "আসন্ন লেনদেন",
   "notification-reminder-1": "আজ থেকে লেনদেন যুক্ত করতে ভুলবেন না!",
@@ -569,5 +568,10 @@
   "add-name": "নাম যুক্ত করুন",
   "delete-name-question": "নাম মুছুন?",
   "duplicate-name-warning": "সদৃশ নাম",
-  "duplicate-name-warning-description": "অন্য নাম চয়ন করুন"
+  "duplicate-name-warning-description": "অন্য নাম চয়ন করুন",
+  "notifications-reminder": "লেনদেনের অনুস্মারক যুক্ত করুন",
+  "notifications-reminder-type": "অনুস্মারক প্রকার",
+  "daily-notification-type-if-not-opened": "যদি অ্যাপটি ইতিমধ্যে ইতিমধ্যে খোলা না করা হয়েছিল",
+  "daily-notification-type-one-day-from-open": "অ্যাপ্লিকেশন থেকে 24 ঘন্টা খোলা",
+  "daily-notification-type-everyday": "প্রতিদিন"
 }

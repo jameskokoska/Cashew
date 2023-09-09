@@ -326,7 +326,6 @@
   "delete-transaction": "व्यवहार हटवा",
   "delete-transaction-question": "व्यवहार हटवा?",
   "daily-notifications": "दैनंदिन सूचना",
-  "daily-notifications-description": "अ‍ॅप उघडला नसेल तर",
   "alert-time": "सावध वेळ",
   "upcoming-transactions": "आगामी व्यवहार",
   "notification-reminder-1": "आजपासून व्यवहार जोडणे विसरू नका!",
@@ -569,5 +568,10 @@
   "add-name": "नाव जोडा",
   "delete-name-question": "नाव हटवा?",
   "duplicate-name-warning": "डुप्लिकेट नाव",
-  "duplicate-name-warning-description": "कृपया दुसरे नाव निवडा"
+  "duplicate-name-warning-description": "कृपया दुसरे नाव निवडा",
+  "notifications-reminder": "व्यवहार स्मरणपत्र जोडा",
+  "notifications-reminder-type": "स्मरणपत्र प्रकार",
+  "daily-notification-type-if-not-opened": "आज अ‍ॅप आधीच उघडला नसेल तर",
+  "daily-notification-type-one-day-from-open": "अॅपपासून 24 तास उघडले",
+  "daily-notification-type-everyday": "रोज"
 }

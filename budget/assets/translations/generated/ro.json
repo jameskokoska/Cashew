@@ -326,7 +326,6 @@
   "delete-transaction": "Ștergeți tranzacția",
   "delete-transaction-question": "Ștergeți tranzacția?",
   "daily-notifications": "Notificări zilnice",
-  "daily-notifications-description": "Dacă aplicația nu a fost deschisă",
   "alert-time": "Timp de alertă",
   "upcoming-transactions": "Tranzacții viitoare",
   "notification-reminder-1": "Nu uitați să adăugați tranzacții de astăzi!",
@@ -569,5 +568,10 @@
   "add-name": "Adăugați numele",
   "delete-name-question": "Ștergeți numele?",
   "duplicate-name-warning": "Numele duplicat",
-  "duplicate-name-warning-description": "Vă rugăm să alegeți un alt nume"
+  "duplicate-name-warning-description": "Vă rugăm să alegeți un alt nume",
+  "notifications-reminder": "Adăugați memento de tranzacție",
+  "notifications-reminder-type": "Tip de memento",
+  "daily-notification-type-if-not-opened": "Dacă aplicația nu a fost deja deschisă astăzi",
+  "daily-notification-type-one-day-from-open": "La 24 de ore de la aplicație deschisă",
+  "daily-notification-type-everyday": "În fiecare zi"
 }

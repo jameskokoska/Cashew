@@ -326,7 +326,6 @@
   "delete-transaction": "లావాదేవీని తొలగించండి",
   "delete-transaction-question": "లావాదేవీని తొలగించాలా?",
   "daily-notifications": "రోజువారీ నోటిఫికేషన్లు",
-  "daily-notifications-description": "అనువర్తనం తెరవకపోతే",
   "alert-time": "హెచ్చరిక సమయం",
   "upcoming-transactions": "రాబోయే లావాదేవీలు",
   "notification-reminder-1": "ఈ రోజు నుండి లావాదేవీలను జోడించడం మర్చిపోవద్దు!",
@@ -569,5 +568,10 @@
   "add-name": "పేరు జోడించండి",
   "delete-name-question": "పేరును తొలగించాలా?",
   "duplicate-name-warning": "నకిలీ పేరు",
-  "duplicate-name-warning-description": "దయచేసి మరొక పేరును ఎంచుకోండి"
+  "duplicate-name-warning-description": "దయచేసి మరొక పేరును ఎంచుకోండి",
+  "notifications-reminder": "లావాదేవీ రిమైండర్‌ను జోడించండి",
+  "notifications-reminder-type": "రిమైండర్ రకం",
+  "daily-notification-type-if-not-opened": "అనువర్తనం ఇప్పటికే తెరవకపోతే",
+  "daily-notification-type-one-day-from-open": "అనువర్తనం నుండి 24 గంటలు తెరవబడింది",
+  "daily-notification-type-everyday": "ప్రతి రోజు"
 }

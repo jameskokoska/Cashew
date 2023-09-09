@@ -326,7 +326,6 @@
   "delete-transaction": "İşlemi Sil",
   "delete-transaction-question": "İşlemi Sil?",
   "daily-notifications": "Günlük Bildirimler",
-  "daily-notifications-description": "Uygulama açılmamışsa",
   "alert-time": "Uyarı süresi",
   "upcoming-transactions": "Yaklaşan işlemler",
   "notification-reminder-1": "Bugünden işlem eklemeyi unutmayın!",
@@ -569,5 +568,10 @@
   "add-name": "İsim ekle",
   "delete-name-question": "Adı Sil?",
   "duplicate-name-warning": "Yinelenen isim",
-  "duplicate-name-warning-description": "Lütfen başka bir isim seçin"
+  "duplicate-name-warning-description": "Lütfen başka bir isim seçin",
+  "notifications-reminder": "İşlem Hatırlatıcısı Ekle",
+  "notifications-reminder-type": "Hatırlatma türü",
+  "daily-notification-type-if-not-opened": "Uygulama bugün henüz açılmamışsa",
+  "daily-notification-type-one-day-from-open": "Uygulamadan 24 saat açıldı",
+  "daily-notification-type-everyday": "Her gün"
 }

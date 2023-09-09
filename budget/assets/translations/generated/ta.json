@@ -326,7 +326,6 @@
   "delete-transaction": "பரிவர்த்தனையை நீக்கு",
   "delete-transaction-question": "பரிவர்த்தனையை நீக்கவா?",
   "daily-notifications": "தினசரி அறிவிப்புகள்",
-  "daily-notifications-description": "பயன்பாடு திறக்கப்படவில்லை என்றால்",
   "alert-time": "எச்சரிக்கை நேரம்",
   "upcoming-transactions": "வரவிருக்கும் பரிவர்த்தனைகள்",
   "notification-reminder-1": "இன்று முதல் பரிவர்த்தனைகளைச் சேர்க்க மறக்காதீர்கள்!",
@@ -569,5 +568,10 @@
   "add-name": "பெயரைச் சேர்க்கவும்",
   "delete-name-question": "பெயரை நீக்கவா?",
   "duplicate-name-warning": "நகல் பெயர்",
-  "duplicate-name-warning-description": "மற்றொரு பெயரைத் தேர்வுசெய்க"
+  "duplicate-name-warning-description": "மற்றொரு பெயரைத் தேர்வுசெய்க",
+  "notifications-reminder": "பரிவர்த்தனை நினைவூட்டலைச் சேர்க்கவும்",
+  "notifications-reminder-type": "நினைவூட்டல் வகை",
+  "daily-notification-type-if-not-opened": "பயன்பாடு ஏற்கனவே திறக்கப்படவில்லை என்றால்",
+  "daily-notification-type-one-day-from-open": "பயன்பாட்டிலிருந்து 24 மணிநேரம் திறக்கப்பட்டது",
+  "daily-notification-type-everyday": "தினமும்"
 }

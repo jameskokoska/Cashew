@@ -326,7 +326,6 @@
   "delete-transaction": "Hapus transaksi",
   "delete-transaction-question": "Hapus transaksi?",
   "daily-notifications": "Pemberitahuan harian",
-  "daily-notifications-description": "Jika aplikasi tidak dibuka",
   "alert-time": "Waktu peringatan",
   "upcoming-transactions": "Transaksi yang akan datang",
   "notification-reminder-1": "Jangan lupa untuk menambahkan transaksi dari hari ini!",
@@ -569,5 +568,10 @@
   "add-name": "Tambahkan nama",
   "delete-name-question": "Hapus Nama?",
   "duplicate-name-warning": "Nama duplikat",
-  "duplicate-name-warning-description": "Pilih Nama Lain"
+  "duplicate-name-warning-description": "Pilih Nama Lain",
+  "notifications-reminder": "Tambahkan pengingat transaksi",
+  "notifications-reminder-type": "Tipe pengingat",
+  "daily-notification-type-if-not-opened": "Jika aplikasi belum dibuka hari ini",
+  "daily-notification-type-one-day-from-open": "24 jam dari aplikasi dibuka",
+  "daily-notification-type-everyday": "Setiap hari"
 }

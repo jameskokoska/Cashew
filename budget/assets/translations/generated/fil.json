@@ -326,7 +326,6 @@
   "delete-transaction": "Tanggalin ang transaksyon",
   "delete-transaction-question": "Tanggalin ang transaksyon?",
   "daily-notifications": "Pang -araw -araw na mga abiso",
-  "daily-notifications-description": "Kung hindi binuksan ang app",
   "alert-time": "Oras ng alerto",
   "upcoming-transactions": "Paparating na mga transaksyon",
   "notification-reminder-1": "Huwag kalimutan na magdagdag ng mga transaksyon mula ngayon!",
@@ -569,5 +568,10 @@
   "add-name": "Magdagdag ng pangalan",
   "delete-name-question": "Tanggalin ang pangalan?",
   "duplicate-name-warning": "Dobleng pangalan",
-  "duplicate-name-warning-description": "Mangyaring pumili ng isa pang pangalan"
+  "duplicate-name-warning-description": "Mangyaring pumili ng isa pang pangalan",
+  "notifications-reminder": "Magdagdag ng paalala sa transaksyon",
+  "notifications-reminder-type": "Uri ng paalala",
+  "daily-notification-type-if-not-opened": "Kung ang app ay hindi pa binuksan ngayon",
+  "daily-notification-type-one-day-from-open": "24 na oras mula sa pagbukas ng app",
+  "daily-notification-type-everyday": "Araw-araw"
 }

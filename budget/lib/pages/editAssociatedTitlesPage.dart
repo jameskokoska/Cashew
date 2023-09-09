@@ -224,16 +224,17 @@ class _EditAssociatedTitlesPageState extends State<EditAssociatedTitlesPage> {
                                 ),
                               ],
                             ),
-                            onDelete: () {
-                              deleteAssociatedTitlePopup(
-                                context,
-                                title: associatedTitle,
-                                routesToPopAfterDelete:
-                                    RoutesToPopAfterDelete.None,
-                              );
+                            onDelete: () async {
+                              return (await deleteAssociatedTitlePopup(
+                                    context,
+                                    title: associatedTitle,
+                                    routesToPopAfterDelete:
+                                        RoutesToPopAfterDelete.None,
+                                  )) ==
+                                  DeletePopupAction.Delete;
                             },
                             openPage: Container(),
-                            key: ValueKey(index),
+                            key: ValueKey(associatedTitle.associatedTitlePk),
                           );
                         },
                         itemCount: snapshot.data!.length,
@@ -273,7 +274,7 @@ class _EditAssociatedTitlesPageState extends State<EditAssociatedTitlesPage> {
   }
 }
 
-void deleteAssociatedTitlePopup(
+Future<DeletePopupAction?> deleteAssociatedTitlePopup(
   BuildContext context, {
   required TransactionAssociatedTitle title,
   required RoutesToPopAfterDelete routesToPopAfterDelete,
@@ -301,6 +302,7 @@ void deleteAssociatedTitlePopup(
       );
     });
   }
+  return action;
 }
 
 class AutoTitlesToggle extends StatelessWidget {

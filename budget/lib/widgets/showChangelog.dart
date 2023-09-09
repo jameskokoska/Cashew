@@ -10,6 +10,11 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    < 4.1.9
+    Added swipe to delete when on edit data pages
+    New reminder types: 24 hours from app last opened, and everyday
+    Fixed even split initial value for Bill Splitter
+    Improved layout of row entry
     < 4.1.8
     Discard changes works properly for Bill Splitter
     Bill Splitter data saving

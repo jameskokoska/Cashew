@@ -232,17 +232,19 @@ class _EditWalletsPageState extends State<EditWalletsPage> {
                           ),
                         ],
                       ),
-                      onDelete: () {
-                        deleteWalletPopup(
-                          context,
-                          wallet: wallet,
-                          routesToPopAfterDelete: RoutesToPopAfterDelete.None,
-                        );
+                      onDelete: () async {
+                        return (await deleteWalletPopup(
+                              context,
+                              wallet: wallet,
+                              routesToPopAfterDelete:
+                                  RoutesToPopAfterDelete.None,
+                            )) ==
+                            DeletePopupAction.Delete;
                       },
                       openPage: AddWalletPage(
                           wallet: wallet,
                           routesToPopAfterDelete: RoutesToPopAfterDelete.One),
-                      key: ValueKey(index),
+                      key: ValueKey(wallet.walletPk),
                     );
                   },
                   itemCount: snapshot.data!.length,
@@ -274,7 +276,7 @@ class _EditWalletsPageState extends State<EditWalletsPage> {
   }
 }
 
-void deleteWalletPopup(
+Future<DeletePopupAction?> deleteWalletPopup(
   BuildContext context, {
   required TransactionWallet wallet,
   required RoutesToPopAfterDelete routesToPopAfterDelete,
@@ -332,6 +334,7 @@ void deleteWalletPopup(
       });
     }
   }
+  return action;
 }
 
 void mergeWalletPopup(

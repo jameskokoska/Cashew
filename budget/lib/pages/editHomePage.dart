@@ -397,23 +397,13 @@ class _EditHomePageState extends State<EditHomePage> {
                         maxLines: 5,
                       ),
                     ),
-                    editHomePageItems[key]?.onTap == null
-                        ? SizedBox.shrink()
-                        : Padding(
-                            padding: const EdgeInsets.only(right: 8.0),
-                            child: Icon(
-                              Icons.more_horiz_rounded,
-                              size: 22,
-                              color: Theme.of(context).colorScheme.secondary,
-                            ),
-                          ),
                   ],
                 ),
+                hasMoreOptionsIcon: editHomePageItems[key]?.onTap != null,
                 extraWidgetsBelow: editHomePageItems[key]?.extraWidgetsBelow ??
                     [SizedBox.shrink()],
                 canDelete: false,
                 index: index,
-                onDelete: () {},
                 onTap: editHomePageItems[key]?.onTap ??
                     () {
                       toggleSwitch();

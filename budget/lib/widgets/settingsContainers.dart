@@ -1,7 +1,9 @@
 import 'package:budget/colors.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/struct/settings.dart';
+import 'package:budget/widgets/animatedExpanded.dart';
 import 'package:budget/widgets/dropdownSelect.dart';
+import 'package:budget/widgets/editRowEntry.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openContainerNavigation.dart';
 import 'package:budget/widgets/tappable.dart';
@@ -22,6 +24,7 @@ class SettingsContainerSwitch extends StatefulWidget {
     this.onLongPress,
     this.onTap,
     this.enableBorderRadius = false,
+    this.hasMoreOptionsIcon = false,
     Key? key,
   }) : super(key: key);
 
@@ -36,6 +39,7 @@ class SettingsContainerSwitch extends StatefulWidget {
   final VoidCallback? onLongPress;
   final VoidCallback? onTap;
   final bool enableBorderRadius;
+  final bool hasMoreOptionsIcon;
 
   @override
   State<SettingsContainerSwitch> createState() =>
@@ -87,6 +91,7 @@ class _SettingsContainerSwitchState extends State<SettingsContainerSwitch> {
       duration: Duration(milliseconds: 300),
       opacity: waiting ? 0.5 : 1,
       child: SettingsContainer(
+        hasMoreOptionsIcon: widget.hasMoreOptionsIcon,
         enableBorderRadius: widget.enableBorderRadius,
         onLongPress: widget.onLongPress,
         onTap: widget.onTap ?? () => {toggleSwitch()},
@@ -445,6 +450,7 @@ class SettingsContainer extends StatelessWidget {
     this.isOutlinedColumn,
     this.enableBorderRadius = false,
     this.isWideOutlined,
+    this.hasMoreOptionsIcon,
   }) : super(key: key);
 
   final String title;
@@ -460,6 +466,7 @@ class SettingsContainer extends StatelessWidget {
   final bool? isOutlinedColumn;
   final bool enableBorderRadius;
   final bool? isWideOutlined;
+  final bool? hasMoreOptionsIcon;
 
   @override
   Widget build(BuildContext context) {
@@ -535,10 +542,13 @@ class SettingsContainer extends StatelessWidget {
                                         maxLines: 5,
                                       ),
                                       Container(height: 3),
-                                      TextFont(
-                                        text: description!,
-                                        fontSize: 14,
-                                        maxLines: 5,
+                                      AnimatedSizeSwitcher(
+                                        child: TextFont(
+                                          key: ValueKey(description.toString()),
+                                          text: description!,
+                                          fontSize: 14,
+                                          maxLines: 5,
+                                        ),
                                       ),
                                     ],
                                   ),
@@ -546,6 +556,9 @@ class SettingsContainer extends StatelessWidget {
                         ],
                       ),
                     ),
+                    hasMoreOptionsIcon == true
+                        ? HasMoreOptionsIcon()
+                        : SizedBox.shrink(),
                     afterWidget ?? SizedBox()
                   ],
                 ),

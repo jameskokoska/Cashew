@@ -9,7 +9,10 @@ import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/notificationsGlobal.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/animatedExpanded.dart';
+import 'package:budget/widgets/framework/popupFramework.dart';
+import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
+import 'package:budget/widgets/radioItems.dart';
 import 'package:budget/widgets/settingsContainers.dart';
 import 'package:budget/widgets/transactionEntry/transactionLabel.dart';
 import 'package:budget/widgets/util/showTimePicker.dart';
@@ -23,6 +26,12 @@ import 'package:timezone/timezone.dart' as tz;
 
 bool notificationsGlobalEnabled = kIsWeb == false;
 
+enum ReminderNotificationType {
+  IfAppNotOpened,
+  DayFromOpen,
+  Everyday,
+}
+
 class DailyNotificationsSettings extends StatefulWidget {
   const DailyNotificationsSettings({super.key});
 
@@ -34,17 +43,28 @@ class DailyNotificationsSettings extends StatefulWidget {
 class _DailyNotificationsSettingsState
     extends State<DailyNotificationsSettings> {
   bool notificationsEnabled = appStateSettings["notifications"];
+  ReminderNotificationType selectedReminderType = ReminderNotificationType
+      .values[appStateSettings["notificationsReminderType"]];
   TimeOfDay timeOfDay = TimeOfDay(
       hour: appStateSettings["notificationHour"],
       minute: appStateSettings["notificationMinute"]);
 
   @override
   Widget build(BuildContext context) {
+    Map<ReminderNotificationType, String> reminderNotificationTypeTranslations =
+        {
+      ReminderNotificationType.IfAppNotOpened:
+          "daily-notification-type-if-not-opened".tr().capitalizeFirst,
+      ReminderNotificationType.DayFromOpen:
+          "daily-notification-type-one-day-from-open".tr().capitalizeFirst,
+      ReminderNotificationType.Everyday:
+          "daily-notification-type-everyday".tr().toLowerCase().capitalizeFirst,
+    };
+
     return Column(
       children: [
         SettingsContainerSwitch(
-          title: "daily-notifications".tr(),
-          description: "daily-notifications-description".tr(),
+          title: "notifications-reminder".tr(),
           onSwitched: (value) async {
             updateSettings("notifications", value, updateGlobalState: false);
             if (value == true) {
@@ -59,38 +79,82 @@ class _DailyNotificationsSettingsState
             return true;
           },
           initialValue: appStateSettings["notifications"],
-          icon: Icons.calendar_today_rounded,
+          icon: notificationsEnabled
+              ? Icons.notifications_rounded
+              : Icons.notifications_off_rounded,
         ),
         AnimatedExpanded(
             expand: notificationsEnabled,
-            child: SettingsContainer(
-              key: ValueKey(1),
-              title: "alert-time".tr(),
-              icon: Icons.timer,
-              onTap: () async {
-                TimeOfDay? newTime =
-                    await showCustomTimePicker(context, timeOfDay);
-                if (newTime != null) {
-                  await initializeNotificationsPlatform();
-                  await scheduleDailyNotification(context, newTime);
-                  setState(() {
-                    timeOfDay = newTime;
-                  });
-                  updateSettings(
-                    "notificationHour",
-                    timeOfDay.hour,
-                    pagesNeedingRefresh: [],
-                    updateGlobalState: false,
-                  );
-                  updateSettings(
-                    "notificationMinute",
-                    timeOfDay.minute,
-                    pagesNeedingRefresh: [],
-                    updateGlobalState: false,
-                  );
-                }
-              },
-              afterWidget: TimeDigits(timeOfDay: timeOfDay),
+            child: Column(
+              children: [
+                SettingsContainer(
+                  title: "notifications-reminder-type".tr(),
+                  description: reminderNotificationTypeTranslations[
+                      ReminderNotificationType.values[
+                          appStateSettings["notificationsReminderType"]]],
+                  onTap: () {
+                    openBottomSheet(
+                      context,
+                      PopupFramework(
+                        title: "notifications-reminder-type".tr(),
+                        child: RadioItems(
+                          items: ReminderNotificationType.values,
+                          initial: ReminderNotificationType.values[
+                              appStateSettings["notificationsReminderType"]],
+                          displayFilter: (ReminderNotificationType value) {
+                            return reminderNotificationTypeTranslations[
+                                    value] ??
+                                "";
+                          },
+                          onChanged: (ReminderNotificationType option) async {
+                            await updateSettings(
+                                "notificationsReminderType", option.index,
+                                updateGlobalState: false);
+                            setState(() {
+                              selectedReminderType = option;
+                            });
+                            Navigator.pop(context);
+                          },
+                        ),
+                      ),
+                    );
+                  },
+                  icon: Icons.notification_important_rounded,
+                ),
+                AnimatedExpanded(
+                  expand: selectedReminderType !=
+                      ReminderNotificationType.DayFromOpen,
+                  child: SettingsContainer(
+                    key: ValueKey(1),
+                    title: "alert-time".tr(),
+                    icon: Icons.timer,
+                    onTap: () async {
+                      TimeOfDay? newTime =
+                          await showCustomTimePicker(context, timeOfDay);
+                      if (newTime != null) {
+                        await initializeNotificationsPlatform();
+                        await scheduleDailyNotification(context, newTime);
+                        setState(() {
+                          timeOfDay = newTime;
+                        });
+                        updateSettings(
+                          "notificationHour",
+                          timeOfDay.hour,
+                          pagesNeedingRefresh: [],
+                          updateGlobalState: false,
+                        );
+                        updateSettings(
+                          "notificationMinute",
+                          timeOfDay.minute,
+                          pagesNeedingRefresh: [],
+                          updateGlobalState: false,
+                        );
+                      }
+                    },
+                    afterWidget: TimeDigits(timeOfDay: timeOfDay),
+                  ),
+                ),
+              ],
             )),
         Divider(
           indent: 20,
@@ -241,6 +305,7 @@ Future<bool> scheduleDailyNotification(context, TimeOfDay timeOfDay,
     {bool scheduleNowDebug = false}) async {
   // If the app was opened on the day the notification was scheduled it will be
   // cancelled and set to the next day because of _nextInstanceOfSetTime
+  // If ReminderNotificationType.Everyday is not true
   await cancelDailyNotification();
 
   AndroidNotificationDetails androidNotificationDetails =
@@ -256,7 +321,13 @@ Future<bool> scheduleDailyNotification(context, TimeOfDay timeOfDay,
       DarwinNotificationDetails(threadIdentifier: 'transactionReminders');
 
   // schedule 2 weeks worth of notifications
-  for (int i = 1; i <= 14; i++) {
+  for (int i = (ReminderNotificationType
+                  .values[appStateSettings["notificationsReminderType"]] ==
+              ReminderNotificationType.Everyday
+          ? 0
+          : 1);
+      i <= 14;
+      i++) {
     String chosenMessage =
         _reminderStrings[Random().nextInt(_reminderStrings.length)].tr();
     tz.TZDateTime dateTime = _nextInstanceOfSetTime(timeOfDay, dayOffset: i);
@@ -293,7 +364,8 @@ Future<bool> scheduleDailyNotification(context, TimeOfDay timeOfDay,
 }
 
 Future<bool> cancelDailyNotification() async {
-  for (int i = 1; i <= 14; i++) {
+  // Need to cancel all, including the one at 0 - even if it does not exist
+  for (int i = 0; i <= 14; i++) {
     await flutterLocalNotificationsPlugin.cancel(i);
   }
   print("Cancelled notifications for daily reminder");

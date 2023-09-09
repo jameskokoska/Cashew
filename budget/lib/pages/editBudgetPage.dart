@@ -198,6 +198,7 @@ class _EditBudgetPageState extends State<EditBudgetPage> {
                       key: ValueKey(index),
                       children: [
                         EditRowEntry(
+                          key: ValueKey(budget.budgetPk),
                           extraIcon: budget.pinned
                               ? Icons.push_pin_rounded
                               : Icons.push_pin_outlined,
@@ -211,13 +212,14 @@ class _EditBudgetPageState extends State<EditBudgetPage> {
                           currentReorder:
                               currentReorder != -1 && currentReorder != index,
                           accentColor: accentColor,
-                          onDelete: () {
-                            deleteBudgetPopup(
-                              context,
-                              budget: budget,
-                              routesToPopAfterDelete:
-                                  RoutesToPopAfterDelete.None,
-                            );
+                          onDelete: () async {
+                            return (await deleteBudgetPopup(
+                                  context,
+                                  budget: budget,
+                                  routesToPopAfterDelete:
+                                      RoutesToPopAfterDelete.None,
+                                )) ==
+                                DeletePopupAction.Delete;
                           },
                           openPage: AddBudgetPage(
                             budget: budget,
@@ -425,7 +427,7 @@ class _EditBudgetPageState extends State<EditBudgetPage> {
   }
 }
 
-void deleteBudgetPopup(
+Future<DeletePopupAction?> deleteBudgetPopup(
   BuildContext context, {
   required Budget budget,
   required RoutesToPopAfterDelete routesToPopAfterDelete,
@@ -477,6 +479,7 @@ void deleteBudgetPopup(
       });
     }
   }
+  return action;
 }
 
 Future<dynamic> deleteSharedBudgetPopup(context, Budget budget) {

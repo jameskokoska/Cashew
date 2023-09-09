@@ -326,7 +326,6 @@
   "delete-transaction": "Slet transaktion",
   "delete-transaction-question": "Slet transaktion?",
   "daily-notifications": "Daglige meddelelser",
-  "daily-notifications-description": "Hvis appen ikke blev åbnet",
   "alert-time": "Alarmtid",
   "upcoming-transactions": "Kommende transaktioner",
   "notification-reminder-1": "Glem ikke at tilføje transaktioner fra i dag!",
@@ -569,5 +568,10 @@
   "add-name": "Tilføj navn",
   "delete-name-question": "Slet navn?",
   "duplicate-name-warning": "Duplikatnavn",
-  "duplicate-name-warning-description": "Vælg et andet navn"
+  "duplicate-name-warning-description": "Vælg et andet navn",
+  "notifications-reminder": "Tilføj transaktion påmindelse",
+  "notifications-reminder-type": "Påmindelsestype",
+  "daily-notification-type-if-not-opened": "Hvis appen ikke allerede var åbnet i dag",
+  "daily-notification-type-one-day-from-open": "24 timer fra App åbnede",
+  "daily-notification-type-everyday": "Hver dag"
 }
