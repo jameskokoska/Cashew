@@ -351,7 +351,9 @@ class UpcomingTransactionDateHeader extends StatelessWidget {
                 ? Row(
                     children: [
                       Icon(
-                        Icons.loop_rounded,
+                        appStateSettings["outlinedIcons"]
+                            ? Icons.loop_outlined
+                            : Icons.loop_rounded,
                         color: dynamicPastel(
                             context, Theme.of(context).colorScheme.primary,
                             amount: 0.4),

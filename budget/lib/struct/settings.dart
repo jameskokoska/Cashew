@@ -296,7 +296,9 @@ class TranslationsHelp extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(right: 12),
                 child: Icon(
-                  Icons.connect_without_contact_rounded,
+                  appStateSettings["outlinedIcons"]
+                      ? Icons.connect_without_contact_outlined
+                      : Icons.connect_without_contact_rounded,
                   color: Theme.of(context).colorScheme.secondary,
                   size: 31,
                 ),

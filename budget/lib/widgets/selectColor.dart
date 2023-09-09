@@ -178,7 +178,9 @@ class _SelectColorState extends State<SelectColor> {
                     });
                   },
                   initialValue: useSystemColor,
-                  icon: Icons.devices_rounded,
+                  icon: appStateSettings["outlinedIcons"]
+                      ? Icons.devices_outlined
+                      : Icons.devices_rounded,
                 )
               : SizedBox.shrink(),
           AnimatedOpacity(
@@ -349,7 +351,9 @@ class ThemeColorIcon extends StatelessWidget {
           onTap: onTap,
           borderRadius: 500,
           child: Icon(
-            Icons.color_lens_rounded,
+            appStateSettings["outlinedIcons"]
+                ? Icons.color_lens_outlined
+                : Icons.color_lens_rounded,
             color: Theme.of(context).colorScheme.onPrimary.withOpacity(0.7),
           ),
         ),
@@ -459,7 +463,9 @@ class _ColorIconCustomState extends State<ColorIconCustom> {
             },
             borderRadius: 500,
             child: Icon(
-              Icons.colorize_rounded,
+              appStateSettings["outlinedIcons"]
+                  ? Icons.colorize_outlined
+                  : Icons.colorize_rounded,
               color: Theme.of(context).colorScheme.secondary,
             ),
           ),

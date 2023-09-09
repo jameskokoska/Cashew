@@ -104,7 +104,9 @@ class _AutoTransactionsPageEmailState extends State<AutoTransactionsPageEmail> {
           description:
               "Parse Gmail emails on app launch. Every email is only scanned once.",
           initialValue: canReadEmails,
-          icon: Icons.mark_email_unread_rounded,
+          icon: appStateSettings["outlinedIcons"]
+              ? Icons.mark_email_unread_outlined
+              : Icons.mark_email_unread_rounded,
         ),
         IgnorePointer(
           ignoring: !canReadEmails,
@@ -315,7 +317,9 @@ Future<void> parseEmailsInBackground(context,
           SnackbarMessage(
             title: templateFound!.templateName + ": " + "From Email",
             description: title,
-            icon: Icons.payments_rounded,
+            icon: appStateSettings["outlinedIcons"]
+                ? Icons.payments_outlined
+                : Icons.payments_rounded,
           ),
         );
         // TODO have setting so they can choose if the emails are markes as read
@@ -352,7 +356,9 @@ Future<void> parseEmailsInBackground(context,
             title: "Scanned " + results.messages!.length.toString() + " emails",
             description: newEmailCount.toString() +
                 pluralString(newEmailCount == 1, " new email"),
-            icon: Icons.mark_email_unread_rounded,
+            icon: appStateSettings["outlinedIcons"]
+                ? Icons.mark_email_unread_outlined
+                : Icons.mark_email_unread_rounded,
             onTap: () {
               pushRoute(context, AutoTransactionsPageEmail());
             },
@@ -493,7 +499,9 @@ class _GmailApiScreenState extends State<GmailApiScreen> {
                 updateGlobalState: false,
               );
             },
-            icon: Icons.format_list_numbered_rounded,
+            icon: appStateSettings["outlinedIcons"]
+                ? Icons.format_list_numbered_outlined
+                : Icons.format_list_numbered_rounded,
           ),
           Padding(
             padding: const EdgeInsets.only(top: 13, bottom: 4, left: 15),
@@ -514,7 +522,9 @@ class _GmailApiScreenState extends State<GmailApiScreen> {
                     child: StatusBox(
                       title: "Email Configuration Missing",
                       description: "Please add a configuration.",
-                      icon: Icons.warning_rounded,
+                      icon: appStateSettings["outlinedIcons"]
+                          ? Icons.warning_outlined
+                          : Icons.warning_rounded,
                       color: Theme.of(context).colorScheme.error,
                     ),
                   );
@@ -633,7 +643,9 @@ class ScannerTemplateEntry extends StatelessWidget {
                         );
                       }
                     },
-                    icon: Icons.delete_rounded,
+                    icon: appStateSettings["outlinedIcons"]
+                        ? Icons.delete_outlined
+                        : Icons.delete_rounded,
                   )
                 ],
               ),

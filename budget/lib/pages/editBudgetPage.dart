@@ -127,7 +127,9 @@ class _EditBudgetPageState extends State<EditBudgetPage> {
                 ),
               );
             },
-            icon: Icon(Icons.add_rounded),
+            icon: Icon(appStateSettings["outlinedIcons"]
+                ? Icons.add_outlined
+                : Icons.add_rounded),
           ),
         ],
         slivers: [
@@ -136,7 +138,9 @@ class _EditBudgetPageState extends State<EditBudgetPage> {
               padding: const EdgeInsets.only(bottom: 8.0),
               child: TextInput(
                 labelText: "search-budgets-placeholder".tr(),
-                icon: Icons.search_rounded,
+                icon: appStateSettings["outlinedIcons"]
+                    ? Icons.search_outlined
+                    : Icons.search_rounded,
                 onSubmitted: (value) {
                   setState(() {
                     searchValue = value;
@@ -200,7 +204,9 @@ class _EditBudgetPageState extends State<EditBudgetPage> {
                         EditRowEntry(
                           key: ValueKey(budget.budgetPk),
                           extraIcon: budget.pinned
-                              ? Icons.push_pin_rounded
+                              ? appStateSettings["outlinedIcons"]
+                                  ? Icons.push_pin_outlined
+                                  : Icons.push_pin_rounded
                               : Icons.push_pin_outlined,
                           onExtra: () async {
                             Budget updatedBudget =
@@ -379,7 +385,9 @@ class _EditBudgetPageState extends State<EditBudgetPage> {
                                 child: Align(
                                   alignment: Alignment.topRight,
                                   child: Icon(
-                                    Icons.people_alt_rounded,
+                                    appStateSettings["outlinedIcons"]
+                                        ? Icons.people_alt_outlined
+                                        : Icons.people_alt_rounded,
                                     size: 18,
                                     color: budget.colour == null
                                         ? Theme.of(context)
@@ -449,7 +457,9 @@ Future<DeletePopupAction?> deleteBudgetPopup(
           context,
           title: "remove-transactions-from-added-budget-question".tr(),
           description: "delete-budget-added-warning".tr(),
-          icon: Icons.warning_amber_rounded,
+          icon: appStateSettings["outlinedIcons"]
+              ? Icons.warning_amber_outlined
+              : Icons.warning_amber_rounded,
           onCancel: () {
             Navigator.pop(context, false);
           },
@@ -489,7 +499,9 @@ Future<dynamic> deleteSharedBudgetPopup(context, Budget budget) {
       title: "Delete Shared Budget?",
       description:
           "You own this budget. Deleting it will remove it from the server. All transactions belonging to this budget will no longer be connected to a budget.",
-      icon: Icons.delete_rounded,
+      icon: appStateSettings["outlinedIcons"]
+          ? Icons.delete_outlined
+          : Icons.delete_rounded,
       onCancel: () {
         Navigator.pop(context, false);
       },
@@ -505,7 +517,9 @@ Future<dynamic> deleteSharedBudgetPopup(context, Budget budget) {
       title: "Leave Shared Budget?",
       description:
           "You are a member of this budget. Deleting it will remove you from the shared group. All transactions belonging to this budget will no longer be connected to a budget, until you are added back.",
-      icon: Icons.delete_rounded,
+      icon: appStateSettings["outlinedIcons"]
+          ? Icons.delete_outlined
+          : Icons.delete_rounded,
       onCancel: () {
         Navigator.pop(context, false);
       },
@@ -649,7 +663,9 @@ class _BudgetTotalSpentToggleState extends State<BudgetTotalSpentToggle> {
           ),
         );
       },
-      icon: Icons.center_focus_weak_rounded,
+      icon: appStateSettings["outlinedIcons"]
+          ? Icons.center_focus_weak_outlined
+          : Icons.center_focus_weak_rounded,
     );
   }
 }

@@ -178,7 +178,9 @@ Future<bool> signInGoogle(
       SnackbarMessage(
         title: "sign-in-error".tr(),
         description: "sign-in-error-description".tr(),
-        icon: Icons.error_rounded,
+        icon: appStateSettings["outlinedIcons"]
+            ? Icons.error_outlined
+            : Icons.error_rounded,
         onTap: () async {},
         timeout: Duration(milliseconds: 3400),
       ),
@@ -291,7 +293,11 @@ Future<void> createBackup(
       Navigator.of(context).maybePop();
     }
     openSnackbar(
-      SnackbarMessage(title: e.toString(), icon: Icons.error_rounded),
+      SnackbarMessage(
+          title: e.toString(),
+          icon: appStateSettings["outlinedIcons"]
+              ? Icons.error_outlined
+              : Icons.error_rounded),
     );
   }
 
@@ -340,7 +346,9 @@ Future<void> createBackup(
         SnackbarMessage(
           title: "backup-created".tr(),
           description: driveFile.name,
-          icon: Icons.backup_rounded,
+          icon: appStateSettings["outlinedIcons"]
+              ? Icons.backup_outlined
+              : Icons.backup_rounded,
         ),
       );
     if (clientIDForSync == null)
@@ -360,7 +368,11 @@ Future<void> createBackup(
       await refreshGoogleSignIn();
     } else {
       openSnackbar(
-        SnackbarMessage(title: e.toString(), icon: Icons.error_rounded),
+        SnackbarMessage(
+            title: e.toString(),
+            icon: appStateSettings["outlinedIcons"]
+                ? Icons.error_outlined
+                : Icons.error_rounded),
       );
     }
   }
@@ -404,7 +416,11 @@ Future<void> deleteRecentBackups(context, amountToKeep,
       loadingIndeterminateKey.currentState!.setVisibility(false);
     }
     openSnackbar(
-      SnackbarMessage(title: e.toString(), icon: Icons.error_rounded),
+      SnackbarMessage(
+          title: e.toString(),
+          icon: appStateSettings["outlinedIcons"]
+              ? Icons.error_outlined
+              : Icons.error_rounded),
     );
   }
 }
@@ -433,7 +449,11 @@ Future<void> chooseBackup(context,
   } catch (e) {
     Navigator.of(context).pop();
     openSnackbar(
-      SnackbarMessage(title: e.toString(), icon: Icons.error_rounded),
+      SnackbarMessage(
+          title: e.toString(),
+          icon: appStateSettings["outlinedIcons"]
+              ? Icons.error_outlined
+              : Icons.error_rounded),
     );
   }
 }
@@ -480,21 +500,31 @@ Future<void> loadBackup(
         openSnackbar(
           SnackbarMessage(
               title: "backup-restored".tr(),
-              icon: Icons.settings_backup_restore_rounded),
+              icon: appStateSettings["outlinedIcons"]
+                  ? Icons.settings_backup_restore_outlined
+                  : Icons.settings_backup_restore_rounded),
         );
         Navigator.pop(context);
         restartAppPopup(context);
       },
       onError: (error) {
         openSnackbar(
-          SnackbarMessage(title: error.toString(), icon: Icons.error_rounded),
+          SnackbarMessage(
+              title: error.toString(),
+              icon: appStateSettings["outlinedIcons"]
+                  ? Icons.error_outlined
+                  : Icons.error_rounded),
         );
       },
     );
   } catch (e) {
     Navigator.of(context).pop();
     openSnackbar(
-      SnackbarMessage(title: e.toString(), icon: Icons.error_rounded),
+      SnackbarMessage(
+          title: e.toString(),
+          icon: appStateSettings["outlinedIcons"]
+              ? Icons.error_outlined
+              : Icons.error_rounded),
     );
   }
 }
@@ -524,7 +554,9 @@ class _GoogleAccountLoginButtonState extends State<GoogleAccountLoginButton> {
           navigatorKey.currentContext != null) {
         result = await openPopup(
           navigatorKey.currentContext!,
-          icon: Icons.badge_rounded,
+          icon: appStateSettings["outlinedIcons"]
+              ? Icons.badge_outlined
+              : Icons.badge_rounded,
           title: "backups".tr(),
           description: "google-drive-backup-disclaimer".tr(),
           onSubmitLabel: "continue".tr(),
@@ -616,7 +648,9 @@ class _GoogleAccountLoginButtonState extends State<GoogleAccountLoginButton> {
                 : NavigationSidebarButton(
                     key: ValueKey("user"),
                     label: googleUser!.displayName ?? "",
-                    icon: Icons.person_rounded,
+                    icon: appStateSettings["outlinedIcons"]
+                        ? Icons.person_outlined
+                        : Icons.person_rounded,
                     onTap: () async {
                       if (widget.onTap != null) widget.onTap!();
                     },
@@ -657,7 +691,9 @@ class _GoogleAccountLoginButtonState extends State<GoogleAccountLoginButton> {
             : SettingsContainerOpenPage(
                 openPage: AccountsPage(),
                 title: googleUser!.displayName ?? "",
-                icon: Icons.person_rounded,
+                icon: appStateSettings["outlinedIcons"]
+                    ? Icons.person_outlined
+                    : Icons.person_rounded,
                 isOutlined: true,
               );
   }
@@ -681,7 +717,11 @@ Future<(drive.DriveApi? driveApi, List<drive.File>?)> getDriveFiles() async {
       return await getDriveFiles();
     } else {
       openSnackbar(
-        SnackbarMessage(title: e.toString(), icon: Icons.error_rounded),
+        SnackbarMessage(
+            title: e.toString(),
+            icon: appStateSettings["outlinedIcons"]
+                ? Icons.error_outlined
+                : Icons.error_rounded),
       );
     }
   }
@@ -807,7 +847,9 @@ class _BackupManagementState extends State<BackupManagement> {
                     initialValue: appStateSettings["autoBackups"],
                     title: "auto-backups".tr(),
                     description: "auto-backups-description".tr(),
-                    icon: Icons.backup_rounded,
+                    icon: appStateSettings["outlinedIcons"]
+                        ? Icons.backup_outlined
+                        : Icons.backup_rounded,
                   ),
                 )
               : SizedBox.shrink(),
@@ -832,7 +874,9 @@ class _BackupManagementState extends State<BackupManagement> {
                     initialValue: appStateSettings["backupSync"],
                     title: "sync-data".tr(),
                     description: "sync-data-description".tr(),
-                    icon: Icons.cloud_sync_rounded,
+                    icon: appStateSettings["outlinedIcons"]
+                        ? Icons.cloud_sync_outlined
+                        : Icons.cloud_sync_rounded,
                   ),
                 )
               : SizedBox.shrink(),
@@ -856,7 +900,9 @@ class _BackupManagementState extends State<BackupManagement> {
                             ? "sync-every-change-description1".tr()
                             : "sync-every-change-description2".tr();
                       },
-                      icon: Icons.all_inbox_rounded,
+                      icon: appStateSettings["outlinedIcons"]
+                          ? Icons.all_inbox_outlined
+                          : Icons.all_inbox_rounded,
                     ),
                   ),
                 )
@@ -878,7 +924,9 @@ class _BackupManagementState extends State<BackupManagement> {
                           appStateSettings["autoBackupsFrequency"].toString(),
                       title: "backup-frequency".tr(),
                       description: "number-of-days".tr(),
-                      icon: Icons.event_repeat_rounded,
+                      icon: appStateSettings["outlinedIcons"]
+                          ? Icons.event_repeat_outlined
+                          : Icons.event_repeat_rounded,
                     ),
                   ),
                 )
@@ -900,7 +948,9 @@ class _BackupManagementState extends State<BackupManagement> {
                       if (int.parse(value) < appStateSettings["backupLimit"]) {
                         openPopup(
                           context,
-                          icon: Icons.delete_rounded,
+                          icon: appStateSettings["outlinedIcons"]
+                              ? Icons.delete_outlined
+                              : Icons.delete_rounded,
                           title: "change-limit".tr(),
                           description: "change-limit-warning".tr(),
                           onSubmit: () async {
@@ -955,7 +1005,9 @@ class _BackupManagementState extends State<BackupManagement> {
                                   context,
                                   title: "load-backup".tr(),
                                   description: "load-backup-warning".tr(),
-                                  icon: Icons.warning_amber_rounded,
+                                  icon: appStateSettings["outlinedIcons"]
+                                      ? Icons.warning_amber_outlined
+                                      : Icons.warning_amber_rounded,
                                   onSubmit: () async {
                                     Navigator.pop(context, true);
                                   },
@@ -978,7 +1030,7 @@ class _BackupManagementState extends State<BackupManagement> {
                               //         (file.value.size ?? "") +
                               //         "\n" +
                               //         (file.value.description ?? ""),
-                              //     icon: Icons.warning_amber_rounded,
+                              //     icon: appStateSettings["outlinedIcons"] ? Icons.warning_amber_outlined : Icons.warning_amber_rounded,
                               //     onSubmit: () async {
                               //       Navigator.pop(context, true);
                               //     },
@@ -1010,8 +1062,14 @@ class _BackupManagementState extends State<BackupManagement> {
                                       children: [
                                         Icon(
                                           widget.isClientSync
-                                              ? Icons.devices_rounded
-                                              : Icons.description_rounded,
+                                              ? appStateSettings[
+                                                      "outlinedIcons"]
+                                                  ? Icons.devices_outlined
+                                                  : Icons.devices_rounded
+                                              : appStateSettings[
+                                                      "outlinedIcons"]
+                                                  ? Icons.description_outlined
+                                                  : Icons.description_rounded,
                                           color: Theme.of(context)
                                               .colorScheme
                                               .secondary,
@@ -1113,7 +1171,10 @@ class _BackupManagementState extends State<BackupManagement> {
                                                 onTap: () {
                                                   openPopup(
                                                     context,
-                                                    icon: Icons.delete_rounded,
+                                                    icon: appStateSettings[
+                                                            "outlinedIcons"]
+                                                        ? Icons.delete_outlined
+                                                        : Icons.delete_rounded,
                                                     title: "delete-backup".tr(),
                                                     subtitle: file.value.name ??
                                                         "No name",
@@ -1186,7 +1247,10 @@ class _BackupManagementState extends State<BackupManagement> {
                                                         "cancel".tr(),
                                                   );
                                                 },
-                                                icon: Icons.close_rounded,
+                                                icon: appStateSettings[
+                                                        "outlinedIcons"]
+                                                    ? Icons.close_outlined
+                                                    : Icons.close_rounded,
                                               ),
                                             ),
                                           ],
@@ -1246,7 +1310,9 @@ class LoadingShimmerDriveFiles extends StatelessWidget {
                     child: Row(
                       children: [
                         Icon(
-                          Icons.description_rounded,
+                          appStateSettings["outlinedIcons"]
+                              ? Icons.description_outlined
+                              : Icons.description_rounded,
                           color: Theme.of(context).colorScheme.secondary,
                           size: 30,
                         ),
@@ -1283,9 +1349,17 @@ class LoadingShimmerDriveFiles extends StatelessWidget {
                   isManaging
                       ? Row(
                           children: [
-                            ButtonIcon(onTap: () {}, icon: Icons.close_rounded),
+                            ButtonIcon(
+                                onTap: () {},
+                                icon: appStateSettings["outlinedIcons"]
+                                    ? Icons.close_outlined
+                                    : Icons.close_rounded),
                             SizedBox(width: 5),
-                            ButtonIcon(onTap: () {}, icon: Icons.close_rounded),
+                            ButtonIcon(
+                                onTap: () {},
+                                icon: appStateSettings["outlinedIcons"]
+                                    ? Icons.close_outlined
+                                    : Icons.close_rounded),
                           ],
                         )
                       : SizedBox.shrink(),
@@ -1326,7 +1400,9 @@ Future<bool> saveDriveFileToDevice(
       openSnackbar(SnackbarMessage(
         title: "backup-downloaded-success".tr(),
         description: fileName,
-        icon: Icons.download_done_rounded,
+        icon: appStateSettings["outlinedIcons"]
+            ? Icons.download_done_outlined
+            : Icons.download_done_rounded,
       ));
       return true;
     } catch (e) {
@@ -1345,14 +1421,18 @@ Future<bool> saveDriveFileToDevice(
     openSnackbar(SnackbarMessage(
       title: "backup-downloaded-success".tr(),
       description: fileName,
-      icon: Icons.download_done_rounded,
+      icon: appStateSettings["outlinedIcons"]
+          ? Icons.download_done_outlined
+          : Icons.download_done_rounded,
     ));
     return true;
   } catch (e) {
     openSnackbar(SnackbarMessage(
       title: "error-downloading".tr(),
       description: e.toString(),
-      icon: Icons.warning_amber_rounded,
+      icon: appStateSettings["outlinedIcons"]
+          ? Icons.warning_amber_outlined
+          : Icons.warning_amber_rounded,
     ));
     print("Error saving file to device: " + e.toString());
     return false;

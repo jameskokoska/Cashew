@@ -295,7 +295,9 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
             );
           },
           icon: Icon(
-            Icons.edit_rounded,
+            appStateSettings["outlinedIcons"]
+                ? Icons.edit_outlined
+                : Icons.edit_rounded,
             color: budgetColorScheme.onSecondaryContainer,
           ),
         ),
@@ -516,7 +518,9 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
                           child: IconButton(
                             color: budgetColorScheme.primary,
                             icon: Icon(
-                              Icons.history_rounded,
+                              appStateSettings["outlinedIcons"]
+                                  ? Icons.history_outlined
+                                  : Icons.history_rounded,
                               size: 22,
                               color: budgetColorScheme.primary.withOpacity(0.8),
                             ),

@@ -390,7 +390,9 @@ Future<bool> syncData(BuildContext context) async {
         SnackbarMessage(
           title: "syncing-failed".tr(),
           description: "sync-fail-reason".tr(),
-          icon: Icons.sync_problem_rounded,
+          icon: appStateSettings["outlinedIcons"]
+              ? Icons.sync_problem_outlined
+              : Icons.sync_problem_rounded,
         ),
       );
       filesSyncing.remove(file);

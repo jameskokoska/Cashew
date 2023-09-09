@@ -158,7 +158,9 @@ class CategoryEntry extends StatelessWidget {
                                 child: Transform.rotate(
                                   angle: categorySpent >= 0 ? pi : 0,
                                   child: Icon(
-                                    Icons.arrow_drop_down_rounded,
+                                    appStateSettings["outlinedIcons"]
+                                        ? Icons.arrow_drop_down_outlined
+                                        : Icons.arrow_drop_down_rounded,
                                     color: showIncomeExpenseIcons
                                         ? categorySpent > 0
                                             ? getColor(context, "incomeAmount")

@@ -162,7 +162,9 @@ class NavigationSidebarState extends State<NavigationSidebar> {
                               },
                             ),
                             NavigationSidebarButton(
-                              icon: Icons.event_repeat_rounded,
+                              icon: appStateSettings["outlinedIcons"]
+                                  ? Icons.event_repeat_outlined
+                                  : Icons.event_repeat_rounded,
                               label: "subscriptions".tr(),
                               isSelected: selectedIndex == 5,
                               onTap: () {
@@ -173,7 +175,9 @@ class NavigationSidebarState extends State<NavigationSidebar> {
                             kIsWeb
                                 ? SizedBox.shrink()
                                 : NavigationSidebarButton(
-                                    icon: Icons.notifications_rounded,
+                                    icon: appStateSettings["outlinedIcons"]
+                                        ? Icons.notifications_outlined
+                                        : Icons.notifications_rounded,
                                     label: "notifications".tr(),
                                     isSelected: selectedIndex == 6,
                                     onTap: () {
@@ -182,7 +186,9 @@ class NavigationSidebarState extends State<NavigationSidebar> {
                                     },
                                   ),
                             NavigationSidebarButton(
-                              icon: Icons.receipt_long_rounded,
+                              icon: appStateSettings["outlinedIcons"]
+                                  ? Icons.receipt_long_outlined
+                                  : Icons.receipt_long_rounded,
                               label: "all-spending".tr(),
                               isSelected: selectedIndex == 7,
                               onTap: () {
@@ -210,7 +216,9 @@ class NavigationSidebarState extends State<NavigationSidebar> {
                               isButtonSelected: selectedIndex == 8,
                             ),
                             NavigationSidebarButton(
-                              icon: Icons.settings_rounded,
+                              icon: appStateSettings["outlinedIcons"]
+                                  ? Icons.settings_outlined
+                                  : Icons.settings_rounded,
                               label: "settings".tr(),
                               isSelected: selectedIndex == 4,
                               onTap: () {
@@ -219,7 +227,9 @@ class NavigationSidebarState extends State<NavigationSidebar> {
                               },
                             ),
                             NavigationSidebarButton(
-                              icon: Icons.info_outline_rounded,
+                              icon: appStateSettings["outlinedIcons"]
+                                  ? Icons.info_outlined
+                                  : Icons.info_outline_rounded,
                               label: "about".tr(),
                               isSelected: selectedIndex == 13,
                               onTap: () {
@@ -328,7 +338,9 @@ class _SyncButtonState extends State<SyncButton> {
                   child: RefreshButton(
                     key: refreshButtonKey,
                     halfAnimation: true,
-                    customIcon: Icons.sync_rounded,
+                    customIcon: appStateSettings["outlinedIcons"]
+                        ? Icons.sync_outlined
+                        : Icons.sync_rounded,
                     flipIcon: true,
                     padding: EdgeInsets.zero,
                     iconOnly: true,
@@ -490,7 +502,9 @@ class _EdiDatatButtonsState extends State<EditDataButtons> {
             curve: Curves.easeInOutCubicEmphasized,
             turns: showEditDataButtons ? 0 : -0.5,
             child: Icon(
-              Icons.arrow_drop_up_rounded,
+              appStateSettings["outlinedIcons"]
+                  ? Icons.arrow_drop_up_outlined
+                  : Icons.arrow_drop_up_rounded,
             ),
           ),
         ),
@@ -502,7 +516,9 @@ class _EdiDatatButtonsState extends State<EditDataButtons> {
                 : Column(
                     children: [
                       NavigationSidebarButton(
-                        icon: Icons.account_balance_wallet_rounded,
+                        icon: appStateSettings["outlinedIcons"]
+                            ? Icons.account_balance_wallet_outlined
+                            : Icons.account_balance_wallet_rounded,
                         label: "wallet-details".tr(),
                         isSelected: widget.selectedIndex == 9,
                         onTap: () {
@@ -520,7 +536,9 @@ class _EdiDatatButtonsState extends State<EditDataButtons> {
                         },
                       ),
                       NavigationSidebarButton(
-                        icon: Icons.category_rounded,
+                        icon: appStateSettings["outlinedIcons"]
+                            ? Icons.category_outlined
+                            : Icons.category_rounded,
                         label: "categories-details".tr(),
                         isSelected: widget.selectedIndex == 11,
                         onTap: () {
@@ -529,7 +547,9 @@ class _EdiDatatButtonsState extends State<EditDataButtons> {
                         },
                       ),
                       NavigationSidebarButton(
-                        icon: Icons.text_fields_rounded,
+                        icon: appStateSettings["outlinedIcons"]
+                            ? Icons.text_fields_outlined
+                            : Icons.text_fields_rounded,
                         label: "titles-details".tr(),
                         isSelected: widget.selectedIndex == 12,
                         onTap: () {

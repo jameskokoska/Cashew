@@ -585,19 +585,33 @@ String getWelcomeMessage() {
 
 IconData getTransactionTypeIcon(TransactionSpecialType? selectedType) {
   if (selectedType == null) {
-    return Icons.payments_rounded;
+    return appStateSettings["outlinedIcons"]
+        ? Icons.payments_outlined
+        : Icons.payments_rounded;
   } else if (selectedType == TransactionSpecialType.upcoming) {
-    return Icons.event_rounded;
+    return appStateSettings["outlinedIcons"]
+        ? Icons.event_outlined
+        : Icons.event_rounded;
   } else if (selectedType == TransactionSpecialType.subscription) {
-    return Icons.event_repeat_rounded;
+    return appStateSettings["outlinedIcons"]
+        ? Icons.event_repeat_outlined
+        : Icons.event_repeat_rounded;
   } else if (selectedType == TransactionSpecialType.repetitive) {
-    return Icons.repeat_rounded;
+    return appStateSettings["outlinedIcons"]
+        ? Icons.repeat_outlined
+        : Icons.repeat_rounded;
   } else if (selectedType == TransactionSpecialType.debt) {
-    return Icons.archive_rounded;
+    return appStateSettings["outlinedIcons"]
+        ? Icons.archive_outlined
+        : Icons.archive_rounded;
   } else if (selectedType == TransactionSpecialType.credit) {
-    return Icons.unarchive_rounded;
+    return appStateSettings["outlinedIcons"]
+        ? Icons.unarchive_outlined
+        : Icons.unarchive_rounded;
   }
-  return Icons.event_repeat_rounded;
+  return appStateSettings["outlinedIcons"]
+      ? Icons.event_repeat_outlined
+      : Icons.event_repeat_rounded;
 }
 
 getTotalSubscriptions(AllWallets allWallets, SelectedSubscriptionsType type,
@@ -734,7 +748,9 @@ void restartAppPopup(context) async {
     openPopup(
       context,
       title: "please-restart-the-application".tr(),
-      icon: Icons.restart_alt_rounded,
+      icon: appStateSettings["outlinedIcons"]
+          ? Icons.restart_alt_outlined
+          : Icons.restart_alt_rounded,
       barrierDismissible: false,
     );
   } else {
@@ -942,7 +958,9 @@ void copyToClipboard(String text, {bool showSnackbar = true}) async {
       SnackbarMessage(
         title: "copied-to-clipboard".tr(),
         description: text,
-        icon: Icons.copy_rounded,
+        icon: appStateSettings["outlinedIcons"]
+            ? Icons.copy_outlined
+            : Icons.copy_rounded,
         timeout: Duration(milliseconds: 2500),
       ),
     );
@@ -956,7 +974,9 @@ Future<String?> readClipboard({bool showSnackbar = true}) async {
     openSnackbar(
       SnackbarMessage(
         title: "pasted-from-clipboard".tr(),
-        icon: Icons.paste_rounded,
+        icon: appStateSettings["outlinedIcons"]
+            ? Icons.paste_outlined
+            : Icons.paste_rounded,
         timeout: Duration(milliseconds: 2500),
       ),
     );

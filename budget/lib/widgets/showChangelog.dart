@@ -10,6 +10,9 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    < 4.2.0
+    Fixed format of swipe to delete container on iOS
+    Debug flag to enable outlined icons
     < 4.1.9
     Added swipe to delete when on edit data pages
     New reminder types: 24 hours from app last opened, and everyday
@@ -1179,7 +1182,6 @@ Future<void> showChangelog(context, {forceShow = false}) async {
 end""";
 
   String version = packageInfoGlobal.version;
-  String buildNumber = packageInfoGlobal.buildNumber;
   int versionInt = parseVersionInt(version);
   int lastLoginVersionInt =
       parseVersionInt(appStateSettings["lastLoginVersion"]);
@@ -1251,12 +1253,7 @@ end""";
         context,
         PopupFramework(
           title: "changelog".tr(),
-          subtitle: "v" +
-              version +
-              "+" +
-              buildNumber +
-              ", db-v" +
-              schemaVersionGlobal.toString(),
+          subtitle: getVersionString(),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: changelogPoints,
@@ -1284,4 +1281,15 @@ int parseVersionInt(String versionString) {
     print("Error parsing version number, defaulting to version 0.");
   }
   return 0;
+}
+
+String getVersionString() {
+  String version = packageInfoGlobal.version;
+  String buildNumber = packageInfoGlobal.buildNumber;
+  return "v" +
+      version +
+      "+" +
+      buildNumber +
+      ", db-v" +
+      schemaVersionGlobal.toString();
 }

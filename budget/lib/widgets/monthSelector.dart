@@ -279,7 +279,9 @@ class MonthSelectorState extends State<MonthSelector> {
                       child: Transform.scale(
                         scale: 1.5,
                         child: Icon(
-                          Icons.arrow_left_rounded,
+                          appStateSettings["outlinedIcons"]
+                              ? Icons.arrow_left_outlined
+                              : Icons.arrow_left_rounded,
                           color: Theme.of(context).colorScheme.onPrimary,
                         ),
                       ),
@@ -312,7 +314,10 @@ class MonthSelectorState extends State<MonthSelector> {
                       height: 34,
                       child: Transform.scale(
                         scale: 1.5,
-                        child: Icon(Icons.arrow_right_rounded,
+                        child: Icon(
+                            appStateSettings["outlinedIcons"]
+                                ? Icons.arrow_right_outlined
+                                : Icons.arrow_right_rounded,
                             color: Theme.of(context).colorScheme.onPrimary),
                       ),
                     ),

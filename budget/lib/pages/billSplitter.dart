@@ -163,7 +163,9 @@ class _BillSplitterState extends State<BillSplitter> {
       openSnackbar(
         SnackbarMessage(
           title: "duplicate-name-warning".tr(),
-          icon: Icons.warning_amber_rounded,
+          icon: appStateSettings["outlinedIcons"]
+              ? Icons.warning_amber_outlined
+              : Icons.warning_amber_rounded,
           description: "duplicate-name-warning-description".tr(),
         ),
       );
@@ -348,7 +350,9 @@ class _BillSplitterState extends State<BillSplitter> {
                       child: SettingsContainer(
                         isOutlinedColumn: true,
                         title: "new-bill".tr(),
-                        icon: Icons.add_rounded,
+                        icon: appStateSettings["outlinedIcons"]
+                            ? Icons.add_outlined
+                            : Icons.add_rounded,
                         isOutlined: true,
                         onTap: () {
                           resetBill();
@@ -363,7 +367,9 @@ class _BillSplitterState extends State<BillSplitter> {
                 child: SettingsContainerOpenPage(
                   isOutlinedColumn: true,
                   title: "names".tr(),
-                  icon: Icons.people_rounded,
+                  icon: appStateSettings["outlinedIcons"]
+                      ? Icons.people_outlined
+                      : Icons.people_rounded,
                   isOutlined: true,
                   openPage: PeoplePage(
                     splitPersons: splitPersons,
@@ -382,7 +388,9 @@ class _BillSplitterState extends State<BillSplitter> {
                     child: SettingsContainerOpenPage(
                       isOutlinedColumn: true,
                       title: "summary".tr(),
-                      icon: Icons.summarize_rounded,
+                      icon: appStateSettings["outlinedIcons"]
+                          ? Icons.summarize_outlined
+                          : Icons.summarize_rounded,
                       isOutlined: true,
                       openPage: SummaryPage(
                         billSplitterItems: billSplitterItems,
@@ -738,7 +746,9 @@ class BillSplitterItemEntry extends StatelessWidget {
                     ),
                     padding: EdgeInsets.all(5),
                     child: Icon(
-                      Icons.delete_rounded,
+                      appStateSettings["outlinedIcons"]
+                          ? Icons.delete_outlined
+                          : Icons.delete_rounded,
                       color: Theme.of(context).colorScheme.onError,
                     ),
                   ),
@@ -895,7 +905,9 @@ class _AddBillItemPageState extends State<AddBillItemPage> {
                         Navigator.pop(context);
                       }
                     },
-                    icon: Icon(Icons.delete_rounded),
+                    icon: Icon(appStateSettings["outlinedIcons"]
+                        ? Icons.delete_outlined
+                        : Icons.delete_rounded),
                   )
                 : SizedBox.shrink(),
           ],
@@ -1412,7 +1424,9 @@ Future<bool> generateLoanTransactionsFromBillSummary(
   }
   openSnackbar(
     SnackbarMessage(
-      icon: Icons.done_rounded,
+      icon: appStateSettings["outlinedIcons"]
+          ? Icons.done_outlined
+          : Icons.done_rounded,
       title: "success-generate-loans".tr(),
       description: "success-generate-loans-description".tr(),
     ),
@@ -1500,7 +1514,9 @@ class _SummaryPersonRowEntryState extends State<SummaryPersonRowEntry> {
                               isExpanded = !isExpanded;
                             });
                           },
-                          icon: Icon(Icons.arrow_drop_down_rounded),
+                          icon: Icon(appStateSettings["outlinedIcons"]
+                              ? Icons.arrow_drop_down_outlined
+                              : Icons.arrow_drop_down_rounded),
                         ),
                       ),
                     ],

@@ -89,7 +89,9 @@ class MoreActionsPageState extends State<MoreActionsPage>
               DropdownItemMenu(
                 id: "about-app",
                 label: "about-app".tr(namedArgs: {"app": globalAppName}).tr(),
-                icon: Icons.info_outline_rounded,
+                icon: appStateSettings["outlinedIcons"]
+                    ? Icons.info_outlined
+                    : Icons.info_outline_rounded,
                 action: () {
                   pushRoute(context, AboutPage());
                 },
@@ -131,7 +133,9 @@ class MorePages extends StatelessWidget {
                           key: settingsPageFrameworkStateKey,
                         ),
                         title: "settings-and-customization".tr(),
-                        icon: Icons.settings_rounded,
+                        icon: appStateSettings["outlinedIcons"]
+                            ? Icons.settings_outlined
+                            : Icons.settings_rounded,
                         isOutlined: true,
                         // description: "Theme, Language, CSV Import",
                         // isWideOutlined: true,
@@ -163,7 +167,9 @@ class MorePages extends StatelessWidget {
                       openBottomSheet(context, RatingPopup(), fullSnap: true);
                     },
                     title: "feedback".tr(),
-                    icon: Icons.rate_review_rounded,
+                    icon: appStateSettings["outlinedIcons"]
+                        ? Icons.rate_review_outlined
+                        : Icons.rate_review_rounded,
                     isOutlined: true,
                   ),
                 ),
@@ -180,7 +186,9 @@ class MorePages extends StatelessWidget {
                             child: SettingsContainerOpenPage(
                               openPage: NotificationsPage(),
                               title: "notifications".tr(),
-                              icon: Icons.notifications_rounded,
+                              icon: appStateSettings["outlinedIcons"]
+                                  ? Icons.notifications_outlined
+                                  : Icons.notifications_rounded,
                               isOutlined: true,
                             ),
                           )
@@ -197,7 +205,9 @@ class MorePages extends StatelessWidget {
                       child: SettingsContainerOpenPage(
                         openPage: SubscriptionsPage(),
                         title: "subscriptions".tr(),
-                        icon: Icons.event_repeat_rounded,
+                        icon: appStateSettings["outlinedIcons"]
+                            ? Icons.event_repeat_outlined
+                            : Icons.event_repeat_rounded,
                         isOutlined: true,
                       ),
                     ),
@@ -205,7 +215,9 @@ class MorePages extends StatelessWidget {
                       child: SettingsContainerOpenPage(
                         openPage: WalletDetailsPage(wallet: null),
                         title: "all-spending".tr(),
-                        icon: Icons.receipt_long_rounded,
+                        icon: appStateSettings["outlinedIcons"]
+                            ? Icons.receipt_long_outlined
+                            : Icons.receipt_long_rounded,
                         isOutlined: true,
                       ),
                     ),
@@ -248,7 +260,9 @@ class MorePages extends StatelessWidget {
                         isOutlinedColumn: true,
                         openPage: EditWalletsPage(),
                         title: "wallets".tr(),
-                        icon: Icons.account_balance_wallet_rounded,
+                        icon: appStateSettings["outlinedIcons"]
+                            ? Icons.account_balance_wallet_outlined
+                            : Icons.account_balance_wallet_rounded,
                         isOutlined: true,
                       ),
                     ),
@@ -269,7 +283,9 @@ class MorePages extends StatelessWidget {
                         isOutlinedColumn: true,
                         openPage: EditCategoriesPage(),
                         title: "categories".tr(),
-                        icon: Icons.category_rounded,
+                        icon: appStateSettings["outlinedIcons"]
+                            ? Icons.category_outlined
+                            : Icons.category_rounded,
                         isOutlined: true,
                       ),
                     ),
@@ -279,7 +295,9 @@ class MorePages extends StatelessWidget {
                         isOutlinedColumn: true,
                         openPage: EditAssociatedTitlesPage(),
                         title: "titles".tr(),
-                        icon: Icons.text_fields_rounded,
+                        icon: appStateSettings["outlinedIcons"]
+                            ? Icons.text_fields_outlined
+                            : Icons.text_fields_rounded,
                         isOutlined: true,
                       ),
                     )
@@ -317,7 +335,9 @@ Future enterNameBottomSheet(context) async {
       child: Column(
         children: [
           SelectText(
-            icon: Icons.person_rounded,
+            icon: appStateSettings["outlinedIcons"]
+                ? Icons.person_outlined
+                : Icons.person_rounded,
             setSelectedText: (_) {},
             nextWithInput: (text) {
               updateSettings("username", text.trim(),
@@ -390,7 +410,9 @@ class SettingsPageContent extends StatelessWidget {
                                         updateGlobalState: true);
                                   },
                                   initialValue: appStateSettings["materialYou"],
-                                  icon: Icons.brush_rounded,
+                                  icon: appStateSettings["outlinedIcons"]
+                                      ? Icons.brush_outlined
+                                      : Icons.brush_rounded,
                                   enableBorderRadius: true,
                                 ),
                               )
@@ -415,7 +437,9 @@ class SettingsPageContent extends StatelessWidget {
               },
               title: "accent-color".tr(),
               description: "accent-color-description".tr(),
-              icon: Icons.color_lens_rounded,
+              icon: appStateSettings["outlinedIcons"]
+                  ? Icons.color_lens_outlined
+                  : Icons.color_lens_rounded,
             );
           },
         ),
@@ -428,11 +452,15 @@ class SettingsPageContent extends StatelessWidget {
                   updateSettings("materialYou", value, updateGlobalState: true);
                 },
                 initialValue: appStateSettings["materialYou"],
-                icon: Icons.brush_rounded,
+                icon: appStateSettings["outlinedIcons"]
+                    ? Icons.brush_outlined
+                    : Icons.brush_rounded,
               ),
         SettingsContainerDropdown(
           title: "theme-mode".tr(),
-          icon: Icons.lightbulb_rounded,
+          icon: appStateSettings["outlinedIcons"]
+              ? Icons.lightbulb_outlined
+              : Icons.lightbulb_rounded,
           initial: appStateSettings["theme"].toString().capitalizeFirst,
           items: ["Light", "Dark", "System"],
           onChanged: (value) {
@@ -458,13 +486,15 @@ class SettingsPageContent extends StatelessWidget {
         //         updateGlobalState: true, pagesNeedingRefresh: [0, 1, 2, 3]);
         //   },
         //   initialValue: appStateSettings["batterySaver"],
-        //   icon: Icons.battery_charging_full_rounded,
+        //   icon: appStateSettings["outlinedIcons"] ? Icons.battery_charging_full_outlined : Icons.battery_charging_full_rounded,
         // ),
         notificationsGlobalEnabled && getIsFullScreen(context) == false
             ? SettingsContainerOpenPage(
                 openPage: NotificationsPage(),
                 title: "notifications".tr(),
-                icon: Icons.notifications_rounded,
+                icon: appStateSettings["outlinedIcons"]
+                    ? Icons.notifications_outlined
+                    : Icons.notifications_rounded,
               )
             : SizedBox.shrink(),
 
@@ -472,7 +502,9 @@ class SettingsPageContent extends StatelessWidget {
             ? SettingsContainerOpenPage(
                 openPage: EditHomePage(),
                 title: "edit-home-page".tr(),
-                icon: Icons.home_rounded,
+                icon: appStateSettings["outlinedIcons"]
+                    ? Icons.home_outlined
+                    : Icons.home_rounded,
               )
             : SizedBox.shrink(),
 
@@ -483,7 +515,9 @@ class SettingsPageContent extends StatelessWidget {
         Builder(builder: (context) {
           return SettingsContainer(
             title: "language".tr(),
-            icon: Icons.language_rounded,
+            icon: appStateSettings["outlinedIcons"]
+                ? Icons.language_outlined
+                : Icons.language_rounded,
             afterWidget: Tappable(
               color: Theme.of(context).colorScheme.secondaryContainer,
               borderRadius: 10,
@@ -507,7 +541,7 @@ class SettingsPageContent extends StatelessWidget {
         // SettingsContainerOpenPage(
         //   openPage: AutoTransactionsPage(),
         //   title: "Auto Transactions",
-        //   icon: Icons.auto_fix_high_rounded,
+        //   icon: appStateSettings["outlinedIcons"] ? Icons.auto_fix_high_outlined : Icons.auto_fix_high_rounded,
         // ),
         SettingsContainerSwitch(
           title: "pay-subscriptions".tr(),
@@ -532,7 +566,9 @@ class SettingsPageContent extends StatelessWidget {
             ? SettingsContainerOpenPage(
                 openPage: AutoTransactionsPageEmail(),
                 title: "auto-email-transactions".tr(),
-                icon: Icons.mark_email_unread_rounded,
+                icon: appStateSettings["outlinedIcons"]
+                    ? Icons.mark_email_unread_outlined
+                    : Icons.mark_email_unread_rounded,
               )
             : SizedBox.shrink(),
 
@@ -541,7 +577,9 @@ class SettingsPageContent extends StatelessWidget {
         SettingsContainerOpenPage(
           openPage: BillSplitter(),
           title: "bill-splitter".tr(),
-          icon: Icons.summarize_rounded,
+          icon: appStateSettings["outlinedIcons"]
+              ? Icons.summarize_outlined
+              : Icons.summarize_rounded,
         ),
 
         ImportCSV(),
@@ -582,7 +620,9 @@ class _BiometricsSettingToggleState extends State<BiometricsSettingToggle> {
                   } catch (e) {
                     openPopup(
                       context,
-                      icon: Icons.warning_amber_rounded,
+                      icon: appStateSettings["outlinedIcons"]
+                          ? Icons.warning_amber_outlined
+                          : Icons.warning_amber_rounded,
                       title: getPlatform() == PlatformOS.isIOS
                           ? "biometrics-disabled".tr()
                           : "biometrics-error".tr(),
@@ -609,7 +649,9 @@ class _BiometricsSettingToggleState extends State<BiometricsSettingToggle> {
                   }
                 },
                 initialValue: appStateSettings["requireAuth"],
-                icon: Icons.lock_rounded,
+                icon: appStateSettings["outlinedIcons"]
+                    ? Icons.lock_outlined
+                    : Icons.lock_rounded,
               )
             : SizedBox.shrink(),
       ],

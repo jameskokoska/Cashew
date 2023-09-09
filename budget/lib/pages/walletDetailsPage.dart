@@ -4,6 +4,7 @@ import 'package:budget/pages/addWalletPage.dart';
 import 'package:budget/pages/homePage/homePageLineGraph.dart';
 import 'package:budget/pages/transactionsSearchPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
+import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/selectedTransactionsActionBar.dart';
@@ -89,7 +90,9 @@ class _WalletDetailsPageState extends State<WalletDetailsPage> {
                     ),
                   );
                 },
-                icon: Icon(Icons.edit_rounded),
+                icon: Icon(appStateSettings["outlinedIcons"]
+                    ? Icons.edit_outlined
+                    : Icons.edit_rounded),
               ),
             ],
             dragDownToDismiss: true,
@@ -345,8 +348,8 @@ class _WalletCategoryPieChartState extends State<WalletCategoryPieChart> {
                       //   },
                       //   icon: Icon(
                       //     tiledCategoryEntries
-                      //         ? Icons.grid_view_rounded
-                      //         : Icons.list_rounded,
+                      //         ? appStateSettings["outlinedIcons"] ? Icons.grid_view_outlined : Icons.grid_view_rounded
+                      //         : appStateSettings["outlinedIcons"] ? Icons.list_outlined : Icons.list_rounded,
                       //   ),
                       // ),
                       // tiledCategoryEntries
@@ -406,7 +409,9 @@ class _WalletDetailsLineGraphState extends State<WalletDetailsLineGraph> {
                 offset: Offset(5, -5),
                 child: IconButton(
                   icon: Icon(
-                    Icons.history_rounded,
+                    appStateSettings["outlinedIcons"]
+                        ? Icons.history_outlined
+                        : Icons.history_rounded,
                     size: 22,
                     color:
                         Theme.of(context).colorScheme.primary.withOpacity(0.8),

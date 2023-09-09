@@ -72,7 +72,9 @@ class _SharedBudgetSettingsState extends State<SharedBudgetSettings> {
     if (members.contains(member)) {
       openSnackbar(
         SnackbarMessage(
-          icon: Icons.warning_rounded,
+          icon: appStateSettings["outlinedIcons"]
+              ? Icons.warning_outlined
+              : Icons.warning_rounded,
           title: "User already exists",
         ),
       );
@@ -81,7 +83,9 @@ class _SharedBudgetSettingsState extends State<SharedBudgetSettings> {
     if (!member.contains("@") || !member.contains(".com")) {
       openSnackbar(
         SnackbarMessage(
-          icon: Icons.warning_rounded,
+          icon: appStateSettings["outlinedIcons"]
+              ? Icons.warning_outlined
+              : Icons.warning_rounded,
           title: "Email only",
           description: "Please ensure a valid email is entered.",
         ),
@@ -144,7 +148,9 @@ class _SharedBudgetSettingsState extends State<SharedBudgetSettings> {
           SizedBox(height: 10),
           Center(
             child: Icon(
-              Icons.warning_rounded,
+              appStateSettings["outlinedIcons"]
+                  ? Icons.warning_outlined
+                  : Icons.warning_rounded,
               color: Theme.of(context).colorScheme.secondary,
               size: 40,
             ),
@@ -361,7 +367,9 @@ class _SharedBudgetSettingsState extends State<SharedBudgetSettings> {
             ? Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 15),
                 child: Button(
-                  icon: Icons.block_rounded,
+                  icon: appStateSettings["outlinedIcons"]
+                      ? Icons.block_outlined
+                      : Icons.block_rounded,
                   iconColor: Theme.of(context).colorScheme.onError,
                   label: "Stop Sharing",
                   onTap: () async {
@@ -370,7 +378,9 @@ class _SharedBudgetSettingsState extends State<SharedBudgetSettings> {
                       title: "Stop Sharing?",
                       description:
                           "Are you sure you want to stop sharing this budget? This will delete all entries from the server.",
-                      icon: Icons.block_rounded,
+                      icon: appStateSettings["outlinedIcons"]
+                          ? Icons.block_outlined
+                          : Icons.block_rounded,
                       onCancel: () {
                         Navigator.pop(context);
                       },
@@ -383,7 +393,9 @@ class _SharedBudgetSettingsState extends State<SharedBudgetSettings> {
                         if (status == false) {
                           openSnackbar(
                             SnackbarMessage(
-                              icon: Icons.warning_rounded,
+                              icon: appStateSettings["outlinedIcons"]
+                                  ? Icons.warning_outlined
+                                  : Icons.warning_rounded,
                               description:
                                   "There was a problem removing the shared budget from the server. Please try again later.",
                             ),
@@ -403,7 +415,9 @@ class _SharedBudgetSettingsState extends State<SharedBudgetSettings> {
             : Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 15),
                 child: Button(
-                  icon: Icons.logout_rounded,
+                  icon: appStateSettings["outlinedIcons"]
+                      ? Icons.logout_outlined
+                      : Icons.logout_rounded,
                   iconColor: Theme.of(context).colorScheme.errorContainer,
                   label: "Leave Shared Group",
                   onTap: () async {
@@ -412,7 +426,9 @@ class _SharedBudgetSettingsState extends State<SharedBudgetSettings> {
                     if (status == false) {
                       openSnackbar(
                         SnackbarMessage(
-                          icon: Icons.warning_rounded,
+                          icon: appStateSettings["outlinedIcons"]
+                              ? Icons.warning_outlined
+                              : Icons.warning_rounded,
                           description:
                               "There was a problem removing the shared budget from the server. Please Try again later.",
                         ),
@@ -425,7 +441,9 @@ class _SharedBudgetSettingsState extends State<SharedBudgetSettings> {
                       title: "Delete " + widget.budget.name + " budget?",
                       description:
                           "This will delete all transactions associated with this category. This will only delete the transactions on your device.",
-                      icon: Icons.delete_rounded,
+                      icon: appStateSettings["outlinedIcons"]
+                          ? Icons.delete_outlined
+                          : Icons.delete_rounded,
                       onCancel: () {
                         Navigator.pop(context);
                         Navigator.pop(context);
@@ -492,7 +510,9 @@ class CategoryMemberContainer extends StatelessWidget {
                 child: Column(
                   children: [
                     SelectText(
-                      icon: Icons.person_rounded,
+                      icon: appStateSettings["outlinedIcons"]
+                          ? Icons.person_outlined
+                          : Icons.person_rounded,
                       setSelectedText: (_) {},
                       nextWithInput: setMember,
                       selectedText: member,
@@ -500,7 +520,9 @@ class CategoryMemberContainer extends StatelessWidget {
                       autoFocus: false,
                     ),
                     SelectText(
-                      icon: Icons.sell_rounded,
+                      icon: appStateSettings["outlinedIcons"]
+                          ? Icons.sell_outlined
+                          : Icons.sell_rounded,
                       setSelectedText: (_) {},
                       nextWithInput: (text) {
                         Map<dynamic, dynamic> nicknames =
@@ -568,7 +590,9 @@ class CategoryMemberContainer extends StatelessWidget {
                         title: "Remove Member?",
                         description:
                             "The transactions this user has downloaded will still be available to them",
-                        icon: Icons.delete_rounded,
+                        icon: appStateSettings["outlinedIcons"]
+                            ? Icons.delete_outlined
+                            : Icons.delete_rounded,
                         onSubmitLabel: "Remove",
                         onSubmit: () {
                           Navigator.pop(context);
@@ -585,7 +609,9 @@ class CategoryMemberContainer extends StatelessWidget {
                     child: Padding(
                       padding: const EdgeInsets.all(14),
                       child: Icon(
-                        Icons.close_rounded,
+                        appStateSettings["outlinedIcons"]
+                            ? Icons.close_outlined
+                            : Icons.close_rounded,
                         size: 25,
                         color: Theme.of(context).colorScheme.primary,
                       ),
@@ -610,7 +636,9 @@ memberPopup(context, String member) {
           Opacity(
             opacity: 0.4,
             child: SelectText(
-              icon: Icons.person_rounded,
+              icon: appStateSettings["outlinedIcons"]
+                  ? Icons.person_outlined
+                  : Icons.person_rounded,
               setSelectedText: (_) {},
               selectedText: member,
               placeholder: "example@gmail.com",
@@ -619,7 +647,9 @@ memberPopup(context, String member) {
             ),
           ),
           SelectText(
-            icon: Icons.sell_rounded,
+            icon: appStateSettings["outlinedIcons"]
+                ? Icons.sell_outlined
+                : Icons.sell_rounded,
             setSelectedText: (_) {},
             nextWithInput: (text) {
               Map<dynamic, dynamic> nicknames =

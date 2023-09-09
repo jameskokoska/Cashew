@@ -93,7 +93,9 @@ class _EditWalletsPageState extends State<EditWalletsPage> {
                 ),
               );
             },
-            icon: Icon(Icons.add_rounded),
+            icon: Icon(appStateSettings["outlinedIcons"]
+                ? Icons.add_outlined
+                : Icons.add_rounded),
           ),
         ],
         slivers: [
@@ -102,7 +104,9 @@ class _EditWalletsPageState extends State<EditWalletsPage> {
               padding: const EdgeInsets.only(bottom: 8.0),
               child: TextInput(
                 labelText: "search-wallets-placeholder".tr(),
-                icon: Icons.search_rounded,
+                icon: appStateSettings["outlinedIcons"]
+                    ? Icons.search_outlined
+                    : Icons.search_rounded,
                 onSubmitted: (value) {
                   setState(() {
                     searchValue = value;
@@ -123,7 +127,9 @@ class _EditWalletsPageState extends State<EditWalletsPage> {
               child: SettingsContainerOpenPage(
                 openPage: ExchangeRates(),
                 title: "exchange-rates".tr(),
-                icon: Icons.account_balance_wallet_rounded,
+                icon: appStateSettings["outlinedIcons"]
+                    ? Icons.account_balance_wallet_outlined
+                    : Icons.account_balance_wallet_rounded,
               ),
             ),
           ),
@@ -165,7 +171,9 @@ class _EditWalletsPageState extends State<EditWalletsPage> {
                     return EditRowEntry(
                       extraIcon: appStateSettings["selectedWalletPk"] ==
                               wallet.walletPk
-                          ? Icons.star_rounded
+                          ? appStateSettings["outlinedIcons"]
+                              ? Icons.star_outlined
+                              : Icons.star_rounded
                           : Icons.star_outline,
                       onExtra: () async {
                         setPrimaryWallet(wallet.walletPk);
@@ -296,7 +304,9 @@ Future<DeletePopupAction?> deleteWalletPopup(
         context,
         title: "delete-all-transactions-question".tr(),
         description: "delete-wallet-merge-warning".tr(),
-        icon: Icons.warning_amber_rounded,
+        icon: appStateSettings["outlinedIcons"]
+            ? Icons.warning_amber_outlined
+            : Icons.warning_amber_rounded,
         onCancel: () {
           Navigator.pop(context, false);
         },

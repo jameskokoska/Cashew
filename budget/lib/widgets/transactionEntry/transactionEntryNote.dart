@@ -2,6 +2,7 @@ import 'dart:ui';
 import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
+import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:flutter/src/material/icons.dart';
 import 'package:flutter/src/material/theme.dart';
@@ -54,7 +55,9 @@ class TransactionEntryNote extends StatelessWidget {
               padding:
                   const EdgeInsets.only(left: 5, right: 3, top: 10, bottom: 10),
               child: Icon(
-                Icons.sticky_note_2_rounded,
+                appStateSettings["outlinedIcons"]
+                    ? Icons.sticky_note_2_outlined
+                    : Icons.sticky_note_2_rounded,
                 size: 22,
                 color: iconColor,
               ),

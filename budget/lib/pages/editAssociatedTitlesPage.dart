@@ -103,7 +103,9 @@ class _EditAssociatedTitlesPageState extends State<EditAssociatedTitlesPage> {
                     duration: Duration(milliseconds: 100));
               });
             },
-            icon: Icon(Icons.add_rounded),
+            icon: Icon(appStateSettings["outlinedIcons"]
+                ? Icons.add_outlined
+                : Icons.add_rounded),
           ),
         ],
         slivers: [
@@ -112,7 +114,9 @@ class _EditAssociatedTitlesPageState extends State<EditAssociatedTitlesPage> {
               padding: const EdgeInsets.only(bottom: 8.0),
               child: TextInput(
                 labelText: "search-titles-placeholder".tr(),
-                icon: Icons.search_rounded,
+                icon: appStateSettings["outlinedIcons"]
+                    ? Icons.search_outlined
+                    : Icons.search_rounded,
                 onSubmitted: (value) {
                   setState(() {
                     searchValue = value;
@@ -318,7 +322,9 @@ class AutoTitlesToggle extends StatelessWidget {
             pagesNeedingRefresh: [], updateGlobalState: false);
       },
       initialValue: appStateSettings["autoAddAssociatedTitles"],
-      icon: Icons.add_box_rounded,
+      icon: appStateSettings["outlinedIcons"]
+          ? Icons.add_box_outlined
+          : Icons.add_box_rounded,
     );
   }
 }
@@ -347,7 +353,9 @@ class _AskForTitlesToggleState extends State<AskForTitlesToggle> {
             setState(() {});
           },
           initialValue: appStateSettings["askForTransactionTitle"],
-          icon: Icons.text_fields_rounded,
+          icon: appStateSettings["outlinedIcons"]
+              ? Icons.text_fields_outlined
+              : Icons.text_fields_rounded,
         ),
         AnimatedExpanded(
           expand: getIsFullScreen(context) == false &&
@@ -375,7 +383,9 @@ class AskForNotesToggle extends StatelessWidget {
         );
       },
       initialValue: appStateSettings["askForTransactionNoteWithTitle"],
-      icon: Icons.sticky_note_2_rounded,
+      icon: appStateSettings["outlinedIcons"]
+          ? Icons.sticky_note_2_outlined
+          : Icons.sticky_note_2_rounded,
     );
   }
 }

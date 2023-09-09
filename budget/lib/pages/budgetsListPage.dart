@@ -4,6 +4,7 @@ import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/addCategoryPage.dart';
 import 'package:budget/pages/editBudgetPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
+import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/budgetContainer.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/noResults.dart';
@@ -59,7 +60,9 @@ class BudgetsListPageState extends State<BudgetsListPage>
             );
           },
           icon: Icon(
-            Icons.edit_rounded,
+            appStateSettings["outlinedIcons"]
+                ? Icons.edit_outlined
+                : Icons.edit_rounded,
             color: Theme.of(context).colorScheme.onSecondaryContainer,
           ),
         ),

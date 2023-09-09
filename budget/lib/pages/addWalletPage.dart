@@ -4,6 +4,7 @@ import 'package:budget/main.dart';
 import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/editWalletsPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
+import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
@@ -325,7 +326,9 @@ class _AddWalletPageState extends State<AddWalletPage> {
                           routesToPopAfterDelete: widget.routesToPopAfterDelete,
                         );
                       },
-                      icon: Icon(Icons.delete_rounded),
+                      icon: Icon(appStateSettings["outlinedIcons"]
+                          ? Icons.delete_outlined
+                          : Icons.delete_rounded),
                     )
                   ]
                 : [])
@@ -431,7 +434,9 @@ class _AddWalletPageState extends State<AddWalletPage> {
                               ),
                             );
                           },
-                          icon: Icons.more_horiz_rounded),
+                          icon: appStateSettings["outlinedIcons"]
+                              ? Icons.more_horiz_outlined
+                              : Icons.more_horiz_rounded),
                       SizedBox(width: 18),
                     ],
                   ),

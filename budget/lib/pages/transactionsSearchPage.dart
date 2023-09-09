@@ -161,7 +161,9 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
                         Expanded(
                           child: TextInput(
                             labelText: "search-placeholder".tr(),
-                            icon: Icons.search_rounded,
+                            icon: appStateSettings["outlinedIcons"]
+                                ? Icons.search_outlined
+                                : Icons.search_rounded,
                             onSubmitted: (value) {
                               setState(() {
                                 searchFilters.searchQuery = value;
@@ -184,7 +186,9 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
                           onTap: () {
                             selectDateRange(context);
                           },
-                          icon: Icons.calendar_month_rounded,
+                          icon: appStateSettings["outlinedIcons"]
+                              ? Icons.calendar_month_outlined
+                              : Icons.calendar_month_rounded,
                         ),
                         SizedBox(width: 7),
                         AnimatedSwitcher(
@@ -215,7 +219,9 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
                             onTap: () {
                               selectFilters(context);
                             },
-                            icon: Icons.filter_alt_rounded,
+                            icon: appStateSettings["outlinedIcons"]
+                                ? Icons.filter_alt_outlined
+                                : Icons.filter_alt_rounded,
                           ),
                         ),
                         SizedBox(width: 20),

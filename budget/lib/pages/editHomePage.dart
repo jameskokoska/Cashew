@@ -62,7 +62,9 @@ class _EditHomePageState extends State<EditHomePage> {
       setState(() {
         editHomePageItems = {
           "wallets": EditHomePageItem(
-            icon: Icons.account_balance_wallet_rounded,
+            icon: appStateSettings["outlinedIcons"]
+                ? Icons.account_balance_wallet_outlined
+                : Icons.account_balance_wallet_rounded,
             name: "wallets".tr(),
             isEnabled: appStateSettings["showWalletSwitcher"],
             onSwitched: (value) {
@@ -94,7 +96,10 @@ class _EditHomePageState extends State<EditHomePage> {
                         child: BudgetTotalSpentToggle(),
                       ),
                       SelectItems(
-                        checkboxCustomIconSelected: Icons.push_pin_rounded,
+                        checkboxCustomIconSelected:
+                            appStateSettings["outlinedIcons"]
+                                ? Icons.push_pin_outlined
+                                : Icons.push_pin_rounded,
                         checkboxCustomIconUnselected: Icons.push_pin_outlined,
                         items: [
                           for (Budget budget in allBudgets)
@@ -150,7 +155,9 @@ class _EditHomePageState extends State<EditHomePage> {
             },
           ),
           "allSpendingSummary": EditHomePageItem(
-            icon: Icons.expand_rounded,
+            icon: appStateSettings["outlinedIcons"]
+                ? Icons.expand_outlined
+                : Icons.expand_rounded,
             name: "income-and-expenses".tr(),
             isEnabled: appStateSettings["showAllSpendingSummary"],
             onSwitched: (value) {
@@ -179,7 +186,9 @@ class _EditHomePageState extends State<EditHomePage> {
             },
           ),
           "spendingGraph": EditHomePageItem(
-            icon: Icons.insights_rounded,
+            icon: appStateSettings["outlinedIcons"]
+                ? Icons.insights_outlined
+                : Icons.insights_rounded,
             name: "spending-graph".tr(),
             isEnabled: appStateSettings["showSpendingGraph"],
             onSwitched: (value) {
@@ -298,7 +307,9 @@ class _EditHomePageState extends State<EditHomePage> {
             },
           ),
           "heatMap": EditHomePageItem(
-            icon: Icons.grid_on_rounded,
+            icon: appStateSettings["outlinedIcons"]
+                ? Icons.grid_on_outlined
+                : Icons.grid_on_rounded,
             name: "heat-map".tr(),
             isEnabled: appStateSettings["showHeatMap"],
             onSwitched: (value) {
@@ -455,7 +466,9 @@ class _SelectStartDateState extends State<SelectStartDate> {
               widget.onSelected(null);
             });
           },
-          icon: Icon(Icons.undo_rounded),
+          icon: Icon(appStateSettings["outlinedIcons"]
+              ? Icons.undo_outlined
+              : Icons.undo_rounded),
         ),
         TappableTextEntry(
           title: selectedDate == null

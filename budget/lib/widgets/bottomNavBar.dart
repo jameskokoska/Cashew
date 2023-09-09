@@ -88,7 +88,9 @@ class BottomNavBarState extends State<BottomNavBar> {
                       ),
                       NavBarIcon(
                         onItemTapped: onItemTapped,
-                        icon: Icons.more_horiz_rounded,
+                        icon: appStateSettings["outlinedIcons"]
+                            ? Icons.more_horiz_outlined
+                            : Icons.more_horiz_rounded,
                         index: 3,
                         currentIndex: selectedIndex,
                       ),
@@ -155,7 +157,9 @@ class BottomNavBarState extends State<BottomNavBar> {
               tooltip: "",
             ),
             NavigationDestination(
-              icon: Icon(Icons.more_horiz_rounded),
+              icon: Icon(appStateSettings["outlinedIcons"]
+                  ? Icons.more_horiz_outlined
+                  : Icons.more_horiz_rounded),
               label: "more".tr(),
               tooltip: "",
             ),

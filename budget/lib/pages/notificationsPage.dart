@@ -1,3 +1,4 @@
+import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/animatedExpanded.dart';
 import 'package:budget/widgets/notificationsSettings.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
@@ -69,7 +70,9 @@ class _NotificationsPageState extends State<NotificationsPage>
           child: StatusBox(
             title: "notifications-disabled".tr(),
             description: "notifications-disabled-description".tr(),
-            icon: Icons.warning_rounded,
+            icon: appStateSettings["outlinedIcons"]
+                ? Icons.warning_outlined
+                : Icons.warning_rounded,
             color: Theme.of(context).colorScheme.error,
             onTap: () {
               AppSettings.openNotificationSettings();

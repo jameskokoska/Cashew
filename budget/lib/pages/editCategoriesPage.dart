@@ -6,6 +6,7 @@ import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/pages/addCategoryPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
+import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/categoryIcon.dart';
 import 'package:budget/widgets/fab.dart';
 import 'package:budget/widgets/fadeIn.dart';
@@ -90,7 +91,9 @@ class _EditCategoriesPageState extends State<EditCategoriesPage> {
                 ),
               );
             },
-            icon: Icon(Icons.add_rounded),
+            icon: Icon(appStateSettings["outlinedIcons"]
+                ? Icons.add_outlined
+                : Icons.add_rounded),
           ),
         ],
         slivers: [
@@ -99,7 +102,9 @@ class _EditCategoriesPageState extends State<EditCategoriesPage> {
               padding: const EdgeInsets.only(bottom: 8.0),
               child: TextInput(
                 labelText: "search-categories-placeholder".tr(),
-                icon: Icons.search_rounded,
+                icon: appStateSettings["outlinedIcons"]
+                    ? Icons.search_outlined
+                    : Icons.search_rounded,
                 onSubmitted: (value) {
                   setState(() {
                     searchValue = value;
@@ -356,12 +361,17 @@ class RefreshButtonState extends State<RefreshButton>
               transform: Matrix4.rotationY(widget.flipIcon == true ? pi : 0),
               child: widget.iconOnly == true
                   ? Icon(
-                      widget.customIcon ?? Icons.refresh_rounded,
+                      widget.customIcon ?? appStateSettings["outlinedIcons"]
+                          ? Icons.refresh_outlined
+                          : Icons.refresh_rounded,
                       color: Theme.of(context).colorScheme.secondary,
                     )
                   : IconButton(
                       padding: widget.padding ?? EdgeInsets.all(15),
-                      icon: Icon(widget.customIcon ?? Icons.refresh_rounded),
+                      icon: Icon(
+                          widget.customIcon ?? appStateSettings["outlinedIcons"]
+                              ? Icons.refresh_outlined
+                              : Icons.refresh_rounded),
                       color: Theme.of(context).colorScheme.secondary,
                       onPressed: () => _onTap(),
                       visualDensity: widget.visualDensity,
@@ -395,7 +405,9 @@ Future<DeletePopupAction?> deleteCategoryPopup(
         context,
         title: "delete-all-transactions-question".tr(),
         description: "delete-category-merge-warning".tr(),
-        icon: Icons.warning_amber_rounded,
+        icon: appStateSettings["outlinedIcons"]
+            ? Icons.warning_amber_outlined
+            : Icons.warning_amber_rounded,
         onCancel: () {
           Navigator.pop(context, false);
         },
@@ -455,7 +467,9 @@ void mergeCategoryPopup(
               context,
               title: "merge-into".tr() + " " + category.name + "?",
               description: "merge-into-description".tr(),
-              icon: Icons.warning_amber_rounded,
+              icon: appStateSettings["outlinedIcons"]
+                  ? Icons.warning_amber_outlined
+                  : Icons.warning_amber_rounded,
               onSubmit: () async {
                 Navigator.pop(context, true);
               },
@@ -477,7 +491,9 @@ void mergeCategoryPopup(
                 openSnackbar(
                   SnackbarMessage(
                     title: "merged-category".tr(),
-                    icon: Icons.merge_rounded,
+                    icon: appStateSettings["outlinedIcons"]
+                        ? Icons.merge_outlined
+                        : Icons.merge_rounded,
                     description: categoryOriginal.name + " → " + category.name,
                   ),
                 );

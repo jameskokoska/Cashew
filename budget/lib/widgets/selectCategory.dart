@@ -2,6 +2,7 @@ import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/pages/addCategoryPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
+import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/categoryIcon.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
@@ -250,7 +251,9 @@ class _SelectCategoryState extends State<SelectCategory> {
                                   height: 70,
                                   child: Center(
                                     child: Icon(
-                                      Icons.category_rounded,
+                                      appStateSettings["outlinedIcons"]
+                                          ? Icons.category_outlined
+                                          : Icons.category_rounded,
                                       size: 35,
                                     ),
                                   ),

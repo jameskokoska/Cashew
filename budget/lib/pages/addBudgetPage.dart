@@ -228,7 +228,9 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
           openPopup(
             context,
             title: "No Connection",
-            icon: Icons.signal_wifi_connected_no_internet_4_rounded,
+            icon: appStateSettings["outlinedIcons"]
+                ? Icons.signal_wifi_connected_no_internet_4_outlined
+                : Icons.signal_wifi_connected_no_internet_4_rounded,
             description:
                 "You can only update the details of a shared budget online.",
             onSubmit: () {
@@ -246,7 +248,9 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
       openPopup(
         context,
         title: "No Connection",
-        icon: Icons.signal_wifi_connected_no_internet_4_rounded,
+        icon: appStateSettings["outlinedIcons"]
+            ? Icons.signal_wifi_connected_no_internet_4_outlined
+            : Icons.signal_wifi_connected_no_internet_4_rounded,
         description:
             "You can only update the details of a shared category online.",
         onCancel: () {
@@ -500,7 +504,9 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                   DropdownItemMenu(
                     id: "delete-budget",
                     label: "delete-budget".tr(),
-                    icon: Icons.delete_rounded,
+                    icon: appStateSettings["outlinedIcons"]
+                        ? Icons.delete_outlined
+                        : Icons.delete_rounded,
                     action: () {
                       deleteBudgetPopup(
                         context,
@@ -515,7 +521,9 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                       ? "pinned-to-homepage".tr()
                       : "unpinned-to-homepage".tr(),
                   icon: selectedPin
-                      ? Icons.push_pin_rounded
+                      ? appStateSettings["outlinedIcons"]
+                          ? Icons.push_pin_outlined
+                          : Icons.push_pin_rounded
                       : Icons.push_pin_outlined,
                   action: () {
                     setSelectedPin();
@@ -525,7 +533,9 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                   DropdownItemMenu(
                     id: "spending-goals",
                     label: "spending-goals".tr(),
-                    icon: Icons.fact_check_rounded,
+                    icon: appStateSettings["outlinedIcons"]
+                        ? Icons.fact_check_outlined
+                        : Icons.fact_check_rounded,
                     action: () async {
                       Budget budget = await createBudget();
                       pushRoute(
@@ -1407,7 +1417,9 @@ class SelectBudgetTypePopup extends StatelessWidget {
                   alignBeside: true,
                   padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
                   text: "added-only".tr(),
-                  iconData: Icons.folder_rounded,
+                  iconData: appStateSettings["outlinedIcons"]
+                      ? Icons.folder_outlined
+                      : Icons.folder_rounded,
                   onTap: () {
                     setBudgetType("Added Only");
                     Navigator.pop(context);
@@ -1443,7 +1455,9 @@ class SelectBudgetTypePopup extends StatelessWidget {
                   alignBeside: true,
                   padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
                   text: "all-transactions".tr(),
-                  iconData: Icons.category_rounded,
+                  iconData: appStateSettings["outlinedIcons"]
+                      ? Icons.category_outlined
+                      : Icons.category_rounded,
                   onTap: () async {
                     setBudgetType("All Transactions");
                     Navigator.pop(context);

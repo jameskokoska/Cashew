@@ -396,7 +396,9 @@ class HeatMap extends StatelessWidget {
                               child: ButtonIcon(
                                 padding: EdgeInsets.zero,
                                 size: dayWidth * 2 + dayPadding * 4,
-                                icon: Icons.history_rounded,
+                                icon: appStateSettings["outlinedIcons"]
+                                    ? Icons.history_outlined
+                                    : Icons.history_rounded,
                                 onTap: () {
                                   loadMoreMonths!(1);
                                 },

@@ -4,6 +4,7 @@ import 'package:budget/functions.dart';
 import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/subscriptionsPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
+import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/animatedExpanded.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/fab.dart';
@@ -138,7 +139,9 @@ class _UpcomingOverdueTransactionsState
                                     });
                                     _searchFocusNode.requestFocus();
                                   },
-                                  icon: Icons.search_rounded,
+                                  icon: appStateSettings["outlinedIcons"]
+                                      ? Icons.search_outlined
+                                      : Icons.search_rounded,
                                 ),
                               )
                             : Container(
@@ -160,7 +163,9 @@ class _UpcomingOverdueTransactionsState
                       padding: const EdgeInsets.only(bottom: 8.0, top: 8),
                       child: TextInput(
                         labelText: "search-transactions-placeholder".tr(),
-                        icon: Icons.search_rounded,
+                        icon: appStateSettings["outlinedIcons"]
+                            ? Icons.search_outlined
+                            : Icons.search_rounded,
                         focusNode: _searchFocusNode,
                         onSubmitted: (value) {
                           setState(() {

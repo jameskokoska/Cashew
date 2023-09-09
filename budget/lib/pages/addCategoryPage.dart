@@ -248,7 +248,9 @@ class _AddCategoryPageState extends State<AddCategoryPage>
                         routesToPopAfterDelete: widget.routesToPopAfterDelete,
                       );
                     },
-                    icon: Icon(Icons.delete_rounded),
+                    icon: Icon(appStateSettings["outlinedIcons"]
+                        ? Icons.delete_outlined
+                        : Icons.delete_rounded),
                   )
                 : SizedBox.shrink()
           ],
@@ -445,7 +447,9 @@ class _AddCategoryPageState extends State<AddCategoryPage>
                 : Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: Button(
-                      icon: Icons.merge_rounded,
+                      icon: appStateSettings["outlinedIcons"]
+                          ? Icons.merge_outlined
+                          : Icons.merge_rounded,
                       label: "merge-category".tr(),
                       onTap: () async {
                         if (widget.category != null)
@@ -662,7 +666,9 @@ class AssociatedTitleContainer extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.all(14),
                 child: Icon(
-                  Icons.close_rounded,
+                  appStateSettings["outlinedIcons"]
+                      ? Icons.close_outlined
+                      : Icons.close_rounded,
                   size: 25,
                   color: Theme.of(context).colorScheme.primary,
                 ),
@@ -714,7 +720,9 @@ class AddButton extends StatelessWidget {
           height: height,
           child: Center(
             child: Icon(
-              Icons.add_rounded,
+              appStateSettings["outlinedIcons"]
+                  ? Icons.add_outlined
+                  : Icons.add_rounded,
               size: 22,
               color: color,
             ),
@@ -764,8 +772,8 @@ class AddButton extends StatelessWidget {
 //             ButtonIcon(
 //               onTap: onTap,
 //               icon: selectedIncome
-//                   ? Icons.exit_to_app_rounded
-//                   : Icons.logout_rounded,
+//                   ? appStateSettings["outlinedIcons"] ? Icons.exit_to_app_outlined : Icons.exit_to_app_rounded
+//                   : appStateSettings["outlinedIcons"] ? Icons.logout_outlined : Icons.logout_rounded,
 //               size: 41,
 //             ),
 //             SizedBox(width: 15),

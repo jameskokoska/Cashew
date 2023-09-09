@@ -237,7 +237,9 @@ Future<bool> compareSharedToCurrentBudgets(
       }
       if (found == false) {
         openSnackbar(SnackbarMessage(
-            icon: Icons.remove_circle_outline_rounded,
+            icon: appStateSettings["outlinedIcons"]
+                ? Icons.remove_circle_outline_outlined
+                : Icons.remove_circle_outline_rounded,
             title: budget.name,
             description: "Is no longer shared with you"));
         print("You have lost permission to this budget: " + budget.name);
@@ -258,7 +260,9 @@ Future<bool> compareSharedToCurrentBudgets(
       openSnackbar(SnackbarMessage(
         title: budgetCloud["name"] + " was shared with you",
         description: "From " + getMemberNickname(budgetDecoded["ownerEmail"]),
-        icon: Icons.share_rounded,
+        icon: appStateSettings["outlinedIcons"]
+            ? Icons.share_outlined
+            : Icons.share_rounded,
       ));
     }
   }
@@ -310,7 +314,9 @@ Future<bool> getCloudBudgets() async {
   if (amountSynced > 0 && totalTransactionsUpdated > 0)
     openSnackbar(
       SnackbarMessage(
-        icon: Icons.cloud_sync_rounded,
+        icon: appStateSettings["outlinedIcons"]
+            ? Icons.cloud_sync_outlined
+            : Icons.cloud_sync_rounded,
         title: "synced".tr() +
             " " +
             totalTransactionsUpdated.toString() +

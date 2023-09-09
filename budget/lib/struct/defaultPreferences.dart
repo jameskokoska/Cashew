@@ -104,6 +104,7 @@ Future<Map<String, dynamic>> getDefaultPreferences() async {
     "incomeExpenseStartDate": null,
     "disableShadows": false,
     "showBackupLimit": false,
+    "outlinedIcons": false,
     "premiumPopupAddTransactionCount": -5,
     "premiumPopupAddTransactionLastShown": DateTime.now().toString(),
     "premiumPopupFreeSeen": false,

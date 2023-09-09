@@ -192,7 +192,9 @@ class SettingsContainerOpenPage extends StatelessWidget {
             afterWidget: isOutlined ?? false
                 ? SizedBox.shrink()
                 : Icon(
-                    Icons.chevron_right_rounded,
+                    appStateSettings["outlinedIcons"]
+                        ? Icons.chevron_right_outlined
+                        : Icons.chevron_right_rounded,
                     size: isOutlined == true ? 20 : 30,
                     color: colorScheme.secondary,
                   ),

@@ -22,8 +22,6 @@ class AboutPage extends StatelessWidget {
   const AboutPage({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    String version = packageInfoGlobal.version;
-    String buildNumber = packageInfoGlobal.buildNumber;
     return PageFramework(
       dragDownToDismiss: true,
       title: "about".tr(),
@@ -76,12 +74,7 @@ class AboutPage extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(
                           vertical: 0, horizontal: 10),
                       child: TextFont(
-                        text: "v" +
-                            version +
-                            "+" +
-                            buildNumber +
-                            ", db-v" +
-                            schemaVersionGlobal.toString(),
+                        text: getVersionString(),
                         fontSize: 14,
                         textAlign: TextAlign.center,
                         maxLines: 5,
@@ -360,12 +353,7 @@ class AboutPage extends StatelessWidget {
                   onTap: () {
                     showLicensePage(
                         context: context,
-                        applicationVersion: "v" +
-                            version +
-                            "+" +
-                            buildNumber +
-                            ", db-v" +
-                            schemaVersionGlobal.toString(),
+                        applicationVersion: getVersionString(),
                         applicationLegalese:
                             "THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE." +
                                 "\n\n" +
@@ -405,14 +393,18 @@ class AboutPage extends StatelessWidget {
                 context,
                 title: "erase-everything".tr(),
                 description: "erase-everything-description".tr(),
-                icon: Icons.warning_amber_rounded,
+                icon: appStateSettings["outlinedIcons"]
+                    ? Icons.warning_amber_outlined
+                    : Icons.warning_amber_rounded,
                 onSubmit: () async {
                   Navigator.pop(context);
                   openPopup(
                     context,
                     title: "erase-everything-warning".tr(),
                     description: "erase-everything-warning-description".tr(),
-                    icon: Icons.warning_rounded,
+                    icon: appStateSettings["outlinedIcons"]
+                        ? Icons.warning_outlined
+                        : Icons.warning_rounded,
                     onSubmit: () async {
                       Navigator.pop(context);
                       openLoadingPopup(context);

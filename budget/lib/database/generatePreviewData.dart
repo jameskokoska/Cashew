@@ -708,7 +708,9 @@ Future<bool> checkLockedFeatureIfInDemoMode(BuildContext? context) async {
   if (appStateSettings["previewDemo"] == true) {
     await openPopup(
       context!,
-      icon: Icons.warning_rounded,
+      icon: appStateSettings["outlinedIcons"]
+          ? Icons.warning_outlined
+          : Icons.warning_rounded,
       title: "not-available-in-preview-demo".tr(),
       description: "not-available-in-preview-demo-description".tr(),
       onCancel: () {

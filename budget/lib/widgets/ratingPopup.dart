@@ -11,6 +11,7 @@ import 'package:budget/widgets/globalSnackBar.dart';
 import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/openSnackbar.dart';
+import 'package:budget/widgets/showChangelog.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textInput.dart';
 import 'package:budget/widgets/textWidgets.dart';
@@ -69,7 +70,9 @@ class _RatingPopupState extends State<RatingPopup> {
                       child: AnimatedSwitcher(
                         duration: Duration(milliseconds: 300),
                         child: Icon(
-                          Icons.star_rounded,
+                          appStateSettings["outlinedIcons"]
+                              ? Icons.star_outlined
+                              : Icons.star_rounded,
                           key: ValueKey(i <= (selectedStars ?? -1)),
                           size: getWidthBottomSheet(context) - 100 < 60 * 5
                               ? (getWidthBottomSheet(context) - 100) / 5
@@ -186,6 +189,7 @@ Future<bool> shareFeedback(String feedbackText, String feedbackType,
       "feedbackType": feedbackType,
       "email": feedbackEmail,
       "platform": getPlatform().toString(),
+      "appVersion": getVersionString(),
     };
 
     DocumentReference feedbackCreatedOnCloud =
@@ -194,7 +198,9 @@ Future<bool> shareFeedback(String feedbackText, String feedbackType,
     openSnackbar(SnackbarMessage(
         title: "feedback-shared".tr(),
         description: "thank-you".tr(),
-        icon: Icons.rate_review_rounded,
+        icon: appStateSettings["outlinedIcons"]
+            ? Icons.rate_review_outlined
+            : Icons.rate_review_rounded,
         timeout: Duration(milliseconds: 2500)));
   } catch (e) {
     print(e.toString());
@@ -205,7 +211,9 @@ Future<bool> shareFeedback(String feedbackText, String feedbackType,
     openSnackbar(SnackbarMessage(
         title: "Error Sharing Feedback",
         description: "Please try again later",
-        icon: Icons.warning_amber_rounded,
+        icon: appStateSettings["outlinedIcons"]
+            ? Icons.warning_amber_outlined
+            : Icons.warning_amber_rounded,
         timeout: Duration(milliseconds: 2500)));
   }
   loadingIndeterminateKey.currentState!.setVisibility(false);

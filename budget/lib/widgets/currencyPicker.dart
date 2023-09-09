@@ -125,7 +125,9 @@ class _CurrencyPickerState extends State<CurrencyPicker> {
                   },
                   child: TextInput(
                     labelText: "search-currencies-placeholder".tr(),
-                    icon: Icons.search_rounded,
+                    icon: appStateSettings["outlinedIcons"]
+                        ? Icons.search_outlined
+                        : Icons.search_rounded,
                     onChanged: (text) {
                       searchCurrencies(text);
                     },

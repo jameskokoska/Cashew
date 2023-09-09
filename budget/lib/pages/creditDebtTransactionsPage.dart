@@ -4,6 +4,7 @@ import 'package:budget/functions.dart';
 import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/upcomingOverdueTransactionsPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
+import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/animatedExpanded.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/fab.dart';
@@ -169,7 +170,9 @@ class _CreditDebtTransactionsState extends State<CreditDebtTransactions> {
                       padding: const EdgeInsets.only(bottom: 8.0, top: 8),
                       child: TextInput(
                         labelText: "search-transactions-placeholder".tr(),
-                        icon: Icons.search_rounded,
+                        icon: appStateSettings["outlinedIcons"]
+                            ? Icons.search_outlined
+                            : Icons.search_rounded,
                         focusNode: _searchFocusNode,
                         onSubmitted: (value) {
                           setState(() {

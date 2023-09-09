@@ -1,3 +1,4 @@
+import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/framework/popupFramework.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
@@ -79,7 +80,9 @@ class _SelectCategoryImageState extends State<SelectCategoryImage> {
                   },
                   child: TextInput(
                     labelText: "search-placeholder".tr(),
-                    icon: Icons.search_rounded,
+                    icon: appStateSettings["outlinedIcons"]
+                        ? Icons.search_outlined
+                        : Icons.search_rounded,
                     onSubmitted: (value) {},
                     onChanged: (value) {
                       setState(() {
@@ -164,7 +167,9 @@ class SuggestIcon extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(right: 12),
               child: Icon(
-                Icons.reviews_rounded,
+                appStateSettings["outlinedIcons"]
+                    ? Icons.reviews_outlined
+                    : Icons.reviews_rounded,
                 color: Theme.of(context).colorScheme.secondary,
                 size: 31,
               ),
@@ -178,7 +183,9 @@ class SuggestIcon extends StatelessWidget {
               ),
             ),
             Icon(
-              Icons.chevron_right_rounded,
+              appStateSettings["outlinedIcons"]
+                  ? Icons.chevron_right_outlined
+                  : Icons.chevron_right_rounded,
               size: 25,
             ),
           ],

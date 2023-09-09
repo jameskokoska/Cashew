@@ -147,7 +147,9 @@ class HomePageState extends State<HomePage>
                                 onPressed: () {
                                   pushRoute(context, EditHomePage());
                                 },
-                                icon: Icon(Icons.more_vert_rounded),
+                                icon: Icon(appStateSettings["outlinedIcons"]
+                                    ? Icons.more_vert_outlined
+                                    : Icons.more_vert_rounded),
                               ),
                       ],
                     ),

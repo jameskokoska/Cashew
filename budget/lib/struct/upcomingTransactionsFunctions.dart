@@ -53,7 +53,9 @@ createNewSubscriptionTransaction(context, Transaction transaction) async {
           SnackbarMessage(
             title: "created-new-transaction".tr(),
             description: getWordedDateShort(newDate),
-            icon: Icons.event_repeat_rounded,
+            icon: appStateSettings["outlinedIcons"]
+                ? Icons.event_repeat_outlined
+                : Icons.event_repeat_rounded,
             onTap: () {
               pushRoute(
                 context,
@@ -77,7 +79,9 @@ Future openPayPopup(
 }) async {
   return await openPopup(
     context,
-    icon: Icons.check_circle_rounded,
+    icon: appStateSettings["outlinedIcons"]
+        ? Icons.check_circle_outlined
+        : Icons.check_circle_rounded,
     title: (transaction.income ? "deposit".tr() : "pay".tr()) + "?",
     description: transaction.income
         ? "deposit-description".tr()
@@ -143,7 +147,9 @@ Future openPayDebtCreditPopup(
 }) async {
   return await openPopup(
     context,
-    icon: Icons.check_circle_rounded,
+    icon: appStateSettings["outlinedIcons"]
+        ? Icons.check_circle_outlined
+        : Icons.check_circle_rounded,
     title: (transaction.type == TransactionSpecialType.credit
             ? "collect".tr()
             : transaction.type == TransactionSpecialType.debt
@@ -183,7 +189,9 @@ Future openRemoveSkipPopup(
 }) async {
   return await openPopup(
     context,
-    icon: Icons.unpublished_rounded,
+    icon: appStateSettings["outlinedIcons"]
+        ? Icons.unpublished_outlined
+        : Icons.unpublished_rounded,
     title: "remove-skip".tr() + "?",
     description: "remove-skip-description".tr(),
     onCancelLabel: "cancel".tr(),
@@ -208,7 +216,9 @@ Future openUnpayPopup(
   Function? runBefore,
 }) async {
   return await openPopup(context,
-      icon: Icons.unpublished_rounded,
+      icon: appStateSettings["outlinedIcons"]
+          ? Icons.unpublished_outlined
+          : Icons.unpublished_rounded,
       title: "remove-payment".tr() + "?",
       description: "remove-payment-description".tr(),
       onCancelLabel: "cancel".tr(),
@@ -238,7 +248,9 @@ Future openUnpayDebtCreditPopup(
 }) async {
   return await openPopup(
     context,
-    icon: Icons.unpublished_rounded,
+    icon: appStateSettings["outlinedIcons"]
+        ? Icons.unpublished_outlined
+        : Icons.unpublished_rounded,
     title: "remove-payment".tr() + "?",
     description: "remove-payment-description".tr(),
     onCancelLabel: "cancel".tr(),

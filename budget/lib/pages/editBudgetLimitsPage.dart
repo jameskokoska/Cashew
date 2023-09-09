@@ -1,5 +1,6 @@
 import 'package:budget/database/tables.dart';
 import 'package:budget/struct/databaseGlobal.dart';
+import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/categoryLimits.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
@@ -52,7 +53,9 @@ class _EditBudgetLimitsPageState extends State<EditBudgetLimitsPage> {
               syncWithInitialValue: true,
               title: "absolute-spending-limits".tr(),
               description: "absolute-spending-limits-description".tr(),
-              icon: Icons.numbers_rounded,
+              icon: appStateSettings["outlinedIcons"]
+                  ? Icons.numbers_outlined
+                  : Icons.numbers_rounded,
             ),
           ),
         ),

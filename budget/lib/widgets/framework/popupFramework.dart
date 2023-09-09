@@ -168,7 +168,9 @@ class PopupFramework extends StatelessWidget {
                 child: IconButton(
                   iconSize: 25,
                   padding: EdgeInsets.all(20),
-                  icon: Icon(Icons.close_rounded),
+                  icon: Icon(appStateSettings["outlinedIcons"]
+                      ? Icons.close_outlined
+                      : Icons.close_rounded),
                   onPressed: () {
                     Navigator.pop(context);
                   },

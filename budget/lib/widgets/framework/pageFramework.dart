@@ -475,7 +475,9 @@ class PageFrameworkState extends State<PageFramework>
                               child: Transform.rotate(
                                 angle: pi / 2,
                                 child: ButtonIcon(
-                                  icon: Icons.chevron_left_rounded,
+                                  icon: appStateSettings["outlinedIcons"]
+                                      ? Icons.chevron_left_outlined
+                                      : Icons.chevron_left_rounded,
                                   onTap: () {
                                     scrollToTop();
                                   },
@@ -598,8 +600,12 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
                 },
                 icon: Icon(
                   getPlatform() == PlatformOS.isIOS
-                      ? Icons.chevron_left_rounded
-                      : Icons.arrow_back_rounded,
+                      ? appStateSettings["outlinedIcons"]
+                          ? Icons.chevron_left_outlined
+                          : Icons.chevron_left_rounded
+                      : appStateSettings["outlinedIcons"]
+                          ? Icons.arrow_back_outlined
+                          : Icons.arrow_back_rounded,
                   color: getColor(context, "black"),
                 ),
               ),

@@ -75,8 +75,12 @@ class SelectedTransactionsActionBar extends StatelessWidget {
                               color: Theme.of(context).colorScheme.secondary,
                               icon: Icon(
                                 getPlatform() == PlatformOS.isIOS
-                                    ? Icons.chevron_left_rounded
-                                    : Icons.arrow_back_rounded,
+                                    ? appStateSettings["outlinedIcons"]
+                                        ? Icons.chevron_left_outlined
+                                        : Icons.chevron_left_rounded
+                                    : appStateSettings["outlinedIcons"]
+                                        ? Icons.arrow_back_outlined
+                                        : Icons.arrow_back_rounded,
                                 color: Theme.of(context).colorScheme.secondary,
                               ),
                               onPressed: () {
@@ -186,7 +190,9 @@ class SelectedTransactionsActionBar extends StatelessWidget {
                             DropdownItemMenu(
                               id: "create-copy",
                               label: "duplicate".tr(),
-                              icon: Icons.file_copy_rounded,
+                              icon: appStateSettings["outlinedIcons"]
+                                  ? Icons.file_copy_outlined
+                                  : Icons.file_copy_rounded,
                               iconScale: 0.97,
                               action: () async {
                                 Transaction transaction = await database
@@ -204,7 +210,9 @@ class SelectedTransactionsActionBar extends StatelessWidget {
                                 }
                                 openSnackbar(
                                   SnackbarMessage(
-                                    icon: Icons.file_copy_rounded,
+                                    icon: appStateSettings["outlinedIcons"]
+                                        ? Icons.file_copy_outlined
+                                        : Icons.file_copy_rounded,
                                     title: "created-copy".tr(),
                                     description:
                                         "copied".tr() + " " + transactionName,
@@ -217,7 +225,9 @@ class SelectedTransactionsActionBar extends StatelessWidget {
                           DropdownItemMenu(
                             id: "change-wallet",
                             label: "change-wallet".tr(),
-                            icon: Icons.account_balance_wallet_rounded,
+                            icon: appStateSettings["outlinedIcons"]
+                                ? Icons.account_balance_wallet_outlined
+                                : Icons.account_balance_wallet_rounded,
                             action: () async {
                               TransactionWallet? wallet =
                                   await selectWalletPopup(context);
@@ -232,7 +242,9 @@ class SelectedTransactionsActionBar extends StatelessWidget {
                               );
                               openSnackbar(
                                 SnackbarMessage(
-                                  icon: Icons.account_balance_wallet_rounded,
+                                  icon: appStateSettings["outlinedIcons"]
+                                      ? Icons.account_balance_wallet_outlined
+                                      : Icons.account_balance_wallet_rounded,
                                   title: "changed-wallet".tr(),
                                   description: "for".tr().capitalizeFirst +
                                       " " +
@@ -298,7 +310,9 @@ class SelectedTransactionsActionBar extends StatelessWidget {
                           DropdownItemMenu(
                             id: "change-category",
                             label: "change-category".tr(),
-                            icon: Icons.category_rounded,
+                            icon: appStateSettings["outlinedIcons"]
+                                ? Icons.category_outlined
+                                : Icons.category_rounded,
                             action: () async {
                               TransactionCategory? category =
                                   await openBottomSheet(
@@ -325,7 +339,9 @@ class SelectedTransactionsActionBar extends StatelessWidget {
                               );
                               openSnackbar(
                                 SnackbarMessage(
-                                  icon: Icons.account_balance_wallet_rounded,
+                                  icon: appStateSettings["outlinedIcons"]
+                                      ? Icons.account_balance_wallet_outlined
+                                      : Icons.account_balance_wallet_rounded,
                                   title: "changed-category".tr(),
                                   description: "for".tr().capitalizeFirst +
                                       " " +
@@ -546,7 +562,9 @@ class _EditSelectedTransactionsState extends State<EditSelectedTransactions> {
                       openSnackbar(
                         SnackbarMessage(
                           title: "No edits to apply!",
-                          icon: Icons.warning_rounded,
+                          icon: appStateSettings["outlinedIcons"]
+                              ? Icons.warning_outlined
+                              : Icons.warning_rounded,
                           timeout: Duration(milliseconds: 1300),
                         ),
                         postIfQueue: false,
@@ -575,7 +593,9 @@ class _EditSelectedTransactionsState extends State<EditSelectedTransactions> {
                                     selectedCategory!.name +
                                     "."
                                 : ""),
-                        icon: Icons.edit_rounded,
+                        icon: appStateSettings["outlinedIcons"]
+                            ? Icons.edit_outlined
+                            : Icons.edit_rounded,
                         onCancel: () {
                           Navigator.pop(context);
                         },

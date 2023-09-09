@@ -63,11 +63,17 @@ class SharedBudgetLabel extends StatelessWidget {
                     duration: Duration(milliseconds: 5000),
                     child: Icon(
                       transaction.sharedStatus == SharedStatus.waiting
-                          ? Icons.sync_rounded
+                          ? appStateSettings["outlinedIcons"]
+                              ? Icons.sync_outlined
+                              : Icons.sync_rounded
                           : transaction.transactionOwnerEmail !=
                                   appStateSettings["currentUserEmail"]
-                              ? Icons.arrow_circle_down_rounded
-                              : Icons.arrow_circle_up_rounded,
+                              ? appStateSettings["outlinedIcons"]
+                                  ? Icons.arrow_circle_down_outlined
+                                  : Icons.arrow_circle_down_rounded
+                              : appStateSettings["outlinedIcons"]
+                                  ? Icons.arrow_circle_up_outlined
+                                  : Icons.arrow_circle_up_rounded,
                       size: 14,
                       color: getColor(context, "black").withOpacity(0.7),
                     ),
@@ -78,8 +84,12 @@ class SharedBudgetLabel extends StatelessWidget {
                   child: Icon(
                     transaction.transactionOwnerEmail !=
                             appStateSettings["currentUserEmail"]
-                        ? Icons.arrow_circle_down_rounded
-                        : Icons.arrow_circle_up_rounded,
+                        ? appStateSettings["outlinedIcons"]
+                            ? Icons.arrow_circle_down_outlined
+                            : Icons.arrow_circle_down_rounded
+                        : appStateSettings["outlinedIcons"]
+                            ? Icons.arrow_circle_up_outlined
+                            : Icons.arrow_circle_up_rounded,
                     size: 14,
                     color: getColor(context, "black").withOpacity(0.7),
                   ),

@@ -49,7 +49,9 @@ class DebugPage extends StatelessWidget {
             // }
           },
           initialValue: appStateSettings["showCumulativeSpending"],
-          icon: Icons.show_chart_rounded,
+          icon: appStateSettings["outlinedIcons"]
+              ? Icons.show_chart_outlined
+              : Icons.show_chart_rounded,
         ),
         SettingsContainerSwitch(
           key: ValueKey(1),
@@ -60,7 +62,9 @@ class DebugPage extends StatelessWidget {
                 pagesNeedingRefresh: [0], updateGlobalState: false);
           },
           initialValue: appStateSettings["removeZeroTransactionEntries"],
-          icon: Icons.money_off_rounded,
+          icon: appStateSettings["outlinedIcons"]
+              ? Icons.money_off_outlined
+              : Icons.money_off_rounded,
         ),
         SettingsContainerSwitch(
           title: "Start spending at 0",
@@ -74,7 +78,9 @@ class DebugPage extends StatelessWidget {
             // }
           },
           initialValue: appStateSettings["ignorePastAmountSpent"],
-          icon: Icons.add_chart_rounded,
+          icon: appStateSettings["outlinedIcons"]
+              ? Icons.add_chart_outlined
+              : Icons.add_chart_rounded,
         ),
         SettingsContainerSwitch(
           title: "Show past spending trajectory",
@@ -83,7 +89,9 @@ class DebugPage extends StatelessWidget {
                 pagesNeedingRefresh: [0], updateGlobalState: false);
           },
           initialValue: appStateSettings["showPastSpendingTrajectory"],
-          icon: Icons.blur_circular_rounded,
+          icon: appStateSettings["outlinedIcons"]
+              ? Icons.blur_circular_outlined
+              : Icons.blur_circular_rounded,
         ),
         SettingsContainerSwitch(
           title: "battery-saver".tr(),
@@ -93,7 +101,9 @@ class DebugPage extends StatelessWidget {
                 updateGlobalState: true, pagesNeedingRefresh: [0, 1, 2, 3]);
           },
           initialValue: appStateSettings["batterySaver"],
-          icon: Icons.battery_charging_full_rounded,
+          icon: appStateSettings["outlinedIcons"]
+              ? Icons.battery_charging_full_outlined
+              : Icons.battery_charging_full_rounded,
         ),
         DangerousDebugFlag(
           child: SettingsContainerSwitch(
@@ -108,7 +118,9 @@ class DebugPage extends StatelessWidget {
         ),
         SettingsContainerDropdown(
           title: "Font",
-          icon: Icons.font_download_rounded,
+          icon: appStateSettings["outlinedIcons"]
+              ? Icons.font_download_outlined
+              : Icons.font_download_rounded,
           initial: appStateSettings["font"],
           items: [
             "Avenir",
@@ -132,7 +144,9 @@ class DebugPage extends StatelessWidget {
           description:
               "Color category icons to follow color, material you must be enabled",
           initialValue: appStateSettings["colorTintCategoryIcon"],
-          icon: Icons.category_rounded,
+          icon: appStateSettings["outlinedIcons"]
+              ? Icons.category_outlined
+              : Icons.category_rounded,
         ),
         DangerousDebugFlag(
           child: SettingsContainerSwitch(
@@ -143,7 +157,9 @@ class DebugPage extends StatelessWidget {
             title: "Enable Email Scanning",
             description: "Not verified by Google. Still in testing.",
             initialValue: appStateSettings["emailScanning"],
-            icon: Icons.mark_email_unread_rounded,
+            icon: appStateSettings["outlinedIcons"]
+                ? Icons.mark_email_unread_outlined
+                : Icons.mark_email_unread_rounded,
           ),
         ),
         DangerousDebugFlag(
@@ -155,7 +171,9 @@ class DebugPage extends StatelessWidget {
             title: "Email Scanning Pull to Refresh",
             description: "May increase API usage",
             initialValue: appStateSettings["emailScanningPullToRefresh"],
-            icon: Icons.mark_email_unread_rounded,
+            icon: appStateSettings["outlinedIcons"]
+                ? Icons.mark_email_unread_outlined
+                : Icons.mark_email_unread_rounded,
           ),
         ),
         DangerousDebugFlag(
@@ -168,7 +186,9 @@ class DebugPage extends StatelessWidget {
             description:
                 "In testing, share budgets and transactions with other users.",
             initialValue: appStateSettings["sharedBudgets"],
-            icon: Icons.share_rounded,
+            icon: appStateSettings["outlinedIcons"]
+                ? Icons.share_outlined
+                : Icons.share_rounded,
           ),
         ),
         SettingsContainerSwitch(
@@ -184,7 +204,20 @@ class DebugPage extends StatelessWidget {
                 ? "sync-every-change-description1".tr()
                 : "sync-every-change-description2".tr();
           },
-          icon: Icons.all_inbox_rounded,
+          icon: appStateSettings["outlinedIcons"]
+              ? Icons.all_inbox_outlined
+              : Icons.all_inbox_rounded,
+        ),
+        SettingsContainerSwitch(
+          enableBorderRadius: true,
+          onSwitched: (value) {
+            updateSettings("outlinedIcons", value,
+                pagesNeedingRefresh: [], updateGlobalState: true);
+          },
+          initialValue: appStateSettings["outlinedIcons"],
+          title: "Outlined icons",
+          description: "Use outlined icons",
+          icon: Icons.outlined_flag,
         ),
 
         SettingsContainerSwitch(
@@ -201,7 +234,9 @@ class DebugPage extends StatelessWidget {
                 pagesNeedingRefresh: [], updateGlobalState: true);
           },
           initialValue: appStateSettings["iOSEmulate"],
-          icon: Icons.apple_rounded,
+          icon: appStateSettings["outlinedIcons"]
+              ? Icons.apple_outlined
+              : Icons.apple_rounded,
         ),
         SettingsContainerSwitch(
           title: "Native iOS Navigation",
@@ -215,7 +250,9 @@ class DebugPage extends StatelessWidget {
             // }
           },
           initialValue: appStateSettings["iOSNavigation"],
-          icon: Icons.apple_rounded,
+          icon: appStateSettings["outlinedIcons"]
+              ? Icons.apple_outlined
+              : Icons.apple_rounded,
         ),
         SettingsContainerSwitch(
           onSwitched: (value) async {
@@ -226,7 +263,9 @@ class DebugPage extends StatelessWidget {
           description:
               "Use the incognito keyboard for text input (if supported)",
           initialValue: appStateSettings["incognitoKeyboard"],
-          icon: Icons.keyboard_rounded,
+          icon: appStateSettings["outlinedIcons"]
+              ? Icons.keyboard_outlined
+              : Icons.keyboard_rounded,
         ),
         SettingsContainerSwitch(
           title: "Disable shadows",

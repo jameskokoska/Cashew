@@ -80,8 +80,12 @@ class _DailyNotificationsSettingsState
           },
           initialValue: appStateSettings["notifications"],
           icon: notificationsEnabled
-              ? Icons.notifications_rounded
-              : Icons.notifications_off_rounded,
+              ? appStateSettings["outlinedIcons"]
+                  ? Icons.notifications_outlined
+                  : Icons.notifications_rounded
+              : appStateSettings["outlinedIcons"]
+                  ? Icons.notifications_off_outlined
+                  : Icons.notifications_off_rounded,
         ),
         AnimatedExpanded(
             expand: notificationsEnabled,
@@ -119,7 +123,9 @@ class _DailyNotificationsSettingsState
                       ),
                     );
                   },
-                  icon: Icons.notification_important_rounded,
+                  icon: appStateSettings["outlinedIcons"]
+                      ? Icons.notification_important_outlined
+                      : Icons.notification_important_rounded,
                 ),
                 AnimatedExpanded(
                   expand: selectedReminderType !=
@@ -201,7 +207,9 @@ class _UpcomingTransactionsNotificationsSettingsState
             return true;
           },
           initialValue: appStateSettings["notificationsUpcomingTransactions"],
-          icon: Icons.calendar_month_rounded,
+          icon: appStateSettings["outlinedIcons"]
+              ? Icons.calendar_month_outlined
+              : Icons.calendar_month_rounded,
         ),
         IgnorePointer(
           ignoring: !notificationsEnabled,

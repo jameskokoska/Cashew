@@ -1,3 +1,4 @@
+import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openContainerNavigation.dart';
@@ -45,7 +46,9 @@ class FAB extends StatelessWidget {
               width: fabSize,
               child: Center(
                 child: Icon(
-                  Icons.add_rounded,
+                  appStateSettings["outlinedIcons"]
+                      ? Icons.add_outlined
+                      : Icons.add_rounded,
                   color: colorPlus != null
                       ? colorPlus
                       : Theme.of(context).colorScheme.onSecondary,

@@ -380,7 +380,7 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
                         // if ((files?.length ?? 0) > 0) {
                         //   result = await openPopup(
                         //     context,
-                        //     icon: Icons.cloud_sync_rounded,
+                        //     icon: appStateSettings["outlinedIcons"] ? Icons.cloud_sync_outlined : Icons.cloud_sync_rounded,
                         //     title: "backup-found".tr(),
                         //     description: "backup-found-description".tr(),
                         //     onSubmit: () {
@@ -523,8 +523,12 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
                           previousOnBoardPage();
                         },
                         icon: getPlatform() == PlatformOS.isIOS
-                            ? Icons.chevron_left_rounded
-                            : Icons.arrow_back_rounded,
+                            ? appStateSettings["outlinedIcons"]
+                                ? Icons.chevron_left_outlined
+                                : Icons.chevron_left_rounded
+                            : appStateSettings["outlinedIcons"]
+                                ? Icons.arrow_back_outlined
+                                : Icons.arrow_back_rounded,
                         size: 50,
                         padding: getIsFullScreen(context) == false
                             ? EdgeInsets.all(3)
@@ -586,8 +590,12 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
                             nextOnBoardPage(children.length);
                         },
                         icon: getPlatform() == PlatformOS.isIOS
-                            ? Icons.chevron_right_rounded
-                            : Icons.arrow_forward_rounded,
+                            ? appStateSettings["outlinedIcons"]
+                                ? Icons.chevron_right_outlined
+                                : Icons.chevron_right_rounded
+                            : appStateSettings["outlinedIcons"]
+                                ? Icons.arrow_forward_outlined
+                                : Icons.arrow_forward_rounded,
                         size: 50,
                         padding: getIsFullScreen(context) == false
                             ? EdgeInsets.all(3)

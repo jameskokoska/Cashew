@@ -1,4 +1,6 @@
 import 'package:budget/functions.dart';
+import 'package:budget/struct/settings.dart';
+import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:flutter/material.dart';
 import '../colors.dart';
@@ -90,7 +92,9 @@ class DropdownSelectState extends State<DropdownSelect> {
         elevation: 15,
         iconSize: 32,
         borderRadius: BorderRadius.circular(10),
-        icon: Icon(Icons.arrow_drop_down_rounded),
+        icon: Icon(appStateSettings["outlinedIcons"]
+            ? Icons.arrow_drop_down_outlined
+            : Icons.arrow_drop_down_rounded),
         onChanged: (String? value) {
           widget.onChanged(value ?? widget.items[0]);
           setState(() {
@@ -144,8 +148,11 @@ class CustomPopupMenuButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool keepOutFirstConsideringHeader = keepOutFirst &&
+        getCenteredTitleSmall(context: context, backButtonEnabled: true) ==
+            false;
     List<DropdownItemMenu> itemsFiltered = [...items];
-    if (keepOutFirst) itemsFiltered.removeAt(0);
+    if (keepOutFirstConsideringHeader) itemsFiltered.removeAt(0);
 
     if (showButtons) {
       return Row(
@@ -179,7 +186,7 @@ class CustomPopupMenuButton extends StatelessWidget {
 
     return Row(
       children: [
-        if (keepOutFirst)
+        if (keepOutFirstConsideringHeader)
           Transform.translate(
             offset: Offset(7, 0),
             child: Tooltip(

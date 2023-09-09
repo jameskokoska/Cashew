@@ -406,7 +406,9 @@ class _SelectAmountState extends State<SelectAmount> {
       openSnackbar(
         SnackbarMessage(
           title: "pasted-from-clipboard".tr(),
-          icon: Icons.paste_rounded,
+          icon: appStateSettings["outlinedIcons"]
+              ? Icons.paste_outlined
+              : Icons.paste_rounded,
           timeout: Duration(milliseconds: 2500),
         ),
       );
@@ -954,7 +956,9 @@ class CalculatorButton extends StatelessWidget {
                         fontSize: 24,
                         text: label,
                       )
-                    : Icon(Icons.backspace_rounded),
+                    : Icon(appStateSettings["outlinedIcons"]
+                        ? Icons.backspace_outlined
+                        : Icons.backspace_rounded),
               ),
             ),
           ),

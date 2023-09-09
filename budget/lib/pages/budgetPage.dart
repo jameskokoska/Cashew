@@ -205,7 +205,9 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                   DropdownItemMenu(
                     id: "edit-budget",
                     label: "edit-budget".tr(),
-                    icon: Icons.edit_rounded,
+                    icon: appStateSettings["outlinedIcons"]
+                        ? Icons.edit_outlined
+                        : Icons.edit_rounded,
                     action: () {
                       pushRoute(
                         context,
@@ -219,7 +221,9 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                   DropdownItemMenu(
                     id: "budget-history",
                     label: "budget-history".tr(),
-                    icon: Icons.history_rounded,
+                    icon: appStateSettings["outlinedIcons"]
+                        ? Icons.history_outlined
+                        : Icons.history_rounded,
                     action: () {
                       pushRoute(
                         context,
@@ -230,7 +234,9 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                   DropdownItemMenu(
                     id: "spending-goals",
                     label: "spending-goals".tr(),
-                    icon: Icons.fact_check_rounded,
+                    icon: appStateSettings["outlinedIcons"]
+                        ? Icons.fact_check_outlined
+                        : Icons.fact_check_rounded,
                     action: () {
                       pushRoute(
                         context,
@@ -477,7 +483,9 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                                         );
                                       },
                                       icon: Icon(
-                                        Icons.fact_check_rounded,
+                                        appStateSettings["outlinedIcons"]
+                                            ? Icons.fact_check_outlined
+                                            : Icons.fact_check_rounded,
                                         color: budgetColorScheme.secondary,
                                       ),
                                     ),

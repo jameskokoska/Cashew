@@ -187,7 +187,10 @@ class EditRowEntry extends StatelessWidget {
                                           ? extraButtonHeight
                                           : double.infinity,
                                       width: 40,
-                                      child: Icon(Icons.delete_rounded),
+                                      child: Icon(
+                                          appStateSettings["outlinedIcons"]
+                                              ? Icons.delete_outlined
+                                              : Icons.delete_rounded),
                                     ),
                                     onTap: onDelete == null
                                         ? null
@@ -216,8 +219,10 @@ class EditRowEntry extends StatelessWidget {
                                                 disableIntrinsicContentHeight
                                                     ? extraButtonHeight
                                                     : double.infinity,
-                                            child:
-                                                Icon(Icons.drag_handle_rounded),
+                                            child: Icon(appStateSettings[
+                                                    "outlinedIcons"]
+                                                ? Icons.drag_handle_outlined
+                                                : Icons.drag_handle_rounded),
                                           ),
                                           onTap: () {},
                                         ),
@@ -231,8 +236,10 @@ class EditRowEntry extends StatelessWidget {
                                           height: disableIntrinsicContentHeight
                                               ? null
                                               : double.infinity,
-                                          child:
-                                              Icon(Icons.drag_handle_rounded),
+                                          child: Icon(
+                                              appStateSettings["outlinedIcons"]
+                                                  ? Icons.drag_handle_outlined
+                                                  : Icons.drag_handle_rounded),
                                         ),
                                       ),
                             showMoreWidget ?? SizedBox.shrink(),
@@ -319,7 +326,7 @@ class EditRowEntry extends StatelessWidget {
     //                       child: Container(
     //                           height: double.infinity,
     //                           width: 40,
-    //                           child: Icon(Icons.delete_rounded)),
+    //                           child: Icon(appStateSettings["outlinedIcons"] ? Icons.delete_outlined : Icons.delete_rounded)),
     //                       onTap: onDelete,
     //                     )
     //                   : SizedBox.shrink(),
@@ -333,7 +340,7 @@ class EditRowEntry extends StatelessWidget {
     //                             margin: EdgeInsets.only(right: 10),
     //                             width: 40,
     //                             height: double.infinity,
-    //                             child: Icon(Icons.drag_handle_rounded)),
+    //                             child: Icon(appStateSettings["outlinedIcons"] ? Icons.drag_handle_outlined : Icons.drag_handle_rounded)),
     //                         onTap: () {},
     //                       ),
     //                     )
@@ -343,7 +350,7 @@ class EditRowEntry extends StatelessWidget {
     //                         margin: EdgeInsets.only(right: 10),
     //                         width: 40,
     //                         height: double.infinity,
-    //                         child: Icon(Icons.drag_handle_rounded),
+    //                         child: Icon(appStateSettings["outlinedIcons"] ? Icons.drag_handle_outlined : Icons.drag_handle_rounded),
     //                       ),
     //                     ),
     //             ],
@@ -438,25 +445,29 @@ class DismissibleEditRowEntry extends StatelessWidget {
             key: ValueKey(key),
             background: Container(
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(15),
+                borderRadius: BorderRadius.circular(borderRadius),
                 color: Colors.red[700],
               ),
               padding: EdgeInsets.symmetric(horizontal: 15),
               alignment: AlignmentDirectional.centerStart,
               child: Icon(
-                Icons.delete_rounded,
+                appStateSettings["outlinedIcons"]
+                    ? Icons.delete_outlined
+                    : Icons.delete_rounded,
                 color: Colors.white,
               ),
             ),
             secondaryBackground: Container(
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(15),
+                borderRadius: BorderRadius.circular(borderRadius),
                 color: Colors.red[700],
               ),
               padding: EdgeInsets.symmetric(horizontal: 15),
               alignment: AlignmentDirectional.centerEnd,
               child: Icon(
-                Icons.delete_rounded,
+                appStateSettings["outlinedIcons"]
+                    ? Icons.delete_outlined
+                    : Icons.delete_rounded,
                 color: Colors.white,
               ),
             ),
@@ -482,7 +493,9 @@ class HasMoreOptionsIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Icon(
-      Icons.more_vert_rounded,
+      appStateSettings["outlinedIcons"]
+          ? Icons.more_vert_outlined
+          : Icons.more_vert_rounded,
       size: 22,
       color: Theme.of(context).colorScheme.secondary.withOpacity(0.7),
     );

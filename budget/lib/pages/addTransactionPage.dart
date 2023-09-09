@@ -820,7 +820,9 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                           openSnackbar(
                             SnackbarMessage(
                               title: "pasted-from-clipboard".tr(),
-                              icon: Icons.paste_rounded,
+                              icon: appStateSettings["outlinedIcons"]
+                                  ? Icons.paste_outlined
+                                  : Icons.paste_rounded,
                               timeout: Duration(milliseconds: 2500),
                             ),
                           );
@@ -985,7 +987,9 @@ class _AddTransactionPageState extends State<AddTransactionPage>
           child: TextInput(
             padding: EdgeInsets.zero,
             labelText: "title-placeholder".tr(),
-            icon: Icons.title_rounded,
+            icon: appStateSettings["outlinedIcons"]
+                ? Icons.title_outlined
+                : Icons.title_rounded,
             controller: _titleInputController,
             onChanged: (text) async {
               setSelectedTitle(text, setInput: false);
@@ -1005,7 +1009,9 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                     borderRadius: BorderRadius.zero,
                     padding: EdgeInsets.zero,
                     labelText: "notes-placeholder".tr(),
-                    icon: Icons.sticky_note_2_rounded,
+                    icon: appStateSettings["outlinedIcons"]
+                        ? Icons.sticky_note_2_outlined
+                        : Icons.sticky_note_2_rounded,
                     controller: _noteInputController,
                     keyboardType: TextInputType.multiline,
                     maxLines: null,
@@ -1067,7 +1073,9 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                       horizontal: 15, vertical: 10),
                                   child: Row(
                                     children: [
-                                      Icon(Icons.link_rounded),
+                                      Icon(appStateSettings["outlinedIcons"]
+                                          ? Icons.link_outlined
+                                          : Icons.link_rounded),
                                       SizedBox(width: 10),
                                       Expanded(
                                         child: TextFont(
@@ -1156,7 +1164,9 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                         routesToPopAfterDelete: widget.routesToPopAfterDelete,
                       );
                     },
-                    icon: Icon(Icons.delete_rounded),
+                    icon: Icon(appStateSettings["outlinedIcons"]
+                        ? Icons.delete_outlined
+                        : Icons.delete_rounded),
                   )
                 : SizedBox.shrink()
           ],
@@ -1676,7 +1686,9 @@ class SelectedWalletButton extends StatelessWidget {
           children: [
             ButtonIcon(
               onTap: onTap,
-              icon: Icons.account_balance_wallet_rounded,
+              icon: appStateSettings["outlinedIcons"]
+                  ? Icons.account_balance_wallet_outlined
+                  : Icons.account_balance_wallet_rounded,
               size: 41,
             ),
             SizedBox(width: 15),
@@ -1722,7 +1734,9 @@ class DateButton extends StatelessWidget {
           children: [
             ButtonIcon(
               onTap: onTap,
-              icon: Icons.calendar_month_rounded,
+              icon: appStateSettings["outlinedIcons"]
+                  ? Icons.calendar_month_outlined
+                  : Icons.calendar_month_rounded,
               size: 41,
             ),
             SizedBox(width: 15),
@@ -1832,7 +1846,9 @@ class _SelectTitleState extends State<SelectTitle> {
           Container(
             width: getWidthBottomSheet(context) - 36,
             child: TextInput(
-              icon: Icons.title_rounded,
+              icon: appStateSettings["outlinedIcons"]
+                  ? Icons.title_outlined
+                  : Icons.title_rounded,
               initialValue: widget.selectedTitle,
               autoFocus: true,
               onEditingComplete: () {
@@ -1960,7 +1976,9 @@ class _SelectTitleState extends State<SelectTitle> {
                         widget.setSelectedNote(text);
                       },
                       labelText: "notes-placeholder".tr(),
-                      icon: Icons.sticky_note_2_rounded,
+                      icon: appStateSettings["outlinedIcons"]
+                          ? Icons.sticky_note_2_outlined
+                          : Icons.sticky_note_2_rounded,
                       keyboardType: TextInputType.multiline,
                       maxLines: null,
                       minLines: 3,
@@ -2110,7 +2128,11 @@ class _SelectTextState extends State<SelectText> {
           child: TextInput(
             focusNode: _focusNode,
             textCapitalization: widget.textCapitalization,
-            icon: widget.icon != null ? widget.icon : Icons.title_rounded,
+            icon: widget.icon != null
+                ? widget.icon
+                : appStateSettings["outlinedIcons"]
+                    ? Icons.title_outlined
+                    : Icons.title_rounded,
             initialValue: widget.selectedText,
             autoFocus: widget.autoFocus,
             readOnly: widget.readOnly,
@@ -2499,7 +2521,9 @@ class HorizontalBreakAbove extends StatelessWidget {
 void showIncomeCannotBeAddedToBudgetWarning() {
   openSnackbar(
     SnackbarMessage(
-      icon: Icons.sticky_note_2_rounded,
+      icon: appStateSettings["outlinedIcons"]
+          ? Icons.sticky_note_2_outlined
+          : Icons.sticky_note_2_rounded,
       title: "expenses-only".tr(),
       description: "expenses-only-description".tr(),
       timeout: Duration(milliseconds: 5000),

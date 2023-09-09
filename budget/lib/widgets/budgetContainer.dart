@@ -257,7 +257,9 @@ class BudgetContainer extends StatelessWidget {
                                               budgetPk: budget.budgetPk),
                                         );
                                       },
-                                      icon: Icons.history_rounded,
+                                      icon: appStateSettings["outlinedIcons"]
+                                          ? Icons.history_outlined
+                                          : Icons.history_rounded,
                                       color: dynamicPastel(
                                           context,
                                           HexColor(budget.colour,

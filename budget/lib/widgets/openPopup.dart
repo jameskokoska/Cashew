@@ -270,7 +270,9 @@ Future<DeletePopupAction?> openDeletePopup(
     title: title,
     subtitle: subtitle,
     description: description,
-    icon: Icons.delete_rounded,
+    icon: appStateSettings["outlinedIcons"]
+        ? Icons.delete_outlined
+        : Icons.delete_rounded,
     onCancel: () {
       Navigator.pop(context, DeletePopupAction.Cancel);
     },
@@ -430,7 +432,9 @@ Future openLoadingPopupTryCatch(Future Function() function,
       openSnackbar(
         SnackbarMessage(
           title: "an-error-occured".tr(),
-          icon: Icons.warning_amber_rounded,
+          icon: appStateSettings["outlinedIcons"]
+              ? Icons.warning_amber_outlined
+              : Icons.warning_amber_rounded,
           description: e.toString(),
         ),
       );
@@ -473,7 +477,9 @@ void discardChangesPopup(context,
       context,
       title: "discard-changes".tr(),
       description: "discard-changes-description".tr(),
-      icon: Icons.warning_rounded,
+      icon: appStateSettings["outlinedIcons"]
+          ? Icons.warning_outlined
+          : Icons.warning_rounded,
       onSubmitLabel: "discard".tr(),
       onSubmit: () async {
         if (onDiscard != null) await onDiscard();

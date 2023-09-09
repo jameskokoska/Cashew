@@ -1,3 +1,4 @@
+import 'package:budget/struct/settings.dart';
 import 'package:flutter/material.dart';
 
 class IncomeOutcomeArrow extends StatelessWidget {
@@ -24,7 +25,9 @@ class IncomeOutcomeArrow extends StatelessWidget {
           clipBehavior: Clip.hardEdge,
           alignment: Alignment.center,
           child: Icon(
-            Icons.arrow_drop_down_rounded,
+            appStateSettings["outlinedIcons"]
+                ? Icons.arrow_drop_down_outlined
+                : Icons.arrow_drop_down_rounded,
             color: color,
             size: iconSize,
           ),

@@ -107,7 +107,10 @@ class PremiumPage extends StatelessWidget {
                                 child: IntrinsicWidth(
                                   child: Column(children: [
                                     SubscriptionFeature(
-                                      iconData: Icons.thumb_up_rounded,
+                                      iconData:
+                                          appStateSettings["outlinedIcons"]
+                                              ? Icons.thumb_up_outlined
+                                              : Icons.thumb_up_rounded,
                                       label: "support-the-developer".tr(),
                                       description:
                                           "support-the-developer-description"
@@ -120,14 +123,20 @@ class PremiumPage extends StatelessWidget {
                                           "unlimited-budgets-description".tr(),
                                     ),
                                     SubscriptionFeature(
-                                      iconData: Icons.history_rounded,
+                                      iconData:
+                                          appStateSettings["outlinedIcons"]
+                                              ? Icons.history_outlined
+                                              : Icons.history_rounded,
                                       label: "past-budget-periods".tr(),
                                       description:
                                           "past-budget-periods-description"
                                               .tr(),
                                     ),
                                     SubscriptionFeature(
-                                      iconData: Icons.color_lens_rounded,
+                                      iconData:
+                                          appStateSettings["outlinedIcons"]
+                                              ? Icons.color_lens_outlined
+                                              : Icons.color_lens_rounded,
                                       label: "unlimited-color-picker".tr(),
                                       description:
                                           "unlimited-color-picker-description"
@@ -196,8 +205,12 @@ class PremiumPage extends StatelessWidget {
                         padding: EdgeInsets.all(15),
                         icon: Icon(
                           getPlatform() == PlatformOS.isIOS
-                              ? Icons.chevron_left_rounded
-                              : Icons.arrow_back_rounded,
+                              ? appStateSettings["outlinedIcons"]
+                                  ? Icons.chevron_left_outlined
+                                  : Icons.chevron_left_rounded
+                              : appStateSettings["outlinedIcons"]
+                                  ? Icons.arrow_back_outlined
+                                  : Icons.arrow_back_rounded,
                           color:
                               Colors.black.withOpacity(canDismiss ? 0.9 : 0.16),
                         ),
@@ -710,7 +723,9 @@ class ProductsState extends State<Products> {
                   : StatusBox(
                       title: "error-getting-products".tr(),
                       description: "error-getting-products-description".tr(),
-                      icon: Icons.warning_rounded,
+                      icon: appStateSettings["outlinedIcons"]
+                          ? Icons.warning_outlined
+                          : Icons.warning_rounded,
                       color: Theme.of(context).colorScheme.error,
                       onTap: () {
                         initializeStoreAndPurchases(
@@ -1020,7 +1035,9 @@ class LockedFeature extends StatelessWidget {
         alignment: Alignment.center,
         children: [
           IgnorePointer(child: this.child),
-          Icon(Icons.lock_rounded),
+          Icon(appStateSettings["outlinedIcons"]
+              ? Icons.lock_outlined
+              : Icons.lock_rounded),
         ],
       );
     return Tappable(
@@ -1230,7 +1247,9 @@ class PremiumBanner extends StatelessWidget {
                           appStateSettings["purchaseID"] != null
                               ? SizedBox.shrink()
                               : Icon(
-                                  Icons.arrow_forward_ios_rounded,
+                                  appStateSettings["outlinedIcons"]
+                                      ? Icons.arrow_forward_ios_outlined
+                                      : Icons.arrow_forward_ios_rounded,
                                   color: Colors.black,
                                   size: 20,
                                 )

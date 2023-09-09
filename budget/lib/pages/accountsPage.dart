@@ -187,7 +187,9 @@ class AccountsPageState extends State<AccountsPage> {
                                   duration: Duration(milliseconds: 200),
                                   child: OutlinedButtonStacked(
                                     text: "export".tr(),
-                                    iconData: Icons.upload_rounded,
+                                    iconData: appStateSettings["outlinedIcons"]
+                                        ? Icons.upload_outlined
+                                        : Icons.upload_rounded,
                                     onTap: () async {
                                       setState(() {
                                         currentlyExporting = true;
@@ -207,7 +209,9 @@ class AccountsPageState extends State<AccountsPage> {
                             Expanded(
                               child: OutlinedButtonStacked(
                                 text: "import".tr(),
-                                iconData: Icons.download_rounded,
+                                iconData: appStateSettings["outlinedIcons"]
+                                    ? Icons.download_outlined
+                                    : Icons.download_rounded,
                                 onTap: () async {
                                   await chooseBackup(context);
                                 },
@@ -227,8 +231,12 @@ class AccountsPageState extends State<AccountsPage> {
                                     ? "devices".tr().capitalizeFirst
                                     : "sync".tr(),
                                 iconData: getPlatform() == PlatformOS.isIOS
-                                    ? Icons.devices_rounded
-                                    : Icons.cloud_sync_rounded,
+                                    ? appStateSettings["outlinedIcons"]
+                                        ? Icons.devices_outlined
+                                        : Icons.devices_rounded
+                                    : appStateSettings["outlinedIcons"]
+                                        ? Icons.cloud_sync_outlined
+                                        : Icons.cloud_sync_rounded,
                                 onTap: () async {
                                   chooseBackup(context,
                                       isManaging: true, isClientSync: true);
@@ -239,7 +247,9 @@ class AccountsPageState extends State<AccountsPage> {
                             Expanded(
                               child: OutlinedButtonStacked(
                                 text: "backups".tr(),
-                                iconData: Icons.folder_rounded,
+                                iconData: appStateSettings["outlinedIcons"]
+                                    ? Icons.folder_outlined
+                                    : Icons.folder_rounded,
                                 onTap: () async {
                                   await chooseBackup(context, isManaging: true);
                                 },

@@ -1,3 +1,4 @@
+import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/scrollbarWrap.dart';
@@ -134,7 +135,9 @@ class TransactionsListPageState extends State<TransactionsListPage>
                                     pushRoute(
                                         context, TransactionsSearchPage());
                                   },
-                                  icon: Icon(Icons.search_rounded),
+                                  icon: Icon(appStateSettings["outlinedIcons"]
+                                      ? Icons.search_outlined
+                                      : Icons.search_rounded),
                                 ),
                               ],
                             ),
@@ -266,7 +269,9 @@ class TransactionsListPageState extends State<TransactionsListPage>
                                 child: IconButton(
                                   padding: EdgeInsets.all(15),
                                   icon: Icon(
-                                    Icons.arrow_left_rounded,
+                                    appStateSettings["outlinedIcons"]
+                                        ? Icons.arrow_left_outlined
+                                        : Icons.arrow_left_rounded,
                                     size: 30,
                                   ),
                                   onPressed: () {
@@ -291,7 +296,9 @@ class TransactionsListPageState extends State<TransactionsListPage>
                                 child: IconButton(
                                   padding: EdgeInsets.all(15),
                                   icon: Icon(
-                                    Icons.arrow_right_rounded,
+                                    appStateSettings["outlinedIcons"]
+                                        ? Icons.arrow_right_outlined
+                                        : Icons.arrow_right_rounded,
                                     size: 30,
                                   ),
                                   onPressed: () {

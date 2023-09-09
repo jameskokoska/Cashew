@@ -131,7 +131,9 @@ class ExportCSV extends StatelessWidget {
           openSnackbar(SnackbarMessage(
             title: "csv-saved-success".tr(),
             description: fileName,
-            icon: Icons.download_done_rounded,
+            icon: appStateSettings["outlinedIcons"]
+                ? Icons.download_done_outlined
+                : Icons.download_done_rounded,
           ));
           return true;
         } catch (e) {
@@ -151,14 +153,18 @@ class ExportCSV extends StatelessWidget {
         openSnackbar(SnackbarMessage(
           title: "csv-saved-success".tr(),
           description: fileName,
-          icon: Icons.download_done_rounded,
+          icon: appStateSettings["outlinedIcons"]
+              ? Icons.download_done_outlined
+              : Icons.download_done_rounded,
         ));
         return true;
       } catch (e) {
         openSnackbar(SnackbarMessage(
           title: "error-exporting".tr(),
           description: e.toString(),
-          icon: Icons.warning_amber_rounded,
+          icon: appStateSettings["outlinedIcons"]
+              ? Icons.warning_amber_outlined
+              : Icons.warning_amber_rounded,
         ));
         print("Error saving file to device: " + e.toString());
         return false;
@@ -225,7 +231,9 @@ class ExportCSV extends StatelessWidget {
         await exportCSV();
       },
       title: "export-csv".tr(),
-      icon: Icons.file_present_rounded,
+      icon: appStateSettings["outlinedIcons"]
+          ? Icons.file_present_outlined
+          : Icons.file_present_rounded,
     );
   }
 }

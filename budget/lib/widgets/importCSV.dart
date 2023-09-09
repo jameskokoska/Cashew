@@ -408,7 +408,9 @@ class _ImportCSVState extends State<ImportCSV> {
         context,
         title: "csv-error".tr(),
         description: e.toString(),
-        icon: Icons.error_rounded,
+        icon: appStateSettings["outlinedIcons"]
+            ? Icons.error_outlined
+            : Icons.error_rounded,
         onSubmitLabel: "ok".tr(),
         onSubmit: () {
           Navigator.of(context).pop();
@@ -445,7 +447,9 @@ class _ImportCSVState extends State<ImportCSV> {
           Navigator.of(context).pop();
           openPopup(
             context,
-            icon: Icons.check_circle_outline_rounded,
+            icon: appStateSettings["outlinedIcons"]
+                ? Icons.check_circle_outline_outlined
+                : Icons.check_circle_outline_rounded,
             title: "done".tr() + "!",
             description: "successfully-imported".tr() +
                 " " +
@@ -493,7 +497,9 @@ class _ImportCSVState extends State<ImportCSV> {
       },
       title: "import-csv".tr() + " " + "(Beta)",
       // description: "import-csv-description".tr(),
-      icon: Icons.file_open_rounded,
+      icon: appStateSettings["outlinedIcons"]
+          ? Icons.file_open_outlined
+          : Icons.file_open_rounded,
     );
   }
 }
@@ -683,7 +689,9 @@ class _ImportingEntriesPopupState extends State<ImportingEntriesPopup> {
         context,
         title: "csv-error".tr(),
         description: e.toString(),
-        icon: Icons.error_rounded,
+        icon: appStateSettings["outlinedIcons"]
+            ? Icons.error_outlined
+            : Icons.error_rounded,
         onSubmitLabel: "ok".tr(),
         onSubmit: () {
           Navigator.of(context).pop();
