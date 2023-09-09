@@ -286,13 +286,6 @@ class MorePages extends StatelessWidget {
                   ],
                 ),
           hasSideNavigation ? SizedBox.shrink() : SettingsPageContent(),
-          kDebugMode
-              ? SettingsContainerOpenPage(
-                  openPage: BillSplitter(),
-                  title: "Bill Splitter".tr(),
-                  icon: Icons.summarize_rounded,
-                )
-              : SizedBox.shrink(),
         ],
       ),
     );
@@ -535,10 +528,6 @@ class SettingsPageContent extends StatelessWidget {
 
         AutoTitlesToggle(),
 
-        ImportCSV(),
-
-        ExportCSV(),
-
         appStateSettings["emailScanning"]
             ? SettingsContainerOpenPage(
                 openPage: AutoTransactionsPageEmail(),
@@ -546,6 +535,18 @@ class SettingsPageContent extends StatelessWidget {
                 icon: Icons.mark_email_unread_rounded,
               )
             : SizedBox.shrink(),
+
+        SettingsHeader(title: "tools".tr()),
+
+        SettingsContainerOpenPage(
+          openPage: BillSplitter(),
+          title: "bill-splitter".tr(),
+          icon: Icons.summarize_rounded,
+        ),
+
+        ImportCSV(),
+
+        ExportCSV(),
       ],
     );
   }

@@ -887,7 +887,7 @@ Future<String> getDeviceInfo() async {
 }
 
 List<String> extractLinks(String text) {
-  RegExp regExp = new RegExp(r'(http(s)?://)?(www\.)?\S+\.\S+');
+  RegExp regExp = new RegExp(r'(http(s)?://)?(www\.)?\S+\.(com|ca)(?![0-9.])');
   Iterable<RegExpMatch> matches = regExp.allMatches(text);
   List<String> links = [];
   for (RegExpMatch match in matches) {

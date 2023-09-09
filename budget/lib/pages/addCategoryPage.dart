@@ -497,6 +497,7 @@ class _AddCategoryPageState extends State<AddCategoryPage>
                     onTap: () {
                       openBottomSheet(
                         context,
+                        fullSnap: true,
                         PopupFramework(
                           title: "set-title".tr(),
                           child: SelectText(
@@ -613,6 +614,7 @@ class AssociatedTitleContainer extends StatelessWidget {
         onTap: () {
           openBottomSheet(
             context,
+            fullSnap: true,
             PopupFramework(
               title: "set-title".tr(),
               child: SelectText(
@@ -626,6 +628,11 @@ class AssociatedTitleContainer extends StatelessWidget {
               ),
             ),
           );
+          // Fix over-scroll stretch when keyboard pops up quickly
+          Future.delayed(Duration(milliseconds: 100), () {
+            bottomSheetControllerGlobal.scrollTo(0,
+                duration: Duration(milliseconds: 100));
+          });
         },
         borderRadius: 15,
         color: backgroundColor,

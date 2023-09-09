@@ -10,6 +10,11 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    < 4.1.8
+    Discard changes works properly for Bill Splitter
+    Bill Splitter data saving
+    Bill Splitter loan transaction generation
+    Bill Splitter translations
     < 4.1.7
     Export to CSV file
     Renamed 'Wallets' to 'Accounts'

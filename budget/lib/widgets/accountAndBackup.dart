@@ -1323,6 +1323,11 @@ Future<bool> saveDriveFileToDevice(
         ..download = fileName
         ..style.display = 'none';
       anchor.click();
+      openSnackbar(SnackbarMessage(
+        title: "backup-downloaded-success".tr(),
+        description: fileName,
+        icon: Icons.download_done_rounded,
+      ));
       return true;
     } catch (e) {
       return true;

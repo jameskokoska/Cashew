@@ -128,7 +128,9 @@ class EditRowEntry extends StatelessWidget {
                               color: Colors.transparent,
                               borderRadius: borderRadius,
                               child: Container(
-                                height: double.infinity,
+                                height: disableIntrinsicContentHeight
+                                    ? null
+                                    : double.infinity,
                                 width: 40,
                                 child: ScaledAnimatedSwitcher(
                                   keyToWatch: extraIcon.toString(),
@@ -146,15 +148,18 @@ class EditRowEntry extends StatelessWidget {
                               color: Colors.transparent,
                               borderRadius: borderRadius,
                               child: Container(
-                                  margin: EdgeInsets.only(
-                                    right: hideReorder == true &&
-                                            showMoreWidget == null
-                                        ? 10
-                                        : 0,
-                                  ),
-                                  height: double.infinity,
-                                  width: 40,
-                                  child: Icon(Icons.delete_rounded)),
+                                margin: EdgeInsets.only(
+                                  right: hideReorder == true &&
+                                          showMoreWidget == null
+                                      ? 10
+                                      : 0,
+                                ),
+                                height: disableIntrinsicContentHeight
+                                    ? null
+                                    : double.infinity,
+                                width: 40,
+                                child: Icon(Icons.delete_rounded),
+                              ),
                               onTap: onDelete,
                             )
                           : SizedBox.shrink(),
@@ -167,13 +172,15 @@ class EditRowEntry extends StatelessWidget {
                                     color: Colors.transparent,
                                     borderRadius: borderRadius,
                                     child: Container(
-                                        margin: EdgeInsets.only(
-                                          right:
-                                              showMoreWidget == null ? 10 : 0,
-                                        ),
-                                        width: 40,
-                                        height: double.infinity,
-                                        child: Icon(Icons.drag_handle_rounded)),
+                                      margin: EdgeInsets.only(
+                                        right: showMoreWidget == null ? 10 : 0,
+                                      ),
+                                      width: 40,
+                                      height: disableIntrinsicContentHeight
+                                          ? null
+                                          : double.infinity,
+                                      child: Icon(Icons.drag_handle_rounded),
+                                    ),
                                     onTap: () {},
                                   ),
                                 )
@@ -182,7 +189,9 @@ class EditRowEntry extends StatelessWidget {
                                   child: Container(
                                     margin: EdgeInsets.only(right: 10),
                                     width: 40,
-                                    height: double.infinity,
+                                    height: disableIntrinsicContentHeight
+                                        ? null
+                                        : double.infinity,
                                     child: Icon(Icons.drag_handle_rounded),
                                   ),
                                 ),

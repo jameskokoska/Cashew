@@ -22,6 +22,7 @@ class SelectCategory extends StatefulWidget {
     this.selectedCategory,
     this.selectedCategories,
     this.next,
+    this.nextWithCategory,
     this.skipIfSet,
     this.nextLabel,
     this.horizontalList = false,
@@ -38,6 +39,7 @@ class SelectCategory extends StatefulWidget {
   final TransactionCategory? selectedCategory;
   final List<String>? selectedCategories;
   final VoidCallback? next;
+  final Function(TransactionCategory)? nextWithCategory;
   final bool? skipIfSet;
   final String? nextLabel;
   final bool horizontalList;
@@ -152,6 +154,9 @@ class _SelectCategoryState extends State<SelectCategory> {
                         sizePadding: 28,
                         label: widget.labelIcon,
                         onTap: () {
+                          if (widget.nextWithCategory != null) {
+                            widget.nextWithCategory!(category);
+                          }
                           if (widget.setSelectedCategory != null) {
                             widget.setSelectedCategory!(category);
                             setState(() {
@@ -324,6 +329,9 @@ class _SelectCategoryState extends State<SelectCategory> {
                     margin: EdgeInsets.zero,
                     label: widget.labelIcon,
                     onTap: () {
+                      if (widget.nextWithCategory != null) {
+                        widget.nextWithCategory!(category);
+                      }
                       if (widget.setSelectedCategory != null) {
                         widget.setSelectedCategory!(category);
                         setState(() {

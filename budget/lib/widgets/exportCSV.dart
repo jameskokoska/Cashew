@@ -128,6 +128,11 @@ class ExportCSV extends StatelessWidget {
             ..download = fileName
             ..style.display = 'none';
           anchor.click();
+          openSnackbar(SnackbarMessage(
+            title: "csv-saved-success".tr(),
+            description: fileName,
+            icon: Icons.download_done_rounded,
+          ));
           return true;
         } catch (e) {
           return true;
