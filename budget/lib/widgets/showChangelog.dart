@@ -10,6 +10,10 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    < 4.2.1
+    CSV tries to parse amount with symbols
+    CSV import error if not all parameters assigned
+    CSV import date format error has more information
     < 4.2.0
     Fixed format of swipe to delete container on iOS
     Debug flag to enable outlined icons

@@ -392,7 +392,23 @@ class _ImportCSVState extends State<ImportCSV> {
                 Button(
                   label: "import".tr(),
                   onTap: () async {
-                    _importEntries(assignedColumns, dateFormat, fileContents);
+                    try {
+                      await _importEntries(
+                          assignedColumns, dateFormat, fileContents);
+                    } catch (e) {
+                      openPopup(
+                        context,
+                        icon: appStateSettings["outlinedIcons"]
+                            ? Icons.warning_amber_outlined
+                            : Icons.warning_amber_rounded,
+                        title: "csv-error".tr(),
+                        description: e.toString(),
+                        onSubmit: () {
+                          Navigator.pop(context);
+                        },
+                        onSubmitLabel: "ok".tr(),
+                      );
+                    }
                   },
                 )
               ],
@@ -544,8 +560,10 @@ class _ImportingEntriesPopupState extends State<ImportingEntriesPopup> {
       name = row[assignedColumns["name"]!["setHeaderIndex"]].toString();
     }
 
-    double amount = 0;
-    amount = double.parse(row[assignedColumns["amount"]!["setHeaderIndex"]]);
+    double? amount;
+    amount = getAmountFromString(
+        (row[assignedColumns["amount"]!["setHeaderIndex"]]).toString());
+    if (amount == null) throw ("Unable to parse amount");
 
     String note = "";
     if (assignedColumns["note"]!["setHeaderIndex"] != -1) {
@@ -625,7 +643,8 @@ class _ImportingEntriesPopupState extends State<ImportingEntriesPopup> {
     } catch (e) {
       // No custom date format entered
       if (dateFormat == "")
-        throw "Failed to parse time! Details: " + e.toString();
+        throw "Failed to parse date and time! Please use the custom 'Date Format' that matches your data. \n\n Details: " +
+            e.toString();
       DateFormat format =
           DateFormat(dateFormat.toString(), context.locale.toString());
       try {
@@ -634,7 +653,8 @@ class _ImportingEntriesPopupState extends State<ImportingEntriesPopup> {
         dateCreated =
             DateTime(dateCreated.year, dateCreated.month, dateCreated.day);
       } catch (e) {
-        throw "Failed to parse time! Details: " + e.toString();
+        throw "Failed to parse date and time! Please use the custom 'Date Format' that matches your data. \n\n  Details: " +
+            e.toString();
       }
     }
 
