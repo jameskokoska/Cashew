@@ -1,11 +1,29 @@
 
 <h1 align="center" style="font-size:28px; line-height:1"><b>Cashew</b></h1>
 
-<a href="https://budget-track.web.app/">
+<a href="https://cashewapp.web.app/">
   <div align="center">
     <img alt="Icon" src="promotional/icons/icon.png" width="150px">
   </div>
 </a>
+
+<br />
+
+<div align="center">
+  <a href="https://play.google.com/store/apps/details?id=com.budget.tracker_app">
+    <img alt="Google Play Badge" src="promotional/store-banners/google-play-badge.png" height="60px">
+  </a>
+  &nbsp;
+  &nbsp;
+  <a href="https://github.com/jameskokoska/Cashew/releases/">
+    <img alt="GitHub Badge" src="promotional/store-banners/github-badge.png" height="60px">
+  </a>
+  &nbsp;
+  &nbsp;
+  <a href="https://budget-track.web.app/">
+    <img alt="PWA Badge" src="promotional/store-banners/pwa-badge.png" height="60px">
+  </a>
+</div>
 
 ---
 
@@ -14,13 +32,10 @@ Cashew is a full-fledged, feature-rich application designed to empower users in 
 ---
 
 ## Release
-This application is only available on Android via invite only, as of now. I hope to release on Android very soon.
+Check out the [official website](https://cashewapp.web.app/)!
 
-The web version is public: https://budget-track.web.app/.
 
-### Developer Note
-
-This application is still in heavy development. The main features complete, but budget and transaction sharing is far off. I have put so much work into building this app and making it as useful as possible for tracking your spending. Tracking your spending is important because it provides you with a clear understanding of where your money is going, empowering you to make informed financial decisions, identify saving opportunities, control your expenses, and work towards your financial goals. I think it's even more important to carefully watch spending habits in the current times we are living in.
+This application is available on [Google Play](), [GitHub]() and as a [Progressive Web App (PWA)](https://budget-track.web.app/). It is only available on iOS via invite only, as of now. I hope to release on iOS very soon.
 
 ### Changelog
 
@@ -101,6 +116,24 @@ Note: requires MacOS.
 
 Note: required Firebase.
 
+### GitHub release
+* Create a tag for the current version specified in `pubspec.yaml`
+* `git tag <version>`
+* Push the tag
+* `git push origin <version>`
+* Create the release and upload binaries
+* https://github.com/jameskokoska/Cashew/releases/new
+
+### Scripts
+`deploy_and_build_windows.bat`
+* Deploy to Firebase and build the apk and appbundle
+
+`open_release_builds.bat`
+* Opens the location of the built apk and appbundle
+
+`update_translations.bat`
+* Downloads the latest version of Cashew translations. Runs `budget\assets\translations\generate-translations.py`
+
 ### Develop Wirelessly on Android
 * `adb tcpip 5555`
 * `adb connect <IP>`
@@ -117,3 +150,6 @@ Note: required Firebase.
 ### Push Route
 * If we want to navigate to a new page, stick to `pushRoute(context, page)` function from `functions.dart`
 * It handles the platform routing and `PageRouteBuilder`
+
+### Wallets vs. Accounts
+* `Wallets` has been been renamed to `Accounts` on the front-end but internally, the name `Wallet` is still used.
