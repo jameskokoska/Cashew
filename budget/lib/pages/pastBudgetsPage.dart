@@ -70,11 +70,12 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
   Stream<List<double?>>? mergedStreamsCategoriesTotal;
   List<DateTimeRange> dateTimeRanges = [];
   int amountLoaded = 8;
-  late List<String>? selectedCategoryFks =
+  late List<String> selectedCategoryFks =
       (appStateSettings["watchedCategoriesOnBudget"]
                   [widget.budget.budgetPk.toString()] ??
               [])
-          .cast<String>();
+          .map<String>((value) => value.toString())
+          .toList();
   GlobalKey<_PastBudgetContainerListState>
       _pastBudgetContainerListStateStateKey = GlobalKey();
 
@@ -115,7 +116,15 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
                 : null,
         budget: widget.budget,
       ));
-      for (String categoryFk in selectedCategoryFks ?? []) {
+      for (String categoryFk in [...(selectedCategoryFks)]) {
+        try {
+          await database.getCategory(categoryFk).$2;
+        } catch (e) {
+          // print("Category No Longer Exists!");
+          (selectedCategoryFks).remove(categoryFk);
+          updateSetting(selectedCategoryFks);
+          continue;
+        }
         watchedCategoryTotals
             .add(database.watchTotalSpentInTimeRangeFromCategories(
           Provider.of<AllWallets>(context, listen: false),
@@ -268,7 +277,7 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
           icon: AnimatedContainer(
             duration: Duration(milliseconds: 500),
             decoration: BoxDecoration(
-              color: (selectedCategoryFks?.length ?? 0) > 0
+              color: selectedCategoryFks.length > 0
                   ? budgetColorScheme.tertiary.withOpacity(0.1)
                   : Colors.transparent,
               borderRadius: BorderRadius.circular(100),
@@ -276,7 +285,7 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
             padding: EdgeInsets.all(8),
             child: Icon(
               Icons.category_outlined,
-              color: (selectedCategoryFks?.length ?? 0) > 0
+              color: selectedCategoryFks.length > 0
                   ? budgetColorScheme.tertiary
                   : budgetColorScheme.onSecondaryContainer,
             ),
@@ -364,8 +373,7 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
                                               categorySpentPoints = {};
                                           if (snapshotMergedStreamsCategoriesTotal
                                                   .hasData &&
-                                              (selectedCategoryFks ?? [])
-                                                      .length >
+                                              (selectedCategoryFks).length >
                                                   0) {
                                             maxY = 0.1;
                                             // separate each into a map of their own
@@ -377,12 +385,11 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
                                                 day <
                                                     snapshotMergedStreamsCategoriesTotal
                                                             .data!.length /
-                                                        (selectedCategoryFks ??
-                                                                [])
+                                                        selectedCategoryFks
                                                             .length;
                                                 day++) {
                                               for (String categoryFk
-                                                  in (selectedCategoryFks ?? [])
+                                                  in selectedCategoryFks
                                                       .reversed) {
                                                 if (categorySpentPoints[
                                                         categoryFk] ==
@@ -451,9 +458,7 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
                                               amountDark: 0.2,
                                             ),
                                             dateRanges: dateTimeRanges,
-                                            maxY: (selectedCategoryFks ?? [])
-                                                        .length >
-                                                    0
+                                            maxY: selectedCategoryFks.length > 0
                                                 ? maxY
                                                 : widget.budget.amount +
                                                             0.0000000000001 >
@@ -577,7 +582,7 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
                       )
                     : SizedBox.shrink(),
               ),
-              (selectedCategoryFks ?? []).length > 0
+              selectedCategoryFks.length > 0
                   ? SliverToBoxAdapter(
                       child: Padding(
                         padding: const EdgeInsets.only(bottom: 10),
@@ -594,14 +599,13 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
                                     for (int period = 0;
                                         period <
                                             amountLoaded *
-                                                (selectedCategoryFks ?? [])
-                                                    .length;
+                                                selectedCategoryFks.length;
                                         period++) {
-                                      int categoryIndex = period %
-                                          (selectedCategoryFks ?? []).length;
+                                      int categoryIndex =
+                                          period % (selectedCategoryFks).length;
                                       TransactionCategory? category =
                                           snapshotCategoriesMapped.data![
-                                              selectedCategoryFks![
+                                              selectedCategoryFks[
                                                   categoryIndex]];
                                       if (category != null &&
                                           period <

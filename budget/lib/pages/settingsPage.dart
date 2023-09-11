@@ -322,6 +322,11 @@ class EnterName extends StatelessWidget {
       icon: Icons.edit,
       onTap: () {
         enterNameBottomSheet(context);
+        // Fix over-scroll stretch when keyboard pops up quickly
+        Future.delayed(Duration(milliseconds: 100), () {
+          bottomSheetControllerGlobal.scrollTo(0,
+              duration: Duration(milliseconds: 100));
+        });
       },
     );
   }
@@ -330,6 +335,7 @@ class EnterName extends StatelessWidget {
 Future enterNameBottomSheet(context) async {
   return await openBottomSheet(
     context,
+    fullSnap: true,
     PopupFramework(
       title: "enter-name".tr(),
       child: Column(

@@ -10,6 +10,10 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    < 4.2.4
+    Documents access in Files for iOS
+    Full snap popup sheet when entering name on home page
+    Budget history conversion fix
     < 4.2.3
     Fixed parsing of number input when decimal separator is comma
     Fixed Android crash on some devices
