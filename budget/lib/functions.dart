@@ -6,6 +6,7 @@ import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/openSnackbar.dart';
 import 'package:budget/widgets/restartApp.dart';
+import 'package:budget/widgets/selectAmount.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
@@ -985,7 +986,6 @@ Future<String?> readClipboard({bool showSnackbar = true}) async {
 
 double? getAmountFromString(String inputString) {
   bool isNegative = false;
-  print(inputString);
   if (inputString.contains("-") ||
       inputString.contains("—") ||
       inputString.contains("−") ||
@@ -998,8 +998,12 @@ double? getAmountFromString(String inputString) {
       inputString.contains("–") ||
       inputString.contains("—") ||
       inputString.contains("―")) {
-    print("IS NEGATIVE!");
     isNegative = true;
+  }
+  if (getDecimalSeparator() == ",") {
+    inputString = inputString.replaceAll(",", ".");
+  } else {
+    inputString = inputString.replaceAll(",", "");
   }
   RegExp regex = RegExp(r'[0-9]+(?:\.[0-9]+)?');
   String? match = regex.stringMatch(inputString);

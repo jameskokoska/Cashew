@@ -10,6 +10,9 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    < 4.2.3
+    Fixed parsing of number input when decimal separator is comma
+    Fixed Android crash on some devices
     < 4.2.2
     Fixed back swipe animation when cancelling a delete
     Fixed CSV parsing amount always returns income
