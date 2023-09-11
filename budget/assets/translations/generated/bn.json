@@ -573,5 +573,7 @@
   "notifications-reminder-type": "অনুস্মারক প্রকার",
   "daily-notification-type-if-not-opened": "যদি অ্যাপটি ইতিমধ্যে ইতিমধ্যে খোলা না করা হয়েছিল",
   "daily-notification-type-one-day-from-open": "অ্যাপ্লিকেশন থেকে 24 ঘন্টা খোলা",
-  "daily-notification-type-everyday": "প্রতিদিন"
+  "daily-notification-type-everyday": "প্রতিদিন",
+  "consider-csv-template": "আবার চেষ্টা করুন এবং প্রদত্ত সিএসভি টেম্পলেট ব্যবহার করে বিবেচনা করুন।",
+  "download-template": "টেমপ্লেট ডাউনলোড করুন"
 }

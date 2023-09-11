@@ -573,5 +573,7 @@
   "notifications-reminder-type": "Type de rappel",
   "daily-notification-type-if-not-opened": "Si l'application n'était pas déjà ouverte aujourd'hui",
   "daily-notification-type-one-day-from-open": "24 heures de l'application ouverte",
-  "daily-notification-type-everyday": "Tous les jours"
+  "daily-notification-type-everyday": "Tous les jours",
+  "consider-csv-template": "Ressayez à nouveau et envisagez d'utiliser le modèle CSV fourni.",
+  "download-template": "Télécharger le modèle"
 }

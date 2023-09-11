@@ -571,7 +571,9 @@
   "duplicate-name-warning-description": "कृपया दूसरा नाम चुनें",
   "notifications-reminder": "लेनदेन अनुस्मारक जोड़ें",
   "notifications-reminder-type": "अनुस्मारक प्रकार",
-  "daily-notification-type-if-not-opened": "अगर ऐप आज ही नहीं खोला गया था",
+  "daily-notification-type-if-not-opened": "यदि ऐप आज पहले से नहीं खोला गया था",
   "daily-notification-type-one-day-from-open": "ऐप से 24 घंटे खोले गए",
-  "daily-notification-type-everyday": "रोज रोज"
+  "daily-notification-type-everyday": "रोज रोज",
+  "consider-csv-template": "फिर से प्रयास करें और प्रदान किए गए CSV टेम्पलेट का उपयोग करने पर विचार करें।",
+  "download-template": "डाउनलोड टेम्पलेट"
 }

@@ -572,6 +572,8 @@
   "notifications-reminder": "یادآوری معامله را اضافه کنید",
   "notifications-reminder-type": "نوع یادآوری",
   "daily-notification-type-if-not-opened": "اگر امروز برنامه باز نشده بود",
-  "daily-notification-type-one-day-from-open": "24 ساعت از برنامه باز شد",
-  "daily-notification-type-everyday": "هر روز"
+  "daily-notification-type-one-day-from-open": "24 ساعت از برنامه باز شده",
+  "daily-notification-type-everyday": "هر روز",
+  "consider-csv-template": "دوباره امتحان کنید و از الگوی CSV ارائه شده استفاده کنید.",
+  "download-template": "دانلود الگوی"
 }

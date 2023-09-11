@@ -529,7 +529,7 @@
   "no-budgets-found": "Nebyly nalezeny žádné rozpočty.",
   "no-categories-found": "Žádné kategorie nalezeny.",
   "no-wallets-found": "Žádné účty.",
-  "no-titles-found": "Žádné tituly.",
+  "no-titles-found": "Nalezeny žádné tituly.",
   "translations": "Překlady",
   "ask-for-notes-with-title": "Požádejte o poznámku s názvem",
   "ask-for-notes-with-title-description": "Při vstupu do názvu",
@@ -573,5 +573,7 @@
   "notifications-reminder-type": "Typ připomenutí",
   "daily-notification-type-if-not-opened": "Pokud aplikace ještě nebyla otevřena",
   "daily-notification-type-one-day-from-open": "Otevřeno 24 hodin od aplikace",
-  "daily-notification-type-everyday": "Každý den"
+  "daily-notification-type-everyday": "Každý den",
+  "consider-csv-template": "Zkuste to znovu a zvažte použití poskytnuté šablony CSV.",
+  "download-template": "Stahování šablony"
 }

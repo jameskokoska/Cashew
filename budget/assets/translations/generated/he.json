@@ -573,5 +573,7 @@
   "notifications-reminder-type": "סוג תזכורת",
   "daily-notification-type-if-not-opened": "אם האפליקציה כבר לא נפתחה היום",
   "daily-notification-type-one-day-from-open": "24 שעות מהאפליקציה נפתחה",
-  "daily-notification-type-everyday": "כל יום"
+  "daily-notification-type-everyday": "כל יום",
+  "consider-csv-template": "נסה שוב ושקול להשתמש בתבנית CSV שסופקה.",
+  "download-template": "הורד תבנית"
 }

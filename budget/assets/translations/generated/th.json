@@ -573,5 +573,7 @@
   "notifications-reminder-type": "ประเภทเตือนความจำ",
   "daily-notification-type-if-not-opened": "หากแอปยังไม่เปิดในวันนี้",
   "daily-notification-type-one-day-from-open": "เปิด 24 ชั่วโมงจากแอป",
-  "daily-notification-type-everyday": "ทุกวัน"
+  "daily-notification-type-everyday": "ทุกวัน",
+  "consider-csv-template": "ลองอีกครั้งและพิจารณาใช้เทมเพลต CSV ที่ให้ไว้",
+  "download-template": "ดาวน์โหลดเทมเพลต"
 }

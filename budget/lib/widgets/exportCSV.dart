@@ -31,6 +31,59 @@ import 'dart:io';
 import 'package:budget/struct/randomConstants.dart';
 import 'package:universal_html/html.dart' show AnchorElement;
 
+Future<bool> saveCSV(String csv, String fileName) async {
+  if (kIsWeb && getPlatform() == PlatformOS.web) {
+    try {
+      List<int> dataStore = utf8.encode(csv);
+      String base64String = base64Encode(dataStore);
+      AnchorElement anchor = AnchorElement(
+          href: 'data:application/octet-stream;base64,$base64String')
+        ..download = fileName
+        ..style.display = 'none';
+      anchor.click();
+      openSnackbar(SnackbarMessage(
+        title: "csv-saved-success".tr(),
+        description: fileName,
+        icon: appStateSettings["outlinedIcons"]
+            ? Icons.download_done_outlined
+            : Icons.download_done_rounded,
+      ));
+      return true;
+    } catch (e) {
+      return true;
+    }
+  }
+
+  try {
+    String directory = getPlatform() == PlatformOS.isAndroid
+        ? "/storage/emulated/0/Download"
+        : (await getApplicationDocumentsDirectory()).path;
+
+    String filePath = "${directory}/${fileName}";
+    File savedFile = File(filePath);
+    await savedFile.writeAsString(csv);
+
+    openSnackbar(SnackbarMessage(
+      title: "csv-saved-success".tr(),
+      description: fileName,
+      icon: appStateSettings["outlinedIcons"]
+          ? Icons.download_done_outlined
+          : Icons.download_done_rounded,
+    ));
+    return true;
+  } catch (e) {
+    openSnackbar(SnackbarMessage(
+      title: "error-exporting".tr(),
+      description: e.toString(),
+      icon: appStateSettings["outlinedIcons"]
+          ? Icons.warning_amber_outlined
+          : Icons.warning_amber_rounded,
+    ));
+    print("Error saving file to device: " + e.toString());
+    return false;
+  }
+}
+
 class ExportCSV extends StatelessWidget {
   const ExportCSV({super.key});
 
@@ -38,14 +91,17 @@ class ExportCSV extends StatelessWidget {
     await openLoadingPopupTryCatch(() async {
       List<Map<String, String>> output = [];
       List<TransactionWithCategory> transactions =
-          await database.getAllTransactionsWithCategoryWalletBudget();
+          await database.getAllTransactionsWithCategoryWalletBudget(
+              (tbl) => tbl.paid.equals(true));
       for (TransactionWithCategory transactionWithCategory in transactions) {
         String inputTransactionString =
             transactionWithCategory.transaction.toString();
+        print(inputTransactionString);
         String inputCategoryString =
             transactionWithCategory.category.toString();
         String inputWalletString = transactionWithCategory.wallet.toString();
         String inputBudgetString = transactionWithCategory.budget.toString();
+
         Map<String, String> merged = {
           ...convertStringToMap(
             inputTransactionString,
@@ -61,7 +117,15 @@ class ExportCSV extends StatelessWidget {
               "sharedStatus",
               "sharedDateUpdated",
               "sharedReferenceBudgetPk",
+              "paid",
+              "createdAnotherFutureTransaction",
+              "skipPaid",
+              "originalDateDue",
+              "upcomingTransactionNotification",
             ],
+            keysToReplace: {
+              "dateCreated": "date",
+            },
           ),
           ...convertStringToMap(
             inputCategoryString,
@@ -70,6 +134,7 @@ class ExportCSV extends StatelessWidget {
               "dateTimeModified",
               "order",
               "income",
+              "methodAdded",
             ],
             keysToReplace: {
               "dateCreated": "categoryDateCreated",
@@ -117,58 +182,7 @@ class ExportCSV extends StatelessWidget {
               .replaceAll(" ", "-")
               .replaceAll(":", "-") +
           ".csv";
-
-      List<int> dataStore = utf8.encode(csv);
-
-      if (kIsWeb && getPlatform() == PlatformOS.web) {
-        try {
-          String base64String = base64Encode(dataStore);
-          AnchorElement anchor = AnchorElement(
-              href: 'data:application/octet-stream;base64,$base64String')
-            ..download = fileName
-            ..style.display = 'none';
-          anchor.click();
-          openSnackbar(SnackbarMessage(
-            title: "csv-saved-success".tr(),
-            description: fileName,
-            icon: appStateSettings["outlinedIcons"]
-                ? Icons.download_done_outlined
-                : Icons.download_done_rounded,
-          ));
-          return true;
-        } catch (e) {
-          return true;
-        }
-      }
-
-      try {
-        String directory = getPlatform() == PlatformOS.isAndroid
-            ? "/storage/emulated/0/Download"
-            : (await getApplicationDocumentsDirectory()).path;
-
-        String filePath = "${directory}/${fileName}";
-        File savedFile = File(filePath);
-        await savedFile.writeAsString(csv);
-
-        openSnackbar(SnackbarMessage(
-          title: "csv-saved-success".tr(),
-          description: fileName,
-          icon: appStateSettings["outlinedIcons"]
-              ? Icons.download_done_outlined
-              : Icons.download_done_rounded,
-        ));
-        return true;
-      } catch (e) {
-        openSnackbar(SnackbarMessage(
-          title: "error-exporting".tr(),
-          description: e.toString(),
-          icon: appStateSettings["outlinedIcons"]
-              ? Icons.warning_amber_outlined
-              : Icons.warning_amber_rounded,
-        ));
-        print("Error saving file to device: " + e.toString());
-        return false;
-      }
+      saveCSV(csv, fileName);
     });
   }
 

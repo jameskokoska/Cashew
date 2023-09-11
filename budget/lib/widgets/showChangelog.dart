@@ -10,6 +10,11 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    < 4.2.2
+    Fixed back swipe animation when cancelling a delete
+    Fixed CSV parsing amount always returns income
+    Fixed exporting CSV method added
+    Removed unnecessary columns when exporting CSV
     < 4.2.1
     CSV tries to parse amount with symbols
     CSV import error if not all parameters assigned

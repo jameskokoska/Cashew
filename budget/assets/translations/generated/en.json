@@ -573,5 +573,7 @@
   "notifications-reminder-type": "Reminder Type",
   "daily-notification-type-if-not-opened": "If the app was not already opened today",
   "daily-notification-type-one-day-from-open": "24 hours from app opened",
-  "daily-notification-type-everyday": "Everyday"
+  "daily-notification-type-everyday": "Everyday",
+  "consider-csv-template": "Try again and consider using the provided CSV template.",
+  "download-template": "Download Template"
 }

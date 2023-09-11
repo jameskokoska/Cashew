@@ -573,5 +573,7 @@
   "notifications-reminder-type": "Loại nhắc nhở",
   "daily-notification-type-if-not-opened": "Nếu ứng dụng chưa được mở hôm nay",
   "daily-notification-type-one-day-from-open": "24 giờ từ ứng dụng được mở",
-  "daily-notification-type-everyday": "Hằng ngày"
+  "daily-notification-type-everyday": "Hằng ngày",
+  "consider-csv-template": "Hãy thử lại và xem xét sử dụng mẫu CSV được cung cấp.",
+  "download-template": "Tải xuống mẫu"
 }

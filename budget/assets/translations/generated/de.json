@@ -573,5 +573,7 @@
   "notifications-reminder-type": "Erinnerungstyp",
   "daily-notification-type-if-not-opened": "Wenn die App heute noch nicht eröffnet wurde",
   "daily-notification-type-one-day-from-open": "24 Stunden von der App geöffnet",
-  "daily-notification-type-everyday": "Täglich"
+  "daily-notification-type-everyday": "Täglich",
+  "consider-csv-template": "Versuchen Sie es erneut und überlegen Sie, ob Sie die bereitgestellte CSV -Vorlage verwenden.",
+  "download-template": "Vorlage herunterladen"
 }

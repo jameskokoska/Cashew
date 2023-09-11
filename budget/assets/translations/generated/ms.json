@@ -573,5 +573,7 @@
   "notifications-reminder-type": "Jenis peringatan",
   "daily-notification-type-if-not-opened": "Sekiranya aplikasi belum dibuka hari ini",
   "daily-notification-type-one-day-from-open": "24 jam dari aplikasi dibuka",
-  "daily-notification-type-everyday": "Setiap hari"
+  "daily-notification-type-everyday": "Setiap hari",
+  "consider-csv-template": "Cuba lagi dan pertimbangkan untuk menggunakan templat CSV yang disediakan.",
+  "download-template": "Muat turun templat"
 }

@@ -543,7 +543,7 @@
   "error-downloading": "错误下载",
   "tools": "工具",
   "delete-bill-item-question": "删除账单项目？",
-  "bill-splitter": "比尔·克莱特（Bill Splitter）",
+  "bill-splitter": "比尔·拆分器",
   "bill-splitter-info": "账单分离器将在购买商品的人中分配您支付的账单。您可以轻松跟踪谁欠您一定数量的钱。",
   "new-bill": "新法案",
   "names": "名称",
@@ -564,7 +564,7 @@
   "success-generate-loans-description": "从账单创建贷款交易",
   "missing-data": "缺失数据。",
   "generate-loan-transactions": "产生贷款交易",
-  "no-names-found": "找不到名称。",
+  "no-names-found": "找不到名字。",
   "add-name": "添加名称",
   "delete-name-question": "删除名称？",
   "duplicate-name-warning": "重复名称",
@@ -573,5 +573,7 @@
   "notifications-reminder-type": "提醒类型",
   "daily-notification-type-if-not-opened": "如果该应用程序今天尚未打开",
   "daily-notification-type-one-day-from-open": "从应用程序开放24小时",
-  "daily-notification-type-everyday": "每天"
+  "daily-notification-type-everyday": "每天",
+  "consider-csv-template": "重试，考虑使用提供的CSV模板。",
+  "download-template": "下载模板"
 }

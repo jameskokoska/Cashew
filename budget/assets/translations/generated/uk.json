@@ -573,5 +573,7 @@
   "notifications-reminder-type": "Тип нагадування",
   "daily-notification-type-if-not-opened": "Якщо додаток сьогодні ще не було відкрито",
   "daily-notification-type-one-day-from-open": "24 години від програми відкрили",
-  "daily-notification-type-everyday": "Повсякденний"
+  "daily-notification-type-everyday": "Повсякденний",
+  "consider-csv-template": "Спробуйте ще раз і подумайте про використання наданого шаблону CSV.",
+  "download-template": "Завантажити шаблон"
 }

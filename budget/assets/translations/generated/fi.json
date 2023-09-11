@@ -573,5 +573,7 @@
   "notifications-reminder-type": "Muistutustyyppi",
   "daily-notification-type-if-not-opened": "Jos sovellusta ei jo avattu tänään",
   "daily-notification-type-one-day-from-open": "24 tuntia sovelluksesta avattiin",
-  "daily-notification-type-everyday": "Joka päivä"
+  "daily-notification-type-everyday": "Joka päivä",
+  "consider-csv-template": "Yritä uudelleen ja harkitse toimitettua CSV -mallin käyttöä.",
+  "download-template": "Lataa malli"
 }

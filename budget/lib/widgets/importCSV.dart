@@ -8,6 +8,7 @@ import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/dropdownSelect.dart';
+import 'package:budget/widgets/exportCSV.dart';
 import 'package:budget/widgets/globalSnackBar.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
@@ -16,6 +17,7 @@ import 'package:budget/widgets/progressBar.dart';
 import 'package:budget/widgets/settingsContainers.dart';
 import 'package:budget/widgets/textInput.dart';
 import 'package:budget/widgets/textWidgets.dart';
+import 'package:budget/widgets/viewAllTransactionsButton.dart';
 import 'package:drift/drift.dart' hide Column, Table;
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
@@ -71,8 +73,11 @@ class _ImportCSVState extends State<ImportCSV> {
           csvString = decoded.string;
         }
 
-        List<List<String>> fileContents = CsvToListConverter()
-            .convert(csvString, eol: '\n', shouldParseNumbers: false);
+        List<List<String>> fileContents = CsvToListConverter().convert(
+          csvString,
+          eol: '\n',
+          shouldParseNumbers: false,
+        );
         int maxColumns = fileContents.fold(0,
             (prev, element) => element.length > prev ? element.length : prev);
 
@@ -402,11 +407,16 @@ class _ImportCSVState extends State<ImportCSV> {
                             ? Icons.warning_amber_outlined
                             : Icons.warning_amber_rounded,
                         title: "csv-error".tr(),
-                        description: e.toString(),
+                        description:
+                            "consider-csv-template".tr() + e.toString(),
                         onSubmit: () {
                           Navigator.pop(context);
                         },
                         onSubmitLabel: "ok".tr(),
+                        onCancel: () {
+                          saveSampleCSV();
+                        },
+                        onCancelLabel: "download-template".tr(),
                       );
                     }
                   },
@@ -511,13 +521,49 @@ class _ImportCSVState extends State<ImportCSV> {
       onTap: () async {
         await _chooseBackupFile();
       },
-      title: "import-csv".tr() + " " + "(Beta)",
+      title: "import-csv".tr(),
       // description: "import-csv-description".tr(),
       icon: appStateSettings["outlinedIcons"]
           ? Icons.file_open_outlined
           : Icons.file_open_rounded,
+      afterWidget: LowKeyButton(
+        onTap: () async {
+          saveSampleCSV();
+        },
+        text: "download-template".tr(),
+      ),
     );
   }
+}
+
+Future saveSampleCSV() async {
+  await openLoadingPopupTryCatch(() async {
+    List<List<dynamic>> csvData = [];
+    csvData.add([
+      "Date",
+      "Amount",
+      "Category",
+      "Title",
+      "Note",
+    ]); // Add first row headers
+    csvData.add([
+      DateTime.now(),
+      "-50",
+      "Groceries",
+      "Fruits and Vegetables",
+      "Paid with cash"
+    ]);
+    csvData.add([
+      DateTime.now(),
+      "250",
+      "Bills & Fees",
+      "Monthly Income",
+      "",
+    ]);
+    String csv = ListToCsvConverter().convert(csvData);
+    return saveCSV(csv, "Cashew-csv-template.csv");
+  });
+  return;
 }
 
 class ImportingEntriesPopup extends StatefulWidget {
@@ -557,7 +603,7 @@ class _ImportingEntriesPopupState extends State<ImportingEntriesPopup> {
       int i) async {
     String name = "";
     if (assignedColumns["name"]!["setHeaderIndex"] != -1) {
-      name = row[assignedColumns["name"]!["setHeaderIndex"]].toString();
+      name = row[assignedColumns["name"]!["setHeaderIndex"]].toString().trim();
     }
 
     double? amount;
@@ -567,7 +613,7 @@ class _ImportingEntriesPopupState extends State<ImportingEntriesPopup> {
 
     String note = "";
     if (assignedColumns["note"]!["setHeaderIndex"] != -1) {
-      note = row[assignedColumns["note"]!["setHeaderIndex"]].toString();
+      note = row[assignedColumns["note"]!["setHeaderIndex"]].toString().trim();
     }
 
     String categoryFk = "0";

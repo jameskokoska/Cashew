@@ -573,5 +573,7 @@
   "notifications-reminder-type": "Påmindelsestype",
   "daily-notification-type-if-not-opened": "Hvis appen ikke allerede var åbnet i dag",
   "daily-notification-type-one-day-from-open": "24 timer fra App åbnede",
-  "daily-notification-type-everyday": "Hver dag"
+  "daily-notification-type-everyday": "Hver dag",
+  "consider-csv-template": "Prøv igen og overvej at bruge den medfølgende CSV -skabelon.",
+  "download-template": "Download skabelon"
 }

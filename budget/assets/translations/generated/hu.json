@@ -537,7 +537,7 @@
   "export-csv": "CSV fájl exportálása",
   "export-csv-warning": "Adatmentés",
   "export-csv-warning-description": "A CSV -be történő exportálást nem szabad az adatok biztonsági másolataként használni. A költségvetéseket és a részletes alkalmazás adatait a CSV -ben nem exportálják! Kérjük, használja a Google Drive fiókot a biztonsági másolatokhoz.",
-  "csv-saved-success": "CSV mentett az eszközre",
+  "csv-saved-success": "CSV mentve az eszközre",
   "error-exporting": "Hiba exportálása",
   "backup-downloaded-success": "Biztonsági mentés letöltött eszközre",
   "error-downloading": "Hiba letöltése",
@@ -556,7 +556,7 @@
   "name": "Név",
   "who-are-you-question": "Ki vagy te?",
   "who-are-you-description": "Önnek kell lenned az, aki fizette a számlát.",
-  "split-evenly": "Egyenletesen osztva",
+  "split-evenly": "Egyenletesen szétválva",
   "item-name-placeholder": "Termék név",
   "reset-bill-question": "Visszaállítja a számlát?",
   "reset-bill-description": "Ez törli az aktuális számla összes elemet",
@@ -573,5 +573,7 @@
   "notifications-reminder-type": "Emlékeztető típus",
   "daily-notification-type-if-not-opened": "Ha az alkalmazást még ma még nem nyitották meg",
   "daily-notification-type-one-day-from-open": "24 órát nyitott alkalmazástól",
-  "daily-notification-type-everyday": "Minden nap"
+  "daily-notification-type-everyday": "Minden nap",
+  "consider-csv-template": "Próbálja újra, és fontolja meg a megadott CSV sablon használatát.",
+  "download-template": "Töltse le a sablont"
 }

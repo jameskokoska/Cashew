@@ -561,7 +561,7 @@
   "reset-bill-question": "請求書をリセットしますか？",
   "reset-bill-description": "これにより、現在の請求書のすべてのアイテムが削除されます",
   "success-generate-loans": "成功",
-  "success-generate-loans-description": "請求書からのローン取引を作成しました",
+  "success-generate-loans-description": "ビルからのローン取引を作成しました",
   "missing-data": "欠落データ。",
   "generate-loan-transactions": "ローン取引を生成します",
   "no-names-found": "名前は見つかりません。",
@@ -573,5 +573,7 @@
   "notifications-reminder-type": "リマインダータイプ",
   "daily-notification-type-if-not-opened": "アプリが今日まだ開いていない場合",
   "daily-notification-type-one-day-from-open": "アプリが開いてから24時間",
-  "daily-notification-type-everyday": "毎日"
+  "daily-notification-type-everyday": "毎日",
+  "consider-csv-template": "もう一度やり直して、提供されたCSVテンプレートの使用を検討してください。",
+  "download-template": "テンプレートをダウンロードします"
 }

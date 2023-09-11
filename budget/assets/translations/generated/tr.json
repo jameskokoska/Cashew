@@ -573,5 +573,7 @@
   "notifications-reminder-type": "Hatırlatma türü",
   "daily-notification-type-if-not-opened": "Uygulama bugün henüz açılmamışsa",
   "daily-notification-type-one-day-from-open": "Uygulamadan 24 saat açıldı",
-  "daily-notification-type-everyday": "Her gün"
+  "daily-notification-type-everyday": "Her gün",
+  "consider-csv-template": "Tekrar deneyin ve sağlanan CSV şablonunu kullanmayı düşünün.",
+  "download-template": "Şablonu indir"
 }

@@ -34,6 +34,7 @@ class EditRowEntry extends StatelessWidget {
     this.extraButtonHeight,
     this.iconAlignment,
     this.hasMoreOptionsIcon = false,
+    this.disableActions = false,
     Key? key,
   }) : super(key: key);
   final int index;
@@ -56,6 +57,7 @@ class EditRowEntry extends StatelessWidget {
   final double? extraButtonHeight;
   final Alignment? iconAlignment;
   final bool hasMoreOptionsIcon;
+  final bool disableActions;
 
   @override
   Widget build(BuildContext context) {
@@ -164,7 +166,7 @@ class EditRowEntry extends StatelessWidget {
                                         ),
                                       ),
                                     ),
-                                    onTap: onExtra,
+                                    onTap: disableActions ? null : onExtra,
                                   )
                                 : SizedBox.shrink(),
                             hasMoreOptionsIcon
@@ -194,37 +196,42 @@ class EditRowEntry extends StatelessWidget {
                                     ),
                                     onTap: onDelete == null
                                         ? null
-                                        : () async {
-                                            await onDelete!();
-                                          },
+                                        : disableActions
+                                            ? () {}
+                                            : () async {
+                                                await onDelete!();
+                                              },
                                   )
                                 : SizedBox.shrink(),
                             hideReorder == true
                                 ? SizedBox.shrink()
                                 : canReorder
-                                    ? ReorderableDragStartListener(
-                                        index: index,
-                                        child: Tappable(
-                                          color: Colors.transparent,
-                                          borderRadius: borderRadius,
-                                          child: Container(
-                                            alignment: iconAlignment,
-                                            margin: EdgeInsets.only(
-                                              right: showMoreWidget == null
-                                                  ? 10
-                                                  : 0,
+                                    ? IgnorePointer(
+                                        ignoring: disableActions,
+                                        child: ReorderableDragStartListener(
+                                          index: index,
+                                          child: Tappable(
+                                            color: Colors.transparent,
+                                            borderRadius: borderRadius,
+                                            child: Container(
+                                              alignment: iconAlignment,
+                                              margin: EdgeInsets.only(
+                                                right: showMoreWidget == null
+                                                    ? 10
+                                                    : 0,
+                                              ),
+                                              width: 40,
+                                              height:
+                                                  disableIntrinsicContentHeight
+                                                      ? extraButtonHeight
+                                                      : double.infinity,
+                                              child: Icon(appStateSettings[
+                                                      "outlinedIcons"]
+                                                  ? Icons.drag_handle_outlined
+                                                  : Icons.drag_handle_rounded),
                                             ),
-                                            width: 40,
-                                            height:
-                                                disableIntrinsicContentHeight
-                                                    ? extraButtonHeight
-                                                    : double.infinity,
-                                            child: Icon(appStateSettings[
-                                                    "outlinedIcons"]
-                                                ? Icons.drag_handle_outlined
-                                                : Icons.drag_handle_rounded),
+                                            onTap: () {},
                                           ),
-                                          onTap: () {},
                                         ),
                                       )
                                     : Opacity(
@@ -477,7 +484,15 @@ class DismissibleEditRowEntry extends StatelessWidget {
             },
             onDismissed: (DismissDirection direction) {},
             confirmDismiss: (direction) async {
-              return await onDelete();
+              // Do not return the result of onDelete.
+              // For example: If going to delete category
+              // Press delete, then no to delete all transactions - it still shows minimize size animation!
+              // We can't wait on this because we need to pop any routes before things are deleted
+              // Ideally to show a change in the list (i.e. an item getting deleted)
+              // We use something like:  ImplicitlyAnimatedDeleteSliverReorderableList
+              // Still in development... has many bugs - is there a better way to do it? see:  ImplicitlyAnimatedDeleteSliverReorderableList
+              await onDelete();
+              return false;
             },
             child: widget,
           ),

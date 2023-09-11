@@ -563,7 +563,7 @@
   "success-generate-loans": "نجاح",
   "success-generate-loans-description": "تم إنشاء معاملات القروض من الفاتورة",
   "missing-data": "بيانات مفقودة.",
-  "generate-loan-transactions": "توليد معاملات القروض",
+  "generate-loan-transactions": "إنشاء معاملات القروض",
   "no-names-found": "لم يتم العثور على أسماء.",
   "add-name": "اضف اسما",
   "delete-name-question": "حذف الاسم؟",
@@ -573,5 +573,7 @@
   "notifications-reminder-type": "نوع التذكير",
   "daily-notification-type-if-not-opened": "إذا لم يتم فتح التطبيق بالفعل اليوم",
   "daily-notification-type-one-day-from-open": "تم فتح 24 ساعة من التطبيق",
-  "daily-notification-type-everyday": "كل يوم"
+  "daily-notification-type-everyday": "كل يوم",
+  "consider-csv-template": "حاول مرة أخرى والنظر في استخدام قالب CSV المقدم.",
+  "download-template": "تنزيل قالب"
 }

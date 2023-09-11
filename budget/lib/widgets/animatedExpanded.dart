@@ -13,6 +13,7 @@ class AnimatedExpanded extends StatefulWidget {
     this.duration = const Duration(milliseconds: 425),
     this.sizeCurve = Curves.fastOutSlowIn,
     this.axis = Axis.vertical,
+    super.key,
   });
 
   @override

@@ -555,7 +555,7 @@
   "owed-to-you": "Skyldes deg",
   "name": "Navn",
   "who-are-you-question": "Hvem er du?",
-  "who-are-you-description": "Du bør være den som betalte regningen.",
+  "who-are-you-description": "Du burde være den som betalte regningen.",
   "split-evenly": "Delte jevnt",
   "item-name-placeholder": "Gjenstandsnavn",
   "reset-bill-question": "Tilbakestill regningen?",
@@ -573,5 +573,7 @@
   "notifications-reminder-type": "Påminnelsestype",
   "daily-notification-type-if-not-opened": "Hvis appen ikke allerede ble åpnet i dag",
   "daily-notification-type-one-day-from-open": "24 timer fra app åpnet",
-  "daily-notification-type-everyday": "Hver dag"
+  "daily-notification-type-everyday": "Hver dag",
+  "consider-csv-template": "Prøv igjen og vurder å bruke den medfølgende CSV -malen.",
+  "download-template": "Last ned mal"
 }

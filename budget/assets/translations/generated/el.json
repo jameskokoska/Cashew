@@ -573,5 +573,7 @@
   "notifications-reminder-type": "Υπενθύμιση",
   "daily-notification-type-if-not-opened": "Εάν η εφαρμογή δεν είχε ήδη ανοίξει σήμερα",
   "daily-notification-type-one-day-from-open": "24 ώρες από την εφαρμογή άνοιξε",
-  "daily-notification-type-everyday": "Κάθε μέρα"
+  "daily-notification-type-everyday": "Κάθε μέρα",
+  "consider-csv-template": "Δοκιμάστε ξανά και σκεφτείτε να χρησιμοποιήσετε το παρεχόμενο πρότυπο CSV.",
+  "download-template": "Λήψη προτύπου"
 }

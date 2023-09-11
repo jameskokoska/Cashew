@@ -573,5 +573,7 @@
   "notifications-reminder-type": "நினைவூட்டல் வகை",
   "daily-notification-type-if-not-opened": "பயன்பாடு ஏற்கனவே திறக்கப்படவில்லை என்றால்",
   "daily-notification-type-one-day-from-open": "பயன்பாட்டிலிருந்து 24 மணிநேரம் திறக்கப்பட்டது",
-  "daily-notification-type-everyday": "தினமும்"
+  "daily-notification-type-everyday": "தினமும்",
+  "consider-csv-template": "மீண்டும் முயற்சிக்கவும், வழங்கப்பட்ட CSV வார்ப்புருவைப் பயன்படுத்தவும்.",
+  "download-template": "வார்ப்புருவைப் பதிவிறக்கவும்"
 }

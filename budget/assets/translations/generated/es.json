@@ -567,11 +567,13 @@
   "no-names-found": "No se encontraron nombres.",
   "add-name": "Agregar nombre",
   "delete-name-question": "¿Eliminar el nombre?",
-  "duplicate-name-warning": "Nombre duplicada",
+  "duplicate-name-warning": "Nombre duplicado",
   "duplicate-name-warning-description": "Por favor elija otro nombre",
   "notifications-reminder": "Agregar recordatorio de transacción",
   "notifications-reminder-type": "Tipo de recordatorio",
   "daily-notification-type-if-not-opened": "Si la aplicación aún no se abrió hoy",
   "daily-notification-type-one-day-from-open": "24 horas desde la aplicación abierta",
-  "daily-notification-type-everyday": "Cada día"
+  "daily-notification-type-everyday": "Cada día",
+  "consider-csv-template": "Intente nuevamente y considere usar la plantilla CSV proporcionada.",
+  "download-template": "Plantilla de descarga"
 }

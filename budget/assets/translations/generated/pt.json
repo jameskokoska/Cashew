@@ -573,5 +573,7 @@
   "notifications-reminder-type": "Tipo de lembrete",
   "daily-notification-type-if-not-opened": "Se o aplicativo ainda não foi aberto hoje",
   "daily-notification-type-one-day-from-open": "24 horas após o aplicativo aberto",
-  "daily-notification-type-everyday": "Diariamente"
+  "daily-notification-type-everyday": "Diariamente",
+  "consider-csv-template": "Tente novamente e considere usar o modelo CSV fornecido.",
+  "download-template": "Modelo de download"
 }

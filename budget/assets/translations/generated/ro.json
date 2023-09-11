@@ -573,5 +573,7 @@
   "notifications-reminder-type": "Tip de memento",
   "daily-notification-type-if-not-opened": "Dacă aplicația nu a fost deja deschisă astăzi",
   "daily-notification-type-one-day-from-open": "La 24 de ore de la aplicație deschisă",
-  "daily-notification-type-everyday": "În fiecare zi"
+  "daily-notification-type-everyday": "În fiecare zi",
+  "consider-csv-template": "Încercați din nou și luați în considerare utilizarea șablonului CSV furnizat.",
+  "download-template": "Descărcați șablonul"
 }

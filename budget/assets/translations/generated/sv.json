@@ -573,5 +573,7 @@
   "notifications-reminder-type": "Påminnelsetyp",
   "daily-notification-type-if-not-opened": "Om appen inte redan öppnades idag",
   "daily-notification-type-one-day-from-open": "24 timmar från appen öppnade",
-  "daily-notification-type-everyday": "Varje dag"
+  "daily-notification-type-everyday": "Varje dag",
+  "consider-csv-template": "Försök igen och överväg att använda den medföljande CSV -mallen.",
+  "download-template": "Ladda ner mall"
 }

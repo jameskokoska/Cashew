@@ -422,8 +422,8 @@
   "delete-transactions": "Verwijder transacties",
   "change-wallet": "Van account veranderen",
   "add-to-budget": "Toevoegen aan budget",
-  "select-wallet": "Selecteer account",
-  "move-to-other-wallet-button": "Verplaats transacties naar een ander account en verwijder",
+  "select-wallet": "Selecteer Account",
+  "move-to-other-wallet-button": "Verplaats transacties naar een andere account en verwijder",
   "changed-wallet": "Account gewijzigd",
   "added-to-budget": "Toegevoegd aan budget",
   "no-addable-budgets": "Geen budgetten om transacties toe te voegen aan",
@@ -440,7 +440,7 @@
   "delete-category-merge-warning": "Het verwijderen van een categorie verwijdert alle transacties in deze categorie. Verplaats transacties naar een andere categorie om dit te vermijden.",
   "deleted-category": "Verwijderde categorie",
   "delete-wallet-question": "Account verwijderen?",
-  "delete-wallet-question-description": "Dit verwijdert alle transacties die aan dit account zijn gekoppeld.",
+  "delete-wallet-question-description": "Hiermee worden alle transacties die aan dit account zijn gekoppeld, verwijderd.",
   "move-transactions": "Verplaats transacties",
   "delete-wallet-merge-warning": "Het verwijderen van een acount verwijdert alle transacties op deze rekening. Verplaats transacties naar een ander account om dit te voorkomen.",
   "deleted-wallet": "Verwijderde account",
@@ -573,5 +573,7 @@
   "notifications-reminder-type": "Type herinneringstype",
   "daily-notification-type-if-not-opened": "Als de app vandaag nog niet is geopend",
   "daily-notification-type-one-day-from-open": "24 uur van de geopende app",
-  "daily-notification-type-everyday": "Elke dag"
+  "daily-notification-type-everyday": "Elke dag",
+  "consider-csv-template": "Probeer het opnieuw en overweeg het gebruik van de verstrekte CSV -sjabloon.",
+  "download-template": "Download sjabloon"
 }

@@ -1387,8 +1387,10 @@ class FinanceDatabase extends _$FinanceDatabase {
   }
 
   Future<List<TransactionWithCategory>>
-      getAllTransactionsWithCategoryWalletBudget() async {
+      getAllTransactionsWithCategoryWalletBudget(
+          Expression<bool> Function($TransactionsTable) filter) async {
     final query = (select(transactions)
+          ..where(filter)
           ..orderBy([(t) => OrderingTerm.desc(t.dateCreated)]))
         .join([
       innerJoin(
@@ -2960,8 +2962,8 @@ class FinanceDatabase extends _$FinanceDatabase {
     //     deleteTransaction(transaction.transactionPk)
     // ]);
     await shiftCategories(-1, order);
-    print("DELETING");
-    print(categoryPk);
+    // print("DELETING");
+    // print(categoryPk);
     await createDeleteLog(DeleteLogType.TransactionCategory, categoryPk);
     return (delete(categories)..where((c) => c.categoryPk.equals(categoryPk)))
         .go();

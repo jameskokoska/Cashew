@@ -573,5 +573,7 @@
   "notifications-reminder-type": "ഓർമ്മപ്പെടുത്തൽ തരം",
   "daily-notification-type-if-not-opened": "അപ്ലിക്കേഷൻ ഇതിനകം തുറന്നിട്ടില്ലെങ്കിൽ",
   "daily-notification-type-one-day-from-open": "അപ്ലിക്കേഷനിൽ നിന്ന് 24 മണിക്കൂർ തുറന്നു",
-  "daily-notification-type-everyday": "എല്ലാ ദിവസവും"
+  "daily-notification-type-everyday": "എല്ലാ ദിവസവും",
+  "consider-csv-template": "വീണ്ടും ശ്രമിക്കുക, കൂടാതെ നൽകിയ CSV ടെംപ്ലേറ്റ് ഉപയോഗിക്കുന്നത് പരിഗണിക്കുക.",
+  "download-template": "ടെംപ്ലേറ്റ് ഡൗൺലോഡുചെയ്യുക"
 }

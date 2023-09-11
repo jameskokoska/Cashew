@@ -984,11 +984,32 @@ Future<String?> readClipboard({bool showSnackbar = true}) async {
 }
 
 double? getAmountFromString(String inputString) {
+  bool isNegative = false;
+  print(inputString);
+  if (inputString.contains("-") ||
+      inputString.contains("—") ||
+      inputString.contains("−") ||
+      inputString.contains("–") ||
+      inputString.contains("‐") ||
+      inputString.contains("−") ||
+      inputString.contains("⁃") ||
+      inputString.contains("‑") ||
+      inputString.contains("‒") ||
+      inputString.contains("–") ||
+      inputString.contains("—") ||
+      inputString.contains("―")) {
+    print("IS NEGATIVE!");
+    isNegative = true;
+  }
   RegExp regex = RegExp(r'[0-9]+(?:\.[0-9]+)?');
   String? match = regex.stringMatch(inputString);
 
   if (match != null) {
     double amount = double.tryParse(match) ?? 0.0;
+    amount = amount.abs();
+    if (isNegative) {
+      amount = amount * -1;
+    }
     return amount;
   }
   return null;

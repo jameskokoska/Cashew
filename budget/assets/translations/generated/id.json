@@ -422,7 +422,7 @@
   "delete-transactions": "Hapus transaksi",
   "change-wallet": "Ganti akun",
   "add-to-budget": "Tambahkan ke anggaran",
-  "select-wallet": "Pilih Akun",
+  "select-wallet": "Pilih akun",
   "move-to-other-wallet-button": "Pindahkan transaksi ke akun lain dan hapus",
   "changed-wallet": "Akun yang diubah",
   "added-to-budget": "Ditambahkan ke anggaran",
@@ -573,5 +573,7 @@
   "notifications-reminder-type": "Tipe pengingat",
   "daily-notification-type-if-not-opened": "Jika aplikasi belum dibuka hari ini",
   "daily-notification-type-one-day-from-open": "24 jam dari aplikasi dibuka",
-  "daily-notification-type-everyday": "Setiap hari"
+  "daily-notification-type-everyday": "Setiap hari",
+  "consider-csv-template": "Coba lagi dan pertimbangkan untuk menggunakan template CSV yang disediakan.",
+  "download-template": "Unduh template"
 }
