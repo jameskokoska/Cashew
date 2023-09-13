@@ -584,5 +584,7 @@
   "enter-google-sheet-url": "Ipasok ang Google Sheet URL",
   "enter-google-sheet-url-description": "Tiyakin na ang sinumang may link ay maaaring tingnan ang iyong google sheet at nakatakda ito sa publiko",
   "create-template-copy": "Lumikha ng kopya ng template",
-  "help": "Tulong"
+  "help": "Tulong",
+  "create-template-copy-description": "Gumawa ng isang kopya at i -save ito sa iyong Google Drive. I -edit ang sheet gamit ang iyong data at i -import ito!",
+  "get-template": "Kumuha ng template"
 }

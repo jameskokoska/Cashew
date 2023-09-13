@@ -12,9 +12,9 @@ Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
     < 4.2.5
     Emoji icon selection for categories
+    Import Google Sheets data
     Collapsible side navigation panel when full screen
     Fixed box shadow for swipe to delete
-    Ability to import Google Sheet directly
     < 4.2.4
     Documents access in Files for iOS
     Full snap popup sheet when entering name on home page

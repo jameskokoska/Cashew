@@ -424,7 +424,7 @@
   "add-to-budget": "बजट में जोड़ें",
   "select-wallet": "लेखा का चयन करें",
   "move-to-other-wallet-button": "लेनदेन को दूसरे खाते में ले जाएं और हटाएं",
-  "changed-wallet": "परिवर्तित लेखा",
+  "changed-wallet": "परिवर्तित खाता",
   "added-to-budget": "बजट में जोड़ा गया",
   "no-addable-budgets": "लेनदेन को जोड़ने के लिए कोई बजट नहीं",
   "create-addable-budget": "बनाएँ 'केवल' बजट जोड़ा गया",
@@ -571,7 +571,7 @@
   "duplicate-name-warning-description": "कृपया दूसरा नाम चुनें",
   "notifications-reminder": "लेनदेन अनुस्मारक जोड़ें",
   "notifications-reminder-type": "अनुस्मारक प्रकार",
-  "daily-notification-type-if-not-opened": "अगर ऐप आज ही नहीं खोला गया था",
+  "daily-notification-type-if-not-opened": "यदि ऐप आज पहले से नहीं खोला गया था",
   "daily-notification-type-one-day-from-open": "ऐप से 24 घंटे खोले गए",
   "daily-notification-type-everyday": "रोज रोज",
   "consider-csv-template": "फिर से प्रयास करें और प्रदान किए गए CSV टेम्पलेट का उपयोग करने पर विचार करें।",
@@ -584,5 +584,7 @@
   "enter-google-sheet-url": "Google शीट URL दर्ज करें",
   "enter-google-sheet-url-description": "सुनिश्चित करें कि लिंक के साथ कोई भी आपकी Google शीट देख सकता है और यह सार्वजनिक रूप से सेट है",
   "create-template-copy": "टेम्पलेट कॉपी बनाएं",
-  "help": "मदद"
+  "help": "मदद",
+  "create-template-copy-description": "एक प्रति बनाएं और इसे अपने Google ड्राइव पर सहेजें। अपने डेटा के साथ शीट को संपादित करें और इसे आयात करें!",
+  "get-template": "टेम्पलेट प्राप्त करें"
 }

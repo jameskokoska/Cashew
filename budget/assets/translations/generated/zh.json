@@ -543,7 +543,7 @@
   "error-downloading": "错误下载",
   "tools": "工具",
   "delete-bill-item-question": "删除账单项目？",
-  "bill-splitter": "比尔·拆分器",
+  "bill-splitter": "比尔·克莱特（Bill Splitter）",
   "bill-splitter-info": "账单分离器将在购买商品的人中分配您支付的账单。您可以轻松跟踪谁欠您一定数量的钱。",
   "new-bill": "新法案",
   "names": "名称",
@@ -584,5 +584,7 @@
   "enter-google-sheet-url": "输入Google Sheep URL",
   "enter-google-sheet-url-description": "确保任何具有链接的人都可以查看您的Google表格，并将其设置为公开",
   "create-template-copy": "创建模板副本",
-  "help": "帮助"
+  "help": "帮助",
+  "create-template-copy-description": "制作副本并将其保存到您的Google驱动器中。用您的数据编辑表并导入它！",
+  "get-template": "获取模板"
 }

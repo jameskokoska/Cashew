@@ -584,5 +584,7 @@
   "enter-google-sheet-url": "Google पत्रक URL प्रविष्ट करा",
   "enter-google-sheet-url-description": "दुव्यासह कोणीही आपली Google शीट पाहू शकतो याची खात्री करा आणि ते सार्वजनिकपणे सेट केले आहे",
   "create-template-copy": "टेम्पलेट कॉपी तयार करा",
-  "help": "मदत"
+  "help": "मदत",
+  "create-template-copy-description": "एक प्रत बनवा आणि आपल्या Google ड्राइव्हवर जतन करा. आपल्या डेटासह पत्रक संपादित करा आणि ते आयात करा!",
+  "get-template": "टेम्पलेट मिळवा"
 }

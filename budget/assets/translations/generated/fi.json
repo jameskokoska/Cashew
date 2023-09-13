@@ -526,10 +526,10 @@
   "all-transactions-description-1": "Kaikki tapahtumat valituissa luokissa ja suodattimissa",
   "all-transactions-description-2": "Hyödyllinen pitkäaikaisissa budjetteissa useiden ajanjaksojen aikana",
   "all-transactions-description-3": "Esimerkki: 'kuukausittaiset menot' budjetti",
-  "no-budgets-found": "Ei löytynyt budjetteja.",
+  "no-budgets-found": "Budjetteja ei löydy.",
   "no-categories-found": "Luokkia ei löydy.",
   "no-wallets-found": "Tiliä ei löydy.",
-  "no-titles-found": "Ei nimikkeitä löydetty.",
+  "no-titles-found": "Ei nimikkeitä löydy.",
   "translations": "Käännökset",
   "ask-for-notes-with-title": "Pyydä muistiinpanoa otsikolla",
   "ask-for-notes-with-title-description": "Otsikkoon siirryttäessä",
@@ -548,7 +548,7 @@
   "new-bill": "Uusi lasku",
   "names": "Nimeä",
   "summary": "Yhteenveto",
-  "edit-item": "Muokkaa kohdetta",
+  "edit-item": "Muokkauskohta",
   "add-item": "Lisää tavara",
   "update-item": "",
   "delete-item": "Poista kohde",
@@ -584,5 +584,7 @@
   "enter-google-sheet-url": "Kirjoita Google -arkin URL -osoite",
   "enter-google-sheet-url-description": "Varmista, että kuka tahansa linkki voi tarkastella Google -arkkia ja se on asetettu julkisuuteen",
   "create-template-copy": "Luo mallikopio",
-  "help": "auta"
+  "help": "auta",
+  "create-template-copy-description": "Tee kopio ja tallenna se Google Drive -laitteeseesi. Muokkaa arkkia tietojesi kanssa ja tuo se!",
+  "get-template": "Saada malli"
 }

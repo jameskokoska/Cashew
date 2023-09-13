@@ -47,7 +47,7 @@
   "budgets-details": "פרטי תקציבים",
   "categories-details": "פרטי קטגוריות",
   "titles-details": "פרטי כותרות",
-  "edit-wallets": "ערוך חשבונות",
+  "edit-wallets": "עריכת חשבונות",
   "edit-budgets": "ערוך תקציבים",
   "edit-categories": "ערוך קטגוריות",
   "edit-titles": "ערוך כותרות",
@@ -563,7 +563,7 @@
   "success-generate-loans": "הַצלָחָה",
   "success-generate-loans-description": "יצר עסקאות הלוואה מחשבון",
   "missing-data": "מידע חסר.",
-  "generate-loan-transactions": "לייצר עסקאות הלוואה",
+  "generate-loan-transactions": "ליצור עסקאות הלוואה",
   "no-names-found": "לא נמצא שמות.",
   "add-name": "הוסף שם",
   "delete-name-question": "למחוק שם?",
@@ -584,5 +584,7 @@
   "enter-google-sheet-url": "הזן את כתובת האתר של גוגל",
   "enter-google-sheet-url-description": "ודא שכל מי שיש לו קישור יכול להציג את גיליון Google שלך ​​והוא מוגדר לציבור",
   "create-template-copy": "צור עותק תבנית",
-  "help": "עֶזרָה"
+  "help": "עֶזרָה",
+  "create-template-copy-description": "ערוך עותק ושמור אותו בכונן Google שלך. ערוך את הגיליון עם הנתונים שלך וייבא אותו!",
+  "get-template": "קבל תבנית"
 }

@@ -584,5 +584,7 @@
   "enter-google-sheet-url": "Enter Google Sheet URL",
   "enter-google-sheet-url-description": "Ensure anyone with the link can view your Google Sheet and it is set to public",
   "create-template-copy": "Create Template Copy",
-  "help": "Help"
+  "help": "Help",
+  "create-template-copy-description": "Make a copy and save it to your Google Drive. Edit the sheet with your data and import it!",
+  "get-template": "Get Template"
 }

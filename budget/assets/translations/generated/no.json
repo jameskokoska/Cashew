@@ -555,7 +555,7 @@
   "owed-to-you": "Skyldes deg",
   "name": "Navn",
   "who-are-you-question": "Hvem er du?",
-  "who-are-you-description": "Du burde være den som betalte regningen.",
+  "who-are-you-description": "Du bør være den som betalte regningen.",
   "split-evenly": "Delte jevnt",
   "item-name-placeholder": "Gjenstandsnavn",
   "reset-bill-question": "Tilbakestill regningen?",
@@ -584,5 +584,7 @@
   "enter-google-sheet-url": "Skriv inn Google Sheet URL",
   "enter-google-sheet-url-description": "Forsikre deg om at alle med lenken kan se Google -arket ditt, og det er satt til offentlig",
   "create-template-copy": "Opprett malkopi",
-  "help": "Hjelp"
+  "help": "Hjelp",
+  "create-template-copy-description": "Lag en kopi og lagre den på Google -stasjonen din. Rediger arket med dataene dine og importer det!",
+  "get-template": "Få mal"
 }

@@ -526,7 +526,7 @@
   "all-transactions-description-1": "Minden tranzakció a kiválasztott kategóriákon és szűrőkön belül",
   "all-transactions-description-2": "Hasznos hosszú távú költségvetéshez több időszak alatt",
   "all-transactions-description-3": "Példa: „Havi kiadások” költségvetés",
-  "no-budgets-found": "Nincs költségvetés.",
+  "no-budgets-found": "Nincsenek költségvetés.",
   "no-categories-found": "Nincsenek kategóriák.",
   "no-wallets-found": "Nincs számla.",
   "no-titles-found": "Nincs cím.",
@@ -556,12 +556,12 @@
   "name": "Név",
   "who-are-you-question": "Ki vagy te?",
   "who-are-you-description": "Önnek kell lenned az, aki fizette a számlát.",
-  "split-evenly": "Egyenletesen osztva",
+  "split-evenly": "Egyenletesen szétválva",
   "item-name-placeholder": "Termék név",
   "reset-bill-question": "Visszaállítja a számlát?",
   "reset-bill-description": "Ez törli az aktuális számla összes elemet",
   "success-generate-loans": "Siker",
-  "success-generate-loans-description": "Létrehozott kölcsön -tranzakciókat Bill -től",
+  "success-generate-loans-description": "Létrehozott hitel -tranzakciókat Bill -től",
   "missing-data": "Hiányzó adatok.",
   "generate-loan-transactions": "Hitelügyletek generálása",
   "no-names-found": "Nincs nevek.",
@@ -584,5 +584,7 @@
   "enter-google-sheet-url": "Írja be a Google Sheet URL -t",
   "enter-google-sheet-url-description": "Győződjön meg arról, hogy bárki, aki rendelkezik a linkkel, megtekintheti a Google lapját, és a nyilvánosságra van állítva",
   "create-template-copy": "Hozzon létre sablon másolatot",
-  "help": "Segítség"
+  "help": "Segítség",
+  "create-template-copy-description": "Készítsen másolatot, és mentse el a Google Drive -ra. Szerkessze a lapot az adatokkal, és importálja!",
+  "get-template": "Szerezzen sablont"
 }

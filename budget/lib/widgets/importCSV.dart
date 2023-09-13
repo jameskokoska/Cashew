@@ -603,8 +603,6 @@ class _ImportCSVState extends State<ImportCSV> {
                   _assignColumns(csvString!, importFromSheets: true);
                 }
               },
-              selectedText:
-                  "https://docs.google.com/spreadsheets/d/1Eiib2fiaC8SNdau8T8TBQql-wyWXVYOLJY-7Ycuky4I/edit?usp=sharing",
               placeholder:
                   "https://docs.google.com/spreadsheets/d/1Eiib2fiaC8SNdau8T8TBQql-wyWXVYOLJY-7Ycuky4I/edit?usp=sharing",
               autoFocus: false,

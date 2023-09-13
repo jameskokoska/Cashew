@@ -584,5 +584,7 @@
   "enter-google-sheet-url": "Entrez l'URL de la feuille Google",
   "enter-google-sheet-url-description": "Assurez-vous que toute personne ayant le lien peut afficher votre feuille Google et qu'elle est définie en public",
   "create-template-copy": "Créer une copie de modèle",
-  "help": "Aide"
+  "help": "Aide",
+  "create-template-copy-description": "Faites une copie et enregistrez-la sur votre Google Drive. Modifiez la feuille avec vos données et importez-les!",
+  "get-template": "Obtenir un modèle"
 }

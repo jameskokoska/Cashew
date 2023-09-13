@@ -440,7 +440,7 @@
   "delete-category-merge-warning": "Usunięcie kategorii usunie wszystkie transakcje w tej kategorii. Przesuń transakcje do innej kategorii, aby tego uniknąć.",
   "deleted-category": "Usunięta kategoria",
   "delete-wallet-question": "Usuń konto?",
-  "delete-wallet-question-description": "To usunę wszystkie transakcje związane z tym konto.",
+  "delete-wallet-question-description": "Spowoduje to usunięcie wszystkich transakcji powiązanych z tym kontem.",
   "move-transactions": "Przenieś transakcje",
   "delete-wallet-merge-warning": "Usunięcie aount usunie wszystkie transakcje na tym koncie. Przenieś transakcje na inne konto, aby tego uniknąć.",
   "deleted-wallet": "Usunięte konto",
@@ -584,5 +584,7 @@
   "enter-google-sheet-url": "Wprowadź adres URL arkusza Google",
   "enter-google-sheet-url-description": "Upewnij się, że każdy z linkiem może wyświetlić arkusz Google i jest on publiczny",
   "create-template-copy": "Utwórz kopię szablonu",
-  "help": "Pomoc"
+  "help": "Pomoc",
+  "create-template-copy-description": "Zrób kopię i zapisz go na Dysku Google. Edytuj arkusz za pomocą danych i zaimportuj go!",
+  "get-template": "Uzyskaj szablon"
 }

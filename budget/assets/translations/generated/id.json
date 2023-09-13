@@ -422,7 +422,7 @@
   "delete-transactions": "Hapus transaksi",
   "change-wallet": "Ganti akun",
   "add-to-budget": "Tambahkan ke anggaran",
-  "select-wallet": "Pilih akun",
+  "select-wallet": "Pilih Akun",
   "move-to-other-wallet-button": "Pindahkan transaksi ke akun lain dan hapus",
   "changed-wallet": "Akun yang diubah",
   "added-to-budget": "Ditambahkan ke anggaran",
@@ -584,5 +584,7 @@
   "enter-google-sheet-url": "Masukkan URL Google Sheet",
   "enter-google-sheet-url-description": "Pastikan siapa pun yang memiliki tautan dapat melihat lembar Google Anda dan diatur ke publik",
   "create-template-copy": "Buat salinan template",
-  "help": "Membantu"
+  "help": "Membantu",
+  "create-template-copy-description": "Buat salinan dan simpan ke Google Drive Anda. Edit lembar dengan data Anda dan impor!",
+  "get-template": "Dapatkan template"
 }

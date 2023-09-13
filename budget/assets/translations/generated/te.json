@@ -563,7 +563,7 @@
   "success-generate-loans": "విజయం",
   "success-generate-loans-description": "బిల్ నుండి రుణ లావాదేవీలను సృష్టించింది",
   "missing-data": "సమాచారం లేదు.",
-  "generate-loan-transactions": "రుణ లావాదేవీలను ఉత్పత్తి చేయండి",
+  "generate-loan-transactions": "రుణ లావాదేవీలను రూపొందించండి",
   "no-names-found": "పేర్లు కనుగొనబడలేదు.",
   "add-name": "పేరు జోడించండి",
   "delete-name-question": "పేరును తొలగించాలా?",
@@ -584,5 +584,7 @@
   "enter-google-sheet-url": "Google షీట్ URL ను నమోదు చేయండి",
   "enter-google-sheet-url-description": "లింక్ ఉన్న ఎవరైనా మీ Google షీట్‌ను చూడగలరని నిర్ధారించుకోండి మరియు ఇది పబ్లిక్ కు సెట్ చేయబడిందని నిర్ధారించుకోండి",
   "create-template-copy": "టెంప్లేట్ కాపీని సృష్టించండి",
-  "help": "సహాయం"
+  "help": "సహాయం",
+  "create-template-copy-description": "కాపీని తయారు చేసి, మీ Google డ్రైవ్‌లో సేవ్ చేయండి. మీ డేటాతో షీట్‌ను సవరించండి మరియు దిగుమతి చేయండి!",
+  "get-template": "టెంప్లేట్ పొందండి"
 }

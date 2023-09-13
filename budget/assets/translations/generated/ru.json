@@ -136,7 +136,7 @@
   "exchange-rate-notice": "Уведомление об обменном курсе",
   "exchange-rate-notice-description": "Обменные курсы, отображаемые в этом приложении, представляются только для информационных целей и не должны использоваться для инвестиционных решений. Эти ставки являются оценками и могут не отражать фактические ставки. Используя это приложение, вы признаете, что понимаете и принимаете эти ограничения и что вы несете полную ответственность за любые решения, принятые на основе информации, предоставленной в приложении.",
   "search-placeholder": "Поиск...",
-  "search-wallets-placeholder": "Поисковые счета ...",
+  "search-wallets-placeholder": "Поисковые учетные записи ...",
   "search-budgets-placeholder": "Поисковые бюджеты ...",
   "search-categories-placeholder": "Категории поиска ...",
   "search-titles-placeholder": "Здания поиска ...",
@@ -540,7 +540,7 @@
   "csv-saved-success": "CSV сохранен на устройстве",
   "error-exporting": "Экспорт ошибок",
   "backup-downloaded-success": "Резервное копирование загружено на устройство",
-  "error-downloading": "Ошибка скачивания",
+  "error-downloading": "Ошибка загрузка",
   "tools": "Инструменты",
   "delete-bill-item-question": "Удалить пункт счета?",
   "bill-splitter": "Билл Сплиттер",
@@ -582,7 +582,9 @@
   "import-and-export": "Импорт Экспорт",
   "import-google-sheet": "Импортировать Google Sheet",
   "enter-google-sheet-url": "Введите URL -адрес Google листа",
-  "enter-google-sheet-url-description": "Убедитесь, что любой, у кого есть ссылка, может просматривать ваш лист Google, и он настроен на публику",
+  "enter-google-sheet-url-description": "Убедитесь, что любой, у кого есть ссылка, может просмотреть ваш лист Google, и он настроен на публику",
   "create-template-copy": "Создать шаблон копию",
-  "help": "Помощь"
+  "help": "Помощь",
+  "create-template-copy-description": "Сделайте копию и сохраните ее на своем Google Drive. Отредактируйте лист с вашими данными и импортируйте его!",
+  "get-template": "Получите шаблон"
 }

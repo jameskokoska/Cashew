@@ -558,7 +558,7 @@
   "who-are-you-description": "Faturayı ödeyen siz olmalısın.",
   "split-evenly": "Eşit olarak bölmek",
   "item-name-placeholder": "Öğe adı",
-  "reset-bill-question": "Faturayı sıfırlamak?",
+  "reset-bill-question": "Faturayı sıfırla?",
   "reset-bill-description": "Bu, mevcut faturadaki tüm öğeleri silecektir",
   "success-generate-loans": "Başarı",
   "success-generate-loans-description": "Bill'den kredi işlemleri oluşturdu",
@@ -584,5 +584,7 @@
   "enter-google-sheet-url": "Google Sayfası URL'sini girin",
   "enter-google-sheet-url-description": "Bağlantıya sahip herkesin Google sayfanızı görüntüleyebileceğinden ve herkese açık olarak ayarlandığından emin olun",
   "create-template-copy": "Şablon Kopyası Oluştur",
-  "help": "Yardım"
+  "help": "Yardım",
+  "create-template-copy-description": "Bir kopya yapın ve Google Drive'ınıza kaydedin. Sayfayı verilerinizle düzenleyin ve içe aktarın!",
+  "get-template": "Şablon alın"
 }

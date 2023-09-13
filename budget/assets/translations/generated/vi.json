@@ -584,5 +584,7 @@
   "enter-google-sheet-url": "Nhập URL Google Sheet",
   "enter-google-sheet-url-description": "Đảm bảo bất cứ ai có liên kết đều có thể xem bảng Google của bạn và nó được đặt thành công khai",
   "create-template-copy": "Tạo bản sao mẫu",
-  "help": "Giúp đỡ"
+  "help": "Giúp đỡ",
+  "create-template-copy-description": "Tạo một bản sao và lưu nó vào ổ đĩa Google của bạn. Chỉnh sửa trang tính với dữ liệu của bạn và nhập nó!",
+  "get-template": "Nhận mẫu"
 }

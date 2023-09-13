@@ -558,7 +558,7 @@
   "who-are-you-description": "Du borde vara den som betalade räkningen.",
   "split-evenly": "Splittring",
   "item-name-placeholder": "Föremålsnamn",
-  "reset-bill-question": "Återställ räkningen?",
+  "reset-bill-question": "Återställ Bill?",
   "reset-bill-description": "Detta kommer att ta bort alla objekt i den nuvarande räkningen",
   "success-generate-loans": "Framgång",
   "success-generate-loans-description": "Skapade låntransaktioner från Bill",
@@ -584,5 +584,7 @@
   "enter-google-sheet-url": "Ange Google Sheet URL",
   "enter-google-sheet-url-description": "Se till att alla med länken kan se ditt Google -ark och det är inställt på offentligt",
   "create-template-copy": "Skapa mallkopia",
-  "help": "Hjälp"
+  "help": "Hjälp",
+  "create-template-copy-description": "Gör en kopia och spara den på din Google -enhet. Redigera arket med dina data och importera det!",
+  "get-template": "Få mall"
 }

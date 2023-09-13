@@ -563,7 +563,7 @@
   "success-generate-loans": "نجاح",
   "success-generate-loans-description": "تم إنشاء معاملات القروض من الفاتورة",
   "missing-data": "بيانات مفقودة.",
-  "generate-loan-transactions": "توليد معاملات القروض",
+  "generate-loan-transactions": "إنشاء معاملات القروض",
   "no-names-found": "لم يتم العثور على أسماء.",
   "add-name": "اضف اسما",
   "delete-name-question": "حذف الاسم؟",
@@ -584,5 +584,7 @@
   "enter-google-sheet-url": "أدخل عنوان URL لـ Google Sheet",
   "enter-google-sheet-url-description": "تأكد من أن أي شخص لديه الرابط يمكنه عرض ورقة Google الخاصة بك ويتم تعيينه على الأماكن العامة",
   "create-template-copy": "إنشاء نسخة قالب",
-  "help": "يساعد"
+  "help": "يساعد",
+  "create-template-copy-description": "قم بعمل نسخة وحفظها في Google Drive. قم بتحرير الورقة مع بياناتك واستيرادها!",
+  "get-template": "احصل على قالب"
 }

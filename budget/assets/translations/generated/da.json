@@ -584,5 +584,7 @@
   "enter-google-sheet-url": "Indtast Google Sheet URL",
   "enter-google-sheet-url-description": "Sørg for, at alle med linket kan se dit Google -ark, og det er indstillet til offentligheden",
   "create-template-copy": "Opret skabelonkopi",
-  "help": "Hjælp"
+  "help": "Hjælp",
+  "create-template-copy-description": "Lav en kopi og gem den på dit Google -drev. Rediger arket med dine data, og importer dem!",
+  "get-template": "Få skabelon"
 }

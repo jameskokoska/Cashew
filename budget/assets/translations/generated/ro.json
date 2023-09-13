@@ -582,7 +582,9 @@
   "import-and-export": "Import Export",
   "import-google-sheet": "Importați foaia Google",
   "enter-google-sheet-url": "Introduceți URL -ul Google Sheet",
-  "enter-google-sheet-url-description": "Asigurați -vă că oricine cu link vă poate vizualiza fișa Google și este setată la public",
+  "enter-google-sheet-url-description": "Asigurați -vă că oricine are linkul vă poate vizualiza fișa Google și este setată la public",
   "create-template-copy": "Creați o copie de șablon",
-  "help": "Ajutor"
+  "help": "Ajutor",
+  "create-template-copy-description": "Faceți o copie și salvați -o pe unitatea dvs. Google. Editați foaia cu datele dvs. și importați -o!",
+  "get-template": "Obțineți șablon"
 }

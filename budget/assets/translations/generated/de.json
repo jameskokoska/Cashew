@@ -574,7 +574,7 @@
   "daily-notification-type-if-not-opened": "Wenn die App heute noch nicht eröffnet wurde",
   "daily-notification-type-one-day-from-open": "24 Stunden von der App geöffnet",
   "daily-notification-type-everyday": "Täglich",
-  "consider-csv-template": "Versuchen Sie es erneut und überlegen Sie, ob Sie die bereitgestellte CSV -Vorlage verwenden.",
+  "consider-csv-template": "Versuchen Sie es erneut und überlegen Sie, ob die bereitgestellte CSV -Vorlage verwendet wird.",
   "template": "Vorlage",
   "enter-emoji": "Geben Sie Emoji ein",
   "enter-emoji-placeholder": "Geben Sie Emoji ein",
@@ -584,5 +584,7 @@
   "enter-google-sheet-url": "Geben Sie die URL von Google Sheet ein",
   "enter-google-sheet-url-description": "Stellen Sie sicher",
   "create-template-copy": "Template -Kopie erstellen",
-  "help": "Helfen"
+  "help": "Helfen",
+  "create-template-copy-description": "Machen Sie eine Kopie und speichern Sie sie in Ihrem Google -Laufwerk. Bearbeiten Sie das Blatt mit Ihren Daten und importieren Sie es!",
+  "get-template": "Vorlage holen"
 }

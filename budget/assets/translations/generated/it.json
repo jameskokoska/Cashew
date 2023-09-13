@@ -584,5 +584,7 @@
   "enter-google-sheet-url": "Inserisci l'URL di Google Sheet",
   "enter-google-sheet-url-description": "Assicurati che chiunque abbia il link possa visualizzare il tuo foglio di Google ed è impostato su pubblico",
   "create-template-copy": "Crea una copia del modello",
-  "help": "Aiuto"
+  "help": "Aiuto",
+  "create-template-copy-description": "Fai una copia e salvala sul tuo Drive Google. Modifica il foglio con i tuoi dati e importalo!",
+  "get-template": "Ottieni modello"
 }

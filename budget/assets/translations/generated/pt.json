@@ -545,7 +545,7 @@
   "delete-bill-item-question": "Excluir item de fatura?",
   "bill-splitter": "Bill Splitter",
   "bill-splitter-info": "O Bill Splitter dividirá uma fatura pela qual você pagou entre as pessoas que compraram itens. Você pode acompanhar facilmente quem lhe deve certas quantias de dinheiro.",
-  "new-bill": "Nova conta",
+  "new-bill": "Nova fatura",
   "names": "Nomes",
   "summary": "Resumo",
   "edit-item": "Editar item",
@@ -582,7 +582,9 @@
   "import-and-export": "Importação e exportação",
   "import-google-sheet": "Importar o Google Sheet",
   "enter-google-sheet-url": "Digite URL do Google Sheet",
-  "enter-google-sheet-url-description": "Certifique -se de que qualquer pessoa com o link possa ver sua folha do Google e ele está definido como público",
+  "enter-google-sheet-url-description": "Certifique -se de que qualquer pessoa com o link possa visualizar sua folha do Google e ele está definido como público",
   "create-template-copy": "Crie cópia de modelo",
-  "help": "Ajuda"
+  "help": "Ajuda",
+  "create-template-copy-description": "Faça uma cópia e salve -a no seu Google Drive. Edite a folha com seus dados e importe -os!",
+  "get-template": "Obtenha modelo"
 }

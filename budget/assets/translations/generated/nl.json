@@ -423,7 +423,7 @@
   "change-wallet": "Van account veranderen",
   "add-to-budget": "Toevoegen aan budget",
   "select-wallet": "Selecteer account",
-  "move-to-other-wallet-button": "Verplaats transacties naar een andere account en verwijder",
+  "move-to-other-wallet-button": "Verplaats transacties naar een ander account en verwijder",
   "changed-wallet": "Account gewijzigd",
   "added-to-budget": "Toegevoegd aan budget",
   "no-addable-budgets": "Geen budgetten om transacties toe te voegen aan",
@@ -584,5 +584,7 @@
   "enter-google-sheet-url": "Voer Google Sheet Url in",
   "enter-google-sheet-url-description": "Zorg ervoor dat iedereen met de link uw Google -blad kan bekijken en deze is ingesteld op openbaar",
   "create-template-copy": "Sjabloon kopie maken",
-  "help": "Hulp"
+  "help": "Hulp",
+  "create-template-copy-description": "Maak een kopie en sla het op in uw Google Drive. Bewerk het blad met uw gegevens en importeer deze!",
+  "get-template": "Krijg sjabloon"
 }

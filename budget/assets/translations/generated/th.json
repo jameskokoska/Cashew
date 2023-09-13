@@ -537,7 +537,7 @@
   "export-csv": "ส่งออกไฟล์ CSV",
   "export-csv-warning": "ข้อมูลสำรองข้อมูล",
   "export-csv-warning-description": "การส่งออกไปยัง CSV ไม่ควรใช้เป็นข้อมูลสำรองข้อมูล งบประมาณและข้อมูลแอพโดยละเอียดจะไม่ถูกส่งออกใน CSV! โปรดใช้บัญชี Google Drive สำหรับการสำรองข้อมูล",
-  "csv-saved-success": "CSV บันทึกไว้ในอุปกรณ์",
+  "csv-saved-success": "CSV บันทึกลงในอุปกรณ์",
   "error-exporting": "การส่งออกข้อผิดพลาด",
   "backup-downloaded-success": "การสำรองข้อมูลดาวน์โหลดไปยังอุปกรณ์",
   "error-downloading": "การดาวน์โหลดข้อผิดพลาด",
@@ -584,5 +584,7 @@
   "enter-google-sheet-url": "ป้อน URL ของ Google Sheet",
   "enter-google-sheet-url-description": "ตรวจสอบให้แน่ใจว่าทุกคนที่มีลิงก์สามารถดู Google ชีตของคุณและตั้งค่าเป็นสาธารณะ",
   "create-template-copy": "สร้างสำเนาเทมเพลต",
-  "help": "ช่วย"
+  "help": "ช่วย",
+  "create-template-copy-description": "ทำสำเนาและบันทึกลงใน Google Drive ของคุณ แก้ไขแผ่นงานด้วยข้อมูลของคุณและนำเข้า!",
+  "get-template": "รับเทมเพลต"
 }

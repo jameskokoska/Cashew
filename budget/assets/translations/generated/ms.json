@@ -423,7 +423,7 @@
   "change-wallet": "Tukar Akaun",
   "add-to-budget": "Tambah kepada belanjawan",
   "select-wallet": "Pilih Akaun",
-  "move-to-other-wallet-button": "Gerakkan transaksi ke akaun lain dan padamkan",
+  "move-to-other-wallet-button": "Gerakkan urus niaga ke akaun lain dan padamkan",
   "changed-wallet": "Akaun berubah",
   "added-to-budget": "Ditambah kepada belanjawan",
   "no-addable-budgets": "Tiada belanjawan untuk menambah urus niaga ke",
@@ -584,5 +584,7 @@
   "enter-google-sheet-url": "Masukkan URL Lembaran Google",
   "enter-google-sheet-url-description": "Pastikan sesiapa yang mempunyai pautan dapat melihat lembaran Google anda dan ditetapkan kepada orang ramai",
   "create-template-copy": "Buat salinan templat",
-  "help": "Pertolongan"
+  "help": "Pertolongan",
+  "create-template-copy-description": "Buat salinan dan simpan ke Google Drive anda. Edit lembaran dengan data anda dan importnya!",
+  "get-template": "Dapatkan templat"
 }

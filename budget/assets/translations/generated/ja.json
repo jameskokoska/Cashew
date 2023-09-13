@@ -581,8 +581,10 @@
   "use-emoji-details": "アイコンとして選択した絵文字を選択します",
   "import-and-export": "インポート・エクスポート",
   "import-google-sheet": "Googleシートをインポートします",
-  "enter-google-sheet-url": "GoogleシートURLを入力します",
+  "enter-google-sheet-url": "GoogleシートURLを入力してください",
   "enter-google-sheet-url-description": "リンクのある人があなたのGoogleシートを表示できることを確認し、それが公開されていることを確認してください",
   "create-template-copy": "テンプレートコピーを作成します",
-  "help": "ヘルプ"
+  "help": "ヘルプ",
+  "create-template-copy-description": "コピーを作成して、Googleドライブに保存します。データでシートを編集してインポートしてください！",
+  "get-template": "テンプレートを取得します"
 }
