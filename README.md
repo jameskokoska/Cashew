@@ -13,13 +13,9 @@
   <a href="https://play.google.com/store/apps/details?id=com.budget.tracker_app">
     <img alt="Google Play Badge" src="promotional/store-banners/google-play-badge.png" height="60px">
   </a>
-  &nbsp;
-  &nbsp;
   <a href="https://github.com/jameskokoska/Cashew/releases/">
     <img alt="GitHub Badge" src="promotional/store-banners/github-badge.png" height="60px">
   </a>
-  &nbsp;
-  &nbsp;
   <a href="https://budget-track.web.app/">
     <img alt="PWA Badge" src="promotional/store-banners/pwa-badge.png" height="60px">
   </a>
