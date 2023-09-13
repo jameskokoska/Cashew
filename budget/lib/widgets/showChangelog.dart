@@ -10,6 +10,9 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    < 4.2.6
+    Migration fix
+    Sync text fix
     < 4.2.5
     Emoji icon selection for categories
     Import Google Sheets data

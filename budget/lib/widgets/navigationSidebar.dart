@@ -459,9 +459,9 @@ class _SyncButtonState extends State<SyncButton> {
                                   text: "synced".tr() +
                                       " " +
                                       (timeLastSynced == null
-                                          ? "never".tr()
-                                          : getTimeAgo(timeLastSynced)
-                                              .toLowerCase()),
+                                              ? "never".tr()
+                                              : getTimeAgo(timeLastSynced))
+                                          .capitalizeFirstofEach,
                                 );
                               },
                             ),

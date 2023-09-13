@@ -706,12 +706,24 @@ class FinanceDatabase extends _$FinanceDatabase {
             );
           },
           from37To38: (m, schema) async {
-            await m.addColumn(
-                schema.transactions, schema.transactions.originalDateDue);
+            try {
+              await m.addColumn(
+                  schema.transactions, schema.transactions.originalDateDue);
+            } catch (e) {
+              print("Error creating column");
+            }
           },
           from38To39: (m, schema) async {
-            await m.addColumn(
-                schema.categories, schema.categories.emojiIconName);
+            // We should try and catch for upgrades - why?
+            // If a user imports a backup from a newer schema when they are on an older
+            // App version, it will import correctly. However, when they do update the app
+            // The migrator will run and it will error out!
+            try {
+              await m.addColumn(
+                  schema.categories, schema.categories.emojiIconName);
+            } catch (e) {
+              print("Error creating column");
+            }
           },
         )(migrator, from, to);
       },
