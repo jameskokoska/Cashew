@@ -575,5 +575,14 @@
   "daily-notification-type-one-day-from-open": "24 ساعت از برنامه باز شده",
   "daily-notification-type-everyday": "هر روز",
   "consider-csv-template": "دوباره امتحان کنید و از الگوی CSV ارائه شده استفاده کنید.",
-  "download-template": "دانلود الگوی"
+  "template": "قالب",
+  "enter-emoji": "ایموجی ها را وارد کنید",
+  "enter-emoji-placeholder": "ایموجی ها را وارد کنید",
+  "use-emoji-details": "به عنوان نماد یک ایموجی مورد نظر خود را انتخاب کنید",
+  "import-and-export": "واردات و صادرات",
+  "import-google-sheet": "وارد کردن برگه Google",
+  "enter-google-sheet-url": "URL Google Sheet را وارد کنید",
+  "enter-google-sheet-url-description": "اطمینان حاصل کنید که هر کسی که دارای پیوند باشد می تواند برگه Google شما را مشاهده کند و تنظیم شده است",
+  "create-template-copy": "کپی الگو را ایجاد کنید",
+  "help": "کمک"
 }

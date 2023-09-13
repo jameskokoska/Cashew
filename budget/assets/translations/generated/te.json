@@ -575,5 +575,14 @@
   "daily-notification-type-one-day-from-open": "అనువర్తనం నుండి 24 గంటలు తెరవబడింది",
   "daily-notification-type-everyday": "ప్రతి రోజు",
   "consider-csv-template": "మళ్ళీ ప్రయత్నించండి మరియు అందించిన CSV టెంప్లేట్‌ను ఉపయోగించడాన్ని పరిగణించండి.",
-  "download-template": "టెంప్లేట్‌ను డౌన్‌లోడ్ చేయండి"
+  "template": "టెంప్లేట్",
+  "enter-emoji": "ఎమోజీని నమోదు చేయండి",
+  "enter-emoji-placeholder": "ఎమోజీని నమోదు చేయండి",
+  "use-emoji-details": "మీకు నచ్చిన ఎమోజీని ఐకాన్ గా ఎంచుకోండి",
+  "import-and-export": "దిగుమతి ఎగుమతి",
+  "import-google-sheet": "గూగుల్ షీట్ దిగుమతి",
+  "enter-google-sheet-url": "Google షీట్ URL ను నమోదు చేయండి",
+  "enter-google-sheet-url-description": "లింక్ ఉన్న ఎవరైనా మీ Google షీట్‌ను చూడగలరని నిర్ధారించుకోండి మరియు ఇది పబ్లిక్ కు సెట్ చేయబడిందని నిర్ధారించుకోండి",
+  "create-template-copy": "టెంప్లేట్ కాపీని సృష్టించండి",
+  "help": "సహాయం"
 }

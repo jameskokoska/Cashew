@@ -100,6 +100,7 @@ Future<Map<String, dynamic>> getDefaultPreferences() async {
     "watchedCategoriesOnBudget": {},
     "iOSNavigation": false,
     "iOSEmulate": false,
+    "expandedNavigationSidebar": true,
     "locale": "System",
     "incomeExpenseStartDate": null,
     "disableShadows": false,

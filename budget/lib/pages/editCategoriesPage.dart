@@ -361,17 +361,18 @@ class RefreshButtonState extends State<RefreshButton>
               transform: Matrix4.rotationY(widget.flipIcon == true ? pi : 0),
               child: widget.iconOnly == true
                   ? Icon(
-                      widget.customIcon ?? appStateSettings["outlinedIcons"]
-                          ? Icons.refresh_outlined
-                          : Icons.refresh_rounded,
+                      widget.customIcon ??
+                          (appStateSettings["outlinedIcons"]
+                              ? Icons.refresh_outlined
+                              : Icons.refresh_rounded),
                       color: Theme.of(context).colorScheme.secondary,
                     )
                   : IconButton(
                       padding: widget.padding ?? EdgeInsets.all(15),
-                      icon: Icon(
-                          widget.customIcon ?? appStateSettings["outlinedIcons"]
+                      icon: Icon(widget.customIcon ??
+                          (appStateSettings["outlinedIcons"]
                               ? Icons.refresh_outlined
-                              : Icons.refresh_rounded),
+                              : Icons.refresh_rounded)),
                       color: Theme.of(context).colorScheme.secondary,
                       onPressed: () => _onTap(),
                       visualDensity: widget.visualDensity,

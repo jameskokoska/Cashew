@@ -422,7 +422,7 @@
   "delete-transactions": "Verwijder transacties",
   "change-wallet": "Van account veranderen",
   "add-to-budget": "Toevoegen aan budget",
-  "select-wallet": "Selecteer Account",
+  "select-wallet": "Selecteer account",
   "move-to-other-wallet-button": "Verplaats transacties naar een andere account en verwijder",
   "changed-wallet": "Account gewijzigd",
   "added-to-budget": "Toegevoegd aan budget",
@@ -575,5 +575,14 @@
   "daily-notification-type-one-day-from-open": "24 uur van de geopende app",
   "daily-notification-type-everyday": "Elke dag",
   "consider-csv-template": "Probeer het opnieuw en overweeg het gebruik van de verstrekte CSV -sjabloon.",
-  "download-template": "Download sjabloon"
+  "template": "Sjabloon",
+  "enter-emoji": "Voer emoji in",
+  "enter-emoji-placeholder": "Voer emoji in",
+  "use-emoji-details": "Selecteer een emoji van uw keuze als pictogram",
+  "import-and-export": "Importeren en exporteren",
+  "import-google-sheet": "Importeer Google -blad",
+  "enter-google-sheet-url": "Voer Google Sheet Url in",
+  "enter-google-sheet-url-description": "Zorg ervoor dat iedereen met de link uw Google -blad kan bekijken en deze is ingesteld op openbaar",
+  "create-template-copy": "Sjabloon kopie maken",
+  "help": "Hulp"
 }

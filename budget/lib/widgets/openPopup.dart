@@ -420,13 +420,15 @@ Future<T?> openLoadingPopup<T extends Object?>(BuildContext context) {
   );
 }
 
-Future<bool> openLoadingPopupTryCatch(Future Function() function,
+Future openLoadingPopupTryCatch(Future Function() function,
     {BuildContext? context, Function(dynamic error)? onError}) async {
   openLoadingPopup(context ?? navigatorKey.currentContext!);
   try {
-    await function();
-    Navigator.pop(context ?? navigatorKey.currentContext!, true);
+    dynamic result = await function();
+    Navigator.pop(context ?? navigatorKey.currentContext!, result);
+    return result;
   } catch (e) {
+    Navigator.pop(context ?? navigatorKey.currentContext!, null);
     if (onError != null)
       onError(e);
     else
@@ -439,9 +441,8 @@ Future<bool> openLoadingPopupTryCatch(Future Function() function,
           description: e.toString(),
         ),
       );
-    Navigator.pop(context ?? navigatorKey.currentContext!, false);
   }
-  return false;
+  return null;
 }
 
 void discardChangesPopup(context,

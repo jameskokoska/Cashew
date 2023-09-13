@@ -119,6 +119,7 @@ class App extends StatelessWidget {
     print("Rebuilt Material App");
 
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       showPerformanceOverlay: kProfileMode,
       localizationsDelegates: context.localizationDelegates,
       supportedLocales: context.supportedLocales,
@@ -237,7 +238,12 @@ class App extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      SizedBox(width: getWidthNavigationSidebar(context)),
+                      AnimatedContainer(
+                        duration: Duration(milliseconds: 1500),
+                        curve: Curves.easeInOutCubicEmphasized,
+                        width: getWidthNavigationSidebar(context),
+                        color: Theme.of(context).canvasColor,
+                      ),
                       Expanded(
                         child: Builder(builder: (context) {
                           double rightPaddingSafeArea =

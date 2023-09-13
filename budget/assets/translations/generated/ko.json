@@ -528,7 +528,7 @@
   "all-transactions-description-3": "예 : '월간 지출'예산",
   "no-budgets-found": "예산이 발견되지 않았습니다.",
   "no-categories-found": "범주가 없습니다.",
-  "no-wallets-found": "발견 된 계정이 없습니다.",
+  "no-wallets-found": "계정이 발견되지 않았습니다.",
   "no-titles-found": "제목이 없습니다.",
   "translations": "번역",
   "ask-for-notes-with-title": "제목으로 메모를 요청하십시오",
@@ -559,7 +559,7 @@
   "split-evenly": "고르게 분할",
   "item-name-placeholder": "상품명",
   "reset-bill-question": "청구서를 재설정 하시겠습니까?",
-  "reset-bill-description": "이것은 현재 청구서의 모든 품목을 삭제합니다",
+  "reset-bill-description": "현재 청구서의 모든 항목이 삭제됩니다",
   "success-generate-loans": "성공",
   "success-generate-loans-description": "Bill에서 대출 거래를 만들었습니다",
   "missing-data": "누락 된 데이터.",
@@ -575,5 +575,14 @@
   "daily-notification-type-one-day-from-open": "앱에서 24 시간 동안 열렸습니다",
   "daily-notification-type-everyday": "매일",
   "consider-csv-template": "다시 시도하고 제공된 CSV 템플릿을 사용하는 것을 고려하십시오.",
-  "download-template": "템플릿을 다운로드하십시오"
+  "template": "주형",
+  "enter-emoji": "이모티콘을 입력하십시오",
+  "enter-emoji-placeholder": "이모티콘을 입력하십시오",
+  "use-emoji-details": "선택한 이모티콘을 아이콘으로 선택하십시오",
+  "import-and-export": "수입 수출",
+  "import-google-sheet": "Google 시트 가져 오기",
+  "enter-google-sheet-url": "Google 시트 URL을 입력하십시오",
+  "enter-google-sheet-url-description": "링크가있는 사람이 Google 시트를 볼 수 있고 공개적으로 설정됩니다.",
+  "create-template-copy": "템플릿 사본을 만듭니다",
+  "help": "돕다"
 }

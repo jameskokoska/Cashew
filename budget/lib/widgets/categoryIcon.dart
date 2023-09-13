@@ -51,6 +51,7 @@ class CategoryIcon extends StatelessWidget {
     Widget child = Column(
       children: [
         Stack(
+          alignment: Alignment.center,
           children: [
             AnimatedContainer(
               duration: Duration(milliseconds: 250),
@@ -118,7 +119,9 @@ class CategoryIcon extends StatelessWidget {
                     : null,
                 borderRadius: borderRadius - 3,
                 child: Center(
-                  child: (category != null && category.iconName != null
+                  child: (category?.emojiIconName == null &&
+                          category != null &&
+                          category.iconName != null
                       ? !appStateSettings["colorTintCategoryIcon"] ||
                               !tintEnabled
                           ? CacheCategoryIcon(
@@ -149,6 +152,12 @@ class CategoryIcon extends StatelessWidget {
                 ),
               ),
             ),
+            category?.emojiIconName != null
+                ? EmojiIcon(
+                    emojiIconName: category?.emojiIconName,
+                    size: size,
+                  )
+                : SizedBox.shrink(),
           ],
         ),
         label
@@ -198,8 +207,11 @@ class CategoryIcon extends StatelessWidget {
 }
 
 class CacheCategoryIcon extends StatefulWidget {
-  const CacheCategoryIcon(
-      {required this.iconName, required this.size, super.key});
+  const CacheCategoryIcon({
+    required this.iconName,
+    required this.size,
+    super.key,
+  });
   final String iconName;
   final double size;
   @override
@@ -239,5 +251,25 @@ class _CacheCategoryIconState extends State<CacheCategoryIcon> {
   @override
   Widget build(BuildContext context) {
     return image;
+  }
+}
+
+class EmojiIcon extends StatelessWidget {
+  const EmojiIcon({required this.emojiIconName, required this.size, super.key});
+  final String? emojiIconName;
+  final double size;
+
+  @override
+  Widget build(BuildContext context) {
+    return IgnorePointer(
+      child: Padding(
+        padding: EdgeInsets.only(bottom: size * 0.185),
+        child: TextFont(
+          text: emojiIconName ?? "",
+          textAlign: TextAlign.center,
+          fontSize: size,
+        ),
+      ),
+    );
   }
 }

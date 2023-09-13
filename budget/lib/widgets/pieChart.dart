@@ -246,6 +246,7 @@ class PieChartDisplayState extends State<PieChartDisplay> {
               amountDark: 0.1),
           iconName: widget.data[i].category.iconName ?? "",
           categoryColor: HexColor(widget.data[i].category.colour),
+          emojiIconName: widget.data[i].category.emojiIconName,
           percent: widget.totalSpent == 0
               ? 0
               : (widget.data[i].total / widget.totalSpent * 100).abs(),
@@ -262,6 +263,7 @@ class _Badge extends StatelessWidget {
   final double scale;
   final Color color;
   final String iconName;
+  final String? emojiIconName;
   final double percent;
   final bool isTouched;
   final bool showLabels;
@@ -272,6 +274,7 @@ class _Badge extends StatelessWidget {
     required this.scale,
     required this.color,
     required this.iconName,
+    required this.emojiIconName,
     required this.percent,
     required this.isTouched,
     required this.showLabels,
@@ -300,6 +303,7 @@ class _Badge extends StatelessWidget {
           ),
         ),
         child: Stack(
+          alignment: Alignment.center,
           children: [
             AnimatedOpacity(
               duration: Duration(milliseconds: 200),
@@ -360,13 +364,21 @@ class _Badge extends StatelessWidget {
                     shape: BoxShape.circle,
                   ),
                   padding: EdgeInsets.all(8),
-                  child: CacheCategoryIcon(
-                    iconName: iconName,
-                    size: 34,
-                  ),
+                  child: emojiIconName != null
+                      ? Container()
+                      : CacheCategoryIcon(
+                          iconName: iconName,
+                          size: 34,
+                        ),
                 ),
               ),
             ),
+            emojiIconName != null
+                ? EmojiIcon(
+                    emojiIconName: emojiIconName,
+                    size: 34 * 0.7,
+                  )
+                : SizedBox.shrink(),
           ],
         ),
       ),

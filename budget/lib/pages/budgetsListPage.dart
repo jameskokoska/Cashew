@@ -132,12 +132,9 @@ class BudgetsListPageState extends State<BudgetsListPage>
                             } else {
                               return Padding(
                                 padding: const EdgeInsets.only(bottom: 16.0),
-                                child: WidgetSize(
-                                  onChange: (size) => print(size),
-                                  child: BudgetContainer(
-                                    budget: snapshot.data![index],
-                                    squishInactiveBudgetContainerHeight: true,
-                                  ),
+                                child: BudgetContainer(
+                                  budget: snapshot.data![index],
+                                  squishInactiveBudgetContainerHeight: true,
                                 ),
                               );
                             }

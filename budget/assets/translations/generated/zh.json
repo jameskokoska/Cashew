@@ -575,5 +575,14 @@
   "daily-notification-type-one-day-from-open": "从应用程序开放24小时",
   "daily-notification-type-everyday": "每天",
   "consider-csv-template": "重试，考虑使用提供的CSV模板。",
-  "download-template": "下载模板"
+  "template": "模板",
+  "enter-emoji": "输入表情符号",
+  "enter-emoji-placeholder": "输入表情符号",
+  "use-emoji-details": "选择您选择的表情符号作为图标",
+  "import-and-export": "进出口",
+  "import-google-sheet": "导入Google表",
+  "enter-google-sheet-url": "输入Google Sheep URL",
+  "enter-google-sheet-url-description": "确保任何具有链接的人都可以查看您的Google表格，并将其设置为公开",
+  "create-template-copy": "创建模板副本",
+  "help": "帮助"
 }

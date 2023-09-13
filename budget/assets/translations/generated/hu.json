@@ -556,7 +556,7 @@
   "name": "Név",
   "who-are-you-question": "Ki vagy te?",
   "who-are-you-description": "Önnek kell lenned az, aki fizette a számlát.",
-  "split-evenly": "Egyenletesen szétválva",
+  "split-evenly": "Egyenletesen osztva",
   "item-name-placeholder": "Termék név",
   "reset-bill-question": "Visszaállítja a számlát?",
   "reset-bill-description": "Ez törli az aktuális számla összes elemet",
@@ -575,5 +575,14 @@
   "daily-notification-type-one-day-from-open": "24 órát nyitott alkalmazástól",
   "daily-notification-type-everyday": "Minden nap",
   "consider-csv-template": "Próbálja újra, és fontolja meg a megadott CSV sablon használatát.",
-  "download-template": "Töltse le a sablont"
+  "template": "Sablon",
+  "enter-emoji": "Írja be a hangulatjeleket",
+  "enter-emoji-placeholder": "Írja be a hangulatjeleket",
+  "use-emoji-details": "Válasszon egy választott hangulatjelet ikonként",
+  "import-and-export": "Import Export",
+  "import-google-sheet": "Importáld a Google Sheet -t",
+  "enter-google-sheet-url": "Írja be a Google Sheet URL -t",
+  "enter-google-sheet-url-description": "Győződjön meg arról, hogy bárki, aki rendelkezik a linkkel, megtekintheti a Google lapját, és a nyilvánosságra van állítva",
+  "create-template-copy": "Hozzon létre sablon másolatot",
+  "help": "Segítség"
 }

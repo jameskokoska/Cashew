@@ -561,7 +561,7 @@
   "reset-bill-question": "請求書をリセットしますか？",
   "reset-bill-description": "これにより、現在の請求書のすべてのアイテムが削除されます",
   "success-generate-loans": "成功",
-  "success-generate-loans-description": "ビルからのローン取引を作成しました",
+  "success-generate-loans-description": "請求書からのローン取引を作成しました",
   "missing-data": "欠落データ。",
   "generate-loan-transactions": "ローン取引を生成します",
   "no-names-found": "名前は見つかりません。",
@@ -575,5 +575,14 @@
   "daily-notification-type-one-day-from-open": "アプリが開いてから24時間",
   "daily-notification-type-everyday": "毎日",
   "consider-csv-template": "もう一度やり直して、提供されたCSVテンプレートの使用を検討してください。",
-  "download-template": "テンプレートをダウンロードします"
+  "template": "テンプレート",
+  "enter-emoji": "絵文字を入力してください",
+  "enter-emoji-placeholder": "絵文字を入力してください",
+  "use-emoji-details": "アイコンとして選択した絵文字を選択します",
+  "import-and-export": "インポート・エクスポート",
+  "import-google-sheet": "Googleシートをインポートします",
+  "enter-google-sheet-url": "GoogleシートURLを入力します",
+  "enter-google-sheet-url-description": "リンクのある人があなたのGoogleシートを表示できることを確認し、それが公開されていることを確認してください",
+  "create-template-copy": "テンプレートコピーを作成します",
+  "help": "ヘルプ"
 }

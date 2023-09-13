@@ -527,7 +527,7 @@ Future<bool> setOnServer(
     "income": transaction.income,
     "ownerEmail": transaction.transactionOwnerEmail, //ownerEmail is the payer
     "categoryName": transactionCategory.name,
-    "categoryIcon": transactionCategory.iconName,
+    "categoryIcon": transactionCategory.iconName, //emoji icons not supported
     "categoryColour": transactionCategory.colour,
   }, SetOptions(merge: true));
   transaction = transaction.copyWith(
@@ -584,7 +584,7 @@ Future<bool> addOnServer(
     "ownerEmail": transaction.transactionOwnerEmail, //ownerEmail is the payer
     "originalCreatorEmail": FirebaseAuth.instance.currentUser!.email,
     "categoryName": transactionCategory.name,
-    "categoryIcon": transactionCategory.iconName,
+    "categoryIcon": transactionCategory.iconName, //emoji icons not supported
     "categoryColour": transactionCategory.colour,
   });
   transaction = transaction.copyWith(

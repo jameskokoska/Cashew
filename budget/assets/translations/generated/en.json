@@ -575,5 +575,14 @@
   "daily-notification-type-one-day-from-open": "24 hours from app opened",
   "daily-notification-type-everyday": "Everyday",
   "consider-csv-template": "Try again and consider using the provided CSV template.",
-  "download-template": "Download Template"
+  "template": "Template",
+  "enter-emoji": "Enter Emoji",
+  "enter-emoji-placeholder": "Enter emoji",
+  "use-emoji-details": "Select an emoji of your choice as the icon",
+  "import-and-export": "Import & Export",
+  "import-google-sheet": "Import Google Sheet",
+  "enter-google-sheet-url": "Enter Google Sheet URL",
+  "enter-google-sheet-url-description": "Ensure anyone with the link can view your Google Sheet and it is set to public",
+  "create-template-copy": "Create Template Copy",
+  "help": "Help"
 }

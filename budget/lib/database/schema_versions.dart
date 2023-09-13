@@ -2079,12 +2079,271 @@ class Shape19 extends i0.VersionedTable {
 i1.GeneratedColumn<DateTime> _column_81(String aliasedName) =>
     i1.GeneratedColumn<DateTime>('original_date_due', aliasedName, true,
         type: i1.DriftSqlType.dateTime, defaultValue: Constant(DateTime.now()));
+
+final class _S39 extends i0.VersionedSchema {
+  _S39({required super.database}) : super(version: 39);
+  @override
+  late final List<i1.DatabaseSchemaEntity> entities = [
+    wallets,
+    categories,
+    transactions,
+    budgets,
+    categoryBudgetLimits,
+    associatedTitles,
+    appSettings,
+    scannerTemplates,
+    deleteLogs,
+  ];
+  late final Shape11 wallets = Shape11(
+      source: i0.VersionedTable(
+        entityName: 'wallets',
+        withoutRowId: false,
+        isStrict: false,
+        tableConstraints: [
+          'PRIMARY KEY(wallet_pk)',
+        ],
+        columns: [
+          _column_67,
+          _column_1,
+          _column_2,
+          _column_3,
+          _column_4,
+          _column_5,
+          _column_6,
+          _column_7,
+          _column_8,
+        ],
+        attachedDatabase: database,
+      ),
+      alias: null);
+  late final Shape20 categories = Shape20(
+      source: i0.VersionedTable(
+        entityName: 'categories',
+        withoutRowId: false,
+        isStrict: false,
+        tableConstraints: [
+          'PRIMARY KEY(category_pk)',
+        ],
+        columns: [
+          _column_68,
+          _column_1,
+          _column_2,
+          _column_3,
+          _column_82,
+          _column_4,
+          _column_5,
+          _column_6,
+          _column_10,
+          _column_11,
+        ],
+        attachedDatabase: database,
+      ),
+      alias: null);
+  late final Shape19 transactions = Shape19(
+      source: i0.VersionedTable(
+        entityName: 'transactions',
+        withoutRowId: false,
+        isStrict: false,
+        tableConstraints: [
+          'PRIMARY KEY(transaction_pk)',
+        ],
+        columns: [
+          _column_69,
+          _column_1,
+          _column_13,
+          _column_14,
+          _column_70,
+          _column_71,
+          _column_4,
+          _column_5,
+          _column_81,
+          _column_10,
+          _column_18,
+          _column_19,
+          _column_20,
+          _column_21,
+          _column_22,
+          _column_23,
+          _column_24,
+          _column_11,
+          _column_25,
+          _column_26,
+          _column_27,
+          _column_28,
+          _column_29,
+          _column_30,
+          _column_72,
+        ],
+        attachedDatabase: database,
+      ),
+      alias: null);
+  late final Shape14 budgets = Shape14(
+      source: i0.VersionedTable(
+        entityName: 'budgets',
+        withoutRowId: false,
+        isStrict: false,
+        tableConstraints: [
+          'PRIMARY KEY(budget_pk)',
+        ],
+        columns: [
+          _column_73,
+          _column_1,
+          _column_13,
+          _column_2,
+          _column_33,
+          _column_34,
+          _column_35,
+          _column_36,
+          _column_37,
+          _column_38,
+          _column_19,
+          _column_4,
+          _column_5,
+          _column_39,
+          _column_6,
+          _column_71,
+          _column_40,
+          _column_41,
+          _column_27,
+          _column_42,
+          _column_30,
+          _column_43,
+          _column_44,
+          _column_66,
+        ],
+        attachedDatabase: database,
+      ),
+      alias: null);
+  late final Shape15 categoryBudgetLimits = Shape15(
+      source: i0.VersionedTable(
+        entityName: 'category_budget_limits',
+        withoutRowId: false,
+        isStrict: false,
+        tableConstraints: [
+          'PRIMARY KEY(category_limit_pk)',
+        ],
+        columns: [
+          _column_74,
+          _column_70,
+          _column_75,
+          _column_13,
+          _column_5,
+        ],
+        attachedDatabase: database,
+      ),
+      alias: null);
+  late final Shape16 associatedTitles = Shape16(
+      source: i0.VersionedTable(
+        entityName: 'associated_titles',
+        withoutRowId: false,
+        isStrict: false,
+        tableConstraints: [
+          'PRIMARY KEY(associated_title_pk)',
+        ],
+        columns: [
+          _column_76,
+          _column_70,
+          _column_48,
+          _column_4,
+          _column_5,
+          _column_6,
+          _column_49,
+        ],
+        attachedDatabase: database,
+      ),
+      alias: null);
+  late final Shape6 appSettings = Shape6(
+      source: i0.VersionedTable(
+        entityName: 'app_settings',
+        withoutRowId: false,
+        isStrict: false,
+        tableConstraints: [],
+        columns: [
+          _column_50,
+          _column_51,
+          _column_52,
+        ],
+        attachedDatabase: database,
+      ),
+      alias: null);
+  late final Shape17 scannerTemplates = Shape17(
+      source: i0.VersionedTable(
+        entityName: 'scanner_templates',
+        withoutRowId: false,
+        isStrict: false,
+        tableConstraints: [
+          'PRIMARY KEY(scanner_template_pk)',
+        ],
+        columns: [
+          _column_77,
+          _column_4,
+          _column_5,
+          _column_54,
+          _column_55,
+          _column_56,
+          _column_57,
+          _column_58,
+          _column_59,
+          _column_78,
+          _column_71,
+          _column_61,
+        ],
+        attachedDatabase: database,
+      ),
+      alias: null);
+  late final Shape18 deleteLogs = Shape18(
+      source: i0.VersionedTable(
+        entityName: 'delete_logs',
+        withoutRowId: false,
+        isStrict: false,
+        tableConstraints: [
+          'PRIMARY KEY(delete_log_pk)',
+        ],
+        columns: [
+          _column_79,
+          _column_80,
+          _column_63,
+          _column_65,
+        ],
+        attachedDatabase: database,
+      ),
+      alias: null);
+}
+
+class Shape20 extends i0.VersionedTable {
+  Shape20({required super.source, required super.alias}) : super.aliased();
+  i1.GeneratedColumn<String> get categoryPk =>
+      columnsByName['category_pk']! as i1.GeneratedColumn<String>;
+  i1.GeneratedColumn<String> get name =>
+      columnsByName['name']! as i1.GeneratedColumn<String>;
+  i1.GeneratedColumn<String> get colour =>
+      columnsByName['colour']! as i1.GeneratedColumn<String>;
+  i1.GeneratedColumn<String> get iconName =>
+      columnsByName['icon_name']! as i1.GeneratedColumn<String>;
+  i1.GeneratedColumn<String> get emojiIconName =>
+      columnsByName['emoji_icon_name']! as i1.GeneratedColumn<String>;
+  i1.GeneratedColumn<DateTime> get dateCreated =>
+      columnsByName['date_created']! as i1.GeneratedColumn<DateTime>;
+  i1.GeneratedColumn<DateTime> get dateTimeModified =>
+      columnsByName['date_time_modified']! as i1.GeneratedColumn<DateTime>;
+  i1.GeneratedColumn<int> get order =>
+      columnsByName['order']! as i1.GeneratedColumn<int>;
+  i1.GeneratedColumn<bool> get income =>
+      columnsByName['income']! as i1.GeneratedColumn<bool>;
+  i1.GeneratedColumn<int> get methodAdded =>
+      columnsByName['method_added']! as i1.GeneratedColumn<int>;
+}
+
+i1.GeneratedColumn<String> _column_82(String aliasedName) =>
+    i1.GeneratedColumn<String>('emoji_icon_name', aliasedName, true,
+        type: i1.DriftSqlType.string);
 i1.OnUpgrade stepByStep({
   required Future<void> Function(i1.Migrator m, _S34 schema) from33To34,
   required Future<void> Function(i1.Migrator m, _S35 schema) from34To35,
   required Future<void> Function(i1.Migrator m, _S36 schema) from35To36,
   required Future<void> Function(i1.Migrator m, _S37 schema) from36To37,
   required Future<void> Function(i1.Migrator m, _S38 schema) from37To38,
+  required Future<void> Function(i1.Migrator m, _S39 schema) from38To39,
 }) {
   return i1.Migrator.stepByStepHelper(step: (currentVersion, database) async {
     switch (currentVersion) {
@@ -2113,6 +2372,11 @@ i1.OnUpgrade stepByStep({
         final migrator = i1.Migrator(database, schema);
         await from37To38(migrator, schema);
         return 38;
+      case 38:
+        final schema = _S39(database: database);
+        final migrator = i1.Migrator(database, schema);
+        await from38To39(migrator, schema);
+        return 39;
       default:
         throw ArgumentError.value('Unknown migration from $currentVersion');
     }

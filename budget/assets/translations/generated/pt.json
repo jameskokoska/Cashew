@@ -575,5 +575,14 @@
   "daily-notification-type-one-day-from-open": "24 horas após o aplicativo aberto",
   "daily-notification-type-everyday": "Diariamente",
   "consider-csv-template": "Tente novamente e considere usar o modelo CSV fornecido.",
-  "download-template": "Modelo de download"
+  "template": "Modelo",
+  "enter-emoji": "Digite emoji",
+  "enter-emoji-placeholder": "Digite emoji",
+  "use-emoji-details": "Selecione um emoji de sua escolha como o ícone",
+  "import-and-export": "Importação e exportação",
+  "import-google-sheet": "Importar o Google Sheet",
+  "enter-google-sheet-url": "Digite URL do Google Sheet",
+  "enter-google-sheet-url-description": "Certifique -se de que qualquer pessoa com o link possa ver sua folha do Google e ele está definido como público",
+  "create-template-copy": "Crie cópia de modelo",
+  "help": "Ajuda"
 }

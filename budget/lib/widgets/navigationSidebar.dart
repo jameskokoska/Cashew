@@ -20,6 +20,10 @@ double getWidthNavigationSidebar(context) {
   double screenPercent = 0.3;
   double maxWidthNavigation = 270;
   double minScreenWidth = 700;
+  if (appStateSettings["expandedNavigationSidebar"] == false) {
+    maxWidthNavigation = 70;
+    minScreenWidth = 70;
+  }
   if (MediaQuery.of(context).size.width < minScreenWidth) return 0;
   return (MediaQuery.of(context).size.width * screenPercent > maxWidthNavigation
           ? maxWidthNavigation
@@ -63,7 +67,9 @@ class NavigationSidebarState extends State<NavigationSidebar> {
         // Remove any open context menus when sidebar clicked
         ContextMenuController.removeAny();
       },
-      child: Container(
+      child: AnimatedContainer(
+        duration: Duration(milliseconds: 1500),
+        curve: Curves.easeInOutCubicEmphasized,
         decoration: BoxDecoration(
           border: Border(
             right: BorderSide(
@@ -101,10 +107,55 @@ class NavigationSidebarState extends State<NavigationSidebar> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       mainAxisSize: MainAxisSize.min,
                       children: [
+                        SizedBox(height: MediaQuery.of(context).padding.top),
                         Column(
                           mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            SizedBox(height: 40),
+                            Opacity(
+                              opacity: 0.7,
+                              child: AnimatedPadding(
+                                duration: Duration(milliseconds: 1500),
+                                curve: Curves.easeInOutCubicEmphasized,
+                                padding: EdgeInsets.only(
+                                  bottom: appStateSettings[
+                                          "expandedNavigationSidebar"]
+                                      ? 0
+                                      : 5,
+                                  top: appStateSettings[
+                                          "expandedNavigationSidebar"]
+                                      ? 0
+                                      : 7,
+                                  left: appStateSettings[
+                                          "expandedNavigationSidebar"]
+                                      ? 0
+                                      : 7,
+                                ),
+                                child: AnimatedRotation(
+                                  duration: Duration(milliseconds: 1500),
+                                  turns: appStateSettings[
+                                          "expandedNavigationSidebar"]
+                                      ? 0
+                                      : -0.5,
+                                  curve: Curves.easeInOutCubicEmphasized,
+                                  child: IconButton(
+                                    padding: EdgeInsets.all(15),
+                                    onPressed: () {
+                                      updateSettings(
+                                          "expandedNavigationSidebar",
+                                          !appStateSettings[
+                                              "expandedNavigationSidebar"],
+                                          updateGlobalState: true);
+                                    },
+                                    icon: Icon(
+                                      appStateSettings["outlinedIcons"]
+                                          ? Icons.chevron_left_outlined
+                                          : Icons.chevron_left_rounded,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
                             Row(
                               children: [
                                 Expanded(
@@ -123,16 +174,34 @@ class NavigationSidebarState extends State<NavigationSidebar> {
                                           isCalendarOpened = false;
                                         }
                                       },
-                                      child: Padding(
-                                          padding: const EdgeInsets.only(
-                                              top: 30, bottom: 30),
-                                          child: SidebarClock()),
+                                      child: AnimatedPadding(
+                                        duration: Duration(milliseconds: 1500),
+                                        curve: Curves.easeInOutCubicEmphasized,
+                                        padding: EdgeInsets.only(
+                                          top: appStateSettings[
+                                                  "expandedNavigationSidebar"]
+                                              ? 15
+                                              : 0,
+                                          bottom: appStateSettings[
+                                                  "expandedNavigationSidebar"]
+                                              ? 15
+                                              : 0,
+                                        ),
+                                        child: SidebarClock(),
+                                      ),
                                     ),
                                   ),
                                 ),
                               ],
                             ),
-                            SizedBox(height: 30),
+                            AnimatedContainer(
+                              duration: Duration(milliseconds: 1500),
+                              curve: Curves.easeInOutCubicEmphasized,
+                              height:
+                                  appStateSettings["expandedNavigationSidebar"]
+                                      ? 40
+                                      : 0,
+                            ),
                             NavigationSidebarButton(
                               icon: Icons.home_rounded,
                               label: "home".tr(),
@@ -261,42 +330,49 @@ class SidebarClock extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MediaQuery(
-      data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
-      child: TimerBuilder.periodic(
-        Duration(seconds: 5),
-        builder: (context) {
-          DateTime now = DateTime.now();
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              TextFont(
-                textColor: getColor(context, "black"),
-                fontSize: 48,
-                fontWeight: FontWeight.bold,
-                text: DateFormat.jm(context.locale.toString())
-                    .format(now)
-                    .replaceAll("AM", "")
-                    .replaceAll("PM", "")
-                    .replaceAll(" ", ""),
-              ),
-              TextFont(
-                textColor: getColor(context, "black").withOpacity(0.5),
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                text: DateFormat('EEEE', context.locale.toString()).format(now),
-              ),
-              SizedBox(height: 5),
-              TextFont(
-                textColor: getColor(context, "black").withOpacity(0.5),
-                fontSize: 18,
-                text: DateFormat('MMMM d, y', context.locale.toString())
-                    .format(now),
-              ),
-            ],
-          );
-        },
+    return AnimatedExpanded(
+      expand: appStateSettings["expandedNavigationSidebar"],
+      axis: Axis.vertical,
+      child: Center(
+        child: MediaQuery(
+          data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+          child: TimerBuilder.periodic(
+            Duration(seconds: 5),
+            builder: (context) {
+              DateTime now = DateTime.now();
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  TextFont(
+                    textColor: getColor(context, "black"),
+                    fontSize: 48,
+                    fontWeight: FontWeight.bold,
+                    text: DateFormat.jm(context.locale.toString())
+                        .format(now)
+                        .replaceAll("AM", "")
+                        .replaceAll("PM", "")
+                        .replaceAll(" ", ""),
+                  ),
+                  TextFont(
+                    textColor: getColor(context, "black").withOpacity(0.5),
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    text: DateFormat('EEEE', context.locale.toString())
+                        .format(now),
+                  ),
+                  SizedBox(height: 5),
+                  TextFont(
+                    textColor: getColor(context, "black").withOpacity(0.5),
+                    fontSize: 18,
+                    text: DateFormat('MMMM d, y', context.locale.toString())
+                        .format(now),
+                  ),
+                ],
+              );
+            },
+          ),
+        ),
       ),
     );
   }
@@ -314,6 +390,25 @@ class _SyncButtonState extends State<SyncButton> {
 
   @override
   Widget build(BuildContext context) {
+    Widget refreshButton = Opacity(
+      opacity: 0.6,
+      child: RefreshButton(
+        key: refreshButtonKey,
+        halfAnimation: true,
+        customIcon: appStateSettings["outlinedIcons"]
+            ? Icons.sync_outlined
+            : Icons.sync_rounded,
+        flipIcon: true,
+        padding: EdgeInsets.zero,
+        iconOnly: true,
+        onTap: () {
+          runAllCloudFunctions(
+            context,
+            forceSignIn: true,
+          );
+        },
+      ),
+    );
     return AnimatedExpanded(
       expand: !(appStateSettings["currentUserEmail"] == "" ||
           appStateSettings["backupSync"] == false),
@@ -329,66 +424,62 @@ class _SyncButtonState extends State<SyncButton> {
             );
             refreshButtonKey.currentState?.startAnimation();
           },
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 13),
-            child: Row(
-              children: [
-                Opacity(
-                  opacity: 0.6,
-                  child: RefreshButton(
-                    key: refreshButtonKey,
-                    halfAnimation: true,
-                    customIcon: appStateSettings["outlinedIcons"]
-                        ? Icons.sync_outlined
-                        : Icons.sync_rounded,
-                    flipIcon: true,
-                    padding: EdgeInsets.zero,
-                    iconOnly: true,
-                    onTap: () {
-                      runAllCloudFunctions(
-                        context,
-                        forceSignIn: true,
-                      );
-                    },
-                  ),
-                ),
-                SizedBox(width: 15),
-                Flexible(
-                  child: AnimatedSwitcher(
-                    duration: Duration(milliseconds: 500),
-                    child: SizedBox(
-                      key: ValueKey(appStateSettings["lastSynced"]),
-                      child: TimerBuilder.periodic(
-                        Duration(seconds: 5),
-                        builder: (context) {
-                          DateTime? timeLastSynced = null;
-                          try {
-                            timeLastSynced = DateTime.parse(
-                              appStateSettings["lastSynced"],
-                            );
-                          } catch (e) {
-                            print("Error parsing time last synced: " +
-                                e.toString());
-                          }
-                          return TextFont(
-                            textAlign: TextAlign.left,
-                            textColor: getColor(context, "textLight"),
-                            fontSize: 13,
-                            maxLines: 3,
-                            text: "synced".tr() +
-                                " " +
-                                (timeLastSynced == null
-                                    ? "never".tr()
-                                    : getTimeAgo(timeLastSynced).toLowerCase()),
-                          );
-                        },
+          // Do not use Animated Switcher because otherwise duplicate key!
+          child: appStateSettings["expandedNavigationSidebar"]
+              ? Padding(
+                  key: ValueKey(appStateSettings["expandedNavigationSidebar"]),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 13),
+                  child: Row(
+                    children: [
+                      refreshButton,
+                      SizedBox(width: 15),
+                      Flexible(
+                        child: AnimatedSwitcher(
+                          duration: Duration(milliseconds: 500),
+                          child: SizedBox(
+                            key: ValueKey(appStateSettings["lastSynced"]),
+                            child: TimerBuilder.periodic(
+                              Duration(seconds: 5),
+                              builder: (context) {
+                                DateTime? timeLastSynced = null;
+                                try {
+                                  timeLastSynced = DateTime.parse(
+                                    appStateSettings["lastSynced"],
+                                  );
+                                } catch (e) {
+                                  print("Error parsing time last synced: " +
+                                      e.toString());
+                                }
+                                return TextFont(
+                                  textAlign: TextAlign.left,
+                                  textColor: getColor(context, "textLight"),
+                                  fontSize: 13,
+                                  maxLines: 3,
+                                  text: "synced".tr() +
+                                      " " +
+                                      (timeLastSynced == null
+                                          ? "never".tr()
+                                          : getTimeAgo(timeLastSynced)
+                                              .toLowerCase()),
+                                );
+                              },
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
+                    ],
+                  ),
+                )
+              : Padding(
+                  key: ValueKey(appStateSettings["expandedNavigationSidebar"]),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 0, vertical: 13),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [refreshButton],
                   ),
                 ),
-              ],
-            ),
-          ),
         ),
       ),
     );
@@ -417,10 +508,19 @@ class NavigationSidebarButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Widget iconWidget = Transform.scale(
+      scale: iconScale,
+      child: Icon(
+        icon,
+        color: isSelected
+            ? Theme.of(context).colorScheme.onSecondaryContainer
+            : Theme.of(context).colorScheme.secondary,
+      ),
+    );
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
       child: AnimatedSwitcher(
-        duration: Duration(milliseconds: 300),
+        duration: Duration(milliseconds: 250),
         child: Tappable(
           key: ValueKey(isSelected),
           borderRadius: getPlatform() == PlatformOS.isIOS ? 10 : 50,
@@ -441,29 +541,41 @@ class NavigationSidebarButton extends StatelessWidget {
             }
             onTap();
           },
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 13),
-            child: Row(
-              children: [
-                Transform.scale(
-                  scale: iconScale,
-                  child: Icon(
-                    icon,
-                    color: isSelected
-                        ? Theme.of(context).colorScheme.onSecondaryContainer
-                        : Theme.of(context).colorScheme.secondary,
+          child: AnimatedSizeSwitcher(
+            child: appStateSettings["expandedNavigationSidebar"]
+                ? Padding(
+                    key:
+                        ValueKey(appStateSettings["expandedNavigationSidebar"]),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 20,
+                      vertical: 13,
+                    ),
+                    child: Row(
+                      children: [
+                        iconWidget,
+                        SizedBox(width: 15),
+                        Expanded(
+                          child: TextFont(
+                            text: label.capitalizeFirst,
+                            fontSize: 16,
+                          ),
+                        ),
+                        trailing,
+                      ],
+                    ),
+                  )
+                : Padding(
+                    key:
+                        ValueKey(appStateSettings["expandedNavigationSidebar"]),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 0,
+                      vertical: 13,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [iconWidget],
+                    ),
                   ),
-                ),
-                SizedBox(width: 15),
-                Expanded(
-                  child: TextFont(
-                    text: label.capitalizeFirst,
-                    fontSize: 16,
-                  ),
-                ),
-                trailing,
-              ],
-            ),
           ),
         ),
       ),
@@ -508,8 +620,11 @@ class _EdiDatatButtonsState extends State<EditDataButtons> {
             ),
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.only(left: 8.0),
+        AnimatedPadding(
+          duration: Duration(milliseconds: 1500),
+          curve: Curves.easeInOutCubicEmphasized,
+          padding: EdgeInsets.only(
+              left: appStateSettings["expandedNavigationSidebar"] ? 8 : 0),
           child: AnimatedSizeSwitcher(
             child: !showEditDataButtons
                 ? Container(key: ValueKey(1))

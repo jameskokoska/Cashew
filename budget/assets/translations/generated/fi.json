@@ -575,5 +575,14 @@
   "daily-notification-type-one-day-from-open": "24 tuntia sovelluksesta avattiin",
   "daily-notification-type-everyday": "Joka päivä",
   "consider-csv-template": "Yritä uudelleen ja harkitse toimitettua CSV -mallin käyttöä.",
-  "download-template": "Lataa malli"
+  "template": "Sapluuna",
+  "enter-emoji": "Anna emoji",
+  "enter-emoji-placeholder": "Anna emoji",
+  "use-emoji-details": "Valitse valitsemasi emoji kuvakkeeksi",
+  "import-and-export": "Tuonti ja vienti",
+  "import-google-sheet": "Tuo Google -arkki",
+  "enter-google-sheet-url": "Kirjoita Google -arkin URL -osoite",
+  "enter-google-sheet-url-description": "Varmista, että kuka tahansa linkki voi tarkastella Google -arkkia ja se on asetettu julkisuuteen",
+  "create-template-copy": "Luo mallikopio",
+  "help": "auta"
 }

@@ -575,5 +575,14 @@
   "daily-notification-type-one-day-from-open": "24 שעות מהאפליקציה נפתחה",
   "daily-notification-type-everyday": "כל יום",
   "consider-csv-template": "נסה שוב ושקול להשתמש בתבנית CSV שסופקה.",
-  "download-template": "הורד תבנית"
+  "template": "תבנית",
+  "enter-emoji": "הזן אמוג'י",
+  "enter-emoji-placeholder": "הזן אמוג'י",
+  "use-emoji-details": "בחר אמוג'י לבחירתך כסמל",
+  "import-and-export": "יבוא ויצוא",
+  "import-google-sheet": "ייבא גיליון גוגל",
+  "enter-google-sheet-url": "הזן את כתובת האתר של גוגל",
+  "enter-google-sheet-url-description": "ודא שכל מי שיש לו קישור יכול להציג את גיליון Google שלך ​​והוא מוגדר לציבור",
+  "create-template-copy": "צור עותק תבנית",
+  "help": "עֶזרָה"
 }

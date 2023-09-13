@@ -575,5 +575,14 @@
   "daily-notification-type-one-day-from-open": "অ্যাপ্লিকেশন থেকে 24 ঘন্টা খোলা",
   "daily-notification-type-everyday": "প্রতিদিন",
   "consider-csv-template": "আবার চেষ্টা করুন এবং প্রদত্ত সিএসভি টেম্পলেট ব্যবহার করে বিবেচনা করুন।",
-  "download-template": "টেমপ্লেট ডাউনলোড করুন"
+  "template": "টেমপ্লেট",
+  "enter-emoji": "ইমোজি প্রবেশ করান",
+  "enter-emoji-placeholder": "ইমোজি প্রবেশ করান",
+  "use-emoji-details": "আইকন হিসাবে আপনার পছন্দের একটি ইমোজি নির্বাচন করুন",
+  "import-and-export": "আমদানি রপ্তানি",
+  "import-google-sheet": "গুগল শীট আমদানি করুন",
+  "enter-google-sheet-url": "গুগল শীট ইউআরএল প্রবেশ করান",
+  "enter-google-sheet-url-description": "লিঙ্কটি সহ যে কেউ আপনার গুগল শীট দেখতে পারে তা নিশ্চিত করুন এবং এটি সর্বজনীনভাবে সেট করা আছে",
+  "create-template-copy": "টেমপ্লেট অনুলিপি তৈরি করুন",
+  "help": "সাহায্য"
 }

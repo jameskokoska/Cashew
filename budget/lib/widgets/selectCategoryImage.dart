@@ -1,3 +1,4 @@
+import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/framework/popupFramework.dart';
@@ -10,6 +11,7 @@ import 'package:budget/widgets/textWidgets.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart' hide TextInput;
 
 // Future<List<String>> getCategoryImages() async {
 //   final manifestContent = await rootBundle.loadString('AssetManifest.json');
@@ -30,12 +32,14 @@ class SelectCategoryImage extends StatefulWidget {
     required this.setSelectedImage,
     this.selectedImage,
     required this.setSelectedTitle,
+    required this.setSelectedEmoji,
     this.next,
   }) : super(key: key);
 
-  final Function(String) setSelectedImage;
+  final Function(String?) setSelectedImage;
   final String? selectedImage;
   final Function(String?) setSelectedTitle;
+  final Function(String?) setSelectedEmoji;
   final VoidCallback? next;
 
   @override
@@ -45,6 +49,7 @@ class SelectCategoryImage extends StatefulWidget {
 class _SelectCategoryImageState extends State<SelectCategoryImage> {
   String? selectedImage;
   String searchTerm = "";
+  bool isEmoji = false;
 
   @override
   void initState() {
@@ -57,44 +62,103 @@ class _SelectCategoryImageState extends State<SelectCategoryImage> {
     }
   }
 
+  void openEmojiSelectorPopup() {
+    openBottomSheet(
+      context,
+      fullSnap: true,
+      PopupFramework(
+        title: "enter-emoji".tr(),
+        child: Column(
+          children: [
+            SelectText(
+              icon: appStateSettings["outlinedIcons"]
+                  ? Icons.emoji_emotions_outlined
+                  : Icons.emoji_emotions_rounded,
+              setSelectedText: (value) {
+                widget.setSelectedImage(null);
+                widget.setSelectedEmoji(value);
+              },
+              popContextWhenSet: true,
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(RegExp(
+                    r'(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])'))
+              ],
+              placeholder: "enter-emoji-placeholder".tr() + " 😀...",
+              autoFocus: false,
+              requestLateAutoFocus: true,
+            ),
+          ],
+        ),
+      ),
+    );
+    // Fix over-scroll stretch when keyboard pops up quickly
+    Future.delayed(Duration(milliseconds: 100), () {
+      bottomSheetControllerGlobal.scrollTo(0,
+          duration: Duration(milliseconds: 100));
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 8.0),
       child: Column(
         children: [
+          context.locale.toString() != "en"
+              ? UseEmoji(onTap: () {
+                  Navigator.pop(context);
+                  openEmojiSelectorPopup();
+                })
+              : SizedBox.shrink(),
           context.locale.toString() == "en"
-              ? Focus(
-                  onFocusChange: (value) {
-                    if (value) {
-                      // Fix over-scroll stretch when keyboard pops up quickly
-                      Future.delayed(Duration(milliseconds: 100), () {
-                        bottomSheetControllerGlobal.scrollTo(0,
-                            duration: Duration(milliseconds: 100));
-                      });
-                      // Update the size of the bottom sheet
-                      Future.delayed(Duration(milliseconds: 500), () {
-                        bottomSheetControllerGlobal.snapToExtent(0);
-                      });
-                    }
-                  },
-                  child: TextInput(
-                    labelText: "search-placeholder".tr(),
-                    icon: appStateSettings["outlinedIcons"]
-                        ? Icons.search_outlined
-                        : Icons.search_rounded,
-                    onSubmitted: (value) {},
-                    onChanged: (value) {
-                      setState(() {
-                        searchTerm = value;
-                      });
-                      bottomSheetControllerGlobal.snapToExtent(0);
-                    },
-                    padding: EdgeInsets.all(0),
-                    autoFocus: true,
-                  ),
+              ? Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Expanded(
+                      child: Focus(
+                        onFocusChange: (value) {
+                          if (value) {
+                            // Fix over-scroll stretch when keyboard pops up quickly
+                            Future.delayed(Duration(milliseconds: 100), () {
+                              bottomSheetControllerGlobal.scrollTo(0,
+                                  duration: Duration(milliseconds: 100));
+                            });
+                            // Update the size of the bottom sheet
+                            Future.delayed(Duration(milliseconds: 500), () {
+                              bottomSheetControllerGlobal.snapToExtent(0);
+                            });
+                          }
+                        },
+                        child: TextInput(
+                          labelText: "search-placeholder".tr(),
+                          icon: appStateSettings["outlinedIcons"]
+                              ? Icons.search_outlined
+                              : Icons.search_rounded,
+                          onSubmitted: (value) {},
+                          onChanged: (value) {
+                            setState(() {
+                              searchTerm = value;
+                            });
+                            bottomSheetControllerGlobal.snapToExtent(0);
+                          },
+                          padding: EdgeInsets.all(0),
+                          autoFocus: true,
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 10),
+                    ButtonIcon(
+                      onTap: () {
+                        Navigator.pop(context);
+                        openEmojiSelectorPopup();
+                      },
+                      icon: appStateSettings["outlinedIcons"]
+                          ? Icons.emoji_emotions_outlined
+                          : Icons.emoji_emotions_rounded,
+                    ),
+                  ],
                 )
-              : SizedBox(height: 0),
+              : SizedBox.shrink(),
           SizedBox(height: 5),
           Center(
             child: Wrap(
@@ -120,6 +184,7 @@ class _SelectCategoryImageState extends State<SelectCategoryImage> {
                     iconPath: "assets/categories/" + image.icon,
                     onTap: () {
                       widget.setSelectedImage(image.icon);
+                      widget.setSelectedEmoji(null);
                       if (context.locale.toString() == "en")
                         widget.setSelectedTitle(image.mostLikelyCategoryName);
                       setState(() {
@@ -143,6 +208,52 @@ class _SelectCategoryImageState extends State<SelectCategoryImage> {
             child: SuggestIcon(),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class UseEmoji extends StatelessWidget {
+  const UseEmoji({required this.onTap, super.key});
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Tappable(
+      onTap: onTap,
+      color: Theme.of(context).colorScheme.secondaryContainer.withOpacity(0.7),
+      borderRadius: 15,
+      child: Padding(
+        padding:
+            const EdgeInsets.only(left: 15, right: 10, top: 12, bottom: 12),
+        child: Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(right: 12),
+              child: Icon(
+                appStateSettings["outlinedIcons"]
+                    ? Icons.emoji_emotions_outlined
+                    : Icons.emoji_emotions_rounded,
+                color: Theme.of(context).colorScheme.secondary,
+                size: 31,
+              ),
+            ),
+            Expanded(
+              child: TextFont(
+                textColor: Theme.of(context).colorScheme.onSecondaryContainer,
+                text: "use-emoji-details".tr(),
+                maxLines: 5,
+                fontSize: 14,
+              ),
+            ),
+            Icon(
+              appStateSettings["outlinedIcons"]
+                  ? Icons.chevron_right_outlined
+                  : Icons.chevron_right_rounded,
+              size: 25,
+            ),
+          ],
+        ),
       ),
     );
   }

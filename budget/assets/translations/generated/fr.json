@@ -575,5 +575,14 @@
   "daily-notification-type-one-day-from-open": "24 heures de l'application ouverte",
   "daily-notification-type-everyday": "Tous les jours",
   "consider-csv-template": "Ressayez à nouveau et envisagez d'utiliser le modèle CSV fourni.",
-  "download-template": "Télécharger le modèle"
+  "template": "Modèle",
+  "enter-emoji": "Entrez emoji",
+  "enter-emoji-placeholder": "Entrez emoji",
+  "use-emoji-details": "Sélectionnez un emoji de votre choix comme icône",
+  "import-and-export": "Importer / Exporter",
+  "import-google-sheet": "Importer une feuille Google",
+  "enter-google-sheet-url": "Entrez l'URL de la feuille Google",
+  "enter-google-sheet-url-description": "Assurez-vous que toute personne ayant le lien peut afficher votre feuille Google et qu'elle est définie en public",
+  "create-template-copy": "Créer une copie de modèle",
+  "help": "Aide"
 }

@@ -35,6 +35,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:budget/colors.dart';
+import 'package:flutter/services.dart' hide TextInput;
 import 'package:provider/provider.dart';
 import 'package:budget/widgets/util/showTimePicker.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
@@ -2085,6 +2086,8 @@ class SelectText extends StatefulWidget {
     this.textCapitalization = TextCapitalization.none,
     this.requestLateAutoFocus = false,
     this.popContext = true,
+    this.popContextWhenSet = false,
+    this.inputFormatters,
   }) : super(key: key);
   final Function(String) setSelectedText;
   final String? selectedText;
@@ -2098,6 +2101,8 @@ class SelectText extends StatefulWidget {
   final TextCapitalization textCapitalization;
   final bool requestLateAutoFocus;
   final bool popContext;
+  final bool popContextWhenSet;
+  final List<TextInputFormatter>? inputFormatters;
 
   @override
   _SelectTextState createState() => _SelectTextState();
@@ -2126,6 +2131,7 @@ class _SelectTextState extends State<SelectText> {
         Container(
           width: getWidthBottomSheet(context) - 36,
           child: TextInput(
+            inputFormatters: widget.inputFormatters,
             focusNode: _focusNode,
             textCapitalization: widget.textCapitalization,
             icon: widget.icon != null
@@ -2151,6 +2157,9 @@ class _SelectTextState extends State<SelectText> {
             onChanged: (text) {
               input = text;
               widget.setSelectedText(input!);
+              if (widget.popContextWhenSet) {
+                Navigator.pop(context);
+              }
             },
             labelText: widget.placeholder ?? widget.labelText,
             padding: EdgeInsets.zero,

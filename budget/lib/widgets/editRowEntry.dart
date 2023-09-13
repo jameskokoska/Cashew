@@ -73,21 +73,25 @@ class EditRowEntry extends StatelessWidget {
             : getColor(context, "lightDarkAccentHeavyLight");
     bool useDismissToDelete = canDelete && onDelete != null;
     double borderRadius = getPlatform() == PlatformOS.isIOS ? 0 : 18;
-    Widget container = Container(
-      decoration: BoxDecoration(
-        boxShadow: getPlatform() == PlatformOS.isIOS
+    List<BoxShadow> boxShadow = (getPlatform() == PlatformOS.isIOS
             ? []
             : appStateSettings["materialYou"]
                 ? []
-                : boxShadowCheck(boxShadowGeneral(context)),
+                : boxShadowCheck(boxShadowGeneral(context))) ??
+        [];
+    Widget container = Container(
+      decoration: BoxDecoration(
+        boxShadow: boxShadow,
       ),
       child: OpenContainerNavigation(
         openPage: openPage,
         closedColor: containerColor,
-        borderRadius: useDismissToDelete ? 0 : borderRadius,
+        borderRadius:
+            useDismissToDelete && boxShadow.length == 0 ? 0 : borderRadius,
         button: (openContainer) {
           return Tappable(
-            borderRadius: useDismissToDelete ? 0 : borderRadius,
+            borderRadius:
+                useDismissToDelete && boxShadow.length == 0 ? 0 : borderRadius,
             color: containerColor,
             onTap: () {
               FocusScopeNode currentFocus = FocusScope.of(context);
@@ -372,6 +376,7 @@ class EditRowEntry extends StatelessWidget {
         widget: container,
         onDelete: onDelete!,
         borderRadius: borderRadius,
+        boxShadow: boxShadow,
       );
     }
     if (!canReorder) {
@@ -431,14 +436,17 @@ class EditRowEntry extends StatelessWidget {
 }
 
 class DismissibleEditRowEntry extends StatelessWidget {
-  const DismissibleEditRowEntry(
-      {super.key,
-      required this.widget,
-      required this.onDelete,
-      required this.borderRadius});
+  const DismissibleEditRowEntry({
+    super.key,
+    required this.widget,
+    required this.onDelete,
+    required this.borderRadius,
+    required this.boxShadow,
+  });
   final Widget widget;
   final Future<bool> Function() onDelete;
   final double borderRadius;
+  final List<BoxShadow> boxShadow;
 
   @override
   Widget build(BuildContext context) {
@@ -446,57 +454,62 @@ class DismissibleEditRowEntry extends StatelessWidget {
       valueListenable: isSwipingToDismissPageDown,
       // Disable the dismiss action if we are swiping down to minimize the page!
       builder: (context, value, _) {
-        return ClipRRect(
-          borderRadius: BorderRadius.circular(borderRadius),
-          child: Dismissible(
-            key: ValueKey(key),
-            background: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(borderRadius),
-                color: Colors.red[700],
-              ),
-              padding: EdgeInsets.symmetric(horizontal: 15),
-              alignment: AlignmentDirectional.centerStart,
-              child: Icon(
-                appStateSettings["outlinedIcons"]
-                    ? Icons.delete_outlined
-                    : Icons.delete_rounded,
-                color: Colors.white,
-              ),
+        Widget child = Dismissible(
+          key: ValueKey(key),
+          background: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(borderRadius),
+              color: Colors.red[700],
             ),
-            secondaryBackground: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(borderRadius),
-                color: Colors.red[700],
-              ),
-              padding: EdgeInsets.symmetric(horizontal: 15),
-              alignment: AlignmentDirectional.centerEnd,
-              child: Icon(
-                appStateSettings["outlinedIcons"]
-                    ? Icons.delete_outlined
-                    : Icons.delete_rounded,
-                color: Colors.white,
-              ),
+            padding: EdgeInsets.symmetric(horizontal: 15),
+            alignment: AlignmentDirectional.centerStart,
+            child: Icon(
+              appStateSettings["outlinedIcons"]
+                  ? Icons.delete_outlined
+                  : Icons.delete_rounded,
+              color: Colors.white,
             ),
-            dismissThresholds: {
-              DismissDirection.startToEnd: value == true ? 10 : 0.5,
-              DismissDirection.endToStart: value == true ? 10 : 0.5,
-            },
-            onDismissed: (DismissDirection direction) {},
-            confirmDismiss: (direction) async {
-              // Do not return the result of onDelete.
-              // For example: If going to delete category
-              // Press delete, then no to delete all transactions - it still shows minimize size animation!
-              // We can't wait on this because we need to pop any routes before things are deleted
-              // Ideally to show a change in the list (i.e. an item getting deleted)
-              // We use something like:  ImplicitlyAnimatedDeleteSliverReorderableList
-              // Still in development... has many bugs - is there a better way to do it? see:  ImplicitlyAnimatedDeleteSliverReorderableList
-              await onDelete();
-              return false;
-            },
-            child: widget,
           ),
+          secondaryBackground: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(borderRadius),
+              color: Colors.red[700],
+            ),
+            padding: EdgeInsets.symmetric(horizontal: 15),
+            alignment: AlignmentDirectional.centerEnd,
+            child: Icon(
+              appStateSettings["outlinedIcons"]
+                  ? Icons.delete_outlined
+                  : Icons.delete_rounded,
+              color: Colors.white,
+            ),
+          ),
+          dismissThresholds: {
+            DismissDirection.startToEnd: value == true ? 10 : 0.5,
+            DismissDirection.endToStart: value == true ? 10 : 0.5,
+          },
+          onDismissed: (DismissDirection direction) {},
+          confirmDismiss: (direction) async {
+            // Do not return the result of onDelete.
+            // For example: If going to delete category
+            // Press delete, then no to delete all transactions - it still shows minimize size animation!
+            // We can't wait on this because we need to pop any routes before things are deleted
+            // Ideally to show a change in the list (i.e. an item getting deleted)
+            // We use something like:  ImplicitlyAnimatedDeleteSliverReorderableList
+            // Still in development... has many bugs - is there a better way to do it? see:  ImplicitlyAnimatedDeleteSliverReorderableList
+            await onDelete();
+            return false;
+          },
+          child: widget,
         );
+        if (boxShadow.length == 0) {
+          return ClipRRect(
+            borderRadius: BorderRadius.circular(borderRadius),
+            child: child,
+          );
+        } else {
+          return child;
+        }
       },
     );
   }

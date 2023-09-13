@@ -440,7 +440,7 @@
   "delete-category-merge-warning": "Durch das Löschen einer Kategorie werden alle Transaktionen in dieser Kategorie gelöscht. Verschieben Sie Transaktionen in eine andere Kategorie, um dies zu vermeiden.",
   "deleted-category": "Kategorie gelöscht",
   "delete-wallet-question": "Konto löschen?",
-  "delete-wallet-question-description": "Dadurch werden alle mit diesem Konto verbundenen Transaktionen gelöscht.",
+  "delete-wallet-question-description": "Dadurch wird alle mit diesem Konto verbundenen Transaktionen gelöscht.",
   "move-transactions": "Transaktionen bewegen",
   "delete-wallet-merge-warning": "Durch das Löschen eines Acount werden alle Transaktionen in diesem Konto gelöscht. Verschieben Sie Transaktionen in ein anderes Konto, um dies zu vermeiden.",
   "deleted-wallet": "Löschter Konto",
@@ -575,5 +575,14 @@
   "daily-notification-type-one-day-from-open": "24 Stunden von der App geöffnet",
   "daily-notification-type-everyday": "Täglich",
   "consider-csv-template": "Versuchen Sie es erneut und überlegen Sie, ob Sie die bereitgestellte CSV -Vorlage verwenden.",
-  "download-template": "Vorlage herunterladen"
+  "template": "Vorlage",
+  "enter-emoji": "Geben Sie Emoji ein",
+  "enter-emoji-placeholder": "Geben Sie Emoji ein",
+  "use-emoji-details": "Wählen Sie ein Emoji Ihrer Wahl als Symbol",
+  "import-and-export": "Import Export",
+  "import-google-sheet": "Google Sheet importieren",
+  "enter-google-sheet-url": "Geben Sie die URL von Google Sheet ein",
+  "enter-google-sheet-url-description": "Stellen Sie sicher",
+  "create-template-copy": "Template -Kopie erstellen",
+  "help": "Helfen"
 }

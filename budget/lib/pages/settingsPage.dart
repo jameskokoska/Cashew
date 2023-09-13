@@ -588,6 +588,8 @@ class SettingsPageContent extends StatelessWidget {
               : Icons.summarize_rounded,
         ),
 
+        SettingsHeader(title: "import-and-export".tr()),
+
         ImportCSV(),
 
         ExportCSV(),

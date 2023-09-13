@@ -575,5 +575,14 @@
   "daily-notification-type-one-day-from-open": "เปิด 24 ชั่วโมงจากแอป",
   "daily-notification-type-everyday": "ทุกวัน",
   "consider-csv-template": "ลองอีกครั้งและพิจารณาใช้เทมเพลต CSV ที่ให้ไว้",
-  "download-template": "ดาวน์โหลดเทมเพลต"
+  "template": "เทมเพลต",
+  "enter-emoji": "เข้าสู่อีโมจิ",
+  "enter-emoji-placeholder": "เข้าสู่อีโมจิ",
+  "use-emoji-details": "เลือกอิโมจิที่คุณเลือกเป็นไอคอน",
+  "import-and-export": "นำเข้าส่งออก",
+  "import-google-sheet": "นำเข้า Google Sheet",
+  "enter-google-sheet-url": "ป้อน URL ของ Google Sheet",
+  "enter-google-sheet-url-description": "ตรวจสอบให้แน่ใจว่าทุกคนที่มีลิงก์สามารถดู Google ชีตของคุณและตั้งค่าเป็นสาธารณะ",
+  "create-template-copy": "สร้างสำเนาเทมเพลต",
+  "help": "ช่วย"
 }

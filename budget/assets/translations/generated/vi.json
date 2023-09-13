@@ -575,5 +575,14 @@
   "daily-notification-type-one-day-from-open": "24 giờ từ ứng dụng được mở",
   "daily-notification-type-everyday": "Hằng ngày",
   "consider-csv-template": "Hãy thử lại và xem xét sử dụng mẫu CSV được cung cấp.",
-  "download-template": "Tải xuống mẫu"
+  "template": "Bản mẫu",
+  "enter-emoji": "Nhập biểu tượng cảm xúc",
+  "enter-emoji-placeholder": "Nhập biểu tượng cảm xúc",
+  "use-emoji-details": "Chọn một biểu tượng cảm xúc mà bạn chọn làm biểu tượng",
+  "import-and-export": "Nhập khẩu xuất khẩu",
+  "import-google-sheet": "Nhập Google Sheet",
+  "enter-google-sheet-url": "Nhập URL Google Sheet",
+  "enter-google-sheet-url-description": "Đảm bảo bất cứ ai có liên kết đều có thể xem bảng Google của bạn và nó được đặt thành công khai",
+  "create-template-copy": "Tạo bản sao mẫu",
+  "help": "Giúp đỡ"
 }

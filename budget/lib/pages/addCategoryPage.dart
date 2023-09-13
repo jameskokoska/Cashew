@@ -42,7 +42,8 @@ class AddCategoryPage extends StatefulWidget {
 class _AddCategoryPageState extends State<AddCategoryPage>
     with SingleTickerProviderStateMixin {
   String? selectedTitle;
-  String? selectedImage = "image.png";
+  late String? selectedImage = widget.category == null ? "image.png" : null;
+  String? selectedEmoji;
   Color? selectedColor;
   bool selectedIncome = false;
   bool? canAddCategory;
@@ -62,9 +63,17 @@ class _AddCategoryPageState extends State<AddCategoryPage>
     return;
   }
 
-  void setSelectedImage(String image) {
+  void setSelectedImage(String? image) {
     setState(() {
-      selectedImage = image.replaceFirst("assets/categories/", "");
+      selectedImage = (image ?? "").replaceFirst("assets/categories/", "");
+    });
+    determineBottomButton();
+    return;
+  }
+
+  void setSelectedEmoji(String? emoji) {
+    setState(() {
+      selectedEmoji = emoji;
     });
     determineBottomButton();
     return;
@@ -143,6 +152,7 @@ class _AddCategoryPageState extends State<AddCategoryPage>
           : await database.getAmountOfCategories(),
       colour: toHexString(selectedColor),
       iconName: selectedImage,
+      emojiIconName: selectedEmoji,
       methodAdded:
           widget.category != null ? widget.category!.methodAdded : null,
     );
@@ -165,6 +175,7 @@ class _AddCategoryPageState extends State<AddCategoryPage>
         setState(() {
           selectedTitle = widget.category?.name;
           selectedImage = widget.category?.iconName;
+          selectedEmoji = widget.category?.emojiIconName;
           selectedIncome = widget.category!.income;
           userAttemptedToChangeTitle = true;
         });
@@ -359,6 +370,7 @@ class _AddCategoryPageState extends State<AddCategoryPage>
                         title: "select-icon".tr(),
                         child: SelectCategoryImage(
                           setSelectedImage: setSelectedImage,
+                          setSelectedEmoji: setSelectedEmoji,
                           selectedImage:
                               "assets/categories/" + selectedImage.toString(),
                           setSelectedTitle: (String? titleRecommendation) {
@@ -397,6 +409,7 @@ class _AddCategoryPageState extends State<AddCategoryPage>
                               income: false,
                               iconName: selectedImage,
                               colour: toHexString(selectedColor),
+                              emojiIconName: selectedEmoji,
                             ),
                             size: 50,
                             sizePadding: 30,

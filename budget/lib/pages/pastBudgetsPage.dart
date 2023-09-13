@@ -794,7 +794,8 @@ class _PastBudgetContainerListState extends State<PastBudgetContainerList> {
                   gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
                     maxCrossAxisExtent: 600,
                     mainAxisExtent: 95,
-                    crossAxisSpacing: 10,
+                    crossAxisSpacing:
+                        getPlatform() == PlatformOS.isIOS ? 0 : 10,
                   ),
                   delegate: SliverChildBuilderDelegate(
                     (BuildContext context, int index) {
@@ -860,7 +861,13 @@ class _PastBudgetContainerListState extends State<PastBudgetContainerList> {
         SliverToBoxAdapter(
           child: Center(
             child: Padding(
-              padding: const EdgeInsets.only(bottom: 30),
+              padding: EdgeInsets.only(
+                bottom: 30,
+                top: getIsFullScreen(context) == true &&
+                        getPlatform() == PlatformOS.isIOS
+                    ? 10
+                    : 0,
+              ),
               child: Opacity(
                 opacity: 0.5,
                 child: Tappable(

@@ -3,6 +3,7 @@ import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../colors.dart';
 
 class TextInput extends StatelessWidget {
@@ -35,6 +36,7 @@ class TextInput extends StatelessWidget {
   final TextCapitalization? textCapitalization;
   final BorderRadius? borderRadius;
   final TextInputAction? textInputAction;
+  final List<TextInputFormatter>? inputFormatters;
 
   const TextInput({
     Key? key,
@@ -67,6 +69,7 @@ class TextInput extends StatelessWidget {
     this.textCapitalization,
     this.borderRadius,
     this.textInputAction,
+    this.inputFormatters,
   }) : super(key: key);
 
   @override
@@ -86,6 +89,7 @@ class TextInput extends StatelessWidget {
         ),
         child: Center(
           child: TextFormField(
+            inputFormatters: inputFormatters,
             textInputAction: textInputAction,
             textCapitalization:
                 textCapitalization ?? TextCapitalization.sentences,
@@ -144,7 +148,7 @@ class TextInput extends StatelessWidget {
               suffixIcon: bubbly == false || icon == null
                   ? null
                   : Padding(
-                      padding: const EdgeInsets.only(right: 13.0),
+                      padding: const EdgeInsets.only(right: 13.0, left: 5),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         mainAxisAlignment: MainAxisAlignment.end,

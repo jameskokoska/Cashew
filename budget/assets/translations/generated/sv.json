@@ -558,7 +558,7 @@
   "who-are-you-description": "Du borde vara den som betalade räkningen.",
   "split-evenly": "Splittring",
   "item-name-placeholder": "Föremålsnamn",
-  "reset-bill-question": "Återställ Bill?",
+  "reset-bill-question": "Återställ räkningen?",
   "reset-bill-description": "Detta kommer att ta bort alla objekt i den nuvarande räkningen",
   "success-generate-loans": "Framgång",
   "success-generate-loans-description": "Skapade låntransaktioner från Bill",
@@ -575,5 +575,14 @@
   "daily-notification-type-one-day-from-open": "24 timmar från appen öppnade",
   "daily-notification-type-everyday": "Varje dag",
   "consider-csv-template": "Försök igen och överväg att använda den medföljande CSV -mallen.",
-  "download-template": "Ladda ner mall"
+  "template": "Mall",
+  "enter-emoji": "Ange emoji",
+  "enter-emoji-placeholder": "Ange emoji",
+  "use-emoji-details": "Välj en emoji som du väljer som ikonen",
+  "import-and-export": "Import Export",
+  "import-google-sheet": "Importera Google Sheet",
+  "enter-google-sheet-url": "Ange Google Sheet URL",
+  "enter-google-sheet-url-description": "Se till att alla med länken kan se ditt Google -ark och det är inställt på offentligt",
+  "create-template-copy": "Skapa mallkopia",
+  "help": "Hjälp"
 }

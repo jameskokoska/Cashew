@@ -502,6 +502,12 @@ class $CategoriesTable extends Categories
   late final GeneratedColumn<String> iconName = GeneratedColumn<String>(
       'icon_name', aliasedName, true,
       type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _emojiIconNameMeta =
+      const VerificationMeta('emojiIconName');
+  @override
+  late final GeneratedColumn<String> emojiIconName = GeneratedColumn<String>(
+      'emoji_icon_name', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
   static const VerificationMeta _dateCreatedMeta =
       const VerificationMeta('dateCreated');
   @override
@@ -525,16 +531,13 @@ class $CategoriesTable extends Categories
       type: DriftSqlType.int, requiredDuringInsert: true);
   static const VerificationMeta _incomeMeta = const VerificationMeta('income');
   @override
-  late final GeneratedColumn<bool> income =
-      GeneratedColumn<bool>('income', aliasedName, false,
-          type: DriftSqlType.bool,
-          requiredDuringInsert: false,
-          defaultConstraints: GeneratedColumn.constraintsDependsOnDialect({
-            SqlDialect.sqlite: 'CHECK ("income" IN (0, 1))',
-            SqlDialect.mysql: '',
-            SqlDialect.postgres: '',
-          }),
-          defaultValue: const Constant(false));
+  late final GeneratedColumn<bool> income = GeneratedColumn<bool>(
+      'income', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("income" IN (0, 1))'),
+      defaultValue: const Constant(false));
   static const VerificationMeta _methodAddedMeta =
       const VerificationMeta('methodAdded');
   @override
@@ -548,6 +551,7 @@ class $CategoriesTable extends Categories
         name,
         colour,
         iconName,
+        emojiIconName,
         dateCreated,
         dateTimeModified,
         order,
@@ -583,6 +587,12 @@ class $CategoriesTable extends Categories
     if (data.containsKey('icon_name')) {
       context.handle(_iconNameMeta,
           iconName.isAcceptableOrUnknown(data['icon_name']!, _iconNameMeta));
+    }
+    if (data.containsKey('emoji_icon_name')) {
+      context.handle(
+          _emojiIconNameMeta,
+          emojiIconName.isAcceptableOrUnknown(
+              data['emoji_icon_name']!, _emojiIconNameMeta));
     }
     if (data.containsKey('date_created')) {
       context.handle(
@@ -624,6 +634,8 @@ class $CategoriesTable extends Categories
           .read(DriftSqlType.string, data['${effectivePrefix}colour']),
       iconName: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}icon_name']),
+      emojiIconName: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}emoji_icon_name']),
       dateCreated: attachedDatabase.typeMapping
           .read(DriftSqlType.dateTime, data['${effectivePrefix}date_created'])!,
       dateTimeModified: attachedDatabase.typeMapping.read(
@@ -655,6 +667,7 @@ class TransactionCategory extends DataClass
   final String name;
   final String? colour;
   final String? iconName;
+  final String? emojiIconName;
   final DateTime dateCreated;
   final DateTime? dateTimeModified;
   final int order;
@@ -665,6 +678,7 @@ class TransactionCategory extends DataClass
       required this.name,
       this.colour,
       this.iconName,
+      this.emojiIconName,
       required this.dateCreated,
       this.dateTimeModified,
       required this.order,
@@ -680,6 +694,9 @@ class TransactionCategory extends DataClass
     }
     if (!nullToAbsent || iconName != null) {
       map['icon_name'] = Variable<String>(iconName);
+    }
+    if (!nullToAbsent || emojiIconName != null) {
+      map['emoji_icon_name'] = Variable<String>(emojiIconName);
     }
     map['date_created'] = Variable<DateTime>(dateCreated);
     if (!nullToAbsent || dateTimeModified != null) {
@@ -703,6 +720,9 @@ class TransactionCategory extends DataClass
       iconName: iconName == null && nullToAbsent
           ? const Value.absent()
           : Value(iconName),
+      emojiIconName: emojiIconName == null && nullToAbsent
+          ? const Value.absent()
+          : Value(emojiIconName),
       dateCreated: Value(dateCreated),
       dateTimeModified: dateTimeModified == null && nullToAbsent
           ? const Value.absent()
@@ -723,6 +743,7 @@ class TransactionCategory extends DataClass
       name: serializer.fromJson<String>(json['name']),
       colour: serializer.fromJson<String?>(json['colour']),
       iconName: serializer.fromJson<String?>(json['iconName']),
+      emojiIconName: serializer.fromJson<String?>(json['emojiIconName']),
       dateCreated: serializer.fromJson<DateTime>(json['dateCreated']),
       dateTimeModified:
           serializer.fromJson<DateTime?>(json['dateTimeModified']),
@@ -740,6 +761,7 @@ class TransactionCategory extends DataClass
       'name': serializer.toJson<String>(name),
       'colour': serializer.toJson<String?>(colour),
       'iconName': serializer.toJson<String?>(iconName),
+      'emojiIconName': serializer.toJson<String?>(emojiIconName),
       'dateCreated': serializer.toJson<DateTime>(dateCreated),
       'dateTimeModified': serializer.toJson<DateTime?>(dateTimeModified),
       'order': serializer.toJson<int>(order),
@@ -754,6 +776,7 @@ class TransactionCategory extends DataClass
           String? name,
           Value<String?> colour = const Value.absent(),
           Value<String?> iconName = const Value.absent(),
+          Value<String?> emojiIconName = const Value.absent(),
           DateTime? dateCreated,
           Value<DateTime?> dateTimeModified = const Value.absent(),
           int? order,
@@ -764,6 +787,8 @@ class TransactionCategory extends DataClass
         name: name ?? this.name,
         colour: colour.present ? colour.value : this.colour,
         iconName: iconName.present ? iconName.value : this.iconName,
+        emojiIconName:
+            emojiIconName.present ? emojiIconName.value : this.emojiIconName,
         dateCreated: dateCreated ?? this.dateCreated,
         dateTimeModified: dateTimeModified.present
             ? dateTimeModified.value
@@ -779,6 +804,7 @@ class TransactionCategory extends DataClass
           ..write('name: $name, ')
           ..write('colour: $colour, ')
           ..write('iconName: $iconName, ')
+          ..write('emojiIconName: $emojiIconName, ')
           ..write('dateCreated: $dateCreated, ')
           ..write('dateTimeModified: $dateTimeModified, ')
           ..write('order: $order, ')
@@ -790,7 +816,7 @@ class TransactionCategory extends DataClass
 
   @override
   int get hashCode => Object.hash(categoryPk, name, colour, iconName,
-      dateCreated, dateTimeModified, order, income, methodAdded);
+      emojiIconName, dateCreated, dateTimeModified, order, income, methodAdded);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -799,6 +825,7 @@ class TransactionCategory extends DataClass
           other.name == this.name &&
           other.colour == this.colour &&
           other.iconName == this.iconName &&
+          other.emojiIconName == this.emojiIconName &&
           other.dateCreated == this.dateCreated &&
           other.dateTimeModified == this.dateTimeModified &&
           other.order == this.order &&
@@ -811,6 +838,7 @@ class CategoriesCompanion extends UpdateCompanion<TransactionCategory> {
   final Value<String> name;
   final Value<String?> colour;
   final Value<String?> iconName;
+  final Value<String?> emojiIconName;
   final Value<DateTime> dateCreated;
   final Value<DateTime?> dateTimeModified;
   final Value<int> order;
@@ -822,6 +850,7 @@ class CategoriesCompanion extends UpdateCompanion<TransactionCategory> {
     this.name = const Value.absent(),
     this.colour = const Value.absent(),
     this.iconName = const Value.absent(),
+    this.emojiIconName = const Value.absent(),
     this.dateCreated = const Value.absent(),
     this.dateTimeModified = const Value.absent(),
     this.order = const Value.absent(),
@@ -834,6 +863,7 @@ class CategoriesCompanion extends UpdateCompanion<TransactionCategory> {
     required String name,
     this.colour = const Value.absent(),
     this.iconName = const Value.absent(),
+    this.emojiIconName = const Value.absent(),
     this.dateCreated = const Value.absent(),
     this.dateTimeModified = const Value.absent(),
     required int order,
@@ -847,6 +877,7 @@ class CategoriesCompanion extends UpdateCompanion<TransactionCategory> {
     Expression<String>? name,
     Expression<String>? colour,
     Expression<String>? iconName,
+    Expression<String>? emojiIconName,
     Expression<DateTime>? dateCreated,
     Expression<DateTime>? dateTimeModified,
     Expression<int>? order,
@@ -859,6 +890,7 @@ class CategoriesCompanion extends UpdateCompanion<TransactionCategory> {
       if (name != null) 'name': name,
       if (colour != null) 'colour': colour,
       if (iconName != null) 'icon_name': iconName,
+      if (emojiIconName != null) 'emoji_icon_name': emojiIconName,
       if (dateCreated != null) 'date_created': dateCreated,
       if (dateTimeModified != null) 'date_time_modified': dateTimeModified,
       if (order != null) 'order': order,
@@ -873,6 +905,7 @@ class CategoriesCompanion extends UpdateCompanion<TransactionCategory> {
       Value<String>? name,
       Value<String?>? colour,
       Value<String?>? iconName,
+      Value<String?>? emojiIconName,
       Value<DateTime>? dateCreated,
       Value<DateTime?>? dateTimeModified,
       Value<int>? order,
@@ -884,6 +917,7 @@ class CategoriesCompanion extends UpdateCompanion<TransactionCategory> {
       name: name ?? this.name,
       colour: colour ?? this.colour,
       iconName: iconName ?? this.iconName,
+      emojiIconName: emojiIconName ?? this.emojiIconName,
       dateCreated: dateCreated ?? this.dateCreated,
       dateTimeModified: dateTimeModified ?? this.dateTimeModified,
       order: order ?? this.order,
@@ -907,6 +941,9 @@ class CategoriesCompanion extends UpdateCompanion<TransactionCategory> {
     }
     if (iconName.present) {
       map['icon_name'] = Variable<String>(iconName.value);
+    }
+    if (emojiIconName.present) {
+      map['emoji_icon_name'] = Variable<String>(emojiIconName.value);
     }
     if (dateCreated.present) {
       map['date_created'] = Variable<DateTime>(dateCreated.value);
@@ -937,6 +974,7 @@ class CategoriesCompanion extends UpdateCompanion<TransactionCategory> {
           ..write('name: $name, ')
           ..write('colour: $colour, ')
           ..write('iconName: $iconName, ')
+          ..write('emojiIconName: $emojiIconName, ')
           ..write('dateCreated: $dateCreated, ')
           ..write('dateTimeModified: $dateTimeModified, ')
           ..write('order: $order, ')
@@ -1025,16 +1063,13 @@ class $TransactionsTable extends Transactions
           defaultValue: Constant(DateTime.now()));
   static const VerificationMeta _incomeMeta = const VerificationMeta('income');
   @override
-  late final GeneratedColumn<bool> income =
-      GeneratedColumn<bool>('income', aliasedName, false,
-          type: DriftSqlType.bool,
-          requiredDuringInsert: false,
-          defaultConstraints: GeneratedColumn.constraintsDependsOnDialect({
-            SqlDialect.sqlite: 'CHECK ("income" IN (0, 1))',
-            SqlDialect.mysql: '',
-            SqlDialect.postgres: '',
-          }),
-          defaultValue: const Constant(false));
+  late final GeneratedColumn<bool> income = GeneratedColumn<bool>(
+      'income', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("income" IN (0, 1))'),
+      defaultValue: const Constant(false));
   static const VerificationMeta _periodLengthMeta =
       const VerificationMeta('periodLength');
   @override
@@ -1057,12 +1092,8 @@ class $TransactionsTable extends Transactions
           'upcoming_transaction_notification', aliasedName, true,
           type: DriftSqlType.bool,
           requiredDuringInsert: false,
-          defaultConstraints: GeneratedColumn.constraintsDependsOnDialect({
-            SqlDialect.sqlite:
-                'CHECK ("upcoming_transaction_notification" IN (0, 1))',
-            SqlDialect.mysql: '',
-            SqlDialect.postgres: '',
-          }),
+          defaultConstraints: GeneratedColumn.constraintIsAlways(
+              'CHECK ("upcoming_transaction_notification" IN (0, 1))'),
           defaultValue: const Constant(true));
   static const VerificationMeta _typeMeta = const VerificationMeta('type');
   @override
@@ -1073,16 +1104,13 @@ class $TransactionsTable extends Transactions
               $TransactionsTable.$convertertypen);
   static const VerificationMeta _paidMeta = const VerificationMeta('paid');
   @override
-  late final GeneratedColumn<bool> paid =
-      GeneratedColumn<bool>('paid', aliasedName, false,
-          type: DriftSqlType.bool,
-          requiredDuringInsert: false,
-          defaultConstraints: GeneratedColumn.constraintsDependsOnDialect({
-            SqlDialect.sqlite: 'CHECK ("paid" IN (0, 1))',
-            SqlDialect.mysql: '',
-            SqlDialect.postgres: '',
-          }),
-          defaultValue: const Constant(false));
+  late final GeneratedColumn<bool> paid = GeneratedColumn<bool>(
+      'paid', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("paid" IN (0, 1))'),
+      defaultValue: const Constant(false));
   static const VerificationMeta _createdAnotherFutureTransactionMeta =
       const VerificationMeta('createdAnotherFutureTransaction');
   @override
@@ -1091,26 +1119,19 @@ class $TransactionsTable extends Transactions
           'created_another_future_transaction', aliasedName, true,
           type: DriftSqlType.bool,
           requiredDuringInsert: false,
-          defaultConstraints: GeneratedColumn.constraintsDependsOnDialect({
-            SqlDialect.sqlite:
-                'CHECK ("created_another_future_transaction" IN (0, 1))',
-            SqlDialect.mysql: '',
-            SqlDialect.postgres: '',
-          }),
+          defaultConstraints: GeneratedColumn.constraintIsAlways(
+              'CHECK ("created_another_future_transaction" IN (0, 1))'),
           defaultValue: const Constant(false));
   static const VerificationMeta _skipPaidMeta =
       const VerificationMeta('skipPaid');
   @override
-  late final GeneratedColumn<bool> skipPaid =
-      GeneratedColumn<bool>('skip_paid', aliasedName, false,
-          type: DriftSqlType.bool,
-          requiredDuringInsert: false,
-          defaultConstraints: GeneratedColumn.constraintsDependsOnDialect({
-            SqlDialect.sqlite: 'CHECK ("skip_paid" IN (0, 1))',
-            SqlDialect.mysql: '',
-            SqlDialect.postgres: '',
-          }),
-          defaultValue: const Constant(false));
+  late final GeneratedColumn<bool> skipPaid = GeneratedColumn<bool>(
+      'skip_paid', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("skip_paid" IN (0, 1))'),
+      defaultValue: const Constant(false));
   static const VerificationMeta _methodAddedMeta =
       const VerificationMeta('methodAdded');
   @override
@@ -2257,15 +2278,12 @@ class $BudgetsTable extends Budgets with TableInfo<$BudgetsTable, Budget> {
   static const VerificationMeta _allCategoryFksMeta =
       const VerificationMeta('allCategoryFks');
   @override
-  late final GeneratedColumn<bool> allCategoryFks =
-      GeneratedColumn<bool>('all_category_fks', aliasedName, false,
-          type: DriftSqlType.bool,
-          requiredDuringInsert: true,
-          defaultConstraints: GeneratedColumn.constraintsDependsOnDialect({
-            SqlDialect.sqlite: 'CHECK ("all_category_fks" IN (0, 1))',
-            SqlDialect.mysql: '',
-            SqlDialect.postgres: '',
-          }));
+  late final GeneratedColumn<bool> allCategoryFks = GeneratedColumn<bool>(
+      'all_category_fks', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: true,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'CHECK ("all_category_fks" IN (0, 1))'));
   static const VerificationMeta _addedTransactionsOnlyMeta =
       const VerificationMeta('addedTransactionsOnly');
   @override
@@ -2273,11 +2291,8 @@ class $BudgetsTable extends Budgets with TableInfo<$BudgetsTable, Budget> {
       GeneratedColumn<bool>('added_transactions_only', aliasedName, false,
           type: DriftSqlType.bool,
           requiredDuringInsert: false,
-          defaultConstraints: GeneratedColumn.constraintsDependsOnDialect({
-            SqlDialect.sqlite: 'CHECK ("added_transactions_only" IN (0, 1))',
-            SqlDialect.mysql: '',
-            SqlDialect.postgres: '',
-          }),
+          defaultConstraints: GeneratedColumn.constraintIsAlways(
+              'CHECK ("added_transactions_only" IN (0, 1))'),
           defaultValue: const Constant(false));
   static const VerificationMeta _periodLengthMeta =
       const VerificationMeta('periodLength');
@@ -2311,16 +2326,13 @@ class $BudgetsTable extends Budgets with TableInfo<$BudgetsTable, Budget> {
           defaultValue: Constant(DateTime.now()));
   static const VerificationMeta _pinnedMeta = const VerificationMeta('pinned');
   @override
-  late final GeneratedColumn<bool> pinned =
-      GeneratedColumn<bool>('pinned', aliasedName, false,
-          type: DriftSqlType.bool,
-          requiredDuringInsert: false,
-          defaultConstraints: GeneratedColumn.constraintsDependsOnDialect({
-            SqlDialect.sqlite: 'CHECK ("pinned" IN (0, 1))',
-            SqlDialect.mysql: '',
-            SqlDialect.postgres: '',
-          }),
-          defaultValue: const Constant(false));
+  late final GeneratedColumn<bool> pinned = GeneratedColumn<bool>(
+      'pinned', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("pinned" IN (0, 1))'),
+      defaultValue: const Constant(false));
   static const VerificationMeta _orderMeta = const VerificationMeta('order');
   @override
   late final GeneratedColumn<int> order = GeneratedColumn<int>(
@@ -2402,11 +2414,8 @@ class $BudgetsTable extends Budgets with TableInfo<$BudgetsTable, Budget> {
       GeneratedColumn<bool>('is_absolute_spending_limit', aliasedName, false,
           type: DriftSqlType.bool,
           requiredDuringInsert: false,
-          defaultConstraints: GeneratedColumn.constraintsDependsOnDialect({
-            SqlDialect.sqlite: 'CHECK ("is_absolute_spending_limit" IN (0, 1))',
-            SqlDialect.mysql: '',
-            SqlDialect.postgres: '',
-          }),
+          defaultConstraints: GeneratedColumn.constraintIsAlways(
+              'CHECK ("is_absolute_spending_limit" IN (0, 1))'),
           defaultValue: const Constant(false));
   @override
   List<GeneratedColumn> get $columns => [
@@ -3772,16 +3781,13 @@ class $AssociatedTitlesTable extends AssociatedTitles
   static const VerificationMeta _isExactMatchMeta =
       const VerificationMeta('isExactMatch');
   @override
-  late final GeneratedColumn<bool> isExactMatch =
-      GeneratedColumn<bool>('is_exact_match', aliasedName, false,
-          type: DriftSqlType.bool,
-          requiredDuringInsert: false,
-          defaultConstraints: GeneratedColumn.constraintsDependsOnDialect({
-            SqlDialect.sqlite: 'CHECK ("is_exact_match" IN (0, 1))',
-            SqlDialect.mysql: '',
-            SqlDialect.postgres: '',
-          }),
-          defaultValue: const Constant(false));
+  late final GeneratedColumn<bool> isExactMatch = GeneratedColumn<bool>(
+      'is_exact_match', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'CHECK ("is_exact_match" IN (0, 1))'),
+      defaultValue: const Constant(false));
   @override
   List<GeneratedColumn> get $columns => [
         associatedTitlePk,
@@ -4441,16 +4447,13 @@ class $ScannerTemplatesTable extends ScannerTemplates
           GeneratedColumn.constraintIsAlways('REFERENCES wallets (wallet_pk)'));
   static const VerificationMeta _ignoreMeta = const VerificationMeta('ignore');
   @override
-  late final GeneratedColumn<bool> ignore =
-      GeneratedColumn<bool>('ignore', aliasedName, false,
-          type: DriftSqlType.bool,
-          requiredDuringInsert: false,
-          defaultConstraints: GeneratedColumn.constraintsDependsOnDialect({
-            SqlDialect.sqlite: 'CHECK ("ignore" IN (0, 1))',
-            SqlDialect.mysql: '',
-            SqlDialect.postgres: '',
-          }),
-          defaultValue: const Constant(false));
+  late final GeneratedColumn<bool> ignore = GeneratedColumn<bool>(
+      'ignore', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("ignore" IN (0, 1))'),
+      defaultValue: const Constant(false));
   @override
   List<GeneratedColumn> get $columns => [
         scannerTemplatePk,

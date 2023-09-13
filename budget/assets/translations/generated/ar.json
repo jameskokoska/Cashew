@@ -563,7 +563,7 @@
   "success-generate-loans": "نجاح",
   "success-generate-loans-description": "تم إنشاء معاملات القروض من الفاتورة",
   "missing-data": "بيانات مفقودة.",
-  "generate-loan-transactions": "إنشاء معاملات القروض",
+  "generate-loan-transactions": "توليد معاملات القروض",
   "no-names-found": "لم يتم العثور على أسماء.",
   "add-name": "اضف اسما",
   "delete-name-question": "حذف الاسم؟",
@@ -575,5 +575,14 @@
   "daily-notification-type-one-day-from-open": "تم فتح 24 ساعة من التطبيق",
   "daily-notification-type-everyday": "كل يوم",
   "consider-csv-template": "حاول مرة أخرى والنظر في استخدام قالب CSV المقدم.",
-  "download-template": "تنزيل قالب"
+  "template": "نموذج",
+  "enter-emoji": "أدخل الرموز التعبيرية",
+  "enter-emoji-placeholder": "أدخل الرموز التعبيرية",
+  "use-emoji-details": "حدد رموز تعبيرية من اختيارك كرمز",
+  "import-and-export": "استيراد و تصدير",
+  "import-google-sheet": "استيراد ورقة Google",
+  "enter-google-sheet-url": "أدخل عنوان URL لـ Google Sheet",
+  "enter-google-sheet-url-description": "تأكد من أن أي شخص لديه الرابط يمكنه عرض ورقة Google الخاصة بك ويتم تعيينه على الأماكن العامة",
+  "create-template-copy": "إنشاء نسخة قالب",
+  "help": "يساعد"
 }

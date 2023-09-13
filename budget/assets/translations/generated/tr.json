@@ -575,5 +575,14 @@
   "daily-notification-type-one-day-from-open": "Uygulamadan 24 saat açıldı",
   "daily-notification-type-everyday": "Her gün",
   "consider-csv-template": "Tekrar deneyin ve sağlanan CSV şablonunu kullanmayı düşünün.",
-  "download-template": "Şablonu indir"
+  "template": "Şablon",
+  "enter-emoji": "Emoji girin",
+  "enter-emoji-placeholder": "Emoji girin",
+  "use-emoji-details": "Simge olarak seçtiğiniz bir emoji seçin",
+  "import-and-export": "İthalat ihracat",
+  "import-google-sheet": "Google sayfasını içe aktarın",
+  "enter-google-sheet-url": "Google Sayfası URL'sini girin",
+  "enter-google-sheet-url-description": "Bağlantıya sahip herkesin Google sayfanızı görüntüleyebileceğinden ve herkese açık olarak ayarlandığından emin olun",
+  "create-template-copy": "Şablon Kopyası Oluştur",
+  "help": "Yardım"
 }

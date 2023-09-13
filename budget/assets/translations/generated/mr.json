@@ -575,5 +575,14 @@
   "daily-notification-type-one-day-from-open": "अॅपपासून 24 तास उघडले",
   "daily-notification-type-everyday": "रोज",
   "consider-csv-template": "पुन्हा प्रयत्न करा आणि प्रदान केलेले सीएसव्ही टेम्पलेट वापरण्याचा विचार करा.",
-  "download-template": "टेम्पलेट डाउनलोड करा"
+  "template": "टेम्पलेट",
+  "enter-emoji": "इमोजी प्रविष्ट करा",
+  "enter-emoji-placeholder": "इमोजी प्रविष्ट करा",
+  "use-emoji-details": "चिन्ह म्हणून आपल्या आवडीची इमोजी निवडा",
+  "import-and-export": "आयात निर्यात",
+  "import-google-sheet": "गूगल शीट आयात करा",
+  "enter-google-sheet-url": "Google पत्रक URL प्रविष्ट करा",
+  "enter-google-sheet-url-description": "दुव्यासह कोणीही आपली Google शीट पाहू शकतो याची खात्री करा आणि ते सार्वजनिकपणे सेट केले आहे",
+  "create-template-copy": "टेम्पलेट कॉपी तयार करा",
+  "help": "मदत"
 }

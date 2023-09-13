@@ -575,5 +575,14 @@
   "daily-notification-type-one-day-from-open": "അപ്ലിക്കേഷനിൽ നിന്ന് 24 മണിക്കൂർ തുറന്നു",
   "daily-notification-type-everyday": "എല്ലാ ദിവസവും",
   "consider-csv-template": "വീണ്ടും ശ്രമിക്കുക, കൂടാതെ നൽകിയ CSV ടെംപ്ലേറ്റ് ഉപയോഗിക്കുന്നത് പരിഗണിക്കുക.",
-  "download-template": "ടെംപ്ലേറ്റ് ഡൗൺലോഡുചെയ്യുക"
+  "template": "ടെംപ്ലേറ്റ്",
+  "enter-emoji": "ഇമോജിയിൽ പ്രവേശിക്കുക",
+  "enter-emoji-placeholder": "ഇമോജിയിൽ പ്രവേശിക്കുക",
+  "use-emoji-details": "നിങ്ങളുടെ ചോയിസിന്റെ ഒരു ഇമോജിയെ ഐക്കണായി തിരഞ്ഞെടുക്കുക",
+  "import-and-export": "ഇറക്കുമതി കയറ്റുമതി",
+  "import-google-sheet": "Google ഷീറ്റ് ഇറക്കുമതി ചെയ്യുക",
+  "enter-google-sheet-url": "Google ഷീറ്റ് URL നൽകുക",
+  "enter-google-sheet-url-description": "ലിങ്ക് ഉള്ള ആർക്കും നിങ്ങളുടെ Google ഷീറ്റ് കാണാൻ കഴിയുമെന്ന് ഉറപ്പാക്കുക, അത് പൊതുവായി സജ്ജമാക്കി",
+  "create-template-copy": "ടെംപ്ലേറ്റ് പകർപ്പ് സൃഷ്ടിക്കുക",
+  "help": "സഹായം"
 }

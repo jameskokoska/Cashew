@@ -575,5 +575,14 @@
   "daily-notification-type-one-day-from-open": "24 часа после открытого приложения",
   "daily-notification-type-everyday": "Каждый день",
   "consider-csv-template": "Попробуйте еще раз и рассмотрите возможность использования предоставленного шаблона CSV.",
-  "download-template": "Скачать шаблон"
+  "template": "Шаблон",
+  "enter-emoji": "Введите эмодзи",
+  "enter-emoji-placeholder": "Введите эмодзи",
+  "use-emoji-details": "Выберите эмодзи по вашему выбору в качестве значка",
+  "import-and-export": "Импорт Экспорт",
+  "import-google-sheet": "Импортировать Google Sheet",
+  "enter-google-sheet-url": "Введите URL -адрес Google листа",
+  "enter-google-sheet-url-description": "Убедитесь, что любой, у кого есть ссылка, может просматривать ваш лист Google, и он настроен на публику",
+  "create-template-copy": "Создать шаблон копию",
+  "help": "Помощь"
 }

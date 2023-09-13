@@ -575,5 +575,14 @@
   "daily-notification-type-one-day-from-open": "24 timer fra app åpnet",
   "daily-notification-type-everyday": "Hver dag",
   "consider-csv-template": "Prøv igjen og vurder å bruke den medfølgende CSV -malen.",
-  "download-template": "Last ned mal"
+  "template": "Mal",
+  "enter-emoji": "Gå inn i emoji",
+  "enter-emoji-placeholder": "Gå inn i emoji",
+  "use-emoji-details": "Velg en emoji etter eget valg som ikon",
+  "import-and-export": "Import Eksport",
+  "import-google-sheet": "Importer Google Sheet",
+  "enter-google-sheet-url": "Skriv inn Google Sheet URL",
+  "enter-google-sheet-url-description": "Forsikre deg om at alle med lenken kan se Google -arket ditt, og det er satt til offentlig",
+  "create-template-copy": "Opprett malkopi",
+  "help": "Hjelp"
 }

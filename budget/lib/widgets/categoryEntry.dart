@@ -378,21 +378,29 @@ class CategoryIconPercent extends StatelessWidget {
       //     sigma: 1,
       //   ),
       // ),
-      Container(
-        decoration: BoxDecoration(
-          color: Theme.of(context).brightness == Brightness.light
-              ? HexColor(category.colour).withOpacity(0.5)
-              : Colors.transparent,
-          shape: BoxShape.circle,
-        ),
-        height: size + insetPadding,
-        width: size + insetPadding,
-        padding: EdgeInsets.all(10),
-        child: CacheCategoryIcon(
-          iconName: category.iconName ?? "",
-          size: size,
-        ),
-      ),
+      category.iconName != null && category.emojiIconName == null
+          ? Container(
+              decoration: BoxDecoration(
+                color: Theme.of(context).brightness == Brightness.light
+                    ? HexColor(category.colour).withOpacity(0.5)
+                    : Colors.transparent,
+                shape: BoxShape.circle,
+              ),
+              height: size + insetPadding,
+              width: size + insetPadding,
+              padding: EdgeInsets.all(10),
+              child: CacheCategoryIcon(
+                iconName: category.iconName ?? "",
+                size: size,
+              ),
+            )
+          : SizedBox.shrink(),
+      category.emojiIconName != null
+          ? EmojiIcon(
+              emojiIconName: category.emojiIconName,
+              size: size * 0.92,
+            )
+          : SizedBox.shrink(),
 
       AnimatedSwitcher(
         duration: Duration(milliseconds: 300),

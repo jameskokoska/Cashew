@@ -542,7 +542,7 @@
   "backup-downloaded-success": "Nai -download ang backup sa aparato",
   "error-downloading": "Pag -download ng error",
   "tools": "Mga tool",
-  "delete-bill-item-question": "Tanggalin ang item ng Bill?",
+  "delete-bill-item-question": "Tanggalin ang item ng bill?",
   "bill-splitter": "Bill Splitter",
   "bill-splitter-info": "Ang Bill Splitter ay maghahati ng isang panukalang batas na iyong binayaran para sa mga taong bumili ng mga item. Madali mong subaybayan kung sino ang may utang sa iyo ng ilang mga halaga ng pera.",
   "new-bill": "Bagong panukalang batas",
@@ -575,5 +575,14 @@
   "daily-notification-type-one-day-from-open": "24 na oras mula sa pagbukas ng app",
   "daily-notification-type-everyday": "Araw-araw",
   "consider-csv-template": "Subukan muli at isaalang -alang ang paggamit ng ibinigay na template ng CSV.",
-  "download-template": "I -download ang template"
+  "template": "Template",
+  "enter-emoji": "Ipasok ang emoji",
+  "enter-emoji-placeholder": "Ipasok ang emoji",
+  "use-emoji-details": "Pumili ng isang emoji na iyong pinili bilang icon",
+  "import-and-export": "I -import at I -export",
+  "import-google-sheet": "I -import ang Google Sheet",
+  "enter-google-sheet-url": "Ipasok ang Google Sheet URL",
+  "enter-google-sheet-url-description": "Tiyakin na ang sinumang may link ay maaaring tingnan ang iyong google sheet at nakatakda ito sa publiko",
+  "create-template-copy": "Lumikha ng kopya ng template",
+  "help": "Tulong"
 }

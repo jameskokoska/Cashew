@@ -20,21 +20,26 @@ import 'schema_versions.dart';
 import 'package:flutter/material.dart' show RangeValues;
 part 'tables.g.dart';
 
-int schemaVersionGlobal = 38;
+int schemaVersionGlobal = 39;
 
 // Migrations and Database changes
+// -1) Make changed to database
+
 // 0) Make sure you are in application root directory (/budget)
 
 // 1) Generate database code:
 // `dart run build_runner build`
 
 // 2) After change to schema, export the new schema:
-// Replace [schemaVersion] with the value of schemaVersionGlobal
+// Generate schema dump for the newly created, current database schema
+// Replace [schemaVersion] in the command below with the value of schemaVersionGlobal
 // `dart run drift_dev schema dump lib\database\tables.dart drift_schemas//drift_schema_v[schemaVersion].json`
 // Read more: https://drift.simonbinder.eu/docs/advanced-features/migrations/#exporting-the-schema
 
 // 3) Generate step-by-step migrations
 // `dart run drift_dev schema steps drift_schemas/ lib\database\schema_versions.dart`
+
+// 4) Implement migration strategy in `await stepByStep`
 
 // Character Limits
 const int NAME_LIMIT = 250;
@@ -256,6 +261,7 @@ class Categories extends Table {
   TextColumn get name => text().withLength(max: NAME_LIMIT)();
   TextColumn get colour => text().withLength(max: COLOUR_LIMIT).nullable()();
   TextColumn get iconName => text().nullable()();
+  TextColumn get emojiIconName => text().nullable()();
   DateTimeColumn get dateCreated =>
       dateTime().clientDefault(() => new DateTime.now())();
   DateTimeColumn get dateTimeModified =>
@@ -702,6 +708,10 @@ class FinanceDatabase extends _$FinanceDatabase {
           from37To38: (m, schema) async {
             await m.addColumn(
                 schema.transactions, schema.transactions.originalDateDue);
+          },
+          from38To39: (m, schema) async {
+            await m.addColumn(
+                schema.categories, schema.categories.emojiIconName);
           },
         )(migrator, from, to);
       },

@@ -575,5 +575,14 @@
   "daily-notification-type-one-day-from-open": "ایپ سے 24 گھنٹے کھل گئے",
   "daily-notification-type-everyday": "ہر روز",
   "consider-csv-template": "دوبارہ کوشش کریں اور فراہم کردہ CSV ٹیمپلیٹ کو استعمال کرنے پر غور کریں۔",
-  "download-template": "ٹیمپلیٹ ڈاؤن لوڈ کریں"
+  "template": "سانچے",
+  "enter-emoji": "ایموجی داخل کریں",
+  "enter-emoji-placeholder": "ایموجی داخل کریں",
+  "use-emoji-details": "آئیکن کے بطور اپنی پسند کا ایک ایموجی منتخب کریں",
+  "import-and-export": "درآمد برآمد",
+  "import-google-sheet": "گوگل شیٹ درآمد کریں",
+  "enter-google-sheet-url": "گوگل شیٹ یو آر ایل درج کریں",
+  "enter-google-sheet-url-description": "اس بات کو یقینی بنائیں کہ لنک والا کوئی بھی آپ کی گوگل شیٹ دیکھ سکتا ہے اور یہ عوام کے لئے تیار ہے",
+  "create-template-copy": "ٹیمپلیٹ کاپی بنائیں",
+  "help": "مدد"
 }

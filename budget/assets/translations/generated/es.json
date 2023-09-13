@@ -546,7 +546,7 @@
   "bill-splitter": "Divisor",
   "bill-splitter-info": "El divisor de la factura dividirá una factura que pagó entre las personas que compraron artículos. Puede realizar un seguimiento fácil de quién le debe ciertas cantidades de dinero.",
   "new-bill": "Nuevo proyecto de ley",
-  "names": "Nombres",
+  "names": "Nombramiento",
   "summary": "Resumen",
   "edit-item": "Elemento de edición",
   "add-item": "Añadir artículo",
@@ -558,7 +558,7 @@
   "who-are-you-description": "Deberías ser quien pagó la factura.",
   "split-evenly": "Dividido uniformemente",
   "item-name-placeholder": "Nombre del árticulo",
-  "reset-bill-question": "Reinicio de la factura?",
+  "reset-bill-question": "Reiniciar factura?",
   "reset-bill-description": "Esto eliminará todos los artículos en la factura actual.",
   "success-generate-loans": "Éxito",
   "success-generate-loans-description": "Transacciones de préstamo creadas a partir de la factura",
@@ -575,5 +575,14 @@
   "daily-notification-type-one-day-from-open": "24 horas desde la aplicación abierta",
   "daily-notification-type-everyday": "Cada día",
   "consider-csv-template": "Intente nuevamente y considere usar la plantilla CSV proporcionada.",
-  "download-template": "Plantilla de descarga"
+  "template": "Plantilla",
+  "enter-emoji": "Ingrese emoji",
+  "enter-emoji-placeholder": "Ingresa emoji",
+  "use-emoji-details": "Seleccione un emoji de su elección como icono",
+  "import-and-export": "Importación y exportación",
+  "import-google-sheet": "Importar la hoja de Google",
+  "enter-google-sheet-url": "Ingrese la URL de la hoja de Google",
+  "enter-google-sheet-url-description": "Asegúrese de que cualquier persona con el enlace pueda ver su hoja de Google y esté configurado como público",
+  "create-template-copy": "Crear copia de plantilla",
+  "help": "Ayuda"
 }

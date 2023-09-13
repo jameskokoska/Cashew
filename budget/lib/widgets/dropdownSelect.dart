@@ -101,7 +101,10 @@ class DropdownSelectState extends State<DropdownSelect> {
             currentValue = value;
           });
         },
-        items: widget.items.map<DropdownMenuItem<String>>((String value) {
+        items: widget.items
+            .toSet()
+            .toList()
+            .map<DropdownMenuItem<String>>((String value) {
           return DropdownMenuItem(
             alignment: Alignment.centerLeft,
             child: TextFont(

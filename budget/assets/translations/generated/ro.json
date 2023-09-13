@@ -555,7 +555,7 @@
   "owed-to-you": "Datorat -o",
   "name": "Nume",
   "who-are-you-question": "Cine eşti tu?",
-  "who-are-you-description": "Ar trebui să fii cel care a plătit factura.",
+  "who-are-you-description": "Ar trebui să fiți cel care a plătit factura.",
   "split-evenly": "Împărțit uniform",
   "item-name-placeholder": "Numele articolului",
   "reset-bill-question": "Resetați factura?",
@@ -575,5 +575,14 @@
   "daily-notification-type-one-day-from-open": "La 24 de ore de la aplicație deschisă",
   "daily-notification-type-everyday": "În fiecare zi",
   "consider-csv-template": "Încercați din nou și luați în considerare utilizarea șablonului CSV furnizat.",
-  "download-template": "Descărcați șablonul"
+  "template": "Șablon",
+  "enter-emoji": "Intră emoji",
+  "enter-emoji-placeholder": "Intră emoji",
+  "use-emoji-details": "Selectați un emoji la alegere ca pictogramă",
+  "import-and-export": "Import Export",
+  "import-google-sheet": "Importați foaia Google",
+  "enter-google-sheet-url": "Introduceți URL -ul Google Sheet",
+  "enter-google-sheet-url-description": "Asigurați -vă că oricine cu link vă poate vizualiza fișa Google și este setată la public",
+  "create-template-copy": "Creați o copie de șablon",
+  "help": "Ajutor"
 }

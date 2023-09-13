@@ -575,5 +575,14 @@
   "daily-notification-type-one-day-from-open": "24 jam dari aplikasi dibuka",
   "daily-notification-type-everyday": "Setiap hari",
   "consider-csv-template": "Coba lagi dan pertimbangkan untuk menggunakan template CSV yang disediakan.",
-  "download-template": "Unduh template"
+  "template": "Templat",
+  "enter-emoji": "Masukkan emoji",
+  "enter-emoji-placeholder": "Masukkan emoji",
+  "use-emoji-details": "Pilih emoji pilihan Anda sebagai ikon",
+  "import-and-export": "Ekspor Impor",
+  "import-google-sheet": "Impor Google Sheet",
+  "enter-google-sheet-url": "Masukkan URL Google Sheet",
+  "enter-google-sheet-url-description": "Pastikan siapa pun yang memiliki tautan dapat melihat lembar Google Anda dan diatur ke publik",
+  "create-template-copy": "Buat salinan template",
+  "help": "Membantu"
 }

@@ -575,5 +575,14 @@
   "daily-notification-type-one-day-from-open": "24 ώρες από την εφαρμογή άνοιξε",
   "daily-notification-type-everyday": "Κάθε μέρα",
   "consider-csv-template": "Δοκιμάστε ξανά και σκεφτείτε να χρησιμοποιήσετε το παρεχόμενο πρότυπο CSV.",
-  "download-template": "Λήψη προτύπου"
+  "template": "Πρότυπο",
+  "enter-emoji": "Εισαγάγετε το emoji",
+  "enter-emoji-placeholder": "Εισαγάγετε το emoji",
+  "use-emoji-details": "Επιλέξτε ένα emoji της επιλογής σας ως εικονίδιο",
+  "import-and-export": "Εισαγωγή εξαγωγή",
+  "import-google-sheet": "Εισαγωγή στο φύλλο Google",
+  "enter-google-sheet-url": "Εισαγάγετε τη διεύθυνση URL του φύλλου Google",
+  "enter-google-sheet-url-description": "Βεβαιωθείτε ότι οποιοσδήποτε με τον σύνδεσμο μπορεί να δει το φύλλο σας Google και έχει οριστεί στο κοινό",
+  "create-template-copy": "Δημιουργία αντιγράφου προτύπου",
+  "help": "Βοήθεια"
 }

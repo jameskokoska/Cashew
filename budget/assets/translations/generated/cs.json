@@ -528,8 +528,8 @@
   "all-transactions-description-3": "Příklad: Rozpočet „Měsíční výdaje“",
   "no-budgets-found": "Nebyly nalezeny žádné rozpočty.",
   "no-categories-found": "Žádné kategorie nalezeny.",
-  "no-wallets-found": "Žádné účty.",
-  "no-titles-found": "Nalezeny žádné tituly.",
+  "no-wallets-found": "Žádné účty nalezeny.",
+  "no-titles-found": "Žádné tituly.",
   "translations": "Překlady",
   "ask-for-notes-with-title": "Požádejte o poznámku s názvem",
   "ask-for-notes-with-title-description": "Při vstupu do názvu",
@@ -575,5 +575,14 @@
   "daily-notification-type-one-day-from-open": "Otevřeno 24 hodin od aplikace",
   "daily-notification-type-everyday": "Každý den",
   "consider-csv-template": "Zkuste to znovu a zvažte použití poskytnuté šablony CSV.",
-  "download-template": "Stahování šablony"
+  "template": "Šablona",
+  "enter-emoji": "Zadejte emodži",
+  "enter-emoji-placeholder": "Zadejte emodži",
+  "use-emoji-details": "Jako ikonu vyberte emodži podle vašeho výběru",
+  "import-and-export": "Import Export",
+  "import-google-sheet": "Importovat list Google",
+  "enter-google-sheet-url": "Zadejte adresu URL listů Google",
+  "enter-google-sheet-url-description": "Zajistěte, aby si kdokoli s odkazem mohl zobrazit váš list Google a je nastaven na veřejnost",
+  "create-template-copy": "Vytvořte kopii šablony",
+  "help": "Pomoc"
 }

@@ -575,5 +575,14 @@
   "daily-notification-type-one-day-from-open": "பயன்பாட்டிலிருந்து 24 மணிநேரம் திறக்கப்பட்டது",
   "daily-notification-type-everyday": "தினமும்",
   "consider-csv-template": "மீண்டும் முயற்சிக்கவும், வழங்கப்பட்ட CSV வார்ப்புருவைப் பயன்படுத்தவும்.",
-  "download-template": "வார்ப்புருவைப் பதிவிறக்கவும்"
+  "template": "வார்ப்புரு",
+  "enter-emoji": "ஈமோஜியை உள்ளிடவும்",
+  "enter-emoji-placeholder": "ஈமோஜியை உள்ளிடவும்",
+  "use-emoji-details": "ஐகானாக உங்களுக்கு விருப்பமான ஒரு ஈமோஜியைத் தேர்ந்தெடுக்கவும்",
+  "import-and-export": "இறக்குமதி ஏற்றுமதி",
+  "import-google-sheet": "கூகிள் தாளை இறக்குமதி செய்க",
+  "enter-google-sheet-url": "Google தாள் URL ஐ உள்ளிடவும்",
+  "enter-google-sheet-url-description": "இணைப்பு உள்ள எவரும் உங்கள் Google தாளைக் காணலாம் என்பதை உறுதிப்படுத்தவும், அது பொதுவில் அமைக்கப்பட்டுள்ளது",
+  "create-template-copy": "வார்ப்புரு நகலை உருவாக்கவும்",
+  "help": "உதவி"
 }
