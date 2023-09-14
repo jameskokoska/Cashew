@@ -34,6 +34,8 @@ class SelectCategory extends StatefulWidget {
     this.scaleWhenSelected = false,
     this.categoryFks,
     this.hideCategoryFks,
+    // Only allow rearrange if all categories are being watched!
+    this.allowRearrange = true,
   }) : super(key: key);
   final Function(TransactionCategory)? setSelectedCategory;
   final Function(List<String>)? setSelectedCategories;
@@ -51,6 +53,7 @@ class SelectCategory extends StatefulWidget {
   final bool scaleWhenSelected;
   final List<String>? categoryFks;
   final List<String>? hideCategoryFks;
+  final bool allowRearrange;
 
   @override
   _SelectCategoryState createState() => _SelectCategoryState();
@@ -371,6 +374,9 @@ class _SelectCategoryState extends State<SelectCategory> {
               child: Column(
                 children: [
                   ReorderableGridView.count(
+                    dragEnabled: widget.categoryFks == null &&
+                        widget.hideCategoryFks == null &&
+                        widget.allowRearrange == true,
                     dragWidgetBuilder: (index, child) {
                       return Opacity(opacity: 0.5, child: child);
                     },
@@ -392,34 +398,31 @@ class _SelectCategoryState extends State<SelectCategory> {
                     shrinkWrap: true,
                     children: categoryIcons,
                     footer: [
-                      widget.addButton == false
-                          ? SizedBox.shrink()
-                          : Padding(
-                              padding:
-                                  const EdgeInsets.only(left: 7.5, right: 7.5),
-                              child: Column(
-                                children: [
-                                  LayoutBuilder(
-                                    builder:
-                                        (context, BoxConstraints constraints) {
-                                      return AddButton(
-                                        onTap: () {},
-                                        height: constraints.maxWidth < 70
-                                            ? constraints.maxWidth
-                                            : 70,
-                                        width: constraints.maxWidth < 70
-                                            ? constraints.maxWidth
-                                            : 70,
-                                        openPage: AddCategoryPage(
-                                          routesToPopAfterDelete:
-                                              RoutesToPopAfterDelete.None,
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                ],
+                      if (widget.addButton != false)
+                        Padding(
+                          padding: const EdgeInsets.only(left: 7.5, right: 7.5),
+                          child: Column(
+                            children: [
+                              LayoutBuilder(
+                                builder: (context, BoxConstraints constraints) {
+                                  return AddButton(
+                                    onTap: () {},
+                                    height: constraints.maxWidth < 70
+                                        ? constraints.maxWidth
+                                        : 70,
+                                    width: constraints.maxWidth < 70
+                                        ? constraints.maxWidth
+                                        : 70,
+                                    openPage: AddCategoryPage(
+                                      routesToPopAfterDelete:
+                                          RoutesToPopAfterDelete.None,
+                                    ),
+                                  );
+                                },
                               ),
-                            ),
+                            ],
+                          ),
+                        ),
                     ],
                     onReorder: (_intPrevious, _intNew) async {
                       TransactionCategory oldCategory =

@@ -235,6 +235,7 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
                       categoryFks: widget.budget.allCategoryFks
                           ? null
                           : widget.budget.categoryFks,
+                      allowRearrange: false,
                     ),
                     Row(
                       children: [

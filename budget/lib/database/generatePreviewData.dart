@@ -79,7 +79,7 @@ Future generatePreviewData() async {
       iconName: null,
       dateCreated: DateTime.now(),
       dateTimeModified: null,
-      order: 1,
+      order: 0,
       currency: "usd",
       decimals: 2,
     ),

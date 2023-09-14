@@ -461,6 +461,7 @@ void mergeCategoryPopup(
       subtitle: "category-to-transfer-all-transactions-to".tr(),
       child: SelectCategory(
         hideCategoryFks: [categoryOriginal.categoryPk],
+        allowRearrange: false,
         popRoute: true,
         setSelectedCategory: (category) async {
           Future.delayed(Duration(milliseconds: 90), () async {

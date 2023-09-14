@@ -119,7 +119,6 @@ class App extends StatelessWidget {
     print("Rebuilt Material App");
 
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
       showPerformanceOverlay: kProfileMode,
       localizationsDelegates: context.localizationDelegates,
       supportedLocales: context.supportedLocales,

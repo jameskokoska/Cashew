@@ -348,6 +348,14 @@
     "Symbol": "£",
     "CountryCode": "GG"
   },
+  "ghs": {
+    "Flag": "https://www.currencyremitapp.com/wp-content/themes/currencyremitapp/images/countryimages/ghana.png",
+    "CountryName": "Ghana",
+    "Currency": "Cedis",
+    "Code": "GHS",
+    "Symbol": "¢",
+    "CountryCode": "GH"
+  },
   "gip": {
     "Flag": "https://www.currencyremitapp.com/wp-content/themes/currencyremitapp/images/countryimages/gibraltar.png",
     "CountryName": "Gibraltar",

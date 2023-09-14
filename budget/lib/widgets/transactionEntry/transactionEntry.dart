@@ -31,19 +31,17 @@ class RecentlyAddedTransactionInfo {
 
   String? transactionPk;
   bool shouldAnimate = false;
-
+  int loopCount = 2;
   bool isRunningAnimation = false;
-  Duration totalFlashDuration = Duration(milliseconds: 4000);
 
-  void runAnimation() {
-    if (isRunningAnimation == false) {
-      Future.delayed(totalFlashDuration, () {
-        isRunningAnimation = false;
-        shouldAnimate = false;
-        recentlyAddedTransactionInfo.notifyListeners();
-      });
-    }
+  void triggerAnimation() {
+    shouldAnimate = false;
     isRunningAnimation = true;
+    recentlyAddedTransactionInfo.notifyListeners();
+    Future.delayed(Duration(milliseconds: 100), () {
+      isRunningAnimation = false;
+      recentlyAddedTransactionInfo.notifyListeners();
+    });
   }
 }
 
@@ -174,10 +172,15 @@ class TransactionEntry extends StatelessWidget {
                             .withOpacity(0.8)
                         : categoryTintColor!.withOpacity(0.2)
                     : getColor(context, "black").withOpacity(0.1);
-                bool currentTransactionJustAdded = recentlyAddedTransactionInfo
+                bool checkVisibilityForAnimation = recentlyAddedTransactionInfo
                             .value.transactionPk ==
                         transaction.transactionPk &&
                     recentlyAddedTransactionInfo.value.shouldAnimate == true;
+                bool triggerAnimation =
+                    recentlyAddedTransactionInfo.value.transactionPk ==
+                            transaction.transactionPk &&
+                        recentlyAddedTransactionInfo.value.isRunningAnimation;
+                int loopCount = recentlyAddedTransactionInfo.value.loopCount;
                 Widget transactionEntryWidget = Padding(
                   padding: enableSelectionCheckmark
                       ? const EdgeInsets.only(left: 5, right: 5)
@@ -192,14 +195,13 @@ class TransactionEntry extends StatelessWidget {
                         isTransactionAfterSelected ? 0 : borderRadius,
                       ),
                     ),
-                    closedColor: currentTransactionJustAdded == true
-                        ? Colors.transparent
-                        : containerColor == null
-                            ? Theme.of(context).canvasColor
-                            : containerColor,
+                    closedColor: containerColor == null
+                        ? Theme.of(context).canvasColor
+                        : containerColor,
                     button: (openContainer) {
                       return FlashingContainer(
-                        isAnimating: currentTransactionJustAdded,
+                        loopCount: loopCount,
+                        isAnimating: triggerAnimation,
                         flashDuration: Duration(milliseconds: 500),
                         backgroundColor: selectedColor.withOpacity(
                           appStateSettings["materialYou"]
@@ -424,7 +426,11 @@ class TransactionEntry extends StatelessWidget {
                     openPage: openPage,
                   ),
                 );
-                if (currentTransactionJustAdded) {
+                // Only render the visibility detector when we know this transaction entry
+                // needs to be animated. VisibilityDetector is expensive!
+                // As soon as it's rendered and the animation is triggered
+                // VisibilityDetector is removed
+                if (checkVisibilityForAnimation) {
                   return VisibilityDetector(
                     key: ValueKey(transaction.transactionPk),
                     child: transactionEntryWidget,
@@ -432,7 +438,7 @@ class TransactionEntry extends StatelessWidget {
                       final double visiblePercentage =
                           visibilityInfo.visibleFraction * 100;
                       if (visiblePercentage >= 90) {
-                        recentlyAddedTransactionInfo.value.runAnimation();
+                        recentlyAddedTransactionInfo.value.triggerAnimation();
                       }
                     },
                   );
@@ -452,12 +458,14 @@ class FlashingContainer extends StatefulWidget {
   final Duration flashDuration;
   final bool isAnimating;
   final Color backgroundColor;
+  final int loopCount; // Add this property
 
   FlashingContainer({
     required this.child,
     this.flashDuration = const Duration(milliseconds: 500),
     this.isAnimating = true,
     this.backgroundColor = Colors.red,
+    this.loopCount = 2, // Default loop count is 1
   });
 
   @override
@@ -468,6 +476,7 @@ class _FlashingContainerState extends State<FlashingContainer>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<Color?> _colorTween;
+  int _currentLoopCount = 0; // Track the current loop count
 
   @override
   void initState() {
@@ -483,20 +492,31 @@ class _FlashingContainerState extends State<FlashingContainer>
     ).animate(_controller);
 
     if (widget.isAnimating) {
-      _controller.repeat(reverse: true);
+      _startAnimation();
+    }
+  }
+
+  void _startAnimation() {
+    if (_currentLoopCount < widget.loopCount || widget.loopCount == 0) {
+      _controller.forward().then((_) {
+        if (_controller.status == AnimationStatus.completed) {
+          _currentLoopCount++;
+          if (widget.loopCount == 0 || _currentLoopCount <= widget.loopCount) {
+            _controller.reverse().then((_) {
+              _startAnimation();
+            });
+          }
+        }
+      });
     }
   }
 
   @override
   void didUpdateWidget(covariant FlashingContainer oldWidget) {
     super.didUpdateWidget(oldWidget);
-
     if (widget.isAnimating) {
-      if (!_controller.isAnimating) {
-        _controller.repeat(reverse: true);
-      }
-    } else {
-      _controller.stop();
+      _currentLoopCount = 0;
+      _startAnimation();
     }
   }
 

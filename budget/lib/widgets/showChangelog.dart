@@ -10,6 +10,13 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    < 4.2.7
+    Added GHS currency
+    Fixed order in preview data for wallets
+    Fixed removed ability to reorder categories on grid when you shouldn't
+    Fixed if add button was disabled in select categories, it would still wrap extra line
+    Transactions flash less when newly added, flash longer when date changed
+    Transaction flash more consistent with timing - counts amount of animation cycles instead of timer based
     < 4.2.6
     Migration fix
     Sync text fix

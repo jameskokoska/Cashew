@@ -365,11 +365,21 @@ class _AddTransactionPageState extends State<AddTransactionPage>
       print("Transaction just added:");
       print(transactionJustAdded);
 
-      // Do the flash animation only if new transaction or the date was changes
+      // Do the flash animation only if the date was changed
       if (transactionJustAdded.dateCreated != widget.transaction?.dateCreated) {
+        recentlyAddedTransactionInfo.value.shouldAnimate = true;
         recentlyAddedTransactionInfo.value.transactionPk =
             transactionJustAdded.transactionPk;
-        recentlyAddedTransactionInfo.value.shouldAnimate = true;
+        recentlyAddedTransactionInfo.value.loopCount = 5;
+        // If a new transaction with an added date of 5 minutes of less before, flash only a bit
+        if (widget.transaction == null &&
+            transactionJustAdded.dateCreated.isAfter(
+              DateTime.now().subtract(
+                Duration(minutes: 5),
+              ),
+            )) {
+          recentlyAddedTransactionInfo.value.loopCount = 2;
+        }
         recentlyAddedTransactionInfo.notifyListeners();
       }
     }
