@@ -10,6 +10,10 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    < 4.2.9
+    Reordered selected transactions actions menu
+    Correct the total amount in an account - in the account details page or edit account page
+    Merge accounts with others - in the edit account page
     < 4.2.8
     Fixed intrinsic height error when clock on sidebar would be collapsed
     Last opened version for changelog defaults to current version

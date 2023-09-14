@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 List<TransactionCategory> defaultCategories() {
   return [
+    // Note categoryPk is reserved for wallet/account total correction category
     TransactionCategory(
       categoryPk: "1",
       name: "default-category-dining".tr(),

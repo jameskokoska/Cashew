@@ -468,10 +468,10 @@ void mergeCategoryPopup(
             final result = await openPopup(
               context,
               title: "merge-into".tr() + " " + category.name + "?",
-              description: "merge-into-description".tr(),
+              description: "merge-into-description-categories".tr(),
               icon: appStateSettings["outlinedIcons"]
-                  ? Icons.warning_amber_outlined
-                  : Icons.warning_amber_rounded,
+                  ? Icons.merge_outlined
+                  : Icons.merge_rounded,
               onSubmit: () async {
                 Navigator.pop(context, true);
               },

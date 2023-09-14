@@ -25,6 +25,7 @@ class SettingsContainerSwitch extends StatefulWidget {
     this.onTap,
     this.enableBorderRadius = false,
     this.hasMoreOptionsIcon = false,
+    this.runOnSwitchedInitially = false,
     Key? key,
   }) : super(key: key);
 
@@ -40,6 +41,7 @@ class SettingsContainerSwitch extends StatefulWidget {
   final VoidCallback? onTap;
   final bool enableBorderRadius;
   final bool hasMoreOptionsIcon;
+  final bool runOnSwitchedInitially;
 
   @override
   State<SettingsContainerSwitch> createState() =>
@@ -54,6 +56,11 @@ class _SettingsContainerSwitchState extends State<SettingsContainerSwitch> {
   void initState() {
     super.initState();
     value = widget.initialValue;
+    Future.delayed(Duration.zero, () {
+      if (widget.runOnSwitchedInitially == true) {
+        widget.onSwitched(value);
+      }
+    });
   }
 
   @override

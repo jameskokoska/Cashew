@@ -223,6 +223,55 @@ class SelectedTransactionsActionBar extends StatelessWidget {
                               },
                             ),
                           DropdownItemMenu(
+                            id: "change-category",
+                            label: "change-category".tr(),
+                            icon: appStateSettings["outlinedIcons"]
+                                ? Icons.category_outlined
+                                : Icons.category_rounded,
+                            action: () async {
+                              TransactionCategory? category =
+                                  await openBottomSheet(
+                                context,
+                                PopupFramework(
+                                  title: "select-category".tr(),
+                                  child: SelectCategory(
+                                    selectedCategory: null,
+                                    setSelectedCategory:
+                                        (TransactionCategory category) {
+                                      Navigator.pop(context, category);
+                                    },
+                                    popRoute: false,
+                                    addButton: false,
+                                  ),
+                                ),
+                              );
+                              if (category == null) return;
+                              List<Transaction> transactions = await database
+                                  .getTransactionsFromPk(value[pageID]!);
+                              await database.moveTransactionsToCategory(
+                                transactions,
+                                category.categoryPk,
+                              );
+                              openSnackbar(
+                                SnackbarMessage(
+                                  icon: appStateSettings["outlinedIcons"]
+                                      ? Icons.account_balance_wallet_outlined
+                                      : Icons.account_balance_wallet_rounded,
+                                  title: "changed-category".tr(),
+                                  description: "for".tr().capitalizeFirst +
+                                      " " +
+                                      transactions.length.toString() +
+                                      " " +
+                                      (transactions.length == 1
+                                          ? "transaction".tr().toLowerCase()
+                                          : "transactions".tr().toLowerCase()),
+                                ),
+                              );
+                              globalSelectedID.value[pageID] = [];
+                              globalSelectedID.notifyListeners();
+                            },
+                          ),
+                          DropdownItemMenu(
                             id: "change-wallet",
                             label: "change-wallet".tr(),
                             icon: appStateSettings["outlinedIcons"]
@@ -303,55 +352,6 @@ class SelectedTransactionsActionBar extends StatelessWidget {
                                 ),
                               );
 
-                              globalSelectedID.value[pageID] = [];
-                              globalSelectedID.notifyListeners();
-                            },
-                          ),
-                          DropdownItemMenu(
-                            id: "change-category",
-                            label: "change-category".tr(),
-                            icon: appStateSettings["outlinedIcons"]
-                                ? Icons.category_outlined
-                                : Icons.category_rounded,
-                            action: () async {
-                              TransactionCategory? category =
-                                  await openBottomSheet(
-                                context,
-                                PopupFramework(
-                                  title: "select-category".tr(),
-                                  child: SelectCategory(
-                                    selectedCategory: null,
-                                    setSelectedCategory:
-                                        (TransactionCategory category) {
-                                      Navigator.pop(context, category);
-                                    },
-                                    popRoute: false,
-                                    addButton: false,
-                                  ),
-                                ),
-                              );
-                              if (category == null) return;
-                              List<Transaction> transactions = await database
-                                  .getTransactionsFromPk(value[pageID]!);
-                              await database.moveTransactionsToCategory(
-                                transactions,
-                                category.categoryPk,
-                              );
-                              openSnackbar(
-                                SnackbarMessage(
-                                  icon: appStateSettings["outlinedIcons"]
-                                      ? Icons.account_balance_wallet_outlined
-                                      : Icons.account_balance_wallet_rounded,
-                                  title: "changed-category".tr(),
-                                  description: "for".tr().capitalizeFirst +
-                                      " " +
-                                      transactions.length.toString() +
-                                      " " +
-                                      (transactions.length == 1
-                                          ? "transaction".tr().toLowerCase()
-                                          : "transactions".tr().toLowerCase()),
-                                ),
-                              );
                               globalSelectedID.value[pageID] = [];
                               globalSelectedID.notifyListeners();
                             },

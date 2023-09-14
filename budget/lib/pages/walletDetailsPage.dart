@@ -5,6 +5,9 @@ import 'package:budget/pages/homePage/homePageLineGraph.dart';
 import 'package:budget/pages/transactionsSearchPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
+import 'package:budget/widgets/dropdownSelect.dart';
+import 'package:budget/widgets/framework/popupFramework.dart';
+import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/selectedTransactionsActionBar.dart';
@@ -78,21 +81,46 @@ class _WalletDetailsPageState extends State<WalletDetailsPage> {
             key: pageState,
             listID: listID,
             actions: [
-              IconButton(
-                padding: EdgeInsets.all(15),
-                tooltip: "edit-wallet".tr(),
-                onPressed: () {
-                  pushRoute(
-                    context,
-                    AddWalletPage(
-                      wallet: widget.wallet,
-                      routesToPopAfterDelete: RoutesToPopAfterDelete.All,
+              CustomPopupMenuButton(
+                showButtons: enableDoubleColumn(context),
+                keepOutFirst: true,
+                items: [
+                  DropdownItemMenu(
+                    id: "edit-wallet",
+                    label: "edit-wallet".tr(),
+                    icon: appStateSettings["outlinedIcons"]
+                        ? Icons.edit_outlined
+                        : Icons.edit_rounded,
+                    action: () {
+                      pushRoute(
+                        context,
+                        AddWalletPage(
+                          wallet: widget.wallet,
+                          routesToPopAfterDelete: RoutesToPopAfterDelete.All,
+                        ),
+                      );
+                    },
+                  ),
+                  if (widget.wallet != null)
+                    DropdownItemMenu(
+                      id: "correct-total-balance",
+                      label: "correct-total-balance".tr(),
+                      icon: appStateSettings["outlinedIcons"]
+                          ? Icons.library_add_outlined
+                          : Icons.library_add_rounded,
+                      action: () {
+                        openBottomSheet(
+                          context,
+                          fullSnap: true,
+                          PopupFramework(
+                            title: "enter-amount".tr(),
+                            underTitleSpace: false,
+                            child: CorrectBalancePopup(wallet: widget.wallet!),
+                          ),
+                        );
+                      },
                     ),
-                  );
-                },
-                icon: Icon(appStateSettings["outlinedIcons"]
-                    ? Icons.edit_outlined
-                    : Icons.edit_rounded),
+                ],
               ),
             ],
             dragDownToDismiss: true,

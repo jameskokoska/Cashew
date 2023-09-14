@@ -352,39 +352,76 @@ void mergeWalletPopup(
   required TransactionWallet walletOriginal,
   required RoutesToPopAfterDelete routesToPopAfterDelete,
 }) async {
-  var result =
-      await selectWalletPopup(context, removeWalletPk: walletOriginal.walletPk);
-  if (result != null) {
-    if (routesToPopAfterDelete == RoutesToPopAfterDelete.All) {
-      Navigator.of(context).popUntil((route) => route.isFirst);
-    } else if (routesToPopAfterDelete == RoutesToPopAfterDelete.One) {
-      Navigator.of(context).pop();
+  var selectedWalletResult = await selectWalletPopup(
+    context,
+    removeWalletPk: walletOriginal.walletPk,
+    subtitle: "wallet-to-transfer-all-transactions-to".tr(),
+  );
+  if (selectedWalletResult != null) {
+    final result = await openPopup(
+      context,
+      title: "merge-into".tr() + " " + selectedWalletResult.name + "?",
+      description: "merge-into-description-wallets".tr(),
+      icon: appStateSettings["outlinedIcons"]
+          ? Icons.merge_outlined
+          : Icons.merge_rounded,
+      onSubmit: () async {
+        Navigator.pop(context, true);
+      },
+      onSubmitLabel: "merge".tr(),
+      onCancelLabel: "cancel".tr(),
+      onCancel: () {
+        Navigator.pop(context);
+      },
+    );
+    if (result == true) {
+      if (routesToPopAfterDelete == RoutesToPopAfterDelete.All) {
+        Navigator.of(context).popUntil((route) => route.isFirst);
+      } else if (routesToPopAfterDelete == RoutesToPopAfterDelete.One) {
+        Navigator.of(context).pop();
+      }
+      openLoadingPopupTryCatch(() async {
+        await database.moveWalletTransactions(
+          Provider.of<AllWallets>(context, listen: false),
+          walletOriginal.walletPk,
+          selectedWalletResult.walletPk,
+        );
+        try {
+          await database.deleteWallet(
+              walletOriginal.walletPk, walletOriginal.order);
+        } catch (e) {
+          openSnackbar(
+            SnackbarMessage(
+              title: "cannot-remove".tr(),
+              description: "cannot-remove-default-wallet".tr(),
+              icon: appStateSettings["outlinedIcons"]
+                  ? Icons.warning_amber_outlined
+                  : Icons.warning_amber_rounded,
+            ),
+          );
+        }
+        openSnackbar(
+          SnackbarMessage(
+            title: "merged-wallet".tr(),
+            icon: appStateSettings["outlinedIcons"]
+                ? Icons.merge_outlined
+                : Icons.merge_rounded,
+            description:
+                walletOriginal.name + " → " + selectedWalletResult.name,
+          ),
+        );
+      });
     }
-    openLoadingPopupTryCatch(() async {
-      await database.moveWalletTransactions(
-        Provider.of<AllWallets>(context, listen: false),
-        walletOriginal.walletPk,
-        result.walletPk,
-      );
-      await database.deleteWallet(
-          walletOriginal.walletPk, walletOriginal.order);
-      openSnackbar(
-        SnackbarMessage(
-          title: "deleted-wallet".tr(),
-          icon: Icons.delete,
-          description: walletOriginal.name,
-        ),
-      );
-    });
   }
 }
 
 Future<TransactionWallet?> selectWalletPopup(BuildContext context,
-    {String? removeWalletPk}) async {
+    {String? removeWalletPk, String? subtitle}) async {
   dynamic wallet = await openBottomSheet(
     context,
     PopupFramework(
       title: "select-wallet".tr(),
+      subtitle: subtitle,
       child: StreamBuilder<List<TransactionWallet>>(
         stream: database.watchAllWallets(),
         builder: (context, snapshot) {

@@ -94,6 +94,7 @@ class AnimatedSizeSwitcher extends StatelessWidget {
     this.sizeDuration = const Duration(milliseconds: 800),
     this.switcherDuration = const Duration(milliseconds: 250),
     this.sizeAlignment = Alignment.center,
+    this.clipBehavior = Clip.hardEdge,
     super.key,
   });
   final Widget child;
@@ -101,10 +102,12 @@ class AnimatedSizeSwitcher extends StatelessWidget {
   final Duration sizeDuration;
   final Duration switcherDuration;
   final Alignment sizeAlignment;
+  final Clip clipBehavior;
 
   @override
   Widget build(BuildContext context) {
     return AnimatedSize(
+      clipBehavior: clipBehavior,
       duration: sizeDuration,
       curve: sizeCurve,
       alignment: sizeAlignment,

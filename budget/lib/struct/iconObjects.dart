@@ -3391,4 +3391,20 @@ List<IconForCategory> iconObjects = [
     ],
     mostLikelyCategoryName: "Formal",
   ),
+  IconForCategory(
+    icon: "charts.png",
+    tags: [
+      "charts",
+      "data",
+      "visualization",
+      "graph",
+      "analytics",
+      "statistics",
+      "diagram",
+      "information",
+      "presentation",
+      "report"
+    ],
+    mostLikelyCategoryName: "Charts",
+  ),
 ];

@@ -752,7 +752,7 @@ class _SelectAmountState extends State<SelectAmount> {
                     constraints: BoxConstraints(maxWidth: 400),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(
-                          getPlatform() == PlatformOS.isIOS ? 8 : 15),
+                          getPlatform() == PlatformOS.isIOS ? 10 : 20),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
@@ -977,6 +977,8 @@ class SelectAmountValue extends StatefulWidget {
     this.nextLabel,
     this.allowZero = false,
     this.suffix = "",
+    this.showEnteredNumber = true,
+    this.extraWidgetAboveNumbers,
   }) : super(key: key);
   final Function(double, String) setSelectedAmount;
   final String amountPassed;
@@ -984,6 +986,8 @@ class SelectAmountValue extends StatefulWidget {
   final String? nextLabel;
   final bool allowZero;
   final String suffix;
+  final bool showEnteredNumber;
+  final Widget? extraWidgetAboveNumbers;
 
   @override
   _SelectAmountValueState createState() => _SelectAmountValueState();
@@ -1141,35 +1145,46 @@ class _SelectAmountValueState extends State<SelectAmountValue> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-          child: AnimatedSwitcher(
-            duration: Duration(milliseconds: 200),
-            child: FractionallySizedBox(
-              key: ValueKey(amount),
-              widthFactor: 1,
-              child: TextFont(
-                autoSizeText: true,
-                maxLines: 1,
-                minFontSize: 16,
-                text: amountConverted + widget.suffix,
-                textAlign: TextAlign.right,
-                fontSize: 35,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-        ),
+        widget.showEnteredNumber == true
+            ? Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: AnimatedSwitcher(
+                  duration: Duration(milliseconds: 200),
+                  child: FractionallySizedBox(
+                    key: ValueKey(amount),
+                    widthFactor: 1,
+                    child: TextFont(
+                      autoSizeText: true,
+                      maxLines: 1,
+                      minFontSize: 16,
+                      text: amountConverted + widget.suffix,
+                      textAlign: TextAlign.right,
+                      fontSize: 35,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              )
+            : SizedBox.shrink(),
         Container(height: 10),
         Center(
           child: Container(
             constraints: BoxConstraints(maxWidth: 400),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(
-                  getPlatform() == PlatformOS.isIOS ? 8 : 15),
+                  getPlatform() == PlatformOS.isIOS ? 10 : 20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
+                  if (widget.extraWidgetAboveNumbers != null)
+                    Container(
+                        color: appStateSettings["materialYou"]
+                            ? Theme.of(context).colorScheme.secondaryContainer
+                            : Theme.of(context).brightness == Brightness.light
+                                ? getColor(context, "lightDarkAccentHeavy")
+                                : getColor(
+                                    context, "lightDarkAccentHeavyLight"),
+                        child: widget.extraWidgetAboveNumbers!),
                   Row(
                     children: [
                       CalculatorButton(
