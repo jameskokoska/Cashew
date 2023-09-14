@@ -30,9 +30,23 @@ double getHorizontalPaddingConstrained(context) {
     returnedPadding = MediaQuery.of(context).size.width / 3 - 140;
     return returnedPadding < 0 ? 0 : returnedPadding;
   } else if (MediaQuery.of(context).size.width <= 1000 &&
-      getIsFullScreen(context)) {
+      getIsFullScreen(context) &&
+      appStateSettings["expandedNavigationSidebar"] == true) {
     double returnedPadding = 0;
     returnedPadding = MediaQuery.of(context).size.width / 5 - 125;
+    return returnedPadding < 0 ? 0 : returnedPadding;
+  }
+  // When the navigation bar is closed
+  else if (MediaQuery.of(context).size.width <= 1000 &&
+      getIsFullScreen(context) &&
+      appStateSettings["expandedNavigationSidebar"] == false) {
+    double returnedPadding = 0;
+    returnedPadding = MediaQuery.of(context).size.width / 3.5 - 125;
+    return returnedPadding < 0 ? 0 : returnedPadding;
+  } else if (getIsFullScreen(context) &&
+      appStateSettings["expandedNavigationSidebar"] == false) {
+    double returnedPadding = 0;
+    returnedPadding = (MediaQuery.of(context).size.width - 500) / 3;
     return returnedPadding < 0 ? 0 : returnedPadding;
   }
 

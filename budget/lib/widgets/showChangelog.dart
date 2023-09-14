@@ -10,6 +10,11 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    < 4.2.8
+    Fixed intrinsic height error when clock on sidebar would be collapsed
+    Last opened version for changelog defaults to current version
+    Fixed context for Google login side navigation button (Preview mode warning would not open)
+    Removed size shift transition when exiting full screen/landscape
     < 4.2.7
     Added GHS currency
     Fixed order in preview data for wallets

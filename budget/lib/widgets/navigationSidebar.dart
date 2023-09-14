@@ -20,11 +20,11 @@ double getWidthNavigationSidebar(context) {
   double screenPercent = 0.3;
   double maxWidthNavigation = 270;
   double minScreenWidth = 700;
-  if (appStateSettings["expandedNavigationSidebar"] == false) {
-    maxWidthNavigation = 70;
-    minScreenWidth = 70;
-  }
+
   if (MediaQuery.of(context).size.width < minScreenWidth) return 0;
+  if (appStateSettings["expandedNavigationSidebar"] == false) {
+    return 70;
+  }
   return (MediaQuery.of(context).size.width * screenPercent > maxWidthNavigation
           ? maxWidthNavigation
           : MediaQuery.of(context).size.width * screenPercent) +
@@ -180,11 +180,11 @@ class NavigationSidebarState extends State<NavigationSidebar> {
                                         padding: EdgeInsets.only(
                                           top: appStateSettings[
                                                   "expandedNavigationSidebar"]
-                                              ? 15
+                                              ? 12
                                               : 0,
                                           bottom: appStateSettings[
                                                   "expandedNavigationSidebar"]
-                                              ? 15
+                                              ? 18
                                               : 0,
                                         ),
                                         child: SidebarClock(),
@@ -330,51 +330,52 @@ class SidebarClock extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedExpanded(
-      expand: appStateSettings["expandedNavigationSidebar"],
-      axis: Axis.vertical,
-      child: Center(
-        child: MediaQuery(
-          data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
-          child: TimerBuilder.periodic(
-            Duration(seconds: 5),
-            builder: (context) {
-              DateTime now = DateTime.now();
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  TextFont(
-                    textColor: getColor(context, "black"),
-                    fontSize: 48,
-                    fontWeight: FontWeight.bold,
-                    text: DateFormat.jm(context.locale.toString())
-                        .format(now)
-                        .replaceAll("AM", "")
-                        .replaceAll("PM", "")
-                        .replaceAll(" ", ""),
-                  ),
-                  TextFont(
-                    textColor: getColor(context, "black").withOpacity(0.5),
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    text: DateFormat('EEEE', context.locale.toString())
-                        .format(now),
-                  ),
-                  SizedBox(height: 5),
-                  TextFont(
-                    textColor: getColor(context, "black").withOpacity(0.5),
-                    fontSize: 18,
-                    text: DateFormat('MMMM d, y', context.locale.toString())
-                        .format(now),
-                  ),
-                ],
-              );
-            },
-          ),
-        ),
-      ),
-    );
+    return appStateSettings["expandedNavigationSidebar"]
+        ? Center(
+            key: ValueKey(appStateSettings["expandedNavigationSidebar"]),
+            child: MediaQuery(
+              data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+              child: TimerBuilder.periodic(
+                Duration(seconds: 5),
+                builder: (context) {
+                  DateTime now = DateTime.now();
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      TextFont(
+                        textColor: getColor(context, "black"),
+                        fontSize: 48,
+                        fontWeight: FontWeight.bold,
+                        text: DateFormat.jm(context.locale.toString())
+                            .format(now)
+                            .replaceAll("AM", "")
+                            .replaceAll("PM", "")
+                            .replaceAll(" ", ""),
+                      ),
+                      TextFont(
+                        textColor: getColor(context, "black").withOpacity(0.5),
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        text: DateFormat('EEEE', context.locale.toString())
+                            .format(now),
+                      ),
+                      SizedBox(height: 5),
+                      TextFont(
+                        textColor: getColor(context, "black").withOpacity(0.5),
+                        fontSize: 18,
+                        text: DateFormat('MMMM d, y', context.locale.toString())
+                            .format(now),
+                      ),
+                    ],
+                  );
+                },
+              ),
+            ),
+          )
+        : Container(
+            key: ValueKey(appStateSettings["expandedNavigationSidebar"]),
+          );
   }
 }
 
@@ -459,9 +460,8 @@ class _SyncButtonState extends State<SyncButton> {
                                   text: "synced".tr() +
                                       " " +
                                       (timeLastSynced == null
-                                              ? "never".tr()
-                                              : getTimeAgo(timeLastSynced))
-                                          .capitalizeFirstofEach,
+                                          ? "never".tr()
+                                          : getTimeAgo(timeLastSynced)),
                                 );
                               },
                             ),

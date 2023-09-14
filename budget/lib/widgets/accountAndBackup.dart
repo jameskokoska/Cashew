@@ -574,7 +574,9 @@ class _GoogleAccountLoginButtonState extends State<GoogleAccountLoginButton> {
       loadingIndeterminateKey.currentState!.setVisibility(true);
       try {
         await signInGoogle(
-            context: context,
+            context: widget.navigationSidebarButton
+                ? navigatorKey.currentContext
+                : context,
             waitForCompletion: false,
             drivePermissions: true,
             next: () {
@@ -1088,7 +1090,7 @@ class _BackupManagementState extends State<BackupManagement> {
                                                   (file.value.modifiedTime ??
                                                           DateTime.now())
                                                       .toLocal(),
-                                                ),
+                                                ).capitalizeFirst,
                                                 fontSize: 18,
                                                 fontWeight: FontWeight.bold,
                                                 maxLines: 2,

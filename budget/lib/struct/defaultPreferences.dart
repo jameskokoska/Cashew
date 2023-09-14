@@ -1,5 +1,6 @@
 import 'package:budget/colors.dart';
 import 'package:budget/functions.dart';
+import 'package:budget/main.dart';
 import 'package:budget/pages/homePage/homePageLineGraph.dart';
 import 'package:budget/widgets/notificationsSettings.dart';
 import 'package:flutter/foundation.dart';

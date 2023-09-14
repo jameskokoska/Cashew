@@ -238,7 +238,9 @@ class App extends StatelessWidget {
                   Row(
                     children: [
                       AnimatedContainer(
-                        duration: Duration(milliseconds: 1500),
+                        duration: getIsFullScreen(context)
+                            ? Duration(milliseconds: 1500)
+                            : Duration.zero,
                         curve: Curves.easeInOutCubicEmphasized,
                         width: getWidthNavigationSidebar(context),
                         color: Theme.of(context).canvasColor,

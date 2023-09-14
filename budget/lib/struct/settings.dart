@@ -21,6 +21,8 @@ import 'package:budget/widgets/framework/popupFramework.dart';
 Map<String, dynamic> appStateSettings = {};
 
 Future<bool> initializeSettings() async {
+  packageInfoGlobal = await PackageInfo.fromPlatform();
+
   Map<String, dynamic> userSettings = await getUserSettings();
   if (userSettings["databaseJustImported"] == true) {
     try {
@@ -48,8 +50,6 @@ Future<bool> initializeSettings() async {
   }
 
   appStateSettings = userSettings;
-
-  packageInfoGlobal = await PackageInfo.fromPlatform();
 
   // Do some actions based on loaded settings
   if (appStateSettings["accentSystemColor"] == true) {
