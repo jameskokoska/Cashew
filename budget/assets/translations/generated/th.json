@@ -439,6 +439,7 @@
   "delete-all-transactions-question": "ลบธุรกรรมทั้งหมด?",
   "delete-category-merge-warning": "การลบหมวดหมู่จะลบธุรกรรมทั้งหมดในหมวดหมู่นี้ ย้ายธุรกรรมไปยังหมวดหมู่อื่นเพื่อหลีกเลี่ยงสิ่งนี้",
   "deleted-category": "หมวดหมู่ที่ถูกลบ",
+  "delete-wallet": "ลบบัญชี",
   "delete-wallet-question": "ลบบัญชี?",
   "delete-wallet-question-description": "สิ่งนี้จะลบธุรกรรมทั้งหมดที่เกี่ยวข้องกับบัญชีนี้",
   "move-transactions": "เคลื่อนไหว",
@@ -582,7 +583,7 @@
   "import-and-export": "นำเข้าส่งออก",
   "import-google-sheet": "นำเข้า Google Sheet",
   "enter-google-sheet-url": "ป้อน URL ของ Google Sheet",
-  "enter-google-sheet-url-description": "ตรวจสอบให้แน่ใจว่าทุกคนที่มีลิงก์สามารถดู Google ชีตของคุณและตั้งค่าเป็นสาธารณะ",
+  "enter-google-sheet-url-description": "ตรวจสอบให้แน่ใจว่าทุกคนที่มีลิงค์สามารถดู Google ชีตของคุณและตั้งค่าเป็นสาธารณะ",
   "create-template-copy": "สร้างสำเนาเทมเพลต",
   "help": "ช่วย",
   "create-template-copy-description": "ทำสำเนาและบันทึกลงใน Google Drive ของคุณ แก้ไขแผ่นงานด้วยข้อมูลของคุณและนำเข้า!",
@@ -598,5 +599,7 @@
   "move-and-delete": "ย้ายและลบ",
   "merged-wallet": "กระเป๋าเงินที่รวมเข้าด้วยกัน",
   "cannot-remove-default-wallet": "ไม่สามารถลบบัญชีเริ่มต้นได้",
-  "cannot-remove": "ไม่สามารถลบออกได้"
+  "cannot-remove": "ไม่สามารถลบออกได้",
+  "installment": "ค่างวดเงินผ่อน",
+  "net-worth": "รายได้สุทธิ"
 }

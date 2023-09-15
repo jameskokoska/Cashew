@@ -439,6 +439,7 @@
   "delete-all-transactions-question": "Excluir todas as transações?",
   "delete-category-merge-warning": "A exclusão de uma categoria excluirá todas as transações nesta categoria. Mova transações para outra categoria para evitar isso.",
   "deleted-category": "Categoria excluída",
+  "delete-wallet": "Deletar conta",
   "delete-wallet-question": "Deletar conta?",
   "delete-wallet-question-description": "Isso excluirá todas as transações associadas a esta conta.",
   "move-transactions": "Mover",
@@ -598,5 +599,7 @@
   "move-and-delete": "Mova e exclua",
   "merged-wallet": "Carteira mesclada",
   "cannot-remove-default-wallet": "A conta padrão não pode ser excluída",
-  "cannot-remove": "Não pode remover"
+  "cannot-remove": "Não pode remover",
+  "installment": "Prestação",
+  "net-worth": "Patrimônio líquido"
 }

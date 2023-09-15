@@ -439,6 +439,7 @@
   "delete-all-transactions-question": "Ta bort alla transaktioner?",
   "delete-category-merge-warning": "Att ta bort en kategori kommer att radera alla transaktioner i denna kategori. Flytta transaktioner till en annan kategori för att undvika detta.",
   "deleted-category": "Borttagen kategori",
+  "delete-wallet": "Radera konto",
   "delete-wallet-question": "Radera konto?",
   "delete-wallet-question-description": "Detta kommer att ta bort alla transaktioner som är associerade med detta konto.",
   "move-transactions": "Flytta",
@@ -590,7 +591,7 @@
   "correct-total-balance": "Rätt totalbalans",
   "default-category-account-amount-balancing": "Balanskorrigering",
   "negative-amount": "Negativt belopp",
-  "update-total-balance": "Uppdatera den totala balansen",
+  "update-total-balance": "Uppdatera total balans",
   "updated-total-balance": "Uppdaterad totalbalans",
   "merge-wallet": "Sammanslagningskonto",
   "wallet-to-transfer-all-transactions-to": "Konto för att överföra alla transaktioner till",
@@ -598,5 +599,7 @@
   "move-and-delete": "Flytta och ta bort",
   "merged-wallet": "Sammanslagd plånbok",
   "cannot-remove-default-wallet": "Standardkonto kan inte raderas",
-  "cannot-remove": "Kan inte ta bort"
+  "cannot-remove": "Kan inte ta bort",
+  "installment": "Avbetalning",
+  "net-worth": "Nettovärde"
 }

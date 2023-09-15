@@ -439,6 +439,7 @@
   "delete-all-transactions-question": "सभी लेनदेन हटाएं?",
   "delete-category-merge-warning": "किसी श्रेणी को हटाने से इस श्रेणी में सभी लेनदेन हटा देंगे। इससे बचने के लिए लेनदेन को दूसरी श्रेणी में ले जाएं।",
   "deleted-category": "हटाए गए श्रेणी",
+  "delete-wallet": "खाता हटा दो",
   "delete-wallet-question": "खाता हटा दो?",
   "delete-wallet-question-description": "यह इस खाते से जुड़े सभी लेनदेन को हटा देगा।",
   "move-transactions": "कदम",
@@ -598,5 +599,7 @@
   "move-and-delete": "स्थानांतरित करें और हटाएं",
   "merged-wallet": "विलय बटुए",
   "cannot-remove-default-wallet": "डिफ़ॉल्ट खाते को हटा नहीं दिया जा सकता है",
-  "cannot-remove": "निकाल नहीं सकता"
+  "cannot-remove": "निकाल नहीं सकता",
+  "installment": "किश्त",
+  "net-worth": "निवल मूल्य"
 }

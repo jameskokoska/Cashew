@@ -439,6 +439,7 @@
   "delete-all-transactions-question": "सर्व व्यवहार हटवा?",
   "delete-category-merge-warning": "श्रेणी हटविणे या श्रेणीतील सर्व व्यवहार हटवेल. हे टाळण्यासाठी व्यवहार दुसर्‍या श्रेणीत हलवा.",
   "deleted-category": "हटविलेली श्रेणी",
+  "delete-wallet": "खाते हटवा",
   "delete-wallet-question": "खाते हटवा?",
   "delete-wallet-question-description": "हे या खात्याशी संबंधित सर्व व्यवहार हटवेल.",
   "move-transactions": "हलवा",
@@ -556,7 +557,7 @@
   "name": "नाव",
   "who-are-you-question": "तू कोण आहेस?",
   "who-are-you-description": "आपण बिल भरले पाहिजे.",
-  "split-evenly": "समान रीतीने विभाजित",
+  "split-evenly": "समान रीतीने विभाजित करा",
   "item-name-placeholder": "आयटम नाव",
   "reset-bill-question": "रीसेट बिल?",
   "reset-bill-description": "हे सध्याच्या बिलातील सर्व वस्तू हटवेल",
@@ -580,7 +581,7 @@
   "enter-emoji-placeholder": "इमोजी प्रविष्ट करा",
   "use-emoji-details": "चिन्ह म्हणून आपल्या आवडीची इमोजी निवडा",
   "import-and-export": "आयात निर्यात",
-  "import-google-sheet": "गूगल शीट आयात करा",
+  "import-google-sheet": "Google पत्रक आयात करा",
   "enter-google-sheet-url": "Google पत्रक URL प्रविष्ट करा",
   "enter-google-sheet-url-description": "दुव्यासह कोणीही आपली Google शीट पाहू शकतो याची खात्री करा आणि ते सार्वजनिकपणे सेट केले आहे",
   "create-template-copy": "टेम्पलेट कॉपी तयार करा",
@@ -598,5 +599,7 @@
   "move-and-delete": "हलवा आणि हटवा",
   "merged-wallet": "विलीन पाकीट",
   "cannot-remove-default-wallet": "डीफॉल्ट खाते हटविले जाऊ शकत नाही",
-  "cannot-remove": "काढू शकत नाही"
+  "cannot-remove": "काढू शकत नाही",
+  "installment": "हप्ता",
+  "net-worth": "नेट वर्थ"
 }

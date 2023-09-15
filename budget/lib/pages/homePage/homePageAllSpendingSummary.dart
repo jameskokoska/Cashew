@@ -43,6 +43,11 @@ class HomePageAllSpendingSummary extends StatelessWidget {
                           database.watchTotalCountOfTransactionsInWallet(
                         null,
                         isIncome: true,
+                        startDate:
+                            appStateSettings["incomeExpenseStartDate"] == null
+                                ? null
+                                : DateTime.parse(
+                                    appStateSettings["incomeExpenseStartDate"]),
                       ),
                       openPage: TransactionsSearchPage(
                         initialFilters: SearchFilters(
@@ -70,6 +75,11 @@ class HomePageAllSpendingSummary extends StatelessWidget {
                           database.watchTotalCountOfTransactionsInWallet(
                         null,
                         isIncome: false,
+                        startDate:
+                            appStateSettings["incomeExpenseStartDate"] == null
+                                ? null
+                                : DateTime.parse(
+                                    appStateSettings["incomeExpenseStartDate"]),
                       ),
                       openPage: TransactionsSearchPage(
                         initialFilters: SearchFilters(

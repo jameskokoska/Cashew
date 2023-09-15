@@ -439,6 +439,7 @@
   "delete-all-transactions-question": "Poistaa kaikki tapahtumat?",
   "delete-category-merge-warning": "Luokan poistaminen poistaa kaikki tämän luokan tapahtumat. Siirrä tapahtumia toiseen luokkaan tämän välttämiseksi.",
   "deleted-category": "Poistettu luokka",
+  "delete-wallet": "Poista tili",
   "delete-wallet-question": "Poista tili?",
   "delete-wallet-question-description": "Tämä poistaa kaikki tähän tilille liittyvät tapahtumat.",
   "move-transactions": "Liikkua",
@@ -598,5 +599,7 @@
   "move-and-delete": "Siirtyä ja poista",
   "merged-wallet": "Yhdistetty lompakko",
   "cannot-remove-default-wallet": "Oletustiliä ei voida poistaa",
-  "cannot-remove": "Ei voi poistaa"
+  "cannot-remove": "Ei voi poistaa",
+  "installment": "Erä",
+  "net-worth": "Nettovarallisuus"
 }

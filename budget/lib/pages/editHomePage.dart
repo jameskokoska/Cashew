@@ -182,6 +182,37 @@ class _EditHomePageState extends State<EditHomePage> {
               );
             },
           ),
+          "netWorth": EditHomePageItem(
+            icon: appStateSettings["outlinedIcons"]
+                ? Icons.area_chart_outlined
+                : Icons.area_chart_rounded,
+            name: "net-worth".tr(),
+            isEnabled: appStateSettings["showNetWorth"],
+            onSwitched: (value) {
+              updateSettings("showNetWorth", value,
+                  pagesNeedingRefresh: [], updateGlobalState: false);
+            },
+            extraWidgetsBelow: [],
+            onTap: () async {
+              openBottomSheet(
+                context,
+                PopupFramework(
+                  title: "select-start-date".tr(),
+                  child: SelectStartDate(
+                    initialDateTime: appStateSettings["netWorthStartDate"] ==
+                            null
+                        ? null
+                        : DateTime.parse(appStateSettings["netWorthStartDate"]),
+                    onSelected: (DateTime? dateTime) {
+                      updateSettings("netWorthStartDate",
+                          dateTime == null ? null : dateTime.toString(),
+                          pagesNeedingRefresh: [], updateGlobalState: false);
+                    },
+                  ),
+                ),
+              );
+            },
+          ),
           "spendingGraph": EditHomePageItem(
             icon: appStateSettings["outlinedIcons"]
                 ? Icons.insights_outlined
@@ -352,7 +383,16 @@ class _EditHomePageState extends State<EditHomePage> {
               });
             },
             itemBuilder: (context, index) {
+              if (keyOrder.length <= index)
+                return Container(
+                  key: ValueKey(index),
+                );
               String key = keyOrder[index];
+              if (editHomePageItems[key] == null)
+                return Container(
+                  key: ValueKey(index),
+                );
+
               toggleSwitch() {
                 editHomePageItems[key]
                     ?.onSwitched(!(editHomePageItems[key]?.isEnabled ?? false));

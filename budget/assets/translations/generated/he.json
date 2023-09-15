@@ -439,6 +439,7 @@
   "delete-all-transactions-question": "למחוק את כל העסקאות?",
   "delete-category-merge-warning": "מחיקת קטגוריה תמחק את כל העסקאות בקטגוריה זו. העבר עסקאות לקטגוריה אחרת כדי להימנע מכך.",
   "deleted-category": "קטגוריה שנמחקו",
+  "delete-wallet": "מחק חשבון",
   "delete-wallet-question": "מחק חשבון?",
   "delete-wallet-question-description": "זה ימחק את כל העסקאות הקשורות לחשבון זה.",
   "move-transactions": "מהלך \\ לזוז \\ לעבור",
@@ -598,5 +599,7 @@
   "move-and-delete": "להזיז ולמחוק",
   "merged-wallet": "ארנק ממוזג",
   "cannot-remove-default-wallet": "לא ניתן למחוק את חשבון ברירת המחדל",
-  "cannot-remove": "לא יכול להסיר"
+  "cannot-remove": "לא יכול להסיר",
+  "installment": "פֶּרֶק",
+  "net-worth": "שווי נקי"
 }

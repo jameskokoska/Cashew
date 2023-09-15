@@ -439,6 +439,7 @@
   "delete-all-transactions-question": "删除所有交易？",
   "delete-category-merge-warning": "删除类别将删除此类别中的所有交易。将交易转移到另一个类别以避免这种情况。",
   "deleted-category": "删除类别",
+  "delete-wallet": "删除帐户",
   "delete-wallet-question": "删除帐户？",
   "delete-wallet-question-description": "这将删除与此帐户相关的所有交易。",
   "move-transactions": "移动",
@@ -598,5 +599,7 @@
   "move-and-delete": "移动并删除",
   "merged-wallet": "合并的钱包",
   "cannot-remove-default-wallet": "默认帐户无法删除",
-  "cannot-remove": "无法删除"
+  "cannot-remove": "无法删除",
+  "installment": "分期付款",
+  "net-worth": "净值"
 }

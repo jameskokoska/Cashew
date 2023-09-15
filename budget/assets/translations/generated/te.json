@@ -439,6 +439,7 @@
   "delete-all-transactions-question": "అన్ని లావాదేవీలను తొలగించాలా?",
   "delete-category-merge-warning": "ఒక వర్గాన్ని తొలగిస్తే ఈ వర్గంలో అన్ని లావాదేవీలను తొలగిస్తుంది. దీన్ని నివారించడానికి లావాదేవీలను మరొక వర్గానికి తరలించండి.",
   "deleted-category": "తొలగించబడిన వర్గం",
+  "delete-wallet": "ఖాతాను తొలగించండి",
   "delete-wallet-question": "ఖాతాను తొలగించాలా?",
   "delete-wallet-question-description": "ఇది ఈ ఖాతాతో అనుబంధించబడిన అన్ని లావాదేవీలను తొలగిస్తుంది.",
   "move-transactions": "కదలిక",
@@ -598,5 +599,7 @@
   "move-and-delete": "తరలించి తొలగించండి",
   "merged-wallet": "విలీన వాలెట్",
   "cannot-remove-default-wallet": "డిఫాల్ట్ ఖాతాను తొలగించలేము",
-  "cannot-remove": "తొలగించలేరు"
+  "cannot-remove": "తొలగించలేరు",
+  "installment": "విడత",
+  "net-worth": "నికర విలువ"
 }

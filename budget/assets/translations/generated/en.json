@@ -439,6 +439,7 @@
   "delete-all-transactions-question": "Delete all transactions?",
   "delete-category-merge-warning": "Deleting a category will delete all transactions in this category. Move transactions to another category to avoid this.",
   "deleted-category": "Deleted Category",
+  "delete-wallet": "Delete account",
   "delete-wallet-question": "Delete account?",
   "delete-wallet-question-description": "This will delete all transactions associated with this account.",
   "move-transactions": "Move",
@@ -598,5 +599,7 @@
   "move-and-delete": "Move and Delete",
   "merged-wallet": "Merged Wallet",
   "cannot-remove-default-wallet": "Default account cannot be deleted",
-  "cannot-remove": "Cannot Remove"
+  "cannot-remove": "Cannot Remove",
+  "installment": "Installment",
+  "net-worth": "Net Worth"
 }

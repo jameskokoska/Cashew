@@ -14,18 +14,25 @@ import 'package:provider/provider.dart';
 // as it won't catch the new transaction amount!
 
 class TransactionsAmountBox extends StatelessWidget {
-  const TransactionsAmountBox(
-      {this.openPage,
-      required this.label,
-      required this.amountStream,
-      required this.textColor,
-      required this.transactionsAmountStream,
-      super.key});
+  const TransactionsAmountBox({
+    this.openPage,
+    required this.label,
+    required this.amountStream,
+    required this.textColor,
+    required this.transactionsAmountStream,
+    this.absolute = true,
+    this.getTextColor,
+    this.currencyKey,
+    super.key,
+  });
   final Widget? openPage;
   final String label;
   final Stream<double?> amountStream;
   final Color textColor;
   final Stream<List<int?>> transactionsAmountStream;
+  final bool absolute;
+  final String? currencyKey;
+  final Function(double)? getTextColor;
 
   @override
   Widget build(BuildContext context) {
@@ -63,18 +70,26 @@ class TransactionsAmountBox extends StatelessWidget {
                           count:
                               snapshot.hasData == false || snapshot.data == null
                                   ? 0
-                                  : (snapshot.data ?? 0).abs(),
+                                  : absolute == true
+                                      ? (snapshot.data ?? 0).abs()
+                                      : (snapshot.data ?? 0),
                           duration: Duration(milliseconds: 1000),
                           initialCount: (0),
                           textBuilder: (number) {
                             return TextFont(
                               text: convertToMoney(
                                   Provider.of<AllWallets>(context), number,
+                                  currencyKey: currencyKey,
+                                  addCurrencyName: currencyKey != null,
                                   finalNumber: snapshot.hasData == false ||
                                           snapshot.data == null
                                       ? 0
-                                      : (snapshot.data ?? 0).abs()),
-                              textColor: textColor,
+                                      : absolute == true
+                                          ? (snapshot.data ?? 0).abs()
+                                          : (snapshot.data ?? 0)),
+                              textColor: getTextColor != null
+                                  ? getTextColor!(snapshot.data ?? 0)
+                                  : textColor,
                               fontWeight: FontWeight.bold,
                               autoSizeText: true,
                               fontSize: 21,

@@ -439,6 +439,7 @@
   "delete-all-transactions-question": "Törölje az összes tranzakciót?",
   "delete-category-merge-warning": "A kategória törlése az összes tranzakciót törli ebbe a kategóriába. Vigye a tranzakciókat egy másik kategóriába, hogy elkerülje.",
   "deleted-category": "Törölt kategória",
+  "delete-wallet": "Fiók törlése",
   "delete-wallet-question": "Fiók törlése?",
   "delete-wallet-question-description": "Ez törli az ehhez a fiókhoz kapcsolódó összes tranzakciót.",
   "move-transactions": "Mozog",
@@ -526,10 +527,10 @@
   "all-transactions-description-1": "Minden tranzakció a kiválasztott kategóriákon és szűrőkön belül",
   "all-transactions-description-2": "Hasznos hosszú távú költségvetéshez több időszak alatt",
   "all-transactions-description-3": "Példa: „Havi kiadások” költségvetés",
-  "no-budgets-found": "Nincs költségvetés.",
+  "no-budgets-found": "Nincsenek költségvetés.",
   "no-categories-found": "Nincsenek kategóriák.",
   "no-wallets-found": "Nincs számla.",
-  "no-titles-found": "Nincs cím.",
+  "no-titles-found": "Nincsenek címek.",
   "translations": "Fordítás",
   "ask-for-notes-with-title": "Kérjen jegyzetet a címmel",
   "ask-for-notes-with-title-description": "Amikor beírja a címet",
@@ -598,5 +599,7 @@
   "move-and-delete": "Mozgás és törlés",
   "merged-wallet": "Egyesített pénztárca",
   "cannot-remove-default-wallet": "Az alapértelmezett fiók nem törölhető",
-  "cannot-remove": "Nem lehet eltávolítani"
+  "cannot-remove": "Nem lehet eltávolítani",
+  "installment": "Részlet",
+  "net-worth": "Nettó érték"
 }

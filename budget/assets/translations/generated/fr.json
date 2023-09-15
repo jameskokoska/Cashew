@@ -439,6 +439,7 @@
   "delete-all-transactions-question": "Supprimer toutes les transactions?",
   "delete-category-merge-warning": "La suppression d'une catégorie supprimera toutes les transactions dans cette catégorie. Déplacez les transactions vers une autre catégorie pour éviter cela.",
   "deleted-category": "Catégorie supprimée",
+  "delete-wallet": "Supprimer le compte",
   "delete-wallet-question": "Supprimer le compte?",
   "delete-wallet-question-description": "Cela supprimera toutes les transactions associées à ce compte.",
   "move-transactions": "Se déplacer",
@@ -598,5 +599,7 @@
   "move-and-delete": "Déplacer et supprimer",
   "merged-wallet": "Portefeuille fusionné",
   "cannot-remove-default-wallet": "Le compte par défaut ne peut pas être supprimé",
-  "cannot-remove": "Impossible de supprimer"
+  "cannot-remove": "Impossible de supprimer",
+  "installment": "Versement",
+  "net-worth": "Valeur nette"
 }

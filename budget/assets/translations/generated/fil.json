@@ -439,6 +439,7 @@
   "delete-all-transactions-question": "Tanggalin ang lahat ng mga transaksyon?",
   "delete-category-merge-warning": "Ang pagtanggal ng isang kategorya ay tatanggalin ang lahat ng mga transaksyon sa kategoryang ito. Ilipat ang mga transaksyon sa ibang kategorya upang maiwasan ito.",
   "deleted-category": "Tinanggal na kategorya",
+  "delete-wallet": "Tanggalin ang account",
   "delete-wallet-question": "Tanggalin ang account?",
   "delete-wallet-question-description": "Tatanggalin nito ang lahat ng mga transaksyon na nauugnay sa account na ito.",
   "move-transactions": "Ilipat",
@@ -598,5 +599,7 @@
   "move-and-delete": "Ilipat at tanggalin",
   "merged-wallet": "Pinagsama ang pitaka",
   "cannot-remove-default-wallet": "Hindi matanggal ang default na account",
-  "cannot-remove": "Hindi matanggal"
+  "cannot-remove": "Hindi matanggal",
+  "installment": "Pag -install",
+  "net-worth": "Net worth"
 }

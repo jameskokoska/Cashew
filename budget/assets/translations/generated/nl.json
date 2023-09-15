@@ -423,7 +423,7 @@
   "change-wallet": "Van account veranderen",
   "add-to-budget": "Toevoegen aan budget",
   "select-wallet": "Selecteer account",
-  "move-to-other-wallet-button": "Verplaats transacties naar een andere account en verwijder",
+  "move-to-other-wallet-button": "Verplaats transacties naar een ander account en verwijder",
   "changed-wallet": "Account gewijzigd",
   "added-to-budget": "Toegevoegd aan budget",
   "no-addable-budgets": "Geen budgetten om transacties toe te voegen aan",
@@ -439,8 +439,9 @@
   "delete-all-transactions-question": "Alle transacties verwijderen?",
   "delete-category-merge-warning": "Het verwijderen van een categorie verwijdert alle transacties in deze categorie. Verplaats transacties naar een andere categorie om dit te vermijden.",
   "deleted-category": "Verwijderde categorie",
+  "delete-wallet": "Account verwijderen",
   "delete-wallet-question": "Account verwijderen?",
-  "delete-wallet-question-description": "Hiermee worden alle transacties die aan dit account zijn gekoppeld, verwijderd.",
+  "delete-wallet-question-description": "Dit verwijdert alle transacties die aan dit account zijn gekoppeld.",
   "move-transactions": "Beweging",
   "delete-wallet-merge-warning": "Het verwijderen van een acount verwijdert alle transacties op deze rekening. Verplaats transacties naar een ander account om dit te voorkomen.",
   "deleted-wallet": "Verwijderde account",
@@ -594,9 +595,11 @@
   "updated-total-balance": "Bijgewerkt totaal saldo",
   "merge-wallet": "Merge -account samenvoegen",
   "wallet-to-transfer-all-transactions-to": "Account om alle transacties over te dragen naar",
-  "merge-into-description-wallets": "Hiermee wordt alle transacties naar de nieuwe account overgebracht en de oude account gewist",
+  "merge-into-description-wallets": "Hiermee wordt alle transacties overgedragen naar de nieuwe account en de oude account wist",
   "move-and-delete": "Verplaats en verwijderen",
   "merged-wallet": "Samengevoegde portemonnee",
   "cannot-remove-default-wallet": "Standaardaccount kan niet worden verwijderd",
-  "cannot-remove": "Kan niet verwijderen"
+  "cannot-remove": "Kan niet verwijderen",
+  "installment": "Aflevering",
+  "net-worth": "Netto waarde"
 }

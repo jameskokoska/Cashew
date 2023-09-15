@@ -439,6 +439,7 @@
   "delete-all-transactions-question": "Видалити всі транзакції?",
   "delete-category-merge-warning": "Видалення категорії видалить усі транзакції в цій категорії. Перемістіть транзакції до іншої категорії, щоб уникнути цього.",
   "deleted-category": "Видалена категорія",
+  "delete-wallet": "Видалити аккаунт",
   "delete-wallet-question": "Видалити аккаунт?",
   "delete-wallet-question-description": "Це видаляє всі транзакції, пов'язані з цим рахунком.",
   "move-transactions": "Рухатися",
@@ -582,7 +583,7 @@
   "import-and-export": "Імпорт-експорт",
   "import-google-sheet": "Імпортувати Google Leat",
   "enter-google-sheet-url": "Введіть URL -адресу Google Sheet",
-  "enter-google-sheet-url-description": "Переконайтесь, що кожен із посиланням може переглянути ваш лист Google, і він встановлений на публіку",
+  "enter-google-sheet-url-description": "Переконайтесь, що кожен із посиланням може переглянути ваш лист Google, і він встановлений на публіці",
   "create-template-copy": "Створіть копію шаблону",
   "help": "Допомога",
   "create-template-copy-description": "Зробіть копію та збережіть її на своєму диску Google. Відредагуйте аркуш своїми даними та імпортуйте їх!",
@@ -592,11 +593,13 @@
   "negative-amount": "Негативна сума",
   "update-total-balance": "Оновіть загальний баланс",
   "updated-total-balance": "Оновлений загальний баланс",
-  "merge-wallet": "Обліковий запис об'єднання",
+  "merge-wallet": "Об'єднання рахунку",
   "wallet-to-transfer-all-transactions-to": "Рахунок для передачі всіх транзакцій на",
   "merge-into-description-wallets": "Це передасть усі транзакції на новий рахунок та стерть старий рахунок",
   "move-and-delete": "Рухатися і видаляти",
   "merged-wallet": "Об'єднаний гаманець",
   "cannot-remove-default-wallet": "Обліковий запис за замовчуванням не може бути видалено",
-  "cannot-remove": "Не може видалити"
+  "cannot-remove": "Не може видалити",
+  "installment": "Розстрочка",
+  "net-worth": "Чиста вартість"
 }

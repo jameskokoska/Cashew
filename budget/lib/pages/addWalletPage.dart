@@ -7,6 +7,7 @@ import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/animatedExpanded.dart';
 import 'package:budget/widgets/button.dart';
+import 'package:budget/widgets/countNumber.dart';
 import 'package:budget/widgets/globalSnackBar.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
@@ -574,38 +575,42 @@ class _CorrectBalancePopupState extends State<CorrectBalancePopup> {
             SizedBox(height: 5),
             Builder(builder: (context) {
               double difference = (enteredAmount - totalWalletAmount);
-              return AnimatedSizeSwitcher(
-                clipBehavior: Clip.none,
-                child: Row(
-                  key: ValueKey(difference),
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    difference != 0
-                        ? IncomeOutcomeArrow(
-                            isIncome: difference > 0,
-                            color: difference > 0 == true
-                                ? getColor(context, "incomeAmount")
-                                : getColor(context, "expenseAmount"),
-                            width: 15,
-                          )
-                        : Container(),
-                    Flexible(
-                      child: TextFont(
-                        text: convertToMoney(
-                          Provider.of<AllWallets>(context),
-                          difference.abs(),
-                          currencyKey: widget.wallet.currency,
-                          decimals: widget.wallet.decimals,
-                        ),
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        textColor: difference > 0 == true
-                            ? getColor(context, "incomeAmount")
-                            : getColor(context, "expenseAmount"),
-                      ),
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  difference != 0
+                      ? IncomeOutcomeArrow(
+                          isIncome: difference > 0,
+                          color: difference > 0 == true
+                              ? getColor(context, "incomeAmount")
+                              : getColor(context, "expenseAmount"),
+                          width: 15,
+                        )
+                      : Container(),
+                  Flexible(
+                    child: CountNumber(
+                      count: difference.abs(),
+                      duration: Duration(milliseconds: 300),
+                      initialCount: (0),
+                      textBuilder: (number) {
+                        return TextFont(
+                          text: convertToMoney(
+                            Provider.of<AllWallets>(context),
+                            number,
+                            currencyKey: widget.wallet.currency,
+                            decimals: widget.wallet.decimals,
+                            finalNumber: number,
+                          ),
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          textColor: difference > 0 == true
+                              ? getColor(context, "incomeAmount")
+                              : getColor(context, "expenseAmount"),
+                        );
+                      },
                     ),
-                  ],
-                ),
+                  ),
+                ],
               );
             }),
             SizedBox(height: 8),
@@ -712,8 +717,8 @@ Future<bool> correctWalletBalance(BuildContext context, double differenceAmount,
             decimals: wallet.decimals,
           ),
       icon: appStateSettings["outlinedIcons"]
-          ? Icons.copy_outlined
-          : Icons.copy_rounded,
+          ? Icons.library_add_outlined
+          : Icons.library_add_rounded,
     ),
   );
 

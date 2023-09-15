@@ -439,6 +439,7 @@
   "delete-all-transactions-question": "همه معاملات را حذف کنید؟",
   "delete-category-merge-warning": "حذف یک دسته ، کلیه معاملات را در این گروه حذف می کند. برای جلوگیری از این کار ، معاملات را به دسته دیگری منتقل کنید.",
   "deleted-category": "دسته حذف شده",
+  "delete-wallet": "حذف حساب کاربری",
   "delete-wallet-question": "حذف حساب کاربری؟",
   "delete-wallet-question-description": "این همه معاملات مرتبط با این حساب را حذف می کند.",
   "move-transactions": "حرکت",
@@ -588,7 +589,7 @@
   "create-template-copy-description": "کپی کنید و آن را در Google Drive خود ذخیره کنید. برگه را با داده های خود ویرایش کرده و آن را وارد کنید!",
   "get-template": "الگوی گرفتن",
   "correct-total-balance": "تعادل کل صحیح",
-  "default-category-account-amount-balancing": "تعادل",
+  "default-category-account-amount-balancing": "تصحیح تعادل",
   "negative-amount": "مقدار منفی",
   "update-total-balance": "تعادل کل را به روز کنید",
   "updated-total-balance": "تعادل کل به روز شده",
@@ -598,5 +599,7 @@
   "move-and-delete": "حرکت و حذف",
   "merged-wallet": "کیف پول ادغام شده",
   "cannot-remove-default-wallet": "حساب پیش فرض حذف نمی شود",
-  "cannot-remove": "نمی تواند حذف شود"
+  "cannot-remove": "نمی تواند حذف شود",
+  "installment": "قسط",
+  "net-worth": "ارزش خالص"
 }

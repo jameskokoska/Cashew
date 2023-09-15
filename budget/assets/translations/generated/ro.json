@@ -439,6 +439,7 @@
   "delete-all-transactions-question": "Ștergeți toate tranzacțiile?",
   "delete-category-merge-warning": "Ștergerea unei categorii va șterge toate tranzacțiile din această categorie. Mutați tranzacțiile într -o altă categorie pentru a evita acest lucru.",
   "deleted-category": "Categorie ștersă",
+  "delete-wallet": "Șterge cont",
   "delete-wallet-question": "Șterge cont?",
   "delete-wallet-question-description": "Aceasta va șterge toate tranzacțiile asociate cu acest cont.",
   "move-transactions": "Mișcare",
@@ -582,7 +583,7 @@
   "import-and-export": "Import Export",
   "import-google-sheet": "Importați foaia Google",
   "enter-google-sheet-url": "Introduceți URL -ul Google Sheet",
-  "enter-google-sheet-url-description": "Asigurați -vă că oricine cu link vă poate vizualiza fișa Google și este setată la public",
+  "enter-google-sheet-url-description": "Asigurați -vă că oricine are linkul vă poate vizualiza fișa Google și este setată la public",
   "create-template-copy": "Creați o copie de șablon",
   "help": "Ajutor",
   "create-template-copy-description": "Faceți o copie și salvați -o pe unitatea dvs. Google. Editați foaia cu datele dvs. și importați -o!",
@@ -598,5 +599,7 @@
   "move-and-delete": "Mutați -vă și ștergeți",
   "merged-wallet": "Portofel contopit",
   "cannot-remove-default-wallet": "Contul implicit nu poate fi șters",
-  "cannot-remove": "Nu se poate elimina"
+  "cannot-remove": "Nu se poate elimina",
+  "installment": "Tranșă",
+  "net-worth": "Valoarea netă"
 }

@@ -3874,8 +3874,11 @@ class FinanceDatabase extends _$FinanceDatabase {
     }
   }
 
-  Stream<List<int?>> watchTotalCountOfTransactionsInWallet(String? walletPk,
-      {bool? isIncome = null}) {
+  Stream<List<int?>> watchTotalCountOfTransactionsInWallet(
+    String? walletPk, {
+    bool? isIncome = null,
+    DateTime? startDate,
+  }) {
     final totalCount = transactions.transactionPk.count();
     final query = selectOnly(transactions)
       ..addColumns([totalCount])
@@ -3884,6 +3887,7 @@ class FinanceDatabase extends _$FinanceDatabase {
               : isIncome == true
                   ? transactions.income.equals(true)
                   : transactions.income.equals(false)) &
+          onlyShowBasedOnTimeRange(transactions, startDate, null, null) &
           (walletPk == null
               ? transactions.walletFk.isNotNull()
               : transactions.walletFk.equals(walletPk)));

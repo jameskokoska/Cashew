@@ -76,9 +76,6 @@ Future<bool> initializeSettings() async {
   appStateSettings["appOpenedHour"] = DateTime.now().hour;
   appStateSettings["appOpenedMinute"] = DateTime.now().minute;
 
-  await sharedPreferences.setString(
-      'userSettings', json.encode(appStateSettings));
-
   String? retrievedClientID = await sharedPreferences.getString("clientID");
   if (retrievedClientID == null) {
     String systemID = await getDeviceInfo();
@@ -98,24 +95,42 @@ Future<bool> initializeSettings() async {
   generateColors();
 
   Map<String, dynamic> defaultPreferences = await getDefaultPreferences();
-  List<String> keyOrder = List<String>.from(
-      appStateSettings["homePageOrder"].map((element) => element.toString()));
   List<String> defaultPrefPageOrder = List<String>.from(
       defaultPreferences["homePageOrder"].map((element) => element.toString()));
-  for (String key in keyOrder) {
-    if (!defaultPreferences["homePageOrder"].contains(key)) {
-      appStateSettings["homePageOrder"] = defaultPrefPageOrder;
-      print("Fixed homepage ordering");
-      break;
+  List<String> currentPageOrder = List<String>.from(
+      appStateSettings["homePageOrder"].map((element) => element.toString()));
+  int index = 0;
+  for (String key in [...currentPageOrder]) {
+    if (!defaultPrefPageOrder.contains(key)) {
+      currentPageOrder.removeWhere((item) => item == key);
+      // print("Fixed homepage ordering: " + currentPageOrder.toString());
     }
+    index++;
   }
+  index = 0;
+  String? keyBefore;
   for (String key in defaultPrefPageOrder) {
-    if (!keyOrder.contains(key)) {
-      appStateSettings["homePageOrder"] = defaultPrefPageOrder;
-      print("Fixed homepage ordering");
-      break;
+    if (!currentPageOrder.contains(key)) {
+      int indexOfItem =
+          keyBefore == null ? -1 : currentPageOrder.indexOf(keyBefore);
+      // print("Fixed homepage ordering finding " + keyBefore.toString());
+      if (indexOfItem != -1) {
+        // print("Fixed homepage ordering inserted at" +
+        //     (indexOfItem + 1).toString());
+        currentPageOrder.insert(indexOfItem + 1, key);
+      } else {
+        currentPageOrder.insert(index, key);
+      }
+      // print("Fixed homepage ordering: " + currentPageOrder.toString());
     }
+    keyBefore = key;
+    index++;
   }
+  appStateSettings["homePageOrder"] = currentPageOrder;
+
+  // save settings
+  await sharedPreferences.setString(
+      'userSettings', json.encode(appStateSettings));
 
   return true;
 }

@@ -439,6 +439,7 @@
   "delete-all-transactions-question": "அனைத்து பரிவர்த்தனைகளையும் நீக்கவா?",
   "delete-category-merge-warning": "ஒரு வகையை நீக்குவது இந்த பிரிவில் உள்ள அனைத்து பரிவர்த்தனைகளையும் நீக்கும். இதைத் தவிர்க்க பரிவர்த்தனைகளை மற்றொரு வகைக்கு நகர்த்தவும்.",
   "deleted-category": "நீக்கப்பட்ட வகை",
+  "delete-wallet": "கணக்கை நீக்குக",
   "delete-wallet-question": "கணக்கை நீக்குக?",
   "delete-wallet-question-description": "இந்த கணக்குடன் தொடர்புடைய அனைத்து பரிவர்த்தனைகளையும் இது நீக்கும்.",
   "move-transactions": "நகர்வு",
@@ -598,5 +599,7 @@
   "move-and-delete": "நகர்த்தவும் நீக்கவும்",
   "merged-wallet": "இணைக்கப்பட்ட பணப்பையை",
   "cannot-remove-default-wallet": "இயல்புநிலை கணக்கை நீக்க முடியாது",
-  "cannot-remove": "அகற்ற முடியாது"
+  "cannot-remove": "அகற்ற முடியாது",
+  "installment": "தவணை",
+  "net-worth": "நிகர மதிப்பு"
 }

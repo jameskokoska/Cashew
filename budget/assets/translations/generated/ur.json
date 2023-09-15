@@ -439,6 +439,7 @@
   "delete-all-transactions-question": "تمام لین دین کو حذف کریں؟",
   "delete-category-merge-warning": "کسی زمرے کو حذف کرنے سے اس زمرے میں تمام لین دین کو حذف کردے گا۔ اس سے بچنے کے ل transactions لین دین کو کسی اور زمرے میں منتقل کریں۔",
   "deleted-category": "حذف شدہ زمرہ",
+  "delete-wallet": "کھاتہ مٹا دو",
   "delete-wallet-question": "کھاتہ مٹا دو؟",
   "delete-wallet-question-description": "یہ اس اکاؤنٹ سے وابستہ تمام لین دین کو حذف کردے گا۔",
   "move-transactions": "اقدام",
@@ -558,7 +559,7 @@
   "who-are-you-description": "آپ کو وہ ہونا چاہئے جس نے بل ادا کیا۔",
   "split-evenly": "یکساں طور پر تقسیم",
   "item-name-placeholder": "شے کا نام",
-  "reset-bill-question": "بل کو دوبارہ ترتیب دیں؟",
+  "reset-bill-question": "ری سیٹ بل؟",
   "reset-bill-description": "یہ موجودہ بل میں تمام اشیاء کو حذف کردے گا",
   "success-generate-loans": "کامیابی",
   "success-generate-loans-description": "بل سے قرض کے لین دین کو پیدا کیا",
@@ -598,5 +599,7 @@
   "move-and-delete": "منتقل اور حذف کریں",
   "merged-wallet": "ضم شدہ پرس",
   "cannot-remove-default-wallet": "پہلے سے طے شدہ اکاؤنٹ کو حذف نہیں کیا جاسکتا",
-  "cannot-remove": "نہیں ہٹ سکتے"
+  "cannot-remove": "نہیں ہٹ سکتے",
+  "installment": "قسط",
+  "net-worth": "کل مالیت"
 }

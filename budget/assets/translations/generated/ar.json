@@ -439,6 +439,7 @@
   "delete-all-transactions-question": "حذف جميع المعاملات؟",
   "delete-category-merge-warning": "سيؤدي حذف فئة إلى حذف جميع المعاملات في هذه الفئة. نقل المعاملات إلى فئة أخرى لتجنب ذلك.",
   "deleted-category": "فئة المحذوفة",
+  "delete-wallet": "حذف الحساب",
   "delete-wallet-question": "حذف الحساب؟",
   "delete-wallet-question-description": "سيؤدي هذا إلى حذف جميع المعاملات المرتبطة بهذا الحساب.",
   "move-transactions": "يتحرك",
@@ -563,7 +564,7 @@
   "success-generate-loans": "نجاح",
   "success-generate-loans-description": "تم إنشاء معاملات القروض من الفاتورة",
   "missing-data": "بيانات مفقودة.",
-  "generate-loan-transactions": "توليد معاملات القروض",
+  "generate-loan-transactions": "إنشاء معاملات القروض",
   "no-names-found": "لم يتم العثور على أسماء.",
   "add-name": "اضف اسما",
   "delete-name-question": "حذف الاسم؟",
@@ -598,5 +599,7 @@
   "move-and-delete": "تحرك وحذف",
   "merged-wallet": "محفظة مدمجة",
   "cannot-remove-default-wallet": "لا يمكن حذف الحساب الافتراضي",
-  "cannot-remove": "لا يمكن إزالة"
+  "cannot-remove": "لا يمكن إزالة",
+  "installment": "الدفعة",
+  "net-worth": "صافي القيمة"
 }

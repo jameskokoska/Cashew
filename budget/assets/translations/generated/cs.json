@@ -439,6 +439,7 @@
   "delete-all-transactions-question": "Odstranit všechny transakce?",
   "delete-category-merge-warning": "Odstranění kategorie odstraní všechny transakce v této kategorii. Přesuňte transakce do jiné kategorie, abyste tomu zabránili.",
   "deleted-category": "Smazaná kategorie",
+  "delete-wallet": "smazat účet",
   "delete-wallet-question": "Smazat účet?",
   "delete-wallet-question-description": "Tím se odstraní všechny transakce spojené s tímto účtem.",
   "move-transactions": "Hýbat se",
@@ -529,7 +530,7 @@
   "no-budgets-found": "Nebyly nalezeny žádné rozpočty.",
   "no-categories-found": "Žádné kategorie nalezeny.",
   "no-wallets-found": "Žádné účty nalezeny.",
-  "no-titles-found": "Žádné tituly.",
+  "no-titles-found": "Nalezeny žádné tituly.",
   "translations": "Překlady",
   "ask-for-notes-with-title": "Požádejte o poznámku s názvem",
   "ask-for-notes-with-title-description": "Při vstupu do názvu",
@@ -543,7 +544,7 @@
   "error-downloading": "Stahování chyb",
   "tools": "Nástroje",
   "delete-bill-item-question": "Odstranit položku účtu?",
-  "bill-splitter": "Bill Splitter",
+  "bill-splitter": "Splitter Bill",
   "bill-splitter-info": "Splitter Bill rozdělí účet, za který jste zaplatili mezi lidmi, kteří zakoupili předměty. Můžete snadno sledovat, kdo vám dluží určité částky peněz.",
   "new-bill": "Nový účet",
   "names": "Jména",
@@ -598,5 +599,7 @@
   "move-and-delete": "Přesunout a smazat",
   "merged-wallet": "Sloučená peněženka",
   "cannot-remove-default-wallet": "Výchozí účet nelze odstranit",
-  "cannot-remove": "Nelze odstranit"
+  "cannot-remove": "Nelze odstranit",
+  "installment": "Splátka",
+  "net-worth": "Čisté jmění"
 }

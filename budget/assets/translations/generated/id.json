@@ -422,7 +422,7 @@
   "delete-transactions": "Hapus transaksi",
   "change-wallet": "Ganti akun",
   "add-to-budget": "Tambahkan ke anggaran",
-  "select-wallet": "Pilih akun",
+  "select-wallet": "Pilih Akun",
   "move-to-other-wallet-button": "Pindahkan transaksi ke akun lain dan hapus",
   "changed-wallet": "Akun yang diubah",
   "added-to-budget": "Ditambahkan ke anggaran",
@@ -439,6 +439,7 @@
   "delete-all-transactions-question": "Hapus semua transaksi?",
   "delete-category-merge-warning": "Menghapus kategori akan menghapus semua transaksi dalam kategori ini. Pindahkan transaksi ke kategori lain untuk menghindari ini.",
   "deleted-category": "Kategori yang dihapus",
+  "delete-wallet": "Hapus akun",
   "delete-wallet-question": "Hapus akun?",
   "delete-wallet-question-description": "Ini akan menghapus semua transaksi yang terkait dengan akun ini.",
   "move-transactions": "Bergerak",
@@ -598,5 +599,7 @@
   "move-and-delete": "Pindah dan hapus",
   "merged-wallet": "Dompet yang digabungkan",
   "cannot-remove-default-wallet": "Akun default tidak dapat dihapus",
-  "cannot-remove": "Tidak bisa menghapus"
+  "cannot-remove": "Tidak bisa menghapus",
+  "installment": "Cicilan",
+  "net-worth": "Kekayaan bersih"
 }

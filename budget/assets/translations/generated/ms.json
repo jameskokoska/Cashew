@@ -439,6 +439,7 @@
   "delete-all-transactions-question": "Padam semua urus niaga?",
   "delete-category-merge-warning": "Memadam kategori akan memadam semua urus niaga dalam kategori ini. Pindahkan transaksi ke kategori lain untuk mengelakkan ini.",
   "deleted-category": "Kategori yang dipadam",
+  "delete-wallet": "Padam akaun",
   "delete-wallet-question": "Padam Akaun?",
   "delete-wallet-question-description": "Ini akan memadamkan semua urus niaga yang berkaitan dengan akaun ini.",
   "move-transactions": "Bergerak",
@@ -598,5 +599,7 @@
   "move-and-delete": "Bergerak dan padamkan",
   "merged-wallet": "Dompet digabungkan",
   "cannot-remove-default-wallet": "Akaun lalai tidak dapat dipadamkan",
-  "cannot-remove": "Tidak dapat dikeluarkan"
+  "cannot-remove": "Tidak dapat dikeluarkan",
+  "installment": "Ansuran",
+  "net-worth": "Nilai bersih"
 }

@@ -25,6 +25,7 @@ import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/currencyPicker.dart';
 import 'package:budget/widgets/transactionEntry/incomeAmountArrow.dart';
 import 'package:budget/widgets/transactionEntry/transactionEntryAmount.dart';
+import 'package:budget/widgets/util/showDatePicker.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -50,7 +51,8 @@ class AddObjectivePage extends StatefulWidget {
   _AddObjectivePageState createState() => _AddObjectivePageState();
 }
 
-class _AddObjectivePageState extends State<AddObjectivePage> {
+class _AddObjectivePageState extends State<AddObjectivePage>
+    with SingleTickerProviderStateMixin {
   bool? canAddObjective;
 
   String? selectedTitle;
@@ -58,8 +60,12 @@ class _AddObjectivePageState extends State<AddObjectivePage> {
   late String? selectedImage = widget.objective == null ? "image.png" : null;
   String? selectedEmoji;
   double selectedAmount = 0;
+  DateTime selectedStartDate = DateTime.now();
+  bool selectedIncome = true;
 
   FocusNode _titleFocusNode = FocusNode();
+  late TabController _incomeTabController =
+      TabController(length: 2, vsync: this);
 
   void setSelectedTitle(String title) {
     setState(() {
@@ -86,7 +92,9 @@ class _AddObjectivePageState extends State<AddObjectivePage> {
   }
 
   void setSelectedColor(Color? color) {
-    selectedColor = color;
+    setState(() {
+      selectedColor = color;
+    });
     determineBottomButton();
     return;
   }
@@ -94,6 +102,14 @@ class _AddObjectivePageState extends State<AddObjectivePage> {
   void setSelectedAmount(double amount) {
     setState(() {
       selectedAmount = amount;
+    });
+    determineBottomButton();
+    return;
+  }
+
+  void setSelectedIncome(bool income) {
+    setState(() {
+      selectedIncome = income;
     });
     determineBottomButton();
     return;
@@ -125,6 +141,21 @@ class _AddObjectivePageState extends State<AddObjectivePage> {
     );
   }
 
+  Future<void> selectStartDate(BuildContext context) async {
+    final DateTime? picked =
+        await showCustomDatePicker(context, selectedStartDate);
+    setSelectedStartDate(picked);
+  }
+
+  setSelectedStartDate(DateTime? date) {
+    if (date != null && date != selectedStartDate) {
+      setState(() {
+        selectedStartDate = date;
+      });
+    }
+    determineBottomButton();
+  }
+
   Future addObjective() async {
     print("Added objective");
     await database.createOrUpdateObjective(
@@ -140,14 +171,16 @@ class _AddObjectivePageState extends State<AddObjectivePage> {
           widget.objective != null ? widget.objective!.objectivePk : "-1",
       name: selectedTitle ?? "",
       colour: toHexString(selectedColor),
-      dateCreated: widget.objective != null
-          ? widget.objective!.dateCreated
-          : DateTime.now(),
+      dateCreated: selectedStartDate,
       dateTimeModified: null,
       order: widget.objective != null
           ? widget.objective!.order
           : numberOfObjectives,
+      emojiIconName: selectedEmoji,
+      iconName: selectedImage,
       amount: selectedAmount,
+      income: selectedIncome,
+      pinned: true,
     );
   }
 
@@ -159,9 +192,21 @@ class _AddObjectivePageState extends State<AddObjectivePage> {
       //Fill in the information from the passed in objective
       //Outside of future.delayed because of textinput when in web mode initial value
       selectedTitle = widget.objective!.name;
+
       selectedColor = widget.objective!.colour == null
           ? null
           : HexColor(widget.objective!.colour);
+      selectedImage = widget.objective!.iconName;
+      selectedEmoji = widget.objective!.emojiIconName;
+      selectedStartDate = widget.objective!.dateCreated;
+      selectedAmount = widget.objective!.amount;
+
+      selectedIncome = widget.objective!.income;
+      if (widget.objective?.income == true) {
+        _incomeTabController.animateTo(1);
+      } else {
+        _incomeTabController.animateTo(0);
+      }
     }
   }
 
@@ -283,6 +328,79 @@ class _AddObjectivePageState extends State<AddObjectivePage> {
           ),
           slivers: [
             SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 13),
+                child: ClipRRect(
+                  borderRadius: getPlatform() == PlatformOS.isIOS
+                      ? BorderRadius.circular(10)
+                      : BorderRadius.circular(15),
+                  child: Material(
+                    color: Theme.of(context)
+                        .colorScheme
+                        .secondaryContainer
+                        .withOpacity(0.2),
+                    child: Theme(
+                      data: ThemeData().copyWith(
+                        splashColor: Theme.of(context).splashColor,
+                      ),
+                      child: TabBar(
+                        splashFactory: Theme.of(context).splashFactory,
+                        controller: _incomeTabController,
+                        onTap: (value) {
+                          if (value == 1)
+                            setSelectedIncome(true);
+                          else
+                            setSelectedIncome(false);
+                        },
+                        dividerColor: Colors.transparent,
+                        indicatorColor: Colors.transparent,
+                        indicatorSize: TabBarIndicatorSize.tab,
+                        indicator: BoxDecoration(
+                          color:
+                              Theme.of(context).colorScheme.secondaryContainer,
+                        ),
+                        labelColor: getColor(context, "black"),
+                        unselectedLabelColor:
+                            getColor(context, "black").withOpacity(0.3),
+                        tabs: [
+                          Tab(
+                            child: Center(
+                              child: Padding(
+                                padding: const EdgeInsets.only(top: 5),
+                                child: Text(
+                                  "savings-goal".tr(),
+                                  style: TextStyle(
+                                    fontSize: 14.5,
+                                    fontFamily: 'Avenir',
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
+                          ),
+                          Tab(
+                            child: Center(
+                              child: Padding(
+                                padding: const EdgeInsets.only(top: 5),
+                                child: Text(
+                                  "expense-goal".tr(),
+                                  style: TextStyle(
+                                    fontSize: 14.5,
+                                    fontFamily: 'Avenir',
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            SliverToBoxAdapter(
               child: Row(
                 mainAxisSize: MainAxisSize.max,
                 children: [
@@ -352,42 +470,13 @@ class _AddObjectivePageState extends State<AddObjectivePage> {
                           fontSize: getIsFullScreen(context) ? 34 : 27,
                           fontWeight: FontWeight.bold,
                           topContentPadding: 40,
+                          initialValue: selectedTitle,
                         ),
                       ),
                     ),
                   ),
                 ],
               ),
-            ),
-
-            SliverToBoxAdapter(
-              child: Row(
-                children: [
-                  IntrinsicWidth(
-                    child: TappableTextEntry(
-                      title: convertToMoney(
-                          Provider.of<AllWallets>(context), selectedAmount),
-                      placeholder:
-                          convertToMoney(Provider.of<AllWallets>(context), 0),
-                      showPlaceHolderWhenTextEquals:
-                          convertToMoney(Provider.of<AllWallets>(context), 0),
-                      onTap: () {
-                        selectAmount(context);
-                      },
-                      fontSize: 35,
-                      fontWeight: FontWeight.bold,
-                      internalPadding:
-                          EdgeInsets.symmetric(vertical: 2, horizontal: 4),
-                      padding:
-                          EdgeInsets.symmetric(vertical: 10, horizontal: 3),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-
-            SliverToBoxAdapter(
-              child: SizedBox(height: 14),
             ),
             SliverToBoxAdapter(
               child: Container(
@@ -400,7 +489,93 @@ class _AddObjectivePageState extends State<AddObjectivePage> {
               ),
             ),
             SliverToBoxAdapter(
-              child: SizedBox(height: 15),
+              child: SizedBox(
+                height: 10,
+              ),
+            ),
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 14),
+                      child: TextFont(
+                        text: "goal".tr() + " ",
+                        fontSize: 17,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Flexible(
+                      child: IntrinsicWidth(
+                        child: TappableTextEntry(
+                          title: convertToMoney(
+                              Provider.of<AllWallets>(context), selectedAmount),
+                          placeholder: convertToMoney(
+                              Provider.of<AllWallets>(context), 0),
+                          showPlaceHolderWhenTextEquals: convertToMoney(
+                              Provider.of<AllWallets>(context), 0),
+                          onTap: () {
+                            selectAmount(context);
+                          },
+                          fontSize: 32,
+                          fontWeight: FontWeight.bold,
+                          internalPadding:
+                              EdgeInsets.symmetric(vertical: 2, horizontal: 4),
+                          padding:
+                              EdgeInsets.symmetric(vertical: 10, horizontal: 3),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            SliverToBoxAdapter(
+              child: Tappable(
+                onTap: () {
+                  selectStartDate(context);
+                },
+                color: Colors.transparent,
+                borderRadius: 15,
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 5, vertical: 8),
+                  child: Center(
+                    child: Wrap(
+                      crossAxisAlignment: WrapCrossAlignment.end,
+                      runAlignment: WrapAlignment.center,
+                      alignment: WrapAlignment.center,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 5.8),
+                          child: TextFont(
+                            text: "starting".tr() + " ",
+                            fontSize: 17,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        IgnorePointer(
+                          child: TappableTextEntry(
+                            title: getWordedDateShortMore(selectedStartDate),
+                            placeholder: "",
+                            onTap: () {
+                              selectAmount(context);
+                            },
+                            fontSize: 25,
+                            fontWeight: FontWeight.bold,
+                            internalPadding: EdgeInsets.symmetric(
+                                vertical: 2, horizontal: 4),
+                            padding: EdgeInsets.symmetric(
+                                vertical: 0, horizontal: 5),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
             ),
             SliverToBoxAdapter(child: SizedBox(height: 65)),
             // SliverToBoxAdapter(

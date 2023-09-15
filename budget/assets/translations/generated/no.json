@@ -439,6 +439,7 @@
   "delete-all-transactions-question": "Slette alle transaksjoner?",
   "delete-category-merge-warning": "Å slette en kategori vil slette alle transaksjoner i denne kategorien. Flytt transaksjoner til en annen kategori for å unngå dette.",
   "deleted-category": "Slettet kategori",
+  "delete-wallet": "Slett konto",
   "delete-wallet-question": "Slett konto?",
   "delete-wallet-question-description": "Dette vil slette alle transaksjoner tilknyttet denne kontoen.",
   "move-transactions": "Bevege seg",
@@ -555,7 +556,7 @@
   "owed-to-you": "Skyldes deg",
   "name": "Navn",
   "who-are-you-question": "Hvem er du?",
-  "who-are-you-description": "Du burde være den som betalte regningen.",
+  "who-are-you-description": "Du bør være den som betalte regningen.",
   "split-evenly": "Delte jevnt",
   "item-name-placeholder": "Gjenstandsnavn",
   "reset-bill-question": "Tilbakestill regningen?",
@@ -598,5 +599,7 @@
   "move-and-delete": "Flytt og slett",
   "merged-wallet": "Sammenslått lommebok",
   "cannot-remove-default-wallet": "Standardkonto kan ikke slettes",
-  "cannot-remove": "Kan ikke fjerne"
+  "cannot-remove": "Kan ikke fjerne",
+  "installment": "Avdrag",
+  "net-worth": "Nettoformue"
 }

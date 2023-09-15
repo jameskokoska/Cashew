@@ -439,6 +439,7 @@
   "delete-all-transactions-question": "Tüm işlemleri silin mi?",
   "delete-category-merge-warning": "Bir kategoriyi silmek bu kategorideki tüm işlemleri silecektir. Bundan kaçınmak için işlemleri başka bir kategoriye taşıyın.",
   "deleted-category": "Silinmiş kategori",
+  "delete-wallet": "Hesabı sil",
   "delete-wallet-question": "Hesabı sil?",
   "delete-wallet-question-description": "Bu, bu hesapla ilişkili tüm işlemleri silecektir.",
   "move-transactions": "Taşınmak",
@@ -588,7 +589,7 @@
   "create-template-copy-description": "Bir kopya yapın ve Google Drive'ınıza kaydedin. Sayfayı verilerinizle düzenleyin ve içe aktarın!",
   "get-template": "Şablon alın",
   "correct-total-balance": "Total Bakiyesi Doğru",
-  "default-category-account-amount-balancing": "Denge düzeltmesi",
+  "default-category-account-amount-balancing": "Denge Düzeltme",
   "negative-amount": "Negatif miktar",
   "update-total-balance": "Toplam Bakiyeyi Güncelle",
   "updated-total-balance": "Güncellenen Toplam Bakiye",
@@ -598,5 +599,7 @@
   "move-and-delete": "Taşın ve Sil",
   "merged-wallet": "Birleştirilmiş cüzdan",
   "cannot-remove-default-wallet": "Varsayılan hesap silinemez",
-  "cannot-remove": "Çıkarılamıyor"
+  "cannot-remove": "Çıkarılamıyor",
+  "installment": "Taksit",
+  "net-worth": "Net değer"
 }

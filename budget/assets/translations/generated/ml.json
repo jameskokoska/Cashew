@@ -439,6 +439,7 @@
   "delete-all-transactions-question": "എല്ലാ ഇടപാടുകളും ഇല്ലാതാക്കണോ?",
   "delete-category-merge-warning": "ഒരു വിഭാഗം ഇല്ലാതാക്കുന്നത് ഈ വിഭാഗത്തിലെ എല്ലാ ഇടപാടുകളും ഇല്ലാതാക്കും. ഇത് ഒഴിവാക്കാൻ ഇടപാടുകൾ മറ്റൊരു വിഭാഗത്തിലേക്ക് നീക്കുക.",
   "deleted-category": "ഒരു വിഭാഗം ഇല്ലാതാക്കി",
+  "delete-wallet": "അക്കൗണ്ട് ഇല്ലാതാക്കുക",
   "delete-wallet-question": "അക്കൗണ്ട് ഇല്ലാതാക്കണോ?",
   "delete-wallet-question-description": "ഇത് ഈ അക്കൗണ്ടുമായി ബന്ധപ്പെട്ട എല്ലാ ഇടപാടുകളും ഇല്ലാതാക്കും.",
   "move-transactions": "ചലിക്കുക",
@@ -598,5 +599,7 @@
   "move-and-delete": "നീക്കി ഇല്ലാതാക്കുക",
   "merged-wallet": "ലയിപ്പിച്ച വാലറ്റ്",
   "cannot-remove-default-wallet": "സ്ഥിരസ്ഥിതി അക്കൗണ്ട് ഇല്ലാതാക്കാൻ കഴിയില്ല",
-  "cannot-remove": "നീക്കംചെയ്യാൻ കഴിയില്ല"
+  "cannot-remove": "നീക്കംചെയ്യാൻ കഴിയില്ല",
+  "installment": "തവണ",
+  "net-worth": "മൊത്തം മൂല്യം"
 }

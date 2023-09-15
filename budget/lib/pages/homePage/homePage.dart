@@ -4,6 +4,7 @@ import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/pages/homePage/homePageHeatmap.dart';
 import 'package:budget/pages/homePage/homePageLineGraph.dart';
+import 'package:budget/pages/homePage/homePageNetWorth.dart';
 import 'package:budget/pages/homePage/homePageWalletSwitcher.dart';
 import 'package:budget/pages/homePage/homeTransactionSlivers.dart';
 import 'package:budget/pages/homePage/homeUpcomingTransactionSlivers.dart';
@@ -118,6 +119,7 @@ class HomePageState extends State<HomePage>
       "budgets": HomePageBudgets(),
       "overdueUpcoming": HomePageUpcomingTransactions(),
       "allSpendingSummary": HomePageAllSpendingSummary(),
+      "netWorth": HomePageNetWorth(),
       "creditDebts": HomePageCreditDebts(),
       "spendingGraph":
           HomePageLineGraph(selectedSlidingSelector: selectedSlidingSelector),

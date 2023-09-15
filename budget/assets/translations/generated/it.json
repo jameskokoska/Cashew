@@ -439,6 +439,7 @@
   "delete-all-transactions-question": "Elimina tutte le transazioni?",
   "delete-category-merge-warning": "L'eliminazione di una categoria eliminerà tutte le transazioni in questa categoria. Sposta le transazioni in un'altra categoria per evitarlo.",
   "deleted-category": "Categoria cancellata",
+  "delete-wallet": "Elimina l'account?",
   "delete-wallet-question": "Elimina l'account?",
   "delete-wallet-question-description": "Verranno eliminate tutte le transazioni associate a questo account.",
   "move-transactions": "Mossa",
@@ -587,7 +588,7 @@
   "help": "Aiuto",
   "create-template-copy-description": "Fai una copia e salvala sul tuo Drive Google. Modifica il foglio con i tuoi dati e importalo!",
   "get-template": "Ottieni modello",
-  "correct-total-balance": "Saldo totale corretto",
+  "correct-total-balance": "Equilibrio totale corretto",
   "default-category-account-amount-balancing": "Correzione dell'equilibrio",
   "negative-amount": "Importo negativo",
   "update-total-balance": "Aggiorna il saldo totale",
@@ -598,5 +599,7 @@
   "move-and-delete": "Sposta ed elimina",
   "merged-wallet": "Portafoglio fuso",
   "cannot-remove-default-wallet": "L'account predefinito non può essere eliminato",
-  "cannot-remove": "Non può rimuovere"
+  "cannot-remove": "Non può rimuovere",
+  "installment": "Rata",
+  "net-worth": "Patrimonio netto"
 }

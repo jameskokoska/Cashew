@@ -439,6 +439,7 @@
   "delete-all-transactions-question": "Alle Transaktionen löschen?",
   "delete-category-merge-warning": "Durch das Löschen einer Kategorie werden alle Transaktionen in dieser Kategorie gelöscht. Verschieben Sie Transaktionen in eine andere Kategorie, um dies zu vermeiden.",
   "deleted-category": "Kategorie gelöscht",
+  "delete-wallet": "Konto löschen",
   "delete-wallet-question": "Konto löschen?",
   "delete-wallet-question-description": "Dadurch wird alle mit diesem Konto verbundenen Transaktionen gelöscht.",
   "move-transactions": "Bewegen",
@@ -574,7 +575,7 @@
   "daily-notification-type-if-not-opened": "Wenn die App heute noch nicht eröffnet wurde",
   "daily-notification-type-one-day-from-open": "24 Stunden von der App geöffnet",
   "daily-notification-type-everyday": "Täglich",
-  "consider-csv-template": "Versuchen Sie es erneut und überlegen Sie, ob Sie die bereitgestellte CSV -Vorlage verwenden.",
+  "consider-csv-template": "Versuchen Sie es erneut und überlegen Sie, ob die bereitgestellte CSV -Vorlage verwendet wird.",
   "template": "Vorlage",
   "enter-emoji": "Geben Sie Emoji ein",
   "enter-emoji-placeholder": "Geben Sie Emoji ein",
@@ -598,5 +599,7 @@
   "move-and-delete": "Bewege und löschen",
   "merged-wallet": "Verschmolze Brieftasche",
   "cannot-remove-default-wallet": "Standardkonto kann nicht gelöscht werden",
-  "cannot-remove": "Kann nicht entfernen"
+  "cannot-remove": "Kann nicht entfernen",
+  "installment": "Rate",
+  "net-worth": "Reinvermögen"
 }
