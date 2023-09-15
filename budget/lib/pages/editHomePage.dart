@@ -96,10 +96,7 @@ class _EditHomePageState extends State<EditHomePage> {
                         child: BudgetTotalSpentToggle(),
                       ),
                       SelectItems(
-                        checkboxCustomIconSelected:
-                            appStateSettings["outlinedIcons"]
-                                ? Icons.push_pin_outlined
-                                : Icons.push_pin_rounded,
+                        checkboxCustomIconSelected: Icons.push_pin_rounded,
                         checkboxCustomIconUnselected: Icons.push_pin_outlined,
                         items: [
                           for (Budget budget in allBudgets)

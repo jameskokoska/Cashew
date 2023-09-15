@@ -521,9 +521,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                       ? "pinned-to-homepage".tr()
                       : "unpinned-to-homepage".tr(),
                   icon: selectedPin
-                      ? appStateSettings["outlinedIcons"]
-                          ? Icons.push_pin_outlined
-                          : Icons.push_pin_rounded
+                      ? Icons.push_pin_rounded
                       : Icons.push_pin_outlined,
                   action: () {
                     setSelectedPin();

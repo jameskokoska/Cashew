@@ -204,9 +204,7 @@ class _EditBudgetPageState extends State<EditBudgetPage> {
                         EditRowEntry(
                           key: ValueKey(budget.budgetPk),
                           extraIcon: budget.pinned
-                              ? appStateSettings["outlinedIcons"]
-                                  ? Icons.push_pin_outlined
-                                  : Icons.push_pin_rounded
+                              ? Icons.push_pin_rounded
                               : Icons.push_pin_outlined,
                           onExtra: () async {
                             Budget updatedBudget =

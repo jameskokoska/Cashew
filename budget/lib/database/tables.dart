@@ -20,7 +20,7 @@ import 'schema_versions.dart';
 import 'package:flutter/material.dart' show RangeValues;
 part 'tables.g.dart';
 
-int schemaVersionGlobal = 39;
+int schemaVersionGlobal = 40;
 
 // Migrations and Database changes
 // -1) Make changed to database
@@ -251,6 +251,9 @@ class Transactions extends Table {
   // the budget this transaction belongs to
   TextColumn get sharedReferenceBudgetPk => text().nullable()();
 
+  TextColumn get objectiveFk =>
+      text().references(Objectives, #objectivePk).nullable()();
+
   @override
   Set<Column> get primaryKey => {transactionPk};
 }
@@ -409,6 +412,29 @@ class ScannerTemplates extends Table {
   Set<Column> get primaryKey => {scannerTemplatePk};
 }
 
+// Objective, savings jars, payment goals, installments, targets etc.
+@DataClassName('Objective')
+class Objectives extends Table {
+  TextColumn get objectivePk => text().clientDefault(() => uuid.v4())();
+  TextColumn get name => text().withLength(max: NAME_LIMIT)();
+  RealColumn get amount => real()();
+  IntColumn get order => integer()();
+  TextColumn get colour => text()
+      .withLength(max: COLOUR_LIMIT)
+      .nullable()(); // if null we are using the themes color
+  DateTimeColumn get dateCreated =>
+      dateTime().clientDefault(() => new DateTime.now())();
+  DateTimeColumn get dateTimeModified =>
+      dateTime().withDefault(Constant(DateTime.now())).nullable()();
+  TextColumn get iconName => text().nullable()();
+  TextColumn get emojiIconName => text().nullable()();
+  BoolColumn get income => boolean().withDefault(const Constant(false))();
+  BoolColumn get pinned => boolean().withDefault(const Constant(true))();
+
+  @override
+  Set<Column> get primaryKey => {objectivePk};
+}
+
 class TransactionWithCategory {
   final TransactionCategory category;
   final Transaction transaction;
@@ -460,6 +486,7 @@ bool canAddToBudget(bool? income, TransactionSpecialType? transactionType) {
   AppSettings,
   ScannerTemplates,
   DeleteLogs,
+  Objectives,
 ])
 class FinanceDatabase extends _$FinanceDatabase {
   // FinanceDatabase() : super(_openConnection());
@@ -723,6 +750,19 @@ class FinanceDatabase extends _$FinanceDatabase {
                   schema.categories, schema.categories.emojiIconName);
             } catch (e) {
               print("Error creating column");
+            }
+          },
+          from39To40: (m, schema) async {
+            try {
+              await m.addColumn(
+                  schema.transactions, schema.transactions.objectiveFk);
+            } catch (e) {
+              print("Error creating column");
+            }
+            try {
+              await migrator.createTable($ObjectivesTable(database));
+            } catch (e) {
+              print("Error creating table");
             }
           },
         )(migrator, from, to);
@@ -1621,6 +1661,23 @@ class FinanceDatabase extends _$FinanceDatabase {
     }
 
     return into(wallets)
+        .insert((companionToInsert), mode: InsertMode.insertOrReplace);
+  }
+
+  //create or update a new objective
+  Future<int> createOrUpdateObjective(Objective objective,
+      {DateTime? customDateTimeModified, bool insert = false}) {
+    objective = objective.copyWith(
+        dateTimeModified: Value(customDateTimeModified ?? DateTime.now()));
+    ObjectivesCompanion companionToInsert = objective.toCompanion(true);
+
+    if (insert) {
+      // Use auto incremented ID when inserting
+      companionToInsert =
+          companionToInsert.copyWith(objectivePk: Value.absent());
+    }
+
+    return into(objectives)
         .insert((companionToInsert), mode: InsertMode.insertOrReplace);
   }
 
@@ -2703,6 +2760,19 @@ class FinanceDatabase extends _$FinanceDatabase {
                   .lower()
                   .like("%" + (searchFor).toLowerCase().trim() + "%")))
           ..orderBy([(c) => OrderingTerm.asc(c.order)])
+          ..limit(limit ?? DEFAULT_LIMIT, offset: offset ?? DEFAULT_OFFSET))
+        .watch();
+  }
+
+  Stream<List<Objective>> watchAllObjectives(
+      {String? searchFor, int? limit, int? offset}) {
+    return (select(objectives)
+          ..where((i) => (searchFor == null
+              ? Constant(true)
+              : i.name
+                  .lower()
+                  .like("%" + (searchFor).toLowerCase().trim() + "%")))
+          ..orderBy([(i) => OrderingTerm.asc(i.order)])
           ..limit(limit ?? DEFAULT_LIMIT, offset: offset ?? DEFAULT_OFFSET))
         .watch();
   }
@@ -3985,6 +4055,12 @@ class FinanceDatabase extends _$FinanceDatabase {
   Future<List<int?>> getTotalCountOfWallets() async {
     final totalCount = wallets.walletPk.count();
     final query = selectOnly(wallets)..addColumns([totalCount]);
+    return query.map((row) => row.read(totalCount)).get();
+  }
+
+  Future<List<int?>> getTotalCountOfObjectives() async {
+    final totalCount = objectives.objectivePk.count();
+    final query = selectOnly(objectives)..addColumns([totalCount]);
     return query.map((row) => row.read(totalCount)).get();
   }
 

@@ -168,6 +168,8 @@ class SelectedTransactionsActionBar extends StatelessWidget {
                       CustomPopupMenuButton(
                         showButtons: enableDoubleColumn(context),
                         keepOutFirst: true,
+                        // There is no header taking up space, we can always keep out the delete button
+                        forceKeepOutFirst: true,
                         items: [
                           DropdownItemMenu(
                             id: "delete-transactions",

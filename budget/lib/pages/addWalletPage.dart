@@ -49,8 +49,6 @@ class AddWalletPage extends StatefulWidget {
 }
 
 class _AddWalletPageState extends State<AddWalletPage> {
-  GlobalKey<PageFrameworkState> addWalletPageKey = GlobalKey();
-
   bool? canAddWallet;
 
   String? selectedTitle;
@@ -62,19 +60,6 @@ class _AddWalletPageState extends State<AddWalletPage> {
   String selectedCurrency = "usd"; //if no currency selected use empty string
   int selectedDecimals = 2;
   FocusNode _titleFocusNode = FocusNode();
-
-  Future<void> selectColor(BuildContext context) async {
-    openBottomSheet(
-      context,
-      PopupFramework(
-        title: "select-color".tr(),
-        child: SelectColor(
-          selectedColor: selectedColor,
-          setSelectedColor: setSelectedColor,
-        ),
-      ),
-    );
-  }
 
   void setSelectedTitle(String title) {
     setState(() {
@@ -95,13 +80,6 @@ class _AddWalletPageState extends State<AddWalletPage> {
       selectedCurrency = currencyKey;
     });
     determineBottomButton();
-    return;
-  }
-
-  void setSelectedIconName(String iconName) {
-    setState(() {
-      selectedIconName = iconName;
-    });
     return;
   }
 
@@ -150,7 +128,7 @@ class _AddWalletPageState extends State<AddWalletPage> {
           : HexColor(widget.wallet!.colour);
       selectedCurrency = widget.wallet!.currency ?? "usd";
       selectedDecimals = widget.wallet!.decimals;
-    } else {}
+    }
     populateCurrencies();
   }
 
@@ -269,7 +247,6 @@ class _AddWalletPageState extends State<AddWalletPage> {
           }
         },
         child: PageFramework(
-          key: addWalletPageKey,
           resizeToAvoidBottomInset: true,
           dragDownToDismiss: true,
           title: widget.wallet == null ? "add-wallet".tr() : "edit-wallet".tr(),
@@ -325,7 +302,7 @@ class _AddWalletPageState extends State<AddWalletPage> {
                 ? [
                     IconButton(
                       padding: EdgeInsets.all(15),
-                      tooltip: "Delete wallet",
+                      tooltip: "delete-wallet",
                       onPressed: () {
                         deleteWalletPopup(
                           context,

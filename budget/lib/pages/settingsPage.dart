@@ -1,10 +1,12 @@
 import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart' hide AppSettings;
 import 'package:budget/pages/aboutPage.dart';
+import 'package:budget/pages/addObjectivePage.dart';
 import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/billSplitter.dart';
 import 'package:budget/pages/creditDebtTransactionsPage.dart';
 import 'package:budget/pages/editHomePage.dart';
+import 'package:budget/pages/editObjectivesPage.dart';
 import 'package:budget/pages/premiumPage.dart';
 import 'package:budget/pages/upcomingOverdueTransactionsPage.dart';
 import 'package:budget/struct/languageMap.dart';
@@ -303,6 +305,16 @@ class MorePages extends StatelessWidget {
                     )
                   ],
                 ),
+          kDebugMode
+              ? SettingsContainerOpenPage(
+                  openPage: EditObjectivesPage(),
+                  title: "objectives & savings jars".tr(),
+                  icon: appStateSettings["outlinedIcons"]
+                      ? Icons.savings_outlined
+                      : Icons.savings_rounded,
+                  isOutlined: true,
+                )
+              : SizedBox.shrink(),
           hasSideNavigation ? SizedBox.shrink() : SettingsPageContent(),
         ],
       ),

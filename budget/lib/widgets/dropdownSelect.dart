@@ -142,11 +142,13 @@ class CustomPopupMenuButton extends StatelessWidget {
   final List<DropdownItemMenu> items;
   final bool showButtons;
   final bool keepOutFirst;
+  final bool forceKeepOutFirst;
 
   CustomPopupMenuButton({
     required this.items,
     this.showButtons = false,
     this.keepOutFirst = true,
+    this.forceKeepOutFirst = false,
   });
 
   @override
@@ -189,7 +191,7 @@ class CustomPopupMenuButton extends StatelessWidget {
 
     return Row(
       children: [
-        if (keepOutFirstConsideringHeader)
+        if (keepOutFirstConsideringHeader || forceKeepOutFirst)
           Transform.translate(
             offset: Offset(7, 0),
             child: Tooltip(

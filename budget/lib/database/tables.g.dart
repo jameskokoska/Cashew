@@ -986,6 +986,549 @@ class CategoriesCompanion extends UpdateCompanion<TransactionCategory> {
   }
 }
 
+class $ObjectivesTable extends Objectives
+    with TableInfo<$ObjectivesTable, Objective> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $ObjectivesTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _objectivePkMeta =
+      const VerificationMeta('objectivePk');
+  @override
+  late final GeneratedColumn<String> objectivePk = GeneratedColumn<String>(
+      'objective_pk', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      clientDefault: () => uuid.v4());
+  static const VerificationMeta _nameMeta = const VerificationMeta('name');
+  @override
+  late final GeneratedColumn<String> name = GeneratedColumn<String>(
+      'name', aliasedName, false,
+      additionalChecks: GeneratedColumn.checkTextLength(),
+      type: DriftSqlType.string,
+      requiredDuringInsert: true);
+  static const VerificationMeta _amountMeta = const VerificationMeta('amount');
+  @override
+  late final GeneratedColumn<double> amount = GeneratedColumn<double>(
+      'amount', aliasedName, false,
+      type: DriftSqlType.double, requiredDuringInsert: true);
+  static const VerificationMeta _orderMeta = const VerificationMeta('order');
+  @override
+  late final GeneratedColumn<int> order = GeneratedColumn<int>(
+      'order', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _colourMeta = const VerificationMeta('colour');
+  @override
+  late final GeneratedColumn<String> colour = GeneratedColumn<String>(
+      'colour', aliasedName, true,
+      additionalChecks: GeneratedColumn.checkTextLength(),
+      type: DriftSqlType.string,
+      requiredDuringInsert: false);
+  static const VerificationMeta _dateCreatedMeta =
+      const VerificationMeta('dateCreated');
+  @override
+  late final GeneratedColumn<DateTime> dateCreated = GeneratedColumn<DateTime>(
+      'date_created', aliasedName, false,
+      type: DriftSqlType.dateTime,
+      requiredDuringInsert: false,
+      clientDefault: () => new DateTime.now());
+  static const VerificationMeta _dateTimeModifiedMeta =
+      const VerificationMeta('dateTimeModified');
+  @override
+  late final GeneratedColumn<DateTime> dateTimeModified =
+      GeneratedColumn<DateTime>('date_time_modified', aliasedName, true,
+          type: DriftSqlType.dateTime,
+          requiredDuringInsert: false,
+          defaultValue: Constant(DateTime.now()));
+  static const VerificationMeta _iconNameMeta =
+      const VerificationMeta('iconName');
+  @override
+  late final GeneratedColumn<String> iconName = GeneratedColumn<String>(
+      'icon_name', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _emojiIconNameMeta =
+      const VerificationMeta('emojiIconName');
+  @override
+  late final GeneratedColumn<String> emojiIconName = GeneratedColumn<String>(
+      'emoji_icon_name', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _incomeMeta = const VerificationMeta('income');
+  @override
+  late final GeneratedColumn<bool> income = GeneratedColumn<bool>(
+      'income', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("income" IN (0, 1))'),
+      defaultValue: const Constant(false));
+  static const VerificationMeta _pinnedMeta = const VerificationMeta('pinned');
+  @override
+  late final GeneratedColumn<bool> pinned = GeneratedColumn<bool>(
+      'pinned', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("pinned" IN (0, 1))'),
+      defaultValue: const Constant(true));
+  @override
+  List<GeneratedColumn> get $columns => [
+        objectivePk,
+        name,
+        amount,
+        order,
+        colour,
+        dateCreated,
+        dateTimeModified,
+        iconName,
+        emojiIconName,
+        income,
+        pinned
+      ];
+  @override
+  String get aliasedName => _alias ?? 'objectives';
+  @override
+  String get actualTableName => 'objectives';
+  @override
+  VerificationContext validateIntegrity(Insertable<Objective> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('objective_pk')) {
+      context.handle(
+          _objectivePkMeta,
+          objectivePk.isAcceptableOrUnknown(
+              data['objective_pk']!, _objectivePkMeta));
+    }
+    if (data.containsKey('name')) {
+      context.handle(
+          _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
+    } else if (isInserting) {
+      context.missing(_nameMeta);
+    }
+    if (data.containsKey('amount')) {
+      context.handle(_amountMeta,
+          amount.isAcceptableOrUnknown(data['amount']!, _amountMeta));
+    } else if (isInserting) {
+      context.missing(_amountMeta);
+    }
+    if (data.containsKey('order')) {
+      context.handle(
+          _orderMeta, order.isAcceptableOrUnknown(data['order']!, _orderMeta));
+    } else if (isInserting) {
+      context.missing(_orderMeta);
+    }
+    if (data.containsKey('colour')) {
+      context.handle(_colourMeta,
+          colour.isAcceptableOrUnknown(data['colour']!, _colourMeta));
+    }
+    if (data.containsKey('date_created')) {
+      context.handle(
+          _dateCreatedMeta,
+          dateCreated.isAcceptableOrUnknown(
+              data['date_created']!, _dateCreatedMeta));
+    }
+    if (data.containsKey('date_time_modified')) {
+      context.handle(
+          _dateTimeModifiedMeta,
+          dateTimeModified.isAcceptableOrUnknown(
+              data['date_time_modified']!, _dateTimeModifiedMeta));
+    }
+    if (data.containsKey('icon_name')) {
+      context.handle(_iconNameMeta,
+          iconName.isAcceptableOrUnknown(data['icon_name']!, _iconNameMeta));
+    }
+    if (data.containsKey('emoji_icon_name')) {
+      context.handle(
+          _emojiIconNameMeta,
+          emojiIconName.isAcceptableOrUnknown(
+              data['emoji_icon_name']!, _emojiIconNameMeta));
+    }
+    if (data.containsKey('income')) {
+      context.handle(_incomeMeta,
+          income.isAcceptableOrUnknown(data['income']!, _incomeMeta));
+    }
+    if (data.containsKey('pinned')) {
+      context.handle(_pinnedMeta,
+          pinned.isAcceptableOrUnknown(data['pinned']!, _pinnedMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {objectivePk};
+  @override
+  Objective map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return Objective(
+      objectivePk: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}objective_pk'])!,
+      name: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
+      amount: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}amount'])!,
+      order: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}order'])!,
+      colour: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}colour']),
+      dateCreated: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}date_created'])!,
+      dateTimeModified: attachedDatabase.typeMapping.read(
+          DriftSqlType.dateTime, data['${effectivePrefix}date_time_modified']),
+      iconName: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}icon_name']),
+      emojiIconName: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}emoji_icon_name']),
+      income: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}income'])!,
+      pinned: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}pinned'])!,
+    );
+  }
+
+  @override
+  $ObjectivesTable createAlias(String alias) {
+    return $ObjectivesTable(attachedDatabase, alias);
+  }
+}
+
+class Objective extends DataClass implements Insertable<Objective> {
+  final String objectivePk;
+  final String name;
+  final double amount;
+  final int order;
+  final String? colour;
+  final DateTime dateCreated;
+  final DateTime? dateTimeModified;
+  final String? iconName;
+  final String? emojiIconName;
+  final bool income;
+  final bool pinned;
+  const Objective(
+      {required this.objectivePk,
+      required this.name,
+      required this.amount,
+      required this.order,
+      this.colour,
+      required this.dateCreated,
+      this.dateTimeModified,
+      this.iconName,
+      this.emojiIconName,
+      required this.income,
+      required this.pinned});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['objective_pk'] = Variable<String>(objectivePk);
+    map['name'] = Variable<String>(name);
+    map['amount'] = Variable<double>(amount);
+    map['order'] = Variable<int>(order);
+    if (!nullToAbsent || colour != null) {
+      map['colour'] = Variable<String>(colour);
+    }
+    map['date_created'] = Variable<DateTime>(dateCreated);
+    if (!nullToAbsent || dateTimeModified != null) {
+      map['date_time_modified'] = Variable<DateTime>(dateTimeModified);
+    }
+    if (!nullToAbsent || iconName != null) {
+      map['icon_name'] = Variable<String>(iconName);
+    }
+    if (!nullToAbsent || emojiIconName != null) {
+      map['emoji_icon_name'] = Variable<String>(emojiIconName);
+    }
+    map['income'] = Variable<bool>(income);
+    map['pinned'] = Variable<bool>(pinned);
+    return map;
+  }
+
+  ObjectivesCompanion toCompanion(bool nullToAbsent) {
+    return ObjectivesCompanion(
+      objectivePk: Value(objectivePk),
+      name: Value(name),
+      amount: Value(amount),
+      order: Value(order),
+      colour:
+          colour == null && nullToAbsent ? const Value.absent() : Value(colour),
+      dateCreated: Value(dateCreated),
+      dateTimeModified: dateTimeModified == null && nullToAbsent
+          ? const Value.absent()
+          : Value(dateTimeModified),
+      iconName: iconName == null && nullToAbsent
+          ? const Value.absent()
+          : Value(iconName),
+      emojiIconName: emojiIconName == null && nullToAbsent
+          ? const Value.absent()
+          : Value(emojiIconName),
+      income: Value(income),
+      pinned: Value(pinned),
+    );
+  }
+
+  factory Objective.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return Objective(
+      objectivePk: serializer.fromJson<String>(json['objectivePk']),
+      name: serializer.fromJson<String>(json['name']),
+      amount: serializer.fromJson<double>(json['amount']),
+      order: serializer.fromJson<int>(json['order']),
+      colour: serializer.fromJson<String?>(json['colour']),
+      dateCreated: serializer.fromJson<DateTime>(json['dateCreated']),
+      dateTimeModified:
+          serializer.fromJson<DateTime?>(json['dateTimeModified']),
+      iconName: serializer.fromJson<String?>(json['iconName']),
+      emojiIconName: serializer.fromJson<String?>(json['emojiIconName']),
+      income: serializer.fromJson<bool>(json['income']),
+      pinned: serializer.fromJson<bool>(json['pinned']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'objectivePk': serializer.toJson<String>(objectivePk),
+      'name': serializer.toJson<String>(name),
+      'amount': serializer.toJson<double>(amount),
+      'order': serializer.toJson<int>(order),
+      'colour': serializer.toJson<String?>(colour),
+      'dateCreated': serializer.toJson<DateTime>(dateCreated),
+      'dateTimeModified': serializer.toJson<DateTime?>(dateTimeModified),
+      'iconName': serializer.toJson<String?>(iconName),
+      'emojiIconName': serializer.toJson<String?>(emojiIconName),
+      'income': serializer.toJson<bool>(income),
+      'pinned': serializer.toJson<bool>(pinned),
+    };
+  }
+
+  Objective copyWith(
+          {String? objectivePk,
+          String? name,
+          double? amount,
+          int? order,
+          Value<String?> colour = const Value.absent(),
+          DateTime? dateCreated,
+          Value<DateTime?> dateTimeModified = const Value.absent(),
+          Value<String?> iconName = const Value.absent(),
+          Value<String?> emojiIconName = const Value.absent(),
+          bool? income,
+          bool? pinned}) =>
+      Objective(
+        objectivePk: objectivePk ?? this.objectivePk,
+        name: name ?? this.name,
+        amount: amount ?? this.amount,
+        order: order ?? this.order,
+        colour: colour.present ? colour.value : this.colour,
+        dateCreated: dateCreated ?? this.dateCreated,
+        dateTimeModified: dateTimeModified.present
+            ? dateTimeModified.value
+            : this.dateTimeModified,
+        iconName: iconName.present ? iconName.value : this.iconName,
+        emojiIconName:
+            emojiIconName.present ? emojiIconName.value : this.emojiIconName,
+        income: income ?? this.income,
+        pinned: pinned ?? this.pinned,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('Objective(')
+          ..write('objectivePk: $objectivePk, ')
+          ..write('name: $name, ')
+          ..write('amount: $amount, ')
+          ..write('order: $order, ')
+          ..write('colour: $colour, ')
+          ..write('dateCreated: $dateCreated, ')
+          ..write('dateTimeModified: $dateTimeModified, ')
+          ..write('iconName: $iconName, ')
+          ..write('emojiIconName: $emojiIconName, ')
+          ..write('income: $income, ')
+          ..write('pinned: $pinned')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(objectivePk, name, amount, order, colour,
+      dateCreated, dateTimeModified, iconName, emojiIconName, income, pinned);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is Objective &&
+          other.objectivePk == this.objectivePk &&
+          other.name == this.name &&
+          other.amount == this.amount &&
+          other.order == this.order &&
+          other.colour == this.colour &&
+          other.dateCreated == this.dateCreated &&
+          other.dateTimeModified == this.dateTimeModified &&
+          other.iconName == this.iconName &&
+          other.emojiIconName == this.emojiIconName &&
+          other.income == this.income &&
+          other.pinned == this.pinned);
+}
+
+class ObjectivesCompanion extends UpdateCompanion<Objective> {
+  final Value<String> objectivePk;
+  final Value<String> name;
+  final Value<double> amount;
+  final Value<int> order;
+  final Value<String?> colour;
+  final Value<DateTime> dateCreated;
+  final Value<DateTime?> dateTimeModified;
+  final Value<String?> iconName;
+  final Value<String?> emojiIconName;
+  final Value<bool> income;
+  final Value<bool> pinned;
+  final Value<int> rowid;
+  const ObjectivesCompanion({
+    this.objectivePk = const Value.absent(),
+    this.name = const Value.absent(),
+    this.amount = const Value.absent(),
+    this.order = const Value.absent(),
+    this.colour = const Value.absent(),
+    this.dateCreated = const Value.absent(),
+    this.dateTimeModified = const Value.absent(),
+    this.iconName = const Value.absent(),
+    this.emojiIconName = const Value.absent(),
+    this.income = const Value.absent(),
+    this.pinned = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  ObjectivesCompanion.insert({
+    this.objectivePk = const Value.absent(),
+    required String name,
+    required double amount,
+    required int order,
+    this.colour = const Value.absent(),
+    this.dateCreated = const Value.absent(),
+    this.dateTimeModified = const Value.absent(),
+    this.iconName = const Value.absent(),
+    this.emojiIconName = const Value.absent(),
+    this.income = const Value.absent(),
+    this.pinned = const Value.absent(),
+    this.rowid = const Value.absent(),
+  })  : name = Value(name),
+        amount = Value(amount),
+        order = Value(order);
+  static Insertable<Objective> custom({
+    Expression<String>? objectivePk,
+    Expression<String>? name,
+    Expression<double>? amount,
+    Expression<int>? order,
+    Expression<String>? colour,
+    Expression<DateTime>? dateCreated,
+    Expression<DateTime>? dateTimeModified,
+    Expression<String>? iconName,
+    Expression<String>? emojiIconName,
+    Expression<bool>? income,
+    Expression<bool>? pinned,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (objectivePk != null) 'objective_pk': objectivePk,
+      if (name != null) 'name': name,
+      if (amount != null) 'amount': amount,
+      if (order != null) 'order': order,
+      if (colour != null) 'colour': colour,
+      if (dateCreated != null) 'date_created': dateCreated,
+      if (dateTimeModified != null) 'date_time_modified': dateTimeModified,
+      if (iconName != null) 'icon_name': iconName,
+      if (emojiIconName != null) 'emoji_icon_name': emojiIconName,
+      if (income != null) 'income': income,
+      if (pinned != null) 'pinned': pinned,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  ObjectivesCompanion copyWith(
+      {Value<String>? objectivePk,
+      Value<String>? name,
+      Value<double>? amount,
+      Value<int>? order,
+      Value<String?>? colour,
+      Value<DateTime>? dateCreated,
+      Value<DateTime?>? dateTimeModified,
+      Value<String?>? iconName,
+      Value<String?>? emojiIconName,
+      Value<bool>? income,
+      Value<bool>? pinned,
+      Value<int>? rowid}) {
+    return ObjectivesCompanion(
+      objectivePk: objectivePk ?? this.objectivePk,
+      name: name ?? this.name,
+      amount: amount ?? this.amount,
+      order: order ?? this.order,
+      colour: colour ?? this.colour,
+      dateCreated: dateCreated ?? this.dateCreated,
+      dateTimeModified: dateTimeModified ?? this.dateTimeModified,
+      iconName: iconName ?? this.iconName,
+      emojiIconName: emojiIconName ?? this.emojiIconName,
+      income: income ?? this.income,
+      pinned: pinned ?? this.pinned,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (objectivePk.present) {
+      map['objective_pk'] = Variable<String>(objectivePk.value);
+    }
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
+    }
+    if (amount.present) {
+      map['amount'] = Variable<double>(amount.value);
+    }
+    if (order.present) {
+      map['order'] = Variable<int>(order.value);
+    }
+    if (colour.present) {
+      map['colour'] = Variable<String>(colour.value);
+    }
+    if (dateCreated.present) {
+      map['date_created'] = Variable<DateTime>(dateCreated.value);
+    }
+    if (dateTimeModified.present) {
+      map['date_time_modified'] = Variable<DateTime>(dateTimeModified.value);
+    }
+    if (iconName.present) {
+      map['icon_name'] = Variable<String>(iconName.value);
+    }
+    if (emojiIconName.present) {
+      map['emoji_icon_name'] = Variable<String>(emojiIconName.value);
+    }
+    if (income.present) {
+      map['income'] = Variable<bool>(income.value);
+    }
+    if (pinned.present) {
+      map['pinned'] = Variable<bool>(pinned.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ObjectivesCompanion(')
+          ..write('objectivePk: $objectivePk, ')
+          ..write('name: $name, ')
+          ..write('amount: $amount, ')
+          ..write('order: $order, ')
+          ..write('colour: $colour, ')
+          ..write('dateCreated: $dateCreated, ')
+          ..write('dateTimeModified: $dateTimeModified, ')
+          ..write('iconName: $iconName, ')
+          ..write('emojiIconName: $emojiIconName, ')
+          ..write('income: $income, ')
+          ..write('pinned: $pinned, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 class $TransactionsTable extends Transactions
     with TableInfo<$TransactionsTable, Transaction> {
   @override
@@ -1185,6 +1728,15 @@ class $TransactionsTable extends Transactions
   late final GeneratedColumn<String> sharedReferenceBudgetPk =
       GeneratedColumn<String>('shared_reference_budget_pk', aliasedName, true,
           type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _objectiveFkMeta =
+      const VerificationMeta('objectiveFk');
+  @override
+  late final GeneratedColumn<String> objectiveFk = GeneratedColumn<String>(
+      'objective_fk', aliasedName, true,
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'REFERENCES objectives (objective_pk)'));
   @override
   List<GeneratedColumn> get $columns => [
         transactionPk,
@@ -1211,7 +1763,8 @@ class $TransactionsTable extends Transactions
         sharedOldKey,
         sharedStatus,
         sharedDateUpdated,
-        sharedReferenceBudgetPk
+        sharedReferenceBudgetPk,
+        objectiveFk
       ];
   @override
   String get aliasedName => _alias ?? 'transactions';
@@ -1350,6 +1903,12 @@ class $TransactionsTable extends Transactions
               data['shared_reference_budget_pk']!,
               _sharedReferenceBudgetPkMeta));
     }
+    if (data.containsKey('objective_fk')) {
+      context.handle(
+          _objectiveFkMeta,
+          objectiveFk.isAcceptableOrUnknown(
+              data['objective_fk']!, _objectiveFkMeta));
+    }
     return context;
   }
 
@@ -1418,6 +1977,8 @@ class $TransactionsTable extends Transactions
       sharedReferenceBudgetPk: attachedDatabase.typeMapping.read(
           DriftSqlType.string,
           data['${effectivePrefix}shared_reference_budget_pk']),
+      objectiveFk: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}objective_fk']),
     );
   }
 
@@ -1473,6 +2034,7 @@ class Transaction extends DataClass implements Insertable<Transaction> {
   final SharedStatus? sharedStatus;
   final DateTime? sharedDateUpdated;
   final String? sharedReferenceBudgetPk;
+  final String? objectiveFk;
   const Transaction(
       {required this.transactionPk,
       required this.name,
@@ -1498,7 +2060,8 @@ class Transaction extends DataClass implements Insertable<Transaction> {
       this.sharedOldKey,
       this.sharedStatus,
       this.sharedDateUpdated,
-      this.sharedReferenceBudgetPk});
+      this.sharedReferenceBudgetPk,
+      this.objectiveFk});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -1565,6 +2128,9 @@ class Transaction extends DataClass implements Insertable<Transaction> {
       map['shared_reference_budget_pk'] =
           Variable<String>(sharedReferenceBudgetPk);
     }
+    if (!nullToAbsent || objectiveFk != null) {
+      map['objective_fk'] = Variable<String>(objectiveFk);
+    }
     return map;
   }
 
@@ -1626,6 +2192,9 @@ class Transaction extends DataClass implements Insertable<Transaction> {
       sharedReferenceBudgetPk: sharedReferenceBudgetPk == null && nullToAbsent
           ? const Value.absent()
           : Value(sharedReferenceBudgetPk),
+      objectiveFk: objectiveFk == null && nullToAbsent
+          ? const Value.absent()
+          : Value(objectiveFk),
     );
   }
 
@@ -1669,6 +2238,7 @@ class Transaction extends DataClass implements Insertable<Transaction> {
           serializer.fromJson<DateTime?>(json['sharedDateUpdated']),
       sharedReferenceBudgetPk:
           serializer.fromJson<String?>(json['sharedReferenceBudgetPk']),
+      objectiveFk: serializer.fromJson<String?>(json['objectiveFk']),
     );
   }
   @override
@@ -1709,6 +2279,7 @@ class Transaction extends DataClass implements Insertable<Transaction> {
       'sharedDateUpdated': serializer.toJson<DateTime?>(sharedDateUpdated),
       'sharedReferenceBudgetPk':
           serializer.toJson<String?>(sharedReferenceBudgetPk),
+      'objectiveFk': serializer.toJson<String?>(objectiveFk),
     };
   }
 
@@ -1737,7 +2308,8 @@ class Transaction extends DataClass implements Insertable<Transaction> {
           Value<String?> sharedOldKey = const Value.absent(),
           Value<SharedStatus?> sharedStatus = const Value.absent(),
           Value<DateTime?> sharedDateUpdated = const Value.absent(),
-          Value<String?> sharedReferenceBudgetPk = const Value.absent()}) =>
+          Value<String?> sharedReferenceBudgetPk = const Value.absent(),
+          Value<String?> objectiveFk = const Value.absent()}) =>
       Transaction(
         transactionPk: transactionPk ?? this.transactionPk,
         name: name ?? this.name,
@@ -1784,6 +2356,7 @@ class Transaction extends DataClass implements Insertable<Transaction> {
         sharedReferenceBudgetPk: sharedReferenceBudgetPk.present
             ? sharedReferenceBudgetPk.value
             : this.sharedReferenceBudgetPk,
+        objectiveFk: objectiveFk.present ? objectiveFk.value : this.objectiveFk,
       );
   @override
   String toString() {
@@ -1815,7 +2388,8 @@ class Transaction extends DataClass implements Insertable<Transaction> {
           ..write('sharedOldKey: $sharedOldKey, ')
           ..write('sharedStatus: $sharedStatus, ')
           ..write('sharedDateUpdated: $sharedDateUpdated, ')
-          ..write('sharedReferenceBudgetPk: $sharedReferenceBudgetPk')
+          ..write('sharedReferenceBudgetPk: $sharedReferenceBudgetPk, ')
+          ..write('objectiveFk: $objectiveFk')
           ..write(')'))
         .toString();
   }
@@ -1846,7 +2420,8 @@ class Transaction extends DataClass implements Insertable<Transaction> {
         sharedOldKey,
         sharedStatus,
         sharedDateUpdated,
-        sharedReferenceBudgetPk
+        sharedReferenceBudgetPk,
+        objectiveFk
       ]);
   @override
   bool operator ==(Object other) =>
@@ -1879,7 +2454,8 @@ class Transaction extends DataClass implements Insertable<Transaction> {
           other.sharedOldKey == this.sharedOldKey &&
           other.sharedStatus == this.sharedStatus &&
           other.sharedDateUpdated == this.sharedDateUpdated &&
-          other.sharedReferenceBudgetPk == this.sharedReferenceBudgetPk);
+          other.sharedReferenceBudgetPk == this.sharedReferenceBudgetPk &&
+          other.objectiveFk == this.objectiveFk);
 }
 
 class TransactionsCompanion extends UpdateCompanion<Transaction> {
@@ -1908,6 +2484,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
   final Value<SharedStatus?> sharedStatus;
   final Value<DateTime?> sharedDateUpdated;
   final Value<String?> sharedReferenceBudgetPk;
+  final Value<String?> objectiveFk;
   final Value<int> rowid;
   const TransactionsCompanion({
     this.transactionPk = const Value.absent(),
@@ -1935,6 +2512,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
     this.sharedStatus = const Value.absent(),
     this.sharedDateUpdated = const Value.absent(),
     this.sharedReferenceBudgetPk = const Value.absent(),
+    this.objectiveFk = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   TransactionsCompanion.insert({
@@ -1963,6 +2541,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
     this.sharedStatus = const Value.absent(),
     this.sharedDateUpdated = const Value.absent(),
     this.sharedReferenceBudgetPk = const Value.absent(),
+    this.objectiveFk = const Value.absent(),
     this.rowid = const Value.absent(),
   })  : name = Value(name),
         amount = Value(amount),
@@ -1995,6 +2574,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
     Expression<int>? sharedStatus,
     Expression<DateTime>? sharedDateUpdated,
     Expression<String>? sharedReferenceBudgetPk,
+    Expression<String>? objectiveFk,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -2028,6 +2608,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
       if (sharedDateUpdated != null) 'shared_date_updated': sharedDateUpdated,
       if (sharedReferenceBudgetPk != null)
         'shared_reference_budget_pk': sharedReferenceBudgetPk,
+      if (objectiveFk != null) 'objective_fk': objectiveFk,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -2058,6 +2639,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
       Value<SharedStatus?>? sharedStatus,
       Value<DateTime?>? sharedDateUpdated,
       Value<String?>? sharedReferenceBudgetPk,
+      Value<String?>? objectiveFk,
       Value<int>? rowid}) {
     return TransactionsCompanion(
       transactionPk: transactionPk ?? this.transactionPk,
@@ -2090,6 +2672,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
       sharedDateUpdated: sharedDateUpdated ?? this.sharedDateUpdated,
       sharedReferenceBudgetPk:
           sharedReferenceBudgetPk ?? this.sharedReferenceBudgetPk,
+      objectiveFk: objectiveFk ?? this.objectiveFk,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -2181,6 +2764,9 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
       map['shared_reference_budget_pk'] =
           Variable<String>(sharedReferenceBudgetPk.value);
     }
+    if (objectiveFk.present) {
+      map['objective_fk'] = Variable<String>(objectiveFk.value);
+    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -2218,6 +2804,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
           ..write('sharedStatus: $sharedStatus, ')
           ..write('sharedDateUpdated: $sharedDateUpdated, ')
           ..write('sharedReferenceBudgetPk: $sharedReferenceBudgetPk, ')
+          ..write('objectiveFk: $objectiveFk, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -5268,6 +5855,7 @@ abstract class _$FinanceDatabase extends GeneratedDatabase {
   _$FinanceDatabase(QueryExecutor e) : super(e);
   late final $WalletsTable wallets = $WalletsTable(this);
   late final $CategoriesTable categories = $CategoriesTable(this);
+  late final $ObjectivesTable objectives = $ObjectivesTable(this);
   late final $TransactionsTable transactions = $TransactionsTable(this);
   late final $BudgetsTable budgets = $BudgetsTable(this);
   late final $CategoryBudgetLimitsTable categoryBudgetLimits =
@@ -5285,6 +5873,7 @@ abstract class _$FinanceDatabase extends GeneratedDatabase {
   List<DatabaseSchemaEntity> get allSchemaEntities => [
         wallets,
         categories,
+        objectives,
         transactions,
         budgets,
         categoryBudgetLimits,

@@ -669,6 +669,7 @@ class _ImportCSVState extends State<ImportCSV> {
                     ? Icons.download_outlined
                     : Icons.download_rounded,
                 size: 18,
+                color: getColor(context, "black").withOpacity(0.5),
               ),
             ),
             text: "template".tr(),
@@ -693,6 +694,7 @@ class _ImportCSVState extends State<ImportCSV> {
                     ? Icons.open_in_new_outlined
                     : Icons.open_in_new_rounded,
                 size: 18,
+                color: getColor(context, "black").withOpacity(0.5),
               ),
             ),
             text: "template".tr(),
