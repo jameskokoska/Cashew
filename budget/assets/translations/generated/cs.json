@@ -529,8 +529,8 @@
   "all-transactions-description-3": "Příklad: Rozpočet „Měsíční výdaje“",
   "no-budgets-found": "Nebyly nalezeny žádné rozpočty.",
   "no-categories-found": "Žádné kategorie nalezeny.",
-  "no-wallets-found": "Žádné účty nalezeny.",
-  "no-titles-found": "Nalezeny žádné tituly.",
+  "no-wallets-found": "Žádné účty.",
+  "no-titles-found": "Žádné tituly.",
   "translations": "Překlady",
   "ask-for-notes-with-title": "Požádejte o poznámku s názvem",
   "ask-for-notes-with-title-description": "Při vstupu do názvu",
@@ -544,7 +544,7 @@
   "error-downloading": "Stahování chyb",
   "tools": "Nástroje",
   "delete-bill-item-question": "Odstranit položku účtu?",
-  "bill-splitter": "Splitter Bill",
+  "bill-splitter": "Bill Splitter",
   "bill-splitter-info": "Splitter Bill rozdělí účet, za který jste zaplatili mezi lidmi, kteří zakoupili předměty. Můžete snadno sledovat, kdo vám dluží určité částky peněz.",
   "new-bill": "Nový účet",
   "names": "Jména",
@@ -601,5 +601,12 @@
   "cannot-remove-default-wallet": "Výchozí účet nelze odstranit",
   "cannot-remove": "Nelze odstranit",
   "installment": "Splátka",
-  "net-worth": "Čisté jmění"
+  "net-worth": "Čisté jmění",
+  "objectives": "Cíle",
+  "edit-objectives": "Upravit cíle",
+  "savings-goal": "Úsporný cíl",
+  "expense-goal": "Cíl výdajů",
+  "goal": "Fotbalová branka",
+  "delete-objective": "Smazat cíl",
+  "add-objective": "Přidat cíl"
 }

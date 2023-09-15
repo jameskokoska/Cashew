@@ -12,6 +12,19 @@ import 'package:flutter/material.dart'
         ReorderableDelayedDragStartListener;
 import 'package:budget/modified/reorderable_list.dart';
 
+Color getStandardContainerColor(BuildContext context) {
+  return getPlatform() == PlatformOS.isIOS
+      ? Theme.of(context).canvasColor
+      : appStateSettings["materialYou"]
+          ? dynamicPastel(
+              context,
+              Theme.of(context).colorScheme.secondaryContainer,
+              amountLight: 0.3,
+              amountDark: 0.6,
+            )
+          : getColor(context, "lightDarkAccentHeavyLight");
+}
+
 class EditRowEntry extends StatelessWidget {
   const EditRowEntry({
     required this.index,
@@ -61,16 +74,7 @@ class EditRowEntry extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Color containerColor = getPlatform() == PlatformOS.isIOS
-        ? Theme.of(context).canvasColor
-        : appStateSettings["materialYou"]
-            ? dynamicPastel(
-                context,
-                Theme.of(context).colorScheme.secondaryContainer,
-                amountLight: 0.3,
-                amountDark: 0.6,
-              )
-            : getColor(context, "lightDarkAccentHeavyLight");
+    Color containerColor = getStandardContainerColor(context);
     bool useDismissToDelete = canDelete && onDelete != null;
     double borderRadius = getPlatform() == PlatformOS.isIOS ? 0 : 18;
     List<BoxShadow> boxShadow = (getPlatform() == PlatformOS.isIOS

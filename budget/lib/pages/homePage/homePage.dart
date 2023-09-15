@@ -207,6 +207,9 @@ class HomePageState extends State<HomePage>
                               // enableDoubleColumn(context) == false
                               //     ? SizedBox.shrink()
                               //     : HomePageAllSpendingSummary(),
+                              // enableDoubleColumn(context) == false
+                              //     ? SizedBox.shrink()
+                              //     : HomePageNetWorth(),
                               enableDoubleColumn(context) == false
                                   ? SizedBox.shrink()
                                   : HomePageUpcomingTransactions(),

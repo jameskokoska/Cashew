@@ -601,5 +601,12 @@
   "cannot-remove-default-wallet": "സ്ഥിരസ്ഥിതി അക്കൗണ്ട് ഇല്ലാതാക്കാൻ കഴിയില്ല",
   "cannot-remove": "നീക്കംചെയ്യാൻ കഴിയില്ല",
   "installment": "തവണ",
-  "net-worth": "മൊത്തം മൂല്യം"
+  "net-worth": "മൊത്തം മൂല്യം",
+  "objectives": "ലക്ഷ്യങ്ങൾ",
+  "edit-objectives": "ലക്ഷ്യങ്ങൾ എഡിറ്റുചെയ്യുക",
+  "savings-goal": "സേവിംഗ്സ് ലക്ഷ്യം",
+  "expense-goal": "ചെലവ് ലക്ഷ്യം",
+  "goal": "ലക്ഷം",
+  "delete-objective": "ലക്ഷ്യം ഇല്ലാതാക്കുക",
+  "add-objective": "ലക്ഷ്യം ചേർക്കുക"
 }

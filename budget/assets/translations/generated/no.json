@@ -601,5 +601,12 @@
   "cannot-remove-default-wallet": "Standardkonto kan ikke slettes",
   "cannot-remove": "Kan ikke fjerne",
   "installment": "Avdrag",
-  "net-worth": "Nettoformue"
+  "net-worth": "Nettoformue",
+  "objectives": "Mål",
+  "edit-objectives": "Rediger mål",
+  "savings-goal": "Sparemål",
+  "expense-goal": "Utgiftsmål",
+  "goal": "Mål",
+  "delete-objective": "Slett målet",
+  "add-objective": "Legg til mål"
 }

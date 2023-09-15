@@ -583,7 +583,7 @@
   "import-and-export": "Import Eksport",
   "import-google-sheet": "Importer Google Sheet",
   "enter-google-sheet-url": "Indtast Google Sheet URL",
-  "enter-google-sheet-url-description": "Sørg for, at enhver med linket kan se dit Google -ark, og det er indstillet til offentligheden",
+  "enter-google-sheet-url-description": "Sørg for, at alle med linket kan se dit Google -ark, og det er indstillet til offentligheden",
   "create-template-copy": "Opret skabelonkopi",
   "help": "Hjælp",
   "create-template-copy-description": "Lav en kopi og gem den på dit Google -drev. Rediger arket med dine data, og importer dem!",
@@ -593,7 +593,7 @@
   "negative-amount": "Negativt beløb",
   "update-total-balance": "Opdater total balance",
   "updated-total-balance": "Opdateret total balance",
-  "merge-wallet": "Merge -konto",
+  "merge-wallet": "Merge konto",
   "wallet-to-transfer-all-transactions-to": "Konto for at overføre alle transaktioner til",
   "merge-into-description-wallets": "Dette overfører alle transaktioner til den nye konto og sletter den gamle konto",
   "move-and-delete": "Flyt og slet",
@@ -601,5 +601,12 @@
   "cannot-remove-default-wallet": "Standardkonto kan ikke slettes",
   "cannot-remove": "Kan ikke fjerne",
   "installment": "Afbetaling",
-  "net-worth": "Nettoværdi"
+  "net-worth": "Nettoværdi",
+  "objectives": "Mål",
+  "edit-objectives": "Rediger mål",
+  "savings-goal": "Besparelsesmål",
+  "expense-goal": "Udgiftsmål",
+  "goal": "Mål",
+  "delete-objective": "Slet mål",
+  "add-objective": "Tilføj mål"
 }

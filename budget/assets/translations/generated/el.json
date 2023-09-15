@@ -601,5 +601,12 @@
   "cannot-remove-default-wallet": "Ο προεπιλεγμένος λογαριασμός δεν μπορεί να διαγραφεί",
   "cannot-remove": "Δεν μπορώ να καταργήσω",
   "installment": "Δόση πληρωμής",
-  "net-worth": "Καθαρή αξία"
+  "net-worth": "Καθαρή αξία",
+  "objectives": "Στόχοι",
+  "edit-objectives": "Επεξεργασία στόχων",
+  "savings-goal": "Στόχος εξοικονόμησης",
+  "expense-goal": "Στόχος δαπανών",
+  "goal": "Στόχος",
+  "delete-objective": "Διαγραφή στόχου",
+  "add-objective": "Προσθήκη στόχου"
 }

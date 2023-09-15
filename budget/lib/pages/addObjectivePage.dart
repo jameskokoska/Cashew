@@ -202,7 +202,7 @@ class _AddObjectivePageState extends State<AddObjectivePage>
       selectedAmount = widget.objective!.amount;
 
       selectedIncome = widget.objective!.income;
-      if (widget.objective?.income == true) {
+      if (widget.objective?.income == false) {
         _incomeTabController.animateTo(1);
       } else {
         _incomeTabController.animateTo(0);
@@ -347,7 +347,7 @@ class _AddObjectivePageState extends State<AddObjectivePage>
                         splashFactory: Theme.of(context).splashFactory,
                         controller: _incomeTabController,
                         onTap: (value) {
-                          if (value == 1)
+                          if (value == 0)
                             setSelectedIncome(true);
                           else
                             setSelectedIncome(false);

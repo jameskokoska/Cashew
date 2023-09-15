@@ -422,7 +422,7 @@
   "delete-transactions": "Hapus transaksi",
   "change-wallet": "Ganti akun",
   "add-to-budget": "Tambahkan ke anggaran",
-  "select-wallet": "Pilih Akun",
+  "select-wallet": "Pilih akun",
   "move-to-other-wallet-button": "Pindahkan transaksi ke akun lain dan hapus",
   "changed-wallet": "Akun yang diubah",
   "added-to-budget": "Ditambahkan ke anggaran",
@@ -601,5 +601,12 @@
   "cannot-remove-default-wallet": "Akun default tidak dapat dihapus",
   "cannot-remove": "Tidak bisa menghapus",
   "installment": "Cicilan",
-  "net-worth": "Kekayaan bersih"
+  "net-worth": "Kekayaan bersih",
+  "objectives": "Tujuan",
+  "edit-objectives": "Edit tujuan",
+  "savings-goal": "Tujuan tabungan",
+  "expense-goal": "Tujuan pengeluaran",
+  "goal": "Sasaran",
+  "delete-objective": "Hapus Tujuan",
+  "add-objective": "Tambahkan tujuan"
 }

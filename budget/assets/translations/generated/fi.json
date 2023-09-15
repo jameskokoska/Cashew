@@ -530,7 +530,7 @@
   "no-budgets-found": "Ei löytynyt budjetteja.",
   "no-categories-found": "Luokkia ei löydy.",
   "no-wallets-found": "Tiliä ei löydy.",
-  "no-titles-found": "Ei nimikkeitä löydetty.",
+  "no-titles-found": "Ei nimikkeitä löydy.",
   "translations": "Käännökset",
   "ask-for-notes-with-title": "Pyydä muistiinpanoa otsikolla",
   "ask-for-notes-with-title-description": "Otsikkoon siirryttäessä",
@@ -601,5 +601,12 @@
   "cannot-remove-default-wallet": "Oletustiliä ei voida poistaa",
   "cannot-remove": "Ei voi poistaa",
   "installment": "Erä",
-  "net-worth": "Nettovarallisuus"
+  "net-worth": "Nettovarallisuus",
+  "objectives": "Tavoitteet",
+  "edit-objectives": "Muokkaa tavoitteita",
+  "savings-goal": "Säästötavoite",
+  "expense-goal": "Kustannustavoite",
+  "goal": "Päämäärä",
+  "delete-objective": "Poistaa objektiivi",
+  "add-objective": "Lisää objektiivinen"
 }

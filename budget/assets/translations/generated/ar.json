@@ -601,5 +601,12 @@
   "cannot-remove-default-wallet": "لا يمكن حذف الحساب الافتراضي",
   "cannot-remove": "لا يمكن إزالة",
   "installment": "الدفعة",
-  "net-worth": "صافي القيمة"
+  "net-worth": "صافي القيمة",
+  "objectives": "أهداف",
+  "edit-objectives": "تحرير الأهداف",
+  "savings-goal": "هدف الادخار",
+  "expense-goal": "هدف المصاريف",
+  "goal": "هدف",
+  "delete-objective": "حذف الهدف",
+  "add-objective": "أضف الهدف"
 }

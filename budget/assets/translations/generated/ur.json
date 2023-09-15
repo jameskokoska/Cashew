@@ -559,7 +559,7 @@
   "who-are-you-description": "آپ کو وہ ہونا چاہئے جس نے بل ادا کیا۔",
   "split-evenly": "یکساں طور پر تقسیم",
   "item-name-placeholder": "شے کا نام",
-  "reset-bill-question": "ری سیٹ بل؟",
+  "reset-bill-question": "بل کو دوبارہ ترتیب دیں؟",
   "reset-bill-description": "یہ موجودہ بل میں تمام اشیاء کو حذف کردے گا",
   "success-generate-loans": "کامیابی",
   "success-generate-loans-description": "بل سے قرض کے لین دین کو پیدا کیا",
@@ -601,5 +601,12 @@
   "cannot-remove-default-wallet": "پہلے سے طے شدہ اکاؤنٹ کو حذف نہیں کیا جاسکتا",
   "cannot-remove": "نہیں ہٹ سکتے",
   "installment": "قسط",
-  "net-worth": "کل مالیت"
+  "net-worth": "کل مالیت",
+  "objectives": "مقاصد",
+  "edit-objectives": "مقاصد میں ترمیم کریں",
+  "savings-goal": "بچت کا مقصد",
+  "expense-goal": "اخراجات کا مقصد",
+  "goal": "مقصد",
+  "delete-objective": "مقصد کو حذف کریں",
+  "add-objective": "مقصد شامل کریں"
 }

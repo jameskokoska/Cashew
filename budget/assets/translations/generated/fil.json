@@ -601,5 +601,12 @@
   "cannot-remove-default-wallet": "Hindi matanggal ang default na account",
   "cannot-remove": "Hindi matanggal",
   "installment": "Pag -install",
-  "net-worth": "Net worth"
+  "net-worth": "Net worth",
+  "objectives": "Mga layunin",
+  "edit-objectives": "I -edit ang mga layunin",
+  "savings-goal": "Layunin ng pag -save",
+  "expense-goal": "Layunin ng gastos",
+  "goal": "Layunin",
+  "delete-objective": "Tanggalin ang layunin",
+  "add-objective": "Magdagdag ng layunin"
 }

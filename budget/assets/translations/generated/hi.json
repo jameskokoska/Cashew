@@ -424,7 +424,7 @@
   "add-to-budget": "बजट में जोड़ें",
   "select-wallet": "लेखा का चयन करें",
   "move-to-other-wallet-button": "लेनदेन को दूसरे खाते में ले जाएं और हटाएं",
-  "changed-wallet": "परिवर्तित लेखा",
+  "changed-wallet": "परिवर्तित खाता",
   "added-to-budget": "बजट में जोड़ा गया",
   "no-addable-budgets": "लेनदेन को जोड़ने के लिए कोई बजट नहीं",
   "create-addable-budget": "बनाएँ 'केवल' बजट जोड़ा गया",
@@ -572,7 +572,7 @@
   "duplicate-name-warning-description": "कृपया दूसरा नाम चुनें",
   "notifications-reminder": "लेनदेन अनुस्मारक जोड़ें",
   "notifications-reminder-type": "अनुस्मारक प्रकार",
-  "daily-notification-type-if-not-opened": "अगर ऐप आज ही नहीं खोला गया था",
+  "daily-notification-type-if-not-opened": "यदि ऐप आज पहले से नहीं खोला गया था",
   "daily-notification-type-one-day-from-open": "ऐप से 24 घंटे खोले गए",
   "daily-notification-type-everyday": "रोज रोज",
   "consider-csv-template": "फिर से प्रयास करें और प्रदान किए गए CSV टेम्पलेट का उपयोग करने पर विचार करें।",
@@ -601,5 +601,12 @@
   "cannot-remove-default-wallet": "डिफ़ॉल्ट खाते को हटा नहीं दिया जा सकता है",
   "cannot-remove": "निकाल नहीं सकता",
   "installment": "किश्त",
-  "net-worth": "निवल मूल्य"
+  "net-worth": "निवल मूल्य",
+  "objectives": "उद्देश्य",
+  "edit-objectives": "उद्देश्य संपादित करें",
+  "savings-goal": "बचत लक्ष्य",
+  "expense-goal": "व्यय लक्ष्य",
+  "goal": "लक्ष्य",
+  "delete-objective": "उद्देश्य हटाएं",
+  "add-objective": "उद्देश्य जोड़ें"
 }

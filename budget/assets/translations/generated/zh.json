@@ -544,7 +544,7 @@
   "error-downloading": "错误下载",
   "tools": "工具",
   "delete-bill-item-question": "删除账单项目？",
-  "bill-splitter": "比尔·拆分器",
+  "bill-splitter": "比尔·克莱特（Bill Splitter）",
   "bill-splitter-info": "账单分离器将在购买商品的人中分配您支付的账单。您可以轻松跟踪谁欠您一定数量的钱。",
   "new-bill": "新法案",
   "names": "名称",
@@ -565,7 +565,7 @@
   "success-generate-loans-description": "从账单创建贷款交易",
   "missing-data": "缺失数据。",
   "generate-loan-transactions": "产生贷款交易",
-  "no-names-found": "找不到名字。",
+  "no-names-found": "找不到名称。",
   "add-name": "添加名称",
   "delete-name-question": "删除名称？",
   "duplicate-name-warning": "重复名称",
@@ -601,5 +601,12 @@
   "cannot-remove-default-wallet": "默认帐户无法删除",
   "cannot-remove": "无法删除",
   "installment": "分期付款",
-  "net-worth": "净值"
+  "net-worth": "净值",
+  "objectives": "目标",
+  "edit-objectives": "编辑目标",
+  "savings-goal": "储蓄目标",
+  "expense-goal": "费用目标",
+  "goal": "目标",
+  "delete-objective": "删除目标",
+  "add-objective": "增加目标"
 }

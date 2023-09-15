@@ -559,7 +559,7 @@
   "who-are-you-description": "Faturayı ödeyen siz olmalısın.",
   "split-evenly": "Eşit olarak bölmek",
   "item-name-placeholder": "Öğe adı",
-  "reset-bill-question": "Faturayı sıfırlamak?",
+  "reset-bill-question": "Faturayı sıfırla?",
   "reset-bill-description": "Bu, mevcut faturadaki tüm öğeleri silecektir",
   "success-generate-loans": "Başarı",
   "success-generate-loans-description": "Bill'den kredi işlemleri oluşturdu",
@@ -589,7 +589,7 @@
   "create-template-copy-description": "Bir kopya yapın ve Google Drive'ınıza kaydedin. Sayfayı verilerinizle düzenleyin ve içe aktarın!",
   "get-template": "Şablon alın",
   "correct-total-balance": "Total Bakiyesi Doğru",
-  "default-category-account-amount-balancing": "Denge Düzeltme",
+  "default-category-account-amount-balancing": "Denge düzeltmesi",
   "negative-amount": "Negatif miktar",
   "update-total-balance": "Toplam Bakiyeyi Güncelle",
   "updated-total-balance": "Güncellenen Toplam Bakiye",
@@ -601,5 +601,12 @@
   "cannot-remove-default-wallet": "Varsayılan hesap silinemez",
   "cannot-remove": "Çıkarılamıyor",
   "installment": "Taksit",
-  "net-worth": "Net değer"
+  "net-worth": "Net değer",
+  "objectives": "Hedefler",
+  "edit-objectives": "Hedefleri Düzenle",
+  "savings-goal": "Tasarruf hedefi",
+  "expense-goal": "Masraf hedefi",
+  "goal": "Amaç",
+  "delete-objective": "Hedefi sil",
+  "add-objective": "Amaç ekle"
 }

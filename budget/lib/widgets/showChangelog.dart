@@ -10,11 +10,15 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    < 4.3.2
+    Objective syncing support
+    Objective list page
+    Objective container
     < 4.3.1
     Net worth home page widget
     When setting custom start date for Income and Expense home page widget, amount of transactions now correct
     Home page order preserved when new widget added
-    Countup number when correcting total wallet balance
+    Count number when correcting total wallet balance
     Add objectives page completed
     < 4.3.0
     Started developing objectives

@@ -588,7 +588,7 @@
   "help": "Aiuto",
   "create-template-copy-description": "Fai una copia e salvala sul tuo Drive Google. Modifica il foglio con i tuoi dati e importalo!",
   "get-template": "Ottieni modello",
-  "correct-total-balance": "Equilibrio totale corretto",
+  "correct-total-balance": "Saldo totale corretto",
   "default-category-account-amount-balancing": "Correzione dell'equilibrio",
   "negative-amount": "Importo negativo",
   "update-total-balance": "Aggiorna il saldo totale",
@@ -601,5 +601,12 @@
   "cannot-remove-default-wallet": "L'account predefinito non può essere eliminato",
   "cannot-remove": "Non può rimuovere",
   "installment": "Rata",
-  "net-worth": "Patrimonio netto"
+  "net-worth": "Patrimonio netto",
+  "objectives": "Obiettivi",
+  "edit-objectives": "Modifica obiettivi",
+  "savings-goal": "Obiettivo di risparmio",
+  "expense-goal": "Obiettivo di spesa",
+  "goal": "Obiettivo",
+  "delete-objective": "Elimina obiettivo",
+  "add-objective": "Aggiungi obiettivo"
 }

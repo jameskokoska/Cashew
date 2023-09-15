@@ -47,7 +47,7 @@
   "budgets-details": "פרטי תקציבים",
   "categories-details": "פרטי קטגוריות",
   "titles-details": "פרטי כותרות",
-  "edit-wallets": "ערוך חשבונות",
+  "edit-wallets": "עריכת חשבונות",
   "edit-budgets": "ערוך תקציבים",
   "edit-categories": "ערוך קטגוריות",
   "edit-titles": "ערוך כותרות",
@@ -601,5 +601,12 @@
   "cannot-remove-default-wallet": "לא ניתן למחוק את חשבון ברירת המחדל",
   "cannot-remove": "לא יכול להסיר",
   "installment": "פֶּרֶק",
-  "net-worth": "שווי נקי"
+  "net-worth": "שווי נקי",
+  "objectives": "יעדים",
+  "edit-objectives": "ערוך יעדים",
+  "savings-goal": "מטרת חיסכון",
+  "expense-goal": "מטרת הוצאות",
+  "goal": "מטרה",
+  "delete-objective": "מחק יעד",
+  "add-objective": "הוסף מטרה"
 }

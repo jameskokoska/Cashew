@@ -160,6 +160,7 @@ enum DeleteLogType {
   Transaction,
   TransactionAssociatedTitle,
   ScannerTemplate,
+  Objective,
 }
 
 enum UpdateLogType {
@@ -170,6 +171,7 @@ enum UpdateLogType {
   Transaction,
   TransactionAssociatedTitle,
   ScannerTemplate,
+  Objective,
 }
 
 @DataClassName('DeleteLog')
@@ -475,6 +477,7 @@ bool canAddToBudget(bool? income, TransactionSpecialType? transactionType) {
 
 // when adding a new table, make sure to enable syncing and that
 // all relevant delete queries create delete logs
+// Modify processSyncLogs to process the update/creation and delete!
 @DriftDatabase(tables: [
   Wallets,
   Transactions,
@@ -2238,6 +2241,15 @@ class FinanceDatabase extends _$FinanceDatabase {
         } else if (syncLog.deleteLogType == DeleteLogType.ScannerTemplate) {
           batch.deleteWhere(scannerTemplates,
               (tbl) => tbl.scannerTemplatePk.equals(syncLog.pk));
+        } else if (syncLog.deleteLogType == DeleteLogType.Objective) {
+          batch.deleteWhere(
+            objectives,
+            (tbl) =>
+                tbl.objectivePk.equals(syncLog.pk) &
+                tbl.dateTimeModified.isSmallerThanValue(
+                  syncLog.transactionDateTime ?? DateTime.now(),
+                ),
+          );
         } else if (syncLog.updateLogType == UpdateLogType.TransactionWallet) {
           batch.update(
             wallets,
@@ -2317,6 +2329,18 @@ class FinanceDatabase extends _$FinanceDatabase {
             syncLog.itemToUpdate,
             where: (tbl) =>
                 tbl.scannerTemplatePk.equals(syncLog.pk) &
+                tbl.dateTimeModified.isSmallerThanValue(
+                  syncLog.transactionDateTime ?? DateTime.now(),
+                ),
+          );
+          batch.insert(scannerTemplates, syncLog.itemToUpdate,
+              mode: InsertMode.insertOrIgnore);
+        } else if (syncLog.updateLogType == UpdateLogType.Objective) {
+          batch.update(
+            objectives,
+            syncLog.itemToUpdate,
+            where: (tbl) =>
+                tbl.objectivePk.equals(syncLog.pk) &
                 tbl.dateTimeModified.isSmallerThanValue(
                   syncLog.transactionDateTime ?? DateTime.now(),
                 ),

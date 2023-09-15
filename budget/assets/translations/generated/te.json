@@ -601,5 +601,12 @@
   "cannot-remove-default-wallet": "డిఫాల్ట్ ఖాతాను తొలగించలేము",
   "cannot-remove": "తొలగించలేరు",
   "installment": "విడత",
-  "net-worth": "నికర విలువ"
+  "net-worth": "నికర విలువ",
+  "objectives": "లక్ష్యాలు",
+  "edit-objectives": "లక్ష్యాలను సవరించండి",
+  "savings-goal": "పొదుపు లక్ష్యం",
+  "expense-goal": "ఖర్చు లక్ష్యం",
+  "goal": "లక్ష్యం",
+  "delete-objective": "లక్ష్యాన్ని తొలగించండి",
+  "add-objective": "లక్ష్యాన్ని జోడించండి"
 }

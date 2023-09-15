@@ -601,5 +601,12 @@
   "cannot-remove-default-wallet": "Default account cannot be deleted",
   "cannot-remove": "Cannot Remove",
   "installment": "Installment",
-  "net-worth": "Net Worth"
+  "net-worth": "Net Worth",
+  "objectives": "Objectives",
+  "edit-objectives": "Edit Objectives",
+  "savings-goal": "Savings goal",
+  "expense-goal": "Expense goal",
+  "goal": "Goal",
+  "delete-objective": "Delete Objective",
+  "add-objective": "Add Objective"
 }

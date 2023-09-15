@@ -582,7 +582,7 @@
   "use-emoji-details": "アイコンとして選択した絵文字を選択します",
   "import-and-export": "インポート・エクスポート",
   "import-google-sheet": "Googleシートをインポートします",
-  "enter-google-sheet-url": "GoogleシートURLを入力してください",
+  "enter-google-sheet-url": "GoogleシートURLを入力します",
   "enter-google-sheet-url-description": "リンクを持っている人なら誰でもあなたのGoogleシートを表示できることを確認し、それが公開されていることを確認してください",
   "create-template-copy": "テンプレートコピーを作成します",
   "help": "ヘルプ",
@@ -601,5 +601,12 @@
   "cannot-remove-default-wallet": "デフォルトのアカウントを削除することはできません",
   "cannot-remove": "削除できません",
   "installment": "取り付け",
-  "net-worth": "純資産"
+  "net-worth": "純資産",
+  "objectives": "目的",
+  "edit-objectives": "目標を編集します",
+  "savings-goal": "節約目標",
+  "expense-goal": "費用目標",
+  "goal": "ゴール",
+  "delete-objective": "目的を削除します",
+  "add-objective": "目的を追加します"
 }

@@ -556,7 +556,7 @@
   "owed-to-you": "તમને ow ણી",
   "name": "નામ",
   "who-are-you-question": "તમે કોણ છો?",
-  "who-are-you-description": "તમારે બિલ ચૂકવનાર એક હોવું જોઈએ.",
+  "who-are-you-description": "તમારે તે જ હોવું જોઈએ જેણે બિલ ચૂકવ્યું હતું.",
   "split-evenly": "સમાનરૂપે વિભાજિત થવું",
   "item-name-placeholder": "વસ્તુનુ નામ",
   "reset-bill-question": "બિલ ફરીથી સેટ કરો?",
@@ -601,5 +601,12 @@
   "cannot-remove-default-wallet": "ડિફ ault લ્ટ એકાઉન્ટ કા deleted ી શકાતું નથી",
   "cannot-remove": "દૂર કરી શકતા નથી",
   "installment": "હપતું",
-  "net-worth": "ચોકીની કિંમત"
+  "net-worth": "ચોકીની કિંમત",
+  "objectives": "ઉદ્દેશ",
+  "edit-objectives": "ઉદ્દેશો સંપાદિત કરો",
+  "savings-goal": "બચત લક્ષ્ય",
+  "expense-goal": "ખર્ચનો ધ્યેય",
+  "goal": "ધ્યેય",
+  "delete-objective": "ઉદ્દેશ્ય કા Delete ી નાખો",
+  "add-objective": "ઉદ્દેશ ઉમેરો"
 }

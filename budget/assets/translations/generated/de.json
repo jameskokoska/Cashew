@@ -441,7 +441,7 @@
   "deleted-category": "Kategorie gelöscht",
   "delete-wallet": "Konto löschen",
   "delete-wallet-question": "Konto löschen?",
-  "delete-wallet-question-description": "Dadurch wird alle mit diesem Konto verbundenen Transaktionen gelöscht.",
+  "delete-wallet-question-description": "Dadurch werden alle mit diesem Konto verbundenen Transaktionen gelöscht.",
   "move-transactions": "Bewegen",
   "delete-wallet-merge-warning": "Durch das Löschen eines Acount werden alle Transaktionen in diesem Konto gelöscht. Verschieben Sie Transaktionen in ein anderes Konto, um dies zu vermeiden.",
   "deleted-wallet": "Löschter Konto",
@@ -575,7 +575,7 @@
   "daily-notification-type-if-not-opened": "Wenn die App heute noch nicht eröffnet wurde",
   "daily-notification-type-one-day-from-open": "24 Stunden von der App geöffnet",
   "daily-notification-type-everyday": "Täglich",
-  "consider-csv-template": "Versuchen Sie es erneut und überlegen Sie, ob die bereitgestellte CSV -Vorlage verwendet wird.",
+  "consider-csv-template": "Versuchen Sie es erneut und überlegen Sie, ob Sie die bereitgestellte CSV -Vorlage verwenden.",
   "template": "Vorlage",
   "enter-emoji": "Geben Sie Emoji ein",
   "enter-emoji-placeholder": "Geben Sie Emoji ein",
@@ -601,5 +601,12 @@
   "cannot-remove-default-wallet": "Standardkonto kann nicht gelöscht werden",
   "cannot-remove": "Kann nicht entfernen",
   "installment": "Rate",
-  "net-worth": "Reinvermögen"
+  "net-worth": "Reinvermögen",
+  "objectives": "Ziele",
+  "edit-objectives": "Ziele bearbeiten",
+  "savings-goal": "Sparziel",
+  "expense-goal": "Kostenziel",
+  "goal": "Ziel",
+  "delete-objective": "Ziel löschen",
+  "add-objective": "Ziel hinzufügen"
 }

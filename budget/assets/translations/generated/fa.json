@@ -589,7 +589,7 @@
   "create-template-copy-description": "کپی کنید و آن را در Google Drive خود ذخیره کنید. برگه را با داده های خود ویرایش کرده و آن را وارد کنید!",
   "get-template": "الگوی گرفتن",
   "correct-total-balance": "تعادل کل صحیح",
-  "default-category-account-amount-balancing": "تصحیح تعادل",
+  "default-category-account-amount-balancing": "تعادل",
   "negative-amount": "مقدار منفی",
   "update-total-balance": "تعادل کل را به روز کنید",
   "updated-total-balance": "تعادل کل به روز شده",
@@ -601,5 +601,12 @@
   "cannot-remove-default-wallet": "حساب پیش فرض حذف نمی شود",
   "cannot-remove": "نمی تواند حذف شود",
   "installment": "قسط",
-  "net-worth": "ارزش خالص"
+  "net-worth": "ارزش خالص",
+  "objectives": "اهداف",
+  "edit-objectives": "اهداف را ویرایش کنید",
+  "savings-goal": "هدف پس انداز",
+  "expense-goal": "هدف هزینه",
+  "goal": "هدف",
+  "delete-objective": "هدف را حذف کنید",
+  "add-objective": "هدف را اضافه کنید"
 }

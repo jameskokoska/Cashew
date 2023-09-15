@@ -589,7 +589,7 @@
   "create-template-copy-description": "Tạo một bản sao và lưu nó vào ổ đĩa Google của bạn. Chỉnh sửa trang tính với dữ liệu của bạn và nhập nó!",
   "get-template": "Nhận mẫu",
   "correct-total-balance": "Chính xác tổng số dư",
-  "default-category-account-amount-balancing": "Cân bằng hiệu chỉnh",
+  "default-category-account-amount-balancing": "Cân bằng chỉnh sửa",
   "negative-amount": "Số tiền âm",
   "update-total-balance": "Cập nhật tổng số dư",
   "updated-total-balance": "Cập nhật tổng số dư",
@@ -598,8 +598,15 @@
   "merge-into-description-wallets": "Điều này sẽ chuyển tất cả các giao dịch vào tài khoản mới và xóa tài khoản cũ",
   "move-and-delete": "Di chuyển và xóa",
   "merged-wallet": "Ví hợp nhất",
-  "cannot-remove-default-wallet": "Tài khoản mặc định không thể bị xóa",
+  "cannot-remove-default-wallet": "Không thể xóa tài khoản mặc định",
   "cannot-remove": "Không thể loại bỏ",
   "installment": "Trả góp",
-  "net-worth": "Giá trị ròng"
+  "net-worth": "Giá trị ròng",
+  "objectives": "Mục tiêu",
+  "edit-objectives": "Chỉnh sửa mục tiêu",
+  "savings-goal": "Mục tiêu tiết kiệm",
+  "expense-goal": "Mục tiêu chi phí",
+  "goal": "Mục tiêu",
+  "delete-objective": "Xóa mục tiêu",
+  "add-objective": "Thêm mục tiêu"
 }

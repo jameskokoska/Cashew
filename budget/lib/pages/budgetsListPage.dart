@@ -27,7 +27,6 @@ class BudgetsListPageState extends State<BudgetsListPage>
     with AutomaticKeepAliveClientMixin {
   GlobalKey<PageFrameworkState> pageState = GlobalKey();
 
-  late Color selectedColor = Colors.red;
   void refreshState() {
     setState(() {});
   }

@@ -639,8 +639,8 @@ class PreviewDemoWarning extends StatelessWidget {
   Widget build(BuildContext context) {
     return appStateSettings["previewDemo"] == true
         ? Padding(
-            padding: EdgeInsets.only(
-                bottom: MediaQuery.of(context).padding.top + 10),
+            padding:
+                EdgeInsets.only(bottom: MediaQuery.of(context).viewPadding.top),
             child: Tappable(
               onTap: () async {
                 deletePreviewData(resetOnboard: true);

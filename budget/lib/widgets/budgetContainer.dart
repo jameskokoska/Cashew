@@ -644,6 +644,9 @@ class BudgetProgress extends StatelessWidget {
     required this.todayPercent,
     required this.yourPercent,
     this.large = false,
+    this.showToday = true,
+    this.padding = const EdgeInsets.symmetric(horizontal: 8.0),
+    this.enableShake = true,
   }) : super(key: key);
 
   final Color color;
@@ -651,6 +654,9 @@ class BudgetProgress extends StatelessWidget {
   final double yourPercent;
   final double todayPercent;
   final bool large;
+  final bool showToday;
+  final EdgeInsets padding;
+  final bool enableShake;
 
   Widget getPercentText(Color color) {
     return Container(
@@ -677,10 +683,10 @@ class BudgetProgress extends StatelessWidget {
       children: [
         ShakeAnimation(
           delay: Duration(milliseconds: 600),
-          animate: percent > 100,
+          animate: enableShake == true && percent > 100,
           child: Padding(
             key: ValueKey(1),
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            padding: padding,
             child: ClipRRect(
               borderRadius: BorderRadius.circular(50),
               child: Stack(
@@ -738,12 +744,14 @@ class BudgetProgress extends StatelessWidget {
             ),
           ),
         ),
-        todayPercent < 0 || todayPercent > 100
-            ? Container(height: 39)
-            : TodayIndicator(
-                percent: todayPercent,
-                large: large,
-              )
+        showToday == true
+            ? todayPercent < 0 || todayPercent > 100
+                ? Container(height: 39)
+                : TodayIndicator(
+                    percent: todayPercent,
+                    large: large,
+                  )
+            : SizedBox.shrink(),
       ],
     );
   }

@@ -601,5 +601,12 @@
   "cannot-remove-default-wallet": "기본 계정을 삭제할 수 없습니다",
   "cannot-remove": "제거 할 수 없습니다",
   "installment": "분할불",
-  "net-worth": "순자산"
+  "net-worth": "순자산",
+  "objectives": "목표",
+  "edit-objectives": "목표 편집",
+  "savings-goal": "저축 목표",
+  "expense-goal": "비용 목표",
+  "goal": "목표",
+  "delete-objective": "목표를 삭제하십시오",
+  "add-objective": "목표를 추가하십시오"
 }

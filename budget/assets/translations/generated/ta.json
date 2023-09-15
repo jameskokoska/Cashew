@@ -553,7 +553,7 @@
   "add-item": "உருப்படியைச் சேர்க்கவும்",
   "update-item": "",
   "delete-item": "உருப்படியை நீக்கு",
-  "owed-to-you": "உங்களுக்கு கடமைப்பட்டிருந்தது",
+  "owed-to-you": "உங்களுக்கு கடமைப்பட்டது",
   "name": "பெயர்",
   "who-are-you-question": "யார் நீ?",
   "who-are-you-description": "மசோதாவை செலுத்தியவராக நீங்கள் இருக்க வேண்டும்.",
@@ -601,5 +601,12 @@
   "cannot-remove-default-wallet": "இயல்புநிலை கணக்கை நீக்க முடியாது",
   "cannot-remove": "அகற்ற முடியாது",
   "installment": "தவணை",
-  "net-worth": "நிகர மதிப்பு"
+  "net-worth": "நிகர மதிப்பு",
+  "objectives": "குறிக்கோள்கள்",
+  "edit-objectives": "குறிக்கோள்களைத் திருத்தவும்",
+  "savings-goal": "சேமிப்பு இலக்கு",
+  "expense-goal": "செலவு இலக்கு",
+  "goal": "இலக்கு",
+  "delete-objective": "குறிக்கோளை நீக்கு",
+  "add-objective": "குறிக்கோளைச் சேர்க்கவும்"
 }

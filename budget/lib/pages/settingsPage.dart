@@ -7,6 +7,7 @@ import 'package:budget/pages/billSplitter.dart';
 import 'package:budget/pages/creditDebtTransactionsPage.dart';
 import 'package:budget/pages/editHomePage.dart';
 import 'package:budget/pages/editObjectivesPage.dart';
+import 'package:budget/pages/objectivesListPage.dart';
 import 'package:budget/pages/premiumPage.dart';
 import 'package:budget/pages/upcomingOverdueTransactionsPage.dart';
 import 'package:budget/struct/languageMap.dart';
@@ -307,7 +308,7 @@ class MorePages extends StatelessWidget {
                 ),
           kDebugMode
               ? SettingsContainerOpenPage(
-                  openPage: EditObjectivesPage(),
+                  openPage: ObjectivesListPage(),
                   title: "objectives & savings jars".tr(),
                   icon: appStateSettings["outlinedIcons"]
                       ? Icons.savings_outlined

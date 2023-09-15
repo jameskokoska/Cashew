@@ -601,5 +601,12 @@
   "cannot-remove-default-wallet": "A conta padrão não pode ser excluída",
   "cannot-remove": "Não pode remover",
   "installment": "Prestação",
-  "net-worth": "Patrimônio líquido"
+  "net-worth": "Patrimônio líquido",
+  "objectives": "Objetivos",
+  "edit-objectives": "Editar objetivos",
+  "savings-goal": "Meta de poupança",
+  "expense-goal": "Objetivo de despesas",
+  "goal": "Meta",
+  "delete-objective": "Excluir objetivo",
+  "add-objective": "Adicione o objetivo"
 }

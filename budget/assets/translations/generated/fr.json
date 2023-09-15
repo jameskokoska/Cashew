@@ -601,5 +601,12 @@
   "cannot-remove-default-wallet": "Le compte par défaut ne peut pas être supprimé",
   "cannot-remove": "Impossible de supprimer",
   "installment": "Versement",
-  "net-worth": "Valeur nette"
+  "net-worth": "Valeur nette",
+  "objectives": "Objectifs",
+  "edit-objectives": "Modifier les objectifs",
+  "savings-goal": "Objectif d'épargne",
+  "expense-goal": "Objectif des dépenses",
+  "goal": "But",
+  "delete-objective": "Supprimer l'objectif",
+  "add-objective": "Ajouter l'objectif"
 }

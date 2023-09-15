@@ -73,7 +73,7 @@ class _EditObjectivesPageState extends State<EditObjectivesPage> {
             padding: EdgeInsets.only(
                 bottom: MediaQuery.of(context).viewPadding.bottom),
             child: FAB(
-              tooltip: "add-category".tr(),
+              tooltip: "add-objective".tr(),
               openPage: AddObjectivePage(
                 routesToPopAfterDelete: RoutesToPopAfterDelete.None,
               ),
@@ -159,14 +159,24 @@ class _EditObjectivesPageState extends State<EditObjectivesPage> {
                       content: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          // CategoryIcon(
-                          //   categoryPk: category.categoryPk,
-                          //   size: 31,
-                          //   category: category,
-                          //   canEditByLongPress: false,
-                          //   borderRadius: 1000,
-                          //   sizePadding: 23,
-                          // ),
+                          CategoryIcon(
+                            categoryPk: "-1",
+                            size: 31,
+                            category: TransactionCategory(
+                              categoryPk: "-1",
+                              name: "",
+                              dateCreated: DateTime.now(),
+                              dateTimeModified: null,
+                              order: 0,
+                              income: false,
+                              iconName: objective.iconName,
+                              colour: objective.colour,
+                              emojiIconName: objective.emojiIconName,
+                            ),
+                            canEditByLongPress: false,
+                            borderRadius: 1000,
+                            sizePadding: 23,
+                          ),
                           Container(width: 5),
                           Expanded(
                             child: Column(
@@ -174,14 +184,52 @@ class _EditObjectivesPageState extends State<EditObjectivesPage> {
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 TextFont(
-                                  text: objective.name
-                                  // +
-                                  //     " - " +
-                                  //     category.order.toString()
-                                  ,
+                                  text: objective.name,
                                   fontWeight: FontWeight.bold,
                                   fontSize: 19,
                                 ),
+                                TextFont(
+                                  textAlign: TextAlign.left,
+                                  text: objective.income
+                                      ? "savings-goal".tr()
+                                      : "expense-goal".tr(),
+                                  fontSize: 14,
+                                  textColor: getColor(context, "black")
+                                      .withOpacity(0.65),
+                                ),
+                                // StreamBuilder<List<int?>>(
+                                //   stream: database
+                                //       .watchTotalCountOfTransactionsInCategory(
+                                //           category.categoryPk),
+                                //   builder: (context, snapshot) {
+                                //     if (snapshot.hasData &&
+                                //         snapshot.data != null) {
+                                //       return TextFont(
+                                //         textAlign: TextAlign.left,
+                                //         text: snapshot.data![0].toString() +
+                                //             " " +
+                                //             (snapshot.data![0] == 1
+                                //                 ? "transaction"
+                                //                     .tr()
+                                //                     .toLowerCase()
+                                //                 : "transactions"
+                                //                     .tr()
+                                //                     .toLowerCase()),
+                                //         fontSize: 14,
+                                //         textColor: getColor(context, "black")
+                                //             .withOpacity(0.65),
+                                //       );
+                                //     } else {
+                                //       return TextFont(
+                                //         textAlign: TextAlign.left,
+                                //         text: "/ transactions",
+                                //         fontSize: 14,
+                                //         textColor: getColor(context, "black")
+                                //             .withOpacity(0.65),
+                                //       );
+                                //     }
+                                //   },
+                                // ),
                               ],
                             ),
                           ),

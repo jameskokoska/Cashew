@@ -583,7 +583,7 @@
   "import-and-export": "นำเข้าส่งออก",
   "import-google-sheet": "นำเข้า Google Sheet",
   "enter-google-sheet-url": "ป้อน URL ของ Google Sheet",
-  "enter-google-sheet-url-description": "ตรวจสอบให้แน่ใจว่าทุกคนที่มีลิงค์สามารถดู Google ชีตของคุณและตั้งค่าเป็นสาธารณะ",
+  "enter-google-sheet-url-description": "ตรวจสอบให้แน่ใจว่าทุกคนที่มีลิงก์สามารถดู Google ชีตของคุณและตั้งค่าเป็นสาธารณะ",
   "create-template-copy": "สร้างสำเนาเทมเพลต",
   "help": "ช่วย",
   "create-template-copy-description": "ทำสำเนาและบันทึกลงใน Google Drive ของคุณ แก้ไขแผ่นงานด้วยข้อมูลของคุณและนำเข้า!",
@@ -601,5 +601,12 @@
   "cannot-remove-default-wallet": "ไม่สามารถลบบัญชีเริ่มต้นได้",
   "cannot-remove": "ไม่สามารถลบออกได้",
   "installment": "ค่างวดเงินผ่อน",
-  "net-worth": "รายได้สุทธิ"
+  "net-worth": "รายได้สุทธิ",
+  "objectives": "วัตถุประสงค์",
+  "edit-objectives": "แก้ไขวัตถุประสงค์",
+  "savings-goal": "เป้าหมายการออม",
+  "expense-goal": "เป้าหมายค่าใช้จ่าย",
+  "goal": "เป้าหมาย",
+  "delete-objective": "ลบวัตถุประสงค์",
+  "add-objective": "เพิ่มวัตถุประสงค์"
 }

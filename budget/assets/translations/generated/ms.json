@@ -423,7 +423,7 @@
   "change-wallet": "Tukar Akaun",
   "add-to-budget": "Tambah kepada belanjawan",
   "select-wallet": "Pilih Akaun",
-  "move-to-other-wallet-button": "Gerakkan transaksi ke akaun lain dan padamkan",
+  "move-to-other-wallet-button": "Gerakkan urus niaga ke akaun lain dan padamkan",
   "changed-wallet": "Akaun berubah",
   "added-to-budget": "Ditambah kepada belanjawan",
   "no-addable-budgets": "Tiada belanjawan untuk menambah urus niaga ke",
@@ -441,7 +441,7 @@
   "deleted-category": "Kategori yang dipadam",
   "delete-wallet": "Padam akaun",
   "delete-wallet-question": "Padam Akaun?",
-  "delete-wallet-question-description": "Ini akan memadamkan semua urus niaga yang berkaitan dengan akaun ini.",
+  "delete-wallet-question-description": "Ini akan memadam semua urus niaga yang berkaitan dengan akaun ini.",
   "move-transactions": "Bergerak",
   "delete-wallet-merge-warning": "Memadam Acount akan memadam semua urus niaga dalam akaun ini. Pindahkan transaksi ke akaun lain untuk mengelakkan ini.",
   "deleted-wallet": "Akaun yang dipadam",
@@ -601,5 +601,12 @@
   "cannot-remove-default-wallet": "Akaun lalai tidak dapat dipadamkan",
   "cannot-remove": "Tidak dapat dikeluarkan",
   "installment": "Ansuran",
-  "net-worth": "Nilai bersih"
+  "net-worth": "Nilai bersih",
+  "objectives": "Objektif",
+  "edit-objectives": "Edit objektif",
+  "savings-goal": "Matlamat simpanan",
+  "expense-goal": "Matlamat perbelanjaan",
+  "goal": "Matlamat",
+  "delete-objective": "Padam objektif",
+  "add-objective": "Tambah objektif"
 }

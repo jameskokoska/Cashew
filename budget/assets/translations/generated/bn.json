@@ -583,7 +583,7 @@
   "import-and-export": "আমদানি রপ্তানি",
   "import-google-sheet": "গুগল শীট আমদানি করুন",
   "enter-google-sheet-url": "গুগল শীট ইউআরএল প্রবেশ করান",
-  "enter-google-sheet-url-description": "লিঙ্কটি সহ যে কেউ আপনার গুগল শিটটি দেখতে পারে তা নিশ্চিত করুন এবং এটি সর্বজনীনভাবে সেট করা আছে",
+  "enter-google-sheet-url-description": "লিঙ্কটি সহ যে কেউ আপনার গুগল শীট দেখতে পারে তা নিশ্চিত করুন এবং এটি সর্বজনীনভাবে সেট করা আছে",
   "create-template-copy": "টেমপ্লেট অনুলিপি তৈরি করুন",
   "help": "সাহায্য",
   "create-template-copy-description": "একটি অনুলিপি তৈরি করুন এবং এটি আপনার গুগল ড্রাইভে সংরক্ষণ করুন। আপনার ডেটা দিয়ে শীটটি সম্পাদনা করুন এবং এটি আমদানি করুন!",
@@ -596,10 +596,17 @@
   "merge-wallet": "একীভূত অ্যাকাউন্ট",
   "wallet-to-transfer-all-transactions-to": "সমস্ত লেনদেন স্থানান্তর করতে অ্যাকাউন্ট",
   "merge-into-description-wallets": "এটি সমস্ত লেনদেনকে নতুন অ্যাকাউন্টে স্থানান্তর করবে এবং পুরানো অ্যাকাউন্টটি মুছবে",
-  "move-and-delete": "সরান এবং মুছুন",
+  "move-and-delete": "সরানো এবং মুছুন",
   "merged-wallet": "মার্জ ওয়ালেট",
   "cannot-remove-default-wallet": "ডিফল্ট অ্যাকাউন্ট মুছে ফেলা যাবে না",
   "cannot-remove": "অপসারণ করতে পারে না",
   "installment": "কিস্তি",
-  "net-worth": "নিট মূল্য"
+  "net-worth": "নিট মূল্য",
+  "objectives": "উদ্দেশ্য",
+  "edit-objectives": "উদ্দেশ্য সম্পাদনা",
+  "savings-goal": "সঞ্চয় লক্ষ্য",
+  "expense-goal": "ব্যয় লক্ষ্য",
+  "goal": "লক্ষ্য",
+  "delete-objective": "উদ্দেশ্য মুছুন",
+  "add-objective": "উদ্দেশ্য যোগ করুন"
 }
