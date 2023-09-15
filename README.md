@@ -10,6 +10,9 @@
 <br />
 
 <div align="center">
+  <a href="https://apps.apple.com/us/app/cashew-expense-budget-tracker/id6463662930">
+    <img alt="iOS App Store Badge" src="promotional/store-banners/app-store-badge.png" height="60px">
+  </a>
   <a href="https://play.google.com/store/apps/details?id=com.budget.tracker_app">
     <img alt="Google Play Badge" src="promotional/store-banners/google-play-badge.png" height="60px">
   </a>
@@ -31,7 +34,7 @@ Cashew is a full-fledged, feature-rich application designed to empower users in 
 Check out the [official website](https://cashewapp.web.app/)!
 
 
-This application is available on [Google Play](), [GitHub]() and as a [Progressive Web App (PWA)](https://budget-track.web.app/). It is only available on iOS via invite only, as of now. I hope to release on iOS very soon.
+This application is available on [App Store](https://apps.apple.com/us/app/cashew-expense-budget-tracker/id6463662930), [Google Play](https://play.google.com/store/apps/details?id=com.budget.tracker_app), [GitHub](https://github.com/jameskokoska/Cashew/releases/) and as a [Progressive Web App (PWA)](https://budget-track.web.app/).
 
 ### Changelog
 
