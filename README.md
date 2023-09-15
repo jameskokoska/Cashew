@@ -81,9 +81,6 @@ Changes and progress about development is all heavily documented in GitHub [comm
 - Import CSV Files: Seamlessly import financial data by uploading CSV files, facilitating a smooth transition from other applications or platforms.
 - Auto Email Transaction Parsing (Beta): Automatically parse transaction details from email receipts, making expense tracking effortless and efficient.
 
-## Platforms
-This application has been tested primarily on `Web` and `Android`. It has successfully compiled to `iOS` but with broken features (Such as Google login and notifications). These issues are planned in the future.
-
 ## Bundled Packages
 This repository contains, bundled in, modified versions of the discontinued packages listed below. They can be found in the folder `/budget/packages`
 * https://pub.dev/packages/implicitly_animated_reorderable_list
