@@ -116,6 +116,13 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
     Color? pageBackgroundColor = appStateSettings["materialYou"]
         ? dynamicPastel(context, budgetColorScheme.primary, amount: 0.92)
         : null;
+    bool showIncomeExpenseIcons = widget.budget.budgetTransactionFilters == null
+        ? true
+        : widget.budget.budgetTransactionFilters
+                    ?.contains(BudgetTransactionFilters.includeIncome) ==
+                true
+            ? true
+            : false;
     return WillPopScope(
       onWillPop: () async {
         if ((globalSelectedID.value[pageId] ?? []).length > 0) {
@@ -157,11 +164,13 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                   ),
                   builder: (context, snapshot) {
                     double totalSpent = 0;
-                    if (snapshot.hasData)
+                    if (snapshot.hasData) {
                       snapshot.data!.forEach((category) {
-                        totalSpent = totalSpent + category.total.abs();
-                        totalSpent = totalSpent.abs();
+                        totalSpent = totalSpent + category.total;
                       });
+                      totalSpent = totalSpent * -1;
+                    }
+
                     if (snapshot.hasData) {
                       return TotalSpent(
                         budget: widget.budget,
@@ -284,53 +293,74 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
                         double totalSpent = 0;
+                        double totalSpentAbsolute = 0;
                         List<Widget> categoryEntries = [];
                         snapshot.data!.forEach((category) {
-                          totalSpent = totalSpent + category.total.abs();
-                          totalSpent = totalSpent.abs();
+                          totalSpent = totalSpent + category.total;
+                          totalSpentAbsolute =
+                              totalSpentAbsolute + category.total.abs();
                         });
-                        snapshot.data!.asMap().forEach((index, category) {
-                          categoryEntries.add(CategoryEntry(
-                            onLongPress: () {
-                              enterCategoryLimitPopup(
-                                context,
-                                category.category,
-                                category.categoryBudgetLimit,
-                                widget.budget.budgetPk,
-                                (p0) => null,
-                                widget.budget.isAbsoluteSpendingLimit,
-                              );
-                            },
-                            isAbsoluteSpendingLimit:
-                                widget.budget.isAbsoluteSpendingLimit,
-                            budgetLimit: widget.budget.amount,
-                            categoryBudgetLimit: category.categoryBudgetLimit,
-                            budgetColorScheme: budgetColorScheme,
-                            category: category.category,
-                            totalSpent: totalSpent,
-                            transactionCount: category.transactionCount,
-                            categorySpent: category.total.abs(),
-                            onTap: () {
-                              if (selectedCategory?.categoryPk ==
-                                  category.category.categoryPk) {
-                                setState(() {
-                                  selectedCategory = null;
-                                });
-                                _pieChartDisplayStateKey.currentState!
-                                    .setTouchedIndex(-1);
-                              } else {
-                                setState(() {
-                                  selectedCategory = category.category;
-                                });
-                                _pieChartDisplayStateKey.currentState!
-                                    .setTouchedIndex(index);
-                              }
-                            },
-                            selected: selectedCategory?.categoryPk ==
-                                category.category.categoryPk,
-                            allSelected: selectedCategory == null,
-                          ));
-                        });
+                        totalSpent = totalSpent * -1;
+                        snapshot.data!.asMap().forEach(
+                          (index, category) {
+                            categoryEntries.add(
+                              CategoryEntry(
+                                overSpentColor: showIncomeExpenseIcons
+                                    ? category.total > 0
+                                        ? getColor(context, "incomeAmount")
+                                        : getColor(context, "expenseAmount")
+                                    : null,
+                                extraText: showIncomeExpenseIcons
+                                    ? category.total > 0
+                                        ? "of-income".tr()
+                                        : "of-expense".tr()
+                                    : null,
+                                showIncomeExpenseIcons: showIncomeExpenseIcons,
+                                onLongPress: () {
+                                  enterCategoryLimitPopup(
+                                    context,
+                                    category.category,
+                                    category.categoryBudgetLimit,
+                                    widget.budget.budgetPk,
+                                    (p0) => null,
+                                    widget.budget.isAbsoluteSpendingLimit,
+                                  );
+                                },
+                                isAbsoluteSpendingLimit:
+                                    widget.budget.isAbsoluteSpendingLimit,
+                                budgetLimit: widget.budget.amount,
+                                categoryBudgetLimit:
+                                    category.categoryBudgetLimit,
+                                budgetColorScheme: budgetColorScheme,
+                                category: category.category,
+                                totalSpent: totalSpentAbsolute,
+                                transactionCount: category.transactionCount,
+                                categorySpent: showIncomeExpenseIcons == true
+                                    ? category.total
+                                    : category.total.abs(),
+                                onTap: () {
+                                  if (selectedCategory?.categoryPk ==
+                                      category.category.categoryPk) {
+                                    setState(() {
+                                      selectedCategory = null;
+                                    });
+                                    _pieChartDisplayStateKey.currentState!
+                                        .setTouchedIndex(-1);
+                                  } else {
+                                    setState(() {
+                                      selectedCategory = category.category;
+                                    });
+                                    _pieChartDisplayStateKey.currentState!
+                                        .setTouchedIndex(index);
+                                  }
+                                },
+                                selected: selectedCategory?.categoryPk ==
+                                    category.category.categoryPk,
+                                allSelected: selectedCategory == null,
+                              ),
+                            );
+                          },
+                        );
                         return SliverToBoxAdapter(
                           child: Column(
                             children: [
@@ -405,10 +435,7 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                                             ? SizedBox.shrink()
                                             : DaySpending(
                                                 budget: widget.budget,
-                                                amount: (widget.budget.amount -
-                                                        totalSpent) /
-                                                    daysBetween(dateForRange,
-                                                        budgetRange.end),
+                                                totalAmount: totalSpent,
                                                 large: true,
                                                 budgetRange: budgetRange,
                                                 padding: const EdgeInsets.only(
@@ -447,7 +474,7 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                                     pieChartDisplayStateKey:
                                         _pieChartDisplayStateKey,
                                     data: snapshot.data ?? [],
-                                    totalSpent: totalSpent,
+                                    totalSpent: totalSpentAbsolute,
                                     setSelectedCategory:
                                         (categoryPk, category) {
                                       setState(() {
@@ -559,7 +586,7 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                 categoryFks: selectedCategory != null
                     ? [selectedCategory?.categoryPk ?? "-1"]
                     : widget.budget.categoryFks ?? [],
-                income: false,
+                income: null,
                 listID: pageId,
                 budgetTransactionFilters:
                     widget.budget.budgetTransactionFilters,
@@ -609,11 +636,11 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                           double totalSpent = 0;
                           int totalTransactions = 0;
                           snapshot.data!.forEach((category) {
-                            totalSpent = totalSpent + category.total.abs();
-                            totalSpent = totalSpent.abs();
+                            totalSpent = totalSpent + category.total;
                             totalTransactions =
                                 totalTransactions + category.transactionCount;
                           });
+                          totalSpent = totalSpent * -1;
                           if (totalSpent == 0 && totalTransactions == 0)
                             return SizedBox.shrink();
                           return Padding(
@@ -814,7 +841,7 @@ class _BudgetLineGraphState extends State<BudgetLineGraph> {
                 ? true
                 : false,
             true,
-            false,
+            null,
             widget.budget.budgetTransactionFilters,
             widget.budget.memberTransactionFilters,
             onlyShowTransactionsBelongingToBudgetPk:
@@ -884,8 +911,8 @@ class _BudgetLineGraphState extends State<BudgetLineGraph> {
                           (amountRatioToPrimaryCurrencyGivenPk(
                                   Provider.of<AllWallets>(context),
                                   transaction.walletFk) ??
-                              0))
-                      .abs();
+                              0)) *
+                      -1;
                 }
               }
               cumulativeTotal += totalForDay;

@@ -4,6 +4,7 @@ import 'package:budget/functions.dart';
 import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/editBudgetPage.dart';
+import 'package:budget/pages/editCategoriesPage.dart';
 import 'package:budget/pages/editWalletsPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
@@ -334,9 +335,9 @@ class SelectedTransactionsActionBar extends StatelessWidget {
                                       transactions, budgetPkToMoveTo);
 
                               // Some transactions weren't moved to a budget
-                              if (transactions.length != numberMoved) {
-                                showIncomeCannotBeAddedToBudgetWarning();
-                              }
+                              // if (transactions.length != numberMoved) {
+                              //   showIncomeCannotBeAddedToBudgetWarning();
+                              // }
 
                               openSnackbar(
                                 SnackbarMessage(
@@ -344,6 +345,53 @@ class SelectedTransactionsActionBar extends StatelessWidget {
                                   title: budget == "none"
                                       ? "removed-from-budget".tr()
                                       : "added-to-budget".tr(),
+                                  description: "for".tr().capitalizeFirst +
+                                      " " +
+                                      numberMoved.toString() +
+                                      " " +
+                                      (numberMoved == 1
+                                          ? "transaction".tr().toLowerCase()
+                                          : "transactions".tr().toLowerCase()),
+                                ),
+                              );
+
+                              globalSelectedID.value[pageID] = [];
+                              globalSelectedID.notifyListeners();
+                            },
+                          ),
+                          DropdownItemMenu(
+                            id: "add-to-objective",
+                            label: "add-to-objective".tr(),
+                            iconScale: 0.85,
+                            icon: appStateSettings["outlinedIcons"]
+                                ? Icons.savings_outlined
+                                : Icons.savings_rounded,
+                            action: () async {
+                              dynamic objective =
+                                  await selectObjectivePopup(context);
+                              print(objective);
+                              if (objective == null) return;
+
+                              String? objectivePkToMoveTo;
+                              if (objective == "none") {
+                                objectivePkToMoveTo = null;
+                              } else {
+                                objectivePkToMoveTo = objective.objectivePk;
+                              }
+                              List<Transaction> transactions = await database
+                                  .getTransactionsFromPk(value[pageID]!);
+                              int numberMoved =
+                                  await database.moveTransactionsToObjective(
+                                      transactions, objectivePkToMoveTo);
+
+                              openSnackbar(
+                                SnackbarMessage(
+                                  icon: appStateSettings["outlinedIcons"]
+                                      ? Icons.savings_outlined
+                                      : Icons.savings_rounded,
+                                  title: objective == "none"
+                                      ? "removed-from-objective".tr()
+                                      : "added-to-objective-action".tr(),
                                   description: "for".tr().capitalizeFirst +
                                       " " +
                                       numberMoved.toString() +

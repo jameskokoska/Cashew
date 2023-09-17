@@ -10,9 +10,11 @@ import 'package:budget/pages/autoTransactionsPageEmail.dart';
 import 'package:budget/pages/budgetsListPage.dart';
 import 'package:budget/pages/editAssociatedTitlesPage.dart';
 import 'package:budget/pages/editBudgetPage.dart';
+import 'package:budget/pages/editObjectivesPage.dart';
 import 'package:budget/pages/editWalletsPage.dart';
 import 'package:budget/pages/homePage/homePage.dart';
 import 'package:budget/pages/notificationsPage.dart';
+import 'package:budget/pages/objectivesListPage.dart';
 import 'package:budget/pages/premiumPage.dart';
 import 'package:budget/pages/settingsPage.dart';
 import 'package:budget/pages/subscriptionsPage.dart';
@@ -212,6 +214,8 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
       EditCategoriesPage(), //11
       EditAssociatedTitlesPage(), //12
       AboutPage(), //13
+      ObjectivesListPage(), //14
+      EditObjectivesPage(), //15
     ];
 
     // SchedulerBinding.instance.addPostFrameCallback((Duration duration) {

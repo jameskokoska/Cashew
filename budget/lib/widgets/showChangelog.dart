@@ -10,6 +10,22 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    < 4.3.3
+    iOS layout for objectives
+    Added objectives to side navigation
+    Select transactions add to objective in action bar
+    Can now add income to budgets
+    New income and expense selector
+    New objective type selection
+    Finished objective syncing
+    Finished objective deletion
+    Finished objective transaction selection
+    When logging in on landing page, syncing progress bar shown
+    Currency code shown if current account currency different than primary
+    Fixed day spending calculation for budget
+    Centered text for budget name
+    Text align to start instead of always left
+    Fixed tapping note icon when in full screen on non web
     < 4.3.2
     Objective syncing support
     Objective list page

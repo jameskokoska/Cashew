@@ -2,6 +2,7 @@ import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/addCategoryPage.dart';
+import 'package:budget/pages/addObjectivePage.dart';
 import 'package:budget/pages/addWalletPage.dart';
 import 'package:budget/pages/premiumPage.dart';
 import 'package:budget/pages/sharedBudgetSettings.dart';
@@ -10,6 +11,7 @@ import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/categoryIcon.dart';
 import 'package:budget/widgets/globalSnackBar.dart';
+import 'package:budget/widgets/incomeExpenseTabSelector.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/timeDigits.dart';
 import 'package:budget/struct/initializeNotifications.dart';
@@ -24,6 +26,7 @@ import 'package:budget/widgets/textInput.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/selectChips.dart';
 import 'package:budget/widgets/saveBottomButton.dart';
+import 'package:budget/widgets/transactionEntry/incomeAmountArrow.dart';
 import 'package:budget/widgets/transactionEntry/transactionEntry.dart';
 import 'package:budget/widgets/transactionEntry/transactionEntryTypeButton.dart';
 import 'package:budget/widgets/transactionEntry/transactionLabel.dart';
@@ -98,13 +101,12 @@ class _AddTransactionPageState extends State<AddTransactionPage>
   BudgetReoccurence selectedRecurrenceEnum = BudgetReoccurence.monthly;
   bool selectedIncome = false;
   String? selectedPayer;
+  String? selectedObjectivePk;
   String? selectedBudgetPk;
   Budget? selectedBudget;
   bool selectedBudgetIsShared = false;
   String selectedWalletPk = appStateSettings["selectedWalletPk"];
   TransactionWallet? selectedWallet;
-  late TabController _incomeTabController =
-      TabController(length: 2, vsync: this);
   bool notesInputFocused = false;
 
   String? textAddTransaction = "add-transaction".tr();
@@ -195,10 +197,8 @@ class _AddTransactionPageState extends State<AddTransactionPage>
     });
     if (selectedType == TransactionSpecialType.credit) {
       setSelectedIncome(false);
-      setSelectedBudgetPk(null);
     } else if (selectedType == TransactionSpecialType.debt) {
       setSelectedIncome(true);
-      setSelectedBudgetPk(null);
     }
     return;
   }
@@ -222,6 +222,13 @@ class _AddTransactionPageState extends State<AddTransactionPage>
       if (isSharedBudget == false || selectedBudgetPassed?.sharedKey == null) {
         selectedPayer = null;
       }
+    });
+    return;
+  }
+
+  void setSelectedObjectivePk(String? selectedObjectivePkPassed) {
+    setState(() {
+      selectedObjectivePk = selectedObjectivePkPassed;
     });
     return;
   }
@@ -299,14 +306,9 @@ class _AddTransactionPageState extends State<AddTransactionPage>
   }
 
   void setSelectedIncome(bool value) {
-    if (selectedBudgetPk != null && value == true) {
-      setSelectedBudgetPk(null);
-      showIncomeCannotBeAddedToBudgetWarning();
-    }
     setState(() {
       selectedIncome = value;
     });
-    _incomeTabController.animateTo(value == true ? 1 : 0);
   }
 
   void setSelectedWalletPk(TransactionWallet selectedWalletPassed) {
@@ -326,20 +328,6 @@ class _AddTransactionPageState extends State<AddTransactionPage>
 
   Future<bool> addTransaction() async {
     print("Added transaction");
-
-    if (selectedIncome == true && selectedBudgetPk != null) {
-      setSelectedBudgetPk(null);
-      showIncomeCannotBeAddedToBudgetWarning();
-    }
-
-    if (selectedType == TransactionSpecialType.credit) {
-      selectedIncome = false;
-      setSelectedBudgetPk(null);
-    } else if (selectedType == TransactionSpecialType.debt) {
-      selectedIncome = true;
-      setSelectedBudgetPk(null);
-    }
-
     if (selectedTitle != null &&
         selectedCategory != null &&
         selectedTitle != "")
@@ -458,13 +446,14 @@ class _AddTransactionPageState extends State<AddTransactionPage>
       sharedDateUpdated: removeShared == false && widget.transaction != null
           ? widget.transaction!.sharedDateUpdated
           : null,
-      sharedReferenceBudgetPk: selectedIncome == true ? null : selectedBudgetPk,
+      sharedReferenceBudgetPk: selectedBudgetPk,
       upcomingTransactionNotification: widget.transaction != null
           ? widget.transaction!.upcomingTransactionNotification
           : null,
       originalDateDue: widget.transaction != null
           ? widget.transaction!.originalDateDue
           : null,
+      objectiveFk: selectedObjectivePk,
     );
 
     if (widget.transaction != null &&
@@ -515,9 +504,9 @@ class _AddTransactionPageState extends State<AddTransactionPage>
         selectedRecurrenceDisplay = namesRecurrence[selectedRecurrence];
       }
       selectedIncome = widget.transaction!.income;
-      _incomeTabController.animateTo(selectedIncome == true ? 1 : 0);
       selectedPayer = widget.transaction!.transactionOwnerEmail;
       selectedBudgetPk = widget.transaction!.sharedReferenceBudgetPk;
+      selectedObjectivePk = widget.transaction!.objectiveFk;
       // var amountString = widget.transaction!.amount.toStringAsFixed(2);
       // if (amountString.substring(amountString.length - 2) == "00") {
       //   selectedAmountCalculation =
@@ -588,14 +577,17 @@ class _AddTransactionPageState extends State<AddTransactionPage>
       hasPadding: false,
       child: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.only(bottom: 8.0),
-            child: SelectAddedBudget(
-              setSelectedBudget: setSelectedBudgetPk,
-              selectedBudgetPk: selectedBudgetPk,
-              extraHorizontalPadding: 13,
-              wrapped: false,
-            ),
+          SelectAddedBudget(
+            setSelectedBudget: setSelectedBudgetPk,
+            selectedBudgetPk: selectedBudgetPk,
+            extraHorizontalPadding: 13,
+            wrapped: false,
+          ),
+          SelectObjective(
+            setSelectedObjective: setSelectedObjectivePk,
+            selectedObjectivePk: selectedObjectivePk,
+            extraHorizontalPadding: 13,
+            wrapped: false,
           ),
           Padding(
             padding: const EdgeInsets.only(left: 18, right: 18, bottom: 10),
@@ -689,63 +681,11 @@ class _AddTransactionPageState extends State<AddTransactionPage>
           AnimatedExpanded(
             expand: !(selectedType == TransactionSpecialType.credit ||
                 selectedType == TransactionSpecialType.debt),
-            child: Material(
-              color: Colors.black.withOpacity(0.2),
-              child: Theme(
-                data: ThemeData().copyWith(
-                  splashColor: Theme.of(context).splashColor,
-                ),
-                child: TabBar(
-                  splashFactory: Theme.of(context).splashFactory,
-                  controller: _incomeTabController,
-                  onTap: (value) {
-                    if (value == 1)
-                      setSelectedIncome(true);
-                    else
-                      setSelectedIncome(false);
-                  },
-                  dividerColor: Colors.transparent,
-                  indicatorColor: Colors.transparent,
-                  indicatorSize: TabBarIndicatorSize.tab,
-                  indicator: BoxDecoration(
-                    color: categoryColor,
-                  ),
-                  labelColor: getColor(context, "black"),
-                  unselectedLabelColor: Colors.white.withOpacity(0.3),
-                  tabs: [
-                    Tab(
-                      child: Center(
-                        child: Padding(
-                          padding: const EdgeInsets.only(top: 5),
-                          child: Text(
-                            "expense".tr(),
-                            style: TextStyle(
-                              fontSize: 14.5,
-                              fontFamily: 'Avenir',
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                      ),
-                    ),
-                    Tab(
-                      child: Center(
-                        child: Padding(
-                          padding: const EdgeInsets.only(top: 5),
-                          child: Text(
-                            "income".tr(),
-                            style: TextStyle(
-                              fontSize: 14.5,
-                              fontFamily: 'Avenir',
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+            child: IncomeExpenseTabSelector(
+              onTabChanged: setSelectedIncome,
+              initialTabIsIncome: selectedIncome,
+              color: categoryColor,
+              unselectedColor: Colors.black.withOpacity(0.2),
             ),
           ),
           Row(
@@ -918,6 +858,15 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                     selectedAmount ?? 0,
                                     decimals: selectedWallet?.decimals,
                                     currencyKey: selectedWallet?.currency,
+                                    addCurrencyName:
+                                        ((Provider.of<AllWallets>(context)
+                                                .indexedByPk[
+                                                    selectedWallet?.walletPk]
+                                                ?.currency) !=
+                                            Provider.of<AllWallets>(context)
+                                                .indexedByPk[appStateSettings[
+                                                    "selectedWalletPk"]]
+                                                ?.currency),
                                   ),
                                   fontSize: 32,
                                   fontWeight: FontWeight.bold,
@@ -1532,6 +1481,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                               ),
                             ),
                           ),
+                          // Wallet picker is in Select Amount... consider removing?
                           Provider.of<AllWallets>(context).list.length <= 1
                               ? SizedBox.shrink()
                               : HorizontalBreakAbove(
@@ -1603,14 +1553,15 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                     ),
                                   ),
                                 ),
-                          AnimatedExpanded(
-                            expand:
-                                canAddToBudget(selectedIncome, selectedType),
-                            child: SelectAddedBudget(
-                              horizontalBreak: true,
-                              selectedBudgetPk: selectedBudgetPk,
-                              setSelectedBudget: setSelectedBudgetPk,
-                            ),
+                          SelectAddedBudget(
+                            selectedBudgetPk: selectedBudgetPk,
+                            setSelectedBudget: setSelectedBudgetPk,
+                            horizontalBreak: true,
+                          ),
+                          SelectObjective(
+                            setSelectedObjective: setSelectedObjectivePk,
+                            selectedObjectivePk: selectedObjectivePk,
+                            horizontalBreak: true,
                           ),
                           AnimatedExpanded(
                             expand: selectedBudgetPk != null &&
@@ -2508,6 +2459,110 @@ class _SelectAddedBudgetState extends State<SelectAddedBudget> {
   }
 }
 
+class SelectObjective extends StatefulWidget {
+  const SelectObjective({
+    required this.setSelectedObjective,
+    this.selectedObjectivePk,
+    this.extraHorizontalPadding,
+    this.wrapped,
+    this.horizontalBreak = false,
+    super.key,
+  });
+  final Function(String?) setSelectedObjective;
+  final String? selectedObjectivePk;
+  final double? extraHorizontalPadding;
+  final bool? wrapped;
+  final bool horizontalBreak;
+
+  @override
+  State<SelectObjective> createState() => _SelectObjectiveState();
+}
+
+class _SelectObjectiveState extends State<SelectObjective> {
+  late String? selectedObjectivePk = widget.selectedObjectivePk;
+
+  @override
+  void didUpdateWidget(covariant SelectObjective oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (selectedObjectivePk != widget.selectedObjectivePk) {
+      setState(() {
+        selectedObjectivePk = widget.selectedObjectivePk;
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<List<Objective>>(
+      stream: database.watchAllObjectives(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          if (snapshot.data!.length <= 0) return Container();
+          return HorizontalBreakAbove(
+            enabled:
+                enableDoubleColumn(context) && widget.horizontalBreak == true,
+            child: Padding(
+                padding: const EdgeInsets.only(top: 5),
+                child: SelectChips(
+                  wrapped: widget.wrapped ?? enableDoubleColumn(context),
+                  extraHorizontalPadding: widget.extraHorizontalPadding,
+                  onLongPress: (Objective? item) {
+                    pushRoute(
+                      context,
+                      AddObjectivePage(
+                        objective: item,
+                        routesToPopAfterDelete:
+                            RoutesToPopAfterDelete.PreventDelete,
+                      ),
+                    );
+                  },
+                  extraWidget: AddButton(
+                    onTap: () {},
+                    width: 40,
+                    padding: EdgeInsets.symmetric(horizontal: 5, vertical: 1),
+                    openPage: AddObjectivePage(
+                      routesToPopAfterDelete: RoutesToPopAfterDelete.One,
+                    ),
+                    borderRadius: 8,
+                  ),
+                  items: [null, ...snapshot.data!],
+                  getLabel: (Objective? item) {
+                    return item?.name ?? "no-objective".tr();
+                  },
+                  onSelected: (Objective? item) {
+                    widget.setSelectedObjective(
+                      item?.objectivePk,
+                    );
+                    setState(() {
+                      selectedObjectivePk = item?.objectivePk;
+                    });
+                  },
+                  getSelected: (Objective? item) {
+                    return selectedObjectivePk == item?.objectivePk;
+                  },
+                  getCustomBorderColor: (Objective? item) {
+                    return dynamicPastel(
+                      context,
+                      lightenPastel(
+                        HexColor(
+                          item?.colour,
+                          defaultColor: Theme.of(context).colorScheme.primary,
+                        ),
+                        amount: 0.3,
+                      ),
+                      amount: 0.4,
+                    );
+                  },
+                )),
+          );
+        } else {
+          return Container();
+        }
+      },
+    );
+  }
+}
+
 class HorizontalBreakAbove extends StatelessWidget {
   const HorizontalBreakAbove({
     required this.child,
@@ -2535,19 +2590,6 @@ class HorizontalBreakAbove extends StatelessWidget {
       ],
     );
   }
-}
-
-void showIncomeCannotBeAddedToBudgetWarning() {
-  openSnackbar(
-    SnackbarMessage(
-      icon: appStateSettings["outlinedIcons"]
-          ? Icons.sticky_note_2_outlined
-          : Icons.sticky_note_2_rounded,
-      title: "expenses-only".tr(),
-      description: "expenses-only-description".tr(),
-      timeout: Duration(milliseconds: 5000),
-    ),
-  );
 }
 
 void deleteTransactionPopup(

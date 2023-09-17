@@ -34,6 +34,7 @@ class CategoryEntry extends StatelessWidget {
     this.showIncomeExpenseIcons = false,
     this.isAbsoluteSpendingLimit = false,
     this.budgetLimit = 0,
+    this.overSpentColor,
   }) : super(key: key);
 
   final TransactionCategory category;
@@ -51,6 +52,7 @@ class CategoryEntry extends StatelessWidget {
   final bool showIncomeExpenseIcons;
   final bool isAbsoluteSpendingLimit;
   final double budgetLimit;
+  final Color? overSpentColor;
 
   @override
   Widget build(BuildContext context) {
@@ -85,7 +87,7 @@ class CategoryEntry extends StatelessWidget {
       );
     } else {
       double percentSpent = categoryBudgetLimit == null
-          ? categorySpent / totalSpent
+          ? (categorySpent / totalSpent).abs()
           : isAbsoluteSpendingLimit
               ? ((categorySpent / categoryBudgetLimit!.amount).abs() > 1
                   ? 1
@@ -179,7 +181,8 @@ class CategoryEntry extends StatelessWidget {
                                   amountSpent),
                               fontSize: 20,
                               textColor: isOverspent
-                                  ? getColor(context, "expenseAmount")
+                                  ? overSpentColor ??
+                                      getColor(context, "expenseAmount")
                                   : showIncomeExpenseIcons && categorySpent != 0
                                       ? categorySpent > 0
                                           ? getColor(context, "incomeAmount")
@@ -197,7 +200,8 @@ class CategoryEntry extends StatelessWidget {
                                               spendingLimit),
                                       fontSize: 14,
                                       textColor: isOverspent
-                                          ? getColor(context, "expenseAmount")
+                                          ? overSpentColor ??
+                                              getColor(context, "expenseAmount")
                                           : getColor(context, "black")
                                               .withOpacity(0.3),
                                     ),

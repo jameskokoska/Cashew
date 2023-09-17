@@ -5,8 +5,10 @@ import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/pages/addCategoryPage.dart';
+import 'package:budget/pages/addObjectivePage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
+import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/categoryIcon.dart';
 import 'package:budget/widgets/fab.dart';
 import 'package:budget/widgets/fadeIn.dart';
@@ -17,6 +19,7 @@ import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/openSnackbar.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
+import 'package:budget/widgets/radioItems.dart';
 import 'package:budget/widgets/selectCategory.dart';
 import 'package:budget/widgets/textInput.dart';
 import 'package:budget/widgets/textWidgets.dart';
@@ -506,4 +509,91 @@ void mergeCategoryPopup(
       ),
     ),
   );
+}
+
+// either "none", null, or a Objective type
+Future<dynamic> selectObjectivePopup(BuildContext context,
+    {String? removeWalletPk}) async {
+  dynamic objective = await openBottomSheet(
+    context,
+    PopupFramework(
+      title: "select-objective".tr(),
+      child: StreamBuilder<List<Objective>>(
+        stream: database.watchAllObjectives(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData &&
+              (snapshot.data != null && snapshot.data!.length > 0)) {
+            List<Objective> addableObjectives = snapshot.data!;
+            return RadioItems(
+              ifNullSelectNone: true,
+              items: [null, ...addableObjectives],
+              colorFilter: (Objective? objective) {
+                if (objective == null) return null;
+                return dynamicPastel(
+                  context,
+                  lightenPastel(
+                    HexColor(
+                      objective.colour,
+                      defaultColor: Theme.of(context).colorScheme.primary,
+                    ),
+                    amount: 0.2,
+                  ),
+                  amount: 0.1,
+                );
+              },
+              displayFilter: (Objective? objective) {
+                return objective?.name ?? "no-objective".tr();
+              },
+              initial: null,
+              onChanged: (Objective? objective) async {
+                if (objective == null)
+                  Navigator.of(context).pop("none");
+                else
+                  Navigator.of(context).pop(objective);
+              },
+            );
+          } else {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      child: TextFont(
+                        text: "no-objectives".tr(),
+                        fontSize: 15,
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 15),
+                IntrinsicWidth(
+                  child: Button(
+                    label: "create-objective".tr(),
+                    onTap: () {
+                      pushRoute(
+                        context,
+                        AddObjectivePage(
+                          routesToPopAfterDelete: RoutesToPopAfterDelete.None,
+                        ),
+                      );
+                    },
+                  ),
+                )
+              ],
+            );
+          }
+        },
+      ),
+    ),
+  );
+
+  if (objective is Objective) return objective;
+  if (objective == "none") return "none";
+  return null;
 }

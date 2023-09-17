@@ -1,14 +1,18 @@
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
+import 'package:budget/pages/accountsPage.dart';
 import 'package:budget/pages/addBudgetPage.dart';
+import 'package:budget/pages/editObjectivesPage.dart';
 import 'package:budget/pages/editWalletsPage.dart';
+import 'package:budget/pages/premiumPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/animatedExpanded.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/categoryIcon.dart';
 import 'package:budget/widgets/globalSnackBar.dart';
+import 'package:budget/widgets/incomeExpenseTabSelector.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
@@ -207,6 +211,21 @@ class _AddObjectivePageState extends State<AddObjectivePage>
       } else {
         _incomeTabController.animateTo(0);
       }
+    } else {
+      Future.delayed(Duration.zero, () async {
+        if (widget.objective == null) {
+          bool result = await premiumPopupBudgets(context);
+          if (result == true) {
+            openBottomSheet(
+              context,
+              fullSnap: false,
+              SelectObjectiveTypePopup(
+                setObjectiveIncome: setSelectedIncome,
+              ),
+            );
+          }
+        }
+      });
     }
   }
 
@@ -334,68 +353,17 @@ class _AddObjectivePageState extends State<AddObjectivePage>
                   borderRadius: getPlatform() == PlatformOS.isIOS
                       ? BorderRadius.circular(10)
                       : BorderRadius.circular(15),
-                  child: Material(
-                    color: Theme.of(context)
+                  child: IncomeExpenseTabSelector(
+                    onTabChanged: setSelectedIncome,
+                    initialTabIsIncome: selectedIncome,
+                    syncWithInitial: true,
+                    color: Theme.of(context).colorScheme.secondaryContainer,
+                    unselectedColor: Theme.of(context)
                         .colorScheme
                         .secondaryContainer
                         .withOpacity(0.2),
-                    child: Theme(
-                      data: ThemeData().copyWith(
-                        splashColor: Theme.of(context).splashColor,
-                      ),
-                      child: TabBar(
-                        splashFactory: Theme.of(context).splashFactory,
-                        controller: _incomeTabController,
-                        onTap: (value) {
-                          if (value == 0)
-                            setSelectedIncome(true);
-                          else
-                            setSelectedIncome(false);
-                        },
-                        dividerColor: Colors.transparent,
-                        indicatorColor: Colors.transparent,
-                        indicatorSize: TabBarIndicatorSize.tab,
-                        indicator: BoxDecoration(
-                          color:
-                              Theme.of(context).colorScheme.secondaryContainer,
-                        ),
-                        labelColor: getColor(context, "black"),
-                        unselectedLabelColor:
-                            getColor(context, "black").withOpacity(0.3),
-                        tabs: [
-                          Tab(
-                            child: Center(
-                              child: Padding(
-                                padding: const EdgeInsets.only(top: 5),
-                                child: Text(
-                                  "savings-goal".tr(),
-                                  style: TextStyle(
-                                    fontSize: 14.5,
-                                    fontFamily: 'Avenir',
-                                  ),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ),
-                            ),
-                          ),
-                          Tab(
-                            child: Center(
-                              child: Padding(
-                                padding: const EdgeInsets.only(top: 5),
-                                child: Text(
-                                  "expense-goal".tr(),
-                                  style: TextStyle(
-                                    fontSize: 14.5,
-                                    fontFamily: 'Avenir',
-                                  ),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+                    expenseLabel: "expense-goal".tr(),
+                    incomeLabel: "savings-goal".tr(),
                   ),
                 ),
               ),
@@ -588,10 +556,85 @@ class _AddObjectivePageState extends State<AddObjectivePage>
   }
 }
 
-Future<DeletePopupAction?> deleteObjectivePopup(
-  BuildContext context, {
-  required Objective objective,
-  required RoutesToPopAfterDelete routesToPopAfterDelete,
-}) async {
-  return null;
+class SelectObjectiveTypePopup extends StatelessWidget {
+  const SelectObjectiveTypePopup({required this.setObjectiveIncome, super.key});
+  final Function(bool isIncome) setObjectiveIncome;
+
+  @override
+  Widget build(BuildContext context) {
+    return PopupFramework(
+      title: "select-objective-type".tr(),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Expanded(
+                child: OutlinedButtonStacked(
+                  alignLeft: true,
+                  alignBeside: true,
+                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                  text: "savings-goal".tr(),
+                  iconData: appStateSettings["outlinedIcons"]
+                      ? Icons.savings_outlined
+                      : Icons.savings_rounded,
+                  onTap: () {
+                    setObjectiveIncome(true);
+                    Navigator.pop(context);
+                  },
+                  afterWidget: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      ListItem(
+                        "savings-goal-description-1".tr(),
+                      ),
+                      Opacity(
+                        opacity: 0.34,
+                        child: ListItem(
+                          "savings-goal-description-2".tr(),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 13),
+          Row(
+            children: [
+              Expanded(
+                child: OutlinedButtonStacked(
+                  alignLeft: true,
+                  alignBeside: true,
+                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                  text: "expense-goal".tr(),
+                  iconData: appStateSettings["outlinedIcons"]
+                      ? Icons.request_quote_outlined
+                      : Icons.request_quote_rounded,
+                  onTap: () async {
+                    setObjectiveIncome(false);
+                    Navigator.pop(context);
+                  },
+                  afterWidget: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      ListItem(
+                        "expense-goal-description-1".tr(),
+                      ),
+                      Opacity(
+                        opacity: 0.34,
+                        child: ListItem("expense-goal-description-2".tr()),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
 }

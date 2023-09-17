@@ -37,6 +37,7 @@ class TextInput extends StatelessWidget {
   final BorderRadius? borderRadius;
   final TextInputAction? textInputAction;
   final List<TextInputFormatter>? inputFormatters;
+  final TextAlign textAlign;
 
   const TextInput({
     Key? key,
@@ -70,6 +71,7 @@ class TextInput extends StatelessWidget {
     this.borderRadius,
     this.textInputAction,
     this.inputFormatters,
+    this.textAlign = TextAlign.start,
   }) : super(key: key);
 
   @override
@@ -113,6 +115,7 @@ class TextInput extends StatelessWidget {
             initialValue: initialValue,
             autofocus: autoFocus,
             onEditingComplete: onEditingComplete,
+            textAlign: textAlign,
             style: TextStyle(
               fontSize:
                   fontSize != null ? fontSize : (bubbly == false ? 18 : 15),

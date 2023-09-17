@@ -232,6 +232,17 @@ class NavigationSidebarState extends State<NavigationSidebar> {
                             ),
                             NavigationSidebarButton(
                               icon: appStateSettings["outlinedIcons"]
+                                  ? Icons.savings_outlined
+                                  : Icons.savings_rounded,
+                              label: "objectives".tr(),
+                              isSelected: selectedIndex == 14,
+                              onTap: () {
+                                pageNavigationFrameworkKey.currentState!
+                                    .changePage(14, switchNavbar: true);
+                              },
+                            ),
+                            NavigationSidebarButton(
+                              icon: appStateSettings["outlinedIcons"]
                                   ? Icons.event_repeat_outlined
                                   : Icons.event_repeat_rounded,
                               label: "subscriptions".tr(),
@@ -670,6 +681,17 @@ class _EdiDatatButtonsState extends State<EditDataButtons> {
                         onTap: () {
                           pageNavigationFrameworkKey.currentState!
                               .changePage(12, switchNavbar: true);
+                        },
+                      ),
+                      NavigationSidebarButton(
+                        icon: appStateSettings["outlinedIcons"]
+                            ? Icons.savings_outlined
+                            : Icons.savings_rounded,
+                        label: "objectives-details".tr(),
+                        isSelected: widget.selectedIndex == 15,
+                        onTap: () {
+                          pageNavigationFrameworkKey.currentState!
+                              .changePage(15, switchNavbar: true);
                         },
                       ),
                     ],

@@ -961,9 +961,10 @@ class PastBudgetContainer extends StatelessWidget {
             if (snapshot.hasData) {
               double totalSpent = 0;
               snapshot.data!.forEach((category) {
-                totalSpent = totalSpent + category.total.abs();
-                totalSpent = totalSpent.abs();
+                totalSpent = totalSpent + category.total;
               });
+              totalSpent = totalSpent * -1;
+
               return Container(
                 height: smallContainerHeight,
                 margin: EdgeInsets.symmetric(horizontal: 20),

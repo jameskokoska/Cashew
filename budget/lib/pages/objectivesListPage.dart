@@ -35,7 +35,24 @@ class ObjectivesListPage extends StatefulWidget {
 class ObjectivesListPageState extends State<ObjectivesListPage> {
   @override
   Widget build(BuildContext context) {
+    Widget addButton = Padding(
+      padding: EdgeInsets.only(top: getPlatform() == PlatformOS.isIOS ? 10 : 0),
+      child: Padding(
+        padding: EdgeInsets.symmetric(
+          horizontal: getPlatform() == PlatformOS.isIOS ? 13 : 0,
+        ),
+        child: AddButton(
+          onTap: () {},
+          openPage: AddObjectivePage(
+            routesToPopAfterDelete: RoutesToPopAfterDelete.PreventDelete,
+          ),
+          height: 150,
+        ),
+      ),
+    );
+
     return PageFramework(
+      dragDownToDismiss: true,
       title: "objectives".tr(),
       backButton: false,
       horizontalPadding: enableDoubleColumn(context) == false
@@ -67,20 +84,16 @@ class ObjectivesListPageState extends State<ObjectivesListPage> {
               return SliverPadding(
                 padding: EdgeInsets.symmetric(vertical: 7, horizontal: 13),
                 sliver: SliverToBoxAdapter(
-                  child: AddButton(
-                    onTap: () {},
-                    openPage: AddObjectivePage(
-                      routesToPopAfterDelete:
-                          RoutesToPopAfterDelete.PreventDelete,
-                    ),
-                    height: 150,
-                  ),
+                  child: addButton,
                 ),
               );
             }
             if (snapshot.hasData) {
               return SliverPadding(
-                padding: EdgeInsets.symmetric(vertical: 7, horizontal: 13),
+                padding: EdgeInsets.symmetric(
+                  vertical: getPlatform() == PlatformOS.isIOS ? 3 : 7,
+                  horizontal: getPlatform() == PlatformOS.isIOS ? 0 : 13,
+                ),
                 sliver: enableDoubleColumn(context)
                     ? SliverGrid(
                         gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
@@ -93,15 +106,10 @@ class ObjectivesListPageState extends State<ObjectivesListPage> {
                         delegate: SliverChildBuilderDelegate(
                           (BuildContext context, int index) {
                             if (index == snapshot.data?.length) {
-                              return AddButton(
-                                onTap: () {},
-                                openPage: AddObjectivePage(
-                                  routesToPopAfterDelete:
-                                      RoutesToPopAfterDelete.PreventDelete,
-                                ),
-                              );
+                              return addButton;
                             } else {
                               return ObjectiveContainer(
+                                index: index,
                                 objective: snapshot.data![index],
                               );
                             }
@@ -113,18 +121,16 @@ class ObjectivesListPageState extends State<ObjectivesListPage> {
                         delegate: SliverChildBuilderDelegate(
                           (BuildContext context, int index) {
                             if (index == snapshot.data?.length) {
-                              return AddButton(
-                                onTap: () {},
-                                openPage: AddObjectivePage(
-                                  routesToPopAfterDelete:
-                                      RoutesToPopAfterDelete.PreventDelete,
-                                ),
-                                height: 150,
-                              );
+                              return addButton;
                             } else {
                               return Padding(
-                                padding: const EdgeInsets.only(bottom: 16.0),
+                                padding: EdgeInsets.only(
+                                  bottom: getPlatform() == PlatformOS.isIOS
+                                      ? 0
+                                      : 16.0,
+                                ),
                                 child: ObjectiveContainer(
+                                  index: index,
                                   objective: snapshot.data![index],
                                 ),
                               );
@@ -149,105 +155,159 @@ class ObjectivesListPageState extends State<ObjectivesListPage> {
 }
 
 class ObjectiveContainer extends StatelessWidget {
-  const ObjectiveContainer({required this.objective, super.key});
+  const ObjectiveContainer(
+      {required this.objective, required this.index, super.key});
   final Objective objective;
+  final int index;
 
   @override
   Widget build(BuildContext context) {
-    return OpenContainerNavigation(
-      openPage: Container(),
-      borderRadius: 15,
-      closedColor: getStandardContainerColor(context),
-      button: (openContainer()) {
-        return Tappable(
-          color: getStandardContainerColor(context),
-          onTap: () {
-            openContainer();
-          },
-          child: Padding(
-            padding:
-                const EdgeInsets.only(left: 30, right: 20, top: 18, bottom: 21),
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    double borderRadius = getPlatform() == PlatformOS.isIOS ? 0 : 18;
+    return StreamBuilder<double?>(
+      stream: database.watchTotalTowardsObjective(
+        objective.objectivePk,
+      ),
+      builder: (context, snapshot) {
+        double totalAmount = snapshot.data ?? 0;
+        if (objective.income == false) {
+          totalAmount = totalAmount * -1;
+        }
+        double percentageTowardsGoal =
+            objective.amount == 0 ? 0 : totalAmount / objective.amount;
+        return Column(
+          children: [
+            OpenContainerNavigation(
+              openPage: Container(),
+              borderRadius: borderRadius,
+              closedColor: getStandardContainerColor(context),
+              button: (openContainer()) {
+                return Column(
                   children: [
-                    Expanded(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          TextFont(
-                            text: objective.name,
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
+                    getPlatform() == PlatformOS.isIOS && index == 0
+                        ? Container(
+                            height: 1.5,
+                            color: getColor(context, "dividerColor"),
+                          )
+                        : SizedBox.shrink(),
+                    Tappable(
+                      onLongPress: () {
+                        pushRoute(
+                          context,
+                          AddObjectivePage(
+                            routesToPopAfterDelete: RoutesToPopAfterDelete.One,
+                            objective: objective,
                           ),
-                          TextFont(
-                            text: "15 transactions",
-                            fontSize: 15,
-                            textColor: getColor(context, "textLight"),
-                          ),
-                        ],
+                        );
+                      },
+                      color: getStandardContainerColor(context),
+                      onTap: () {
+                        openContainer();
+                      },
+                      child: Padding(
+                        padding: EdgeInsets.only(
+                          left: getPlatform() == PlatformOS.isIOS ? 23 : 30,
+                          right: getPlatform() == PlatformOS.isIOS ? 23 : 20,
+                          top: 18,
+                          bottom: 21,
+                        ),
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Expanded(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      TextFont(
+                                        text: objective.name,
+                                        fontSize: 24,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                      TextFont(
+                                        text: "15 transactions",
+                                        fontSize: 15,
+                                        textColor: getColor(context, "black")
+                                            .withOpacity(0.65),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                CategoryIcon(
+                                  categoryPk: "-1",
+                                  category: TransactionCategory(
+                                    categoryPk: "-1",
+                                    name: "",
+                                    dateCreated: DateTime.now(),
+                                    dateTimeModified: null,
+                                    order: 0,
+                                    income: false,
+                                    iconName: objective.iconName,
+                                    colour: objective.colour,
+                                    emojiIconName: objective.emojiIconName,
+                                  ),
+                                  size: 30,
+                                  sizePadding: 20,
+                                  borderRadius: 100,
+                                  canEditByLongPress: false,
+                                  margin: EdgeInsets.zero,
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 4),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                TextFont(
+                                  fontWeight: FontWeight.bold,
+                                  text: convertToMoney(
+                                      Provider.of<AllWallets>(context),
+                                      totalAmount),
+                                  fontSize: 24,
+                                  textColor: getColor(context, "black"),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(bottom: 1),
+                                  child: TextFont(
+                                    text: " / " +
+                                        convertToMoney(
+                                            Provider.of<AllWallets>(context),
+                                            objective.amount),
+                                    fontSize: 15,
+                                    textColor: getColor(context, "black")
+                                        .withOpacity(0.3),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 8),
+                            BudgetProgress(
+                              color: HexColor(objective.colour),
+                              percent: percentageTowardsGoal * 100,
+                              todayPercent: -1,
+                              showToday: false,
+                              yourPercent: 0,
+                              padding: EdgeInsets.zero,
+                              enableShake: false,
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                    CategoryIcon(
-                      categoryPk: "-1",
-                      category: TransactionCategory(
-                        categoryPk: "-1",
-                        name: "",
-                        dateCreated: DateTime.now(),
-                        dateTimeModified: null,
-                        order: 0,
-                        income: false,
-                        iconName: objective.iconName,
-                        colour: objective.colour,
-                        emojiIconName: objective.emojiIconName,
-                      ),
-                      size: 30,
-                      sizePadding: 20,
-                      borderRadius: 100,
-                      canEditByLongPress: false,
-                      margin: EdgeInsets.zero,
-                    ),
+                    getPlatform() == PlatformOS.isIOS
+                        ? Container(
+                            height: 1.5,
+                            color: getColor(context, "dividerColor"),
+                          )
+                        : SizedBox.shrink(),
                   ],
-                ),
-                SizedBox(height: 4),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    TextFont(
-                      fontWeight: FontWeight.bold,
-                      text:
-                          convertToMoney(Provider.of<AllWallets>(context), 50),
-                      fontSize: 24,
-                      textColor: getColor(context, "black"),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 1),
-                      child: TextFont(
-                        text: " / " +
-                            convertToMoney(
-                                Provider.of<AllWallets>(context), 100),
-                        fontSize: 15,
-                        textColor: getColor(context, "black").withOpacity(0.3),
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 8),
-                BudgetProgress(
-                  color: HexColor(objective.colour),
-                  percent: 50,
-                  todayPercent: -1,
-                  showToday: false,
-                  yourPercent: 0,
-                  padding: EdgeInsets.zero,
-                  enableShake: false,
-                ),
-              ],
+                );
+              },
             ),
-          ),
+          ],
         );
       },
     );

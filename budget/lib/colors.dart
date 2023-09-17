@@ -28,7 +28,7 @@ Color getColor(BuildContext context, String colorName) {
       amountLight: 0.96,
     );
   }
-  return Theme.of(context).extension<AppColors>()!.colors[colorName] ??
+  return Theme.of(context).extension<AppColors>()?.colors[colorName] ??
       Colors.red;
 }
 

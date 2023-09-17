@@ -290,7 +290,7 @@ class CenteredAmountAndNumTransactions extends StatelessWidget {
                   child: getInitialText != null &&
                           getInitialText!(totalAmount) != null
                       ? TextFont(
-                          key: ValueKey(1),
+                          key: ValueKey(getInitialText!(totalAmount) ?? ""),
                           text: getInitialText!(totalAmount) ?? "",
                           fontSize: 16,
                           textColor: getColor(context, "textLight"),

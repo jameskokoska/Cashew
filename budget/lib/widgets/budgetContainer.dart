@@ -81,9 +81,9 @@ class BudgetContainer extends StatelessWidget {
             if (snapshot.hasData) {
               double totalSpent = 0;
               snapshot.data!.forEach((category) {
-                totalSpent = totalSpent + category.total.abs();
-                totalSpent = totalSpent.abs();
+                totalSpent = totalSpent + category.total;
               });
+              totalSpent = totalSpent * -1;
               return Container(
                 // height: height,
                 child: ClipRRect(
@@ -303,7 +303,7 @@ class BudgetContainer extends StatelessWidget {
                           budget: budget,
                           percent: budget.amount == 0
                               ? 0
-                              : (totalSpent / budget.amount * 100).abs(),
+                              : (totalSpent / budget.amount * 100),
                           yourPercent: budget.amount == 0
                               ? 0
                               : snapshotTotalSpentByCurrentUserOnly.data == null
@@ -322,8 +322,7 @@ class BudgetContainer extends StatelessWidget {
                       ),
                       DaySpending(
                         budget: budget,
-                        amount: (budget.amount - totalSpent) /
-                            daysBetween(dateForRangeLocal, budgetRange.end),
+                        totalAmount: totalSpent,
                         budgetRange: budgetRange,
                         padding: EdgeInsets.only(
                           left: 10,
@@ -419,7 +418,7 @@ class DaySpending extends StatelessWidget {
   const DaySpending({
     Key? key,
     required Budget this.budget,
-    required double this.amount,
+    required double this.totalAmount,
     bool this.large = false,
     required this.budgetRange,
     required this.padding,
@@ -427,7 +426,7 @@ class DaySpending extends StatelessWidget {
 
   final Budget budget;
   final bool large;
-  final double amount;
+  final double totalAmount;
   final DateTimeRange budgetRange;
   final EdgeInsets padding;
 
@@ -448,6 +447,8 @@ class DaySpending extends StatelessWidget {
                       )
                       .inDays +
                   1;
+              double amount =
+                  ((totalAmount - budget.amount) / remainingDays) * -1;
               return TextFont(
                 textColor: getColor(context, "black").withAlpha(80),
                 text: isOutOfRange
@@ -662,7 +663,10 @@ class BudgetProgress extends StatelessWidget {
     return Container(
       child: Center(
         child: TextFont(
-          text: percent.toStringAsFixed(0) + "%",
+          text: (percent.toStringAsFixed(0) == "-0"
+                  ? "0"
+                  : percent.toStringAsFixed(0)) +
+              "%",
           textColor: color,
           fontSize: large ? 16 : 14,
           textAlign: TextAlign.center,
@@ -805,74 +809,74 @@ class _AnimatedProgressState extends State<AnimatedProgress> {
 
   @override
   Widget build(BuildContext context) {
+    double percent = widget.percent == double.infinity ||
+            widget.percent == double.negativeInfinity ||
+            widget.otherPercent == double.infinity ||
+            widget.otherPercent == double.negativeInfinity ||
+            widget.percent <= 0
+        ? 0
+        : widget.percent;
     return Stack(
       children: [
-        widget.percent == double.infinity ||
-                widget.percent == double.negativeInfinity ||
-                widget.otherPercent == double.infinity ||
-                widget.otherPercent == double.negativeInfinity
-            ? SizedBox.shrink()
-            : AnimatedFractionallySizedBox(
-                duration: Duration(milliseconds: 1500),
-                curve: Curves.easeInOutCubic,
-                heightFactor: 1,
-                widthFactor: animateIn
-                    ? (widget.percent > 100 ? 1 : widget.percent / 100)
-                    : 0,
-                child: Stack(
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(0),
-                        color: lightenPastel(widget.color, amount: 0.6),
-                      ),
+        AnimatedFractionallySizedBox(
+          duration: Duration(milliseconds: 1500),
+          curve: Curves.easeInOutCubic,
+          heightFactor: 1,
+          widthFactor: animateIn ? (percent > 100 ? 1 : percent / 100) : 0,
+          child: Stack(
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(0),
+                  color: lightenPastel(widget.color, amount: 0.6),
+                ),
+              ),
+              // there are no other shared category entries from other users - it is all by the current user
+              AnimatedOpacity(
+                opacity: widget.otherPercent >= 99.99999 ? 0 : 1,
+                duration: Duration(milliseconds: 500),
+                child: AnimatedFractionallySizedBox(
+                  duration: Duration(milliseconds: 1500),
+                  curve: Curves.easeInOutCubic,
+                  heightFactor: 1,
+                  widthFactor: animateIn
+                      ? (widget.otherPercent > 100
+                          ? 1
+                          : widget.otherPercent / 100)
+                      : 0,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color: dynamicPastel(context, widget.color,
+                              amountDark: 0.1, amountLight: 0.3)
+                          .withOpacity(0.8),
                     ),
-                    // there are no other shared category entries from other users - it is all by the current user
-                    AnimatedOpacity(
-                      opacity: widget.otherPercent >= 99.99999 ? 0 : 1,
-                      duration: Duration(milliseconds: 500),
-                      child: AnimatedFractionallySizedBox(
-                        duration: Duration(milliseconds: 1500),
-                        curve: Curves.easeInOutCubic,
-                        heightFactor: 1,
-                        widthFactor: animateIn
-                            ? (widget.otherPercent > 100
-                                ? 1
-                                : widget.otherPercent / 100)
-                            : 0,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            color: dynamicPastel(context, widget.color,
-                                    amountDark: 0.1, amountLight: 0.3)
-                                .withOpacity(0.8),
-                          ),
-                        ),
-                      ),
-                    ),
-
-                    AnimatedOpacity(
-                      opacity: widget.percent > 40
-                          ? fadeIn
-                              ? 1
-                              : 0
-                          : 0,
-                      duration: Duration(milliseconds: 500),
-                      child: widget.getPercentText(
-                        darkenPastel(widget.color, amount: 0.6),
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
               ),
 
+              AnimatedOpacity(
+                opacity: percent > 40
+                    ? fadeIn
+                        ? 1
+                        : 0
+                    : 0,
+                duration: Duration(milliseconds: 500),
+                child: widget.getPercentText(
+                  darkenPastel(widget.color, amount: 0.6),
+                ),
+              ),
+            ],
+          ),
+        ),
+
         // This adds a rounded corner when the percent is small
-        widget.percent / 100 < 0.05
+        percent / 100 < 0.05
             ? AnimatedContainer(
                 curve: Curves.easeInOutCubic,
                 duration: Duration(milliseconds: 1500),
                 width: animateIn
-                    ? widget.percent / 100 <= 0
+                    ? percent / 100 <= 0
                         ? 0
                         : widget.large
                             ? 15

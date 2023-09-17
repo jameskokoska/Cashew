@@ -228,6 +228,8 @@ Future<bool> syncData(BuildContext context) async {
   List<SyncLog> syncLogs = [];
   List<drive.File> filesSyncing = [];
 
+  int currentFileIndex = 0;
+  loadingProgressKey.currentState!.setProgressPercentage(0);
   for (drive.File file in filesToDownloadSyncChanges) {
     loadingIndeterminateKey.currentState!.setVisibility(true);
 
@@ -369,6 +371,20 @@ Future<bool> syncData(BuildContext context) async {
         ));
       }
 
+      List<Objective> newObjectives =
+          await databaseSync.getAllNewObjectives(lastSynced);
+      for (Objective newEntry in newObjectives) {
+        syncLogs.add(SyncLog(
+          deleteLogType: null,
+          updateLogType: UpdateLogType.Objective,
+          pk: newEntry.objectivePk,
+          itemToUpdate: newEntry,
+          transactionDateTime: newEntry.dateTimeModified,
+        ));
+      }
+      print("NEW OBJECTIVES");
+      print(newObjectives);
+
       List<DeleteLog> deleteLogs =
           await databaseSync.getAllNewDeleteLogs(lastSynced);
 
@@ -400,8 +416,13 @@ Future<bool> syncData(BuildContext context) async {
       return false;
     }
 
+    currentFileIndex = currentFileIndex + 1;
+    loadingProgressKey.currentState!.setProgressPercentage(
+        currentFileIndex / filesToDownloadSyncChanges.length);
+
     await databaseSync.close();
   }
+  loadingProgressKey.currentState!.setProgressPercentage(1);
 
   await database.processSyncLogs(syncLogs);
   for (drive.File file in filesSyncing)
@@ -422,6 +443,7 @@ Future<bool> syncData(BuildContext context) async {
     pagesNeedingRefresh: [],
     updateGlobalState: getIsFullScreen(context) ? true : false,
   );
+
   print("DONE SYNCING");
   return true;
 }

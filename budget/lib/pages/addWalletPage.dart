@@ -581,9 +581,6 @@ class _CorrectBalancePopupState extends State<CorrectBalancePopup> {
                   difference != 0
                       ? IncomeOutcomeArrow(
                           isIncome: difference > 0,
-                          color: difference > 0 == true
-                              ? getColor(context, "incomeAmount")
-                              : getColor(context, "expenseAmount"),
                           width: 15,
                         )
                       : Container(),

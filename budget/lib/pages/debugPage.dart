@@ -208,17 +208,6 @@ class DebugPage extends StatelessWidget {
               ? Icons.all_inbox_outlined
               : Icons.all_inbox_rounded,
         ),
-        SettingsContainerSwitch(
-          enableBorderRadius: true,
-          onSwitched: (value) {
-            updateSettings("outlinedIcons", value,
-                pagesNeedingRefresh: [], updateGlobalState: true);
-          },
-          initialValue: appStateSettings["outlinedIcons"],
-          title: "Outlined icons",
-          description: "Use outlined icons",
-          icon: Icons.outlined_flag,
-        ),
 
         SettingsContainerSwitch(
           title: "Emulate iOS",

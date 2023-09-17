@@ -27,7 +27,7 @@ class TextFont extends StatelessWidget {
     required this.text,
     this.fontSize = 20,
     this.fontWeight = FontWeight.normal,
-    this.textAlign = TextAlign.left,
+    this.textAlign = TextAlign.start,
     this.textColor,
     this.maxLines = null,
     this.fixParagraphMargin = false,

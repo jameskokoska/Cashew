@@ -118,9 +118,11 @@ class PremiumPage extends StatelessWidget {
                                     ),
                                     SubscriptionFeature(
                                       iconData: MoreIcons.chart_pie,
-                                      label: "unlimited-budgets".tr(),
+                                      label: "unlimited-budgets-and-objectives"
+                                          .tr(),
                                       description:
-                                          "unlimited-budgets-description".tr(),
+                                          "unlimited-budgets-and-objectives-description"
+                                              .tr(),
                                     ),
                                     SubscriptionFeature(
                                       iconData:

@@ -237,6 +237,10 @@ class _EditObjectivesPageState extends State<EditObjectivesPage> {
                       ),
                       index: index,
                       onDelete: () async {
+                        deleteObjectivePopup(context,
+                            objective: objective,
+                            routesToPopAfterDelete:
+                                RoutesToPopAfterDelete.None);
                         return true;
                       },
                       openPage: AddObjectivePage(
@@ -248,9 +252,13 @@ class _EditObjectivesPageState extends State<EditObjectivesPage> {
                   itemCount: snapshot.data!.length,
                   onReorder: (_intPrevious, _intNew) async {
                     Objective oldObjective = snapshot.data![_intPrevious];
-
                     if (_intNew > _intPrevious) {
-                    } else {}
+                      await database.moveObjective(oldObjective.objectivePk,
+                          _intNew - 1, oldObjective.order);
+                    } else {
+                      await database.moveObjective(oldObjective.objectivePk,
+                          _intNew, oldObjective.order);
+                    }
                     return true;
                   },
                 );
@@ -267,4 +275,57 @@ class _EditObjectivesPageState extends State<EditObjectivesPage> {
       ),
     );
   }
+}
+
+Future<DeletePopupAction?> deleteObjectivePopup(
+  BuildContext context, {
+  required Objective objective,
+  required RoutesToPopAfterDelete routesToPopAfterDelete,
+}) async {
+  DeletePopupAction? action = await openDeletePopup(
+    context,
+    title: "delete-objective-question".tr(),
+    subtitle: objective.name,
+  );
+  if (action == DeletePopupAction.Delete) {
+    dynamic result = true;
+    int? numTransactions = await database
+        .getTotalCountOfTransactionsInObjective(objective.objectivePk);
+    if (numTransactions != null && numTransactions > 0) {
+      result = await openPopup(
+        context,
+        title: "remove-transactions-from-objective-question".tr(),
+        description: "delete-objective-warning".tr(),
+        icon: appStateSettings["outlinedIcons"]
+            ? Icons.warning_amber_outlined
+            : Icons.warning_amber_rounded,
+        onCancel: () {
+          Navigator.pop(context, false);
+        },
+        onCancelLabel: "cancel".tr(),
+        onSubmit: () async {
+          Navigator.pop(context, true);
+        },
+        onSubmitLabel: "delete-objective".tr(),
+      );
+    }
+    if (result == true) {
+      if (routesToPopAfterDelete == RoutesToPopAfterDelete.All) {
+        Navigator.of(context).popUntil((route) => route.isFirst);
+      } else if (routesToPopAfterDelete == RoutesToPopAfterDelete.One) {
+        Navigator.of(context).pop();
+      }
+      openLoadingPopupTryCatch(() async {
+        await database.deleteObjective(context, objective);
+        openSnackbar(
+          SnackbarMessage(
+            title: "deleted-objective".tr(),
+            icon: Icons.delete,
+            description: objective.name,
+          ),
+        );
+      });
+    }
+  }
+  return action;
 }

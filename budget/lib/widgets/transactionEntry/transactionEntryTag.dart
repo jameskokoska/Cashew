@@ -7,41 +7,83 @@ import 'package:budget/widgets/util/infiniteRotationAnimation.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/colors.dart';
 
-class AssociatedBudgetLabel extends StatelessWidget {
-  const AssociatedBudgetLabel({required this.transaction, super.key});
+class TransactionEntryTag extends StatelessWidget {
+  const TransactionEntryTag({required this.transaction, super.key});
   final Transaction transaction;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(top: 1.0),
-      child: transaction.sharedReferenceBudgetPk == null
-          ? SizedBox.shrink()
-          : StreamBuilder<Budget>(
-              stream: database.getBudget(transaction.sharedReferenceBudgetPk!),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  Budget budget = snapshot.data!;
-                  return Padding(
-                    padding: const EdgeInsets.only(left: 3),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: HexColor(budget.colour).withOpacity(0.25),
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 4.5, vertical: 2.25),
-                      child: TextFont(
-                        text: snapshot.data!.name,
-                        fontSize: 11.5,
-                        textColor: getColor(context, "black").withOpacity(0.7),
-                      ),
-                    ),
-                  );
-                }
-                return Container();
-              },
+      child: Row(
+        children: [
+          transaction.sharedReferenceBudgetPk == null
+              ? SizedBox.shrink()
+              : StreamBuilder<Budget>(
+                  stream:
+                      database.getBudget(transaction.sharedReferenceBudgetPk!),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      Budget budget = snapshot.data!;
+                      return TransactionTag(
+                        color: HexColor(budget.colour),
+                        name: budget.name,
+                      );
+                    }
+                    return Container();
+                  },
+                ),
+          transaction.objectiveFk == null
+              ? SizedBox.shrink()
+              : StreamBuilder<Objective>(
+                  stream: database.getObjective(transaction.objectiveFk!),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      Objective objective = snapshot.data!;
+                      return TransactionTag(
+                        color: HexColor(objective.colour),
+                        name: objective.name,
+                      );
+                    }
+                    return Container();
+                  },
+                ),
+        ],
+      ),
+    );
+  }
+}
+
+class TransactionTag extends StatelessWidget {
+  final Color color;
+  final String name;
+
+  TransactionTag({
+    required this.color,
+    required this.name,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 3),
+      child: Container(
+        decoration: BoxDecoration(
+          color: color.withOpacity(0.25),
+          borderRadius: BorderRadius.circular(6),
+        ),
+        padding: EdgeInsets.symmetric(horizontal: 4.5, vertical: 1.05),
+        child: Padding(
+          padding: const EdgeInsets.only(top: 2.2),
+          child: Text(
+            name,
+            style: TextStyle(
+              fontSize: 11.5,
+              color: getColor(context, "black").withOpacity(0.7),
             ),
+          ),
+        ),
+      ),
     );
   }
 }

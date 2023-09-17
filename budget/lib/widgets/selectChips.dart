@@ -17,6 +17,7 @@ class SelectChips<T> extends StatefulWidget {
     required this.getLabel,
     this.getCustomBorderColor,
     this.extraWidget,
+    this.extraWidgetAtBeginning = false,
     this.onLongPress,
     this.wrapped = false,
     this.extraHorizontalPadding,
@@ -27,6 +28,7 @@ class SelectChips<T> extends StatefulWidget {
   final String Function(T) getLabel;
   final Color? Function(T)? getCustomBorderColor;
   final Widget? extraWidget;
+  final bool extraWidgetAtBeginning;
   final Function(T)? onLongPress;
   final bool wrapped;
   final double? extraHorizontalPadding;
@@ -77,6 +79,8 @@ class _SelectChipsState<T> extends State<SelectChips<T>> {
   @override
   Widget build(BuildContext context) {
     List<Widget> children = [
+      if (widget.extraWidget != null && widget.extraWidgetAtBeginning == true)
+        widget.extraWidget ?? SizedBox.shrink(),
       ...List<Widget>.generate(
         widget.items.length,
         (int index) {
@@ -121,7 +125,8 @@ class _SelectChipsState<T> extends State<SelectChips<T>> {
           );
         },
       ).toList(),
-      widget.extraWidget ?? SizedBox.shrink()
+      if (widget.extraWidget != null && widget.extraWidgetAtBeginning == false)
+        widget.extraWidget ?? SizedBox.shrink()
     ];
 
     return Padding(

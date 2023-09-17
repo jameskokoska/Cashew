@@ -302,7 +302,7 @@ class _WalletCategoryPieChartState extends State<WalletCategoryPieChart> {
                 //         ? widget.budget.budgetPk
                 //         : null,
                 // budget: widget.budget,
-                income: null,
+                // income: null,
               ),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {

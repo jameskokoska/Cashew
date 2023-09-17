@@ -1,16 +1,17 @@
+import 'package:budget/colors.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:flutter/material.dart';
 
 class IncomeOutcomeArrow extends StatelessWidget {
   const IncomeOutcomeArrow({
     required this.isIncome,
-    required this.color,
+    this.color,
     this.iconSize,
     this.width,
     super.key,
   });
   final bool isIncome;
-  final Color color;
+  final Color? color;
   final double? iconSize;
   final double? width;
   @override
@@ -28,7 +29,11 @@ class IncomeOutcomeArrow extends StatelessWidget {
             appStateSettings["outlinedIcons"]
                 ? Icons.arrow_drop_down_outlined
                 : Icons.arrow_drop_down_rounded,
-            color: color,
+            color: color == null
+                ? (isIncome
+                    ? getColor(context, "incomeAmount")
+                    : getColor(context, "expenseAmount"))
+                : color,
             size: iconSize,
           ),
         ),

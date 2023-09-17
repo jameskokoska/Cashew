@@ -9,6 +9,7 @@ import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/categoryIcon.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/widgets/framework/popupFramework.dart';
+import 'package:budget/widgets/incomeExpenseTabSelector.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openContainerNavigation.dart';
 import 'package:budget/widgets/openPopup.dart';
@@ -295,67 +296,14 @@ class _AddCategoryPageState extends State<AddCategoryPage>
                 borderRadius: getPlatform() == PlatformOS.isIOS
                     ? BorderRadius.circular(10)
                     : BorderRadius.circular(15),
-                child: Material(
-                  color: Theme.of(context)
+                child: IncomeExpenseTabSelector(
+                  onTabChanged: setSelectedIncome,
+                  initialTabIsIncome: selectedIncome,
+                  color: Theme.of(context).colorScheme.secondaryContainer,
+                  unselectedColor: Theme.of(context)
                       .colorScheme
                       .secondaryContainer
                       .withOpacity(0.2),
-                  child: Theme(
-                    data: ThemeData().copyWith(
-                      splashColor: Theme.of(context).splashColor,
-                    ),
-                    child: TabBar(
-                      splashFactory: Theme.of(context).splashFactory,
-                      controller: _incomeTabController,
-                      onTap: (value) {
-                        if (value == 1)
-                          setSelectedIncome(true);
-                        else
-                          setSelectedIncome(false);
-                      },
-                      dividerColor: Colors.transparent,
-                      indicatorColor: Colors.transparent,
-                      indicatorSize: TabBarIndicatorSize.tab,
-                      indicator: BoxDecoration(
-                        color: Theme.of(context).colorScheme.secondaryContainer,
-                      ),
-                      labelColor: getColor(context, "black"),
-                      unselectedLabelColor:
-                          getColor(context, "black").withOpacity(0.3),
-                      tabs: [
-                        Tab(
-                          child: Center(
-                            child: Padding(
-                              padding: const EdgeInsets.only(top: 5),
-                              child: Text(
-                                "expense".tr(),
-                                style: TextStyle(
-                                  fontSize: 14.5,
-                                  fontFamily: 'Avenir',
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
-                          ),
-                        ),
-                        Tab(
-                          child: Center(
-                            child: Padding(
-                              padding: const EdgeInsets.only(top: 5),
-                              child: Text(
-                                "income".tr(),
-                                style: TextStyle(
-                                  fontSize: 14.5,
-                                  fontFamily: 'Avenir',
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
                 ),
               ),
             ),
@@ -558,7 +506,7 @@ class _AddCategoryPageState extends State<AddCategoryPage>
                           : widget.category!.categoryPk,
                     ),
                     builder: (context, snapshot) {
-                      print(snapshot.data);
+                      // print(snapshot.data);
                       if (snapshot.hasData &&
                           (snapshot.data ?? []).length > 0) {
                         return Column(

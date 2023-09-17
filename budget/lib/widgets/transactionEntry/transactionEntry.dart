@@ -18,7 +18,7 @@ import 'package:visibility_detector/visibility_detector.dart';
 import 'swipeToSelectTransactions.dart';
 import 'transactionEntryAmount.dart';
 import 'transactionEntryNote.dart';
-import 'associatedBudgetLabel.dart';
+import 'transactionEntryTag.dart';
 
 ValueNotifier<Map<String, List<String>>> globalSelectedID =
     ValueNotifier<Map<String, List<String>>>({});
@@ -205,7 +205,9 @@ class TransactionEntry extends StatelessWidget {
                         flashDuration: Duration(milliseconds: 500),
                         backgroundColor: selectedColor.withOpacity(
                           appStateSettings["materialYou"]
-                              ? 0.4
+                              ? categoryTintColor == null
+                                  ? 0.4
+                                  : 0.1
                               : Theme.of(context).brightness == Brightness.light
                                   ? 0.1
                                   : 0.2,
@@ -384,11 +386,15 @@ class TransactionEntry extends StatelessWidget {
                                             ),
                                           );
                                         }),
-                                        transaction.sharedReferenceBudgetPk !=
-                                                    null &&
-                                                transaction.sharedKey == null &&
-                                                transaction.sharedStatus == null
-                                            ? AssociatedBudgetLabel(
+                                        (transaction.sharedReferenceBudgetPk !=
+                                                        null &&
+                                                    transaction.sharedKey ==
+                                                        null &&
+                                                    transaction.sharedStatus ==
+                                                        null) ||
+                                                (transaction.objectiveFk !=
+                                                    null)
+                                            ? TransactionEntryTag(
                                                 transaction: transaction)
                                             : SizedBox.shrink(),
                                         transaction.sharedKey != null ||
