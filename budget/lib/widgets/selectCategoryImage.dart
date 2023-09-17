@@ -167,7 +167,9 @@ class _SelectCategoryImageState extends State<SelectCategoryImage> {
                 bool show = false;
                 if (searchTerm != "") {
                   for (int i = 0; i < image.tags.length; i++) {
-                    if (image.tags[i].contains(searchTerm)) {
+                    if (image.tags[i]
+                        .toLowerCase()
+                        .contains(searchTerm.toLowerCase())) {
                       show = true;
                       break;
                     }

@@ -10,6 +10,15 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    < 4.3.4
+    Objectives entries completed
+    Objectives add page bottom buttons for incomplete information
+    Objectives information page
+    Searching for a category icon no longer case sensitive
+    More category icons
+    Fixed ordering by date for loans
+    Fixed expanded container on backup page
+    Brought pack outlined icons in debug page
     < 4.3.3
     iOS layout for objectives
     Added objectives to side navigation

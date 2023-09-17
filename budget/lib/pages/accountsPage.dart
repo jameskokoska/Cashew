@@ -316,73 +316,86 @@ class OutlinedButtonStacked extends StatelessWidget {
   Widget build(BuildContext context) {
     return AnimatedSwitcher(
       duration: Duration(milliseconds: 250),
-      child: Tappable(
-        key: ValueKey(filled),
-        onTap: onTap,
-        borderRadius: 15,
-        color: filled == true
-            ? Theme.of(context).colorScheme.secondary.withOpacity(0.2)
-            : Colors.transparent,
-        child: Container(
-          decoration: BoxDecoration(
-            border: Border.all(
-              color: (appStateSettings["materialYou"]
-                  ? Theme.of(context).colorScheme.secondary.withOpacity(0.5)
-                  : getColor(context, "lightDarkAccentHeavy")),
-              width: 2,
+      child: Row(
+        children: [
+          Expanded(
+            child: Tappable(
+              key: ValueKey(filled),
+              onTap: onTap,
+              borderRadius: 15,
+              color: filled == true
+                  ? Theme.of(context).colorScheme.secondary.withOpacity(0.2)
+                  : Colors.transparent,
+              child: Container(
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: (appStateSettings["materialYou"]
+                        ? Theme.of(context)
+                            .colorScheme
+                            .secondary
+                            .withOpacity(0.5)
+                        : getColor(context, "lightDarkAccentHeavy")),
+                    width: 2,
+                  ),
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                child: Padding(
+                  padding: padding ??
+                      EdgeInsets.symmetric(horizontal: 8, vertical: 30),
+                  child: Column(
+                    crossAxisAlignment: alignLeft
+                        ? CrossAxisAlignment.start
+                        : CrossAxisAlignment.center,
+                    children: [
+                      alignBeside != true
+                          ? Column(
+                              crossAxisAlignment: alignLeft
+                                  ? CrossAxisAlignment.start
+                                  : CrossAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  iconData,
+                                  size: 35,
+                                  color:
+                                      Theme.of(context).colorScheme.secondary,
+                                ),
+                                SizedBox(height: 10),
+                                TextFont(
+                                  text: text,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  maxLines: 2,
+                                ),
+                              ],
+                            )
+                          : Row(
+                              children: [
+                                Icon(
+                                  iconData,
+                                  size: 28,
+                                  color:
+                                      Theme.of(context).colorScheme.secondary,
+                                ),
+                                SizedBox(width: 10),
+                                TextFont(
+                                  text: text,
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.bold,
+                                  maxLines: 2,
+                                ),
+                              ],
+                            ),
+                      afterWidget == null
+                          ? SizedBox.shrink()
+                          : SizedBox(height: 8),
+                      afterWidget ?? SizedBox.shrink(),
+                    ],
+                  ),
+                ),
+              ),
             ),
-            borderRadius: BorderRadius.circular(15),
           ),
-          child: Padding(
-            padding:
-                padding ?? EdgeInsets.symmetric(horizontal: 8, vertical: 30),
-            child: Column(
-              crossAxisAlignment: alignLeft
-                  ? CrossAxisAlignment.start
-                  : CrossAxisAlignment.center,
-              children: [
-                alignBeside != true
-                    ? Column(
-                        crossAxisAlignment: alignLeft
-                            ? CrossAxisAlignment.start
-                            : CrossAxisAlignment.center,
-                        children: [
-                          Icon(
-                            iconData,
-                            size: 35,
-                            color: Theme.of(context).colorScheme.secondary,
-                          ),
-                          SizedBox(height: 10),
-                          TextFont(
-                            text: text,
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            maxLines: 2,
-                          ),
-                        ],
-                      )
-                    : Row(
-                        children: [
-                          Icon(
-                            iconData,
-                            size: 28,
-                            color: Theme.of(context).colorScheme.secondary,
-                          ),
-                          SizedBox(width: 10),
-                          TextFont(
-                            text: text,
-                            fontSize: 22,
-                            fontWeight: FontWeight.bold,
-                            maxLines: 2,
-                          ),
-                        ],
-                      ),
-                afterWidget == null ? SizedBox.shrink() : SizedBox(height: 8),
-                afterWidget ?? SizedBox.shrink(),
-              ],
-            ),
-          ),
-        ),
+        ],
       ),
     );
   }

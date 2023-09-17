@@ -335,15 +335,23 @@ class _AddObjectivePageState extends State<AddObjectivePage>
                     },
                     disabled: false,
                   )
-                : SaveBottomButton(
-                    label: widget.objective == null
-                        ? "add-objective".tr()
-                        : "save-changes".tr(),
-                    onTap: () async {
-                      await addObjective();
-                    },
-                    disabled: !(canAddObjective ?? false),
-                  ),
+                : selectedAmount == 0
+                    ? SaveBottomButton(
+                        label: "set-amount".tr(),
+                        onTap: () async {
+                          selectAmount(context);
+                        },
+                        disabled: false,
+                      )
+                    : SaveBottomButton(
+                        label: widget.objective == null
+                            ? "add-objective".tr()
+                            : "save-changes".tr(),
+                        onTap: () async {
+                          await addObjective();
+                        },
+                        disabled: !(canAddObjective ?? false),
+                      ),
           ),
           slivers: [
             SliverToBoxAdapter(

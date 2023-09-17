@@ -98,9 +98,11 @@ class ObjectivesListPageState extends State<ObjectivesListPage> {
                     ? SliverGrid(
                         gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
                           maxCrossAxisExtent: 600.0,
-                          mainAxisExtent: 200,
-                          mainAxisSpacing: 10.0,
-                          crossAxisSpacing: 10.0,
+                          mainAxisExtent: 160,
+                          mainAxisSpacing:
+                              getPlatform() == PlatformOS.isIOS ? 0 : 10.0,
+                          crossAxisSpacing:
+                              getPlatform() == PlatformOS.isIOS ? 0 : 10.0,
                           childAspectRatio: 5,
                         ),
                         delegate: SliverChildBuilderDelegate(
@@ -226,11 +228,41 @@ class ObjectiveContainer extends StatelessWidget {
                                         fontSize: 24,
                                         fontWeight: FontWeight.bold,
                                       ),
-                                      TextFont(
-                                        text: "15 transactions",
-                                        fontSize: 15,
-                                        textColor: getColor(context, "black")
-                                            .withOpacity(0.65),
+                                      StreamBuilder<int?>(
+                                        stream: database
+                                            .getTotalCountOfTransactionsInObjective(
+                                                objective.objectivePk)
+                                            .$1,
+                                        builder: (context, snapshot) {
+                                          if (snapshot.hasData &&
+                                              snapshot.data != null) {
+                                            return TextFont(
+                                              textAlign: TextAlign.left,
+                                              text: snapshot.data.toString() +
+                                                  " " +
+                                                  (snapshot.data == 1
+                                                      ? "transaction"
+                                                          .tr()
+                                                          .toLowerCase()
+                                                      : "transactions"
+                                                          .tr()
+                                                          .toLowerCase()),
+                                              fontSize: 15,
+                                              textColor:
+                                                  getColor(context, "black")
+                                                      .withOpacity(0.65),
+                                            );
+                                          } else {
+                                            return TextFont(
+                                              textAlign: TextAlign.left,
+                                              text: "/ transactions",
+                                              fontSize: 15,
+                                              textColor:
+                                                  getColor(context, "black")
+                                                      .withOpacity(0.65),
+                                            );
+                                          }
+                                        },
                                       ),
                                     ],
                                   ),
@@ -258,28 +290,51 @@ class ObjectiveContainer extends StatelessWidget {
                             ),
                             SizedBox(height: 4),
                             Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
-                                TextFont(
-                                  fontWeight: FontWeight.bold,
-                                  text: convertToMoney(
-                                      Provider.of<AllWallets>(context),
-                                      totalAmount),
-                                  fontSize: 24,
-                                  textColor: getColor(context, "black"),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(bottom: 1),
-                                  child: TextFont(
-                                    text: " / " +
-                                        convertToMoney(
-                                            Provider.of<AllWallets>(context),
-                                            objective.amount),
-                                    fontSize: 15,
-                                    textColor: getColor(context, "black")
-                                        .withOpacity(0.3),
+                                Flexible(
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(right: 3),
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(bottom: 3),
+                                      child: TextFont(
+                                        text: getWordedDateShortMore(
+                                          objective.dateCreated,
+                                        ),
+                                        fontSize: 15,
+                                        textColor: getColor(context, "black")
+                                            .withOpacity(0.65),
+                                      ),
+                                    ),
                                   ),
+                                ),
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    TextFont(
+                                      fontWeight: FontWeight.bold,
+                                      text: convertToMoney(
+                                          Provider.of<AllWallets>(context),
+                                          totalAmount),
+                                      fontSize: 24,
+                                      textColor: getColor(context, "black"),
+                                    ),
+                                    Padding(
+                                      padding:
+                                          const EdgeInsets.only(bottom: 2.5),
+                                      child: TextFont(
+                                        text: " / " +
+                                            convertToMoney(
+                                                Provider.of<AllWallets>(
+                                                    context),
+                                                objective.amount),
+                                        fontSize: 15,
+                                        textColor: getColor(context, "black")
+                                            .withOpacity(0.3),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),

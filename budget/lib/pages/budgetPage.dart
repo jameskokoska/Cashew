@@ -112,7 +112,8 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
     );
     String pageId = budgetRange.start.millisecondsSinceEpoch.toString() +
         widget.budget.name +
-        budgetRange.end.millisecondsSinceEpoch.toString();
+        budgetRange.end.millisecondsSinceEpoch.toString() +
+        widget.budget.budgetPk;
     Color? pageBackgroundColor = appStateSettings["materialYou"]
         ? dynamicPastel(context, budgetColorScheme.primary, amount: 0.92)
         : null;

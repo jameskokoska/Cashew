@@ -4234,7 +4234,7 @@ class FinanceDatabase extends _$FinanceDatabase {
     ])
       ..orderBy([
         OrderingTerm.desc(transactions.paid),
-        OrderingTerm.asc(transactions.dateCreated),
+        OrderingTerm.desc(transactions.dateCreated),
       ])
       ..where(onlyShowTransactionBasedOnSearchQuery(transactions, searchString,
               withCategories: true) &
@@ -4285,14 +4285,14 @@ class FinanceDatabase extends _$FinanceDatabase {
     return result;
   }
 
-  Future<int?> getTotalCountOfTransactionsInObjective(
-      String objectivePk) async {
+  (Stream<int?>, Future<int?>) getTotalCountOfTransactionsInObjective(
+      String objectivePk) {
     final totalCount = transactions.transactionPk.count();
     final query = selectOnly(transactions)
       ..where(transactions.objectiveFk.equals(objectivePk))
       ..addColumns([totalCount]);
-    final result = await query.map((row) => row.read(totalCount)).getSingle();
-    return result;
+    final result = query.map((row) => row.read(totalCount));
+    return (result.watchSingle(), result.getSingle());
   }
 
   // get all transactions that occurred in a given time period that belong to categories

@@ -71,6 +71,7 @@ class AddTransactionPage extends StatefulWidget {
     this.transaction,
     this.selectedBudget,
     this.selectedType,
+    this.selectedObjective,
     required this.routesToPopAfterDelete,
   }) : super(key: key);
 
@@ -78,6 +79,7 @@ class AddTransactionPage extends StatefulWidget {
   final Transaction? transaction;
   final Budget? selectedBudget;
   final TransactionSpecialType? selectedType;
+  final Objective? selectedObjective;
   final RoutesToPopAfterDelete routesToPopAfterDelete;
 
   @override
@@ -568,6 +570,11 @@ class _AddTransactionPageState extends State<AddTransactionPage>
       selectedBudgetPk = widget.selectedBudget!.budgetPk;
       selectedPayer = appStateSettings["currentUserEmail"];
       selectedBudgetIsShared = widget.selectedBudget!.sharedKey != null;
+    }
+    if (widget.selectedObjective != null) {
+      setState(() {
+        selectedObjectivePk = widget.selectedObjective!.objectivePk;
+      });
     }
   }
 

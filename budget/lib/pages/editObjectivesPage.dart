@@ -197,39 +197,40 @@ class _EditObjectivesPageState extends State<EditObjectivesPage> {
                                   textColor: getColor(context, "black")
                                       .withOpacity(0.65),
                                 ),
-                                // StreamBuilder<List<int?>>(
-                                //   stream: database
-                                //       .watchTotalCountOfTransactionsInCategory(
-                                //           category.categoryPk),
-                                //   builder: (context, snapshot) {
-                                //     if (snapshot.hasData &&
-                                //         snapshot.data != null) {
-                                //       return TextFont(
-                                //         textAlign: TextAlign.left,
-                                //         text: snapshot.data![0].toString() +
-                                //             " " +
-                                //             (snapshot.data![0] == 1
-                                //                 ? "transaction"
-                                //                     .tr()
-                                //                     .toLowerCase()
-                                //                 : "transactions"
-                                //                     .tr()
-                                //                     .toLowerCase()),
-                                //         fontSize: 14,
-                                //         textColor: getColor(context, "black")
-                                //             .withOpacity(0.65),
-                                //       );
-                                //     } else {
-                                //       return TextFont(
-                                //         textAlign: TextAlign.left,
-                                //         text: "/ transactions",
-                                //         fontSize: 14,
-                                //         textColor: getColor(context, "black")
-                                //             .withOpacity(0.65),
-                                //       );
-                                //     }
-                                //   },
-                                // ),
+                                StreamBuilder<int?>(
+                                  stream: database
+                                      .getTotalCountOfTransactionsInObjective(
+                                          objective.objectivePk)
+                                      .$1,
+                                  builder: (context, snapshot) {
+                                    if (snapshot.hasData &&
+                                        snapshot.data != null) {
+                                      return TextFont(
+                                        textAlign: TextAlign.left,
+                                        text: snapshot.data.toString() +
+                                            " " +
+                                            (snapshot.data == 1
+                                                ? "transaction"
+                                                    .tr()
+                                                    .toLowerCase()
+                                                : "transactions"
+                                                    .tr()
+                                                    .toLowerCase()),
+                                        fontSize: 14,
+                                        textColor: getColor(context, "black")
+                                            .withOpacity(0.65),
+                                      );
+                                    } else {
+                                      return TextFont(
+                                        textAlign: TextAlign.left,
+                                        text: "/ transactions",
+                                        fontSize: 14,
+                                        textColor: getColor(context, "black")
+                                            .withOpacity(0.65),
+                                      );
+                                    }
+                                  },
+                                ),
                               ],
                             ),
                           ),
@@ -290,7 +291,8 @@ Future<DeletePopupAction?> deleteObjectivePopup(
   if (action == DeletePopupAction.Delete) {
     dynamic result = true;
     int? numTransactions = await database
-        .getTotalCountOfTransactionsInObjective(objective.objectivePk);
+        .getTotalCountOfTransactionsInObjective(objective.objectivePk)
+        .$2;
     if (numTransactions != null && numTransactions > 0) {
       result = await openPopup(
         context,

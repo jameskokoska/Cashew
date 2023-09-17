@@ -3407,4 +3407,68 @@ List<IconForCategory> iconObjects = [
     ],
     mostLikelyCategoryName: "Charts",
   ),
+  IconForCategory(
+    icon: "tea.png",
+    tags: [
+      "tea",
+      "beverage",
+      "drink",
+      "cup",
+      "brew",
+      "infusion",
+      "caffeine",
+      "refreshment",
+      "herbal",
+      "hot"
+    ],
+    mostLikelyCategoryName: "Tea",
+  ),
+  IconForCategory(
+    icon: "ball.png",
+    tags: [
+      "ball",
+      "sports",
+      "game",
+      "play",
+      "sporting",
+      "round",
+      "athletics",
+      "equipment",
+      "sphere",
+      "recreation"
+    ],
+    mostLikelyCategoryName: "Sports",
+  ),
+  IconForCategory(
+    icon: "apple.png",
+    tags: [
+      "apple",
+      "fruit",
+      "food",
+      "healthy",
+      "nutrition",
+      "juicy",
+      "orchard",
+      "snack",
+      "diet",
+      "crisp"
+    ],
+    mostLikelyCategoryName: "Fruit",
+  ),
+  IconForCategory(
+    icon: "keyboard.png",
+    tags: [
+      "keyboard",
+      "computer",
+      "typing",
+      "input",
+      "device",
+      "technology",
+      "keys",
+      "typing",
+      "electronics",
+      "interface"
+    ],
+    mostLikelyCategoryName: "Technology",
+  ),
 ];
