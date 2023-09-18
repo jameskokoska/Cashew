@@ -289,8 +289,8 @@ class _WalletCategoryPieChartState extends State<WalletCategoryPieChart> {
                 Provider.of<AllWallets>(context),
                 DateTime.now(),
                 DateTime.now(),
-                [],
-                true,
+                null,
+                null,
                 null, null,
                 allTime: true,
                 walletPk:

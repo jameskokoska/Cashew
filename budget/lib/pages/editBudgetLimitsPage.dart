@@ -61,11 +61,14 @@ class _EditBudgetLimitsPageState extends State<EditBudgetLimitsPage> {
         ),
         CategoryLimits(
           isAbsoluteSpendingLimit: selectedIsAbsoluteSpendingLimit,
-          selectedCategories: widget.budget.categoryFks ?? [],
+          categoryFks: widget.budget.categoryFks,
+          categoryFksExclude: widget.budget.categoryFksExclude,
           budgetPk: widget.budget.budgetPk,
           budgetLimit: widget.budget.amount,
-          showAddCategoryButton: widget.budget.categoryFks == null ||
-              widget.budget.categoryFks?.isEmpty == true,
+          showAddCategoryButton: (widget.budget.categoryFks == null ||
+                  widget.budget.categoryFks?.isEmpty == true) ||
+              (widget.budget.categoryFksExclude == null ||
+                  widget.budget.categoryFksExclude?.isEmpty == true),
         ),
       ],
     );

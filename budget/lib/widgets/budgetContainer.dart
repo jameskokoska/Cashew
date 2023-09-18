@@ -67,8 +67,8 @@ class BudgetContainer extends StatelessWidget {
             Provider.of<AllWallets>(context),
             budgetRange.start,
             budgetRange.end,
-            budget.categoryFks ?? [],
-            budget.allCategoryFks,
+            budget.categoryFks,
+            budget.categoryFksExclude,
             budget.budgetTransactionFilters,
             budget.memberTransactionFilters,
             onlyShowTransactionsBelongingToBudgetPk:
@@ -1066,8 +1066,8 @@ class _BudgetSpenderSummaryState extends State<BudgetSpenderSummary> {
         Provider.of<AllWallets>(context, listen: false),
         widget.budgetRange.start,
         widget.budgetRange.end,
-        widget.budget.categoryFks ?? [],
-        widget.budget.allCategoryFks,
+        widget.budget.categoryFks,
+        widget.budget.categoryFksExclude,
         member,
         widget.budget.budgetPk,
         allTime: widget.allTime,
@@ -1232,9 +1232,9 @@ class _BudgetSpenderSummaryState extends State<BudgetSpenderSummary> {
                                 stream: database.watchAllTransactionsByUser(
                                     start: widget.budgetRange.start,
                                     end: widget.budgetRange.end,
-                                    categoryFks:
-                                        widget.budget.categoryFks ?? [],
-                                    allCategories: widget.budget.allCategoryFks,
+                                    categoryFks: widget.budget.categoryFks,
+                                    categoryFksExclude:
+                                        widget.budget.categoryFksExclude,
                                     userEmail: spender.member),
                                 builder: (context, snapshot) {
                                   if (snapshot.hasData) {

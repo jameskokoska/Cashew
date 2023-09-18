@@ -117,7 +117,7 @@ String convertToMoney(
   if (amount == -0.0) {
     amount = amount.abs();
   }
-  if (amount == double.infinity) {
+  if (amount == double.infinity || amount == double.negativeInfinity) {
     return "Infinity";
   }
   amount = double.parse(amount.toStringAsFixed(numberDecimals));

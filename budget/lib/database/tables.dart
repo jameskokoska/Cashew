@@ -20,7 +20,7 @@ import 'schema_versions.dart';
 import 'package:flutter/material.dart' show RangeValues;
 part 'tables.g.dart';
 
-int schemaVersionGlobal = 40;
+int schemaVersionGlobal = 41;
 
 // Migrations and Database changes
 // -1) Make changed to database
@@ -360,7 +360,9 @@ class Budgets extends Table {
   DateTimeColumn get endDate => dateTime()();
   TextColumn get categoryFks =>
       text().map(const StringListInColumnConverter()).nullable()();
-  BoolColumn get allCategoryFks => boolean()();
+  TextColumn get categoryFksExclude =>
+      text().map(const StringListInColumnConverter()).nullable()();
+  // BoolColumn get allCategoryFks => boolean()();
   BoolColumn get addedTransactionsOnly =>
       boolean().withDefault(const Constant(false))();
   IntColumn get periodLength => integer()();
@@ -758,7 +760,7 @@ class FinanceDatabase extends _$FinanceDatabase {
               await m.addColumn(
                   schema.transactions, schema.transactions.originalDateDue);
             } catch (e) {
-              print("Error creating column");
+              print("Migration Error: Error creating column");
             }
           },
           from38To39: (m, schema) async {
@@ -770,7 +772,7 @@ class FinanceDatabase extends _$FinanceDatabase {
               await m.addColumn(
                   schema.categories, schema.categories.emojiIconName);
             } catch (e) {
-              print("Error creating column");
+              print("Migration Error: Error creating column");
             }
           },
           from39To40: (m, schema) async {
@@ -778,12 +780,25 @@ class FinanceDatabase extends _$FinanceDatabase {
               await m.addColumn(
                   schema.transactions, schema.transactions.objectiveFk);
             } catch (e) {
-              print("Error creating column");
+              print("Migration Error: Error creating column");
             }
             try {
               await migrator.createTable($ObjectivesTable(database));
             } catch (e) {
-              print("Error creating table");
+              print("Migration Error: Error creating table");
+            }
+          },
+          from40To41: (m, schema) async {
+            try {
+              await m.addColumn(
+                  schema.budgets, schema.budgets.categoryFksExclude);
+            } catch (e) {
+              print("Migration Error: Error creating column");
+            }
+            try {
+              await m.alterTable(TableMigration(budgets));
+            } catch (e) {
+              print("Migration Error: Error deleting includeAllCategories");
             }
           },
         )(migrator, from, to);
@@ -886,7 +901,8 @@ class FinanceDatabase extends _$FinanceDatabase {
     DateTime date, {
     String search = "",
     // Search will be ignored... if these params are passed in
-    List<String> categoryFks = const [],
+    List<String>? categoryFks,
+    List<String>? categoryFksExclude,
     List<String> walletFks = const [],
     bool? income,
     required List<BudgetTransactionFilters>? budgetTransactionFilters,
@@ -904,7 +920,8 @@ class FinanceDatabase extends _$FinanceDatabase {
                     budgetTransactionFilters: budgetTransactionFilters,
                     memberTransactionFilters: memberTransactionFilters) &
                 isOnDay(dateCreated, date) &
-                onlyShowBasedOnCategoryFks(tbl, categoryFks) &
+                onlyShowBasedOnCategoryFks(
+                    tbl, categoryFks, categoryFksExclude) &
                 onlyShowBasedOnWalletFks(tbl, walletFks) &
                 onlyShowBasedOnIncome(tbl, income) &
                 onlyShowIfMember(tbl, member) &
@@ -961,7 +978,8 @@ class FinanceDatabase extends _$FinanceDatabase {
     required DateTime? end,
     String search = "",
     // Search will be ignored... if these params are passed in
-    List<String> categoryFks = const [],
+    List<String>? categoryFks,
+    List<String>? categoryFksExclude,
     List<String> walletFks = const [],
     bool? income,
     required List<BudgetTransactionFilters>? budgetTransactionFilters,
@@ -992,7 +1010,8 @@ class FinanceDatabase extends _$FinanceDatabase {
               budgetTransactionFilters: budgetTransactionFilters,
               memberTransactionFilters: memberTransactionFilters) &
           onlyShowBasedOnTimeRange(transactions, startDate, endDate, budget) &
-          onlyShowBasedOnCategoryFks(transactions, categoryFks) &
+          onlyShowBasedOnCategoryFks(
+              transactions, categoryFks, categoryFksExclude) &
           onlyShowBasedOnWalletFks(transactions, walletFks) &
           onlyShowBasedOnIncome(transactions, income) &
           onlyShowIfMember(transactions, member) &
@@ -3450,7 +3469,9 @@ class FinanceDatabase extends _$FinanceDatabase {
   }
 
   Stream<double?> watchTotalOfCategoryLimitsInBudgetWithCategories(
-      String budgetPk, List<String> categoryPks) {
+      String budgetPk,
+      List<String>? categoryPks,
+      List<String>? categoryPksExclude) {
     final totalAmt = categoryBudgetLimits.amount.sum();
     JoinedSelectStatement<$CategoryBudgetLimitsTable, CategoryBudgetLimit>
         query;
@@ -3458,7 +3479,7 @@ class FinanceDatabase extends _$FinanceDatabase {
     query = selectOnly(categoryBudgetLimits)
       ..addColumns([totalAmt])
       ..where(categoryBudgetLimits.budgetFk.equals(budgetPk) &
-          categoryBudgetLimits.categoryFk.isIn(categoryPks));
+          isInCategory(categoryBudgetLimits, categoryPks, categoryPksExclude));
 
     return query.map((row) => row.read(totalAmt)).watchSingleOrNull();
   }
@@ -3503,7 +3524,7 @@ class FinanceDatabase extends _$FinanceDatabase {
       DateTime start,
       DateTime end,
       List<String>? categoryFks,
-      bool allCategories,
+      List<String>? categoryFksExclude,
       List<BudgetTransactionFilters>? budgetTransactionFilters,
       List<String>? memberTransactionFilters,
       {bool allCashFlow = false,
@@ -3516,41 +3537,24 @@ class FinanceDatabase extends _$FinanceDatabase {
       final totalAmt = transactions.amount.sum();
       final date = transactions.dateCreated.date;
 
-      JoinedSelectStatement<$TransactionsTable, Transaction> query;
-      if (allCategories) {
-        query = (selectOnly(transactions)
-          ..addColumns([totalAmt])
-          ..where(
-            onlyShowBasedOnTimeRange(transactions, startDate, endDate, budget) &
-                transactions.paid.equals(true) &
-                // (allCashFlow
-                //     ? transactions.income.isIn([true, false])
-                //     : transactions.income.equals(false)) &
-                onlyShowIfCertainBudget(
-                    transactions, onlyShowTransactionsBelongingToBudgetPk) &
-                transactions.walletFk.equals(wallet.walletPk) &
-                onlyShowIfFollowsFilters(transactions,
-                    budgetTransactionFilters: budgetTransactionFilters,
-                    memberTransactionFilters: memberTransactionFilters),
-          ));
-      } else {
-        query = (selectOnly(transactions)
-          ..addColumns([totalAmt])
-          ..where(
-            onlyShowBasedOnTimeRange(transactions, startDate, endDate, budget) &
-                transactions.categoryFk.isIn(categoryFks ?? []) &
-                transactions.paid.equals(true) &
-                // (allCashFlow
-                //     ? transactions.income.isIn([true, false])
-                //     : transactions.income.equals(false)) &
-                onlyShowIfCertainBudget(
-                    transactions, onlyShowTransactionsBelongingToBudgetPk) &
-                transactions.walletFk.equals(wallet.walletPk) &
-                onlyShowIfFollowsFilters(transactions,
-                    budgetTransactionFilters: budgetTransactionFilters,
-                    memberTransactionFilters: memberTransactionFilters),
-          ));
-      }
+      JoinedSelectStatement<$TransactionsTable, Transaction> query =
+          (selectOnly(transactions)
+            ..addColumns([totalAmt])
+            ..where(
+              isInCategory(transactions, categoryFks, categoryFksExclude) &
+                  onlyShowBasedOnTimeRange(
+                      transactions, startDate, endDate, budget) &
+                  transactions.paid.equals(true) &
+                  // (allCashFlow
+                  //     ? transactions.income.isIn([true, false])
+                  //     : transactions.income.equals(false)) &
+                  onlyShowIfCertainBudget(
+                      transactions, onlyShowTransactionsBelongingToBudgetPk) &
+                  transactions.walletFk.equals(wallet.walletPk) &
+                  onlyShowIfFollowsFilters(transactions,
+                      budgetTransactionFilters: budgetTransactionFilters,
+                      memberTransactionFilters: memberTransactionFilters),
+            ));
 
       mergedStreams.add(query
           .map(((row) =>
@@ -3568,7 +3572,7 @@ class FinanceDatabase extends _$FinanceDatabase {
     Expression<bool> isInWalletPks =
         onlyShowBasedOnWalletFks(tbl, searchFilters.walletPks);
     Expression<bool> isInCategoryPks =
-        onlyShowBasedOnCategoryFks(tbl, searchFilters.categoryPks);
+        onlyShowBasedOnCategoryFks(tbl, searchFilters.categoryPks, null);
     Expression<bool> isInBudgetPks =
         onlyShowBasedOnBudgetFks(tbl, searchFilters.budgetPks);
 
@@ -3796,8 +3800,8 @@ class FinanceDatabase extends _$FinanceDatabase {
       AllWallets allWallets,
       DateTime start,
       DateTime end,
-      List<String> categoryFks,
-      bool allCategories,
+      List<String>? categoryFks,
+      List<String>? categoryFksExclude,
       String userEmail,
       String onlyShowTransactionsBelongingToBudgetPk,
       {bool allTime = false}) {
@@ -3817,7 +3821,7 @@ class FinanceDatabase extends _$FinanceDatabase {
             transactions.paid.equals(true) &
             //transactions.income.equals(false) &
             transactions.walletFk.equals(wallet.walletPk) &
-            isInCategory(transactions, allCategories, categoryFks) &
+            isInCategory(transactions, categoryFks, categoryFksExclude) &
             transactions.transactionOwnerEmail.equals(userEmail) &
             transactions.sharedReferenceBudgetPk
                 .equals(onlyShowTransactionsBelongingToBudgetPk)));
@@ -3834,8 +3838,8 @@ class FinanceDatabase extends _$FinanceDatabase {
       {int? limit,
       required DateTime start,
       required DateTime end,
-      required List<String> categoryFks,
-      required bool allCategories,
+      required List<String>? categoryFks,
+      required List<String>? categoryFksExclude,
       required String userEmail}) {
     DateTime startDate = DateTime(start.year, start.month, start.day);
     DateTime endDate = DateTime(end.year, end.month, end.day);
@@ -3844,7 +3848,7 @@ class FinanceDatabase extends _$FinanceDatabase {
             return tbl.dateCreated.isBetweenValues(startDate, endDate) &
                 tbl.paid.equals(true) &
                 tbl.income.equals(false) &
-                isInCategory(tbl, allCategories, categoryFks) &
+                isInCategory(tbl, categoryFks, categoryFksExclude) &
                 tbl.transactionOwnerEmail.equals(userEmail);
           })
           ..orderBy([(b) => OrderingTerm.desc(b.dateCreated)])
@@ -3853,10 +3857,31 @@ class FinanceDatabase extends _$FinanceDatabase {
   }
 
   Expression<bool> isInCategory(
-      $TransactionsTable tbl, bool allCategories, List<String> categoryFks) {
-    return allCategories
+      tbl, List<String>? categoryFks, List<String>? categoryFksExclude) {
+    if ((categoryFks ?? []).length <= 0) categoryFks = null;
+    if ((categoryFksExclude ?? []).length <= 0) categoryFksExclude = null;
+    return categoryFks == null && categoryFksExclude == null
         ? tbl.categoryFk.isNotNull()
-        : tbl.categoryFk.isIn(categoryFks);
+        : categoryFks != null && categoryFksExclude == null
+            ? tbl.categoryFk.isIn(categoryFks)
+            : categoryFks == null && categoryFksExclude != null
+                ? tbl.categoryFk.isNotIn(categoryFksExclude)
+                : tbl.categoryFk.isIn(categoryFks ?? []) &
+                    tbl.categoryFk.isNotIn(categoryFksExclude ?? []);
+  }
+
+  bool isInCategoryCheck(String categoryFk, List<String>? categoryFks,
+      List<String>? categoryFksExclude) {
+    if ((categoryFks ?? []).length <= 0) categoryFks = null;
+    if ((categoryFksExclude ?? []).length <= 0) categoryFksExclude = null;
+    return categoryFks == null && categoryFksExclude == null
+        ? true
+        : categoryFks != null && categoryFksExclude == null
+            ? categoryFks.contains(categoryFk)
+            : categoryFks == null && categoryFksExclude != null
+                ? categoryFksExclude.contains(categoryFk) == false
+                : (categoryFks ?? []).contains(categoryFk) &&
+                    (categoryFksExclude ?? []).contains(categoryFk) == false;
   }
 
   Expression<bool> onlyShowIfMember($TransactionsTable tbl, String? member) {
@@ -3869,11 +3894,9 @@ class FinanceDatabase extends _$FinanceDatabase {
     return (income != null ? tbl.income.equals(income) : Constant(true));
   }
 
-  Expression<bool> onlyShowBasedOnCategoryFks(
-      $TransactionsTable tbl, List<String>? categoryFks) {
-    return (categoryFks != null && categoryFks.length > 0
-        ? tbl.categoryFk.isIn(categoryFks)
-        : Constant(true));
+  Expression<bool> onlyShowBasedOnCategoryFks($TransactionsTable tbl,
+      List<String>? categoryFks, List<String>? categoryFksExclude) {
+    return isInCategory(tbl, categoryFks, categoryFksExclude);
   }
 
   Expression<bool> onlyShowBasedOnWalletFks(
@@ -3945,8 +3968,8 @@ class FinanceDatabase extends _$FinanceDatabase {
     AllWallets allWallets,
     DateTime start,
     DateTime end,
-    List<String> categoryFks,
-    bool allCategories,
+    List<String>? categoryFks,
+    List<String>? categoryFksExclude,
     List<BudgetTransactionFilters>? budgetTransactionFilters,
     List<String>? memberTransactionFilters, {
     String? member,
@@ -3968,7 +3991,7 @@ class FinanceDatabase extends _$FinanceDatabase {
         ..where((tbl) {
           return onlyShowBasedOnTimeRange(
                   transactions, startDate, endDate, budget, allTime: allTime) &
-              isInCategory(tbl, allCategories, categoryFks) &
+              isInCategory(tbl, categoryFks, categoryFksExclude) &
               tbl.paid.equals(true) &
               // evaluateIfNull(tbl.income.equals(income ?? false), income, true) &
               transactions.walletFk.equals(wallet.walletPk) &

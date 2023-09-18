@@ -29,6 +29,7 @@ class CategoryIcon extends StatelessWidget {
     this.tintEnabled = true,
     this.cacheImage = false,
     this.enableTooltip = false,
+    this.correctionEmojiPaddingBottom = 0,
   }) : super(key: key);
 
   final String? categoryPk;
@@ -47,6 +48,7 @@ class CategoryIcon extends StatelessWidget {
   final bool tintEnabled;
   final bool cacheImage;
   final bool enableTooltip;
+  final double? correctionEmojiPaddingBottom;
 
   Widget categoryIconWidget(context, TransactionCategory? category) {
     Widget child = Column(
@@ -157,6 +159,7 @@ class CategoryIcon extends StatelessWidget {
                 ? EmojiIcon(
                     emojiIconName: category?.emojiIconName,
                     size: size,
+                    correctionPaddingBottom: correctionEmojiPaddingBottom,
                   )
                 : SizedBox.shrink(),
           ],
@@ -256,15 +259,22 @@ class _CacheCategoryIconState extends State<CacheCategoryIcon> {
 }
 
 class EmojiIcon extends StatelessWidget {
-  const EmojiIcon({required this.emojiIconName, required this.size, super.key});
+  const EmojiIcon({
+    required this.emojiIconName,
+    required this.size,
+    this.correctionPaddingBottom,
+    super.key,
+  });
   final String? emojiIconName;
   final double size;
+  final double? correctionPaddingBottom;
 
   @override
   Widget build(BuildContext context) {
     return IgnorePointer(
       child: Padding(
-        padding: EdgeInsets.only(bottom: size * 0.185),
+        padding: EdgeInsets.only(
+            bottom: size * 0.185 - (correctionPaddingBottom ?? 0)),
         child: TextFont(
           text: emojiIconName ?? "",
           textAlign: TextAlign.center,

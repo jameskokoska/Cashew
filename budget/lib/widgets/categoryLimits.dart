@@ -23,13 +23,15 @@ class CategoryLimits extends StatefulWidget {
   const CategoryLimits({
     required this.budgetPk,
     required this.budgetLimit,
-    required this.selectedCategories,
+    required this.categoryFks,
+    required this.categoryFksExclude,
     required this.showAddCategoryButton,
     required this.isAbsoluteSpendingLimit,
     super.key,
   });
   final String budgetPk;
-  final List<String> selectedCategories;
+  final List<String>? categoryFks;
+  final List<String>? categoryFksExclude;
   final double budgetLimit;
   final bool showAddCategoryButton;
   final bool isAbsoluteSpendingLimit;
@@ -48,19 +50,15 @@ class _CategoryLimitsState extends State<CategoryLimits> {
         stream: database.watchAllCategories(),
         builder: (context, snapshot) {
           if (snapshot.hasData && snapshot.data != null) {
-            List<String> allCategoryFks = [
-              for (TransactionCategory category in snapshot.data!)
-                category.categoryPk
-            ];
             return SliverStickyLabelDivider(
               info: "category-spending-goals".tr(),
               extraInfoWidget: StreamBuilder<double?>(
                 stream:
                     database.watchTotalOfCategoryLimitsInBudgetWithCategories(
-                        widget.budgetPk,
-                        widget.selectedCategories.length <= 0
-                            ? allCategoryFks
-                            : widget.selectedCategories),
+                  widget.budgetPk,
+                  widget.categoryFks,
+                  widget.categoryFksExclude,
+                ),
                 builder: (context, snapshot) {
                   return CountNumber(
                     count: snapshot.data ?? 0,
@@ -89,9 +87,8 @@ class _CategoryLimitsState extends State<CategoryLimits> {
                 children: [
                   SizedBox(height: 5),
                   for (TransactionCategory category in snapshot.data!)
-                    widget.selectedCategories.isEmpty ||
-                            widget.selectedCategories
-                                .contains(category.categoryPk)
+                    database.isInCategoryCheck(category.categoryPk,
+                            widget.categoryFks, widget.categoryFksExclude)
                         ? StreamBuilder<CategoryBudgetLimit?>(
                             stream: database
                                 .getCategoryLimit(

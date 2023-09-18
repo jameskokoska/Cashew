@@ -485,7 +485,7 @@ Future<dynamic> openTransactionsOnDayBottomSheet(
           day ?? DateTime.now(),
           day ?? DateTime.now(),
           null,
-          true,
+          null,
           null,
           null,
           allCashFlow: true,

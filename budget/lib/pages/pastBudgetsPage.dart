@@ -106,7 +106,7 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
         budgetRange.start,
         budgetRange.end,
         widget.budget.categoryFks,
-        widget.budget.allCategoryFks,
+        widget.budget.categoryFksExclude,
         widget.budget.budgetTransactionFilters,
         widget.budget.memberTransactionFilters,
         onlyShowTransactionsBelongingToBudgetPk:
@@ -131,7 +131,7 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
           budgetRange.start,
           budgetRange.end,
           [categoryFk],
-          false,
+          null,
           widget.budget.budgetTransactionFilters,
           widget.budget.memberTransactionFilters,
           onlyShowTransactionsBelongingToBudgetPk:
@@ -224,17 +224,15 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
                       addButton: false,
                       selectedCategories: selectedCategoryFks,
                       setSelectedCategories:
-                          (List<String> selectedCategoryFks) {
+                          (List<String>? selectedCategoryFks) {
                         setState(() {
-                          this.selectedCategoryFks = selectedCategoryFks;
-                          updateSetting(selectedCategoryFks);
+                          this.selectedCategoryFks = selectedCategoryFks ?? [];
+                          updateSetting(selectedCategoryFks ?? []);
                         });
                         loadLines(amountLoaded);
                       },
                       scaleWhenSelected: false,
-                      categoryFks: widget.budget.allCategoryFks
-                          ? null
-                          : widget.budget.categoryFks,
+                      categoryFks: widget.budget.categoryFks,
                       allowRearrange: false,
                     ),
                     Row(
@@ -947,8 +945,8 @@ class PastBudgetContainer extends StatelessWidget {
             Provider.of<AllWallets>(context),
             budgetRange.start,
             budgetRange.end,
-            budget.categoryFks ?? [],
-            budget.allCategoryFks,
+            budget.categoryFks,
+            budget.categoryFksExclude,
             budget.budgetTransactionFilters,
             budget.memberTransactionFilters,
             onlyShowTransactionsBelongingToBudgetPk:

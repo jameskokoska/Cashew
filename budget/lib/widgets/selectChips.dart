@@ -146,7 +146,9 @@ class _SelectChipsState<T> extends State<SelectChips<T>> {
                           heightOfScroll = size.height;
                         });
                       },
-                      child: children[0],
+                      child: widget.extraWidgetAtBeginning == false
+                          ? children[0]
+                          : children[1],
                     ),
                   ),
                 )

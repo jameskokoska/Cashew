@@ -36,9 +36,10 @@ class SelectCategory extends StatefulWidget {
     this.hideCategoryFks,
     // Only allow rearrange if all categories are being watched!
     this.allowRearrange = true,
+    this.fadeOutWhenSelected = false,
   }) : super(key: key);
   final Function(TransactionCategory)? setSelectedCategory;
-  final Function(List<String>)? setSelectedCategories;
+  final Function(List<String>?)? setSelectedCategories;
   final TransactionCategory? selectedCategory;
   final List<String>? selectedCategories;
   final VoidCallback? next;
@@ -54,6 +55,7 @@ class SelectCategory extends StatefulWidget {
   final List<String>? categoryFks;
   final List<String>? hideCategoryFks;
   final bool allowRearrange;
+  final bool? fadeOutWhenSelected;
 
   @override
   _SelectCategoryState createState() => _SelectCategoryState();
@@ -151,46 +153,57 @@ class _SelectCategoryState extends State<SelectCategory> {
                             : 0,
                         right: index == snapshot.data!.length - 1 ? 12 - 4 : 0),
                     child: Builder(builder: (context) {
-                      return CategoryIcon(
-                        enableTooltip: category.name.length > 10,
-                        categoryPk: category.categoryPk,
-                        size: 42,
-                        sizePadding: 28,
-                        label: widget.labelIcon,
-                        onTap: () {
-                          if (widget.nextWithCategory != null) {
-                            widget.nextWithCategory!(category);
-                          }
-                          if (widget.setSelectedCategory != null) {
-                            widget.setSelectedCategory!(category);
-                            setState(() {
-                              selectedCategories = [];
-                              selectedCategories.add(category.categoryPk);
-                            });
-                            Future.delayed(Duration(milliseconds: 70), () {
-                              if (widget.popRoute) Navigator.pop(context);
-                              if (widget.next != null) {
-                                widget.next!();
-                              }
-                            });
-                          } else if (widget.setSelectedCategories != null) {
-                            // print(selectedCategories);
-                            if (selectedCategories
-                                .contains(category.categoryPk)) {
+                      return AnimatedOpacity(
+                        duration: Duration(milliseconds: 500),
+                        opacity: widget.fadeOutWhenSelected == true &&
+                                selectedCategories.contains(category.categoryPk)
+                            ? 0.3
+                            : 1,
+                        child: CategoryIcon(
+                          enableTooltip: category.name.length > 10,
+                          categoryPk: category.categoryPk,
+                          size: 42,
+                          sizePadding: 28,
+                          correctionEmojiPaddingBottom: 5,
+                          label: widget.labelIcon,
+                          onTap: () {
+                            if (widget.nextWithCategory != null) {
+                              widget.nextWithCategory!(category);
+                            }
+                            if (widget.setSelectedCategory != null) {
+                              widget.setSelectedCategory!(category);
                               setState(() {
-                                selectedCategories.remove(category.categoryPk);
-                              });
-                              widget.setSelectedCategories!(selectedCategories);
-                            } else {
-                              setState(() {
+                                selectedCategories = [];
                                 selectedCategories.add(category.categoryPk);
                               });
-                              widget.setSelectedCategories!(selectedCategories);
+                              Future.delayed(Duration(milliseconds: 70), () {
+                                if (widget.popRoute) Navigator.pop(context);
+                                if (widget.next != null) {
+                                  widget.next!();
+                                }
+                              });
+                            } else if (widget.setSelectedCategories != null) {
+                              // print(selectedCategories);
+                              if (selectedCategories
+                                  .contains(category.categoryPk)) {
+                                setState(() {
+                                  selectedCategories
+                                      .remove(category.categoryPk);
+                                });
+                                widget
+                                    .setSelectedCategories!(selectedCategories);
+                              } else {
+                                setState(() {
+                                  selectedCategories.add(category.categoryPk);
+                                });
+                                widget
+                                    .setSelectedCategories!(selectedCategories);
+                              }
                             }
-                          }
-                        },
-                        outline:
-                            selectedCategories.contains(category.categoryPk),
+                          },
+                          outline:
+                              selectedCategories.contains(category.categoryPk),
+                        ),
                       );
                     }),
                   ),
@@ -217,7 +230,7 @@ class _SelectCategoryState extends State<SelectCategory> {
                                     .secondaryContainer,
                                 onTap: () {
                                   if (widget.setSelectedCategories != null) {
-                                    widget.setSelectedCategories!([]);
+                                    widget.setSelectedCategories!(null);
                                   }
                                   setState(() {
                                     selectedCategories = [];
@@ -326,45 +339,53 @@ class _SelectCategoryState extends State<SelectCategory> {
                               false
                       ? 0.86
                       : 1,
-                  child: CategoryIcon(
-                    enableTooltip: category.name.length > 10,
-                    canEditByLongPress: false,
-                    categoryPk: category.categoryPk,
-                    size: size,
-                    sizePadding: 24,
-                    margin: EdgeInsets.zero,
-                    label: widget.labelIcon,
-                    onTap: () {
-                      if (widget.nextWithCategory != null) {
-                        widget.nextWithCategory!(category);
-                      }
-                      if (widget.setSelectedCategory != null) {
-                        widget.setSelectedCategory!(category);
-                        setState(() {
-                          selectedCategories = [];
-                          selectedCategories.add(category.categoryPk);
-                        });
-                        Future.delayed(Duration(milliseconds: 70), () {
-                          if (widget.popRoute) Navigator.pop(context);
-                          if (widget.next != null) {
-                            widget.next!();
-                          }
-                        });
-                      } else if (widget.setSelectedCategories != null) {
-                        if (selectedCategories.contains(category.categoryPk)) {
+                  child: AnimatedOpacity(
+                    duration: Duration(milliseconds: 500),
+                    opacity: widget.fadeOutWhenSelected == true &&
+                            selectedCategories.contains(category.categoryPk)
+                        ? 0.3
+                        : 1,
+                    child: CategoryIcon(
+                      enableTooltip: category.name.length > 10,
+                      canEditByLongPress: false,
+                      categoryPk: category.categoryPk,
+                      size: size,
+                      sizePadding: 24,
+                      margin: EdgeInsets.zero,
+                      label: widget.labelIcon,
+                      onTap: () {
+                        if (widget.nextWithCategory != null) {
+                          widget.nextWithCategory!(category);
+                        }
+                        if (widget.setSelectedCategory != null) {
+                          widget.setSelectedCategory!(category);
                           setState(() {
-                            selectedCategories.remove(category.categoryPk);
-                          });
-                          widget.setSelectedCategories!(selectedCategories);
-                        } else {
-                          setState(() {
+                            selectedCategories = [];
                             selectedCategories.add(category.categoryPk);
                           });
-                          widget.setSelectedCategories!(selectedCategories);
+                          Future.delayed(Duration(milliseconds: 70), () {
+                            if (widget.popRoute) Navigator.pop(context);
+                            if (widget.next != null) {
+                              widget.next!();
+                            }
+                          });
+                        } else if (widget.setSelectedCategories != null) {
+                          if (selectedCategories
+                              .contains(category.categoryPk)) {
+                            setState(() {
+                              selectedCategories.remove(category.categoryPk);
+                            });
+                            widget.setSelectedCategories!(selectedCategories);
+                          } else {
+                            setState(() {
+                              selectedCategories.add(category.categoryPk);
+                            });
+                            widget.setSelectedCategories!(selectedCategories);
+                          }
                         }
-                      }
-                    },
-                    outline: selectedCategories.contains(category.categoryPk),
+                      },
+                      outline: selectedCategories.contains(category.categoryPk),
+                    ),
                   ),
                 ),
               );

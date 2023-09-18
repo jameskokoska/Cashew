@@ -596,10 +596,13 @@ class SelectObjectiveTypePopup extends StatelessWidget {
                       ListItem(
                         "savings-goal-description-1".tr(),
                       ),
+                      ListItem(
+                        "savings-goal-description-2".tr(),
+                      ),
                       Opacity(
                         opacity: 0.34,
                         child: ListItem(
-                          "savings-goal-description-2".tr(),
+                          "savings-goal-description-3".tr(),
                         ),
                       ),
                     ],
@@ -631,9 +634,12 @@ class SelectObjectiveTypePopup extends StatelessWidget {
                       ListItem(
                         "expense-goal-description-1".tr(),
                       ),
+                      ListItem(
+                        "expense-goal-description-2".tr(),
+                      ),
                       Opacity(
                         opacity: 0.34,
-                        child: ListItem("expense-goal-description-2".tr()),
+                        child: ListItem("expense-goal-description-3".tr()),
                       ),
                     ],
                   ),

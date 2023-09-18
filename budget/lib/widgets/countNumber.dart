@@ -149,10 +149,10 @@ class _CountNumberState extends State<CountNumber> {
       tween: IntTween(
         begin: (double.parse((previousAmount).toStringAsFixed(decimals)) *
                 pow(10, decimals))
-            .toInt(),
+            .round(),
         end: (double.parse((widget.count).toStringAsFixed(decimals)) *
                 pow(10, decimals))
-            .toInt(),
+            .round(),
       ),
       duration: widget.duration,
       curve: widget.curve,

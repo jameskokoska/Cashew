@@ -10,6 +10,11 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    < 4.3.5
+    Budget type info button
+    Exclude transactions from budget
+    Objectives renamed to goals
+    Fixed rounding of amounts when counting animation is used
     < 4.3.4
     Objectives entries completed
     Objectives add page bottom buttons for incomplete information

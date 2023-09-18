@@ -24,7 +24,8 @@ class TransactionEntries extends StatelessWidget {
     this.startDay,
     this.endDay, {
     this.search = "",
-    this.categoryFks = const [],
+    this.categoryFks,
+    this.categoryFksExclude,
     this.walletFks = const [],
     this.onSelected,
     this.listID,
@@ -56,7 +57,8 @@ class TransactionEntries extends StatelessWidget {
   final DateTime? startDay;
   final DateTime? endDay;
   final String search;
-  final List<String> categoryFks;
+  final List<String>? categoryFks;
+  final List<String>? categoryFksExclude;
   final List<String> walletFks;
   final Function(Transaction, bool)? onSelected;
   final String? listID;
@@ -92,6 +94,7 @@ class TransactionEntries extends StatelessWidget {
         end: endDay,
         search: search,
         categoryFks: categoryFks,
+        categoryFksExclude: categoryFksExclude,
         walletFks: walletFks,
         income: income,
         budgetTransactionFilters: budgetTransactionFilters,
@@ -155,6 +158,7 @@ class TransactionEntries extends StatelessWidget {
                   date,
                   search: search,
                   categoryFks: categoryFks,
+                  categoryFksExclude: categoryFksExclude,
                   walletFks: walletFks,
                   income: income,
                   budgetTransactionFilters: budgetTransactionFilters,

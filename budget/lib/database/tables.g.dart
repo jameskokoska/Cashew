@@ -2862,15 +2862,15 @@ class $BudgetsTable extends Budgets with TableInfo<$BudgetsTable, Budget> {
       categoryFks = GeneratedColumn<String>('category_fks', aliasedName, true,
               type: DriftSqlType.string, requiredDuringInsert: false)
           .withConverter<List<String>?>($BudgetsTable.$convertercategoryFksn);
-  static const VerificationMeta _allCategoryFksMeta =
-      const VerificationMeta('allCategoryFks');
+  static const VerificationMeta _categoryFksExcludeMeta =
+      const VerificationMeta('categoryFksExclude');
   @override
-  late final GeneratedColumn<bool> allCategoryFks = GeneratedColumn<bool>(
-      'all_category_fks', aliasedName, false,
-      type: DriftSqlType.bool,
-      requiredDuringInsert: true,
-      defaultConstraints: GeneratedColumn.constraintIsAlways(
-          'CHECK ("all_category_fks" IN (0, 1))'));
+  late final GeneratedColumnWithTypeConverter<List<String>?, String>
+      categoryFksExclude = GeneratedColumn<String>(
+              'category_fks_exclude', aliasedName, true,
+              type: DriftSqlType.string, requiredDuringInsert: false)
+          .withConverter<List<String>?>(
+              $BudgetsTable.$convertercategoryFksExcluden);
   static const VerificationMeta _addedTransactionsOnlyMeta =
       const VerificationMeta('addedTransactionsOnly');
   @override
@@ -3013,7 +3013,7 @@ class $BudgetsTable extends Budgets with TableInfo<$BudgetsTable, Budget> {
         startDate,
         endDate,
         categoryFks,
-        allCategoryFks,
+        categoryFksExclude,
         addedTransactionsOnly,
         periodLength,
         reoccurrence,
@@ -3073,14 +3073,7 @@ class $BudgetsTable extends Budgets with TableInfo<$BudgetsTable, Budget> {
       context.missing(_endDateMeta);
     }
     context.handle(_categoryFksMeta, const VerificationResult.success());
-    if (data.containsKey('all_category_fks')) {
-      context.handle(
-          _allCategoryFksMeta,
-          allCategoryFks.isAcceptableOrUnknown(
-              data['all_category_fks']!, _allCategoryFksMeta));
-    } else if (isInserting) {
-      context.missing(_allCategoryFksMeta);
-    }
+    context.handle(_categoryFksExcludeMeta, const VerificationResult.success());
     if (data.containsKey('added_transactions_only')) {
       context.handle(
           _addedTransactionsOnlyMeta,
@@ -3173,8 +3166,9 @@ class $BudgetsTable extends Budgets with TableInfo<$BudgetsTable, Budget> {
       categoryFks: $BudgetsTable.$convertercategoryFksn.fromSql(attachedDatabase
           .typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}category_fks'])),
-      allCategoryFks: attachedDatabase.typeMapping
-          .read(DriftSqlType.bool, data['${effectivePrefix}all_category_fks'])!,
+      categoryFksExclude: $BudgetsTable.$convertercategoryFksExcluden.fromSql(
+          attachedDatabase.typeMapping.read(DriftSqlType.string,
+              data['${effectivePrefix}category_fks_exclude'])),
       addedTransactionsOnly: attachedDatabase.typeMapping.read(
           DriftSqlType.bool,
           data['${effectivePrefix}added_transactions_only'])!,
@@ -3229,6 +3223,10 @@ class $BudgetsTable extends Budgets with TableInfo<$BudgetsTable, Budget> {
       const StringListInColumnConverter();
   static TypeConverter<List<String>?, String?> $convertercategoryFksn =
       NullAwareTypeConverter.wrap($convertercategoryFks);
+  static TypeConverter<List<String>, String> $convertercategoryFksExclude =
+      const StringListInColumnConverter();
+  static TypeConverter<List<String>?, String?> $convertercategoryFksExcluden =
+      NullAwareTypeConverter.wrap($convertercategoryFksExclude);
   static JsonTypeConverter2<BudgetReoccurence, int, int>
       $converterreoccurrence =
       const EnumIndexConverter<BudgetReoccurence>(BudgetReoccurence.values);
@@ -3270,7 +3268,7 @@ class Budget extends DataClass implements Insertable<Budget> {
   final DateTime startDate;
   final DateTime endDate;
   final List<String>? categoryFks;
-  final bool allCategoryFks;
+  final List<String>? categoryFksExclude;
   final bool addedTransactionsOnly;
   final int periodLength;
   final BudgetReoccurence? reoccurrence;
@@ -3295,7 +3293,7 @@ class Budget extends DataClass implements Insertable<Budget> {
       required this.startDate,
       required this.endDate,
       this.categoryFks,
-      required this.allCategoryFks,
+      this.categoryFksExclude,
       required this.addedTransactionsOnly,
       required this.periodLength,
       this.reoccurrence,
@@ -3327,7 +3325,11 @@ class Budget extends DataClass implements Insertable<Budget> {
       final converter = $BudgetsTable.$convertercategoryFksn;
       map['category_fks'] = Variable<String>(converter.toSql(categoryFks));
     }
-    map['all_category_fks'] = Variable<bool>(allCategoryFks);
+    if (!nullToAbsent || categoryFksExclude != null) {
+      final converter = $BudgetsTable.$convertercategoryFksExcluden;
+      map['category_fks_exclude'] =
+          Variable<String>(converter.toSql(categoryFksExclude));
+    }
     map['added_transactions_only'] = Variable<bool>(addedTransactionsOnly);
     map['period_length'] = Variable<int>(periodLength);
     if (!nullToAbsent || reoccurrence != null) {
@@ -3387,7 +3389,9 @@ class Budget extends DataClass implements Insertable<Budget> {
       categoryFks: categoryFks == null && nullToAbsent
           ? const Value.absent()
           : Value(categoryFks),
-      allCategoryFks: Value(allCategoryFks),
+      categoryFksExclude: categoryFksExclude == null && nullToAbsent
+          ? const Value.absent()
+          : Value(categoryFksExclude),
       addedTransactionsOnly: Value(addedTransactionsOnly),
       periodLength: Value(periodLength),
       reoccurrence: reoccurrence == null && nullToAbsent
@@ -3436,7 +3440,8 @@ class Budget extends DataClass implements Insertable<Budget> {
       startDate: serializer.fromJson<DateTime>(json['startDate']),
       endDate: serializer.fromJson<DateTime>(json['endDate']),
       categoryFks: serializer.fromJson<List<String>?>(json['categoryFks']),
-      allCategoryFks: serializer.fromJson<bool>(json['allCategoryFks']),
+      categoryFksExclude:
+          serializer.fromJson<List<String>?>(json['categoryFksExclude']),
       addedTransactionsOnly:
           serializer.fromJson<bool>(json['addedTransactionsOnly']),
       periodLength: serializer.fromJson<int>(json['periodLength']),
@@ -3476,7 +3481,8 @@ class Budget extends DataClass implements Insertable<Budget> {
       'startDate': serializer.toJson<DateTime>(startDate),
       'endDate': serializer.toJson<DateTime>(endDate),
       'categoryFks': serializer.toJson<List<String>?>(categoryFks),
-      'allCategoryFks': serializer.toJson<bool>(allCategoryFks),
+      'categoryFksExclude':
+          serializer.toJson<List<String>?>(categoryFksExclude),
       'addedTransactionsOnly': serializer.toJson<bool>(addedTransactionsOnly),
       'periodLength': serializer.toJson<int>(periodLength),
       'reoccurrence': serializer.toJson<int?>(
@@ -3510,7 +3516,7 @@ class Budget extends DataClass implements Insertable<Budget> {
           DateTime? startDate,
           DateTime? endDate,
           Value<List<String>?> categoryFks = const Value.absent(),
-          bool? allCategoryFks,
+          Value<List<String>?> categoryFksExclude = const Value.absent(),
           bool? addedTransactionsOnly,
           int? periodLength,
           Value<BudgetReoccurence?> reoccurrence = const Value.absent(),
@@ -3536,7 +3542,9 @@ class Budget extends DataClass implements Insertable<Budget> {
         startDate: startDate ?? this.startDate,
         endDate: endDate ?? this.endDate,
         categoryFks: categoryFks.present ? categoryFks.value : this.categoryFks,
-        allCategoryFks: allCategoryFks ?? this.allCategoryFks,
+        categoryFksExclude: categoryFksExclude.present
+            ? categoryFksExclude.value
+            : this.categoryFksExclude,
         addedTransactionsOnly:
             addedTransactionsOnly ?? this.addedTransactionsOnly,
         periodLength: periodLength ?? this.periodLength,
@@ -3580,7 +3588,7 @@ class Budget extends DataClass implements Insertable<Budget> {
           ..write('startDate: $startDate, ')
           ..write('endDate: $endDate, ')
           ..write('categoryFks: $categoryFks, ')
-          ..write('allCategoryFks: $allCategoryFks, ')
+          ..write('categoryFksExclude: $categoryFksExclude, ')
           ..write('addedTransactionsOnly: $addedTransactionsOnly, ')
           ..write('periodLength: $periodLength, ')
           ..write('reoccurrence: $reoccurrence, ')
@@ -3610,7 +3618,7 @@ class Budget extends DataClass implements Insertable<Budget> {
         startDate,
         endDate,
         categoryFks,
-        allCategoryFks,
+        categoryFksExclude,
         addedTransactionsOnly,
         periodLength,
         reoccurrence,
@@ -3639,7 +3647,7 @@ class Budget extends DataClass implements Insertable<Budget> {
           other.startDate == this.startDate &&
           other.endDate == this.endDate &&
           other.categoryFks == this.categoryFks &&
-          other.allCategoryFks == this.allCategoryFks &&
+          other.categoryFksExclude == this.categoryFksExclude &&
           other.addedTransactionsOnly == this.addedTransactionsOnly &&
           other.periodLength == this.periodLength &&
           other.reoccurrence == this.reoccurrence &&
@@ -3666,7 +3674,7 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
   final Value<DateTime> startDate;
   final Value<DateTime> endDate;
   final Value<List<String>?> categoryFks;
-  final Value<bool> allCategoryFks;
+  final Value<List<String>?> categoryFksExclude;
   final Value<bool> addedTransactionsOnly;
   final Value<int> periodLength;
   final Value<BudgetReoccurence?> reoccurrence;
@@ -3692,7 +3700,7 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
     this.startDate = const Value.absent(),
     this.endDate = const Value.absent(),
     this.categoryFks = const Value.absent(),
-    this.allCategoryFks = const Value.absent(),
+    this.categoryFksExclude = const Value.absent(),
     this.addedTransactionsOnly = const Value.absent(),
     this.periodLength = const Value.absent(),
     this.reoccurrence = const Value.absent(),
@@ -3719,7 +3727,7 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
     required DateTime startDate,
     required DateTime endDate,
     this.categoryFks = const Value.absent(),
-    required bool allCategoryFks,
+    this.categoryFksExclude = const Value.absent(),
     this.addedTransactionsOnly = const Value.absent(),
     required int periodLength,
     this.reoccurrence = const Value.absent(),
@@ -3741,7 +3749,6 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
         amount = Value(amount),
         startDate = Value(startDate),
         endDate = Value(endDate),
-        allCategoryFks = Value(allCategoryFks),
         periodLength = Value(periodLength),
         order = Value(order),
         walletFk = Value(walletFk);
@@ -3753,7 +3760,7 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
     Expression<DateTime>? startDate,
     Expression<DateTime>? endDate,
     Expression<String>? categoryFks,
-    Expression<bool>? allCategoryFks,
+    Expression<String>? categoryFksExclude,
     Expression<bool>? addedTransactionsOnly,
     Expression<int>? periodLength,
     Expression<int>? reoccurrence,
@@ -3780,7 +3787,8 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
       if (startDate != null) 'start_date': startDate,
       if (endDate != null) 'end_date': endDate,
       if (categoryFks != null) 'category_fks': categoryFks,
-      if (allCategoryFks != null) 'all_category_fks': allCategoryFks,
+      if (categoryFksExclude != null)
+        'category_fks_exclude': categoryFksExclude,
       if (addedTransactionsOnly != null)
         'added_transactions_only': addedTransactionsOnly,
       if (periodLength != null) 'period_length': periodLength,
@@ -3814,7 +3822,7 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
       Value<DateTime>? startDate,
       Value<DateTime>? endDate,
       Value<List<String>?>? categoryFks,
-      Value<bool>? allCategoryFks,
+      Value<List<String>?>? categoryFksExclude,
       Value<bool>? addedTransactionsOnly,
       Value<int>? periodLength,
       Value<BudgetReoccurence?>? reoccurrence,
@@ -3840,7 +3848,7 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
       startDate: startDate ?? this.startDate,
       endDate: endDate ?? this.endDate,
       categoryFks: categoryFks ?? this.categoryFks,
-      allCategoryFks: allCategoryFks ?? this.allCategoryFks,
+      categoryFksExclude: categoryFksExclude ?? this.categoryFksExclude,
       addedTransactionsOnly:
           addedTransactionsOnly ?? this.addedTransactionsOnly,
       periodLength: periodLength ?? this.periodLength,
@@ -3891,8 +3899,10 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
       map['category_fks'] =
           Variable<String>(converter.toSql(categoryFks.value));
     }
-    if (allCategoryFks.present) {
-      map['all_category_fks'] = Variable<bool>(allCategoryFks.value);
+    if (categoryFksExclude.present) {
+      final converter = $BudgetsTable.$convertercategoryFksExcluden;
+      map['category_fks_exclude'] =
+          Variable<String>(converter.toSql(categoryFksExclude.value));
     }
     if (addedTransactionsOnly.present) {
       map['added_transactions_only'] =
@@ -3971,7 +3981,7 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
           ..write('startDate: $startDate, ')
           ..write('endDate: $endDate, ')
           ..write('categoryFks: $categoryFks, ')
-          ..write('allCategoryFks: $allCategoryFks, ')
+          ..write('categoryFksExclude: $categoryFksExclude, ')
           ..write('addedTransactionsOnly: $addedTransactionsOnly, ')
           ..write('periodLength: $periodLength, ')
           ..write('reoccurrence: $reoccurrence, ')

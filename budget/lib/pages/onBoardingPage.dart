@@ -94,7 +94,6 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
           amount: selectedAmount ?? 0,
           startDate: selectedStartDate,
           endDate: selectedEndDate ?? DateTime.now(),
-          allCategoryFks: true,
           addedTransactionsOnly: false,
           periodLength: selectedPeriodLength,
           dateCreated: DateTime.now(),
