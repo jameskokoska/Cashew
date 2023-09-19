@@ -89,6 +89,7 @@ class TransactionEntry extends StatelessWidget {
     this.transactionAfter,
     this.allowSelect,
     this.highlightActionButton = false,
+    this.showObjectivePercentage = true,
   }) : super(key: key);
 
   final Widget openPage;
@@ -103,6 +104,7 @@ class TransactionEntry extends StatelessWidget {
   final Transaction? transactionAfter;
   final bool? allowSelect;
   final bool highlightActionButton;
+  final bool showObjectivePercentage;
 
   final double fabSize = 50;
 
@@ -350,7 +352,10 @@ class TransactionEntry extends StatelessWidget {
                                                 (transaction.objectiveFk !=
                                                     null)
                                             ? TransactionEntryTag(
-                                                transaction: transaction)
+                                                transaction: transaction,
+                                                showObjectivePercentage:
+                                                    showObjectivePercentage,
+                                              )
                                             : SizedBox.shrink(),
                                         transaction.sharedKey != null ||
                                                 transaction.sharedStatus ==

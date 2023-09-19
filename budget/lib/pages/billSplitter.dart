@@ -35,6 +35,8 @@ import 'package:provider/provider.dart';
 import 'package:budget/widgets/countNumber.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 
+import '../widgets/tappableTextEntry.dart';
+
 class BillSplitterItem {
   BillSplitterItem(
     this.name,

@@ -650,5 +650,10 @@
   "borrowed-transaction-type-description-2": "Income until marked 'Settled'",
   "borrowed-transaction-type-description-3": "Once 'Settled' it will not count towards your total",
   "select-transaction-type": "Select Transaction Type",
-  "mark-transaction-help-description": "Mark a special transaction by tapping the action button in the transaction entry"
+  "mark-transaction-help-description": "Mark a special transaction by tapping the action button in the transaction entry",
+  "increase-budget-warning": "Consider Your Budget",
+  "increase-budget-warning-description": "Stick to your budget to maintain financial health. Increasing your budget can hinder your financial goals.",
+  "example-goals": "Example Goals",
+  "example-goals-1": "Trip Savings Jar",
+  "Car Loan Payment": "Car Loan Payment"
 }

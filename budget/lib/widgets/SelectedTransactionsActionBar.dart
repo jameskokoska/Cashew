@@ -29,6 +29,10 @@ import 'package:provider/provider.dart';
 import 'package:budget/widgets/countNumber.dart';
 import 'package:budget/widgets/framework/popupFramework.dart';
 
+import 'tappableTextEntry.dart';
+
+import 'tappableTextEntry.dart';
+
 class SelectedTransactionsActionBar extends StatelessWidget {
   const SelectedTransactionsActionBar(
       {Key? key, required this.pageID, this.colorScheme})

@@ -353,6 +353,7 @@ class _ObjectivePageContentState extends State<_ObjectivePageContent> {
                 colorScheme: objectiveColorScheme,
                 onlyShowTransactionsBelongingToObjectivePk:
                     widget.objective.objectivePk,
+                showObjectivePercentage: false,
               ),
               // Wipe all remaining pixels off - sometimes graphics artifacts are left behind
               SliverToBoxAdapter(

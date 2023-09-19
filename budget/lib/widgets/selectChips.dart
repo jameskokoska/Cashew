@@ -57,6 +57,14 @@ class _SelectChipsState<T> extends State<SelectChips<T>> {
           }
           currentIndex++;
         }
+        print("SCROLLTO" + scrollToIndex.toString());
+        // Extra widget at beginning
+        if (widget.extraWidget != null &&
+            widget.extraWidgetAtBeginning == true &&
+            scrollToIndex != null &&
+            scrollToIndex > 0) {
+          scrollToIndex = scrollToIndex + 1;
+        }
         if (scrollToIndex != null && scrollToIndex != 0) {
           itemScrollController.scrollTo(
             index: scrollToIndex,

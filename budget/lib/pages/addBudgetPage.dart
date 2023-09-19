@@ -37,7 +37,9 @@ import 'package:budget/colors.dart';
 import 'package:provider/provider.dart';
 import 'package:budget/widgets/animatedExpanded.dart';
 
+import '../widgets/outlinedButtonStacked.dart';
 import '../widgets/sliverStickyLabelDivider.dart';
+import '../widgets/tappableTextEntry.dart';
 
 class AddBudgetPage extends StatefulWidget {
   AddBudgetPage({
@@ -118,6 +120,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
   List<String> allMembersOfAllBudgets = [];
   List<String>? selectedMemberTransactionFilters;
   FocusNode _titleFocusNode = FocusNode();
+  bool increaseBudgetWarningShown = false;
 
   // BudgetsCompanion budget = BudgetsCompanion();
 
@@ -639,6 +642,26 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                     });
                   },
                   initialSelectedEndDate: selectedEndDate,
+                  afterAmountEnteredDismissed: (amountEntered) {
+                    if (widget.budget != null &&
+                        amountEntered != null &&
+                        widget.budget!.amount < amountEntered &&
+                        increaseBudgetWarningShown == false) {
+                      increaseBudgetWarningShown = true;
+                      openPopup(
+                        context,
+                        title: "increase-budget-warning".tr(),
+                        description: "increase-budget-warning-description".tr(),
+                        icon: appStateSettings["outlinedIcons"]
+                            ? Icons.warning_amber_outlined
+                            : Icons.warning_amber_rounded,
+                        onSubmitLabel: "ok".tr(),
+                        onSubmit: () {
+                          Navigator.pop(context);
+                        },
+                      );
+                    }
+                  },
                 ),
                 SizedBox(height: 10),
               ],
@@ -1029,96 +1052,6 @@ String getSelectedCategoriesText(List<String>? categoryFks) {
   }
 }
 
-class TappableTextEntry extends StatelessWidget {
-  const TappableTextEntry({
-    Key? key,
-    required this.title,
-    required this.placeholder,
-    required this.onTap,
-    this.fontSize,
-    this.fontWeight,
-    this.padding = const EdgeInsets.symmetric(vertical: 0),
-    this.internalPadding =
-        const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
-    this.autoSizeText = false,
-    this.showPlaceHolderWhenTextEquals,
-    this.disabled = false,
-    this.customTitleBuilder,
-  }) : super(key: key);
-
-  final String? title;
-  final String placeholder;
-  final VoidCallback onTap;
-  final EdgeInsets padding;
-  final EdgeInsets internalPadding;
-  final double? fontSize;
-  final FontWeight? fontWeight;
-  final bool autoSizeText;
-  final String? showPlaceHolderWhenTextEquals;
-  final bool disabled;
-  final Function(Widget Function(String? titlePassed) titleBuilder)?
-      customTitleBuilder;
-
-  @override
-  Widget build(BuildContext context) {
-    Widget titleBuilder(String? titlePassed) {
-      return TextFont(
-        autoSizeText: autoSizeText,
-        maxLines: 1,
-        minFontSize: 16,
-        textAlign: TextAlign.left,
-        fontSize: fontSize ?? 35,
-        fontWeight: fontWeight ?? FontWeight.bold,
-        text: titlePassed == null ||
-                titlePassed == "" ||
-                titlePassed == showPlaceHolderWhenTextEquals
-            ? placeholder
-            : titlePassed ?? "",
-        textColor: titlePassed == null ||
-                titlePassed == "" ||
-                titlePassed == showPlaceHolderWhenTextEquals
-            ? getColor(context, "textLight")
-            : getColor(context, "black"),
-      );
-    }
-
-    return Tappable(
-      onTap: disabled == true ? null : onTap,
-      color: Colors.transparent,
-      borderRadius: 15,
-      child: Padding(
-        padding: padding,
-        child: AnimatedContainer(
-          curve: Curves.easeInOut,
-          duration: Duration(milliseconds: 250),
-          padding: internalPadding,
-          decoration: BoxDecoration(
-            border: Border(
-                bottom: BorderSide(
-                    width: disabled ? 0 : 1.5,
-                    color: disabled
-                        ? Colors.transparent
-                        : appStateSettings["materialYou"]
-                            ? Theme.of(context)
-                                .colorScheme
-                                .primary
-                                .withOpacity(0.2)
-                            : getColor(context, "lightDarkAccentHeavy"))),
-          ),
-          child: IntrinsicWidth(
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: customTitleBuilder != null
-                  ? customTitleBuilder!(titleBuilder)
-                  : titleBuilder(title),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
 class ColumnSliver extends StatelessWidget {
   const ColumnSliver(
       {super.key, required this.children, this.centered = false});
@@ -1153,6 +1086,7 @@ class BudgetDetails extends StatefulWidget {
     this.initialSelectedStartDate,
     this.initialSelectedEndDate,
     this.initialSelectedRecurrence,
+    this.afterAmountEnteredDismissed,
   });
   final Function determineBottomButton;
   final Function(double, String) setSelectedAmount;
@@ -1165,6 +1099,7 @@ class BudgetDetails extends StatefulWidget {
   final DateTime? initialSelectedStartDate;
   final DateTime? initialSelectedEndDate;
   final String? initialSelectedRecurrence;
+  final Function(double? amountEntered)? afterAmountEnteredDismissed;
   @override
   State<BudgetDetails> createState() => _BudgetDetailsState();
 }
@@ -1217,6 +1152,9 @@ class _BudgetDetailsState extends State<BudgetDetails> {
         ),
       ),
     );
+    if (widget.afterAmountEnteredDismissed != null) {
+      widget.afterAmountEnteredDismissed!(selectedAmount);
+    }
   }
 
   Future<void> selectPeriodLength(BuildContext context) async {

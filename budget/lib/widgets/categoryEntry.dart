@@ -223,37 +223,17 @@ class CategoryEntry extends StatelessWidget {
                                     right: 13,
                                     bottom: 3,
                                   ),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(100),
-                                    child: Stack(
-                                      children: [
-                                        Container(
-                                          color: appStateSettings["materialYou"]
-                                              ? budgetColorScheme
-                                                  .secondaryContainer
-                                              : selected
-                                                  ? getColor(context, "white")
-                                                  : getColor(context,
-                                                      "lightDarkAccentHeavy"),
-                                          height: 5,
-                                        ),
-                                        AnimatedFractionallySizedBox(
-                                          duration:
-                                              Duration(milliseconds: 1000),
-                                          curve:
-                                              Curves.easeInOutCubicEmphasized,
-                                          child: ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(100),
-                                            child: Container(
-                                              color: HexColor(category.colour),
-                                              height: 5,
-                                            ),
-                                          ),
-                                          widthFactor: percentSpent,
-                                        ),
-                                      ],
-                                    ),
+                                  child: ThinProgress(
+                                    backgroundColor:
+                                        appStateSettings["materialYou"]
+                                            ? budgetColorScheme
+                                                .secondaryContainer
+                                            : selected
+                                                ? getColor(context, "white")
+                                                : getColor(context,
+                                                    "lightDarkAccentHeavy"),
+                                    color: HexColor(category.colour),
+                                    progress: percentSpent,
                                   ),
                                 )
                               : TextFont(
@@ -429,5 +409,43 @@ class CategoryIconPercent extends StatelessWidget {
         ),
       ),
     ]);
+  }
+}
+
+class ThinProgress extends StatelessWidget {
+  final Color color;
+  final Color backgroundColor;
+  final double progress;
+
+  ThinProgress(
+      {required this.color,
+      required this.backgroundColor,
+      required this.progress});
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(100),
+      child: Stack(
+        children: [
+          Container(
+            color: backgroundColor,
+            height: 5,
+          ),
+          AnimatedFractionallySizedBox(
+            duration: Duration(milliseconds: 1000),
+            curve: Curves.easeInOutCubicEmphasized,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(100),
+              child: Container(
+                color: color,
+                height: 5,
+              ),
+            ),
+            widthFactor: progress,
+          ),
+        ],
+      ),
+    );
   }
 }

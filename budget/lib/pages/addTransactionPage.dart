@@ -47,6 +47,9 @@ import 'package:budget/widgets/framework/popupFramework.dart';
 import 'package:budget/struct/currencyFunctions.dart';
 import 'package:budget/widgets/animatedExpanded.dart';
 
+import '../widgets/outlinedButtonStacked.dart';
+import '../widgets/tappableTextEntry.dart';
+
 //TODO
 //only show the tags that correspond to selected category
 //put recent used tags at the top? when no category selected
@@ -2827,7 +2830,28 @@ class SelectTransactionTypePopup extends StatelessWidget {
                       text: "mark-transaction-help-description".tr(),
                     ),
                   ),
-                  SizedBox(height: 5),
+                  SizedBox(height: 18),
+                  IgnorePointer(
+                    child: TransactionEntry(
+                      highlightActionButton: true,
+                      useHorizontalPaddingConstrained: false,
+                      openPage: Container(),
+                      transaction: Transaction(
+                        transactionPk: "-1",
+                        name: "",
+                        amount: 100,
+                        note: "",
+                        categoryFk: "-1",
+                        walletFk: appStateSettings["selectedWalletPk"],
+                        dateCreated: DateTime.now(),
+                        income: false,
+                        paid: false,
+                        skipPaid: false,
+                        type: TransactionSpecialType.upcoming,
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 8),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -2857,27 +2881,6 @@ class SelectTransactionTypePopup extends StatelessWidget {
                           ),
                         ),
                     ],
-                  ),
-                  SizedBox(height: 5),
-                  IgnorePointer(
-                    child: TransactionEntry(
-                      highlightActionButton: true,
-                      useHorizontalPaddingConstrained: false,
-                      openPage: Container(),
-                      transaction: Transaction(
-                        transactionPk: "-1",
-                        name: "",
-                        amount: 100,
-                        note: "",
-                        categoryFk: "-1",
-                        walletFk: appStateSettings["selectedWalletPk"],
-                        dateCreated: DateTime.now(),
-                        income: false,
-                        paid: false,
-                        skipPaid: false,
-                        type: TransactionSpecialType.upcoming,
-                      ),
-                    ),
                   ),
                 ],
               ),

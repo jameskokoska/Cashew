@@ -52,6 +52,7 @@ class TransactionEntries extends StatelessWidget {
     this.pastDaysLimitToShow,
     this.includeDateDivider = true,
     this.allowSelect = true,
+    this.showObjectivePercentage = true,
     super.key,
   });
 
@@ -86,6 +87,7 @@ class TransactionEntries extends StatelessWidget {
   final int? pastDaysLimitToShow;
   final bool includeDateDivider;
   final bool allowSelect;
+  final bool showObjectivePercentage;
 
   @override
   Widget build(BuildContext context) {
@@ -246,6 +248,8 @@ class TransactionEntries extends StatelessWidget {
                                 },
                                 listID: listID,
                                 allowSelect: allowSelect,
+                                showObjectivePercentage:
+                                    showObjectivePercentage,
                               ),
                             ),
                           );
@@ -312,6 +316,7 @@ class TransactionEntries extends StatelessWidget {
                               },
                               listID: listID,
                               allowSelect: allowSelect,
+                              showObjectivePercentage: showObjectivePercentage,
                             );
                           },
                         ),
@@ -359,6 +364,7 @@ class TransactionEntries extends StatelessWidget {
                               },
                               listID: listID,
                               allowSelect: allowSelect,
+                              showObjectivePercentage: showObjectivePercentage,
                             ),
                           );
                         },

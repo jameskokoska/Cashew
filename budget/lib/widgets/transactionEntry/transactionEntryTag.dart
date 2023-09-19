@@ -2,14 +2,20 @@ import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
+import 'package:budget/widgets/categoryEntry.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/util/infiniteRotationAnimation.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/colors.dart';
+import 'package:provider/provider.dart';
 
 class TransactionEntryTag extends StatelessWidget {
-  const TransactionEntryTag({required this.transaction, super.key});
+  const TransactionEntryTag(
+      {required this.transaction,
+      this.showObjectivePercentage = true,
+      super.key});
   final Transaction transaction;
+  final bool showObjectivePercentage;
 
   @override
   Widget build(BuildContext context) {
@@ -19,34 +25,90 @@ class TransactionEntryTag extends StatelessWidget {
         children: [
           transaction.sharedReferenceBudgetPk == null
               ? SizedBox.shrink()
-              : StreamBuilder<Budget>(
-                  stream:
-                      database.getBudget(transaction.sharedReferenceBudgetPk!),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      Budget budget = snapshot.data!;
-                      return TransactionTag(
-                        color: HexColor(budget.colour),
-                        name: budget.name,
-                      );
-                    }
-                    return Container();
-                  },
+              : Expanded(
+                  child: StreamBuilder<Budget>(
+                    stream: database
+                        .getBudget(transaction.sharedReferenceBudgetPk!),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        Budget budget = snapshot.data!;
+                        return TransactionTag(
+                          color: HexColor(budget.colour),
+                          name: budget.name,
+                        );
+                      }
+                      return Container();
+                    },
+                  ),
                 ),
           transaction.objectiveFk == null
               ? SizedBox.shrink()
-              : StreamBuilder<Objective>(
-                  stream: database.getObjective(transaction.objectiveFk!),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      Objective objective = snapshot.data!;
-                      return TransactionTag(
-                        color: HexColor(objective.colour),
-                        name: objective.name,
-                      );
-                    }
-                    return Container();
-                  },
+              : Expanded(
+                  child: StreamBuilder<Objective>(
+                    stream: database.getObjective(transaction.objectiveFk!),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        Objective objective = snapshot.data!;
+                        return StreamBuilder<double?>(
+                          stream: database.watchTotalTowardsObjective(
+                            Provider.of<AllWallets>(context),
+                            objective.objectivePk,
+                          ),
+                          builder: (context, snapshot) {
+                            double totalAmount = snapshot.data ?? 0;
+                            if (objective.income == false) {
+                              totalAmount = totalAmount * -1;
+                            }
+                            double percentageTowardsGoal = objective.amount == 0
+                                ? 0
+                                : totalAmount / objective.amount;
+                            percentageTowardsGoal = percentageTowardsGoal <= 0
+                                ? 0
+                                : percentageTowardsGoal;
+                            // Use layout builder
+                            // https://stackoverflow.com/questions/65933330/expanded-and-flexible-not-filling-entire-row
+                            return LayoutBuilder(
+                              builder: (context, constraints) {
+                                return Row(
+                                  children: [
+                                    ConstrainedBox(
+                                      constraints: BoxConstraints(
+                                          maxWidth: constraints.maxWidth * 0.8),
+                                      child: TransactionTag(
+                                        color: HexColor(objective.colour),
+                                        name: objective.name +
+                                            ": " +
+                                            convertToPercent(
+                                                percentageTowardsGoal * 100,
+                                                numberDecimals: 0),
+                                      ),
+                                    ),
+                                    if (showObjectivePercentage)
+                                      SizedBox(width: 7),
+                                    if (showObjectivePercentage)
+                                      Expanded(
+                                        child: ThinProgress(
+                                          backgroundColor:
+                                              appStateSettings["materialYou"]
+                                                  ? Theme.of(context)
+                                                      .colorScheme
+                                                      .secondaryContainer
+                                                  : getColor(context,
+                                                      "lightDarkAccentHeavy"),
+                                          color: HexColor(objective.colour),
+                                          progress: percentageTowardsGoal,
+                                        ),
+                                      ),
+                                  ],
+                                );
+                              },
+                            );
+                          },
+                        );
+                      }
+                      return Container();
+                    },
+                  ),
                 ),
         ],
       ),
@@ -73,15 +135,11 @@ class TransactionTag extends StatelessWidget {
           borderRadius: BorderRadius.circular(6),
         ),
         padding: EdgeInsets.symmetric(horizontal: 4.5, vertical: 1.05),
-        child: Padding(
-          padding: const EdgeInsets.only(top: 2.2),
-          child: Text(
-            name,
-            style: TextStyle(
-              fontSize: 11.5,
-              color: getColor(context, "black").withOpacity(0.7),
-            ),
-          ),
+        child: TextFont(
+          text: name,
+          fontSize: 11.5,
+          textColor: getColor(context, "black").withOpacity(0.7),
+          maxLines: 1,
         ),
       ),
     );

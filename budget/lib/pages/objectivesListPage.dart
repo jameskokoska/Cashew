@@ -8,6 +8,7 @@ import 'package:budget/pages/editBudgetPage.dart';
 import 'package:budget/pages/editObjectivesPage.dart';
 import 'package:budget/pages/objectivePage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
+import 'package:budget/struct/randomConstants.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/budgetContainer.dart';
 import 'package:budget/widgets/categoryIcon.dart';
@@ -26,32 +27,11 @@ import 'package:flutter/material.dart'
     hide SliverReorderableList, ReorderableDelayedDragStartListener;
 import 'package:provider/provider.dart';
 
-class ObjectivesListPage extends StatefulWidget {
+class ObjectivesListPage extends StatelessWidget {
   const ObjectivesListPage({Key? key}) : super(key: key);
 
   @override
-  State<ObjectivesListPage> createState() => ObjectivesListPageState();
-}
-
-class ObjectivesListPageState extends State<ObjectivesListPage> {
-  @override
   Widget build(BuildContext context) {
-    Widget addButton = Padding(
-      padding: EdgeInsets.only(top: getPlatform() == PlatformOS.isIOS ? 10 : 0),
-      child: Padding(
-        padding: EdgeInsets.symmetric(
-          horizontal: getPlatform() == PlatformOS.isIOS ? 13 : 0,
-        ),
-        child: AddButton(
-          onTap: () {},
-          openPage: AddObjectivePage(
-            routesToPopAfterDelete: RoutesToPopAfterDelete.PreventDelete,
-          ),
-          height: 150,
-        ),
-      ),
-    );
-
     return PageFramework(
       dragDownToDismiss: true,
       title: "goals".tr(),
@@ -81,72 +61,153 @@ class ObjectivesListPageState extends State<ObjectivesListPage> {
         StreamBuilder<List<Objective>>(
           stream: database.watchAllObjectives(),
           builder: (context, snapshot) {
-            if (snapshot.hasData && (snapshot.data ?? []).length <= 0) {
-              return SliverPadding(
-                padding: EdgeInsets.symmetric(vertical: 7, horizontal: 13),
-                sliver: SliverToBoxAdapter(
-                  child: addButton,
+            bool showDemoObjectives = false;
+            List<Objective> objectivesList = [...(snapshot.data ?? [])];
+            if (snapshot.hasData == false ||
+                (objectivesList.length <= 0 && snapshot.hasData)) {
+              showDemoObjectives = true;
+              objectivesList.add(
+                Objective(
+                  objectivePk: "-3",
+                  name: "example-goals-1".tr(),
+                  amount: 1500,
+                  order: 0,
+                  dateCreated: DateTime.now().subtract(Duration(days: 40)),
+                  income: false,
+                  pinned: false,
+                  iconName: "coconut-tree.png",
+                  colour: toHexString(Colors.greenAccent),
+                ),
+              );
+              objectivesList.add(
+                Objective(
+                  objectivePk: "-2",
+                  name: "example-goals-2".tr(),
+                  amount: 2000,
+                  order: 0,
+                  dateCreated: DateTime.now().subtract(Duration(days: 10)),
+                  income: false,
+                  pinned: false,
+                  iconName: "car(1).png",
+                  colour: toHexString(Colors.orangeAccent),
                 ),
               );
             }
-            if (snapshot.hasData) {
-              return SliverPadding(
-                padding: EdgeInsets.symmetric(
-                  vertical: getPlatform() == PlatformOS.isIOS ? 3 : 7,
-                  horizontal: getPlatform() == PlatformOS.isIOS ? 0 : 13,
-                ),
-                sliver: enableDoubleColumn(context)
-                    ? SliverGrid(
-                        gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                          maxCrossAxisExtent: 600.0,
-                          mainAxisExtent: 160,
-                          mainAxisSpacing:
-                              getPlatform() == PlatformOS.isIOS ? 0 : 10.0,
-                          crossAxisSpacing:
-                              getPlatform() == PlatformOS.isIOS ? 0 : 10.0,
-                          childAspectRatio: 5,
+            Widget addButton = Column(
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      child: Padding(
+                        padding: EdgeInsets.only(
+                          top: getPlatform() == PlatformOS.isIOS ? 10 : 0,
+                          bottom: 20,
                         ),
-                        delegate: SliverChildBuilderDelegate(
-                          (BuildContext context, int index) {
-                            if (index == snapshot.data?.length) {
-                              return addButton;
-                            } else {
-                              return ObjectiveContainer(
-                                index: index,
-                                objective: snapshot.data![index],
-                              );
-                            }
-                          },
-                          childCount: (snapshot.data?.length ?? 0) + 1,
-                        ),
-                      )
-                    : SliverList(
-                        delegate: SliverChildBuilderDelegate(
-                          (BuildContext context, int index) {
-                            if (index == snapshot.data?.length) {
-                              return addButton;
-                            } else {
-                              return Padding(
-                                padding: EdgeInsets.only(
-                                  bottom: getPlatform() == PlatformOS.isIOS
-                                      ? 0
-                                      : 16.0,
-                                ),
-                                child: ObjectiveContainer(
-                                  index: index,
-                                  objective: snapshot.data![index],
-                                ),
-                              );
-                            }
-                          },
-                          childCount: (snapshot.data?.length ?? 0) +
-                              1, //snapshot.data?.length
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal:
+                                getPlatform() == PlatformOS.isIOS ? 13 : 0,
+                          ),
+                          child: AddButton(
+                            onTap: () {},
+                            openPage: AddObjectivePage(
+                              routesToPopAfterDelete:
+                                  RoutesToPopAfterDelete.PreventDelete,
+                            ),
+                            height: 150,
+                          ),
                         ),
                       ),
-              );
-            } else {
-              return SliverToBoxAdapter();
-            }
+                    ),
+                  ],
+                ),
+                if (showDemoObjectives)
+                  TextFont(
+                    text: "example-goals".tr(),
+                    textColor: getColor(context, "black").withOpacity(0.25),
+                    fontSize: 18,
+                    textAlign: TextAlign.center,
+                  )
+              ],
+            );
+            return SliverPadding(
+              padding: EdgeInsets.symmetric(
+                vertical: getPlatform() == PlatformOS.isIOS ? 3 : 7,
+                horizontal: getPlatform() == PlatformOS.isIOS ? 0 : 13,
+              ),
+              sliver: enableDoubleColumn(context)
+                  ? SliverGrid(
+                      gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                        maxCrossAxisExtent: 600.0,
+                        mainAxisExtent: 160,
+                        mainAxisSpacing:
+                            getPlatform() == PlatformOS.isIOS ? 0 : 10.0,
+                        crossAxisSpacing:
+                            getPlatform() == PlatformOS.isIOS ? 0 : 10.0,
+                        childAspectRatio: 5,
+                      ),
+                      delegate: SliverChildBuilderDelegate(
+                        (BuildContext context, int index) {
+                          Objective objective = objectivesList[
+                              index - (showDemoObjectives ? 1 : 0)];
+                          return Padding(
+                            padding: EdgeInsets.only(
+                              bottom:
+                                  getPlatform() == PlatformOS.isIOS ? 0 : 16.0,
+                            ),
+                            child: ObjectiveContainer(
+                              index: index,
+                              objective: objective,
+                              forcedTotalAmount: showDemoObjectives
+                                  ? (objective.income
+                                          ? randomInt[0].toDouble()
+                                          : randomInt[0].toDouble() * -1) *
+                                      15
+                                  : null,
+                              forcedNumberTransactions:
+                                  showDemoObjectives ? randomInt[index] : null,
+                            ),
+                          );
+                        },
+                        childCount: objectivesList.length + 1,
+                      ),
+                    )
+                  : SliverList(
+                      delegate: SliverChildBuilderDelegate(
+                        (BuildContext context, int index) {
+                          if ((showDemoObjectives && index == 0) ||
+                              (showDemoObjectives == false &&
+                                  index == objectivesList.length)) {
+                            return addButton;
+                          } else {
+                            Objective objective = objectivesList[
+                                index - (showDemoObjectives ? 1 : 0)];
+                            return Padding(
+                              padding: EdgeInsets.only(
+                                bottom: getPlatform() == PlatformOS.isIOS
+                                    ? 0
+                                    : 16.0,
+                              ),
+                              child: ObjectiveContainer(
+                                index: index,
+                                objective: objective,
+                                forcedTotalAmount: showDemoObjectives
+                                    ? (objective.income
+                                            ? randomInt[0].toDouble()
+                                            : randomInt[0].toDouble() * -1) *
+                                        15
+                                    : null,
+                                forcedNumberTransactions: showDemoObjectives
+                                    ? randomInt[index]
+                                    : null,
+                              ),
+                            );
+                          }
+                        },
+                        childCount: (objectivesList.length) + 1,
+                      ),
+                    ),
+            );
           },
         ),
         SliverToBoxAdapter(
@@ -158,21 +219,28 @@ class ObjectivesListPageState extends State<ObjectivesListPage> {
 }
 
 class ObjectiveContainer extends StatelessWidget {
-  const ObjectiveContainer(
-      {required this.objective, required this.index, super.key});
+  const ObjectiveContainer({
+    required this.objective,
+    required this.index,
+    this.forcedTotalAmount,
+    this.forcedNumberTransactions,
+    super.key,
+  });
   final Objective objective;
   final int index;
+  final double? forcedTotalAmount;
+  final int? forcedNumberTransactions;
 
   @override
   Widget build(BuildContext context) {
     double borderRadius = getPlatform() == PlatformOS.isIOS ? 0 : 18;
-    return StreamBuilder<double?>(
+    Widget child = StreamBuilder<double?>(
       stream: database.watchTotalTowardsObjective(
         Provider.of<AllWallets>(context),
         objective.objectivePk,
       ),
       builder: (context, snapshot) {
-        double totalAmount = snapshot.data ?? 0;
+        double totalAmount = forcedTotalAmount ?? snapshot.data ?? 0;
         if (objective.income == false) {
           totalAmount = totalAmount * -1;
         }
@@ -236,34 +304,27 @@ class ObjectiveContainer extends StatelessWidget {
                                                 objective.objectivePk)
                                             .$1,
                                         builder: (context, snapshot) {
-                                          if (snapshot.hasData &&
-                                              snapshot.data != null) {
-                                            return TextFont(
-                                              textAlign: TextAlign.left,
-                                              text: snapshot.data.toString() +
-                                                  " " +
-                                                  (snapshot.data == 1
-                                                      ? "transaction"
-                                                          .tr()
-                                                          .toLowerCase()
-                                                      : "transactions"
-                                                          .tr()
-                                                          .toLowerCase()),
-                                              fontSize: 15,
-                                              textColor:
-                                                  getColor(context, "black")
-                                                      .withOpacity(0.65),
-                                            );
-                                          } else {
-                                            return TextFont(
-                                              textAlign: TextAlign.left,
-                                              text: "/ transactions",
-                                              fontSize: 15,
-                                              textColor:
-                                                  getColor(context, "black")
-                                                      .withOpacity(0.65),
-                                            );
-                                          }
+                                          int numberTransactions =
+                                              forcedNumberTransactions ??
+                                                  snapshot.data ??
+                                                  0;
+                                          return TextFont(
+                                            textAlign: TextAlign.left,
+                                            text:
+                                                numberTransactions.toString() +
+                                                    " " +
+                                                    (numberTransactions == 1
+                                                        ? "transaction"
+                                                            .tr()
+                                                            .toLowerCase()
+                                                        : "transactions"
+                                                            .tr()
+                                                            .toLowerCase()),
+                                            fontSize: 15,
+                                            textColor:
+                                                getColor(context, "black")
+                                                    .withOpacity(0.65),
+                                          );
                                         },
                                       ),
                                     ],
@@ -370,5 +431,24 @@ class ObjectiveContainer extends StatelessWidget {
         );
       },
     );
+    if (forcedNumberTransactions != null || forcedTotalAmount != null) {
+      return IgnorePointer(
+        child: Opacity(
+          opacity: 0.25,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(20),
+            child: ColorFiltered(
+              colorFilter: ColorFilter.mode(
+                Colors.grey,
+                BlendMode.saturation,
+              ),
+              child: child,
+            ),
+          ),
+        ),
+      );
+    } else {
+      return child;
+    }
   }
 }

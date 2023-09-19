@@ -37,7 +37,9 @@ import 'dart:async';
 import 'package:budget/colors.dart';
 import 'package:provider/provider.dart';
 
+import '../widgets/outlinedButtonStacked.dart';
 import '../widgets/sliverStickyLabelDivider.dart';
+import '../widgets/tappableTextEntry.dart';
 import 'exchangeRatesPage.dart';
 
 class AddObjectivePage extends StatefulWidget {

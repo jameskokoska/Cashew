@@ -18,6 +18,7 @@ import 'package:provider/provider.dart';
 import 'package:budget/widgets/framework/popupFramework.dart';
 
 import 'sliverStickyLabelDivider.dart';
+import 'tappableTextEntry.dart';
 
 class CategoryLimits extends StatefulWidget {
   const CategoryLimits({
@@ -60,6 +61,9 @@ class _CategoryLimitsState extends State<CategoryLimits> {
                   widget.categoryFksExclude,
                 ),
                 builder: (context, snapshot) {
+                  bool isOver = widget.isAbsoluteSpendingLimit
+                      ? (snapshot.data ?? 0) > widget.budgetLimit
+                      : (snapshot.data ?? 0) > 100;
                   return CountNumber(
                     count: snapshot.data ?? 0,
                     duration: Duration(milliseconds: 700),
@@ -67,7 +71,9 @@ class _CategoryLimitsState extends State<CategoryLimits> {
                     textBuilder: (number) {
                       return TextFont(
                         fontSize: 15,
-                        textColor: getColor(context, "textLight"),
+                        textColor: isOver
+                            ? getColor(context, "expenseRed")
+                            : getColor(context, "textLight"),
                         text: widget.isAbsoluteSpendingLimit
                             ? (convertToMoney(
                                     Provider.of<AllWallets>(context), number,

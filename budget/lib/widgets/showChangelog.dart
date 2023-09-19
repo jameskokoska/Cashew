@@ -10,6 +10,13 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    < 4.3.7
+    Added example goals
+    Fixed scroll to index with info icon
+    Increase budget warning popup
+    Transaction tag formatting fixes
+    Transaction entry shows progress towards goal
+    Category limits warning when over 100% of the total
     < 4.3.6
     Internally renamed wallets to accounts and objectives to goals for translations
     Excluded categories no longer selectable from watch categories

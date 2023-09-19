@@ -22,6 +22,8 @@ import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/widgets/framework/popupFramework.dart';
 import 'package:budget/functions.dart';
 
+import '../widgets/tappableTextEntry.dart';
+
 // We need to refresh the home page when this route is popped
 
 class EditHomePageItem {
