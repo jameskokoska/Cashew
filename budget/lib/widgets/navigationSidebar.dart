@@ -234,7 +234,7 @@ class NavigationSidebarState extends State<NavigationSidebar> {
                               icon: appStateSettings["outlinedIcons"]
                                   ? Icons.savings_outlined
                                   : Icons.savings_rounded,
-                              label: "objectives".tr(),
+                              label: "goals".tr(),
                               isSelected: selectedIndex == 14,
                               onTap: () {
                                 pageNavigationFrameworkKey.currentState!
@@ -645,7 +645,7 @@ class _EdiDatatButtonsState extends State<EditDataButtons> {
                         icon: appStateSettings["outlinedIcons"]
                             ? Icons.account_balance_wallet_outlined
                             : Icons.account_balance_wallet_rounded,
-                        label: "wallet-details".tr(),
+                        label: "account-details".tr(),
                         isSelected: widget.selectedIndex == 9,
                         onTap: () {
                           pageNavigationFrameworkKey.currentState!
@@ -687,7 +687,7 @@ class _EdiDatatButtonsState extends State<EditDataButtons> {
                         icon: appStateSettings["outlinedIcons"]
                             ? Icons.savings_outlined
                             : Icons.savings_rounded,
-                        label: "objectives-details".tr(),
+                        label: "goals-details".tr(),
                         isSelected: widget.selectedIndex == 15,
                         onTap: () {
                           pageNavigationFrameworkKey.currentState!

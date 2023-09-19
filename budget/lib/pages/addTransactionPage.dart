@@ -1,5 +1,6 @@
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
+import 'package:budget/pages/accountsPage.dart';
 import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/addCategoryPage.dart';
 import 'package:budget/pages/addObjectivePage.dart';
@@ -72,6 +73,7 @@ class AddTransactionPage extends StatefulWidget {
     this.selectedBudget,
     this.selectedType,
     this.selectedObjective,
+    this.selectedIncome,
     required this.routesToPopAfterDelete,
   }) : super(key: key);
 
@@ -81,6 +83,7 @@ class AddTransactionPage extends StatefulWidget {
   final TransactionSpecialType? selectedType;
   final Objective? selectedObjective;
   final RoutesToPopAfterDelete routesToPopAfterDelete;
+  final bool? selectedIncome;
 
   @override
   _AddTransactionPageState createState() => _AddTransactionPageState();
@@ -563,7 +566,6 @@ class _AddTransactionPageState extends State<AddTransactionPage>
           widget.transaction == null
               ? appStateSettings["selectedWalletPk"]
               : widget.transaction!.walletFk);
-      setState(() {});
     });
     if (widget.selectedBudget != null) {
       selectedBudget = widget.selectedBudget;
@@ -572,10 +574,12 @@ class _AddTransactionPageState extends State<AddTransactionPage>
       selectedBudgetIsShared = widget.selectedBudget!.sharedKey != null;
     }
     if (widget.selectedObjective != null) {
-      setState(() {
-        selectedObjectivePk = widget.selectedObjective!.objectivePk;
-      });
+      selectedObjectivePk = widget.selectedObjective!.objectivePk;
     }
+    if (widget.selectedIncome != null) {
+      selectedIncome = widget.selectedIncome!;
+    }
+    setState(() {});
   }
 
   Widget afterSetTitle() {
@@ -691,6 +695,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
             child: IncomeExpenseTabSelector(
               onTabChanged: setSelectedIncome,
               initialTabIsIncome: selectedIncome,
+              syncWithInitial: true,
               color: categoryColor,
               unselectedColor: Colors.black.withOpacity(0.2),
             ),
@@ -1397,6 +1402,33 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                               padding: const EdgeInsets.only(top: 5),
                               child: SelectChips(
                                 wrapped: enableDoubleColumn(context),
+                                extraWidgetAtBeginning: true,
+                                extraWidget: Transform.scale(
+                                  scale: 1.3,
+                                  child: IconButton(
+                                    padding: EdgeInsets.zero,
+                                    visualDensity: VisualDensity.compact,
+                                    icon: Icon(
+                                      Icons.info_outlined,
+                                      size: 19,
+                                    ),
+                                    onPressed: () {
+                                      openBottomSheet(
+                                        context,
+                                        fullSnap: false,
+                                        SelectTransactionTypePopup(
+                                          setTransactionType: (type) {
+                                            setSelectedType(
+                                              transactionTypeDisplayToEnum[
+                                                  type],
+                                            );
+                                          },
+                                          selectedTransactionType: selectedType,
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ),
                                 items: <TransactionSpecialType?>[
                                   null,
                                   ...TransactionSpecialType.values
@@ -2534,7 +2566,7 @@ class _SelectObjectiveState extends State<SelectObjective> {
                   ),
                   items: [null, ...snapshot.data!],
                   getLabel: (Objective? item) {
-                    return item?.name ?? "no-objective".tr();
+                    return item?.name ?? "no-goal".tr();
                   },
                   onSelected: (Objective? item) {
                     widget.setSelectedObjective(
@@ -2667,4 +2699,246 @@ Future deleteTransactionsPopup(
     });
   }
   return action;
+}
+
+class SelectTransactionTypePopup extends StatelessWidget {
+  const SelectTransactionTypePopup({
+    required this.setTransactionType,
+    this.selectedTransactionType,
+    super.key,
+  });
+  final Function(TransactionSpecialType? transactionType) setTransactionType;
+  final TransactionSpecialType? selectedTransactionType;
+
+  @override
+  Widget build(BuildContext context) {
+    return PopupFramework(
+      title: "select-transaction-type".tr(),
+      child: Column(
+        children: [
+          TransactionTypeInfoEntry(
+            selectedTransactionType: selectedTransactionType,
+            setTransactionType: setTransactionType,
+            transactionType: null,
+            title: "default".tr(),
+            onTap: () {
+              setTransactionType(null);
+              Navigator.pop(context);
+            },
+            icon: appStateSettings["outlinedIcons"]
+                ? Icons.check_circle_outlined
+                : Icons.check_circle_rounded,
+          ),
+          TransactionTypeInfoEntry(
+            selectedTransactionType: selectedTransactionType,
+            setTransactionType: setTransactionType,
+            transactionType: TransactionSpecialType.upcoming,
+            title: "upcoming".tr(),
+            childrenDescription: [
+              ListItem(
+                "upcoming-transaction-type-description-1".tr(),
+              ),
+              ListItem(
+                "upcoming-transaction-type-description-2".tr(),
+              ),
+            ],
+          ),
+          TransactionTypeInfoEntry(
+            selectedTransactionType: selectedTransactionType,
+            setTransactionType: setTransactionType,
+            transactionType: TransactionSpecialType.subscription,
+            title: "subscription".tr(),
+            childrenDescription: [
+              ListItem(
+                "subscription-transaction-type-description-1".tr(),
+              ),
+              ListItem(
+                "subscription-transaction-type-description-2".tr(),
+              ),
+            ],
+          ),
+          TransactionTypeInfoEntry(
+            selectedTransactionType: selectedTransactionType,
+            setTransactionType: setTransactionType,
+            transactionType: TransactionSpecialType.repetitive,
+            title: "repetitive".tr(),
+            childrenDescription: [
+              ListItem(
+                "repetitive-transaction-type-description-1".tr(),
+              ),
+              ListItem(
+                "repetitive-transaction-type-description-2".tr(),
+              ),
+            ],
+          ),
+          TransactionTypeInfoEntry(
+            selectedTransactionType: selectedTransactionType,
+            setTransactionType: setTransactionType,
+            transactionType: TransactionSpecialType.credit,
+            title: "lent".tr(),
+            childrenDescription: [
+              ListItem(
+                "lent-transaction-type-description-1".tr(),
+              ),
+              ListItem(
+                "lent-transaction-type-description-2".tr(),
+              ),
+              ListItem(
+                "lent-transaction-type-description-3".tr(),
+              ),
+            ],
+          ),
+          TransactionTypeInfoEntry(
+            selectedTransactionType: selectedTransactionType,
+            setTransactionType: setTransactionType,
+            transactionType: TransactionSpecialType.debt,
+            title: "borrowed".tr(),
+            childrenDescription: [
+              ListItem(
+                "borrowed-transaction-type-description-1".tr(),
+              ),
+              ListItem(
+                "borrowed-transaction-type-description-2".tr(),
+              ),
+              ListItem(
+                "borrowed-transaction-type-description-3".tr(),
+              ),
+            ],
+          ),
+          SizedBox(height: 13),
+          Tappable(
+            color: dynamicPastel(
+              context,
+              Theme.of(context).colorScheme.secondaryContainer,
+              amount: 0.5,
+            ),
+            borderRadius: 20,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 15),
+              child: Column(
+                children: [
+                  SizedBox(height: 8),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: TextFont(
+                      maxLines: 5,
+                      fontSize: 16,
+                      textAlign: TextAlign.center,
+                      text: "mark-transaction-help-description".tr(),
+                    ),
+                  ),
+                  SizedBox(height: 5),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      for (TransactionSpecialType type
+                          in TransactionSpecialType.values)
+                        IgnorePointer(
+                          child: TransactionEntryActionButton(
+                            transaction: Transaction(
+                              transactionPk: "-1",
+                              name: "",
+                              amount: 0,
+                              note: "",
+                              categoryFk: "-1",
+                              walletFk: "",
+                              dateCreated: DateTime.now(),
+                              income: false,
+                              paid: [
+                                TransactionSpecialType.credit,
+                                TransactionSpecialType.debt
+                              ].contains(type)
+                                  ? true
+                                  : false,
+                              skipPaid: false,
+                              type: type,
+                            ),
+                            iconColor: Theme.of(context).colorScheme.secondary,
+                          ),
+                        ),
+                    ],
+                  ),
+                  SizedBox(height: 5),
+                  IgnorePointer(
+                    child: TransactionEntry(
+                      highlightActionButton: true,
+                      useHorizontalPaddingConstrained: false,
+                      openPage: Container(),
+                      transaction: Transaction(
+                        transactionPk: "-1",
+                        name: "",
+                        amount: 100,
+                        note: "",
+                        categoryFk: "-1",
+                        walletFk: appStateSettings["selectedWalletPk"],
+                        dateCreated: DateTime.now(),
+                        income: false,
+                        paid: false,
+                        skipPaid: false,
+                        type: TransactionSpecialType.upcoming,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class TransactionTypeInfoEntry extends StatelessWidget {
+  final Function(TransactionSpecialType? transactionType) setTransactionType;
+  final TransactionSpecialType? selectedTransactionType;
+  final List<Widget>? childrenDescription;
+  final String title;
+  final IconData? icon;
+  final TransactionSpecialType? transactionType;
+  final VoidCallback? onTap;
+
+  TransactionTypeInfoEntry({
+    Key? key,
+    required this.setTransactionType,
+    required this.selectedTransactionType,
+    this.childrenDescription,
+    required this.title,
+    this.icon,
+    required this.transactionType,
+    this.onTap,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 13),
+      child: Row(
+        children: [
+          Expanded(
+            child: OutlinedButtonStacked(
+              filled: selectedTransactionType == transactionType,
+              alignLeft: true,
+              alignBeside: true,
+              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+              text: title,
+              iconData: icon ?? getTransactionTypeIcon(transactionType),
+              onTap: onTap ??
+                  () {
+                    setTransactionType(transactionType);
+                    Navigator.pop(context);
+                  },
+              afterWidget: childrenDescription == null
+                  ? null
+                  : Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: childrenDescription ?? [],
+                    ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }

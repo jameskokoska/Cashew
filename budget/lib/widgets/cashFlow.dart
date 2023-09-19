@@ -17,13 +17,13 @@ class CashFlow extends StatelessWidget {
   Widget build(BuildContext context) {
     return StreamBuilder<double?>(
       stream: database.watchTotalSpentInTimeRangeFromCategories(
-        Provider.of<AllWallets>(context),
-        startDate,
-        endDate,
-        null,
-        null,
-        null,
-        null,
+        allWallets: Provider.of<AllWallets>(context),
+        start: startDate,
+        end: endDate,
+        categoryFks: null,
+        categoryFksExclude: null,
+        budgetTransactionFilters: [],
+        memberTransactionFilters: null,
         allCashFlow: true,
       ),
       builder: (context, snapshot) {

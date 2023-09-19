@@ -8,6 +8,8 @@ class AnimatedCircularProgress extends StatefulWidget {
   final Color foregroundColor;
   final Color? overageColor;
   final Color? overageShadowColor;
+  final double strokeWidth;
+  final double valueStrokeWidth;
 
   AnimatedCircularProgress({
     Key? key,
@@ -16,6 +18,8 @@ class AnimatedCircularProgress extends StatefulWidget {
     required this.foregroundColor,
     this.overageColor,
     this.overageShadowColor,
+    this.strokeWidth = 3.5,
+    this.valueStrokeWidth = 4,
   }) : super(key: key);
 
   @override
@@ -80,9 +84,9 @@ class _AnimatedCircularProgressState extends State<AnimatedCircularProgress>
             foregroundColor: widget.foregroundColor,
             overageColor: widget.overageColor ?? Colors.transparent,
             overageShadowColor: widget.overageShadowColor ?? Colors.transparent,
-            strokeWidth: 3.5,
-            valueStrokeWidth: 4,
-            cornerRadius: 4,
+            strokeWidth: widget.strokeWidth,
+            valueStrokeWidth: widget.valueStrokeWidth,
+            cornerRadius: widget.valueStrokeWidth,
           ),
         );
       },

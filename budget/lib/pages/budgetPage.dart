@@ -148,13 +148,15 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                 return StreamBuilder<List<CategoryWithTotal>>(
                   stream: database
                       .watchTotalSpentInEachCategoryInTimeRangeFromCategories(
-                    Provider.of<AllWallets>(context),
-                    budgetRange.start,
-                    budgetRange.end,
-                    widget.budget.categoryFks,
-                    widget.budget.categoryFksExclude,
-                    widget.budget.budgetTransactionFilters,
-                    widget.budget.memberTransactionFilters,
+                    allWallets: Provider.of<AllWallets>(context),
+                    start: budgetRange.start,
+                    end: budgetRange.end,
+                    categoryFks: widget.budget.categoryFks,
+                    categoryFksExclude: widget.budget.categoryFksExclude,
+                    budgetTransactionFilters:
+                        widget.budget.budgetTransactionFilters,
+                    memberTransactionFilters:
+                        widget.budget.memberTransactionFilters,
                     member: selectedMember,
                     onlyShowTransactionsBelongingToBudgetPk:
                         widget.budget.sharedKey != null ||
@@ -276,13 +278,15 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                   return StreamBuilder<List<CategoryWithTotal>>(
                     stream: database
                         .watchTotalSpentInEachCategoryInTimeRangeFromCategories(
-                      Provider.of<AllWallets>(context),
-                      budgetRange.start,
-                      budgetRange.end,
-                      widget.budget.categoryFks,
-                      widget.budget.categoryFksExclude,
-                      widget.budget.budgetTransactionFilters,
-                      widget.budget.memberTransactionFilters,
+                      allWallets: Provider.of<AllWallets>(context),
+                      start: budgetRange.start,
+                      end: budgetRange.end,
+                      categoryFks: widget.budget.categoryFks,
+                      categoryFksExclude: widget.budget.categoryFksExclude,
+                      budgetTransactionFilters:
+                          widget.budget.budgetTransactionFilters,
+                      memberTransactionFilters:
+                          widget.budget.memberTransactionFilters,
                       member: selectedMember,
                       onlyShowTransactionsBelongingToBudgetPk:
                           widget.budget.sharedKey != null ||
@@ -616,13 +620,15 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                     return StreamBuilder<List<CategoryWithTotal>>(
                       stream: database
                           .watchTotalSpentInEachCategoryInTimeRangeFromCategories(
-                        Provider.of<AllWallets>(context),
-                        budgetRange.start,
-                        budgetRange.end,
-                        widget.budget.categoryFks,
-                        widget.budget.categoryFksExclude,
-                        widget.budget.budgetTransactionFilters,
-                        widget.budget.memberTransactionFilters,
+                        allWallets: Provider.of<AllWallets>(context),
+                        start: budgetRange.start,
+                        end: budgetRange.end,
+                        categoryFks: widget.budget.categoryFks,
+                        categoryFksExclude: widget.budget.categoryFksExclude,
+                        budgetTransactionFilters:
+                            widget.budget.budgetTransactionFilters,
+                        memberTransactionFilters:
+                            widget.budget.memberTransactionFilters,
                         member: selectedMember,
                         onlyShowTransactionsBelongingToBudgetPk:
                             widget.budget.sharedKey != null ||
@@ -702,6 +708,7 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
           ),
           SelectedTransactionsActionBar(
             pageID: pageId,
+            colorScheme: budgetColorScheme,
           ),
         ],
       ),

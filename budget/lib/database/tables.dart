@@ -84,16 +84,20 @@ enum BudgetTransactionFilters {
   includeIncome, //disabled by default (as set by the function below: isFilterSelectedWithDefaults -> offByDefault)
   includeDebtAndCredit, //disabled by default (as set by the function below:isFilterSelectedWithDefaults ->  offByDefault)
   addedToObjective,
+  defaultBudgetTransactionFilters, //if default is in the list, use the default behavior
 }
 
 bool isFilterSelectedWithDefaults(
     List<BudgetTransactionFilters>? filters, BudgetTransactionFilters filter) {
+  if (filters == null) return true;
+
   List<BudgetTransactionFilters> offByDefault = [
     BudgetTransactionFilters.includeIncome,
     BudgetTransactionFilters.includeDebtAndCredit
   ];
 
-  if (filters == null) {
+  if (filters
+      .contains(BudgetTransactionFilters.defaultBudgetTransactionFilters)) {
     if (offByDefault.contains(filter)) {
       return false;
     }
@@ -800,6 +804,23 @@ class FinanceDatabase extends _$FinanceDatabase {
             } catch (e) {
               print("Migration Error: Error deleting includeAllCategories");
             }
+            try {
+              List<Budget> allBudgets = await getAllBudgets();
+              List<Budget> budgetsInserting = [];
+              for (Budget budget in allBudgets) {
+                if (budget.budgetTransactionFilters == null &&
+                    budget.addedTransactionsOnly == false) {
+                  budgetsInserting.add(budget.copyWith(
+                      budgetTransactionFilters: Value([
+                    BudgetTransactionFilters.defaultBudgetTransactionFilters
+                  ])));
+                }
+              }
+              await createOrUpdateBatchBudgetsOnly(budgetsInserting);
+            } catch (e) {
+              print(
+                  "Migration Error: Error upgrading transaction filters default for budgets");
+            }
           },
         )(migrator, from, to);
       },
@@ -909,6 +930,7 @@ class FinanceDatabase extends _$FinanceDatabase {
     required List<String>? memberTransactionFilters,
     String? member,
     String? onlyShowTransactionsBelongingToBudgetPk,
+    String? onlyShowTransactionsBelongingToObjectivePk,
     SearchFilters? searchFilters,
   }) {
     JoinedSelectStatement<HasResultSet, dynamic> query;
@@ -927,6 +949,8 @@ class FinanceDatabase extends _$FinanceDatabase {
                 onlyShowIfMember(tbl, member) &
                 onlyShowIfCertainBudget(
                     tbl, onlyShowTransactionsBelongingToBudgetPk) &
+                onlyShowIfCertainObjective(
+                    transactions, onlyShowTransactionsBelongingToObjectivePk) &
                 onlyShowTransactionBasedOnSearchQuery(transactions, search,
                     withCategories: true);
           })
@@ -986,6 +1010,7 @@ class FinanceDatabase extends _$FinanceDatabase {
     required List<String>? memberTransactionFilters,
     String? member,
     String? onlyShowTransactionsBelongingToBudgetPk,
+    String? onlyShowTransactionsBelongingToObjectivePk,
     Budget? budget,
     int? limit,
     SearchFilters? searchFilters,
@@ -1003,20 +1028,24 @@ class FinanceDatabase extends _$FinanceDatabase {
       ..orderBy(limit == null
           ? [OrderingTerm.asc(transactions.dateCreated)]
           : [OrderingTerm.desc(transactions.dateCreated)])
-      ..where(onlyShowTransactionBasedOnSearchQuery(transactions, search,
-              withCategories: true) &
-          onlyShowIfFollowsSearchFilters(transactions, searchFilters) &
-          onlyShowIfFollowsFilters(transactions,
-              budgetTransactionFilters: budgetTransactionFilters,
-              memberTransactionFilters: memberTransactionFilters) &
-          onlyShowBasedOnTimeRange(transactions, startDate, endDate, budget) &
-          onlyShowBasedOnCategoryFks(
-              transactions, categoryFks, categoryFksExclude) &
-          onlyShowBasedOnWalletFks(transactions, walletFks) &
-          onlyShowBasedOnIncome(transactions, income) &
-          onlyShowIfMember(transactions, member) &
-          onlyShowIfCertainBudget(
-              transactions, onlyShowTransactionsBelongingToBudgetPk))
+      ..where(
+        onlyShowTransactionBasedOnSearchQuery(transactions, search,
+                withCategories: true) &
+            onlyShowIfFollowsSearchFilters(transactions, searchFilters) &
+            onlyShowIfFollowsFilters(transactions,
+                budgetTransactionFilters: budgetTransactionFilters,
+                memberTransactionFilters: memberTransactionFilters) &
+            onlyShowBasedOnTimeRange(transactions, startDate, endDate, budget) &
+            onlyShowBasedOnCategoryFks(
+                transactions, categoryFks, categoryFksExclude) &
+            onlyShowBasedOnWalletFks(transactions, walletFks) &
+            onlyShowBasedOnIncome(transactions, income) &
+            onlyShowIfMember(transactions, member) &
+            onlyShowIfCertainBudget(
+                transactions, onlyShowTransactionsBelongingToBudgetPk) &
+            onlyShowIfCertainObjective(
+                transactions, onlyShowTransactionsBelongingToObjectivePk),
+      )
       ..addColumns([transactions.dateCreated])
       ..where(transactions.dateCreated.isNotNull())
       ..limit(limit ?? DEFAULT_LIMIT, offset: null);
@@ -2467,7 +2496,7 @@ class FinanceDatabase extends _$FinanceDatabase {
                   syncLog.transactionDateTime ?? DateTime.now(),
                 ),
           );
-          batch.insert(scannerTemplates, syncLog.itemToUpdate,
+          batch.insert(objectives, syncLog.itemToUpdate,
               mode: InsertMode.insertOrIgnore);
         }
       }
@@ -2514,14 +2543,15 @@ class FinanceDatabase extends _$FinanceDatabase {
   //   return true;
   // }
 
-  // Future<bool> createOrUpdateBatchBudgetsOnly(
-  //     List<Budget> budgetsInserting) async {
-  //   await batch((batch) {
-  //     batch.insertAll(budgets, budgetsInserting,
-  //         mode: InsertMode.insertOrReplace);
-  //   });
-  //   return true;
-  // }
+  // This doesn't handle order of budgets!
+  Future<bool> createOrUpdateBatchBudgetsOnly(
+      List<Budget> budgetsInserting) async {
+    await batch((batch) {
+      batch.insertAll(budgets, budgetsInserting,
+          mode: InsertMode.insertOrReplace);
+    });
+    return true;
+  }
 
   // Future<bool> createOrUpdateBatchCategoryLimitsOnly(
   //     List<CategoryBudgetLimit> limitsInserting) async {
@@ -2977,6 +3007,11 @@ class FinanceDatabase extends _$FinanceDatabase {
                   ? b.sharedKey.isNotNull()
                   : b.sharedKey.isNull())))
           ..orderBy([(c) => OrderingTerm.asc(c.order)]))
+        .get();
+  }
+
+  Future<List<Objective>> getAllObjectives() {
+    return (select(objectives)..orderBy([(c) => OrderingTerm.asc(c.order)]))
         .get();
   }
 
@@ -3484,15 +3519,25 @@ class FinanceDatabase extends _$FinanceDatabase {
     return query.map((row) => row.read(totalAmt)).watchSingleOrNull();
   }
 
-  Stream<double?> watchTotalTowardsObjective(String objectivePk) {
-    final totalAmt = transactions.amount.sum();
-    JoinedSelectStatement<$TransactionsTable, Transaction> query;
+  Stream<double?> watchTotalTowardsObjective(
+      AllWallets allWallets, String objectivePk) {
+    List<Stream<double?>> mergedStreams = [];
+    for (TransactionWallet wallet in allWallets.list) {
+      final totalAmt = transactions.amount.sum();
+      JoinedSelectStatement<$TransactionsTable, Transaction> query;
 
-    query = selectOnly(transactions)
-      ..addColumns([totalAmt])
-      ..where(transactions.objectiveFk.equals(objectivePk));
+      query = selectOnly(transactions)
+        ..addColumns([totalAmt])
+        ..where(transactions.objectiveFk.equals(objectivePk) &
+            transactions.walletFk.equals(wallet.walletPk));
 
-    return query.map((row) => row.read(totalAmt)).watchSingleOrNull();
+      mergedStreams.add(query
+          .map(((row) =>
+              (row.read(totalAmt) ?? 0) *
+              (amountRatioToPrimaryCurrency(allWallets, wallet.currency) ?? 0)))
+          .watchSingle());
+    }
+    return totalDoubleStream(mergedStreams);
   }
 
   Stream<double?> watchTotalSpentGivenList(
@@ -3520,14 +3565,14 @@ class FinanceDatabase extends _$FinanceDatabase {
 
   // get total amount spent in each day
   Stream<double?> watchTotalSpentInTimeRangeFromCategories(
-      AllWallets allWallets,
-      DateTime start,
-      DateTime end,
-      List<String>? categoryFks,
-      List<String>? categoryFksExclude,
-      List<BudgetTransactionFilters>? budgetTransactionFilters,
-      List<String>? memberTransactionFilters,
-      {bool allCashFlow = false,
+      {required AllWallets allWallets,
+      required DateTime start,
+      required DateTime end,
+      required List<String>? categoryFks,
+      required List<String>? categoryFksExclude,
+      required List<BudgetTransactionFilters>? budgetTransactionFilters,
+      required List<String>? memberTransactionFilters,
+      bool allCashFlow = false,
       String? onlyShowTransactionsBelongingToBudgetPk,
       Budget? budget}) {
     DateTime startDate = DateTime(start.year, start.month, start.day);
@@ -3626,6 +3671,7 @@ class FinanceDatabase extends _$FinanceDatabase {
                     true
                 ? tbl.sharedKey.isNotNull()
                 : Constant(false);
+
     Expression<bool> includeAdded = searchFilters
                 .budgetTransactionFilters.length <=
             0
@@ -3691,55 +3737,60 @@ class FinanceDatabase extends _$FinanceDatabase {
         : (tbl.sharedKey.isNotNull() &
                 tbl.transactionOwnerEmail.isIn(memberTransactionFilters) |
             tbl.sharedKey.isNull());
-    Expression<bool> includeShared = budgetTransactionFilters == null
-        ? Constant(true)
-        : budgetTransactionFilters
-                    .contains(BudgetTransactionFilters.sharedToOtherBudget) ==
-                false
-            ? tbl.sharedKey.isNull()
-            : Constant(true);
-    Expression<bool> includeAdded = budgetTransactionFilters == null
-        ? Constant(true)
-        : budgetTransactionFilters
-                    .contains(BudgetTransactionFilters.addedToOtherBudget) ==
-                false
-            ? tbl.sharedReferenceBudgetPk.isNull() | tbl.sharedKey.isNotNull()
-            : Constant(true);
 
-    Expression<bool> includeIncome = budgetTransactionFilters == null
-        ? Constant(true)
-        : budgetTransactionFilters
-                    .contains(BudgetTransactionFilters.includeIncome) ==
-                false
-            ? tbl.income.equals(false)
-            : Constant(true);
+    Expression<bool> includeShared = budgetTransactionFilters
+                ?.contains(BudgetTransactionFilters.sharedToOtherBudget) ==
+            false
+        ? Constant(
+              isFilterSelectedWithDefaults(budgetTransactionFilters,
+                  BudgetTransactionFilters.sharedToOtherBudget),
+            ) |
+            (tbl.sharedKey.isNull())
+        : Constant(true);
 
-    Expression<bool> includeDebtAndCredit = budgetTransactionFilters == null
-        ? Constant(true)
-        : budgetTransactionFilters
-                    .contains(BudgetTransactionFilters.includeDebtAndCredit) ==
-                false
-            ? tbl.type.isNotIn([
+    Expression<bool> includeAdded = budgetTransactionFilters
+                ?.contains(BudgetTransactionFilters.addedToOtherBudget) ==
+            false
+        ? Constant(
+              isFilterSelectedWithDefaults(budgetTransactionFilters,
+                  BudgetTransactionFilters.addedToOtherBudget),
+            ) |
+            (tbl.sharedReferenceBudgetPk.isNull() | tbl.sharedKey.isNotNull())
+        : Constant(true);
+
+    Expression<bool> includeIncome = budgetTransactionFilters
+                ?.contains(BudgetTransactionFilters.includeIncome) ==
+            false
+        ? Constant(
+              isFilterSelectedWithDefaults(budgetTransactionFilters,
+                  BudgetTransactionFilters.includeIncome),
+            ) |
+            (tbl.income.equals(false))
+        : Constant(true);
+
+    Expression<bool> includeDebtAndCredit = budgetTransactionFilters
+                ?.contains(BudgetTransactionFilters.includeDebtAndCredit) ==
+            false
+        ? Constant(
+              isFilterSelectedWithDefaults(budgetTransactionFilters,
+                  BudgetTransactionFilters.includeDebtAndCredit),
+            ) |
+            (tbl.type.isNotIn([
                   TransactionSpecialType.credit.index,
                   TransactionSpecialType.debt.index
                 ]) |
-                tbl.type.isNull()
-            : Constant(true);
+                tbl.type.isNull())
+        : Constant(true);
 
-    Expression<bool> includeAddedToObjective = budgetTransactionFilters == null
-        ? Constant(true)
-        : budgetTransactionFilters
-                    .contains(BudgetTransactionFilters.addedToObjective) ==
-                false
-            ? tbl.objectiveFk.isNull()
-            : Constant(true);
-
-    // Don't show debt/credit in budgets
-    // Expression<bool> hideDebtCredit = budgetTransactionFilters == null
-    //     ? Constant(true)
-    //     : tbl.type.isNotValue(TransactionSpecialType.credit.index) &
-    //         tbl.type.isNotValue(TransactionSpecialType.debt.index);
-    // We now allow this
+    Expression<bool> includeAddedToObjective = budgetTransactionFilters
+                ?.contains(BudgetTransactionFilters.addedToObjective) ==
+            false
+        ? Constant(
+              isFilterSelectedWithDefaults(budgetTransactionFilters,
+                  BudgetTransactionFilters.addedToObjective),
+            ) |
+            (tbl.objectiveFk.isNull())
+        : Constant(true);
 
     return memberIncluded &
         includeShared &
@@ -3747,18 +3798,6 @@ class FinanceDatabase extends _$FinanceDatabase {
         includeIncome &
         includeDebtAndCredit &
         includeAddedToObjective;
-    // ? (tbl.sharedReferenceBudgetPk.isNull())
-    //             : (sharedTransactionsShow ==
-    //                     SharedTransactionsShow.onlyIfNotShared)
-    //                 ? (tbl.sharedKey.isNull())
-    //                 : (sharedTransactionsShow ==
-    //                         SharedTransactionsShow.onlyIfOwnerIfShared)
-    //                     ? (tbl.sharedReferenceBudgetPk.isNotNull() &
-    //                         tbl.sharedKey.isNotNull() &
-    //                         tbl.transactionOwnerEmail.equals(
-    //                             appStateSettings["currentUserEmail"]))
-    //                     : tbl.sharedKey.isNotNull() |
-    //                         tbl.sharedKey.isNull());
   }
 
   Stream<double?> watchTotalSpentByCurrentUserOnly(
@@ -3960,18 +3999,25 @@ class FinanceDatabase extends _$FinanceDatabase {
         : Constant(true));
   }
 
+  Expression<bool> onlyShowIfCertainObjective(
+      $TransactionsTable tbl, String? objectivePk) {
+    return (objectivePk != null
+        ? tbl.objectiveFk.equals(objectivePk)
+        : Constant(true));
+  }
+
   // The total amount of that category will always be that last column
   // print(snapshot.data![0].rawData.data["transactions.category_fk"]);
   // print(snapshot.data![0].rawData.data["c" + (snapshot.data![0].rawData.data.length).toString()]);
   Stream<List<CategoryWithTotal>>
-      watchTotalSpentInEachCategoryInTimeRangeFromCategories(
-    AllWallets allWallets,
-    DateTime start,
-    DateTime end,
-    List<String>? categoryFks,
-    List<String>? categoryFksExclude,
-    List<BudgetTransactionFilters>? budgetTransactionFilters,
-    List<String>? memberTransactionFilters, {
+      watchTotalSpentInEachCategoryInTimeRangeFromCategories({
+    required AllWallets allWallets,
+    required DateTime start,
+    required DateTime end,
+    required List<String>? categoryFks,
+    required List<String>? categoryFksExclude,
+    required List<BudgetTransactionFilters>? budgetTransactionFilters,
+    required List<String>? memberTransactionFilters,
     String? member,
     String? onlyShowTransactionsBelongingToBudgetPk,
     Budget? budget,
@@ -4420,6 +4466,7 @@ class FinanceDatabase extends _$FinanceDatabase {
     streamGroup.add(select(budgets).watch());
     streamGroup.add(select(categoryBudgetLimits).watch());
     streamGroup.add(select(associatedTitles).watch());
+    streamGroup.add(select(objectives).watch());
     streamGroup.add(select(scannerTemplates).watch());
     return streamGroup.stream;
   }

@@ -65,7 +65,7 @@ class _EditHomePageState extends State<EditHomePage> {
             icon: appStateSettings["outlinedIcons"]
                 ? Icons.account_balance_wallet_outlined
                 : Icons.account_balance_wallet_rounded,
-            name: "wallets".tr(),
+            name: "accounts".tr(),
             isEnabled: appStateSettings["showWalletSwitcher"],
             onSwitched: (value) {
               updateSettings("showWalletSwitcher", value,

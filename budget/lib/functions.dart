@@ -31,16 +31,19 @@ extension CapExtension on String {
       .join(" ");
 }
 
-String convertToPercent(double amount, [double? finalNumber]) {
-  int numberDecimals = finalNumber == null
-      ? getDecimalPlaces(amount) > 2
-          ? 2
-          : getDecimalPlaces(amount)
-      : getDecimalPlaces(finalNumber) > 2
-          ? 2
-          : getDecimalPlaces(finalNumber);
+String convertToPercent(double amount,
+    {double? finalNumber, int? numberDecimals}) {
+  int numberDecimalsGet = numberDecimals != null
+      ? numberDecimals
+      : finalNumber == null
+          ? getDecimalPlaces(amount) > 2
+              ? 2
+              : getDecimalPlaces(amount)
+          : getDecimalPlaces(finalNumber) > 2
+              ? 2
+              : getDecimalPlaces(finalNumber);
 
-  String roundedAmount = amount.toStringAsFixed(numberDecimals);
+  String roundedAmount = amount.toStringAsFixed(numberDecimalsGet);
 
   return roundedAmount + "%";
 }

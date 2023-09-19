@@ -369,7 +369,7 @@ Future<int> downloadTransactionsFromBudgets(
           budgetDecoded["ownerEmail"],
           ...List<String>.from(budgetDecoded["members"]),
         ],
-        budgetTransactionFilters: null,
+        budgetTransactionFilters: [],
         memberTransactionFilters: null,
         isAbsoluteSpendingLimit: false,
       ),

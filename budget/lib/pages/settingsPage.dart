@@ -119,13 +119,13 @@ class MorePages extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool hasSideNavigation = getIsFullScreen(context) == false;
+    bool hasSideNavigation = getIsFullScreen(context);
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 4),
       child: Column(
         children: [
-          hasSideNavigation == false
+          hasSideNavigation
               ? SizedBox.shrink()
               : Row(
                   children: [
@@ -179,7 +179,7 @@ class MorePages extends StatelessWidget {
               ),
             ],
           ),
-          hasSideNavigation == false
+          hasSideNavigation
               ? SizedBox.shrink()
               : Row(
                   mainAxisSize: MainAxisSize.min,
@@ -199,7 +199,7 @@ class MorePages extends StatelessWidget {
                     Expanded(child: GoogleAccountLoginButton()),
                   ],
                 ),
-          hasSideNavigation == false
+          hasSideNavigation
               ? SizedBox.shrink()
               : Row(
                   mainAxisSize: MainAxisSize.min,
@@ -226,7 +226,7 @@ class MorePages extends StatelessWidget {
                     ),
                   ],
                 ),
-          hasSideNavigation == false
+          hasSideNavigation
               ? SizedBox.shrink()
               : Row(
                   mainAxisSize: MainAxisSize.min,
@@ -252,7 +252,17 @@ class MorePages extends StatelessWidget {
                     ),
                   ],
                 ),
-          hasSideNavigation == false
+          hasSideNavigation
+              ? SizedBox.shrink()
+              : SettingsContainerOpenPage(
+                  openPage: ObjectivesListPage(),
+                  title: "spending-and-savings-goals".tr(),
+                  icon: appStateSettings["outlinedIcons"]
+                      ? Icons.savings_outlined
+                      : Icons.savings_rounded,
+                  isOutlined: true,
+                ),
+          hasSideNavigation
               ? SizedBox.shrink()
               : Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -262,7 +272,7 @@ class MorePages extends StatelessWidget {
                       child: SettingsContainerOpenPage(
                         isOutlinedColumn: true,
                         openPage: EditWalletsPage(),
-                        title: "wallets".tr(),
+                        title: "accounts".tr(),
                         icon: appStateSettings["outlinedIcons"]
                             ? Icons.account_balance_wallet_outlined
                             : Icons.account_balance_wallet_rounded,
@@ -306,17 +316,7 @@ class MorePages extends StatelessWidget {
                     )
                   ],
                 ),
-          kDebugMode
-              ? SettingsContainerOpenPage(
-                  openPage: ObjectivesListPage(),
-                  title: "objectives & savings jars".tr(),
-                  icon: appStateSettings["outlinedIcons"]
-                      ? Icons.savings_outlined
-                      : Icons.savings_rounded,
-                  isOutlined: true,
-                )
-              : SizedBox.shrink(),
-          hasSideNavigation ? SizedBox.shrink() : SettingsPageContent(),
+          hasSideNavigation ? SettingsPageContent() : SizedBox.shrink(),
         ],
       ),
     );

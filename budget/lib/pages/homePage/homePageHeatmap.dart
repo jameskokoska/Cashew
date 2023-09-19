@@ -481,13 +481,13 @@ Future<dynamic> openTransactionsOnDayBottomSheet(
       hasPadding: false,
       customSubtitleWidget: StreamBuilder<double?>(
         stream: database.watchTotalSpentInTimeRangeFromCategories(
-          Provider.of<AllWallets>(context, listen: false),
-          day ?? DateTime.now(),
-          day ?? DateTime.now(),
-          null,
-          null,
-          null,
-          null,
+          allWallets: Provider.of<AllWallets>(context, listen: false),
+          start: day ?? DateTime.now(),
+          end: day ?? DateTime.now(),
+          categoryFks: null,
+          categoryFksExclude: null,
+          budgetTransactionFilters: [],
+          memberTransactionFilters: null,
           allCashFlow: true,
         ),
         builder: (context, snapshot) {

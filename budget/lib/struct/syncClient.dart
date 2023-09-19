@@ -413,6 +413,7 @@ Future<bool> syncData(BuildContext context) async {
       );
       filesSyncing.remove(file);
       await databaseSync.close();
+      loadingProgressKey.currentState!.setProgressPercentage(1);
       return false;
     }
 
@@ -422,7 +423,6 @@ Future<bool> syncData(BuildContext context) async {
 
     await databaseSync.close();
   }
-  loadingProgressKey.currentState!.setProgressPercentage(1);
 
   await database.processSyncLogs(syncLogs);
   for (drive.File file in filesSyncing)
@@ -443,6 +443,12 @@ Future<bool> syncData(BuildContext context) async {
     pagesNeedingRefresh: [],
     updateGlobalState: getIsFullScreen(context) ? true : false,
   );
+
+  loadingProgressKey.currentState!.setProgressPercentage(0.999);
+
+  Future.delayed(Duration(milliseconds: 300), () {
+    loadingProgressKey.currentState!.setProgressPercentage(1);
+  });
 
   print("DONE SYNCING");
   return true;

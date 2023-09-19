@@ -63,6 +63,8 @@ Future deletePreviewData({bool resetOnboard = false}) async {
 
   await database.deleteAllDeleteLogs();
 
+  await createDefaultCategories();
+
   loadingIndeterminateKey.currentState?.setVisibility(false);
   updateSettings("previewDemo", false, updateGlobalState: false);
 }
@@ -74,7 +76,7 @@ Future generatePreviewData() async {
   await database.createOrUpdateWallet(
     TransactionWallet(
       walletPk: "0",
-      name: "Wallet",
+      name: "Bank",
       colour: null,
       iconName: null,
       dateCreated: DateTime.now(),

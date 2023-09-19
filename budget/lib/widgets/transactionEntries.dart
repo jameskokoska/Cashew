@@ -36,6 +36,7 @@ class TransactionEntries extends StatelessWidget {
     this.memberTransactionFilters,
     this.member,
     this.onlyShowTransactionsBelongingToBudgetPk,
+    this.onlyShowTransactionsBelongingToObjectivePk,
     this.simpleListRender = false,
     this.budget,
     this.dateDividerColor,
@@ -69,6 +70,7 @@ class TransactionEntries extends StatelessWidget {
   final List<String>? memberTransactionFilters;
   final String? member;
   final String? onlyShowTransactionsBelongingToBudgetPk;
+  final String? onlyShowTransactionsBelongingToObjectivePk;
   final bool simpleListRender;
   final Budget? budget;
   final Color? dateDividerColor;
@@ -102,6 +104,8 @@ class TransactionEntries extends StatelessWidget {
         member: member,
         onlyShowTransactionsBelongingToBudgetPk:
             onlyShowTransactionsBelongingToBudgetPk,
+        onlyShowTransactionsBelongingToObjectivePk:
+            onlyShowTransactionsBelongingToObjectivePk,
         budget: budget,
         limit: limit,
         searchFilters: searchFilters,
@@ -166,6 +170,8 @@ class TransactionEntries extends StatelessWidget {
                   member: member,
                   onlyShowTransactionsBelongingToBudgetPk:
                       onlyShowTransactionsBelongingToBudgetPk,
+                  onlyShowTransactionsBelongingToObjectivePk:
+                      onlyShowTransactionsBelongingToObjectivePk,
                   searchFilters: searchFilters,
                 ),
                 builder: (context, snapshot) {

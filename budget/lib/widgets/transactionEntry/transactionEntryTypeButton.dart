@@ -1,15 +1,75 @@
 import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
+import 'package:budget/functions.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/struct/upcomingTransactionsFunctions.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:easy_localization/src/public_ext.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/src/material/colors.dart';
 import 'package:flutter/src/material/theme.dart';
 import 'package:flutter/src/widgets/basic.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+
+class TransactionEntryActionButton extends StatelessWidget {
+  const TransactionEntryActionButton(
+      {required this.transaction,
+      required this.iconColor,
+      this.containerColor,
+      super.key});
+  final Transaction transaction;
+  final Color iconColor;
+  final Color? containerColor;
+
+  @override
+  Widget build(BuildContext context) {
+    return Tooltip(
+      message: getTransactionActionNameFromType(transaction),
+      child: GestureDetector(
+        onTap: () {
+          openTransactionActionFromType(context, transaction);
+        },
+        child: Padding(
+          padding: const EdgeInsets.only(
+            left: 6,
+            top: 5.5,
+            bottom: 5.5,
+            right: 6,
+          ),
+          child: Transform.scale(
+            scale: isTransactionActionDealtWith(transaction) ? 0.92 : 1,
+            child: Tappable(
+              color: !isTransactionActionDealtWith(transaction)
+                  ? Theme.of(context)
+                      .colorScheme
+                      .secondaryContainer
+                      .withOpacity(0.6)
+                  : iconColor.withOpacity(0.7),
+              onTap: () {
+                openTransactionActionFromType(context, transaction);
+              },
+              borderRadius: 100,
+              child: Padding(
+                padding: const EdgeInsets.all(6),
+                child: Icon(
+                  getTransactionTypeIcon(transaction.type),
+                  color: isTransactionActionDealtWith(transaction)
+                      ? (containerColor == null
+                          ? Theme.of(context).canvasColor
+                          : containerColor)
+                      : iconColor.withOpacity(0.8),
+                  size: 23,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
 
 class TransactionEntryTypeButton extends StatelessWidget {
   const TransactionEntryTypeButton({required this.transaction, super.key});

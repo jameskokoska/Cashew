@@ -250,7 +250,8 @@ class _AddWalletPageState extends State<AddWalletPage> {
         child: PageFramework(
           resizeToAvoidBottomInset: true,
           dragDownToDismiss: true,
-          title: widget.wallet == null ? "add-wallet".tr() : "edit-wallet".tr(),
+          title:
+              widget.wallet == null ? "add-account".tr() : "edit-account".tr(),
           onBackButton: () async {
             if (widget.wallet != null) {
               discardChangesPopup(
@@ -303,7 +304,7 @@ class _AddWalletPageState extends State<AddWalletPage> {
                 ? [
                     IconButton(
                       padding: EdgeInsets.all(15),
-                      tooltip: "delete-wallet",
+                      tooltip: "delete-account".tr(),
                       onPressed: () {
                         deleteWalletPopup(
                           context,
@@ -333,7 +334,7 @@ class _AddWalletPageState extends State<AddWalletPage> {
                   )
                 : SaveBottomButton(
                     label: widget.wallet == null
-                        ? "add-wallet".tr()
+                        ? "add-account".tr()
                         : "save-changes".tr(),
                     onTap: () async {
                       await addWallet();
@@ -425,7 +426,7 @@ class _AddWalletPageState extends State<AddWalletPage> {
                         icon: appStateSettings["outlinedIcons"]
                             ? Icons.merge_outlined
                             : Icons.merge_rounded,
-                        label: "merge-wallet".tr(),
+                        label: "merge-account".tr(),
                         onTap: () async {
                           if (widget.wallet != null)
                             mergeWalletPopup(

@@ -21,8 +21,14 @@ Future<bool> initializeDefaultDatabase() async {
 
 Future<bool> createDefaultCategories() async {
   for (TransactionCategory category in defaultCategories()) {
-    await database.createOrUpdateCategory(category,
-        customDateTimeModified: DateTime(0));
+    try {
+      await database.getCategory(category.categoryPk).$2;
+    } catch (e) {
+      print(
+          e.toString() + " default category does not already exist, creating");
+      await database.createOrUpdateCategory(category,
+          customDateTimeModified: DateTime(0));
+    }
   }
   return true;
 }
@@ -30,7 +36,7 @@ Future<bool> createDefaultCategories() async {
 TransactionWallet defaultWallet() {
   return TransactionWallet(
     walletPk: "0",
-    name: "default-wallet-name".tr(),
+    name: "default-account-name".tr(),
     dateCreated: DateTime.now(),
     order: 0,
     currency: getDevicesDefaultCurrencyCode(),

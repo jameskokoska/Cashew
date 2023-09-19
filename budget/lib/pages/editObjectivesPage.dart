@@ -66,14 +66,14 @@ class _EditObjectivesPageState extends State<EditObjectivesPage> {
         horizontalPadding: getHorizontalPaddingConstrained(context),
         dragDownToDismiss: true,
         dragDownToDismissEnabled: dragDownToDismissEnabled,
-        title: "objectives".tr(),
+        title: "goals".tr(),
         scrollToTopButton: true,
         floatingActionButton: AnimateFABDelayed(
           fab: Padding(
             padding: EdgeInsets.only(
                 bottom: MediaQuery.of(context).viewPadding.bottom),
             child: FAB(
-              tooltip: "add-objective".tr(),
+              tooltip: "add-goal".tr(),
               openPage: AddObjectivePage(
                 routesToPopAfterDelete: RoutesToPopAfterDelete.None,
               ),
@@ -83,7 +83,7 @@ class _EditObjectivesPageState extends State<EditObjectivesPage> {
         actions: [
           IconButton(
             padding: EdgeInsets.all(15),
-            tooltip: "add-objective".tr(),
+            tooltip: "add-goal".tr(),
             onPressed: () {
               pushRoute(
                 context,
@@ -102,7 +102,7 @@ class _EditObjectivesPageState extends State<EditObjectivesPage> {
             child: Padding(
               padding: const EdgeInsets.only(bottom: 8.0),
               child: TextInput(
-                labelText: "search-objectives-placeholder".tr(),
+                labelText: "search-goals-placeholder".tr(),
                 icon: appStateSettings["outlinedIcons"]
                     ? Icons.search_outlined
                     : Icons.search_rounded,
@@ -127,7 +127,7 @@ class _EditObjectivesPageState extends State<EditObjectivesPage> {
               if (snapshot.hasData && (snapshot.data ?? []).length <= 0) {
                 return SliverToBoxAdapter(
                   child: NoResults(
-                    message: "no-objectives-found".tr(),
+                    message: "no-goals-found".tr(),
                   ),
                 );
               }
@@ -285,7 +285,7 @@ Future<DeletePopupAction?> deleteObjectivePopup(
 }) async {
   DeletePopupAction? action = await openDeletePopup(
     context,
-    title: "delete-objective-question".tr(),
+    title: "delete-goal-question".tr(),
     subtitle: objective.name,
   );
   if (action == DeletePopupAction.Delete) {
@@ -296,8 +296,8 @@ Future<DeletePopupAction?> deleteObjectivePopup(
     if (numTransactions != null && numTransactions > 0) {
       result = await openPopup(
         context,
-        title: "remove-transactions-from-objective-question".tr(),
-        description: "delete-objective-warning".tr(),
+        title: "remove-transactions-from-goal-question".tr(),
+        description: "delete-goal-warning".tr(),
         icon: appStateSettings["outlinedIcons"]
             ? Icons.warning_amber_outlined
             : Icons.warning_amber_rounded,
@@ -308,7 +308,7 @@ Future<DeletePopupAction?> deleteObjectivePopup(
         onSubmit: () async {
           Navigator.pop(context, true);
         },
-        onSubmitLabel: "delete-objective".tr(),
+        onSubmitLabel: "delete-goal".tr(),
       );
     }
     if (result == true) {
@@ -321,7 +321,7 @@ Future<DeletePopupAction?> deleteObjectivePopup(
         await database.deleteObjective(context, objective);
         openSnackbar(
           SnackbarMessage(
-            title: "deleted-objective".tr(),
+            title: "deleted-goal".tr(),
             icon: Icons.delete,
             description: objective.name,
           ),

@@ -68,13 +68,13 @@ class _EditWalletsPageState extends State<EditWalletsPage> {
         dragDownToDismiss: true,
         dragDownToDismissEnabled: dragDownToDismissEnabled,
         scrollToTopButton: true,
-        title: "edit-wallets".tr(),
+        title: "edit-accounts".tr(),
         floatingActionButton: AnimateFABDelayed(
           fab: Padding(
             padding: EdgeInsets.only(
                 bottom: MediaQuery.of(context).viewPadding.bottom),
             child: FAB(
-              tooltip: "add-wallet".tr(),
+              tooltip: "add-account".tr(),
               openPage: AddWalletPage(
                 routesToPopAfterDelete: RoutesToPopAfterDelete.None,
               ),
@@ -84,7 +84,7 @@ class _EditWalletsPageState extends State<EditWalletsPage> {
         actions: [
           IconButton(
             padding: EdgeInsets.all(15),
-            tooltip: "add-wallet".tr(),
+            tooltip: "add-account".tr(),
             onPressed: () {
               pushRoute(
                 context,
@@ -103,7 +103,7 @@ class _EditWalletsPageState extends State<EditWalletsPage> {
             child: Padding(
               padding: const EdgeInsets.only(bottom: 8.0),
               child: TextInput(
-                labelText: "search-wallets-placeholder".tr(),
+                labelText: "search-accounts-placeholder".tr(),
                 icon: appStateSettings["outlinedIcons"]
                     ? Icons.search_outlined
                     : Icons.search_rounded,
@@ -140,7 +140,7 @@ class _EditWalletsPageState extends State<EditWalletsPage> {
               if (snapshot.hasData && (snapshot.data ?? []).length <= 0) {
                 return SliverToBoxAdapter(
                   child: NoResults(
-                    message: "no-wallets-found".tr(),
+                    message: "no-accounts-found".tr(),
                   ),
                 );
               }
@@ -291,9 +291,9 @@ Future<DeletePopupAction?> deleteWalletPopup(
 }) async {
   DeletePopupAction? action = await openDeletePopup(
     context,
-    title: "delete-wallet-question".tr(),
+    title: "delete-account-question".tr(),
     subtitle: wallet.name,
-    description: "delete-wallet-question-description".tr(),
+    description: "delete-account-question-description".tr(),
   );
   if (action == DeletePopupAction.Delete) {
     int transactionsFromWalletLength =
@@ -303,7 +303,7 @@ Future<DeletePopupAction?> deleteWalletPopup(
       result = await openPopup(
         context,
         title: "delete-all-transactions-question".tr(),
-        description: "delete-wallet-merge-warning".tr(),
+        description: "delete-account-merge-warning".tr(),
         icon: appStateSettings["outlinedIcons"]
             ? Icons.warning_amber_outlined
             : Icons.warning_amber_rounded,
@@ -336,7 +336,7 @@ Future<DeletePopupAction?> deleteWalletPopup(
         await database.deleteWallet(wallet.walletPk, wallet.order);
         openSnackbar(
           SnackbarMessage(
-            title: "deleted-wallet".tr(),
+            title: "deleted-account".tr(),
             icon: Icons.delete,
             description: wallet.name,
           ),
@@ -355,13 +355,13 @@ void mergeWalletPopup(
   var selectedWalletResult = await selectWalletPopup(
     context,
     removeWalletPk: walletOriginal.walletPk,
-    subtitle: "wallet-to-transfer-all-transactions-to".tr(),
+    subtitle: "account-to-transfer-all-transactions-to".tr(),
   );
   if (selectedWalletResult != null) {
     final result = await openPopup(
       context,
       title: "merge-into".tr() + " " + selectedWalletResult.name + "?",
-      description: "merge-into-description-wallets".tr(),
+      description: "merge-into-description-accounts".tr(),
       icon: appStateSettings["outlinedIcons"]
           ? Icons.merge_outlined
           : Icons.merge_rounded,
@@ -393,7 +393,7 @@ void mergeWalletPopup(
           openSnackbar(
             SnackbarMessage(
               title: "cannot-remove".tr(),
-              description: "cannot-remove-default-wallet".tr(),
+              description: "cannot-remove-default-account".tr(),
               icon: appStateSettings["outlinedIcons"]
                   ? Icons.warning_amber_outlined
                   : Icons.warning_amber_rounded,
@@ -402,7 +402,7 @@ void mergeWalletPopup(
         }
         openSnackbar(
           SnackbarMessage(
-            title: "merged-wallet".tr(),
+            title: "merged-account".tr(),
             icon: appStateSettings["outlinedIcons"]
                 ? Icons.merge_outlined
                 : Icons.merge_rounded,
@@ -420,7 +420,7 @@ Future<TransactionWallet?> selectWalletPopup(BuildContext context,
   dynamic wallet = await openBottomSheet(
     context,
     PopupFramework(
-      title: "select-wallet".tr(),
+      title: "select-account".tr(),
       subtitle: subtitle,
       child: StreamBuilder<List<TransactionWallet>>(
         stream: database.watchAllWallets(),
@@ -430,6 +430,12 @@ Future<TransactionWallet?> selectWalletPopup(BuildContext context,
             if (removeWalletPk != null)
               walletsWithoutOneDeleted.removeWhere(
                   (TransactionWallet w) => w.walletPk == removeWalletPk);
+            if (walletsWithoutOneDeleted.isEmpty) {
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 15),
+                child: NoResults(message: "no-accounts-found".tr()),
+              );
+            }
             return RadioItems(
               items: walletsWithoutOneDeleted,
               colorFilter: (TransactionWallet? wallet) {

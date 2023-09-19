@@ -317,10 +317,10 @@ class OutlinedButtonStacked extends StatelessWidget {
     return AnimatedSwitcher(
       duration: Duration(milliseconds: 250),
       child: Row(
+        key: ValueKey(filled),
         children: [
           Expanded(
             child: Tappable(
-              key: ValueKey(filled),
               onTap: onTap,
               borderRadius: 15,
               color: filled == true

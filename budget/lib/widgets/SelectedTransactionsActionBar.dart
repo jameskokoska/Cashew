@@ -30,13 +30,16 @@ import 'package:budget/widgets/countNumber.dart';
 import 'package:budget/widgets/framework/popupFramework.dart';
 
 class SelectedTransactionsActionBar extends StatelessWidget {
-  const SelectedTransactionsActionBar({Key? key, required this.pageID})
+  const SelectedTransactionsActionBar(
+      {Key? key, required this.pageID, this.colorScheme})
       : super(key: key);
 
   final String pageID;
+  final ColorScheme? colorScheme;
 
   @override
   Widget build(BuildContext context) {
+    ColorScheme colorScheme = this.colorScheme ?? Theme.of(context).colorScheme;
     return ValueListenableBuilder(
       valueListenable: globalSelectedID,
       builder: (context, value, widget) {
@@ -63,7 +66,7 @@ class SelectedTransactionsActionBar extends StatelessWidget {
                     //       getIsFullScreen(context) ? 20 : 10),
                     // ),
                     boxShadow: boxShadowCheck(boxShadowSharp(context)),
-                    color: Theme.of(context).colorScheme.secondaryContainer,
+                    color: colorScheme.secondaryContainer,
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -73,7 +76,7 @@ class SelectedTransactionsActionBar extends StatelessWidget {
                           children: [
                             IconButton(
                               padding: EdgeInsets.all(15),
-                              color: Theme.of(context).colorScheme.secondary,
+                              color: colorScheme.secondary,
                               icon: Icon(
                                 getPlatform() == PlatformOS.isIOS
                                     ? appStateSettings["outlinedIcons"]
@@ -82,7 +85,7 @@ class SelectedTransactionsActionBar extends StatelessWidget {
                                     : appStateSettings["outlinedIcons"]
                                         ? Icons.arrow_back_outlined
                                         : Icons.arrow_back_rounded,
-                                color: Theme.of(context).colorScheme.secondary,
+                                color: colorScheme.secondary,
                               ),
                               onPressed: () {
                                 globalSelectedID.value[pageID] = [];
@@ -275,8 +278,8 @@ class SelectedTransactionsActionBar extends StatelessWidget {
                             },
                           ),
                           DropdownItemMenu(
-                            id: "change-wallet",
-                            label: "change-wallet".tr(),
+                            id: "change-account",
+                            label: "change-account".tr(),
                             icon: appStateSettings["outlinedIcons"]
                                 ? Icons.account_balance_wallet_outlined
                                 : Icons.account_balance_wallet_rounded,
@@ -297,7 +300,7 @@ class SelectedTransactionsActionBar extends StatelessWidget {
                                   icon: appStateSettings["outlinedIcons"]
                                       ? Icons.account_balance_wallet_outlined
                                       : Icons.account_balance_wallet_rounded,
-                                  title: "changed-wallet".tr(),
+                                  title: "changed-account".tr(),
                                   description: "for".tr().capitalizeFirst +
                                       " " +
                                       transactions.length.toString() +
@@ -360,8 +363,8 @@ class SelectedTransactionsActionBar extends StatelessWidget {
                             },
                           ),
                           DropdownItemMenu(
-                            id: "add-to-objective",
-                            label: "add-to-objective".tr(),
+                            id: "add-to-goal",
+                            label: "add-to-goal".tr(),
                             iconScale: 0.85,
                             icon: appStateSettings["outlinedIcons"]
                                 ? Icons.savings_outlined
@@ -390,8 +393,8 @@ class SelectedTransactionsActionBar extends StatelessWidget {
                                       ? Icons.savings_outlined
                                       : Icons.savings_rounded,
                                   title: objective == "none"
-                                      ? "removed-from-objective".tr()
-                                      : "added-to-objective-action".tr(),
+                                      ? "removed-from-goal".tr()
+                                      : "added-to-goal-action".tr(),
                                   description: "for".tr().capitalizeFirst +
                                       " " +
                                       numberMoved.toString() +
@@ -412,10 +415,10 @@ class SelectedTransactionsActionBar extends StatelessWidget {
                           true)
                         IconButton(
                           padding: EdgeInsets.all(15),
-                          color: Theme.of(context).colorScheme.secondary,
+                          color: colorScheme.secondary,
                           icon: Icon(
                             Icons.edit,
-                            color: Theme.of(context).colorScheme.secondary,
+                            color: colorScheme.secondary,
                           ),
                           onPressed: () {
                             openPopupCustom(

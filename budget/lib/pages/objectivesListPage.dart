@@ -6,6 +6,7 @@ import 'package:budget/pages/addCategoryPage.dart';
 import 'package:budget/pages/addObjectivePage.dart';
 import 'package:budget/pages/editBudgetPage.dart';
 import 'package:budget/pages/editObjectivesPage.dart';
+import 'package:budget/pages/objectivePage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/budgetContainer.dart';
@@ -53,7 +54,7 @@ class ObjectivesListPageState extends State<ObjectivesListPage> {
 
     return PageFramework(
       dragDownToDismiss: true,
-      title: "objectives".tr(),
+      title: "goals".tr(),
       backButton: false,
       horizontalPadding: enableDoubleColumn(context) == false
           ? getHorizontalPaddingConstrained(context)
@@ -61,7 +62,7 @@ class ObjectivesListPageState extends State<ObjectivesListPage> {
       actions: [
         IconButton(
           padding: EdgeInsets.all(15),
-          tooltip: "edit-objectives".tr(),
+          tooltip: "edit-goals".tr(),
           onPressed: () {
             pushRoute(
               context,
@@ -167,6 +168,7 @@ class ObjectiveContainer extends StatelessWidget {
     double borderRadius = getPlatform() == PlatformOS.isIOS ? 0 : 18;
     return StreamBuilder<double?>(
       stream: database.watchTotalTowardsObjective(
+        Provider.of<AllWallets>(context),
         objective.objectivePk,
       ),
       builder: (context, snapshot) {
@@ -179,7 +181,7 @@ class ObjectiveContainer extends StatelessWidget {
         return Column(
           children: [
             OpenContainerNavigation(
-              openPage: Container(),
+              openPage: ObjectivePage(objectivePk: objective.objectivePk),
               borderRadius: borderRadius,
               closedColor: getStandardContainerColor(context),
               button: (openContainer()) {
@@ -318,7 +320,9 @@ class ObjectiveContainer extends StatelessWidget {
                                           Provider.of<AllWallets>(context),
                                           totalAmount),
                                       fontSize: 24,
-                                      textColor: getColor(context, "black"),
+                                      textColor: totalAmount >= objective.amount
+                                          ? getColor(context, "incomeAmount")
+                                          : getColor(context, "black"),
                                     ),
                                     Padding(
                                       padding:

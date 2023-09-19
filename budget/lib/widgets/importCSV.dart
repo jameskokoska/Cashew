@@ -161,8 +161,8 @@ class _ImportCSVState extends State<ImportCSV> {
           "setHeaderIndex": -1,
         },
         "wallet": {
-          "displayName": "wallet",
-          "headerValues": ["wallet"],
+          "displayName": "account",
+          "headerValues": ["wallet", "account"],
           "required": true,
           "setHeaderValue": "",
           "setHeaderIndex": -1,
@@ -416,7 +416,7 @@ class _ImportCSVState extends State<ImportCSV> {
                                       getLabel: (label) {
                                         if (label == "~Current Wallet~") {
                                           return "~" +
-                                              "current-wallet".tr() +
+                                              "current-account".tr() +
                                               "~";
                                         } else if (label == "~None~") {
                                           return "~" + "none".tr() + "~";

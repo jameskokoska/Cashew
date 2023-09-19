@@ -112,7 +112,9 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
   bool selectedPin = true;
   bool selectedShared = false;
   bool selectedAddedTransactionsOnly = false;
-  List<BudgetTransactionFilters>? selectedBudgetTransactionFilters = null;
+  List<BudgetTransactionFilters> selectedBudgetTransactionFilters = [
+    BudgetTransactionFilters.defaultBudgetTransactionFilters
+  ];
   List<String> allMembersOfAllBudgets = [];
   List<String>? selectedMemberTransactionFilters;
   FocusNode _titleFocusNode = FocusNode();
@@ -195,6 +197,12 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
     });
     determineBottomButton();
     return;
+  }
+
+  void setSelectedAmount(double amount, String amountStringCalculation) {
+    setState(() {
+      selectedAmount = amount;
+    });
   }
 
   Future addBudget() async {
@@ -290,12 +298,14 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
           widget.budget != null ? currentInstance!.sharedMembers : null,
       sharedAllMembersEver:
           widget.budget != null ? currentInstance!.sharedAllMembersEver : null,
-      budgetTransactionFilters: widget.budget?.addedTransactionsOnly == true
+      budgetTransactionFilters: widget.budget?.addedTransactionsOnly == true ||
+              selectedAddedTransactionsOnly
           ? null
           : currentInstance?.sharedKey != null
               ? null
               : selectedBudgetTransactionFilters,
-      memberTransactionFilters: widget.budget?.addedTransactionsOnly == true
+      memberTransactionFilters: widget.budget?.addedTransactionsOnly == true ||
+              selectedAddedTransactionsOnly
           ? null
           : currentInstance?.sharedKey != null
               ? null
@@ -346,7 +356,8 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
           : HexColor(widget.budget!.colour);
 
       selectedBudgetTransactionFilters =
-          widget.budget!.budgetTransactionFilters ?? null;
+          widget.budget!.budgetTransactionFilters ??
+              [BudgetTransactionFilters.defaultBudgetTransactionFilters];
       selectedMemberTransactionFilters =
           widget.budget!.memberTransactionFilters ?? null;
 
@@ -367,7 +378,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
     }
   }
 
-  setSelectedBudgetFilters(List<BudgetTransactionFilters>? filters) {
+  setSelectedBudgetFilters(List<BudgetTransactionFilters> filters) {
     setState(() {
       selectedBudgetTransactionFilters = filters;
     });
@@ -602,11 +613,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                   determineBottomButton: () {
                     determineBottomButton();
                   },
-                  setSelectedAmount: (amount, _) {
-                    setState(() {
-                      selectedAmount = amount;
-                    });
-                  },
+                  setSelectedAmount: setSelectedAmount,
                   initialSelectedAmount: selectedAmount,
                   setSelectedPeriodLength: (length) {
                     setState(() {
@@ -768,7 +775,8 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                           ),
                           extraWidgetAtBeginning: true,
                           items: [
-                            "Default",
+                            BudgetTransactionFilters
+                                .defaultBudgetTransactionFilters,
                             BudgetTransactionFilters.includeIncome,
                             BudgetTransactionFilters.includeDebtAndCredit,
                             BudgetTransactionFilters.addedToOtherBudget,
@@ -778,70 +786,77 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                                 : []),
                           ],
                           getLabel: (dynamic item) {
-                            if (item == "Default") return "default".tr();
                             return item ==
-                                    BudgetTransactionFilters.includeIncome
-                                ? "include-income".tr()
-                                : item ==
-                                        BudgetTransactionFilters
-                                            .addedToOtherBudget
-                                    ? "added-to-other-budgets".tr()
+                                    BudgetTransactionFilters
+                                        .defaultBudgetTransactionFilters
+                                ? "default".tr()
+                                : item == BudgetTransactionFilters.includeIncome
+                                    ? "include-income".tr()
                                     : item ==
                                             BudgetTransactionFilters
-                                                .addedToObjective
-                                        ? "added-to-objective".tr()
+                                                .addedToOtherBudget
+                                        ? "added-to-other-budgets".tr()
                                         : item ==
                                                 BudgetTransactionFilters
-                                                    .sharedToOtherBudget
-                                            ? "shared-to-other-budgets".tr()
+                                                    .addedToObjective
+                                            ? "added-to-goal".tr()
                                             : item ==
                                                     BudgetTransactionFilters
-                                                        .includeDebtAndCredit
-                                                ? "include-debt-and-credit".tr()
-                                                : "";
+                                                        .sharedToOtherBudget
+                                                ? "shared-to-other-budgets".tr()
+                                                : item ==
+                                                        BudgetTransactionFilters
+                                                            .includeDebtAndCredit
+                                                    ? "include-debt-and-credit"
+                                                        .tr()
+                                                    : "";
                           },
                           onSelected: (dynamic item) {
-                            if (item == "Default" &&
-                                selectedBudgetTransactionFilters == null) {
-                              selectedBudgetTransactionFilters = [];
-                              setState(() {});
-                              determineBottomButton();
-                              return;
-                            } else if (item == "Default" &&
-                                selectedBudgetTransactionFilters != null) {
-                              selectedBudgetTransactionFilters = null;
-                              setState(() {});
-                              determineBottomButton();
-                              return;
+                            if (item ==
+                                BudgetTransactionFilters
+                                    .defaultBudgetTransactionFilters) {
+                              if (selectedBudgetTransactionFilters.contains(
+                                  BudgetTransactionFilters
+                                      .defaultBudgetTransactionFilters)) {
+                                selectedBudgetTransactionFilters = [];
+                              } else {
+                                selectedBudgetTransactionFilters = [
+                                  BudgetTransactionFilters
+                                      .defaultBudgetTransactionFilters
+                                ];
+                              }
+                            } else {
+                              if (selectedBudgetTransactionFilters.contains(
+                                  BudgetTransactionFilters
+                                      .defaultBudgetTransactionFilters)) {
+                                selectedBudgetTransactionFilters = [];
+                              }
+                              if (selectedBudgetTransactionFilters
+                                  .contains(item)) {
+                                selectedBudgetTransactionFilters.remove(item);
+                              } else {
+                                selectedBudgetTransactionFilters.add(item);
+                              }
                             }
-                            if (selectedBudgetTransactionFilters == null)
-                              selectedBudgetTransactionFilters = [];
-                            if (selectedBudgetTransactionFilters!
-                                .contains(item))
-                              selectedBudgetTransactionFilters!.remove(item);
-                            else
-                              selectedBudgetTransactionFilters!.add(item);
+
                             setState(() {});
                             determineBottomButton();
                           },
                           getSelected: (dynamic item) {
-                            if (item == "Default" &&
-                                selectedBudgetTransactionFilters == null) {
-                              return true;
-                            }
-                            if (selectedBudgetTransactionFilters == null)
+                            if (selectedBudgetTransactionFilters.contains(
+                                BudgetTransactionFilters
+                                    .defaultBudgetTransactionFilters))
                               return isFilterSelectedWithDefaults(
                                   selectedBudgetTransactionFilters, item);
-                            return selectedBudgetTransactionFilters!
+                            return selectedBudgetTransactionFilters
                                 .contains(item);
                           },
                         ),
                         AnimatedExpanded(
                           expand: appStateSettings["sharedBudgets"] == true &&
-                              (selectedBudgetTransactionFilters == null ||
-                                  selectedBudgetTransactionFilters!.contains(
-                                      BudgetTransactionFilters
-                                          .sharedToOtherBudget)),
+                              (selectedBudgetTransactionFilters.contains(
+                                  BudgetTransactionFilters
+                                      .sharedToOtherBudget)),
                           child: SelectChips(
                             items: ["All", ...allMembersOfAllBudgets],
                             getLabel: (String item) {
@@ -1179,7 +1194,7 @@ class _BudgetDetailsState extends State<BudgetDetails> {
   }
 
   Future<void> selectAmount(BuildContext context) async {
-    openBottomSheet(
+    await openBottomSheet(
       context,
       fullSnap: true,
       PopupFramework(
@@ -1593,8 +1608,8 @@ class ViewBudgetTransactionFilterInfo extends StatefulWidget {
     super.key,
   });
 
-  final List<BudgetTransactionFilters>? selectedBudgetFilters;
-  final void Function(List<BudgetTransactionFilters>?) setSelectedBudgetFilters;
+  final List<BudgetTransactionFilters> selectedBudgetFilters;
+  final void Function(List<BudgetTransactionFilters>) setSelectedBudgetFilters;
 
   @override
   State<ViewBudgetTransactionFilterInfo> createState() =>
@@ -1603,18 +1618,31 @@ class ViewBudgetTransactionFilterInfo extends StatefulWidget {
 
 class _ViewBudgetTransactionFilterInfoState
     extends State<ViewBudgetTransactionFilterInfo> {
-  late List<BudgetTransactionFilters>? selectedBudgetFilters =
+  late List<BudgetTransactionFilters> selectedBudgetFilters =
       widget.selectedBudgetFilters;
 
-  onTap(BudgetTransactionFilters filter) {
-    if (selectedBudgetFilters == null) selectedBudgetFilters = [];
-    if (isFilterSelectedWithDefaults(selectedBudgetFilters, filter)) {
-      selectedBudgetFilters?.remove(filter);
-      widget.setSelectedBudgetFilters(selectedBudgetFilters);
+  onTap(BudgetTransactionFilters item) {
+    if (item == BudgetTransactionFilters.defaultBudgetTransactionFilters) {
+      if (selectedBudgetFilters
+          .contains(BudgetTransactionFilters.defaultBudgetTransactionFilters)) {
+        selectedBudgetFilters = [];
+      } else {
+        selectedBudgetFilters = [
+          BudgetTransactionFilters.defaultBudgetTransactionFilters
+        ];
+      }
     } else {
-      selectedBudgetFilters?.add(filter);
-      widget.setSelectedBudgetFilters(selectedBudgetFilters);
+      if (selectedBudgetFilters
+          .contains(BudgetTransactionFilters.defaultBudgetTransactionFilters)) {
+        selectedBudgetFilters = [];
+      }
+      if (selectedBudgetFilters.contains(item)) {
+        selectedBudgetFilters.remove(item);
+      } else {
+        selectedBudgetFilters.add(item);
+      }
     }
+    widget.setSelectedBudgetFilters(selectedBudgetFilters);
     setState(() {});
   }
 
@@ -1628,7 +1656,8 @@ class _ViewBudgetTransactionFilterInfoState
             children: [
               Expanded(
                 child: OutlinedButtonStacked(
-                  filled: selectedBudgetFilters == null,
+                  filled: selectedBudgetFilters.contains(
+                      BudgetTransactionFilters.defaultBudgetTransactionFilters),
                   alignLeft: true,
                   alignBeside: true,
                   padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
@@ -1637,14 +1666,8 @@ class _ViewBudgetTransactionFilterInfoState
                       ? Icons.check_circle_outlined
                       : Icons.check_circle_rounded,
                   onTap: () {
-                    if (selectedBudgetFilters == null) {
-                      selectedBudgetFilters = [];
-                      widget.setSelectedBudgetFilters([]);
-                    } else {
-                      selectedBudgetFilters = null;
-                      widget.setSelectedBudgetFilters(null);
-                    }
-                    setState(() {});
+                    onTap(BudgetTransactionFilters
+                        .defaultBudgetTransactionFilters);
                   },
                 ),
               ),
@@ -1653,64 +1676,64 @@ class _ViewBudgetTransactionFilterInfoState
           FilterTypeInfoEntry(
             selectedBudgetFilters: selectedBudgetFilters,
             setSelectedBudgetFilters: widget.setSelectedBudgetFilters,
+            budgetTransactionFilter: BudgetTransactionFilters.includeIncome,
+            title: "include-income".tr(),
             childrenDescription: [
               ListItem(
                 "include-income-description-1".tr(),
               ),
             ],
-            title: "include-income".tr(),
             icon: appStateSettings["outlinedIcons"]
                 ? Icons.arrow_drop_up_outlined
                 : Icons.arrow_drop_up_rounded,
             onTap: onTap,
-            budgetTransactionFilter: BudgetTransactionFilters.includeIncome,
           ),
           FilterTypeInfoEntry(
             selectedBudgetFilters: selectedBudgetFilters,
             setSelectedBudgetFilters: widget.setSelectedBudgetFilters,
+            budgetTransactionFilter:
+                BudgetTransactionFilters.includeDebtAndCredit,
+            title: "include-debt-and-credit".tr(),
             childrenDescription: [
               ListItem(
                 "include-debt-and-credit-description-1".tr(),
               ),
             ],
-            title: "include-debt-and-credit".tr(),
             icon: appStateSettings["outlinedIcons"]
                 ? Icons.archive_outlined
                 : Icons.archive_rounded,
             onTap: onTap,
-            budgetTransactionFilter:
-                BudgetTransactionFilters.includeDebtAndCredit,
           ),
           FilterTypeInfoEntry(
             selectedBudgetFilters: selectedBudgetFilters,
             setSelectedBudgetFilters: widget.setSelectedBudgetFilters,
+            budgetTransactionFilter:
+                BudgetTransactionFilters.addedToOtherBudget,
+            title: "added-to-other-budgets".tr(),
             childrenDescription: [
               ListItem(
                 "added-to-other-budgets-description-1".tr(),
               ),
             ],
-            title: "added-to-other-budgets".tr(),
             icon: appStateSettings["outlinedIcons"]
                 ? Icons.add_outlined
                 : Icons.add_rounded,
             onTap: onTap,
-            budgetTransactionFilter:
-                BudgetTransactionFilters.addedToOtherBudget,
           ),
           FilterTypeInfoEntry(
             selectedBudgetFilters: selectedBudgetFilters,
             setSelectedBudgetFilters: widget.setSelectedBudgetFilters,
+            budgetTransactionFilter: BudgetTransactionFilters.addedToObjective,
+            title: "added-to-goal".tr(),
             childrenDescription: [
               ListItem(
-                "added-to-objective-description-1".tr(),
+                "added-to-goal-description-1".tr(),
               ),
             ],
-            title: "added-to-objective".tr(),
             icon: appStateSettings["outlinedIcons"]
                 ? Icons.savings_outlined
                 : Icons.savings_rounded,
             onTap: onTap,
-            budgetTransactionFilter: BudgetTransactionFilters.addedToObjective,
           ),
         ],
       ),
@@ -1719,8 +1742,8 @@ class _ViewBudgetTransactionFilterInfoState
 }
 
 class FilterTypeInfoEntry extends StatelessWidget {
-  final List<BudgetTransactionFilters>? selectedBudgetFilters;
-  final Function(List<BudgetTransactionFilters>?) setSelectedBudgetFilters;
+  final List<BudgetTransactionFilters> selectedBudgetFilters;
+  final Function(List<BudgetTransactionFilters>) setSelectedBudgetFilters;
   final List<Widget> childrenDescription;
   final String title;
   final IconData icon;
@@ -1742,7 +1765,10 @@ class FilterTypeInfoEntry extends StatelessWidget {
   Widget build(BuildContext context) {
     return AnimatedOpacity(
       duration: Duration(milliseconds: 500),
-      opacity: selectedBudgetFilters == null ? 0.5 : 1,
+      opacity: selectedBudgetFilters.contains(
+              BudgetTransactionFilters.defaultBudgetTransactionFilters)
+          ? 0.5
+          : 1,
       child: Padding(
         padding: const EdgeInsets.only(top: 13),
         child: Row(

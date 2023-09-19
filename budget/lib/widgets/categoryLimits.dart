@@ -75,7 +75,8 @@ class _CategoryLimitsState extends State<CategoryLimits> {
                                 " / " +
                                 convertToMoney(Provider.of<AllWallets>(context),
                                     widget.budgetLimit))
-                            : (convertToPercent(number, snapshot.data ?? 0) +
+                            : (convertToPercent(number,
+                                    finalNumber: snapshot.data ?? 0) +
                                 " / " +
                                 "100%"),
                       );

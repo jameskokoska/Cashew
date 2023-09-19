@@ -1366,7 +1366,7 @@ Future<bool> generateLoanTransactionsFromBillSummary(
   print(category);
   for (SplitPersonSummary summary in billSummary) {
     String note = "";
-    double amountSpent = 0;
+    double amountSpentTotal = 0;
     for (BillSplitterItem billSplitterItem in summary.billSplitterItems) {
       SplitPerson? splitPerson;
       for (SplitPerson splitPersonCheck in billSplitterItem.userAmounts) {
@@ -1375,6 +1375,7 @@ Future<bool> generateLoanTransactionsFromBillSummary(
           break;
         }
       }
+      double amountSpent = 0;
       if (splitPerson == null) continue;
       double percentOfTotal = billSplitterItem.evenSplit
           ? billSplitterItem.userAmounts.length == 0
@@ -1382,6 +1383,7 @@ Future<bool> generateLoanTransactionsFromBillSummary(
               : 1 / billSplitterItem.userAmounts.length
           : (splitPerson.percent ?? 0) / 100;
       amountSpent = billSplitterItem.cost * percentOfTotal;
+      amountSpentTotal = amountSpentTotal + amountSpent;
       if (amountSpent == 0) percentOfTotal = 0;
       if (amountSpent == 0) continue;
 
@@ -1410,7 +1412,7 @@ Future<bool> generateLoanTransactionsFromBillSummary(
         name: isThePayee
             ? billName.trim()
             : (summary.splitPerson.name.trim() + " - " + billName.trim()),
-        amount: amountSpent.abs() * -1,
+        amount: amountSpentTotal.abs() * -1,
         note: note,
         categoryFk: category.categoryPk,
         walletFk: appStateSettings["selectedWalletPk"],

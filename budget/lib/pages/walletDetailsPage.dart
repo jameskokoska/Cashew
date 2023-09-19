@@ -86,8 +86,8 @@ class _WalletDetailsPageState extends State<WalletDetailsPage> {
                 keepOutFirst: true,
                 items: [
                   DropdownItemMenu(
-                    id: "edit-wallet",
-                    label: "edit-wallet".tr(),
+                    id: "edit-account",
+                    label: "edit-account".tr(),
                     icon: appStateSettings["outlinedIcons"]
                         ? Icons.edit_outlined
                         : Icons.edit_rounded,
@@ -286,12 +286,12 @@ class _WalletCategoryPieChartState extends State<WalletCategoryPieChart> {
             return StreamBuilder<List<CategoryWithTotal>>(
               stream: database
                   .watchTotalSpentInEachCategoryInTimeRangeFromCategories(
-                Provider.of<AllWallets>(context),
-                DateTime.now(),
-                DateTime.now(),
-                null,
-                null,
-                null, null,
+                allWallets: Provider.of<AllWallets>(context),
+                start: DateTime.now(),
+                end: DateTime.now(),
+                categoryFks: null,
+                categoryFksExclude: null,
+                budgetTransactionFilters: [], memberTransactionFilters: null,
                 allTime: true,
                 walletPk:
                     widget.wallet == null ? null : widget.wallet!.walletPk,

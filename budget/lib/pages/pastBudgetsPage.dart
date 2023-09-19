@@ -71,11 +71,7 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
   List<DateTimeRange> dateTimeRanges = [];
   int amountLoaded = 8;
   late List<String> selectedCategoryFks =
-      (appStateSettings["watchedCategoriesOnBudget"]
-                  [widget.budget.budgetPk.toString()] ??
-              [])
-          .map<String>((value) => value.toString())
-          .toList();
+      getSelectedCategoryFksConsideringBudget();
   GlobalKey<_PastBudgetContainerListState>
       _pastBudgetContainerListStateStateKey = GlobalKey();
 
@@ -92,6 +88,23 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
     super.didUpdateWidget(oldWidget);
   }
 
+  List<String> getSelectedCategoryFksConsideringBudget() {
+    List<String> selectedCategoryFks =
+        (appStateSettings["watchedCategoriesOnBudget"]
+                    [widget.budget.budgetPk.toString()] ??
+                [])
+            .map<String>((value) => value.toString())
+            .toList();
+    selectedCategoryFks.removeWhere((categoryFk) =>
+        (widget.budget.categoryFksExclude ?? []).contains(categoryFk));
+    if (widget.budget.categoryFks != null ||
+        widget.budget.categoryFks?.isNotEmpty == true) {
+      selectedCategoryFks.retainWhere((categoryFk) =>
+          (widget.budget.categoryFks ?? []).contains(categoryFk));
+    }
+    return selectedCategoryFks;
+  }
+
   void loadLines(amountLoaded) async {
     dateTimeRanges = [];
     List<Stream<double?>> watchedBudgetTotals = [];
@@ -102,13 +115,13 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
       DateTimeRange budgetRange = getBudgetDate(widget.budget, datePast);
       dateTimeRanges.add(budgetRange);
       watchedBudgetTotals.add(database.watchTotalSpentInTimeRangeFromCategories(
-        Provider.of<AllWallets>(context, listen: false),
-        budgetRange.start,
-        budgetRange.end,
-        widget.budget.categoryFks,
-        widget.budget.categoryFksExclude,
-        widget.budget.budgetTransactionFilters,
-        widget.budget.memberTransactionFilters,
+        allWallets: Provider.of<AllWallets>(context, listen: false),
+        start: budgetRange.start,
+        end: budgetRange.end,
+        categoryFks: widget.budget.categoryFks,
+        categoryFksExclude: widget.budget.categoryFksExclude,
+        budgetTransactionFilters: widget.budget.budgetTransactionFilters,
+        memberTransactionFilters: widget.budget.memberTransactionFilters,
         onlyShowTransactionsBelongingToBudgetPk:
             widget.budget.sharedKey != null ||
                     widget.budget.addedTransactionsOnly == true
@@ -127,13 +140,13 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
         }
         watchedCategoryTotals
             .add(database.watchTotalSpentInTimeRangeFromCategories(
-          Provider.of<AllWallets>(context, listen: false),
-          budgetRange.start,
-          budgetRange.end,
-          [categoryFk],
-          null,
-          widget.budget.budgetTransactionFilters,
-          widget.budget.memberTransactionFilters,
+          allWallets: Provider.of<AllWallets>(context, listen: false),
+          start: budgetRange.start,
+          end: budgetRange.end,
+          categoryFks: [categoryFk],
+          categoryFksExclude: null,
+          budgetTransactionFilters: widget.budget.budgetTransactionFilters,
+          memberTransactionFilters: widget.budget.memberTransactionFilters,
           onlyShowTransactionsBelongingToBudgetPk:
               widget.budget.sharedKey != null ||
                       widget.budget.addedTransactionsOnly == true
@@ -233,6 +246,7 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
                       },
                       scaleWhenSelected: false,
                       categoryFks: widget.budget.categoryFks,
+                      hideCategoryFks: widget.budget.categoryFksExclude,
                       allowRearrange: false,
                     ),
                     Row(
@@ -942,13 +956,13 @@ class PastBudgetContainer extends StatelessWidget {
         return StreamBuilder<List<CategoryWithTotal>>(
           stream:
               database.watchTotalSpentInEachCategoryInTimeRangeFromCategories(
-            Provider.of<AllWallets>(context),
-            budgetRange.start,
-            budgetRange.end,
-            budget.categoryFks,
-            budget.categoryFksExclude,
-            budget.budgetTransactionFilters,
-            budget.memberTransactionFilters,
+            allWallets: Provider.of<AllWallets>(context),
+            start: budgetRange.start,
+            end: budgetRange.end,
+            categoryFks: budget.categoryFks,
+            categoryFksExclude: budget.categoryFksExclude,
+            budgetTransactionFilters: budget.budgetTransactionFilters,
+            memberTransactionFilters: budget.memberTransactionFilters,
             onlyShowTransactionsBelongingToBudgetPk:
                 budget.sharedKey != null || budget.addedTransactionsOnly == true
                     ? budget.budgetPk

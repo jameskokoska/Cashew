@@ -10,6 +10,20 @@ import 'package:flutter/material.dart';
 
 Future<void> showChangelog(context, {forceShow = false}) async {
   String changelog = """
+    < 4.3.6
+    Internally renamed wallets to accounts and objectives to goals for translations
+    Excluded categories no longer selectable from watch categories
+    Selected watched categories correct based on what was selected in the budget
+    Implemented default behavior for budget transaction filters
+    Themed action app bar for budgets and objectives pages
+    Fixed currency conversions for goals
+    Finished goals info page
+    Fixed premium popup for objectives
+    Fixed syncing progress
+    Fixed objective syncing
+    Fixed bill splitter total amounts
+    When previewing data, categories will get recreated and not replace modified ones
+    Added info button and popup for transaction type selection
     < 4.3.5
     Budget type info button
     Exclude transactions from budget

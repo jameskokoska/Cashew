@@ -36,7 +36,6 @@ class TransactionEntryAmount extends StatelessWidget {
               duration: Duration(milliseconds: 1000),
               initialCount: count,
               textBuilder: (number) {
-                print(number); //prints 9.94
                 return Row(
                   children: [
                     AnimatedSizeSwitcher(

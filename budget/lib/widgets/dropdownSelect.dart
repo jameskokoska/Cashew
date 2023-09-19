@@ -157,7 +157,8 @@ class CustomPopupMenuButton extends StatelessWidget {
         getCenteredTitleSmall(context: context, backButtonEnabled: true) ==
             false;
     List<DropdownItemMenu> itemsFiltered = [...items];
-    if (keepOutFirstConsideringHeader) itemsFiltered.removeAt(0);
+    if (keepOutFirstConsideringHeader || forceKeepOutFirst)
+      itemsFiltered.removeAt(0);
 
     if (showButtons) {
       return Row(
@@ -193,7 +194,7 @@ class CustomPopupMenuButton extends StatelessWidget {
       children: [
         if (keepOutFirstConsideringHeader || forceKeepOutFirst)
           Transform.translate(
-            offset: Offset(7, 0),
+            offset: Offset(itemsFiltered.isNotEmpty ? 7 : 0, 0),
             child: Tooltip(
               message: items[0].label,
               child: IconButton(
@@ -210,44 +211,45 @@ class CustomPopupMenuButton extends StatelessWidget {
               ),
             ),
           ),
-        PopupMenuButton<String>(
-          padding: EdgeInsets.all(15),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(
-              Radius.circular(getPlatform() == PlatformOS.isIOS ? 5 : 10),
+        if (itemsFiltered.isNotEmpty)
+          PopupMenuButton<String>(
+            padding: EdgeInsets.all(15),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(
+                Radius.circular(getPlatform() == PlatformOS.isIOS ? 5 : 10),
+              ),
             ),
-          ),
-          onSelected: (value) {
-            for (DropdownItemMenu item in items) {
-              if (item.id == value) {
-                item.action();
-                break;
+            onSelected: (value) {
+              for (DropdownItemMenu item in items) {
+                if (item.id == value) {
+                  item.action();
+                  break;
+                }
               }
-            }
-          },
-          itemBuilder: (BuildContext context) {
-            return itemsFiltered.map((item) {
-              return PopupMenuItem<String>(
-                value: item.id,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Transform.scale(
-                      scale: item.iconScale ?? 1,
-                      child: Icon(item.icon),
-                    ),
-                    SizedBox(width: 9),
-                    TextFont(
-                      text: item.label,
-                      fontSize: 14.5,
-                    ),
-                  ],
-                ),
-              );
-            }).toList();
-          },
-        ),
+            },
+            itemBuilder: (BuildContext context) {
+              return itemsFiltered.map((item) {
+                return PopupMenuItem<String>(
+                  value: item.id,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Transform.scale(
+                        scale: item.iconScale ?? 1,
+                        child: Icon(item.icon),
+                      ),
+                      SizedBox(width: 9),
+                      TextFont(
+                        text: item.label,
+                        fontSize: 14.5,
+                      ),
+                    ],
+                  ),
+                );
+              }).toList();
+            },
+          ),
       ],
     );
   }

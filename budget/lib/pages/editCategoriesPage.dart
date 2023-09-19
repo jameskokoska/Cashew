@@ -517,7 +517,7 @@ Future<dynamic> selectObjectivePopup(BuildContext context,
   dynamic objective = await openBottomSheet(
     context,
     PopupFramework(
-      title: "select-objective".tr(),
+      title: "select-goal".tr(),
       child: StreamBuilder<List<Objective>>(
         stream: database.watchAllObjectives(),
         builder: (context, snapshot) {
@@ -542,7 +542,7 @@ Future<dynamic> selectObjectivePopup(BuildContext context,
                 );
               },
               displayFilter: (Objective? objective) {
-                return objective?.name ?? "no-objective".tr();
+                return objective?.name ?? "no-goal".tr();
               },
               initial: null,
               onChanged: (Objective? objective) async {
@@ -564,7 +564,7 @@ Future<dynamic> selectObjectivePopup(BuildContext context,
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 10),
                       child: TextFont(
-                        text: "no-objectives".tr(),
+                        text: "no-goals".tr(),
                         fontSize: 15,
                         textAlign: TextAlign.center,
                       ),
@@ -574,7 +574,7 @@ Future<dynamic> selectObjectivePopup(BuildContext context,
                 SizedBox(height: 15),
                 IntrinsicWidth(
                   child: Button(
-                    label: "create-objective".tr(),
+                    label: "create-goal".tr(),
                     onTap: () {
                       pushRoute(
                         context,

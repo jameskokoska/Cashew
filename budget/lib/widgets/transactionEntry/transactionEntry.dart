@@ -1,6 +1,7 @@
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/struct/settings.dart';
+import 'package:budget/widgets/breathingAnimation.dart';
 import 'package:budget/widgets/categoryIcon.dart';
 import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/widgets/openContainerNavigation.dart';
@@ -87,6 +88,7 @@ class TransactionEntry extends StatelessWidget {
     this.transactionBefore,
     this.transactionAfter,
     this.allowSelect,
+    this.highlightActionButton = false,
   }) : super(key: key);
 
   final Widget openPage;
@@ -100,6 +102,7 @@ class TransactionEntry extends StatelessWidget {
   final Transaction? transactionBefore;
   final Transaction? transactionAfter;
   final bool? allowSelect;
+  final bool highlightActionButton;
 
   final double fabSize = 50;
 
@@ -293,68 +296,20 @@ class TransactionEntry extends StatelessWidget {
                                           width: 10,
                                         )
                                       : Builder(builder: (context) {
-                                          Widget actionButton = Tooltip(
-                                            message:
-                                                getTransactionActionNameFromType(
-                                                    transaction),
-                                            child: GestureDetector(
-                                              onTap: () {
-                                                openTransactionActionFromType(
-                                                    context, transaction);
-                                              },
-                                              child: Padding(
-                                                padding: const EdgeInsets.only(
-                                                  left: 6,
-                                                  top: 5.5,
-                                                  bottom: 5.5,
-                                                  right: 6,
-                                                ),
-                                                child: Transform.scale(
-                                                  scale:
-                                                      isTransactionActionDealtWith(
-                                                              transaction)
-                                                          ? 0.92
-                                                          : 1,
-                                                  child: Tappable(
-                                                    color: !isTransactionActionDealtWith(
-                                                            transaction)
-                                                        ? Theme.of(context)
-                                                            .colorScheme
-                                                            .secondaryContainer
-                                                            .withOpacity(0.6)
-                                                        : iconColor
-                                                            .withOpacity(0.7),
-                                                    onTap: () {
-                                                      openTransactionActionFromType(
-                                                          context, transaction);
-                                                    },
-                                                    borderRadius: 100,
-                                                    child: Padding(
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              6),
-                                                      child: Icon(
-                                                        getTransactionTypeIcon(
-                                                            transaction.type),
-                                                        color: isTransactionActionDealtWith(
-                                                                transaction)
-                                                            ? (containerColor ==
-                                                                    null
-                                                                ? Theme.of(
-                                                                        context)
-                                                                    .canvasColor
-                                                                : containerColor)
-                                                            : iconColor
-                                                                .withOpacity(
-                                                                    0.8),
-                                                        size: 23,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
+                                          Widget actionButton =
+                                              TransactionEntryActionButton(
+                                            transaction: transaction,
+                                            iconColor: iconColor,
+                                            containerColor: containerColor,
                                           );
+                                          if (highlightActionButton) {
+                                            actionButton = BreathingWidget(
+                                              duration:
+                                                  Duration(milliseconds: 600),
+                                              endScale: 1.2,
+                                              child: actionButton,
+                                            );
+                                          }
                                           return AnimatedSwitcher(
                                             duration:
                                                 Duration(milliseconds: 800),

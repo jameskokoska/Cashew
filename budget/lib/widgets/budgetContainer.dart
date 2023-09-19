@@ -64,13 +64,13 @@ class BudgetContainer extends StatelessWidget {
         return StreamBuilder<List<CategoryWithTotal>>(
           stream:
               database.watchTotalSpentInEachCategoryInTimeRangeFromCategories(
-            Provider.of<AllWallets>(context),
-            budgetRange.start,
-            budgetRange.end,
-            budget.categoryFks,
-            budget.categoryFksExclude,
-            budget.budgetTransactionFilters,
-            budget.memberTransactionFilters,
+            allWallets: Provider.of<AllWallets>(context),
+            start: budgetRange.start,
+            end: budgetRange.end,
+            categoryFks: budget.categoryFks,
+            categoryFksExclude: budget.categoryFksExclude,
+            budgetTransactionFilters: budget.budgetTransactionFilters,
+            memberTransactionFilters: budget.memberTransactionFilters,
             onlyShowTransactionsBelongingToBudgetPk:
                 budget.sharedKey != null || budget.addedTransactionsOnly == true
                     ? budget.budgetPk

@@ -214,7 +214,7 @@ class _AddObjectivePageState extends State<AddObjectivePage>
     } else {
       Future.delayed(Duration.zero, () async {
         if (widget.objective == null) {
-          bool result = await premiumPopupBudgets(context);
+          bool result = await premiumPopupObjectives(context);
           if (result == true) {
             openBottomSheet(
               context,
@@ -274,9 +274,7 @@ class _AddObjectivePageState extends State<AddObjectivePage>
         child: PageFramework(
           resizeToAvoidBottomInset: true,
           dragDownToDismiss: true,
-          title: widget.objective == null
-              ? "add-objective".tr()
-              : "edit-objective".tr(),
+          title: widget.objective == null ? "add-goal".tr() : "edit-goal".tr(),
           onBackButton: () async {
             if (widget.objective != null) {
               discardChangesPopup(
@@ -307,7 +305,7 @@ class _AddObjectivePageState extends State<AddObjectivePage>
                 ? [
                     IconButton(
                       padding: EdgeInsets.all(15),
-                      tooltip: "delete-objective".tr(),
+                      tooltip: "delete-goal".tr(),
                       onPressed: () {
                         deleteObjectivePopup(
                           context,
@@ -345,7 +343,7 @@ class _AddObjectivePageState extends State<AddObjectivePage>
                       )
                     : SaveBottomButton(
                         label: widget.objective == null
-                            ? "add-objective".tr()
+                            ? "add-goal".tr()
                             : "save-changes".tr(),
                         onTap: () async {
                           await addObjective();
@@ -571,7 +569,7 @@ class SelectObjectiveTypePopup extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PopupFramework(
-      title: "select-objective-type".tr(),
+      title: "select-goal-type".tr(),
       child: Column(
         children: [
           Row(

@@ -118,10 +118,9 @@ class PremiumPage extends StatelessWidget {
                                     ),
                                     SubscriptionFeature(
                                       iconData: MoreIcons.chart_pie,
-                                      label: "unlimited-budgets-and-objectives"
-                                          .tr(),
+                                      label: "unlimited-budgets-and-goals".tr(),
                                       description:
-                                          "unlimited-budgets-and-objectives-description"
+                                          "unlimited-budgets-and-goals-description"
                                               .tr(),
                                     ),
                                     SubscriptionFeature(
@@ -617,6 +616,20 @@ Future<bool> premiumPopupPushRoute(BuildContext context) async {
 Future<bool> premiumPopupBudgets(BuildContext context) async {
   if (hidePremiumPopup()) return true;
   if ((await database.getAllBudgets()).length > 0) {
+    if (await premiumPopupPushRoute(context) == true) {
+      return true;
+    } else {
+      Navigator.pop(context);
+      return false;
+    }
+  } else {
+    return true;
+  }
+}
+
+Future<bool> premiumPopupObjectives(BuildContext context) async {
+  if (hidePremiumPopup()) return true;
+  if ((await database.getAllObjectives()).length > 0) {
     if (await premiumPopupPushRoute(context) == true) {
       return true;
     } else {
