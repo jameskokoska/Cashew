@@ -4082,7 +4082,7 @@ class FinanceDatabase extends _$FinanceDatabase {
     Budget? budget,
     bool allTime = false,
     String? walletPk,
-    bool? isIncome = false,
+    bool? isIncome = null,
   }) {
     DateTime startDate = DateTime(start.year, start.month, start.day);
     DateTime endDate = DateTime(end.year, end.month, end.day);
