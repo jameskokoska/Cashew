@@ -56,8 +56,8 @@ Changes and progress about development is all heavily documented in GitHub [comm
 - Easy Editing: Long-press and swipe to select multiple budgets, edit accordingly as needed or delete multiple at once.
 
 ### Financial Flexibility
-- Multiple Currencies and Wallets: Manage finances across different currencies and wallets with up-to-date conversion rates for accurate calculations and effortless currency conversions. The interface shows the original amount added and the converted amount to the selected wallet.
-- Switch Wallets and Currencies with Ease: On the homepage, easily select a different wallet and currency and everything will be converted automatically in an instant.
+- Multiple Currencies and Accounts: Manage finances across different currencies and accounts with up-to-date conversion rates for accurate calculations and effortless currency conversions. The interface shows the original amount added and the converted amount to the selected account.
+- Switch Accounts and Currencies with Ease: On the homepage, easily select a different account and currency and everything will be converted automatically in an instant.
 
 ### Enhanced Security and Accessibility
 - Biometric Lock: Secure budget data using biometric authentication, adding an extra layer of privacy.
@@ -148,4 +148,7 @@ Note: required Firebase.
 * It handles the platform routing and `PageRouteBuilder`
 
 ### Wallets vs. Accounts
-* `Wallets` has been been renamed to `Accounts` on the front-end but internally, the name `Wallet` is still used.
+* `Wallets` have been been renamed to `Accounts` on the front-end but internally, the name `Wallet` is still used.
+
+### Objectives vs. Goals
+* `Objectives` have been been renamed to `Goals` on the front-end but internally, the name `Objectives` is still used.
