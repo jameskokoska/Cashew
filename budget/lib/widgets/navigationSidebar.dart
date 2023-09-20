@@ -70,260 +70,265 @@ class NavigationSidebarState extends State<NavigationSidebar> {
       child: AnimatedContainer(
         duration: Duration(milliseconds: 1500),
         curve: Curves.easeInOutCubicEmphasized,
-        decoration: BoxDecoration(
-          border: Border(
-            right: BorderSide(
-              color: appStateSettings["materialYou"]
-                  ? dynamicPastel(
-                      context, Theme.of(context).colorScheme.secondaryContainer,
-                      amountLight: 0, amountDark: 0.6)
-                  : getColor(context, "lightDarkAccent"),
-              width: 3,
+        width: getWidthNavigationSidebar(context),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Theme.of(context).canvasColor,
+            border: Border(
+              right: BorderSide(
+                color: appStateSettings["materialYou"]
+                    ? dynamicPastel(context,
+                        Theme.of(context).colorScheme.secondaryContainer,
+                        amountLight: 0, amountDark: 0.6)
+                    : getColor(context, "lightDarkAccent"),
+                width: 3,
+              ),
             ),
           ),
-          color: Theme.of(context).canvasColor,
-        ),
-        width: getWidthNavigationSidebar(context),
-        child: Padding(
-          padding:
-              EdgeInsets.only(left: MediaQuery.of(context).viewPadding.left),
-          child: IgnorePointer(
-            ignoring: appStateSettings["hasOnboarded"] == false ||
-                lockAppWaitForRestart == true,
-            child: AnimatedOpacity(
-              duration: Duration(milliseconds: 500),
-              opacity: appStateSettings["hasOnboarded"] == false ||
-                      lockAppWaitForRestart == true
-                  ? 0.3
-                  : 1,
-              child: SingleChildScrollView(
-                child: IntrinsicHeight(
-                  child: ConstrainedBox(
-                    constraints: BoxConstraints(
-                      minHeight: MediaQuery.of(context).size.height,
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        SizedBox(height: MediaQuery.of(context).padding.top),
-                        Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Opacity(
-                              opacity: 0.7,
-                              child: AnimatedPadding(
-                                duration: Duration(milliseconds: 1500),
-                                curve: Curves.easeInOutCubicEmphasized,
-                                padding: EdgeInsets.only(
-                                  bottom: appStateSettings[
-                                          "expandedNavigationSidebar"]
-                                      ? 0
-                                      : 5,
-                                  top: appStateSettings[
-                                          "expandedNavigationSidebar"]
-                                      ? 0
-                                      : 7,
-                                  left: appStateSettings[
-                                          "expandedNavigationSidebar"]
-                                      ? 0
-                                      : 7,
-                                ),
-                                child: AnimatedRotation(
+          child: Padding(
+            padding:
+                EdgeInsets.only(left: MediaQuery.of(context).viewPadding.left),
+            child: IgnorePointer(
+              ignoring: appStateSettings["hasOnboarded"] == false ||
+                  lockAppWaitForRestart == true,
+              child: AnimatedOpacity(
+                duration: Duration(milliseconds: 500),
+                opacity: appStateSettings["hasOnboarded"] == false ||
+                        lockAppWaitForRestart == true
+                    ? 0.3
+                    : 1,
+                child: SingleChildScrollView(
+                  child: IntrinsicHeight(
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(
+                        minHeight: MediaQuery.of(context).size.height,
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          SizedBox(height: MediaQuery.of(context).padding.top),
+                          Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Opacity(
+                                opacity: 0.7,
+                                child: AnimatedPadding(
                                   duration: Duration(milliseconds: 1500),
-                                  turns: appStateSettings[
-                                          "expandedNavigationSidebar"]
-                                      ? 0
-                                      : -0.5,
                                   curve: Curves.easeInOutCubicEmphasized,
-                                  child: IconButton(
-                                    padding: EdgeInsets.all(15),
-                                    onPressed: () {
-                                      updateSettings(
-                                          "expandedNavigationSidebar",
-                                          !appStateSettings[
-                                              "expandedNavigationSidebar"],
-                                          updateGlobalState: true);
-                                    },
-                                    icon: Icon(
-                                      appStateSettings["outlinedIcons"]
-                                          ? Icons.chevron_left_outlined
-                                          : Icons.chevron_left_rounded,
-                                    ),
+                                  padding: EdgeInsets.only(
+                                    bottom: appStateSettings[
+                                            "expandedNavigationSidebar"]
+                                        ? 0
+                                        : 5,
+                                    top: appStateSettings[
+                                            "expandedNavigationSidebar"]
+                                        ? 0
+                                        : 7,
+                                    left: appStateSettings[
+                                            "expandedNavigationSidebar"]
+                                        ? 0
+                                        : 7,
                                   ),
-                                ),
-                              ),
-                            ),
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 14),
-                                    child: Tappable(
-                                      borderRadius: 20,
-                                      onTap: () async {
-                                        isCalendarOpened = true;
-                                        if (navigatorKey.currentContext !=
-                                            null) {
-                                          await showCustomDatePicker(
-                                              navigatorKey.currentContext!,
-                                              DateTime.now());
-                                          isCalendarOpened = false;
-                                        }
+                                  child: AnimatedRotation(
+                                    duration: Duration(milliseconds: 1500),
+                                    turns: appStateSettings[
+                                            "expandedNavigationSidebar"]
+                                        ? 0
+                                        : -0.5,
+                                    curve: Curves.easeInOutCubicEmphasized,
+                                    child: IconButton(
+                                      padding: EdgeInsets.all(15),
+                                      onPressed: () {
+                                        updateSettings(
+                                            "expandedNavigationSidebar",
+                                            !appStateSettings[
+                                                "expandedNavigationSidebar"],
+                                            updateGlobalState: true);
                                       },
-                                      child: AnimatedPadding(
-                                        duration: Duration(milliseconds: 1500),
-                                        curve: Curves.easeInOutCubicEmphasized,
-                                        padding: EdgeInsets.only(
-                                          top: appStateSettings[
-                                                  "expandedNavigationSidebar"]
-                                              ? 12
-                                              : 0,
-                                          bottom: appStateSettings[
-                                                  "expandedNavigationSidebar"]
-                                              ? 18
-                                              : 0,
-                                        ),
-                                        child: SidebarClock(),
+                                      icon: Icon(
+                                        appStateSettings["outlinedIcons"]
+                                            ? Icons.chevron_left_outlined
+                                            : Icons.chevron_left_rounded,
                                       ),
                                     ),
                                   ),
                                 ),
-                              ],
-                            ),
-                            AnimatedContainer(
-                              duration: Duration(milliseconds: 1500),
-                              curve: Curves.easeInOutCubicEmphasized,
-                              height:
-                                  appStateSettings["expandedNavigationSidebar"]
-                                      ? 40
-                                      : 0,
-                            ),
-                            NavigationSidebarButton(
-                              icon: Icons.home_rounded,
-                              label: "home".tr(),
-                              isSelected: selectedIndex == 0,
-                              onTap: () {
-                                pageNavigationFrameworkKey.currentState!
-                                    .changePage(0, switchNavbar: true);
-                              },
-                            ),
-                            NavigationSidebarButton(
-                              icon: Icons.payments_rounded,
-                              label: "transactions".tr(),
-                              isSelected: selectedIndex == 1,
-                              onTap: () {
-                                pageNavigationFrameworkKey.currentState!
-                                    .changePage(1, switchNavbar: true);
-                              },
-                            ),
-                            NavigationSidebarButton(
-                              icon: MoreIcons.chart_pie,
-                              iconScale: 0.87,
-                              label: "budgets".tr(),
-                              isSelected: selectedIndex == 2,
-                              onTap: () {
-                                pageNavigationFrameworkKey.currentState!
-                                    .changePage(2, switchNavbar: true);
-                              },
-                            ),
-                            NavigationSidebarButton(
-                              icon: appStateSettings["outlinedIcons"]
-                                  ? Icons.savings_outlined
-                                  : Icons.savings_rounded,
-                              label: "goals".tr(),
-                              isSelected: selectedIndex == 14,
-                              onTap: () {
-                                pageNavigationFrameworkKey.currentState!
-                                    .changePage(14, switchNavbar: true);
-                              },
-                            ),
-                            NavigationSidebarButton(
-                              icon: appStateSettings["outlinedIcons"]
-                                  ? Icons.event_repeat_outlined
-                                  : Icons.event_repeat_rounded,
-                              label: "subscriptions".tr(),
-                              isSelected: selectedIndex == 5,
-                              onTap: () {
-                                pageNavigationFrameworkKey.currentState!
-                                    .changePage(5, switchNavbar: true);
-                              },
-                            ),
-                            kIsWeb
-                                ? SizedBox.shrink()
-                                : NavigationSidebarButton(
-                                    icon: appStateSettings["outlinedIcons"]
-                                        ? Icons.notifications_outlined
-                                        : Icons.notifications_rounded,
-                                    label: "notifications".tr(),
-                                    isSelected: selectedIndex == 6,
-                                    onTap: () {
-                                      pageNavigationFrameworkKey.currentState!
-                                          .changePage(6, switchNavbar: true);
-                                    },
+                              ),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 14),
+                                      child: Tappable(
+                                        borderRadius: 20,
+                                        onTap: () async {
+                                          isCalendarOpened = true;
+                                          if (navigatorKey.currentContext !=
+                                              null) {
+                                            await showCustomDatePicker(
+                                                navigatorKey.currentContext!,
+                                                DateTime.now());
+                                            isCalendarOpened = false;
+                                          }
+                                        },
+                                        child: AnimatedPadding(
+                                          duration:
+                                              Duration(milliseconds: 1500),
+                                          curve:
+                                              Curves.easeInOutCubicEmphasized,
+                                          padding: EdgeInsets.only(
+                                            top: appStateSettings[
+                                                    "expandedNavigationSidebar"]
+                                                ? 12
+                                                : 0,
+                                            bottom: appStateSettings[
+                                                    "expandedNavigationSidebar"]
+                                                ? 18
+                                                : 0,
+                                          ),
+                                          child: SidebarClock(),
+                                        ),
+                                      ),
+                                    ),
                                   ),
-                            NavigationSidebarButton(
-                              icon: appStateSettings["outlinedIcons"]
-                                  ? Icons.receipt_long_outlined
-                                  : Icons.receipt_long_rounded,
-                              label: "all-spending".tr(),
-                              isSelected: selectedIndex == 7,
-                              onTap: () {
-                                pageNavigationFrameworkKey.currentState!
-                                    .changePage(7, switchNavbar: true);
-                              },
-                            ),
-                            EditDataButtons(selectedIndex: selectedIndex),
-                          ],
-                        ),
-                        Spacer(),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            SizedBox(height: 40),
-                            GoogleAccountLoginButton(
-                              navigationSidebarButton: true,
-                              onTap: () {
-                                pageNavigationFrameworkKey.currentState!
-                                    .changePage(8, switchNavbar: true);
-                                appStateKey.currentState?.refreshAppState();
-                              },
-                              isButtonSelected: selectedIndex == 8,
-                            ),
-                            NavigationSidebarButton(
-                              icon: appStateSettings["outlinedIcons"]
-                                  ? Icons.settings_outlined
-                                  : Icons.settings_rounded,
-                              label: "settings".tr(),
-                              isSelected: selectedIndex == 4,
-                              onTap: () {
-                                pageNavigationFrameworkKey.currentState!
-                                    .changePage(4, switchNavbar: true);
-                              },
-                            ),
-                            NavigationSidebarButton(
-                              icon: appStateSettings["outlinedIcons"]
-                                  ? Icons.info_outlined
-                                  : Icons.info_outline_rounded,
-                              label: "about".tr(),
-                              isSelected: selectedIndex == 13,
-                              onTap: () {
-                                pageNavigationFrameworkKey.currentState!
-                                    .changePage(13, switchNavbar: true);
-                              },
-                            ),
-                            SyncButton(),
-                            SizedBox(height: 10),
-                            SizedBox(
-                                height: MediaQuery.of(context).padding.bottom),
-                          ],
-                        ),
-                      ],
+                                ],
+                              ),
+                              AnimatedContainer(
+                                duration: Duration(milliseconds: 1500),
+                                curve: Curves.easeInOutCubicEmphasized,
+                                height: appStateSettings[
+                                        "expandedNavigationSidebar"]
+                                    ? 40
+                                    : 0,
+                              ),
+                              NavigationSidebarButton(
+                                icon: Icons.home_rounded,
+                                label: "home".tr(),
+                                isSelected: selectedIndex == 0,
+                                onTap: () {
+                                  pageNavigationFrameworkKey.currentState!
+                                      .changePage(0, switchNavbar: true);
+                                },
+                              ),
+                              NavigationSidebarButton(
+                                icon: Icons.payments_rounded,
+                                label: "transactions".tr(),
+                                isSelected: selectedIndex == 1,
+                                onTap: () {
+                                  pageNavigationFrameworkKey.currentState!
+                                      .changePage(1, switchNavbar: true);
+                                },
+                              ),
+                              NavigationSidebarButton(
+                                icon: MoreIcons.chart_pie,
+                                iconScale: 0.87,
+                                label: "budgets".tr(),
+                                isSelected: selectedIndex == 2,
+                                onTap: () {
+                                  pageNavigationFrameworkKey.currentState!
+                                      .changePage(2, switchNavbar: true);
+                                },
+                              ),
+                              NavigationSidebarButton(
+                                icon: appStateSettings["outlinedIcons"]
+                                    ? Icons.savings_outlined
+                                    : Icons.savings_rounded,
+                                label: "goals".tr(),
+                                isSelected: selectedIndex == 14,
+                                onTap: () {
+                                  pageNavigationFrameworkKey.currentState!
+                                      .changePage(14, switchNavbar: true);
+                                },
+                              ),
+                              NavigationSidebarButton(
+                                icon: appStateSettings["outlinedIcons"]
+                                    ? Icons.event_repeat_outlined
+                                    : Icons.event_repeat_rounded,
+                                label: "subscriptions".tr(),
+                                isSelected: selectedIndex == 5,
+                                onTap: () {
+                                  pageNavigationFrameworkKey.currentState!
+                                      .changePage(5, switchNavbar: true);
+                                },
+                              ),
+                              kIsWeb
+                                  ? SizedBox.shrink()
+                                  : NavigationSidebarButton(
+                                      icon: appStateSettings["outlinedIcons"]
+                                          ? Icons.notifications_outlined
+                                          : Icons.notifications_rounded,
+                                      label: "notifications".tr(),
+                                      isSelected: selectedIndex == 6,
+                                      onTap: () {
+                                        pageNavigationFrameworkKey.currentState!
+                                            .changePage(6, switchNavbar: true);
+                                      },
+                                    ),
+                              NavigationSidebarButton(
+                                icon: appStateSettings["outlinedIcons"]
+                                    ? Icons.receipt_long_outlined
+                                    : Icons.receipt_long_rounded,
+                                label: "all-spending".tr(),
+                                isSelected: selectedIndex == 7,
+                                onTap: () {
+                                  pageNavigationFrameworkKey.currentState!
+                                      .changePage(7, switchNavbar: true);
+                                },
+                              ),
+                              EditDataButtons(selectedIndex: selectedIndex),
+                            ],
+                          ),
+                          Spacer(),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              SizedBox(height: 40),
+                              GoogleAccountLoginButton(
+                                navigationSidebarButton: true,
+                                onTap: () {
+                                  pageNavigationFrameworkKey.currentState!
+                                      .changePage(8, switchNavbar: true);
+                                  appStateKey.currentState?.refreshAppState();
+                                },
+                                isButtonSelected: selectedIndex == 8,
+                              ),
+                              NavigationSidebarButton(
+                                icon: appStateSettings["outlinedIcons"]
+                                    ? Icons.settings_outlined
+                                    : Icons.settings_rounded,
+                                label: "settings".tr(),
+                                isSelected: selectedIndex == 4,
+                                onTap: () {
+                                  pageNavigationFrameworkKey.currentState!
+                                      .changePage(4, switchNavbar: true);
+                                },
+                              ),
+                              NavigationSidebarButton(
+                                icon: appStateSettings["outlinedIcons"]
+                                    ? Icons.info_outlined
+                                    : Icons.info_outline_rounded,
+                                label: "about".tr(),
+                                isSelected: selectedIndex == 13,
+                                onTap: () {
+                                  pageNavigationFrameworkKey.currentState!
+                                      .changePage(13, switchNavbar: true);
+                                },
+                              ),
+                              SyncButton(),
+                              SizedBox(height: 10),
+                              SizedBox(
+                                  height:
+                                      MediaQuery.of(context).padding.bottom),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),

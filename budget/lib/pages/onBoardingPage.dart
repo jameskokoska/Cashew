@@ -1,3 +1,4 @@
+import 'package:budget/colors.dart';
 import 'package:budget/database/generatePreviewData.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/main.dart';
@@ -63,6 +64,7 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
       DateTime(DateTime.now().year, DateTime.now().month, 1);
   DateTime? selectedEndDate;
   String selectedRecurrence = "Monthly";
+  bool selectedIncludeIncome = false;
 
   bool showImage = false;
   final Image imageLanding1 = Image(
@@ -102,6 +104,15 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
           walletFk: "0",
           reoccurrence: mapRecurrence(selectedRecurrence),
           isAbsoluteSpendingLimit: false,
+          budgetTransactionFilters: [
+            ...(selectedIncludeIncome == false
+                ? [BudgetTransactionFilters.defaultBudgetTransactionFilters]
+                : [
+                    BudgetTransactionFilters.includeIncome,
+                    BudgetTransactionFilters.addedToOtherBudget,
+                    BudgetTransactionFilters.addedToObjective
+                  ])
+          ],
         ),
       );
     }
@@ -269,6 +280,7 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
               maxLines: 5,
             ),
           ),
+          SizedBox(height: 15),
           BudgetDetails(
             determineBottomButton: () {},
             setSelectedAmount: (amount, _) {
@@ -302,16 +314,35 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
             },
             initialSelectedEndDate: selectedEndDate,
           ),
-          SizedBox(height: 15),
+          Opacity(
+            opacity: 0.8,
+            child: ChoiceChip(
+              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+              selectedColor: appStateSettings["materialYou"]
+                  ? null
+                  : getColor(context, "lightDarkAccentHeavy"),
+              label: TextFont(
+                text: "include-income-onboarding-label".tr() +
+                    (selectedIncludeIncome == false ? "?" : ""),
+                fontSize: 15,
+              ),
+              selected: selectedIncludeIncome,
+              onSelected: (bool selected) {
+                setState(() {
+                  selectedIncludeIncome = selected;
+                });
+              },
+            ),
+          ),
+          SizedBox(height: 35),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 25),
             child: TextFont(
-              text: "onboarding-info-2-1".tr() +
-                  "\n" +
-                  "onboarding-info-2-2".tr(),
+              text: "onboarding-info-2-1".tr(),
               textAlign: TextAlign.center,
-              fontSize: 16,
+              fontSize: 15,
               maxLines: 5,
+              textColor: getColor(context, "black").withOpacity(0.35),
             ),
           ),
         ],

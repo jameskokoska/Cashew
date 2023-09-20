@@ -7,6 +7,7 @@ import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/dropdownSelect.dart';
 import 'package:budget/widgets/framework/popupFramework.dart';
+import 'package:budget/widgets/incomeExpenseTabSelector.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
@@ -54,6 +55,7 @@ class _WalletDetailsPageState extends State<WalletDetailsPage> {
       ? "All Spending Summary"
       : widget.wallet!.walletPk.toString() + " Wallet Summary";
   GlobalKey<PageFrameworkState> pageState = GlobalKey();
+  bool isIncome = false;
 
   @override
   Widget build(BuildContext context) {
@@ -145,28 +147,6 @@ class _WalletDetailsPageState extends State<WalletDetailsPage> {
                           children: [
                             Expanded(
                               child: TransactionsAmountBox(
-                                label: "income".tr(),
-                                amountStream: database.watchTotalOfWallet(
-                                  walletPk,
-                                  isIncome: true,
-                                  allWallets: Provider.of<AllWallets>(context),
-                                ),
-                                textColor: getColor(context, "incomeAmount"),
-                                transactionsAmountStream: database
-                                    .watchTotalCountOfTransactionsInWallet(
-                                  walletPk,
-                                  isIncome: true,
-                                ),
-                                openPage: TransactionsSearchPage(
-                                  initialFilters: SearchFilters(
-                                    expenseIncome: [ExpenseIncome.income],
-                                  ),
-                                ),
-                              ),
-                            ),
-                            SizedBox(width: 13),
-                            Expanded(
-                              child: TransactionsAmountBox(
                                 label: "expense".tr(),
                                 amountStream: database.watchTotalOfWallet(
                                   walletPk,
@@ -186,6 +166,28 @@ class _WalletDetailsPageState extends State<WalletDetailsPage> {
                                 ),
                               ),
                             ),
+                            SizedBox(width: 13),
+                            Expanded(
+                              child: TransactionsAmountBox(
+                                label: "income".tr(),
+                                amountStream: database.watchTotalOfWallet(
+                                  walletPk,
+                                  isIncome: true,
+                                  allWallets: Provider.of<AllWallets>(context),
+                                ),
+                                textColor: getColor(context, "incomeAmount"),
+                                transactionsAmountStream: database
+                                    .watchTotalCountOfTransactionsInWallet(
+                                  walletPk,
+                                  isIncome: true,
+                                ),
+                                openPage: TransactionsSearchPage(
+                                  initialFilters: SearchFilters(
+                                    expenseIncome: [ExpenseIncome.income],
+                                  ),
+                                ),
+                              ),
+                            ),
                           ],
                         ),
                       ),
@@ -195,6 +197,33 @@ class _WalletDetailsPageState extends State<WalletDetailsPage> {
                           ? []
                           : [widget.wallet!.walletPk],
                     ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: getHorizontalPaddingConstrained(context)),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 13),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            boxShadow:
+                                boxShadowCheck(boxShadowGeneral(context)),
+                          ),
+                          child: ClipRRect(
+                            borderRadius: getPlatform() == PlatformOS.isIOS
+                                ? BorderRadius.circular(10)
+                                : BorderRadius.circular(15),
+                            child: IncomeExpenseTabSelector(
+                              onTabChanged: (income) {
+                                setState(() {
+                                  isIncome = income;
+                                });
+                              },
+                              initialTabIsIncome: false,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 10),
                     WalletCategoryPieChart(
                       wallet: widget.wallet,
                       walletColorScheme: walletColorScheme,
@@ -204,6 +233,7 @@ class _WalletDetailsPageState extends State<WalletDetailsPage> {
                           selectedCategoryPk = categoryPk;
                         });
                       },
+                      isIncome: isIncome,
                     ),
                   ],
                 ),
@@ -216,6 +246,7 @@ class _WalletDetailsPageState extends State<WalletDetailsPage> {
                 limit: selectedCategoryPk == "-1" ? 0 : 10,
                 listID: listID,
                 showNoResults: false,
+                income: isIncome,
               ),
               selectedCategoryPk == "-1"
                   ? SliverToBoxAdapter(
@@ -248,12 +279,14 @@ class WalletCategoryPieChart extends StatefulWidget {
     required this.wallet,
     required this.walletColorScheme,
     required this.onSelectedCategory,
+    required this.isIncome,
     super.key,
   });
 
   final TransactionWallet? wallet;
   final ColorScheme walletColorScheme;
   final Function(String) onSelectedCategory;
+  final bool isIncome;
 
   @override
   State<WalletCategoryPieChart> createState() => _WalletCategoryPieChartState();
@@ -270,135 +303,111 @@ class _WalletCategoryPieChartState extends State<WalletCategoryPieChart> {
     return StreamBuilder<double?>(
       stream: database.watchTotalOfWallet(
         widget.wallet?.walletPk,
-        isIncome: true,
+        isIncome: widget.isIncome,
         allWallets: Provider.of<AllWallets>(context),
       ),
-      builder: (context, totalIncomeSnapshot) {
-        double totalIncome = totalIncomeSnapshot.data ?? 0;
-        return StreamBuilder<double?>(
-          stream: database.watchTotalOfWallet(
-            widget.wallet?.walletPk,
-            isIncome: false,
+      builder: (context, totalSnapshot) {
+        double total = (totalSnapshot.data ?? 0).abs();
+        return StreamBuilder<List<CategoryWithTotal>>(
+          stream:
+              database.watchTotalSpentInEachCategoryInTimeRangeFromCategories(
             allWallets: Provider.of<AllWallets>(context),
+            start: DateTime.now(),
+            end: DateTime.now(),
+            categoryFks: null,
+            categoryFksExclude: null,
+            budgetTransactionFilters: null,
+            memberTransactionFilters: null,
+            allTime: true,
+            walletPk: widget.wallet == null ? null : widget.wallet!.walletPk,
+            isIncome: widget.isIncome,
           ),
-          builder: (context, totalExpenseSnapshot) {
-            double totalExpense = totalExpenseSnapshot.data ?? 0;
-            return StreamBuilder<List<CategoryWithTotal>>(
-              stream: database
-                  .watchTotalSpentInEachCategoryInTimeRangeFromCategories(
-                allWallets: Provider.of<AllWallets>(context),
-                start: DateTime.now(),
-                end: DateTime.now(),
-                categoryFks: null,
-                categoryFksExclude: null,
-                budgetTransactionFilters: [], memberTransactionFilters: null,
-                allTime: true,
-                walletPk:
-                    widget.wallet == null ? null : widget.wallet!.walletPk,
-                // member: selectedMember,
-                // onlyShowTransactionsBelongingToBudget:
-                //     widget.budget.sharedKey != null ||
-                //             widget.budget.addedTransactionsOnly == true
-                //         ? widget.budget.budgetPk
-                //         : null,
-                // budget: widget.budget,
-                // income: null,
-              ),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  double totalSpent = totalIncome.abs() + totalExpense.abs();
-                  if (totalSpent == 0) return SizedBox.shrink();
-
-                  List<Widget> categoryEntries = [];
-                  snapshot.data!.asMap().forEach((index, category) {
-                    categoryEntries.add(
-                      CategoryEntry(
-                        extraText: category.total > 0
-                            ? "of-income".tr()
-                            : "of-expense".tr(),
-                        isTiled: tiledCategoryEntries,
-                        budgetColorScheme: widget.walletColorScheme,
-                        category: category.category,
-                        totalSpent:
-                            category.total > 0 ? totalIncome : totalExpense,
-                        transactionCount: category.transactionCount,
-                        categorySpent: category.total,
-                        onTap: () {
-                          if (selectedCategoryPk ==
-                              category.category.categoryPk) {
-                            setState(() {
-                              selectedCategoryPk = "-1";
-                              selectedCategory = null;
-                            });
-                            _pieChartDisplayStateKey.currentState!
-                                .setTouchedIndex(-1);
-                            widget.onSelectedCategory("-1");
-                          } else {
-                            setState(() {
-                              selectedCategoryPk = category.category.categoryPk;
-                              selectedCategory = category.category;
-                            });
-                            _pieChartDisplayStateKey.currentState!
-                                .setTouchedIndex(index);
-                            widget.onSelectedCategory(
-                                category.category.categoryPk);
-                          }
-                        },
-                        selected:
-                            selectedCategoryPk == category.category.categoryPk,
-                        allSelected: selectedCategoryPk == "-1",
-                        showIncomeExpenseIcons: true,
-                      ),
-                    );
-                  });
-                  return Column(
-                    children: [
-                      SizedBox(height: 30),
-                      PieChartWrapper(
-                        isPastBudget: true,
-                        pieChartDisplayStateKey: _pieChartDisplayStateKey,
-                        data: snapshot.data!,
-                        totalSpent: totalSpent,
-                        setSelectedCategory: (categoryPk, category) {
-                          setState(() {
-                            selectedCategoryPk = categoryPk;
-                            selectedCategory = category;
-                            widget.onSelectedCategory(categoryPk);
-                          });
-                        },
-                      ),
-                      SizedBox(height: 35),
-                      // IconButton(
-                      //   onPressed: () {
-                      //     setState(() {
-                      //       tiledCategoryEntries = !tiledCategoryEntries;
-                      //     });
-                      //   },
-                      //   icon: Icon(
-                      //     tiledCategoryEntries
-                      //         ? appStateSettings["outlinedIcons"] ? Icons.grid_view_outlined : Icons.grid_view_rounded
-                      //         : appStateSettings["outlinedIcons"] ? Icons.list_outlined : Icons.list_rounded,
-                      //   ),
-                      // ),
-                      // tiledCategoryEntries
-                      //     ? Padding(
-                      //         padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      //         child: Wrap(
-                      //           children: [...categoryEntries],
-                      //         ),
-                      //       )
-                      //     : SizedBox.shrink(),
-                      // Wrap(
-                      //   children: [...categoryEntries],
-                      // ),
-                      ...categoryEntries,
-                      SizedBox(height: 15),
-                    ],
-                  );
-                }
-                return SizedBox.shrink();
-              },
-            );
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              List<Widget> categoryEntries = [];
+              snapshot.data!.asMap().forEach((index, category) {
+                categoryEntries.add(
+                  CategoryEntry(
+                    extraText:
+                        widget.isIncome ? "of-income".tr() : "of-expense".tr(),
+                    isTiled: tiledCategoryEntries,
+                    budgetColorScheme: widget.walletColorScheme,
+                    category: category.category,
+                    totalSpent: total,
+                    transactionCount: category.transactionCount,
+                    categorySpent: category.total,
+                    onTap: () {
+                      if (selectedCategoryPk == category.category.categoryPk) {
+                        setState(() {
+                          selectedCategoryPk = "-1";
+                          selectedCategory = null;
+                        });
+                        _pieChartDisplayStateKey.currentState!
+                            .setTouchedIndex(-1);
+                        widget.onSelectedCategory("-1");
+                      } else {
+                        setState(() {
+                          selectedCategoryPk = category.category.categoryPk;
+                          selectedCategory = category.category;
+                        });
+                        _pieChartDisplayStateKey.currentState!
+                            .setTouchedIndex(index);
+                        widget.onSelectedCategory(category.category.categoryPk);
+                      }
+                    },
+                    selected:
+                        selectedCategoryPk == category.category.categoryPk,
+                    allSelected: selectedCategoryPk == "-1",
+                    showIncomeExpenseIcons: true,
+                  ),
+                );
+              });
+              return Column(
+                children: [
+                  SizedBox(height: 30),
+                  PieChartWrapper(
+                    isPastBudget: true,
+                    pieChartDisplayStateKey: _pieChartDisplayStateKey,
+                    data: snapshot.data!,
+                    totalSpent: total,
+                    setSelectedCategory: (categoryPk, category) {
+                      setState(() {
+                        selectedCategoryPk = categoryPk;
+                        selectedCategory = category;
+                        widget.onSelectedCategory(categoryPk);
+                      });
+                    },
+                  ),
+                  SizedBox(height: 35),
+                  // IconButton(
+                  //   onPressed: () {
+                  //     setState(() {
+                  //       tiledCategoryEntries = !tiledCategoryEntries;
+                  //     });
+                  //   },
+                  //   icon: Icon(
+                  //     tiledCategoryEntries
+                  //         ? appStateSettings["outlinedIcons"] ? Icons.grid_view_outlined : Icons.grid_view_rounded
+                  //         : appStateSettings["outlinedIcons"] ? Icons.list_outlined : Icons.list_rounded,
+                  //   ),
+                  // ),
+                  // tiledCategoryEntries
+                  //     ? Padding(
+                  //         padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  //         child: Wrap(
+                  //           children: [...categoryEntries],
+                  //         ),
+                  //       )
+                  //     : SizedBox.shrink(),
+                  // Wrap(
+                  //   children: [...categoryEntries],
+                  // ),
+                  ...categoryEntries,
+                  SizedBox(height: 15),
+                ],
+              );
+            }
+            return SizedBox.shrink();
           },
         );
       },

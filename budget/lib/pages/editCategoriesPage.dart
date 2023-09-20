@@ -410,8 +410,8 @@ Future<DeletePopupAction?> deleteCategoryPopup(
         title: "delete-all-transactions-question".tr(),
         description: "delete-category-merge-warning".tr(),
         icon: appStateSettings["outlinedIcons"]
-            ? Icons.warning_amber_outlined
-            : Icons.warning_amber_rounded,
+            ? Icons.warning_outlined
+            : Icons.warning_rounded,
         onCancel: () {
           Navigator.pop(context, false);
         },

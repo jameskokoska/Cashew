@@ -166,8 +166,8 @@ class _BillSplitterState extends State<BillSplitter> {
         SnackbarMessage(
           title: "duplicate-name-warning".tr(),
           icon: appStateSettings["outlinedIcons"]
-              ? Icons.warning_amber_outlined
-              : Icons.warning_amber_rounded,
+              ? Icons.warning_outlined
+              : Icons.warning_rounded,
           description: "duplicate-name-warning-description".tr(),
         ),
       );

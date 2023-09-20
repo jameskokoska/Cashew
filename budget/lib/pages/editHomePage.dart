@@ -83,7 +83,6 @@ class _EditHomePageState extends State<EditHomePage> {
                   pagesNeedingRefresh: [], updateGlobalState: false);
             },
             onTap: () async {
-              String defaultLabel = "default-line-graph".tr();
               List<Budget> allBudgets = await database.getAllBudgets();
               List<Budget> allPinnedBudgets =
                   await database.getAllPinnedBudgets().$2;
@@ -110,7 +109,7 @@ class _EditHomePageState extends State<EditHomePage> {
                                 budgetPk.toString()) {
                               return budget.name;
                             }
-                          return defaultLabel;
+                          return "";
                         },
                         initialItems: [
                           for (Budget budget in allPinnedBudgets)
@@ -125,6 +124,62 @@ class _EditHomePageState extends State<EditHomePage> {
                             budgetToUpdate.copyWith(
                                 pinned: !budgetToUpdate.pinned),
                             updateSharedEntry: false,
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
+          "objectives": EditHomePageItem(
+            icon: appStateSettings["outlinedIcons"]
+                ? Icons.savings_outlined
+                : Icons.savings_rounded,
+            name: "goals".tr(),
+            isEnabled: appStateSettings["showObjectives"],
+            onSwitched: (value) {
+              updateSettings("showObjectives", value,
+                  pagesNeedingRefresh: [], updateGlobalState: false);
+            },
+            onTap: () async {
+              List<Objective> allObjectives = await database.getAllObjectives();
+              List<Objective> allPinnedObjectives =
+                  await database.getAllPinnedObjectives().$2;
+              openBottomSheet(
+                context,
+                PopupFramework(
+                  title: "select-goals".tr(),
+                  child: Column(
+                    children: [
+                      SelectItems(
+                        checkboxCustomIconSelected: Icons.push_pin_rounded,
+                        checkboxCustomIconUnselected: Icons.push_pin_outlined,
+                        items: [
+                          for (Objective objective in allObjectives)
+                            objective.objectivePk.toString()
+                        ],
+                        displayFilter: (objectivePk) {
+                          for (Objective objective in allObjectives)
+                            if (objective.objectivePk.toString() ==
+                                objectivePk.toString()) {
+                              return objective.name;
+                            }
+                          return "";
+                        },
+                        initialItems: [
+                          for (Objective objective in allPinnedObjectives)
+                            objective.objectivePk.toString()
+                        ],
+                        onChangedSingleItem: (value) async {
+                          Objective objective = allObjectives[allObjectives
+                              .indexWhere((item) => item.objectivePk == value)];
+                          Objective objectiveToUpdate = await database
+                              .getObjectiveInstance(objective.objectivePk);
+                          await database.createOrUpdateObjective(
+                            objectiveToUpdate.copyWith(
+                                pinned: !objectiveToUpdate.pinned),
                           );
                         },
                       ),

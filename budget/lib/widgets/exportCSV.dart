@@ -76,8 +76,8 @@ Future<bool> saveCSV(String csv, String fileName) async {
       title: "error-exporting".tr(),
       description: e.toString(),
       icon: appStateSettings["outlinedIcons"]
-          ? Icons.warning_amber_outlined
-          : Icons.warning_amber_rounded,
+          ? Icons.warning_outlined
+          : Icons.warning_rounded,
     ));
     print("Error saving file to device: " + e.toString());
     return false;

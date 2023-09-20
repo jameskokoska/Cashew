@@ -181,6 +181,9 @@ class _AddCategoryPageState extends State<AddCategoryPage>
           userAttemptedToChangeTitle = true;
         });
         _titleController.text = selectedTitle ?? "";
+        _titleController.selection = TextSelection.fromPosition(
+            TextPosition(offset: _titleController.text.length));
+
         if (widget.category?.income == true) {
           _incomeTabController.animateTo(1);
         } else {
@@ -223,6 +226,7 @@ class _AddCategoryPageState extends State<AddCategoryPage>
           }
         },
         child: PageFramework(
+          horizontalPadding: getHorizontalPaddingConstrained(context),
           resizeToAvoidBottomInset: true,
           dragDownToDismiss: true,
           title: widget.category == null
@@ -299,11 +303,6 @@ class _AddCategoryPageState extends State<AddCategoryPage>
                 child: IncomeExpenseTabSelector(
                   onTabChanged: setSelectedIncome,
                   initialTabIsIncome: selectedIncome,
-                  color: Theme.of(context).colorScheme.secondaryContainer,
-                  unselectedColor: Theme.of(context)
-                      .colorScheme
-                      .secondaryContainer
-                      .withOpacity(0.2),
                 ),
               ),
             ),

@@ -214,7 +214,7 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
       EditCategoriesPage(), //11
       EditAssociatedTitlesPage(), //12
       AboutPage(), //13
-      ObjectivesListPage(), //14
+      ObjectivesListPage(backButton: false), //14
       EditObjectivesPage(), //15
     ];
 
@@ -375,7 +375,7 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
                       routesToPopAfterDelete: RoutesToPopAfterDelete.None,
                     ),
                   ),
-                  condition: [0, 1, 2].contains(currentPage),
+                  condition: [0, 1, 2, 14].contains(currentPage),
                 )
               ],
             ),

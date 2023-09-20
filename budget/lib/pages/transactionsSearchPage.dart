@@ -1,6 +1,7 @@
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/pages/addBudgetPage.dart';
+import 'package:budget/pages/addObjectivePage.dart';
 import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/addWalletPage.dart';
 import 'package:budget/struct/settings.dart';
@@ -490,6 +491,21 @@ class AppliedFilterChips extends StatelessWidget {
         openFiltersSelection: openFiltersSelection,
       ));
     }
+    // Objectives
+    for (Objective objective in await database.getAllObjectives()) {
+      if (searchFilters.objectivePks.contains(objective.objectivePk))
+        out.add(AppliedFilterChip(
+          label: objective.name,
+          customBorderColor: HexColor(objective.colour),
+          openFiltersSelection: openFiltersSelection,
+        ));
+    }
+    if (searchFilters.objectivePks.contains(null)) {
+      out.add(AppliedFilterChip(
+        label: "no-objective".tr(),
+        openFiltersSelection: openFiltersSelection,
+      ));
+    }
 
     return out;
   }
@@ -603,6 +619,7 @@ class SearchFilters {
     this.walletPks = const [],
     this.categoryPks = const [],
     this.budgetPks = const [],
+    this.objectivePks = const [],
     this.expenseIncome = const [],
     this.paidStatus = const [],
     this.transactionTypes = const [],
@@ -616,6 +633,7 @@ class SearchFilters {
     walletPks = this.walletPks.isEmpty ? [] : this.walletPks;
     categoryPks = this.categoryPks.isEmpty ? [] : this.categoryPks;
     budgetPks = this.budgetPks.isEmpty ? [] : this.budgetPks;
+    objectivePks = this.objectivePks.isEmpty ? [] : this.objectivePks;
     expenseIncome = this.expenseIncome.isEmpty ? [] : this.expenseIncome;
     paidStatus = this.paidStatus.isEmpty ? [] : this.paidStatus;
     transactionTypes =
@@ -631,6 +649,7 @@ class SearchFilters {
   List<String> walletPks;
   List<String> categoryPks;
   List<String?> budgetPks;
+  List<String?> objectivePks;
   List<ExpenseIncome> expenseIncome;
   List<PaidStatus> paidStatus;
   List<TransactionSpecialType?> transactionTypes;
@@ -645,6 +664,7 @@ class SearchFilters {
     walletPks = [];
     categoryPks = [];
     budgetPks = [];
+    objectivePks = [];
     expenseIncome = [];
     paidStatus = [];
     transactionTypes = [];
@@ -660,6 +680,7 @@ class SearchFilters {
     if (walletPks.isEmpty &&
         categoryPks.isEmpty &&
         budgetPks.isEmpty &&
+        objectivePks.isEmpty &&
         expenseIncome.isEmpty &&
         paidStatus.isEmpty &&
         transactionTypes.isEmpty &&
@@ -932,6 +953,60 @@ class _TransactionFiltersSelectionState
                   return selectedFilters.budgetPks.contains(item?.budgetPk);
                 },
                 getCustomBorderColor: (Budget? item) {
+                  if (item == null) return null;
+                  return dynamicPastel(
+                    context,
+                    lightenPastel(
+                      HexColor(
+                        item.colour,
+                        defaultColor: Theme.of(context).colorScheme.primary,
+                      ),
+                      amount: 0.3,
+                    ),
+                    amount: 0.4,
+                  );
+                },
+              );
+            } else {
+              return SizedBox.shrink();
+            }
+          },
+        ),
+
+        StreamBuilder<List<Objective>>(
+          stream: database.watchAllObjectives(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return SelectChips(
+                items: [null, ...snapshot.data!],
+                onLongPress: (Objective? item) {
+                  pushRoute(
+                    context,
+                    AddObjectivePage(
+                      objective: item,
+                      routesToPopAfterDelete:
+                          RoutesToPopAfterDelete.PreventDelete,
+                    ),
+                  );
+                },
+                getLabel: (Objective? item) {
+                  if (item == null) return "no-objective".tr();
+                  return item.name;
+                },
+                onSelected: (Objective? item) {
+                  if (selectedFilters.objectivePks
+                      .contains(item?.objectivePk)) {
+                    selectedFilters.objectivePks.remove(item?.objectivePk);
+                  } else {
+                    selectedFilters.objectivePks.add(item?.objectivePk);
+                  }
+                  setSearchFilters();
+                },
+                getSelected: (Objective? item) {
+                  return selectedFilters.objectivePks
+                      .contains(item?.objectivePk);
+                },
+                getCustomBorderColor: (Objective? item) {
                   if (item == null) return null;
                   return dynamicPastel(
                     context,

@@ -36,6 +36,7 @@ import 'package:budget/widgets/util/showDatePicker.dart';
 import 'package:budget/widgets/util/widgetSize.dart';
 import 'package:drift/drift.dart' hide Column;
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:budget/colors.dart';
@@ -701,6 +702,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
               syncWithInitial: true,
               color: categoryColor,
               unselectedColor: Colors.black.withOpacity(0.2),
+              unselectedLabelColor: Colors.white.withOpacity(0.3),
             ),
           ),
           Row(
@@ -969,6 +971,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
             onChanged: (text) async {
               setSelectedTitle(text, setInput: false);
             },
+            autoFocus: kIsWeb && getIsFullScreen(context),
           ),
         ),
         Container(height: 14),

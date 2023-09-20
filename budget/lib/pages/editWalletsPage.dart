@@ -305,8 +305,8 @@ Future<DeletePopupAction?> deleteWalletPopup(
         title: "delete-all-transactions-question".tr(),
         description: "delete-account-merge-warning".tr(),
         icon: appStateSettings["outlinedIcons"]
-            ? Icons.warning_amber_outlined
-            : Icons.warning_amber_rounded,
+            ? Icons.warning_outlined
+            : Icons.warning_rounded,
         onCancel: () {
           Navigator.pop(context, false);
         },
@@ -395,8 +395,8 @@ void mergeWalletPopup(
               title: "cannot-remove".tr(),
               description: "cannot-remove-default-account".tr(),
               icon: appStateSettings["outlinedIcons"]
-                  ? Icons.warning_amber_outlined
-                  : Icons.warning_amber_rounded,
+                  ? Icons.warning_outlined
+                  : Icons.warning_rounded,
             ),
           );
         }

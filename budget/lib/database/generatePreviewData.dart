@@ -53,6 +53,11 @@ Future deletePreviewData({bool resetOnboard = false}) async {
   } catch (e) {
     print(e.toString());
   }
+  try {
+    await database.forceDeleteObjectives(["10", "11"]);
+  } catch (e) {
+    print(e.toString());
+  }
 
   await database.createOrUpdateWallet(
     defaultWallet(),
@@ -133,6 +138,108 @@ Future generatePreviewData() async {
       order: 1,
       walletFk: "0",
       isAbsoluteSpendingLimit: true,
+    ),
+  );
+  await database.createOrUpdateObjective(
+    Objective(
+      objectivePk: "10",
+      name: "Trip Savings Jar",
+      amount: 500.0,
+      order: 0,
+      colour: "0xff66bb6a",
+      dateCreated: DateTime.now().subtract(Duration(days: 5)),
+      dateTimeModified: DateTime.now(),
+      iconName: "coconut-tree.png",
+      emojiIconName: null,
+      income: true,
+      pinned: true,
+    ),
+  );
+  await database.createOrUpdateObjective(
+    Objective(
+      objectivePk: "11",
+      name: "Car Payment Loan",
+      amount: 1000.0,
+      order: 1,
+      colour: "0xffff7043",
+      dateCreated: DateTime.now().subtract(Duration(days: 25)),
+      dateTimeModified: DateTime.now(),
+      iconName: "car.png",
+      emojiIconName: null,
+      income: false,
+      pinned: true,
+    ),
+  );
+  await database.createOrUpdateTransaction(
+    updateSharedEntry: false,
+    insert: true,
+    Transaction(
+      objectiveFk: "10",
+      methodAdded: MethodAdded.preview,
+      transactionPk: "-1",
+      name: "Vacation savings",
+      amount: 520.0,
+      note: "Some extra money to put towards a trip!",
+      categoryFk: "6",
+      walletFk: "0",
+      dateCreated: DateTime.now().subtract(Duration(days: 4)),
+      dateTimeModified: null,
+      income: true,
+      periodLength: 1,
+      reoccurrence: BudgetReoccurence.monthly,
+      upcomingTransactionNotification: true,
+      type: null,
+      paid: true,
+      createdAnotherFutureTransaction: false,
+      skipPaid: true,
+    ),
+  );
+  await database.createOrUpdateTransaction(
+    updateSharedEntry: false,
+    insert: true,
+    Transaction(
+      objectiveFk: "11",
+      methodAdded: MethodAdded.preview,
+      transactionPk: "-1",
+      name: "Car Payment",
+      amount: -500.0,
+      note: "",
+      categoryFk: "6",
+      walletFk: "0",
+      dateCreated: tripStart.subtract(Duration(days: 4)),
+      dateTimeModified: null,
+      income: false,
+      periodLength: 1,
+      reoccurrence: BudgetReoccurence.monthly,
+      upcomingTransactionNotification: true,
+      type: null,
+      paid: true,
+      createdAnotherFutureTransaction: false,
+      skipPaid: true,
+    ),
+  );
+  await database.createOrUpdateTransaction(
+    updateSharedEntry: false,
+    insert: true,
+    Transaction(
+      objectiveFk: "11",
+      methodAdded: MethodAdded.preview,
+      transactionPk: "-1",
+      name: "Car Payment",
+      amount: -200.0,
+      note: "",
+      categoryFk: "6",
+      walletFk: "0",
+      dateCreated: DateTime.now().subtract(Duration(days: 10)),
+      dateTimeModified: null,
+      income: false,
+      periodLength: 1,
+      reoccurrence: BudgetReoccurence.monthly,
+      upcomingTransactionNotification: true,
+      type: null,
+      paid: true,
+      createdAnotherFutureTransaction: false,
+      skipPaid: true,
     ),
   );
   await database.createOrUpdateTransaction(
@@ -515,7 +622,7 @@ Future generatePreviewData() async {
     Transaction(
       methodAdded: MethodAdded.preview,
       transactionPk: "-1",
-      name: "Movie stream",
+      name: "Movie streaming service",
       amount: -15.0,
       note: "",
       categoryFk: "5",

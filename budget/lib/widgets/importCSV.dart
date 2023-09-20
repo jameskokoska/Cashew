@@ -190,8 +190,8 @@ class _ImportCSVState extends State<ImportCSV> {
           openPopup(
             context,
             icon: appStateSettings["outlinedIcons"]
-                ? Icons.warning_amber_outlined
-                : Icons.warning_amber_rounded,
+                ? Icons.warning_outlined
+                : Icons.warning_rounded,
             title: "csv-error".tr(),
             description: "consider-csv-template".tr() + e.toString(),
             onSubmit: () {
@@ -455,8 +455,8 @@ class _ImportCSVState extends State<ImportCSV> {
                     openPopup(
                       context,
                       icon: appStateSettings["outlinedIcons"]
-                          ? Icons.warning_amber_outlined
-                          : Icons.warning_amber_rounded,
+                          ? Icons.warning_outlined
+                          : Icons.warning_rounded,
                       title: "csv-error".tr(),
                       description: "consider-csv-template".tr() + e.toString(),
                       onSubmit: () {

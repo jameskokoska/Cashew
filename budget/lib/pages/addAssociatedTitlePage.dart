@@ -8,6 +8,7 @@ import 'package:budget/widgets/selectCategory.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textInput.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 
@@ -177,6 +178,7 @@ class _AddAssociatedTitlePageState extends State<AddAssociatedTitlePage> {
                   fontWeight: FontWeight.bold,
                   topContentPadding: 0,
                   focusNode: _focusNode,
+                  autoFocus: kIsWeb && getIsFullScreen(context),
                 ),
               ),
             ],

@@ -25,7 +25,7 @@ class TransactionEntryTag extends StatelessWidget {
         children: [
           transaction.sharedReferenceBudgetPk == null
               ? SizedBox.shrink()
-              : Expanded(
+              : Flexible(
                   child: StreamBuilder<Budget>(
                     stream: database
                         .getBudget(transaction.sharedReferenceBudgetPk!),

@@ -78,6 +78,7 @@ enum PaidStatus {
 
 // You should explain what each one does to the user in ViewBudgetTransactionFilterInfo
 // Implement the default and behavior here: onlyShowIfFollowsFilters
+// Also add the default to the onboarding page budget creation: OnBoardingPageBodyState
 enum BudgetTransactionFilters {
   addedToOtherBudget,
   sharedToOtherBudget,
@@ -1361,6 +1362,15 @@ class FinanceDatabase extends _$FinanceDatabase {
     return (query.watch(), query.get());
   }
 
+  (Stream<List<Objective>>, Future<List<Objective>>) getAllPinnedObjectives(
+      {int? limit, int? offset}) {
+    final query = (select(objectives)
+      ..where((tbl) => tbl.pinned.equals(true))
+      ..orderBy([(b) => OrderingTerm.asc(b.order)])
+      ..limit(limit ?? DEFAULT_LIMIT, offset: offset ?? DEFAULT_OFFSET));
+    return (query.watch(), query.get());
+  }
+
   Stream<Budget> getBudget(String budgetPk) {
     return (select(budgets)..where((b) => b.budgetPk.equals(budgetPk)))
         .watchSingle();
@@ -1820,7 +1830,7 @@ class FinanceDatabase extends _$FinanceDatabase {
 
   //create or update a new objective
   Future<int> createOrUpdateObjective(Objective objective,
-      {DateTime? customDateTimeModified, bool insert = false}) {
+      {DateTime? customDateTimeModified, bool insert = false}) async {
     objective = objective.copyWith(
         dateTimeModified: Value(customDateTimeModified ?? DateTime.now()));
     ObjectivesCompanion companionToInsert = objective.toCompanion(true);
@@ -1829,6 +1839,16 @@ class FinanceDatabase extends _$FinanceDatabase {
       // Use auto incremented ID when inserting
       companionToInsert =
           companionToInsert.copyWith(objectivePk: Value.absent());
+
+      // If homepage section disabled and user added an objective, enable homepage section
+      if (appStateSettings["showObjectives"] == false &&
+          objective.pinned == true) {
+        int amountObjectives = (await getAllObjectives()).length;
+        if (amountObjectives <= 0) {
+          await updateSettings("showObjectives", true,
+              updateGlobalState: false, pagesNeedingRefresh: [0]);
+        }
+      }
     }
 
     return into(objectives)
@@ -2913,6 +2933,16 @@ class FinanceDatabase extends _$FinanceDatabase {
     if (insert) {
       // Use auto incremented ID when inserting
       companionToInsert = companionToInsert.copyWith(budgetPk: Value.absent());
+
+      // If homepage section disabled and user added a budget, enable homepage section
+      if (appStateSettings["showPinnedBudgets"] == false &&
+          budget.pinned == true) {
+        int amountBudgets = (await getAllBudgets()).length;
+        if (amountBudgets <= 0) {
+          await updateSettings("showPinnedBudgets", true,
+              updateGlobalState: false, pagesNeedingRefresh: [0]);
+        }
+      }
     }
 
     return into(budgets)
@@ -2928,6 +2958,11 @@ class FinanceDatabase extends _$FinanceDatabase {
   // get budget given key
   Future<Budget> getBudgetInstance(String budgetPk) {
     return (select(budgets)..where((t) => t.budgetPk.equals(budgetPk)))
+        .getSingle();
+  }
+
+  Future<Objective> getObjectiveInstance(String objectivePk) {
+    return (select(objectives)..where((t) => t.objectivePk.equals(objectivePk)))
         .getSingle();
   }
 
@@ -3235,6 +3270,11 @@ class FinanceDatabase extends _$FinanceDatabase {
 
   Future forceDeleteBudgets(List<String> budgetPks) async {
     return (delete(budgets)..where((t) => t.budgetPk.isIn(budgetPks))).go();
+  }
+
+  Future forceDeleteObjectives(List<String> objectivePks) async {
+    return (delete(objectives)..where((t) => t.objectivePk.isIn(objectivePks)))
+        .go();
   }
 
   Future deleteCategoryBudgetLimit(String categoryLimitPk) async {
@@ -3620,6 +3660,8 @@ class FinanceDatabase extends _$FinanceDatabase {
         onlyShowBasedOnCategoryFks(tbl, searchFilters.categoryPks, null);
     Expression<bool> isInBudgetPks =
         onlyShowBasedOnBudgetFks(tbl, searchFilters.budgetPks);
+    Expression<bool> isInObjectivePks =
+        onlyShowBasedOnObjectiveFks(tbl, searchFilters.objectivePks);
 
     Expression<bool> isIncome = searchFilters.expenseIncome.length <= 0
         ? Constant(true)
@@ -3704,6 +3746,7 @@ class FinanceDatabase extends _$FinanceDatabase {
     return isInWalletPks &
         isInCategoryPks &
         isInBudgetPks &
+        isInObjectivePks &
         isInQuery &
         (isIncome | isExpense) &
         (isPaid | isNotPaid | isSkippedPaid) &
@@ -3966,6 +4009,22 @@ class FinanceDatabase extends _$FinanceDatabase {
                 : Constant(true));
   }
 
+  Expression<bool> onlyShowBasedOnObjectiveFks(
+      $TransactionsTable tbl, List<String?>? objectiveFks) {
+    return objectiveFks != null &&
+            objectiveFks.contains(null) &&
+            objectiveFks.length > 1
+        ? tbl.objectiveFk
+                .isIn(objectiveFks.map((value) => value ?? "0").toList()) |
+            tbl.objectiveFk.isNull()
+        : (objectiveFks ?? []).contains(null)
+            ? tbl.objectiveFk.isNull()
+            : (objectiveFks != null && objectiveFks.length > 0
+                ? tbl.objectiveFk
+                    .isIn(objectiveFks.map((value) => value ?? "0").toList())
+                : Constant(true));
+  }
+
   // Start date is in the past
   // End date is in the future
   // Start -> End
@@ -4023,6 +4082,7 @@ class FinanceDatabase extends _$FinanceDatabase {
     Budget? budget,
     bool allTime = false,
     String? walletPk,
+    bool? isIncome = false,
   }) {
     DateTime startDate = DateTime(start.year, start.month, start.day);
     DateTime endDate = DateTime(end.year, end.month, end.day);
@@ -4045,6 +4105,7 @@ class FinanceDatabase extends _$FinanceDatabase {
                   budgetTransactionFilters: budgetTransactionFilters,
                   memberTransactionFilters: memberTransactionFilters) &
               onlyShowIfMember(tbl, member) &
+              onlyShowBasedOnIncome(tbl, isIncome) &
               onlyShowIfCertainBudget(
                   tbl, onlyShowTransactionsBelongingToBudgetPk);
         })

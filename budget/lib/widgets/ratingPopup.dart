@@ -212,8 +212,8 @@ Future<bool> shareFeedback(String feedbackText, String feedbackType,
         title: "Error Sharing Feedback",
         description: "Please try again later",
         icon: appStateSettings["outlinedIcons"]
-            ? Icons.warning_amber_outlined
-            : Icons.warning_amber_rounded,
+            ? Icons.warning_outlined
+            : Icons.warning_rounded,
         timeout: Duration(milliseconds: 2500)));
   }
   loadingIndeterminateKey.currentState!.setVisibility(false);

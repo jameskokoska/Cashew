@@ -211,6 +211,7 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
             ),
             actions: [
               CustomPopupMenuButton(
+                colorScheme: budgetColorScheme,
                 showButtons: enableDoubleColumn(context),
                 keepOutFirst: true,
                 items: [
@@ -314,11 +315,6 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                                     ? category.total > 0
                                         ? getColor(context, "incomeAmount")
                                         : getColor(context, "expenseAmount")
-                                    : null,
-                                extraText: showIncomeExpenseIcons
-                                    ? category.total > 0
-                                        ? "of-income".tr()
-                                        : "of-expense".tr()
                                     : null,
                                 showIncomeExpenseIcons: showIncomeExpenseIcons,
                                 onLongPress: () {
@@ -588,8 +584,12 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
               TransactionEntries(
                 budgetRange.start,
                 budgetRange.end,
-                categoryFks: widget.budget.categoryFks,
-                categoryFksExclude: widget.budget.categoryFksExclude,
+                categoryFks: selectedCategory != null
+                    ? [selectedCategory!.categoryPk]
+                    : widget.budget.categoryFks,
+                categoryFksExclude: selectedCategory != null
+                    ? null
+                    : widget.budget.categoryFksExclude,
                 income: null,
                 listID: pageId,
                 budgetTransactionFilters:

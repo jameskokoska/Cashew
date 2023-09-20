@@ -255,7 +255,9 @@ class MorePages extends StatelessWidget {
           hasSideNavigation
               ? SizedBox.shrink()
               : SettingsContainerOpenPage(
-                  openPage: ObjectivesListPage(),
+                  openPage: ObjectivesListPage(
+                    backButton: true,
+                  ),
                   title: "spending-and-savings-goals".tr(),
                   icon: appStateSettings["outlinedIcons"]
                       ? Icons.savings_outlined
@@ -642,8 +644,8 @@ class _BiometricsSettingToggleState extends State<BiometricsSettingToggle> {
                     openPopup(
                       context,
                       icon: appStateSettings["outlinedIcons"]
-                          ? Icons.warning_amber_outlined
-                          : Icons.warning_amber_rounded,
+                          ? Icons.warning_outlined
+                          : Icons.warning_rounded,
                       title: getPlatform() == PlatformOS.isIOS
                           ? "biometrics-disabled".tr()
                           : "biometrics-error".tr(),

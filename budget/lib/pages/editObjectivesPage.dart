@@ -149,6 +149,15 @@ class _EditObjectivesPageState extends State<EditObjectivesPage> {
                   itemBuilder: (context, index) {
                     Objective objective = snapshot.data![index];
                     return EditRowEntry(
+                      extraIcon: objective.pinned
+                          ? Icons.push_pin_rounded
+                          : Icons.push_pin_outlined,
+                      onExtra: () async {
+                        Objective updatedObjective =
+                            objective.copyWith(pinned: !objective.pinned);
+                        await database
+                            .createOrUpdateObjective(updatedObjective);
+                      },
                       canReorder: searchValue == "" &&
                           (snapshot.data ?? []).length != 1,
                       currentReorder:
@@ -299,8 +308,8 @@ Future<DeletePopupAction?> deleteObjectivePopup(
         title: "remove-transactions-from-goal-question".tr(),
         description: "delete-goal-warning".tr(),
         icon: appStateSettings["outlinedIcons"]
-            ? Icons.warning_amber_outlined
-            : Icons.warning_amber_rounded,
+            ? Icons.warning_outlined
+            : Icons.warning_rounded,
         onCancel: () {
           Navigator.pop(context, false);
         },

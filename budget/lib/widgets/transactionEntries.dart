@@ -53,6 +53,7 @@ class TransactionEntries extends StatelessWidget {
     this.includeDateDivider = true,
     this.allowSelect = true,
     this.showObjectivePercentage = true,
+    this.noResultsPadding,
     super.key,
   });
 
@@ -88,6 +89,7 @@ class TransactionEntries extends StatelessWidget {
   final bool includeDateDivider;
   final bool allowSelect;
   final bool showObjectivePercentage;
+  final EdgeInsets? noResultsPadding;
 
   @override
   Widget build(BuildContext context) {
@@ -115,26 +117,19 @@ class TransactionEntries extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           if (snapshot.data!.length <= 0 && showNoResults == true) {
+            Widget noResults = NoResults(
+              message: noResultsMessage ??
+                  "no-transactions-within-time-range".tr() + ".",
+              tintColor: colorScheme != null
+                  ? colorScheme?.primary.withOpacity(0.6)
+                  : null,
+              noSearchResultsVariation: noSearchResultsVariation,
+              padding: noResultsPadding,
+            );
             if (slivers) {
-              return SliverToBoxAdapter(
-                child: NoResults(
-                  message: noResultsMessage ??
-                      "no-transactions-within-time-range".tr() + ".",
-                  tintColor: colorScheme != null
-                      ? colorScheme?.primary.withOpacity(0.6)
-                      : null,
-                  noSearchResultsVariation: noSearchResultsVariation,
-                ),
-              );
+              return SliverToBoxAdapter(child: noResults);
             } else {
-              return NoResults(
-                message: noResultsMessage ??
-                    "no-transactions-within-time-range".tr() + ".",
-                tintColor: colorScheme != null
-                    ? colorScheme?.primary.withOpacity(0.6)
-                    : null,
-                noSearchResultsVariation: noSearchResultsVariation,
-              );
+              return noResults;
             }
           }
           List<Widget> transactionsWidgets = [];

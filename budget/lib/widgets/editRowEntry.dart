@@ -12,8 +12,9 @@ import 'package:flutter/material.dart'
         ReorderableDelayedDragStartListener;
 import 'package:budget/modified/reorderable_list.dart';
 
-Color getStandardContainerColor(BuildContext context) {
-  return getPlatform() == PlatformOS.isIOS
+Color getStandardContainerColor(BuildContext context,
+    {bool forceNonIOS = false}) {
+  return getPlatform() == PlatformOS.isIOS && forceNonIOS == false
       ? Theme.of(context).canvasColor
       : appStateSettings["materialYou"]
           ? dynamicPastel(

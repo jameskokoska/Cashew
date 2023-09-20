@@ -2,6 +2,7 @@ import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
 import 'package:budget/pages/debugPage.dart';
+import 'package:budget/pages/detailedChangelogPage.dart';
 import 'package:budget/pages/onBoardingPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/languageMap.dart';
@@ -20,6 +21,27 @@ import 'package:budget/colors.dart';
 
 class AboutPage extends StatelessWidget {
   const AboutPage({Key? key}) : super(key: key);
+
+  showChangelogForce(BuildContext context) {
+    showChangelog(
+      context,
+      forceShow: true,
+      majorChangesOnly: true,
+      extraWidget: Padding(
+        padding: const EdgeInsets.only(
+          bottom: 10,
+        ),
+        child: Button(
+          label: "view-detailed-changelog".tr(),
+          onTap: () {
+            Navigator.pop(context);
+            pushRoute(context, DetailedChangelogPage());
+          },
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return PageFramework(
@@ -68,7 +90,7 @@ class AboutPage extends StatelessWidget {
                   Tappable(
                     borderRadius: 10,
                     onTap: () {
-                      showChangelog(context, forceShow: true);
+                      showChangelogForce(context);
                     },
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
@@ -155,7 +177,7 @@ class AboutPage extends StatelessWidget {
                 child: Button(
                   label: "view-changelog".tr(),
                   onTap: () {
-                    showChangelog(context, forceShow: true);
+                    showChangelogForce(context);
                   },
                   expandedLayout: true,
                 ),
@@ -394,8 +416,8 @@ class AboutPage extends StatelessWidget {
                 title: "erase-everything".tr(),
                 description: "erase-everything-description".tr(),
                 icon: appStateSettings["outlinedIcons"]
-                    ? Icons.warning_amber_outlined
-                    : Icons.warning_amber_rounded,
+                    ? Icons.warning_outlined
+                    : Icons.warning_rounded,
                 onSubmit: () async {
                   Navigator.pop(context);
                   openPopup(
@@ -403,8 +425,8 @@ class AboutPage extends StatelessWidget {
                     title: "erase-everything-warning".tr(),
                     description: "erase-everything-warning-description".tr(),
                     icon: appStateSettings["outlinedIcons"]
-                        ? Icons.warning_outlined
-                        : Icons.warning_rounded,
+                        ? Icons.warning_amber_outlined
+                        : Icons.warning_amber_rounded,
                     onSubmit: () async {
                       Navigator.pop(context);
                       openLoadingPopup(context);

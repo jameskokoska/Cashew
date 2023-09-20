@@ -436,8 +436,8 @@ Future openLoadingPopupTryCatch(Future Function() function,
         SnackbarMessage(
           title: "an-error-occured".tr(),
           icon: appStateSettings["outlinedIcons"]
-              ? Icons.warning_amber_outlined
-              : Icons.warning_amber_rounded,
+              ? Icons.warning_outlined
+              : Icons.warning_rounded,
           description: e.toString(),
         ),
       );

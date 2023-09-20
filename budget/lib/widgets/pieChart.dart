@@ -283,15 +283,14 @@ class _Badge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool showIcon = percent.abs() < 5;
     return AnimatedScale(
-      curve:
-          percent < 5 ? Curves.easeInOutCubicEmphasized : ElasticOutCurve(0.6),
-      duration: percent < 5
-          ? Duration(milliseconds: 700)
-          : Duration(milliseconds: 1300),
-      scale: percent < 5 && isTouched == false
+      curve: showIcon ? Curves.easeInOutCubicEmphasized : ElasticOutCurve(0.6),
+      duration:
+          showIcon ? Duration(milliseconds: 700) : Duration(milliseconds: 1300),
+      scale: showIcon && isTouched == false
           ? 0
-          : (showLabels || isTouched ? (percent < 5 ? 1 : scale) : 0),
+          : (showLabels || isTouched ? (showIcon ? 1 : scale) : 0),
       child: Container(
         width: 45,
         height: 45,

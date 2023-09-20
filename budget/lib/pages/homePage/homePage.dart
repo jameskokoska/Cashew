@@ -5,6 +5,7 @@ import 'package:budget/functions.dart';
 import 'package:budget/pages/homePage/homePageHeatmap.dart';
 import 'package:budget/pages/homePage/homePageLineGraph.dart';
 import 'package:budget/pages/homePage/homePageNetWorth.dart';
+import 'package:budget/pages/homePage/homePageObjectives.dart';
 import 'package:budget/pages/homePage/homePageWalletSwitcher.dart';
 import 'package:budget/pages/homePage/homeTransactionSlivers.dart';
 import 'package:budget/pages/homePage/homeUpcomingTransactionSlivers.dart';
@@ -40,6 +41,9 @@ import 'package:flutter/material.dart';
 import 'package:budget/widgets/scrollbarWrap.dart';
 import 'package:budget/widgets/slidingSelectorIncomeExpense.dart';
 import 'package:provider/provider.dart';
+
+import '../../widgets/linearGradientFadedEdges.dart';
+import '../../widgets/util/rightSideClipper.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({
@@ -120,6 +124,7 @@ class HomePageState extends State<HomePage>
       "overdueUpcoming": HomePageUpcomingTransactions(),
       "allSpendingSummary": HomePageAllSpendingSummary(),
       "netWorth": HomePageNetWorth(),
+      "objectives": HomePageObjectives(),
       "creditDebts": HomePageCreditDebts(),
       "spendingGraph":
           HomePageLineGraph(selectedSlidingSelector: selectedSlidingSelector),
@@ -212,15 +217,26 @@ class HomePageState extends State<HomePage>
                               //     : HomePageNetWorth(),
                               enableDoubleColumn(context) == false
                                   ? SizedBox.shrink()
-                                  : HomePageUpcomingTransactions(),
-                              enableDoubleColumn(context) == false
-                                  ? SizedBox.shrink()
-                                  : HomePageCreditDebts(),
+                                  : LinearGradientFadedEdges(
+                                      enableLeft: false,
+                                      enableBottom: false,
+                                      enableTop: false,
+                                      child: ClipRRect(
+                                        clipper: RightSideClipper(),
+                                        child: HomePageObjectives(),
+                                      ),
+                                    ),
                               enableDoubleColumn(context) == false
                                   ? SizedBox.shrink()
                                   : HomePageLineGraph(
                                       selectedSlidingSelector:
                                           selectedSlidingSelector),
+                              enableDoubleColumn(context) == false
+                                  ? SizedBox.shrink()
+                                  : HomePageUpcomingTransactions(),
+                              enableDoubleColumn(context) == false
+                                  ? SizedBox.shrink()
+                                  : HomePageCreditDebts(),
                               enableDoubleColumn(context) == false
                                   ? SizedBox.shrink()
                                   : HomePageHeatMap(),

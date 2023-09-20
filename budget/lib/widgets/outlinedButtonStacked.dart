@@ -89,11 +89,13 @@ class OutlinedButtonStacked extends StatelessWidget {
                                       Theme.of(context).colorScheme.secondary,
                                 ),
                                 SizedBox(width: 10),
-                                TextFont(
-                                  text: text,
-                                  fontSize: 22,
-                                  fontWeight: FontWeight.bold,
-                                  maxLines: 2,
+                                Flexible(
+                                  child: TextFont(
+                                    text: text,
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.bold,
+                                    maxLines: 2,
+                                  ),
                                 ),
                               ],
                             ),

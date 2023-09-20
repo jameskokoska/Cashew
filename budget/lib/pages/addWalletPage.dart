@@ -250,6 +250,7 @@ class _AddWalletPageState extends State<AddWalletPage> {
         child: PageFramework(
           resizeToAvoidBottomInset: true,
           dragDownToDismiss: true,
+          horizontalPadding: getHorizontalPaddingConstrained(context),
           title:
               widget.wallet == null ? "add-account".tr() : "edit-account".tr(),
           onBackButton: () async {

@@ -1,4 +1,5 @@
 import 'package:budget/colors.dart';
+import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/transactionEntry/incomeAmountArrow.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -6,20 +7,22 @@ import 'package:flutter/material.dart';
 class IncomeExpenseTabSelector extends StatefulWidget {
   final Function(bool isIncome) onTabChanged;
   final bool initialTabIsIncome;
-  final Color color;
-  final Color unselectedColor;
+  final Color? color;
+  final Color? unselectedColor;
   final bool syncWithInitial;
   final String? incomeLabel;
   final String? expenseLabel;
+  final Color? unselectedLabelColor;
 
   IncomeExpenseTabSelector({
     required this.onTabChanged,
     required this.initialTabIsIncome,
-    required this.color,
-    required this.unselectedColor,
+    this.color,
+    this.unselectedColor,
     this.syncWithInitial = false,
     this.incomeLabel,
     this.expenseLabel,
+    this.unselectedLabelColor,
   });
 
   @override
@@ -60,17 +63,26 @@ class _IncomeExpenseTabSelectorState extends State<IncomeExpenseTabSelector>
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: widget.unselectedColor,
+      color: widget.unselectedColor == null
+          ? appStateSettings["materialYou"]
+              ? Theme.of(context).colorScheme.primary.withOpacity(0.1)
+              : getColor(context, "lightDarkAccentHeavyLight")
+          : widget.unselectedColor,
       child: TabBar(
         controller: _incomeTabController,
         dividerColor: Colors.transparent,
         indicatorColor: Colors.transparent,
         indicatorSize: TabBarIndicatorSize.tab,
         indicator: BoxDecoration(
-          color: widget.color,
+          color: widget.color != null
+              ? widget.color
+              : (appStateSettings["materialYou"]
+                  ? Theme.of(context).colorScheme.primary.withOpacity(0.3)
+                  : getColor(context, "black").withOpacity(0.15)),
         ),
         labelColor: getColor(context, "black"),
-        unselectedLabelColor: Colors.white.withOpacity(0.3),
+        unselectedLabelColor: widget.unselectedLabelColor ??
+            getColor(context, "black").withOpacity(0.3),
         onTap: (value) {
           widget.onTabChanged(value == 1);
           setState(() {

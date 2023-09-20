@@ -65,6 +65,24 @@ class BudgetsListPageState extends State<BudgetsListPage>
             color: Theme.of(context).colorScheme.onSecondaryContainer,
           ),
         ),
+        if (getIsFullScreen(context))
+          IconButton(
+            padding: EdgeInsets.all(15),
+            tooltip: "add-budget".tr(),
+            onPressed: () {
+              pushRoute(
+                context,
+                AddBudgetPage(
+                    routesToPopAfterDelete: RoutesToPopAfterDelete.None),
+              );
+            },
+            icon: Icon(
+              appStateSettings["outlinedIcons"]
+                  ? Icons.add_outlined
+                  : Icons.add_rounded,
+              color: Theme.of(context).colorScheme.onSecondaryContainer,
+            ),
+          ),
       ],
       slivers: [
         StreamBuilder<List<Budget>>(
@@ -92,9 +110,9 @@ class BudgetsListPageState extends State<BudgetsListPage>
                     ? SliverGrid(
                         gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
                           maxCrossAxisExtent: 600.0,
-                          mainAxisExtent: 200,
-                          mainAxisSpacing: 10.0,
-                          crossAxisSpacing: 10.0,
+                          mainAxisExtent: 190,
+                          mainAxisSpacing: 15.0,
+                          crossAxisSpacing: 15.0,
                           childAspectRatio: 5,
                         ),
                         delegate: SliverChildBuilderDelegate(

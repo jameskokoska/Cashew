@@ -354,6 +354,7 @@ class _ObjectivePageContentState extends State<_ObjectivePageContent> {
                 onlyShowTransactionsBelongingToObjectivePk:
                     widget.objective.objectivePk,
                 showObjectivePercentage: false,
+                noResultsMessage: "no-transactions-found".tr(),
               ),
               // Wipe all remaining pixels off - sometimes graphics artifacts are left behind
               SliverToBoxAdapter(

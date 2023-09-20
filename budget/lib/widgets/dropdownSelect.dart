@@ -143,12 +143,14 @@ class CustomPopupMenuButton extends StatelessWidget {
   final bool showButtons;
   final bool keepOutFirst;
   final bool forceKeepOutFirst;
+  final ColorScheme? colorScheme;
 
   CustomPopupMenuButton({
     required this.items,
     this.showButtons = false,
     this.keepOutFirst = true,
     this.forceKeepOutFirst = false,
+    this.colorScheme,
   });
 
   @override
@@ -212,43 +214,46 @@ class CustomPopupMenuButton extends StatelessWidget {
             ),
           ),
         if (itemsFiltered.isNotEmpty)
-          PopupMenuButton<String>(
-            padding: EdgeInsets.all(15),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(
-                Radius.circular(getPlatform() == PlatformOS.isIOS ? 5 : 10),
+          Theme(
+            data: Theme.of(context).copyWith(colorScheme: colorScheme),
+            child: PopupMenuButton<String>(
+              padding: EdgeInsets.all(15),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(getPlatform() == PlatformOS.isIOS ? 5 : 10),
+                ),
               ),
-            ),
-            onSelected: (value) {
-              for (DropdownItemMenu item in items) {
-                if (item.id == value) {
-                  item.action();
-                  break;
+              onSelected: (value) {
+                for (DropdownItemMenu item in items) {
+                  if (item.id == value) {
+                    item.action();
+                    break;
+                  }
                 }
-              }
-            },
-            itemBuilder: (BuildContext context) {
-              return itemsFiltered.map((item) {
-                return PopupMenuItem<String>(
-                  value: item.id,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Transform.scale(
-                        scale: item.iconScale ?? 1,
-                        child: Icon(item.icon),
-                      ),
-                      SizedBox(width: 9),
-                      TextFont(
-                        text: item.label,
-                        fontSize: 14.5,
-                      ),
-                    ],
-                  ),
-                );
-              }).toList();
-            },
+              },
+              itemBuilder: (BuildContext context) {
+                return itemsFiltered.map((item) {
+                  return PopupMenuItem<String>(
+                    value: item.id,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Transform.scale(
+                          scale: item.iconScale ?? 1,
+                          child: Icon(item.icon),
+                        ),
+                        SizedBox(width: 9),
+                        TextFont(
+                          text: item.label,
+                          fontSize: 14.5,
+                        ),
+                      ],
+                    ),
+                  );
+                }).toList();
+              },
+            ),
           ),
       ],
     );

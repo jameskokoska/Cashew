@@ -33,6 +33,7 @@ Future<Map<String, dynamic>> getDefaultPreferences() async {
     "accentSystemColor": supportsSystemColor(),
     "showWalletSwitcher": true,
     "showPinnedBudgets": true,
+    "showObjectives": true,
     "showAllSpendingSummary": false,
     "showNetWorth": false,
     "showOverdueUpcoming": false,
@@ -42,6 +43,7 @@ Future<Map<String, dynamic>> getDefaultPreferences() async {
     "homePageOrder": [
       "wallets",
       "budgets",
+      "objectives",
       "allSpendingSummary",
       "netWorth",
       "overdueUpcoming",

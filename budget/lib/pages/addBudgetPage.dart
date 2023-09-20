@@ -325,11 +325,22 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
       if (widget.budget == null) {
         bool result = await premiumPopupBudgets(context);
         if (result == true && widget.isAddedOnlyBudget != true) {
-          openBottomSheet(
+          dynamic result = await openBottomSheet(
             context,
             fullSnap: false,
             SelectBudgetTypePopup(setBudgetType: setSelectedBudgetType),
           );
+          if (result == "All Transactions") {
+            await openBottomSheet(
+              context,
+              fullSnap: false,
+              ViewBudgetTransactionFilterInfo(
+                selectedBudgetFilters: selectedBudgetTransactionFilters,
+                setSelectedBudgetFilters: setSelectedBudgetFilters,
+                popOnDefault: true,
+              ),
+            );
+          }
         }
       }
 
@@ -653,8 +664,8 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                         title: "increase-budget-warning".tr(),
                         description: "increase-budget-warning-description".tr(),
                         icon: appStateSettings["outlinedIcons"]
-                            ? Icons.warning_amber_outlined
-                            : Icons.warning_amber_rounded,
+                            ? Icons.warning_outlined
+                            : Icons.warning_rounded,
                         onSubmitLabel: "ok".tr(),
                         onSubmit: () {
                           Navigator.pop(context);
@@ -1474,7 +1485,7 @@ class SelectBudgetTypePopup extends StatelessWidget {
                       : Icons.folder_rounded,
                   onTap: () {
                     setBudgetType("Added Only");
-                    Navigator.pop(context);
+                    Navigator.pop(context, "Added Only");
                   },
                   afterWidget: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -1513,7 +1524,7 @@ class SelectBudgetTypePopup extends StatelessWidget {
                       : Icons.category_rounded,
                   onTap: () async {
                     setBudgetType("All Transactions");
-                    Navigator.pop(context);
+                    Navigator.pop(context, "All Transactions");
                   },
                   afterWidget: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -1543,11 +1554,13 @@ class ViewBudgetTransactionFilterInfo extends StatefulWidget {
   const ViewBudgetTransactionFilterInfo({
     required this.selectedBudgetFilters,
     required this.setSelectedBudgetFilters,
+    this.popOnDefault = false,
     super.key,
   });
 
   final List<BudgetTransactionFilters> selectedBudgetFilters;
   final void Function(List<BudgetTransactionFilters>) setSelectedBudgetFilters;
+  final bool popOnDefault;
 
   @override
   State<ViewBudgetTransactionFilterInfo> createState() =>
@@ -1604,8 +1617,14 @@ class _ViewBudgetTransactionFilterInfoState
                       ? Icons.check_circle_outlined
                       : Icons.check_circle_rounded,
                   onTap: () {
-                    onTap(BudgetTransactionFilters
-                        .defaultBudgetTransactionFilters);
+                    if (widget.popOnDefault == true &&
+                        selectedBudgetFilters.contains(BudgetTransactionFilters
+                            .defaultBudgetTransactionFilters)) {
+                      Navigator.pop(context);
+                    } else {
+                      onTap(BudgetTransactionFilters
+                          .defaultBudgetTransactionFilters);
+                    }
                   },
                 ),
               ),
@@ -1619,6 +1638,9 @@ class _ViewBudgetTransactionFilterInfoState
             childrenDescription: [
               ListItem(
                 "include-income-description-1".tr(),
+              ),
+              ListItem(
+                "include-income-description-2".tr(),
               ),
             ],
             icon: appStateSettings["outlinedIcons"]

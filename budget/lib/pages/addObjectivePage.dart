@@ -11,8 +11,10 @@ import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/animatedExpanded.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/categoryIcon.dart';
+import 'package:budget/widgets/dropdownSelect.dart';
 import 'package:budget/widgets/globalSnackBar.dart';
 import 'package:budget/widgets/incomeExpenseTabSelector.dart';
+import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
@@ -68,6 +70,7 @@ class _AddObjectivePageState extends State<AddObjectivePage>
   double selectedAmount = 0;
   DateTime selectedStartDate = DateTime.now();
   bool selectedIncome = true;
+  bool selectedPin = true;
 
   FocusNode _titleFocusNode = FocusNode();
   late TabController _incomeTabController =
@@ -116,6 +119,14 @@ class _AddObjectivePageState extends State<AddObjectivePage>
   void setSelectedIncome(bool income) {
     setState(() {
       selectedIncome = income;
+    });
+    determineBottomButton();
+    return;
+  }
+
+  void setSelectedPin() {
+    setState(() {
+      selectedPin = !selectedPin;
     });
     determineBottomButton();
     return;
@@ -186,7 +197,7 @@ class _AddObjectivePageState extends State<AddObjectivePage>
       iconName: selectedImage,
       amount: selectedAmount,
       income: selectedIncome,
-      pinned: true,
+      pinned: selectedPin,
     );
   }
 
@@ -206,6 +217,7 @@ class _AddObjectivePageState extends State<AddObjectivePage>
       selectedEmoji = widget.objective!.emojiIconName;
       selectedStartDate = widget.objective!.dateCreated;
       selectedAmount = widget.objective!.amount;
+      selectedPin = widget.objective!.pinned;
 
       selectedIncome = widget.objective!.income;
       if (widget.objective?.income == false) {
@@ -274,6 +286,7 @@ class _AddObjectivePageState extends State<AddObjectivePage>
           }
         },
         child: PageFramework(
+          horizontalPadding: getHorizontalPaddingConstrained(context),
           resizeToAvoidBottomInset: true,
           dragDownToDismiss: true,
           title: widget.objective == null ? "add-goal".tr() : "edit-goal".tr(),
@@ -300,27 +313,42 @@ class _AddObjectivePageState extends State<AddObjectivePage>
             }
           },
           actions: [
-            ...(widget.objective != null &&
-                    widget.objective!.objectivePk != "0" &&
+            CustomPopupMenuButton(
+              showButtons:
+                  widget.objective == null || enableDoubleColumn(context),
+              keepOutFirst: true,
+              items: [
+                if (widget.objective != null &&
                     widget.routesToPopAfterDelete !=
-                        RoutesToPopAfterDelete.PreventDelete
-                ? [
-                    IconButton(
-                      padding: EdgeInsets.all(15),
-                      tooltip: "delete-goal".tr(),
-                      onPressed: () {
-                        deleteObjectivePopup(
-                          context,
-                          objective: widget.objective!,
-                          routesToPopAfterDelete: widget.routesToPopAfterDelete,
-                        );
-                      },
-                      icon: Icon(appStateSettings["outlinedIcons"]
-                          ? Icons.delete_outlined
-                          : Icons.delete_rounded),
-                    )
-                  ]
-                : [])
+                        RoutesToPopAfterDelete.PreventDelete)
+                  DropdownItemMenu(
+                    id: "delete-goal",
+                    label: "delete-goal".tr(),
+                    icon: appStateSettings["outlinedIcons"]
+                        ? Icons.delete_outlined
+                        : Icons.delete_rounded,
+                    action: () {
+                      deleteObjectivePopup(
+                        context,
+                        objective: widget.objective!,
+                        routesToPopAfterDelete: widget.routesToPopAfterDelete,
+                      );
+                    },
+                  ),
+                DropdownItemMenu(
+                  id: "pin-to-home",
+                  label: selectedPin
+                      ? "pinned-to-homepage".tr()
+                      : "unpinned-to-homepage".tr(),
+                  icon: selectedPin
+                      ? Icons.push_pin_rounded
+                      : Icons.push_pin_outlined,
+                  action: () {
+                    setSelectedPin();
+                  },
+                ),
+              ],
+            ),
           ],
           overlay: Align(
             alignment: Alignment.bottomCenter,
@@ -365,11 +393,6 @@ class _AddObjectivePageState extends State<AddObjectivePage>
                     onTabChanged: setSelectedIncome,
                     initialTabIsIncome: selectedIncome,
                     syncWithInitial: true,
-                    color: Theme.of(context).colorScheme.secondaryContainer,
-                    unselectedColor: Theme.of(context)
-                        .colorScheme
-                        .secondaryContainer
-                        .withOpacity(0.2),
                     expenseLabel: "expense-goal".tr(),
                     incomeLabel: "savings-goal".tr(),
                   ),

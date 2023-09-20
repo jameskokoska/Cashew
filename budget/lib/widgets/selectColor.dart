@@ -3,6 +3,7 @@ import 'package:budget/pages/premiumPage.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/colorPicker.dart';
+import 'package:budget/widgets/linearGradientFadedEdges.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/settingsContainers.dart';
 import 'package:budget/widgets/tappable.dart';
@@ -81,77 +82,84 @@ class _SelectColorState extends State<SelectColor> {
       selectableColorsList.insert(0, Colors.transparent);
     }
     if (widget.horizontalList) {
-      return ListView.builder(
-        addAutomaticKeepAlives: true,
-        clipBehavior: Clip.none,
-        scrollDirection: Axis.horizontal,
-        itemCount: selectableColorsList.length,
-        itemBuilder: (context, index) {
-          Color color;
-          // Custom color as the last color
-          color = selectableColorsList[index];
-          return Padding(
-            padding: EdgeInsets.only(
-                left: index == 0 ? 12 : 0,
-                right: index + 1 == selectableColorsList.length ? 12 : 0),
-            child: widget.includeThemeColor && index == 0
-                ? ThemeColorIcon(
-                    outline: selectedIndex == 0 && selectedColor == null,
-                    margin: EdgeInsets.all(5),
-                    size: 55,
-                    onTap: () {
-                      widget.setSelectedColor!(null);
-                      setState(() {
-                        selectedColor = null;
-                        selectedIndex = index;
-                      });
-                    },
-                  )
-                : widget.supportCustomColors &&
-                        index + 1 == selectableColorsList.length
-                    ? ColorIconCustom(
-                        initialSelectedColor: selectedColor ?? Colors.red,
-                        outline: selectedIndex == -1 ||
-                            selectedIndex == selectableColorsList.length - 1,
+      return LinearGradientFadedEdges(
+        enableTop: false,
+        enableBottom: false,
+        child: ClipRRect(
+          child: ListView.builder(
+            addAutomaticKeepAlives: true,
+            clipBehavior: Clip.none,
+            scrollDirection: Axis.horizontal,
+            itemCount: selectableColorsList.length,
+            itemBuilder: (context, index) {
+              Color color;
+              // Custom color as the last color
+              color = selectableColorsList[index];
+              return Padding(
+                padding: EdgeInsets.only(
+                    left: index == 0 ? 12 : 0,
+                    right: index + 1 == selectableColorsList.length ? 12 : 0),
+                child: widget.includeThemeColor && index == 0
+                    ? ThemeColorIcon(
+                        outline: selectedIndex == 0 && selectedColor == null,
                         margin: EdgeInsets.all(5),
                         size: 55,
-                        onTap: (colorPassed) {
-                          widget.setSelectedColor!(colorPassed);
+                        onTap: () {
+                          widget.setSelectedColor!(null);
                           setState(() {
-                            selectedColor = color;
+                            selectedColor = null;
                             selectedIndex = index;
                           });
                         },
                       )
-                    : ColorIcon(
-                        margin: EdgeInsets.all(5),
-                        color: (widget.supportCustomColors &&
-                                index + 1 == selectableColorsList.length)
-                            ? (selectedColor ?? Colors.transparent)
-                            : color,
-                        size: 55,
-                        onTap: () {
-                          if (widget.setSelectedColor != null) {
-                            widget.setSelectedColor!(color);
-                            setState(() {
-                              selectedColor = color;
-                              selectedIndex = index;
-                            });
-                            Future.delayed(Duration(milliseconds: 70), () {
-                              if (widget.next != null) {
-                                widget.next!();
-                              }
-                            });
-                          }
-                        },
-                        outline: (selectedIndex != null &&
+                    : widget.supportCustomColors &&
+                            index + 1 == selectableColorsList.length
+                        ? ColorIconCustom(
+                            initialSelectedColor: selectedColor ?? Colors.red,
+                            outline: selectedIndex == -1 ||
                                 selectedIndex ==
-                                    selectableColorsList.length - 1 &&
-                                index == selectedIndex) ||
-                            selectedColor.toString() == color.toString(),
-                      ),
-          );
-        },
+                                    selectableColorsList.length - 1,
+                            margin: EdgeInsets.all(5),
+                            size: 55,
+                            onTap: (colorPassed) {
+                              widget.setSelectedColor!(colorPassed);
+                              setState(() {
+                                selectedColor = color;
+                                selectedIndex = index;
+                              });
+                            },
+                          )
+                        : ColorIcon(
+                            margin: EdgeInsets.all(5),
+                            color: (widget.supportCustomColors &&
+                                    index + 1 == selectableColorsList.length)
+                                ? (selectedColor ?? Colors.transparent)
+                                : color,
+                            size: 55,
+                            onTap: () {
+                              if (widget.setSelectedColor != null) {
+                                widget.setSelectedColor!(color);
+                                setState(() {
+                                  selectedColor = color;
+                                  selectedIndex = index;
+                                });
+                                Future.delayed(Duration(milliseconds: 70), () {
+                                  if (widget.next != null) {
+                                    widget.next!();
+                                  }
+                                });
+                              }
+                            },
+                            outline: (selectedIndex != null &&
+                                    selectedIndex ==
+                                        selectableColorsList.length - 1 &&
+                                    index == selectedIndex) ||
+                                selectedColor.toString() == color.toString(),
+                          ),
+              );
+            },
+          ),
+        ),
       );
     }
     return Padding(

@@ -22,7 +22,7 @@ class CashFlow extends StatelessWidget {
         end: endDate,
         categoryFks: null,
         categoryFksExclude: null,
-        budgetTransactionFilters: [],
+        budgetTransactionFilters: null,
         memberTransactionFilters: null,
         allCashFlow: true,
       ),

@@ -1008,8 +1008,8 @@ class _BackupManagementState extends State<BackupManagement> {
                                   title: "load-backup".tr(),
                                   description: "load-backup-warning".tr(),
                                   icon: appStateSettings["outlinedIcons"]
-                                      ? Icons.warning_amber_outlined
-                                      : Icons.warning_amber_rounded,
+                                      ? Icons.warning_outlined
+                                      : Icons.warning_rounded,
                                   onSubmit: () async {
                                     Navigator.pop(context, true);
                                   },
@@ -1032,7 +1032,7 @@ class _BackupManagementState extends State<BackupManagement> {
                               //         (file.value.size ?? "") +
                               //         "\n" +
                               //         (file.value.description ?? ""),
-                              //     icon: appStateSettings["outlinedIcons"] ? Icons.warning_amber_outlined : Icons.warning_amber_rounded,
+                              //     icon: appStateSettings["outlinedIcons"] ? Icons.warning_outlined : Icons.warning_rounded,
                               //     onSubmit: () async {
                               //       Navigator.pop(context, true);
                               //     },
@@ -1433,8 +1433,8 @@ Future<bool> saveDriveFileToDevice(
       title: "error-downloading".tr(),
       description: e.toString(),
       icon: appStateSettings["outlinedIcons"]
-          ? Icons.warning_amber_outlined
-          : Icons.warning_amber_rounded,
+          ? Icons.warning_outlined
+          : Icons.warning_rounded,
     ));
     print("Error saving file to device: " + e.toString());
     return false;

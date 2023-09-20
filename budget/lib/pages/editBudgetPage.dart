@@ -456,8 +456,8 @@ Future<DeletePopupAction?> deleteBudgetPopup(
           title: "remove-transactions-from-added-budget-question".tr(),
           description: "delete-budget-added-warning".tr(),
           icon: appStateSettings["outlinedIcons"]
-              ? Icons.warning_amber_outlined
-              : Icons.warning_amber_rounded,
+              ? Icons.warning_outlined
+              : Icons.warning_rounded,
           onCancel: () {
             Navigator.pop(context, false);
           },
