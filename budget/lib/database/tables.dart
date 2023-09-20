@@ -3544,14 +3544,16 @@ class FinanceDatabase extends _$FinanceDatabase {
             category: item.category,
             total: item.total +
                 (categoryTotals[item.category.categoryPk]?.total ?? 0),
-            transactionCount: item.transactionCount,
+            transactionCount: item.transactionCount +
+                (categoryTotals[item.category.categoryPk]?.transactionCount ??
+                    0),
             categoryBudgetLimit: item.categoryBudgetLimit,
           );
         }
       }
       List<CategoryWithTotal> categoryWithTotalsSorted = categoryTotals.values
           .toList()
-        ..sort((a, b) => a.total.compareTo(b.total));
+        ..sort((a, b) => b.total.abs().compareTo(a.total.abs()));
       return categoryWithTotalsSorted;
     });
   }
@@ -4136,8 +4138,8 @@ class FinanceDatabase extends _$FinanceDatabase {
                     false))
       ])
             ..addColumns([totalAmt, totalCount])
-            ..groupBy([categories.categoryPk])
-            ..orderBy([OrderingTerm.asc(totalAmt)]))
+            ..groupBy([categories.categoryPk]))
+          // totalCategoryTotalStream takes care of the ordering!
           .map((row) {
         final TransactionCategory category = row.readTable(categories);
         CategoryBudgetLimit? categoryBudgetLimit =

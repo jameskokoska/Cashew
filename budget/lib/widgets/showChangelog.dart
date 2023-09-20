@@ -14,6 +14,9 @@ import 'package:flutter/material.dart';
 
 String getChangelogString() {
   return """
+    < 4.4.1
+    Fixed ordering of categories based on amount spent
+    Fixed transaction count across accounts
     < 4.4.0
     Prevented multiple syncs from running at once
     Decreased width of goals
@@ -1325,7 +1328,7 @@ end""";
 // If they were not already seen by a user, they are shown at the top of the changelog
 Map<String, List<MajorChanges>> getMajorChanges() {
   return {
-    "< 4.4.0": [
+    "< 4.4.1": [
       MajorChanges(
         "major-change-1".tr(),
         Icons.arrow_drop_up_rounded,
