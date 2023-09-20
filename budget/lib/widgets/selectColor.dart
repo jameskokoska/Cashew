@@ -85,6 +85,8 @@ class _SelectColorState extends State<SelectColor> {
       return LinearGradientFadedEdges(
         enableTop: false,
         enableBottom: false,
+        enableLeft: getHorizontalPaddingConstrained(context) > 0,
+        enableRight: getHorizontalPaddingConstrained(context) > 0,
         child: ClipRRect(
           child: ListView.builder(
             addAutomaticKeepAlives: true,

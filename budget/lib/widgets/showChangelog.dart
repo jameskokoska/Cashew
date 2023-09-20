@@ -14,6 +14,12 @@ import 'package:flutter/material.dart';
 
 String getChangelogString() {
   return """
+    < 4.4.0
+    Prevented multiple syncs from running at once
+    Decreased width of goals
+    Pie chart homepage shows top categories spent legend
+    Fixed final decimal count rounding
+    Fixed order objectives added
     < 4.3.9
     Pie chart homepage widget
     Color fixes, especially on income and expense selector
@@ -1319,7 +1325,7 @@ end""";
 // If they were not already seen by a user, they are shown at the top of the changelog
 Map<String, List<MajorChanges>> getMajorChanges() {
   return {
-    "< 4.3.9": [
+    "< 4.4.0": [
       MajorChanges(
         "major-change-1".tr(),
         Icons.arrow_drop_up_rounded,
@@ -1352,9 +1358,16 @@ Map<String, List<MajorChanges>> getMajorChanges() {
       ),
       MajorChanges(
         "major-change-5".tr(),
-        Icons.bug_report_rounded,
+        Icons.emoji_emotions_rounded,
         info: [
           "major-change-5-1".tr(),
+        ],
+      ),
+      MajorChanges(
+        "major-change-6".tr(),
+        Icons.bug_report_rounded,
+        info: [
+          "major-change-6-1".tr(),
         ],
       ),
     ],
@@ -1446,7 +1459,7 @@ List<Widget>? getChangelogPointsWidgets(BuildContext context,
           child: TextFont(
             text: string.replaceAll("< ", ""),
             fontSize: 25,
-            maxLines: 5,
+            maxLines: 10,
             fontWeight: FontWeight.bold,
           ),
         ));

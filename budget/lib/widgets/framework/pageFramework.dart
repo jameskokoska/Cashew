@@ -98,7 +98,7 @@ class PageFramework extends StatefulWidget {
 
 class PageFrameworkState extends State<PageFramework>
     with TickerProviderStateMixin, WidgetsBindingObserver {
-  double leftBackSwipeDetectionWidth = 50;
+  final double leftBackSwipeDetectionWidth = 50;
 
   late ScrollController _scrollController;
   late AnimationController _animationControllerShift =

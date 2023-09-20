@@ -122,7 +122,7 @@ class _HomePageObjectivesState extends State<HomePageObjectives> {
                                         padding:
                                             const EdgeInsets.only(right: 7),
                                         child: SizedBox(
-                                          width: 500,
+                                          width: 400,
                                           child: widget,
                                         ),
                                       )

@@ -173,8 +173,12 @@ class SyncLog {
   }
 }
 
+// Only allow one sync at a time
+bool canSyncData = false;
+
 // load the latest backup and import any newly modified data into the db
 Future<bool> syncData(BuildContext context) async {
+  if (canSyncData) return false;
   // Syncing data seems to fail on iOS debug mode (at least on iPad).
   // When actually creating the entries, it seems the device disconnects.
   // It works on release though.
@@ -184,6 +188,8 @@ Future<bool> syncData(BuildContext context) async {
   if (errorSigningInDuringCloud == true) return false;
   // Prevent sign-in on web - background sign-in cannot access Google Drive etc.
   if (kIsWeb && !entireAppLoaded) return false;
+
+  canSyncData = false;
 
   bool hasSignedIn = false;
   if (googleUser == null) {
@@ -196,6 +202,7 @@ Future<bool> syncData(BuildContext context) async {
     hasSignedIn = true;
   }
   if (hasSignedIn == false) {
+    canSyncData = true;
     return false;
   }
 
@@ -409,11 +416,13 @@ Future<bool> syncData(BuildContext context) async {
           icon: appStateSettings["outlinedIcons"]
               ? Icons.sync_problem_outlined
               : Icons.sync_problem_rounded,
+          timeout: Duration(milliseconds: 5500),
         ),
       );
       filesSyncing.remove(file);
       await databaseSync.close();
       loadingProgressKey.currentState!.setProgressPercentage(1);
+      canSyncData = true;
       return false;
     }
 
@@ -449,6 +458,8 @@ Future<bool> syncData(BuildContext context) async {
   Future.delayed(Duration(milliseconds: 300), () {
     loadingProgressKey.currentState!.setProgressPercentage(1);
   });
+
+  canSyncData = true;
 
   print("DONE SYNCING");
   return true;

@@ -33,7 +33,7 @@ Future<Map<String, dynamic>> getDefaultPreferences() async {
     "accentSystemColor": supportsSystemColor(),
     "showWalletSwitcher": true,
     "showPinnedBudgets": true,
-    "showObjectives": true,
+    "showObjectives": false,
     "showAllSpendingSummary": false,
     "showNetWorth": false,
     "showOverdueUpcoming": false,

@@ -51,6 +51,7 @@ class PieChartWrapper extends StatelessWidget {
     required this.isPastBudget,
     required this.pieChartDisplayStateKey,
     this.middleColor,
+    this.percentLabelOnTop = false,
   }) : super(key: key);
   final List<CategoryWithTotal> data;
   final double totalSpent;
@@ -59,6 +60,7 @@ class PieChartWrapper extends StatelessWidget {
   final bool isPastBudget;
   final GlobalKey<PieChartDisplayState>? pieChartDisplayStateKey;
   final Color? middleColor;
+  final bool percentLabelOnTop;
 
   @override
   Widget build(BuildContext context) {
@@ -73,6 +75,7 @@ class PieChartWrapper extends StatelessWidget {
             totalSpent: totalSpent,
             setSelectedCategory: setSelectedCategory,
             key: pieChartDisplayStateKey,
+            percentLabelOnTop: percentLabelOnTop,
           ),
           data.length <= 0
               ? SizedBox.shrink()
@@ -111,16 +114,18 @@ class PieChartWrapper extends StatelessWidget {
 GlobalKey<PieChartDisplayState> pieChartDisplayStatePastBudgetKey = GlobalKey();
 
 class PieChartDisplay extends StatefulWidget {
-  PieChartDisplay(
-      {Key? key,
-      required this.data,
-      required this.totalSpent,
-      required this.setSelectedCategory})
-      : super(key: key);
+  PieChartDisplay({
+    Key? key,
+    required this.data,
+    required this.totalSpent,
+    required this.setSelectedCategory,
+    this.percentLabelOnTop = false,
+  }) : super(key: key);
   final List<CategoryWithTotal> data;
   final double totalSpent;
   final Function(String categoryPk, TransactionCategory? category)
       setSelectedCategory;
+  final bool percentLabelOnTop;
 
   @override
   State<StatefulWidget> createState() => PieChartDisplayState();
@@ -141,7 +146,8 @@ class PieChartDisplayState extends State<PieChartDisplay> {
       });
     }
     Future.delayed(Duration(milliseconds: 500), () async {
-      for (int i = 1; i <= widget.data.length; i++) {
+      int numCategories = (await database.getAllCategories()).length;
+      for (int i = 1; i <= numCategories + 25; i++) {
         await Future.delayed(const Duration(milliseconds: 70));
         if (mounted)
           setState(() {
@@ -237,6 +243,7 @@ class PieChartDisplayState extends State<PieChartDisplay> {
         title: "",
         radius: radius,
         badgeWidget: _Badge(
+          percentLabelOnTop: widget.percentLabelOnTop,
           showLabels: i < showLabels,
           scale: widgetScale,
           color: dynamicPastel(
@@ -269,6 +276,7 @@ class _Badge extends StatelessWidget {
   final bool isTouched;
   final bool showLabels;
   final Color categoryColor;
+  final bool percentLabelOnTop;
 
   const _Badge({
     Key? key,
@@ -280,6 +288,7 @@ class _Badge extends StatelessWidget {
     required this.isTouched,
     required this.showLabels,
     required this.categoryColor,
+    required this.percentLabelOnTop,
   }) : super(key: key);
 
   @override
@@ -310,7 +319,7 @@ class _Badge extends StatelessWidget {
               opacity: this.scale == 1 ? 0 : 1,
               child: Center(
                 child: Transform.translate(
-                  offset: Offset(0, 34),
+                  offset: Offset(0, percentLabelOnTop ? -34 : 34),
                   child: IntrinsicWidth(
                     child: Container(
                       height: 20,

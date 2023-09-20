@@ -218,6 +218,9 @@ class HomePageState extends State<HomePage>
                               // enableDoubleColumn(context) == false
                               //     ? SizedBox.shrink()
                               //     : HomePageNetWorth(),
+                              // enableDoubleColumn(context) == false
+                              //     ? SizedBox.shrink()
+                              //     : HomePagePieChart(),
                               enableDoubleColumn(context) == false
                                   ? SizedBox.shrink()
                                   : LinearGradientFadedEdges(

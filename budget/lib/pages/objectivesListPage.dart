@@ -147,7 +147,7 @@ class ObjectivesListPage extends StatelessWidget {
                     child: TextFont(
                       text: "example-goals".tr(),
                       textColor: getColor(context, "black").withOpacity(0.25),
-                      fontSize: 18,
+                      fontSize: 16,
                       textAlign: TextAlign.center,
                     ),
                   )
@@ -161,7 +161,7 @@ class ObjectivesListPage extends StatelessWidget {
               sliver: enableDoubleColumn(context)
                   ? SliverGrid(
                       gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                        maxCrossAxisExtent: 600.0,
+                        maxCrossAxisExtent: 500.0,
                         mainAxisExtent: 160,
                         mainAxisSpacing:
                             getPlatform() == PlatformOS.isIOS ? 0 : 15.0,

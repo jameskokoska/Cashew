@@ -8,6 +8,7 @@ import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/keepAliveClientMixin.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/pieChart.dart';
+import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionsAmountBox.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -32,54 +33,125 @@ class HomePagePieChart extends StatelessWidget {
                   boxShadow: boxShadowCheck(boxShadowGeneral(context)),
                 ),
                 padding: EdgeInsets.symmetric(vertical: 30, horizontal: 10),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Flexible(
-                      child: StreamBuilder<double?>(
-                        stream: database.watchTotalOfWallet(
-                          null,
-                          isIncome: isIncome,
-                          allWallets: Provider.of<AllWallets>(context),
-                        ),
-                        builder: (context, totalSnapshot) {
-                          double total = (totalSnapshot.data ?? 0).abs();
-                          return StreamBuilder<List<CategoryWithTotal>>(
-                            stream: database
-                                .watchTotalSpentInEachCategoryInTimeRangeFromCategories(
-                              allWallets: Provider.of<AllWallets>(context),
-                              start: DateTime.now(),
-                              end: DateTime.now(),
-                              categoryFks: null,
-                              categoryFksExclude: null,
-                              budgetTransactionFilters: null,
-                              memberTransactionFilters: null,
-                              allTime: true,
-                              walletPk: null,
-                              isIncome: isIncome,
-                            ),
-                            builder: (context, snapshot) {
-                              if (snapshot.hasData) {
-                                return PieChartWrapper(
-                                  isPastBudget: true,
-                                  pieChartDisplayStateKey: null,
-                                  data: snapshot.data!,
-                                  totalSpent: total,
-                                  setSelectedCategory:
-                                      (categoryPk, category) {},
-                                );
-                              }
-                              return SizedBox.shrink();
+                child: StreamBuilder<double?>(
+                  stream: database.watchTotalOfWallet(
+                    null,
+                    isIncome: isIncome,
+                    allWallets: Provider.of<AllWallets>(context),
+                  ),
+                  builder: (context, totalSnapshot) {
+                    double total = (totalSnapshot.data ?? 0).abs();
+                    return StreamBuilder<List<CategoryWithTotal>>(
+                      stream: database
+                          .watchTotalSpentInEachCategoryInTimeRangeFromCategories(
+                        allWallets: Provider.of<AllWallets>(context),
+                        start: DateTime.now(),
+                        end: DateTime.now(),
+                        categoryFks: null,
+                        categoryFksExclude: null,
+                        budgetTransactionFilters: null,
+                        memberTransactionFilters: null,
+                        allTime: true,
+                        walletPk: null,
+                        isIncome: isIncome,
+                      ),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          return LayoutBuilder(
+                            builder: (_, boxConstraints) {
+                              print(boxConstraints);
+                              bool showTopCategoriesLegend =
+                                  boxConstraints.maxWidth > 320;
+                              return Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  if (showTopCategoriesLegend)
+                                    Flexible(
+                                      flex: 1,
+                                      child: Padding(
+                                        padding: EdgeInsets.only(left: 12),
+                                        child: TopCategoriesSpentLegend(
+                                          categoriesWithTotal: snapshot.data!
+                                              .take(
+                                                boxConstraints.maxWidth < 420
+                                                    ? 3
+                                                    : 5,
+                                              )
+                                              .toList(),
+                                        ),
+                                      ),
+                                    ),
+                                  Flexible(
+                                    flex: 2,
+                                    child: Padding(
+                                      padding: EdgeInsets.only(
+                                          right:
+                                              showTopCategoriesLegend ? 20 : 0),
+                                      child: PieChartWrapper(
+                                        isPastBudget: true,
+                                        pieChartDisplayStateKey: null,
+                                        data: snapshot.data!,
+                                        totalSpent: total,
+                                        setSelectedCategory:
+                                            (categoryPk, category) {},
+                                        percentLabelOnTop: true,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              );
                             },
                           );
-                        },
-                      ),
-                    ),
-                  ],
+                        }
+                        return SizedBox.shrink();
+                      },
+                    );
+                  },
                 ),
               ),
             ),
           );
+  }
+}
+
+class TopCategoriesSpentLegend extends StatelessWidget {
+  const TopCategoriesSpentLegend(
+      {required this.categoriesWithTotal, super.key});
+  final List<CategoryWithTotal> categoriesWithTotal;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        for (CategoryWithTotal categoryWithTotal in categoriesWithTotal)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 4),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                  width: 10,
+                  height: 10,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(100),
+                    color: HexColor(categoryWithTotal.category.colour),
+                  ),
+                ),
+                SizedBox(width: 5),
+                Flexible(
+                  child: TextFont(
+                    text: categoryWithTotal.category.name,
+                    fontSize: 15,
+                    maxLines: 2,
+                  ),
+                ),
+              ],
+            ),
+          ),
+      ],
+    );
   }
 }

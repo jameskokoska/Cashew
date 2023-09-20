@@ -502,7 +502,7 @@ class AppliedFilterChips extends StatelessWidget {
     }
     if (searchFilters.objectivePks.contains(null)) {
       out.add(AppliedFilterChip(
-        label: "no-objective".tr(),
+        label: "no-goal".tr(),
         openFiltersSelection: openFiltersSelection,
       ));
     }
@@ -990,7 +990,7 @@ class _TransactionFiltersSelectionState
                   );
                 },
                 getLabel: (Objective? item) {
-                  if (item == null) return "no-objective".tr();
+                  if (item == null) return "no-goal".tr();
                   return item.name;
                 },
                 onSelected: (Objective? item) {

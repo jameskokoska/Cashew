@@ -2135,6 +2135,20 @@ class FinanceDatabase extends _$FinanceDatabase {
     return true;
   }
 
+  Future<bool> fixOrderObjectives() async {
+    List<Objective> objectivesList = await (select(objectives)
+          ..orderBy([(t) => OrderingTerm.asc(t.order)]))
+        .get();
+    for (int i = 0; i < objectivesList.length; i++) {
+      objectivesList[i] = objectivesList[i]
+          .copyWith(order: i, dateTimeModified: Value(DateTime.now()));
+    }
+    await batch((batch) {
+      batch.insertAll(objectives, objectivesList, mode: InsertMode.replace);
+    });
+    return true;
+  }
+
   Future<bool> fixOrderCategories() async {
     List<TransactionCategory> categoriesList = await (select(categories)
           ..orderBy([(t) => OrderingTerm.asc(t.order)]))
@@ -2993,8 +3007,7 @@ class FinanceDatabase extends _$FinanceDatabase {
               : i.name
                   .lower()
                   .like("%" + (searchFor).toLowerCase().trim() + "%")))
-          ..orderBy([(i) => OrderingTerm.asc(i.order)])
-          ..limit(limit ?? DEFAULT_LIMIT, offset: offset ?? DEFAULT_OFFSET))
+          ..orderBy([(i) => OrderingTerm.asc(i.order)]))
         .watch();
   }
 

@@ -44,7 +44,7 @@ class _EditObjectivesPageState extends State<EditObjectivesPage> {
   @override
   void initState() {
     Future.delayed(Duration.zero, () {
-      database.fixOrderCategories();
+      database.fixOrderObjectives();
     });
     super.initState();
   }

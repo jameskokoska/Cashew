@@ -85,6 +85,8 @@ class _CountUpState extends State<CountUp> {
   }
 }
 
+bool isWholeNumber(num value) => value is int || value == value.roundToDouble();
+
 class CountNumber extends StatefulWidget {
   const CountNumber({
     Key? key,
@@ -119,7 +121,9 @@ class _CountNumberState extends State<CountNumber> {
   Widget build(BuildContext context) {
     int decimals = 0;
 
-    if (widget.count % 1 == 0) {
+    if (widget.decimals != null &&
+        isWholeNumber(double.parse(
+            widget.count.toStringAsFixed(widget.decimals ?? decimals)))) {
       decimals = 0;
     } else {
       int currentSelectedDecimals = Provider.of<AllWallets>(context)
