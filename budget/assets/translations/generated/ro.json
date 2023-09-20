@@ -666,10 +666,13 @@
   "major-change-3": "Obiective",
   "major-change-3-1": "Urmăriți cheltuielile și economisirea obiectivelor",
   "major-change-3-2": "Adăugați tranzacții la obiective și urmăriți -vă progresul",
-  "major-change-4": "Valoarea netă",
-  "major-change-4-1": "Widget nou pentru pagina principală netă",
+  "major-change-4": "Widget -uri de pagini de pornire",
+  "major-change-4-1": "Widget pentru pagina de pornire a plăcilor noi",
+  "major-change-4-2": "Widget nou pentru pagina principală netă",
   "major-change-5": "Corectarea erorilor",
   "major-change-5-1": "Remedieri de erori și îmbunătățiri ale interfeței",
   "close": "Închide",
-  "view-detailed-changelog": "Vizualizați ChangeLog detaliat"
+  "view-detailed-changelog": "Vizualizați ChangeLog detaliat",
+  "pie-chart": "Graficul proporțiilor",
+  "select-type": "Selectați tip"
 }

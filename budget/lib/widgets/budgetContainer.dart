@@ -641,6 +641,7 @@ class BudgetProgress extends StatelessWidget {
   BudgetProgress({
     Key? key,
     required this.color,
+    this.backgroundColor,
     required this.percent,
     required this.todayPercent,
     required this.yourPercent,
@@ -651,6 +652,7 @@ class BudgetProgress extends StatelessWidget {
   }) : super(key: key);
 
   final Color color;
+  final backgroundColor;
   final double percent;
   final double yourPercent;
   final double todayPercent;
@@ -699,19 +701,20 @@ class BudgetProgress extends StatelessWidget {
                   Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(50),
-                      color: appStateSettings["materialYou"]
-                          ? large
-                              ? dynamicPastel(context, color,
-                                  amountLight: 0.9, amountDark: 0.8)
-                              : dynamicPastel(
-                                  context,
-                                  dynamicPastel(context, color,
-                                      amount: 0.7, inverse: true),
-                                  amountLight: 0.87,
-                                  amountDark: 0.75)
-                          : large
-                              ? getColor(context, "lightDarkAccent")
-                              : getColor(context, "lightDarkAccentHeavy"),
+                      color: backgroundColor ??
+                          (appStateSettings["materialYou"]
+                              ? large
+                                  ? dynamicPastel(context, color,
+                                      amountLight: 0.9, amountDark: 0.8)
+                                  : dynamicPastel(
+                                      context,
+                                      dynamicPastel(context, color,
+                                          amount: 0.7, inverse: true),
+                                      amountLight: 0.87,
+                                      amountDark: 0.75)
+                              : large
+                                  ? getColor(context, "lightDarkAccent")
+                                  : getColor(context, "lightDarkAccentHeavy")),
                     ),
                     height: large ? 24.2 : 19.2,
                   ),

@@ -666,10 +666,13 @@
   "major-change-3": "Hedefler",
   "major-change-3-1": "Harcama ve Tasarruf Hedefleri",
   "major-change-3-2": "Hedeflere işlem ekleyin ve ilerlemenizi izleyin",
-  "major-change-4": "Net değer",
-  "major-change-4-1": "Yeni Net Değerli Ana Sayfa Widget",
+  "major-change-4": "Ana sayfa widget'ları",
+  "major-change-4-1": "Yeni pasta grafik ana sayfa widget",
+  "major-change-4-2": "Yeni Net Değerli Ana Sayfa Widget",
   "major-change-5": "Hata düzeltmeleri",
   "major-change-5-1": "Hata düzeltmeleri ve arayüz geliştirmeleri",
   "close": "Kapalı",
-  "view-detailed-changelog": "Ayrıntılı ChangeLog'u görüntüleyin"
+  "view-detailed-changelog": "Ayrıntılı ChangeLog'u görüntüleyin",
+  "pie-chart": "Yuvarlak diyagram",
+  "select-type": "Türü seçin"
 }

@@ -77,7 +77,7 @@ class _IncomeExpenseTabSelectorState extends State<IncomeExpenseTabSelector>
           color: widget.color != null
               ? widget.color
               : (appStateSettings["materialYou"]
-                  ? Theme.of(context).colorScheme.primary.withOpacity(0.3)
+                  ? Theme.of(context).colorScheme.primary.withOpacity(0.25)
                   : getColor(context, "black").withOpacity(0.15)),
         ),
         labelColor: getColor(context, "black"),

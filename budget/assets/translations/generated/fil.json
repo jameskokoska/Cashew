@@ -666,10 +666,13 @@
   "major-change-3": "Mga layunin",
   "major-change-3-1": "Subaybayan ang mga layunin sa paggastos at pag -save",
   "major-change-3-2": "Magdagdag ng mga transaksyon sa mga layunin at subaybayan ang iyong pag -unlad",
-  "major-change-4": "Net worth",
-  "major-change-4-1": "Bagong Net Worth Homepage Widget",
+  "major-change-4": "Mga widget ng home page",
+  "major-change-4-1": "Bagong pie chart homepage widget",
+  "major-change-4-2": "Bagong Net Worth Homepage Widget",
   "major-change-5": "Pag -aayos ng bug",
   "major-change-5-1": "Pag -aayos ng bug at pagpapabuti ng interface",
   "close": "Malapit",
-  "view-detailed-changelog": "Tingnan ang detalyadong Changelog"
+  "view-detailed-changelog": "Tingnan ang detalyadong Changelog",
+  "pie-chart": "Pie chart",
+  "select-type": "Piliin ang Uri"
 }

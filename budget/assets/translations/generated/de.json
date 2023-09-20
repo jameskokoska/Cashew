@@ -666,10 +666,13 @@
   "major-change-3": "Ziele",
   "major-change-3-1": "Verfolgen Sie Ausgaben- und Sparenziele",
   "major-change-3-2": "Fügen Sie den Zielen Transaktionen hinzu und verfolgen Sie Ihren Fortschritt",
-  "major-change-4": "Reinvermögen",
-  "major-change-4-1": "Neues Netto -Worth -Homepage -Widget",
+  "major-change-4": "Homepage -Widgets",
+  "major-change-4-1": "Neues Kreisdiagramm -Homepage -Widget",
+  "major-change-4-2": "Neues Netto -Worth -Homepage -Widget",
   "major-change-5": "Fehlerbehebung",
   "major-change-5-1": "Fehlerbehebungen und Schnittstellenverbesserungen",
   "close": "Schließen",
-  "view-detailed-changelog": "Detaillierte ChangeLog anzeigen"
+  "view-detailed-changelog": "Detaillierte ChangeLog anzeigen",
+  "pie-chart": "Kuchendiagramm",
+  "select-type": "Art auswählen"
 }

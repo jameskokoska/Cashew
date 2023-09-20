@@ -666,10 +666,13 @@
   "major-change-3": "هدف",
   "major-change-3-1": "خرج کردن و صرفه جویی در اهداف",
   "major-change-3-2": "معاملات را به اهداف اضافه کنید و پیشرفت خود را پیگیری کنید",
-  "major-change-4": "ارزش خالص",
-  "major-change-4-1": "ویجت صفحه اصلی با ارزش خالص جدید",
+  "major-change-4": "ویجت های صفحه اصلی",
+  "major-change-4-1": "ویجت صفحه اصلی نمودار پای جدید",
+  "major-change-4-2": "ویجت صفحه اصلی با ارزش خالص جدید",
   "major-change-5": "رفع اشکال",
   "major-change-5-1": "رفع اشکال و بهبود رابط",
   "close": "بستن",
-  "view-detailed-changelog": "مشاهده ChangeLog مفصل"
+  "view-detailed-changelog": "مشاهده ChangeLog مفصل",
+  "pie-chart": "نمودار دایره ای",
+  "select-type": "نوع را انتخاب کنید"
 }

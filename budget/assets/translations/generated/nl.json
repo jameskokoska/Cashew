@@ -666,10 +666,13 @@
   "major-change-3": "Doelen",
   "major-change-3-1": "Volg de uitgaven en het besparen van doelen",
   "major-change-3-2": "Voeg transacties toe aan doelen en volg uw voortgang",
-  "major-change-4": "Netto waarde",
-  "major-change-4-1": "NIEUWE NETTAL WAARD HOMEPAGE WIDGET",
+  "major-change-4": "Startpagina widgets",
+  "major-change-4-1": "Nieuwe widget van de cirkeldiagram",
+  "major-change-4-2": "NIEUWE NETTAL WAARD HOMEPAGE WIDGET",
   "major-change-5": "Bugfixes",
   "major-change-5-1": "Bugfixes en interfaceverbeteringen",
   "close": "Dichtbij",
-  "view-detailed-changelog": "Bekijk gedetailleerde changelog"
+  "view-detailed-changelog": "Bekijk gedetailleerde changelog",
+  "pie-chart": "Cirkeldiagram",
+  "select-type": "Selecteer type"
 }

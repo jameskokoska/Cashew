@@ -666,10 +666,13 @@
   "major-change-3": "目標",
   "major-change-3-1": "支出と節約の目標を追跡します",
   "major-change-3-2": "目標にトランザクションを追加し、進捗状況を追跡します",
-  "major-change-4": "純資産",
-  "major-change-4-1": "新しい純資産ホームページウィジェット",
+  "major-change-4": "ホームページウィジェット",
+  "major-change-4-1": "新しいパイチャートホームページウィジェット",
+  "major-change-4-2": "新しい純資産ホームページウィジェット",
   "major-change-5": "バグの修正",
   "major-change-5-1": "バグの修正とインターフェイスの改善",
   "close": "近い",
-  "view-detailed-changelog": "詳細なChangelogを表示します"
+  "view-detailed-changelog": "詳細なChangelogを表示します",
+  "pie-chart": "円グラフ",
+  "select-type": "[タイプ]を選択します"
 }

@@ -666,10 +666,13 @@
   "major-change-3": "Obiettivi",
   "major-change-3-1": "Traccia gli obiettivi di spesa e salvataggio",
   "major-change-3-2": "Aggiungi transazioni agli obiettivi e traccia i tuoi progressi",
-  "major-change-4": "Patrimonio netto",
-  "major-change-4-1": "Nuovo Widget Homepage del Nuovo NET WORT",
+  "major-change-4": "Widget home page",
+  "major-change-4-1": "Nuovo widget homepage del grafico a torta",
+  "major-change-4-2": "Nuovo Widget Homepage del Nuovo NET WORT",
   "major-change-5": "Correzioni di bug",
   "major-change-5-1": "Correzioni di bug e miglioramenti dell'interfaccia",
   "close": "Vicino",
-  "view-detailed-changelog": "Visualizza Changelog dettagliato"
+  "view-detailed-changelog": "Visualizza Changelog dettagliato",
+  "pie-chart": "Grafico a torta",
+  "select-type": "Selezionare il tipo"
 }

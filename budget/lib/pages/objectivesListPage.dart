@@ -448,6 +448,11 @@ class ObjectiveContainer extends StatelessWidget {
                         yourPercent: 0,
                         padding: EdgeInsets.zero,
                         enableShake: false,
+                        backgroundColor: (getPlatform() == PlatformOS.isIOS &&
+                                    forceAndroidBubbleDesign == false) ||
+                                appStateSettings["materialYou"] == false
+                            ? null
+                            : Theme.of(context).colorScheme.secondaryContainer,
                       ),
                     ],
                   ),

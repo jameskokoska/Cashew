@@ -57,7 +57,7 @@ class PieChartWrapper extends StatelessWidget {
   final Function(String categoryPk, TransactionCategory? category)
       setSelectedCategory;
   final bool isPastBudget;
-  final pieChartDisplayStateKey;
+  final GlobalKey<PieChartDisplayState>? pieChartDisplayStateKey;
   final Color? middleColor;
 
   @override
@@ -66,6 +66,7 @@ class PieChartWrapper extends StatelessWidget {
       width: enableDoubleColumn(context) == false ? 200 : 300,
       height: enableDoubleColumn(context) == false ? 200 : 300,
       child: Stack(
+        alignment: Alignment.center,
         children: [
           PieChartDisplay(
             data: data,

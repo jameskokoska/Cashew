@@ -666,10 +666,13 @@
   "major-change-3": "Mål",
   "major-change-3-1": "Spore utgifter og spare mål",
   "major-change-3-2": "Legg til transaksjoner i mål og spore fremdriften din",
-  "major-change-4": "Nettoformue",
-  "major-change-4-1": "Ny nettverdi -hjemmeside widget",
+  "major-change-4": "Hjemmeside widgeter",
+  "major-change-4-1": "Ny kakediagram -hjemmeside widget",
+  "major-change-4-2": "Ny nettverdi -hjemmeside widget",
   "major-change-5": "Feilrettinger",
   "major-change-5-1": "Feilrettinger og forbedringer av grensesnittet",
   "close": "Lukk",
-  "view-detailed-changelog": "Se detaljert Changelog"
+  "view-detailed-changelog": "Se detaljert Changelog",
+  "pie-chart": "Kake diagram",
+  "select-type": "Velg Type"
 }

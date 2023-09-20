@@ -666,10 +666,13 @@
   "major-change-3": "Mål",
   "major-change-3-1": "Spåra utgifter och spara mål",
   "major-change-3-2": "Lägg till transaktioner till mål och spåra dina framsteg",
-  "major-change-4": "Nettovärde",
-  "major-change-4-1": "Nytt nettovärde hemsidan widget",
+  "major-change-4": "Hemsida widgetar",
+  "major-change-4-1": "Nytt cirkeldiagram hemsida widget",
+  "major-change-4-2": "Nytt nettovärde hemsidan widget",
   "major-change-5": "Bug fixar",
   "major-change-5-1": "Bugfixar och gränssnittsförbättringar",
   "close": "Stänga",
-  "view-detailed-changelog": "Visa detaljerad ChangeLog"
+  "view-detailed-changelog": "Visa detaljerad ChangeLog",
+  "pie-chart": "Tårtdiagram",
+  "select-type": "Välj typ"
 }

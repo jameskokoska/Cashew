@@ -666,10 +666,13 @@
   "major-change-3": "Metas",
   "major-change-3-1": "Acompanhe as metas de gastos e salvamento",
   "major-change-3-2": "Adicione transações às metas e acompanhe seu progresso",
-  "major-change-4": "Patrimônio líquido",
-  "major-change-4-1": "Novo widget de página inicial do patrimônio líquido",
+  "major-change-4": "Widgets da página inicial",
+  "major-change-4-1": "Novo widget da página inicial do gráfico",
+  "major-change-4-2": "Novo widget de página inicial do patrimônio líquido",
   "major-change-5": "Correções de bug",
   "major-change-5-1": "Correções de bugs e melhorias de interface",
   "close": "Fechar",
-  "view-detailed-changelog": "Ver Changelog detalhado"
+  "view-detailed-changelog": "Ver Changelog detalhado",
+  "pie-chart": "Gráfico de pizza",
+  "select-type": "Selecione o tipo"
 }

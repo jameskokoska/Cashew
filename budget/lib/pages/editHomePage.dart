@@ -391,6 +391,47 @@ class _EditHomePageState extends State<EditHomePage> {
               );
             },
           ),
+          "pieChart": EditHomePageItem(
+              icon: appStateSettings["outlinedIcons"]
+                  ? Icons.pie_chart_outline
+                  : Icons.pie_chart_rounded,
+              name: "pie-chart".tr(),
+              isEnabled: appStateSettings["showPieChart"],
+              onSwitched: (value) {
+                updateSettings("showPieChart", value,
+                    pagesNeedingRefresh: [], updateGlobalState: false);
+              },
+              extraWidgetsBelow: [],
+              onTap: () {
+                openBottomSheet(
+                  context,
+                  PopupFramework(
+                    title: "select-type".tr(),
+                    child: RadioItems(
+                      items: <String>[
+                        "expense",
+                        "income",
+                      ],
+                      displayFilter: (type) {
+                        return type.toString().tr();
+                      },
+                      initial: appStateSettings["pieChartIsIncome"] == true
+                          ? "income"
+                          : "expense",
+                      onChanged: (type) async {
+                        if (type == "expense") {
+                          updateSettings("pieChartIsIncome", false,
+                              updateGlobalState: false);
+                        } else {
+                          updateSettings("pieChartIsIncome", true,
+                              updateGlobalState: false);
+                        }
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  ),
+                );
+              }),
           "heatMap": EditHomePageItem(
             icon: appStateSettings["outlinedIcons"]
                 ? Icons.grid_on_outlined

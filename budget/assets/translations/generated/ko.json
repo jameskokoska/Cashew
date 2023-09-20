@@ -666,10 +666,13 @@
   "major-change-3": "목표",
   "major-change-3-1": "지출 및 저축 목표를 추적하십시오",
   "major-change-3-2": "목표에 거래를 추가하고 진행 상황을 추적하십시오",
-  "major-change-4": "순자산",
-  "major-change-4-1": "새로운 순 가치 홈페이지 위젯",
+  "major-change-4": "홈페이지 위젯",
+  "major-change-4-1": "새로운 파이 차트 홈페이지 위젯",
+  "major-change-4-2": "새로운 순 가치 홈페이지 위젯",
   "major-change-5": "버그 수정",
   "major-change-5-1": "버그 수정 및 인터페이스 개선",
   "close": "닫다",
-  "view-detailed-changelog": "자세한 ChangeLog를 봅니다"
+  "view-detailed-changelog": "자세한 ChangeLog를 봅니다",
+  "pie-chart": "파이 차트",
+  "select-type": "유형을 선택하십시오"
 }

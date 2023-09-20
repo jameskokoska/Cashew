@@ -14,6 +14,9 @@ import 'package:flutter/material.dart';
 
 String getChangelogString() {
   return """
+    < 4.3.9
+    Pie chart homepage widget
+    Color fixes, especially on income and expense selector
     < 4.3.8
     Objective filters on search page
     Onboarding page text modifications
@@ -1316,7 +1319,7 @@ end""";
 // If they were not already seen by a user, they are shown at the top of the changelog
 Map<String, List<MajorChanges>> getMajorChanges() {
   return {
-    "< 4.3.8": [
+    "< 4.3.9": [
       MajorChanges(
         "major-change-1".tr(),
         Icons.arrow_drop_up_rounded,
@@ -1341,9 +1344,10 @@ Map<String, List<MajorChanges>> getMajorChanges() {
       ),
       MajorChanges(
         "major-change-4".tr(),
-        Icons.area_chart_rounded,
+        Icons.home_rounded,
         info: [
           "major-change-4-1".tr(),
+          "major-change-4-2".tr(),
         ],
       ),
       MajorChanges(

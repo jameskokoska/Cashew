@@ -666,10 +666,13 @@
   "major-change-3": "Mål",
   "major-change-3-1": "Spor udgifter og reddende mål",
   "major-change-3-2": "Tilføj transaktioner til mål og spore dine fremskridt",
-  "major-change-4": "Nettoværdi",
-  "major-change-4-1": "Nyt nettoværdi hjemmeside widget",
+  "major-change-4": "Hjemmeside widgets",
+  "major-change-4-1": "Ny cirkeldiagram hjemmeside widget",
+  "major-change-4-2": "Nyt nettoværdi hjemmeside widget",
   "major-change-5": "Fejlrettelser",
   "major-change-5-1": "Fejlrettelser og forbedringer af interface",
   "close": "Tæt",
-  "view-detailed-changelog": "Se detaljeret Changelog"
+  "view-detailed-changelog": "Se detaljeret Changelog",
+  "pie-chart": "Lagkagediagram",
+  "select-type": "Vælg type"
 }

@@ -666,10 +666,13 @@
   "major-change-3": "Objectifs",
   "major-change-3-1": "Suivre les dépenses et économiser des objectifs",
   "major-change-3-2": "Ajouter des transactions aux objectifs et suivre vos progrès",
-  "major-change-4": "Valeur nette",
-  "major-change-4-1": "Nouveau widget de page à domicile nette",
+  "major-change-4": "Widgets de la page d'accueil",
+  "major-change-4-1": "Widget de page d'accueil du nouveau graphique à tarte",
+  "major-change-4-2": "Nouveau widget de page à domicile nette",
   "major-change-5": "Correction de bugs",
   "major-change-5-1": "Correction de bugs et améliorations d'interface",
   "close": "Fermer",
-  "view-detailed-changelog": "Afficher la modique détaillée"
+  "view-detailed-changelog": "Afficher la modique détaillée",
+  "pie-chart": "Diagramme circulaire",
+  "select-type": "Sélectionner le genre"
 }

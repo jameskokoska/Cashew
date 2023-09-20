@@ -666,10 +666,13 @@
   "major-change-3": "Cíle",
   "major-change-3-1": "Sledovat výdaje a úsporu cílů",
   "major-change-3-2": "Přidejte transakce k cílům a sledujte svůj pokrok",
-  "major-change-4": "Čisté jmění",
-  "major-change-4-1": "Nový widget Homepage Net Worth",
+  "major-change-4": "Widgety domovské stránky",
+  "major-change-4-1": "Nový widget domovské stránky s výsevkovým grafem",
+  "major-change-4-2": "Nový widget Homepage Net Worth",
   "major-change-5": "Oprava chyb",
   "major-change-5-1": "Oprava chyb a vylepšení rozhraní",
   "close": "Zavřít",
-  "view-detailed-changelog": "Zobrazit podrobný ChangeLog"
+  "view-detailed-changelog": "Zobrazit podrobný ChangeLog",
+  "pie-chart": "Výsečový graf",
+  "select-type": "Vyberte typ"
 }

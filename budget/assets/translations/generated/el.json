@@ -666,10 +666,13 @@
   "major-change-3": "Γκολ",
   "major-change-3-1": "Παρακολούθηση στόχων δαπανών και εξοικονόμησης",
   "major-change-3-2": "Προσθέστε συναλλαγές σε στόχους και παρακολουθείτε την πρόοδό σας",
-  "major-change-4": "Καθαρή αξία",
-  "major-change-4-1": "Νέο widget αρχικής σελίδας NEW Net Worth",
+  "major-change-4": "Widgets αρχικής σελίδας",
+  "major-change-4-1": "Νέο widget αρχικής σελίδας πίτας",
+  "major-change-4-2": "Νέο widget αρχικής σελίδας NEW Net Worth",
   "major-change-5": "Διορθώσεις σφαλμάτων",
   "major-change-5-1": "Διορθώσεις σφαλμάτων και βελτιώσεις διασύνδεσης",
   "close": "Κλείσε",
-  "view-detailed-changelog": "Δείτε λεπτομερές Changelog"
+  "view-detailed-changelog": "Δείτε λεπτομερές Changelog",
+  "pie-chart": "Διάγραμμα πίτας",
+  "select-type": "Επιλέξτε τον τύπο"
 }

@@ -666,10 +666,13 @@
   "major-change-3": "Goals",
   "major-change-3-1": "Track spending and saving goals",
   "major-change-3-2": "Add transactions to goals and track your progress",
-  "major-change-4": "Net Worth",
-  "major-change-4-1": "New net worth homepage widget",
+  "major-change-4": "Home Page Widgets",
+  "major-change-4-1": "New pie chart homepage widget",
+  "major-change-4-2": "New net worth homepage widget",
   "major-change-5": "Bug Fixes",
   "major-change-5-1": "Bug fixes and interface improvements",
   "close": "Close",
-  "view-detailed-changelog": "View Detailed Changelog"
+  "view-detailed-changelog": "View Detailed Changelog",
+  "pie-chart": "Pie Chart",
+  "select-type": "Select Type"
 }

@@ -666,10 +666,13 @@
   "major-change-3": "Matlamat",
   "major-change-3-1": "Mengesan perbelanjaan dan menjimatkan matlamat",
   "major-change-3-2": "Tambahkan urus niaga ke matlamat dan menjejaki kemajuan anda",
-  "major-change-4": "Nilai bersih",
-  "major-change-4-1": "Widget Laman Utama Bersih Bersih Baru",
+  "major-change-4": "Widget halaman rumah",
+  "major-change-4-1": "Widget Laman Utama Carta Pai Baru",
+  "major-change-4-2": "Widget Laman Utama Bersih Bersih Baru",
   "major-change-5": "Pembetulan pepijat",
   "major-change-5-1": "Pembetulan pepijat dan penambahbaikan antara muka",
   "close": "Tutup",
-  "view-detailed-changelog": "Lihat Changelog terperinci"
+  "view-detailed-changelog": "Lihat Changelog terperinci",
+  "pie-chart": "Carta pai",
+  "select-type": "Pilih jenis"
 }

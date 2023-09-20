@@ -666,10 +666,13 @@
   "major-change-3": "Objetivos",
   "major-change-3-1": "Rastrear el gasto y el ahorro de objetivos",
   "major-change-3-2": "Agregue transacciones a los objetivos y rastree su progreso",
-  "major-change-4": "Valor neto",
-  "major-change-4-1": "Nuevo widget de página de inicio de patrimonio neto",
+  "major-change-4": "Widgets de la página de inicio",
+  "major-change-4-1": "Nuevo widget de la página de inicio del gráfico de pastel",
+  "major-change-4-2": "Nuevo widget de página de inicio de patrimonio neto",
   "major-change-5": "Corrección de errores",
   "major-change-5-1": "Correcciones de errores y mejoras de interfaz",
   "close": "Cerca",
-  "view-detailed-changelog": "Ver ChangeLog detallado"
+  "view-detailed-changelog": "Ver ChangeLog detallado",
+  "pie-chart": "Gráfico circular",
+  "select-type": "Seleccione tipo"
 }

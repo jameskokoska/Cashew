@@ -666,10 +666,13 @@
   "major-change-3": "الأهداف",
   "major-change-3-1": "تتبع الأهداف الإنفاق وتوفير",
   "major-change-3-2": "إضافة معاملات إلى الأهداف وتتبع تقدمك",
-  "major-change-4": "صافي القيمة",
-  "major-change-4-1": "عنصر واجهة مستخدم صافي قيمة صافي جديد",
+  "major-change-4": "عنوان الصفحة الرئيسية",
+  "major-change-4-1": "عنصر واجهة مستخدم لصفحة فطيرة جديدة",
+  "major-change-4-2": "عنصر واجهة مستخدم صافي قيمة صافي جديد",
   "major-change-5": "اصلاحات الشوائب",
   "major-change-5-1": "إصلاحات الأخطاء وتحسين الواجهة",
   "close": "يغلق",
-  "view-detailed-changelog": "عرض مفصل changelog"
+  "view-detailed-changelog": "عرض مفصل changelog",
+  "pie-chart": "مخطط فطيرة",
+  "select-type": "اختر صنف"
 }

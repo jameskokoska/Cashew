@@ -6,6 +6,7 @@ import 'package:budget/pages/homePage/homePageHeatmap.dart';
 import 'package:budget/pages/homePage/homePageLineGraph.dart';
 import 'package:budget/pages/homePage/homePageNetWorth.dart';
 import 'package:budget/pages/homePage/homePageObjectives.dart';
+import 'package:budget/pages/homePage/homePagePieChart.dart';
 import 'package:budget/pages/homePage/homePageWalletSwitcher.dart';
 import 'package:budget/pages/homePage/homeTransactionSlivers.dart';
 import 'package:budget/pages/homePage/homeUpcomingTransactionSlivers.dart';
@@ -128,6 +129,8 @@ class HomePageState extends State<HomePage>
       "creditDebts": HomePageCreditDebts(),
       "spendingGraph":
           HomePageLineGraph(selectedSlidingSelector: selectedSlidingSelector),
+      "pieChart":
+          HomePagePieChart(selectedSlidingSelector: selectedSlidingSelector),
       "heatMap": HomePageHeatMap(),
     };
     return SwipeToSelectTransactions(

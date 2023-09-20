@@ -666,10 +666,13 @@
   "major-change-3": "Bàn thắng",
   "major-change-3-1": "Theo dõi chi tiêu và tiết kiệm mục tiêu",
   "major-change-3-2": "Thêm giao dịch vào mục tiêu và theo dõi tiến trình của bạn",
-  "major-change-4": "Giá trị ròng",
-  "major-change-4-1": "Tiện ích trang chủ giá trị ròng mới",
+  "major-change-4": "Tiện ích trang chủ",
+  "major-change-4-1": "Tiện ích trang chủ biểu đồ hình tròn mới",
+  "major-change-4-2": "Tiện ích trang chủ giá trị ròng mới",
   "major-change-5": "Sửa lỗi",
   "major-change-5-1": "Sửa lỗi và cải thiện giao diện",
   "close": "Đóng",
-  "view-detailed-changelog": "Xem chi tiết Changelog"
+  "view-detailed-changelog": "Xem chi tiết Changelog",
+  "pie-chart": "Biểu đồ tròn",
+  "select-type": "Lựa chọn đối tượng"
 }

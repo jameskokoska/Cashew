@@ -666,10 +666,13 @@
   "major-change-3": "Sasaran",
   "major-change-3-1": "Lacak pengeluaran dan simpan gol",
   "major-change-3-2": "Tambahkan transaksi ke sasaran dan lacak kemajuan Anda",
-  "major-change-4": "Kekayaan bersih",
-  "major-change-4-1": "Widget Beranda Kekayaan Bersih Baru",
+  "major-change-4": "Widget halaman beranda",
+  "major-change-4-1": "Widget beranda bagan pai baru",
+  "major-change-4-2": "Widget Beranda Kekayaan Bersih Baru",
   "major-change-5": "Perbaikan kerusakan",
   "major-change-5-1": "Perbaikan bug dan peningkatan antarmuka",
   "close": "Menutup",
-  "view-detailed-changelog": "Lihat Changelog Detail"
+  "view-detailed-changelog": "Lihat Changelog Detail",
+  "pie-chart": "Pie chart",
+  "select-type": "Pilih tipe"
 }

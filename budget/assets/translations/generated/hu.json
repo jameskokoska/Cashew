@@ -666,10 +666,13 @@
   "major-change-3": "Célok",
   "major-change-3-1": "Kövesse nyomon a kiadásokat és a célok megtakarítását",
   "major-change-3-2": "Adjon hozzá tranzakciókat a célokhoz, és kövesse nyomon az előrehaladást",
-  "major-change-4": "Nettó érték",
-  "major-change-4-1": "Új nettó vagyon honlap widget",
+  "major-change-4": "Kezdőlap widgetek",
+  "major-change-4-1": "Új kördiagram honlap widget",
+  "major-change-4-2": "Új nettó vagyon honlap widget",
   "major-change-5": "Hibajavítások",
   "major-change-5-1": "Hibajavítások és interfész fejlesztések",
   "close": "Bezárás",
-  "view-detailed-changelog": "Tekintse meg a részletes változási változást"
+  "view-detailed-changelog": "Tekintse meg a részletes változási változást",
+  "pie-chart": "Kördiagram",
+  "select-type": "Válassza ki a típust"
 }
