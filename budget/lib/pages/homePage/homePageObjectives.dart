@@ -88,21 +88,23 @@ class _HomePageObjectivesState extends State<HomePageObjectives> {
                   ];
                   return Stack(
                     children: [
-                      Visibility(
-                        maintainSize: true,
-                        maintainAnimation: true,
-                        maintainState: true,
-                        child: Opacity(
-                          opacity: 0,
-                          child: WidgetSize(
-                            onChange: (Size size) {
-                              setState(() {
-                                height = size.height;
-                              });
-                            },
-                            child: ObjectiveContainer(
-                              objective: snapshot.data![0],
-                              index: 0,
+                      IgnorePointer(
+                        child: Visibility(
+                          maintainSize: true,
+                          maintainAnimation: true,
+                          maintainState: true,
+                          child: Opacity(
+                            opacity: 0,
+                            child: WidgetSize(
+                              onChange: (Size size) {
+                                setState(() {
+                                  height = size.height;
+                                });
+                              },
+                              child: ObjectiveContainer(
+                                objective: snapshot.data![0],
+                                index: 0,
+                              ),
                             ),
                           ),
                         ),

@@ -195,8 +195,9 @@ class _EditWalletsPageState extends State<EditWalletsPage> {
                           ),
                           Container(height: 2),
                           StreamBuilder<double?>(
-                            stream: database.watchTotalOfWallet(wallet.walletPk,
-                                allWallets: Provider.of<AllWallets>(context)),
+                            stream: database.watchTotalOfWalletNoConversion(
+                              wallet.walletPk,
+                            ),
                             builder: (context, snapshot) {
                               return TextFont(
                                 textAlign: TextAlign.left,
@@ -212,9 +213,9 @@ class _EditWalletsPageState extends State<EditWalletsPage> {
                             },
                           ),
                           StreamBuilder<List<int?>>(
-                            stream:
-                                database.watchTotalCountOfTransactionsInWallet(
-                                    wallet.walletPk),
+                            stream: database
+                                .watchTotalCountOfTransactionsInWallet(
+                                    [wallet.walletPk]),
                             builder: (context, snapshot) {
                               if (snapshot.hasData && snapshot.data != null) {
                                 return TextFont(
@@ -416,7 +417,9 @@ void mergeWalletPopup(
 }
 
 Future<TransactionWallet?> selectWalletPopup(BuildContext context,
-    {String? removeWalletPk, String? subtitle}) async {
+    {String? removeWalletPk,
+    String? subtitle,
+    TransactionWallet? selectedWallet}) async {
   dynamic wallet = await openBottomSheet(
     context,
     PopupFramework(
@@ -459,7 +462,7 @@ Future<TransactionWallet?> selectWalletPopup(BuildContext context,
                     (wallet?.currency ?? "").allCaps +
                     ")";
               },
-              initial: null,
+              initial: selectedWallet,
               onChanged: (TransactionWallet? wallet) async {
                 Navigator.of(context).pop(wallet);
               },

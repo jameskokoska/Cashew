@@ -1,7 +1,9 @@
 import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
+import 'package:budget/pages/addObjectivePage.dart';
 import 'package:budget/pages/editBudgetPage.dart';
 import 'package:budget/pages/homePage/homePageLineGraph.dart';
+import 'package:budget/pages/homePage/homePageNetWorth.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/modified/reorderable_list.dart';
 import 'package:budget/struct/settings.dart';
@@ -9,6 +11,7 @@ import 'package:budget/widgets/editRowEntry.dart';
 import 'package:budget/widgets/moreIcons.dart';
 import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
+import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/radioItems.dart';
 import 'package:budget/widgets/selectItems.dart';
 import 'package:budget/pages/addBudgetPage.dart';
@@ -21,6 +24,7 @@ import 'package:flutter/services.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/widgets/framework/popupFramework.dart';
 import 'package:budget/functions.dart';
+import 'package:provider/provider.dart';
 
 import '../widgets/tappableTextEntry.dart';
 
@@ -96,6 +100,14 @@ class _EditHomePageState extends State<EditHomePage> {
                         borderRadius: BorderRadius.circular(15),
                         child: BudgetTotalSpentToggle(),
                       ),
+                      if (allBudgets.length <= 0)
+                        NoResultsCreate(
+                          message: "no-budgets-found".tr(),
+                          buttonLabel: "create-budget".tr(),
+                          route: AddObjectivePage(
+                            routesToPopAfterDelete: RoutesToPopAfterDelete.None,
+                          ),
+                        ),
                       SelectItems(
                         checkboxCustomIconSelected: Icons.push_pin_rounded,
                         checkboxCustomIconUnselected: Icons.push_pin_outlined,
@@ -153,6 +165,14 @@ class _EditHomePageState extends State<EditHomePage> {
                   title: "select-goals".tr(),
                   child: Column(
                     children: [
+                      if (allObjectives.length <= 0)
+                        NoResultsCreate(
+                          message: "no-goals-found".tr(),
+                          buttonLabel: "create-goal".tr(),
+                          route: AddObjectivePage(
+                            routesToPopAfterDelete: RoutesToPopAfterDelete.None,
+                          ),
+                        ),
                       SelectItems(
                         checkboxCustomIconSelected: Icons.push_pin_rounded,
                         checkboxCustomIconUnselected: Icons.push_pin_outlined,
@@ -253,20 +273,7 @@ class _EditHomePageState extends State<EditHomePage> {
             onTap: () async {
               openBottomSheet(
                 context,
-                PopupFramework(
-                  title: "select-start-date".tr(),
-                  child: SelectStartDate(
-                    initialDateTime: appStateSettings["netWorthStartDate"] ==
-                            null
-                        ? null
-                        : DateTime.parse(appStateSettings["netWorthStartDate"]),
-                    onSelected: (DateTime? dateTime) {
-                      updateSettings("netWorthStartDate",
-                          dateTime == null ? null : dateTime.toString(),
-                          pagesNeedingRefresh: [], updateGlobalState: false);
-                    },
-                  ),
-                ),
+                NetWorthSettings(),
               );
             },
           ),

@@ -81,20 +81,22 @@ class _HomePageBudgetsState extends State<HomePageBudgets> {
             ];
             return Stack(
               children: [
-                Visibility(
-                  maintainSize: true,
-                  maintainAnimation: true,
-                  maintainState: true,
-                  child: Opacity(
-                    opacity: 0,
-                    child: WidgetSize(
-                      onChange: (Size size) {
-                        setState(() {
-                          height = size.height;
-                        });
-                      },
-                      child: BudgetContainer(
-                        budget: snapshot.data![0],
+                IgnorePointer(
+                  child: Visibility(
+                    maintainSize: true,
+                    maintainAnimation: true,
+                    maintainState: true,
+                    child: Opacity(
+                      opacity: 0,
+                      child: WidgetSize(
+                        onChange: (Size size) {
+                          setState(() {
+                            height = size.height;
+                          });
+                        },
+                        child: BudgetContainer(
+                          budget: snapshot.data![0],
+                        ),
                       ),
                     ),
                   ),

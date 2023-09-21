@@ -6,6 +6,7 @@ import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/pages/addCategoryPage.dart';
 import 'package:budget/pages/addObjectivePage.dart';
+import 'package:budget/pages/editBudgetPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/button.dart';
@@ -553,39 +554,12 @@ Future<dynamic> selectObjectivePopup(BuildContext context,
               },
             );
           } else {
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 10),
-                      child: TextFont(
-                        text: "no-goals".tr(),
-                        fontSize: 15,
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 15),
-                IntrinsicWidth(
-                  child: Button(
-                    label: "create-goal".tr(),
-                    onTap: () {
-                      pushRoute(
-                        context,
-                        AddObjectivePage(
-                          routesToPopAfterDelete: RoutesToPopAfterDelete.None,
-                        ),
-                      );
-                    },
-                  ),
-                )
-              ],
+            return NoResultsCreate(
+              message: "no-goals-found".tr(),
+              buttonLabel: "create-goal".tr(),
+              route: AddObjectivePage(
+                routesToPopAfterDelete: RoutesToPopAfterDelete.None,
+              ),
             );
           }
         },

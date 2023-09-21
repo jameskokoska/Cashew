@@ -572,40 +572,13 @@ Future<dynamic> selectAddableBudgetPopup(BuildContext context,
               },
             );
           } else {
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 10),
-                      child: TextFont(
-                        text: "no-addable-budgets".tr(),
-                        fontSize: 15,
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 15),
-                IntrinsicWidth(
-                  child: Button(
-                    label: "create-addable-budget".tr(),
-                    onTap: () {
-                      pushRoute(
-                        context,
-                        AddBudgetPage(
-                          isAddedOnlyBudget: true,
-                          routesToPopAfterDelete: RoutesToPopAfterDelete.None,
-                        ),
-                      );
-                    },
-                  ),
-                )
-              ],
+            return NoResultsCreate(
+              message: "no-addable-budgets".tr(),
+              buttonLabel: "create-addable-budget".tr(),
+              route: AddBudgetPage(
+                isAddedOnlyBudget: true,
+                routesToPopAfterDelete: RoutesToPopAfterDelete.None,
+              ),
             );
           }
         },
@@ -616,6 +589,55 @@ Future<dynamic> selectAddableBudgetPopup(BuildContext context,
   if (budget is Budget) return budget;
   if (budget == "none") return "none";
   return null;
+}
+
+class NoResultsCreate extends StatelessWidget {
+  const NoResultsCreate(
+      {required this.message,
+      required this.buttonLabel,
+      required this.route,
+      super.key});
+  final String message;
+  final String buttonLabel;
+  final Widget route;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        SizedBox(height: 20),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10),
+              child: TextFont(
+                text: message.tr(),
+                fontSize: 15,
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ],
+        ),
+        SizedBox(height: 15),
+        IntrinsicWidth(
+          child: Button(
+            label: buttonLabel.tr(),
+            onTap: () {
+              pushRoute(
+                context,
+                route,
+              );
+            },
+          ),
+        ),
+        SizedBox(height: 20),
+      ],
+    );
+  }
 }
 
 class BudgetTotalSpentToggle extends StatefulWidget {

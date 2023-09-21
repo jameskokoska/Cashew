@@ -452,7 +452,7 @@
   "an-error-occured": "En feil oppstod",
   "more": "Mer",
   "syncing-failed": "Synkronisering mislyktes",
-  "sync-fail-reason": "Fjern gamle synkroniserte sikkerhetskopier og prøv igjen. Uoverensstemmende databaseversjoner.",
+  "sync-fail-reason": "Fjern gamle sikkerhetskopier av synkronisert enhet og prøv igjen. Uoverensstemmende databaseversjoner.",
   "feedback-shared": "Tilbakemelding delt!",
   "thank-you": "Takk skal du ha!",
   "email-optional": "E -post (valgfritt)",
@@ -629,7 +629,6 @@
   "deleted-goal": "Slettet mål",
   "removed-from-goal": "Fjernet fra målet",
   "added-to-goal-action": "Lagt til målet",
-  "no-goals": "Ingen mål funnet",
   "create-goal": "Skape mål",
   "select-goal": "Velg måltype",
   "no-goal": "Ingen mål",
@@ -675,5 +674,12 @@
   "close": "Lukk",
   "view-detailed-changelog": "Se detaljert Changelog",
   "pie-chart": "Kake diagram",
-  "select-type": "Velg Type"
+  "select-type": "Velg Type",
+  "create-budget": "Lage budsjett",
+  "no-goals-found": "Ingen mål funnet.",
+  "net-worth-settings": "Innstillinger for nettoverdi",
+  "transfer-balance": "Overføringsbalanse",
+  "withdraw-amount": "Trekk ut beløp",
+  "transferred-balance": "Overført balanse",
+  "net-total": "Netto totalt"
 }

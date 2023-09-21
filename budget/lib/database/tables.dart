@@ -4181,54 +4181,57 @@ class FinanceDatabase extends _$FinanceDatabase {
   }
 
   Stream<double?> watchTotalOfWallet(
-    String? walletPk, {
+    List<String>? walletPks, {
     bool? isIncome = null,
     DateTime? startDate,
     required AllWallets allWallets,
   }) {
-    if (walletPk == null) {
-      // we have to convert currencies to account for all wallets
-      List<Stream<double?>> mergedStreams = [];
-      for (TransactionWallet wallet in allWallets.list) {
-        final totalAmt = transactions.amount.sum();
-        final query = selectOnly(transactions)
-          ..addColumns([totalAmt])
-          ..where(transactions.walletFk.equals(wallet.walletPk) &
-              transactions.paid.equals(true) &
-              evaluateIfNull(transactions.walletFk.equals(walletPk ?? "0"),
-                  walletPk, true) &
-              onlyShowBasedOnTimeRange(transactions, startDate, null, null) &
-              evaluateIfNull(transactions.income.equals(isIncome ?? true),
-                  isIncome, true) &
-              onlyShowBasedOnIncome(transactions, isIncome));
-        mergedStreams.add(query
-            .map((row) =>
-                (row.read(totalAmt) ?? 0) *
-                (amountRatioToPrimaryCurrency(allWallets, wallet.currency) ??
-                    0))
-            .watchSingle());
-      }
-      return totalDoubleStream(mergedStreams);
-    } else {
+    // we have to convert currencies to account for all wallets
+    List<Stream<double?>> mergedStreams = [];
+    for (TransactionWallet wallet in allWallets.list) {
       final totalAmt = transactions.amount.sum();
       final query = selectOnly(transactions)
         ..addColumns([totalAmt])
-        ..where((startDate == null
-                ? Constant(true)
-                : transactions.dateCreated.isBiggerThanValue(startDate)) &
-            (isIncome == null
-                ? Constant(true)
-                : isIncome == true
-                    ? transactions.income.equals(true)
-                    : transactions.income.equals(false)) &
-            transactions.walletFk.equals(walletPk) &
-            transactions.paid.equals(true));
-      return query.map((row) => row.read(totalAmt)).watchSingleOrNull();
+        ..where(transactions.walletFk.equals(wallet.walletPk) &
+            transactions.paid.equals(true) &
+            evaluateIfNull(
+                transactions.walletFk.isIn(walletPks ?? []), walletPks, true) &
+            onlyShowBasedOnTimeRange(transactions, startDate, null, null) &
+            evaluateIfNull(
+                transactions.income.equals(isIncome ?? true), isIncome, true) &
+            onlyShowBasedOnIncome(transactions, isIncome));
+      mergedStreams.add(query
+          .map((row) =>
+              (row.read(totalAmt) ?? 0) *
+              (amountRatioToPrimaryCurrency(allWallets, wallet.currency) ?? 0))
+          .watchSingle());
     }
+    return totalDoubleStream(mergedStreams);
+  }
+
+  Stream<double?> watchTotalOfWalletNoConversion(
+    String walletPk, {
+    bool? isIncome = null,
+    DateTime? startDate,
+  }) {
+    final totalAmt = transactions.amount.sum();
+    final query = selectOnly(transactions)
+      ..addColumns([totalAmt])
+      ..where((startDate == null
+              ? Constant(true)
+              : transactions.dateCreated.isBiggerThanValue(startDate)) &
+          (isIncome == null
+              ? Constant(true)
+              : isIncome == true
+                  ? transactions.income.equals(true)
+                  : transactions.income.equals(false)) &
+          transactions.walletFk.equals(walletPk) &
+          transactions.paid.equals(true));
+    return query.map((row) => row.read(totalAmt)).watchSingleOrNull();
   }
 
   Stream<List<int?>> watchTotalCountOfTransactionsInWallet(
-    String? walletPk, {
+    List<String>? walletPks, {
     bool? isIncome = null,
     DateTime? startDate,
   }) {
@@ -4241,9 +4244,8 @@ class FinanceDatabase extends _$FinanceDatabase {
                   ? transactions.income.equals(true)
                   : transactions.income.equals(false)) &
           onlyShowBasedOnTimeRange(transactions, startDate, null, null) &
-          (walletPk == null
-              ? transactions.walletFk.isNotNull()
-              : transactions.walletFk.equals(walletPk)));
+          evaluateIfNull(
+              transactions.walletFk.isIn(walletPks ?? []), walletPks, true));
     return query.map((row) => row.read(totalCount)).watch();
   }
 

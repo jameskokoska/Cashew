@@ -83,27 +83,27 @@ class _WalletDetailsPageState extends State<WalletDetailsPage> {
             key: pageState,
             listID: listID,
             actions: [
-              CustomPopupMenuButton(
-                showButtons: enableDoubleColumn(context),
-                keepOutFirst: true,
-                items: [
-                  DropdownItemMenu(
-                    id: "edit-account",
-                    label: "edit-account".tr(),
-                    icon: appStateSettings["outlinedIcons"]
-                        ? Icons.edit_outlined
-                        : Icons.edit_rounded,
-                    action: () {
-                      pushRoute(
-                        context,
-                        AddWalletPage(
-                          wallet: widget.wallet,
-                          routesToPopAfterDelete: RoutesToPopAfterDelete.All,
-                        ),
-                      );
-                    },
-                  ),
-                  if (widget.wallet != null)
+              if (widget.wallet != null)
+                CustomPopupMenuButton(
+                  showButtons: enableDoubleColumn(context),
+                  keepOutFirst: true,
+                  items: [
+                    DropdownItemMenu(
+                      id: "edit-account",
+                      label: "edit-account".tr(),
+                      icon: appStateSettings["outlinedIcons"]
+                          ? Icons.edit_outlined
+                          : Icons.edit_rounded,
+                      action: () {
+                        pushRoute(
+                          context,
+                          AddWalletPage(
+                            wallet: widget.wallet,
+                            routesToPopAfterDelete: RoutesToPopAfterDelete.All,
+                          ),
+                        );
+                      },
+                    ),
                     DropdownItemMenu(
                       id: "correct-total-balance",
                       label: "correct-total-balance".tr(),
@@ -122,8 +122,26 @@ class _WalletDetailsPageState extends State<WalletDetailsPage> {
                         );
                       },
                     ),
-                ],
-              ),
+                    DropdownItemMenu(
+                      id: "transfer-balance",
+                      label: "transfer-balance".tr(),
+                      icon: appStateSettings["outlinedIcons"]
+                          ? Icons.compare_arrows_outlined
+                          : Icons.compare_arrows_rounded,
+                      action: () {
+                        openBottomSheet(
+                          context,
+                          fullSnap: true,
+                          PopupFramework(
+                            title: "enter-amount".tr(),
+                            underTitleSpace: false,
+                            child: TransferBalancePopup(wallet: widget.wallet!),
+                          ),
+                        );
+                      },
+                    ),
+                  ],
+                ),
             ],
             dragDownToDismiss: true,
             title: widget.wallet == null
@@ -147,21 +165,67 @@ class _WalletDetailsPageState extends State<WalletDetailsPage> {
                           children: [
                             Expanded(
                               child: TransactionsAmountBox(
+                                label: "net-total".tr(),
+                                absolute: false,
+                                currencyKey: Provider.of<AllWallets>(context)
+                                    .indexedByPk[
+                                        appStateSettings["selectedWalletPk"]]
+                                    ?.currency,
+                                amountStream: database.watchTotalOfWallet(
+                                  walletPk != null ? [walletPk] : null,
+                                  isIncome: null,
+                                  allWallets: Provider.of<AllWallets>(context),
+                                ),
+                                textColor: getColor(context, "black"),
+                                transactionsAmountStream: database
+                                    .watchTotalCountOfTransactionsInWallet(
+                                  walletPk != null ? [walletPk] : null,
+                                  isIncome: null,
+                                ),
+                                openPage: TransactionsSearchPage(
+                                  initialFilters: SearchFilters(
+                                    walletPks: widget.wallet == null
+                                        ? []
+                                        : [widget.wallet?.walletPk ?? ""],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                          bottom: 13, left: 13, right: 13),
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal:
+                                getHorizontalPaddingConstrained(context)),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Expanded(
+                              child: TransactionsAmountBox(
                                 label: "expense".tr(),
                                 amountStream: database.watchTotalOfWallet(
-                                  walletPk,
+                                  walletPk != null ? [walletPk] : null,
                                   isIncome: false,
                                   allWallets: Provider.of<AllWallets>(context),
                                 ),
                                 textColor: getColor(context, "expenseAmount"),
                                 transactionsAmountStream: database
                                     .watchTotalCountOfTransactionsInWallet(
-                                  walletPk,
+                                  walletPk != null ? [walletPk] : null,
                                   isIncome: false,
                                 ),
                                 openPage: TransactionsSearchPage(
                                   initialFilters: SearchFilters(
                                     expenseIncome: [ExpenseIncome.expense],
+                                    walletPks: widget.wallet == null
+                                        ? []
+                                        : [widget.wallet?.walletPk ?? ""],
                                   ),
                                 ),
                               ),
@@ -171,19 +235,22 @@ class _WalletDetailsPageState extends State<WalletDetailsPage> {
                               child: TransactionsAmountBox(
                                 label: "income".tr(),
                                 amountStream: database.watchTotalOfWallet(
-                                  walletPk,
+                                  walletPk == null ? null : [walletPk],
                                   isIncome: true,
                                   allWallets: Provider.of<AllWallets>(context),
                                 ),
                                 textColor: getColor(context, "incomeAmount"),
                                 transactionsAmountStream: database
                                     .watchTotalCountOfTransactionsInWallet(
-                                  walletPk,
+                                  walletPk == null ? null : [walletPk],
                                   isIncome: true,
                                 ),
                                 openPage: TransactionsSearchPage(
                                   initialFilters: SearchFilters(
                                     expenseIncome: [ExpenseIncome.income],
+                                    walletPks: widget.wallet == null
+                                        ? []
+                                        : [widget.wallet?.walletPk ?? ""],
                                   ),
                                 ),
                               ),
@@ -302,7 +369,9 @@ class _WalletCategoryPieChartState extends State<WalletCategoryPieChart> {
   Widget build(BuildContext context) {
     return StreamBuilder<double?>(
       stream: database.watchTotalOfWallet(
-        widget.wallet?.walletPk,
+        widget.wallet?.walletPk == null
+            ? null
+            : [widget.wallet?.walletPk ?? ""],
         isIncome: widget.isIncome,
         allWallets: Provider.of<AllWallets>(context),
       ),

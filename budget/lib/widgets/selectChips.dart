@@ -141,21 +141,23 @@ class _SelectChipsState<T> extends State<SelectChips<T>> {
       child: Stack(
         children: [
           children.length > 0
-              ? Visibility(
-                  maintainSize: true,
-                  maintainAnimation: true,
-                  maintainState: true,
-                  child: Opacity(
-                    opacity: 0,
-                    child: WidgetSize(
-                      onChange: (Size size) {
-                        setState(() {
-                          heightOfScroll = size.height;
-                        });
-                      },
-                      child: widget.extraWidgetAtBeginning == false
-                          ? children[0]
-                          : children[1],
+              ? IgnorePointer(
+                  child: Visibility(
+                    maintainSize: true,
+                    maintainAnimation: true,
+                    maintainState: true,
+                    child: Opacity(
+                      opacity: 0,
+                      child: WidgetSize(
+                        onChange: (Size size) {
+                          setState(() {
+                            heightOfScroll = size.height;
+                          });
+                        },
+                        child: widget.extraWidgetAtBeginning == false
+                            ? children[0]
+                            : children[1],
+                      ),
                     ),
                   ),
                 )

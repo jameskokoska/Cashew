@@ -82,9 +82,8 @@ class WalletEntry extends StatelessWidget {
                             ),
                           ),
                           StreamBuilder<double?>(
-                            stream: database.watchTotalOfWallet(
+                            stream: database.watchTotalOfWalletNoConversion(
                               wallet.walletPk,
-                              allWallets: Provider.of<AllWallets>(context),
                             ),
                             builder: (context, snapshot) {
                               return CountNumber(
@@ -112,9 +111,9 @@ class WalletEntry extends StatelessWidget {
                             },
                           ),
                           StreamBuilder<List<int?>>(
-                            stream:
-                                database.watchTotalCountOfTransactionsInWallet(
-                                    wallet.walletPk),
+                            stream: database
+                                .watchTotalCountOfTransactionsInWallet(
+                                    [wallet.walletPk]),
                             builder: (context, snapshot) {
                               if (snapshot.hasData && snapshot.data != null) {
                                 return TextFont(

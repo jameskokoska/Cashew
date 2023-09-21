@@ -122,6 +122,7 @@ class ExportCSV extends StatelessWidget {
               "skipPaid",
               "originalDateDue",
               "upcomingTransactionNotification",
+              "objectiveFk",
             ],
             keysToReplace: {
               "dateCreated": "date",
@@ -208,8 +209,9 @@ class ExportCSV extends StatelessWidget {
 
       // Iterate through the parts and split each part by ": "
       for (String part in parts) {
+        print(part);
         List<String> keyValue = part.split(": ");
-        if (keyValue.length == 2) {
+        if (keyValue.length >= 2) {
           String key = keyValue[0].trim();
           if (keysToShow != null && keysToShow.contains(key) == false) continue;
           if (keysToIgnore.contains(key)) continue;
@@ -217,6 +219,14 @@ class ExportCSV extends StatelessWidget {
             key = keysToReplace[key] ?? "";
           String value = keyValue[1].trim();
           if (value == "null") value = "";
+
+          // Remove the key from the string
+          int index = part.indexOf(": ");
+          if (index != -1) {
+            value = part.substring(index);
+            value = value.replaceFirst(": ", "");
+          }
+
           resultMap[key] = value;
         }
       }

@@ -629,7 +629,6 @@
   "deleted-goal": "Διαγραμμένος στόχος",
   "removed-from-goal": "Αφαιρέθηκε από το στόχο",
   "added-to-goal-action": "Προστέθηκε στο στόχο",
-  "no-goals": "Δεν βρέθηκαν στόχοι",
   "create-goal": "Δημιουργία στόχου",
   "select-goal": "Επιλέξτε Τύπος στόχου",
   "no-goal": "Χωρίς στόχο",
@@ -675,5 +674,12 @@
   "close": "Κλείσε",
   "view-detailed-changelog": "Δείτε λεπτομερές Changelog",
   "pie-chart": "Διάγραμμα πίτας",
-  "select-type": "Επιλέξτε τον τύπο"
+  "select-type": "Επιλέξτε τον τύπο",
+  "create-budget": "Δημιουργία προϋπολογισμού",
+  "no-goals-found": "Δεν βρέθηκαν στόχοι.",
+  "net-worth-settings": "Ρυθμίσεις καθαρής αξίας",
+  "transfer-balance": "Ισοζύγιο μεταφοράς",
+  "withdraw-amount": "ποσό ανάληψης",
+  "transferred-balance": "Μεταφερόμενο υπόλοιπο",
+  "net-total": "Συνολικό σύνολο"
 }

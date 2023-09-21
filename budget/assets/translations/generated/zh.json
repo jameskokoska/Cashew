@@ -618,7 +618,7 @@
   "include-debt-and-credit": "借出并借了",
   "added-to-goal": "添加到目标",
   "include-income-description-1": "收入交易将包括在预算中",
-  "include-income-description-2": "支出预算总计会随收入而减少",
+  "include-income-description-2": "支出预算总计将随着收入而减少",
   "added-to-other-budgets-description-1": "您添加到另一个预算中的交易也将包括在本预算中",
   "include-debt-and-credit-description-1": "借出和借用的交易将包括在预算中",
   "added-to-goal-description-1": "您添加到目标的交易也将包括在本预算中",
@@ -629,7 +629,6 @@
   "deleted-goal": "删除目标",
   "removed-from-goal": "从目标中删除",
   "added-to-goal-action": "添加到目标",
-  "no-goals": "找不到目标",
   "create-goal": "创建目标",
   "select-goal": "选择目标类型",
   "no-goal": "没有目标",
@@ -675,5 +674,12 @@
   "close": "关闭",
   "view-detailed-changelog": "查看详细的变形值",
   "pie-chart": "饼形图",
-  "select-type": "选择类型"
+  "select-type": "选择类型",
+  "create-budget": "创建预算",
+  "no-goals-found": "找不到目标。",
+  "net-worth-settings": "净资产设置",
+  "transfer-balance": "转移余额",
+  "withdraw-amount": "取款数量",
+  "transferred-balance": "转移的余额",
+  "net-total": "净总值"
 }

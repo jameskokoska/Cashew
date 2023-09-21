@@ -96,6 +96,7 @@ Future<Map<String, dynamic>> getDefaultPreferences() async {
     "pieChartIsIncome": false,
     "incomeExpenseStartDate": null,
     "netWorthStartDate": null,
+    "netWorthSelectedWalletPks": null, // List<String>?
     "showPastSpendingTrajectory": false,
     "lastSynced": null,
     "font": "Avenir",

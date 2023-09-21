@@ -14,6 +14,15 @@ import 'package:flutter/material.dart';
 
 String getChangelogString() {
   return """
+    < 4.4.2
+    Added net total to spending details page
+    Added balance transfer between different accounts with supported currency conversions
+    Fixed CSV export when entry has colon (":")
+    When tapping income/expense total, search page has applied account filter
+    If no goal or budget when selecting, option to create one
+    Seamless count number when decimals not provided
+    Tooltip no longer prevents category reorder in popup with long title
+    Gasoline icon
     < 4.4.1
     Fixed ordering of categories based on amount spent
     Fixed transaction count across accounts

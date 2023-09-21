@@ -134,6 +134,11 @@ class CheckItems<T> extends StatefulWidget {
       void Function(T item) addItem,
       void Function(T item) removeItem)? buildSuffix;
   final double? minVerticalPadding;
+  final bool allSelected;
+  final bool syncWithInitial;
+  final bool triggerInitialOnChanged;
+  final IconData? selectedIcon;
+  final IconData? unSelectedIcon;
 
   const CheckItems({
     Key? key,
@@ -145,6 +150,11 @@ class CheckItems<T> extends StatefulWidget {
     this.colorFilter,
     this.buildSuffix,
     this.minVerticalPadding,
+    this.allSelected = false,
+    this.syncWithInitial = false,
+    this.triggerInitialOnChanged = true,
+    this.selectedIcon,
+    this.unSelectedIcon,
   }) : super(key: key);
 
   @override
@@ -158,7 +168,17 @@ class _CheckItemsState<T> extends State<CheckItems<T>> {
   void initState() {
     super.initState();
     currentValues = widget.initial ?? [];
-    widget.onChanged(currentValues);
+    Future.delayed(Duration.zero, () {
+      if (widget.triggerInitialOnChanged) widget.onChanged(currentValues);
+    });
+  }
+
+  void didUpdateWidget(oldWidget) {
+    if (oldWidget != widget && widget.syncWithInitial) {
+      setState(() {
+        currentValues = widget.initial ?? [];
+      });
+    }
   }
 
   void addEntry(T item) {
@@ -184,11 +204,12 @@ class _CheckItemsState<T> extends State<CheckItems<T>> {
     for (int itemIndex = 0; itemIndex < widget.items.length; itemIndex++) {
       T item = widget.items[itemIndex];
       bool selected = false;
-      if (currentValues.contains(item)) selected = true;
+      if (currentValues.contains(item) || widget.allSelected) selected = true;
       bool isAfterSelected =
-          nullIfIndexOutOfRange(widget.items, itemIndex + 1) != null &&
-              currentValues.contains(widget.items[itemIndex + 1]);
-      bool isBeforeSelected =
+          widget.allSelected && itemIndex != widget.items.length - 1 ||
+              nullIfIndexOutOfRange(widget.items, itemIndex + 1) != null &&
+                  currentValues.contains(widget.items[itemIndex + 1]);
+      bool isBeforeSelected = widget.allSelected && itemIndex != 0 ||
           nullIfIndexOutOfRange(widget.items, itemIndex - 1) != null &&
               currentValues.contains(widget.items[itemIndex - 1]);
       children.add(
@@ -249,8 +270,18 @@ class _CheckItemsState<T> extends State<CheckItems<T>> {
               leading: Padding(
                 padding: const EdgeInsets.only(right: 5),
                 child: selected
-                    ? Icon(Icons.check_box)
-                    : Icon(Icons.check_box_outline_blank),
+                    ? Icon(
+                        widget.selectedIcon ?? Icons.check_box,
+                        color: widget.colorFilter != null
+                            ? widget.colorFilter!(item)
+                            : null,
+                      )
+                    : Icon(
+                        widget.unSelectedIcon ?? Icons.check_box_outline_blank,
+                        color: widget.colorFilter != null
+                            ? widget.colorFilter!(item)
+                            : null,
+                      ),
               ),
             ),
           ),

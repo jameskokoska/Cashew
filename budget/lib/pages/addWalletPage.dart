@@ -3,6 +3,7 @@ import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
 import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/editWalletsPage.dart';
+import 'package:budget/struct/currencyFunctions.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/animatedExpanded.dart';
@@ -24,6 +25,7 @@ import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/currencyPicker.dart';
 import 'package:budget/widgets/transactionEntry/incomeAmountArrow.dart';
 import 'package:budget/widgets/transactionEntry/transactionEntryAmount.dart';
+import 'package:budget/widgets/walletEntry.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -443,6 +445,41 @@ class _AddWalletPageState extends State<AddWalletPage> {
                       ),
                     ),
             ),
+            SliverToBoxAdapter(
+              child: widget.wallet == null ||
+                      widget.routesToPopAfterDelete ==
+                          RoutesToPopAfterDelete.PreventDelete
+                  ? SizedBox.shrink()
+                  : Padding(
+                      padding: const EdgeInsets.only(
+                        left: 20,
+                        right: 20,
+                        bottom: 10,
+                      ),
+                      child: Button(
+                        icon: appStateSettings["outlinedIcons"]
+                            ? Icons.compare_arrows_outlined
+                            : Icons.compare_arrows_rounded,
+                        label: "transfer-balance".tr(),
+                        onTap: () async {
+                          if (widget.wallet != null)
+                            openBottomSheet(
+                              context,
+                              fullSnap: true,
+                              PopupFramework(
+                                title: "enter-amount".tr(),
+                                underTitleSpace: false,
+                                child: TransferBalancePopup(
+                                    wallet: widget.wallet!),
+                              ),
+                            );
+                        },
+                        color: Theme.of(context).colorScheme.secondaryContainer,
+                        textColor:
+                            Theme.of(context).colorScheme.onSecondaryContainer,
+                      ),
+                    ),
+            ),
             SliverStickyLabelDivider(
               info: "select-currency".tr(),
               sliver: ColumnSliver(children: [
@@ -519,9 +556,8 @@ class _CorrectBalancePopupState extends State<CorrectBalancePopup> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<double?>(
-      stream: database.watchTotalOfWallet(
+      stream: database.watchTotalOfWalletNoConversion(
         widget.wallet.walletPk,
-        allWallets: Provider.of<AllWallets>(context),
       ),
       builder: (context, snapshot) {
         double totalWalletAmount = snapshot.data ?? 0;
@@ -665,6 +701,34 @@ class _CorrectBalancePopupState extends State<CorrectBalancePopup> {
 
 Future<bool> correctWalletBalance(BuildContext context, double differenceAmount,
     double newAmount, TransactionWallet wallet) async {
+  String transferString = wallet.name +
+      ": " +
+      convertToMoney(
+        Provider.of<AllWallets>(context, listen: false),
+        newAmount,
+        currencyKey: wallet.currency,
+        decimals: wallet.decimals,
+      );
+
+  String note = "updated-total-balance".tr() + "\n" + transferString;
+
+  await createCorrectionTransaction(differenceAmount, wallet, note: note);
+
+  openSnackbar(
+    SnackbarMessage(
+      title: "updated-total-balance".tr(),
+      description: transferString,
+      icon: appStateSettings["outlinedIcons"]
+          ? Icons.library_add_outlined
+          : Icons.library_add_rounded,
+    ),
+  );
+
+  return true;
+}
+
+Future createCorrectionTransaction(double amount, TransactionWallet wallet,
+    {String? note}) async {
   try {
     await database.getCategory("0").$2;
   } catch (e) {
@@ -693,33 +757,226 @@ Future<bool> correctWalletBalance(BuildContext context, double differenceAmount,
     Transaction(
       transactionPk: "-1",
       name: "",
-      amount: differenceAmount,
-      note: "",
+      amount: amount,
+      note: note ?? "",
       categoryFk: "0",
       walletFk: wallet.walletPk,
       dateCreated: DateTime.now(),
-      income: differenceAmount > 0,
+      income: amount > 0,
       paid: true,
       skipPaid: false,
     ),
   );
+}
 
-  openSnackbar(
-    SnackbarMessage(
-      title: "updated-total-balance".tr(),
-      description: wallet.name +
-          ": " +
-          convertToMoney(
-            Provider.of<AllWallets>(context, listen: false),
-            newAmount,
-            currencyKey: wallet.currency,
-            decimals: wallet.decimals,
+class TransferBalancePopup extends StatefulWidget {
+  const TransferBalancePopup({required this.wallet, super.key});
+  final TransactionWallet wallet;
+
+  @override
+  State<TransferBalancePopup> createState() => _TransferBalancePopupState();
+}
+
+class _TransferBalancePopupState extends State<TransferBalancePopup> {
+  double enteredAmount = 0;
+  bool isNegative = false;
+  late TransactionWallet walletFrom = widget.wallet;
+  TransactionWallet? walletTo;
+
+  Widget walletSelector(TransactionWallet? wallet,
+      Function(TransactionWallet wallet) onSelected) {
+    return Opacity(
+      opacity: wallet == null ? 0.5 : 1,
+      child: AnimatedSizeSwitcher(
+        clipBehavior: Clip.none,
+        child: Tappable(
+          key: ValueKey(walletFrom.walletPk),
+          color: getColor(context, "lightDarkAccentHeavyLight"),
+          borderRadius: 12,
+          child: Container(
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: HexColor(wallet?.colour,
+                        defaultColor: Theme.of(context).colorScheme.primary)
+                    .withOpacity(0.7),
+                width: 2,
+              ),
+              borderRadius: BorderRadius.all(Radius.circular(12)),
+            ),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 2),
+              child: TextFont(
+                text: (wallet?.name ?? "select-account".tr()) +
+                    (wallet != null
+                        ? "\n" + (wallet.currency ?? "").toUpperCase()
+                        : ""),
+                fontSize: 17,
+                textAlign: TextAlign.center,
+                maxLines: 3,
+              ),
+            ),
           ),
-      icon: appStateSettings["outlinedIcons"]
-          ? Icons.library_add_outlined
-          : Icons.library_add_rounded,
-    ),
-  );
+          onTap: () async {
+            dynamic result =
+                await selectWalletPopup(context, selectedWallet: wallet);
+            if (result is TransactionWallet) {
+              onSelected(result);
+            }
+          },
+        ),
+      ),
+    );
+  }
 
-  return true;
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        SizedBox(height: 10),
+        Wrap(
+          alignment: WrapAlignment.center,
+          crossAxisAlignment: WrapCrossAlignment.center,
+          runSpacing: 10,
+          children: [
+            walletSelector(walletFrom, (wallet) {
+              setState(() {
+                walletFrom = wallet;
+              });
+            }),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: AnimatedRotation(
+                duration: Duration(milliseconds: 1200),
+                turns: isNegative ? 0.5 : 1,
+                curve: ElasticOutCurve(0.6),
+                child: Icon(
+                  appStateSettings["outlinedIcons"]
+                      ? Icons.arrow_forward_outlined
+                      : Icons.arrow_forward_rounded,
+                ),
+              ),
+            ),
+            walletSelector(walletTo, (wallet) {
+              setState(() {
+                walletTo = wallet;
+              });
+            }),
+          ],
+        ),
+        SizedBox(height: 10),
+        AnimatedSizeSwitcher(
+          clipBehavior: Clip.none,
+          child: TextFont(
+            key: ValueKey(enteredAmount),
+            autoSizeText: true,
+            maxLines: 1,
+            minFontSize: 16,
+            text: convertToMoney(
+              Provider.of<AllWallets>(context),
+              enteredAmount
+                  .abs(), //We flip the arrow instead of showing negative
+              currencyKey: widget.wallet.currency,
+              decimals: widget.wallet.decimals,
+              addCurrencyName: true,
+            ),
+            textAlign: TextAlign.center,
+            fontSize: 30,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        SizedBox(height: 5),
+        SelectAmountValue(
+          extraWidgetAboveNumbers: SettingsContainerSwitch(
+            title: "withdraw-amount".tr(),
+            onSwitched: (value) {
+              setState(() {
+                isNegative = value;
+                if (isNegative == true)
+                  enteredAmount = enteredAmount.abs() * -1;
+                else
+                  enteredAmount = enteredAmount.abs();
+              });
+            },
+            enableBorderRadius: true,
+            initialValue: false,
+            syncWithInitialValue: false,
+            runOnSwitchedInitially: true,
+          ),
+          showEnteredNumber: false,
+          amountPassed: "0",
+          setSelectedAmount: (amount, calculation) {
+            setState(() {
+              if (isNegative == true)
+                enteredAmount = amount.abs() * -1;
+              else
+                enteredAmount = amount.abs();
+            });
+          },
+          allowZero: true,
+          next: () async {
+            if (walletTo == null) {
+              dynamic result =
+                  await selectWalletPopup(context, selectedWallet: walletTo);
+              if (result is TransactionWallet) {
+                setState(() {
+                  walletTo = result;
+                });
+              }
+              return;
+            }
+
+            String transferString =
+                walletFrom.name + (isNegative ? " ← " : " → ") + walletTo!.name;
+
+            String note = "transferred-balance".tr() + "\n" + transferString;
+
+            AllWallets allWallets =
+                Provider.of<AllWallets>(context, listen: false);
+
+            await createCorrectionTransaction(
+              enteredAmount *
+                  (amountRatioFromToCurrency(
+                        allWallets
+                            .indexedByPk[appStateSettings["selectedWalletPk"]]!
+                            .currency!,
+                        allWallets.indexedByPk[walletTo!.walletPk]!.currency!,
+                      ) ??
+                      1),
+              walletTo!,
+              note: note,
+            );
+            await createCorrectionTransaction(
+              enteredAmount *
+                  -1 *
+                  (amountRatioFromToCurrency(
+                        allWallets
+                            .indexedByPk[appStateSettings["selectedWalletPk"]]!
+                            .currency!,
+                        allWallets.indexedByPk[walletFrom.walletPk]!.currency!,
+                      ) ??
+                      1),
+              walletFrom,
+              note: note,
+            );
+
+            openSnackbar(
+              SnackbarMessage(
+                title: "transferred-balance".tr(),
+                description: transferString,
+                icon: appStateSettings["outlinedIcons"]
+                    ? Icons.compare_arrows_outlined
+                    : Icons.compare_arrows_rounded,
+              ),
+            );
+
+            Navigator.pop(context);
+          },
+          nextLabel: walletTo == null
+              ? "select-account".tr()
+              : "update-total-balance".tr(),
+        ),
+      ],
+    );
+  }
 }

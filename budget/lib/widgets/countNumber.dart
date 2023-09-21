@@ -121,9 +121,12 @@ class _CountNumberState extends State<CountNumber> {
   Widget build(BuildContext context) {
     int decimals = 0;
 
-    if (widget.decimals != null &&
-        isWholeNumber(double.parse(
-            widget.count.toStringAsFixed(widget.decimals ?? decimals)))) {
+    if (isWholeNumber(double.parse(widget.count.toStringAsFixed(
+        widget.decimals ??
+            (Provider.of<AllWallets>(context)
+                    .indexedByPk[appStateSettings["selectedWalletPk"]]
+                    ?.decimals ??
+                2))))) {
       decimals = 0;
     } else {
       int currentSelectedDecimals = Provider.of<AllWallets>(context)

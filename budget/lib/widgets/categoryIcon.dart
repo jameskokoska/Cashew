@@ -187,6 +187,9 @@ class CategoryIcon extends StatelessWidget {
         waitDuration: Duration(milliseconds: 100),
         message: category?.name ?? "",
         child: child,
+        // A hover will still trigger the tooltip,
+        // but a long press won't since category icons can be long pressed to reorder/edited
+        triggerMode: TooltipTriggerMode.manual,
       );
     } else {
       return child;

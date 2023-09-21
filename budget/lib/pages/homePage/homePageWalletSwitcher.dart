@@ -39,16 +39,18 @@ class HomePageWalletSwitcher extends StatelessWidget {
                             ? SizedBox.shrink()
                             : SizedBox(
                                 width: 130,
-                                child: Visibility(
-                                  maintainSize: true,
-                                  maintainAnimation: true,
-                                  maintainState: true,
-                                  child: Opacity(
-                                    opacity: 0,
-                                    child: WalletEntry(
-                                      selected: false,
-                                      wallet: snapshot
-                                          .data![snapshot.data!.length - 1],
+                                child: IgnorePointer(
+                                  child: Visibility(
+                                    maintainSize: true,
+                                    maintainAnimation: true,
+                                    maintainState: true,
+                                    child: Opacity(
+                                      opacity: 0,
+                                      child: WalletEntry(
+                                        selected: false,
+                                        wallet: snapshot
+                                            .data![snapshot.data!.length - 1],
+                                      ),
                                     ),
                                   ),
                                 ),

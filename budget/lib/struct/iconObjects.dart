@@ -1293,7 +1293,8 @@ List<IconForCategory> iconObjects = [
       "transportation",
       "transit",
       "road trip",
-      "gas"
+      "gas",
+      "fuel",
     ],
     mostLikelyCategoryName: "Gas",
   ),
@@ -3470,5 +3471,37 @@ List<IconForCategory> iconObjects = [
       "interface"
     ],
     mostLikelyCategoryName: "Technology",
+  ),
+  IconForCategory(
+    icon: "fuel.png",
+    tags: [
+      "fuel",
+      "energy",
+      "gas",
+      "petrol",
+      "refueling",
+      "car",
+      "automobile",
+      "gas station",
+      "transportation",
+      "combustible"
+    ],
+    mostLikelyCategoryName: "Fuel",
+  ),
+  IconForCategory(
+    icon: "gasoline.png",
+    tags: [
+      "gasoline",
+      "fuel",
+      "petrol",
+      "energy",
+      "car",
+      "automobile",
+      "refueling",
+      "gas station",
+      "transportation",
+      "combustible"
+    ],
+    mostLikelyCategoryName: "Gasoline",
   ),
 ];
