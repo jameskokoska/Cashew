@@ -14,6 +14,9 @@ import 'package:flutter/material.dart';
 
 String getChangelogString() {
   return """
+    < 4.4.4
+    Feathered faded edge removed space between
+    Transfer balance option in wallet details page above Merge Account
     < 4.4.3
     Only paid transactions count towards a goal
     Fixed data syncing not activating after initial launch

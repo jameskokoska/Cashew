@@ -33,18 +33,21 @@ class LinearGradientFadedEdges extends StatelessWidget {
             left: 0,
             top: 0,
             bottom: 0,
-            child: IgnorePointer(
-              child: Container(
-                width: gradientSize,
-                foregroundDecoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      gradientColorFiltered,
-                      gradientColorFiltered.withOpacity(0.0),
-                    ],
-                    begin: Alignment.centerLeft,
-                    end: Alignment.centerRight,
-                    stops: [0.1, 1],
+            child: Transform.translate(
+              offset: Offset(-1, 0),
+              child: IgnorePointer(
+                child: Container(
+                  width: gradientSize,
+                  foregroundDecoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        gradientColorFiltered,
+                        gradientColorFiltered.withOpacity(0.0),
+                      ],
+                      begin: Alignment.centerLeft,
+                      end: Alignment.centerRight,
+                      stops: [0.1, 1],
+                    ),
                   ),
                 ),
               ),
@@ -55,18 +58,21 @@ class LinearGradientFadedEdges extends StatelessWidget {
             right: 0,
             top: 0,
             bottom: 0,
-            child: IgnorePointer(
-              child: Container(
-                width: gradientSize,
-                foregroundDecoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      gradientColorFiltered,
-                      gradientColorFiltered.withOpacity(0.0),
-                    ],
-                    begin: Alignment.centerRight,
-                    end: Alignment.centerLeft,
-                    stops: [0.1, 1],
+            child: Transform.translate(
+              offset: Offset(1, 0),
+              child: IgnorePointer(
+                child: Container(
+                  width: gradientSize,
+                  foregroundDecoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        gradientColorFiltered,
+                        gradientColorFiltered.withOpacity(0.0),
+                      ],
+                      begin: Alignment.centerRight,
+                      end: Alignment.centerLeft,
+                      stops: [0.1, 1],
+                    ),
                   ),
                 ),
               ),
@@ -77,18 +83,21 @@ class LinearGradientFadedEdges extends StatelessWidget {
             right: 0,
             left: 0,
             top: 0,
-            child: IgnorePointer(
-              child: Container(
-                height: gradientSize,
-                foregroundDecoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      gradientColorFiltered,
-                      gradientColorFiltered.withOpacity(0.0),
-                    ],
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    stops: [0.1, 1],
+            child: Transform.translate(
+              offset: Offset(0, -1),
+              child: IgnorePointer(
+                child: Container(
+                  height: gradientSize,
+                  foregroundDecoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        gradientColorFiltered,
+                        gradientColorFiltered.withOpacity(0.0),
+                      ],
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      stops: [0.1, 1],
+                    ),
                   ),
                 ),
               ),
@@ -99,18 +108,21 @@ class LinearGradientFadedEdges extends StatelessWidget {
             right: 0,
             left: 0,
             bottom: 0,
-            child: IgnorePointer(
-              child: Container(
-                height: gradientSize,
-                foregroundDecoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      gradientColorFiltered,
-                      gradientColorFiltered.withOpacity(0.0),
-                    ],
-                    begin: Alignment.bottomCenter,
-                    end: Alignment.topCenter,
-                    stops: [0.1, 1],
+            child: Transform.translate(
+              offset: Offset(0, 1),
+              child: IgnorePointer(
+                child: Container(
+                  height: gradientSize,
+                  foregroundDecoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        gradientColorFiltered,
+                        gradientColorFiltered.withOpacity(0.0),
+                      ],
+                      begin: Alignment.bottomCenter,
+                      end: Alignment.topCenter,
+                      stops: [0.1, 1],
+                    ),
                   ),
                 ),
               ),

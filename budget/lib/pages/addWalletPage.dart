@@ -427,37 +427,6 @@ class _AddWalletPageState extends State<AddWalletPage> {
                       ),
                       child: Button(
                         icon: appStateSettings["outlinedIcons"]
-                            ? Icons.merge_outlined
-                            : Icons.merge_rounded,
-                        label: "merge-account".tr(),
-                        onTap: () async {
-                          if (widget.wallet != null)
-                            mergeWalletPopup(
-                              context,
-                              walletOriginal: widget.wallet!,
-                              routesToPopAfterDelete:
-                                  widget.routesToPopAfterDelete,
-                            );
-                        },
-                        color: Theme.of(context).colorScheme.secondaryContainer,
-                        textColor:
-                            Theme.of(context).colorScheme.onSecondaryContainer,
-                      ),
-                    ),
-            ),
-            SliverToBoxAdapter(
-              child: widget.wallet == null ||
-                      widget.routesToPopAfterDelete ==
-                          RoutesToPopAfterDelete.PreventDelete
-                  ? SizedBox.shrink()
-                  : Padding(
-                      padding: const EdgeInsets.only(
-                        left: 20,
-                        right: 20,
-                        bottom: 10,
-                      ),
-                      child: Button(
-                        icon: appStateSettings["outlinedIcons"]
                             ? Icons.compare_arrows_outlined
                             : Icons.compare_arrows_rounded,
                         label: "transfer-balance".tr(),
@@ -480,6 +449,38 @@ class _AddWalletPageState extends State<AddWalletPage> {
                       ),
                     ),
             ),
+            SliverToBoxAdapter(
+              child: widget.wallet == null ||
+                      widget.routesToPopAfterDelete ==
+                          RoutesToPopAfterDelete.PreventDelete
+                  ? SizedBox.shrink()
+                  : Padding(
+                      padding: const EdgeInsets.only(
+                        left: 20,
+                        right: 20,
+                        bottom: 10,
+                      ),
+                      child: Button(
+                        icon: appStateSettings["outlinedIcons"]
+                            ? Icons.merge_outlined
+                            : Icons.merge_rounded,
+                        label: "merge-account".tr(),
+                        onTap: () async {
+                          if (widget.wallet != null)
+                            mergeWalletPopup(
+                              context,
+                              walletOriginal: widget.wallet!,
+                              routesToPopAfterDelete:
+                                  widget.routesToPopAfterDelete,
+                            );
+                        },
+                        color: Theme.of(context).colorScheme.secondaryContainer,
+                        textColor:
+                            Theme.of(context).colorScheme.onSecondaryContainer,
+                      ),
+                    ),
+            ),
+
             SliverStickyLabelDivider(
               info: "select-currency".tr(),
               sliver: ColumnSliver(children: [
