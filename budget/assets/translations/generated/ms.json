@@ -681,5 +681,7 @@
   "transfer-balance": "Baki pemindahan",
   "withdraw-amount": "Menarik balik jumlah",
   "transferred-balance": "Baki yang dipindahkan",
-  "net-total": "Jumlah bersih"
+  "net-total": "Jumlah bersih",
+  "all-accounts": "Loading...",
+  "transfer-amount": "Loading..."
 }

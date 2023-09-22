@@ -681,5 +681,7 @@
   "transfer-balance": "Átadási egyenleg",
   "withdraw-amount": "Visszavonási összeg",
   "transferred-balance": "Átadott egyenleg",
-  "net-total": "Nettó összeg"
+  "net-total": "Nettó összeg",
+  "all-accounts": "Loading...",
+  "transfer-amount": "Loading..."
 }

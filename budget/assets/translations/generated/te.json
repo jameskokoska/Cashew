@@ -681,5 +681,7 @@
   "transfer-balance": "బదిలీ బ్యాలెన్స్",
   "withdraw-amount": "మొత్తం ఉపసంహరించుకోండి",
   "transferred-balance": "బదిలీ చేయబడిన బ్యాలెన్స్",
-  "net-total": "నికర మొత్తం"
+  "net-total": "నికర మొత్తం",
+  "all-accounts": "Loading...",
+  "transfer-amount": "Loading..."
 }

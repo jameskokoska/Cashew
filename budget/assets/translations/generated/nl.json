@@ -681,5 +681,7 @@
   "transfer-balance": "Overdrachtssaldo",
   "withdraw-amount": "bedrag opnemen",
   "transferred-balance": "Overgedragen saldo",
-  "net-total": "Netto totaal"
+  "net-total": "Netto totaal",
+  "all-accounts": "Loading...",
+  "transfer-amount": "Loading..."
 }

@@ -681,5 +681,7 @@
   "transfer-balance": "Saldo de transferencia",
   "withdraw-amount": "Monto de retiro",
   "transferred-balance": "Saldo transferido",
-  "net-total": "Total neto"
+  "net-total": "Total neto",
+  "all-accounts": "Loading...",
+  "transfer-amount": "Loading..."
 }

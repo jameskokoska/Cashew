@@ -681,5 +681,7 @@
   "transfer-balance": "Sold de transfer",
   "withdraw-amount": "Retrage suma",
   "transferred-balance": "Sold transferat",
-  "net-total": "Total net"
+  "net-total": "Total net",
+  "all-accounts": "Loading...",
+  "transfer-amount": "Loading..."
 }

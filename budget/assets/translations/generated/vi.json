@@ -681,5 +681,7 @@
   "transfer-balance": "Cân bằng chuyển nhượng",
   "withdraw-amount": "Rút tiền",
   "transferred-balance": "BẢO HÀNH được chuyển giao",
-  "net-total": "Tổng số mạng"
+  "net-total": "Tổng số mạng",
+  "all-accounts": "Loading...",
+  "transfer-amount": "Loading..."
 }

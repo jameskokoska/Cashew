@@ -681,5 +681,7 @@
   "transfer-balance": "Überweisungsbilanz",
   "withdraw-amount": "Betrag beheben",
   "transferred-balance": "Übertragter Saldo",
-  "net-total": "Netto Gesamt"
+  "net-total": "Netto Gesamt",
+  "all-accounts": "Loading...",
+  "transfer-amount": "Loading..."
 }

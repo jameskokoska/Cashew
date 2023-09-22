@@ -681,5 +681,7 @@
   "transfer-balance": "Transfer bakiyesi",
   "withdraw-amount": "Geri çekilme miktarı",
   "transferred-balance": "Aktarılan bakiye",
-  "net-total": "Net toplam"
+  "net-total": "Net toplam",
+  "all-accounts": "Loading...",
+  "transfer-amount": "Loading..."
 }

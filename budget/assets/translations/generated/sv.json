@@ -681,5 +681,7 @@
   "transfer-balance": "Övergångsbalans",
   "withdraw-amount": "Ta ut summan",
   "transferred-balance": "Överförd balans",
-  "net-total": "Nettot total"
+  "net-total": "Nettot total",
+  "all-accounts": "Loading...",
+  "transfer-amount": "Loading..."
 }

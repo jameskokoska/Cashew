@@ -681,5 +681,7 @@
   "transfer-balance": "Saldo transferu",
   "withdraw-amount": "Kwota wypłaty",
   "transferred-balance": "Przeniesiony saldo",
-  "net-total": "Suma netto"
+  "net-total": "Suma netto",
+  "all-accounts": "Loading...",
+  "transfer-amount": "Loading..."
 }

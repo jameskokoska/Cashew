@@ -59,7 +59,7 @@ class HomePagePieChart extends StatelessWidget {
                         if (snapshot.hasData) {
                           return LayoutBuilder(
                             builder: (_, boxConstraints) {
-                              print(boxConstraints);
+                              // print(boxConstraints);
                               bool showTopCategoriesLegend =
                                   boxConstraints.maxWidth > 320;
                               return Row(

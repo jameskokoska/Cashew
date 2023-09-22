@@ -681,5 +681,7 @@
   "transfer-balance": "전송 잔액",
   "withdraw-amount": "금액을 인출하십시오",
   "transferred-balance": "양도 된 잔액",
-  "net-total": "순계"
+  "net-total": "순계",
+  "all-accounts": "Loading...",
+  "transfer-amount": "Loading..."
 }

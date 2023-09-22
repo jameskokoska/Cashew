@@ -681,5 +681,7 @@
   "transfer-balance": "Přenosová zůstatek",
   "withdraw-amount": "Vybrat částku",
   "transferred-balance": "Přenesená rovnováha",
-  "net-total": "Čistá celková část"
+  "net-total": "Čistá celková část",
+  "all-accounts": "Loading...",
+  "transfer-amount": "Loading..."
 }

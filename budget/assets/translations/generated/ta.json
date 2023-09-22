@@ -681,5 +681,7 @@
   "transfer-balance": "இடமாற்ற இருப்பு",
   "withdraw-amount": "தொகையைத் திரும்பப் பெறுங்கள்",
   "transferred-balance": "மாற்றப்பட்ட இருப்பு",
-  "net-total": "நிகர மொத்தம்"
+  "net-total": "நிகர மொத்தம்",
+  "all-accounts": "Loading...",
+  "transfer-amount": "Loading..."
 }

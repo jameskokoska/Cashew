@@ -681,5 +681,7 @@
   "transfer-balance": "Paglipat ng balanse",
   "withdraw-amount": "halaga ng kukuhaing pera",
   "transferred-balance": "Inilipat na balanse",
-  "net-total": "Total na kita"
+  "net-total": "Total na kita",
+  "all-accounts": "Loading...",
+  "transfer-amount": "Loading..."
 }

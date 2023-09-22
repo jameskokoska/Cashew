@@ -14,6 +14,12 @@ import 'package:flutter/material.dart';
 
 String getChangelogString() {
   return """
+    < 4.4.3
+    Only paid transactions count towards a goal
+    Fixed data syncing not activating after initial launch
+    Fixed when order of objectives is corrected, the modified time is not updated -> opening the page on a newer device can undo all changes when syncing - even though nothing was specifically edited! 
+    Transaction correction creations are now awaited so database does not lock
+    Fixed translations
     < 4.4.2
     Added net total to spending details page
     Added balance transfer between different accounts with supported currency conversions

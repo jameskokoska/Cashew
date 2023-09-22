@@ -739,6 +739,7 @@ Future createCorrectionTransaction(double amount, TransactionWallet wallet,
 
     await database.createOrUpdateCategory(
       insert: false,
+      updateSharedEntry: false,
       TransactionCategory(
         categoryPk: "0",
         name: "default-category-account-amount-balancing".tr(),
@@ -752,8 +753,9 @@ Future createCorrectionTransaction(double amount, TransactionWallet wallet,
     );
   }
 
-  database.createOrUpdateTransaction(
+  await database.createOrUpdateTransaction(
     insert: true,
+    updateSharedEntry: false,
     Transaction(
       transactionPk: "-1",
       name: "",
@@ -946,6 +948,7 @@ class _TransferBalancePopupState extends State<TransferBalancePopup> {
               walletTo!,
               note: note,
             );
+
             await createCorrectionTransaction(
               enteredAmount *
                   -1 *
@@ -972,9 +975,8 @@ class _TransferBalancePopupState extends State<TransferBalancePopup> {
 
             Navigator.pop(context);
           },
-          nextLabel: walletTo == null
-              ? "select-account".tr()
-              : "update-total-balance".tr(),
+          nextLabel:
+              walletTo == null ? "select-account".tr() : "transfer-amount".tr(),
         ),
       ],
     );

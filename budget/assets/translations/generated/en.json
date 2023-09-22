@@ -585,7 +585,7 @@
   "create-template-copy-description": "Make a copy and save it to your Google Drive. Edit the sheet with your data and import it!",
   "get-template": "Get Template",
   "correct-total-balance": "Correct Total Balance",
-  "default-category-account-amount-balancing": "Balance correction",
+  "default-category-account-amount-balancing": "Balance Correction",
   "negative-amount": "Negative Amount",
   "update-total-balance": "Update Total Balance",
   "updated-total-balance": "Updated Total Balance",
@@ -681,5 +681,7 @@
   "transfer-balance": "Transfer Balance",
   "withdraw-amount": "Withdraw Amount",
   "transferred-balance": "Transferred Balance",
-  "net-total": "Net Total"
+  "net-total": "Net Total",
+  "all-accounts": "All Accounts",
+  "transfer-amount": "Transfer Amount"
 }

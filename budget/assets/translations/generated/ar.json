@@ -681,5 +681,7 @@
   "transfer-balance": "توازن النقل",
   "withdraw-amount": "سحب المبلغ",
   "transferred-balance": "الرصيد المنقول",
-  "net-total": "إجمالي صافي"
+  "net-total": "إجمالي صافي",
+  "all-accounts": "Loading...",
+  "transfer-amount": "Loading..."
 }

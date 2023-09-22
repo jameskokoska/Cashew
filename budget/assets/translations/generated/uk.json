@@ -681,5 +681,7 @@
   "transfer-balance": "Баланс передачі",
   "withdraw-amount": "Зняти суму",
   "transferred-balance": "Переданий баланс",
-  "net-total": "Чистий загальний"
+  "net-total": "Чистий загальний",
+  "all-accounts": "Loading...",
+  "transfer-amount": "Loading..."
 }

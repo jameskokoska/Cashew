@@ -681,5 +681,7 @@
   "transfer-balance": "تعادل انتقال",
   "withdraw-amount": "برداشت مبلغ",
   "transferred-balance": "تعادل منتقل شده",
-  "net-total": "کل خالص"
+  "net-total": "کل خالص",
+  "all-accounts": "Loading...",
+  "transfer-amount": "Loading..."
 }

@@ -681,5 +681,7 @@
   "transfer-balance": "हस्तांतरण शिल्लक",
   "withdraw-amount": "रक्कम मागे घ्या",
   "transferred-balance": "हस्तांतरित शिल्लक",
-  "net-total": "निव्वळ एकूण"
+  "net-total": "निव्वळ एकूण",
+  "all-accounts": "Loading...",
+  "transfer-amount": "Loading..."
 }

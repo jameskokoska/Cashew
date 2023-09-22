@@ -2126,8 +2126,11 @@ class FinanceDatabase extends _$FinanceDatabase {
           ..orderBy([(t) => OrderingTerm.asc(t.order)]))
         .get();
     for (int i = 0; i < budgetsList.length; i++) {
-      budgetsList[i] = budgetsList[i]
-          .copyWith(order: i, dateTimeModified: Value(DateTime.now()));
+      budgetsList[i] = budgetsList[i].copyWith(
+        order: i,
+        // Don't update the dateTimeModified, opening the page will cause them all to have a new dateTimeModified... when something was actually not modified
+        // dateTimeModified: Value(DateTime.now()),
+      );
     }
     await batch((batch) {
       batch.insertAll(budgets, budgetsList, mode: InsertMode.replace);
@@ -2140,8 +2143,11 @@ class FinanceDatabase extends _$FinanceDatabase {
           ..orderBy([(t) => OrderingTerm.asc(t.order)]))
         .get();
     for (int i = 0; i < objectivesList.length; i++) {
-      objectivesList[i] = objectivesList[i]
-          .copyWith(order: i, dateTimeModified: Value(DateTime.now()));
+      objectivesList[i] = objectivesList[i].copyWith(
+        order: i,
+        // Don't update the dateTimeModified, opening the page will cause them all to have a new dateTimeModified... when something was actually not modified
+        // dateTimeModified: Value(DateTime.now()),
+      );
     }
     await batch((batch) {
       batch.insertAll(objectives, objectivesList, mode: InsertMode.replace);
@@ -2154,8 +2160,11 @@ class FinanceDatabase extends _$FinanceDatabase {
           ..orderBy([(t) => OrderingTerm.asc(t.order)]))
         .get();
     for (int i = 0; i < categoriesList.length; i++) {
-      categoriesList[i] = categoriesList[i]
-          .copyWith(order: i, dateTimeModified: Value(DateTime.now()));
+      categoriesList[i] = categoriesList[i].copyWith(
+        order: i,
+        // Don't update the dateTimeModified, opening the page will cause them all to have a new dateTimeModified... when something was actually not modified
+        // dateTimeModified: Value(DateTime.now()),
+      );
     }
     await batch((batch) {
       batch.insertAll(categories, categoriesList, mode: InsertMode.replace);
@@ -2168,8 +2177,11 @@ class FinanceDatabase extends _$FinanceDatabase {
           ..orderBy([(t) => OrderingTerm.asc(t.order)]))
         .get();
     for (int i = 0; i < walletsList.length; i++) {
-      walletsList[i] = walletsList[i]
-          .copyWith(order: i, dateTimeModified: Value(DateTime.now()));
+      walletsList[i] = walletsList[i].copyWith(
+        order: i,
+        // Don't update the dateTimeModified, opening the page will cause them all to have a new dateTimeModified... when something was actually not modified
+        // dateTimeModified: Value(DateTime.now()),
+      );
     }
     await batch((batch) {
       batch.insertAll(wallets, walletsList, mode: InsertMode.replace);
@@ -2183,8 +2195,11 @@ class FinanceDatabase extends _$FinanceDatabase {
               ..orderBy([(t) => OrderingTerm.asc(t.order)]))
             .get();
     for (int i = 0; i < associatedTitlesList.length; i++) {
-      associatedTitlesList[i] = associatedTitlesList[i]
-          .copyWith(order: i, dateTimeModified: Value(DateTime.now()));
+      associatedTitlesList[i] = associatedTitlesList[i].copyWith(
+        order: i,
+        // Don't update the dateTimeModified, opening the page will cause them all to have a new dateTimeModified... when something was actually not modified
+        // dateTimeModified: Value(DateTime.now()),
+      );
     }
     await batch((batch) {
       batch.insertAll(associatedTitles, associatedTitlesList,
@@ -3584,7 +3599,8 @@ class FinanceDatabase extends _$FinanceDatabase {
       query = selectOnly(transactions)
         ..addColumns([totalAmt])
         ..where(transactions.objectiveFk.equals(objectivePk) &
-            transactions.walletFk.equals(wallet.walletPk));
+            transactions.walletFk.equals(wallet.walletPk) &
+            transactions.paid.equals(true));
 
       mergedStreams.add(query
           .map(((row) =>

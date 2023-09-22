@@ -681,5 +681,7 @@
   "transfer-balance": "Overførselsbalance",
   "withdraw-amount": "Træk beløbet tilbage",
   "transferred-balance": "Overført balance",
-  "net-total": "Netto i alt"
+  "net-total": "Netto i alt",
+  "all-accounts": "Loading...",
+  "transfer-amount": "Loading..."
 }

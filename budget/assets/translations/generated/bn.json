@@ -681,5 +681,7 @@
   "transfer-balance": "ভারসাম্য স্থানান্তর",
   "withdraw-amount": "পরিমাণ প্রত্যাহার",
   "transferred-balance": "স্থানান্তর ভারসাম্য",
-  "net-total": "সর্বমোট"
+  "net-total": "সর্বমোট",
+  "all-accounts": "Loading...",
+  "transfer-amount": "Loading..."
 }

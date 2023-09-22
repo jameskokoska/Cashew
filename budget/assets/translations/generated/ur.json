@@ -681,5 +681,7 @@
   "transfer-balance": "ٹرانسفر بیلنس",
   "withdraw-amount": "رقم واپس لیتے ہیں",
   "transferred-balance": "منتقلی توازن",
-  "net-total": "خالص کل"
+  "net-total": "خالص کل",
+  "all-accounts": "Loading...",
+  "transfer-amount": "Loading..."
 }

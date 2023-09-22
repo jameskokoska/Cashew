@@ -681,5 +681,7 @@
   "transfer-balance": "Siirtotasapaino",
   "withdraw-amount": "Nostettava summa",
   "transferred-balance": "Siirretty saldo",
-  "net-total": "Nettosumma"
+  "net-total": "Nettosumma",
+  "all-accounts": "Loading...",
+  "transfer-amount": "Loading..."
 }

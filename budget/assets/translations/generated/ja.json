@@ -681,5 +681,7 @@
   "transfer-balance": "転送バランス",
   "withdraw-amount": "金額を撤回",
   "transferred-balance": "転送された残高",
-  "net-total": "合計額"
+  "net-total": "合計額",
+  "all-accounts": "Loading...",
+  "transfer-amount": "Loading..."
 }

@@ -681,5 +681,7 @@
   "transfer-balance": "તબદીલી સિલક",
   "withdraw-amount": "પાછું રકમ",
   "transferred-balance": "તબદીલી કરેલ સિલક",
-  "net-total": "ચોખ્ખો સરવાળો"
+  "net-total": "ચોખ્ખો સરવાળો",
+  "all-accounts": "Loading...",
+  "transfer-amount": "Loading..."
 }

@@ -681,5 +681,7 @@
   "transfer-balance": "Saldo transfer",
   "withdraw-amount": "Jumlah penarikan",
   "transferred-balance": "Saldo yang ditransfer",
-  "net-total": "Total net"
+  "net-total": "Total net",
+  "all-accounts": "Loading...",
+  "transfer-amount": "Loading..."
 }

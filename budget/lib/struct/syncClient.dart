@@ -174,11 +174,11 @@ class SyncLog {
 }
 
 // Only allow one sync at a time
-bool canSyncData = false;
+bool canSyncData = true;
 
 // load the latest backup and import any newly modified data into the db
 Future<bool> syncData(BuildContext context) async {
-  if (canSyncData) return false;
+  if (canSyncData == false) return false;
   // Syncing data seems to fail on iOS debug mode (at least on iPad).
   // When actually creating the entries, it seems the device disconnects.
   // It works on release though.

@@ -681,5 +681,7 @@
   "transfer-balance": "अंतरण शेष",
   "withdraw-amount": "राशि वापस ले",
   "transferred-balance": "हस्तांतरित शेष",
-  "net-total": "शुद्ध योग"
+  "net-total": "शुद्ध योग",
+  "all-accounts": "Loading...",
+  "transfer-amount": "Loading..."
 }

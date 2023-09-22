@@ -681,5 +681,7 @@
   "transfer-balance": "转移余额",
   "withdraw-amount": "取款数量",
   "transferred-balance": "转移的余额",
-  "net-total": "净总值"
+  "net-total": "净总值",
+  "all-accounts": "Loading...",
+  "transfer-amount": "Loading..."
 }

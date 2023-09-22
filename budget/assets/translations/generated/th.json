@@ -681,5 +681,7 @@
   "transfer-balance": "โอนสมดุล",
   "withdraw-amount": "ถอนจำนวนเงิน",
   "transferred-balance": "ยอดเงินโอน",
-  "net-total": "ยอดรวมสุทธิ"
+  "net-total": "ยอดรวมสุทธิ",
+  "all-accounts": "Loading...",
+  "transfer-amount": "Loading..."
 }

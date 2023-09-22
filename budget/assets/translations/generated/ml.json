@@ -681,5 +681,7 @@
   "transfer-balance": "ബാലൻസ് കൈമാറുക",
   "withdraw-amount": "പിൻവലിക്കൽ",
   "transferred-balance": "കൈമാറ്റം ചെയ്ത ബാലൻസ്",
-  "net-total": "മൊത്തം ആകെ"
+  "net-total": "മൊത്തം ആകെ",
+  "all-accounts": "Loading...",
+  "transfer-amount": "Loading..."
 }

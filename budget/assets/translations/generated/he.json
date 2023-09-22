@@ -681,5 +681,7 @@
   "transfer-balance": "העברת איזון",
   "withdraw-amount": "סכום למשוך",
   "transferred-balance": "איזון מועבר",
-  "net-total": "סך הכל נטו"
+  "net-total": "סך הכל נטו",
+  "all-accounts": "Loading...",
+  "transfer-amount": "Loading..."
 }
