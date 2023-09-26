@@ -164,13 +164,16 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
       runQuickActionsPayLoads(context);
       initializeStoreAndPurchases(
           context: context, popRouteWithPurchase: false);
-      await initializeNotificationsPlatform();
-      await setDailyNotificationOnLaunch(context);
-      await setUpcomingNotifications(context);
 
       if (entireAppLoaded == false) {
         await runAllCloudFunctions(context);
       }
+
+      // Should do this after syncing
+      // The upcoming transactions may have been modified after a sync
+      await initializeNotificationsPlatform();
+      await setDailyNotificationOnLaunch(context);
+      await setUpcomingNotifications(context);
 
       // Mark subscriptions as paid AFTER syncing with cloud
       // Maybe another device already marked them as paid

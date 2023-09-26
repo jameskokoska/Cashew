@@ -15,6 +15,9 @@ import 'listItem.dart';
 
 String getChangelogString() {
   return """
+    < 4.4.7
+    Added FAB to wallet details page
+    Fixed line graph history in wallet details page when custom period selected
     < 4.4.6
     New period time range selection for homepage widgets and all spending page
     Balance correction category budget transaction filter

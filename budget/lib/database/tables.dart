@@ -25,24 +25,7 @@ part 'tables.g.dart';
 
 int schemaVersionGlobal = 41;
 
-// Migrations and Database changes
-// -1) Make changed to database
-
-// 0) Make sure you are in application root directory (/budget)
-
-// 1) Generate database code:
-// `dart run build_runner build`
-
-// 2) After change to schema, export the new schema:
-// Generate schema dump for the newly created, current database schema
-// Replace [schemaVersion] in the command below with the value of schemaVersionGlobal
-// `dart run drift_dev schema dump lib\database\tables.dart drift_schemas//drift_schema_v[schemaVersion].json`
-// Read more: https://drift.simonbinder.eu/docs/advanced-features/migrations/#exporting-the-schema
-
-// 3) Generate step-by-step migrations
-// `dart run drift_dev schema steps drift_schemas/ lib\database\schema_versions.dart`
-
-// 4) Implement migration strategy in `await stepByStep`
+// To update and migrate the database, check the README
 
 // Character Limits
 const int NAME_LIMIT = 250;

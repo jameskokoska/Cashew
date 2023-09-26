@@ -1,6 +1,7 @@
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/pages/addBudgetPage.dart';
+import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/addWalletPage.dart';
 import 'package:budget/pages/editHomePage.dart';
 import 'package:budget/pages/homePage/homePageLineGraph.dart';
@@ -34,6 +35,8 @@ import 'package:flutter/material.dart';
 import 'package:budget/colors.dart';
 import 'package:budget/widgets/viewAllTransactionsButton.dart';
 import 'package:provider/provider.dart';
+import 'package:budget/widgets/fab.dart';
+import 'package:budget/widgets/fadeIn.dart';
 
 class WatchedWalletDetailsPage extends StatelessWidget {
   const WatchedWalletDetailsPage({required this.walletPk, super.key});
@@ -93,6 +96,18 @@ class _WalletDetailsPageState extends State<WalletDetailsPage> {
           PageFramework(
             key: pageState,
             listID: listID,
+            floatingActionButton: AnimateFABDelayed(
+              fab: Padding(
+                padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).viewPadding.bottom),
+                child: FAB(
+                  tooltip: "add-transaction".tr(),
+                  openPage: AddTransactionPage(
+                    routesToPopAfterDelete: RoutesToPopAfterDelete.One,
+                  ),
+                ),
+              ),
+            ),
             actions: [
               if (widget.wallet != null)
                 CustomPopupMenuButton(
@@ -551,6 +566,7 @@ class _WalletDetailsLineGraphState extends State<WalletDetailsLineGraph> {
 
   @override
   Widget build(BuildContext context) {
+    DateTime? customPeriodStartDate = getStartDateOfSelectedCustomPeriod();
     return Padding(
       padding: const EdgeInsets.only(bottom: 13),
       child: Container(
@@ -562,28 +578,32 @@ class _WalletDetailsLineGraphState extends State<WalletDetailsLineGraph> {
         ),
         child: Stack(
           children: [
-            Positioned(
-              right: 0,
-              top: 0,
-              child: Transform.translate(
-                offset: Offset(5, -5),
-                child: IconButton(
-                  icon: Icon(
-                    appStateSettings["outlinedIcons"]
-                        ? Icons.history_outlined
-                        : Icons.history_rounded,
-                    size: 22,
-                    color:
-                        Theme.of(context).colorScheme.primary.withOpacity(0.8),
+            if (widget.followCustomPeriodCycle == false ||
+                customPeriodStartDate == null)
+              Positioned(
+                right: 0,
+                top: 0,
+                child: Transform.translate(
+                  offset: Offset(5, -5),
+                  child: IconButton(
+                    icon: Icon(
+                      appStateSettings["outlinedIcons"]
+                          ? Icons.history_outlined
+                          : Icons.history_rounded,
+                      size: 22,
+                      color: Theme.of(context)
+                          .colorScheme
+                          .primary
+                          .withOpacity(0.8),
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        numberMonthsToLoad++;
+                      });
+                    },
                   ),
-                  onPressed: () {
-                    setState(() {
-                      numberMonthsToLoad++;
-                    });
-                  },
                 ),
               ),
-            ),
             Padding(
               padding: EdgeInsets.only(left: 7, right: 7, bottom: 12, top: 18),
               child: PastSpendingGraph(
@@ -591,7 +611,9 @@ class _WalletDetailsLineGraphState extends State<WalletDetailsLineGraph> {
                 walletPks: widget.walletPks,
                 monthsToLoad: numberMonthsToLoad,
                 followCustomPeriodCycle: widget.followCustomPeriodCycle,
-                customStartDate: getStartDateOfSelectedCustomPeriod(),
+                customStartDate: widget.followCustomPeriodCycle == true
+                    ? customPeriodStartDate
+                    : null,
                 // extraLeftPaddingIfSmall:
                 //     10, //we want this because the corner has the load more dates button
               ),
