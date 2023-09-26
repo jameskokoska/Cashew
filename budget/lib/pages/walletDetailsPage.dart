@@ -1,23 +1,34 @@
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
+import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/addWalletPage.dart';
+import 'package:budget/pages/editHomePage.dart';
 import 'package:budget/pages/homePage/homePageLineGraph.dart';
 import 'package:budget/pages/transactionsSearchPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
+import 'package:budget/widgets/animatedExpanded.dart';
 import 'package:budget/widgets/dropdownSelect.dart';
 import 'package:budget/widgets/framework/popupFramework.dart';
 import 'package:budget/widgets/incomeExpenseTabSelector.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
+import 'package:budget/widgets/outlinedButtonStacked.dart';
+import 'package:budget/widgets/periodCyclePicker.dart';
+import 'package:budget/widgets/radioItems.dart';
+import 'package:budget/widgets/selectAmount.dart';
 import 'package:budget/widgets/selectedTransactionsActionBar.dart';
 import 'package:budget/widgets/categoryEntry.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/widgets/pieChart.dart';
+import 'package:budget/widgets/tappable.dart';
+import 'package:budget/widgets/tappableTextEntry.dart';
+import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntries.dart';
 import 'package:budget/widgets/transactionEntry/transactionEntry.dart';
 import 'package:budget/widgets/transactionsAmountBox.dart';
+import 'package:budget/widgets/util/showDatePicker.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/colors.dart';
@@ -142,6 +153,30 @@ class _WalletDetailsPageState extends State<WalletDetailsPage> {
                     ),
                   ],
                 ),
+              if (widget.wallet == null)
+                CustomPopupMenuButton(
+                  showButtons: enableDoubleColumn(context),
+                  keepOutFirst: true,
+                  items: [
+                    DropdownItemMenu(
+                      id: "select-period",
+                      label: "select-period".tr(),
+                      icon: appStateSettings["outlinedIcons"]
+                          ? Icons.timelapse_outlined
+                          : Icons.timelapse_rounded,
+                      action: () async {
+                        await openBottomSheet(
+                          context,
+                          PopupFramework(
+                            title: "select-period".tr(),
+                            child: PeriodCyclePicker(),
+                          ),
+                        );
+                        setState(() {});
+                      },
+                    ),
+                  ],
+                ),
             ],
             dragDownToDismiss: true,
             title: widget.wallet == null
@@ -175,12 +210,16 @@ class _WalletDetailsPageState extends State<WalletDetailsPage> {
                                   walletPk != null ? [walletPk] : null,
                                   isIncome: null,
                                   allWallets: Provider.of<AllWallets>(context),
+                                  followCustomPeriodCycle:
+                                      widget.wallet == null,
                                 ),
                                 textColor: getColor(context, "black"),
                                 transactionsAmountStream: database
                                     .watchTotalCountOfTransactionsInWallet(
                                   walletPk != null ? [walletPk] : null,
                                   isIncome: null,
+                                  followCustomPeriodCycle:
+                                      widget.wallet == null,
                                 ),
                                 openPage: TransactionsSearchPage(
                                   initialFilters: SearchFilters(
@@ -213,12 +252,16 @@ class _WalletDetailsPageState extends State<WalletDetailsPage> {
                                   walletPk != null ? [walletPk] : null,
                                   isIncome: false,
                                   allWallets: Provider.of<AllWallets>(context),
+                                  followCustomPeriodCycle:
+                                      widget.wallet == null,
                                 ),
                                 textColor: getColor(context, "expenseAmount"),
                                 transactionsAmountStream: database
                                     .watchTotalCountOfTransactionsInWallet(
                                   walletPk != null ? [walletPk] : null,
                                   isIncome: false,
+                                  followCustomPeriodCycle:
+                                      widget.wallet == null,
                                 ),
                                 openPage: TransactionsSearchPage(
                                   initialFilters: SearchFilters(
@@ -238,12 +281,16 @@ class _WalletDetailsPageState extends State<WalletDetailsPage> {
                                   walletPk == null ? null : [walletPk],
                                   isIncome: true,
                                   allWallets: Provider.of<AllWallets>(context),
+                                  followCustomPeriodCycle:
+                                      widget.wallet == null,
                                 ),
                                 textColor: getColor(context, "incomeAmount"),
                                 transactionsAmountStream: database
                                     .watchTotalCountOfTransactionsInWallet(
                                   walletPk == null ? null : [walletPk],
                                   isIncome: true,
+                                  followCustomPeriodCycle:
+                                      widget.wallet == null,
                                 ),
                                 openPage: TransactionsSearchPage(
                                   initialFilters: SearchFilters(
@@ -263,6 +310,7 @@ class _WalletDetailsPageState extends State<WalletDetailsPage> {
                       walletPks: widget.wallet == null
                           ? []
                           : [widget.wallet!.walletPk],
+                      followCustomPeriodCycle: widget.wallet == null,
                     ),
                     Padding(
                       padding: EdgeInsets.symmetric(
@@ -374,6 +422,7 @@ class _WalletCategoryPieChartState extends State<WalletCategoryPieChart> {
             : [widget.wallet?.walletPk ?? ""],
         isIncome: widget.isIncome,
         allWallets: Provider.of<AllWallets>(context),
+        followCustomPeriodCycle: widget.wallet == null,
       ),
       builder: (context, totalSnapshot) {
         double total = (totalSnapshot.data ?? 0).abs();
@@ -390,6 +439,7 @@ class _WalletCategoryPieChartState extends State<WalletCategoryPieChart> {
             allTime: true,
             walletPk: widget.wallet == null ? null : widget.wallet!.walletPk,
             isIncome: widget.isIncome,
+            followCustomPeriodCycle: widget.wallet == null,
           ),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
@@ -485,8 +535,12 @@ class _WalletCategoryPieChartState extends State<WalletCategoryPieChart> {
 }
 
 class WalletDetailsLineGraph extends StatefulWidget {
-  const WalletDetailsLineGraph({super.key, required this.walletPks});
+  const WalletDetailsLineGraph(
+      {super.key,
+      required this.walletPks,
+      required this.followCustomPeriodCycle});
   final List<String>? walletPks;
+  final bool followCustomPeriodCycle;
 
   @override
   State<WalletDetailsLineGraph> createState() => _WalletDetailsLineGraphState();
@@ -536,6 +590,8 @@ class _WalletDetailsLineGraphState extends State<WalletDetailsLineGraph> {
                 isIncome: null,
                 walletPks: widget.walletPks,
                 monthsToLoad: numberMonthsToLoad,
+                followCustomPeriodCycle: widget.followCustomPeriodCycle,
+                customStartDate: getStartDateOfSelectedCustomPeriod(),
                 // extraLeftPaddingIfSmall:
                 //     10, //we want this because the corner has the load more dates button
               ),

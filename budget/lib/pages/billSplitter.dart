@@ -1407,7 +1407,7 @@ Future<bool> generateLoanTransactionsFromBillSummary(
     note = note.trim();
     bool isThePayee = summary.splitPerson.name == payee;
 
-    database.createOrUpdateTransaction(
+    await database.createOrUpdateTransaction(
       insert: true,
       Transaction(
         transactionPk: "-1",

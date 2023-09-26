@@ -13,6 +13,7 @@ class IncomeExpenseTabSelector extends StatefulWidget {
   final String? incomeLabel;
   final String? expenseLabel;
   final Color? unselectedLabelColor;
+  final bool showIcons;
 
   IncomeExpenseTabSelector({
     required this.onTabChanged,
@@ -23,6 +24,7 @@ class IncomeExpenseTabSelector extends StatefulWidget {
     this.incomeLabel,
     this.expenseLabel,
     this.unselectedLabelColor,
+    this.showIcons = true,
   });
 
   @override
@@ -97,15 +99,16 @@ class _IncomeExpenseTabSelectorState extends State<IncomeExpenseTabSelector>
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    AnimatedOpacity(
-                      duration: Duration(milliseconds: 300),
-                      opacity: selectedIncome ? 0.5 : 1,
-                      child: IncomeOutcomeArrow(
-                        width: 19,
-                        isIncome: false,
-                        color: getColor(context, "expenseAmount"),
+                    if (widget.showIcons)
+                      AnimatedOpacity(
+                        duration: Duration(milliseconds: 300),
+                        opacity: selectedIncome ? 0.5 : 1,
+                        child: IncomeOutcomeArrow(
+                          width: 19,
+                          isIncome: false,
+                          color: getColor(context, "expenseAmount"),
+                        ),
                       ),
-                    ),
                     Text(
                       widget.expenseLabel ?? "expense".tr(),
                       style: TextStyle(
@@ -126,15 +129,16 @@ class _IncomeExpenseTabSelectorState extends State<IncomeExpenseTabSelector>
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    AnimatedOpacity(
-                      duration: Duration(milliseconds: 300),
-                      opacity: !selectedIncome ? 0.5 : 1,
-                      child: IncomeOutcomeArrow(
-                        width: 19,
-                        isIncome: true,
-                        color: getColor(context, "incomeAmount"),
+                    if (widget.showIcons)
+                      AnimatedOpacity(
+                        duration: Duration(milliseconds: 300),
+                        opacity: !selectedIncome ? 0.5 : 1,
+                        child: IncomeOutcomeArrow(
+                          width: 19,
+                          isIncome: true,
+                          color: getColor(context, "incomeAmount"),
+                        ),
                       ),
-                    ),
                     Text(
                       widget.incomeLabel ?? "income".tr(),
                       style: TextStyle(

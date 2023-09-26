@@ -1,8 +1,11 @@
 import 'package:budget/colors.dart';
+import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
 import 'package:budget/pages/homePage/homePageLineGraph.dart';
+import 'package:budget/pages/walletDetailsPage.dart';
 import 'package:budget/widgets/notificationsSettings.dart';
+import 'package:budget/widgets/periodCyclePicker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:device_info_plus/device_info_plus.dart';
@@ -94,8 +97,6 @@ Future<Map<String, dynamic>> getDefaultPreferences() async {
     "lineGraphDisplayType": LineGraphDisplay.Default30Days.index,
     "lineGraphStartDate": DateTime.now().toString(),
     "pieChartIsIncome": false,
-    "incomeExpenseStartDate": null,
-    "netWorthStartDate": null,
     "netWorthSelectedWalletPks": null, // List<String>?
     "showPastSpendingTrajectory": false,
     "lastSynced": null,
@@ -121,5 +122,14 @@ Future<Map<String, dynamic>> getDefaultPreferences() async {
     "premiumPopupFreeSeen": false,
     "previewDemo": false,
     "purchaseID": null,
+    // For showing information within a certain cycle
+    "selectedPeriodCycleType": CycleType.allTime.index,
+    "cyclePeriodLength": 1,
+    "cycleReoccurrence": BudgetReoccurence.monthly.index,
+    "cycleStartDate":
+        DateTime(DateTime.now().year, DateTime.now().month, 1).toString(),
+    "customPeriodStartDate":
+        DateTime(DateTime.now().year, DateTime.now().month, 1).toString(),
+    "customPeriodPastDays": 30,
   };
 }

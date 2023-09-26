@@ -1,3 +1,4 @@
+import 'package:budget/functions.dart';
 import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/homePage/homePageLineGraph.dart';
 import 'package:budget/pages/transactionsSearchPage.dart';
@@ -7,6 +8,7 @@ import 'package:budget/struct/settings.dart';
 import 'package:budget/struct/shareBudget.dart';
 import 'package:budget/struct/syncClient.dart';
 import 'package:budget/widgets/navigationFramework.dart';
+import 'package:budget/widgets/periodCyclePicker.dart';
 import 'package:budget/widgets/walletEntry.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:async';
@@ -16,6 +18,7 @@ export 'platform/shared.dart';
 import 'dart:convert';
 import 'package:budget/struct/currencyFunctions.dart';
 import 'schema_versions.dart';
+import 'package:flutter/material.dart' show DateTimeRange;
 
 import 'package:flutter/material.dart' show RangeValues;
 part 'tables.g.dart';
@@ -86,6 +89,7 @@ enum BudgetTransactionFilters {
   includeDebtAndCredit, //disabled by default (as set by the function below:isFilterSelectedWithDefaults ->  offByDefault)
   addedToObjective,
   defaultBudgetTransactionFilters, //if default is in the list, use the default behavior
+  includeBalanceCorrection, //disabled by default
 }
 
 bool isFilterSelectedWithDefaults(
@@ -94,7 +98,8 @@ bool isFilterSelectedWithDefaults(
 
   List<BudgetTransactionFilters> offByDefault = [
     BudgetTransactionFilters.includeIncome,
-    BudgetTransactionFilters.includeDebtAndCredit
+    BudgetTransactionFilters.includeDebtAndCredit,
+    BudgetTransactionFilters.includeBalanceCorrection,
   ];
 
   if (filters
@@ -2909,11 +2914,7 @@ class FinanceDatabase extends _$FinanceDatabase {
 
   // create or update a budget
 
-  Future<int> createOrUpdateBudget(Budget budget,
-      {bool updateSharedEntry = true, bool insert = false}) async {
-    double maxAmount = 100000000;
-    if (budget.amount >= maxAmount) budget = budget.copyWith(amount: maxAmount);
-
+  Budget limitBudgetPeriod(Budget budget) {
     int maxTimePeriodYears = 10;
     int maxTimePeriodMonths = 100;
     int maxTimePeriodWeeks = 500;
@@ -2932,6 +2933,15 @@ class FinanceDatabase extends _$FinanceDatabase {
       budget = budget.copyWith(periodLength: maxTimePeriodDays);
 
     if (budget.periodLength <= 0) budget = budget.copyWith(periodLength: 1);
+    return budget;
+  }
+
+  Future<int> createOrUpdateBudget(Budget budget,
+      {bool updateSharedEntry = true, bool insert = false}) async {
+    budget = limitBudgetPeriod(budget);
+
+    double maxAmount = 100000000;
+    if (budget.amount >= maxAmount) budget = budget.copyWith(amount: maxAmount);
 
     if (updateSharedEntry == true && appStateSettings["sharedBudgets"] == false)
       updateSharedEntry = false;
@@ -3031,8 +3041,10 @@ class FinanceDatabase extends _$FinanceDatabase {
     return (select(categories)
           ..limit(limit ?? DEFAULT_LIMIT, offset: offset ?? DEFAULT_OFFSET))
         .watch()
-        .map((categoryList) =>
-            {for (var category in categoryList) category.categoryPk: category});
+        .map((categoryList) => {
+              for (TransactionCategory category in categoryList)
+                category.categoryPk: category
+            });
   }
 
   Future<List<TransactionCategory>> getAllCategories(
@@ -3866,12 +3878,23 @@ class FinanceDatabase extends _$FinanceDatabase {
             (tbl.objectiveFk.isNull())
         : Constant(true);
 
+    Expression<bool> includeBalanceCorrection = budgetTransactionFilters
+                ?.contains(BudgetTransactionFilters.includeBalanceCorrection) ==
+            false
+        ? Constant(
+              isFilterSelectedWithDefaults(budgetTransactionFilters,
+                  BudgetTransactionFilters.includeBalanceCorrection),
+            ) |
+            (tbl.categoryFk.equals("0").not())
+        : Constant(true);
+
     return memberIncluded &
         includeShared &
         includeAdded &
         includeIncome &
         includeDebtAndCredit &
-        includeAddedToObjective;
+        includeAddedToObjective &
+        includeBalanceCorrection;
   }
 
   Stream<double?> watchTotalSpentByCurrentUserOnly(
@@ -4007,6 +4030,44 @@ class FinanceDatabase extends _$FinanceDatabase {
     return (income != null ? tbl.income.equals(income) : Constant(true));
   }
 
+  // Balance correction category has pk "0"
+  // We also want to include these transactions if isIncome is null (total net spending)
+  Expression<bool> onlyShowIfNotBalanceCorrection(
+      $TransactionsTable tbl, bool? isIncome) {
+    return (tbl.categoryFk.equals("0").not() |
+        (isIncome == null ? Constant(true) : Constant(false)));
+  }
+
+  Expression<bool> onlyShowIfFollowCustomPeriodCycle(
+      $TransactionsTable tbl, bool followCustomPeriodCycle) {
+    CycleType selectedPeriodType =
+        CycleType.values[appStateSettings["selectedPeriodCycleType"] ?? 0];
+
+    if (followCustomPeriodCycle == false) {
+      return Constant(true);
+    } else if (selectedPeriodType == CycleType.allTime) {
+      return Constant(true);
+    } else if (selectedPeriodType == CycleType.cycle) {
+      DateTimeRange budgetRange = getCycleDateTimeRange();
+      DateTime startDate = DateTime(budgetRange.start.year,
+          budgetRange.start.month, budgetRange.start.day);
+      DateTime endDate = DateTime(
+          budgetRange.end.year, budgetRange.end.month, budgetRange.end.day);
+      return onlyShowBasedOnTimeRange(tbl, startDate, endDate, null,
+          allTime: false);
+    } else if (selectedPeriodType == CycleType.pastDays) {
+      DateTime startDate = DateTime.now().subtract(
+          Duration(days: (appStateSettings["customPeriodPastDays"] ?? 0)));
+      return tbl.dateCreated.isBiggerOrEqualValue(startDate);
+    } else if (selectedPeriodType == CycleType.startDate) {
+      DateTime startDate =
+          DateTime.tryParse(appStateSettings["customPeriodStartDate"] ?? "") ??
+              DateTime.now();
+      return tbl.dateCreated.isBiggerOrEqualValue(startDate);
+    }
+    return Constant(true);
+  }
+
   Expression<bool> onlyShowBasedOnCategoryFks($TransactionsTable tbl,
       List<String>? categoryFks, List<String>? categoryFksExclude) {
     return isInCategory(tbl, categoryFks, categoryFksExclude);
@@ -4114,6 +4175,7 @@ class FinanceDatabase extends _$FinanceDatabase {
     bool allTime = false,
     String? walletPk,
     bool? isIncome = null,
+    bool followCustomPeriodCycle = false,
   }) {
     DateTime startDate = DateTime(start.year, start.month, start.day);
     DateTime endDate = DateTime(end.year, end.month, end.day);
@@ -4129,6 +4191,9 @@ class FinanceDatabase extends _$FinanceDatabase {
           return onlyShowBasedOnTimeRange(
                   transactions, startDate, endDate, budget, allTime: allTime) &
               isInCategory(tbl, categoryFks, categoryFksExclude) &
+              onlyShowIfNotBalanceCorrection(transactions, isIncome) &
+              onlyShowIfFollowCustomPeriodCycle(
+                  transactions, followCustomPeriodCycle) &
               tbl.paid.equals(true) &
               // evaluateIfNull(tbl.income.equals(income ?? false), income, true) &
               transactions.walletFk.equals(wallet.walletPk) &
@@ -4201,6 +4266,7 @@ class FinanceDatabase extends _$FinanceDatabase {
     bool? isIncome = null,
     DateTime? startDate,
     required AllWallets allWallets,
+    bool followCustomPeriodCycle = false,
   }) {
     // we have to convert currencies to account for all wallets
     List<Stream<double?>> mergedStreams = [];
@@ -4209,7 +4275,10 @@ class FinanceDatabase extends _$FinanceDatabase {
       final query = selectOnly(transactions)
         ..addColumns([totalAmt])
         ..where(transactions.walletFk.equals(wallet.walletPk) &
+            onlyShowIfNotBalanceCorrection(transactions, isIncome) &
             transactions.paid.equals(true) &
+            onlyShowIfFollowCustomPeriodCycle(
+                transactions, followCustomPeriodCycle) &
             evaluateIfNull(
                 transactions.walletFk.isIn(walletPks ?? []), walletPks, true) &
             onlyShowBasedOnTimeRange(transactions, startDate, null, null) &
@@ -4242,6 +4311,7 @@ class FinanceDatabase extends _$FinanceDatabase {
                   ? transactions.income.equals(true)
                   : transactions.income.equals(false)) &
           transactions.walletFk.equals(walletPk) &
+          onlyShowIfNotBalanceCorrection(transactions, isIncome) &
           transactions.paid.equals(true));
     return query.map((row) => row.read(totalAmt)).watchSingleOrNull();
   }
@@ -4250,6 +4320,7 @@ class FinanceDatabase extends _$FinanceDatabase {
     List<String>? walletPks, {
     bool? isIncome = null,
     DateTime? startDate,
+    bool followCustomPeriodCycle = false,
   }) {
     final totalCount = transactions.transactionPk.count();
     final query = selectOnly(transactions)
@@ -4259,6 +4330,9 @@ class FinanceDatabase extends _$FinanceDatabase {
               : isIncome == true
                   ? transactions.income.equals(true)
                   : transactions.income.equals(false)) &
+          onlyShowIfNotBalanceCorrection(transactions, isIncome) &
+          onlyShowIfFollowCustomPeriodCycle(
+              transactions, followCustomPeriodCycle) &
           onlyShowBasedOnTimeRange(transactions, startDate, null, null) &
           evaluateIfNull(
               transactions.walletFk.isIn(walletPks ?? []), walletPks, true));
@@ -4462,8 +4536,8 @@ class FinanceDatabase extends _$FinanceDatabase {
   Stream<List<Transaction>> getTransactionsInTimeRangeFromCategories(
     DateTime start,
     DateTime end,
-    List<String> categoryFks,
-    bool allCategories,
+    List<String>? categoryFks,
+    List<String>? categoryFksExclude,
     bool isPaidOnly,
     bool? isIncome,
     List<BudgetTransactionFilters>? budgetTransactionFilters,
@@ -4472,14 +4546,16 @@ class FinanceDatabase extends _$FinanceDatabase {
     String? onlyShowTransactionsBelongingToBudgetPk,
     Budget? budget,
     List<String>? walletPks,
+    bool followCustomPeriodCycle = false,
   }) {
     DateTime startDate = DateTime(start.year, start.month, start.day);
     DateTime endDate = DateTime(end.year, end.month, end.day);
     return (select(transactions)
           ..where((tbl) {
-            return evaluateIfNull(tbl.categoryFk.isIn(categoryFks),
-                    categoryFks.length <= 0 ? null : true, true) &
+            return isInCategory(tbl, categoryFks, categoryFksExclude) &
                 evaluateIfNull(tbl.paid.equals(true), isPaidOnly, true) &
+                onlyShowIfFollowCustomPeriodCycle(
+                    transactions, followCustomPeriodCycle) &
                 onlyShowIfFollowsFilters(tbl,
                     budgetTransactionFilters: budgetTransactionFilters,
                     memberTransactionFilters: memberTransactionFilters) &
@@ -4507,6 +4583,7 @@ class FinanceDatabase extends _$FinanceDatabase {
     Budget? budget,
     List<String>? walletPks,
     required AllWallets allWallets,
+    bool followCustomPeriodCycle = false,
   }) {
     // the date, which acts as the end point and everything before this day is inclusive
     // for onlyShowBasedOnTimeRange, but we don't want to include this day
@@ -4517,6 +4594,8 @@ class FinanceDatabase extends _$FinanceDatabase {
       final query = selectOnly(transactions)
         ..addColumns([totalAmt])
         ..where(transactions.walletFk.equals(wallet.walletPk) &
+            onlyShowIfFollowCustomPeriodCycle(
+                transactions, followCustomPeriodCycle) &
             evaluateIfNull(transactions.categoryFk.isIn(categoryFks),
                 categoryFks.length <= 0 ? null : true, true) &
             evaluateIfNull(transactions.paid.equals(true), isPaidOnly, true) &

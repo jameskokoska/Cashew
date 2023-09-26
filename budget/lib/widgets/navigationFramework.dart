@@ -160,7 +160,6 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
         openBottomSheet(context, RatingPopup(), fullSnap: true);
       }
       await initializeDefaultDatabase();
-      await markSubscriptionsAsPaid();
       runNotificationPayLoads(context);
       runQuickActionsPayLoads(context);
       initializeStoreAndPurchases(
@@ -172,6 +171,10 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
       if (entireAppLoaded == false) {
         await runAllCloudFunctions(context);
       }
+
+      // Mark subscriptions as paid AFTER syncing with cloud
+      // Maybe another device already marked them as paid
+      await markSubscriptionsAsPaid();
 
       database.deleteWanderingTransactions();
 

@@ -32,22 +32,14 @@ class HomePageAllSpendingSummary extends StatelessWidget {
                         null,
                         isIncome: true,
                         allWallets: Provider.of<AllWallets>(context),
-                        startDate:
-                            appStateSettings["incomeExpenseStartDate"] == null
-                                ? null
-                                : DateTime.parse(
-                                    appStateSettings["incomeExpenseStartDate"]),
+                        followCustomPeriodCycle: true,
                       ),
                       textColor: getColor(context, "incomeAmount"),
                       transactionsAmountStream:
                           database.watchTotalCountOfTransactionsInWallet(
                         null,
                         isIncome: true,
-                        startDate:
-                            appStateSettings["incomeExpenseStartDate"] == null
-                                ? null
-                                : DateTime.parse(
-                                    appStateSettings["incomeExpenseStartDate"]),
+                        followCustomPeriodCycle: true,
                       ),
                       openPage: TransactionsSearchPage(
                         initialFilters: SearchFilters(
@@ -64,22 +56,14 @@ class HomePageAllSpendingSummary extends StatelessWidget {
                         null,
                         isIncome: false,
                         allWallets: Provider.of<AllWallets>(context),
-                        startDate:
-                            appStateSettings["incomeExpenseStartDate"] == null
-                                ? null
-                                : DateTime.parse(
-                                    appStateSettings["incomeExpenseStartDate"]),
+                        followCustomPeriodCycle: true,
                       ),
                       textColor: getColor(context, "expenseAmount"),
                       transactionsAmountStream:
                           database.watchTotalCountOfTransactionsInWallet(
                         null,
                         isIncome: false,
-                        startDate:
-                            appStateSettings["incomeExpenseStartDate"] == null
-                                ? null
-                                : DateTime.parse(
-                                    appStateSettings["incomeExpenseStartDate"]),
+                        followCustomPeriodCycle: true,
                       ),
                       openPage: TransactionsSearchPage(
                         initialFilters: SearchFilters(

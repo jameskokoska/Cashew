@@ -17,11 +17,13 @@ class CurrencyPicker extends StatefulWidget {
     this.extraButton,
     this.onHasFocus,
     this.initialCurrency,
+    this.padding,
   });
   final Function(String) onSelected;
   final Widget? extraButton;
   final Function? onHasFocus;
   final String? initialCurrency;
+  final EdgeInsets? padding;
 
   @override
   State<CurrencyPicker> createState() => _CurrencyPickerState();
@@ -112,7 +114,7 @@ class _CurrencyPickerState extends State<CurrencyPicker> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8),
+      padding: widget.padding ?? EdgeInsets.symmetric(horizontal: 8),
       child: Column(
         children: [
           Row(
@@ -131,11 +133,13 @@ class _CurrencyPickerState extends State<CurrencyPicker> {
                     onChanged: (text) {
                       searchCurrencies(text);
                     },
-                    padding: EdgeInsets.only(left: 18),
+                    padding: widget.extraButton != null
+                        ? EdgeInsets.only(left: 18)
+                        : EdgeInsets.zero,
                   ),
                 ),
               ),
-              widget.extraButton ?? SizedBox.shrink(),
+              if (widget.extraButton != null) widget.extraButton!,
             ],
           ),
           SizedBox(height: 12),
@@ -256,18 +260,24 @@ class CurrencyItem extends StatelessWidget {
                     fontSize: 18,
                   ),
                   TextFont(
-                    text: currenciesJSON[currencyKey]?["Symbol"] ?? "",
+                    text: currenciesJSON[currencyKey]?["Symbol"] == null ||
+                            currenciesJSON[currencyKey]?["Symbol"] == ""
+                        ? (currenciesJSON[currencyKey]?["Code"]
+                                .toString()
+                                .allCaps ??
+                            "")
+                        : (currenciesJSON[currencyKey]?["Symbol"] ?? ""),
                     autoSizeText: true,
                     maxFontSize: 50,
                     fontSize: 25,
                     fontWeight: FontWeight.bold,
                   ),
                   currenciesJSON[currencyKey]?["CountryName"] == null &&
-                          currenciesJSON[currencyKey]?["gecko"] == null
+                          currenciesJSON[currencyKey]?["Currency"] == null
                       ? SizedBox.shrink()
                       : TextFont(
                           text: currenciesJSON[currencyKey]?["CountryName"] ??
-                              (currenciesJSON[currencyKey]["gecko"])
+                              (currenciesJSON[currencyKey]["Currency"])
                                   .toString()
                                   .capitalizeFirst ??
                               "",

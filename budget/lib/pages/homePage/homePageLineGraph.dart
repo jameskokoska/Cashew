@@ -105,12 +105,14 @@ class PastSpendingGraph extends StatelessWidget {
     this.customStartDate,
     this.walletPks,
     this.extraLeftPaddingIfSmall = 0,
+    this.followCustomPeriodCycle = false,
   });
   final bool? isIncome;
   final int monthsToLoad;
   final DateTime? customStartDate;
   final List<String>? walletPks;
   final double extraLeftPaddingIfSmall;
+  final bool followCustomPeriodCycle;
 
   @override
   Widget build(BuildContext context) {
@@ -134,6 +136,7 @@ class PastSpendingGraph extends StatelessWidget {
         null,
         walletPks: walletPks,
         allWallets: Provider.of<AllWallets>(context),
+        followCustomPeriodCycle: followCustomPeriodCycle,
       ),
       builder: (context, snapshotTotalSpentBefore) {
         if (snapshotTotalSpentBefore.hasData) {
@@ -153,13 +156,14 @@ class PastSpendingGraph extends StatelessWidget {
                 DateTime.now().month,
                 DateTime.now().day,
               ),
-              [],
-              true,
+              null,
+              null,
               true,
               isIncome,
               null,
               null,
               walletPks: walletPks,
+              followCustomPeriodCycle: followCustomPeriodCycle,
             ),
             builder: (context, snapshot) {
               if (snapshot.hasData) {

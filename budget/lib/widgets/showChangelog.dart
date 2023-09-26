@@ -11,9 +11,27 @@ import 'package:budget/widgets/outlinedButtonStacked.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'listItem.dart';
 
 String getChangelogString() {
   return """
+    < 4.4.6
+    New period time range selection for homepage widgets and all spending page
+    Balance correction category budget transaction filter
+    Transaction filter only exists if there is a balance correction category
+    Added significant amount of currencies
+    Discard changes popup is only shown if a change was made when creating a new entry
+    Fixed line graph would include transactions that were in an excluded category
+    Balance correction transactions no longer count towards income/expense totals, only net totals
+    Fixed automatically marking subscriptions as paid syncing
+    When editing the amount of a transaction, default action is no longer add transaction
+    Fixed past budget page graph with negative budget periods
+    Added vegetable category icons
+    < 4.4.5
+    Added AED currency
+    Fixed date formatting locale
+    Replaces include income selector on onboarding with currency picker
+    Generating loan transactions with bill splitter awaits for each generated transaction
     < 4.4.4
     Feathered faded edge removed space between
     Transfer balance option in wallet details page above Merge Account
@@ -1390,6 +1408,19 @@ Map<String, List<MajorChanges>> getMajorChanges() {
         info: [
           "major-change-6-1".tr(),
         ],
+      ),
+    ],
+    "< 4.4.6": [
+      MajorChanges(
+        "major-change-7".tr(),
+        Icons.timelapse_rounded,
+        info: [
+          "major-change-7-1".tr(),
+        ],
+      ),
+      MajorChanges(
+        "major-change-8".tr(),
+        Icons.price_change_rounded,
       ),
     ],
   };

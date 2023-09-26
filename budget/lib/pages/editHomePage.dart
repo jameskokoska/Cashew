@@ -1,9 +1,11 @@
 import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/pages/addObjectivePage.dart';
+import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/editBudgetPage.dart';
 import 'package:budget/pages/homePage/homePageLineGraph.dart';
 import 'package:budget/pages/homePage/homePageNetWorth.dart';
+import 'package:budget/pages/walletDetailsPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/modified/reorderable_list.dart';
 import 'package:budget/struct/settings.dart';
@@ -12,9 +14,12 @@ import 'package:budget/widgets/moreIcons.dart';
 import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
+import 'package:budget/widgets/periodCyclePicker.dart';
 import 'package:budget/widgets/radioItems.dart';
+import 'package:budget/widgets/selectAmount.dart';
 import 'package:budget/widgets/selectItems.dart';
 import 'package:budget/pages/addBudgetPage.dart';
+import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/util/showDatePicker.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -242,19 +247,8 @@ class _EditHomePageState extends State<EditHomePage> {
               openBottomSheet(
                 context,
                 PopupFramework(
-                  title: "select-start-date".tr(),
-                  child: SelectStartDate(
-                    initialDateTime:
-                        appStateSettings["incomeExpenseStartDate"] == null
-                            ? null
-                            : DateTime.parse(
-                                appStateSettings["incomeExpenseStartDate"]),
-                    onSelected: (DateTime? dateTime) {
-                      updateSettings("incomeExpenseStartDate",
-                          dateTime == null ? null : dateTime.toString(),
-                          pagesNeedingRefresh: [], updateGlobalState: false);
-                    },
-                  ),
+                  title: "select-period".tr(),
+                  child: PeriodCyclePicker(),
                 ),
               );
             },
@@ -414,27 +408,36 @@ class _EditHomePageState extends State<EditHomePage> {
                   context,
                   PopupFramework(
                     title: "select-type".tr(),
-                    child: RadioItems(
-                      items: <String>[
-                        "expense",
-                        "income",
+                    child: Column(
+                      children: [
+                        RadioItems(
+                          items: <String>[
+                            "expense",
+                            "income",
+                          ],
+                          displayFilter: (type) {
+                            return type.toString().tr();
+                          },
+                          initial: appStateSettings["pieChartIsIncome"] == true
+                              ? "income"
+                              : "expense",
+                          onChanged: (type) async {
+                            if (type == "expense") {
+                              updateSettings("pieChartIsIncome", false,
+                                  updateGlobalState: false);
+                            } else {
+                              updateSettings("pieChartIsIncome", true,
+                                  updateGlobalState: false);
+                            }
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 5),
+                          child: HorizontalBreakAbove(
+                              enabled: true, child: PeriodCyclePicker()),
+                        ),
                       ],
-                      displayFilter: (type) {
-                        return type.toString().tr();
-                      },
-                      initial: appStateSettings["pieChartIsIncome"] == true
-                          ? "income"
-                          : "expense",
-                      onChanged: (type) async {
-                        if (type == "expense") {
-                          updateSettings("pieChartIsIncome", false,
-                              updateGlobalState: false);
-                        } else {
-                          updateSettings("pieChartIsIncome", true,
-                              updateGlobalState: false);
-                        }
-                        Navigator.of(context).pop();
-                      },
                     ),
                   ),
                 );
@@ -580,57 +583,6 @@ class _EditHomePageState extends State<EditHomePage> {
           ),
         ],
       ),
-    );
-  }
-}
-
-class SelectStartDate extends StatefulWidget {
-  const SelectStartDate(
-      {required this.initialDateTime, required this.onSelected, super.key});
-  final DateTime? initialDateTime;
-  final Function(DateTime?) onSelected;
-
-  @override
-  State<SelectStartDate> createState() => _SelectStartDateState();
-}
-
-class _SelectStartDateState extends State<SelectStartDate> {
-  late DateTime? selectedDate = widget.initialDateTime;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        IconButton(
-          onPressed: () {
-            setState(() {
-              selectedDate = null;
-              widget.onSelected(null);
-            });
-          },
-          icon: Icon(appStateSettings["outlinedIcons"]
-              ? Icons.undo_outlined
-              : Icons.undo_rounded),
-        ),
-        TappableTextEntry(
-          title: selectedDate == null
-              ? "all-time".tr()
-              : getWordedDateShortMore(selectedDate!, includeYear: true),
-          placeholder: "",
-          onTap: () async {
-            final DateTime? picked = await showCustomDatePicker(
-                context, selectedDate ?? DateTime.now());
-            setState(() {
-              selectedDate = picked ?? selectedDate;
-            });
-            widget.onSelected(selectedDate);
-          },
-          fontSize: 25,
-          fontWeight: FontWeight.bold,
-          internalPadding: EdgeInsets.symmetric(vertical: 2, horizontal: 4),
-          padding: EdgeInsets.symmetric(vertical: 0, horizontal: 5),
-        ),
-      ],
     );
   }
 }

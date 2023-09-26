@@ -3,6 +3,7 @@ import 'package:budget/functions.dart';
 import 'package:budget/pages/accountsPage.dart';
 import 'package:budget/pages/editBudgetLimitsPage.dart';
 import 'package:budget/pages/editBudgetPage.dart';
+import 'package:budget/pages/editHomePage.dart';
 import 'package:budget/pages/premiumPage.dart';
 import 'package:budget/pages/sharedBudgetSettings.dart';
 import 'package:budget/struct/databaseGlobal.dart';
@@ -11,6 +12,7 @@ import 'package:budget/struct/shareBudget.dart';
 import 'package:budget/widgets/countNumber.dart';
 import 'package:budget/widgets/dropdownSelect.dart';
 import 'package:budget/widgets/globalSnackBar.dart';
+import 'package:budget/widgets/incomeExpenseTabSelector.dart';
 import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
@@ -37,6 +39,7 @@ import 'package:budget/colors.dart';
 import 'package:provider/provider.dart';
 import 'package:budget/widgets/animatedExpanded.dart';
 
+import '../widgets/listItem.dart';
 import '../widgets/outlinedButtonStacked.dart';
 import '../widgets/sliverStickyLabelDivider.dart';
 import '../widgets/tappableTextEntry.dart';
@@ -318,6 +321,20 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
     );
   }
 
+  Budget? budgetInitial;
+
+  void showDiscardChangesPopupIfNotEditing() async {
+    Budget budgetCreated = await createBudget();
+    budgetCreated = budgetCreated.copyWith(
+        dateCreated: budgetInitial?.dateCreated,
+        endDate: budgetInitial?.endDate);
+    if (budgetCreated != budgetInitial && widget.budget == null) {
+      discardChangesPopup(context, forceShow: true);
+    } else {
+      Navigator.pop(context);
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -388,6 +405,11 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
       //Set to false because we can't save until we made some changes
       setState(() {
         canAddBudget = false;
+      });
+    }
+    if (widget.budget == null) {
+      Future.delayed(Duration.zero, () async {
+        budgetInitial = await createBudget();
       });
     }
   }
@@ -464,6 +486,35 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
     );
   }
 
+  void checkPopupBalanceCorrectionSelectedWarning(
+      BuildContext context, List<String>? categories) {
+    if (categories?.contains("0") == true) {
+      openPopup(
+        context,
+        title: "balance-correction-selected".tr(),
+        icon: appStateSettings["outlinedIcons"]
+            ? Icons.bar_chart_outlined
+            : Icons.bar_chart_rounded,
+        description: "balance-correction-selected-info".tr(),
+        onSubmit: () {
+          Navigator.pop(context);
+        },
+        onSubmitLabel: "OK".tr(),
+        onCancel: () {
+          Navigator.pop(context);
+          openBottomSheet(
+            context,
+            fullSnap: false,
+            ViewBudgetTransactionFilterInfo(
+                selectedBudgetFilters: selectedBudgetTransactionFilters,
+                setSelectedBudgetFilters: setSelectedBudgetFilters),
+          );
+        },
+        onCancelLabel: "info".tr(),
+      );
+    }
+  }
+
   GlobalKey<_BudgetDetailsState> _budgetDetailsStateKey = GlobalKey();
 
   @override
@@ -473,7 +524,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
         if (widget.budget != null) {
           discardChangesPopupIfBudgetPassed();
         } else {
-          discardChangesPopup(context, forceShow: true);
+          showDiscardChangesPopupIfNotEditing();
         }
         return false;
       },
@@ -493,14 +544,14 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
             if (widget.budget != null) {
               discardChangesPopupIfBudgetPassed();
             } else {
-              discardChangesPopup(context, forceShow: true);
+              showDiscardChangesPopupIfNotEditing();
             }
           },
           onDragDownToDismiss: () async {
             if (widget.budget != null) {
               discardChangesPopupIfBudgetPassed();
             } else {
-              discardChangesPopup(context, forceShow: true);
+              showDiscardChangesPopupIfNotEditing();
             }
           },
           actions: [
@@ -777,167 +828,193 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                           widget.budget == null),
               sliver: ColumnSliver(
                 children: [
-                  AnimatedExpanded(
-                    expand: !(selectedShared == true ||
-                        selectedAddedTransactionsOnly),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(height: 5),
-                        SelectChips(
-                          extraWidget: Transform.scale(
-                            scale: 1.3,
-                            child: IconButton(
-                              padding: EdgeInsets.zero,
-                              visualDensity: VisualDensity.compact,
-                              icon: Icon(
-                                Icons.info_outlined,
-                                size: 19,
-                              ),
-                              onPressed: () {
-                                openBottomSheet(
-                                  context,
-                                  fullSnap: false,
-                                  ViewBudgetTransactionFilterInfo(
-                                      selectedBudgetFilters:
-                                          selectedBudgetTransactionFilters,
-                                      setSelectedBudgetFilters:
-                                          setSelectedBudgetFilters),
-                                );
-                              },
-                            ),
-                          ),
-                          extraWidgetAtBeginning: true,
-                          items: [
-                            BudgetTransactionFilters
-                                .defaultBudgetTransactionFilters,
-                            BudgetTransactionFilters.includeIncome,
-                            BudgetTransactionFilters.includeDebtAndCredit,
-                            BudgetTransactionFilters.addedToOtherBudget,
-                            BudgetTransactionFilters.addedToObjective,
-                            ...(appStateSettings["sharedBudgets"]
-                                ? [BudgetTransactionFilters.sharedToOtherBudget]
-                                : []),
-                          ],
-                          getLabel: (dynamic item) {
-                            return item ==
+                  FutureBuilder<TransactionCategory?>(
+                      future: database.getCategory("0").$2,
+                      builder: (context, snapshot) {
+                        return AnimatedExpanded(
+                          expand: !(selectedShared == true ||
+                              selectedAddedTransactionsOnly),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(height: 5),
+                              SelectChips(
+                                extraWidget: Transform.scale(
+                                  scale: 1.3,
+                                  child: IconButton(
+                                    padding: EdgeInsets.zero,
+                                    visualDensity: VisualDensity.compact,
+                                    icon: Icon(
+                                      Icons.info_outlined,
+                                      size: 19,
+                                    ),
+                                    onPressed: () {
+                                      openBottomSheet(
+                                        context,
+                                        fullSnap: false,
+                                        ViewBudgetTransactionFilterInfo(
+                                            selectedBudgetFilters:
+                                                selectedBudgetTransactionFilters,
+                                            setSelectedBudgetFilters:
+                                                setSelectedBudgetFilters),
+                                      );
+                                    },
+                                  ),
+                                ),
+                                extraWidgetAtBeginning: true,
+                                items: [
+                                  BudgetTransactionFilters
+                                      .defaultBudgetTransactionFilters,
+                                  BudgetTransactionFilters.includeIncome,
+                                  BudgetTransactionFilters.includeDebtAndCredit,
+                                  BudgetTransactionFilters.addedToOtherBudget,
+                                  BudgetTransactionFilters.addedToObjective,
+                                  ...(appStateSettings["sharedBudgets"]
+                                      ? [
+                                          BudgetTransactionFilters
+                                              .sharedToOtherBudget
+                                        ]
+                                      : []),
+                                  if (snapshot.hasData)
                                     BudgetTransactionFilters
-                                        .defaultBudgetTransactionFilters
-                                ? "default".tr()
-                                : item == BudgetTransactionFilters.includeIncome
-                                    ? "include-income".tr()
-                                    : item ==
-                                            BudgetTransactionFilters
-                                                .addedToOtherBudget
-                                        ? "added-to-other-budgets".tr()
-                                        : item ==
-                                                BudgetTransactionFilters
-                                                    .addedToObjective
-                                            ? "added-to-goal".tr()
-                                            : item ==
-                                                    BudgetTransactionFilters
-                                                        .sharedToOtherBudget
-                                                ? "shared-to-other-budgets".tr()
-                                                : item ==
-                                                        BudgetTransactionFilters
-                                                            .includeDebtAndCredit
-                                                    ? "include-debt-and-credit"
-                                                        .tr()
-                                                    : "";
-                          },
-                          onSelected: (dynamic item) {
-                            if (item ==
-                                BudgetTransactionFilters
-                                    .defaultBudgetTransactionFilters) {
-                              if (selectedBudgetTransactionFilters.contains(
-                                  BudgetTransactionFilters
-                                      .defaultBudgetTransactionFilters)) {
-                                selectedBudgetTransactionFilters = [];
-                              } else {
-                                selectedBudgetTransactionFilters = [
-                                  BudgetTransactionFilters
-                                      .defaultBudgetTransactionFilters
-                                ];
-                              }
-                            } else {
-                              if (selectedBudgetTransactionFilters.contains(
-                                  BudgetTransactionFilters
-                                      .defaultBudgetTransactionFilters)) {
-                                selectedBudgetTransactionFilters = [];
-                              }
-                              if (selectedBudgetTransactionFilters
-                                  .contains(item)) {
-                                selectedBudgetTransactionFilters.remove(item);
-                              } else {
-                                selectedBudgetTransactionFilters.add(item);
-                              }
-                            }
+                                        .includeBalanceCorrection,
+                                ],
+                                getLabel: (dynamic item) {
+                                  return item ==
+                                          BudgetTransactionFilters
+                                              .defaultBudgetTransactionFilters
+                                      ? "default".tr()
+                                      : item ==
+                                              BudgetTransactionFilters
+                                                  .includeIncome
+                                          ? "include-income".tr()
+                                          : item ==
+                                                  BudgetTransactionFilters
+                                                      .addedToOtherBudget
+                                              ? "added-to-other-budgets".tr()
+                                              : item ==
+                                                      BudgetTransactionFilters
+                                                          .addedToObjective
+                                                  ? "added-to-goal".tr()
+                                                  : item ==
+                                                          BudgetTransactionFilters
+                                                              .sharedToOtherBudget
+                                                      ? "shared-to-other-budgets"
+                                                          .tr()
+                                                      : item ==
+                                                              BudgetTransactionFilters
+                                                                  .includeDebtAndCredit
+                                                          ? "include-debt-and-credit"
+                                                              .tr()
+                                                          : item ==
+                                                                  BudgetTransactionFilters
+                                                                      .includeBalanceCorrection
+                                                              ? "balance-correction"
+                                                                  .tr()
+                                                              : "";
+                                },
+                                onSelected: (dynamic item) {
+                                  if (item ==
+                                      BudgetTransactionFilters
+                                          .defaultBudgetTransactionFilters) {
+                                    if (selectedBudgetTransactionFilters
+                                        .contains(BudgetTransactionFilters
+                                            .defaultBudgetTransactionFilters)) {
+                                      selectedBudgetTransactionFilters = [];
+                                    } else {
+                                      selectedBudgetTransactionFilters = [
+                                        BudgetTransactionFilters
+                                            .defaultBudgetTransactionFilters
+                                      ];
+                                    }
+                                  } else {
+                                    if (selectedBudgetTransactionFilters
+                                        .contains(BudgetTransactionFilters
+                                            .defaultBudgetTransactionFilters)) {
+                                      selectedBudgetTransactionFilters = [];
+                                    }
+                                    if (selectedBudgetTransactionFilters
+                                        .contains(item)) {
+                                      selectedBudgetTransactionFilters
+                                          .remove(item);
+                                    } else {
+                                      selectedBudgetTransactionFilters
+                                          .add(item);
+                                    }
+                                  }
 
-                            setState(() {});
-                            determineBottomButton();
-                          },
-                          getSelected: (dynamic item) {
-                            if (selectedBudgetTransactionFilters.contains(
-                                BudgetTransactionFilters
-                                    .defaultBudgetTransactionFilters))
-                              return isFilterSelectedWithDefaults(
-                                  selectedBudgetTransactionFilters, item);
-                            return selectedBudgetTransactionFilters
-                                .contains(item);
-                          },
-                        ),
-                        AnimatedExpanded(
-                          expand: appStateSettings["sharedBudgets"] == true &&
-                              (selectedBudgetTransactionFilters.contains(
-                                  BudgetTransactionFilters
-                                      .sharedToOtherBudget)),
-                          child: SelectChips(
-                            items: ["All", ...allMembersOfAllBudgets],
-                            getLabel: (String item) {
-                              return getMemberNickname(item);
-                            },
-                            onSelected: (String item) {
-                              if (item == "All" &&
-                                  selectedMemberTransactionFilters == null) {
-                                selectedMemberTransactionFilters = [];
-                                setState(() {});
-                                determineBottomButton();
-                                return;
-                              } else if (item == "All" &&
-                                  selectedMemberTransactionFilters != null) {
-                                selectedMemberTransactionFilters = null;
-                                setState(() {});
-                                determineBottomButton();
-                                return;
-                              }
-                              if (selectedMemberTransactionFilters == null) {
-                                selectedMemberTransactionFilters = [];
-                              }
-                              if (selectedMemberTransactionFilters!
-                                  .contains(item)) {
-                                selectedMemberTransactionFilters!.remove(item);
-                              } else {
-                                selectedMemberTransactionFilters!.add(item);
-                              }
-                              setState(() {});
-                              determineBottomButton();
-                            },
-                            getSelected: (String item) {
-                              if (item == "All" &&
-                                  selectedMemberTransactionFilters == null)
-                                return true;
-                              if (item != "All" &&
-                                  selectedMemberTransactionFilters == null)
-                                return true;
-                              return selectedMemberTransactionFilters!
-                                  .contains(item);
-                            },
+                                  setState(() {});
+                                  determineBottomButton();
+                                },
+                                getSelected: (dynamic item) {
+                                  if (selectedBudgetTransactionFilters.contains(
+                                      BudgetTransactionFilters
+                                          .defaultBudgetTransactionFilters))
+                                    return isFilterSelectedWithDefaults(
+                                        selectedBudgetTransactionFilters, item);
+                                  return selectedBudgetTransactionFilters
+                                      .contains(item);
+                                },
+                              ),
+                              AnimatedExpanded(
+                                expand: appStateSettings["sharedBudgets"] ==
+                                        true &&
+                                    (selectedBudgetTransactionFilters.contains(
+                                        BudgetTransactionFilters
+                                            .sharedToOtherBudget)),
+                                child: SelectChips(
+                                  items: ["All", ...allMembersOfAllBudgets],
+                                  getLabel: (String item) {
+                                    return getMemberNickname(item);
+                                  },
+                                  onSelected: (String item) {
+                                    if (item == "All" &&
+                                        selectedMemberTransactionFilters ==
+                                            null) {
+                                      selectedMemberTransactionFilters = [];
+                                      setState(() {});
+                                      determineBottomButton();
+                                      return;
+                                    } else if (item == "All" &&
+                                        selectedMemberTransactionFilters !=
+                                            null) {
+                                      selectedMemberTransactionFilters = null;
+                                      setState(() {});
+                                      determineBottomButton();
+                                      return;
+                                    }
+                                    if (selectedMemberTransactionFilters ==
+                                        null) {
+                                      selectedMemberTransactionFilters = [];
+                                    }
+                                    if (selectedMemberTransactionFilters!
+                                        .contains(item)) {
+                                      selectedMemberTransactionFilters!
+                                          .remove(item);
+                                    } else {
+                                      selectedMemberTransactionFilters!
+                                          .add(item);
+                                    }
+                                    setState(() {});
+                                    determineBottomButton();
+                                  },
+                                  getSelected: (String item) {
+                                    if (item == "All" &&
+                                        selectedMemberTransactionFilters ==
+                                            null) return true;
+                                    if (item != "All" &&
+                                        selectedMemberTransactionFilters ==
+                                            null) return true;
+                                    return selectedMemberTransactionFilters!
+                                        .contains(item);
+                                  },
+                                ),
+                              ),
+                              SizedBox(height: 10),
+                            ],
                           ),
-                        ),
-                        SizedBox(height: 10),
-                      ],
-                    ),
-                  ),
+                        );
+                      }),
                   widget.budget != null && widget.budget!.addedTransactionsOnly
                       ? Row(
                           children: [
@@ -986,7 +1063,11 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                         child: SelectCategory(
                           horizontalList: true,
                           selectedCategories: selectedCategoryPks,
-                          setSelectedCategories: setSelectedCategories,
+                          setSelectedCategories: (categories) {
+                            checkPopupBalanceCorrectionSelectedWarning(
+                                context, categories);
+                            setSelectedCategories(categories);
+                          },
                           showSelectedAllCategoriesIfNoneSelected: true,
                         ),
                       ),
@@ -1021,7 +1102,11 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                         child: SelectCategory(
                           horizontalList: true,
                           selectedCategories: selectedCategoryPksExclude,
-                          setSelectedCategories: setSelectedCategoriesExclude,
+                          setSelectedCategories: (categories) {
+                            checkPopupBalanceCorrectionSelectedWarning(
+                                context, categories);
+                            setSelectedCategoriesExclude(categories);
+                          },
                           showSelectedAllCategoriesIfNoneSelected: false,
                           fadeOutWhenSelected: true,
                         ),
@@ -1396,9 +1481,7 @@ class _BudgetDetailsState extends State<BudgetDetails> {
                                 title:
                                     getWordedDateShortMore(selectedStartDate),
                                 placeholder: "",
-                                onTap: () {
-                                  selectAmount(context);
-                                },
+                                onTap: () {},
                                 fontSize: 25,
                                 fontWeight: FontWeight.bold,
                                 internalPadding: EdgeInsets.symmetric(
@@ -1571,6 +1654,7 @@ class _ViewBudgetTransactionFilterInfoState
     extends State<ViewBudgetTransactionFilterInfo> {
   late List<BudgetTransactionFilters> selectedBudgetFilters =
       widget.selectedBudgetFilters;
+  bool hasCorrectionCategory = false;
 
   onTap(BudgetTransactionFilters item) {
     if (item == BudgetTransactionFilters.defaultBudgetTransactionFilters) {
@@ -1595,6 +1679,24 @@ class _ViewBudgetTransactionFilterInfoState
     }
     widget.setSelectedBudgetFilters(selectedBudgetFilters);
     setState(() {});
+  }
+
+  @override
+  void initState() {
+    checkIfHasCorrectionCategory();
+    super.initState();
+  }
+
+  void checkIfHasCorrectionCategory() {
+    Future.delayed(Duration.zero, () async {
+      try {
+        await database.getCategory("0").$2;
+        hasCorrectionCategory = true;
+      } catch (e) {
+        hasCorrectionCategory = false;
+      }
+      setState(() {});
+    });
   }
 
   @override
@@ -1695,6 +1797,23 @@ class _ViewBudgetTransactionFilterInfoState
                 : Icons.savings_rounded,
             onTap: onTap,
           ),
+          if (hasCorrectionCategory == true)
+            FilterTypeInfoEntry(
+              selectedBudgetFilters: selectedBudgetFilters,
+              setSelectedBudgetFilters: widget.setSelectedBudgetFilters,
+              budgetTransactionFilter:
+                  BudgetTransactionFilters.includeBalanceCorrection,
+              title: "balance-correction".tr(),
+              childrenDescription: [
+                ListItem(
+                  "balance-correction-description-1".tr(),
+                ),
+              ],
+              icon: appStateSettings["outlinedIcons"]
+                  ? Icons.bar_chart_outlined
+                  : Icons.bar_chart_rounded,
+              onTap: onTap,
+            ),
         ],
       ),
     );
@@ -1756,35 +1875,6 @@ class FilterTypeInfoEntry extends StatelessWidget {
             ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class ListItem extends StatelessWidget {
-  ListItem(this.text);
-  final String text;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 3),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          TextFont(
-            text: "• ",
-            maxLines: 1,
-            fontSize: 15.5,
-          ),
-          Expanded(
-            child: TextFont(
-              text: text,
-              maxLines: 50,
-              fontSize: 15.5,
-            ),
-          ),
-        ],
       ),
     );
   }

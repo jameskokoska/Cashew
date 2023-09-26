@@ -352,22 +352,28 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
                                   builder: (context, snapshot) {
                                     if (snapshot.hasData) {
                                       double maxY = 0.1;
+                                      double minY = -0.00000000000001;
                                       List<FlSpot> spots = [];
                                       List<FlSpot> initialSpots = [];
 
                                       for (int i = snapshot.data!.length - 1;
                                           i >= 0;
                                           i--) {
-                                        if ((snapshot.data![i] ?? 0).abs() >
-                                            maxY)
-                                          maxY = (snapshot.data![i] ?? 0).abs();
+                                        if ((snapshot.data![i] ?? 0) * -1 <
+                                            minY) {
+                                          minY = (snapshot.data![i] ?? 0) * -1;
+                                        }
+                                        if ((snapshot.data![i] ?? 0) * -1 >
+                                            maxY) {
+                                          maxY = (snapshot.data![i] ?? 0) * -1;
+                                        }
                                         spots.add(FlSpot(
                                           snapshot.data!.length -
                                               1 -
                                               i.toDouble(),
                                           (snapshot.data![i] ?? 0).abs() == 0
                                               ? 0.001
-                                              : (snapshot.data![i] ?? 0).abs(),
+                                              : (snapshot.data![i] ?? 0) * -1,
                                         ));
                                         initialSpots.add(
                                           FlSpot(
@@ -378,6 +384,8 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
                                           ),
                                         );
                                       }
+                                      // print(minY);
+                                      // print(maxY);
                                       return StreamBuilder<List<double?>>(
                                         stream: mergedStreamsCategoriesTotal,
                                         builder: (context,
@@ -479,6 +487,7 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
                                                     ? widget.budget.amount +
                                                         0.0000000000001
                                                     : maxY,
+                                            minY: minY,
                                             spots: spots,
                                             initialSpots: initialSpots,
                                             horizontalLineAt:

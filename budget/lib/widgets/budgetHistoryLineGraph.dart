@@ -19,6 +19,7 @@ class BudgetHistoryLineGraph extends StatefulWidget {
     required this.initialSpots,
     required this.horizontalLineAt,
     required this.maxY,
+    required this.minY,
     required this.extraCategorySpots,
     required this.categoriesMapped,
     this.onTouchedIndex,
@@ -31,6 +32,7 @@ class BudgetHistoryLineGraph extends StatefulWidget {
   final Budget budget;
   final double? horizontalLineAt;
   final double maxY;
+  final double minY;
   final Function(int?)? onTouchedIndex;
   final Map<String, List<FlSpot>> extraCategorySpots;
   final Map<String, TransactionCategory> categoriesMapped;
@@ -46,7 +48,7 @@ class _BudgetHistoryLineGraphState extends State<BudgetHistoryLineGraph> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration(milliseconds: 0), () {
+    Future.delayed(Duration.zero, () {
       setState(() {
         loaded = true;
       });
@@ -157,7 +159,7 @@ class _BudgetHistoryLineGraphState extends State<BudgetHistoryLineGraph> {
         swapAnimationDuration: Duration(milliseconds: 2000),
         LineChartData(
           lineBarsData: lineBarsData,
-          minY: -0.00000000000001,
+          minY: widget.minY,
           maxY: widget.maxY,
           lineTouchData: LineTouchData(
             touchCallback:
@@ -282,8 +284,7 @@ class _BudgetHistoryLineGraphState extends State<BudgetHistoryLineGraph> {
                                     BudgetReoccurence.yearly
                                 ? DateFormat('yyyy', context.locale.toString())
                                     .format(startDate)
-                                : DateFormat(
-                                        'MMM\nd', context.locale.toString())
+                                : DateFormat('MMM', context.locale.toString())
                                     .format(startDate),
                         textColor: dynamicPastel(context, widget.color,
                                 amount: 0.8, inverse: true)
@@ -307,7 +308,7 @@ class _BudgetHistoryLineGraphState extends State<BudgetHistoryLineGraph> {
                   bool show = false;
                   if (value == 0) {
                     show = true;
-                  } else if (value <= widget.maxY && value > 1) {
+                  } else if (value <= widget.maxY && value > widget.minY) {
                     show = true;
                   } else {
                     return SizedBox.shrink();

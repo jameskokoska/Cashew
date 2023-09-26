@@ -3504,4 +3504,52 @@ List<IconForCategory> iconObjects = [
     ],
     mostLikelyCategoryName: "Gasoline",
   ),
+  IconForCategory(
+    icon: "organic-food.png",
+    tags: [
+      "organic-food",
+      "vegetables",
+      "crate",
+      "produce",
+      "healthy",
+      "natural",
+      "nutrition",
+      "fresh",
+      "farm",
+      "sustainable"
+    ],
+    mostLikelyCategoryName: "Organic",
+  ),
+  IconForCategory(
+    icon: "salad.png",
+    tags: [
+      "salad",
+      "vegetables",
+      "fruits",
+      "healthy",
+      "greens",
+      "nutrition",
+      "fresh",
+      "tossed",
+      "meal",
+      "lettuce"
+    ],
+    mostLikelyCategoryName: "Salad",
+  ),
+  IconForCategory(
+    icon: "healthy-food.png",
+    tags: [
+      "healthy-food",
+      "nutrition",
+      "fruits",
+      "vegetables",
+      "banana",
+      "watermelon",
+      "fresh",
+      "nutritious",
+      "diet",
+      "wellness"
+    ],
+    mostLikelyCategoryName: "Healthy",
+  ),
 ];

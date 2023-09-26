@@ -1,5 +1,6 @@
 import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
+import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/editHomePage.dart';
 import 'package:budget/pages/transactionsSearchPage.dart';
 import 'package:budget/pages/walletDetailsPage.dart';
@@ -8,6 +9,7 @@ import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/framework/popupFramework.dart';
 import 'package:budget/widgets/keepAliveClientMixin.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
+import 'package:budget/widgets/periodCyclePicker.dart';
 import 'package:budget/widgets/radioItems.dart';
 import 'package:budget/widgets/transactionsAmountBox.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -40,10 +42,7 @@ class HomePageNetWorth extends StatelessWidget {
                         appStateSettings["netWorthSelectedWalletPks"],
                         isIncome: null,
                         allWallets: Provider.of<AllWallets>(context),
-                        startDate: appStateSettings["netWorthStartDate"] == null
-                            ? null
-                            : DateTime.parse(
-                                appStateSettings["netWorthStartDate"]),
+                        followCustomPeriodCycle: true,
                       ),
                       // getTextColor: (amount) => amount == 0
                       //     ? getColor(context, "black")
@@ -55,10 +54,7 @@ class HomePageNetWorth extends StatelessWidget {
                           database.watchTotalCountOfTransactionsInWallet(
                         appStateSettings["netWorthSelectedWalletPks"],
                         isIncome: null,
-                        startDate: appStateSettings["netWorthStartDate"] == null
-                            ? null
-                            : DateTime.parse(
-                                appStateSettings["netWorthStartDate"]),
+                        followCustomPeriodCycle: true,
                       ),
                       openPage: WalletDetailsPage(wallet: null),
                     ),
@@ -88,17 +84,6 @@ class _NetWorthSettingsState extends State<NetWorthSettings> {
       title: "net-worth-settings".tr(),
       child: Column(
         children: [
-          SelectStartDate(
-            initialDateTime: appStateSettings["netWorthStartDate"] == null
-                ? null
-                : DateTime.parse(appStateSettings["netWorthStartDate"]),
-            onSelected: (DateTime? dateTime) {
-              updateSettings("netWorthStartDate",
-                  dateTime == null ? null : dateTime.toString(),
-                  pagesNeedingRefresh: [], updateGlobalState: false);
-            },
-          ),
-          SizedBox(height: 10),
           CheckItems(
             triggerInitialOnChanged: false,
             minVerticalPadding: 0,
@@ -157,6 +142,11 @@ class _NetWorthSettingsState extends State<NetWorthSettings> {
                 amount: 0.1,
               );
             },
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 12),
+            child:
+                HorizontalBreakAbove(enabled: true, child: PeriodCyclePicker()),
           ),
         ],
       ),

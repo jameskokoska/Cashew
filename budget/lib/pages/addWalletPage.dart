@@ -118,6 +118,19 @@ class _AddWalletPageState extends State<AddWalletPage> {
     });
   }
 
+  TransactionWallet? walletInitial;
+
+  void showDiscardChangesPopupIfNotEditing() async {
+    TransactionWallet walletCreated = await createTransactionWallet();
+    walletCreated =
+        walletCreated.copyWith(dateCreated: walletInitial?.dateCreated);
+    if (walletCreated != walletInitial && widget.wallet == null) {
+      discardChangesPopup(context, forceShow: true);
+    } else {
+      Navigator.pop(context);
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -133,6 +146,11 @@ class _AddWalletPageState extends State<AddWalletPage> {
       selectedDecimals = widget.wallet!.decimals;
     }
     populateCurrencies();
+    if (widget.wallet == null) {
+      Future.delayed(Duration.zero, () async {
+        walletInitial = await createTransactionWallet();
+      });
+    }
   }
 
   @override
@@ -216,9 +234,9 @@ class _AddWalletPageState extends State<AddWalletPage> {
                 Row(
                   children: [
                     TextFont(
-                        text: currencies[key]["Symbol"] +
+                        text: (currencies[key]?["Symbol"] ?? "") +
                             " " +
-                            currencies[key]["Code"]),
+                            (currencies[key]?["Code"] ?? "")),
                   ],
                 )
               ],
@@ -237,7 +255,7 @@ class _AddWalletPageState extends State<AddWalletPage> {
             currentObject: await createTransactionWallet(),
           );
         } else {
-          discardChangesPopup(context, forceShow: true);
+          showDiscardChangesPopupIfNotEditing();
         }
         return false;
       },
@@ -263,7 +281,7 @@ class _AddWalletPageState extends State<AddWalletPage> {
                 currentObject: await createTransactionWallet(),
               );
             } else {
-              discardChangesPopup(context, forceShow: true);
+              showDiscardChangesPopupIfNotEditing();
             }
           },
           onDragDownToDismiss: () async {
@@ -274,7 +292,7 @@ class _AddWalletPageState extends State<AddWalletPage> {
                 currentObject: await createTransactionWallet(),
               );
             } else {
-              discardChangesPopup(context, forceShow: true);
+              showDiscardChangesPopupIfNotEditing();
             }
           },
           actions: [

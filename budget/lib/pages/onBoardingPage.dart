@@ -8,16 +8,21 @@ import 'package:budget/struct/languageMap.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/accountAndBackup.dart';
 import 'package:budget/widgets/button.dart';
+import 'package:budget/widgets/currencyPicker.dart';
+import 'package:budget/widgets/framework/popupFramework.dart';
 import 'package:budget/widgets/moreIcons.dart';
 import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
+import 'package:budget/widgets/selectAmount.dart';
 import 'package:budget/widgets/settingsContainers.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/viewAllTransactionsButton.dart';
+import 'package:drift/drift.dart' hide Column;
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import '../functions.dart';
 import 'package:budget/database/initializeDefaultDatabase.dart';
 
@@ -110,7 +115,7 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
                 : [
                     BudgetTransactionFilters.includeIncome,
                     BudgetTransactionFilters.addedToOtherBudget,
-                    BudgetTransactionFilters.addedToObjective
+                    BudgetTransactionFilters.addedToObjective,
                   ])
           ],
         ),
@@ -280,7 +285,7 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
               maxLines: 5,
             ),
           ),
-          SizedBox(height: 15),
+          SizedBox(height: 10),
           BudgetDetails(
             determineBottomButton: () {},
             setSelectedAmount: (amount, _) {
@@ -314,27 +319,74 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
             },
             initialSelectedEndDate: selectedEndDate,
           ),
-          Opacity(
-            opacity: 0.8,
-            child: ChoiceChip(
-              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-              selectedColor: appStateSettings["materialYou"]
-                  ? null
-                  : getColor(context, "lightDarkAccentHeavy"),
-              label: TextFont(
-                text: "include-income-onboarding-label".tr() +
-                    (selectedIncludeIncome == false ? "?" : ""),
-                fontSize: 15,
-              ),
-              selected: selectedIncludeIncome,
-              onSelected: (bool selected) {
-                setState(() {
-                  selectedIncludeIncome = selected;
-                });
-              },
-            ),
+          // This is pretty confusing, users can enable this later by editing the budget
+          // Opacity(
+          //   opacity: 0.8,
+          //   child: ChoiceChip(
+          //     materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+          //     selectedColor: appStateSettings["materialYou"]
+          //         ? null
+          //         : getColor(context, "lightDarkAccentHeavy"),
+          //     label: TextFont(
+          //       text: "include-income-onboarding-label".tr() +
+          //           (selectedIncludeIncome == false ? "?" : ""),
+          //       fontSize: 15,
+          //     ),
+          //     selected: selectedIncludeIncome,
+          //     onSelected: (bool selected) {
+          //       setState(() {
+          //         selectedIncludeIncome = selected;
+          //       });
+          //     },
+          //   ),
+          // ),
+
+          StreamBuilder<AllWallets>(
+            stream: database.watchAllWalletsIndexed(),
+            builder: (context, snapshot) {
+              TransactionWallet? primaryWallet = snapshot
+                  .data?.indexedByPk[appStateSettings["selectedWalletPk"]];
+              if (primaryWallet != null) {
+                return Padding(
+                  padding: const EdgeInsets.only(top: 15),
+                  child: LowKeyButton(
+                    onTap: () {
+                      openBottomSheet(
+                        context,
+                        PopupFramework(
+                          title: "select-primary-currency".tr(),
+                          subtitle: "select-primary-currency-description".tr(),
+                          child: Column(
+                            children: [
+                              CurrencyPicker(
+                                padding: EdgeInsets.zero,
+                                onSelected: (selectedCurrency) {
+                                  Navigator.pop(context);
+                                  database.createOrUpdateWallet(
+                                      primaryWallet.copyWith(
+                                          currency: Value(selectedCurrency)));
+                                },
+                                initialCurrency: primaryWallet.currency,
+                                onHasFocus: () {
+                                  // Disable scroll when focus - because iOS header height is different than that of Android.
+                                  // Future.delayed(Duration(milliseconds: 500), () {
+                                  //   addWalletPageKey.currentState?.scrollTo(250);
+                                  // });
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                    text: "change-currency".tr(),
+                  ),
+                );
+              }
+              return SizedBox.shrink();
+            },
           ),
-          SizedBox(height: 35),
+          SizedBox(height: 15),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 25),
             child: TextFont(

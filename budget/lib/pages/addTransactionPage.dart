@@ -48,6 +48,7 @@ import 'package:budget/widgets/framework/popupFramework.dart';
 import 'package:budget/struct/currencyFunctions.dart';
 import 'package:budget/widgets/animatedExpanded.dart';
 
+import '../widgets/listItem.dart';
 import '../widgets/outlinedButtonStacked.dart';
 import '../widgets/tappableTextEntry.dart';
 
@@ -480,6 +481,20 @@ class _AddTransactionPageState extends State<AddTransactionPage>
     return createdTransaction;
   }
 
+  Transaction? transactionInitial;
+
+  // If a change was made, show the discard changes popup
+  // When creating a new entry only
+  void showDiscardChangesPopupIfNotEditing() {
+    Transaction transactionCreated = createTransaction();
+    if (transactionCreated != transactionInitial &&
+        widget.transaction == null) {
+      discardChangesPopup(context, forceShow: true);
+    } else {
+      Navigator.pop(context);
+    }
+  }
+
   late TextEditingController _titleInputController;
   late TextEditingController _noteInputController;
 
@@ -583,6 +598,12 @@ class _AddTransactionPageState extends State<AddTransactionPage>
     if (widget.selectedIncome != null) {
       selectedIncome = widget.selectedIncome!;
     }
+    if (widget.transaction == null) {
+      Future.delayed(Duration.zero, () {
+        transactionInitial = createTransaction();
+      });
+    }
+
     setState(() {});
   }
 
@@ -842,14 +863,12 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                     ),
                                   );
                                 } else {
-                                  await addTransaction();
-                                  Navigator.pop(context);
                                   Navigator.pop(context);
                                 }
                               },
                               nextLabel: selectedCategory == null
                                   ? "select-category".tr()
-                                  : textAddTransaction,
+                                  : "set-amount".tr(),
                             ),
                           ),
                         );
@@ -1088,7 +1107,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
             currentObject: await createTransaction(),
           );
         } else {
-          discardChangesPopup(context, forceShow: true);
+          showDiscardChangesPopupIfNotEditing();
         }
         return false;
       },
@@ -1115,7 +1134,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                 currentObject: await createTransaction(),
               );
             } else {
-              discardChangesPopup(context, forceShow: true);
+              showDiscardChangesPopupIfNotEditing();
             }
           },
           onDragDownToDismiss: () async {
@@ -1126,7 +1145,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                 currentObject: await createTransaction(),
               );
             } else {
-              discardChangesPopup(context, forceShow: true);
+              showDiscardChangesPopupIfNotEditing();
             }
           },
           actions: [

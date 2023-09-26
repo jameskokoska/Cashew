@@ -38,6 +38,7 @@ class HomePagePieChart extends StatelessWidget {
                     null,
                     isIncome: isIncome,
                     allWallets: Provider.of<AllWallets>(context),
+                    followCustomPeriodCycle: true,
                   ),
                   builder: (context, totalSnapshot) {
                     double total = (totalSnapshot.data ?? 0).abs();
@@ -54,6 +55,7 @@ class HomePagePieChart extends StatelessWidget {
                         allTime: true,
                         walletPk: null,
                         isIncome: isIncome,
+                        followCustomPeriodCycle: true,
                       ),
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {

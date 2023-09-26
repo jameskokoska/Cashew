@@ -159,6 +159,19 @@ class _AddCategoryPageState extends State<AddCategoryPage>
     );
   }
 
+  TransactionCategory? categoryInitial;
+
+  void showDiscardChangesPopupIfNotEditing() async {
+    TransactionCategory categoryCreated = await createTransactionCategory();
+    categoryCreated =
+        categoryCreated.copyWith(dateCreated: categoryInitial?.dateCreated);
+    if (categoryCreated != categoryInitial && widget.category == null) {
+      discardChangesPopup(context, forceShow: true);
+    } else {
+      Navigator.pop(context);
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -195,6 +208,11 @@ class _AddCategoryPageState extends State<AddCategoryPage>
     setState(() {
       canAddCategory = false;
     });
+    if (widget.category == null) {
+      Future.delayed(Duration.zero, () async {
+        categoryInitial = await createTransactionCategory();
+      });
+    }
   }
 
   @override
@@ -213,7 +231,7 @@ class _AddCategoryPageState extends State<AddCategoryPage>
               previousObject: widget.category!,
               currentObject: await createTransactionCategory());
         } else {
-          discardChangesPopup(context, forceShow: true);
+          showDiscardChangesPopupIfNotEditing();
         }
         return false;
       },
@@ -238,7 +256,7 @@ class _AddCategoryPageState extends State<AddCategoryPage>
                   previousObject: widget.category!,
                   currentObject: await createTransactionCategory());
             } else {
-              discardChangesPopup(context, forceShow: true);
+              showDiscardChangesPopupIfNotEditing();
             }
           },
           onDragDownToDismiss: () async {
@@ -247,7 +265,7 @@ class _AddCategoryPageState extends State<AddCategoryPage>
                   previousObject: widget.category!,
                   currentObject: await createTransactionCategory());
             } else {
-              discardChangesPopup(context, forceShow: true);
+              showDiscardChangesPopupIfNotEditing();
             }
           },
           actions: [

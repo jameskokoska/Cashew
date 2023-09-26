@@ -1,5 +1,17 @@
 [
   {
+    "CountryName": "United Arab Emirates",
+    "Currency": "Dirham",
+    "Code": "AED",
+    "Symbol": "د.إ"
+  },
+  {
+    "CountryName": "Kenya Shilling",
+    "Currency": "Kenya Shilling",
+    "Code": "KES",
+    "Symbol": "KES"
+  },
+  {
     "Flag": "https://www.currencyremitapp.com/wp-content/themes/currencyremitapp/images/countryimages/albania.png",
     "CountryName": "Albania",
     "Currency": "Lek",

@@ -39,6 +39,7 @@ import 'dart:async';
 import 'package:budget/colors.dart';
 import 'package:provider/provider.dart';
 
+import '../widgets/listItem.dart';
 import '../widgets/outlinedButtonStacked.dart';
 import '../widgets/sliverStickyLabelDivider.dart';
 import '../widgets/tappableTextEntry.dart';
@@ -201,6 +202,19 @@ class _AddObjectivePageState extends State<AddObjectivePage>
     );
   }
 
+  Objective? objectiveInitial;
+
+  void showDiscardChangesPopupIfNotEditing() async {
+    Objective objectiveCreated = await createObjective();
+    objectiveCreated =
+        objectiveCreated.copyWith(dateCreated: objectiveInitial?.dateCreated);
+    if (objectiveCreated != objectiveInitial && widget.objective == null) {
+      discardChangesPopup(context, forceShow: true);
+    } else {
+      Navigator.pop(context);
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -241,6 +255,11 @@ class _AddObjectivePageState extends State<AddObjectivePage>
         }
       });
     }
+    if (widget.objective == null) {
+      Future.delayed(Duration.zero, () async {
+        objectiveInitial = await createObjective();
+      });
+    }
   }
 
   @override
@@ -273,7 +292,7 @@ class _AddObjectivePageState extends State<AddObjectivePage>
             currentObject: await createObjective(),
           );
         } else {
-          discardChangesPopup(context, forceShow: true);
+          showDiscardChangesPopupIfNotEditing();
         }
         return false;
       },
@@ -298,7 +317,7 @@ class _AddObjectivePageState extends State<AddObjectivePage>
                 currentObject: await createObjective(),
               );
             } else {
-              discardChangesPopup(context, forceShow: true);
+              showDiscardChangesPopupIfNotEditing();
             }
           },
           onDragDownToDismiss: () async {
@@ -309,7 +328,7 @@ class _AddObjectivePageState extends State<AddObjectivePage>
                 currentObject: await createObjective(),
               );
             } else {
-              discardChangesPopup(context, forceShow: true);
+              showDiscardChangesPopupIfNotEditing();
             }
           },
           actions: [

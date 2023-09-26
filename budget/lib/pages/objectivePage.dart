@@ -152,7 +152,7 @@ class _ObjectivePageContentState extends State<_ObjectivePageContent> {
                 items: [
                   DropdownItemMenu(
                     id: "edit-goals",
-                    label: "edit-goal".tr(),
+                    label: "edit-goals".tr(),
                     icon: appStateSettings["outlinedIcons"]
                         ? Icons.edit_outlined
                         : Icons.edit_rounded,

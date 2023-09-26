@@ -1,6 +1,7 @@
 import 'package:budget/database/tables.dart';
 import 'package:budget/main.dart';
 import 'package:budget/pages/subscriptionsPage.dart';
+import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/globalSnackBar.dart';
 import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/openPopup.dart';
@@ -135,11 +136,21 @@ String convertToMoney(
     locale: Platform.localeName,
     symbol: getCurrencyString(allWallets, currencyKey: currencyKey),
   );
+  // If there is no currency symbol, use the currency code
+  if (getCurrencyString(allWallets, currencyKey: currencyKey) == "") {
+    addCurrencyName = true;
+  }
   String formatOutput = currency.format(amount).trim();
-  if (addCurrencyName == true)
+  if (addCurrencyName == true && currencyKey != null) {
+    formatOutput = formatOutput + " " + currencyKey.toUpperCase();
+  } else if (addCurrencyName == true) {
     formatOutput = formatOutput +
         " " +
-        (currencyKey ?? "Missing Currency Key").toUpperCase();
+        (allWallets.indexedByPk[appStateSettings["selectedWalletPk"]]
+                    ?.currency ??
+                "")
+            .toUpperCase();
+  }
   return formatOutput;
   // if (finalNumber != null &&
   //     !finalNumber
@@ -203,26 +214,18 @@ String getWordedDateShort(
   DateTime date, {
   includeYear = false,
   showTodayTomorrow = true,
-  newLineYear = false,
-  newLineDay = false,
 }) {
   if (showTodayTomorrow && checkYesterdayTodayTomorrow(date) != false) {
     return checkYesterdayTodayTomorrow(date);
   }
-  if (includeYear && newLineYear) {
-    return DateFormat(
-            'MMM d\nyyyy', navigatorKey.currentContext?.locale.toString())
-        .format(date);
-  } else if (includeYear) {
-    return DateFormat(
-            'MMM d, yyyy', navigatorKey.currentContext?.locale.toString())
-        .format(date);
-  } else if (newLineDay) {
-    return DateFormat('MMM \nd', navigatorKey.currentContext?.locale.toString())
-        .format(date);
+
+  final locale = navigatorKey.currentContext?.locale.toString();
+
+  if (includeYear) {
+    return DateFormat.yMMMd(locale).format(date);
+  } else {
+    return DateFormat.MMMd(locale).format(date);
   }
-  return DateFormat('MMM d', navigatorKey.currentContext?.locale.toString())
-      .format(date);
 }
 
 // e.g. Today/Yesterday/Tomorrow/Tuesday/ March 15
@@ -231,26 +234,26 @@ String getWordedDateShortMore(DateTime date,
   if (checkYesterdayTodayTomorrow(date) != false) {
     if (includeTimeIfToday) {
       return checkYesterdayTodayTomorrow(date) +
-          DateFormat(
-                  ' - h:mm aaa', navigatorKey.currentContext?.locale.toString())
+          " - " +
+          DateFormat('h:mm aaa', navigatorKey.currentContext?.locale.toString())
               .format(date);
     } else {
       return checkYesterdayTodayTomorrow(date);
     }
   }
+  final locale = navigatorKey.currentContext?.locale.toString();
   if (includeYear) {
-    return DateFormat(
-            'MMMM d, yyyy', navigatorKey.currentContext?.locale.toString())
-        .format(date);
+    return DateFormat.MMMMd(locale).format(date) +
+        ", " +
+        DateFormat.y(locale).format(date);
   } else if (includeTime) {
-    return DateFormat('MMMM d, yyyy - h:mm aaa',
-            navigatorKey.currentContext?.locale.toString())
-        .format(date);
+    return DateFormat.MMMMd(locale).format(date) +
+        ", " +
+        DateFormat.y(locale).format(date) +
+        " - " +
+        DateFormat('h:mm aaa', locale).format(date);
   }
-  {
-    return DateFormat('MMMM d', navigatorKey.currentContext?.locale.toString())
-        .format(date);
-  }
+  return DateFormat.MMMMd(locale).format(date);
 }
 
 String getTimeAgo(DateTime time) {
@@ -379,6 +382,7 @@ BudgetReoccurence mapRecurrence(String? recurrenceString) {
 
 //get the current period of a repetitive budget
 DateTimeRange getBudgetDate(Budget budget, DateTime currentDate) {
+  budget = database.limitBudgetPeriod(budget);
   if (budget.reoccurrence == BudgetReoccurence.custom) {
     return DateTimeRange(start: budget.startDate, end: budget.endDate);
   } else if (budget.reoccurrence == BudgetReoccurence.daily ||

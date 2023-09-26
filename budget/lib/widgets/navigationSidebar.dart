@@ -380,8 +380,8 @@ class SidebarClock extends StatelessWidget {
                       TextFont(
                         textColor: getColor(context, "black").withOpacity(0.5),
                         fontSize: 18,
-                        text: DateFormat('MMMM d, y', context.locale.toString())
-                            .format(now),
+                        text: getWordedDateShortMore(DateTime.now(),
+                            includeYear: true),
                       ),
                     ],
                   );
