@@ -36,7 +36,7 @@
 
 ---
 
-Cashew is a full-fledged, feature-rich application designed to empower users in managing their finances effectively. Built using Flutter - with Drift's SQL package, and Firebase at its core - this app offers a seamless and intuitive user experience across various devices. Development started in September 2021.
+Cashew is a full-fledged, feature-rich application designed to empower users in managing their finances effectively. Built using Flutter - with Drift's SQL package, and Firebase - this app offers a seamless and intuitive user experience across various devices. Development started in September 2021.
 
 ---
 
@@ -44,7 +44,7 @@ Cashew is a full-fledged, feature-rich application designed to empower users in 
 Check out the [official website](https://cashewapp.web.app/)!
 
 
-This application is available on [App Store](https://apps.apple.com/us/app/cashew-expense-budget-tracker/id6463662930), [Google Play](https://play.google.com/store/apps/details?id=com.budget.tracker_app), [GitHub](https://github.com/jameskokoska/Cashew/releases/) and as a [Progressive Web App (PWA)](https://budget-track.web.app/).
+This application is available on the [App Store](https://apps.apple.com/us/app/cashew-expense-budget-tracker/id6463662930), [Google Play](https://play.google.com/store/apps/details?id=com.budget.tracker_app), [GitHub](https://github.com/jameskokoska/Cashew/releases/) and as a [Progressive Web App (PWA)](https://budget-track.web.app/).
 
 ### Changelog
 
@@ -57,6 +57,7 @@ Changes and progress about development is all heavily documented in GitHub [comm
 - Added Budgets: Selectively add transactions to specific budgets, allowing you to focus on specific expense categories.
 - Category Spending Limits per Budget: Set limits for each category within a budget, ensuring responsible spending.
 - Past Budget History Viewing: Analyze your spending habits over time by accessing past budget history, enabling comparison and tracking of financial progress.
+- Goals: Create spending and saving goals and put transactions towards different purchases or savings. Track your progress towards achieving your financial goals.
 
 ### 💰 Transaction Management
 - Support for Different Transaction Types: Categorize transactions effectively based on types such as upcoming, subscription, repeating, debts (borrowed), and credit (lent). Each type behaves in certain ways in the interface. Pay your upcoming transactions when you're ready, or mark your lent out transactions as collected.
