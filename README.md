@@ -146,9 +146,23 @@ Note: required Firebase.
 * `adb connect <IP>`
 * Get the phone's IP by going to `About Phone` > `Status Information` > `IP Address`
 
-### Update Database Tables
-* Run `dart run build_runner build`
-* Don't forget to bump schema version
+### Migrate Database
+1. Make any database changes to the schema and tables
+2. Bump the schema version
+    * Change `int schemaVersionGlobal = ...+1` in `tables.dart`
+3. Make sure you are in application root directory
+    * `cd .\budget\`
+4. Generate database code
+    * Run `dart run build_runner build`
+5. Export the new schema
+    * Generate schema dump for the newly created schema
+    * Replace `[schemaVersion]` in the command below with the value of `schemaVersionGlobal`
+    * Run `dart run drift_dev schema dump lib\database\tables.dart drift_schemas//drift_schema_v[schemaVersion].json`
+    * Read more: https://drift.simonbinder.eu/docs/advanced-features/migrations/#exporting-the-schema
+6. Generate step-by-step migrations
+    * Run `dart run drift_dev schema steps drift_schemas/ lib\database\schema_versions.dart`
+7. Implement migration strategy 
+    * Edit `await stepByStep(...)` function in `tables.dart` and add the migration strategy for the new version migration
 
 ### Get Platform
 * Use `getPlatform()` from `functions.dart`
