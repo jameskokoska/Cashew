@@ -12,6 +12,7 @@ import 'package:budget/widgets/animatedExpanded.dart';
 import 'package:budget/widgets/dropdownSelect.dart';
 import 'package:budget/widgets/framework/popupFramework.dart';
 import 'package:budget/widgets/incomeExpenseTabSelector.dart';
+import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
@@ -188,6 +189,7 @@ class _WalletDetailsPageState extends State<WalletDetailsPage> {
                           ),
                         );
                         setState(() {});
+                        homePageStateKey.currentState?.refreshState();
                       },
                     ),
                   ],

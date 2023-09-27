@@ -39,4 +39,8 @@ Set<String> supportedLanguagesSet = {
   "te",
   "uk",
   "ur",
+  "sr",
 };
+
+// Language names can be found in 
+// /budget/assets/static/language-names.json

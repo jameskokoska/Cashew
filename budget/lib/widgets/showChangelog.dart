@@ -15,6 +15,9 @@ import 'listItem.dart';
 
 String getChangelogString() {
   return """
+    < 4.4.8
+    Serbian language support
+    Homepage reloads when period cycle is selected on all spending page
     < 4.4.7
     Added FAB to wallet details page
     Fixed line graph history in wallet details page when custom period selected
