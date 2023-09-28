@@ -44,7 +44,7 @@ Cashew is a full-fledged, feature-rich application designed to empower users in 
 Check out the [official website](https://cashewapp.web.app/)!
 
 
-This application is available on the [App Store](https://apps.apple.com/us/app/cashew-expense-budget-tracker/id6463662930), [Google Play](https://play.google.com/store/apps/details?id=com.budget.tracker_app), [GitHub](https://github.com/jameskokoska/Cashew/releases/) and as a [Progressive Web App (PWA)](https://budget-track.web.app/).
+This application is available on the [App Store](https://apps.apple.com/us/app/cashew-expense-budget-tracker/id6463662930), [Google Play](https://play.google.com/store/apps/details?id=com.budget.tracker_app), [GitHub](https://github.com/jameskokoska/Cashew/releases/) and as a [Web App (PWA)](https://budget-track.web.app/).
 
 ### Changelog
 
@@ -90,7 +90,7 @@ Changes and progress about development is all heavily documented in GitHub [comm
 ### 💿 Smart Automation
 - Notifications: Stay informed about important financial events and receive timely reminders for budget goals, transactions, and upcoming due dates.
 - Import CSV Files: Seamlessly import financial data by uploading CSV files, facilitating a smooth transition from other applications or platforms.
-- Import Google Sheets: Seamlessly import Google Sheets tables, quickly importing many trasnactions from a spreadsheet.
+- Import Google Sheets: Seamlessly import Google Sheets tables, quickly importing many transactions from a spreadsheet.
 - ~~Unsupported: Auto Email Transaction Parsing (Beta): Automatically parse transaction details from email receipts, making expense tracking effortless and efficient.~~
 
 
@@ -103,18 +103,18 @@ This repository contains, bundled in, modified versions of the discontinued pack
 The translations are available here: https://docs.google.com/spreadsheets/d/1QQqt28cmrby6JqxLm-oxUXCuM3alniLJ6IRhcPJDOtk/edit?usp=sharing. If you would like to help translate, please reach out on email: dapperappdeveloper@gmail.com
 
 ### To Update Translations
-1. Run `budget\assets\translations\generate-translations.py``
+1. Run `budget\assets\translations\generate-translations.py`
 2. Restart the application
 
 ## Developer Notes
 
 ### Android Release
-* To build an app-bundle Android release, run `flutter build appbundle --release`.
+* To build an app-bundle Android release, run `flutter build appbundle --release`
 
 Note: required Android SDK.
 
 ### iOS Release
-* To build an IPA iOS release, run `flutter build ipa`.
+* To build an IPA iOS release, run `flutter build ipa`
 
 Note: requires MacOS.
 
