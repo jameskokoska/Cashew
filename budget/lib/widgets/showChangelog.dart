@@ -26,6 +26,7 @@ String getChangelogString() {
     Hot fix for default wallet creation database lock
     Fix SQL file selection on iOS limitation
     Database corruption detection (if incorrect file imported)
+    Changelog version not getting updated
     < 4.5.0
     Can enable/disable homepage welcome banner
     Feedback popup only shown if changelog is not
@@ -1502,7 +1503,6 @@ bool showChangelog(
   bool majorChangesOnly = false,
   Widget? extraWidget,
 }) {
-  String version = packageInfoGlobal.version;
   List<Widget>? changelogPoints = getChangelogPointsWidgets(
     context,
     forceShow: forceShow,
@@ -1510,6 +1510,14 @@ bool showChangelog(
         Localizations.localeOf(context).toString().toLowerCase() != "en"
             ? true
             : majorChangesOnly,
+  );
+
+  String version = packageInfoGlobal.version;
+  updateSettings(
+    "lastLoginVersion",
+    version,
+    pagesNeedingRefresh: [],
+    updateGlobalState: false,
   );
 
   //Don't show changelog on first login and only show if english, unless forced
@@ -1534,13 +1542,6 @@ bool showChangelog(
     );
     return true;
   }
-
-  updateSettings(
-    "lastLoginVersion",
-    version,
-    pagesNeedingRefresh: [],
-    updateGlobalState: false,
-  );
   return false;
 }
 
