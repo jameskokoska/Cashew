@@ -3568,4 +3568,52 @@ List<IconForCategory> iconObjects = [
     ],
     mostLikelyCategoryName: "Tablet",
   ),
+  IconForCategory(
+    icon: "exchange-arrows-circle.png",
+    tags: [
+      "exchange-arrows-circle",
+      "arrows",
+      "circle",
+      "rotate",
+      "exchange",
+      "circular",
+      "refresh",
+      "reload",
+      "loop",
+      "rotation"
+    ],
+    mostLikelyCategoryName: "Rotation",
+  ),
+  IconForCategory(
+    icon: "exchange-arrows.png",
+    tags: [
+      "exchange-arrows",
+      "arrows",
+      "exchange",
+      "swap",
+      "switch",
+      "transfer",
+      "change",
+      "direction",
+      "trade",
+      "transaction"
+    ],
+    mostLikelyCategoryName: "Exchange",
+  ),
+  IconForCategory(
+    icon: "back-undo-arrow.png",
+    tags: [
+      "back-undo-arrow",
+      "arrow",
+      "undo",
+      "back",
+      "backward",
+      "reverse",
+      "return",
+      "go back",
+      "previous",
+      "retreat"
+    ],
+    mostLikelyCategoryName: "Undo",
+  ),
 ];

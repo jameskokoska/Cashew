@@ -5,6 +5,7 @@ import 'package:budget/functions.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/material/icons.dart';
 import 'package:flutter/src/material/theme.dart';
@@ -52,8 +53,7 @@ class TransactionEntryNote extends StatelessWidget {
               fontFamilyFallback: ['Inter'],
             ),
             triggerMode: TooltipTriggerMode.tap,
-            showDuration: getIsFullScreen(context) == false ||
-                    getPlatform() != PlatformOS.web
+            showDuration: getIsFullScreen(context) == false || kIsWeb == false
                 ? Duration(milliseconds: 10000)
                 : Duration(milliseconds: 100),
             message: transaction.note,

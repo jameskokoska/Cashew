@@ -168,7 +168,9 @@
         }
       }).then(function(engineInitializer) {
         loading.classList.add('main_done');
-        return engineInitializer.initializeEngine();
+        return engineInitializer.initializeEngine({
+          useColorEmoji: true,
+        });
       }).then(function(appRunner) {
         loading.classList.add('init_done');
         return appRunner.runApp();

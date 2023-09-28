@@ -3,6 +3,11 @@ import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
 import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/detailedChangelogPage.dart';
+import 'package:budget/pages/editCategoriesPage.dart';
+import 'package:budget/pages/editHomePage.dart';
+import 'package:budget/pages/objectivesListPage.dart';
+import 'package:budget/pages/settingsPage.dart';
+import 'package:budget/pages/walletDetailsPage.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
@@ -15,6 +20,18 @@ import 'listItem.dart';
 
 String getChangelogString() {
   return """
+    < 4.5.0
+    Can enable/disable homepage welcome banner
+    Feedback popup only shown if changelog is not
+    Backup reminder popup if not logged in
+    Fixed translations for import/export
+    Added description for settings option
+    Added arrow icons
+    Fixed CSV export on web
+    Fixed import SQL file restart popup
+    Import and Export DB working on web and Android
+    Enabled color emojis on web
+    Some major changes can be tapped bringing the user to the related page 
     < 4.4.9
     Import and export all data (SQL DB) options
     New backups section in settings
@@ -1399,6 +1416,9 @@ Map<String, List<MajorChanges>> getMajorChanges() {
           "major-change-3-1".tr(),
           "major-change-3-2".tr(),
         ],
+        onTap: (context) {
+          pushRoute(context, ObjectivesListPage(backButton: true));
+        },
       ),
       MajorChanges(
         "major-change-4".tr(),
@@ -1407,6 +1427,9 @@ Map<String, List<MajorChanges>> getMajorChanges() {
           "major-change-4-1".tr(),
           "major-change-4-2".tr(),
         ],
+        onTap: (context) {
+          pushRoute(context, EditHomePage());
+        },
       ),
       MajorChanges(
         "major-change-5".tr(),
@@ -1414,6 +1437,9 @@ Map<String, List<MajorChanges>> getMajorChanges() {
         info: [
           "major-change-5-1".tr(),
         ],
+        onTap: (context) {
+          pushRoute(context, EditCategoriesPage());
+        },
       ),
       MajorChanges(
         "major-change-6".tr(),
@@ -1430,21 +1456,46 @@ Map<String, List<MajorChanges>> getMajorChanges() {
         info: [
           "major-change-7-1".tr(),
         ],
+        onTap: (context) {
+          pushRoute(context, WalletDetailsPage(wallet: null));
+        },
       ),
       MajorChanges(
         "major-change-8".tr(),
         Icons.price_change_rounded,
       ),
     ],
+    "< 4.5.0": [
+      MajorChanges(
+        "major-change-9".tr(),
+        Icons.file_open_rounded,
+        info: [
+          "major-change-9-1".tr(),
+        ],
+        onTap: (context) {
+          pushRoute(context, SettingsPageFramework());
+        },
+      ),
+      MajorChanges(
+        "major-change-10".tr(),
+        Icons.edit_rounded,
+        info: [
+          "major-change-10-1".tr(),
+        ],
+        onTap: (context) {
+          pushRoute(context, EditHomePage());
+        },
+      ),
+    ],
   };
 }
 
-Future<void> showChangelog(
+bool showChangelog(
   BuildContext context, {
   bool forceShow = false,
   bool majorChangesOnly = false,
   Widget? extraWidget,
-}) async {
+}) {
   String version = packageInfoGlobal.version;
   List<Widget>? changelogPoints = getChangelogPointsWidgets(
     context,
@@ -1475,6 +1526,7 @@ Future<void> showChangelog(
       ),
       showScrollbar: true,
     );
+    return true;
   }
 
   updateSettings(
@@ -1483,6 +1535,7 @@ Future<void> showChangelog(
     pagesNeedingRefresh: [],
     updateGlobalState: false,
   );
+  return false;
 }
 
 List<Widget>? getChangelogPointsWidgets(BuildContext context,
@@ -1503,8 +1556,9 @@ List<Widget>? getChangelogPointsWidgets(BuildContext context,
       string = string.replaceFirst("    ", ""); // remove the indent
       if (string.startsWith("< ")) {
         if (forceShow) {
-          changelogPoints.addAll(
-              getAllMajorChangeWidgetsForVersion(string, majorChanges) ?? []);
+          changelogPoints.addAll(getAllMajorChangeWidgetsForVersion(
+                  context, string, majorChanges) ??
+              []);
         }
 
         versionBookmark = parseVersionInt(string.replaceAll("< ", ""));
@@ -1513,7 +1567,8 @@ List<Widget>? getChangelogPointsWidgets(BuildContext context,
         }
 
         majorChangelogPointsAtTop.addAll(
-            getAllMajorChangeWidgetsForVersion(string, majorChanges) ?? []);
+            getAllMajorChangeWidgetsForVersion(context, string, majorChanges) ??
+                []);
 
         if (majorChangesOnly == true) {
           continue;
@@ -1588,14 +1643,15 @@ String getVersionString() {
 }
 
 class MajorChanges {
-  MajorChanges(this.title, this.icon, {this.info});
+  MajorChanges(this.title, this.icon, {this.info, this.onTap});
 
   String title;
   IconData icon;
   List<String>? info;
+  Function(BuildContext context)? onTap;
 }
 
-List<Widget>? getAllMajorChangeWidgetsForVersion(
+List<Widget>? getAllMajorChangeWidgetsForVersion(BuildContext context,
     String version, Map<String, List<MajorChanges>> majorChanges) {
   if (majorChanges[version] == null) return null;
   return [
@@ -1616,7 +1672,9 @@ List<Widget>? getAllMajorChangeWidgetsForVersion(
                 padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
                 text: majorChange.title.tr(),
                 iconData: majorChange.icon,
-                onTap: () {},
+                onTap: majorChange.onTap == null
+                    ? null
+                    : () => majorChange.onTap!(context),
                 afterWidget: majorChange.info == null
                     ? null
                     : Column(

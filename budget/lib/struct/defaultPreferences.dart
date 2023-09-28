@@ -44,6 +44,7 @@ Future<Map<String, dynamic>> getDefaultPreferences() async {
     "showSpendingGraph": true,
     "showPieChart": false,
     "showHeatMap": false,
+    "showUsernameWelcomeBanner": true,
     "homePageOrder": [
       "wallets",
       "budgets",
@@ -79,6 +80,7 @@ Future<Map<String, dynamic>> getDefaultPreferences() async {
     "lastLoginVersion": "",
     "numLogins": 0,
     "submittedFeedback": false,
+    "canShowBackupReminderPopup": true,
     "notifications": true,
     "notificationHour": 20,
     "notificationMinute": 0,

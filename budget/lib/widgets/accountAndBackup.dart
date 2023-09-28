@@ -226,6 +226,64 @@ Future<bool> refreshGoogleSignIn() async {
   return true;
 }
 
+Future<bool> signInAndSync(BuildContext context,
+    {required dynamic Function() next}) async {
+  dynamic result = true;
+  if (getPlatform() == PlatformOS.isIOS &&
+      navigatorKey.currentContext != null) {
+    result = await openPopup(
+      navigatorKey.currentContext!,
+      icon: appStateSettings["outlinedIcons"]
+          ? Icons.badge_outlined
+          : Icons.badge_rounded,
+      title: "backups".tr(),
+      description: "google-drive-backup-disclaimer".tr(),
+      onSubmitLabel: "continue".tr(),
+      onSubmit: () {
+        Navigator.pop(navigatorKey.currentContext!, true);
+      },
+      onCancel: () {
+        Navigator.pop(navigatorKey.currentContext!);
+      },
+      onCancelLabel: "cancel".tr(),
+    );
+  }
+
+  if (result != true) return false;
+  loadingIndeterminateKey.currentState!.setVisibility(true);
+  try {
+    await signInGoogle(
+      context: context,
+      waitForCompletion: false,
+      drivePermissions: true,
+      next: next,
+    );
+    if (appStateSettings["username"] == "" && googleUser != null) {
+      updateSettings("username", googleUser?.displayName ?? "",
+          pagesNeedingRefresh: [0], updateGlobalState: false);
+    }
+    if (googleUser != null) {
+      loadingIndeterminateKey.currentState!.setVisibility(true);
+      await syncData(context);
+      loadingIndeterminateKey.currentState!.setVisibility(true);
+      await syncPendingQueueOnServer();
+      loadingIndeterminateKey.currentState!.setVisibility(true);
+      await getCloudBudgets();
+      loadingIndeterminateKey.currentState!.setVisibility(true);
+      await createBackupInBackground(context);
+    } else {
+      throw ("cannot sync data - user not logged in");
+    }
+    loadingIndeterminateKey.currentState!.setVisibility(false);
+    return true;
+  } catch (e) {
+    print("Error syncing data after login!");
+    print(e.toString());
+    loadingIndeterminateKey.currentState!.setVisibility(false);
+    return false;
+  }
+}
+
 Future<void> createBackupInBackground(context) async {
   if (appStateSettings["hasSignedIn"] == false) return;
   if (errorSigningInDuringCloud == true) return;
@@ -572,72 +630,30 @@ class GoogleAccountLoginButton extends StatefulWidget {
 }
 
 class _GoogleAccountLoginButtonState extends State<GoogleAccountLoginButton> {
+  loginWithSync() {
+    signInAndSync(
+      widget.navigationSidebarButton
+          ? navigatorKey.currentContext ?? context
+          : context,
+      next: () {
+        setState(() {});
+        if (widget.navigationSidebarButton) {
+          if (widget.onTap != null) widget.onTap!();
+        } else {
+          // Navigator.push(
+          //   context,
+          //   MaterialPageRoute(
+          //     builder: (context) => AccountsPage(),
+          //   ),
+          // );
+          pushRoute(context, AccountsPage());
+        }
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    Function login = () async {
-      dynamic result = true;
-      if (getPlatform() == PlatformOS.isIOS &&
-          navigatorKey.currentContext != null) {
-        result = await openPopup(
-          navigatorKey.currentContext!,
-          icon: appStateSettings["outlinedIcons"]
-              ? Icons.badge_outlined
-              : Icons.badge_rounded,
-          title: "backups".tr(),
-          description: "google-drive-backup-disclaimer".tr(),
-          onSubmitLabel: "continue".tr(),
-          onSubmit: () {
-            Navigator.pop(navigatorKey.currentContext!, true);
-          },
-          onCancel: () {
-            Navigator.pop(navigatorKey.currentContext!);
-          },
-          onCancelLabel: "cancel".tr(),
-        );
-      }
-
-      if (result != true) return;
-      loadingIndeterminateKey.currentState!.setVisibility(true);
-      try {
-        await signInGoogle(
-            context: widget.navigationSidebarButton
-                ? navigatorKey.currentContext
-                : context,
-            waitForCompletion: false,
-            drivePermissions: true,
-            next: () {
-              setState(() {});
-              if (widget.navigationSidebarButton) {
-                if (widget.onTap != null) widget.onTap!();
-              } else {
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(
-                //     builder: (context) => AccountsPage(),
-                //   ),
-                // );
-                pushRoute(context, AccountsPage());
-              }
-            });
-        if (appStateSettings["username"] == "" && googleUser != null) {
-          updateSettings("username", googleUser?.displayName ?? "",
-              pagesNeedingRefresh: [0], updateGlobalState: false);
-        }
-        if (googleUser != null) {
-          loadingIndeterminateKey.currentState!.setVisibility(true);
-          await syncData(context);
-          loadingIndeterminateKey.currentState!.setVisibility(true);
-          await syncPendingQueueOnServer();
-          loadingIndeterminateKey.currentState!.setVisibility(true);
-          await getCloudBudgets();
-          loadingIndeterminateKey.currentState!.setVisibility(true);
-          await createBackupInBackground(context);
-        }
-      } catch (e) {
-        print(e.toString());
-      }
-      loadingIndeterminateKey.currentState!.setVisibility(false);
-    };
     if (widget.navigationSidebarButton == true) {
       return AnimatedSwitcher(
         duration: Duration(milliseconds: 600),
@@ -648,18 +664,14 @@ class _GoogleAccountLoginButtonState extends State<GoogleAccountLoginButton> {
                     label: "backup".tr(),
                     icon: MoreIcons.google_drive,
                     iconScale: 0.87,
-                    onTap: () async {
-                      login();
-                    },
+                    onTap: loginWithSync,
                     isSelected: false,
                   )
                 : NavigationSidebarButton(
                     key: ValueKey("login"),
                     label: "login".tr(),
                     icon: MoreIcons.google,
-                    onTap: () async {
-                      login();
-                    },
+                    onTap: loginWithSync,
                     isSelected: false,
                   )
             : getPlatform() == PlatformOS.isIOS
@@ -696,7 +708,7 @@ class _GoogleAccountLoginButtonState extends State<GoogleAccountLoginButton> {
                 ? SettingsContainer(
                     isOutlined: widget.isOutlinedButton,
                     onTap: () async {
-                      login();
+                      loginWithSync();
                     },
                     title: widget.forceButtonName ?? "backup".tr(),
                     icon: MoreIcons.google_drive,
@@ -705,7 +717,7 @@ class _GoogleAccountLoginButtonState extends State<GoogleAccountLoginButton> {
                 : SettingsContainer(
                     isOutlined: widget.isOutlinedButton,
                     onTap: () async {
-                      login();
+                      loginWithSync();
                     },
                     title: widget.forceButtonName ?? "login".tr(),
                     icon: widget.forceButtonName == null
@@ -1426,7 +1438,7 @@ Future<bool> saveDriveFileToDevice(
           .replaceAll(":", "-") +
       ".sqlite";
 
-  if (kIsWeb && getPlatform() == PlatformOS.web) {
+  if (kIsWeb) {
     try {
       String base64String = base64Encode(dataStore);
       AnchorElement anchor = AnchorElement(
@@ -1482,4 +1494,38 @@ Future<bool> saveDriveFileToDevice(
     print("Error saving file to device: " + e.toString());
     return false;
   }
+}
+
+bool openBackupReminderPopupCheck(BuildContext context) {
+  if ((appStateSettings["currentUserEmail"] == null ||
+          appStateSettings["currentUserEmail"] == "") &&
+      ((appStateSettings["numLogins"] + 1) % 7 == 0) &&
+      appStateSettings["canShowBackupReminderPopup"] == true) {
+    openPopup(
+      context,
+      icon: MoreIcons.google_drive,
+      iconScale: 0.9,
+      title: "backup-your-data-reminder".tr(),
+      description: "backup-your-data-reminder-description".tr() +
+          " " +
+          "google-drive".tr(),
+      onSubmitLabel: "backup".tr().capitalizeFirst,
+      onSubmit: () async {
+        Navigator.pop(context);
+        await signInAndSync(context, next: () {});
+      },
+      onCancelLabel: "never".tr().capitalizeFirst,
+      onCancel: () {
+        Navigator.pop(context);
+        updateSettings("canShowBackupReminderPopup", false,
+            updateGlobalState: false);
+      },
+      onExtraLabel: "later".tr().capitalizeFirst,
+      onExtra: () {
+        Navigator.pop(context);
+      },
+    );
+    return true;
+  }
+  return false;
 }

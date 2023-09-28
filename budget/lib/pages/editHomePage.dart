@@ -462,6 +462,15 @@ class _EditHomePageState extends State<EditHomePage> {
     super.initState();
   }
 
+  toggleSwitch(String key) {
+    editHomePageItems[key]
+        ?.onSwitched(!(editHomePageItems[key]?.isEnabled ?? false));
+    setState(() {
+      editHomePageItems[key]?.isEnabled =
+          !(editHomePageItems[key]?.isEnabled ?? false);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -476,6 +485,22 @@ class _EditHomePageState extends State<EditHomePage> {
         dragDownToDismissEnabled: dragDownToDismissEnabled,
         title: "edit-home".tr(),
         slivers: [
+          SliverToBoxAdapter(
+            child: HomePageEditRowEntryUsername(
+              iconData: appStateSettings["outlinedIcons"]
+                  ? Icons.edit_outlined
+                  : Icons.edit_rounded,
+              initialValue: appStateSettings["showUsernameWelcomeBanner"],
+              name: appStateSettings["username"] == null ||
+                      appStateSettings["username"] == ""
+                  ? "homepage-banner".tr()
+                  : "username-banner".tr(),
+              onChanged: (value) {
+                updateSettings("showUsernameWelcomeBanner", value,
+                    updateGlobalState: false);
+              },
+            ),
+          ),
           SliverReorderableList(
             onReorderStart: (index) {
               HapticFeedback.heavyImpact();
@@ -501,15 +526,6 @@ class _EditHomePageState extends State<EditHomePage> {
                   key: ValueKey(index),
                 );
 
-              toggleSwitch() {
-                editHomePageItems[key]
-                    ?.onSwitched(!(editHomePageItems[key]?.isEnabled ?? false));
-                setState(() {
-                  editHomePageItems[key]?.isEnabled =
-                      !(editHomePageItems[key]?.isEnabled ?? false);
-                });
-              }
-
               return EditRowEntry(
                 canReorder: true,
                 currentReorder: currentReorder != -1 && currentReorder != index,
@@ -523,14 +539,14 @@ class _EditHomePageState extends State<EditHomePage> {
                             activeColor: Theme.of(context).colorScheme.primary,
                             value: editHomePageItems[key]?.isEnabled ?? false,
                             onChanged: (value) {
-                              toggleSwitch();
+                              toggleSwitch(key);
                             },
                           )
                         : Switch(
                             activeColor: Theme.of(context).colorScheme.primary,
                             value: editHomePageItems[key]?.isEnabled ?? false,
                             onChanged: (value) {
-                              toggleSwitch();
+                              toggleSwitch(key);
                             },
                             materialTapTargetSize:
                                 MaterialTapTargetSize.shrinkWrap,
@@ -556,13 +572,12 @@ class _EditHomePageState extends State<EditHomePage> {
                   ],
                 ),
                 hasMoreOptionsIcon: editHomePageItems[key]?.onTap != null,
-                extraWidgetsBelow: editHomePageItems[key]?.extraWidgetsBelow ??
-                    [SizedBox.shrink()],
+                extraWidgetsBelow: editHomePageItems[key]?.extraWidgetsBelow,
                 canDelete: false,
                 index: index,
                 onTap: editHomePageItems[key]?.onTap ??
                     () {
-                      toggleSwitch();
+                      toggleSwitch(key);
                     },
                 openPage: Container(),
               );
@@ -583,6 +598,84 @@ class _EditHomePageState extends State<EditHomePage> {
           ),
         ],
       ),
+    );
+  }
+}
+
+class HomePageEditRowEntryUsername extends StatefulWidget {
+  const HomePageEditRowEntryUsername(
+      {required this.initialValue,
+      required this.onChanged,
+      required this.iconData,
+      required this.name,
+      super.key});
+
+  final bool initialValue;
+  final Function(bool value) onChanged;
+  final IconData iconData;
+  final String name;
+
+  @override
+  State<HomePageEditRowEntryUsername> createState() =>
+      _HomePageEditRowEntryUsernameState();
+}
+
+class _HomePageEditRowEntryUsernameState
+    extends State<HomePageEditRowEntryUsername> {
+  late bool value = widget.initialValue;
+  @override
+  Widget build(BuildContext context) {
+    return EditRowEntry(
+      canReorder: false,
+      padding: EdgeInsets.only(left: 18, right: 0, top: 16, bottom: 16),
+      extraWidget: Row(
+        children: [
+          getPlatform() == PlatformOS.isIOS
+              ? CupertinoSwitch(
+                  activeColor: Theme.of(context).colorScheme.primary,
+                  value: value,
+                  onChanged: (value) {
+                    widget.onChanged(value);
+                    setState(() {
+                      this.value = value;
+                    });
+                  },
+                )
+              : Switch(
+                  activeColor: Theme.of(context).colorScheme.primary,
+                  value: value,
+                  onChanged: (value) {
+                    widget.onChanged(value);
+                    setState(() {
+                      this.value = value;
+                    });
+                  },
+                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                ),
+        ],
+      ),
+      content: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Icon(
+            widget.iconData,
+            color: Theme.of(context).colorScheme.primary,
+          ),
+          SizedBox(width: 13),
+          Expanded(
+            child: TextFont(
+              text: widget.name,
+              fontWeight: FontWeight.bold,
+              fontSize: 17,
+              maxLines: 5,
+            ),
+          ),
+        ],
+      ),
+      canDelete: false,
+      index: 0,
+      onTap: () {},
+      openPage: Container(),
     );
   }
 }

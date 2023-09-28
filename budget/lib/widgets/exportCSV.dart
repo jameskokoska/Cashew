@@ -32,7 +32,7 @@ import 'package:budget/struct/randomConstants.dart';
 import 'package:universal_html/html.dart' show AnchorElement;
 
 Future saveCSV(String csv, String fileName) async {
-  if (kIsWeb && getPlatform() == PlatformOS.web) {
+  if (kIsWeb) {
     try {
       List<int> dataStore = utf8.encode(csv);
       String base64String = base64Encode(dataStore);
@@ -123,7 +123,6 @@ Map<String, String> convertStringToMap(String inputString,
         if (keysToReplace.keys.contains(key) && keysToReplace[key] != null)
           key = keysToReplace[key] ?? "";
         String value = keyValue[1].trim();
-        if (value == "null") value = "";
 
         // Remove the key from the string
         int index = part.indexOf(": ");
@@ -131,6 +130,8 @@ Map<String, String> convertStringToMap(String inputString,
           value = part.substring(index);
           value = value.replaceFirst(": ", "");
         }
+
+        if (value == "null") value = "";
 
         resultMap[key] = value;
       }
@@ -241,7 +242,7 @@ class ExportCSV extends StatelessWidget {
               .replaceAll(" ", "-")
               .replaceAll(":", "-") +
           ".csv";
-      saveCSV(csv, fileName);
+      await saveCSV(csv, fileName);
     });
   }
 

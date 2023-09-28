@@ -25,6 +25,15 @@ import 'package:budget/widgets/framework/popupFramework.dart';
 
 final InAppReview inAppReview = InAppReview.instance;
 
+bool openRatingPopupCheck(BuildContext context) {
+  if ((appStateSettings["numLogins"] + 1) % 10 == 0 &&
+      appStateSettings["submittedFeedback"] != true) {
+    openBottomSheet(context, RatingPopup(), fullSnap: true);
+    return true;
+  }
+  return false;
+}
+
 class RatingPopup extends StatefulWidget {
   const RatingPopup({super.key});
 
@@ -100,7 +109,7 @@ class _RatingPopupState extends State<RatingPopup> {
           ),
           SizedBox(height: 15),
           TextInput(
-            labelText: "feedback-and-suggestions".tr(),
+            labelText: "feedback-suggestions-questions".tr(),
             keyboardType: TextInputType.multiline,
             maxLines: null,
             minLines: 3,

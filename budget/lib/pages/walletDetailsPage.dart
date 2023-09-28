@@ -176,7 +176,7 @@ class _WalletDetailsPageState extends State<WalletDetailsPage> {
                   items: [
                     DropdownItemMenu(
                       id: "select-period",
-                      label: "select-period".tr(),
+                      label: "select-period-tooltip".tr(),
                       icon: appStateSettings["outlinedIcons"]
                           ? Icons.timelapse_outlined
                           : Icons.timelapse_rounded,

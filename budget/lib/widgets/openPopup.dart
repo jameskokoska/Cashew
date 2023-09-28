@@ -15,6 +15,7 @@ import 'package:budget/widgets/textWidgets.dart';
 Future<T?> openPopup<T extends Object?>(
   BuildContext context, {
   IconData? icon,
+  double? iconScale,
   String? title,
   String? subtitle,
   String? description,
@@ -92,11 +93,14 @@ Future<T?> openPopup<T extends Object?>(
                               ? Padding(
                                   padding: const EdgeInsets.symmetric(
                                       vertical: 8.0, horizontal: 10),
-                                  child: Icon(
-                                    icon,
-                                    size: 65,
-                                    color:
-                                        Theme.of(context).colorScheme.primary,
+                                  child: Transform.scale(
+                                    scale: iconScale ?? 1,
+                                    child: Icon(
+                                      icon,
+                                      size: 65,
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
+                                    ),
                                   ),
                                 )
                               : SizedBox.shrink(),
@@ -420,12 +424,17 @@ Future<T?> openLoadingPopup<T extends Object?>(BuildContext context) {
   );
 }
 
-Future openLoadingPopupTryCatch(Future Function() function,
-    {BuildContext? context, Function(dynamic error)? onError}) async {
+Future openLoadingPopupTryCatch(
+  Future Function() function, {
+  BuildContext? context,
+  Function(dynamic error)? onError,
+  Function()? onSuccess,
+}) async {
   openLoadingPopup(context ?? navigatorKey.currentContext!);
   try {
     dynamic result = await function();
     Navigator.pop(context ?? navigatorKey.currentContext!, result);
+    if (onSuccess != null) onSuccess();
     return result;
   } catch (e) {
     Navigator.pop(context ?? navigatorKey.currentContext!, null);

@@ -442,6 +442,10 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
                     loadingIndeterminateKey.currentState?.setVisibility(true);
                     openLoadingPopupTryCatch(
                       () async {
+                        // Can maybe use this function, but on web first login does not sync...
+                        // Let's just use the functionality below this
+                        // await signInAndSync(context, next: () {});
+
                         await signInGoogle(
                           context: context,
                           waitForCompletion: false,

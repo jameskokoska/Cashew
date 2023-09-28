@@ -36,13 +36,13 @@ import 'package:path/path.dart' as p;
 
 Future<bool> importDBFileFromDevice(BuildContext context) async {
   FilePickerResult? result = await FilePicker.platform.pickFiles(
-    allowedExtensions: ['sql'],
+    allowedExtensions: ['sql', 'sqlite'],
     type: FileType.custom,
   );
   if (result == null) {
     openSnackbar(SnackbarMessage(
       title: "error-importing".tr(),
-      description: "no-file-selected".toString(),
+      description: "no-file-selected".tr(),
       icon: appStateSettings["outlinedIcons"]
           ? Icons.warning_outlined
           : Icons.warning_rounded,
@@ -60,7 +60,6 @@ Future<bool> importDBFileFromDevice(BuildContext context) async {
   resetLanguageToSystem(context);
   await updateSettings("databaseJustImported", true,
       pagesNeedingRefresh: [], updateGlobalState: false);
-  restartAppPopup(context);
   return true;
 }
 
@@ -68,16 +67,19 @@ class ImportDB extends StatelessWidget {
   const ImportDB({super.key});
 
   Future importDB(BuildContext context) async {
-    await openLoadingPopupTryCatch(() async {
-      await importDBFileFromDevice(context);
-    });
+    await openLoadingPopupTryCatch(
+      () async {
+        await importDBFileFromDevice(context);
+      },
+      onSuccess: () => restartAppPopup(context),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return SettingsContainer(
       onTap: () async {
-        await importDBFileFromDevice(context);
+        await importDB(context);
       },
       title: "import-data-file".tr(),
       icon: appStateSettings["outlinedIcons"]

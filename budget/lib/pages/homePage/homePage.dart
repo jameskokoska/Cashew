@@ -133,6 +133,11 @@ class HomePageState extends State<HomePage>
           HomePagePieChart(selectedSlidingSelector: selectedSlidingSelector),
       "heatMap": HomePageHeatMap(),
     };
+    bool showWelcomeBanner =
+        appStateSettings["showUsernameWelcomeBanner"] != false ||
+            enableDoubleColumn(context);
+    bool useSmallBanner =
+        showWelcomeBanner == false && enableDoubleColumn(context) == false;
     return SwipeToSelectTransactions(
       listID: "0",
       child: SharedBudgetRefresh(
@@ -146,10 +151,17 @@ class HomePageState extends State<HomePage>
                   controller: _scrollController,
                   children: [
                     PreviewDemoWarning(),
+                    if (useSmallBanner) SizedBox(height: 13),
                     Row(
                       mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.end,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
+                        useSmallBanner
+                            ? HomePageWelcomeBannerSmall(
+                                showUsername: showUsername,
+                              )
+                            : SizedBox.shrink(),
                         enableDoubleColumn(context)
                             ? SizedBox(height: 78)
                             : IconButton(
@@ -166,32 +178,39 @@ class HomePageState extends State<HomePage>
                     // Wipe all remaining pixels off - sometimes graphics artifacts are left behind
                     Container(height: 1, color: Theme.of(context).canvasColor),
 
-                    ConstrainedBox(
-                      constraints: BoxConstraints(
-                          minHeight: getExpandedHeaderHeight(context, null,
-                                  isHomePageSpace: true) /
-                              1.34),
-                      child: Container(
-                        // Subtract one (1) here because of the thickness of the wiper above
-                        alignment: Alignment.bottomLeft,
-                        padding: EdgeInsets.only(left: 9, bottom: 17, right: 9),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            HomePageUsername(
-                              animationControllerHeader:
-                                  _animationControllerHeader,
-                              animationControllerHeader2:
-                                  _animationControllerHeader2,
-                              showUsername: showUsername,
-                              appStateSettings: appStateSettings,
-                              enterNameBottomSheet: enterNameBottomSheet,
+                    showWelcomeBanner
+                        ? ConstrainedBox(
+                            constraints: BoxConstraints(
+                                minHeight: getExpandedHeaderHeight(
+                                        context, null,
+                                        isHomePageSpace: true) /
+                                    1.34),
+                            child: Container(
+                              // Subtract one (1) here because of the thickness of the wiper above
+                              alignment: Alignment.bottomLeft,
+                              padding: EdgeInsets.only(
+                                  left: 9,
+                                  bottom: enableDoubleColumn(context) ? 10 : 17,
+                                  right: 9),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  HomePageUsername(
+                                    animationControllerHeader:
+                                        _animationControllerHeader,
+                                    animationControllerHeader2:
+                                        _animationControllerHeader2,
+                                    showUsername: showUsername,
+                                    appStateSettings: appStateSettings,
+                                    enterNameBottomSheet: enterNameBottomSheet,
+                                  ),
+                                ],
+                              ),
                             ),
-                          ],
-                        ),
-                      ),
-                    ),
+                          )
+                        : SizedBox(height: 5),
                     ...[
                       for (String sectionKey
                           in appStateSettings["homePageOrder"])

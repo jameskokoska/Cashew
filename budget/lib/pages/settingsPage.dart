@@ -138,6 +138,8 @@ class MorePages extends StatelessWidget {
                           key: settingsPageFrameworkStateKey,
                         ),
                         title: "settings-and-customization".tr(),
+                        description:
+                            "settings-and-customization-description".tr(),
                         icon: appStateSettings["outlinedIcons"]
                             ? Icons.settings_outlined
                             : Icons.settings_rounded,

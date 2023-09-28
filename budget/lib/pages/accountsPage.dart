@@ -88,12 +88,7 @@ class AccountsPageState extends State<AccountsPage> {
                           loadingIndeterminateKey.currentState
                               ?.setVisibility(true);
                           try {
-                            await signInGoogle(
-                              context: context,
-                              waitForCompletion: false,
-                              drivePermissions: true,
-                              next: () {},
-                            );
+                            await signInAndSync(context, next: () {});
                           } catch (e) {
                             print("Error signing in: " + e.toString());
                           }

@@ -737,7 +737,10 @@ class ProductsState extends State<Products> {
                   ? SizedBox.shrink()
                   : StatusBox(
                       title: "error-getting-products".tr(),
-                      description: "error-getting-products-description".tr(),
+                      description: "error-getting-products-description".tr() +
+                          (kDebugMode && tryStoreEnabled == false
+                              ? " Store disabled in debug mode! Enable `tryStoreEnabled`"
+                              : ""),
                       icon: appStateSettings["outlinedIcons"]
                           ? Icons.warning_outlined
                           : Icons.warning_rounded,

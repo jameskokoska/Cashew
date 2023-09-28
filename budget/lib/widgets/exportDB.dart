@@ -42,7 +42,7 @@ Future saveDBFileToDevice(String fileName) async {
     dataStore.insertAll(dataStore.length, data);
   }
 
-  if (kIsWeb && getPlatform() == PlatformOS.web) {
+  if (kIsWeb) {
     try {
       String base64String = base64Encode(dataStore);
       AnchorElement anchor = AnchorElement(
@@ -113,7 +113,7 @@ class ExportDB extends StatelessWidget {
               .replaceAll(" ", "-")
               .replaceAll(":", "-") +
           ".sqlite";
-      saveDBFileToDevice(fileName);
+      await saveDBFileToDevice(fileName);
     });
   }
 

@@ -89,3 +89,21 @@ class HomePageUsername extends StatelessWidget {
     );
   }
 }
+
+class HomePageWelcomeBannerSmall extends StatelessWidget {
+  const HomePageWelcomeBannerSmall({required this.showUsername, super.key});
+  final bool showUsername;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 17, right: 5),
+      child: TextFont(
+        text: showUsername ? getWelcomeMessage() : "home".tr(),
+        fontWeight: FontWeight.bold,
+        fontSize: 26,
+        textColor: Theme.of(context).colorScheme.onPrimaryContainer,
+      ),
+    );
+  }
+}

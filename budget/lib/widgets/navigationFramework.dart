@@ -154,11 +154,17 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
       SystemChrome.setSystemUIOverlayStyle(
           getSystemUiOverlayStyle(Theme.of(context).brightness));
 
-      await showChangelog(context);
-      if ((appStateSettings["numLogins"] + 1) % 10 == 0 &&
-          appStateSettings["submittedFeedback"] != true) {
-        openBottomSheet(context, RatingPopup(), fullSnap: true);
+      await initializeNotificationsPlatform();
+
+      bool isChangelogShown = showChangelog(context);
+      if (isChangelogShown == false) {
+        bool isRatingPopupShown = openRatingPopupCheck(context);
+        if (isRatingPopupShown == false) {
+          openBackupReminderPopupCheck(context);
+        }
       }
+
+      await setDailyNotificationOnLaunch(context);
       await initializeDefaultDatabase();
       runNotificationPayLoads(context);
       runQuickActionsPayLoads(context);
@@ -171,8 +177,6 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
 
       // Should do this after syncing
       // The upcoming transactions may have been modified after a sync
-      await initializeNotificationsPlatform();
-      await setDailyNotificationOnLaunch(context);
       await setUpcomingNotifications(context);
 
       // Mark subscriptions as paid AFTER syncing with cloud
