@@ -13,7 +13,7 @@ import 'package:budget/widgets/animatedExpanded.dart';
 import 'package:budget/widgets/categoryIcon.dart';
 import 'package:budget/widgets/dropdownSelect.dart';
 import 'package:budget/widgets/openPopup.dart';
-import 'package:budget/widgets/selectedTransactionsActionBar.dart';
+import 'package:budget/widgets/selectedTransactionsAppBar.dart';
 import 'package:budget/widgets/budgetContainer.dart';
 import 'package:budget/widgets/categoryEntry.dart';
 import 'package:budget/widgets/categoryLimits.dart';
@@ -363,7 +363,7 @@ class _ObjectivePageContentState extends State<_ObjectivePageContent> {
               SliverToBoxAdapter(child: SizedBox(height: 45))
             ],
           ),
-          SelectedTransactionsActionBar(
+          SelectedTransactionsAppBar(
             pageID: pageId,
             colorScheme: objectiveColorScheme,
           ),

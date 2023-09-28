@@ -402,10 +402,12 @@ bool openDatabaseCorruptedPopup(BuildContext context) {
         await importDB(context, ignoreOverwriteWarning: true);
       },
       onSubmitLabel: "import-backup".tr(),
-      onCancel: () {
+      onCancel: () async {
         Navigator.pop(context);
-        forceDeleteDB();
-        sharedPreferences.clear();
+        await openLoadingPopupTryCatch(() async {
+          await forceDeleteDB();
+          await sharedPreferences.clear();
+        });
         restartAppPopup(context);
       },
       onCancelLabel: "reset".tr(),

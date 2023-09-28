@@ -4,7 +4,7 @@ import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/openPopup.dart';
-import 'package:budget/widgets/selectedTransactionsActionBar.dart';
+import 'package:budget/widgets/selectedTransactionsAppBar.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/fab.dart';
 import 'package:budget/widgets/fadeIn.dart';
@@ -281,7 +281,7 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
               SliverToBoxAdapter(child: SizedBox(height: 55)),
             ],
           ),
-          SelectedTransactionsActionBar(
+          SelectedTransactionsAppBar(
             pageID: "Subscriptions",
           ),
         ],

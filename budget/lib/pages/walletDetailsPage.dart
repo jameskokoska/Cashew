@@ -20,7 +20,7 @@ import 'package:budget/widgets/outlinedButtonStacked.dart';
 import 'package:budget/widgets/periodCyclePicker.dart';
 import 'package:budget/widgets/radioItems.dart';
 import 'package:budget/widgets/selectAmount.dart';
-import 'package:budget/widgets/selectedTransactionsActionBar.dart';
+import 'package:budget/widgets/selectedTransactionsAppBar.dart';
 import 'package:budget/widgets/categoryEntry.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/widgets/pieChart.dart';
@@ -397,7 +397,7 @@ class _WalletDetailsPageState extends State<WalletDetailsPage> {
                     ),
             ],
           ),
-          SelectedTransactionsActionBar(
+          SelectedTransactionsAppBar(
             pageID: listID,
           ),
         ],

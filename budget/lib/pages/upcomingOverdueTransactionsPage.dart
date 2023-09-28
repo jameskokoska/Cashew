@@ -12,7 +12,7 @@ import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/widgets/noResults.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
-import 'package:budget/widgets/selectedTransactionsActionBar.dart';
+import 'package:budget/widgets/selectedTransactionsAppBar.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/widgets/slidingSelectorIncomeExpense.dart';
 import 'package:budget/widgets/tappable.dart';
@@ -245,7 +245,7 @@ class _UpcomingOverdueTransactionsState
               ),
             ],
           ),
-          SelectedTransactionsActionBar(
+          SelectedTransactionsAppBar(
             pageID: pageId,
           ),
         ],

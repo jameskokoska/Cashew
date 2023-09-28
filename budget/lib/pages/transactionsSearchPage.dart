@@ -9,7 +9,7 @@ import 'package:budget/widgets/fab.dart';
 import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/openPopup.dart';
-import 'package:budget/widgets/selectedTransactionsActionBar.dart';
+import 'package:budget/widgets/selectedTransactionsAppBar.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
@@ -301,7 +301,7 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
               ],
             ),
           ),
-          SelectedTransactionsActionBar(
+          SelectedTransactionsAppBar(
             pageID: "TransactionsSearch",
           ),
         ],

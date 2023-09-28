@@ -33,8 +33,8 @@ import 'tappableTextEntry.dart';
 
 import 'tappableTextEntry.dart';
 
-class SelectedTransactionsActionBar extends StatelessWidget {
-  const SelectedTransactionsActionBar(
+class SelectedTransactionsAppBar extends StatelessWidget {
+  const SelectedTransactionsAppBar(
       {Key? key, required this.pageID, this.colorScheme})
       : super(key: key);
 
