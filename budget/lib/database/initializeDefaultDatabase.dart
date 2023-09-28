@@ -8,7 +8,7 @@ import 'package:budget/struct/defaultCategories.dart';
 Future<bool> initializeDefaultDatabase() async {
   //Initialize default categories
   if ((await database.getAllCategories()).length <= 0) {
-    createDefaultCategories();
+    await createDefaultCategories();
   }
   if ((await database.getAllWallets()).length <= 0) {
     await database.createOrUpdateWallet(
