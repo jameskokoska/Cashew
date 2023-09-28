@@ -533,11 +533,13 @@
   "enter-period-length": "Angi periodelengde",
   "export-csv": "Eksporter CSV -fil",
   "export-csv-warning": "Data backup",
-  "export-csv-warning-description": "Eksport til CSV skal ikke brukes som sikkerhetskopi av data. Budsjetter og detaljerte appdata eksporteres ikke i CSV! Bruk Google Drive -kontoen for sikkerhetskopier.",
+  "export-csv-warning-description": "Eksport til CSV skal ikke brukes som sikkerhetskopi av data. Budsjetter og detaljerte appdata eksporteres ikke i CSV! Bruk Google Drive eller innstillinger for import- og eksportdata nedenfor.",
   "csv-saved-success": "CSV lagret på enheten",
   "error-exporting": "Feil eksport",
   "backup-downloaded-success": "Sikkerhetskopi lastet ned til enheten",
+  "backup-saved-success": "Sikkerhetskopiering lagret til enheten",
   "error-downloading": "Feil nedlasting",
+  "error-saving": "Feil lagring",
   "tools": "Verktøy",
   "delete-bill-item-question": "Slette regningselementet?",
   "bill-splitter": "Bill Splitter",
@@ -699,5 +701,12 @@
   "major-change-8": "38 nye valutaer",
   "cycle": "Syklus",
   "past-days": "Tidligere dager",
-  "start-date": "Startdato"
+  "start-date": "Startdato",
+  "provide-email-question": "Gi e -post?",
+  "provide-email-question-description": "Hvis du oppgir e -posten din, kan utvikleren kontakte deg om forslaget ditt!",
+  "submit-anyway": "Send inn uansett",
+  "go-back": "Gå tilbake",
+  "export-data-file": "Eksporter datafil",
+  "import-data-file": "Importer datafil",
+  "google-drive": "Google Drive"
 }

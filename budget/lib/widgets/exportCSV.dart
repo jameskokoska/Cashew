@@ -31,7 +31,7 @@ import 'dart:io';
 import 'package:budget/struct/randomConstants.dart';
 import 'package:universal_html/html.dart' show AnchorElement;
 
-Future<bool> saveCSV(String csv, String fileName) async {
+Future saveCSV(String csv, String fileName) async {
   if (kIsWeb && getPlatform() == PlatformOS.web) {
     try {
       List<int> dataStore = utf8.encode(csv);
@@ -50,7 +50,15 @@ Future<bool> saveCSV(String csv, String fileName) async {
       ));
       return true;
     } catch (e) {
-      return true;
+      openSnackbar(SnackbarMessage(
+        title: "error-exporting".tr(),
+        description: e.toString(),
+        icon: appStateSettings["outlinedIcons"]
+            ? Icons.warning_outlined
+            : Icons.warning_rounded,
+      ));
+      print("Error saving file to device: " + e.toString());
+      return false;
     }
   }
 
@@ -84,6 +92,56 @@ Future<bool> saveCSV(String csv, String fileName) async {
   }
 }
 
+Map<String, String> convertStringToMap(String inputString,
+    {List<String> keysToIgnore = const [],
+    List<String>? keysToShow,
+    Map<String, String> keysToReplace = const {}}) {
+  // Find the index of the first "(" character
+  final startIndex = inputString.indexOf("(");
+
+  if (startIndex != -1) {
+    // Remove everything before the first "(" character, including it
+    inputString = inputString.substring(startIndex + 1);
+
+    // Remove the last character ")"
+    inputString = inputString.substring(0, inputString.length - 1);
+
+    // Split by comma and space
+    List<String> parts = inputString.split(", ");
+
+    // Create a Map to store key-value pairs
+    Map<String, String> resultMap = {};
+
+    // Iterate through the parts and split each part by ": "
+    for (String part in parts) {
+      print(part);
+      List<String> keyValue = part.split(": ");
+      if (keyValue.length >= 2) {
+        String key = keyValue[0].trim();
+        if (keysToShow != null && keysToShow.contains(key) == false) continue;
+        if (keysToIgnore.contains(key)) continue;
+        if (keysToReplace.keys.contains(key) && keysToReplace[key] != null)
+          key = keysToReplace[key] ?? "";
+        String value = keyValue[1].trim();
+        if (value == "null") value = "";
+
+        // Remove the key from the string
+        int index = part.indexOf(": ");
+        if (index != -1) {
+          value = part.substring(index);
+          value = value.replaceFirst(": ", "");
+        }
+
+        resultMap[key] = value;
+      }
+    }
+
+    return resultMap;
+  } else {
+    return {};
+  }
+}
+
 class ExportCSV extends StatelessWidget {
   const ExportCSV({super.key});
 
@@ -96,7 +154,7 @@ class ExportCSV extends StatelessWidget {
       for (TransactionWithCategory transactionWithCategory in transactions) {
         String inputTransactionString =
             transactionWithCategory.transaction.toString();
-        print(inputTransactionString);
+        // print(inputTransactionString);
         String inputCategoryString =
             transactionWithCategory.category.toString();
         String inputWalletString = transactionWithCategory.wallet.toString();
@@ -185,56 +243,6 @@ class ExportCSV extends StatelessWidget {
           ".csv";
       saveCSV(csv, fileName);
     });
-  }
-
-  Map<String, String> convertStringToMap(String inputString,
-      {List<String> keysToIgnore = const [],
-      List<String>? keysToShow,
-      Map<String, String> keysToReplace = const {}}) {
-    // Find the index of the first "(" character
-    final startIndex = inputString.indexOf("(");
-
-    if (startIndex != -1) {
-      // Remove everything before the first "(" character, including it
-      inputString = inputString.substring(startIndex + 1);
-
-      // Remove the last character ")"
-      inputString = inputString.substring(0, inputString.length - 1);
-
-      // Split by comma and space
-      List<String> parts = inputString.split(", ");
-
-      // Create a Map to store key-value pairs
-      Map<String, String> resultMap = {};
-
-      // Iterate through the parts and split each part by ": "
-      for (String part in parts) {
-        print(part);
-        List<String> keyValue = part.split(": ");
-        if (keyValue.length >= 2) {
-          String key = keyValue[0].trim();
-          if (keysToShow != null && keysToShow.contains(key) == false) continue;
-          if (keysToIgnore.contains(key)) continue;
-          if (keysToReplace.keys.contains(key) && keysToReplace[key] != null)
-            key = keysToReplace[key] ?? "";
-          String value = keyValue[1].trim();
-          if (value == "null") value = "";
-
-          // Remove the key from the string
-          int index = part.indexOf(": ");
-          if (index != -1) {
-            value = part.substring(index);
-            value = value.replaceFirst(": ", "");
-          }
-
-          resultMap[key] = value;
-        }
-      }
-
-      return resultMap;
-    } else {
-      return {};
-    }
   }
 
   @override

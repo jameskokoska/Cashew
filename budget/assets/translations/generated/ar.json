@@ -533,11 +533,13 @@
   "enter-period-length": "أدخل طول الفترة",
   "export-csv": "تصدير ملف CSV",
   "export-csv-warning": "النسخ الاحتياطي للبيانات",
-  "export-csv-warning-description": "لا ينبغي استخدام التصدير إلى CSV كنسخة احتياطية للبيانات. لا يتم تصدير الميزانيات وبيانات التطبيق التفصيلية في CSV! يرجى استخدام حساب محرك Google للنسخ الاحتياطية.",
+  "export-csv-warning-description": "لا ينبغي استخدام التصدير إلى CSV كنسخة احتياطية للبيانات. لا يتم تصدير الميزانيات وبيانات التطبيق التفصيلية في CSV! يرجى استخدام محرك Google أو إعدادات بيانات الاستيراد والتصدير أدناه.",
   "csv-saved-success": "تم حفظ CSV على الجهاز",
   "error-exporting": "الخطأ تصدير",
   "backup-downloaded-success": "تم تنزيل النسخ الاحتياطي على الجهاز",
+  "backup-saved-success": "نسخة احتياطية محفوظة على الجهاز",
   "error-downloading": "خطأ تنزيل",
+  "error-saving": "خطأ حفظ",
   "tools": "أدوات",
   "delete-bill-item-question": "حذف عنصر الفاتورة؟",
   "bill-splitter": "بيل فاصل",
@@ -699,5 +701,12 @@
   "major-change-8": "38 عملات جديدة",
   "cycle": "دورة",
   "past-days": "الأيام الماضية",
-  "start-date": "تاريخ البدء"
+  "start-date": "تاريخ البدء",
+  "provide-email-question": "تقديم البريد الإلكتروني؟",
+  "provide-email-question-description": "إذا قمت بتقديم بريدك الإلكتروني ، يمكن للمطور الاتصال بك حول اقتراحك!",
+  "submit-anyway": "إرسال على أي حال",
+  "go-back": "عُد",
+  "export-data-file": "ملف بيانات التصدير",
+  "import-data-file": "استيراد ملف البيانات",
+  "google-drive": "Google Drive"
 }

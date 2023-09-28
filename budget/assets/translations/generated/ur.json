@@ -533,11 +533,13 @@
   "enter-period-length": "مدت کی لمبائی درج کریں",
   "export-csv": "CSV فائل برآمد کریں",
   "export-csv-warning": "ڈیٹا بیک اپ",
-  "export-csv-warning-description": "CSV کو برآمد کرنا ڈیٹا کے بیک اپ کے طور پر استعمال نہیں ہونا چاہئے۔ بجٹ اور تفصیلی ایپ کا ڈیٹا CSV میں برآمد نہیں کیا جاتا ہے! براہ کرم بیک اپ کے لئے گوگل ڈرائیو اکاؤنٹ استعمال کریں۔",
+  "export-csv-warning-description": "CSV کو برآمد کرنا ڈیٹا کے بیک اپ کے طور پر استعمال نہیں ہونا چاہئے۔ بجٹ اور تفصیلی ایپ کا ڈیٹا CSV میں برآمد نہیں کیا جاتا ہے! براہ کرم ذیل میں گوگل ڈرائیو یا درآمد اور برآمد ڈیٹا کی ترتیبات کا استعمال کریں۔",
   "csv-saved-success": "سی ایس وی نے ڈیوائس میں محفوظ کیا",
   "error-exporting": "غلطی برآمد کرنے میں",
   "backup-downloaded-success": "بیک اپ ڈیوائس پر ڈاؤن لوڈ کیا گیا",
+  "backup-saved-success": "بیک اپ ڈیوائس میں محفوظ ہوگیا",
   "error-downloading": "ڈاؤن لوڈ کرنے میں خرابی",
+  "error-saving": "بچت میں خرابی",
   "tools": "اوزار",
   "delete-bill-item-question": "بل آئٹم کو حذف کریں؟",
   "bill-splitter": "بل اسپلٹر",
@@ -699,5 +701,12 @@
   "major-change-8": "38 نئی کرنسیوں",
   "cycle": "سائیکل",
   "past-days": "پچھلے دن",
-  "start-date": "شروع کرنے کی تاریخ"
+  "start-date": "شروع کرنے کی تاریخ",
+  "provide-email-question": "ای میل فراہم کریں؟",
+  "provide-email-question-description": "اگر آپ اپنا ای میل فراہم کرتے ہیں تو ، ڈویلپر آپ کے مشورے کے بارے میں آپ سے رابطہ کرسکتا ہے!",
+  "submit-anyway": "بہرحال جمع کروائیں",
+  "go-back": "واپس جاو",
+  "export-data-file": "ڈیٹا فائل برآمد کریں",
+  "import-data-file": "ڈیٹا فائل درآمد کریں",
+  "google-drive": "Google Drive"
 }

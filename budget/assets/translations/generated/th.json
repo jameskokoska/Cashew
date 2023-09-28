@@ -533,11 +533,13 @@
   "enter-period-length": "ป้อนความยาวระยะเวลา",
   "export-csv": "ส่งออกไฟล์ CSV",
   "export-csv-warning": "ข้อมูลสำรองข้อมูล",
-  "export-csv-warning-description": "การส่งออกไปยัง CSV ไม่ควรใช้เป็นข้อมูลสำรองข้อมูล งบประมาณและข้อมูลแอพโดยละเอียดจะไม่ถูกส่งออกใน CSV! โปรดใช้บัญชี Google Drive สำหรับการสำรองข้อมูล",
+  "export-csv-warning-description": "การส่งออกไปยัง CSV ไม่ควรใช้เป็นข้อมูลสำรองข้อมูล งบประมาณและข้อมูลแอพโดยละเอียดจะไม่ถูกส่งออกใน CSV! โปรดใช้ Google Drive หรือการตั้งค่าข้อมูลนำเข้าและส่งออกด้านล่าง",
   "csv-saved-success": "CSV บันทึกไว้ในอุปกรณ์",
   "error-exporting": "การส่งออกข้อผิดพลาด",
   "backup-downloaded-success": "การสำรองข้อมูลดาวน์โหลดไปยังอุปกรณ์",
+  "backup-saved-success": "บันทึกการสำรองข้อมูลลงในอุปกรณ์",
   "error-downloading": "การดาวน์โหลดข้อผิดพลาด",
+  "error-saving": "การบันทึกข้อผิดพลาด",
   "tools": "เครื่องมือ",
   "delete-bill-item-question": "ลบรายการบิล?",
   "bill-splitter": "ตัวแยกบิล",
@@ -699,5 +701,12 @@
   "major-change-8": "38 สกุลเงินใหม่",
   "cycle": "รอบ",
   "past-days": "วันที่ผ่านมา",
-  "start-date": "วันที่เริ่มต้น"
+  "start-date": "วันที่เริ่มต้น",
+  "provide-email-question": "ให้อีเมล?",
+  "provide-email-question-description": "หากคุณให้อีเมลของคุณผู้พัฒนาสามารถติดต่อคุณเกี่ยวกับคำแนะนำของคุณ!",
+  "submit-anyway": "ส่งต่อไป",
+  "go-back": "กลับไป",
+  "export-data-file": "ไฟล์ข้อมูลส่งออก",
+  "import-data-file": "นำเข้าไฟล์ข้อมูล",
+  "google-drive": "Google Drive"
 }

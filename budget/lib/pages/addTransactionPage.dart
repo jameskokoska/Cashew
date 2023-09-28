@@ -571,14 +571,14 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                 )
               : afterSetTitle(),
         );
+        if (appStateSettings["askForTransactionTitle"]) {
+          // Fix over-scroll stretch when keyboard pops up quickly
+          Future.delayed(Duration(milliseconds: 100), () {
+            bottomSheetControllerGlobal.scrollTo(0,
+                duration: Duration(milliseconds: 100));
+          });
+        }
       });
-      if (appStateSettings["askForTransactionTitle"]) {
-        // Fix over-scroll stretch when keyboard pops up quickly
-        Future.delayed(Duration(milliseconds: 100), () {
-          bottomSheetControllerGlobal.scrollTo(0,
-              duration: Duration(milliseconds: 100));
-        });
-      }
     }
     Future.delayed(Duration.zero, () async {
       selectedWallet = await database.getWalletInstance(

@@ -533,11 +533,13 @@
   "enter-period-length": "Ange periodens längd",
   "export-csv": "Exportera CSV -fil",
   "export-csv-warning": "Säkerhetskopiering av data",
-  "export-csv-warning-description": "Export till CSV bör inte användas som en säkerhetskopia av data. Budgetar och detaljerade appdata exporteras inte i CSV! Använd Google Drive -kontot för säkerhetskopior.",
+  "export-csv-warning-description": "Export till CSV bör inte användas som en säkerhetskopia av data. Budgetar och detaljerade appdata exporteras inte i CSV! Använd Google Drive eller import- och exportdatainställningarna nedan.",
   "csv-saved-success": "CSV sparat på enheten",
   "error-exporting": "Felexport",
   "backup-downloaded-success": "Backup Nedladdad till enheten",
+  "backup-saved-success": "Säkerhetskopiering sparas på enheten",
   "error-downloading": "Nedladdning av fel",
+  "error-saving": "Felbesparing",
   "tools": "Verktyg",
   "delete-bill-item-question": "Radera räkningsobjekt?",
   "bill-splitter": "Bill Splitter",
@@ -699,5 +701,12 @@
   "major-change-8": "38 nya valutor",
   "cycle": "Cykel",
   "past-days": "De senaste dagarna",
-  "start-date": "Start datum"
+  "start-date": "Start datum",
+  "provide-email-question": "Ange e -post?",
+  "provide-email-question-description": "Om du tillhandahåller din e -post kan utvecklaren kontakta dig om ditt förslag!",
+  "submit-anyway": "Skicka ändå",
+  "go-back": "Gå tillbaka",
+  "export-data-file": "Exportdatafil",
+  "import-data-file": "Importera datafil",
+  "google-drive": "Google Drive"
 }

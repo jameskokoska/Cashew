@@ -114,6 +114,7 @@ class _IncomeExpenseTabSelectorState extends State<IncomeExpenseTabSelector>
                       style: TextStyle(
                         fontSize: 14.5,
                         fontFamily: 'Avenir',
+                        fontFamilyFallback: ['Inter'],
                       ),
                       textAlign: TextAlign.center,
                     ),
@@ -144,6 +145,7 @@ class _IncomeExpenseTabSelectorState extends State<IncomeExpenseTabSelector>
                       style: TextStyle(
                         fontSize: 14.5,
                         fontFamily: 'Avenir',
+                        fontFamilyFallback: ['Inter'],
                       ),
                       textAlign: TextAlign.center,
                     ),

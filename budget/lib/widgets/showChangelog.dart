@@ -15,6 +15,13 @@ import 'listItem.dart';
 
 String getChangelogString() {
   return """
+    < 4.4.9
+    Import and export all data (SQL DB) options
+    New backups section in settings
+    If leaving feedback and suggestions are included, remind user to leave email
+    Fixed popup resizing after premium page shown when adding transaction
+    Font fallback for every custom font text style (for other language characters)
+    Added tablet icon
     < 4.4.8
     Serbian language support
     Homepage reloads when period cycle is selected on all spending page

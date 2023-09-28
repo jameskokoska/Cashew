@@ -150,6 +150,7 @@ class _ExchangeRatesState extends State<ExchangeRates> {
                                 style: TextStyle(
                                   color: getColor(context, "black"),
                                   fontFamily: appStateSettings["font"],
+                                  fontFamilyFallback: ['Inter'],
                                 ),
                               ),
                               TextSpan(
@@ -157,6 +158,7 @@ class _ExchangeRatesState extends State<ExchangeRates> {
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontFamily: appStateSettings["font"],
+                                  fontFamilyFallback: ['Inter'],
                                   color: getColor(context, "black"),
                                 ),
                               ),

@@ -533,11 +533,13 @@
   "enter-period-length": "Introduceți durata perioadei",
   "export-csv": "Exportați fișierul CSV",
   "export-csv-warning": "Copia de rezerva a datelor",
-  "export-csv-warning-description": "Exportul la CSV nu trebuie utilizat ca o copie de rezervă a datelor. Bugetele și datele detaliate despre aplicații nu sunt exportate în CSV! Vă rugăm să utilizați contul Google Drive pentru copii de rezervă.",
+  "export-csv-warning-description": "Exportul la CSV nu trebuie utilizat ca o copie de rezervă a datelor. Bugetele și datele detaliate despre aplicații nu sunt exportate în CSV! Vă rugăm să utilizați Google Drive sau setările de date de import și export de mai jos.",
   "csv-saved-success": "CSV salvat pe dispozitiv",
   "error-exporting": "Eroare la export",
   "backup-downloaded-success": "Backup descărcat pe dispozitiv",
+  "backup-saved-success": "Backup salvat pe dispozitiv",
   "error-downloading": "Descărcarea erorilor",
+  "error-saving": "Economisirea erorilor",
   "tools": "Instrumente",
   "delete-bill-item-question": "Ștergeți articolul de factură?",
   "bill-splitter": "Bill Splitter",
@@ -699,5 +701,12 @@
   "major-change-8": "38 de monede noi",
   "cycle": "Ciclu",
   "past-days": "Zilele trecute",
-  "start-date": "Data de început"
+  "start-date": "Data de început",
+  "provide-email-question": "Oferiți e -mail?",
+  "provide-email-question-description": "Dacă vă furnizați e -mailul, dezvoltatorul vă poate contacta despre sugestia dvs.!",
+  "submit-anyway": "Trimiteți oricum",
+  "go-back": "Întoarce-te",
+  "export-data-file": "Exportați fișier de date",
+  "import-data-file": "Importați fișierul de date",
+  "google-drive": "Google Drive"
 }

@@ -533,11 +533,13 @@
   "enter-period-length": "Masukkan panjang periode",
   "export-csv": "Ekspor file CSV",
   "export-csv-warning": "Cadangan data",
-  "export-csv-warning-description": "Mengekspor ke CSV tidak boleh digunakan sebagai cadangan data. Anggaran dan data aplikasi terperinci tidak diekspor di CSV! Silakan gunakan akun Google Drive untuk cadangan.",
+  "export-csv-warning-description": "Mengekspor ke CSV tidak boleh digunakan sebagai cadangan data. Anggaran dan data aplikasi terperinci tidak diekspor di CSV! Harap gunakan Google Drive atau pengaturan data impor dan ekspor di bawah ini.",
   "csv-saved-success": "CSV disimpan ke perangkat",
   "error-exporting": "Ekspor Kesalahan",
   "backup-downloaded-success": "Cadangan diunduh ke perangkat",
+  "backup-saved-success": "Cadangan disimpan ke perangkat",
   "error-downloading": "Pengunduhan Kesalahan",
+  "error-saving": "Penghematan kesalahan",
   "tools": "Peralatan",
   "delete-bill-item-question": "Hapus item tagihan?",
   "bill-splitter": "Bill splitter",
@@ -699,5 +701,12 @@
   "major-change-8": "38 mata uang baru",
   "cycle": "Siklus",
   "past-days": "Hari -hari terakhir",
-  "start-date": "Mulai tanggal"
+  "start-date": "Mulai tanggal",
+  "provide-email-question": "Memberikan email?",
+  "provide-email-question-description": "Jika Anda memberikan email Anda, pengembang dapat menghubungi Anda tentang saran Anda!",
+  "submit-anyway": "Kirimkan",
+  "go-back": "Kembali",
+  "export-data-file": "Ekspor File Data",
+  "import-data-file": "Impor file data",
+  "google-drive": "Google Drive"
 }

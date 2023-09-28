@@ -126,6 +126,7 @@ class TextInput extends StatelessWidget {
                       : 1.3,
               fontWeight: fontWeight,
               fontFamily: appStateSettings["font"],
+              fontFamilyFallback: ['Inter'],
             ),
             cursorColor: dynamicPastel(
                 context, HexColor(appStateSettings["accentColor"]),

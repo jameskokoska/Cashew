@@ -533,11 +533,13 @@
   "enter-period-length": "期間長を入力します",
   "export-csv": "CSVファイルをエクスポートします",
   "export-csv-warning": "データバックアップ",
-  "export-csv-warning-description": "CSVへのエクスポートは、データのバックアップとして使用しないでください。予算と詳細なアプリデータはCSVでエクスポートされていません！ Googleドライブアカウントをバックアップに使用してください。",
+  "export-csv-warning-description": "CSVへのエクスポートは、データのバックアップとして使用しないでください。予算と詳細なアプリデータはCSVでエクスポートされていません！ Googleドライブまたは以下のインポートデータ設定を使用してください。",
   "csv-saved-success": "CSVはデバイスに保存されました",
   "error-exporting": "エラーエクスポート",
   "backup-downloaded-success": "バックアップはデバイスにダウンロードされました",
+  "backup-saved-success": "バックアップはデバイスに保存されました",
   "error-downloading": "エラーダウンロード",
+  "error-saving": "エラー保存",
   "tools": "ツール",
   "delete-bill-item-question": "請求書アイテムを削除しますか？",
   "bill-splitter": "ビルスプリッター",
@@ -699,5 +701,12 @@
   "major-change-8": "38の新しい通貨",
   "cycle": "サイクル",
   "past-days": "過去の日",
-  "start-date": "開始日"
+  "start-date": "開始日",
+  "provide-email-question": "メールを提供しますか？",
+  "provide-email-question-description": "あなたがあなたの電子メールを提供するならば、開発者はあなたの提案についてあなたに連絡することができます！",
+  "submit-anyway": "とにかく送信してください",
+  "go-back": "戻る",
+  "export-data-file": "データファイルをエクスポートします",
+  "import-data-file": "データファイルをインポートします",
+  "google-drive": "Google Drive"
 }

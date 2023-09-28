@@ -1001,6 +1001,7 @@ class SubscriptionOption extends StatelessWidget {
                                     getColor(context, "black").withOpacity(0.7),
                                 fontSize: 14,
                                 fontFamily: appStateSettings["font"],
+                                fontFamilyFallback: ['Inter'],
                               ),
                             ),
                             TextSpan(
@@ -1008,6 +1009,7 @@ class SubscriptionOption extends StatelessWidget {
                               style: TextStyle(
                                 fontSize: 12,
                                 fontFamily: appStateSettings["font"],
+                                fontFamilyFallback: ['Inter'],
                               ),
                             ),
                             TextSpan(
@@ -1016,6 +1018,7 @@ class SubscriptionOption extends StatelessWidget {
                                 color: getColor(context, "black"),
                                 fontSize: 17,
                                 fontFamily: appStateSettings["font"],
+                                fontFamilyFallback: ['Inter'],
                               ),
                             ),
                           ],

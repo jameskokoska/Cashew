@@ -145,6 +145,27 @@ class _RatingPopupState extends State<RatingPopup> {
           Button(
             label: "submit".tr(),
             onTap: () async {
+              // Remind user to provide email
+              if (_feedbackController.text != "") {
+                dynamic result = await openPopup(
+                  context,
+                  icon: appStateSettings["outlinedIcons"]
+                      ? Icons.email_outlined
+                      : Icons.email_rounded,
+                  title: "provide-email-question".tr(),
+                  description: "provide-email-question-description".tr(),
+                  onCancelLabel: "submit-anyway".tr(),
+                  onCancel: () {
+                    Navigator.pop(context, true);
+                  },
+                  onSubmitLabel: "go-back".tr(),
+                  onSubmit: () {
+                    Navigator.pop(context, false);
+                  },
+                );
+                if (result == false) return;
+              }
+
               Navigator.pop(context);
               shareFeedback(
                 _feedbackController.text,

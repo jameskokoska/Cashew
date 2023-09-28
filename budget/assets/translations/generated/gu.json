@@ -533,11 +533,13 @@
   "enter-period-length": "અવધિ લંબાઈ દાખલ કરો",
   "export-csv": "નિકાસ સીએસવી ફાઇલ",
   "export-csv-warning": "આધારપત્રક",
-  "export-csv-warning-description": "સીએસવીમાં નિકાસ કરવાથી ડેટાના બેકઅપ તરીકે ઉપયોગ થવો જોઈએ નહીં. સીએસવીમાં બજેટ અને વિગતવાર એપ્લિકેશન ડેટા નિકાસ કરવામાં આવતો નથી! કૃપા કરીને બેકઅપ માટે ગૂગલ ડ્રાઇવ એકાઉન્ટનો ઉપયોગ કરો.",
+  "export-csv-warning-description": "સીએસવીમાં નિકાસ કરવાથી ડેટાના બેકઅપ તરીકે ઉપયોગ થવો જોઈએ નહીં. બજેટ અને વિગતવાર એપ્લિકેશન ડેટા સીએસવીમાં નિકાસ કરવામાં આવતો નથી! કૃપા કરીને નીચે ગૂગલ ડ્રાઇવ અથવા આયાત અને નિકાસ ડેટા સેટિંગ્સનો ઉપયોગ કરો.",
   "csv-saved-success": "સીએસવી ઉપકરણ પર સાચવ્યો",
   "error-exporting": "નિકાસ કરવી",
   "backup-downloaded-success": "બેકઅપ ડિવાઇસ પર ડાઉનલોડ કર્યું",
+  "backup-saved-success": "બેકઅપ ઉપકરણ પર સાચવ્યું",
   "error-downloading": "ડાઉનલોડ ભૂલ",
+  "error-saving": "ભૂલ બચત",
   "tools": "સાધનો",
   "delete-bill-item-question": "બિલ આઇટમ કા Delete ી નાખો?",
   "bill-splitter": "હૂંડી",
@@ -699,5 +701,12 @@
   "major-change-8": "38 નવી કરન્સી",
   "cycle": "ચક્ર",
   "past-days": "પાછલા દિવસ",
-  "start-date": "પ્રારંભ તારીખ"
+  "start-date": "પ્રારંભ તારીખ",
+  "provide-email-question": "ઇમેઇલ પ્રદાન કરો?",
+  "provide-email-question-description": "જો તમે તમારું ઇમેઇલ પ્રદાન કરો છો, તો વિકાસકર્તા તમારા સૂચન વિશે તમારો સંપર્ક કરી શકે છે!",
+  "submit-anyway": "કોઈપણ રીતે સબમિટ કરો",
+  "go-back": "પાછા જાવ",
+  "export-data-file": "નિકાસ ડેટા ફાઇલ",
+  "import-data-file": "ડેટા ફાઇલ આયાત કરો",
+  "google-drive": "Google Drive"
 }

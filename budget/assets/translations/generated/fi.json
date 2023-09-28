@@ -533,11 +533,13 @@
   "enter-period-length": "Anna ajanjakson pituus",
   "export-csv": "Vie CSV -tiedosto",
   "export-csv-warning": "Datan varmuuskopio",
-  "export-csv-warning-description": "Vie CSV: hen ei pidä käyttää tietojen varmuuskopiona. Budjetteja ja yksityiskohtaisia ​​sovellustietoja ei vie viettää CSV: tä! Käytä varmuuskopioita Google Drive -tilillä.",
+  "export-csv-warning-description": "Vie CSV: hen ei pidä käyttää tietojen varmuuskopiona. Budjetteja ja yksityiskohtaisia ​​sovellustietoja ei vie viettää CSV: tä! Käytä alla olevaa Google Drivea tai alla olevia data- ja vientia -asetuksia.",
   "csv-saved-success": "CSV tallennettu laitteeseen",
   "error-exporting": "Virheen vienti",
   "backup-downloaded-success": "Varmuuskopio ladattu laitteeseen",
+  "backup-saved-success": "Varmuuskopio Tallennettu laitteelle",
   "error-downloading": "Virheen lataus",
+  "error-saving": "Virheen säästö",
   "tools": "Työkalut",
   "delete-bill-item-question": "Poista laskuteollisuus?",
   "bill-splitter": "Laskun jakaja",
@@ -699,5 +701,12 @@
   "major-change-8": "38 uutta valuuttaa",
   "cycle": "Kiertää",
   "past-days": "Viime päivinä",
-  "start-date": "Aloituspäivämäärä"
+  "start-date": "Aloituspäivämäärä",
+  "provide-email-question": "Antaa sähköpostia?",
+  "provide-email-question-description": "Jos annat sähköpostisi, kehittäjä voi ottaa sinuun yhteyttä ehdotuksestasi!",
+  "submit-anyway": "Lähetä joka tapauksessa",
+  "go-back": "Mene takaisin",
+  "export-data-file": "Vientitiedosto",
+  "import-data-file": "Tuo datatiedosto",
+  "google-drive": "Google Drive"
 }

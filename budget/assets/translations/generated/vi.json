@@ -533,11 +533,13 @@
   "enter-period-length": "Nhập thời gian dài",
   "export-csv": "Xuất tệp CSV",
   "export-csv-warning": "Sao lưu dữ liệu",
-  "export-csv-warning-description": "Xuất sang CSV không nên được sử dụng như một bản sao lưu dữ liệu. Ngân sách và dữ liệu ứng dụng chi tiết không được xuất trong CSV! Vui lòng sử dụng tài khoản Google Drive cho bản sao lưu.",
+  "export-csv-warning-description": "Xuất sang CSV không nên được sử dụng như một bản sao lưu dữ liệu. Ngân sách và dữ liệu ứng dụng chi tiết không được xuất trong CSV! Vui lòng sử dụng Google Drive hoặc cài đặt dữ liệu nhập và nhập bên dưới.",
   "csv-saved-success": "CSV được lưu vào thiết bị",
   "error-exporting": "Xuất khẩu lỗi",
   "backup-downloaded-success": "Sao lưu được tải xuống thiết bị",
+  "backup-saved-success": "Sao lưu được lưu vào thiết bị",
   "error-downloading": "Tải xuống lỗi",
+  "error-saving": "Tiết kiệm lỗi",
   "tools": "Công cụ",
   "delete-bill-item-question": "Xóa mục hóa đơn?",
   "bill-splitter": "Hóa đơn chia tay",
@@ -699,5 +701,12 @@
   "major-change-8": "38 loại tiền tệ mới",
   "cycle": "Xe đạp",
   "past-days": "Những ngày đã qua",
-  "start-date": "Ngày bắt đầu"
+  "start-date": "Ngày bắt đầu",
+  "provide-email-question": "Cung cấp email?",
+  "provide-email-question-description": "Nếu bạn cung cấp email của bạn, nhà phát triển có thể liên hệ với bạn về đề xuất của bạn!",
+  "submit-anyway": "Gửi dù sao đi nữa",
+  "go-back": "Quay lại",
+  "export-data-file": "Xuất tệp dữ liệu",
+  "import-data-file": "Nhập tệp dữ liệu",
+  "google-drive": "Google Drive"
 }

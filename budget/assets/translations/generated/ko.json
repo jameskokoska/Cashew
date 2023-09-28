@@ -533,11 +533,13 @@
   "enter-period-length": "기간 길이를 입력하십시오",
   "export-csv": "CSV 파일 내보내기",
   "export-csv-warning": "데이터 백업",
-  "export-csv-warning-description": "CSV로 내보내는 것은 데이터 백업으로 사용해서는 안됩니다. CSV에서 예산 및 세부 앱 데이터가 내보내지 않습니다! 백업을 위해 Google 드라이브 계정을 사용하십시오.",
+  "export-csv-warning-description": "CSV로 내보내는 것은 데이터 백업으로 사용해서는 안됩니다. CSV에서 예산 및 세부 앱 데이터가 내보내지 않습니다! Google 드라이브 또는 아래의 가져 오기 및 내보내기 데이터 설정을 사용하십시오.",
   "csv-saved-success": "CSV는 장치에 저장되었습니다",
   "error-exporting": "오류 내보내기",
   "backup-downloaded-success": "백업이 장치에 다운로드되었습니다",
+  "backup-saved-success": "백업은 장치에 저장되었습니다",
   "error-downloading": "오류 다운로드",
+  "error-saving": "오류 저장",
   "tools": "도구",
   "delete-bill-item-question": "청구서 항목 삭제?",
   "bill-splitter": "빌 스플리터",
@@ -699,5 +701,12 @@
   "major-change-8": "38 개의 새로운 통화",
   "cycle": "주기",
   "past-days": "지난 날",
-  "start-date": "시작 날짜"
+  "start-date": "시작 날짜",
+  "provide-email-question": "이메일을 제공 하시겠습니까?",
+  "provide-email-question-description": "이메일을 제공하면 개발자가 귀하의 제안에 대해 연락 할 수 있습니다!",
+  "submit-anyway": "어쨌든 제출하십시오",
+  "go-back": "돌아 가라",
+  "export-data-file": "내보내기 데이터 파일",
+  "import-data-file": "가져 오기 데이터 파일",
+  "google-drive": "Google Drive"
 }

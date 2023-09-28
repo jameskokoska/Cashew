@@ -330,6 +330,7 @@ class TranslationsHelp extends StatelessWidget {
                     style: TextStyle(
                       color: getColor(context, "black"),
                       fontFamily: appStateSettings["font"],
+                      fontFamilyFallback: ['Inter'],
                     ),
                   ),
                   TextSpan(
@@ -342,6 +343,7 @@ class TranslationsHelp extends StatelessWidget {
                       color:
                           getColor(context, "unPaidOverdue").withOpacity(0.8),
                       fontFamily: appStateSettings["font"],
+                      fontFamilyFallback: ['Inter'],
                     ),
                   ),
                 ],

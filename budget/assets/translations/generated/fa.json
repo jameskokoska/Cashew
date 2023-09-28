@@ -533,11 +533,13 @@
   "enter-period-length": "طول دوره را وارد کنید",
   "export-csv": "صادرات پرونده CSV",
   "export-csv-warning": "فایل پشتیبانی اطلاعات",
-  "export-csv-warning-description": "صادرات به CSV نباید به عنوان نسخه پشتیبان از داده ها استفاده شود. بودجه و داده های برنامه دقیق در CSV صادر نمی شود! لطفاً برای تهیه نسخه پشتیبان از حساب Google Drive استفاده کنید.",
+  "export-csv-warning-description": "صادرات به CSV نباید به عنوان نسخه پشتیبان از داده ها استفاده شود. بودجه و داده های برنامه دقیق در CSV صادر نمی شود! لطفاً از Google Drive یا تنظیمات داده های واردات و صادرات در زیر استفاده کنید.",
   "csv-saved-success": "CSV در دستگاه ذخیره شد",
   "error-exporting": "صادرات خطا",
   "backup-downloaded-success": "نسخه پشتیبان تهیه شده به دستگاه",
+  "backup-saved-success": "پشتیبان تهیه شده در دستگاه",
   "error-downloading": "بارگیری خطا",
+  "error-saving": "خطا در ذخیره",
   "tools": "ابزار",
   "delete-bill-item-question": "مورد صورتحساب را حذف کنید؟",
   "bill-splitter": "تقسیم کننده صورتحساب",
@@ -699,5 +701,12 @@
   "major-change-8": "38 ارز جدید",
   "cycle": "چرخه",
   "past-days": "روزهای گذشته",
-  "start-date": "تاریخ شروع"
+  "start-date": "تاریخ شروع",
+  "provide-email-question": "ایمیل تهیه کنید؟",
+  "provide-email-question-description": "اگر ایمیل خود را ارائه دهید ، توسعه دهنده می تواند در مورد پیشنهاد شما با شما تماس بگیرد!",
+  "submit-anyway": "به هر حال ارسال کنید",
+  "go-back": "برگرد",
+  "export-data-file": "پرونده داده صادر کردن",
+  "import-data-file": "وارد کردن پرونده داده",
+  "google-drive": "Google Drive"
 }

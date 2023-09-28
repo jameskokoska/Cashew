@@ -533,11 +533,13 @@
   "enter-period-length": "Masukkan tempoh tempoh",
   "export-csv": "Eksport fail CSV",
   "export-csv-warning": "Sandaran data",
-  "export-csv-warning-description": "Mengeksport ke CSV tidak boleh digunakan sebagai sandaran data. Belanjawan dan data aplikasi terperinci tidak dieksport dalam CSV! Sila gunakan akaun Google Drive untuk sandaran.",
+  "export-csv-warning-description": "Mengeksport ke CSV tidak boleh digunakan sebagai sandaran data. Belanjawan dan data aplikasi terperinci tidak dieksport dalam CSV! Sila gunakan Google Drive atau tetapan data import dan eksport di bawah.",
   "csv-saved-success": "CSV disimpan ke peranti",
   "error-exporting": "Ralat mengeksport",
   "backup-downloaded-success": "Sandaran dimuat turun ke peranti",
+  "backup-saved-success": "Sandaran disimpan ke peranti",
   "error-downloading": "Ralat memuat turun",
+  "error-saving": "Penjimatan ralat",
   "tools": "Alat",
   "delete-bill-item-question": "Padam item bil?",
   "bill-splitter": "Splitter Bill",
@@ -699,5 +701,12 @@
   "major-change-8": "38 mata wang baru",
   "cycle": "Kitaran",
   "past-days": "Beberapa hari yang lalu",
-  "start-date": "Tarikh mula"
+  "start-date": "Tarikh mula",
+  "provide-email-question": "Berikan e -mel?",
+  "provide-email-question-description": "Jika anda memberikan e -mel anda, pemaju boleh menghubungi anda mengenai cadangan anda!",
+  "submit-anyway": "Hantar pula",
+  "go-back": "Pergi balik",
+  "export-data-file": "Fail data eksport",
+  "import-data-file": "Import fail data",
+  "google-drive": "Google Drive"
 }

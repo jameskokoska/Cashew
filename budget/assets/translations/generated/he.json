@@ -533,11 +533,13 @@
   "enter-period-length": "הזן אורך תקופה",
   "export-csv": "ייצוא קובץ CSV",
   "export-csv-warning": "גיבוי נתונים",
-  "export-csv-warning-description": "אין להשתמש בייצוא ל- CSV כגיבוי של נתונים. תקציבים ונתוני אפליקציות מפורטות אינם מיוצאים ב- CSV! אנא השתמש בחשבון Google Drive לגיבויים.",
+  "export-csv-warning-description": "אין להשתמש בייצוא ל- CSV כגיבוי של נתונים. תקציבים ונתוני אפליקציות מפורטות אינם מיוצאים ב- CSV! אנא השתמש בכונן Google או בהגדרות הייבוא ​​והייצוא של נתונים למטה.",
   "csv-saved-success": "CSV נשמר במכשיר",
   "error-exporting": "ייצוא שגיאות",
   "backup-downloaded-success": "גיבוי הורד למכשיר",
+  "backup-saved-success": "גיבוי נשמר במכשיר",
   "error-downloading": "הורדת שגיאות",
+  "error-saving": "שמירת שגיאות",
   "tools": "כלים",
   "delete-bill-item-question": "למחוק פריט ביל?",
   "bill-splitter": "מפצל ביל",
@@ -699,5 +701,12 @@
   "major-change-8": "38 מטבעות חדשים",
   "cycle": "מחזור",
   "past-days": "הימים האחרונים",
-  "start-date": "תאריך התחלה"
+  "start-date": "תאריך התחלה",
+  "provide-email-question": "לספק דוא\"ל?",
+  "provide-email-question-description": "אם אתה מספק את הדוא\"ל שלך, היזם יכול ליצור איתך קשר לגבי ההצעה שלך!",
+  "submit-anyway": "להגיש בכל מקרה",
+  "go-back": "תחזור",
+  "export-data-file": "ייצוא קובץ נתונים",
+  "import-data-file": "ייבא קובץ נתונים",
+  "google-drive": "Google Drive"
 }

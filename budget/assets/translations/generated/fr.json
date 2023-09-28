@@ -533,11 +533,13 @@
   "enter-period-length": "Entrez la durée de la période",
   "export-csv": "Exporter le fichier CSV",
   "export-csv-warning": "Sauvegarde de données",
-  "export-csv-warning-description": "L'exportation vers CSV ne doit pas être utilisée comme sauvegarde des données. Les budgets et les données détaillées des applications ne sont pas exportées dans le CSV! Veuillez utiliser le compte Google Drive pour les sauvegardes.",
+  "export-csv-warning-description": "L'exportation vers CSV ne doit pas être utilisée comme sauvegarde des données. Les budgets et les données détaillées des applications ne sont pas exportées dans le CSV! Veuillez utiliser Google Drive ou les paramètres d'importation et d'exportation ci-dessous.",
   "csv-saved-success": "CSV enregistré sur l'appareil",
   "error-exporting": "Erreur d'exportation",
   "backup-downloaded-success": "Sauvegarde téléchargée sur l'appareil",
+  "backup-saved-success": "Sauvegarde enregistrée sur l'appareil",
   "error-downloading": "Téléchargement d'erreur",
+  "error-saving": "Économie d'erreur",
   "tools": "Outils",
   "delete-bill-item-question": "Supprimer l'article de la facture?",
   "bill-splitter": "Billet",
@@ -699,5 +701,12 @@
   "major-change-8": "38 nouvelles monnaies",
   "cycle": "Faire du vélo",
   "past-days": "Passés passés",
-  "start-date": "Date de début"
+  "start-date": "Date de début",
+  "provide-email-question": "Fournir un e-mail?",
+  "provide-email-question-description": "Si vous fournissez votre e-mail, le développeur peut vous contacter au sujet de votre suggestion!",
+  "submit-anyway": "Soumettre de toute façon",
+  "go-back": "Retourner",
+  "export-data-file": "Fichier de données d'exportation",
+  "import-data-file": "Importer un fichier de données",
+  "google-drive": "Google Drive"
 }

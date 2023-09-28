@@ -533,11 +533,13 @@
   "enter-period-length": "Voer de lengte van de periode in",
   "export-csv": "Exporteer CSV -bestand",
   "export-csv-warning": "Reservekopie van gegevens",
-  "export-csv-warning-description": "Exporteren naar CSV mag niet worden gebruikt als een back -up van gegevens. Budgetten en gedetailleerde app -gegevens worden niet geëxporteerd in de CSV! Gebruik het Google Drive -account voor back -ups.",
+  "export-csv-warning-description": "Exporteren naar CSV mag niet worden gebruikt als een back -up van gegevens. Budgetten en gedetailleerde app -gegevens worden niet geëxporteerd in de CSV! Gebruik hieronder Google Drive of de gegevensinstellingen importeren en exporteren.",
   "csv-saved-success": "CSV opgeslagen op apparaat",
   "error-exporting": "Error exporteren",
   "backup-downloaded-success": "Back -up gedownload naar apparaat",
+  "backup-saved-success": "Back -up opgeslagen op apparaat",
   "error-downloading": "Fout downloaden",
+  "error-saving": "Foutbesparing",
   "tools": "Hulpmiddelen",
   "delete-bill-item-question": "Bill -item verwijderen?",
   "bill-splitter": "Bill Splitter",
@@ -699,5 +701,12 @@
   "major-change-8": "38 nieuwe valuta",
   "cycle": "Fiets",
   "past-days": "Voorgaande dagen",
-  "start-date": "Begin datum"
+  "start-date": "Begin datum",
+  "provide-email-question": "E -mail geven?",
+  "provide-email-question-description": "Als u uw e -mail verstrekt, kan de ontwikkelaar contact met u opnemen over uw suggestie!",
+  "submit-anyway": "Dien toch in",
+  "go-back": "Ga terug",
+  "export-data-file": "Exporteer gegevensbestand exporteren",
+  "import-data-file": "Het gegevensbestand importeren",
+  "google-drive": "Google Drive"
 }

@@ -533,11 +533,13 @@
   "enter-period-length": "कालावधी लांबी प्रविष्ट करा",
   "export-csv": "सीएसव्ही फाइल निर्यात करा",
   "export-csv-warning": "डेटा बॅकअप",
-  "export-csv-warning-description": "सीएसव्हीला निर्यात करणे डेटाचा बॅकअप म्हणून वापरले जाऊ नये. बजेट आणि तपशीलवार अ‍ॅप डेटा सीएसव्हीमध्ये निर्यात केला जात नाही! कृपया बॅकअपसाठी Google ड्राइव्ह खाते वापरा.",
+  "export-csv-warning-description": "सीएसव्हीला निर्यात करणे डेटाचा बॅकअप म्हणून वापरले जाऊ नये. बजेट आणि तपशीलवार अ‍ॅप डेटा सीएसव्हीमध्ये निर्यात केला जात नाही! कृपया Google ड्राइव्ह किंवा खाली आयात आणि निर्यात डेटा सेटिंग्ज वापरा.",
   "csv-saved-success": "सीएसव्हीने डिव्हाइसवर सेव्ह केले",
   "error-exporting": "त्रुटी निर्यात",
   "backup-downloaded-success": "डिव्हाइसवर बॅकअप डाउनलोड केला",
+  "backup-saved-success": "बॅकअप डिव्हाइसवर सेव्ह",
   "error-downloading": "त्रुटी डाउनलोड करणे",
+  "error-saving": "त्रुटी बचत",
   "tools": "साधने",
   "delete-bill-item-question": "बिल आयटम हटवा?",
   "bill-splitter": "बिल स्प्लिटर",
@@ -699,5 +701,12 @@
   "major-change-8": "38 नवीन चलने",
   "cycle": "चक्र",
   "past-days": "मागील दिवस",
-  "start-date": "प्रारंभ तारीख"
+  "start-date": "प्रारंभ तारीख",
+  "provide-email-question": "ईमेल प्रदान करा?",
+  "provide-email-question-description": "आपण आपला ईमेल प्रदान केल्यास, विकसक आपल्या सूचनेबद्दल आपल्याशी संपर्क साधू शकतो!",
+  "submit-anyway": "तरीही सबमिट करा",
+  "go-back": "परत जा",
+  "export-data-file": "डेटा फाइल निर्यात करा",
+  "import-data-file": "डेटा फाइल आयात करा",
+  "google-drive": "Google Drive"
 }

@@ -533,11 +533,13 @@
   "enter-period-length": "Enter Period Length",
   "export-csv": "Export CSV File",
   "export-csv-warning": "Data Backup",
-  "export-csv-warning-description": "Exporting to CSV should not be used as a backup of data. Budgets and detailed app data is not exported in the CSV! Please use the Google Drive Account for backups.",
+  "export-csv-warning-description": "Exporting to CSV should not be used as a backup of data. Budgets and detailed app data is not exported in the CSV! Please use Google Drive or the Import and Export data settings below.",
   "csv-saved-success": "CSV Saved to Device",
   "error-exporting": "Error Exporting",
   "backup-downloaded-success": "Backup Downloaded to Device",
+  "backup-saved-success": "Backup Saved to Device",
   "error-downloading": "Error Downloading",
+  "error-saving": "Error Saving",
   "tools": "Tools",
   "delete-bill-item-question": "Delete bill item?",
   "bill-splitter": "Bill Splitter",
@@ -699,5 +701,12 @@
   "major-change-8": "38 New Currencies",
   "cycle": "Cycle",
   "past-days": "Past Days",
-  "start-date": "Start Date"
+  "start-date": "Start Date",
+  "provide-email-question": "Provide Email?",
+  "provide-email-question-description": "If you provide your email, the developer can contact you about your suggestion!",
+  "submit-anyway": "Submit Anyway",
+  "go-back": "Go Back",
+  "export-data-file": "Export Data File",
+  "import-data-file": "Import Data File",
+  "google-drive": "Google Drive"
 }

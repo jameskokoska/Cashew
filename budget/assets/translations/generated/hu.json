@@ -533,11 +533,13 @@
   "enter-period-length": "Írja be az időszak hosszát",
   "export-csv": "CSV fájl exportálása",
   "export-csv-warning": "Adatmentés",
-  "export-csv-warning-description": "A CSV -be történő exportálást nem szabad az adatok biztonsági másolataként használni. A költségvetéseket és a részletes alkalmazás adatait a CSV -ben nem exportálják! Kérjük, használja a Google Drive fiókot a biztonsági másolatokhoz.",
+  "export-csv-warning-description": "A CSV -be történő exportálást nem szabad az adatok biztonsági másolataként használni. A költségvetéseket és a részletes alkalmazás adatait a CSV -ben nem exportálják! Kérjük, használja a Google Drive -t vagy az alábbiak importálását és exportálását.",
   "csv-saved-success": "CSV mentve az eszközre",
   "error-exporting": "Hiba exportálása",
   "backup-downloaded-success": "Biztonsági mentés letöltött eszközre",
+  "backup-saved-success": "Az eszközre mentett biztonsági mentés",
   "error-downloading": "Hiba letöltése",
+  "error-saving": "Hibamegtakarítás",
   "tools": "Szerszámok",
   "delete-bill-item-question": "Törölje a számla tételt?",
   "bill-splitter": "Számla osztó",
@@ -699,5 +701,12 @@
   "major-change-8": "38 új valuta",
   "cycle": "Ciklus",
   "past-days": "Az elmúlt napok",
-  "start-date": "Kezdő dátum"
+  "start-date": "Kezdő dátum",
+  "provide-email-question": "Adjon e -mailt?",
+  "provide-email-question-description": "Ha megadja az e -mailjét, a fejlesztő kapcsolatba léphet Önnel a javaslatával kapcsolatban!",
+  "submit-anyway": "Különben is",
+  "go-back": "menjen vissza",
+  "export-data-file": "Adatfájl exportálása",
+  "import-data-file": "Adatfájl importálása",
+  "google-drive": "Google Drive"
 }

@@ -533,11 +533,13 @@
   "enter-period-length": "Wprowadź długość okresu",
   "export-csv": "Eksportuj plik CSV",
   "export-csv-warning": "Backup danych",
-  "export-csv-warning-description": "Eksportowanie do CSV nie powinno być wykorzystywane jako tworzenie kopii zapasowych danych. Budżety i szczegółowe dane aplikacji nie są eksportowane w CSV! Użyj konta Dysku Google do kopii zapasowych.",
+  "export-csv-warning-description": "Eksportowanie do CSV nie powinno być wykorzystywane jako tworzenie kopii zapasowych danych. Budżety i szczegółowe dane aplikacji nie są eksportowane w CSV! Skorzystaj z Dysku Google lub ustawień danych importu i eksportu poniżej.",
   "csv-saved-success": "CSV zapisane na urządzeniu",
   "error-exporting": "Eksportowanie błędów",
   "backup-downloaded-success": "Kopia zapasowa pobrana na urządzenie",
+  "backup-saved-success": "Kopia zapasowa zapisana na urządzeniu",
   "error-downloading": "Pobieranie błędów",
+  "error-saving": "Zapisywanie błędów",
   "tools": "Narzędzia",
   "delete-bill-item-question": "Usuń element rachunku?",
   "bill-splitter": "Rozdzielacz Bill",
@@ -699,5 +701,12 @@
   "major-change-8": "38 nowych walut",
   "cycle": "Cykl",
   "past-days": "Ostatnie dni",
-  "start-date": "Data rozpoczęcia"
+  "start-date": "Data rozpoczęcia",
+  "provide-email-question": "Podać e -mail?",
+  "provide-email-question-description": "Jeśli podasz swój e -mail, programista może skontaktować się z Tobą w sprawie Twojej sugestii!",
+  "submit-anyway": "Prześlij i tak",
+  "go-back": "Wróć",
+  "export-data-file": "Eksportuj plik danych",
+  "import-data-file": "Importować plik danych",
+  "google-drive": "Google Drive"
 }

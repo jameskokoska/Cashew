@@ -533,11 +533,13 @@
   "enter-period-length": "अवधि की लंबाई दर्ज करें",
   "export-csv": "निर्यात CSV फ़ाइल",
   "export-csv-warning": "डेटा बैकअप",
-  "export-csv-warning-description": "CSV को निर्यात का उपयोग डेटा के बैकअप के रूप में नहीं किया जाना चाहिए। CSV में बजट और विस्तृत ऐप डेटा निर्यात नहीं किया गया है! कृपया बैकअप के लिए Google ड्राइव खाते का उपयोग करें।",
+  "export-csv-warning-description": "CSV को निर्यात का उपयोग डेटा के बैकअप के रूप में नहीं किया जाना चाहिए। CSV में बजट और विस्तृत ऐप डेटा निर्यात नहीं किया गया है! कृपया नीचे दिए गए Google ड्राइव या आयात और निर्यात डेटा सेटिंग्स का उपयोग करें।",
   "csv-saved-success": "CSV डिवाइस पर सहेजा",
   "error-exporting": "त्रुटि निर्यात करना",
   "backup-downloaded-success": "डिवाइस पर डाउनलोड किया गया बैकअप",
+  "backup-saved-success": "डिवाइस के लिए सहेजा गया बैकअप",
   "error-downloading": "त्रुटि डाउनलोड करना",
+  "error-saving": "त्रुटि सहेजना",
   "tools": "औजार",
   "delete-bill-item-question": "बिल आइटम हटाएं?",
   "bill-splitter": "बिल स्प्लिटर",
@@ -699,5 +701,12 @@
   "major-change-8": "38 नई मुद्राएं",
   "cycle": "चक्र",
   "past-days": "पिछले दिनों",
-  "start-date": "आरंभ करने की तिथि"
+  "start-date": "आरंभ करने की तिथि",
+  "provide-email-question": "ईमेल प्रदान करें?",
+  "provide-email-question-description": "यदि आप अपना ईमेल प्रदान करते हैं, तो डेवलपर आपके सुझाव के बारे में आपसे संपर्क कर सकता है!",
+  "submit-anyway": "वैसे भी सबमिट करें",
+  "go-back": "वापस जाओ",
+  "export-data-file": "निर्यात डेटा फ़ाइल",
+  "import-data-file": "आयात आंकड़ा फ़ाइल",
+  "google-drive": "Google Drive"
 }

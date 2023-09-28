@@ -84,7 +84,8 @@ class SlidingSelectorIncomeExpense extends StatelessWidget {
                                 "all".tr(),
                                 style: TextStyle(
                                   fontSize: 14,
-                                  fontFamily: 'Avenir',
+                                  fontFamily: appStateSettings["font"],
+                                  fontFamilyFallback: ['Inter'],
                                 ),
                               ),
                             ),
@@ -98,7 +99,8 @@ class SlidingSelectorIncomeExpense extends StatelessWidget {
                                 "expense".tr(),
                                 style: TextStyle(
                                   fontSize: 14,
-                                  fontFamily: 'Avenir',
+                                  fontFamily: appStateSettings["font"],
+                                  fontFamilyFallback: ['Inter'],
                                 ),
                               ),
                             ),
@@ -112,7 +114,8 @@ class SlidingSelectorIncomeExpense extends StatelessWidget {
                                 "income".tr(),
                                 style: TextStyle(
                                   fontSize: 14,
-                                  fontFamily: 'Avenir',
+                                  fontFamily: appStateSettings["font"],
+                                  fontFamilyFallback: ['Inter'],
                                 ),
                               ),
                             ),
@@ -129,7 +132,8 @@ class SlidingSelectorIncomeExpense extends StatelessWidget {
                                   option.tr(),
                                   style: TextStyle(
                                     fontSize: 14,
-                                    fontFamily: 'Avenir',
+                                    fontFamily: appStateSettings["font"],
+                                    fontFamilyFallback: ['Inter'],
                                   ),
                                 ),
                               ),

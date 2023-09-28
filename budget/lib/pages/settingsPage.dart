@@ -13,6 +13,7 @@ import 'package:budget/pages/upcomingOverdueTransactionsPage.dart';
 import 'package:budget/struct/languageMap.dart';
 import 'package:budget/widgets/animatedExpanded.dart';
 import 'package:budget/widgets/dropdownSelect.dart';
+import 'package:budget/widgets/exportDB.dart';
 import 'package:budget/widgets/importCSV.dart';
 import 'package:budget/widgets/exportCSV.dart';
 import 'package:budget/pages/autoTransactionsPageEmail.dart';
@@ -23,6 +24,7 @@ import 'package:budget/pages/editWalletsPage.dart';
 import 'package:budget/pages/notificationsPage.dart';
 import 'package:budget/pages/subscriptionsPage.dart';
 import 'package:budget/widgets/accountAndBackup.dart';
+import 'package:budget/widgets/importDB.dart';
 import 'package:budget/widgets/moreIcons.dart';
 import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/notificationsSettings.dart';
@@ -605,9 +607,20 @@ class SettingsPageContent extends StatelessWidget {
 
         SettingsHeader(title: "import-and-export".tr()),
 
+        ExportCSV(),
+
         ImportCSV(),
 
-        ExportCSV(),
+        SettingsHeader(title: "backups".tr()),
+
+        ExportDB(),
+
+        ImportDB(),
+
+        GoogleAccountLoginButton(
+          isOutlinedButton: false,
+          forceButtonName: "google-drive".tr(),
+        ),
       ],
     );
   }

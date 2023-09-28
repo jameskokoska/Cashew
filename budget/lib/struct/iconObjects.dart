@@ -3552,4 +3552,20 @@ List<IconForCategory> iconObjects = [
     ],
     mostLikelyCategoryName: "Healthy",
   ),
+  IconForCategory(
+    icon: "tablet.png",
+    tags: [
+      "tablet",
+      "device",
+      "technology",
+      "electronics",
+      "screen",
+      "computer",
+      "digital",
+      "portable",
+      "touchscreen",
+      "gadget"
+    ],
+    mostLikelyCategoryName: "Tablet",
+  ),
 ];

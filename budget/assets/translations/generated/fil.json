@@ -533,11 +533,13 @@
   "enter-period-length": "Ipasok ang haba ng panahon",
   "export-csv": "I -export ang CSV file",
   "export-csv-warning": "Backup ng data",
-  "export-csv-warning-description": "Ang pag -export sa CSV ay hindi dapat gamitin bilang isang backup ng data. Ang mga badyet at detalyadong data ng app ay hindi nai -export sa CSV! Mangyaring gamitin ang Google Drive account para sa mga backup.",
+  "export-csv-warning-description": "Ang pag -export sa CSV ay hindi dapat gamitin bilang isang backup ng data. Ang mga badyet at detalyadong data ng app ay hindi nai -export sa CSV! Mangyaring gamitin ang Google Drive o ang mga setting ng data ng pag -import at pag -export sa ibaba.",
   "csv-saved-success": "Nai -save ang CSV sa aparato",
   "error-exporting": "Error sa pag -export",
   "backup-downloaded-success": "Nai -download ang backup sa aparato",
+  "backup-saved-success": "I -save ang backup sa aparato",
   "error-downloading": "Pag -download ng error",
+  "error-saving": "Error sa pag -save",
   "tools": "Mga tool",
   "delete-bill-item-question": "Tanggalin ang item ng bill?",
   "bill-splitter": "Bill Splitter",
@@ -699,5 +701,12 @@
   "major-change-8": "38 bagong pera",
   "cycle": "Cycle",
   "past-days": "Mga nakaraang araw",
-  "start-date": "Petsa ng pagsisimula"
+  "start-date": "Petsa ng pagsisimula",
+  "provide-email-question": "Magbigay ng email?",
+  "provide-email-question-description": "Kung ibinibigay mo ang iyong email, maaaring makipag -ugnay sa iyo ang developer tungkol sa iyong mungkahi!",
+  "submit-anyway": "Isumite pa rin",
+  "go-back": "Bumalik ka",
+  "export-data-file": "I -export ang file ng data",
+  "import-data-file": "Mag -import ng file ng data",
+  "google-drive": "Google Drive"
 }

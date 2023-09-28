@@ -533,11 +533,13 @@
   "enter-period-length": "Zadejte délku období",
   "export-csv": "Exportujte soubor CSV",
   "export-csv-warning": "Zálohování dat",
-  "export-csv-warning-description": "Export do CSV by neměl být používán jako zálohování dat. Rozpočty a podrobná data aplikace nejsou exportovány v CSV! Použijte prosím účet Disk Google pro zálohy.",
+  "export-csv-warning-description": "Export do CSV by neměl být používán jako zálohování dat. Rozpočty a podrobná data aplikace nejsou exportovány v CSV! Níže použijte disk Google nebo nastavení dat importu a exportu.",
   "csv-saved-success": "CSV uloženo do zařízení",
   "error-exporting": "Export chyby",
   "backup-downloaded-success": "Zálohování staženo do zařízení",
+  "backup-saved-success": "Zálohování uloženo do zařízení",
   "error-downloading": "Stahování chyb",
+  "error-saving": "Uložení chyby",
   "tools": "Nástroje",
   "delete-bill-item-question": "Odstranit položku účtu?",
   "bill-splitter": "Bill Splitter",
@@ -699,5 +701,12 @@
   "major-change-8": "38 nových měn",
   "cycle": "Cyklus",
   "past-days": "Minulé dny",
-  "start-date": "Datum zahájení"
+  "start-date": "Datum zahájení",
+  "provide-email-question": "Poskytnout e -mail?",
+  "provide-email-question-description": "Pokud poskytnete svůj e -mail, vývojář vás může kontaktovat ohledně vašeho návrhu!",
+  "submit-anyway": "Stejně odešlete",
+  "go-back": "Vraťte se",
+  "export-data-file": "Exportní datový soubor",
+  "import-data-file": "Import datový soubor",
+  "google-drive": "Google Drive"
 }

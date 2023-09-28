@@ -533,11 +533,13 @@
   "enter-period-length": "Zeitlänge eingeben",
   "export-csv": "CSV -Datei exportieren",
   "export-csv-warning": "Datensicherung",
-  "export-csv-warning-description": "Das Exportieren nach CSV sollte nicht als Sicherung von Daten verwendet werden. Budgets und detaillierte App -Daten werden im CSV nicht exportiert! Bitte verwenden Sie das Google Drive -Konto für Sicherungen.",
+  "export-csv-warning-description": "Das Exportieren nach CSV sollte nicht als Sicherung von Daten verwendet werden. Budgets und detaillierte App -Daten werden im CSV nicht exportiert! Bitte verwenden Sie Google Drive oder die folgenden Dateneinstellungen importieren und exportieren.",
   "csv-saved-success": "CSV auf dem Gerät gespeichert",
   "error-exporting": "Fehlerexportieren",
   "backup-downloaded-success": "Sicherung auf das Gerät heruntergeladen",
+  "backup-saved-success": "Sicherung auf dem Gerät gespeichert",
   "error-downloading": "Fehler beim Herunterladen",
+  "error-saving": "Fehlersparen",
   "tools": "Werkzeuge",
   "delete-bill-item-question": "Rechnungsartikel löschen?",
   "bill-splitter": "Bill Splitter",
@@ -699,5 +701,12 @@
   "major-change-8": "38 neue Währungen",
   "cycle": "Zyklus",
   "past-days": "Vergangene Tage",
-  "start-date": "Startdatum"
+  "start-date": "Startdatum",
+  "provide-email-question": "E -Mail angeben?",
+  "provide-email-question-description": "Wenn Sie Ihre E -Mail angeben, kann der Entwickler Sie über Ihren Vorschlag kontaktieren!",
+  "submit-anyway": "Trotzdem einreichen",
+  "go-back": "Geh zurück",
+  "export-data-file": "Datendatei exportieren",
+  "import-data-file": "Datendatei importieren",
+  "google-drive": "Google Drive"
 }

@@ -533,11 +533,13 @@
   "enter-period-length": "Dönem uzunluğunu girin",
   "export-csv": "CSV dosyasını dışa aktar",
   "export-csv-warning": "Veri yedekleme",
-  "export-csv-warning-description": "CSV'ye dışa aktarma, veri yedekleme olarak kullanılmamalıdır. Bütçeler ve ayrıntılı uygulama verileri CSV'de dışa aktarılmaz! Yedeklemeler için lütfen Google Drive hesabını kullanın.",
+  "export-csv-warning-description": "CSV'ye dışa aktarma, veri yedekleme olarak kullanılmamalıdır. Bütçeler ve ayrıntılı uygulama verileri CSV'de dışa aktarılmaz! Lütfen Google Drive'ı veya aşağıdaki içe aktarma ve dışa aktarma veri ayarlarını kullanın.",
   "csv-saved-success": "CSV cihaza kaydedildi",
   "error-exporting": "Hata Dışa Aktarma",
   "backup-downloaded-success": "Yedekleme cihaza indirildi",
+  "backup-saved-success": "Yedekleme cihaza kaydedildi",
   "error-downloading": "Hata İndirme",
+  "error-saving": "Hata Kaydetme",
   "tools": "Aletler",
   "delete-bill-item-question": "Fatura öğesini silmek?",
   "bill-splitter": "Fatura ayırıcısı",
@@ -699,5 +701,12 @@
   "major-change-8": "38 Yeni Para Birimi",
   "cycle": "Döngü",
   "past-days": "Geçmiş günler",
-  "start-date": "Başlangıç ​​tarihi"
+  "start-date": "Başlangıç ​​tarihi",
+  "provide-email-question": "E -posta sağlamak mı?",
+  "provide-email-question-description": "E -postanızı sağlarsanız, geliştirici öneriniz hakkında sizinle iletişime geçebilir!",
+  "submit-anyway": "Yine de Gönder",
+  "go-back": "Geri gitmek",
+  "export-data-file": "Dışa aktarma Dosyası",
+  "import-data-file": "Veri Dosyasını İçe Aktar",
+  "google-drive": "Google Drive"
 }

@@ -146,8 +146,8 @@ Future<bool> signInGoogle(
           : await googleSignIn?.signIn();
 
       if (account != null) {
-        print("ACCOUNT");
-        print(account);
+        // print("ACCOUNT");
+        // print(account);
         googleUser = account;
         updateSettings(
           "currentUserEmail",
@@ -267,6 +267,56 @@ Future<void> createBackupInBackground(context) async {
   return;
 }
 
+class DBFileInfo {
+  DBFileInfo(
+    this.dbFileBytes,
+    this.mediaStream,
+  );
+
+  var dbFileBytes;
+  Stream<List<int>> mediaStream;
+}
+
+Future<DBFileInfo> getCurrentDBFileInfo() async {
+  var dbFileBytes;
+  late Stream<List<int>> mediaStream;
+  if (kIsWeb) {
+    final html.Storage localStorage = html.window.localStorage;
+    dbFileBytes = bin2str.decode(localStorage["moor_db_str_db"] ?? "");
+    mediaStream = Stream.value(dbFileBytes);
+  } else {
+    final dbFolder = await getApplicationDocumentsDirectory();
+    final dbFile = File(p.join(dbFolder.path, 'db.sqlite'));
+    print("FILE SIZE:" + (dbFile.lengthSync() / 1e+6).toString());
+    // Share.shareFiles([p.join(dbFolder.path, 'db.sqlite')],
+    //     text: 'Database');
+    // await file.readAsBytes();
+    dbFileBytes = await dbFile.readAsBytes();
+    mediaStream = Stream.value(List<int>.from(dbFileBytes));
+  }
+  return DBFileInfo(dbFileBytes, mediaStream);
+}
+
+Future overwriteDefaultDB(List<int> dataStore) async {
+  if (kIsWeb) {
+    final html.Storage localStorage = html.window.localStorage;
+    localStorage.clear();
+    localStorage["moor_db_str_db"] =
+        bin2str.encode(Uint8List.fromList(dataStore));
+    // extract the db number and set it to this to run migrator
+    // localStorage["moor_db_version_db"] =
+    //     (file.name ?? "-").split("-")[1].replaceAll("v", "");
+  } else {
+    final dbFolder = await getApplicationDocumentsDirectory();
+    final dbFile = File(p.join(dbFolder.path, 'db.sqlite'));
+    await dbFile.writeAsBytes(dataStore);
+    // Share.shareFiles([p.join(dbFolder.path, 'db.sqlite')],
+    //     text: 'Database');
+  }
+  // we need to be able to sync with others after the restore
+  await sharedPreferences.setString("dateOfLastSyncedWithClient", "{}");
+}
+
 Future<void> createBackup(
   context, {
   bool? silentBackup,
@@ -305,27 +355,15 @@ Future<void> createBackup(
     if (deleteOldBackups)
       await deleteRecentBackups(context, appStateSettings["backupLimit"],
           silentDelete: true);
-    var dbFileBytes;
-    late Stream<List<int>> mediaStream;
-    if (kIsWeb) {
-      final html.Storage localStorage = html.window.localStorage;
-      dbFileBytes = bin2str.decode(localStorage["moor_db_str_db"] ?? "");
-      mediaStream = Stream.value(dbFileBytes);
-    } else {
-      final dbFolder = await getApplicationDocumentsDirectory();
-      final dbFile = File(p.join(dbFolder.path, 'db.sqlite'));
-      print("FILE SIZE:" + (dbFile.lengthSync() / 1e+6).toString());
-      // Share.shareFiles([p.join(dbFolder.path, 'db.sqlite')],
-      //     text: 'Database');
-      // await file.readAsBytes();
-      dbFileBytes = await dbFile.readAsBytes();
-      mediaStream = Stream.value(List<int>.from(dbFileBytes));
-    }
+
+    DBFileInfo currentDBFileInfo = await getCurrentDBFileInfo();
+
     final authHeaders = await googleUser!.authHeaders;
     final authenticateClient = GoogleAuthClient(authHeaders);
     final driveApi = drive.DriveApi(authenticateClient);
 
-    var media = new drive.Media(mediaStream, dbFileBytes.length);
+    var media = new drive.Media(
+        currentDBFileInfo.mediaStream, currentDBFileInfo.dbFileBytes.length);
 
     var driveFile = new drive.File();
     final timestamp =
@@ -472,23 +510,7 @@ Future<void> loadBackup(
         dataStore.insertAll(dataStore.length, data);
       },
       onDone: () async {
-        if (kIsWeb) {
-          final html.Storage localStorage = html.window.localStorage;
-          localStorage.clear();
-          localStorage["moor_db_str_db"] =
-              bin2str.encode(Uint8List.fromList(dataStore));
-          // extract the db number and set it to this to run migrator
-          // localStorage["moor_db_version_db"] =
-          //     (file.name ?? "-").split("-")[1].replaceAll("v", "");
-        } else {
-          final dbFolder = await getApplicationDocumentsDirectory();
-          final dbFile = File(p.join(dbFolder.path, 'db.sqlite'));
-          await dbFile.writeAsBytes(dataStore);
-          // we need to be able to sync with others after the restore
-          await sharedPreferences.setString("dateOfLastSyncedWithClient", "{}");
-          // Share.shareFiles([p.join(dbFolder.path, 'db.sqlite')],
-          //     text: 'Database');
-        }
+        await overwriteDefaultDB(dataStore);
 
         // if this is added, it doesn't restore the database properly on web
         // await database.close();
@@ -535,10 +557,14 @@ class GoogleAccountLoginButton extends StatefulWidget {
     this.navigationSidebarButton = false,
     this.onTap,
     this.isButtonSelected = false,
+    this.isOutlinedButton = true,
+    this.forceButtonName,
   });
   final bool navigationSidebarButton;
   final Function? onTap;
   final bool isButtonSelected;
+  final bool isOutlinedButton;
+  final String? forceButtonName;
 
   @override
   State<GoogleAccountLoginButton> createState() =>
@@ -650,9 +676,12 @@ class _GoogleAccountLoginButtonState extends State<GoogleAccountLoginButton> {
                 : NavigationSidebarButton(
                     key: ValueKey("user"),
                     label: googleUser!.displayName ?? "",
-                    icon: appStateSettings["outlinedIcons"]
-                        ? Icons.person_outlined
-                        : Icons.person_rounded,
+                    icon: widget.forceButtonName == null
+                        ? appStateSettings["outlinedIcons"]
+                            ? Icons.person_outlined
+                            : Icons.person_rounded
+                        : MoreIcons.google_drive,
+                    iconScale: widget.forceButtonName == null ? 1 : 0.87,
                     onTap: () async {
                       if (widget.onTap != null) widget.onTap!();
                     },
@@ -665,38 +694,44 @@ class _GoogleAccountLoginButtonState extends State<GoogleAccountLoginButton> {
             padding: EdgeInsets.symmetric(vertical: 5, horizontal: 4),
             child: getPlatform() == PlatformOS.isIOS
                 ? SettingsContainer(
-                    isOutlined: true,
+                    isOutlined: widget.isOutlinedButton,
                     onTap: () async {
                       login();
                     },
-                    title: "backup".tr(),
+                    title: widget.forceButtonName ?? "backup".tr(),
                     icon: MoreIcons.google_drive,
                     iconScale: 0.87,
                   )
                 : SettingsContainer(
-                    isOutlined: true,
+                    isOutlined: widget.isOutlinedButton,
                     onTap: () async {
                       login();
                     },
-                    title: "login".tr(),
-                    icon: MoreIcons.google,
+                    title: widget.forceButtonName ?? "login".tr(),
+                    icon: widget.forceButtonName == null
+                        ? MoreIcons.google
+                        : MoreIcons.google_drive,
+                    iconScale: widget.forceButtonName == null ? 1 : 0.87,
                   ),
           )
         : getPlatform() == PlatformOS.isIOS
             ? SettingsContainerOpenPage(
                 openPage: AccountsPage(),
-                title: "backup".tr(),
+                title: widget.forceButtonName ?? "backup".tr(),
                 icon: MoreIcons.google_drive,
-                isOutlined: true,
+                isOutlined: widget.isOutlinedButton,
                 iconScale: 0.87,
               )
             : SettingsContainerOpenPage(
                 openPage: AccountsPage(),
-                title: googleUser!.displayName ?? "",
-                icon: appStateSettings["outlinedIcons"]
-                    ? Icons.person_outlined
-                    : Icons.person_rounded,
-                isOutlined: true,
+                title: widget.forceButtonName ?? googleUser!.displayName ?? "",
+                icon: widget.forceButtonName == null
+                    ? appStateSettings["outlinedIcons"]
+                        ? Icons.person_outlined
+                        : Icons.person_rounded
+                    : MoreIcons.google_drive,
+                iconScale: widget.forceButtonName == null ? 1 : 0.87,
+                isOutlined: widget.isOutlinedButton,
               );
   }
 }
@@ -1408,7 +1443,15 @@ Future<bool> saveDriveFileToDevice(
       ));
       return true;
     } catch (e) {
-      return true;
+      openSnackbar(SnackbarMessage(
+        title: "error-downloading".tr(),
+        description: e.toString(),
+        icon: appStateSettings["outlinedIcons"]
+            ? Icons.warning_outlined
+            : Icons.warning_rounded,
+      ));
+      print("Error saving file to device: " + e.toString());
+      return false;
     }
   }
 

@@ -47,7 +47,10 @@ class TransactionEntryNote extends StatelessWidget {
               ),
             ),
             textStyle: TextStyle(
-                color: getColor(context, "black"), fontFamily: 'Avenir'),
+              color: getColor(context, "black"),
+              fontFamily: appStateSettings["font"],
+              fontFamilyFallback: ['Inter'],
+            ),
             triggerMode: TooltipTriggerMode.tap,
             showDuration: getIsFullScreen(context) == false ||
                     getPlatform() != PlatformOS.web

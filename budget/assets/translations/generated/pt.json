@@ -533,11 +533,13 @@
   "enter-period-length": "Digite o comprimento do período",
   "export-csv": "Exportar arquivo CSV",
   "export-csv-warning": "Backup de dados",
-  "export-csv-warning-description": "A exportação para o CSV não deve ser usada como um backup de dados. Orçamentos e dados detalhados do aplicativo não são exportados no CSV! Use a conta do Google Drive para backups.",
+  "export-csv-warning-description": "A exportação para o CSV não deve ser usada como um backup de dados. Orçamentos e dados detalhados do aplicativo não são exportados no CSV! Use o Google Drive ou as configurações de dados de importação e exportação abaixo.",
   "csv-saved-success": "CSV salvo no dispositivo",
   "error-exporting": "Erro de exportação",
   "backup-downloaded-success": "Backup baixado para o dispositivo",
+  "backup-saved-success": "Backup salvo no dispositivo",
   "error-downloading": "Erro do download",
+  "error-saving": "Erro salvando",
   "tools": "Ferramentas",
   "delete-bill-item-question": "Excluir item de fatura?",
   "bill-splitter": "Bill Splitter",
@@ -699,5 +701,12 @@
   "major-change-8": "38 novas moedas",
   "cycle": "Ciclo",
   "past-days": "Dias passados",
-  "start-date": "Data de início"
+  "start-date": "Data de início",
+  "provide-email-question": "Fornecer email?",
+  "provide-email-question-description": "Se você fornecer seu e -mail, o desenvolvedor poderá entrar em contato com você sobre sua sugestão!",
+  "submit-anyway": "Envie de qualquer maneira",
+  "go-back": "Volte",
+  "export-data-file": "Exportar arquivo de dados",
+  "import-data-file": "Importar arquivo de dados",
+  "google-drive": "Google Drive"
 }

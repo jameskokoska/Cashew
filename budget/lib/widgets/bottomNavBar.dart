@@ -124,6 +124,7 @@ class BottomNavBarState extends State<BottomNavBar> {
             if (states.contains(MaterialState.selected)) {
               return TextStyle(
                 fontFamily: appStateSettings["font"],
+                fontFamilyFallback: ['Inter'],
                 fontSize: 13,
                 fontWeight: FontWeight.bold,
                 overflow: TextOverflow.clip,
@@ -131,6 +132,7 @@ class BottomNavBarState extends State<BottomNavBar> {
             } else {
               return TextStyle(
                 fontFamily: appStateSettings["font"],
+                fontFamilyFallback: ['Inter'],
                 fontSize: 13,
                 overflow: TextOverflow.clip,
               );
