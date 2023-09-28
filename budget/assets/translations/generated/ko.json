@@ -720,5 +720,12 @@
   "major-change-9-1": "설정에서 전체 데이터 파일 백업 가져 오기/내보내기",
   "major-change-10": "홈페이지 배너",
   "major-change-10-1": "홈페이지 편집 홈 페이지에서 홈페이지 배너 위젯 크기를 사용자 정의하십시오.",
-  "select-period-tooltip": "기간을 선택하십시오"
+  "select-period-tooltip": "기간을 선택하십시오",
+  "data-overwrite-warning": "데이터를 덮어 쓰기",
+  "data-overwrite-warning-description": "데이터 가져 오기는 모든 현재 데이터를 덮어 씁니다!",
+  "select-backup-file": "백업을 선택하십시오",
+  "select-backup-file-description": "Backup.sql 파일을 선택하십시오.",
+  "database-corrupted": "데이터베이스가 손상되었습니다",
+  "database-corrupted-description": "데이터베이스가 손상되었습니다. 잘못된 파일을 가져 왔을 수 있습니다.",
+  "import-backup": "백업 가져 오기"
 }

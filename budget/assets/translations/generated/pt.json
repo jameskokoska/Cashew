@@ -720,5 +720,12 @@
   "major-change-9-1": "Importar/exportar backups de arquivos de dados completos nas configurações",
   "major-change-10": "Banner da página inicial",
   "major-change-10-1": "Personalize o tamanho do widget do banner da página inicial na página inicial Editar",
-  "select-period-tooltip": "Selecione Período"
+  "select-period-tooltip": "Selecione Período",
+  "data-overwrite-warning": "Substituição de dados",
+  "data-overwrite-warning-description": "A importação de dados substituirá todos os dados atuais!",
+  "select-backup-file": "Selecione Backup",
+  "select-backup-file-description": "Selecione seu arquivo backup.sql.",
+  "database-corrupted": "Banco de dados corrompido",
+  "database-corrupted-description": "Seu banco de dados está corrompido. Você pode ter importado o arquivo errado.",
+  "import-backup": "Importar backup"
 }

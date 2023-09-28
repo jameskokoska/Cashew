@@ -720,5 +720,12 @@
   "major-change-9-1": "Tuo/vie koko datatiedoston varmuuskopiot asetuksissa",
   "major-change-10": "Kotisivupalkki",
   "major-change-10-1": "Muokkaa kotisivun bannerin widget -kokoa Edit -kotisivulla",
-  "select-period-tooltip": "Valintajakso"
+  "select-period-tooltip": "Valintajakso",
+  "data-overwrite-warning": "Tietokorvaus",
+  "data-overwrite-warning-description": "Tietojen tuonti korvaa kaikki nykyiset tiedot!",
+  "select-backup-file": "Valitse varmuuskopio",
+  "select-backup-file-description": "Valitse varmuuskopio.sql -tiedosto.",
+  "database-corrupted": "Tietokanta vioittunut",
+  "database-corrupted-description": "Tietokanta on vioittunut. Olet ehkä tuonut väärän tiedoston.",
+  "import-backup": "Tuo varmuuskopio"
 }

@@ -720,5 +720,12 @@
   "major-change-9-1": "Увоз / извоз Потпуне резервне копије датотека података у подешавањима",
   "major-change-10": "Почетна страница Банер",
   "major-change-10-1": "Прилагодите величину почетне странице за почетну страницу у почетној страници Едит",
-  "select-period-tooltip": "Изаберите период"
+  "select-period-tooltip": "Изаберите период",
+  "data-overwrite-warning": "Преписивање података",
+  "data-overwrite-warning-description": "Увоз података ће пребрисати све тренутне податке!",
+  "select-backup-file": "Изаберите Израдац",
+  "select-backup-file-description": "Изаберите датотеку Бацкуп.СКЛ.",
+  "database-corrupted": "База података оштећена",
+  "database-corrupted-description": "Ваша база података је оштећена. Можда сте увели погрешну датотеку.",
+  "import-backup": "Увоз резервне копије"
 }

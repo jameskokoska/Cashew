@@ -20,6 +20,12 @@ import 'listItem.dart';
 
 String getChangelogString() {
   return """
+    < 4.5.1
+    Data import overwrite warning
+    SQL files are saved instead of SQLITE
+    Hot fix for default wallet creation database lock
+    Fix SQL file selection on iOS limitation
+    Database corruption detection (if incorrect file imported)
     < 4.5.0
     Can enable/disable homepage welcome banner
     Feedback popup only shown if changelog is not
@@ -1465,7 +1471,7 @@ Map<String, List<MajorChanges>> getMajorChanges() {
         Icons.price_change_rounded,
       ),
     ],
-    "< 4.5.0": [
+    "< 4.5.1": [
       MajorChanges(
         "major-change-9".tr(),
         Icons.file_open_rounded,

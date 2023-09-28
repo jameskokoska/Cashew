@@ -720,5 +720,12 @@
   "major-change-9-1": "ייבא/ייצא גיבויים של קבצי נתונים מלאים בהגדרות",
   "major-change-10": "דף הבית באנר",
   "major-change-10-1": "התאם אישית את גודל הווידג'ט של דף הבית בדף העריכה",
-  "select-period-tooltip": "בחר תקופה"
+  "select-period-tooltip": "בחר תקופה",
+  "data-overwrite-warning": "החלפת נתונים",
+  "data-overwrite-warning-description": "ייבוא ​​נתונים יחליף את כל הנתונים הנוכחיים!",
+  "select-backup-file": "בחר גיבוי",
+  "select-backup-file-description": "אנא בחר את קובץ ה- backup.sql שלך.",
+  "database-corrupted": "מסד נתונים פגום",
+  "database-corrupted-description": "בסיס הנתונים שלך פגום. יתכן שייבאת את הקובץ הלא נכון.",
+  "import-backup": "יבוא גיבוי"
 }

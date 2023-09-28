@@ -720,5 +720,12 @@
   "major-change-9-1": "Importera/exportera fullständiga säkerhetskopior av datafiler i inställningar",
   "major-change-10": "Hemsida banner",
   "major-change-10-1": "Anpassa hemsidan Banner Widget -storlek på redigeringssidan",
-  "select-period-tooltip": "Välj period"
+  "select-period-tooltip": "Välj period",
+  "data-overwrite-warning": "Data Overwrite",
+  "data-overwrite-warning-description": "Importera data kommer att skriva över all aktuell data!",
+  "select-backup-file": "Välj säkerhetskopiering",
+  "select-backup-file-description": "Välj din Backup.sql -fil.",
+  "database-corrupted": "Databasen skadad",
+  "database-corrupted-description": "Din databas är skadad. Du kanske har importerat fel fil.",
+  "import-backup": "Importbackup"
 }

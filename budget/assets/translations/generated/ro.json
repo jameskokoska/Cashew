@@ -720,5 +720,12 @@
   "major-change-9-1": "Importați/exportați backup -uri complete de fișiere de date în setări",
   "major-change-10": "Banner în pagina principală",
   "major-change-10-1": "Personalizați dimensiunea widget -ului bannerului din pagina de pornire în pagina de pornire a editării",
-  "select-period-tooltip": "Selectați perioada"
+  "select-period-tooltip": "Selectați perioada",
+  "data-overwrite-warning": "O suprascriere a datelor",
+  "data-overwrite-warning-description": "Importarea datelor va suprascrie toate datele curente!",
+  "select-backup-file": "Selectați backup",
+  "select-backup-file-description": "Vă rugăm să selectați fișierul Backup.SQL.",
+  "database-corrupted": "Baza de date coruptă",
+  "database-corrupted-description": "Baza de date este coruptă. Este posibil să fi importat fișierul greșit.",
+  "import-backup": "Import backup"
 }

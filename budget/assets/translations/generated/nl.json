@@ -720,5 +720,12 @@
   "major-change-9-1": "Volledige back -ups van het volledige gegevensbestand importeren/exporteren in instellingen",
   "major-change-10": "Homepage banner",
   "major-change-10-1": "Pas de widgetgrootte van de startpagina aan in de startpagina bewerken",
-  "select-period-tooltip": "Selecteer de periode"
+  "select-period-tooltip": "Selecteer de periode",
+  "data-overwrite-warning": "Gegevensoverschrijving",
+  "data-overwrite-warning-description": "Het importeren van gegevens zal alle huidige gegevens overschrijven!",
+  "select-backup-file": "Selecteer back -up",
+  "select-backup-file-description": "Selecteer uw backup.sql -bestand.",
+  "database-corrupted": "Database beschadigd",
+  "database-corrupted-description": "Uw database is beschadigd. Mogelijk heeft u het verkeerde bestand geïmporteerd.",
+  "import-backup": "Back -up importeren"
 }

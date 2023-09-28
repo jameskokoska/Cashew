@@ -720,5 +720,12 @@
   "major-change-9-1": "সেটিংসে সম্পূর্ণ ডেটা ফাইলের ব্যাকআপগুলি আমদানি/রফতানি করুন",
   "major-change-10": "হোমপেজ ব্যানার",
   "major-change-10-1": "সম্পাদনা হোম পৃষ্ঠায় হোমপেজ ব্যানার উইজেটের আকার কাস্টমাইজ করুন",
-  "select-period-tooltip": "সময়কাল নির্বাচন করুন"
+  "select-period-tooltip": "সময়কাল নির্বাচন করুন",
+  "data-overwrite-warning": "ডেটা ওভাররাইট",
+  "data-overwrite-warning-description": "ডেটা আমদানি করা সমস্ত বর্তমান ডেটা ওভাররাইট করবে!",
+  "select-backup-file": "ব্যাকআপ নির্বাচন করুন",
+  "select-backup-file-description": "আপনার ব্যাকআপ.এসকিউএল ফাইল নির্বাচন করুন।",
+  "database-corrupted": "ডাটাবেস দূষিত",
+  "database-corrupted-description": "আপনার ডাটাবেস দূষিত হয়। আপনি ভুল ফাইলটি আমদানি করতে পারেন।",
+  "import-backup": "ব্যাকআপ আমদানি করুন"
 }

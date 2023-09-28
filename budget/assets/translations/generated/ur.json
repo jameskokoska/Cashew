@@ -720,5 +720,12 @@
   "major-change-9-1": "ترتیبات میں مکمل ڈیٹا فائل بیک اپ درآمد/برآمد کریں",
   "major-change-10": "ہوم پیج بینر",
   "major-change-10-1": "ایڈیٹ ہوم پیج میں ہوم پیج بینر ویجیٹ سائز کو اپنی مرضی کے مطابق بنائیں",
-  "select-period-tooltip": "مدت منتخب کریں"
+  "select-period-tooltip": "مدت منتخب کریں",
+  "data-overwrite-warning": "ڈیٹا اوور رائٹ",
+  "data-overwrite-warning-description": "ڈیٹا کی درآمد سے تمام موجودہ ڈیٹا کو اوور رائٹ کردے گا!",
+  "select-backup-file": "بیک اپ منتخب کریں",
+  "select-backup-file-description": "براہ کرم اپنی بیک اپ ڈاٹ ایس کیو ایل فائل کو منتخب کریں۔",
+  "database-corrupted": "ڈیٹا بیس خراب ہوگیا",
+  "database-corrupted-description": "آپ کا ڈیٹا بیس خراب ہے۔ ہوسکتا ہے کہ آپ نے غلط فائل درآمد کی ہو۔",
+  "import-backup": "بیک اپ درآمد کریں"
 }

@@ -720,5 +720,12 @@
   "major-change-9-1": "設定で完全なデータファイルのバックアップをインポート/エクスポートします",
   "major-change-10": "ホームページバナー",
   "major-change-10-1": "編集ホームページでホームページバナーウィジェットサイズをカスタマイズする",
-  "select-period-tooltip": "ピリオドを選択します"
+  "select-period-tooltip": "ピリオドを選択します",
+  "data-overwrite-warning": "データ上書き",
+  "data-overwrite-warning-description": "データのインポートは、現在のすべてのデータを上書きします！",
+  "select-backup-file": "バックアップを選択します",
+  "select-backup-file-description": "Backup.sqlファイルを選択してください。",
+  "database-corrupted": "データベースが破損しました",
+  "database-corrupted-description": "データベースは破損しています。間違ったファイルをインポートした可能性があります。",
+  "import-backup": "バックアップをインポートします"
 }

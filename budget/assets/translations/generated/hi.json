@@ -720,5 +720,12 @@
   "major-change-9-1": "सेटिंग्स में पूर्ण डेटा फ़ाइल बैकअप आयात/निर्यात करें",
   "major-change-10": "मुखपृष्ठ बैनर",
   "major-change-10-1": "होम पेज में होमपेज बैनर विजेट आकार को अनुकूलित करें",
-  "select-period-tooltip": "अवधि का चयन करें"
+  "select-period-tooltip": "अवधि का चयन करें",
+  "data-overwrite-warning": "आंकड़ा अधिलेखित",
+  "data-overwrite-warning-description": "डेटा आयात करना सभी वर्तमान डेटा को अधिलेखित कर देगा!",
+  "select-backup-file": "बैकअप का चयन करें",
+  "select-backup-file-description": "कृपया अपनी Backup.sql फ़ाइल का चयन करें।",
+  "database-corrupted": "डेटाबेस भ्रष्ट",
+  "database-corrupted-description": "आपका डेटाबेस दूषित है। आपने गलत फ़ाइल का आयात किया होगा।",
+  "import-backup": "आयात बैकअप"
 }

@@ -720,5 +720,12 @@
   "major-change-9-1": "Importer / exporter des sauvegardes de fichiers de données complètes dans les paramètres",
   "major-change-10": "Bannière de page d'accueil",
   "major-change-10-1": "Personnalisez la taille du widget de la bannière de page d'accueil dans la page d'accueil EDIT",
-  "select-period-tooltip": "Sélectionner la période"
+  "select-period-tooltip": "Sélectionner la période",
+  "data-overwrite-warning": "Écrasement des données",
+  "data-overwrite-warning-description": "L'importation de données écrasera toutes les données actuelles!",
+  "select-backup-file": "Sélectionner la sauvegarde",
+  "select-backup-file-description": "Veuillez sélectionner votre fichier backup.sql.",
+  "database-corrupted": "Base de données corrompue",
+  "database-corrupted-description": "Votre base de données est corrompue. Vous avez peut-être importé le mauvais fichier.",
+  "import-backup": "Sauvegarde d'importation"
 }

@@ -100,22 +100,22 @@ Future saveDBFileToDevice(String fileName) async {
   }
 }
 
+Future exportDB() async {
+  await openLoadingPopupTryCatch(() async {
+    String fileName = "cashew-" +
+        DateTime.now()
+            .toString()
+            .replaceAll(".", "-")
+            .replaceAll("-", "-")
+            .replaceAll(" ", "-")
+            .replaceAll(":", "-") +
+        ".sql";
+    await saveDBFileToDevice(fileName);
+  });
+}
+
 class ExportDB extends StatelessWidget {
   const ExportDB({super.key});
-
-  Future exportDB() async {
-    await openLoadingPopupTryCatch(() async {
-      String fileName = "cashew-" +
-          DateTime.now()
-              .toString()
-              .replaceAll(".", "-")
-              .replaceAll("-", "-")
-              .replaceAll(" ", "-")
-              .replaceAll(":", "-") +
-          ".sqlite";
-      await saveDBFileToDevice(fileName);
-    });
-  }
 
   @override
   Widget build(BuildContext context) {

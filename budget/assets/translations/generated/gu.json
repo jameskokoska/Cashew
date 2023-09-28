@@ -720,5 +720,12 @@
   "major-change-9-1": "સેટિંગ્સમાં સંપૂર્ણ ડેટા ફાઇલ બેકઅપ આયાત/નિકાસ કરો",
   "major-change-10": "હોમપાનું બેનર",
   "major-change-10-1": "સંપાદન હોમ પેજમાં હોમપેજ બેનર વિજેટ કદને કસ્ટમાઇઝ કરો",
-  "select-period-tooltip": "સમયગાળો પસંદ કરો"
+  "select-period-tooltip": "સમયગાળો પસંદ કરો",
+  "data-overwrite-warning": "આધાર",
+  "data-overwrite-warning-description": "ડેટા આયાત કરવાથી બધા વર્તમાન ડેટાને ફરીથી લખાશે!",
+  "select-backup-file": "બેકઅપ પસંદ કરો",
+  "select-backup-file-description": "કૃપા કરીને તમારી બેકઅપ.એસક્યુએલ ફાઇલ પસંદ કરો.",
+  "database-corrupted": "ડેટાબેસ ભ્રષ્ટ",
+  "database-corrupted-description": "તમારો ડેટાબેઝ દૂષિત છે. તમે ખોટી ફાઇલ આયાત કરી હશે.",
+  "import-backup": "આયાતનો બેકઅપ"
 }

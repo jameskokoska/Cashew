@@ -428,13 +428,13 @@ Future openLoadingPopupTryCatch(
   Future Function() function, {
   BuildContext? context,
   Function(dynamic error)? onError,
-  Function()? onSuccess,
+  Function(dynamic result)? onSuccess,
 }) async {
   openLoadingPopup(context ?? navigatorKey.currentContext!);
   try {
     dynamic result = await function();
     Navigator.pop(context ?? navigatorKey.currentContext!, result);
-    if (onSuccess != null) onSuccess();
+    if (onSuccess != null) onSuccess(result);
     return result;
   } catch (e) {
     Navigator.pop(context ?? navigatorKey.currentContext!, null);

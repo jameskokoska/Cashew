@@ -720,5 +720,12 @@
   "major-change-9-1": "Mengimport/mengeksport sandaran fail data penuh dalam tetapan",
   "major-change-10": "Banner Laman Utama",
   "major-change-10-1": "Sesuaikan saiz widget Banner Homepage di halaman edit rumah",
-  "select-period-tooltip": "Pilih Tempoh"
+  "select-period-tooltip": "Pilih Tempoh",
+  "data-overwrite-warning": "Data Overwrite",
+  "data-overwrite-warning-description": "Mengimport data akan menimpa semua data semasa!",
+  "select-backup-file": "Pilih sandaran",
+  "select-backup-file-description": "Sila pilih fail Backup.sql anda.",
+  "database-corrupted": "Pangkalan data rosak",
+  "database-corrupted-description": "Pangkalan data anda rosak. Anda mungkin telah mengimport fail yang salah.",
+  "import-backup": "Import sandaran"
 }

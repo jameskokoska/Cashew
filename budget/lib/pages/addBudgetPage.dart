@@ -499,7 +499,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
         onSubmit: () {
           Navigator.pop(context);
         },
-        onSubmitLabel: "OK".tr(),
+        onSubmitLabel: "ok".tr(),
         onCancel: () {
           Navigator.pop(context);
           openBottomSheet(

@@ -35,10 +35,13 @@ import 'package:universal_html/html.dart' show AnchorElement;
 import 'package:path/path.dart' as p;
 
 Future<bool> importDBFileFromDevice(BuildContext context) async {
-  FilePickerResult? result = await FilePicker.platform.pickFiles(
-    allowedExtensions: ['sql', 'sqlite'],
-    type: FileType.custom,
-  );
+  // For some reason, iOS does not let us select SQL files if we limit
+  FilePickerResult? result = getPlatform() == PlatformOS.isIOS
+      ? await FilePicker.platform.pickFiles()
+      : await FilePicker.platform.pickFiles(
+          allowedExtensions: ['sql', 'sqlite'],
+          type: FileType.custom,
+        );
   if (result == null) {
     openSnackbar(SnackbarMessage(
       title: "error-importing".tr(),
@@ -63,17 +66,51 @@ Future<bool> importDBFileFromDevice(BuildContext context) async {
   return true;
 }
 
-class ImportDB extends StatelessWidget {
-  const ImportDB({super.key});
-
-  Future importDB(BuildContext context) async {
+Future importDB(BuildContext context, {ignoreOverwriteWarning = false}) async {
+  dynamic result = ignoreOverwriteWarning == true
+      ? true
+      : await openPopup(
+          context,
+          icon: appStateSettings["outlinedIcons"]
+              ? Icons.warning_outlined
+              : Icons.warning_rounded,
+          title: "data-overwrite-warning".tr(),
+          description: "data-overwrite-warning-description".tr(),
+          onCancel: () {
+            Navigator.pop(context, false);
+          },
+          onCancelLabel: "cancel".tr(),
+          onSubmit: () {
+            Navigator.pop(context, true);
+          },
+          onSubmitLabel: "ok".tr(),
+        );
+  if (result == true) {
+    await openPopup(
+      context,
+      icon: appStateSettings["outlinedIcons"]
+          ? Icons.file_open_outlined
+          : Icons.file_open_rounded,
+      title: "select-backup-file".tr(),
+      description: "select-backup-file-description".tr(),
+      onSubmit: () {
+        Navigator.pop(context);
+      },
+      onSubmitLabel: "ok".tr(),
+    );
     await openLoadingPopupTryCatch(
       () async {
-        await importDBFileFromDevice(context);
+        return await importDBFileFromDevice(context);
       },
-      onSuccess: () => restartAppPopup(context),
+      onSuccess: (result) {
+        if (result != false) restartAppPopup(context);
+      },
     );
   }
+}
+
+class ImportDB extends StatelessWidget {
+  const ImportDB({super.key});
 
   @override
   Widget build(BuildContext context) {

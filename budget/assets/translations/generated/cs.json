@@ -720,5 +720,12 @@
   "major-change-9-1": "Import/Export záloh plného datového souboru v nastavení",
   "major-change-10": "Banner na domovské stránce",
   "major-change-10-1": "Přizpůsobte velikost widgetu banneru na domovské stránce na domovské stránce Úpravy",
-  "select-period-tooltip": "Vyberte období"
+  "select-period-tooltip": "Vyberte období",
+  "data-overwrite-warning": "Data přepsána",
+  "data-overwrite-warning-description": "Import dat přepíše všechna aktuální data!",
+  "select-backup-file": "Vyberte zálohu",
+  "select-backup-file-description": "Vyberte prosím soubor záloh.sql.",
+  "database-corrupted": "Zkorumpovaná databáze",
+  "database-corrupted-description": "Vaše databáze je poškozena. Možná jste importovali nesprávný soubor.",
+  "import-backup": "Import zálohování"
 }

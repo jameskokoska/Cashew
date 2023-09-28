@@ -17,6 +17,7 @@ import 'package:budget/struct/syncClient.dart';
 import 'package:budget/widgets/animatedExpanded.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/globalSnackBar.dart';
+import 'package:budget/widgets/importDB.dart';
 import 'package:budget/widgets/moreIcons.dart';
 import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
@@ -373,6 +374,48 @@ Future overwriteDefaultDB(List<int> dataStore) async {
   }
   // we need to be able to sync with others after the restore
   await sharedPreferences.setString("dateOfLastSyncedWithClient", "{}");
+}
+
+Future forceDeleteDB() async {
+  if (kIsWeb) {
+    final html.Storage localStorage = html.window.localStorage;
+    localStorage.clear();
+  } else {
+    final dbFolder = await getApplicationDocumentsDirectory();
+    final dbFile = File(p.join(dbFolder.path, 'db.sqlite'));
+    await dbFile.delete();
+  }
+}
+
+bool openDatabaseCorruptedPopup(BuildContext context) {
+  if (isDatabaseCorrupted) {
+    openPopup(
+      context,
+      icon: appStateSettings["outlinedIcons"]
+          ? Icons.heart_broken_outlined
+          : Icons.heart_broken_rounded,
+      title: "database-corrupted".tr(),
+      description: "database-corrupted-description".tr(),
+      barrierDismissible: false,
+      onSubmit: () async {
+        Navigator.pop(context);
+        await importDB(context, ignoreOverwriteWarning: true);
+      },
+      onSubmitLabel: "import-backup".tr(),
+      onCancel: () {
+        Navigator.pop(context);
+        forceDeleteDB();
+        sharedPreferences.clear();
+        restartAppPopup(context);
+      },
+      onCancelLabel: "reset".tr(),
+    );
+    // Lock the side navigation
+    lockAppWaitForRestart = true;
+    appStateKey.currentState?.refreshAppState();
+    return true;
+  }
+  return false;
 }
 
 Future<void> createBackup(
@@ -1436,7 +1479,7 @@ Future<bool> saveDriveFileToDevice(
           .replaceAll("-", "-")
           .replaceAll(" ", "-")
           .replaceAll(":", "-") +
-      ".sqlite";
+      ".sql";
 
   if (kIsWeb) {
     try {

@@ -29,6 +29,7 @@ import 'package:budget/struct/syncClient.dart';
 import 'package:budget/widgets/accountAndBackup.dart';
 import 'package:budget/widgets/bottomNavBar.dart';
 import 'package:budget/widgets/fab.dart';
+import 'package:budget/widgets/importDB.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/notificationsSettings.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
@@ -153,6 +154,9 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
     Future.delayed(Duration.zero, () async {
       SystemChrome.setSystemUIOverlayStyle(
           getSystemUiOverlayStyle(Theme.of(context).brightness));
+
+      bool isDatabaseCorruptedPopupShown = openDatabaseCorruptedPopup(context);
+      if (isDatabaseCorruptedPopupShown) return;
 
       await initializeNotificationsPlatform();
 

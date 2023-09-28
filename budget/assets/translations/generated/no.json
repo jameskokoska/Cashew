@@ -720,5 +720,12 @@
   "major-change-9-1": "Importer/eksporter full sikkerhetskopiering av data i innstillinger",
   "major-change-10": "Hjemmeside banner",
   "major-change-10-1": "Tilpass hjemmesiden Banner Widget Størrelse på hjemmesiden",
-  "select-period-tooltip": "Velg periode"
+  "select-period-tooltip": "Velg periode",
+  "data-overwrite-warning": "Data overskriver",
+  "data-overwrite-warning-description": "Importere data vil overskrive alle gjeldende data!",
+  "select-backup-file": "Velg sikkerhetskopi",
+  "select-backup-file-description": "Velg din backup.sql -fil.",
+  "database-corrupted": "Databasen ødelagt",
+  "database-corrupted-description": "Databasen din er ødelagt. Du har kanskje importert feil fil.",
+  "import-backup": "Importer sikkerhetskopi"
 }

@@ -720,5 +720,12 @@
   "major-change-9-1": "Importa/esporta backup del file di dati completo in impostazioni",
   "major-change-10": "Banner homepage",
   "major-change-10-1": "Personalizza la dimensione del widget banner homepage nella home page di modifica",
-  "select-period-tooltip": "Seleziona periodo"
+  "select-period-tooltip": "Seleziona periodo",
+  "data-overwrite-warning": "I dati sovrascrivi",
+  "data-overwrite-warning-description": "L'importazione di dati sovrascriverà tutti i dati attuali!",
+  "select-backup-file": "Seleziona Backup",
+  "select-backup-file-description": "Seleziona il tuo file backup.sql.",
+  "database-corrupted": "Il database corrotto",
+  "database-corrupted-description": "Il tuo database è corrotto. Potresti aver importato il file sbagliato.",
+  "import-backup": "Importa backup"
 }

@@ -720,5 +720,12 @@
   "major-change-9-1": "Impor/Ekspor Cadangan File Data Lengkap di Pengaturan",
   "major-change-10": "Spanduk Beranda",
   "major-change-10-1": "Kustomisasi Ukuran Widget Banner Beranda di Halaman Beranda Edit",
-  "select-period-tooltip": "Pilih periode"
+  "select-period-tooltip": "Pilih periode",
+  "data-overwrite-warning": "Data ditimpa",
+  "data-overwrite-warning-description": "Mengimpor data akan menimpa semua data saat ini!",
+  "select-backup-file": "Pilih Cadangan",
+  "select-backup-file-description": "Pilih file backup.sql Anda.",
+  "database-corrupted": "Database rusak",
+  "database-corrupted-description": "Basis data Anda rusak. Anda mungkin telah mengimpor file yang salah.",
+  "import-backup": "Impor cadangan"
 }

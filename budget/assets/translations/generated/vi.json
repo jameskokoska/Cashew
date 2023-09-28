@@ -720,5 +720,12 @@
   "major-change-9-1": "Nhập/Xuất các bản sao lưu tệp dữ liệu đầy đủ trong Cài đặt",
   "major-change-10": "Biểu ngữ trang chủ",
   "major-change-10-1": "Tùy chỉnh kích thước tiện ích biểu ngữ trang chủ trong trang chủ Chỉnh sửa",
-  "select-period-tooltip": "Chọn thời gian"
+  "select-period-tooltip": "Chọn thời gian",
+  "data-overwrite-warning": "Dữ liệu ghi đè",
+  "data-overwrite-warning-description": "Nhập dữ liệu sẽ ghi đè tất cả dữ liệu hiện tại!",
+  "select-backup-file": "Chọn sao lưu",
+  "select-backup-file-description": "Vui lòng chọn tệp Sao lưu.SQL của bạn.",
+  "database-corrupted": "Cơ sở dữ liệu bị hỏng",
+  "database-corrupted-description": "Cơ sở dữ liệu của bạn bị hỏng. Bạn có thể đã nhập sai tệp.",
+  "import-backup": "Nhập bản sao lưu"
 }

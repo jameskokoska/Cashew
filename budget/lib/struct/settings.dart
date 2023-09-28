@@ -1,8 +1,11 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
+import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
+import 'package:drift/isolate.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:budget/struct/databaseGlobal.dart';
@@ -19,6 +22,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:budget/widgets/framework/popupFramework.dart';
 
 Map<String, dynamic> appStateSettings = {};
+bool isDatabaseCorrupted = false;
 
 Future<bool> initializeSettings() async {
   packageInfoGlobal = await PackageInfo.fromPlatform();
@@ -46,6 +50,19 @@ Future<bool> initializeSettings() async {
       print("Settings were restored");
     } catch (e) {
       print("Error restoring imported settings " + e.toString());
+      if (e is DriftRemoteException) {
+        if (e.remoteCause
+            .toString()
+            .toLowerCase()
+            .contains("file is not a database")) {
+          isDatabaseCorrupted = true;
+        }
+      } else if (e
+          .toString()
+          .toLowerCase()
+          .contains("file is not a database")) {
+        isDatabaseCorrupted = true;
+      }
     }
   }
 

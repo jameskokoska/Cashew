@@ -720,5 +720,12 @@
   "major-change-9-1": "Import/eksport Fuld datafilbackups i indstillinger",
   "major-change-10": "Hjemmeside banner",
   "major-change-10-1": "Tilpas hjemmeside Banner -widget -størrelse på redigeringssiden",
-  "select-period-tooltip": "Vælg periode"
+  "select-period-tooltip": "Vælg periode",
+  "data-overwrite-warning": "Data overskriver",
+  "data-overwrite-warning-description": "Import af data overskriver alle aktuelle data!",
+  "select-backup-file": "Vælg backup",
+  "select-backup-file-description": "Vælg din backup.sql -fil.",
+  "database-corrupted": "Database ødelagt",
+  "database-corrupted-description": "Din database er ødelagt. Du har muligvis importeret den forkerte fil.",
+  "import-backup": "Importer backup"
 }

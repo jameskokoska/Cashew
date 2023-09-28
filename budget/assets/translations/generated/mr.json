@@ -720,5 +720,12 @@
   "major-change-9-1": "सेटिंग्जमध्ये पूर्ण डेटा फाइल बॅकअप आयात/निर्यात करा",
   "major-change-10": "मुख्यपृष्ठ बॅनर",
   "major-change-10-1": "मुख्यपृष्ठ संपादन मुख्यपृष्ठामध्ये मुख्यपृष्ठ बॅनर विजेट आकार सानुकूलित करा",
-  "select-period-tooltip": "कालावधी निवडा"
+  "select-period-tooltip": "कालावधी निवडा",
+  "data-overwrite-warning": "डेटा अधिलिखित",
+  "data-overwrite-warning-description": "डेटा आयात केल्याने सर्व वर्तमान डेटा अधिलिखित होईल!",
+  "select-backup-file": "बॅकअप निवडा",
+  "select-backup-file-description": "कृपया आपली बॅकअप.एसक्यूएल फाइल निवडा.",
+  "database-corrupted": "डेटाबेस दूषित",
+  "database-corrupted-description": "आपला डेटाबेस दूषित झाला आहे. आपण कदाचित चुकीची फाईल आयात केली असेल.",
+  "import-backup": "आयात बॅकअप"
 }

@@ -720,5 +720,12 @@
   "major-change-9-1": "A teljes adatfájlok biztonsági másolatainak importálása/exportálása a beállításokban",
   "major-change-10": "Honlap zászló",
   "major-change-10-1": "Testreszabhatja a honlap szalaghirdetési widget méretét a szerkesztés kezdőlapján",
-  "select-period-tooltip": "Válassza ki az időszakot"
+  "select-period-tooltip": "Válassza ki az időszakot",
+  "data-overwrite-warning": "Az adatok felülírása",
+  "data-overwrite-warning-description": "Az adatok importálása felülírja az összes aktuális adatot!",
+  "select-backup-file": "Válassza ki a Biztonsági másolatot",
+  "select-backup-file-description": "Kérjük, válassza ki a biztonsági másolatot.sql fájlt.",
+  "database-corrupted": "Az adatbázis megsérült",
+  "database-corrupted-description": "Az adatbázisod sérült. Lehet, hogy rossz fájlt importált.",
+  "import-backup": "Biztonsági mentés importálása"
 }

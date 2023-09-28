@@ -720,5 +720,12 @@
   "major-change-9-1": "استيراد/تصدير النسخ الاحتياطية ملفات البيانات الكاملة في الإعدادات",
   "major-change-10": "لافتة الصفحة الرئيسية",
   "major-change-10-1": "تخصيص حجم عنصر واجهة المستخدم لافتة الصفحة الرئيسية في الصفحة الرئيسية تحرير",
-  "select-period-tooltip": "حدد الفترة"
+  "select-period-tooltip": "حدد الفترة",
+  "data-overwrite-warning": "الكتابة فوق البيانات",
+  "data-overwrite-warning-description": "سوف استيراد البيانات الكتابة فوق جميع البيانات الحالية!",
+  "select-backup-file": "حدد النسخ الاحتياطي",
+  "select-backup-file-description": "يرجى تحديد ملف backup.sql الخاص بك.",
+  "database-corrupted": "قاعدة البيانات تالفة",
+  "database-corrupted-description": "قاعدة البيانات الخاصة بك تالفة. قد تكون قد استوردت الملف الخطأ.",
+  "import-backup": "استيراد النسخ الاحتياطي"
 }

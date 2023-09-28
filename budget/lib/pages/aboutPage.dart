@@ -429,14 +429,7 @@ class AboutPage extends StatelessWidget {
                         : Icons.warning_amber_rounded,
                     onSubmit: () async {
                       Navigator.pop(context);
-                      openLoadingPopup(context);
-                      await Future.wait([
-                        database.deleteEverything(),
-                        sharedPreferences.clear()
-                      ]);
-                      await database.close();
-                      Navigator.pop(context);
-                      restartAppPopup(context);
+                      clearDatabase(context);
                     },
                     onSubmitLabel: "erase".tr(),
                     onCancelLabel: "cancel".tr(),
@@ -471,6 +464,15 @@ class AboutPage extends StatelessWidget {
       ],
     );
   }
+}
+
+// Note that this is different than forceDeleteDB()
+Future clearDatabase(BuildContext context) async {
+  openLoadingPopup(context);
+  await Future.wait([database.deleteEverything(), sharedPreferences.clear()]);
+  await database.close();
+  Navigator.pop(context);
+  restartAppPopup(context);
 }
 
 class AboutInfoBox extends StatelessWidget {

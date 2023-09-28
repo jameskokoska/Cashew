@@ -720,5 +720,12 @@
   "major-change-9-1": "Importieren/exportieren Sie vollständige Datendateisicherungen in Einstellungen",
   "major-change-10": "Homepage Banner",
   "major-change-10-1": "Passen Sie die Homepage -Banner -Widget -Größe auf der Homepage bearbeiten an",
-  "select-period-tooltip": "Periode auswählen"
+  "select-period-tooltip": "Periode auswählen",
+  "data-overwrite-warning": "Datenüberschreibung",
+  "data-overwrite-warning-description": "Das Importieren von Daten überschreibt alle aktuellen Daten!",
+  "select-backup-file": "Wählen Sie Backup",
+  "select-backup-file-description": "Bitte wählen Sie Ihre Backup.sql -Datei aus.",
+  "database-corrupted": "Datenbank beschädigt",
+  "database-corrupted-description": "Ihre Datenbank ist beschädigt. Möglicherweise haben Sie die falsche Datei importiert.",
+  "import-backup": "Backup importieren"
 }

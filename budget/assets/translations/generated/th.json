@@ -720,5 +720,12 @@
   "major-change-9-1": "นำเข้า/ส่งออกการสำรองข้อมูลไฟล์ข้อมูลเต็มรูปแบบในการตั้งค่า",
   "major-change-10": "แบนเนอร์หน้าแรก",
   "major-change-10-1": "ปรับแต่งขนาดวิดเจ็ตแบนเนอร์โฮมเพจในหน้าแรกแก้ไข",
-  "select-period-tooltip": "เลือกระยะเวลา"
+  "select-period-tooltip": "เลือกระยะเวลา",
+  "data-overwrite-warning": "เขียนทับข้อมูล",
+  "data-overwrite-warning-description": "การนำเข้าข้อมูลจะเขียนทับข้อมูลปัจจุบันทั้งหมด!",
+  "select-backup-file": "เลือกการสำรองข้อมูล",
+  "select-backup-file-description": "โปรดเลือกไฟล์ backup.sql ของคุณ",
+  "database-corrupted": "ฐานข้อมูลเสียหาย",
+  "database-corrupted-description": "ฐานข้อมูลของคุณเสียหาย คุณอาจนำเข้าไฟล์ผิด",
+  "import-backup": "นำเข้าสำรอง"
 }

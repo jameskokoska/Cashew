@@ -720,5 +720,12 @@
   "major-change-9-1": "Import/Export full data file backups in Settings",
   "major-change-10": "Homepage Banner",
   "major-change-10-1": "Customize the homepage banner widget size in the Edit Home page",
-  "select-period-tooltip": "Select Period"
+  "select-period-tooltip": "Select Period",
+  "data-overwrite-warning": "Data Overwrite",
+  "data-overwrite-warning-description": "Importing data will overwrite all current data!",
+  "select-backup-file": "Select Backup",
+  "select-backup-file-description": "Please select your backup.sql file.",
+  "database-corrupted": "Database Corrupted",
+  "database-corrupted-description": "Your database is corrupted. You may have imported the wrong file.",
+  "import-backup": "Import Backup"
 }

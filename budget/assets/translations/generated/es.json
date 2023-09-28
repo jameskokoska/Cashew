@@ -720,5 +720,12 @@
   "major-change-9-1": "Importar/exportar copias de seguridad de archivos de datos completos en la configuración",
   "major-change-10": "Banner de la página de inicio",
   "major-change-10-1": "Personalice el tamaño del widget del banner de la página de inicio en la página de inicio de editar",
-  "select-period-tooltip": "Período de selección"
+  "select-period-tooltip": "Período de selección",
+  "data-overwrite-warning": "Datos sobrescribir",
+  "data-overwrite-warning-description": "¡Importar datos sobrescribirá todos los datos actuales!",
+  "select-backup-file": "Seleccionar copia de seguridad",
+  "select-backup-file-description": "Seleccione su archivo Backup.sql.",
+  "database-corrupted": "Base de datos corrupta",
+  "database-corrupted-description": "Su base de datos está dañada. Es posible que haya importado el archivo incorrecto.",
+  "import-backup": "Importación de respaldo"
 }
