@@ -461,7 +461,7 @@
   "delete-sync-backup-warning": "Müşteriler arasındaki senkronizasyon sorunlarını önlemek için, silmeden önce diğer tüm etkin cihazları senkronize etmek iyi bir fikirdir.",
   "development-team": "Geliştirme Takımı",
   "settings-and-customization": "Ayarlar ve Özelleştirme",
-  "settings-and-customization-description": "Tema, Dil, İthalat/İhracat CSV ...",
+  "settings-and-customization-description": "Tema, Dil, İthalat/İhracat CSV",
   "assign-columns": "Sütunlar atayın",
   "date": "Tarih",
   "amount": "Miktar",

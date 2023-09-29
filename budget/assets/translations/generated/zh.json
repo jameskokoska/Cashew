@@ -461,7 +461,7 @@
   "delete-sync-backup-warning": "为了防止客户端之间的同步问题，在删除所有其他活动设备之前，是一个好主意。",
   "development-team": "开发团队",
   "settings-and-customization": "设置和自定义",
-  "settings-and-customization-description": "主题，语言，导入/导出CSV ...",
+  "settings-and-customization-description": "主题，语言，进出口CSV",
   "assign-columns": "分配列",
   "date": "日期",
   "amount": "数量",

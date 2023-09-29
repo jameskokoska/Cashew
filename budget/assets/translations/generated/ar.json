@@ -461,7 +461,7 @@
   "delete-sync-backup-warning": "لمنع مشكلات التزامن بين العملاء ، من الجيد مزامنة جميع الأجهزة النشطة الأخرى قبل الحذف.",
   "development-team": "فريق التطوير",
   "settings-and-customization": "الإعدادات والتخصيص",
-  "settings-and-customization-description": "الموضوع ، اللغة ، الاستيراد/التصدير CSV ...",
+  "settings-and-customization-description": "الموضوع ، اللغة ، الاستيراد/التصدير CSV",
   "assign-columns": "تعيين الأعمدة",
   "date": "تاريخ",
   "amount": "كمية",

@@ -461,7 +461,7 @@
   "delete-sync-backup-warning": "Да би се спречило питања синхронизације између клијената, добра је идеја да се пре брисања синхронизујете све остале активне уређаје.",
   "development-team": "Развојни тим",
   "settings-and-customization": "Подешавања и прилагођавање",
-  "settings-and-customization-description": "Тема, језик, увоз / извоз ЦСВ ...",
+  "settings-and-customization-description": "Тема, језик, увоз / извоз ЦСВ",
   "assign-columns": "Доделите ступце",
   "date": "Датум",
   "amount": "Износ",

@@ -461,7 +461,7 @@
   "delete-sync-backup-warning": "Um Synchronisationsprobleme zwischen Kunden zu verhindern, ist es eine gute Idee, alle anderen aktiven Geräte vor dem Löschen zu synchronisieren.",
   "development-team": "Entwicklungsteam",
   "settings-and-customization": "Einstellungen und Anpassung",
-  "settings-and-customization-description": "Thema, Sprache, Import/Export CSV ...",
+  "settings-and-customization-description": "Thema, Sprache, Import/Export CSV",
   "assign-columns": "Spalten zuweisen",
   "date": "Datum",
   "amount": "Menge",

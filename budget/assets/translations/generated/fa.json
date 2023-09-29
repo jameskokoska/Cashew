@@ -461,7 +461,7 @@
   "delete-sync-backup-warning": "برای جلوگیری از مشکلات هماهنگ سازی بین مشتری ، ایده خوبی است که قبل از حذف همه دستگاه های فعال دیگر را همگام سازی کنید.",
   "development-team": "تیم توسعه",
   "settings-and-customization": "تنظیمات و سفارشی سازی",
-  "settings-and-customization-description": "موضوع ، زبان ، واردات/صادرات CSV ...",
+  "settings-and-customization-description": "موضوع ، زبان ، واردات/صادرات CSV",
   "assign-columns": "ستون ها را اختصاص دهید",
   "date": "تاریخ",
   "amount": "میزان",

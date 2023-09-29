@@ -20,6 +20,8 @@ import 'listItem.dart';
 
 String getChangelogString() {
   return """
+    < 4.5.2
+    If no account name reference when importing CSV, a new one will be made
     < 4.5.1
     Data import overwrite warning
     SQL files are saved instead of SQLITE

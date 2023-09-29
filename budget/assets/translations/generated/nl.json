@@ -461,7 +461,7 @@
   "delete-sync-backup-warning": "Om synchronisatieproblemen tussen klanten te voorkomen, is het een goed idee om alle andere actieve apparaten te synchroniseren voordat ze worden verwijderd.",
   "development-team": "Ontwikkelingsteam",
   "settings-and-customization": "Instellingen en aanpassing",
-  "settings-and-customization-description": "Thema, taal, import/exporteren CSV ...",
+  "settings-and-customization-description": "Thema, taal, import/exporteren CSV",
   "assign-columns": "Kolommen toewijzen",
   "date": "Datum",
   "amount": "Hoeveelheid",

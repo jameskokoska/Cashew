@@ -461,7 +461,7 @@
   "delete-sync-backup-warning": "クライアント間の同期の問題を防ぐために、削除する前に他のすべてのアクティブなデバイスを同期することをお勧めします。",
   "development-team": "開発チーム",
   "settings-and-customization": "設定とカスタマイズ",
-  "settings-and-customization-description": "テーマ、言語、CSVのインポート/エクスポート...",
+  "settings-and-customization-description": "テーマ、言語、インポート/エクスポートCSV",
   "assign-columns": "列を割り当てます",
   "date": "日付",
   "amount": "額",

@@ -461,7 +461,7 @@
   "delete-sync-backup-warning": "For å forhindre synkroniseringsproblemer mellom klienter, er det lurt å synkronisere alle andre aktive enheter før du sletter.",
   "development-team": "Utviklingsteam",
   "settings-and-customization": "Innstillinger og tilpasning",
-  "settings-and-customization-description": "Tema, språk, import/eksport CSV ...",
+  "settings-and-customization-description": "Tema, språk, import/eksport CSV",
   "assign-columns": "Tilordne kolonner",
   "date": "Dato",
   "amount": "Beløp",

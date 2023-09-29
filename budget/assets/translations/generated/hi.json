@@ -461,7 +461,7 @@
   "delete-sync-backup-warning": "ग्राहकों के बीच सिंक्रनाइज़ेशन मुद्दों को रोकने के लिए, हटाने से पहले अन्य सभी सक्रिय उपकरणों को सिंक करना एक अच्छा विचार है।",
   "development-team": "विकास दल",
   "settings-and-customization": "सेटिंग्स और अनुकूलन",
-  "settings-and-customization-description": "थीम, भाषा, आयात/निर्यात CSV ...",
+  "settings-and-customization-description": "थीम, भाषा, आयात/निर्यात CSV",
   "assign-columns": "कॉलम असाइन करें",
   "date": "तारीख",
   "amount": "मात्रा",

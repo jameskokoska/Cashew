@@ -461,7 +461,7 @@
   "delete-sync-backup-warning": "Untuk mencegah masalah sinkronisasi antara klien, itu ide yang baik untuk menyinkronkan semua perangkat aktif lainnya sebelum dihapus.",
   "development-team": "Tim pengembangan",
   "settings-and-customization": "Pengaturan & Kustomisasi",
-  "settings-and-customization-description": "Tema, Bahasa, Impor/Ekspor CSV ...",
+  "settings-and-customization-description": "Tema, Bahasa, Impor/Ekspor CSV",
   "assign-columns": "Tetapkan kolom",
   "date": "Tanggal",
   "amount": "Jumlah",

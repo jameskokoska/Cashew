@@ -461,7 +461,7 @@
   "delete-sync-backup-warning": "வாடிக்கையாளர்களிடையே ஒத்திசைவு சிக்கல்களைத் தடுக்க, நீக்குவதற்கு முன் மற்ற அனைத்து செயலில் உள்ள சாதனங்களையும் ஒத்திசைப்பது நல்லது.",
   "development-team": "மேம்பாட்டுக் குழு",
   "settings-and-customization": "அமைப்புகள் மற்றும் தனிப்பயனாக்கம்",
-  "settings-and-customization-description": "தீம், மொழி, இறக்குமதி/ஏற்றுமதி CSV ...",
+  "settings-and-customization-description": "தீம், மொழி, இறக்குமதி/ஏற்றுமதி CSV",
   "assign-columns": "நெடுவரிசைகளை ஒதுக்கவும்",
   "date": "தேதி",
   "amount": "தொகை",

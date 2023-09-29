@@ -461,7 +461,7 @@
   "delete-sync-backup-warning": "Az ügyfelek közötti szinkronizálási problémák elkerülése érdekében érdemes szinkronizálni az összes többi aktív eszközt a törlés előtt.",
   "development-team": "Fejlesztői csapat",
   "settings-and-customization": "Beállítások és testreszabás",
-  "settings-and-customization-description": "Téma, nyelv, import/export CSV ...",
+  "settings-and-customization-description": "Téma, nyelv, import/export CSV",
   "assign-columns": "Oszlopok hozzárendelése",
   "date": "Dátum",
   "amount": "Összeg",

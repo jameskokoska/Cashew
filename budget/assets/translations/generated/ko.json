@@ -461,7 +461,7 @@
   "delete-sync-backup-warning": "클라이언트 간의 동기화 문제를 방지하려면 삭제하기 전에 다른 모든 활성 장치를 동기화하는 것이 좋습니다.",
   "development-team": "개발 팀",
   "settings-and-customization": "설정 및 사용자 정의",
-  "settings-and-customization-description": "테마, 언어, 수입/내보내기 CSV ...",
+  "settings-and-customization-description": "테마, 언어, 수입/내보내기 CSV",
   "assign-columns": "열을 할당합니다",
   "date": "날짜",
   "amount": "양",

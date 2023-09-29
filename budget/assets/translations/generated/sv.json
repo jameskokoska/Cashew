@@ -461,7 +461,7 @@
   "delete-sync-backup-warning": "För att förhindra synkroniseringsproblem mellan klienter är det en bra idé att synkronisera alla andra aktiva enheter innan du tar bort.",
   "development-team": "Utvecklingsteam",
   "settings-and-customization": "Inställningar och anpassning",
-  "settings-and-customization-description": "Tema, språk, import/export CSV ...",
+  "settings-and-customization-description": "Tema, språk, import/export CSV",
   "assign-columns": "Tilldela kolumner",
   "date": "Datum",
   "amount": "Belopp",

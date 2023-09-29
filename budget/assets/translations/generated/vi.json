@@ -461,7 +461,7 @@
   "delete-sync-backup-warning": "Để ngăn chặn các vấn đề đồng bộ hóa giữa các máy khách, nên đồng bộ hóa tất cả các thiết bị hoạt động khác trước khi xóa.",
   "development-team": "Nhóm phát triển",
   "settings-and-customization": "Cài đặt & Tùy chỉnh",
-  "settings-and-customization-description": "Chủ đề, Ngôn ngữ, Nhập/Xuất CSV ...",
+  "settings-and-customization-description": "Chủ đề, Ngôn ngữ, Nhập/Xuất CSV",
   "assign-columns": "Gán cột",
   "date": "Ngày",
   "amount": "Số lượng",

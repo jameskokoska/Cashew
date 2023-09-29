@@ -461,7 +461,7 @@
   "delete-sync-backup-warning": "כדי למנוע בעיות סנכרון בין לקוחות, כדאי לסנכרן את כל המכשירים הפעילים האחרים לפני המחיקה.",
   "development-team": "צוות פיתוח",
   "settings-and-customization": "הגדרות והתאמה אישית",
-  "settings-and-customization-description": "נושא, שפה, יבוא/ייצוא CSV ...",
+  "settings-and-customization-description": "נושא, שפה, יבוא/ייצוא CSV",
   "assign-columns": "הקצה עמודות",
   "date": "תַאֲרִיך",
   "amount": "כמות",

@@ -461,7 +461,7 @@
   "delete-sync-backup-warning": "Aby se zabránilo problémům se synchronizací mezi klienty, je dobré synchronizovat všechna ostatní aktivní zařízení před odstraněním.",
   "development-team": "Vývojářský tým",
   "settings-and-customization": "Nastavení a přizpůsobení",
-  "settings-and-customization-description": "Téma, jazyk, import/export CSV ...",
+  "settings-and-customization-description": "Téma, jazyk, import/export CSV",
   "assign-columns": "Přiřaďte sloupce",
   "date": "datum",
   "amount": "Množství",

@@ -461,7 +461,7 @@
   "delete-sync-backup-warning": "Para evitar problemas de sincronização entre os clientes, é uma boa ideia sincronizar todos os outros dispositivos ativos antes de excluir.",
   "development-team": "Equipe de desenvolvimento",
   "settings-and-customization": "Configurações e personalização",
-  "settings-and-customization-description": "Tema, idioma, importação/exportação CSV ...",
+  "settings-and-customization-description": "Tema, idioma, importação/exportação CSV",
   "assign-columns": "Atribuir colunas",
   "date": "Data",
   "amount": "Quantia",

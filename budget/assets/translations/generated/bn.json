@@ -461,7 +461,7 @@
   "delete-sync-backup-warning": "ক্লায়েন্টদের মধ্যে সিঙ্ক্রোনাইজেশন সমস্যাগুলি রোধ করতে, মুছে ফেলার আগে অন্যান্য সমস্ত সক্রিয় ডিভাইসগুলি সিঙ্ক করা ভাল ধারণা।",
   "development-team": "উন্নয়ন দল",
   "settings-and-customization": "সেটিংস এবং কাস্টমাইজেশন",
-  "settings-and-customization-description": "থিম, ভাষা, আমদানি/রফতানি সিএসভি ...",
+  "settings-and-customization-description": "থিম, ভাষা, আমদানি/রফতানি সিএসভি",
   "assign-columns": "কলাম বরাদ্দ করুন",
   "date": "তারিখ",
   "amount": "পরিমাণ",

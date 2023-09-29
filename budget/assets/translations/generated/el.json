@@ -461,7 +461,7 @@
   "delete-sync-backup-warning": "Για να αποτρέψετε τα ζητήματα συγχρονισμού μεταξύ των πελατών, είναι καλή ιδέα να συγχρονίσετε όλες τις άλλες ενεργές συσκευές πριν από τη διαγραφή.",
   "development-team": "Ομάδα ανάπτυξης",
   "settings-and-customization": "Ρυθμίσεις και προσαρμογή",
-  "settings-and-customization-description": "Θέμα, Γλώσσα, Εισαγωγή/Εξαγωγή CSV ...",
+  "settings-and-customization-description": "Θέμα, Γλώσσα, Εισαγωγή/Εξαγωγή CSV",
   "assign-columns": "Αναθέστε στήλες",
   "date": "Ημερομηνία",
   "amount": "Ποσό",

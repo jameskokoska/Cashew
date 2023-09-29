@@ -461,7 +461,7 @@
   "delete-sync-backup-warning": "Щоб запобігти проблеми синхронізації між клієнтами, перед вилученням є гарна ідея синхронізувати всі інші активні пристрої.",
   "development-team": "Команда розвитку",
   "settings-and-customization": "Налаштування та налаштування",
-  "settings-and-customization-description": "Тема, мова, імпорт/експорт CSV ...",
+  "settings-and-customization-description": "Тема, мова, імпорт/експорт CSV",
   "assign-columns": "Призначення стовпців",
   "date": "Дата",
   "amount": "Обсяг",

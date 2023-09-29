@@ -461,7 +461,7 @@
   "delete-sync-backup-warning": "เพื่อป้องกันปัญหาการซิงโครไนซ์ระหว่างลูกค้าเป็นความคิดที่ดีที่จะซิงค์อุปกรณ์ที่ใช้งานอื่น ๆ ทั้งหมดก่อนที่จะลบ",
   "development-team": "ทีมพัฒนา",
   "settings-and-customization": "การตั้งค่าและการปรับแต่ง",
-  "settings-and-customization-description": "ธีม, ภาษา, นำเข้า/ส่งออก CSV ...",
+  "settings-and-customization-description": "ชุดรูปแบบภาษาการนำเข้า/ส่งออก CSV",
   "assign-columns": "กำหนดคอลัมน์",
   "date": "วันที่",
   "amount": "จำนวน",

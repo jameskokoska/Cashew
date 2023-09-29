@@ -28,6 +28,7 @@ import 'package:csv/csv.dart';
 import 'package:flutter_charset_detector/flutter_charset_detector.dart';
 import 'package:budget/widgets/framework/popupFramework.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:universal_html/html.dart' as html;
 import 'dart:io';
 import 'package:budget/struct/randomConstants.dart';
@@ -162,7 +163,7 @@ class _ImportCSVState extends State<ImportCSV> {
         },
         "wallet": {
           "displayName": "account",
-          "headerValues": ["wallet", "account"],
+          "headerValues": ["wallet", "account", "accountName", "account name"],
           "required": true,
           "setHeaderValue": "",
           "setHeaderIndex": -1,
@@ -839,7 +840,7 @@ class _ImportingEntriesPopupState extends State<ImportingEntriesPopup> {
           categoryPk: "-1",
           name: row[assignedColumns["category"]!["setHeaderIndex"]],
           dateCreated: DateTime.now(),
-          dateTimeModified: null,
+          dateTimeModified: DateTime.now(),
           order: numberOfCategories,
           income: amount > 0,
           iconName: "image.png",
@@ -858,7 +859,8 @@ class _ImportingEntriesPopupState extends State<ImportingEntriesPopup> {
     }
 
     String walletFk = "0";
-    if (assignedColumns["wallet"]!["setHeaderIndex"] == -1) {
+    if (assignedColumns["wallet"]!["setHeaderIndex"] == -1 ||
+        row[assignedColumns["wallet"]!["setHeaderIndex"]] == "") {
       walletFk = appStateSettings["selectedWalletPk"];
     } else {
       try {
@@ -866,8 +868,28 @@ class _ImportingEntriesPopupState extends State<ImportingEntriesPopup> {
                 row[assignedColumns["wallet"]!["setHeaderIndex"]]))
             .walletPk;
       } catch (e) {
-        throw "Wallet not found! If you want to import to the current wallet, please select '~Current Wallet~'. Details: " +
-            e.toString();
+        try {
+          int numberOfWallets =
+              (await database.getTotalCountOfWallets())[0] ?? 0;
+          await database.createOrUpdateWallet(
+            insert: true,
+            Provider.of<AllWallets>(context, listen: false)
+                .indexedByPk[appStateSettings["selectedWalletPk"]]!
+                .copyWith(
+                  walletPk: "-1",
+                  name: row[assignedColumns["wallet"]!["setHeaderIndex"]],
+                  dateCreated: DateTime.now(),
+                  dateTimeModified: Value(DateTime.now()),
+                  order: numberOfWallets,
+                ),
+          );
+          walletFk = (await database.getWalletInstanceGivenName(
+                  row[assignedColumns["wallet"]!["setHeaderIndex"]]))
+              .walletPk;
+        } catch (e) {
+          throw "Wallet not found! If you want to import to the current wallet, please select '~Current Wallet~'. Details: " +
+              e.toString();
+        }
       }
     }
 
