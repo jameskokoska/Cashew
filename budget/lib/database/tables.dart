@@ -519,7 +519,7 @@ class FinanceDatabase extends _$FinanceDatabase {
         await m.createAll();
       },
       onUpgrade: (migrator, from, to) async {
-        print("FROM" + from.toString());
+        print("Migrating from: " + from.toString() + " to " + to.toString());
         if (from <= 9) {
           await migrator.createTable($AppSettingsTable(database));
         }
@@ -2990,7 +2990,16 @@ class FinanceDatabase extends _$FinanceDatabase {
 
   // get category given name
   Future<TransactionCategory> getCategoryInstanceGivenName(String name) async {
-    return (await (select(categories)..where((t) => t.name.equals(name))).get())
+    return (await (select(categories)..where((c) => c.name.equals(name))).get())
+        .first;
+  }
+
+  Future<TransactionCategory> getCategoryInstanceGivenNameTrim(
+      String name) async {
+    return (await (select(categories)
+              ..where((c) =>
+                  c.name.lower().trim().equals(name.toLowerCase().trim())))
+            .get())
         .first;
   }
 
@@ -3181,6 +3190,15 @@ class FinanceDatabase extends _$FinanceDatabase {
   // get wallet given name
   Future<TransactionWallet> getWalletInstanceGivenName(String name) async {
     return (await (select(wallets)..where((w) => w.name.equals(name))).get())
+        .first;
+  }
+
+  // get wallet given name, to lower and trim
+  Future<TransactionWallet> getWalletInstanceGivenNameTrim(String name) async {
+    return (await (select(wallets)
+              ..where((w) =>
+                  w.name.lower().trim().equals(name.toLowerCase().trim())))
+            .get())
         .first;
   }
 

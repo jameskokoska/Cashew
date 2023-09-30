@@ -175,12 +175,13 @@ String convertToMoney(
   // return currency.format(amount);
 }
 
-String getMonth(int monthIndex) {
-  DateTime dateTime = DateTime(DateTime.now().year, monthIndex + 1);
-  String monthName =
-      DateFormat('MMMM', navigatorKey.currentContext?.locale.toString())
-          .format(dateTime);
-  return monthName;
+String getMonth(DateTime dateTime, {bool includeYear = false}) {
+  if (includeYear) {
+    return DateFormat.yMMMM(navigatorKey.currentContext?.locale.toString())
+        .format(dateTime);
+  }
+  return DateFormat.MMMM(navigatorKey.currentContext?.locale.toString())
+      .format(dateTime);
 }
 
 String getWordedTime(DateTime dateTime) {

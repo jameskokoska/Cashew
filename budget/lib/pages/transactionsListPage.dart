@@ -223,12 +223,9 @@ class TransactionsListPageState extends State<TransactionsListPage>
                                         noResultsMessage: "no-transactions-for"
                                                 .tr() +
                                             " " +
-                                            getMonth(startDate.month) +
-                                            (startDate.year !=
-                                                    DateTime.now().year
-                                                ? " " +
-                                                    startDate.year.toString()
-                                                : "") +
+                                            getMonth(startDate,
+                                                includeYear: startDate.year !=
+                                                    DateTime.now().year) +
                                             ".",
                                       ),
                                       SliverToBoxAdapter(

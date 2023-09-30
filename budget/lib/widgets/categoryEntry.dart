@@ -380,9 +380,25 @@ class CategoryIconPercent extends StatelessWidget {
             )
           : SizedBox.shrink(),
       category.emojiIconName != null
-          ? EmojiIcon(
-              emojiIconName: category.emojiIconName,
-              size: size * 0.92,
+          ? Stack(
+              alignment: Alignment.center,
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).brightness == Brightness.light
+                        ? HexColor(category.colour).withOpacity(0.5)
+                        : Colors.transparent,
+                    shape: BoxShape.circle,
+                  ),
+                  height: size + insetPadding,
+                  width: size + insetPadding,
+                  padding: EdgeInsets.all(10),
+                ),
+                EmojiIcon(
+                  emojiIconName: category.emojiIconName,
+                  size: size * 0.92,
+                ),
+              ],
             )
           : SizedBox.shrink(),
 

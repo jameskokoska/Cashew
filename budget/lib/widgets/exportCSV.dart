@@ -114,7 +114,7 @@ Map<String, String> convertStringToMap(String inputString,
 
     // Iterate through the parts and split each part by ": "
     for (String part in parts) {
-      print(part);
+      // print(part);
       List<String> keyValue = part.split(": ");
       if (keyValue.length >= 2) {
         String key = keyValue[0].trim();

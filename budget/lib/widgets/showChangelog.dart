@@ -20,6 +20,12 @@ import 'listItem.dart';
 
 String getChangelogString() {
   return """
+    < 4.5.3
+    Negative goal percentage shown in transaction entry
+    Long press email to copy to clipboard
+    Fixed month label offset in no results for transactions list
+    If no similar account name found, attempt to trim and lowercase to find similar category/account name when importing CSV
+    Fixed emoji icons would not have background in budget category spending entries in light mode
     < 4.5.2
     If no account name reference when importing CSV, a new one will be made
     < 4.5.1

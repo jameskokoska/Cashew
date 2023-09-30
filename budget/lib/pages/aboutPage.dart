@@ -204,6 +204,9 @@ class AboutPage extends StatelessWidget {
             onTap: () {
               openUrl('mailto:dapperappdeveloper@gmail.com');
             },
+            onLongPress: () {
+              copyToClipboard("dapperappdeveloper@gmail.com");
+            },
             color: appStateSettings["materialYou"]
                 ? dynamicPastel(
                     context, Theme.of(context).colorScheme.secondaryContainer,

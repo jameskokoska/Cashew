@@ -813,42 +813,48 @@ class _ImportingEntriesPopupState extends State<ImportingEntriesPopup> {
     try {
       selectedCategory = await database.getCategoryInstanceGivenName(
           row[assignedColumns["category"]!["setHeaderIndex"]]);
-    } catch (_) {
-      // just make a new category, no point in checking associated titles - doesn't make much sense!
+    } catch (e) {
+      try {
+        selectedCategory = await database.getCategoryInstanceGivenNameTrim(
+            row[assignedColumns["category"]!["setHeaderIndex"]]);
+      } catch (e) {
+        // just make a new category, no point in checking associated titles - doesn't make much sense!
 
-      // category not found, check titles
-      // try {
-      //   if (name != "") {
-      //     List result = await getRelatingAssociatedTitle(name);
-      //     TransactionAssociatedTitle? associatedTitle = result[0];
-      //     if (associatedTitle == null) {
-      //       throw ("Can't find a category that matched this title: " + name);
-      //     }
-      //     selectedCategory =
-      //         await database.getCategoryInstance(associatedTitle.categoryFk);
-      //   } else {
-      //     throw ("error, just make a new category");
-      //   }
-      // } catch (e) {
-      // print(e.toString());
-      // just create a category
-      int numberOfCategories =
-          (await database.getTotalCountOfCategories())[0] ?? 0;
-      await database.createOrUpdateCategory(
-        insert: true,
-        TransactionCategory(
-          categoryPk: "-1",
-          name: row[assignedColumns["category"]!["setHeaderIndex"]],
-          dateCreated: DateTime.now(),
-          dateTimeModified: DateTime.now(),
-          order: numberOfCategories,
-          income: amount > 0,
-          iconName: "image.png",
-          methodAdded: MethodAdded.csv,
-        ),
-      );
-      selectedCategory = await database.getCategoryInstanceGivenName(
-          row[assignedColumns["category"]!["setHeaderIndex"]]);
+        // category not found, check titles
+        // try {
+        //   if (name != "") {
+        //     List result = await getRelatingAssociatedTitle(name);
+        //     TransactionAssociatedTitle? associatedTitle = result[0];
+        //     if (associatedTitle == null) {
+        //       throw ("Can't find a category that matched this title: " + name);
+        //     }
+        //     selectedCategory =
+        //         await database.getCategoryInstance(associatedTitle.categoryFk);
+        //   } else {
+        //     throw ("error, just make a new category");
+        //   }
+        // } catch (e) {
+        // print(e.toString());
+        // just create a category
+        int numberOfCategories =
+            (await database.getTotalCountOfCategories())[0] ?? 0;
+        await database.createOrUpdateCategory(
+          insert: true,
+          TransactionCategory(
+            categoryPk: "-1",
+            name: row[assignedColumns["category"]!["setHeaderIndex"]],
+            dateCreated: DateTime.now(),
+            dateTimeModified: DateTime.now(),
+            order: numberOfCategories,
+            income: amount > 0,
+            iconName: "image.png",
+            methodAdded: MethodAdded.csv,
+          ),
+        );
+        selectedCategory = await database.getCategoryInstanceGivenName(
+            row[assignedColumns["category"]!["setHeaderIndex"]]);
+      }
+
       // }
     }
     categoryFk = selectedCategory.categoryPk;
@@ -869,26 +875,32 @@ class _ImportingEntriesPopupState extends State<ImportingEntriesPopup> {
             .walletPk;
       } catch (e) {
         try {
-          int numberOfWallets =
-              (await database.getTotalCountOfWallets())[0] ?? 0;
-          await database.createOrUpdateWallet(
-            insert: true,
-            Provider.of<AllWallets>(context, listen: false)
-                .indexedByPk[appStateSettings["selectedWalletPk"]]!
-                .copyWith(
-                  walletPk: "-1",
-                  name: row[assignedColumns["wallet"]!["setHeaderIndex"]],
-                  dateCreated: DateTime.now(),
-                  dateTimeModified: Value(DateTime.now()),
-                  order: numberOfWallets,
-                ),
-          );
-          walletFk = (await database.getWalletInstanceGivenName(
+          walletFk = (await database.getWalletInstanceGivenNameTrim(
                   row[assignedColumns["wallet"]!["setHeaderIndex"]]))
               .walletPk;
         } catch (e) {
-          throw "Wallet not found! If you want to import to the current wallet, please select '~Current Wallet~'. Details: " +
-              e.toString();
+          try {
+            int numberOfWallets =
+                (await database.getTotalCountOfWallets())[0] ?? 0;
+            await database.createOrUpdateWallet(
+              insert: true,
+              Provider.of<AllWallets>(context, listen: false)
+                  .indexedByPk[appStateSettings["selectedWalletPk"]]!
+                  .copyWith(
+                    walletPk: "-1",
+                    name: row[assignedColumns["wallet"]!["setHeaderIndex"]],
+                    dateCreated: DateTime.now(),
+                    dateTimeModified: Value(DateTime.now()),
+                    order: numberOfWallets,
+                  ),
+            );
+            walletFk = (await database.getWalletInstanceGivenName(
+                    row[assignedColumns["wallet"]!["setHeaderIndex"]]))
+                .walletPk;
+          } catch (e) {
+            throw "Wallet not found! If you want to import to the current wallet, please select '~Current Wallet~'. Details: " +
+                e.toString();
+          }
         }
       }
     }
