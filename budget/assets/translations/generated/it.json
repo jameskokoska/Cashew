@@ -591,8 +591,8 @@
   "correct-total-balance": "Correggi saldo",
   "default-category-account-amount-balancing": "Correzione saldo",
   "negative-amount": "Importo negativo",
-  "update-total-balance": "Aggiorna il saldo totale",
-  "updated-total-balance": "Saldo totale aggiornato",
+  "update-total-balance": "Correggi saldo",
+  "updated-total-balance": "Saldo aggiornato",
   "merge-account": "Account unione",
   "account-to-transfer-all-transactions-to": "Conto per trasferire tutte le transazioni a",
   "merge-into-description-accounts": "Ciò trasferirà tutte le transazioni sul nuovo account e cancellerà il vecchio account",
@@ -721,11 +721,12 @@
   "major-change-10": "Banner homepage",
   "major-change-10-1": "Personalizza la dimensione del widget banner homepage nella home page di modifica",
   "select-period-tooltip": "Seleziona periodo",
-  "data-overwrite-warning": "I dati sovrascrivi",
+  "data-overwrite-warning": "Sovrascrivi i dati",
   "data-overwrite-warning-description": "L'importazione di dati sovrascriverà tutti i dati attuali!",
   "select-backup-file": "Seleziona Backup",
   "select-backup-file-description": "Seleziona il tuo file backup.sql.",
-  "database-corrupted": "Il database corrotto",
+  "database-corrupted": "Database corrotto",
   "database-corrupted-description": "Il tuo database è corrotto. Potresti aver importato il file sbagliato.",
-  "import-backup": "Importa backup"
+  "import-backup": "Importa backup",
+  "view-previous-budget-periods": "Visualizza i periodi di bilancio precedenti"
 }

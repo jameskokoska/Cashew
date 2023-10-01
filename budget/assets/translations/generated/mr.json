@@ -727,5 +727,6 @@
   "select-backup-file-description": "कृपया आपली बॅकअप.एसक्यूएल फाइल निवडा.",
   "database-corrupted": "डेटाबेस दूषित",
   "database-corrupted-description": "आपला डेटाबेस दूषित झाला आहे. आपण कदाचित चुकीची फाईल आयात केली असेल.",
-  "import-backup": "आयात बॅकअप"
+  "import-backup": "आयात बॅकअप",
+  "view-previous-budget-periods": "मागील बजेट कालावधी पहा"
 }

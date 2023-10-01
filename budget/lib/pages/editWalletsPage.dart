@@ -133,6 +133,27 @@ class _EditWalletsPageState extends State<EditWalletsPage> {
               ),
             ),
           ),
+          SliverToBoxAdapter(
+            child: AnimatedExpanded(
+              expand: hideIfSearching(searchValue, context) == false,
+              child: SettingsContainer(
+                onTap: () {
+                  openBottomSheet(
+                    context,
+                    fullSnap: true,
+                    TransferBalancePopup(
+                      wallet: Provider.of<AllWallets>(context, listen: false)
+                          .indexedByPk[appStateSettings["selectedWalletPk"]]!,
+                    ),
+                  );
+                },
+                title: "transfer-balance".tr(),
+                icon: appStateSettings["outlinedIcons"]
+                    ? Icons.compare_arrows_outlined
+                    : Icons.compare_arrows_rounded,
+              ),
+            ),
+          ),
           StreamBuilder<List<TransactionWallet>>(
             stream: database.watchAllWallets(
                 searchFor: searchValue == "" ? null : searchValue),

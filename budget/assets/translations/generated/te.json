@@ -727,5 +727,6 @@
   "select-backup-file-description": "దయచేసి మీ backup.sql ఫైల్‌ను ఎంచుకోండి.",
   "database-corrupted": "డేటాబేస్ పాడైంది",
   "database-corrupted-description": "మీ డేటాబేస్ పాడైంది. మీరు తప్పు ఫైల్‌ను దిగుమతి చేసుకోవచ్చు.",
-  "import-backup": "దిగుమతి బ్యాకప్"
+  "import-backup": "దిగుమతి బ్యాకప్",
+  "view-previous-budget-periods": "మునుపటి బడ్జెట్ కాలాలను చూడండి"
 }

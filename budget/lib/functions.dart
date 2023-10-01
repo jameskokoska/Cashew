@@ -1059,3 +1059,17 @@ double getDeviceAspectRatio(BuildContext context) {
   final double aspectRatio = size.height / size.width;
   return aspectRatio;
 }
+
+Future<int?> getAndroidVersion() async {
+  int? androidVersion;
+  if (getPlatform(ignoreEmulation: true) == PlatformOS.isAndroid) {
+    try {
+      AndroidDeviceInfo androidInfo = await DeviceInfoPlugin().androidInfo;
+      String androidVersionString = androidInfo.version.release;
+      androidVersion = int.tryParse(androidVersionString);
+    } catch (e) {
+      print("Error parsing Android version" + e.toString());
+    }
+  }
+  return androidVersion;
+}

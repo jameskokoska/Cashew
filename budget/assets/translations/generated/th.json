@@ -727,5 +727,6 @@
   "select-backup-file-description": "โปรดเลือกไฟล์ backup.sql ของคุณ",
   "database-corrupted": "ฐานข้อมูลเสียหาย",
   "database-corrupted-description": "ฐานข้อมูลของคุณเสียหาย คุณอาจนำเข้าไฟล์ผิด",
-  "import-backup": "นำเข้าสำรอง"
+  "import-backup": "นำเข้าสำรอง",
+  "view-previous-budget-periods": "ดูระยะเวลางบประมาณก่อนหน้า"
 }

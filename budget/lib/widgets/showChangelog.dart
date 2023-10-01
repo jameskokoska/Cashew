@@ -20,6 +20,16 @@ import 'listItem.dart';
 
 String getChangelogString() {
   return """
+    < 4.5.4
+    Fixed loading system color when choosing theme (no longer required restart)
+    Removed deep cyan color from unsupported accent color devices
+    Date and time selection for correct total balance and transfer account balance
+    Date picker range selector follows accent color
+    If no transactions in budget listed, added button to view past budget periods
+    Removed past history page for custom budget period
+    Added transfer balance settings button to account list page
+    System color only enabled by default on Android >=12 version
+    Taxi, sandwich, subscription, category icons
     < 4.5.3
     Negative goal percentage shown in transaction entry
     Long press email to copy to clipboard

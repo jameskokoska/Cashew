@@ -727,5 +727,6 @@
   "select-backup-file-description": "يرجى تحديد ملف backup.sql الخاص بك.",
   "database-corrupted": "قاعدة البيانات تالفة",
   "database-corrupted-description": "قاعدة البيانات الخاصة بك تالفة. قد تكون قد استوردت الملف الخطأ.",
-  "import-backup": "استيراد النسخ الاحتياطي"
+  "import-backup": "استيراد النسخ الاحتياطي",
+  "view-previous-budget-periods": "عرض فترات الميزانية السابقة"
 }

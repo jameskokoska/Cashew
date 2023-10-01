@@ -727,5 +727,6 @@
   "select-backup-file-description": "Vui lòng chọn tệp Sao lưu.SQL của bạn.",
   "database-corrupted": "Cơ sở dữ liệu bị hỏng",
   "database-corrupted-description": "Cơ sở dữ liệu của bạn bị hỏng. Bạn có thể đã nhập sai tệp.",
-  "import-backup": "Nhập bản sao lưu"
+  "import-backup": "Nhập bản sao lưu",
+  "view-previous-budget-periods": "Xem thời gian ngân sách trước đó"
 }

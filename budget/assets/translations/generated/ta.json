@@ -727,5 +727,6 @@
   "select-backup-file-description": "உங்கள் grave.sql கோப்பைத் தேர்ந்தெடுக்கவும்.",
   "database-corrupted": "தரவுத்தளம் சிதைந்தது",
   "database-corrupted-description": "உங்கள் தரவுத்தளம் சிதைந்துள்ளது. நீங்கள் தவறான கோப்பை இறக்குமதி செய்திருக்கலாம்.",
-  "import-backup": "காப்புப்பிரதி இறக்குமதி செய்யுங்கள்"
+  "import-backup": "காப்புப்பிரதி இறக்குமதி செய்யுங்கள்",
+  "view-previous-budget-periods": "முந்தைய பட்ஜெட் காலங்களைக் காண்க"
 }

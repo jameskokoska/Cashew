@@ -1,7 +1,12 @@
+import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
+import 'package:budget/pages/pastBudgetsPage.dart';
 import 'package:budget/pages/transactionsSearchPage.dart';
+import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/dateDivider.dart';
 import 'package:budget/widgets/openPopup.dart';
+import 'package:budget/widgets/tappable.dart';
+import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntry/transactionEntry.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/struct/settings.dart';
@@ -54,6 +59,7 @@ class TransactionEntries extends StatelessWidget {
     this.allowSelect = true,
     this.showObjectivePercentage = true,
     this.noResultsPadding,
+    this.noResultsExtraWidget,
     super.key,
   });
 
@@ -90,6 +96,7 @@ class TransactionEntries extends StatelessWidget {
   final bool allowSelect;
   final bool showObjectivePercentage;
   final EdgeInsets? noResultsPadding;
+  final Widget? noResultsExtraWidget;
 
   @override
   Widget build(BuildContext context) {
@@ -117,14 +124,30 @@ class TransactionEntries extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           if (snapshot.data!.length <= 0 && showNoResults == true) {
-            Widget noResults = NoResults(
-              message: noResultsMessage ??
-                  "no-transactions-within-time-range".tr() + ".",
-              tintColor: colorScheme != null
-                  ? colorScheme?.primary.withOpacity(0.6)
-                  : null,
-              noSearchResultsVariation: noSearchResultsVariation,
-              padding: noResultsPadding,
+            Widget noResults = Column(
+              children: [
+                NoResults(
+                  message: noResultsMessage ??
+                      "no-transactions-within-time-range".tr() +
+                          "." +
+                          (budget != null
+                              ? ("\n" +
+                                  "(" +
+                                  getWordedDateShortMore(
+                                      startDay ?? DateTime.now()) +
+                                  " - " +
+                                  getWordedDateShortMore(
+                                      endDay ?? DateTime.now()) +
+                                  ")")
+                              : ""),
+                  tintColor: colorScheme != null
+                      ? colorScheme?.primary.withOpacity(0.6)
+                      : null,
+                  noSearchResultsVariation: noSearchResultsVariation,
+                  padding: noResultsPadding,
+                ),
+                if (noResultsExtraWidget != null) noResultsExtraWidget!,
+              ],
             );
             if (slivers) {
               return SliverToBoxAdapter(child: noResults);

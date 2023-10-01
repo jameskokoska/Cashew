@@ -727,5 +727,6 @@
   "select-backup-file-description": "Изаберите датотеку Бацкуп.СКЛ.",
   "database-corrupted": "База података оштећена",
   "database-corrupted-description": "Ваша база података је оштећена. Можда сте увели погрешну датотеку.",
-  "import-backup": "Увоз резервне копије"
+  "import-backup": "Увоз резервне копије",
+  "view-previous-budget-periods": "Погледајте претходне буџетске периоде"
 }

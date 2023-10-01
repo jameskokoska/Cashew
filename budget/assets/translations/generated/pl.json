@@ -727,5 +727,6 @@
   "select-backup-file-description": "Wybierz plik Backup.sql.",
   "database-corrupted": "Baza danych uszkodzona",
   "database-corrupted-description": "Twoja baza danych jest uszkodzona. Być może zaimportowałeś niewłaściwy plik.",
-  "import-backup": "Kopia zapasowa importu"
+  "import-backup": "Kopia zapasowa importu",
+  "view-previous-budget-periods": "Zobacz poprzednie okresy budżetowe"
 }

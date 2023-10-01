@@ -727,5 +727,6 @@
   "select-backup-file-description": "Pilih file backup.sql Anda.",
   "database-corrupted": "Database rusak",
   "database-corrupted-description": "Basis data Anda rusak. Anda mungkin telah mengimpor file yang salah.",
-  "import-backup": "Impor cadangan"
+  "import-backup": "Impor cadangan",
+  "view-previous-budget-periods": "Lihat Periode Anggaran Sebelumnya"
 }

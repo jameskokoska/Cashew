@@ -727,5 +727,6 @@
   "select-backup-file-description": "Seleccione su archivo Backup.sql.",
   "database-corrupted": "Base de datos corrupta",
   "database-corrupted-description": "Su base de datos está dañada. Es posible que haya importado el archivo incorrecto.",
-  "import-backup": "Importación de respaldo"
+  "import-backup": "Importación de respaldo",
+  "view-previous-budget-periods": "Ver períodos presupuestarios anteriores"
 }

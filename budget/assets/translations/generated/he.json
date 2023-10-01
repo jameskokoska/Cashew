@@ -727,5 +727,6 @@
   "select-backup-file-description": "אנא בחר את קובץ ה- backup.sql שלך.",
   "database-corrupted": "מסד נתונים פגום",
   "database-corrupted-description": "בסיס הנתונים שלך פגום. יתכן שייבאת את הקובץ הלא נכון.",
-  "import-backup": "יבוא גיבוי"
+  "import-backup": "יבוא גיבוי",
+  "view-previous-budget-periods": "צפה בתקופות תקציב קודמות"
 }

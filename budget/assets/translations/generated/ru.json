@@ -727,5 +727,6 @@
   "select-backup-file-description": "Пожалуйста, выберите свой файл Backup.sql.",
   "database-corrupted": "База данных повреждена",
   "database-corrupted-description": "Ваша база данных повреждена. Вы, возможно, импортировали неправильный файл.",
-  "import-backup": "Импорт резервного копирования"
+  "import-backup": "Импорт резервного копирования",
+  "view-previous-budget-periods": "Просмотреть предыдущие бюджетные периоды"
 }

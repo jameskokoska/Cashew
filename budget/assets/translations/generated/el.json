@@ -727,5 +727,6 @@
   "select-backup-file-description": "Επιλέξτε το αρχείο backup.sql.",
   "database-corrupted": "Η βάση δεδομένων είναι κατεστραμμένη",
   "database-corrupted-description": "Η βάση δεδομένων σας είναι κατεστραμμένη. Μπορεί να έχετε εισαγάγει το λάθος αρχείο.",
-  "import-backup": "Εισαγωγή αντιγράφου ασφαλείας"
+  "import-backup": "Εισαγωγή αντιγράφου ασφαλείας",
+  "view-previous-budget-periods": "Προβολή προηγούμενων περιόδων προϋπολογισμού"
 }

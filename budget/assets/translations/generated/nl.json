@@ -727,5 +727,6 @@
   "select-backup-file-description": "Selecteer uw backup.sql -bestand.",
   "database-corrupted": "Database beschadigd",
   "database-corrupted-description": "Uw database is beschadigd. Mogelijk heeft u het verkeerde bestand geïmporteerd.",
-  "import-backup": "Back -up importeren"
+  "import-backup": "Back -up importeren",
+  "view-previous-budget-periods": "Bekijk eerdere begrotingsperioden"
 }

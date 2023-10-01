@@ -2,6 +2,7 @@ import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
 import 'package:budget/pages/addBudgetPage.dart';
+import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/editWalletsPage.dart';
 import 'package:budget/struct/currencyFunctions.dart';
 import 'package:budget/struct/databaseGlobal.dart';
@@ -25,6 +26,8 @@ import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/currencyPicker.dart';
 import 'package:budget/widgets/transactionEntry/incomeAmountArrow.dart';
 import 'package:budget/widgets/transactionEntry/transactionEntryAmount.dart';
+import 'package:budget/widgets/util/showDatePicker.dart';
+import 'package:budget/widgets/util/showTimePicker.dart';
 import 'package:budget/widgets/walletEntry.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
@@ -419,11 +422,7 @@ class _AddWalletPageState extends State<AddWalletPage> {
                           openBottomSheet(
                             context,
                             fullSnap: true,
-                            PopupFramework(
-                              title: "enter-amount".tr(),
-                              underTitleSpace: false,
-                              child: CorrectBalancePopup(wallet: wallet),
-                            ),
+                            CorrectBalancePopup(wallet: wallet),
                           );
                         },
                         color: Theme.of(context).colorScheme.secondaryContainer,
@@ -453,12 +452,7 @@ class _AddWalletPageState extends State<AddWalletPage> {
                             openBottomSheet(
                               context,
                               fullSnap: true,
-                              PopupFramework(
-                                title: "enter-amount".tr(),
-                                underTitleSpace: false,
-                                child: TransferBalancePopup(
-                                    wallet: widget.wallet!),
-                              ),
+                              TransferBalancePopup(wallet: widget.wallet!),
                             );
                         },
                         color: Theme.of(context).colorScheme.secondaryContainer,
@@ -572,53 +566,60 @@ class CorrectBalancePopup extends StatefulWidget {
 class _CorrectBalancePopupState extends State<CorrectBalancePopup> {
   double enteredAmount = 0;
   bool isNegative = false;
+  TimeOfDay? selectedTime = null;
+  DateTime? selectedDateTime = null;
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<double?>(
-      stream: database.watchTotalOfWalletNoConversion(
-        widget.wallet.walletPk,
+    return PopupFramework(
+      title: "enter-amount".tr(),
+      underTitleSpace: false,
+      outsideExtraWidget: IconButton(
+        iconSize: 25,
+        padding: EdgeInsets.all(getPlatform() == PlatformOS.isIOS ? 15 : 20),
+        icon: Icon(
+          appStateSettings["outlinedIcons"]
+              ? Icons.calendar_month_outlined
+              : Icons.calendar_month_rounded,
+        ),
+        onPressed: () async {
+          selectedDateTime = await showCustomDatePicker(
+              context, selectedDateTime ?? DateTime.now());
+          if (selectedDateTime != null) {
+            selectedTime = await showCustomTimePicker(
+                context,
+                TimeOfDay(
+                    hour: selectedTime?.hour ?? TimeOfDay.now().hour,
+                    minute: selectedTime?.minute ?? TimeOfDay.now().minute));
+            if (selectedTime != null) {
+              selectedDateTime = selectedDateTime!.copyWith(
+                  hour: selectedTime?.hour, minute: selectedTime?.minute);
+            } else {
+              selectedDateTime = selectedDateTime!.copyWith(
+                  hour: TimeOfDay.now().hour, minute: TimeOfDay.now().minute);
+            }
+          }
+        },
       ),
-      builder: (context, snapshot) {
-        double totalWalletAmount = snapshot.data ?? 0;
-        return Column(
-          children: [
-            SizedBox(height: 10),
-            Wrap(
-              alignment: WrapAlignment.center,
-              crossAxisAlignment: WrapCrossAlignment.center,
-              children: [
-                TextFont(
-                  autoSizeText: true,
-                  maxLines: 1,
-                  minFontSize: 16,
-                  text: convertToMoney(
-                    Provider.of<AllWallets>(context),
-                    totalWalletAmount,
-                    currencyKey: widget.wallet.currency,
-                    decimals: widget.wallet.decimals,
-                  ),
-                  textAlign: TextAlign.center,
-                  fontSize: 30,
-                  fontWeight: FontWeight.bold,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: Icon(
-                    appStateSettings["outlinedIcons"]
-                        ? Icons.arrow_forward_outlined
-                        : Icons.arrow_forward_rounded,
-                  ),
-                ),
-                AnimatedSizeSwitcher(
-                  clipBehavior: Clip.none,
-                  child: TextFont(
-                    key: ValueKey(enteredAmount),
+      child: StreamBuilder<double?>(
+        stream: database.watchTotalOfWalletNoConversion(
+          widget.wallet.walletPk,
+        ),
+        builder: (context, snapshot) {
+          double totalWalletAmount = snapshot.data ?? 0;
+          return Column(
+            children: [
+              SizedBox(height: 10),
+              Wrap(
+                alignment: WrapAlignment.center,
+                crossAxisAlignment: WrapCrossAlignment.center,
+                children: [
+                  TextFont(
                     autoSizeText: true,
                     maxLines: 1,
                     minFontSize: 16,
                     text: convertToMoney(
                       Provider.of<AllWallets>(context),
-                      enteredAmount,
+                      totalWalletAmount,
                       currencyKey: widget.wallet.currency,
                       decimals: widget.wallet.decimals,
                     ),
@@ -626,100 +627,127 @@ class _CorrectBalancePopupState extends State<CorrectBalancePopup> {
                     fontSize: 30,
                     fontWeight: FontWeight.bold,
                   ),
-                ),
-              ],
-            ),
-            SizedBox(height: 5),
-            Builder(builder: (context) {
-              double difference = (enteredAmount - totalWalletAmount);
-              return Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  difference != 0
-                      ? IncomeOutcomeArrow(
-                          isIncome: difference > 0,
-                          width: 15,
-                        )
-                      : Container(),
-                  Flexible(
-                    child: CountNumber(
-                      count: difference.abs(),
-                      duration: Duration(milliseconds: 300),
-                      initialCount: (0),
-                      textBuilder: (number) {
-                        return TextFont(
-                          text: convertToMoney(
-                            Provider.of<AllWallets>(context),
-                            number,
-                            currencyKey: widget.wallet.currency,
-                            decimals: widget.wallet.decimals,
-                            finalNumber: number,
-                          ),
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          textColor: difference > 0 == true
-                              ? getColor(context, "incomeAmount")
-                              : getColor(context, "expenseAmount"),
-                        );
-                      },
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: Icon(
+                      appStateSettings["outlinedIcons"]
+                          ? Icons.arrow_forward_outlined
+                          : Icons.arrow_forward_rounded,
+                    ),
+                  ),
+                  AnimatedSizeSwitcher(
+                    clipBehavior: Clip.none,
+                    child: TextFont(
+                      key: ValueKey(enteredAmount),
+                      autoSizeText: true,
+                      maxLines: 1,
+                      minFontSize: 16,
+                      text: convertToMoney(
+                        Provider.of<AllWallets>(context),
+                        enteredAmount,
+                        currencyKey: widget.wallet.currency,
+                        decimals: widget.wallet.decimals,
+                      ),
+                      textAlign: TextAlign.center,
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 ],
-              );
-            }),
-            SizedBox(height: 8),
-            SelectAmountValue(
-              // Rerender when has data, so that the initialValue of negative-amount if correct
-              // Also render if no data, because that means the wallet is empty
-              // We still want users to be able to correct the amount
-              key: ValueKey(snapshot.hasData == false),
-              extraWidgetAboveNumbers: SettingsContainerSwitch(
-                title: "negative-amount".tr(),
-                onSwitched: (value) {
+              ),
+              SizedBox(height: 5),
+              Builder(builder: (context) {
+                double difference = (enteredAmount - totalWalletAmount);
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    difference != 0
+                        ? IncomeOutcomeArrow(
+                            isIncome: difference > 0,
+                            width: 15,
+                          )
+                        : Container(),
+                    Flexible(
+                      child: CountNumber(
+                        count: difference.abs(),
+                        duration: Duration(milliseconds: 300),
+                        initialCount: (0),
+                        textBuilder: (number) {
+                          return TextFont(
+                            text: convertToMoney(
+                              Provider.of<AllWallets>(context),
+                              number,
+                              currencyKey: widget.wallet.currency,
+                              decimals: widget.wallet.decimals,
+                              finalNumber: number,
+                            ),
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            textColor: difference > 0 == true
+                                ? getColor(context, "incomeAmount")
+                                : getColor(context, "expenseAmount"),
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                );
+              }),
+              SizedBox(height: 8),
+              SelectAmountValue(
+                // Rerender when has data, so that the initialValue of negative-amount if correct
+                // Also render if no data, because that means the wallet is empty
+                // We still want users to be able to correct the amount
+                key: ValueKey(snapshot.hasData == false),
+                extraWidgetAboveNumbers: SettingsContainerSwitch(
+                  title: "negative-amount".tr(),
+                  onSwitched: (value) {
+                    setState(() {
+                      isNegative = value;
+                      if (isNegative == true)
+                        enteredAmount = enteredAmount.abs() * -1;
+                      else
+                        enteredAmount = enteredAmount.abs();
+                    });
+                  },
+                  enableBorderRadius: true,
+                  initialValue: totalWalletAmount < 0,
+                  syncWithInitialValue: false,
+                  runOnSwitchedInitially: true,
+                ),
+                showEnteredNumber: false,
+                amountPassed: "0",
+                setSelectedAmount: (amount, calculation) {
                   setState(() {
-                    isNegative = value;
                     if (isNegative == true)
-                      enteredAmount = enteredAmount.abs() * -1;
+                      enteredAmount = amount.abs() * -1;
                     else
-                      enteredAmount = enteredAmount.abs();
+                      enteredAmount = amount.abs();
                   });
                 },
-                enableBorderRadius: true,
-                initialValue: totalWalletAmount < 0,
-                syncWithInitialValue: false,
-                runOnSwitchedInitially: true,
+                allowZero: true,
+                next: () async {
+                  await correctWalletBalance(
+                    context,
+                    enteredAmount - totalWalletAmount,
+                    enteredAmount,
+                    widget.wallet,
+                    selectedDateTime,
+                  );
+                  Navigator.pop(context);
+                },
+                nextLabel: "update-total-balance".tr(),
               ),
-              showEnteredNumber: false,
-              amountPassed: "0",
-              setSelectedAmount: (amount, calculation) {
-                setState(() {
-                  if (isNegative == true)
-                    enteredAmount = amount.abs() * -1;
-                  else
-                    enteredAmount = amount.abs();
-                });
-              },
-              allowZero: true,
-              next: () async {
-                await correctWalletBalance(
-                  context,
-                  enteredAmount - totalWalletAmount,
-                  enteredAmount,
-                  widget.wallet,
-                );
-                Navigator.pop(context);
-              },
-              nextLabel: "update-total-balance".tr(),
-            ),
-          ],
-        );
-      },
+            ],
+          );
+        },
+      ),
     );
   }
 }
 
 Future<bool> correctWalletBalance(BuildContext context, double differenceAmount,
-    double newAmount, TransactionWallet wallet) async {
+    double newAmount, TransactionWallet wallet, DateTime? dateTime) async {
   String transferString = wallet.name +
       ": " +
       convertToMoney(
@@ -731,7 +759,12 @@ Future<bool> correctWalletBalance(BuildContext context, double differenceAmount,
 
   String note = "updated-total-balance".tr() + "\n" + transferString;
 
-  await createCorrectionTransaction(differenceAmount, wallet, note: note);
+  await createCorrectionTransaction(
+    differenceAmount,
+    wallet,
+    note: note,
+    dateTime: dateTime,
+  );
 
   openSnackbar(
     SnackbarMessage(
@@ -747,7 +780,7 @@ Future<bool> correctWalletBalance(BuildContext context, double differenceAmount,
 }
 
 Future createCorrectionTransaction(double amount, TransactionWallet wallet,
-    {String? note}) async {
+    {String? note, DateTime? dateTime}) async {
   try {
     await database.getCategory("0").$2;
   } catch (e) {
@@ -782,7 +815,7 @@ Future createCorrectionTransaction(double amount, TransactionWallet wallet,
       note: note ?? "",
       categoryFk: "0",
       walletFk: wallet.walletPk,
-      dateCreated: DateTime.now(),
+      dateCreated: dateTime ?? DateTime.now(),
       income: amount > 0,
       paid: true,
       skipPaid: false,
@@ -803,6 +836,8 @@ class _TransferBalancePopupState extends State<TransferBalancePopup> {
   bool isNegative = false;
   late TransactionWallet walletFrom = widget.wallet;
   TransactionWallet? walletTo;
+  TimeOfDay? selectedTime = null;
+  DateTime? selectedDateTime = null;
 
   Widget walletSelector(TransactionWallet? wallet,
       Function(TransactionWallet wallet) onSelected) {
@@ -852,152 +887,190 @@ class _TransferBalancePopupState extends State<TransferBalancePopup> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        SizedBox(height: 10),
-        Wrap(
-          alignment: WrapAlignment.center,
-          crossAxisAlignment: WrapCrossAlignment.center,
-          runSpacing: 10,
-          children: [
-            walletSelector(walletFrom, (wallet) {
-              setState(() {
-                walletFrom = wallet;
-              });
-            }),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: AnimatedRotation(
-                duration: Duration(milliseconds: 1200),
-                turns: isNegative ? 0.5 : 1,
-                curve: ElasticOutCurve(0.6),
-                child: Icon(
-                  appStateSettings["outlinedIcons"]
-                      ? Icons.arrow_forward_outlined
-                      : Icons.arrow_forward_rounded,
+    return PopupFramework(
+      title: "enter-amount".tr(),
+      underTitleSpace: false,
+      outsideExtraWidget: IconButton(
+        iconSize: 25,
+        padding: EdgeInsets.all(getPlatform() == PlatformOS.isIOS ? 15 : 20),
+        icon: Icon(
+          appStateSettings["outlinedIcons"]
+              ? Icons.calendar_month_outlined
+              : Icons.calendar_month_rounded,
+        ),
+        onPressed: () async {
+          selectedDateTime = await showCustomDatePicker(
+              context, selectedDateTime ?? DateTime.now());
+          if (selectedDateTime != null) {
+            selectedTime = await showCustomTimePicker(
+                context,
+                TimeOfDay(
+                    hour: selectedTime?.hour ?? TimeOfDay.now().hour,
+                    minute: selectedTime?.minute ?? TimeOfDay.now().minute));
+            if (selectedTime != null) {
+              selectedDateTime = selectedDateTime!.copyWith(
+                  hour: selectedTime?.hour, minute: selectedTime?.minute);
+            } else {
+              selectedDateTime = selectedDateTime!.copyWith(
+                  hour: TimeOfDay.now().hour, minute: TimeOfDay.now().minute);
+            }
+          }
+        },
+      ),
+      child: Column(
+        children: [
+          SizedBox(height: 13),
+          Wrap(
+            alignment: WrapAlignment.center,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            runSpacing: 10,
+            children: [
+              walletSelector(walletFrom, (wallet) {
+                setState(() {
+                  walletFrom = wallet;
+                });
+              }),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: AnimatedRotation(
+                  duration: Duration(milliseconds: 1200),
+                  turns: isNegative ? 0.5 : 1,
+                  curve: ElasticOutCurve(0.6),
+                  child: Icon(
+                    appStateSettings["outlinedIcons"]
+                        ? Icons.arrow_forward_outlined
+                        : Icons.arrow_forward_rounded,
+                  ),
                 ),
               ),
-            ),
-            walletSelector(walletTo, (wallet) {
-              setState(() {
-                walletTo = wallet;
-              });
-            }),
-          ],
-        ),
-        SizedBox(height: 10),
-        AnimatedSizeSwitcher(
-          clipBehavior: Clip.none,
-          child: TextFont(
-            key: ValueKey(enteredAmount),
-            autoSizeText: true,
-            maxLines: 1,
-            minFontSize: 16,
-            text: convertToMoney(
-              Provider.of<AllWallets>(context),
-              enteredAmount
-                  .abs(), //We flip the arrow instead of showing negative
-              currencyKey: widget.wallet.currency,
-              decimals: widget.wallet.decimals,
-              addCurrencyName: true,
-            ),
-            textAlign: TextAlign.center,
-            fontSize: 30,
-            fontWeight: FontWeight.bold,
+              walletSelector(walletTo, (wallet) {
+                setState(() {
+                  walletTo = wallet;
+                });
+              }),
+            ],
           ),
-        ),
-        SizedBox(height: 5),
-        SelectAmountValue(
-          extraWidgetAboveNumbers: SettingsContainerSwitch(
-            title: "withdraw-amount".tr(),
-            onSwitched: (value) {
+          SizedBox(height: 10),
+          AnimatedSizeSwitcher(
+            clipBehavior: Clip.none,
+            child: TextFont(
+              key: ValueKey(enteredAmount),
+              autoSizeText: true,
+              maxLines: 1,
+              minFontSize: 16,
+              text: convertToMoney(
+                Provider.of<AllWallets>(context),
+                enteredAmount
+                    .abs(), //We flip the arrow instead of showing negative
+                currencyKey: widget.wallet.currency,
+                decimals: widget.wallet.decimals,
+                addCurrencyName: true,
+              ),
+              textAlign: TextAlign.center,
+              fontSize: 30,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          SizedBox(height: 5),
+          SelectAmountValue(
+            extraWidgetAboveNumbers: SettingsContainerSwitch(
+              title: "withdraw-amount".tr(),
+              onSwitched: (value) {
+                setState(() {
+                  isNegative = value;
+                  if (isNegative == true)
+                    enteredAmount = enteredAmount.abs() * -1;
+                  else
+                    enteredAmount = enteredAmount.abs();
+                });
+              },
+              enableBorderRadius: true,
+              initialValue: false,
+              syncWithInitialValue: false,
+              runOnSwitchedInitially: true,
+            ),
+            showEnteredNumber: false,
+            amountPassed: "0",
+            setSelectedAmount: (amount, calculation) {
               setState(() {
-                isNegative = value;
                 if (isNegative == true)
-                  enteredAmount = enteredAmount.abs() * -1;
+                  enteredAmount = amount.abs() * -1;
                 else
-                  enteredAmount = enteredAmount.abs();
+                  enteredAmount = amount.abs();
               });
             },
-            enableBorderRadius: true,
-            initialValue: false,
-            syncWithInitialValue: false,
-            runOnSwitchedInitially: true,
-          ),
-          showEnteredNumber: false,
-          amountPassed: "0",
-          setSelectedAmount: (amount, calculation) {
-            setState(() {
-              if (isNegative == true)
-                enteredAmount = amount.abs() * -1;
-              else
-                enteredAmount = amount.abs();
-            });
-          },
-          allowZero: true,
-          next: () async {
-            if (walletTo == null) {
-              dynamic result =
-                  await selectWalletPopup(context, selectedWallet: walletTo);
-              if (result is TransactionWallet) {
-                setState(() {
-                  walletTo = result;
-                });
+            allowZero: true,
+            next: () async {
+              if (walletTo == null) {
+                dynamic result =
+                    await selectWalletPopup(context, selectedWallet: walletTo);
+                if (result is TransactionWallet) {
+                  setState(() {
+                    walletTo = result;
+                  });
+                }
+                return;
               }
-              return;
-            }
 
-            String transferString =
-                walletFrom.name + (isNegative ? " ← " : " → ") + walletTo!.name;
+              String transferString = walletFrom.name +
+                  (isNegative ? " ← " : " → ") +
+                  walletTo!.name;
 
-            String note = "transferred-balance".tr() + "\n" + transferString;
+              String note = "transferred-balance".tr() + "\n" + transferString;
 
-            AllWallets allWallets =
-                Provider.of<AllWallets>(context, listen: false);
+              AllWallets allWallets =
+                  Provider.of<AllWallets>(context, listen: false);
 
-            await createCorrectionTransaction(
-              enteredAmount *
-                  (amountRatioFromToCurrency(
-                        allWallets
-                            .indexedByPk[appStateSettings["selectedWalletPk"]]!
-                            .currency!,
-                        allWallets.indexedByPk[walletTo!.walletPk]!.currency!,
-                      ) ??
-                      1),
-              walletTo!,
-              note: note,
-            );
+              await createCorrectionTransaction(
+                enteredAmount *
+                    (amountRatioFromToCurrency(
+                          allWallets
+                              .indexedByPk[
+                                  appStateSettings["selectedWalletPk"]]!
+                              .currency!,
+                          allWallets.indexedByPk[walletTo!.walletPk]!.currency!,
+                        ) ??
+                        1),
+                walletTo!,
+                note: note,
+                dateTime: selectedDateTime,
+              );
 
-            await createCorrectionTransaction(
-              enteredAmount *
-                  -1 *
-                  (amountRatioFromToCurrency(
-                        allWallets
-                            .indexedByPk[appStateSettings["selectedWalletPk"]]!
-                            .currency!,
-                        allWallets.indexedByPk[walletFrom.walletPk]!.currency!,
-                      ) ??
-                      1),
-              walletFrom,
-              note: note,
-            );
+              await createCorrectionTransaction(
+                enteredAmount *
+                    -1 *
+                    (amountRatioFromToCurrency(
+                          allWallets
+                              .indexedByPk[
+                                  appStateSettings["selectedWalletPk"]]!
+                              .currency!,
+                          allWallets
+                              .indexedByPk[walletFrom.walletPk]!.currency!,
+                        ) ??
+                        1),
+                walletFrom,
+                note: note,
+                dateTime: selectedDateTime,
+              );
 
-            openSnackbar(
-              SnackbarMessage(
-                title: "transferred-balance".tr(),
-                description: transferString,
-                icon: appStateSettings["outlinedIcons"]
-                    ? Icons.compare_arrows_outlined
-                    : Icons.compare_arrows_rounded,
-              ),
-            );
+              openSnackbar(
+                SnackbarMessage(
+                  title: "transferred-balance".tr(),
+                  description: transferString,
+                  icon: appStateSettings["outlinedIcons"]
+                      ? Icons.compare_arrows_outlined
+                      : Icons.compare_arrows_rounded,
+                ),
+              );
 
-            Navigator.pop(context);
-          },
-          nextLabel:
-              walletTo == null ? "select-account".tr() : "transfer-amount".tr(),
-        ),
-      ],
+              Navigator.pop(context);
+            },
+            nextLabel: walletTo == null
+                ? "select-account".tr()
+                : "transfer-amount".tr(),
+          ),
+        ],
+      ),
     );
   }
 }

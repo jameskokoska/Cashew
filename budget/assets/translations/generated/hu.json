@@ -727,5 +727,6 @@
   "select-backup-file-description": "Kérjük, válassza ki a biztonsági másolatot.sql fájlt.",
   "database-corrupted": "Az adatbázis megsérült",
   "database-corrupted-description": "Az adatbázisod sérült. Lehet, hogy rossz fájlt importált.",
-  "import-backup": "Biztonsági mentés importálása"
+  "import-backup": "Biztonsági mentés importálása",
+  "view-previous-budget-periods": "Tekintse meg a korábbi költségvetési periódusokat"
 }

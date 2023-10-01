@@ -727,5 +727,6 @@
   "select-backup-file-description": "Backup.sqlファイルを選択してください。",
   "database-corrupted": "データベースが破損しました",
   "database-corrupted-description": "データベースは破損しています。間違ったファイルをインポートした可能性があります。",
-  "import-backup": "バックアップをインポートします"
+  "import-backup": "バックアップをインポートします",
+  "view-previous-budget-periods": "以前の予算期間を表示します"
 }

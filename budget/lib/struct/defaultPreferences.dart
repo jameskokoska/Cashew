@@ -13,15 +13,6 @@ import 'package:flutter/services.dart';
 
 // default settings, defaultSettings, initial settings
 Future<Map<String, dynamic>> getDefaultPreferences() async {
-  int androidVersion = 11;
-  if (getPlatform(ignoreEmulation: true) == PlatformOS.isAndroid) {
-    androidVersion = 0;
-    AndroidDeviceInfo androidInfo = await DeviceInfoPlugin().androidInfo;
-    String androidVersionString = androidInfo.version.release;
-    try {
-      androidVersion = int.parse(androidVersionString);
-    } catch (e) {}
-  }
   return {
     "databaseJustImported": false,
     "backupLimit": 20,
@@ -33,7 +24,7 @@ Future<Map<String, dynamic>> getDefaultPreferences() async {
     "selectedWalletPk": "0",
     "selectedSubscriptionType": 0,
     "accentColor": toHexString(Color(0xFF1B447A)),
-    "accentSystemColor": supportsSystemColor(),
+    "accentSystemColor": await systemColorByDefault(),
     "showWalletSwitcher": true,
     "showPinnedBudgets": true,
     "showObjectives": false,
@@ -61,7 +52,6 @@ Future<Map<String, dynamic>> getDefaultPreferences() async {
     "showCumulativeSpending": true,
     "removeZeroTransactionEntries": true,
     "ignorePastAmountSpent": false,
-    // "askForTransactionTitle": androidVersion > 10,
     "askForTransactionTitle": true,
     "askForTransactionNoteWithTitle": false,
     // "batterySaver": kIsWeb,

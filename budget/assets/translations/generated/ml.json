@@ -727,5 +727,6 @@
   "select-backup-file-description": "നിങ്ങളുടെ ബാക്കപ്പ്. SQL ഫയൽ തിരഞ്ഞെടുക്കുക.",
   "database-corrupted": "ഡാറ്റാബേസ് കേടായി",
   "database-corrupted-description": "നിങ്ങളുടെ ഡാറ്റാബേസ് കേടായി. നിങ്ങൾ തെറ്റായ ഫയൽ ഇറക്കുമതി ചെയ്തേക്കാം.",
-  "import-backup": "ഇറക്കുമതി ബാക്കപ്പ്"
+  "import-backup": "ഇറക്കുമതി ബാക്കപ്പ്",
+  "view-previous-budget-periods": "മുമ്പത്തെ ബജറ്റ് കാലയളവുകൾ കാണുക"
 }

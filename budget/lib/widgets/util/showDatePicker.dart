@@ -32,6 +32,7 @@ Future<DateTime?> showCustomDatePicker(
                     primary: Theme.of(context).colorScheme.primary),
                 buttonTheme:
                     ButtonThemeData(textTheme: ButtonTextTheme.primary),
+                datePickerTheme: Theme.of(context).datePickerTheme,
               )
             : ThemeData.dark().copyWith(
                 useMaterial3: getPlatform() != PlatformOS.isIOS,
@@ -41,6 +42,7 @@ Future<DateTime?> showCustomDatePicker(
                     primary: Theme.of(context).colorScheme.secondary),
                 buttonTheme:
                     ButtonThemeData(textTheme: ButtonTextTheme.primary),
+                datePickerTheme: Theme.of(context).datePickerTheme,
               ),
         child: child ?? SizedBox.shrink(),
       );
@@ -69,9 +71,11 @@ Future<DateTimeRange?> showCustomDateRangePicker(
                 typography: Typography.material2021(),
                 primaryColor: Theme.of(context).colorScheme.primary,
                 colorScheme: ColorScheme.light(
-                    primary: Theme.of(context).colorScheme.primary),
+                  primary: Theme.of(context).colorScheme.primary,
+                ),
                 buttonTheme:
                     ButtonThemeData(textTheme: ButtonTextTheme.primary),
+                datePickerTheme: Theme.of(context).datePickerTheme,
               )
             : ThemeData.dark().copyWith(
                 useMaterial3: getPlatform() != PlatformOS.isIOS,
@@ -81,6 +85,7 @@ Future<DateTimeRange?> showCustomDateRangePicker(
                     primary: Theme.of(context).colorScheme.secondary),
                 buttonTheme:
                     ButtonThemeData(textTheme: ButtonTextTheme.primary),
+                datePickerTheme: Theme.of(context).datePickerTheme,
               ),
         child: child ?? SizedBox.shrink(),
       );

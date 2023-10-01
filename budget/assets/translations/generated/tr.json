@@ -727,5 +727,6 @@
   "select-backup-file-description": "Lütfen Backup.sql dosyanızı seçin.",
   "database-corrupted": "Veritabanı bozuk",
   "database-corrupted-description": "Veritabanınız bozuk. Yanlış dosyayı içe aktarmış olabilirsiniz.",
-  "import-backup": "Yedekleme İçe Aktarma"
+  "import-backup": "Yedekleme İçe Aktarma",
+  "view-previous-budget-periods": "Önceki bütçe dönemlerini görüntüleyin"
 }

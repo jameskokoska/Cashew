@@ -8,6 +8,7 @@ import 'package:budget/pages/premiumPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/animatedExpanded.dart';
+import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/dropdownSelect.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/selectedTransactionsAppBar.dart';
@@ -21,6 +22,7 @@ import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/widgets/pieChart.dart';
+import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntries.dart';
 import 'package:budget/widgets/transactionEntry/transactionEntry.dart';
@@ -231,19 +233,22 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                       );
                     },
                   ),
-                  DropdownItemMenu(
-                    id: "budget-history",
-                    label: "budget-history".tr(),
-                    icon: appStateSettings["outlinedIcons"]
-                        ? Icons.history_outlined
-                        : Icons.history_rounded,
-                    action: () {
-                      pushRoute(
-                        context,
-                        PastBudgetsPage(budgetPk: widget.budget.budgetPk),
-                      );
-                    },
-                  ),
+                  if (widget.budget.reoccurrence != BudgetReoccurence.custom &&
+                      widget.isPastBudget == false &&
+                      widget.isPastBudgetButCurrentPeriod == false)
+                    DropdownItemMenu(
+                      id: "budget-history",
+                      label: "budget-history".tr(),
+                      icon: appStateSettings["outlinedIcons"]
+                          ? Icons.history_outlined
+                          : Icons.history_rounded,
+                      action: () {
+                        pushRoute(
+                          context,
+                          PastBudgetsPage(budgetPk: widget.budget.budgetPk),
+                        );
+                      },
+                    ),
                   DropdownItemMenu(
                     id: "spending-goals",
                     label: "spending-goals".tr(),
@@ -607,6 +612,79 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                 transactionBackgroundColor: pageBackgroundColor,
                 categoryTintColor: budgetColorScheme.primary,
                 colorScheme: budgetColorScheme,
+                noResultsPadding: EdgeInsets.symmetric(horizontal: 30),
+                noResultsExtraWidget: widget.budget.reoccurrence !=
+                            BudgetReoccurence.custom &&
+                        widget.isPastBudget == false &&
+                        widget.isPastBudgetButCurrentPeriod == false
+                    ? Padding(
+                        padding: const EdgeInsets.only(top: 20),
+                        child: Tappable(
+                          borderRadius: 15,
+                          color: dynamicPastel(
+                            context,
+                            budgetColorScheme.secondaryContainer,
+                            amountLight:
+                                appStateSettings["materialYou"] ? 0.25 : 0.4,
+                            amountDark:
+                                appStateSettings["materialYou"] ? 0.4 : 0.55,
+                          ),
+                          onTap: () {
+                            pushRoute(
+                              context,
+                              PastBudgetsPage(budgetPk: widget.budget.budgetPk),
+                            );
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 15, vertical: 10),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                ButtonIcon(
+                                  onTap: () {
+                                    pushRoute(
+                                      context,
+                                      PastBudgetsPage(
+                                          budgetPk: widget.budget.budgetPk),
+                                    );
+                                  },
+                                  icon: appStateSettings["outlinedIcons"]
+                                      ? Icons.history_outlined
+                                      : Icons.history_rounded,
+                                  color: dynamicPastel(
+                                      context,
+                                      HexColor(widget.budget.colour,
+                                          defaultColor: Theme.of(context)
+                                              .colorScheme
+                                              .primary),
+                                      amount: 0.5),
+                                  iconColor: dynamicPastel(
+                                      context,
+                                      HexColor(widget.budget.colour,
+                                          defaultColor: Theme.of(context)
+                                              .colorScheme
+                                              .primary),
+                                      amount: 0.7,
+                                      inverse: true),
+                                  size: 38,
+                                  iconPadding: 18,
+                                ),
+                                SizedBox(width: 10),
+                                Flexible(
+                                  child: TextFont(
+                                    text: "view-previous-budget-periods".tr(),
+                                    fontSize: 17,
+                                    maxLines: 2,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      )
+                    : SizedBox.shrink(),
               ),
               SliverToBoxAdapter(
                 child: StreamBuilder<double?>(

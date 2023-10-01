@@ -727,5 +727,6 @@
   "select-backup-file-description": "Veuillez sélectionner votre fichier backup.sql.",
   "database-corrupted": "Base de données corrompue",
   "database-corrupted-description": "Votre base de données est corrompue. Vous avez peut-être importé le mauvais fichier.",
-  "import-backup": "Sauvegarde d'importation"
+  "import-backup": "Sauvegarde d'importation",
+  "view-previous-budget-periods": "Afficher les périodes budgétaires précédentes"
 }

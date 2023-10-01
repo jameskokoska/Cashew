@@ -727,5 +727,6 @@
   "select-backup-file-description": "Sila pilih fail Backup.sql anda.",
   "database-corrupted": "Pangkalan data rosak",
   "database-corrupted-description": "Pangkalan data anda rosak. Anda mungkin telah mengimport fail yang salah.",
-  "import-backup": "Import sandaran"
+  "import-backup": "Import sandaran",
+  "view-previous-budget-periods": "Lihat Tempoh Belanjawan Sebelumnya"
 }
