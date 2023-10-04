@@ -382,8 +382,8 @@ class SidebarClock extends StatelessWidget {
                       TextFont(
                         textColor: getColor(context, "black").withOpacity(0.5),
                         fontSize: 18,
-                        text: getWordedDateShortMore(DateTime.now(),
-                            includeYear: true),
+                        text: DateFormat.yMMMMd(context.locale.toString())
+                            .format(now),
                       ),
                     ],
                   );

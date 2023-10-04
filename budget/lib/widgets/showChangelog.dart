@@ -34,6 +34,7 @@ String getChangelogString() {
     Fixed category colors for theme color selection
     Fixed formatting of currency page on wider screens
     Fixed side navigation prevented refreshing if currencies changed
+    Fixed sidebar clock date
     < 4.5.4
     Fixed loading system color when choosing theme (no longer required restart)
     Removed deep cyan color from unsupported accent color devices
