@@ -730,5 +730,7 @@
   "import-backup": "Kopia zapasowa importu",
   "view-previous-budget-periods": "Zobacz poprzednie okresy budżetowe",
   "current-period": "Obecny okres",
-  "set-spending-goals": "Ustaw cele wydatków kategorii"
+  "set-spending-goals": "Ustaw cele wydatków kategorii",
+  "tap-for-custom-exchange-rate": "Stuknij wpis, aby ustawić niestandardowy kurs wymiany",
+  "set-currency": "Ustaw walutę"
 }

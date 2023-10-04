@@ -134,6 +134,8 @@ class SettingsContainerOpenPage extends StatelessWidget {
   const SettingsContainerOpenPage({
     Key? key,
     required this.openPage,
+    this.onClosed,
+    this.onOpen,
     required this.title,
     this.description,
     this.icon,
@@ -145,6 +147,8 @@ class SettingsContainerOpenPage extends StatelessWidget {
   }) : super(key: key);
 
   final Widget openPage;
+  final VoidCallback? onClosed;
+  final VoidCallback? onOpen;
   final String title;
   final String? description;
   final IconData? icon;
@@ -162,6 +166,8 @@ class SettingsContainerOpenPage extends StatelessWidget {
           ? EdgeInsets.zero
           : EdgeInsets.only(top: 5, bottom: 5, left: 4, right: 4),
       child: OpenContainerNavigation(
+        onClosed: onClosed,
+        onOpen: onOpen,
         closedColor: Theme.of(context).canvasColor,
         borderRadius: isOutlined == true
             ? 10

@@ -730,5 +730,7 @@
   "import-backup": "Yedekleme İçe Aktarma",
   "view-previous-budget-periods": "Önceki bütçe dönemlerini görüntüle",
   "current-period": "Mevcut dönem",
-  "set-spending-goals": "Kategori harcama hedefleri belirleyin"
+  "set-spending-goals": "Kategori harcama hedefleri belirleyin",
+  "tap-for-custom-exchange-rate": "Özel döviz kuru ayarlamak için bir girişe dokunun",
+  "set-currency": "Para Birimi"
 }

@@ -312,9 +312,11 @@ class _AddWalletPageState extends State<AddWalletPage> {
                     Navigator.pop(context);
                   },
                   onCancelLabel: "ok".tr(),
-                  onSubmit: () {
+                  onSubmit: () async {
+                    checkIfExchangeRateChangeBefore();
                     Navigator.pop(context);
-                    pushRoute(context, ExchangeRates());
+                    await pushRoute(context, ExchangeRates());
+                    checkIfExchangeRateChangeAfter();
                   },
                   onSubmitLabel: "exchange-rates".tr(),
                 );

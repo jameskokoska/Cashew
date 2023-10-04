@@ -730,5 +730,7 @@
   "import-backup": "นำเข้าสำรอง",
   "view-previous-budget-periods": "ดูระยะเวลางบประมาณก่อนหน้า",
   "current-period": "งวดปัจจุบัน",
-  "set-spending-goals": "กำหนดเป้าหมายการใช้จ่ายหมวดหมู่"
+  "set-spending-goals": "กำหนดเป้าหมายการใช้จ่ายหมวดหมู่",
+  "tap-for-custom-exchange-rate": "แตะรายการเพื่อตั้งค่าอัตราแลกเปลี่ยนที่กำหนดเอง",
+  "set-currency": "ตั้งค่าสกุลเงิน"
 }

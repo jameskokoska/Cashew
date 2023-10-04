@@ -21,6 +21,8 @@ import 'listItem.dart';
 String getChangelogString() {
   return """
     < 4.5.5
+    Added ability to modify currency ratios
+    Added exchange rates list into settings page
     Added today indicator to category spending limits
     Added compress view to hide extra dates in current budget period line graph
     Pie chart tints color to avoid identical colors next to each other

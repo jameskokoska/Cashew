@@ -730,5 +730,7 @@
   "import-backup": "Nhập bản sao lưu",
   "view-previous-budget-periods": "Xem thời gian ngân sách trước đó",
   "current-period": "Giai đoạn hiện tại",
-  "set-spending-goals": "Đặt mục tiêu chi tiêu danh mục"
+  "set-spending-goals": "Đặt mục tiêu chi tiêu danh mục",
+  "tap-for-custom-exchange-rate": "Nhấn vào một mục để đặt tỷ giá hối đoái tùy chỉnh",
+  "set-currency": "Đặt tiền tệ"
 }

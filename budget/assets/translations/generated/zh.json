@@ -730,5 +730,7 @@
   "import-backup": "导入备份",
   "view-previous-budget-periods": "查看以前的预算期",
   "current-period": "现时阶段",
-  "set-spending-goals": "设定类别支出目标"
+  "set-spending-goals": "设定类别支出目标",
+  "tap-for-custom-exchange-rate": "点击条目设置自定义汇率",
+  "set-currency": "设定货币"
 }

@@ -730,5 +730,7 @@
   "import-backup": "Importer backup",
   "view-previous-budget-periods": "Se tidligere budgetperioder",
   "current-period": "Nuværende periode",
-  "set-spending-goals": "Sæt kategoriforbrugsmål"
+  "set-spending-goals": "Sæt kategoriforbrugsmål",
+  "tap-for-custom-exchange-rate": "Tryk på en post for at indstille en brugerdefineret valutakurs",
+  "set-currency": "Indstil valuta"
 }

@@ -730,5 +730,7 @@
   "import-backup": "Importa backup",
   "view-previous-budget-periods": "Visualizza i periodi di bilancio precedenti",
   "current-period": "Periodo attuale",
-  "set-spending-goals": "Imposta obiettivi di spesa della categoria"
+  "set-spending-goals": "Imposta obiettivi di spesa della categoria",
+  "tap-for-custom-exchange-rate": "Tocca una voce per impostare un tasso di cambio personalizzato",
+  "set-currency": "Imposta valuta"
 }

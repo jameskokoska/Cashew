@@ -730,5 +730,7 @@
   "import-backup": "Back -up importeren",
   "view-previous-budget-periods": "Bekijk eerdere begrotingsperioden",
   "current-period": "Huidige periode",
-  "set-spending-goals": "Stel categorie -uitgavendoelen in"
+  "set-spending-goals": "Stel categorie -uitgavendoelen in",
+  "tap-for-custom-exchange-rate": "Tik op een item om een ​​aangepaste wisselkoers in te stellen",
+  "set-currency": "Valuta instellen"
 }

@@ -7,6 +7,7 @@ import 'package:budget/pages/billSplitter.dart';
 import 'package:budget/pages/creditDebtTransactionsPage.dart';
 import 'package:budget/pages/editHomePage.dart';
 import 'package:budget/pages/editObjectivesPage.dart';
+import 'package:budget/pages/exchangeRatesPage.dart';
 import 'package:budget/pages/objectivesListPage.dart';
 import 'package:budget/pages/premiumPage.dart';
 import 'package:budget/pages/upcomingOverdueTransactionsPage.dart';
@@ -532,6 +533,20 @@ class SettingsPageContent extends StatelessWidget {
                     : Icons.home_rounded,
               )
             : SizedBox.shrink(),
+
+        SettingsContainerOpenPage(
+          onOpen: () {
+            checkIfExchangeRateChangeBefore();
+          },
+          onClosed: () {
+            checkIfExchangeRateChangeAfter();
+          },
+          openPage: ExchangeRates(),
+          title: "exchange-rates".tr(),
+          icon: appStateSettings["outlinedIcons"]
+              ? Icons.account_balance_wallet_outlined
+              : Icons.account_balance_wallet_rounded,
+        ),
 
         BudgetTotalSpentToggle(),
 

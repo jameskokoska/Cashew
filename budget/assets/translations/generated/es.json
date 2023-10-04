@@ -730,5 +730,7 @@
   "import-backup": "Importación de respaldo",
   "view-previous-budget-periods": "Ver períodos presupuestarios anteriores",
   "current-period": "Período actual",
-  "set-spending-goals": "Establecer objetivos de gasto de categoría"
+  "set-spending-goals": "Establecer objetivos de gasto de categoría",
+  "tap-for-custom-exchange-rate": "Toque una entrada para establecer un tipo de cambio personalizado",
+  "set-currency": "Moneda establecida"
 }

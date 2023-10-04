@@ -730,5 +730,7 @@
   "import-backup": "Import zálohování",
   "view-previous-budget-periods": "Zobrazit předchozí rozpočtová období",
   "current-period": "Současné období",
-  "set-spending-goals": "Nastavte si výdaje na kategorii"
+  "set-spending-goals": "Nastavte si výdaje na kategorii",
+  "tap-for-custom-exchange-rate": "Klepnutím na položku nastavíte vlastní směnný kurz",
+  "set-currency": "Nastavit měnu"
 }

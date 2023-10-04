@@ -730,5 +730,7 @@
   "import-backup": "Tuo varmuuskopio",
   "view-previous-budget-periods": "Tarkastele aiempia budjettijaksoja",
   "current-period": "Nykyinen jakso",
-  "set-spending-goals": "Aseta luokan menot"
+  "set-spending-goals": "Aseta luokan menot",
+  "tap-for-custom-exchange-rate": "Napauta merkintää asettaaksesi mukautetun valuuttakurssin",
+  "set-currency": "Asettaa valuutta"
 }

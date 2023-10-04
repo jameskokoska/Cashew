@@ -730,5 +730,7 @@
   "import-backup": "バックアップをインポートします",
   "view-previous-budget-periods": "以前の予算期間を表示します",
   "current-period": "当期",
-  "set-spending-goals": "カテゴリの支出目標を設定します"
+  "set-spending-goals": "カテゴリの支出目標を設定します",
+  "tap-for-custom-exchange-rate": "エントリをタップして、カスタム為替レートを設定します",
+  "set-currency": "通貨を設定します"
 }

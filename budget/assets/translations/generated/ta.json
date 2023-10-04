@@ -730,5 +730,7 @@
   "import-backup": "காப்புப்பிரதி இறக்குமதி செய்யுங்கள்",
   "view-previous-budget-periods": "முந்தைய பட்ஜெட் காலங்களைக் காண்க",
   "current-period": "நடப்பு காலம்",
-  "set-spending-goals": "வகை செலவு இலக்குகளை அமைக்கவும்"
+  "set-spending-goals": "வகை செலவு இலக்குகளை அமைக்கவும்",
+  "tap-for-custom-exchange-rate": "தனிப்பயன் பரிமாற்ற வீதத்தை அமைக்க ஒரு நுழைவைத் தட்டவும்",
+  "set-currency": "நாணயத்தை அமைக்கவும்"
 }

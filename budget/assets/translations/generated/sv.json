@@ -730,5 +730,7 @@
   "import-backup": "Importbackup",
   "view-previous-budget-periods": "Visa tidigare budgetperioder",
   "current-period": "Nuvarande period",
-  "set-spending-goals": "Uppsättningar av utgifter för kategori"
+  "set-spending-goals": "Uppsättningar av utgifter för kategori",
+  "tap-for-custom-exchange-rate": "Tryck på en post för att ställa in en anpassad växelkurs",
+  "set-currency": "Fastställa valuta"
 }

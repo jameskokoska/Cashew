@@ -730,5 +730,7 @@
   "import-backup": "Sauvegarde d'importation",
   "view-previous-budget-periods": "Afficher les périodes budgétaires précédentes",
   "current-period": "Période actuelle",
-  "set-spending-goals": "Définir les objectifs de dépenses de catégorie"
+  "set-spending-goals": "Définir les objectifs de dépenses de catégorie",
+  "tap-for-custom-exchange-rate": "Appuyez sur une entrée pour définir un taux de change personnalisé",
+  "set-currency": "Régler la monnaie"
 }

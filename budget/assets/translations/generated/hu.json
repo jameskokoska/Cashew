@@ -730,5 +730,7 @@
   "import-backup": "Biztonsági mentés importálása",
   "view-previous-budget-periods": "Tekintse meg a korábbi költségvetési periódusokat",
   "current-period": "Jelenlegi időszak",
-  "set-spending-goals": "Állítsa be a kategória kiadási célokat"
+  "set-spending-goals": "Állítsa be a kategória kiadási célokat",
+  "tap-for-custom-exchange-rate": "Érintse meg a bejegyzést az egyéni árfolyam beállításához",
+  "set-currency": "Beállított pénznem"
 }

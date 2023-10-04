@@ -730,5 +730,7 @@
   "import-backup": "Import backup",
   "view-previous-budget-periods": "Vizualizați perioadele bugetare anterioare",
   "current-period": "Perioada curenta",
-  "set-spending-goals": "Stabiliți obiective de cheltuieli categoriei"
+  "set-spending-goals": "Stabiliți obiective de cheltuieli categoriei",
+  "tap-for-custom-exchange-rate": "Atingeți o intrare pentru a seta un curs de schimb personalizat",
+  "set-currency": "Setați moneda"
 }

@@ -2,9 +2,14 @@ import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/pages/aboutPage.dart';
 import 'package:budget/struct/currencyFunctions.dart';
+import 'package:budget/widgets/fadeIn.dart';
+import 'package:budget/widgets/framework/popupFramework.dart';
 import 'package:budget/widgets/noResults.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
+import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
+import 'package:budget/widgets/selectAmount.dart';
+import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textInput.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -64,7 +69,9 @@ class _ExchangeRatesState extends State<ExchangeRates> {
             openPopup(
               context,
               title: "exchange-rate-notice".tr(),
-              description: "exchange-rate-notice-description".tr(),
+              description: "exchange-rate-notice-description".tr() +
+                  "\n\n" +
+                  "tap-for-custom-exchange-rate".tr(),
               icon: Icons.info,
               onCancel: () {
                 Navigator.pop(context);
@@ -104,7 +111,22 @@ class _ExchangeRatesState extends State<ExchangeRates> {
           child: Padding(
             padding: EdgeInsets.only(top: 5),
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 17),
+              child: TextFont(
+                text: "tap-for-custom-exchange-rate".tr(),
+                maxLines: 2,
+                fontSize: 13,
+                textColor: getColor(context, "textLight"),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ),
+        ),
+        SliverToBoxAdapter(
+          child: Padding(
+            padding: EdgeInsets.only(top: 7),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 5),
               child: TextFont(
                 text: "1 " +
                     Provider.of<AllWallets>(context)
@@ -129,42 +151,63 @@ class _ExchangeRatesState extends State<ExchangeRates> {
                     String key = currencyExchangeFiltered.keys
                         .toList()[index]
                         .toString();
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 15),
-                      child: Row(
-                        children: [
-                          TextFont(
-                            text: "",
-                            maxLines: 3,
-                            fontSize: 18,
-                            richTextSpan: [
-                              TextSpan(
-                                text: " = " +
-                                    (1 /
-                                            ((amountRatioToPrimaryCurrency(
-                                                    Provider.of<AllWallets>(
-                                                        context),
-                                                    key) ??
-                                                1)))
-                                        .toStringAsFixed(15),
-                                style: TextStyle(
-                                  color: getColor(context, "black"),
-                                  fontFamily: appStateSettings["font"],
-                                  fontFamilyFallback: ['Inter'],
-                                ),
-                              ),
-                              TextSpan(
-                                text: " " + key.allCaps,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: appStateSettings["font"],
-                                  fontFamilyFallback: ['Inter'],
-                                  color: getColor(context, "black"),
-                                ),
+                    return ScaledAnimatedSwitcher(
+                      keyToWatch: (appStateSettings["customCurrencyAmounts"]
+                              ?[key])
+                          .toString(),
+                      key: ValueKey(key),
+                      child: Tappable(
+                        onTap: () async {
+                          await openBottomSheet(
+                            context,
+                            SetCustomCurrency(currencyKey: key),
+                          );
+                          setState(() {});
+                        },
+                        color: appStateSettings["customCurrencyAmounts"]
+                                    ?[key] ==
+                                null
+                            ? Colors.transparent
+                            : Theme.of(context).colorScheme.secondaryContainer,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 15),
+                          child: Row(
+                            children: [
+                              TextFont(
+                                text: "",
+                                maxLines: 3,
+                                richTextSpan: [
+                                  TextSpan(
+                                    text: " = " +
+                                        (1 /
+                                                ((amountRatioToPrimaryCurrency(
+                                                        Provider.of<AllWallets>(
+                                                            context),
+                                                        key) ??
+                                                    1)))
+                                            .toStringAsFixed(14),
+                                    style: TextStyle(
+                                      color: getColor(context, "black"),
+                                      fontFamily: appStateSettings["font"],
+                                      fontFamilyFallback: ['Inter'],
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text: " " + key.allCaps,
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: appStateSettings["font"],
+                                      fontFamilyFallback: ['Inter'],
+                                      color: getColor(context, "black"),
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ],
                           ),
-                        ],
+                        ),
                       ),
                     );
                   },
@@ -173,5 +216,76 @@ class _ExchangeRatesState extends State<ExchangeRates> {
               ),
       ],
     );
+  }
+}
+
+class SetCustomCurrency extends StatefulWidget {
+  const SetCustomCurrency({required this.currencyKey, super.key});
+  final String currencyKey;
+
+  @override
+  State<SetCustomCurrency> createState() => _SetCustomCurrencyState();
+}
+
+class _SetCustomCurrencyState extends State<SetCustomCurrency> {
+  @override
+  Widget build(BuildContext context) {
+    return PopupFramework(
+      title: "set-currency".tr(),
+      subtitle: "1 " +
+          Provider.of<AllWallets>(context)
+              .indexedByPk[appStateSettings["selectedWalletPk"]]!
+              .currency
+              .toString()
+              .allCaps +
+          " = ",
+      child: SelectAmountValue(
+        allowZero: true,
+        setSelectedAmount: (amount, amountString) {
+          Map<dynamic, dynamic> customCurrencyAmountsMap =
+              appStateSettings["customCurrencyAmounts"];
+          if (amount == 0 || amountString == "") {
+            customCurrencyAmountsMap.remove(widget.currencyKey);
+          } else {
+            customCurrencyAmountsMap[widget.currencyKey] = amount;
+          }
+          updateSettings("customCurrencyAmounts", customCurrencyAmountsMap,
+              updateGlobalState: false);
+        },
+        amountPassed: appStateSettings["customCurrencyAmounts"]
+                    ?[widget.currencyKey] ==
+                null
+            ? ""
+            : removeTrailingZeroes(appStateSettings["customCurrencyAmounts"]
+                        ?[widget.currencyKey]
+                    .toString() ??
+                "0"),
+        suffix: " " + widget.currencyKey.allCaps,
+        nextLabel: "set-amount".tr(),
+        next: () {
+          Navigator.pop(context);
+        },
+      ),
+    );
+  }
+}
+
+String originalExchangeRatesBeforeOpenString = "";
+void checkIfExchangeRateChangeBefore() {
+  originalExchangeRatesBeforeOpenString =
+      appStateSettings["customCurrencyAmounts"].toString();
+}
+
+bool checkIfExchangeRateChangeAfter() {
+  // print(originalExchangeRatesBeforeOpenString);
+  // print(appStateSettings["customCurrencyAmounts"].toString());
+  if (originalExchangeRatesBeforeOpenString !=
+      appStateSettings["customCurrencyAmounts"].toString()) {
+    // print("There was a change to the custom currencies!");
+    // Reset global state because currencies need to be reloaded
+    appStateKey.currentState?.refreshAppState();
+    return true;
+  } else {
+    return false;
   }
 }

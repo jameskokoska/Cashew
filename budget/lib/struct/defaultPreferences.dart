@@ -100,9 +100,11 @@ Future<Map<String, dynamic>> getDefaultPreferences() async {
     "massEditSelectedTransactions": false,
     "incognitoKeyboard": false,
     // the key is the budgetPk (in String!)
-    // Should be of type Map<String,List<int>>
+    // Should be of type Map<String, List<String>>
     "watchedCategoriesOnBudget": {},
     "showCompressedViewBudgetGraph": false,
+    // Should be of type Map<String, double>
+    "customCurrencyAmounts": {},
     "iOSNavigation": false,
     "iOSEmulate": false,
     "expandedNavigationSidebar": true,

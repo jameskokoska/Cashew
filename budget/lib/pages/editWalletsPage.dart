@@ -1,6 +1,7 @@
 import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
+import 'package:budget/main.dart';
 import 'package:budget/pages/addWalletPage.dart';
 import 'package:budget/pages/editBudgetPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
@@ -125,6 +126,12 @@ class _EditWalletsPageState extends State<EditWalletsPage> {
             child: AnimatedExpanded(
               expand: hideIfSearching(searchValue, context) == false,
               child: SettingsContainerOpenPage(
+                onOpen: () {
+                  checkIfExchangeRateChangeBefore();
+                },
+                onClosed: () {
+                  checkIfExchangeRateChangeAfter();
+                },
                 openPage: ExchangeRates(),
                 title: "exchange-rates".tr(),
                 icon: appStateSettings["outlinedIcons"]

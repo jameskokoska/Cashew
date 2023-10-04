@@ -730,5 +730,7 @@
   "import-backup": "بیک اپ درآمد کریں",
   "view-previous-budget-periods": "پچھلے بجٹ کے ادوار کو دیکھیں",
   "current-period": "موجودہ دور",
-  "set-spending-goals": "زمرے کے اخراجات کے اہداف طے کریں"
+  "set-spending-goals": "زمرے کے اخراجات کے اہداف طے کریں",
+  "tap-for-custom-exchange-rate": "کسٹم ایکسچینج ریٹ طے کرنے کے لئے اندراج پر ٹیپ کریں",
+  "set-currency": "کرنسی مرتب کریں"
 }

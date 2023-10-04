@@ -730,5 +730,7 @@
   "import-backup": "백업 가져 오기",
   "view-previous-budget-periods": "이전 예산 기간을보십시오",
   "current-period": "현재 기간",
-  "set-spending-goals": "카테고리 지출 목표를 설정합니다"
+  "set-spending-goals": "카테고리 지출 목표를 설정합니다",
+  "tap-for-custom-exchange-rate": "항목을 탭하여 사용자 정의 환율을 설정하십시오",
+  "set-currency": "통화를 설정하십시오"
 }

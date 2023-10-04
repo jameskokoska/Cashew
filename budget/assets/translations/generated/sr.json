@@ -730,5 +730,7 @@
   "import-backup": "Увоз резервне копије",
   "view-previous-budget-periods": "Погледајте претходне буџетске периоде",
   "current-period": "Тренутни период",
-  "set-spending-goals": "Подесите циљеве потрошње категорије"
+  "set-spending-goals": "Подесите циљеве потрошње категорије",
+  "tap-for-custom-exchange-rate": "Додирните унос да бисте поставили прилагођени курс",
+  "set-currency": "Подесите валуту"
 }

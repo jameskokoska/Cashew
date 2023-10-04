@@ -730,5 +730,7 @@
   "import-backup": "وارد کردن پشتیبان گیری",
   "view-previous-budget-periods": "مشاهده دوره های بودجه قبلی",
   "current-period": "دوره جاری",
-  "set-spending-goals": "تعیین اهداف هزینه"
+  "set-spending-goals": "تعیین اهداف هزینه",
+  "tap-for-custom-exchange-rate": "برای تعیین نرخ ارز سفارشی روی یک ورودی ضربه بزنید",
+  "set-currency": "ارز"
 }

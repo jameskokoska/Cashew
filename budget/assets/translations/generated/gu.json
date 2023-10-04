@@ -730,5 +730,7 @@
   "import-backup": "આયાતનો બેકઅપ",
   "view-previous-budget-periods": "પાછલા બજેટ સમયગાળા જુઓ",
   "current-period": "વર્તમાન સમયગાળો",
-  "set-spending-goals": "કેટેગરી ખર્ચ લક્ષ્યો સેટ કરો"
+  "set-spending-goals": "કેટેગરી ખર્ચ લક્ષ્યો સેટ કરો",
+  "tap-for-custom-exchange-rate": "કસ્ટમ વિનિમય દર સેટ કરવા માટે એન્ટ્રી ટેપ કરો",
+  "set-currency": "ચલણ નક્કી કરવું"
 }
