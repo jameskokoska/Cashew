@@ -1,6 +1,7 @@
 import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
 import 'package:budget/pages/editCategoriesPage.dart';
+import 'package:budget/pages/exchangeRatesPage.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/accountAndBackup.dart';
 import 'package:budget/widgets/animatedExpanded.dart';
@@ -52,6 +53,7 @@ class NavigationSidebarState extends State<NavigationSidebar> {
       selectedIndex = index;
     });
     FocusScope.of(context).unfocus();
+    checkIfExchangeRateChangeAfter();
   }
 
   @override

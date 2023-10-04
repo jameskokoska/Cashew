@@ -59,6 +59,7 @@ class _ExchangeRatesState extends State<ExchangeRates> {
     }
 
     return PageFramework(
+      horizontalPadding: getHorizontalPaddingConstrained(context),
       dragDownToDismiss: true,
       title: "exchange-rates".tr(),
       actions: [
@@ -270,7 +271,7 @@ class _SetCustomCurrencyState extends State<SetCustomCurrency> {
   }
 }
 
-String originalExchangeRatesBeforeOpenString = "";
+String? originalExchangeRatesBeforeOpenString;
 void checkIfExchangeRateChangeBefore() {
   originalExchangeRatesBeforeOpenString =
       appStateSettings["customCurrencyAmounts"].toString();
@@ -279,11 +280,13 @@ void checkIfExchangeRateChangeBefore() {
 bool checkIfExchangeRateChangeAfter() {
   // print(originalExchangeRatesBeforeOpenString);
   // print(appStateSettings["customCurrencyAmounts"].toString());
-  if (originalExchangeRatesBeforeOpenString !=
-      appStateSettings["customCurrencyAmounts"].toString()) {
-    // print("There was a change to the custom currencies!");
+  if (originalExchangeRatesBeforeOpenString != null &&
+      originalExchangeRatesBeforeOpenString !=
+          appStateSettings["customCurrencyAmounts"].toString()) {
+    print("There was a change to the custom currencies!");
     // Reset global state because currencies need to be reloaded
     appStateKey.currentState?.refreshAppState();
+    originalExchangeRatesBeforeOpenString = null;
     return true;
   } else {
     return false;
