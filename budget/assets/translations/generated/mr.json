@@ -728,5 +728,7 @@
   "database-corrupted": "डेटाबेस दूषित",
   "database-corrupted-description": "आपला डेटाबेस दूषित झाला आहे. आपण कदाचित चुकीची फाईल आयात केली असेल.",
   "import-backup": "आयात बॅकअप",
-  "view-previous-budget-periods": "मागील बजेट कालावधी पहा"
+  "view-previous-budget-periods": "मागील बजेट कालावधी पहा",
+  "current-period": "चालू कालावधी",
+  "set-spending-goals": "श्रेणी खर्च ध्येय सेट करा"
 }

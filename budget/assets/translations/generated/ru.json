@@ -728,5 +728,7 @@
   "database-corrupted": "База данных повреждена",
   "database-corrupted-description": "Ваша база данных повреждена. Вы, возможно, импортировали неправильный файл.",
   "import-backup": "Импорт резервного копирования",
-  "view-previous-budget-periods": "Просмотреть предыдущие бюджетные периоды"
+  "view-previous-budget-periods": "Просмотреть предыдущие бюджетные периоды",
+  "current-period": "Текущий период",
+  "set-spending-goals": "Установить категории тратить цели"
 }

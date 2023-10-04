@@ -728,5 +728,7 @@
   "database-corrupted": "Tietokanta vioittunut",
   "database-corrupted-description": "Tietokanta on vioittunut. Olet ehkä tuonut väärän tiedoston.",
   "import-backup": "Tuo varmuuskopio",
-  "view-previous-budget-periods": "Tarkastele aiempia budjettijaksoja"
+  "view-previous-budget-periods": "Tarkastele aiempia budjettijaksoja",
+  "current-period": "Nykyinen jakso",
+  "set-spending-goals": "Aseta luokan menot"
 }

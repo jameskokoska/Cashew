@@ -728,5 +728,7 @@
   "database-corrupted": "Cơ sở dữ liệu bị hỏng",
   "database-corrupted-description": "Cơ sở dữ liệu của bạn bị hỏng. Bạn có thể đã nhập sai tệp.",
   "import-backup": "Nhập bản sao lưu",
-  "view-previous-budget-periods": "Xem thời gian ngân sách trước đó"
+  "view-previous-budget-periods": "Xem thời gian ngân sách trước đó",
+  "current-period": "Giai đoạn hiện tại",
+  "set-spending-goals": "Đặt mục tiêu chi tiêu danh mục"
 }

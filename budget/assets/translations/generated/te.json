@@ -728,5 +728,7 @@
   "database-corrupted": "డేటాబేస్ పాడైంది",
   "database-corrupted-description": "మీ డేటాబేస్ పాడైంది. మీరు తప్పు ఫైల్‌ను దిగుమతి చేసుకోవచ్చు.",
   "import-backup": "దిగుమతి బ్యాకప్",
-  "view-previous-budget-periods": "మునుపటి బడ్జెట్ కాలాలను చూడండి"
+  "view-previous-budget-periods": "మునుపటి బడ్జెట్ కాలాలను చూడండి",
+  "current-period": "ప్రస్తుత కాలం",
+  "set-spending-goals": "వర్గం ఖర్చు లక్ష్యాలను సెట్ చేయండి"
 }

@@ -415,6 +415,7 @@ Future generatePreviewData() async {
       sharedReferenceBudgetPk: "10",
     ),
   );
+  int monthlySpendingDayStart = DateTime.now().day <= 13 ? 13 : 1;
   await database.createOrUpdateBudget(
     updateSharedEntry: false,
     Budget(
@@ -422,7 +423,8 @@ Future generatePreviewData() async {
       name: "Monthly Spending",
       amount: 500.0,
       colour: null,
-      startDate: DateTime(DateTime.now().year, DateTime.now().month, 1)
+      startDate: DateTime(DateTime.now().year, DateTime.now().month,
+              monthlySpendingDayStart)
           .subtract(Duration(minutes: 19)),
       endDate: DateTime.now(),
       categoryFks: null,

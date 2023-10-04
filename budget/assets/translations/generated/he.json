@@ -728,5 +728,7 @@
   "database-corrupted": "מסד נתונים פגום",
   "database-corrupted-description": "בסיס הנתונים שלך פגום. יתכן שייבאת את הקובץ הלא נכון.",
   "import-backup": "יבוא גיבוי",
-  "view-previous-budget-periods": "צפה בתקופות תקציב קודמות"
+  "view-previous-budget-periods": "צפה בתקופות תקציב קודמות",
+  "current-period": "התקופה הנוכחית",
+  "set-spending-goals": "הגדר יעדי הוצאות קטגוריות"
 }

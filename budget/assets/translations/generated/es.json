@@ -728,5 +728,7 @@
   "database-corrupted": "Base de datos corrupta",
   "database-corrupted-description": "Su base de datos está dañada. Es posible que haya importado el archivo incorrecto.",
   "import-backup": "Importación de respaldo",
-  "view-previous-budget-periods": "Ver períodos presupuestarios anteriores"
+  "view-previous-budget-periods": "Ver períodos presupuestarios anteriores",
+  "current-period": "Período actual",
+  "set-spending-goals": "Establecer objetivos de gasto de categoría"
 }

@@ -412,6 +412,7 @@ class _AddWalletPageState extends State<AddWalletPage> {
                         bottom: 10,
                       ),
                       child: Button(
+                        flexibleLayout: true,
                         icon: appStateSettings["outlinedIcons"]
                             ? Icons.library_add_outlined
                             : Icons.library_add_rounded,
@@ -443,6 +444,7 @@ class _AddWalletPageState extends State<AddWalletPage> {
                         bottom: 10,
                       ),
                       child: Button(
+                        flexibleLayout: true,
                         icon: appStateSettings["outlinedIcons"]
                             ? Icons.compare_arrows_outlined
                             : Icons.compare_arrows_rounded,
@@ -473,6 +475,7 @@ class _AddWalletPageState extends State<AddWalletPage> {
                         bottom: 10,
                       ),
                       child: Button(
+                        flexibleLayout: true,
                         icon: appStateSettings["outlinedIcons"]
                             ? Icons.merge_outlined
                             : Icons.merge_rounded,

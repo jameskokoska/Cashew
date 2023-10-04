@@ -728,5 +728,7 @@
   "database-corrupted": "Пошкоджена база даних",
   "database-corrupted-description": "Ваша база даних пошкоджена. Можливо, ви імпортували неправильний файл.",
   "import-backup": "Імпорт резервного копіювання",
-  "view-previous-budget-periods": "Переглянути попередні бюджетні періоди"
+  "view-previous-budget-periods": "Переглянути попередні бюджетні періоди",
+  "current-period": "Поточний період",
+  "set-spending-goals": "Встановити категорію витрачаються цілі"
 }

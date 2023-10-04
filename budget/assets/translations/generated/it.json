@@ -728,5 +728,7 @@
   "database-corrupted": "Database corrotto",
   "database-corrupted-description": "Il tuo database è corrotto. Potresti aver importato il file sbagliato.",
   "import-backup": "Importa backup",
-  "view-previous-budget-periods": "Visualizza i periodi di bilancio precedenti"
+  "view-previous-budget-periods": "Visualizza i periodi di bilancio precedenti",
+  "current-period": "Periodo attuale",
+  "set-spending-goals": "Imposta obiettivi di spesa della categoria"
 }

@@ -728,5 +728,7 @@
   "database-corrupted": "Databasen ødelagt",
   "database-corrupted-description": "Databasen din er ødelagt. Du har kanskje importert feil fil.",
   "import-backup": "Importer sikkerhetskopi",
-  "view-previous-budget-periods": "Se tidligere budsjettperioder"
+  "view-previous-budget-periods": "Se tidligere budsjettperioder",
+  "current-period": "Nåværende periode",
+  "set-spending-goals": "Sett kategori Utgiftsmål"
 }

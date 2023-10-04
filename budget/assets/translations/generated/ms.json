@@ -728,5 +728,7 @@
   "database-corrupted": "Pangkalan data rosak",
   "database-corrupted-description": "Pangkalan data anda rosak. Anda mungkin telah mengimport fail yang salah.",
   "import-backup": "Import sandaran",
-  "view-previous-budget-periods": "Lihat Tempoh Belanjawan Sebelumnya"
+  "view-previous-budget-periods": "Lihat Tempoh Belanjawan Sebelumnya",
+  "current-period": "Tempoh semasa",
+  "set-spending-goals": "Tetapkan Matlamat Perbelanjaan Kategori"
 }

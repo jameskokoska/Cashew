@@ -728,5 +728,7 @@
   "database-corrupted": "Veritabanı bozuk",
   "database-corrupted-description": "Veritabanınız bozuk. Yanlış dosyayı içe aktarmış olabilirsiniz.",
   "import-backup": "Yedekleme İçe Aktarma",
-  "view-previous-budget-periods": "Önceki bütçe dönemlerini görüntüleyin"
+  "view-previous-budget-periods": "Önceki bütçe dönemlerini görüntüle",
+  "current-period": "Mevcut dönem",
+  "set-spending-goals": "Kategori harcama hedefleri belirleyin"
 }

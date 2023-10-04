@@ -20,6 +20,16 @@ import 'listItem.dart';
 
 String getChangelogString() {
   return """
+    < 4.5.5
+    Added today indicator to category spending limits
+    Added compress view to hide extra dates in current budget period line graph
+    Pie chart tints color to avoid identical colors next to each other
+    Fixed category background colors in light mode
+    Current period shown in edit budget page
+    Added category spending goals button when editing budget
+    Preview data monthly budget will start later in the month based on the current time (It will always look like there are transactions)
+    Fixed spending trajectory on budget line graph for custom budget periods
+    Fixed category colors for theme color selection
     < 4.5.4
     Fixed loading system color when choosing theme (no longer required restart)
     Removed deep cyan color from unsupported accent color devices

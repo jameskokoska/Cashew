@@ -728,5 +728,7 @@
   "database-corrupted": "Datenbank beschädigt",
   "database-corrupted-description": "Ihre Datenbank ist beschädigt. Möglicherweise haben Sie die falsche Datei importiert.",
   "import-backup": "Backup importieren",
-  "view-previous-budget-periods": "Sehen Sie sich frühere Budgetperioden an"
+  "view-previous-budget-periods": "Sehen Sie sich frühere Budgetperioden an",
+  "current-period": "Derzeitige Periode",
+  "set-spending-goals": "Setzen Sie die Kategorieausgabenziele"
 }

@@ -728,5 +728,7 @@
   "database-corrupted": "ڈیٹا بیس خراب ہوگیا",
   "database-corrupted-description": "آپ کا ڈیٹا بیس خراب ہے۔ ہوسکتا ہے کہ آپ نے غلط فائل درآمد کی ہو۔",
   "import-backup": "بیک اپ درآمد کریں",
-  "view-previous-budget-periods": "پچھلے بجٹ کے ادوار کو دیکھیں"
+  "view-previous-budget-periods": "پچھلے بجٹ کے ادوار کو دیکھیں",
+  "current-period": "موجودہ دور",
+  "set-spending-goals": "زمرے کے اخراجات کے اہداف طے کریں"
 }

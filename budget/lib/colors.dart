@@ -197,6 +197,15 @@ Color dynamicPastel(
   if (amountDark == null) {
     amountDark = amount;
   }
+  if (amountLight > 1) {
+    amountLight = 1;
+  }
+  if (amountDark > 1) {
+    amountDark = 1;
+  }
+  if (amount > 1) {
+    amount = 1;
+  }
   if (inverse) {
     if (Theme.of(context).brightness == Brightness.light) {
       return darkenPastel(color, amount: amountDark);

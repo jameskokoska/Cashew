@@ -728,5 +728,7 @@
   "database-corrupted": "База података оштећена",
   "database-corrupted-description": "Ваша база података је оштећена. Можда сте увели погрешну датотеку.",
   "import-backup": "Увоз резервне копије",
-  "view-previous-budget-periods": "Погледајте претходне буџетске периоде"
+  "view-previous-budget-periods": "Погледајте претходне буџетске периоде",
+  "current-period": "Тренутни период",
+  "set-spending-goals": "Подесите циљеве потрошње категорије"
 }

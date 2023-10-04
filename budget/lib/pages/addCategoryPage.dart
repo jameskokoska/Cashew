@@ -425,6 +425,7 @@ class _AddCategoryPageState extends State<AddCategoryPage>
                 : Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: Button(
+                      flexibleLayout: true,
                       icon: appStateSettings["outlinedIcons"]
                           ? Icons.merge_outlined
                           : Icons.merge_rounded,

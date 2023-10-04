@@ -728,5 +728,7 @@
   "database-corrupted": "ডাটাবেস দূষিত",
   "database-corrupted-description": "আপনার ডাটাবেস দূষিত হয়। আপনি ভুল ফাইলটি আমদানি করতে পারেন।",
   "import-backup": "ব্যাকআপ আমদানি করুন",
-  "view-previous-budget-periods": "পূর্ববর্তী বাজেটের সময়কাল দেখুন"
+  "view-previous-budget-periods": "পূর্ববর্তী বাজেটের সময়কাল দেখুন",
+  "current-period": "বর্তমান সময়ের",
+  "set-spending-goals": "বিভাগ ব্যয় লক্ষ্য নির্ধারণ করুন"
 }

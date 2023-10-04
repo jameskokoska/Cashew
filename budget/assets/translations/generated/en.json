@@ -728,5 +728,7 @@
   "database-corrupted": "Database Corrupted",
   "database-corrupted-description": "Your database is corrupted. You may have imported the wrong file.",
   "import-backup": "Import Backup",
-  "view-previous-budget-periods": "View previous budget periods"
+  "view-previous-budget-periods": "View previous budget periods",
+  "current-period": "Current Period",
+  "set-spending-goals": "Set Category Spending Goals"
 }

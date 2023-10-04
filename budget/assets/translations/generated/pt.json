@@ -728,5 +728,7 @@
   "database-corrupted": "Banco de dados corrompido",
   "database-corrupted-description": "Seu banco de dados está corrompido. Você pode ter importado o arquivo errado.",
   "import-backup": "Importar backup",
-  "view-previous-budget-periods": "Ver períodos de orçamento anteriores"
+  "view-previous-budget-periods": "Ver períodos de orçamento anteriores",
+  "current-period": "Período atual",
+  "set-spending-goals": "Definir metas de gastos de categoria"
 }

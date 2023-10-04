@@ -1376,6 +1376,8 @@ List<IconForCategory> iconObjects = [
       "success",
       "future",
       "hat",
+      "student",
+      "studying",
     ],
     mostLikelyCategoryName: "Education",
   ),

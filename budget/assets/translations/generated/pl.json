@@ -728,5 +728,7 @@
   "database-corrupted": "Baza danych uszkodzona",
   "database-corrupted-description": "Twoja baza danych jest uszkodzona. Być może zaimportowałeś niewłaściwy plik.",
   "import-backup": "Kopia zapasowa importu",
-  "view-previous-budget-periods": "Zobacz poprzednie okresy budżetowe"
+  "view-previous-budget-periods": "Zobacz poprzednie okresy budżetowe",
+  "current-period": "Obecny okres",
+  "set-spending-goals": "Ustaw cele wydatków kategorii"
 }

@@ -728,5 +728,7 @@
   "database-corrupted": "データベースが破損しました",
   "database-corrupted-description": "データベースは破損しています。間違ったファイルをインポートした可能性があります。",
   "import-backup": "バックアップをインポートします",
-  "view-previous-budget-periods": "以前の予算期間を表示します"
+  "view-previous-budget-periods": "以前の予算期間を表示します",
+  "current-period": "当期",
+  "set-spending-goals": "カテゴリの支出目標を設定します"
 }

@@ -728,5 +728,7 @@
   "database-corrupted": "ฐานข้อมูลเสียหาย",
   "database-corrupted-description": "ฐานข้อมูลของคุณเสียหาย คุณอาจนำเข้าไฟล์ผิด",
   "import-backup": "นำเข้าสำรอง",
-  "view-previous-budget-periods": "ดูระยะเวลางบประมาณก่อนหน้า"
+  "view-previous-budget-periods": "ดูระยะเวลางบประมาณก่อนหน้า",
+  "current-period": "งวดปัจจุบัน",
+  "set-spending-goals": "กำหนดเป้าหมายการใช้จ่ายหมวดหมู่"
 }

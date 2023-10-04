@@ -728,5 +728,7 @@
   "database-corrupted": "Database rusak",
   "database-corrupted-description": "Basis data Anda rusak. Anda mungkin telah mengimpor file yang salah.",
   "import-backup": "Impor cadangan",
-  "view-previous-budget-periods": "Lihat Periode Anggaran Sebelumnya"
+  "view-previous-budget-periods": "Lihat Periode Anggaran Sebelumnya",
+  "current-period": "Periode saat ini",
+  "set-spending-goals": "Tetapkan Tujuan Pengeluaran Kategori"
 }

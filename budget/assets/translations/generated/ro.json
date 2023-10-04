@@ -728,5 +728,7 @@
   "database-corrupted": "Baza de date coruptă",
   "database-corrupted-description": "Baza de date este coruptă. Este posibil să fi importat fișierul greșit.",
   "import-backup": "Import backup",
-  "view-previous-budget-periods": "Vizualizați perioadele bugetare anterioare"
+  "view-previous-budget-periods": "Vizualizați perioadele bugetare anterioare",
+  "current-period": "Perioada curenta",
+  "set-spending-goals": "Stabiliți obiective de cheltuieli categoriei"
 }

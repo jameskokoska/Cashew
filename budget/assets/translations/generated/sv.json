@@ -728,5 +728,7 @@
   "database-corrupted": "Databasen skadad",
   "database-corrupted-description": "Din databas är skadad. Du kanske har importerat fel fil.",
   "import-backup": "Importbackup",
-  "view-previous-budget-periods": "Visa tidigare budgetperioder"
+  "view-previous-budget-periods": "Visa tidigare budgetperioder",
+  "current-period": "Nuvarande period",
+  "set-spending-goals": "Uppsättningar av utgifter för kategori"
 }

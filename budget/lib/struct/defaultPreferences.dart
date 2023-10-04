@@ -102,6 +102,7 @@ Future<Map<String, dynamic>> getDefaultPreferences() async {
     // the key is the budgetPk (in String!)
     // Should be of type Map<String,List<int>>
     "watchedCategoriesOnBudget": {},
+    "showCompressedViewBudgetGraph": false,
     "iOSNavigation": false,
     "iOSEmulate": false,
     "expandedNavigationSidebar": true,

@@ -728,5 +728,7 @@
   "database-corrupted": "ഡാറ്റാബേസ് കേടായി",
   "database-corrupted-description": "നിങ്ങളുടെ ഡാറ്റാബേസ് കേടായി. നിങ്ങൾ തെറ്റായ ഫയൽ ഇറക്കുമതി ചെയ്തേക്കാം.",
   "import-backup": "ഇറക്കുമതി ബാക്കപ്പ്",
-  "view-previous-budget-periods": "മുമ്പത്തെ ബജറ്റ് കാലയളവുകൾ കാണുക"
+  "view-previous-budget-periods": "മുമ്പത്തെ ബജറ്റ് കാലയളവുകൾ കാണുക",
+  "current-period": "നിലവിലെ കാലയളവ്",
+  "set-spending-goals": "കാറ്റഗറി ചെലവ് ലക്ഷ്യങ്ങൾ സജ്ജമാക്കുക"
 }

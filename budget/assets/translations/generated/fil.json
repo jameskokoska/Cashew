@@ -728,5 +728,7 @@
   "database-corrupted": "Nasira ang database",
   "database-corrupted-description": "Ang iyong database ay nasira. Maaaring na -import mo ang maling file.",
   "import-backup": "I -import ang backup",
-  "view-previous-budget-periods": "Tingnan ang mga nakaraang panahon ng badyet"
+  "view-previous-budget-periods": "Tingnan ang mga nakaraang panahon ng badyet",
+  "current-period": "Kasalukuyang Panahon",
+  "set-spending-goals": "Itakda ang mga layunin sa paggastos ng kategorya"
 }
