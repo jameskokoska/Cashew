@@ -108,6 +108,9 @@ class _AddWalletPageState extends State<AddWalletPage> {
       order: widget.wallet != null ? widget.wallet!.order : numberOfWallets,
       currency: selectedCurrency,
       decimals: selectedDecimals,
+      homePageWidgetDisplay: widget.wallet != null
+          ? widget.wallet!.homePageWidgetDisplay
+          : defaultWalletHomePageWidgetDisplay,
     );
   }
 

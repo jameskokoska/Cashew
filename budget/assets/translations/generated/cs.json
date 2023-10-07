@@ -732,5 +732,7 @@
   "current-period": "Současné období",
   "set-spending-goals": "Nastavte si výdaje na kategorii",
   "tap-for-custom-exchange-rate": "Klepnutím na položku nastavíte vlastní směnný kurz",
-  "set-currency": "Nastavit měnu"
+  "set-currency": "Nastavit měnu",
+  "accounts-list": "Seznam účtů",
+  "select-accounts": "Vyberte účty"
 }

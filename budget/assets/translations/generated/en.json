@@ -732,5 +732,7 @@
   "current-period": "Current Period",
   "set-spending-goals": "Set Category Spending Goals",
   "tap-for-custom-exchange-rate": "Tap an entry to set a custom exchange rate",
-  "set-currency": "Set Currency"
+  "set-currency": "Set Currency",
+  "accounts-list": "Accounts List",
+  "select-accounts": "Select Accounts"
 }

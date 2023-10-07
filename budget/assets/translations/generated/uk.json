@@ -732,5 +732,7 @@
   "current-period": "Поточний період",
   "set-spending-goals": "Встановити категорію витрачаються цілі",
   "tap-for-custom-exchange-rate": "Торкніться запису, щоб встановити власний обмінний курс",
-  "set-currency": "Встановити валюту"
+  "set-currency": "Встановити валюту",
+  "accounts-list": "Список рахунків",
+  "select-accounts": "Виберіть рахунки"
 }

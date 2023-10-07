@@ -732,5 +732,7 @@
   "current-period": "当期",
   "set-spending-goals": "カテゴリの支出目標を設定します",
   "tap-for-custom-exchange-rate": "エントリをタップして、カスタム為替レートを設定します",
-  "set-currency": "通貨を設定します"
+  "set-currency": "通貨を設定します",
+  "accounts-list": "アカウントリスト",
+  "select-accounts": "アカウントを選択します"
 }

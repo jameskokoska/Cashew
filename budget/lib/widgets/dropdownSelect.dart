@@ -159,8 +159,8 @@ class CustomPopupMenuButton extends StatelessWidget {
         getCenteredTitleSmall(context: context, backButtonEnabled: true) ==
             false;
     List<DropdownItemMenu> itemsFiltered = [...items];
-    if (keepOutFirstConsideringHeader || forceKeepOutFirst)
-      itemsFiltered.removeAt(0);
+    if ((keepOutFirstConsideringHeader || forceKeepOutFirst) &&
+        items.length > 0) itemsFiltered.removeAt(0);
 
     if (showButtons) {
       return Row(

@@ -728,9 +728,11 @@
   "database-corrupted": "Veritabanı bozuk",
   "database-corrupted-description": "Veritabanınız bozuk. Yanlış dosyayı içe aktarmış olabilirsiniz.",
   "import-backup": "Yedekleme İçe Aktarma",
-  "view-previous-budget-periods": "Önceki bütçe dönemlerini görüntüle",
+  "view-previous-budget-periods": "Önceki bütçe dönemlerini görüntüleyin",
   "current-period": "Mevcut dönem",
   "set-spending-goals": "Kategori harcama hedefleri belirleyin",
   "tap-for-custom-exchange-rate": "Özel döviz kuru ayarlamak için bir girişe dokunun",
-  "set-currency": "Para Birimi"
+  "set-currency": "Para Birimi",
+  "accounts-list": "Hesaplar Listesi",
+  "select-accounts": "Hesapları Seçin"
 }

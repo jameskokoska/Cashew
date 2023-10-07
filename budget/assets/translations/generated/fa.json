@@ -732,5 +732,7 @@
   "current-period": "دوره جاری",
   "set-spending-goals": "تعیین اهداف هزینه",
   "tap-for-custom-exchange-rate": "برای تعیین نرخ ارز سفارشی روی یک ورودی ضربه بزنید",
-  "set-currency": "ارز"
+  "set-currency": "ارز",
+  "accounts-list": "لیست حساب",
+  "select-accounts": "حساب ها را انتخاب کنید"
 }

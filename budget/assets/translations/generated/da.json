@@ -732,5 +732,7 @@
   "current-period": "Nuværende periode",
   "set-spending-goals": "Sæt kategoriforbrugsmål",
   "tap-for-custom-exchange-rate": "Tryk på en post for at indstille en brugerdefineret valutakurs",
-  "set-currency": "Indstil valuta"
+  "set-currency": "Indstil valuta",
+  "accounts-list": "Liste over konti",
+  "select-accounts": "Vælg konti"
 }

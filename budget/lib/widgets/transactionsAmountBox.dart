@@ -16,6 +16,7 @@ import 'package:provider/provider.dart';
 class TransactionsAmountBox extends StatelessWidget {
   const TransactionsAmountBox({
     this.openPage,
+    this.onLongPress,
     required this.label,
     required this.amountStream,
     required this.textColor,
@@ -26,6 +27,7 @@ class TransactionsAmountBox extends StatelessWidget {
     super.key,
   });
   final Widget? openPage;
+  final Function? onLongPress;
   final String label;
   final Stream<double?> amountStream;
   final Color textColor;
@@ -48,6 +50,9 @@ class TransactionsAmountBox extends StatelessWidget {
             color: getColor(context, "lightDarkAccentHeavyLight"),
             onTap: () {
               if (openPage != null) openContainer();
+            },
+            onLongPress: () {
+              if (onLongPress != null) onLongPress!();
             },
             child: Container(
               child: Padding(

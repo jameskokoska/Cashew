@@ -732,5 +732,7 @@
   "current-period": "现时阶段",
   "set-spending-goals": "设定类别支出目标",
   "tap-for-custom-exchange-rate": "点击条目设置自定义汇率",
-  "set-currency": "设定货币"
+  "set-currency": "设定货币",
+  "accounts-list": "帐户列表",
+  "select-accounts": "选择帐户"
 }

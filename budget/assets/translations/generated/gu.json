@@ -732,5 +732,7 @@
   "current-period": "વર્તમાન સમયગાળો",
   "set-spending-goals": "કેટેગરી ખર્ચ લક્ષ્યો સેટ કરો",
   "tap-for-custom-exchange-rate": "કસ્ટમ વિનિમય દર સેટ કરવા માટે એન્ટ્રી ટેપ કરો",
-  "set-currency": "ચલણ નક્કી કરવું"
+  "set-currency": "ચલણ નક્કી કરવું",
+  "accounts-list": "હિસાબ યાદી",
+  "select-accounts": "હિસાબ પસંદ કરો"
 }

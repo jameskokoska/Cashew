@@ -20,6 +20,19 @@ import 'listItem.dart';
 
 String getChangelogString() {
   return """
+    < 4.5.6
+    Account pinning for wallet switcher and wallet list
+    New wallet list homepage section
+    Net worth new account selection
+    Added respective color to pinning budgets and pinning goals list
+    New add budget and goal home screen button action
+    Fixed net worth default check color to match theme
+    Fixed net worth account selection casting variable type
+    Remove pinned icon from budget entries - to pin budgets, edit the home page
+    Edit home page when in full screen
+    Editing home page in full screen supports different layouts (compared to smaller screen)
+    Auto-correct and capitalization disabled in email field
+    Prepped database for subcategories
     < 4.5.5
     Added ability to modify currency ratios
     Added exchange rates list into settings page

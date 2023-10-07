@@ -577,18 +577,18 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                       );
                     },
                   ),
-                DropdownItemMenu(
-                  id: "pin-to-home",
-                  label: selectedPin
-                      ? "pinned-to-homepage".tr()
-                      : "unpinned-to-homepage".tr(),
-                  icon: selectedPin
-                      ? Icons.push_pin_rounded
-                      : Icons.push_pin_outlined,
-                  action: () {
-                    setSelectedPin();
-                  },
-                ),
+                // DropdownItemMenu(
+                //   id: "pin-to-home",
+                //   label: selectedPin
+                //       ? "pinned-to-homepage".tr()
+                //       : "unpinned-to-homepage".tr(),
+                //   icon: selectedPin
+                //       ? Icons.push_pin_rounded
+                //       : Icons.push_pin_outlined,
+                //   action: () {
+                //     setSelectedPin();
+                //   },
+                // ),
                 if (widget.budget != null)
                   DropdownItemMenu(
                     id: "spending-goals",

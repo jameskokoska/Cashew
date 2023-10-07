@@ -732,5 +732,7 @@
   "current-period": "Nåværende periode",
   "set-spending-goals": "Sett kategori Utgiftsmål",
   "tap-for-custom-exchange-rate": "Trykk på en oppføring for å angi en tilpasset valutakurs",
-  "set-currency": "Sett valuta"
+  "set-currency": "Sett valuta",
+  "accounts-list": "Kontoliste",
+  "select-accounts": "Velg kontoer"
 }

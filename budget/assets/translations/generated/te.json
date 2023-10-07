@@ -732,5 +732,7 @@
   "current-period": "ప్రస్తుత కాలం",
   "set-spending-goals": "వర్గం ఖర్చు లక్ష్యాలను సెట్ చేయండి",
   "tap-for-custom-exchange-rate": "అనుకూల మార్పిడి రేటును సెట్ చేయడానికి ఎంట్రీని నొక్కండి",
-  "set-currency": "కరెన్సీని సెట్ చేయండి"
+  "set-currency": "కరెన్సీని సెట్ చేయండి",
+  "accounts-list": "ఖాతాల జాబితా",
+  "select-accounts": "ఖాతాలను ఎంచుకోండి"
 }

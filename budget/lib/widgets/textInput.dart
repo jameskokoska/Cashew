@@ -38,6 +38,7 @@ class TextInput extends StatelessWidget {
   final TextInputAction? textInputAction;
   final List<TextInputFormatter>? inputFormatters;
   final TextAlign textAlign;
+  final bool autocorrect;
 
   const TextInput({
     Key? key,
@@ -72,6 +73,7 @@ class TextInput extends StatelessWidget {
     this.textInputAction,
     this.inputFormatters,
     this.textAlign = TextAlign.start,
+    this.autocorrect = true,
   }) : super(key: key);
 
   @override
@@ -116,6 +118,7 @@ class TextInput extends StatelessWidget {
             autofocus: autoFocus,
             onEditingComplete: onEditingComplete,
             textAlign: textAlign,
+            autocorrect: autocorrect,
             style: TextStyle(
               fontSize:
                   fontSize != null ? fontSize : (bubbly == false ? 18 : 15),

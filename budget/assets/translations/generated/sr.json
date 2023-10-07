@@ -732,5 +732,7 @@
   "current-period": "Тренутни период",
   "set-spending-goals": "Подесите циљеве потрошње категорије",
   "tap-for-custom-exchange-rate": "Додирните унос да бисте поставили прилагођени курс",
-  "set-currency": "Подесите валуту"
+  "set-currency": "Подесите валуту",
+  "accounts-list": "Листа рачуна",
+  "select-accounts": "Изаберите налоге"
 }

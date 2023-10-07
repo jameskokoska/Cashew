@@ -53,6 +53,8 @@ double getHorizontalPaddingConstrained(context) {
   return (MediaQuery.of(context).size.width - getWidthBottomSheet(context)) / 3;
 }
 
+SheetController? bottomSheetControllerGlobalCustomAssigned;
+
 late SheetController bottomSheetControllerGlobal;
 // Set snap to false if there is a keyboard
 Future openBottomSheet(
@@ -64,10 +66,13 @@ Future openBottomSheet(
   bool showScrollbar = false,
   bool fullSnap = false,
   bool isDismissable = true,
+  bool useCustomController = false,
 }) async {
   //minimize keyboard when open
   FocusScope.of(context).unfocus();
   bottomSheetControllerGlobal = new SheetController();
+  if (useCustomController == true)
+    bottomSheetControllerGlobalCustomAssigned = new SheetController();
   return await showSlidingBottomSheet(context,
       resizeToAvoidBottomInset: resizeForKeyboard,
       // getOSInsideWeb() == "iOS" ? false : resizeForKeyboard,
@@ -88,7 +93,9 @@ Future openBottomSheet(
         showScrollbar: showScrollbar,
         scrollbar: ((child) => ScrollbarWrap(child: child)),
       ),
-      controller: bottomSheetControllerGlobal,
+      controller: useCustomController
+          ? bottomSheetControllerGlobalCustomAssigned
+          : bottomSheetControllerGlobal,
       elevation: 0,
       isBackdropInteractable: true,
       dismissOnBackdropTap: true,

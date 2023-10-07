@@ -524,15 +524,13 @@ class SettingsPageContent extends StatelessWidget {
               )
             : SizedBox.shrink(),
 
-        notificationsGlobalEnabled && getIsFullScreen(context) == false
-            ? SettingsContainerOpenPage(
-                openPage: EditHomePage(),
-                title: "edit-home-page".tr(),
-                icon: appStateSettings["outlinedIcons"]
-                    ? Icons.home_outlined
-                    : Icons.home_rounded,
-              )
-            : SizedBox.shrink(),
+        SettingsContainerOpenPage(
+          openPage: EditHomePage(),
+          title: "edit-home-page".tr(),
+          icon: appStateSettings["outlinedIcons"]
+              ? Icons.home_outlined
+              : Icons.home_rounded,
+        ),
 
         SettingsContainerOpenPage(
           onOpen: () {

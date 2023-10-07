@@ -48,10 +48,9 @@ class HomePageHeatMap extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return appStateSettings["showHeatMap"] == false &&
-            enableDoubleColumn(context) == false
-        ? SizedBox.shrink()
-        : KeepAliveClientMixin(child: HeatMapGetPoints());
+    if (isHomeScreenSectionEnabled(context, "showHeatMap") == false)
+      return SizedBox.shrink();
+    return KeepAliveClientMixin(child: HeatMapGetPoints());
   }
 }
 

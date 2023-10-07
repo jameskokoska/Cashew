@@ -732,5 +732,7 @@
   "current-period": "Perioada curenta",
   "set-spending-goals": "Stabiliți obiective de cheltuieli categoriei",
   "tap-for-custom-exchange-rate": "Atingeți o intrare pentru a seta un curs de schimb personalizat",
-  "set-currency": "Setați moneda"
+  "set-currency": "Setați moneda",
+  "accounts-list": "Lista de conturi",
+  "select-accounts": "Selectați conturi"
 }

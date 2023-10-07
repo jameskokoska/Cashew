@@ -732,5 +732,7 @@
   "current-period": "Nykyinen jakso",
   "set-spending-goals": "Aseta luokan menot",
   "tap-for-custom-exchange-rate": "Napauta merkintää asettaaksesi mukautetun valuuttakurssin",
-  "set-currency": "Asettaa valuutta"
+  "set-currency": "Asettaa valuutta",
+  "accounts-list": "Tililuettelo",
+  "select-accounts": "Valitse tilit"
 }

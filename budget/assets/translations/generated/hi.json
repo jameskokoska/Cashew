@@ -731,6 +731,8 @@
   "view-previous-budget-periods": "पिछले बजट अवधि देखें",
   "current-period": "वर्तमान अवधि",
   "set-spending-goals": "श्रेणी खर्च करने वाले लक्ष्य निर्धारित करें",
-  "tap-for-custom-exchange-rate": "कस्टम विनिमय दर निर्धारित करने के लिए एक प्रविष्टि टैप करें",
-  "set-currency": "मुद्रा निर्धारित करें"
+  "tap-for-custom-exchange-rate": "एक कस्टम विनिमय दर निर्धारित करने के लिए एक प्रविष्टि टैप करें",
+  "set-currency": "मुद्रा निर्धारित करें",
+  "accounts-list": "लेखा सूची",
+  "select-accounts": "खातों का चयन करें"
 }

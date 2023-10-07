@@ -463,12 +463,14 @@ class _SyncButtonState extends State<SyncButton> {
                               builder: (context) {
                                 DateTime? timeLastSynced = null;
                                 try {
-                                  timeLastSynced = DateTime.parse(
+                                  if (appStateSettings["lastSynced"] == null)
+                                    throw ("lastSynced is null!");
+                                  timeLastSynced = DateTime.tryParse(
                                     appStateSettings["lastSynced"],
                                   );
                                 } catch (e) {
-                                  print("Error parsing time last synced: " +
-                                      e.toString());
+                                  // print("Error parsing time last synced: " +
+                                  //     e.toString());
                                 }
                                 return TextFont(
                                   textAlign: TextAlign.left,

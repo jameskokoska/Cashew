@@ -732,5 +732,7 @@
   "current-period": "Periode saat ini",
   "set-spending-goals": "Tetapkan Tujuan Pengeluaran Kategori",
   "tap-for-custom-exchange-rate": "Ketuk entri untuk mengatur nilai tukar khusus",
-  "set-currency": "Atur mata uang"
+  "set-currency": "Atur mata uang",
+  "accounts-list": "Daftar Akun",
+  "select-accounts": "Pilih akun"
 }

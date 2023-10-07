@@ -732,5 +732,7 @@
   "current-period": "বর্তমান সময়ের",
   "set-spending-goals": "বিভাগ ব্যয় লক্ষ্য নির্ধারণ করুন",
   "tap-for-custom-exchange-rate": "একটি কাস্টম এক্সচেঞ্জ রেট সেট করতে একটি এন্ট্রি আলতো চাপুন",
-  "set-currency": "মুদ্রা সেট করুন"
+  "set-currency": "মুদ্রা সেট করুন",
+  "accounts-list": "অ্যাকাউন্ট তালিকা",
+  "select-accounts": "অ্যাকাউন্ট নির্বাচন করুন"
 }

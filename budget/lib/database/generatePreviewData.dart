@@ -89,32 +89,35 @@ Future generatePreviewData() async {
       order: 0,
       currency: "usd",
       decimals: 2,
+      homePageWidgetDisplay: defaultWalletHomePageWidgetDisplay,
     ),
   );
   await database.createOrUpdateWallet(
     TransactionWallet(
       walletPk: "10",
       name: "Euros",
-      colour: null,
+      colour: "0xff66bb6a",
       iconName: null,
       dateCreated: DateTime.now(),
       dateTimeModified: null,
       order: 1,
       currency: "eur",
       decimals: 2,
+      homePageWidgetDisplay: defaultWalletHomePageWidgetDisplay,
     ),
   );
   await database.createOrUpdateWallet(
     TransactionWallet(
       walletPk: "11",
       name: "Bitcoin",
-      colour: null,
+      colour: "0xffef5350",
       iconName: null,
       dateCreated: DateTime.now(),
       dateTimeModified: null,
       order: 2,
       currency: "btc",
       decimals: 7,
+      homePageWidgetDisplay: defaultWalletHomePageWidgetDisplay,
     ),
   );
   DateTime tripStart = DateTime.now().subtract(Duration(days: 7));

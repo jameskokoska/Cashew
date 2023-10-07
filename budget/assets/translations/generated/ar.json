@@ -732,5 +732,7 @@
   "current-period": "الفترة الحالية",
   "set-spending-goals": "حدد أهداف الإنفاق في الفئة",
   "tap-for-custom-exchange-rate": "اضغط على إدخال لتعيين سعر صرف مخصص",
-  "set-currency": "تعيين العملة"
+  "set-currency": "تعيين العملة",
+  "accounts-list": "قائمة الحسابات",
+  "select-accounts": "حدد الحسابات"
 }

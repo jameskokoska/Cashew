@@ -728,9 +728,11 @@
   "database-corrupted": "Base de datos corrupta",
   "database-corrupted-description": "Su base de datos está dañada. Es posible que haya importado el archivo incorrecto.",
   "import-backup": "Importación de respaldo",
-  "view-previous-budget-periods": "Ver períodos presupuestarios anteriores",
+  "view-previous-budget-periods": "Ver períodos de presupuesto anteriores",
   "current-period": "Período actual",
   "set-spending-goals": "Establecer objetivos de gasto de categoría",
   "tap-for-custom-exchange-rate": "Toque una entrada para establecer un tipo de cambio personalizado",
-  "set-currency": "Moneda establecida"
+  "set-currency": "Moneda establecida",
+  "accounts-list": "Lista de cuentas",
+  "select-accounts": "Seleccionar cuentas"
 }

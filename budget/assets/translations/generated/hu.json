@@ -732,5 +732,7 @@
   "current-period": "Jelenlegi időszak",
   "set-spending-goals": "Állítsa be a kategória kiadási célokat",
   "tap-for-custom-exchange-rate": "Érintse meg a bejegyzést az egyéni árfolyam beállításához",
-  "set-currency": "Beállított pénznem"
+  "set-currency": "Beállított pénznem",
+  "accounts-list": "Számlák listája",
+  "select-accounts": "Válassza ki a Fiókokat"
 }

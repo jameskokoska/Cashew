@@ -732,5 +732,7 @@
   "current-period": "התקופה הנוכחית",
   "set-spending-goals": "הגדר יעדי הוצאות קטגוריות",
   "tap-for-custom-exchange-rate": "הקש על ערך כדי להגדיר שער חליפין מותאם אישית",
-  "set-currency": "קבע מטבע"
+  "set-currency": "קבע מטבע",
+  "accounts-list": "רשימת חשבונות",
+  "select-accounts": "בחר חשבונות"
 }

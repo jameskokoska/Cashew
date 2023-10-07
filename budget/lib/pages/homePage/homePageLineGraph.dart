@@ -2,6 +2,7 @@ import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/pages/budgetPage.dart';
+import 'package:budget/pages/editHomePage.dart';
 import 'package:budget/struct/currencyFunctions.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
@@ -22,78 +23,74 @@ class HomePageLineGraph extends StatelessWidget {
   final int selectedSlidingSelector;
   @override
   Widget build(BuildContext context) {
-    return appStateSettings["showSpendingGraph"] == false &&
-            enableDoubleColumn(context) == false
-        ? SizedBox.shrink()
-        : KeepAliveClientMixin(
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: 13),
-              child: Container(
-                padding:
-                    EdgeInsets.only(left: 5, right: 7, bottom: 12, top: 18),
-                margin: EdgeInsets.symmetric(horizontal: 13),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(15)),
-                  color: getColor(context, "lightDarkAccentHeavyLight"),
-                  boxShadow: boxShadowCheck(boxShadowGeneral(context)),
-                ),
-                child: appStateSettings["lineGraphDisplayType"] ==
-                        LineGraphDisplay.Default30Days.index
-                    ? PastSpendingGraph(
-                        isIncome: selectedSlidingSelector == 2
-                            ? false
-                            : selectedSlidingSelector == 3
-                                ? true
-                                : null,
-                      )
-                    : appStateSettings["lineGraphDisplayType"] ==
-                            LineGraphDisplay.CustomStartDate.index
-                        ? PastSpendingGraph(
-                            isIncome: selectedSlidingSelector == 2
-                                ? false
-                                : selectedSlidingSelector == 3
-                                    ? true
-                                    : null,
-                            customStartDate: DateTime.parse(
-                                appStateSettings["lineGraphStartDate"]),
-                          )
-                        : StreamBuilder<Budget>(
-                            stream: database.getBudget(
-                                appStateSettings["lineGraphReferenceBudgetPk"]
-                                    .toString()),
-                            builder: (context, snapshot) {
-                              if (snapshot.hasData) {
-                                Budget budget = snapshot.data!;
-                                ColorScheme budgetColorScheme =
-                                    ColorScheme.fromSeed(
-                                  seedColor: HexColor(budget.colour,
-                                      defaultColor: Theme.of(context)
-                                          .colorScheme
-                                          .primary),
-                                  brightness: determineBrightnessTheme(context),
-                                );
-                                return Column(
-                                  children: [
-                                    BudgetLineGraph(
-                                      key: ValueKey(budget.budgetPk),
-                                      budget: budget,
-                                      budgetColorScheme: budgetColorScheme,
-                                      dateForRange: DateTime.now(),
-                                      budgetRange:
-                                          getBudgetDate(budget, DateTime.now()),
-                                      isPastBudget: false,
-                                      selectedCategory: null,
-                                      showPastSpending: false,
-                                    ),
-                                  ],
-                                );
-                              }
-                              return SizedBox.shrink();
-                            },
-                          ),
-              ),
-            ),
-          );
+    if (isHomeScreenSectionEnabled(context, "showSpendingGraph") == false)
+      return SizedBox.shrink();
+    return KeepAliveClientMixin(
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 13),
+        child: Container(
+          padding: EdgeInsets.only(left: 5, right: 7, bottom: 12, top: 18),
+          margin: EdgeInsets.symmetric(horizontal: 13),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(15)),
+            color: getColor(context, "lightDarkAccentHeavyLight"),
+            boxShadow: boxShadowCheck(boxShadowGeneral(context)),
+          ),
+          child: appStateSettings["lineGraphDisplayType"] ==
+                  LineGraphDisplay.Default30Days.index
+              ? PastSpendingGraph(
+                  isIncome: selectedSlidingSelector == 2
+                      ? false
+                      : selectedSlidingSelector == 3
+                          ? true
+                          : null,
+                )
+              : appStateSettings["lineGraphDisplayType"] ==
+                      LineGraphDisplay.CustomStartDate.index
+                  ? PastSpendingGraph(
+                      isIncome: selectedSlidingSelector == 2
+                          ? false
+                          : selectedSlidingSelector == 3
+                              ? true
+                              : null,
+                      customStartDate: DateTime.parse(
+                          appStateSettings["lineGraphStartDate"]),
+                    )
+                  : StreamBuilder<Budget>(
+                      stream: database.getBudget(
+                          appStateSettings["lineGraphReferenceBudgetPk"]
+                              .toString()),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          Budget budget = snapshot.data!;
+                          ColorScheme budgetColorScheme = ColorScheme.fromSeed(
+                            seedColor: HexColor(budget.colour,
+                                defaultColor:
+                                    Theme.of(context).colorScheme.primary),
+                            brightness: determineBrightnessTheme(context),
+                          );
+                          return Column(
+                            children: [
+                              BudgetLineGraph(
+                                key: ValueKey(budget.budgetPk),
+                                budget: budget,
+                                budgetColorScheme: budgetColorScheme,
+                                dateForRange: DateTime.now(),
+                                budgetRange:
+                                    getBudgetDate(budget, DateTime.now()),
+                                isPastBudget: false,
+                                selectedCategory: null,
+                                showPastSpending: false,
+                              ),
+                            ],
+                          );
+                        }
+                        return SizedBox.shrink();
+                      },
+                    ),
+        ),
+      ),
+    );
   }
 }
 
