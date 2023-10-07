@@ -727,5 +727,12 @@
   "select-backup-file-description": "Backup.sql 파일을 선택하십시오.",
   "database-corrupted": "데이터베이스가 손상되었습니다",
   "database-corrupted-description": "데이터베이스가 손상되었습니다. 잘못된 파일을 가져 왔을 수 있습니다.",
-  "import-backup": "백업 가져 오기"
+  "import-backup": "백업 가져 오기",
+  "view-previous-budget-periods": "이전 예산 기간을보십시오",
+  "current-period": "현재 기간",
+  "set-spending-goals": "카테고리 지출 목표를 설정합니다",
+  "tap-for-custom-exchange-rate": "항목을 탭하여 사용자 정의 환율을 설정하십시오",
+  "set-currency": "통화를 설정하십시오",
+  "accounts-list": "계정 목록",
+  "select-accounts": "계정을 선택하십시오"
 }

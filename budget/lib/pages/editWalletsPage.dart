@@ -1,6 +1,7 @@
 import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
+import 'package:budget/main.dart';
 import 'package:budget/pages/addWalletPage.dart';
 import 'package:budget/pages/editBudgetPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
@@ -125,11 +126,38 @@ class _EditWalletsPageState extends State<EditWalletsPage> {
             child: AnimatedExpanded(
               expand: hideIfSearching(searchValue, context) == false,
               child: SettingsContainerOpenPage(
+                onOpen: () {
+                  checkIfExchangeRateChangeBefore();
+                },
+                onClosed: () {
+                  checkIfExchangeRateChangeAfter();
+                },
                 openPage: ExchangeRates(),
                 title: "exchange-rates".tr(),
                 icon: appStateSettings["outlinedIcons"]
                     ? Icons.account_balance_wallet_outlined
                     : Icons.account_balance_wallet_rounded,
+              ),
+            ),
+          ),
+          SliverToBoxAdapter(
+            child: AnimatedExpanded(
+              expand: hideIfSearching(searchValue, context) == false,
+              child: SettingsContainer(
+                onTap: () {
+                  openBottomSheet(
+                    context,
+                    fullSnap: true,
+                    TransferBalancePopup(
+                      wallet: Provider.of<AllWallets>(context, listen: false)
+                          .indexedByPk[appStateSettings["selectedWalletPk"]]!,
+                    ),
+                  );
+                },
+                title: "transfer-balance".tr(),
+                icon: appStateSettings["outlinedIcons"]
+                    ? Icons.compare_arrows_outlined
+                    : Icons.compare_arrows_rounded,
               ),
             ),
           ),

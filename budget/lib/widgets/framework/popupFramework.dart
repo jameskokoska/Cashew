@@ -17,6 +17,7 @@ class PopupFramework extends StatelessWidget {
     this.showCloseButton = false,
     this.hasBottomSafeArea = true,
     this.icon,
+    this.outsideExtraWidget,
   }) : super(key: key);
   final Widget child;
   final String? title;
@@ -27,6 +28,7 @@ class PopupFramework extends StatelessWidget {
   final bool showCloseButton;
   final bool hasBottomSafeArea;
   final Widget? icon;
+  final Widget? outsideExtraWidget;
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -162,21 +164,35 @@ class PopupFramework extends StatelessWidget {
             ],
           ),
         ),
-        getIsFullScreen(context) || showCloseButton
-            ? Align(
-                alignment: Alignment.topRight,
-                child: IconButton(
+        Align(
+          alignment: Alignment.topRight,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (outsideExtraWidget != null)
+                Transform.translate(
+                  offset: Offset(
+                      (getIsFullScreen(context) || showCloseButton) ? 20 : 0,
+                      0),
+                  child: outsideExtraWidget!,
+                ),
+              if (getIsFullScreen(context) || showCloseButton)
+                IconButton(
                   iconSize: 25,
-                  padding: EdgeInsets.all(20),
-                  icon: Icon(appStateSettings["outlinedIcons"]
-                      ? Icons.close_outlined
-                      : Icons.close_rounded),
+                  padding: EdgeInsets.all(
+                      getPlatform() == PlatformOS.isIOS ? 15 : 20),
+                  icon: Icon(
+                    appStateSettings["outlinedIcons"]
+                        ? Icons.close_outlined
+                        : Icons.close_rounded,
+                  ),
                   onPressed: () {
                     Navigator.pop(context);
                   },
                 ),
-              )
-            : SizedBox(),
+            ],
+          ),
+        ),
       ],
     );
   }

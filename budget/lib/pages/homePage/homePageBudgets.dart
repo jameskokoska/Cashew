@@ -1,14 +1,22 @@
+import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
+import 'package:budget/functions.dart';
 import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/addCategoryPage.dart';
+import 'package:budget/pages/addObjectivePage.dart';
+import 'package:budget/pages/editBudgetPage.dart';
+import 'package:budget/pages/editHomePage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
+import 'package:budget/widgets/framework/popupFramework.dart';
 import 'package:budget/widgets/keepAliveClientMixin.dart';
 import 'package:budget/widgets/budgetContainer.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
+import 'package:budget/widgets/selectItems.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 import '../../widgets/util/widgetSize.dart';
@@ -25,26 +33,29 @@ class _HomePageBudgetsState extends State<HomePageBudgets> {
 
   @override
   Widget build(BuildContext context) {
-    if (appStateSettings["showPinnedBudgets"] == false &&
-        enableDoubleColumn(context) == false) return SizedBox.shrink();
+    if (isHomeScreenSectionEnabled(context, "showPinnedBudgets") == false)
+      return SizedBox.shrink();
     return KeepAliveClientMixin(
       child: StreamBuilder<List<Budget>>(
         stream: database.getAllPinnedBudgets().$1,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             if (snapshot.data!.length == 0) {
-              return enableDoubleColumn(context) == true
-                  ? SizedBox.shrink()
-                  : AddButton(
-                      onTap: () {},
-                      height: 160,
-                      width: null,
-                      padding: const EdgeInsets.only(
-                          left: 13, right: 13, bottom: 13),
-                      openPage: AddBudgetPage(
-                        routesToPopAfterDelete: RoutesToPopAfterDelete.None,
-                      ),
-                    );
+              return AddButton(
+                onTap: () {
+                  openBottomSheet(
+                    context,
+                    EditHomePagePinnedBudgetsPopup(
+                      showBudgetsTotalLabelSetting: false,
+                    ),
+                    useCustomController: true,
+                  );
+                },
+                height: 160,
+                width: null,
+                padding: const EdgeInsets.only(left: 13, right: 13, bottom: 13),
+                icon: Icons.format_list_bulleted_add,
+              );
             }
             // if (snapshot.data!.length == 1) {
             //   return Padding(
@@ -69,13 +80,19 @@ class _HomePageBudgetsState extends State<HomePageBudgets> {
               Padding(
                 padding: const EdgeInsets.only(left: 3, right: 3),
                 child: AddButton(
-                  onTap: () {},
+                  onTap: () {
+                    openBottomSheet(
+                      context,
+                      EditHomePagePinnedBudgetsPopup(
+                        showBudgetsTotalLabelSetting: false,
+                      ),
+                      useCustomController: true,
+                    );
+                  },
                   height: null,
                   width: null,
                   padding: EdgeInsets.all(0),
-                  openPage: AddBudgetPage(
-                    routesToPopAfterDelete: RoutesToPopAfterDelete.None,
-                  ),
+                  icon: Icons.format_list_bulleted_add,
                 ),
               ),
             ];
@@ -152,5 +169,121 @@ class _HomePageBudgetsState extends State<HomePageBudgets> {
         },
       ),
     );
+  }
+}
+
+class EditHomePagePinnedBudgetsPopup extends StatelessWidget {
+  const EditHomePagePinnedBudgetsPopup(
+      {super.key, required this.showBudgetsTotalLabelSetting});
+  final bool showBudgetsTotalLabelSetting;
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<List<Budget>>(
+        stream: database.watchAllBudgets(),
+        builder: (context, snapshot) {
+          List<Budget> allBudgets = snapshot.data ?? [];
+          return StreamBuilder<List<Budget>>(
+              stream: database.getAllPinnedBudgets().$1,
+              builder: (context, snapshot2) {
+                List<Budget> allPinnedBudgets = snapshot2.data ?? [];
+                return PopupFramework(
+                  title: "select-budgets".tr(),
+                  child: Column(
+                    children: [
+                      if (showBudgetsTotalLabelSetting)
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(15),
+                          child: BudgetTotalSpentToggle(),
+                        ),
+                      if (allBudgets.length <= 0)
+                        NoResultsCreate(
+                          message: "no-budgets-found".tr(),
+                          buttonLabel: "create-budget".tr(),
+                          route: AddBudgetPage(
+                            routesToPopAfterDelete: RoutesToPopAfterDelete.None,
+                          ),
+                        ),
+                      SelectItems(
+                        syncWithInitial: true,
+                        checkboxCustomIconSelected: Icons.push_pin_rounded,
+                        checkboxCustomIconUnselected: Icons.push_pin_outlined,
+                        items: [
+                          for (Budget budget in allBudgets)
+                            budget.budgetPk.toString()
+                        ],
+                        getColor: (budgetPk, selected) {
+                          for (Budget budget in allBudgets)
+                            if (budget.budgetPk.toString() ==
+                                budgetPk.toString()) {
+                              return HexColor(budget.colour,
+                                      defaultColor:
+                                          Theme.of(context).colorScheme.primary)
+                                  .withOpacity(selected == true ? 0.7 : 0.5);
+                            }
+                          return null;
+                        },
+                        displayFilter: (budgetPk) {
+                          for (Budget budget in allBudgets)
+                            if (budget.budgetPk.toString() ==
+                                budgetPk.toString()) {
+                              return budget.name;
+                            }
+                          return "";
+                        },
+                        initialItems: [
+                          for (Budget budget in allPinnedBudgets)
+                            budget.budgetPk.toString()
+                        ],
+                        onChangedSingleItem: (value) async {
+                          Budget budget = allBudgets[allBudgets
+                              .indexWhere((item) => item.budgetPk == value)];
+                          Budget budgetToUpdate =
+                              await database.getBudgetInstance(budget.budgetPk);
+                          await database.createOrUpdateBudget(
+                            budgetToUpdate.copyWith(
+                                pinned: !budgetToUpdate.pinned),
+                            updateSharedEntry: false,
+                          );
+                        },
+                        onLongPress: (String budgetPk) async {
+                          Budget budget =
+                              await database.getBudgetInstance(budgetPk);
+                          pushRoute(
+                            context,
+                            AddBudgetPage(
+                              routesToPopAfterDelete:
+                                  RoutesToPopAfterDelete.One,
+                              budget: budget,
+                            ),
+                          );
+                        },
+                      ),
+                      if (allBudgets.length > 0)
+                        AddButton(
+                          onTap: () {},
+                          height: 50,
+                          width: null,
+                          padding: const EdgeInsets.only(
+                            left: 13,
+                            right: 13,
+                            bottom: 13,
+                            top: 13,
+                          ),
+                          openPage: AddBudgetPage(
+                            routesToPopAfterDelete: RoutesToPopAfterDelete.None,
+                          ),
+                          afterOpenPage: () {
+                            Future.delayed(Duration(milliseconds: 100), () {
+                              bottomSheetControllerGlobalCustomAssigned
+                                  ?.snapToExtent(0);
+                            });
+                          },
+                        ),
+                    ],
+                  ),
+                );
+              });
+        });
   }
 }

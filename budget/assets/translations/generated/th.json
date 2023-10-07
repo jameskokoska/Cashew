@@ -727,5 +727,12 @@
   "select-backup-file-description": "โปรดเลือกไฟล์ backup.sql ของคุณ",
   "database-corrupted": "ฐานข้อมูลเสียหาย",
   "database-corrupted-description": "ฐานข้อมูลของคุณเสียหาย คุณอาจนำเข้าไฟล์ผิด",
-  "import-backup": "นำเข้าสำรอง"
+  "import-backup": "นำเข้าสำรอง",
+  "view-previous-budget-periods": "ดูระยะเวลางบประมาณก่อนหน้า",
+  "current-period": "งวดปัจจุบัน",
+  "set-spending-goals": "กำหนดเป้าหมายการใช้จ่ายหมวดหมู่",
+  "tap-for-custom-exchange-rate": "แตะรายการเพื่อตั้งค่าอัตราแลกเปลี่ยนที่กำหนดเอง",
+  "set-currency": "ตั้งค่าสกุลเงิน",
+  "accounts-list": "รายการบัญชี",
+  "select-accounts": "เลือกบัญชี"
 }

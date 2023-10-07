@@ -25,6 +25,7 @@ class Button extends StatefulWidget {
     this.borderRadius,
     this.changeScale = true,
     this.expandedLayout = false,
+    this.flexibleLayout = false,
     this.disabled = false,
   }) : super(key: key);
   final String label;
@@ -42,6 +43,7 @@ class Button extends StatefulWidget {
   final double? borderRadius;
   final bool changeScale;
   final bool expandedLayout;
+  final bool flexibleLayout;
   final bool disabled;
 
   @override
@@ -148,7 +150,11 @@ class _ButtonState extends State<Button> with TickerProviderStateMixin {
                             ),
                           )
                         : SizedBox.shrink(),
-                    widget.expandedLayout ? Expanded(child: text) : text,
+                    widget.flexibleLayout
+                        ? Flexible(child: text)
+                        : widget.expandedLayout
+                            ? Expanded(child: text)
+                            : text,
                   ],
                 ),
               ),

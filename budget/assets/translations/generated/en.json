@@ -727,5 +727,12 @@
   "select-backup-file-description": "Please select your backup.sql file.",
   "database-corrupted": "Database Corrupted",
   "database-corrupted-description": "Your database is corrupted. You may have imported the wrong file.",
-  "import-backup": "Import Backup"
+  "import-backup": "Import Backup",
+  "view-previous-budget-periods": "View previous budget periods",
+  "current-period": "Current Period",
+  "set-spending-goals": "Set Category Spending Goals",
+  "tap-for-custom-exchange-rate": "Tap an entry to set a custom exchange rate",
+  "set-currency": "Set Currency",
+  "accounts-list": "Accounts List",
+  "select-accounts": "Select Accounts"
 }

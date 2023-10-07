@@ -3,8 +3,11 @@ import 'package:budget/database/tables.dart';
 import 'package:budget/pages/addObjectivePage.dart';
 import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/editBudgetPage.dart';
+import 'package:budget/pages/homePage/homePageBudgets.dart';
 import 'package:budget/pages/homePage/homePageLineGraph.dart';
 import 'package:budget/pages/homePage/homePageNetWorth.dart';
+import 'package:budget/pages/homePage/homePageObjectives.dart';
+import 'package:budget/pages/homePage/homePageWalletSwitcher.dart';
 import 'package:budget/pages/walletDetailsPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/modified/reorderable_list.dart';
@@ -12,6 +15,7 @@ import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/editRowEntry.dart';
 import 'package:budget/widgets/moreIcons.dart';
 import 'package:budget/widgets/navigationFramework.dart';
+import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/periodCyclePicker.dart';
@@ -77,76 +81,54 @@ class _EditHomePageState extends State<EditHomePage> {
                 ? Icons.account_balance_wallet_outlined
                 : Icons.account_balance_wallet_rounded,
             name: "accounts".tr(),
-            isEnabled: appStateSettings["showWalletSwitcher"],
+            isEnabled:
+                isHomeScreenSectionEnabled(context, "showWalletSwitcher"),
             onSwitched: (value) {
-              updateSettings("showWalletSwitcher", value,
-                  pagesNeedingRefresh: [], updateGlobalState: false);
+              switchHomeScreenSection(context, "showWalletSwitcher", value);
+            },
+            onTap: () {
+              openBottomSheet(
+                context,
+                EditHomePagePinnedWalletsPopup(
+                  homePageWidgetDisplay: HomePageWidgetDisplay.WalletSwitcher,
+                ),
+                useCustomController: true,
+              );
+            },
+          ),
+          "walletsList": EditHomePageItem(
+            icon: appStateSettings["outlinedIcons"]
+                ? Icons.format_list_bulleted_outlined
+                : Icons.format_list_bulleted_rounded,
+            name: "accounts-list".tr(),
+            isEnabled: isHomeScreenSectionEnabled(context, "showWalletList"),
+            onSwitched: (value) {
+              switchHomeScreenSection(context, "showWalletList", value);
+            },
+            onTap: () {
+              openBottomSheet(
+                context,
+                EditHomePagePinnedWalletsPopup(
+                  homePageWidgetDisplay: HomePageWidgetDisplay.WalletList,
+                ),
+                useCustomController: true,
+              );
             },
           ),
           "budgets": EditHomePageItem(
             icon: MoreIcons.chart_pie,
             name: "budgets".tr(),
-            isEnabled: appStateSettings["showPinnedBudgets"],
+            isEnabled: isHomeScreenSectionEnabled(context, "showPinnedBudgets"),
             onSwitched: (value) {
-              updateSettings("showPinnedBudgets", value,
-                  pagesNeedingRefresh: [], updateGlobalState: false);
+              switchHomeScreenSection(context, "showPinnedBudgets", value);
             },
-            onTap: () async {
-              List<Budget> allBudgets = await database.getAllBudgets();
-              List<Budget> allPinnedBudgets =
-                  await database.getAllPinnedBudgets().$2;
+            onTap: () {
               openBottomSheet(
                 context,
-                PopupFramework(
-                  title: "select-budgets".tr(),
-                  child: Column(
-                    children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(15),
-                        child: BudgetTotalSpentToggle(),
-                      ),
-                      if (allBudgets.length <= 0)
-                        NoResultsCreate(
-                          message: "no-budgets-found".tr(),
-                          buttonLabel: "create-budget".tr(),
-                          route: AddObjectivePage(
-                            routesToPopAfterDelete: RoutesToPopAfterDelete.None,
-                          ),
-                        ),
-                      SelectItems(
-                        checkboxCustomIconSelected: Icons.push_pin_rounded,
-                        checkboxCustomIconUnselected: Icons.push_pin_outlined,
-                        items: [
-                          for (Budget budget in allBudgets)
-                            budget.budgetPk.toString()
-                        ],
-                        displayFilter: (budgetPk) {
-                          for (Budget budget in allBudgets)
-                            if (budget.budgetPk.toString() ==
-                                budgetPk.toString()) {
-                              return budget.name;
-                            }
-                          return "";
-                        },
-                        initialItems: [
-                          for (Budget budget in allPinnedBudgets)
-                            budget.budgetPk.toString()
-                        ],
-                        onChangedSingleItem: (value) async {
-                          Budget budget = allBudgets[allBudgets
-                              .indexWhere((item) => item.budgetPk == value)];
-                          Budget budgetToUpdate =
-                              await database.getBudgetInstance(budget.budgetPk);
-                          await database.createOrUpdateBudget(
-                            budgetToUpdate.copyWith(
-                                pinned: !budgetToUpdate.pinned),
-                            updateSharedEntry: false,
-                          );
-                        },
-                      ),
-                    ],
-                  ),
+                EditHomePagePinnedBudgetsPopup(
+                  showBudgetsTotalLabelSetting: true,
                 ),
+                useCustomController: true,
               );
             },
           ),
@@ -155,82 +137,34 @@ class _EditHomePageState extends State<EditHomePage> {
                 ? Icons.savings_outlined
                 : Icons.savings_rounded,
             name: "goals".tr(),
-            isEnabled: appStateSettings["showObjectives"],
+            isEnabled: isHomeScreenSectionEnabled(context, "showObjectives"),
             onSwitched: (value) {
-              updateSettings("showObjectives", value,
-                  pagesNeedingRefresh: [], updateGlobalState: false);
+              switchHomeScreenSection(context, "showObjectives", value);
             },
             onTap: () async {
-              List<Objective> allObjectives = await database.getAllObjectives();
-              List<Objective> allPinnedObjectives =
-                  await database.getAllPinnedObjectives().$2;
               openBottomSheet(
                 context,
-                PopupFramework(
-                  title: "select-goals".tr(),
-                  child: Column(
-                    children: [
-                      if (allObjectives.length <= 0)
-                        NoResultsCreate(
-                          message: "no-goals-found".tr(),
-                          buttonLabel: "create-goal".tr(),
-                          route: AddObjectivePage(
-                            routesToPopAfterDelete: RoutesToPopAfterDelete.None,
-                          ),
-                        ),
-                      SelectItems(
-                        checkboxCustomIconSelected: Icons.push_pin_rounded,
-                        checkboxCustomIconUnselected: Icons.push_pin_outlined,
-                        items: [
-                          for (Objective objective in allObjectives)
-                            objective.objectivePk.toString()
-                        ],
-                        displayFilter: (objectivePk) {
-                          for (Objective objective in allObjectives)
-                            if (objective.objectivePk.toString() ==
-                                objectivePk.toString()) {
-                              return objective.name;
-                            }
-                          return "";
-                        },
-                        initialItems: [
-                          for (Objective objective in allPinnedObjectives)
-                            objective.objectivePk.toString()
-                        ],
-                        onChangedSingleItem: (value) async {
-                          Objective objective = allObjectives[allObjectives
-                              .indexWhere((item) => item.objectivePk == value)];
-                          Objective objectiveToUpdate = await database
-                              .getObjectiveInstance(objective.objectivePk);
-                          await database.createOrUpdateObjective(
-                            objectiveToUpdate.copyWith(
-                                pinned: !objectiveToUpdate.pinned),
-                          );
-                        },
-                      ),
-                    ],
-                  ),
-                ),
+                EditHomePagePinnedGoalsPopup(),
+                useCustomController: true,
               );
             },
           ),
           "overdueUpcoming": EditHomePageItem(
             icon: getTransactionTypeIcon(TransactionSpecialType.subscription),
             name: "overdue-and-upcoming".tr(),
-            isEnabled: appStateSettings["showOverdueUpcoming"],
+            isEnabled:
+                isHomeScreenSectionEnabled(context, "showOverdueUpcoming"),
             onSwitched: (value) {
-              updateSettings("showOverdueUpcoming", value,
-                  pagesNeedingRefresh: [], updateGlobalState: false);
+              switchHomeScreenSection(context, "showOverdueUpcoming", value);
             },
           ),
           "creditDebts": EditHomePageItem(
             icon: getTransactionTypeIcon(TransactionSpecialType.credit),
             // name: "lent-and-borrowed".tr(),
             name: "loans".tr(),
-            isEnabled: appStateSettings["showCreditDebt"],
+            isEnabled: isHomeScreenSectionEnabled(context, "showCreditDebt"),
             onSwitched: (value) {
-              updateSettings("showCreditDebt", value,
-                  pagesNeedingRefresh: [], updateGlobalState: false);
+              switchHomeScreenSection(context, "showCreditDebt", value);
             },
           ),
           "allSpendingSummary": EditHomePageItem(
@@ -238,10 +172,10 @@ class _EditHomePageState extends State<EditHomePage> {
                 ? Icons.expand_outlined
                 : Icons.expand_rounded,
             name: "income-and-expenses".tr(),
-            isEnabled: appStateSettings["showAllSpendingSummary"],
+            isEnabled:
+                isHomeScreenSectionEnabled(context, "showAllSpendingSummary"),
             onSwitched: (value) {
-              updateSettings("showAllSpendingSummary", value,
-                  pagesNeedingRefresh: [], updateGlobalState: false);
+              switchHomeScreenSection(context, "showAllSpendingSummary", value);
             },
             onTap: () async {
               openBottomSheet(
@@ -258,10 +192,9 @@ class _EditHomePageState extends State<EditHomePage> {
                 ? Icons.area_chart_outlined
                 : Icons.area_chart_rounded,
             name: "net-worth".tr(),
-            isEnabled: appStateSettings["showNetWorth"],
+            isEnabled: isHomeScreenSectionEnabled(context, "showNetWorth"),
             onSwitched: (value) {
-              updateSettings("showNetWorth", value,
-                  pagesNeedingRefresh: [], updateGlobalState: false);
+              switchHomeScreenSection(context, "showNetWorth", value);
             },
             extraWidgetsBelow: [],
             onTap: () async {
@@ -276,10 +209,9 @@ class _EditHomePageState extends State<EditHomePage> {
                 ? Icons.insights_outlined
                 : Icons.insights_rounded,
             name: "spending-graph".tr(),
-            isEnabled: appStateSettings["showSpendingGraph"],
+            isEnabled: isHomeScreenSectionEnabled(context, "showSpendingGraph"),
             onSwitched: (value) {
-              updateSettings("showSpendingGraph", value,
-                  pagesNeedingRefresh: [], updateGlobalState: false);
+              switchHomeScreenSection(context, "showSpendingGraph", value);
             },
             extraWidgetsBelow: [],
             onTap: () async {
@@ -397,10 +329,9 @@ class _EditHomePageState extends State<EditHomePage> {
                   ? Icons.pie_chart_outline
                   : Icons.pie_chart_rounded,
               name: "pie-chart".tr(),
-              isEnabled: appStateSettings["showPieChart"],
+              isEnabled: isHomeScreenSectionEnabled(context, "showPieChart"),
               onSwitched: (value) {
-                updateSettings("showPieChart", value,
-                    pagesNeedingRefresh: [], updateGlobalState: false);
+                switchHomeScreenSection(context, "showPieChart", value);
               },
               extraWidgetsBelow: [],
               onTap: () {
@@ -447,10 +378,9 @@ class _EditHomePageState extends State<EditHomePage> {
                 ? Icons.grid_on_outlined
                 : Icons.grid_on_rounded,
             name: "heat-map".tr(),
-            isEnabled: appStateSettings["showHeatMap"],
+            isEnabled: isHomeScreenSectionEnabled(context, "showHeatMap"),
             onSwitched: (value) {
-              updateSettings("showHeatMap", value,
-                  pagesNeedingRefresh: [], updateGlobalState: false);
+              switchHomeScreenSection(context, "showHeatMap", value);
             },
             extraWidgetsBelow: [],
           ),
@@ -485,22 +415,23 @@ class _EditHomePageState extends State<EditHomePage> {
         dragDownToDismissEnabled: dragDownToDismissEnabled,
         title: "edit-home".tr(),
         slivers: [
-          SliverToBoxAdapter(
-            child: HomePageEditRowEntryUsername(
-              iconData: appStateSettings["outlinedIcons"]
-                  ? Icons.edit_outlined
-                  : Icons.edit_rounded,
-              initialValue: appStateSettings["showUsernameWelcomeBanner"],
-              name: appStateSettings["username"] == null ||
-                      appStateSettings["username"] == ""
-                  ? "homepage-banner".tr()
-                  : "username-banner".tr(),
-              onChanged: (value) {
-                updateSettings("showUsernameWelcomeBanner", value,
-                    updateGlobalState: false);
-              },
+          if (enableDoubleColumn(context) == false)
+            SliverToBoxAdapter(
+              child: HomePageEditRowEntryUsername(
+                iconData: appStateSettings["outlinedIcons"]
+                    ? Icons.edit_outlined
+                    : Icons.edit_rounded,
+                initialValue: appStateSettings["showUsernameWelcomeBanner"],
+                name: appStateSettings["username"] == null ||
+                        appStateSettings["username"] == ""
+                    ? "homepage-banner".tr()
+                    : "username-banner".tr(),
+                onChanged: (value) {
+                  updateSettings("showUsernameWelcomeBanner", value,
+                      updateGlobalState: false);
+                },
+              ),
             ),
-          ),
           SliverReorderableList(
             onReorderStart: (index) {
               HapticFeedback.heavyImpact();
@@ -674,8 +605,32 @@ class _HomePageEditRowEntryUsernameState
       ),
       canDelete: false,
       index: 0,
-      onTap: () {},
+      onTap: () {
+        widget.onChanged(!value);
+        setState(() {
+          this.value = !value;
+        });
+      },
       openPage: Container(),
     );
+  }
+}
+
+void switchHomeScreenSection(
+    BuildContext context, String sectionSetting, bool value) {
+  if (enableDoubleColumn(context)) {
+    updateSettings(sectionSetting + "FullScreen", value,
+        pagesNeedingRefresh: [], updateGlobalState: false);
+  } else {
+    updateSettings(sectionSetting, value,
+        pagesNeedingRefresh: [], updateGlobalState: false);
+  }
+}
+
+bool isHomeScreenSectionEnabled(BuildContext context, String sectionSetting) {
+  if (enableDoubleColumn(context)) {
+    return appStateSettings[sectionSetting + "FullScreen"];
+  } else {
+    return appStateSettings[sectionSetting];
   }
 }

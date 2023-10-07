@@ -727,5 +727,12 @@
   "select-backup-file-description": "Kérjük, válassza ki a biztonsági másolatot.sql fájlt.",
   "database-corrupted": "Az adatbázis megsérült",
   "database-corrupted-description": "Az adatbázisod sérült. Lehet, hogy rossz fájlt importált.",
-  "import-backup": "Biztonsági mentés importálása"
+  "import-backup": "Biztonsági mentés importálása",
+  "view-previous-budget-periods": "Tekintse meg a korábbi költségvetési periódusokat",
+  "current-period": "Jelenlegi időszak",
+  "set-spending-goals": "Állítsa be a kategória kiadási célokat",
+  "tap-for-custom-exchange-rate": "Érintse meg a bejegyzést az egyéni árfolyam beállításához",
+  "set-currency": "Beállított pénznem",
+  "accounts-list": "Számlák listája",
+  "select-accounts": "Válassza ki a Fiókokat"
 }

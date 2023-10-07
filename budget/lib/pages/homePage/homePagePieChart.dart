@@ -1,6 +1,7 @@
 import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
+import 'package:budget/pages/editHomePage.dart';
 import 'package:budget/pages/transactionsSearchPage.dart';
 import 'package:budget/pages/walletDetailsPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
@@ -19,102 +20,97 @@ class HomePagePieChart extends StatelessWidget {
   final int selectedSlidingSelector;
   @override
   Widget build(BuildContext context) {
+    if (isHomeScreenSectionEnabled(context, "showPieChart") == false)
+      return SizedBox.shrink();
     bool isIncome = appStateSettings["pieChartIsIncome"];
-    return !appStateSettings["showPieChart"] &&
-            enableDoubleColumn(context) == false
-        ? SizedBox.shrink()
-        : KeepAliveClientMixin(
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: 13, left: 13, right: 13),
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(15)),
-                  color: getColor(context, "lightDarkAccentHeavyLight"),
-                  boxShadow: boxShadowCheck(boxShadowGeneral(context)),
+    return KeepAliveClientMixin(
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 13, left: 13, right: 13),
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(15)),
+            color: getColor(context, "lightDarkAccentHeavyLight"),
+            boxShadow: boxShadowCheck(boxShadowGeneral(context)),
+          ),
+          padding: EdgeInsets.symmetric(vertical: 30, horizontal: 10),
+          child: StreamBuilder<double?>(
+            stream: database.watchTotalOfWallet(
+              null,
+              isIncome: isIncome,
+              allWallets: Provider.of<AllWallets>(context),
+              followCustomPeriodCycle: true,
+            ),
+            builder: (context, totalSnapshot) {
+              double total = (totalSnapshot.data ?? 0).abs();
+              return StreamBuilder<List<CategoryWithTotal>>(
+                stream: database
+                    .watchTotalSpentInEachCategoryInTimeRangeFromCategories(
+                  allWallets: Provider.of<AllWallets>(context),
+                  start: DateTime.now(),
+                  end: DateTime.now(),
+                  categoryFks: null,
+                  categoryFksExclude: null,
+                  budgetTransactionFilters: null,
+                  memberTransactionFilters: null,
+                  allTime: true,
+                  walletPk: null,
+                  isIncome: isIncome,
+                  followCustomPeriodCycle: true,
                 ),
-                padding: EdgeInsets.symmetric(vertical: 30, horizontal: 10),
-                child: StreamBuilder<double?>(
-                  stream: database.watchTotalOfWallet(
-                    null,
-                    isIncome: isIncome,
-                    allWallets: Provider.of<AllWallets>(context),
-                    followCustomPeriodCycle: true,
-                  ),
-                  builder: (context, totalSnapshot) {
-                    double total = (totalSnapshot.data ?? 0).abs();
-                    return StreamBuilder<List<CategoryWithTotal>>(
-                      stream: database
-                          .watchTotalSpentInEachCategoryInTimeRangeFromCategories(
-                        allWallets: Provider.of<AllWallets>(context),
-                        start: DateTime.now(),
-                        end: DateTime.now(),
-                        categoryFks: null,
-                        categoryFksExclude: null,
-                        budgetTransactionFilters: null,
-                        memberTransactionFilters: null,
-                        allTime: true,
-                        walletPk: null,
-                        isIncome: isIncome,
-                        followCustomPeriodCycle: true,
-                      ),
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          return LayoutBuilder(
-                            builder: (_, boxConstraints) {
-                              // print(boxConstraints);
-                              bool showTopCategoriesLegend =
-                                  boxConstraints.maxWidth > 320;
-                              return Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  if (showTopCategoriesLegend)
-                                    Flexible(
-                                      flex: 1,
-                                      child: Padding(
-                                        padding: EdgeInsets.only(left: 12),
-                                        child: TopCategoriesSpentLegend(
-                                          categoriesWithTotal: snapshot.data!
-                                              .take(
-                                                boxConstraints.maxWidth < 420
-                                                    ? 3
-                                                    : 5,
-                                              )
-                                              .toList(),
-                                        ),
-                                      ),
-                                    ),
-                                  Flexible(
-                                    flex: 2,
-                                    child: Padding(
-                                      padding: EdgeInsets.only(
-                                          right:
-                                              showTopCategoriesLegend ? 20 : 0),
-                                      child: PieChartWrapper(
-                                        isPastBudget: true,
-                                        pieChartDisplayStateKey: null,
-                                        data: snapshot.data!,
-                                        totalSpent: total,
-                                        setSelectedCategory:
-                                            (categoryPk, category) {},
-                                        percentLabelOnTop: true,
-                                      ),
-                                    ),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return LayoutBuilder(
+                      builder: (_, boxConstraints) {
+                        // print(boxConstraints);
+                        bool showTopCategoriesLegend =
+                            boxConstraints.maxWidth > 320;
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            if (showTopCategoriesLegend)
+                              Flexible(
+                                flex: 1,
+                                child: Padding(
+                                  padding: EdgeInsets.only(left: 12),
+                                  child: TopCategoriesSpentLegend(
+                                    categoriesWithTotal: snapshot.data!
+                                        .take(
+                                          boxConstraints.maxWidth < 420 ? 3 : 5,
+                                        )
+                                        .toList(),
                                   ),
-                                ],
-                              );
-                            },
-                          );
-                        }
-                        return SizedBox.shrink();
+                                ),
+                              ),
+                            Flexible(
+                              flex: 2,
+                              child: Padding(
+                                padding: EdgeInsets.only(
+                                    right: showTopCategoriesLegend ? 20 : 0),
+                                child: PieChartWrapper(
+                                  isPastBudget: true,
+                                  pieChartDisplayStateKey: null,
+                                  data: snapshot.data!,
+                                  totalSpent: total,
+                                  setSelectedCategory:
+                                      (categoryPk, category) {},
+                                  percentLabelOnTop: true,
+                                ),
+                              ),
+                            ),
+                          ],
+                        );
                       },
                     );
-                  },
-                ),
-              ),
-            ),
-          );
+                  }
+                  return SizedBox.shrink();
+                },
+              );
+            },
+          ),
+        ),
+      ),
+    );
   }
 }
 

@@ -72,6 +72,17 @@ class $WalletsTable extends Wallets
       type: DriftSqlType.int,
       requiredDuringInsert: false,
       defaultValue: Constant(2));
+  static const VerificationMeta _homePageWidgetDisplayMeta =
+      const VerificationMeta('homePageWidgetDisplay');
+  @override
+  late final GeneratedColumnWithTypeConverter<List<HomePageWidgetDisplay>?,
+      String> homePageWidgetDisplay = GeneratedColumn<String>(
+          'home_page_widget_display', aliasedName, true,
+          type: DriftSqlType.string,
+          requiredDuringInsert: false,
+          defaultValue: const Constant(null))
+      .withConverter<List<HomePageWidgetDisplay>?>(
+          $WalletsTable.$converterhomePageWidgetDisplayn);
   @override
   List<GeneratedColumn> get $columns => [
         walletPk,
@@ -82,7 +93,8 @@ class $WalletsTable extends Wallets
         dateTimeModified,
         order,
         currency,
-        decimals
+        decimals,
+        homePageWidgetDisplay
       ];
   @override
   String get aliasedName => _alias ?? 'wallets';
@@ -137,6 +149,8 @@ class $WalletsTable extends Wallets
       context.handle(_decimalsMeta,
           decimals.isAcceptableOrUnknown(data['decimals']!, _decimalsMeta));
     }
+    context.handle(
+        _homePageWidgetDisplayMeta, const VerificationResult.success());
     return context;
   }
 
@@ -164,6 +178,9 @@ class $WalletsTable extends Wallets
           .read(DriftSqlType.string, data['${effectivePrefix}currency']),
       decimals: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}decimals'])!,
+      homePageWidgetDisplay: $WalletsTable.$converterhomePageWidgetDisplayn
+          .fromSql(attachedDatabase.typeMapping.read(DriftSqlType.string,
+              data['${effectivePrefix}home_page_widget_display'])),
     );
   }
 
@@ -171,6 +188,13 @@ class $WalletsTable extends Wallets
   $WalletsTable createAlias(String alias) {
     return $WalletsTable(attachedDatabase, alias);
   }
+
+  static TypeConverter<List<HomePageWidgetDisplay>, String>
+      $converterhomePageWidgetDisplay =
+      const HomePageWidgetDisplayListInColumnConverter();
+  static TypeConverter<List<HomePageWidgetDisplay>?, String?>
+      $converterhomePageWidgetDisplayn =
+      NullAwareTypeConverter.wrap($converterhomePageWidgetDisplay);
 }
 
 class TransactionWallet extends DataClass
@@ -184,6 +208,7 @@ class TransactionWallet extends DataClass
   final int order;
   final String? currency;
   final int decimals;
+  final List<HomePageWidgetDisplay>? homePageWidgetDisplay;
   const TransactionWallet(
       {required this.walletPk,
       required this.name,
@@ -193,7 +218,8 @@ class TransactionWallet extends DataClass
       this.dateTimeModified,
       required this.order,
       this.currency,
-      required this.decimals});
+      required this.decimals,
+      this.homePageWidgetDisplay});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -214,6 +240,11 @@ class TransactionWallet extends DataClass
       map['currency'] = Variable<String>(currency);
     }
     map['decimals'] = Variable<int>(decimals);
+    if (!nullToAbsent || homePageWidgetDisplay != null) {
+      final converter = $WalletsTable.$converterhomePageWidgetDisplayn;
+      map['home_page_widget_display'] =
+          Variable<String>(converter.toSql(homePageWidgetDisplay));
+    }
     return map;
   }
 
@@ -235,6 +266,9 @@ class TransactionWallet extends DataClass
           ? const Value.absent()
           : Value(currency),
       decimals: Value(decimals),
+      homePageWidgetDisplay: homePageWidgetDisplay == null && nullToAbsent
+          ? const Value.absent()
+          : Value(homePageWidgetDisplay),
     );
   }
 
@@ -252,6 +286,8 @@ class TransactionWallet extends DataClass
       order: serializer.fromJson<int>(json['order']),
       currency: serializer.fromJson<String?>(json['currency']),
       decimals: serializer.fromJson<int>(json['decimals']),
+      homePageWidgetDisplay: serializer.fromJson<List<HomePageWidgetDisplay>?>(
+          json['homePageWidgetDisplay']),
     );
   }
   @override
@@ -267,6 +303,8 @@ class TransactionWallet extends DataClass
       'order': serializer.toJson<int>(order),
       'currency': serializer.toJson<String?>(currency),
       'decimals': serializer.toJson<int>(decimals),
+      'homePageWidgetDisplay': serializer
+          .toJson<List<HomePageWidgetDisplay>?>(homePageWidgetDisplay),
     };
   }
 
@@ -279,7 +317,9 @@ class TransactionWallet extends DataClass
           Value<DateTime?> dateTimeModified = const Value.absent(),
           int? order,
           Value<String?> currency = const Value.absent(),
-          int? decimals}) =>
+          int? decimals,
+          Value<List<HomePageWidgetDisplay>?> homePageWidgetDisplay =
+              const Value.absent()}) =>
       TransactionWallet(
         walletPk: walletPk ?? this.walletPk,
         name: name ?? this.name,
@@ -292,6 +332,9 @@ class TransactionWallet extends DataClass
         order: order ?? this.order,
         currency: currency.present ? currency.value : this.currency,
         decimals: decimals ?? this.decimals,
+        homePageWidgetDisplay: homePageWidgetDisplay.present
+            ? homePageWidgetDisplay.value
+            : this.homePageWidgetDisplay,
       );
   @override
   String toString() {
@@ -304,14 +347,15 @@ class TransactionWallet extends DataClass
           ..write('dateTimeModified: $dateTimeModified, ')
           ..write('order: $order, ')
           ..write('currency: $currency, ')
-          ..write('decimals: $decimals')
+          ..write('decimals: $decimals, ')
+          ..write('homePageWidgetDisplay: $homePageWidgetDisplay')
           ..write(')'))
         .toString();
   }
 
   @override
   int get hashCode => Object.hash(walletPk, name, colour, iconName, dateCreated,
-      dateTimeModified, order, currency, decimals);
+      dateTimeModified, order, currency, decimals, homePageWidgetDisplay);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -324,7 +368,8 @@ class TransactionWallet extends DataClass
           other.dateTimeModified == this.dateTimeModified &&
           other.order == this.order &&
           other.currency == this.currency &&
-          other.decimals == this.decimals);
+          other.decimals == this.decimals &&
+          other.homePageWidgetDisplay == this.homePageWidgetDisplay);
 }
 
 class WalletsCompanion extends UpdateCompanion<TransactionWallet> {
@@ -337,6 +382,7 @@ class WalletsCompanion extends UpdateCompanion<TransactionWallet> {
   final Value<int> order;
   final Value<String?> currency;
   final Value<int> decimals;
+  final Value<List<HomePageWidgetDisplay>?> homePageWidgetDisplay;
   final Value<int> rowid;
   const WalletsCompanion({
     this.walletPk = const Value.absent(),
@@ -348,6 +394,7 @@ class WalletsCompanion extends UpdateCompanion<TransactionWallet> {
     this.order = const Value.absent(),
     this.currency = const Value.absent(),
     this.decimals = const Value.absent(),
+    this.homePageWidgetDisplay = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   WalletsCompanion.insert({
@@ -360,6 +407,7 @@ class WalletsCompanion extends UpdateCompanion<TransactionWallet> {
     required int order,
     this.currency = const Value.absent(),
     this.decimals = const Value.absent(),
+    this.homePageWidgetDisplay = const Value.absent(),
     this.rowid = const Value.absent(),
   })  : name = Value(name),
         order = Value(order);
@@ -373,6 +421,7 @@ class WalletsCompanion extends UpdateCompanion<TransactionWallet> {
     Expression<int>? order,
     Expression<String>? currency,
     Expression<int>? decimals,
+    Expression<String>? homePageWidgetDisplay,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -385,6 +434,8 @@ class WalletsCompanion extends UpdateCompanion<TransactionWallet> {
       if (order != null) 'order': order,
       if (currency != null) 'currency': currency,
       if (decimals != null) 'decimals': decimals,
+      if (homePageWidgetDisplay != null)
+        'home_page_widget_display': homePageWidgetDisplay,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -399,6 +450,7 @@ class WalletsCompanion extends UpdateCompanion<TransactionWallet> {
       Value<int>? order,
       Value<String?>? currency,
       Value<int>? decimals,
+      Value<List<HomePageWidgetDisplay>?>? homePageWidgetDisplay,
       Value<int>? rowid}) {
     return WalletsCompanion(
       walletPk: walletPk ?? this.walletPk,
@@ -410,6 +462,8 @@ class WalletsCompanion extends UpdateCompanion<TransactionWallet> {
       order: order ?? this.order,
       currency: currency ?? this.currency,
       decimals: decimals ?? this.decimals,
+      homePageWidgetDisplay:
+          homePageWidgetDisplay ?? this.homePageWidgetDisplay,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -444,6 +498,11 @@ class WalletsCompanion extends UpdateCompanion<TransactionWallet> {
     if (decimals.present) {
       map['decimals'] = Variable<int>(decimals.value);
     }
+    if (homePageWidgetDisplay.present) {
+      final converter = $WalletsTable.$converterhomePageWidgetDisplayn;
+      map['home_page_widget_display'] =
+          Variable<String>(converter.toSql(homePageWidgetDisplay.value));
+    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -462,6 +521,7 @@ class WalletsCompanion extends UpdateCompanion<TransactionWallet> {
           ..write('order: $order, ')
           ..write('currency: $currency, ')
           ..write('decimals: $decimals, ')
+          ..write('homePageWidgetDisplay: $homePageWidgetDisplay, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -545,6 +605,15 @@ class $CategoriesTable extends Categories
       GeneratedColumn<int>('method_added', aliasedName, true,
               type: DriftSqlType.int, requiredDuringInsert: false)
           .withConverter<MethodAdded?>($CategoriesTable.$convertermethodAddedn);
+  static const VerificationMeta _subCategoryFksMeta =
+      const VerificationMeta('subCategoryFks');
+  @override
+  late final GeneratedColumnWithTypeConverter<List<String>?, String>
+      subCategoryFks = GeneratedColumn<String>(
+              'sub_category_fks', aliasedName, true,
+              type: DriftSqlType.string, requiredDuringInsert: false)
+          .withConverter<List<String>?>(
+              $CategoriesTable.$convertersubCategoryFksn);
   @override
   List<GeneratedColumn> get $columns => [
         categoryPk,
@@ -556,7 +625,8 @@ class $CategoriesTable extends Categories
         dateTimeModified,
         order,
         income,
-        methodAdded
+        methodAdded,
+        subCategoryFks
       ];
   @override
   String get aliasedName => _alias ?? 'categories';
@@ -617,6 +687,7 @@ class $CategoriesTable extends Categories
           income.isAcceptableOrUnknown(data['income']!, _incomeMeta));
     }
     context.handle(_methodAddedMeta, const VerificationResult.success());
+    context.handle(_subCategoryFksMeta, const VerificationResult.success());
     return context;
   }
 
@@ -647,6 +718,9 @@ class $CategoriesTable extends Categories
       methodAdded: $CategoriesTable.$convertermethodAddedn.fromSql(
           attachedDatabase.typeMapping
               .read(DriftSqlType.int, data['${effectivePrefix}method_added'])),
+      subCategoryFks: $CategoriesTable.$convertersubCategoryFksn.fromSql(
+          attachedDatabase.typeMapping.read(
+              DriftSqlType.string, data['${effectivePrefix}sub_category_fks'])),
     );
   }
 
@@ -659,6 +733,10 @@ class $CategoriesTable extends Categories
       const EnumIndexConverter<MethodAdded>(MethodAdded.values);
   static JsonTypeConverter2<MethodAdded?, int?, int?> $convertermethodAddedn =
       JsonTypeConverter2.asNullable($convertermethodAdded);
+  static TypeConverter<List<String>, String> $convertersubCategoryFks =
+      const StringListInColumnConverter();
+  static TypeConverter<List<String>?, String?> $convertersubCategoryFksn =
+      NullAwareTypeConverter.wrap($convertersubCategoryFks);
 }
 
 class TransactionCategory extends DataClass
@@ -673,6 +751,7 @@ class TransactionCategory extends DataClass
   final int order;
   final bool income;
   final MethodAdded? methodAdded;
+  final List<String>? subCategoryFks;
   const TransactionCategory(
       {required this.categoryPk,
       required this.name,
@@ -683,7 +762,8 @@ class TransactionCategory extends DataClass
       this.dateTimeModified,
       required this.order,
       required this.income,
-      this.methodAdded});
+      this.methodAdded,
+      this.subCategoryFks});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -707,6 +787,11 @@ class TransactionCategory extends DataClass
     if (!nullToAbsent || methodAdded != null) {
       final converter = $CategoriesTable.$convertermethodAddedn;
       map['method_added'] = Variable<int>(converter.toSql(methodAdded));
+    }
+    if (!nullToAbsent || subCategoryFks != null) {
+      final converter = $CategoriesTable.$convertersubCategoryFksn;
+      map['sub_category_fks'] =
+          Variable<String>(converter.toSql(subCategoryFks));
     }
     return map;
   }
@@ -732,6 +817,9 @@ class TransactionCategory extends DataClass
       methodAdded: methodAdded == null && nullToAbsent
           ? const Value.absent()
           : Value(methodAdded),
+      subCategoryFks: subCategoryFks == null && nullToAbsent
+          ? const Value.absent()
+          : Value(subCategoryFks),
     );
   }
 
@@ -751,6 +839,8 @@ class TransactionCategory extends DataClass
       income: serializer.fromJson<bool>(json['income']),
       methodAdded: $CategoriesTable.$convertermethodAddedn
           .fromJson(serializer.fromJson<int?>(json['methodAdded'])),
+      subCategoryFks:
+          serializer.fromJson<List<String>?>(json['subCategoryFks']),
     );
   }
   @override
@@ -768,6 +858,7 @@ class TransactionCategory extends DataClass
       'income': serializer.toJson<bool>(income),
       'methodAdded': serializer.toJson<int?>(
           $CategoriesTable.$convertermethodAddedn.toJson(methodAdded)),
+      'subCategoryFks': serializer.toJson<List<String>?>(subCategoryFks),
     };
   }
 
@@ -781,7 +872,8 @@ class TransactionCategory extends DataClass
           Value<DateTime?> dateTimeModified = const Value.absent(),
           int? order,
           bool? income,
-          Value<MethodAdded?> methodAdded = const Value.absent()}) =>
+          Value<MethodAdded?> methodAdded = const Value.absent(),
+          Value<List<String>?> subCategoryFks = const Value.absent()}) =>
       TransactionCategory(
         categoryPk: categoryPk ?? this.categoryPk,
         name: name ?? this.name,
@@ -796,6 +888,8 @@ class TransactionCategory extends DataClass
         order: order ?? this.order,
         income: income ?? this.income,
         methodAdded: methodAdded.present ? methodAdded.value : this.methodAdded,
+        subCategoryFks:
+            subCategoryFks.present ? subCategoryFks.value : this.subCategoryFks,
       );
   @override
   String toString() {
@@ -809,14 +903,25 @@ class TransactionCategory extends DataClass
           ..write('dateTimeModified: $dateTimeModified, ')
           ..write('order: $order, ')
           ..write('income: $income, ')
-          ..write('methodAdded: $methodAdded')
+          ..write('methodAdded: $methodAdded, ')
+          ..write('subCategoryFks: $subCategoryFks')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(categoryPk, name, colour, iconName,
-      emojiIconName, dateCreated, dateTimeModified, order, income, methodAdded);
+  int get hashCode => Object.hash(
+      categoryPk,
+      name,
+      colour,
+      iconName,
+      emojiIconName,
+      dateCreated,
+      dateTimeModified,
+      order,
+      income,
+      methodAdded,
+      subCategoryFks);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -830,7 +935,8 @@ class TransactionCategory extends DataClass
           other.dateTimeModified == this.dateTimeModified &&
           other.order == this.order &&
           other.income == this.income &&
-          other.methodAdded == this.methodAdded);
+          other.methodAdded == this.methodAdded &&
+          other.subCategoryFks == this.subCategoryFks);
 }
 
 class CategoriesCompanion extends UpdateCompanion<TransactionCategory> {
@@ -844,6 +950,7 @@ class CategoriesCompanion extends UpdateCompanion<TransactionCategory> {
   final Value<int> order;
   final Value<bool> income;
   final Value<MethodAdded?> methodAdded;
+  final Value<List<String>?> subCategoryFks;
   final Value<int> rowid;
   const CategoriesCompanion({
     this.categoryPk = const Value.absent(),
@@ -856,6 +963,7 @@ class CategoriesCompanion extends UpdateCompanion<TransactionCategory> {
     this.order = const Value.absent(),
     this.income = const Value.absent(),
     this.methodAdded = const Value.absent(),
+    this.subCategoryFks = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   CategoriesCompanion.insert({
@@ -869,6 +977,7 @@ class CategoriesCompanion extends UpdateCompanion<TransactionCategory> {
     required int order,
     this.income = const Value.absent(),
     this.methodAdded = const Value.absent(),
+    this.subCategoryFks = const Value.absent(),
     this.rowid = const Value.absent(),
   })  : name = Value(name),
         order = Value(order);
@@ -883,6 +992,7 @@ class CategoriesCompanion extends UpdateCompanion<TransactionCategory> {
     Expression<int>? order,
     Expression<bool>? income,
     Expression<int>? methodAdded,
+    Expression<String>? subCategoryFks,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -896,6 +1006,7 @@ class CategoriesCompanion extends UpdateCompanion<TransactionCategory> {
       if (order != null) 'order': order,
       if (income != null) 'income': income,
       if (methodAdded != null) 'method_added': methodAdded,
+      if (subCategoryFks != null) 'sub_category_fks': subCategoryFks,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -911,6 +1022,7 @@ class CategoriesCompanion extends UpdateCompanion<TransactionCategory> {
       Value<int>? order,
       Value<bool>? income,
       Value<MethodAdded?>? methodAdded,
+      Value<List<String>?>? subCategoryFks,
       Value<int>? rowid}) {
     return CategoriesCompanion(
       categoryPk: categoryPk ?? this.categoryPk,
@@ -923,6 +1035,7 @@ class CategoriesCompanion extends UpdateCompanion<TransactionCategory> {
       order: order ?? this.order,
       income: income ?? this.income,
       methodAdded: methodAdded ?? this.methodAdded,
+      subCategoryFks: subCategoryFks ?? this.subCategoryFks,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -961,6 +1074,11 @@ class CategoriesCompanion extends UpdateCompanion<TransactionCategory> {
       final converter = $CategoriesTable.$convertermethodAddedn;
       map['method_added'] = Variable<int>(converter.toSql(methodAdded.value));
     }
+    if (subCategoryFks.present) {
+      final converter = $CategoriesTable.$convertersubCategoryFksn;
+      map['sub_category_fks'] =
+          Variable<String>(converter.toSql(subCategoryFks.value));
+    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -980,6 +1098,7 @@ class CategoriesCompanion extends UpdateCompanion<TransactionCategory> {
           ..write('order: $order, ')
           ..write('income: $income, ')
           ..write('methodAdded: $methodAdded, ')
+          ..write('subCategoryFks: $subCategoryFks, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();

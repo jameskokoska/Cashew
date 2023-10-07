@@ -727,5 +727,12 @@
   "select-backup-file-description": "Velg din backup.sql -fil.",
   "database-corrupted": "Databasen ødelagt",
   "database-corrupted-description": "Databasen din er ødelagt. Du har kanskje importert feil fil.",
-  "import-backup": "Importer sikkerhetskopi"
+  "import-backup": "Importer sikkerhetskopi",
+  "view-previous-budget-periods": "Se tidligere budsjettperioder",
+  "current-period": "Nåværende periode",
+  "set-spending-goals": "Sett kategori Utgiftsmål",
+  "tap-for-custom-exchange-rate": "Trykk på en oppføring for å angi en tilpasset valutakurs",
+  "set-currency": "Sett valuta",
+  "accounts-list": "Kontoliste",
+  "select-accounts": "Velg kontoer"
 }

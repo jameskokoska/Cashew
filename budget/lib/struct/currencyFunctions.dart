@@ -42,9 +42,6 @@ double? amountRatioToPrimaryCurrency(
   if (walletCurrency == null) {
     return 1;
   }
-  if (appStateSettings["cachedCurrencyExchange"][walletCurrency] == null) {
-    return 1;
-  }
   if (allWallets.indexedByPk[appStateSettings["selectedWalletPk"]]?.currency ==
       walletCurrency) {
     return 1;
@@ -53,28 +50,19 @@ double? amountRatioToPrimaryCurrency(
     return 1;
   }
 
-  double exchangeRateFromUSDToTarget =
-      appStateSettings["cachedCurrencyExchange"][allWallets
-              .indexedByPk[appStateSettings["selectedWalletPk"]]?.currency]
-          .toDouble();
+  double exchangeRateFromUSDToTarget = getCurrencyExchangeRate(
+      allWallets.indexedByPk[appStateSettings["selectedWalletPk"]]?.currency);
   double exchangeRateFromCurrentToUSD =
-      1 / appStateSettings["cachedCurrencyExchange"][walletCurrency].toDouble();
+      1 / getCurrencyExchangeRate(walletCurrency);
   return exchangeRateFromUSDToTarget * exchangeRateFromCurrentToUSD;
 }
 
 double? amountRatioFromToCurrency(
     String walletCurrencyBefore, String walletCurrencyAfter) {
-  if (appStateSettings["cachedCurrencyExchange"][walletCurrencyBefore] ==
-          null ||
-      appStateSettings["cachedCurrencyExchange"][walletCurrencyAfter] == null) {
-    return null;
-  }
   double exchangeRateFromUSDToTarget =
-      appStateSettings["cachedCurrencyExchange"][walletCurrencyAfter]
-          .toDouble();
-  double exchangeRateFromCurrentToUSD = 1 /
-      appStateSettings["cachedCurrencyExchange"][walletCurrencyBefore]
-          .toDouble();
+      getCurrencyExchangeRate(walletCurrencyAfter);
+  double exchangeRateFromCurrentToUSD =
+      1 / getCurrencyExchangeRate(walletCurrencyBefore);
   return exchangeRateFromUSDToTarget * exchangeRateFromCurrentToUSD;
 }
 
@@ -89,4 +77,15 @@ String getCurrencyString(AllWallets allWallets, {String? currencyKey}) {
       : selectedWalletCurrency == null
           ? ""
           : (currenciesJSON[selectedWalletCurrency]?["Symbol"] ?? "");
+}
+
+double getCurrencyExchangeRate(String? currencyKey) {
+  if (currencyKey == null || currencyKey == "") return 1;
+  if (appStateSettings["customCurrencyAmounts"]?[currencyKey] != null) {
+    return appStateSettings["customCurrencyAmounts"][currencyKey].toDouble();
+  } else if (appStateSettings["cachedCurrencyExchange"]?[currencyKey] != null) {
+    return appStateSettings["cachedCurrencyExchange"][currencyKey].toDouble();
+  } else {
+    return 1;
+  }
 }

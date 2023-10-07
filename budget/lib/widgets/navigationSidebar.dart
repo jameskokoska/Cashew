@@ -1,6 +1,7 @@
 import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
 import 'package:budget/pages/editCategoriesPage.dart';
+import 'package:budget/pages/exchangeRatesPage.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/accountAndBackup.dart';
 import 'package:budget/widgets/animatedExpanded.dart';
@@ -52,6 +53,7 @@ class NavigationSidebarState extends State<NavigationSidebar> {
       selectedIndex = index;
     });
     FocusScope.of(context).unfocus();
+    checkIfExchangeRateChangeAfter();
   }
 
   @override
@@ -380,8 +382,8 @@ class SidebarClock extends StatelessWidget {
                       TextFont(
                         textColor: getColor(context, "black").withOpacity(0.5),
                         fontSize: 18,
-                        text: getWordedDateShortMore(DateTime.now(),
-                            includeYear: true),
+                        text: DateFormat.yMMMMd(context.locale.toString())
+                            .format(now),
                       ),
                     ],
                   );
@@ -461,12 +463,14 @@ class _SyncButtonState extends State<SyncButton> {
                               builder: (context) {
                                 DateTime? timeLastSynced = null;
                                 try {
-                                  timeLastSynced = DateTime.parse(
+                                  if (appStateSettings["lastSynced"] == null)
+                                    throw ("lastSynced is null!");
+                                  timeLastSynced = DateTime.tryParse(
                                     appStateSettings["lastSynced"],
                                   );
                                 } catch (e) {
-                                  print("Error parsing time last synced: " +
-                                      e.toString());
+                                  // print("Error parsing time last synced: " +
+                                  //     e.toString());
                                 }
                                 return TextFont(
                                   textAlign: TextAlign.left,

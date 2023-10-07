@@ -35,6 +35,7 @@ class CategoryEntry extends StatelessWidget {
     this.isAbsoluteSpendingLimit = false,
     this.budgetLimit = 0,
     this.overSpentColor,
+    this.todayPercent,
   }) : super(key: key);
 
   final TransactionCategory category;
@@ -53,6 +54,7 @@ class CategoryEntry extends StatelessWidget {
   final bool isAbsoluteSpendingLimit;
   final double budgetLimit;
   final Color? overSpentColor;
+  final double? todayPercent;
 
   @override
   Widget build(BuildContext context) {
@@ -232,8 +234,14 @@ class CategoryEntry extends StatelessWidget {
                                                 ? getColor(context, "white")
                                                 : getColor(context,
                                                     "lightDarkAccentHeavy"),
-                                    color: HexColor(category.colour),
+                                    color: HexColor(category.colour,
+                                        defaultColor: Theme.of(context)
+                                            .colorScheme
+                                            .primary),
                                     progress: percentSpent,
+                                    dotProgress: todayPercent == null
+                                        ? null
+                                        : (todayPercent ?? 0) / 100,
                                   ),
                                 )
                               : TextFont(
@@ -348,6 +356,12 @@ class CategoryIconPercent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Color backgroundColor = dynamicPastel(
+        context,
+        HexColor(category.colour,
+            defaultColor: Theme.of(context).colorScheme.primary),
+        amountLight: 0.55,
+        amountDark: 0.35);
     return Stack(alignment: Alignment.center, children: [
       // Padding(
       //   padding: EdgeInsets.all(insetPadding / 2),
@@ -366,7 +380,7 @@ class CategoryIconPercent extends StatelessWidget {
           ? Container(
               decoration: BoxDecoration(
                 color: Theme.of(context).brightness == Brightness.light
-                    ? HexColor(category.colour).withOpacity(0.5)
+                    ? backgroundColor
                     : Colors.transparent,
                 shape: BoxShape.circle,
               ),
@@ -380,9 +394,25 @@ class CategoryIconPercent extends StatelessWidget {
             )
           : SizedBox.shrink(),
       category.emojiIconName != null
-          ? EmojiIcon(
-              emojiIconName: category.emojiIconName,
-              size: size * 0.92,
+          ? Stack(
+              alignment: Alignment.center,
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).brightness == Brightness.light
+                        ? backgroundColor
+                        : Colors.transparent,
+                    shape: BoxShape.circle,
+                  ),
+                  height: size + insetPadding,
+                  width: size + insetPadding,
+                  padding: EdgeInsets.all(10),
+                ),
+                EmojiIcon(
+                  emojiIconName: category.emojiIconName,
+                  size: size * 0.92,
+                ),
+              ],
             )
           : SizedBox.shrink(),
 
@@ -416,36 +446,62 @@ class ThinProgress extends StatelessWidget {
   final Color color;
   final Color backgroundColor;
   final double progress;
+  final double? dotProgress;
 
-  ThinProgress(
-      {required this.color,
-      required this.backgroundColor,
-      required this.progress});
+  ThinProgress({
+    required this.color,
+    required this.backgroundColor,
+    required this.progress,
+    this.dotProgress,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(100),
-      child: Stack(
-        children: [
-          Container(
-            color: backgroundColor,
-            height: 5,
-          ),
-          AnimatedFractionallySizedBox(
-            duration: Duration(milliseconds: 1000),
-            curve: Curves.easeInOutCubicEmphasized,
-            child: ClipRRect(
+    return LayoutBuilder(
+      builder: (_, boxConstraints) {
+        double x = boxConstraints.maxWidth * (dotProgress ?? 0);
+        return Stack(
+          clipBehavior: Clip.none,
+          children: [
+            ClipRRect(
               borderRadius: BorderRadius.circular(100),
-              child: Container(
-                color: color,
-                height: 5,
+              child: Stack(
+                children: [
+                  Container(
+                    color: backgroundColor,
+                    height: 5,
+                  ),
+                  AnimatedFractionallySizedBox(
+                    duration: Duration(milliseconds: 1000),
+                    curve: Curves.easeInOutCubicEmphasized,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(100),
+                      child: Container(
+                        color: color,
+                        height: 5,
+                      ),
+                    ),
+                    widthFactor: progress,
+                  ),
+                ],
               ),
             ),
-            widthFactor: progress,
-          ),
-        ],
-      ),
+            if (dotProgress != null)
+              Positioned(
+                left: x - 5,
+                top: -3 / 2,
+                child: Container(
+                  height: 8,
+                  width: 4,
+                  decoration: BoxDecoration(
+                    color: color,
+                    borderRadius: BorderRadius.circular(100),
+                  ),
+                ),
+              ),
+          ],
+        );
+      },
     );
   }
 }

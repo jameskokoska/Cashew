@@ -7,6 +7,7 @@ import 'package:budget/pages/homePage/homePageLineGraph.dart';
 import 'package:budget/pages/homePage/homePageNetWorth.dart';
 import 'package:budget/pages/homePage/homePageObjectives.dart';
 import 'package:budget/pages/homePage/homePagePieChart.dart';
+import 'package:budget/pages/homePage/homePageWalletList.dart';
 import 'package:budget/pages/homePage/homePageWalletSwitcher.dart';
 import 'package:budget/pages/homePage/homeTransactionSlivers.dart';
 import 'package:budget/pages/homePage/homeUpcomingTransactionSlivers.dart';
@@ -121,6 +122,7 @@ class HomePageState extends State<HomePage>
 
     Map<String, Widget> homePageSections = {
       "wallets": HomePageWalletSwitcher(),
+      "walletsList": HomePageWalletList(),
       "budgets": HomePageBudgets(),
       "overdueUpcoming": HomePageUpcomingTransactions(),
       "allSpendingSummary": HomePageAllSpendingSummary(),
@@ -134,10 +136,13 @@ class HomePageState extends State<HomePage>
       "heatMap": HomePageHeatMap(),
     };
     bool showWelcomeBanner =
-        appStateSettings["showUsernameWelcomeBanner"] != false ||
-            enableDoubleColumn(context);
-    bool useSmallBanner =
-        showWelcomeBanner == false && enableDoubleColumn(context) == false;
+        appStateSettings["showUsernameWelcomeBanner"] != false;
+    bool useSmallBanner = showWelcomeBanner == false;
+
+    List<String> homePageSectionsAboveInFullScreen = [
+      "wallets",
+      "budgets",
+    ];
     return SwipeToSelectTransactions(
       listID: "0",
       child: SharedBudgetRefresh(
@@ -162,17 +167,18 @@ class HomePageState extends State<HomePage>
                                 showUsername: showUsername,
                               )
                             : SizedBox.shrink(),
-                        enableDoubleColumn(context)
-                            ? SizedBox(height: 78)
-                            : IconButton(
-                                padding: EdgeInsets.all(15),
-                                onPressed: () {
-                                  pushRoute(context, EditHomePage());
-                                },
-                                icon: Icon(appStateSettings["outlinedIcons"]
-                                    ? Icons.more_vert_outlined
-                                    : Icons.more_vert_rounded),
-                              ),
+                        Tooltip(
+                          message: "edit-home".tr(),
+                          child: IconButton(
+                            padding: EdgeInsets.all(15),
+                            onPressed: () {
+                              pushRoute(context, EditHomePage());
+                            },
+                            icon: Icon(appStateSettings["outlinedIcons"]
+                                ? Icons.more_vert_outlined
+                                : Icons.more_vert_rounded),
+                          ),
+                        ),
                       ],
                     ),
                     // Wipe all remaining pixels off - sometimes graphics artifacts are left behind
@@ -218,12 +224,18 @@ class HomePageState extends State<HomePage>
                             ? SizedBox.shrink()
                             : homePageSections[sectionKey] ?? SizedBox.shrink()
                     ],
-                    enableDoubleColumn(context) == false
-                        ? SizedBox.shrink()
-                        : HomePageWalletSwitcher(),
-                    enableDoubleColumn(context) == false
-                        ? SizedBox.shrink()
-                        : HomePageBudgets(),
+                    // Full screen top section
+                    ...[
+                      for (String sectionKey
+                          in appStateSettings["homePageOrder"])
+                        enableDoubleColumn(context) == false ||
+                                homePageSectionsAboveInFullScreen
+                                        .contains(sectionKey) ==
+                                    false
+                            ? SizedBox.shrink()
+                            : homePageSections[sectionKey] ?? SizedBox.shrink()
+                    ],
+                    // Full screen bottom split section
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -231,40 +243,15 @@ class HomePageState extends State<HomePage>
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              // enableDoubleColumn(context) == false
-                              //     ? SizedBox.shrink()
-                              //     : HomePageAllSpendingSummary(),
-                              // enableDoubleColumn(context) == false
-                              //     ? SizedBox.shrink()
-                              //     : HomePageNetWorth(),
-                              // enableDoubleColumn(context) == false
-                              //     ? SizedBox.shrink()
-                              //     : HomePagePieChart(),
-                              enableDoubleColumn(context) == false
-                                  ? SizedBox.shrink()
-                                  : LinearGradientFadedEdges(
-                                      enableLeft: false,
-                                      enableBottom: false,
-                                      enableTop: false,
-                                      child: ClipRRect(
-                                        clipper: RightSideClipper(),
-                                        child: HomePageObjectives(),
-                                      ),
-                                    ),
-                              enableDoubleColumn(context) == false
-                                  ? SizedBox.shrink()
-                                  : HomePageLineGraph(
-                                      selectedSlidingSelector:
-                                          selectedSlidingSelector),
-                              enableDoubleColumn(context) == false
-                                  ? SizedBox.shrink()
-                                  : HomePageUpcomingTransactions(),
-                              enableDoubleColumn(context) == false
-                                  ? SizedBox.shrink()
-                                  : HomePageCreditDebts(),
-                              enableDoubleColumn(context) == false
-                                  ? SizedBox.shrink()
-                                  : HomePageHeatMap(),
+                              for (String sectionKey
+                                  in appStateSettings["homePageOrder"])
+                                enableDoubleColumn(context) == false ||
+                                        homePageSectionsAboveInFullScreen
+                                                .contains(sectionKey) ==
+                                            true
+                                    ? SizedBox.shrink()
+                                    : homePageSections[sectionKey] ??
+                                        SizedBox.shrink(),
                             ],
                           ),
                         ),

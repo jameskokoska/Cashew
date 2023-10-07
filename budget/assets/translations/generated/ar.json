@@ -727,5 +727,12 @@
   "select-backup-file-description": "يرجى تحديد ملف backup.sql الخاص بك.",
   "database-corrupted": "قاعدة البيانات تالفة",
   "database-corrupted-description": "قاعدة البيانات الخاصة بك تالفة. قد تكون قد استوردت الملف الخطأ.",
-  "import-backup": "استيراد النسخ الاحتياطي"
+  "import-backup": "استيراد النسخ الاحتياطي",
+  "view-previous-budget-periods": "عرض فترات الميزانية السابقة",
+  "current-period": "الفترة الحالية",
+  "set-spending-goals": "حدد أهداف الإنفاق في الفئة",
+  "tap-for-custom-exchange-rate": "اضغط على إدخال لتعيين سعر صرف مخصص",
+  "set-currency": "تعيين العملة",
+  "accounts-list": "قائمة الحسابات",
+  "select-accounts": "حدد الحسابات"
 }

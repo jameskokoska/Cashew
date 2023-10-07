@@ -727,5 +727,12 @@
   "select-backup-file-description": "Vă rugăm să selectați fișierul Backup.SQL.",
   "database-corrupted": "Baza de date coruptă",
   "database-corrupted-description": "Baza de date este coruptă. Este posibil să fi importat fișierul greșit.",
-  "import-backup": "Import backup"
+  "import-backup": "Import backup",
+  "view-previous-budget-periods": "Vizualizați perioadele bugetare anterioare",
+  "current-period": "Perioada curenta",
+  "set-spending-goals": "Stabiliți obiective de cheltuieli categoriei",
+  "tap-for-custom-exchange-rate": "Atingeți o intrare pentru a seta un curs de schimb personalizat",
+  "set-currency": "Setați moneda",
+  "accounts-list": "Lista de conturi",
+  "select-accounts": "Selectați conturi"
 }

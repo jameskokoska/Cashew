@@ -9,6 +9,7 @@ import 'package:budget/pages/sharedBudgetSettings.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/struct/shareBudget.dart';
+import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/countNumber.dart';
 import 'package:budget/widgets/dropdownSelect.dart';
 import 'package:budget/widgets/globalSnackBar.dart';
@@ -576,18 +577,18 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                       );
                     },
                   ),
-                DropdownItemMenu(
-                  id: "pin-to-home",
-                  label: selectedPin
-                      ? "pinned-to-homepage".tr()
-                      : "unpinned-to-homepage".tr(),
-                  icon: selectedPin
-                      ? Icons.push_pin_rounded
-                      : Icons.push_pin_outlined,
-                  action: () {
-                    setSelectedPin();
-                  },
-                ),
+                // DropdownItemMenu(
+                //   id: "pin-to-home",
+                //   label: selectedPin
+                //       ? "pinned-to-homepage".tr()
+                //       : "unpinned-to-homepage".tr(),
+                //   icon: selectedPin
+                //       ? Icons.push_pin_rounded
+                //       : Icons.push_pin_outlined,
+                //   action: () {
+                //     setSelectedPin();
+                //   },
+                // ),
                 if (widget.budget != null)
                   DropdownItemMenu(
                     id: "spending-goals",
@@ -725,8 +726,101 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                     }
                   },
                 ),
+                AnimatedExpanded(
+                  expand: enumRecurrence[selectedRecurrence] !=
+                      BudgetReoccurence.custom,
+                  child: Builder(builder: (context) {
+                    DateTimeRange budgetRange = getBudgetDate(
+                      Budget(
+                        startDate: selectedStartDate,
+                        periodLength: selectedPeriodLength,
+                        reoccurrence: enumRecurrence[selectedRecurrence],
+                        budgetPk: "-1",
+                        name: "",
+                        amount: 0,
+                        endDate: DateTime.now(),
+                        addedTransactionsOnly: false,
+                        dateCreated: DateTime.now(),
+                        pinned: false,
+                        order: -1,
+                        walletFk: "",
+                        isAbsoluteSpendingLimit: false,
+                      ),
+                      DateTime.now(),
+                    );
+                    String text = "current-period".tr() +
+                        "\n" +
+                        getWordedDateShortMore(budgetRange.start) +
+                        " - " +
+                        getWordedDateShortMore(budgetRange.end);
+                    return Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Flexible(
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                              bottom: 10,
+                              top: 5,
+                            ),
+                            child: AnimatedSizeSwitcher(
+                              child: TextFont(
+                                key: ValueKey(text),
+                                text: text,
+                                fontSize: 14.5,
+                                maxLines: 4,
+                                textColor: getColor(context, "textLight"),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    );
+                  }),
+                ),
                 SizedBox(height: 10),
               ],
+            ),
+            SliverToBoxAdapter(
+              child: widget.budget == null
+                  ? SizedBox.shrink()
+                  : Padding(
+                      padding: const EdgeInsets.only(
+                        left: 20,
+                        right: 20,
+                        bottom: 15,
+                      ),
+                      child: Button(
+                        flexibleLayout: true,
+                        icon: appStateSettings["outlinedIcons"]
+                            ? Icons.fact_check_outlined
+                            : Icons.fact_check_rounded,
+                        label: "set-spending-goals".tr(),
+                        onTap: () async {
+                          Budget budget = await createBudget();
+                          pushRoute(
+                            context,
+                            StreamBuilder<Budget>(
+                              stream:
+                                  database.getBudget(widget.budget!.budgetPk),
+                              builder: (context, snapshot) {
+                                if (snapshot.data == null)
+                                  return SizedBox.shrink();
+                                return EditBudgetLimitsPage(
+                                  budget: budget,
+                                  currentIsAbsoluteSpendingLimit:
+                                      snapshot.data!.isAbsoluteSpendingLimit,
+                                );
+                              },
+                            ),
+                          );
+                        },
+                        color: Theme.of(context).colorScheme.secondaryContainer,
+                        textColor:
+                            Theme.of(context).colorScheme.onSecondaryContainer,
+                      ),
+                    ),
             ),
             SliverStickyLabelDivider(
               info: "select-color".tr(),

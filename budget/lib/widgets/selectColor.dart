@@ -173,16 +173,17 @@ class _SelectColorState extends State<SelectColor> {
                   enableBorderRadius: true,
                   title: "use-system-color".tr(),
                   onSwitched: (value) async {
+                    await updateSettings("accentSystemColor", value,
+                        updateGlobalState: true);
                     if (value == true) {
-                      updateSettings(
+                      // Need to set "accentSystemColor" to true before getAccentColorSystemString
+                      await updateSettings(
                           "accentColor", await getAccentColorSystemString(),
                           updateGlobalState: true);
                       generateColors();
                     } else {
                       widget.setSelectedColor!(selectedColor);
                     }
-                    updateSettings("accentSystemColor", value,
-                        updateGlobalState: true);
                     setState(() {
                       useSystemColor = value;
                     });

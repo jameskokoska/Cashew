@@ -727,5 +727,12 @@
   "select-backup-file-description": "Επιλέξτε το αρχείο backup.sql.",
   "database-corrupted": "Η βάση δεδομένων είναι κατεστραμμένη",
   "database-corrupted-description": "Η βάση δεδομένων σας είναι κατεστραμμένη. Μπορεί να έχετε εισαγάγει το λάθος αρχείο.",
-  "import-backup": "Εισαγωγή αντιγράφου ασφαλείας"
+  "import-backup": "Εισαγωγή αντιγράφου ασφαλείας",
+  "view-previous-budget-periods": "Προβολή προηγούμενων περιόδων προϋπολογισμού",
+  "current-period": "Τωρινή περίοδος",
+  "set-spending-goals": "Ορίστε στόχους δαπανών κατηγορίας",
+  "tap-for-custom-exchange-rate": "Πατήστε μια καταχώρηση για να ορίσετε μια προσαρμοσμένη συναλλαγματική ισοτιμία",
+  "set-currency": "Καθορισμένο νόμισμα",
+  "accounts-list": "Λίστα λογαριασμών",
+  "select-accounts": "Επιλέξτε λογαριασμούς"
 }

@@ -12,6 +12,8 @@ class OpenContainerNavigation extends StatelessWidget {
     this.borderRadius = 250,
     this.closedElevation,
     this.customBorderRadius,
+    this.onClosed,
+    this.onOpen,
   }) : super(key: key);
 
   final Widget openPage;
@@ -20,12 +22,16 @@ class OpenContainerNavigation extends StatelessWidget {
   final double borderRadius;
   final double? closedElevation;
   final BorderRadiusGeometry? customBorderRadius;
+  final VoidCallback? onClosed;
+  final VoidCallback? onOpen;
 
   @override
   Widget build(BuildContext context) {
     if (appStateSettings["batterySaver"] || appStateSettings["iOSNavigation"]) {
-      Widget child = button(() {
-        pushRoute(context, openPage);
+      Widget child = button(() async {
+        if (onOpen != null) onOpen!();
+        await pushRoute(context, openPage);
+        if (onClosed != null) onClosed!();
       });
       return ClipRRect(
         borderRadius: customBorderRadius ?? BorderRadius.circular(borderRadius),
@@ -36,6 +42,9 @@ class OpenContainerNavigation extends StatelessWidget {
       );
     }
     return OpenContainer(
+      onClosed: (_) async {
+        if (onClosed != null) onClosed!();
+      },
       transitionType: ContainerTransitionType.fade,
       openBuilder: (BuildContext context, VoidCallback _) {
         return openPage;
@@ -49,7 +58,10 @@ class OpenContainerNavigation extends StatelessWidget {
       closedColor: closedColor ?? Colors.transparent,
       openElevation: 0,
       closedBuilder: (BuildContext context, VoidCallback openContainer) {
-        return button(openContainer);
+        return button(() {
+          if (onOpen != null) onOpen!();
+          openContainer();
+        });
       },
       closedShape: RoundedRectangleBorder(
         borderRadius: customBorderRadius ??

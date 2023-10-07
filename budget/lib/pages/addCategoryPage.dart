@@ -425,6 +425,7 @@ class _AddCategoryPageState extends State<AddCategoryPage>
                 : Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: Button(
+                      flexibleLayout: true,
                       icon: appStateSettings["outlinedIcons"]
                           ? Icons.merge_outlined
                           : Icons.merge_rounded,
@@ -668,6 +669,9 @@ class AddButton extends StatelessWidget {
     this.height = 52,
     this.openPage,
     this.borderRadius = 15,
+    this.icon,
+    this.afterOpenPage,
+    this.onOpenPage,
   }) : super(key: key);
 
   final VoidCallback onTap;
@@ -676,6 +680,9 @@ class AddButton extends StatelessWidget {
   final double? height;
   final double borderRadius;
   final Widget? openPage;
+  final IconData? icon;
+  final Function? afterOpenPage;
+  final Function? onOpenPage;
 
   @override
   Widget build(BuildContext context) {
@@ -698,9 +705,10 @@ class AddButton extends StatelessWidget {
           height: height,
           child: Center(
             child: Icon(
-              appStateSettings["outlinedIcons"]
-                  ? Icons.add_outlined
-                  : Icons.add_rounded,
+              icon ??
+                  (appStateSettings["outlinedIcons"]
+                      ? Icons.add_outlined
+                      : Icons.add_rounded),
               size: 22,
               color: color,
             ),
@@ -721,6 +729,12 @@ class AddButton extends StatelessWidget {
             return getButton(openPage);
           },
           borderRadius: borderRadius,
+          onClosed: () {
+            if (afterOpenPage != null) afterOpenPage!();
+          },
+          onOpen: () {
+            if (onOpenPage != null) onOpenPage!();
+          },
         ),
       );
     }

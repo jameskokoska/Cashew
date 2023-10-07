@@ -727,5 +727,12 @@
   "select-backup-file-description": "Mangyaring piliin ang iyong backup.sql file.",
   "database-corrupted": "Nasira ang database",
   "database-corrupted-description": "Ang iyong database ay nasira. Maaaring na -import mo ang maling file.",
-  "import-backup": "I -import ang backup"
+  "import-backup": "I -import ang backup",
+  "view-previous-budget-periods": "Tingnan ang mga nakaraang panahon ng badyet",
+  "current-period": "Kasalukuyang Panahon",
+  "set-spending-goals": "Itakda ang mga layunin sa paggastos ng kategorya",
+  "tap-for-custom-exchange-rate": "Tapikin ang isang entry upang magtakda ng isang pasadyang rate ng palitan",
+  "set-currency": "Itakda ang pera",
+  "accounts-list": "Listahan ng mga account",
+  "select-accounts": "Piliin ang Mga Account"
 }

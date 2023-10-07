@@ -6,6 +6,7 @@ import 'package:budget/widgets/categoryIcon.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/pinWheelReveal.dart';
 import 'package:budget/widgets/textWidgets.dart';
+import 'package:budget/functions.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
@@ -221,22 +222,35 @@ class PieChartDisplayState extends State<PieChartDisplay> {
 
   List<PieChartSectionData> showingSections() {
     return List.generate(widget.data.length, (i) {
-      final isTouched = i == touchedIndex;
-      final radius = enableDoubleColumn(context) == false
+      final bool isTouched = i == touchedIndex;
+      final double radius = enableDoubleColumn(context) == false
           ? isTouched
               ? 106.0
               : 100.0
           : isTouched
               ? 146.0
               : 136.0;
-      final widgetScale = isTouched ? 1.3 : 1.0;
+      final double widgetScale = isTouched ? 1.3 : 1.0;
+      bool isTouchingSameColorSection = false;
+      if (nullIfIndexOutOfRange(widget.data, i - 1)?.category?.colour ==
+              widget.data[i].category.colour ||
+          nullIfIndexOutOfRange(widget.data, i + 1)?.category?.colour ==
+              widget.data[i].category.colour) {
+        isTouchingSameColorSection = true;
+      }
+      final Color color = dynamicPastel(
+        context,
+        HexColor(widget.data[i].category.colour,
+            defaultColor: Theme.of(context).colorScheme.primary),
+        amountLight: 0.3 +
+            (isTouchingSameColorSection && i % 3 == 0 ? 0.2 : 0) +
+            (isTouchingSameColorSection && i % 3 == 1 ? 0.35 : 0),
+        amountDark: 0.1 +
+            (isTouchingSameColorSection && i % 3 == 0 ? 0.2 : 0) +
+            (isTouchingSameColorSection && i % 3 == 1 ? 0.35 : 0),
+      );
       return PieChartSectionData(
-        color: dynamicPastel(
-            context,
-            HexColor(widget.data[i].category.colour,
-                defaultColor: Theme.of(context).colorScheme.primary),
-            amountLight: 0.3,
-            amountDark: 0.1),
+        color: color,
         value: widget.totalSpent == 0
             ? 0
             : (widget.data[i].total / widget.totalSpent).abs(),
@@ -246,14 +260,10 @@ class PieChartDisplayState extends State<PieChartDisplay> {
           percentLabelOnTop: widget.percentLabelOnTop,
           showLabels: i < showLabels,
           scale: widgetScale,
-          color: dynamicPastel(
-              context,
-              HexColor(widget.data[i].category.colour,
-                  defaultColor: Theme.of(context).colorScheme.primary),
-              amountLight: 0.3,
-              amountDark: 0.1),
+          color: color,
           iconName: widget.data[i].category.iconName ?? "",
-          categoryColor: HexColor(widget.data[i].category.colour),
+          categoryColor: HexColor(widget.data[i].category.colour,
+              defaultColor: Theme.of(context).colorScheme.primary),
           emojiIconName: widget.data[i].category.emojiIconName,
           percent: widget.totalSpent == 0
               ? 0
@@ -368,7 +378,8 @@ class _Badge extends StatelessWidget {
                 child: Container(
                   decoration: BoxDecoration(
                     color: Theme.of(context).brightness == Brightness.light
-                        ? categoryColor.withOpacity(0.5)
+                        ? dynamicPastel(context, categoryColor,
+                            amountLight: 0.55, amountDark: 0.35)
                         : Colors.transparent,
                     shape: BoxShape.circle,
                   ),

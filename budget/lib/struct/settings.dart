@@ -317,6 +317,9 @@ class TranslationsHelp extends StatelessWidget {
       onTap: () {
         openUrl('mailto:dapperappdeveloper@gmail.com');
       },
+      onLongPress: () {
+        copyToClipboard("dapperappdeveloper@gmail.com");
+      },
       color: backgroundColor ??
           Theme.of(context).colorScheme.secondaryContainer.withOpacity(0.7),
       borderRadius: getPlatform() == PlatformOS.isIOS ? 10 : 15,

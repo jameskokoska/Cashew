@@ -133,6 +133,8 @@ class _RatingPopupState extends State<RatingPopup> {
                 labelText: "email-optional".tr(),
                 padding: EdgeInsets.zero,
                 controller: _feedbackControllerEmail,
+                textCapitalization: TextCapitalization.none,
+                autocorrect: false,
               ),
             ),
           ),

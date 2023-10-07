@@ -727,5 +727,12 @@
   "select-backup-file-description": "Bitte wählen Sie Ihre Backup.sql -Datei aus.",
   "database-corrupted": "Datenbank beschädigt",
   "database-corrupted-description": "Ihre Datenbank ist beschädigt. Möglicherweise haben Sie die falsche Datei importiert.",
-  "import-backup": "Backup importieren"
+  "import-backup": "Backup importieren",
+  "view-previous-budget-periods": "Sehen Sie sich frühere Budgetperioden an",
+  "current-period": "Derzeitige Periode",
+  "set-spending-goals": "Setzen Sie die Kategorieausgabenziele",
+  "tap-for-custom-exchange-rate": "Tippen Sie auf einen Eintrag, um einen benutzerdefinierten Wechselkurs festzulegen",
+  "set-currency": "Währung festlegen",
+  "accounts-list": "Kontenliste",
+  "select-accounts": "Wählen Sie Konten"
 }

@@ -197,6 +197,15 @@ Color dynamicPastel(
   if (amountDark == null) {
     amountDark = amount;
   }
+  if (amountLight > 1) {
+    amountLight = 1;
+  }
+  if (amountDark > 1) {
+    amountDark = 1;
+  }
+  if (amount > 1) {
+    amount = 1;
+  }
   if (inverse) {
     if (Theme.of(context).brightness == Brightness.light) {
       return darkenPastel(color, amount: amountDark);
@@ -288,16 +297,34 @@ Future<String?> getAccentColorSystemString() async {
     SystemTheme.fallbackColor = Colors.blue;
     await SystemTheme.accentColor.load();
     Color accentColor = SystemTheme.accentColor.accent;
-    appStateSettings["accentColor"] = toHexString(accentColor);
+    if (accentColor.toString() == "Color(0xff80cbc4)") {
+      // A default cyan color returned from an unsupported accent color Samsung device
+      return null;
+    }
+    print("SYSTEM COLOR LOADED");
     return toHexString(accentColor);
   } else {
     return null;
   }
 }
 
+Future<bool> systemColorByDefault() async {
+  if (getPlatform() == PlatformOS.isAndroid) {
+    if (supportsSystemColor()) {
+      int? androidVersion = await getAndroidVersion();
+      print("Android version: " + androidVersion.toString());
+      if (androidVersion != null && androidVersion >= 12) {
+        return true;
+      }
+    }
+    return false;
+  }
+  return supportsSystemColor();
+}
+
 bool supportsSystemColor() {
   return defaultTargetPlatform.supportsAccentColor &&
-      kIsWeb == false &&
+      kIsWeb != true &&
       getPlatform() != PlatformOS.isIOS;
 }
 

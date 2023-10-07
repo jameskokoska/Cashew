@@ -727,5 +727,12 @@
   "select-backup-file-description": "Pilih file backup.sql Anda.",
   "database-corrupted": "Database rusak",
   "database-corrupted-description": "Basis data Anda rusak. Anda mungkin telah mengimpor file yang salah.",
-  "import-backup": "Impor cadangan"
+  "import-backup": "Impor cadangan",
+  "view-previous-budget-periods": "Lihat Periode Anggaran Sebelumnya",
+  "current-period": "Periode saat ini",
+  "set-spending-goals": "Tetapkan Tujuan Pengeluaran Kategori",
+  "tap-for-custom-exchange-rate": "Ketuk entri untuk mengatur nilai tukar khusus",
+  "set-currency": "Atur mata uang",
+  "accounts-list": "Daftar Akun",
+  "select-accounts": "Pilih akun"
 }

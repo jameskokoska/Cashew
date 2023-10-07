@@ -89,32 +89,35 @@ Future generatePreviewData() async {
       order: 0,
       currency: "usd",
       decimals: 2,
+      homePageWidgetDisplay: defaultWalletHomePageWidgetDisplay,
     ),
   );
   await database.createOrUpdateWallet(
     TransactionWallet(
       walletPk: "10",
       name: "Euros",
-      colour: null,
+      colour: "0xff66bb6a",
       iconName: null,
       dateCreated: DateTime.now(),
       dateTimeModified: null,
       order: 1,
       currency: "eur",
       decimals: 2,
+      homePageWidgetDisplay: defaultWalletHomePageWidgetDisplay,
     ),
   );
   await database.createOrUpdateWallet(
     TransactionWallet(
       walletPk: "11",
       name: "Bitcoin",
-      colour: null,
+      colour: "0xffef5350",
       iconName: null,
       dateCreated: DateTime.now(),
       dateTimeModified: null,
       order: 2,
       currency: "btc",
       decimals: 7,
+      homePageWidgetDisplay: defaultWalletHomePageWidgetDisplay,
     ),
   );
   DateTime tripStart = DateTime.now().subtract(Duration(days: 7));
@@ -415,6 +418,7 @@ Future generatePreviewData() async {
       sharedReferenceBudgetPk: "10",
     ),
   );
+  int monthlySpendingDayStart = DateTime.now().day <= 13 ? 13 : 1;
   await database.createOrUpdateBudget(
     updateSharedEntry: false,
     Budget(
@@ -422,7 +426,8 @@ Future generatePreviewData() async {
       name: "Monthly Spending",
       amount: 500.0,
       colour: null,
-      startDate: DateTime(DateTime.now().year, DateTime.now().month, 1)
+      startDate: DateTime(DateTime.now().year, DateTime.now().month,
+              monthlySpendingDayStart)
           .subtract(Duration(minutes: 19)),
       endDate: DateTime.now(),
       categoryFks: null,

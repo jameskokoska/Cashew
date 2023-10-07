@@ -23,7 +23,7 @@ import 'package:flutter/material.dart' show DateTimeRange;
 import 'package:flutter/material.dart' show RangeValues;
 part 'tables.g.dart';
 
-int schemaVersionGlobal = 41;
+int schemaVersionGlobal = 42;
 
 // To update and migrate the database, check the README
 
@@ -74,6 +74,17 @@ enum BudgetTransactionFilters {
   defaultBudgetTransactionFilters, //if default is in the list, use the default behavior
   includeBalanceCorrection, //disabled by default
 }
+
+enum HomePageWidgetDisplay {
+  WalletSwitcher,
+  WalletList,
+  NetWorth,
+}
+
+List<HomePageWidgetDisplay> defaultWalletHomePageWidgetDisplay = [
+  HomePageWidgetDisplay.WalletSwitcher,
+  HomePageWidgetDisplay.WalletList,
+];
 
 bool isFilterSelectedWithDefaults(
     List<BudgetTransactionFilters>? filters, BudgetTransactionFilters filter) {
@@ -128,6 +139,24 @@ class BudgetTransactionFiltersListInColumnConverter
 
   @override
   String toSql(List<BudgetTransactionFilters> filters) {
+    List<int> ints = filters.map((filter) => filter.index).toList();
+    return json.encode(ints);
+  }
+}
+
+class HomePageWidgetDisplayListInColumnConverter
+    extends TypeConverter<List<HomePageWidgetDisplay>, String> {
+  const HomePageWidgetDisplayListInColumnConverter();
+  @override
+  List<HomePageWidgetDisplay> fromSql(String string_from_db) {
+    List<int> ints = List<int>.from(json.decode(string_from_db));
+    List<HomePageWidgetDisplay> filters =
+        ints.map((i) => HomePageWidgetDisplay.values[i]).toList();
+    return filters;
+  }
+
+  @override
+  String toSql(List<HomePageWidgetDisplay> filters) {
     List<int> ints = filters.map((filter) => filter.index).toList();
     return json.encode(ints);
   }
@@ -209,6 +238,10 @@ class Wallets extends Table {
   IntColumn get order => integer()();
   TextColumn get currency => text().nullable()();
   IntColumn get decimals => integer().withDefault(Constant(2))();
+  TextColumn get homePageWidgetDisplay => text()
+      .nullable()
+      .withDefault(const Constant(null))
+      .map(const HomePageWidgetDisplayListInColumnConverter())();
 
   @override
   Set<Column> get primaryKey => {walletPk};
@@ -284,6 +317,8 @@ class Categories extends Table {
   IntColumn get order => integer()();
   BoolColumn get income => boolean().withDefault(const Constant(false))();
   IntColumn get methodAdded => intEnum<MethodAdded>().nullable()();
+  TextColumn get subCategoryFks =>
+      text().map(const StringListInColumnConverter()).nullable()();
   // Attributes to configure sharing of transactions:
   // sharedKey will have the key referencing the entry in the firebase database, if this is null, it is not shared
   // TextColumn get sharedKey => text().nullable()();
@@ -519,7 +554,7 @@ class FinanceDatabase extends _$FinanceDatabase {
         await m.createAll();
       },
       onUpgrade: (migrator, from, to) async {
-        print("FROM" + from.toString());
+        print("Migrating from: " + from.toString() + " to " + to.toString());
         if (from <= 9) {
           await migrator.createTable($AppSettingsTable(database));
         }
@@ -809,6 +844,33 @@ class FinanceDatabase extends _$FinanceDatabase {
             } catch (e) {
               print(
                   "Migration Error: Error upgrading transaction filters default for budgets");
+            }
+          },
+          from41To42: (m, schema) async {
+            try {
+              await m.addColumn(
+                  schema.categories, schema.categories.subCategoryFks);
+            } catch (e) {
+              print("Migration Error: Error creating column");
+            }
+            try {
+              await m.addColumn(
+                  schema.wallets, schema.wallets.homePageWidgetDisplay);
+            } catch (e) {
+              print("Migration Error: Error creating column");
+            }
+            try {
+              List<TransactionWallet> allWallets = await getAllWallets();
+              List<TransactionWallet> walletsInserting = [];
+              for (TransactionWallet wallet in allWallets) {
+                walletsInserting.add(wallet.copyWith(
+                    homePageWidgetDisplay:
+                        Value(defaultWalletHomePageWidgetDisplay)));
+              }
+              await createOrUpdateBatchWalletsOnly(walletsInserting);
+            } catch (e) {
+              print(
+                  "Migration Error: Error upgrading home page widget display default for wallets");
             }
           },
         )(migrator, from, to);
@@ -1340,6 +1402,15 @@ class FinanceDatabase extends _$FinanceDatabase {
         .get();
   }
 
+  (Stream<List<TransactionWallet>>, Future<List<TransactionWallet>>)
+      getAllPinnedWallets(HomePageWidgetDisplay homePageWidgetDisplay) {
+    final query = (select(wallets)
+      ..where((tbl) => tbl.homePageWidgetDisplay
+          .contains(homePageWidgetDisplay.index.toString()))
+      ..orderBy([(b) => OrderingTerm.asc(b.order)]));
+    return (query.watch(), query.get());
+  }
+
   // watch all budgets that have been created that are pinned
   (Stream<List<Budget>>, Future<List<Budget>>) getAllPinnedBudgets(
       {int? limit, int? offset}) {
@@ -1809,7 +1880,10 @@ class FinanceDatabase extends _$FinanceDatabase {
 
     if (insert) {
       // Use auto incremented ID when inserting
-      companionToInsert = companionToInsert.copyWith(walletPk: Value.absent());
+      companionToInsert = companionToInsert.copyWith(
+        walletPk: Value.absent(),
+        homePageWidgetDisplay: Value(defaultWalletHomePageWidgetDisplay),
+      );
     }
 
     return into(wallets)
@@ -1980,7 +2054,7 @@ class FinanceDatabase extends _$FinanceDatabase {
       } else {
         convertedAmount = convertedAmount / 100 * budgetSetAmount;
       }
-      print(convertedAmount);
+      // print(convertedAmount);
       await createOrUpdateCategoryLimit(
           categorySpendingLimit.copyWith(amount: convertedAmount));
     }
@@ -2562,14 +2636,14 @@ class FinanceDatabase extends _$FinanceDatabase {
     return true;
   }
 
-  // Future<bool> createOrUpdateBatchWalletsOnly(
-  //     List<TransactionWallet> walletsInserting) async {
-  //   await batch((batch) {
-  //     batch.insertAll(wallets, walletsInserting,
-  //         mode: InsertMode.insertOrReplace);
-  //   });
-  //   return true;
-  // }
+  Future<bool> createOrUpdateBatchWalletsOnly(
+      List<TransactionWallet> walletsInserting) async {
+    await batch((batch) {
+      batch.insertAll(wallets, walletsInserting,
+          mode: InsertMode.insertOrReplace);
+    });
+    return true;
+  }
 
   // Future<bool> createOrUpdateBatchCategoriesOnly(
   //     List<TransactionCategory> categoriesInserting) async {
@@ -2990,7 +3064,16 @@ class FinanceDatabase extends _$FinanceDatabase {
 
   // get category given name
   Future<TransactionCategory> getCategoryInstanceGivenName(String name) async {
-    return (await (select(categories)..where((t) => t.name.equals(name))).get())
+    return (await (select(categories)..where((c) => c.name.equals(name))).get())
+        .first;
+  }
+
+  Future<TransactionCategory> getCategoryInstanceGivenNameTrim(
+      String name) async {
+    return (await (select(categories)
+              ..where((c) =>
+                  c.name.lower().trim().equals(name.toLowerCase().trim())))
+            .get())
         .first;
   }
 
@@ -3181,6 +3264,15 @@ class FinanceDatabase extends _$FinanceDatabase {
   // get wallet given name
   Future<TransactionWallet> getWalletInstanceGivenName(String name) async {
     return (await (select(wallets)..where((w) => w.name.equals(name))).get())
+        .first;
+  }
+
+  // get wallet given name, to lower and trim
+  Future<TransactionWallet> getWalletInstanceGivenNameTrim(String name) async {
+    return (await (select(wallets)
+              ..where((w) =>
+                  w.name.lower().trim().equals(name.toLowerCase().trim())))
+            .get())
         .first;
   }
 

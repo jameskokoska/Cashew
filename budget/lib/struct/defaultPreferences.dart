@@ -13,15 +13,6 @@ import 'package:flutter/services.dart';
 
 // default settings, defaultSettings, initial settings
 Future<Map<String, dynamic>> getDefaultPreferences() async {
-  int androidVersion = 11;
-  if (getPlatform(ignoreEmulation: true) == PlatformOS.isAndroid) {
-    androidVersion = 0;
-    AndroidDeviceInfo androidInfo = await DeviceInfoPlugin().androidInfo;
-    String androidVersionString = androidInfo.version.release;
-    try {
-      androidVersion = int.parse(androidVersionString);
-    } catch (e) {}
-  }
   return {
     "databaseJustImported": false,
     "backupLimit": 20,
@@ -33,20 +24,34 @@ Future<Map<String, dynamic>> getDefaultPreferences() async {
     "selectedWalletPk": "0",
     "selectedSubscriptionType": 0,
     "accentColor": toHexString(Color(0xFF1B447A)),
-    "accentSystemColor": supportsSystemColor(),
+    "accentSystemColor": await systemColorByDefault(),
+    // FullScreen is added if the section has its own preference when full screen (double column)
     "showWalletSwitcher": true,
+    "showWalletSwitcherFullScreen": true,
+    "showWalletList": false,
+    "showWalletListFullScreen": false,
     "showPinnedBudgets": true,
+    "showPinnedBudgetsFullScreen": true,
     "showObjectives": false,
+    "showObjectivesFullScreen": true,
     "showAllSpendingSummary": false,
+    "showAllSpendingSummaryFullScreen": false,
     "showNetWorth": false,
+    "showNetWorthFullScreen": false,
     "showOverdueUpcoming": false,
+    "showOverdueUpcomingFullScreen": true,
     "showCreditDebt": false,
+    "showCreditDebtFullScreen": true,
     "showSpendingGraph": true,
+    "showSpendingGraphFullScreen": true,
     "showPieChart": false,
+    "showPieChartFullScreen": false,
     "showHeatMap": false,
+    "showHeatMapFullScreen": true,
     "showUsernameWelcomeBanner": true,
     "homePageOrder": [
       "wallets",
+      "walletsList",
       "budgets",
       "objectives",
       "allSpendingSummary",
@@ -61,7 +66,6 @@ Future<Map<String, dynamic>> getDefaultPreferences() async {
     "showCumulativeSpending": true,
     "removeZeroTransactionEntries": true,
     "ignorePastAmountSpent": false,
-    // "askForTransactionTitle": androidVersion > 10,
     "askForTransactionTitle": true,
     "askForTransactionNoteWithTitle": false,
     // "batterySaver": kIsWeb,
@@ -99,7 +103,7 @@ Future<Map<String, dynamic>> getDefaultPreferences() async {
     "lineGraphDisplayType": LineGraphDisplay.Default30Days.index,
     "lineGraphStartDate": DateTime.now().toString(),
     "pieChartIsIncome": false,
-    "netWorthSelectedWalletPks": null, // List<String>?
+    "netWorthAllWallets": true,
     "showPastSpendingTrajectory": false,
     "lastSynced": null,
     "font": "Avenir",
@@ -110,8 +114,11 @@ Future<Map<String, dynamic>> getDefaultPreferences() async {
     "massEditSelectedTransactions": false,
     "incognitoKeyboard": false,
     // the key is the budgetPk (in String!)
-    // Should be of type Map<String,List<int>>
+    // Should be of type Map<String, List<String>>
     "watchedCategoriesOnBudget": {},
+    "showCompressedViewBudgetGraph": false,
+    // Should be of type Map<String, double>
+    "customCurrencyAmounts": {},
     "iOSNavigation": false,
     "iOSEmulate": false,
     "expandedNavigationSidebar": true,

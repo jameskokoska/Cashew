@@ -727,5 +727,12 @@
   "select-backup-file-description": "Selecione seu arquivo backup.sql.",
   "database-corrupted": "Banco de dados corrompido",
   "database-corrupted-description": "Seu banco de dados está corrompido. Você pode ter importado o arquivo errado.",
-  "import-backup": "Importar backup"
+  "import-backup": "Importar backup",
+  "view-previous-budget-periods": "Ver períodos de orçamento anteriores",
+  "current-period": "Período atual",
+  "set-spending-goals": "Definir metas de gastos com categoria",
+  "tap-for-custom-exchange-rate": "Toque em uma entrada para definir uma taxa de câmbio personalizada",
+  "set-currency": "Defina moeda",
+  "accounts-list": "Lista de contas",
+  "select-accounts": "Selecione Contas"
 }

@@ -727,5 +727,12 @@
   "select-backup-file-description": "कृपया आपली बॅकअप.एसक्यूएल फाइल निवडा.",
   "database-corrupted": "डेटाबेस दूषित",
   "database-corrupted-description": "आपला डेटाबेस दूषित झाला आहे. आपण कदाचित चुकीची फाईल आयात केली असेल.",
-  "import-backup": "आयात बॅकअप"
+  "import-backup": "आयात बॅकअप",
+  "view-previous-budget-periods": "मागील बजेट कालावधी पहा",
+  "current-period": "चालू कालावधी",
+  "set-spending-goals": "श्रेणी खर्च ध्येय सेट करा",
+  "tap-for-custom-exchange-rate": "सानुकूल विनिमय दर सेट करण्यासाठी प्रविष्टी टॅप करा",
+  "set-currency": "चलन सेट करा",
+  "accounts-list": "लेखा यादी",
+  "select-accounts": "खाती निवडा"
 }

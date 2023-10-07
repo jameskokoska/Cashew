@@ -727,5 +727,12 @@
   "select-backup-file-description": "براہ کرم اپنی بیک اپ ڈاٹ ایس کیو ایل فائل کو منتخب کریں۔",
   "database-corrupted": "ڈیٹا بیس خراب ہوگیا",
   "database-corrupted-description": "آپ کا ڈیٹا بیس خراب ہے۔ ہوسکتا ہے کہ آپ نے غلط فائل درآمد کی ہو۔",
-  "import-backup": "بیک اپ درآمد کریں"
+  "import-backup": "بیک اپ درآمد کریں",
+  "view-previous-budget-periods": "پچھلے بجٹ کے ادوار کو دیکھیں",
+  "current-period": "موجودہ دور",
+  "set-spending-goals": "زمرے کے اخراجات کے اہداف طے کریں",
+  "tap-for-custom-exchange-rate": "کسٹم ایکسچینج ریٹ طے کرنے کے لئے اندراج پر ٹیپ کریں",
+  "set-currency": "کرنسی مرتب کریں",
+  "accounts-list": "اکاؤنٹس کی فہرست",
+  "select-accounts": "اکاؤنٹس کو منتخب کریں"
 }

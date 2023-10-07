@@ -727,5 +727,12 @@
   "select-backup-file-description": "Sila pilih fail Backup.sql anda.",
   "database-corrupted": "Pangkalan data rosak",
   "database-corrupted-description": "Pangkalan data anda rosak. Anda mungkin telah mengimport fail yang salah.",
-  "import-backup": "Import sandaran"
+  "import-backup": "Import sandaran",
+  "view-previous-budget-periods": "Lihat Tempoh Belanjawan Sebelumnya",
+  "current-period": "Tempoh semasa",
+  "set-spending-goals": "Tetapkan Matlamat Perbelanjaan Kategori",
+  "tap-for-custom-exchange-rate": "Ketik entri untuk menetapkan kadar pertukaran tersuai",
+  "set-currency": "Tetapkan mata wang",
+  "accounts-list": "Senarai Akaun",
+  "select-accounts": "Pilih akaun"
 }

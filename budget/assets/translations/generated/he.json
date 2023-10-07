@@ -727,5 +727,12 @@
   "select-backup-file-description": "אנא בחר את קובץ ה- backup.sql שלך.",
   "database-corrupted": "מסד נתונים פגום",
   "database-corrupted-description": "בסיס הנתונים שלך פגום. יתכן שייבאת את הקובץ הלא נכון.",
-  "import-backup": "יבוא גיבוי"
+  "import-backup": "יבוא גיבוי",
+  "view-previous-budget-periods": "צפה בתקופות תקציב קודמות",
+  "current-period": "התקופה הנוכחית",
+  "set-spending-goals": "הגדר יעדי הוצאות קטגוריות",
+  "tap-for-custom-exchange-rate": "הקש על ערך כדי להגדיר שער חליפין מותאם אישית",
+  "set-currency": "קבע מטבע",
+  "accounts-list": "רשימת חשבונות",
+  "select-accounts": "בחר חשבונות"
 }

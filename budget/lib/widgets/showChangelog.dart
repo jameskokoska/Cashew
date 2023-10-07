@@ -20,6 +20,50 @@ import 'listItem.dart';
 
 String getChangelogString() {
   return """
+    < 4.5.6
+    Account pinning for wallet switcher and wallet list
+    New wallet list homepage section
+    Net worth new account selection
+    Added respective color to pinning budgets and pinning goals list
+    New add budget and goal home screen button action
+    Fixed net worth default check color to match theme
+    Fixed net worth account selection casting variable type
+    Remove pinned icon from budget entries - to pin budgets, edit the home page
+    Edit home page when in full screen
+    Editing home page in full screen supports different layouts (compared to smaller screen)
+    Auto-correct and capitalization disabled in email field
+    Prepped database for subcategories
+    < 4.5.5
+    Added ability to modify currency ratios
+    Added exchange rates list into settings page
+    Added today indicator to category spending limits
+    Added compress view to hide extra dates in current budget period line graph
+    Pie chart tints color to avoid identical colors next to each other
+    Fixed category background colors in light mode
+    Current period shown in edit budget page
+    Added category spending goals button when editing budget
+    Preview data monthly budget will start later in the month based on the current time (It will always look like there are transactions)
+    Fixed spending trajectory on budget line graph for custom budget periods
+    Fixed category colors for theme color selection
+    Fixed formatting of currency page on wider screens
+    Fixed side navigation prevented refreshing if currencies changed
+    Fixed sidebar clock date
+    < 4.5.4
+    Fixed loading system color when choosing theme (no longer required restart)
+    Removed deep cyan color from unsupported accent color devices
+    Date and time selection for correct total balance and transfer account balance
+    Date picker range selector follows accent color
+    If no transactions in budget listed, added button to view past budget periods
+    Removed past history page for custom budget period
+    Added transfer balance settings button to account list page
+    System color only enabled by default on Android >=12 version
+    Taxi, sandwich, subscription, category icons
+    < 4.5.3
+    Negative goal percentage shown in transaction entry
+    Long press email to copy to clipboard
+    Fixed month label offset in no results for transactions list
+    If no similar account name found, attempt to trim and lowercase to find similar category/account name when importing CSV
+    Fixed emoji icons would not have background in budget category spending entries in light mode
     < 4.5.2
     If no account name reference when importing CSV, a new one will be made
     < 4.5.1

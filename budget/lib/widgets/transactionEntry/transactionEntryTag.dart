@@ -79,7 +79,9 @@ class TransactionEntryTag extends StatelessWidget {
                                         name: objective.name +
                                             ": " +
                                             convertToPercent(
-                                                percentageTowardsGoal * 100,
+                                                (totalAmount /
+                                                        objective.amount) *
+                                                    100,
                                                 numberDecimals: 0),
                                       ),
                                     ),

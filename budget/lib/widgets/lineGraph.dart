@@ -450,8 +450,8 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
           colors: [
             index == 0
                 ? widget.color.withAlpha(100)
-                : widget.color.withAlpha(0),
-            widget.color.withAlpha(0),
+                : widget.color.withAlpha(1),
+            widget.color.withAlpha(1),
           ],
           begin: Alignment.bottomCenter,
           end: Alignment(
@@ -474,8 +474,8 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
           colors: [
             index == 0
                 ? widget.color.withAlpha(100)
-                : widget.color.withAlpha(0),
-            widget.color.withAlpha(0),
+                : widget.color.withAlpha(1),
+            widget.color.withAlpha(1),
           ],
           begin: Alignment.topCenter,
           end: Alignment(

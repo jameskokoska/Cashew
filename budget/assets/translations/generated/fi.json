@@ -727,5 +727,12 @@
   "select-backup-file-description": "Valitse varmuuskopio.sql -tiedosto.",
   "database-corrupted": "Tietokanta vioittunut",
   "database-corrupted-description": "Tietokanta on vioittunut. Olet ehkä tuonut väärän tiedoston.",
-  "import-backup": "Tuo varmuuskopio"
+  "import-backup": "Tuo varmuuskopio",
+  "view-previous-budget-periods": "Tarkastele aiempia budjettijaksoja",
+  "current-period": "Nykyinen jakso",
+  "set-spending-goals": "Aseta luokan menot",
+  "tap-for-custom-exchange-rate": "Napauta merkintää asettaaksesi mukautetun valuuttakurssin",
+  "set-currency": "Asettaa valuutta",
+  "accounts-list": "Tililuettelo",
+  "select-accounts": "Valitse tilit"
 }

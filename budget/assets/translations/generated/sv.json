@@ -727,5 +727,12 @@
   "select-backup-file-description": "Välj din Backup.sql -fil.",
   "database-corrupted": "Databasen skadad",
   "database-corrupted-description": "Din databas är skadad. Du kanske har importerat fel fil.",
-  "import-backup": "Importbackup"
+  "import-backup": "Importbackup",
+  "view-previous-budget-periods": "Visa tidigare budgetperioder",
+  "current-period": "Nuvarande period",
+  "set-spending-goals": "Uppsättningsmål för kategori",
+  "tap-for-custom-exchange-rate": "Tryck på en post för att ställa in en anpassad växelkurs",
+  "set-currency": "Fastställa valuta",
+  "accounts-list": "Kontonlista",
+  "select-accounts": "Välj konton"
 }

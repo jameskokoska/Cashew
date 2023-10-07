@@ -727,5 +727,12 @@
   "select-backup-file-description": "Vyberte prosím soubor záloh.sql.",
   "database-corrupted": "Zkorumpovaná databáze",
   "database-corrupted-description": "Vaše databáze je poškozena. Možná jste importovali nesprávný soubor.",
-  "import-backup": "Import zálohování"
+  "import-backup": "Import zálohování",
+  "view-previous-budget-periods": "Zobrazit předchozí rozpočtová období",
+  "current-period": "Současné období",
+  "set-spending-goals": "Nastavte si výdaje na kategorii",
+  "tap-for-custom-exchange-rate": "Klepnutím na položku nastavíte vlastní směnný kurz",
+  "set-currency": "Nastavit měnu",
+  "accounts-list": "Seznam účtů",
+  "select-accounts": "Vyberte účty"
 }

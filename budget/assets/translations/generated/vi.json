@@ -727,5 +727,12 @@
   "select-backup-file-description": "Vui lòng chọn tệp Sao lưu.SQL của bạn.",
   "database-corrupted": "Cơ sở dữ liệu bị hỏng",
   "database-corrupted-description": "Cơ sở dữ liệu của bạn bị hỏng. Bạn có thể đã nhập sai tệp.",
-  "import-backup": "Nhập bản sao lưu"
+  "import-backup": "Nhập bản sao lưu",
+  "view-previous-budget-periods": "Xem thời gian ngân sách trước đó",
+  "current-period": "Giai đoạn hiện tại",
+  "set-spending-goals": "Đặt mục tiêu chi tiêu danh mục",
+  "tap-for-custom-exchange-rate": "Nhấn vào một mục để đặt tỷ giá hối đoái tùy chỉnh",
+  "set-currency": "Đặt tiền tệ",
+  "accounts-list": "Danh sách tài khoản",
+  "select-accounts": "Chọn tài khoản"
 }

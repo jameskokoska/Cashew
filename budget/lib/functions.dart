@@ -175,12 +175,13 @@ String convertToMoney(
   // return currency.format(amount);
 }
 
-String getMonth(int monthIndex) {
-  DateTime dateTime = DateTime(DateTime.now().year, monthIndex + 1);
-  String monthName =
-      DateFormat('MMMM', navigatorKey.currentContext?.locale.toString())
-          .format(dateTime);
-  return monthName;
+String getMonth(DateTime dateTime, {bool includeYear = false}) {
+  if (includeYear) {
+    return DateFormat.yMMMM(navigatorKey.currentContext?.locale.toString())
+        .format(dateTime);
+  }
+  return DateFormat.MMMM(navigatorKey.currentContext?.locale.toString())
+      .format(dateTime);
 }
 
 String getWordedTime(DateTime dateTime) {
@@ -1057,4 +1058,18 @@ double getDeviceAspectRatio(BuildContext context) {
   Size size = MediaQuery.of(context).size;
   final double aspectRatio = size.height / size.width;
   return aspectRatio;
+}
+
+Future<int?> getAndroidVersion() async {
+  int? androidVersion;
+  if (getPlatform(ignoreEmulation: true) == PlatformOS.isAndroid) {
+    try {
+      AndroidDeviceInfo androidInfo = await DeviceInfoPlugin().androidInfo;
+      String androidVersionString = androidInfo.version.release;
+      androidVersion = int.tryParse(androidVersionString);
+    } catch (e) {
+      print("Error parsing Android version" + e.toString());
+    }
+  }
+  return androidVersion;
 }

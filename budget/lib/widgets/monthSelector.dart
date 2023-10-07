@@ -127,8 +127,7 @@ class MonthSelectorState extends State<MonthSelector> {
                                       ? TextFont(
                                           key: ValueKey(1),
                                           fontSize: 14,
-                                          text: getMonth(
-                                              currentDateTime.month - 1),
+                                          text: getMonth(currentDateTime),
                                           textColor: getColor(context, "black"),
                                           fontWeight: isToday
                                               ? FontWeight.bold
@@ -140,8 +139,7 @@ class MonthSelectorState extends State<MonthSelector> {
                                       : TextFont(
                                           key: ValueKey(2),
                                           fontSize: 14,
-                                          text: getMonth(
-                                              currentDateTime.month - 1),
+                                          text: getMonth(currentDateTime),
                                           textColor:
                                               getColor(context, "textLight"),
                                           fontWeight: isToday

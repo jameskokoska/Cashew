@@ -727,5 +727,12 @@
   "select-backup-file-description": "Будь ласка, виберіть свій файл резервного копіювання.SQL.",
   "database-corrupted": "Пошкоджена база даних",
   "database-corrupted-description": "Ваша база даних пошкоджена. Можливо, ви імпортували неправильний файл.",
-  "import-backup": "Імпорт резервного копіювання"
+  "import-backup": "Імпорт резервного копіювання",
+  "view-previous-budget-periods": "Переглянути попередні бюджетні періоди",
+  "current-period": "Поточний період",
+  "set-spending-goals": "Встановити категорію витрачаються цілі",
+  "tap-for-custom-exchange-rate": "Торкніться запису, щоб встановити власний обмінний курс",
+  "set-currency": "Встановити валюту",
+  "accounts-list": "Список рахунків",
+  "select-accounts": "Виберіть рахунки"
 }

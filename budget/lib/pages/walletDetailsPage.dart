@@ -141,11 +141,7 @@ class _WalletDetailsPageState extends State<WalletDetailsPage> {
                         openBottomSheet(
                           context,
                           fullSnap: true,
-                          PopupFramework(
-                            title: "enter-amount".tr(),
-                            underTitleSpace: false,
-                            child: CorrectBalancePopup(wallet: widget.wallet!),
-                          ),
+                          CorrectBalancePopup(wallet: widget.wallet!),
                         );
                       },
                     ),
@@ -159,11 +155,7 @@ class _WalletDetailsPageState extends State<WalletDetailsPage> {
                         openBottomSheet(
                           context,
                           fullSnap: true,
-                          PopupFramework(
-                            title: "enter-amount".tr(),
-                            underTitleSpace: false,
-                            child: TransferBalancePopup(wallet: widget.wallet!),
-                          ),
+                          TransferBalancePopup(wallet: widget.wallet!),
                         );
                       },
                     ),
