@@ -311,95 +311,99 @@ class _Badge extends StatelessWidget {
       scale: showIcon && isTouched == false
           ? 0
           : (showLabels || isTouched ? (showIcon ? 1 : scale) : 0),
-      child: Container(
-        width: 45,
-        height: 45,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          border: Border.all(
-            color: color,
-            width: 2.5,
+      child: AnimatedSwitcher(
+        duration: Duration(milliseconds: 500),
+        child: Container(
+          key: ValueKey(iconName),
+          width: 45,
+          height: 45,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            border: Border.all(
+              color: color,
+              width: 2.5,
+            ),
           ),
-        ),
-        child: Stack(
-          alignment: Alignment.center,
-          children: [
-            AnimatedOpacity(
-              duration: Duration(milliseconds: 200),
-              opacity: this.scale == 1 ? 0 : 1,
-              child: Center(
-                child: Transform.translate(
-                  offset: Offset(0, percentLabelOnTop ? -34 : 34),
-                  child: IntrinsicWidth(
-                    child: Container(
-                      height: 20,
-                      padding: EdgeInsets.symmetric(horizontal: 5),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5),
-                        border: Border.all(
-                          color: color,
-                          width: 1.5,
-                        ),
-                        color: Theme.of(context).canvasColor,
-                      ),
-                      child: Center(
-                        child: MediaQuery(
-                          child: TextFont(
-                            text: percent.toStringAsFixed(0) + '%',
-                            fontSize: 10,
-                            fontWeight: FontWeight.bold,
-                            textAlign: TextAlign.center,
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              AnimatedOpacity(
+                duration: Duration(milliseconds: 200),
+                opacity: this.scale == 1 ? 0 : 1,
+                child: Center(
+                  child: Transform.translate(
+                    offset: Offset(0, percentLabelOnTop ? -34 : 34),
+                    child: IntrinsicWidth(
+                      child: Container(
+                        height: 20,
+                        padding: EdgeInsets.symmetric(horizontal: 5),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                          border: Border.all(
+                            color: color,
+                            width: 1.5,
                           ),
-                          data: MediaQuery.of(context)
-                              .copyWith(textScaleFactor: 1.0),
+                          color: Theme.of(context).canvasColor,
+                        ),
+                        child: Center(
+                          child: MediaQuery(
+                            child: TextFont(
+                              text: percent.toStringAsFixed(0) + '%',
+                              fontSize: 10,
+                              fontWeight: FontWeight.bold,
+                              textAlign: TextAlign.center,
+                            ),
+                            data: MediaQuery.of(context)
+                                .copyWith(textScaleFactor: 1.0),
+                          ),
                         ),
                       ),
                     ),
                   ),
                 ),
               ),
-            ),
-            Container(
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Theme.of(context).canvasColor,
-              ),
-              child: Center(
-                // child: SimpleShadow(
-                //   child: Image(
-                //     image: assetImage,
-                //     width: 23,
-                //   ),
-                //   opacity: 0.8,
-                //   color: categoryColor,
-                //   offset: Offset(0, 0),
-                //   sigma: 1,
-                // ),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).brightness == Brightness.light
-                        ? dynamicPastel(context, categoryColor,
-                            amountLight: 0.55, amountDark: 0.35)
-                        : Colors.transparent,
-                    shape: BoxShape.circle,
+              Container(
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Theme.of(context).canvasColor,
+                ),
+                child: Center(
+                  // child: SimpleShadow(
+                  //   child: Image(
+                  //     image: assetImage,
+                  //     width: 23,
+                  //   ),
+                  //   opacity: 0.8,
+                  //   color: categoryColor,
+                  //   offset: Offset(0, 0),
+                  //   sigma: 1,
+                  // ),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).brightness == Brightness.light
+                          ? dynamicPastel(context, categoryColor,
+                              amountLight: 0.55, amountDark: 0.35)
+                          : Colors.transparent,
+                      shape: BoxShape.circle,
+                    ),
+                    padding: EdgeInsets.all(8),
+                    child: emojiIconName != null
+                        ? Container()
+                        : CacheCategoryIcon(
+                            iconName: iconName,
+                            size: 34,
+                          ),
                   ),
-                  padding: EdgeInsets.all(8),
-                  child: emojiIconName != null
-                      ? Container()
-                      : CacheCategoryIcon(
-                          iconName: iconName,
-                          size: 34,
-                        ),
                 ),
               ),
-            ),
-            emojiIconName != null
-                ? EmojiIcon(
-                    emojiIconName: emojiIconName,
-                    size: 34 * 0.7,
-                  )
-                : SizedBox.shrink(),
-          ],
+              emojiIconName != null
+                  ? EmojiIcon(
+                      emojiIconName: emojiIconName,
+                      size: 34 * 0.7,
+                    )
+                  : SizedBox.shrink(),
+            ],
+          ),
         ),
       ),
     );

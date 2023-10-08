@@ -350,6 +350,8 @@ class TransactionEntry extends StatelessWidget {
                                                     transaction.sharedStatus ==
                                                         null) ||
                                                 (transaction.objectiveFk !=
+                                                    null) ||
+                                                (transaction.subCategoryFk !=
                                                     null)
                                             ? TransactionEntryTag(
                                                 transaction: transaction,

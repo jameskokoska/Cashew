@@ -21,6 +21,8 @@ class SelectChips<T> extends StatefulWidget {
     this.onLongPress,
     this.wrapped = false,
     this.extraHorizontalPadding,
+    this.getAvatar,
+    this.selectedColor,
   });
   final List<T> items;
   final bool Function(T) getSelected;
@@ -32,6 +34,8 @@ class SelectChips<T> extends StatefulWidget {
   final Function(T)? onLongPress;
   final bool wrapped;
   final double? extraHorizontalPadding;
+  final Widget Function(T)? getAvatar;
+  final Color? selectedColor;
 
   @override
   State<SelectChips<T>> createState() => _SelectChipsState<T>();
@@ -94,6 +98,8 @@ class _SelectChipsState<T> extends State<SelectChips<T>> {
           T item = widget.items[index];
           bool selected = widget.getSelected(item);
           String label = widget.getLabel(item);
+          Widget? avatar =
+              widget.getAvatar == null ? null : widget.getAvatar!(item);
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 5),
             child: Material(
@@ -107,10 +113,21 @@ class _SelectChipsState<T> extends State<SelectChips<T>> {
                   data: Theme.of(context)
                       .copyWith(canvasColor: Colors.transparent),
                   child: ChoiceChip(
-                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    selectedColor: appStateSettings["materialYou"]
+                    avatar: avatar == null
                         ? null
-                        : getColor(context, "lightDarkAccentHeavy"),
+                        : Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisSize: MainAxisSize.max,
+                            children: [
+                              avatar,
+                            ],
+                          ),
+                    showCheckmark: avatar == null,
+                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    selectedColor: widget.selectedColor ??
+                        (appStateSettings["materialYou"]
+                            ? null
+                            : getColor(context, "lightDarkAccentHeavy")),
                     side: widget.getCustomBorderColor == null ||
                             widget.getCustomBorderColor!(item) == null
                         ? null

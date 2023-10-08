@@ -239,7 +239,8 @@ class _CacheCategoryIconState extends State<CacheCategoryIcon> {
 
   @override
   void didUpdateWidget(covariant CacheCategoryIcon oldWidget) {
-    if (widget.iconName != oldWidget.iconName) {
+    if (widget.iconName != oldWidget.iconName ||
+        widget.size != oldWidget.size) {
       setState(() {
         image = Image.asset(
           "assets/categories/" + widget.iconName,

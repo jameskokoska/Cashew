@@ -97,6 +97,7 @@ class AddTransactionPage extends StatefulWidget {
 class _AddTransactionPageState extends State<AddTransactionPage>
     with SingleTickerProviderStateMixin {
   TransactionCategory? selectedCategory;
+  String? selectedSubCategoryPk;
   double? selectedAmount;
   String? selectedAmountCalculation;
   String? selectedTitle;
@@ -151,7 +152,19 @@ class _AddTransactionPageState extends State<AddTransactionPage>
   void setSelectedCategory(TransactionCategory category) {
     setSelectedIncome(category.income);
     setState(() {
+      if (selectedCategory != category) selectedSubCategoryPk = null;
       selectedCategory = category;
+    });
+    return;
+  }
+
+  void setSelectedSubCategory(TransactionCategory category) {
+    setState(() {
+      if (selectedSubCategoryPk == category.categoryPk) {
+        selectedSubCategoryPk = null;
+      } else {
+        selectedSubCategoryPk = category.categoryPk;
+      }
     });
     return;
   }
@@ -428,6 +441,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
           : (selectedAmount ?? 0).abs() * -1),
       note: selectedNote ?? "",
       categoryFk: selectedCategory?.categoryPk ?? "-1",
+      subCategoryFk: selectedSubCategoryPk,
       dateCreated: selectedDate,
       dateTimeModified: null,
       income: selectedIncome,
@@ -531,6 +545,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
       selectedPayer = widget.transaction!.transactionOwnerEmail;
       selectedBudgetPk = widget.transaction!.sharedReferenceBudgetPk;
       selectedObjectivePk = widget.transaction!.objectiveFk;
+      selectedSubCategoryPk = widget.transaction!.subCategoryFk;
       // var amountString = widget.transaction!.amount.toStringAsFixed(2);
       // if (amountString.substring(amountString.length - 2) == "00") {
       //   selectedAmountCalculation =
@@ -745,8 +760,8 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                     setSelectedCategory(category);
                   }
                 },
-                onTap: () {
-                  openBottomSheet(
+                onTap: () async {
+                  await openBottomSheet(
                     context,
                     PopupFramework(
                       title: "select-category".tr(),
@@ -756,6 +771,23 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                       ),
                     ),
                   );
+                  if (selectedCategory?.categoryPk != null) {
+                    int subCategoriesOfMain = await database
+                        .getAmountOfSubCategories(selectedCategory!.categoryPk);
+                    if (subCategoriesOfMain > 0) {
+                      await openBottomSheet(
+                        context,
+                        PopupFramework(
+                          title: "select-category".tr(),
+                          child: SelectCategory(
+                            selectedCategory: selectedCategory,
+                            setSelectedCategory: setSelectedSubCategory,
+                            mainCategoryPk: selectedCategory!.categoryPk,
+                          ),
+                        ),
+                      );
+                    }
+                  }
                 },
                 color: Colors.transparent,
                 child: Container(
@@ -967,6 +999,94 @@ class _AddTransactionPageState extends State<AddTransactionPage>
               ),
             ],
           ),
+          if (selectedCategory != null)
+            StreamBuilder<List<TransactionCategory>>(
+              stream: database.watchAllSubCategoriesOfMainCategory(
+                  selectedCategory!.categoryPk),
+              builder: (context, snapshot) {
+                List<TransactionCategory> subCategories = snapshot.data ?? [];
+                return AnimatedSizeSwitcher(
+                  child: (subCategories.length <= 0)
+                      ? Container()
+                      : Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(bottom: 6),
+                              child: SelectChips(
+                                selectedColor: Theme.of(context)
+                                    .canvasColor
+                                    .withOpacity(0.6),
+                                onLongPress: (category) {
+                                  pushRoute(
+                                    context,
+                                    AddCategoryPage(
+                                      category: category,
+                                      routesToPopAfterDelete:
+                                          RoutesToPopAfterDelete.PreventDelete,
+                                    ),
+                                  );
+                                },
+                                items: subCategories,
+                                getSelected: (TransactionCategory category) {
+                                  return selectedSubCategoryPk ==
+                                      category.categoryPk;
+                                },
+                                onSelected: (TransactionCategory category) {
+                                  setSelectedSubCategory(category);
+                                },
+                                getCustomBorderColor:
+                                    (TransactionCategory category) {
+                                  return dynamicPastel(
+                                    context,
+                                    lightenPastel(
+                                      HexColor(
+                                        category.colour,
+                                        defaultColor: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
+                                      ),
+                                      amount: 0.3,
+                                    ),
+                                    amount: 0.4,
+                                  );
+                                },
+                                getLabel: (TransactionCategory category) {
+                                  return category.name;
+                                },
+                                extraWidget: AddButton(
+                                  onTap: () {},
+                                  width: 40,
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 5, vertical: 1),
+                                  openPage: AddCategoryPage(
+                                    routesToPopAfterDelete:
+                                        RoutesToPopAfterDelete.None,
+                                    mainCategoryPkWhenSubCategory:
+                                        selectedCategory?.categoryPk,
+                                  ),
+                                  borderRadius: 8,
+                                ),
+                                getAvatar: (TransactionCategory category) {
+                                  return LayoutBuilder(
+                                      builder: (context, constraints) {
+                                    return CategoryIcon(
+                                      categoryPk: "-1",
+                                      category: category,
+                                      size: constraints.maxWidth,
+                                      sizePadding: 0,
+                                      noBackground: true,
+                                      canEditByLongPress: false,
+                                      margin: EdgeInsets.zero,
+                                    );
+                                  });
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                );
+              },
+            ),
         ],
       ),
     );
@@ -2642,16 +2762,27 @@ class HorizontalBreakAbove extends StatelessWidget {
     return Column(
       children: [
         // Divider(indent: 10, endIndent: 10),
-        Container(
-          margin: EdgeInsets.symmetric(vertical: 10),
-          height: 2,
-          decoration: BoxDecoration(
-            color: getColor(context, "dividerColor"),
-            borderRadius: BorderRadius.all(Radius.circular(15)),
-          ),
-        ),
+        HorizontalBreak(),
         child,
       ],
+    );
+  }
+}
+
+class HorizontalBreak extends StatelessWidget {
+  const HorizontalBreak(
+      {this.padding = const EdgeInsets.symmetric(vertical: 10), super.key});
+  final EdgeInsets padding;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: padding,
+      height: 2,
+      decoration: BoxDecoration(
+        color: getColor(context, "dividerColor"),
+        borderRadius: BorderRadius.all(Radius.circular(15)),
+      ),
     );
   }
 }
@@ -2887,6 +3018,7 @@ class SelectTransactionTypePopup extends StatelessWidget {
                               amount: 0,
                               note: "",
                               categoryFk: "-1",
+                              subCategoryFk: null,
                               walletFk: "",
                               dateCreated: DateTime.now(),
                               income: false,

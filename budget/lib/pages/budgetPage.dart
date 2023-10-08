@@ -93,6 +93,7 @@ class _BudgetPageContent extends StatefulWidget {
 class _BudgetPageContentState extends State<_BudgetPageContent> {
   double budgetHeaderHeight = 0;
   String? selectedMember = null;
+  bool showAllSubcategories = false;
   TransactionCategory? selectedCategory =
       null; //We shouldn't always rely on this, if for example the user changes the category and we are still on this page. But for less important info and O(1) we can reference it quickly.
   GlobalKey<PieChartDisplayState> _pieChartDisplayStateKey = GlobalKey();
@@ -103,6 +104,391 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
       if (widget.isPastBudget == true) premiumPopupPastBudgets(context);
     });
     super.initState();
+  }
+
+  Widget subCategorySpendingSummary({
+    required bool showIncomeExpenseIcons,
+    required DateTimeRange budgetRange,
+    required double todayPercent,
+    required ColorScheme budgetColorScheme,
+    required String mainCategoryPkIfSubCategories,
+    required int? index,
+    required bool allSelected,
+    required bool selected,
+    bool onlyShowMainCategory = false,
+    bool hideIfNoSubcategoryEntries = false,
+  }) {
+    return StreamBuilder<List<CategoryWithTotal>>(
+      stream: database.watchTotalSpentInEachCategoryInTimeRangeFromCategories(
+        allWallets: Provider.of<AllWallets>(context),
+        start: budgetRange.start,
+        end: budgetRange.end,
+        categoryFks: widget.budget.categoryFks,
+        categoryFksExclude: widget.budget.categoryFksExclude,
+        budgetTransactionFilters: widget.budget.budgetTransactionFilters,
+        memberTransactionFilters: widget.budget.memberTransactionFilters,
+        member: selectedMember,
+        onlyShowTransactionsBelongingToBudgetPk:
+            widget.budget.sharedKey != null ||
+                    widget.budget.addedTransactionsOnly == true
+                ? widget.budget.budgetPk
+                : null,
+        budget: widget.budget,
+        mainCategoryPkIfSubCategories: mainCategoryPkIfSubCategories,
+        countUnassignedTransactons: true,
+        includeAllSubCategories: showAllSubcategories,
+      ),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          double totalSpent = 0;
+          double totalSpentAbsolute = 0;
+          CategoryWithTotal? mainCategory;
+          snapshot.data!.forEach((CategoryWithTotal category) {
+            totalSpent = totalSpent + category.total;
+            totalSpentAbsolute = totalSpentAbsolute + category.total.abs();
+            if (category.category.categoryPk == mainCategoryPkIfSubCategories)
+              mainCategory = category;
+          });
+          totalSpent = totalSpent * -1;
+
+          bool showMainCategoryOnly = ((snapshot.data ?? []).length <= 1 &&
+                  hideIfNoSubcategoryEntries == false) ||
+              onlyShowMainCategory;
+
+          Widget mainCategoryEntry = mainCategory == null
+              ? SizedBox.shrink()
+              : CategoryEntry(
+                  highlightIfSelected: onlyShowMainCategory,
+                  todayPercent: todayPercent,
+                  overSpentColor: showIncomeExpenseIcons
+                      ? mainCategory!.total > 0
+                          ? getColor(context, "incomeAmount")
+                          : getColor(context, "expenseAmount")
+                      : null,
+                  showIncomeExpenseIcons: showIncomeExpenseIcons,
+                  onLongPress: () {
+                    enterCategoryLimitPopup(
+                      context,
+                      mainCategory!.category,
+                      mainCategory!.categoryBudgetLimit,
+                      widget.budget.budgetPk,
+                      (p0) => null,
+                      widget.budget.isAbsoluteSpendingLimit,
+                    );
+                  },
+                  isAbsoluteSpendingLimit:
+                      widget.budget.isAbsoluteSpendingLimit,
+                  budgetLimit: widget.budget.amount,
+                  categoryBudgetLimit: mainCategory!.categoryBudgetLimit,
+                  budgetColorScheme: budgetColorScheme,
+                  category: mainCategory!.category,
+                  totalSpent: totalSpentAbsolute,
+                  transactionCount: mainCategory!.transactionCount,
+                  categorySpent: showIncomeExpenseIcons == true
+                      ? mainCategory!.total
+                      : mainCategory!.total.abs(),
+                  onTap: () {
+                    if (selectedCategory?.categoryPk ==
+                            mainCategory!.category.categoryPk ||
+                        index == null) {
+                      setState(() {
+                        selectedCategory = null;
+                      });
+                      _pieChartDisplayStateKey.currentState!
+                          .setTouchedIndex(-1);
+                    } else {
+                      setState(() {
+                        selectedCategory = mainCategory!.category;
+                      });
+                      _pieChartDisplayStateKey.currentState!
+                          .setTouchedIndex(index);
+                    }
+                  },
+                  selected: selected,
+                  allSelected: allSelected,
+                );
+
+          // If only the main category is here - no subcategories
+          if ((snapshot.data ?? []).length <= 1 &&
+              hideIfNoSubcategoryEntries == true) return SizedBox.shrink();
+
+          VoidCallback onTap = () {
+            if (selectedCategory?.categoryPk ==
+                    mainCategory!.category.categoryPk ||
+                index == null) {
+              setState(() {
+                selectedCategory = null;
+              });
+              _pieChartDisplayStateKey.currentState!.setTouchedIndex(-1);
+            } else {
+              setState(() {
+                selectedCategory = mainCategory!.category;
+              });
+              _pieChartDisplayStateKey.currentState!.setTouchedIndex(index);
+            }
+          };
+
+          return AnimatedSizeSwitcher(
+            child: showMainCategoryOnly
+                ? mainCategoryEntry
+                : AnimatedExpanded(
+                    key: ValueKey(1),
+                    expand: selected == true || allSelected,
+                    child: SubCategoriesContainer(
+                      onTap: onTap,
+                      key: ValueKey(mainCategoryPkIfSubCategories),
+                      mainCategory: mainCategoryEntry,
+                      colorScheme: budgetColorScheme,
+                      subCategoryEntries: Padding(
+                        padding: const EdgeInsets.only(top: 5),
+                        child: Column(
+                          children: [
+                            for (CategoryWithTotal category in snapshot.data!)
+                              category.category.categoryPk ==
+                                      mainCategoryPkIfSubCategories
+                                  ? SizedBox.shrink()
+                                  : CategoryEntry(
+                                      onTap: onTap,
+                                      highlightIfSelected: onlyShowMainCategory,
+                                      todayPercent: todayPercent,
+                                      overSpentColor: showIncomeExpenseIcons
+                                          ? category.total > 0
+                                              ? getColor(
+                                                  context, "incomeAmount")
+                                              : getColor(
+                                                  context, "expenseAmount")
+                                          : null,
+                                      showIncomeExpenseIcons:
+                                          showIncomeExpenseIcons,
+                                      onLongPress: () {
+                                        enterCategoryLimitPopup(
+                                          context,
+                                          category.category,
+                                          category.categoryBudgetLimit,
+                                          widget.budget.budgetPk,
+                                          (p0) => null,
+                                          widget.budget.isAbsoluteSpendingLimit,
+                                        );
+                                      },
+                                      isAbsoluteSpendingLimit:
+                                          widget.budget.isAbsoluteSpendingLimit,
+                                      budgetLimit:
+                                          widget.budget.isAbsoluteSpendingLimit
+                                              ? (mainCategory
+                                                      ?.categoryBudgetLimit
+                                                      ?.amount ??
+                                                  1)
+                                              : (mainCategory
+                                                          ?.categoryBudgetLimit
+                                                          ?.amount ??
+                                                      1) /
+                                                  100 *
+                                                  widget.budget.amount,
+                                      categoryBudgetLimit:
+                                          category.categoryBudgetLimit,
+                                      budgetColorScheme: budgetColorScheme,
+                                      category: category.category,
+                                      totalSpent: totalSpentAbsolute,
+                                      transactionCount:
+                                          category.transactionCount,
+                                      categorySpent:
+                                          showIncomeExpenseIcons == true
+                                              ? category.total
+                                              : category.total.abs(),
+                                      selected: selected,
+                                      allSelected: allSelected,
+                                    ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+          );
+        } else {
+          return SizedBox.shrink();
+        }
+      },
+    );
+  }
+
+  Widget pieChart({
+    required double totalSpentAbsolute,
+    required ColorScheme budgetColorScheme,
+    required DateTimeRange budgetRange,
+    required bool showAllSubcategories,
+    required VoidCallback toggleAllSubCategories,
+    required List<CategoryWithTotal> dataPassed,
+  }) {
+    return StreamBuilder<List<CategoryWithTotal>>(
+      stream: database.watchTotalSpentInEachCategoryInTimeRangeFromCategories(
+        allWallets: Provider.of<AllWallets>(context),
+        start: budgetRange.start,
+        end: budgetRange.end,
+        categoryFks: widget.budget.categoryFks,
+        categoryFksExclude: widget.budget.categoryFksExclude,
+        budgetTransactionFilters: widget.budget.budgetTransactionFilters,
+        memberTransactionFilters: widget.budget.memberTransactionFilters,
+        member: selectedMember,
+        onlyShowTransactionsBelongingToBudgetPk:
+            widget.budget.sharedKey != null ||
+                    widget.budget.addedTransactionsOnly == true
+                ? widget.budget.budgetPk
+                : null,
+        budget: widget.budget,
+        // Set to countUnassignedTransactons: false for the pie chart
+        //  includeAllSubCategories: showAllSubcategories,
+        // If implementing pie chart summary for subcategories, also need to implement ability to tap a subcategory from the pie chart
+        countUnassignedTransactons: false,
+        includeAllSubCategories: true,
+      ),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          bool hasSubCategories = false;
+          double totalSpent = 0;
+          double totalSpentAbsolute = 0;
+          snapshot.data!.forEach((category) {
+            totalSpent = totalSpent + category.total;
+            totalSpentAbsolute = totalSpentAbsolute + category.total.abs();
+            if (category.category.mainCategoryPk != null &&
+                hasSubCategories == false) hasSubCategories = true;
+          });
+          totalSpent = totalSpent * -1;
+
+          // Take outside data
+          // the difference is includeAllSubCategories: false when the data is passed
+          // We can use this data when showAllSubcategories is false
+          List<CategoryWithTotal> data = dataPassed;
+          if (showAllSubcategories) data = snapshot.data ?? [];
+
+          return Column(
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                    boxShadow: boxShadowCheck(
+                      boxShadowGeneral(context),
+                    ),
+                    borderRadius: BorderRadius.circular(200)),
+                child: PieChartWrapper(
+                  pieChartDisplayStateKey: _pieChartDisplayStateKey,
+                  data: data,
+                  totalSpent: totalSpentAbsolute,
+                  setSelectedCategory: (categoryPk, category) async {
+                    if (category?.mainCategoryPk != null) {
+                      TransactionCategory mainCategory = await database
+                          .getCategoryInstance(category!.mainCategoryPk!);
+                      setState(() {
+                        selectedCategory = mainCategory;
+                      });
+                    } else {
+                      setState(() {
+                        selectedCategory = category;
+                      });
+                    }
+                  },
+                  isPastBudget: widget.isPastBudget ?? false,
+                  middleColor: appStateSettings["materialYou"]
+                      ? dynamicPastel(context, budgetColorScheme.primary,
+                          amount: 0.92)
+                      : null,
+                ),
+              ),
+              Transform.translate(
+                offset:
+                    Offset(-9 - getHorizontalPaddingConstrained(context), 10),
+                child: Align(
+                  alignment: Alignment.bottomRight,
+                  child: Builder(builder: (context) {
+                    bool showClearButton = selectedCategory != null;
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        Row(
+                          children: [
+                            if (hasSubCategories)
+                              Transform.translate(
+                                key: ValueKey(showClearButton),
+                                offset: Offset(10, 0),
+                                child: Tooltip(
+                                  message: "view-subcategories".tr(),
+                                  child: IconButton(
+                                    padding: EdgeInsets.all(15),
+                                    onPressed: toggleAllSubCategories,
+                                    icon: ScaledAnimatedSwitcher(
+                                      keyToWatch:
+                                          showAllSubcategories.toString(),
+                                      child: Icon(
+                                        showAllSubcategories
+                                            ? (appStateSettings["outlinedIcons"]
+                                                ? Icons.unfold_less_outlined
+                                                : Icons.unfold_less_rounded)
+                                            : (appStateSettings["outlinedIcons"]
+                                                ? Icons.unfold_more_outlined
+                                                : Icons.unfold_more_rounded),
+                                        color: budgetColorScheme.secondary,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            Tooltip(
+                              message: "edit-spending-goals".tr(),
+                              child: IconButton(
+                                padding: EdgeInsets.all(15),
+                                onPressed: () {
+                                  pushRoute(
+                                    context,
+                                    EditBudgetLimitsPage(
+                                      budget: widget.budget,
+                                    ),
+                                  );
+                                },
+                                icon: Icon(
+                                  appStateSettings["outlinedIcons"]
+                                      ? Icons.fact_check_outlined
+                                      : Icons.fact_check_rounded,
+                                  color: budgetColorScheme.secondary,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        AnimatedSizeSwitcher(
+                          child: showClearButton == false
+                              ? Container(
+                                  key: ValueKey(1),
+                                )
+                              : Tooltip(
+                                  message: "clear-selection".tr(),
+                                  child: IconButton(
+                                    padding: EdgeInsets.all(15),
+                                    onPressed: () {
+                                      setState(() {
+                                        selectedCategory = null;
+                                      });
+                                      _pieChartDisplayStateKey.currentState!
+                                          .setTouchedIndex(-1);
+                                    },
+                                    icon: Icon(
+                                      appStateSettings["outlinedIcons"]
+                                          ? Icons.clear_outlined
+                                          : Icons.clear_rounded,
+                                      color: budgetColorScheme.secondary,
+                                    ),
+                                  ),
+                                ),
+                        ),
+                      ],
+                    );
+                  }),
+                ),
+              ),
+            ],
+          );
+        }
+        return SizedBox.shrink();
+      },
+    );
   }
 
   @override
@@ -308,6 +694,11 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                               ? widget.budget.budgetPk
                               : null,
                       budget: widget.budget,
+                      // Set to countUnassignedTransactons: false for the pie chart
+                      //  includeAllSubCategories: showAllSubcategories,
+                      // If implementing pie chart summary for subcategories, also need to implement ability to tap a subcategory from the pie chart
+                      countUnassignedTransactons: true,
+                      includeAllSubCategories: false,
                     ),
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
@@ -322,58 +713,101 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                         totalSpent = totalSpent * -1;
                         snapshot.data!.asMap().forEach(
                           (index, category) {
-                            categoryEntries.add(
-                              CategoryEntry(
-                                todayPercent: todayPercent,
-                                overSpentColor: showIncomeExpenseIcons
-                                    ? category.total > 0
-                                        ? getColor(context, "incomeAmount")
-                                        : getColor(context, "expenseAmount")
-                                    : null,
-                                showIncomeExpenseIcons: showIncomeExpenseIcons,
-                                onLongPress: () {
-                                  enterCategoryLimitPopup(
-                                    context,
-                                    category.category,
-                                    category.categoryBudgetLimit,
-                                    widget.budget.budgetPk,
-                                    (p0) => null,
-                                    widget.budget.isAbsoluteSpendingLimit,
-                                  );
-                                },
-                                isAbsoluteSpendingLimit:
-                                    widget.budget.isAbsoluteSpendingLimit,
-                                budgetLimit: widget.budget.amount,
-                                categoryBudgetLimit:
-                                    category.categoryBudgetLimit,
-                                budgetColorScheme: budgetColorScheme,
-                                category: category.category,
-                                totalSpent: totalSpentAbsolute,
-                                transactionCount: category.transactionCount,
-                                categorySpent: showIncomeExpenseIcons == true
-                                    ? category.total
-                                    : category.total.abs(),
-                                onTap: () {
-                                  if (selectedCategory?.categoryPk ==
-                                      category.category.categoryPk) {
-                                    setState(() {
-                                      selectedCategory = null;
-                                    });
-                                    _pieChartDisplayStateKey.currentState!
-                                        .setTouchedIndex(-1);
-                                  } else {
-                                    setState(() {
-                                      selectedCategory = category.category;
-                                    });
-                                    _pieChartDisplayStateKey.currentState!
-                                        .setTouchedIndex(index);
-                                  }
-                                },
-                                selected: selectedCategory?.categoryPk ==
-                                    category.category.categoryPk,
-                                allSelected: selectedCategory == null,
-                              ),
-                            );
+                            if (category.category.mainCategoryPk == null)
+                              categoryEntries.add(
+                                StreamBuilder<List<TransactionCategory>>(
+                                    stream: database
+                                        .watchAllSubCategoriesOfMainCategory(
+                                            category.category.categoryPk),
+                                    builder: (context, snapshot) {
+                                      if (snapshot.hasData == false)
+                                        return SizedBox.shrink();
+                                      if (snapshot.hasData &&
+                                          (snapshot?.data ?? []).length > 0) {
+                                        return subCategorySpendingSummary(
+                                            showIncomeExpenseIcons:
+                                                showIncomeExpenseIcons,
+                                            budgetRange: budgetRange,
+                                            todayPercent: todayPercent,
+                                            budgetColorScheme:
+                                                budgetColorScheme,
+                                            mainCategoryPkIfSubCategories:
+                                                category.category.categoryPk,
+                                            index: index,
+                                            selected: selectedCategory
+                                                    ?.categoryPk ==
+                                                category.category.categoryPk,
+                                            allSelected:
+                                                selectedCategory == null,
+                                            onlyShowMainCategory:
+                                                showAllSubcategories == false &&
+                                                    selectedCategory
+                                                            ?.categoryPk !=
+                                                        category.category
+                                                            .categoryPk);
+                                      }
+                                      return CategoryEntry(
+                                        todayPercent: todayPercent,
+                                        overSpentColor: showIncomeExpenseIcons
+                                            ? category.total > 0
+                                                ? getColor(
+                                                    context, "incomeAmount")
+                                                : getColor(
+                                                    context, "expenseAmount")
+                                            : null,
+                                        showIncomeExpenseIcons:
+                                            showIncomeExpenseIcons,
+                                        onLongPress: () {
+                                          enterCategoryLimitPopup(
+                                            context,
+                                            category.category,
+                                            category.categoryBudgetLimit,
+                                            widget.budget.budgetPk,
+                                            (p0) => null,
+                                            widget
+                                                .budget.isAbsoluteSpendingLimit,
+                                          );
+                                        },
+                                        isAbsoluteSpendingLimit: widget
+                                            .budget.isAbsoluteSpendingLimit,
+                                        budgetLimit: widget.budget.amount,
+                                        categoryBudgetLimit:
+                                            category.categoryBudgetLimit,
+                                        budgetColorScheme: budgetColorScheme,
+                                        category: category.category,
+                                        totalSpent: totalSpentAbsolute,
+                                        transactionCount:
+                                            category.transactionCount,
+                                        categorySpent:
+                                            showIncomeExpenseIcons == true
+                                                ? category.total
+                                                : category.total.abs(),
+                                        onTap: () {
+                                          if (selectedCategory?.categoryPk ==
+                                              category.category.categoryPk) {
+                                            setState(() {
+                                              selectedCategory = null;
+                                            });
+                                            _pieChartDisplayStateKey
+                                                .currentState!
+                                                .setTouchedIndex(-1);
+                                          } else {
+                                            setState(() {
+                                              selectedCategory =
+                                                  category.category;
+                                            });
+                                            _pieChartDisplayStateKey
+                                                .currentState!
+                                                .setTouchedIndex(index);
+                                          }
+                                        },
+                                        selected:
+                                            selectedCategory?.categoryPk ==
+                                                category.category.categoryPk,
+                                        allSelected: selectedCategory == null,
+                                      );
+                                    }),
+                              );
                           },
                         );
                         return SliverToBoxAdapter(
@@ -474,62 +908,21 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                                   : SizedBox.shrink(),
                               if (snapshot.data!.length > 0)
                                 SizedBox(height: 30),
+
                               if (snapshot.data!.length > 0)
-                                Container(
-                                  decoration: BoxDecoration(
-                                      boxShadow: boxShadowCheck(
-                                        boxShadowGeneral(context),
-                                      ),
-                                      borderRadius: BorderRadius.circular(200)),
-                                  child: PieChartWrapper(
-                                    pieChartDisplayStateKey:
-                                        _pieChartDisplayStateKey,
-                                    data: snapshot.data ?? [],
-                                    totalSpent: totalSpentAbsolute,
-                                    setSelectedCategory:
-                                        (categoryPk, category) {
-                                      setState(() {
-                                        selectedCategory = category;
-                                      });
-                                    },
-                                    isPastBudget: widget.isPastBudget ?? false,
-                                    middleColor: appStateSettings["materialYou"]
-                                        ? dynamicPastel(
-                                            context, budgetColorScheme.primary,
-                                            amount: 0.92)
-                                        : null,
-                                  ),
+                                pieChart(
+                                  budgetRange: budgetRange,
+                                  totalSpentAbsolute: totalSpentAbsolute,
+                                  budgetColorScheme: budgetColorScheme,
+                                  showAllSubcategories: showAllSubcategories,
+                                  toggleAllSubCategories: () {
+                                    setState(() {
+                                      showAllSubcategories =
+                                          !showAllSubcategories;
+                                    });
+                                  },
+                                  dataPassed: snapshot.data ?? [],
                                 ),
-                              Transform.translate(
-                                offset: Offset(
-                                    -9 -
-                                        getHorizontalPaddingConstrained(
-                                            context),
-                                    10),
-                                child: Align(
-                                  alignment: Alignment.bottomRight,
-                                  child: Tooltip(
-                                    message: "edit-spending-goals".tr(),
-                                    child: IconButton(
-                                      padding: EdgeInsets.all(15),
-                                      onPressed: () {
-                                        pushRoute(
-                                          context,
-                                          EditBudgetLimitsPage(
-                                            budget: widget.budget,
-                                          ),
-                                        );
-                                      },
-                                      icon: Icon(
-                                        appStateSettings["outlinedIcons"]
-                                            ? Icons.fact_check_outlined
-                                            : Icons.fact_check_rounded,
-                                        color: budgetColorScheme.secondary,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
                               // if (snapshot.data!.length > 0)
                               //   SizedBox(height: 35),
                               ...categoryEntries,

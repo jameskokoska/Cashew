@@ -605,15 +605,16 @@ class $CategoriesTable extends Categories
       GeneratedColumn<int>('method_added', aliasedName, true,
               type: DriftSqlType.int, requiredDuringInsert: false)
           .withConverter<MethodAdded?>($CategoriesTable.$convertermethodAddedn);
-  static const VerificationMeta _subCategoryFksMeta =
-      const VerificationMeta('subCategoryFks');
+  static const VerificationMeta _mainCategoryPkMeta =
+      const VerificationMeta('mainCategoryPk');
   @override
-  late final GeneratedColumnWithTypeConverter<List<String>?, String>
-      subCategoryFks = GeneratedColumn<String>(
-              'sub_category_fks', aliasedName, true,
-              type: DriftSqlType.string, requiredDuringInsert: false)
-          .withConverter<List<String>?>(
-              $CategoriesTable.$convertersubCategoryFksn);
+  late final GeneratedColumn<String> mainCategoryPk = GeneratedColumn<String>(
+      'main_category_pk', aliasedName, true,
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'REFERENCES categories (category_pk)'),
+      defaultValue: const Constant(null));
   @override
   List<GeneratedColumn> get $columns => [
         categoryPk,
@@ -626,7 +627,7 @@ class $CategoriesTable extends Categories
         order,
         income,
         methodAdded,
-        subCategoryFks
+        mainCategoryPk
       ];
   @override
   String get aliasedName => _alias ?? 'categories';
@@ -687,7 +688,12 @@ class $CategoriesTable extends Categories
           income.isAcceptableOrUnknown(data['income']!, _incomeMeta));
     }
     context.handle(_methodAddedMeta, const VerificationResult.success());
-    context.handle(_subCategoryFksMeta, const VerificationResult.success());
+    if (data.containsKey('main_category_pk')) {
+      context.handle(
+          _mainCategoryPkMeta,
+          mainCategoryPk.isAcceptableOrUnknown(
+              data['main_category_pk']!, _mainCategoryPkMeta));
+    }
     return context;
   }
 
@@ -718,9 +724,8 @@ class $CategoriesTable extends Categories
       methodAdded: $CategoriesTable.$convertermethodAddedn.fromSql(
           attachedDatabase.typeMapping
               .read(DriftSqlType.int, data['${effectivePrefix}method_added'])),
-      subCategoryFks: $CategoriesTable.$convertersubCategoryFksn.fromSql(
-          attachedDatabase.typeMapping.read(
-              DriftSqlType.string, data['${effectivePrefix}sub_category_fks'])),
+      mainCategoryPk: attachedDatabase.typeMapping.read(
+          DriftSqlType.string, data['${effectivePrefix}main_category_pk']),
     );
   }
 
@@ -733,10 +738,6 @@ class $CategoriesTable extends Categories
       const EnumIndexConverter<MethodAdded>(MethodAdded.values);
   static JsonTypeConverter2<MethodAdded?, int?, int?> $convertermethodAddedn =
       JsonTypeConverter2.asNullable($convertermethodAdded);
-  static TypeConverter<List<String>, String> $convertersubCategoryFks =
-      const StringListInColumnConverter();
-  static TypeConverter<List<String>?, String?> $convertersubCategoryFksn =
-      NullAwareTypeConverter.wrap($convertersubCategoryFks);
 }
 
 class TransactionCategory extends DataClass
@@ -751,7 +752,7 @@ class TransactionCategory extends DataClass
   final int order;
   final bool income;
   final MethodAdded? methodAdded;
-  final List<String>? subCategoryFks;
+  final String? mainCategoryPk;
   const TransactionCategory(
       {required this.categoryPk,
       required this.name,
@@ -763,7 +764,7 @@ class TransactionCategory extends DataClass
       required this.order,
       required this.income,
       this.methodAdded,
-      this.subCategoryFks});
+      this.mainCategoryPk});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -788,10 +789,8 @@ class TransactionCategory extends DataClass
       final converter = $CategoriesTable.$convertermethodAddedn;
       map['method_added'] = Variable<int>(converter.toSql(methodAdded));
     }
-    if (!nullToAbsent || subCategoryFks != null) {
-      final converter = $CategoriesTable.$convertersubCategoryFksn;
-      map['sub_category_fks'] =
-          Variable<String>(converter.toSql(subCategoryFks));
+    if (!nullToAbsent || mainCategoryPk != null) {
+      map['main_category_pk'] = Variable<String>(mainCategoryPk);
     }
     return map;
   }
@@ -817,9 +816,9 @@ class TransactionCategory extends DataClass
       methodAdded: methodAdded == null && nullToAbsent
           ? const Value.absent()
           : Value(methodAdded),
-      subCategoryFks: subCategoryFks == null && nullToAbsent
+      mainCategoryPk: mainCategoryPk == null && nullToAbsent
           ? const Value.absent()
-          : Value(subCategoryFks),
+          : Value(mainCategoryPk),
     );
   }
 
@@ -839,8 +838,7 @@ class TransactionCategory extends DataClass
       income: serializer.fromJson<bool>(json['income']),
       methodAdded: $CategoriesTable.$convertermethodAddedn
           .fromJson(serializer.fromJson<int?>(json['methodAdded'])),
-      subCategoryFks:
-          serializer.fromJson<List<String>?>(json['subCategoryFks']),
+      mainCategoryPk: serializer.fromJson<String?>(json['mainCategoryPk']),
     );
   }
   @override
@@ -858,7 +856,7 @@ class TransactionCategory extends DataClass
       'income': serializer.toJson<bool>(income),
       'methodAdded': serializer.toJson<int?>(
           $CategoriesTable.$convertermethodAddedn.toJson(methodAdded)),
-      'subCategoryFks': serializer.toJson<List<String>?>(subCategoryFks),
+      'mainCategoryPk': serializer.toJson<String?>(mainCategoryPk),
     };
   }
 
@@ -873,7 +871,7 @@ class TransactionCategory extends DataClass
           int? order,
           bool? income,
           Value<MethodAdded?> methodAdded = const Value.absent(),
-          Value<List<String>?> subCategoryFks = const Value.absent()}) =>
+          Value<String?> mainCategoryPk = const Value.absent()}) =>
       TransactionCategory(
         categoryPk: categoryPk ?? this.categoryPk,
         name: name ?? this.name,
@@ -888,8 +886,8 @@ class TransactionCategory extends DataClass
         order: order ?? this.order,
         income: income ?? this.income,
         methodAdded: methodAdded.present ? methodAdded.value : this.methodAdded,
-        subCategoryFks:
-            subCategoryFks.present ? subCategoryFks.value : this.subCategoryFks,
+        mainCategoryPk:
+            mainCategoryPk.present ? mainCategoryPk.value : this.mainCategoryPk,
       );
   @override
   String toString() {
@@ -904,7 +902,7 @@ class TransactionCategory extends DataClass
           ..write('order: $order, ')
           ..write('income: $income, ')
           ..write('methodAdded: $methodAdded, ')
-          ..write('subCategoryFks: $subCategoryFks')
+          ..write('mainCategoryPk: $mainCategoryPk')
           ..write(')'))
         .toString();
   }
@@ -921,7 +919,7 @@ class TransactionCategory extends DataClass
       order,
       income,
       methodAdded,
-      subCategoryFks);
+      mainCategoryPk);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -936,7 +934,7 @@ class TransactionCategory extends DataClass
           other.order == this.order &&
           other.income == this.income &&
           other.methodAdded == this.methodAdded &&
-          other.subCategoryFks == this.subCategoryFks);
+          other.mainCategoryPk == this.mainCategoryPk);
 }
 
 class CategoriesCompanion extends UpdateCompanion<TransactionCategory> {
@@ -950,7 +948,7 @@ class CategoriesCompanion extends UpdateCompanion<TransactionCategory> {
   final Value<int> order;
   final Value<bool> income;
   final Value<MethodAdded?> methodAdded;
-  final Value<List<String>?> subCategoryFks;
+  final Value<String?> mainCategoryPk;
   final Value<int> rowid;
   const CategoriesCompanion({
     this.categoryPk = const Value.absent(),
@@ -963,7 +961,7 @@ class CategoriesCompanion extends UpdateCompanion<TransactionCategory> {
     this.order = const Value.absent(),
     this.income = const Value.absent(),
     this.methodAdded = const Value.absent(),
-    this.subCategoryFks = const Value.absent(),
+    this.mainCategoryPk = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   CategoriesCompanion.insert({
@@ -977,7 +975,7 @@ class CategoriesCompanion extends UpdateCompanion<TransactionCategory> {
     required int order,
     this.income = const Value.absent(),
     this.methodAdded = const Value.absent(),
-    this.subCategoryFks = const Value.absent(),
+    this.mainCategoryPk = const Value.absent(),
     this.rowid = const Value.absent(),
   })  : name = Value(name),
         order = Value(order);
@@ -992,7 +990,7 @@ class CategoriesCompanion extends UpdateCompanion<TransactionCategory> {
     Expression<int>? order,
     Expression<bool>? income,
     Expression<int>? methodAdded,
-    Expression<String>? subCategoryFks,
+    Expression<String>? mainCategoryPk,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -1006,7 +1004,7 @@ class CategoriesCompanion extends UpdateCompanion<TransactionCategory> {
       if (order != null) 'order': order,
       if (income != null) 'income': income,
       if (methodAdded != null) 'method_added': methodAdded,
-      if (subCategoryFks != null) 'sub_category_fks': subCategoryFks,
+      if (mainCategoryPk != null) 'main_category_pk': mainCategoryPk,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -1022,7 +1020,7 @@ class CategoriesCompanion extends UpdateCompanion<TransactionCategory> {
       Value<int>? order,
       Value<bool>? income,
       Value<MethodAdded?>? methodAdded,
-      Value<List<String>?>? subCategoryFks,
+      Value<String?>? mainCategoryPk,
       Value<int>? rowid}) {
     return CategoriesCompanion(
       categoryPk: categoryPk ?? this.categoryPk,
@@ -1035,7 +1033,7 @@ class CategoriesCompanion extends UpdateCompanion<TransactionCategory> {
       order: order ?? this.order,
       income: income ?? this.income,
       methodAdded: methodAdded ?? this.methodAdded,
-      subCategoryFks: subCategoryFks ?? this.subCategoryFks,
+      mainCategoryPk: mainCategoryPk ?? this.mainCategoryPk,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -1074,10 +1072,8 @@ class CategoriesCompanion extends UpdateCompanion<TransactionCategory> {
       final converter = $CategoriesTable.$convertermethodAddedn;
       map['method_added'] = Variable<int>(converter.toSql(methodAdded.value));
     }
-    if (subCategoryFks.present) {
-      final converter = $CategoriesTable.$convertersubCategoryFksn;
-      map['sub_category_fks'] =
-          Variable<String>(converter.toSql(subCategoryFks.value));
+    if (mainCategoryPk.present) {
+      map['main_category_pk'] = Variable<String>(mainCategoryPk.value);
     }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
@@ -1098,7 +1094,7 @@ class CategoriesCompanion extends UpdateCompanion<TransactionCategory> {
           ..write('order: $order, ')
           ..write('income: $income, ')
           ..write('methodAdded: $methodAdded, ')
-          ..write('subCategoryFks: $subCategoryFks, ')
+          ..write('mainCategoryPk: $mainCategoryPk, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -1690,6 +1686,16 @@ class $TransactionsTable extends Transactions
       requiredDuringInsert: true,
       defaultConstraints: GeneratedColumn.constraintIsAlways(
           'REFERENCES categories (category_pk)'));
+  static const VerificationMeta _subCategoryFkMeta =
+      const VerificationMeta('subCategoryFk');
+  @override
+  late final GeneratedColumn<String> subCategoryFk = GeneratedColumn<String>(
+      'sub_category_fk', aliasedName, true,
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'REFERENCES categories (category_pk)'),
+      defaultValue: const Constant(null));
   static const VerificationMeta _walletFkMeta =
       const VerificationMeta('walletFk');
   @override
@@ -1863,6 +1869,7 @@ class $TransactionsTable extends Transactions
         amount,
         note,
         categoryFk,
+        subCategoryFk,
         walletFk,
         dateCreated,
         dateTimeModified,
@@ -1925,6 +1932,12 @@ class $TransactionsTable extends Transactions
               data['category_fk']!, _categoryFkMeta));
     } else if (isInserting) {
       context.missing(_categoryFkMeta);
+    }
+    if (data.containsKey('sub_category_fk')) {
+      context.handle(
+          _subCategoryFkMeta,
+          subCategoryFk.isAcceptableOrUnknown(
+              data['sub_category_fk']!, _subCategoryFkMeta));
     }
     if (data.containsKey('wallet_fk')) {
       context.handle(_walletFkMeta,
@@ -2047,6 +2060,8 @@ class $TransactionsTable extends Transactions
           .read(DriftSqlType.string, data['${effectivePrefix}note'])!,
       categoryFk: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}category_fk'])!,
+      subCategoryFk: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}sub_category_fk']),
       walletFk: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}wallet_fk'])!,
       dateCreated: attachedDatabase.typeMapping
@@ -2133,6 +2148,7 @@ class Transaction extends DataClass implements Insertable<Transaction> {
   final double amount;
   final String note;
   final String categoryFk;
+  final String? subCategoryFk;
   final String walletFk;
   final DateTime dateCreated;
   final DateTime? dateTimeModified;
@@ -2160,6 +2176,7 @@ class Transaction extends DataClass implements Insertable<Transaction> {
       required this.amount,
       required this.note,
       required this.categoryFk,
+      this.subCategoryFk,
       required this.walletFk,
       required this.dateCreated,
       this.dateTimeModified,
@@ -2189,6 +2206,9 @@ class Transaction extends DataClass implements Insertable<Transaction> {
     map['amount'] = Variable<double>(amount);
     map['note'] = Variable<String>(note);
     map['category_fk'] = Variable<String>(categoryFk);
+    if (!nullToAbsent || subCategoryFk != null) {
+      map['sub_category_fk'] = Variable<String>(subCategoryFk);
+    }
     map['wallet_fk'] = Variable<String>(walletFk);
     map['date_created'] = Variable<DateTime>(dateCreated);
     if (!nullToAbsent || dateTimeModified != null) {
@@ -2260,6 +2280,9 @@ class Transaction extends DataClass implements Insertable<Transaction> {
       amount: Value(amount),
       note: Value(note),
       categoryFk: Value(categoryFk),
+      subCategoryFk: subCategoryFk == null && nullToAbsent
+          ? const Value.absent()
+          : Value(subCategoryFk),
       walletFk: Value(walletFk),
       dateCreated: Value(dateCreated),
       dateTimeModified: dateTimeModified == null && nullToAbsent
@@ -2326,6 +2349,7 @@ class Transaction extends DataClass implements Insertable<Transaction> {
       amount: serializer.fromJson<double>(json['amount']),
       note: serializer.fromJson<String>(json['note']),
       categoryFk: serializer.fromJson<String>(json['categoryFk']),
+      subCategoryFk: serializer.fromJson<String?>(json['subCategoryFk']),
       walletFk: serializer.fromJson<String>(json['walletFk']),
       dateCreated: serializer.fromJson<DateTime>(json['dateCreated']),
       dateTimeModified:
@@ -2369,6 +2393,7 @@ class Transaction extends DataClass implements Insertable<Transaction> {
       'amount': serializer.toJson<double>(amount),
       'note': serializer.toJson<String>(note),
       'categoryFk': serializer.toJson<String>(categoryFk),
+      'subCategoryFk': serializer.toJson<String?>(subCategoryFk),
       'walletFk': serializer.toJson<String>(walletFk),
       'dateCreated': serializer.toJson<DateTime>(dateCreated),
       'dateTimeModified': serializer.toJson<DateTime?>(dateTimeModified),
@@ -2408,6 +2433,7 @@ class Transaction extends DataClass implements Insertable<Transaction> {
           double? amount,
           String? note,
           String? categoryFk,
+          Value<String?> subCategoryFk = const Value.absent(),
           String? walletFk,
           DateTime? dateCreated,
           Value<DateTime?> dateTimeModified = const Value.absent(),
@@ -2435,6 +2461,8 @@ class Transaction extends DataClass implements Insertable<Transaction> {
         amount: amount ?? this.amount,
         note: note ?? this.note,
         categoryFk: categoryFk ?? this.categoryFk,
+        subCategoryFk:
+            subCategoryFk.present ? subCategoryFk.value : this.subCategoryFk,
         walletFk: walletFk ?? this.walletFk,
         dateCreated: dateCreated ?? this.dateCreated,
         dateTimeModified: dateTimeModified.present
@@ -2485,6 +2513,7 @@ class Transaction extends DataClass implements Insertable<Transaction> {
           ..write('amount: $amount, ')
           ..write('note: $note, ')
           ..write('categoryFk: $categoryFk, ')
+          ..write('subCategoryFk: $subCategoryFk, ')
           ..write('walletFk: $walletFk, ')
           ..write('dateCreated: $dateCreated, ')
           ..write('dateTimeModified: $dateTimeModified, ')
@@ -2520,6 +2549,7 @@ class Transaction extends DataClass implements Insertable<Transaction> {
         amount,
         note,
         categoryFk,
+        subCategoryFk,
         walletFk,
         dateCreated,
         dateTimeModified,
@@ -2551,6 +2581,7 @@ class Transaction extends DataClass implements Insertable<Transaction> {
           other.amount == this.amount &&
           other.note == this.note &&
           other.categoryFk == this.categoryFk &&
+          other.subCategoryFk == this.subCategoryFk &&
           other.walletFk == this.walletFk &&
           other.dateCreated == this.dateCreated &&
           other.dateTimeModified == this.dateTimeModified &&
@@ -2583,6 +2614,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
   final Value<double> amount;
   final Value<String> note;
   final Value<String> categoryFk;
+  final Value<String?> subCategoryFk;
   final Value<String> walletFk;
   final Value<DateTime> dateCreated;
   final Value<DateTime?> dateTimeModified;
@@ -2611,6 +2643,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
     this.amount = const Value.absent(),
     this.note = const Value.absent(),
     this.categoryFk = const Value.absent(),
+    this.subCategoryFk = const Value.absent(),
     this.walletFk = const Value.absent(),
     this.dateCreated = const Value.absent(),
     this.dateTimeModified = const Value.absent(),
@@ -2640,6 +2673,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
     required double amount,
     required String note,
     required String categoryFk,
+    this.subCategoryFk = const Value.absent(),
     required String walletFk,
     this.dateCreated = const Value.absent(),
     this.dateTimeModified = const Value.absent(),
@@ -2673,6 +2707,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
     Expression<double>? amount,
     Expression<String>? note,
     Expression<String>? categoryFk,
+    Expression<String>? subCategoryFk,
     Expression<String>? walletFk,
     Expression<DateTime>? dateCreated,
     Expression<DateTime>? dateTimeModified,
@@ -2702,6 +2737,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
       if (amount != null) 'amount': amount,
       if (note != null) 'note': note,
       if (categoryFk != null) 'category_fk': categoryFk,
+      if (subCategoryFk != null) 'sub_category_fk': subCategoryFk,
       if (walletFk != null) 'wallet_fk': walletFk,
       if (dateCreated != null) 'date_created': dateCreated,
       if (dateTimeModified != null) 'date_time_modified': dateTimeModified,
@@ -2738,6 +2774,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
       Value<double>? amount,
       Value<String>? note,
       Value<String>? categoryFk,
+      Value<String?>? subCategoryFk,
       Value<String>? walletFk,
       Value<DateTime>? dateCreated,
       Value<DateTime?>? dateTimeModified,
@@ -2766,6 +2803,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
       amount: amount ?? this.amount,
       note: note ?? this.note,
       categoryFk: categoryFk ?? this.categoryFk,
+      subCategoryFk: subCategoryFk ?? this.subCategoryFk,
       walletFk: walletFk ?? this.walletFk,
       dateCreated: dateCreated ?? this.dateCreated,
       dateTimeModified: dateTimeModified ?? this.dateTimeModified,
@@ -2813,6 +2851,9 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
     }
     if (categoryFk.present) {
       map['category_fk'] = Variable<String>(categoryFk.value);
+    }
+    if (subCategoryFk.present) {
+      map['sub_category_fk'] = Variable<String>(subCategoryFk.value);
     }
     if (walletFk.present) {
       map['wallet_fk'] = Variable<String>(walletFk.value);
@@ -2900,6 +2941,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
           ..write('amount: $amount, ')
           ..write('note: $note, ')
           ..write('categoryFk: $categoryFk, ')
+          ..write('subCategoryFk: $subCategoryFk, ')
           ..write('walletFk: $walletFk, ')
           ..write('dateCreated: $dateCreated, ')
           ..write('dateTimeModified: $dateTimeModified, ')

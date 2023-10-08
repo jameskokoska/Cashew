@@ -3,6 +3,7 @@ import 'package:budget/functions.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/categoryEntry.dart';
+import 'package:budget/widgets/categoryIcon.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/util/infiniteRotationAnimation.dart';
 import 'package:flutter/material.dart';
@@ -23,6 +24,40 @@ class TransactionEntryTag extends StatelessWidget {
       padding: const EdgeInsets.only(top: 1.0),
       child: Row(
         children: [
+          transaction.subCategoryFk == null
+              ? SizedBox.shrink()
+              : Flexible(
+                  child: StreamBuilder<TransactionCategory>(
+                    stream: database.getCategory(transaction.subCategoryFk!).$1,
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        TransactionCategory category = snapshot.data!;
+                        return TransactionTag(
+                          color: HexColor(category.colour),
+                          name: (category.emojiIconName != null
+                                  ? ((category.emojiIconName ?? "") + " ")
+                                  : "") +
+                              category.name,
+                          leading: category.emojiIconName != null
+                              ? null
+                              : Padding(
+                                  padding: const EdgeInsets.only(right: 3),
+                                  child: CategoryIcon(
+                                    categoryPk: "-1",
+                                    category: category,
+                                    size: 14,
+                                    sizePadding: 1,
+                                    noBackground: true,
+                                    canEditByLongPress: false,
+                                    margin: EdgeInsets.zero,
+                                  ),
+                                ),
+                        );
+                      }
+                      return Container();
+                    },
+                  ),
+                ),
           transaction.sharedReferenceBudgetPk == null
               ? SizedBox.shrink()
               : Flexible(
@@ -121,10 +156,12 @@ class TransactionEntryTag extends StatelessWidget {
 class TransactionTag extends StatelessWidget {
   final Color color;
   final String name;
+  final Widget? leading;
 
   TransactionTag({
     required this.color,
     required this.name,
+    this.leading,
   });
 
   @override
@@ -137,11 +174,19 @@ class TransactionTag extends StatelessWidget {
           borderRadius: BorderRadius.circular(6),
         ),
         padding: EdgeInsets.symmetric(horizontal: 4.5, vertical: 1.05),
-        child: TextFont(
-          text: name,
-          fontSize: 11.5,
-          textColor: getColor(context, "black").withOpacity(0.7),
-          maxLines: 1,
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            leading ?? SizedBox.shrink(),
+            Flexible(
+              child: TextFont(
+                text: name,
+                fontSize: 11.5,
+                textColor: getColor(context, "black").withOpacity(0.7),
+                maxLines: 1,
+              ),
+            ),
+          ],
         ),
       ),
     );

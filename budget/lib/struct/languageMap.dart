@@ -40,6 +40,7 @@ Set<String> supportedLanguagesSet = {
   "uk",
   "ur",
   "sr",
+  "sw",
 };
 
 // Language names can be found in 

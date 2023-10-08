@@ -3096,7 +3096,7 @@ final class _S42 extends i0.VersionedSchema {
         attachedDatabase: database,
       ),
       alias: null);
-  late final Shape22 transactions = Shape22(
+  late final Shape26 transactions = Shape26(
       source: i0.VersionedTable(
         entityName: 'transactions',
         withoutRowId: false,
@@ -3110,6 +3110,7 @@ final class _S42 extends i0.VersionedSchema {
           _column_13,
           _column_14,
           _column_70,
+          _column_89,
           _column_71,
           _column_4,
           _column_5,
@@ -3318,13 +3319,85 @@ class Shape25 extends i0.VersionedTable {
       columnsByName['income']! as i1.GeneratedColumn<bool>;
   i1.GeneratedColumn<int> get methodAdded =>
       columnsByName['method_added']! as i1.GeneratedColumn<int>;
-  i1.GeneratedColumn<String> get subCategoryFks =>
-      columnsByName['sub_category_fks']! as i1.GeneratedColumn<String>;
+  i1.GeneratedColumn<String> get mainCategoryPk =>
+      columnsByName['main_category_pk']! as i1.GeneratedColumn<String>;
 }
 
 i1.GeneratedColumn<String> _column_88(String aliasedName) =>
-    i1.GeneratedColumn<String>('sub_category_fks', aliasedName, true,
-        type: i1.DriftSqlType.string);
+    i1.GeneratedColumn<String>('main_category_pk', aliasedName, true,
+        type: i1.DriftSqlType.string,
+        defaultConstraints: i1.GeneratedColumn.constraintIsAlways(
+            'REFERENCES categories (category_pk)'),
+        defaultValue: const Constant(null));
+
+class Shape26 extends i0.VersionedTable {
+  Shape26({required super.source, required super.alias}) : super.aliased();
+  i1.GeneratedColumn<String> get transactionPk =>
+      columnsByName['transaction_pk']! as i1.GeneratedColumn<String>;
+  i1.GeneratedColumn<String> get name =>
+      columnsByName['name']! as i1.GeneratedColumn<String>;
+  i1.GeneratedColumn<double> get amount =>
+      columnsByName['amount']! as i1.GeneratedColumn<double>;
+  i1.GeneratedColumn<String> get note =>
+      columnsByName['note']! as i1.GeneratedColumn<String>;
+  i1.GeneratedColumn<String> get categoryFk =>
+      columnsByName['category_fk']! as i1.GeneratedColumn<String>;
+  i1.GeneratedColumn<String> get subCategoryFk =>
+      columnsByName['sub_category_fk']! as i1.GeneratedColumn<String>;
+  i1.GeneratedColumn<String> get walletFk =>
+      columnsByName['wallet_fk']! as i1.GeneratedColumn<String>;
+  i1.GeneratedColumn<DateTime> get dateCreated =>
+      columnsByName['date_created']! as i1.GeneratedColumn<DateTime>;
+  i1.GeneratedColumn<DateTime> get dateTimeModified =>
+      columnsByName['date_time_modified']! as i1.GeneratedColumn<DateTime>;
+  i1.GeneratedColumn<DateTime> get originalDateDue =>
+      columnsByName['original_date_due']! as i1.GeneratedColumn<DateTime>;
+  i1.GeneratedColumn<bool> get income =>
+      columnsByName['income']! as i1.GeneratedColumn<bool>;
+  i1.GeneratedColumn<int> get periodLength =>
+      columnsByName['period_length']! as i1.GeneratedColumn<int>;
+  i1.GeneratedColumn<int> get reoccurrence =>
+      columnsByName['reoccurrence']! as i1.GeneratedColumn<int>;
+  i1.GeneratedColumn<bool> get upcomingTransactionNotification =>
+      columnsByName['upcoming_transaction_notification']!
+          as i1.GeneratedColumn<bool>;
+  i1.GeneratedColumn<int> get type =>
+      columnsByName['type']! as i1.GeneratedColumn<int>;
+  i1.GeneratedColumn<bool> get paid =>
+      columnsByName['paid']! as i1.GeneratedColumn<bool>;
+  i1.GeneratedColumn<bool> get createdAnotherFutureTransaction =>
+      columnsByName['created_another_future_transaction']!
+          as i1.GeneratedColumn<bool>;
+  i1.GeneratedColumn<bool> get skipPaid =>
+      columnsByName['skip_paid']! as i1.GeneratedColumn<bool>;
+  i1.GeneratedColumn<int> get methodAdded =>
+      columnsByName['method_added']! as i1.GeneratedColumn<int>;
+  i1.GeneratedColumn<String> get transactionOwnerEmail =>
+      columnsByName['transaction_owner_email']! as i1.GeneratedColumn<String>;
+  i1.GeneratedColumn<String> get transactionOriginalOwnerEmail =>
+      columnsByName['transaction_original_owner_email']!
+          as i1.GeneratedColumn<String>;
+  i1.GeneratedColumn<String> get sharedKey =>
+      columnsByName['shared_key']! as i1.GeneratedColumn<String>;
+  i1.GeneratedColumn<String> get sharedOldKey =>
+      columnsByName['shared_old_key']! as i1.GeneratedColumn<String>;
+  i1.GeneratedColumn<int> get sharedStatus =>
+      columnsByName['shared_status']! as i1.GeneratedColumn<int>;
+  i1.GeneratedColumn<DateTime> get sharedDateUpdated =>
+      columnsByName['shared_date_updated']! as i1.GeneratedColumn<DateTime>;
+  i1.GeneratedColumn<String> get sharedReferenceBudgetPk =>
+      columnsByName['shared_reference_budget_pk']!
+          as i1.GeneratedColumn<String>;
+  i1.GeneratedColumn<String> get objectiveFk =>
+      columnsByName['objective_fk']! as i1.GeneratedColumn<String>;
+}
+
+i1.GeneratedColumn<String> _column_89(String aliasedName) =>
+    i1.GeneratedColumn<String>('sub_category_fk', aliasedName, true,
+        type: i1.DriftSqlType.string,
+        defaultConstraints: i1.GeneratedColumn.constraintIsAlways(
+            'REFERENCES categories (category_pk)'),
+        defaultValue: const Constant(null));
 i1.OnUpgrade stepByStep({
   required Future<void> Function(i1.Migrator m, _S34 schema) from33To34,
   required Future<void> Function(i1.Migrator m, _S35 schema) from34To35,

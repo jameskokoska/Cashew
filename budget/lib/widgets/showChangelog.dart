@@ -20,6 +20,14 @@ import 'listItem.dart';
 
 String getChangelogString() {
   return """
+    < 4.5.7
+    Subcategories functionality
+    Subcategories budget entries
+    Subcategories spending limits
+    Subcategories creation, reordering, deletion
+    Subcategories selection
+    Reworked budget summary page 
+    Fixed merge and delete category would miss unpaid transactions
     < 4.5.6
     Account pinning for wallet switcher and wallet list
     New wallet list homepage section

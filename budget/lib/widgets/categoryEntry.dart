@@ -25,6 +25,7 @@ class CategoryEntry extends StatelessWidget {
     required this.totalSpent,
     required this.onTap,
     required this.selected,
+    this.highlightIfSelected = true,
     required this.allSelected,
     required this.budgetColorScheme,
     this.categoryBudgetLimit,
@@ -44,6 +45,7 @@ class CategoryEntry extends StatelessWidget {
   final double categorySpent;
   final VoidCallback onTap;
   final bool selected;
+  final bool highlightIfSelected;
   final bool allSelected;
   final ColorScheme budgetColorScheme;
   final bool isTiled;
@@ -318,7 +320,7 @@ class CategoryEntry extends StatelessWidget {
             child: AnimatedContainer(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(isTiled ? 15 : 0),
-                color: selected
+                color: highlightIfSelected && selected
                     ? dynamicPastel(context, budgetColorScheme.primary,
                             amount: 0.3)
                         .withAlpha(80)
