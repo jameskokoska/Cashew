@@ -738,5 +738,9 @@
   "of-category": "kategória",
   "subcategories": "Alkategóriák",
   "view-subcategories": "Alkategóriák megtekintése",
-  "select-subcategory": "Válassza az Alkategória lehetőséget"
+  "select-subcategory": "Válassza az Alkategória lehetőséget",
+  "delete-subcategory-question": "Törölje az alkategóriát?",
+  "delete-subcategory-question-description": "Ez eltávolítja az alkategóriát az ehhez az alkategóriához kapcsolódó összes tranzakcióból.",
+  "remove-all-transactions-from-subcategory-question": "Távolítsa el az összes tranzakciót?",
+  "delete-subcategory-merge-warning": "Az alkategória törlése eltávolítja az összes tranzakciót ebből az alkategóriából. A tranzakciókat egy másik alkategóriába helyezze, hogy elkerülje."
 }

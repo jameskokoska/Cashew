@@ -738,5 +738,9 @@
   "of-category": "של קטגוריה",
   "subcategories": "קטגוריות משנה",
   "view-subcategories": "צפה בקטגוריות משנה",
-  "select-subcategory": "בחר תת -קטגוריית משנה"
+  "select-subcategory": "בחר תת -קטגוריית משנה",
+  "delete-subcategory-question": "למחוק תת -קטגוריית משנה?",
+  "delete-subcategory-question-description": "זה יסיר את קטגוריית המשנה מכל העסקאות הקשורות לקטגוריית משנה זו.",
+  "remove-all-transactions-from-subcategory-question": "להסיר את כל העסקאות?",
+  "delete-subcategory-merge-warning": "מחיקת קטגוריית משנה תסיר את כל העסקאות מקטגוריית משנה זו. העבר עסקאות לקטגוריית משנה אחרת כדי להימנע מכך."
 }

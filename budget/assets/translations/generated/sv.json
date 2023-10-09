@@ -738,5 +738,9 @@
   "of-category": "kategori",
   "subcategories": "Underkategorier",
   "view-subcategories": "Visa underkategorier",
-  "select-subcategory": "Välj underkategori"
+  "select-subcategory": "Välj underkategori",
+  "delete-subcategory-question": "Ta bort underkategori?",
+  "delete-subcategory-question-description": "Detta kommer att ta bort underkategorin från alla transaktioner som är associerade med denna underkategori.",
+  "remove-all-transactions-from-subcategory-question": "Ta bort alla transaktioner?",
+  "delete-subcategory-merge-warning": "Att ta bort en underkategori kommer att ta bort alla transaktioner från denna underkategori. Flytta transaktioner till en annan underkategori för att undvika detta."
 }

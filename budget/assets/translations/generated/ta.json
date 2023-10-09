@@ -738,5 +738,9 @@
   "of-category": "வகை",
   "subcategories": "துணைப்பிரிவுகள்",
   "view-subcategories": "துணைப்பிரிவுகளைக் காண்க",
-  "select-subcategory": "துணைப்பிரிவைத் தேர்ந்தெடுக்கவும்"
+  "select-subcategory": "துணைப்பிரிவைத் தேர்ந்தெடுக்கவும்",
+  "delete-subcategory-question": "துணைப்பிரிவை நீக்கவா?",
+  "delete-subcategory-question-description": "இந்த துணைப்பிரிவுடன் தொடர்புடைய அனைத்து பரிவர்த்தனைகளிலிருந்தும் இது துணைப்பிரிவை அகற்றும்.",
+  "remove-all-transactions-from-subcategory-question": "அனைத்து பரிவர்த்தனைகளையும் அகற்றவா?",
+  "delete-subcategory-merge-warning": "ஒரு துணைப்பிரிவை நீக்குவது இந்த துணைப்பிரிவிலிருந்து அனைத்து பரிவர்த்தனைகளையும் அகற்றும். இதைத் தவிர்க்க பரிவர்த்தனைகளை மற்றொரு துணைப்பிரிவுக்கு நகர்த்தவும்."
 }

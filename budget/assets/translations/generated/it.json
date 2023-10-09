@@ -593,7 +593,7 @@
   "negative-amount": "Importo negativo",
   "update-total-balance": "Correggi saldo",
   "updated-total-balance": "Saldo aggiornato",
-  "merge-account": "Account unione",
+  "merge-account": "Unisci account",
   "account-to-transfer-all-transactions-to": "Conto per trasferire tutte le transazioni a",
   "merge-into-description-accounts": "Ciò trasferirà tutte le transazioni sul nuovo account e cancellerà il vecchio account",
   "move-and-delete": "Sposta ed elimina",
@@ -682,7 +682,7 @@
   "create-budget": "Crea budget",
   "no-goals-found": "Nessun obiettivo trovato.",
   "net-worth-settings": "Impostazioni del patrimonio netto",
-  "transfer-balance": "Bilancio di trasferimento",
+  "transfer-balance": "Trasferisci",
   "withdraw-amount": "Prelevare l'importo",
   "transferred-balance": "Saldo trasferito",
   "net-total": "Totale netto",
@@ -738,5 +738,9 @@
   "of-category": "di categoria",
   "subcategories": "Sottocategorie",
   "view-subcategories": "Visualizza le sottocategorie",
-  "select-subcategory": "Seleziona la sottocategoria"
+  "select-subcategory": "Seleziona la sottocategoria",
+  "delete-subcategory-question": "Elimina la sottocategoria?",
+  "delete-subcategory-question-description": "Ciò rimuoverà la sottocategoria da tutte le transazioni associate a questa sottocategoria.",
+  "remove-all-transactions-from-subcategory-question": "Rimuovere tutte le transazioni?",
+  "delete-subcategory-merge-warning": "L'eliminazione di una sottocategoria rimuoverà tutte le transazioni da questa sottocategoria. Spostare le transazioni in un'altra sottocategoria per evitarlo."
 }

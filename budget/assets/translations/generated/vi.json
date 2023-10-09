@@ -738,5 +738,9 @@
   "of-category": "của thể loại",
   "subcategories": "Thể loại phụ",
   "view-subcategories": "Xem các danh mục con",
-  "select-subcategory": "Chọn tiểu thể loại"
+  "select-subcategory": "Chọn tiểu thể loại",
+  "delete-subcategory-question": "Xóa tiểu thể loại?",
+  "delete-subcategory-question-description": "Điều này sẽ loại bỏ danh mục con khỏi tất cả các giao dịch liên quan đến tiểu thể loại này.",
+  "remove-all-transactions-from-subcategory-question": "Xóa tất cả các giao dịch?",
+  "delete-subcategory-merge-warning": "Xóa một tiểu thể loại sẽ xóa tất cả các giao dịch khỏi tiểu thể loại này. Di chuyển các giao dịch sang một tiểu thể loại khác để tránh điều này."
 }

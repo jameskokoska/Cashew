@@ -738,5 +738,9 @@
   "of-category": "kategorii",
   "subcategories": "Podkategorie",
   "view-subcategories": "Zobacz podkategorie",
-  "select-subcategory": "Wybierz podkategorię"
+  "select-subcategory": "Wybierz podkategorię",
+  "delete-subcategory-question": "Usuń podkategorię?",
+  "delete-subcategory-question-description": "Spowoduje to usunięcie podkategorii ze wszystkich transakcji powiązanych z tą podkategorią.",
+  "remove-all-transactions-from-subcategory-question": "Usunąć wszystkie transakcje?",
+  "delete-subcategory-merge-warning": "Usunięcie podkategorii usunie wszystkie transakcje z tej podkategorii. Przesuń transakcje do innej podkategorii, aby tego uniknąć."
 }

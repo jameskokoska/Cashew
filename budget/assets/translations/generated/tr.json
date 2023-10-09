@@ -738,5 +738,9 @@
   "of-category": "kategori",
   "subcategories": "Alt kategoriler",
   "view-subcategories": "Alt Kategorileri Görüntüle",
-  "select-subcategory": "Alt Kategori'yi seçin"
+  "select-subcategory": "Alt Kategori'yi seçin",
+  "delete-subcategory-question": "Alt Kategoriyi Sil?",
+  "delete-subcategory-question-description": "Bu, alt kategoriyi bu alt kategoriyle ilişkili tüm işlemlerden kaldıracaktır.",
+  "remove-all-transactions-from-subcategory-question": "Tüm işlemleri kaldırın mı?",
+  "delete-subcategory-merge-warning": "Bir alt kategoriyi silmek bu alt kategorideki tüm işlemleri kaldıracaktır. Bundan kaçınmak için işlemleri başka bir alt kategoriye taşıyın."
 }

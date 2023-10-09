@@ -106,6 +106,12 @@ Future<void> setUpcomingNotifications(context) async {
   bool upcomingTransactionsNotificationsEnabled =
       appStateSettings["notificationsUpcomingTransactions"];
   if (upcomingTransactionsNotificationsEnabled) {
-    await scheduleUpcomingTransactionsNotification(context);
+    try {
+      await scheduleUpcomingTransactionsNotification(context);
+    } catch (e) {
+      print(e.toString() +
+          " Error setting up notifications for upcoming transactions");
+    }
   }
+  return;
 }

@@ -738,5 +738,9 @@
   "of-category": "ng kategorya",
   "subcategories": "Mga kategorya",
   "view-subcategories": "Tingnan ang mga subkategorya",
-  "select-subcategory": "Piliin ang Subcategory"
+  "select-subcategory": "Piliin ang Subcategory",
+  "delete-subcategory-question": "Tanggalin ang Subcategory?",
+  "delete-subcategory-question-description": "Aalisin nito ang subcategory mula sa lahat ng mga transaksyon na nauugnay sa subcategory na ito.",
+  "remove-all-transactions-from-subcategory-question": "Alisin ang lahat ng mga transaksyon?",
+  "delete-subcategory-merge-warning": "Ang pagtanggal ng isang subcategory ay aalisin ang lahat ng mga transaksyon mula sa subcategory na ito. Ilipat ang mga transaksyon sa isa pang subcategory upang maiwasan ito."
 }

@@ -738,5 +738,9 @@
   "of-category": "કેફી",
   "subcategories": "ઉપ -કેટેગરીઝ",
   "view-subcategories": "ઉપકેટેગરીઝ જુઓ",
-  "select-subcategory": "સબક ateg ટેગરી પસંદ કરો"
+  "select-subcategory": "સબક ateg ટેગરી પસંદ કરો",
+  "delete-subcategory-question": "સબક ateg ટેગરી કા Delete ી નાખો?",
+  "delete-subcategory-question-description": "આ આ પેટા કેટેગરી સાથે સંકળાયેલા તમામ વ્યવહારોમાંથી સબક ateg ટેગરીને દૂર કરશે.",
+  "remove-all-transactions-from-subcategory-question": "બધા વ્યવહારો દૂર કરો?",
+  "delete-subcategory-merge-warning": "સબક ateg ટેગરીને કા ting ી નાખવાથી આ પેટા કેટેગરીમાંથી તમામ વ્યવહારો દૂર થશે. આને ટાળવા માટે વ્યવહારોને બીજી સબક ateg ટેગરીમાં ખસેડો."
 }

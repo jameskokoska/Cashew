@@ -738,5 +738,9 @@
   "of-category": "категорије",
   "subcategories": "Подкатегорије",
   "view-subcategories": "Погледајте подкатегорије",
-  "select-subcategory": "Изаберите Подкатегорија"
+  "select-subcategory": "Изаберите Подкатегорија",
+  "delete-subcategory-question": "Избришите подкатегорију?",
+  "delete-subcategory-question-description": "Ово ће уклонити подкатегорију из свих трансакција повезаних са овом подкатегорије.",
+  "remove-all-transactions-from-subcategory-question": "Уклоните све трансакције?",
+  "delete-subcategory-merge-warning": "Брисање подкатегорије уклониће све трансакције из ове подкатегорије. Премјестите трансакције на другу подкатегорију да то избегнете."
 }

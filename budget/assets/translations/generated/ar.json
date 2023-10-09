@@ -738,5 +738,9 @@
   "of-category": "من الفئة",
   "subcategories": "الفئات الفرعية",
   "view-subcategories": "عرض الفئات الفرعية",
-  "select-subcategory": "حدد الفئة الفرعية"
+  "select-subcategory": "حدد الفئة الفرعية",
+  "delete-subcategory-question": "حذف الفئة الفرعية؟",
+  "delete-subcategory-question-description": "سيؤدي ذلك إلى إزالة الفئة الفرعية من جميع المعاملات المرتبطة بهذه الفئة الفرعية.",
+  "remove-all-transactions-from-subcategory-question": "إزالة جميع المعاملات؟",
+  "delete-subcategory-merge-warning": "سيؤدي حذف الفئة الفرعية إلى إزالة جميع المعاملات من هذه الفئة الفرعية. نقل المعاملات إلى فئة فرعية أخرى لتجنب ذلك."
 }

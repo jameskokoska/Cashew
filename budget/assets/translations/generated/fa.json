@@ -738,5 +738,9 @@
   "of-category": "دسته",
   "subcategories": "زیر شاخه های",
   "view-subcategories": "زیر شاخه ها را مشاهده کنید",
-  "select-subcategory": "زیر مجموعه را انتخاب کنید"
+  "select-subcategory": "زیر مجموعه را انتخاب کنید",
+  "delete-subcategory-question": "زیرمجموعه را حذف کنید؟",
+  "delete-subcategory-question-description": "این زیر مجموعه را از کلیه معاملات مرتبط با این زیر مجموعه حذف می کند.",
+  "remove-all-transactions-from-subcategory-question": "همه معاملات را حذف کنید؟",
+  "delete-subcategory-merge-warning": "حذف یک زیر مجموعه ، کلیه معاملات را از این زیر مجموعه حذف می کند. برای جلوگیری از این کار ، معاملات را به زیر شاخه دیگری منتقل کنید."
 }

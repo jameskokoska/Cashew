@@ -738,5 +738,9 @@
   "of-category": "of category",
   "subcategories": "Subcategories",
   "view-subcategories": "View Subcategories",
-  "select-subcategory": "Select Subcategory"
+  "select-subcategory": "Select Subcategory",
+  "delete-subcategory-question": "Delete subcategory?",
+  "delete-subcategory-question-description": "This will remove the subcategory from all transactions associated with this subcategory.",
+  "remove-all-transactions-from-subcategory-question": "Remove all transactions?",
+  "delete-subcategory-merge-warning": "Deleting a subcategory will remove all transactions from this subcategory. Move transactions to another subcategory to avoid this."
 }

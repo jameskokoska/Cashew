@@ -20,6 +20,13 @@ import 'listItem.dart';
 
 String getChangelogString() {
   return """
+    < 4.5.9
+    Merge categories handles subcategories
+    Make subcategory from main category
+    Deleting subcategory complete
+    Added spacing for FAB on wallet details page
+    Added orange juice, barbecue, sauces, and bottles icon
+    Try catch test for creating subscription transaction and with notification error catch
     < 4.5.8
     Fixed initial tab value for income/expense when editing category
     Wallet actions in more actions menu when editing

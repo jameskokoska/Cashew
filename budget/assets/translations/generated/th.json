@@ -738,5 +738,9 @@
   "of-category": "ของหมวดหมู่",
   "subcategories": "หมวดหมู่ย่อย",
   "view-subcategories": "ดูหมวดหมู่ย่อย",
-  "select-subcategory": "เลือกหมวดหมู่ย่อย"
+  "select-subcategory": "เลือกหมวดหมู่ย่อย",
+  "delete-subcategory-question": "ลบหมวดหมู่ย่อย?",
+  "delete-subcategory-question-description": "สิ่งนี้จะลบหมวดหมู่ย่อยออกจากธุรกรรมทั้งหมดที่เกี่ยวข้องกับหมวดหมู่ย่อยนี้",
+  "remove-all-transactions-from-subcategory-question": "ลบธุรกรรมทั้งหมด?",
+  "delete-subcategory-merge-warning": "การลบหมวดหมู่ย่อยจะลบธุรกรรมทั้งหมดออกจากหมวดหมู่ย่อยนี้ ย้ายธุรกรรมไปยังหมวดหมู่ย่อยอื่นเพื่อหลีกเลี่ยงสิ่งนี้"
 }

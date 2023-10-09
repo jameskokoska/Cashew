@@ -738,5 +738,9 @@
   "of-category": "श्रेणी",
   "subcategories": "उपश्रेणी",
   "view-subcategories": "उपश्रेणी पहा",
-  "select-subcategory": "उपश्रेणी निवडा"
+  "select-subcategory": "उपश्रेणी निवडा",
+  "delete-subcategory-question": "उपश्रेणी हटवा?",
+  "delete-subcategory-question-description": "हे या उपश्रेणीशी संबंधित सर्व व्यवहारांमधून उपश्रेणी काढून टाकेल.",
+  "remove-all-transactions-from-subcategory-question": "सर्व व्यवहार काढा?",
+  "delete-subcategory-merge-warning": "उपश्रेणी हटविण्यामुळे या उपश्रेणीतून सर्व व्यवहार काढून टाकतील. हे टाळण्यासाठी व्यवहार दुसर्‍या उपश्रेणीवर हलवा."
 }

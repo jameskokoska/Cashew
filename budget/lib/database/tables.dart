@@ -849,7 +849,7 @@ class FinanceDatabase extends _$FinanceDatabase {
                   ])));
                 }
               }
-              await createOrUpdateBatchBudgetsOnly(budgetsInserting);
+              await updateBatchBudgetsOnly(budgetsInserting);
             } catch (e) {
               print(
                   "Migration Error: Error upgrading transaction filters default for budgets");
@@ -882,7 +882,7 @@ class FinanceDatabase extends _$FinanceDatabase {
                     homePageWidgetDisplay:
                         Value(defaultWalletHomePageWidgetDisplay)));
               }
-              await createOrUpdateBatchWalletsOnly(walletsInserting);
+              await updateBatchWalletsOnly(walletsInserting);
             } catch (e) {
               print(
                   "Migration Error: Error upgrading home page widget display default for wallets");
@@ -2093,7 +2093,7 @@ class FinanceDatabase extends _$FinanceDatabase {
       }
       limitsInserting.add(categorySpendingLimit.copyWith(
           amount: convertedAmount, dateTimeModified: Value(DateTime.now())));
-      await createOrUpdateBatchCategoryLimitsOnly(limitsInserting);
+      await updateBatchCategoryLimitsOnly(limitsInserting);
     }
     return true;
   }
@@ -2254,9 +2254,12 @@ class FinanceDatabase extends _$FinanceDatabase {
     return true;
   }
 
-  Future<bool> fixOrderCategories() async {
+  Future<bool> fixOrderCategories(
+      {String? mainCategoryPkIfSubCategoryOrderFixing}) async {
     List<TransactionCategory> categoriesList = await (select(categories)
-          ..where((c) => onlyShowMainCategoryListing(c))
+          ..where((c) => mainCategoryPkIfSubCategoryOrderFixing == null
+              ? onlyShowMainCategoryListing(c)
+              : c.mainCategoryPk.equals(mainCategoryPkIfSubCategoryOrderFixing))
           ..orderBy([(t) => OrderingTerm.asc(t.order)]))
         .get();
     for (int i = 0; i < categoriesList.length; i++) {
@@ -2680,7 +2683,7 @@ class FinanceDatabase extends _$FinanceDatabase {
     return true;
   }
 
-  Future<bool> createOrUpdateBatchWalletsOnly(
+  Future<bool> updateBatchWalletsOnly(
       List<TransactionWallet> walletsInserting) async {
     await batch((batch) {
       batch.insertAll(wallets, walletsInserting,
@@ -2689,7 +2692,7 @@ class FinanceDatabase extends _$FinanceDatabase {
     return true;
   }
 
-  Future<bool> createOrUpdateBatchCategoriesOnly(
+  Future<bool> updateBatchCategoriesOnly(
       List<TransactionCategory> categoriesInserting) async {
     await batch((batch) {
       batch.insertAll(categories, categoriesInserting,
@@ -2699,8 +2702,7 @@ class FinanceDatabase extends _$FinanceDatabase {
   }
 
   // This doesn't handle order of budgets!
-  Future<bool> createOrUpdateBatchBudgetsOnly(
-      List<Budget> budgetsInserting) async {
+  Future<bool> updateBatchBudgetsOnly(List<Budget> budgetsInserting) async {
     await batch((batch) {
       batch.insertAll(budgets, budgetsInserting,
           mode: InsertMode.insertOrReplace);
@@ -2708,7 +2710,7 @@ class FinanceDatabase extends _$FinanceDatabase {
     return true;
   }
 
-  Future<bool> createOrUpdateBatchCategoryLimitsOnly(
+  Future<bool> updateBatchCategoryLimitsOnly(
       List<CategoryBudgetLimit> limitsInserting) async {
     await batch((batch) {
       batch.insertAll(categoryBudgetLimits, limitsInserting,
@@ -2727,7 +2729,7 @@ class FinanceDatabase extends _$FinanceDatabase {
   // }
 
   // This doesn't handle order of titles!
-  Future<bool> createOrUpdateBatchAssociatedTitlesOnly(
+  Future<bool> updateBatchAssociatedTitlesOnly(
       List<TransactionAssociatedTitle> associatedTitlesInserting) async {
     await batch((batch) {
       batch.insertAll(associatedTitles, associatedTitlesInserting,
@@ -3344,9 +3346,12 @@ class FinanceDatabase extends _$FinanceDatabase {
     });
   }
 
-  Future<bool> shiftCategories(int direction, int pastIndexIncluding) async {
+  Future<bool> shiftCategories(int direction, int pastIndexIncluding,
+      {String? mainCategoryPk}) async {
     List<TransactionCategory> categoryList = await (select(categories)
-          ..where((c) => onlyShowMainCategoryListing(c))
+          ..where((c) => mainCategoryPk == null
+              ? onlyShowMainCategoryListing(c)
+              : c.mainCategoryPk.equals(mainCategoryPk))
           ..orderBy([(c) => OrderingTerm.asc(c.order)]))
         .get();
     if (direction == -1 || direction == 1) {
@@ -3533,10 +3538,17 @@ class FinanceDatabase extends _$FinanceDatabase {
     //     // delete shared transactions one by one, need to update the server
     //     deleteTransaction(transaction.transactionPk)
     // ]);
-    await shiftCategories(-1, order);
+    TransactionCategory category = await getCategoryInstance(categoryPk);
+    if (category.mainCategoryPk != null) {
+      // a subcategory
+      await shiftCategories(-1, order, mainCategoryPk: category.mainCategoryPk);
+    } else {
+      await shiftCategories(-1, order);
+    }
     // print("DELETING");
     // print(categoryPk);
     await createDeleteLog(DeleteLogType.TransactionCategory, categoryPk);
+    // Delete any category with same key, or subcategory with that key
     return (delete(categories)
           ..where((c) =>
               c.categoryPk.equals(categoryPk) |
@@ -3735,7 +3747,8 @@ class FinanceDatabase extends _$FinanceDatabase {
   }
 
   Future mergeAndDeleteCategory(
-      TransactionCategory categoryFrom, TransactionCategory categoryTo) async {
+      TransactionCategory categoryFrom, TransactionCategory categoryTo,
+      {bool movingToSubCategory = false}) async {
     List<Transaction> transactionsToUpdate =
         await getAllTransactionsFromCategory(categoryFrom.categoryPk);
     // This is good for shared budgets, but shared is discontinued
@@ -3748,6 +3761,9 @@ class FinanceDatabase extends _$FinanceDatabase {
     for (Transaction transaction in transactionsToUpdate) {
       transactionsEdited.add(transaction.copyWith(
           categoryFk: categoryTo.categoryPk,
+          subCategoryFk: Value(movingToSubCategory
+              ? categoryFrom.categoryPk
+              : transaction.subCategoryFk),
           dateTimeModified: Value(DateTime.now())));
     }
     await updateBatchTransactionsOnly(transactionsEdited);
@@ -3760,9 +3776,40 @@ class FinanceDatabase extends _$FinanceDatabase {
           categoryFk: categoryTo.categoryPk,
           dateTimeModified: Value(DateTime.now())));
     }
-    await createOrUpdateBatchAssociatedTitlesOnly(associatedTitlesEdited);
+    await updateBatchAssociatedTitlesOnly(associatedTitlesEdited);
 
-    await database.deleteCategory(categoryFrom.categoryPk, categoryFrom.order);
+    if (movingToSubCategory) {
+      // Make the category into a subcategory
+      await database.createOrUpdateCategory(
+        categoryFrom.copyWith(
+          mainCategoryPk: Value(categoryTo.categoryPk),
+          order: await database.getAmountOfSubCategories(categoryTo.categoryPk),
+        ),
+      );
+      await shiftCategories(-1, categoryFrom.order);
+    } else {
+      // Move all subcategories into the new category
+      List<TransactionCategory> allSubCategories = await database
+          .getAllSubCategoriesOfMainCategory(categoryFrom.categoryPk);
+      List<TransactionCategory> categoriesEdited = [];
+      int order =
+          await database.getAmountOfSubCategories(categoryFrom.categoryPk);
+      for (TransactionCategory category in allSubCategories) {
+        categoriesEdited.add(
+          category.copyWith(
+            mainCategoryPk: Value(categoryTo.categoryPk),
+            dateTimeModified: Value(DateTime.now()),
+            order: order,
+          ),
+        );
+        order = order + 1;
+      }
+      await updateBatchCategoriesOnly(categoriesEdited);
+
+      // Delete the old category
+      await database.deleteCategory(
+          categoryFrom.categoryPk, categoryFrom.order);
+    }
   }
 
   Stream<double?> totalDoubleStream(List<Stream<double?>> mergedStreams) {

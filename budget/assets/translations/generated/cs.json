@@ -738,5 +738,9 @@
   "of-category": "kategorie",
   "subcategories": "Podkategorie",
   "view-subcategories": "Zobrazit podkategorie",
-  "select-subcategory": "Vyberte podkategorie"
+  "select-subcategory": "Vyberte podkategorie",
+  "delete-subcategory-question": "Odstranit podkategorie?",
+  "delete-subcategory-question-description": "Tím se odstraní podkategorie ze všech transakcí spojených s touto podkategorií.",
+  "remove-all-transactions-from-subcategory-question": "Odebrat všechny transakce?",
+  "delete-subcategory-merge-warning": "Odstranění podkategorie odstraní všechny transakce z této podkategorie. Přesuňte transakce do jiné podkategorie, abyste tomu zabránili."
 }

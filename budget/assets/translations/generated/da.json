@@ -738,5 +738,9 @@
   "of-category": "af kategori",
   "subcategories": "Underkategorier",
   "view-subcategories": "Se underkategorier",
-  "select-subcategory": "Vælg underkategori"
+  "select-subcategory": "Vælg underkategori",
+  "delete-subcategory-question": "Slet underkategori?",
+  "delete-subcategory-question-description": "Dette fjerner underkategorien fra alle transaktioner, der er forbundet med denne underkategori.",
+  "remove-all-transactions-from-subcategory-question": "Fjerne alle transaktioner?",
+  "delete-subcategory-merge-warning": "Sletning af en underkategori fjerner alle transaktioner fra denne underkategori. Flyt transaktioner til en anden underkategori for at undgå dette."
 }

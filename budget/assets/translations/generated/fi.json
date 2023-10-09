@@ -738,5 +738,9 @@
   "of-category": "luokka",
   "subcategories": "Alaluokka",
   "view-subcategories": "Näytä alaluokat",
-  "select-subcategory": "Valitse alaluokka"
+  "select-subcategory": "Valitse alaluokka",
+  "delete-subcategory-question": "Poista alaluokka?",
+  "delete-subcategory-question-description": "Tämä poistaa alaluokan kaikista tähän alaluokkaan liittyvistä tapahtumista.",
+  "remove-all-transactions-from-subcategory-question": "Poista kaikki tapahtumat?",
+  "delete-subcategory-merge-warning": "Alaluokan poistaminen poistaa kaikki tapahtumat tästä alaluokasta. Siirrä tapahtumia toiseen alaluokkaan tämän välttämiseksi."
 }

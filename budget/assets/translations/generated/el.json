@@ -738,5 +738,9 @@
   "of-category": "κατηγορίας",
   "subcategories": "Υποκατηγορίες",
   "view-subcategories": "Προβολή υποκατηγοριών",
-  "select-subcategory": "Επιλέξτε υποκατηγορία"
+  "select-subcategory": "Επιλέξτε υποκατηγορία",
+  "delete-subcategory-question": "Διαγραφή υποκατηγορίας;",
+  "delete-subcategory-question-description": "Αυτό θα καταργήσει την υποκατηγορία από όλες τις συναλλαγές που σχετίζονται με αυτήν την υποκατηγορία.",
+  "remove-all-transactions-from-subcategory-question": "Κατάργηση όλων των συναλλαγών;",
+  "delete-subcategory-merge-warning": "Η διαγραφή μιας υποκατηγορίας θα καταργήσει όλες τις συναλλαγές από αυτήν την υποκατηγορία. Μετακινήστε τις συναλλαγές σε μια άλλη υποκατηγορία για να αποφύγετε αυτό."
 }

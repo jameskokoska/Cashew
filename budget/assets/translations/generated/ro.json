@@ -738,5 +738,9 @@
   "of-category": "din categorie",
   "subcategories": "Subcategorii",
   "view-subcategories": "Vizualizați subcategoriile",
-  "select-subcategory": "Selectați Subcategoria"
+  "select-subcategory": "Selectați Subcategoria",
+  "delete-subcategory-question": "Ștergeți subcategoria?",
+  "delete-subcategory-question-description": "Aceasta va elimina subcategoria din toate tranzacțiile asociate cu această subcategorie.",
+  "remove-all-transactions-from-subcategory-question": "Îndepărtați toate tranzacțiile?",
+  "delete-subcategory-merge-warning": "Ștergerea unei subcategorie va elimina toate tranzacțiile din această subcategorie. Mutați tranzacțiile într -o altă subcategorie pentru a evita acest lucru."
 }

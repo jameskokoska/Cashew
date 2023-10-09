@@ -738,5 +738,9 @@
   "of-category": "kategori",
   "subcategories": "Subkategori",
   "view-subcategories": "Lihat subkategori",
-  "select-subcategory": "Pilih Subkategori"
+  "select-subcategory": "Pilih Subkategori",
+  "delete-subcategory-question": "Padam Subkategori?",
+  "delete-subcategory-question-description": "Ini akan mengeluarkan subkategori dari semua urus niaga yang berkaitan dengan subkategori ini.",
+  "remove-all-transactions-from-subcategory-question": "Keluarkan semua urus niaga?",
+  "delete-subcategory-merge-warning": "Memadam subkategori akan mengeluarkan semua transaksi dari subkategori ini. Pindahkan transaksi ke subkategori lain untuk mengelakkan ini."
 }

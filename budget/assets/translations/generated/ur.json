@@ -738,5 +738,9 @@
   "of-category": "زمرہ کی",
   "subcategories": "ذیلی زمرہ جات",
   "view-subcategories": "ذیلی زمرہ جات دیکھیں",
-  "select-subcategory": "ذیلی زمرہ منتخب کریں"
+  "select-subcategory": "ذیلی زمرہ منتخب کریں",
+  "delete-subcategory-question": "ذیلی زمرہ حذف کریں؟",
+  "delete-subcategory-question-description": "اس ذیلی زمرہ سے وابستہ تمام لین دین سے ذیلی زمرہ کو ختم کردے گا۔",
+  "remove-all-transactions-from-subcategory-question": "تمام لین دین کو ہٹا دیں؟",
+  "delete-subcategory-merge-warning": "ذیلی زمرہ کو حذف کرنے سے اس ذیلی زمرہ سے تمام لین دین ختم ہوجائے گا۔ اس سے بچنے کے لئے لین دین کو کسی اور ذیلی زمرہ میں منتقل کریں۔"
 }

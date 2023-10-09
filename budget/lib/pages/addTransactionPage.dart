@@ -354,60 +354,71 @@ class _AddTransactionPageState extends State<AddTransactionPage>
   }
 
   Future<bool> addTransaction() async {
-    print("Added transaction");
-    if (selectedTitle != null &&
-        selectedCategory != null &&
-        selectedTitle != "")
-      await addAssociatedTitles(selectedTitle!, selectedCategory!);
-    Transaction createdTransaction = await createTransaction();
-    if ([
-      TransactionSpecialType.repetitive,
-      TransactionSpecialType.subscription,
-      TransactionSpecialType.upcoming
-    ].contains(createdTransaction.type)) {
-      await setUpcomingNotifications(context);
-    }
+    try {
+      print("Added transaction");
+      if (selectedTitle != null &&
+          selectedCategory != null &&
+          selectedTitle != "")
+        await addAssociatedTitles(selectedTitle!, selectedCategory!);
+      Transaction createdTransaction = await createTransaction();
 
-    final int? rowId = await database.createOrUpdateTransaction(
-      insert: widget.transaction == null,
-      await createTransaction(),
-      originalTransaction: widget.transaction,
-    );
+      final int? rowId = await database.createOrUpdateTransaction(
+        insert: widget.transaction == null,
+        createdTransaction,
+        originalTransaction: widget.transaction,
+      );
 
-    if (rowId != null) {
-      final Transaction transactionJustAdded =
-          await database.getTransactionFromRowId(rowId);
-      print("Transaction just added:");
-      print(transactionJustAdded);
+      if (rowId != null) {
+        final Transaction transactionJustAdded =
+            await database.getTransactionFromRowId(rowId);
+        print("Transaction just added:");
+        print(transactionJustAdded);
 
-      // Do the flash animation only if the date was changed
-      if (transactionJustAdded.dateCreated != widget.transaction?.dateCreated) {
-        recentlyAddedTransactionInfo.value.shouldAnimate = true;
-        recentlyAddedTransactionInfo.value.transactionPk =
-            transactionJustAdded.transactionPk;
-        recentlyAddedTransactionInfo.value.loopCount = 5;
-        // If a new transaction with an added date of 5 minutes of less before, flash only a bit
-        if (widget.transaction == null &&
-            transactionJustAdded.dateCreated.isAfter(
-              DateTime.now().subtract(
-                Duration(minutes: 5),
-              ),
-            )) {
-          recentlyAddedTransactionInfo.value.loopCount = 2;
+        // Do the flash animation only if the date was changed
+        if (transactionJustAdded.dateCreated !=
+            widget.transaction?.dateCreated) {
+          recentlyAddedTransactionInfo.value.shouldAnimate = true;
+          recentlyAddedTransactionInfo.value.transactionPk =
+              transactionJustAdded.transactionPk;
+          recentlyAddedTransactionInfo.value.loopCount = 5;
+          // If a new transaction with an added date of 5 minutes of less before, flash only a bit
+          if (widget.transaction == null &&
+              transactionJustAdded.dateCreated.isAfter(
+                DateTime.now().subtract(
+                  Duration(minutes: 5),
+                ),
+              )) {
+            recentlyAddedTransactionInfo.value.loopCount = 2;
+          }
+          recentlyAddedTransactionInfo.notifyListeners();
         }
-        recentlyAddedTransactionInfo.notifyListeners();
       }
+
+      if ([
+        TransactionSpecialType.repetitive,
+        TransactionSpecialType.subscription,
+        TransactionSpecialType.upcoming
+      ].contains(createdTransaction.type)) {
+        await setUpcomingNotifications(context);
+      }
+
+      // recentlyAddedTransactionID.value =
+
+      if (widget.transaction == null &&
+          appStateSettings["purchaseID"] == null) {
+        updateSettings("premiumPopupAddTransactionCount",
+            (appStateSettings["premiumPopupAddTransactionCount"] ?? 0) + 1,
+            updateGlobalState: false);
+      }
+
+      return true;
+    } catch (e) {
+      openSnackbar(SnackbarMessage(
+        title: "Please report this error to the developer",
+        description: e.toString(),
+      ));
+      return false;
     }
-
-    // recentlyAddedTransactionID.value =
-
-    if (widget.transaction == null && appStateSettings["purchaseID"] == null) {
-      updateSettings("premiumPopupAddTransactionCount",
-          appStateSettings["premiumPopupAddTransactionCount"] + 1,
-          updateGlobalState: false);
-    }
-
-    return true;
   }
 
   Transaction createTransaction({bool removeShared = false}) {

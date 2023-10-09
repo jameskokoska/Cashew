@@ -500,22 +500,37 @@ Future<DeletePopupAction?> deleteCategoryPopup(
   required TransactionCategory category,
   required RoutesToPopAfterDelete routesToPopAfterDelete,
 }) async {
+  bool isSubCategory = false;
+  if (category.mainCategoryPk != null) {
+    isSubCategory = true;
+  }
   DeletePopupAction? action = await openDeletePopup(
     context,
-    title: "delete-category-question".tr(),
+    title: isSubCategory
+        ? "delete-subcategory-question".tr()
+        : "delete-category-question".tr(),
     subtitle: category.name,
-    description: "delete-category-question-description".tr(),
+    description: isSubCategory
+        ? "delete-subcategory-question-description".tr()
+        : "delete-category-question-description".tr(),
   );
   if (action == DeletePopupAction.Delete) {
-    int transactionsFromCategoryLength =
-        (await database.getAllTransactionsFromCategory(category.categoryPk))
+    int transactionsFromCategoryLength = isSubCategory
+        ? (await database
+                .getAllTransactionsFromSubCategory(category.categoryPk))
+            .length
+        : (await database.getAllTransactionsFromCategory(category.categoryPk))
             .length;
     dynamic result = true;
     if (transactionsFromCategoryLength > 0) {
       result = await openPopup(
         context,
-        title: "delete-all-transactions-question".tr(),
-        description: "delete-category-merge-warning".tr(),
+        title: isSubCategory
+            ? "remove-all-transactions-from-subcategory-question".tr()
+            : "delete-all-transactions-question".tr(),
+        description: isSubCategory
+            ? "delete-subcategory-merge-warning".tr()
+            : "delete-category-merge-warning".tr(),
         icon: appStateSettings["outlinedIcons"]
             ? Icons.warning_outlined
             : Icons.warning_rounded,
@@ -618,62 +633,62 @@ void mergeCategoryPopup(
   );
 }
 
-// either "none", null, or a Objective type
-Future<dynamic> selectObjectivePopup(BuildContext context,
-    {String? removeWalletPk}) async {
-  dynamic objective = await openBottomSheet(
+void makeSubCategoryPopup(
+  BuildContext context, {
+  required TransactionCategory categoryOriginal,
+  required RoutesToPopAfterDelete routesToPopAfterDelete,
+}) {
+  openBottomSheet(
     context,
     PopupFramework(
-      title: "select-goal".tr(),
-      child: StreamBuilder<List<Objective>>(
-        stream: database.watchAllObjectives(),
-        builder: (context, snapshot) {
-          if (snapshot.hasData &&
-              (snapshot.data != null && snapshot.data!.length > 0)) {
-            List<Objective> addableObjectives = snapshot.data!;
-            return RadioItems(
-              ifNullSelectNone: true,
-              items: [null, ...addableObjectives],
-              colorFilter: (Objective? objective) {
-                if (objective == null) return null;
-                return dynamicPastel(
-                  context,
-                  lightenPastel(
-                    HexColor(
-                      objective.colour,
-                      defaultColor: Theme.of(context).colorScheme.primary,
-                    ),
-                    amount: 0.2,
+      title: "select-category".tr(),
+      subtitle: "select-the-main-category-for-this-subcategory".tr(),
+      child: SelectCategory(
+        hideCategoryFks: [categoryOriginal.categoryPk],
+        allowRearrange: false,
+        popRoute: true,
+        setSelectedCategory: (category) async {
+          Future.delayed(Duration(milliseconds: 90), () async {
+            final result = await openPopup(
+              context,
+              title: "make-subcategory-of".tr() + " " + category.name + "?",
+              description: "make-subcategory-description-categories".tr(),
+              icon: appStateSettings["outlinedIcons"]
+                  ? Icons.move_up_outlined
+                  : Icons.move_up_rounded,
+              onSubmit: () async {
+                Navigator.pop(context, true);
+              },
+              onSubmitLabel: "make-subcategory".tr(),
+              onCancelLabel: "cancel".tr(),
+              onCancel: () {
+                Navigator.pop(context);
+              },
+            );
+            if (result == true) {
+              if (routesToPopAfterDelete == RoutesToPopAfterDelete.All) {
+                Navigator.of(context).popUntil((route) => route.isFirst);
+              } else if (routesToPopAfterDelete == RoutesToPopAfterDelete.One) {
+                Navigator.of(context).pop();
+              }
+              openLoadingPopupTryCatch(() async {
+                await database.mergeAndDeleteCategory(
+                    categoryOriginal, category,
+                    movingToSubCategory: true);
+                openSnackbar(
+                  SnackbarMessage(
+                    title: "subcategory-created".tr(),
+                    icon: appStateSettings["outlinedIcons"]
+                        ? Icons.move_to_inbox_outlined
+                        : Icons.move_to_inbox_rounded,
+                    description: categoryOriginal.name + " → " + category.name,
                   ),
-                  amount: 0.1,
                 );
-              },
-              displayFilter: (Objective? objective) {
-                return objective?.name ?? "no-goal".tr();
-              },
-              initial: null,
-              onChanged: (Objective? objective) async {
-                if (objective == null)
-                  Navigator.of(context).pop("none");
-                else
-                  Navigator.of(context).pop(objective);
-              },
-            );
-          } else {
-            return NoResultsCreate(
-              message: "no-goals-found".tr(),
-              buttonLabel: "create-goal".tr(),
-              route: AddObjectivePage(
-                routesToPopAfterDelete: RoutesToPopAfterDelete.None,
-              ),
-            );
-          }
+              });
+            }
+          });
         },
       ),
     ),
   );
-
-  if (objective is Objective) return objective;
-  if (objective == "none") return "none";
-  return null;
 }

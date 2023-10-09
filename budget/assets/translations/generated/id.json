@@ -738,5 +738,9 @@
   "of-category": "kategori",
   "subcategories": "Subkategori",
   "view-subcategories": "Lihat Subkategori",
-  "select-subcategory": "Pilih Subkategori"
+  "select-subcategory": "Pilih Subkategori",
+  "delete-subcategory-question": "Hapus subkategori?",
+  "delete-subcategory-question-description": "Ini akan menghapus subkategori dari semua transaksi yang terkait dengan subkategori ini.",
+  "remove-all-transactions-from-subcategory-question": "Hapus semua transaksi?",
+  "delete-subcategory-merge-warning": "Menghapus subkategori akan menghapus semua transaksi dari subkategori ini. Pindahkan transaksi ke subkategori lain untuk menghindari ini."
 }

@@ -225,7 +225,7 @@ class GlobalSnackbarState extends State<GlobalSnackbar>
                                     currentMessage?.description == null
                                         ? SizedBox.shrink()
                                         : TextFont(
-                                            maxLines: 3,
+                                            maxLines: 5,
                                             text: currentMessage?.description ??
                                                 "",
                                             textAlign:

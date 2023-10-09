@@ -211,10 +211,13 @@ class _AddCategoryPageState extends State<AddCategoryPage>
       } else {
         _incomeTabController.animateTo(0);
       }
-      Future.delayed(Duration.zero, () {
+      Future.delayed(Duration.zero, () async {
         _titleController.text = selectedTitle ?? "";
         _titleController.selection = TextSelection.fromPosition(
             TextPosition(offset: _titleController.text.length));
+        // await database.fixOrderCategories(
+        //     mainCategoryPkIfSubCategoryOrderFixing:
+        //         widget.category!.categoryPk);
       });
     }
 
@@ -503,7 +506,36 @@ class _AddCategoryPageState extends State<AddCategoryPage>
                 builder: (context, snapshot) {
                   List<TransactionCategory> subCategories = snapshot.data ?? [];
                   if (subCategories.length <= 0)
-                    return SliverToBoxAdapter(child: SizedBox.shrink());
+                    return SliverToBoxAdapter(
+                      child: Padding(
+                        padding: EdgeInsets.only(
+                          left: 20,
+                          right: 20,
+                          top: 20,
+                        ),
+                        child: Button(
+                          flexibleLayout: true,
+                          icon: appStateSettings["outlinedIcons"]
+                              ? Icons.move_to_inbox_outlined
+                              : Icons.move_to_inbox_rounded,
+                          label: "make-subcategory".tr(),
+                          onTap: () async {
+                            if (widget.category != null)
+                              makeSubCategoryPopup(
+                                context,
+                                categoryOriginal: widget.category!,
+                                routesToPopAfterDelete:
+                                    widget.routesToPopAfterDelete,
+                              );
+                          },
+                          color:
+                              Theme.of(context).colorScheme.secondaryContainer,
+                          textColor: Theme.of(context)
+                              .colorScheme
+                              .onSecondaryContainer,
+                        ),
+                      ),
+                    );
                   return SliverReorderableList(
                     onReorderStart: (index) {
                       HapticFeedback.heavyImpact();

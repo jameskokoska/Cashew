@@ -421,6 +421,7 @@ class _WalletDetailsPageState extends State<WalletDetailsPage> {
                         ),
                       )),
                     ),
+              SliverToBoxAdapter(child: SizedBox(height: 75)),
             ],
           ),
           SelectedTransactionsAppBar(
@@ -565,7 +566,6 @@ class _WalletCategoryPieChartState extends State<WalletCategoryPieChart> {
                   //   children: [...categoryEntries],
                   // ),
                   ...categoryEntries,
-                  SizedBox(height: 15),
                 ],
               );
             }

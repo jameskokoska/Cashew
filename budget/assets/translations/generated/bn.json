@@ -738,5 +738,9 @@
   "of-category": "বিভাগ",
   "subcategories": "উপশ্রেণী",
   "view-subcategories": "উপশ্রেণী দেখুন",
-  "select-subcategory": "সাব বিভাগ নির্বাচন করুন"
+  "select-subcategory": "সাব বিভাগ নির্বাচন করুন",
+  "delete-subcategory-question": "সাব বিভাগ মুছুন?",
+  "delete-subcategory-question-description": "এটি এই উপশ্রেণীর সাথে সম্পর্কিত সমস্ত লেনদেন থেকে উপশ্রেণীটি সরিয়ে ফেলবে।",
+  "remove-all-transactions-from-subcategory-question": "সমস্ত লেনদেন সরান?",
+  "delete-subcategory-merge-warning": "একটি উপশ্রেণী মুছে ফেলা এই উপশ্রেণী থেকে সমস্ত লেনদেন অপসারণ করবে। এটি এড়াতে লেনদেনগুলি অন্য উপশ্রেণীতে সরান।"
 }

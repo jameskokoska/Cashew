@@ -738,5 +738,9 @@
   "of-category": "категории",
   "subcategories": "Подкатегории",
   "view-subcategories": "Просмотреть подкатегории",
-  "select-subcategory": "Выберите подкатегорию"
+  "select-subcategory": "Выберите подкатегорию",
+  "delete-subcategory-question": "Удалить подкатегорию?",
+  "delete-subcategory-question-description": "Это удалит подкатегорию из всех транзакций, связанных с этой подкатегорией.",
+  "remove-all-transactions-from-subcategory-question": "Удалить все транзакции?",
+  "delete-subcategory-merge-warning": "Удаление подкатегории удалит все транзакции из этой подкатегории. Переместите транзакции в другую подкатегорию, чтобы избежать этого."
 }

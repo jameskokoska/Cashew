@@ -738,5 +738,9 @@
   "of-category": "类别",
   "subcategories": "子类别",
   "view-subcategories": "查看子类别",
-  "select-subcategory": "选择子类别"
+  "select-subcategory": "选择子类别",
+  "delete-subcategory-question": "删除子类别？",
+  "delete-subcategory-question-description": "这将从与此子类别相关的所有交易中删除子类别。",
+  "remove-all-transactions-from-subcategory-question": "删除所有交易？",
+  "delete-subcategory-merge-warning": "删除子类别将从此子类别中删除所有交易。将交易移至另一个子类别以避免这种情况。"
 }

@@ -738,5 +738,9 @@
   "of-category": "വിഭാഗത്തിന്റെ",
   "subcategories": "ഉപവിഭാഗങ്ങൾ",
   "view-subcategories": "ഉപവിഭാഗങ്ങൾ കാണുക",
-  "select-subcategory": "ഉപവിഭാഗം തിരഞ്ഞെടുക്കുക"
+  "select-subcategory": "ഉപവിഭാഗം തിരഞ്ഞെടുക്കുക",
+  "delete-subcategory-question": "ഉപവിഭാഗം ഇല്ലാതാക്കണോ?",
+  "delete-subcategory-question-description": "ഈ ഉപവിഭാഗവുമായി ബന്ധപ്പെട്ട എല്ലാ ഇടപാടുകളിൽ നിന്നും ഇത് ഉപവിഭാഗം നീക്കംചെയ്യും.",
+  "remove-all-transactions-from-subcategory-question": "എല്ലാ ഇടപാടുകളും നീക്കംചെയ്യണോ?",
+  "delete-subcategory-merge-warning": "ഒരു ഉപവിഭാഗം ഇല്ലാതാക്കുന്നത് ഈ ഉപവിഭാഗംയിൽ നിന്ന് എല്ലാ ഇടപാടുകളും നീക്കംചെയ്യും. ഇത് ഒഴിവാക്കാൻ ഇടപാടുകൾ മറ്റൊരു ഉപവിഭാഗത്തിലേക്ക് നീക്കുക."
 }

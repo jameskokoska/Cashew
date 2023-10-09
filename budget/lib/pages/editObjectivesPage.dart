@@ -6,6 +6,7 @@ import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/pages/addCategoryPage.dart';
 import 'package:budget/pages/addObjectivePage.dart';
+import 'package:budget/pages/editBudgetPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/categoryIcon.dart';
@@ -18,6 +19,7 @@ import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/openSnackbar.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
+import 'package:budget/widgets/radioItems.dart';
 import 'package:budget/widgets/selectCategory.dart';
 import 'package:budget/widgets/textInput.dart';
 import 'package:budget/widgets/textWidgets.dart';
@@ -339,4 +341,64 @@ Future<DeletePopupAction?> deleteObjectivePopup(
     }
   }
   return action;
+}
+
+// either "none", null, or a Objective type
+Future<dynamic> selectObjectivePopup(BuildContext context,
+    {String? removeWalletPk}) async {
+  dynamic objective = await openBottomSheet(
+    context,
+    PopupFramework(
+      title: "select-goal".tr(),
+      child: StreamBuilder<List<Objective>>(
+        stream: database.watchAllObjectives(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData &&
+              (snapshot.data != null && snapshot.data!.length > 0)) {
+            List<Objective> addableObjectives = snapshot.data!;
+            return RadioItems(
+              ifNullSelectNone: true,
+              items: [null, ...addableObjectives],
+              colorFilter: (Objective? objective) {
+                if (objective == null) return null;
+                return dynamicPastel(
+                  context,
+                  lightenPastel(
+                    HexColor(
+                      objective.colour,
+                      defaultColor: Theme.of(context).colorScheme.primary,
+                    ),
+                    amount: 0.2,
+                  ),
+                  amount: 0.1,
+                );
+              },
+              displayFilter: (Objective? objective) {
+                return objective?.name ?? "no-goal".tr();
+              },
+              initial: null,
+              onChanged: (Objective? objective) async {
+                if (objective == null)
+                  Navigator.of(context).pop("none");
+                else
+                  Navigator.of(context).pop(objective);
+              },
+            );
+          } else {
+            return NoResultsCreate(
+              message: "no-goals-found".tr(),
+              buttonLabel: "create-goal".tr(),
+              route: AddObjectivePage(
+                routesToPopAfterDelete: RoutesToPopAfterDelete.None,
+              ),
+            );
+          }
+        },
+      ),
+    ),
+  );
+
+  if (objective is Objective) return objective;
+  if (objective == "none") return "none";
+  return null;
 }

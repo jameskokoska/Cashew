@@ -738,5 +738,9 @@
   "of-category": "カテゴリの",
   "subcategories": "サブカテゴリ",
   "view-subcategories": "サブカテゴリを表示します",
-  "select-subcategory": "サブカテゴリを選択します"
+  "select-subcategory": "サブカテゴリを選択します",
+  "delete-subcategory-question": "サブカテゴリを削除しますか？",
+  "delete-subcategory-question-description": "これにより、このサブカテゴリに関連するすべてのトランザクションからサブカテゴリが削除されます。",
+  "remove-all-transactions-from-subcategory-question": "すべてのトランザクションを削除しますか？",
+  "delete-subcategory-merge-warning": "サブカテゴリを削除すると、このサブカテゴリからすべてのトランザクションが削除されます。これを避けるために、トランザクションを別のサブカテゴリに移動します。"
 }

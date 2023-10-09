@@ -738,5 +738,9 @@
   "of-category": "వర్గం",
   "subcategories": "ఉపవర్గాలు",
   "view-subcategories": "ఉపవర్గాలను చూడండి",
-  "select-subcategory": "ఉపవర్గం ఎంచుకోండి"
+  "select-subcategory": "ఉపవర్గం ఎంచుకోండి",
+  "delete-subcategory-question": "ఉపవర్గం తొలగించాలా?",
+  "delete-subcategory-question-description": "ఇది ఈ ఉపవర్గంతో అనుబంధించబడిన అన్ని లావాదేవీల నుండి ఉపవర్గాన్ని తొలగిస్తుంది.",
+  "remove-all-transactions-from-subcategory-question": "అన్ని లావాదేవీలను తొలగించాలా?",
+  "delete-subcategory-merge-warning": "ఉపవర్గాన్ని తొలగిస్తే ఈ ఉపవర్గం నుండి అన్ని లావాదేవీలను తొలగిస్తుంది. దీన్ని నివారించడానికి లావాదేవీలను మరొక ఉపవర్గానికి తరలించండి."
 }

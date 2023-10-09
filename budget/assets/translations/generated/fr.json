@@ -738,5 +738,9 @@
   "of-category": "de catégorie",
   "subcategories": "Sous-catégories",
   "view-subcategories": "Afficher les sous-catégories",
-  "select-subcategory": "Sélectionner la sous-catégorie"
+  "select-subcategory": "Sélectionner la sous-catégorie",
+  "delete-subcategory-question": "Supprimer la sous-catégorie?",
+  "delete-subcategory-question-description": "Cela supprimera la sous-catégorie de toutes les transactions associées à cette sous-catégorie.",
+  "remove-all-transactions-from-subcategory-question": "Supprimer toutes les transactions?",
+  "delete-subcategory-merge-warning": "La suppression d'une sous-catégorie supprimera toutes les transactions de cette sous-catégorie. Déplacez les transactions vers une autre sous-catégorie pour éviter cela."
 }

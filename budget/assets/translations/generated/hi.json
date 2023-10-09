@@ -738,5 +738,9 @@
   "of-category": "श्रेणी का",
   "subcategories": "उपश्रेणियों",
   "view-subcategories": "उपश्रेणियाँ देखें",
-  "select-subcategory": "उपश्रेणी का चयन करें"
+  "select-subcategory": "उपश्रेणी का चयन करें",
+  "delete-subcategory-question": "उपश्रेणी को हटाएं?",
+  "delete-subcategory-question-description": "यह इस उपश्रेणी से जुड़े सभी लेनदेन से उपश्रेणी को हटा देगा।",
+  "remove-all-transactions-from-subcategory-question": "सभी लेनदेन निकालें?",
+  "delete-subcategory-merge-warning": "एक उपश्रेणी को हटाने से इस उपश्रेणी से सभी लेनदेन को हटा दिया जाएगा। इससे बचने के लिए लेनदेन को एक और उपश्रेणी में स्थानांतरित करें।"
 }

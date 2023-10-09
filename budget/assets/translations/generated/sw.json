@@ -738,5 +738,9 @@
   "of-category": "ya jamii",
   "subcategories": "Sehemu ndogo",
   "view-subcategories": "Angalia vijidudu",
-  "select-subcategory": "Chagua kifungu kidogo"
+  "select-subcategory": "Chagua kifungu kidogo",
+  "delete-subcategory-question": "Futa kifungu kidogo?",
+  "delete-subcategory-question-description": "Hii itaondoa kifungu kidogo kutoka kwa shughuli zote zinazohusiana na kifungu hiki.",
+  "remove-all-transactions-from-subcategory-question": "Ondoa shughuli zote?",
+  "delete-subcategory-merge-warning": "Kufuta kifungu kidogo kitaondoa shughuli zote kutoka kwa kifungu hiki. Hoja shughuli kwa kifungu kingine ili kuepusha hii."
 }
