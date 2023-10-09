@@ -734,5 +734,9 @@
   "tap-for-custom-exchange-rate": "सानुकूल विनिमय दर सेट करण्यासाठी प्रविष्टी टॅप करा",
   "set-currency": "चलन सेट करा",
   "accounts-list": "लेखा यादी",
-  "select-accounts": "खाती निवडा"
+  "select-accounts": "खाती निवडा",
+  "of-category": "श्रेणी",
+  "subcategories": "उपश्रेणी",
+  "view-subcategories": "उपश्रेणी पहा",
+  "select-subcategory": "उपश्रेणी निवडा"
 }

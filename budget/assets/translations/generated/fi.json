@@ -734,5 +734,9 @@
   "tap-for-custom-exchange-rate": "Napauta merkintää asettaaksesi mukautetun valuuttakurssin",
   "set-currency": "Asettaa valuutta",
   "accounts-list": "Tililuettelo",
-  "select-accounts": "Valitse tilit"
+  "select-accounts": "Valitse tilit",
+  "of-category": "luokka",
+  "subcategories": "Alaluokka",
+  "view-subcategories": "Näytä alaluokat",
+  "select-subcategory": "Valitse alaluokka"
 }

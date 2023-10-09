@@ -734,5 +734,9 @@
   "tap-for-custom-exchange-rate": "הקש על ערך כדי להגדיר שער חליפין מותאם אישית",
   "set-currency": "קבע מטבע",
   "accounts-list": "רשימת חשבונות",
-  "select-accounts": "בחר חשבונות"
+  "select-accounts": "בחר חשבונות",
+  "of-category": "של קטגוריה",
+  "subcategories": "קטגוריות משנה",
+  "view-subcategories": "צפה בקטגוריות משנה",
+  "select-subcategory": "בחר תת -קטגוריית משנה"
 }

@@ -734,5 +734,9 @@
   "tap-for-custom-exchange-rate": "Πατήστε μια καταχώρηση για να ορίσετε μια προσαρμοσμένη συναλλαγματική ισοτιμία",
   "set-currency": "Καθορισμένο νόμισμα",
   "accounts-list": "Λίστα λογαριασμών",
-  "select-accounts": "Επιλέξτε λογαριασμούς"
+  "select-accounts": "Επιλέξτε λογαριασμούς",
+  "of-category": "κατηγορίας",
+  "subcategories": "Υποκατηγορίες",
+  "view-subcategories": "Προβολή υποκατηγοριών",
+  "select-subcategory": "Επιλέξτε υποκατηγορία"
 }

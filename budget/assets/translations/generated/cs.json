@@ -734,5 +734,9 @@
   "tap-for-custom-exchange-rate": "Klepnutím na položku nastavíte vlastní směnný kurz",
   "set-currency": "Nastavit měnu",
   "accounts-list": "Seznam účtů",
-  "select-accounts": "Vyberte účty"
+  "select-accounts": "Vyberte účty",
+  "of-category": "kategorie",
+  "subcategories": "Podkategorie",
+  "view-subcategories": "Zobrazit podkategorie",
+  "select-subcategory": "Vyberte podkategorie"
 }

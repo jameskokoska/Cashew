@@ -734,5 +734,9 @@
   "tap-for-custom-exchange-rate": "Nhấn vào một mục để đặt tỷ giá hối đoái tùy chỉnh",
   "set-currency": "Đặt tiền tệ",
   "accounts-list": "Danh sách tài khoản",
-  "select-accounts": "Chọn tài khoản"
+  "select-accounts": "Chọn tài khoản",
+  "of-category": "của thể loại",
+  "subcategories": "Thể loại phụ",
+  "view-subcategories": "Xem các danh mục con",
+  "select-subcategory": "Chọn tiểu thể loại"
 }

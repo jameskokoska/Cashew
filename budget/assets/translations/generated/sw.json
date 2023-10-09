@@ -734,5 +734,9 @@
   "tap-for-custom-exchange-rate": "Gonga kiingilio ili kuweka kiwango cha ubadilishaji wa kawaida",
   "set-currency": "Weka sarafu",
   "accounts-list": "Orodha ya akaunti",
-  "select-accounts": "Chagua akaunti"
+  "select-accounts": "Chagua akaunti",
+  "of-category": "ya jamii",
+  "subcategories": "Sehemu ndogo",
+  "view-subcategories": "Angalia vijidudu",
+  "select-subcategory": "Chagua kifungu kidogo"
 }

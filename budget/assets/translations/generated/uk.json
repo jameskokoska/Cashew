@@ -734,5 +734,9 @@
   "tap-for-custom-exchange-rate": "Торкніться запису, щоб встановити власний обмінний курс",
   "set-currency": "Встановити валюту",
   "accounts-list": "Список рахунків",
-  "select-accounts": "Виберіть рахунки"
+  "select-accounts": "Виберіть рахунки",
+  "of-category": "категорії",
+  "subcategories": "Підкатегорії",
+  "view-subcategories": "Переглянути підкатегорії",
+  "select-subcategory": "Виберіть підкатегорію"
 }

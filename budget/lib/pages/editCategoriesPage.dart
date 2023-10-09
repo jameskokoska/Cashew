@@ -9,6 +9,7 @@ import 'package:budget/pages/addObjectivePage.dart';
 import 'package:budget/pages/editBudgetPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
+import 'package:budget/widgets/animatedExpanded.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/categoryIcon.dart';
 import 'package:budget/widgets/fab.dart';
@@ -22,6 +23,7 @@ import 'package:budget/widgets/openSnackbar.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/widgets/radioItems.dart';
 import 'package:budget/widgets/selectCategory.dart';
+import 'package:budget/widgets/selectChips.dart';
 import 'package:budget/widgets/textInput.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -123,152 +125,256 @@ class _EditCategoriesPageState extends State<EditCategoriesPage> {
               ),
             ),
           ),
-          StreamBuilder<List<TransactionCategory>>(
-            stream: database.watchAllCategories(
-                searchFor: searchValue == "" ? null : searchValue),
-            builder: (context, snapshot) {
-              if (snapshot.hasData && (snapshot.data ?? []).length <= 0) {
-                return SliverToBoxAdapter(
-                  child: NoResults(
-                    message: "no-categories-found".tr(),
-                  ),
-                );
-              }
-              if (snapshot.hasData && (snapshot.data ?? []).length > 0) {
-                return SliverReorderableList(
-                  onReorderStart: (index) {
-                    HapticFeedback.heavyImpact();
-                    setState(() {
-                      dragDownToDismissEnabled = false;
-                      currentReorder = index;
-                    });
-                  },
-                  onReorderEnd: (_) {
-                    setState(() {
-                      dragDownToDismissEnabled = true;
-                      currentReorder = -1;
-                    });
-                  },
-                  itemBuilder: (context, index) {
-                    TransactionCategory category = snapshot.data![index];
-                    return EditRowEntry(
-                      canReorder: searchValue == "" &&
-                          (snapshot.data ?? []).length != 1,
-                      currentReorder:
-                          currentReorder != -1 && currentReorder != index,
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                      key: ValueKey(category.categoryPk),
-                      content: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          CategoryIcon(
-                            categoryPk: category.categoryPk,
-                            size: 31,
-                            category: category,
-                            canEditByLongPress: false,
-                            borderRadius: 1000,
-                            sizePadding: 23,
-                          ),
-                          Container(width: 5),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisSize: MainAxisSize.min,
+          StreamBuilder<Map<String, List<TransactionCategory>>>(
+              stream: database.watchAllSubCategoriesIndexedByPk(),
+              builder: (context, snapshotSubCategories) {
+                Map<String, List<TransactionCategory>>
+                    subCategoriesIndexedByPk = snapshotSubCategories.data ?? {};
+                return StreamBuilder<List<TransactionCategory>>(
+                  stream: database.watchAllCategories(
+                      searchFor: searchValue == "" ? null : searchValue),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData && (snapshot.data ?? []).length <= 0) {
+                      return SliverToBoxAdapter(
+                        child: NoResults(
+                          message: "no-categories-found".tr(),
+                        ),
+                      );
+                    }
+                    if (snapshot.hasData && (snapshot.data ?? []).length > 0) {
+                      return SliverReorderableList(
+                        onReorderStart: (index) {
+                          HapticFeedback.heavyImpact();
+                          setState(() {
+                            dragDownToDismissEnabled = false;
+                            currentReorder = index;
+                          });
+                        },
+                        onReorderEnd: (_) {
+                          setState(() {
+                            dragDownToDismissEnabled = true;
+                            currentReorder = -1;
+                          });
+                        },
+                        itemBuilder: (context, index) {
+                          TransactionCategory category = snapshot.data![index];
+                          List<TransactionCategory> subCategories =
+                              subCategoriesIndexedByPk[category.categoryPk] ??
+                                  [];
+                          return EditRowEntry(
+                            canReorder: searchValue == "" &&
+                                (snapshot.data ?? []).length != 1,
+                            currentReorder:
+                                currentReorder != -1 && currentReorder != index,
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 5),
+                            key: ValueKey(category.categoryPk),
+                            extraWidgetsBelow: [
+                              if (subCategories.length > 0)
+                                Padding(
+                                  padding: const EdgeInsets.only(bottom: 4),
+                                  child: SelectChips(
+                                    scrollablePositionedList: false,
+                                    items: subCategories,
+                                    onLongPress: (category) {
+                                      pushRoute(
+                                        context,
+                                        AddCategoryPage(
+                                          category: category,
+                                          routesToPopAfterDelete:
+                                              RoutesToPopAfterDelete
+                                                  .PreventDelete,
+                                        ),
+                                      );
+                                    },
+                                    onSelected: (TransactionCategory category) {
+                                      pushRoute(
+                                        context,
+                                        AddCategoryPage(
+                                          category: category,
+                                          routesToPopAfterDelete:
+                                              RoutesToPopAfterDelete
+                                                  .PreventDelete,
+                                        ),
+                                      );
+                                    },
+                                    getSelected:
+                                        (TransactionCategory category) {
+                                      return false;
+                                    },
+                                    getCustomBorderColor:
+                                        (TransactionCategory category) {
+                                      return dynamicPastel(
+                                        context,
+                                        lightenPastel(
+                                          HexColor(
+                                            category.colour,
+                                            defaultColor: Theme.of(context)
+                                                .colorScheme
+                                                .primary,
+                                          ),
+                                          amount: 0.3,
+                                        ),
+                                        amount: 0.4,
+                                      );
+                                    },
+                                    getLabel: (TransactionCategory category) {
+                                      return category.name;
+                                    },
+                                    extraWidget: AddButton(
+                                      onTap: () {},
+                                      width: 40,
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 5, vertical: 1),
+                                      openPage: AddCategoryPage(
+                                        routesToPopAfterDelete:
+                                            RoutesToPopAfterDelete.One,
+                                        mainCategoryPkWhenSubCategory:
+                                            category.categoryPk,
+                                      ),
+                                      borderRadius: 8,
+                                    ),
+                                    getAvatar: (TransactionCategory category) {
+                                      return LayoutBuilder(
+                                          builder: (context, constraints) {
+                                        return CategoryIcon(
+                                          categoryPk: "-1",
+                                          category: category,
+                                          size: constraints.maxWidth,
+                                          sizePadding: 0,
+                                          noBackground: true,
+                                          canEditByLongPress: false,
+                                          margin: EdgeInsets.zero,
+                                        );
+                                      });
+                                    },
+                                  ),
+                                ),
+                            ],
+                            content: Column(
                               children: [
-                                TextFont(
-                                  text: category.name
-                                  // +
-                                  //     " - " +
-                                  //     category.order.toString()
-                                  ,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 19,
-                                ),
-                                TextFont(
-                                  textAlign: TextAlign.left,
-                                  text: category.income
-                                      ? "income".tr()
-                                      : "expense".tr(),
-                                  fontSize: 14,
-                                  textColor: getColor(context, "black")
-                                      .withOpacity(0.65),
-                                ),
-                                StreamBuilder<List<int?>>(
-                                  stream: database
-                                      .watchTotalCountOfTransactionsInCategory(
-                                          category.categoryPk),
-                                  builder: (context, snapshot) {
-                                    if (snapshot.hasData &&
-                                        snapshot.data != null) {
-                                      return TextFont(
-                                        textAlign: TextAlign.left,
-                                        text: snapshot.data![0].toString() +
-                                            " " +
-                                            (snapshot.data![0] == 1
-                                                ? "transaction"
-                                                    .tr()
-                                                    .toLowerCase()
-                                                : "transactions"
-                                                    .tr()
-                                                    .toLowerCase()),
-                                        fontSize: 14,
-                                        textColor: getColor(context, "black")
-                                            .withOpacity(0.65),
-                                      );
-                                    } else {
-                                      return TextFont(
-                                        textAlign: TextAlign.left,
-                                        text: "/ transactions",
-                                        fontSize: 14,
-                                        textColor: getColor(context, "black")
-                                            .withOpacity(0.65),
-                                      );
-                                    }
-                                  },
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    CategoryIcon(
+                                      categoryPk: category.categoryPk,
+                                      size: 31,
+                                      category: category,
+                                      canEditByLongPress: false,
+                                      borderRadius: 1000,
+                                      sizePadding: 23,
+                                    ),
+                                    Container(width: 5),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          TextFont(
+                                            text: category.name
+                                            // +
+                                            //     " - " +
+                                            //     category.order.toString()
+                                            ,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 19,
+                                          ),
+                                          TextFont(
+                                            textAlign: TextAlign.left,
+                                            text: category.income
+                                                ? "income".tr()
+                                                : "expense".tr(),
+                                            fontSize: 14,
+                                            textColor:
+                                                getColor(context, "black")
+                                                    .withOpacity(0.65),
+                                          ),
+                                          StreamBuilder<List<int?>>(
+                                            stream: database
+                                                .watchTotalCountOfTransactionsInCategory(
+                                                    category.categoryPk),
+                                            builder: (context, snapshot) {
+                                              if (snapshot.hasData &&
+                                                  snapshot.data != null) {
+                                                return TextFont(
+                                                  textAlign: TextAlign.left,
+                                                  text: snapshot.data![0]
+                                                          .toString() +
+                                                      " " +
+                                                      (snapshot.data![0] == 1
+                                                          ? "transaction"
+                                                              .tr()
+                                                              .toLowerCase()
+                                                          : "transactions"
+                                                              .tr()
+                                                              .toLowerCase()),
+                                                  fontSize: 14,
+                                                  textColor:
+                                                      getColor(context, "black")
+                                                          .withOpacity(0.65),
+                                                );
+                                              } else {
+                                                return TextFont(
+                                                  textAlign: TextAlign.left,
+                                                  text: "/ transactions",
+                                                  fontSize: 14,
+                                                  textColor:
+                                                      getColor(context, "black")
+                                                          .withOpacity(0.65),
+                                                );
+                                              }
+                                            },
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),
-                          ),
-                        ],
-                      ),
-                      index: index,
-                      onDelete: () async {
-                        return (await deleteCategoryPopup(
-                              context,
+                            index: index,
+                            onDelete: () async {
+                              return (await deleteCategoryPopup(
+                                    context,
+                                    category: category,
+                                    routesToPopAfterDelete:
+                                        RoutesToPopAfterDelete.None,
+                                  )) ==
+                                  DeletePopupAction.Delete;
+                            },
+                            openPage: AddCategoryPage(
                               category: category,
                               routesToPopAfterDelete:
-                                  RoutesToPopAfterDelete.None,
-                            )) ==
-                            DeletePopupAction.Delete;
-                      },
-                      openPage: AddCategoryPage(
-                        category: category,
-                        routesToPopAfterDelete: RoutesToPopAfterDelete.One,
-                      ),
+                                  RoutesToPopAfterDelete.One,
+                            ),
+                          );
+                        },
+                        itemCount: snapshot.data!.length,
+                        onReorder: (_intPrevious, _intNew) async {
+                          TransactionCategory oldCategory =
+                              snapshot.data![_intPrevious];
+
+                          if (_intNew > _intPrevious) {
+                            await database.moveCategory(oldCategory.categoryPk,
+                                _intNew - 1, oldCategory.order);
+                          } else {
+                            await database.moveCategory(oldCategory.categoryPk,
+                                _intNew, oldCategory.order);
+                          }
+                          return true;
+                        },
+                      );
+                    }
+                    return SliverToBoxAdapter(
+                      child: Container(),
                     );
                   },
-                  itemCount: snapshot.data!.length,
-                  onReorder: (_intPrevious, _intNew) async {
-                    TransactionCategory oldCategory =
-                        snapshot.data![_intPrevious];
-
-                    if (_intNew > _intPrevious) {
-                      await database.moveCategory(oldCategory.categoryPk,
-                          _intNew - 1, oldCategory.order);
-                    } else {
-                      await database.moveCategory(
-                          oldCategory.categoryPk, _intNew, oldCategory.order);
-                    }
-                    return true;
-                  },
                 );
-              }
-              return SliverToBoxAdapter(
-                child: Container(),
-              );
-            },
-          ),
+              }),
           SliverToBoxAdapter(
             child: SizedBox(height: 75),
           ),

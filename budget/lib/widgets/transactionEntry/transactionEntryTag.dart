@@ -20,6 +20,9 @@ class TransactionEntryTag extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool showObjectivePercentageCheck = showObjectivePercentage;
+    if (transaction.sharedReferenceBudgetPk != null ||
+        transaction.subCategoryFk != null) showObjectivePercentageCheck = false;
     return Padding(
       padding: const EdgeInsets.only(top: 1.0),
       child: Row(
@@ -108,7 +111,10 @@ class TransactionEntryTag extends StatelessWidget {
                                   children: [
                                     ConstrainedBox(
                                       constraints: BoxConstraints(
-                                          maxWidth: constraints.maxWidth * 0.8),
+                                          maxWidth: constraints.maxWidth *
+                                              (showObjectivePercentageCheck
+                                                  ? 0.8
+                                                  : 1)),
                                       child: TransactionTag(
                                         color: HexColor(objective.colour),
                                         name: objective.name +
@@ -120,9 +126,9 @@ class TransactionEntryTag extends StatelessWidget {
                                                 numberDecimals: 0),
                                       ),
                                     ),
-                                    if (showObjectivePercentage)
+                                    if (showObjectivePercentageCheck)
                                       SizedBox(width: 7),
-                                    if (showObjectivePercentage)
+                                    if (showObjectivePercentageCheck)
                                       Expanded(
                                         child: ThinProgress(
                                           backgroundColor:
@@ -132,7 +138,18 @@ class TransactionEntryTag extends StatelessWidget {
                                                       .secondaryContainer
                                                   : getColor(context,
                                                       "lightDarkAccentHeavy"),
-                                          color: HexColor(objective.colour),
+                                          color: dynamicPastel(
+                                            context,
+                                            HexColor(
+                                              objective.colour,
+                                              defaultColor: Theme.of(context)
+                                                  .colorScheme
+                                                  .primary,
+                                            ),
+                                            inverse: true,
+                                            amountLight: 0.1,
+                                            amountDark: 0.1,
+                                          ),
                                           progress: percentageTowardsGoal,
                                         ),
                                       ),

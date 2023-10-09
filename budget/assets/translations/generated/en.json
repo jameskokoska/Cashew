@@ -734,5 +734,9 @@
   "tap-for-custom-exchange-rate": "Tap an entry to set a custom exchange rate",
   "set-currency": "Set Currency",
   "accounts-list": "Accounts List",
-  "select-accounts": "Select Accounts"
+  "select-accounts": "Select Accounts",
+  "of-category": "of category",
+  "subcategories": "Subcategories",
+  "view-subcategories": "View Subcategories",
+  "select-subcategory": "Select Subcategory"
 }

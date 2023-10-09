@@ -734,5 +734,9 @@
   "tap-for-custom-exchange-rate": "Tryk på en post for at indstille en brugerdefineret valutakurs",
   "set-currency": "Indstil valuta",
   "accounts-list": "Liste over konti",
-  "select-accounts": "Vælg konti"
+  "select-accounts": "Vælg konti",
+  "of-category": "af kategori",
+  "subcategories": "Underkategorier",
+  "view-subcategories": "Se underkategorier",
+  "select-subcategory": "Vælg underkategori"
 }

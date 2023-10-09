@@ -734,5 +734,9 @@
   "tap-for-custom-exchange-rate": "एक कस्टम विनिमय दर निर्धारित करने के लिए एक प्रविष्टि टैप करें",
   "set-currency": "मुद्रा निर्धारित करें",
   "accounts-list": "लेखा सूची",
-  "select-accounts": "खातों का चयन करें"
+  "select-accounts": "खातों का चयन करें",
+  "of-category": "श्रेणी का",
+  "subcategories": "उपश्रेणियों",
+  "view-subcategories": "उपश्रेणियाँ देखें",
+  "select-subcategory": "उपश्रेणी का चयन करें"
 }

@@ -734,5 +734,9 @@
   "tap-for-custom-exchange-rate": "একটি কাস্টম এক্সচেঞ্জ রেট সেট করতে একটি এন্ট্রি আলতো চাপুন",
   "set-currency": "মুদ্রা সেট করুন",
   "accounts-list": "অ্যাকাউন্ট তালিকা",
-  "select-accounts": "অ্যাকাউন্ট নির্বাচন করুন"
+  "select-accounts": "অ্যাকাউন্ট নির্বাচন করুন",
+  "of-category": "বিভাগ",
+  "subcategories": "উপশ্রেণী",
+  "view-subcategories": "উপশ্রেণী দেখুন",
+  "select-subcategory": "সাব বিভাগ নির্বাচন করুন"
 }

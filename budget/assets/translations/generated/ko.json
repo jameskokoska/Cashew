@@ -734,5 +734,9 @@
   "tap-for-custom-exchange-rate": "항목을 탭하여 사용자 정의 환율을 설정하십시오",
   "set-currency": "통화를 설정하십시오",
   "accounts-list": "계정 목록",
-  "select-accounts": "계정을 선택하십시오"
+  "select-accounts": "계정을 선택하십시오",
+  "of-category": "카테고리",
+  "subcategories": "하위 범주",
+  "view-subcategories": "하위 범주를 봅니다",
+  "select-subcategory": "하위 범주를 선택하십시오"
 }

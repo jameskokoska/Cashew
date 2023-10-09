@@ -2029,11 +2029,14 @@ class FinanceDatabase extends _$FinanceDatabase {
   }
 
   Stream<List<TransactionAssociatedTitle>> watchAllAssociatedTitlesInCategory(
-    String categoryFk,
-  ) {
+      String categoryFk,
+      {int? limit}) {
     return (select(associatedTitles)
           ..where((t) => t.categoryFk.equals(categoryFk))
-          ..orderBy([(t) => OrderingTerm.desc(t.order)]))
+          ..orderBy([(t) => OrderingTerm.desc(t.order)])
+          ..limit(
+            limit ?? DEFAULT_LIMIT,
+          ))
         .watch();
   }
 
@@ -2047,9 +2050,7 @@ class FinanceDatabase extends _$FinanceDatabase {
   }
 
   Stream<List<CategoryBudgetLimit>> watchAllCategoryLimitsInBudget(
-      String budgetPk,
-      {int? limit,
-      int? offset}) {
+      String budgetPk) {
     return (select(categoryBudgetLimits)
           ..where((t) => t.budgetFk.equals(budgetPk)))
         .watch();
@@ -3148,6 +3149,21 @@ class FinanceDatabase extends _$FinanceDatabase {
           ..orderBy([(c) => OrderingTerm.asc(c.order)])
           ..limit(limit ?? DEFAULT_LIMIT, offset: offset ?? DEFAULT_OFFSET))
         .watch();
+  }
+
+  Stream<Map<String, List<TransactionCategory>>>
+      watchAllSubCategoriesIndexedByPk() {
+    return (select(categories)..orderBy([(w) => OrderingTerm.asc(w.order)]))
+        .watch()
+        .map((categories) {
+      Map<String, List<TransactionCategory>> indexedByPk = {
+        for (TransactionCategory category in categories)
+          category.categoryPk: categories
+              .where((c) => c.mainCategoryPk == category.categoryPk)
+              .toList(),
+      };
+      return indexedByPk;
+    });
   }
 
   Stream<List<TransactionCategory>> watchAllSubCategoriesOfMainCategory(

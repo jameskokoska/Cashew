@@ -734,5 +734,9 @@
   "tap-for-custom-exchange-rate": "Trykk på en oppføring for å angi en tilpasset valutakurs",
   "set-currency": "Sett valuta",
   "accounts-list": "Kontoliste",
-  "select-accounts": "Velg kontoer"
+  "select-accounts": "Velg kontoer",
+  "of-category": "av kategori",
+  "subcategories": "Underkategorier",
+  "view-subcategories": "Se underkategorier",
+  "select-subcategory": "Velg underkategori"
 }

@@ -734,5 +734,9 @@
   "tap-for-custom-exchange-rate": "Tapikin ang isang entry upang magtakda ng isang pasadyang rate ng palitan",
   "set-currency": "Itakda ang pera",
   "accounts-list": "Listahan ng mga account",
-  "select-accounts": "Piliin ang Mga Account"
+  "select-accounts": "Piliin ang Mga Account",
+  "of-category": "ng kategorya",
+  "subcategories": "Mga kategorya",
+  "view-subcategories": "Tingnan ang mga subkategorya",
+  "select-subcategory": "Piliin ang Subcategory"
 }

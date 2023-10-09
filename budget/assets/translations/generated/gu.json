@@ -734,5 +734,9 @@
   "tap-for-custom-exchange-rate": "કસ્ટમ વિનિમય દર સેટ કરવા માટે એન્ટ્રી ટેપ કરો",
   "set-currency": "ચલણ નક્કી કરવું",
   "accounts-list": "હિસાબ યાદી",
-  "select-accounts": "હિસાબ પસંદ કરો"
+  "select-accounts": "હિસાબ પસંદ કરો",
+  "of-category": "કેફી",
+  "subcategories": "ઉપ -કેટેગરીઝ",
+  "view-subcategories": "ઉપકેટેગરીઝ જુઓ",
+  "select-subcategory": "સબક ateg ટેગરી પસંદ કરો"
 }

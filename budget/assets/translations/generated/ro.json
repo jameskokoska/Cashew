@@ -734,5 +734,9 @@
   "tap-for-custom-exchange-rate": "Atingeți o intrare pentru a seta un curs de schimb personalizat",
   "set-currency": "Setați moneda",
   "accounts-list": "Lista de conturi",
-  "select-accounts": "Selectați conturi"
+  "select-accounts": "Selectați conturi",
+  "of-category": "din categorie",
+  "subcategories": "Subcategorii",
+  "view-subcategories": "Vizualizați subcategoriile",
+  "select-subcategory": "Selectați Subcategoria"
 }

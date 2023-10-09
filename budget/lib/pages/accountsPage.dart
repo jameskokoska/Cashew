@@ -183,10 +183,10 @@ class AccountsPageState extends State<AccountsPage> {
                                   opacity: currentlyExporting ? 0.4 : 1,
                                   duration: Duration(milliseconds: 200),
                                   child: OutlinedButtonStacked(
-                                    text: "export".tr(),
+                                    text: "backup".tr(),
                                     iconData: appStateSettings["outlinedIcons"]
-                                        ? Icons.upload_outlined
-                                        : Icons.upload_rounded,
+                                        ? Icons.cloud_upload_rounded
+                                        : Icons.cloud_upload_rounded,
                                     onTap: () async {
                                       setState(() {
                                         currentlyExporting = true;
@@ -205,10 +205,10 @@ class AccountsPageState extends State<AccountsPage> {
                             SizedBox(width: 15),
                             Expanded(
                               child: OutlinedButtonStacked(
-                                text: "import".tr(),
+                                text: "restore".tr(),
                                 iconData: appStateSettings["outlinedIcons"]
-                                    ? Icons.download_outlined
-                                    : Icons.download_rounded,
+                                    ? Icons.cloud_download_outlined
+                                    : Icons.cloud_download_rounded,
                                 onTap: () async {
                                   await chooseBackup(context);
                                 },

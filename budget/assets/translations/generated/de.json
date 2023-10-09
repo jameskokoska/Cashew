@@ -734,5 +734,9 @@
   "tap-for-custom-exchange-rate": "Tippen Sie auf einen Eintrag, um einen benutzerdefinierten Wechselkurs festzulegen",
   "set-currency": "Währung festlegen",
   "accounts-list": "Kontenliste",
-  "select-accounts": "Wählen Sie Konten"
+  "select-accounts": "Wählen Sie Konten",
+  "of-category": "der Kategorie",
+  "subcategories": "Unterkategorien",
+  "view-subcategories": "Unterkategorien anzeigen",
+  "select-subcategory": "Wählen Sie Unterkategorie"
 }

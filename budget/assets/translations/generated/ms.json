@@ -734,5 +734,9 @@
   "tap-for-custom-exchange-rate": "Ketik entri untuk menetapkan kadar pertukaran tersuai",
   "set-currency": "Tetapkan mata wang",
   "accounts-list": "Senarai Akaun",
-  "select-accounts": "Pilih akaun"
+  "select-accounts": "Pilih akaun",
+  "of-category": "kategori",
+  "subcategories": "Subkategori",
+  "view-subcategories": "Lihat subkategori",
+  "select-subcategory": "Pilih Subkategori"
 }

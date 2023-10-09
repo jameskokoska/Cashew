@@ -734,5 +734,9 @@
   "tap-for-custom-exchange-rate": "Toque una entrada para establecer un tipo de cambio personalizado",
   "set-currency": "Moneda establecida",
   "accounts-list": "Lista de cuentas",
-  "select-accounts": "Seleccionar cuentas"
+  "select-accounts": "Seleccionar cuentas",
+  "of-category": "de categoría",
+  "subcategories": "Subcategorías",
+  "view-subcategories": "Ver subcategorías",
+  "select-subcategory": "Seleccionar subcategoría"
 }

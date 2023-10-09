@@ -97,7 +97,7 @@ class AddTransactionPage extends StatefulWidget {
 class _AddTransactionPageState extends State<AddTransactionPage>
     with SingleTickerProviderStateMixin {
   TransactionCategory? selectedCategory;
-  String? selectedSubCategoryPk;
+  TransactionCategory? selectedSubCategory;
   double? selectedAmount;
   String? selectedAmountCalculation;
   String? selectedTitle;
@@ -149,21 +149,25 @@ class _AddTransactionPageState extends State<AddTransactionPage>
     });
   }
 
-  void setSelectedCategory(TransactionCategory category) {
-    setSelectedIncome(category.income);
+  void setSelectedCategory(TransactionCategory category,
+      {bool setIncome = true}) {
+    if (setIncome) setSelectedIncome(category.income);
     setState(() {
-      if (selectedCategory != category) selectedSubCategoryPk = null;
+      if (selectedCategory != category) selectedSubCategory = null;
       selectedCategory = category;
     });
     return;
   }
 
-  void setSelectedSubCategory(TransactionCategory category) {
+  void setSelectedSubCategory(TransactionCategory? category, {toggle = false}) {
     setState(() {
-      if (selectedSubCategoryPk == category.categoryPk) {
-        selectedSubCategoryPk = null;
+      if (category == null) {
+        selectedSubCategory = null;
+      } else if (selectedSubCategory?.categoryPk == category.categoryPk &&
+          toggle) {
+        selectedSubCategory = null;
       } else {
-        selectedSubCategoryPk = category.categoryPk;
+        selectedSubCategory = category;
       }
     });
     return;
@@ -441,7 +445,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
           : (selectedAmount ?? 0).abs() * -1),
       note: selectedNote ?? "",
       categoryFk: selectedCategory?.categoryPk ?? "-1",
-      subCategoryFk: selectedSubCategoryPk,
+      subCategoryFk: selectedSubCategory?.categoryPk,
       dateCreated: selectedDate,
       dateTimeModified: null,
       income: selectedIncome,
@@ -545,7 +549,6 @@ class _AddTransactionPageState extends State<AddTransactionPage>
       selectedPayer = widget.transaction!.transactionOwnerEmail;
       selectedBudgetPk = widget.transaction!.sharedReferenceBudgetPk;
       selectedObjectivePk = widget.transaction!.objectiveFk;
-      selectedSubCategoryPk = widget.transaction!.subCategoryFk;
       // var amountString = widget.transaction!.amount.toStringAsFixed(2);
       // if (amountString.substring(amountString.length - 2) == "00") {
       //   selectedAmountCalculation =
@@ -568,30 +571,30 @@ class _AddTransactionPageState extends State<AddTransactionPage>
 
       Future.delayed(Duration(milliseconds: 0), () async {
         await premiumPopupAddTransaction(context);
-        openBottomSheet(
-          context,
-          // Only allow full snap when entering a title
-          fullSnap: appStateSettings["askForTransactionTitle"] == true,
-          appStateSettings["askForTransactionTitle"]
-              ? SelectTitle(
-                  selectedTitle: selectedTitle,
-                  setSelectedNote: setSelectedNoteController,
-                  setSelectedTitle: setSelectedTitleController,
-                  setSelectedTags: setSelectedTags,
-                  selectedCategory: selectedCategory,
-                  setSelectedCategory: setSelectedCategory,
-                  next: () {
-                    openBottomSheet(context, afterSetTitle());
-                  },
-                )
-              : afterSetTitle(),
-        );
         if (appStateSettings["askForTransactionTitle"]) {
+          openBottomSheet(
+            context,
+            // Only allow full snap when entering a title
+            fullSnap: true,
+            SelectTitle(
+              selectedTitle: selectedTitle,
+              setSelectedNote: setSelectedNoteController,
+              setSelectedTitle: setSelectedTitleController,
+              setSelectedTags: setSelectedTags,
+              selectedCategory: selectedCategory,
+              setSelectedCategory: setSelectedCategory,
+              next: () {
+                afterSetTitle();
+              },
+            ),
+          );
           // Fix over-scroll stretch when keyboard pops up quickly
           Future.delayed(Duration(milliseconds: 100), () {
             bottomSheetControllerGlobal.scrollTo(0,
                 duration: Duration(milliseconds: 100));
           });
+        } else {
+          afterSetTitle();
         }
       });
     }
@@ -622,11 +625,124 @@ class _AddTransactionPageState extends State<AddTransactionPage>
     setState(() {});
   }
 
-  Widget afterSetTitle() {
-    return PopupFramework(
-      title: "select-category".tr(),
-      hasPadding: false,
-      child: Column(
+  updateInitial() async {
+    if (widget.transaction != null) {
+      TransactionCategory? getSelectedCategory =
+          await database.getCategoryInstance(widget.transaction!.categoryFk);
+      TransactionCategory? getSelectedSubCategory =
+          widget.transaction!.subCategoryFk == null
+              ? null
+              : await database
+                  .getCategoryInstance(widget.transaction!.subCategoryFk!);
+      Budget? getBudget;
+      try {
+        getBudget = await database.getBudgetInstance(
+            widget.transaction!.sharedReferenceBudgetPk ?? "-1");
+      } catch (e) {}
+
+      setState(() {
+        selectedCategory = getSelectedCategory;
+        selectedSubCategory = getSelectedSubCategory;
+        selectedBudget = getBudget;
+        selectedBudgetIsShared =
+            getBudget == null ? false : getBudget.sharedKey != null;
+      });
+    }
+  }
+
+  // return false if the subcategory is skipped
+  Future<dynamic> selectCategorySequence(
+      {Widget? extraWidgetBefore, bool? skipIfSet}) async {
+    dynamic result = await openBottomSheet(
+      context,
+      PopupFramework(
+        title: "select-category".tr(),
+        hasPadding: false,
+        child: Column(
+          children: [
+            if (extraWidgetBefore != null) extraWidgetBefore,
+            Padding(
+              padding: const EdgeInsets.only(left: 18, right: 18, bottom: 10),
+              child: SelectCategory(
+                skipIfSet: skipIfSet,
+                selectedCategory: selectedCategory,
+                setSelectedCategory: setSelectedCategory,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+    if (result != null && result is TransactionCategory) {
+      int subCategoriesOfMain =
+          await database.getAmountOfSubCategories(result.categoryPk);
+      if (subCategoriesOfMain > 0) {
+        result = await openBottomSheet(
+          context,
+          PopupFramework(
+            title: "select-subcategory".tr(),
+            child: SelectCategory(
+              skipIfSet: skipIfSet,
+              selectedCategory: selectedSubCategory,
+              setSelectedCategory: setSelectedSubCategory,
+              mainCategoryPk: selectedCategory!.categoryPk,
+              header: [
+                LayoutBuilder(builder: (context, constraints) {
+                  return Column(
+                    children: [
+                      Tappable(
+                        color: Theme.of(context).colorScheme.secondaryContainer,
+                        onTap: () {
+                          setSelectedSubCategory(null);
+                          Navigator.pop(context, false);
+                        },
+                        borderRadius: 18,
+                        child: Container(
+                          height: constraints.maxWidth < 70
+                              ? constraints.maxWidth
+                              : 66,
+                          width: constraints.maxWidth < 70
+                              ? constraints.maxWidth
+                              : 66,
+                          child: Center(
+                            child: Icon(
+                              appStateSettings["outlinedIcons"]
+                                  ? Icons.block_outlined
+                                  : Icons.block_rounded,
+                              size: 40,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(top: 2),
+                        child: Center(
+                          child: TextFont(
+                            textAlign: TextAlign.center,
+                            text: "none".tr(),
+                            fontSize: 10,
+                            maxLines: 1,
+                          ),
+                        ),
+                      ),
+                    ],
+                  );
+                }),
+              ],
+            ),
+          ),
+        );
+        if (result == false) return false;
+      }
+    }
+    if (result is TransactionCategory) return result;
+    return null;
+  }
+
+  Future afterSetTitle() async {
+    dynamic result = await selectCategorySequence(
+      skipIfSet: true,
+      extraWidgetBefore: Column(
         children: [
           SelectAddedBudget(
             setSelectedBudget: setSelectedBudgetPk,
@@ -640,72 +756,59 @@ class _AddTransactionPageState extends State<AddTransactionPage>
             extraHorizontalPadding: 13,
             wrapped: false,
           ),
-          Padding(
-            padding: const EdgeInsets.only(left: 18, right: 18, bottom: 10),
-            child: SelectCategory(
-              selectedCategory: selectedCategory,
-              setSelectedCategory: setSelectedCategory,
-              skipIfSet: true,
-              next: () {
-                openBottomSheet(
-                  context,
-                  fullSnap: true,
-                  PopupFramework(
-                    title: "enter-amount".tr(),
-                    underTitleSpace: false,
-                    hasPadding: false,
-                    child: SelectAmount(
-                      enableWalletPicker: true,
-                      selectedWallet: selectedWallet,
-                      setSelectedWallet: setSelectedWalletPk,
-                      padding: EdgeInsets.symmetric(horizontal: 18),
-                      walletPkForCurrency: selectedWalletPk,
-                      onlyShowCurrencyIcon:
-                          appStateSettings["selectedWalletPk"] ==
-                              selectedWalletPk,
-                      amountPassed: (selectedAmount ?? "0").toString(),
-                      setSelectedAmount: setSelectedAmount,
-                      next: () async {
-                        await addTransaction();
-                        Navigator.pop(context);
-                        Navigator.pop(context);
-                      },
-                      nextLabel: textAddTransaction,
-                    ),
-                  ),
-                );
-              },
-            ),
-          ),
-          selectedCategory != null
-              ? CategoryIcon(
-                  categoryPk: "-1",
-                  size: 50,
-                  category: selectedCategory,
-                )
-              : Container()
         ],
       ),
     );
+    if (result is TransactionCategory || result == false) {
+      openBottomSheet(
+        context,
+        fullSnap: true,
+        PopupFramework(
+          title: "enter-amount".tr(),
+          underTitleSpace: false,
+          hasPadding: false,
+          child: selectAmountPopup(
+            next: () async {
+              await addTransaction();
+              Navigator.pop(context);
+              Navigator.pop(context);
+            },
+            nextLabel: textAddTransaction,
+          ),
+        ),
+      );
+    }
   }
 
-  updateInitial() async {
-    if (widget.transaction != null) {
-      TransactionCategory? getSelectedCategory =
-          await database.getCategoryInstance(widget.transaction!.categoryFk);
-      Budget? getBudget;
-      try {
-        getBudget = await database.getBudgetInstance(
-            widget.transaction!.sharedReferenceBudgetPk ?? "-1");
-      } catch (e) {}
-
-      setState(() {
-        selectedCategory = getSelectedCategory;
-        selectedBudget = getBudget;
-        selectedBudgetIsShared =
-            getBudget == null ? false : getBudget.sharedKey != null;
-      });
-    }
+  selectAmountPopup({VoidCallback? next, String? nextLabel}) async {
+    await openBottomSheet(
+      context,
+      fullSnap: true,
+      PopupFramework(
+        title: "enter-amount".tr(),
+        hasPadding: false,
+        underTitleSpace: false,
+        child: SelectAmount(
+          enableWalletPicker: true,
+          selectedWallet: selectedWallet,
+          setSelectedWallet: setSelectedWalletPk,
+          padding: EdgeInsets.symmetric(horizontal: 18),
+          walletPkForCurrency: selectedWalletPk,
+          // onlyShowCurrencyIcon:
+          //     appStateSettings[
+          //             "selectedWalletPk"] ==
+          //         selectedWalletPk,
+          onlyShowCurrencyIcon: true,
+          amountPassed: (selectedAmount ?? "0").toString(),
+          setSelectedAmount: setSelectedAmount,
+          next: next ??
+              () async {
+                Navigator.pop(context);
+              },
+          nextLabel: nextLabel ?? "set-amount".tr(),
+        ),
+      ),
+    );
   }
 
   @override
@@ -757,37 +860,12 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                     TransactionCategory category = await database
                         .getCategory(selectedCategory!.categoryPk)
                         .$2;
-                    setSelectedCategory(category);
+                    setSelectedCategory(category,
+                        setIncome: selectedCategory?.income != category.income);
                   }
                 },
                 onTap: () async {
-                  await openBottomSheet(
-                    context,
-                    PopupFramework(
-                      title: "select-category".tr(),
-                      child: SelectCategory(
-                        selectedCategory: selectedCategory,
-                        setSelectedCategory: setSelectedCategory,
-                      ),
-                    ),
-                  );
-                  if (selectedCategory?.categoryPk != null) {
-                    int subCategoriesOfMain = await database
-                        .getAmountOfSubCategories(selectedCategory!.categoryPk);
-                    if (subCategoriesOfMain > 0) {
-                      await openBottomSheet(
-                        context,
-                        PopupFramework(
-                          title: "select-category".tr(),
-                          child: SelectCategory(
-                            selectedCategory: selectedCategory,
-                            setSelectedCategory: setSelectedSubCategory,
-                            mainCategoryPk: selectedCategory!.categoryPk,
-                          ),
-                        ),
-                      );
-                    }
-                  }
+                  await selectCategorySequence();
                 },
                 color: Colors.transparent,
                 child: Container(
@@ -856,54 +934,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                       color: Colors.transparent,
                       onLongPress: onLongPress,
                       onTap: () {
-                        openBottomSheet(
-                          context,
-                          fullSnap: true,
-                          PopupFramework(
-                            title: "enter-amount".tr(),
-                            hasPadding: false,
-                            underTitleSpace: false,
-                            child: SelectAmount(
-                              enableWalletPicker: true,
-                              selectedWallet: selectedWallet,
-                              setSelectedWallet: setSelectedWalletPk,
-                              padding: EdgeInsets.symmetric(horizontal: 18),
-                              walletPkForCurrency: selectedWalletPk,
-                              // onlyShowCurrencyIcon:
-                              //     appStateSettings[
-                              //             "selectedWalletPk"] ==
-                              //         selectedWalletPk,
-                              onlyShowCurrencyIcon: true,
-                              amountPassed: (selectedAmount ?? "0").toString(),
-                              setSelectedAmount: setSelectedAmount,
-                              next: () async {
-                                if (selectedCategory == null) {
-                                  Navigator.pop(context);
-                                  openBottomSheet(
-                                    context,
-                                    PopupFramework(
-                                      title: "select-category".tr(),
-                                      child: SelectCategory(
-                                        selectedCategory: selectedCategory,
-                                        setSelectedCategory:
-                                            setSelectedCategory,
-                                        next: () async {
-                                          // await addTransaction();
-                                          // Navigator.pop(context);
-                                        },
-                                      ),
-                                    ),
-                                  );
-                                } else {
-                                  Navigator.pop(context);
-                                }
-                              },
-                              nextLabel: selectedCategory == null
-                                  ? "select-category".tr()
-                                  : "set-amount".tr(),
-                            ),
-                          ),
-                        );
+                        selectAmountPopup();
                       },
                       child: Container(
                         padding: const EdgeInsets.only(right: 37),
@@ -1028,11 +1059,12 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                 },
                                 items: subCategories,
                                 getSelected: (TransactionCategory category) {
-                                  return selectedSubCategoryPk ==
+                                  return selectedSubCategory?.categoryPk ==
                                       category.categoryPk;
                                 },
                                 onSelected: (TransactionCategory category) {
-                                  setSelectedSubCategory(category);
+                                  setSelectedSubCategory(category,
+                                      toggle: true);
                                 },
                                 getCustomBorderColor:
                                     (TransactionCategory category) {
@@ -1296,89 +1328,14 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                       ? SaveBottomButton(
                           label: "select-category".tr(),
                           onTap: () {
-                            openBottomSheet(
-                              context,
-                              PopupFramework(
-                                title: "select-category".tr(),
-                                child: SelectCategory(
-                                  selectedCategory: selectedCategory,
-                                  setSelectedCategory: setSelectedCategory,
-                                  skipIfSet: true,
-                                  next: () {
-                                    if (selectedAmount == null)
-                                      openBottomSheet(
-                                        context,
-                                        fullSnap: true,
-                                        PopupFramework(
-                                          title: "enter-amount".tr(),
-                                          hasPadding: false,
-                                          underTitleSpace: false,
-                                          child: SelectAmount(
-                                            enableWalletPicker: true,
-                                            selectedWallet: selectedWallet,
-                                            setSelectedWallet:
-                                                setSelectedWalletPk,
-                                            padding: EdgeInsets.symmetric(
-                                                horizontal: 18),
-                                            walletPkForCurrency:
-                                                selectedWalletPk,
-                                            onlyShowCurrencyIcon:
-                                                appStateSettings[
-                                                        "selectedWalletPk"] ==
-                                                    selectedWalletPk,
-                                            amountPassed:
-                                                (selectedAmount ?? "0")
-                                                    .toString(),
-                                            setSelectedAmount:
-                                                setSelectedAmount,
-                                            next: () async {
-                                              await addTransaction();
-                                              Navigator.pop(context);
-                                              Navigator.pop(context);
-                                            },
-                                            nextLabel: textAddTransaction,
-                                          ),
-                                        ),
-                                      );
-                                  },
-                                ),
-                              ),
-                            );
+                            selectCategorySequence();
                           },
                         )
                       : selectedAmount == null
                           ? SaveBottomButton(
                               label: "enter-amount".tr(),
                               onTap: () {
-                                openBottomSheet(
-                                  context,
-                                  fullSnap: true,
-                                  PopupFramework(
-                                    title: "enter-amount".tr(),
-                                    hasPadding: false,
-                                    underTitleSpace: false,
-                                    child: SelectAmount(
-                                      enableWalletPicker: true,
-                                      selectedWallet: selectedWallet,
-                                      setSelectedWallet: setSelectedWalletPk,
-                                      padding:
-                                          EdgeInsets.symmetric(horizontal: 18),
-                                      walletPkForCurrency: selectedWalletPk,
-                                      onlyShowCurrencyIcon: appStateSettings[
-                                              "selectedWalletPk"] ==
-                                          selectedWalletPk,
-                                      amountPassed:
-                                          (selectedAmount ?? "0").toString(),
-                                      setSelectedAmount: setSelectedAmount,
-                                      next: () async {
-                                        await addTransaction();
-                                        Navigator.pop(context);
-                                        Navigator.pop(context);
-                                      },
-                                      nextLabel: textAddTransaction,
-                                    ),
-                                  ),
-                                );
+                                selectAmountPopup();
                               },
                             )
                           : SaveBottomButton(

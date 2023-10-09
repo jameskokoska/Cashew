@@ -734,5 +734,9 @@
   "tap-for-custom-exchange-rate": "Нажмите на запись, чтобы установить пользовательский обменный курс",
   "set-currency": "Установить валюту",
   "accounts-list": "Список счетов",
-  "select-accounts": "Выберите учетные записи"
+  "select-accounts": "Выберите учетные записи",
+  "of-category": "категории",
+  "subcategories": "Подкатегории",
+  "view-subcategories": "Просмотреть подкатегории",
+  "select-subcategory": "Выберите подкатегорию"
 }

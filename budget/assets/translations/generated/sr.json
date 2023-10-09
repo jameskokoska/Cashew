@@ -734,5 +734,9 @@
   "tap-for-custom-exchange-rate": "Додирните унос да бисте поставили прилагођени курс",
   "set-currency": "Подесите валуту",
   "accounts-list": "Листа рачуна",
-  "select-accounts": "Изаберите налоге"
+  "select-accounts": "Изаберите налоге",
+  "of-category": "категорије",
+  "subcategories": "Подкатегорије",
+  "view-subcategories": "Погледајте подкатегорије",
+  "select-subcategory": "Изаберите Подкатегорија"
 }

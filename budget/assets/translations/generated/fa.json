@@ -734,5 +734,9 @@
   "tap-for-custom-exchange-rate": "برای تعیین نرخ ارز سفارشی روی یک ورودی ضربه بزنید",
   "set-currency": "ارز",
   "accounts-list": "لیست حساب",
-  "select-accounts": "حساب ها را انتخاب کنید"
+  "select-accounts": "حساب ها را انتخاب کنید",
+  "of-category": "دسته",
+  "subcategories": "زیر شاخه های",
+  "view-subcategories": "زیر شاخه ها را مشاهده کنید",
+  "select-subcategory": "زیر مجموعه را انتخاب کنید"
 }

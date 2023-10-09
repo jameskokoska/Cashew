@@ -734,5 +734,9 @@
   "tap-for-custom-exchange-rate": "کسٹم ایکسچینج ریٹ طے کرنے کے لئے اندراج پر ٹیپ کریں",
   "set-currency": "کرنسی مرتب کریں",
   "accounts-list": "اکاؤنٹس کی فہرست",
-  "select-accounts": "اکاؤنٹس کو منتخب کریں"
+  "select-accounts": "اکاؤنٹس کو منتخب کریں",
+  "of-category": "زمرہ کی",
+  "subcategories": "ذیلی زمرہ جات",
+  "view-subcategories": "ذیلی زمرہ جات دیکھیں",
+  "select-subcategory": "ذیلی زمرہ منتخب کریں"
 }

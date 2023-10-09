@@ -734,5 +734,9 @@
   "tap-for-custom-exchange-rate": "Érintse meg a bejegyzést az egyéni árfolyam beállításához",
   "set-currency": "Beállított pénznem",
   "accounts-list": "Számlák listája",
-  "select-accounts": "Válassza ki a Fiókokat"
+  "select-accounts": "Válassza ki a Fiókokat",
+  "of-category": "kategória",
+  "subcategories": "Alkategóriák",
+  "view-subcategories": "Alkategóriák megtekintése",
+  "select-subcategory": "Válassza az Alkategória lehetőséget"
 }

@@ -132,6 +132,7 @@ List<IconForCategory> iconObjects = [
       "two wheeler",
       "commute",
       "biking",
+      "bike",
     ],
     mostLikelyCategoryName: "transportation",
   ),
@@ -3697,5 +3698,101 @@ List<IconForCategory> iconObjects = [
       "plan"
     ],
     mostLikelyCategoryName: "Subscription",
+  ),
+  IconForCategory(
+    icon: "microphone.png",
+    tags: [
+      "microphone",
+      "audio",
+      "sound",
+      "recording",
+      "voice",
+      "music",
+      "mic",
+      "studio",
+      "speech",
+      "podcast"
+    ],
+    mostLikelyCategoryName: "Microphone",
+  ),
+  IconForCategory(
+    icon: "church.png",
+    tags: [
+      "church",
+      "place of worship",
+      "religion",
+      "spirituality",
+      "faith",
+      "sacred",
+      "holy",
+      "cathedral",
+      "prayer",
+      "sanctuary"
+    ],
+    mostLikelyCategoryName: "Church",
+  ),
+  IconForCategory(
+    icon: "motor-bike(1).png",
+    tags: [
+      "motor-bike",
+      "motorcycle",
+      "bike",
+      "vehicle",
+      "transportation",
+      "ride",
+      "motor",
+      "two-wheeler",
+      "cycle",
+      "speed"
+    ],
+    mostLikelyCategoryName: "Motorbike",
+  ),
+  IconForCategory(
+    icon: "motor-bike(2).png",
+    tags: [
+      "motor-bike",
+      "motorcycle",
+      "bike",
+      "vehicle",
+      "transportation",
+      "ride",
+      "motor",
+      "two-wheeler",
+      "cycle",
+      "speed"
+    ],
+    mostLikelyCategoryName: "Motorbike",
+  ),
+  IconForCategory(
+    icon: "school-bus.png",
+    tags: [
+      "school-bus",
+      "bus",
+      "education",
+      "transportation",
+      "students",
+      "school",
+      "learning",
+      "childhood",
+      "ride",
+      "vehicle"
+    ],
+    mostLikelyCategoryName: "School",
+  ),
+  IconForCategory(
+    icon: "delivery-truck.png",
+    tags: [
+      "delivery-truck",
+      "truck",
+      "delivery",
+      "transportation",
+      "cargo",
+      "logistics",
+      "shipping",
+      "freight",
+      "distribution",
+      "vehicle"
+    ],
+    mostLikelyCategoryName: "Delivery",
   ),
 ];

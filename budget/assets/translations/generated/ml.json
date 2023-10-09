@@ -734,5 +734,9 @@
   "tap-for-custom-exchange-rate": "ഒരു ഇഷ്ടാനുസൃത വിനിമയ നിരക്ക് സജ്ജീകരിക്കുന്നതിന് ഒരു എൻട്രി ടാപ്പുചെയ്യുക",
   "set-currency": "കറൻസി സജ്ജമാക്കുക",
   "accounts-list": "അക്കൗണ്ടുകൾ പട്ടിക",
-  "select-accounts": "അക്കൗണ്ടുകൾ തിരഞ്ഞെടുക്കുക"
+  "select-accounts": "അക്കൗണ്ടുകൾ തിരഞ്ഞെടുക്കുക",
+  "of-category": "വിഭാഗത്തിന്റെ",
+  "subcategories": "ഉപവിഭാഗങ്ങൾ",
+  "view-subcategories": "ഉപവിഭാഗങ്ങൾ കാണുക",
+  "select-subcategory": "ഉപവിഭാഗം തിരഞ്ഞെടുക്കുക"
 }

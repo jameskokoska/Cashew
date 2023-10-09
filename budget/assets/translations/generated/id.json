@@ -734,5 +734,9 @@
   "tap-for-custom-exchange-rate": "Ketuk entri untuk mengatur nilai tukar khusus",
   "set-currency": "Atur mata uang",
   "accounts-list": "Daftar Akun",
-  "select-accounts": "Pilih akun"
+  "select-accounts": "Pilih akun",
+  "of-category": "kategori",
+  "subcategories": "Subkategori",
+  "view-subcategories": "Lihat Subkategori",
+  "select-subcategory": "Pilih Subkategori"
 }

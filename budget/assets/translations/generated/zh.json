@@ -734,5 +734,9 @@
   "tap-for-custom-exchange-rate": "点击条目设置自定义汇率",
   "set-currency": "设定货币",
   "accounts-list": "帐户列表",
-  "select-accounts": "选择帐户"
+  "select-accounts": "选择帐户",
+  "of-category": "类别",
+  "subcategories": "子类别",
+  "view-subcategories": "查看子类别",
+  "select-subcategory": "选择子类别"
 }

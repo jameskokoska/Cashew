@@ -236,10 +236,18 @@ class CategoryEntry extends StatelessWidget {
                                                 ? getColor(context, "white")
                                                 : getColor(context,
                                                     "lightDarkAccentHeavy"),
-                                    color: HexColor(category.colour,
+                                    color: dynamicPastel(
+                                      context,
+                                      HexColor(
+                                        category.colour,
                                         defaultColor: Theme.of(context)
                                             .colorScheme
-                                            .primary),
+                                            .primary,
+                                      ),
+                                      inverse: true,
+                                      amountLight: 0.1,
+                                      amountDark: 0.1,
+                                    ),
                                     progress: percentSpent,
                                     dotProgress: todayPercent == null
                                         ? null
@@ -435,7 +443,7 @@ class CategoryIconPercent extends StatelessWidget {
               ),
               inverse: true,
               amountLight: 0.1,
-              amountDark: 0.25,
+              amountDark: 0.1,
             ),
           ),
         ),

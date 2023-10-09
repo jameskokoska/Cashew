@@ -734,5 +734,9 @@
   "tap-for-custom-exchange-rate": "แตะรายการเพื่อตั้งค่าอัตราแลกเปลี่ยนที่กำหนดเอง",
   "set-currency": "ตั้งค่าสกุลเงิน",
   "accounts-list": "รายการบัญชี",
-  "select-accounts": "เลือกบัญชี"
+  "select-accounts": "เลือกบัญชี",
+  "of-category": "ของหมวดหมู่",
+  "subcategories": "หมวดหมู่ย่อย",
+  "view-subcategories": "ดูหมวดหมู่ย่อย",
+  "select-subcategory": "เลือกหมวดหมู่ย่อย"
 }

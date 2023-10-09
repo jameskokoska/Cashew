@@ -734,5 +734,9 @@
   "tap-for-custom-exchange-rate": "Özel döviz kuru ayarlamak için bir girişe dokunun",
   "set-currency": "Para Birimi",
   "accounts-list": "Hesaplar Listesi",
-  "select-accounts": "Hesapları Seçin"
+  "select-accounts": "Hesapları Seçin",
+  "of-category": "kategori",
+  "subcategories": "Alt kategoriler",
+  "view-subcategories": "Alt Kategorileri Görüntüle",
+  "select-subcategory": "Alt Kategori'yi seçin"
 }

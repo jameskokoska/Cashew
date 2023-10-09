@@ -734,5 +734,9 @@
   "tap-for-custom-exchange-rate": "エントリをタップして、カスタム為替レートを設定します",
   "set-currency": "通貨を設定します",
   "accounts-list": "アカウントリスト",
-  "select-accounts": "アカウントを選択します"
+  "select-accounts": "アカウントを選択します",
+  "of-category": "カテゴリの",
+  "subcategories": "サブカテゴリ",
+  "view-subcategories": "サブカテゴリを表示します",
+  "select-subcategory": "サブカテゴリを選択します"
 }

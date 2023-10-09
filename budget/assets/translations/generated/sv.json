@@ -734,5 +734,9 @@
   "tap-for-custom-exchange-rate": "Tryck på en post för att ställa in en anpassad växelkurs",
   "set-currency": "Fastställa valuta",
   "accounts-list": "Kontonlista",
-  "select-accounts": "Välj konton"
+  "select-accounts": "Välj konton",
+  "of-category": "kategori",
+  "subcategories": "Underkategorier",
+  "view-subcategories": "Visa underkategorier",
+  "select-subcategory": "Välj underkategori"
 }

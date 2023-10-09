@@ -44,7 +44,13 @@ for currency in data1:
                 "Symbol": dataPoint["symbol_native"],
                 # "CountryName": dataPoint["name"],
             }
-    if currency in result and result[currency]["Symbol"] == result[currency]["Code"]:
+        # else:
+        #     result[currency] = {
+        #         "Currency" : data1[currency],
+        #         "Code": currency,
+        #         "NotKnown": True,
+        #     }
+    if currency in result and "Symbol" in result[currency] and result[currency]["Symbol"] == result[currency]["Code"]:
         del result[currency]["Symbol"]
 
 with open('generated/currencies.json', 'w', encoding='utf8') as json_file:

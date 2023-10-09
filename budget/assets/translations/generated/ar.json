@@ -734,5 +734,9 @@
   "tap-for-custom-exchange-rate": "اضغط على إدخال لتعيين سعر صرف مخصص",
   "set-currency": "تعيين العملة",
   "accounts-list": "قائمة الحسابات",
-  "select-accounts": "حدد الحسابات"
+  "select-accounts": "حدد الحسابات",
+  "of-category": "من الفئة",
+  "subcategories": "الفئات الفرعية",
+  "view-subcategories": "عرض الفئات الفرعية",
+  "select-subcategory": "حدد الفئة الفرعية"
 }

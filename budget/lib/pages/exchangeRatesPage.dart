@@ -33,6 +33,17 @@ class _ExchangeRatesState extends State<ExchangeRates> {
   Widget build(BuildContext context) {
     Map<dynamic, dynamic> currencyExchange =
         appStateSettings["cachedCurrencyExchange"];
+    if (currencyExchange.keys.length <= 0) {
+      for (String key in currenciesJSON.keys) {
+        currencyExchange[key] = 1;
+      }
+    } else {
+      for (String key in [...currencyExchange.keys]) {
+        if (currenciesJSON.keys.contains(key) == false) {
+          currencyExchange.remove(key);
+        }
+      }
+    }
     Map<dynamic, dynamic> currencyExchangeFiltered = {};
     if (searchCurrenciesText == "") {
       currencyExchangeFiltered = currencyExchange;

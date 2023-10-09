@@ -20,6 +20,19 @@ import 'listItem.dart';
 
 String getChangelogString() {
   return """
+    < 4.5.8
+    Fixed initial tab value for income/expense when editing category
+    Wallet actions in more actions menu when editing
+    Decimal precision option in wallet details page
+    Removed unused exchange rates from exchange rate page
+    Defaulted to currency exchange of 1 if no currencies are downloaded
+    Select subcategory sequence in add category
+    Titles limit when editing category
+    Category spending linear progress color matches circular progress color
+    Renamed export and import to backup and restore
+    Subcategory list in edit category entry
+    Added motor bike, church, microphone, school bus, delivery truck icons
+    Fixed symbol for currencies without symbol would take primary wallet symbol
     < 4.5.7
     Subcategories functionality
     Subcategories budget entries
@@ -28,6 +41,7 @@ String getChangelogString() {
     Subcategories selection
     Reworked budget summary page 
     Fixed merge and delete category would miss unpaid transactions
+    Swahili language
     < 4.5.6
     Account pinning for wallet switcher and wallet list
     New wallet list homepage section

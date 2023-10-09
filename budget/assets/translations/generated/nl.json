@@ -734,5 +734,9 @@
   "tap-for-custom-exchange-rate": "Tik op een item om een ​​aangepaste wisselkoers in te stellen",
   "set-currency": "Valuta instellen",
   "accounts-list": "Accountlijst",
-  "select-accounts": "Selecteer Accounts"
+  "select-accounts": "Selecteer Accounts",
+  "of-category": "categorie",
+  "subcategories": "Subcategorieën",
+  "view-subcategories": "Bekijk subcategorieën",
+  "select-subcategory": "Selecteer Subcategorie"
 }

@@ -159,7 +159,10 @@ class _AddCategoryPageState extends State<AddCategoryPage>
       income: selectedIncome,
       order: widget.category != null
           ? widget.category!.order
-          : await database.getAmountOfCategories(),
+          : widget.mainCategoryPkWhenSubCategory != null
+              ? await database.getAmountOfSubCategories(
+                  widget.mainCategoryPkWhenSubCategory!)
+              : await database.getAmountOfCategories(),
       colour: toHexString(selectedColor),
       iconName: selectedImage,
       emojiIconName: selectedEmoji,
@@ -195,29 +198,26 @@ class _AddCategoryPageState extends State<AddCategoryPage>
             ? null
             : HexColor(widget.category!.colour))
         : null;
-    Future.delayed(Duration.zero, () {
-      if (widget.category != null) {
-        //We are editing a transaction
-        //Fill in the information from the passed in transaction
-
-        setState(() {
-          selectedTitle = widget.category?.name;
-          selectedImage = widget.category?.iconName;
-          selectedEmoji = widget.category?.emojiIconName;
-          selectedIncome = widget.category!.income;
-          userAttemptedToChangeTitle = true;
-        });
+    if (widget.category != null) {
+      setState(() {
+        selectedTitle = widget.category?.name;
+        selectedImage = widget.category?.iconName;
+        selectedEmoji = widget.category?.emojiIconName;
+        selectedIncome = widget.category!.income;
+        userAttemptedToChangeTitle = true;
+      });
+      if (selectedIncome == true) {
+        _incomeTabController.animateTo(1);
+      } else {
+        _incomeTabController.animateTo(0);
+      }
+      Future.delayed(Duration.zero, () {
         _titleController.text = selectedTitle ?? "";
         _titleController.selection = TextSelection.fromPosition(
             TextPosition(offset: _titleController.text.length));
+      });
+    }
 
-        if (widget.category?.income == true) {
-          _incomeTabController.animateTo(1);
-        } else {
-          _incomeTabController.animateTo(0);
-        }
-      }
-    });
     //Set to false because we can't save until we made some changes
     setState(() {
       canAddCategory = false;
@@ -444,13 +444,16 @@ class _AddCategoryPageState extends State<AddCategoryPage>
                       setSelectedColor: setSelectedColor,
                     ),
                   ),
-                  SizedBox(height: 20),
                   widgetCategory == null ||
                           widget.routesToPopAfterDelete ==
                               RoutesToPopAfterDelete.PreventDelete
                       ? SizedBox.shrink()
                       : Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          padding: EdgeInsets.only(
+                            left: 20,
+                            right: 20,
+                            top: 20,
+                          ),
                           child: Button(
                             flexibleLayout: true,
                             icon: appStateSettings["outlinedIcons"]
@@ -758,6 +761,7 @@ class _AddCategoryPageState extends State<AddCategoryPage>
                             widget.category == null
                                 ? "-1"
                                 : widget.category!.categoryPk,
+                            limit: 30,
                           ),
                           builder: (context, snapshot) {
                             // print(snapshot.data);

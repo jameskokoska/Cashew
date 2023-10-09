@@ -734,5 +734,9 @@
   "tap-for-custom-exchange-rate": "தனிப்பயன் பரிமாற்ற வீதத்தை அமைக்க ஒரு நுழைவைத் தட்டவும்",
   "set-currency": "நாணயத்தை அமைக்கவும்",
   "accounts-list": "கணக்கு பட்டியல்",
-  "select-accounts": "கணக்குகளைத் தேர்ந்தெடுக்கவும்"
+  "select-accounts": "கணக்குகளைத் தேர்ந்தெடுக்கவும்",
+  "of-category": "வகை",
+  "subcategories": "துணைப்பிரிவுகள்",
+  "view-subcategories": "துணைப்பிரிவுகளைக் காண்க",
+  "select-subcategory": "துணைப்பிரிவைத் தேர்ந்தெடுக்கவும்"
 }

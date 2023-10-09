@@ -942,8 +942,8 @@ class _BackupManagementState extends State<BackupManagement> {
                     title: "auto-backups".tr(),
                     description: "auto-backups-description".tr(),
                     icon: appStateSettings["outlinedIcons"]
-                        ? Icons.backup_outlined
-                        : Icons.backup_rounded,
+                        ? Icons.cloud_done_outlined
+                        : Icons.cloud_done_rounded,
                   ),
                 )
               : SizedBox.shrink(),

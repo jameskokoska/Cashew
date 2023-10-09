@@ -38,6 +38,7 @@ class SelectCategory extends StatefulWidget {
     this.allowRearrange = true,
     this.fadeOutWhenSelected = false,
     this.mainCategoryPk,
+    this.header,
   }) : super(key: key);
   final Function(TransactionCategory)? setSelectedCategory;
   final Function(List<String>?)? setSelectedCategories;
@@ -58,6 +59,7 @@ class SelectCategory extends StatefulWidget {
   final bool allowRearrange;
   final bool? fadeOutWhenSelected;
   final String? mainCategoryPk;
+  final List<Widget>? header;
 
   @override
   _SelectCategoryState createState() => _SelectCategoryState();
@@ -73,7 +75,7 @@ class _SelectCategoryState extends State<SelectCategory> {
     super.initState();
     Future.delayed(Duration(milliseconds: 0), () {
       if (widget.selectedCategory != null && widget.skipIfSet == true) {
-        if (widget.popRoute) Navigator.pop(context);
+        if (widget.popRoute) Navigator.pop(context, widget.selectedCategory);
         if (widget.next != null) {
           widget.next!();
         }
@@ -180,7 +182,8 @@ class _SelectCategoryState extends State<SelectCategory> {
                               selectedCategories.add(category.categoryPk);
                             });
                             Future.delayed(Duration(milliseconds: 70), () {
-                              if (widget.popRoute) Navigator.pop(context);
+                              if (widget.popRoute)
+                                Navigator.pop(context, category);
                               if (widget.next != null) {
                                 widget.next!();
                               }
@@ -365,7 +368,7 @@ class _SelectCategoryState extends State<SelectCategory> {
                           selectedCategories.add(category.categoryPk);
                         });
                         Future.delayed(Duration(milliseconds: 70), () {
-                          if (widget.popRoute) Navigator.pop(context);
+                          if (widget.popRoute) Navigator.pop(context, category);
                           if (widget.next != null) {
                             widget.next!();
                           }
@@ -417,6 +420,7 @@ class _SelectCategoryState extends State<SelectCategory> {
                       : ((getWidthBottomSheet(context)) ~/ size ~/ 2.1).toInt(),
                   shrinkWrap: true,
                   children: categoryIcons,
+                  header: widget.header ?? [],
                   footer: [
                     if (widget.addButton != false)
                       Padding(

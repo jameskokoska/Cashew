@@ -734,5 +734,9 @@
   "tap-for-custom-exchange-rate": "Stuknij wpis, aby ustawić niestandardowy kurs wymiany",
   "set-currency": "Ustaw walutę",
   "accounts-list": "Lista kont",
-  "select-accounts": "Wybierz konta"
+  "select-accounts": "Wybierz konta",
+  "of-category": "kategorii",
+  "subcategories": "Podkategorie",
+  "view-subcategories": "Zobacz podkategorie",
+  "select-subcategory": "Wybierz podkategorię"
 }

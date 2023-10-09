@@ -10,7 +10,9 @@ import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/animatedExpanded.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/countNumber.dart';
+import 'package:budget/widgets/dropdownSelect.dart';
 import 'package:budget/widgets/globalSnackBar.dart';
+import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
@@ -206,6 +208,32 @@ class _AddWalletPageState extends State<AddWalletPage> {
     }
   }
 
+  void openDecimalPrecisionPopup() {
+    openBottomSheet(
+      context,
+      PopupFramework(
+        title: "decimal-precision".tr(),
+        child: SelectAmountValue(
+          amountPassed: selectedDecimals.toString(),
+          setSelectedAmount: (amount, _) {
+            selectedDecimals = amount.toInt();
+            if (amount > 10) {
+              selectedDecimals = 10;
+            } else if (amount < 0) {
+              selectedDecimals = 0;
+            }
+            setState(() {});
+          },
+          next: () async {
+            determineBottomButton();
+            Navigator.pop(context);
+          },
+          nextLabel: "set-amount".tr(),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     List<Widget> currencyList = [];
@@ -302,51 +330,95 @@ class _AddWalletPageState extends State<AddWalletPage> {
             }
           },
           actions: [
-            IconButton(
-              padding: EdgeInsets.all(15),
-              tooltip: "info".tr(),
-              onPressed: () {
-                openPopup(
-                  context,
-                  title: "exchange-rate-notice".tr(),
-                  description: "exchange-rate-notice-description".tr(),
-                  icon: Icons.info,
-                  onCancel: () {
-                    Navigator.pop(context);
-                  },
-                  onCancelLabel: "ok".tr(),
-                  onSubmit: () async {
-                    checkIfExchangeRateChangeBefore();
-                    Navigator.pop(context);
-                    await pushRoute(context, ExchangeRates());
-                    checkIfExchangeRateChangeAfter();
-                  },
-                  onSubmitLabel: "exchange-rates".tr(),
-                );
-              },
-              icon: Icon(Icons.info),
-            ),
-            ...(widget.wallet != null &&
+            CustomPopupMenuButton(
+              showButtons: enableDoubleColumn(context),
+              keepOutFirst: true,
+              items: [
+                if (widget.wallet != null &&
                     widget.wallet!.walletPk != "0" &&
                     widget.routesToPopAfterDelete !=
-                        RoutesToPopAfterDelete.PreventDelete
-                ? [
-                    IconButton(
-                      padding: EdgeInsets.all(15),
-                      tooltip: "delete-account".tr(),
-                      onPressed: () {
-                        deleteWalletPopup(
-                          context,
-                          wallet: widget.wallet!,
-                          routesToPopAfterDelete: widget.routesToPopAfterDelete,
-                        );
+                        RoutesToPopAfterDelete.PreventDelete)
+                  DropdownItemMenu(
+                    id: "delete-account",
+                    label: "delete-account".tr(),
+                    icon: appStateSettings["outlinedIcons"]
+                        ? Icons.delete_outlined
+                        : Icons.delete_rounded,
+                    action: () {
+                      deleteWalletPopup(
+                        context,
+                        wallet: widget.wallet!,
+                        routesToPopAfterDelete: widget.routesToPopAfterDelete,
+                      );
+                    },
+                  ),
+                DropdownItemMenu(
+                  id: "info",
+                  label: "info".tr(),
+                  icon: Icons.info,
+                  action: () {
+                    openPopup(
+                      context,
+                      title: "exchange-rate-notice".tr(),
+                      description: "exchange-rate-notice-description".tr(),
+                      icon: Icons.info,
+                      onCancel: () {
+                        Navigator.pop(context);
                       },
-                      icon: Icon(appStateSettings["outlinedIcons"]
-                          ? Icons.delete_outlined
-                          : Icons.delete_rounded),
-                    )
-                  ]
-                : [])
+                      onCancelLabel: "ok".tr(),
+                      onSubmit: () async {
+                        checkIfExchangeRateChangeBefore();
+                        Navigator.pop(context);
+                        await pushRoute(context, ExchangeRates());
+                        checkIfExchangeRateChangeAfter();
+                      },
+                      onSubmitLabel: "exchange-rates".tr(),
+                    );
+                  },
+                ),
+                if (widget.wallet != null)
+                  DropdownItemMenu(
+                    id: "correct-total-balance",
+                    label: "correct-total-balance".tr(),
+                    icon: appStateSettings["outlinedIcons"]
+                        ? Icons.library_add_outlined
+                        : Icons.library_add_rounded,
+                    action: () {
+                      openBottomSheet(
+                        context,
+                        fullSnap: true,
+                        CorrectBalancePopup(wallet: widget.wallet!),
+                      );
+                    },
+                  ),
+                if (widget.wallet != null)
+                  DropdownItemMenu(
+                    id: "transfer-balance",
+                    label: "transfer-balance".tr(),
+                    icon: appStateSettings["outlinedIcons"]
+                        ? Icons.compare_arrows_outlined
+                        : Icons.compare_arrows_rounded,
+                    action: () {
+                      openBottomSheet(
+                        context,
+                        fullSnap: true,
+                        TransferBalancePopup(wallet: widget.wallet!),
+                      );
+                    },
+                  ),
+                if (widget.wallet != null)
+                  DropdownItemMenu(
+                    id: "decimal-precision",
+                    label: "decimal-precision".tr(),
+                    icon: appStateSettings["outlinedIcons"]
+                        ? Icons.more_horiz_outlined
+                        : Icons.more_horiz_rounded,
+                    action: () {
+                      openDecimalPrecisionPopup();
+                    },
+                  ),
+              ],
+            ),
           ],
           overlay: Align(
             alignment: Alignment.bottomCenter,
@@ -519,29 +591,7 @@ class _AddWalletPageState extends State<AddWalletPage> {
                       SizedBox(width: 10),
                       ButtonIcon(
                           onTap: () {
-                            openBottomSheet(
-                              context,
-                              PopupFramework(
-                                title: "decimal-precision".tr(),
-                                child: SelectAmountValue(
-                                  amountPassed: selectedDecimals.toString(),
-                                  setSelectedAmount: (amount, _) {
-                                    selectedDecimals = amount.toInt();
-                                    if (amount > 10) {
-                                      selectedDecimals = 10;
-                                    } else if (amount < 0) {
-                                      selectedDecimals = 0;
-                                    }
-                                    setState(() {});
-                                  },
-                                  next: () async {
-                                    determineBottomButton();
-                                    Navigator.pop(context);
-                                  },
-                                  nextLabel: "set-amount".tr(),
-                                ),
-                              ),
-                            );
+                            openDecimalPrecisionPopup();
                           },
                           icon: appStateSettings["outlinedIcons"]
                               ? Icons.more_horiz_outlined

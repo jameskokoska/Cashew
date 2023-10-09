@@ -734,5 +734,9 @@
   "tap-for-custom-exchange-rate": "అనుకూల మార్పిడి రేటును సెట్ చేయడానికి ఎంట్రీని నొక్కండి",
   "set-currency": "కరెన్సీని సెట్ చేయండి",
   "accounts-list": "ఖాతాల జాబితా",
-  "select-accounts": "ఖాతాలను ఎంచుకోండి"
+  "select-accounts": "ఖాతాలను ఎంచుకోండి",
+  "of-category": "వర్గం",
+  "subcategories": "ఉపవర్గాలు",
+  "view-subcategories": "ఉపవర్గాలను చూడండి",
+  "select-subcategory": "ఉపవర్గం ఎంచుకోండి"
 }
