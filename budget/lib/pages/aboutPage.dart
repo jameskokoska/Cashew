@@ -365,6 +365,10 @@ class AboutPage extends StatelessWidget {
           title: "Swahili",
           list: ["Anthony K."],
         ),
+        AboutInfoBox(
+          title: "German",
+          list: ["Fabian S."],
+        ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
           child: TranslationsHelp(

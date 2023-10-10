@@ -22,58 +22,60 @@ class HomePageWalletList extends StatelessWidget {
     return KeepAliveClientMixin(
       child: Padding(
         padding: const EdgeInsets.only(bottom: 13, left: 13, right: 13),
-        child: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(15)),
-            color: getColor(context, "lightDarkAccentHeavyLight"),
-            boxShadow: boxShadowCheck(boxShadowGeneral(context)),
-          ),
-          child: StreamBuilder<List<TransactionWallet>>(
-            stream: database
-                .getAllPinnedWallets(HomePageWidgetDisplay.WalletList)
-                .$1,
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return Column(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    if (snapshot.hasData && snapshot.data!.length > 0)
-                      SizedBox(height: 8),
-                    for (TransactionWallet wallet in snapshot.data!)
-                      WalletEntryRow(
-                        selected: appStateSettings["selectedWalletPk"] ==
-                            wallet.walletPk,
-                        wallet: wallet,
-                      ),
-                    if (snapshot.hasData && snapshot.data!.length > 0)
-                      SizedBox(height: 8),
-                    if (snapshot.hasData && snapshot.data!.length <= 0)
-                      Row(
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          Expanded(
-                            child: AddButton(
-                              onTap: () {
-                                openBottomSheet(
-                                  context,
-                                  EditHomePagePinnedWalletsPopup(
-                                    homePageWidgetDisplay:
-                                        HomePageWidgetDisplay.WalletList,
-                                  ),
-                                  useCustomController: true,
-                                );
-                              },
-                              height: 40,
-                              icon: Icons.format_list_bulleted_add,
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(15),
+          child: Container(
+            decoration: BoxDecoration(
+              color: getColor(context, "lightDarkAccentHeavyLight"),
+              boxShadow: boxShadowCheck(boxShadowGeneral(context)),
+            ),
+            child: StreamBuilder<List<TransactionWallet>>(
+              stream: database
+                  .getAllPinnedWallets(HomePageWidgetDisplay.WalletList)
+                  .$1,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return Column(
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      if (snapshot.hasData && snapshot.data!.length > 0)
+                        SizedBox(height: 8),
+                      for (TransactionWallet wallet in snapshot.data!)
+                        WalletEntryRow(
+                          selected: appStateSettings["selectedWalletPk"] ==
+                              wallet.walletPk,
+                          wallet: wallet,
+                        ),
+                      if (snapshot.hasData && snapshot.data!.length > 0)
+                        SizedBox(height: 8),
+                      if (snapshot.hasData && snapshot.data!.length <= 0)
+                        Row(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Expanded(
+                              child: AddButton(
+                                onTap: () {
+                                  openBottomSheet(
+                                    context,
+                                    EditHomePagePinnedWalletsPopup(
+                                      homePageWidgetDisplay:
+                                          HomePageWidgetDisplay.WalletList,
+                                    ),
+                                    useCustomController: true,
+                                  );
+                                },
+                                height: 40,
+                                icon: Icons.format_list_bulleted_add,
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
-                  ],
-                );
-              }
-              return Container();
-            },
+                          ],
+                        ),
+                    ],
+                  );
+                }
+                return Container();
+              },
+            ),
           ),
         ),
       ),

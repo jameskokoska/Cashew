@@ -154,7 +154,7 @@ Future<bool> initializeSettings() async {
 
 // setAppStateSettings
 Future<bool> updateSettings(
-  setting,
+  String setting,
   value, {
   required bool updateGlobalState,
   List<int> pagesNeedingRefresh = const [],

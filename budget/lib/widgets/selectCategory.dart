@@ -3,6 +3,7 @@ import 'package:budget/database/tables.dart';
 import 'package:budget/pages/addCategoryPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
+import 'package:budget/widgets/animatedExpanded.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/categoryIcon.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
@@ -37,8 +38,11 @@ class SelectCategory extends StatefulWidget {
     // Only allow rearrange if all categories are being watched!
     this.allowRearrange = true,
     this.fadeOutWhenSelected = false,
-    this.mainCategoryPk,
+    this.mainCategoryPks,
     this.header,
+    this.horizontalListViewHeight = 100,
+    this.forceSelectAllToFalse = false,
+    this.listPadding = const EdgeInsets.symmetric(horizontal: 20),
   }) : super(key: key);
   final Function(TransactionCategory)? setSelectedCategory;
   final Function(List<String>?)? setSelectedCategories;
@@ -58,8 +62,11 @@ class SelectCategory extends StatefulWidget {
   final List<String>? hideCategoryFks;
   final bool allowRearrange;
   final bool? fadeOutWhenSelected;
-  final String? mainCategoryPk;
+  final List<String>? mainCategoryPks;
   final List<Widget>? header;
+  final double horizontalListViewHeight;
+  final bool forceSelectAllToFalse;
+  final EdgeInsets listPadding;
 
   @override
   _SelectCategoryState createState() => _SelectCategoryState();
@@ -124,7 +131,7 @@ class _SelectCategoryState extends State<SelectCategory> {
 
     return StreamBuilder<List<TransactionCategory>>(
       stream:
-          database.watchAllCategories(mainCategoryPk: widget.mainCategoryPk),
+          database.watchAllCategories(mainCategoryPks: widget.mainCategoryPks),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           if (widget.horizontalList) {
@@ -148,174 +155,118 @@ class _SelectCategoryState extends State<SelectCategory> {
                             false
                     ? 0.86
                     : 1,
-                child: Padding(
-                  padding: EdgeInsets.only(
-                      left: index == 0
-                          ? 12 -
-                              (widget.showSelectedAllCategoriesIfNoneSelected
-                                  ? 4
-                                  : 0)
-                          : 0,
-                      right: index == snapshot.data!.length - 1 ? 12 - 4 : 0),
-                  child: Builder(builder: (context) {
-                    return AnimatedOpacity(
-                      duration: Duration(milliseconds: 500),
-                      opacity: widget.fadeOutWhenSelected == true &&
-                              selectedCategories.contains(category.categoryPk)
-                          ? 0.3
-                          : 1,
-                      child: CategoryIcon(
-                        enableTooltip: category.name.length > 10,
-                        categoryPk: category.categoryPk,
-                        size: 42,
-                        sizePadding: 28,
-                        correctionEmojiPaddingBottom: 5,
-                        label: widget.labelIcon,
-                        onTap: () {
-                          if (widget.nextWithCategory != null) {
-                            widget.nextWithCategory!(category);
-                          }
-                          if (widget.setSelectedCategory != null) {
-                            widget.setSelectedCategory!(category);
+                child: Builder(builder: (context) {
+                  return AnimatedOpacity(
+                    duration: Duration(milliseconds: 500),
+                    opacity: widget.fadeOutWhenSelected == true &&
+                            selectedCategories.contains(category.categoryPk)
+                        ? 0.3
+                        : 1,
+                    child: CategoryIcon(
+                      enableTooltip: category.name.length > 10,
+                      categoryPk: category.categoryPk,
+                      size: 42,
+                      sizePadding: 28,
+                      correctionEmojiPaddingBottom: 5,
+                      label: widget.labelIcon,
+                      onTap: () {
+                        if (widget.nextWithCategory != null) {
+                          widget.nextWithCategory!(category);
+                        }
+                        if (widget.setSelectedCategory != null) {
+                          widget.setSelectedCategory!(category);
+                          setState(() {
+                            selectedCategories = [];
+                            selectedCategories.add(category.categoryPk);
+                          });
+                          Future.delayed(Duration(milliseconds: 70), () {
+                            if (widget.popRoute)
+                              Navigator.pop(context, category);
+                            if (widget.next != null) {
+                              widget.next!();
+                            }
+                          });
+                        } else if (widget.setSelectedCategories != null) {
+                          // print(selectedCategories);
+                          if (selectedCategories
+                              .contains(category.categoryPk)) {
                             setState(() {
-                              selectedCategories = [];
+                              selectedCategories.remove(category.categoryPk);
+                            });
+                            widget.setSelectedCategories!(selectedCategories);
+                          } else {
+                            setState(() {
                               selectedCategories.add(category.categoryPk);
                             });
-                            Future.delayed(Duration(milliseconds: 70), () {
-                              if (widget.popRoute)
-                                Navigator.pop(context, category);
-                              if (widget.next != null) {
-                                widget.next!();
-                              }
-                            });
-                          } else if (widget.setSelectedCategories != null) {
-                            // print(selectedCategories);
-                            if (selectedCategories
-                                .contains(category.categoryPk)) {
-                              setState(() {
-                                selectedCategories.remove(category.categoryPk);
-                              });
-                              widget.setSelectedCategories!(selectedCategories);
-                            } else {
-                              setState(() {
-                                selectedCategories.add(category.categoryPk);
-                              });
-                              widget.setSelectedCategories!(selectedCategories);
-                            }
+                            widget.setSelectedCategories!(selectedCategories);
                           }
-                        },
-                        outline:
-                            selectedCategories.contains(category.categoryPk),
-                      ),
-                    );
-                  }),
-                ),
+                        }
+                      },
+                      outline: selectedCategories.contains(category.categoryPk),
+                    ),
+                  );
+                }),
               ));
               index++;
             }
-            return ListView(
-              addAutomaticKeepAlives: true,
-              clipBehavior: Clip.none,
-              scrollDirection: Axis.horizontal,
-              children: [
-                widget.showSelectedAllCategoriesIfNoneSelected
-                    ? Padding(
-                        key: ValueKey(1),
-                        padding: const EdgeInsets.only(
-                          top: 8,
-                          left: 20,
+            return IgnorePointer(
+              ignoring: children.length <= 0,
+              child: AnimatedSizeSwitcher(
+                child: Container(
+                  key: ValueKey(children.length <= 0),
+                  height: children.length <= 0
+                      ? 0
+                      : widget.horizontalListViewHeight,
+                  child: ListView(
+                    addAutomaticKeepAlives: true,
+                    clipBehavior: Clip.none,
+                    scrollDirection: Axis.horizontal,
+                    padding: widget.listPadding,
+                    children: [
+                      if (widget.showSelectedAllCategoriesIfNoneSelected)
+                        SelectedCategoryHorizontalExtraButton(
+                          label: "all".tr(),
+                          onTap: () {
+                            if (widget.setSelectedCategories != null) {
+                              widget.setSelectedCategories!(null);
+                            }
+                            setState(() {
+                              selectedCategories = [];
+                            });
+                          },
+                          isOutlined: widget.forceSelectAllToFalse == true
+                              ? false
+                              : selectedCategories.isEmpty,
+                          icon: appStateSettings["outlinedIcons"]
+                              ? Icons.category_outlined
+                              : Icons.category_rounded,
                         ),
-                        child: Column(
-                          children: [
-                            Tappable(
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .secondaryContainer,
-                              onTap: () {
-                                if (widget.setSelectedCategories != null) {
-                                  widget.setSelectedCategories!(null);
-                                }
-                                setState(() {
-                                  selectedCategories = [];
-                                });
-                              },
-                              borderRadius: 18,
-                              child: AnimatedContainer(
-                                duration: Duration(milliseconds: 250),
-                                decoration: selectedCategories.isEmpty
-                                    ? BoxDecoration(
-                                        border: Border.all(
-                                          color: dynamicPastel(
-                                              context,
-                                              Theme.of(context)
-                                                  .colorScheme
-                                                  .primary,
-                                              amountLight: 0.5,
-                                              amountDark: 0.4,
-                                              inverse: true),
-                                          width: 3,
-                                        ),
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(18)),
-                                      )
-                                    : BoxDecoration(
-                                        border: Border.all(
-                                          color: Colors.transparent,
-                                          width: 0,
-                                        ),
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(15)),
-                                      ),
-                                width: 70,
-                                height: 70,
-                                child: Center(
-                                  child: Icon(
-                                    appStateSettings["outlinedIcons"]
-                                        ? Icons.category_outlined
-                                        : Icons.category_rounded,
-                                    size: 35,
-                                  ),
+                      if (widget.header != null) ...widget.header!,
+                      ...children,
+                      widget.addButton == false
+                          ? SizedBox.shrink()
+                          : Padding(
+                              key: ValueKey(2),
+                              padding: const EdgeInsets.only(
+                                bottom: 21,
+                                top: 8,
+                              ),
+                              child: AddButton(
+                                onTap: () {},
+                                padding: EdgeInsets.symmetric(horizontal: 7),
+                                openPage: AddCategoryPage(
+                                  routesToPopAfterDelete:
+                                      RoutesToPopAfterDelete.None,
+                                  mainCategoryPkWhenSubCategory:
+                                      widget.mainCategoryPks?[0],
                                 ),
+                                width: 70,
                               ),
                             ),
-                            Container(
-                              margin: EdgeInsets.only(top: 4),
-                              width: 60,
-                              child: Center(
-                                child: TextFont(
-                                  textAlign: TextAlign.center,
-                                  text: "all".tr(),
-                                  fontSize: 10,
-                                  maxLines: 1,
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
-                      )
-                    : SizedBox.shrink(),
-                ...children,
-                widget.addButton == false
-                    ? SizedBox.shrink()
-                    : Padding(
-                        key: ValueKey(2),
-                        padding: const EdgeInsets.only(
-                          bottom: 21,
-                          top: 8,
-                          right: 20,
-                        ),
-                        child: AddButton(
-                          onTap: () {},
-                          padding: EdgeInsets.zero,
-                          openPage: AddCategoryPage(
-                            routesToPopAfterDelete: RoutesToPopAfterDelete.None,
-                            mainCategoryPkWhenSubCategory:
-                                widget.mainCategoryPk,
-                          ),
-                          width: 70,
-                        ),
-                      ),
-              ],
+                    ],
+                  ),
+                ),
+              ),
             );
           }
           double size = getWidthBottomSheet(context) <= 400
@@ -441,7 +392,7 @@ class _SelectCategoryState extends State<SelectCategory> {
                                     routesToPopAfterDelete:
                                         RoutesToPopAfterDelete.None,
                                     mainCategoryPkWhenSubCategory:
-                                        widget.mainCategoryPk,
+                                        widget.mainCategoryPks?[0],
                                   ),
                                 );
                               },
@@ -578,6 +529,80 @@ class _SelectCategoryState extends State<SelectCategory> {
           return Container();
         }
       },
+    );
+  }
+}
+
+class SelectedCategoryHorizontalExtraButton extends StatelessWidget {
+  const SelectedCategoryHorizontalExtraButton(
+      {required this.label,
+      required this.onTap,
+      required this.isOutlined,
+      required this.icon,
+      super.key});
+  final String label;
+  final VoidCallback onTap;
+  final bool isOutlined;
+  final IconData icon;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      key: ValueKey(1),
+      padding: EdgeInsets.only(
+        top: 8,
+        left: 8,
+        right: 8,
+      ),
+      child: Column(
+        children: [
+          Tappable(
+            color: Theme.of(context).colorScheme.secondaryContainer,
+            onTap: onTap,
+            borderRadius: 18,
+            child: AnimatedContainer(
+              duration: Duration(milliseconds: 250),
+              decoration: isOutlined
+                  ? BoxDecoration(
+                      border: Border.all(
+                        color: dynamicPastel(
+                            context, Theme.of(context).colorScheme.primary,
+                            amountLight: 0.5, amountDark: 0.4, inverse: true),
+                        width: 3,
+                      ),
+                      borderRadius: BorderRadius.all(Radius.circular(18)),
+                    )
+                  : BoxDecoration(
+                      border: Border.all(
+                        color: Colors.transparent,
+                        width: 0,
+                      ),
+                      borderRadius: BorderRadius.all(Radius.circular(15)),
+                    ),
+              width: 70,
+              height: 70,
+              child: Center(
+                child: Icon(
+                  icon,
+                  size: 35,
+                ),
+              ),
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.only(top: 4),
+            width: 60,
+            child: Center(
+              child: TextFont(
+                textAlign: TextAlign.center,
+                text: label,
+                fontSize: 10,
+                maxLines: 1,
+              ),
+            ),
+          )
+        ],
+      ),
     );
   }
 }

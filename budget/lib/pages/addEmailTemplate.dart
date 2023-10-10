@@ -460,14 +460,11 @@ class _AddEmailTemplateState extends State<AddEmailTemplate> {
                     ),
                   ),
                   SizedBox(height: 3),
-                  Container(
-                    height: 100,
-                    child: SelectCategory(
-                      horizontalList: true,
-                      selectedCategory: selectedCategory,
-                      setSelectedCategory: setSelectedCategory,
-                      popRoute: false,
-                    ),
+                  SelectCategory(
+                    horizontalList: true,
+                    selectedCategory: selectedCategory,
+                    setSelectedCategory: setSelectedCategory,
+                    popRoute: false,
                   ),
                   SizedBox(height: 20),
                   Padding(

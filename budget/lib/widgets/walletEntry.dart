@@ -172,12 +172,12 @@ class WalletEntryRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return OpenContainerNavigation(
-      borderRadius: 15,
+      borderRadius: 0,
       openPage: WatchedWalletDetailsPage(walletPk: wallet.walletPk),
       button: (openContainer) {
         return Tappable(
           color: getColor(context, "lightDarkAccentHeavyLight"),
-          borderRadius: 14,
+          borderRadius: 0,
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
             child: Container(

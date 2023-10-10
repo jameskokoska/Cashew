@@ -29,13 +29,13 @@ class TransactionEntryTag extends StatelessWidget {
         children: [
           transaction.subCategoryFk == null
               ? SizedBox.shrink()
-              : Flexible(
-                  child: StreamBuilder<TransactionCategory>(
-                    stream: database.getCategory(transaction.subCategoryFk!).$1,
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        TransactionCategory category = snapshot.data!;
-                        return TransactionTag(
+              : StreamBuilder<TransactionCategory?>(
+                  stream: database.getCategory(transaction.subCategoryFk!).$1,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      TransactionCategory? category = snapshot.data!;
+                      return Flexible(
+                        child: TransactionTag(
                           color: HexColor(category.colour),
                           name: (category.emojiIconName != null
                                   ? ((category.emojiIconName ?? "") + " ")
@@ -55,11 +55,11 @@ class TransactionEntryTag extends StatelessWidget {
                                     margin: EdgeInsets.zero,
                                   ),
                                 ),
-                        );
-                      }
-                      return Container();
-                    },
-                  ),
+                        ),
+                      );
+                    }
+                    return SizedBox.shrink();
+                  },
                 ),
           transaction.sharedReferenceBudgetPk == null
               ? SizedBox.shrink()

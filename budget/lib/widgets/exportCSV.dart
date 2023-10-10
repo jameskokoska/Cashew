@@ -139,6 +139,16 @@ Map<String, String> convertStringToMap(String inputString,
 
     return resultMap;
   } else {
+    if (keysToShow != null) {
+      Map<String, String> out = {};
+      for (String keyIteration in keysToShow) {
+        String key = keyIteration;
+        if (keysToReplace.keys.contains(key) && keysToReplace[key] != null)
+          key = keysToReplace[key] ?? "";
+        out[key] = "";
+      }
+      return out;
+    }
     return {};
   }
 }
@@ -149,8 +159,8 @@ class ExportCSV extends StatelessWidget {
   Future exportCSV() async {
     await openLoadingPopupTryCatch(() async {
       List<Map<String, String>> output = [];
-      List<TransactionWithCategory> transactions =
-          await database.getAllTransactionsWithCategoryWalletBudget(
+      List<TransactionWithCategory> transactions = await database
+          .getAllTransactionsWithCategoryWalletBudgetObjectiveSubCategory(
               (tbl) => tbl.paid.equals(true));
       for (TransactionWithCategory transactionWithCategory in transactions) {
         String inputTransactionString =
@@ -160,7 +170,12 @@ class ExportCSV extends StatelessWidget {
             transactionWithCategory.category.toString();
         String inputWalletString = transactionWithCategory.wallet.toString();
         String inputBudgetString = transactionWithCategory.budget.toString();
-
+        String inputObjectiveString =
+            transactionWithCategory.objective.toString();
+        String inputSubcategoryString =
+            transactionWithCategory.subCategory.toString();
+        print(inputObjectiveString);
+        print(inputSubcategoryString);
         Map<String, String> merged = {
           ...convertStringToMap(
             inputTransactionString,
@@ -182,6 +197,7 @@ class ExportCSV extends StatelessWidget {
               "originalDateDue",
               "upcomingTransactionNotification",
               "objectiveFk",
+              "subCategoryFk",
             ],
             keysToReplace: {
               "dateCreated": "date",
@@ -195,10 +211,20 @@ class ExportCSV extends StatelessWidget {
               "order",
               "income",
               "methodAdded",
+              "mainCategoryPk"
             ],
             keysToReplace: {
               "dateCreated": "categoryDateCreated",
               "name": "categoryName",
+            },
+          ),
+          ...convertStringToMap(
+            inputSubcategoryString,
+            keysToShow: [
+              "name",
+            ],
+            keysToReplace: {
+              "name": "subcategoryName",
             },
           ),
           ...convertStringToMap(
@@ -210,7 +236,8 @@ class ExportCSV extends StatelessWidget {
               "colour",
               "order",
               "iconName",
-              "decimals"
+              "decimals",
+              "homePageWidgetDisplay",
             ],
             keysToReplace: {
               "name": "accountName", //"walletName"
@@ -223,6 +250,15 @@ class ExportCSV extends StatelessWidget {
             ],
             keysToReplace: {
               "name": "budgetName",
+            },
+          ),
+          ...convertStringToMap(
+            inputSubcategoryString,
+            keysToShow: [
+              "name",
+            ],
+            keysToReplace: {
+              "name": "objectiveName",
             },
           ),
         };

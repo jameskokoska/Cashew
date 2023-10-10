@@ -117,6 +117,7 @@ Future<Map<String, dynamic>> getDefaultPreferences() async {
     // Should be of type Map<String, List<String>>
     "watchedCategoriesOnBudget": {},
     "showCompressedViewBudgetGraph": false,
+    "showAllSubcategories": true,
     // Should be of type Map<String, double>
     "customCurrencyAmounts": {},
     "iOSNavigation": false,

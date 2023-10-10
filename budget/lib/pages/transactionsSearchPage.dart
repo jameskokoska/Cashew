@@ -5,6 +5,7 @@ import 'package:budget/pages/addObjectivePage.dart';
 import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/addWalletPage.dart';
 import 'package:budget/struct/settings.dart';
+import 'package:budget/widgets/animatedExpanded.dart';
 import 'package:budget/widgets/fab.dart';
 import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/struct/databaseGlobal.dart';
@@ -395,6 +396,22 @@ class AppliedFilterChips extends StatelessWidget {
         openFiltersSelection: openFiltersSelection,
       ));
     }
+    for (TransactionCategory category in await database.getAllCategories(
+        categoryFks: searchFilters.subcategoryPks,
+        allCategories: false,
+        includeSubCategories: true)) {
+      out.add(AppliedFilterChip(
+        label: category.name,
+        customBorderColor: HexColor(category.colour),
+        openFiltersSelection: openFiltersSelection,
+      ));
+    }
+    if (searchFilters.subcategoryPks == null) {
+      out.add(AppliedFilterChip(
+        label: "no-subcategory".tr(),
+        openFiltersSelection: openFiltersSelection,
+      ));
+    }
     // Amount range
     if (searchFilters.amountRange != null) {
       out.add(
@@ -530,8 +547,12 @@ class AppliedFilterChips extends StatelessWidget {
                     child: SingleChildScrollView(
                       padding: EdgeInsets.symmetric(horizontal: 16),
                       scrollDirection: Axis.horizontal,
-                      child: Row(
-                        children: snapshot.data!,
+                      child: AnimatedSizeSwitcher(
+                        clipBehavior: Clip.none,
+                        child: Row(
+                          key: ValueKey(snapshot.data.toString()),
+                          children: snapshot.data!,
+                        ),
                       ),
                     ),
                   )
@@ -618,6 +639,7 @@ class SearchFilters {
   SearchFilters({
     this.walletPks = const [],
     this.categoryPks = const [],
+    this.subcategoryPks = const [],
     this.budgetPks = const [],
     this.objectivePks = const [],
     this.expenseIncome = const [],
@@ -632,6 +654,8 @@ class SearchFilters {
   }) {
     walletPks = this.walletPks.isEmpty ? [] : this.walletPks;
     categoryPks = this.categoryPks.isEmpty ? [] : this.categoryPks;
+    subcategoryPks =
+        this.subcategoryPks?.isEmpty == true ? [] : this.subcategoryPks;
     budgetPks = this.budgetPks.isEmpty ? [] : this.budgetPks;
     objectivePks = this.objectivePks.isEmpty ? [] : this.objectivePks;
     expenseIncome = this.expenseIncome.isEmpty ? [] : this.expenseIncome;
@@ -648,6 +672,8 @@ class SearchFilters {
   // think of it, if the tag is added it will be considered in the search
   List<String> walletPks;
   List<String> categoryPks;
+  List<String>?
+      subcategoryPks; // if this is null, it means any transaction WITHOUT a subcategory (blank list means all)
   List<String?> budgetPks;
   List<String?> objectivePks;
   List<ExpenseIncome> expenseIncome;
@@ -663,6 +689,7 @@ class SearchFilters {
   clearSearchFilters() {
     walletPks = [];
     categoryPks = [];
+    subcategoryPks = [];
     budgetPks = [];
     objectivePks = [];
     expenseIncome = [];
@@ -679,6 +706,7 @@ class SearchFilters {
   bool isClear({bool? ignoreDateTimeRange, bool? ignoreSearchQuery}) {
     if (walletPks.isEmpty &&
         categoryPks.isEmpty &&
+        subcategoryPks?.isEmpty == true &&
         budgetPks.isEmpty &&
         objectivePks.isEmpty &&
         expenseIncome.isEmpty &&
@@ -733,18 +761,42 @@ class _TransactionFiltersSelectionState
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Container(
-          height: 100,
-          child: SelectCategory(
-            horizontalList: true,
-            showSelectedAllCategoriesIfNoneSelected: true,
-            addButton: false,
-            selectedCategories: selectedFilters.categoryPks,
-            setSelectedCategories: (List<String>? categories) {
-              selectedFilters.categoryPks = categories ?? [];
-              setSearchFilters();
-            },
-          ),
+        SelectCategory(
+          horizontalList: true,
+          showSelectedAllCategoriesIfNoneSelected: true,
+          addButton: false,
+          selectedCategories: selectedFilters.categoryPks,
+          setSelectedCategories: (List<String>? categories) {
+            selectedFilters.categoryPks = categories ?? [];
+            if (selectedFilters.categoryPks.length <= 0)
+              selectedFilters.subcategoryPks = [];
+            setSearchFilters();
+          },
+        ),
+        SelectCategory(
+          horizontalList: true,
+          showSelectedAllCategoriesIfNoneSelected: true,
+          addButton: false,
+          selectedCategories: selectedFilters.subcategoryPks,
+          setSelectedCategories: (List<String>? categories) {
+            selectedFilters.subcategoryPks = categories ?? [];
+            setSearchFilters();
+          },
+          mainCategoryPks: selectedFilters.categoryPks,
+          forceSelectAllToFalse: selectedFilters.subcategoryPks == null,
+          header: [
+            SelectedCategoryHorizontalExtraButton(
+              label: "none".tr(),
+              onTap: () {
+                selectedFilters.subcategoryPks = null;
+                setSearchFilters();
+              },
+              isOutlined: selectedFilters.subcategoryPks == null,
+              icon: appStateSettings["outlinedIcons"]
+                  ? Icons.block_outlined
+                  : Icons.block_rounded,
+            ),
+          ],
         ),
         StreamBuilder<RangeValues>(
           stream: database.getHighestLowestAmount(

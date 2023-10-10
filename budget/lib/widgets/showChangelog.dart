@@ -2,6 +2,7 @@ import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
 import 'package:budget/pages/addBudgetPage.dart';
+import 'package:budget/pages/addCategoryPage.dart';
 import 'package:budget/pages/detailedChangelogPage.dart';
 import 'package:budget/pages/editCategoriesPage.dart';
 import 'package:budget/pages/editHomePage.dart';
@@ -12,6 +13,7 @@ import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/framework/popupFramework.dart';
+import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/outlinedButtonStacked.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -20,6 +22,18 @@ import 'listItem.dart';
 
 String getChangelogString() {
   return """
+    < 4.6.0
+    Make subcategory into main category
+    Merge subcategories support
+    Fixed transaction entry if subcategory reference not found
+    Can add subcategory directly when creating a category
+    CSV export for objective name and subcategory name
+    CSV export proper headers when budget has no value
+    Animation when changing filters
+    Subcategory filters
+    No assigned subcategory filter
+    Show all subcategories toggle preference saved
+    Removed rounded corners for wallets summary list
     < 4.5.9
     Merge categories handles subcategories
     Make subcategory from main category
@@ -1562,6 +1576,33 @@ Map<String, List<MajorChanges>> getMajorChanges() {
         Icons.edit_rounded,
         info: [
           "major-change-10-1".tr(),
+        ],
+        onTap: (context) {
+          pushRoute(context, EditHomePage());
+        },
+      ),
+    ],
+    "< 4.6.0": [
+      MajorChanges(
+        "major-change-11".tr(),
+        Icons.category_rounded,
+        info: [
+          "major-change-11-1".tr(),
+        ],
+        onTap: (context) {
+          pushRoute(
+            context,
+            AddCategoryPage(
+              routesToPopAfterDelete: RoutesToPopAfterDelete.None,
+            ),
+          );
+        },
+      ),
+      MajorChanges(
+        "major-change-12".tr(),
+        Icons.list_rounded,
+        info: [
+          "major-change-12-1".tr(),
         ],
         onTap: (context) {
           pushRoute(context, EditHomePage());

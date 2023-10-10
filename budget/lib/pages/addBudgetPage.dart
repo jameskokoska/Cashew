@@ -1152,18 +1152,15 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                     child: AnimatedExpanded(
                       expand: !(selectedShared == true ||
                           selectedAddedTransactionsOnly),
-                      child: Container(
-                        height: 100,
-                        child: SelectCategory(
-                          horizontalList: true,
-                          selectedCategories: selectedCategoryPks,
-                          setSelectedCategories: (categories) {
-                            checkPopupBalanceCorrectionSelectedWarning(
-                                context, categories);
-                            setSelectedCategories(categories);
-                          },
-                          showSelectedAllCategoriesIfNoneSelected: true,
-                        ),
+                      child: SelectCategory(
+                        horizontalList: true,
+                        selectedCategories: selectedCategoryPks,
+                        setSelectedCategories: (categories) {
+                          checkPopupBalanceCorrectionSelectedWarning(
+                              context, categories);
+                          setSelectedCategories(categories);
+                        },
+                        showSelectedAllCategoriesIfNoneSelected: true,
                       ),
                     ),
                   ),
@@ -1191,19 +1188,16 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                     child: AnimatedExpanded(
                       expand: !(selectedShared == true ||
                           selectedAddedTransactionsOnly),
-                      child: Container(
-                        height: 100,
-                        child: SelectCategory(
-                          horizontalList: true,
-                          selectedCategories: selectedCategoryPksExclude,
-                          setSelectedCategories: (categories) {
-                            checkPopupBalanceCorrectionSelectedWarning(
-                                context, categories);
-                            setSelectedCategoriesExclude(categories);
-                          },
-                          showSelectedAllCategoriesIfNoneSelected: false,
-                          fadeOutWhenSelected: true,
-                        ),
+                      child: SelectCategory(
+                        horizontalList: true,
+                        selectedCategories: selectedCategoryPksExclude,
+                        setSelectedCategories: (categories) {
+                          checkPopupBalanceCorrectionSelectedWarning(
+                              context, categories);
+                          setSelectedCategoriesExclude(categories);
+                        },
+                        showSelectedAllCategoriesIfNoneSelected: false,
+                        fadeOutWhenSelected: true,
                       ),
                     ),
                   ),

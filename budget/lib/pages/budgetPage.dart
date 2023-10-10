@@ -93,7 +93,7 @@ class _BudgetPageContent extends StatefulWidget {
 class _BudgetPageContentState extends State<_BudgetPageContent> {
   double budgetHeaderHeight = 0;
   String? selectedMember = null;
-  bool showAllSubcategories = false;
+  bool showAllSubcategories = appStateSettings["showAllSubcategories"];
   TransactionCategory? selectedCategory =
       null; //We shouldn't always rely on this, if for example the user changes the category and we are still on this page. But for less important info and O(1) we can reference it quickly.
   GlobalKey<PieChartDisplayState> _pieChartDisplayStateKey = GlobalKey();
@@ -309,6 +309,14 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
         }
       },
     );
+  }
+
+  void toggleAllSubcategories() {
+    setState(() {
+      showAllSubcategories = !showAllSubcategories;
+    });
+    updateSettings("showAllSubcategories", showAllSubcategories,
+        updateGlobalState: false);
   }
 
   Widget pieChart({
@@ -723,7 +731,7 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                                       if (snapshot.hasData == false)
                                         return SizedBox.shrink();
                                       if (snapshot.hasData &&
-                                          (snapshot?.data ?? []).length > 0) {
+                                          (snapshot.data ?? []).length > 0) {
                                         return subCategorySpendingSummary(
                                             showIncomeExpenseIcons:
                                                 showIncomeExpenseIcons,
@@ -915,12 +923,8 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                                   totalSpentAbsolute: totalSpentAbsolute,
                                   budgetColorScheme: budgetColorScheme,
                                   showAllSubcategories: showAllSubcategories,
-                                  toggleAllSubCategories: () {
-                                    setState(() {
-                                      showAllSubcategories =
-                                          !showAllSubcategories;
-                                    });
-                                  },
+                                  toggleAllSubCategories:
+                                      toggleAllSubcategories,
                                   dataPassed: snapshot.data ?? [],
                                 ),
                               // if (snapshot.data!.length > 0)

@@ -358,8 +358,14 @@ class _AddTransactionPageState extends State<AddTransactionPage>
       print("Added transaction");
       if (selectedTitle != null &&
           selectedCategory != null &&
-          selectedTitle != "")
+          selectedTitle != "") {
+        // if (selectedSubCategory != null) {
+        //   await addAssociatedTitles(selectedTitle!, selectedSubCategory!);
+        // } else {
+        //   await addAssociatedTitles(selectedTitle!, selectedCategory!);
+        // }
         await addAssociatedTitles(selectedTitle!, selectedCategory!);
+      }
       Transaction createdTransaction = await createTransaction();
 
       final int? rowId = await database.createOrUpdateTransaction(
@@ -640,11 +646,12 @@ class _AddTransactionPageState extends State<AddTransactionPage>
     if (widget.transaction != null) {
       TransactionCategory? getSelectedCategory =
           await database.getCategoryInstance(widget.transaction!.categoryFk);
+
       TransactionCategory? getSelectedSubCategory =
           widget.transaction!.subCategoryFk == null
               ? null
-              : await database
-                  .getCategoryInstance(widget.transaction!.subCategoryFk!);
+              : await database.getCategoryInstanceOrNull(
+                  widget.transaction!.subCategoryFk!);
       Budget? getBudget;
       try {
         getBudget = await database.getBudgetInstance(
@@ -661,97 +668,13 @@ class _AddTransactionPageState extends State<AddTransactionPage>
     }
   }
 
-  // return false if the subcategory is skipped
-  Future<dynamic> selectCategorySequence(
-      {Widget? extraWidgetBefore, bool? skipIfSet}) async {
-    dynamic result = await openBottomSheet(
-      context,
-      PopupFramework(
-        title: "select-category".tr(),
-        hasPadding: false,
-        child: Column(
-          children: [
-            if (extraWidgetBefore != null) extraWidgetBefore,
-            Padding(
-              padding: const EdgeInsets.only(left: 18, right: 18, bottom: 10),
-              child: SelectCategory(
-                skipIfSet: skipIfSet,
-                selectedCategory: selectedCategory,
-                setSelectedCategory: setSelectedCategory,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-    if (result != null && result is TransactionCategory) {
-      int subCategoriesOfMain =
-          await database.getAmountOfSubCategories(result.categoryPk);
-      if (subCategoriesOfMain > 0) {
-        result = await openBottomSheet(
-          context,
-          PopupFramework(
-            title: "select-subcategory".tr(),
-            child: SelectCategory(
-              skipIfSet: skipIfSet,
-              selectedCategory: selectedSubCategory,
-              setSelectedCategory: setSelectedSubCategory,
-              mainCategoryPk: selectedCategory!.categoryPk,
-              header: [
-                LayoutBuilder(builder: (context, constraints) {
-                  return Column(
-                    children: [
-                      Tappable(
-                        color: Theme.of(context).colorScheme.secondaryContainer,
-                        onTap: () {
-                          setSelectedSubCategory(null);
-                          Navigator.pop(context, false);
-                        },
-                        borderRadius: 18,
-                        child: Container(
-                          height: constraints.maxWidth < 70
-                              ? constraints.maxWidth
-                              : 66,
-                          width: constraints.maxWidth < 70
-                              ? constraints.maxWidth
-                              : 66,
-                          child: Center(
-                            child: Icon(
-                              appStateSettings["outlinedIcons"]
-                                  ? Icons.block_outlined
-                                  : Icons.block_rounded,
-                              size: 40,
-                            ),
-                          ),
-                        ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(top: 2),
-                        child: Center(
-                          child: TextFont(
-                            textAlign: TextAlign.center,
-                            text: "none".tr(),
-                            fontSize: 10,
-                            maxLines: 1,
-                          ),
-                        ),
-                      ),
-                    ],
-                  );
-                }),
-              ],
-            ),
-          ),
-        );
-        if (result == false) return false;
-      }
-    }
-    if (result is TransactionCategory) return result;
-    return null;
-  }
-
   Future afterSetTitle() async {
     dynamic result = await selectCategorySequence(
+      context,
+      selectedCategory: selectedCategory,
+      setSelectedCategory: setSelectedCategory,
+      selectedSubCategory: selectedSubCategory,
+      setSelectedSubCategory: setSelectedSubCategory,
       skipIfSet: true,
       extraWidgetBefore: Column(
         children: [
@@ -770,6 +693,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
         ],
       ),
     );
+
     if (result is TransactionCategory || result == false) {
       openBottomSheet(
         context,
@@ -876,7 +800,14 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                   }
                 },
                 onTap: () async {
-                  await selectCategorySequence();
+                  await selectCategorySequence(
+                    context,
+                    selectedCategory: selectedCategory,
+                    setSelectedCategory: setSelectedCategory,
+                    selectedSubCategory: selectedSubCategory,
+                    setSelectedSubCategory: setSelectedSubCategory,
+                    skipIfSet: false,
+                  );
                 },
                 color: Colors.transparent,
                 child: Container(
@@ -1339,7 +1270,14 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                       ? SaveBottomButton(
                           label: "select-category".tr(),
                           onTap: () {
-                            selectCategorySequence();
+                            selectCategorySequence(
+                              context,
+                              selectedCategory: selectedCategory,
+                              setSelectedCategory: setSelectedCategory,
+                              selectedSubCategory: selectedSubCategory,
+                              setSelectedSubCategory: setSelectedSubCategory,
+                              skipIfSet: false,
+                            );
                           },
                         )
                       : selectedAmount == null
@@ -3066,4 +3004,100 @@ class TransactionTypeInfoEntry extends StatelessWidget {
       ),
     );
   }
+}
+
+// return false if the subcategory is skipped
+Future<dynamic> selectCategorySequence(
+  BuildContext context, {
+  Widget? extraWidgetBefore,
+  bool? skipIfSet,
+  required TransactionCategory? selectedCategory,
+  required Function(TransactionCategory) setSelectedCategory,
+  required TransactionCategory? selectedSubCategory,
+  required Function(TransactionCategory?) setSelectedSubCategory,
+}) async {
+  dynamic result = await openBottomSheet(
+    context,
+    PopupFramework(
+      title: "select-category".tr(),
+      hasPadding: false,
+      child: Column(
+        children: [
+          if (extraWidgetBefore != null) extraWidgetBefore,
+          Padding(
+            padding: const EdgeInsets.only(left: 18, right: 18, bottom: 10),
+            child: SelectCategory(
+              skipIfSet: skipIfSet,
+              selectedCategory: selectedCategory,
+              setSelectedCategory: setSelectedCategory,
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
+  if (result != null && result is TransactionCategory) {
+    int subCategoriesOfMain =
+        await database.getAmountOfSubCategories(result.categoryPk);
+    if (subCategoriesOfMain > 0) {
+      result = await openBottomSheet(
+        context,
+        PopupFramework(
+          title: "select-subcategory".tr(),
+          child: SelectCategory(
+            skipIfSet: skipIfSet,
+            selectedCategory: selectedSubCategory,
+            setSelectedCategory: setSelectedSubCategory,
+            mainCategoryPks: [result.categoryPk],
+            header: [
+              LayoutBuilder(builder: (context, constraints) {
+                return Column(
+                  children: [
+                    Tappable(
+                      color: Theme.of(context).colorScheme.secondaryContainer,
+                      onTap: () {
+                        setSelectedSubCategory(null);
+                        Navigator.pop(context, false);
+                      },
+                      borderRadius: 18,
+                      child: Container(
+                        height: constraints.maxWidth < 70
+                            ? constraints.maxWidth
+                            : 66,
+                        width: constraints.maxWidth < 70
+                            ? constraints.maxWidth
+                            : 66,
+                        child: Center(
+                          child: Icon(
+                            appStateSettings["outlinedIcons"]
+                                ? Icons.block_outlined
+                                : Icons.block_rounded,
+                            size: 40,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top: 2),
+                      child: Center(
+                        child: TextFont(
+                          textAlign: TextAlign.center,
+                          text: "none".tr(),
+                          fontSize: 10,
+                          maxLines: 1,
+                        ),
+                      ),
+                    ),
+                  ],
+                );
+              }),
+            ],
+          ),
+        ),
+      );
+      if (result == false) return false;
+    }
+  }
+  if (result is TransactionCategory) return result;
+  return null;
 }

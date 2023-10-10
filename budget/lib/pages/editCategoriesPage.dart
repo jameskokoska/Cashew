@@ -126,10 +126,11 @@ class _EditCategoriesPageState extends State<EditCategoriesPage> {
             ),
           ),
           StreamBuilder<Map<String, List<TransactionCategory>>>(
-              stream: database.watchAllSubCategoriesIndexedByPk(),
+              stream: database.watchAllSubCategoriesIndexedByMainCategoryPk(),
               builder: (context, snapshotSubCategories) {
                 Map<String, List<TransactionCategory>>
-                    subCategoriesIndexedByPk = snapshotSubCategories.data ?? {};
+                    subCategoriesIndexedByMainPk =
+                    snapshotSubCategories.data ?? {};
                 return StreamBuilder<List<TransactionCategory>>(
                   stream: database.watchAllCategories(
                       searchFor: searchValue == "" ? null : searchValue),
@@ -159,7 +160,8 @@ class _EditCategoriesPageState extends State<EditCategoriesPage> {
                         itemBuilder: (context, index) {
                           TransactionCategory category = snapshot.data![index];
                           List<TransactionCategory> subCategories =
-                              subCategoriesIndexedByPk[category.categoryPk] ??
+                              subCategoriesIndexedByMainPk[
+                                      category.categoryPk] ??
                                   [];
                           return EditRowEntry(
                             canReorder: searchValue == "" &&
@@ -193,8 +195,7 @@ class _EditCategoriesPageState extends State<EditCategoriesPage> {
                                         AddCategoryPage(
                                           category: category,
                                           routesToPopAfterDelete:
-                                              RoutesToPopAfterDelete
-                                                  .PreventDelete,
+                                              RoutesToPopAfterDelete.One,
                                         ),
                                       );
                                     },
@@ -543,11 +544,17 @@ Future<DeletePopupAction?> deleteCategoryPopup(
         },
         onExtra2: () async {
           Navigator.pop(context, false);
-          mergeCategoryPopup(
-            context,
-            categoryOriginal: category,
-            routesToPopAfterDelete: routesToPopAfterDelete,
-          );
+          isSubCategory
+              ? mergeSubcategoryPopup(
+                  context,
+                  subcategoryOriginal: category,
+                  routesToPopAfterDelete: routesToPopAfterDelete,
+                )
+              : mergeCategoryPopup(
+                  context,
+                  categoryOriginal: category,
+                  routesToPopAfterDelete: routesToPopAfterDelete,
+                );
         },
         onExtraLabel2: "move-transactions".tr(),
         onSubmitLabel: "delete".tr(),
@@ -633,6 +640,109 @@ void mergeCategoryPopup(
   );
 }
 
+void mergeSubcategoryPopup(
+  BuildContext context, {
+  required TransactionCategory subcategoryOriginal,
+  required RoutesToPopAfterDelete routesToPopAfterDelete,
+}) {
+  openBottomSheet(
+    context,
+    PopupFramework(
+      title: "select-subcategory".tr(),
+      subtitle: "subcategory-to-transfer-all-transactions-to".tr(),
+      child: SelectCategory(
+        hideCategoryFks: [subcategoryOriginal.categoryPk],
+        allowRearrange: false,
+        popRoute: true,
+        mainCategoryPks: [subcategoryOriginal.mainCategoryPk ?? ""],
+        setSelectedCategory: (subcategory) async {
+          Future.delayed(Duration(milliseconds: 90), () async {
+            final result = await openPopup(
+              context,
+              title: "merge-into".tr() + " " + subcategory.name + "?",
+              description: "merge-into-description-subcategories".tr(),
+              icon: appStateSettings["outlinedIcons"]
+                  ? Icons.merge_outlined
+                  : Icons.merge_rounded,
+              onSubmit: () async {
+                Navigator.pop(context, true);
+              },
+              onSubmitLabel: "merge".tr(),
+              onCancelLabel: "cancel".tr(),
+              onCancel: () {
+                Navigator.pop(context);
+              },
+            );
+            if (result == true) {
+              if (routesToPopAfterDelete == RoutesToPopAfterDelete.All) {
+                Navigator.of(context).popUntil((route) => route.isFirst);
+              } else if (routesToPopAfterDelete == RoutesToPopAfterDelete.One) {
+                Navigator.of(context).pop();
+              }
+              openLoadingPopupTryCatch(() async {
+                await database.mergeAndDeleteSubCategory(
+                    subcategoryOriginal, subcategory);
+                openSnackbar(
+                  SnackbarMessage(
+                    title: "merged-subcategory".tr(),
+                    icon: appStateSettings["outlinedIcons"]
+                        ? Icons.merge_outlined
+                        : Icons.merge_rounded,
+                    description:
+                        subcategoryOriginal.name + " → " + subcategory.name,
+                  ),
+                );
+              });
+            }
+          });
+        },
+      ),
+    ),
+  );
+}
+
+void makeMainCategoryPopup(
+  BuildContext context, {
+  required TransactionCategory subcategoryOriginal,
+  required RoutesToPopAfterDelete routesToPopAfterDelete,
+}) async {
+  final result = await openPopup(
+    context,
+    title: "make-main-category-question".tr(),
+    description: "make-main-category-description".tr(),
+    icon: appStateSettings["outlinedIcons"]
+        ? Icons.move_down_outlined
+        : Icons.move_down_rounded,
+    onSubmit: () async {
+      Navigator.pop(context, true);
+    },
+    onSubmitLabel: "make-main-category".tr(),
+    onCancelLabel: "cancel".tr(),
+    onCancel: () {
+      Navigator.pop(context);
+    },
+  );
+  if (result == true) {
+    if (routesToPopAfterDelete == RoutesToPopAfterDelete.All) {
+      Navigator.of(context).popUntil((route) => route.isFirst);
+    } else if (routesToPopAfterDelete == RoutesToPopAfterDelete.One) {
+      Navigator.of(context).pop();
+    }
+    openLoadingPopupTryCatch(() async {
+      await database.makeSubcategoryIntoMainCategory(subcategoryOriginal);
+      openSnackbar(
+        SnackbarMessage(
+          title: "main-category-created".tr(),
+          icon: appStateSettings["outlinedIcons"]
+              ? Icons.inbox_outlined
+              : Icons.inbox_rounded,
+          description: subcategoryOriginal.name,
+        ),
+      );
+    });
+  }
+}
+
 void makeSubCategoryPopup(
   BuildContext context, {
   required TransactionCategory categoryOriginal,
@@ -672,9 +782,8 @@ void makeSubCategoryPopup(
                 Navigator.of(context).pop();
               }
               openLoadingPopupTryCatch(() async {
-                await database.mergeAndDeleteCategory(
-                    categoryOriginal, category,
-                    movingToSubCategory: true);
+                await database.makeMainCategoryIntoSubcategory(
+                    categoryOriginal, category);
                 openSnackbar(
                   SnackbarMessage(
                     title: "subcategory-created".tr(),

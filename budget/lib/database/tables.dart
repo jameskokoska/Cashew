@@ -498,11 +498,15 @@ class TransactionWithCategory {
   final Transaction transaction;
   final TransactionWallet? wallet;
   final Budget? budget;
+  final Objective? objective;
+  final TransactionCategory? subCategory;
   TransactionWithCategory({
     required this.category,
     required this.transaction,
     this.wallet,
     this.budget,
+    this.objective,
+    this.subCategory,
   });
 }
 
@@ -1615,6 +1619,17 @@ class FinanceDatabase extends _$FinanceDatabase {
     return true;
   }
 
+  Future<Map<String, TransactionCategory>> getAllCategoriesIndexed() async {
+    List<TransactionCategory> allCategories = (await ((select(categories)
+          ..orderBy([(w) => OrderingTerm.asc(w.order)]))
+        .get()));
+    Map<String, TransactionCategory> indexedByPk = {
+      for (TransactionCategory category in allCategories)
+        category.categoryPk: category,
+    };
+    return indexedByPk;
+  }
+
   Stream<AllWallets> watchAllWalletsIndexed() {
     return (select(wallets)..orderBy([(w) => OrderingTerm.asc(w.order)]))
         .watch()
@@ -1679,7 +1694,7 @@ class FinanceDatabase extends _$FinanceDatabase {
   }
 
   Future<List<TransactionWithCategory>>
-      getAllTransactionsWithCategoryWalletBudget(
+      getAllTransactionsWithCategoryWalletBudgetObjectiveSubCategory(
           Expression<bool> Function($TransactionsTable) filter) async {
     final query = (select(transactions)
           ..where(filter)
@@ -1697,9 +1712,16 @@ class FinanceDatabase extends _$FinanceDatabase {
         budgets,
         budgets.budgetPk.equalsExp(transactions.sharedReferenceBudgetPk),
       ),
+      leftOuterJoin(
+        objectives,
+        objectives.objectivePk.equalsExp(transactions.objectiveFk),
+      ),
     ]);
 
     final rows = await query.get();
+
+    Map<String, TransactionCategory> categoriesIndexed =
+        await database.getAllCategoriesIndexed();
 
     return rows.map((row) {
       return TransactionWithCategory(
@@ -1707,6 +1729,9 @@ class FinanceDatabase extends _$FinanceDatabase {
         transaction: row.readTable(transactions),
         wallet: row.readTableOrNull(wallets),
         budget: row.readTableOrNull(budgets),
+        objective: row.readTableOrNull(objectives),
+        subCategory:
+            categoriesIndexed[row.readTable(transactions).subCategoryFk],
       );
     }).toList();
   }
@@ -3107,6 +3132,11 @@ class FinanceDatabase extends _$FinanceDatabase {
         .getSingle();
   }
 
+  Future<TransactionCategory?> getCategoryInstanceOrNull(String categoryPk) {
+    return (select(categories)..where((c) => c.categoryPk.equals(categoryPk)))
+        .getSingleOrNull();
+  }
+
   // get budget given key
   Future<Budget> getBudgetInstance(String budgetPk) {
     return (select(budgets)..where((t) => t.budgetPk.equals(budgetPk)))
@@ -3137,24 +3167,31 @@ class FinanceDatabase extends _$FinanceDatabase {
         .first;
   }
 
-  Stream<List<TransactionCategory>> watchAllCategories(
-      {String? searchFor, int? limit, int? offset, String? mainCategoryPk}) {
+  Stream<List<TransactionCategory>> watchAllCategories({
+    String? searchFor,
+    int? limit,
+    int? offset,
+    List<String>? mainCategoryPks,
+  }) {
     return (select(categories)
-          ..where((c) => ((mainCategoryPk == null
+          ..where((c) => ((mainCategoryPks == null
                   ? onlyShowMainCategoryListing(c)
-                  : c.mainCategoryPk.equals(mainCategoryPk)) &
+                  : c.mainCategoryPk.isIn(mainCategoryPks)) &
               (searchFor == null
                   ? Constant(true)
                   : c.name
                       .lower()
                       .like("%" + (searchFor).toLowerCase().trim() + "%"))))
-          ..orderBy([(c) => OrderingTerm.asc(c.order)])
+          ..orderBy([
+            (c) => OrderingTerm.asc(c.mainCategoryPk),
+            (c) => OrderingTerm.asc(c.order),
+          ])
           ..limit(limit ?? DEFAULT_LIMIT, offset: offset ?? DEFAULT_OFFSET))
         .watch();
   }
 
   Stream<Map<String, List<TransactionCategory>>>
-      watchAllSubCategoriesIndexedByPk() {
+      watchAllSubCategoriesIndexedByMainCategoryPk() {
     return (select(categories)..orderBy([(w) => OrderingTerm.asc(w.order)]))
         .watch()
         .map((categories) {
@@ -3212,9 +3249,12 @@ class FinanceDatabase extends _$FinanceDatabase {
       {int? limit,
       int? offset,
       List<String>? categoryFks,
-      bool? allCategories}) {
+      bool? allCategories,
+      bool includeSubCategories = false}) {
     return (select(categories)
-          ..where((c) => (onlyShowMainCategoryListing(c) &
+          ..where((c) => ((includeSubCategories == false
+                  ? onlyShowMainCategoryListing(c)
+                  : Constant(true)) &
               (allCategories != false
                   ? Constant(true)
                   : c.categoryPk.isIn(categoryFks ?? []))))
@@ -3746,9 +3786,78 @@ class FinanceDatabase extends _$FinanceDatabase {
         .go();
   }
 
+  Future mergeAndDeleteSubCategory(TransactionCategory subCategoryFrom,
+      TransactionCategory subCategoryTo) async {
+    List<Transaction> transactionsToUpdate =
+        await getAllTransactionsFromSubCategory(subCategoryFrom.categoryPk);
+
+    List<Transaction> transactionsEdited = [];
+    for (Transaction transaction in transactionsToUpdate) {
+      transactionsEdited.add(transaction.copyWith(
+          subCategoryFk: Value(subCategoryTo.categoryPk),
+          dateTimeModified: Value(DateTime.now())));
+    }
+    await updateBatchTransactionsOnly(transactionsEdited);
+
+    // Delete the old subcategory
+    await database.deleteCategory(
+      subCategoryFrom.categoryPk,
+      subCategoryFrom.order,
+    );
+  }
+
+  Future makeMainCategoryIntoSubcategory(
+      TransactionCategory categoryFrom, TransactionCategory categoryTo) async {
+    List<Transaction> transactionsToUpdate =
+        await getAllTransactionsFromCategory(categoryFrom.categoryPk);
+    List<Transaction> transactionsEdited = [];
+    for (Transaction transaction in transactionsToUpdate) {
+      transactionsEdited.add(transaction.copyWith(
+          categoryFk: categoryTo.categoryPk,
+          subCategoryFk: Value(categoryFrom.categoryPk),
+          dateTimeModified: Value(DateTime.now())));
+    }
+    await updateBatchTransactionsOnly(transactionsEdited);
+
+    await shiftCategories(-1, categoryFrom.order);
+
+    await database.createOrUpdateCategory(
+      categoryFrom.copyWith(
+        mainCategoryPk: Value(categoryTo.categoryPk),
+        order: await database.getAmountOfSubCategories(categoryTo.categoryPk),
+      ),
+    );
+  }
+
+  Future makeSubcategoryIntoMainCategory(
+      TransactionCategory categoryFrom) async {
+    List<Transaction> transactionsToUpdate =
+        await getAllTransactionsFromSubCategory(categoryFrom.categoryPk);
+    List<Transaction> transactionsEdited = [];
+    for (Transaction transaction in transactionsToUpdate) {
+      transactionsEdited.add(
+        transaction.copyWith(
+          categoryFk: categoryFrom.categoryPk,
+          subCategoryFk: Value(null),
+          dateTimeModified: Value(DateTime.now()),
+        ),
+      );
+    }
+    await updateBatchTransactionsOnly(transactionsEdited);
+
+    await shiftCategories(-1, categoryFrom.order,
+        mainCategoryPk: categoryFrom.mainCategoryPk);
+
+    await database.createOrUpdateCategory(
+      categoryFrom.copyWith(
+        mainCategoryPk: Value(null),
+        order: await database.getAmountOfCategories(),
+      ),
+    );
+  }
+
   Future mergeAndDeleteCategory(
-      TransactionCategory categoryFrom, TransactionCategory categoryTo,
-      {bool movingToSubCategory = false}) async {
+      TransactionCategory categoryFrom, TransactionCategory categoryTo) async {
     List<Transaction> transactionsToUpdate =
         await getAllTransactionsFromCategory(categoryFrom.categoryPk);
     // This is good for shared budgets, but shared is discontinued
@@ -3761,9 +3870,7 @@ class FinanceDatabase extends _$FinanceDatabase {
     for (Transaction transaction in transactionsToUpdate) {
       transactionsEdited.add(transaction.copyWith(
           categoryFk: categoryTo.categoryPk,
-          subCategoryFk: Value(movingToSubCategory
-              ? categoryFrom.categoryPk
-              : transaction.subCategoryFk),
+          subCategoryFk: Value(transaction.subCategoryFk),
           dateTimeModified: Value(DateTime.now())));
     }
     await updateBatchTransactionsOnly(transactionsEdited);
@@ -3778,38 +3885,26 @@ class FinanceDatabase extends _$FinanceDatabase {
     }
     await updateBatchAssociatedTitlesOnly(associatedTitlesEdited);
 
-    if (movingToSubCategory) {
-      // Make the category into a subcategory
-      await database.createOrUpdateCategory(
-        categoryFrom.copyWith(
+    // Move all subcategories into the new category
+    List<TransactionCategory> allSubCategories = await database
+        .getAllSubCategoriesOfMainCategory(categoryFrom.categoryPk);
+    List<TransactionCategory> categoriesEdited = [];
+    int order =
+        await database.getAmountOfSubCategories(categoryFrom.categoryPk);
+    for (TransactionCategory category in allSubCategories) {
+      categoriesEdited.add(
+        category.copyWith(
           mainCategoryPk: Value(categoryTo.categoryPk),
-          order: await database.getAmountOfSubCategories(categoryTo.categoryPk),
+          dateTimeModified: Value(DateTime.now()),
+          order: order,
         ),
       );
-      await shiftCategories(-1, categoryFrom.order);
-    } else {
-      // Move all subcategories into the new category
-      List<TransactionCategory> allSubCategories = await database
-          .getAllSubCategoriesOfMainCategory(categoryFrom.categoryPk);
-      List<TransactionCategory> categoriesEdited = [];
-      int order =
-          await database.getAmountOfSubCategories(categoryFrom.categoryPk);
-      for (TransactionCategory category in allSubCategories) {
-        categoriesEdited.add(
-          category.copyWith(
-            mainCategoryPk: Value(categoryTo.categoryPk),
-            dateTimeModified: Value(DateTime.now()),
-            order: order,
-          ),
-        );
-        order = order + 1;
-      }
-      await updateBatchCategoriesOnly(categoriesEdited);
-
-      // Delete the old category
-      await database.deleteCategory(
-          categoryFrom.categoryPk, categoryFrom.order);
+      order = order + 1;
     }
+    await updateBatchCategoriesOnly(categoriesEdited);
+
+    // Delete the old category
+    await database.deleteCategory(categoryFrom.categoryPk, categoryFrom.order);
   }
 
   Stream<double?> totalDoubleStream(List<Stream<double?>> mergedStreams) {
@@ -3980,6 +4075,8 @@ class FinanceDatabase extends _$FinanceDatabase {
         onlyShowBasedOnWalletFks(tbl, searchFilters.walletPks);
     Expression<bool> isInCategoryPks =
         onlyShowBasedOnCategoryFks(tbl, searchFilters.categoryPks, null);
+    Expression<bool> isInSubcategoryPks =
+        onlyShowBasedOnSubcategoryFks(tbl, searchFilters.subcategoryPks);
     Expression<bool> isInBudgetPks =
         onlyShowBasedOnBudgetFks(tbl, searchFilters.budgetPks);
     Expression<bool> isInObjectivePks =
@@ -4067,6 +4164,7 @@ class FinanceDatabase extends _$FinanceDatabase {
 
     return isInWalletPks &
         isInCategoryPks &
+        isInSubcategoryPks &
         isInBudgetPks &
         isInObjectivePks &
         isInQuery &
@@ -4350,6 +4448,15 @@ class FinanceDatabase extends _$FinanceDatabase {
   Expression<bool> onlyShowBasedOnCategoryFks($TransactionsTable tbl,
       List<String>? categoryFks, List<String>? categoryFksExclude) {
     return isInCategory(tbl, categoryFks, categoryFksExclude);
+  }
+
+  Expression<bool> onlyShowBasedOnSubcategoryFks(
+      $TransactionsTable tbl, List<String>? subCategoryFks) {
+    return subCategoryFks == null
+        ? tbl.subCategoryFk.isNull()
+        : subCategoryFks.isEmpty
+            ? Constant(true)
+            : tbl.subCategoryFk.isIn(subCategoryFks);
   }
 
   Expression<bool> onlyShowBasedOnWalletFks(

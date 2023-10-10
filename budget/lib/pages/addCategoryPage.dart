@@ -11,11 +11,16 @@ import 'package:budget/widgets/categoryIcon.dart';
 import 'package:budget/widgets/editRowEntry.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/widgets/framework/popupFramework.dart';
+import 'package:budget/widgets/globalSnackBar.dart';
 import 'package:budget/widgets/incomeExpenseTabSelector.dart';
+import 'package:budget/widgets/listItem.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openContainerNavigation.dart';
 import 'package:budget/widgets/openPopup.dart';
+import 'package:budget/widgets/openSnackbar.dart';
+import 'package:budget/widgets/outlinedButtonStacked.dart';
 import 'package:budget/widgets/saveBottomButton.dart';
+import 'package:budget/widgets/selectCategory.dart';
 import 'package:budget/widgets/selectCategoryImage.dart';
 import 'package:budget/widgets/selectColor.dart';
 import 'package:budget/widgets/tappable.dart';
@@ -49,6 +54,8 @@ class AddCategoryPage extends StatefulWidget {
 
 class _AddCategoryPageState extends State<AddCategoryPage>
     with SingleTickerProviderStateMixin {
+  bool isMainCategoryWhenCreating = true;
+  String? mainCategoryPkForSubcategoryWhenCreating;
   String? selectedTitle;
   late String? selectedImage = widget.category == null ? "image.png" : null;
   String? selectedEmoji;
@@ -140,6 +147,20 @@ class _AddCategoryPageState extends State<AddCategoryPage>
       insert: widget.category == null,
       createdCategory,
     );
+    if (canSelectIfSubCategoryOrMainCategory() &&
+        mainCategoryPkForSubcategoryWhenCreating != null) {
+      TransactionCategory categoryMain = await database
+          .getCategoryInstance(mainCategoryPkForSubcategoryWhenCreating!);
+      openSnackbar(
+        SnackbarMessage(
+          title: "subcategory-created".tr(),
+          icon: appStateSettings["outlinedIcons"]
+              ? Icons.move_to_inbox_outlined
+              : Icons.move_to_inbox_rounded,
+          description: (selectedTitle ?? "") + " → " + categoryMain.name,
+        ),
+      );
+    }
     Navigator.pop(context);
   }
 
@@ -159,18 +180,25 @@ class _AddCategoryPageState extends State<AddCategoryPage>
       income: selectedIncome,
       order: widget.category != null
           ? widget.category!.order
-          : widget.mainCategoryPkWhenSubCategory != null
+          : canSelectIfSubCategoryOrMainCategory() &&
+                  mainCategoryPkForSubcategoryWhenCreating != null
               ? await database.getAmountOfSubCategories(
-                  widget.mainCategoryPkWhenSubCategory!)
-              : await database.getAmountOfCategories(),
+                  mainCategoryPkForSubcategoryWhenCreating!)
+              : widget.mainCategoryPkWhenSubCategory != null
+                  ? await database.getAmountOfSubCategories(
+                      widget.mainCategoryPkWhenSubCategory!)
+                  : await database.getAmountOfCategories(),
       colour: toHexString(selectedColor),
       iconName: selectedImage,
       emojiIconName: selectedEmoji,
       methodAdded:
           widget.category != null ? widget.category!.methodAdded : null,
-      mainCategoryPk: widget.mainCategoryPkWhenSubCategory != null
-          ? widget.mainCategoryPkWhenSubCategory
-          : widget.category?.mainCategoryPk,
+      mainCategoryPk: canSelectIfSubCategoryOrMainCategory() &&
+              mainCategoryPkForSubcategoryWhenCreating != null
+          ? mainCategoryPkForSubcategoryWhenCreating
+          : widget.mainCategoryPkWhenSubCategory != null
+              ? widget.mainCategoryPkWhenSubCategory
+              : widget.category?.mainCategoryPk,
     );
   }
 
@@ -187,6 +215,12 @@ class _AddCategoryPageState extends State<AddCategoryPage>
     } else {
       Navigator.pop(context);
     }
+  }
+
+  bool canSelectIfSubCategoryOrMainCategory() {
+    return widget.category == null &&
+        widget.mainCategoryPkWhenSubCategory == null &&
+        isSubCategory == false;
   }
 
   @override
@@ -215,9 +249,9 @@ class _AddCategoryPageState extends State<AddCategoryPage>
         _titleController.text = selectedTitle ?? "";
         _titleController.selection = TextSelection.fromPosition(
             TextPosition(offset: _titleController.text.length));
-        // await database.fixOrderCategories(
-        //     mainCategoryPkIfSubCategoryOrderFixing:
-        //         widget.category!.categoryPk);
+        await database.fixOrderCategories(
+            mainCategoryPkIfSubCategoryOrderFixing:
+                widget.category!.categoryPk);
       });
     }
 
@@ -322,15 +356,43 @@ class _AddCategoryPageState extends State<AddCategoryPage>
                     },
                     disabled: false,
                   )
-                : SaveBottomButton(
-                    label: widget.category == null
-                        ? "add-category".tr()
-                        : "save-changes".tr(),
-                    onTap: () async {
-                      await addCategory();
-                    },
-                    disabled: !(canAddCategory ?? false),
-                  ),
+                : canSelectIfSubCategoryOrMainCategory() &&
+                        mainCategoryPkForSubcategoryWhenCreating == null
+                    ? SaveBottomButton(
+                        label: "select-main-category".tr(),
+                        onTap: () async {
+                          openBottomSheet(
+                            context,
+                            PopupFramework(
+                              title: "select-category".tr(),
+                              subtitle:
+                                  "select-the-main-category-for-this-subcategory"
+                                      .tr(),
+                              child: SelectCategory(
+                                setSelectedCategory:
+                                    (TransactionCategory category) {
+                                  mainCategoryPkForSubcategoryWhenCreating =
+                                      category.categoryPk;
+                                },
+                                next: () async {
+                                  await addCategory();
+                                },
+                                addButton: false,
+                              ),
+                            ),
+                          );
+                        },
+                        disabled: !(canAddCategory ?? false),
+                      )
+                    : SaveBottomButton(
+                        label: widget.category == null
+                            ? "add-category".tr()
+                            : "save-changes".tr(),
+                        onTap: () async {
+                          await addCategory();
+                        },
+                        disabled: !(canAddCategory ?? false),
+                      ),
           ),
           slivers: [
             SliverToBoxAdapter(
@@ -462,15 +524,56 @@ class _AddCategoryPageState extends State<AddCategoryPage>
                             icon: appStateSettings["outlinedIcons"]
                                 ? Icons.merge_outlined
                                 : Icons.merge_rounded,
-                            label: "merge-category".tr(),
+                            label: isSubCategory
+                                ? "merge-subcategory".tr()
+                                : "merge-category".tr(),
                             onTap: () async {
-                              if (widget.category != null)
-                                mergeCategoryPopup(
-                                  context,
-                                  categoryOriginal: widget.category!,
+                              if (widget.category != null) {
+                                if (isSubCategory) {
+                                  mergeSubcategoryPopup(context,
+                                      subcategoryOriginal: widget.category!,
+                                      routesToPopAfterDelete:
+                                          widget.routesToPopAfterDelete);
+                                } else {
+                                  mergeCategoryPopup(
+                                    context,
+                                    categoryOriginal: widget.category!,
+                                    routesToPopAfterDelete:
+                                        widget.routesToPopAfterDelete,
+                                  );
+                                }
+                              }
+                            },
+                            color: Theme.of(context)
+                                .colorScheme
+                                .secondaryContainer,
+                            textColor: Theme.of(context)
+                                .colorScheme
+                                .onSecondaryContainer,
+                          ),
+                        ),
+                  widgetCategory == null ||
+                          widget.routesToPopAfterDelete ==
+                              RoutesToPopAfterDelete.PreventDelete ||
+                          isSubCategory == false
+                      ? SizedBox.shrink()
+                      : Padding(
+                          padding: EdgeInsets.only(
+                            left: 20,
+                            right: 20,
+                            top: 10,
+                          ),
+                          child: Button(
+                            flexibleLayout: true,
+                            icon: appStateSettings["outlinedIcons"]
+                                ? Icons.inbox_outlined
+                                : Icons.inbox_rounded,
+                            label: "make-main-category".tr(),
+                            onTap: () async {
+                              makeMainCategoryPopup(context,
+                                  subcategoryOriginal: widget.category!,
                                   routesToPopAfterDelete:
-                                      widget.routesToPopAfterDelete,
-                                );
+                                      widget.routesToPopAfterDelete);
                             },
                             color: Theme.of(context)
                                 .colorScheme
@@ -499,19 +602,38 @@ class _AddCategoryPageState extends State<AddCategoryPage>
                 ],
               ),
             ),
+            if (canSelectIfSubCategoryOrMainCategory())
+              SliverToBoxAdapter(
+                  child: Padding(
+                padding: const EdgeInsets.only(top: 20),
+                child: SelectIsSubcategory(
+                  isMainCategoryWhenCreating: isMainCategoryWhenCreating,
+                  onTap: (value) {
+                    setState(() {
+                      isMainCategoryWhenCreating = value;
+                    });
+                  },
+                  setMainCategoryPkForSubcategoryWhenCreating: (value) {
+                    mainCategoryPkForSubcategoryWhenCreating = value;
+                  },
+                ),
+              )),
             if ((widgetCategory == null || isSubCategory) == false)
               StreamBuilder<List<TransactionCategory>>(
                 stream: database.watchAllSubCategoriesOfMainCategory(
                     widget.category!.categoryPk),
                 builder: (context, snapshot) {
                   List<TransactionCategory> subCategories = snapshot.data ?? [];
-                  if (subCategories.length <= 0)
+                  if (subCategories.length <= 0 &&
+                      widget.routesToPopAfterDelete !=
+                          RoutesToPopAfterDelete.PreventDelete)
                     return SliverToBoxAdapter(
                       child: Padding(
                         padding: EdgeInsets.only(
                           left: 20,
                           right: 20,
-                          top: 20,
+                          top: 10,
+                          bottom: 8,
                         ),
                         child: Button(
                           flexibleLayout: true,
@@ -562,6 +684,8 @@ class _AddCategoryPageState extends State<AddCategoryPage>
                           horizontal:
                               getPlatform() == PlatformOS.isIOS ? 17 : 7,
                         ),
+                        canDelete: widget.routesToPopAfterDelete !=
+                            RoutesToPopAfterDelete.PreventDelete,
                         key: ValueKey(category.categoryPk),
                         content: Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
@@ -1062,3 +1186,89 @@ class AddButton extends StatelessWidget {
 //     );
 //   }
 // }
+
+class SelectIsSubcategory extends StatelessWidget {
+  const SelectIsSubcategory(
+      {required this.isMainCategoryWhenCreating,
+      required this.onTap,
+      required this.setMainCategoryPkForSubcategoryWhenCreating,
+      super.key});
+  final bool isMainCategoryWhenCreating;
+  final Function(bool isMainCategoryWhenCreating) onTap;
+  final Function(String mainCategoryPkForSubcategoryWhenCreating)
+      setMainCategoryPkForSubcategoryWhenCreating;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Expanded(
+                child: OutlinedButtonStacked(
+                  filled: isMainCategoryWhenCreating,
+                  alignLeft: true,
+                  alignBeside: true,
+                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                  text: "main-category".tr(),
+                  iconData: appStateSettings["outlinedIcons"]
+                      ? Icons.category_outlined
+                      : Icons.category_rounded,
+                  onTap: () {
+                    onTap(true);
+                  },
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 13),
+          Row(
+            children: [
+              Expanded(
+                child: OutlinedButtonStacked(
+                  filled: !isMainCategoryWhenCreating,
+                  transitionWhenFilled: false,
+                  alignLeft: true,
+                  alignBeside: true,
+                  padding: EdgeInsets.only(left: 20, right: 20, top: 20),
+                  text: "subcategory".tr(),
+                  iconData: appStateSettings["outlinedIcons"]
+                      ? Icons.move_to_inbox_outlined
+                      : Icons.move_to_inbox_rounded,
+                  onTap: () {
+                    onTap(false);
+                  },
+                  afterWidget: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 1),
+                        child: ClipRRect(
+                          child: SelectCategory(
+                            horizontalList: true,
+                            listPadding: EdgeInsets.symmetric(horizontal: 10),
+                            addButton: false,
+                            setSelectedCategory: (category) {
+                              setMainCategoryPkForSubcategoryWhenCreating(
+                                  category.categoryPk);
+                              onTap(false);
+                            },
+                            popRoute: false,
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                  afterWidgetPadding: EdgeInsets.only(bottom: 20),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
