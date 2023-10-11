@@ -763,5 +763,7 @@
   "make-main-category": "Membuat kategori utama",
   "make-main-category-question": "Membuat kategori utama?",
   "make-main-category-description": "Ini akan memindahkan semua transaksi dari kategori utama ke kategori utama baru",
-  "main-category-created": "Kategori utama dibuat"
+  "main-category-created": "Kategori utama dibuat",
+  "no-folder-selected": "Tidak ada folder yang dipilih",
+  "clear-selection": "Seleksi yang jelas"
 }

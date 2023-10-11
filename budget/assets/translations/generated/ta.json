@@ -763,5 +763,7 @@
   "make-main-category": "பிரதான வகையை உருவாக்குங்கள்",
   "make-main-category-question": "பிரதான வகையை உருவாக்கவா?",
   "make-main-category-description": "இது அனைத்து பரிவர்த்தனைகளையும் பிரதான வகையிலிருந்து புதிய பிரதான வகைக்கு நகர்த்தும்",
-  "main-category-created": "முக்கிய வகை உருவாக்கப்பட்டது"
+  "main-category-created": "முக்கிய வகை உருவாக்கப்பட்டது",
+  "no-folder-selected": "கோப்புறை எதுவும் தேர்ந்தெடுக்கப்படவில்லை",
+  "clear-selection": "தெளிவான தேர்வு"
 }

@@ -22,7 +22,6 @@ import 'package:drift/drift.dart' hide Column, Table;
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:file_picker/file_picker.dart';
 import 'dart:io';
 import 'package:csv/csv.dart';
 import 'package:flutter_charset_detector/flutter_charset_detector.dart';
@@ -33,8 +32,12 @@ import 'dart:io';
 import 'package:budget/struct/randomConstants.dart';
 import 'package:universal_html/html.dart' show AnchorElement;
 import 'package:path/path.dart' as p;
+import 'package:file_picker/file_picker.dart';
 
-Future saveDBFileToDevice(String fileName) async {
+Future saveDBFileToDevice(
+  String fileName, {
+  String? customDirectory,
+}) async {
   DBFileInfo currentDBFileInfo = await getCurrentDBFileInfo();
 
   List<int> dataStore = [];
@@ -72,31 +75,51 @@ Future saveDBFileToDevice(String fileName) async {
   }
 
   try {
-    String directory = getPlatform() == PlatformOS.isAndroid
-        ? "/storage/emulated/0/Download"
-        : (await getApplicationDocumentsDirectory()).path;
+    String directory = customDirectory ??
+        (getPlatform() == PlatformOS.isAndroid
+            ? "/storage/emulated/0/Download"
+            : (await getApplicationDocumentsDirectory()).path);
 
     String filePath = "${directory}/${fileName}";
     File savedFile = File(filePath);
     await savedFile.writeAsBytes(dataStore);
     openSnackbar(SnackbarMessage(
       title: "backup-saved-success".tr(),
-      description: fileName,
+      description: filePath,
       icon: appStateSettings["outlinedIcons"]
           ? Icons.download_done_outlined
           : Icons.download_done_rounded,
+      timeout: Duration(milliseconds: 5000),
     ));
     return true;
   } catch (e) {
-    openSnackbar(SnackbarMessage(
-      title: "error-saving".tr(),
-      description: e.toString(),
-      icon: appStateSettings["outlinedIcons"]
-          ? Icons.warning_outlined
-          : Icons.warning_rounded,
-    ));
-    print("Error saving file to device: " + e.toString());
-    return false;
+    if (customDirectory == null) {
+      String? selectedDirectory = await FilePicker.platform.getDirectoryPath();
+      if (selectedDirectory == null) {
+        openSnackbar(SnackbarMessage(
+          title: "error-exporting".tr(),
+          description: "no-folder-selected".tr(),
+          icon: appStateSettings["outlinedIcons"]
+              ? Icons.warning_outlined
+              : Icons.warning_rounded,
+        ));
+        print("Error saving file to device: " + e.toString());
+        return false;
+      } else {
+        return await saveDBFileToDevice(fileName,
+            customDirectory: selectedDirectory);
+      }
+    } else {
+      openSnackbar(SnackbarMessage(
+        title: "error-exporting".tr(),
+        description: e.toString(),
+        icon: appStateSettings["outlinedIcons"]
+            ? Icons.warning_outlined
+            : Icons.warning_rounded,
+      ));
+      print("Error saving file to device: " + e.toString());
+      return false;
+    }
   }
 }
 

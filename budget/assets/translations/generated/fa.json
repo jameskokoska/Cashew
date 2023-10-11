@@ -737,7 +737,7 @@
   "select-accounts": "حساب ها را انتخاب کنید",
   "of-category": "دسته",
   "subcategories": "زیر شاخه های",
-  "view-subcategories": "مشاهده زیر شاخه ها",
+  "view-subcategories": "زیر شاخه ها را مشاهده کنید",
   "select-subcategory": "زیر مجموعه را انتخاب کنید",
   "delete-subcategory-question": "زیرمجموعه را حذف کنید؟",
   "delete-subcategory-question-description": "با این کار برچسب زیر مجموعه از کلیه معاملات مرتبط با این زیر مجموعه حذف می شود.",
@@ -763,5 +763,7 @@
   "make-main-category": "دسته اصلی را بسازید",
   "make-main-category-question": "دسته اصلی را درست کنید؟",
   "make-main-category-description": "این همه معاملات را از دسته اصلی به یک دسته اصلی جدید منتقل می کند",
-  "main-category-created": "دسته اصلی ایجاد شده است"
+  "main-category-created": "دسته اصلی ایجاد شده است",
+  "no-folder-selected": "هیچ پوشه ای انتخاب نشده است",
+  "clear-selection": "انتخاب روشن"
 }

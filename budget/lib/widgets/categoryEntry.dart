@@ -40,6 +40,7 @@ class CategoryEntry extends StatelessWidget {
     this.expandSubcategories = true,
     this.selectedSubCategoryPk,
     this.alwaysShow = false,
+    this.isSubcategory = false,
   }) : super(key: key);
 
   final TransactionCategory category;
@@ -64,6 +65,7 @@ class CategoryEntry extends StatelessWidget {
   final bool expandSubcategories;
   final String? selectedSubCategoryPk;
   final bool alwaysShow;
+  final bool isSubcategory;
 
   @override
   Widget build(BuildContext context) {
@@ -105,7 +107,9 @@ class CategoryEntry extends StatelessWidget {
             : categorySpent > (categoryBudgetLimit!.amount / 100 * budgetLimit);
     component = Padding(
       padding: EdgeInsets.symmetric(
-        horizontal: getHorizontalPaddingConstrained(context),
+        horizontal: isSubcategory == false
+            ? getHorizontalPaddingConstrained(context)
+            : 0,
       ),
       child: Builder(
         builder: (context) {
@@ -344,6 +348,7 @@ class CategoryEntry extends StatelessWidget {
                             subcategoryWithTotal.category.categoryPk,
                         allSelected: allSelected,
                         alwaysShow: selected,
+                        isSubcategory: true,
                       ),
                   ],
                 ),

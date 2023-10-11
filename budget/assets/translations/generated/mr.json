@@ -763,5 +763,7 @@
   "make-main-category": "मुख्य श्रेणी बनवा",
   "make-main-category-question": "मुख्य श्रेणी बनवा?",
   "make-main-category-description": "हे सर्व व्यवहार मुख्य श्रेणीतून नवीन मुख्य श्रेणीत हलवेल",
-  "main-category-created": "मुख्य श्रेणी तयार केली"
+  "main-category-created": "मुख्य श्रेणी तयार केली",
+  "no-folder-selected": "कोणतेही फोल्डर निवडलेले नाही",
+  "clear-selection": "स्पष्ट निवड"
 }

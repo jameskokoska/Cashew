@@ -745,7 +745,7 @@
   "delete-subcategory-merge-warning": "Ștergerea unei subcategorie va elimina toate tranzacțiile din această subcategorie. Mutați tranzacțiile într -o altă subcategorie pentru a evita acest lucru.",
   "select-the-main-category-for-this-subcategory": "Selectați categoria principală pentru această subcategorie",
   "make-subcategory-of": "Faceți subcategorie din",
-  "make-subcategory-description-categories": "Acest lucru va muta toate tranzacțiile la noua categorie și le va eticheta cu această subcategorie",
+  "make-subcategory-description-categories": "Aceasta va muta toate tranzacțiile la noua categorie și le va eticheta cu această subcategorie",
   "make-subcategory": "Faceți subcategorie",
   "subcategory-created": "Subcategorie creată",
   "no-subcategory": "Fără subcategorie",
@@ -763,5 +763,7 @@
   "make-main-category": "Faceți categoria principală",
   "make-main-category-question": "Faceți categoria principală?",
   "make-main-category-description": "Aceasta va muta toate tranzacțiile de la categoria principală la o nouă categorie principală",
-  "main-category-created": "Categorie principală creată"
+  "main-category-created": "Categorie principală creată",
+  "no-folder-selected": "Nu există niciun folder selectat",
+  "clear-selection": "Selecție clară"
 }

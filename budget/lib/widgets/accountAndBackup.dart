@@ -44,6 +44,7 @@ import 'package:universal_html/html.dart' as html;
 import 'dart:io';
 import 'package:budget/struct/randomConstants.dart';
 import 'package:universal_html/html.dart' show AnchorElement;
+import 'package:file_picker/file_picker.dart';
 
 Future<bool> checkConnection() async {
   late bool isConnected;
@@ -1466,7 +1467,10 @@ class LoadingShimmerDriveFiles extends StatelessWidget {
 }
 
 Future<bool> saveDriveFileToDevice(
-    drive.DriveApi driveApi, drive.File fileToSave) async {
+  drive.DriveApi driveApi,
+  drive.File fileToSave, {
+  String? customDirectory,
+}) async {
   List<int> dataStore = [];
   dynamic response = await driveApi.files
       .get(fileToSave.id!, downloadOptions: drive.DownloadOptions.fullMedia);
@@ -1513,31 +1517,51 @@ Future<bool> saveDriveFileToDevice(
   }
 
   try {
-    String directory = getPlatform() == PlatformOS.isAndroid
-        ? "/storage/emulated/0/Download"
-        : (await getApplicationDocumentsDirectory()).path;
+    String directory = customDirectory ??
+        (getPlatform() == PlatformOS.isAndroid
+            ? "/storage/emulated/0/Download"
+            : (await getApplicationDocumentsDirectory()).path);
 
     String filePath = "${directory}/${fileName}";
     File savedFile = File(filePath);
     await savedFile.writeAsBytes(dataStore);
     openSnackbar(SnackbarMessage(
       title: "backup-downloaded-success".tr(),
-      description: fileName,
+      description: filePath,
       icon: appStateSettings["outlinedIcons"]
           ? Icons.download_done_outlined
           : Icons.download_done_rounded,
+      timeout: Duration(milliseconds: 5000),
     ));
     return true;
   } catch (e) {
-    openSnackbar(SnackbarMessage(
-      title: "error-downloading".tr(),
-      description: e.toString(),
-      icon: appStateSettings["outlinedIcons"]
-          ? Icons.warning_outlined
-          : Icons.warning_rounded,
-    ));
-    print("Error saving file to device: " + e.toString());
-    return false;
+    if (customDirectory == null) {
+      String? selectedDirectory = await FilePicker.platform.getDirectoryPath();
+      if (selectedDirectory == null) {
+        openSnackbar(SnackbarMessage(
+          title: "error-exporting".tr(),
+          description: "no-folder-selected".tr(),
+          icon: appStateSettings["outlinedIcons"]
+              ? Icons.warning_outlined
+              : Icons.warning_rounded,
+        ));
+        print("Error saving file to device: " + e.toString());
+        return false;
+      } else {
+        return await saveDriveFileToDevice(driveApi, fileToSave,
+            customDirectory: selectedDirectory);
+      }
+    } else {
+      openSnackbar(SnackbarMessage(
+        title: "error-exporting".tr(),
+        description: e.toString(),
+        icon: appStateSettings["outlinedIcons"]
+            ? Icons.warning_outlined
+            : Icons.warning_rounded,
+      ));
+      print("Error saving file to device: " + e.toString());
+      return false;
+    }
   }
 }
 

@@ -65,7 +65,7 @@ class HomePageWalletList extends StatelessWidget {
                                   );
                                 },
                                 height: 40,
-                                icon: Icons.format_list_bulleted_add,
+                                // icon: Icons.format_list_bulleted_add,
                               ),
                             ),
                           ],

@@ -747,7 +747,7 @@
   "make-subcategory-of": "הפוך תת -קטגוריית משנה של",
   "make-subcategory-description-categories": "זה יעביר את כל העסקאות לקטגוריה החדשה ויתייג אותן בקטגוריית משנה זו",
   "make-subcategory": "הפוך תת -קטגוריית משנה",
-  "subcategory-created": "תת -קטגוריה שנוצרה",
+  "subcategory-created": "תת -קטגוריית משנה שנוצרה",
   "no-subcategory": "אין קטגוריית משנה",
   "main-category": "קטגוריה ראשית",
   "subcategory": "קטגוריית משנה",
@@ -763,5 +763,7 @@
   "make-main-category": "הפוך את הקטגוריה הראשית",
   "make-main-category-question": "לעשות קטגוריה ראשית?",
   "make-main-category-description": "זה יעביר את כל העסקאות מהקטגוריה הראשית לקטגוריה ראשית חדשה",
-  "main-category-created": "הקטגוריה הראשית שנוצרה"
+  "main-category-created": "הקטגוריה הראשית שנוצרה",
+  "no-folder-selected": "לא נבחרה תיקיה",
+  "clear-selection": "בחירה ברורה"
 }

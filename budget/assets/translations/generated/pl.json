@@ -763,5 +763,7 @@
   "make-main-category": "Stwórz główną kategorię",
   "make-main-category-question": "Tworzyć główną kategorię?",
   "make-main-category-description": "Spowoduje to przeniesienie wszystkich transakcji z głównej kategorii do nowej kategorii głównej",
-  "main-category-created": "Utworzona kategoria główna"
+  "main-category-created": "Utworzona kategoria główna",
+  "no-folder-selected": "Brak folderu",
+  "clear-selection": "Jasny wybór"
 }

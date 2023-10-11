@@ -766,10 +766,24 @@ class _TransactionFiltersSelectionState
           showSelectedAllCategoriesIfNoneSelected: true,
           addButton: false,
           selectedCategories: selectedFilters.categoryPks,
-          setSelectedCategories: (List<String>? categories) {
+          setSelectedCategories: (List<String>? categories) async {
             selectedFilters.categoryPks = categories ?? [];
             if (selectedFilters.categoryPks.length <= 0)
               selectedFilters.subcategoryPks = [];
+
+            // Remove any subcategories that are selected that no longer
+            // have the primary category selected
+            for (String subCategoryPk in ([
+              ...selectedFilters.subcategoryPks ?? []
+            ])) {
+              TransactionCategory subCategory =
+                  await database.getCategoryInstance(subCategoryPk);
+              if ((categories ?? []).contains(subCategory.mainCategoryPk) ==
+                  false) {
+                (selectedFilters.subcategoryPks ?? []).remove(subCategoryPk);
+              }
+            }
+
             setSearchFilters();
           },
         ),

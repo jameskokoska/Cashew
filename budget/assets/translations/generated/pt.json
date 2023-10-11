@@ -744,7 +744,7 @@
   "remove-all-transactions-from-subcategory-question": "Remover todas as transações?",
   "delete-subcategory-merge-warning": "A exclusão de uma subcategoria removerá todas as transações desta subcategoria. Mova transações para outra subcategoria para evitar isso.",
   "select-the-main-category-for-this-subcategory": "Selecione a categoria principal para esta subcategoria",
-  "make-subcategory-of": "Fazer subcategoria de",
+  "make-subcategory-of": "Faça subcategoria de",
   "make-subcategory-description-categories": "Isso moverá todas as transações para a nova categoria e as rotulará com esta subcategoria",
   "make-subcategory": "Faça subcategoria",
   "subcategory-created": "Subcategoria criada",
@@ -763,5 +763,7 @@
   "make-main-category": "Faça a categoria principal",
   "make-main-category-question": "Fazer categoria principal?",
   "make-main-category-description": "Isso moverá todas as transações da categoria principal para uma nova categoria principal",
-  "main-category-created": "Categoria principal criada"
+  "main-category-created": "Categoria principal criada",
+  "no-folder-selected": "Nenhuma pasta selecionada",
+  "clear-selection": "Seleção clara"
 }

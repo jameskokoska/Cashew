@@ -54,7 +54,7 @@ class _HomePageBudgetsState extends State<HomePageBudgets> {
                 height: 160,
                 width: null,
                 padding: const EdgeInsets.only(left: 13, right: 13, bottom: 13),
-                icon: Icons.format_list_bulleted_add,
+                // icon: Icons.format_list_bulleted_add,
               );
             }
             // if (snapshot.data!.length == 1) {
@@ -92,7 +92,7 @@ class _HomePageBudgetsState extends State<HomePageBudgets> {
                   height: null,
                   width: null,
                   padding: EdgeInsets.all(0),
-                  icon: Icons.format_list_bulleted_add,
+                  // icon: Icons.format_list_bulleted_add,
                 ),
               ),
             ];

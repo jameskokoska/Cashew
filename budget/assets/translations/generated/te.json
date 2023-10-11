@@ -763,5 +763,7 @@
   "make-main-category": "ప్రధాన వర్గం చేయండి",
   "make-main-category-question": "ప్రధాన వర్గాన్ని తయారు చేయాలా?",
   "make-main-category-description": "ఇది అన్ని లావాదేవీలను ప్రధాన వర్గం నుండి కొత్త ప్రధాన వర్గానికి తరలిస్తుంది",
-  "main-category-created": "ప్రధాన వర్గం సృష్టించబడింది"
+  "main-category-created": "ప్రధాన వర్గం సృష్టించబడింది",
+  "no-folder-selected": "ఫోల్డర్ ఎంచుకోలేదు",
+  "clear-selection": "స్పష్టమైన ఎంపిక"
 }

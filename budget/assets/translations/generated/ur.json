@@ -739,8 +739,8 @@
   "subcategories": "ذیلی زمرہ جات",
   "view-subcategories": "ذیلی زمرہ جات دیکھیں",
   "select-subcategory": "ذیلی زمرہ منتخب کریں",
-  "delete-subcategory-question": "ذیلی زمرہ کو حذف کریں؟",
-  "delete-subcategory-question-description": "اس سے اس ذیلی زمرہ سے وابستہ تمام لین دین سے ذیلی زمرہ ٹیگ ختم ہوجائے گا۔",
+  "delete-subcategory-question": "ذیلی زمرہ حذف کریں؟",
+  "delete-subcategory-question-description": "یہ اس ذیلی زمرہ سے وابستہ تمام لین دین سے ذیلی زمرہ ٹیگ کو ختم کردے گا۔",
   "remove-all-transactions-from-subcategory-question": "تمام لین دین کو ہٹا دیں؟",
   "delete-subcategory-merge-warning": "ذیلی زمرہ کو حذف کرنے سے اس ذیلی زمرہ سے تمام لین دین ختم ہوجائے گا۔ اس سے بچنے کے لئے لین دین کو کسی اور ذیلی زمرہ میں منتقل کریں۔",
   "select-the-main-category-for-this-subcategory": "اس ذیلی زمرہ کے لئے مرکزی زمرہ منتخب کریں",
@@ -763,5 +763,7 @@
   "make-main-category": "مرکزی زمرہ بنائیں",
   "make-main-category-question": "مرکزی زمرہ بنائیں؟",
   "make-main-category-description": "یہ تمام لین دین کو مرکزی زمرے سے ایک نئے اہم زمرے میں منتقل کرے گا",
-  "main-category-created": "مرکزی زمرہ تشکیل دیا گیا ہے"
+  "main-category-created": "مرکزی زمرہ تشکیل دیا گیا ہے",
+  "no-folder-selected": "کوئی فولڈر منتخب نہیں ہوا",
+  "clear-selection": "واضح انتخاب"
 }

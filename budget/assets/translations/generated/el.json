@@ -763,5 +763,7 @@
   "make-main-category": "Κάντε την κύρια κατηγορία",
   "make-main-category-question": "ΚΑΝΕΤΕ ΚΥΡΙΑ Κατηγορία;",
   "make-main-category-description": "Αυτό θα μεταφέρει όλες τις συναλλαγές από την κύρια κατηγορία σε μια νέα κύρια κατηγορία",
-  "main-category-created": "Η κύρια κατηγορία δημιουργήθηκε"
+  "main-category-created": "Η κύρια κατηγορία δημιουργήθηκε",
+  "no-folder-selected": "Δεν επιλέχθηκε φάκελος",
+  "clear-selection": "Καθαρή επιλογή"
 }

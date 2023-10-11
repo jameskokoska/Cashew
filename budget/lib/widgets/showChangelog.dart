@@ -22,6 +22,11 @@ import 'listItem.dart';
 
 String getChangelogString() {
   return """
+    < 4.6.3
+    Fixed padding for subcategories on large displays
+    Fixed syncing for handling null values
+    Fixed filters when deselected main category, it now deselects any subcategories
+    If export to downloads fails, prompts user to pick directory when saving file
     < 4.6.2
     Improved performance of transaction entries (with SQL joins, avoid lookups)
     All spending summary supports subcategories
@@ -1591,7 +1596,7 @@ Map<String, List<MajorChanges>> getMajorChanges() {
         },
       ),
     ],
-    "< 4.6.0": [
+    "< 4.6.3": [
       MajorChanges(
         "major-change-11".tr(),
         Icons.category_rounded,
@@ -1616,6 +1621,13 @@ Map<String, List<MajorChanges>> getMajorChanges() {
         onTap: (context) {
           pushRoute(context, EditHomePage());
         },
+      ),
+      MajorChanges(
+        "major-change-6".tr(),
+        Icons.bug_report_rounded,
+        info: [
+          "major-change-6-1".tr(),
+        ],
       ),
     ],
   };

@@ -763,5 +763,7 @@
   "make-main-category": "Tehdä pääluokka",
   "make-main-category-question": "Tehdä pääluokka?",
   "make-main-category-description": "Tämä siirtää kaikki transaktiot pääluokasta uuteen pääluokkaan",
-  "main-category-created": "Pääluokka luotu"
+  "main-category-created": "Pääluokka luotu",
+  "no-folder-selected": "Ei kansiota valittu",
+  "clear-selection": "Tyhjennä valinta"
 }

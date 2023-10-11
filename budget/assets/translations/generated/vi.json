@@ -745,7 +745,7 @@
   "delete-subcategory-merge-warning": "Xóa một tiểu thể loại sẽ xóa tất cả các giao dịch khỏi tiểu thể loại này. Di chuyển các giao dịch sang một tiểu thể loại khác để tránh điều này.",
   "select-the-main-category-for-this-subcategory": "Chọn danh mục chính cho danh mục con này",
   "make-subcategory-of": "Làm cho tiểu thể loại của",
-  "make-subcategory-description-categories": "Điều này sẽ chuyển tất cả các giao dịch sang danh mục mới và dán nhãn cho chúng với tiểu thể loại này",
+  "make-subcategory-description-categories": "Điều này sẽ chuyển tất cả các giao dịch sang danh mục mới và dán nhãn cho chúng với danh mục con này",
   "make-subcategory": "Làm cho tiểu thể loại",
   "subcategory-created": "Tiểu loại được tạo ra",
   "no-subcategory": "Không có danh mục con",
@@ -763,5 +763,7 @@
   "make-main-category": "Tạo loại chính",
   "make-main-category-question": "Tạo loại chính?",
   "make-main-category-description": "Điều này sẽ chuyển tất cả các giao dịch từ danh mục chính sang danh mục chính mới",
-  "main-category-created": "Danh mục chính được tạo ra"
+  "main-category-created": "Danh mục chính được tạo ra",
+  "no-folder-selected": "Không có thư mục được chọn",
+  "clear-selection": "Lựa chọn rõ ràng"
 }

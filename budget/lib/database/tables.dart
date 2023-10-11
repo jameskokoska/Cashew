@@ -2530,6 +2530,11 @@ class FinanceDatabase extends _$FinanceDatabase {
   // ************************************************************
 
   Future<bool> processSyncLogs(List<SyncLog> syncLogs) async {
+    // We want InsertMode.insertOrReplace because
+    // if null values are inserted we want to overwrite it with a null
+    // For example when a transactions subCategoryPk is set to null
+    // We need to set it to null, nt keep the default when syncing!
+
     syncLogs.sort(
         (a, b) => a.transactionDateTime!.compareTo(b.transactionDateTime!));
 
@@ -2634,7 +2639,7 @@ class FinanceDatabase extends _$FinanceDatabase {
                 ),
           );
           batch.insert(wallets, syncLog.itemToUpdate,
-              mode: InsertMode.insertOrIgnore);
+              mode: InsertMode.insertOrReplace);
         } else if (syncLog.updateLogType == UpdateLogType.TransactionCategory) {
           batch.update(
             categories,
@@ -2646,7 +2651,7 @@ class FinanceDatabase extends _$FinanceDatabase {
                 ),
           );
           batch.insert(categories, syncLog.itemToUpdate,
-              mode: InsertMode.insertOrIgnore);
+              mode: InsertMode.insertOrReplace);
         } else if (syncLog.updateLogType == UpdateLogType.Budget) {
           batch.update(
             budgets,
@@ -2658,7 +2663,7 @@ class FinanceDatabase extends _$FinanceDatabase {
                 ),
           );
           batch.insert(budgets, syncLog.itemToUpdate,
-              mode: InsertMode.insertOrIgnore);
+              mode: InsertMode.insertOrReplace);
         } else if (syncLog.updateLogType == UpdateLogType.CategoryBudgetLimit) {
           batch.update(
             categoryBudgetLimits,
@@ -2670,7 +2675,7 @@ class FinanceDatabase extends _$FinanceDatabase {
                 ),
           );
           batch.insert(categoryBudgetLimits, syncLog.itemToUpdate,
-              mode: InsertMode.insertOrIgnore);
+              mode: InsertMode.insertOrReplace);
         } else if (syncLog.updateLogType == UpdateLogType.Transaction) {
           batch.update(
             transactions,
@@ -2682,7 +2687,7 @@ class FinanceDatabase extends _$FinanceDatabase {
                 ),
           );
           batch.insert(transactions, syncLog.itemToUpdate,
-              mode: InsertMode.insertOrIgnore);
+              mode: InsertMode.insertOrReplace);
         } else if (syncLog.updateLogType ==
             UpdateLogType.TransactionAssociatedTitle) {
           batch.update(
@@ -2695,7 +2700,7 @@ class FinanceDatabase extends _$FinanceDatabase {
                 ),
           );
           batch.insert(associatedTitles, syncLog.itemToUpdate,
-              mode: InsertMode.insertOrIgnore);
+              mode: InsertMode.insertOrReplace);
         } else if (syncLog.updateLogType == UpdateLogType.ScannerTemplate) {
           batch.update(
             scannerTemplates,
@@ -2707,7 +2712,7 @@ class FinanceDatabase extends _$FinanceDatabase {
                 ),
           );
           batch.insert(scannerTemplates, syncLog.itemToUpdate,
-              mode: InsertMode.insertOrIgnore);
+              mode: InsertMode.insertOrReplace);
         } else if (syncLog.updateLogType == UpdateLogType.Objective) {
           batch.update(
             objectives,
@@ -2719,7 +2724,7 @@ class FinanceDatabase extends _$FinanceDatabase {
                 ),
           );
           batch.insert(objectives, syncLog.itemToUpdate,
-              mode: InsertMode.insertOrIgnore);
+              mode: InsertMode.insertOrReplace);
         }
       }
     });

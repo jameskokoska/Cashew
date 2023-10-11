@@ -763,5 +763,7 @@
   "make-main-category": "Lage hovedkategori",
   "make-main-category-question": "Lage hovedkategori?",
   "make-main-category-description": "Dette vil flytte alle transaksjoner fra hovedkategorien til en ny hovedkategori",
-  "main-category-created": "Hovedkategori opprettet"
+  "main-category-created": "Hovedkategori opprettet",
+  "no-folder-selected": "Ingen mappe valgt",
+  "clear-selection": "Klart valg"
 }

@@ -763,5 +763,7 @@
   "make-main-category": "Hauptkategorie machen",
   "make-main-category-question": "Hauptkategorie machen?",
   "make-main-category-description": "Dadurch wird alle Transaktionen aus der Hauptkategorie in eine neue Hauptkategorie verschoben",
-  "main-category-created": "Hauptkategorie erstellt"
+  "main-category-created": "Hauptkategorie erstellt",
+  "no-folder-selected": "Kein Ordner ausgewählt",
+  "clear-selection": "Klare Auswahl"
 }

@@ -763,5 +763,7 @@
   "make-main-category": "പ്രധാന വിഭാഗം നിർമ്മിക്കുക",
   "make-main-category-question": "പ്രധാന വിഭാഗം നിർമ്മിക്കുമോ?",
   "make-main-category-description": "ഇത് പ്രധാന വിഭാഗത്തിൽ നിന്ന് ഒരു പുതിയ പ്രധാന വിഭാഗത്തിലേക്ക് നീക്കും",
-  "main-category-created": "സൃഷ്ടിച്ച പ്രധാന വിഭാഗം"
+  "main-category-created": "സൃഷ്ടിച്ച പ്രധാന വിഭാഗം",
+  "no-folder-selected": "തിരഞ്ഞെടുത്ത ഫോൾഡുകളൊന്നുമില്ല",
+  "clear-selection": "തിരഞ്ഞെടുത്തത്"
 }

@@ -763,5 +763,7 @@
   "make-main-category": "สร้างหมวดหมู่หลัก",
   "make-main-category-question": "ทำหมวดหมู่หลัก?",
   "make-main-category-description": "สิ่งนี้จะย้ายธุรกรรมทั้งหมดจากหมวดหมู่หลักไปยังหมวดหมู่หลักใหม่",
-  "main-category-created": "หมวดหมู่หลักที่สร้างขึ้น"
+  "main-category-created": "หมวดหมู่หลักที่สร้างขึ้น",
+  "no-folder-selected": "ไม่มีการเลือกโฟลเดอร์",
+  "clear-selection": "การเลือกที่ชัดเจน"
 }

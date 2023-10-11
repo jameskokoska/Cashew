@@ -763,5 +763,7 @@
   "make-main-category": "প্রধান বিভাগ করুন",
   "make-main-category-question": "মূল বিভাগ তৈরি করবেন?",
   "make-main-category-description": "এটি সমস্ত লেনদেনকে মূল বিভাগ থেকে একটি নতুন প্রধান বিভাগে স্থানান্তরিত করবে",
-  "main-category-created": "মূল বিভাগ তৈরি"
+  "main-category-created": "মূল বিভাগ তৈরি",
+  "no-folder-selected": "কোনও ফোল্ডার নির্বাচন করা হয়নি",
+  "clear-selection": "পরিষ্কার নির্বাচন"
 }

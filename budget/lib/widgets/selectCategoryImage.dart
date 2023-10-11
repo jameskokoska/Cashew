@@ -137,7 +137,7 @@ class _SelectCategoryImageState extends State<SelectCategoryImage> {
                           onSubmitted: (value) {},
                           onChanged: (value) {
                             setState(() {
-                              searchTerm = value;
+                              searchTerm = value.trim();
                             });
                             bottomSheetControllerGlobal.snapToExtent(0);
                           },

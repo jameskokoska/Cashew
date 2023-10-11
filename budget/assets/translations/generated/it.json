@@ -683,11 +683,11 @@
   "no-goals-found": "Nessun obiettivo trovato.",
   "net-worth-settings": "Impostazioni del patrimonio netto",
   "transfer-balance": "Trasferisci",
-  "withdraw-amount": "Prelevare l'importo",
+  "withdraw-amount": "Preleva l'importo",
   "transferred-balance": "Saldo trasferito",
   "net-total": "Totale netto",
   "all-accounts": "Tutti gli account",
-  "transfer-amount": "Importo del trasferimento",
+  "transfer-amount": "Trasferisci importo",
   "change-currency": "Cambia valuta",
   "select-primary-currency": "Seleziona la valuta primaria",
   "select-primary-currency-description": "Puoi sempre aggiungere più account con valute diverse in seguito.",
@@ -763,5 +763,7 @@
   "make-main-category": "Crea la categoria principale",
   "make-main-category-question": "Fare la categoria principale?",
   "make-main-category-description": "Ciò sposterà tutte le transazioni dalla categoria principale in una nuova categoria principale",
-  "main-category-created": "Categoria principale creata"
+  "main-category-created": "Categoria principale creata",
+  "no-folder-selected": "Nessuna cartella selezionata",
+  "clear-selection": "Selezione chiara"
 }

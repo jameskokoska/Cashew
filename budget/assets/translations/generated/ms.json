@@ -739,7 +739,7 @@
   "subcategories": "Subkategori",
   "view-subcategories": "Lihat subkategori",
   "select-subcategory": "Pilih Subkategori",
-  "delete-subcategory-question": "Padam subkategori?",
+  "delete-subcategory-question": "Padam Subkategori?",
   "delete-subcategory-question-description": "Ini akan mengeluarkan tag subkategori dari semua urus niaga yang berkaitan dengan subkategori ini.",
   "remove-all-transactions-from-subcategory-question": "Keluarkan semua urus niaga?",
   "delete-subcategory-merge-warning": "Memadam subkategori akan mengeluarkan semua transaksi dari subkategori ini. Pindahkan transaksi ke subkategori lain untuk mengelakkan ini.",
@@ -763,5 +763,7 @@
   "make-main-category": "Buat kategori utama",
   "make-main-category-question": "Membuat kategori utama?",
   "make-main-category-description": "Ini akan memindahkan semua urus niaga dari kategori utama ke kategori utama baru",
-  "main-category-created": "Kategori utama dibuat"
+  "main-category-created": "Kategori utama dibuat",
+  "no-folder-selected": "Tiada folder yang dipilih",
+  "clear-selection": "Pemilihan yang jelas"
 }

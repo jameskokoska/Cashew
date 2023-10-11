@@ -763,5 +763,7 @@
   "make-main-category": "Hacer la categoría principal",
   "make-main-category-question": "Hacer la categoría principal?",
   "make-main-category-description": "Esto moverá todas las transacciones de la categoría principal a una nueva categoría principal",
-  "main-category-created": "Categoría principal creada"
+  "main-category-created": "Categoría principal creada",
+  "no-folder-selected": "No se selecciona carpeta",
+  "clear-selection": "Selección clara"
 }

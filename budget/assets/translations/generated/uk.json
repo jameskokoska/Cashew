@@ -763,5 +763,7 @@
   "make-main-category": "Зробіть основну категорію",
   "make-main-category-question": "Зробити основну категорію?",
   "make-main-category-description": "Це перенесе всі транзакції з основної категорії до нової основної категорії",
-  "main-category-created": "Створена основна категорія"
+  "main-category-created": "Створена основна категорія",
+  "no-folder-selected": "Жодної папки не вибрано",
+  "clear-selection": "Чіткий вибір"
 }

@@ -763,5 +763,7 @@
   "make-main-category": "Maak hoofdcategorie",
   "make-main-category-question": "Hoofdcategorie maken?",
   "make-main-category-description": "Dit zal alle transacties van de hoofdcategorie verplaatsen naar een nieuwe hoofdcategorie",
-  "main-category-created": "Hoofdcategorie gemaakt"
+  "main-category-created": "Hoofdcategorie gemaakt",
+  "no-folder-selected": "Geen map geselecteerd",
+  "clear-selection": "Duidelijke selectie"
 }

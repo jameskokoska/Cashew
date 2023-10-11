@@ -763,5 +763,7 @@
   "make-main-category": "주요 범주를 만듭니다",
   "make-main-category-question": "주요 범주를 만드시겠습니까?",
   "make-main-category-description": "이것은 모든 트랜잭션이 기본 범주에서 새로운 주요 범주로 이동합니다.",
-  "main-category-created": "주요 범주가 생성되었습니다"
+  "main-category-created": "주요 범주가 생성되었습니다",
+  "no-folder-selected": "폴더가 선택되지 않았습니다",
+  "clear-selection": "명확한 선택"
 }

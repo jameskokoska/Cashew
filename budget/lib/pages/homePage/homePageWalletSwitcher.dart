@@ -81,7 +81,7 @@ class HomePageWalletSwitcher extends StatelessWidget {
                                   useCustomController: true,
                                 );
                               },
-                              icon: Icons.format_list_bulleted_add,
+                              // icon: Icons.format_list_bulleted_add,
                             ),
                           ),
                         ),

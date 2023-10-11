@@ -763,5 +763,7 @@
   "make-main-category": "Направите главну категорију",
   "make-main-category-question": "Направите главну категорију?",
   "make-main-category-description": "Ово ће преместити све трансакције из главне категорије у нову главну категорију",
-  "main-category-created": "Главна категорија је створена"
+  "main-category-created": "Главна категорија је створена",
+  "no-folder-selected": "Није изабрана мапа",
+  "clear-selection": "Јасно избор"
 }

@@ -763,5 +763,7 @@
   "make-main-category": "Vytvořte hlavní kategorii",
   "make-main-category-question": "Udělat hlavní kategorii?",
   "make-main-category-description": "Tím se přesunou všechny transakce z hlavní kategorie do nové hlavní kategorie",
-  "main-category-created": "Vytvořená hlavní kategorie"
+  "main-category-created": "Vytvořená hlavní kategorie",
+  "no-folder-selected": "Žádná vybraná složka",
+  "clear-selection": "Jasný výběr"
 }

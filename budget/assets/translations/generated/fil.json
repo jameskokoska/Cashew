@@ -763,5 +763,7 @@
   "make-main-category": "Gumawa ng pangunahing kategorya",
   "make-main-category-question": "Gumawa ng pangunahing kategorya?",
   "make-main-category-description": "Ililipat nito ang lahat ng mga transaksyon mula sa pangunahing kategorya sa isang bagong pangunahing kategorya",
-  "main-category-created": "Ang pangunahing kategorya ay nilikha"
+  "main-category-created": "Ang pangunahing kategorya ay nilikha",
+  "no-folder-selected": "Walang napiling folder",
+  "clear-selection": "Malinaw na pagpili"
 }

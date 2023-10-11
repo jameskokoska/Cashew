@@ -740,7 +740,7 @@
   "view-subcategories": "查看子类别",
   "select-subcategory": "选择子类别",
   "delete-subcategory-question": "删除子类别？",
-  "delete-subcategory-question-description": "这将从与此子类别关联的所有事务中删除子类别标签。",
+  "delete-subcategory-question-description": "这将从与此子类别关联的所有交易中删除子类别标签。",
   "remove-all-transactions-from-subcategory-question": "删除所有交易？",
   "delete-subcategory-merge-warning": "删除子类别将从此子类别中删除所有交易。将交易移至另一个子类别以避免这种情况。",
   "select-the-main-category-for-this-subcategory": "选择此子类别的主要类别",
@@ -763,5 +763,7 @@
   "make-main-category": "进行主要类别",
   "make-main-category-question": "成为主要类别？",
   "make-main-category-description": "这将把所有交易从主要类别移动到新的主要类别",
-  "main-category-created": "创建的主要类别"
+  "main-category-created": "创建的主要类别",
+  "no-folder-selected": "未选择文件夹",
+  "clear-selection": "清空选项"
 }

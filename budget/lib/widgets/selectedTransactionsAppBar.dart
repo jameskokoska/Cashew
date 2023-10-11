@@ -377,7 +377,6 @@ class SelectedTransactionsAppBar extends StatelessWidget {
                             action: () async {
                               dynamic objective =
                                   await selectObjectivePopup(context);
-                              print(objective);
                               if (objective == null) return;
 
                               String? objectivePkToMoveTo;

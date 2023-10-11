@@ -763,5 +763,7 @@
   "make-main-category": "جعل الفئة الرئيسية",
   "make-main-category-question": "جعل الفئة الرئيسية؟",
   "make-main-category-description": "سيؤدي ذلك إلى نقل جميع المعاملات من الفئة الرئيسية إلى فئة رئيسية جديدة",
-  "main-category-created": "الفئة الرئيسية التي تم إنشاؤها"
+  "main-category-created": "الفئة الرئيسية التي تم إنشاؤها",
+  "no-folder-selected": "لم يتم اختيار مجلد",
+  "clear-selection": "اختيار واضح"
 }

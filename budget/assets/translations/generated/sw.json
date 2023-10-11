@@ -763,5 +763,7 @@
   "make-main-category": "Tengeneza jamii kuu",
   "make-main-category-question": "Tengeneza Jamii Kuu?",
   "make-main-category-description": "Hii itahamisha shughuli zote kutoka kwa jamii kuu kwenda kwa jamii kuu mpya",
-  "main-category-created": "Jamii kuu iliyoundwa"
+  "main-category-created": "Jamii kuu iliyoundwa",
+  "no-folder-selected": "Hakuna folda iliyochaguliwa",
+  "clear-selection": "Uteuzi wazi"
 }

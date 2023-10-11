@@ -763,5 +763,7 @@
   "make-main-category": "મુખ્ય કેટેગરી બનાવો",
   "make-main-category-question": "મુખ્ય કેટેગરી બનાવો?",
   "make-main-category-description": "આ તમામ વ્યવહારોને મુખ્ય કેટેગરીથી નવી મુખ્ય કેટેગરીમાં ખસેડશે",
-  "main-category-created": "મુખ્ય કેટેગરી"
+  "main-category-created": "મુખ્ય કેટેગરી",
+  "no-folder-selected": "કોઈ ફોલ્ડર પસંદ થયેલ નથી",
+  "clear-selection": "સ્પષ્ટ પસંદગી"
 }

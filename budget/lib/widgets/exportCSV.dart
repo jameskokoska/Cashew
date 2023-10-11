@@ -30,8 +30,13 @@ import 'package:universal_html/html.dart' as html;
 import 'dart:io';
 import 'package:budget/struct/randomConstants.dart';
 import 'package:universal_html/html.dart' show AnchorElement;
+import 'package:file_picker/file_picker.dart';
 
-Future saveCSV(String csv, String fileName) async {
+Future saveCSV(
+  String csv,
+  String fileName, {
+  String? customDirectory,
+}) async {
   if (kIsWeb) {
     try {
       List<int> dataStore = utf8.encode(csv);
@@ -63,9 +68,10 @@ Future saveCSV(String csv, String fileName) async {
   }
 
   try {
-    String directory = getPlatform() == PlatformOS.isAndroid
-        ? "/storage/emulated/0/Download"
-        : (await getApplicationDocumentsDirectory()).path;
+    String directory = customDirectory ??
+        (getPlatform() == PlatformOS.isAndroid
+            ? "/storage/emulated/0/Download"
+            : (await getApplicationDocumentsDirectory()).path);
 
     String filePath = "${directory}/${fileName}";
     File savedFile = File(filePath);
@@ -73,22 +79,40 @@ Future saveCSV(String csv, String fileName) async {
 
     openSnackbar(SnackbarMessage(
       title: "csv-saved-success".tr(),
-      description: fileName,
+      description: filePath,
       icon: appStateSettings["outlinedIcons"]
           ? Icons.download_done_outlined
           : Icons.download_done_rounded,
+      timeout: Duration(milliseconds: 5000),
     ));
     return true;
   } catch (e) {
-    openSnackbar(SnackbarMessage(
-      title: "error-exporting".tr(),
-      description: e.toString(),
-      icon: appStateSettings["outlinedIcons"]
-          ? Icons.warning_outlined
-          : Icons.warning_rounded,
-    ));
-    print("Error saving file to device: " + e.toString());
-    return false;
+    if (customDirectory == null) {
+      String? selectedDirectory = await FilePicker.platform.getDirectoryPath();
+      if (selectedDirectory == null) {
+        openSnackbar(SnackbarMessage(
+          title: "error-exporting".tr(),
+          description: "no-folder-selected".tr(),
+          icon: appStateSettings["outlinedIcons"]
+              ? Icons.warning_outlined
+              : Icons.warning_rounded,
+        ));
+        print("Error saving file to device: " + e.toString());
+        return false;
+      } else {
+        return await saveCSV(csv, fileName, customDirectory: selectedDirectory);
+      }
+    } else {
+      openSnackbar(SnackbarMessage(
+        title: "error-exporting".tr(),
+        description: e.toString(),
+        icon: appStateSettings["outlinedIcons"]
+            ? Icons.warning_outlined
+            : Icons.warning_rounded,
+      ));
+      print("Error saving file to device: " + e.toString());
+      return false;
+    }
   }
 }
 
@@ -165,7 +189,6 @@ class ExportCSV extends StatelessWidget {
       for (TransactionWithCategory transactionWithCategory in transactions) {
         String inputTransactionString =
             transactionWithCategory.transaction.toString();
-        // print(inputTransactionString);
         String inputCategoryString =
             transactionWithCategory.category.toString();
         String inputWalletString = transactionWithCategory.wallet.toString();
@@ -174,8 +197,6 @@ class ExportCSV extends StatelessWidget {
             transactionWithCategory.objective.toString();
         String inputSubcategoryString =
             transactionWithCategory.subCategory.toString();
-        print(inputObjectiveString);
-        print(inputSubcategoryString);
         Map<String, String> merged = {
           ...convertStringToMap(
             inputTransactionString,
@@ -253,7 +274,7 @@ class ExportCSV extends StatelessWidget {
             },
           ),
           ...convertStringToMap(
-            inputSubcategoryString,
+            inputObjectiveString,
             keysToShow: [
               "name",
             ],
