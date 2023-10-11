@@ -111,17 +111,20 @@ class CategoryIcon extends StatelessWidget {
                                 amountDark: 0.35)
                         : getColor(context, "canvasContainer"),
                 onTap: onTap,
-                onLongPress: () {
-                  if (onLongPress != null) onLongPress!();
-                  if (canEditByLongPress)
-                    pushRoute(
-                      context,
-                      AddCategoryPage(
-                        category: category,
-                        routesToPopAfterDelete: RoutesToPopAfterDelete.One,
-                      ),
-                    );
-                },
+                onLongPress: canEditByLongPress == false && onLongPress == null
+                    ? null
+                    : () {
+                        if (onLongPress != null) onLongPress!();
+                        if (canEditByLongPress)
+                          pushRoute(
+                            context,
+                            AddCategoryPage(
+                              category: category,
+                              routesToPopAfterDelete:
+                                  RoutesToPopAfterDelete.One,
+                            ),
+                          );
+                      },
                 borderRadius: borderRadius - 3,
                 child: Center(
                   child: (category?.emojiIconName == null &&

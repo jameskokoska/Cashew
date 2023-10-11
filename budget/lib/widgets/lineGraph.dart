@@ -78,20 +78,24 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
         borderData: borderData,
         lineBarsData: lineBarsData,
         minX: 0,
+        maxX: loaded
+            ? widget.maxPair.x
+            : widget.maxPair.x - widget.maxPair.x * 0.7,
         minY: loaded
             ?
             // (widget.maxPair.y > 0 && widget.minPair.y > 0) ||
             //         (widget.maxPair.y < 0 && widget.minPair.y < 0)
             //     ? 0
             //     : widget.minPair.y
-            widget.minPair.y
+            widget.minPair.y == 0
+                ? -0.000001
+                : widget.minPair.y
             : widget.minPair.y - (widget.minPair.y - widget.amountBefore) * 0.7,
         maxY: loaded
-            ? widget.maxPair.y
+            ? widget.maxPair.y == 0
+                ? 0.000001
+                : widget.maxPair.y
             : widget.maxPair.y + (widget.maxPair.y - widget.amountBefore) * 0.7,
-        maxX: loaded
-            ? widget.maxPair.x
-            : widget.maxPair.x - widget.maxPair.x * 0.7,
         // axisTitleData: axisTitleData,
         titlesData: titlesData,
         extraLinesData: extraLinesData,
@@ -426,6 +430,8 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
       );
 
   LineChartBarData lineChartBarData(List<FlSpot> spots, int index) {
+    print("MIN" + widget.minPair.y.toString());
+    print("MAX" + widget.maxPair.y.toString());
     return LineChartBarData(
       color: widget.colors.length > 0
           ? lightenPastel(widget.colors[index], amount: 0.3)
@@ -588,7 +594,7 @@ class LineChartWrapper extends StatelessWidget {
   }
 
   Pair getMaxPoint(List<List<Pair>> pointsList) {
-    Pair max = Pair(1, 1);
+    Pair max = Pair(0, 0);
     if (amountBefore != 0 &&
         pointsList.isNotEmpty &&
         pointsList[0].isNotEmpty) {
@@ -621,7 +627,7 @@ class LineChartWrapper extends StatelessWidget {
     }
     for (List<Pair> points in pointsList) {
       if (points.length <= 0 && min.x == 0 && min.y == 0) {
-        min = Pair(1, 1);
+        min = Pair(0, 0);
       }
       for (Pair pair in points) {
         if (pair.x < min.x) {

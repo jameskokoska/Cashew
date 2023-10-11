@@ -21,7 +21,10 @@ import 'package:flutter/material.dart';
 import 'listItem.dart';
 
 String getChangelogString() {
-  return """    
+  return """
+    < 4.6.5
+    Linear gradient fixes when min/max is 0 for line graph
+    Fix on press for category icon
     < 4.6.4
     Launch screen logo for iOS
     Removed opacity when snackbar tapped on iOS
