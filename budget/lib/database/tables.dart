@@ -521,12 +521,27 @@ class CategoryWithTotal {
   final CategoryBudgetLimit? categoryBudgetLimit;
   final double total;
   final int transactionCount;
+
   CategoryWithTotal({
     required this.category,
     required this.total,
     this.transactionCount = 0,
     this.categoryBudgetLimit,
   });
+
+  CategoryWithTotal copyWith({
+    TransactionCategory? category,
+    CategoryBudgetLimit? categoryBudgetLimit,
+    double? total,
+    int? transactionCount,
+  }) {
+    return CategoryWithTotal(
+      category: category ?? this.category,
+      categoryBudgetLimit: categoryBudgetLimit ?? this.categoryBudgetLimit,
+      total: total ?? this.total,
+      transactionCount: transactionCount ?? this.transactionCount,
+    );
+  }
 }
 
 // bool canAddToBudget(bool? income, TransactionSpecialType? transactionType) {
@@ -1012,8 +1027,9 @@ class FinanceDatabase extends _$FinanceDatabase {
                     budgetTransactionFilters: budgetTransactionFilters,
                     memberTransactionFilters: memberTransactionFilters) &
                 isOnDay(dateCreated, date) &
-                onlyShowBasedOnCategoryFks(
-                    tbl, categoryFks, categoryFksExclude) &
+                (onlyShowBasedOnCategoryFks(
+                        tbl, categoryFks, categoryFksExclude) |
+                    onlyShowBasedOnSubcategoryFks(transactions, categoryFks)) &
                 onlyShowBasedOnWalletFks(tbl, walletFks) &
                 onlyShowBasedOnIncome(tbl, income) &
                 onlyShowIfMember(tbl, member) &
@@ -1106,8 +1122,9 @@ class FinanceDatabase extends _$FinanceDatabase {
                 budgetTransactionFilters: budgetTransactionFilters,
                 memberTransactionFilters: memberTransactionFilters) &
             onlyShowBasedOnTimeRange(transactions, startDate, endDate, budget) &
-            onlyShowBasedOnCategoryFks(
-                transactions, categoryFks, categoryFksExclude) &
+            (onlyShowBasedOnCategoryFks(
+                    transactions, categoryFks, categoryFksExclude) |
+                onlyShowBasedOnSubcategoryFks(transactions, categoryFks)) &
             onlyShowBasedOnWalletFks(transactions, walletFks) &
             onlyShowBasedOnIncome(transactions, income) &
             onlyShowIfMember(transactions, member) &
@@ -4569,7 +4586,7 @@ class FinanceDatabase extends _$FinanceDatabase {
     String? mainCategoryPkIfSubCategories,
     bool includeAllSubCategories = false,
     // if a transaction does not have a subcategory assigned, does it show up in the total?
-    bool countUnassignedTransactons = false,
+    bool countUnassignedTransactions = false,
   }) {
     DateTime startDate = DateTime(start.year, start.month, start.day);
     DateTime endDate = DateTime(end.year, end.month, end.day);
@@ -4611,7 +4628,7 @@ class FinanceDatabase extends _$FinanceDatabase {
                 ? ((categories.categoryPk
                             .equalsExp(transactions.subCategoryFk) &
                         transactions.subCategoryFk.isNotNull()) |
-                    (countUnassignedTransactons == true
+                    (countUnassignedTransactions == true
                         ? categories.categoryPk
                             .equalsExp(transactions.categoryFk)
                         : (categories.categoryPk

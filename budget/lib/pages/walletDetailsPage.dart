@@ -499,7 +499,7 @@ class _WalletCategoryPieChartState extends State<WalletCategoryPieChart> {
                     totalSpent: total,
                     transactionCount: category.transactionCount,
                     categorySpent: category.total,
-                    onTap: () {
+                    onTap: (_, __) {
                       if (selectedCategoryPk == category.category.categoryPk) {
                         setState(() {
                           selectedCategoryPk = "-1";

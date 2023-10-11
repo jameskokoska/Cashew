@@ -164,6 +164,23 @@ class PieChartDisplayState extends State<PieChartDisplay> {
     });
   }
 
+  void setTouchedCategoryPk(String? categoryPk) {
+    if (categoryPk == null) return;
+    int index = 0;
+    bool found = false;
+    for (CategoryWithTotal category in widget.data) {
+      if (category.category.categoryPk == categoryPk) {
+        found = true;
+        break;
+      }
+      index++;
+    }
+    if (found == false)
+      setTouchedIndex(-1);
+    else
+      setTouchedIndex(index);
+  }
+
   @override
   Widget build(BuildContext context) {
     if (widget.data.length <= 0) return SizedBox.shrink();

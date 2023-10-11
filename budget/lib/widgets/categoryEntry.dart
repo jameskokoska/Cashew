@@ -6,6 +6,7 @@ import 'package:budget/pages/addCategoryPage.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/animatedExpanded.dart';
 import 'package:budget/widgets/categoryIcon.dart';
+import 'package:budget/widgets/categoryLimits.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/tappable.dart';
@@ -25,7 +26,6 @@ class CategoryEntry extends StatelessWidget {
     required this.totalSpent,
     required this.onTap,
     required this.selected,
-    this.highlightIfSelected = true,
     required this.allSelected,
     required this.budgetColorScheme,
     this.categoryBudgetLimit,
@@ -37,30 +37,49 @@ class CategoryEntry extends StatelessWidget {
     this.budgetLimit = 0,
     this.overSpentColor,
     this.todayPercent,
+    this.subcategoriesWithTotalMap,
+    this.expandSubcategories = true,
+    this.selectedSubCategoryPk,
+    this.alwaysShow = false,
   }) : super(key: key);
 
   final TransactionCategory category;
   final int transactionCount;
   final double totalSpent;
   final double categorySpent;
-  final VoidCallback onTap;
+  final Function(TransactionCategory category,
+      CategoryBudgetLimit? categoryBudgetLimit) onTap;
   final bool selected;
-  final bool highlightIfSelected;
   final bool allSelected;
   final ColorScheme budgetColorScheme;
   final bool isTiled;
   final CategoryBudgetLimit? categoryBudgetLimit;
-  final Function? onLongPress;
+  final Function(TransactionCategory category,
+      CategoryBudgetLimit? categoryBudgetLimit)? onLongPress;
   final String? extraText;
   final bool showIncomeExpenseIcons;
   final bool isAbsoluteSpendingLimit;
   final double budgetLimit;
   final Color? overSpentColor;
   final double? todayPercent;
+  final Map<String, List<CategoryWithTotal>>? subcategoriesWithTotalMap;
+  final bool expandSubcategories;
+  final String? selectedSubCategoryPk;
+  final bool alwaysShow;
 
   @override
   Widget build(BuildContext context) {
     Widget component;
+
+    List<CategoryWithTotal> subCategoriesWithTotal =
+        subcategoriesWithTotalMap?[category.categoryPk] ?? [];
+
+    if (category.mainCategoryPk != null && subcategoriesWithTotalMap != null)
+      return SizedBox.shrink();
+
+    bool hasSubCategories =
+        subCategoriesWithTotal.length > 0 && expandSubcategories != false;
+
     if (isTiled) {
       component = Container(
         width: 70,
@@ -120,196 +139,281 @@ class CategoryEntry extends StatelessWidget {
         padding: EdgeInsets.symmetric(
           horizontal: getHorizontalPaddingConstrained(context),
         ),
-        child: Row(
-          children: [
-            // CategoryIcon(
-            //   category: category,
-            //   size: 30,
-            //   margin: EdgeInsets.zero,
-            // ),
-            CategoryIconPercent(
-              category: category,
-              percent: percentSpent * 100,
-              progressBackgroundColor: appStateSettings["materialYou"]
-                  ? budgetColorScheme.secondaryContainer
-                  : selected
-                      ? getColor(context, "white")
-                      : getColor(context, "lightDarkAccentHeavy"),
-              size: 28,
-              insetPadding: 18,
-            ),
-            Container(
-              width: 15,
-            ),
-            Expanded(
-              child: Container(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Row(
-                      children: [
-                        Expanded(
-                          child: TextFont(
-                            text: category.name,
-                            fontSize: 17,
-                            maxLines: 1,
-                          ),
-                        ),
-                        SizedBox(width: 10),
-                        categorySpent == 0 || showIncomeExpenseIcons == false
-                            ? SizedBox.shrink()
-                            : Transform.translate(
-                                offset: Offset(3, 0),
-                                child: Transform.rotate(
-                                  angle: categorySpent >= 0 ? pi : 0,
-                                  child: Icon(
-                                    appStateSettings["outlinedIcons"]
-                                        ? Icons.arrow_drop_down_outlined
-                                        : Icons.arrow_drop_down_rounded,
-                                    color: showIncomeExpenseIcons
-                                        ? categorySpent > 0
-                                            ? getColor(context, "incomeAmount")
-                                            : getColor(context, "expenseAmount")
-                                        : getColor(context, "black"),
-                                  ),
+        child: Builder(
+          builder: (context) {
+            Widget mainCategoryWidget = Padding(
+              padding: hasSubCategories
+                  ? EdgeInsets.zero
+                  : EdgeInsets.only(left: 20, right: 25, top: 8, bottom: 8),
+              child: Row(
+                children: [
+                  CategoryIconPercent(
+                    category: category,
+                    percent: percentSpent * 100,
+                    progressBackgroundColor: appStateSettings["materialYou"]
+                        ? budgetColorScheme.secondaryContainer
+                        : selected
+                            ? getColor(context, "white")
+                            : getColor(context, "lightDarkAccentHeavy"),
+                    size: 28,
+                    insetPadding: 18,
+                  ),
+                  Container(
+                    width: 15,
+                  ),
+                  Expanded(
+                    child: Container(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Row(
+                            children: [
+                              Expanded(
+                                child: TextFont(
+                                  text: category.name,
+                                  fontSize: 17,
+                                  maxLines: 1,
                                 ),
                               ),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            TextFont(
-                              fontWeight: FontWeight.bold,
-                              text: convertToMoney(
-                                  Provider.of<AllWallets>(context),
-                                  amountSpent),
-                              fontSize: 20,
-                              textColor: isOverspent
-                                  ? overSpentColor ??
-                                      getColor(context, "expenseAmount")
-                                  : showIncomeExpenseIcons && categorySpent != 0
-                                      ? categorySpent > 0
-                                          ? getColor(context, "incomeAmount")
-                                          : getColor(context, "expenseAmount")
-                                      : getColor(context, "black"),
-                            ),
-                            categoryBudgetLimit == null
-                                ? SizedBox.shrink()
-                                : Padding(
-                                    padding: const EdgeInsets.only(bottom: 1),
-                                    child: TextFont(
-                                      text: " / " +
-                                          convertToMoney(
-                                              Provider.of<AllWallets>(context),
-                                              spendingLimit),
-                                      fontSize: 14,
-                                      textColor: isOverspent
-                                          ? overSpentColor ??
-                                              getColor(context, "expenseAmount")
-                                          : getColor(context, "black")
-                                              .withOpacity(0.3),
-                                    ),
-                                  ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 1,
-                    ),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: categoryBudgetLimit != null
-                              ? Padding(
-                                  padding: const EdgeInsets.only(
-                                    top: 3,
-                                    right: 13,
-                                    bottom: 3,
-                                  ),
-                                  child: ThinProgress(
-                                    backgroundColor:
-                                        appStateSettings["materialYou"]
-                                            ? budgetColorScheme
-                                                .secondaryContainer
-                                            : selected
-                                                ? getColor(context, "white")
-                                                : getColor(context,
-                                                    "lightDarkAccentHeavy"),
-                                    color: dynamicPastel(
-                                      context,
-                                      HexColor(
-                                        category.colour,
-                                        defaultColor: Theme.of(context)
-                                            .colorScheme
-                                            .primary,
+                              SizedBox(width: 10),
+                              categorySpent == 0 ||
+                                      showIncomeExpenseIcons == false
+                                  ? SizedBox.shrink()
+                                  : Transform.translate(
+                                      offset: Offset(3, 0),
+                                      child: Transform.rotate(
+                                        angle: categorySpent >= 0 ? pi : 0,
+                                        child: Icon(
+                                          appStateSettings["outlinedIcons"]
+                                              ? Icons.arrow_drop_down_outlined
+                                              : Icons.arrow_drop_down_rounded,
+                                          color: showIncomeExpenseIcons
+                                              ? categorySpent > 0
+                                                  ? getColor(
+                                                      context, "incomeAmount")
+                                                  : getColor(
+                                                      context, "expenseAmount")
+                                              : getColor(context, "black"),
+                                        ),
                                       ),
-                                      inverse: true,
-                                      amountLight: 0.1,
-                                      amountDark: 0.1,
                                     ),
-                                    progress: percentSpent,
-                                    dotProgress: todayPercent == null
-                                        ? null
-                                        : (todayPercent ?? 0) / 100,
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  TextFont(
+                                    fontWeight: FontWeight.bold,
+                                    text: convertToMoney(
+                                        Provider.of<AllWallets>(context),
+                                        amountSpent),
+                                    fontSize: 20,
+                                    textColor: isOverspent
+                                        ? overSpentColor ??
+                                            getColor(context, "expenseAmount")
+                                        : showIncomeExpenseIcons &&
+                                                categorySpent != 0
+                                            ? categorySpent > 0
+                                                ? getColor(
+                                                    context, "incomeAmount")
+                                                : getColor(
+                                                    context, "expenseAmount")
+                                            : getColor(context, "black"),
                                   ),
-                                )
-                              : TextFont(
-                                  text: (totalSpent == 0
-                                          ? "0"
-                                          : (categorySpent / totalSpent * 100)
-                                              .abs()
-                                              .toStringAsFixed(0)) +
-                                      "% " +
-                                      (extraText ?? "of-spending")
-                                          .toString()
-                                          .tr(),
-                                  fontSize: 14,
-                                  textColor: selected
-                                      ? getColor(context, "black")
-                                          .withOpacity(0.4)
-                                      : getColor(context, "textLight"),
-                                ),
-                        ),
-                        TextFont(
-                          text: transactionCount.toString() +
-                              " " +
-                              (transactionCount == 1
-                                  ? "transaction".tr().toLowerCase()
-                                  : "transactions".tr().toLowerCase()),
-                          fontSize: 14,
-                          textColor: selected
-                              ? getColor(context, "black").withOpacity(0.4)
-                              : getColor(context, "textLight"),
-                        ),
-                      ],
+                                  categoryBudgetLimit == null
+                                      ? SizedBox.shrink()
+                                      : Padding(
+                                          padding:
+                                              const EdgeInsets.only(bottom: 1),
+                                          child: TextFont(
+                                            text: " / " +
+                                                convertToMoney(
+                                                    Provider.of<AllWallets>(
+                                                        context),
+                                                    spendingLimit),
+                                            fontSize: 14,
+                                            textColor: isOverspent
+                                                ? overSpentColor ??
+                                                    getColor(context,
+                                                        "expenseAmount")
+                                                : getColor(context, "black")
+                                                    .withOpacity(0.3),
+                                          ),
+                                        ),
+                                ],
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 1,
+                          ),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: categoryBudgetLimit != null
+                                    ? Padding(
+                                        padding: const EdgeInsets.only(
+                                          top: 3,
+                                          right: 13,
+                                          bottom: 3,
+                                        ),
+                                        child: ThinProgress(
+                                          backgroundColor: appStateSettings[
+                                                  "materialYou"]
+                                              ? budgetColorScheme
+                                                  .secondaryContainer
+                                              : selected
+                                                  ? getColor(context, "white")
+                                                  : getColor(context,
+                                                      "lightDarkAccentHeavy"),
+                                          color: dynamicPastel(
+                                            context,
+                                            HexColor(
+                                              category.colour,
+                                              defaultColor: Theme.of(context)
+                                                  .colorScheme
+                                                  .primary,
+                                            ),
+                                            inverse: true,
+                                            amountLight: 0.1,
+                                            amountDark: 0.1,
+                                          ),
+                                          progress: percentSpent,
+                                          dotProgress: todayPercent == null
+                                              ? null
+                                              : (todayPercent ?? 0) / 100,
+                                        ),
+                                      )
+                                    : TextFont(
+                                        text: (totalSpent == 0
+                                                ? "0"
+                                                : (categorySpent /
+                                                        totalSpent *
+                                                        100)
+                                                    .abs()
+                                                    .toStringAsFixed(0)) +
+                                            "% " +
+                                            (extraText ?? "of-spending")
+                                                .toString()
+                                                .tr(),
+                                        fontSize: 14,
+                                        textColor: selected
+                                            ? getColor(context, "black")
+                                                .withOpacity(0.4)
+                                            : getColor(context, "textLight"),
+                                      ),
+                              ),
+                              TextFont(
+                                text: transactionCount.toString() +
+                                    " " +
+                                    (transactionCount == 1
+                                        ? "transaction".tr().toLowerCase()
+                                        : "transactions".tr().toLowerCase()),
+                                fontSize: 14,
+                                textColor: selected
+                                    ? getColor(context, "black")
+                                        .withOpacity(0.4)
+                                    : getColor(context, "textLight"),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
-                  ],
+                  ),
+                ],
+              ),
+            );
+
+            if (subCategoriesWithTotal.length <= 0) return mainCategoryWidget;
+
+            Widget subCategoriesSummaryWidget = AnimatedExpanded(
+              key: ValueKey(1),
+              expand: selected == true || allSelected,
+              child: SubCategoriesContainer(
+                onTap: () {
+                  onTap(category, categoryBudgetLimit);
+                },
+                key: ValueKey(category.categoryPk),
+                mainCategory: Padding(
+                  padding: const EdgeInsets.only(
+                      left: 20, right: 25, top: 8, bottom: 8),
+                  child: mainCategoryWidget,
+                ),
+                colorScheme: budgetColorScheme,
+                subCategoryEntries: Padding(
+                  padding: const EdgeInsets.only(top: 5),
+                  child: Column(
+                    children: [
+                      for (CategoryWithTotal subcategoryWithTotal
+                          in subCategoriesWithTotal)
+                        CategoryEntry(
+                          onTap: onTap,
+                          todayPercent: todayPercent,
+                          overSpentColor: showIncomeExpenseIcons
+                              ? subcategoryWithTotal.total > 0
+                                  ? getColor(context, "incomeAmount")
+                                  : getColor(context, "expenseAmount")
+                              : null,
+                          showIncomeExpenseIcons: showIncomeExpenseIcons,
+                          onLongPress: onLongPress,
+                          isAbsoluteSpendingLimit: isAbsoluteSpendingLimit,
+                          budgetLimit: categoryBudgetLimit == null
+                              ? budgetLimit
+                              : isAbsoluteSpendingLimit
+                                  ? (categoryBudgetLimit?.amount ?? 1)
+                                  : (categoryBudgetLimit?.amount ?? 1) *
+                                      budgetLimit /
+                                      100,
+                          categoryBudgetLimit:
+                              subcategoryWithTotal.categoryBudgetLimit,
+                          budgetColorScheme: budgetColorScheme,
+                          category: subcategoryWithTotal.category,
+                          totalSpent: totalSpent,
+                          transactionCount:
+                              subcategoryWithTotal.transactionCount,
+                          categorySpent: showIncomeExpenseIcons == true
+                              ? subcategoryWithTotal.total
+                              : subcategoryWithTotal.total.abs(),
+                          selected: selectedSubCategoryPk ==
+                              subcategoryWithTotal.category.categoryPk,
+                          allSelected: allSelected,
+                          alwaysShow: selected,
+                        ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+            );
+
+            return AnimatedSizeSwitcher(
+              child: expandSubcategories == true
+                  ? subCategoriesSummaryWidget
+                  : mainCategoryWidget,
+            );
+          },
         ),
       );
     }
     return WillPopScope(
       onWillPop: () async {
         if (allSelected == false && selected) {
-          onTap();
+          onTap(category, categoryBudgetLimit);
           return false;
         }
         return true;
       },
       child: AnimatedExpanded(
-        expand: !(!selected && !allSelected && isTiled == false),
+        expand: !(!selected && !allSelected && isTiled == false) || alwaysShow,
         duration: Duration(milliseconds: 650),
         sizeCurve: Curves.easeInOutCubic,
         child: Tappable(
           borderRadius: isTiled ? 15 : 0,
           key: ValueKey(isTiled),
-          onTap: onTap,
+          onTap: () {
+            onTap(category, categoryBudgetLimit);
+          },
           onLongPress: onLongPress != null
-              ? () => onLongPress!()
+              ? () => onLongPress!(category, categoryBudgetLimit)
               : () => pushRoute(
                     context,
                     AddCategoryPage(
@@ -320,7 +424,7 @@ class CategoryEntry extends StatelessWidget {
           color: Colors.transparent,
           child: AnimatedOpacity(
             duration: Duration(milliseconds: 300),
-            opacity: allSelected
+            opacity: allSelected || alwaysShow
                 ? 1
                 : selected
                     ? 1
@@ -328,7 +432,7 @@ class CategoryEntry extends StatelessWidget {
             child: AnimatedContainer(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(isTiled ? 15 : 0),
-                color: highlightIfSelected && selected
+                color: selected && hasSubCategories == false
                     ? dynamicPastel(context, budgetColorScheme.primary,
                             amount: 0.3)
                         .withAlpha(80)
@@ -336,9 +440,6 @@ class CategoryEntry extends StatelessWidget {
               ),
               curve: Curves.easeInOut,
               duration: Duration(milliseconds: 500),
-              padding: isTiled
-                  ? null
-                  : EdgeInsets.only(left: 20, right: 25, top: 8, bottom: 8),
               child: component,
             ),
           ),

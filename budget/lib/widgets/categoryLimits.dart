@@ -197,7 +197,7 @@ class _CategoryLimitEntryState extends State<CategoryLimitEntry> {
   Widget build(BuildContext context) {
     return StreamBuilder<List<TransactionCategory>>(
       stream: database
-          .watchAllSubCategoriesOfMainCategory(widget.category!.categoryPk),
+          .watchAllSubCategoriesOfMainCategory(widget.category.categoryPk),
       builder: (context, snapshot) {
         List<TransactionCategory> subCategories = snapshot.data ?? [];
         bool hasSubCategories = subCategories.length > 0;
@@ -430,6 +430,43 @@ class SubCategoriesContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Widget content = Column(
+      children: [
+        Container(
+          decoration: BoxDecoration(
+            color: (colorScheme ?? Theme.of(context).colorScheme)
+                .secondaryContainer
+                .withOpacity(0.5),
+            borderRadius: BorderRadius.vertical(
+              top: Radius.circular(
+                getPlatform() == PlatformOS.isIOS ? 0 : 14,
+              ),
+            ),
+          ),
+          padding: EdgeInsets.symmetric(
+              vertical: getPlatform() == PlatformOS.isIOS ? 2 : 7),
+          child: mainCategory,
+        ),
+        separatorBanner ?? SizedBox.shrink(),
+        subCategoryEntries,
+        SizedBox(height: 5),
+        extraButtonEnd ?? SizedBox.shrink(),
+      ],
+    );
+    if (getPlatform() == PlatformOS.isIOS)
+      return Column(
+        children: [
+          HorizontalBreak(padding: EdgeInsets.zero),
+          Container(
+            child: content,
+            color: (colorScheme ?? Theme.of(context).colorScheme)
+                .secondaryContainer
+                .withOpacity(0.2),
+          ),
+          HorizontalBreak(padding: EdgeInsets.zero),
+          SizedBox(height: 6),
+        ],
+      );
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 10, vertical: 3),
       child: ClipRRect(
@@ -449,25 +486,7 @@ class SubCategoriesContainer extends StatelessWidget {
               ),
               borderRadius: BorderRadius.circular(15),
             ),
-            child: Column(
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    color: (colorScheme ?? Theme.of(context).colorScheme)
-                        .secondaryContainer
-                        .withOpacity(0.5),
-                    borderRadius:
-                        BorderRadius.vertical(top: Radius.circular(14)),
-                  ),
-                  padding: EdgeInsets.symmetric(vertical: 7),
-                  child: mainCategory,
-                ),
-                separatorBanner ?? SizedBox.shrink(),
-                subCategoryEntries,
-                SizedBox(height: 5),
-                extraButtonEnd ?? SizedBox.shrink(),
-              ],
-            ),
+            child: content,
           ),
         ),
       ),

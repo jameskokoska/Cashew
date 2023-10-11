@@ -22,6 +22,10 @@ import 'listItem.dart';
 
 String getChangelogString() {
   return """
+    < 4.6.1
+    Support for subcategory selection on budget page
+    Rewrote pie chart and spending summary for budget details page to better support subcategories
+    iOS layout for subcategories
     < 4.6.0
     Make subcategory into main category
     Merge subcategories support
