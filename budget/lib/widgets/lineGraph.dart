@@ -441,7 +441,7 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
       aboveBarData: BarAreaData(
         applyCutOffY: true,
         cutOffY: 0,
-        show: widget.minPair.y > 0 && widget.maxPair.y > 0
+        show: widget.minPair.y >= 0 && widget.maxPair.y >= 0
             ? false
             : index != 0
                 ? false
@@ -457,7 +457,7 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
           end: Alignment(
               0,
               widget.maxPair.y > 0
-                  ? (widget.minPair.y) /
+                  ? (widget.minPair.y).abs() /
                       ((widget.maxPair.y).abs() + (widget.minPair.y).abs())
                   : -1),
         ),
@@ -469,7 +469,7 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
       belowBarData: BarAreaData(
         applyCutOffY: true,
         cutOffY: 0,
-        show: widget.minPair.y < 0 && widget.maxPair.y < 0 ? false : true,
+        show: widget.minPair.y <= 0 && widget.maxPair.y <= 0 ? false : true,
         gradient: LinearGradient(
           colors: [
             index == 0
@@ -480,7 +480,7 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
           begin: Alignment.topCenter,
           end: Alignment(
               0,
-              (widget.maxPair.y) /
+              (widget.maxPair.y).abs() /
                   ((widget.maxPair.y).abs() + (widget.minPair.y).abs())),
         ),
         // gradientTo: Offset(

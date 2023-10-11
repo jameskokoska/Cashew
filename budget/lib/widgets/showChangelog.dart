@@ -22,6 +22,10 @@ import 'listItem.dart';
 
 String getChangelogString() {
   return """
+    < 4.6.4
+    Launch screen logo for iOS
+    Removed opacity when snackbar tapped on iOS
+    Fixed gradient on budget line graph on iOS
     < 4.6.3
     Fixed padding for subcategories on large displays
     Fixed syncing for handling null values
@@ -1550,13 +1554,13 @@ Map<String, List<MajorChanges>> getMajorChanges() {
           pushRoute(context, EditCategoriesPage());
         },
       ),
-      MajorChanges(
-        "major-change-6".tr(),
-        Icons.bug_report_rounded,
-        info: [
-          "major-change-6-1".tr(),
-        ],
-      ),
+      // MajorChanges(
+      //   "major-change-6".tr(),
+      //   Icons.bug_report_rounded,
+      //   info: [
+      //     "major-change-6-1".tr(),
+      //   ],
+      // ),
     ],
     "< 4.4.6": [
       MajorChanges(

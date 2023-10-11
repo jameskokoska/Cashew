@@ -25,6 +25,7 @@ class CategoryIcon extends StatelessWidget {
     this.category, //pass this in to not look it up again
     this.borderRadius = 18,
     this.canEditByLongPress = true,
+    this.onLongPress,
     this.tintColor,
     this.tintEnabled = true,
     this.cacheImage = false,
@@ -44,6 +45,7 @@ class CategoryIcon extends StatelessWidget {
   final TransactionCategory? category;
   final double borderRadius;
   final bool canEditByLongPress;
+  final VoidCallback? onLongPress;
   final Color? tintColor;
   final bool tintEnabled;
   final bool cacheImage;
@@ -109,17 +111,17 @@ class CategoryIcon extends StatelessWidget {
                                 amountDark: 0.35)
                         : getColor(context, "canvasContainer"),
                 onTap: onTap,
-                onLongPress: canEditByLongPress
-                    ? () {
-                        pushRoute(
-                          context,
-                          AddCategoryPage(
-                            category: category,
-                            routesToPopAfterDelete: RoutesToPopAfterDelete.One,
-                          ),
-                        );
-                      }
-                    : null,
+                onLongPress: () {
+                  if (onLongPress != null) onLongPress!();
+                  if (canEditByLongPress)
+                    pushRoute(
+                      context,
+                      AddCategoryPage(
+                        category: category,
+                        routesToPopAfterDelete: RoutesToPopAfterDelete.One,
+                      ),
+                    );
+                },
                 borderRadius: borderRadius - 3,
                 child: Center(
                   child: (category?.emojiIconName == null &&

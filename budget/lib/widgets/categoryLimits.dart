@@ -513,6 +513,20 @@ void enterCategoryLimitPopup(
         size: 35,
         borderRadius: 500,
         margin: EdgeInsets.zero,
+        canEditByLongPress: true,
+        onLongPress: () {
+          Navigator.pop(context);
+        },
+        onTap: () {
+          Navigator.pop(context);
+          pushRoute(
+            context,
+            AddCategoryPage(
+              category: category,
+              routesToPopAfterDelete: RoutesToPopAfterDelete.One,
+            ),
+          );
+        },
       ),
       underTitleSpace: false,
       child: isAbsoluteSpendingLimit == false

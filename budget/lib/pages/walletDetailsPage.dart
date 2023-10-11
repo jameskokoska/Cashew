@@ -586,6 +586,7 @@ class _WalletCategoryPieChartState extends State<WalletCategoryPieChart> {
                       });
                       _pieChartDisplayStateKey.currentState!
                           .setTouchedIndex(-1);
+                      widget.onSelectedCategory(selectedCategory);
                     },
                     onEditSpendingGoals: null,
                     toggleAllSubCategories: toggleAllSubcategories,

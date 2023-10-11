@@ -17,6 +17,7 @@ class Tappable extends StatelessWidget {
     this.type = MaterialType.canvas,
     required this.child,
     this.onLongPress,
+    this.hasOpacity = true,
   }) : super(key: key);
 
   final double borderRadius;
@@ -27,6 +28,7 @@ class Tappable extends StatelessWidget {
   final Widget child;
   final MaterialType type;
   final VoidCallback? onLongPress;
+  final bool hasOpacity;
 
   @override
   Widget build(BuildContext context) {
@@ -43,6 +45,7 @@ class Tappable extends StatelessWidget {
                 onLongPress!();
               }
             : null,
+        pressedOpacity: hasOpacity ? 0.5 : 1,
       );
     }
 
