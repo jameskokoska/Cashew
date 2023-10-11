@@ -81,6 +81,9 @@ class TransactionEntry extends StatelessWidget {
     required this.transaction,
     this.listID, //needs to be unique based on the page to avoid conflicting globalSelectedIDs
     this.category,
+    this.subCategory,
+    this.budget,
+    this.objective,
     this.onSelected,
     this.containerColor,
     this.useHorizontalPaddingConstrained = true,
@@ -96,6 +99,9 @@ class TransactionEntry extends StatelessWidget {
   final Transaction transaction;
   final String? listID;
   final TransactionCategory? category;
+  final TransactionCategory? subCategory;
+  final Budget? budget;
+  final Objective? objective;
   final Function(Transaction transaction, bool selected)? onSelected;
   final Color? containerColor;
   final bool useHorizontalPaddingConstrained;
@@ -357,6 +363,9 @@ class TransactionEntry extends StatelessWidget {
                                                 transaction: transaction,
                                                 showObjectivePercentage:
                                                     showObjectivePercentage,
+                                                subCategory: subCategory,
+                                                budget: budget,
+                                                objective: objective,
                                               )
                                             : SizedBox.shrink(),
                                         transaction.sharedKey != null ||

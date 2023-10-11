@@ -22,6 +22,11 @@ import 'listItem.dart';
 
 String getChangelogString() {
   return """
+    < 4.6.2
+    Improved performance of transaction entries (with SQL joins, avoid lookups)
+    All spending summary supports subcategories
+    Fixed pie chart touched indices for subcategories
+    Limit to first 50 transactions per day show on homepage 
     < 4.6.1
     Support for subcategory selection on budget page
     Rewrote pie chart and spending summary for budget details page to better support subcategories

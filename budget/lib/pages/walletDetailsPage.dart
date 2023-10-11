@@ -8,6 +8,7 @@ import 'package:budget/pages/homePage/homePageLineGraph.dart';
 import 'package:budget/pages/transactionsSearchPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
+import 'package:budget/struct/spendingSummaryHelper.dart';
 import 'package:budget/widgets/animatedExpanded.dart';
 import 'package:budget/widgets/dropdownSelect.dart';
 import 'package:budget/widgets/framework/popupFramework.dart';
@@ -65,12 +66,12 @@ class WalletDetailsPage extends StatefulWidget {
 }
 
 class _WalletDetailsPageState extends State<WalletDetailsPage> {
-  String selectedCategoryPk = "-1";
+  TransactionCategory? selectedCategory;
+  bool isIncome = false;
   late String listID = widget.wallet == null
       ? "All Spending Summary"
       : widget.wallet!.walletPk.toString() + " Wallet Summary";
   GlobalKey<PageFrameworkState> pageState = GlobalKey();
-  bool isIncome = false;
 
   @override
   Widget build(BuildContext context) {
@@ -355,43 +356,20 @@ class _WalletDetailsPageState extends State<WalletDetailsPage> {
                           : [widget.wallet!.walletPk],
                       followCustomPeriodCycle: widget.wallet == null,
                     ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: getHorizontalPaddingConstrained(context)),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 13),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            boxShadow:
-                                boxShadowCheck(boxShadowGeneral(context)),
-                          ),
-                          child: ClipRRect(
-                            borderRadius: getPlatform() == PlatformOS.isIOS
-                                ? BorderRadius.circular(10)
-                                : BorderRadius.circular(15),
-                            child: IncomeExpenseTabSelector(
-                              onTabChanged: (income) {
-                                setState(() {
-                                  isIncome = income;
-                                });
-                              },
-                              initialTabIsIncome: false,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 10),
                     WalletCategoryPieChart(
                       wallet: widget.wallet,
                       walletColorScheme: walletColorScheme,
-                      onSelectedCategory: (String categoryPk) {
+                      onSelectedCategory: (TransactionCategory? category) {
                         // pageState.currentState?.scrollTo(500);
                         setState(() {
-                          selectedCategoryPk = categoryPk;
+                          selectedCategory = category;
                         });
                       },
-                      isIncome: isIncome,
+                      onSelectedIncome: (bool isIncome) {
+                        setState(() {
+                          this.isIncome = isIncome;
+                        });
+                      },
                     ),
                   ],
                 ),
@@ -399,14 +377,16 @@ class _WalletDetailsPageState extends State<WalletDetailsPage> {
               TransactionEntries(
                 null,
                 null,
-                categoryFks: [selectedCategoryPk],
+                categoryFks: selectedCategory != null
+                    ? [selectedCategory!.categoryPk]
+                    : [],
                 walletFks: walletPk == null ? [] : [walletPk],
-                limit: selectedCategoryPk == "-1" ? 0 : 10,
+                limit: selectedCategory == null ? 0 : 10,
                 listID: listID,
                 showNoResults: false,
                 income: isIncome,
               ),
-              selectedCategoryPk == "-1"
+              selectedCategory == null
                   ? SliverToBoxAdapter(
                       child: SizedBox.shrink(),
                     )
@@ -438,39 +418,73 @@ class WalletCategoryPieChart extends StatefulWidget {
     required this.wallet,
     required this.walletColorScheme,
     required this.onSelectedCategory,
-    required this.isIncome,
+    required this.onSelectedIncome,
     super.key,
   });
 
   final TransactionWallet? wallet;
   final ColorScheme walletColorScheme;
-  final Function(String) onSelectedCategory;
-  final bool isIncome;
+  final Function(TransactionCategory?) onSelectedCategory;
+  final Function(bool) onSelectedIncome;
 
   @override
   State<WalletCategoryPieChart> createState() => _WalletCategoryPieChartState();
 }
 
 class _WalletCategoryPieChartState extends State<WalletCategoryPieChart> {
-  String selectedCategoryPk = "-1";
   TransactionCategory? selectedCategory = null;
+  bool isIncome = false;
   GlobalKey<PieChartDisplayState> _pieChartDisplayStateKey = GlobalKey();
-  bool tiledCategoryEntries = false;
+  bool showAllSubcategories = appStateSettings["showAllSubcategories"];
+
+  void toggleAllSubcategories() {
+    setState(() {
+      showAllSubcategories = !showAllSubcategories;
+    });
+    Future.delayed(Duration(milliseconds: 10), () {
+      _pieChartDisplayStateKey.currentState!
+          .setTouchedCategoryPk(selectedCategory?.categoryPk);
+    });
+
+    updateSettings("showAllSubcategories", showAllSubcategories,
+        updateGlobalState: false);
+  }
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<double?>(
-      stream: database.watchTotalOfWallet(
-        widget.wallet?.walletPk == null
-            ? null
-            : [widget.wallet?.walletPk ?? ""],
-        isIncome: widget.isIncome,
-        allWallets: Provider.of<AllWallets>(context),
-        followCustomPeriodCycle: widget.wallet == null,
-      ),
-      builder: (context, totalSnapshot) {
-        double total = (totalSnapshot.data ?? 0).abs();
-        return StreamBuilder<List<CategoryWithTotal>>(
+    return Column(
+      children: [
+        Padding(
+          padding: EdgeInsets.symmetric(
+              horizontal: getHorizontalPaddingConstrained(context)),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 13),
+            child: Container(
+              decoration: BoxDecoration(
+                boxShadow: boxShadowCheck(boxShadowGeneral(context)),
+              ),
+              child: ClipRRect(
+                borderRadius: getPlatform() == PlatformOS.isIOS
+                    ? BorderRadius.circular(10)
+                    : BorderRadius.circular(15),
+                child: IncomeExpenseTabSelector(
+                  onTabChanged: (income) {
+                    setState(() {
+                      isIncome = income;
+                      selectedCategory = null;
+                    });
+                    _pieChartDisplayStateKey.currentState!.setTouchedIndex(-1);
+                    widget.onSelectedIncome(income);
+                    widget.onSelectedCategory(selectedCategory);
+                  },
+                  initialTabIsIncome: false,
+                ),
+              ),
+            ),
+          ),
+        ),
+        SizedBox(height: 10),
+        StreamBuilder<List<CategoryWithTotal>>(
           stream:
               database.watchTotalSpentInEachCategoryInTimeRangeFromCategories(
             allWallets: Provider.of<AllWallets>(context),
@@ -482,45 +496,68 @@ class _WalletCategoryPieChartState extends State<WalletCategoryPieChart> {
             memberTransactionFilters: null,
             allTime: true,
             walletPk: widget.wallet == null ? null : widget.wallet!.walletPk,
-            isIncome: widget.isIncome,
+            isIncome: isIncome,
             followCustomPeriodCycle: widget.wallet == null,
+            countUnassignedTransactions: true,
+            includeAllSubCategories: true,
           ),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
+              TotalSpentCategoriesSummary s = watchTotalSpentInTimeRangeHelper(
+                  dataInput: snapshot.data ?? [],
+                  showAllSubcategories: showAllSubcategories);
               List<Widget> categoryEntries = [];
               snapshot.data!.asMap().forEach((index, category) {
                 categoryEntries.add(
                   CategoryEntry(
-                    extraText:
-                        widget.isIncome ? "of-income".tr() : "of-expense".tr(),
-                    isTiled: tiledCategoryEntries,
+                    selectedSubCategoryPk: selectedCategory?.categoryPk,
+                    expandSubcategories: showAllSubcategories ||
+                        category.category.categoryPk ==
+                            selectedCategory?.categoryPk ||
+                        category.category.categoryPk ==
+                            selectedCategory?.mainCategoryPk,
+                    subcategoriesWithTotalMap:
+                        s.subCategorySpendingIndexedByMainCategoryPk,
+                    extraText: isIncome ? "of-income".tr() : "of-expense".tr(),
                     budgetColorScheme: widget.walletColorScheme,
                     category: category.category,
-                    totalSpent: total,
+                    totalSpent: s.totalSpentAbsolute,
                     transactionCount: category.transactionCount,
                     categorySpent: category.total,
-                    onTap: (_, __) {
-                      if (selectedCategoryPk == category.category.categoryPk) {
+                    onTap: (TransactionCategory tappedCategory, _) {
+                      if (selectedCategory?.categoryPk ==
+                          tappedCategory.categoryPk) {
                         setState(() {
-                          selectedCategoryPk = "-1";
                           selectedCategory = null;
                         });
                         _pieChartDisplayStateKey.currentState!
                             .setTouchedIndex(-1);
-                        widget.onSelectedCategory("-1");
                       } else {
-                        setState(() {
-                          selectedCategoryPk = category.category.categoryPk;
-                          selectedCategory = category.category;
-                        });
-                        _pieChartDisplayStateKey.currentState!
-                            .setTouchedIndex(index);
-                        widget.onSelectedCategory(category.category.categoryPk);
+                        if (showAllSubcategories ||
+                            tappedCategory.mainCategoryPk == null) {
+                          setState(() {
+                            selectedCategory = tappedCategory;
+                          });
+                          _pieChartDisplayStateKey.currentState!
+                              .setTouchedCategoryPk(tappedCategory.categoryPk);
+                        } else {
+                          // We are tapping a subcategoryEntry and it is not in the pie chart
+                          // because showAllSubcategories is false and mainCategoryPk is not null
+                          setState(() {
+                            selectedCategory = tappedCategory;
+                          });
+                          _pieChartDisplayStateKey.currentState!
+                              .setTouchedCategoryPk(
+                                  tappedCategory.mainCategoryPk);
+                        }
                       }
+                      widget.onSelectedCategory(selectedCategory);
                     },
-                    selected:
-                        selectedCategoryPk == category.category.categoryPk,
-                    allSelected: selectedCategoryPk == "-1",
+                    selected: category.category.categoryPk ==
+                            selectedCategory?.mainCategoryPk ||
+                        selectedCategory?.categoryPk ==
+                            category.category.categoryPk,
+                    allSelected: selectedCategory == null,
                     showIncomeExpenseIcons: true,
                   ),
                 );
@@ -531,48 +568,39 @@ class _WalletCategoryPieChartState extends State<WalletCategoryPieChart> {
                   PieChartWrapper(
                     isPastBudget: true,
                     pieChartDisplayStateKey: _pieChartDisplayStateKey,
-                    data: snapshot.data!,
-                    totalSpent: total,
-                    setSelectedCategory: (categoryPk, category) {
+                    data: s.dataFilterUnassignedTransactions,
+                    totalSpent: s.totalSpentAbsolute,
+                    setSelectedCategory: (categoryPk, category) async {
                       setState(() {
-                        selectedCategoryPk = categoryPk;
                         selectedCategory = category;
-                        widget.onSelectedCategory(categoryPk);
                       });
+                      widget.onSelectedCategory(selectedCategory);
                     },
                   ),
-                  SizedBox(height: 35),
-                  // IconButton(
-                  //   onPressed: () {
-                  //     setState(() {
-                  //       tiledCategoryEntries = !tiledCategoryEntries;
-                  //     });
-                  //   },
-                  //   icon: Icon(
-                  //     tiledCategoryEntries
-                  //         ? appStateSettings["outlinedIcons"] ? Icons.grid_view_outlined : Icons.grid_view_rounded
-                  //         : appStateSettings["outlinedIcons"] ? Icons.list_outlined : Icons.list_rounded,
-                  //   ),
-                  // ),
-                  // tiledCategoryEntries
-                  //     ? Padding(
-                  //         padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  //         child: Wrap(
-                  //           children: [...categoryEntries],
-                  //         ),
-                  //       )
-                  //     : SizedBox.shrink(),
-                  // Wrap(
-                  //   children: [...categoryEntries],
-                  // ),
+                  PieChartOptions(
+                    hasSubCategories: s.hasSubCategories,
+                    selectedCategory: selectedCategory,
+                    onClearSelection: () {
+                      setState(() {
+                        selectedCategory = null;
+                      });
+                      _pieChartDisplayStateKey.currentState!
+                          .setTouchedIndex(-1);
+                    },
+                    onEditSpendingGoals: null,
+                    toggleAllSubCategories: toggleAllSubcategories,
+                    colorScheme: Theme.of(context).colorScheme,
+                    showAllSubcategories: showAllSubcategories,
+                  ),
                   ...categoryEntries,
+                  SizedBox(height: 10),
                 ],
               );
             }
             return SizedBox.shrink();
           },
-        );
-      },
+        ),
+      ],
     );
   }
 }

@@ -60,6 +60,7 @@ class TransactionEntries extends StatelessWidget {
     this.showObjectivePercentage = true,
     this.noResultsPadding,
     this.noResultsExtraWidget,
+    this.limitPerDay,
     super.key,
   });
 
@@ -97,6 +98,7 @@ class TransactionEntries extends StatelessWidget {
   final bool showObjectivePercentage;
   final EdgeInsets? noResultsPadding;
   final Widget? noResultsExtraWidget;
+  final int? limitPerDay;
 
   @override
   Widget build(BuildContext context) {
@@ -193,6 +195,7 @@ class TransactionEntries extends StatelessWidget {
                   onlyShowTransactionsBelongingToObjectivePk:
                       onlyShowTransactionsBelongingToObjectivePk,
                   searchFilters: searchFilters,
+                  limit: limitPerDay,
                 ),
                 builder: (context, snapshot) {
                   if (snapshot.data != null && snapshot.hasData) {
@@ -251,6 +254,10 @@ class TransactionEntries extends StatelessWidget {
                                     .transaction
                                     .transactionPk),
                                 category: transactionList[realIndex].category,
+                                subCategory:
+                                    transactionList[realIndex].subCategory,
+                                budget: transactionList[realIndex].budget,
+                                objective: transactionList[realIndex].objective,
                                 openPage: AddTransactionPage(
                                   transaction:
                                       transactionList[realIndex].transaction,
@@ -319,6 +326,10 @@ class TransactionEntries extends StatelessWidget {
                                   .transaction
                                   .transactionPk),
                               category: transactionList[realIndex].category,
+                              subCategory:
+                                  transactionList[realIndex].subCategory,
+                              budget: transactionList[realIndex].budget,
+                              objective: transactionList[realIndex].objective,
                               openPage: AddTransactionPage(
                                 transaction:
                                     transactionList[realIndex].transaction,
@@ -370,6 +381,9 @@ class TransactionEntries extends StatelessWidget {
                               containerColor: transactionBackgroundColor,
                               key: ValueKey(item.transaction.transactionPk),
                               category: item.category,
+                              subCategory: item.subCategory,
+                              budget: item.budget,
+                              objective: item.objective,
                               openPage: AddTransactionPage(
                                 transaction: item.transaction,
                                 routesToPopAfterDelete:

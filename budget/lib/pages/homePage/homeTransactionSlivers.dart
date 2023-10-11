@@ -35,6 +35,7 @@ class HomeTransactionSlivers extends StatelessWidget {
           dateDividerColor: Colors.transparent,
           useHorizontalPaddingConstrained: false,
           pastDaysLimitToShow: 7,
+          limitPerDay: 50,
         ),
       ),
     );

@@ -209,6 +209,9 @@ class PieChartDisplayState extends State<PieChartDisplay> {
                       pieTouchResponse.touchedSection!.touchedSectionIndex) {
                 touchedIndex =
                     pieTouchResponse.touchedSection!.touchedSectionIndex;
+                print("TOUCHED");
+                print(touchedIndex);
+                print(widget.data);
                 widget.setSelectedCategory(
                     widget.data[touchedIndex].category.categoryPk,
                     widget.data[touchedIndex].category);
@@ -268,8 +271,8 @@ class PieChartDisplayState extends State<PieChartDisplay> {
       );
       return PieChartSectionData(
         color: color,
-        value: widget.totalSpent == 0
-            ? 0
+        value: widget.totalSpent <= 0
+            ? 5
             : (widget.data[i].total / widget.totalSpent).abs(),
         title: "",
         radius: radius,

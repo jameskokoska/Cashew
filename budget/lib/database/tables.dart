@@ -529,6 +529,14 @@ class CategoryWithTotal {
     this.categoryBudgetLimit,
   });
 
+  @override
+  String toString() {
+    return 'CategoryWithTotal {'
+        'category: ${category.name}, '
+        'total: $total, '
+        '}';
+  }
+
   CategoryWithTotal copyWith({
     TransactionCategory? category,
     CategoryBudgetLimit? categoryBudgetLimit,
@@ -1017,7 +1025,9 @@ class FinanceDatabase extends _$FinanceDatabase {
     String? onlyShowTransactionsBelongingToBudgetPk,
     String? onlyShowTransactionsBelongingToObjectivePk,
     SearchFilters? searchFilters,
+    int? limit,
   }) {
+    final subCategories = alias(categories, 'subCategories');
     JoinedSelectStatement<HasResultSet, dynamic> query;
     query = (select(transactions)
           ..where((tbl) {
@@ -1040,6 +1050,7 @@ class FinanceDatabase extends _$FinanceDatabase {
                 onlyShowTransactionBasedOnSearchQuery(transactions, search,
                     withCategories: true);
           })
+          ..limit(limit ?? DEFAULT_LIMIT, offset: null)
           ..orderBy([
             (t) => OrderingTerm(
                   expression: (t.type
@@ -1054,13 +1065,26 @@ class FinanceDatabase extends _$FinanceDatabase {
           ]))
         .join([
       innerJoin(
-          categories, categories.categoryPk.equalsExp(transactions.categoryFk))
+          categories, categories.categoryPk.equalsExp(transactions.categoryFk)),
+      leftOuterJoin(
+        budgets,
+        budgets.budgetPk.equalsExp(transactions.sharedReferenceBudgetPk),
+      ),
+      leftOuterJoin(
+        objectives,
+        objectives.objectivePk.equalsExp(transactions.objectiveFk),
+      ),
+      leftOuterJoin(subCategories,
+          subCategories.categoryPk.equalsExp(transactions.subCategoryFk)),
     ]);
 
     return query.watch().map((rows) => rows.map((row) {
           return TransactionWithCategory(
               category: row.readTable(categories),
-              transaction: row.readTable(transactions));
+              transaction: row.readTable(transactions),
+              budget: row.readTableOrNull(budgets),
+              objective: row.readTableOrNull(objectives),
+              subCategory: row.readTableOrNull(subCategories));
         }).toList());
   }
 
@@ -1713,6 +1737,7 @@ class FinanceDatabase extends _$FinanceDatabase {
   Future<List<TransactionWithCategory>>
       getAllTransactionsWithCategoryWalletBudgetObjectiveSubCategory(
           Expression<bool> Function($TransactionsTable) filter) async {
+    final subCategories = alias(categories, 'subCategories');
     final query = (select(transactions)
           ..where(filter)
           ..orderBy([(t) => OrderingTerm.desc(t.dateCreated)]))
@@ -1733,12 +1758,11 @@ class FinanceDatabase extends _$FinanceDatabase {
         objectives,
         objectives.objectivePk.equalsExp(transactions.objectiveFk),
       ),
+      leftOuterJoin(subCategories,
+          subCategories.categoryPk.equalsExp(transactions.subCategoryFk)),
     ]);
 
     final rows = await query.get();
-
-    Map<String, TransactionCategory> categoriesIndexed =
-        await database.getAllCategoriesIndexed();
 
     return rows.map((row) {
       return TransactionWithCategory(
@@ -1747,8 +1771,7 @@ class FinanceDatabase extends _$FinanceDatabase {
         wallet: row.readTableOrNull(wallets),
         budget: row.readTableOrNull(budgets),
         objective: row.readTableOrNull(objectives),
-        subCategory:
-            categoriesIndexed[row.readTable(transactions).subCategoryFk],
+        subCategory: row.readTableOrNull(subCategories),
       );
     }).toList();
   }

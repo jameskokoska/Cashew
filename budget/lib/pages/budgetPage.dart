@@ -10,6 +10,7 @@ import 'package:budget/pages/pastBudgetsPage.dart';
 import 'package:budget/pages/premiumPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
+import 'package:budget/struct/spendingSummaryHelper.dart';
 import 'package:budget/widgets/animatedExpanded.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/dropdownSelect.dart';
@@ -125,8 +126,7 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
     required DateTimeRange budgetRange,
     required bool showAllSubcategories,
     required VoidCallback toggleAllSubCategories,
-    required List<CategoryWithTotal> data,
-    required List<CategoryWithTotal> dataWithoutSubcategories,
+    required List<CategoryWithTotal> dataFilterUnassignedTransactions,
     required bool hasSubCategories,
   }) {
     return Column(
@@ -139,20 +139,24 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
               borderRadius: BorderRadius.circular(200)),
           child: PieChartWrapper(
             pieChartDisplayStateKey: _pieChartDisplayStateKey,
-            data: showAllSubcategories ? data : dataWithoutSubcategories,
+            data: dataFilterUnassignedTransactions,
             totalSpent: totalSpentAbsolute,
             setSelectedCategory: (categoryPk, category) async {
-              if (category?.mainCategoryPk != null) {
-                TransactionCategory mainCategory = await database
-                    .getCategoryInstance(category!.mainCategoryPk!);
-                setState(() {
-                  selectedCategory = mainCategory;
-                });
-              } else {
-                setState(() {
-                  selectedCategory = category;
-                });
-              }
+              setState(() {
+                selectedCategory = category;
+              });
+              // If we want to select the subcategories main category when tapped
+              // if (category?.mainCategoryPk != null) {
+              //   TransactionCategory mainCategory = await database
+              //       .getCategoryInstance(category!.mainCategoryPk!);
+              //   setState(() {
+              //     selectedCategory = mainCategory;
+              //   });
+              // } else {
+              //   setState(() {
+              //     selectedCategory = category;
+              //   });
+              // }
             },
             isPastBudget: widget.isPastBudget ?? false,
             middleColor: appStateSettings["materialYou"]
@@ -161,94 +165,26 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                 : null,
           ),
         ),
-        Transform.translate(
-          offset: Offset(-9 - getHorizontalPaddingConstrained(context), 5),
-          child: Align(
-            alignment: Alignment.bottomRight,
-            child: Builder(builder: (context) {
-              bool showClearButton = selectedCategory != null;
-              return Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Transform.translate(
-                    offset: Offset(11, 0),
-                    child: AnimatedExpanded(
-                      expand: showClearButton,
-                      child: Tooltip(
-                        message: "clear-selection".tr(),
-                        child: IconButton(
-                          padding: EdgeInsets.all(15),
-                          onPressed: () {
-                            setState(() {
-                              selectedCategory = null;
-                            });
-                            _pieChartDisplayStateKey.currentState!
-                                .setTouchedIndex(-1);
-                          },
-                          icon: Icon(
-                            appStateSettings["outlinedIcons"]
-                                ? Icons.clear_outlined
-                                : Icons.clear_rounded,
-                            color: budgetColorScheme.secondary,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Row(
-                    children: [
-                      if (hasSubCategories)
-                        Transform.translate(
-                          key: ValueKey(showClearButton),
-                          offset: Offset(10, 0),
-                          child: Tooltip(
-                            message: "view-subcategories".tr(),
-                            child: IconButton(
-                              padding: EdgeInsets.all(15),
-                              onPressed: toggleAllSubCategories,
-                              icon: ScaledAnimatedSwitcher(
-                                keyToWatch: showAllSubcategories.toString(),
-                                child: Icon(
-                                  showAllSubcategories
-                                      ? (appStateSettings["outlinedIcons"]
-                                          ? Icons.unfold_less_outlined
-                                          : Icons.unfold_less_rounded)
-                                      : (appStateSettings["outlinedIcons"]
-                                          ? Icons.unfold_more_outlined
-                                          : Icons.unfold_more_rounded),
-                                  color: budgetColorScheme.secondary,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      Tooltip(
-                        message: "edit-spending-goals".tr(),
-                        child: IconButton(
-                          padding: EdgeInsets.all(15),
-                          onPressed: () {
-                            pushRoute(
-                              context,
-                              EditBudgetLimitsPage(
-                                budget: widget.budget,
-                              ),
-                            );
-                          },
-                          icon: Icon(
-                            appStateSettings["outlinedIcons"]
-                                ? Icons.fact_check_outlined
-                                : Icons.fact_check_rounded,
-                            color: budgetColorScheme.secondary,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              );
-            }),
-          ),
+        PieChartOptions(
+          hasSubCategories: hasSubCategories,
+          selectedCategory: selectedCategory,
+          onClearSelection: () {
+            setState(() {
+              selectedCategory = null;
+            });
+            _pieChartDisplayStateKey.currentState!.setTouchedIndex(-1);
+          },
+          colorScheme: budgetColorScheme,
+          onEditSpendingGoals: () {
+            pushRoute(
+              context,
+              EditBudgetLimitsPage(
+                budget: widget.budget,
+              ),
+            );
+          },
+          showAllSubcategories: showAllSubcategories,
+          toggleAllSubCategories: toggleAllSubCategories,
         ),
       ],
     );
@@ -443,90 +379,19 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                   // Set to countUnassignedTransactons: false for the pie chart
                   //  includeAllSubCategories: showAllSubcategories,
                   // If implementing pie chart summary for subcategories, also need to implement ability to tap a subcategory from the pie chart
-                  countUnassignedTransactions: false,
+                  countUnassignedTransactions: true,
                   includeAllSubCategories: true,
                 ),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
-                    double totalSpent = 0;
-                    double totalSpentAbsolute = 0;
+                    TotalSpentCategoriesSummary s =
+                        watchTotalSpentInTimeRangeHelper(
+                            dataInput: snapshot.data ?? [],
+                            showAllSubcategories: showAllSubcategories);
                     List<Widget> categoryEntries = [];
-
-                    Map<String, List<CategoryWithTotal>>
-                        subCategorySpendingIndexedByMainCategoryPk = {};
-                    Map<String, double> totalSpentOfMainCategories = {};
-
-                    snapshot.data!.forEach(
-                      (CategoryWithTotal categoryWithTotal) {
-                        totalSpent = totalSpent + categoryWithTotal.total;
-                        totalSpentAbsolute =
-                            totalSpentAbsolute + categoryWithTotal.total.abs();
-
-                        if (categoryWithTotal.category.mainCategoryPk != null) {
-                          if (subCategorySpendingIndexedByMainCategoryPk[
-                                  categoryWithTotal.category.mainCategoryPk!] ==
-                              null) {
-                            subCategorySpendingIndexedByMainCategoryPk[
-                                categoryWithTotal
-                                    .category.mainCategoryPk!] = [];
-                          }
-                          subCategorySpendingIndexedByMainCategoryPk[
-                                  categoryWithTotal.category.mainCategoryPk!]!
-                              .add(categoryWithTotal);
-                        }
-
-                        // if countUnassignedTransactions: false then we need to get the total of the main category
-                        if (categoryWithTotal.category.mainCategoryPk == null) {
-                          totalSpentOfMainCategories[categoryWithTotal.category
-                              .categoryPk] = (totalSpentOfMainCategories[
-                                      categoryWithTotal.category.categoryPk] ??
-                                  0) +
-                              categoryWithTotal.total;
-                        } else {
-                          totalSpentOfMainCategories[
-                                  categoryWithTotal.category.mainCategoryPk!] =
-                              (totalSpentOfMainCategories[categoryWithTotal
-                                          .category.mainCategoryPk!] ??
-                                      0) +
-                                  categoryWithTotal.total;
-                        }
-
-                        // if countUnassignedTransactions: false then we need to get the total of the main category
-                      },
-                    );
-
-                    List<CategoryWithTotal> dataWithoutSubcategories = [];
-
-                    if (showAllSubcategories == false) {
-                      (snapshot.data ?? [])
-                          .forEach((CategoryWithTotal categoryWithTotal) {
-                        if (categoryWithTotal.category.mainCategoryPk == null) {
-                          dataWithoutSubcategories.add(
-                            categoryWithTotal.copyWith(
-                                total: totalSpentOfMainCategories[
-                                        categoryWithTotal
-                                            .category.categoryPk] ??
-                                    0),
-                          );
-                        }
-                      });
-                    }
-
-                    bool hasSubCategories =
-                        subCategorySpendingIndexedByMainCategoryPk.isNotEmpty;
-
-                    totalSpent = totalSpent * -1;
-
-                    print(totalSpent);
 
                     snapshot.data!.asMap().forEach(
                       (index, category) {
-                        double totalSpentForCategory =
-                            category.category.mainCategoryPk == null
-                                ? (totalSpentOfMainCategories[
-                                        category.category.categoryPk] ??
-                                    0)
-                                : category.total;
                         categoryEntries.add(
                           CategoryEntry(
                             selectedSubCategoryPk: selectedCategory?.categoryPk,
@@ -536,10 +401,10 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                                 category.category.categoryPk ==
                                     selectedCategory?.mainCategoryPk,
                             subcategoriesWithTotalMap:
-                                subCategorySpendingIndexedByMainCategoryPk,
+                                s.subCategorySpendingIndexedByMainCategoryPk,
                             todayPercent: todayPercent,
                             overSpentColor: showIncomeExpenseIcons
-                                ? totalSpentForCategory > 0
+                                ? category.total > 0
                                     ? getColor(context, "incomeAmount")
                                     : getColor(context, "expenseAmount")
                                 : null,
@@ -561,11 +426,11 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                             categoryBudgetLimit: category.categoryBudgetLimit,
                             budgetColorScheme: budgetColorScheme,
                             category: category.category,
-                            totalSpent: totalSpentAbsolute,
+                            totalSpent: s.totalSpentAbsolute,
                             transactionCount: category.transactionCount,
                             categorySpent: showIncomeExpenseIcons == true
-                                ? totalSpentForCategory
-                                : totalSpentForCategory.abs(),
+                                ? category.total
+                                : category.total.abs(),
                             onTap: (TransactionCategory tappedCategory, _) {
                               if (selectedCategory?.categoryPk ==
                                   tappedCategory.categoryPk) {
@@ -575,12 +440,24 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                                 _pieChartDisplayStateKey.currentState!
                                     .setTouchedIndex(-1);
                               } else {
-                                setState(() {
-                                  selectedCategory = tappedCategory;
-                                });
-                                _pieChartDisplayStateKey.currentState!
-                                    .setTouchedCategoryPk(
-                                        tappedCategory.categoryPk);
+                                if (showAllSubcategories ||
+                                    tappedCategory.mainCategoryPk == null) {
+                                  setState(() {
+                                    selectedCategory = tappedCategory;
+                                  });
+                                  _pieChartDisplayStateKey.currentState!
+                                      .setTouchedCategoryPk(
+                                          tappedCategory.categoryPk);
+                                } else {
+                                  // We are tapping a subcategoryEntry and it is not in the pie chart
+                                  // because showAllSubcategories is false and mainCategoryPk is not null
+                                  setState(() {
+                                    selectedCategory = tappedCategory;
+                                  });
+                                  _pieChartDisplayStateKey.currentState!
+                                      .setTouchedCategoryPk(
+                                          tappedCategory.mainCategoryPk);
+                                }
                               }
                             },
                             selected: category.category.categoryPk ==
@@ -637,7 +514,7 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                                         large: true,
                                         percent: widget.budget.amount == 0
                                             ? 0
-                                            : totalSpent /
+                                            : s.totalSpent /
                                                 widget.budget.amount *
                                                 100,
                                         yourPercent: 0,
@@ -651,7 +528,7 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                                         ? SizedBox.shrink()
                                         : DaySpending(
                                             budget: widget.budget,
-                                            totalAmount: totalSpent,
+                                            totalAmount: s.totalSpent,
                                             large: true,
                                             budgetRange: budgetRange,
                                             padding: const EdgeInsets.only(
@@ -682,14 +559,13 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                           if (snapshot.data!.length > 0)
                             pieChart(
                               budgetRange: budgetRange,
-                              totalSpentAbsolute: totalSpentAbsolute,
+                              totalSpentAbsolute: s.totalSpentAbsolute,
                               budgetColorScheme: budgetColorScheme,
                               showAllSubcategories: showAllSubcategories,
                               toggleAllSubCategories: toggleAllSubcategories,
-                              data: (snapshot.data ?? []),
-                              dataWithoutSubcategories:
-                                  dataWithoutSubcategories,
-                              hasSubCategories: hasSubCategories,
+                              dataFilterUnassignedTransactions:
+                                  s.dataFilterUnassignedTransactions,
+                              hasSubCategories: s.hasSubCategories,
                             ),
                           // if (snapshot.data!.length > 0)
                           //   SizedBox(height: 35),
