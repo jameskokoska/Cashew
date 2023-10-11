@@ -952,30 +952,34 @@ class _TodayIndicatorState extends State<TodayIndicator> {
                     : FractionalOffset(indicatorOffsetPercent, 0),
             child: Column(
               children: [
-                SlideFadeTransition(
-                  child: WidgetSize(
-                    onChange: (Size size) {
-                      todayIndicatorSize = size;
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(6),
-                          color:
-                              Theme.of(context).brightness == Brightness.light
-                                  ? Color(0xFF1F1F1F)
-                                  : getColor(context, "black")),
-                      child: Padding(
-                        padding: EdgeInsets.only(
-                            top: 3, right: 5, left: 5, bottom: 3),
-                        child: MediaQuery(
-                          child: TextFont(
-                            textAlign: TextAlign.center,
-                            text: "today".tr(),
-                            fontSize: widget.large ? 10 : 9,
-                            textColor: getColor(context, "white"),
+                WidgetSize(
+                  onChange: (Size size) {
+                    todayIndicatorSize = size;
+                  },
+                  child: AnimatedOpacity(
+                    duration: Duration(milliseconds: 200),
+                    opacity: todayIndicatorSize != null ? 1 : 0,
+                    child: SlideFadeTransition(
+                      child: Container(
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(6),
+                            color:
+                                Theme.of(context).brightness == Brightness.light
+                                    ? Color(0xFF1F1F1F)
+                                    : getColor(context, "black")),
+                        child: Padding(
+                          padding: EdgeInsets.only(
+                              top: 3, right: 5, left: 5, bottom: 3),
+                          child: MediaQuery(
+                            child: TextFont(
+                              textAlign: TextAlign.center,
+                              text: "today".tr(),
+                              fontSize: widget.large ? 10 : 9,
+                              textColor: getColor(context, "white"),
+                            ),
+                            data: MediaQuery.of(context)
+                                .copyWith(textScaleFactor: 1.0),
                           ),
-                          data: MediaQuery.of(context)
-                              .copyWith(textScaleFactor: 1.0),
                         ),
                       ),
                     ),

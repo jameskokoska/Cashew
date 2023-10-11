@@ -21,11 +21,12 @@ import 'package:flutter/material.dart';
 import 'listItem.dart';
 
 String getChangelogString() {
-  return """
+  return """    
     < 4.6.4
     Launch screen logo for iOS
     Removed opacity when snackbar tapped on iOS
     Fixed gradient on budget line graph on iOS
+    Quick fix for today indicator size
     < 4.6.3
     Fixed padding for subcategories on large displays
     Fixed syncing for handling null values
