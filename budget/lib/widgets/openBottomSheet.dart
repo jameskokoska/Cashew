@@ -67,10 +67,12 @@ Future openBottomSheet(
   bool fullSnap = false,
   bool isDismissable = true,
   bool useCustomController = false,
+  bool reAssignBottomSheetControllerGlobal = true,
 }) async {
   //minimize keyboard when open
   FocusScope.of(context).unfocus();
-  bottomSheetControllerGlobal = new SheetController();
+  if (reAssignBottomSheetControllerGlobal)
+    bottomSheetControllerGlobal = new SheetController();
   if (useCustomController == true)
     bottomSheetControllerGlobalCustomAssigned = new SheetController();
   return await showSlidingBottomSheet(context,

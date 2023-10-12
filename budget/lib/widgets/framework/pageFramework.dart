@@ -444,43 +444,49 @@ class PageFrameworkState extends State<PageFramework>
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   widget.scrollToTopButton
-                      ? AnimatedBuilder(
-                          animation: _scrollToTopAnimationController,
-                          builder: (_, child) {
-                            return IgnorePointer(
-                              ignoring:
-                                  _scrollToTopAnimationController.value <= 0.1,
-                              child: Transform.translate(
-                                offset: Offset(
-                                  0,
-                                  10 *
-                                      (1 -
-                                          CurvedAnimation(
-                                                  parent:
-                                                      _scrollToTopAnimationController,
-                                                  curve: Curves.easeInOut)
-                                              .value),
+                      ? Padding(
+                          padding: EdgeInsets.only(
+                              bottom:
+                                  MediaQuery.of(context).viewPadding.bottom),
+                          child: AnimatedBuilder(
+                            animation: _scrollToTopAnimationController,
+                            builder: (_, child) {
+                              return IgnorePointer(
+                                ignoring:
+                                    _scrollToTopAnimationController.value <=
+                                        0.1,
+                                child: Transform.translate(
+                                  offset: Offset(
+                                    0,
+                                    10 *
+                                        (1 -
+                                            CurvedAnimation(
+                                                    parent:
+                                                        _scrollToTopAnimationController,
+                                                    curve: Curves.easeInOut)
+                                                .value),
+                                  ),
+                                  child: child,
                                 ),
-                                child: child,
-                              ),
-                            );
-                          },
-                          child: FadeTransition(
-                            opacity: CurvedAnimation(
-                                parent: _scrollToTopAnimationController,
-                                curve: Curves.easeInOut),
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.only(right: 7, bottom: 1),
-                              child: Transform.rotate(
-                                angle: pi / 2,
-                                child: ButtonIcon(
-                                  icon: appStateSettings["outlinedIcons"]
-                                      ? Icons.chevron_left_outlined
-                                      : Icons.chevron_left_rounded,
-                                  onTap: () {
-                                    scrollToTop();
-                                  },
+                              );
+                            },
+                            child: FadeTransition(
+                              opacity: CurvedAnimation(
+                                  parent: _scrollToTopAnimationController,
+                                  curve: Curves.easeInOut),
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.only(right: 7, bottom: 1),
+                                child: Transform.rotate(
+                                  angle: pi / 2,
+                                  child: ButtonIcon(
+                                    icon: appStateSettings["outlinedIcons"]
+                                        ? Icons.chevron_left_outlined
+                                        : Icons.chevron_left_rounded,
+                                    onTap: () {
+                                      scrollToTop();
+                                    },
+                                  ),
                                 ),
                               ),
                             ),

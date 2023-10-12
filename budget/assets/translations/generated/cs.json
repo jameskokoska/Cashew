@@ -724,7 +724,7 @@
   "data-overwrite-warning": "Data přepsána",
   "data-overwrite-warning-description": "Import dat přepíše všechna aktuální data!",
   "select-backup-file": "Vyberte zálohu",
-  "select-backup-file-description": "Vyberte prosím soubor záloh.sql.",
+  "select-backup-file-description": "Vyberte prosím soubor záloh.sqlite.",
   "database-corrupted": "Zkorumpovaná databáze",
   "database-corrupted-description": "Vaše databáze je poškozena. Možná jste importovali nesprávný soubor.",
   "import-backup": "Import zálohování",

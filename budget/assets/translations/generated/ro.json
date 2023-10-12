@@ -724,7 +724,7 @@
   "data-overwrite-warning": "O suprascriere a datelor",
   "data-overwrite-warning-description": "Importarea datelor va suprascrie toate datele curente!",
   "select-backup-file": "Selectați backup",
-  "select-backup-file-description": "Vă rugăm să selectați fișierul Backup.SQL.",
+  "select-backup-file-description": "Vă rugăm să selectați fișierul Backup.sqlite.",
   "database-corrupted": "Baza de date coruptă",
   "database-corrupted-description": "Baza de date este coruptă. Este posibil să fi importat fișierul greșit.",
   "import-backup": "Import backup",

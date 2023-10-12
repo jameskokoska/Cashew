@@ -724,7 +724,7 @@
   "data-overwrite-warning": "החלפת נתונים",
   "data-overwrite-warning-description": "ייבוא ​​נתונים יחליף את כל הנתונים הנוכחיים!",
   "select-backup-file": "בחר גיבוי",
-  "select-backup-file-description": "אנא בחר את קובץ ה- backup.sql שלך.",
+  "select-backup-file-description": "אנא בחר את קובץ ה- backup.sqlite שלך.",
   "database-corrupted": "מסד נתונים פגום",
   "database-corrupted-description": "בסיס הנתונים שלך פגום. יתכן שייבאת את הקובץ הלא נכון.",
   "import-backup": "יבוא גיבוי",

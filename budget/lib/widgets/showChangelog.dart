@@ -22,6 +22,15 @@ import 'listItem.dart';
 
 String getChangelogString() {
   return """
+    < 4.6.6
+    Bottom safe area padding for scroll to top button
+    Fixed today indicator loading in late when measuring size
+    Percent in budget container updates properly when budget date changed
+    Fixed lag spike when generating preview data - improper budget start date
+    Fixed bottom sheet reassigned controller and scroll when suggesting icon
+    Linear gradient fixed for underneath color
+    Generate preview data tries to avoid empty monthly budget
+    Translation fixes
     < 4.6.5
     Linear gradient fixes when min/max is 0 for line graph
     Fix on press for category icon
@@ -1604,7 +1613,7 @@ Map<String, List<MajorChanges>> getMajorChanges() {
         },
       ),
     ],
-    "< 4.6.3": [
+    "< 4.6.6": [
       MajorChanges(
         "major-change-11".tr(),
         Icons.category_rounded,

@@ -724,7 +724,7 @@
   "data-overwrite-warning": "Дані переписували",
   "data-overwrite-warning-description": "Імпорт даних буде перезаписати всі поточні дані!",
   "select-backup-file": "Виберіть резервну копію",
-  "select-backup-file-description": "Будь ласка, виберіть свій файл резервного копіювання.SQL.",
+  "select-backup-file-description": "Будь ласка, виберіть свій файл резервного копіювання.sqlite.",
   "database-corrupted": "Пошкоджена база даних",
   "database-corrupted-description": "Ваша база даних пошкоджена. Можливо, ви імпортували неправильний файл.",
   "import-backup": "Імпорт резервного копіювання",

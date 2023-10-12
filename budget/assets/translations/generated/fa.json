@@ -724,7 +724,7 @@
   "data-overwrite-warning": "داده های بازنویسی",
   "data-overwrite-warning-description": "وارد کردن داده ها تمام داده های فعلی را رونویسی می کند!",
   "select-backup-file": "پشتیبان گیری را انتخاب کنید",
-  "select-backup-file-description": "لطفاً پرونده backup.sql خود را انتخاب کنید.",
+  "select-backup-file-description": "لطفاً پرونده backup.sqlite خود را انتخاب کنید.",
   "database-corrupted": "پایگاه داده خراب",
   "database-corrupted-description": "پایگاه داده شما خراب است. ممکن است پرونده اشتباه وارد کرده باشید.",
   "import-backup": "وارد کردن پشتیبان گیری",

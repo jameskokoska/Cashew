@@ -430,8 +430,6 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
       );
 
   LineChartBarData lineChartBarData(List<FlSpot> spots, int index) {
-    print("MIN" + widget.minPair.y.toString());
-    print("MAX" + widget.maxPair.y.toString());
     return LineChartBarData(
       color: widget.colors.length > 0
           ? lightenPastel(widget.colors[index], amount: 0.3)
@@ -463,7 +461,7 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
           end: Alignment(
               0,
               widget.maxPair.y > 0
-                  ? (widget.minPair.y).abs() /
+                  ? -(widget.minPair.y).abs() /
                       ((widget.maxPair.y).abs() + (widget.minPair.y).abs())
                   : -1),
         ),

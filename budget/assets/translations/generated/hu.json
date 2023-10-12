@@ -724,7 +724,7 @@
   "data-overwrite-warning": "Az adatok felülírása",
   "data-overwrite-warning-description": "Az adatok importálása felülírja az összes aktuális adatot!",
   "select-backup-file": "Válassza ki a Biztonsági másolatot",
-  "select-backup-file-description": "Kérjük, válassza ki a biztonsági másolatot.sql fájlt.",
+  "select-backup-file-description": "Kérjük, válassza ki a biztonsági backup.sqlite fájlt.",
   "database-corrupted": "Az adatbázis megsérült",
   "database-corrupted-description": "Az adatbázisod sérült. Lehet, hogy rossz fájlt importált.",
   "import-backup": "Biztonsági mentés importálása",

@@ -418,7 +418,7 @@ Future generatePreviewData() async {
       sharedReferenceBudgetPk: "10",
     ),
   );
-  int monthlySpendingDayStart = DateTime.now().day <= 13 ? 13 : 1;
+  int monthlySpendingDayStart = DateTime.now().day <= 10 ? 15 : 1;
   await database.createOrUpdateBudget(
     updateSharedEntry: false,
     Budget(
@@ -686,6 +686,36 @@ Future generatePreviewData() async {
     ),
   );
   loadingIndeterminateKey.currentState?.setVisibility(false);
+  for (int i = 0; i < 20; i++) {
+    List<int> moreCommonCategories = [1, 2, 3, 4, 5];
+    List<int> moreCommonCommonCategories = [1, 2, 4];
+    await database.createOrUpdateTransaction(
+      updateSharedEntry: false,
+      insert: true,
+      Transaction(
+        methodAdded: MethodAdded.preview,
+        transactionPk: "-1",
+        name: "",
+        amount: (5 + Random().nextDouble() * 10) * -1,
+        note: "",
+        categoryFk: (Random().nextInt(2) == 0
+                ? Random().nextInt(2) == 0
+                    ? moreCommonCategories[
+                        Random().nextInt(moreCommonCommonCategories.length)]
+                    : moreCommonCategories[
+                        Random().nextInt(moreCommonCategories.length)]
+                : Random().nextInt(11) + 1)
+            .toString(),
+        walletFk: "0",
+        dateCreated: DateTime.now()
+            .subtract(Duration(days: i))
+            .subtract(Duration(minutes: i * 13)),
+        income: false,
+        paid: true,
+        skipPaid: true,
+      ),
+    );
+  }
   for (int i = 5; i < 300; i = i + Random().nextInt(4)) {
     List<int> moreCommonCategories = [1, 2, 3, 4, 5];
     List<int> moreCommonCommonCategories = [1, 2, 4];

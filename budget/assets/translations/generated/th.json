@@ -724,7 +724,7 @@
   "data-overwrite-warning": "เขียนทับข้อมูล",
   "data-overwrite-warning-description": "การนำเข้าข้อมูลจะเขียนทับข้อมูลปัจจุบันทั้งหมด!",
   "select-backup-file": "เลือกการสำรองข้อมูล",
-  "select-backup-file-description": "โปรดเลือกไฟล์ backup.sql ของคุณ",
+  "select-backup-file-description": "โปรดเลือกไฟล์ backup.sqlite ของคุณ",
   "database-corrupted": "ฐานข้อมูลเสียหาย",
   "database-corrupted-description": "ฐานข้อมูลของคุณเสียหาย คุณอาจนำเข้าไฟล์ผิด",
   "import-backup": "นำเข้าสำรอง",
@@ -764,6 +764,6 @@
   "make-main-category-question": "ทำหมวดหมู่หลัก?",
   "make-main-category-description": "สิ่งนี้จะย้ายธุรกรรมทั้งหมดจากหมวดหมู่หลักไปยังหมวดหมู่หลักใหม่",
   "main-category-created": "หมวดหมู่หลักที่สร้างขึ้น",
-  "no-folder-selected": "ไม่มีการเลือกโฟลเดอร์",
+  "no-folder-selected": "ไม่เลือกโฟลเดอร์",
   "clear-selection": "การเลือกที่ชัดเจน"
 }

@@ -724,7 +724,7 @@
   "data-overwrite-warning": "Nadpisanie danych",
   "data-overwrite-warning-description": "Importowanie danych będzie zastąpić wszystkie bieżące dane!",
   "select-backup-file": "Wybierz kopię zapasową",
-  "select-backup-file-description": "Wybierz plik Backup.sql.",
+  "select-backup-file-description": "Wybierz plik Backup.sqlite.",
   "database-corrupted": "Baza danych uszkodzona",
   "database-corrupted-description": "Twoja baza danych jest uszkodzona. Być może zaimportowałeś niewłaściwy plik.",
   "import-backup": "Kopia zapasowa importu",

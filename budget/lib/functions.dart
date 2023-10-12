@@ -411,7 +411,7 @@ DateTimeRange getBudgetDate(Budget budget, DateTime currentDate) {
     // print("--------");
     if (currentDate.millisecondsSinceEpoch <=
         currentDateLoopEnd.millisecondsSinceEpoch) {
-      for (int i = 0; i < 100000; i++) {
+      for (int i = 0; i < 10000; i++) {
         // print("Current loop: " +
         //     i.toString() +
         //     " " +
@@ -455,7 +455,7 @@ DateTimeRange getBudgetDate(Budget budget, DateTime currentDate) {
       }
     } else if (currentDate.millisecondsSinceEpoch >=
         currentDateLoopEnd.millisecondsSinceEpoch) {
-      for (int i = 0; i < 100000; i++) {
+      for (int i = 0; i < 10000; i++) {
         // print(currentDateLoopStart.toString() + currentDateLoopEnd.toString());
         if (currentDate.millisecondsSinceEpoch >=
                 currentDateLoopStart.millisecondsSinceEpoch &&

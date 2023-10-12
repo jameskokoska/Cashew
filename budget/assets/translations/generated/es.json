@@ -724,7 +724,7 @@
   "data-overwrite-warning": "Datos sobrescribir",
   "data-overwrite-warning-description": "¡Importar datos sobrescribirá todos los datos actuales!",
   "select-backup-file": "Seleccionar copia de seguridad",
-  "select-backup-file-description": "Seleccione su archivo Backup.sql.",
+  "select-backup-file-description": "Seleccione su archivo Backup.sqlite.",
   "database-corrupted": "Base de datos corrupta",
   "database-corrupted-description": "Su base de datos está dañada. Es posible que haya importado el archivo incorrecto.",
   "import-backup": "Importación de respaldo",

@@ -3116,6 +3116,11 @@ class FinanceDatabase extends _$FinanceDatabase {
       budget = budget.copyWith(periodLength: maxTimePeriodDays);
 
     if (budget.periodLength <= 0) budget = budget.copyWith(periodLength: 1);
+
+    budget = budget.copyWith(
+      startDate: DateTime(
+          budget.startDate.year, budget.startDate.month, budget.startDate.day),
+    );
     return budget;
   }
 

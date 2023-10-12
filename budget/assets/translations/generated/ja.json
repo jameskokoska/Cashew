@@ -724,7 +724,7 @@
   "data-overwrite-warning": "データ上書き",
   "data-overwrite-warning-description": "データのインポートは、現在のすべてのデータを上書きします！",
   "select-backup-file": "バックアップを選択します",
-  "select-backup-file-description": "Backup.sqlファイルを選択してください。",
+  "select-backup-file-description": "Backup.sqliteファイルを選択してください。",
   "database-corrupted": "データベースが破損しました",
   "database-corrupted-description": "データベースは破損しています。間違ったファイルをインポートした可能性があります。",
   "import-backup": "バックアップをインポートします",

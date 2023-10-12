@@ -925,6 +925,16 @@ class _TodayIndicatorState extends State<TodayIndicator> {
 
   Size? todayIndicatorSize;
   Size? progressSize;
+
+  @override
+  void didUpdateWidget(covariant TodayIndicator oldWidget) {
+    if (oldWidget.percent != widget.percent)
+      setState(() {
+        percent = widget.percent;
+      });
+    super.didUpdateWidget(oldWidget);
+  }
+
   @override
   Widget build(BuildContext context) {
     double percentThreshold = 0;
@@ -955,6 +965,7 @@ class _TodayIndicatorState extends State<TodayIndicator> {
                 WidgetSize(
                   onChange: (Size size) {
                     todayIndicatorSize = size;
+                    setState(() {});
                   },
                   child: AnimatedOpacity(
                     duration: Duration(milliseconds: 200),

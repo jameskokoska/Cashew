@@ -724,7 +724,7 @@
   "data-overwrite-warning": "Tietokorvaus",
   "data-overwrite-warning-description": "Tietojen tuonti korvaa kaikki nykyiset tiedot!",
   "select-backup-file": "Valitse varmuuskopio",
-  "select-backup-file-description": "Valitse varmuuskopio.sql -tiedosto.",
+  "select-backup-file-description": "Valitse varmuuskopio.sqlite -tiedosto.",
   "database-corrupted": "Tietokanta vioittunut",
   "database-corrupted-description": "Tietokanta on vioittunut. Olet ehkä tuonut väärän tiedoston.",
   "import-backup": "Tuo varmuuskopio",

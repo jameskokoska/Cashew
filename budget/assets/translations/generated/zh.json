@@ -724,7 +724,7 @@
   "data-overwrite-warning": "数据覆盖",
   "data-overwrite-warning-description": "导入数据将覆盖所有当前数据！",
   "select-backup-file": "选择备份",
-  "select-backup-file-description": "请选择您的backup.sql文件。",
+  "select-backup-file-description": "请选择您的backup.sqlite文件。",
   "database-corrupted": "数据库损坏",
   "database-corrupted-description": "您的数据库已损坏。您可能已经导入错误的文件。",
   "import-backup": "导入备份",

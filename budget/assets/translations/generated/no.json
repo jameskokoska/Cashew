@@ -724,7 +724,7 @@
   "data-overwrite-warning": "Data overskriver",
   "data-overwrite-warning-description": "Importere data vil overskrive alle gjeldende data!",
   "select-backup-file": "Velg sikkerhetskopi",
-  "select-backup-file-description": "Velg din backup.sql -fil.",
+  "select-backup-file-description": "Velg din backup.sqlite -fil.",
   "database-corrupted": "Databasen ødelagt",
   "database-corrupted-description": "Databasen din er ødelagt. Du har kanskje importert feil fil.",
   "import-backup": "Importer sikkerhetskopi",

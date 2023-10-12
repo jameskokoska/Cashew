@@ -724,7 +724,7 @@
   "data-overwrite-warning": "Verilerin üzerine yazma",
   "data-overwrite-warning-description": "Verilerin içe aktarılması tüm geçerli verilerin üzerine yazılır!",
   "select-backup-file": "Yedeklemeyi seçin",
-  "select-backup-file-description": "Lütfen Backup.sql dosyanızı seçin.",
+  "select-backup-file-description": "Lütfen Backup.sqlite dosyanızı seçin.",
   "database-corrupted": "Veritabanı bozuk",
   "database-corrupted-description": "Veritabanınız bozuk. Yanlış dosyayı içe aktarmış olabilirsiniz.",
   "import-backup": "Yedekleme İçe Aktarma",
@@ -765,5 +765,5 @@
   "make-main-category-description": "Bu, tüm işlemleri ana kategoriden yeni bir ana kategoriye taşıyacaktır",
   "main-category-created": "Ana kategori oluşturuldu",
   "no-folder-selected": "Klasör seçilmedi",
-  "clear-selection": "Net seçim"
+  "clear-selection": "Açık seçim"
 }

@@ -268,7 +268,17 @@ class SuggestIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     return Tappable(
       onTap: () {
-        openBottomSheet(context, SuggestIconPopup());
+        openBottomSheet(
+          context,
+          SuggestIconPopup(),
+          reAssignBottomSheetControllerGlobal: false,
+          useCustomController: true,
+        );
+        // Fix over-scroll stretch when keyboard pops up quickly
+        Future.delayed(Duration(milliseconds: 100), () {
+          bottomSheetControllerGlobalCustomAssigned?.scrollTo(0,
+              duration: Duration(milliseconds: 100));
+        });
       },
       color: Theme.of(context).colorScheme.secondaryContainer.withOpacity(0.7),
       borderRadius: 15,
