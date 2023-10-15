@@ -357,7 +357,8 @@ class _AddCategoryPageState extends State<AddCategoryPage>
                     disabled: false,
                   )
                 : canSelectIfSubCategoryOrMainCategory() &&
-                        mainCategoryPkForSubcategoryWhenCreating == null
+                        mainCategoryPkForSubcategoryWhenCreating == null &&
+                        isMainCategoryWhenCreating == false
                     ? SaveBottomButton(
                         label: "select-main-category".tr(),
                         onTap: () async {

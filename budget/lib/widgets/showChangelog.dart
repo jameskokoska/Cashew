@@ -22,6 +22,9 @@ import 'listItem.dart';
 
 String getChangelogString() {
   return """
+    < 4.6.7
+    Hot fix for creating main categories
+    Hot fix for default selected wallet
     < 4.6.6
     Bottom safe area padding for scroll to top button
     Fixed today indicator loading in late when measuring size

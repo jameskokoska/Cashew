@@ -1593,7 +1593,8 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                       items:
                                           Provider.of<AllWallets>(context).list,
                                       getSelected: (TransactionWallet wallet) {
-                                        return selectedWallet == wallet;
+                                        return selectedWallet?.walletPk ==
+                                            wallet.walletPk;
                                       },
                                       onSelected: (TransactionWallet wallet) {
                                         setSelectedWalletPk(wallet);

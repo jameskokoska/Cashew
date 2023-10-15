@@ -687,7 +687,7 @@ class _SelectAmountState extends State<SelectAmount> {
                           );
                         },
                         getSelected: (TransactionWallet wallet) {
-                          return selectedWallet == wallet;
+                          return selectedWallet?.walletPk == wallet.walletPk;
                         },
                         onSelected: (TransactionWallet wallet) {
                           if (widget.setSelectedWallet != null)
