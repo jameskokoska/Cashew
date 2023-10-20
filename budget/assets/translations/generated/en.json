@@ -765,5 +765,7 @@
   "make-main-category-description": "This will move all transactions from the main category to a new main category",
   "main-category-created": "Main Category Created",
   "no-folder-selected": "No folder selected",
-  "clear-selection": "Clear Selection"
+  "clear-selection": "Clear Selection",
+  "view-all-days": "View All Days",
+  "view-to-today": "View To Today"
 }

@@ -765,5 +765,7 @@
   "make-main-category-description": "这将把所有交易从主要类别移动到新的主要类别",
   "main-category-created": "创建的主要类别",
   "no-folder-selected": "未选择文件夹",
-  "clear-selection": "清空选项"
+  "clear-selection": "清空选项",
+  "view-all-days": "全天查看",
+  "view-to-today": "今天查看"
 }

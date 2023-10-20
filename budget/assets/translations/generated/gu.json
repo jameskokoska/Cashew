@@ -765,5 +765,7 @@
   "make-main-category-description": "આ તમામ વ્યવહારોને મુખ્ય કેટેગરીથી નવી મુખ્ય કેટેગરીમાં ખસેડશે",
   "main-category-created": "મુખ્ય કેટેગરી",
   "no-folder-selected": "કોઈ ફોલ્ડર પસંદ થયેલ નથી",
-  "clear-selection": "સ્પષ્ટ પસંદગી"
+  "clear-selection": "સ્પષ્ટ પસંદગી",
+  "view-all-days": "બધા દિવસો જુઓ",
+  "view-to-today": "આજે જુઓ"
 }

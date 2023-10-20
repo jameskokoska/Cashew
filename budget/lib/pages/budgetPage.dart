@@ -1018,22 +1018,39 @@ class _BudgetLineGraphState extends State<BudgetLineGraph> {
 
               //can be optimized...
               double totalForDay = 0;
+
               for (Transaction transaction in snapshot.data![snapshotIndex]) {
                 if (widget.selectedCategory == null ||
                     transaction.categoryFk ==
                         widget.selectedCategory?.categoryPk ||
                     transaction.subCategoryFk ==
-                        widget.selectedCategory?.categoryPk) if (indexDay
-                            .year ==
-                        transaction.dateCreated.year &&
-                    indexDay.month == transaction.dateCreated.month &&
-                    indexDay.day == transaction.dateCreated.day) {
-                  totalForDay += (transaction.amount *
-                          (amountRatioToPrimaryCurrencyGivenPk(
-                                  Provider.of<AllWallets>(context),
-                                  transaction.walletFk) ??
-                              0)) *
-                      -1;
+                        widget.selectedCategory?.categoryPk) {
+                  if (indexDay.year == transaction.dateCreated.year &&
+                      indexDay.month == transaction.dateCreated.month &&
+                      indexDay.day == transaction.dateCreated.day) {
+                    totalForDay += (transaction.amount *
+                            (amountRatioToPrimaryCurrencyGivenPk(
+                                    Provider.of<AllWallets>(context),
+                                    transaction.walletFk) ??
+                                0)) *
+                        -1;
+                  }
+
+                  // If it is the first day of a custom time period and it is a added budget
+                  // We want to get the total spent of all before this day!
+                  if (indexDay == dateTimeRanges[0].start &&
+                      widget.budget.addedTransactionsOnly &&
+                      widget.budget.reoccurrence == BudgetReoccurence.custom &&
+                      indexDay.millisecondsSinceEpoch >
+                          transaction.dateCreated.millisecondsSinceEpoch) {
+                    print(indexDay);
+                    totalForDay += (transaction.amount *
+                            (amountRatioToPrimaryCurrencyGivenPk(
+                                    Provider.of<AllWallets>(context),
+                                    transaction.walletFk) ??
+                                0)) *
+                        -1;
+                  }
                 }
               }
               cumulativeTotal += totalForDay;
@@ -1096,14 +1113,17 @@ class _BudgetLineGraphState extends State<BudgetLineGraph> {
                                       .millisecondsSinceEpoch)),
                 ),
               ),
-              if (widget.isPastBudget == false)
+              if (widget.isPastBudget == false &&
+                  widget.budgetRange.end.isAfter(DateTime.now()))
                 Positioned(
                   right: 0,
                   top: 0,
                   child: Transform.translate(
                     offset: Offset(5, -5),
                     child: Tooltip(
-                      message: "view-more".tr(),
+                      message: showCompressedView
+                          ? "view-all-days".tr()
+                          : "view-to-today".tr(),
                       child: IconButton(
                         color: widget.budgetColorScheme.primary,
                         icon: Transform.rotate(

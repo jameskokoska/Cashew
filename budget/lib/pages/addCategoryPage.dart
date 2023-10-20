@@ -699,6 +699,9 @@ class _AddCategoryPageState extends State<AddCategoryPage>
                               sizePadding: 20,
                               borderRadius: 1000,
                               category: category,
+                              onLongPress: null,
+                              onTap: null,
+                              canEditByLongPress: false,
                             ),
                             SizedBox(width: 15),
                             Expanded(
@@ -1233,11 +1236,28 @@ class SelectIsSubcategory extends StatelessWidget {
                   transitionWhenFilled: false,
                   alignLeft: true,
                   alignBeside: true,
-                  padding: EdgeInsets.only(left: 20, right: 20, top: 20),
+                  padding: EdgeInsets.only(left: 20, right: 12, top: 15),
                   text: "subcategory".tr(),
                   iconData: appStateSettings["outlinedIcons"]
                       ? Icons.move_to_inbox_outlined
                       : Icons.move_to_inbox_rounded,
+                  infoButton: Transform.scale(
+                    scale: 1.3,
+                    child: IconButton(
+                      padding: EdgeInsets.zero,
+                      visualDensity: VisualDensity.compact,
+                      icon: Icon(
+                        Icons.info_outlined,
+                        size: 19,
+                      ),
+                      onPressed: () {
+                        openBottomSheet(
+                          context,
+                          SampleSubcategoriesPopup(),
+                        );
+                      },
+                    ),
+                  ),
                   onTap: () {
                     onTap(false);
                   },
@@ -1269,6 +1289,217 @@ class SelectIsSubcategory extends StatelessWidget {
             ],
           ),
         ],
+      ),
+    );
+  }
+}
+
+class SampleSubcategoriesPopup extends StatelessWidget {
+  const SampleSubcategoriesPopup({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return PopupFramework(
+      title: "subcategories".tr(),
+      subtitle:
+          "Create subcategories to further organize your transactions the way you want it",
+      child: Column(
+        children: [
+          TextFont(
+            text: "Examples",
+            fontSize: 16,
+            textAlign: TextAlign.center,
+          ),
+          SizedBox(height: 8),
+          FakeCategoryEntryPlaceholder(
+            iconName: "coffee.png",
+            categoryName: "Drinks",
+            showAsSubcategory: false,
+          ),
+          Wrap(
+            direction: Axis.horizontal,
+            runAlignment: WrapAlignment.center,
+            alignment: WrapAlignment.center,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            children: [
+              FakeCategoryEntryPlaceholder(
+                iconName: "coffee-cup.png",
+                categoryName: "Coffee",
+              ),
+              FakeCategoryEntryPlaceholder(
+                iconName: "bubble-tea.png",
+                categoryName: "Bubble Tea",
+              ),
+              FakeCategoryEntryPlaceholder(
+                iconName: "orange-juice.png",
+                categoryName: "Soda",
+              ),
+            ],
+          ),
+          HorizontalBreak(),
+          SizedBox(height: 10),
+          FakeCategoryEntryPlaceholder(
+            iconName: "theatre.png",
+            categoryName: "Entertainment",
+            showAsSubcategory: false,
+          ),
+          Wrap(
+            direction: Axis.horizontal,
+            runAlignment: WrapAlignment.center,
+            alignment: WrapAlignment.center,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            children: [
+              FakeCategoryEntryPlaceholder(
+                iconName: "popcorn.png",
+                categoryName: "Movies",
+              ),
+              FakeCategoryEntryPlaceholder(
+                iconName: "music.png",
+                categoryName: "Music",
+              ),
+              FakeCategoryEntryPlaceholder(
+                iconName: "bowling.png",
+                categoryName: "Activities",
+              ),
+            ],
+          ),
+          HorizontalBreak(),
+          SizedBox(height: 10),
+          FakeCategoryEntryPlaceholder(
+            iconName: "car.png",
+            categoryName: "Car",
+            showAsSubcategory: false,
+          ),
+          Wrap(
+            direction: Axis.horizontal,
+            runAlignment: WrapAlignment.center,
+            alignment: WrapAlignment.center,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            children: [
+              FakeCategoryEntryPlaceholder(
+                iconName: "gas-station.png",
+                categoryName: "Gas",
+              ),
+              FakeCategoryEntryPlaceholder(
+                iconName: "gears.png",
+                categoryName: "Maintenance",
+              ),
+              FakeCategoryEntryPlaceholder(
+                iconName: "bill.png",
+                categoryName: "Insurance",
+              ),
+            ],
+          ),
+          HorizontalBreak(),
+          SizedBox(height: 10),
+          FakeCategoryEntryPlaceholder(
+            iconName: "flower.png",
+            categoryName: "Beauty",
+            showAsSubcategory: false,
+          ),
+          Wrap(
+            direction: Axis.horizontal,
+            runAlignment: WrapAlignment.center,
+            alignment: WrapAlignment.center,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            children: [
+              FakeCategoryEntryPlaceholder(
+                iconName: "barber.png",
+                categoryName: "Haircut",
+              ),
+              FakeCategoryEntryPlaceholder(
+                iconName: "makeup(1).png",
+                categoryName: "Touchups",
+              ),
+              FakeCategoryEntryPlaceholder(
+                iconName: "tshirt.png",
+                categoryName: "Clothing",
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class FakeCategoryEntryPlaceholder extends StatelessWidget {
+  const FakeCategoryEntryPlaceholder({
+    required this.iconName,
+    required this.categoryName,
+    this.showAsSubcategory = true,
+    super.key,
+  });
+
+  final String iconName;
+  final String categoryName;
+  final bool showAsSubcategory;
+
+  @override
+  Widget build(BuildContext context) {
+    Widget categoryIcon = CategoryIcon(
+      categoryPk: "-1",
+      noBackground: true,
+      category: TransactionCategory(
+        categoryPk: "-1",
+        name: "",
+        dateCreated: DateTime.now(),
+        dateTimeModified: null,
+        order: 0,
+        income: false,
+        iconName: iconName,
+        colour: toHexString(Colors.red),
+        emojiIconName: null,
+      ),
+      size: 40,
+      sizePadding: showAsSubcategory ? 0 : 20,
+      canEditByLongPress: false,
+    );
+    if (showAsSubcategory) {
+      return Padding(
+        padding: EdgeInsets.only(
+          bottom: 10,
+          left: 5,
+          right: 5,
+        ),
+        child: Tappable(
+          color:
+              Theme.of(context).colorScheme.secondaryContainer.withOpacity(0.7),
+          borderRadius: 10,
+          onTap: () {},
+          child: Padding(
+            padding: const EdgeInsets.all(12),
+            child: Column(
+              children: [
+                categoryIcon,
+                TextFont(
+                  text: categoryName,
+                  fontSize: 16,
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
+    return Padding(
+      padding: EdgeInsets.only(
+        bottom: 10,
+      ),
+      child: Tappable(
+        color: Theme.of(context).colorScheme.secondaryContainer,
+        borderRadius: 15,
+        onTap: () {},
+        child: Row(
+          children: [
+            categoryIcon,
+            TextFont(
+              text: categoryName,
+              fontWeight: FontWeight.bold,
+              fontSize: 20,
+            ),
+          ],
+        ),
       ),
     );
   }

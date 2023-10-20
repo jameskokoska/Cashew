@@ -765,5 +765,7 @@
   "make-main-category-description": "이것은 모든 트랜잭션이 기본 범주에서 새로운 주요 범주로 이동합니다.",
   "main-category-created": "주요 범주가 생성되었습니다",
   "no-folder-selected": "폴더가 선택되지 않았습니다",
-  "clear-selection": "명확한 선택"
+  "clear-selection": "명확한 선택",
+  "view-all-days": "하루 종일보십시오",
+  "view-to-today": "오늘까지"
 }

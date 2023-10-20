@@ -765,5 +765,7 @@
   "make-main-category-description": "Αυτό θα μεταφέρει όλες τις συναλλαγές από την κύρια κατηγορία σε μια νέα κύρια κατηγορία",
   "main-category-created": "Η κύρια κατηγορία δημιουργήθηκε",
   "no-folder-selected": "Δεν επιλέχθηκε φάκελος",
-  "clear-selection": "Καθαρή επιλογή"
+  "clear-selection": "Καθαρή επιλογή",
+  "view-all-days": "Δείτε όλες τις ημέρες",
+  "view-to-today": "Προβολή μέχρι σήμερα"
 }

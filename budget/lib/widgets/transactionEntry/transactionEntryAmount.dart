@@ -73,29 +73,22 @@ class TransactionEntryAmount extends StatelessWidget {
         ),
         AnimatedSizeSwitcher(
           child: showOtherCurrency
-              ? Padding(
+              ? TextFont(
                   key: ValueKey(1),
-                  padding: const EdgeInsets.only(top: 1),
-                  child: TextFont(
-                    text: convertToMoney(
-                      Provider.of<AllWallets>(context),
-                      transaction.amount.abs(),
-                      decimals: Provider.of<AllWallets>(context)
-                              .indexedByPk[transaction.walletFk]
-                              ?.decimals ??
-                          2,
-                      currencyKey: Provider.of<AllWallets>(context)
-                          .indexedByPk[transaction.walletFk]
-                          ?.currency,
-                      addCurrencyName: true,
-                    ),
-                    fontSize: 12,
-                    textColor: transaction.paid
-                        ? getTransactionAmountColor(context, transaction)
-                            .withOpacity(0.6)
-                        : getTransactionAmountColor(context, transaction)
-                            .withOpacity(0.35),
+                  text: convertToMoney(
+                    Provider.of<AllWallets>(context),
+                    transaction.amount.abs(),
+                    decimals: Provider.of<AllWallets>(context)
+                            .indexedByPk[transaction.walletFk]
+                            ?.decimals ??
+                        2,
+                    currencyKey: Provider.of<AllWallets>(context)
+                        .indexedByPk[transaction.walletFk]
+                        ?.currency,
+                    addCurrencyName: true,
                   ),
+                  fontSize: 12,
+                  textColor: getTransactionAmountColor(context, transaction),
                 )
               : Container(
                   key: ValueKey(0),

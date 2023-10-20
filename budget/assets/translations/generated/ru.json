@@ -765,5 +765,7 @@
   "make-main-category-description": "Это перенесет все транзакции из основной категории в новую основную категорию",
   "main-category-created": "Основная категория создана",
   "no-folder-selected": "Не выбрана папка",
-  "clear-selection": "Очистить выбор"
+  "clear-selection": "Очистить выбор",
+  "view-all-days": "Просмотреть все дни",
+  "view-to-today": "Посмотреть сегодня"
 }

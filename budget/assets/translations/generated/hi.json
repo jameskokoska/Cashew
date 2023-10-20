@@ -765,5 +765,7 @@
   "make-main-category-description": "यह मुख्य श्रेणी से सभी लेनदेन को एक नई मुख्य श्रेणी में ले जाएगा",
   "main-category-created": "मुख्य श्रेणी बनाई गई",
   "no-folder-selected": "कोई फ़ोल्डर चयनित नहीं",
-  "clear-selection": "चयन साफ़ करें"
+  "clear-selection": "चयन साफ़ करें",
+  "view-all-days": "सभी दिन देखें",
+  "view-to-today": "आज का दृश्य"
 }

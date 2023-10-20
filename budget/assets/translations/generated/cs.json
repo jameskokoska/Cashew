@@ -765,5 +765,7 @@
   "make-main-category-description": "Tím se přesunou všechny transakce z hlavní kategorie do nové hlavní kategorie",
   "main-category-created": "Vytvořená hlavní kategorie",
   "no-folder-selected": "Žádná vybraná složka",
-  "clear-selection": "Jasný výběr"
+  "clear-selection": "Jasný výběr",
+  "view-all-days": "Zobrazit všechny dny",
+  "view-to-today": "Zobrazit dnes"
 }

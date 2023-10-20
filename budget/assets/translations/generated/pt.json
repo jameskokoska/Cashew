@@ -765,5 +765,7 @@
   "make-main-category-description": "Isso moverá todas as transações da categoria principal para uma nova categoria principal",
   "main-category-created": "Categoria principal criada",
   "no-folder-selected": "Nenhuma pasta selecionada",
-  "clear-selection": "Seleção clara"
+  "clear-selection": "Seleção clara",
+  "view-all-days": "Ver todos os dias",
+  "view-to-today": "Vista para hoje"
 }

@@ -765,5 +765,7 @@
   "make-main-category-description": "ഇത് പ്രധാന വിഭാഗത്തിൽ നിന്ന് ഒരു പുതിയ പ്രധാന വിഭാഗത്തിലേക്ക് നീക്കും",
   "main-category-created": "സൃഷ്ടിച്ച പ്രധാന വിഭാഗം",
   "no-folder-selected": "തിരഞ്ഞെടുത്ത ഫോൾഡുകളൊന്നുമില്ല",
-  "clear-selection": "തിരഞ്ഞെടുത്തത്"
+  "clear-selection": "തിരഞ്ഞെടുത്തത്",
+  "view-all-days": "എല്ലാ ദിവസവും കാണുക",
+  "view-to-today": "ഇന്ന് കാണുക"
 }

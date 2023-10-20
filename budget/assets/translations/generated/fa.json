@@ -765,5 +765,7 @@
   "make-main-category-description": "این همه معاملات را از دسته اصلی به یک دسته اصلی جدید منتقل می کند",
   "main-category-created": "دسته اصلی ایجاد شده است",
   "no-folder-selected": "هیچ پوشه ای انتخاب نشده است",
-  "clear-selection": "انتخاب روشن"
+  "clear-selection": "انتخاب روشن",
+  "view-all-days": "مشاهده همه روزها",
+  "view-to-today": "مشاهده به امروز"
 }

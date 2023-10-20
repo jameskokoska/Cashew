@@ -260,6 +260,11 @@ class _BudgetHistoryLineGraphState extends State<BudgetHistoryLineGraph> {
               sideTitles: SideTitles(
                 interval: null,
                 showTitles: true,
+                reservedSize: widget.budget.reoccurrence ==
+                            BudgetReoccurence.weekly ||
+                        widget.budget.reoccurrence == BudgetReoccurence.daily
+                    ? 35
+                    : null,
                 getTitlesWidget: (value, meta) {
                   DateTime startDate = widget.dateRanges[0].start;
                   if (widget.spots.length - 1 - value.round() <
@@ -273,22 +278,38 @@ class _BudgetHistoryLineGraphState extends State<BudgetHistoryLineGraph> {
                       value.round().toStringAsFixed(2)) {
                     return Padding(
                       padding: const EdgeInsets.only(top: 8.0),
-                      child: TextFont(
-                        textAlign: TextAlign.center,
-                        fontSize: 13,
-                        text: widget.budget.reoccurrence ==
-                                BudgetReoccurence.monthly
-                            ? DateFormat('MMM', context.locale.toString())
-                                .format(startDate)
-                            : widget.budget.reoccurrence ==
-                                    BudgetReoccurence.yearly
-                                ? DateFormat('yyyy', context.locale.toString())
-                                    .format(startDate)
-                                : DateFormat('MMM', context.locale.toString())
-                                    .format(startDate),
-                        textColor: dynamicPastel(context, widget.color,
-                                amount: 0.8, inverse: true)
-                            .withOpacity(0.5),
+                      child: MediaQuery(
+                        data: MediaQuery.of(context)
+                            .copyWith(textScaleFactor: 1.0),
+                        child: TextFont(
+                          textAlign: TextAlign.center,
+                          fontSize: 13,
+                          text: widget.budget.reoccurrence ==
+                                  BudgetReoccurence.weekly
+                              ? DateFormat('MMM\ndd', context.locale.toString())
+                                  .format(startDate)
+                              : widget.budget.reoccurrence ==
+                                      BudgetReoccurence.daily
+                                  ? DateFormat(
+                                          'MMM\ndd', context.locale.toString())
+                                      .format(startDate)
+                                  : widget.budget.reoccurrence ==
+                                          BudgetReoccurence.monthly
+                                      ? DateFormat(
+                                              'MMM', context.locale.toString())
+                                          .format(startDate)
+                                      : widget.budget.reoccurrence ==
+                                              BudgetReoccurence.yearly
+                                          ? DateFormat('yyyy',
+                                                  context.locale.toString())
+                                              .format(startDate)
+                                          : DateFormat('MMM',
+                                                  context.locale.toString())
+                                              .format(startDate),
+                          textColor: dynamicPastel(context, widget.color,
+                                  amount: 0.8, inverse: true)
+                              .withOpacity(0.5),
+                        ),
                       ),
                     );
                   }

@@ -765,5 +765,7 @@
   "make-main-category-description": "Spowoduje to przeniesienie wszystkich transakcji z głównej kategorii do nowej kategorii głównej",
   "main-category-created": "Utworzona kategoria główna",
   "no-folder-selected": "Brak folderu",
-  "clear-selection": "Jasny wybór"
+  "clear-selection": "Jasny wybór",
+  "view-all-days": "Zobacz wszystkie dni",
+  "view-to-today": "Zobacz dzisiaj"
 }

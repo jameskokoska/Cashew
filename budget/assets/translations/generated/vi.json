@@ -765,5 +765,7 @@
   "make-main-category-description": "Điều này sẽ chuyển tất cả các giao dịch từ danh mục chính sang danh mục chính mới",
   "main-category-created": "Danh mục chính được tạo ra",
   "no-folder-selected": "Không có thư mục được chọn",
-  "clear-selection": "Lựa chọn rõ ràng"
+  "clear-selection": "Lựa chọn rõ ràng",
+  "view-all-days": "Xem tất cả các ngày",
+  "view-to-today": "Xem cho ngày hôm nay"
 }

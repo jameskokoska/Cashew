@@ -765,5 +765,7 @@
   "make-main-category-description": "これにより、すべてのトランザクションがメインカテゴリから新しいメインカテゴリに移動します",
   "main-category-created": "作成されたメインカテゴリ",
   "no-folder-selected": "フォルダーが選択されていません",
-  "clear-selection": "明確な選択"
+  "clear-selection": "明確な選択",
+  "view-all-days": "すべての日を見る",
+  "view-to-today": "今日を見る"
 }

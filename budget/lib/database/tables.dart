@@ -1334,6 +1334,7 @@ class FinanceDatabase extends _$FinanceDatabase {
 
   (Stream<List<Transaction>>, Future<List<Transaction>>) getAllSubscriptions() {
     final query = select(transactions)
+      ..orderBy([(t) => OrderingTerm.asc(t.dateCreated)])
       ..where(
         (transaction) =>
             transactions.paid.equals(false) &

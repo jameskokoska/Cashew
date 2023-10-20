@@ -765,5 +765,7 @@
   "make-main-category-description": "Dette vil flytte alle transaktioner fra hovedkategorien til en ny hovedkategori",
   "main-category-created": "Hovedkategori oprettet",
   "no-folder-selected": "Ingen mappe valgt",
-  "clear-selection": "Klar valg"
+  "clear-selection": "Klar valg",
+  "view-all-days": "Se alle dage",
+  "view-to-today": "Se til i dag"
 }

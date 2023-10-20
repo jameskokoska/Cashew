@@ -565,7 +565,7 @@ class ThinProgress extends StatelessWidget {
                 ],
               ),
             ),
-            if (dotProgress != null)
+            if (dotProgress != null && dotProgress! >= 0 && dotProgress! <= 1)
               Positioned(
                 left: x - 5,
                 top: -3 / 2,

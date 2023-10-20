@@ -765,5 +765,7 @@
   "make-main-category-description": "Ini akan memindahkan semua transaksi dari kategori utama ke kategori utama baru",
   "main-category-created": "Kategori utama dibuat",
   "no-folder-selected": "Tidak ada folder yang dipilih",
-  "clear-selection": "Seleksi yang jelas"
+  "clear-selection": "Seleksi yang jelas",
+  "view-all-days": "Lihat sepanjang hari",
+  "view-to-today": "Lihat ke hari ini"
 }

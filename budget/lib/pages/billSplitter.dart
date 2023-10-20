@@ -25,6 +25,7 @@ import 'package:budget/widgets/saveBottomButton.dart';
 import 'package:budget/widgets/selectAmount.dart';
 import 'package:budget/widgets/selectCategory.dart';
 import 'package:budget/widgets/settingsContainers.dart';
+import 'package:budget/widgets/sliverStickyLabelDivider.dart';
 import 'package:budget/widgets/textInput.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -1282,36 +1283,28 @@ class SummaryPage extends StatelessWidget {
           disabled: false,
         ),
       ),
-      listWidgets: splitPersonSummaries.length <= 0
-          ? [NoResults(message: "missing-data".tr())]
-          : [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    TextFont(
-                      text: "name".tr(),
-                      fontSize: 17,
-                      textColor: getColor(context, "textLight"),
-                    ),
-                    TextFont(
-                      text: "owed-to-you".tr(),
-                      fontSize: 17,
-                      textColor: getColor(context, "textLight"),
-                      textAlign: TextAlign.right,
-                    )
+      slivers: [
+        SliverStickyLabelDivider(
+          info: "name".tr(),
+          extraInfo: "owed-to-you".tr(),
+          sliver: ColumnSliver(
+            children: splitPersonSummaries.length <= 0
+                ? [NoResults(message: "missing-data".tr())]
+                : [
+                    for (int i = 0; i < splitPersonSummaries.length; i++)
+                      SummaryPersonRowEntry(
+                        splitPersonName:
+                            splitPersonSummaries[i].splitPerson.name,
+                        total: splitPersonSummaries[i].total,
+                        billSplitterItems:
+                            splitPersonSummaries[i].billSplitterItems,
+                        index: i,
+                      ),
+                    SizedBox(height: 50),
                   ],
-                ),
-              ),
-              for (int i = 0; i < splitPersonSummaries.length; i++)
-                SummaryPersonRowEntry(
-                  splitPersonName: splitPersonSummaries[i].splitPerson.name,
-                  total: splitPersonSummaries[i].total,
-                  billSplitterItems: splitPersonSummaries[i].billSplitterItems,
-                  index: i,
-                ),
-            ],
+          ),
+        ),
+      ],
       horizontalPadding: getHorizontalPaddingConstrained(context),
     );
   }

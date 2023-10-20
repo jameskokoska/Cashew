@@ -765,5 +765,7 @@
   "make-main-category-description": "ఇది అన్ని లావాదేవీలను ప్రధాన వర్గం నుండి కొత్త ప్రధాన వర్గానికి తరలిస్తుంది",
   "main-category-created": "ప్రధాన వర్గం సృష్టించబడింది",
   "no-folder-selected": "ఫోల్డర్ ఎంచుకోలేదు",
-  "clear-selection": "స్పష్టమైన ఎంపిక"
+  "clear-selection": "స్పష్టమైన ఎంపిక",
+  "view-all-days": "అన్ని రోజులు చూడండి",
+  "view-to-today": "ఈ రోజు చూడండి"
 }

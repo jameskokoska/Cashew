@@ -17,6 +17,7 @@ class OutlinedButtonStacked extends StatelessWidget {
     this.alignBeside,
     this.filled = false,
     this.transitionWhenFilled = true,
+    this.infoButton,
   });
   final String text;
   final void Function()? onTap;
@@ -28,6 +29,7 @@ class OutlinedButtonStacked extends StatelessWidget {
   final bool? alignBeside;
   final bool filled;
   final bool transitionWhenFilled;
+  final Widget? infoButton;
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -81,6 +83,7 @@ class OutlinedButtonStacked extends StatelessWidget {
                                     fontWeight: FontWeight.bold,
                                     maxLines: 2,
                                   ),
+                                  infoButton ?? SizedBox.shrink()
                                 ],
                               )
                             : Row(
@@ -92,7 +95,7 @@ class OutlinedButtonStacked extends StatelessWidget {
                                         Theme.of(context).colorScheme.secondary,
                                   ),
                                   SizedBox(width: 10),
-                                  Flexible(
+                                  Expanded(
                                     child: TextFont(
                                       text: text,
                                       fontSize: 22,
@@ -100,6 +103,7 @@ class OutlinedButtonStacked extends StatelessWidget {
                                       maxLines: 2,
                                     ),
                                   ),
+                                  infoButton ?? SizedBox.shrink(),
                                 ],
                               ),
                         afterWidget == null
@@ -110,9 +114,9 @@ class OutlinedButtonStacked extends StatelessWidget {
                       ],
                     ),
                   ),
-                  if (afterWidgetPadding != null)
+                  if (afterWidget != null)
                     Padding(
-                      padding: afterWidgetPadding!,
+                      padding: afterWidgetPadding ?? EdgeInsets.zero,
                       child: afterWidget ?? SizedBox.shrink(),
                     ),
                 ],

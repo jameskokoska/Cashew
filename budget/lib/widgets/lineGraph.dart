@@ -203,7 +203,9 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
               );
             },
             reservedSize: 28,
-            interval: widget.maxPair.x / (getIsFullScreen(context) ? 6 : 4),
+            interval: widget.maxPair.x / (getIsFullScreen(context) ? 6 : 4) == 0
+                ? 5
+                : widget.maxPair.x / (getIsFullScreen(context) ? 6 : 4),
           ),
         ),
         leftTitles: AxisTitles(
@@ -393,7 +395,11 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
         show: true,
         verticalInterval:
             ((widget.maxPair.x).abs() + (widget.minPair.x).abs()) /
-                (getIsFullScreen(context) ? 6 : 4),
+                        (getIsFullScreen(context) ? 6 : 4) ==
+                    0
+                ? 5
+                : ((widget.maxPair.x).abs() + (widget.minPair.x).abs()) /
+                    (getIsFullScreen(context) ? 6 : 4),
         // This interval needs more work, maybe follow the one from budgetHistoryLineGraph.dart
         // horizontalInterval:
         //     ((widget.maxPair.y).abs() + (widget.minPair.y).abs()) /
@@ -644,7 +650,7 @@ class LineChartWrapper extends StatelessWidget {
     Pair maxPair = getMaxPoint(points);
     Pair minPair = getMinPoint(points);
     if (maxPair.y == minPair.y) {
-      minPair.y = minPair.y - 1;
+      // minPair.y = minPair.y - 1;
       maxPair.y = maxPair.y + 1;
     }
     return ClipRect(

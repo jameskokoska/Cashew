@@ -184,8 +184,7 @@ class _EditCategoriesPageState extends State<EditCategoriesPage> {
                                         AddCategoryPage(
                                           category: category,
                                           routesToPopAfterDelete:
-                                              RoutesToPopAfterDelete
-                                                  .PreventDelete,
+                                              RoutesToPopAfterDelete.One,
                                         ),
                                       );
                                     },

@@ -3866,4 +3866,20 @@ List<IconForCategory> iconObjects = [
     ],
     mostLikelyCategoryName: "Grill",
   ),
+  IconForCategory(
+    icon: "theatre.png",
+    tags: [
+      "theatre",
+      "theater",
+      "performance",
+      "arts",
+      "drama",
+      "entertainment",
+      "stage",
+      "play",
+      "show",
+      "acting",
+    ],
+    mostLikelyCategoryName: "Theatre",
+  ),
 ];

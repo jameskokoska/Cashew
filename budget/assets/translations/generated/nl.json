@@ -765,5 +765,7 @@
   "make-main-category-description": "Dit zal alle transacties van de hoofdcategorie verplaatsen naar een nieuwe hoofdcategorie",
   "main-category-created": "Hoofdcategorie gemaakt",
   "no-folder-selected": "Geen map geselecteerd",
-  "clear-selection": "Duidelijke selectie"
+  "clear-selection": "Duidelijke selectie",
+  "view-all-days": "Bekijk alle dagen",
+  "view-to-today": "Bekijk vandaag"
 }

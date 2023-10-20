@@ -765,5 +765,7 @@
   "make-main-category-description": "Ez az összes tranzakciót a fő kategóriából egy új fő kategóriába mozgatja",
   "main-category-created": "A létrehozott fő kategória",
   "no-folder-selected": "Nincs kiválasztva mappa",
-  "clear-selection": "Világos kiválasztás"
+  "clear-selection": "Világos kiválasztás",
+  "view-all-days": "Minden nap megtekintése",
+  "view-to-today": "Kilátás a mai napig"
 }

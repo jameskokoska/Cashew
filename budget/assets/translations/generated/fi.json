@@ -765,5 +765,7 @@
   "make-main-category-description": "Tämä siirtää kaikki transaktiot pääluokasta uuteen pääluokkaan",
   "main-category-created": "Pääluokka luotu",
   "no-folder-selected": "Ei kansiota valittu",
-  "clear-selection": "Tyhjennä valinta"
+  "clear-selection": "Tyhjennä valinta",
+  "view-all-days": "Näytä kaikki päivät",
+  "view-to-today": "Näytä tänään"
 }
