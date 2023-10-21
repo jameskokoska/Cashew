@@ -206,29 +206,8 @@ class SelectedTransactionsAppBar extends StatelessWidget {
                                   : Icons.file_copy_rounded,
                               iconScale: 0.97,
                               action: () async {
-                                Transaction transaction = await database
-                                    .getTransactionFromPk(value[pageID]!.first);
-                                await database.createOrUpdateTransaction(
-                                  transaction,
-                                  insert: true,
-                                );
-                                String transactionName = transaction.name;
-                                if (transactionName.trim() == "") {
-                                  transactionName =
-                                      (await database.getCategoryInstance(
-                                              transaction.categoryFk))
-                                          .name;
-                                }
-                                openSnackbar(
-                                  SnackbarMessage(
-                                    icon: appStateSettings["outlinedIcons"]
-                                        ? Icons.file_copy_outlined
-                                        : Icons.file_copy_rounded,
-                                    title: "created-copy".tr(),
-                                    description:
-                                        "copied".tr() + " " + transactionName,
-                                  ),
-                                );
+                                await duplicateTransaction(
+                                    context, value[pageID]!.first);
                                 globalSelectedID.value[pageID] = [];
                                 globalSelectedID.notifyListeners();
                               },
@@ -446,6 +425,28 @@ class SelectedTransactionsAppBar extends StatelessWidget {
       },
     );
   }
+}
+
+Future duplicateTransaction(BuildContext context, String transactionPk) async {
+  Transaction transaction = await database.getTransactionFromPk(transactionPk);
+  await database.createOrUpdateTransaction(
+    transaction,
+    insert: true,
+  );
+  String transactionName = transaction.name;
+  if (transactionName.trim() == "") {
+    transactionName =
+        (await database.getCategoryInstance(transaction.categoryFk)).name;
+  }
+  openSnackbar(
+    SnackbarMessage(
+      icon: appStateSettings["outlinedIcons"]
+          ? Icons.file_copy_outlined
+          : Icons.file_copy_rounded,
+      title: "created-copy".tr(),
+      description: "copied".tr() + " " + transactionName,
+    ),
+  );
 }
 
 class EditSelectedTransactions extends StatefulWidget {

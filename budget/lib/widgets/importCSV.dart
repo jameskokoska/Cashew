@@ -72,6 +72,7 @@ class _ImportCSVState extends State<ImportCSV> {
           DecodingResult decoded = await CharsetDetector.autoDecode(fileBytes);
           csvString = decoded.string;
         }
+        print(csvString);
         return csvString;
       } else {
         throw "no-file-selected".tr();
@@ -737,19 +738,22 @@ Future saveSampleCSV() async {
       "Category",
       "Title",
       "Note",
+      "Account",
     ]); // Add first row headers
     csvData.add([
       DateTime.now(),
       "-50",
       "Groceries",
       "Fruits and Vegetables",
-      "Paid with cash"
+      "Paid with cash342",
+      "",
     ]);
     csvData.add([
       DateTime.now(),
       "250",
       "Bills & Fees",
       "Monthly Income",
+      "",
       "",
     ]);
     String csv = ListToCsvConverter().convert(csvData);
@@ -866,7 +870,7 @@ class _ImportingEntriesPopupState extends State<ImportingEntriesPopup> {
 
     String walletFk = "0";
     if (assignedColumns["wallet"]!["setHeaderIndex"] == -1 ||
-        row[assignedColumns["wallet"]!["setHeaderIndex"]] == "") {
+        row[assignedColumns["wallet"]!["setHeaderIndex"]].trim() == "") {
       walletFk = appStateSettings["selectedWalletPk"];
     } else {
       try {

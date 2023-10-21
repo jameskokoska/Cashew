@@ -846,6 +846,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                       children: [
                         SizedBox(height: 5),
                         SelectChips(
+                          allowMultipleSelected: false,
                           extraWidgetAtBeginning: true,
                           extraWidget: Transform.scale(
                             scale: 1.3,

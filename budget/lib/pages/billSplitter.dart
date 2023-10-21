@@ -109,6 +109,7 @@ class BillSplitter extends StatefulWidget {
 class _BillSplitterState extends State<BillSplitter> {
   List<SplitPerson> splitPersons = [];
   List<BillSplitterItem> billSplitterItems = [];
+  double multiplierAmount = 0;
 
   @override
   void initState() {
@@ -116,6 +117,7 @@ class _BillSplitterState extends State<BillSplitter> {
     Future.delayed(Duration.zero, () async {
       splitPersons = await getBillSplitterPersonList();
       billSplitterItems = await getBillSplitterItemList();
+      multiplierAmount = await getMultiplierAmount();
       setState(() {});
     });
   }
@@ -207,6 +209,13 @@ class _BillSplitterState extends State<BillSplitter> {
     return action;
   }
 
+  Future setMultiplierAmount(double amount) async {
+    setState(() {
+      multiplierAmount = amount;
+    });
+    saveMultiplierAmount(amount);
+  }
+
   @override
   Widget build(BuildContext context) {
     return PageFramework(
@@ -244,6 +253,8 @@ class _BillSplitterState extends State<BillSplitter> {
               updateBillSplitterItem: updateBillSplitterItem,
               addPerson: addPerson,
               deletePerson: deletePerson,
+              multiplierAmount: multiplierAmount,
+              setMultiplierAmount: setMultiplierAmount,
             ),
           ),
         ),
@@ -258,7 +269,7 @@ class _BillSplitterState extends State<BillSplitter> {
               double totalCost = 0;
 
               for (BillSplitterItem billSplitterItem in billSplitterItems) {
-                totalCost += billSplitterItem.cost;
+                totalCost += billSplitterItem.cost * multiplierAmount;
 
                 for (SplitPerson splitPerson in billSplitterItem.userAmounts) {
                   double percentOfTotal = billSplitterItem.evenSplit
@@ -266,7 +277,8 @@ class _BillSplitterState extends State<BillSplitter> {
                           ? 0
                           : 1 / billSplitterItem.userAmounts.length
                       : (splitPerson.percent ?? 0) / 100;
-                  double amountSpent = billSplitterItem.cost * percentOfTotal;
+                  double amountSpent =
+                      billSplitterItem.cost * multiplierAmount * percentOfTotal;
 
                   totalAccountedFor += amountSpent;
                 }
@@ -398,6 +410,7 @@ class _BillSplitterState extends State<BillSplitter> {
                       openPage: SummaryPage(
                         billSplitterItems: billSplitterItems,
                         resetBill: resetBill,
+                        multiplierAmount: multiplierAmount,
                       ),
                     ),
                   ),
@@ -417,6 +430,8 @@ class _BillSplitterState extends State<BillSplitter> {
             updateBillSplitterItem: updateBillSplitterItem,
             addPerson: addPerson,
             deletePerson: deletePerson,
+            multiplierAmount: multiplierAmount,
+            setMultiplierAmount: setMultiplierAmount,
           ),
         SizedBox(height: 55),
       ],
@@ -513,6 +528,17 @@ Future<bool> resetBillSplitterItemList() async {
   return true;
 }
 
+Future<double> getMultiplierAmount() async {
+  double? multiplierAmount =
+      sharedPreferences.getDouble("billSplitterMultiplierAmount");
+  return multiplierAmount ?? 1;
+}
+
+Future saveMultiplierAmount(double amount) async {
+  await sharedPreferences.setDouble("billSplitterMultiplierAmount", amount);
+  return;
+}
+
 class BillSplitterItemEntry extends StatelessWidget {
   const BillSplitterItemEntry({
     required this.billSplitterItem,
@@ -523,6 +549,8 @@ class BillSplitterItemEntry extends StatelessWidget {
     required this.updateBillSplitterItem,
     required this.addPerson,
     required this.deletePerson,
+    required this.setMultiplierAmount,
+    required this.multiplierAmount,
     super.key,
   });
   final BillSplitterItem billSplitterItem;
@@ -534,12 +562,17 @@ class BillSplitterItemEntry extends StatelessWidget {
   final Function(BillSplitterItem, int? index) updateBillSplitterItem;
   final bool Function(SplitPerson) addPerson;
   final Function(SplitPerson) deletePerson;
+  final Function(double amount) setMultiplierAmount;
+  final double multiplierAmount;
 
   @override
   Widget build(BuildContext context) {
     double total = 0;
     for (SplitPerson splitPerson in billSplitterItem.userAmounts) {
-      total += (splitPerson.percent ?? 0) / 100 * billSplitterItem.cost;
+      total += (splitPerson.percent ?? 0) /
+          100 *
+          billSplitterItem.cost *
+          multiplierAmount;
     }
     String totalString = convertToMoney(
       Provider.of<AllWallets>(context),
@@ -547,16 +580,16 @@ class BillSplitterItemEntry extends StatelessWidget {
     );
     String originalCostString = convertToMoney(
       Provider.of<AllWallets>(context),
-      billSplitterItem.cost,
+      billSplitterItem.cost * multiplierAmount,
     );
     if (billSplitterItem.evenSplit && billSplitterItem.userAmounts.length > 0) {
       totalString = originalCostString;
     }
     Color? errorColor = totalString == originalCostString
         ? null
-        : total < billSplitterItem.cost
+        : total < billSplitterItem.cost * multiplierAmount
             ? getColor(context, "expenseAmount")
-            : total > billSplitterItem.cost
+            : total > billSplitterItem.cost * multiplierAmount
                 ? getColor(context, "warningOrange")
                 : null;
 
@@ -584,6 +617,8 @@ class BillSplitterItemEntry extends StatelessWidget {
                 updateBillSplitterItem: updateBillSplitterItem,
                 addPerson: addPerson,
                 deletePerson: deletePerson,
+                multiplierAmount: multiplierAmount,
+                setMultiplierAmount: setMultiplierAmount,
               ),
               canReorder: false,
               hideReorder: true,
@@ -631,7 +666,7 @@ class BillSplitterItemEntry extends StatelessWidget {
                               text: " / " +
                                   convertToMoney(
                                     Provider.of<AllWallets>(context),
-                                    billSplitterItem.cost,
+                                    billSplitterItem.cost * multiplierAmount,
                                   ),
                               fontSize: 15,
                               textColor: getColor(context, "textLight"),
@@ -665,8 +700,9 @@ class BillSplitterItemEntry extends StatelessWidget {
                                       ? 0
                                       : 1 / billSplitterItem.userAmounts.length
                                   : (splitPerson.percent ?? 0) / 100;
-                              double amountSpent =
-                                  billSplitterItem.cost * percentOfTotal;
+                              double amountSpent = billSplitterItem.cost *
+                                  multiplierAmount *
+                                  percentOfTotal;
                               if (amountSpent == 0) percentOfTotal = 0;
                               return Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -772,6 +808,8 @@ class AddBillItemPage extends StatefulWidget {
     required this.updateBillSplitterItem,
     required this.addPerson,
     required this.deletePerson,
+    required this.setMultiplierAmount,
+    required this.multiplierAmount,
     super.key,
   });
   final List<SplitPerson> splitPersons;
@@ -783,6 +821,8 @@ class AddBillItemPage extends StatefulWidget {
   final bool Function(SplitPerson) addPerson;
   final Function(SplitPerson) deletePerson;
   final Function(BillSplitterItem, int? index) updateBillSplitterItem;
+  final Function(double amount) setMultiplierAmount;
+  final double multiplierAmount;
 
   @override
   State<AddBillItemPage> createState() => _AddBillItemPageState();
@@ -805,6 +845,7 @@ class _AddBillItemPageState extends State<AddBillItemPage> {
   List<SplitPerson> selectedSplitPersons = [];
   late TextEditingController _titleInputController =
       TextEditingController(text: billSplitterItem.name);
+  late double multiplierAmount = widget.multiplierAmount;
 
   @override
   void initState() {
@@ -916,40 +957,102 @@ class _AddBillItemPageState extends State<AddBillItemPage> {
           ],
           listWidgets: [
             Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 7.5),
-                  child: TappableTextEntry(
-                    title: convertToMoney(
-                      Provider.of<AllWallets>(context),
-                      billSplitterItem.cost,
+                Flexible(
+                  child: IntrinsicWidth(
+                    child: TextInput(
+                      controller: _titleInputController,
+                      labelText: "item-name-placeholder".tr(),
+                      bubbly: false,
+                      onChanged: (text) {
+                        billSplitterItem.name = text;
+                      },
+                      textAlign: TextAlign.center,
+                      padding: EdgeInsets.only(left: 7, right: 7),
+                      fontSize: getIsFullScreen(context) ? 26 : 25,
+                      fontWeight: FontWeight.bold,
+                      topContentPadding: kIsWeb ? 6.8 : 0,
                     ),
-                    placeholder: convertToPercent(0),
-                    showPlaceHolderWhenTextEquals: convertToPercent(0),
-                    onTap: () {
-                      openEnterAmountBottomSheet();
-                    },
-                    fontSize: 27,
-                    padding: EdgeInsets.zero,
-                  ),
-                ),
-                Expanded(
-                  child: TextInput(
-                    controller: _titleInputController,
-                    labelText: "item-name-placeholder".tr(),
-                    bubbly: false,
-                    onChanged: (text) {
-                      billSplitterItem.name = text;
-                    },
-                    padding: EdgeInsets.only(left: 7, right: 7),
-                    fontSize: getIsFullScreen(context) ? 25 : 24,
-                    fontWeight: FontWeight.bold,
-                    topContentPadding: kIsWeb ? 6.8 : 0,
                   ),
                 ),
               ],
             ),
             SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Flexible(
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 7.5),
+                    child: TappableTextEntry(
+                      title: convertToMoney(
+                        Provider.of<AllWallets>(context),
+                        billSplitterItem.cost,
+                      ),
+                      placeholder: convertToPercent(0),
+                      showPlaceHolderWhenTextEquals: convertToPercent(0),
+                      onTap: () {
+                        openEnterAmountBottomSheet();
+                      },
+                      fontSize: 27,
+                      padding: EdgeInsets.zero,
+                    ),
+                  ),
+                ),
+                TextFont(text: "×"),
+                Flexible(
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 7.5),
+                    child: TappableTextEntry(
+                      title: multiplierAmount.toStringAsFixed(2),
+                      placeholder: "1",
+                      showPlaceHolderWhenTextEquals: "1.00",
+                      onTap: () {
+                        openBottomSheet(
+                          context,
+                          fullSnap: true,
+                          PopupFramework(
+                            title: "enter-amount".tr(),
+                            subtitle:
+                                "bill-splitter-multiplier-description".tr(),
+                            child: SelectAmount(
+                              allowZero: true,
+                              allDecimals: true,
+                              convertToMoney: false,
+                              amountPassed: multiplierAmount.toString(),
+                              setSelectedAmount: (amount, __) {
+                                if (amount == 0) {
+                                  widget.setMultiplierAmount(1);
+                                  setState(() {
+                                    multiplierAmount = 1;
+                                  });
+                                } else {
+                                  widget.setMultiplierAmount(amount);
+                                  setState(() {
+                                    multiplierAmount = amount;
+                                  });
+                                }
+                              },
+                              next: () {
+                                print(multiplierAmount);
+                                Navigator.pop(context);
+                              },
+                              nextLabel: "set-amount".tr(),
+                              currencyKey: null,
+                              onlyShowCurrencyIcon: false,
+                            ),
+                          ),
+                        );
+                      },
+                      fontSize: 27,
+                      padding: EdgeInsets.zero,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 15),
             Container(
               decoration: BoxDecoration(
                 borderRadius: getPlatform() == PlatformOS.isIOS
@@ -1218,10 +1321,14 @@ class SplitPersonSummary {
 
 class SummaryPage extends StatelessWidget {
   const SummaryPage(
-      {required this.billSplitterItems, required this.resetBill, super.key});
+      {required this.billSplitterItems,
+      required this.resetBill,
+      required this.multiplierAmount,
+      super.key});
 
   final List<BillSplitterItem> billSplitterItems;
   final Future<DeletePopupAction?> Function() resetBill;
+  final double multiplierAmount;
 
   @override
   Widget build(BuildContext context) {
@@ -1253,7 +1360,8 @@ class SummaryPage extends StatelessWidget {
                 ? 0
                 : 1 / billSplitterItem.userAmounts.length
             : (splitPerson.percent ?? 0) / 100;
-        double amountSpent = billSplitterItem.cost * percentOfTotal;
+        double amountSpent =
+            billSplitterItem.cost * multiplierAmount * percentOfTotal;
         if (amountSpent == 0) percentOfTotal = 0;
         total += amountSpent;
       }
@@ -1278,6 +1386,7 @@ class SummaryPage extends StatelessWidget {
               context,
               splitPersonSummaries,
               resetBill,
+              multiplierAmount,
             );
           },
           disabled: false,
@@ -1299,6 +1408,7 @@ class SummaryPage extends StatelessWidget {
                         billSplitterItems:
                             splitPersonSummaries[i].billSplitterItems,
                         index: i,
+                        multiplierAmount: multiplierAmount,
                       ),
                     SizedBox(height: 50),
                   ],
@@ -1313,7 +1423,8 @@ class SummaryPage extends StatelessWidget {
 Future<bool> generateLoanTransactionsFromBillSummary(
     BuildContext context,
     List<SplitPersonSummary> billSummary,
-    Future<DeletePopupAction?> Function() resetBill) async {
+    Future<DeletePopupAction?> Function() resetBill,
+    double multiplierAmount) async {
   String payee = await openBottomSheet(
     context,
     PopupFramework(
@@ -1377,7 +1488,7 @@ Future<bool> generateLoanTransactionsFromBillSummary(
               ? 0
               : 1 / billSplitterItem.userAmounts.length
           : (splitPerson.percent ?? 0) / 100;
-      amountSpent = billSplitterItem.cost * percentOfTotal;
+      amountSpent = billSplitterItem.cost * multiplierAmount * percentOfTotal;
       amountSpentTotal = amountSpentTotal + amountSpent;
       if (amountSpent == 0) percentOfTotal = 0;
       if (amountSpent == 0) continue;
@@ -1392,7 +1503,7 @@ Future<bool> generateLoanTransactionsFromBillSummary(
               ? (" / " +
                   convertToMoney(
                     Provider.of<AllWallets>(context, listen: false),
-                    billSplitterItem.cost,
+                    billSplitterItem.cost * multiplierAmount,
                   ))
               : "");
       note += "\n";
@@ -1438,12 +1549,14 @@ class SummaryPersonRowEntry extends StatefulWidget {
     required this.total,
     required this.billSplitterItems,
     required this.index,
+    required this.multiplierAmount,
     super.key,
   });
   final String splitPersonName;
   final double total;
   final List<BillSplitterItem> billSplitterItems;
   final int index;
+  final double multiplierAmount;
 
   @override
   State<SummaryPersonRowEntry> createState() => _SummaryPersonRowEntryState();
@@ -1551,8 +1664,9 @@ class _SummaryPersonRowEntryState extends State<SummaryPersonRowEntry> {
                                         : 1 /
                                             billSplitterItem.userAmounts.length
                                     : (splitPerson.percent ?? 0) / 100;
-                                double amountSpent =
-                                    billSplitterItem.cost * percentOfTotal;
+                                double amountSpent = billSplitterItem.cost *
+                                    widget.multiplierAmount *
+                                    percentOfTotal;
                                 if (amountSpent == 0) percentOfTotal = 0;
                                 return Padding(
                                   padding: const EdgeInsets.only(right: 15),

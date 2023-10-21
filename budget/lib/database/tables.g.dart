@@ -1862,6 +1862,15 @@ class $TransactionsTable extends Transactions
       requiredDuringInsert: false,
       defaultConstraints: GeneratedColumn.constraintIsAlways(
           'REFERENCES objectives (objective_pk)'));
+  static const VerificationMeta _budgetFksExcludeMeta =
+      const VerificationMeta('budgetFksExclude');
+  @override
+  late final GeneratedColumnWithTypeConverter<List<String>?, String>
+      budgetFksExclude = GeneratedColumn<String>(
+              'budget_fks_exclude', aliasedName, true,
+              type: DriftSqlType.string, requiredDuringInsert: false)
+          .withConverter<List<String>?>(
+              $TransactionsTable.$converterbudgetFksExcluden);
   @override
   List<GeneratedColumn> get $columns => [
         transactionPk,
@@ -1890,7 +1899,8 @@ class $TransactionsTable extends Transactions
         sharedStatus,
         sharedDateUpdated,
         sharedReferenceBudgetPk,
-        objectiveFk
+        objectiveFk,
+        budgetFksExclude
       ];
   @override
   String get aliasedName => _alias ?? 'transactions';
@@ -2041,6 +2051,7 @@ class $TransactionsTable extends Transactions
           objectiveFk.isAcceptableOrUnknown(
               data['objective_fk']!, _objectiveFkMeta));
     }
+    context.handle(_budgetFksExcludeMeta, const VerificationResult.success());
     return context;
   }
 
@@ -2113,6 +2124,9 @@ class $TransactionsTable extends Transactions
           data['${effectivePrefix}shared_reference_budget_pk']),
       objectiveFk: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}objective_fk']),
+      budgetFksExclude: $TransactionsTable.$converterbudgetFksExcluden.fromSql(
+          attachedDatabase.typeMapping.read(DriftSqlType.string,
+              data['${effectivePrefix}budget_fks_exclude'])),
     );
   }
 
@@ -2140,6 +2154,10 @@ class $TransactionsTable extends Transactions
       const EnumIndexConverter<SharedStatus>(SharedStatus.values);
   static JsonTypeConverter2<SharedStatus?, int?, int?> $convertersharedStatusn =
       JsonTypeConverter2.asNullable($convertersharedStatus);
+  static TypeConverter<List<String>, String> $converterbudgetFksExclude =
+      const StringListInColumnConverter();
+  static TypeConverter<List<String>?, String?> $converterbudgetFksExcluden =
+      NullAwareTypeConverter.wrap($converterbudgetFksExclude);
 }
 
 class Transaction extends DataClass implements Insertable<Transaction> {
@@ -2170,6 +2188,7 @@ class Transaction extends DataClass implements Insertable<Transaction> {
   final DateTime? sharedDateUpdated;
   final String? sharedReferenceBudgetPk;
   final String? objectiveFk;
+  final List<String>? budgetFksExclude;
   const Transaction(
       {required this.transactionPk,
       required this.name,
@@ -2197,7 +2216,8 @@ class Transaction extends DataClass implements Insertable<Transaction> {
       this.sharedStatus,
       this.sharedDateUpdated,
       this.sharedReferenceBudgetPk,
-      this.objectiveFk});
+      this.objectiveFk,
+      this.budgetFksExclude});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -2270,6 +2290,11 @@ class Transaction extends DataClass implements Insertable<Transaction> {
     if (!nullToAbsent || objectiveFk != null) {
       map['objective_fk'] = Variable<String>(objectiveFk);
     }
+    if (!nullToAbsent || budgetFksExclude != null) {
+      final converter = $TransactionsTable.$converterbudgetFksExcluden;
+      map['budget_fks_exclude'] =
+          Variable<String>(converter.toSql(budgetFksExclude));
+    }
     return map;
   }
 
@@ -2337,6 +2362,9 @@ class Transaction extends DataClass implements Insertable<Transaction> {
       objectiveFk: objectiveFk == null && nullToAbsent
           ? const Value.absent()
           : Value(objectiveFk),
+      budgetFksExclude: budgetFksExclude == null && nullToAbsent
+          ? const Value.absent()
+          : Value(budgetFksExclude),
     );
   }
 
@@ -2382,6 +2410,8 @@ class Transaction extends DataClass implements Insertable<Transaction> {
       sharedReferenceBudgetPk:
           serializer.fromJson<String?>(json['sharedReferenceBudgetPk']),
       objectiveFk: serializer.fromJson<String?>(json['objectiveFk']),
+      budgetFksExclude:
+          serializer.fromJson<List<String>?>(json['budgetFksExclude']),
     );
   }
   @override
@@ -2424,6 +2454,7 @@ class Transaction extends DataClass implements Insertable<Transaction> {
       'sharedReferenceBudgetPk':
           serializer.toJson<String?>(sharedReferenceBudgetPk),
       'objectiveFk': serializer.toJson<String?>(objectiveFk),
+      'budgetFksExclude': serializer.toJson<List<String>?>(budgetFksExclude),
     };
   }
 
@@ -2454,7 +2485,8 @@ class Transaction extends DataClass implements Insertable<Transaction> {
           Value<SharedStatus?> sharedStatus = const Value.absent(),
           Value<DateTime?> sharedDateUpdated = const Value.absent(),
           Value<String?> sharedReferenceBudgetPk = const Value.absent(),
-          Value<String?> objectiveFk = const Value.absent()}) =>
+          Value<String?> objectiveFk = const Value.absent(),
+          Value<List<String>?> budgetFksExclude = const Value.absent()}) =>
       Transaction(
         transactionPk: transactionPk ?? this.transactionPk,
         name: name ?? this.name,
@@ -2504,6 +2536,9 @@ class Transaction extends DataClass implements Insertable<Transaction> {
             ? sharedReferenceBudgetPk.value
             : this.sharedReferenceBudgetPk,
         objectiveFk: objectiveFk.present ? objectiveFk.value : this.objectiveFk,
+        budgetFksExclude: budgetFksExclude.present
+            ? budgetFksExclude.value
+            : this.budgetFksExclude,
       );
   @override
   String toString() {
@@ -2537,7 +2572,8 @@ class Transaction extends DataClass implements Insertable<Transaction> {
           ..write('sharedStatus: $sharedStatus, ')
           ..write('sharedDateUpdated: $sharedDateUpdated, ')
           ..write('sharedReferenceBudgetPk: $sharedReferenceBudgetPk, ')
-          ..write('objectiveFk: $objectiveFk')
+          ..write('objectiveFk: $objectiveFk, ')
+          ..write('budgetFksExclude: $budgetFksExclude')
           ..write(')'))
         .toString();
   }
@@ -2570,7 +2606,8 @@ class Transaction extends DataClass implements Insertable<Transaction> {
         sharedStatus,
         sharedDateUpdated,
         sharedReferenceBudgetPk,
-        objectiveFk
+        objectiveFk,
+        budgetFksExclude
       ]);
   @override
   bool operator ==(Object other) =>
@@ -2605,7 +2642,8 @@ class Transaction extends DataClass implements Insertable<Transaction> {
           other.sharedStatus == this.sharedStatus &&
           other.sharedDateUpdated == this.sharedDateUpdated &&
           other.sharedReferenceBudgetPk == this.sharedReferenceBudgetPk &&
-          other.objectiveFk == this.objectiveFk);
+          other.objectiveFk == this.objectiveFk &&
+          other.budgetFksExclude == this.budgetFksExclude);
 }
 
 class TransactionsCompanion extends UpdateCompanion<Transaction> {
@@ -2636,6 +2674,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
   final Value<DateTime?> sharedDateUpdated;
   final Value<String?> sharedReferenceBudgetPk;
   final Value<String?> objectiveFk;
+  final Value<List<String>?> budgetFksExclude;
   final Value<int> rowid;
   const TransactionsCompanion({
     this.transactionPk = const Value.absent(),
@@ -2665,6 +2704,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
     this.sharedDateUpdated = const Value.absent(),
     this.sharedReferenceBudgetPk = const Value.absent(),
     this.objectiveFk = const Value.absent(),
+    this.budgetFksExclude = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   TransactionsCompanion.insert({
@@ -2695,6 +2735,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
     this.sharedDateUpdated = const Value.absent(),
     this.sharedReferenceBudgetPk = const Value.absent(),
     this.objectiveFk = const Value.absent(),
+    this.budgetFksExclude = const Value.absent(),
     this.rowid = const Value.absent(),
   })  : name = Value(name),
         amount = Value(amount),
@@ -2729,6 +2770,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
     Expression<DateTime>? sharedDateUpdated,
     Expression<String>? sharedReferenceBudgetPk,
     Expression<String>? objectiveFk,
+    Expression<String>? budgetFksExclude,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -2764,6 +2806,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
       if (sharedReferenceBudgetPk != null)
         'shared_reference_budget_pk': sharedReferenceBudgetPk,
       if (objectiveFk != null) 'objective_fk': objectiveFk,
+      if (budgetFksExclude != null) 'budget_fks_exclude': budgetFksExclude,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -2796,6 +2839,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
       Value<DateTime?>? sharedDateUpdated,
       Value<String?>? sharedReferenceBudgetPk,
       Value<String?>? objectiveFk,
+      Value<List<String>?>? budgetFksExclude,
       Value<int>? rowid}) {
     return TransactionsCompanion(
       transactionPk: transactionPk ?? this.transactionPk,
@@ -2830,6 +2874,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
       sharedReferenceBudgetPk:
           sharedReferenceBudgetPk ?? this.sharedReferenceBudgetPk,
       objectiveFk: objectiveFk ?? this.objectiveFk,
+      budgetFksExclude: budgetFksExclude ?? this.budgetFksExclude,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -2927,6 +2972,11 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
     if (objectiveFk.present) {
       map['objective_fk'] = Variable<String>(objectiveFk.value);
     }
+    if (budgetFksExclude.present) {
+      final converter = $TransactionsTable.$converterbudgetFksExcluden;
+      map['budget_fks_exclude'] =
+          Variable<String>(converter.toSql(budgetFksExclude.value));
+    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -2966,6 +3016,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
           ..write('sharedDateUpdated: $sharedDateUpdated, ')
           ..write('sharedReferenceBudgetPk: $sharedReferenceBudgetPk, ')
           ..write('objectiveFk: $objectiveFk, ')
+          ..write('budgetFksExclude: $budgetFksExclude, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();

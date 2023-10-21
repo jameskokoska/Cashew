@@ -178,7 +178,7 @@ class PieChartOptions extends StatelessWidget {
                     if (hasSubCategories)
                       Transform.translate(
                         key: ValueKey(showClearButton),
-                        offset: Offset(10, 0),
+                        offset: Offset(onEditSpendingGoals != null ? 10 : 0, 0),
                         child: Tooltip(
                           message: "view-subcategories".tr(),
                           child: IconButton(

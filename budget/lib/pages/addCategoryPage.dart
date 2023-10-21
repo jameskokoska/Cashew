@@ -1301,121 +1301,153 @@ class SampleSubcategoriesPopup extends StatelessWidget {
   Widget build(BuildContext context) {
     return PopupFramework(
       title: "subcategories".tr(),
-      subtitle:
-          "Create subcategories to further organize your transactions the way you want it",
+      subtitle: "subcategories-description".tr(),
       child: Column(
         children: [
           TextFont(
-            text: "Examples",
+            text: "examples".tr(),
             fontSize: 16,
             textAlign: TextAlign.center,
           ),
-          SizedBox(height: 8),
-          FakeCategoryEntryPlaceholder(
-            iconName: "coffee.png",
-            categoryName: "Drinks",
-            showAsSubcategory: false,
-          ),
-          Wrap(
-            direction: Axis.horizontal,
-            runAlignment: WrapAlignment.center,
-            alignment: WrapAlignment.center,
-            crossAxisAlignment: WrapCrossAlignment.center,
-            children: [
-              FakeCategoryEntryPlaceholder(
-                iconName: "coffee-cup.png",
-                categoryName: "Coffee",
-              ),
-              FakeCategoryEntryPlaceholder(
-                iconName: "bubble-tea.png",
-                categoryName: "Bubble Tea",
-              ),
-              FakeCategoryEntryPlaceholder(
-                iconName: "orange-juice.png",
-                categoryName: "Soda",
-              ),
-            ],
-          ),
-          HorizontalBreak(),
           SizedBox(height: 10),
-          FakeCategoryEntryPlaceholder(
-            iconName: "theatre.png",
-            categoryName: "Entertainment",
-            showAsSubcategory: false,
+          OutlinedContainer(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+              child: Column(
+                children: [
+                  FakeCategoryEntryPlaceholder(
+                    iconName: "coffee.png",
+                    categoryName: "drinks".tr(),
+                    showAsSubcategory: false,
+                  ),
+                  Wrap(
+                    direction: Axis.horizontal,
+                    runAlignment: WrapAlignment.center,
+                    alignment: WrapAlignment.center,
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    children: [
+                      FakeCategoryEntryPlaceholder(
+                        iconName: "coffee-cup.png",
+                        categoryName: "coffee".tr(),
+                      ),
+                      FakeCategoryEntryPlaceholder(
+                        iconName: "bubble-tea.png",
+                        categoryName: "bubble-tea".tr(),
+                      ),
+                      FakeCategoryEntryPlaceholder(
+                        iconName: "orange-juice.png",
+                        categoryName: "soda".tr(),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
           ),
-          Wrap(
-            direction: Axis.horizontal,
-            runAlignment: WrapAlignment.center,
-            alignment: WrapAlignment.center,
-            crossAxisAlignment: WrapCrossAlignment.center,
-            children: [
-              FakeCategoryEntryPlaceholder(
-                iconName: "popcorn.png",
-                categoryName: "Movies",
-              ),
-              FakeCategoryEntryPlaceholder(
-                iconName: "music.png",
-                categoryName: "Music",
-              ),
-              FakeCategoryEntryPlaceholder(
-                iconName: "bowling.png",
-                categoryName: "Activities",
-              ),
-            ],
-          ),
-          HorizontalBreak(),
           SizedBox(height: 10),
-          FakeCategoryEntryPlaceholder(
-            iconName: "car.png",
-            categoryName: "Car",
-            showAsSubcategory: false,
+          OutlinedContainer(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+              child: Column(
+                children: [
+                  FakeCategoryEntryPlaceholder(
+                    iconName: "theatre.png",
+                    categoryName: "entertainment".tr(),
+                    showAsSubcategory: false,
+                  ),
+                  Wrap(
+                    direction: Axis.horizontal,
+                    runAlignment: WrapAlignment.center,
+                    alignment: WrapAlignment.center,
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    children: [
+                      FakeCategoryEntryPlaceholder(
+                        iconName: "popcorn.png",
+                        categoryName: "movies".tr(),
+                      ),
+                      FakeCategoryEntryPlaceholder(
+                        iconName: "music.png",
+                        categoryName: "music".tr(),
+                      ),
+                      FakeCategoryEntryPlaceholder(
+                        iconName: "bowling.png",
+                        categoryName: "activities".tr(),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
           ),
-          Wrap(
-            direction: Axis.horizontal,
-            runAlignment: WrapAlignment.center,
-            alignment: WrapAlignment.center,
-            crossAxisAlignment: WrapCrossAlignment.center,
-            children: [
-              FakeCategoryEntryPlaceholder(
-                iconName: "gas-station.png",
-                categoryName: "Gas",
-              ),
-              FakeCategoryEntryPlaceholder(
-                iconName: "gears.png",
-                categoryName: "Maintenance",
-              ),
-              FakeCategoryEntryPlaceholder(
-                iconName: "bill.png",
-                categoryName: "Insurance",
-              ),
-            ],
-          ),
-          HorizontalBreak(),
           SizedBox(height: 10),
-          FakeCategoryEntryPlaceholder(
-            iconName: "flower.png",
-            categoryName: "Beauty",
-            showAsSubcategory: false,
+          OutlinedContainer(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+              child: Column(
+                children: [
+                  FakeCategoryEntryPlaceholder(
+                    iconName: "car.png",
+                    categoryName: "car".tr(),
+                    showAsSubcategory: false,
+                  ),
+                  Wrap(
+                    direction: Axis.horizontal,
+                    runAlignment: WrapAlignment.center,
+                    alignment: WrapAlignment.center,
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    children: [
+                      FakeCategoryEntryPlaceholder(
+                        iconName: "gas-station.png",
+                        categoryName: "gas".tr(),
+                      ),
+                      FakeCategoryEntryPlaceholder(
+                        iconName: "gears.png",
+                        categoryName: "maintenance".tr(),
+                      ),
+                      FakeCategoryEntryPlaceholder(
+                        iconName: "bill.png",
+                        categoryName: "insurance".tr(),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
           ),
-          Wrap(
-            direction: Axis.horizontal,
-            runAlignment: WrapAlignment.center,
-            alignment: WrapAlignment.center,
-            crossAxisAlignment: WrapCrossAlignment.center,
-            children: [
-              FakeCategoryEntryPlaceholder(
-                iconName: "barber.png",
-                categoryName: "Haircut",
+          SizedBox(height: 10),
+          OutlinedContainer(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+              child: Column(
+                children: [
+                  FakeCategoryEntryPlaceholder(
+                    iconName: "flower.png",
+                    categoryName: "beauty".tr(),
+                    showAsSubcategory: false,
+                  ),
+                  Wrap(
+                    direction: Axis.horizontal,
+                    runAlignment: WrapAlignment.center,
+                    alignment: WrapAlignment.center,
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    children: [
+                      FakeCategoryEntryPlaceholder(
+                        iconName: "barber.png",
+                        categoryName: "haircut".tr(),
+                      ),
+                      FakeCategoryEntryPlaceholder(
+                        iconName: "makeup(1).png",
+                        categoryName: "touchups".tr(),
+                      ),
+                      FakeCategoryEntryPlaceholder(
+                        iconName: "tshirt.png",
+                        categoryName: "clothing".tr(),
+                      ),
+                    ],
+                  ),
+                ],
               ),
-              FakeCategoryEntryPlaceholder(
-                iconName: "makeup(1).png",
-                categoryName: "Touchups",
-              ),
-              FakeCategoryEntryPlaceholder(
-                iconName: "tshirt.png",
-                categoryName: "Clothing",
-              ),
-            ],
+            ),
           ),
         ],
       ),
@@ -1482,25 +1514,15 @@ class FakeCategoryEntryPlaceholder extends StatelessWidget {
         ),
       );
     }
-    return Padding(
-      padding: EdgeInsets.only(
-        bottom: 10,
-      ),
-      child: Tappable(
-        color: Theme.of(context).colorScheme.secondaryContainer,
-        borderRadius: 15,
-        onTap: () {},
-        child: Row(
-          children: [
-            categoryIcon,
-            TextFont(
-              text: categoryName,
-              fontWeight: FontWeight.bold,
-              fontSize: 20,
-            ),
-          ],
+    return Row(
+      children: [
+        categoryIcon,
+        TextFont(
+          text: categoryName,
+          fontWeight: FontWeight.bold,
+          fontSize: 20,
         ),
-      ),
+      ],
     );
   }
 }

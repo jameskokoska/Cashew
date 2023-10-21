@@ -25,6 +25,8 @@ class SelectChips<T> extends StatefulWidget {
     this.selectedColor,
     this.scrollablePositionedList = true,
     this.padding,
+    // If allowMultipleSelected, we use check marks
+    this.allowMultipleSelected = true,
   });
   final List<T> items;
   final bool Function(T) getSelected;
@@ -40,6 +42,7 @@ class SelectChips<T> extends StatefulWidget {
   final Color? selectedColor;
   final scrollablePositionedList;
   final EdgeInsets? padding;
+  final bool allowMultipleSelected;
 
   @override
   State<SelectChips<T>> createState() => _SelectChipsState<T>();
@@ -126,7 +129,8 @@ class _SelectChipsState<T> extends State<SelectChips<T>> {
                               avatar,
                             ],
                           ),
-                    showCheckmark: avatar == null,
+                    showCheckmark:
+                        widget.allowMultipleSelected == true && avatar == null,
                     materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                     selectedColor: widget.selectedColor ??
                         (appStateSettings["materialYou"]

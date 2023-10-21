@@ -39,20 +39,8 @@ class OutlinedButtonStacked extends StatelessWidget {
             onTap: onTap,
             borderRadius: 15,
             color: Colors.transparent,
-            child: AnimatedContainer(
-              duration: Duration(milliseconds: 250),
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: (appStateSettings["materialYou"]
-                      ? Theme.of(context).colorScheme.secondary.withOpacity(0.5)
-                      : getColor(context, "lightDarkAccentHeavy")),
-                  width: 2,
-                ),
-                color: filled == true
-                    ? Theme.of(context).colorScheme.secondary.withOpacity(0.2)
-                    : Colors.transparent,
-                borderRadius: BorderRadius.circular(15),
-              ),
+            child: OutlinedContainer(
+              filled: filled,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -114,7 +102,7 @@ class OutlinedButtonStacked extends StatelessWidget {
                       ],
                     ),
                   ),
-                  if (afterWidget != null)
+                  if (afterWidgetPadding != null)
                     Padding(
                       padding: afterWidgetPadding ?? EdgeInsets.zero,
                       child: afterWidget ?? SizedBox.shrink(),
@@ -125,6 +113,33 @@ class OutlinedButtonStacked extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class OutlinedContainer extends StatelessWidget {
+  const OutlinedContainer(
+      {required this.child, this.filled = false, super.key});
+  final Widget child;
+  final bool filled;
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedContainer(
+      duration: Duration(milliseconds: 250),
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: (appStateSettings["materialYou"]
+              ? Theme.of(context).colorScheme.secondary.withOpacity(0.5)
+              : getColor(context, "lightDarkAccentHeavy")),
+          width: 2,
+        ),
+        color: filled == true
+            ? Theme.of(context).colorScheme.secondary.withOpacity(0.2)
+            : Colors.transparent,
+        borderRadius: BorderRadius.circular(15),
+      ),
+      child: child,
     );
   }
 }

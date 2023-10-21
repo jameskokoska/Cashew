@@ -23,7 +23,7 @@ import 'package:flutter/material.dart' show DateTimeRange;
 import 'package:flutter/material.dart' show RangeValues;
 part 'tables.g.dart';
 
-int schemaVersionGlobal = 42;
+int schemaVersionGlobal = 43;
 
 // To update and migrate the database, check the README
 
@@ -302,6 +302,8 @@ class Transactions extends Table {
 
   TextColumn get objectiveFk =>
       text().references(Objectives, #objectivePk).nullable()();
+  TextColumn get budgetFksExclude =>
+      text().map(const StringListInColumnConverter()).nullable()();
 
   @override
   Set<Column> get primaryKey => {transactionPk};
@@ -915,6 +917,14 @@ class FinanceDatabase extends _$FinanceDatabase {
                   "Migration Error: Error upgrading home page widget display default for wallets");
             }
           },
+          from42To43: (m, schema) async {
+            try {
+              await m.addColumn(
+                  schema.transactions, schema.transactions.budgetFksExclude);
+            } catch (e) {
+              print("Migration Error: Error creating column budgetFksExclude");
+            }
+          },
         )(migrator, from, to);
       },
     );
@@ -1026,6 +1036,7 @@ class FinanceDatabase extends _$FinanceDatabase {
     String? onlyShowTransactionsBelongingToObjectivePk,
     SearchFilters? searchFilters,
     int? limit,
+    Budget? budget,
   }) {
     final subCategories = alias(categories, 'subCategories');
     JoinedSelectStatement<HasResultSet, dynamic> query;
@@ -1043,6 +1054,7 @@ class FinanceDatabase extends _$FinanceDatabase {
                 onlyShowBasedOnWalletFks(tbl, walletFks) &
                 onlyShowBasedOnIncome(tbl, income) &
                 onlyShowIfMember(tbl, member) &
+                onlyShowIfNotExcludedFromBudget(tbl, budget?.budgetPk) &
                 onlyShowIfCertainBudget(
                     tbl, onlyShowTransactionsBelongingToBudgetPk) &
                 onlyShowIfCertainObjective(
@@ -1152,6 +1164,7 @@ class FinanceDatabase extends _$FinanceDatabase {
             onlyShowBasedOnWalletFks(transactions, walletFks) &
             onlyShowBasedOnIncome(transactions, income) &
             onlyShowIfMember(transactions, member) &
+            onlyShowIfNotExcludedFromBudget(transactions, budget?.budgetPk) &
             onlyShowIfCertainBudget(
                 transactions, onlyShowTransactionsBelongingToBudgetPk) &
             onlyShowIfCertainObjective(
@@ -3023,10 +3036,19 @@ class FinanceDatabase extends _$FinanceDatabase {
       String budgetPk) {
     return (select(transactions)
           ..where((tbl) {
-            return tbl.sharedReferenceBudgetPk.equals(budgetPk) &
-                tbl.paid.equals(true);
+            return tbl.sharedReferenceBudgetPk.equals(budgetPk);
+            // & tbl.paid.equals(true);
           })
           ..orderBy([(t) => OrderingTerm.desc(t.dateCreated)]))
+        .get();
+  }
+
+  Future<List<Transaction>> getAllTransactionsBelongingToExcludedBudget(
+      String budgetPk) {
+    return (select(transactions)
+          ..where((tbl) {
+            return tbl.budgetFksExclude.contains(budgetPk);
+          }))
         .get();
   }
 
@@ -3352,6 +3374,13 @@ class FinanceDatabase extends _$FinanceDatabase {
         .watch();
   }
 
+  Stream<List<Budget>> watchAllNonAddableBudgets() {
+    return (select(budgets)
+          ..where((b) => (b.addedTransactionsOnly.equals(false)))
+          ..orderBy([(c) => OrderingTerm.asc(c.order)]))
+        .watch();
+  }
+
   Future<List<String>> getAllMembersOfBudgets() async {
     List<Budget> sharedBudgets = await getAllBudgets(sharedBudgetsOnly: true);
     Set<String> members = {};
@@ -3510,6 +3539,11 @@ class FinanceDatabase extends _$FinanceDatabase {
           await getAllTransactionsBelongingToSharedBudget(budget.budgetPk);
       await moveTransactionsToBudget(transactionsAddedToThisBudget, null);
     }
+
+    List<Transaction> transactionsExcludedFromThisBudget =
+        await getAllTransactionsBelongingToExcludedBudget(budget.budgetPk);
+    await clearExcludeTransactions(
+        transactionsExcludedFromThisBudget, budget.budgetPk);
 
     if (appStateSettings["lineGraphDisplayType"] ==
             LineGraphDisplay.Budget.index &&
@@ -3763,6 +3797,23 @@ class FinanceDatabase extends _$FinanceDatabase {
       //     canAddToBudget(transaction.income, transaction.type)) {
       allTransactionsToUpdate.add(transaction.copyWith(
         sharedReferenceBudgetPk: Value(addedBudgetPk),
+        dateTimeModified: Value(DateTime.now()),
+      ));
+    }
+    await updateBatchTransactionsOnly(allTransactionsToUpdate);
+    return allTransactionsToUpdate.length;
+  }
+
+  // Returns the number of updates transactions
+  Future<int> clearExcludeTransactions(List<Transaction> transactionsToMove,
+      String? excludedBudgetPkToClear) async {
+    List<Transaction> allTransactionsToUpdate = [];
+    for (Transaction transaction in transactionsToMove) {
+      List<String> budgetFksExclude = transaction.budgetFksExclude ?? [];
+      budgetFksExclude.remove(excludedBudgetPkToClear);
+      allTransactionsToUpdate.add(transaction.copyWith(
+        budgetFksExclude:
+            Value(budgetFksExclude.isEmpty ? null : budgetFksExclude),
         dateTimeModified: Value(DateTime.now()),
       ));
     }
@@ -4101,6 +4152,8 @@ class FinanceDatabase extends _$FinanceDatabase {
                   // (allCashFlow
                   //     ? transactions.income.isIn([true, false])
                   //     : transactions.income.equals(false)) &
+                  onlyShowIfNotExcludedFromBudget(
+                      transactions, budget?.budgetPk) &
                   onlyShowIfCertainBudget(
                       transactions, onlyShowTransactionsBelongingToBudgetPk) &
                   transactions.walletFk.equals(wallet.walletPk) &
@@ -4591,6 +4644,15 @@ class FinanceDatabase extends _$FinanceDatabase {
         : Constant(true));
   }
 
+  Expression<bool> onlyShowIfNotExcludedFromBudget(
+      $TransactionsTable tbl, String? budgetPk) {
+    return (budgetPk != null
+        ? tbl.budgetFksExclude.isNull() |
+            (tbl.budgetFksExclude.isNotNull() &
+                tbl.budgetFksExclude.contains(budgetPk).not())
+        : Constant(true));
+  }
+
   Expression<bool> onlyShowIfCertainObjective(
       $TransactionsTable tbl, String? objectivePk) {
     return (objectivePk != null
@@ -4647,6 +4709,7 @@ class FinanceDatabase extends _$FinanceDatabase {
                   memberTransactionFilters: memberTransactionFilters) &
               onlyShowIfMember(tbl, member) &
               onlyShowBasedOnIncome(tbl, isIncome) &
+              onlyShowIfNotExcludedFromBudget(tbl, budget?.budgetPk) &
               onlyShowIfCertainBudget(
                   tbl, onlyShowTransactionsBelongingToBudgetPk) &
               (mainCategoryPkIfSubCategories == null
@@ -5035,6 +5098,7 @@ class FinanceDatabase extends _$FinanceDatabase {
                     memberTransactionFilters: memberTransactionFilters) &
                 onlyShowBasedOnTimeRange(tbl, startDate, endDate, budget) &
                 onlyShowIfMember(tbl, member) &
+                onlyShowIfNotExcludedFromBudget(tbl, budget?.budgetPk) &
                 onlyShowIfCertainBudget(
                     tbl, onlyShowTransactionsBelongingToBudgetPk) &
                 onlyShowBasedOnWalletFks(tbl, walletPks) &
@@ -5078,6 +5142,7 @@ class FinanceDatabase extends _$FinanceDatabase {
                 memberTransactionFilters: memberTransactionFilters) &
             onlyShowBasedOnTimeRange(transactions, null, startDate, budget) &
             onlyShowIfMember(transactions, member) &
+            onlyShowIfNotExcludedFromBudget(transactions, budget?.budgetPk) &
             onlyShowIfCertainBudget(
                 transactions, onlyShowTransactionsBelongingToBudgetPk) &
             onlyShowBasedOnWalletFks(transactions, walletPks) &

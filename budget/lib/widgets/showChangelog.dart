@@ -22,6 +22,18 @@ import 'listItem.dart';
 
 String getChangelogString() {
   return """
+    < 4.6.9
+    Exclude transactions from certain all transaction budgets
+    Check mark is only shown if multiple can be selected when selecting chips
+    Bill splitter supports global multiplication value
+    Fixed enter amount popup showing twice
+    Added calculations to balance correction and balance transfer
+    Updated translations for subcategories info
+    Added duplicate transaction option under more options when editing transaction
+    Fixed translation for view subcategories on wallet details page
+    Fixed line graph for showing time periods of one day
+    Added account to CSV template
+    Fixed empty account name would create a blank account
     < 4.6.8
     Example subcategories info
     Updated translations

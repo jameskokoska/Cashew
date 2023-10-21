@@ -196,6 +196,7 @@ class TransactionEntries extends StatelessWidget {
                       onlyShowTransactionsBelongingToObjectivePk,
                   searchFilters: searchFilters,
                   limit: limitPerDay,
+                  budget: budget,
                 ),
                 builder: (context, snapshot) {
                   if (snapshot.data != null && snapshot.hasData) {

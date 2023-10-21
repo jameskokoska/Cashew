@@ -752,7 +752,7 @@ class _CorrectBalancePopupState extends State<CorrectBalancePopup> {
                 );
               }),
               SizedBox(height: 8),
-              SelectAmountValue(
+              SelectAmount(
                 // Rerender when has data, so that the initialValue of negative-amount if correct
                 // Also render if no data, because that means the wallet is empty
                 // We still want users to be able to correct the amount
@@ -1030,7 +1030,7 @@ class _TransferBalancePopupState extends State<TransferBalancePopup> {
             ),
           ),
           SizedBox(height: 5),
-          SelectAmountValue(
+          SelectAmount(
             extraWidgetAboveNumbers: SettingsContainerSwitch(
               title: "withdraw-amount".tr(),
               onSwitched: (value) {

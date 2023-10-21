@@ -14,6 +14,8 @@ import 'package:budget/widgets/categoryIcon.dart';
 import 'package:budget/widgets/globalSnackBar.dart';
 import 'package:budget/widgets/incomeExpenseTabSelector.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
+import 'package:budget/widgets/selectedTransactionsAppBar.dart';
+import 'package:budget/widgets/sliverStickyLabelDivider.dart';
 import 'package:budget/widgets/timeDigits.dart';
 import 'package:budget/struct/initializeNotifications.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
@@ -34,6 +36,7 @@ import 'package:budget/widgets/transactionEntry/transactionLabel.dart';
 import 'package:budget/widgets/util/contextMenu.dart';
 import 'package:budget/widgets/util/showDatePicker.dart';
 import 'package:budget/widgets/util/widgetSize.dart';
+import 'package:budget/widgets/viewAllTransactionsButton.dart';
 import 'package:drift/drift.dart' hide Column;
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
@@ -119,6 +122,8 @@ class _AddTransactionPageState extends State<AddTransactionPage>
   String selectedWalletPk = appStateSettings["selectedWalletPk"];
   TransactionWallet? selectedWallet;
   bool notesInputFocused = false;
+  bool showMoreOptions = false;
+  List<String> selectedExcludedBudgetPks = [];
 
   String? textAddTransaction = "add-transaction".tr();
 
@@ -249,6 +254,13 @@ class _AddTransactionPageState extends State<AddTransactionPage>
       if (isSharedBudget == false || selectedBudgetPassed?.sharedKey == null) {
         selectedPayer = null;
       }
+    });
+    return;
+  }
+
+  void setSelectedExcludedBudgetPks(List<String>? budgetPks) {
+    setState(() {
+      selectedExcludedBudgetPks = budgetPks ?? [];
     });
     return;
   }
@@ -499,6 +511,8 @@ class _AddTransactionPageState extends State<AddTransactionPage>
           ? widget.transaction!.originalDateDue
           : null,
       objectiveFk: selectedObjectivePk,
+      budgetFksExclude:
+          selectedExcludedBudgetPks.isEmpty ? null : selectedExcludedBudgetPks,
     );
 
     if (widget.transaction != null &&
@@ -566,6 +580,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
       selectedPayer = widget.transaction!.transactionOwnerEmail;
       selectedBudgetPk = widget.transaction!.sharedReferenceBudgetPk;
       selectedObjectivePk = widget.transaction!.objectiveFk;
+      selectedExcludedBudgetPks = widget.transaction!.budgetFksExclude ?? [];
       // var amountString = widget.transaction!.amount.toStringAsFixed(2);
       // if (amountString.substring(amountString.length - 2) == "00") {
       //   selectedAmountCalculation =
@@ -695,22 +710,13 @@ class _AddTransactionPageState extends State<AddTransactionPage>
     );
 
     if (result is TransactionCategory || result == false) {
-      openBottomSheet(
-        context,
-        fullSnap: true,
-        PopupFramework(
-          title: "enter-amount".tr(),
-          underTitleSpace: false,
-          hasPadding: false,
-          child: selectAmountPopup(
-            next: () async {
-              await addTransaction();
-              Navigator.pop(context);
-              Navigator.pop(context);
-            },
-            nextLabel: textAddTransaction,
-          ),
-        ),
+      selectAmountPopup(
+        next: () async {
+          await addTransaction();
+          Navigator.pop(context);
+          Navigator.pop(context);
+        },
+        nextLabel: textAddTransaction,
       );
     }
   }
@@ -986,6 +992,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                             Padding(
                               padding: const EdgeInsets.only(bottom: 6),
                               child: SelectChips(
+                                allowMultipleSelected: false,
                                 selectedColor: Theme.of(context)
                                     .canvasColor
                                     .withOpacity(0.6),
@@ -1452,6 +1459,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                             child: Padding(
                               padding: const EdgeInsets.only(top: 5),
                               child: SelectChips(
+                                allowMultipleSelected: false,
                                 wrapped: enableDoubleColumn(context),
                                 extraWidgetAtBeginning: true,
                                 extraWidget: Transform.scale(
@@ -1579,6 +1587,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                   child: Padding(
                                     padding: const EdgeInsets.only(top: 5),
                                     child: SelectChips(
+                                      allowMultipleSelected: false,
                                       onLongPress: (TransactionWallet wallet) {
                                         pushRoute(
                                           context,
@@ -1660,6 +1669,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                             child: Padding(
                               padding: const EdgeInsets.only(top: 5),
                               child: SelectChips(
+                                allowMultipleSelected: false,
                                 wrapped: enableDoubleColumn(context),
                                 items: <String>[
                                   ...(selectedBudget?.sharedMembers ?? [])
@@ -1682,6 +1692,88 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                           enableDoubleColumn(context)
                               ? SizedBox.shrink()
                               : transactionTextInput,
+                          SizedBox(height: 10),
+                          AnimatedExpanded(
+                              expand: showMoreOptions == false &&
+                                  widget.transaction?.budgetFksExclude != null,
+                              child: Column(
+                                children: [
+                                  StickyLabelDivider(
+                                    info: "exclude-from-budget".tr(),
+                                  ),
+                                  SelectExcludeBudget(
+                                    setSelectedExcludedBudgets:
+                                        setSelectedExcludedBudgetPks,
+                                    selectedExcludedBudgetPks:
+                                        selectedExcludedBudgetPks,
+                                    horizontalBreak: true,
+                                  ),
+                                ],
+                              )),
+                          AnimatedSizeSwitcher(
+                            child: showMoreOptions == false
+                                ? Padding(
+                                    padding: const EdgeInsets.only(top: 5),
+                                    child: LowKeyButton(
+                                      key: ValueKey(1),
+                                      onTap: () {
+                                        setState(() {
+                                          showMoreOptions = true;
+                                        });
+                                      },
+                                      text: "more-options".tr(),
+                                    ),
+                                  )
+                                : Column(
+                                    key: ValueKey(2),
+                                    children: [
+                                      if (widget.transaction != null)
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                            left: 20,
+                                            right: 20,
+                                            bottom: 12,
+                                            top: 5,
+                                          ),
+                                          child: Button(
+                                            flexibleLayout: true,
+                                            icon: appStateSettings[
+                                                    "outlinedIcons"]
+                                                ? Icons.file_copy_outlined
+                                                : Icons.file_copy_rounded,
+                                            label: "duplicate".tr(),
+                                            onTap: () async {
+                                              bool result =
+                                                  await addTransaction();
+                                              if (result)
+                                                Navigator.of(context).pop();
+                                              duplicateTransaction(
+                                                  context,
+                                                  widget.transaction!
+                                                      .transactionPk);
+                                            },
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .secondaryContainer,
+                                            textColor: Theme.of(context)
+                                                .colorScheme
+                                                .onSecondaryContainer,
+                                          ),
+                                        ),
+                                      StickyLabelDivider(
+                                        info: "exclude-from-budget".tr(),
+                                      ),
+                                      SelectExcludeBudget(
+                                        setSelectedExcludedBudgets:
+                                            setSelectedExcludedBudgetPks,
+                                        selectedExcludedBudgetPks:
+                                            selectedExcludedBudgetPks,
+                                        horizontalBreak: true,
+                                      ),
+                                    ],
+                                  ),
+                          ),
+
                           widget.transaction == null ||
                                   widget.transaction!.sharedDateUpdated == null
                               ? SizedBox.shrink()
@@ -2489,6 +2581,7 @@ class _SelectAddedBudgetState extends State<SelectAddedBudget> {
             child: Padding(
                 padding: const EdgeInsets.only(top: 5),
                 child: SelectChips(
+                  allowMultipleSelected: false,
                   wrapped: widget.wrapped ?? enableDoubleColumn(context),
                   extraHorizontalPadding: widget.extraHorizontalPadding,
                   onLongPress: (Budget? item) {
@@ -2595,6 +2688,7 @@ class _SelectObjectiveState extends State<SelectObjective> {
             child: Padding(
                 padding: const EdgeInsets.only(top: 5),
                 child: SelectChips(
+                  allowMultipleSelected: false,
                   wrapped: widget.wrapped ?? enableDoubleColumn(context),
                   extraHorizontalPadding: widget.extraHorizontalPadding,
                   onLongPress: (Objective? item) {
@@ -2632,6 +2726,127 @@ class _SelectObjectiveState extends State<SelectObjective> {
                     return selectedObjectivePk == item?.objectivePk;
                   },
                   getCustomBorderColor: (Objective? item) {
+                    return dynamicPastel(
+                      context,
+                      lightenPastel(
+                        HexColor(
+                          item?.colour,
+                          defaultColor: Theme.of(context).colorScheme.primary,
+                        ),
+                        amount: 0.3,
+                      ),
+                      amount: 0.4,
+                    );
+                  },
+                )),
+          );
+        } else {
+          return Container();
+        }
+      },
+    );
+  }
+}
+
+class SelectExcludeBudget extends StatefulWidget {
+  const SelectExcludeBudget({
+    required this.setSelectedExcludedBudgets,
+    this.selectedExcludedBudgetPks,
+    this.extraHorizontalPadding,
+    this.wrapped,
+    this.horizontalBreak,
+    super.key,
+  });
+  final Function(List<String>?) setSelectedExcludedBudgets;
+  final List<String>? selectedExcludedBudgetPks;
+  final double? extraHorizontalPadding;
+  final bool? wrapped;
+  final bool? horizontalBreak;
+
+  @override
+  State<SelectExcludeBudget> createState() => _SelectExcludeBudgetState();
+}
+
+class _SelectExcludeBudgetState extends State<SelectExcludeBudget> {
+  late List<String> selectedExcludedBudgetPks =
+      widget.selectedExcludedBudgetPks ?? [];
+
+  @override
+  void didUpdateWidget(covariant SelectExcludeBudget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (selectedExcludedBudgetPks != widget.selectedExcludedBudgetPks) {
+      setState(() {
+        selectedExcludedBudgetPks = widget.selectedExcludedBudgetPks ?? [];
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<List<Budget>>(
+      stream: database.watchAllNonAddableBudgets(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          if (snapshot.data!.length <= 0)
+            return Padding(
+              padding: const EdgeInsets.all(5),
+              child: TextFont(
+                text: "no-budgets-found".tr(),
+                fontSize: 16,
+                textAlign: TextAlign.center,
+              ),
+            );
+          return HorizontalBreakAbove(
+            enabled:
+                enableDoubleColumn(context) && widget.horizontalBreak == true,
+            child: Padding(
+                padding: const EdgeInsets.only(top: 5),
+                child: SelectChips(
+                  wrapped: widget.wrapped ?? enableDoubleColumn(context),
+                  extraHorizontalPadding: widget.extraHorizontalPadding,
+                  onLongPress: (Budget item) {
+                    pushRoute(
+                      context,
+                      AddBudgetPage(
+                        budget: item,
+                        routesToPopAfterDelete:
+                            RoutesToPopAfterDelete.PreventDelete,
+                      ),
+                    );
+                  },
+                  extraWidget: AddButton(
+                    onTap: () {},
+                    width: 40,
+                    padding: EdgeInsets.symmetric(horizontal: 5, vertical: 1),
+                    openPage: AddBudgetPage(
+                      routesToPopAfterDelete: RoutesToPopAfterDelete.One,
+                    ),
+                    borderRadius: 8,
+                  ),
+                  items: snapshot.data!,
+                  getLabel: (Budget item) {
+                    return item.name;
+                  },
+                  onSelected: (Budget item) {
+                    // widget.setSelectedBudget(
+                    //   item,
+                    //   isSharedBudget: item?.sharedKey != null,
+                    // );
+                    // setState(() {
+                    //   selectedBudgetPk = item?.budgetPk;
+                    // });
+                    if (selectedExcludedBudgetPks.contains(item.budgetPk)) {
+                      selectedExcludedBudgetPks.remove(item.budgetPk);
+                    } else {
+                      selectedExcludedBudgetPks.add(item.budgetPk);
+                    }
+                    widget
+                        .setSelectedExcludedBudgets(selectedExcludedBudgetPks);
+                  },
+                  getSelected: (Budget item) {
+                    return (selectedExcludedBudgetPks).contains(item.budgetPk);
+                  },
+                  getCustomBorderColor: (Budget? item) {
                     return dynamicPastel(
                       context,
                       lightenPastel(

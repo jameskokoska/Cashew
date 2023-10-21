@@ -1,8 +1,10 @@
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/struct/settings.dart';
+import 'package:budget/widgets/noResults.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/textWidgets.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/colors.dart';
@@ -509,6 +511,11 @@ class Pair {
   double x;
   double y;
   DateTime? dateTime;
+
+  @override
+  String toString() {
+    return 'x: $x, y: $y, dateTime: $dateTime';
+  }
 }
 
 class LineChartWrapper extends StatelessWidget {
@@ -616,6 +623,7 @@ class LineChartWrapper extends StatelessWidget {
     }
     if (keepHorizontalLineInView &&
         horizontalLineAt != null &&
+        horizontalLineAt != double.infinity &&
         (max.y) < ((horizontalLineAt ?? 0) + (horizontalLineAt ?? 0) * 0.1)) {
       max.y = (horizontalLineAt ?? 0) + (horizontalLineAt ?? 0) * 0.1;
     }
@@ -652,6 +660,10 @@ class LineChartWrapper extends StatelessWidget {
     if (maxPair.y == minPair.y) {
       // minPair.y = minPair.y - 1;
       maxPair.y = maxPair.y + 1;
+    }
+    if (maxPair.x == minPair.x) {
+      // minPair.y = minPair.y - 1;
+      // maxPair.x = maxPair.x + 1;
     }
     return ClipRect(
       child: Container(
