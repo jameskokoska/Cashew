@@ -40,7 +40,7 @@ String getChangelogString() {
     Added theatre category icon
     Fixed category budget limits today indicator offset when viewing past budget
     Fixed budget history page label for weekly and daily budgets
-    Renamed tooltip for exand and compress in budget line graph
+    Renamed tooltip for expand and compress in budget line graph
     View more button in budget line graph only shown when current date within budget period
     If added only budget with custom time period, line graph accounts for all previous spending not within time range
     Fixed tap action for sub-category icon in edit category page
