@@ -19,6 +19,7 @@ import 'dart:convert';
 import 'package:budget/struct/currencyFunctions.dart';
 import 'schema_versions.dart';
 import 'package:flutter/material.dart' show DateTimeRange;
+import 'package:drift_dev/api/migrations.dart';
 
 import 'package:flutter/material.dart' show RangeValues;
 part 'tables.g.dart';
@@ -591,6 +592,13 @@ class FinanceDatabase extends _$FinanceDatabase {
       onCreate: (Migrator m) async {
         await m.createAll();
       },
+      // beforeOpen: (details) async {
+      //   try {
+      //     await validateDatabaseSchema();
+      //   } catch (e) {
+      //     print("Database mismatch " + e.toString());
+      //   }
+      // },
       onUpgrade: (migrator, from, to) async {
         print("Migrating from: " + from.toString() + " to " + to.toString());
         if (from <= 9) {
@@ -822,14 +830,17 @@ class FinanceDatabase extends _$FinanceDatabase {
             );
           },
           from37To38: (m, schema) async {
+            print("37 to 38");
             try {
               await m.addColumn(
                   schema.transactions, schema.transactions.originalDateDue);
             } catch (e) {
-              print("Migration Error: Error creating column");
+              print("Migration Error: Error creating column originalDateDue " +
+                  e.toString());
             }
           },
           from38To39: (m, schema) async {
+            print("38 to 39");
             // We should try and catch for upgrades - why?
             // If a user imports a backup from a newer schema when they are on an older
             // App version, it will import correctly. However, when they do update the app
@@ -838,33 +849,41 @@ class FinanceDatabase extends _$FinanceDatabase {
               await m.addColumn(
                   schema.categories, schema.categories.emojiIconName);
             } catch (e) {
-              print("Migration Error: Error creating column");
+              print("Migration Error: Error creating column emojiIconName " +
+                  e.toString());
             }
           },
           from39To40: (m, schema) async {
+            print("39 to 40");
             try {
               await m.addColumn(
                   schema.transactions, schema.transactions.objectiveFk);
             } catch (e) {
-              print("Migration Error: Error creating column");
+              print("Migration Error: Error creating column objectiveFk " +
+                  e.toString());
             }
             try {
               await migrator.createTable($ObjectivesTable(database));
             } catch (e) {
-              print("Migration Error: Error creating table");
+              print("Migration Error: Error creating table ObjectivesTable " +
+                  e.toString());
             }
           },
           from40To41: (m, schema) async {
+            print("40 to 41");
             try {
               await m.addColumn(
                   schema.budgets, schema.budgets.categoryFksExclude);
             } catch (e) {
-              print("Migration Error: Error creating column");
+              print(
+                  "Migration Error: Error creating column categoryFksExclude " +
+                      e.toString());
             }
             try {
               await m.alterTable(TableMigration(budgets));
             } catch (e) {
-              print("Migration Error: Error deleting includeAllCategories");
+              print("Migration Error: Error deleting includeAllCategories " +
+                  e.toString());
             }
             try {
               List<Budget> allBudgets = await getAllBudgets();
@@ -881,28 +900,72 @@ class FinanceDatabase extends _$FinanceDatabase {
               await updateBatchBudgetsOnly(budgetsInserting);
             } catch (e) {
               print(
-                  "Migration Error: Error upgrading transaction filters default for budgets");
+                  "Migration Error: Error upgrading transaction filters default for budgets " +
+                      e.toString());
             }
           },
           from41To42: (m, schema) async {
+            print("41 to 42");
             try {
               await m.addColumn(
                   schema.categories, schema.categories.mainCategoryPk);
             } catch (e) {
-              print("Migration Error: Error creating column");
+              print("Migration Error: Error creating column mainCategoryPk " +
+                  e.toString());
             }
             try {
               await m.addColumn(
                   schema.wallets, schema.wallets.homePageWidgetDisplay);
             } catch (e) {
-              print("Migration Error: Error creating column");
+              print(
+                  "Migration Error: Error creating column homePageWidgetDisplay " +
+                      e.toString());
             }
             try {
               await m.addColumn(
                   schema.transactions, schema.transactions.subCategoryFk);
             } catch (e) {
-              print("Migration Error: Error creating column");
+              print("Migration Error: Error creating column subCategoryFk " +
+                  e.toString());
             }
+            // Also see beforeOpen
+            // We modify the entries of homePageWidgetDisplay of wallet entries after this migration
+            // Since this code prevents the other migrations from running after, and it existed before,
+            // the budgetFksExclude in 42to43 may have not run properly...
+            // Therefore we also have code to check if this was properly created in beforeOpen
+          },
+          from42To43: (m, schema) async {
+            print("42 to 43");
+            try {
+              await m.addColumn(
+                  schema.transactions, schema.transactions.budgetFksExclude);
+            } catch (e) {
+              print("Migration Error: Error creating column budgetFksExclude " +
+                  e.toString());
+            }
+          },
+        )(migrator, from, to);
+      },
+      beforeOpen: (details) async {
+        // This code exists because migration 42to43 may have not run correctly...
+        // See explanation in 41to42
+        try {
+          final m = createMigrator();
+          await m.addColumn(transactions, transactions.budgetFksExclude);
+          print("Migration successfully fixed budgetFksExclude");
+        } catch (e) {
+          // The column already existed
+        }
+
+        if (details.hadUpgrade && details.versionBefore != null) {
+          print(
+              "Migration Version Before: " + details.versionBefore.toString());
+          print("Migration Version After: " + details.versionNow.toString());
+
+          if (details.versionBefore! < 42) {
+            // Migration 41to42
+            print(
+                "Migration updating wallet homePageWidgetDisplay entries to default values");
             try {
               List<TransactionWallet> allWallets = await getAllWallets();
               List<TransactionWallet> walletsInserting = [];
@@ -911,21 +974,16 @@ class FinanceDatabase extends _$FinanceDatabase {
                     homePageWidgetDisplay:
                         Value(defaultWalletHomePageWidgetDisplay)));
               }
-              await updateBatchWalletsOnly(walletsInserting);
+              Future.delayed(Duration(milliseconds: 0), () async {
+                await updateBatchWalletsOnly(walletsInserting);
+              });
             } catch (e) {
               print(
-                  "Migration Error: Error upgrading home page widget display default for wallets");
+                  "Migration Error: Error upgrading home page widget display default for wallets " +
+                      e.toString());
             }
-          },
-          from42To43: (m, schema) async {
-            try {
-              await m.addColumn(
-                  schema.transactions, schema.transactions.budgetFksExclude);
-            } catch (e) {
-              print("Migration Error: Error creating column budgetFksExclude");
-            }
-          },
-        )(migrator, from, to);
+          }
+        }
       },
     );
   }

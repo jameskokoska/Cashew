@@ -22,6 +22,8 @@ import 'listItem.dart';
 
 String getChangelogString() {
   return """
+    < 4.7.0
+    Important database migration fix
     < 4.6.9
     Exclude transactions from certain all transaction budgets
     Check mark is only shown if multiple can be selected when selecting chips

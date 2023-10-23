@@ -2,6 +2,7 @@ import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
+import 'package:budget/pages/homePage/homePage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/button.dart';
@@ -293,6 +294,13 @@ class DebugPage extends StatelessWidget {
             if (value == 0) value = 0.0000001;
             timeDilation = value;
             updateSettings("animationSpeed", value, updateGlobalState: true);
+          },
+        ),
+        Button(
+          label: "Fix migration (from db 37 above)",
+          onTap: () async {
+            await database.customStatement('PRAGMA user_version = 37');
+            restartAppPopup(context);
           },
         ),
         SizedBox(height: 20),
