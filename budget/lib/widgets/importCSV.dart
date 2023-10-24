@@ -745,7 +745,7 @@ Future saveSampleCSV() async {
       "-50",
       "Groceries",
       "Fruits and Vegetables",
-      "Paid with cash342",
+      "Paid with cash",
       "",
     ]);
     csvData.add([

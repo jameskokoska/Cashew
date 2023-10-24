@@ -22,6 +22,9 @@ import 'listItem.dart';
 
 String getChangelogString() {
   return """
+    < 4.7.1
+    Improved light/dark mode switching animation timing
+    CSV template spelling fix
     < 4.7.0
     Important database migration fix
     < 4.6.9

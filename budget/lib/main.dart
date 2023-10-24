@@ -126,7 +126,7 @@ class App extends StatelessWidget {
           enableDevicePreview ? DevicePreview.locale(context) : context.locale,
       shortcuts: shortcuts,
       actions: keyboardIntents,
-      themeAnimationDuration: Duration(milliseconds: 700),
+      themeAnimationDuration: Duration(milliseconds: 300),
       key: ValueKey(1),
       title: 'Cashew',
       navigatorKey: navigatorKey,

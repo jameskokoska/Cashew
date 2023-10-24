@@ -19,7 +19,6 @@ import 'dart:convert';
 import 'package:budget/struct/currencyFunctions.dart';
 import 'schema_versions.dart';
 import 'package:flutter/material.dart' show DateTimeRange;
-import 'package:drift_dev/api/migrations.dart';
 
 import 'package:flutter/material.dart' show RangeValues;
 part 'tables.g.dart';
@@ -592,6 +591,7 @@ class FinanceDatabase extends _$FinanceDatabase {
       onCreate: (Migrator m) async {
         await m.createAll();
       },
+      // import 'package:drift_dev/api/migrations.dart';
       // beforeOpen: (details) async {
       //   try {
       //     await validateDatabaseSchema();
