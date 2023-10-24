@@ -62,23 +62,3 @@ class FAB extends StatelessWidget {
     );
   }
 }
-
-class OpenTestPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Test page'),
-      ),
-      body: GestureDetector(
-        onDoubleTap: () {},
-        onPanUpdate: (details) {
-          if (details.delta.dy > 10 || details.delta.dx > 10) {
-            Navigator.of(context).pop();
-          }
-        },
-        child: Container(color: Colors.blueGrey),
-      ),
-    );
-  }
-}

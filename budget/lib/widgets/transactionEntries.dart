@@ -450,8 +450,12 @@ class TransactionEntries extends StatelessWidget {
               children: transactionsWidgets,
             );
           } else {
-            return Column(
+            return ListView(
+              scrollDirection: Axis.vertical,
               children: transactionsWidgets,
+              shrinkWrap: true,
+              physics: ClampingScrollPhysics(),
+              padding: EdgeInsets.zero,
             );
           }
         }

@@ -511,6 +511,7 @@ Future<dynamic> openTransactionsOnDayBottomSheet(
         allowSelect: false,
         useHorizontalPaddingConstrained: false,
         noResultsPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+        limitPerDay: 50,
       ),
       title: day == null
           ? ""

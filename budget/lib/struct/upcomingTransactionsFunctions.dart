@@ -271,11 +271,17 @@ Future openUnpayDebtCreditPopup(
   );
 }
 
-Future<bool> markSubscriptionsAsPaid() async {
+Future<bool> markSubscriptionsAsPaid({int? iteration}) async {
   if (appStateSettings["automaticallyPaySubscriptions"]) {
+    // Loop through, because a new one that was created automatically may be past due
+    if (iteration != null && iteration > 50) {
+      return true;
+    }
     List<Transaction> subscriptions = await database.getAllSubscriptions().$2;
+    bool hasUpdatedASubscription = false;
     for (Transaction transaction in subscriptions) {
       if (transaction.dateCreated.isBefore(DateTime.now())) {
+        hasUpdatedASubscription = true;
         Transaction transactionNew = transaction.copyWith(
           paid: true,
           dateCreated: transaction.dateCreated,
@@ -285,6 +291,10 @@ Future<bool> markSubscriptionsAsPaid() async {
         await createNewSubscriptionTransaction(null, transaction);
       }
     }
+    if (hasUpdatedASubscription)
+      markSubscriptionsAsPaid(iteration: (iteration ?? 0) + 1);
+    print("Automatically paid subscriptions with iteration: " +
+        iteration.toString());
   }
   return true;
 }

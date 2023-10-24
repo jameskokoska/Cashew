@@ -22,6 +22,11 @@ import 'listItem.dart';
 
 String getChangelogString() {
   return """
+    < 4.7.2
+    New category icons
+    Period length defaults to 1 for repetitive transactions
+    Automatically pay subscriptions loops through multiple overdue
+    Emoji category icon selection large button with English locale
     < 4.7.1
     Improved light/dark mode switching animation timing
     CSV template spelling fix

@@ -205,6 +205,15 @@ class _SelectCategoryImageState extends State<SelectCategoryImage> {
               }).toList(),
             ),
           ),
+          context.locale.toString() == "en"
+              ? Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: UseEmoji(onTap: () {
+                    Navigator.pop(context);
+                    openEmojiSelectorPopup();
+                  }),
+                )
+              : SizedBox.shrink(),
           Padding(
             padding: const EdgeInsets.only(top: 8.0),
             child: SuggestIcon(),

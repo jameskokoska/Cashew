@@ -483,7 +483,9 @@ class _AddTransactionPageState extends State<AddTransactionPage>
       skipPaid: skipPaid,
       type: selectedType,
       reoccurrence: selectedRecurrenceEnum,
-      periodLength: selectedPeriodLength,
+      periodLength: selectedPeriodLength <= 0 && selectedType != null
+          ? 1
+          : selectedPeriodLength,
       methodAdded:
           widget.transaction != null ? widget.transaction!.methodAdded : null,
       createdAnotherFutureTransaction: createdAnotherFutureTransaction,
@@ -2458,9 +2460,9 @@ getRelatingAssociatedTitle(String text) async {
 
   bool foundFromCategoryLocal = false;
   // if (categoryFk != null) {
-  print("SEARCHING");
+  // print("SEARCHING");
   List<TransactionCategory> allCategories = (await database.getAllCategories());
-  print(allCategories);
+  // print(allCategories);
   for (TransactionCategory category in allCategories) {
     if (text.toLowerCase().contains(category.name.toLowerCase())) {
       categoryFk = category.categoryPk;
