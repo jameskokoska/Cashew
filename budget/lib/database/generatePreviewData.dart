@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:budget/colors.dart';
 import 'package:budget/database/initializeDefaultDatabase.dart';
 import 'package:budget/database/tables.dart';
+import 'package:budget/main.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/navigationFramework.dart';
@@ -771,6 +772,49 @@ Future generatePreviewData() async {
       ),
     );
   }
+
+  // if (allowDangerousDebugFlags) {
+  //   // Large database test
+
+  //   List<TransactionsCompanion> insert = [];
+
+  //   for (int i = 0; i < 35000; i++) {
+  //     insert.add(
+  //       Transaction(
+  //         methodAdded: MethodAdded.preview,
+  //         transactionPk: uuid.v4(),
+  //         name: "",
+  //         amount: -(10 + Random().nextDouble() * 200),
+  //         note: "",
+  //         categoryFk: (Random().nextInt(2) == 0 ? 6 : 10).toString(),
+  //         walletFk: "0",
+  //         dateCreated: DateTime.now().subtract(Duration(days: i)),
+  //         income: false,
+  //         paid: true,
+  //         skipPaid: true,
+  //       ).toCompanion(true),
+  //     );
+  //   }
+  //   for (int i = 0; i < 35000; i++) {
+  //     insert.add(
+  //       Transaction(
+  //         methodAdded: MethodAdded.preview,
+  //         transactionPk: uuid.v4(),
+  //         name: "",
+  //         amount: -(10 + Random().nextDouble() * 200),
+  //         note: "",
+  //         categoryFk: (Random().nextInt(2) == 0 ? 6 : 10).toString(),
+  //         walletFk: "0",
+  //         dateCreated: DateTime.now().subtract(Duration(days: i)),
+  //         income: false,
+  //         paid: true,
+  //         skipPaid: true,
+  //       ).toCompanion(true),
+  //     );
+  //   }
+  //   await database.createBatchTransactionsOnly(insert);
+  // }
+
   loadingIndeterminateKey.currentState?.setVisibility(false);
 }
 
@@ -782,7 +826,7 @@ class PreviewDemoWarning extends StatelessWidget {
     return appStateSettings["previewDemo"] == true
         ? Padding(
             padding:
-                EdgeInsets.only(bottom: MediaQuery.of(context).viewPadding.top),
+                EdgeInsets.only(bottom: MediaQuery.viewPaddingOf(context).top),
             child: Tappable(
               onTap: () async {
                 deletePreviewData(resetOnboard: true);

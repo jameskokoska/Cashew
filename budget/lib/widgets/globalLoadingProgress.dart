@@ -48,7 +48,7 @@ class GlobalLoadingProgressState extends State<GlobalLoadingProgress> {
               duration: Duration(milliseconds: 300),
               curve: Curves.easeInOut,
               height: loadingBarHeight,
-              width: MediaQuery.of(context).size.width * progressPercentage,
+              width: MediaQuery.sizeOf(context).width * progressPercentage,
               decoration: BoxDecoration(
                 color: dynamicPastel(
                     context, Theme.of(context).colorScheme.primary,

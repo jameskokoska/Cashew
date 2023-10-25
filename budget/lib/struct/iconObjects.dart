@@ -1055,7 +1055,7 @@ List<IconForCategory> iconObjects = [
       "convenient",
       "junk"
     ],
-    mostLikelyCategoryName: "Fast Food",
+    mostLikelyCategoryName: "Food",
   ),
   IconForCategory(
     icon: "favourite.png",
@@ -3817,7 +3817,7 @@ List<IconForCategory> iconObjects = [
       "cocktail",
       "bar",
     ],
-    mostLikelyCategoryName: "Juice",
+    mostLikelyCategoryName: "Drink",
   ),
   IconForCategory(
     icon: "bottles.png",
@@ -3843,7 +3843,7 @@ List<IconForCategory> iconObjects = [
       "cocktail",
       "bar",
     ],
-    mostLikelyCategoryName: "Bottles",
+    mostLikelyCategoryName: "Drink",
   ),
   IconForCategory(
     icon: "sauces.png",
@@ -3958,7 +3958,7 @@ List<IconForCategory> iconObjects = [
       "fresh",
       "healthy",
     ],
-    mostLikelyCategoryName: "Sushi",
+    mostLikelyCategoryName: "Food",
   ),
   IconForCategory(
     icon: "taco.png",
@@ -3974,6 +3974,6 @@ List<IconForCategory> iconObjects = [
       "meat",
       "vegetables",
     ],
-    mostLikelyCategoryName: "Taco",
+    mostLikelyCategoryName: "Food",
   ),
 ];

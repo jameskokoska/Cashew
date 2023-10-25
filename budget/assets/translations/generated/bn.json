@@ -790,5 +790,8 @@
   "bill-splitter-multiplier-description": "এমন একটি মান লিখুন যা বিল স্প্লিটারের প্রতিটি আইটেমের সাথে গুণিত হবে। প্রতিটি আইটেমে ট্যাক্স প্রয়োগ করা হলে দরকারী।",
   "more-options": "আরও বিকল্প",
   "cannot-display-graph-for-current-time-period": "বর্তমান সময়ের জন্য গ্রাফ প্রদর্শন করতে পারে না।",
-  "exclude-from-budget": "বাজেট থেকে বাদ দিন"
+  "exclude-from-budget": "বাজেট থেকে বাদ দিন",
+  "erase-synced-data-and-cloud-backups": "সিঙ্কড ডেটা এবং ক্লাউড ব্যাকআপগুলি মুছুন",
+  "erase-cloud-data": "মেঘের ডেটা মুছুন",
+  "erase-cloud-data-description": "আপনার গুগল অ্যাকাউন্টে লগইন করুন এবং 'সিঙ্ক' এবং 'ব্যাকআপস' এর অধীনে অবস্থিত ব্যাকআপগুলি মুছুন"
 }

@@ -76,7 +76,7 @@ class _EditCategoriesPageState extends State<EditCategoriesPage> {
         floatingActionButton: AnimateFABDelayed(
           fab: Padding(
             padding: EdgeInsets.only(
-                bottom: MediaQuery.of(context).viewPadding.bottom),
+                bottom: MediaQuery.viewPaddingOf(context).bottom),
             child: FAB(
               tooltip: "add-category".tr(),
               openPage: AddCategoryPage(
@@ -131,8 +131,8 @@ class _EditCategoriesPageState extends State<EditCategoriesPage> {
                 Map<String, List<TransactionCategory>>
                     subCategoriesIndexedByMainPk =
                     snapshotSubCategories.data ?? {};
-                return StreamBuilder<List<TransactionCategory>>(
-                  stream: database.watchAllCategories(
+                return StreamBuilder<List<CategoryWithDetails>>(
+                  stream: database.watchAllMainCategoriesWithDetails(
                       searchFor: searchValue == "" ? null : searchValue),
                   builder: (context, snapshot) {
                     if (snapshot.hasData && (snapshot.data ?? []).length <= 0) {
@@ -158,7 +158,10 @@ class _EditCategoriesPageState extends State<EditCategoriesPage> {
                           });
                         },
                         itemBuilder: (context, index) {
-                          TransactionCategory category = snapshot.data![index];
+                          CategoryWithDetails categoryDetails =
+                              snapshot.data![index];
+                          TransactionCategory category =
+                              categoryDetails.category;
                           List<TransactionCategory> subCategories =
                               subCategoriesIndexedByMainPk[
                                       category.categoryPk] ??
@@ -293,41 +296,25 @@ class _EditCategoriesPageState extends State<EditCategoriesPage> {
                                                 getColor(context, "black")
                                                     .withOpacity(0.65),
                                           ),
-                                          StreamBuilder<List<int?>>(
-                                            stream: database
-                                                .watchTotalCountOfTransactionsInCategory(
-                                                    category.categoryPk),
-                                            builder: (context, snapshot) {
-                                              if (snapshot.hasData &&
-                                                  snapshot.data != null) {
-                                                return TextFont(
-                                                  textAlign: TextAlign.left,
-                                                  text: snapshot.data![0]
-                                                          .toString() +
-                                                      " " +
-                                                      (snapshot.data![0] == 1
-                                                          ? "transaction"
-                                                              .tr()
-                                                              .toLowerCase()
-                                                          : "transactions"
-                                                              .tr()
-                                                              .toLowerCase()),
-                                                  fontSize: 14,
-                                                  textColor:
-                                                      getColor(context, "black")
-                                                          .withOpacity(0.65),
-                                                );
-                                              } else {
-                                                return TextFont(
-                                                  textAlign: TextAlign.left,
-                                                  text: "/ transactions",
-                                                  fontSize: 14,
-                                                  textColor:
-                                                      getColor(context, "black")
-                                                          .withOpacity(0.65),
-                                                );
-                                              }
-                                            },
+                                          TextFont(
+                                            textAlign: TextAlign.left,
+                                            text: categoryDetails
+                                                    .numberTransactions
+                                                    .toString() +
+                                                " " +
+                                                (categoryDetails
+                                                            .numberTransactions ==
+                                                        1
+                                                    ? "transaction"
+                                                        .tr()
+                                                        .toLowerCase()
+                                                    : "transactions"
+                                                        .tr()
+                                                        .toLowerCase()),
+                                            fontSize: 14,
+                                            textColor:
+                                                getColor(context, "black")
+                                                    .withOpacity(0.65),
                                           ),
                                         ],
                                       ),
@@ -355,8 +342,10 @@ class _EditCategoriesPageState extends State<EditCategoriesPage> {
                         },
                         itemCount: snapshot.data!.length,
                         onReorder: (_intPrevious, _intNew) async {
-                          TransactionCategory oldCategory =
+                          CategoryWithDetails oldCategoryDetails =
                               snapshot.data![_intPrevious];
+                          TransactionCategory oldCategory =
+                              oldCategoryDetails.category;
 
                           if (_intNew > _intPrevious) {
                             await database.moveCategory(oldCategory.categoryPk,

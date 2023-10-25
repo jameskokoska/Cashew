@@ -768,7 +768,7 @@
   "clear-selection": "انتخاب روشن",
   "view-all-days": "مشاهده همه روزها",
   "view-to-today": "مشاهده به امروز",
-  "subcategories-description": "زیر شاخه هایی ایجاد کنید تا معاملات خود را به شکلی که می خواهید سازماندهی کنید",
+  "subcategories-description": "زیر شاخه هایی ایجاد کنید تا معاملات خود را به روشی که می خواهید سازماندهی کنید",
   "examples": "مثال ها",
   "drinks": "نوشیدنی",
   "coffee": "قهوه",
@@ -790,5 +790,8 @@
   "bill-splitter-multiplier-description": "مقداری را وارد کنید که در هر مورد در شکاف صورتحساب ضرب شود. اگر مالیات بر روی هر مورد اعمال شود ، مفید است.",
   "more-options": "گزینه های بیشتر",
   "cannot-display-graph-for-current-time-period": "نمی تواند نمودار را برای دوره زمانی فعلی نمایش دهد.",
-  "exclude-from-budget": "از بودجه مستثنی است"
+  "exclude-from-budget": "از بودجه مستثنی است",
+  "erase-synced-data-and-cloud-backups": "داده های همگام سازی و پشتیبان گیری از ابر را پاک کنید",
+  "erase-cloud-data": "داده های ابر را پاک کنید",
+  "erase-cloud-data-description": "وارد حساب Google خود شوید و نسخه پشتیبان تهیه شده در زیر \"Sync\" و \"Backups\" را حذف کنید"
 }

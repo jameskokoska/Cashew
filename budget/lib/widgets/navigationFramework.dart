@@ -268,6 +268,7 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
       // The global Widget stack
       child: Stack(children: [
         Scaffold(
+          resizeToAvoidBottomInset: false,
           body: FadeIndexedStack(
             children: [...pages, ...pagesExtended],
             index: currentPage,
@@ -278,7 +279,6 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
                     : Duration(milliseconds: 300),
           ),
           extendBody: true,
-          resizeToAvoidBottomInset: false,
           bottomNavigationBar: BottomNavBar(
             key: navbarStateKey,
             onChanged: (index) {
@@ -291,8 +291,8 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
           child: Padding(
             padding: EdgeInsets.only(
               bottom: (getIsFullScreen(context) == false
-                      ? 95 + MediaQuery.of(context).viewPadding.bottom
-                      : 15 + MediaQuery.of(context).viewPadding.bottom) -
+                      ? 95 + MediaQuery.viewPaddingOf(context).bottom
+                      : 15 + MediaQuery.viewPaddingOf(context).bottom) -
                   // iOS navbar is lower
                   (getPlatform() == PlatformOS.isIOS ? 10 : 0),
               right: 15,

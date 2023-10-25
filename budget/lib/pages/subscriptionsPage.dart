@@ -56,7 +56,7 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
             floatingActionButton: AnimateFABDelayed(
               fab: Padding(
                 padding: EdgeInsets.only(
-                    bottom: MediaQuery.of(context).viewPadding.bottom),
+                    bottom: MediaQuery.viewPaddingOf(context).bottom),
                 child: FAB(
                   tooltip: "add-subscription".tr(),
                   openPage: AddTransactionPage(

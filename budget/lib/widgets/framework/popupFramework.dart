@@ -147,7 +147,7 @@ class PopupFramework extends StatelessWidget {
                   ? Builder(builder: (context) {
                       double initialBottomPadding = 10;
                       double bottomSafeAreaPadding =
-                          MediaQuery.of(context).padding.bottom;
+                          MediaQuery.paddingOf(context).bottom;
 
                       bottomSafeAreaPadding =
                           bottomSafeAreaPadding - initialBottomPadding;
@@ -156,7 +156,7 @@ class PopupFramework extends StatelessWidget {
                         bottomSafeAreaPadding = initialBottomPadding;
                       }
 
-                      // print(MediaQuery.of(context).padding.bottom);
+                      // print(MediaQuery.paddingOf(context).bottom);
                       // print(bottomSafeAreaPadding);
                       return SizedBox(height: bottomSafeAreaPadding);
                     })

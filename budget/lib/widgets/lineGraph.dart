@@ -667,7 +667,7 @@ class LineChartWrapper extends StatelessWidget {
     }
     return ClipRect(
       child: Container(
-        height: MediaQuery.of(context).size.width > 700 ? 300 : 175,
+        height: MediaQuery.sizeOf(context).width > 700 ? 300 : 175,
         child: _LineChart(
           spots: convertPoints(filterPointsList(points)),
           maxPair: maxPair,

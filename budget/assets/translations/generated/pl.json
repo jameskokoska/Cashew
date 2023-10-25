@@ -790,5 +790,8 @@
   "bill-splitter-multiplier-description": "Wprowadź wartość, która zostanie pomnożona do każdego elementu w rozdzieleniu rachunku. Przydatne, jeśli podatek jest stosowany na każdym elemencie.",
   "more-options": "Więcej możliwości",
   "cannot-display-graph-for-current-time-period": "Nie można wyświetlić wykresu dla bieżącego okresu.",
-  "exclude-from-budget": "Wykluczyć z budżetu"
+  "exclude-from-budget": "Wykluczyć z budżetu",
+  "erase-synced-data-and-cloud-backups": "Usuń synchronizowane dane i kopie zapasowe w chmurze",
+  "erase-cloud-data": "Usuń dane w chmurze",
+  "erase-cloud-data-description": "Zaloguj się na swoje konto Google i usuń kopie zapasowe znajdujące się pod „Sync” i „Backups”"
 }

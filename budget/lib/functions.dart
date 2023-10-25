@@ -831,7 +831,7 @@ Future<dynamic> pushRoute(BuildContext context, Widget page,
 
 Brightness determineBrightnessTheme(context) {
   return getSettingConstants(appStateSettings)["theme"] == ThemeMode.system
-      ? MediaQuery.of(context).platformBrightness
+      ? MediaQuery.platformBrightnessOf(context)
       : getSettingConstants(appStateSettings)["theme"] == ThemeMode.light
           ? Brightness.light
           : getSettingConstants(appStateSettings)["theme"] == ThemeMode.dark
@@ -1055,7 +1055,7 @@ dynamic nullIfIndexOutOfRange(List list, index) {
 }
 
 double getDeviceAspectRatio(BuildContext context) {
-  Size size = MediaQuery.of(context).size;
+  Size size = MediaQuery.sizeOf(context);
   final double aspectRatio = size.height / size.width;
   return aspectRatio;
 }

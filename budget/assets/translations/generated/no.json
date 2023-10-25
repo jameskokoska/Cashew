@@ -790,5 +790,8 @@
   "bill-splitter-multiplier-description": "Angi en verdi som vil bli multiplisert til hvert element i regningssplitteren. Nyttig hvis skatt brukes på hver vare.",
   "more-options": "Flere valg",
   "cannot-display-graph-for-current-time-period": "Kan ikke vise graf for gjeldende periode.",
-  "exclude-from-budget": "Ekskludere fra budsjett"
+  "exclude-from-budget": "Ekskludere fra budsjett",
+  "erase-synced-data-and-cloud-backups": "Slett synkroniserte data og sky -sikkerhetskopier",
+  "erase-cloud-data": "Slett skydata",
+  "erase-cloud-data-description": "Logg inn på Google -kontoen din og slett sikkerhetskopier som ligger under 'Sync' og 'Backups'"
 }

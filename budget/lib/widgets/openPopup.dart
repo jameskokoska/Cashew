@@ -68,8 +68,8 @@ Future<T?> openPopup<T extends Object?>(
               margin: EdgeInsets.only(
                 left: 20,
                 right: 20,
-                top: MediaQuery.of(context).padding.top + 20,
-                bottom: MediaQuery.of(context).padding.bottom + 20,
+                top: MediaQuery.paddingOf(context).top + 20,
+                bottom: MediaQuery.paddingOf(context).bottom + 20,
               ),
               decoration: BoxDecoration(
                 color: appStateSettings["materialYou"]
@@ -332,8 +332,8 @@ Future<T?> openPopupCustom<T extends Object?>(
             margin: EdgeInsets.only(
               left: 20,
               right: 20,
-              top: MediaQuery.of(context).padding.top,
-              bottom: MediaQuery.of(context).padding.bottom,
+              top: MediaQuery.paddingOf(context).top,
+              bottom: MediaQuery.paddingOf(context).bottom,
             ),
             decoration: BoxDecoration(
               color: appStateSettings["materialYou"]
@@ -404,8 +404,8 @@ Future<T?> openLoadingPopup<T extends Object?>(BuildContext context) {
             margin: EdgeInsets.only(
               left: 20,
               right: 20,
-              top: MediaQuery.of(context).padding.top,
-              bottom: MediaQuery.of(context).padding.bottom,
+              top: MediaQuery.paddingOf(context).top,
+              bottom: MediaQuery.paddingOf(context).bottom,
             ),
             decoration: BoxDecoration(
               color: appStateSettings["materialYou"]

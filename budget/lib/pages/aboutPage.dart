@@ -1,6 +1,7 @@
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
+import 'package:budget/pages/accountsPage.dart';
 import 'package:budget/pages/debugPage.dart';
 import 'package:budget/pages/detailedChangelogPage.dart';
 import 'package:budget/pages/onBoardingPage.dart';
@@ -8,10 +9,12 @@ import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/languageMap.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/button.dart';
+import 'package:budget/widgets/framework/popupFramework.dart';
 import 'package:budget/widgets/moreIcons.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
+import 'package:budget/widgets/outlinedButtonStacked.dart';
 import 'package:budget/widgets/showChangelog.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
@@ -441,6 +444,54 @@ class AboutPage extends StatelessWidget {
                 icon: appStateSettings["outlinedIcons"]
                     ? Icons.warning_outlined
                     : Icons.warning_rounded,
+                onExtraLabel2: "erase-synced-data-and-cloud-backups".tr(),
+                onExtra2: () {
+                  Navigator.pop(context);
+                  openBottomSheet(
+                    context,
+                    PopupFramework(
+                      title: "erase-cloud-data".tr(),
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(
+                              bottom: 18,
+                              left: 5,
+                              right: 5,
+                            ),
+                            child: TextFont(
+                              text: "erase-cloud-data-description".tr(),
+                              fontSize: 18,
+                              textAlign: TextAlign.center,
+                              maxLines: 10,
+                            ),
+                          ),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: SyncCloudBackupButton(
+                                  onTap: () async {
+                                    Navigator.pop(context);
+                                    pushRoute(context, AccountsPage());
+                                  },
+                                ),
+                              ),
+                              SizedBox(width: 18),
+                              Expanded(
+                                child: BackupsCloudBackupButton(
+                                  onTap: () async {
+                                    Navigator.pop(context);
+                                    pushRoute(context, AccountsPage());
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
                 onSubmit: () async {
                   Navigator.pop(context);
                   openPopup(

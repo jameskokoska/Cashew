@@ -130,7 +130,7 @@ class _ObjectivePageContentState extends State<_ObjectivePageContent> {
             floatingActionButton: AnimateFABDelayed(
               fab: Padding(
                 padding: EdgeInsets.only(
-                    bottom: MediaQuery.of(context).viewPadding.bottom),
+                    bottom: MediaQuery.viewPaddingOf(context).bottom),
                 child: FAB(
                   tooltip: "add-transaction".tr(),
                   openPage: AddTransactionPage(

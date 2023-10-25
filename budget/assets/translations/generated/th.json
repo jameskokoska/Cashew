@@ -790,5 +790,8 @@
   "bill-splitter-multiplier-description": "ป้อนค่าที่จะคูณกับทุกรายการในตัวแยกบิล มีประโยชน์หากใช้ภาษีในแต่ละรายการ",
   "more-options": "ตัวเลือกเพิ่มเติม",
   "cannot-display-graph-for-current-time-period": "ไม่สามารถแสดงกราฟสำหรับช่วงเวลาปัจจุบัน",
-  "exclude-from-budget": "แยกออกจากงบประมาณ"
+  "exclude-from-budget": "แยกออกจากงบประมาณ",
+  "erase-synced-data-and-cloud-backups": "ลบข้อมูลที่ซิงค์และการสำรองข้อมูลคลาวด์",
+  "erase-cloud-data": "ลบข้อมูลคลาวด์",
+  "erase-cloud-data-description": "เข้าสู่ระบบบัญชี Google ของคุณและลบการสำรองข้อมูลที่อยู่ภายใต้ 'ซิงค์' และ 'การสำรองข้อมูล'"
 }

@@ -790,5 +790,8 @@
   "bill-splitter-multiplier-description": "Entrez une valeur qui sera multipliée à chaque élément du séparateur de factures. Utile si la taxe est appliquée sur chaque élément.",
   "more-options": "Plus d'options",
   "cannot-display-graph-for-current-time-period": "Impossible d'afficher le graphique pour la période actuelle.",
-  "exclude-from-budget": "Exclure du budget"
+  "exclude-from-budget": "Exclure du budget",
+  "erase-synced-data-and-cloud-backups": "Effacer les données synchronisées et les sauvegardes cloud",
+  "erase-cloud-data": "Effacer les données du cloud",
+  "erase-cloud-data-description": "Connectez-vous à votre compte Google et supprimez les sauvegardes situées sous «Sync» et «Backups»"
 }

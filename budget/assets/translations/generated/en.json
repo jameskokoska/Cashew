@@ -790,5 +790,8 @@
   "bill-splitter-multiplier-description": "Enter a value that will be multiplied to every item in the bill splitter. Useful if tax is applied on each item.",
   "more-options": "More Options",
   "cannot-display-graph-for-current-time-period": "Cannot display graph for current time period.",
-  "exclude-from-budget": "Exclude From Budget"
+  "exclude-from-budget": "Exclude From Budget",
+  "erase-synced-data-and-cloud-backups": "Erase Synced Data And Cloud Backups",
+  "erase-cloud-data": "Erase Cloud Data",
+  "erase-cloud-data-description": "Login to your Google account and delete backups located under 'Sync' and 'Backups'"
 }

@@ -789,6 +789,9 @@
   "multiplier": "Çarpan",
   "bill-splitter-multiplier-description": "Bill Splitter'daki her öğeye çarpılacak bir değer girin. Her bir öğeye vergi uygulanırsa kullanışlıdır.",
   "more-options": "Daha fazla seçenek",
-  "cannot-display-graph-for-current-time-period": "Grafiği geçerli zaman periyodu için görüntüleyemez.",
-  "exclude-from-budget": "Bütçeden hariç"
+  "cannot-display-graph-for-current-time-period": "Grafiği geçerli zaman dilimi için görüntüleyemez.",
+  "exclude-from-budget": "Bütçeden hariç",
+  "erase-synced-data-and-cloud-backups": "Senkronize edilmiş verileri ve bulut yedeklemelerini silin",
+  "erase-cloud-data": "Bulut verilerini silin",
+  "erase-cloud-data-description": "Google hesabınıza giriş yapın ve 'senkronizasyon' ve 'yedekler' altında bulunan yedeklemeleri silin"
 }

@@ -146,7 +146,7 @@ class GlobalSnackbarState extends State<GlobalSnackbar>
             offset: Offset(
                 (_animationControllerX.value - 0.5) * 100,
                 (_animationControllerY.value - 0.5) * 400 +
-                    MediaQuery.of(context).viewPadding.top +
+                    MediaQuery.viewPaddingOf(context).top +
                     10),
             child: child,
           );

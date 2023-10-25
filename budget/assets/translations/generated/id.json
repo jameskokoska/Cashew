@@ -790,5 +790,8 @@
   "bill-splitter-multiplier-description": "Masukkan nilai yang akan dikalikan dengan setiap item dalam pembagi tagihan. Berguna jika pajak diterapkan pada setiap item.",
   "more-options": "Lebih banyak pilihan",
   "cannot-display-graph-for-current-time-period": "Tidak dapat menampilkan grafik untuk periode waktu saat ini.",
-  "exclude-from-budget": "Mengecualikan dari anggaran"
+  "exclude-from-budget": "Dikecualikan dari anggaran",
+  "erase-synced-data-and-cloud-backups": "Hapus data yang disinkronkan dan cadangan cloud",
+  "erase-cloud-data": "Hapus data cloud",
+  "erase-cloud-data-description": "Masuk ke akun Google Anda dan hapus cadangan yang terletak di bawah 'Sync' dan 'Backups'"
 }

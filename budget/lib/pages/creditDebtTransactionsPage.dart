@@ -59,7 +59,7 @@ class _CreditDebtTransactionsState extends State<CreditDebtTransactions> {
               enabled: isCredit != null,
               fab: Padding(
                 padding: EdgeInsets.only(
-                    bottom: MediaQuery.of(context).viewPadding.bottom),
+                    bottom: MediaQuery.viewPaddingOf(context).bottom),
                 child: FAB(
                   tooltip:
                       isCredit == true ? "add-credit".tr() : "add-debt".tr(),

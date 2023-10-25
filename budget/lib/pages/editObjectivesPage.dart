@@ -73,7 +73,7 @@ class _EditObjectivesPageState extends State<EditObjectivesPage> {
         floatingActionButton: AnimateFABDelayed(
           fab: Padding(
             padding: EdgeInsets.only(
-                bottom: MediaQuery.of(context).viewPadding.bottom),
+                bottom: MediaQuery.viewPaddingOf(context).bottom),
             child: FAB(
               tooltip: "add-goal".tr(),
               openPage: AddObjectivePage(

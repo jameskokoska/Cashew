@@ -143,12 +143,12 @@ class _BudgetHistoryLineGraphState extends State<BudgetHistoryLineGraph> {
     ];
 
     return Container(
-      height: MediaQuery.of(context).size.height * 0.3 >
+      height: MediaQuery.sizeOf(context).height * 0.3 >
               (getIsFullScreen(context) == false ? 190 : 350)
           ? getIsFullScreen(context) == false
               ? 190
               : 350
-          : MediaQuery.of(context).size.height * 0.3,
+          : MediaQuery.sizeOf(context).height * 0.3,
       padding: const EdgeInsets.only(
         left: 10,
         right: 25,

@@ -30,8 +30,7 @@ class HomeTransactionSlivers extends StatelessWidget {
               : selectedSlidingSelector == 2
                   ? false
                   : true,
-          sticky: false,
-          slivers: false,
+          renderAsSlivers: false,
           dateDividerColor: Colors.transparent,
           useHorizontalPaddingConstrained: false,
           pastDaysLimitToShow: 7,

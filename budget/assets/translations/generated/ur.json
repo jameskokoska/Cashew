@@ -790,5 +790,8 @@
   "bill-splitter-multiplier-description": "ایک ایسی قیمت درج کریں جو بل اسپلٹر میں ہر آئٹم سے ضرب ہوجائے۔ مفید ہے اگر ہر آئٹم پر ٹیکس کا اطلاق ہوتا ہے۔",
   "more-options": "مزید زرائے",
   "cannot-display-graph-for-current-time-period": "موجودہ وقت کی مدت کے لئے گراف ڈسپلے نہیں کرسکتے ہیں۔",
-  "exclude-from-budget": "بجٹ سے خارج کریں"
+  "exclude-from-budget": "بجٹ سے خارج کریں",
+  "erase-synced-data-and-cloud-backups": "مطابقت پذیر ڈیٹا اور کلاؤڈ بیک اپ کو مٹا دیں",
+  "erase-cloud-data": "کلاؤڈ ڈیٹا کو مٹا دیں",
+  "erase-cloud-data-description": "اپنے گوگل اکاؤنٹ میں لاگ ان کریں اور 'مطابقت پذیری' اور 'بیک اپ' کے تحت واقع بیک اپ کو حذف کریں"
 }

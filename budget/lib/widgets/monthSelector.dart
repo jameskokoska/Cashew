@@ -41,7 +41,7 @@ class MonthSelectorState extends State<MonthSelector> {
   _onScroll(double position) {
     final upperBound = 200;
     final lowerBound = -200 -
-        (MediaQuery.of(context).size.width -
+        (MediaQuery.sizeOf(context).width -
                 getWidthNavigationSidebar(context)) /
             2 -
         100;
@@ -72,7 +72,7 @@ class MonthSelectorState extends State<MonthSelector> {
   Widget build(BuildContext context) {
     return NotificationListener(
       onNotification: (SizeChangedLayoutNotification notification) {
-        double middle = -(MediaQuery.of(context).size.width -
+        double middle = -(MediaQuery.sizeOf(context).width -
                     getWidthNavigationSidebar(context)) /
                 2 +
             100 / 2;
@@ -90,7 +90,7 @@ class MonthSelectorState extends State<MonthSelector> {
               height: 50,
               overBoundsDetection: 50,
               initialItems: 10,
-              startingScrollPosition: -(MediaQuery.of(context).size.width -
+              startingScrollPosition: -(MediaQuery.sizeOf(context).width -
                           getWidthNavigationSidebar(context)) /
                       2 +
                   100 / 2,

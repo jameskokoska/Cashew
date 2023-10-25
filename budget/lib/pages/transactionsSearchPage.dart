@@ -49,9 +49,18 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
   final _debouncer = Debouncer(milliseconds: 500);
 
   late SearchFilters searchFilters;
+  late FocusNode _searchFocusNode;
 
   @override
   void initState() {
+    Future.delayed(Duration(milliseconds: 0), () {
+      // This detaches the focus so that any popup does not trigger a rerendering of list widgets
+      FocusScopeNode currentFocus = FocusScope.of(context);
+      if (!currentFocus.hasPrimaryFocus) {
+        currentFocus.unfocus();
+      }
+      _searchFocusNode.requestFocus();
+    });
     DateTimeRange initialDateTimeRange = DateTimeRange(
       start: DateTime(
           DateTime.now().year, DateTime.now().month - 6, DateTime.now().day),
@@ -62,12 +71,13 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
         : SearchFilters();
 
     searchFilters.dateTimeRange = initialDateTimeRange;
-    super.initState();
     _animationControllerSearch = AnimationController(vsync: this, value: 1);
+    _searchFocusNode = new FocusNode();
+    super.initState();
   }
 
   _scrollListener(position) {
-    double percent = position / (MediaQuery.of(context).padding.top + 65 + 50);
+    double percent = position / (MediaQuery.paddingOf(context).top + 65 + 50);
     if (percent >= 0 && percent <= 1) {
       _animationControllerSearch.value = 1 - percent;
     }
@@ -137,7 +147,7 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
               floatingActionButton: AnimateFABDelayed(
                 fab: Padding(
                   padding: EdgeInsets.only(
-                      bottom: MediaQuery.of(context).viewPadding.bottom),
+                      bottom: MediaQuery.viewPaddingOf(context).bottom),
                   child: FAB(
                     tooltip: "add-transaction".tr(),
                     openPage: AddTransactionPage(
@@ -180,7 +190,7 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
                               });
                             },
                             padding: EdgeInsets.all(0),
-                            autoFocus: true,
+                            focusNode: _searchFocusNode,
                           ),
                         ),
                         SizedBox(width: 7),
@@ -263,7 +273,7 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
                   null,
                   null,
                   listID: "TransactionsSearch",
-                  simpleListRender: true,
+                  simpleListRender: false,
                   noResultsMessage: "no-transactions-found".tr(),
                   noSearchResultsVariation: true,
                   searchFilters: searchFilters,

@@ -766,7 +766,7 @@
   "main-category-created": "주요 범주가 생성되었습니다",
   "no-folder-selected": "폴더가 선택되지 않았습니다",
   "clear-selection": "명확한 선택",
-  "view-all-days": "하루 종일보십시오",
+  "view-all-days": "하루 종일보세요",
   "view-to-today": "오늘까지",
   "subcategories-description": "트랜잭션을 추가로 구성하여 원하는 방식으로 하위 범주를 작성하십시오.",
   "examples": "예",
@@ -790,5 +790,8 @@
   "bill-splitter-multiplier-description": "Bill Splitter의 모든 품목에 곱할 값을 입력하십시오. 각 항목에 세금이 적용되는 경우 유용합니다.",
   "more-options": "더 많은 옵션",
   "cannot-display-graph-for-current-time-period": "현재 기간 동안 그래프를 표시 할 수 없습니다.",
-  "exclude-from-budget": "예산에서 제외"
+  "exclude-from-budget": "예산에서 제외",
+  "erase-synced-data-and-cloud-backups": "동기화 된 데이터 및 클라우드 백업을 지우십시오",
+  "erase-cloud-data": "클라우드 데이터를 지우십시오",
+  "erase-cloud-data-description": "Google 계정에 로그인하고 'Sync'및 'Backups'에있는 백업을 삭제합니다."
 }

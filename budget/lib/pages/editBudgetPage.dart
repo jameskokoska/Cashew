@@ -32,7 +32,7 @@ import 'package:provider/provider.dart';
 String? hiddenOnSearchValue;
 
 bool hideIfSearching(String? searchTerm, BuildContext context) {
-  // print(MediaQuery.of(context).size.height -
+  // print(MediaQuery.sizeOf(context).height -
   //     getKeyboardHeight(context) -
   //     getExpandedHeaderHeight(context, null));
 
@@ -44,7 +44,7 @@ bool hideIfSearching(String? searchTerm, BuildContext context) {
   }
   if (searchTerm == "" ||
       searchTerm == null ||
-      MediaQuery.of(context).size.height -
+      MediaQuery.sizeOf(context).height -
               getKeyboardHeight(context) -
               getExpandedHeaderHeight(context, null) >
           400) {
@@ -98,7 +98,7 @@ class _EditBudgetPageState extends State<EditBudgetPage> {
         floatingActionButton: AnimateFABDelayed(
           fab: Padding(
             padding: EdgeInsets.only(
-                bottom: MediaQuery.of(context).viewPadding.bottom),
+                bottom: MediaQuery.viewPaddingOf(context).bottom),
             child: FAB(
               tooltip: "add-budget".tr(),
               openPage: AddBudgetPage(

@@ -223,17 +223,7 @@ class AccountsPageState extends State<AccountsPage> {
                         child: Row(
                           children: [
                             Expanded(
-                              child: OutlinedButtonStacked(
-                                text: getPlatform() == PlatformOS.isIOS
-                                    ? "devices".tr().capitalizeFirst
-                                    : "sync".tr(),
-                                iconData: getPlatform() == PlatformOS.isIOS
-                                    ? appStateSettings["outlinedIcons"]
-                                        ? Icons.devices_outlined
-                                        : Icons.devices_rounded
-                                    : appStateSettings["outlinedIcons"]
-                                        ? Icons.cloud_sync_outlined
-                                        : Icons.cloud_sync_rounded,
+                              child: SyncCloudBackupButton(
                                 onTap: () async {
                                   chooseBackup(context,
                                       isManaging: true, isClientSync: true);
@@ -242,11 +232,7 @@ class AccountsPageState extends State<AccountsPage> {
                             ),
                             SizedBox(width: 18),
                             Expanded(
-                              child: OutlinedButtonStacked(
-                                text: "backups".tr(),
-                                iconData: appStateSettings["outlinedIcons"]
-                                    ? Icons.folder_outlined
-                                    : Icons.folder_rounded,
+                              child: BackupsCloudBackupButton(
                                 onTap: () async {
                                   await chooseBackup(context, isManaging: true);
                                 },
@@ -285,6 +271,45 @@ class AccountsPageState extends State<AccountsPage> {
           ),
         ),
       ],
+    );
+  }
+}
+
+class SyncCloudBackupButton extends StatelessWidget {
+  const SyncCloudBackupButton({super.key, required this.onTap});
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return OutlinedButtonStacked(
+      text: getPlatform() == PlatformOS.isIOS
+          ? "devices".tr().capitalizeFirst
+          : "sync".tr(),
+      iconData: getPlatform() == PlatformOS.isIOS
+          ? appStateSettings["outlinedIcons"]
+              ? Icons.devices_outlined
+              : Icons.devices_rounded
+          : appStateSettings["outlinedIcons"]
+              ? Icons.cloud_sync_outlined
+              : Icons.cloud_sync_rounded,
+      onTap: onTap,
+    );
+  }
+}
+
+class BackupsCloudBackupButton extends StatelessWidget {
+  const BackupsCloudBackupButton({super.key, required this.onTap});
+
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return OutlinedButtonStacked(
+      text: "backups".tr(),
+      iconData: appStateSettings["outlinedIcons"]
+          ? Icons.folder_outlined
+          : Icons.folder_rounded,
+      onTap: onTap,
     );
   }
 }

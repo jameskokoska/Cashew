@@ -90,7 +90,7 @@ class SlidingSheet extends StatefulWidget {
 
   /// {@template sliding_sheet.avoidStatusBar}
   /// If true, adds the top padding returned by
-  /// `MediaQuery.of(context).viewPadding.top` to the [padding] when taking
+  /// `MediaQuery.viewPaddingOf(context).top` to the [padding] when taking
   /// up the full screen.
   ///
   /// This can be used to easily avoid the content of the sheet from being
@@ -447,7 +447,7 @@ class _SlidingSheetState extends State<SlidingSheet>
       return begin;
     }
 
-    final statusBarHeight = MediaQuery.of(context).viewPadding.top;
+    final statusBarHeight = MediaQuery.viewPaddingOf(context).top;
     final end = begin.copyWith(top: begin.top + statusBarHeight);
     return EdgeInsets.lerp(begin, end, lerpFactor)!;
   }
@@ -784,11 +784,11 @@ class _SlidingSheetState extends State<SlidingSheet>
     dismissUnderway = true;
     final FocusScopeNode currentFocus = FocusScope.of(context);
     if (!currentFocus.hasPrimaryFocus ||
-        MediaQuery.of(context).viewInsets.bottom > 0) {
+        MediaQuery.viewInsetsOf(context).bottom > 0) {
       // Close the keyboard
       currentFocus.unfocus();
       // Wait for the keyboard to close
-      while (MediaQuery.of(context).viewInsets.bottom > 0) {
+      while (MediaQuery.viewInsetsOf(context).bottom > 0) {
         await Future.delayed(const Duration(milliseconds: 1), () {});
       }
     }
@@ -1117,8 +1117,8 @@ class _SlidingSheetState extends State<SlidingSheet>
               // width: double.infinity,
               // height: double.infinity,
               // Fixes backdrop not fading correctly when using Impeller (iOS - Flutter v3.13)
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height - 1,
+              width: MediaQuery.sizeOf(context).width,
+              height: MediaQuery.sizeOf(context).height - 1,
               color: widget.backdropColor,
             ),
           ),

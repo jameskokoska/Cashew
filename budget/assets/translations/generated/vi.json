@@ -790,5 +790,8 @@
   "bill-splitter-multiplier-description": "Nhập một giá trị sẽ được nhân với mọi mục trong bộ chia hóa đơn. Hữu ích nếu thuế được áp dụng trên mỗi mặt hàng.",
   "more-options": "Lựa chọn khác",
   "cannot-display-graph-for-current-time-period": "Không thể hiển thị đồ thị cho khoảng thời gian hiện tại.",
-  "exclude-from-budget": "Loại trừ khỏi ngân sách"
+  "exclude-from-budget": "Loại trừ khỏi ngân sách",
+  "erase-synced-data-and-cloud-backups": "Xóa dữ liệu được đồng bộ hóa và sao lưu đám mây",
+  "erase-cloud-data": "Xóa dữ liệu đám mây",
+  "erase-cloud-data-description": "Đăng nhập vào tài khoản Google của bạn và xóa các bản sao lưu nằm trong 'Sync' và 'Sao lưu'"
 }

@@ -10,47 +10,46 @@ import 'package:budget/widgets/scrollbarWrap.dart';
 bool getIsFullScreen(context) {
   return getWidthNavigationSidebar(context) > 0;
   double maxWidth = 700;
-  return MediaQuery.of(context).size.width > maxWidth;
+  return MediaQuery.sizeOf(context).width > maxWidth;
 }
 
 double getWidthBottomSheet(context) {
   double maxWidth = 900;
-  return MediaQuery.of(context).size.width -
-              getWidthNavigationSidebar(context) >
+  return MediaQuery.sizeOf(context).width - getWidthNavigationSidebar(context) >
           maxWidth
       ? maxWidth - getWidthNavigationSidebar(context)
-      : MediaQuery.of(context).size.width - getWidthNavigationSidebar(context);
+      : MediaQuery.sizeOf(context).width - getWidthNavigationSidebar(context);
 }
 
 double getHorizontalPaddingConstrained(context) {
-  if (MediaQuery.of(context).size.width >= 550 &&
-      MediaQuery.of(context).size.width <= 1000 &&
+  if (MediaQuery.sizeOf(context).width >= 550 &&
+      MediaQuery.sizeOf(context).width <= 1000 &&
       getIsFullScreen(context) == false) {
     double returnedPadding = 0;
-    returnedPadding = MediaQuery.of(context).size.width / 3 - 140;
+    returnedPadding = MediaQuery.sizeOf(context).width / 3 - 140;
     return returnedPadding < 0 ? 0 : returnedPadding;
-  } else if (MediaQuery.of(context).size.width <= 1000 &&
+  } else if (MediaQuery.sizeOf(context).width <= 1000 &&
       getIsFullScreen(context) &&
       appStateSettings["expandedNavigationSidebar"] == true) {
     double returnedPadding = 0;
-    returnedPadding = MediaQuery.of(context).size.width / 5 - 125;
+    returnedPadding = MediaQuery.sizeOf(context).width / 5 - 125;
     return returnedPadding < 0 ? 0 : returnedPadding;
   }
   // When the navigation bar is closed
-  else if (MediaQuery.of(context).size.width <= 1000 &&
+  else if (MediaQuery.sizeOf(context).width <= 1000 &&
       getIsFullScreen(context) &&
       appStateSettings["expandedNavigationSidebar"] == false) {
     double returnedPadding = 0;
-    returnedPadding = MediaQuery.of(context).size.width / 3.5 - 125;
+    returnedPadding = MediaQuery.sizeOf(context).width / 3.5 - 125;
     return returnedPadding < 0 ? 0 : returnedPadding;
   } else if (getIsFullScreen(context) &&
       appStateSettings["expandedNavigationSidebar"] == false) {
     double returnedPadding = 0;
-    returnedPadding = (MediaQuery.of(context).size.width - 500) / 3;
+    returnedPadding = (MediaQuery.sizeOf(context).width - 500) / 3;
     return returnedPadding < 0 ? 0 : returnedPadding;
   }
 
-  return (MediaQuery.of(context).size.width - getWidthBottomSheet(context)) / 3;
+  return (MediaQuery.sizeOf(context).width - getWidthBottomSheet(context)) / 3;
 }
 
 SheetController? bottomSheetControllerGlobalCustomAssigned;
@@ -84,7 +83,7 @@ Future openBottomSheet(
               amountDark: 0.3, amountLight: 0.6)
           : getColor(context, "lightDarkAccent"), builder: (context) {
     double deviceAspectRatio =
-        MediaQuery.of(context).size.height / MediaQuery.of(context).size.width;
+        MediaQuery.sizeOf(context).height / MediaQuery.sizeOf(context).width;
 
     return SlidingSheetDialog(
       isDismissable: isDismissable,
@@ -179,7 +178,7 @@ Future openBottomSheet(
 //     backgroundColor: Colors.transparent,
 //     builder: (contextBuilder) {
 //       return Padding(
-//         padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
+//         padding: EdgeInsets.only(top: MediaQuery.paddingOf(context).top),
 //         child: GestureDetector(
 //           onTap: () {
 //             Navigator.pop(context);

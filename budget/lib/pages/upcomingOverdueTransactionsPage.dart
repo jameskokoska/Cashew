@@ -66,7 +66,7 @@ class _UpcomingOverdueTransactionsState
               enabled: overdueTransactions == null,
               fab: Padding(
                 padding: EdgeInsets.only(
-                    bottom: MediaQuery.of(context).viewPadding.bottom),
+                    bottom: MediaQuery.viewPaddingOf(context).bottom),
                 child: FAB(
                   tooltip: "add-upcoming".tr(),
                   openPage: AddTransactionPage(

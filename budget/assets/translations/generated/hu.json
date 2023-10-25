@@ -790,5 +790,8 @@
   "bill-splitter-multiplier-description": "Írjon be egy olyan értéket, amelyet megsokszorozunk a számla -elosztó minden elemére. Hasznos, ha az adót minden tételre alkalmazzák.",
   "more-options": "Több lehetőség",
   "cannot-display-graph-for-current-time-period": "Nem tudja megjeleníteni a grafikonot az aktuális időtartamra.",
-  "exclude-from-budget": "Kizárja a költségvetést"
+  "exclude-from-budget": "Kizárja a költségvetést",
+  "erase-synced-data-and-cloud-backups": "Törölje a szinkronizált adatok és a felhő biztonsági mentéseit",
+  "erase-cloud-data": "Törölje a felhőadatokat",
+  "erase-cloud-data-description": "Jelentkezzen be a Google -fiókjába, és törölje a „Sync” és a „Backups” alatt található biztonsági mentéseket"
 }

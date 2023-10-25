@@ -914,7 +914,7 @@ class _SelectAmountState extends State<SelectAmount> {
                       ? Button(
                           key: Key("addSuccess"),
                           label: widget.nextLabel ?? "",
-                          width: MediaQuery.of(context).size.width,
+                          width: MediaQuery.sizeOf(context).width,
                           onTap: () {
                             if (widget.allowZero && amount == "") {
                               widget.setSelectedAmount(0, "");
@@ -936,7 +936,7 @@ class _SelectAmountState extends State<SelectAmount> {
                       : Button(
                           key: Key("addNoSuccess"),
                           label: widget.nextLabel ?? "",
-                          width: MediaQuery.of(context).size.width,
+                          width: MediaQuery.sizeOf(context).width,
                           onTap: () {},
                           color: Colors.grey,
                         ),
@@ -1306,7 +1306,7 @@ class _SelectAmountValueState extends State<SelectAmountValue> {
               ? Button(
                   key: Key("addSuccess"),
                   label: widget.nextLabel ?? "",
-                  width: MediaQuery.of(context).size.width,
+                  width: MediaQuery.sizeOf(context).width,
                   onTap: () {
                     if (widget.next != null) {
                       widget.next!();
@@ -1316,7 +1316,7 @@ class _SelectAmountValueState extends State<SelectAmountValue> {
               : Button(
                   key: Key("addNoSuccess"),
                   label: widget.nextLabel ?? "",
-                  width: MediaQuery.of(context).size.width,
+                  width: MediaQuery.sizeOf(context).width,
                   onTap: () {},
                   color: Colors.grey,
                 ),

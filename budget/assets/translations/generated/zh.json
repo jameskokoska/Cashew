@@ -790,5 +790,8 @@
   "bill-splitter-multiplier-description": "输入将乘以账单分离器中每个项目的值。如果对每个项目征税，有用。",
   "more-options": "更多的选择",
   "cannot-display-graph-for-current-time-period": "无法显示当前时间段的图形。",
-  "exclude-from-budget": "排除在预算之外"
+  "exclude-from-budget": "排除在预算之外",
+  "erase-synced-data-and-cloud-backups": "擦除同步数据和云备份",
+  "erase-cloud-data": "擦除云数据",
+  "erase-cloud-data-description": "登录到您的Google帐户并删除位于“同步”和“备份”下的备份"
 }

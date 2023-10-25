@@ -191,7 +191,7 @@ class _AddAssociatedTitlePageState extends State<AddAssociatedTitlePage> {
                   label: widget.associatedTitle == null
                       ? "add-title".tr()
                       : "save-changes".tr(),
-                  width: MediaQuery.of(context).size.width,
+                  width: MediaQuery.sizeOf(context).width,
                   onTap: () async {
                     await addTitle();
                   },
@@ -200,7 +200,7 @@ class _AddAssociatedTitlePageState extends State<AddAssociatedTitlePage> {
                   label: widget.associatedTitle == null
                       ? "add-title".tr()
                       : "save-changes".tr(),
-                  width: MediaQuery.of(context).size.width,
+                  width: MediaQuery.sizeOf(context).width,
                   onTap: () {},
                   color: Colors.grey,
                 ),

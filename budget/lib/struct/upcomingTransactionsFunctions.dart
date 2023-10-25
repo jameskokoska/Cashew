@@ -291,8 +291,9 @@ Future<bool> markSubscriptionsAsPaid({int? iteration}) async {
         await createNewSubscriptionTransaction(null, transaction);
       }
     }
-    if (hasUpdatedASubscription)
-      markSubscriptionsAsPaid(iteration: (iteration ?? 0) + 1);
+    if (hasUpdatedASubscription) {
+      await markSubscriptionsAsPaid(iteration: (iteration ?? 0) + 1);
+    }
     print("Automatically paid subscriptions with iteration: " +
         iteration.toString());
   }

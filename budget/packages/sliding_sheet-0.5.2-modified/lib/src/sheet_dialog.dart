@@ -102,13 +102,13 @@ Future<T?> showSlidingBottomSheet<T>(
                   Align(
                     alignment: Alignment.bottomCenter,
                     child: Container(
-                      height: MediaQuery.of(context).viewInsets.bottom,
+                      height: MediaQuery.viewInsetsOf(context).bottom,
                       color: bottomPaddingColor,
                     ),
                   ),
                   Padding(
                     padding: EdgeInsets.only(
-                      bottom: MediaQuery.of(context).viewInsets.bottom,
+                      bottom: MediaQuery.viewInsetsOf(context).bottom,
                     ),
                     child: sheet,
                   ),
@@ -117,7 +117,7 @@ Future<T?> showSlidingBottomSheet<T>(
             } else if (resizeToAvoidBottomInset) {
               sheet = Padding(
                 padding: EdgeInsets.only(
-                  bottom: MediaQuery.of(context).viewInsets.bottom,
+                  bottom: MediaQuery.viewInsetsOf(context).bottom,
                 ),
                 child: sheet,
               );

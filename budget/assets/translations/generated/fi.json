@@ -790,5 +790,8 @@
   "bill-splitter-multiplier-description": "Syötä arvo, joka kerrotaan jokaiselle laskun jakajan kohteelle. Hyödyllinen, jos veroa käytetään jokaisessa tuotteessa.",
   "more-options": "Lisää vaihtoehtoja",
   "cannot-display-graph-for-current-time-period": "Kraafia ei voi näyttää kuluneen ajanjakson ajan.",
-  "exclude-from-budget": "Sulkea pois budjettia"
+  "exclude-from-budget": "Sulkea pois budjettia",
+  "erase-synced-data-and-cloud-backups": "Poista synkronoidut tiedot ja pilvivarmuuskopiot",
+  "erase-cloud-data": "Poista pilvitiedot",
+  "erase-cloud-data-description": "Kirjaudu Google -tiliisi ja poista varmuuskopiot, jotka sijaitsevat 'synkronoinnissa' ja 'varmuuskopiot'"
 }

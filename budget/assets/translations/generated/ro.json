@@ -790,5 +790,8 @@
   "bill-splitter-multiplier-description": "Introduceți o valoare care va fi înmulțită la fiecare articol din divizorul de facturi. Util dacă se aplică impozit pe fiecare articol.",
   "more-options": "Mai multe opțiuni",
   "cannot-display-graph-for-current-time-period": "Nu se poate afișa grafic pentru perioada de timp curentă.",
-  "exclude-from-budget": "Exclude din buget"
+  "exclude-from-budget": "Exclude din buget",
+  "erase-synced-data-and-cloud-backups": "Ștergeți date sincronizate și copii de rezervă în cloud",
+  "erase-cloud-data": "Ștergeți datele cloud",
+  "erase-cloud-data-description": "Conectați -vă la contul dvs. Google și ștergeți backup -urile situate în „Sync” și „Backup -uri”"
 }

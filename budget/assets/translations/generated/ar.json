@@ -790,5 +790,8 @@
   "bill-splitter-multiplier-description": "أدخل قيمة سيتم ضربها في كل عنصر في فاصل الفاتورة. مفيد إذا تم تطبيق الضريبة على كل عنصر.",
   "more-options": "المزيد من الخيارات",
   "cannot-display-graph-for-current-time-period": "لا يمكن عرض الرسم البياني للفترة الزمنية الحالية.",
-  "exclude-from-budget": "باستثناء الميزانية"
+  "exclude-from-budget": "استبعاد من الميزانية",
+  "erase-synced-data-and-cloud-backups": "محو البيانات المزامنة والنسخ الاحتياطية السحابية",
+  "erase-cloud-data": "محو البيانات السحابية",
+  "erase-cloud-data-description": "تسجيل الدخول إلى حساب Google الخاص بك وحذف النسخ الاحتياطية الموجودة تحت \"Sync\" و \"النسخ الاحتياطية\""
 }

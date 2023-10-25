@@ -33,7 +33,7 @@ const int NOTE_LIMIT = 500;
 const int COLOUR_LIMIT = 50;
 
 // Query Constants
-const int DEFAULT_LIMIT = 5000;
+const int DEFAULT_LIMIT = 100000;
 const int DEFAULT_OFFSET = 0;
 
 enum BudgetReoccurence { custom, daily, weekly, monthly, yearly }
@@ -509,6 +509,26 @@ class TransactionWithCategory {
     this.budget,
     this.objective,
     this.subCategory,
+  });
+}
+
+class CategoryWithDetails {
+  final TransactionCategory category;
+  final int? numberTransactions;
+  CategoryWithDetails({
+    required this.category,
+    this.numberTransactions,
+  });
+}
+
+class WalletWithDetails {
+  final TransactionWallet wallet;
+  final double? totalSpent;
+  final int? numberTransactions;
+  WalletWithDetails({
+    required this.wallet,
+    this.totalSpent,
+    this.numberTransactions,
   });
 }
 
@@ -1080,7 +1100,8 @@ class FinanceDatabase extends _$FinanceDatabase {
 
   //get transactions that occurred on a given day and category
   Stream<List<TransactionWithCategory>> getTransactionCategoryWithDay(
-    DateTime date, {
+    DateTime? start,
+    DateTime? end, {
     String search = "",
     // Search will be ignored... if these params are passed in
     List<String>? categoryFks,
@@ -1101,11 +1122,17 @@ class FinanceDatabase extends _$FinanceDatabase {
     query = (select(transactions)
           ..where((tbl) {
             final dateCreated = tbl.dateCreated;
+
             return onlyShowIfFollowsSearchFilters(tbl, searchFilters) &
                 onlyShowIfFollowsFilters(tbl,
                     budgetTransactionFilters: budgetTransactionFilters,
                     memberTransactionFilters: memberTransactionFilters) &
-                isOnDay(dateCreated, date) &
+                (start == null && end == null
+                    ? Constant(true)
+                    : start != null && end == null
+                        ? isOnDay(dateCreated, start)
+                        : onlyShowBasedOnTimeRange(
+                            transactions, start, end, budget)) &
                 (onlyShowBasedOnCategoryFks(
                         tbl, categoryFks, categoryFksExclude) |
                     onlyShowBasedOnSubcategoryFks(transactions, categoryFks)) &
@@ -1122,16 +1149,19 @@ class FinanceDatabase extends _$FinanceDatabase {
           })
           ..limit(limit ?? DEFAULT_LIMIT, offset: null)
           ..orderBy([
-            (t) => OrderingTerm(
-                  expression: (t.type
-                              .equalsValue(TransactionSpecialType.repetitive) |
-                          t.type.equalsValue(
-                              TransactionSpecialType.subscription) |
-                          t.type.equalsValue(TransactionSpecialType.upcoming)) &
-                      t.paid.equals(false),
-                  mode: OrderingMode.asc,
-                ),
-            (t) => OrderingTerm.asc(t.dateCreated),
+            // This will bring unpaid transactions to the top of the list
+            // Before it brought it to the top of the day, but now
+            // This returns all transactions within a time range
+            // (t) => OrderingTerm(
+            //       expression: (t.type
+            //                   .equalsValue(TransactionSpecialType.repetitive) |
+            //               t.type.equalsValue(
+            //                   TransactionSpecialType.subscription) |
+            //               t.type.equalsValue(TransactionSpecialType.upcoming)) &
+            //           t.paid.equals(false),
+            //       mode: OrderingMode.desc,
+            //     ),
+            (t) => OrderingTerm.desc(t.dateCreated),
           ]))
         .join([
       innerJoin(
@@ -1205,9 +1235,7 @@ class FinanceDatabase extends _$FinanceDatabase {
         leftOuterJoin(categories,
             categories.categoryPk.equalsExp(transactions.categoryFk))
       ])
-      ..orderBy(limit == null
-          ? [OrderingTerm.asc(transactions.dateCreated)]
-          : [OrderingTerm.desc(transactions.dateCreated)])
+      ..orderBy([OrderingTerm.desc(transactions.dateCreated)])
       ..where(
         onlyShowTransactionBasedOnSearchQuery(transactions, search,
                 withCategories: true) &
@@ -1765,6 +1793,35 @@ class FinanceDatabase extends _$FinanceDatabase {
           ..orderBy([(w) => OrderingTerm.asc(w.order)])
           ..limit(limit ?? DEFAULT_LIMIT, offset: offset ?? DEFAULT_OFFSET))
         .watch();
+  }
+
+  Stream<List<WalletWithDetails>> watchAllWalletsWithDetails(
+      {String? searchFor}) {
+    JoinedSelectStatement<HasResultSet, dynamic> query;
+    final totalCount = transactions.transactionPk.count();
+    final totalSpent =
+        transactions.amount.sum(filter: transactions.paid.equals(true));
+    query = (select(wallets)
+          ..where((w) => (searchFor == null
+              ? Constant(true)
+              : w.name
+                  .lower()
+                  .like("%" + (searchFor).toLowerCase().trim() + "%")))
+          ..orderBy([(w) => OrderingTerm.asc(w.order)]))
+        .join([
+      innerJoin(
+          transactions, transactions.walletFk.equalsExp(wallets.walletPk)),
+    ])
+      ..groupBy([wallets.walletPk])
+      ..addColumns([totalCount, totalSpent]);
+
+    return query.watch().map((rows) => rows.map((row) {
+          return WalletWithDetails(
+            wallet: row.readTable(wallets),
+            numberTransactions: row.read(totalCount),
+            totalSpent: row.read(totalSpent),
+          );
+        }).toList());
   }
 
   Stream<List<ScannerTemplate>> watchAllScannerTemplates(
@@ -3319,6 +3376,36 @@ class FinanceDatabase extends _$FinanceDatabase {
           ])
           ..limit(limit ?? DEFAULT_LIMIT, offset: offset ?? DEFAULT_OFFSET))
         .watch();
+  }
+
+  Stream<List<CategoryWithDetails>> watchAllMainCategoriesWithDetails({
+    String? searchFor,
+  }) {
+    JoinedSelectStatement<HasResultSet, dynamic> query;
+    final totalCount = transactions.transactionPk.count();
+    query = (select(categories)
+          ..where((c) => (onlyShowMainCategoryListing(c) &
+              (searchFor == null
+                  ? Constant(true)
+                  : c.name
+                      .lower()
+                      .like("%" + (searchFor).toLowerCase().trim() + "%"))))
+          ..orderBy([
+            (c) => OrderingTerm.asc(c.order),
+          ]))
+        .join([
+      innerJoin(transactions,
+          transactions.categoryFk.equalsExp(categories.categoryPk)),
+    ])
+      ..groupBy([categories.categoryPk])
+      ..addColumns([totalCount]);
+
+    return query.watch().map((rows) => rows.map((row) {
+          return CategoryWithDetails(
+            category: row.readTable(categories),
+            numberTransactions: row.read(totalCount),
+          );
+        }).toList());
   }
 
   Stream<Map<String, List<TransactionCategory>>>

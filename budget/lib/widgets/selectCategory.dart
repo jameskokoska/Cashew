@@ -504,7 +504,7 @@ class _SelectCategoryState extends State<SelectCategory> {
                                 ? Button(
                                     key: Key("addSuccess"),
                                     label: widget.nextLabel ?? "",
-                                    width: MediaQuery.of(context).size.width,
+                                    width: MediaQuery.sizeOf(context).width,
                                     onTap: () {
                                       if (widget.next != null) {
                                         widget.next!();
@@ -514,7 +514,7 @@ class _SelectCategoryState extends State<SelectCategory> {
                                 : Button(
                                     key: Key("addNoSuccess"),
                                     label: widget.nextLabel ?? "",
-                                    width: MediaQuery.of(context).size.width,
+                                    width: MediaQuery.sizeOf(context).width,
                                     onTap: () {},
                                     color: Colors.grey,
                                   ),

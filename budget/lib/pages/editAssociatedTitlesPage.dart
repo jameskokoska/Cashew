@@ -68,7 +68,7 @@ class _EditAssociatedTitlesPageState extends State<EditAssociatedTitlesPage> {
         floatingActionButton: AnimateFABDelayed(
           fab: Padding(
             padding: EdgeInsets.only(
-                bottom: MediaQuery.of(context).viewPadding.bottom),
+                bottom: MediaQuery.viewPaddingOf(context).bottom),
             child: FAB(
               tooltip: "add-title".tr(),
               openPage: SizedBox.shrink(),

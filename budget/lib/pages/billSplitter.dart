@@ -243,8 +243,8 @@ class _BillSplitterState extends State<BillSplitter> {
       horizontalPadding: getHorizontalPaddingConstrained(context),
       floatingActionButton: AnimateFABDelayed(
         fab: Padding(
-          padding: EdgeInsets.only(
-              bottom: MediaQuery.of(context).viewPadding.bottom),
+          padding:
+              EdgeInsets.only(bottom: MediaQuery.viewPaddingOf(context).bottom),
           child: FAB(
             openPage: AddBillItemPage(
               splitPersons: splitPersons,
@@ -1290,8 +1290,8 @@ class _PeoplePageState extends State<PeoplePage> {
       ],
       floatingActionButton: AnimateFABDelayed(
         fab: Padding(
-          padding: EdgeInsets.only(
-              bottom: MediaQuery.of(context).viewPadding.bottom),
+          padding:
+              EdgeInsets.only(bottom: MediaQuery.viewPaddingOf(context).bottom),
           child: FAB(
             openPage: SizedBox.shrink(),
             onTap: () {

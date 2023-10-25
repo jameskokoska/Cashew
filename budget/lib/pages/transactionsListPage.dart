@@ -81,7 +81,7 @@ class TransactionsListPageState extends State<TransactionsListPage>
 
   _scrollListener() {
     double percent = _scrollController.offset /
-        (MediaQuery.of(context).padding.top + 65 + 50);
+        (MediaQuery.paddingOf(context).top + 65 + 50);
     if (percent >= 0 && percent <= 1) {
       _animationControllerSearch.value = 1 - percent;
     }
@@ -185,8 +185,7 @@ class TransactionsListPageState extends State<TransactionsListPage>
                                   DateTime.now().month + pageOffset);
                               monthSelectorStateKey.currentState
                                   ?.setSelectedDateStart(startDate, pageOffset);
-                              double middle = -(MediaQuery.of(context)
-                                              .size
+                              double middle = -(MediaQuery.sizeOf(context)
                                               .width -
                                           getWidthNavigationSidebar(context)) /
                                       2 +
@@ -243,8 +242,7 @@ class TransactionsListPageState extends State<TransactionsListPage>
                                       SliverToBoxAdapter(
                                         child: SizedBox(
                                           height: 90 +
-                                              MediaQuery.of(context)
-                                                      .padding
+                                              MediaQuery.paddingOf(context)
                                                       .bottom /
                                                   4,
                                         ),

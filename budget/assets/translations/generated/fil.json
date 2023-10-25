@@ -790,5 +790,8 @@
   "bill-splitter-multiplier-description": "Magpasok ng isang halaga na madami sa bawat item sa bill splitter. Kapaki -pakinabang kung ang buwis ay inilalapat sa bawat item.",
   "more-options": "Higit pang mga pagpipilian",
   "cannot-display-graph-for-current-time-period": "Hindi maipakita ang graph para sa kasalukuyang tagal ng oras.",
-  "exclude-from-budget": "Ibukod mula sa badyet"
+  "exclude-from-budget": "Ibukod mula sa badyet",
+  "erase-synced-data-and-cloud-backups": "Burahin ang pag -sync ng data at mga backup ng ulap",
+  "erase-cloud-data": "Burahin ang data ng ulap",
+  "erase-cloud-data-description": "Mag -login sa iyong Google account at tanggalin ang mga backup na matatagpuan sa ilalim ng 'Sync' at 'Backups'"
 }

@@ -18,7 +18,7 @@ class TimeDigits extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     bool use24HourFormat =
-        MediaQuery.of(context).alwaysUse24HourFormat || is24HourFormat(context);
+        MediaQuery.alwaysUse24HourFormatOf(context) || is24HourFormat(context);
     String hours = "";
     String minutes = "";
     if (use24HourFormat) {

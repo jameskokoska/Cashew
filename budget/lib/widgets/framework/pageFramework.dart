@@ -254,6 +254,7 @@ class PageFrameworkState extends State<PageFramework>
     if (widget.dragDownToDismissEnabled) {
       if ((totalDragX >= 90 || totalDragY >= 125) &&
           !(ModalRoute.of(context)?.isFirst ?? true)) {
+        // HapticFeedback.lightImpact();
         if (widget.onDragDownToDismiss != null) {
           widget.onDragDownToDismiss!();
         } else {
@@ -358,7 +359,7 @@ class PageFrameworkState extends State<PageFramework>
                             widget.bottomPadding
                                 ? SizedBox(
                                     height:
-                                        MediaQuery.of(context).padding.bottom +
+                                        MediaQuery.paddingOf(context).bottom +
                                             15)
                                 : SizedBox.shrink(),
                           ]),
@@ -368,7 +369,7 @@ class PageFrameworkState extends State<PageFramework>
                         child: widget.bottomPadding
                             ? SizedBox(
                                 height:
-                                    MediaQuery.of(context).padding.bottom + 15)
+                                    MediaQuery.paddingOf(context).bottom + 15)
                             : SizedBox.shrink(),
                       ),
               ],
@@ -446,8 +447,7 @@ class PageFrameworkState extends State<PageFramework>
                   widget.scrollToTopButton
                       ? Padding(
                           padding: EdgeInsets.only(
-                              bottom:
-                                  MediaQuery.of(context).viewPadding.bottom),
+                              bottom: MediaQuery.viewPaddingOf(context).bottom),
                           child: AnimatedBuilder(
                             animation: _scrollToTopAnimationController,
                             builder: (_, child) {
@@ -637,7 +637,7 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
         double percent = 1 -
             (constraints.biggest.height -
                     collapsedHeight -
-                    MediaQuery.of(context).padding.top) /
+                    MediaQuery.paddingOf(context).top) /
                 (expandedHeightCalculated - collapsedHeight);
         if (collapsedHeight == expandedHeightCalculated) percent = 1;
         String titleString = title.capitalizeFirst;
@@ -795,15 +795,15 @@ List<Widget> getAppBarBackgroundColorLayers({
     Container(
       color: appBarBackgroundColor ?? Theme.of(context).canvasColor,
       // Fixes backdrop not fading correctly when using Impeller (iOS - Flutter v3.13)
-      width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height - 1,
+      width: MediaQuery.sizeOf(context).width,
+      height: MediaQuery.sizeOf(context).height - 1,
     ),
     centeredTitleSmall && appBarBackgroundColorStart == null
         ? SizedBox.shrink()
         : Container(
             // Fixes backdrop not fading correctly when using Impeller (iOS - Flutter v3.13)
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height - 1,
+            width: MediaQuery.sizeOf(context).width,
+            height: MediaQuery.sizeOf(context).height - 1,
 
             color: appBarBackgroundColorStart == null
                 ? Theme.of(context).canvasColor
@@ -815,8 +815,8 @@ List<Widget> getAppBarBackgroundColorLayers({
             builder: (context) {
               Widget container = Container(
                 // Fixes backdrop not fading correctly when using Impeller (iOS - Flutter v3.13)
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height - 1,
+                width: MediaQuery.sizeOf(context).width,
+                height: MediaQuery.sizeOf(context).height - 1,
 
                 color: appBarBackgroundColor ??
                     dynamicPastel(
@@ -852,8 +852,8 @@ List<Widget> getAppBarBackgroundColorLayers({
             builder: (context) {
               Widget container = Container(
                 // Fixes backdrop not fading correctly when using Impeller (iOS - Flutter v3.13)
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height - 1,
+                width: MediaQuery.sizeOf(context).width,
+                height: MediaQuery.sizeOf(context).height - 1,
 
                 color: appBarBGColorCalculated,
               );
@@ -988,7 +988,7 @@ bool getCenteredTitle(
 
 bool getCenteredTitleSmall(
     {required BuildContext context, required bool backButtonEnabled}) {
-  if (backButtonEnabled && MediaQuery.of(context).size.height <= MIN_HEIGHT) {
+  if (backButtonEnabled && MediaQuery.sizeOf(context).height <= MIN_HEIGHT) {
     return true;
   } else if (backButtonEnabled && getPlatform() == PlatformOS.isIOS) {
     return true;
@@ -1000,7 +1000,7 @@ double getExpandedHeaderHeight(
     BuildContext context, double? expandedHeightPassed,
     {bool? isHomePageSpace}) {
   if (expandedHeightPassed != null) return expandedHeightPassed;
-  double height = MediaQuery.of(context).size.height;
+  double height = MediaQuery.sizeOf(context).height;
 
   double minHeaderHeight = getPlatform() == PlatformOS.isIOS
       ? isHomePageSpace == true

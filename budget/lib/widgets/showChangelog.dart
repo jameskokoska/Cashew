@@ -22,6 +22,13 @@ import 'listItem.dart';
 
 String getChangelogString() {
   return """
+    < 4.7.3
+    Improved performance of search transactions page
+    Improved performance of transactions list page
+    Improved performance of edit category page
+    Improved performance of edit accounts page
+    Improved performance with keyboard popups and MediaQuery calls for rerendering
+    Added info when erasing all app data about erasing cloud data
     < 4.7.2
     New category icons
     Period length defaults to 1 for repetitive transactions

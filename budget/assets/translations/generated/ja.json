@@ -790,5 +790,8 @@
   "bill-splitter-multiplier-description": "請求書スプリッター内のすべてのアイテムに乗算される値を入力します。各アイテムに税金が適用される場合に便利です。",
   "more-options": "より多くのオプション",
   "cannot-display-graph-for-current-time-period": "現在の期間はグラフを表示できません。",
-  "exclude-from-budget": "予算から除外します"
+  "exclude-from-budget": "予算から除外します",
+  "erase-synced-data-and-cloud-backups": "同期したデータとクラウドバックアップを消去します",
+  "erase-cloud-data": "クラウドデータを消去します",
+  "erase-cloud-data-description": "Googleアカウントにログインし、「同期」と「バックアップ」の下にあるバックアップを削除します"
 }

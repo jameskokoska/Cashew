@@ -101,7 +101,7 @@ class _WalletDetailsPageState extends State<WalletDetailsPage> {
             floatingActionButton: AnimateFABDelayed(
               fab: Padding(
                 padding: EdgeInsets.only(
-                    bottom: MediaQuery.of(context).viewPadding.bottom),
+                    bottom: MediaQuery.viewPaddingOf(context).bottom),
                 child: FAB(
                   tooltip: "add-transaction".tr(),
                   openPage: AddTransactionPage(
@@ -374,18 +374,19 @@ class _WalletDetailsPageState extends State<WalletDetailsPage> {
                   ],
                 ),
               ),
-              TransactionEntries(
-                null,
-                null,
-                categoryFks: selectedCategory != null
-                    ? [selectedCategory!.categoryPk]
-                    : [],
-                walletFks: walletPk == null ? [] : [walletPk],
-                limit: selectedCategory == null ? 0 : 10,
-                listID: listID,
-                showNoResults: false,
-                income: isIncome,
-              ),
+              if (selectedCategory != null)
+                TransactionEntries(
+                  null,
+                  null,
+                  categoryFks: selectedCategory != null
+                      ? [selectedCategory!.categoryPk]
+                      : [],
+                  walletFks: walletPk == null ? [] : [walletPk],
+                  limit: selectedCategory == null ? 0 : 10,
+                  listID: listID,
+                  showNoResults: false,
+                  income: isIncome,
+                ),
               selectedCategory == null
                   ? SliverToBoxAdapter(
                       child: SizedBox.shrink(),

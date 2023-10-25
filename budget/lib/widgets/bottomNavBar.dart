@@ -96,7 +96,7 @@ class BottomNavBarState extends State<BottomNavBar> {
                       ),
                     ],
                   ),
-                  SizedBox(height: MediaQuery.of(context).padding.bottom)
+                  SizedBox(height: MediaQuery.paddingOf(context).bottom)
                 ],
               ),
             )

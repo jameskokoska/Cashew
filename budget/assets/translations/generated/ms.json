@@ -790,5 +790,8 @@
   "bill-splitter-multiplier-description": "Masukkan nilai yang akan didarabkan kepada setiap item dalam splitter bil. Berguna jika cukai digunakan pada setiap item.",
   "more-options": "Lebih banyak pilihan",
   "cannot-display-graph-for-current-time-period": "Tidak dapat memaparkan graf untuk tempoh masa semasa.",
-  "exclude-from-budget": "Tidak termasuk dari anggaran"
+  "exclude-from-budget": "Tidak termasuk dari anggaran",
+  "erase-synced-data-and-cloud-backups": "Padamkan data disegerakkan dan sandaran awan",
+  "erase-cloud-data": "Padam data awan",
+  "erase-cloud-data-description": "Log masuk ke akaun Google anda dan padamkan sandaran yang terletak di bawah 'Sync' dan 'Backups'"
 }

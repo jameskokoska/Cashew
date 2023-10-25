@@ -498,7 +498,7 @@ Future<dynamic> openTransactionsOnDayBottomSheet(
         },
       ),
       child: TransactionEntries(
-        slivers: false,
+        renderAsSlivers: false,
         day,
         day,
         transactionBackgroundColor: appStateSettings["materialYou"]

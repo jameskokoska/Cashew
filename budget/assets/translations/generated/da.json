@@ -790,5 +790,8 @@
   "bill-splitter-multiplier-description": "Indtast en værdi, der vil blive multipliceret til hvert element i Bill Splitter. Nyttigt, hvis skat påføres på hvert element.",
   "more-options": "Flere muligheder",
   "cannot-display-graph-for-current-time-period": "Kan ikke vise graf i den aktuelle periode.",
-  "exclude-from-budget": "Ekskluder fra budgettet"
+  "exclude-from-budget": "Ekskluder fra budgettet",
+  "erase-synced-data-and-cloud-backups": "Slet synkroniserede data og cloud -sikkerhedskopier",
+  "erase-cloud-data": "Slet skytata",
+  "erase-cloud-data-description": "Log ind på din Google -konto og slet sikkerhedskopier placeret under 'Sync' og 'Backups'"
 }

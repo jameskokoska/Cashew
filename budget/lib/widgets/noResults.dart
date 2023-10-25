@@ -27,8 +27,7 @@ class NoResults extends StatelessWidget {
           child: Padding(
             padding: padding ??
                 EdgeInsets.only(
-                  top:
-                      MediaQuery.of(context).size.height * 0.4 > 400 ? 100 : 35,
+                  top: MediaQuery.sizeOf(context).height * 0.4 > 400 ? 100 : 35,
                   right: 30,
                   left: 30,
                 ),
@@ -36,11 +35,11 @@ class NoResults extends StatelessWidget {
               children: [
                 Container(
                   constraints: BoxConstraints(
-                      maxWidth: MediaQuery.of(context).size.height <=
-                              MediaQuery.of(context).size.width
-                          ? MediaQuery.of(context).size.height * 0.4 > 400
+                      maxWidth: MediaQuery.sizeOf(context).height <=
+                              MediaQuery.sizeOf(context).width
+                          ? MediaQuery.sizeOf(context).height * 0.4 > 400
                               ? 400
-                              : MediaQuery.of(context).size.height * 0.4
+                              : MediaQuery.sizeOf(context).height * 0.4
                           : 270),
                   child: appStateSettings["materialYou"]
                       ? ColorFiltered(

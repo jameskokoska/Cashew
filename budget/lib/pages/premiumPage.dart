@@ -77,8 +77,8 @@ class PremiumPage extends StatelessWidget {
                           Column(
                             children: [
                               SizedBox(
-                                height: MediaQuery.of(context).viewPadding.top +
-                                    MediaQuery.of(context).size.height * 0.1,
+                                height: MediaQuery.viewPaddingOf(context).top +
+                                    MediaQuery.sizeOf(context).height * 0.1,
                               ),
                               Column(
                                 children: [
@@ -99,7 +99,7 @@ class PremiumPage extends StatelessWidget {
                               ),
                               SizedBox(
                                   height: 15 +
-                                      MediaQuery.of(context).size.height *
+                                      MediaQuery.sizeOf(context).height *
                                           0.028),
                               Padding(
                                 padding:
@@ -148,7 +148,7 @@ class PremiumPage extends StatelessWidget {
                               ),
                               SizedBox(
                                   height: 13 +
-                                      MediaQuery.of(context).size.height *
+                                      MediaQuery.sizeOf(context).height *
                                           0.028),
                               Products(
                                 key: purchasesStateKey,
@@ -198,9 +198,9 @@ class PremiumPage extends StatelessWidget {
                     alignment: Alignment.topLeft,
                     child: Padding(
                       padding: EdgeInsets.only(
-                        left: MediaQuery.of(context).viewPadding.left,
-                        top: MediaQuery.of(context).viewPadding.top,
-                        right: MediaQuery.of(context).viewPadding.right,
+                        left: MediaQuery.viewPaddingOf(context).left,
+                        top: MediaQuery.viewPaddingOf(context).top,
+                        right: MediaQuery.viewPaddingOf(context).right,
                       ),
                       child: IconButton(
                         padding: EdgeInsets.all(15),

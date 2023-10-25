@@ -790,5 +790,8 @@
   "bill-splitter-multiplier-description": "Ingrese un valor que se multiplique en cada elemento en el divisor de facturas. Útil si el impuesto se aplica en cada artículo.",
   "more-options": "Mas opciones",
   "cannot-display-graph-for-current-time-period": "No se puede mostrar gráfico para el período de tiempo actual.",
-  "exclude-from-budget": "Excluir del presupuesto"
+  "exclude-from-budget": "Excluir del presupuesto",
+  "erase-synced-data-and-cloud-backups": "Borrar los datos sincronizados y las copias de seguridad de la nube",
+  "erase-cloud-data": "Borrar datos de nubes",
+  "erase-cloud-data-description": "Inicie sesión en su cuenta de Google y elimine las copias de seguridad ubicadas en 'Sincronización' y 'Copias de seguridad'"
 }

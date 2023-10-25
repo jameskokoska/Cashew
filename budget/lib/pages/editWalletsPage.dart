@@ -73,7 +73,7 @@ class _EditWalletsPageState extends State<EditWalletsPage> {
         floatingActionButton: AnimateFABDelayed(
           fab: Padding(
             padding: EdgeInsets.only(
-                bottom: MediaQuery.of(context).viewPadding.bottom),
+                bottom: MediaQuery.viewPaddingOf(context).bottom),
             child: FAB(
               tooltip: "add-account".tr(),
               openPage: AddWalletPage(
@@ -161,8 +161,8 @@ class _EditWalletsPageState extends State<EditWalletsPage> {
               ),
             ),
           ),
-          StreamBuilder<List<TransactionWallet>>(
-            stream: database.watchAllWallets(
+          StreamBuilder<List<WalletWithDetails>>(
+            stream: database.watchAllWalletsWithDetails(
                 searchFor: searchValue == "" ? null : searchValue),
             builder: (context, snapshot) {
               if (snapshot.hasData && (snapshot.data ?? []).length <= 0) {
@@ -188,7 +188,8 @@ class _EditWalletsPageState extends State<EditWalletsPage> {
                     });
                   },
                   itemBuilder: (context, index) {
-                    TransactionWallet wallet = snapshot.data![index];
+                    WalletWithDetails walletWithDetails = snapshot.data![index];
+                    TransactionWallet wallet = walletWithDetails.wallet;
                     Color accentColor = dynamicPastel(
                         context,
                         HexColor(wallet.colour,
@@ -222,50 +223,28 @@ class _EditWalletsPageState extends State<EditWalletsPage> {
                             fontSize: 21,
                           ),
                           Container(height: 2),
-                          StreamBuilder<double?>(
-                            stream: database.watchTotalOfWalletNoConversion(
-                              wallet.walletPk,
-                            ),
-                            builder: (context, snapshot) {
-                              return TextFont(
-                                textAlign: TextAlign.left,
-                                text: convertToMoney(
-                                  Provider.of<AllWallets>(context),
-                                  snapshot.data ?? 0 * -1,
-                                  currencyKey: wallet.currency,
-                                  decimals: wallet.decimals,
-                                  addCurrencyName: true,
-                                ).toString(),
-                                fontSize: 15,
-                              );
-                            },
+                          TextFont(
+                            textAlign: TextAlign.left,
+                            text: convertToMoney(
+                              Provider.of<AllWallets>(context),
+                              walletWithDetails.totalSpent ?? 0,
+                              currencyKey: wallet.currency,
+                              decimals: wallet.decimals,
+                              addCurrencyName: true,
+                            ).toString(),
+                            fontSize: 15,
                           ),
-                          StreamBuilder<List<int?>>(
-                            stream: database
-                                .watchTotalCountOfTransactionsInWallet(
-                                    [wallet.walletPk]),
-                            builder: (context, snapshot) {
-                              if (snapshot.hasData && snapshot.data != null) {
-                                return TextFont(
-                                  textAlign: TextAlign.left,
-                                  text: snapshot.data![0].toString() +
-                                      " " +
-                                      (snapshot.data![0] == 1
-                                          ? "transaction".tr().toLowerCase()
-                                          : "transactions".tr().toLowerCase()),
-                                  fontSize: 14,
-                                  textColor: getColor(context, "black")
-                                      .withOpacity(0.65),
-                                );
-                              } else {
-                                return TextFont(
-                                    textAlign: TextAlign.left,
-                                    text: "/ transactions",
-                                    fontSize: 14,
-                                    textColor: getColor(context, "black")
-                                        .withOpacity(0.65));
-                              }
-                            },
+                          TextFont(
+                            textAlign: TextAlign.left,
+                            text: walletWithDetails.numberTransactions
+                                    .toString() +
+                                " " +
+                                (walletWithDetails.numberTransactions == 1
+                                    ? "transaction".tr().toLowerCase()
+                                    : "transactions".tr().toLowerCase()),
+                            fontSize: 14,
+                            textColor:
+                                getColor(context, "black").withOpacity(0.65),
                           ),
                         ],
                       ),
@@ -286,7 +265,9 @@ class _EditWalletsPageState extends State<EditWalletsPage> {
                   },
                   itemCount: snapshot.data!.length,
                   onReorder: (_intPrevious, _intNew) async {
-                    TransactionWallet oldWallet = snapshot.data![_intPrevious];
+                    WalletWithDetails oldWalletWithDetails =
+                        snapshot.data![_intPrevious];
+                    TransactionWallet oldWallet = oldWalletWithDetails.wallet;
 
                     if (_intNew > _intPrevious) {
                       await database.moveWallet(

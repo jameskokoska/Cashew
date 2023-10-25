@@ -790,5 +790,8 @@
   "bill-splitter-multiplier-description": "Immettere un valore che verrà moltiplicato per ogni articolo nello splitter di fattura. Utile se viene applicata l'imposta su ciascun articolo.",
   "more-options": "Più opzioni",
   "cannot-display-graph-for-current-time-period": "Impossibile visualizzare il grafico per il periodo di tempo corrente.",
-  "exclude-from-budget": "Escludere dal budget"
+  "exclude-from-budget": "Escludere dal budget",
+  "erase-synced-data-and-cloud-backups": "Cancellare i dati sincronizzati e i backup del cloud",
+  "erase-cloud-data": "Cancella i dati del cloud",
+  "erase-cloud-data-description": "Accedi al tuo account Google ed elimina i backup situati in \"Sync\" e \"Backups\""
 }

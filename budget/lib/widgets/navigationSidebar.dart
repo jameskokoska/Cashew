@@ -22,19 +22,19 @@ double getWidthNavigationSidebar(context) {
   double maxWidthNavigation = 270;
   double minScreenWidth = 700;
 
-  if (MediaQuery.of(context).size.width < minScreenWidth) return 0;
+  if (MediaQuery.sizeOf(context).width < minScreenWidth) return 0;
   if (appStateSettings["expandedNavigationSidebar"] == false) {
     return 70;
   }
-  return (MediaQuery.of(context).size.width * screenPercent > maxWidthNavigation
+  return (MediaQuery.sizeOf(context).width * screenPercent > maxWidthNavigation
           ? maxWidthNavigation
-          : MediaQuery.of(context).size.width * screenPercent) +
-      MediaQuery.of(context).viewPadding.left;
+          : MediaQuery.sizeOf(context).width * screenPercent) +
+      MediaQuery.viewPaddingOf(context).left;
 }
 
 bool enableDoubleColumn(context) {
   double minScreenWidth = 1000;
-  return MediaQuery.of(context).size.width > minScreenWidth ? true : false;
+  return MediaQuery.sizeOf(context).width > minScreenWidth ? true : false;
 }
 
 class NavigationSidebar extends StatefulWidget {
@@ -89,7 +89,7 @@ class NavigationSidebarState extends State<NavigationSidebar> {
           ),
           child: Padding(
             padding:
-                EdgeInsets.only(left: MediaQuery.of(context).viewPadding.left),
+                EdgeInsets.only(left: MediaQuery.viewPaddingOf(context).left),
             child: IgnorePointer(
               ignoring: appStateSettings["hasOnboarded"] == false ||
                   lockAppWaitForRestart == true,
@@ -103,14 +103,14 @@ class NavigationSidebarState extends State<NavigationSidebar> {
                   child: IntrinsicHeight(
                     child: ConstrainedBox(
                       constraints: BoxConstraints(
-                        minHeight: MediaQuery.of(context).size.height,
+                        minHeight: MediaQuery.sizeOf(context).height,
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.start,
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          SizedBox(height: MediaQuery.of(context).padding.top),
+                          SizedBox(height: MediaQuery.paddingOf(context).top),
                           Column(
                             mainAxisSize: MainAxisSize.min,
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -325,8 +325,7 @@ class NavigationSidebarState extends State<NavigationSidebar> {
                               SyncButton(),
                               SizedBox(height: 10),
                               SizedBox(
-                                  height:
-                                      MediaQuery.of(context).padding.bottom),
+                                  height: MediaQuery.paddingOf(context).bottom),
                             ],
                           ),
                         ],

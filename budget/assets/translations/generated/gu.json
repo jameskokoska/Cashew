@@ -790,5 +790,8 @@
   "bill-splitter-multiplier-description": "એક મૂલ્ય દાખલ કરો જે બિલ સ્પ્લિટરની દરેક વસ્તુમાં ગુણાકાર કરવામાં આવશે. જો દરેક વસ્તુ પર કર લાગુ કરવામાં આવે તો ઉપયોગી.",
   "more-options": "વધુ વિકલ્પ",
   "cannot-display-graph-for-current-time-period": "વર્તમાન સમયગાળા માટે ગ્રાફ પ્રદર્શિત કરી શકાતો નથી.",
-  "exclude-from-budget": "બજેટમાંથી બાકાત રાખવું"
+  "exclude-from-budget": "બજેટમાંથી બાકાત રાખવું",
+  "erase-synced-data-and-cloud-backups": "ભૂંસી નાખેલી સમન્વયિત ડેટા અને ક્લાઉડ બેકઅપ્સ",
+  "erase-cloud-data": "વાદળ ડેટા ભૂંસી નાખો",
+  "erase-cloud-data-description": "તમારા Google એકાઉન્ટ પર લ Login ગિન કરો અને 'સિંક' અને 'બેકઅપ્સ' હેઠળ સ્થિત બેકઅપ્સ કા delete ી નાખો"
 }

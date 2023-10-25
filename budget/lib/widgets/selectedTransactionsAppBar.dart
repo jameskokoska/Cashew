@@ -54,7 +54,7 @@ class SelectedTransactionsAppBar extends StatelessWidget {
           left: 0,
           right: 0,
           duration: Duration(milliseconds: 500),
-          top: animateIn ? 0 : -(MediaQuery.of(context).padding.top + 80),
+          top: animateIn ? 0 : -(MediaQuery.paddingOf(context).top + 80),
           curve: Curves.easeInOutCubic,
           child: Align(
             alignment: Alignment.topCenter,
@@ -62,7 +62,7 @@ class SelectedTransactionsAppBar extends StatelessWidget {
               children: [
                 Container(
                   padding:
-                      EdgeInsets.only(top: MediaQuery.of(context).padding.top),
+                      EdgeInsets.only(top: MediaQuery.paddingOf(context).top),
                   decoration: BoxDecoration(
                     // borderRadius: BorderRadius.only(
                     //   bottomLeft: Radius.circular(

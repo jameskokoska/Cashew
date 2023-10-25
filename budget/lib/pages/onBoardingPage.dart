@@ -39,6 +39,7 @@ class OnBoardingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        resizeToAvoidBottomInset: false,
         body: OnBoardingPageBody(
             popNavigationWhenDone: popNavigationWhenDone,
             showPreviewDemoButton: showPreviewDemoButton));
@@ -194,9 +195,9 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
       //   widgets: [
       //     Container(
       //       constraints: BoxConstraints(
-      //           maxWidth: MediaQuery.of(context).size.height <=
-      //                   MediaQuery.of(context).size.width
-      //               ? MediaQuery.of(context).size.height * 0.5
+      //           maxWidth: MediaQuery.sizeOf(context).height <=
+      //                   MediaQuery.sizeOf(context).width
+      //               ? MediaQuery.sizeOf(context).height * 0.5
       //               : 300),
       //       child: Image(
       //         image: AssetImage("assets/landing/DepressedMan.png"),
@@ -229,9 +230,9 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
         widgets: [
           Container(
             constraints: BoxConstraints(
-                maxWidth: MediaQuery.of(context).size.height <=
-                        MediaQuery.of(context).size.width
-                    ? MediaQuery.of(context).size.height * 0.5
+                maxWidth: MediaQuery.sizeOf(context).height <=
+                        MediaQuery.sizeOf(context).width
+                    ? MediaQuery.sizeOf(context).height * 0.5
                     : 300),
             child: imageLanding1,
           ),
@@ -268,9 +269,9 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
         widgets: [
           Container(
             constraints: BoxConstraints(
-                maxWidth: MediaQuery.of(context).size.height <=
-                        MediaQuery.of(context).size.width
-                    ? MediaQuery.of(context).size.height * 0.5
+                maxWidth: MediaQuery.sizeOf(context).height <=
+                        MediaQuery.sizeOf(context).width
+                    ? MediaQuery.sizeOf(context).height * 0.5
                     : 300),
             child: imageLanding2,
           ),
@@ -403,9 +404,9 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
         widgets: [
           Container(
             constraints: BoxConstraints(
-                maxWidth: MediaQuery.of(context).size.height <=
-                        MediaQuery.of(context).size.width
-                    ? MediaQuery.of(context).size.height * 0.5
+                maxWidth: MediaQuery.sizeOf(context).height <=
+                        MediaQuery.sizeOf(context).width
+                    ? MediaQuery.sizeOf(context).height * 0.5
                     : 300),
             child: imageLanding3,
           ),
@@ -591,7 +592,7 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
           alignment: Alignment.bottomCenter,
           child: Padding(
             padding: EdgeInsets.only(
-                bottom: MediaQuery.of(context).viewPadding.bottom),
+                bottom: MediaQuery.viewPaddingOf(context).bottom),
             child: Padding(
               padding: const EdgeInsets.symmetric(
                 horizontal: 18,
@@ -724,7 +725,7 @@ class OnBoardPage extends StatelessWidget {
         ),
         Padding(
           padding: EdgeInsets.only(
-              bottom: 60 + MediaQuery.of(context).padding.bottom),
+              bottom: 60 + MediaQuery.paddingOf(context).bottom),
           child: Align(
             alignment: Alignment.bottomCenter,
             child: bottomWidget ?? SizedBox.shrink(),

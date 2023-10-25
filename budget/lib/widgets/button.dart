@@ -87,7 +87,7 @@ class _ButtonState extends State<Button> with TickerProviderStateMixin {
       padding: EdgeInsets.only(
           bottom: widget.hasBottomExtraSafeArea == true &&
                   widget.expandToFillBottomExtraSafeArea == false
-              ? MediaQuery.of(context).viewPadding.bottom
+              ? MediaQuery.viewPaddingOf(context).bottom
               : 0),
       child: AnimatedScale(
         duration: Duration(milliseconds: 200),
@@ -124,7 +124,7 @@ class _ButtonState extends State<Button> with TickerProviderStateMixin {
           child: Padding(
             padding: EdgeInsets.only(
               bottom: widget.expandToFillBottomExtraSafeArea
-                  ? MediaQuery.of(context).viewPadding.bottom
+                  ? MediaQuery.viewPaddingOf(context).bottom
                   : 0,
             ),
             child: Container(

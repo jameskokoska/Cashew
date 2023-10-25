@@ -790,5 +790,8 @@
   "bill-splitter-multiplier-description": "एक मान दर्ज करें जो बिल स्प्लिटर में प्रत्येक आइटम से गुणा किया जाएगा। यदि प्रत्येक आइटम पर कर लागू किया जाता है तो उपयोगी।",
   "more-options": "अधिक विकल्प",
   "cannot-display-graph-for-current-time-period": "वर्तमान समय अवधि के लिए ग्राफ प्रदर्शित नहीं कर सकते।",
-  "exclude-from-budget": "बजट से बाहर कर दें"
+  "exclude-from-budget": "बजट से बाहर कर दें",
+  "erase-synced-data-and-cloud-backups": "सिंक किए गए डेटा और क्लाउड बैकअप को मिटा दें",
+  "erase-cloud-data": "क्लाउड डेटा मिटाएं",
+  "erase-cloud-data-description": "अपने Google खाते में लॉगिन करें और 'सिंक' और 'बैकअप' के तहत स्थित बैकअप को हटा दें"
 }

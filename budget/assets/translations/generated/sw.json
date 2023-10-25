@@ -790,5 +790,8 @@
   "bill-splitter-multiplier-description": "Ingiza thamani ambayo itazidishwa kwa kila kitu kwenye mgawanyiko wa muswada. Muhimu ikiwa ushuru unatumika kwenye kila kitu.",
   "more-options": "Chaguzi zaidi",
   "cannot-display-graph-for-current-time-period": "Haiwezi kuonyesha grafu kwa kipindi cha sasa cha wakati.",
-  "exclude-from-budget": "Ondoa kutoka kwa bajeti"
+  "exclude-from-budget": "Ondoa kutoka kwa bajeti",
+  "erase-synced-data-and-cloud-backups": "Futa data iliyosawazishwa na backups za wingu",
+  "erase-cloud-data": "Futa data ya wingu",
+  "erase-cloud-data-description": "Ingia kwenye akaunti yako ya Google na futa backups ziko chini ya 'Usawazishaji' na 'Backups'"
 }

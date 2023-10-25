@@ -248,10 +248,10 @@ class App extends StatelessWidget {
                       Expanded(
                         child: Builder(builder: (context) {
                           double rightPaddingSafeArea =
-                              MediaQuery.of(context).padding.right;
+                              MediaQuery.paddingOf(context).right;
                           bool hasRightSafeArea = rightPaddingSafeArea > 0;
                           double leftPaddingSafeArea =
-                              MediaQuery.of(context).padding.left;
+                              MediaQuery.paddingOf(context).left;
                           bool hasLeftSafeArea = leftPaddingSafeArea > 0 &&
                               getIsFullScreen(context) == false;
                           // Only enable left safe area if no navigation sidebar

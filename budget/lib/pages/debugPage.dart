@@ -374,11 +374,13 @@ class DebugPage extends StatelessWidget {
             }),
         SizedBox(height: 20),
         DangerousDebugFlag(
-            child: Button(
-                label: "Create preview data",
-                onTap: () async {
-                  generatePreviewData();
-                })),
+          child: Button(
+            label: "Create preview data",
+            onTap: () async {
+              generatePreviewData();
+            },
+          ),
+        ),
         SizedBox(height: 10),
         DangerousDebugFlag(
           child: Button(

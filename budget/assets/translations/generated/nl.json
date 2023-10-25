@@ -790,5 +790,8 @@
   "bill-splitter-multiplier-description": "Voer een waarde in die wordt vermenigvuldigd met elk item in de Bill Splitter. Handig als belasting op elk item wordt toegepast.",
   "more-options": "Meer opties",
   "cannot-display-graph-for-current-time-period": "Kan de grafiek niet weergeven voor de huidige periode.",
-  "exclude-from-budget": "Uitsluiten van het budget"
+  "exclude-from-budget": "Uitsluiten van het budget",
+  "erase-synced-data-and-cloud-backups": "Wis gesynchroniseerde gegevens en cloudback -ups",
+  "erase-cloud-data": "Wis op cloudgegevens",
+  "erase-cloud-data-description": "Log in op uw Google -account en verwijder back -ups onder 'Sync' en 'back -ups'"
 }
