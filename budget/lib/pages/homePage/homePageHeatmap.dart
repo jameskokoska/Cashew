@@ -498,22 +498,20 @@ Future<dynamic> openTransactionsOnDayBottomSheet(
         },
       ),
       child: TransactionEntries(
-        m: TransactionEntriesMetaData(
-          renderAsSlivers: false,
-          day,
-          day,
-          transactionBackgroundColor: appStateSettings["materialYou"]
-              ? dynamicPastel(
-                  context, Theme.of(context).colorScheme.secondaryContainer,
-                  amountDark: 0.3, amountLight: 0.6)
-              : getColor(context, "lightDarkAccent"),
-          dateDividerColor: Colors.transparent,
-          includeDateDivider: false,
-          allowSelect: false,
-          useHorizontalPaddingConstrained: false,
-          noResultsPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-          limitPerDay: 50,
-        ),
+        renderAsSlivers: false,
+        day,
+        day,
+        transactionBackgroundColor: appStateSettings["materialYou"]
+            ? dynamicPastel(
+                context, Theme.of(context).colorScheme.secondaryContainer,
+                amountDark: 0.3, amountLight: 0.6)
+            : getColor(context, "lightDarkAccent"),
+        dateDividerColor: Colors.transparent,
+        includeDateDivider: false,
+        allowSelect: false,
+        useHorizontalPaddingConstrained: false,
+        noResultsPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+        limitPerDay: 50,
       ),
       title: day == null
           ? ""

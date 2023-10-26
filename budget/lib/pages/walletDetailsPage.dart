@@ -376,18 +376,16 @@ class _WalletDetailsPageState extends State<WalletDetailsPage> {
               ),
               if (selectedCategory != null)
                 TransactionEntries(
-                  m: TransactionEntriesMetaData(
-                    null,
-                    null,
-                    categoryFks: selectedCategory != null
-                        ? [selectedCategory!.categoryPk]
-                        : [],
-                    walletFks: walletPk == null ? [] : [walletPk],
-                    limit: selectedCategory == null ? 0 : 10,
-                    listID: listID,
-                    showNoResults: false,
-                    income: isIncome,
-                  ),
+                  null,
+                  null,
+                  categoryFks: selectedCategory != null
+                      ? [selectedCategory!.categoryPk]
+                      : [],
+                  walletFks: walletPk == null ? [] : [walletPk],
+                  limit: selectedCategory == null ? 0 : 10,
+                  listID: listID,
+                  showNoResults: false,
+                  income: isIncome,
                 ),
               selectedCategory == null
                   ? SliverToBoxAdapter(

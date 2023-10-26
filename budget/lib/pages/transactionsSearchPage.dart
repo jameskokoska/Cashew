@@ -118,15 +118,6 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
 
   @override
   Widget build(BuildContext context) {
-    TransactionEntriesMetaData m = TransactionEntriesMetaData(
-      null,
-      null,
-      listID: "TransactionsSearch",
-      simpleListRender: false,
-      noResultsMessage: "no-transactions-found".tr(),
-      noSearchResultsVariation: true,
-      searchFilters: searchFilters,
-    );
     return WillPopScope(
       onWillPop: () async {
         if ((globalSelectedID.value["TransactionsSearch"] ?? []).length > 0) {
@@ -165,163 +156,160 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
                   ),
                 ),
               ),
-              customScrollViewBuilder: (ScrollController scrollController,
-                  ScrollPhysics? scrollPhysics, Widget sliverAppBar) {
-                return TransactionEntriesWatcher(
-                  m: TransactionEntriesMetaData(
-                    null,
-                    null,
-                    listID: "TransactionsSearch",
-                    simpleListRender: false,
-                    noResultsMessage: "no-transactions-found".tr(),
-                    noSearchResultsVariation: true,
-                    searchFilters: searchFilters,
-                  ),
-                  transactionEntriesBuilder: (snapshot) {
-                    return CustomScrollView(
-                      physics: scrollPhysics,
-                      controller: scrollController,
-                      slivers: [
-                        sliverAppBar,
-                        SliverToBoxAdapter(
-                          child: AnimatedBuilder(
-                            animation: _animationControllerSearch,
-                            builder: (_, child) {
-                              return Transform.translate(
-                                offset: Offset(
-                                    0,
-                                    6.5 -
-                                        6.5 *
-                                            (_animationControllerSearch.value)),
-                                child: child,
-                              );
+              slivers: [
+                SliverToBoxAdapter(
+                  child: AnimatedBuilder(
+                    animation: _animationControllerSearch,
+                    builder: (_, child) {
+                      return Transform.translate(
+                        offset: Offset(
+                            0, 6.5 - 6.5 * (_animationControllerSearch.value)),
+                        child: child,
+                      );
+                    },
+                    child: Row(
+                      children: [
+                        SizedBox(width: 20),
+                        Expanded(
+                          child: TextInput(
+                            labelText: "search-placeholder".tr(),
+                            icon: appStateSettings["outlinedIcons"]
+                                ? Icons.search_outlined
+                                : Icons.search_rounded,
+                            onSubmitted: (value) {
+                              setState(() {
+                                searchFilters.searchQuery = value;
+                              });
                             },
-                            child: Row(
-                              children: [
-                                SizedBox(width: 20),
-                                Expanded(
-                                  child: TextInput(
-                                    labelText: "search-placeholder".tr(),
-                                    icon: appStateSettings["outlinedIcons"]
-                                        ? Icons.search_outlined
-                                        : Icons.search_rounded,
-                                    onSubmitted: (value) {
-                                      setState(() {
-                                        searchFilters.searchQuery = value;
-                                      });
-                                    },
-                                    onChanged: (value) {
-                                      _debouncer.run(() {
-                                        if (searchFilters.searchQuery != value)
-                                          setState(() {
-                                            searchFilters.searchQuery = value;
-                                          });
-                                      });
-                                    },
-                                    padding: EdgeInsets.all(0),
-                                    focusNode: _searchFocusNode,
-                                  ),
-                                ),
-                                SizedBox(width: 7),
-                                ButtonIcon(
-                                  onTap: () {
-                                    selectDateRange(context);
-                                  },
-                                  icon: appStateSettings["outlinedIcons"]
-                                      ? Icons.calendar_month_outlined
-                                      : Icons.calendar_month_rounded,
-                                ),
-                                SizedBox(width: 7),
-                                AnimatedSwitcher(
-                                  duration: Duration(milliseconds: 500),
-                                  child: ButtonIcon(
-                                    key: ValueKey(
-                                      searchFilters.isClear(
-                                        ignoreDateTimeRange: true,
-                                        ignoreSearchQuery: true,
-                                      ),
-                                    ),
-                                    color: searchFilters.isClear(
-                                      ignoreDateTimeRange: true,
-                                      ignoreSearchQuery: true,
-                                    )
-                                        ? null
-                                        : Theme.of(context)
-                                            .colorScheme
-                                            .tertiaryContainer,
-                                    iconColor: searchFilters.isClear(
-                                      ignoreDateTimeRange: true,
-                                      ignoreSearchQuery: true,
-                                    )
-                                        ? null
-                                        : Theme.of(context)
-                                            .colorScheme
-                                            .onTertiaryContainer,
-                                    onTap: () {
-                                      selectFilters(context);
-                                    },
-                                    icon: appStateSettings["outlinedIcons"]
-                                        ? Icons.filter_alt_outlined
-                                        : Icons.filter_alt_rounded,
-                                  ),
-                                ),
-                                SizedBox(width: 20),
-                              ],
-                            ),
+                            onChanged: (value) {
+                              _debouncer.run(() {
+                                if (searchFilters.searchQuery != value)
+                                  setState(() {
+                                    searchFilters.searchQuery = value;
+                                  });
+                              });
+                            },
+                            padding: EdgeInsets.all(0),
+                            focusNode: _searchFocusNode,
                           ),
                         ),
-                        SliverToBoxAdapter(
-                          child: SizedBox(height: 13),
+                        SizedBox(width: 7),
+                        ButtonIcon(
+                          onTap: () {
+                            selectDateRange(context);
+                          },
+                          icon: appStateSettings["outlinedIcons"]
+                              ? Icons.calendar_month_outlined
+                              : Icons.calendar_month_rounded,
                         ),
-                        SliverToBoxAdapter(
-                          child: AppliedFilterChips(
-                            searchFilters: searchFilters,
-                            openFiltersSelection: () {
+                        SizedBox(width: 7),
+                        AnimatedSwitcher(
+                          duration: Duration(milliseconds: 500),
+                          child: ButtonIcon(
+                            key: ValueKey(
+                              searchFilters.isClear(
+                                ignoreDateTimeRange: true,
+                                ignoreSearchQuery: true,
+                              ),
+                            ),
+                            color: searchFilters.isClear(
+                              ignoreDateTimeRange: true,
+                              ignoreSearchQuery: true,
+                            )
+                                ? null
+                                : Theme.of(context)
+                                    .colorScheme
+                                    .tertiaryContainer,
+                            iconColor: searchFilters.isClear(
+                              ignoreDateTimeRange: true,
+                              ignoreSearchQuery: true,
+                            )
+                                ? null
+                                : Theme.of(context)
+                                    .colorScheme
+                                    .onTertiaryContainer,
+                            onTap: () {
                               selectFilters(context);
                             },
+                            icon: appStateSettings["outlinedIcons"]
+                                ? Icons.filter_alt_outlined
+                                : Icons.filter_alt_rounded,
                           ),
                         ),
-                        ...getTransactionWidgets(
-                          context: context,
-                          snapshot: snapshot,
-                          m: m,
-                        ),
-                        SliverToBoxAdapter(
-                          child: GestureDetector(
-                            onTap: () {
-                              selectDateRange(context);
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.only(
-                                left: 20,
-                                right: 20,
-                                top: 20,
-                                bottom: 40,
-                              ),
-                              child: TextFont(
-                                fontSize: 13,
-                                textAlign: TextAlign.center,
-                                textColor: getColor(context, "textLight"),
-                                text: "showing-transactions-from".tr() +
-                                    "\n" +
-                                    getWordedDateShortMore(
-                                        searchFilters.dateTimeRange?.start ??
-                                            DateTime.now(),
-                                        includeYear: true) +
-                                    " - " +
-                                    getWordedDateShortMore(
-                                        searchFilters.dateTimeRange?.end ??
-                                            DateTime.now(),
-                                        includeYear: true),
-                              ),
-                            ),
-                          ),
-                        ),
+                        SizedBox(width: 20),
                       ],
-                    );
+                    ),
+                  ),
+                ),
+                SliverToBoxAdapter(
+                  child: SizedBox(height: 13),
+                ),
+                SliverToBoxAdapter(
+                    child: AppliedFilterChips(
+                  searchFilters: searchFilters,
+                  openFiltersSelection: () {
+                    selectFilters(context);
                   },
-                );
-              },
+                )),
+                // SliverToBoxAdapter(
+                //   child: SlidingSelectorIncomeExpense(
+                //       onSelected: (index) {
+                //         setState(() {
+                //           selectedIncome = index == 1
+                //               ? null
+                //               : index == 2
+                //                   ? false
+                //                   : true;
+                //         });
+                //         searchTransaction(selectedSearch,
+                //             income: selectedIncome);
+                //       },
+                //       alternateTheme: true),
+                // ),
+                // SliverToBoxAdapter(
+                //   child: SizedBox(height: 7),
+                // ),
+                TransactionEntries(
+                  null,
+                  null,
+                  listID: "TransactionsSearch",
+                  simpleListRender: false,
+                  noResultsMessage: "no-transactions-found".tr(),
+                  noSearchResultsVariation: true,
+                  searchFilters: searchFilters,
+                ),
+                SliverToBoxAdapter(
+                  child: GestureDetector(
+                    onTap: () {
+                      selectDateRange(context);
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                        left: 20,
+                        right: 20,
+                        top: 20,
+                        bottom: 40,
+                      ),
+                      child: TextFont(
+                        fontSize: 13,
+                        textAlign: TextAlign.center,
+                        textColor: getColor(context, "textLight"),
+                        text: "showing-transactions-from".tr() +
+                            "\n" +
+                            getWordedDateShortMore(
+                                searchFilters.dateTimeRange?.start ??
+                                    DateTime.now(),
+                                includeYear: true) +
+                            " - " +
+                            getWordedDateShortMore(
+                                searchFilters.dateTimeRange?.end ??
+                                    DateTime.now(),
+                                includeYear: true),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
           SelectedTransactionsAppBar(

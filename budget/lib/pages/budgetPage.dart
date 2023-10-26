@@ -626,107 +626,104 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                 ),
               ),
               TransactionEntries(
-                m: TransactionEntriesMetaData(
-                  budgetRange.start,
-                  budgetRange.end,
-                  categoryFks: selectedCategory != null
-                      ? [selectedCategory!.categoryPk]
-                      : widget.budget.categoryFks,
-                  categoryFksExclude: selectedCategory != null
-                      ? null
-                      : widget.budget.categoryFksExclude,
-                  income: null,
-                  listID: pageId,
-                  budgetTransactionFilters:
-                      widget.budget.budgetTransactionFilters,
-                  memberTransactionFilters:
-                      widget.budget.memberTransactionFilters,
-                  member: selectedMember,
-                  onlyShowTransactionsBelongingToBudgetPk:
-                      widget.budget.sharedKey != null ||
-                              widget.budget.addedTransactionsOnly == true
-                          ? widget.budget.budgetPk
-                          : null,
-                  budget: widget.budget,
-                  dateDividerColor: pageBackgroundColor,
-                  transactionBackgroundColor: pageBackgroundColor,
-                  categoryTintColor: budgetColorScheme.primary,
-                  colorScheme: budgetColorScheme,
-                  noResultsPadding: EdgeInsets.symmetric(horizontal: 30),
-                  noResultsExtraWidget: widget.budget.reoccurrence !=
-                              BudgetReoccurence.custom &&
-                          widget.isPastBudget == false &&
-                          widget.isPastBudgetButCurrentPeriod == false
-                      ? Padding(
-                          padding: const EdgeInsets.only(top: 20),
-                          child: Tappable(
-                            borderRadius: 15,
-                            color: dynamicPastel(
+                budgetRange.start,
+                budgetRange.end,
+                categoryFks: selectedCategory != null
+                    ? [selectedCategory!.categoryPk]
+                    : widget.budget.categoryFks,
+                categoryFksExclude: selectedCategory != null
+                    ? null
+                    : widget.budget.categoryFksExclude,
+                income: null,
+                listID: pageId,
+                budgetTransactionFilters:
+                    widget.budget.budgetTransactionFilters,
+                memberTransactionFilters:
+                    widget.budget.memberTransactionFilters,
+                member: selectedMember,
+                onlyShowTransactionsBelongingToBudgetPk:
+                    widget.budget.sharedKey != null ||
+                            widget.budget.addedTransactionsOnly == true
+                        ? widget.budget.budgetPk
+                        : null,
+                budget: widget.budget,
+                dateDividerColor: pageBackgroundColor,
+                transactionBackgroundColor: pageBackgroundColor,
+                categoryTintColor: budgetColorScheme.primary,
+                colorScheme: budgetColorScheme,
+                noResultsPadding: EdgeInsets.symmetric(horizontal: 30),
+                noResultsExtraWidget: widget.budget.reoccurrence !=
+                            BudgetReoccurence.custom &&
+                        widget.isPastBudget == false &&
+                        widget.isPastBudgetButCurrentPeriod == false
+                    ? Padding(
+                        padding: const EdgeInsets.only(top: 20),
+                        child: Tappable(
+                          borderRadius: 15,
+                          color: dynamicPastel(
+                            context,
+                            budgetColorScheme.secondaryContainer,
+                            amountLight:
+                                appStateSettings["materialYou"] ? 0.25 : 0.4,
+                            amountDark:
+                                appStateSettings["materialYou"] ? 0.4 : 0.55,
+                          ),
+                          onTap: () {
+                            pushRoute(
                               context,
-                              budgetColorScheme.secondaryContainer,
-                              amountLight:
-                                  appStateSettings["materialYou"] ? 0.25 : 0.4,
-                              amountDark:
-                                  appStateSettings["materialYou"] ? 0.4 : 0.55,
-                            ),
-                            onTap: () {
-                              pushRoute(
-                                context,
-                                PastBudgetsPage(
-                                    budgetPk: widget.budget.budgetPk),
-                              );
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 15, vertical: 10),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  ButtonIcon(
-                                    onTap: () {
-                                      pushRoute(
-                                        context,
-                                        PastBudgetsPage(
-                                            budgetPk: widget.budget.budgetPk),
-                                      );
-                                    },
-                                    icon: appStateSettings["outlinedIcons"]
-                                        ? Icons.history_outlined
-                                        : Icons.history_rounded,
-                                    color: dynamicPastel(
-                                        context,
-                                        HexColor(widget.budget.colour,
-                                            defaultColor: Theme.of(context)
-                                                .colorScheme
-                                                .primary),
-                                        amount: 0.5),
-                                    iconColor: dynamicPastel(
-                                        context,
-                                        HexColor(widget.budget.colour,
-                                            defaultColor: Theme.of(context)
-                                                .colorScheme
-                                                .primary),
-                                        amount: 0.7,
-                                        inverse: true),
-                                    size: 38,
-                                    iconPadding: 18,
+                              PastBudgetsPage(budgetPk: widget.budget.budgetPk),
+                            );
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 15, vertical: 10),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                ButtonIcon(
+                                  onTap: () {
+                                    pushRoute(
+                                      context,
+                                      PastBudgetsPage(
+                                          budgetPk: widget.budget.budgetPk),
+                                    );
+                                  },
+                                  icon: appStateSettings["outlinedIcons"]
+                                      ? Icons.history_outlined
+                                      : Icons.history_rounded,
+                                  color: dynamicPastel(
+                                      context,
+                                      HexColor(widget.budget.colour,
+                                          defaultColor: Theme.of(context)
+                                              .colorScheme
+                                              .primary),
+                                      amount: 0.5),
+                                  iconColor: dynamicPastel(
+                                      context,
+                                      HexColor(widget.budget.colour,
+                                          defaultColor: Theme.of(context)
+                                              .colorScheme
+                                              .primary),
+                                      amount: 0.7,
+                                      inverse: true),
+                                  size: 38,
+                                  iconPadding: 18,
+                                ),
+                                SizedBox(width: 10),
+                                Flexible(
+                                  child: TextFont(
+                                    text: "view-previous-budget-periods".tr(),
+                                    fontSize: 17,
+                                    maxLines: 2,
                                   ),
-                                  SizedBox(width: 10),
-                                  Flexible(
-                                    child: TextFont(
-                                      text: "view-previous-budget-periods".tr(),
-                                      fontSize: 17,
-                                      maxLines: 2,
-                                    ),
-                                  ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
                           ),
-                        )
-                      : SizedBox.shrink(),
-                ),
+                        ),
+                      )
+                    : SizedBox.shrink(),
               ),
               SliverToBoxAdapter(
                 child: StreamBuilder<List<CategoryWithTotal>>(
