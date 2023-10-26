@@ -3979,26 +3979,36 @@ class FinanceDatabase extends _$FinanceDatabase {
     return allTransactionsToUpdate.length;
   }
 
-  Future moveTransactionsToCategory(
-      List<Transaction> transactionsToMove, String categoryPk) async {
+  Future moveTransactionsToCategory(List<Transaction> transactionsToMove,
+      String categoryPk, String? subCategoryPk, bool clearSubcategory) async {
     List<Transaction> allTransactionsToUpdate = [];
-    List<String> subCategories =
-        (await database.getAllSubCategoriesOfMainCategory(categoryPk))
-            .map((c) => c.categoryPk)
-            .toList();
-    for (Transaction transaction in transactionsToMove) {
-      print(subCategories);
-      bool clearSubCategory = true;
-      if (subCategories.contains(transaction.subCategoryFk)) {
-        clearSubCategory = false;
+    if (clearSubcategory == false && subCategoryPk == null) {
+      List<String> subCategories =
+          (await database.getAllSubCategoriesOfMainCategory(categoryPk))
+              .map((c) => c.categoryPk)
+              .toList();
+      for (Transaction transaction in transactionsToMove) {
+        bool clearSubCategory = true;
+        if (subCategories.contains(transaction.subCategoryFk)) {
+          clearSubCategory = false;
+        }
+        allTransactionsToUpdate.add(transaction.copyWith(
+          categoryFk: categoryPk,
+          dateTimeModified: Value(DateTime.now()),
+          subCategoryFk: Value(
+              clearSubCategory == true ? null : transaction.subCategoryFk),
+        ));
       }
-      allTransactionsToUpdate.add(transaction.copyWith(
-        categoryFk: categoryPk,
-        dateTimeModified: Value(DateTime.now()),
-        subCategoryFk:
-            Value(clearSubCategory == true ? null : transaction.subCategoryFk),
-      ));
+    } else {
+      for (Transaction transaction in transactionsToMove) {
+        allTransactionsToUpdate.add(transaction.copyWith(
+          categoryFk: categoryPk,
+          dateTimeModified: Value(DateTime.now()),
+          subCategoryFk: Value(subCategoryPk),
+        ));
+      }
     }
+
     return await updateBatchTransactionsOnly(allTransactionsToUpdate);
   }
 

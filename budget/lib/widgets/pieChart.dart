@@ -47,7 +47,7 @@ class PieChartWrapper extends StatelessWidget {
   const PieChartWrapper({
     Key? key,
     required this.data,
-    required this.totalSpent,
+    required this.totalSpentAbsolute,
     required this.setSelectedCategory,
     required this.isPastBudget,
     required this.pieChartDisplayStateKey,
@@ -55,7 +55,7 @@ class PieChartWrapper extends StatelessWidget {
     this.percentLabelOnTop = false,
   }) : super(key: key);
   final List<CategoryWithTotal> data;
-  final double totalSpent;
+  final double totalSpentAbsolute;
   final Function(String categoryPk, TransactionCategory? category)
       setSelectedCategory;
   final bool isPastBudget;
@@ -65,6 +65,19 @@ class PieChartWrapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final List<CategoryWithTotal> dataFiltered = [];
+    if (data.length <= 0) return SizedBox.shrink();
+    int numberZeroTransactions = 0;
+    // Remove all the categories with a total of 0
+    // This fixes the touch index offset for PieChartDisplay!
+    for (CategoryWithTotal categoryWithTotal in data) {
+      if (categoryWithTotal.total == 0) {
+        numberZeroTransactions++;
+      } else {
+        dataFiltered.add(categoryWithTotal);
+      }
+    }
+    if (numberZeroTransactions == data.length) return SizedBox.shrink();
     return Container(
       width: enableDoubleColumn(context) == false ? 200 : 300,
       height: enableDoubleColumn(context) == false ? 200 : 300,
@@ -72,40 +85,36 @@ class PieChartWrapper extends StatelessWidget {
         alignment: Alignment.center,
         children: [
           PieChartDisplay(
-            data: data,
-            totalSpent: totalSpent,
+            data: dataFiltered,
+            totalSpentAbsolute: totalSpentAbsolute,
             setSelectedCategory: setSelectedCategory,
             key: pieChartDisplayStateKey,
             percentLabelOnTop: percentLabelOnTop,
           ),
-          data.length <= 0
-              ? SizedBox.shrink()
-              : IgnorePointer(
-                  child: Center(
-                    child: Container(
-                      width: enableDoubleColumn(context) == false ? 105 : 130,
-                      height: enableDoubleColumn(context) == false ? 105 : 130,
-                      decoration: BoxDecoration(
-                        color: middleColor?.withOpacity(0.2) ??
-                            getColor(context, "white").withOpacity(0.2),
-                        shape: BoxShape.circle,
-                      ),
-                    ),
-                  ),
+          IgnorePointer(
+            child: Center(
+              child: Container(
+                width: enableDoubleColumn(context) == false ? 105 : 130,
+                height: enableDoubleColumn(context) == false ? 105 : 130,
+                decoration: BoxDecoration(
+                  color: middleColor?.withOpacity(0.2) ??
+                      getColor(context, "white").withOpacity(0.2),
+                  shape: BoxShape.circle,
                 ),
-          data.length <= 0
-              ? SizedBox.shrink()
-              : IgnorePointer(
-                  child: Center(
-                    child: Container(
-                      width: enableDoubleColumn(context) == false ? 80 : 110,
-                      height: enableDoubleColumn(context) == false ? 80 : 110,
-                      decoration: BoxDecoration(
-                          color: middleColor ?? Theme.of(context).canvasColor,
-                          shape: BoxShape.circle),
-                    ),
-                  ),
-                ),
+              ),
+            ),
+          ),
+          IgnorePointer(
+            child: Center(
+              child: Container(
+                width: enableDoubleColumn(context) == false ? 80 : 110,
+                height: enableDoubleColumn(context) == false ? 80 : 110,
+                decoration: BoxDecoration(
+                    color: middleColor ?? Theme.of(context).canvasColor,
+                    shape: BoxShape.circle),
+              ),
+            ),
+          ),
         ],
       ),
     );
@@ -118,12 +127,12 @@ class PieChartDisplay extends StatefulWidget {
   PieChartDisplay({
     Key? key,
     required this.data,
-    required this.totalSpent,
+    required this.totalSpentAbsolute,
     required this.setSelectedCategory,
     this.percentLabelOnTop = false,
   }) : super(key: key);
   final List<CategoryWithTotal> data;
-  final double totalSpent;
+  final double totalSpentAbsolute;
   final Function(String categoryPk, TransactionCategory? category)
       setSelectedCategory;
   final bool percentLabelOnTop;
@@ -183,12 +192,6 @@ class PieChartDisplayState extends State<PieChartDisplay> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.data.length <= 0) return SizedBox.shrink();
-    int numberZeroTransactions = 0;
-    for (CategoryWithTotal categoryWithTotal in widget.data) {
-      if (categoryWithTotal.total == 0) numberZeroTransactions++;
-    }
-    if (numberZeroTransactions == widget.data.length) return SizedBox.shrink();
     return PinWheelReveal(
       delay: Duration(milliseconds: 0),
       duration: Duration(milliseconds: 850),
@@ -271,9 +274,9 @@ class PieChartDisplayState extends State<PieChartDisplay> {
       );
       return PieChartSectionData(
         color: color,
-        value: widget.totalSpent <= 0
+        value: widget.totalSpentAbsolute <= 0
             ? 5
-            : (widget.data[i].total / widget.totalSpent).abs(),
+            : (widget.data[i].total / widget.totalSpentAbsolute).abs(),
         title: "",
         radius: radius,
         badgeWidget: _Badge(
@@ -285,9 +288,9 @@ class PieChartDisplayState extends State<PieChartDisplay> {
           categoryColor: HexColor(widget.data[i].category.colour,
               defaultColor: Theme.of(context).colorScheme.primary),
           emojiIconName: widget.data[i].category.emojiIconName,
-          percent: widget.totalSpent == 0
+          percent: widget.totalSpentAbsolute == 0
               ? 0
-              : (widget.data[i].total / widget.totalSpent * 100).abs(),
+              : (widget.data[i].total / widget.totalSpentAbsolute * 100).abs(),
           isTouched: isTouched,
         ),
         titlePositionPercentageOffset: 1.4,

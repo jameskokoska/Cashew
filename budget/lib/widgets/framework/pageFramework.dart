@@ -54,6 +54,7 @@ class PageFramework extends StatefulWidget {
     this.scrollPhysics,
     this.belowAppBarPaddingWhenCenteredTitleSmall,
     this.transparentAppBar = false,
+    this.customScrollViewBuilder,
   }) : super(key: key);
 
   final String title;
@@ -91,6 +92,10 @@ class PageFramework extends StatefulWidget {
   final ScrollPhysics? scrollPhysics;
   final double? belowAppBarPaddingWhenCenteredTitleSmall;
   final bool transparentAppBar;
+  final Widget Function(
+      ScrollController scrollController,
+      ScrollPhysics? scrollPhysics,
+      Widget sliverAppbar)? customScrollViewBuilder;
 
   @override
   State<PageFramework> createState() => PageFrameworkState();
@@ -297,83 +302,86 @@ class PageFrameworkState extends State<PageFramework>
     bool centeredTitleSmall = getCenteredTitleSmall(
         context: context, backButtonEnabled: backButtonEnabled);
 
+    Widget sliverAppBar = PageFrameworkSliverAppBar(
+      title: widget.title,
+      titleWidget: widget.titleWidget,
+      appBarBackgroundColor: widget.appBarBackgroundColor,
+      appBarBackgroundColorStart: widget.appBarBackgroundColorStart,
+      backButton: widget.backButton,
+      subtitle: widget.subtitle,
+      subtitleSize: widget.subtitleSize,
+      subtitleAnimationSpeed: widget.subtitleAnimationSpeed,
+      onBottomReached: widget.onBottomReached,
+      pinned: widget.pinned,
+      subtitleAlignment: widget.subtitleAlignment,
+      // customTitleBuilder: widget.customTitleBuilder,
+      animationControllerOpacity: _animationControllerOpacity,
+      animationControllerShift: _animationControllerShift,
+      textColor: widget.textColor,
+      onBackButton: widget.onBackButton,
+      actions: widget.actions,
+      expandedHeight: getExpandedHeaderHeight(context, widget.expandedHeight),
+      centeredTitle: centeredTitle,
+      centeredTitleSmall: centeredTitleSmall,
+      belowAppBarPaddingWhenCenteredTitleSmall:
+          widget.belowAppBarPaddingWhenCenteredTitleSmall,
+    );
+
     Widget scaffold = Scaffold(
       resizeToAvoidBottomInset: widget.resizeToAvoidBottomInset,
       backgroundColor: widget.backgroundColor,
       body: Stack(
         children: [
           ScrollbarWrap(
-            child: CustomScrollView(
-              physics: widget.scrollPhysics,
-              controller: _scrollController,
-              slivers: [
-                ...(widget.enableHeader
-                    ? [
-                        PageFrameworkSliverAppBar(
-                          title: widget.title,
-                          titleWidget: widget.titleWidget,
-                          appBarBackgroundColor: widget.appBarBackgroundColor,
-                          appBarBackgroundColorStart:
-                              widget.appBarBackgroundColorStart,
-                          backButton: widget.backButton,
-                          subtitle: widget.subtitle,
-                          subtitleSize: widget.subtitleSize,
-                          subtitleAnimationSpeed: widget.subtitleAnimationSpeed,
-                          onBottomReached: widget.onBottomReached,
-                          pinned: widget.pinned,
-                          subtitleAlignment: widget.subtitleAlignment,
-                          // customTitleBuilder: widget.customTitleBuilder,
-                          animationControllerOpacity:
-                              _animationControllerOpacity,
-                          animationControllerShift: _animationControllerShift,
-                          textColor: widget.textColor,
-                          onBackButton: widget.onBackButton,
-                          actions: widget.actions,
-                          expandedHeight: getExpandedHeaderHeight(
-                              context, widget.expandedHeight),
-                          centeredTitle: centeredTitle,
-                          centeredTitleSmall: centeredTitleSmall,
-                          belowAppBarPaddingWhenCenteredTitleSmall:
-                              widget.belowAppBarPaddingWhenCenteredTitleSmall,
+            child: widget.customScrollViewBuilder != null
+                ? widget.customScrollViewBuilder!(
+                    _scrollController,
+                    widget.scrollPhysics,
+                    sliverAppBar,
+                  )
+                : CustomScrollView(
+                    physics: widget.scrollPhysics,
+                    controller: _scrollController,
+                    slivers: [
+                      if (widget.enableHeader) sliverAppBar,
+                      if (widget.enableHeader &&
+                          (centeredTitleSmall || centeredTitle))
+                        SliverToBoxAdapter(
+                          child: Center(child: widget.subtitle),
                         ),
-                        if (centeredTitleSmall || centeredTitle)
-                          SliverToBoxAdapter(
-                            child: Center(child: widget.subtitle),
-                          )
-                      ]
-                    : []),
-                for (Widget sliver in widget.slivers)
-                  widget.horizontalPadding == 0
-                      ? sliver
-                      : SliverPadding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: widget.horizontalPadding),
-                          sliver: sliver),
-                widget.listWidgets != null
-                    ? SliverPadding(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: widget.horizontalPadding),
-                        sliver: SliverList(
-                          delegate: SliverChildListDelegate([
-                            ...widget.listWidgets!,
-                            widget.bottomPadding
-                                ? SizedBox(
-                                    height:
-                                        MediaQuery.paddingOf(context).bottom +
-                                            15)
-                                : SizedBox.shrink(),
-                          ]),
-                        ),
-                      )
-                    : SliverToBoxAdapter(
-                        child: widget.bottomPadding
-                            ? SizedBox(
-                                height:
-                                    MediaQuery.paddingOf(context).bottom + 15)
-                            : SizedBox.shrink(),
-                      ),
-              ],
-            ),
+                      for (Widget sliver in widget.slivers)
+                        widget.horizontalPadding == 0
+                            ? sliver
+                            : SliverPadding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: widget.horizontalPadding),
+                                sliver: sliver),
+                      widget.listWidgets != null
+                          ? SliverPadding(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: widget.horizontalPadding),
+                              sliver: SliverList(
+                                delegate: SliverChildListDelegate([
+                                  ...widget.listWidgets!,
+                                  widget.bottomPadding
+                                      ? SizedBox(
+                                          height: MediaQuery.paddingOf(context)
+                                                  .bottom +
+                                              15)
+                                      : SizedBox.shrink(),
+                                ]),
+                              ),
+                            )
+                          : SliverToBoxAdapter(
+                              child: widget.bottomPadding
+                                  ? SizedBox(
+                                      height:
+                                          MediaQuery.paddingOf(context).bottom +
+                                              15)
+                                  : SizedBox.shrink(),
+                            ),
+                    ],
+                  ),
           ),
           widget.overlay ?? SizedBox.shrink(),
         ],

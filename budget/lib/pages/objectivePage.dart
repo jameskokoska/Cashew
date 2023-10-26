@@ -343,6 +343,7 @@ class _ObjectivePageContentState extends State<_ObjectivePageContent> {
                 ),
               ),
               TransactionEntries(
+                  m: TransactionEntriesMetaData(
                 null,
                 null,
                 income: null,
@@ -355,7 +356,7 @@ class _ObjectivePageContentState extends State<_ObjectivePageContent> {
                     widget.objective.objectivePk,
                 showObjectivePercentage: false,
                 noResultsMessage: "no-transactions-found".tr(),
-              ),
+              )),
               // Wipe all remaining pixels off - sometimes graphics artifacts are left behind
               SliverToBoxAdapter(
                 child: Container(height: 1, color: pageBackgroundColor),

@@ -219,28 +219,29 @@ class SelectedTransactionsAppBar extends StatelessWidget {
                                 ? Icons.category_outlined
                                 : Icons.category_rounded,
                             action: () async {
-                              TransactionCategory? category =
-                                  await openBottomSheet(
+                              MainAndSubcategory mainAndSubcategory =
+                                  await selectCategorySequence(
                                 context,
-                                PopupFramework(
-                                  title: "select-category".tr(),
-                                  child: SelectCategory(
-                                    selectedCategory: null,
-                                    setSelectedCategory:
-                                        (TransactionCategory category) {
-                                      Navigator.pop(context, category);
-                                    },
-                                    popRoute: false,
-                                    addButton: false,
-                                  ),
-                                ),
+                                selectedCategory: null,
+                                setSelectedCategory: (_) {},
+                                selectedSubCategory: null,
+                                setSelectedSubCategory: (_) {},
                               );
+                              TransactionCategory? category =
+                                  mainAndSubcategory.main;
+                              print(mainAndSubcategory.sub);
                               if (category == null) return;
+                              TransactionCategory? subCategory =
+                                  mainAndSubcategory.sub;
                               List<Transaction> transactions = await database
                                   .getTransactionsFromPk(value[pageID]!);
                               await database.moveTransactionsToCategory(
                                 transactions,
                                 category.categoryPk,
+                                subCategory?.categoryPk,
+                                mainAndSubcategory
+                                        .ignoredSubcategorySelection ==
+                                    false,
                               );
                               openSnackbar(
                                 SnackbarMessage(

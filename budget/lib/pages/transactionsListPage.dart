@@ -212,20 +212,23 @@ class TransactionsListPageState extends State<TransactionsListPage>
                                                 contextPageView),
                                       ),
                                       TransactionEntries(
-                                        startDate,
-                                        new DateTime(
-                                            startDate.year,
-                                            startDate.month + 1,
-                                            startDate.day - 1),
-                                        onSelected: onSelected,
-                                        listID: "Transactions",
-                                        noResultsMessage: "no-transactions-for"
-                                                .tr() +
-                                            " " +
-                                            getMonth(startDate,
-                                                includeYear: startDate.year !=
-                                                    DateTime.now().year) +
-                                            ".",
+                                        m: TransactionEntriesMetaData(
+                                          startDate,
+                                          new DateTime(
+                                              startDate.year,
+                                              startDate.month + 1,
+                                              startDate.day - 1),
+                                          onSelected: onSelected,
+                                          listID: "Transactions",
+                                          noResultsMessage:
+                                              "no-transactions-for".tr() +
+                                                  " " +
+                                                  getMonth(startDate,
+                                                      includeYear: startDate
+                                                              .year !=
+                                                          DateTime.now().year) +
+                                                  ".",
+                                        ),
                                       ),
                                       SliverToBoxAdapter(
                                         child: CashFlow(

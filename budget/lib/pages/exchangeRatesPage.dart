@@ -50,20 +50,17 @@ class _ExchangeRatesState extends State<ExchangeRates> {
     } else {
       for (String key in currencyExchange.keys) {
         String? currencyCountry = currenciesJSON[key]?["CountryName"];
-        String? currencyName = currenciesJSON[key]?["currency"];
+        String? currencyName = currenciesJSON[key]?["Currency"];
         if ((searchCurrenciesText.trim() == "" ||
-                key
+            key.toLowerCase().contains(searchCurrenciesText.toLowerCase()) ||
+            (currencyCountry != null &&
+                currencyCountry
                     .toLowerCase()
-                    .contains(searchCurrenciesText.toLowerCase()) ||
-                (currencyCountry != null &&
-                    currencyCountry
-                        .toLowerCase()
-                        .contains(searchCurrenciesText.toLowerCase())) ||
-                (currencyName != null &&
-                    currencyName
-                        .toLowerCase()
-                        .contains(searchCurrenciesText.toLowerCase()))) &&
-            (currencyCountry != null || currencyName != null)) {
+                    .contains(searchCurrenciesText.toLowerCase())) ||
+            (currencyName != null &&
+                currencyName
+                    .toLowerCase()
+                    .contains(searchCurrenciesText.toLowerCase())))) {
           currencyExchangeFiltered[key] = currencyExchange[key];
         }
       }

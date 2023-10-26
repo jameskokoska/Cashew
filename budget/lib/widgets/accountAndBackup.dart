@@ -183,7 +183,6 @@ Future<bool> signInGoogle(
         icon: appStateSettings["outlinedIcons"]
             ? Icons.error_outlined
             : Icons.error_rounded,
-        onTap: () async {},
         timeout: Duration(milliseconds: 3400),
       ),
     );

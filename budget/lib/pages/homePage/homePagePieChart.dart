@@ -91,7 +91,7 @@ class HomePagePieChart extends StatelessWidget {
                                   isPastBudget: true,
                                   pieChartDisplayStateKey: null,
                                   data: snapshot.data!,
-                                  totalSpent: total,
+                                  totalSpentAbsolute: total,
                                   setSelectedCategory:
                                       (categoryPk, category) {},
                                   percentLabelOnTop: true,

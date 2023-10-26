@@ -686,7 +686,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
   }
 
   Future afterSetTitle() async {
-    dynamic result = await selectCategorySequence(
+    MainAndSubcategory mainAndSubcategory = await selectCategorySequence(
       context,
       selectedCategory: selectedCategory,
       setSelectedCategory: setSelectedCategory,
@@ -711,7 +711,8 @@ class _AddTransactionPageState extends State<AddTransactionPage>
       ),
     );
 
-    if (result is TransactionCategory || result == false) {
+    if (mainAndSubcategory.main != null &&
+        mainAndSubcategory.ignoredSubcategorySelection == false) {
       selectAmountPopup(
         next: () async {
           await addTransaction();
@@ -3224,16 +3225,31 @@ class TransactionTypeInfoEntry extends StatelessWidget {
   }
 }
 
-// return false if the subcategory is skipped
-Future<dynamic> selectCategorySequence(
+class MainAndSubcategory {
+  MainAndSubcategory(
+      {this.main, this.sub, this.ignoredSubcategorySelection = false});
+
+  TransactionCategory? main;
+  TransactionCategory? sub;
+  bool ignoredSubcategorySelection;
+
+  @override
+  String toString() {
+    return 'main: $main, sub: $sub, ignoredSubcategorySelection: $ignoredSubcategorySelection';
+  }
+}
+
+// ignoredSubcategorySelection is true if the subcategory is skipped
+Future<MainAndSubcategory> selectCategorySequence(
   BuildContext context, {
   Widget? extraWidgetBefore,
   bool? skipIfSet,
   required TransactionCategory? selectedCategory,
-  required Function(TransactionCategory) setSelectedCategory,
+  required Function(TransactionCategory)? setSelectedCategory,
   required TransactionCategory? selectedSubCategory,
-  required Function(TransactionCategory?) setSelectedSubCategory,
+  required Function(TransactionCategory?)? setSelectedSubCategory,
 }) async {
+  MainAndSubcategory mainAndSubcategory = MainAndSubcategory();
   dynamic result = await openBottomSheet(
     context,
     PopupFramework(
@@ -3255,10 +3271,11 @@ Future<dynamic> selectCategorySequence(
     ),
   );
   if (result != null && result is TransactionCategory) {
-    int subCategoriesOfMain =
-        await database.getAmountOfSubCategories(result.categoryPk);
+    mainAndSubcategory.main = result;
+    int subCategoriesOfMain = await database
+        .getAmountOfSubCategories(mainAndSubcategory.main!.categoryPk);
     if (subCategoriesOfMain > 0) {
-      result = await openBottomSheet(
+      dynamic result2 = await openBottomSheet(
         context,
         PopupFramework(
           title: "select-subcategory".tr(),
@@ -3266,7 +3283,7 @@ Future<dynamic> selectCategorySequence(
             skipIfSet: skipIfSet,
             selectedCategory: selectedSubCategory,
             setSelectedCategory: setSelectedSubCategory,
-            mainCategoryPks: [result.categoryPk],
+            mainCategoryPks: [mainAndSubcategory.main!.categoryPk],
             header: [
               LayoutBuilder(builder: (context, constraints) {
                 return Column(
@@ -3274,7 +3291,8 @@ Future<dynamic> selectCategorySequence(
                     Tappable(
                       color: Theme.of(context).colorScheme.secondaryContainer,
                       onTap: () {
-                        setSelectedSubCategory(null);
+                        if (setSelectedSubCategory != null)
+                          setSelectedSubCategory(null);
                         Navigator.pop(context, false);
                       },
                       borderRadius: 18,
@@ -3313,9 +3331,16 @@ Future<dynamic> selectCategorySequence(
           ),
         ),
       );
-      if (result == false) return false;
+      if (result2 is TransactionCategory) {
+        mainAndSubcategory.sub = result2;
+      }
+      if (result2 == null) {
+        mainAndSubcategory.ignoredSubcategorySelection = true;
+      }
+      if (result2 == false) {
+        return mainAndSubcategory;
+      }
     }
   }
-  if (result is TransactionCategory) return result;
-  return null;
+  return mainAndSubcategory;
 }

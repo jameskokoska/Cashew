@@ -23,7 +23,7 @@ class CategoryEntry extends StatelessWidget {
     required this.category,
     required this.transactionCount,
     required this.categorySpent,
-    required this.totalSpent,
+    required this.totalSpentAbsolute,
     required this.onTap,
     required this.selected,
     required this.allSelected,
@@ -45,7 +45,7 @@ class CategoryEntry extends StatelessWidget {
 
   final TransactionCategory category;
   final int transactionCount;
-  final double totalSpent;
+  final double totalSpentAbsolute;
   final double categorySpent;
   final Function(TransactionCategory category,
       CategoryBudgetLimit? categoryBudgetLimit) onTap;
@@ -81,7 +81,7 @@ class CategoryEntry extends StatelessWidget {
         subCategoriesWithTotal.length > 0 && expandSubcategories != false;
 
     double percentSpent = categoryBudgetLimit == null
-        ? (categorySpent / totalSpent).abs()
+        ? (categorySpent / totalSpentAbsolute).abs()
         : isAbsoluteSpendingLimit
             ? ((categorySpent / categoryBudgetLimit!.amount).abs() > 1
                 ? 1
@@ -256,10 +256,10 @@ class CategoryEntry extends StatelessWidget {
                                       ),
                                     )
                                   : TextFont(
-                                      text: (totalSpent == 0
+                                      text: (totalSpentAbsolute == 0
                                               ? "0"
                                               : (categorySpent /
-                                                      totalSpent *
+                                                      totalSpentAbsolute *
                                                       100)
                                                   .abs()
                                                   .toStringAsFixed(0)) +
@@ -339,7 +339,7 @@ class CategoryEntry extends StatelessWidget {
                             subcategoryWithTotal.categoryBudgetLimit,
                         budgetColorScheme: budgetColorScheme,
                         category: subcategoryWithTotal.category,
-                        totalSpent: totalSpent,
+                        totalSpentAbsolute: totalSpentAbsolute,
                         transactionCount: subcategoryWithTotal.transactionCount,
                         categorySpent: showIncomeExpenseIcons == true
                             ? subcategoryWithTotal.total

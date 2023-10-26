@@ -376,16 +376,18 @@ class _WalletDetailsPageState extends State<WalletDetailsPage> {
               ),
               if (selectedCategory != null)
                 TransactionEntries(
-                  null,
-                  null,
-                  categoryFks: selectedCategory != null
-                      ? [selectedCategory!.categoryPk]
-                      : [],
-                  walletFks: walletPk == null ? [] : [walletPk],
-                  limit: selectedCategory == null ? 0 : 10,
-                  listID: listID,
-                  showNoResults: false,
-                  income: isIncome,
+                  m: TransactionEntriesMetaData(
+                    null,
+                    null,
+                    categoryFks: selectedCategory != null
+                        ? [selectedCategory!.categoryPk]
+                        : [],
+                    walletFks: walletPk == null ? [] : [walletPk],
+                    limit: selectedCategory == null ? 0 : 10,
+                    listID: listID,
+                    showNoResults: false,
+                    income: isIncome,
+                  ),
                 ),
               selectedCategory == null
                   ? SliverToBoxAdapter(
@@ -522,7 +524,7 @@ class _WalletCategoryPieChartState extends State<WalletCategoryPieChart> {
                     extraText: isIncome ? "of-income".tr() : "of-expense".tr(),
                     budgetColorScheme: widget.walletColorScheme,
                     category: category.category,
-                    totalSpent: s.totalSpentAbsolute,
+                    totalSpentAbsolute: s.totalSpentAbsolute,
                     transactionCount: category.transactionCount,
                     categorySpent: category.total,
                     onTap: (TransactionCategory tappedCategory, _) {
@@ -570,7 +572,7 @@ class _WalletCategoryPieChartState extends State<WalletCategoryPieChart> {
                     isPastBudget: true,
                     pieChartDisplayStateKey: _pieChartDisplayStateKey,
                     data: s.dataFilterUnassignedTransactions,
-                    totalSpent: s.totalSpentAbsolute,
+                    totalSpentAbsolute: s.totalSpentAbsolute,
                     setSelectedCategory: (categoryPk, category) async {
                       setState(() {
                         selectedCategory = category;

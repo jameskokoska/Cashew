@@ -22,6 +22,13 @@ import 'listItem.dart';
 
 String getChangelogString() {
   return """
+    < 4.7.4
+    Optimized transaction search page to support lazy rendering 
+    Added wifi category icon
+    Can select subcategory when changing the category of selected transactions
+    Added search keywords for utility category icons
+    Fixed search for exchange rates (includes currency name and key)
+    Fixed total spent percentage in budget details when using subcategories
     < 4.7.3
     Improved performance of search transactions page
     Improved performance of transactions list page
