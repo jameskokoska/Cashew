@@ -793,5 +793,6 @@
   "exclude-from-budget": "תכלול מהתקציב",
   "erase-synced-data-and-cloud-backups": "מחק נתונים מסונכרנים וגיבויים בענן",
   "erase-cloud-data": "מחק נתוני ענן",
-  "erase-cloud-data-description": "התחבר לחשבון Google שלך ​​ומחק גיבויים הממוקמים תחת 'סנכרון' ו'גיבויים '"
+  "erase-cloud-data-description": "התחבר לחשבון Google שלך ​​ומחק גיבויים הממוקמים תחת 'סנכרון' ו'גיבויים '",
+  "add": "לְהוֹסִיף"
 }

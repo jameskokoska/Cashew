@@ -793,5 +793,6 @@
   "exclude-from-budget": "Aus dem Budget ausschließen",
   "erase-synced-data-and-cloud-backups": "Synchronisierte Daten und Cloud -Sicherungen löschen",
   "erase-cloud-data": "Cloud -Daten löschen",
-  "erase-cloud-data-description": "Melden Sie sich in Ihrem Google -Konto an und löschen"
+  "erase-cloud-data-description": "Melden Sie sich in Ihrem Google -Konto an und löschen",
+  "add": "Hinzufügen"
 }

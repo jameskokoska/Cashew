@@ -784,7 +784,7 @@
   "insurance": "Ubezpieczenie",
   "beauty": "Uroda",
   "haircut": "Ostrzyżenie",
-  "touchups": "Dotykania",
+  "touchups": "Dotyk",
   "clothing": "Odzież",
   "multiplier": "Mnożnik",
   "bill-splitter-multiplier-description": "Wprowadź wartość, która zostanie pomnożona do każdego elementu w rozdzieleniu rachunku. Przydatne, jeśli podatek jest stosowany na każdym elemencie.",
@@ -793,5 +793,6 @@
   "exclude-from-budget": "Wykluczyć z budżetu",
   "erase-synced-data-and-cloud-backups": "Usuń synchronizowane dane i kopie zapasowe w chmurze",
   "erase-cloud-data": "Usuń dane w chmurze",
-  "erase-cloud-data-description": "Zaloguj się na swoje konto Google i usuń kopie zapasowe znajdujące się pod „Sync” i „Backups”"
+  "erase-cloud-data-description": "Zaloguj się na swoje konto Google i usuń kopie zapasowe znajdujące się pod „Sync” i „Backups”",
+  "add": "Dodać"
 }

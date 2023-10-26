@@ -354,18 +354,6 @@ class _AddObjectivePageState extends State<AddObjectivePage>
                       );
                     },
                   ),
-                DropdownItemMenu(
-                  id: "pin-to-home",
-                  label: selectedPin
-                      ? "pinned-to-homepage".tr()
-                      : "unpinned-to-homepage".tr(),
-                  icon: selectedPin
-                      ? Icons.push_pin_rounded
-                      : Icons.push_pin_outlined,
-                  action: () {
-                    setSelectedPin();
-                  },
-                ),
               ],
             ),
           ],

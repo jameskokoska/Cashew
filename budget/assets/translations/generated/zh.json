@@ -793,5 +793,6 @@
   "exclude-from-budget": "排除在预算之外",
   "erase-synced-data-and-cloud-backups": "擦除同步数据和云备份",
   "erase-cloud-data": "擦除云数据",
-  "erase-cloud-data-description": "登录到您的Google帐户并删除位于“同步”和“备份”下的备份"
+  "erase-cloud-data-description": "登录到您的Google帐户并删除位于“同步”和“备份”下的备份",
+  "add": "添加"
 }

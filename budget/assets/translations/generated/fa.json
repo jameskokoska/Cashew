@@ -793,5 +793,6 @@
   "exclude-from-budget": "از بودجه مستثنی است",
   "erase-synced-data-and-cloud-backups": "داده های همگام سازی و پشتیبان گیری از ابر را پاک کنید",
   "erase-cloud-data": "داده های ابر را پاک کنید",
-  "erase-cloud-data-description": "وارد حساب Google خود شوید و نسخه پشتیبان تهیه شده در زیر \"Sync\" و \"Backups\" را حذف کنید"
+  "erase-cloud-data-description": "وارد حساب Google خود شوید و نسخه پشتیبان تهیه شده در زیر \"Sync\" و \"Backups\" را حذف کنید",
+  "add": "اضافه کردن"
 }

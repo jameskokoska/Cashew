@@ -793,5 +793,6 @@
   "exclude-from-budget": "Uitsluiten van het budget",
   "erase-synced-data-and-cloud-backups": "Wis gesynchroniseerde gegevens en cloudback -ups",
   "erase-cloud-data": "Wis op cloudgegevens",
-  "erase-cloud-data-description": "Log in op uw Google -account en verwijder back -ups onder 'Sync' en 'back -ups'"
+  "erase-cloud-data-description": "Log in op uw Google -account en verwijder back -ups onder 'Sync' en 'back -ups'",
+  "add": "Toevoegen"
 }

@@ -793,5 +793,6 @@
   "exclude-from-budget": "Exclude din buget",
   "erase-synced-data-and-cloud-backups": "Ștergeți date sincronizate și copii de rezervă în cloud",
   "erase-cloud-data": "Ștergeți datele cloud",
-  "erase-cloud-data-description": "Conectați -vă la contul dvs. Google și ștergeți backup -urile situate în „Sync” și „Backup -uri”"
+  "erase-cloud-data-description": "Conectați -vă la contul dvs. Google și ștergeți backup -urile situate în „Sync” și „Backup -uri”",
+  "add": "Adăuga"
 }

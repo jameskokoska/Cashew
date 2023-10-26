@@ -793,5 +793,6 @@
   "exclude-from-budget": "Dikecualikan dari anggaran",
   "erase-synced-data-and-cloud-backups": "Hapus data yang disinkronkan dan cadangan cloud",
   "erase-cloud-data": "Hapus data cloud",
-  "erase-cloud-data-description": "Masuk ke akun Google Anda dan hapus cadangan yang terletak di bawah 'Sync' dan 'Backups'"
+  "erase-cloud-data-description": "Masuk ke akun Google Anda dan hapus cadangan yang terletak di bawah 'Sync' dan 'Backups'",
+  "add": "Menambahkan"
 }

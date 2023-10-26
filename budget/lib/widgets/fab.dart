@@ -6,20 +6,22 @@ import 'package:budget/widgets/tappable.dart';
 import 'package:flutter/material.dart';
 
 class FAB extends StatelessWidget {
-  FAB(
-      {Key? key,
-      required this.openPage,
-      this.onTap,
-      this.tooltip = "",
-      this.color,
-      this.colorPlus})
-      : super(key: key);
+  FAB({
+    Key? key,
+    required this.openPage,
+    this.onTap,
+    this.tooltip = "",
+    this.color,
+    this.colorPlus,
+    this.onLongPress,
+  }) : super(key: key);
 
   final Widget openPage;
   final String tooltip;
   final Function()? onTap;
   final Color? color;
   final Color? colorPlus;
+  final Function()? onLongPress;
 
   @override
   Widget build(BuildContext context) {
@@ -41,6 +43,7 @@ class FAB extends StatelessWidget {
               else
                 openContainer();
             },
+            onLongPress: onLongPress,
             child: SizedBox(
               height: fabSize,
               width: fabSize,

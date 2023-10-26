@@ -793,5 +793,6 @@
   "exclude-from-budget": "Tidak termasuk dari anggaran",
   "erase-synced-data-and-cloud-backups": "Padamkan data disegerakkan dan sandaran awan",
   "erase-cloud-data": "Padam data awan",
-  "erase-cloud-data-description": "Log masuk ke akaun Google anda dan padamkan sandaran yang terletak di bawah 'Sync' dan 'Backups'"
+  "erase-cloud-data-description": "Log masuk ke akaun Google anda dan padamkan sandaran yang terletak di bawah 'Sync' dan 'Backups'",
+  "add": "Tambah"
 }

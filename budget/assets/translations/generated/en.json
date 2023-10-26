@@ -793,5 +793,6 @@
   "exclude-from-budget": "Exclude From Budget",
   "erase-synced-data-and-cloud-backups": "Erase Synced Data And Cloud Backups",
   "erase-cloud-data": "Erase Cloud Data",
-  "erase-cloud-data-description": "Login to your Google account and delete backups located under 'Sync' and 'Backups'"
+  "erase-cloud-data-description": "Login to your Google account and delete backups located under 'Sync' and 'Backups'",
+  "add": "Add"
 }

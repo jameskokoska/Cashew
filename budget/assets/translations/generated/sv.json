@@ -793,5 +793,6 @@
   "exclude-from-budget": "Utesluta från budgeten",
   "erase-synced-data-and-cloud-backups": "Radera synkroniserade data och molnens säkerhetskopior",
   "erase-cloud-data": "Radera molndata",
-  "erase-cloud-data-description": "Logga in på ditt Google -konto och ta bort säkerhetskopior som finns under 'Sync' och 'Backups'"
+  "erase-cloud-data-description": "Logga in på ditt Google -konto och ta bort säkerhetskopior som finns under 'Sync' och 'Backups'",
+  "add": "Lägg till"
 }

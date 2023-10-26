@@ -793,5 +793,6 @@
   "exclude-from-budget": "બજેટમાંથી બાકાત રાખવું",
   "erase-synced-data-and-cloud-backups": "ભૂંસી નાખેલી સમન્વયિત ડેટા અને ક્લાઉડ બેકઅપ્સ",
   "erase-cloud-data": "વાદળ ડેટા ભૂંસી નાખો",
-  "erase-cloud-data-description": "તમારા Google એકાઉન્ટ પર લ Login ગિન કરો અને 'સિંક' અને 'બેકઅપ્સ' હેઠળ સ્થિત બેકઅપ્સ કા delete ી નાખો"
+  "erase-cloud-data-description": "તમારા Google એકાઉન્ટ પર લ Login ગિન કરો અને 'સિંક' અને 'બેકઅપ્સ' હેઠળ સ્થિત બેકઅપ્સ કા delete ી નાખો",
+  "add": "ઉમેરો"
 }

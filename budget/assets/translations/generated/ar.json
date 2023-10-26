@@ -793,5 +793,6 @@
   "exclude-from-budget": "استبعاد من الميزانية",
   "erase-synced-data-and-cloud-backups": "محو البيانات المزامنة والنسخ الاحتياطية السحابية",
   "erase-cloud-data": "محو البيانات السحابية",
-  "erase-cloud-data-description": "تسجيل الدخول إلى حساب Google الخاص بك وحذف النسخ الاحتياطية الموجودة تحت \"Sync\" و \"النسخ الاحتياطية\""
+  "erase-cloud-data-description": "تسجيل الدخول إلى حساب Google الخاص بك وحذف النسخ الاحتياطية الموجودة تحت \"Sync\" و \"النسخ الاحتياطية\"",
+  "add": "يضيف"
 }

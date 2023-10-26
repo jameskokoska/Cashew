@@ -793,5 +793,6 @@
   "exclude-from-budget": "Exclua do orçamento",
   "erase-synced-data-and-cloud-backups": "Apagar dados sincronizados e backups de nuvem",
   "erase-cloud-data": "Apague os dados da nuvem",
-  "erase-cloud-data-description": "Faça login na sua conta do Google e exclua backups localizados em 'Sync' e 'Backups'"
+  "erase-cloud-data-description": "Faça login na sua conta do Google e exclua backups localizados em 'Sync' e 'Backups'",
+  "add": "Adicionar"
 }

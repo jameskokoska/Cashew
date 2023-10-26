@@ -793,5 +793,6 @@
   "exclude-from-budget": "बजट से बाहर कर दें",
   "erase-synced-data-and-cloud-backups": "सिंक किए गए डेटा और क्लाउड बैकअप को मिटा दें",
   "erase-cloud-data": "क्लाउड डेटा मिटाएं",
-  "erase-cloud-data-description": "अपने Google खाते में लॉगिन करें और 'सिंक' और 'बैकअप' के तहत स्थित बैकअप को हटा दें"
+  "erase-cloud-data-description": "अपने Google खाते में लॉगिन करें और 'सिंक' और 'बैकअप' के तहत स्थित बैकअप को हटा दें",
+  "add": "जोड़ना"
 }

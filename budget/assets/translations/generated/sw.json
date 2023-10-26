@@ -793,5 +793,6 @@
   "exclude-from-budget": "Ondoa kutoka kwa bajeti",
   "erase-synced-data-and-cloud-backups": "Futa data iliyosawazishwa na backups za wingu",
   "erase-cloud-data": "Futa data ya wingu",
-  "erase-cloud-data-description": "Ingia kwenye akaunti yako ya Google na futa backups ziko chini ya 'Usawazishaji' na 'Backups'"
+  "erase-cloud-data-description": "Ingia kwenye akaunti yako ya Google na futa backups ziko chini ya 'Usawazishaji' na 'Backups'",
+  "add": "ADD"
 }

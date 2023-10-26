@@ -18,6 +18,7 @@ class OutlinedButtonStacked extends StatelessWidget {
     this.filled = false,
     this.transitionWhenFilled = true,
     this.infoButton,
+    this.iconScale = 1,
   });
   final String text;
   final void Function()? onTap;
@@ -30,6 +31,7 @@ class OutlinedButtonStacked extends StatelessWidget {
   final bool filled;
   final bool transitionWhenFilled;
   final Widget? infoButton;
+  final double iconScale;
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -58,11 +60,15 @@ class OutlinedButtonStacked extends StatelessWidget {
                                     ? CrossAxisAlignment.start
                                     : CrossAxisAlignment.center,
                                 children: [
-                                  Icon(
-                                    iconData,
-                                    size: 35,
-                                    color:
-                                        Theme.of(context).colorScheme.secondary,
+                                  Transform.scale(
+                                    scale: iconScale,
+                                    child: Icon(
+                                      iconData,
+                                      size: 35,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .secondary,
+                                    ),
                                   ),
                                   SizedBox(height: 10),
                                   TextFont(
@@ -76,11 +82,15 @@ class OutlinedButtonStacked extends StatelessWidget {
                               )
                             : Row(
                                 children: [
-                                  Icon(
-                                    iconData,
-                                    size: 28,
-                                    color:
-                                        Theme.of(context).colorScheme.secondary,
+                                  Transform.scale(
+                                    scale: iconScale,
+                                    child: Icon(
+                                      iconData,
+                                      size: 28,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .secondary,
+                                    ),
                                   ),
                                   SizedBox(width: 10),
                                   Expanded(

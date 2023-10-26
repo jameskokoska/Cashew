@@ -1,3 +1,4 @@
+import 'package:animations/animations.dart';
 import 'package:budget/colors.dart';
 import 'package:budget/database/initializeDefaultDatabase.dart';
 import 'package:budget/functions.dart';
@@ -5,7 +6,10 @@ import 'package:budget/main.dart';
 import 'package:budget/pages/aboutPage.dart';
 import 'package:budget/pages/accountsPage.dart';
 import 'package:budget/pages/addBudgetPage.dart';
+import 'package:budget/pages/addCategoryPage.dart';
+import 'package:budget/pages/addObjectivePage.dart';
 import 'package:budget/pages/addTransactionPage.dart';
+import 'package:budget/pages/addWalletPage.dart';
 import 'package:budget/pages/autoTransactionsPageEmail.dart';
 import 'package:budget/pages/budgetsListPage.dart';
 import 'package:budget/pages/editAssociatedTitlesPage.dart';
@@ -29,11 +33,15 @@ import 'package:budget/struct/syncClient.dart';
 import 'package:budget/widgets/accountAndBackup.dart';
 import 'package:budget/widgets/bottomNavBar.dart';
 import 'package:budget/widgets/fab.dart';
+import 'package:budget/widgets/framework/popupFramework.dart';
 import 'package:budget/widgets/importDB.dart';
+import 'package:budget/widgets/moreIcons.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/notificationsSettings.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
+import 'package:budget/widgets/openContainerNavigation.dart';
 import 'package:budget/widgets/openPopup.dart';
+import 'package:budget/widgets/outlinedButtonStacked.dart';
 import 'package:budget/widgets/ratingPopup.dart';
 import 'package:budget/widgets/showChangelog.dart';
 import 'package:budget/struct/initializeNotifications.dart';
@@ -387,6 +395,15 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
                     openPage: AddTransactionPage(
                       routesToPopAfterDelete: RoutesToPopAfterDelete.None,
                     ),
+                    onLongPress: () {
+                      openBottomSheet(
+                        context,
+                        PopupFramework(
+                          title: "add".tr(),
+                          child: AddMoreThingsPopup(),
+                        ),
+                      );
+                    },
                   ),
                   condition: [0, 1, 2, 14].contains(currentPage),
                 )
@@ -395,6 +412,101 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
           ),
         ),
       ]),
+    );
+  }
+}
+
+class AddMoreThingsPopup extends StatelessWidget {
+  const AddMoreThingsPopup({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        AddThing(
+          iconData: appStateSettings["outlinedIcons"]
+              ? Icons.payments_outlined
+              : Icons.payments_rounded,
+          title: "transaction".tr(),
+          openPage: AddTransactionPage(
+              routesToPopAfterDelete: RoutesToPopAfterDelete.None),
+        ),
+        AddThing(
+          iconData: MoreIcons.chart_pie,
+          title: "budget".tr(),
+          openPage: AddBudgetPage(
+              routesToPopAfterDelete: RoutesToPopAfterDelete.None),
+          iconScale: 0.9,
+        ),
+        AddThing(
+          iconData: appStateSettings["outlinedIcons"]
+              ? Icons.savings_outlined
+              : Icons.savings_rounded,
+          title: "goal".tr(),
+          openPage: AddObjectivePage(
+              routesToPopAfterDelete: RoutesToPopAfterDelete.None),
+        ),
+        AddThing(
+          iconData: appStateSettings["outlinedIcons"]
+              ? Icons.category_outlined
+              : Icons.category_rounded,
+          title: "category".tr(),
+          openPage: AddCategoryPage(
+              routesToPopAfterDelete: RoutesToPopAfterDelete.None),
+        ),
+        AddThing(
+          iconData: appStateSettings["outlinedIcons"]
+              ? Icons.account_balance_wallet_outlined
+              : Icons.account_balance_wallet_rounded,
+          title: "account".tr(),
+          openPage: AddWalletPage(
+              routesToPopAfterDelete: RoutesToPopAfterDelete.None),
+        ),
+      ],
+    );
+  }
+}
+
+class AddThing extends StatelessWidget {
+  const AddThing({
+    required this.iconData,
+    required this.title,
+    required this.openPage,
+    this.iconScale = 1,
+    super.key,
+  });
+
+  final IconData iconData;
+  final String title;
+  final Widget openPage;
+  final double iconScale;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(
+        bottom: 5,
+        top: 5,
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: OutlinedButtonStacked(
+              filled: false,
+              alignLeft: true,
+              alignBeside: true,
+              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+              text: title.capitalizeFirst,
+              iconData: iconData,
+              iconScale: iconScale,
+              onTap: () {
+                Navigator.pop(context);
+                pushRoute(context, openPage);
+              },
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

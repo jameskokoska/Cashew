@@ -793,5 +793,6 @@
   "exclude-from-budget": "Sulkea pois budjettia",
   "erase-synced-data-and-cloud-backups": "Poista synkronoidut tiedot ja pilvivarmuuskopiot",
   "erase-cloud-data": "Poista pilvitiedot",
-  "erase-cloud-data-description": "Kirjaudu Google -tiliisi ja poista varmuuskopiot, jotka sijaitsevat 'synkronoinnissa' ja 'varmuuskopiot'"
+  "erase-cloud-data-description": "Kirjaudu Google -tiliisi ja poista varmuuskopiot, jotka sijaitsevat 'synkronoinnissa' ja 'varmuuskopiot'",
+  "add": "Lisätä"
 }

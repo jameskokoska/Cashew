@@ -784,7 +784,7 @@
   "insurance": "Pojištění",
   "beauty": "Krása",
   "haircut": "Střih",
-  "touchups": "Dotek",
+  "touchups": "Doteky",
   "clothing": "Oblečení",
   "multiplier": "Násobitel",
   "bill-splitter-multiplier-description": "Zadejte hodnotu, která bude násobena na každou položku v rozprašovači účtu. Užitečné, pokud je na každou položku použita daň.",
@@ -793,5 +793,6 @@
   "exclude-from-budget": "Vyloučit z rozpočtu",
   "erase-synced-data-and-cloud-backups": "Vymazat synchronizace dat a záloh cloudu",
   "erase-cloud-data": "Vymazat cloudová data",
-  "erase-cloud-data-description": "Přihlaste se k vašemu účtu Google a smažte zálohy umístěné pod „synchronizací“ a „zálohy“"
+  "erase-cloud-data-description": "Přihlaste se k vašemu účtu Google a smažte zálohy umístěné pod „synchronizací“ a „zálohy“",
+  "add": "Přidat"
 }

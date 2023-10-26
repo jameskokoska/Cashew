@@ -793,5 +793,6 @@
   "exclude-from-budget": "Excluir del presupuesto",
   "erase-synced-data-and-cloud-backups": "Borrar los datos sincronizados y las copias de seguridad de la nube",
   "erase-cloud-data": "Borrar datos de nubes",
-  "erase-cloud-data-description": "Inicie sesión en su cuenta de Google y elimine las copias de seguridad ubicadas en 'Sincronización' y 'Copias de seguridad'"
+  "erase-cloud-data-description": "Inicie sesión en su cuenta de Google y elimine las copias de seguridad ubicadas en 'Sincronización' y 'Copias de seguridad'",
+  "add": "Agregar"
 }
