@@ -1809,7 +1809,7 @@ class FinanceDatabase extends _$FinanceDatabase {
                   .like("%" + (searchFor).toLowerCase().trim() + "%")))
           ..orderBy([(w) => OrderingTerm.asc(w.order)]))
         .join([
-      innerJoin(
+      leftOuterJoin(
           transactions, transactions.walletFk.equalsExp(wallets.walletPk)),
     ])
       ..groupBy([wallets.walletPk])
@@ -3394,7 +3394,7 @@ class FinanceDatabase extends _$FinanceDatabase {
             (c) => OrderingTerm.asc(c.order),
           ]))
         .join([
-      innerJoin(transactions,
+      leftOuterJoin(transactions,
           transactions.categoryFk.equalsExp(categories.categoryPk)),
     ])
       ..groupBy([categories.categoryPk])

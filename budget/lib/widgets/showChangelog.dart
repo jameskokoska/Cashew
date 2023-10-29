@@ -22,6 +22,8 @@ import 'listItem.dart';
 
 String getChangelogString() {
   return """
+    < 4.7.5
+    Fixed category and accounts list items not showing up if number of transactions was equal to zero
     < 4.7.4
     Long press add transaction button provides options to add different things
     Optimized transaction search page to support lazy rendering 
