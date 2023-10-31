@@ -127,7 +127,7 @@ TotalSpentCategoriesSummary watchTotalSpentInTimeRangeHelper({
 class PieChartOptions extends StatelessWidget {
   const PieChartOptions({
     required this.hasSubCategories,
-    required this.selectedCategory,
+    required this.selectedCategoryPks,
     required this.onClearSelection,
     required this.onEditSpendingGoals,
     required this.toggleAllSubCategories,
@@ -136,7 +136,7 @@ class PieChartOptions extends StatelessWidget {
     super.key,
   });
   final bool hasSubCategories;
-  final TransactionCategory? selectedCategory;
+  final List<String> selectedCategoryPks;
   final VoidCallback onClearSelection;
   final VoidCallback? onEditSpendingGoals;
   final VoidCallback toggleAllSubCategories;
@@ -153,7 +153,7 @@ class PieChartOptions extends StatelessWidget {
         child: Align(
           alignment: Alignment.bottomRight,
           child: Builder(builder: (context) {
-            bool showClearButton = selectedCategory != null;
+            bool showClearButton = selectedCategoryPks.isNotEmpty;
             return Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               mainAxisSize: MainAxisSize.max,
