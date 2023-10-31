@@ -1823,17 +1823,21 @@ class FinanceDatabase extends _$FinanceDatabase {
   }
 
   Stream<List<WalletWithDetails>> watchAllWalletsWithDetails(
-      {String? searchFor}) {
+      {String? searchFor, HomePageWidgetDisplay? homePageWidgetDisplay}) {
     JoinedSelectStatement<HasResultSet, dynamic> query;
     final totalCount = transactions.transactionPk.count();
     final totalSpent =
         transactions.amount.sum(filter: transactions.paid.equals(true));
     query = (select(wallets)
-          ..where((w) => (searchFor == null
-              ? Constant(true)
-              : w.name
-                  .lower()
-                  .like("%" + (searchFor).toLowerCase().trim() + "%")))
+          ..where((w) => ((homePageWidgetDisplay != null
+                  ? w.homePageWidgetDisplay
+                      .contains(homePageWidgetDisplay.index.toString())
+                  : Constant(true)) &
+              (searchFor == null
+                  ? Constant(true)
+                  : w.name
+                      .lower()
+                      .like("%" + (searchFor).toLowerCase().trim() + "%"))))
           ..orderBy([(w) => OrderingTerm.asc(w.order)]))
         .join([
       leftOuterJoin(

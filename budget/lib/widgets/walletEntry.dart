@@ -17,8 +17,9 @@ import 'package:provider/provider.dart';
 import 'package:budget/widgets/countNumber.dart';
 
 class WalletEntry extends StatelessWidget {
-  const WalletEntry({super.key, required this.wallet, required this.selected});
-  final TransactionWallet wallet;
+  const WalletEntry(
+      {super.key, required this.walletWithDetails, required this.selected});
+  final WalletWithDetails walletWithDetails;
   final bool selected;
 
   @override
@@ -31,7 +32,8 @@ class WalletEntry extends StatelessWidget {
       ),
       child: OpenContainerNavigation(
         borderRadius: 15,
-        openPage: WatchedWalletDetailsPage(walletPk: wallet.walletPk),
+        openPage: WatchedWalletDetailsPage(
+            walletPk: walletWithDetails.wallet.walletPk),
         button: (openContainer) {
           return Tappable(
             color: getColor(context, "lightDarkAccentHeavyLight"),
@@ -42,7 +44,7 @@ class WalletEntry extends StatelessWidget {
                 border: Border.all(
                   width: 2,
                   color: selected
-                      ? HexColor(wallet.colour,
+                      ? HexColor(walletWithDetails.wallet.colour,
                               defaultColor:
                                   Theme.of(context).colorScheme.primary)
                           .withOpacity(0.7)
@@ -62,7 +64,7 @@ class WalletEntry extends StatelessWidget {
                       child: Container(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(100),
-                          color: HexColor(wallet.colour,
+                          color: HexColor(walletWithDetails.wallet.colour,
                                   defaultColor:
                                       Theme.of(context).colorScheme.primary)
                               .withOpacity(0.7),
@@ -79,60 +81,45 @@ class WalletEntry extends StatelessWidget {
                           Padding(
                             padding: const EdgeInsets.only(right: 17),
                             child: TextFont(
-                              text: wallet.name,
+                              text: walletWithDetails.wallet.name,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          StreamBuilder<double?>(
-                            stream: database.watchTotalOfWalletNoConversion(
-                              wallet.walletPk,
-                            ),
-                            builder: (context, snapshot) {
-                              return CountNumber(
-                                lazyFirstRender: false,
-                                count: (snapshot.data ?? 0 * -1),
-                                duration: Duration(milliseconds: 1000),
-                                decimals: wallet.decimals,
-                                initialCount: (snapshot.data ?? 0 * -1),
-                                textBuilder: (number) {
-                                  return TextFont(
-                                    textAlign: TextAlign.left,
-                                    text: convertToMoney(
-                                      Provider.of<AllWallets>(context),
-                                      number,
-                                      finalNumber: snapshot.data ?? 0 * -1,
-                                      currencyKey: wallet.currency,
-                                      decimals: wallet.decimals,
-                                      addCurrencyName: true,
-                                    ),
-                                    fontSize: 17,
-                                    fontWeight: FontWeight.bold,
-                                  );
-                                },
+                          CountNumber(
+                            lazyFirstRender: false,
+                            count: (walletWithDetails.totalSpent ?? 0 * -1),
+                            duration: Duration(milliseconds: 1000),
+                            decimals: walletWithDetails.wallet.decimals,
+                            initialCount: 0,
+                            textBuilder: (number) {
+                              return TextFont(
+                                textAlign: TextAlign.left,
+                                text: convertToMoney(
+                                  Provider.of<AllWallets>(context),
+                                  number,
+                                  finalNumber:
+                                      walletWithDetails.totalSpent ?? 0 * -1,
+                                  currencyKey:
+                                      walletWithDetails.wallet.currency,
+                                  decimals: walletWithDetails.wallet.decimals,
+                                  addCurrencyName: true,
+                                ),
+                                fontSize: 17,
+                                fontWeight: FontWeight.bold,
                               );
                             },
                           ),
-                          StreamBuilder<List<int?>>(
-                            stream: database
-                                .watchTotalCountOfTransactionsInWallet(
-                                    [wallet.walletPk]),
-                            builder: (context, snapshot) {
-                              if (snapshot.hasData && snapshot.data != null) {
-                                return TextFont(
-                                  textAlign: TextAlign.left,
-                                  text: snapshot.data![0].toString() +
-                                      " " +
-                                      (snapshot.data![0] == 1
-                                          ? "transaction".tr().toLowerCase()
-                                          : "transactions".tr().toLowerCase()),
-                                  fontSize: 14,
-                                  textColor: getColor(context, "black")
-                                      .withOpacity(0.65),
-                                );
-                              } else {
-                                return SizedBox();
-                              }
-                            },
+                          TextFont(
+                            textAlign: TextAlign.left,
+                            text: walletWithDetails.numberTransactions
+                                    .toString() +
+                                " " +
+                                (walletWithDetails.numberTransactions == 1
+                                    ? "transaction".tr().toLowerCase()
+                                    : "transactions".tr().toLowerCase()),
+                            fontSize: 14,
+                            textColor:
+                                getColor(context, "black").withOpacity(0.65),
                           ),
                         ],
                       ),
@@ -145,16 +132,17 @@ class WalletEntry extends StatelessWidget {
               if (selected) {
                 openContainer();
               } else {
-                setPrimaryWallet(wallet.walletPk);
+                setPrimaryWallet(walletWithDetails.wallet.walletPk);
               }
             },
             onLongPress: () {
               pushRoute(
-                  context,
-                  AddWalletPage(
-                    wallet: wallet,
-                    routesToPopAfterDelete: RoutesToPopAfterDelete.All,
-                  ));
+                context,
+                AddWalletPage(
+                  wallet: walletWithDetails.wallet,
+                  routesToPopAfterDelete: RoutesToPopAfterDelete.All,
+                ),
+              );
             },
           );
         },
@@ -165,15 +153,16 @@ class WalletEntry extends StatelessWidget {
 
 class WalletEntryRow extends StatelessWidget {
   const WalletEntryRow(
-      {super.key, required this.wallet, required this.selected});
-  final TransactionWallet wallet;
+      {super.key, required this.walletWithDetails, required this.selected});
+  final WalletWithDetails walletWithDetails;
   final bool selected;
 
   @override
   Widget build(BuildContext context) {
     return OpenContainerNavigation(
       borderRadius: 0,
-      openPage: WatchedWalletDetailsPage(walletPk: wallet.walletPk),
+      openPage:
+          WatchedWalletDetailsPage(walletPk: walletWithDetails.wallet.walletPk),
       button: (openContainer) {
         return Tappable(
           color: getColor(context, "lightDarkAccentHeavyLight"),
@@ -195,11 +184,11 @@ class WalletEntryRow extends StatelessWidget {
                               ? Container(
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(100),
-                                    color: HexColor(wallet.colour,
-                                            defaultColor: Theme.of(context)
-                                                .colorScheme
-                                                .primary)
-                                        .withOpacity(0.7),
+                                    color: HexColor(
+                                      walletWithDetails.wallet.colour,
+                                      defaultColor:
+                                          Theme.of(context).colorScheme.primary,
+                                    ).withOpacity(0.7),
                                   ),
                                   width: 20,
                                   height: 20,
@@ -211,11 +200,12 @@ class WalletEntryRow extends StatelessWidget {
                                       borderRadius: BorderRadius.circular(100),
                                       border: Border.all(
                                         width: 2,
-                                        color: HexColor(wallet.colour,
-                                                defaultColor: Theme.of(context)
-                                                    .colorScheme
-                                                    .primary)
-                                            .withOpacity(0.7),
+                                        color: HexColor(
+                                          walletWithDetails.wallet.colour,
+                                          defaultColor: Theme.of(context)
+                                              .colorScheme
+                                              .primary,
+                                        ).withOpacity(0.7),
                                       ),
                                     ),
                                     width: 20,
@@ -230,7 +220,7 @@ class WalletEntryRow extends StatelessWidget {
                               left: 10,
                             ),
                             child: TextFont(
-                              text: wallet.name,
+                              text: walletWithDetails.wallet.name,
                               fontWeight: FontWeight.bold,
                               fontSize: 18,
                             ),
@@ -239,32 +229,25 @@ class WalletEntryRow extends StatelessWidget {
                       ],
                     ),
                   ),
-                  StreamBuilder<double?>(
-                    stream: database.watchTotalOfWalletNoConversion(
-                      wallet.walletPk,
-                    ),
-                    builder: (context, snapshot) {
-                      return CountNumber(
-                        lazyFirstRender: false,
-                        count: (snapshot.data ?? 0 * -1),
-                        duration: Duration(milliseconds: 1000),
-                        decimals: wallet.decimals,
-                        initialCount: (snapshot.data ?? 0 * -1),
-                        textBuilder: (number) {
-                          return TextFont(
-                            textAlign: TextAlign.right,
-                            text: convertToMoney(
-                              Provider.of<AllWallets>(context),
-                              number,
-                              finalNumber: snapshot.data ?? 0 * -1,
-                              currencyKey: wallet.currency,
-                              decimals: wallet.decimals,
-                              addCurrencyName: true,
-                            ),
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          );
-                        },
+                  CountNumber(
+                    lazyFirstRender: false,
+                    count: (walletWithDetails.totalSpent ?? 0 * -1),
+                    duration: Duration(milliseconds: 1000),
+                    decimals: walletWithDetails.wallet.decimals,
+                    initialCount: 0,
+                    textBuilder: (number) {
+                      return TextFont(
+                        textAlign: TextAlign.right,
+                        text: convertToMoney(
+                          Provider.of<AllWallets>(context),
+                          number,
+                          finalNumber: walletWithDetails.totalSpent ?? 0 * -1,
+                          currencyKey: walletWithDetails.wallet.currency,
+                          decimals: walletWithDetails.wallet.decimals,
+                          addCurrencyName: true,
+                        ),
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
                       );
                     },
                   ),
@@ -276,14 +259,14 @@ class WalletEntryRow extends StatelessWidget {
             if (selected) {
               openContainer();
             } else {
-              setPrimaryWallet(wallet.walletPk);
+              setPrimaryWallet(walletWithDetails.wallet.walletPk);
             }
           },
           onLongPress: () {
             pushRoute(
                 context,
                 AddWalletPage(
-                  wallet: wallet,
+                  wallet: walletWithDetails.wallet,
                   routesToPopAfterDelete: RoutesToPopAfterDelete.All,
                 ));
           },

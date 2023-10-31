@@ -30,10 +30,9 @@ class HomePageWalletList extends StatelessWidget {
           ),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(15),
-            child: StreamBuilder<List<TransactionWallet>>(
-              stream: database
-                  .getAllPinnedWallets(HomePageWidgetDisplay.WalletList)
-                  .$1,
+            child: StreamBuilder<List<WalletWithDetails>>(
+              stream: database.watchAllWalletsWithDetails(
+                  homePageWidgetDisplay: HomePageWidgetDisplay.WalletList),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   return Column(
@@ -41,11 +40,11 @@ class HomePageWalletList extends StatelessWidget {
                     children: [
                       if (snapshot.hasData && snapshot.data!.length > 0)
                         SizedBox(height: 8),
-                      for (TransactionWallet wallet in snapshot.data!)
+                      for (WalletWithDetails walletDetails in snapshot.data!)
                         WalletEntryRow(
                           selected: appStateSettings["selectedWalletPk"] ==
-                              wallet.walletPk,
-                          wallet: wallet,
+                              walletDetails.wallet.walletPk,
+                          walletWithDetails: walletDetails,
                         ),
                       if (snapshot.hasData && snapshot.data!.length > 0)
                         SizedBox(height: 8),

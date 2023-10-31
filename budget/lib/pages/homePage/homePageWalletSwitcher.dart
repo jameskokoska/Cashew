@@ -28,10 +28,9 @@ class HomePageWalletSwitcher extends StatelessWidget {
     return KeepAliveClientMixin(
       child: Padding(
         padding: const EdgeInsets.only(bottom: 13.0),
-        child: StreamBuilder<List<TransactionWallet>>(
-          stream: database
-              .getAllPinnedWallets(HomePageWidgetDisplay.WalletSwitcher)
-              .$1,
+        child: StreamBuilder<List<WalletWithDetails>>(
+          stream: database.watchAllWalletsWithDetails(
+              homePageWidgetDisplay: HomePageWidgetDisplay.WalletSwitcher),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return SingleChildScrollView(
@@ -39,11 +38,11 @@ class HomePageWalletSwitcher extends StatelessWidget {
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    for (TransactionWallet wallet in snapshot.data!)
+                    for (WalletWithDetails walletDetails in snapshot.data!)
                       WalletEntry(
                         selected: appStateSettings["selectedWalletPk"] ==
-                            wallet.walletPk,
-                        wallet: wallet,
+                            walletDetails.wallet.walletPk,
+                        walletWithDetails: walletDetails,
                       ),
                     Stack(
                       children: [
@@ -58,10 +57,9 @@ class HomePageWalletSwitcher extends StatelessWidget {
                                 opacity: 0,
                                 child: WalletEntry(
                                   selected: false,
-                                  wallet: snapshot.data!.length <= 0
-                                      ? defaultWallet()
-                                      : snapshot
-                                          .data![snapshot.data!.length - 1],
+                                  walletWithDetails: WalletWithDetails(
+                                    wallet: defaultWallet(),
+                                  ),
                                 ),
                               ),
                             ),

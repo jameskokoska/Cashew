@@ -28,6 +28,7 @@ String getChangelogString() {
     Max width for search bar in search transactions page
     Fixed shadow for wallets list home page widget
     Added loans and scheduled navigation bar pages when in full screen
+    Optimized database query calls for account switcher and account list
     < 4.7.5
     Fixed category and accounts list items not showing up if number of transactions was equal to zero
     < 4.7.4
