@@ -1,3 +1,4 @@
+import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
 import 'package:budget/pages/editCategoriesPage.dart';
@@ -255,6 +256,26 @@ class NavigationSidebarState extends State<NavigationSidebar> {
                                 onTap: () {
                                   pageNavigationFrameworkKey.currentState!
                                       .changePage(5, switchNavbar: true);
+                                },
+                              ),
+                              NavigationSidebarButton(
+                                icon: getTransactionTypeIcon(
+                                    TransactionSpecialType.upcoming),
+                                label: "scheduled".tr(),
+                                isSelected: selectedIndex == 16,
+                                onTap: () {
+                                  pageNavigationFrameworkKey.currentState!
+                                      .changePage(16, switchNavbar: true);
+                                },
+                              ),
+                              NavigationSidebarButton(
+                                icon: getTransactionTypeIcon(
+                                    TransactionSpecialType.credit),
+                                label: "loans".tr(),
+                                isSelected: selectedIndex == 17,
+                                onTap: () {
+                                  pageNavigationFrameworkKey.currentState!
+                                      .changePage(17, switchNavbar: true);
                                 },
                               ),
                               kIsWeb

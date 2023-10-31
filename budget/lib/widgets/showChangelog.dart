@@ -22,6 +22,12 @@ import 'listItem.dart';
 
 String getChangelogString() {
   return """
+    < 4.7.6
+    Can search for transactions based on subcategory name
+    Search transactions based on budget name, goal name
+    Max width for search bar in search transactions page
+    Fixed shadow for wallets list home page widget
+    Added loans and scheduled navigation bar pages when in full screen
     < 4.7.5
     Fixed category and accounts list items not showing up if number of transactions was equal to zero
     < 4.7.4

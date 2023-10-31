@@ -158,86 +158,88 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
               ),
               slivers: [
                 SliverToBoxAdapter(
-                  child: AnimatedBuilder(
-                    animation: _animationControllerSearch,
-                    builder: (_, child) {
-                      return Transform.translate(
-                        offset: Offset(
-                            0, 6.5 - 6.5 * (_animationControllerSearch.value)),
-                        child: child,
-                      );
-                    },
-                    child: Row(
-                      children: [
-                        SizedBox(width: 20),
-                        Expanded(
-                          child: TextInput(
-                            labelText: "search-placeholder".tr(),
-                            icon: appStateSettings["outlinedIcons"]
-                                ? Icons.search_outlined
-                                : Icons.search_rounded,
-                            onSubmitted: (value) {
-                              setState(() {
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: getHorizontalPaddingConstrained(context)),
+                    child: AnimatedBuilder(
+                      animation: _animationControllerSearch,
+                      builder: (_, child) {
+                        return Transform.translate(
+                          offset: Offset(0,
+                              6.5 - 6.5 * (_animationControllerSearch.value)),
+                          child: child,
+                        );
+                      },
+                      child: Row(
+                        children: [
+                          SizedBox(width: 20),
+                          Expanded(
+                            child: TextInput(
+                              labelText: "search-placeholder".tr(),
+                              icon: appStateSettings["outlinedIcons"]
+                                  ? Icons.search_outlined
+                                  : Icons.search_rounded,
+                              onSubmitted: (value) {
                                 searchFilters.searchQuery = value;
-                              });
-                            },
-                            onChanged: (value) {
-                              _debouncer.run(() {
-                                if (searchFilters.searchQuery != value)
-                                  setState(() {
-                                    searchFilters.searchQuery = value;
-                                  });
-                              });
-                            },
-                            padding: EdgeInsets.all(0),
-                            focusNode: _searchFocusNode,
+                              },
+                              onChanged: (value) {
+                                _debouncer.run(() {
+                                  if (searchFilters.searchQuery != value)
+                                    setState(() {
+                                      searchFilters.searchQuery = value;
+                                    });
+                                });
+                              },
+                              padding: EdgeInsets.all(0),
+                              focusNode: _searchFocusNode,
+                            ),
                           ),
-                        ),
-                        SizedBox(width: 7),
-                        ButtonIcon(
-                          onTap: () {
-                            selectDateRange(context);
-                          },
-                          icon: appStateSettings["outlinedIcons"]
-                              ? Icons.calendar_month_outlined
-                              : Icons.calendar_month_rounded,
-                        ),
-                        SizedBox(width: 7),
-                        AnimatedSwitcher(
-                          duration: Duration(milliseconds: 500),
-                          child: ButtonIcon(
-                            key: ValueKey(
-                              searchFilters.isClear(
+                          SizedBox(width: 7),
+                          ButtonIcon(
+                            onTap: () {
+                              selectDateRange(context);
+                            },
+                            icon: appStateSettings["outlinedIcons"]
+                                ? Icons.calendar_month_outlined
+                                : Icons.calendar_month_rounded,
+                          ),
+                          SizedBox(width: 7),
+                          AnimatedSwitcher(
+                            duration: Duration(milliseconds: 500),
+                            child: ButtonIcon(
+                              key: ValueKey(
+                                searchFilters.isClear(
+                                  ignoreDateTimeRange: true,
+                                  ignoreSearchQuery: true,
+                                ),
+                              ),
+                              color: searchFilters.isClear(
                                 ignoreDateTimeRange: true,
                                 ignoreSearchQuery: true,
-                              ),
+                              )
+                                  ? null
+                                  : Theme.of(context)
+                                      .colorScheme
+                                      .tertiaryContainer,
+                              iconColor: searchFilters.isClear(
+                                ignoreDateTimeRange: true,
+                                ignoreSearchQuery: true,
+                              )
+                                  ? null
+                                  : Theme.of(context)
+                                      .colorScheme
+                                      .onTertiaryContainer,
+                              onTap: () {
+                                selectFilters(context);
+                              },
+                              icon: appStateSettings["outlinedIcons"]
+                                  ? Icons.filter_alt_outlined
+                                  : Icons.filter_alt_rounded,
                             ),
-                            color: searchFilters.isClear(
-                              ignoreDateTimeRange: true,
-                              ignoreSearchQuery: true,
-                            )
-                                ? null
-                                : Theme.of(context)
-                                    .colorScheme
-                                    .tertiaryContainer,
-                            iconColor: searchFilters.isClear(
-                              ignoreDateTimeRange: true,
-                              ignoreSearchQuery: true,
-                            )
-                                ? null
-                                : Theme.of(context)
-                                    .colorScheme
-                                    .onTertiaryContainer,
-                            onTap: () {
-                              selectFilters(context);
-                            },
-                            icon: appStateSettings["outlinedIcons"]
-                                ? Icons.filter_alt_outlined
-                                : Icons.filter_alt_rounded,
                           ),
-                        ),
-                        SizedBox(width: 20),
-                      ],
+                          SizedBox(width: 20),
+                        ],
+                      ),
                     ),
                   ),
                 ),

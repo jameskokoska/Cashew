@@ -1117,53 +1117,10 @@ class FinanceDatabase extends _$FinanceDatabase {
     int? limit,
     Budget? budget,
   }) {
-    final subCategories = alias(categories, 'subCategories');
+    final $CategoriesTable subCategories = alias(categories, 'subCategories');
     JoinedSelectStatement<HasResultSet, dynamic> query;
-    query = (select(transactions)
-          ..where((tbl) {
-            final dateCreated = tbl.dateCreated;
 
-            return onlyShowIfFollowsSearchFilters(tbl, searchFilters) &
-                onlyShowIfFollowsFilters(tbl,
-                    budgetTransactionFilters: budgetTransactionFilters,
-                    memberTransactionFilters: memberTransactionFilters) &
-                (start == null && end == null
-                    ? Constant(true)
-                    : start != null && end == null
-                        ? isOnDay(dateCreated, start)
-                        : onlyShowBasedOnTimeRange(
-                            transactions, start, end, budget)) &
-                (onlyShowBasedOnCategoryFks(
-                        tbl, categoryFks, categoryFksExclude) |
-                    onlyShowBasedOnSubcategoryFks(transactions, categoryFks)) &
-                onlyShowBasedOnWalletFks(tbl, walletFks) &
-                onlyShowBasedOnIncome(tbl, income) &
-                onlyShowIfMember(tbl, member) &
-                onlyShowIfNotExcludedFromBudget(tbl, budget?.budgetPk) &
-                onlyShowIfCertainBudget(
-                    tbl, onlyShowTransactionsBelongingToBudgetPk) &
-                onlyShowIfCertainObjective(
-                    transactions, onlyShowTransactionsBelongingToObjectivePk) &
-                onlyShowTransactionBasedOnSearchQuery(transactions, search,
-                    withCategories: true);
-          })
-          ..limit(limit ?? DEFAULT_LIMIT, offset: null)
-          ..orderBy([
-            // This will bring unpaid transactions to the top of the list
-            // Before it brought it to the top of the day, but now
-            // This returns all transactions within a time range
-            // (t) => OrderingTerm(
-            //       expression: (t.type
-            //                   .equalsValue(TransactionSpecialType.repetitive) |
-            //               t.type.equalsValue(
-            //                   TransactionSpecialType.subscription) |
-            //               t.type.equalsValue(TransactionSpecialType.upcoming)) &
-            //           t.paid.equals(false),
-            //       mode: OrderingMode.desc,
-            //     ),
-            (t) => OrderingTerm.desc(t.dateCreated),
-          ]))
-        .join([
+    query = select(transactions).join([
       innerJoin(
           categories, categories.categoryPk.equalsExp(transactions.categoryFk)),
       leftOuterJoin(
@@ -1176,7 +1133,54 @@ class FinanceDatabase extends _$FinanceDatabase {
       ),
       leftOuterJoin(subCategories,
           subCategories.categoryPk.equalsExp(transactions.subCategoryFk)),
-    ]);
+    ])
+      ..orderBy([
+        // This will bring unpaid transactions to the top of the list
+        // Before it brought it to the top of the day, but now
+        // This returns all transactions within a time range
+        // (t) => OrderingTerm(
+        //       expression: (t.type
+        //                   .equalsValue(TransactionSpecialType.repetitive) |
+        //               t.type.equalsValue(
+        //                   TransactionSpecialType.subscription) |
+        //               t.type.equalsValue(TransactionSpecialType.upcoming)) &
+        //           t.paid.equals(false),
+        //       mode: OrderingMode.desc,
+        //     ),
+        OrderingTerm.desc(transactions.dateCreated)
+      ])
+      ..where(onlyShowTransactionBasedOnSearchQuery(transactions, search,
+              withCategories: true,
+              joinedWithSubcategoriesTable: subCategories) &
+          // Pass in the subcategories table so we can search name based on subcategory
+          onlyShowIfFollowsSearchFilters(
+            transactions,
+            searchFilters,
+            joinedWithSubcategoriesTable: subCategories,
+            joinedWithBudgets: true,
+            joinedWithCategories: true,
+            joinedWithObjectives: true,
+          ) &
+          onlyShowIfFollowsFilters(transactions,
+              budgetTransactionFilters: budgetTransactionFilters,
+              memberTransactionFilters: memberTransactionFilters) &
+          (start == null && end == null
+              ? Constant(true)
+              : start != null && end == null
+                  ? isOnDay(transactions.dateCreated, start)
+                  : onlyShowBasedOnTimeRange(
+                      transactions, start, end, budget)) &
+          (onlyShowBasedOnCategoryFks(
+                  transactions, categoryFks, categoryFksExclude) |
+              onlyShowBasedOnSubcategoryFks(transactions, categoryFks)) &
+          onlyShowBasedOnWalletFks(transactions, walletFks) &
+          onlyShowBasedOnIncome(transactions, income) &
+          onlyShowIfMember(transactions, member) &
+          onlyShowIfNotExcludedFromBudget(transactions, budget?.budgetPk) &
+          onlyShowIfCertainBudget(
+              transactions, onlyShowTransactionsBelongingToBudgetPk) &
+          onlyShowIfCertainObjective(
+              transactions, onlyShowTransactionsBelongingToObjectivePk));
 
     return query.watch().map((rows) => rows.map((row) {
           return TransactionWithCategory(
@@ -1200,13 +1204,21 @@ class FinanceDatabase extends _$FinanceDatabase {
     final max = transactions.amount.max();
     final min = transactions.amount.min();
     final query = selectOnly(transactions)
-      ..where(onlyShowIfFollowsSearchFilters(transactions, searchFilters))
+      ..where(onlyShowIfFollowsSearchFilters(
+        transactions,
+        searchFilters,
+        joinedWithBudgets: false,
+        joinedWithCategories: false,
+        joinedWithObjectives: false,
+        joinedWithSubcategoriesTable: null,
+      ))
       ..addColumns([max, min]);
     return query
         .map((row) => RangeValues(row.read(min) ?? 0, row.read(max) ?? 0))
         .watchSingle();
   }
 
+  // Unused
   Stream<List<DateTime?>> getUniqueDates({
     required DateTime? start,
     required DateTime? end,
@@ -1229,17 +1241,28 @@ class FinanceDatabase extends _$FinanceDatabase {
         start == null ? null : DateTime(start.year, start.month, start.day);
     DateTime? endDate =
         end == null ? null : DateTime(end.year, end.month, end.day);
+    final $CategoriesTable subCategories = alias(categories, 'subCategories');
 
     final query = selectOnly(transactions, distinct: true)
       ..join([
         leftOuterJoin(categories,
-            categories.categoryPk.equalsExp(transactions.categoryFk))
+            categories.categoryPk.equalsExp(transactions.categoryFk)),
+        leftOuterJoin(subCategories,
+            subCategories.categoryPk.equalsExp(transactions.subCategoryFk)),
       ])
       ..orderBy([OrderingTerm.desc(transactions.dateCreated)])
       ..where(
         onlyShowTransactionBasedOnSearchQuery(transactions, search,
-                withCategories: true) &
-            onlyShowIfFollowsSearchFilters(transactions, searchFilters) &
+                withCategories: true,
+                joinedWithSubcategoriesTable: subCategories) &
+            onlyShowIfFollowsSearchFilters(
+              transactions,
+              searchFilters,
+              joinedWithCategories: true,
+              joinedWithSubcategoriesTable: subCategories,
+              joinedWithBudgets: false,
+              joinedWithObjectives: false,
+            ) &
             onlyShowIfFollowsFilters(transactions,
                 budgetTransactionFilters: budgetTransactionFilters,
                 memberTransactionFilters: memberTransactionFilters) &
@@ -1484,13 +1507,17 @@ class FinanceDatabase extends _$FinanceDatabase {
       bool? isOverdueTransactions,
       {int? limit,
       String? searchString}) {
+    final $CategoriesTable subCategories = alias(categories, 'subCategories');
     final query = select(transactions).join([
       innerJoin(
           categories, categories.categoryPk.equalsExp(transactions.categoryFk)),
+      leftOuterJoin(subCategories,
+          subCategories.categoryPk.equalsExp(transactions.subCategoryFk)),
     ])
       ..orderBy([OrderingTerm.asc(transactions.dateCreated)])
       ..where(onlyShowTransactionBasedOnSearchQuery(transactions, searchString,
-              withCategories: true) &
+              withCategories: true,
+              joinedWithSubcategoriesTable: subCategories) &
           transactions.skipPaid.equals(false) &
           transactions.paid.equals(false) &
           (isOverdueTransactions == null
@@ -4327,7 +4354,13 @@ class FinanceDatabase extends _$FinanceDatabase {
   }
 
   Expression<bool> onlyShowIfFollowsSearchFilters(
-      $TransactionsTable tbl, SearchFilters? searchFilters) {
+    $TransactionsTable tbl,
+    SearchFilters? searchFilters, {
+    required $CategoriesTable? joinedWithSubcategoriesTable,
+    required bool joinedWithCategories,
+    required bool joinedWithBudgets,
+    required bool joinedWithObjectives,
+  }) {
     if (searchFilters == null) return Constant(true);
 
     Expression<bool> isInWalletPks =
@@ -4418,8 +4451,13 @@ class FinanceDatabase extends _$FinanceDatabase {
 
     String searchQuery = searchFilters.searchQuery ?? "";
     Expression<bool> isInQuery = onlyShowTransactionBasedOnSearchQuery(
-        tbl, searchQuery,
-        withCategories: true);
+      tbl,
+      searchQuery,
+      withCategories: joinedWithCategories,
+      joinedWithSubcategoriesTable: joinedWithSubcategoriesTable,
+      withBudgets: joinedWithBudgets,
+      withObjectives: joinedWithObjectives,
+    );
 
     return isInWalletPks &
         isInCategoryPks &
@@ -4437,18 +4475,38 @@ class FinanceDatabase extends _$FinanceDatabase {
   }
 
   Expression<bool> onlyShowTransactionBasedOnSearchQuery(
-      $TransactionsTable tbl, String? searchQuery,
-      {required bool withCategories}) {
+    $TransactionsTable tbl,
+    String? searchQuery, {
+    required bool withCategories,
+    required $CategoriesTable? joinedWithSubcategoriesTable,
+    bool? withBudgets,
+    bool? withObjectives,
+  }) {
     // If withCategories if true, you will need to use a join with categories!
     return searchQuery == "" || searchQuery == null
         ? Constant(true)
-        : ((withCategories == true
+        : (withCategories == true
                 ? categories.name
                     .lower()
                     .like("%" + searchQuery.toLowerCase() + "%")
                 : Constant(false)) |
+            (joinedWithSubcategoriesTable != null
+                ? joinedWithSubcategoriesTable.name
+                    .lower()
+                    .like("%" + searchQuery.toLowerCase() + "%")
+                : Constant(false)) |
+            (withBudgets == true
+                ? budgets.name
+                    .lower()
+                    .like("%" + searchQuery.toLowerCase() + "%")
+                : Constant(false)) |
+            (withObjectives == true
+                ? objectives.name
+                    .lower()
+                    .like("%" + searchQuery.toLowerCase() + "%")
+                : Constant(false)) |
             tbl.name.lower().like("%" + searchQuery.toLowerCase() + "%") |
-            tbl.note.lower().like("%" + searchQuery.toLowerCase() + "%"));
+            tbl.note.lower().like("%" + searchQuery.toLowerCase() + "%");
   }
 
   Expression<bool> onlyShowIfFollowsFilters($TransactionsTable tbl,
@@ -5028,14 +5086,19 @@ class FinanceDatabase extends _$FinanceDatabase {
     List<Stream<double?>> mergedStreams = [];
     for (TransactionWallet wallet in allWallets.list) {
       final totalAmt = transactions.amount.sum();
+      final $CategoriesTable subCategories = alias(categories, 'subCategories');
       final query = selectOnly(transactions)
         ..addColumns([totalAmt])
         ..join([
           innerJoin(categories,
-              categories.categoryPk.equalsExp(transactions.categoryFk))
+              categories.categoryPk.equalsExp(transactions.categoryFk)),
+          leftOuterJoin(subCategories,
+              subCategories.categoryPk.equalsExp(transactions.subCategoryFk)),
         ])
         ..where(onlyShowTransactionBasedOnSearchQuery(
-                transactions, searchString, withCategories: true) &
+                transactions, searchString,
+                withCategories: true,
+                joinedWithSubcategoriesTable: subCategories) &
             // transactions.income.equals(false) &
             transactions.skipPaid.equals(false) &
             transactions.paid.equals(false) &
@@ -5065,15 +5128,19 @@ class FinanceDatabase extends _$FinanceDatabase {
   Stream<List<int?>> watchCountOfUpcomingOverdue(bool? isOverdueTransactions,
       {String? searchString}) {
     final totalCount = transactions.transactionPk.count();
+    final $CategoriesTable subCategories = alias(categories, 'subCategories');
 
     final query = selectOnly(transactions)
       ..addColumns([totalCount])
       ..join([
         innerJoin(categories,
-            categories.categoryPk.equalsExp(transactions.categoryFk))
+            categories.categoryPk.equalsExp(transactions.categoryFk)),
+        leftOuterJoin(subCategories,
+            subCategories.categoryPk.equalsExp(transactions.subCategoryFk)),
       ])
       ..where(onlyShowTransactionBasedOnSearchQuery(transactions, searchString,
-              withCategories: true) &
+              withCategories: true,
+              joinedWithSubcategoriesTable: subCategories) &
           transactions.skipPaid.equals(false) &
           transactions.paid.equals(false) &
           (isOverdueTransactions == null
@@ -5094,15 +5161,19 @@ class FinanceDatabase extends _$FinanceDatabase {
     List<Stream<double?>> mergedStreams = [];
     for (TransactionWallet wallet in allWallets.list) {
       final totalAmt = transactions.amount.sum();
+      final $CategoriesTable subCategories = alias(categories, 'subCategories');
       final query = selectOnly(transactions)
         ..addColumns([totalAmt])
         ..join([
           innerJoin(categories,
-              categories.categoryPk.equalsExp(transactions.categoryFk))
+              categories.categoryPk.equalsExp(transactions.categoryFk)),
+          leftOuterJoin(subCategories,
+              subCategories.categoryPk.equalsExp(transactions.subCategoryFk)),
         ])
         ..where(transactions.paid.equals(true) &
             onlyShowTransactionBasedOnSearchQuery(transactions, searchString,
-                withCategories: true) &
+                withCategories: true,
+                joinedWithSubcategoriesTable: subCategories) &
             transactions.walletFk.equals(wallet.walletPk) &
             (isCredit == null
                 ? transactions.type
@@ -5125,16 +5196,20 @@ class FinanceDatabase extends _$FinanceDatabase {
   Stream<List<int?>> watchCountOfCreditDebt(
       bool? isCredit, String? searchString) {
     final totalCount = transactions.transactionPk.count();
+    final $CategoriesTable subCategories = alias(categories, 'subCategories');
 
     final query = selectOnly(transactions)
       ..addColumns([totalCount])
       ..join([
         innerJoin(categories,
-            categories.categoryPk.equalsExp(transactions.categoryFk))
+            categories.categoryPk.equalsExp(transactions.categoryFk)),
+        leftOuterJoin(subCategories,
+            subCategories.categoryPk.equalsExp(transactions.subCategoryFk)),
       ])
       ..where(transactions.paid.equals(true) &
           onlyShowTransactionBasedOnSearchQuery(transactions, searchString,
-              withCategories: true) &
+              withCategories: true,
+              joinedWithSubcategoriesTable: subCategories) &
           (isCredit == null
               ? transactions.type.equals(TransactionSpecialType.credit.index) |
                   transactions.type.equals(TransactionSpecialType.debt.index)
@@ -5148,16 +5223,20 @@ class FinanceDatabase extends _$FinanceDatabase {
 
   Stream<List<Transaction>> watchAllCreditDebtTransactions(
       bool? isCredit, String? searchString) {
+    final $CategoriesTable subCategories = alias(categories, 'subCategories');
     final query = select(transactions).join([
       innerJoin(
           categories, categories.categoryPk.equalsExp(transactions.categoryFk)),
+      leftOuterJoin(subCategories,
+          subCategories.categoryPk.equalsExp(transactions.subCategoryFk)),
     ])
       ..orderBy([
         OrderingTerm.desc(transactions.paid),
         OrderingTerm.desc(transactions.dateCreated),
       ])
       ..where(onlyShowTransactionBasedOnSearchQuery(transactions, searchString,
-              withCategories: true) &
+              withCategories: true,
+              joinedWithSubcategoriesTable: subCategories) &
           (isCredit == null
               ? transactions.type.equals(TransactionSpecialType.credit.index) |
                   transactions.type.equals(TransactionSpecialType.debt.index)

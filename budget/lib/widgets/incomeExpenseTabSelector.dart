@@ -68,7 +68,10 @@ class _IncomeExpenseTabSelectorState extends State<IncomeExpenseTabSelector>
       color: widget.unselectedColor == null
           ? appStateSettings["materialYou"]
               ? Theme.of(context).colorScheme.primary.withOpacity(0.1)
-              : getColor(context, "lightDarkAccentHeavyLight")
+              : Theme.of(context).brightness == Brightness.dark
+                  ? getColor(context, "lightDarkAccentHeavyLight")
+                      .withOpacity(0.5)
+                  : Colors.black.withOpacity(0.07)
           : widget.unselectedColor,
       child: TabBar(
         controller: _incomeTabController,

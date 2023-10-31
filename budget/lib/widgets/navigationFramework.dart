@@ -23,7 +23,9 @@ import 'package:budget/pages/premiumPage.dart';
 import 'package:budget/pages/settingsPage.dart';
 import 'package:budget/pages/subscriptionsPage.dart';
 import 'package:budget/pages/transactionsListPage.dart';
+import 'package:budget/pages/upcomingOverdueTransactionsPage.dart';
 import 'package:budget/pages/walletDetailsPage.dart';
+import 'package:budget/pages/creditDebtTransactionsPage.dart';
 import 'package:budget/struct/currencyFunctions.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/quickActions.dart';
@@ -169,11 +171,9 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
       await initializeNotificationsPlatform();
 
       bool isChangelogShown = showChangelog(context);
+      bool isRatingPopupShown = false;
       if (isChangelogShown == false) {
-        bool isRatingPopupShown = openRatingPopupCheck(context);
-        if (isRatingPopupShown == false) {
-          openBackupReminderPopupCheck(context);
-        }
+        isRatingPopupShown = openRatingPopupCheck(context);
       }
 
       await setDailyNotificationOnLaunch(context);
@@ -185,6 +185,11 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
 
       if (entireAppLoaded == false) {
         await runAllCloudFunctions(context);
+      }
+
+      // Do this after cloud functions attempt (i.e. if user is not signed in we can show it)
+      if (isRatingPopupShown == false && isChangelogShown == false) {
+        openBackupReminderPopupCheck(context);
       }
 
       // Should do this after syncing
@@ -238,6 +243,8 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
       AboutPage(), //13
       ObjectivesListPage(backButton: false), //14
       EditObjectivesPage(), //15
+      UpcomingOverdueTransactions(overdueTransactions: null), //16
+      CreditDebtTransactions(isCredit: null), //17
     ];
 
     // SchedulerBinding.instance.addPostFrameCallback((Duration duration) {

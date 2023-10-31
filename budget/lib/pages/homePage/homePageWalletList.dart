@@ -22,13 +22,14 @@ class HomePageWalletList extends StatelessWidget {
     return KeepAliveClientMixin(
       child: Padding(
         padding: const EdgeInsets.only(bottom: 13, left: 13, right: 13),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(15),
-          child: Container(
-            decoration: BoxDecoration(
-              color: getColor(context, "lightDarkAccentHeavyLight"),
-              boxShadow: boxShadowCheck(boxShadowGeneral(context)),
-            ),
+        child: Container(
+          decoration: BoxDecoration(
+            color: getColor(context, "lightDarkAccentHeavyLight"),
+            boxShadow: boxShadowCheck(boxShadowGeneral(context)),
+            borderRadius: BorderRadius.circular(15),
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(15),
             child: StreamBuilder<List<TransactionWallet>>(
               stream: database
                   .getAllPinnedWallets(HomePageWidgetDisplay.WalletList)
