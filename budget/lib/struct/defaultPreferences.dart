@@ -85,6 +85,7 @@ Future<Map<String, dynamic>> getDefaultPreferences() async {
     "numLogins": 0,
     "submittedFeedback": false,
     "canShowBackupReminderPopup": true,
+    "canShowTransactionActionButtonTip": true,
     "notifications": true,
     "notificationHour": 20,
     "notificationMinute": 0,

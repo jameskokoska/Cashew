@@ -22,6 +22,12 @@ import 'listItem.dart';
 
 String getChangelogString() {
   return """
+    < 4.7.7
+    Balance correction transactions removed from home page graph when income/expense tab selected
+    (to be consistent with the income and expense total implementations for balance corrections)
+    Fixed horizontal separators for more transaction options in full screen
+    Added information popup when adding a special type of transaction
+    Original due date field exported when exporting CSV
     < 4.7.6
     Can search for transactions based on subcategory name
     Search transactions based on budget name, goal name

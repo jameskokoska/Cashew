@@ -794,5 +794,7 @@
   "erase-synced-data-and-cloud-backups": "Erase Synced Data And Cloud Backups",
   "erase-cloud-data": "Erase Cloud Data",
   "erase-cloud-data-description": "Login to your Google account and delete backups located under 'Sync' and 'Backups'",
-  "add": "Add"
+  "add": "Add",
+  "transaction-type": "Transaction Type",
+  "do-not-show-again": "Don't show again"
 }

@@ -794,5 +794,7 @@
   "erase-synced-data-and-cloud-backups": "Hapus data yang disinkronkan dan cadangan cloud",
   "erase-cloud-data": "Hapus data cloud",
   "erase-cloud-data-description": "Masuk ke akun Google Anda dan hapus cadangan yang terletak di bawah 'Sync' dan 'Backups'",
-  "add": "Menambahkan"
+  "add": "Menambahkan",
+  "transaction-type": "tipe transaksi",
+  "do-not-show-again": "Jangan tunjukkan lagi"
 }

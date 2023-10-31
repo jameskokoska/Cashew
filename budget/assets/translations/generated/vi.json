@@ -794,5 +794,7 @@
   "erase-synced-data-and-cloud-backups": "Xóa dữ liệu được đồng bộ hóa và sao lưu đám mây",
   "erase-cloud-data": "Xóa dữ liệu đám mây",
   "erase-cloud-data-description": "Đăng nhập vào tài khoản Google của bạn và xóa các bản sao lưu nằm trong 'Sync' và 'Sao lưu'",
-  "add": "Thêm vào"
+  "add": "Thêm vào",
+  "transaction-type": "Loại giao dịch",
+  "do-not-show-again": "Đừng hiển thị lại"
 }

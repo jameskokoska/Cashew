@@ -794,5 +794,7 @@
   "erase-synced-data-and-cloud-backups": "Poista synkronoidut tiedot ja pilvivarmuuskopiot",
   "erase-cloud-data": "Poista pilvitiedot",
   "erase-cloud-data-description": "Kirjaudu Google -tiliisi ja poista varmuuskopiot, jotka sijaitsevat 'synkronoinnissa' ja 'varmuuskopiot'",
-  "add": "Lisätä"
+  "add": "Lisätä",
+  "transaction-type": "Maksutavan tyyppi",
+  "do-not-show-again": "Älä näytä uudestaan"
 }

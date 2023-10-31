@@ -794,5 +794,7 @@
   "erase-synced-data-and-cloud-backups": "Usuń synchronizowane dane i kopie zapasowe w chmurze",
   "erase-cloud-data": "Usuń dane w chmurze",
   "erase-cloud-data-description": "Zaloguj się na swoje konto Google i usuń kopie zapasowe znajdujące się pod „Sync” i „Backups”",
-  "add": "Dodać"
+  "add": "Dodać",
+  "transaction-type": "typ transakcji",
+  "do-not-show-again": "Nie pokazuj ponownie"
 }

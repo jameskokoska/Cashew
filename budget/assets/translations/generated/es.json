@@ -794,5 +794,7 @@
   "erase-synced-data-and-cloud-backups": "Borrar los datos sincronizados y las copias de seguridad de la nube",
   "erase-cloud-data": "Borrar datos de nubes",
   "erase-cloud-data-description": "Inicie sesión en su cuenta de Google y elimine las copias de seguridad ubicadas en 'Sincronización' y 'Copias de seguridad'",
-  "add": "Agregar"
+  "add": "Agregar",
+  "transaction-type": "tipo de transacción",
+  "do-not-show-again": "No te muestres de nuevo"
 }

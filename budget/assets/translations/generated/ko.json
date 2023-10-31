@@ -766,9 +766,9 @@
   "main-category-created": "주요 범주가 생성되었습니다",
   "no-folder-selected": "폴더가 선택되지 않았습니다",
   "clear-selection": "명확한 선택",
-  "view-all-days": "하루 종일보십시오",
+  "view-all-days": "하루 종일보세요",
   "view-to-today": "오늘까지",
-  "subcategories-description": "트랜잭션을 추가로 구성하여 원하는 방식으로 하위 범주를 작성하십시오.",
+  "subcategories-description": "원하는 방식으로 거래를 추가로 구성하기 위해 하위 범주를 작성하십시오.",
   "examples": "예",
   "drinks": "음료수",
   "coffee": "커피",
@@ -794,5 +794,7 @@
   "erase-synced-data-and-cloud-backups": "동기화 된 데이터 및 클라우드 백업을 지우십시오",
   "erase-cloud-data": "클라우드 데이터를 지우십시오",
   "erase-cloud-data-description": "Google 계정에 로그인하고 'Sync'및 'Backups'에있는 백업을 삭제합니다.",
-  "add": "추가하다"
+  "add": "추가하다",
+  "transaction-type": "거래 유형",
+  "do-not-show-again": "다시는 표시하지 마십시오"
 }

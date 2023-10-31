@@ -794,5 +794,7 @@
   "erase-synced-data-and-cloud-backups": "Cancellare i dati sincronizzati e i backup del cloud",
   "erase-cloud-data": "Cancella i dati del cloud",
   "erase-cloud-data-description": "Accedi al tuo account Google ed elimina i backup situati in \"Sync\" e \"Backups\"",
-  "add": "Aggiungere"
+  "add": "Aggiungere",
+  "transaction-type": "Tipo di transazione",
+  "do-not-show-again": "Non mostrare più"
 }

@@ -794,5 +794,7 @@
   "erase-synced-data-and-cloud-backups": "Slet synkroniserede data og cloud -sikkerhedskopier",
   "erase-cloud-data": "Slet skytata",
   "erase-cloud-data-description": "Log ind på din Google -konto og slet sikkerhedskopier placeret under 'Sync' og 'Backups'",
-  "add": "Tilføje"
+  "add": "Tilføje",
+  "transaction-type": "Transaktionstype",
+  "do-not-show-again": "Vis ikke igen"
 }

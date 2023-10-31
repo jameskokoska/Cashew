@@ -768,7 +768,7 @@
   "clear-selection": "Uteuzi wazi",
   "view-all-days": "Tazama siku zote",
   "view-to-today": "Tazama leo",
-  "subcategories-description": "Unda vijidudu ili kupanga shughuli zako kwa njia unayotaka",
+  "subcategories-description": "Unda vijidudu ili kupanga shughuli zako zaidi kwa njia unayotaka",
   "examples": "Mifano",
   "drinks": "Vinywaji",
   "coffee": "Kahawa",
@@ -794,5 +794,7 @@
   "erase-synced-data-and-cloud-backups": "Futa data iliyosawazishwa na backups za wingu",
   "erase-cloud-data": "Futa data ya wingu",
   "erase-cloud-data-description": "Ingia kwenye akaunti yako ya Google na futa backups ziko chini ya 'Usawazishaji' na 'Backups'",
-  "add": "ADD"
+  "add": "ADD",
+  "transaction-type": "Aina ya manunuzi",
+  "do-not-show-again": "Usionyeshe tena"
 }

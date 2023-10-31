@@ -768,7 +768,7 @@
   "clear-selection": "انتخاب روشن",
   "view-all-days": "مشاهده همه روزها",
   "view-to-today": "مشاهده به امروز",
-  "subcategories-description": "زیر شاخه هایی ایجاد کنید تا معاملات خود را به روشی که می خواهید سازماندهی کنید",
+  "subcategories-description": "زیر شاخه هایی ایجاد کنید تا معاملات خود را به شکلی که می خواهید سازماندهی کنید",
   "examples": "مثال ها",
   "drinks": "نوشیدنی",
   "coffee": "قهوه",
@@ -794,5 +794,7 @@
   "erase-synced-data-and-cloud-backups": "داده های همگام سازی و پشتیبان گیری از ابر را پاک کنید",
   "erase-cloud-data": "داده های ابر را پاک کنید",
   "erase-cloud-data-description": "وارد حساب Google خود شوید و نسخه پشتیبان تهیه شده در زیر \"Sync\" و \"Backups\" را حذف کنید",
-  "add": "اضافه کردن"
+  "add": "اضافه کردن",
+  "transaction-type": "نوع معامله",
+  "do-not-show-again": "دوباره نشان نده"
 }

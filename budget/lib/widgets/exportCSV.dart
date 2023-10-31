@@ -215,7 +215,7 @@ class ExportCSV extends StatelessWidget {
               "paid",
               "createdAnotherFutureTransaction",
               "skipPaid",
-              "originalDateDue",
+              // "originalDateDue",
               "upcomingTransactionNotification",
               "objectiveFk",
               "subCategoryFk",

@@ -794,5 +794,7 @@
   "erase-synced-data-and-cloud-backups": "Synchronisierte Daten und Cloud -Sicherungen löschen",
   "erase-cloud-data": "Cloud -Daten löschen",
   "erase-cloud-data-description": "Melden Sie sich in Ihrem Google -Konto an und löschen",
-  "add": "Hinzufügen"
+  "add": "Hinzufügen",
+  "transaction-type": "Art der Transaktion",
+  "do-not-show-again": "Zeigen Sie nicht noch einmal"
 }

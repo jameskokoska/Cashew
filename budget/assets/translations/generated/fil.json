@@ -794,5 +794,7 @@
   "erase-synced-data-and-cloud-backups": "Burahin ang pag -sync ng data at mga backup ng ulap",
   "erase-cloud-data": "Burahin ang data ng ulap",
   "erase-cloud-data-description": "Mag -login sa iyong Google account at tanggalin ang mga backup na matatagpuan sa ilalim ng 'Sync' at 'Backups'",
-  "add": "Idagdag"
+  "add": "Idagdag",
+  "transaction-type": "Uri ng transaksyon",
+  "do-not-show-again": "Huwag magpakita ulit"
 }

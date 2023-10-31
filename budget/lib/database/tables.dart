@@ -1149,38 +1149,41 @@ class FinanceDatabase extends _$FinanceDatabase {
         //     ),
         OrderingTerm.desc(transactions.dateCreated)
       ])
-      ..where(onlyShowTransactionBasedOnSearchQuery(transactions, search,
-              withCategories: true,
-              joinedWithSubcategoriesTable: subCategories) &
-          // Pass in the subcategories table so we can search name based on subcategory
-          onlyShowIfFollowsSearchFilters(
-            transactions,
-            searchFilters,
-            joinedWithSubcategoriesTable: subCategories,
-            joinedWithBudgets: true,
-            joinedWithCategories: true,
-            joinedWithObjectives: true,
-          ) &
-          onlyShowIfFollowsFilters(transactions,
-              budgetTransactionFilters: budgetTransactionFilters,
-              memberTransactionFilters: memberTransactionFilters) &
-          (start == null && end == null
-              ? Constant(true)
-              : start != null && end == null
-                  ? isOnDay(transactions.dateCreated, start)
-                  : onlyShowBasedOnTimeRange(
-                      transactions, start, end, budget)) &
-          (onlyShowBasedOnCategoryFks(
-                  transactions, categoryFks, categoryFksExclude) |
-              onlyShowBasedOnSubcategoryFks(transactions, categoryFks)) &
-          onlyShowBasedOnWalletFks(transactions, walletFks) &
-          onlyShowBasedOnIncome(transactions, income) &
-          onlyShowIfMember(transactions, member) &
-          onlyShowIfNotExcludedFromBudget(transactions, budget?.budgetPk) &
-          onlyShowIfCertainBudget(
-              transactions, onlyShowTransactionsBelongingToBudgetPk) &
-          onlyShowIfCertainObjective(
-              transactions, onlyShowTransactionsBelongingToObjectivePk));
+      ..where(
+        onlyShowBalanceCorrectionIfIsIncomeIsNull(transactions, income) &
+            onlyShowTransactionBasedOnSearchQuery(transactions, search,
+                withCategories: true,
+                joinedWithSubcategoriesTable: subCategories) &
+            // Pass in the subcategories table so we can search name based on subcategory
+            onlyShowIfFollowsSearchFilters(
+              transactions,
+              searchFilters,
+              joinedWithSubcategoriesTable: subCategories,
+              joinedWithBudgets: true,
+              joinedWithCategories: true,
+              joinedWithObjectives: true,
+            ) &
+            onlyShowIfFollowsFilters(transactions,
+                budgetTransactionFilters: budgetTransactionFilters,
+                memberTransactionFilters: memberTransactionFilters) &
+            (start == null && end == null
+                ? Constant(true)
+                : start != null && end == null
+                    ? isOnDay(transactions.dateCreated, start)
+                    : onlyShowBasedOnTimeRange(
+                        transactions, start, end, budget)) &
+            (onlyShowBasedOnCategoryFks(
+                    transactions, categoryFks, categoryFksExclude) |
+                onlyShowBasedOnSubcategoryFks(transactions, categoryFks)) &
+            onlyShowBasedOnWalletFks(transactions, walletFks) &
+            onlyShowBasedOnIncome(transactions, income) &
+            onlyShowIfMember(transactions, member) &
+            onlyShowIfNotExcludedFromBudget(transactions, budget?.budgetPk) &
+            onlyShowIfCertainBudget(
+                transactions, onlyShowTransactionsBelongingToBudgetPk) &
+            onlyShowIfCertainObjective(
+                transactions, onlyShowTransactionsBelongingToObjectivePk),
+      );
 
     return query.watch().map((rows) => rows.map((row) {
           return TransactionWithCategory(
@@ -4476,6 +4479,15 @@ class FinanceDatabase extends _$FinanceDatabase {
         (includeShared | includeAdded) &
         isInAmountRange &
         isMethodAdded;
+  }
+
+  Expression<bool> onlyShowBalanceCorrectionIfIsIncomeIsNull(
+    $TransactionsTable tbl,
+    bool? isIncome,
+  ) {
+    return isIncome == null
+        ? Constant(true)
+        : transactions.categoryFk.equals("0").not();
   }
 
   Expression<bool> onlyShowTransactionBasedOnSearchQuery(

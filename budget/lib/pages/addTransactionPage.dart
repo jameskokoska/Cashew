@@ -366,6 +366,57 @@ class _AddTransactionPageState extends State<AddTransactionPage>
   }
 
   Future<bool> addTransaction() async {
+    if (appStateSettings["canShowTransactionActionButtonTip"] == true &&
+        selectedType != null) {
+      await openBottomSheet(
+        context,
+        fullSnap: false,
+        PopupFramework(
+          title: "transaction-type".tr(),
+          child: Column(
+            children: [
+              SelectTransactionTypePopup(
+                setTransactionType: (type) {},
+                selectedTransactionType: selectedType,
+                onlyShowOneTransactionType: selectedType,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 12),
+                child: Row(
+                  children: [
+                    Flexible(
+                      child: Button(
+                        color: Theme.of(context).colorScheme.tertiaryContainer,
+                        textColor:
+                            Theme.of(context).colorScheme.onTertiaryContainer,
+                        label: "do-not-show-again".tr(),
+                        onTap: () {
+                          updateSettings(
+                              "canShowTransactionActionButtonTip", false,
+                              updateGlobalState: false);
+                          Navigator.pop(context);
+                        },
+                        expandedLayout: true,
+                      ),
+                    ),
+                    SizedBox(width: 10),
+                    Flexible(
+                      child: Button(
+                        label: "ok".tr(),
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        expandedLayout: true,
+                      ),
+                    ),
+                  ],
+                ),
+              )
+            ],
+          ),
+        ),
+      );
+    }
     try {
       print("Added transaction");
       if (selectedTitle != null &&
@@ -1478,14 +1529,18 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                       openBottomSheet(
                                         context,
                                         fullSnap: false,
-                                        SelectTransactionTypePopup(
-                                          setTransactionType: (type) {
-                                            setSelectedType(
-                                              transactionTypeDisplayToEnum[
-                                                  type],
-                                            );
-                                          },
-                                          selectedTransactionType: selectedType,
+                                        PopupFramework(
+                                          title: "select-transaction-type".tr(),
+                                          child: SelectTransactionTypePopup(
+                                            setTransactionType: (type) {
+                                              setSelectedType(
+                                                transactionTypeDisplayToEnum[
+                                                    type],
+                                              );
+                                            },
+                                            selectedTransactionType:
+                                                selectedType,
+                                          ),
                                         ),
                                       );
                                     },
@@ -1701,15 +1756,17 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                   widget.transaction?.budgetFksExclude != null,
                               child: Column(
                                 children: [
-                                  StickyLabelDivider(
-                                    info: "exclude-from-budget".tr(),
+                                  HorizontalBreakAbove(
+                                    enabled: enableDoubleColumn(context),
+                                    child: StickyLabelDivider(
+                                      info: "exclude-from-budget".tr(),
+                                    ),
                                   ),
                                   SelectExcludeBudget(
                                     setSelectedExcludedBudgets:
                                         setSelectedExcludedBudgetPks,
                                     selectedExcludedBudgetPks:
                                         selectedExcludedBudgetPks,
-                                    horizontalBreak: true,
                                   ),
                                 ],
                               )),
@@ -1731,47 +1788,52 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                     key: ValueKey(2),
                                     children: [
                                       if (widget.transaction != null)
-                                        Padding(
-                                          padding: const EdgeInsets.only(
-                                            left: 20,
-                                            right: 20,
-                                            bottom: 12,
-                                            top: 5,
-                                          ),
-                                          child: Button(
-                                            flexibleLayout: true,
-                                            icon: appStateSettings[
-                                                    "outlinedIcons"]
-                                                ? Icons.file_copy_outlined
-                                                : Icons.file_copy_rounded,
-                                            label: "duplicate".tr(),
-                                            onTap: () async {
-                                              bool result =
-                                                  await addTransaction();
-                                              if (result)
-                                                Navigator.of(context).pop();
-                                              duplicateTransaction(
-                                                  context,
-                                                  widget.transaction!
-                                                      .transactionPk);
-                                            },
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .secondaryContainer,
-                                            textColor: Theme.of(context)
-                                                .colorScheme
-                                                .onSecondaryContainer,
+                                        HorizontalBreakAbove(
+                                          enabled: enableDoubleColumn(context),
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                              left: 20,
+                                              right: 20,
+                                              bottom: 12,
+                                              top: 5,
+                                            ),
+                                            child: Button(
+                                              flexibleLayout: true,
+                                              icon: appStateSettings[
+                                                      "outlinedIcons"]
+                                                  ? Icons.file_copy_outlined
+                                                  : Icons.file_copy_rounded,
+                                              label: "duplicate".tr(),
+                                              onTap: () async {
+                                                bool result =
+                                                    await addTransaction();
+                                                if (result)
+                                                  Navigator.of(context).pop();
+                                                duplicateTransaction(
+                                                    context,
+                                                    widget.transaction!
+                                                        .transactionPk);
+                                              },
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .secondaryContainer,
+                                              textColor: Theme.of(context)
+                                                  .colorScheme
+                                                  .onSecondaryContainer,
+                                            ),
                                           ),
                                         ),
-                                      StickyLabelDivider(
-                                        info: "exclude-from-budget".tr(),
+                                      HorizontalBreakAbove(
+                                        enabled: enableDoubleColumn(context),
+                                        child: StickyLabelDivider(
+                                          info: "exclude-from-budget".tr(),
+                                        ),
                                       ),
                                       SelectExcludeBudget(
                                         setSelectedExcludedBudgets:
                                             setSelectedExcludedBudgetPks,
                                         selectedExcludedBudgetPks:
                                             selectedExcludedBudgetPks,
-                                        horizontalBreak: true,
                                       ),
                                     ],
                                   ),
@@ -2757,14 +2819,12 @@ class SelectExcludeBudget extends StatefulWidget {
     this.selectedExcludedBudgetPks,
     this.extraHorizontalPadding,
     this.wrapped,
-    this.horizontalBreak,
     super.key,
   });
   final Function(List<String>?) setSelectedExcludedBudgets;
   final List<String>? selectedExcludedBudgetPks;
   final double? extraHorizontalPadding;
   final bool? wrapped;
-  final bool? horizontalBreak;
 
   @override
   State<SelectExcludeBudget> createState() => _SelectExcludeBudgetState();
@@ -2799,71 +2859,66 @@ class _SelectExcludeBudgetState extends State<SelectExcludeBudget> {
                 textAlign: TextAlign.center,
               ),
             );
-          return HorizontalBreakAbove(
-            enabled:
-                enableDoubleColumn(context) && widget.horizontalBreak == true,
-            child: Padding(
-                padding: const EdgeInsets.only(top: 5),
-                child: SelectChips(
-                  wrapped: widget.wrapped ?? enableDoubleColumn(context),
-                  extraHorizontalPadding: widget.extraHorizontalPadding,
-                  onLongPress: (Budget item) {
-                    pushRoute(
-                      context,
-                      AddBudgetPage(
-                        budget: item,
-                        routesToPopAfterDelete:
-                            RoutesToPopAfterDelete.PreventDelete,
-                      ),
-                    );
-                  },
-                  extraWidget: AddButton(
-                    onTap: () {},
-                    width: 40,
-                    padding: EdgeInsets.symmetric(horizontal: 5, vertical: 1),
-                    openPage: AddBudgetPage(
-                      routesToPopAfterDelete: RoutesToPopAfterDelete.One,
+          return Padding(
+              padding: const EdgeInsets.only(top: 5),
+              child: SelectChips(
+                wrapped: widget.wrapped ?? enableDoubleColumn(context),
+                extraHorizontalPadding: widget.extraHorizontalPadding,
+                onLongPress: (Budget item) {
+                  pushRoute(
+                    context,
+                    AddBudgetPage(
+                      budget: item,
+                      routesToPopAfterDelete:
+                          RoutesToPopAfterDelete.PreventDelete,
                     ),
-                    borderRadius: 8,
+                  );
+                },
+                extraWidget: AddButton(
+                  onTap: () {},
+                  width: 40,
+                  padding: EdgeInsets.symmetric(horizontal: 5, vertical: 1),
+                  openPage: AddBudgetPage(
+                    routesToPopAfterDelete: RoutesToPopAfterDelete.One,
                   ),
-                  items: snapshot.data!,
-                  getLabel: (Budget item) {
-                    return item.name;
-                  },
-                  onSelected: (Budget item) {
-                    // widget.setSelectedBudget(
-                    //   item,
-                    //   isSharedBudget: item?.sharedKey != null,
-                    // );
-                    // setState(() {
-                    //   selectedBudgetPk = item?.budgetPk;
-                    // });
-                    if (selectedExcludedBudgetPks.contains(item.budgetPk)) {
-                      selectedExcludedBudgetPks.remove(item.budgetPk);
-                    } else {
-                      selectedExcludedBudgetPks.add(item.budgetPk);
-                    }
-                    widget
-                        .setSelectedExcludedBudgets(selectedExcludedBudgetPks);
-                  },
-                  getSelected: (Budget item) {
-                    return (selectedExcludedBudgetPks).contains(item.budgetPk);
-                  },
-                  getCustomBorderColor: (Budget? item) {
-                    return dynamicPastel(
-                      context,
-                      lightenPastel(
-                        HexColor(
-                          item?.colour,
-                          defaultColor: Theme.of(context).colorScheme.primary,
-                        ),
-                        amount: 0.3,
+                  borderRadius: 8,
+                ),
+                items: snapshot.data!,
+                getLabel: (Budget item) {
+                  return item.name;
+                },
+                onSelected: (Budget item) {
+                  // widget.setSelectedBudget(
+                  //   item,
+                  //   isSharedBudget: item?.sharedKey != null,
+                  // );
+                  // setState(() {
+                  //   selectedBudgetPk = item?.budgetPk;
+                  // });
+                  if (selectedExcludedBudgetPks.contains(item.budgetPk)) {
+                    selectedExcludedBudgetPks.remove(item.budgetPk);
+                  } else {
+                    selectedExcludedBudgetPks.add(item.budgetPk);
+                  }
+                  widget.setSelectedExcludedBudgets(selectedExcludedBudgetPks);
+                },
+                getSelected: (Budget item) {
+                  return (selectedExcludedBudgetPks).contains(item.budgetPk);
+                },
+                getCustomBorderColor: (Budget? item) {
+                  return dynamicPastel(
+                    context,
+                    lightenPastel(
+                      HexColor(
+                        item?.colour,
+                        defaultColor: Theme.of(context).colorScheme.primary,
                       ),
-                      amount: 0.4,
-                    );
-                  },
-                )),
-          );
+                      amount: 0.3,
+                    ),
+                    amount: 0.4,
+                  );
+                },
+              ));
         } else {
           return Container();
         }
@@ -2986,17 +3041,18 @@ class SelectTransactionTypePopup extends StatelessWidget {
   const SelectTransactionTypePopup({
     required this.setTransactionType,
     this.selectedTransactionType,
+    this.onlyShowOneTransactionType,
     super.key,
   });
   final Function(TransactionSpecialType? transactionType) setTransactionType;
   final TransactionSpecialType? selectedTransactionType;
+  final TransactionSpecialType? onlyShowOneTransactionType;
 
   @override
   Widget build(BuildContext context) {
-    return PopupFramework(
-      title: "select-transaction-type".tr(),
-      child: Column(
-        children: [
+    return Column(
+      children: [
+        if (onlyShowOneTransactionType == null)
           TransactionTypeInfoEntry(
             selectedTransactionType: selectedTransactionType,
             setTransactionType: setTransactionType,
@@ -3010,163 +3066,167 @@ class SelectTransactionTypePopup extends StatelessWidget {
                 ? Icons.check_circle_outlined
                 : Icons.check_circle_rounded,
           ),
-          TransactionTypeInfoEntry(
-            selectedTransactionType: selectedTransactionType,
-            setTransactionType: setTransactionType,
-            transactionType: TransactionSpecialType.upcoming,
-            title: "upcoming".tr(),
-            childrenDescription: [
-              ListItem(
-                "upcoming-transaction-type-description-1".tr(),
-              ),
-              ListItem(
-                "upcoming-transaction-type-description-2".tr(),
-              ),
-            ],
-          ),
-          TransactionTypeInfoEntry(
-            selectedTransactionType: selectedTransactionType,
-            setTransactionType: setTransactionType,
-            transactionType: TransactionSpecialType.subscription,
-            title: "subscription".tr(),
-            childrenDescription: [
-              ListItem(
-                "subscription-transaction-type-description-1".tr(),
-              ),
-              ListItem(
-                "subscription-transaction-type-description-2".tr(),
-              ),
-            ],
-          ),
-          TransactionTypeInfoEntry(
-            selectedTransactionType: selectedTransactionType,
-            setTransactionType: setTransactionType,
-            transactionType: TransactionSpecialType.repetitive,
-            title: "repetitive".tr(),
-            childrenDescription: [
-              ListItem(
-                "repetitive-transaction-type-description-1".tr(),
-              ),
-              ListItem(
-                "repetitive-transaction-type-description-2".tr(),
-              ),
-            ],
-          ),
-          TransactionTypeInfoEntry(
-            selectedTransactionType: selectedTransactionType,
-            setTransactionType: setTransactionType,
-            transactionType: TransactionSpecialType.credit,
-            title: "lent".tr(),
-            childrenDescription: [
-              ListItem(
-                "lent-transaction-type-description-1".tr(),
-              ),
-              ListItem(
-                "lent-transaction-type-description-2".tr(),
-              ),
-              ListItem(
-                "lent-transaction-type-description-3".tr(),
-              ),
-            ],
-          ),
-          TransactionTypeInfoEntry(
-            selectedTransactionType: selectedTransactionType,
-            setTransactionType: setTransactionType,
-            transactionType: TransactionSpecialType.debt,
-            title: "borrowed".tr(),
-            childrenDescription: [
-              ListItem(
-                "borrowed-transaction-type-description-1".tr(),
-              ),
-              ListItem(
-                "borrowed-transaction-type-description-2".tr(),
-              ),
-              ListItem(
-                "borrowed-transaction-type-description-3".tr(),
-              ),
-            ],
-          ),
-          SizedBox(height: 13),
-          Tappable(
-            color: dynamicPastel(
-              context,
-              Theme.of(context).colorScheme.secondaryContainer,
-              amount: 0.5,
+        TransactionTypeInfoEntry(
+          selectedTransactionType: selectedTransactionType,
+          setTransactionType: setTransactionType,
+          transactionType: TransactionSpecialType.upcoming,
+          title: "upcoming".tr(),
+          childrenDescription: [
+            ListItem(
+              "upcoming-transaction-type-description-1".tr(),
             ),
-            borderRadius: 20,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 15),
-              child: Column(
-                children: [
-                  SizedBox(height: 8),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: TextFont(
-                      maxLines: 5,
-                      fontSize: 16,
-                      textAlign: TextAlign.center,
-                      text: "mark-transaction-help-description".tr(),
+            ListItem(
+              "upcoming-transaction-type-description-2".tr(),
+            ),
+          ],
+          onlyShowOneTransactionType: onlyShowOneTransactionType,
+        ),
+        TransactionTypeInfoEntry(
+          selectedTransactionType: selectedTransactionType,
+          setTransactionType: setTransactionType,
+          transactionType: TransactionSpecialType.subscription,
+          title: "subscription".tr(),
+          childrenDescription: [
+            ListItem(
+              "subscription-transaction-type-description-1".tr(),
+            ),
+            ListItem(
+              "subscription-transaction-type-description-2".tr(),
+            ),
+          ],
+          onlyShowOneTransactionType: onlyShowOneTransactionType,
+        ),
+        TransactionTypeInfoEntry(
+          selectedTransactionType: selectedTransactionType,
+          setTransactionType: setTransactionType,
+          transactionType: TransactionSpecialType.repetitive,
+          title: "repetitive".tr(),
+          childrenDescription: [
+            ListItem(
+              "repetitive-transaction-type-description-1".tr(),
+            ),
+            ListItem(
+              "repetitive-transaction-type-description-2".tr(),
+            ),
+          ],
+          onlyShowOneTransactionType: onlyShowOneTransactionType,
+        ),
+        TransactionTypeInfoEntry(
+          selectedTransactionType: selectedTransactionType,
+          setTransactionType: setTransactionType,
+          transactionType: TransactionSpecialType.credit,
+          title: "lent".tr(),
+          childrenDescription: [
+            ListItem(
+              "lent-transaction-type-description-1".tr(),
+            ),
+            ListItem(
+              "lent-transaction-type-description-2".tr(),
+            ),
+            ListItem(
+              "lent-transaction-type-description-3".tr(),
+            ),
+          ],
+          onlyShowOneTransactionType: onlyShowOneTransactionType,
+        ),
+        TransactionTypeInfoEntry(
+          selectedTransactionType: selectedTransactionType,
+          setTransactionType: setTransactionType,
+          transactionType: TransactionSpecialType.debt,
+          title: "borrowed".tr(),
+          childrenDescription: [
+            ListItem(
+              "borrowed-transaction-type-description-1".tr(),
+            ),
+            ListItem(
+              "borrowed-transaction-type-description-2".tr(),
+            ),
+            ListItem(
+              "borrowed-transaction-type-description-3".tr(),
+            ),
+          ],
+          onlyShowOneTransactionType: onlyShowOneTransactionType,
+        ),
+        SizedBox(height: 13),
+        Tappable(
+          color: dynamicPastel(
+            context,
+            Theme.of(context).colorScheme.secondaryContainer,
+            amount: 0.5,
+          ),
+          borderRadius: 20,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 15),
+            child: Column(
+              children: [
+                SizedBox(height: 8),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: TextFont(
+                    maxLines: 5,
+                    fontSize: 16,
+                    textAlign: TextAlign.center,
+                    text: "mark-transaction-help-description".tr(),
+                  ),
+                ),
+                SizedBox(height: 18),
+                IgnorePointer(
+                  child: TransactionEntry(
+                    highlightActionButton: true,
+                    useHorizontalPaddingConstrained: false,
+                    openPage: Container(),
+                    transaction: Transaction(
+                      transactionPk: "-1",
+                      name: "",
+                      amount: 100,
+                      note: "",
+                      categoryFk: "-1",
+                      walletFk: appStateSettings["selectedWalletPk"],
+                      dateCreated: DateTime.now(),
+                      income: false,
+                      paid: false,
+                      skipPaid: false,
+                      type: TransactionSpecialType.upcoming,
                     ),
                   ),
-                  SizedBox(height: 18),
-                  IgnorePointer(
-                    child: TransactionEntry(
-                      highlightActionButton: true,
-                      useHorizontalPaddingConstrained: false,
-                      openPage: Container(),
-                      transaction: Transaction(
-                        transactionPk: "-1",
-                        name: "",
-                        amount: 100,
-                        note: "",
-                        categoryFk: "-1",
-                        walletFk: appStateSettings["selectedWalletPk"],
-                        dateCreated: DateTime.now(),
-                        income: false,
-                        paid: false,
-                        skipPaid: false,
-                        type: TransactionSpecialType.upcoming,
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 8),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      for (TransactionSpecialType type
-                          in TransactionSpecialType.values)
-                        IgnorePointer(
-                          child: TransactionEntryActionButton(
-                            transaction: Transaction(
-                              transactionPk: "-1",
-                              name: "",
-                              amount: 0,
-                              note: "",
-                              categoryFk: "-1",
-                              subCategoryFk: null,
-                              walletFk: "",
-                              dateCreated: DateTime.now(),
-                              income: false,
-                              paid: [
-                                TransactionSpecialType.credit,
-                                TransactionSpecialType.debt
-                              ].contains(type)
-                                  ? true
-                                  : false,
-                              skipPaid: false,
-                              type: type,
-                            ),
-                            iconColor: Theme.of(context).colorScheme.secondary,
+                ),
+                SizedBox(height: 8),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    for (TransactionSpecialType type
+                        in TransactionSpecialType.values)
+                      IgnorePointer(
+                        child: TransactionEntryActionButton(
+                          transaction: Transaction(
+                            transactionPk: "-1",
+                            name: "",
+                            amount: 0,
+                            note: "",
+                            categoryFk: "-1",
+                            subCategoryFk: null,
+                            walletFk: "",
+                            dateCreated: DateTime.now(),
+                            income: false,
+                            paid: [
+                              TransactionSpecialType.credit,
+                              TransactionSpecialType.debt
+                            ].contains(type)
+                                ? true
+                                : false,
+                            skipPaid: false,
+                            type: type,
                           ),
+                          iconColor: Theme.of(context).colorScheme.secondary,
                         ),
-                    ],
-                  ),
-                ],
-              ),
+                      ),
+                  ],
+                ),
+              ],
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
@@ -3178,6 +3238,7 @@ class TransactionTypeInfoEntry extends StatelessWidget {
   final String title;
   final IconData? icon;
   final TransactionSpecialType? transactionType;
+  final TransactionSpecialType? onlyShowOneTransactionType;
   final VoidCallback? onTap;
 
   TransactionTypeInfoEntry({
@@ -3188,40 +3249,46 @@ class TransactionTypeInfoEntry extends StatelessWidget {
     required this.title,
     this.icon,
     required this.transactionType,
+    this.onlyShowOneTransactionType,
     this.onTap,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 13),
-      child: Row(
-        children: [
-          Expanded(
-            child: OutlinedButtonStacked(
-              filled: selectedTransactionType == transactionType,
-              alignLeft: true,
-              alignBeside: true,
-              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-              text: title,
-              iconData: icon ?? getTransactionTypeIcon(transactionType),
-              onTap: onTap ??
-                  () {
-                    setTransactionType(transactionType);
-                    Navigator.pop(context);
-                  },
-              afterWidget: childrenDescription == null
-                  ? null
-                  : Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: childrenDescription ?? [],
-                    ),
+    if (onlyShowOneTransactionType == null ||
+        onlyShowOneTransactionType == transactionType) {
+      return Padding(
+        padding: const EdgeInsets.only(top: 13),
+        child: Row(
+          children: [
+            Expanded(
+              child: OutlinedButtonStacked(
+                filled: selectedTransactionType == transactionType,
+                alignLeft: true,
+                alignBeside: true,
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                text: title,
+                iconData: icon ?? getTransactionTypeIcon(transactionType),
+                onTap: onTap ??
+                    () {
+                      setTransactionType(transactionType);
+                      Navigator.pop(context);
+                    },
+                afterWidget: childrenDescription == null
+                    ? null
+                    : Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: childrenDescription ?? [],
+                      ),
+              ),
             ),
-          ),
-        ],
-      ),
-    );
+          ],
+        ),
+      );
+    } else {
+      return SizedBox.shrink();
+    }
   }
 }
 

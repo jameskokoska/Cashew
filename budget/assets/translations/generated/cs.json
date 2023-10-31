@@ -794,5 +794,7 @@
   "erase-synced-data-and-cloud-backups": "Vymazat synchronizace dat a záloh cloudu",
   "erase-cloud-data": "Vymazat cloudová data",
   "erase-cloud-data-description": "Přihlaste se k vašemu účtu Google a smažte zálohy umístěné pod „synchronizací“ a „zálohy“",
-  "add": "Přidat"
+  "add": "Přidat",
+  "transaction-type": "typ transakce",
+  "do-not-show-again": "Neukazujte znovu"
 }

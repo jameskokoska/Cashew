@@ -794,5 +794,7 @@
   "erase-synced-data-and-cloud-backups": "Slett synkroniserte data og sky -sikkerhetskopier",
   "erase-cloud-data": "Slett skydata",
   "erase-cloud-data-description": "Logg inn på Google -kontoen din og slett sikkerhetskopier som ligger under 'Sync' og 'Backups'",
-  "add": "Legg til"
+  "add": "Legg til",
+  "transaction-type": "Transaksjonstype",
+  "do-not-show-again": "Ikke vis igjen"
 }

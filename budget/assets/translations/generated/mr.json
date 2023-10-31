@@ -789,10 +789,12 @@
   "multiplier": "गुणक",
   "bill-splitter-multiplier-description": "बिल स्प्लिटरमधील प्रत्येक वस्तूला गुणाकार होईल असे मूल्य प्रविष्ट करा. प्रत्येक आयटमवर कर लागू केल्यास उपयुक्त.",
   "more-options": "अधिक पर्याय",
-  "cannot-display-graph-for-current-time-period": "सध्याच्या कालावधीसाठी आलेख प्रदर्शित करू शकत नाही.",
+  "cannot-display-graph-for-current-time-period": "चालू कालावधीसाठी आलेख प्रदर्शित करू शकत नाही.",
   "exclude-from-budget": "बजेटमधून वगळा",
   "erase-synced-data-and-cloud-backups": "समक्रमित डेटा आणि क्लाऊड बॅकअप मिटवा",
   "erase-cloud-data": "क्लाउड डेटा मिटवा",
   "erase-cloud-data-description": "आपल्या Google खात्यावर लॉग इन करा आणि 'समक्रमण' आणि 'बॅकअप' अंतर्गत स्थित बॅकअप हटवा",
-  "add": "जोडा"
+  "add": "जोडा",
+  "transaction-type": "व्यवहार प्रकार",
+  "do-not-show-again": "पुन्हा दर्शवू नका"
 }

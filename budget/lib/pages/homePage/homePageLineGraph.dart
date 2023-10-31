@@ -179,6 +179,10 @@ class PastSpendingGraph extends StatelessWidget {
                   //can be optimized...
                   double totalForDay = 0;
                   for (Transaction transaction in snapshot.data!) {
+                    // Remove balance correction transactions if not showing all transactions
+                    if (isIncome != null && transaction.categoryFk == "0") {
+                      continue;
+                    }
                     if (indexDay.year == transaction.dateCreated.year &&
                         indexDay.month == transaction.dateCreated.month &&
                         indexDay.day == transaction.dateCreated.day) {

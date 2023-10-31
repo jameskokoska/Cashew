@@ -794,5 +794,7 @@
   "erase-synced-data-and-cloud-backups": "Radera synkroniserade data och molnens säkerhetskopior",
   "erase-cloud-data": "Radera molndata",
   "erase-cloud-data-description": "Logga in på ditt Google -konto och ta bort säkerhetskopior som finns under 'Sync' och 'Backups'",
-  "add": "Lägg till"
+  "add": "Lägg till",
+  "transaction-type": "Överföringstyp",
+  "do-not-show-again": "Visa inte igen"
 }

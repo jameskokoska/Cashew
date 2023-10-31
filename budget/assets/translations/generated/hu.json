@@ -794,5 +794,7 @@
   "erase-synced-data-and-cloud-backups": "Törölje a szinkronizált adatok és a felhő biztonsági mentéseit",
   "erase-cloud-data": "Törölje a felhőadatokat",
   "erase-cloud-data-description": "Jelentkezzen be a Google -fiókjába, és törölje a „Sync” és a „Backups” alatt található biztonsági mentéseket",
-  "add": "Hozzáad"
+  "add": "Hozzáad",
+  "transaction-type": "Tranzakció Típusa",
+  "do-not-show-again": "Ne mutasd meg újra"
 }

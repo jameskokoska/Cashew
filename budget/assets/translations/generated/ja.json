@@ -794,5 +794,7 @@
   "erase-synced-data-and-cloud-backups": "同期したデータとクラウドバックアップを消去します",
   "erase-cloud-data": "クラウドデータを消去します",
   "erase-cloud-data-description": "Googleアカウントにログインし、「同期」と「バックアップ」の下にあるバックアップを削除します",
-  "add": "追加"
+  "add": "追加",
+  "transaction-type": "トランザクションタイプ",
+  "do-not-show-again": "二度と見せないでください"
 }
