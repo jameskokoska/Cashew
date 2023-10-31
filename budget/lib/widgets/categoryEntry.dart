@@ -38,7 +38,7 @@ class CategoryEntry extends StatelessWidget {
     this.todayPercent,
     this.subcategoriesWithTotalMap,
     this.expandSubcategories = true,
-    this.selectedCategoryPks = const [],
+    this.selectedSubCategoryPk,
     this.alwaysShow = false,
     this.isSubcategory = false,
   }) : super(key: key);
@@ -63,7 +63,7 @@ class CategoryEntry extends StatelessWidget {
   final double? todayPercent;
   final Map<String, List<CategoryWithTotal>>? subcategoriesWithTotalMap;
   final bool expandSubcategories;
-  final List<String> selectedCategoryPks;
+  final String? selectedSubCategoryPk;
   final bool alwaysShow;
   final bool isSubcategory;
 
@@ -344,8 +344,8 @@ class CategoryEntry extends StatelessWidget {
                         categorySpent: showIncomeExpenseIcons == true
                             ? subcategoryWithTotal.total
                             : subcategoryWithTotal.total.abs(),
-                        selected: selectedCategoryPks
-                            .contains(subcategoryWithTotal.category.categoryPk),
+                        selected: selectedSubCategoryPk ==
+                            subcategoryWithTotal.category.categoryPk,
                         allSelected: allSelected,
                         alwaysShow: selected,
                         isSubcategory: true,

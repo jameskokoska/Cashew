@@ -48,19 +48,18 @@ class PieChartWrapper extends StatelessWidget {
     Key? key,
     required this.data,
     required this.totalSpentAbsolute,
-    required this.addSelectedCategoryPk,
-    required this.removeSelectedCategoryPk,
-    required this.selectedCategoryPks,
+    required this.setSelectedCategory,
     required this.isPastBudget,
+    required this.pieChartDisplayStateKey,
     this.middleColor,
     this.percentLabelOnTop = false,
   }) : super(key: key);
   final List<CategoryWithTotal> data;
   final double totalSpentAbsolute;
-  final Function(String categoryPk) addSelectedCategoryPk;
-  final Function(String categoryPk) removeSelectedCategoryPk;
-  final List<String> selectedCategoryPks;
+  final Function(String categoryPk, TransactionCategory? category)
+      setSelectedCategory;
   final bool isPastBudget;
+  final GlobalKey<PieChartDisplayState>? pieChartDisplayStateKey;
   final Color? middleColor;
   final bool percentLabelOnTop;
 
@@ -88,9 +87,8 @@ class PieChartWrapper extends StatelessWidget {
           PieChartDisplay(
             data: dataFiltered,
             totalSpentAbsolute: totalSpentAbsolute,
-            addSelectedCategoryPk: addSelectedCategoryPk,
-            removeSelectedCategoryPk: removeSelectedCategoryPk,
-            selectedCategoryPks: selectedCategoryPks,
+            setSelectedCategory: setSelectedCategory,
+            key: pieChartDisplayStateKey,
             percentLabelOnTop: percentLabelOnTop,
           ),
           IgnorePointer(
@@ -130,16 +128,13 @@ class PieChartDisplay extends StatefulWidget {
     Key? key,
     required this.data,
     required this.totalSpentAbsolute,
-    required this.addSelectedCategoryPk,
-    required this.removeSelectedCategoryPk,
-    required this.selectedCategoryPks,
+    required this.setSelectedCategory,
     this.percentLabelOnTop = false,
   }) : super(key: key);
   final List<CategoryWithTotal> data;
   final double totalSpentAbsolute;
-  final Function(String categoryPk) addSelectedCategoryPk;
-  final Function(String categoryPk) removeSelectedCategoryPk;
-  final List<String> selectedCategoryPks;
+  final Function(String categoryPk, TransactionCategory? category)
+      setSelectedCategory;
   final bool percentLabelOnTop;
 
   @override
@@ -147,6 +142,7 @@ class PieChartDisplay extends StatefulWidget {
 }
 
 class PieChartDisplayState extends State<PieChartDisplay> {
+  int touchedIndex = -1;
   bool scaleIn = false;
   int showLabels = 0;
   @override
@@ -171,6 +167,29 @@ class PieChartDisplayState extends State<PieChartDisplay> {
     });
   }
 
+  void setTouchedIndex(index) {
+    setState(() {
+      touchedIndex = index;
+    });
+  }
+
+  void setTouchedCategoryPk(String? categoryPk) {
+    if (categoryPk == null) return;
+    int index = 0;
+    bool found = false;
+    for (CategoryWithTotal category in widget.data) {
+      if (category.category.categoryPk == categoryPk) {
+        found = true;
+        break;
+      }
+      index++;
+    }
+    if (found == false)
+      setTouchedIndex(-1);
+    else
+      setTouchedIndex(index);
+  }
+
   @override
   Widget build(BuildContext context) {
     return PinWheelReveal(
@@ -188,22 +207,26 @@ class PieChartDisplayState extends State<PieChartDisplay> {
                   pieTouchResponse.touchedSection == null) {
                 return;
               }
-              int touchedIndex =
-                  pieTouchResponse.touchedSection!.touchedSectionIndex;
-              if (touchedIndex == -1) return;
-              String categoryPk = widget.data[touchedIndex].category.categoryPk;
-              if (event.runtimeType == FlTapDownEvent) {
-                print("TOUCHEDcategoryPk" + categoryPk.toString());
-                print("selectedCategoryPks" +
-                    widget.selectedCategoryPks.toString());
-
-                if (widget.selectedCategoryPks.contains(categoryPk)) {
-                  widget.removeSelectedCategoryPk(categoryPk);
-                } else {
-                  widget.addSelectedCategoryPk(categoryPk);
-                }
+              if (event.runtimeType == FlTapDownEvent &&
+                  touchedIndex !=
+                      pieTouchResponse.touchedSection!.touchedSectionIndex) {
+                touchedIndex =
+                    pieTouchResponse.touchedSection!.touchedSectionIndex;
+                print("TOUCHED");
+                print(touchedIndex);
+                print(widget.data);
+                widget.setSelectedCategory(
+                    widget.data[touchedIndex].category.categoryPk,
+                    widget.data[touchedIndex].category);
+              } else if (event.runtimeType == FlTapDownEvent) {
+                touchedIndex = -1;
+                widget.setSelectedCategory("-1", null);
               } else if (event.runtimeType == FlLongPressMoveUpdate) {
-                widget.addSelectedCategoryPk(categoryPk);
+                touchedIndex =
+                    pieTouchResponse.touchedSection!.touchedSectionIndex;
+                widget.setSelectedCategory(
+                    widget.data[touchedIndex].category.categoryPk,
+                    widget.data[touchedIndex].category);
               }
             });
           }),
@@ -222,8 +245,7 @@ class PieChartDisplayState extends State<PieChartDisplay> {
 
   List<PieChartSectionData> showingSections() {
     return List.generate(widget.data.length, (i) {
-      final bool isTouched = widget.selectedCategoryPks
-          .contains(widget.data[i].category.categoryPk);
+      final bool isTouched = i == touchedIndex;
       final double radius = enableDoubleColumn(context) == false
           ? isTouched
               ? 106.0

@@ -79,7 +79,7 @@ class HomePageLineGraph extends StatelessWidget {
                                 budgetRange:
                                     getBudgetDate(budget, DateTime.now()),
                                 isPastBudget: false,
-                                selectedCategoryPks: [],
+                                selectedCategory: null,
                                 showPastSpending: false,
                               ),
                             ],

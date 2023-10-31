@@ -89,11 +89,11 @@ class HomePagePieChart extends StatelessWidget {
                                     right: showTopCategoriesLegend ? 20 : 0),
                                 child: PieChartWrapper(
                                   isPastBudget: true,
+                                  pieChartDisplayStateKey: null,
                                   data: snapshot.data!,
                                   totalSpentAbsolute: total,
-                                  addSelectedCategoryPk: (_) {},
-                                  removeSelectedCategoryPk: (_) {},
-                                  selectedCategoryPks: [],
+                                  setSelectedCategory:
+                                      (categoryPk, category) {},
                                   percentLabelOnTop: true,
                                 ),
                               ),

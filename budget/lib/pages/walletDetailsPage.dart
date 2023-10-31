@@ -66,7 +66,7 @@ class WalletDetailsPage extends StatefulWidget {
 }
 
 class _WalletDetailsPageState extends State<WalletDetailsPage> {
-  List<String> selectedCategoryPks = [];
+  TransactionCategory? selectedCategory;
   bool isIncome = false;
   late String listID = widget.wallet == null
       ? "All Spending Summary"
@@ -95,316 +95,316 @@ class _WalletDetailsPageState extends State<WalletDetailsPage> {
       },
       child: Stack(
         children: [
-          // PageFramework(
-          //   key: pageState,
-          //   listID: listID,
-          //   floatingActionButton: AnimateFABDelayed(
-          //     fab: Padding(
-          //       padding: EdgeInsets.only(
-          //           bottom: MediaQuery.viewPaddingOf(context).bottom),
-          //       child: FAB(
-          //         tooltip: "add-transaction".tr(),
-          //         openPage: AddTransactionPage(
-          //           routesToPopAfterDelete: RoutesToPopAfterDelete.One,
-          //         ),
-          //       ),
-          //     ),
-          //   ),
-          //   actions: [
-          //     if (widget.wallet != null)
-          //       CustomPopupMenuButton(
-          //         showButtons: enableDoubleColumn(context),
-          //         keepOutFirst: true,
-          //         items: [
-          //           DropdownItemMenu(
-          //             id: "edit-account",
-          //             label: "edit-account".tr(),
-          //             icon: appStateSettings["outlinedIcons"]
-          //                 ? Icons.edit_outlined
-          //                 : Icons.edit_rounded,
-          //             action: () {
-          //               pushRoute(
-          //                 context,
-          //                 AddWalletPage(
-          //                   wallet: widget.wallet,
-          //                   routesToPopAfterDelete: RoutesToPopAfterDelete.All,
-          //                 ),
-          //               );
-          //             },
-          //           ),
-          //           DropdownItemMenu(
-          //             id: "correct-total-balance",
-          //             label: "correct-total-balance".tr(),
-          //             icon: appStateSettings["outlinedIcons"]
-          //                 ? Icons.library_add_outlined
-          //                 : Icons.library_add_rounded,
-          //             action: () {
-          //               openBottomSheet(
-          //                 context,
-          //                 fullSnap: true,
-          //                 CorrectBalancePopup(wallet: widget.wallet!),
-          //               );
-          //             },
-          //           ),
-          //           DropdownItemMenu(
-          //             id: "transfer-balance",
-          //             label: "transfer-balance".tr(),
-          //             icon: appStateSettings["outlinedIcons"]
-          //                 ? Icons.compare_arrows_outlined
-          //                 : Icons.compare_arrows_rounded,
-          //             action: () {
-          //               openBottomSheet(
-          //                 context,
-          //                 fullSnap: true,
-          //                 TransferBalancePopup(wallet: widget.wallet!),
-          //               );
-          //             },
-          //           ),
-          //           DropdownItemMenu(
-          //             id: "decimal-precision",
-          //             label: "decimal-precision".tr(),
-          //             icon: appStateSettings["outlinedIcons"]
-          //                 ? Icons.more_horiz_outlined
-          //                 : Icons.more_horiz_rounded,
-          //             action: () {
-          //               openBottomSheet(
-          //                 context,
-          //                 PopupFramework(
-          //                   title: "decimal-precision".tr(),
-          //                   child: SelectAmountValue(
-          //                     amountPassed: widget.wallet!.decimals.toString(),
-          //                     setSelectedAmount: (amount, _) async {
-          //                       int selectedDecimals = amount.toInt();
-          //                       if (amount > 10) {
-          //                         selectedDecimals = 10;
-          //                       } else if (amount < 0) {
-          //                         selectedDecimals = 0;
-          //                       }
-          //                       TransactionWallet wallet = await database
-          //                           .getWalletInstance(widget.wallet!.walletPk);
-          //                       await database.createOrUpdateWallet(wallet
-          //                           .copyWith(decimals: selectedDecimals));
-          //                     },
-          //                     next: () async {
-          //                       Navigator.pop(context);
-          //                     },
-          //                     nextLabel: "set-amount".tr(),
-          //                   ),
-          //                 ),
-          //               );
-          //             },
-          //           ),
-          //         ],
-          //       ),
-          //     if (widget.wallet == null)
-          //       CustomPopupMenuButton(
-          //         showButtons: enableDoubleColumn(context),
-          //         keepOutFirst: true,
-          //         items: [
-          //           DropdownItemMenu(
-          //             id: "select-period",
-          //             label: "select-period-tooltip".tr(),
-          //             icon: appStateSettings["outlinedIcons"]
-          //                 ? Icons.timelapse_outlined
-          //                 : Icons.timelapse_rounded,
-          //             action: () async {
-          //               await openBottomSheet(
-          //                 context,
-          //                 PopupFramework(
-          //                   title: "select-period".tr(),
-          //                   child: PeriodCyclePicker(),
-          //                 ),
-          //               );
-          //               setState(() {});
-          //               homePageStateKey.currentState?.refreshState();
-          //             },
-          //           ),
-          //         ],
-          //       ),
-          //   ],
-          //   dragDownToDismiss: true,
-          //   title: widget.wallet == null
-          //       ? "all-spending".tr()
-          //       : widget.wallet!.name,
-          //   slivers: [
-          //     SliverToBoxAdapter(
-          //       child: Column(
-          //         children: [
-          //           SizedBox(height: 10),
-          //           Padding(
-          //             padding: const EdgeInsets.only(
-          //                 bottom: 13, left: 13, right: 13),
-          //             child: Padding(
-          //               padding: EdgeInsets.symmetric(
-          //                   horizontal:
-          //                       getHorizontalPaddingConstrained(context)),
-          //               child: Row(
-          //                 crossAxisAlignment: CrossAxisAlignment.center,
-          //                 mainAxisAlignment: MainAxisAlignment.center,
-          //                 children: [
-          //                   Expanded(
-          //                     child: TransactionsAmountBox(
-          //                       label: "net-total".tr(),
-          //                       absolute: false,
-          //                       currencyKey: Provider.of<AllWallets>(context)
-          //                           .indexedByPk[
-          //                               appStateSettings["selectedWalletPk"]]
-          //                           ?.currency,
-          //                       amountStream: database.watchTotalOfWallet(
-          //                         walletPk != null ? [walletPk] : null,
-          //                         isIncome: null,
-          //                         allWallets: Provider.of<AllWallets>(context),
-          //                         followCustomPeriodCycle:
-          //                             widget.wallet == null,
-          //                       ),
-          //                       textColor: getColor(context, "black"),
-          //                       transactionsAmountStream: database
-          //                           .watchTotalCountOfTransactionsInWallet(
-          //                         walletPk != null ? [walletPk] : null,
-          //                         isIncome: null,
-          //                         followCustomPeriodCycle:
-          //                             widget.wallet == null,
-          //                       ),
-          //                       openPage: TransactionsSearchPage(
-          //                         initialFilters: SearchFilters(
-          //                           walletPks: widget.wallet == null
-          //                               ? []
-          //                               : [widget.wallet?.walletPk ?? ""],
-          //                         ),
-          //                       ),
-          //                     ),
-          //                   ),
-          //                 ],
-          //               ),
-          //             ),
-          //           ),
-          //           Padding(
-          //             padding: const EdgeInsets.only(
-          //                 bottom: 13, left: 13, right: 13),
-          //             child: Padding(
-          //               padding: EdgeInsets.symmetric(
-          //                   horizontal:
-          //                       getHorizontalPaddingConstrained(context)),
-          //               child: Row(
-          //                 crossAxisAlignment: CrossAxisAlignment.center,
-          //                 mainAxisAlignment: MainAxisAlignment.center,
-          //                 children: [
-          //                   Expanded(
-          //                     child: TransactionsAmountBox(
-          //                       label: "expense".tr(),
-          //                       amountStream: database.watchTotalOfWallet(
-          //                         walletPk != null ? [walletPk] : null,
-          //                         isIncome: false,
-          //                         allWallets: Provider.of<AllWallets>(context),
-          //                         followCustomPeriodCycle:
-          //                             widget.wallet == null,
-          //                       ),
-          //                       textColor: getColor(context, "expenseAmount"),
-          //                       transactionsAmountStream: database
-          //                           .watchTotalCountOfTransactionsInWallet(
-          //                         walletPk != null ? [walletPk] : null,
-          //                         isIncome: false,
-          //                         followCustomPeriodCycle:
-          //                             widget.wallet == null,
-          //                       ),
-          //                       openPage: TransactionsSearchPage(
-          //                         initialFilters: SearchFilters(
-          //                           expenseIncome: [ExpenseIncome.expense],
-          //                           walletPks: widget.wallet == null
-          //                               ? []
-          //                               : [widget.wallet?.walletPk ?? ""],
-          //                         ),
-          //                       ),
-          //                     ),
-          //                   ),
-          //                   SizedBox(width: 13),
-          //                   Expanded(
-          //                     child: TransactionsAmountBox(
-          //                       label: "income".tr(),
-          //                       amountStream: database.watchTotalOfWallet(
-          //                         walletPk == null ? null : [walletPk],
-          //                         isIncome: true,
-          //                         allWallets: Provider.of<AllWallets>(context),
-          //                         followCustomPeriodCycle:
-          //                             widget.wallet == null,
-          //                       ),
-          //                       textColor: getColor(context, "incomeAmount"),
-          //                       transactionsAmountStream: database
-          //                           .watchTotalCountOfTransactionsInWallet(
-          //                         walletPk == null ? null : [walletPk],
-          //                         isIncome: true,
-          //                         followCustomPeriodCycle:
-          //                             widget.wallet == null,
-          //                       ),
-          //                       openPage: TransactionsSearchPage(
-          //                         initialFilters: SearchFilters(
-          //                           expenseIncome: [ExpenseIncome.income],
-          //                           walletPks: widget.wallet == null
-          //                               ? []
-          //                               : [widget.wallet?.walletPk ?? ""],
-          //                         ),
-          //                       ),
-          //                     ),
-          //                   ),
-          //                 ],
-          //               ),
-          //             ),
-          //           ),
-          //           WalletDetailsLineGraph(
-          //             walletPks: widget.wallet == null
-          //                 ? []
-          //                 : [widget.wallet!.walletPk],
-          //             followCustomPeriodCycle: widget.wallet == null,
-          //           ),
-          //           WalletCategoryPieChart(
-          //             wallet: widget.wallet,
-          //             walletColorScheme: walletColorScheme,
-          //             onSelectedCategory: (TransactionCategory? category) {
-          //               // pageState.currentState?.scrollTo(500);
-          //               setState(() {
-          //                 selectedCategory = category;
-          //               });
-          //             },
-          //             onSelectedIncome: (bool isIncome) {
-          //               setState(() {
-          //                 this.isIncome = isIncome;
-          //               });
-          //             },
-          //           ),
-          //         ],
-          //       ),
-          //     ),
-          //     if (selectedCategory != null)
-          //       TransactionEntries(
-          //         null,
-          //         null,
-          //         categoryFks: selectedCategory != null
-          //             ? [selectedCategory!.categoryPk]
-          //             : [],
-          //         walletFks: walletPk == null ? [] : [walletPk],
-          //         limit: selectedCategory == null ? 0 : 10,
-          //         listID: listID,
-          //         showNoResults: false,
-          //         income: isIncome,
-          //       ),
-          //     selectedCategory == null
-          //         ? SliverToBoxAdapter(
-          //             child: SizedBox.shrink(),
-          //           )
-          //         : SliverToBoxAdapter(
-          //             child: Center(
-          //                 child: Padding(
-          //               padding: const EdgeInsets.symmetric(vertical: 7),
-          //               child: ViewAllTransactionsButton(
-          //                 onPress: () {
-          //                   pushRoute(context, TransactionsSearchPage());
-          //                 },
-          //               ),
-          //             )),
-          //           ),
-          //     SliverToBoxAdapter(child: SizedBox(height: 75)),
-          //   ],
-          // ),
+          PageFramework(
+            key: pageState,
+            listID: listID,
+            floatingActionButton: AnimateFABDelayed(
+              fab: Padding(
+                padding: EdgeInsets.only(
+                    bottom: MediaQuery.viewPaddingOf(context).bottom),
+                child: FAB(
+                  tooltip: "add-transaction".tr(),
+                  openPage: AddTransactionPage(
+                    routesToPopAfterDelete: RoutesToPopAfterDelete.One,
+                  ),
+                ),
+              ),
+            ),
+            actions: [
+              if (widget.wallet != null)
+                CustomPopupMenuButton(
+                  showButtons: enableDoubleColumn(context),
+                  keepOutFirst: true,
+                  items: [
+                    DropdownItemMenu(
+                      id: "edit-account",
+                      label: "edit-account".tr(),
+                      icon: appStateSettings["outlinedIcons"]
+                          ? Icons.edit_outlined
+                          : Icons.edit_rounded,
+                      action: () {
+                        pushRoute(
+                          context,
+                          AddWalletPage(
+                            wallet: widget.wallet,
+                            routesToPopAfterDelete: RoutesToPopAfterDelete.All,
+                          ),
+                        );
+                      },
+                    ),
+                    DropdownItemMenu(
+                      id: "correct-total-balance",
+                      label: "correct-total-balance".tr(),
+                      icon: appStateSettings["outlinedIcons"]
+                          ? Icons.library_add_outlined
+                          : Icons.library_add_rounded,
+                      action: () {
+                        openBottomSheet(
+                          context,
+                          fullSnap: true,
+                          CorrectBalancePopup(wallet: widget.wallet!),
+                        );
+                      },
+                    ),
+                    DropdownItemMenu(
+                      id: "transfer-balance",
+                      label: "transfer-balance".tr(),
+                      icon: appStateSettings["outlinedIcons"]
+                          ? Icons.compare_arrows_outlined
+                          : Icons.compare_arrows_rounded,
+                      action: () {
+                        openBottomSheet(
+                          context,
+                          fullSnap: true,
+                          TransferBalancePopup(wallet: widget.wallet!),
+                        );
+                      },
+                    ),
+                    DropdownItemMenu(
+                      id: "decimal-precision",
+                      label: "decimal-precision".tr(),
+                      icon: appStateSettings["outlinedIcons"]
+                          ? Icons.more_horiz_outlined
+                          : Icons.more_horiz_rounded,
+                      action: () {
+                        openBottomSheet(
+                          context,
+                          PopupFramework(
+                            title: "decimal-precision".tr(),
+                            child: SelectAmountValue(
+                              amountPassed: widget.wallet!.decimals.toString(),
+                              setSelectedAmount: (amount, _) async {
+                                int selectedDecimals = amount.toInt();
+                                if (amount > 10) {
+                                  selectedDecimals = 10;
+                                } else if (amount < 0) {
+                                  selectedDecimals = 0;
+                                }
+                                TransactionWallet wallet = await database
+                                    .getWalletInstance(widget.wallet!.walletPk);
+                                await database.createOrUpdateWallet(wallet
+                                    .copyWith(decimals: selectedDecimals));
+                              },
+                              next: () async {
+                                Navigator.pop(context);
+                              },
+                              nextLabel: "set-amount".tr(),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ],
+                ),
+              if (widget.wallet == null)
+                CustomPopupMenuButton(
+                  showButtons: enableDoubleColumn(context),
+                  keepOutFirst: true,
+                  items: [
+                    DropdownItemMenu(
+                      id: "select-period",
+                      label: "select-period-tooltip".tr(),
+                      icon: appStateSettings["outlinedIcons"]
+                          ? Icons.timelapse_outlined
+                          : Icons.timelapse_rounded,
+                      action: () async {
+                        await openBottomSheet(
+                          context,
+                          PopupFramework(
+                            title: "select-period".tr(),
+                            child: PeriodCyclePicker(),
+                          ),
+                        );
+                        setState(() {});
+                        homePageStateKey.currentState?.refreshState();
+                      },
+                    ),
+                  ],
+                ),
+            ],
+            dragDownToDismiss: true,
+            title: widget.wallet == null
+                ? "all-spending".tr()
+                : widget.wallet!.name,
+            slivers: [
+              SliverToBoxAdapter(
+                child: Column(
+                  children: [
+                    SizedBox(height: 10),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                          bottom: 13, left: 13, right: 13),
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal:
+                                getHorizontalPaddingConstrained(context)),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Expanded(
+                              child: TransactionsAmountBox(
+                                label: "net-total".tr(),
+                                absolute: false,
+                                currencyKey: Provider.of<AllWallets>(context)
+                                    .indexedByPk[
+                                        appStateSettings["selectedWalletPk"]]
+                                    ?.currency,
+                                amountStream: database.watchTotalOfWallet(
+                                  walletPk != null ? [walletPk] : null,
+                                  isIncome: null,
+                                  allWallets: Provider.of<AllWallets>(context),
+                                  followCustomPeriodCycle:
+                                      widget.wallet == null,
+                                ),
+                                textColor: getColor(context, "black"),
+                                transactionsAmountStream: database
+                                    .watchTotalCountOfTransactionsInWallet(
+                                  walletPk != null ? [walletPk] : null,
+                                  isIncome: null,
+                                  followCustomPeriodCycle:
+                                      widget.wallet == null,
+                                ),
+                                openPage: TransactionsSearchPage(
+                                  initialFilters: SearchFilters(
+                                    walletPks: widget.wallet == null
+                                        ? []
+                                        : [widget.wallet?.walletPk ?? ""],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                          bottom: 13, left: 13, right: 13),
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal:
+                                getHorizontalPaddingConstrained(context)),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Expanded(
+                              child: TransactionsAmountBox(
+                                label: "expense".tr(),
+                                amountStream: database.watchTotalOfWallet(
+                                  walletPk != null ? [walletPk] : null,
+                                  isIncome: false,
+                                  allWallets: Provider.of<AllWallets>(context),
+                                  followCustomPeriodCycle:
+                                      widget.wallet == null,
+                                ),
+                                textColor: getColor(context, "expenseAmount"),
+                                transactionsAmountStream: database
+                                    .watchTotalCountOfTransactionsInWallet(
+                                  walletPk != null ? [walletPk] : null,
+                                  isIncome: false,
+                                  followCustomPeriodCycle:
+                                      widget.wallet == null,
+                                ),
+                                openPage: TransactionsSearchPage(
+                                  initialFilters: SearchFilters(
+                                    expenseIncome: [ExpenseIncome.expense],
+                                    walletPks: widget.wallet == null
+                                        ? []
+                                        : [widget.wallet?.walletPk ?? ""],
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(width: 13),
+                            Expanded(
+                              child: TransactionsAmountBox(
+                                label: "income".tr(),
+                                amountStream: database.watchTotalOfWallet(
+                                  walletPk == null ? null : [walletPk],
+                                  isIncome: true,
+                                  allWallets: Provider.of<AllWallets>(context),
+                                  followCustomPeriodCycle:
+                                      widget.wallet == null,
+                                ),
+                                textColor: getColor(context, "incomeAmount"),
+                                transactionsAmountStream: database
+                                    .watchTotalCountOfTransactionsInWallet(
+                                  walletPk == null ? null : [walletPk],
+                                  isIncome: true,
+                                  followCustomPeriodCycle:
+                                      widget.wallet == null,
+                                ),
+                                openPage: TransactionsSearchPage(
+                                  initialFilters: SearchFilters(
+                                    expenseIncome: [ExpenseIncome.income],
+                                    walletPks: widget.wallet == null
+                                        ? []
+                                        : [widget.wallet?.walletPk ?? ""],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    WalletDetailsLineGraph(
+                      walletPks: widget.wallet == null
+                          ? []
+                          : [widget.wallet!.walletPk],
+                      followCustomPeriodCycle: widget.wallet == null,
+                    ),
+                    WalletCategoryPieChart(
+                      wallet: widget.wallet,
+                      walletColorScheme: walletColorScheme,
+                      onSelectedCategory: (TransactionCategory? category) {
+                        // pageState.currentState?.scrollTo(500);
+                        setState(() {
+                          selectedCategory = category;
+                        });
+                      },
+                      onSelectedIncome: (bool isIncome) {
+                        setState(() {
+                          this.isIncome = isIncome;
+                        });
+                      },
+                    ),
+                  ],
+                ),
+              ),
+              if (selectedCategory != null)
+                TransactionEntries(
+                  null,
+                  null,
+                  categoryFks: selectedCategory != null
+                      ? [selectedCategory!.categoryPk]
+                      : [],
+                  walletFks: walletPk == null ? [] : [walletPk],
+                  limit: selectedCategory == null ? 0 : 10,
+                  listID: listID,
+                  showNoResults: false,
+                  income: isIncome,
+                ),
+              selectedCategory == null
+                  ? SliverToBoxAdapter(
+                      child: SizedBox.shrink(),
+                    )
+                  : SliverToBoxAdapter(
+                      child: Center(
+                          child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 7),
+                        child: ViewAllTransactionsButton(
+                          onPress: () {
+                            pushRoute(context, TransactionsSearchPage());
+                          },
+                        ),
+                      )),
+                    ),
+              SliverToBoxAdapter(child: SizedBox(height: 75)),
+            ],
+          ),
           SelectedTransactionsAppBar(
             pageID: listID,
           ),
@@ -418,14 +418,14 @@ class WalletCategoryPieChart extends StatefulWidget {
   const WalletCategoryPieChart({
     required this.wallet,
     required this.walletColorScheme,
-    required this.onSelectedCategoryPks,
+    required this.onSelectedCategory,
     required this.onSelectedIncome,
     super.key,
   });
 
   final TransactionWallet? wallet;
   final ColorScheme walletColorScheme;
-  final Function(List<String>) onSelectedCategoryPks;
+  final Function(TransactionCategory?) onSelectedCategory;
   final Function(bool) onSelectedIncome;
 
   @override
@@ -433,13 +433,18 @@ class WalletCategoryPieChart extends StatefulWidget {
 }
 
 class _WalletCategoryPieChartState extends State<WalletCategoryPieChart> {
-  List<String> selectedCategoryPks = [];
+  TransactionCategory? selectedCategory = null;
   bool isIncome = false;
+  GlobalKey<PieChartDisplayState> _pieChartDisplayStateKey = GlobalKey();
   bool showAllSubcategories = appStateSettings["showAllSubcategories"];
 
   void toggleAllSubcategories() {
     setState(() {
       showAllSubcategories = !showAllSubcategories;
+    });
+    Future.delayed(Duration(milliseconds: 10), () {
+      _pieChartDisplayStateKey.currentState!
+          .setTouchedCategoryPk(selectedCategory?.categoryPk);
     });
 
     updateSettings("showAllSubcategories", showAllSubcategories,
@@ -467,10 +472,11 @@ class _WalletCategoryPieChartState extends State<WalletCategoryPieChart> {
                   onTabChanged: (income) {
                     setState(() {
                       isIncome = income;
-                      selectedCategoryPks = [];
+                      selectedCategory = null;
                     });
+                    _pieChartDisplayStateKey.currentState!.setTouchedIndex(-1);
                     widget.onSelectedIncome(income);
-                    widget.onSelectedCategoryPks(selectedCategoryPks);
+                    widget.onSelectedCategory(selectedCategory);
                   },
                   initialTabIsIncome: false,
                 ),
@@ -497,93 +503,102 @@ class _WalletCategoryPieChartState extends State<WalletCategoryPieChart> {
             includeAllSubCategories: true,
           ),
           builder: (context, snapshot) {
-            // if (snapshot.hasData) {
-            //   TotalSpentCategoriesSummary s = watchTotalSpentInTimeRangeHelper(
-            //       dataInput: snapshot.data ?? [],
-            //       showAllSubcategories: showAllSubcategories);
-            //   List<Widget> categoryEntries = [];
-            //   snapshot.data!.asMap().forEach((index, category) {
-            //     categoryEntries.add(
-            //       CategoryEntry(
-            //         selectedSubCategoryPk: selectedCategory?.categoryPk,
-            //         expandSubcategories: showAllSubcategories ||
-            //             category.category.categoryPk ==
-            //                 selectedCategory?.categoryPk ||
-            //             category.category.categoryPk ==
-            //                 selectedCategory?.mainCategoryPk,
-            //         subcategoriesWithTotalMap:
-            //             s.subCategorySpendingIndexedByMainCategoryPk,
-            //         extraText: isIncome ? "of-income".tr() : "of-expense".tr(),
-            //         budgetColorScheme: widget.walletColorScheme,
-            //         category: category.category,
-            //         totalSpentAbsolute: s.totalSpentAbsolute,
-            //         transactionCount: category.transactionCount,
-            //         categorySpent: category.total,
-            //         onTap: (TransactionCategory tappedCategory, _) {
-            //           if (selectedCategory?.categoryPk ==
-            //               tappedCategory.categoryPk) {
-            //             setState(() {
-            //               selectedCategory = null;
-            //             });
-            //           } else {
-            //             if (showAllSubcategories ||
-            //                 tappedCategory.mainCategoryPk == null) {
-            //               setState(() {
-            //                 selectedCategory = tappedCategory;
-            //               });
-            //             } else {
-            //               // We are tapping a subcategoryEntry and it is not in the pie chart
-            //               // because showAllSubcategories is false and mainCategoryPk is not null
-            //               setState(() {
-            //                 selectedCategory = tappedCategory;
-            //               });
-            //             }
-            //           }
-            //           widget.onSelectedCategoryPks(selectedCategoryPks);
-            //         },
-            //         selected: category.category.categoryPk ==
-            //                 selectedCategory?.mainCategoryPk ||
-            //             selectedCategory?.categoryPk ==
-            //                 category.category.categoryPk,
-            //         allSelected: selectedCategory == null,
-            //         showIncomeExpenseIcons: true,
-            //       ),
-            //     );
-            //   });
-            //   return Column(
-            //     children: [
-            //       SizedBox(height: 30),
-            //       PieChartWrapper(
-            //         isPastBudget: true,
-            //         data: s.dataFilterUnassignedTransactions,
-            //         totalSpentAbsolute: s.totalSpentAbsolute,
-            //         setSelectedCategoryPks: (categoryPks) async {
-            //           setState(() {
-            //             selectedCategoryPks = categoryPks;
-            //           });
-            //           widget.onSelectedCategoryPks(selectedCategoryPks);
-            //         },
-            //       ),
-            //       PieChartOptions(
-            //         hasSubCategories: s.hasSubCategories,
-            //         selectedCategoryPks: selectedCategoryPks,
-            //         onClearSelection: () {
-            //           setState(() {
-            //             selectedCategoryPks = [];
-            //           });
-
-            //           widget.onSelectedCategoryPks(selectedCategoryPks);
-            //         },
-            //         onEditSpendingGoals: null,
-            //         toggleAllSubCategories: toggleAllSubcategories,
-            //         colorScheme: Theme.of(context).colorScheme,
-            //         showAllSubcategories: showAllSubcategories,
-            //       ),
-            //       ...categoryEntries,
-            //       SizedBox(height: 10),
-            //     ],
-            //   );
-            // }
+            if (snapshot.hasData) {
+              TotalSpentCategoriesSummary s = watchTotalSpentInTimeRangeHelper(
+                  dataInput: snapshot.data ?? [],
+                  showAllSubcategories: showAllSubcategories);
+              List<Widget> categoryEntries = [];
+              snapshot.data!.asMap().forEach((index, category) {
+                categoryEntries.add(
+                  CategoryEntry(
+                    selectedSubCategoryPk: selectedCategory?.categoryPk,
+                    expandSubcategories: showAllSubcategories ||
+                        category.category.categoryPk ==
+                            selectedCategory?.categoryPk ||
+                        category.category.categoryPk ==
+                            selectedCategory?.mainCategoryPk,
+                    subcategoriesWithTotalMap:
+                        s.subCategorySpendingIndexedByMainCategoryPk,
+                    extraText: isIncome ? "of-income".tr() : "of-expense".tr(),
+                    budgetColorScheme: widget.walletColorScheme,
+                    category: category.category,
+                    totalSpentAbsolute: s.totalSpentAbsolute,
+                    transactionCount: category.transactionCount,
+                    categorySpent: category.total,
+                    onTap: (TransactionCategory tappedCategory, _) {
+                      if (selectedCategory?.categoryPk ==
+                          tappedCategory.categoryPk) {
+                        setState(() {
+                          selectedCategory = null;
+                        });
+                        _pieChartDisplayStateKey.currentState!
+                            .setTouchedIndex(-1);
+                      } else {
+                        if (showAllSubcategories ||
+                            tappedCategory.mainCategoryPk == null) {
+                          setState(() {
+                            selectedCategory = tappedCategory;
+                          });
+                          _pieChartDisplayStateKey.currentState!
+                              .setTouchedCategoryPk(tappedCategory.categoryPk);
+                        } else {
+                          // We are tapping a subcategoryEntry and it is not in the pie chart
+                          // because showAllSubcategories is false and mainCategoryPk is not null
+                          setState(() {
+                            selectedCategory = tappedCategory;
+                          });
+                          _pieChartDisplayStateKey.currentState!
+                              .setTouchedCategoryPk(
+                                  tappedCategory.mainCategoryPk);
+                        }
+                      }
+                      widget.onSelectedCategory(selectedCategory);
+                    },
+                    selected: category.category.categoryPk ==
+                            selectedCategory?.mainCategoryPk ||
+                        selectedCategory?.categoryPk ==
+                            category.category.categoryPk,
+                    allSelected: selectedCategory == null,
+                    showIncomeExpenseIcons: true,
+                  ),
+                );
+              });
+              return Column(
+                children: [
+                  SizedBox(height: 30),
+                  PieChartWrapper(
+                    isPastBudget: true,
+                    pieChartDisplayStateKey: _pieChartDisplayStateKey,
+                    data: s.dataFilterUnassignedTransactions,
+                    totalSpentAbsolute: s.totalSpentAbsolute,
+                    setSelectedCategory: (categoryPk, category) async {
+                      setState(() {
+                        selectedCategory = category;
+                      });
+                      widget.onSelectedCategory(selectedCategory);
+                    },
+                  ),
+                  PieChartOptions(
+                    hasSubCategories: s.hasSubCategories,
+                    selectedCategory: selectedCategory,
+                    onClearSelection: () {
+                      setState(() {
+                        selectedCategory = null;
+                      });
+                      _pieChartDisplayStateKey.currentState!
+                          .setTouchedIndex(-1);
+                      widget.onSelectedCategory(selectedCategory);
+                    },
+                    onEditSpendingGoals: null,
+                    toggleAllSubCategories: toggleAllSubcategories,
+                    colorScheme: Theme.of(context).colorScheme,
+                    showAllSubcategories: showAllSubcategories,
+                  ),
+                  ...categoryEntries,
+                  SizedBox(height: 10),
+                ],
+              );
+            }
             return SizedBox.shrink();
           },
         ),

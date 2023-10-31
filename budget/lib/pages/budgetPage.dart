@@ -95,7 +95,9 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
   double budgetHeaderHeight = 0;
   String? selectedMember = null;
   bool showAllSubcategories = appStateSettings["showAllSubcategories"];
-  List<String> selectedCategoryPks = [];
+  TransactionCategory? selectedCategory =
+      null; //We shouldn't always rely on this, if for example the user changes the category and we are still on this page. But for less important info and O(1) we can reference it quickly.
+  GlobalKey<PieChartDisplayState> _pieChartDisplayStateKey = GlobalKey();
 
   @override
   void initState() {
@@ -108,6 +110,10 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
   void toggleAllSubcategories() {
     setState(() {
       showAllSubcategories = !showAllSubcategories;
+    });
+    Future.delayed(Duration(milliseconds: 10), () {
+      _pieChartDisplayStateKey.currentState!
+          .setTouchedCategoryPk(selectedCategory?.categoryPk);
     });
 
     updateSettings("showAllSubcategories", showAllSubcategories,
@@ -132,19 +138,26 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
               ),
               borderRadius: BorderRadius.circular(200)),
           child: PieChartWrapper(
+            pieChartDisplayStateKey: _pieChartDisplayStateKey,
             data: dataFilterUnassignedTransactions,
             totalSpentAbsolute: totalSpentAbsolute,
-            addSelectedCategoryPk: (categoryPk) {
+            setSelectedCategory: (categoryPk, category) async {
               setState(() {
-                selectedCategoryPks.add(categoryPk);
+                selectedCategory = category;
               });
+              // If we want to select the subcategories main category when tapped
+              // if (category?.mainCategoryPk != null) {
+              //   TransactionCategory mainCategory = await database
+              //       .getCategoryInstance(category!.mainCategoryPk!);
+              //   setState(() {
+              //     selectedCategory = mainCategory;
+              //   });
+              // } else {
+              //   setState(() {
+              //     selectedCategory = category;
+              //   });
+              // }
             },
-            removeSelectedCategoryPk: (categoryPk) {
-              setState(() {
-                selectedCategoryPks.remove(categoryPk);
-              });
-            },
-            selectedCategoryPks: selectedCategoryPks,
             isPastBudget: widget.isPastBudget ?? false,
             middleColor: appStateSettings["materialYou"]
                 ? dynamicPastel(context, budgetColorScheme.primary,
@@ -154,11 +167,12 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
         ),
         PieChartOptions(
           hasSubCategories: hasSubCategories,
-          selectedCategoryPks: selectedCategoryPks,
+          selectedCategory: selectedCategory,
           onClearSelection: () {
             setState(() {
-              selectedCategoryPks = [];
+              selectedCategory = null;
             });
+            _pieChartDisplayStateKey.currentState!.setTouchedIndex(-1);
           },
           colorScheme: budgetColorScheme,
           onEditSpendingGoals: () {
@@ -380,13 +394,12 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                       (index, category) {
                         categoryEntries.add(
                           CategoryEntry(
-                            selectedCategoryPks: selectedCategoryPks,
-                            expandSubcategories: showAllSubcategories,
-                            //  ||
-                            //     category.category.categoryPk ==
-                            //         selectedCategory?.categoryPk ||
-                            //     category.category.categoryPk ==
-                            //         selectedCategory?.mainCategoryPk,
+                            selectedSubCategoryPk: selectedCategory?.categoryPk,
+                            expandSubcategories: showAllSubcategories ||
+                                category.category.categoryPk ==
+                                    selectedCategory?.categoryPk ||
+                                category.category.categoryPk ==
+                                    selectedCategory?.mainCategoryPk,
                             subcategoriesWithTotalMap:
                                 s.subCategorySpendingIndexedByMainCategoryPk,
                             todayPercent: todayPercent,
@@ -419,36 +432,39 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                                 ? category.total
                                 : category.total.abs(),
                             onTap: (TransactionCategory tappedCategory, _) {
-                              if (selectedCategoryPks
-                                  .contains(tappedCategory.categoryPk)) {
+                              if (selectedCategory?.categoryPk ==
+                                  tappedCategory.categoryPk) {
                                 setState(() {
-                                  selectedCategoryPks
-                                      .remove(tappedCategory.categoryPk);
+                                  selectedCategory = null;
                                 });
+                                _pieChartDisplayStateKey.currentState!
+                                    .setTouchedIndex(-1);
                               } else {
                                 if (showAllSubcategories ||
                                     tappedCategory.mainCategoryPk == null) {
                                   setState(() {
-                                    selectedCategoryPks
-                                        .add(tappedCategory.categoryPk);
+                                    selectedCategory = tappedCategory;
                                   });
+                                  _pieChartDisplayStateKey.currentState!
+                                      .setTouchedCategoryPk(
+                                          tappedCategory.categoryPk);
                                 } else {
                                   // We are tapping a subcategoryEntry and it is not in the pie chart
                                   // because showAllSubcategories is false and mainCategoryPk is not null
                                   setState(() {
-                                    selectedCategoryPks
-                                        .add(tappedCategory.categoryPk);
+                                    selectedCategory = tappedCategory;
                                   });
+                                  _pieChartDisplayStateKey.currentState!
+                                      .setTouchedCategoryPk(
+                                          tappedCategory.mainCategoryPk);
                                 }
                               }
                             },
-                            selected: selectedCategoryPks
-                                .contains(category.category.categoryPk),
-                            // category.category.categoryPk ==
-                            //       selectedCategory?.mainCategoryPk ||
-                            //   selectedCategory?.categoryPk ==
-                            //       category.category.categoryPk,
-                            allSelected: selectedCategoryPks.isEmpty,
+                            selected: category.category.categoryPk ==
+                                    selectedCategory?.mainCategoryPk ||
+                                selectedCategory?.categoryPk ==
+                                    category.category.categoryPk,
+                            allSelected: selectedCategory == null,
                           ),
                         );
                       },
@@ -531,8 +547,10 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                                   setSelectedMember: (member) {
                                     setState(() {
                                       selectedMember = member;
-                                      selectedCategoryPks = [];
+                                      selectedCategory = null;
                                     });
+                                    _pieChartDisplayStateKey.currentState!
+                                        .setTouchedIndex(-1);
                                   },
                                 )
                               : SizedBox.shrink(),
@@ -562,7 +580,7 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
               ),
               SliverToBoxAdapter(
                 child: AnimatedExpanded(
-                    expand: selectedCategoryPks.isNotEmpty,
+                    expand: selectedCategory != null,
                     child: Padding(
                       key: ValueKey(1),
                       padding: const EdgeInsets.only(
@@ -597,7 +615,7 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                       budget: widget.budget,
                       dateForRange: dateForRange,
                       isPastBudget: widget.isPastBudget,
-                      selectedCategoryPks: selectedCategoryPks,
+                      selectedCategory: selectedCategory,
                       budgetRange: budgetRange,
                       budgetColorScheme: budgetColorScheme,
                       showIfNone: false,
@@ -610,10 +628,10 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
               TransactionEntries(
                 budgetRange.start,
                 budgetRange.end,
-                categoryFks: selectedCategoryPks.isNotEmpty
-                    ? selectedCategoryPks
+                categoryFks: selectedCategory != null
+                    ? [selectedCategory!.categoryPk]
                     : widget.budget.categoryFks,
-                categoryFksExclude: selectedCategoryPks.isNotEmpty
+                categoryFksExclude: selectedCategory != null
                     ? null
                     : widget.budget.categoryFksExclude,
                 income: null,
@@ -851,7 +869,7 @@ class BudgetLineGraph extends StatefulWidget {
     required this.budget,
     required this.dateForRange,
     required this.isPastBudget,
-    required this.selectedCategoryPks,
+    required this.selectedCategory,
     required this.budgetRange,
     required this.budgetColorScheme,
     this.showPastSpending = true,
@@ -863,7 +881,7 @@ class BudgetLineGraph extends StatefulWidget {
   final Budget budget;
   final DateTime? dateForRange;
   final bool? isPastBudget;
-  final List<String> selectedCategoryPks;
+  final TransactionCategory? selectedCategory;
   final DateTimeRange budgetRange;
   final ColorScheme budgetColorScheme;
   final bool showPastSpending;
@@ -1002,11 +1020,11 @@ class _BudgetLineGraphState extends State<BudgetLineGraph> {
               double totalForDay = 0;
 
               for (Transaction transaction in snapshot.data![snapshotIndex]) {
-                if (widget.selectedCategoryPks.isEmpty ||
-                    widget.selectedCategoryPks
-                        .contains(transaction.categoryFk) ||
-                    widget.selectedCategoryPks
-                        .contains(transaction.subCategoryFk)) {
+                if (widget.selectedCategory == null ||
+                    transaction.categoryFk ==
+                        widget.selectedCategory?.categoryPk ||
+                    transaction.subCategoryFk ==
+                        widget.selectedCategory?.categoryPk) {
                   if (indexDay.year == transaction.dateCreated.year &&
                       indexDay.month == transaction.dateCreated.month &&
                       indexDay.day == transaction.dateCreated.day) {
@@ -1042,7 +1060,11 @@ class _BudgetLineGraphState extends State<BudgetLineGraph> {
             }
             pointsList.add(points);
           }
-          Color lineColor = widget.budgetColorScheme.primary;
+          Color lineColor = widget.selectedCategory?.categoryPk != null &&
+                  widget.selectedCategory != null
+              ? HexColor(widget.selectedCategory!.colour,
+                  defaultColor: Theme.of(context).colorScheme.primary)
+              : widget.budgetColorScheme.primary;
           if (widget.showIfNone == false && totalZeroes == pointsList[0].length)
             return SizedBox.shrink();
           return Stack(
@@ -1051,7 +1073,7 @@ class _BudgetLineGraphState extends State<BudgetLineGraph> {
                 padding: widget.padding,
                 child: LineChartWrapper(
                   keepHorizontalLineInView:
-                      widget.selectedCategoryPks.isEmpty ? true : false,
+                      widget.selectedCategory == null ? true : false,
                   color: lineColor,
                   verticalLineAt: widget.isPastBudget == true
                       ? null
@@ -1067,7 +1089,8 @@ class _BudgetLineGraphState extends State<BudgetLineGraph> {
                     for (int index = 0; index < snapshot.data!.length; index++)
                       index == 0
                           ? lineColor
-                          : (widget.selectedCategoryPks.isNotEmpty
+                          : (widget.selectedCategory?.categoryPk != null &&
+                                      widget.selectedCategory != null
                                   ? lineColor
                                   : widget.budgetColorScheme.tertiary)
                               .withOpacity((index) / snapshot.data!.length)
