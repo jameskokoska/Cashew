@@ -797,8 +797,17 @@
   "exclude-from-budget": "排除在预算之外",
   "erase-synced-data-and-cloud-backups": "擦除同步数据和云备份",
   "erase-cloud-data": "擦除云数据",
-  "erase-cloud-data-description": "登录到您的Google帐户，并删除位于“同步”和“备份”下的备份",
+  "erase-cloud-data-description": "登录到您的Google帐户并删除位于“同步”和“备份”下的备份",
   "add": "添加",
   "transaction-type": "交易类型",
-  "do-not-show-again": "不要再显示"
+  "do-not-show-again": "不要再显示",
+  "add-attachment": "添加附件",
+  "add-attachment-description": "附件添加到您的Google驱动器中",
+  "take-photo": "拍照",
+  "select-photo": "选择照片",
+  "select-file": "选择文件",
+  "error-attaching-file": "错误附加文件",
+  "no-photo-taken": "没有照片",
+  "major-change-14": "交易附件",
+  "major-change-14-1": "通过Google Drive将照片或文件附加到交易中"
 }

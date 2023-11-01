@@ -768,7 +768,7 @@
   "make-main-category-question": "ทำหมวดหมู่หลัก?",
   "make-main-category-description": "สิ่งนี้จะย้ายธุรกรรมทั้งหมดจากหมวดหมู่หลักไปยังหมวดหมู่หลักใหม่",
   "main-category-created": "หมวดหมู่หลักที่สร้างขึ้น",
-  "no-folder-selected": "ไม่มีการเลือกโฟลเดอร์",
+  "no-folder-selected": "ไม่เลือกโฟลเดอร์",
   "clear-selection": "การเลือกที่ชัดเจน",
   "view-all-days": "ดูทุกวัน",
   "view-to-today": "ดูวันนี้",
@@ -800,5 +800,14 @@
   "erase-cloud-data-description": "เข้าสู่ระบบบัญชี Google ของคุณและลบการสำรองข้อมูลที่อยู่ภายใต้ 'ซิงค์' และ 'การสำรองข้อมูล'",
   "add": "เพิ่ม",
   "transaction-type": "ประเภทธุรกรรม",
-  "do-not-show-again": "อย่าแสดงอีก"
+  "do-not-show-again": "อย่าแสดงอีก",
+  "add-attachment": "เพิ่มไฟล์แนบ",
+  "add-attachment-description": "ไฟล์แนบจะถูกเพิ่มลงใน Google Drive ของคุณ",
+  "take-photo": "ถ่ายภาพ",
+  "select-photo": "เลือกรูปภาพ",
+  "select-file": "เลือกไฟล์",
+  "error-attaching-file": "การแนบข้อผิดพลาดไฟล์",
+  "no-photo-taken": "ไม่มีรูปถ่าย",
+  "major-change-14": "ไฟล์แนบธุรกรรม",
+  "major-change-14-1": "แนบรูปภาพหรือไฟล์ไปยังธุรกรรมผ่าน Google Drive"
 }

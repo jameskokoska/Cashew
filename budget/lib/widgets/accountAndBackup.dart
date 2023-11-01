@@ -81,6 +81,7 @@ Future<bool> signInGoogle(
     bool? waitForCompletion,
     bool? drivePermissions,
     bool? gMailPermissions,
+    bool? drivePermissionsAttachments,
     bool? silentSignIn,
     Function()? next}) async {
   // bool isConnected = false;
@@ -116,6 +117,9 @@ Future<bool> signInGoogle(
     if (googleUser == null) {
       List<String> scopes = [
         ...(drivePermissions == true ? [drive.DriveApi.driveAppdataScope] : []),
+        ...(drivePermissionsAttachments == true
+            ? [drive.DriveApi.driveFileScope]
+            : []),
         ...(gMailPermissions == true
             ? [
                 gMail.GmailApi.gmailReadonlyScope,

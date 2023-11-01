@@ -769,7 +769,7 @@
   "make-main-category-description": "Bu, tüm işlemleri ana kategoriden yeni bir ana kategoriye taşıyacaktır",
   "main-category-created": "Ana kategori oluşturuldu",
   "no-folder-selected": "Klasör seçilmedi",
-  "clear-selection": "Açık seçim",
+  "clear-selection": "Net seçim",
   "view-all-days": "Tüm Günleri Görüntüle",
   "view-to-today": "Bugüne Bakış",
   "subcategories-description": "İşlemlerinizi istediğiniz şekilde daha fazla düzenlemek için alt kategoriler oluşturun",
@@ -800,5 +800,14 @@
   "erase-cloud-data-description": "Google hesabınıza giriş yapın ve 'senkronizasyon' ve 'yedeklemeler' altında bulunan yedeklemeleri silin",
   "add": "Eklemek",
   "transaction-type": "işlem tipi",
-  "do-not-show-again": "Bir daha gösterme"
+  "do-not-show-again": "Bir daha gösterme",
+  "add-attachment": "Ek Ekle",
+  "add-attachment-description": "Google Drive'ınıza ekler eklenir",
+  "take-photo": "Fotoğraf çek",
+  "select-photo": "Fotoğraf seçin",
+  "select-file": "Dosya Seç",
+  "error-attaching-file": "Dosya ekleme hatası",
+  "no-photo-taken": "Fotoğraf çekilmez",
+  "major-change-14": "İşlem ekleri",
+  "major-change-14-1": "Google Drive üzerinden işlemlere fotoğraf veya dosyalar ekleyin"
 }

@@ -253,12 +253,13 @@ class CurrencyItem extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.all(13),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  TextFont(
-                    text: currencyKey.toUpperCase(),
-                    fontSize: 18,
-                  ),
+                  if (currenciesJSON[currencyKey]?["NotKnown"] != true)
+                    TextFont(
+                      text: currencyKey.toUpperCase(),
+                      fontSize: 18,
+                    ),
                   TextFont(
                     text: currenciesJSON[currencyKey]?["Symbol"] == null ||
                             currenciesJSON[currencyKey]?["Symbol"] == ""
@@ -269,22 +270,28 @@ class CurrencyItem extends StatelessWidget {
                         : (currenciesJSON[currencyKey]?["Symbol"] ?? ""),
                     autoSizeText: true,
                     maxFontSize: 50,
-                    fontSize: 25,
+                    fontSize: currenciesJSON[currencyKey]?["NotKnown"] == true
+                        ? 20
+                        : 25,
                     fontWeight: FontWeight.bold,
                   ),
-                  currenciesJSON[currencyKey]?["CountryName"] == null &&
-                          currenciesJSON[currencyKey]?["Currency"] == null
-                      ? SizedBox.shrink()
-                      : TextFont(
-                          text: currenciesJSON[currencyKey]?["CountryName"] ??
-                              (currenciesJSON[currencyKey]["Currency"])
-                                  .toString()
-                                  .capitalizeFirst ??
-                              "",
-                          autoSizeText: true,
-                          maxFontSize: 50,
-                          fontSize: 10,
-                        ),
+                  if (((currenciesJSON[currencyKey]?["CountryName"] == null ||
+                              currenciesJSON[currencyKey]?["CountryName"] ==
+                                  "") &&
+                          (currenciesJSON[currencyKey]?["Currency"] == null ||
+                              currenciesJSON[currencyKey]?["Currency"] ==
+                                  "")) ==
+                      false)
+                    TextFont(
+                      text: currenciesJSON[currencyKey]?["CountryName"] ??
+                          (currenciesJSON[currencyKey]["Currency"])
+                              .toString()
+                              .capitalizeFirst ??
+                          "",
+                      autoSizeText: true,
+                      maxFontSize: 50,
+                      fontSize: 10,
+                    ),
                 ],
               ),
             ),

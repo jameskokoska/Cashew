@@ -800,5 +800,14 @@
   "erase-cloud-data-description": "התחבר לחשבון Google שלך ​​ומחק גיבויים הממוקמים תחת 'סנכרון' ו'גיבויים '",
   "add": "לְהוֹסִיף",
   "transaction-type": "סוג עסקה",
-  "do-not-show-again": "אל תראה שוב"
+  "do-not-show-again": "אל תראה שוב",
+  "add-attachment": "הוסף קובץ מצורף",
+  "add-attachment-description": "קבצים מצורפים מתווספים לכונן Google שלך",
+  "take-photo": "לצלם",
+  "select-photo": "בחר תמונה",
+  "select-file": "בחר קובץ",
+  "error-attaching-file": "שגיאה בחיבור קובץ",
+  "no-photo-taken": "אין תמונה שצולמה",
+  "major-change-14": "קבצים מצורפים לעסקה",
+  "major-change-14-1": "צרף תמונות או קבצים לעסקאות דרך Google Drive"
 }

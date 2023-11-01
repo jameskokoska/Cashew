@@ -788,7 +788,7 @@
   "insurance": "Ubezpieczenie",
   "beauty": "Uroda",
   "haircut": "Ostrzyżenie",
-  "touchups": "Dotyk",
+  "touchups": "Dotykania",
   "clothing": "Odzież",
   "multiplier": "Mnożnik",
   "bill-splitter-multiplier-description": "Wprowadź wartość, która zostanie pomnożona do każdego elementu w rozdzieleniu rachunku. Przydatne, jeśli podatek jest stosowany na każdym elemencie.",
@@ -800,5 +800,14 @@
   "erase-cloud-data-description": "Zaloguj się na swoje konto Google i usuń kopie zapasowe znajdujące się pod „Sync” i „Backups”",
   "add": "Dodać",
   "transaction-type": "typ transakcji",
-  "do-not-show-again": "Nie pokazuj ponownie"
+  "do-not-show-again": "Nie pokazuj ponownie",
+  "add-attachment": "Dodać załącznik",
+  "add-attachment-description": "Załączniki są dodawane do Twojego Dysku Google",
+  "take-photo": "Zrobić zdjęcie",
+  "select-photo": "Wybierz zdjęcie",
+  "select-file": "Wybierz plik",
+  "error-attaching-file": "Plik podłączający błąd",
+  "no-photo-taken": "Brak zdjęcia",
+  "major-change-14": "Załączniki transakcyjne",
+  "major-change-14-1": "Dołącz zdjęcia lub pliki do transakcji za pośrednictwem Dysku Google"
 }

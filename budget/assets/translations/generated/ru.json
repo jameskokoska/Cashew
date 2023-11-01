@@ -800,5 +800,14 @@
   "erase-cloud-data-description": "Войдите в свою учетную запись Google и удалите резервные копии, расположенные под «синхронизацией» и «резервными копиями»",
   "add": "Добавлять",
   "transaction-type": "Тип операции",
-  "do-not-show-again": "Не показывай снова"
+  "do-not-show-again": "Не показывай снова",
+  "add-attachment": "Добавить приложение",
+  "add-attachment-description": "Вложения добавляются в ваш Google Drive",
+  "take-photo": "Сделать фотографию",
+  "select-photo": "Выберите фото",
+  "select-file": "Выберите файл",
+  "error-attaching-file": "Ошибка прикрепления файла",
+  "no-photo-taken": "Фотография не сделана",
+  "major-change-14": "Вложения транзакции",
+  "major-change-14-1": "Прикрепите фотографии или файлы к транзакциям через Google Drive"
 }

@@ -800,5 +800,14 @@
   "erase-cloud-data-description": "Logg inn på Google -kontoen din og slett sikkerhetskopier som ligger under 'Sync' og 'Backups'",
   "add": "Legg til",
   "transaction-type": "Transaksjonstype",
-  "do-not-show-again": "Ikke vis igjen"
+  "do-not-show-again": "Ikke vis igjen",
+  "add-attachment": "Legg til vedlegg",
+  "add-attachment-description": "Vedlegg legges til på Google -stasjonen din",
+  "take-photo": "Ta bilde",
+  "select-photo": "Velg bilde",
+  "select-file": "Velg Fil",
+  "error-attaching-file": "Feil vedleggsfilen",
+  "no-photo-taken": "Ingen bilder tatt",
+  "major-change-14": "Transaksjonsvedlegg",
+  "major-change-14-1": "Fest bilder eller filer til transaksjoner via Google Drive"
 }

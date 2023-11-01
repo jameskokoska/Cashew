@@ -788,7 +788,7 @@
   "insurance": "Pojištění",
   "beauty": "Krása",
   "haircut": "Střih",
-  "touchups": "Doteky",
+  "touchups": "Dotek",
   "clothing": "Oblečení",
   "multiplier": "Násobitel",
   "bill-splitter-multiplier-description": "Zadejte hodnotu, která bude násobena na každou položku v rozprašovači účtu. Užitečné, pokud je na každou položku použita daň.",
@@ -800,5 +800,14 @@
   "erase-cloud-data-description": "Přihlaste se k vašemu účtu Google a smažte zálohy umístěné pod „synchronizací“ a „zálohy“",
   "add": "Přidat",
   "transaction-type": "typ transakce",
-  "do-not-show-again": "Neukazujte znovu"
+  "do-not-show-again": "Neukazujte znovu",
+  "add-attachment": "Přidat přílohu",
+  "add-attachment-description": "Přílohy jsou přidány na váš disk Google",
+  "take-photo": "Vyfotit",
+  "select-photo": "Vyberte fotografii",
+  "select-file": "Zvolte soubor",
+  "error-attaching-file": "Připojení souboru chyby",
+  "no-photo-taken": "Žádná fotografie",
+  "major-change-14": "Transakční přílohy",
+  "major-change-14-1": "Připojte fotografie nebo soubory k transakcím přes disk Google"
 }

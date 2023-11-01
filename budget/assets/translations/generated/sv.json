@@ -98,7 +98,7 @@
   "auto-email-transactions": "Auto -e -posttransaktioner",
   "pay-subscriptions": "Betala prenumerationer",
   "pay-subscriptions-description": "Markera automatiskt ett prenumeration som betalas efter förfallodagen",
-  "pay-repetitive": "Betala upprepade",
+  "pay-repetitive": "Betala repetitiva",
   "pay-repetitive-description": "Markera automatiskt en repetitiv transaktion som betalas efter förfallodagen",
   "pay-upcoming": "Ankommande",
   "pay-upcoming-description": "Markera automatiskt en kommande transaktion som betalas efter förfallodagen",
@@ -800,5 +800,14 @@
   "erase-cloud-data-description": "Logga in på ditt Google -konto och ta bort säkerhetskopior som finns under 'Sync' och 'Backups'",
   "add": "Lägg till",
   "transaction-type": "Överföringstyp",
-  "do-not-show-again": "Visa inte igen"
+  "do-not-show-again": "Visa inte igen",
+  "add-attachment": "Bifoga fil",
+  "add-attachment-description": "Bilagor läggs till i din Google -enhet",
+  "take-photo": "Ta ett foto",
+  "select-photo": "Välj foto",
+  "select-file": "Välj fil",
+  "error-attaching-file": "Fel Bifogningsfil",
+  "no-photo-taken": "Inget foto taget",
+  "major-change-14": "Transaktionsförhållanden",
+  "major-change-14-1": "Bifoga foton eller filer till transaktioner via Google Drive"
 }

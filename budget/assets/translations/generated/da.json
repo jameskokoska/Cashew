@@ -800,5 +800,14 @@
   "erase-cloud-data-description": "Log ind på din Google -konto og slet sikkerhedskopier placeret under 'Sync' og 'Backups'",
   "add": "Tilføje",
   "transaction-type": "Transaktionstype",
-  "do-not-show-again": "Vis ikke igen"
+  "do-not-show-again": "Vis ikke igen",
+  "add-attachment": "Tilføj vedhæftning",
+  "add-attachment-description": "Vedhæftede filer tilføjes til dit Google -drev",
+  "take-photo": "Tag et billede",
+  "select-photo": "Vælg foto",
+  "select-file": "Vælg fil",
+  "error-attaching-file": "Fejl vedhæftet fil",
+  "no-photo-taken": "Intet foto taget",
+  "major-change-14": "Transaktions vedhæftede filer",
+  "major-change-14-1": "Vedhæft fotos eller filer til transaktioner via Google Drive"
 }

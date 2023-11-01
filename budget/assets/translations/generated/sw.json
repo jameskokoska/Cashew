@@ -772,7 +772,7 @@
   "clear-selection": "Uteuzi wazi",
   "view-all-days": "Tazama siku zote",
   "view-to-today": "Tazama leo",
-  "subcategories-description": "Unda vijidudu ili kupanga shughuli zako zaidi kwa njia unayotaka",
+  "subcategories-description": "Unda vijidudu ili kupanga shughuli zako kwa njia unayotaka",
   "examples": "Mifano",
   "drinks": "Vinywaji",
   "coffee": "Kahawa",
@@ -800,5 +800,14 @@
   "erase-cloud-data-description": "Ingia kwenye akaunti yako ya Google na futa backups ziko chini ya 'Usawazishaji' na 'Backups'",
   "add": "ADD",
   "transaction-type": "Aina ya manunuzi",
-  "do-not-show-again": "Usionyeshe tena"
+  "do-not-show-again": "Usionyeshe tena",
+  "add-attachment": "Ongeza kiambatisho",
+  "add-attachment-description": "Viambatisho vinaongezwa kwenye Hifadhi yako ya Google",
+  "take-photo": "Piga picha",
+  "select-photo": "Chagua picha",
+  "select-file": "Chagua Faili",
+  "error-attaching-file": "Hitilafu ya kushikilia faili",
+  "no-photo-taken": "Hakuna picha iliyochukuliwa",
+  "major-change-14": "Viambatisho vya shughuli",
+  "major-change-14-1": "Ambatisha picha au faili kwa shughuli kupitia Hifadhi ya Google"
 }

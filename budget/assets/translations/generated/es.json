@@ -800,5 +800,14 @@
   "erase-cloud-data-description": "Inicie sesión en su cuenta de Google y elimine las copias de seguridad ubicadas en 'Sincronización' y 'Copias de seguridad'",
   "add": "Agregar",
   "transaction-type": "tipo de transacción",
-  "do-not-show-again": "No te muestres de nuevo"
+  "do-not-show-again": "No te muestres de nuevo",
+  "add-attachment": "Añadir un adjunto",
+  "add-attachment-description": "Los archivos adjuntos se agregan a su Drive Google",
+  "take-photo": "Tomar foto",
+  "select-photo": "Seleccione Foto",
+  "select-file": "Seleccione Archivo",
+  "error-attaching-file": "Error adjunta de archivo",
+  "no-photo-taken": "No hay foto tomada",
+  "major-change-14": "Adjuntos de transacciones",
+  "major-change-14-1": "Adjunte fotos o archivos a las transacciones a través de Google Drive"
 }

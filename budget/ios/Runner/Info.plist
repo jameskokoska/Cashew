@@ -10,6 +10,8 @@
   <string>Lock the application</string>
   <key>NSPhotoLibraryUsageDescription</key>
   <string>Photo library access</string>
+  <key>NSCameraUsageDescription</key>
+  <string>Camera access for adding transaction attachment</string>
   <key>ITSAppUsesNonExemptEncryption</key>
   <false/>
 	<key>CADisableMinimumFrameDurationOnPhone</key>

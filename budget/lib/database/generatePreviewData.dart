@@ -904,7 +904,7 @@ Future<bool> checkLockedFeatureIfInDemoMode(BuildContext? context) async {
       },
       onCancelLabel: "cancel".tr(),
       onSubmit: () {
-        Navigator.pop(context);
+        Navigator.of(context).popUntil((route) => route.isFirst);
         deletePreviewData(resetOnboard: true);
       },
       onSubmitLabel: "exit-demo".tr(),

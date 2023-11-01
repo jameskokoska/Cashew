@@ -1,4 +1,34 @@
 {
+  "00": {
+    "Currency": "00 Token",
+    "Code": "00",
+    "NotKnown": true
+  },
+  "1inch": {
+    "Currency": "1inch",
+    "Code": "1inch",
+    "NotKnown": true
+  },
+  "aave": {
+    "Currency": "Aave",
+    "Code": "aave",
+    "NotKnown": true
+  },
+  "abt": {
+    "Currency": "Arcblock",
+    "Code": "abt",
+    "NotKnown": true
+  },
+  "ach": {
+    "Currency": "Alchemy Pay",
+    "Code": "ach",
+    "NotKnown": true
+  },
+  "acs": {
+    "Currency": "ACryptoS",
+    "Code": "acs",
+    "NotKnown": true
+  },
   "ada": {
     "Currency": "Cardano",
     "Code": "ADA",
@@ -11,6 +41,11 @@
     "CountryName": "United Arab Emirates",
     "CountryCode": "AE"
   },
+  "aergo": {
+    "Currency": "Aergo",
+    "Code": "aergo",
+    "NotKnown": true
+  },
   "afn": {
     "Currency": "Afghani",
     "Code": "AFN",
@@ -18,10 +53,40 @@
     "CountryName": "Afghanistan",
     "CountryCode": "AF"
   },
+  "agld": {
+    "Currency": "Adventure Gold",
+    "Code": "agld",
+    "NotKnown": true
+  },
+  "aioz": {
+    "Currency": "Aioz Network",
+    "Code": "aioz",
+    "NotKnown": true
+  },
+  "akt": {
+    "Currency": "Akash Network",
+    "Code": "akt",
+    "NotKnown": true
+  },
+  "alcx": {
+    "Currency": "Alchemix",
+    "Code": "alcx",
+    "NotKnown": true
+  },
+  "aleph": {
+    "Currency": "Aleph.im",
+    "Code": "aleph",
+    "NotKnown": true
+  },
   "algo": {
     "Currency": "Algorand",
     "Code": "ALGO",
     "Symbol": "Ⱥ"
+  },
+  "alice": {
+    "Currency": "My Neighbor Alice",
+    "Code": "alice",
+    "NotKnown": true
   },
   "all": {
     "Currency": "Lek",
@@ -35,12 +100,62 @@
     "Code": "AMD",
     "Symbol": "դր."
   },
+  "amp": {
+    "Currency": "Amp",
+    "Code": "amp",
+    "NotKnown": true
+  },
   "ang": {
     "Currency": "Antilles Guilder",
     "Code": "ANG",
     "Symbol": "ƒ",
     "CountryName": "Netherlands",
     "CountryCode": "NL"
+  },
+  "ankr": {
+    "Currency": "Ankr Network",
+    "Code": "ankr",
+    "NotKnown": true
+  },
+  "ant": {
+    "Currency": "Aragon",
+    "Code": "ant",
+    "NotKnown": true
+  },
+  "aoa": {
+    "Currency": "Angolan Kwanza",
+    "Code": "aoa",
+    "NotKnown": true
+  },
+  "ape": {
+    "Currency": "ApeCoin",
+    "Code": "ape",
+    "NotKnown": true
+  },
+  "api3": {
+    "Currency": "API3",
+    "Code": "api3",
+    "NotKnown": true
+  },
+  "apt": {
+    "Currency": "Aptos",
+    "Code": "apt",
+    "NotKnown": true
+  },
+  "ar": {
+    "Currency": "Arweave",
+    "Code": "ar",
+    "NotKnown": true
+  },
+  "arb": {
+    "Currency": "Arbitrum",
+    "Code": "arb",
+    "NotKnown": true
+  },
+  "arpa": {
+    "Currency": "ARPA Chain",
+    "Code": "arpa",
+    "NotKnown": true
   },
   "ars": {
     "Currency": "Peso",
@@ -49,12 +164,62 @@
     "CountryName": "Argentina",
     "CountryCode": "AR"
   },
+  "asm": {
+    "Currency": "Assemble Protocol",
+    "Code": "asm",
+    "NotKnown": true
+  },
+  "ast": {
+    "Currency": "AirSwap",
+    "Code": "ast",
+    "NotKnown": true
+  },
+  "ata": {
+    "Currency": "Automata Network",
+    "Code": "ata",
+    "NotKnown": true
+  },
+  "atom": {
+    "Currency": "Cosmos",
+    "Code": "atom",
+    "NotKnown": true
+  },
+  "ats": {
+    "Currency": "Austrian Schilling",
+    "Code": "ats",
+    "NotKnown": true
+  },
+  "auction": {
+    "Currency": "Bounce Token AUCTION",
+    "Code": "auction",
+    "NotKnown": true
+  },
   "aud": {
     "Currency": "Dollar",
     "Code": "AUD",
     "Symbol": "$",
     "CountryName": "Australia",
     "CountryCode": "AU"
+  },
+  "audio": {
+    "Currency": "Audius",
+    "Code": "audio",
+    "NotKnown": true
+  },
+  "aurora": {
+    "Currency": "Aurora",
+    "Code": "aurora",
+    "NotKnown": true
+  },
+  "avax": {
+    "Currency": "Avalanche",
+    "Code": "avax",
+    "NotKnown": true
+  },
+  "avt": {
+    "Currency": "Aventus",
+    "Code": "avt",
+    "NotKnown": true
   },
   "awg": {
     "Currency": "Guilder",
@@ -63,6 +228,21 @@
     "CountryName": "Aruba",
     "CountryCode": "AW"
   },
+  "axl": {
+    "Currency": "Axelar",
+    "Code": "axl",
+    "NotKnown": true
+  },
+  "axs": {
+    "Currency": "Axie Infinity",
+    "Code": "axs",
+    "NotKnown": true
+  },
+  "azm": {
+    "Currency": "Azerbaijani Manat",
+    "Code": "azm",
+    "NotKnown": true
+  },
   "azn": {
     "Currency": "Manat",
     "Code": "AZN",
@@ -70,12 +250,37 @@
     "CountryName": "Azerbaijan",
     "CountryCode": "AZ"
   },
+  "badger": {
+    "Currency": "Badger DAO",
+    "Code": "badger",
+    "NotKnown": true
+  },
+  "bake": {
+    "Currency": "BakeryToken",
+    "Code": "bake",
+    "NotKnown": true
+  },
+  "bal": {
+    "Currency": "Balancer",
+    "Code": "bal",
+    "NotKnown": true
+  },
   "bam": {
     "Currency": "Convertible Marka",
     "Code": "BAM",
     "Symbol": "KM",
     "CountryName": "Bosnia and Herzegovina",
     "CountryCode": "BA"
+  },
+  "band": {
+    "Currency": "Band Protocol",
+    "Code": "band",
+    "NotKnown": true
+  },
+  "bat": {
+    "Currency": "Basic Attention Token",
+    "Code": "bat",
+    "NotKnown": true
   },
   "bbd": {
     "Currency": "Dollar",
@@ -94,6 +299,11 @@
     "Code": "BDT",
     "Symbol": "৳"
   },
+  "bef": {
+    "Currency": "Belgian Franc",
+    "Code": "bef",
+    "NotKnown": true
+  },
   "bgn": {
     "Currency": "Lev",
     "Code": "BGN",
@@ -106,10 +316,30 @@
     "Code": "BHD",
     "Symbol": "د.ب.‏"
   },
+  "bico": {
+    "Currency": "Biconomy",
+    "Code": "bico",
+    "NotKnown": true
+  },
   "bif": {
     "Currency": "Burundian Franc",
     "Code": "BIF",
     "Symbol": "FBu"
+  },
+  "bit": {
+    "Currency": "BitDAO",
+    "Code": "bit",
+    "NotKnown": true
+  },
+  "blur": {
+    "Currency": "Blur",
+    "Code": "blur",
+    "NotKnown": true
+  },
+  "blz": {
+    "Currency": "Bluzelle",
+    "Code": "blz",
+    "NotKnown": true
   },
   "bmd": {
     "Currency": "Dollar",
@@ -118,11 +348,21 @@
     "CountryName": "Bermuda",
     "CountryCode": "BM"
   },
+  "bnb": {
+    "Currency": "Binance Coin",
+    "Code": "bnb",
+    "NotKnown": true
+  },
   "bnd": {
     "Currency": "Darussalam Dollar",
     "Code": "BND",
     "Symbol": "$",
     "CountryName": "Brunei"
+  },
+  "bnt": {
+    "Currency": "Bancor Network",
+    "Code": "bnt",
+    "NotKnown": true
   },
   "bob": {
     "Currency": "Boliviano",
@@ -130,6 +370,16 @@
     "Symbol": "$b",
     "CountryName": "Bolivia",
     "CountryCode": "BO"
+  },
+  "boba": {
+    "Currency": "Boba Network",
+    "Code": "boba",
+    "NotKnown": true
+  },
+  "bond": {
+    "Currency": "BarnBridge",
+    "Code": "bond",
+    "NotKnown": true
   },
   "brl": {
     "Currency": "Real",
@@ -150,10 +400,45 @@
     "Code": "BSV",
     "Symbol": "Ɓ"
   },
+  "bsw": {
+    "Currency": "Biswap",
+    "Code": "bsw",
+    "NotKnown": true
+  },
   "btc": {
     "Currency": "Bitcoin",
     "Code": "BTC",
     "Symbol": "₿"
+  },
+  "btcb": {
+    "Currency": "Bitcoin BEP2",
+    "Code": "btcb",
+    "NotKnown": true
+  },
+  "btg": {
+    "Currency": "Bitcoin Gold",
+    "Code": "btg",
+    "NotKnown": true
+  },
+  "btn": {
+    "Currency": "Bhutanese Ngultrum",
+    "Code": "btn",
+    "NotKnown": true
+  },
+  "btrst": {
+    "Currency": "Braintrust",
+    "Code": "btrst",
+    "NotKnown": true
+  },
+  "btt": {
+    "Currency": "BitTorrent",
+    "Code": "btt",
+    "NotKnown": true
+  },
+  "busd": {
+    "Currency": "Binance USD",
+    "Code": "busd",
+    "NotKnown": true
   },
   "bwp": {
     "Currency": "Pula",
@@ -181,6 +466,11 @@
     "CountryName": "Belize",
     "CountryCode": "BZ"
   },
+  "c98": {
+    "Currency": "Coin98",
+    "Code": "c98",
+    "NotKnown": true
+  },
   "cad": {
     "Currency": "Dollar",
     "Code": "CAD",
@@ -188,10 +478,40 @@
     "CountryName": "Canada",
     "CountryCode": "CA"
   },
+  "cake": {
+    "Currency": "PancakeSwap",
+    "Code": "cake",
+    "NotKnown": true
+  },
+  "cbeth": {
+    "Currency": "Coinbase Wrapped Staked ETH",
+    "Code": "cbeth",
+    "NotKnown": true
+  },
   "cdf": {
     "Currency": "Congolese Franc",
     "Code": "CDF",
     "Symbol": "FrCD"
+  },
+  "celo": {
+    "Currency": "Celo",
+    "Code": "celo",
+    "NotKnown": true
+  },
+  "celr": {
+    "Currency": "Celer Network",
+    "Code": "celr",
+    "NotKnown": true
+  },
+  "cfx": {
+    "Currency": "Conflux",
+    "Code": "cfx",
+    "NotKnown": true
+  },
+  "cgld": {
+    "Currency": "Celo Gold",
+    "Code": "cgld",
+    "NotKnown": true
   },
   "chf": {
     "Currency": "Franc",
@@ -200,12 +520,27 @@
     "CountryName": "Switzerland",
     "CountryCode": "CH"
   },
+  "chz": {
+    "Currency": "Chiliz",
+    "Code": "chz",
+    "NotKnown": true
+  },
   "clp": {
     "Currency": "Peso",
     "Code": "CLP",
     "Symbol": "$",
     "CountryName": "Chile",
     "CountryCode": "CL"
+  },
+  "clv": {
+    "Currency": "Clover Finance",
+    "Code": "clv",
+    "NotKnown": true
+  },
+  "cnh": {
+    "Currency": "Chinese Yuan Renminbi Offshore",
+    "Code": "cnh",
+    "NotKnown": true
   },
   "cny": {
     "Currency": "Yuan Renminbi",
@@ -214,12 +549,27 @@
     "CountryName": "China",
     "CountryCode": "CN"
   },
+  "comp": {
+    "Currency": "Compound",
+    "Code": "comp",
+    "NotKnown": true
+  },
   "cop": {
     "Currency": "Peso",
     "Code": "COP",
     "Symbol": "$",
     "CountryName": "Colombia",
     "CountryCode": "CO"
+  },
+  "coti": {
+    "Currency": "COTI",
+    "Code": "coti",
+    "NotKnown": true
+  },
+  "coval": {
+    "Currency": "COVAL",
+    "Code": "coval",
+    "NotKnown": true
   },
   "crc": {
     "Currency": "Colon",
@@ -228,6 +578,41 @@
     "CountryName": "Costa Rica",
     "CountryCode": "CR"
   },
+  "cro": {
+    "Currency": "Crypto.com Chain",
+    "Code": "cro",
+    "NotKnown": true
+  },
+  "crpt": {
+    "Currency": "Crypterium",
+    "Code": "crpt",
+    "NotKnown": true
+  },
+  "crv": {
+    "Currency": "Curve DAO Token",
+    "Code": "crv",
+    "NotKnown": true
+  },
+  "cspr": {
+    "Currency": "Casper",
+    "Code": "cspr",
+    "NotKnown": true
+  },
+  "ctsi": {
+    "Currency": "Cartesi",
+    "Code": "ctsi",
+    "NotKnown": true
+  },
+  "ctx": {
+    "Currency": "Cryptex Finance",
+    "Code": "ctx",
+    "NotKnown": true
+  },
+  "cuc": {
+    "Currency": "Cuban Convertible Peso",
+    "Code": "cuc",
+    "NotKnown": true
+  },
   "cup": {
     "Currency": "Peso",
     "Code": "CUP",
@@ -235,10 +620,25 @@
     "CountryName": "Cuba",
     "CountryCode": "CU"
   },
+  "cvc": {
+    "Currency": "Civic",
+    "Code": "cvc",
+    "NotKnown": true
+  },
   "cve": {
     "Currency": "Cape Verdean Escudo",
     "Code": "CVE",
     "Symbol": "CV$"
+  },
+  "cvx": {
+    "Currency": "Convex Finance",
+    "Code": "cvx",
+    "NotKnown": true
+  },
+  "cyp": {
+    "Currency": "Cypriot Pound",
+    "Code": "cyp",
+    "NotKnown": true
   },
   "czk": {
     "Currency": "Koruna",
@@ -252,10 +652,55 @@
     "Code": "DAI",
     "Symbol": "◈"
   },
+  "dar": {
+    "Currency": "Mines of Dalarnia",
+    "Code": "dar",
+    "NotKnown": true
+  },
   "dash": {
     "Currency": "Dash",
     "Code": "DASH",
     "Symbol": "Đ"
+  },
+  "dcr": {
+    "Currency": "Decred",
+    "Code": "dcr",
+    "NotKnown": true
+  },
+  "ddx": {
+    "Currency": "DerivaDAO",
+    "Code": "ddx",
+    "NotKnown": true
+  },
+  "dem": {
+    "Currency": "German Deutsche Mark",
+    "Code": "dem",
+    "NotKnown": true
+  },
+  "deso": {
+    "Currency": "Decentralized Social",
+    "Code": "deso",
+    "NotKnown": true
+  },
+  "dext": {
+    "Currency": "DEXTools",
+    "Code": "dext",
+    "NotKnown": true
+  },
+  "dfi": {
+    "Currency": "DfiStarter",
+    "Code": "dfi",
+    "NotKnown": true
+  },
+  "dia": {
+    "Currency": "Dia",
+    "Code": "dia",
+    "NotKnown": true
+  },
+  "dimo": {
+    "Currency": "DIMO",
+    "Code": "dimo",
+    "NotKnown": true
   },
   "djf": {
     "Currency": "Djiboutian Franc",
@@ -268,6 +713,11 @@
     "Symbol": "kr",
     "CountryName": "Denmark",
     "CountryCode": "DK"
+  },
+  "dnt": {
+    "Currency": "District0x",
+    "Code": "dnt",
+    "NotKnown": true
   },
   "doge": {
     "Currency": "Dogecoin",
@@ -286,6 +736,21 @@
     "Code": "DOT",
     "Symbol": "●"
   },
+  "drep": {
+    "Currency": "Drep [new]",
+    "Code": "drep",
+    "NotKnown": true
+  },
+  "dydx": {
+    "Currency": "dYdX",
+    "Code": "dydx",
+    "NotKnown": true
+  },
+  "dyp": {
+    "Currency": "DeFi Yield Protocol",
+    "Code": "dyp",
+    "NotKnown": true
+  },
   "dzd": {
     "Currency": "Algerian Dinar",
     "Code": "DZD",
@@ -298,12 +763,32 @@
     "CountryName": "Estonia",
     "CountryCode": "EE"
   },
+  "egld": {
+    "Currency": "Elrond",
+    "Code": "egld",
+    "NotKnown": true
+  },
   "egp": {
     "Currency": "Pound",
     "Code": "EGP",
     "Symbol": "£",
     "CountryName": "Egypt",
     "CountryCode": "EG"
+  },
+  "ela": {
+    "Currency": "Elastos",
+    "Code": "ela",
+    "NotKnown": true
+  },
+  "enj": {
+    "Currency": "Enjin Coin",
+    "Code": "enj",
+    "NotKnown": true
+  },
+  "ens": {
+    "Currency": "Ethereum Name Service",
+    "Code": "ens",
+    "NotKnown": true
   },
   "eos": {
     "Currency": "EOS",
@@ -314,6 +799,11 @@
     "Currency": "Eritrean Nakfa",
     "Code": "ERN",
     "Symbol": "Nfk"
+  },
+  "esp": {
+    "Currency": "Spanish Peseta",
+    "Code": "esp",
+    "NotKnown": true
   },
   "etb": {
     "Currency": "Ethiopian Birr",
@@ -330,11 +820,56 @@
     "Code": "ETH",
     "Symbol": "Ξ"
   },
+  "eth2": {
+    "Currency": "Ethereum 2.0",
+    "Code": "eth2",
+    "NotKnown": true
+  },
   "eur": {
     "Currency": "Euro",
     "Code": "EUR",
     "Symbol": "€",
     "CountryName": "Euro Member"
+  },
+  "euroc": {
+    "Currency": "Euro Coin",
+    "Code": "euroc",
+    "NotKnown": true
+  },
+  "farm": {
+    "Currency": "Harvest Finance",
+    "Code": "farm",
+    "NotKnown": true
+  },
+  "fei": {
+    "Currency": "Fei USD",
+    "Code": "fei",
+    "NotKnown": true
+  },
+  "fet": {
+    "Currency": "Fetch.ai",
+    "Code": "fet",
+    "NotKnown": true
+  },
+  "fida": {
+    "Currency": "Bonfida",
+    "Code": "fida",
+    "NotKnown": true
+  },
+  "fil": {
+    "Currency": "Filecoin",
+    "Code": "fil",
+    "NotKnown": true
+  },
+  "fim": {
+    "Currency": "Finnish Markka",
+    "Code": "fim",
+    "NotKnown": true
+  },
+  "fis": {
+    "Currency": "Stafi",
+    "Code": "fis",
+    "NotKnown": true
   },
   "fjd": {
     "Currency": "Dollar",
@@ -348,6 +883,71 @@
     "Code": "FKP",
     "Symbol": "£",
     "CountryName": "Falkland Islands"
+  },
+  "flow": {
+    "Currency": "Flow",
+    "Code": "flow",
+    "NotKnown": true
+  },
+  "flr": {
+    "Currency": "FLARE",
+    "Code": "flr",
+    "NotKnown": true
+  },
+  "fort": {
+    "Currency": "Forta",
+    "Code": "fort",
+    "NotKnown": true
+  },
+  "forth": {
+    "Currency": "Ampleforth Governance Token",
+    "Code": "forth",
+    "NotKnown": true
+  },
+  "fox": {
+    "Currency": "Shapeshift FOX Token",
+    "Code": "fox",
+    "NotKnown": true
+  },
+  "frax": {
+    "Currency": "Frax",
+    "Code": "frax",
+    "NotKnown": true
+  },
+  "frf": {
+    "Currency": "French Franc",
+    "Code": "frf",
+    "NotKnown": true
+  },
+  "ftm": {
+    "Currency": "Fantom",
+    "Code": "ftm",
+    "NotKnown": true
+  },
+  "ftt": {
+    "Currency": "FarmaTrust",
+    "Code": "ftt",
+    "NotKnown": true
+  },
+  "fx": {
+    "Currency": "Function X",
+    "Code": "fx",
+    "NotKnown": true
+  },
+  "fxs": {
+    "Currency": "Frax Share",
+    "Code": "fxs",
+    "NotKnown": true
+  },
+  "gal": {
+    "Currency": "Project Galaxy",
+    "Code": "gal",
+    "NotKnown": true
+  },
+  "gala": {
+    "Currency": "Gala",
+    "Code": "gala",
+    "NotKnown": true
   },
   "gbp": {
     "Currency": "Pound",
@@ -363,12 +963,22 @@
     "CountryName": "Georgia",
     "CountryCode": "GE"
   },
+  "gfi": {
+    "Currency": "Goldfinch",
+    "Code": "gfi",
+    "NotKnown": true
+  },
   "ggp": {
     "Currency": "Pound",
     "Code": "GGP",
     "Symbol": "£",
     "CountryName": "Guernsey",
     "CountryCode": "GG"
+  },
+  "ghc": {
+    "Currency": "Ghanaian Cedi",
+    "Code": "ghc",
+    "NotKnown": true
   },
   "ghs": {
     "Currency": "Cedis",
@@ -377,6 +987,11 @@
     "CountryName": "Ghana",
     "CountryCode": "GH"
   },
+  "ghst": {
+    "Currency": "Aavegotchi",
+    "Code": "ghst",
+    "NotKnown": true
+  },
   "gip": {
     "Currency": "Pound",
     "Code": "GIP",
@@ -384,10 +999,70 @@
     "CountryName": "Gibraltar",
     "CountryCode": "GI"
   },
+  "glm": {
+    "Currency": "Golem",
+    "Code": "glm",
+    "NotKnown": true
+  },
+  "gmd": {
+    "Currency": "Gambian Dalasi",
+    "Code": "gmd",
+    "NotKnown": true
+  },
+  "gmt": {
+    "Currency": "Stepn",
+    "Code": "gmt",
+    "NotKnown": true
+  },
+  "gmx": {
+    "Currency": "Goldmaxcoin",
+    "Code": "gmx",
+    "NotKnown": true
+  },
   "gnf": {
     "Currency": "Guinean Franc",
     "Code": "GNF",
     "Symbol": "FG"
+  },
+  "gno": {
+    "Currency": "Gnosis",
+    "Code": "gno",
+    "NotKnown": true
+  },
+  "gnt": {
+    "Currency": "GreenTrust",
+    "Code": "gnt",
+    "NotKnown": true
+  },
+  "gods": {
+    "Currency": "Gods Unchained",
+    "Code": "gods",
+    "NotKnown": true
+  },
+  "grd": {
+    "Currency": "Greek Drachma",
+    "Code": "grd",
+    "NotKnown": true
+  },
+  "grt": {
+    "Currency": "The Graph",
+    "Code": "grt",
+    "NotKnown": true
+  },
+  "gst": {
+    "Currency": "Green Satoshi Token",
+    "Code": "gst",
+    "NotKnown": true
+  },
+  "gt": {
+    "Currency": "GateToken",
+    "Code": "gt",
+    "NotKnown": true
+  },
+  "gtc": {
+    "Currency": "Gitcoin",
+    "Code": "gtc",
+    "NotKnown": true
   },
   "gtq": {
     "Currency": "Quetzal",
@@ -396,12 +1071,37 @@
     "CountryName": "Guatemala",
     "CountryCode": "GT"
   },
+  "gusd": {
+    "Currency": "Gemini US Dollar",
+    "Code": "gusd",
+    "NotKnown": true
+  },
   "gyd": {
     "Currency": "Dollar",
     "Code": "GYD",
     "Symbol": "$",
     "CountryName": "Guyana",
     "CountryCode": "GY"
+  },
+  "gyen": {
+    "Currency": "GYEN",
+    "Code": "gyen",
+    "NotKnown": true
+  },
+  "hbar": {
+    "Currency": "Hedera",
+    "Code": "hbar",
+    "NotKnown": true
+  },
+  "hft": {
+    "Currency": "Hashflow",
+    "Code": "hft",
+    "NotKnown": true
+  },
+  "high": {
+    "Currency": "Highstreet",
+    "Code": "high",
+    "NotKnown": true
   },
   "hkd": {
     "Currency": "Dollar",
@@ -417,12 +1117,37 @@
     "CountryName": "Honduras",
     "CountryCode": "HN"
   },
+  "hnt": {
+    "Currency": "Helium",
+    "Code": "hnt",
+    "NotKnown": true
+  },
+  "hopr": {
+    "Currency": "HOPR",
+    "Code": "hopr",
+    "NotKnown": true
+  },
+  "hot": {
+    "Currency": "Hydro Protocol",
+    "Code": "hot",
+    "NotKnown": true
+  },
   "hrk": {
     "Currency": "Kuna",
     "Code": "HRK",
     "Symbol": "kn",
     "CountryName": "Croatia",
     "CountryCode": "HR"
+  },
+  "ht": {
+    "Currency": "Huobi Token",
+    "Code": "ht",
+    "NotKnown": true
+  },
+  "htg": {
+    "Currency": "Haitian Gourde",
+    "Code": "htg",
+    "NotKnown": true
   },
   "huf": {
     "Currency": "Forint",
@@ -436,12 +1161,22 @@
     "Code": "ICP",
     "Symbol": "∞"
   },
+  "idex": {
+    "Currency": "IDEX",
+    "Code": "idex",
+    "NotKnown": true
+  },
   "idr": {
     "Currency": "Rupiah",
     "Code": "IDR",
     "Symbol": "Rp",
     "CountryName": "Indonesia",
     "CountryCode": "ID"
+  },
+  "iep": {
+    "Currency": "Irish Pound",
+    "Code": "iep",
+    "NotKnown": true
   },
   "ils": {
     "Currency": "Shekel",
@@ -450,6 +1185,11 @@
     "CountryName": "Israel",
     "CountryCode": "IL"
   },
+  "ilv": {
+    "Currency": "Illuvium",
+    "Code": "ilv",
+    "NotKnown": true
+  },
   "imp": {
     "Currency": "Pound",
     "Code": "IMP",
@@ -457,12 +1197,37 @@
     "CountryName": "Isle of Man",
     "CountryCode": "IM"
   },
+  "imx": {
+    "Currency": "Immutable X",
+    "Code": "imx",
+    "NotKnown": true
+  },
+  "index": {
+    "Currency": "Index Cooperative",
+    "Code": "index",
+    "NotKnown": true
+  },
+  "inj": {
+    "Currency": "Injective",
+    "Code": "inj",
+    "NotKnown": true
+  },
   "inr": {
     "Currency": "Rupee",
     "Code": "INR",
     "Symbol": "₹",
     "CountryName": "India",
     "CountryCode": "IN"
+  },
+  "inv": {
+    "Currency": "Inverse Finance",
+    "Code": "inv",
+    "NotKnown": true
+  },
+  "iotx": {
+    "Currency": "IoTeX",
+    "Code": "iotx",
+    "NotKnown": true
   },
   "iqd": {
     "Currency": "Iraqi Dinar",
@@ -481,6 +1246,16 @@
     "Symbol": "kr",
     "CountryName": "Iceland",
     "CountryCode": "IS"
+  },
+  "itl": {
+    "Currency": "Italian Lira",
+    "Code": "itl",
+    "NotKnown": true
+  },
+  "jasmy": {
+    "Currency": "Jasmy",
+    "Code": "jasmy",
+    "NotKnown": true
   },
   "jep": {
     "Currency": "Pound",
@@ -508,6 +1283,36 @@
     "CountryName": "Japan",
     "CountryCode": "JP"
   },
+  "jup": {
+    "Currency": "Jupiter",
+    "Code": "jup",
+    "NotKnown": true
+  },
+  "kas": {
+    "Currency": "",
+    "Code": "kas",
+    "NotKnown": true
+  },
+  "kava": {
+    "Currency": "Kava",
+    "Code": "kava",
+    "NotKnown": true
+  },
+  "kcs": {
+    "Currency": "Kucoin",
+    "Code": "kcs",
+    "NotKnown": true
+  },
+  "kda": {
+    "Currency": "Kadena",
+    "Code": "kda",
+    "NotKnown": true
+  },
+  "keep": {
+    "Currency": "Keep Network",
+    "Code": "keep",
+    "NotKnown": true
+  },
   "kes": {
     "Currency": "Kenya Shilling",
     "Code": "KES",
@@ -527,10 +1332,20 @@
     "CountryName": "Cambodia",
     "CountryCode": "KH"
   },
+  "klay": {
+    "Currency": "Klaytn",
+    "Code": "klay",
+    "NotKnown": true
+  },
   "kmf": {
     "Currency": "Comorian Franc",
     "Code": "KMF",
     "Symbol": "FC"
+  },
+  "knc": {
+    "Currency": "Kyber Network Crystals",
+    "Code": "knc",
+    "NotKnown": true
   },
   "kpw": {
     "Currency": "Won",
@@ -538,11 +1353,21 @@
     "Symbol": "₩",
     "CountryName": "Korea (North)"
   },
+  "krl": {
+    "Currency": "Kryll",
+    "Code": "krl",
+    "NotKnown": true
+  },
   "krw": {
     "Currency": "Won",
     "Code": "KRW",
     "Symbol": "₩",
     "CountryName": "Korea (South)"
+  },
+  "ksm": {
+    "Currency": "Kusama",
+    "Code": "ksm",
+    "NotKnown": true
   },
   "kwd": {
     "Currency": "Kuwaiti Dinar",
@@ -575,6 +1400,31 @@
     "CountryName": "Lebanon",
     "CountryCode": "LB"
   },
+  "lcx": {
+    "Currency": "LCX",
+    "Code": "lcx",
+    "NotKnown": true
+  },
+  "ldo": {
+    "Currency": "Lido DAO Token",
+    "Code": "ldo",
+    "NotKnown": true
+  },
+  "leo": {
+    "Currency": "LEOcoin",
+    "Code": "leo",
+    "NotKnown": true
+  },
+  "link": {
+    "Currency": "Chainlink",
+    "Code": "link",
+    "NotKnown": true
+  },
+  "lit": {
+    "Currency": "Litentry",
+    "Code": "lit",
+    "NotKnown": true
+  },
   "lkr": {
     "Currency": "Rupee",
     "Code": "LKR",
@@ -582,12 +1432,47 @@
     "CountryName": "Sri Lanka",
     "CountryCode": "LK"
   },
+  "loka": {
+    "Currency": "League of Kingdoms Arena",
+    "Code": "loka",
+    "NotKnown": true
+  },
+  "loom": {
+    "Currency": "Loom Network",
+    "Code": "loom",
+    "NotKnown": true
+  },
+  "lpt": {
+    "Currency": "Livepeer (LPT)",
+    "Code": "lpt",
+    "NotKnown": true
+  },
+  "lqty": {
+    "Currency": "Liquity",
+    "Code": "lqty",
+    "NotKnown": true
+  },
+  "lrc": {
+    "Currency": "Loopring",
+    "Code": "lrc",
+    "NotKnown": true
+  },
   "lrd": {
     "Currency": "Dollar",
     "Code": "LRD",
     "Symbol": "$",
     "CountryName": "Liberia",
     "CountryCode": "LR"
+  },
+  "lseth": {
+    "Currency": "Liquid Staked Ethereum",
+    "Code": "lseth",
+    "NotKnown": true
+  },
+  "lsl": {
+    "Currency": "Basotho Loti",
+    "Code": "lsl",
+    "NotKnown": true
   },
   "ltc": {
     "Currency": "Litecoin",
@@ -600,6 +1485,21 @@
     "Symbol": "Lt",
     "CountryName": "Lithuania",
     "CountryCode": "LT"
+  },
+  "luf": {
+    "Currency": "Luxembourg Franc",
+    "Code": "luf",
+    "NotKnown": true
+  },
+  "luna": {
+    "Currency": "Terra",
+    "Code": "luna",
+    "NotKnown": true
+  },
+  "lunc": {
+    "Currency": "",
+    "Code": "lunc",
+    "NotKnown": true
   },
   "lvl": {
     "Currency": "Lat",
@@ -618,18 +1518,78 @@
     "Code": "MAD",
     "Symbol": "د.م.‏"
   },
+  "magic": {
+    "Currency": "MAGIC",
+    "Code": "magic",
+    "NotKnown": true
+  },
+  "mana": {
+    "Currency": "Mana Coin Decentraland",
+    "Code": "mana",
+    "NotKnown": true
+  },
+  "mask": {
+    "Currency": "Mask Network",
+    "Code": "mask",
+    "NotKnown": true
+  },
+  "math": {
+    "Currency": "MATH",
+    "Code": "math",
+    "NotKnown": true
+  },
+  "matic": {
+    "Currency": "Polygon",
+    "Code": "matic",
+    "NotKnown": true
+  },
+  "mco2": {
+    "Currency": "Moss Carbon Credit",
+    "Code": "mco2",
+    "NotKnown": true
+  },
   "mdl": {
     "Currency": "Moldovan Leu",
     "Code": "MDL"
+  },
+  "mdt": {
+    "Currency": "Measurable Data Token",
+    "Code": "mdt",
+    "NotKnown": true
+  },
+  "media": {
+    "Currency": "Media Network",
+    "Code": "media",
+    "NotKnown": true
+  },
+  "metis": {
+    "Currency": "MetisDAO",
+    "Code": "metis",
+    "NotKnown": true
   },
   "mga": {
     "Currency": "Malagasy Ariary",
     "Code": "MGA"
   },
+  "mgf": {
+    "Currency": "Malagasy Franc",
+    "Code": "mgf",
+    "NotKnown": true
+  },
+  "mina": {
+    "Currency": "Mina",
+    "Code": "mina",
+    "NotKnown": true
+  },
   "miota": {
     "Currency": "Iota",
     "Code": "MIOTA",
     "Symbol": "ɨ"
+  },
+  "mir": {
+    "Currency": "Mirror Protocol",
+    "Code": "mir",
+    "NotKnown": true
   },
   "mkd": {
     "Currency": "Denar",
@@ -642,10 +1602,20 @@
     "Code": "MKR",
     "Symbol": "Μ"
   },
+  "mln": {
+    "Currency": "Enzyme",
+    "Code": "mln",
+    "NotKnown": true
+  },
   "mmk": {
     "Currency": "Myanma Kyat",
     "Code": "MMK",
     "Symbol": "K"
+  },
+  "mnde": {
+    "Currency": "Marinade",
+    "Code": "mnde",
+    "NotKnown": true
   },
   "mnt": {
     "Currency": "Tughrik",
@@ -654,10 +1624,45 @@
     "CountryName": "Mongolia",
     "CountryCode": "MN"
   },
+  "mona": {
+    "Currency": "Monavale",
+    "Code": "mona",
+    "NotKnown": true
+  },
   "mop": {
     "Currency": "Macanese Pataca",
     "Code": "MOP",
     "Symbol": "MOP$"
+  },
+  "mpl": {
+    "Currency": "Maple",
+    "Code": "mpl",
+    "NotKnown": true
+  },
+  "mro": {
+    "Currency": "Mauritanian Ouguiya",
+    "Code": "mro",
+    "NotKnown": true
+  },
+  "mru": {
+    "Currency": "Mauritanian Ouguiya",
+    "Code": "mru",
+    "NotKnown": true
+  },
+  "msol": {
+    "Currency": "Marinade Staked SOL",
+    "Code": "msol",
+    "NotKnown": true
+  },
+  "mtl": {
+    "Currency": "Maltese Lira",
+    "Code": "mtl",
+    "NotKnown": true
+  },
+  "multi": {
+    "Currency": "Multichain",
+    "Code": "multi",
+    "NotKnown": true
   },
   "mur": {
     "Currency": "Rupee",
@@ -666,6 +1671,31 @@
     "CountryName": "Mauritius",
     "CountryCode": "MU"
   },
+  "musd": {
+    "Currency": "mStableUSD",
+    "Code": "musd",
+    "NotKnown": true
+  },
+  "muse": {
+    "Currency": "Muse",
+    "Code": "muse",
+    "NotKnown": true
+  },
+  "mvr": {
+    "Currency": "Maldivian Rufiyaa",
+    "Code": "mvr",
+    "NotKnown": true
+  },
+  "mwk": {
+    "Currency": "Malawian Kwacha",
+    "Code": "mwk",
+    "NotKnown": true
+  },
+  "mxc": {
+    "Currency": "MXC",
+    "Code": "mxc",
+    "NotKnown": true
+  },
   "mxn": {
     "Currency": "Peso",
     "Code": "MXN",
@@ -673,12 +1703,22 @@
     "CountryName": "Mexico",
     "CountryCode": "MX"
   },
+  "mxv": {
+    "Currency": "",
+    "Code": "mxv",
+    "NotKnown": true
+  },
   "myr": {
     "Currency": "Ringgit",
     "Code": "MYR",
     "Symbol": "RM",
     "CountryName": "Malaysia",
     "CountryCode": "MY"
+  },
+  "mzm": {
+    "Currency": "Mozambican Metical",
+    "Code": "mzm",
+    "NotKnown": true
   },
   "mzn": {
     "Currency": "Metical",
@@ -694,6 +1734,36 @@
     "CountryName": "Namibia",
     "CountryCode": "NA"
   },
+  "nct": {
+    "Currency": "Polyswarm",
+    "Code": "nct",
+    "NotKnown": true
+  },
+  "near": {
+    "Currency": "NEAR Protocol",
+    "Code": "near",
+    "NotKnown": true
+  },
+  "neo": {
+    "Currency": "NEO",
+    "Code": "neo",
+    "NotKnown": true
+  },
+  "nest": {
+    "Currency": "NEST Protocol",
+    "Code": "nest",
+    "NotKnown": true
+  },
+  "nexo": {
+    "Currency": "NEXO",
+    "Code": "nexo",
+    "NotKnown": true
+  },
+  "nft": {
+    "Currency": "NFT",
+    "Code": "nft",
+    "NotKnown": true
+  },
   "ngn": {
     "Currency": "Naira",
     "Code": "NGN",
@@ -707,6 +1777,21 @@
     "Symbol": "C$",
     "CountryName": "Nicaragua",
     "CountryCode": "NI"
+  },
+  "nkn": {
+    "Currency": "NKN",
+    "Code": "nkn",
+    "NotKnown": true
+  },
+  "nlg": {
+    "Currency": "Dutch Guilder",
+    "Code": "nlg",
+    "NotKnown": true
+  },
+  "nmr": {
+    "Currency": "Numeraire Network",
+    "Code": "nmr",
+    "NotKnown": true
   },
   "nok": {
     "Currency": "Krone",
@@ -722,12 +1807,37 @@
     "CountryName": "Nepal",
     "CountryCode": "NP"
   },
+  "nu": {
+    "Currency": "NuCypher",
+    "Code": "nu",
+    "NotKnown": true
+  },
   "nzd": {
     "Currency": "Dollar",
     "Code": "NZD",
     "Symbol": "$",
     "CountryName": "New Zealand",
     "CountryCode": "NZ"
+  },
+  "ocean": {
+    "Currency": "Ocean Protocol",
+    "Code": "ocean",
+    "NotKnown": true
+  },
+  "ogn": {
+    "Currency": "Origin Token",
+    "Code": "ogn",
+    "NotKnown": true
+  },
+  "okb": {
+    "Currency": "Okex",
+    "Code": "okb",
+    "NotKnown": true
+  },
+  "omg": {
+    "Currency": "Omisego",
+    "Code": "omg",
+    "NotKnown": true
   },
   "omr": {
     "Currency": "Rial",
@@ -736,6 +1846,41 @@
     "CountryName": "Oman",
     "CountryCode": "OM"
   },
+  "one": {
+    "Currency": "Menlo One",
+    "Code": "one",
+    "NotKnown": true
+  },
+  "ooki": {
+    "Currency": "Ooki Protocol",
+    "Code": "ooki",
+    "NotKnown": true
+  },
+  "op": {
+    "Currency": "Optimism",
+    "Code": "op",
+    "NotKnown": true
+  },
+  "orca": {
+    "Currency": "Orca",
+    "Code": "orca",
+    "NotKnown": true
+  },
+  "orn": {
+    "Currency": "Orion Protocol",
+    "Code": "orn",
+    "NotKnown": true
+  },
+  "osmo": {
+    "Currency": "Osmosis",
+    "Code": "osmo",
+    "NotKnown": true
+  },
+  "oxt": {
+    "Currency": "Orchid Network",
+    "Code": "oxt",
+    "NotKnown": true
+  },
   "pab": {
     "Currency": "Balboa",
     "Code": "PAB",
@@ -743,12 +1888,37 @@
     "CountryName": "Panama",
     "CountryCode": "PA"
   },
+  "pax": {
+    "Currency": "Paxos Standard Token",
+    "Code": "pax",
+    "NotKnown": true
+  },
+  "paxg": {
+    "Currency": "PAX Gold",
+    "Code": "paxg",
+    "NotKnown": true
+  },
   "pen": {
     "Currency": "Nuevo Sol",
     "Code": "PEN",
     "Symbol": "S/.",
     "CountryName": "Peru",
     "CountryCode": "PE"
+  },
+  "pepe": {
+    "Currency": "",
+    "Code": "pepe",
+    "NotKnown": true
+  },
+  "perp": {
+    "Currency": "Perpetual Protocol",
+    "Code": "perp",
+    "NotKnown": true
+  },
+  "pgk": {
+    "Currency": "Papua New Guinean Kina",
+    "Code": "pgk",
+    "NotKnown": true
   },
   "php": {
     "Currency": "Peso",
@@ -764,12 +1934,72 @@
     "CountryName": "Pakistan",
     "CountryCode": "PK"
   },
+  "pla": {
+    "Currency": "PlayDapp",
+    "Code": "pla",
+    "NotKnown": true
+  },
   "pln": {
     "Currency": "Zloty",
     "Code": "PLN",
     "Symbol": "zł",
     "CountryName": "Poland",
     "CountryCode": "PL"
+  },
+  "plu": {
+    "Currency": "Pluton",
+    "Code": "plu",
+    "NotKnown": true
+  },
+  "png": {
+    "Currency": "Pangolin",
+    "Code": "png",
+    "NotKnown": true
+  },
+  "pols": {
+    "Currency": "Polkastarter",
+    "Code": "pols",
+    "NotKnown": true
+  },
+  "poly": {
+    "Currency": "Polymath",
+    "Code": "poly",
+    "NotKnown": true
+  },
+  "pond": {
+    "Currency": "Marlin",
+    "Code": "pond",
+    "NotKnown": true
+  },
+  "powr": {
+    "Currency": "Powerledger",
+    "Code": "powr",
+    "NotKnown": true
+  },
+  "prime": {
+    "Currency": "Echelon Prime",
+    "Code": "prime",
+    "NotKnown": true
+  },
+  "pro": {
+    "Currency": "Propy",
+    "Code": "pro",
+    "NotKnown": true
+  },
+  "prq": {
+    "Currency": "PARSIQ",
+    "Code": "prq",
+    "NotKnown": true
+  },
+  "pte": {
+    "Currency": "Portuguese Escudo",
+    "Code": "pte",
+    "NotKnown": true
+  },
+  "pundix": {
+    "Currency": "Pundi X (New)",
+    "Code": "pundix",
+    "NotKnown": true
   },
   "pyg": {
     "Currency": "Guarani",
@@ -778,6 +2008,16 @@
     "CountryName": "Paraguay",
     "CountryCode": "PY"
   },
+  "pyr": {
+    "Currency": "Vulcan Forged PYR",
+    "Code": "pyr",
+    "NotKnown": true
+  },
+  "pyusd": {
+    "Currency": "",
+    "Code": "pyusd",
+    "NotKnown": true
+  },
   "qar": {
     "Currency": "Riyal",
     "Code": "QAR",
@@ -785,10 +2025,100 @@
     "CountryName": "Qatar",
     "CountryCode": "QA"
   },
+  "qi": {
+    "Currency": "BENQI",
+    "Code": "qi",
+    "NotKnown": true
+  },
+  "qnt": {
+    "Currency": "Quant",
+    "Code": "qnt",
+    "NotKnown": true
+  },
+  "qsp": {
+    "Currency": "Quantstamp",
+    "Code": "qsp",
+    "NotKnown": true
+  },
+  "qtum": {
+    "Currency": "QTUM",
+    "Code": "qtum",
+    "NotKnown": true
+  },
+  "quick": {
+    "Currency": "QuickSwap",
+    "Code": "quick",
+    "NotKnown": true
+  },
+  "rad": {
+    "Currency": "Radicle",
+    "Code": "rad",
+    "NotKnown": true
+  },
+  "rai": {
+    "Currency": "Rai Reflex Index",
+    "Code": "rai",
+    "NotKnown": true
+  },
+  "rare": {
+    "Currency": "SuperRare",
+    "Code": "rare",
+    "NotKnown": true
+  },
+  "rari": {
+    "Currency": "Rarible",
+    "Code": "rari",
+    "NotKnown": true
+  },
+  "rbn": {
+    "Currency": "Ribbon FInance",
+    "Code": "rbn",
+    "NotKnown": true
+  },
+  "ren": {
+    "Currency": "renBTC",
+    "Code": "ren",
+    "NotKnown": true
+  },
   "rep": {
     "Currency": "Augur",
     "Code": "REP",
     "Symbol": "Ɍ"
+  },
+  "repv2": {
+    "Currency": "REPv2",
+    "Code": "repv2",
+    "NotKnown": true
+  },
+  "req": {
+    "Currency": "Request",
+    "Code": "req",
+    "NotKnown": true
+  },
+  "rgt": {
+    "Currency": "Rari Governance Token",
+    "Code": "rgt",
+    "NotKnown": true
+  },
+  "rlc": {
+    "Currency": "iExec RLC",
+    "Code": "rlc",
+    "NotKnown": true
+  },
+  "rly": {
+    "Currency": "Rally",
+    "Code": "rly",
+    "NotKnown": true
+  },
+  "rndr": {
+    "Currency": "Render Token",
+    "Code": "rndr",
+    "NotKnown": true
+  },
+  "rol": {
+    "Currency": "Romanian Leu",
+    "Code": "rol",
+    "NotKnown": true
   },
   "ron": {
     "Currency": "New Leu",
@@ -796,6 +2126,16 @@
     "Symbol": "lei",
     "CountryName": "Romania",
     "CountryCode": "RO"
+  },
+  "rose": {
+    "Currency": "Oasis Network",
+    "Code": "rose",
+    "NotKnown": true
+  },
+  "rpl": {
+    "Currency": "Rocket Pool",
+    "Code": "rpl",
+    "NotKnown": true
   },
   "rsd": {
     "Currency": "Dinar",
@@ -809,10 +2149,25 @@
     "Symbol": "₽",
     "CountryName": "Russia"
   },
+  "rune": {
+    "Currency": "THORChain (ERC20)",
+    "Code": "rune",
+    "NotKnown": true
+  },
+  "rvn": {
+    "Currency": "Ravencoin",
+    "Code": "rvn",
+    "NotKnown": true
+  },
   "rwf": {
     "Currency": "Rwandan Franc",
     "Code": "RWF",
     "Symbol": "FR"
+  },
+  "sand": {
+    "Currency": "The Sandbox",
+    "Code": "sand",
+    "NotKnown": true
   },
   "sar": {
     "Currency": "Riyal",
@@ -835,9 +2190,19 @@
     "CountryName": "Seychelles",
     "CountryCode": "SC"
   },
+  "sdd": {
+    "Currency": "Sudanese Dinar",
+    "Code": "sdd",
+    "NotKnown": true
+  },
   "sdg": {
     "Currency": "Sudanese Pound",
     "Code": "SDG"
+  },
+  "sei": {
+    "Currency": "",
+    "Code": "sei",
+    "NotKnown": true
   },
   "sek": {
     "Currency": "Krona",
@@ -853,12 +2218,57 @@
     "CountryName": "Singapore",
     "CountryCode": "SG"
   },
+  "shib": {
+    "Currency": "Shiba Inu",
+    "Code": "shib",
+    "NotKnown": true
+  },
   "shp": {
     "Currency": "Pound",
     "Code": "SHP",
     "Symbol": "£",
     "CountryName": "Saint Helena",
     "CountryCode": "SH"
+  },
+  "shping": {
+    "Currency": "Shping Coin",
+    "Code": "shping",
+    "NotKnown": true
+  },
+  "sit": {
+    "Currency": "Slovenian Tolar",
+    "Code": "sit",
+    "NotKnown": true
+  },
+  "skk": {
+    "Currency": "Slovak Koruna",
+    "Code": "skk",
+    "NotKnown": true
+  },
+  "skl": {
+    "Currency": "SKALE Network",
+    "Code": "skl",
+    "NotKnown": true
+  },
+  "sle": {
+    "Currency": "Sierra Leonean Leone",
+    "Code": "sle",
+    "NotKnown": true
+  },
+  "sll": {
+    "Currency": "Sierra Leonean Leone",
+    "Code": "sll",
+    "NotKnown": true
+  },
+  "snt": {
+    "Currency": "Status Network",
+    "Code": "snt",
+    "NotKnown": true
+  },
+  "snx": {
+    "Currency": "Synthetix Network",
+    "Code": "snx",
+    "NotKnown": true
   },
   "sol": {
     "Currency": "Solana",
@@ -872,12 +2282,82 @@
     "CountryName": "Somalia",
     "CountryCode": "SO"
   },
+  "spa": {
+    "Currency": "Sperax",
+    "Code": "spa",
+    "NotKnown": true
+  },
+  "spell": {
+    "Currency": "Spell Token",
+    "Code": "spell",
+    "NotKnown": true
+  },
+  "spl": {
+    "Currency": "Seborgan Luigino",
+    "Code": "spl",
+    "NotKnown": true
+  },
   "srd": {
     "Currency": "Dollar",
     "Code": "SRD",
     "Symbol": "$",
     "CountryName": "Suriname",
     "CountryCode": "SR"
+  },
+  "srg": {
+    "Currency": "Surinamese Guilder",
+    "Code": "srg",
+    "NotKnown": true
+  },
+  "ssp": {
+    "Currency": "South Sudanese Pound",
+    "Code": "ssp",
+    "NotKnown": true
+  },
+  "std": {
+    "Currency": "Sao Tomean Dobra",
+    "Code": "std",
+    "NotKnown": true
+  },
+  "stg": {
+    "Currency": "Stargate Finance",
+    "Code": "stg",
+    "NotKnown": true
+  },
+  "stn": {
+    "Currency": "Sao Tomean Dobra",
+    "Code": "stn",
+    "NotKnown": true
+  },
+  "storj": {
+    "Currency": "Storj",
+    "Code": "storj",
+    "NotKnown": true
+  },
+  "stx": {
+    "Currency": "Stacks",
+    "Code": "stx",
+    "NotKnown": true
+  },
+  "sui": {
+    "Currency": "Sui",
+    "Code": "sui",
+    "NotKnown": true
+  },
+  "suku": {
+    "Currency": "SUKU",
+    "Code": "suku",
+    "NotKnown": true
+  },
+  "super": {
+    "Currency": "SuperFarm",
+    "Code": "super",
+    "NotKnown": true
+  },
+  "sushi": {
+    "Currency": "SushiSwap",
+    "Code": "sushi",
+    "NotKnown": true
   },
   "svc": {
     "Currency": "Colon",
@@ -886,11 +2366,36 @@
     "CountryName": "El Salvador",
     "CountryCode": "SV"
   },
+  "swftc": {
+    "Currency": "SwftCoin",
+    "Code": "swftc",
+    "NotKnown": true
+  },
+  "sylo": {
+    "Currency": "Sylo",
+    "Code": "sylo",
+    "NotKnown": true
+  },
+  "syn": {
+    "Currency": "Synapse",
+    "Code": "syn",
+    "NotKnown": true
+  },
   "syp": {
     "Currency": "Pound",
     "Code": "SYP",
     "Symbol": "£",
     "CountryName": "Syria"
+  },
+  "szl": {
+    "Currency": "Swazi Lilangeni",
+    "Code": "szl",
+    "NotKnown": true
+  },
+  "t": {
+    "Currency": "Threshold",
+    "Code": "t",
+    "NotKnown": true
   },
   "thb": {
     "Currency": "Baht",
@@ -899,15 +2404,65 @@
     "CountryName": "Thailand",
     "CountryCode": "TH"
   },
+  "theta": {
+    "Currency": "Theta",
+    "Code": "theta",
+    "NotKnown": true
+  },
+  "time": {
+    "Currency": "Chrono.tech",
+    "Code": "time",
+    "NotKnown": true
+  },
+  "tjs": {
+    "Currency": "Tajikistani Somoni",
+    "Code": "tjs",
+    "NotKnown": true
+  },
+  "tmm": {
+    "Currency": "Turkmenistani Manat",
+    "Code": "tmm",
+    "NotKnown": true
+  },
+  "tmt": {
+    "Currency": "Turkmenistani Manat",
+    "Code": "tmt",
+    "NotKnown": true
+  },
   "tnd": {
     "Currency": "Tunisian Dinar",
     "Code": "TND",
     "Symbol": "د.ت.‏"
   },
+  "ton": {
+    "Currency": "Tokamak Network",
+    "Code": "ton",
+    "NotKnown": true
+  },
+  "tone": {
+    "Currency": "TE-FOOD",
+    "Code": "tone",
+    "NotKnown": true
+  },
   "top": {
     "Currency": "Tongan Paʻanga",
     "Code": "TOP",
     "Symbol": "T$"
+  },
+  "trac": {
+    "Currency": "OriginTrail",
+    "Code": "trac",
+    "NotKnown": true
+  },
+  "trb": {
+    "Currency": "Tellor",
+    "Code": "trb",
+    "NotKnown": true
+  },
+  "tribe": {
+    "Currency": "Tribe",
+    "Code": "tribe",
+    "NotKnown": true
   },
   "trl": {
     "Currency": "Lira",
@@ -915,6 +2470,16 @@
     "Symbol": "₺",
     "CountryName": "Turkey",
     "CountryCode": "TR"
+  },
+  "tru": {
+    "Currency": "TrueFi",
+    "Code": "tru",
+    "NotKnown": true
+  },
+  "trx": {
+    "Currency": "TRON",
+    "Code": "trx",
+    "NotKnown": true
   },
   "try": {
     "Currency": "Turkish Lira",
@@ -928,6 +2493,16 @@
     "CountryName": "Trinidad and Tobago",
     "CountryCode": "TT"
   },
+  "ttt": {
+    "Currency": "Tap Project",
+    "Code": "ttt",
+    "NotKnown": true
+  },
+  "tusd": {
+    "Currency": "True USD",
+    "Code": "tusd",
+    "NotKnown": true
+  },
   "tvd": {
     "Currency": "Dollar",
     "Code": "TVD",
@@ -935,11 +2510,21 @@
     "CountryName": "Tuvalu",
     "CountryCode": "TV"
   },
+  "tvk": {
+    "Currency": "Terra Virtua Kolect",
+    "Code": "tvk",
+    "NotKnown": true
+  },
   "twd": {
     "Currency": "New Dollar",
     "Code": "TWD",
     "Symbol": "NT$",
     "CountryName": "Taiwan"
+  },
+  "twt": {
+    "Currency": "Trust Wallet Token",
+    "Code": "twt",
+    "NotKnown": true
   },
   "tzs": {
     "Currency": "Tanzanian Shilling",
@@ -958,6 +2543,26 @@
     "Code": "UGX",
     "Symbol": "USh"
   },
+  "uma": {
+    "Currency": "Universal Market Access",
+    "Code": "uma",
+    "NotKnown": true
+  },
+  "unfi": {
+    "Currency": "Unifi Protocol DAO",
+    "Code": "unfi",
+    "NotKnown": true
+  },
+  "uni": {
+    "Currency": "Uniswap",
+    "Code": "uni",
+    "NotKnown": true
+  },
+  "upi": {
+    "Currency": "Pawtocol",
+    "Code": "upi",
+    "NotKnown": true
+  },
   "usd": {
     "Currency": "Dollar",
     "Code": "USD",
@@ -965,10 +2570,30 @@
     "CountryName": "United States",
     "CountryCode": "US"
   },
+  "usdc": {
+    "Currency": "USDC",
+    "Code": "usdc",
+    "NotKnown": true
+  },
+  "usdd": {
+    "Currency": "",
+    "Code": "usdd",
+    "NotKnown": true
+  },
+  "usdp": {
+    "Currency": "USDP Stablecoin",
+    "Code": "usdp",
+    "NotKnown": true
+  },
   "usdt": {
     "Currency": "Tether",
     "Code": "USDT",
     "Symbol": "₮"
+  },
+  "ust": {
+    "Currency": "TerraUSD",
+    "Code": "ust",
+    "NotKnown": true
   },
   "uyu": {
     "Currency": "Peso",
@@ -984,12 +2609,47 @@
     "CountryName": "Uzbekistan",
     "CountryCode": "UZ"
   },
+  "val": {
+    "Currency": "Vatican City Lira",
+    "Code": "val",
+    "NotKnown": true
+  },
+  "vara": {
+    "Currency": "",
+    "Code": "vara",
+    "NotKnown": true
+  },
+  "veb": {
+    "Currency": "Venezuelan Bolívar",
+    "Code": "veb",
+    "NotKnown": true
+  },
+  "ved": {
+    "Currency": "",
+    "Code": "ved",
+    "NotKnown": true
+  },
   "vef": {
     "Currency": "Bolivar Fuerte",
     "Code": "VEF",
     "Symbol": "Bs",
     "CountryName": "Venezuela",
     "CountryCode": "VE"
+  },
+  "ves": {
+    "Currency": "Venezuelan Bolívar",
+    "Code": "ves",
+    "NotKnown": true
+  },
+  "vet": {
+    "Currency": "Vechain",
+    "Code": "vet",
+    "NotKnown": true
+  },
+  "vgx": {
+    "Currency": "Voyager Token",
+    "Code": "vgx",
+    "NotKnown": true
   },
   "vnd": {
     "Currency": "Dong",
@@ -998,10 +2658,135 @@
     "CountryName": "Viet Nam",
     "CountryCode": "VN"
   },
+  "voxel": {
+    "Currency": "Voxies",
+    "Code": "voxel",
+    "NotKnown": true
+  },
+  "vtho": {
+    "Currency": "VeChainThor",
+    "Code": "vtho",
+    "NotKnown": true
+  },
+  "vuv": {
+    "Currency": "Ni-Vanuatu Vatu",
+    "Code": "vuv",
+    "NotKnown": true
+  },
+  "wampl": {
+    "Currency": "Wrapped Ampleforth",
+    "Code": "wampl",
+    "NotKnown": true
+  },
+  "waves": {
+    "Currency": "Waves",
+    "Code": "waves",
+    "NotKnown": true
+  },
+  "waxl": {
+    "Currency": "Axelar",
+    "Code": "waxl",
+    "NotKnown": true
+  },
+  "wbtc": {
+    "Currency": "Wrapped Bitcoin",
+    "Code": "wbtc",
+    "NotKnown": true
+  },
+  "wcfg": {
+    "Currency": "Wrapped Centrifuge",
+    "Code": "wcfg",
+    "NotKnown": true
+  },
+  "wemix": {
+    "Currency": "WEMIX",
+    "Code": "wemix",
+    "NotKnown": true
+  },
+  "wluna": {
+    "Currency": "Wrapped LUNA",
+    "Code": "wluna",
+    "NotKnown": true
+  },
+  "woo": {
+    "Currency": "WOO Network",
+    "Code": "woo",
+    "NotKnown": true
+  },
+  "wst": {
+    "Currency": "Samoan Tala",
+    "Code": "wst",
+    "NotKnown": true
+  },
   "xaf": {
     "Currency": "CFA Franc BEAC",
     "Code": "XAF",
     "Symbol": "FCFA"
+  },
+  "xag": {
+    "Currency": "Silver Ounce",
+    "Code": "xag",
+    "NotKnown": true
+  },
+  "xau": {
+    "Currency": "Gold Ounce",
+    "Code": "xau",
+    "NotKnown": true
+  },
+  "xaut": {
+    "Currency": "Tether Gold",
+    "Code": "xaut",
+    "NotKnown": true
+  },
+  "xbt": {
+    "Currency": "",
+    "Code": "xbt",
+    "NotKnown": true
+  },
+  "xcd": {
+    "Currency": "East Caribbean Dollar",
+    "Code": "xcd",
+    "NotKnown": true
+  },
+  "xch": {
+    "Currency": "Chia",
+    "Code": "xch",
+    "NotKnown": true
+  },
+  "xcn": {
+    "Currency": "Chain",
+    "Code": "xcn",
+    "NotKnown": true
+  },
+  "xdc": {
+    "Currency": "XDC Network",
+    "Code": "xdc",
+    "NotKnown": true
+  },
+  "xdr": {
+    "Currency": "IMF Special Drawing Rights",
+    "Code": "xdr",
+    "NotKnown": true
+  },
+  "xec": {
+    "Currency": "Eternal Coin",
+    "Code": "xec",
+    "NotKnown": true
+  },
+  "xem": {
+    "Currency": "NEM",
+    "Code": "xem",
+    "NotKnown": true
+  },
+  "xlm": {
+    "Currency": "Stellar Lumen",
+    "Code": "xlm",
+    "NotKnown": true
+  },
+  "xmon": {
+    "Currency": "XMON",
+    "Code": "xmon",
+    "NotKnown": true
   },
   "xmr": {
     "Currency": "Monero",
@@ -1013,6 +2798,21 @@
     "Code": "XOF",
     "Symbol": "CFA"
   },
+  "xpd": {
+    "Currency": "Palladium Ounce",
+    "Code": "xpd",
+    "NotKnown": true
+  },
+  "xpf": {
+    "Currency": "CFP Franc",
+    "Code": "xpf",
+    "NotKnown": true
+  },
+  "xpt": {
+    "Currency": "Platinum Ounce",
+    "Code": "xpt",
+    "NotKnown": true
+  },
   "xrp": {
     "Currency": "XRP",
     "Code": "XRP",
@@ -1023,12 +2823,27 @@
     "Code": "XTZ",
     "Symbol": "ꜩ"
   },
+  "xyo": {
+    "Currency": "XYO Network",
+    "Code": "xyo",
+    "NotKnown": true
+  },
   "yer": {
     "Currency": "Rial",
     "Code": "YER",
     "Symbol": "﷼",
     "CountryName": "Yemen",
     "CountryCode": "YE"
+  },
+  "yfi": {
+    "Currency": "Yearn Finance",
+    "Code": "yfi",
+    "NotKnown": true
+  },
+  "yfii": {
+    "Currency": "DFI.Money",
+    "Code": "yfii",
+    "NotKnown": true
   },
   "zar": {
     "Currency": "Rand",
@@ -1042,10 +2857,30 @@
     "Code": "ZEC",
     "Symbol": "ⓩ"
   },
+  "zen": {
+    "Currency": "Horizen",
+    "Code": "zen",
+    "NotKnown": true
+  },
+  "zil": {
+    "Currency": "Zilliqa",
+    "Code": "zil",
+    "NotKnown": true
+  },
   "zmk": {
     "Currency": "Zambian Kwacha",
     "Code": "ZMK",
     "Symbol": "ZK"
+  },
+  "zmw": {
+    "Currency": "Zambian Kwacha",
+    "Code": "zmw",
+    "NotKnown": true
+  },
+  "zrx": {
+    "Currency": "ZRX 0x",
+    "Code": "zrx",
+    "NotKnown": true
   },
   "zwd": {
     "Currency": "Dollar",

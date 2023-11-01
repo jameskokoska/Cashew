@@ -4,7 +4,7 @@ import 'package:budget/pages/creditDebtTransactionsPage.dart';
 import 'package:budget/pages/editHomePage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
-import 'package:budget/widgets/keepAliveClientMixin.dart';
+import 'package:budget/widgets/util/keepAliveClientMixin.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/transactionsAmountBox.dart';
 import 'package:easy_localization/easy_localization.dart';

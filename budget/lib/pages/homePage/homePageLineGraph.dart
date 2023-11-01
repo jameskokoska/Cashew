@@ -6,7 +6,7 @@ import 'package:budget/pages/editHomePage.dart';
 import 'package:budget/struct/currencyFunctions.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
-import 'package:budget/widgets/keepAliveClientMixin.dart';
+import 'package:budget/widgets/util/keepAliveClientMixin.dart';
 import 'package:budget/widgets/lineGraph.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:flutter/material.dart';

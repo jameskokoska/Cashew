@@ -794,11 +794,20 @@
   "bill-splitter-multiplier-description": "Masukkan nilai yang akan dikalikan dengan setiap item dalam pembagi tagihan. Berguna jika pajak diterapkan pada setiap item.",
   "more-options": "Lebih banyak pilihan",
   "cannot-display-graph-for-current-time-period": "Tidak dapat menampilkan grafik untuk periode waktu saat ini.",
-  "exclude-from-budget": "Dikecualikan dari anggaran",
+  "exclude-from-budget": "Mengecualikan dari anggaran",
   "erase-synced-data-and-cloud-backups": "Hapus data yang disinkronkan dan cadangan cloud",
   "erase-cloud-data": "Hapus data cloud",
   "erase-cloud-data-description": "Masuk ke akun Google Anda dan hapus cadangan yang terletak di bawah 'Sync' dan 'Backups'",
   "add": "Menambahkan",
   "transaction-type": "tipe transaksi",
-  "do-not-show-again": "Jangan tunjukkan lagi"
+  "do-not-show-again": "Jangan tunjukkan lagi",
+  "add-attachment": "Tambahkan sisipan",
+  "add-attachment-description": "Lampiran ditambahkan ke Google Drive Anda",
+  "take-photo": "Memotret",
+  "select-photo": "Pilih foto",
+  "select-file": "Pilih file",
+  "error-attaching-file": "File attaching kesalahan",
+  "no-photo-taken": "Tidak ada foto yang diambil",
+  "major-change-14": "Lampiran transaksi",
+  "major-change-14-1": "Lampirkan foto atau file ke transaksi melalui Google Drive"
 }

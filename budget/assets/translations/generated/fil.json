@@ -100,7 +100,7 @@
   "pay-subscriptions-description": "Awtomatikong markahan ang isang subscription bilang bayad pagkatapos ng takdang petsa",
   "pay-repetitive": "Magbayad ng paulit -ulit",
   "pay-repetitive-description": "Awtomatikong markahan ang isang paulit -ulit na transaksyon na binabayaran pagkatapos ng takdang petsa",
-  "pay-upcoming": "Magbayad paparating",
+  "pay-upcoming": "Magbayad ng paparating",
   "pay-upcoming-description": "Awtomatikong markahan ang isang paparating na transaksyon na nabayaran pagkatapos ng takdang petsa",
   "import-csv": "I -import ang CSV file",
   "import-csv-description": "Mag -import ng isang panlabas na mapagkukunan ng data ng CSV",
@@ -800,5 +800,14 @@
   "erase-cloud-data-description": "Mag -login sa iyong Google account at tanggalin ang mga backup na matatagpuan sa ilalim ng 'Sync' at 'Backups'",
   "add": "Idagdag",
   "transaction-type": "Uri ng transaksyon",
-  "do-not-show-again": "Huwag magpakita ulit"
+  "do-not-show-again": "Huwag magpakita ulit",
+  "add-attachment": "Magdagdag ng kalakip",
+  "add-attachment-description": "Ang mga kalakip ay idinagdag sa iyong Google Drive",
+  "take-photo": "Kunan ng litrato",
+  "select-photo": "Piliin ang Larawan",
+  "select-file": "Piliin ang File",
+  "error-attaching-file": "Error na nakakabit ng file",
+  "no-photo-taken": "Walang kinunan ng larawan",
+  "major-change-14": "Mga Attachment ng Transaksyon",
+  "major-change-14-1": "Ikabit ang mga larawan o file sa mga transaksyon sa pamamagitan ng Google Drive"
 }

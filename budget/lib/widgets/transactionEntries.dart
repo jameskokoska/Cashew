@@ -320,25 +320,27 @@ class TransactionEntries extends StatelessWidget {
 
         Widget noResults = Column(
           children: [
-            NoResults(
-              message: noResultsMessage ??
-                  "no-transactions-within-time-range".tr() +
-                      "." +
-                      (budget != null
-                          ? ("\n" +
-                              "(" +
-                              getWordedDateShortMore(
-                                  startDay ?? DateTime.now()) +
-                              " - " +
-                              getWordedDateShortMore(endDay ?? DateTime.now()) +
-                              ")")
-                          : ""),
-              tintColor: colorScheme != null
-                  ? colorScheme?.primary.withOpacity(0.6)
-                  : null,
-              noSearchResultsVariation: noSearchResultsVariation,
-              padding: noResultsPadding,
-            ),
+            if (showNoResults)
+              NoResults(
+                message: noResultsMessage ??
+                    "no-transactions-within-time-range".tr() +
+                        "." +
+                        (budget != null
+                            ? ("\n" +
+                                "(" +
+                                getWordedDateShortMore(
+                                    startDay ?? DateTime.now()) +
+                                " - " +
+                                getWordedDateShortMore(
+                                    endDay ?? DateTime.now()) +
+                                ")")
+                            : ""),
+                tintColor: colorScheme != null
+                    ? colorScheme?.primary.withOpacity(0.6)
+                    : null,
+                noSearchResultsVariation: noSearchResultsVariation,
+                padding: noResultsPadding,
+              ),
             if (noResultsExtraWidget != null) noResultsExtraWidget!,
           ],
         );

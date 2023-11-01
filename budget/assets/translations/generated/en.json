@@ -800,5 +800,14 @@
   "erase-cloud-data-description": "Login to your Google account and delete backups located under 'Sync' and 'Backups'",
   "add": "Add",
   "transaction-type": "Transaction Type",
-  "do-not-show-again": "Don't show again"
+  "do-not-show-again": "Don't show again",
+  "add-attachment": "Add attachment",
+  "add-attachment-description": "Attachments are added to your Google Drive",
+  "take-photo": "Take Photo",
+  "select-photo": "Select Photo",
+  "select-file": "Select File",
+  "error-attaching-file": "Error Attaching File",
+  "no-photo-taken": "No photo taken",
+  "major-change-14": "Transaction Attachments",
+  "major-change-14-1": "Attach photos or files to transactions via Google Drive"
 }

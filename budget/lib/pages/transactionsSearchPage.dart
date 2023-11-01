@@ -290,8 +290,8 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
                       padding: const EdgeInsets.only(
                         left: 20,
                         right: 20,
-                        top: 20,
-                        bottom: 40,
+                        top: 15,
+                        bottom: 50,
                       ),
                       child: TextFont(
                         fontSize: 13,

@@ -29,7 +29,7 @@ class CashFlow extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.data != null && snapshot.hasData) {
           return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 17),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
             child: TextFont(
               text: "total-cash-flow".tr() +
                   ": " +

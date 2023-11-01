@@ -800,5 +800,14 @@
   "erase-cloud-data-description": "Googleアカウントにログインし、「同期」と「バックアップ」の下にあるバックアップを削除します",
   "add": "追加",
   "transaction-type": "トランザクションタイプ",
-  "do-not-show-again": "二度と見せないでください"
+  "do-not-show-again": "二度と見せないでください",
+  "add-attachment": "添付ファイルを追加する",
+  "add-attachment-description": "添付ファイルはGoogleドライブに追加されます",
+  "take-photo": "写真を撮る",
+  "select-photo": "写真を選択します",
+  "select-file": "ファイルを選ぶ",
+  "error-attaching-file": "エラーファイルの添付",
+  "no-photo-taken": "写真はありません",
+  "major-change-14": "トランザクション添付ファイル",
+  "major-change-14-1": "Googleドライブを介してトランザクションに写真またはファイルを添付します"
 }

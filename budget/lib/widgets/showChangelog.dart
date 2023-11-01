@@ -22,6 +22,14 @@ import 'listItem.dart';
 
 String getChangelogString() {
   return """
+    < 4.7.9
+    Photo and document attachments for transactions
+    Improved refresh rate on some devices
+    Added 367 more currencies
+    Exiting preview demo pops all routes
+    Improved the way links are parsed in transaction notes
+    Cleaned currency picker interface for missing information
+    Fixed show no results in transaction entries
     < 4.7.8
     Automatic marking as paid for upcoming and repetitive transactions
     Added automatic marking as paid setting to subscriptions and scheduled transactions page
@@ -1720,6 +1728,15 @@ Map<String, List<MajorChanges>> getMajorChanges() {
         Icons.bug_report_rounded,
         info: [
           "major-change-6-1".tr(),
+        ],
+      ),
+    ],
+    "< 4.7.9": [
+      MajorChanges(
+        "major-change-14".tr(),
+        Icons.attach_file_rounded,
+        info: [
+          "major-change-14-1".tr(),
         ],
       ),
     ],

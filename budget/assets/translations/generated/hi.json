@@ -100,7 +100,7 @@
   "pay-subscriptions-description": "नियत तारीख के बाद भुगतान के रूप में स्वचालित रूप से एक सदस्यता को चिह्नित करें",
   "pay-repetitive": "दोहराव का भुगतान करें",
   "pay-repetitive-description": "नियत तारीख के बाद भुगतान के रूप में एक दोहराव लेनदेन को स्वचालित रूप से चिह्नित करें",
-  "pay-upcoming": "आगामी भुगतान करें",
+  "pay-upcoming": "भुगतान करें",
   "pay-upcoming-description": "नियत तारीख के बाद भुगतान के रूप में एक आगामी लेनदेन को स्वचालित रूप से चिह्नित करें",
   "import-csv": "आयात CSV फ़ाइल",
   "import-csv-description": "एक बाहरी CSV डेटा स्रोत आयात करें",
@@ -772,7 +772,7 @@
   "clear-selection": "चयन साफ़ करें",
   "view-all-days": "सभी दिन देखें",
   "view-to-today": "आज का दृश्य",
-  "subcategories-description": "अपने लेनदेन को और व्यवस्थित करने के लिए उपश्रेणियाँ बनाएं जिस तरह से आप इसे चाहते हैं",
+  "subcategories-description": "अपने लेनदेन को और व्यवस्थित करने के लिए उपश्रेणियाँ बनाएं जिस तरह से आप चाहते हैं",
   "examples": "उदाहरण",
   "drinks": "पेय",
   "coffee": "कॉफी",
@@ -800,5 +800,14 @@
   "erase-cloud-data-description": "अपने Google खाते में लॉगिन करें और 'सिंक' और 'बैकअप' के तहत स्थित बैकअप को हटा दें",
   "add": "जोड़ना",
   "transaction-type": "सौदे का प्रकार",
-  "do-not-show-again": "फिर से मत दिखाओ"
+  "do-not-show-again": "फिर से मत दिखाओ",
+  "add-attachment": "अय्टाचमेंट जोडे",
+  "add-attachment-description": "संलग्नक आपके Google ड्राइव में जोड़े जाते हैं",
+  "take-photo": "फोटो लो",
+  "select-photo": "फोटो का चयन करें",
+  "select-file": "फ़ाइल का चयन करें",
+  "error-attaching-file": "त्रुटि संलग्न फ़ाइल",
+  "no-photo-taken": "कोई फोटो नहीं लिया",
+  "major-change-14": "लेन -देन संलग्नक",
+  "major-change-14-1": "Google ड्राइव के माध्यम से लेनदेन के लिए फ़ोटो या फ़ाइलें संलग्न करें"
 }

@@ -800,5 +800,14 @@
   "erase-cloud-data-description": "Đăng nhập vào tài khoản Google của bạn và xóa các bản sao lưu nằm trong 'Sync' và 'Sao lưu'",
   "add": "Thêm vào",
   "transaction-type": "Loại giao dịch",
-  "do-not-show-again": "Đừng hiển thị lại"
+  "do-not-show-again": "Đừng hiển thị lại",
+  "add-attachment": "Thêm bản đính kèm",
+  "add-attachment-description": "Tệp đính kèm được thêm vào ổ đĩa Google của bạn",
+  "take-photo": "Chụp hình",
+  "select-photo": "Chọn tấm ảnh",
+  "select-file": "Chọn tập tin",
+  "error-attaching-file": "Lỗi khi đính kèm tệp",
+  "no-photo-taken": "Không có ảnh chụp",
+  "major-change-14": "Tệp đính kèm giao dịch",
+  "major-change-14-1": "Đính kèm ảnh hoặc tệp vào giao dịch qua Google Drive"
 }

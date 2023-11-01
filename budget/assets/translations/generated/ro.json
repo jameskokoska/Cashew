@@ -800,5 +800,14 @@
   "erase-cloud-data-description": "Conectați -vă la contul dvs. Google și ștergeți backup -urile situate în „Sync” și „Backup -uri”",
   "add": "Adăuga",
   "transaction-type": "tipul tranzacției",
-  "do-not-show-again": "Nu mai arăta din nou"
+  "do-not-show-again": "Nu mai arăta din nou",
+  "add-attachment": "Adauga atasament",
+  "add-attachment-description": "Atașamentele sunt adăugate la Google Drive",
+  "take-photo": "Fa o poza",
+  "select-photo": "Selectați fotografie",
+  "select-file": "Selectați fișier",
+  "error-attaching-file": "Eroare la atașarea fișierului",
+  "no-photo-taken": "Nici o fotografie făcută",
+  "major-change-14": "Atașamente de tranzacție",
+  "major-change-14-1": "Atașați fotografii sau fișiere la tranzacții prin Google Drive"
 }

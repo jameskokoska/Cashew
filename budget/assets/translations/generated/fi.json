@@ -800,5 +800,14 @@
   "erase-cloud-data-description": "Kirjaudu Google -tiliisi ja poista varmuuskopiot, jotka sijaitsevat 'synkronoinnissa' ja 'varmuuskopiot'",
   "add": "Lisätä",
   "transaction-type": "Maksutavan tyyppi",
-  "do-not-show-again": "Älä näytä uudestaan"
+  "do-not-show-again": "Älä näytä uudestaan",
+  "add-attachment": "Lisää LIITE",
+  "add-attachment-description": "Liitteet lisätään Google -asemaan",
+  "take-photo": "Ottaa valokuva",
+  "select-photo": "Valitse valokuva",
+  "select-file": "Valitse tiedosto",
+  "error-attaching-file": "Virhe liitetiedosto",
+  "no-photo-taken": "Ei valokuvaa otettu",
+  "major-change-14": "Transaktioliitteet",
+  "major-change-14-1": "Liitä valokuvia tai tiedostoja tapahtumiin Google Driven kautta"
 }

@@ -800,5 +800,14 @@
   "erase-cloud-data-description": "আপনার গুগল অ্যাকাউন্টে লগইন করুন এবং 'সিঙ্ক' এবং 'ব্যাকআপস' এর অধীনে অবস্থিত ব্যাকআপগুলি মুছুন",
   "add": "যোগ করুন",
   "transaction-type": "লেনদেন প্রকার",
-  "do-not-show-again": "আবার দেখাবেন না"
+  "do-not-show-again": "আবার দেখাবেন না",
+  "add-attachment": "সংযুক্তি যোগ",
+  "add-attachment-description": "আপনার গুগল ড্রাইভে সংযুক্তি যুক্ত করা হয়",
+  "take-photo": "ছবি তোল",
+  "select-photo": "ফটো নির্বাচন করুন",
+  "select-file": "নথি নির্বাচন",
+  "error-attaching-file": "ফাইল সংযুক্ত করতে ত্রুটি",
+  "no-photo-taken": "কোন ছবি তোলা",
+  "major-change-14": "লেনদেন সংযুক্তি",
+  "major-change-14-1": "গুগল ড্রাইভের মাধ্যমে লেনদেনে ফটো বা ফাইল সংযুক্ত করুন"
 }

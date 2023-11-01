@@ -101,7 +101,7 @@
   "pay-repetitive": "تکراری پرداخت کنید",
   "pay-repetitive-description": "به طور خودکار یک معامله تکراری را که پس از موعد مقرر پرداخت می شود علامت گذاری کنید",
   "pay-upcoming": "پرداخت آینده",
-  "pay-upcoming-description": "به طور خودکار یک معامله آینده را همانطور که پس از موعد مقرر پرداخت می شود ، علامت گذاری کنید",
+  "pay-upcoming-description": "به طور خودکار یک معامله آینده را همانطور که پس از موعد مقرر پرداخت می شود علامت گذاری کنید",
   "import-csv": "وارد کردن پرونده CSV",
   "import-csv-description": "منبع داده CSV خارجی را وارد کنید",
   "rate-app": "نرخ {برنامه}",
@@ -800,5 +800,14 @@
   "erase-cloud-data-description": "وارد حساب Google خود شوید و نسخه پشتیبان تهیه شده در زیر \"Sync\" و \"Backups\" را حذف کنید",
   "add": "اضافه کردن",
   "transaction-type": "نوع معامله",
-  "do-not-show-again": "دوباره نشان نده"
+  "do-not-show-again": "دوباره نشان نده",
+  "add-attachment": "پیوست را اضافه کنید",
+  "add-attachment-description": "پیوست ها به Drive Google شما اضافه می شوند",
+  "take-photo": "عکس گرفتن",
+  "select-photo": "عکس را انتخاب کنید",
+  "select-file": "فایل را انتخاب کنید",
+  "error-attaching-file": "خطا در پیوست پرونده",
+  "no-photo-taken": "عکسی گرفته نشده است",
+  "major-change-14": "پیوست های معامله",
+  "major-change-14-1": "عکس ها یا پرونده ها را از طریق Google Drive به معاملات وصل کنید"
 }

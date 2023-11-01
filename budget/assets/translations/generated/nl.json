@@ -788,7 +788,7 @@
   "insurance": "Verzekering",
   "beauty": "Schoonheid",
   "haircut": "Kapsel",
-  "touchups": "Aanraking",
+  "touchups": "Touchups",
   "clothing": "Kleding",
   "multiplier": "Vermenigvuldiger",
   "bill-splitter-multiplier-description": "Voer een waarde in die wordt vermenigvuldigd met elk item in de Bill Splitter. Handig als belasting op elk item wordt toegepast.",
@@ -800,5 +800,14 @@
   "erase-cloud-data-description": "Log in op uw Google -account en verwijder back -ups onder 'Sync' en 'back -ups'",
   "add": "Toevoegen",
   "transaction-type": "Transactie Type",
-  "do-not-show-again": "Laat niet meer zien"
+  "do-not-show-again": "Laat niet meer zien",
+  "add-attachment": "Voeg bijlage toe",
+  "add-attachment-description": "Bijlagen worden toegevoegd aan uw Google Drive",
+  "take-photo": "Foto nemen",
+  "select-photo": "Selecteer foto",
+  "select-file": "Selecteer bestand",
+  "error-attaching-file": "Fout bij het bijvoegen van bestand",
+  "no-photo-taken": "Geen foto gemaakt",
+  "major-change-14": "Transactiebijlagen",
+  "major-change-14-1": "Voeg foto's of bestanden toe aan transacties via Google Drive"
 }

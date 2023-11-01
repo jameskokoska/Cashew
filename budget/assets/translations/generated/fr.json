@@ -800,5 +800,14 @@
   "erase-cloud-data-description": "Connectez-vous à votre compte Google et supprimez les sauvegardes situées sous «Sync» et «Backups»",
   "add": "Ajouter",
   "transaction-type": "Type de transaction",
-  "do-not-show-again": "Ne montrez plus"
+  "do-not-show-again": "Ne montrez plus",
+  "add-attachment": "Ajouter une pièce jointe",
+  "add-attachment-description": "Des pièces jointes sont ajoutées à votre Google Drive",
+  "take-photo": "Prendre une photo",
+  "select-photo": "Sélectionner la photo",
+  "select-file": "Choisir le dossier",
+  "error-attaching-file": "Fichier d'erreur de connexion",
+  "no-photo-taken": "Aucune photo prise",
+  "major-change-14": "Pièces jointes",
+  "major-change-14-1": "Joindre des photos ou des fichiers aux transactions via Google Drive"
 }

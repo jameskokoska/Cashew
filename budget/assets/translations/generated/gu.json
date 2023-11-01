@@ -800,5 +800,14 @@
   "erase-cloud-data-description": "તમારા Google એકાઉન્ટ પર લ Login ગિન કરો અને 'સિંક' અને 'બેકઅપ્સ' હેઠળ સ્થિત બેકઅપ્સ કા delete ી નાખો",
   "add": "ઉમેરો",
   "transaction-type": "વ્યવહાર પ્રકાર",
-  "do-not-show-again": "ફરીથી બતાવશો નહીં"
+  "do-not-show-again": "ફરીથી બતાવશો નહીં",
+  "add-attachment": "જોડાણ ઉમેરો",
+  "add-attachment-description": "તમારા Google ડ્રાઇવમાં જોડાણો ઉમેરવામાં આવે છે",
+  "take-photo": "ફોટો પાડ",
+  "select-photo": "ફોટો પસંદ કરો",
+  "select-file": "ફાઇલ પસંદ કરો",
+  "error-attaching-file": "ફાઇલ જોડવામાં ભૂલ",
+  "no-photo-taken": "કોઈ ફોટો લીધો નથી",
+  "major-change-14": "લેવડદેવડ",
+  "major-change-14-1": "ગૂગલ ડ્રાઇવ દ્વારા વ્યવહારમાં ફોટા અથવા ફાઇલો જોડો"
 }

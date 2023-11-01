@@ -26,7 +26,7 @@ import 'package:budget/widgets/lineGraph.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/selectedTransactionsAppBar.dart';
-import 'package:budget/widgets/keepAliveClientMixin.dart';
+import 'package:budget/widgets/util/keepAliveClientMixin.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntries.dart';

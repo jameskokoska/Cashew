@@ -1,3 +1,4 @@
+import 'package:budget/database/generatePreviewData.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/pages/accountsPage.dart';
@@ -9,6 +10,7 @@ import 'package:budget/pages/premiumPage.dart';
 import 'package:budget/pages/sharedBudgetSettings.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
+import 'package:budget/struct/uploadAttachment.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/categoryIcon.dart';
 import 'package:budget/widgets/globalSnackBar.dart';
@@ -39,11 +41,13 @@ import 'package:budget/widgets/util/widgetSize.dart';
 import 'package:budget/widgets/viewAllTransactionsButton.dart';
 import 'package:drift/drift.dart' hide Column;
 import 'package:easy_localization/easy_localization.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:budget/colors.dart';
 import 'package:flutter/services.dart' hide TextInput;
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:budget/widgets/util/showTimePicker.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
@@ -806,6 +810,16 @@ class _AddTransactionPageState extends State<AddTransactionPage>
     );
   }
 
+  void addAttachmentLinkToNote(String? link) {
+    if (link == null) return;
+    setSelectedNoteController(
+      (selectedNote ?? "") +
+          (selectedNote == "" || selectedNote == null ? "" : "\n") +
+          (link),
+    );
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     Color categoryColor = dynamicPastel(
@@ -1184,6 +1198,131 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                     }
                   },
                 ),
+                LinkInNotes(
+                  color: lightenPastel(
+                      (appStateSettings["materialYou"]
+                          ? Theme.of(context).colorScheme.secondaryContainer
+                          : getColor(context, "canvasContainer")),
+                      amount: 0.1),
+                  link: "add-attachment".tr(),
+                  iconData: appStateSettings["outlinedIcons"]
+                      ? Icons.attachment_outlined
+                      : Icons.attachment_rounded,
+                  iconDataAfter: appStateSettings["outlinedIcons"]
+                      ? Icons.add_outlined
+                      : Icons.add_rounded,
+                  onTap: () async {
+                    openBottomSheet(
+                      context,
+                      PopupFramework(
+                        title: "add-attachment".tr().capitalizeFirstofEach,
+                        subtitle: "add-attachment-description".tr(),
+                        child: Column(
+                          children: [
+                            if (kIsWeb == false)
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 13),
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      child: OutlinedButtonStacked(
+                                        filled: false,
+                                        alignLeft: true,
+                                        alignBeside: true,
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 20, vertical: 20),
+                                        text: "take-photo".tr(),
+                                        iconData:
+                                            appStateSettings["outlinedIcons"]
+                                                ? Icons.camera_alt_outlined
+                                                : Icons.camera_alt_rounded,
+                                        onTap: () async {
+                                          Navigator.pop(context);
+                                          if (await checkLockedFeatureIfInDemoMode(
+                                                  context) ==
+                                              true) {
+                                            String? result =
+                                                await getPhotoAndUpload(
+                                                    source: ImageSource.camera);
+                                            addAttachmentLinkToNote(result);
+                                          }
+                                        },
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            if (kIsWeb == false)
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 13),
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      child: OutlinedButtonStacked(
+                                        filled: false,
+                                        alignLeft: true,
+                                        alignBeside: true,
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 20, vertical: 20),
+                                        text: "select-photo".tr(),
+                                        iconData:
+                                            appStateSettings["outlinedIcons"]
+                                                ? Icons.photo_library_outlined
+                                                : Icons.photo_library_rounded,
+                                        onTap: () async {
+                                          Navigator.pop(context);
+                                          if (await checkLockedFeatureIfInDemoMode(
+                                                  context) ==
+                                              true) {
+                                            String? result =
+                                                await getPhotoAndUpload(
+                                                    source:
+                                                        ImageSource.gallery);
+                                            addAttachmentLinkToNote(result);
+                                          }
+                                        },
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            Padding(
+                              padding: const EdgeInsets.only(bottom: 13),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: OutlinedButtonStacked(
+                                      filled: false,
+                                      alignLeft: true,
+                                      alignBeside: true,
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 20, vertical: 20),
+                                      text: "select-file".tr(),
+                                      iconData:
+                                          appStateSettings["outlinedIcons"]
+                                              ? Icons.file_open_outlined
+                                              : Icons.file_open_rounded,
+                                      onTap: () async {
+                                        Navigator.pop(context);
+                                        if (await checkLockedFeatureIfInDemoMode(
+                                                context) ==
+                                            true) {
+                                          String? result =
+                                              await getFileAndUpload();
+                                          addAttachmentLinkToNote(result);
+                                        }
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                ),
                 AnimatedSizeSwitcher(
                   child: extractLinks(selectedNote ?? "").length <= 0
                       ? Container(
@@ -1193,55 +1332,14 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                           children: [
                             for (String link
                                 in extractLinks(selectedNote ?? ""))
-                              Tappable(
+                              LinkInNotes(
+                                link: link,
+                                onLongPress: () {
+                                  copyToClipboard(link);
+                                },
                                 onTap: () {
-                                  if (link.contains("http://"))
-                                    link = "http://www." +
-                                        link
-                                            .replaceFirst("www.", "")
-                                            .replaceFirst("http://", "");
-                                  else if (link.contains("https://"))
-                                    link = "https://www." +
-                                        link
-                                            .replaceFirst("www.", "")
-                                            .replaceFirst("https://", "");
-                                  else
-                                    link = "http://www." +
-                                        link
-                                            .replaceFirst("www.", "")
-                                            .replaceFirst("https://", "")
-                                            .replaceFirst("http://", "");
                                   openUrl(link);
                                 },
-                                color: darkenPastel(
-                                    (appStateSettings["materialYou"]
-                                        ? Theme.of(context)
-                                            .colorScheme
-                                            .secondaryContainer
-                                        : getColor(context, "canvasContainer")),
-                                    amount: 0.2),
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 15, vertical: 10),
-                                  child: Row(
-                                    children: [
-                                      Icon(appStateSettings["outlinedIcons"]
-                                          ? Icons.link_outlined
-                                          : Icons.link_rounded),
-                                      SizedBox(width: 10),
-                                      Expanded(
-                                        child: TextFont(
-                                          text: link
-                                              .replaceFirst("www.", "")
-                                              .replaceFirst("http://", "")
-                                              .replaceFirst("https://", ""),
-                                          fontSize: 16,
-                                          maxLines: 1,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
                               ),
                           ],
                         ),
@@ -3410,4 +3508,61 @@ Future<MainAndSubcategory> selectCategorySequence(
     }
   }
   return mainAndSubcategory;
+}
+
+class LinkInNotes extends StatelessWidget {
+  const LinkInNotes({
+    required this.link,
+    required this.onTap,
+    this.onLongPress,
+    this.iconData,
+    this.iconDataAfter,
+    this.color,
+    super.key,
+  });
+  final String link;
+  final VoidCallback onTap;
+  final VoidCallback? onLongPress;
+  final IconData? iconData;
+  final IconData? iconDataAfter;
+  final Color? color;
+
+  @override
+  Widget build(BuildContext context) {
+    return Tappable(
+      onTap: onTap,
+      onLongPress: onLongPress,
+      color: color ??
+          darkenPastel(
+              (appStateSettings["materialYou"]
+                  ? Theme.of(context).colorScheme.secondaryContainer
+                  : getColor(context, "canvasContainer")),
+              amount: 0.2),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+        child: Row(
+          children: [
+            Icon(
+              iconData ??
+                  (appStateSettings["outlinedIcons"]
+                      ? Icons.link_outlined
+                      : Icons.link_rounded),
+            ),
+            SizedBox(width: 10),
+            Expanded(
+              child: TextFont(
+                text: link
+                    .replaceFirst("www.", "")
+                    .replaceFirst("http://", "")
+                    .replaceFirst("https://", ""),
+                fontSize: 16,
+                maxLines: 1,
+              ),
+            ),
+            if (iconDataAfter != null) Icon(iconDataAfter),
+          ],
+        ),
+      ),
+    );
+  }
 }

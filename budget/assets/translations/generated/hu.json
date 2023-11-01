@@ -800,5 +800,14 @@
   "erase-cloud-data-description": "Jelentkezzen be a Google -fiókjába, és törölje a „Sync” és a „Backups” alatt található biztonsági mentéseket",
   "add": "Hozzáad",
   "transaction-type": "Tranzakció Típusa",
-  "do-not-show-again": "Ne mutasd meg újra"
+  "do-not-show-again": "Ne mutasd meg újra",
+  "add-attachment": "Add hozzá a mellékletet",
+  "add-attachment-description": "A mellékleteket hozzáadják a Google Drive -hoz",
+  "take-photo": "Fotót készíteni",
+  "select-photo": "Válassza ki a fotót",
+  "select-file": "Válaszd ki a fájlt",
+  "error-attaching-file": "Hiba a fájl csatolása",
+  "no-photo-taken": "Nincs fotó készített",
+  "major-change-14": "Tranzakciós mellékletek",
+  "major-change-14-1": "Fotók vagy fájlok csatolása a tranzakciókhoz a Google Drive segítségével"
 }

@@ -11,7 +11,7 @@ import 'package:budget/pages/walletDetailsPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/framework/popupFramework.dart';
-import 'package:budget/widgets/keepAliveClientMixin.dart';
+import 'package:budget/widgets/util/keepAliveClientMixin.dart';
 import 'package:budget/widgets/linearGradientFadedEdges.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/openBottomSheet.dart';

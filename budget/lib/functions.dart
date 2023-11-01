@@ -11,6 +11,7 @@ import 'package:budget/widgets/selectAmount.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_displaymode/flutter_displaymode.dart';
 import 'package:url_launcher/url_launcher.dart';
 import './colors.dart';
 import 'package:flutter/material.dart';
@@ -912,7 +913,7 @@ Future<String> getDeviceInfo() async {
 }
 
 List<String> extractLinks(String text) {
-  RegExp regExp = new RegExp(r'(http(s)?://)?(www\.)?\S+\.(com|ca)(?![0-9.])');
+  RegExp regExp = RegExp(r'https?://(?:www\.)?\S+');
   Iterable<RegExpMatch> matches = regExp.allMatches(text);
   List<String> links = [];
   for (RegExpMatch match in matches) {
@@ -950,7 +951,7 @@ List<String> popularCurrencies = [
 String getDevicesDefaultCurrencyCode() {
   String? currentCountryCode =
       WidgetsBinding.instance.platformDispatcher.locale.countryCode;
-  print(currentCountryCode);
+  // print(currentCountryCode);
   for (String currencyKey in currenciesJSON.keys) {
     if (currenciesJSON[currencyKey]["CountryCode"] == currentCountryCode) {
       return currencyKey;
@@ -1072,4 +1073,15 @@ Future<int?> getAndroidVersion() async {
     }
   }
   return androidVersion;
+}
+
+Future<bool> setHighRefreshRate() async {
+  try {
+    if (getPlatform() == PlatformOS.isAndroid)
+      await FlutterDisplayMode.setHighRefreshRate();
+    return true;
+  } catch (e) {
+    print("Error setting high refresh rate: " + e.toString());
+  }
+  return false;
 }

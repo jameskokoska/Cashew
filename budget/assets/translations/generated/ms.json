@@ -800,5 +800,14 @@
   "erase-cloud-data-description": "Log masuk ke akaun Google anda dan padamkan sandaran yang terletak di bawah 'Sync' dan 'Backups'",
   "add": "Tambah",
   "transaction-type": "Jenis transaksi",
-  "do-not-show-again": "Jangan tunjukkan lagi"
+  "do-not-show-again": "Jangan tunjukkan lagi",
+  "add-attachment": "Tambah lampiran",
+  "add-attachment-description": "Lampiran ditambah ke pemacu google anda",
+  "take-photo": "Mengambil gambar",
+  "select-photo": "Pilih foto",
+  "select-file": "Pilih fail",
+  "error-attaching-file": "Ralat melampirkan fail",
+  "no-photo-taken": "Tiada foto yang diambil",
+  "major-change-14": "Lampiran transaksi",
+  "major-change-14-1": "Lampirkan foto atau fail ke urus niaga melalui Google Drive"
 }
