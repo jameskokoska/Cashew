@@ -154,6 +154,8 @@ class TransactionEntries extends StatelessWidget {
       ),
       builder: (context, snapshot) {
         if (snapshot.data != null && snapshot.hasData) {
+          // print(snapshot.data!.length);
+
           if (snapshot.data!.length > 0) {
             List<Widget> widgetsOut = [];
             int currentTotalIndex = 0;

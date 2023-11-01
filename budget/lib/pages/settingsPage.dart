@@ -581,20 +581,10 @@ class SettingsPageContent extends StatelessWidget {
         //   title: "Auto Transactions",
         //   icon: appStateSettings["outlinedIcons"] ? Icons.auto_fix_high_outlined : Icons.auto_fix_high_rounded,
         // ),
-        SettingsContainerSwitch(
-          title: "pay-subscriptions".tr(),
-          description: "pay-subscriptions-description".tr(),
-          onSwitched: (value) async {
-            if (true) {
-              await markSubscriptionsAsPaid();
-              await setUpcomingNotifications(context);
-            }
-            updateSettings("automaticallyPaySubscriptions", value,
-                updateGlobalState: false);
-          },
-          initialValue: appStateSettings["automaticallyPaySubscriptions"],
-          icon: getTransactionTypeIcon(TransactionSpecialType.subscription),
-        ),
+
+        AutoPayUpcomingSetting(),
+        AutoPayRepetitiveSetting(),
+        AutoPaySubscriptionsSetting(),
 
         AskForTitlesToggle(),
 

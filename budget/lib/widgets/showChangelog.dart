@@ -22,6 +22,10 @@ import 'listItem.dart';
 
 String getChangelogString() {
   return """
+    < 4.7.8
+    Automatic marking as paid for upcoming and repetitive transactions
+    Added automatic marking as paid setting to subscriptions and scheduled transactions page
+    Fixed order or setting upcoming notifications after automatically marking transactions
     < 4.7.7
     Balance correction transactions removed from home page graph when income/expense tab selected
     (to be consistent with the income and expense total implementations for balance corrections)

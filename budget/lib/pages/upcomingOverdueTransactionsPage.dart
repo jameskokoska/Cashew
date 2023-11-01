@@ -4,16 +4,22 @@ import 'package:budget/functions.dart';
 import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/subscriptionsPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
+import 'package:budget/struct/initializeNotifications.dart';
 import 'package:budget/struct/settings.dart';
+import 'package:budget/struct/upcomingTransactionsFunctions.dart';
 import 'package:budget/widgets/animatedExpanded.dart';
 import 'package:budget/widgets/button.dart';
+import 'package:budget/widgets/dropdownSelect.dart';
 import 'package:budget/widgets/fab.dart';
 import 'package:budget/widgets/fadeIn.dart';
+import 'package:budget/widgets/framework/popupFramework.dart';
+import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/noResults.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/selectedTransactionsAppBar.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
+import 'package:budget/widgets/settingsContainers.dart';
 import 'package:budget/widgets/slidingSelectorIncomeExpense.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
@@ -79,6 +85,36 @@ class _UpcomingOverdueTransactionsState
             listID: pageId,
             title: "scheduled".tr(),
             dragDownToDismiss: true,
+            actions: [
+              CustomPopupMenuButton(
+                showButtons: enableDoubleColumn(context),
+                keepOutFirst: true,
+                items: [
+                  DropdownItemMenu(
+                    id: "settings",
+                    label: "settings".tr(),
+                    icon: appStateSettings["outlinedIcons"]
+                        ? Icons.settings_outlined
+                        : Icons.settings_rounded,
+                    action: () {
+                      openBottomSheet(
+                        context,
+                        PopupFramework(
+                          hasPadding: false,
+                          child: Column(
+                            children: [
+                              AutoPayUpcomingSetting(),
+                              AutoPayRepetitiveSetting(),
+                              AutoPaySubscriptionsSetting(),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ],
+              ),
+            ],
             slivers: [
               SliverToBoxAdapter(
                   child: CenteredAmountAndNumTransactions(
@@ -373,6 +409,49 @@ class CenteredAmountAndNumTransactions extends StatelessWidget {
         ),
         SizedBox(height: 20),
       ],
+    );
+  }
+}
+
+class AutoPayUpcomingSetting extends StatelessWidget {
+  const AutoPayUpcomingSetting({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return SettingsContainerSwitch(
+      title: "pay-upcoming".tr(),
+      description: "pay-upcoming-description".tr(),
+      onSwitched: (value) async {
+        // Need to change setting first, otherwise the function would not run!
+        await updateSettings("automaticallyPayUpcoming", value,
+            updateGlobalState: false);
+        await markUpcomingAsPaid();
+        await setUpcomingNotifications(context);
+      },
+      initialValue: appStateSettings["automaticallyPayUpcoming"],
+      icon: getTransactionTypeIcon(TransactionSpecialType.upcoming),
+    );
+  }
+}
+
+class AutoPayRepetitiveSetting extends StatelessWidget {
+  const AutoPayRepetitiveSetting({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return SettingsContainerSwitch(
+      title: "pay-repetitive".tr(),
+      description: "pay-repetitive-description".tr(),
+      onSwitched: (value) async {
+        // Need to change setting first, otherwise the function would not run!
+        await updateSettings("automaticallyPayRepetitive", value,
+            updateGlobalState: false);
+        // Repetitive and subscriptions are handled by the same function
+        await markSubscriptionsAsPaid();
+        await setUpcomingNotifications(context);
+      },
+      initialValue: appStateSettings["automaticallyPayRepetitive"],
+      icon: getTransactionTypeIcon(TransactionSpecialType.repetitive),
     );
   }
 }

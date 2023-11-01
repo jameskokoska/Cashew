@@ -370,7 +370,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
         selectedType != null) {
       await openBottomSheet(
         context,
-        fullSnap: false,
+        fullSnap: true,
         PopupFramework(
           title: "transaction-type".tr(),
           child: Column(

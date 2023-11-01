@@ -3,6 +3,11 @@ import 'package:budget/database/tables.dart';
 import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
+import 'package:budget/struct/initializeNotifications.dart';
+import 'package:budget/struct/upcomingTransactionsFunctions.dart';
+import 'package:budget/widgets/dropdownSelect.dart';
+import 'package:budget/widgets/framework/popupFramework.dart';
+import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/selectedTransactionsAppBar.dart';
 import 'package:budget/widgets/button.dart';
@@ -11,6 +16,7 @@ import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/widgets/noResults.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
+import 'package:budget/widgets/settingsContainers.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntry/transactionEntry.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -68,6 +74,30 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
             ),
             dragDownToDismiss: true,
             title: "subscriptions".tr(),
+            actions: [
+              CustomPopupMenuButton(
+                showButtons: enableDoubleColumn(context),
+                keepOutFirst: true,
+                items: [
+                  DropdownItemMenu(
+                    id: "settings",
+                    label: "settings".tr(),
+                    icon: appStateSettings["outlinedIcons"]
+                        ? Icons.settings_outlined
+                        : Icons.settings_rounded,
+                    action: () {
+                      openBottomSheet(
+                        context,
+                        PopupFramework(
+                          hasPadding: false,
+                          child: AutoPaySubscriptionsSetting(),
+                        ),
+                      );
+                    },
+                  ),
+                ],
+              ),
+            ],
             slivers: [
               SliverToBoxAdapter(
                 child: Padding(
@@ -320,31 +350,36 @@ class UpcomingTransactionDateHeader extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Row(
-              children: [
-                TextFont(
-                  text: getWordedDateShortMore(transaction.dateCreated),
-                  fontWeight: small ? FontWeight.normal : FontWeight.bold,
-                  fontSize: small ? 14 : 18,
-                  textColor: small ? getColor(context, "textLight") : null,
-                ),
-                daysDifference != 0
-                    ? TextFont(
-                        fontSize: small ? 14 : 16,
-                        textColor: getColor(context, "textLight"),
-                        text: " • " +
-                            daysDifference.abs().toString() +
-                            " " +
-                            (daysDifference.abs() == 1
-                                ? "day".tr()
-                                : "days".tr()) +
-                            (daysDifference > 0
-                                ? " " + "overdue".tr().toLowerCase()
-                                : ""),
-                        fontWeight: small ? FontWeight.normal : FontWeight.bold,
-                      )
-                    : SizedBox(),
-              ],
+            Flexible(
+              child: Row(
+                children: [
+                  TextFont(
+                    text: getWordedDateShortMore(transaction.dateCreated),
+                    fontWeight: small ? FontWeight.normal : FontWeight.bold,
+                    fontSize: small ? 14 : 18,
+                    textColor: small ? getColor(context, "textLight") : null,
+                  ),
+                  Flexible(
+                    child: daysDifference != 0
+                        ? TextFont(
+                            fontSize: small ? 14 : 16,
+                            textColor: getColor(context, "textLight"),
+                            text: " • " +
+                                daysDifference.abs().toString() +
+                                " " +
+                                (daysDifference.abs() == 1
+                                    ? "day".tr()
+                                    : "days".tr()) +
+                                (daysDifference > 0
+                                    ? " " + "overdue".tr().toLowerCase()
+                                    : ""),
+                            fontWeight:
+                                small ? FontWeight.normal : FontWeight.bold,
+                          )
+                        : SizedBox(),
+                  ),
+                ],
+              ),
             ),
             transaction.type == TransactionSpecialType.repetitive ||
                     transaction.type == TransactionSpecialType.subscription
@@ -386,6 +421,27 @@ class UpcomingTransactionDateHeader extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class AutoPaySubscriptionsSetting extends StatelessWidget {
+  const AutoPaySubscriptionsSetting({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return SettingsContainerSwitch(
+      title: "pay-subscriptions".tr(),
+      description: "pay-subscriptions-description".tr(),
+      onSwitched: (value) async {
+        // Need to change setting first, otherwise the function would not run!
+        await updateSettings("automaticallyPaySubscriptions", value,
+            updateGlobalState: false);
+        await markSubscriptionsAsPaid();
+        await setUpcomingNotifications(context);
+      },
+      initialValue: appStateSettings["automaticallyPaySubscriptions"],
+      icon: getTransactionTypeIcon(TransactionSpecialType.subscription),
     );
   }
 }

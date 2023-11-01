@@ -272,12 +272,18 @@ Future openUnpayDebtCreditPopup(
 }
 
 Future<bool> markSubscriptionsAsPaid({int? iteration}) async {
-  if (appStateSettings["automaticallyPaySubscriptions"]) {
+  if (appStateSettings["automaticallyPaySubscriptions"] ||
+      appStateSettings["automaticallyPayRepetitive"]) {
     // Loop through, because a new one that was created automatically may be past due
     if (iteration != null && iteration > 50) {
       return true;
     }
-    List<Transaction> subscriptions = await database.getAllSubscriptions().$2;
+    List<Transaction> subscriptions = [
+      if (appStateSettings["automaticallyPaySubscriptions"])
+        ...(await database.getAllSubscriptions().$2),
+      if (appStateSettings["automaticallyPayRepetitive"])
+        ...(await database.getAllOverdueRepetitiveTransactions().$2)
+    ];
     bool hasUpdatedASubscription = false;
     for (Transaction transaction in subscriptions) {
       if (transaction.dateCreated.isBefore(DateTime.now())) {
@@ -296,6 +302,24 @@ Future<bool> markSubscriptionsAsPaid({int? iteration}) async {
     }
     print("Automatically paid subscriptions with iteration: " +
         iteration.toString());
+  }
+  return true;
+}
+
+Future<bool> markUpcomingAsPaid() async {
+  if (appStateSettings["automaticallyPayUpcoming"]) {
+    List<Transaction> upcoming =
+        await database.getAllOverdueUpcomingTransactions().$2;
+    for (Transaction transaction in upcoming) {
+      if (transaction.dateCreated.isBefore(DateTime.now())) {
+        Transaction transactionNew = transaction.copyWith(
+          paid: true,
+          dateCreated: transaction.dateCreated,
+        );
+        await database.createOrUpdateTransaction(transactionNew);
+      }
+    }
+    print("Automatically paid upcoming transactions");
   }
   return true;
 }

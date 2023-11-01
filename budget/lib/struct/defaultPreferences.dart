@@ -69,6 +69,8 @@ Future<Map<String, dynamic>> getDefaultPreferences() async {
     "askForTransactionTitle": true,
     "askForTransactionNoteWithTitle": false,
     // "batterySaver": kIsWeb,
+    "automaticallyPayUpcoming": true,
+    "automaticallyPayRepetitive": true,
     "automaticallyPaySubscriptions": true,
     "batterySaver": false,
     "username": "",

@@ -279,6 +279,7 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
                   noResultsMessage: "no-transactions-found".tr(),
                   noSearchResultsVariation: true,
                   searchFilters: searchFilters,
+                  // limit: 250,
                 ),
                 SliverToBoxAdapter(
                   child: GestureDetector(

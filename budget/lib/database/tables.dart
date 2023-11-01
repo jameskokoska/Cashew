@@ -1134,6 +1134,7 @@ class FinanceDatabase extends _$FinanceDatabase {
       leftOuterJoin(subCategories,
           subCategories.categoryPk.equalsExp(transactions.subCategoryFk)),
     ])
+      ..limit(limit ?? DEFAULT_LIMIT, offset: null)
       ..orderBy([
         // This will bring unpaid transactions to the top of the list
         // Before it brought it to the top of the day, but now
@@ -1457,6 +1458,7 @@ class FinanceDatabase extends _$FinanceDatabase {
         .watch();
   }
 
+  // This gets all overdue subscription transactions
   (Stream<List<Transaction>>, Future<List<Transaction>>) getAllSubscriptions() {
     final query = select(transactions)
       ..orderBy([(t) => OrderingTerm.asc(t.dateCreated)])
@@ -1470,6 +1472,35 @@ class FinanceDatabase extends _$FinanceDatabase {
     return (query.watch(), query.get());
   }
 
+  // This gets all overdue upcoming transactions
+  (Stream<List<Transaction>>, Future<List<Transaction>>)
+      getAllOverdueUpcomingTransactions() {
+    final query = select(transactions)
+      ..orderBy([(t) => OrderingTerm.asc(t.dateCreated)])
+      ..where(
+        (transaction) =>
+            transactions.paid.equals(false) &
+            transactions.type.equals(TransactionSpecialType.upcoming.index) &
+            transactions.skipPaid.equals(false),
+      );
+    return (query.watch(), query.get());
+  }
+
+  // This gets all overdue repetitive transactions
+  (Stream<List<Transaction>>, Future<List<Transaction>>)
+      getAllOverdueRepetitiveTransactions() {
+    final query = select(transactions)
+      ..orderBy([(t) => OrderingTerm.asc(t.dateCreated)])
+      ..where(
+        (transaction) =>
+            transactions.paid.equals(false) &
+            transactions.type.equals(TransactionSpecialType.repetitive.index) &
+            transactions.skipPaid.equals(false),
+      );
+    return (query.watch(), query.get());
+  }
+
+  // This only gets upcoming transactions that are past the current time
   Future<List<Transaction>> getAllUpcomingTransactions(
       {int? limit, DateTime? startDate, DateTime? endDate}) {
     final query = select(transactions)

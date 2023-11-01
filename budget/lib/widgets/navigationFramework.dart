@@ -192,13 +192,14 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
         openBackupReminderPopupCheck(context);
       }
 
-      // Should do this after syncing
-      // The upcoming transactions may have been modified after a sync
-      await setUpcomingNotifications(context);
-
       // Mark subscriptions as paid AFTER syncing with cloud
       // Maybe another device already marked them as paid
       await markSubscriptionsAsPaid();
+      await markUpcomingAsPaid();
+
+      // Should do this after syncing and after the subscriptions/upcoming transactions auto paid for
+      // The upcoming transactions may have been modified after a sync
+      await setUpcomingNotifications(context);
 
       database.deleteWanderingTransactions();
 
