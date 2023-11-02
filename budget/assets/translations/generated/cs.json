@@ -804,10 +804,16 @@
   "add-attachment": "Přidat přílohu",
   "add-attachment-description": "Přílohy jsou přidány na váš disk Google",
   "take-photo": "Vyfotit",
-  "select-photo": "Vyberte fotografii",
+  "select-photo": "Vyberte fotku",
   "select-file": "Zvolte soubor",
   "error-attaching-file": "Připojení souboru chyby",
   "no-photo-taken": "Žádná fotografie",
   "major-change-14": "Transakční přílohy",
-  "major-change-14-1": "Připojte fotografie nebo soubory k transakcím přes disk Google"
+  "major-change-14-1": "Připojte fotografie nebo soubory k transakcím přes disk Google",
+  "ending": "konec",
+  "until-forever": "Navždy",
+  "goal-reached": "Cíl dosáhl!",
+  "goal-overdue": "Cíl zpožděný",
+  "save": "Uložit",
+  "spend": "Strávit"
 }

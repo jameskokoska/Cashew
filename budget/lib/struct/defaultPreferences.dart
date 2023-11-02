@@ -135,7 +135,9 @@ Future<Map<String, dynamic>> getDefaultPreferences() async {
     "premiumPopupFreeSeen": false,
     "previewDemo": false,
     "purchaseID": null,
-    // For showing information within a certain cycle
+    // *********************************************************** //
+    // For showing information within a certain cycle for all spending wallet details page
+    // cycleSettingsExtension = ""
     "selectedPeriodCycleType": CycleType.allTime.index,
     "cyclePeriodLength": 1,
     "cycleReoccurrence": BudgetReoccurence.monthly.index,
@@ -144,5 +146,85 @@ Future<Map<String, dynamic>> getDefaultPreferences() async {
     "customPeriodStartDate":
         DateTime(DateTime.now().year, DateTime.now().month, 1).toString(),
     "customPeriodPastDays": 30,
+    // For showing information within a certain cycle for pie chart
+    // cycleSettingsExtension = "PieChart"
+    "selectedPeriodCycleTypePieChart": CycleType.allTime.index,
+    "cyclePeriodLengthPieChart": 1,
+    "cycleReoccurrencePieChart": BudgetReoccurence.monthly.index,
+    "cycleStartDatePieChart":
+        DateTime(DateTime.now().year, DateTime.now().month, 1).toString(),
+    "customPeriodStartDatePieChart":
+        DateTime(DateTime.now().year, DateTime.now().month, 1).toString(),
+    "customPeriodPastDaysPieChart": 30,
+    // For showing information within a certain cycle for net worth
+    // cycleSettingsExtension = "NetWorth"
+    "selectedPeriodCycleTypeNetWorth": CycleType.allTime.index,
+    "cyclePeriodLengthNetWorth": 1,
+    "cycleReoccurrenceNetWorth": BudgetReoccurence.monthly.index,
+    "cycleStartDateNetWorth":
+        DateTime(DateTime.now().year, DateTime.now().month, 1).toString(),
+    "customPeriodStartDateNetWorth":
+        DateTime(DateTime.now().year, DateTime.now().month, 1).toString(),
+    "customPeriodPastDaysNetWorth": 30,
+    // For showing information within a certain cycle for income and expenses (allSpendingSummary)
+    // cycleSettingsExtension = "AllSpendingSummary"
+    "selectedPeriodCycleTypeAllSpendingSummary": CycleType.allTime.index,
+    "cyclePeriodLengthAllSpendingSummary": 1,
+    "cycleReoccurrenceAllSpendingSummary": BudgetReoccurence.monthly.index,
+    "cycleStartDateAllSpendingSummary":
+        DateTime(DateTime.now().year, DateTime.now().month, 1).toString(),
+    "customPeriodStartDateAllSpendingSummary":
+        DateTime(DateTime.now().year, DateTime.now().month, 1).toString(),
+    "customPeriodPastDaysAllSpendingSummary": 30,
+    // *********************************************************** //
   };
 }
+
+dynamic attemptToMigrateCyclePreferences(
+    dynamic currentUserSettings, String key) {
+  try {
+    if (
+        // This is a setting we need to find a value for
+        migrateCyclePreferencesKeys.keys.contains(key) &&
+            // The current setting does not have a value
+            currentUserSettings[key] == null &&
+            // We have a current setting for the previous associated value
+            currentUserSettings[migrateCyclePreferencesKeys[key]] != null) {
+      print("Migrating cycle setting " +
+          key.toString() +
+          " to the value of " +
+          currentUserSettings[migrateCyclePreferencesKeys[key]].toString() +
+          " from key " +
+          migrateCyclePreferencesKeys[key].toString());
+      currentUserSettings[key] =
+          currentUserSettings[migrateCyclePreferencesKeys[key]];
+    }
+  } catch (e) {
+    print("Error migrating cycle preferences " + e.toString());
+  }
+
+  return currentUserSettings;
+}
+
+Map<String, String> migrateCyclePreferencesKeys = {
+  "selectedPeriodCycleTypePieChart": "selectedPeriodCycleType",
+  "cyclePeriodLengthPieChart": "cyclePeriodLength",
+  "cycleReoccurrencePieChart": "cycleReoccurrence",
+  "cycleStartDatePieChart": "customPeriodStartDate",
+  "customPeriodStartDatePieChart": "customPeriodStartDate",
+  "customPeriodPastDaysPieChart": "customPeriodPastDays",
+  //
+  "selectedPeriodCycleTypeNetWorth": "selectedPeriodCycleType",
+  "cyclePeriodLengthNetWorth": "cyclePeriodLength",
+  "cycleReoccurrenceNetWorth": "cycleReoccurrence",
+  "cycleStartDateNetWorth": "customPeriodStartDate",
+  "customPeriodStartDateNetWorth": "customPeriodStartDate",
+  "customPeriodPastDaysNetWorth": "customPeriodPastDays",
+  //
+  "selectedPeriodCycleTypeAllSpendingSummary": "selectedPeriodCycleType",
+  "cyclePeriodLengthAllSpendingSummary": "cyclePeriodLength",
+  "cycleReoccurrenceAllSpendingSummary": "cycleReoccurrence",
+  "cycleStartDateAllSpendingSummary": "customPeriodStartDate",
+  "customPeriodStartDateAllSpendingSummary": "customPeriodStartDate",
+  "customPeriodPastDaysAllSpendingSummary": "customPeriodPastDays",
+};

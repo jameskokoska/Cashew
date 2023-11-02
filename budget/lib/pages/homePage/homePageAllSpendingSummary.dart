@@ -4,6 +4,10 @@ import 'package:budget/pages/editHomePage.dart';
 import 'package:budget/pages/transactionsSearchPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
+import 'package:budget/widgets/framework/popupFramework.dart';
+import 'package:budget/widgets/navigationFramework.dart';
+import 'package:budget/widgets/openBottomSheet.dart';
+import 'package:budget/widgets/periodCyclePicker.dart';
 import 'package:budget/widgets/util/keepAliveClientMixin.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/transactionsAmountBox.dart';
@@ -27,12 +31,25 @@ class HomePageAllSpendingSummary extends StatelessWidget {
           children: [
             Expanded(
               child: TransactionsAmountBox(
+                onLongPress: () async {
+                  await openBottomSheet(
+                    context,
+                    PopupFramework(
+                      title: "select-period".tr(),
+                      child: PeriodCyclePicker(
+                        cycleSettingsExtension: "AllSpendingSummary",
+                      ),
+                    ),
+                  );
+                  homePageStateKey.currentState?.refreshState();
+                },
                 label: "income".tr(),
                 amountStream: database.watchTotalOfWallet(
                   null,
                   isIncome: true,
                   allWallets: Provider.of<AllWallets>(context),
                   followCustomPeriodCycle: true,
+                  cycleSettingsExtension: "AllSpendingSummary",
                 ),
                 textColor: getColor(context, "incomeAmount"),
                 transactionsAmountStream:
@@ -40,6 +57,7 @@ class HomePageAllSpendingSummary extends StatelessWidget {
                   null,
                   isIncome: true,
                   followCustomPeriodCycle: true,
+                  cycleSettingsExtension: "AllSpendingSummary",
                 ),
                 openPage: TransactionsSearchPage(
                   initialFilters: SearchFilters(
@@ -51,12 +69,25 @@ class HomePageAllSpendingSummary extends StatelessWidget {
             SizedBox(width: 13),
             Expanded(
               child: TransactionsAmountBox(
+                onLongPress: () async {
+                  await openBottomSheet(
+                    context,
+                    PopupFramework(
+                      title: "select-period".tr(),
+                      child: PeriodCyclePicker(
+                        cycleSettingsExtension: "AllSpendingSummary",
+                      ),
+                    ),
+                  );
+                  homePageStateKey.currentState?.refreshState();
+                },
                 label: "expense".tr(),
                 amountStream: database.watchTotalOfWallet(
                   null,
                   isIncome: false,
                   allWallets: Provider.of<AllWallets>(context),
                   followCustomPeriodCycle: true,
+                  cycleSettingsExtension: "AllSpendingSummary",
                 ),
                 textColor: getColor(context, "expenseAmount"),
                 transactionsAmountStream:
@@ -64,6 +95,7 @@ class HomePageAllSpendingSummary extends StatelessWidget {
                   null,
                   isIncome: false,
                   followCustomPeriodCycle: true,
+                  cycleSettingsExtension: "AllSpendingSummary",
                 ),
                 openPage: TransactionsSearchPage(
                   initialFilters: SearchFilters(

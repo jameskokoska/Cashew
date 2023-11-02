@@ -809,5 +809,11 @@
   "error-attaching-file": "Fel Bifogningsfil",
   "no-photo-taken": "Inget foto taget",
   "major-change-14": "Transaktionsförhållanden",
-  "major-change-14-1": "Bifoga foton eller filer till transaktioner via Google Drive"
+  "major-change-14-1": "Bifoga foton eller filer till transaktioner via Google Drive",
+  "ending": "slut",
+  "until-forever": "Tills alltid",
+  "goal-reached": "Mål nådd!",
+  "goal-overdue": "Mål förfallen",
+  "save": "Spara",
+  "spend": "Spendera"
 }

@@ -809,5 +809,11 @@
   "error-attaching-file": "Lỗi khi đính kèm tệp",
   "no-photo-taken": "Không có ảnh chụp",
   "major-change-14": "Tệp đính kèm giao dịch",
-  "major-change-14-1": "Đính kèm ảnh hoặc tệp vào giao dịch qua Google Drive"
+  "major-change-14-1": "Đính kèm ảnh hoặc tệp vào giao dịch qua Google Drive",
+  "ending": "kết thúc",
+  "until-forever": "Cho đến mãi mãi",
+  "goal-reached": "Mục tiêu đạt được!",
+  "goal-overdue": "Mục tiêu quá hạn",
+  "save": "Cứu",
+  "spend": "Tiêu"
 }

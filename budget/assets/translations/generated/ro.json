@@ -100,7 +100,7 @@
   "pay-subscriptions-description": "Marcați automat un abonament așa cum este plătit după data scadenței",
   "pay-repetitive": "Plătește repetitiv",
   "pay-repetitive-description": "Marcați automat o tranzacție repetitivă, plătită după data scadenței",
-  "pay-upcoming": "Plătiți viitorul",
+  "pay-upcoming": "Plătește viitor",
   "pay-upcoming-description": "Marcați automat o tranzacție viitoare, plătită după data scadenței",
   "import-csv": "Importați fișierul CSV",
   "import-csv-description": "Importați o sursă externă de date CSV",
@@ -809,5 +809,11 @@
   "error-attaching-file": "Eroare la atașarea fișierului",
   "no-photo-taken": "Nici o fotografie făcută",
   "major-change-14": "Atașamente de tranzacție",
-  "major-change-14-1": "Atașați fotografii sau fișiere la tranzacții prin Google Drive"
+  "major-change-14-1": "Atașați fotografii sau fișiere la tranzacții prin Google Drive",
+  "ending": "final",
+  "until-forever": "Pentru totdeauna",
+  "goal-reached": "Golul atins!",
+  "goal-overdue": "Obiectiv întârziat",
+  "save": "Salvați",
+  "spend": "Petrece"
 }

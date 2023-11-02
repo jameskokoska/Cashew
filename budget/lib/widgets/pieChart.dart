@@ -212,9 +212,9 @@ class PieChartDisplayState extends State<PieChartDisplay> {
                       pieTouchResponse.touchedSection!.touchedSectionIndex) {
                 touchedIndex =
                     pieTouchResponse.touchedSection!.touchedSectionIndex;
-                print("TOUCHED");
-                print(touchedIndex);
-                print(widget.data);
+                // print("TOUCHED");
+                // print(touchedIndex);
+                // print(widget.data);
                 widget.setSelectedCategory(
                     widget.data[touchedIndex].category.categoryPk,
                     widget.data[touchedIndex].category);

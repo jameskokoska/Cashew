@@ -101,7 +101,7 @@
   "pay-repetitive": "Pagare ripetitivo",
   "pay-repetitive-description": "Segna automaticamente una transazione ripetitiva come pagato dopo la data di scadenza",
   "pay-upcoming": "Paga imminente",
-  "pay-upcoming-description": "Segna automaticamente una transazione imminente come pagato dopo la data di scadenza",
+  "pay-upcoming-description": "Segna automaticamente una transazione imminente pagata dopo la data di scadenza",
   "import-csv": "Importa file CSV",
   "import-csv-description": "Importa i dati da un file CSV esterno",
   "rate-app": "Vota {app}",
@@ -809,5 +809,11 @@
   "error-attaching-file": "Errore di allegazione del file",
   "no-photo-taken": "Nessuna foto scattata",
   "major-change-14": "Allegati di transazione",
-  "major-change-14-1": "Allega foto o file alle transazioni tramite Google Drive"
+  "major-change-14-1": "Allega foto o file alle transazioni tramite Google Drive",
+  "ending": "finale",
+  "until-forever": "Per sempre",
+  "goal-reached": "Obiettivo raggiunto!",
+  "goal-overdue": "Obiettivo in ritardo",
+  "save": "Salva",
+  "spend": "Trascorrere"
 }

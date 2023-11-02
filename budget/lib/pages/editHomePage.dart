@@ -182,7 +182,8 @@ class _EditHomePageState extends State<EditHomePage> {
                 context,
                 PopupFramework(
                   title: "select-period".tr(),
-                  child: PeriodCyclePicker(),
+                  child: PeriodCyclePicker(
+                      cycleSettingsExtension: "AllSpendingSummary"),
                 ),
               );
             },
@@ -366,7 +367,11 @@ class _EditHomePageState extends State<EditHomePage> {
                         Padding(
                           padding: const EdgeInsets.only(top: 5),
                           child: HorizontalBreakAbove(
-                              enabled: true, child: PeriodCyclePicker()),
+                            enabled: true,
+                            child: PeriodCyclePicker(
+                              cycleSettingsExtension: "PieChart",
+                            ),
+                          ),
                         ),
                       ],
                     ),

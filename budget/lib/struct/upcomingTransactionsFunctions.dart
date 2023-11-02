@@ -10,6 +10,8 @@ import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/openSnackbar.dart';
 import 'package:budget/widgets/framework/popupFramework.dart';
 import 'package:budget/widgets/selectAmount.dart';
+import 'package:budget/widgets/transactionEntry/transactionEntryTypeButton.dart';
+import 'package:budget/widgets/transactionEntry/transactionLabel.dart';
 import 'package:drift/drift.dart' hide Column;
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -40,6 +42,23 @@ createNewSubscriptionTransaction(context, Transaction transaction) async {
         transaction.dateCreated.second,
         transaction.dateCreated.millisecond,
       );
+
+      // After end date
+      if (transaction.endDate != null &&
+          transaction.endDate!.isBefore(newDate)) {
+        String transactionName = await getTransactionLabel(transaction);
+        openSnackbar(
+          SnackbarMessage(
+            title: "end-date-reached".tr(),
+            description: "for".tr().capitalizeFirst + " " + transactionName,
+            icon: appStateSettings["outlinedIcons"]
+                ? Icons.event_available_outlined
+                : Icons.event_available_rounded,
+          ),
+        );
+        return;
+      }
+
       Transaction newTransaction = transaction.copyWith(
         paid: false,
         transactionPk: "-1",

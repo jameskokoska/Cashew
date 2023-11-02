@@ -40,6 +40,7 @@ Future<bool> initializeSettings() async {
       Map<String, dynamic> userPreferencesDefault =
           await getDefaultPreferences();
       userPreferencesDefault.forEach((key, value) {
+        userSettings = attemptToMigrateCyclePreferences(userSettings, key);
         if (userSettings[key] == null) {
           userSettings[key] = userPreferencesDefault[key];
         }
@@ -226,6 +227,8 @@ Future<Map<String, dynamic>> getUserSettings() async {
     var userSettingsJSON = json.decode(userSettings);
     //Set to defaults if a new setting is added, but no entry saved
     userPreferencesDefault.forEach((key, value) {
+      userSettingsJSON =
+          attemptToMigrateCyclePreferences(userSettingsJSON, key);
       if (userSettingsJSON[key] == null) {
         userSettingsJSON[key] = userPreferencesDefault[key];
       }

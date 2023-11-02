@@ -779,7 +779,7 @@
   "bubble-tea": "Kabarcık çay",
   "soda": "Soda",
   "entertainment": "Eğlence",
-  "movies": "Film",
+  "movies": "Filmler",
   "music": "Müzik",
   "activities": "Faaliyetler",
   "car": "Araç Kredisi Ödemesi",
@@ -809,5 +809,11 @@
   "error-attaching-file": "Dosya ekleme hatası",
   "no-photo-taken": "Fotoğraf çekilmez",
   "major-change-14": "İşlem ekleri",
-  "major-change-14-1": "Google Drive üzerinden işlemlere fotoğraf veya dosyalar ekleyin"
+  "major-change-14-1": "Google Drive üzerinden işlemlere fotoğraf veya dosyalar ekleyin",
+  "ending": "bitirme",
+  "until-forever": "Sonsuza kadar",
+  "goal-reached": "Hedefe ulaşıldı!",
+  "goal-overdue": "Gol gecikmiş",
+  "save": "Kaydetmek",
+  "spend": "Harcamak"
 }

@@ -809,5 +809,11 @@
   "error-attaching-file": "错误附加文件",
   "no-photo-taken": "没有照片",
   "major-change-14": "交易附件",
-  "major-change-14-1": "通过Google Drive将照片或文件附加到交易中"
+  "major-change-14-1": "通过Google Drive将照片或文件附加到交易中",
+  "ending": "结尾",
+  "until-forever": "直到永远",
+  "goal-reached": "目标达到！",
+  "goal-overdue": "目标逾期",
+  "save": "节省",
+  "spend": "花费"
 }

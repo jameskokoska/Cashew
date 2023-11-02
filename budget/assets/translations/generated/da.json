@@ -802,12 +802,18 @@
   "transaction-type": "Transaktionstype",
   "do-not-show-again": "Vis ikke igen",
   "add-attachment": "Tilføj vedhæftning",
-  "add-attachment-description": "Vedhæftede filer tilføjes til dit Google -drev",
+  "add-attachment-description": "Vedhæftede filer føjes til dit Google -drev",
   "take-photo": "Tag et billede",
   "select-photo": "Vælg foto",
   "select-file": "Vælg fil",
   "error-attaching-file": "Fejl vedhæftet fil",
   "no-photo-taken": "Intet foto taget",
   "major-change-14": "Transaktions vedhæftede filer",
-  "major-change-14-1": "Vedhæft fotos eller filer til transaktioner via Google Drive"
+  "major-change-14-1": "Vedhæft fotos eller filer til transaktioner via Google Drive",
+  "ending": "Slutning",
+  "until-forever": "Indtil for evigt",
+  "goal-reached": "Mål nået!",
+  "goal-overdue": "Mål forfaldt",
+  "save": "Gemme",
+  "spend": "Bruge"
 }

@@ -788,7 +788,7 @@
   "insurance": "Ubezpieczenie",
   "beauty": "Uroda",
   "haircut": "Ostrzyżenie",
-  "touchups": "Dotykania",
+  "touchups": "Dotyk",
   "clothing": "Odzież",
   "multiplier": "Mnożnik",
   "bill-splitter-multiplier-description": "Wprowadź wartość, która zostanie pomnożona do każdego elementu w rozdzieleniu rachunku. Przydatne, jeśli podatek jest stosowany na każdym elemencie.",
@@ -809,5 +809,11 @@
   "error-attaching-file": "Plik podłączający błąd",
   "no-photo-taken": "Brak zdjęcia",
   "major-change-14": "Załączniki transakcyjne",
-  "major-change-14-1": "Dołącz zdjęcia lub pliki do transakcji za pośrednictwem Dysku Google"
+  "major-change-14-1": "Dołącz zdjęcia lub pliki do transakcji za pośrednictwem Dysku Google",
+  "ending": "kończący się",
+  "until-forever": "Na zawsze",
+  "goal-reached": "Cel osiągnięty!",
+  "goal-overdue": "OPTERUJĄC GORODA",
+  "save": "Ratować",
+  "spend": "Wydawać"
 }

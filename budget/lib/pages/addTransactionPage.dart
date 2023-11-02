@@ -113,6 +113,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
   List<String> selectedTags = [];
   DateTime selectedDate = DateTime.now();
   TimeOfDay selectedTime = TimeOfDay.now();
+  DateTime? selectedEndDate = null;
   int selectedPeriodLength = 1;
   String selectedRecurrence = "Monthly";
   String selectedRecurrenceDisplay = "month";
@@ -156,6 +157,20 @@ class _AddTransactionPageState extends State<AddTransactionPage>
       selectedDate =
           selectedDate.copyWith(hour: time.hour, minute: time.minute);
     });
+  }
+
+  Future<void> selectEndDate(BuildContext context) async {
+    final DateTime? picked =
+        await showCustomDatePicker(context, selectedEndDate ?? DateTime.now());
+    if (picked != null) setSelectedEndDate(picked);
+  }
+
+  setSelectedEndDate(DateTime? date) {
+    if (date != selectedEndDate) {
+      setState(() {
+        selectedEndDate = date;
+      });
+    }
   }
 
   void setSelectedCategory(TransactionCategory category,
@@ -531,6 +546,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
       categoryFk: selectedCategory?.categoryPk ?? "-1",
       subCategoryFk: selectedSubCategory?.categoryPk,
       dateCreated: selectedDate,
+      endDate: selectedEndDate,
       dateTimeModified: null,
       income: selectedIncome,
       walletFk: selectedWalletPk,
@@ -617,6 +633,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
       selectedTitle = widget.transaction!.name;
       selectedNote = widget.transaction!.note;
       selectedDate = widget.transaction!.dateCreated;
+      selectedEndDate = widget.transaction!.endDate;
       selectedTime = TimeOfDay(
         hour: widget.transaction!.dateCreated.hour,
         minute: widget.transaction!.dateCreated.minute,
@@ -1198,12 +1215,11 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                     }
                   },
                 ),
+                HorizontalBreak(padding: EdgeInsets.zero),
                 LinkInNotes(
-                  color: lightenPastel(
-                      (appStateSettings["materialYou"]
-                          ? Theme.of(context).colorScheme.secondaryContainer
-                          : getColor(context, "canvasContainer")),
-                      amount: 0.1),
+                  color: (appStateSettings["materialYou"]
+                      ? Theme.of(context).colorScheme.secondaryContainer
+                      : getColor(context, "canvasContainer")),
                   link: "add-attachment".tr(),
                   iconData: appStateSettings["outlinedIcons"]
                       ? Icons.attachment_outlined
@@ -1671,65 +1687,130 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                 selectedType ==
                                     TransactionSpecialType.subscription,
                             child: Padding(
-                              padding: const EdgeInsets.only(bottom: 8.0),
-                              child: Row(
+                              padding: const EdgeInsets.only(bottom: 9),
+                              child: Column(
                                 children: [
-                                  Expanded(
-                                    child: Wrap(
-                                      key: ValueKey(1),
-                                      alignment: WrapAlignment.center,
-                                      crossAxisAlignment:
-                                          WrapCrossAlignment.center,
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 5),
+                                    child: Row(
                                       children: [
-                                        TextFont(
-                                          text: "repeat-every".tr(),
+                                        Expanded(
+                                          child: Wrap(
+                                            key: ValueKey(1),
+                                            alignment: WrapAlignment.center,
+                                            crossAxisAlignment:
+                                                WrapCrossAlignment.center,
+                                            children: [
+                                              TextFont(
+                                                text: "repeat-every".tr(),
+                                                fontSize: 23,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                              Row(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  TappableTextEntry(
+                                                    title: selectedPeriodLength
+                                                        .toString(),
+                                                    placeholder: "0",
+                                                    showPlaceHolderWhenTextEquals:
+                                                        "0",
+                                                    onTap: () {
+                                                      selectPeriodLength(
+                                                          context);
+                                                    },
+                                                    fontSize: 23,
+                                                    fontWeight: FontWeight.bold,
+                                                    internalPadding:
+                                                        EdgeInsets.symmetric(
+                                                            vertical: 4,
+                                                            horizontal: 4),
+                                                    padding:
+                                                        EdgeInsets.symmetric(
+                                                            vertical: 0,
+                                                            horizontal: 3),
+                                                  ),
+                                                  TappableTextEntry(
+                                                    title:
+                                                        selectedRecurrenceDisplay
+                                                            .toString()
+                                                            .toLowerCase()
+                                                            .tr()
+                                                            .toLowerCase(),
+                                                    placeholder: "",
+                                                    onTap: () {
+                                                      selectRecurrence(context);
+                                                    },
+                                                    fontSize: 23,
+                                                    fontWeight: FontWeight.bold,
+                                                    internalPadding:
+                                                        EdgeInsets.symmetric(
+                                                            vertical: 4,
+                                                            horizontal: 4),
+                                                    padding:
+                                                        EdgeInsets.symmetric(
+                                                            vertical: 0,
+                                                            horizontal: 3),
+                                                  ),
+                                                ],
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      AnimatedExpanded(
+                                        expand: selectedEndDate != null,
+                                        axis: Axis.horizontal,
+                                        child: TextFont(
+                                          text: "until".tr(),
                                           fontSize: 23,
                                           fontWeight: FontWeight.bold,
                                         ),
-                                        Row(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            TappableTextEntry(
-                                              title: selectedPeriodLength
-                                                  .toString(),
-                                              placeholder: "0",
-                                              showPlaceHolderWhenTextEquals:
-                                                  "0",
-                                              onTap: () {
-                                                selectPeriodLength(context);
-                                              },
-                                              fontSize: 23,
-                                              fontWeight: FontWeight.bold,
-                                              internalPadding:
-                                                  EdgeInsets.symmetric(
-                                                      vertical: 4,
-                                                      horizontal: 4),
-                                              padding: EdgeInsets.symmetric(
-                                                  vertical: 5, horizontal: 3),
-                                            ),
-                                            TappableTextEntry(
-                                              title: selectedRecurrenceDisplay
-                                                  .toString()
-                                                  .toLowerCase()
-                                                  .tr()
-                                                  .toLowerCase(),
-                                              placeholder: "",
-                                              onTap: () {
-                                                selectRecurrence(context);
-                                              },
-                                              fontSize: 23,
-                                              fontWeight: FontWeight.bold,
-                                              internalPadding:
-                                                  EdgeInsets.symmetric(
-                                                      vertical: 4,
-                                                      horizontal: 4),
-                                              padding: EdgeInsets.symmetric(
-                                                  vertical: 5, horizontal: 3),
-                                            ),
-                                          ],
-                                        )
-                                      ],
-                                    ),
+                                      ),
+                                      Flexible(
+                                        child: TappableTextEntry(
+                                          title: (selectedEndDate == null
+                                              ? ""
+                                              : getWordedDateShort(
+                                                  selectedEndDate!,
+                                                  includeYear:
+                                                      selectedEndDate!.year !=
+                                                          DateTime.now().year,
+                                                )),
+                                          placeholder: "until-forever".tr(),
+                                          showPlaceHolderWhenTextEquals: "",
+                                          onTap: () {
+                                            selectEndDate(context);
+                                          },
+                                          fontSize: 23,
+                                          fontWeight: FontWeight.bold,
+                                          internalPadding: EdgeInsets.symmetric(
+                                              vertical: 5, horizontal: 4),
+                                          padding: EdgeInsets.symmetric(
+                                              vertical: 0, horizontal: 5),
+                                        ),
+                                      ),
+                                      AnimatedExpanded(
+                                        expand: selectedEndDate != null,
+                                        axis: Axis.horizontal,
+                                        child: Opacity(
+                                          opacity: 0.5,
+                                          child: IconButton(
+                                            onPressed: () {
+                                              setSelectedEndDate(null);
+                                            },
+                                            tooltip: "clear".tr(),
+                                            icon: Icon(Icons.clear),
+                                            padding: EdgeInsets.all(15),
+                                          ),
+                                        ),
+                                      )
+                                    ],
                                   ),
                                 ],
                               ),

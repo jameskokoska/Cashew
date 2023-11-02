@@ -809,5 +809,11 @@
   "error-attaching-file": "שגיאה בחיבור קובץ",
   "no-photo-taken": "אין תמונה שצולמה",
   "major-change-14": "קבצים מצורפים לעסקה",
-  "major-change-14-1": "צרף תמונות או קבצים לעסקאות דרך Google Drive"
+  "major-change-14-1": "צרף תמונות או קבצים לעסקאות דרך Google Drive",
+  "ending": "סִיוּם",
+  "until-forever": "לעולמי עד",
+  "goal-reached": "המטרה הושגה!",
+  "goal-overdue": "יעד איחור",
+  "save": "להציל",
+  "spend": "לְבַלוֹת"
 }

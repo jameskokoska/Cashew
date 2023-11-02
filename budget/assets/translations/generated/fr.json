@@ -809,5 +809,11 @@
   "error-attaching-file": "Fichier d'erreur de connexion",
   "no-photo-taken": "Aucune photo prise",
   "major-change-14": "Pièces jointes",
-  "major-change-14-1": "Joindre des photos ou des fichiers aux transactions via Google Drive"
+  "major-change-14-1": "Joindre des photos ou des fichiers aux transactions via Google Drive",
+  "ending": "fin",
+  "until-forever": "Pour toujours",
+  "goal-reached": "Objectif atteint!",
+  "goal-overdue": "Objectif en retard",
+  "save": "Sauvegarder",
+  "spend": "Dépenser"
 }

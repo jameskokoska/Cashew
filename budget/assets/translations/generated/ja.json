@@ -809,5 +809,11 @@
   "error-attaching-file": "エラーファイルの添付",
   "no-photo-taken": "写真はありません",
   "major-change-14": "トランザクション添付ファイル",
-  "major-change-14-1": "Googleドライブを介してトランザクションに写真またはファイルを添付します"
+  "major-change-14-1": "Googleドライブを介してトランザクションに写真またはファイルを添付します",
+  "ending": "エンディング",
+  "until-forever": "永遠に",
+  "goal-reached": "ゴールが到達しました！",
+  "goal-overdue": "目標が遅れています",
+  "save": "保存",
+  "spend": "過ごす"
 }

@@ -788,7 +788,7 @@
   "insurance": "Verzekering",
   "beauty": "Schoonheid",
   "haircut": "Kapsel",
-  "touchups": "Touchups",
+  "touchups": "Aanraking",
   "clothing": "Kleding",
   "multiplier": "Vermenigvuldiger",
   "bill-splitter-multiplier-description": "Voer een waarde in die wordt vermenigvuldigd met elk item in de Bill Splitter. Handig als belasting op elk item wordt toegepast.",
@@ -809,5 +809,11 @@
   "error-attaching-file": "Fout bij het bijvoegen van bestand",
   "no-photo-taken": "Geen foto gemaakt",
   "major-change-14": "Transactiebijlagen",
-  "major-change-14-1": "Voeg foto's of bestanden toe aan transacties via Google Drive"
+  "major-change-14-1": "Voeg foto's of bestanden toe aan transacties via Google Drive",
+  "ending": "einde",
+  "until-forever": "Voor altijd",
+  "goal-reached": "Doel bereikt!",
+  "goal-overdue": "Doel te laat",
+  "save": "Redden",
+  "spend": "Uitgeven"
 }

@@ -809,5 +809,11 @@
   "error-attaching-file": "Virhe liitetiedosto",
   "no-photo-taken": "Ei valokuvaa otettu",
   "major-change-14": "Transaktioliitteet",
-  "major-change-14-1": "Liitä valokuvia tai tiedostoja tapahtumiin Google Driven kautta"
+  "major-change-14-1": "Liitä valokuvia tai tiedostoja tapahtumiin Google Driven kautta",
+  "ending": "pääte",
+  "until-forever": "Ikuisesti",
+  "goal-reached": "Tavoite saavutti!",
+  "goal-overdue": "Tavoite myöhässä",
+  "save": "Tallentaa",
+  "spend": "Viettää"
 }

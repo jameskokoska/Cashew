@@ -809,5 +809,11 @@
   "error-attaching-file": "Ralat melampirkan fail",
   "no-photo-taken": "Tiada foto yang diambil",
   "major-change-14": "Lampiran transaksi",
-  "major-change-14-1": "Lampirkan foto atau fail ke urus niaga melalui Google Drive"
+  "major-change-14-1": "Lampirkan foto atau fail ke urus niaga melalui Google Drive",
+  "ending": "berakhir",
+  "until-forever": "Sehingga selamanya",
+  "goal-reached": "Matlamat dicapai!",
+  "goal-overdue": "Matlamat terlambat",
+  "save": "Simpan",
+  "spend": "Menghabiskan"
 }

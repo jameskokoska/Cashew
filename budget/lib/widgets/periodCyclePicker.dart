@@ -42,20 +42,23 @@ enum CycleType {
 }
 
 class PeriodCyclePicker extends StatefulWidget {
-  const PeriodCyclePicker({super.key});
+  const PeriodCyclePicker({required this.cycleSettingsExtension, super.key});
+  final String cycleSettingsExtension;
 
   @override
   State<PeriodCyclePicker> createState() => _PeriodCyclePickerState();
 }
 
 class _PeriodCyclePickerState extends State<PeriodCyclePicker> {
-  CycleType selectedCycle =
-      CycleType.values[appStateSettings["selectedPeriodCycleType"] ?? 0];
+  late CycleType selectedCycle = CycleType.values[appStateSettings[
+          "selectedPeriodCycleType" + widget.cycleSettingsExtension] ??
+      0];
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         CycleTypeEntry(
+          cycleSettingsExtension: widget.cycleSettingsExtension,
           title: "all-time".tr(),
           icon: appStateSettings["outlinedIcons"]
               ? Icons.apps_outlined
@@ -69,6 +72,7 @@ class _PeriodCyclePickerState extends State<PeriodCyclePicker> {
           selectedCycle: selectedCycle,
         ),
         CycleTypeEntry(
+          cycleSettingsExtension: widget.cycleSettingsExtension,
           title: "cycle".tr(),
           icon: appStateSettings["outlinedIcons"]
               ? Icons.timelapse_outlined
@@ -79,10 +83,13 @@ class _PeriodCyclePickerState extends State<PeriodCyclePicker> {
               selectedCycle = CycleType.cycle;
             });
           },
-          extraWidget: CyclePeriodSelection(),
+          extraWidget: CyclePeriodSelection(
+            cycleSettingsExtension: widget.cycleSettingsExtension,
+          ),
           selectedCycle: selectedCycle,
         ),
         CycleTypeEntry(
+          cycleSettingsExtension: widget.cycleSettingsExtension,
           title: "past-days".tr(),
           icon: appStateSettings["outlinedIcons"]
               ? Icons.date_range_outlined
@@ -94,9 +101,12 @@ class _PeriodCyclePickerState extends State<PeriodCyclePicker> {
             });
           },
           selectedCycle: selectedCycle,
-          extraWidget: PastDaysSelection(),
+          extraWidget: PastDaysSelection(
+            cycleSettingsExtension: widget.cycleSettingsExtension,
+          ),
         ),
         CycleTypeEntry(
+          cycleSettingsExtension: widget.cycleSettingsExtension,
           title: "start-date".tr(),
           icon: appStateSettings["outlinedIcons"]
               ? Icons.today_outlined
@@ -107,21 +117,9 @@ class _PeriodCyclePickerState extends State<PeriodCyclePicker> {
               selectedCycle = CycleType.startDate;
             });
           },
-          extraWidget: SelectStartDate(),
+          extraWidget: SelectStartDate(
+              cycleSettingsExtension: widget.cycleSettingsExtension),
           selectedCycle: selectedCycle,
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(
-            vertical: 10,
-            horizontal: 10,
-          ),
-          child: TextFont(
-            text: "period-cycle-picker-description".tr(),
-            fontSize: 13,
-            textAlign: TextAlign.center,
-            textColor: getColor(context, "textLight"),
-            maxLines: 10,
-          ),
         ),
       ],
     );
@@ -137,6 +135,7 @@ class CycleTypeEntry extends StatelessWidget {
     required this.onTap,
     required this.cycle,
     required this.selectedCycle,
+    required this.cycleSettingsExtension,
   });
 
   final String title;
@@ -145,6 +144,7 @@ class CycleTypeEntry extends StatelessWidget {
   final VoidCallback onTap;
   final CycleType cycle;
   final CycleType selectedCycle;
+  final String cycleSettingsExtension;
 
   @override
   Widget build(BuildContext context) {
@@ -166,7 +166,9 @@ class CycleTypeEntry extends StatelessWidget {
                 iconData: icon,
                 onTap: () {
                   onTap();
-                  updateSettings("selectedPeriodCycleType", cycle.index,
+                  updateSettings(
+                      "selectedPeriodCycleType" + cycleSettingsExtension,
+                      cycle.index,
                       updateGlobalState: false);
                 },
                 afterWidget: extraWidget == null
@@ -185,15 +187,20 @@ class CycleTypeEntry extends StatelessWidget {
 }
 
 class SelectStartDate extends StatefulWidget {
-  const SelectStartDate({super.key});
+  const SelectStartDate({
+    super.key,
+    required this.cycleSettingsExtension,
+  });
+  final String cycleSettingsExtension;
 
   @override
   State<SelectStartDate> createState() => _SelectStartDateState();
 }
 
 class _SelectStartDateState extends State<SelectStartDate> {
-  late DateTime? selectedDate =
-      DateTime.tryParse(appStateSettings["customPeriodStartDate"] ?? "");
+  late DateTime? selectedDate = DateTime.tryParse(appStateSettings[
+          "customPeriodStartDate" + widget.cycleSettingsExtension] ??
+      "");
 
   @override
   Widget build(BuildContext context) {
@@ -213,7 +220,9 @@ class _SelectStartDateState extends State<SelectStartDate> {
                 setState(() {
                   selectedDate = picked ?? selectedDate;
                 });
-                updateSettings("customPeriodStartDate", selectedDate.toString(),
+                updateSettings(
+                    "customPeriodStartDate" + widget.cycleSettingsExtension,
+                    selectedDate.toString(),
                     updateGlobalState: false);
               },
               fontSize: 25,
@@ -229,7 +238,11 @@ class _SelectStartDateState extends State<SelectStartDate> {
 }
 
 class CyclePeriodSelection extends StatefulWidget {
-  const CyclePeriodSelection({super.key});
+  const CyclePeriodSelection({
+    super.key,
+    required this.cycleSettingsExtension,
+  });
+  final String cycleSettingsExtension;
   @override
   State<CyclePeriodSelection> createState() => _CyclePeriodSelectionState();
 }
@@ -242,11 +255,15 @@ class _CyclePeriodSelectionState extends State<CyclePeriodSelection> {
   String selectedRecurrenceDisplay = "month";
   @override
   void initState() {
-    selectedPeriodLength = appStateSettings["cyclePeriodLength"] ?? 1;
-    selectedStartDate = DateTime.tryParse(appStateSettings["cycleStartDate"]) ??
+    selectedPeriodLength =
+        appStateSettings["cyclePeriodLength" + widget.cycleSettingsExtension] ??
+            1;
+    selectedStartDate = DateTime.tryParse(appStateSettings[
+            "cycleStartDate" + widget.cycleSettingsExtension]) ??
         DateTime(DateTime.now().year, DateTime.now().month, 1);
-    selectedRecurrence = enumRecurrence[
-            BudgetReoccurence.values[appStateSettings["cycleReoccurrence"]]] ??
+    selectedRecurrence = enumRecurrence[BudgetReoccurence.values[
+            appStateSettings[
+                "cycleReoccurrence" + widget.cycleSettingsExtension]]] ??
         "Monthly";
 
     if (selectedPeriodLength == 1) {
@@ -299,7 +316,8 @@ class _CyclePeriodSelectionState extends State<CyclePeriodSelection> {
         }
       });
     }
-    updateSettings("cyclePeriodLength", selectedPeriodLength,
+    updateSettings("cyclePeriodLength" + widget.cycleSettingsExtension,
+        selectedPeriodLength,
         updateGlobalState: false);
     return;
   }
@@ -318,7 +336,9 @@ class _CyclePeriodSelectionState extends State<CyclePeriodSelection> {
           onChanged: (value) {
             setState(() {
               selectedRecurrence = value;
-              updateSettings("cycleReoccurrence", enumRecurrence[value].index,
+              updateSettings(
+                  "cycleReoccurrence" + widget.cycleSettingsExtension,
+                  enumRecurrence[value].index,
                   updateGlobalState: false);
               if (selectedPeriodLength == 1) {
                 selectedRecurrenceDisplay = nameRecurrence[value];
@@ -341,7 +361,8 @@ class _CyclePeriodSelectionState extends State<CyclePeriodSelection> {
 
   setSelectedStartDate(DateTime? date) {
     if (date != null && date != selectedStartDate) {
-      updateSettings("cycleStartDate", date.toString(),
+      updateSettings(
+          "cycleStartDate" + widget.cycleSettingsExtension, date.toString(),
           updateGlobalState: false);
       setState(() {
         selectedStartDate = date;
@@ -494,14 +515,17 @@ class _CyclePeriodSelectionState extends State<CyclePeriodSelection> {
   }
 }
 
-DateTimeRange getCycleDateTimeRange() {
+DateTimeRange getCycleDateTimeRange(String cycleSettingsExtension) {
   return getBudgetDate(
     Budget(
-      startDate: DateTime.tryParse(appStateSettings["cycleStartDate"] ?? "") ??
+      startDate: DateTime.tryParse(
+              appStateSettings["cycleStartDate" + cycleSettingsExtension] ??
+                  "") ??
           DateTime.now(),
-      periodLength: appStateSettings["cyclePeriodLength"] ?? 1,
-      reoccurrence:
-          BudgetReoccurence.values[appStateSettings["cycleReoccurrence"] ?? 0],
+      periodLength:
+          appStateSettings["cyclePeriodLength" + cycleSettingsExtension] ?? 1,
+      reoccurrence: BudgetReoccurence.values[
+          appStateSettings["cycleReoccurrence" + cycleSettingsExtension] ?? 0],
       budgetPk: "-1",
       name: "",
       amount: 0,
@@ -517,31 +541,36 @@ DateTimeRange getCycleDateTimeRange() {
   );
 }
 
-DateTime? getStartDateOfSelectedCustomPeriod() {
-  CycleType selectedPeriodType =
-      CycleType.values[appStateSettings["selectedPeriodCycleType"] ?? 0];
+DateTime? getStartDateOfSelectedCustomPeriod(String cycleSettingsExtension) {
+  CycleType selectedPeriodType = CycleType.values[
+      appStateSettings["selectedPeriodCycleType" + cycleSettingsExtension] ??
+          0];
   if (selectedPeriodType == CycleType.allTime) {
     return null;
   } else if (selectedPeriodType == CycleType.cycle) {
-    DateTimeRange budgetRange = getCycleDateTimeRange();
+    DateTimeRange budgetRange = getCycleDateTimeRange(cycleSettingsExtension);
     DateTime startDate = DateTime(
         budgetRange.start.year, budgetRange.start.month, budgetRange.start.day);
     return startDate;
   } else if (selectedPeriodType == CycleType.pastDays) {
-    DateTime startDate = DateTime.now().subtract(
-        Duration(days: (appStateSettings["customPeriodPastDays"] ?? 0)));
+    DateTime startDate = DateTime.now().subtract(Duration(
+        days: (appStateSettings[
+                "customPeriodPastDays" + cycleSettingsExtension] ??
+            0)));
     return startDate;
   } else if (selectedPeriodType == CycleType.startDate) {
-    DateTime startDate =
-        DateTime.tryParse(appStateSettings["customPeriodStartDate"] ?? "") ??
-            DateTime.now();
+    DateTime startDate = DateTime.tryParse(appStateSettings[
+                "customPeriodStartDate" + cycleSettingsExtension] ??
+            "") ??
+        DateTime.now();
     return startDate;
   }
   return null;
 }
 
 class PastDaysSelection extends StatefulWidget {
-  const PastDaysSelection({super.key});
+  const PastDaysSelection({super.key, required this.cycleSettingsExtension});
+  final String cycleSettingsExtension;
   @override
   State<PastDaysSelection> createState() => _PastDaysSelectionState();
 }
@@ -551,7 +580,9 @@ class _PastDaysSelectionState extends State<PastDaysSelection> {
 
   @override
   void initState() {
-    selectedPeriodLength = appStateSettings["customPeriodPastDays"] ?? 1;
+    selectedPeriodLength = appStateSettings[
+            "customPeriodPastDays" + widget.cycleSettingsExtension] ??
+        1;
     super.initState();
   }
 
@@ -587,7 +618,8 @@ class _PastDaysSelectionState extends State<PastDaysSelection> {
         selectedPeriodLength = 0;
       });
     }
-    updateSettings("customPeriodPastDays", selectedPeriodLength,
+    updateSettings("customPeriodPastDays" + widget.cycleSettingsExtension,
+        selectedPeriodLength,
         updateGlobalState: false);
     return;
   }

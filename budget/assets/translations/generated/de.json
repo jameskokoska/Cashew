@@ -793,7 +793,7 @@
   "multiplier": "Multiplikator",
   "bill-splitter-multiplier-description": "Geben Sie einen Wert ein, der mit jedem Artikel im Bill Splitter multipliziert wird. Nützlich, wenn die Steuer auf jeden Artikel angewendet wird.",
   "more-options": "Mehr Optionen",
-  "cannot-display-graph-for-current-time-period": "Diagramm kann für den aktuellen Zeitraum nicht angezeigt werden.",
+  "cannot-display-graph-for-current-time-period": "Für den aktuellen Zeitraum kann das Diagramm nicht angezeigt werden.",
   "exclude-from-budget": "Aus dem Budget ausschließen",
   "erase-synced-data-and-cloud-backups": "Synchronisierte Daten und Cloud -Sicherungen löschen",
   "erase-cloud-data": "Cloud -Daten löschen",
@@ -809,5 +809,11 @@
   "error-attaching-file": "Fehler beim Anhängen von Datei",
   "no-photo-taken": "Kein Foto gemacht",
   "major-change-14": "Transaktionsanhänge",
-  "major-change-14-1": "Fügen Sie Fotos oder Dateien über Google Drive an Transaktionen hinzu"
+  "major-change-14-1": "Fügen Sie Fotos oder Dateien über Google Drive an Transaktionen hinzu",
+  "ending": "Ende",
+  "until-forever": "Für immer",
+  "goal-reached": "Ziel erreicht!",
+  "goal-overdue": "Ziel überfällig",
+  "save": "Speichern",
+  "spend": "Ausgeben"
 }

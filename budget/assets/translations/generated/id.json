@@ -809,5 +809,11 @@
   "error-attaching-file": "File attaching kesalahan",
   "no-photo-taken": "Tidak ada foto yang diambil",
   "major-change-14": "Lampiran transaksi",
-  "major-change-14-1": "Lampirkan foto atau file ke transaksi melalui Google Drive"
+  "major-change-14-1": "Lampirkan foto atau file ke transaksi melalui Google Drive",
+  "ending": "akhir",
+  "until-forever": "Sampai selamanya",
+  "goal-reached": "Tujuan tercapai!",
+  "goal-overdue": "Tujuan tertunda",
+  "save": "Menyimpan",
+  "spend": "Membelanjakan"
 }

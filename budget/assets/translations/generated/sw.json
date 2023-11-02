@@ -809,5 +809,11 @@
   "error-attaching-file": "Hitilafu ya kushikilia faili",
   "no-photo-taken": "Hakuna picha iliyochukuliwa",
   "major-change-14": "Viambatisho vya shughuli",
-  "major-change-14-1": "Ambatisha picha au faili kwa shughuli kupitia Hifadhi ya Google"
+  "major-change-14-1": "Ambatisha picha au faili kwa shughuli kupitia Hifadhi ya Google",
+  "ending": "mwisho",
+  "until-forever": "Mpaka milele",
+  "goal-reached": "Lengo limefikiwa!",
+  "goal-overdue": "Lengo limepitwa na wakati",
+  "save": "Kuokoa",
+  "spend": "Tumia"
 }

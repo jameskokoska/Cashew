@@ -1426,7 +1426,7 @@ class LoadingShimmerDriveFiles extends StatelessWidget {
                                   color: Colors.white,
                                 ),
                                 height: 20,
-                                width: 70 + randomDouble[i % 10] * 120,
+                                width: 70 + randomDouble[i % 10] * 120 + 13,
                               ),
                               SizedBox(height: 6),
                               Container(
@@ -1444,6 +1444,7 @@ class LoadingShimmerDriveFiles extends StatelessWidget {
                       ],
                     ),
                   ),
+                  SizedBox(width: 13),
                   isManaging
                       ? Row(
                           children: [

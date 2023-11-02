@@ -809,5 +809,11 @@
   "error-attaching-file": "Error Attaching File",
   "no-photo-taken": "No photo taken",
   "major-change-14": "Transaction Attachments",
-  "major-change-14-1": "Attach photos or files to transactions via Google Drive"
+  "major-change-14-1": "Attach photos or files to transactions via Google Drive",
+  "ending": "ending",
+  "until-forever": "Until Forever",
+  "goal-reached": "Goal reached!",
+  "goal-overdue": "Goal overdue",
+  "save": "Save",
+  "spend": "Spend"
 }

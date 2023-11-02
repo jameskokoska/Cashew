@@ -22,6 +22,11 @@ import 'listItem.dart';
 
 String getChangelogString() {
   return """
+    < 4.8.0
+    Added end date for savings/spending goals
+    Spending/saving projection when end date set for goals
+    End date for repeating and subscription transactions
+    Separated settings for custom cycle periods for homepage widgets
     < 4.7.9
     Photo and document attachments for transactions
     Improved refresh rate on some devices

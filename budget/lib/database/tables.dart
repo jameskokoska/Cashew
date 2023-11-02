@@ -23,7 +23,7 @@ import 'package:flutter/material.dart' show DateTimeRange;
 import 'package:flutter/material.dart' show RangeValues;
 part 'tables.g.dart';
 
-int schemaVersionGlobal = 43;
+int schemaVersionGlobal = 44;
 
 // To update and migrate the database, check the README
 
@@ -275,6 +275,7 @@ class Transactions extends Table {
   // Subscriptions and Repetitive payments
   IntColumn get periodLength => integer().nullable()();
   IntColumn get reoccurrence => intEnum<BudgetReoccurence>().nullable()();
+  DateTimeColumn get endDate => dateTime().nullable()();
   BoolColumn get upcomingTransactionNotification =>
       boolean().withDefault(const Constant(true)).nullable()();
   IntColumn get type => intEnum<TransactionSpecialType>().nullable()();
@@ -484,6 +485,7 @@ class Objectives extends Table {
       .nullable()(); // if null we are using the themes color
   DateTimeColumn get dateCreated =>
       dateTime().clientDefault(() => new DateTime.now())();
+  DateTimeColumn get endDate => dateTime().nullable()();
   DateTimeColumn get dateTimeModified =>
       dateTime().withDefault(Constant(DateTime.now())).nullable()();
   TextColumn get iconName => text().nullable()();
@@ -962,6 +964,24 @@ class FinanceDatabase extends _$FinanceDatabase {
             } catch (e) {
               print("Migration Error: Error creating column budgetFksExclude " +
                   e.toString());
+            }
+          },
+          from43To44: (m, schema) async {
+            print("43 to 44");
+            try {
+              await m.addColumn(
+                  schema.transactions, schema.transactions.endDate);
+            } catch (e) {
+              print(
+                  "Migration Error: Error creating column transactions.endDate" +
+                      e.toString());
+            }
+            try {
+              await m.addColumn(schema.objectives, schema.objectives.endDate);
+            } catch (e) {
+              print(
+                  "Migration Error: Error creating column objectives.endDate " +
+                      e.toString());
             }
           },
         )(migrator, from, to);
@@ -4780,16 +4800,18 @@ class FinanceDatabase extends _$FinanceDatabase {
   }
 
   Expression<bool> onlyShowIfFollowCustomPeriodCycle(
-      $TransactionsTable tbl, bool followCustomPeriodCycle) {
-    CycleType selectedPeriodType =
-        CycleType.values[appStateSettings["selectedPeriodCycleType"] ?? 0];
+      $TransactionsTable tbl, bool followCustomPeriodCycle,
+      {String cycleSettingsExtension = ""}) {
+    CycleType selectedPeriodType = CycleType.values[
+        appStateSettings["selectedPeriodCycleType" + cycleSettingsExtension] ??
+            0];
 
     if (followCustomPeriodCycle == false) {
       return Constant(true);
     } else if (selectedPeriodType == CycleType.allTime) {
       return Constant(true);
     } else if (selectedPeriodType == CycleType.cycle) {
-      DateTimeRange budgetRange = getCycleDateTimeRange();
+      DateTimeRange budgetRange = getCycleDateTimeRange(cycleSettingsExtension);
       DateTime startDate = DateTime(budgetRange.start.year,
           budgetRange.start.month, budgetRange.start.day);
       DateTime endDate = DateTime(
@@ -4797,13 +4819,16 @@ class FinanceDatabase extends _$FinanceDatabase {
       return onlyShowBasedOnTimeRange(tbl, startDate, endDate, null,
           allTime: false);
     } else if (selectedPeriodType == CycleType.pastDays) {
-      DateTime startDate = DateTime.now().subtract(
-          Duration(days: (appStateSettings["customPeriodPastDays"] ?? 0)));
+      DateTime startDate = DateTime.now().subtract(Duration(
+          days: (appStateSettings[
+                  "customPeriodPastDays" + cycleSettingsExtension] ??
+              0)));
       return tbl.dateCreated.isBiggerOrEqualValue(startDate);
     } else if (selectedPeriodType == CycleType.startDate) {
-      DateTime startDate =
-          DateTime.tryParse(appStateSettings["customPeriodStartDate"] ?? "") ??
-              DateTime.now();
+      DateTime startDate = DateTime.tryParse(appStateSettings[
+                  "customPeriodStartDate" + cycleSettingsExtension] ??
+              "") ??
+          DateTime.now();
       return tbl.dateCreated.isBiggerOrEqualValue(startDate);
     }
     return Constant(true);
@@ -4943,6 +4968,7 @@ class FinanceDatabase extends _$FinanceDatabase {
     bool includeAllSubCategories = false,
     // if a transaction does not have a subcategory assigned, does it show up in the total?
     bool countUnassignedTransactions = false,
+    String cycleSettingsExtension = "",
   }) {
     DateTime startDate = DateTime(start.year, start.month, start.day);
     DateTime endDate = DateTime(end.year, end.month, end.day);
@@ -4960,7 +4986,8 @@ class FinanceDatabase extends _$FinanceDatabase {
               isInCategory(tbl, categoryFks, categoryFksExclude) &
               onlyShowIfNotBalanceCorrection(transactions, isIncome) &
               onlyShowIfFollowCustomPeriodCycle(
-                  transactions, followCustomPeriodCycle) &
+                  transactions, followCustomPeriodCycle,
+                  cycleSettingsExtension: cycleSettingsExtension) &
               tbl.paid.equals(true) &
               // evaluateIfNull(tbl.income.equals(income ?? false), income, true) &
               transactions.walletFk.equals(wallet.walletPk) &
@@ -5055,6 +5082,7 @@ class FinanceDatabase extends _$FinanceDatabase {
     DateTime? startDate,
     required AllWallets allWallets,
     bool followCustomPeriodCycle = false,
+    String cycleSettingsExtension = "",
   }) {
     // we have to convert currencies to account for all wallets
     List<Stream<double?>> mergedStreams = [];
@@ -5066,7 +5094,8 @@ class FinanceDatabase extends _$FinanceDatabase {
             onlyShowIfNotBalanceCorrection(transactions, isIncome) &
             transactions.paid.equals(true) &
             onlyShowIfFollowCustomPeriodCycle(
-                transactions, followCustomPeriodCycle) &
+                transactions, followCustomPeriodCycle,
+                cycleSettingsExtension: cycleSettingsExtension) &
             evaluateIfNull(
                 transactions.walletFk.isIn(walletPks ?? []), walletPks, true) &
             onlyShowBasedOnTimeRange(transactions, startDate, null, null) &
@@ -5109,6 +5138,7 @@ class FinanceDatabase extends _$FinanceDatabase {
     bool? isIncome = null,
     DateTime? startDate,
     bool followCustomPeriodCycle = false,
+    String cycleSettingsExtension = "",
   }) {
     final totalCount = transactions.transactionPk.count();
     final query = selectOnly(transactions)
@@ -5120,7 +5150,8 @@ class FinanceDatabase extends _$FinanceDatabase {
                   : transactions.income.equals(false)) &
           onlyShowIfNotBalanceCorrection(transactions, isIncome) &
           onlyShowIfFollowCustomPeriodCycle(
-              transactions, followCustomPeriodCycle) &
+              transactions, followCustomPeriodCycle,
+              cycleSettingsExtension: cycleSettingsExtension) &
           onlyShowBasedOnTimeRange(transactions, startDate, null, null) &
           evaluateIfNull(
               transactions.walletFk.isIn(walletPks ?? []), walletPks, true));
@@ -5365,6 +5396,7 @@ class FinanceDatabase extends _$FinanceDatabase {
     Budget? budget,
     List<String>? walletPks,
     bool followCustomPeriodCycle = false,
+    String cycleSettingsExtension = "",
   }) {
     DateTime startDate = DateTime(start.year, start.month, start.day);
     DateTime endDate = DateTime(end.year, end.month, end.day);
@@ -5373,7 +5405,8 @@ class FinanceDatabase extends _$FinanceDatabase {
             return isInCategory(tbl, categoryFks, categoryFksExclude) &
                 evaluateIfNull(tbl.paid.equals(true), isPaidOnly, true) &
                 onlyShowIfFollowCustomPeriodCycle(
-                    transactions, followCustomPeriodCycle) &
+                    transactions, followCustomPeriodCycle,
+                    cycleSettingsExtension: cycleSettingsExtension) &
                 onlyShowIfFollowsFilters(tbl,
                     budgetTransactionFilters: budgetTransactionFilters,
                     memberTransactionFilters: memberTransactionFilters) &
@@ -5403,6 +5436,7 @@ class FinanceDatabase extends _$FinanceDatabase {
     List<String>? walletPks,
     required AllWallets allWallets,
     bool followCustomPeriodCycle = false,
+    String cycleSettingsExtension = "",
   }) {
     // the date, which acts as the end point and everything before this day is inclusive
     // for onlyShowBasedOnTimeRange, but we don't want to include this day
@@ -5414,7 +5448,8 @@ class FinanceDatabase extends _$FinanceDatabase {
         ..addColumns([totalAmt])
         ..where(transactions.walletFk.equals(wallet.walletPk) &
             onlyShowIfFollowCustomPeriodCycle(
-                transactions, followCustomPeriodCycle) &
+                transactions, followCustomPeriodCycle,
+                cycleSettingsExtension: cycleSettingsExtension) &
             evaluateIfNull(transactions.categoryFk.isIn(categoryFks),
                 categoryFks.length <= 0 ? null : true, true) &
             evaluateIfNull(transactions.paid.equals(true), isPaidOnly, true) &

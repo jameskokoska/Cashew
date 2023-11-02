@@ -1147,6 +1147,12 @@ class $ObjectivesTable extends Objectives
       type: DriftSqlType.dateTime,
       requiredDuringInsert: false,
       clientDefault: () => new DateTime.now());
+  static const VerificationMeta _endDateMeta =
+      const VerificationMeta('endDate');
+  @override
+  late final GeneratedColumn<DateTime> endDate = GeneratedColumn<DateTime>(
+      'end_date', aliasedName, true,
+      type: DriftSqlType.dateTime, requiredDuringInsert: false);
   static const VerificationMeta _dateTimeModifiedMeta =
       const VerificationMeta('dateTimeModified');
   @override
@@ -1193,6 +1199,7 @@ class $ObjectivesTable extends Objectives
         order,
         colour,
         dateCreated,
+        endDate,
         dateTimeModified,
         iconName,
         emojiIconName,
@@ -1242,6 +1249,10 @@ class $ObjectivesTable extends Objectives
           dateCreated.isAcceptableOrUnknown(
               data['date_created']!, _dateCreatedMeta));
     }
+    if (data.containsKey('end_date')) {
+      context.handle(_endDateMeta,
+          endDate.isAcceptableOrUnknown(data['end_date']!, _endDateMeta));
+    }
     if (data.containsKey('date_time_modified')) {
       context.handle(
           _dateTimeModifiedMeta,
@@ -1287,6 +1298,8 @@ class $ObjectivesTable extends Objectives
           .read(DriftSqlType.string, data['${effectivePrefix}colour']),
       dateCreated: attachedDatabase.typeMapping
           .read(DriftSqlType.dateTime, data['${effectivePrefix}date_created'])!,
+      endDate: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}end_date']),
       dateTimeModified: attachedDatabase.typeMapping.read(
           DriftSqlType.dateTime, data['${effectivePrefix}date_time_modified']),
       iconName: attachedDatabase.typeMapping
@@ -1313,6 +1326,7 @@ class Objective extends DataClass implements Insertable<Objective> {
   final int order;
   final String? colour;
   final DateTime dateCreated;
+  final DateTime? endDate;
   final DateTime? dateTimeModified;
   final String? iconName;
   final String? emojiIconName;
@@ -1325,6 +1339,7 @@ class Objective extends DataClass implements Insertable<Objective> {
       required this.order,
       this.colour,
       required this.dateCreated,
+      this.endDate,
       this.dateTimeModified,
       this.iconName,
       this.emojiIconName,
@@ -1341,6 +1356,9 @@ class Objective extends DataClass implements Insertable<Objective> {
       map['colour'] = Variable<String>(colour);
     }
     map['date_created'] = Variable<DateTime>(dateCreated);
+    if (!nullToAbsent || endDate != null) {
+      map['end_date'] = Variable<DateTime>(endDate);
+    }
     if (!nullToAbsent || dateTimeModified != null) {
       map['date_time_modified'] = Variable<DateTime>(dateTimeModified);
     }
@@ -1364,6 +1382,9 @@ class Objective extends DataClass implements Insertable<Objective> {
       colour:
           colour == null && nullToAbsent ? const Value.absent() : Value(colour),
       dateCreated: Value(dateCreated),
+      endDate: endDate == null && nullToAbsent
+          ? const Value.absent()
+          : Value(endDate),
       dateTimeModified: dateTimeModified == null && nullToAbsent
           ? const Value.absent()
           : Value(dateTimeModified),
@@ -1388,6 +1409,7 @@ class Objective extends DataClass implements Insertable<Objective> {
       order: serializer.fromJson<int>(json['order']),
       colour: serializer.fromJson<String?>(json['colour']),
       dateCreated: serializer.fromJson<DateTime>(json['dateCreated']),
+      endDate: serializer.fromJson<DateTime?>(json['endDate']),
       dateTimeModified:
           serializer.fromJson<DateTime?>(json['dateTimeModified']),
       iconName: serializer.fromJson<String?>(json['iconName']),
@@ -1406,6 +1428,7 @@ class Objective extends DataClass implements Insertable<Objective> {
       'order': serializer.toJson<int>(order),
       'colour': serializer.toJson<String?>(colour),
       'dateCreated': serializer.toJson<DateTime>(dateCreated),
+      'endDate': serializer.toJson<DateTime?>(endDate),
       'dateTimeModified': serializer.toJson<DateTime?>(dateTimeModified),
       'iconName': serializer.toJson<String?>(iconName),
       'emojiIconName': serializer.toJson<String?>(emojiIconName),
@@ -1421,6 +1444,7 @@ class Objective extends DataClass implements Insertable<Objective> {
           int? order,
           Value<String?> colour = const Value.absent(),
           DateTime? dateCreated,
+          Value<DateTime?> endDate = const Value.absent(),
           Value<DateTime?> dateTimeModified = const Value.absent(),
           Value<String?> iconName = const Value.absent(),
           Value<String?> emojiIconName = const Value.absent(),
@@ -1433,6 +1457,7 @@ class Objective extends DataClass implements Insertable<Objective> {
         order: order ?? this.order,
         colour: colour.present ? colour.value : this.colour,
         dateCreated: dateCreated ?? this.dateCreated,
+        endDate: endDate.present ? endDate.value : this.endDate,
         dateTimeModified: dateTimeModified.present
             ? dateTimeModified.value
             : this.dateTimeModified,
@@ -1451,6 +1476,7 @@ class Objective extends DataClass implements Insertable<Objective> {
           ..write('order: $order, ')
           ..write('colour: $colour, ')
           ..write('dateCreated: $dateCreated, ')
+          ..write('endDate: $endDate, ')
           ..write('dateTimeModified: $dateTimeModified, ')
           ..write('iconName: $iconName, ')
           ..write('emojiIconName: $emojiIconName, ')
@@ -1461,8 +1487,19 @@ class Objective extends DataClass implements Insertable<Objective> {
   }
 
   @override
-  int get hashCode => Object.hash(objectivePk, name, amount, order, colour,
-      dateCreated, dateTimeModified, iconName, emojiIconName, income, pinned);
+  int get hashCode => Object.hash(
+      objectivePk,
+      name,
+      amount,
+      order,
+      colour,
+      dateCreated,
+      endDate,
+      dateTimeModified,
+      iconName,
+      emojiIconName,
+      income,
+      pinned);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -1473,6 +1510,7 @@ class Objective extends DataClass implements Insertable<Objective> {
           other.order == this.order &&
           other.colour == this.colour &&
           other.dateCreated == this.dateCreated &&
+          other.endDate == this.endDate &&
           other.dateTimeModified == this.dateTimeModified &&
           other.iconName == this.iconName &&
           other.emojiIconName == this.emojiIconName &&
@@ -1487,6 +1525,7 @@ class ObjectivesCompanion extends UpdateCompanion<Objective> {
   final Value<int> order;
   final Value<String?> colour;
   final Value<DateTime> dateCreated;
+  final Value<DateTime?> endDate;
   final Value<DateTime?> dateTimeModified;
   final Value<String?> iconName;
   final Value<String?> emojiIconName;
@@ -1500,6 +1539,7 @@ class ObjectivesCompanion extends UpdateCompanion<Objective> {
     this.order = const Value.absent(),
     this.colour = const Value.absent(),
     this.dateCreated = const Value.absent(),
+    this.endDate = const Value.absent(),
     this.dateTimeModified = const Value.absent(),
     this.iconName = const Value.absent(),
     this.emojiIconName = const Value.absent(),
@@ -1514,6 +1554,7 @@ class ObjectivesCompanion extends UpdateCompanion<Objective> {
     required int order,
     this.colour = const Value.absent(),
     this.dateCreated = const Value.absent(),
+    this.endDate = const Value.absent(),
     this.dateTimeModified = const Value.absent(),
     this.iconName = const Value.absent(),
     this.emojiIconName = const Value.absent(),
@@ -1530,6 +1571,7 @@ class ObjectivesCompanion extends UpdateCompanion<Objective> {
     Expression<int>? order,
     Expression<String>? colour,
     Expression<DateTime>? dateCreated,
+    Expression<DateTime>? endDate,
     Expression<DateTime>? dateTimeModified,
     Expression<String>? iconName,
     Expression<String>? emojiIconName,
@@ -1544,6 +1586,7 @@ class ObjectivesCompanion extends UpdateCompanion<Objective> {
       if (order != null) 'order': order,
       if (colour != null) 'colour': colour,
       if (dateCreated != null) 'date_created': dateCreated,
+      if (endDate != null) 'end_date': endDate,
       if (dateTimeModified != null) 'date_time_modified': dateTimeModified,
       if (iconName != null) 'icon_name': iconName,
       if (emojiIconName != null) 'emoji_icon_name': emojiIconName,
@@ -1560,6 +1603,7 @@ class ObjectivesCompanion extends UpdateCompanion<Objective> {
       Value<int>? order,
       Value<String?>? colour,
       Value<DateTime>? dateCreated,
+      Value<DateTime?>? endDate,
       Value<DateTime?>? dateTimeModified,
       Value<String?>? iconName,
       Value<String?>? emojiIconName,
@@ -1573,6 +1617,7 @@ class ObjectivesCompanion extends UpdateCompanion<Objective> {
       order: order ?? this.order,
       colour: colour ?? this.colour,
       dateCreated: dateCreated ?? this.dateCreated,
+      endDate: endDate ?? this.endDate,
       dateTimeModified: dateTimeModified ?? this.dateTimeModified,
       iconName: iconName ?? this.iconName,
       emojiIconName: emojiIconName ?? this.emojiIconName,
@@ -1602,6 +1647,9 @@ class ObjectivesCompanion extends UpdateCompanion<Objective> {
     }
     if (dateCreated.present) {
       map['date_created'] = Variable<DateTime>(dateCreated.value);
+    }
+    if (endDate.present) {
+      map['end_date'] = Variable<DateTime>(endDate.value);
     }
     if (dateTimeModified.present) {
       map['date_time_modified'] = Variable<DateTime>(dateTimeModified.value);
@@ -1633,6 +1681,7 @@ class ObjectivesCompanion extends UpdateCompanion<Objective> {
           ..write('order: $order, ')
           ..write('colour: $colour, ')
           ..write('dateCreated: $dateCreated, ')
+          ..write('endDate: $endDate, ')
           ..write('dateTimeModified: $dateTimeModified, ')
           ..write('iconName: $iconName, ')
           ..write('emojiIconName: $emojiIconName, ')
@@ -1752,6 +1801,12 @@ class $TransactionsTable extends Transactions
               type: DriftSqlType.int, requiredDuringInsert: false)
           .withConverter<BudgetReoccurence?>(
               $TransactionsTable.$converterreoccurrencen);
+  static const VerificationMeta _endDateMeta =
+      const VerificationMeta('endDate');
+  @override
+  late final GeneratedColumn<DateTime> endDate = GeneratedColumn<DateTime>(
+      'end_date', aliasedName, true,
+      type: DriftSqlType.dateTime, requiredDuringInsert: false);
   static const VerificationMeta _upcomingTransactionNotificationMeta =
       const VerificationMeta('upcomingTransactionNotification');
   @override
@@ -1886,6 +1941,7 @@ class $TransactionsTable extends Transactions
         income,
         periodLength,
         reoccurrence,
+        endDate,
         upcomingTransactionNotification,
         type,
         paid,
@@ -1984,6 +2040,10 @@ class $TransactionsTable extends Transactions
               data['period_length']!, _periodLengthMeta));
     }
     context.handle(_reoccurrenceMeta, const VerificationResult.success());
+    if (data.containsKey('end_date')) {
+      context.handle(_endDateMeta,
+          endDate.isAcceptableOrUnknown(data['end_date']!, _endDateMeta));
+    }
     if (data.containsKey('upcoming_transaction_notification')) {
       context.handle(
           _upcomingTransactionNotificationMeta,
@@ -2088,6 +2148,8 @@ class $TransactionsTable extends Transactions
       reoccurrence: $TransactionsTable.$converterreoccurrencen.fromSql(
           attachedDatabase.typeMapping
               .read(DriftSqlType.int, data['${effectivePrefix}reoccurrence'])),
+      endDate: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}end_date']),
       upcomingTransactionNotification: attachedDatabase.typeMapping.read(
           DriftSqlType.bool,
           data['${effectivePrefix}upcoming_transaction_notification']),
@@ -2174,6 +2236,7 @@ class Transaction extends DataClass implements Insertable<Transaction> {
   final bool income;
   final int? periodLength;
   final BudgetReoccurence? reoccurrence;
+  final DateTime? endDate;
   final bool? upcomingTransactionNotification;
   final TransactionSpecialType? type;
   final bool paid;
@@ -2203,6 +2266,7 @@ class Transaction extends DataClass implements Insertable<Transaction> {
       required this.income,
       this.periodLength,
       this.reoccurrence,
+      this.endDate,
       this.upcomingTransactionNotification,
       this.type,
       required this.paid,
@@ -2244,6 +2308,9 @@ class Transaction extends DataClass implements Insertable<Transaction> {
     if (!nullToAbsent || reoccurrence != null) {
       final converter = $TransactionsTable.$converterreoccurrencen;
       map['reoccurrence'] = Variable<int>(converter.toSql(reoccurrence));
+    }
+    if (!nullToAbsent || endDate != null) {
+      map['end_date'] = Variable<DateTime>(endDate);
     }
     if (!nullToAbsent || upcomingTransactionNotification != null) {
       map['upcoming_transaction_notification'] =
@@ -2323,6 +2390,9 @@ class Transaction extends DataClass implements Insertable<Transaction> {
       reoccurrence: reoccurrence == null && nullToAbsent
           ? const Value.absent()
           : Value(reoccurrence),
+      endDate: endDate == null && nullToAbsent
+          ? const Value.absent()
+          : Value(endDate),
       upcomingTransactionNotification:
           upcomingTransactionNotification == null && nullToAbsent
               ? const Value.absent()
@@ -2387,6 +2457,7 @@ class Transaction extends DataClass implements Insertable<Transaction> {
       periodLength: serializer.fromJson<int?>(json['periodLength']),
       reoccurrence: $TransactionsTable.$converterreoccurrencen
           .fromJson(serializer.fromJson<int?>(json['reoccurrence'])),
+      endDate: serializer.fromJson<DateTime?>(json['endDate']),
       upcomingTransactionNotification:
           serializer.fromJson<bool?>(json['upcomingTransactionNotification']),
       type: $TransactionsTable.$convertertypen
@@ -2432,6 +2503,7 @@ class Transaction extends DataClass implements Insertable<Transaction> {
       'periodLength': serializer.toJson<int?>(periodLength),
       'reoccurrence': serializer.toJson<int?>(
           $TransactionsTable.$converterreoccurrencen.toJson(reoccurrence)),
+      'endDate': serializer.toJson<DateTime?>(endDate),
       'upcomingTransactionNotification':
           serializer.toJson<bool?>(upcomingTransactionNotification),
       'type': serializer
@@ -2472,6 +2544,7 @@ class Transaction extends DataClass implements Insertable<Transaction> {
           bool? income,
           Value<int?> periodLength = const Value.absent(),
           Value<BudgetReoccurence?> reoccurrence = const Value.absent(),
+          Value<DateTime?> endDate = const Value.absent(),
           Value<bool?> upcomingTransactionNotification = const Value.absent(),
           Value<TransactionSpecialType?> type = const Value.absent(),
           bool? paid,
@@ -2508,6 +2581,7 @@ class Transaction extends DataClass implements Insertable<Transaction> {
             periodLength.present ? periodLength.value : this.periodLength,
         reoccurrence:
             reoccurrence.present ? reoccurrence.value : this.reoccurrence,
+        endDate: endDate.present ? endDate.value : this.endDate,
         upcomingTransactionNotification: upcomingTransactionNotification.present
             ? upcomingTransactionNotification.value
             : this.upcomingTransactionNotification,
@@ -2556,6 +2630,7 @@ class Transaction extends DataClass implements Insertable<Transaction> {
           ..write('income: $income, ')
           ..write('periodLength: $periodLength, ')
           ..write('reoccurrence: $reoccurrence, ')
+          ..write('endDate: $endDate, ')
           ..write(
               'upcomingTransactionNotification: $upcomingTransactionNotification, ')
           ..write('type: $type, ')
@@ -2593,6 +2668,7 @@ class Transaction extends DataClass implements Insertable<Transaction> {
         income,
         periodLength,
         reoccurrence,
+        endDate,
         upcomingTransactionNotification,
         type,
         paid,
@@ -2626,6 +2702,7 @@ class Transaction extends DataClass implements Insertable<Transaction> {
           other.income == this.income &&
           other.periodLength == this.periodLength &&
           other.reoccurrence == this.reoccurrence &&
+          other.endDate == this.endDate &&
           other.upcomingTransactionNotification ==
               this.upcomingTransactionNotification &&
           other.type == this.type &&
@@ -2660,6 +2737,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
   final Value<bool> income;
   final Value<int?> periodLength;
   final Value<BudgetReoccurence?> reoccurrence;
+  final Value<DateTime?> endDate;
   final Value<bool?> upcomingTransactionNotification;
   final Value<TransactionSpecialType?> type;
   final Value<bool> paid;
@@ -2690,6 +2768,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
     this.income = const Value.absent(),
     this.periodLength = const Value.absent(),
     this.reoccurrence = const Value.absent(),
+    this.endDate = const Value.absent(),
     this.upcomingTransactionNotification = const Value.absent(),
     this.type = const Value.absent(),
     this.paid = const Value.absent(),
@@ -2721,6 +2800,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
     this.income = const Value.absent(),
     this.periodLength = const Value.absent(),
     this.reoccurrence = const Value.absent(),
+    this.endDate = const Value.absent(),
     this.upcomingTransactionNotification = const Value.absent(),
     this.type = const Value.absent(),
     this.paid = const Value.absent(),
@@ -2756,6 +2836,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
     Expression<bool>? income,
     Expression<int>? periodLength,
     Expression<int>? reoccurrence,
+    Expression<DateTime>? endDate,
     Expression<bool>? upcomingTransactionNotification,
     Expression<int>? type,
     Expression<bool>? paid,
@@ -2787,6 +2868,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
       if (income != null) 'income': income,
       if (periodLength != null) 'period_length': periodLength,
       if (reoccurrence != null) 'reoccurrence': reoccurrence,
+      if (endDate != null) 'end_date': endDate,
       if (upcomingTransactionNotification != null)
         'upcoming_transaction_notification': upcomingTransactionNotification,
       if (type != null) 'type': type,
@@ -2825,6 +2907,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
       Value<bool>? income,
       Value<int?>? periodLength,
       Value<BudgetReoccurence?>? reoccurrence,
+      Value<DateTime?>? endDate,
       Value<bool?>? upcomingTransactionNotification,
       Value<TransactionSpecialType?>? type,
       Value<bool>? paid,
@@ -2855,6 +2938,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
       income: income ?? this.income,
       periodLength: periodLength ?? this.periodLength,
       reoccurrence: reoccurrence ?? this.reoccurrence,
+      endDate: endDate ?? this.endDate,
       upcomingTransactionNotification: upcomingTransactionNotification ??
           this.upcomingTransactionNotification,
       type: type ?? this.type,
@@ -2921,6 +3005,9 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
     if (reoccurrence.present) {
       final converter = $TransactionsTable.$converterreoccurrencen;
       map['reoccurrence'] = Variable<int>(converter.toSql(reoccurrence.value));
+    }
+    if (endDate.present) {
+      map['end_date'] = Variable<DateTime>(endDate.value);
     }
     if (upcomingTransactionNotification.present) {
       map['upcoming_transaction_notification'] =
@@ -2999,6 +3086,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
           ..write('income: $income, ')
           ..write('periodLength: $periodLength, ')
           ..write('reoccurrence: $reoccurrence, ')
+          ..write('endDate: $endDate, ')
           ..write(
               'upcomingTransactionNotification: $upcomingTransactionNotification, ')
           ..write('type: $type, ')

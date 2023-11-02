@@ -103,6 +103,7 @@ class PastSpendingGraph extends StatelessWidget {
     this.walletPks,
     this.extraLeftPaddingIfSmall = 0,
     this.followCustomPeriodCycle = false,
+    this.cycleSettingsExtension = "",
   });
   final bool? isIncome;
   final int monthsToLoad;
@@ -110,6 +111,7 @@ class PastSpendingGraph extends StatelessWidget {
   final List<String>? walletPks;
   final double extraLeftPaddingIfSmall;
   final bool followCustomPeriodCycle;
+  final String cycleSettingsExtension;
 
   @override
   Widget build(BuildContext context) {
@@ -134,6 +136,7 @@ class PastSpendingGraph extends StatelessWidget {
         walletPks: walletPks,
         allWallets: Provider.of<AllWallets>(context),
         followCustomPeriodCycle: followCustomPeriodCycle,
+        cycleSettingsExtension: cycleSettingsExtension,
       ),
       builder: (context, snapshotTotalSpentBefore) {
         if (snapshotTotalSpentBefore.hasData) {
@@ -161,6 +164,7 @@ class PastSpendingGraph extends StatelessWidget {
               null,
               walletPks: walletPks,
               followCustomPeriodCycle: followCustomPeriodCycle,
+              cycleSettingsExtension: cycleSettingsExtension,
             ),
             builder: (context, snapshot) {
               if (snapshot.hasData) {

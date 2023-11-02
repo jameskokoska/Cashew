@@ -809,5 +809,11 @@
   "error-attaching-file": "Hiba a fájl csatolása",
   "no-photo-taken": "Nincs fotó készített",
   "major-change-14": "Tranzakciós mellékletek",
-  "major-change-14-1": "Fotók vagy fájlok csatolása a tranzakciókhoz a Google Drive segítségével"
+  "major-change-14-1": "Fotók vagy fájlok csatolása a tranzakciókhoz a Google Drive segítségével",
+  "ending": "befejező",
+  "until-forever": "Örökké",
+  "goal-reached": "Elérte a célt!",
+  "goal-overdue": "Cél lejárt",
+  "save": "Megment",
+  "spend": "Tölt"
 }

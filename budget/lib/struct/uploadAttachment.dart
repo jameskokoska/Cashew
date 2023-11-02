@@ -63,12 +63,11 @@ Future<String?> getPhotoAndUpload({required ImageSource source}) async {
   dynamic result = await openLoadingPopupTryCatch(() async {
     final ImagePicker picker = ImagePicker();
     final XFile? photo = await picker.pickImage(source: source);
-    if (photo == null)
-      throw (
-        source == ImageSource.camera
-            ? "no-photo-taken".tr()
-            : "no-file-selected".tr(),
-      );
+    if (photo == null) {
+      if (source == ImageSource.camera) throw ("no-photo-taken".tr());
+      if (source == ImageSource.gallery) throw ("no-file-selected".tr());
+      throw ("error-getting-photo");
+    }
 
     var fileBytes;
     late Stream<List<int>> mediaStream;
@@ -140,7 +139,6 @@ Future<String?> getFileAndUpload() async {
       );
     }
   }, onError: (e) {
-    print("Error");
     openSnackbar(
       SnackbarMessage(
         title: "error-attaching-file".tr(),

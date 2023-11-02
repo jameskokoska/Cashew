@@ -4,6 +4,7 @@ import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/addObjectivePage.dart';
 import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/editBudgetLimitsPage.dart';
+import 'package:budget/pages/objectivesListPage.dart';
 import 'package:budget/pages/pastBudgetsPage.dart';
 import 'package:budget/pages/premiumPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
@@ -196,120 +197,146 @@ class _ObjectivePageContentState extends State<_ObjectivePageContent> {
                     } else {
                       hasPlayedConfetti = false;
                     }
-                    return Padding(
-                      padding: const EdgeInsets.only(top: 40, bottom: 5),
-                      child: Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
+                    return Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(top: 40, bottom: 5),
+                          child: Stack(
+                            alignment: Alignment.center,
                             children: [
-                              Flexible(
-                                child: Container(
-                                  constraints: BoxConstraints(maxWidth: 250),
-                                  child: AspectRatio(
-                                    aspectRatio: 1,
-                                    child: AnimatedCircularProgress(
-                                      percent: percentageTowardsGoal < 0
-                                          ? 0
-                                          : percentageTowardsGoal,
-                                      backgroundColor: objectiveColorScheme
-                                          .secondaryContainer,
-                                      foregroundColor: dynamicPastel(
-                                        context,
-                                        objectiveColorScheme.primary,
-                                        amountLight: 0.4,
-                                        amountDark: 0.2,
-                                      ),
-                                      overageColor: Colors.transparent,
-                                      overageShadowColor: Colors.transparent,
-                                      strokeWidth: 5,
-                                      valueStrokeWidth: 10,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          Column(
-                            children: [
-                              CategoryIcon(
-                                categoryPk: "-1",
-                                category: TransactionCategory(
-                                  categoryPk: "-1",
-                                  name: "",
-                                  dateCreated: DateTime.now(),
-                                  dateTimeModified: null,
-                                  order: 0,
-                                  income: false,
-                                  iconName: widget.objective.iconName,
-                                  colour: widget.objective.colour,
-                                  emojiIconName: widget.objective.emojiIconName,
-                                ),
-                                size: 40,
-                                sizePadding: 30,
-                                borderRadius: 100,
-                                canEditByLongPress: false,
-                                margin: EdgeInsets.zero,
-                              ),
-                              SizedBox(height: 20),
-                              CountNumber(
-                                count: percentageTowardsGoal * 100,
-                                duration: Duration(milliseconds: 1000),
-                                initialCount: (0),
-                                textBuilder: (value) {
-                                  return TextFont(
-                                    text: convertToPercent(
-                                      value,
-                                      finalNumber: percentageTowardsGoal * 100,
-                                      numberDecimals: 0,
-                                    ),
-                                    fontSize: 28,
-                                    fontWeight: FontWeight.bold,
-                                  );
-                                },
-                              ),
-                              SizedBox(height: 8),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.end,
+                                crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  TextFont(
-                                    text: convertToMoney(
-                                        Provider.of<AllWallets>(context),
-                                        totalAmount),
-                                    fontSize: 18,
-                                    textColor:
-                                        totalAmount >= widget.objective.amount
+                                  Flexible(
+                                    child: Container(
+                                      constraints:
+                                          BoxConstraints(maxWidth: 250),
+                                      child: AspectRatio(
+                                        aspectRatio: 1,
+                                        child: AnimatedCircularProgress(
+                                          percent: percentageTowardsGoal < 0
+                                              ? 0
+                                              : percentageTowardsGoal,
+                                          backgroundColor: objectiveColorScheme
+                                              .secondaryContainer,
+                                          foregroundColor: dynamicPastel(
+                                            context,
+                                            objectiveColorScheme.primary,
+                                            amountLight: 0.4,
+                                            amountDark: 0.2,
+                                          ),
+                                          overageColor: Colors.transparent,
+                                          overageShadowColor:
+                                              Colors.transparent,
+                                          strokeWidth: 5,
+                                          valueStrokeWidth: 10,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Column(
+                                children: [
+                                  CategoryIcon(
+                                    categoryPk: "-1",
+                                    category: TransactionCategory(
+                                      categoryPk: "-1",
+                                      name: "",
+                                      dateCreated: DateTime.now(),
+                                      dateTimeModified: null,
+                                      order: 0,
+                                      income: false,
+                                      iconName: widget.objective.iconName,
+                                      colour: widget.objective.colour,
+                                      emojiIconName:
+                                          widget.objective.emojiIconName,
+                                    ),
+                                    size: 40,
+                                    sizePadding: 30,
+                                    borderRadius: 100,
+                                    canEditByLongPress: false,
+                                    margin: EdgeInsets.zero,
+                                  ),
+                                  SizedBox(height: 20),
+                                  CountNumber(
+                                    count: percentageTowardsGoal * 100,
+                                    duration: Duration(milliseconds: 1000),
+                                    initialCount: (0),
+                                    textBuilder: (value) {
+                                      return TextFont(
+                                        text: convertToPercent(
+                                          value,
+                                          finalNumber:
+                                              percentageTowardsGoal * 100,
+                                          numberDecimals: 0,
+                                        ),
+                                        fontSize: 28,
+                                        fontWeight: FontWeight.bold,
+                                      );
+                                    },
+                                  ),
+                                  SizedBox(height: 8),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    children: [
+                                      TextFont(
+                                        text: convertToMoney(
+                                            Provider.of<AllWallets>(context),
+                                            totalAmount),
+                                        fontSize: 18,
+                                        textColor: totalAmount >=
+                                                widget.objective.amount
                                             ? getColor(context, "incomeAmount")
                                             : getColor(context, "black"),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(bottom: 1),
-                                    child: TextFont(
-                                      text: " / " +
-                                          convertToMoney(
-                                              Provider.of<AllWallets>(context),
-                                              widget.objective.amount),
-                                      fontSize: 13,
-                                      textColor: getColor(context, "black")
-                                          .withOpacity(0.3),
-                                    ),
+                                      ),
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(bottom: 1),
+                                        child: TextFont(
+                                          text: " / " +
+                                              convertToMoney(
+                                                  Provider.of<AllWallets>(
+                                                      context),
+                                                  widget.objective.amount),
+                                          fontSize: 13,
+                                          textColor: getColor(context, "black")
+                                              .withOpacity(0.3),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ],
                               ),
                             ],
                           ),
-                        ],
-                      ),
+                        ),
+                        if (widget.objective.endDate != null)
+                          Padding(
+                            padding: const EdgeInsets.only(top: 10.0),
+                            child: TextFont(
+                              text: getObjectiveStatus(
+                                context,
+                                widget.objective,
+                                totalAmount,
+                                percentageTowardsGoal,
+                                addSpendingSavingIndication: true,
+                              ),
+                              maxLines: 3,
+                              textAlign: TextAlign.center,
+                              fontSize: 18,
+                            ),
+                          ),
+                      ],
                     );
                   },
                 ),
               ),
               SliverPadding(
-                padding: const EdgeInsets.only(
-                  top: 10,
+                padding: EdgeInsets.only(
+                  top: widget.objective.endDate == null ? 10 : 5,
                   left: 20,
                   right: 20,
                   bottom: 30,
@@ -330,12 +357,14 @@ class _ObjectivePageContentState extends State<_ObjectivePageContent> {
                                   ? "transaction".tr().toLowerCase()
                                   : "transactions".tr().toLowerCase()),
                           fontSize: 18,
+                          maxLines: 3,
                         );
                       } else {
                         return TextFont(
                           textAlign: TextAlign.center,
                           text: "/ transactions",
                           fontSize: 18,
+                          maxLines: 3,
                         );
                       }
                     },

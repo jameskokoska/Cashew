@@ -63,6 +63,7 @@ class HomePageNetWorth extends StatelessWidget {
                           isIncome: null,
                           allWallets: Provider.of<AllWallets>(context),
                           followCustomPeriodCycle: true,
+                          cycleSettingsExtension: "NetWorth",
                         ),
                         // getTextColor: (amount) => amount == 0
                         //     ? getColor(context, "black")
@@ -75,6 +76,7 @@ class HomePageNetWorth extends StatelessWidget {
                           walletPks,
                           isIncome: null,
                           followCustomPeriodCycle: true,
+                          cycleSettingsExtension: "NetWorth",
                         ),
                         openPage: WalletDetailsPage(wallet: null),
                       ),
@@ -189,8 +191,12 @@ class _NetWorthSettingsState extends State<NetWorthSettings> {
           ),
           Padding(
             padding: const EdgeInsets.only(top: 8.0),
-            child:
-                HorizontalBreakAbove(enabled: true, child: PeriodCyclePicker()),
+            child: HorizontalBreakAbove(
+              enabled: true,
+              child: PeriodCyclePicker(
+                cycleSettingsExtension: "NetWorth",
+              ),
+            ),
           ),
         ],
       ),

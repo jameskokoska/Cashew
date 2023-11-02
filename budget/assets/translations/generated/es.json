@@ -809,5 +809,11 @@
   "error-attaching-file": "Error adjunta de archivo",
   "no-photo-taken": "No hay foto tomada",
   "major-change-14": "Adjuntos de transacciones",
-  "major-change-14-1": "Adjunte fotos o archivos a las transacciones a través de Google Drive"
+  "major-change-14-1": "Adjunte fotos o archivos a las transacciones a través de Google Drive",
+  "ending": "finalizando",
+  "until-forever": "Hasta siempre",
+  "goal-reached": "Objetivo alcanzado!",
+  "goal-overdue": "Gol atrasado",
+  "save": "Ahorrar",
+  "spend": "Gastar"
 }

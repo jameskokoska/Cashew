@@ -212,7 +212,8 @@ class _WalletDetailsPageState extends State<WalletDetailsPage> {
                           context,
                           PopupFramework(
                             title: "select-period".tr(),
-                            child: PeriodCyclePicker(),
+                            child:
+                                PeriodCyclePicker(cycleSettingsExtension: ""),
                           ),
                         );
                         setState(() {});
@@ -256,6 +257,7 @@ class _WalletDetailsPageState extends State<WalletDetailsPage> {
                                   allWallets: Provider.of<AllWallets>(context),
                                   followCustomPeriodCycle:
                                       widget.wallet == null,
+                                  cycleSettingsExtension: "",
                                 ),
                                 textColor: getColor(context, "black"),
                                 transactionsAmountStream: database
@@ -264,6 +266,7 @@ class _WalletDetailsPageState extends State<WalletDetailsPage> {
                                   isIncome: null,
                                   followCustomPeriodCycle:
                                       widget.wallet == null,
+                                  cycleSettingsExtension: "",
                                 ),
                                 openPage: TransactionsSearchPage(
                                   initialFilters: SearchFilters(
@@ -298,6 +301,7 @@ class _WalletDetailsPageState extends State<WalletDetailsPage> {
                                   allWallets: Provider.of<AllWallets>(context),
                                   followCustomPeriodCycle:
                                       widget.wallet == null,
+                                  cycleSettingsExtension: "",
                                 ),
                                 textColor: getColor(context, "expenseAmount"),
                                 transactionsAmountStream: database
@@ -306,6 +310,7 @@ class _WalletDetailsPageState extends State<WalletDetailsPage> {
                                   isIncome: false,
                                   followCustomPeriodCycle:
                                       widget.wallet == null,
+                                  cycleSettingsExtension: "",
                                 ),
                                 openPage: TransactionsSearchPage(
                                   initialFilters: SearchFilters(
@@ -327,6 +332,7 @@ class _WalletDetailsPageState extends State<WalletDetailsPage> {
                                   allWallets: Provider.of<AllWallets>(context),
                                   followCustomPeriodCycle:
                                       widget.wallet == null,
+                                  cycleSettingsExtension: "",
                                 ),
                                 textColor: getColor(context, "incomeAmount"),
                                 transactionsAmountStream: database
@@ -335,6 +341,7 @@ class _WalletDetailsPageState extends State<WalletDetailsPage> {
                                   isIncome: true,
                                   followCustomPeriodCycle:
                                       widget.wallet == null,
+                                  cycleSettingsExtension: "",
                                 ),
                                 openPage: TransactionsSearchPage(
                                   initialFilters: SearchFilters(
@@ -355,8 +362,10 @@ class _WalletDetailsPageState extends State<WalletDetailsPage> {
                           ? []
                           : [widget.wallet!.walletPk],
                       followCustomPeriodCycle: widget.wallet == null,
+                      cycleSettingsExtension: "",
                     ),
                     WalletCategoryPieChart(
+                      cycleSettingsExtension: "",
                       wallet: widget.wallet,
                       walletColorScheme: walletColorScheme,
                       onSelectedCategory: (TransactionCategory? category) {
@@ -420,6 +429,7 @@ class WalletCategoryPieChart extends StatefulWidget {
     required this.walletColorScheme,
     required this.onSelectedCategory,
     required this.onSelectedIncome,
+    required this.cycleSettingsExtension,
     super.key,
   });
 
@@ -427,6 +437,7 @@ class WalletCategoryPieChart extends StatefulWidget {
   final ColorScheme walletColorScheme;
   final Function(TransactionCategory?) onSelectedCategory;
   final Function(bool) onSelectedIncome;
+  final String cycleSettingsExtension;
 
   @override
   State<WalletCategoryPieChart> createState() => _WalletCategoryPieChartState();
@@ -499,6 +510,7 @@ class _WalletCategoryPieChartState extends State<WalletCategoryPieChart> {
             walletPk: widget.wallet == null ? null : widget.wallet!.walletPk,
             isIncome: isIncome,
             followCustomPeriodCycle: widget.wallet == null,
+            cycleSettingsExtension: widget.cycleSettingsExtension,
             countUnassignedTransactions: true,
             includeAllSubCategories: true,
           ),
@@ -608,12 +620,15 @@ class _WalletCategoryPieChartState extends State<WalletCategoryPieChart> {
 }
 
 class WalletDetailsLineGraph extends StatefulWidget {
-  const WalletDetailsLineGraph(
-      {super.key,
-      required this.walletPks,
-      required this.followCustomPeriodCycle});
+  const WalletDetailsLineGraph({
+    super.key,
+    required this.walletPks,
+    required this.followCustomPeriodCycle,
+    required this.cycleSettingsExtension,
+  });
   final List<String>? walletPks;
   final bool followCustomPeriodCycle;
+  final String cycleSettingsExtension;
 
   @override
   State<WalletDetailsLineGraph> createState() => _WalletDetailsLineGraphState();
@@ -624,7 +639,7 @@ class _WalletDetailsLineGraphState extends State<WalletDetailsLineGraph> {
 
   @override
   Widget build(BuildContext context) {
-    DateTime? customPeriodStartDate = getStartDateOfSelectedCustomPeriod();
+    DateTime? customPeriodStartDate = getStartDateOfSelectedCustomPeriod("");
     return Padding(
       padding: const EdgeInsets.only(bottom: 13),
       child: Container(
@@ -669,6 +684,7 @@ class _WalletDetailsLineGraphState extends State<WalletDetailsLineGraph> {
                 walletPks: widget.walletPks,
                 monthsToLoad: numberMonthsToLoad,
                 followCustomPeriodCycle: widget.followCustomPeriodCycle,
+                cycleSettingsExtension: widget.cycleSettingsExtension,
                 customStartDate: widget.followCustomPeriodCycle == true
                     ? customPeriodStartDate
                     : null,

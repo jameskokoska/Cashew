@@ -70,6 +70,7 @@ class _AddObjectivePageState extends State<AddObjectivePage>
   String? selectedEmoji;
   double selectedAmount = 0;
   DateTime selectedStartDate = DateTime.now();
+  DateTime? selectedEndDate = null;
   bool selectedIncome = true;
   bool selectedPin = true;
 
@@ -165,10 +166,25 @@ class _AddObjectivePageState extends State<AddObjectivePage>
     setSelectedStartDate(picked);
   }
 
+  Future<void> selectEndDate(BuildContext context) async {
+    final DateTime? picked =
+        await showCustomDatePicker(context, selectedEndDate ?? DateTime.now());
+    if (picked != null) setSelectedEndDate(picked);
+  }
+
   setSelectedStartDate(DateTime? date) {
     if (date != null && date != selectedStartDate) {
       setState(() {
         selectedStartDate = date;
+      });
+    }
+    determineBottomButton();
+  }
+
+  setSelectedEndDate(DateTime? date) {
+    if (date != selectedEndDate) {
+      setState(() {
+        selectedEndDate = date;
       });
     }
     determineBottomButton();
@@ -184,12 +200,17 @@ class _AddObjectivePageState extends State<AddObjectivePage>
   Future<Objective> createObjective() async {
     int numberOfObjectives =
         (await database.getTotalCountOfObjectives())[0] ?? 0;
+    if (selectedEndDate != null &&
+        selectedStartDate.isAfter(selectedEndDate!)) {
+      selectedEndDate = null;
+    }
     return Objective(
       objectivePk:
           widget.objective != null ? widget.objective!.objectivePk : "-1",
       name: selectedTitle ?? "",
       colour: toHexString(selectedColor),
       dateCreated: selectedStartDate,
+      endDate: selectedEndDate,
       dateTimeModified: null,
       order: widget.objective != null
           ? widget.objective!.order
@@ -230,6 +251,7 @@ class _AddObjectivePageState extends State<AddObjectivePage>
       selectedImage = widget.objective!.iconName;
       selectedEmoji = widget.objective!.emojiIconName;
       selectedStartDate = widget.objective!.dateCreated;
+      selectedEndDate = widget.objective!.endDate;
       selectedAmount = widget.objective!.amount;
       selectedPin = widget.objective!.pinned;
 
@@ -540,46 +562,85 @@ class _AddObjectivePageState extends State<AddObjectivePage>
               ),
             ),
             SliverToBoxAdapter(
-              child: Tappable(
-                onTap: () {
-                  selectStartDate(context);
-                },
-                color: Colors.transparent,
-                borderRadius: 15,
-                child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 5, vertical: 8),
-                  child: Center(
-                    child: Wrap(
-                      crossAxisAlignment: WrapCrossAlignment.end,
-                      runAlignment: WrapAlignment.center,
-                      alignment: WrapAlignment.center,
+              child: SizedBox(height: 20),
+            ),
+            SliverToBoxAdapter(
+              child: Center(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    TappableTextEntry(
+                      title: getWordedDateShortMore(
+                        selectedStartDate,
+                        includeYear:
+                            selectedStartDate.year != DateTime.now().year,
+                      ),
+                      placeholder: "",
+                      onTap: () {
+                        selectStartDate(context);
+                      },
+                      fontSize: 23,
+                      fontWeight: FontWeight.bold,
+                      internalPadding:
+                          EdgeInsets.symmetric(vertical: 5, horizontal: 4),
+                      padding: EdgeInsets.symmetric(vertical: 0, horizontal: 5),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 5.8),
-                          child: TextFont(
-                            text: "starting".tr() + " ",
-                            fontSize: 17,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        IgnorePointer(
-                          child: TappableTextEntry(
-                            title: getWordedDateShortMore(selectedStartDate),
-                            placeholder: "",
-                            onTap: () {
-                              selectAmount(context);
-                            },
-                            fontSize: 25,
-                            fontWeight: FontWeight.bold,
-                            internalPadding: EdgeInsets.symmetric(
-                                vertical: 2, horizontal: 4),
-                            padding: EdgeInsets.symmetric(
-                                vertical: 0, horizontal: 5),
+                        AnimatedExpanded(
+                          expand: selectedEndDate != null,
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 10, bottom: 0),
+                            child: Icon(
+                              Icons.arrow_downward_rounded,
+                              size: 25,
+                            ),
                           ),
                         ),
                       ],
                     ),
-                  ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        TappableTextEntry(
+                          title: selectedEndDate == null
+                              ? ""
+                              : getWordedDateShortMore(
+                                  selectedEndDate!,
+                                  includeYear: selectedEndDate!.year !=
+                                      DateTime.now().year,
+                                ),
+                          placeholder: "until-forever".tr(),
+                          showPlaceHolderWhenTextEquals: "",
+                          onTap: () {
+                            selectEndDate(context);
+                          },
+                          fontSize: 23,
+                          fontWeight: FontWeight.bold,
+                          internalPadding:
+                              EdgeInsets.symmetric(vertical: 5, horizontal: 4),
+                          padding:
+                              EdgeInsets.symmetric(vertical: 0, horizontal: 5),
+                        ),
+                        AnimatedExpanded(
+                          expand: selectedEndDate != null,
+                          axis: Axis.horizontal,
+                          child: Opacity(
+                            opacity: 0.5,
+                            child: IconButton(
+                              onPressed: () {
+                                setSelectedEndDate(null);
+                              },
+                              tooltip: "clear".tr(),
+                              icon: Icon(Icons.clear),
+                              padding: EdgeInsets.all(15),
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ],
                 ),
               ),
             ),
