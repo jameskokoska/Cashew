@@ -29,6 +29,7 @@ import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntries.dart';
 import 'package:budget/widgets/transactionEntry/transactionEntry.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/colors.dart';
 import 'package:async/async.dart' show StreamZip;
@@ -215,9 +216,8 @@ class _ObjectivePageContentState extends State<_ObjectivePageContent> {
                                       child: AspectRatio(
                                         aspectRatio: 1,
                                         child: AnimatedCircularProgress(
-                                          percent: percentageTowardsGoal < 0
-                                              ? 0
-                                              : percentageTowardsGoal,
+                                          percent: clampDouble(
+                                              percentageTowardsGoal, 0, 1),
                                           backgroundColor: objectiveColorScheme
                                               .secondaryContainer,
                                           foregroundColor: dynamicPastel(
@@ -226,9 +226,6 @@ class _ObjectivePageContentState extends State<_ObjectivePageContent> {
                                             amountLight: 0.4,
                                             amountDark: 0.2,
                                           ),
-                                          overageColor: Colors.transparent,
-                                          overageShadowColor:
-                                              Colors.transparent,
                                           strokeWidth: 5,
                                           valueStrokeWidth: 10,
                                         ),

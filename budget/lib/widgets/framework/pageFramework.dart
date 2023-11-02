@@ -194,12 +194,22 @@ class PageFrameworkState extends State<PageFramework>
     if (widget.backButton == true || widget.subtitle != null && percent <= 1) {
       double offset = _scrollController.offset;
       if (percent < 0) offset = 0;
-      _animationControllerShift.value = (offset /
-          (getExpandedHeaderHeight(context, widget.expandedHeight) - 56));
-      _animationControllerOpacity.value = 0.5 +
-          (offset /
-              (getExpandedHeaderHeight(context, widget.expandedHeight) - 56) /
-              2);
+
+      if (getExpandedHeaderHeight(context, widget.expandedHeight) - 56 == 0) {
+        _animationControllerOpacity.value = 0.5 +
+            (offset /
+                (getExpandedHeaderHeight(context, widget.expandedHeight)) /
+                2);
+        _animationControllerShift.value = (offset /
+            (getExpandedHeaderHeight(context, widget.expandedHeight)));
+      } else {
+        _animationControllerOpacity.value = 0.5 +
+            (offset /
+                (getExpandedHeaderHeight(context, widget.expandedHeight) - 56) /
+                2);
+        _animationControllerShift.value = (offset /
+            (getExpandedHeaderHeight(context, widget.expandedHeight) - 56));
+      }
     }
     if (_scrollController.offset > 400 &&
         _scrollToTopAnimationController.value == 0) {
@@ -838,8 +848,10 @@ List<Widget> getAppBarBackgroundColorLayers({
                       animation: animationControllerOpacity,
                       builder: (_, child) {
                         return Opacity(
-                          opacity:
+                          opacity: clampDouble(
                               (animationControllerOpacity.value - 0.5) / 0.5,
+                              0,
+                              1),
                           child: child,
                         );
                       },
@@ -913,8 +925,10 @@ List<Widget> getAppBarBackgroundColorLayers({
                       animation: animationControllerOpacity,
                       builder: (_, child) {
                         return Opacity(
-                          opacity:
+                          opacity: clampDouble(
                               (animationControllerOpacity.value - 0.5) / 0.5,
+                              0,
+                              1),
                           child: child,
                         );
                       },

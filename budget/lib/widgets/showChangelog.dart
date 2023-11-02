@@ -22,6 +22,10 @@ import 'listItem.dart';
 
 String getChangelogString() {
   return """
+    < 4.8.1
+    Goal spending circular progress limited to 100%
+    Fixed back button over scroll opacity animation
+    Tweaked background colors for subcategories
     < 4.8.0
     Added end date for savings/spending goals
     Spending/saving projection when end date set for goals

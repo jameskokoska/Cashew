@@ -436,7 +436,7 @@ class SubCategoriesContainer extends StatelessWidget {
           decoration: BoxDecoration(
             color: (colorScheme ?? Theme.of(context).colorScheme)
                 .secondaryContainer
-                .withOpacity(0.5),
+                .withOpacity(getPlatform() == PlatformOS.isIOS ? 0.15 : 0.5),
             borderRadius: BorderRadius.vertical(
               top: Radius.circular(
                 getPlatform() == PlatformOS.isIOS ? 0 : 14,
@@ -461,7 +461,7 @@ class SubCategoriesContainer extends StatelessWidget {
             child: content,
             color: (colorScheme ?? Theme.of(context).colorScheme)
                 .secondaryContainer
-                .withOpacity(0.2),
+                .withOpacity(0.3),
           ),
           HorizontalBreak(padding: EdgeInsets.zero),
           SizedBox(height: 6),
