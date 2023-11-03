@@ -152,7 +152,7 @@
   "auto-add-titles-description": "Cuando se crea una transacción",
   "select-categories": "Seleccionar categorías",
   "transactions-to-include": "Transacciones para incluir",
-  "category-spending-goals": "Objetivos de gasto de categoría",
+  "category-spending-goals": "Metas de Gastos por Categoria",
   "saving-tracking": "Deberías salvar",
   "for": "para",
   "more-days": "más días",
@@ -815,5 +815,6 @@
   "goal-reached": "Objetivo alcanzado!",
   "goal-overdue": "Gol atrasado",
   "save": "Ahorrar",
-  "spend": "Gastar"
+  "spend": "Gastar",
+  "until": "hasta"
 }

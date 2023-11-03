@@ -793,7 +793,7 @@
   "multiplier": "Multiplikator",
   "bill-splitter-multiplier-description": "Geben Sie einen Wert ein, der mit jedem Artikel im Bill Splitter multipliziert wird. Nützlich, wenn die Steuer auf jeden Artikel angewendet wird.",
   "more-options": "Mehr Optionen",
-  "cannot-display-graph-for-current-time-period": "Für den aktuellen Zeitraum kann das Diagramm nicht angezeigt werden.",
+  "cannot-display-graph-for-current-time-period": "Diagramm kann für den aktuellen Zeitraum nicht angezeigt werden.",
   "exclude-from-budget": "Aus dem Budget ausschließen",
   "erase-synced-data-and-cloud-backups": "Synchronisierte Daten und Cloud -Sicherungen löschen",
   "erase-cloud-data": "Cloud -Daten löschen",
@@ -815,5 +815,6 @@
   "goal-reached": "Ziel erreicht!",
   "goal-overdue": "Ziel überfällig",
   "save": "Speichern",
-  "spend": "Ausgeben"
+  "spend": "Ausgeben",
+  "until": "bis"
 }

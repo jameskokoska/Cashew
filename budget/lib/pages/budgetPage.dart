@@ -427,6 +427,7 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                             budgetColorScheme: budgetColorScheme,
                             category: category.category,
                             totalSpentAbsolute: s.totalSpentAbsolute,
+                            totalSpent: s.totalSpent,
                             transactionCount: category.transactionCount,
                             categorySpent: showIncomeExpenseIcons == true
                                 ? category.total

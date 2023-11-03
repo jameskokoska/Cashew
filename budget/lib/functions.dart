@@ -389,7 +389,8 @@ DateTimeRange getBudgetDate(Budget budget, DateTime currentDate) {
     return DateTimeRange(start: budget.startDate, end: budget.endDate);
   } else if (budget.reoccurrence == BudgetReoccurence.daily ||
       budget.reoccurrence == BudgetReoccurence.monthly ||
-      budget.reoccurrence == BudgetReoccurence.yearly) {
+      budget.reoccurrence == BudgetReoccurence.yearly ||
+      budget.reoccurrence == BudgetReoccurence.weekly) {
     DateTime currentDateLoopStart = budget.startDate;
     late DateTime currentDateLoopEnd;
     if (budget.reoccurrence == BudgetReoccurence.daily) {
@@ -405,6 +406,11 @@ DateTimeRange getBudgetDate(Budget budget, DateTime currentDate) {
           currentDateLoopStart.year + budget.periodLength,
           currentDateLoopStart.month,
           currentDateLoopStart.day);
+    } else if (budget.reoccurrence == BudgetReoccurence.weekly) {
+      currentDateLoopEnd = DateTime(
+          currentDateLoopStart.year,
+          currentDateLoopStart.month,
+          currentDateLoopStart.day + budget.periodLength * 7);
     }
     // print("START");
     // print(currentDate);
@@ -452,6 +458,15 @@ DateTimeRange getBudgetDate(Budget budget, DateTime currentDate) {
               currentDateLoopEnd.year - budget.periodLength,
               currentDateLoopEnd.month,
               currentDateLoopEnd.day);
+        } else if (budget.reoccurrence == BudgetReoccurence.weekly) {
+          currentDateLoopStart = DateTime(
+              currentDateLoopStart.year,
+              currentDateLoopStart.month,
+              currentDateLoopStart.day - budget.periodLength * 7);
+          currentDateLoopEnd = DateTime(
+              currentDateLoopEnd.year,
+              currentDateLoopEnd.month,
+              currentDateLoopEnd.day - budget.periodLength * 7);
         }
       }
     } else if (currentDate.millisecondsSinceEpoch >=
@@ -491,22 +506,17 @@ DateTimeRange getBudgetDate(Budget budget, DateTime currentDate) {
               currentDateLoopEnd.year + budget.periodLength,
               currentDateLoopEnd.month,
               currentDateLoopEnd.day);
+        } else if (budget.reoccurrence == BudgetReoccurence.weekly) {
+          currentDateLoopStart = DateTime(
+              currentDateLoopStart.year,
+              currentDateLoopStart.month,
+              currentDateLoopStart.day + budget.periodLength * 7);
+          currentDateLoopEnd = DateTime(
+              currentDateLoopEnd.year,
+              currentDateLoopEnd.month,
+              currentDateLoopEnd.day + budget.periodLength * 7);
         }
       }
-    }
-  } else if (budget.reoccurrence == BudgetReoccurence.weekly) {
-    DateTime currentDateLoop = currentDate;
-    for (int daysToGoBack = 0;
-        daysToGoBack <= 7 * budget.periodLength;
-        daysToGoBack++) {
-      if (currentDateLoop.weekday == budget.startDate.weekday) {
-        DateTime endDate = new DateTime(
-            currentDateLoop.year,
-            currentDateLoop.month,
-            currentDateLoop.day + 7 * budget.periodLength - 1);
-        return DateTimeRange(start: currentDateLoop, end: endDate);
-      }
-      currentDateLoop = currentDateLoop.subtract(Duration(days: 1));
     }
   }
   return DateTimeRange(

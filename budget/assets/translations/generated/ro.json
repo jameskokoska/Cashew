@@ -100,7 +100,7 @@
   "pay-subscriptions-description": "Marcați automat un abonament așa cum este plătit după data scadenței",
   "pay-repetitive": "Plătește repetitiv",
   "pay-repetitive-description": "Marcați automat o tranzacție repetitivă, plătită după data scadenței",
-  "pay-upcoming": "Plătește viitor",
+  "pay-upcoming": "Plătiți viitorul",
   "pay-upcoming-description": "Marcați automat o tranzacție viitoare, plătită după data scadenței",
   "import-csv": "Importați fișierul CSV",
   "import-csv-description": "Importați o sursă externă de date CSV",
@@ -815,5 +815,6 @@
   "goal-reached": "Golul atins!",
   "goal-overdue": "Obiectiv întârziat",
   "save": "Salvați",
-  "spend": "Petrece"
+  "spend": "Petrece",
+  "until": "pana cand"
 }

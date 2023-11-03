@@ -788,7 +788,7 @@
   "insurance": "Verzekering",
   "beauty": "Schoonheid",
   "haircut": "Kapsel",
-  "touchups": "Aanraking",
+  "touchups": "Touchups",
   "clothing": "Kleding",
   "multiplier": "Vermenigvuldiger",
   "bill-splitter-multiplier-description": "Voer een waarde in die wordt vermenigvuldigd met elk item in de Bill Splitter. Handig als belasting op elk item wordt toegepast.",
@@ -815,5 +815,6 @@
   "goal-reached": "Doel bereikt!",
   "goal-overdue": "Doel te laat",
   "save": "Redden",
-  "spend": "Uitgeven"
+  "spend": "Uitgeven",
+  "until": "tot"
 }

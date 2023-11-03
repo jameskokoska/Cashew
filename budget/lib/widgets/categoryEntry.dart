@@ -24,6 +24,7 @@ class CategoryEntry extends StatelessWidget {
     required this.transactionCount,
     required this.categorySpent,
     required this.totalSpentAbsolute,
+    required this.totalSpent,
     required this.onTap,
     required this.selected,
     required this.allSelected,
@@ -41,11 +42,13 @@ class CategoryEntry extends StatelessWidget {
     this.selectedSubCategoryPk,
     this.alwaysShow = false,
     this.isSubcategory = false,
+    this.mainCategorySpentIfSubcategory = 0,
   }) : super(key: key);
 
   final TransactionCategory category;
   final int transactionCount;
   final double totalSpentAbsolute;
+  final double totalSpent;
   final double categorySpent;
   final Function(TransactionCategory category,
       CategoryBudgetLimit? categoryBudgetLimit) onTap;
@@ -66,6 +69,7 @@ class CategoryEntry extends StatelessWidget {
   final String? selectedSubCategoryPk;
   final bool alwaysShow;
   final bool isSubcategory;
+  final double mainCategorySpentIfSubcategory;
 
   @override
   Widget build(BuildContext context) {
@@ -255,24 +259,42 @@ class CategoryEntry extends StatelessWidget {
                                             : (todayPercent ?? 0) / 100,
                                       ),
                                     )
-                                  : TextFont(
-                                      text: (totalSpentAbsolute == 0
+                                  : Builder(builder: (context) {
+                                      String text = (totalSpent == 0
                                               ? "0"
                                               : (categorySpent /
-                                                      totalSpentAbsolute *
+                                                      totalSpent *
                                                       100)
                                                   .abs()
                                                   .toStringAsFixed(0)) +
                                           "% " +
                                           (extraText ?? "of-spending")
                                               .toString()
-                                              .tr(),
-                                      fontSize: 14,
-                                      textColor: selected
-                                          ? getColor(context, "black")
-                                              .withOpacity(0.4)
-                                          : getColor(context, "textLight"),
-                                    ),
+                                              .tr();
+                                      if (isSubcategory) {
+                                        text = (totalSpentAbsolute == 0 ||
+                                                    mainCategorySpentIfSubcategory ==
+                                                        0
+                                                ? "0"
+                                                : (categorySpent /
+                                                        mainCategorySpentIfSubcategory *
+                                                        100)
+                                                    .abs()
+                                                    .toStringAsFixed(0)) +
+                                            "% " +
+                                            (extraText ?? "of-subcategory")
+                                                .toString()
+                                                .tr();
+                                      }
+                                      return TextFont(
+                                        text: text,
+                                        fontSize: 14,
+                                        textColor: selected
+                                            ? getColor(context, "black")
+                                                .withOpacity(0.4)
+                                            : getColor(context, "textLight"),
+                                      );
+                                    }),
                             ),
                             TextFont(
                               text: transactionCount.toString() +
@@ -340,6 +362,7 @@ class CategoryEntry extends StatelessWidget {
                         budgetColorScheme: budgetColorScheme,
                         category: subcategoryWithTotal.category,
                         totalSpentAbsolute: totalSpentAbsolute,
+                        totalSpent: totalSpent,
                         transactionCount: subcategoryWithTotal.transactionCount,
                         categorySpent: showIncomeExpenseIcons == true
                             ? subcategoryWithTotal.total
@@ -349,6 +372,7 @@ class CategoryEntry extends StatelessWidget {
                         allSelected: allSelected,
                         alwaysShow: selected,
                         isSubcategory: true,
+                        mainCategorySpentIfSubcategory: amountSpent,
                       ),
                   ],
                 ),

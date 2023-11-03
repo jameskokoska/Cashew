@@ -810,10 +810,11 @@
   "no-photo-taken": "Ingen bilder tatt",
   "major-change-14": "Transaksjonsvedlegg",
   "major-change-14-1": "Fest bilder eller filer til transaksjoner via Google Drive",
-  "ending": "slutter",
+  "ending": "slutt",
   "until-forever": "Inntil for alltid",
   "goal-reached": "Mål nådd!",
   "goal-overdue": "Mål forfalt",
   "save": "Lagre",
-  "spend": "Bruke"
+  "spend": "Bruke",
+  "until": "før"
 }

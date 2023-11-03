@@ -675,6 +675,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                   ),
                 ),
                 BudgetDetails(
+                  showCurrentPeriod: true,
                   key: _budgetDetailsStateKey,
                   determineBottomButton: () {
                     determineBottomButton();
@@ -725,59 +726,6 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                       );
                     }
                   },
-                ),
-                AnimatedExpanded(
-                  expand: enumRecurrence[selectedRecurrence] !=
-                      BudgetReoccurence.custom,
-                  child: Builder(builder: (context) {
-                    DateTimeRange budgetRange = getBudgetDate(
-                      Budget(
-                        startDate: selectedStartDate,
-                        periodLength: selectedPeriodLength,
-                        reoccurrence: enumRecurrence[selectedRecurrence],
-                        budgetPk: "-1",
-                        name: "",
-                        amount: 0,
-                        endDate: DateTime.now(),
-                        addedTransactionsOnly: false,
-                        dateCreated: DateTime.now(),
-                        pinned: false,
-                        order: -1,
-                        walletFk: "",
-                        isAbsoluteSpendingLimit: false,
-                      ),
-                      DateTime.now(),
-                    );
-                    String text = "current-period".tr() +
-                        "\n" +
-                        getWordedDateShortMore(budgetRange.start) +
-                        " - " +
-                        getWordedDateShortMore(budgetRange.end);
-                    return Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Flexible(
-                          child: Padding(
-                            padding: const EdgeInsets.only(
-                              bottom: 10,
-                              top: 5,
-                            ),
-                            child: AnimatedSizeSwitcher(
-                              child: TextFont(
-                                key: ValueKey(text),
-                                text: text,
-                                fontSize: 14.5,
-                                maxLines: 4,
-                                textColor: getColor(context, "textLight"),
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    );
-                  }),
                 ),
                 SizedBox(height: 10),
               ],
@@ -1272,6 +1220,7 @@ class BudgetDetails extends StatefulWidget {
     this.initialSelectedEndDate,
     this.initialSelectedRecurrence,
     this.afterAmountEnteredDismissed,
+    this.showCurrentPeriod = false,
   });
   final Function determineBottomButton;
   final Function(double, String) setSelectedAmount;
@@ -1285,6 +1234,7 @@ class BudgetDetails extends StatefulWidget {
   final DateTime? initialSelectedEndDate;
   final String? initialSelectedRecurrence;
   final Function(double? amountEntered)? afterAmountEnteredDismissed;
+  final bool showCurrentPeriod;
   @override
   State<BudgetDetails> createState() => _BudgetDetailsState();
 }
@@ -1621,6 +1571,60 @@ class _BudgetDetailsState extends State<BudgetDetails> {
                   ),
           ),
         ),
+        if (widget.showCurrentPeriod)
+          AnimatedExpanded(
+            expand:
+                enumRecurrence[selectedRecurrence] != BudgetReoccurence.custom,
+            child: Builder(builder: (context) {
+              DateTimeRange budgetRange = getBudgetDate(
+                Budget(
+                  startDate: selectedStartDate,
+                  periodLength: selectedPeriodLength,
+                  reoccurrence: enumRecurrence[selectedRecurrence],
+                  budgetPk: "-1",
+                  name: "",
+                  amount: 0,
+                  endDate: DateTime.now(),
+                  addedTransactionsOnly: false,
+                  dateCreated: DateTime.now(),
+                  pinned: false,
+                  order: -1,
+                  walletFk: "",
+                  isAbsoluteSpendingLimit: false,
+                ),
+                DateTime.now(),
+              );
+              String text = "current-period".tr() +
+                  "\n" +
+                  getWordedDateShortMore(budgetRange.start) +
+                  " - " +
+                  getWordedDateShortMore(budgetRange.end);
+              return Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Flexible(
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                        bottom: 10,
+                        top: 5,
+                      ),
+                      child: AnimatedSizeSwitcher(
+                        child: TextFont(
+                          key: ValueKey(text),
+                          text: text,
+                          fontSize: 14.5,
+                          maxLines: 4,
+                          textColor: getColor(context, "textLight"),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            }),
+          ),
       ],
     );
   }

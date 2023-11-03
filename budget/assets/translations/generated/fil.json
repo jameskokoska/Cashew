@@ -100,7 +100,7 @@
   "pay-subscriptions-description": "Awtomatikong markahan ang isang subscription bilang bayad pagkatapos ng takdang petsa",
   "pay-repetitive": "Magbayad ng paulit -ulit",
   "pay-repetitive-description": "Awtomatikong markahan ang isang paulit -ulit na transaksyon na binabayaran pagkatapos ng takdang petsa",
-  "pay-upcoming": "Magbayad paparating",
+  "pay-upcoming": "Magbayad ng paparating",
   "pay-upcoming-description": "Awtomatikong markahan ang isang paparating na transaksyon na nabayaran pagkatapos ng takdang petsa",
   "import-csv": "I -import ang CSV file",
   "import-csv-description": "Mag -import ng isang panlabas na mapagkukunan ng data ng CSV",
@@ -815,5 +815,6 @@
   "goal-reached": "Naabot ang layunin!",
   "goal-overdue": "LAYUNIN OVERDUE",
   "save": "I -save",
-  "spend": "Gumastos"
+  "spend": "Gumastos",
+  "until": "Hanggang"
 }

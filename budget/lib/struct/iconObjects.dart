@@ -4014,4 +4014,148 @@ List<IconForCategory> iconObjects = [
     ],
     mostLikelyCategoryName: "WiFi",
   ),
+  IconForCategory(
+    icon: "fried-egg.png",
+    tags: [
+      "fried-egg",
+      "egg",
+      "food",
+      "breakfast",
+      "yolk",
+      "cooking",
+      "fried",
+      "meal",
+      "protein",
+      "brunch"
+    ],
+    mostLikelyCategoryName: "Eggs",
+  ),
+  IconForCategory(
+    icon: "car-charging-station.png",
+    tags: [
+      "car-charging-station",
+      "charging",
+      "electric",
+      "vehicle",
+      "energy",
+      "power",
+      "station",
+      "charger",
+      "electricity",
+      "recharge"
+    ],
+    mostLikelyCategoryName: "Charging",
+  ),
+  IconForCategory(
+    icon: "battery-charge.png",
+    tags: [
+      "battery-charge",
+      "battery",
+      "charge",
+      "power",
+      "energy",
+      "electricity",
+      "rechargeable",
+      "cell",
+      "portable",
+      "juice"
+    ],
+    mostLikelyCategoryName: "Battery",
+  ),
+  IconForCategory(
+    icon: "eggs.png",
+    tags: [
+      "eggs",
+      "food",
+      "breakfast",
+      "protein",
+      "cooking",
+      "meal",
+      "fresh",
+      "chicken",
+      "omelette",
+      "scrambled-eggs"
+    ],
+    mostLikelyCategoryName: "Eggs",
+  ),
+  IconForCategory(
+    icon: "shrimp.png",
+    tags: [
+      "shrimp",
+      "seafood",
+      "food",
+      "prawn",
+      "crustacean",
+      "cooking",
+      "shellfish",
+      "delicacy",
+      "ocean",
+      "crab"
+    ],
+    mostLikelyCategoryName: "Shrimp",
+  ),
+  IconForCategory(
+    icon: "raw-meat.png",
+    tags: [
+      "raw-meat",
+      "meat",
+      "food",
+      "butcher",
+      "fresh",
+      "beef",
+      "poultry",
+      "pork",
+      "chicken",
+      "steak"
+    ],
+    mostLikelyCategoryName: "Meat",
+  ),
+  IconForCategory(
+    icon: "bread.png",
+    tags: [
+      "bread",
+      "food",
+      "baking",
+      "loaf",
+      "wheat",
+      "yeast",
+      "sandwich",
+      "toast",
+      "bakery",
+      "fresh"
+    ],
+    mostLikelyCategoryName: "Bakery",
+  ),
+  IconForCategory(
+    icon: "3d-printer.png",
+    tags: [
+      "3d",
+      "printer",
+      "printing",
+      "technology",
+      "manufacturing",
+      "prototype",
+      "innovation",
+      "creative",
+      "design",
+      "plastic"
+    ],
+    mostLikelyCategoryName: "Printer",
+  ),
+  IconForCategory(
+    icon: "milk.png",
+    tags: [
+      "milk",
+      "dairy",
+      "drink",
+      "calcium",
+      "white",
+      "beverage",
+      "cow",
+      "nutrients",
+      "healthy",
+      "nutrition"
+    ],
+    mostLikelyCategoryName: "Dairy",
+  ),
 ];

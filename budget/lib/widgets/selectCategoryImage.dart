@@ -9,6 +9,7 @@ import 'package:budget/struct/iconObjects.dart';
 import 'package:budget/widgets/textInput.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/foundation.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' hide TextInput;
@@ -115,36 +116,38 @@ class _SelectCategoryImageState extends State<SelectCategoryImage> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Expanded(
-                      child: Focus(
-                        onFocusChange: (value) {
-                          if (value) {
-                            // Fix over-scroll stretch when keyboard pops up quickly
-                            Future.delayed(Duration(milliseconds: 100), () {
-                              bottomSheetControllerGlobal.scrollTo(0,
-                                  duration: Duration(milliseconds: 100));
-                            });
-                            // Update the size of the bottom sheet
-                            Future.delayed(Duration(milliseconds: 500), () {
-                              bottomSheetControllerGlobal.snapToExtent(0);
-                            });
-                          }
+                      child:
+                          // Focus(
+                          //   onFocusChange: (value) {
+                          //     if (value) {
+                          //       // Fix over-scroll stretch when keyboard pops up quickly
+                          //       Future.delayed(Duration(milliseconds: 100), () {
+                          //         bottomSheetControllerGlobal.scrollTo(0,
+                          //             duration: Duration(milliseconds: 100));
+                          //       });
+                          //       // Update the size of the bottom sheet
+                          //       Future.delayed(Duration(milliseconds: 500), () {
+                          //         bottomSheetControllerGlobal.snapToExtent(0);
+                          //       });
+                          //     }
+                          //   },
+                          // child:
+                          TextInput(
+                        labelText: "search-placeholder".tr(),
+                        icon: appStateSettings["outlinedIcons"]
+                            ? Icons.search_outlined
+                            : Icons.search_rounded,
+                        onSubmitted: (value) {},
+                        onChanged: (value) {
+                          setState(() {
+                            searchTerm = value.trim();
+                          });
+                          bottomSheetControllerGlobal.snapToExtent(0);
                         },
-                        child: TextInput(
-                          labelText: "search-placeholder".tr(),
-                          icon: appStateSettings["outlinedIcons"]
-                              ? Icons.search_outlined
-                              : Icons.search_rounded,
-                          onSubmitted: (value) {},
-                          onChanged: (value) {
-                            setState(() {
-                              searchTerm = value.trim();
-                            });
-                            bottomSheetControllerGlobal.snapToExtent(0);
-                          },
-                          padding: EdgeInsets.all(0),
-                          autoFocus: true,
-                        ),
+                        padding: EdgeInsets.all(0),
+                        autoFocus: kIsWeb,
                       ),
+                      // ),
                     ),
                     SizedBox(width: 10),
                     ButtonIcon(

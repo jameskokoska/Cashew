@@ -804,7 +804,7 @@
   "add-attachment": "Přidat přílohu",
   "add-attachment-description": "Přílohy jsou přidány na váš disk Google",
   "take-photo": "Vyfotit",
-  "select-photo": "Vyberte fotku",
+  "select-photo": "Vyberte fotografii",
   "select-file": "Zvolte soubor",
   "error-attaching-file": "Připojení souboru chyby",
   "no-photo-taken": "Žádná fotografie",
@@ -815,5 +815,6 @@
   "goal-reached": "Cíl dosáhl!",
   "goal-overdue": "Cíl zpožděný",
   "save": "Uložit",
-  "spend": "Strávit"
+  "spend": "Strávit",
+  "until": "až do"
 }

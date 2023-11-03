@@ -4799,6 +4799,7 @@ class FinanceDatabase extends _$FinanceDatabase {
         (isIncome == null ? Constant(true) : Constant(false)));
   }
 
+  // If followCustomPeriodCycle is true, cycleSettingsExtension should always be passed in a value!
   Expression<bool> onlyShowIfFollowCustomPeriodCycle(
       $TransactionsTable tbl, bool followCustomPeriodCycle,
       {String cycleSettingsExtension = ""}) {

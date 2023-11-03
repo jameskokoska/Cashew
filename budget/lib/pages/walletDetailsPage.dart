@@ -535,6 +535,7 @@ class _WalletCategoryPieChartState extends State<WalletCategoryPieChart> {
                     budgetColorScheme: widget.walletColorScheme,
                     category: category.category,
                     totalSpentAbsolute: s.totalSpentAbsolute,
+                    totalSpent: s.totalSpent,
                     transactionCount: category.transactionCount,
                     categorySpent: category.total,
                     onTap: (TransactionCategory tappedCategory, _) {

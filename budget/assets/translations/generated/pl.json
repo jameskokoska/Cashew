@@ -788,7 +788,7 @@
   "insurance": "Ubezpieczenie",
   "beauty": "Uroda",
   "haircut": "Ostrzyżenie",
-  "touchups": "Dotyk",
+  "touchups": "Dotykania",
   "clothing": "Odzież",
   "multiplier": "Mnożnik",
   "bill-splitter-multiplier-description": "Wprowadź wartość, która zostanie pomnożona do każdego elementu w rozdzieleniu rachunku. Przydatne, jeśli podatek jest stosowany na każdym elemencie.",
@@ -813,7 +813,8 @@
   "ending": "kończący się",
   "until-forever": "Na zawsze",
   "goal-reached": "Cel osiągnięty!",
-  "goal-overdue": "OPTERUJĄC GORODA",
+  "goal-overdue": "OPPÓŁ",
   "save": "Ratować",
-  "spend": "Wydawać"
+  "spend": "Wydawać",
+  "until": "dopóki"
 }

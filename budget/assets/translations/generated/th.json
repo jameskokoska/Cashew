@@ -810,10 +810,11 @@
   "no-photo-taken": "ไม่มีรูปถ่าย",
   "major-change-14": "ไฟล์แนบธุรกรรม",
   "major-change-14-1": "แนบรูปภาพหรือไฟล์ไปยังธุรกรรมผ่าน Google Drive",
-  "ending": "ตอนจบ",
+  "ending": "การจบ",
   "until-forever": "จนถึงตลอดไป",
   "goal-reached": "บรรลุเป้าหมาย!",
   "goal-overdue": "เป้าหมายเกินกำหนด",
   "save": "บันทึก",
-  "spend": "ใช้จ่าย"
+  "spend": "ใช้จ่าย",
+  "until": "จนกระทั่ง"
 }

@@ -802,7 +802,7 @@
   "transaction-type": "Transaktionstype",
   "do-not-show-again": "Vis ikke igen",
   "add-attachment": "Tilføj vedhæftning",
-  "add-attachment-description": "Vedhæftede filer føjes til dit Google -drev",
+  "add-attachment-description": "Vedhæftede filer tilføjes til dit Google -drev",
   "take-photo": "Tag et billede",
   "select-photo": "Vælg foto",
   "select-file": "Vælg fil",
@@ -815,5 +815,6 @@
   "goal-reached": "Mål nået!",
   "goal-overdue": "Mål forfaldt",
   "save": "Gemme",
-  "spend": "Bruge"
+  "spend": "Bruge",
+  "until": "indtil"
 }

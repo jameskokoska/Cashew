@@ -22,6 +22,16 @@ import 'listItem.dart';
 
 String getChangelogString() {
   return """
+    < 4.8.2
+    Added dates to goals details page
+    End date no longer exported with CSV
+    Select category icon popup only focuses search bar on web, removed focus popup resizing
+    Fixed overflow for income and expense selector
+    Updated translations
+    Added more category icons (eggs, car charging, battery, shrimp, meat, bread, 3D printer)
+    Tweaked centering of income and expense arrows for income and expense tab selector
+    Fixed custom weekly period length calculation
+    Fixed incorrect percentages for category spending with subcategories
     < 4.8.1
     Goal spending circular progress limited to 100%
     Fixed back button over scroll opacity animation

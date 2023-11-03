@@ -300,7 +300,7 @@ class _ObjectivePageContentState extends State<_ObjectivePageContent> {
                                                   widget.objective.amount),
                                           fontSize: 13,
                                           textColor: getColor(context, "black")
-                                              .withOpacity(0.3),
+                                              .withOpacity(0.4),
                                         ),
                                       ),
                                     ],
@@ -310,22 +310,51 @@ class _ObjectivePageContentState extends State<_ObjectivePageContent> {
                             ],
                           ),
                         ),
-                        if (widget.objective.endDate != null)
-                          Padding(
-                            padding: const EdgeInsets.only(top: 10.0),
-                            child: TextFont(
-                              text: getObjectiveStatus(
-                                context,
-                                widget.objective,
-                                totalAmount,
-                                percentageTowardsGoal,
-                                addSpendingSavingIndication: true,
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              top: 20.0, left: 20, right: 20),
+                          child: Column(
+                            children: [
+                              TextFont(
+                                text: getWordedDateShortMore(
+                                      widget.objective.dateCreated,
+                                      includeYear:
+                                          widget.objective.dateCreated.year !=
+                                              DateTime.now().year,
+                                    ) +
+                                    (widget.objective.endDate != null
+                                        ? " - " +
+                                            getWordedDateShortMore(
+                                              widget.objective.endDate!,
+                                              includeYear: widget.objective
+                                                      .endDate!.year !=
+                                                  DateTime.now().year,
+                                            )
+                                        : ""),
+                                maxLines: 3,
+                                textAlign: TextAlign.center,
+                                fontSize: 21,
+                                fontWeight: FontWeight.bold,
                               ),
-                              maxLines: 3,
-                              textAlign: TextAlign.center,
-                              fontSize: 18,
-                            ),
+                              if (widget.objective.endDate != null)
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 12),
+                                  child: TextFont(
+                                    text: getObjectiveStatus(
+                                      context,
+                                      widget.objective,
+                                      totalAmount,
+                                      percentageTowardsGoal,
+                                      addSpendingSavingIndication: true,
+                                    ),
+                                    maxLines: 3,
+                                    textAlign: TextAlign.center,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                            ],
                           ),
+                        ),
                       ],
                     );
                   },
@@ -333,7 +362,7 @@ class _ObjectivePageContentState extends State<_ObjectivePageContent> {
               ),
               SliverPadding(
                 padding: EdgeInsets.only(
-                  top: widget.objective.endDate == null ? 10 : 5,
+                  top: 5,
                   left: 20,
                   right: 20,
                   bottom: 30,
@@ -353,14 +382,14 @@ class _ObjectivePageContentState extends State<_ObjectivePageContent> {
                               (snapshot.data == 1
                                   ? "transaction".tr().toLowerCase()
                                   : "transactions".tr().toLowerCase()),
-                          fontSize: 18,
+                          fontSize: 16,
                           maxLines: 3,
                         );
                       } else {
                         return TextFont(
                           textAlign: TextAlign.center,
                           text: "/ transactions",
-                          fontSize: 18,
+                          fontSize: 16,
                           maxLines: 3,
                         );
                       }

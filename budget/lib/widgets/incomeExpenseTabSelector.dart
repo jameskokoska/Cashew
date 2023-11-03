@@ -98,7 +98,7 @@ class _IncomeExpenseTabSelectorState extends State<IncomeExpenseTabSelector>
           Tab(
             child: Center(
               child: Padding(
-                padding: const EdgeInsets.only(top: 5),
+                padding: const EdgeInsets.only(top: 2),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -112,14 +112,20 @@ class _IncomeExpenseTabSelectorState extends State<IncomeExpenseTabSelector>
                           color: getColor(context, "expenseAmount"),
                         ),
                       ),
-                    Text(
-                      widget.expenseLabel ?? "expense".tr(),
-                      style: TextStyle(
-                        fontSize: 14.5,
-                        fontFamily: 'Avenir',
-                        fontFamilyFallback: ['Inter'],
+                    Flexible(
+                      child: Transform.translate(
+                        offset: Offset(0, 1.7),
+                        child: Text(
+                          widget.expenseLabel ?? "expense".tr(),
+                          maxLines: 2,
+                          style: TextStyle(
+                            fontSize: 14.5,
+                            fontFamily: 'Avenir',
+                            fontFamilyFallback: ['Inter'],
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
                       ),
-                      textAlign: TextAlign.center,
                     ),
                   ],
                 ),
@@ -129,28 +135,37 @@ class _IncomeExpenseTabSelectorState extends State<IncomeExpenseTabSelector>
           Tab(
             child: Center(
               child: Padding(
-                padding: const EdgeInsets.only(top: 5),
+                padding: const EdgeInsets.only(top: 2),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     if (widget.showIcons)
-                      AnimatedOpacity(
-                        duration: Duration(milliseconds: 300),
-                        opacity: !selectedIncome ? 0.5 : 1,
-                        child: IncomeOutcomeArrow(
-                          width: 19,
-                          isIncome: true,
-                          color: getColor(context, "incomeAmount"),
+                      Transform.translate(
+                        offset: Offset(0, 1.2),
+                        child: AnimatedOpacity(
+                          duration: Duration(milliseconds: 300),
+                          opacity: !selectedIncome ? 0.5 : 1,
+                          child: IncomeOutcomeArrow(
+                            width: 19,
+                            isIncome: true,
+                            color: getColor(context, "incomeAmount"),
+                          ),
                         ),
                       ),
-                    Text(
-                      widget.incomeLabel ?? "income".tr(),
-                      style: TextStyle(
-                        fontSize: 14.5,
-                        fontFamily: 'Avenir',
-                        fontFamilyFallback: ['Inter'],
+                    Flexible(
+                      child: Transform.translate(
+                        offset: Offset(0, 1.7),
+                        child: Text(
+                          widget.incomeLabel ?? "income".tr(),
+                          maxLines: 2,
+                          style: TextStyle(
+                            fontSize: 14.5,
+                            fontFamily: 'Avenir',
+                            fontFamilyFallback: ['Inter'],
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
                       ),
-                      textAlign: TextAlign.center,
                     ),
                   ],
                 ),

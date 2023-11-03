@@ -219,6 +219,7 @@ class ExportCSV extends StatelessWidget {
               "upcomingTransactionNotification",
               "objectiveFk",
               "subCategoryFk",
+              "endDate",
             ],
             keysToReplace: {
               "dateCreated": "date",
