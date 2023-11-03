@@ -493,7 +493,7 @@
   "manage": "व्यवस्थापित करा",
   "restore-purchases": "खरेदी पुनर्संचयित",
   "backup-restored": "बॅकअप पुनर्संचयित",
-  "budget-total-label": "अर्थसंकल्प एकूण लेबल",
+  "budget-total-type": "बजेट एकूण प्रकार",
   "total-spent": "एकूण खर्च",
   "total-remaining": "एकूण उर्वरित",
   "total-spent-example": "उदाहरणः 100 चा 25 खर्च",
@@ -816,5 +816,8 @@
   "goal-overdue": "ध्येय थकीत",
   "save": "जतन करा",
   "spend": "खर्च करा",
-  "until": "पर्यंत"
+  "until": "पर्यंत",
+  "of-subcategory": "उपश्रेणीचे",
+  "account-label": "खाते लेबल",
+  "account-label-description": "सर्व व्यवहारांसाठी खाते लेबल जोडा"
 }

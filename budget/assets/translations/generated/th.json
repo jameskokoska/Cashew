@@ -493,7 +493,7 @@
   "manage": "จัดการ",
   "restore-purchases": "เรียกคืนการซื้อสินค้า",
   "backup-restored": "กู้คืนการสำรองข้อมูล",
-  "budget-total-label": "งบประมาณรวมฉลาก",
+  "budget-total-type": "ประเภทงบประมาณรวม",
   "total-spent": "ใช้จ่ายทั้งหมด",
   "total-remaining": "ทั้งหมดที่เหลืออยู่",
   "total-spent-example": "ตัวอย่าง: 25 ใช้ 100",
@@ -816,5 +816,8 @@
   "goal-overdue": "เป้าหมายเกินกำหนด",
   "save": "บันทึก",
   "spend": "ใช้จ่าย",
-  "until": "จนกระทั่ง"
+  "until": "จนกระทั่ง",
+  "of-subcategory": "ของหมวดหมู่ย่อย",
+  "account-label": "ฉลากบัญชี",
+  "account-label-description": "เพิ่มฉลากบัญชีสำหรับธุรกรรมทั้งหมด"
 }

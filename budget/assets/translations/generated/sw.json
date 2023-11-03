@@ -493,7 +493,7 @@
   "manage": "Kusimamia",
   "restore-purchases": "Rejesha ununuzi",
   "backup-restored": "Backup imerejeshwa",
-  "budget-total-label": "Bajeti Jumla ya lebo",
+  "budget-total-type": "Aina ya jumla ya bajeti",
   "total-spent": "Jumla ya kutumika",
   "total-remaining": "Jumla iliyobaki",
   "total-spent-example": "Mfano: 25 alitumia 100",
@@ -816,5 +816,8 @@
   "goal-overdue": "Lengo limepitwa na wakati",
   "save": "Kuokoa",
   "spend": "Tumia",
-  "until": "mpaka"
+  "until": "mpaka",
+  "of-subcategory": "ya kifungu kidogo",
+  "account-label": "Lebo ya akaunti",
+  "account-label-description": "Ongeza lebo ya akaunti kwa shughuli zote"
 }

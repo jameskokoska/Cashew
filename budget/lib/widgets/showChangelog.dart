@@ -22,6 +22,10 @@ import 'listItem.dart';
 
 String getChangelogString() {
   return """
+    < 4.8.3
+    Added account label setting - show an account name label for every transaction if enabled
+    Extra settings minimize when search is focused in edit data pages
+    Renamed setting budget total label to budget total type
     < 4.8.2
     Added dates to goals details page
     End date no longer exported with CSV

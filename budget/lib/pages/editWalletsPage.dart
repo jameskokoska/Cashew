@@ -42,6 +42,7 @@ class _EditWalletsPageState extends State<EditWalletsPage> {
   bool dragDownToDismissEnabled = true;
   int currentReorder = -1;
   String searchValue = "";
+  bool isFocused = false;
 
   @override
   void initState() {
@@ -103,28 +104,41 @@ class _EditWalletsPageState extends State<EditWalletsPage> {
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.only(bottom: 8.0),
-              child: TextInput(
-                labelText: "search-accounts-placeholder".tr(),
-                icon: appStateSettings["outlinedIcons"]
-                    ? Icons.search_outlined
-                    : Icons.search_rounded,
-                onSubmitted: (value) {
+              child: Focus(
+                onFocusChange: (value) {
                   setState(() {
-                    searchValue = value;
+                    isFocused = value;
                   });
                 },
-                onChanged: (value) {
-                  setState(() {
-                    searchValue = value;
-                  });
-                },
-                autoFocus: false,
+                child: TextInput(
+                  labelText: "search-accounts-placeholder".tr(),
+                  icon: appStateSettings["outlinedIcons"]
+                      ? Icons.search_outlined
+                      : Icons.search_rounded,
+                  onSubmitted: (value) {
+                    setState(() {
+                      searchValue = value;
+                    });
+                  },
+                  onChanged: (value) {
+                    setState(() {
+                      searchValue = value;
+                    });
+                  },
+                  autoFocus: false,
+                ),
               ),
             ),
           ),
           SliverToBoxAdapter(
             child: AnimatedExpanded(
-              expand: hideIfSearching(searchValue, context) == false,
+              expand: hideIfSearching(searchValue, isFocused, context) == false,
+              child: ShowAccountLabelSettingToggle(),
+            ),
+          ),
+          SliverToBoxAdapter(
+            child: AnimatedExpanded(
+              expand: hideIfSearching(searchValue, isFocused, context) == false,
               child: SettingsContainerOpenPage(
                 onOpen: () {
                   checkIfExchangeRateChangeBefore();
@@ -142,7 +156,7 @@ class _EditWalletsPageState extends State<EditWalletsPage> {
           ),
           SliverToBoxAdapter(
             child: AnimatedExpanded(
-              expand: hideIfSearching(searchValue, context) == false,
+              expand: hideIfSearching(searchValue, isFocused, context) == false,
               child: SettingsContainer(
                 onTap: () {
                   openBottomSheet(
@@ -486,4 +500,24 @@ Future<TransactionWallet?> selectWalletPopup(BuildContext context,
 
   if (wallet is TransactionWallet) return wallet;
   return null;
+}
+
+class ShowAccountLabelSettingToggle extends StatelessWidget {
+  const ShowAccountLabelSettingToggle({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return SettingsContainerSwitch(
+      title: "account-label".tr(),
+      description: "Add account label for all transactions".tr(),
+      onSwitched: (value) {
+        updateSettings("showAccountLabelTagInTransactionEntry", value,
+            updateGlobalState: true);
+      },
+      initialValue: appStateSettings["showAccountLabelTagInTransactionEntry"],
+      icon: appStateSettings["outlinedIcons"]
+          ? Icons.label_outlined
+          : Icons.label_rounded,
+    );
+  }
 }

@@ -24,6 +24,7 @@ import 'package:budget/widgets/textInput.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/editRowEntry.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' hide SliverReorderableList;
 import 'package:flutter/services.dart' hide TextInput;
 import 'package:budget/modified/reorderable_list.dart';
@@ -31,7 +32,7 @@ import 'package:provider/provider.dart';
 
 String? hiddenOnSearchValue;
 
-bool hideIfSearching(String? searchTerm, BuildContext context) {
+bool hideIfSearching(String? searchTerm, bool isFocused, BuildContext context) {
   // print(MediaQuery.sizeOf(context).height -
   //     getKeyboardHeight(context) -
   //     getExpandedHeaderHeight(context, null));
@@ -40,6 +41,11 @@ bool hideIfSearching(String? searchTerm, BuildContext context) {
   // We don't want the settings to pop in and out just because user decided to
   // scroll through results and therefore minimized the keyboard
   if (hiddenOnSearchValue != null && hiddenOnSearchValue == searchTerm) {
+    return true;
+  }
+  if (kIsWeb == false &&
+      isFocused == true &&
+      MediaQuery.sizeOf(context).height < 950) {
     return true;
   }
   if (searchTerm == "" ||
@@ -67,6 +73,7 @@ class _EditBudgetPageState extends State<EditBudgetPage> {
   bool dragDownToDismissEnabled = true;
   int currentReorder = -1;
   String searchValue = "";
+  bool isFocused = false;
 
   @override
   void initState() {
@@ -136,28 +143,35 @@ class _EditBudgetPageState extends State<EditBudgetPage> {
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.only(bottom: 8.0),
-              child: TextInput(
-                labelText: "search-budgets-placeholder".tr(),
-                icon: appStateSettings["outlinedIcons"]
-                    ? Icons.search_outlined
-                    : Icons.search_rounded,
-                onSubmitted: (value) {
+              child: Focus(
+                onFocusChange: (value) {
                   setState(() {
-                    searchValue = value;
+                    isFocused = value;
                   });
                 },
-                onChanged: (value) {
-                  setState(() {
-                    searchValue = value;
-                  });
-                },
-                autoFocus: false,
+                child: TextInput(
+                  labelText: "search-budgets-placeholder".tr(),
+                  icon: appStateSettings["outlinedIcons"]
+                      ? Icons.search_outlined
+                      : Icons.search_rounded,
+                  onSubmitted: (value) {
+                    setState(() {
+                      searchValue = value;
+                    });
+                  },
+                  onChanged: (value) {
+                    setState(() {
+                      searchValue = value;
+                    });
+                  },
+                  autoFocus: false,
+                ),
               ),
             ),
           ),
           SliverToBoxAdapter(
             child: AnimatedExpanded(
-              expand: hideIfSearching(searchValue, context) == false,
+              expand: hideIfSearching(searchValue, isFocused, context) == false,
               child: BudgetTotalSpentToggle(),
             ),
           ),
@@ -651,7 +665,7 @@ class _BudgetTotalSpentToggleState extends State<BudgetTotalSpentToggle> {
   @override
   Widget build(BuildContext context) {
     return SettingsContainer(
-      title: "budget-total-label".tr(),
+      title: "budget-total-type".tr(),
       description: appStateSettings["showTotalSpentForBudget"] == true
           ? "total-spent".tr().toLowerCase().capitalizeFirst
           : "total-remaining".tr().toLowerCase().capitalizeFirst,
@@ -659,7 +673,7 @@ class _BudgetTotalSpentToggleState extends State<BudgetTotalSpentToggle> {
         openBottomSheet(
           context,
           PopupFramework(
-            title: "budget-total-label".tr(),
+            title: "budget-total-type".tr(),
             child: RadioItems(
               items: ["total-remaining", "total-spent"],
               initial: appStateSettings["showTotalSpentForBudget"] == true

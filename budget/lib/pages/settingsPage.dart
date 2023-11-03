@@ -546,6 +546,8 @@ class SettingsPageContent extends StatelessWidget {
               : Icons.account_balance_wallet_rounded,
         ),
 
+        ShowAccountLabelSettingToggle(),
+
         BudgetTotalSpentToggle(),
 
         BiometricsSettingToggle(),

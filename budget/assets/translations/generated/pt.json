@@ -493,7 +493,7 @@
   "manage": "Gerenciar",
   "restore-purchases": "Restaurar compras",
   "backup-restored": "Backup restaurado",
-  "budget-total-label": "Rótulo Total de Orçamentos",
+  "budget-total-type": "Tipo total do orçamento",
   "total-spent": "Total gasto",
   "total-remaining": "Restante total",
   "total-spent-example": "Exemplo: 25 gasto de 100",
@@ -816,5 +816,8 @@
   "goal-overdue": "Meta vencida",
   "save": "Economizar",
   "spend": "Gastar",
-  "until": "até"
+  "until": "até",
+  "of-subcategory": "de subcategoria",
+  "account-label": "Rótulo da conta",
+  "account-label-description": "Adicionar rótulo de conta para todas as transações"
 }

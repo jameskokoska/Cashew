@@ -493,7 +493,7 @@
   "manage": "Quản lý",
   "restore-purchases": "Khôi phục mua hàng",
   "backup-restored": "Sao lưu được khôi phục",
-  "budget-total-label": "Ngân sách Tổng nhãn",
+  "budget-total-type": "Tổng ngân sách loại",
   "total-spent": "Tổng đã dành",
   "total-remaining": "Tổng số còn lại",
   "total-spent-example": "Ví dụ: 25 chi tiêu 100",
@@ -816,5 +816,8 @@
   "goal-overdue": "Mục tiêu quá hạn",
   "save": "Cứu",
   "spend": "Tiêu",
-  "until": "cho đến khi"
+  "until": "cho đến khi",
+  "of-subcategory": "của tiểu thể loại",
+  "account-label": "Nhãn tài khoản",
+  "account-label-description": "Thêm nhãn tài khoản cho tất cả các giao dịch"
 }

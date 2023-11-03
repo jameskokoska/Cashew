@@ -493,7 +493,7 @@
   "manage": "കൈകാരംചെയ്യുക",
   "restore-purchases": "വാങ്ങലുകൾ പുനഃസ്ഥാപിക്കുക",
   "backup-restored": "ബാക്കപ്പ് പുന .സ്ഥാപിച്ചു",
-  "budget-total-label": "മൊത്തം ലേബൽ ബജറ്റുകൾ",
+  "budget-total-type": "ബജറ്റ് ആകെ തരം",
   "total-spent": "ആകെ ചെലവഴിച്ചു",
   "total-remaining": "ആകെ ശേഷിക്കുന്നു",
   "total-spent-example": "ഉദാഹരണം: 100 ചെലവഴിച്ച 25",
@@ -816,5 +816,8 @@
   "goal-overdue": "ലക്ഷ്യം കാലതാമസം",
   "save": "രക്ഷിക്കും",
   "spend": "ചെലവാക്കുക",
-  "until": "വരുവോളം"
+  "until": "വരുവോളം",
+  "of-subcategory": "ഉപവിഭാഗം",
+  "account-label": "അക്കൗണ്ട് ലേബൽ",
+  "account-label-description": "എല്ലാ ഇടപാടുകൾക്കും അക്കൗണ്ട് ലേബൽ ചേർക്കുക"
 }

@@ -493,7 +493,7 @@
   "manage": "Mengelola",
   "restore-purchases": "Mengembalikan pembelian",
   "backup-restored": "Cadangan dipulihkan",
-  "budget-total-label": "Label Total Anggaran",
+  "budget-total-type": "Jenis Total Anggaran",
   "total-spent": "Total dihabiskan",
   "total-remaining": "Total tersisa",
   "total-spent-example": "Contoh: 25 dihabiskan 100",
@@ -816,5 +816,8 @@
   "goal-overdue": "Tujuan tertunda",
   "save": "Menyimpan",
   "spend": "Membelanjakan",
-  "until": "sampai"
+  "until": "sampai",
+  "of-subcategory": "subkategori",
+  "account-label": "Label Akun",
+  "account-label-description": "Tambahkan label akun untuk semua transaksi"
 }

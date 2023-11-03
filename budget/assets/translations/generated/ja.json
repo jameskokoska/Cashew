@@ -493,7 +493,7 @@
   "manage": "管理",
   "restore-purchases": "購入を復元",
   "backup-restored": "バックアップが復元されました",
-  "budget-total-label": "予算の合計ラベル",
+  "budget-total-type": "予算の合計タイプ",
   "total-spent": "合計",
   "total-remaining": "残りの合計",
   "total-spent-example": "例：100の25匹",
@@ -816,5 +816,8 @@
   "goal-overdue": "目標が遅れています",
   "save": "保存",
   "spend": "過ごす",
-  "until": "それまで"
+  "until": "それまで",
+  "of-subcategory": "サブカテゴリの",
+  "account-label": "アカウントラベル",
+  "account-label-description": "すべてのトランザクションのアカウントラベルを追加します"
 }

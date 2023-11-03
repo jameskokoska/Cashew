@@ -493,7 +493,7 @@
   "manage": "Manage",
   "restore-purchases": "Restore Purchases",
   "backup-restored": "Backup Restored",
-  "budget-total-label": "Budgets Total Label",
+  "budget-total-type": "Budget Total Type",
   "total-spent": "Total Spent",
   "total-remaining": "Total Remaining",
   "total-spent-example": "Example: 25 spent of 100",
@@ -816,5 +816,8 @@
   "goal-overdue": "Goal overdue",
   "save": "Save",
   "spend": "Spend",
-  "until": "until"
+  "until": "until",
+  "of-subcategory": "of subcategory",
+  "account-label": "Account Label",
+  "account-label-description": "Add account label for all transactions"
 }

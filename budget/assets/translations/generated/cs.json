@@ -493,7 +493,7 @@
   "manage": "Spravovat",
   "restore-purchases": "Obnovit nákupy",
   "backup-restored": "Zálohování obnoveno",
-  "budget-total-label": "Rozpočty Celkové štítky",
+  "budget-total-type": "Celkový typ rozpočtu",
   "total-spent": "Celkem utracené",
   "total-remaining": "Celkem zbývající",
   "total-spent-example": "Příklad: 25 utracených ze 100",
@@ -816,5 +816,8 @@
   "goal-overdue": "Cíl zpožděný",
   "save": "Uložit",
   "spend": "Strávit",
-  "until": "až do"
+  "until": "až do",
+  "of-subcategory": "podkategorie",
+  "account-label": "Štítek účtu",
+  "account-label-description": "Přidejte štítek účtu pro všechny transakce"
 }

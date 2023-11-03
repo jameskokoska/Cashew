@@ -493,7 +493,7 @@
   "manage": "Управлять",
   "restore-purchases": "Восстановить покупки",
   "backup-restored": "Резервное копирование восстановлено",
-  "budget-total-label": "Бюджеты Общий ярлык",
+  "budget-total-type": "Бюджет общий тип",
   "total-spent": "Всего потрачено",
   "total-remaining": "Всего осталось",
   "total-spent-example": "Пример: 25 потрачено по 100",
@@ -816,5 +816,8 @@
   "goal-overdue": "Цель просрочена",
   "save": "Сохранять",
   "spend": "Тратить",
-  "until": "до"
+  "until": "до",
+  "of-subcategory": "подкатегории",
+  "account-label": "Метка учетной записи",
+  "account-label-description": "Добавить метку учетной записи для всех транзакций"
 }

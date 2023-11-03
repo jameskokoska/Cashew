@@ -98,7 +98,7 @@
   "auto-email-transactions": "معاملات البريد الإلكتروني التلقائي",
   "pay-subscriptions": "دفع الاشتراكات",
   "pay-subscriptions-description": "تلقائيا وضع علامة على الاشتراك على النحو المدفوع بعد تاريخ الاستحقاق",
-  "pay-repetitive": "دفع متكررة",
+  "pay-repetitive": "دفع متكرر",
   "pay-repetitive-description": "حدد تلقائيًا معاملة متكررة على النحو المدفوع بعد تاريخ الاستحقاق",
   "pay-upcoming": "دفع قادم",
   "pay-upcoming-description": "حدد تلقائيًا معاملة قادمة على النحو المدفوع بعد تاريخ الاستحقاق",
@@ -493,7 +493,7 @@
   "manage": "يدير",
   "restore-purchases": "استعادة المشتريات",
   "backup-restored": "استعادة النسخ الاحتياطي",
-  "budget-total-label": "الميزانيات الإجمالية الملصق",
+  "budget-total-type": "إجمالي الميزانية",
   "total-spent": "إجمال الصرف",
   "total-remaining": "إجمالي المتبقي",
   "total-spent-example": "مثال: 25 تنفق من 100",
@@ -816,5 +816,8 @@
   "goal-overdue": "المتأخر الهدف",
   "save": "يحفظ",
   "spend": "ينفق",
-  "until": "حتى"
+  "until": "حتى",
+  "of-subcategory": "من الفئة الفرعية",
+  "account-label": "علامة الحساب",
+  "account-label-description": "أضف تسمية الحساب لجميع المعاملات"
 }

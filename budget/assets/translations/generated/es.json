@@ -493,7 +493,7 @@
   "manage": "Administrar",
   "restore-purchases": "Restaurar las compras",
   "backup-restored": "Copia de seguridad restaurada",
-  "budget-total-label": "Etiqueta total de presupuestos",
+  "budget-total-type": "Tipo total presupuestario",
   "total-spent": "Total gastado",
   "total-remaining": "Total restante",
   "total-spent-example": "Ejemplo: 25 gastado de 100",
@@ -816,5 +816,8 @@
   "goal-overdue": "Gol atrasado",
   "save": "Ahorrar",
   "spend": "Gastar",
-  "until": "hasta"
+  "until": "hasta",
+  "of-subcategory": "de subcategoría",
+  "account-label": "Etiqueta de cuenta",
+  "account-label-description": "Agregar etiqueta de cuenta para todas las transacciones"
 }

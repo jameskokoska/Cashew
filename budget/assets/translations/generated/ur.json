@@ -493,7 +493,7 @@
   "manage": "انتظام کریں",
   "restore-purchases": "خریداری کو بحال کریں",
   "backup-restored": "بیک اپ بحال ہوا",
-  "budget-total-label": "بجٹ کل لیبل",
+  "budget-total-type": "بجٹ کی کل قسم",
   "total-spent": "کل خرچ",
   "total-remaining": "کل باقی",
   "total-spent-example": "مثال کے طور پر: 100 کا 25 خرچ",
@@ -816,5 +816,8 @@
   "goal-overdue": "گول واجب الادا",
   "save": "بچت کریں",
   "spend": "خرچ کریں",
-  "until": "جب تک"
+  "until": "جب تک",
+  "of-subcategory": "ذیلی زمرہ کی",
+  "account-label": "اکاؤنٹ کا لیبل",
+  "account-label-description": "تمام لین دین کے لئے اکاؤنٹ کا لیبل شامل کریں"
 }

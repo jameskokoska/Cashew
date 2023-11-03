@@ -493,7 +493,7 @@
   "manage": "Kezel",
   "restore-purchases": "Vásárlás visszaállítása",
   "backup-restored": "A biztonsági mentés helyreállított",
-  "budget-total-label": "Költségvetés Total Címke",
+  "budget-total-type": "Költségvetési teljes típus",
   "total-spent": "Összesen elköltött",
   "total-remaining": "A fennmaradó teljes",
   "total-spent-example": "Példa: 25 költött 100 -at",
@@ -816,5 +816,8 @@
   "goal-overdue": "Cél lejárt",
   "save": "Megment",
   "spend": "Tölt",
-  "until": "amíg"
+  "until": "amíg",
+  "of-subcategory": "alkategória",
+  "account-label": "Számlacímke",
+  "account-label-description": "Adja hozzá az összes tranzakció fiókcímkét"
 }

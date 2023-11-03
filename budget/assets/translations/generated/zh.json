@@ -493,7 +493,7 @@
   "manage": "管理",
   "restore-purchases": "恢复购买",
   "backup-restored": "备份恢复",
-  "budget-total-label": "预算总标签",
+  "budget-total-type": "预算总类型",
   "total-spent": "总支出",
   "total-remaining": "总剩余",
   "total-spent-example": "示例：25支出100",
@@ -816,5 +816,8 @@
   "goal-overdue": "目标逾期",
   "save": "节省",
   "spend": "花费",
-  "until": "直到"
+  "until": "直到",
+  "of-subcategory": "子类别",
+  "account-label": "帐户标签",
+  "account-label-description": "为所有交易添加帐户标签"
 }

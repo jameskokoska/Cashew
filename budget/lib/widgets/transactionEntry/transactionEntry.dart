@@ -358,7 +358,10 @@ class TransactionEntry extends StatelessWidget {
                                                 (transaction.objectiveFk !=
                                                     null) ||
                                                 (transaction.subCategoryFk !=
-                                                    null)
+                                                    null) ||
+                                                (appStateSettings[
+                                                        "showAccountLabelTagInTransactionEntry"] ==
+                                                    true)
                                             ? TransactionEntryTag(
                                                 transaction: transaction,
                                                 showObjectivePercentage:

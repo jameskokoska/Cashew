@@ -493,7 +493,7 @@
   "manage": "నిర్వహించడానికి",
   "restore-purchases": "కొనుగోళ్లు పునరుద్ధరించడానికి",
   "backup-restored": "బ్యాకప్ పునరుద్ధరించబడింది",
-  "budget-total-label": "బడ్జెట్లు మొత్తం లేబుల్",
+  "budget-total-type": "బడ్జెట్ మొత్తం రకం",
   "total-spent": "మొత్తం ఖర్చు",
   "total-remaining": "మొత్తం మిగిలి ఉంది",
   "total-spent-example": "ఉదాహరణ: 25 ఖర్చు 25",
@@ -816,5 +816,8 @@
   "goal-overdue": "లక్ష్యం మీరిన",
   "save": "సేవ్",
   "spend": "ఖర్చు",
-  "until": "వరకు"
+  "until": "వరకు",
+  "of-subcategory": "ఉపవర్గం",
+  "account-label": "ఖాతా లేబుల్",
+  "account-label-description": "అన్ని లావాదేవీల కోసం ఖాతా లేబుల్‌ను జోడించండి"
 }

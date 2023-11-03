@@ -493,7 +493,7 @@
   "manage": "Üstesinden gelmek",
   "restore-purchases": "Satın Alımları Geri Yükle",
   "backup-restored": "Yedekleme geri yüklendi",
-  "budget-total-label": "Bütçeler Toplam Etiket",
+  "budget-total-type": "Bütçe Toplam Türü",
   "total-spent": "Toplam harcama",
   "total-remaining": "Toplam kalan",
   "total-spent-example": "Örnek: 100'ün 25 harcanması",
@@ -816,5 +816,8 @@
   "goal-overdue": "Gol gecikmiş",
   "save": "Kaydetmek",
   "spend": "Harcamak",
-  "until": "değin"
+  "until": "değin",
+  "of-subcategory": "alt kategori",
+  "account-label": "Hesap etiketi",
+  "account-label-description": "Tüm işlemler için hesap etiketi ekleyin"
 }

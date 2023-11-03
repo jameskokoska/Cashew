@@ -493,7 +493,7 @@
   "manage": "Få til",
   "restore-purchases": "Gjenopprette kjøp",
   "backup-restored": "Sikkerhetskopiering gjenopprettet",
-  "budget-total-label": "Budsjetter total etikett",
+  "budget-total-type": "Budsjett Total type",
   "total-spent": "Totalt brukt",
   "total-remaining": "Totalt gjenværende",
   "total-spent-example": "Eksempel: 25 brukt på 100",
@@ -816,5 +816,8 @@
   "goal-overdue": "Mål forfalt",
   "save": "Lagre",
   "spend": "Bruke",
-  "until": "før"
+  "until": "før",
+  "of-subcategory": "av underkategori",
+  "account-label": "Kontogetikett",
+  "account-label-description": "Legg til kontomerke for alle transaksjoner"
 }

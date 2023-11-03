@@ -493,7 +493,7 @@
   "manage": "Управљати",
   "restore-purchases": "Обнављање куповина",
   "backup-restored": "Рестаурирано резервне копије",
-  "budget-total-label": "Буџети Укупна етикета",
+  "budget-total-type": "Укупни тип буџета",
   "total-spent": "Укупно потрошено",
   "total-remaining": "Потпуно преостали",
   "total-spent-example": "Пример: 25 потрошено од 100",
@@ -816,5 +816,8 @@
   "goal-overdue": "Долазни циљ",
   "save": "сачувати",
   "spend": "Проводити",
-  "until": "све док"
+  "until": "све док",
+  "of-subcategory": "подкатегорије",
+  "account-label": "Ознака рачуна",
+  "account-label-description": "Додајте налепницу налога за све трансакције"
 }

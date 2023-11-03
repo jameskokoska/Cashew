@@ -34,83 +34,89 @@ class TransactionEntryTag extends StatelessWidget {
       padding: const EdgeInsets.only(top: 1.0),
       child: Row(
         children: [
-          transaction.subCategoryFk == null
-              ? SizedBox.shrink()
-              : Builder(builder: (context) {
-                  if (subCategory != null) {
-                    return SubCategoryTag(category: subCategory!);
-                  } else {
-                    return StreamBuilder<TransactionCategory?>(
-                      stream:
-                          database.getCategory(transaction.subCategoryFk!).$1,
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          TransactionCategory? category = snapshot.data!;
-                          return SubCategoryTag(category: category);
-                        }
-                        return SizedBox.shrink();
-                      },
-                    );
-                  }
-                }),
-          transaction.sharedReferenceBudgetPk == null
-              ? SizedBox.shrink()
-              : Flexible(
-                  child: Builder(builder: (context) {
-                    if (budget != null) {
-                      return TransactionTag(
-                        color: HexColor(budget?.colour,
-                            defaultColor:
-                                Theme.of(context).colorScheme.primary),
-                        name: budget?.name ?? "",
-                      );
-                    } else {
-                      return StreamBuilder<Budget>(
-                        stream: database
-                            .getBudget(transaction.sharedReferenceBudgetPk!),
-                        builder: (context, snapshot) {
-                          if (snapshot.hasData) {
-                            Budget budget = snapshot.data!;
-                            return TransactionTag(
-                              color: HexColor(budget.colour,
-                                  defaultColor:
-                                      Theme.of(context).colorScheme.primary),
-                              name: budget.name,
-                            );
-                          }
-                          return Container();
-                        },
-                      );
+          if (appStateSettings["showAccountLabelTagInTransactionEntry"] == true)
+            TransactionTag(
+              color: HexColor(
+                  Provider.of<AllWallets>(context)
+                      .indexedByPk[transaction.walletFk]
+                      ?.colour,
+                  defaultColor: Theme.of(context).colorScheme.primary),
+              name: Provider.of<AllWallets>(context)
+                      .indexedByPk[transaction.walletFk]
+                      ?.name ??
+                  "",
+            ),
+          if (transaction.subCategoryFk != null)
+            Builder(builder: (context) {
+              if (subCategory != null) {
+                return SubCategoryTag(category: subCategory!);
+              } else {
+                return StreamBuilder<TransactionCategory?>(
+                  stream: database.getCategory(transaction.subCategoryFk!).$1,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      TransactionCategory? category = snapshot.data!;
+                      return SubCategoryTag(category: category);
                     }
-                  }),
-                ),
-          transaction.objectiveFk == null
-              ? SizedBox.shrink()
-              : Expanded(
-                  child: Builder(builder: (context) {
-                    if (objective != null) {
+                    return SizedBox.shrink();
+                  },
+                );
+              }
+            }),
+          if (transaction.sharedReferenceBudgetPk != null)
+            Flexible(
+              child: Builder(builder: (context) {
+                if (budget != null) {
+                  return TransactionTag(
+                    color: HexColor(budget?.colour,
+                        defaultColor: Theme.of(context).colorScheme.primary),
+                    name: budget?.name ?? "",
+                  );
+                } else {
+                  return StreamBuilder<Budget>(
+                    stream: database
+                        .getBudget(transaction.sharedReferenceBudgetPk!),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        Budget budget = snapshot.data!;
+                        return TransactionTag(
+                          color: HexColor(budget.colour,
+                              defaultColor:
+                                  Theme.of(context).colorScheme.primary),
+                          name: budget.name,
+                        );
+                      }
+                      return Container();
+                    },
+                  );
+                }
+              }),
+            ),
+          if (transaction.objectiveFk != null)
+            Expanded(
+              child: Builder(builder: (context) {
+                if (objective != null) {
+                  return ObjectivePercentTag(
+                    objective: objective!,
+                    showObjectivePercentageCheck: showObjectivePercentageCheck,
+                  );
+                }
+                return StreamBuilder<Objective>(
+                  stream: database.getObjective(transaction.objectiveFk!),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      Objective objective = snapshot.data!;
                       return ObjectivePercentTag(
-                        objective: objective!,
+                        objective: objective,
                         showObjectivePercentageCheck:
                             showObjectivePercentageCheck,
                       );
                     }
-                    return StreamBuilder<Objective>(
-                      stream: database.getObjective(transaction.objectiveFk!),
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          Objective objective = snapshot.data!;
-                          return ObjectivePercentTag(
-                            objective: objective,
-                            showObjectivePercentageCheck:
-                                showObjectivePercentageCheck,
-                          );
-                        }
-                        return Container();
-                      },
-                    );
-                  }),
-                ),
+                    return Container();
+                  },
+                );
+              }),
+            ),
         ],
       ),
     );

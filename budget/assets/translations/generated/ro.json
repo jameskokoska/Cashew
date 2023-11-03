@@ -493,7 +493,7 @@
   "manage": "Administra",
   "restore-purchases": "Restabiliți achizițiile",
   "backup-restored": "Restaurarea backup -ului",
-  "budget-total-label": "Etichetă totală a bugetelor",
+  "budget-total-type": "Tipul total bugetar",
   "total-spent": "Total cheltuit",
   "total-remaining": "Total rămas",
   "total-spent-example": "Exemplu: 25 a cheltuit de 100",
@@ -816,5 +816,8 @@
   "goal-overdue": "Obiectiv întârziat",
   "save": "Salvați",
   "spend": "Petrece",
-  "until": "pana cand"
+  "until": "pana cand",
+  "of-subcategory": "din subcategorie",
+  "account-label": "Etichetă de cont",
+  "account-label-description": "Adăugați eticheta de cont pentru toate tranzacțiile"
 }

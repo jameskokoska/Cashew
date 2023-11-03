@@ -493,7 +493,7 @@
   "manage": "관리하다",
   "restore-purchases": "구매를 복원",
   "backup-restored": "백업이 복원되었습니다",
-  "budget-total-label": "예산 총 레이블",
+  "budget-total-type": "예산 총 유형",
   "total-spent": "총 소비",
   "total-remaining": "남은 총",
   "total-spent-example": "예 : 100을 25로 소비했습니다",
@@ -816,5 +816,8 @@
   "goal-overdue": "목표 기한",
   "save": "구하다",
   "spend": "경비",
-  "until": "~까지"
+  "until": "~까지",
+  "of-subcategory": "하위 범주의",
+  "account-label": "계정 레이블",
+  "account-label-description": "모든 트랜잭션에 대한 계정 레이블을 추가하십시오"
 }

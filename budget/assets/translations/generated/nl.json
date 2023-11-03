@@ -493,7 +493,7 @@
   "manage": "Beheren",
   "restore-purchases": "Herstel aankopen",
   "backup-restored": "Back -up hersteld",
-  "budget-total-label": "Budgetten Totaal label",
+  "budget-total-type": "Budget Totaal type",
   "total-spent": "Totaal uitgegeven",
   "total-remaining": "Totaal overgebleven",
   "total-spent-example": "Voorbeeld: 25 besteed van 100",
@@ -816,5 +816,8 @@
   "goal-overdue": "Doel te laat",
   "save": "Redden",
   "spend": "Uitgeven",
-  "until": "tot"
+  "until": "tot",
+  "of-subcategory": "van subcategorie",
+  "account-label": "Accountlabel",
+  "account-label-description": "Accountlabel toevoegen voor alle transacties"
 }

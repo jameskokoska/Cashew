@@ -493,7 +493,7 @@
   "manage": "સંચાલન કરવું",
   "restore-purchases": "ખરીદી પુન restore સ્થાપિત કરો",
   "backup-restored": "બેકઅપ પુન restored સ્થાપિત",
-  "budget-total-label": "કુલ લેબલ",
+  "budget-total-type": "બજેટનો કુલ પ્રકાર",
   "total-spent": "કુલ ખર્ચ",
   "total-remaining": "બાકી",
   "total-spent-example": "ઉદાહરણ: 25 100 ખર્ચ",
@@ -816,5 +816,8 @@
   "goal-overdue": "મ overલટ -ડેડ્યુ",
   "save": "બચત કરવી",
   "spend": "ખર્ચ કરવો",
-  "until": "ત્યાં સુધી"
+  "until": "ત્યાં સુધી",
+  "of-subcategory": "ઉપકાઠ",
+  "account-label": "હિસાબનું લેબલ",
+  "account-label-description": "બધા વ્યવહારો માટે એકાઉન્ટ લેબલ ઉમેરો"
 }

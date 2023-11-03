@@ -493,7 +493,7 @@
   "manage": "לנהל",
   "restore-purchases": "לשחזר רכישות",
   "backup-restored": "הגיבוי שוחזר",
-  "budget-total-label": "תקציבים תווית מוחלטת",
+  "budget-total-type": "סוג התקציב הכולל",
   "total-spent": "סה\"כ הוצא",
   "total-remaining": "סך הכל נותר",
   "total-spent-example": "דוגמה: 25 בילוי של 100",
@@ -816,5 +816,8 @@
   "goal-overdue": "יעד איחור",
   "save": "להציל",
   "spend": "לְבַלוֹת",
-  "until": "עד"
+  "until": "עד",
+  "of-subcategory": "של תת -קטגוריה",
+  "account-label": "תווית חשבון",
+  "account-label-description": "הוסף תווית חשבון עבור כל העסקאות"
 }

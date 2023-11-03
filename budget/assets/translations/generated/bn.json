@@ -493,7 +493,7 @@
   "manage": "পরিচালনা করুন",
   "restore-purchases": "ক্রয় পুনরুদ্ধার",
   "backup-restored": "ব্যাকআপ পুনরুদ্ধার",
-  "budget-total-label": "মোট লেবেল বাজেট",
+  "budget-total-type": "বাজেট মোট প্রকার",
   "total-spent": "মোট খরচ",
   "total-remaining": "মোট বাকি",
   "total-spent-example": "উদাহরণ: 25 টি 100 ব্যয়",
@@ -816,5 +816,8 @@
   "goal-overdue": "লক্ষ্য ছাড়",
   "save": "সংরক্ষণ",
   "spend": "ব্যয় করা",
-  "until": "অবধি"
+  "until": "অবধি",
+  "of-subcategory": "সাব বিভাগের",
+  "account-label": "অ্যাকাউন্ট লেবেল",
+  "account-label-description": "সমস্ত লেনদেনের জন্য অ্যাকাউন্ট লেবেল যুক্ত করুন"
 }

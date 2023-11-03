@@ -493,7 +493,7 @@
   "manage": "நிர்வகிக்கவும்",
   "restore-purchases": "கொள்முதலை திரும்பப்பெறு",
   "backup-restored": "காப்புப்பிரதி மீட்டெடுக்கப்பட்டது",
-  "budget-total-label": "பட்ஜெட்டுகள் மொத்த லேபிள்",
+  "budget-total-type": "பட்ஜெட் மொத்த வகை",
   "total-spent": "மொத்தம் செலவழித்தது",
   "total-remaining": "மொத்தம் மீதமுள்ள",
   "total-spent-example": "எடுத்துக்காட்டு: 25 செலவழித்த 25",
@@ -816,5 +816,8 @@
   "goal-overdue": "இலக்கு தாமதமானது",
   "save": "சேமிக்கவும்",
   "spend": "செலவு",
-  "until": "வரை"
+  "until": "வரை",
+  "of-subcategory": "துணைப்பிரிவு",
+  "account-label": "கணக்கு லேபிள்",
+  "account-label-description": "அனைத்து பரிவர்த்தனைகளுக்கும் கணக்கு லேபிளைச் சேர்க்கவும்"
 }

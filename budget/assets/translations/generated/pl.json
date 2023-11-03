@@ -493,7 +493,7 @@
   "manage": "Zarządzaj",
   "restore-purchases": "Przywróć zakupy",
   "backup-restored": "Przywrócono kopię zapasową",
-  "budget-total-label": "Etykieta wszystkich budżetów",
+  "budget-total-type": "Całkowity typ budżetu",
   "total-spent": "Wydatki RAZEM",
   "total-remaining": "Pozostało RAZEM",
   "total-spent-example": "Przykład: wydano 25 ze 100",
@@ -816,5 +816,8 @@
   "goal-overdue": "OPPÓŁ",
   "save": "Ratować",
   "spend": "Wydawać",
-  "until": "dopóki"
+  "until": "dopóki",
+  "of-subcategory": "podkategorii",
+  "account-label": "Etykieta konta",
+  "account-label-description": "Dodaj etykietę konta dla wszystkich transakcji"
 }

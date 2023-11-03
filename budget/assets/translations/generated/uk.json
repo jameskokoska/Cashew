@@ -493,7 +493,7 @@
   "manage": "Керувати",
   "restore-purchases": "Відновити покупки",
   "backup-restored": "Резервне копіювання відновлено",
-  "budget-total-label": "Всього бюджети",
+  "budget-total-type": "Загальний тип бюджету",
   "total-spent": "Всього витрачений",
   "total-remaining": "Загальний залишок",
   "total-spent-example": "Приклад: 25 витрачено 100",
@@ -816,5 +816,8 @@
   "goal-overdue": "Гол прострочений",
   "save": "Заощадити",
   "spend": "Витрачати",
-  "until": "до"
+  "until": "до",
+  "of-subcategory": "підкатегорії",
+  "account-label": "Лейбл облікового запису",
+  "account-label-description": "Додайте етикетку облікового запису для всіх транзакцій"
 }

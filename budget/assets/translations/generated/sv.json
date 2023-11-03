@@ -98,7 +98,7 @@
   "auto-email-transactions": "Auto -e -posttransaktioner",
   "pay-subscriptions": "Betala prenumerationer",
   "pay-subscriptions-description": "Markera automatiskt ett prenumeration som betalas efter förfallodagen",
-  "pay-repetitive": "Betala repetitiva",
+  "pay-repetitive": "Betala upprepade",
   "pay-repetitive-description": "Markera automatiskt en repetitiv transaktion som betalas efter förfallodagen",
   "pay-upcoming": "Ankommande",
   "pay-upcoming-description": "Markera automatiskt en kommande transaktion som betalas efter förfallodagen",
@@ -493,7 +493,7 @@
   "manage": "Hantera",
   "restore-purchases": "Återställa köp",
   "backup-restored": "Säkerhetskopiering återställs",
-  "budget-total-label": "Budgetar Totalt etikett",
+  "budget-total-type": "Budget Total typ",
   "total-spent": "Totalt spenderat",
   "total-remaining": "Total kvarvarande",
   "total-spent-example": "Exempel: 25 tillbringade 100",
@@ -816,5 +816,8 @@
   "goal-overdue": "Mål förfallen",
   "save": "Spara",
   "spend": "Spendera",
-  "until": "fram tills"
+  "until": "fram tills",
+  "of-subcategory": "underkategori",
+  "account-label": "Kontotikett",
+  "account-label-description": "Lägg till kontoetikett för alla transaktioner"
 }

@@ -493,7 +493,7 @@
   "manage": "Styre",
   "restore-purchases": "Genoprette indkøb",
   "backup-restored": "Backup gendannet",
-  "budget-total-label": "Budgetter samlet label",
+  "budget-total-type": "Budget Total type",
   "total-spent": "Samlet brugt",
   "total-remaining": "Samlet resterende",
   "total-spent-example": "Eksempel: 25 brugt på 100",
@@ -816,5 +816,8 @@
   "goal-overdue": "Mål forfaldt",
   "save": "Gemme",
   "spend": "Bruge",
-  "until": "indtil"
+  "until": "indtil",
+  "of-subcategory": "af underkategori",
+  "account-label": "Konto -etiket",
+  "account-label-description": "Tilføj kontonetiket til alle transaktioner"
 }

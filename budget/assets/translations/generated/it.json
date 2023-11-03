@@ -493,7 +493,7 @@
   "manage": "Gestisci",
   "restore-purchases": "Ripristina gli acquisti",
   "backup-restored": "Backup ripristinato",
-  "budget-total-label": "Formato del totale dei budget",
+  "budget-total-type": "Tipo totale di budget",
   "total-spent": "Totale speso",
   "total-remaining": "Totale rimanente",
   "total-spent-example": "Esempio: spesi 25 su 100",
@@ -816,5 +816,8 @@
   "goal-overdue": "Obiettivo in ritardo",
   "save": "Salva",
   "spend": "Trascorrere",
-  "until": "Fino a"
+  "until": "Fino a",
+  "of-subcategory": "di sottocategoria",
+  "account-label": "Etichetta dell'account",
+  "account-label-description": "Aggiungi l'etichetta dell'account per tutte le transazioni"
 }

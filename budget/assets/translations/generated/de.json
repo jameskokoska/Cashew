@@ -493,7 +493,7 @@
   "manage": "Verwalten",
   "restore-purchases": "Einkäufe wiederherstellen",
   "backup-restored": "Backup wiederhergestellt",
-  "budget-total-label": "Budgets Gesamtetikett",
+  "budget-total-type": "Budget Gesamttyp",
   "total-spent": "Gesamtausgaben",
   "total-remaining": "Total verbleibend",
   "total-spent-example": "Beispiel: 25 verbracht von 100 ausgegeben",
@@ -816,5 +816,8 @@
   "goal-overdue": "Ziel überfällig",
   "save": "Speichern",
   "spend": "Ausgeben",
-  "until": "bis"
+  "until": "bis",
+  "of-subcategory": "der Unterkategorie",
+  "account-label": "Kontoetikett",
+  "account-label-description": "Fügen Sie Account Label für alle Transaktionen hinzu"
 }

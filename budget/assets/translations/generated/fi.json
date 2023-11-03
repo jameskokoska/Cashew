@@ -493,7 +493,7 @@
   "manage": "Hallita",
   "restore-purchases": "Palauttaa ostot",
   "backup-restored": "Varmuuskopio Resorned",
-  "budget-total-label": "Budjettien kokonaismäärä",
+  "budget-total-type": "Kokonaistyyppi",
   "total-spent": "Kokonaiskäyttö",
   "total-remaining": "Jäljellä oleva",
   "total-spent-example": "Esimerkki: 25 käytettyä 100: sta",
@@ -816,5 +816,8 @@
   "goal-overdue": "Tavoite myöhässä",
   "save": "Tallentaa",
   "spend": "Viettää",
-  "until": "siihen asti kun"
+  "until": "siihen asti kun",
+  "of-subcategory": "alaluokka",
+  "account-label": "Tilinreketti",
+  "account-label-description": "Lisää tilin tarra kaikille tapahtumille"
 }

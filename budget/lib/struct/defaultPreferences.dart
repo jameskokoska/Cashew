@@ -135,6 +135,7 @@ Future<Map<String, dynamic>> getDefaultPreferences() async {
     "premiumPopupFreeSeen": false,
     "previewDemo": false,
     "purchaseID": null,
+    "showAccountLabelTagInTransactionEntry": false,
     // *********************************************************** //
     // For showing information within a certain cycle for all spending wallet details page
     // cycleSettingsExtension = ""
