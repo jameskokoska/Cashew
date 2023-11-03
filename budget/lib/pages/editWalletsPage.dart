@@ -509,7 +509,7 @@ class ShowAccountLabelSettingToggle extends StatelessWidget {
   Widget build(BuildContext context) {
     return SettingsContainerSwitch(
       title: "account-label".tr(),
-      description: "Add account label for all transactions".tr(),
+      description: "account-label-description".tr(),
       onSwitched: (value) {
         updateSettings("showAccountLabelTagInTransactionEntry", value,
             updateGlobalState: true);
