@@ -57,9 +57,9 @@ TotalSpentCategoriesSummary watchTotalSpentInTimeRangeHelper({
       // Don't re-add the subcategory total, since the main category total includes this already
       if (categoryWithTotal.category.mainCategoryPk == null) {
         s.totalSpent = s.totalSpent + categoryWithTotal.total;
+        s.totalSpentAbsolute =
+            s.totalSpentAbsolute + categoryWithTotal.total.abs();
       }
-      s.totalSpentAbsolute =
-          s.totalSpentAbsolute + categoryWithTotal.total.abs();
 
       if (categoryWithTotal.category.mainCategoryPk != null) {
         if (s.subCategorySpendingIndexedByMainCategoryPk[
