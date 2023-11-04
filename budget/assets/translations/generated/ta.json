@@ -819,5 +819,6 @@
   "until": "வரை",
   "of-subcategory": "துணைப்பிரிவு",
   "account-label": "கணக்கு லேபிள்",
-  "account-label-description": "அனைத்து பரிவர்த்தனைகளுக்கும் கணக்கு லேபிளைச் சேர்க்கவும்"
+  "account-label-description": "அனைத்து பரிவர்த்தனைகளுக்கும் கணக்கு லேபிளைச் சேர்க்கவும்",
+  "transaction-details": "பரிமாற்ற விவரங்கள்"
 }

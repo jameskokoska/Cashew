@@ -819,5 +819,6 @@
   "until": "až do",
   "of-subcategory": "podkategorie",
   "account-label": "Štítek účtu",
-  "account-label-description": "Přidejte štítek účtu pro všechny transakce"
+  "account-label-description": "Přidejte štítek účtu pro všechny transakce",
+  "transaction-details": "Detaily transakce"
 }

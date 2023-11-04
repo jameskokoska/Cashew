@@ -22,6 +22,16 @@ import 'listItem.dart';
 
 String getChangelogString() {
   return """
+    < 4.8.4
+    Upcoming transactions on homepage respect sliding income/expense selector
+    Search page shows one month of transactions in the future by default
+    When transferring balance or correcting total for accounts, can enter custom title along with custom date
+    Enter title popup with note allows for attachments
+    Fixed tapping checkbox in account picker for net worth settings would not select the account
+    Fixed in-app review dependencies
+    Fixed setting names capitalizations
+    Fixed default currency code
+    Fixed absolute spending limit conversions for subcategories when main category had no limit set (now defaults to using the budget limit)
     < 4.8.3
     Added account label setting - show an account name label for every transaction if enabled
     Extra settings minimize when search is focused in edit data pages

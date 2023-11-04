@@ -819,5 +819,6 @@
   "until": "जब तक",
   "of-subcategory": "उपश्रेणी का",
   "account-label": "खाता लेबल",
-  "account-label-description": "सभी लेनदेन के लिए खाता लेबल जोड़ें"
+  "account-label-description": "सभी लेनदेन के लिए खाता लेबल जोड़ें",
+  "transaction-details": "लेनदेन का विवरण"
 }

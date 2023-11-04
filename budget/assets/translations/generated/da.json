@@ -819,5 +819,6 @@
   "until": "indtil",
   "of-subcategory": "af underkategori",
   "account-label": "Konto -etiket",
-  "account-label-description": "Tilføj kontonetiket til alle transaktioner"
+  "account-label-description": "Tilføj kontonetiket til alle transaktioner",
+  "transaction-details": "overførselsdetaljer"
 }

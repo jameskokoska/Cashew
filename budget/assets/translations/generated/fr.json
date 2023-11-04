@@ -819,5 +819,6 @@
   "until": "jusqu'à",
   "of-subcategory": "de la sous-catégorie",
   "account-label": "Étiquette de compte",
-  "account-label-description": "Ajouter une étiquette de compte pour toutes les transactions"
+  "account-label-description": "Ajouter une étiquette de compte pour toutes les transactions",
+  "transaction-details": "détails de la transaction"
 }

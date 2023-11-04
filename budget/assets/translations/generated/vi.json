@@ -819,5 +819,6 @@
   "until": "cho đến khi",
   "of-subcategory": "của tiểu thể loại",
   "account-label": "Nhãn tài khoản",
-  "account-label-description": "Thêm nhãn tài khoản cho tất cả các giao dịch"
+  "account-label-description": "Thêm nhãn tài khoản cho tất cả các giao dịch",
+  "transaction-details": "chi tiết giao dịch"
 }

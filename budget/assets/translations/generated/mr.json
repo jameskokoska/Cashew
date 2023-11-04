@@ -819,5 +819,6 @@
   "until": "पर्यंत",
   "of-subcategory": "उपश्रेणीचे",
   "account-label": "खाते लेबल",
-  "account-label-description": "सर्व व्यवहारांसाठी खाते लेबल जोडा"
+  "account-label-description": "सर्व व्यवहारांसाठी खाते लेबल जोडा",
+  "transaction-details": "व्यवहाराचा तपशील"
 }

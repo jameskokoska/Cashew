@@ -267,7 +267,9 @@ class HomePageState extends State<HomePage>
                                     children: [
                                       slidingSelector,
                                       SizedBox(height: 8),
-                                      HomeUpcomingTransactionSlivers(),
+                                      HomeUpcomingTransactionSlivers(
+                                          selectedSlidingSelector:
+                                              selectedSlidingSelector),
                                       HomeTransactionSlivers(
                                           selectedSlidingSelector:
                                               selectedSlidingSelector),
@@ -293,7 +295,9 @@ class HomePageState extends State<HomePage>
                     enableDoubleColumn(context) == true
                         ? SizedBox.shrink()
                         : KeepAliveClientMixin(
-                            child: HomeUpcomingTransactionSlivers(),
+                            child: HomeUpcomingTransactionSlivers(
+                                selectedSlidingSelector:
+                                    selectedSlidingSelector),
                           ),
                     enableDoubleColumn(context) == true
                         ? SizedBox.shrink()

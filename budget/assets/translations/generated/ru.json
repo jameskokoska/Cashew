@@ -819,5 +819,6 @@
   "until": "до",
   "of-subcategory": "подкатегории",
   "account-label": "Метка учетной записи",
-  "account-label-description": "Добавить метку учетной записи для всех транзакций"
+  "account-label-description": "Добавить метку учетной записи для всех транзакций",
+  "transaction-details": "Детали транзакции"
 }

@@ -146,7 +146,7 @@
   "search-transactions": "Search Transactions",
   "search": "Search",
   "search-currencies-placeholder": "Search currencies...",
-  "ask-for-transaction-title": "Ask for Transaction Title",
+  "ask-for-transaction-title": "Ask For Transaction Title",
   "ask-for-transaction-title-description": "When adding a transaction",
   "auto-add-titles": "Automatically Add Titles",
   "auto-add-titles-description": "When a transaction is created",
@@ -533,7 +533,7 @@
   "no-accounts-found": "No accounts found.",
   "no-titles-found": "No titles found.",
   "translations": "Translations",
-  "ask-for-notes-with-title": "Ask for Note With Title",
+  "ask-for-notes-with-title": "Ask For Note With Title",
   "ask-for-notes-with-title-description": "When entering the title",
   "enter-period-length": "Enter Period Length",
   "export-csv": "Export CSV File",
@@ -819,5 +819,6 @@
   "until": "until",
   "of-subcategory": "of subcategory",
   "account-label": "Account Label",
-  "account-label-description": "Add account label for all transactions"
+  "account-label-description": "Add account label for all transactions",
+  "transaction-details": "Transaction Details"
 }

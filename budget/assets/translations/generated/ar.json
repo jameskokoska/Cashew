@@ -819,5 +819,6 @@
   "until": "حتى",
   "of-subcategory": "من الفئة الفرعية",
   "account-label": "علامة الحساب",
-  "account-label-description": "أضف تسمية الحساب لجميع المعاملات"
+  "account-label-description": "أضف تسمية الحساب لجميع المعاملات",
+  "transaction-details": "تفاصيل الصفقه"
 }

@@ -819,5 +819,6 @@
   "until": "fram tills",
   "of-subcategory": "underkategori",
   "account-label": "Kontotikett",
-  "account-label-description": "Lägg till kontoetikett för alla transaktioner"
+  "account-label-description": "Lägg till kontoetikett för alla transaktioner",
+  "transaction-details": "Transaktions Detaljer"
 }

@@ -819,5 +819,6 @@
   "until": "før",
   "of-subcategory": "av underkategori",
   "account-label": "Kontogetikett",
-  "account-label-description": "Legg til kontomerke for alle transaksjoner"
+  "account-label-description": "Legg til kontomerke for alle transaksjoner",
+  "transaction-details": "Transaksjonsdetaljer"
 }

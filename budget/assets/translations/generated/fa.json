@@ -819,5 +819,6 @@
   "until": "تا زمان",
   "of-subcategory": "زیر شاخه",
   "account-label": "برچسب حساب",
-  "account-label-description": "برای همه معاملات برچسب حساب اضافه کنید"
+  "account-label-description": "برای همه معاملات برچسب حساب اضافه کنید",
+  "transaction-details": "جزئیات معامله"
 }

@@ -819,5 +819,6 @@
   "until": "све док",
   "of-subcategory": "подкатегорије",
   "account-label": "Ознака рачуна",
-  "account-label-description": "Додајте налепницу налога за све трансакције"
+  "account-label-description": "Додајте налепницу налога за све трансакције",
+  "transaction-details": "Детаљи трансакције"
 }

@@ -819,5 +819,6 @@
   "until": "siihen asti kun",
   "of-subcategory": "alaluokka",
   "account-label": "Tilinreketti",
-  "account-label-description": "Lisää tilin tarra kaikille tapahtumille"
+  "account-label-description": "Lisää tilin tarra kaikille tapahtumille",
+  "transaction-details": "maksutapahtuman tiedot"
 }

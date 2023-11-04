@@ -819,5 +819,6 @@
   "until": "değin",
   "of-subcategory": "alt kategori",
   "account-label": "Hesap etiketi",
-  "account-label-description": "Tüm işlemler için hesap etiketi ekleyin"
+  "account-label-description": "Tüm işlemler için hesap etiketi ekleyin",
+  "transaction-details": "ödeme detayları"
 }

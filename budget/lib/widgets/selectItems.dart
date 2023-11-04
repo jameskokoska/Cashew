@@ -137,14 +137,16 @@ class _SelectItemsState extends State<SelectItems> {
                           ),
                         ),
                       )
-                    : Checkbox(
-                        onChanged: (_) {},
-                        value: selected,
-                        activeColor: color,
-                        checkColor: dynamicPastel(context,
-                            color ?? Theme.of(context).colorScheme.primary,
-                            amount: 0.65),
-                        visualDensity: VisualDensity.compact,
+                    : IgnorePointer(
+                        child: Checkbox(
+                          onChanged: (_) {},
+                          value: selected,
+                          activeColor: color,
+                          checkColor: dynamicPastel(context,
+                              color ?? Theme.of(context).colorScheme.primary,
+                              amount: 0.65),
+                          visualDensity: VisualDensity.compact,
+                        ),
                       ),
               ),
             );

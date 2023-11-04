@@ -819,5 +819,6 @@
   "until": "~까지",
   "of-subcategory": "하위 범주의",
   "account-label": "계정 레이블",
-  "account-label-description": "모든 트랜잭션에 대한 계정 레이블을 추가하십시오"
+  "account-label-description": "모든 트랜잭션에 대한 계정 레이블을 추가하십시오",
+  "transaction-details": "상세 거래 내역"
 }

@@ -819,5 +819,6 @@
   "until": "μέχρι",
   "of-subcategory": "υποκατηγορία",
   "account-label": "Ετικέτα λογαριασμού",
-  "account-label-description": "Προσθέστε ετικέτα λογαριασμού για όλες τις συναλλαγές"
+  "account-label-description": "Προσθέστε ετικέτα λογαριασμού για όλες τις συναλλαγές",
+  "transaction-details": "Λεπτομέρειες Συναλλαγής"
 }

@@ -819,5 +819,6 @@
   "until": "വരുവോളം",
   "of-subcategory": "ഉപവിഭാഗം",
   "account-label": "അക്കൗണ്ട് ലേബൽ",
-  "account-label-description": "എല്ലാ ഇടപാടുകൾക്കും അക്കൗണ്ട് ലേബൽ ചേർക്കുക"
+  "account-label-description": "എല്ലാ ഇടപാടുകൾക്കും അക്കൗണ്ട് ലേബൽ ചേർക്കുക",
+  "transaction-details": "ഇടപാട് വിശദാംശങ്ങൾ"
 }

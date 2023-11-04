@@ -819,5 +819,6 @@
   "until": "amíg",
   "of-subcategory": "alkategória",
   "account-label": "Számlacímke",
-  "account-label-description": "Adja hozzá az összes tranzakció fiókcímkét"
+  "account-label-description": "Adja hozzá az összes tranzakció fiókcímkét",
+  "transaction-details": "tranzakció részletek"
 }

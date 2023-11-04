@@ -819,5 +819,6 @@
   "until": "それまで",
   "of-subcategory": "サブカテゴリの",
   "account-label": "アカウントラベル",
-  "account-label-description": "すべてのトランザクションのアカウントラベルを追加します"
+  "account-label-description": "すべてのトランザクションのアカウントラベルを追加します",
+  "transaction-details": "トランザクションの詳細"
 }

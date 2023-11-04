@@ -108,11 +108,9 @@ class _AddTransactionPageState extends State<AddTransactionPage>
   double? selectedAmount;
   String? selectedAmountCalculation;
   String? selectedTitle;
-  String? selectedNote;
   TransactionSpecialType? selectedType = null;
   List<String> selectedTags = [];
   DateTime selectedDate = DateTime.now();
-  TimeOfDay selectedTime = TimeOfDay.now();
   DateTime? selectedEndDate = null;
   int selectedPeriodLength = 1;
   String selectedRecurrence = "Monthly";
@@ -131,33 +129,6 @@ class _AddTransactionPageState extends State<AddTransactionPage>
   List<String> selectedExcludedBudgetPks = [];
 
   String? textAddTransaction = "add-transaction".tr();
-
-  Future<void> selectDate(BuildContext context) async {
-    final DateTime? picked = await showCustomDatePicker(context, selectedDate);
-    if (picked != null && picked != selectedDate) {
-      setState(() {
-        selectedDate = selectedDate.copyWith(
-          year: picked.year,
-          month: picked.month,
-          day: picked.day,
-        );
-      });
-    }
-  }
-
-  void setSelectedDate(DateTime dateTime) {
-    setState(() {
-      selectedDate = dateTime;
-    });
-  }
-
-  void setSelectedTime(TimeOfDay time) {
-    setState(() {
-      selectedTime = time;
-      selectedDate =
-          selectedDate.copyWith(hour: time.hour, minute: time.minute);
-    });
-  }
 
   Future<void> selectEndDate(BuildContext context) async {
     final DateTime? picked =
@@ -234,7 +205,6 @@ class _AddTransactionPageState extends State<AddTransactionPage>
 
   void setSelectedNoteController(String note, {bool setInput = true}) {
     if (setInput) setTextInput(_noteInputController, note);
-    selectedNote = note;
     return;
   }
 
@@ -542,7 +512,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
       amount: (selectedIncome
           ? (selectedAmount ?? 0).abs()
           : (selectedAmount ?? 0).abs() * -1),
-      note: selectedNote ?? "",
+      note: _noteInputController.text,
       categoryFk: selectedCategory?.categoryPk ?? "-1",
       subCategoryFk: selectedSubCategory?.categoryPk,
       dateCreated: selectedDate,
@@ -631,13 +601,8 @@ class _AddTransactionPageState extends State<AddTransactionPage>
       _noteInputController =
           new TextEditingController(text: widget.transaction!.note);
       selectedTitle = widget.transaction!.name;
-      selectedNote = widget.transaction!.note;
       selectedDate = widget.transaction!.dateCreated;
       selectedEndDate = widget.transaction!.endDate;
-      selectedTime = TimeOfDay(
-        hour: widget.transaction!.dateCreated.hour,
-        minute: widget.transaction!.dateCreated.minute,
-      );
       selectedWalletPk = widget.transaction!.walletFk;
       selectedAmount = widget.transaction!.amount.abs();
       selectedType = widget.transaction!.type;
@@ -692,6 +657,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
               next: () {
                 afterSetTitle();
               },
+              noteInputController: _noteInputController,
             ),
           );
           // Fix over-scroll stretch when keyboard pops up quickly
@@ -825,16 +791,6 @@ class _AddTransactionPageState extends State<AddTransactionPage>
         ),
       ),
     );
-  }
-
-  void addAttachmentLinkToNote(String? link) {
-    if (link == null) return;
-    setSelectedNoteController(
-      (selectedNote ?? "") +
-          (selectedNote == "" || selectedNote == null ? "" : "\n") +
-          (link),
-    );
-    setState(() {});
   }
 
   @override
@@ -1182,186 +1138,14 @@ class _AddTransactionPageState extends State<AddTransactionPage>
         Container(height: 14),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 22),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(
-                getPlatform() == PlatformOS.isIOS ? 8 : 15),
-            child: Column(
-              children: [
-                Focus(
-                  child: TextInput(
-                    borderRadius: BorderRadius.zero,
-                    padding: EdgeInsets.zero,
-                    labelText: "notes-placeholder".tr(),
-                    icon: appStateSettings["outlinedIcons"]
-                        ? Icons.sticky_note_2_outlined
-                        : Icons.sticky_note_2_rounded,
-                    controller: _noteInputController,
-                    keyboardType: TextInputType.multiline,
-                    maxLines: null,
-                    minLines: 3,
-                    onChanged: (text) async {
-                      setSelectedNoteController(text, setInput: false);
-                    },
-                  ),
-                  onFocusChange: (hasFocus) {
-                    if (hasFocus == false && notesInputFocused == true) {
-                      setState(() {
-                        notesInputFocused = false;
-                      });
-                    } else if (hasFocus == true && notesInputFocused == false) {
-                      setState(() {
-                        notesInputFocused = true;
-                      });
-                    }
-                  },
-                ),
-                HorizontalBreak(padding: EdgeInsets.zero),
-                LinkInNotes(
-                  color: (appStateSettings["materialYou"]
-                      ? Theme.of(context).colorScheme.secondaryContainer
-                      : getColor(context, "canvasContainer")),
-                  link: "add-attachment".tr(),
-                  iconData: appStateSettings["outlinedIcons"]
-                      ? Icons.attachment_outlined
-                      : Icons.attachment_rounded,
-                  iconDataAfter: appStateSettings["outlinedIcons"]
-                      ? Icons.add_outlined
-                      : Icons.add_rounded,
-                  onTap: () async {
-                    openBottomSheet(
-                      context,
-                      PopupFramework(
-                        title: "add-attachment".tr().capitalizeFirstofEach,
-                        subtitle: "add-attachment-description".tr(),
-                        child: Column(
-                          children: [
-                            if (kIsWeb == false)
-                              Padding(
-                                padding: const EdgeInsets.only(bottom: 13),
-                                child: Row(
-                                  children: [
-                                    Expanded(
-                                      child: OutlinedButtonStacked(
-                                        filled: false,
-                                        alignLeft: true,
-                                        alignBeside: true,
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 20, vertical: 20),
-                                        text: "take-photo".tr(),
-                                        iconData:
-                                            appStateSettings["outlinedIcons"]
-                                                ? Icons.camera_alt_outlined
-                                                : Icons.camera_alt_rounded,
-                                        onTap: () async {
-                                          Navigator.pop(context);
-                                          if (await checkLockedFeatureIfInDemoMode(
-                                                  context) ==
-                                              true) {
-                                            String? result =
-                                                await getPhotoAndUpload(
-                                                    source: ImageSource.camera);
-                                            addAttachmentLinkToNote(result);
-                                          }
-                                        },
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            if (kIsWeb == false)
-                              Padding(
-                                padding: const EdgeInsets.only(bottom: 13),
-                                child: Row(
-                                  children: [
-                                    Expanded(
-                                      child: OutlinedButtonStacked(
-                                        filled: false,
-                                        alignLeft: true,
-                                        alignBeside: true,
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 20, vertical: 20),
-                                        text: "select-photo".tr(),
-                                        iconData:
-                                            appStateSettings["outlinedIcons"]
-                                                ? Icons.photo_library_outlined
-                                                : Icons.photo_library_rounded,
-                                        onTap: () async {
-                                          Navigator.pop(context);
-                                          if (await checkLockedFeatureIfInDemoMode(
-                                                  context) ==
-                                              true) {
-                                            String? result =
-                                                await getPhotoAndUpload(
-                                                    source:
-                                                        ImageSource.gallery);
-                                            addAttachmentLinkToNote(result);
-                                          }
-                                        },
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            Padding(
-                              padding: const EdgeInsets.only(bottom: 13),
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    child: OutlinedButtonStacked(
-                                      filled: false,
-                                      alignLeft: true,
-                                      alignBeside: true,
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: 20, vertical: 20),
-                                      text: "select-file".tr(),
-                                      iconData:
-                                          appStateSettings["outlinedIcons"]
-                                              ? Icons.file_open_outlined
-                                              : Icons.file_open_rounded,
-                                      onTap: () async {
-                                        Navigator.pop(context);
-                                        if (await checkLockedFeatureIfInDemoMode(
-                                                context) ==
-                                            true) {
-                                          String? result =
-                                              await getFileAndUpload();
-                                          addAttachmentLinkToNote(result);
-                                        }
-                                      },
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  },
-                ),
-                AnimatedSizeSwitcher(
-                  child: extractLinks(selectedNote ?? "").length <= 0
-                      ? Container(
-                          key: ValueKey(1),
-                        )
-                      : Column(
-                          children: [
-                            for (String link
-                                in extractLinks(selectedNote ?? ""))
-                              LinkInNotes(
-                                link: link,
-                                onLongPress: () {
-                                  copyToClipboard(link);
-                                },
-                                onTap: () {
-                                  openUrl(link);
-                                },
-                              ),
-                          ],
-                        ),
-                )
-              ],
-            ),
+          child: TransactionNotesTextInput(
+            noteInputController: _noteInputController,
+            setNotesInputFocused: (isFocused) {
+              setState(() {
+                notesInputFocused = isFocused;
+              });
+            },
+            setSelectedNoteController: setSelectedNoteController,
           ),
         ),
       ],
@@ -1609,13 +1393,17 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                               duration: Duration(milliseconds: 300),
                               child: DateButton(
                                 key: ValueKey(selectedDate.toString()),
-                                onTap: () {
-                                  selectDate(context);
+                                initialSelectedDate: selectedDate,
+                                initialSelectedTime: TimeOfDay(
+                                    hour: selectedDate.hour,
+                                    minute: selectedDate.minute),
+                                setSelectedDate: (date) {
+                                  selectedDate = date;
                                 },
-                                selectedDate: selectedDate,
-                                setSelectedDate: setSelectedDate,
-                                setSelectedTime: setSelectedTime,
-                                selectedTime: selectedTime,
+                                setSelectedTime: (time) {
+                                  selectedDate = selectedDate.copyWith(
+                                      hour: time.hour, minute: time.minute);
+                                },
                               ),
                             ),
                           ),
@@ -2095,38 +1883,64 @@ class SelectedWalletButton extends StatelessWidget {
   }
 }
 
-class DateButton extends StatelessWidget {
+class DateButton extends StatefulWidget {
   const DateButton({
     Key? key,
-    required this.onTap,
-    required this.selectedDate,
-    required this.selectedTime,
+    required this.initialSelectedDate,
+    required this.initialSelectedTime,
     required this.setSelectedDate,
     required this.setSelectedTime,
+    this.internalPadding =
+        const EdgeInsets.only(left: 20, top: 6, bottom: 6, right: 4),
   }) : super(key: key);
-  final VoidCallback onTap;
-  final DateTime selectedDate;
+  final DateTime initialSelectedDate;
+  final TimeOfDay initialSelectedTime;
   final Function(DateTime) setSelectedDate;
   final Function(TimeOfDay) setSelectedTime;
-  final TimeOfDay selectedTime;
+  final EdgeInsets internalPadding;
+
+  @override
+  State<DateButton> createState() => _DateButtonState();
+}
+
+class _DateButtonState extends State<DateButton> {
+  late DateTime selectedDate = widget.initialSelectedDate;
+  late TimeOfDay selectedTime = widget.initialSelectedTime;
+
   @override
   Widget build(BuildContext context) {
     String wordedDate = getWordedDateShortMore(selectedDate);
     String wordedDateShort = getWordedDateShort(selectedDate);
 
     return Tappable(
-      onTap: onTap,
+      color: Colors.transparent,
+      onTap: () async {
+        final DateTime? picked =
+            await showCustomDatePicker(context, selectedDate);
+        if (picked != null && picked != selectedDate) {
+          setState(() {
+            selectedDate = selectedDate.copyWith(
+              year: picked.year,
+              month: picked.month,
+              day: picked.day,
+            );
+          });
+        }
+        widget.setSelectedDate(selectedDate);
+      },
       borderRadius: 10,
       child: Padding(
-        padding: const EdgeInsets.only(left: 20, top: 6, bottom: 6, right: 4),
+        padding: widget.internalPadding,
         child: Row(
           children: [
-            ButtonIcon(
-              onTap: onTap,
-              icon: appStateSettings["outlinedIcons"]
-                  ? Icons.calendar_month_outlined
-                  : Icons.calendar_month_rounded,
-              size: 41,
+            IgnorePointer(
+              child: ButtonIcon(
+                onTap: () {},
+                icon: appStateSettings["outlinedIcons"]
+                    ? Icons.calendar_month_outlined
+                    : Icons.calendar_month_rounded,
+                size: 41,
+              ),
             ),
             SizedBox(width: 15),
             Expanded(
@@ -2149,12 +1963,18 @@ class DateButton extends StatelessWidget {
             ),
             SizedBox(width: 10),
             Tappable(
+              color: Colors.transparent,
               onTap: () async {
                 TimeOfDay? newTime = await showCustomTimePicker(
                   context,
                   selectedTime,
                 );
-                setSelectedTime(newTime ?? selectedTime);
+                if (newTime != null) {
+                  setState(() {
+                    selectedTime = newTime;
+                  });
+                }
+                widget.setSelectedTime(newTime ?? selectedTime);
               },
               borderRadius: 5,
               child: Padding(
@@ -2183,6 +2003,7 @@ class SelectTitle extends StatefulWidget {
     required this.setSelectedCategory,
     this.selectedTitle,
     required this.setSelectedTags,
+    required this.noteInputController,
     this.next,
   }) : super(key: key);
   final Function(String) setSelectedTitle;
@@ -2191,6 +2012,7 @@ class SelectTitle extends StatefulWidget {
   final Function(TransactionCategory) setSelectedCategory;
   final Function(List<String>) setSelectedTags;
   final String? selectedTitle;
+  final TextEditingController noteInputController;
   final VoidCallback? next;
 
   @override
@@ -2359,19 +2181,17 @@ class _SelectTitleState extends State<SelectTitle> {
                   padding: const EdgeInsets.only(top: 13),
                   child: Container(
                     width: getWidthBottomSheet(context) - 36,
-                    child: TextInput(
-                      autoFocus: false,
-                      onChanged: (text) {
-                        widget.setSelectedNote(text);
+                    child: TransactionNotesTextInput(
+                      noteInputController: widget.noteInputController,
+                      setNotesInputFocused: (isFocused) {},
+                      setSelectedNoteController: (note, {setInput = true}) {
+                        widget.setSelectedNote(note);
+                        // Update the size of the bottom sheet
+                        // Need to do it slowly because the link container size is animated slowly
+                        Future.delayed(Duration(milliseconds: 200), () {
+                          bottomSheetControllerGlobal.scrollTo(0);
+                        });
                       },
-                      labelText: "notes-placeholder".tr(),
-                      icon: appStateSettings["outlinedIcons"]
-                          ? Icons.sticky_note_2_outlined
-                          : Icons.sticky_note_2_rounded,
-                      keyboardType: TextInputType.multiline,
-                      maxLines: null,
-                      minLines: 3,
-                      padding: EdgeInsets.zero,
                     ),
                   ),
                 )
@@ -3643,6 +3463,243 @@ class LinkInNotes extends StatelessWidget {
             if (iconDataAfter != null) Icon(iconDataAfter),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class TransactionNotesTextInput extends StatefulWidget {
+  const TransactionNotesTextInput({
+    required this.noteInputController,
+    required this.setNotesInputFocused,
+    required this.setSelectedNoteController,
+    super.key,
+  });
+  final TextEditingController noteInputController;
+  final Function(bool) setNotesInputFocused;
+  final Function(String note, {bool setInput}) setSelectedNoteController;
+
+  @override
+  State<TransactionNotesTextInput> createState() =>
+      _TransactionNotesTextInputState();
+}
+
+class _TransactionNotesTextInputState extends State<TransactionNotesTextInput> {
+  bool notesInputFocused = false;
+  late List<String> extractedLinks =
+      extractLinks(widget.noteInputController.text);
+
+  void addAttachmentLinkToNote(String? link) {
+    if (link == null) return;
+    String noteUpdated = widget.noteInputController.text +
+        (widget.noteInputController.text == "" ? "" : "\n") +
+        (link);
+
+    widget.setSelectedNoteController(noteUpdated);
+    updateExtractedLinks(noteUpdated);
+  }
+
+  void updateExtractedLinks(String text) {
+    List<String> newlyExtractedLinks = extractLinks(text);
+    if (newlyExtractedLinks.toString() != extractedLinks.toString()) {
+      setState(() {
+        extractedLinks = newlyExtractedLinks;
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    widget.noteInputController.addListener(_printLatestValue);
+  }
+
+  @override
+  void dispose() {
+    widget.noteInputController.removeListener(_printLatestValue);
+    super.dispose();
+  }
+
+  void _printLatestValue() {
+    updateExtractedLinks(widget.noteInputController.text);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipRRect(
+      borderRadius:
+          BorderRadius.circular(getPlatform() == PlatformOS.isIOS ? 8 : 15),
+      child: Column(
+        children: [
+          Focus(
+            child: TextInput(
+              borderRadius: BorderRadius.zero,
+              padding: EdgeInsets.zero,
+              labelText: "notes-placeholder".tr(),
+              icon: appStateSettings["outlinedIcons"]
+                  ? Icons.sticky_note_2_outlined
+                  : Icons.sticky_note_2_rounded,
+              controller: widget.noteInputController,
+              keyboardType: TextInputType.multiline,
+              maxLines: null,
+              minLines: 3,
+              onChanged: (text) async {
+                widget.setSelectedNoteController(text, setInput: false);
+                updateExtractedLinks(text);
+              },
+            ),
+            onFocusChange: (hasFocus) {
+              if (hasFocus == false && notesInputFocused == true) {
+                notesInputFocused = false;
+                widget.setNotesInputFocused(false);
+              } else if (hasFocus == true && notesInputFocused == false) {
+                notesInputFocused = true;
+                widget.setNotesInputFocused(true);
+              }
+            },
+          ),
+          HorizontalBreak(padding: EdgeInsets.zero),
+          LinkInNotes(
+            color: (appStateSettings["materialYou"]
+                ? Theme.of(context).colorScheme.secondaryContainer
+                : getColor(context, "canvasContainer")),
+            link: "add-attachment".tr(),
+            iconData: appStateSettings["outlinedIcons"]
+                ? Icons.attachment_outlined
+                : Icons.attachment_rounded,
+            iconDataAfter: appStateSettings["outlinedIcons"]
+                ? Icons.add_outlined
+                : Icons.add_rounded,
+            onTap: () async {
+              openBottomSheet(
+                context,
+                // We need to use the custom controller because the ask for title popup uses the default controller
+                // Which we need to control separately
+                useCustomController: true,
+                reAssignBottomSheetControllerGlobal: false,
+                PopupFramework(
+                  title: "add-attachment".tr().capitalizeFirstofEach,
+                  subtitle: "add-attachment-description".tr(),
+                  child: Column(
+                    children: [
+                      if (kIsWeb == false)
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 13),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: OutlinedButtonStacked(
+                                  filled: false,
+                                  alignLeft: true,
+                                  alignBeside: true,
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 20, vertical: 20),
+                                  text: "take-photo".tr(),
+                                  iconData: appStateSettings["outlinedIcons"]
+                                      ? Icons.camera_alt_outlined
+                                      : Icons.camera_alt_rounded,
+                                  onTap: () async {
+                                    Navigator.pop(context);
+                                    if (await checkLockedFeatureIfInDemoMode(
+                                            context) ==
+                                        true) {
+                                      String? result = await getPhotoAndUpload(
+                                          source: ImageSource.camera);
+                                      addAttachmentLinkToNote(result);
+                                    }
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      if (kIsWeb == false)
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 13),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: OutlinedButtonStacked(
+                                  filled: false,
+                                  alignLeft: true,
+                                  alignBeside: true,
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 20, vertical: 20),
+                                  text: "select-photo".tr(),
+                                  iconData: appStateSettings["outlinedIcons"]
+                                      ? Icons.photo_library_outlined
+                                      : Icons.photo_library_rounded,
+                                  onTap: () async {
+                                    Navigator.pop(context);
+                                    if (await checkLockedFeatureIfInDemoMode(
+                                            context) ==
+                                        true) {
+                                      String? result = await getPhotoAndUpload(
+                                          source: ImageSource.gallery);
+                                      addAttachmentLinkToNote(result);
+                                    }
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 13),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: OutlinedButtonStacked(
+                                filled: false,
+                                alignLeft: true,
+                                alignBeside: true,
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 20, vertical: 20),
+                                text: "select-file".tr(),
+                                iconData: appStateSettings["outlinedIcons"]
+                                    ? Icons.file_open_outlined
+                                    : Icons.file_open_rounded,
+                                onTap: () async {
+                                  Navigator.pop(context);
+                                  if (await checkLockedFeatureIfInDemoMode(
+                                          context) ==
+                                      true) {
+                                    String? result = await getFileAndUpload();
+                                    addAttachmentLinkToNote(result);
+                                  }
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
+          AnimatedSizeSwitcher(
+            child: extractedLinks.length <= 0
+                ? Container(
+                    key: ValueKey(1),
+                  )
+                : Column(
+                    children: [
+                      for (String link in extractedLinks)
+                        LinkInNotes(
+                          link: link,
+                          onLongPress: () {
+                            copyToClipboard(link);
+                          },
+                          onTap: () {
+                            openUrl(link);
+                          },
+                        ),
+                    ],
+                  ),
+          ),
+        ],
       ),
     );
   }

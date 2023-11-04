@@ -819,5 +819,6 @@
   "until": "直到",
   "of-subcategory": "子类别",
   "account-label": "帐户标签",
-  "account-label-description": "为所有交易添加帐户标签"
+  "account-label-description": "为所有交易添加帐户标签",
+  "transaction-details": "交易明细"
 }

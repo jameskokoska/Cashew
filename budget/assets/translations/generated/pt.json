@@ -819,5 +819,6 @@
   "until": "até",
   "of-subcategory": "de subcategoria",
   "account-label": "Rótulo da conta",
-  "account-label-description": "Adicionar rótulo de conta para todas as transações"
+  "account-label-description": "Adicionar rótulo de conta para todas as transações",
+  "transaction-details": "Detalhes da transação"
 }

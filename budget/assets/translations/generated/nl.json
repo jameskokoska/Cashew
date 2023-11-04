@@ -819,5 +819,6 @@
   "until": "tot",
   "of-subcategory": "van subcategorie",
   "account-label": "Accountlabel",
-  "account-label-description": "Accountlabel toevoegen voor alle transacties"
+  "account-label-description": "Accountlabel toevoegen voor alle transacties",
+  "transaction-details": "transactie details"
 }

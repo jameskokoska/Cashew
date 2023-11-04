@@ -1540,10 +1540,11 @@ class FinanceDatabase extends _$FinanceDatabase {
   }
 
   Stream<List<Transaction>> watchAllUpcomingTransactions(String? searchString,
-      {int? limit, DateTime? startDate, DateTime? endDate}) {
+      {int? limit, DateTime? startDate, DateTime? endDate, bool? isIncome}) {
     final query = select(transactions)
       ..orderBy([(b) => OrderingTerm.asc(b.dateCreated)])
-      ..where((transaction) =>
+      ..where((transactions) =>
+          onlyShowBasedOnIncome(transactions, isIncome) &
           transactions.skipPaid.equals(false) &
           transactions.paid.equals(false) &
           transactions.dateCreated
@@ -2336,9 +2337,10 @@ class FinanceDatabase extends _$FinanceDatabase {
   }
 
   Future<bool> toggleAbsolutePercentSpendingCategoryBudgetLimits(
-      String budgetPk,
-      double budgetSetAmount,
-      bool absoluteToPercentage) async {
+    String budgetPk,
+    double budgetSetAmount,
+    bool absoluteToPercentage,
+  ) async {
     List<CategoryBudgetLimit> limitsInserting = [];
     List<CategoryBudgetLimit> categorySpendingLimits =
         await (select(categoryBudgetLimits)
@@ -2349,6 +2351,7 @@ class FinanceDatabase extends _$FinanceDatabase {
           await getCategoryInstance(categorySpendingLimit.categoryFk);
       double convertedAmount;
       if (category.mainCategoryPk == null) {
+        // This is a main category
         convertedAmount = categorySpendingLimit.amount;
         if (absoluteToPercentage) {
           convertedAmount = convertedAmount / budgetSetAmount * 100;
@@ -2356,11 +2359,13 @@ class FinanceDatabase extends _$FinanceDatabase {
           convertedAmount = convertedAmount / 100 * budgetSetAmount;
         }
       } else {
+        // This is a subcategory
         CategoryBudgetLimit? categoryLimitMain = categorySpendingLimits
             .where((e) => e.categoryFk == category.mainCategoryPk)
             .toList()
             .firstOrNull;
-        double convertedAmountMain = categoryLimitMain?.amount ?? 1;
+        double convertedAmountMain = categoryLimitMain?.amount ??
+            (absoluteToPercentage ? budgetSetAmount : 100);
         convertedAmount = categorySpendingLimit.amount;
         if (absoluteToPercentage) {
           convertedAmount = convertedAmount / convertedAmountMain * 100;

@@ -626,6 +626,8 @@ class _CorrectBalancePopupState extends State<CorrectBalancePopup> {
   bool isNegative = false;
   TimeOfDay? selectedTime = null;
   DateTime? selectedDateTime = null;
+  String selectedTitle = "";
+
   @override
   Widget build(BuildContext context) {
     return PopupFramework(
@@ -636,26 +638,54 @@ class _CorrectBalancePopupState extends State<CorrectBalancePopup> {
         padding: EdgeInsets.all(getPlatform() == PlatformOS.isIOS ? 15 : 20),
         icon: Icon(
           appStateSettings["outlinedIcons"]
-              ? Icons.calendar_month_outlined
-              : Icons.calendar_month_rounded,
+              ? Icons.edit_outlined
+              : Icons.edit_rounded,
         ),
         onPressed: () async {
-          selectedDateTime = await showCustomDatePicker(
-              context, selectedDateTime ?? DateTime.now());
-          if (selectedDateTime != null) {
-            selectedTime = await showCustomTimePicker(
-                context,
-                TimeOfDay(
-                    hour: selectedTime?.hour ?? TimeOfDay.now().hour,
-                    minute: selectedTime?.minute ?? TimeOfDay.now().minute));
-            if (selectedTime != null) {
-              selectedDateTime = selectedDateTime!.copyWith(
-                  hour: selectedTime?.hour, minute: selectedTime?.minute);
-            } else {
-              selectedDateTime = selectedDateTime!.copyWith(
-                  hour: TimeOfDay.now().hour, minute: TimeOfDay.now().minute);
-            }
-          }
+          openBottomSheet(
+            context,
+            PopupFramework(
+              child: Column(
+                children: [
+                  Container(
+                    width: getWidthBottomSheet(context) - 36,
+                    child: TextInput(
+                      icon: appStateSettings["outlinedIcons"]
+                          ? Icons.title_outlined
+                          : Icons.title_rounded,
+                      autoFocus: true,
+                      onChanged: (text) async {
+                        selectedTitle = text;
+                      },
+                      labelText: "title-placeholder".tr(),
+                      padding: EdgeInsets.only(bottom: 13),
+                    ),
+                  ),
+                  DateButton(
+                    internalPadding: EdgeInsets.only(right: 5),
+                    initialSelectedDate: selectedDateTime ?? DateTime.now(),
+                    initialSelectedTime: TimeOfDay(
+                        hour: selectedDateTime?.hour ?? TimeOfDay.now().hour,
+                        minute:
+                            selectedDateTime?.minute ?? TimeOfDay.now().minute),
+                    setSelectedDate: (date) {
+                      selectedDateTime = date;
+                    },
+                    setSelectedTime: (time) {
+                      selectedDateTime = (selectedDateTime ?? DateTime.now())
+                          .copyWith(hour: time.hour, minute: time.minute);
+                    },
+                  ),
+                ],
+              ),
+              title: "transaction-details".tr(),
+            ),
+          );
+          // Fix over-scroll stretch when keyboard pops up quickly
+          Future.delayed(Duration(milliseconds: 100), () {
+            bottomSheetControllerGlobal.scrollTo(0,
+                duration: Duration(milliseconds: 100));
+          });
         },
       ),
       child: StreamBuilder<double?>(
@@ -791,6 +821,7 @@ class _CorrectBalancePopupState extends State<CorrectBalancePopup> {
                     enteredAmount,
                     widget.wallet,
                     selectedDateTime,
+                    selectedTitle,
                   );
                   Navigator.pop(context);
                 },
@@ -804,8 +835,13 @@ class _CorrectBalancePopupState extends State<CorrectBalancePopup> {
   }
 }
 
-Future<bool> correctWalletBalance(BuildContext context, double differenceAmount,
-    double newAmount, TransactionWallet wallet, DateTime? dateTime) async {
+Future<bool> correctWalletBalance(
+    BuildContext context,
+    double differenceAmount,
+    double newAmount,
+    TransactionWallet wallet,
+    DateTime? dateTime,
+    String title) async {
   String transferString = wallet.name +
       ": " +
       convertToMoney(
@@ -822,6 +858,7 @@ Future<bool> correctWalletBalance(BuildContext context, double differenceAmount,
     wallet,
     note: note,
     dateTime: dateTime,
+    title: title,
   );
 
   openSnackbar(
@@ -838,7 +875,7 @@ Future<bool> correctWalletBalance(BuildContext context, double differenceAmount,
 }
 
 Future createCorrectionTransaction(double amount, TransactionWallet wallet,
-    {String? note, DateTime? dateTime}) async {
+    {String? note, DateTime? dateTime, String? title}) async {
   try {
     await database.getCategory("0").$2;
   } catch (e) {
@@ -868,7 +905,7 @@ Future createCorrectionTransaction(double amount, TransactionWallet wallet,
     updateSharedEntry: false,
     Transaction(
       transactionPk: "-1",
-      name: "",
+      name: title ?? "",
       amount: amount,
       note: note ?? "",
       categoryFk: "0",
@@ -896,6 +933,7 @@ class _TransferBalancePopupState extends State<TransferBalancePopup> {
   TransactionWallet? walletTo;
   TimeOfDay? selectedTime = null;
   DateTime? selectedDateTime = null;
+  String selectedTitle = "";
 
   Widget walletSelector(TransactionWallet? wallet,
       Function(TransactionWallet wallet) onSelected) {
@@ -953,26 +991,54 @@ class _TransferBalancePopupState extends State<TransferBalancePopup> {
         padding: EdgeInsets.all(getPlatform() == PlatformOS.isIOS ? 15 : 20),
         icon: Icon(
           appStateSettings["outlinedIcons"]
-              ? Icons.calendar_month_outlined
-              : Icons.calendar_month_rounded,
+              ? Icons.edit_outlined
+              : Icons.edit_rounded,
         ),
         onPressed: () async {
-          selectedDateTime = await showCustomDatePicker(
-              context, selectedDateTime ?? DateTime.now());
-          if (selectedDateTime != null) {
-            selectedTime = await showCustomTimePicker(
-                context,
-                TimeOfDay(
-                    hour: selectedTime?.hour ?? TimeOfDay.now().hour,
-                    minute: selectedTime?.minute ?? TimeOfDay.now().minute));
-            if (selectedTime != null) {
-              selectedDateTime = selectedDateTime!.copyWith(
-                  hour: selectedTime?.hour, minute: selectedTime?.minute);
-            } else {
-              selectedDateTime = selectedDateTime!.copyWith(
-                  hour: TimeOfDay.now().hour, minute: TimeOfDay.now().minute);
-            }
-          }
+          openBottomSheet(
+            context,
+            PopupFramework(
+              child: Column(
+                children: [
+                  Container(
+                    width: getWidthBottomSheet(context) - 36,
+                    child: TextInput(
+                      icon: appStateSettings["outlinedIcons"]
+                          ? Icons.title_outlined
+                          : Icons.title_rounded,
+                      autoFocus: true,
+                      onChanged: (text) async {
+                        selectedTitle = text;
+                      },
+                      labelText: "title-placeholder".tr(),
+                      padding: EdgeInsets.only(bottom: 13),
+                    ),
+                  ),
+                  DateButton(
+                    internalPadding: EdgeInsets.only(right: 5),
+                    initialSelectedDate: selectedDateTime ?? DateTime.now(),
+                    initialSelectedTime: TimeOfDay(
+                        hour: selectedDateTime?.hour ?? TimeOfDay.now().hour,
+                        minute:
+                            selectedDateTime?.minute ?? TimeOfDay.now().minute),
+                    setSelectedDate: (date) {
+                      selectedDateTime = date;
+                    },
+                    setSelectedTime: (time) {
+                      selectedDateTime = (selectedDateTime ?? DateTime.now())
+                          .copyWith(hour: time.hour, minute: time.minute);
+                    },
+                  ),
+                ],
+              ),
+              title: "transaction-details".tr(),
+            ),
+          );
+          // Fix over-scroll stretch when keyboard pops up quickly
+          Future.delayed(Duration(milliseconds: 100), () {
+            bottomSheetControllerGlobal.scrollTo(0,
+                duration: Duration(milliseconds: 100));
+          });
         },
       ),
       child: Column(
@@ -1092,6 +1158,7 @@ class _TransferBalancePopupState extends State<TransferBalancePopup> {
                 walletTo!,
                 note: note,
                 dateTime: selectedDateTime,
+                title: selectedTitle,
               );
 
               await createCorrectionTransaction(
@@ -1109,6 +1176,7 @@ class _TransferBalancePopupState extends State<TransferBalancePopup> {
                 walletFrom,
                 note: note,
                 dateTime: selectedDateTime,
+                title: selectedTitle,
               );
 
               openSnackbar(

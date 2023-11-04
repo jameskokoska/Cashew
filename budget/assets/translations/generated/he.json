@@ -819,5 +819,6 @@
   "until": "עד",
   "of-subcategory": "של תת -קטגוריה",
   "account-label": "תווית חשבון",
-  "account-label-description": "הוסף תווית חשבון עבור כל העסקאות"
+  "account-label-description": "הוסף תווית חשבון עבור כל העסקאות",
+  "transaction-details": "פרטי העברה"
 }

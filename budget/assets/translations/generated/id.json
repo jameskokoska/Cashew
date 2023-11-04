@@ -819,5 +819,6 @@
   "until": "sampai",
   "of-subcategory": "subkategori",
   "account-label": "Label Akun",
-  "account-label-description": "Tambahkan label akun untuk semua transaksi"
+  "account-label-description": "Tambahkan label akun untuk semua transaksi",
+  "transaction-details": "Detil transaksi"
 }

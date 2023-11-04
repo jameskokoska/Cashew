@@ -64,7 +64,8 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
     DateTimeRange initialDateTimeRange = DateTimeRange(
       start: DateTime(
           DateTime.now().year, DateTime.now().month - 6, DateTime.now().day),
-      end: DateTime.now(),
+      end: DateTime(
+          DateTime.now().year, DateTime.now().month + 1, DateTime.now().day),
     );
     searchFilters = widget.initialFilters != null
         ? widget.initialFilters!

@@ -819,5 +819,6 @@
   "until": "до",
   "of-subcategory": "підкатегорії",
   "account-label": "Лейбл облікового запису",
-  "account-label-description": "Додайте етикетку облікового запису для всіх транзакцій"
+  "account-label-description": "Додайте етикетку облікового запису для всіх транзакцій",
+  "transaction-details": "Деталі транзакції"
 }

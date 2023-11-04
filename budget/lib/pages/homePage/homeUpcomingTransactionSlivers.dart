@@ -8,6 +8,10 @@ import 'package:budget/widgets/transactionEntry/transactionEntry.dart';
 import 'package:flutter/material.dart';
 
 class HomeUpcomingTransactionSlivers extends StatelessWidget {
+  const HomeUpcomingTransactionSlivers(
+      {required this.selectedSlidingSelector, super.key});
+  final int selectedSlidingSelector;
+
   @override
   Widget build(BuildContext context) {
     return AnimatedSizeSwitcher(
@@ -18,6 +22,11 @@ class HomeUpcomingTransactionSlivers extends StatelessWidget {
               DateTime.now().day + 1),
           endDate: DateTime(DateTime.now().year, DateTime.now().month,
               DateTime.now().day + 4),
+          isIncome: selectedSlidingSelector == 1
+              ? null
+              : selectedSlidingSelector == 2
+                  ? false
+                  : true,
           null,
         ),
         builder: (context, snapshot) {

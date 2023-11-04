@@ -819,5 +819,6 @@
   "until": "bis",
   "of-subcategory": "der Unterkategorie",
   "account-label": "Kontoetikett",
-  "account-label-description": "Fügen Sie Account Label für alle Transaktionen hinzu"
+  "account-label-description": "Fügen Sie Account Label für alle Transaktionen hinzu",
+  "transaction-details": "Transaktionsdetails"
 }

@@ -819,5 +819,6 @@
   "until": "จนกระทั่ง",
   "of-subcategory": "ของหมวดหมู่ย่อย",
   "account-label": "ฉลากบัญชี",
-  "account-label-description": "เพิ่มฉลากบัญชีสำหรับธุรกรรมทั้งหมด"
+  "account-label-description": "เพิ่มฉลากบัญชีสำหรับธุรกรรมทั้งหมด",
+  "transaction-details": "รายละเอียดการทำธุรกรรม"
 }

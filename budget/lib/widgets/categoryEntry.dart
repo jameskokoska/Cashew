@@ -85,7 +85,9 @@ class CategoryEntry extends StatelessWidget {
         subCategoriesWithTotal.length > 0 && expandSubcategories != false;
 
     double percentSpent = categoryBudgetLimit == null
-        ? (categorySpent / totalSpentAbsolute).abs()
+        ? isSubcategory
+            ? (categorySpent / mainCategorySpentIfSubcategory).abs()
+            : (categorySpent / totalSpent).abs()
         : isAbsoluteSpendingLimit
             ? ((categorySpent / categoryBudgetLimit!.amount).abs() > 1
                 ? 1
@@ -262,30 +264,16 @@ class CategoryEntry extends StatelessWidget {
                                   : Builder(builder: (context) {
                                       String text = (totalSpent == 0
                                               ? "0"
-                                              : (categorySpent /
-                                                      totalSpent *
-                                                      100)
-                                                  .abs()
+                                              : (percentSpent * 100)
                                                   .toStringAsFixed(0)) +
                                           "% " +
-                                          (extraText ?? "of-spending")
+                                          (extraText ??
+                                                  (isSubcategory
+                                                      ? "of-subcategory"
+                                                      : "of-spending"))
                                               .toString()
                                               .tr();
-                                      if (isSubcategory) {
-                                        text = (totalSpentAbsolute == 0 ||
-                                                    mainCategorySpentIfSubcategory ==
-                                                        0
-                                                ? "0"
-                                                : (categorySpent /
-                                                        mainCategorySpentIfSubcategory *
-                                                        100)
-                                                    .abs()
-                                                    .toStringAsFixed(0)) +
-                                            "% " +
-                                            (extraText ?? "of-subcategory")
-                                                .toString()
-                                                .tr();
-                                      }
+
                                       return TextFont(
                                         text: text,
                                         fontSize: 14,
