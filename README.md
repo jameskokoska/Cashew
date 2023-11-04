@@ -28,7 +28,7 @@
 
 <a href="https://cashewapp.web.app/">
   <div align="center">
-    <img width="95%" src="/promotional/GitHub/SocialPreviewGitHub.png" alt="Promo banner">
+    <img width="95%" src="promotional/GitHub/SocialPreviewGitHub.png" alt="Promo banner">
   </div>
 </a>
 
@@ -39,6 +39,16 @@
 Cashew is a full-fledged, feature-rich application designed to empower users in managing their finances effectively. Built using Flutter - with Drift's SQL package, and Firebase - this app offers a seamless and intuitive user experience across various devices. Development started in September 2021.
 
 ---
+
+## Feature
+Cashew was featured on [YouTube](https://www.youtube.com/watch?v=2MwWmqcn--s&t=261s)!
+Thanks [Sam Beckman](https://www.youtube.com/@sambeckman)!
+
+<a href="https://www.youtube.com/watch?v=2MwWmqcn--s&t=261s">
+  <div align="center">
+    <img width="80%" src="promotional/youtube-promo/thumbnail.png" alt="Review Video">
+  </div>
+</a>
 
 ## Release
 Check out the [official website](https://cashewapp.web.app/)!
