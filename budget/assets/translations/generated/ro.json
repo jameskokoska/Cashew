@@ -820,5 +820,12 @@
   "of-subcategory": "din subcategorie",
   "account-label": "Etichetă de cont",
   "account-label-description": "Adăugați eticheta de cont pentru toate tranzacțiile",
-  "transaction-details": "Detalii despre tranzacție"
+  "transaction-details": "Detalii despre tranzacție",
+  "reorder-categories": "Categorii de reordonare",
+  "drag-and-drop-categories-to-rearrange": "Categorii de glisare și cădere pentru a rearanja",
+  "show-all-categories": "Arată toate categoriile",
+  "only-income-categories": "Doar categorii de venituri",
+  "only-expense-categories": "Doar categorii de cheltuieli",
+  "transfer-in": "Transfer în",
+  "transfer-out": "Transfer de la"
 }

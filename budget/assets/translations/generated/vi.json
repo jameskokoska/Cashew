@@ -820,5 +820,12 @@
   "of-subcategory": "của tiểu thể loại",
   "account-label": "Nhãn tài khoản",
   "account-label-description": "Thêm nhãn tài khoản cho tất cả các giao dịch",
-  "transaction-details": "chi tiết giao dịch"
+  "transaction-details": "chi tiết giao dịch",
+  "reorder-categories": "Sắp xếp lại các loại",
+  "drag-and-drop-categories-to-rearrange": "Kéo và thả các danh mục để sắp xếp lại",
+  "show-all-categories": "Hiển thị tất cả các loại",
+  "only-income-categories": "Chỉ các loại thu nhập",
+  "only-expense-categories": "Chỉ các loại chi phí",
+  "transfer-in": "Chuyển vào",
+  "transfer-out": "Chuyển từ"
 }

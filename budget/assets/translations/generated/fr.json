@@ -820,5 +820,12 @@
   "of-subcategory": "de la sous-catégorie",
   "account-label": "Étiquette de compte",
   "account-label-description": "Ajouter une étiquette de compte pour toutes les transactions",
-  "transaction-details": "détails de la transaction"
+  "transaction-details": "détails de la transaction",
+  "reorder-categories": "Catégories de réorganisation",
+  "drag-and-drop-categories-to-rearrange": "Catégories de traînée et de dépôt pour réorganiser",
+  "show-all-categories": "Afficher toutes les catégories",
+  "only-income-categories": "Seules les catégories de revenus",
+  "only-expense-categories": "Seules les catégories de dépenses",
+  "transfer-in": "Transférer dans",
+  "transfer-out": "Transfert à partir de"
 }

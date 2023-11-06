@@ -820,5 +820,12 @@
   "of-subcategory": "of subcategory",
   "account-label": "Account Label",
   "account-label-description": "Add account label for all transactions",
-  "transaction-details": "Transaction Details"
+  "transaction-details": "Transaction Details",
+  "reorder-categories": "Reorder Categories",
+  "drag-and-drop-categories-to-rearrange": "Drag and drop categories to rearrange",
+  "show-all-categories": "Show All Categories",
+  "only-income-categories": "Only Income Categories",
+  "only-expense-categories": "Only Expense Categories",
+  "transfer-in": "Transfer In",
+  "transfer-out": "Transfer Out"
 }

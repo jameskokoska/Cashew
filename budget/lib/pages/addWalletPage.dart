@@ -1158,7 +1158,11 @@ class _TransferBalancePopupState extends State<TransferBalancePopup> {
                 walletTo!,
                 note: note,
                 dateTime: selectedDateTime,
-                title: selectedTitle,
+                title: selectedTitle == ""
+                    ? (allWallets.indexedByPk[walletTo!.walletPk]!.name +
+                        " " +
+                        "transfer-in".tr())
+                    : selectedTitle,
               );
 
               await createCorrectionTransaction(
@@ -1176,7 +1180,11 @@ class _TransferBalancePopupState extends State<TransferBalancePopup> {
                 walletFrom,
                 note: note,
                 dateTime: selectedDateTime,
-                title: selectedTitle,
+                title: selectedTitle == ""
+                    ? (allWallets.indexedByPk[walletFrom.walletPk]!.name +
+                        " " +
+                        "transfer-out".tr())
+                    : selectedTitle,
               );
 
               openSnackbar(

@@ -820,5 +820,12 @@
   "of-subcategory": "subkategori",
   "account-label": "Label Akun",
   "account-label-description": "Tambahkan label akun untuk semua transaksi",
-  "transaction-details": "Detil transaksi"
+  "transaction-details": "Detil transaksi",
+  "reorder-categories": "Kategori ulang",
+  "drag-and-drop-categories-to-rearrange": "Seret dan jatuhkan kategori untuk mengatur ulang",
+  "show-all-categories": "Tunjukkan semua kategori",
+  "only-income-categories": "Hanya kategori pendapatan",
+  "only-expense-categories": "Hanya kategori pengeluaran",
+  "transfer-in": "Transfer ke",
+  "transfer-out": "Transfer dari"
 }

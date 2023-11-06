@@ -820,5 +820,12 @@
   "of-subcategory": "من الفئة الفرعية",
   "account-label": "علامة الحساب",
   "account-label-description": "أضف تسمية الحساب لجميع المعاملات",
-  "transaction-details": "تفاصيل الصفقه"
+  "transaction-details": "تفاصيل الصفقه",
+  "reorder-categories": "إعادة ترتيب الفئات",
+  "drag-and-drop-categories-to-rearrange": "سحب فئات وإسقاطها لإعادة ترتيب",
+  "show-all-categories": "إظهار جميع الفئات",
+  "only-income-categories": "فئات الدخل فقط",
+  "only-expense-categories": "فئات المصاريف فقط",
+  "transfer-in": "نقل إلى",
+  "transfer-out": "تحويل من"
 }

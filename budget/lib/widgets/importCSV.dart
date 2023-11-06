@@ -796,7 +796,8 @@ class _ImportingEntriesPopupState extends State<ImportingEntriesPopup> {
       Map<String, Map<String, dynamic>> assignedColumns,
       String dateFormat,
       List<String> row,
-      int i) async {
+      int i,
+      {int? transactionTypeIndex}) async {
     String name = "";
     if (assignedColumns["name"]!["setHeaderIndex"] != -1) {
       name = row[assignedColumns["name"]!["setHeaderIndex"]].toString().trim();
@@ -804,8 +805,19 @@ class _ImportingEntriesPopupState extends State<ImportingEntriesPopup> {
 
     double? amount;
     amount = getAmountFromString(
-        (row[assignedColumns["amount"]!["setHeaderIndex"]]).toString());
+        (row[assignedColumns["amount"]!["setHeaderIndex"]]).toString().trim());
     if (amount == null) throw ("Unable to parse amount");
+
+    // Handle Mint transaction types
+    if (transactionTypeIndex != null) {
+      if (row[transactionTypeIndex].toString().trim().toLowerCase() ==
+          "credit") {
+        amount = amount.abs();
+      } else if (row[transactionTypeIndex].toString().trim().toLowerCase() ==
+          "debit") {
+        amount = amount.abs() * -1;
+      }
+    }
 
     String note = "";
     if (assignedColumns["note"]!["setHeaderIndex"] != -1) {
@@ -816,11 +828,15 @@ class _ImportingEntriesPopupState extends State<ImportingEntriesPopup> {
     TransactionCategory selectedCategory;
     try {
       selectedCategory = await database.getCategoryInstanceGivenName(
-          row[assignedColumns["category"]!["setHeaderIndex"]]);
+          row[assignedColumns["category"]!["setHeaderIndex"]]
+              .toString()
+              .trim());
     } catch (e) {
       try {
         selectedCategory = await database.getCategoryInstanceGivenNameTrim(
-            row[assignedColumns["category"]!["setHeaderIndex"]]);
+            row[assignedColumns["category"]!["setHeaderIndex"]]
+                .toString()
+                .trim());
       } catch (e) {
         // just make a new category, no point in checking associated titles - doesn't make much sense!
 
@@ -846,7 +862,9 @@ class _ImportingEntriesPopupState extends State<ImportingEntriesPopup> {
           insert: true,
           TransactionCategory(
             categoryPk: "-1",
-            name: row[assignedColumns["category"]!["setHeaderIndex"]],
+            name: row[assignedColumns["category"]!["setHeaderIndex"]]
+                .toString()
+                .trim(),
             dateCreated: DateTime.now(),
             dateTimeModified: DateTime.now(),
             order: numberOfCategories,
@@ -856,7 +874,9 @@ class _ImportingEntriesPopupState extends State<ImportingEntriesPopup> {
           ),
         );
         selectedCategory = await database.getCategoryInstanceGivenName(
-            row[assignedColumns["category"]!["setHeaderIndex"]]);
+            row[assignedColumns["category"]!["setHeaderIndex"]]
+                .toString()
+                .trim());
       }
 
       // }
@@ -870,17 +890,22 @@ class _ImportingEntriesPopupState extends State<ImportingEntriesPopup> {
 
     String walletFk = "0";
     if (assignedColumns["wallet"]!["setHeaderIndex"] == -1 ||
-        row[assignedColumns["wallet"]!["setHeaderIndex"]].trim() == "") {
+        row[assignedColumns["wallet"]!["setHeaderIndex"]].toString().trim() ==
+            "") {
       walletFk = appStateSettings["selectedWalletPk"];
     } else {
       try {
         walletFk = (await database.getWalletInstanceGivenName(
-                row[assignedColumns["wallet"]!["setHeaderIndex"]]))
+                row[assignedColumns["wallet"]!["setHeaderIndex"]]
+                    .toString()
+                    .trim()))
             .walletPk;
       } catch (e) {
         try {
           walletFk = (await database.getWalletInstanceGivenNameTrim(
-                  row[assignedColumns["wallet"]!["setHeaderIndex"]]))
+                  row[assignedColumns["wallet"]!["setHeaderIndex"]]
+                      .toString()
+                      .trim()))
               .walletPk;
         } catch (e) {
           try {
@@ -892,14 +917,18 @@ class _ImportingEntriesPopupState extends State<ImportingEntriesPopup> {
                   .indexedByPk[appStateSettings["selectedWalletPk"]]!
                   .copyWith(
                     walletPk: "-1",
-                    name: row[assignedColumns["wallet"]!["setHeaderIndex"]],
+                    name: row[assignedColumns["wallet"]!["setHeaderIndex"]]
+                        .toString()
+                        .trim(),
                     dateCreated: DateTime.now(),
                     dateTimeModified: Value(DateTime.now()),
                     order: numberOfWallets,
                   ),
             );
             walletFk = (await database.getWalletInstanceGivenName(
-                    row[assignedColumns["wallet"]!["setHeaderIndex"]]))
+                    row[assignedColumns["wallet"]!["setHeaderIndex"]]
+                        .toString()
+                        .trim()))
                 .walletPk;
           } catch (e) {
             throw "Wallet not found! If you want to import to the current wallet, please select '~Current Wallet~'. Details: " +
@@ -911,8 +940,8 @@ class _ImportingEntriesPopupState extends State<ImportingEntriesPopup> {
 
     DateTime dateCreated;
     try {
-      dateCreated =
-          DateTime.parse(row[assignedColumns["date"]!["setHeaderIndex"]]);
+      dateCreated = DateTime.parse(
+          row[assignedColumns["date"]!["setHeaderIndex"]].toString().trim());
       dateCreated = DateTime(
         dateCreated.year,
         dateCreated.month,
@@ -929,8 +958,8 @@ class _ImportingEntriesPopupState extends State<ImportingEntriesPopup> {
       DateFormat format =
           DateFormat(dateFormat.toString(), context.locale.toString());
       try {
-        dateCreated =
-            format.parse(row[assignedColumns["date"]!["setHeaderIndex"]]);
+        dateCreated = format.parse(
+            row[assignedColumns["date"]!["setHeaderIndex"]].toString().trim());
         dateCreated =
             DateTime(dateCreated.year, dateCreated.month, dateCreated.day);
       } catch (e) {
@@ -973,8 +1002,26 @@ class _ImportingEntriesPopupState extends State<ImportingEntriesPopup> {
           currentFileLength = fileContents.length;
         });
         List<String> row = fileContents[i];
-        Transaction transactionToAdd =
-            await _importEntry(assignedColumns, dateFormat, row, i);
+        List<String>? header = fileContents.firstOrNull;
+        // Importing a CSV from Mint uses a column name of "Transaction Type" to determine the polarity of the transaction amount
+        // If this is the case, we will use this to determine the polarity of the amount (+/-)
+        int? transactionTypeIndex;
+        if (header != null) {
+          String searchTerm = "Transaction Type";
+          for (int i = 0; i < header.length; i++) {
+            if (header[i].toString().trim() == searchTerm.trim()) {
+              transactionTypeIndex = i;
+              break;
+            }
+          }
+        }
+        Transaction transactionToAdd = await _importEntry(
+          assignedColumns,
+          dateFormat,
+          row,
+          i,
+          transactionTypeIndex: transactionTypeIndex,
+        );
         TransactionsCompanion companionToInsert =
             transactionToAdd.toCompanion(true);
         // Use auto incremented ID when inserting

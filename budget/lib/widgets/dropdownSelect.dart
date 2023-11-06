@@ -144,6 +144,7 @@ class CustomPopupMenuButton extends StatelessWidget {
   final bool keepOutFirst;
   final bool forceKeepOutFirst;
   final ColorScheme? colorScheme;
+  final double buttonPadding;
 
   CustomPopupMenuButton({
     required this.items,
@@ -151,6 +152,7 @@ class CustomPopupMenuButton extends StatelessWidget {
     this.keepOutFirst = true,
     this.forceKeepOutFirst = false,
     this.colorScheme,
+    this.buttonPadding = 15,
   });
 
   @override
@@ -194,13 +196,14 @@ class CustomPopupMenuButton extends StatelessWidget {
 
     return Row(
       children: [
-        if (keepOutFirstConsideringHeader || forceKeepOutFirst)
+        if ((keepOutFirstConsideringHeader || forceKeepOutFirst) &&
+            items.length > 0)
           Transform.translate(
             offset: Offset(itemsFiltered.isNotEmpty ? 7 : 0, 0),
             child: Tooltip(
               message: items[0].label,
               child: IconButton(
-                padding: EdgeInsets.all(15),
+                padding: EdgeInsets.all(buttonPadding),
                 onPressed: () {
                   items[0].action();
                 },
@@ -217,7 +220,7 @@ class CustomPopupMenuButton extends StatelessWidget {
           Theme(
             data: Theme.of(context).copyWith(colorScheme: colorScheme),
             child: PopupMenuButton<String>(
-              padding: EdgeInsets.all(15),
+              padding: EdgeInsets.all(buttonPadding),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(
                   Radius.circular(getPlatform() == PlatformOS.isIOS ? 5 : 10),

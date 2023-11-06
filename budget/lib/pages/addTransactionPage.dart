@@ -13,6 +13,8 @@ import 'package:budget/struct/settings.dart';
 import 'package:budget/struct/uploadAttachment.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/categoryIcon.dart';
+import 'package:budget/widgets/dropdownSelect.dart';
+import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/widgets/globalSnackBar.dart';
 import 'package:budget/widgets/incomeExpenseTabSelector.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
@@ -117,6 +119,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
   String selectedRecurrenceDisplay = "month";
   BudgetReoccurence selectedRecurrenceEnum = BudgetReoccurence.monthly;
   bool selectedIncome = false;
+  bool initiallySettingSelectedIncome = false;
   String? selectedPayer;
   String? selectedObjectivePk;
   String? selectedBudgetPk;
@@ -333,9 +336,10 @@ class _AddTransactionPageState extends State<AddTransactionPage>
     );
   }
 
-  void setSelectedIncome(bool value) {
+  void setSelectedIncome(bool value, {bool initiallySetting = false}) {
     setState(() {
       selectedIncome = value;
+      initiallySettingSelectedIncome = initiallySetting;
     });
   }
 
@@ -727,11 +731,18 @@ class _AddTransactionPageState extends State<AddTransactionPage>
     MainAndSubcategory mainAndSubcategory = await selectCategorySequence(
       context,
       selectedCategory: selectedCategory,
-      setSelectedCategory: setSelectedCategory,
+      setSelectedCategory: (TransactionCategory category) {
+        setSelectedCategory(category,
+            setIncome: initiallySettingSelectedIncome == false);
+      },
       selectedSubCategory: selectedSubCategory,
       setSelectedSubCategory: setSelectedSubCategory,
+      setSelectedIncome: (value) {
+        setSelectedIncome(value == true, initiallySetting: value != null);
+      },
       skipIfSet: true,
-      extraWidgetBefore: Column(
+      selectedIncomeInitial: null,
+      extraWidgetAfter: Column(
         children: [
           SelectAddedBudget(
             setSelectedBudget: setSelectedBudgetPk,
@@ -854,6 +865,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                     selectedSubCategory: selectedSubCategory,
                     setSelectedSubCategory: setSelectedSubCategory,
                     skipIfSet: false,
+                    selectedIncomeInitial: selectedIncome,
                   );
                 },
                 color: Colors.transparent,
@@ -1236,6 +1248,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                               selectedSubCategory: selectedSubCategory,
                               setSelectedSubCategory: setSelectedSubCategory,
                               skipIfSet: false,
+                              selectedIncomeInitial: selectedIncome,
                             );
                           },
                         )
@@ -3308,32 +3321,28 @@ class MainAndSubcategory {
 // ignoredSubcategorySelection is true if the subcategory is skipped
 Future<MainAndSubcategory> selectCategorySequence(
   BuildContext context, {
-  Widget? extraWidgetBefore,
+  Widget? extraWidgetAfter,
   bool? skipIfSet,
   required TransactionCategory? selectedCategory,
   required Function(TransactionCategory)? setSelectedCategory,
   required TransactionCategory? selectedSubCategory,
   required Function(TransactionCategory?)? setSelectedSubCategory,
+  Function(bool?)? setSelectedIncome,
+  required bool?
+      selectedIncomeInitial, // if this is null, always show all categories
 }) async {
   MainAndSubcategory mainAndSubcategory = MainAndSubcategory();
   dynamic result = await openBottomSheet(
     context,
-    PopupFramework(
-      title: "select-category".tr(),
-      hasPadding: false,
-      child: Column(
-        children: [
-          if (extraWidgetBefore != null) extraWidgetBefore,
-          Padding(
-            padding: const EdgeInsets.only(left: 18, right: 18, bottom: 10),
-            child: SelectCategory(
-              skipIfSet: skipIfSet,
-              selectedCategory: selectedCategory,
-              setSelectedCategory: setSelectedCategory,
-            ),
-          ),
-        ],
-      ),
+    SelectCategoryWithIncomeExpenseSelector(
+      extraWidgetAfter: extraWidgetAfter,
+      skipIfSet: skipIfSet,
+      selectedCategory: selectedCategory,
+      setSelectedCategory: setSelectedCategory,
+      selectedSubCategory: selectedSubCategory,
+      setSelectedSubCategory: setSelectedSubCategory,
+      setSelectedIncome: setSelectedIncome,
+      selectedIncomeInitial: selectedIncomeInitial,
     ),
   );
   if (result != null && result is TransactionCategory) {
@@ -3350,6 +3359,7 @@ Future<MainAndSubcategory> selectCategorySequence(
             selectedCategory: selectedSubCategory,
             setSelectedCategory: setSelectedSubCategory,
             mainCategoryPks: [mainAndSubcategory.main!.categoryPk],
+            allowRearrange: false,
             header: [
               LayoutBuilder(builder: (context, constraints) {
                 return Column(
@@ -3409,6 +3419,155 @@ Future<MainAndSubcategory> selectCategorySequence(
     }
   }
   return mainAndSubcategory;
+}
+
+class SelectCategoryWithIncomeExpenseSelector extends StatefulWidget {
+  const SelectCategoryWithIncomeExpenseSelector({
+    required this.extraWidgetAfter,
+    required this.skipIfSet,
+    required this.selectedCategory,
+    required this.setSelectedCategory,
+    required this.selectedSubCategory,
+    required this.setSelectedSubCategory,
+    required this.setSelectedIncome,
+    required this.selectedIncomeInitial,
+    super.key,
+  });
+
+  final Widget? extraWidgetAfter;
+  final bool? skipIfSet;
+  final TransactionCategory? selectedCategory;
+  final Function(TransactionCategory)? setSelectedCategory;
+  final TransactionCategory? selectedSubCategory;
+  final Function(TransactionCategory?)? setSelectedSubCategory;
+  final Function(bool?)? setSelectedIncome;
+  final bool? selectedIncomeInitial;
+
+  @override
+  State<SelectCategoryWithIncomeExpenseSelector> createState() =>
+      _SelectCategoryWithIncomeExpenseSelectorState();
+}
+
+class _SelectCategoryWithIncomeExpenseSelectorState
+    extends State<SelectCategoryWithIncomeExpenseSelector> {
+  late bool? selectedIncome =
+      appStateSettings["showAllCategoriesWhenSelecting"] == true
+          ? null
+          : widget.selectedIncomeInitial;
+
+  void setSelectedIncome(bool? value) {
+    if (widget.setSelectedIncome != null) widget.setSelectedIncome!(value);
+    setState(() {
+      selectedIncome = value;
+    });
+    Future.delayed(Duration(milliseconds: 100), () {
+      bottomSheetControllerGlobal.snapToExtent(0,
+          duration: Duration(milliseconds: 400));
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return PopupFramework(
+      title: widget.setSelectedIncome == null ? "select-category".tr() : null,
+      hasPadding: false,
+      aboveTitleSpace: widget.setSelectedIncome == null,
+      outsideExtraWidget: widget.setSelectedIncome != null
+          // Hide option to rearrange because income/expense selector is shown
+          ? null
+          : CustomPopupMenuButton(
+              showButtons: false,
+              keepOutFirst: false,
+              buttonPadding: getPlatform() == PlatformOS.isIOS ? 15 : 20,
+              items: [
+                if (widget.selectedIncomeInitial != null)
+                  DropdownItemMenu(
+                    id: "toggle-selected-income",
+                    label: selectedIncome == null
+                        ? (widget.selectedIncomeInitial == true
+                            ? "only-income-categories".tr()
+                            : "only-expense-categories".tr())
+                        : "show-all-categories".tr(),
+                    icon: appStateSettings["outlinedIcons"]
+                        ? Icons.grid_on_outlined
+                        : Icons.grid_on_rounded,
+                    action: () {
+                      if (selectedIncome == null) {
+                        setSelectedIncome(widget.selectedIncomeInitial);
+                        updateSettings("showAllCategoriesWhenSelecting", false,
+                            updateGlobalState: false);
+                      } else {
+                        setSelectedIncome(null);
+                        updateSettings("showAllCategoriesWhenSelecting", true,
+                            updateGlobalState: false);
+                      }
+                    },
+                  ),
+                DropdownItemMenu(
+                  id: "reorder-categories",
+                  label: "reorder-categories".tr(),
+                  icon: appStateSettings["outlinedIcons"]
+                      ? Icons.flip_to_front_outlined
+                      : Icons.flip_to_front_rounded,
+                  action: () async {
+                    Navigator.pop(context);
+                    openBottomSheet(context, ReorderCategoriesPopup());
+                  },
+                ),
+              ],
+            ),
+      child: Column(
+        children: [
+          if (widget.setSelectedIncome != null)
+            IncomeExpenseButtonSelector(setSelectedIncome: (value) {
+              setSelectedIncome(value);
+            }),
+          Padding(
+            padding: const EdgeInsets.only(left: 18, right: 18),
+            child: SelectCategory(
+              skipIfSet: widget.skipIfSet,
+              selectedCategory: widget.selectedCategory,
+              setSelectedCategory: widget.setSelectedCategory,
+              selectedIncome: selectedIncome,
+              allowRearrange: false,
+              // selectedIncome == null && widget.selectedIncomeInitial == null,
+            ),
+          ),
+          if (widget.extraWidgetAfter != null) widget.extraWidgetAfter!,
+        ],
+      ),
+    );
+  }
+}
+
+class ReorderCategoriesPopup extends StatelessWidget {
+  const ReorderCategoriesPopup({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return PopupFramework(
+      title: "reorder-categories".tr(),
+      subtitle: "drag-and-drop-categories-to-rearrange".tr(),
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(bottom: 8.0),
+            child: SelectCategory(
+              skipIfSet: false,
+              selectedIncome: null, // needs to be null
+              addButton: false,
+            ),
+          ),
+          Button(
+            label: "done".tr(),
+            onTap: () {
+              Navigator.pop(context);
+            },
+          )
+        ],
+      ),
+    );
+  }
 }
 
 class LinkInNotes extends StatelessWidget {

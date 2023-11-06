@@ -820,5 +820,12 @@
   "of-subcategory": "ของหมวดหมู่ย่อย",
   "account-label": "ฉลากบัญชี",
   "account-label-description": "เพิ่มฉลากบัญชีสำหรับธุรกรรมทั้งหมด",
-  "transaction-details": "รายละเอียดการทำธุรกรรม"
+  "transaction-details": "รายละเอียดการทำธุรกรรม",
+  "reorder-categories": "จัดลำดับหมวดหมู่ใหม่",
+  "drag-and-drop-categories-to-rearrange": "ลากและวางหมวดหมู่เพื่อจัดเรียงใหม่",
+  "show-all-categories": "แสดงหมวดหมู่ทั้งหมด",
+  "only-income-categories": "ประเภทรายได้เท่านั้น",
+  "only-expense-categories": "ประเภทค่าใช้จ่ายเท่านั้น",
+  "transfer-in": "ถ่ายโอน",
+  "transfer-out": "ถ่ายโอนจาก"
 }

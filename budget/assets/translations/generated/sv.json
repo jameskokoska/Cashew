@@ -820,5 +820,12 @@
   "of-subcategory": "underkategori",
   "account-label": "Kontotikett",
   "account-label-description": "Lägg till kontoetikett för alla transaktioner",
-  "transaction-details": "Transaktions Detaljer"
+  "transaction-details": "Transaktions Detaljer",
+  "reorder-categories": "Ombeställa kategorier",
+  "drag-and-drop-categories-to-rearrange": "Dra och släpp kategorier för att ordna om",
+  "show-all-categories": "Visa alla kategorier",
+  "only-income-categories": "Endast inkomstkategorier",
+  "only-expense-categories": "Endast kostnadskategorier",
+  "transfer-in": "Överföra till",
+  "transfer-out": "Överföra från och med"
 }

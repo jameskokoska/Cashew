@@ -820,5 +820,12 @@
   "of-subcategory": "של תת -קטגוריה",
   "account-label": "תווית חשבון",
   "account-label-description": "הוסף תווית חשבון עבור כל העסקאות",
-  "transaction-details": "פרטי העברה"
+  "transaction-details": "פרטי העברה",
+  "reorder-categories": "סדר מחדש קטגוריות",
+  "drag-and-drop-categories-to-rearrange": "גרור ושחרר קטגוריות לארגון מחדש",
+  "show-all-categories": "הצג את כל הקטגוריות",
+  "only-income-categories": "רק קטגוריות הכנסה",
+  "only-expense-categories": "רק קטגוריות הוצאות",
+  "transfer-in": "להעביר ל",
+  "transfer-out": "להעביר מ"
 }

@@ -820,5 +820,12 @@
   "of-subcategory": "하위 범주의",
   "account-label": "계정 레이블",
   "account-label-description": "모든 트랜잭션에 대한 계정 레이블을 추가하십시오",
-  "transaction-details": "상세 거래 내역"
+  "transaction-details": "상세 거래 내역",
+  "reorder-categories": "재주문 카테고리",
+  "drag-and-drop-categories-to-rearrange": "카테고리를 드래그 앤 드롭하여 재 배열합니다",
+  "show-all-categories": "모든 카테고리를 보여줍니다",
+  "only-income-categories": "소득 범주 만",
+  "only-expense-categories": "비용 범주 만",
+  "transfer-in": "전송",
+  "transfer-out": "전송"
 }

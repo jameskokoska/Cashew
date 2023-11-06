@@ -820,5 +820,12 @@
   "of-subcategory": "उपश्रेणी का",
   "account-label": "खाता लेबल",
   "account-label-description": "सभी लेनदेन के लिए खाता लेबल जोड़ें",
-  "transaction-details": "लेनदेन का विवरण"
+  "transaction-details": "लेनदेन का विवरण",
+  "reorder-categories": "पुनरुत्थान श्रेणियां",
+  "drag-and-drop-categories-to-rearrange": "पुनर्व्यवस्थित करने के लिए श्रेणियों को खींचें और ड्रॉप करें",
+  "show-all-categories": "सभी श्रेणियां दिखाएं",
+  "only-income-categories": "केवल आय श्रेणियां",
+  "only-expense-categories": "केवल व्यय श्रेणियां",
+  "transfer-in": "स्थानांतरित करना",
+  "transfer-out": "इससे स्थानांतरित करें"
 }

@@ -820,5 +820,12 @@
   "of-subcategory": "alt kategori",
   "account-label": "Hesap etiketi",
   "account-label-description": "Tüm işlemler için hesap etiketi ekleyin",
-  "transaction-details": "ödeme detayları"
+  "transaction-details": "ödeme detayları",
+  "reorder-categories": "Kategorileri yeniden sıralayın",
+  "drag-and-drop-categories-to-rearrange": "Yeniden düzenlemek için kategorileri sürükleyin ve bırakın",
+  "show-all-categories": "Tüm kategorileri göster",
+  "only-income-categories": "Sadece gelir kategorileri",
+  "only-expense-categories": "Yalnızca Gider Kategorileri",
+  "transfer-in": "Aktarmak",
+  "transfer-out": "Aktarmak"
 }

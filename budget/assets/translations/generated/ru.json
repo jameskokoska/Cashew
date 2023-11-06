@@ -820,5 +820,12 @@
   "of-subcategory": "подкатегории",
   "account-label": "Метка учетной записи",
   "account-label-description": "Добавить метку учетной записи для всех транзакций",
-  "transaction-details": "Детали транзакции"
+  "transaction-details": "Детали транзакции",
+  "reorder-categories": "Переупорядочить категории",
+  "drag-and-drop-categories-to-rearrange": "Перетаскивать категории для перестройки",
+  "show-all-categories": "Показать все категории",
+  "only-income-categories": "Только категории доходов",
+  "only-expense-categories": "Только категории расходов",
+  "transfer-in": "Переносить в",
+  "transfer-out": "Перенос из"
 }

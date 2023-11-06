@@ -101,7 +101,7 @@
   "pay-repetitive": "بار بار ادا کریں",
   "pay-repetitive-description": "مقررہ تاریخ کے بعد ادائیگی کے مطابق بار بار ٹرانزیکشن کو خود بخود نشان زد کریں",
   "pay-upcoming": "آئندہ ادائیگی کریں",
-  "pay-upcoming-description": "مقررہ تاریخ کے بعد ادائیگی کے مطابق آئندہ ٹرانزیکشن کو خود بخود نشان زد کریں",
+  "pay-upcoming-description": "مقررہ تاریخ کے بعد ادائیگی کے مطابق آئندہ لین دین کو خود بخود نشان زد کریں",
   "import-csv": "CSV فائل درآمد کریں",
   "import-csv-description": "بیرونی CSV ڈیٹا ماخذ درآمد کریں",
   "rate-app": "شرح {ایپ}",
@@ -820,5 +820,12 @@
   "of-subcategory": "ذیلی زمرہ کی",
   "account-label": "اکاؤنٹ کا لیبل",
   "account-label-description": "تمام لین دین کے لئے اکاؤنٹ کا لیبل شامل کریں",
-  "transaction-details": "لین دین کی تفصیلات"
+  "transaction-details": "لین دین کی تفصیلات",
+  "reorder-categories": "دوبارہ ترتیب والے زمرے",
+  "drag-and-drop-categories-to-rearrange": "دوبارہ ترتیب دینے کے لئے زمرے کو گھسیٹیں اور ڈراپ کریں",
+  "show-all-categories": "تمام زمرے دکھائیں",
+  "only-income-categories": "صرف آمدنی کے زمرے",
+  "only-expense-categories": "صرف اخراجات کے زمرے",
+  "transfer-in": "میں منتقلی",
+  "transfer-out": "سے منتقلی"
 }

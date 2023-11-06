@@ -820,5 +820,12 @@
   "of-subcategory": "ഉപവിഭാഗം",
   "account-label": "അക്കൗണ്ട് ലേബൽ",
   "account-label-description": "എല്ലാ ഇടപാടുകൾക്കും അക്കൗണ്ട് ലേബൽ ചേർക്കുക",
-  "transaction-details": "ഇടപാട് വിശദാംശങ്ങൾ"
+  "transaction-details": "ഇടപാട് വിശദാംശങ്ങൾ",
+  "reorder-categories": "വിഭാഗങ്ങൾ പുന order ക്രമീകരിക്കുക",
+  "drag-and-drop-categories-to-rearrange": "പുന ar ക്രമീകരിക്കുന്നതിന് വിഭാഗങ്ങൾ വലിച്ചിടുക",
+  "show-all-categories": "എല്ലാ വിഭാഗങ്ങളും കാണിക്കുക",
+  "only-income-categories": "വരുമാന വിഭാഗങ്ങൾ മാത്രം",
+  "only-expense-categories": "ചെലവ് വിഭാഗങ്ങൾ മാത്രം",
+  "transfer-in": "കൈമാറുക",
+  "transfer-out": "നിന്ന് കൈമാറുക"
 }

@@ -197,7 +197,8 @@ class SelectedTransactionsAppBar extends StatelessWidget {
                               }
                             },
                           ),
-                          if (value[pageID]?.length == 1)
+                          if (value[pageID] != null &&
+                              value[pageID]!.length <= 10)
                             DropdownItemMenu(
                               id: "create-copy",
                               label: "duplicate".tr(),
@@ -206,8 +207,32 @@ class SelectedTransactionsAppBar extends StatelessWidget {
                                   : Icons.file_copy_rounded,
                               iconScale: 0.97,
                               action: () async {
-                                await duplicateTransaction(
-                                    context, value[pageID]!.first);
+                                bool showDetailedSnackbarMessage =
+                                    value[pageID]!.length <= 1;
+                                for (int i = 0;
+                                    i < value[pageID]!.length;
+                                    i++) {
+                                  await duplicateTransaction(
+                                    context,
+                                    value[pageID]![i],
+                                    showDuplicatedMessage:
+                                        showDetailedSnackbarMessage,
+                                  );
+                                }
+                                if (showDetailedSnackbarMessage == false) {
+                                  openSnackbar(
+                                    SnackbarMessage(
+                                      icon: appStateSettings["outlinedIcons"]
+                                          ? Icons.file_copy_outlined
+                                          : Icons.file_copy_rounded,
+                                      title: "created-copy".tr(),
+                                      description:
+                                          value[pageID]!.length.toString() +
+                                              " " +
+                                              "transactions".tr().toLowerCase(),
+                                    ),
+                                  );
+                                }
                                 globalSelectedID.value[pageID] = [];
                                 globalSelectedID.notifyListeners();
                               },
@@ -226,6 +251,7 @@ class SelectedTransactionsAppBar extends StatelessWidget {
                                 setSelectedCategory: (_) {},
                                 selectedSubCategory: null,
                                 setSelectedSubCategory: (_) {},
+                                selectedIncomeInitial: null,
                               );
                               TransactionCategory? category =
                                   mainAndSubcategory.main;
@@ -428,7 +454,8 @@ class SelectedTransactionsAppBar extends StatelessWidget {
   }
 }
 
-Future duplicateTransaction(BuildContext context, String transactionPk) async {
+Future duplicateTransaction(BuildContext context, String transactionPk,
+    {bool showDuplicatedMessage = true}) async {
   Transaction transaction = await database.getTransactionFromPk(transactionPk);
   await database.createOrUpdateTransaction(
     transaction,
@@ -439,15 +466,17 @@ Future duplicateTransaction(BuildContext context, String transactionPk) async {
     transactionName =
         (await database.getCategoryInstance(transaction.categoryFk)).name;
   }
-  openSnackbar(
-    SnackbarMessage(
-      icon: appStateSettings["outlinedIcons"]
-          ? Icons.file_copy_outlined
-          : Icons.file_copy_rounded,
-      title: "created-copy".tr(),
-      description: "copied".tr() + " " + transactionName,
-    ),
-  );
+  if (showDuplicatedMessage) {
+    openSnackbar(
+      SnackbarMessage(
+        icon: appStateSettings["outlinedIcons"]
+            ? Icons.file_copy_outlined
+            : Icons.file_copy_rounded,
+        title: "created-copy".tr(),
+        description: "copied".tr() + " " + transactionName,
+      ),
+    );
+  }
 }
 
 class EditSelectedTransactions extends StatefulWidget {

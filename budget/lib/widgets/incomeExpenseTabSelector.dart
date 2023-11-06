@@ -1,5 +1,8 @@
 import 'package:budget/colors.dart';
 import 'package:budget/struct/settings.dart';
+import 'package:budget/widgets/outlinedButtonStacked.dart';
+import 'package:budget/widgets/tappable.dart';
+import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntry/incomeAmountArrow.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -52,6 +55,9 @@ class _IncomeExpenseTabSelectorState extends State<IncomeExpenseTabSelector>
   void didUpdateWidget(covariant IncomeExpenseTabSelector oldWidget) {
     if (widget.syncWithInitial) {
       _incomeTabController.animateTo(widget.initialTabIsIncome ? 1 : 0);
+      setState(() {
+        selectedIncome = widget.initialTabIsIncome;
+      });
     }
     super.didUpdateWidget(oldWidget);
   }
@@ -96,78 +102,164 @@ class _IncomeExpenseTabSelectorState extends State<IncomeExpenseTabSelector>
         },
         tabs: [
           Tab(
-            child: Center(
-              child: Padding(
-                padding: const EdgeInsets.only(top: 2),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    if (widget.showIcons)
-                      AnimatedOpacity(
-                        duration: Duration(milliseconds: 300),
-                        opacity: selectedIncome ? 0.5 : 1,
-                        child: IncomeOutcomeArrow(
-                          width: 19,
-                          isIncome: false,
-                          color: getColor(context, "expenseAmount"),
-                        ),
-                      ),
-                    Flexible(
-                      child: Transform.translate(
-                        offset: Offset(0, 1.7),
-                        child: Text(
-                          widget.expenseLabel ?? "expense".tr(),
-                          maxLines: 2,
-                          style: TextStyle(
-                            fontSize: 14.5,
-                            fontFamily: 'Avenir',
-                            fontFamilyFallback: ['Inter'],
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
+            child: ExpenseIncomeSelectorLabel(
+              selectedIncome: selectedIncome,
+              showIcons: widget.showIcons,
+              label: widget.expenseLabel,
+              isIncome: false,
+            ),
+          ),
+          Tab(
+            child: ExpenseIncomeSelectorLabel(
+              selectedIncome: selectedIncome,
+              showIcons: widget.showIcons,
+              label: widget.incomeLabel,
+              isIncome: true,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class ExpenseIncomeSelectorLabel extends StatelessWidget {
+  const ExpenseIncomeSelectorLabel({
+    required this.selectedIncome,
+    required this.showIcons,
+    required this.isIncome,
+    this.label,
+    super.key,
+  });
+  final bool selectedIncome;
+  final bool showIcons;
+  final String? label;
+  final bool isIncome;
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.only(top: 2),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            if (showIcons)
+              AnimatedOpacity(
+                duration: Duration(milliseconds: 300),
+                opacity: (isIncome && selectedIncome) ||
+                        (isIncome == false && selectedIncome == false)
+                    ? 1
+                    : 0.5,
+                child: IncomeOutcomeArrow(
+                  width: 19,
+                  isIncome: isIncome,
+                  color: isIncome
+                      ? getColor(context, "incomeAmount")
+                      : getColor(context, "expenseAmount"),
+                ),
+              ),
+            Flexible(
+              child: AnimatedOpacity(
+                duration: Duration(milliseconds: 300),
+                opacity: (isIncome && selectedIncome) ||
+                        (isIncome == false && selectedIncome == false)
+                    ? 1
+                    : 0.5,
+                child: TextFont(
+                  text: label ?? (isIncome ? "income".tr() : "expense".tr()),
+                  maxLines: 2,
+                  fontSize: 14.5,
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class IncomeExpenseButtonSelector extends StatefulWidget {
+  const IncomeExpenseButtonSelector(
+      {required this.setSelectedIncome, super.key});
+  final Function(bool?) setSelectedIncome;
+
+  @override
+  State<IncomeExpenseButtonSelector> createState() =>
+      _IncomeExpenseButtonSelectorState();
+}
+
+class _IncomeExpenseButtonSelectorState
+    extends State<IncomeExpenseButtonSelector> {
+  bool? selectedIncome;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 18, right: 18, bottom: 13),
+      child: Row(
+        children: [
+          Expanded(
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(15),
+              child: Tappable(
+                onTap: () {
+                  if (selectedIncome == false) {
+                    setState(() {
+                      selectedIncome = null;
+                    });
+                  } else {
+                    setState(() {
+                      selectedIncome = false;
+                    });
+                  }
+                  widget.setSelectedIncome(selectedIncome);
+                },
+                color: Colors.transparent,
+                child: OutlinedContainer(
+                  filled: selectedIncome == false,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ExpenseIncomeSelectorLabel(
+                      selectedIncome: false,
+                      showIcons: true,
+                      isIncome: false,
                     ),
-                  ],
+                  ),
                 ),
               ),
             ),
           ),
-          Tab(
-            child: Center(
-              child: Padding(
-                padding: const EdgeInsets.only(top: 2),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    if (widget.showIcons)
-                      Transform.translate(
-                        offset: Offset(0, 1.2),
-                        child: AnimatedOpacity(
-                          duration: Duration(milliseconds: 300),
-                          opacity: !selectedIncome ? 0.5 : 1,
-                          child: IncomeOutcomeArrow(
-                            width: 19,
-                            isIncome: true,
-                            color: getColor(context, "incomeAmount"),
-                          ),
-                        ),
-                      ),
-                    Flexible(
-                      child: Transform.translate(
-                        offset: Offset(0, 1.7),
-                        child: Text(
-                          widget.incomeLabel ?? "income".tr(),
-                          maxLines: 2,
-                          style: TextStyle(
-                            fontSize: 14.5,
-                            fontFamily: 'Avenir',
-                            fontFamilyFallback: ['Inter'],
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
+          SizedBox(width: 13),
+          Expanded(
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(15),
+              child: Tappable(
+                onTap: () {
+                  if (selectedIncome == true) {
+                    setState(() {
+                      selectedIncome = null;
+                    });
+                  } else {
+                    setState(() {
+                      selectedIncome = true;
+                    });
+                  }
+                  widget.setSelectedIncome(selectedIncome);
+                },
+                color: Colors.transparent,
+                child: OutlinedContainer(
+                  filled: selectedIncome == true,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ExpenseIncomeSelectorLabel(
+                      selectedIncome: true,
+                      showIcons: true,
+                      isIncome: true,
                     ),
-                  ],
+                  ),
                 ),
               ),
             ),

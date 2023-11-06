@@ -820,5 +820,12 @@
   "of-subcategory": "підкатегорії",
   "account-label": "Лейбл облікового запису",
   "account-label-description": "Додайте етикетку облікового запису для всіх транзакцій",
-  "transaction-details": "Деталі транзакції"
+  "transaction-details": "Деталі транзакції",
+  "reorder-categories": "Категорії переробки",
+  "drag-and-drop-categories-to-rearrange": "Перетягувати категорії для переставлення",
+  "show-all-categories": "Показати всі категорії",
+  "only-income-categories": "Тільки категорії доходів",
+  "only-expense-categories": "Тільки категорії витрат",
+  "transfer-in": "Перенести в",
+  "transfer-out": "Передати з"
 }

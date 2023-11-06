@@ -820,5 +820,12 @@
   "of-subcategory": "alaluokka",
   "account-label": "Tilinreketti",
   "account-label-description": "Lisää tilin tarra kaikille tapahtumille",
-  "transaction-details": "maksutapahtuman tiedot"
+  "transaction-details": "maksutapahtuman tiedot",
+  "reorder-categories": "JORDORAA TILAA",
+  "drag-and-drop-categories-to-rearrange": "Vedä ja pudota luokat uudelleen",
+  "show-all-categories": "Näytä kaikki luokat",
+  "only-income-categories": "Vain tulokategoriat",
+  "only-expense-categories": "Vain kustannusluokat",
+  "transfer-in": "Siirtyä jhk",
+  "transfer-out": "Siirto jstk"
 }

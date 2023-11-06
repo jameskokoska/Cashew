@@ -6,6 +6,7 @@ import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/animatedExpanded.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/categoryIcon.dart';
+import 'package:budget/widgets/incomeExpenseTabSelector.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/tappable.dart';
@@ -43,6 +44,7 @@ class SelectCategory extends StatefulWidget {
     this.horizontalListViewHeight = 100,
     this.forceSelectAllToFalse = false,
     this.listPadding = const EdgeInsets.symmetric(horizontal: 20),
+    this.selectedIncome,
   }) : super(key: key);
   final Function(TransactionCategory)? setSelectedCategory;
   final Function(List<String>?)? setSelectedCategories;
@@ -67,6 +69,7 @@ class SelectCategory extends StatefulWidget {
   final double horizontalListViewHeight;
   final bool forceSelectAllToFalse;
   final EdgeInsets listPadding;
+  final bool? selectedIncome;
 
   @override
   _SelectCategoryState createState() => _SelectCategoryState();
@@ -120,6 +123,11 @@ class _SelectCategoryState extends State<SelectCategory> {
   //find the selected category using selectedCategory
   @override
   Widget build(BuildContext context) {
+    bool dragEnabled = widget.selectedIncome == null &&
+        widget.categoryFks == null &&
+        widget.hideCategoryFks == null &&
+        widget.allowRearrange == true;
+
     if (updatedInitial == false &&
         (widget.selectedCategory != null ||
             widget.selectedCategories != null)) {
@@ -130,13 +138,14 @@ class _SelectCategoryState extends State<SelectCategory> {
     }
 
     return StreamBuilder<List<TransactionCategory>>(
-      stream:
-          database.watchAllCategories(mainCategoryPks: widget.mainCategoryPks),
+      stream: database.watchAllCategories(
+        mainCategoryPks: widget.mainCategoryPks,
+        selectedIncome: widget.selectedIncome,
+      ),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           if (widget.horizontalList) {
             List<Widget> children = [];
-            int index = 0;
             for (TransactionCategory category in snapshot.data!) {
               if (widget.categoryFks != null &&
                   !widget.categoryFks!.contains(category.categoryPk)) {
@@ -207,7 +216,6 @@ class _SelectCategoryState extends State<SelectCategory> {
                   );
                 }),
               ));
-              index++;
             }
             return IgnorePointer(
               ignoring: children.length <= 0,
@@ -302,7 +310,7 @@ class _SelectCategoryState extends State<SelectCategory> {
                       : 1,
                   child: CategoryIcon(
                     enableTooltip: category.name.length > 10,
-                    canEditByLongPress: false,
+                    canEditByLongPress: dragEnabled == false,
                     categoryPk: category.categoryPk,
                     size: size,
                     sizePadding: 24,
@@ -348,76 +356,80 @@ class _SelectCategoryState extends State<SelectCategory> {
             padding: const EdgeInsets.only(bottom: 8.0, left: 10, right: 10),
             child: Column(
               children: [
-                ReorderableGridView.count(
-                  dragEnabled: widget.categoryFks == null &&
-                      widget.hideCategoryFks == null &&
-                      widget.allowRearrange == true,
-                  dragWidgetBuilder: (index, child) {
-                    return Opacity(opacity: 0.5, child: child);
-                  },
-                  placeholderBuilder: (dropIndex, dropInddex, dragWidget) {
-                    return Opacity(
-                      opacity: 0.2,
-                      child: dragWidget,
-                    );
-                  },
-                  childAspectRatio: 0.96,
-                  padding: EdgeInsets.only(top: 5),
-                  controller: _scrollController,
-                  crossAxisSpacing: 0,
-                  mainAxisSpacing: 5,
-                  crossAxisCount: getWidthBottomSheet(context) <= 400
-                      ? 4
-                      : ((getWidthBottomSheet(context)) ~/ size ~/ 2.1).toInt(),
-                  shrinkWrap: true,
-                  children: categoryIcons,
-                  header: widget.header ?? [],
-                  footer: [
-                    if (widget.addButton != false)
-                      Padding(
-                        padding: const EdgeInsets.only(left: 7.5, right: 7.5),
-                        child: Column(
-                          children: [
-                            LayoutBuilder(
-                              builder: (context, BoxConstraints constraints) {
-                                return AddButton(
-                                  onTap: () {},
-                                  height: constraints.maxWidth < 70
-                                      ? constraints.maxWidth
-                                      : 70,
-                                  width: constraints.maxWidth < 70
-                                      ? constraints.maxWidth
-                                      : 70,
-                                  openPage: AddCategoryPage(
-                                    routesToPopAfterDelete:
-                                        RoutesToPopAfterDelete.None,
-                                    mainCategoryPkWhenSubCategory:
-                                        widget.mainCategoryPks?[0],
-                                  ),
-                                );
-                              },
-                            ),
-                          ],
+                AnimatedSizeSwitcher(
+                  sizeDuration: Duration(milliseconds: 250),
+                  switcherDuration: Duration(milliseconds: 150),
+                  child: ReorderableGridView.count(
+                    key: ValueKey(snapshot.data!.length),
+                    dragEnabled: dragEnabled,
+                    dragWidgetBuilder: (index, child) {
+                      return Opacity(opacity: 0.5, child: child);
+                    },
+                    placeholderBuilder: (dropIndex, dropInddex, dragWidget) {
+                      return Opacity(
+                        opacity: 0.2,
+                        child: dragWidget,
+                      );
+                    },
+                    childAspectRatio: 0.96,
+                    padding: EdgeInsets.only(top: 5),
+                    controller: _scrollController,
+                    crossAxisSpacing: 0,
+                    mainAxisSpacing: 5,
+                    crossAxisCount: getWidthBottomSheet(context) <= 400
+                        ? 4
+                        : ((getWidthBottomSheet(context)) ~/ size ~/ 2.1)
+                            .toInt(),
+                    shrinkWrap: true,
+                    children: categoryIcons,
+                    header: widget.header ?? [],
+                    footer: [
+                      if (widget.addButton != false)
+                        Padding(
+                          padding: const EdgeInsets.only(left: 7.5, right: 7.5),
+                          child: Column(
+                            children: [
+                              LayoutBuilder(
+                                builder: (context, BoxConstraints constraints) {
+                                  return AddButton(
+                                    onTap: () {},
+                                    height: constraints.maxWidth < 70
+                                        ? constraints.maxWidth
+                                        : 70,
+                                    width: constraints.maxWidth < 70
+                                        ? constraints.maxWidth
+                                        : 70,
+                                    openPage: AddCategoryPage(
+                                      routesToPopAfterDelete:
+                                          RoutesToPopAfterDelete.None,
+                                      mainCategoryPkWhenSubCategory:
+                                          widget.mainCategoryPks?[0],
+                                    ),
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                  ],
-                  onReorder: (_intPrevious, _intNew) async {
-                    TransactionCategory oldCategory =
-                        snapshot.data![_intPrevious];
+                    ],
+                    onReorder: (_intPrevious, _intNew) async {
+                      TransactionCategory oldCategory =
+                          snapshot.data![_intPrevious];
 
-                    if (_intNew > _intPrevious) {
-                      await database.moveCategory(
-                          oldCategory.categoryPk, _intNew, oldCategory.order);
-                    } else {
-                      await database.moveCategory(
-                          oldCategory.categoryPk, _intNew, oldCategory.order);
-                    }
-                    return true;
-                  },
-                  onDragStart: (_) {
-                    database.fixOrderCategories();
-                    HapticFeedback.heavyImpact();
-                  },
+                      if (_intNew > _intPrevious) {
+                        await database.moveCategory(
+                            oldCategory.categoryPk, _intNew, oldCategory.order);
+                      } else {
+                        await database.moveCategory(
+                            oldCategory.categoryPk, _intNew, oldCategory.order);
+                      }
+                      return true;
+                    },
+                    onDragStart: (_) {
+                      database.fixOrderCategories();
+                      HapticFeedback.heavyImpact();
+                    },
+                  ),
                 ),
                 // Center(
                 //   child: Wrap(
@@ -494,34 +506,33 @@ class _SelectCategoryState extends State<SelectCategory> {
                 //     ],
                 //   ),
                 // ),
-                widget.nextLabel != null
-                    ? Column(
-                        children: [
-                          Container(height: 15),
-                          AnimatedSwitcher(
-                            duration: Duration(milliseconds: 500),
-                            child: selectedCategories.length > 0
-                                ? Button(
-                                    key: Key("addSuccess"),
-                                    label: widget.nextLabel ?? "",
-                                    width: MediaQuery.sizeOf(context).width,
-                                    onTap: () {
-                                      if (widget.next != null) {
-                                        widget.next!();
-                                      }
-                                    },
-                                  )
-                                : Button(
-                                    key: Key("addNoSuccess"),
-                                    label: widget.nextLabel ?? "",
-                                    width: MediaQuery.sizeOf(context).width,
-                                    onTap: () {},
-                                    color: Colors.grey,
-                                  ),
-                          )
-                        ],
+                if (widget.nextLabel != null)
+                  Column(
+                    children: [
+                      Container(height: 15),
+                      AnimatedSwitcher(
+                        duration: Duration(milliseconds: 500),
+                        child: selectedCategories.length > 0
+                            ? Button(
+                                key: Key("addSuccess"),
+                                label: widget.nextLabel ?? "",
+                                width: MediaQuery.sizeOf(context).width,
+                                onTap: () {
+                                  if (widget.next != null) {
+                                    widget.next!();
+                                  }
+                                },
+                              )
+                            : Button(
+                                key: Key("addNoSuccess"),
+                                label: widget.nextLabel ?? "",
+                                width: MediaQuery.sizeOf(context).width,
+                                onTap: () {},
+                                color: Colors.grey,
+                              ),
                       )
-                    : Container()
+                    ],
+                  )
               ],
             ),
           );

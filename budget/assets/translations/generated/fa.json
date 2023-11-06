@@ -820,5 +820,12 @@
   "of-subcategory": "زیر شاخه",
   "account-label": "برچسب حساب",
   "account-label-description": "برای همه معاملات برچسب حساب اضافه کنید",
-  "transaction-details": "جزئیات معامله"
+  "transaction-details": "جزئیات معامله",
+  "reorder-categories": "مقوله های مرتب سازی",
+  "drag-and-drop-categories-to-rearrange": "دسته بندی ها را بکشید و رها کنید تا دوباره تنظیم شود",
+  "show-all-categories": "نمایش همه دسته ها",
+  "only-income-categories": "فقط مقوله های درآمد",
+  "only-expense-categories": "فقط مقوله های هزینه",
+  "transfer-in": "انتقال به",
+  "transfer-out": "انتقال از"
 }

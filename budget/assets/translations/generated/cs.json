@@ -820,5 +820,12 @@
   "of-subcategory": "podkategorie",
   "account-label": "Štítek účtu",
   "account-label-description": "Přidejte štítek účtu pro všechny transakce",
-  "transaction-details": "Detaily transakce"
+  "transaction-details": "Detaily transakce",
+  "reorder-categories": "Změnit kategorie pořadí",
+  "drag-and-drop-categories-to-rearrange": "Přetažení kategorií pro přeuspořádání",
+  "show-all-categories": "Zobrazit všechny kategorie",
+  "only-income-categories": "Pouze kategorie příjmů",
+  "only-expense-categories": "Pouze kategorie výdajů",
+  "transfer-in": "Převést do",
+  "transfer-out": "Přenos z"
 }

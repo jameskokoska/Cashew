@@ -136,6 +136,8 @@ Future<Map<String, dynamic>> getDefaultPreferences() async {
     "previewDemo": false,
     "purchaseID": null,
     "showAccountLabelTagInTransactionEntry": false,
+    //Show all categories or only income/expense
+    "showAllCategoriesWhenSelecting": true,
     // *********************************************************** //
     // For showing information within a certain cycle for all spending wallet details page
     // cycleSettingsExtension = ""

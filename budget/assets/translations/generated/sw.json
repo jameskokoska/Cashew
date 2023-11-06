@@ -820,5 +820,12 @@
   "of-subcategory": "ya kifungu kidogo",
   "account-label": "Lebo ya akaunti",
   "account-label-description": "Ongeza lebo ya akaunti kwa shughuli zote",
-  "transaction-details": "Maelezo ya ununuzi"
+  "transaction-details": "Maelezo ya ununuzi",
+  "reorder-categories": "Rejea kategoria",
+  "drag-and-drop-categories-to-rearrange": "Buruta na vikundi vya kuacha kupanga upya",
+  "show-all-categories": "Onyesha aina zote",
+  "only-income-categories": "Aina za mapato tu",
+  "only-expense-categories": "Aina za gharama tu",
+  "transfer-in": "Kuhamisha",
+  "transfer-out": "Uhamisho kutoka"
 }

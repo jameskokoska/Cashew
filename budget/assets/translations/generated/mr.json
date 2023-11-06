@@ -820,5 +820,12 @@
   "of-subcategory": "उपश्रेणीचे",
   "account-label": "खाते लेबल",
   "account-label-description": "सर्व व्यवहारांसाठी खाते लेबल जोडा",
-  "transaction-details": "व्यवहाराचा तपशील"
+  "transaction-details": "व्यवहाराचा तपशील",
+  "reorder-categories": "पुनर्क्रमित श्रेणी",
+  "drag-and-drop-categories-to-rearrange": "पुनर्रचना करण्यासाठी श्रेणी ड्रॅग आणि ड्रॉप करा",
+  "show-all-categories": "सर्व श्रेणी दर्शवा",
+  "only-income-categories": "केवळ उत्पन्न श्रेणी",
+  "only-expense-categories": "केवळ खर्च श्रेणी",
+  "transfer-in": "मध्ये हस्तांतरण",
+  "transfer-out": "पासून हस्तांतरण"
 }

@@ -820,5 +820,12 @@
   "of-subcategory": "子类别",
   "account-label": "帐户标签",
   "account-label-description": "为所有交易添加帐户标签",
-  "transaction-details": "交易明细"
+  "transaction-details": "交易明细",
+  "reorder-categories": "重新排序类别",
+  "drag-and-drop-categories-to-rearrange": "将类别拖放到重新排列",
+  "show-all-categories": "显示所有类别",
+  "only-income-categories": "唯一的收入类别",
+  "only-expense-categories": "仅费用类别",
+  "transfer-in": "转移到",
+  "transfer-out": "从转移"
 }

@@ -3450,11 +3450,17 @@ class FinanceDatabase extends _$FinanceDatabase {
     int? limit,
     int? offset,
     List<String>? mainCategoryPks,
+    bool? selectedIncome,
   }) {
     return (select(categories)
           ..where((c) => ((mainCategoryPks == null
                   ? onlyShowMainCategoryListing(c)
                   : c.mainCategoryPk.isIn(mainCategoryPks)) &
+              (selectedIncome == true
+                  ? c.income.equals(true)
+                  : selectedIncome == false
+                      ? c.income.equals(false)
+                      : Constant(true)) &
               (searchFor == null
                   ? Constant(true)
                   : c.name

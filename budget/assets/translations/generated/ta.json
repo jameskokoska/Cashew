@@ -820,5 +820,12 @@
   "of-subcategory": "துணைப்பிரிவு",
   "account-label": "கணக்கு லேபிள்",
   "account-label-description": "அனைத்து பரிவர்த்தனைகளுக்கும் கணக்கு லேபிளைச் சேர்க்கவும்",
-  "transaction-details": "பரிமாற்ற விவரங்கள்"
+  "transaction-details": "பரிமாற்ற விவரங்கள்",
+  "reorder-categories": "வகைகளை மறுதொடக்கம் செய்யுங்கள்",
+  "drag-and-drop-categories-to-rearrange": "மறுசீரமைக்க வகைகளை இழுத்து விடுங்கள்",
+  "show-all-categories": "அனைத்து வகைகளையும் காட்டு",
+  "only-income-categories": "வருமான வகைகள் மட்டுமே",
+  "only-expense-categories": "செலவு வகைகள் மட்டுமே",
+  "transfer-in": "மாற்றவும்",
+  "transfer-out": "இருந்து இடமாற்றம்"
 }

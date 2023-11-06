@@ -302,6 +302,33 @@ class _AddCategoryPageState extends State<AddCategoryPage>
           horizontalPadding: getHorizontalPaddingConstrained(context),
           resizeToAvoidBottomInset: true,
           dragDownToDismiss: true,
+          subtitle: widget.mainCategoryPkWhenSubCategory == null
+              ? null
+              : StreamBuilder<TransactionCategory>(
+                  stream: database
+                      .watchCategory(widget.mainCategoryPkWhenSubCategory!),
+                  builder: (context, snapshot) {
+                    return TextFont(
+                      text: "for".tr().capitalizeFirst +
+                          " " +
+                          (snapshot.data?.name ?? ""),
+                      fontSize: getCenteredTitle(
+                                      context: context,
+                                      backButtonEnabled: true) ==
+                                  true &&
+                              getCenteredTitleSmall(
+                                      context: context,
+                                      backButtonEnabled: true) ==
+                                  false
+                          ? 30
+                          : 22,
+                      maxLines: 5,
+                      fontWeight: FontWeight.bold,
+                    );
+                  }),
+          subtitleSize:
+              widget.mainCategoryPkWhenSubCategory == null ? null : 10,
+          subtitleAlignment: Alignment.bottomLeft,
           title: widget.category == null
               ? "add-category".tr()
               : "edit-category".tr(),

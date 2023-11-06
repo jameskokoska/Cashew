@@ -93,6 +93,7 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
         child: TransactionFiltersSelection(
           setSearchFilters: setSearchFilters,
           searchFilters: searchFilters,
+          clearSearchFilters: clearSearchFilters,
         ),
       ),
     );
@@ -103,6 +104,17 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
 
   void setSearchFilters(SearchFilters searchFilters) {
     this.searchFilters = searchFilters;
+  }
+
+  void clearSearchFilters() {
+    // Don't change the DateTime selected, as its handles separately
+    DateTimeRange? dateTimeRange = searchFilters.dateTimeRange;
+    // Don't change the search query, as its handled by the text box
+    String? searchQuery = searchFilters.searchQuery;
+    searchFilters.clearSearchFilters();
+    searchFilters.dateTimeRange = dateTimeRange;
+    searchFilters.searchQuery = searchQuery;
+    setState(() {});
   }
 
   Future<void> selectDateRange(BuildContext context) async {
@@ -248,12 +260,14 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
                   child: SizedBox(height: 13),
                 ),
                 SliverToBoxAdapter(
-                    child: AppliedFilterChips(
-                  searchFilters: searchFilters,
-                  openFiltersSelection: () {
-                    selectFilters(context);
-                  },
-                )),
+                  child: AppliedFilterChips(
+                    searchFilters: searchFilters,
+                    openFiltersSelection: () {
+                      selectFilters(context);
+                    },
+                    clearSearchFilters: clearSearchFilters,
+                  ),
+                ),
                 // SliverToBoxAdapter(
                 //   child: SlidingSelectorIncomeExpense(
                 //       onSelected: (index) {
@@ -393,10 +407,12 @@ class AppliedFilterChips extends StatelessWidget {
   const AppliedFilterChips({
     required this.searchFilters,
     required this.openFiltersSelection,
+    required this.clearSearchFilters,
     super.key,
   });
   final SearchFilters searchFilters;
   final Function openFiltersSelection;
+  final Function clearSearchFilters;
 
   Future<List<Widget>> getSearchFilterWidgets(BuildContext context) async {
     AllWallets allWallets = Provider.of<AllWallets>(context);
@@ -565,7 +581,29 @@ class AppliedFilterChips extends StatelessWidget {
                         clipBehavior: Clip.none,
                         child: Row(
                           key: ValueKey(snapshot.data.toString()),
-                          children: snapshot.data!,
+                          children: [
+                            SizedBox(width: 5),
+                            Transform.scale(
+                              scale: 1.3,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(100),
+                                child: Tappable(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Icon(
+                                      Icons.close_rounded,
+                                      size: 17,
+                                    ),
+                                  ),
+                                  onTap: () {
+                                    clearSearchFilters();
+                                  },
+                                ),
+                              ),
+                            ),
+                            SizedBox(width: 2),
+                            ...(snapshot.data ?? [])
+                          ],
                         ),
                       ),
                     ),
@@ -740,10 +778,14 @@ class SearchFilters {
 
 class TransactionFiltersSelection extends StatefulWidget {
   const TransactionFiltersSelection(
-      {required this.searchFilters, required this.setSearchFilters, super.key});
+      {required this.searchFilters,
+      required this.setSearchFilters,
+      required this.clearSearchFilters,
+      super.key});
 
   final SearchFilters searchFilters;
   final Function(SearchFilters searchFilters) setSearchFilters;
+  final Function() clearSearchFilters;
 
   @override
   State<TransactionFiltersSelection> createState() =>
@@ -755,18 +797,6 @@ class _TransactionFiltersSelectionState
   late SearchFilters selectedFilters = widget.searchFilters;
 
   void setSearchFilters() {
-    widget.setSearchFilters(selectedFilters);
-    setState(() {});
-  }
-
-  void clearSearchFilters() {
-    // Don't change the DateTime selected, as its handles separately
-    DateTimeRange? dateTimeRange = selectedFilters.dateTimeRange;
-    // Don't change the search query, as its handled by the text box
-    String? searchQuery = selectedFilters.searchQuery;
-    selectedFilters.clearSearchFilters();
-    selectedFilters.dateTimeRange = dateTimeRange;
-    selectedFilters.searchQuery = searchQuery;
     widget.setSearchFilters(selectedFilters);
     setState(() {});
   }
@@ -1138,7 +1168,8 @@ class _TransactionFiltersSelectionState
                   expandedLayout: true,
                   label: "reset".tr(),
                   onTap: () {
-                    clearSearchFilters();
+                    widget.clearSearchFilters();
+                    Navigator.pop(context);
                   },
                   color: Theme.of(context).colorScheme.tertiaryContainer,
                   textColor: Theme.of(context).colorScheme.onTertiaryContainer,

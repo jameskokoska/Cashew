@@ -820,5 +820,12 @@
   "of-subcategory": "সাব বিভাগের",
   "account-label": "অ্যাকাউন্ট লেবেল",
   "account-label-description": "সমস্ত লেনদেনের জন্য অ্যাকাউন্ট লেবেল যুক্ত করুন",
-  "transaction-details": "লেনদেন বিবরণী"
+  "transaction-details": "লেনদেন বিবরণী",
+  "reorder-categories": "পুনরায় অর্ডার বিভাগ",
+  "drag-and-drop-categories-to-rearrange": "পুনরায় সাজানোর জন্য বিভাগগুলি টেনে আনুন এবং ড্রপ করুন",
+  "show-all-categories": "সমস্ত বিভাগ দেখান",
+  "only-income-categories": "শুধুমাত্র আয়ের বিভাগ",
+  "only-expense-categories": "শুধুমাত্র ব্যয় বিভাগ",
+  "transfer-in": "স্থানান্তর",
+  "transfer-out": "থেকে স্থানান্তর"
 }

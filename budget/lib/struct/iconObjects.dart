@@ -4158,4 +4158,56 @@ List<IconForCategory> iconObjects = [
     ],
     mostLikelyCategoryName: "Dairy",
   ),
+  IconForCategory(
+    icon: "magic-box.png",
+    tags: [
+      "magic-box",
+      "miscellaneous",
+      "random",
+      "items",
+      "mystery",
+      "surprise",
+      "unknown",
+      "assortment",
+      "diverse",
+      "variety"
+    ],
+    mostLikelyCategoryName: "Miscellaneous",
+  ),
+  IconForCategory(
+    icon: "decrease.png",
+    tags: [
+      "decrease",
+      "decreasing",
+      "arrows",
+      "downward",
+      "reduce",
+      "lower",
+      "lessen",
+      "diminish",
+      "shrink",
+      "decline",
+      "outcome",
+      "withdraw",
+      "expense"
+    ],
+    mostLikelyCategoryName: "Decrease",
+  ),
+  IconForCategory(
+    icon: "increase.png",
+    tags: [
+      "increase",
+      "increasing",
+      "arrows",
+      "upward",
+      "grow",
+      "rise",
+      "expand",
+      "enlarge",
+      "multiply",
+      "improve",
+      "income"
+    ],
+    mostLikelyCategoryName: "Increase",
+  ),
 ];

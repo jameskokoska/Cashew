@@ -461,9 +461,8 @@ class DaySpending extends StatelessWidget {
                             Provider.of<AllWallets>(context), amount.abs()) +
                         "/" +
                         "day".tr() +
-                        " "
-                                "for"
-                            .tr() +
+                        " " +
+                        "for".tr() +
                         " " +
                         remainingDays.toString() +
                         " " +

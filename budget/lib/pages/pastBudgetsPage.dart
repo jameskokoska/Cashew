@@ -187,6 +187,65 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
         pagesNeedingRefresh: [], updateGlobalState: false);
   }
 
+  void openWatchCategoriesBottomSheet() {
+    openBottomSheet(
+      context,
+      PopupFramework(
+        title: "select-categories-to-watch".tr(),
+        child: Column(
+          children: [
+            SelectCategory(
+              labelIcon: true,
+              addButton: false,
+              selectedCategories: selectedCategoryFks,
+              setSelectedCategories: (List<String>? selectedCategoryFks) {
+                setState(() {
+                  this.selectedCategoryFks = selectedCategoryFks ?? [];
+                  updateSetting(selectedCategoryFks ?? []);
+                });
+                loadLines(amountLoaded);
+              },
+              scaleWhenSelected: false,
+              categoryFks: widget.budget.categoryFks,
+              hideCategoryFks: widget.budget.categoryFksExclude,
+              allowRearrange: false,
+            ),
+            Row(
+              children: [
+                Expanded(
+                  child: Button(
+                    expandedLayout: true,
+                    label: "clear".tr(),
+                    onTap: () {
+                      setState(() {
+                        selectedCategoryFks = [];
+                        updateSetting([]);
+                      });
+                      Navigator.pop(context);
+                    },
+                    color: Theme.of(context).colorScheme.tertiaryContainer,
+                    textColor:
+                        Theme.of(context).colorScheme.onTertiaryContainer,
+                  ),
+                ),
+                SizedBox(width: 13),
+                Expanded(
+                  child: Button(
+                    expandedLayout: true,
+                    label: "done".tr(),
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   void dispose() {
     super.dispose();
@@ -226,65 +285,7 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
         IconButton(
           tooltip: "watch-categories".tr(),
           onPressed: () {
-            openBottomSheet(
-              context,
-              PopupFramework(
-                title: "select-categories-to-watch".tr(),
-                child: Column(
-                  children: [
-                    SelectCategory(
-                      labelIcon: true,
-                      addButton: false,
-                      selectedCategories: selectedCategoryFks,
-                      setSelectedCategories:
-                          (List<String>? selectedCategoryFks) {
-                        setState(() {
-                          this.selectedCategoryFks = selectedCategoryFks ?? [];
-                          updateSetting(selectedCategoryFks ?? []);
-                        });
-                        loadLines(amountLoaded);
-                      },
-                      scaleWhenSelected: false,
-                      categoryFks: widget.budget.categoryFks,
-                      hideCategoryFks: widget.budget.categoryFksExclude,
-                      allowRearrange: false,
-                    ),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Button(
-                            expandedLayout: true,
-                            label: "clear".tr(),
-                            onTap: () {
-                              setState(() {
-                                selectedCategoryFks = [];
-                                updateSetting([]);
-                              });
-                              Navigator.pop(context);
-                            },
-                            color:
-                                Theme.of(context).colorScheme.tertiaryContainer,
-                            textColor: Theme.of(context)
-                                .colorScheme
-                                .onTertiaryContainer,
-                          ),
-                        ),
-                        SizedBox(width: 13),
-                        Expanded(
-                          child: Button(
-                            expandedLayout: true,
-                            label: "done".tr(),
-                            onTap: () {
-                              Navigator.pop(context);
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            );
+            openWatchCategoriesBottomSheet();
           },
           padding: EdgeInsets.all(15 - 8),
           icon: AnimatedContainer(
@@ -608,70 +609,94 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
                   ? SliverToBoxAdapter(
                       child: Padding(
                         padding: const EdgeInsets.only(bottom: 10),
-                        child: StreamBuilder<Map<String, TransactionCategory>>(
-                          stream: database.watchAllCategoriesMapped(),
-                          builder: (context, snapshotCategoriesMapped) {
-                            if (snapshotCategoriesMapped.hasData) {
-                              return StreamBuilder<List<double?>>(
-                                stream: mergedStreamsCategoriesTotal,
-                                builder: (context, snapshotCategoriesTotal) {
-                                  if (snapshotCategoriesTotal.hasData) {
-                                    List<Widget> children = [];
-                                    Map<String, double> categoryTotals = {};
-                                    for (int period = 0;
-                                        period <
-                                            amountLoaded *
-                                                selectedCategoryFks.length;
-                                        period++) {
-                                      int categoryIndex =
-                                          period % (selectedCategoryFks).length;
-                                      TransactionCategory? category =
-                                          snapshotCategoriesMapped.data![
-                                              selectedCategoryFks[
-                                                  categoryIndex]];
-                                      if (category != null &&
-                                          period <
-                                              snapshotCategoriesTotal
-                                                  .data!.length) {
-                                        categoryTotals[category.categoryPk] =
-                                            (categoryTotals[
-                                                        category.categoryPk] ??
-                                                    0) +
-                                                (snapshotCategoriesTotal
-                                                        .data?[period] ??
-                                                    0);
-                                      }
-                                    }
-                                    for (String categoryPk
-                                        in categoryTotals.keys) {
-                                      TransactionCategory? category =
-                                          snapshotCategoriesMapped
-                                              .data![categoryPk];
-                                      if (category != null) {
-                                        children.add(
-                                          CategoryAverageSpent(
-                                            category: category,
-                                            amountPeriods: amountLoaded,
-                                            amountSpent:
-                                                categoryTotals[categoryPk] ?? 0,
-                                          ),
-                                        );
-                                      }
-                                    }
+                        child: StreamBuilder<List<double?>>(
+                            stream: mergedStreamsBudgetTotal,
+                            builder:
+                                (context, snapshotMergedStreamsBudgetTotal) {
+                              int totalNonZeroPeriods = 0;
+                              for (double? periodTotal
+                                  in (snapshotMergedStreamsBudgetTotal.data ??
+                                      [])) {
+                                if (periodTotal != null && periodTotal != 0) {
+                                  totalNonZeroPeriods++;
+                                }
+                              }
 
-                                    return Column(
-                                      children: children,
+                              return StreamBuilder<
+                                  Map<String, TransactionCategory>>(
+                                stream: database.watchAllCategoriesMapped(),
+                                builder: (context, snapshotCategoriesMapped) {
+                                  if (snapshotCategoriesMapped.hasData) {
+                                    return StreamBuilder<List<double?>>(
+                                      stream: mergedStreamsCategoriesTotal,
+                                      builder:
+                                          (context, snapshotCategoriesTotal) {
+                                        if (snapshotCategoriesTotal.hasData) {
+                                          List<Widget> children = [];
+                                          Map<String, double> categoryTotals =
+                                              {};
+                                          for (int period = 0;
+                                              period <
+                                                  amountLoaded *
+                                                      selectedCategoryFks
+                                                          .length;
+                                              period++) {
+                                            int categoryIndex = period %
+                                                (selectedCategoryFks).length;
+                                            TransactionCategory? category =
+                                                snapshotCategoriesMapped.data![
+                                                    selectedCategoryFks[
+                                                        categoryIndex]];
+                                            if (category != null &&
+                                                period <
+                                                    snapshotCategoriesTotal
+                                                        .data!.length) {
+                                              categoryTotals[
+                                                      category.categoryPk] =
+                                                  (categoryTotals[category
+                                                              .categoryPk] ??
+                                                          0) +
+                                                      (snapshotCategoriesTotal
+                                                              .data?[period] ??
+                                                          0);
+                                            }
+                                          }
+                                          for (String categoryPk
+                                              in categoryTotals.keys) {
+                                            TransactionCategory? category =
+                                                snapshotCategoriesMapped
+                                                    .data![categoryPk];
+                                            if (category != null) {
+                                              children.add(
+                                                CategoryAverageSpent(
+                                                  category: category,
+                                                  amountPeriods:
+                                                      totalNonZeroPeriods,
+                                                  amountSpent: categoryTotals[
+                                                          categoryPk] ??
+                                                      0,
+                                                  onTap: () {
+                                                    openWatchCategoriesBottomSheet();
+                                                  },
+                                                ),
+                                              );
+                                            }
+                                          }
+
+                                          return Column(
+                                            children: children,
+                                          );
+                                        } else {
+                                          return SizedBox.shrink();
+                                        }
+                                      },
                                     );
                                   } else {
                                     return SizedBox.shrink();
                                   }
                                 },
                               );
-                            } else {
-                              return SizedBox.shrink();
-                            }
-                          },
-                        ),
+                            }),
                       ),
                     )
                   : SliverToBoxAdapter(child: SizedBox.shrink()),
@@ -1259,11 +1284,13 @@ class CategoryAverageSpent extends StatelessWidget {
     required this.category,
     required this.amountPeriods,
     required this.amountSpent,
+    required this.onTap,
     super.key,
   });
   final TransactionCategory category;
   final int amountPeriods;
   final double amountSpent;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -1277,6 +1304,7 @@ class CategoryAverageSpent extends StatelessWidget {
           ),
         );
       },
+      onTap: onTap,
       color: Colors.transparent,
       child: Padding(
         padding: EdgeInsets.symmetric(

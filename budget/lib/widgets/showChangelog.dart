@@ -22,6 +22,20 @@ import 'listItem.dart';
 
 String getChangelogString() {
   return """
+    < 4.8.5
+    Long press category to edit when selecting
+    Option to reorder categories in popup
+    Option to only show related income/expense categories when selecting
+    Income and expense selector when selecting initial category
+    Fixed exact scheduling of notifications failing on Android 14+
+    Adding subcategory page shows name of main category
+    Tapping watched category opens watch categories bottom sheet
+    Budget periods with zero total spent are not considered when determining average category spending 
+    Support for proper transaction amount polarity when importing CSV from Mint
+    Account transfer transactions are labelled as transfer in/out if custom title empty
+    Can duplicate up to 10 selected transactions
+    Clear applied filters button beside applied filters chips in search page
+    Added miscellaneous, increase and decrease icons
     < 4.8.4
     Upcoming transactions on homepage respect sliding income/expense selector
     Search page shows one month of transactions in the future by default

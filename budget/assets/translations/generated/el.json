@@ -820,5 +820,12 @@
   "of-subcategory": "υποκατηγορία",
   "account-label": "Ετικέτα λογαριασμού",
   "account-label-description": "Προσθέστε ετικέτα λογαριασμού για όλες τις συναλλαγές",
-  "transaction-details": "Λεπτομέρειες Συναλλαγής"
+  "transaction-details": "Λεπτομέρειες Συναλλαγής",
+  "reorder-categories": "Κατηγορίες αναδιάταξης",
+  "drag-and-drop-categories-to-rearrange": "Σύνθεση και πτώση κατηγοριών για αναδιάταξη",
+  "show-all-categories": "Εμφάνιση όλων των κατηγοριών",
+  "only-income-categories": "Μόνο κατηγορίες εισοδήματος",
+  "only-expense-categories": "Μόνο κατηγορίες εξόδων",
+  "transfer-in": "Μεταφέρω σε",
+  "transfer-out": "Μεταφέρω από"
 }

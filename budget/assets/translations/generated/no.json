@@ -820,5 +820,12 @@
   "of-subcategory": "av underkategori",
   "account-label": "Kontogetikett",
   "account-label-description": "Legg til kontomerke for alle transaksjoner",
-  "transaction-details": "Transaksjonsdetaljer"
+  "transaction-details": "Transaksjonsdetaljer",
+  "reorder-categories": "Ombestill kategorier",
+  "drag-and-drop-categories-to-rearrange": "Dra og slippe kategorier for å omorganisere",
+  "show-all-categories": "Vis alle kategorier",
+  "only-income-categories": "Bare inntektskategorier",
+  "only-expense-categories": "Bare kostnadskategorier",
+  "transfer-in": "Overfør til",
+  "transfer-out": "Overfør fra"
 }

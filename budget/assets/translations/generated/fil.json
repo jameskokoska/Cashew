@@ -820,5 +820,12 @@
   "of-subcategory": "ng subcategory",
   "account-label": "Label ng account",
   "account-label-description": "Magdagdag ng label ng account para sa lahat ng mga transaksyon",
-  "transaction-details": "Mga detalye ng transaksyon"
+  "transaction-details": "Mga detalye ng transaksyon",
+  "reorder-categories": "Mga kategorya ng Reorder",
+  "drag-and-drop-categories-to-rearrange": "I -drag at i -drop ang mga kategorya upang muling ayusin",
+  "show-all-categories": "Ipakita ang lahat ng mga kategorya",
+  "only-income-categories": "Mga kategorya lamang ng kita",
+  "only-expense-categories": "Mga kategorya lamang ng gastos",
+  "transfer-in": "Ilipat sa",
+  "transfer-out": "Ilipat mula sa"
 }

@@ -820,5 +820,12 @@
   "of-subcategory": "ઉપકાઠ",
   "account-label": "હિસાબનું લેબલ",
   "account-label-description": "બધા વ્યવહારો માટે એકાઉન્ટ લેબલ ઉમેરો",
-  "transaction-details": "વ્યવહાર વિગતો"
+  "transaction-details": "વ્યવહાર વિગતો",
+  "reorder-categories": "શ્રેણીઓ ફરીથી ગોઠવવું",
+  "drag-and-drop-categories-to-rearrange": "ફરીથી ગોઠવવા માટે કેટેગરીઝ ખેંચો અને છોડો",
+  "show-all-categories": "બધી કેટેગરીઓ બતાવો",
+  "only-income-categories": "ફક્ત આવક કેટેગરીઝ",
+  "only-expense-categories": "ફક્ત ખર્ચ કેટેગરીઝ",
+  "transfer-in": "પ્રવેશ",
+  "transfer-out": "માંથી બદલી"
 }

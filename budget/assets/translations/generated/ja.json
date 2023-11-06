@@ -820,5 +820,12 @@
   "of-subcategory": "サブカテゴリの",
   "account-label": "アカウントラベル",
   "account-label-description": "すべてのトランザクションのアカウントラベルを追加します",
-  "transaction-details": "トランザクションの詳細"
+  "transaction-details": "トランザクションの詳細",
+  "reorder-categories": "カテゴリを並べ替えます",
+  "drag-and-drop-categories-to-rearrange": "ドラッグアンドドロップカテゴリを再配置します",
+  "show-all-categories": "すべてのカテゴリを表示します",
+  "only-income-categories": "収入カテゴリのみ",
+  "only-expense-categories": "費用カテゴリのみ",
+  "transfer-in": "に転送します",
+  "transfer-out": "からの転送"
 }

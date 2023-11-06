@@ -820,5 +820,12 @@
   "of-subcategory": "af underkategori",
   "account-label": "Konto -etiket",
   "account-label-description": "Tilføj kontonetiket til alle transaktioner",
-  "transaction-details": "overførselsdetaljer"
+  "transaction-details": "overførselsdetaljer",
+  "reorder-categories": "Ombestillingskategorier",
+  "drag-and-drop-categories-to-rearrange": "Træk og slip kategorier for at omarrangere",
+  "show-all-categories": "Vis alle kategorier",
+  "only-income-categories": "Kun indkomstkategorier",
+  "only-expense-categories": "Kun udgiftskategorier",
+  "transfer-in": "Overfør til",
+  "transfer-out": "Overførsel fra"
 }

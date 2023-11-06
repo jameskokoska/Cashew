@@ -6,6 +6,7 @@ import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
+import 'package:budget/struct/initializeNotifications.dart';
 import 'package:budget/struct/notificationsGlobal.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/animatedExpanded.dart';
@@ -66,10 +67,11 @@ class _DailyNotificationsSettingsState
         SettingsContainerSwitch(
           title: "notifications-reminder".tr(),
           onSwitched: (value) async {
-            updateSettings("notifications", value, updateGlobalState: false);
+            await updateSettings("notifications", value,
+                updateGlobalState: false);
             if (value == true) {
               await initializeNotificationsPlatform();
-              await scheduleDailyNotification(context, timeOfDay);
+              await setDailyNotifications(context);
             } else {
               await cancelDailyNotification();
             }
@@ -138,23 +140,23 @@ class _DailyNotificationsSettingsState
                       TimeOfDay? newTime =
                           await showCustomTimePicker(context, timeOfDay);
                       if (newTime != null) {
-                        await initializeNotificationsPlatform();
-                        await scheduleDailyNotification(context, newTime);
                         setState(() {
                           timeOfDay = newTime;
                         });
-                        updateSettings(
+                        await updateSettings(
                           "notificationHour",
                           timeOfDay.hour,
                           pagesNeedingRefresh: [],
                           updateGlobalState: false,
                         );
-                        updateSettings(
+                        await updateSettings(
                           "notificationMinute",
                           timeOfDay.minute,
                           pagesNeedingRefresh: [],
                           updateGlobalState: false,
                         );
+                        await initializeNotificationsPlatform();
+                        await setDailyNotifications(context);
                       }
                     },
                     afterWidget: TimeDigits(timeOfDay: timeOfDay),
@@ -309,7 +311,8 @@ List<String> _reminderStrings = [
   for (int i = 1; i <= 26; i++) "notification-reminder-" + i.toString()
 ];
 
-Future<bool> scheduleDailyNotification(context, TimeOfDay timeOfDay,
+Future<bool> scheduleDailyNotification(
+    BuildContext context, TimeOfDay timeOfDay,
     {bool scheduleNowDebug = false}) async {
   // If the app was opened on the day the notification was scheduled it will be
   // cancelled and set to the next day because of _nextInstanceOfSetTime
@@ -356,6 +359,10 @@ Future<bool> scheduleDailyNotification(context, TimeOfDay timeOfDay,
       uiLocalNotificationDateInterpretation:
           UILocalNotificationDateInterpretation.absoluteTime,
       matchDateTimeComponents: DateTimeComponents.dateAndTime,
+
+      // If exact time was used, need USE_EXACT_ALARM and SCHEDULE_EXACT_ALARM permissions
+      // which are only meant for calendar/reminder based applications
+      androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
     );
     print("Notification " +
         chosenMessage +
@@ -441,6 +448,10 @@ Future<bool> scheduleUpcomingTransactionsNotification(context) async {
         payload: 'upcomingTransaction',
         uiLocalNotificationDateInterpretation:
             UILocalNotificationDateInterpretation.absoluteTime,
+
+        // If exact time was used, need USE_EXACT_ALARM and SCHEDULE_EXACT_ALARM permissions
+        // which are only meant for calendar/reminder based applications
+        androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
       );
     } else {
       print("Cannot set up notification before current time!");

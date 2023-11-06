@@ -820,5 +820,12 @@
   "of-subcategory": "ఉపవర్గం",
   "account-label": "ఖాతా లేబుల్",
   "account-label-description": "అన్ని లావాదేవీల కోసం ఖాతా లేబుల్‌ను జోడించండి",
-  "transaction-details": "లావాదేవీ వివరాలు"
+  "transaction-details": "లావాదేవీ వివరాలు",
+  "reorder-categories": "వర్గాలను క్రమాన్ని మార్చండి",
+  "drag-and-drop-categories-to-rearrange": "వర్గాలను లాగండి మరియు వదలండి",
+  "show-all-categories": "అన్ని వర్గాలను చూపించు",
+  "only-income-categories": "ఆదాయ వర్గాలు మాత్రమే",
+  "only-expense-categories": "వ్యయ వర్గాలు మాత్రమే",
+  "transfer-in": "లోకి బదిలీ చేయండి",
+  "transfer-out": "నుండి బదిలీ"
 }

@@ -176,7 +176,7 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
         isRatingPopupShown = openRatingPopupCheck(context);
       }
 
-      await setDailyNotificationOnLaunch(context);
+      await setDailyNotifications(context);
       await initializeDefaultDatabase();
       runNotificationPayLoads(context);
       runQuickActionsPayLoads(context);

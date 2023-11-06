@@ -820,5 +820,12 @@
   "of-subcategory": "de subcategoria",
   "account-label": "Rótulo da conta",
   "account-label-description": "Adicionar rótulo de conta para todas as transações",
-  "transaction-details": "Detalhes da transação"
+  "transaction-details": "Detalhes da transação",
+  "reorder-categories": "Reordenar categorias",
+  "drag-and-drop-categories-to-rearrange": "Arraste e solte categorias para reorganizar",
+  "show-all-categories": "Mostre todas as categorias",
+  "only-income-categories": "Apenas categorias de renda",
+  "only-expense-categories": "Apenas categorias de despesas",
+  "transfer-in": "Transferência para",
+  "transfer-out": "Transferir de"
 }

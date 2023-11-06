@@ -820,5 +820,12 @@
   "of-subcategory": "van subcategorie",
   "account-label": "Accountlabel",
   "account-label-description": "Accountlabel toevoegen voor alle transacties",
-  "transaction-details": "transactie details"
+  "transaction-details": "transactie details",
+  "reorder-categories": "Categorieën opnieuw bestellen",
+  "drag-and-drop-categories-to-rearrange": "Categorieën slepen en neerzetten om te herschikken",
+  "show-all-categories": "Toon alle categorieën",
+  "only-income-categories": "Alleen inkomenscategorieën",
+  "only-expense-categories": "Alleen kostencategorieën",
+  "transfer-in": "Overbrengen in",
+  "transfer-out": "Overbrengen van"
 }

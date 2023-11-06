@@ -98,10 +98,10 @@
   "auto-email-transactions": "Transazioni e-mail automatiche",
   "pay-subscriptions": "Abbonamenti a pagamento",
   "pay-subscriptions-description": "Segna automaticamente un abbonamento come pagato dopo la data di scadenza",
-  "pay-repetitive": "Pagare ripetitivo",
+  "pay-repetitive": "Paga ripetitivi",
   "pay-repetitive-description": "Segna automaticamente una transazione ripetitiva come pagato dopo la data di scadenza",
   "pay-upcoming": "Paga imminente",
-  "pay-upcoming-description": "Segna automaticamente una transazione imminente come pagato dopo la data di scadenza",
+  "pay-upcoming-description": "Segna automaticamente una transazione imminente pagata dopo la data di scadenza",
   "import-csv": "Importa file CSV",
   "import-csv-description": "Importa i dati da un file CSV esterno",
   "rate-app": "Vota {app}",
@@ -820,5 +820,12 @@
   "of-subcategory": "di sottocategoria",
   "account-label": "Etichetta dell'account",
   "account-label-description": "Aggiungi l'etichetta dell'account per tutte le transazioni",
-  "transaction-details": "Dettagli di Transazione"
+  "transaction-details": "Dettagli di Transazione",
+  "reorder-categories": "Categorie di riordino",
+  "drag-and-drop-categories-to-rearrange": "Trascina le categorie per riorganizzare",
+  "show-all-categories": "Mostra tutte le categorie",
+  "only-income-categories": "Solo categorie di reddito",
+  "only-expense-categories": "Solo categorie di spese",
+  "transfer-in": "Trasferire in",
+  "transfer-out": "Trasferito da"
 }

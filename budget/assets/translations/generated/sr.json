@@ -820,5 +820,12 @@
   "of-subcategory": "подкатегорије",
   "account-label": "Ознака рачуна",
   "account-label-description": "Додајте налепницу налога за све трансакције",
-  "transaction-details": "Детаљи трансакције"
+  "transaction-details": "Детаљи трансакције",
+  "reorder-categories": "Резервишите категорије",
+  "drag-and-drop-categories-to-rearrange": "Превуците и испустите категорије за преуређивање",
+  "show-all-categories": "Прикажи све категорије",
+  "only-income-categories": "Само категорије прихода",
+  "only-expense-categories": "Само категорије трошкова",
+  "transfer-in": "Пренос у",
+  "transfer-out": "Пренос из"
 }

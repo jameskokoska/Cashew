@@ -82,29 +82,34 @@ void runNotificationPayLoads(context) {
   notificationPayload = "";
 }
 
-Future<void> setDailyNotificationOnLaunch(context) async {
+Future<void> setDailyNotifications(context) async {
   if (kIsWeb) return;
-  bool notificationsEnabled = appStateSettings["notifications"];
-  TimeOfDay timeOfDay = TimeOfDay(
-      hour: appStateSettings["notificationHour"],
-      minute: appStateSettings["notificationMinute"]);
-  if (ReminderNotificationType
-          .values[appStateSettings["notificationsReminderType"]] ==
-      ReminderNotificationType.DayFromOpen) {
-    timeOfDay = TimeOfDay(
-        hour: appStateSettings["appOpenedHour"],
-        minute: appStateSettings["appOpenedMinute"]);
-  }
+  bool notificationsEnabled = appStateSettings["notifications"] == true;
 
   if (notificationsEnabled) {
-    await scheduleDailyNotification(context, timeOfDay);
+    try {
+      TimeOfDay timeOfDay = TimeOfDay(
+          hour: appStateSettings["notificationHour"],
+          minute: appStateSettings["notificationMinute"]);
+      if (ReminderNotificationType
+              .values[appStateSettings["notificationsReminderType"]] ==
+          ReminderNotificationType.DayFromOpen) {
+        timeOfDay = TimeOfDay(
+            hour: appStateSettings["appOpenedHour"],
+            minute: appStateSettings["appOpenedMinute"]);
+      }
+      await scheduleDailyNotification(context, timeOfDay);
+    } catch (e) {
+      print(e.toString() +
+          " Error setting up notifications for upcoming transactions");
+    }
   }
 }
 
 Future<void> setUpcomingNotifications(context) async {
   if (kIsWeb) return;
   bool upcomingTransactionsNotificationsEnabled =
-      appStateSettings["notificationsUpcomingTransactions"];
+      appStateSettings["notificationsUpcomingTransactions"] == true;
   if (upcomingTransactionsNotificationsEnabled) {
     try {
       await scheduleUpcomingTransactionsNotification(context);

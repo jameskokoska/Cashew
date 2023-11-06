@@ -820,5 +820,12 @@
   "of-subcategory": "alkategória",
   "account-label": "Számlacímke",
   "account-label-description": "Adja hozzá az összes tranzakció fiókcímkét",
-  "transaction-details": "tranzakció részletek"
+  "transaction-details": "tranzakció részletek",
+  "reorder-categories": "A kategóriák átrendezése",
+  "drag-and-drop-categories-to-rearrange": "Húzza és dobja el a kategóriákat az átrendezéshez",
+  "show-all-categories": "Mutasd meg az összes kategóriát",
+  "only-income-categories": "Csak a jövedelemkategóriák",
+  "only-expense-categories": "Csak költségkategóriák",
+  "transfer-in": "Áthelyez",
+  "transfer-out": "Átad"
 }
