@@ -263,11 +263,12 @@ class _SelectCategoryState extends State<SelectCategory> {
                                 onTap: () {},
                                 padding: EdgeInsets.symmetric(horizontal: 7),
                                 openPage: AddCategoryPage(
-                                  routesToPopAfterDelete:
-                                      RoutesToPopAfterDelete.None,
-                                  mainCategoryPkWhenSubCategory:
-                                      widget.mainCategoryPks?[0],
-                                ),
+                                    routesToPopAfterDelete:
+                                        RoutesToPopAfterDelete.None,
+                                    mainCategoryPkWhenSubCategory:
+                                        widget.mainCategoryPks?[0],
+                                    initiallyIsExpense:
+                                        widget.selectedIncome != true),
                                 width: 70,
                               ),
                             ),
@@ -404,6 +405,8 @@ class _SelectCategoryState extends State<SelectCategory> {
                                           RoutesToPopAfterDelete.None,
                                       mainCategoryPkWhenSubCategory:
                                           widget.mainCategoryPks?[0],
+                                      initiallyIsExpense:
+                                          widget.selectedIncome != true,
                                     ),
                                   );
                                 },

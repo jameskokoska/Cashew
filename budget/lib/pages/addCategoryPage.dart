@@ -40,6 +40,7 @@ class AddCategoryPage extends StatefulWidget {
     this.category,
     required this.routesToPopAfterDelete,
     this.mainCategoryPkWhenSubCategory,
+    this.initiallyIsExpense = true,
   }) : super(key: key);
 
   //When a category is passed in, we are editing that category
@@ -47,7 +48,7 @@ class AddCategoryPage extends StatefulWidget {
   final RoutesToPopAfterDelete routesToPopAfterDelete;
   final String?
       mainCategoryPkWhenSubCategory; //When this is null, it is a main category not a sub category
-
+  final bool initiallyIsExpense;
   @override
   _AddCategoryPageState createState() => _AddCategoryPageState();
 }
@@ -60,7 +61,7 @@ class _AddCategoryPageState extends State<AddCategoryPage>
   late String? selectedImage = widget.category == null ? "image.png" : null;
   String? selectedEmoji;
   Color? selectedColor;
-  bool selectedIncome = false;
+  late bool selectedIncome = widget.initiallyIsExpense == false;
   bool? canAddCategory;
   TransactionCategory? widgetCategory;
   List<String>? selectedMembers;
@@ -240,11 +241,6 @@ class _AddCategoryPageState extends State<AddCategoryPage>
         selectedIncome = widget.category!.income;
         userAttemptedToChangeTitle = true;
       });
-      if (selectedIncome == true) {
-        _incomeTabController.animateTo(1);
-      } else {
-        _incomeTabController.animateTo(0);
-      }
       Future.delayed(Duration.zero, () async {
         _titleController.text = selectedTitle ?? "";
         _titleController.selection = TextSelection.fromPosition(
@@ -253,6 +249,12 @@ class _AddCategoryPageState extends State<AddCategoryPage>
             mainCategoryPkIfSubCategoryOrderFixing:
                 widget.category!.categoryPk);
       });
+    }
+
+    if (selectedIncome == true) {
+      _incomeTabController.animateTo(1);
+    } else {
+      _incomeTabController.animateTo(0);
     }
 
     //Set to false because we can't save until we made some changes

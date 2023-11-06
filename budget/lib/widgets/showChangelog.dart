@@ -36,6 +36,7 @@ String getChangelogString() {
     Can duplicate up to 10 selected transactions
     Clear applied filters button beside applied filters chips in search page
     Added miscellaneous, increase and decrease icons
+    If adding a category and income is selected, income will be selected by default
     < 4.8.4
     Upcoming transactions on homepage respect sliding income/expense selector
     Search page shows one month of transactions in the future by default
