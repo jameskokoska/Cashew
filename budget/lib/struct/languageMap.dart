@@ -41,6 +41,7 @@ Set<String> supportedLanguagesSet = {
   "ur",
   "sr",
   "sw",
+  "bg",
 };
 
 // Language names can be found in 

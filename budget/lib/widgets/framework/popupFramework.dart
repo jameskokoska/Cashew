@@ -77,13 +77,16 @@ class PopupFramework extends StatelessWidget {
                                       textAlign: TextAlign.center,
                                     ),
                               ),
-                            Container(
-                              height: 1.5,
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .secondaryContainer,
-                              margin: EdgeInsets.only(top: 10, bottom: 5),
-                            )
+                            if (title != null || subtitle != null)
+                              Container(
+                                height: 1.5,
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .secondaryContainer,
+                                margin: EdgeInsets.only(top: 10, bottom: 5),
+                              )
+                            else
+                              SizedBox(height: 5),
                           ],
                         ),
                         Padding(

@@ -1,8 +1,11 @@
 import 'package:budget/struct/settings.dart';
+import 'package:budget/widgets/framework/popupFramework.dart';
+import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openContainerNavigation.dart';
 import 'package:budget/widgets/tappable.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 class FAB extends StatelessWidget {
@@ -13,7 +16,7 @@ class FAB extends StatelessWidget {
     this.tooltip = "",
     this.color,
     this.colorPlus,
-    this.onLongPress,
+    this.onLongPressAddAllPopup = true,
   }) : super(key: key);
 
   final Widget openPage;
@@ -21,7 +24,7 @@ class FAB extends StatelessWidget {
   final Function()? onTap;
   final Color? color;
   final Color? colorPlus;
-  final Function()? onLongPress;
+  final bool? onLongPressAddAllPopup;
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +46,17 @@ class FAB extends StatelessWidget {
               else
                 openContainer();
             },
-            onLongPress: onLongPress,
+            onLongPress: onLongPressAddAllPopup == false
+                ? null
+                : () {
+                    openBottomSheet(
+                      context,
+                      PopupFramework(
+                        title: "add".tr(),
+                        child: AddMoreThingsPopup(),
+                      ),
+                    );
+                  },
             child: SizedBox(
               height: fabSize,
               width: fabSize,

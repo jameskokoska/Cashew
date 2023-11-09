@@ -827,5 +827,10 @@
   "only-income-categories": "소득 범주 만",
   "only-expense-categories": "비용 범주 만",
   "transfer-in": "전송",
-  "transfer-out": "전송"
+  "transfer-out": "전송",
+  "cannot-create-transaction": "트랜잭션을 생성 할 수 없습니다",
+  "category-no-longer-exists": "카테고리는 더 이상 존재하지 않습니다",
+  "default-category-income": "소득",
+  "select-shortcut": "바로 가기를 선택하십시오",
+  "all-spending-settings": "모든 지출 설정"
 }

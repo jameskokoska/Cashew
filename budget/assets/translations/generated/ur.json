@@ -101,7 +101,7 @@
   "pay-repetitive": "بار بار ادا کریں",
   "pay-repetitive-description": "مقررہ تاریخ کے بعد ادائیگی کے مطابق بار بار ٹرانزیکشن کو خود بخود نشان زد کریں",
   "pay-upcoming": "آئندہ ادائیگی کریں",
-  "pay-upcoming-description": "مقررہ تاریخ کے بعد ادائیگی کے مطابق آئندہ لین دین کو خود بخود نشان زد کریں",
+  "pay-upcoming-description": "مقررہ تاریخ کے بعد ادائیگی کے مطابق آئندہ ٹرانزیکشن کو خود بخود نشان زد کریں",
   "import-csv": "CSV فائل درآمد کریں",
   "import-csv-description": "بیرونی CSV ڈیٹا ماخذ درآمد کریں",
   "rate-app": "شرح {ایپ}",
@@ -827,5 +827,10 @@
   "only-income-categories": "صرف آمدنی کے زمرے",
   "only-expense-categories": "صرف اخراجات کے زمرے",
   "transfer-in": "میں منتقلی",
-  "transfer-out": "سے منتقلی"
+  "transfer-out": "سے منتقلی",
+  "cannot-create-transaction": "لین دین پیدا نہیں کرسکتا",
+  "category-no-longer-exists": "زمرہ اب موجود نہیں ہے",
+  "default-category-income": "آمدنی",
+  "select-shortcut": "شارٹ کٹ منتخب کریں",
+  "all-spending-settings": "تمام اخراجات کی ترتیبات"
 }

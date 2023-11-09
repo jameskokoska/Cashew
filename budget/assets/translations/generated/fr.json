@@ -827,5 +827,10 @@
   "only-income-categories": "Seules les catégories de revenus",
   "only-expense-categories": "Seules les catégories de dépenses",
   "transfer-in": "Transférer dans",
-  "transfer-out": "Transfert à partir de"
+  "transfer-out": "Transfert à partir de",
+  "cannot-create-transaction": "Impossible de créer une transaction",
+  "category-no-longer-exists": "La catégorie n'existe plus",
+  "default-category-income": "Revenu",
+  "select-shortcut": "Sélectionner le raccourci",
+  "all-spending-settings": "Tous les paramètres de dépenses"
 }

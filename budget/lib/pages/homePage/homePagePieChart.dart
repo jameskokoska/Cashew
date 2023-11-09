@@ -54,7 +54,7 @@ class HomePagePieChart extends StatelessWidget {
                   budgetTransactionFilters: null,
                   memberTransactionFilters: null,
                   allTime: true,
-                  walletPk: null,
+                  walletPks: null,
                   isIncome: isIncome,
                   followCustomPeriodCycle: true,
                   cycleSettingsExtension: "PieChart",

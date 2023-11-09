@@ -184,7 +184,7 @@ Future generatePreviewData() async {
       name: "Vacation savings",
       amount: 520.0,
       note: "Some extra money to put towards a trip!",
-      categoryFk: "6",
+      categoryFk: "12",
       walletFk: "0",
       dateCreated: DateTime.now().subtract(Duration(days: 4)),
       dateTimeModified: null,
@@ -459,7 +459,7 @@ Future generatePreviewData() async {
       name: "Payroll",
       amount: 580.89,
       note: "",
-      categoryFk: "6",
+      categoryFk: "12",
       walletFk: "0",
       dateCreated: DateTime(DateTime.now().year, DateTime.now().month - 2, 1)
           .subtract(Duration(minutes: 17)),
@@ -483,7 +483,7 @@ Future generatePreviewData() async {
       name: "Payroll",
       amount: 780.55,
       note: "",
-      categoryFk: "6",
+      categoryFk: "12",
       walletFk: "0",
       dateCreated: DateTime(DateTime.now().year, DateTime.now().month - 1, 1)
           .subtract(Duration(minutes: 13)),
@@ -507,7 +507,7 @@ Future generatePreviewData() async {
       name: "Payroll",
       amount: 650.45,
       note: "",
-      categoryFk: "6",
+      categoryFk: "12",
       walletFk: "0",
       dateCreated: DateTime(DateTime.now().year, DateTime.now().month, 1)
           .subtract(Duration(minutes: 35)),
@@ -531,7 +531,7 @@ Future generatePreviewData() async {
       name: "Extra income",
       amount: 0.005,
       note: "",
-      categoryFk: "6",
+      categoryFk: "12",
       walletFk: "11",
       dateCreated: DateTime(DateTime.now().year, DateTime.now().month,
               DateTime.now().day - 20)

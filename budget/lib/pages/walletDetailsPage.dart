@@ -5,6 +5,8 @@ import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/addWalletPage.dart';
 import 'package:budget/pages/editHomePage.dart';
 import 'package:budget/pages/homePage/homePageLineGraph.dart';
+import 'package:budget/pages/homePage/homePageNetWorth.dart';
+import 'package:budget/pages/homePage/homePageWalletSwitcher.dart';
 import 'package:budget/pages/transactionsSearchPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
@@ -73,6 +75,24 @@ class _WalletDetailsPageState extends State<WalletDetailsPage> {
       : widget.wallet!.walletPk.toString() + " Wallet Summary";
   GlobalKey<PageFrameworkState> pageState = GlobalKey();
 
+  void selectAllSpendingPeriod() async {
+    if (widget.wallet == null) {
+      await openBottomSheet(
+        context,
+        PopupFramework(
+          title: "all-spending-settings".tr(),
+          child: WalletPickerPeriodCycle(
+            allWalletsSettingKey: "allSpendingAllWallets",
+            cycleSettingsExtension: "",
+            homePageWidgetDisplay: HomePageWidgetDisplay.AllSpending,
+          ),
+        ),
+      );
+      setState(() {});
+      homePageStateKey.currentState?.refreshState();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     ColorScheme walletColorScheme = widget.wallet == null
@@ -82,7 +102,21 @@ class _WalletDetailsPageState extends State<WalletDetailsPage> {
                 defaultColor: Theme.of(context).colorScheme.primary),
             brightness: determineBrightnessTheme(context),
           );
-    String? walletPk = widget.wallet == null ? null : widget.wallet!.walletPk;
+
+    List<String>? walletPks =
+        widget.wallet == null ? null : [widget.wallet!.walletPk];
+
+    if (widget.wallet == null &&
+        appStateSettings["allSpendingAllWallets"] == false) {
+      walletPks = [];
+      for (TransactionWallet wallet in Provider.of<AllWallets>(context).list) {
+        if ((wallet.homePageWidgetDisplay ?? [])
+            .contains(HomePageWidgetDisplay.AllSpending)) {
+          walletPks.add(wallet.walletPk);
+        }
+      }
+    }
+
     return WillPopScope(
       onWillPop: () async {
         if ((globalSelectedID.value[listID] ?? []).length > 0) {
@@ -208,16 +242,7 @@ class _WalletDetailsPageState extends State<WalletDetailsPage> {
                           ? Icons.timelapse_outlined
                           : Icons.timelapse_rounded,
                       action: () async {
-                        await openBottomSheet(
-                          context,
-                          PopupFramework(
-                            title: "select-period".tr(),
-                            child:
-                                PeriodCyclePicker(cycleSettingsExtension: ""),
-                          ),
-                        );
-                        setState(() {});
-                        homePageStateKey.currentState?.refreshState();
+                        selectAllSpendingPeriod();
                       },
                     ),
                   ],
@@ -245,6 +270,9 @@ class _WalletDetailsPageState extends State<WalletDetailsPage> {
                           children: [
                             Expanded(
                               child: TransactionsAmountBox(
+                                onLongPress: () {
+                                  selectAllSpendingPeriod();
+                                },
                                 label: "net-total".tr(),
                                 absolute: false,
                                 currencyKey: Provider.of<AllWallets>(context)
@@ -252,7 +280,7 @@ class _WalletDetailsPageState extends State<WalletDetailsPage> {
                                         appStateSettings["selectedWalletPk"]]
                                     ?.currency,
                                 amountStream: database.watchTotalOfWallet(
-                                  walletPk != null ? [walletPk] : null,
+                                  walletPks,
                                   isIncome: null,
                                   allWallets: Provider.of<AllWallets>(context),
                                   followCustomPeriodCycle:
@@ -262,7 +290,7 @@ class _WalletDetailsPageState extends State<WalletDetailsPage> {
                                 textColor: getColor(context, "black"),
                                 transactionsAmountStream: database
                                     .watchTotalCountOfTransactionsInWallet(
-                                  walletPk != null ? [walletPk] : null,
+                                  walletPks,
                                   isIncome: null,
                                   followCustomPeriodCycle:
                                       widget.wallet == null,
@@ -294,9 +322,12 @@ class _WalletDetailsPageState extends State<WalletDetailsPage> {
                           children: [
                             Expanded(
                               child: TransactionsAmountBox(
+                                onLongPress: () {
+                                  selectAllSpendingPeriod();
+                                },
                                 label: "expense".tr(),
                                 amountStream: database.watchTotalOfWallet(
-                                  walletPk != null ? [walletPk] : null,
+                                  walletPks,
                                   isIncome: false,
                                   allWallets: Provider.of<AllWallets>(context),
                                   followCustomPeriodCycle:
@@ -306,7 +337,7 @@ class _WalletDetailsPageState extends State<WalletDetailsPage> {
                                 textColor: getColor(context, "expenseAmount"),
                                 transactionsAmountStream: database
                                     .watchTotalCountOfTransactionsInWallet(
-                                  walletPk != null ? [walletPk] : null,
+                                  walletPks,
                                   isIncome: false,
                                   followCustomPeriodCycle:
                                       widget.wallet == null,
@@ -315,9 +346,7 @@ class _WalletDetailsPageState extends State<WalletDetailsPage> {
                                 openPage: TransactionsSearchPage(
                                   initialFilters: SearchFilters(
                                     expenseIncome: [ExpenseIncome.expense],
-                                    walletPks: widget.wallet == null
-                                        ? []
-                                        : [widget.wallet?.walletPk ?? ""],
+                                    walletPks: walletPks ?? [],
                                   ),
                                 ),
                               ),
@@ -325,9 +354,12 @@ class _WalletDetailsPageState extends State<WalletDetailsPage> {
                             SizedBox(width: 13),
                             Expanded(
                               child: TransactionsAmountBox(
+                                onLongPress: () {
+                                  selectAllSpendingPeriod();
+                                },
                                 label: "income".tr(),
                                 amountStream: database.watchTotalOfWallet(
-                                  walletPk == null ? null : [walletPk],
+                                  walletPks,
                                   isIncome: true,
                                   allWallets: Provider.of<AllWallets>(context),
                                   followCustomPeriodCycle:
@@ -337,7 +369,7 @@ class _WalletDetailsPageState extends State<WalletDetailsPage> {
                                 textColor: getColor(context, "incomeAmount"),
                                 transactionsAmountStream: database
                                     .watchTotalCountOfTransactionsInWallet(
-                                  walletPk == null ? null : [walletPk],
+                                  walletPks,
                                   isIncome: true,
                                   followCustomPeriodCycle:
                                       widget.wallet == null,
@@ -346,9 +378,7 @@ class _WalletDetailsPageState extends State<WalletDetailsPage> {
                                 openPage: TransactionsSearchPage(
                                   initialFilters: SearchFilters(
                                     expenseIncome: [ExpenseIncome.income],
-                                    walletPks: widget.wallet == null
-                                        ? []
-                                        : [widget.wallet?.walletPk ?? ""],
+                                    walletPks: walletPks ?? [],
                                   ),
                                 ),
                               ),
@@ -358,15 +388,13 @@ class _WalletDetailsPageState extends State<WalletDetailsPage> {
                       ),
                     ),
                     WalletDetailsLineGraph(
-                      walletPks: widget.wallet == null
-                          ? []
-                          : [widget.wallet!.walletPk],
+                      walletPks: walletPks,
                       followCustomPeriodCycle: widget.wallet == null,
                       cycleSettingsExtension: "",
                     ),
                     WalletCategoryPieChart(
                       cycleSettingsExtension: "",
-                      wallet: widget.wallet,
+                      walletPks: walletPks,
                       walletColorScheme: walletColorScheme,
                       onSelectedCategory: (TransactionCategory? category) {
                         // pageState.currentState?.scrollTo(500);
@@ -390,7 +418,7 @@ class _WalletDetailsPageState extends State<WalletDetailsPage> {
                   categoryFks: selectedCategory != null
                       ? [selectedCategory!.categoryPk]
                       : [],
-                  walletFks: walletPk == null ? [] : [walletPk],
+                  walletFks: walletPks ?? [],
                   limit: selectedCategory == null ? 0 : 10,
                   listID: listID,
                   showNoResults: false,
@@ -411,7 +439,7 @@ class _WalletDetailsPageState extends State<WalletDetailsPage> {
                         ),
                       )),
                     ),
-              SliverToBoxAdapter(child: SizedBox(height: 75)),
+              SliverToBoxAdapter(child: SizedBox(height: 65)),
             ],
           ),
           SelectedTransactionsAppBar(
@@ -425,7 +453,7 @@ class _WalletDetailsPageState extends State<WalletDetailsPage> {
 
 class WalletCategoryPieChart extends StatefulWidget {
   const WalletCategoryPieChart({
-    required this.wallet,
+    required this.walletPks,
     required this.walletColorScheme,
     required this.onSelectedCategory,
     required this.onSelectedIncome,
@@ -433,7 +461,7 @@ class WalletCategoryPieChart extends StatefulWidget {
     super.key,
   });
 
-  final TransactionWallet? wallet;
+  final List<String>? walletPks;
   final ColorScheme walletColorScheme;
   final Function(TransactionCategory?) onSelectedCategory;
   final Function(bool) onSelectedIncome;
@@ -507,9 +535,9 @@ class _WalletCategoryPieChartState extends State<WalletCategoryPieChart> {
             budgetTransactionFilters: null,
             memberTransactionFilters: null,
             allTime: true,
-            walletPk: widget.wallet == null ? null : widget.wallet!.walletPk,
+            walletPks: widget.walletPks,
             isIncome: isIncome,
-            followCustomPeriodCycle: widget.wallet == null,
+            followCustomPeriodCycle: widget.walletPks == null,
             cycleSettingsExtension: widget.cycleSettingsExtension,
             countUnassignedTransactions: true,
             includeAllSubCategories: true,

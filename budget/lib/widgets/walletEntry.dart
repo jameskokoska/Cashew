@@ -163,6 +163,7 @@ class WalletEntryRow extends StatelessWidget {
       borderRadius: 0,
       openPage:
           WatchedWalletDetailsPage(walletPk: walletWithDetails.wallet.walletPk),
+      closedColor: getColor(context, "lightDarkAccentHeavyLight"),
       button: (openContainer) {
         return Tappable(
           color: getColor(context, "lightDarkAccentHeavyLight"),

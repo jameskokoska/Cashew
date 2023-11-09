@@ -827,5 +827,10 @@
   "only-income-categories": "ફક્ત આવક કેટેગરીઝ",
   "only-expense-categories": "ફક્ત ખર્ચ કેટેગરીઝ",
   "transfer-in": "પ્રવેશ",
-  "transfer-out": "માંથી બદલી"
+  "transfer-out": "માંથી બદલી",
+  "cannot-create-transaction": "વ્યવહાર બનાવી શકાતો નથી",
+  "category-no-longer-exists": "વર્ગ હવે અસ્તિત્વમાં નથી",
+  "default-category-income": "આવક",
+  "select-shortcut": "શોર્ટકટ પસંદ કરો",
+  "all-spending-settings": "બધી ખર્ચ સેટિંગ્સ"
 }

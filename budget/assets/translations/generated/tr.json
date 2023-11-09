@@ -827,5 +827,10 @@
   "only-income-categories": "Sadece gelir kategorileri",
   "only-expense-categories": "Yalnızca Gider Kategorileri",
   "transfer-in": "Aktarmak",
-  "transfer-out": "Aktarmak"
+  "transfer-out": "Aktarmak",
+  "cannot-create-transaction": "İşlem oluşturulamıyor",
+  "category-no-longer-exists": "Kategori artık mevcut değil",
+  "default-category-income": "Gelir",
+  "select-shortcut": "Kısayol'u seçin",
+  "all-spending-settings": "Tüm harcama ayarları"
 }

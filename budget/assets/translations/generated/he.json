@@ -827,5 +827,10 @@
   "only-income-categories": "רק קטגוריות הכנסה",
   "only-expense-categories": "רק קטגוריות הוצאות",
   "transfer-in": "להעביר ל",
-  "transfer-out": "להעביר מ"
+  "transfer-out": "להעביר מ",
+  "cannot-create-transaction": "לא יכול ליצור עסקה",
+  "category-no-longer-exists": "קטגוריה כבר לא קיימת",
+  "default-category-income": "הַכנָסָה",
+  "select-shortcut": "בחר קיצור דרך",
+  "all-spending-settings": "כל הגדרות ההוצאות"
 }

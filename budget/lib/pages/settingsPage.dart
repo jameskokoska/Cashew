@@ -12,7 +12,9 @@ import 'package:budget/pages/objectivesListPage.dart';
 import 'package:budget/pages/premiumPage.dart';
 import 'package:budget/pages/upcomingOverdueTransactionsPage.dart';
 import 'package:budget/struct/languageMap.dart';
+import 'package:budget/struct/navBarIconsData.dart';
 import 'package:budget/widgets/animatedExpanded.dart';
+import 'package:budget/widgets/bottomNavBar.dart';
 import 'package:budget/widgets/dropdownSelect.dart';
 import 'package:budget/widgets/exportDB.dart';
 import 'package:budget/widgets/importCSV.dart';
@@ -138,12 +140,10 @@ class MorePages extends StatelessWidget {
                         openPage: SettingsPageFramework(
                           key: settingsPageFrameworkStateKey,
                         ),
-                        title: "settings-and-customization".tr(),
+                        title: navBarIconsData["settings"]!.labelLong.tr(),
+                        icon: navBarIconsData["settings"]!.iconData,
                         description:
                             "settings-and-customization-description".tr(),
-                        icon: appStateSettings["outlinedIcons"]
-                            ? Icons.settings_outlined
-                            : Icons.settings_rounded,
                         isOutlined: true,
                         // description: "Theme, Language, CSV Import",
                         // isWideOutlined: true,
@@ -193,10 +193,9 @@ class MorePages extends StatelessWidget {
                         ? Expanded(
                             child: SettingsContainerOpenPage(
                               openPage: NotificationsPage(),
-                              title: "notifications".tr(),
-                              icon: appStateSettings["outlinedIcons"]
-                                  ? Icons.notifications_outlined
-                                  : Icons.notifications_rounded,
+                              title:
+                                  navBarIconsData["notifications"]!.label.tr(),
+                              icon: navBarIconsData["notifications"]!.iconData,
                               isOutlined: true,
                             ),
                           )
@@ -212,20 +211,16 @@ class MorePages extends StatelessWidget {
                     Expanded(
                       child: SettingsContainerOpenPage(
                         openPage: SubscriptionsPage(),
-                        title: "subscriptions".tr(),
-                        icon: appStateSettings["outlinedIcons"]
-                            ? Icons.event_repeat_outlined
-                            : Icons.event_repeat_rounded,
+                        title: navBarIconsData["subscriptions"]!.label.tr(),
+                        icon: navBarIconsData["subscriptions"]!.iconData,
                         isOutlined: true,
                       ),
                     ),
                     Expanded(
                       child: SettingsContainerOpenPage(
                         openPage: WalletDetailsPage(wallet: null),
-                        title: "all-spending".tr(),
-                        icon: appStateSettings["outlinedIcons"]
-                            ? Icons.receipt_long_outlined
-                            : Icons.receipt_long_rounded,
+                        title: navBarIconsData["allSpending"]!.label.tr(),
+                        icon: navBarIconsData["allSpending"]!.iconData,
                         isOutlined: true,
                       ),
                     ),
@@ -240,18 +235,16 @@ class MorePages extends StatelessWidget {
                       child: SettingsContainerOpenPage(
                         openPage: UpcomingOverdueTransactions(
                             overdueTransactions: null),
-                        title: "scheduled".tr(),
-                        icon: getTransactionTypeIcon(
-                            TransactionSpecialType.upcoming),
+                        title: navBarIconsData["scheduled"]!.label.tr(),
+                        icon: navBarIconsData["scheduled"]!.iconData,
                         isOutlined: true,
                       ),
                     ),
                     Expanded(
                       child: SettingsContainerOpenPage(
                         openPage: CreditDebtTransactions(isCredit: null),
-                        title: "loans".tr(),
-                        icon: getTransactionTypeIcon(
-                            TransactionSpecialType.credit),
+                        title: navBarIconsData["loans"]!.label.tr(),
+                        icon: navBarIconsData["loans"]!.iconData,
                         isOutlined: true,
                       ),
                     ),
@@ -263,10 +256,8 @@ class MorePages extends StatelessWidget {
                   openPage: ObjectivesListPage(
                     backButton: true,
                   ),
-                  title: "spending-and-savings-goals".tr(),
-                  icon: appStateSettings["outlinedIcons"]
-                      ? Icons.savings_outlined
-                      : Icons.savings_rounded,
+                  title: navBarIconsData["goals"]!.labelLong.tr(),
+                  icon: navBarIconsData["goals"]!.iconData,
                   isOutlined: true,
                 ),
           hasSideNavigation
@@ -279,10 +270,8 @@ class MorePages extends StatelessWidget {
                       child: SettingsContainerOpenPage(
                         isOutlinedColumn: true,
                         openPage: EditWalletsPage(),
-                        title: "accounts".tr(),
-                        icon: appStateSettings["outlinedIcons"]
-                            ? Icons.account_balance_wallet_outlined
-                            : Icons.account_balance_wallet_rounded,
+                        title: navBarIconsData["accountDetails"]!.label.tr(),
+                        icon: navBarIconsData["accountDetails"]!.iconData,
                         isOutlined: true,
                       ),
                     ),
@@ -291,9 +280,9 @@ class MorePages extends StatelessWidget {
                       child: SettingsContainerOpenPage(
                         isOutlinedColumn: true,
                         openPage: EditBudgetPage(),
-                        title: "budgets".tr(),
-                        icon: MoreIcons.chart_pie,
-                        iconScale: 0.83,
+                        title: navBarIconsData["budgetDetails"]!.label.tr(),
+                        icon: navBarIconsData["budgetDetails"]!.iconData,
+                        iconScale: navBarIconsData["budgetDetails"]!.iconScale,
                         isOutlined: true,
                       ),
                     ),
@@ -302,10 +291,8 @@ class MorePages extends StatelessWidget {
                       child: SettingsContainerOpenPage(
                         isOutlinedColumn: true,
                         openPage: EditCategoriesPage(),
-                        title: "categories".tr(),
-                        icon: appStateSettings["outlinedIcons"]
-                            ? Icons.category_outlined
-                            : Icons.category_rounded,
+                        title: navBarIconsData["categoriesDetails"]!.label.tr(),
+                        icon: navBarIconsData["categoriesDetails"]!.iconData,
                         isOutlined: true,
                       ),
                     ),
@@ -314,10 +301,8 @@ class MorePages extends StatelessWidget {
                       child: SettingsContainerOpenPage(
                         isOutlinedColumn: true,
                         openPage: EditAssociatedTitlesPage(),
-                        title: "titles".tr(),
-                        icon: appStateSettings["outlinedIcons"]
-                            ? Icons.text_fields_outlined
-                            : Icons.text_fields_rounded,
+                        title: navBarIconsData["titlesDetails"]!.label.tr(),
+                        icon: navBarIconsData["titlesDetails"]!.iconData,
                         isOutlined: true,
                       ),
                     )

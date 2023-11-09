@@ -117,6 +117,24 @@ class DebugPage extends StatelessWidget {
             icon: Icons.edit,
           ),
         ),
+        Opacity(
+          // Indicates if it is enabled by default per device height
+          opacity: MediaQuery.sizeOf(context).height <= MIN_HEIGHT_FOR_HEADER
+              ? 0.5
+              : 1,
+          child: SettingsContainerSwitch(
+            title: "Force smaller header",
+            description: "Remove the reachability of the header",
+            onSwitched: (value) {
+              updateSettings("forceSmallHeader", value,
+                  updateGlobalState: true, pagesNeedingRefresh: [0, 1, 2, 3]);
+            },
+            initialValue: appStateSettings["forceSmallHeader"],
+            icon: appStateSettings["outlinedIcons"]
+                ? Icons.subtitles_outlined
+                : Icons.subtitles_rounded,
+          ),
+        ),
         SettingsContainerDropdown(
           title: "Font",
           icon: appStateSettings["outlinedIcons"]

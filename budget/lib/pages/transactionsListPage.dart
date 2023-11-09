@@ -8,7 +8,6 @@ import 'package:budget/pages/transactionsSearchPage.dart';
 import 'package:budget/struct/shareBudget.dart';
 import 'package:budget/widgets/selectedTransactionsAppBar.dart';
 import 'package:budget/widgets/monthSelector.dart';
-import 'package:budget/widgets/cashFlow.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/widgets/transactionEntries.dart';
 import 'package:budget/widgets/transactionEntry/swipeToSelectTransactions.dart';
@@ -226,25 +225,13 @@ class TransactionsListPageState extends State<TransactionsListPage>
                                                 includeYear: startDate.year !=
                                                     DateTime.now().year) +
                                             ".",
-                                      ),
-                                      SliverToBoxAdapter(
-                                        child: CashFlow(
-                                          startDate,
-                                          new DateTime(
-                                            startDate.year,
-                                            startDate.month + 1,
-                                            startDate.day - 1,
-                                          ),
-                                        ),
+                                        showTotalCashFlow: true,
                                       ),
 
                                       // Wipe all remaining pixels off - sometimes graphics artifacts are left behind
                                       SliverToBoxAdapter(
                                         child: SizedBox(
-                                          height: 90 +
-                                              MediaQuery.paddingOf(context)
-                                                      .bottom /
-                                                  4,
+                                          height: 40,
                                         ),
                                       ),
                                     ],

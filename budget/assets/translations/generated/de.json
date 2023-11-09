@@ -827,5 +827,10 @@
   "only-income-categories": "Nur Einkommenskategorien",
   "only-expense-categories": "Nur Kostenkategorien",
   "transfer-in": "Übertragen in",
-  "transfer-out": "Übertragen von"
+  "transfer-out": "Übertragen von",
+  "cannot-create-transaction": "Transaktion kann nicht erstellen",
+  "category-no-longer-exists": "Kategorie existiert nicht mehr",
+  "default-category-income": "Einkommen",
+  "select-shortcut": "Wählen Sie Verknüpfung",
+  "all-spending-settings": "Alle Ausgabeneinstellungen"
 }

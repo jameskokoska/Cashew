@@ -101,7 +101,7 @@
   "pay-repetitive": "Πληρώνουν επαναλαμβανόμενα",
   "pay-repetitive-description": "Σημειώστε αυτόματα μια επαναλαμβανόμενη συναλλαγή όπως καταβάλλεται μετά την ημερομηνία λήξης",
   "pay-upcoming": "Επερχόμενος",
-  "pay-upcoming-description": "Σημειώστε αυτόματα μια επερχόμενη συναλλαγή όπως καταβάλλεται μετά την ημερομηνία λήξης",
+  "pay-upcoming-description": "Σημειώστε αυτόματα μια επερχόμενη συναλλαγή όπως καταβλήθηκε μετά την ημερομηνία λήξης",
   "import-csv": "Εισαγωγή αρχείου CSV",
   "import-csv-description": "Εισαγάγετε μια εξωτερική πηγή δεδομένων CSV",
   "rate-app": "Βαθμολόγησε την {app}",
@@ -827,5 +827,10 @@
   "only-income-categories": "Μόνο κατηγορίες εισοδήματος",
   "only-expense-categories": "Μόνο κατηγορίες εξόδων",
   "transfer-in": "Μεταφέρω σε",
-  "transfer-out": "Μεταφέρω από"
+  "transfer-out": "Μεταφέρω από",
+  "cannot-create-transaction": "Δεν είναι δυνατή η δημιουργία συναλλαγής",
+  "category-no-longer-exists": "Η κατηγορία δεν υπάρχει πλέον",
+  "default-category-income": "Εισόδημα",
+  "select-shortcut": "Επιλέξτε συντόμευση",
+  "all-spending-settings": "Όλες οι ρυθμίσεις δαπανών"
 }

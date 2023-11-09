@@ -827,5 +827,10 @@
   "only-income-categories": "فقط مقوله های درآمد",
   "only-expense-categories": "فقط مقوله های هزینه",
   "transfer-in": "انتقال به",
-  "transfer-out": "انتقال از"
+  "transfer-out": "انتقال از",
+  "cannot-create-transaction": "نمی تواند معامله ایجاد کند",
+  "category-no-longer-exists": "گروه دیگر وجود ندارد",
+  "default-category-income": "درآمد",
+  "select-shortcut": "میانبر را انتخاب کنید",
+  "all-spending-settings": "تمام تنظیمات هزینه"
 }

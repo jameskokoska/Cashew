@@ -827,5 +827,10 @@
   "only-income-categories": "Alleen inkomenscategorieën",
   "only-expense-categories": "Alleen kostencategorieën",
   "transfer-in": "Overbrengen in",
-  "transfer-out": "Overbrengen van"
+  "transfer-out": "Overbrengen van",
+  "cannot-create-transaction": "Kan geen transactie maken",
+  "category-no-longer-exists": "Categorie bestaat niet meer",
+  "default-category-income": "Inkomen",
+  "select-shortcut": "Selecteer snelkoppeling",
+  "all-spending-settings": "Alle uitgaveninstellingen"
 }

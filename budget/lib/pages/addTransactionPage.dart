@@ -18,6 +18,7 @@ import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/widgets/globalSnackBar.dart';
 import 'package:budget/widgets/incomeExpenseTabSelector.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
+import 'package:budget/widgets/pieChart.dart';
 import 'package:budget/widgets/selectedTransactionsAppBar.dart';
 import 'package:budget/widgets/sliverStickyLabelDivider.dart';
 import 'package:budget/widgets/timeDigits.dart';
@@ -145,6 +146,13 @@ class _AddTransactionPageState extends State<AddTransactionPage>
         selectedEndDate = date;
       });
     }
+  }
+
+  void clearSelectedCategory() {
+    setState(() {
+      selectedCategory = null;
+      selectedSubCategory = null;
+    });
   }
 
   void setSelectedCategory(TransactionCategory category,
@@ -475,10 +483,20 @@ class _AddTransactionPageState extends State<AddTransactionPage>
 
       return true;
     } catch (e) {
-      openSnackbar(SnackbarMessage(
-        title: "Please report this error to the developer",
-        description: e.toString(),
-      ));
+      if (e.toString() == "category-no-longer-exists") {
+        openSnackbar(SnackbarMessage(
+          title: "cannot-create-transaction".tr(),
+          description: "category-no-longer-exists".tr(),
+          icon: Icons.warning_amber_rounded,
+        ));
+        clearSelectedCategory();
+      } else {
+        openSnackbar(SnackbarMessage(
+          title: "cannot-create-transaction".tr(),
+          description: e.toString(),
+          icon: Icons.warning_amber_rounded,
+        ));
+      }
       return false;
     }
   }
@@ -845,8 +863,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                     context,
                     AddCategoryPage(
                       category: selectedCategory,
-                      routesToPopAfterDelete:
-                          RoutesToPopAfterDelete.PreventDelete,
+                      routesToPopAfterDelete: RoutesToPopAfterDelete.One,
                     ),
                   );
                   if (selectedCategory != null) {
@@ -1055,7 +1072,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                     AddCategoryPage(
                                       category: category,
                                       routesToPopAfterDelete:
-                                          RoutesToPopAfterDelete.PreventDelete,
+                                          RoutesToPopAfterDelete.One,
                                     ),
                                   );
                                 },
@@ -1094,7 +1111,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                       horizontal: 5, vertical: 1),
                                   openPage: AddCategoryPage(
                                     routesToPopAfterDelete:
-                                        RoutesToPopAfterDelete.None,
+                                        RoutesToPopAfterDelete.One,
                                     mainCategoryPkWhenSubCategory:
                                         selectedCategory?.categoryPk,
                                   ),

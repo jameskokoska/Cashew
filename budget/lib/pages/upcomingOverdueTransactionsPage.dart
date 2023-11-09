@@ -70,14 +70,16 @@ class _UpcomingOverdueTransactionsState
             resizeToAvoidBottomInset: true,
             floatingActionButton: AnimateFABDelayed(
               enabled: overdueTransactions == null,
-              fab: Padding(
-                padding: EdgeInsets.only(
-                    bottom: MediaQuery.viewPaddingOf(context).bottom),
-                child: FAB(
-                  tooltip: "add-upcoming".tr(),
-                  openPage: AddTransactionPage(
-                    selectedType: TransactionSpecialType.upcoming,
-                    routesToPopAfterDelete: RoutesToPopAfterDelete.None,
+              fab: AnimateFABDelayed(
+                fab: Padding(
+                  padding: EdgeInsets.only(
+                      bottom: MediaQuery.viewPaddingOf(context).bottom),
+                  child: FAB(
+                    tooltip: "add-upcoming".tr(),
+                    openPage: AddTransactionPage(
+                      selectedType: TransactionSpecialType.upcoming,
+                      routesToPopAfterDelete: RoutesToPopAfterDelete.None,
+                    ),
                   ),
                 ),
               ),

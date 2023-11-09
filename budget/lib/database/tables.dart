@@ -79,6 +79,7 @@ enum HomePageWidgetDisplay {
   WalletSwitcher,
   WalletList,
   NetWorth,
+  AllSpending,
 }
 
 List<HomePageWidgetDisplay> defaultWalletHomePageWidgetDisplay = [
@@ -2658,12 +2659,31 @@ class FinanceDatabase extends _$FinanceDatabase {
     }
 
     // we are saying we still need this category! - for syncing
-    TransactionCategory categoryInUse =
-        await getCategoryInstance(transaction.categoryFk);
-    await createOrUpdateCategory(
-      categoryInUse.copyWith(dateTimeModified: Value(DateTime.now())),
-      updateSharedEntry: false,
-    );
+    try {
+      TransactionCategory categoryInUse =
+          await getCategoryInstance(transaction.categoryFk);
+      await createOrUpdateCategory(
+        categoryInUse.copyWith(dateTimeModified: Value(DateTime.now())),
+        updateSharedEntry: false,
+      );
+    } catch (e) {
+      throw ("category-no-longer-exists");
+    }
+
+    // we are saying we still need this subcategory! - for syncing
+    if (transaction.subCategoryFk != null) {
+      try {
+        TransactionCategory subCategoryInUse =
+            await getCategoryInstance(transaction.subCategoryFk!);
+        await createOrUpdateCategory(
+          subCategoryInUse.copyWith(dateTimeModified: Value(DateTime.now())),
+          updateSharedEntry: false,
+        );
+      } catch (e) {
+        print("subcategory no longer exists");
+        transaction = transaction.copyWith(subCategoryFk: Value(null));
+      }
+    }
 
     // Update the servers entry of the transaction
     if (transaction.paid && updateSharedEntry == true) {
@@ -4973,7 +4993,7 @@ class FinanceDatabase extends _$FinanceDatabase {
     String? onlyShowTransactionsBelongingToBudgetPk,
     Budget? budget,
     bool allTime = false,
-    String? walletPk,
+    List<String>? walletPks,
     bool? isIncome = null,
     bool followCustomPeriodCycle = false,
     String? mainCategoryPkIfSubCategories,
@@ -4987,7 +5007,8 @@ class FinanceDatabase extends _$FinanceDatabase {
     List<Stream<List<CategoryWithTotal>>> mergedStreams = [];
 
     for (TransactionWallet wallet in allWallets.list) {
-      if (walletPk != null && wallet.walletPk != walletPk) continue;
+      if (walletPks != null && walletPks.contains(wallet.walletPk) == false)
+        continue;
       final totalAmt = transactions.amount.sum();
       final totalCount = transactions.transactionPk.count();
 

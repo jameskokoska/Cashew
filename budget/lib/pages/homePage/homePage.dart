@@ -275,7 +275,8 @@ class HomePageState extends State<HomePage>
                                               selectedSlidingSelector),
                                       SizedBox(height: 7),
                                       Center(
-                                          child: ViewAllTransactionsButton()),
+                                        child: ViewAllTransactionsButton(),
+                                      ),
                                     ],
                                   ),
                                 ),

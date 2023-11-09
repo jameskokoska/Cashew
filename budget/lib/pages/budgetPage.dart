@@ -725,64 +725,7 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                         ),
                       )
                     : SizedBox.shrink(),
-              ),
-              SliverToBoxAdapter(
-                child: StreamBuilder<List<CategoryWithTotal>>(
-                  stream: database
-                      .watchTotalSpentInEachCategoryInTimeRangeFromCategories(
-                    allWallets: Provider.of<AllWallets>(context),
-                    start: budgetRange.start,
-                    end: budgetRange.end,
-                    categoryFks: widget.budget.categoryFks,
-                    categoryFksExclude: widget.budget.categoryFksExclude,
-                    budgetTransactionFilters:
-                        widget.budget.budgetTransactionFilters,
-                    memberTransactionFilters:
-                        widget.budget.memberTransactionFilters,
-                    member: selectedMember,
-                    onlyShowTransactionsBelongingToBudgetPk:
-                        widget.budget.sharedKey != null ||
-                                widget.budget.addedTransactionsOnly == true
-                            ? widget.budget.budgetPk
-                            : null,
-                    budget: widget.budget,
-                  ),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      double totalSpent = 0;
-                      int totalTransactions = 0;
-                      snapshot.data!.forEach((category) {
-                        totalSpent = totalSpent + category.total;
-                        totalTransactions =
-                            totalTransactions + category.transactionCount;
-                      });
-                      totalSpent = totalSpent * -1;
-                      if (totalSpent == 0 && totalTransactions == 0)
-                        return SizedBox.shrink();
-                      return Padding(
-                        padding: const EdgeInsets.only(
-                          left: 10,
-                          right: 10,
-                          top: 10,
-                          bottom: 8,
-                        ),
-                        child: TextFont(
-                          text: "total-cash-flow".tr() +
-                              ": " +
-                              convertToMoney(Provider.of<AllWallets>(context),
-                                  totalSpent) +
-                              "\n" +
-                              totalTransactions.toString() +
-                              " transactions",
-                          fontSize: 13,
-                          textAlign: TextAlign.center,
-                          textColor: getColor(context, "textLight"),
-                        ),
-                      );
-                    }
-                    return SizedBox.shrink();
-                  },
-                ),
+                showTotalCashFlow: true,
               ),
               SliverToBoxAdapter(
                 child: widget.budget.sharedDateUpdated == null

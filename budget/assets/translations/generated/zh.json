@@ -827,5 +827,10 @@
   "only-income-categories": "唯一的收入类别",
   "only-expense-categories": "仅费用类别",
   "transfer-in": "转移到",
-  "transfer-out": "从转移"
+  "transfer-out": "从转移",
+  "cannot-create-transaction": "无法创建事务",
+  "category-no-longer-exists": "类别不再存在",
+  "default-category-income": "收入",
+  "select-shortcut": "选择快捷方式",
+  "all-spending-settings": "所有支出设置"
 }

@@ -827,5 +827,10 @@
   "only-income-categories": "ประเภทรายได้เท่านั้น",
   "only-expense-categories": "ประเภทค่าใช้จ่ายเท่านั้น",
   "transfer-in": "ถ่ายโอน",
-  "transfer-out": "ถ่ายโอนจาก"
+  "transfer-out": "ถ่ายโอนจาก",
+  "cannot-create-transaction": "ไม่สามารถสร้างธุรกรรมได้",
+  "category-no-longer-exists": "หมวดหมู่ไม่มีอยู่อีกต่อไป",
+  "default-category-income": "รายได้",
+  "select-shortcut": "เลือกทางลัด",
+  "all-spending-settings": "การตั้งค่าการใช้จ่ายทั้งหมด"
 }

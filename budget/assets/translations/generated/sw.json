@@ -827,5 +827,10 @@
   "only-income-categories": "Aina za mapato tu",
   "only-expense-categories": "Aina za gharama tu",
   "transfer-in": "Kuhamisha",
-  "transfer-out": "Uhamisho kutoka"
+  "transfer-out": "Uhamisho kutoka",
+  "cannot-create-transaction": "Haiwezi kuunda shughuli",
+  "category-no-longer-exists": "Jamii haipo tena",
+  "default-category-income": "Mapato",
+  "select-shortcut": "Chagua njia ya mkato",
+  "all-spending-settings": "Mipangilio yote ya matumizi"
 }

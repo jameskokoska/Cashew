@@ -294,7 +294,7 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
                     ? Duration.zero
                     : Duration(milliseconds: 300),
           ),
-          extendBody: true,
+          extendBody: false,
           bottomNavigationBar: BottomNavBar(
             key: navbarStateKey,
             onChanged: (index) {
@@ -403,15 +403,6 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
                     openPage: AddTransactionPage(
                       routesToPopAfterDelete: RoutesToPopAfterDelete.None,
                     ),
-                    onLongPress: () {
-                      openBottomSheet(
-                        context,
-                        PopupFramework(
-                          title: "add".tr(),
-                          child: AddMoreThingsPopup(),
-                        ),
-                      );
-                    },
                   ),
                   condition: [0, 1, 2, 14].contains(currentPage),
                 )
@@ -444,7 +435,7 @@ class AddMoreThingsPopup extends StatelessWidget {
           title: "budget".tr(),
           openPage: AddBudgetPage(
               routesToPopAfterDelete: RoutesToPopAfterDelete.None),
-          iconScale: 0.9,
+          iconScale: 0.87,
         ),
         AddThing(
           iconData: appStateSettings["outlinedIcons"]

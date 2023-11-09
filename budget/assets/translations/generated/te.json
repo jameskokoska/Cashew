@@ -827,5 +827,10 @@
   "only-income-categories": "ఆదాయ వర్గాలు మాత్రమే",
   "only-expense-categories": "వ్యయ వర్గాలు మాత్రమే",
   "transfer-in": "లోకి బదిలీ చేయండి",
-  "transfer-out": "నుండి బదిలీ"
+  "transfer-out": "నుండి బదిలీ",
+  "cannot-create-transaction": "లావాదేవీని సృష్టించలేరు",
+  "category-no-longer-exists": "వర్గం ఇక లేదు",
+  "default-category-income": "ఆదాయం",
+  "select-shortcut": "సత్వరమార్గం ఎంచుకోండి",
+  "all-spending-settings": "అన్ని ఖర్చు సెట్టింగులు"
 }

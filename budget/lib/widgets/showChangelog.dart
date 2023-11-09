@@ -22,6 +22,16 @@ import 'listItem.dart';
 
 String getChangelogString() {
   return """
+    < 4.8.6
+    Added account picker filters for all spending page
+    Customizable navigation bar shortcuts - customize by long pressing in navigation bar
+    Added default income category
+    Added cash flow to search transaction page
+    If a category no longer exists when adding transaction, the category is cleared
+    Removed header line for iOS when selecting initial category because title in popup is empty
+    Added force small subheader debug flag
+    Rearranged about page
+    Added Bulgarian language support
     < 4.8.5
     Long press category to edit when selecting
     Option to reorder categories in popup

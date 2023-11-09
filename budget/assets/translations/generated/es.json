@@ -827,5 +827,10 @@
   "only-income-categories": "Solo categorías de ingresos",
   "only-expense-categories": "Solo categorías de gastos",
   "transfer-in": "Transferirse a",
-  "transfer-out": "Transferido de"
+  "transfer-out": "Transferido de",
+  "cannot-create-transaction": "No se puede crear transacción",
+  "category-no-longer-exists": "La categoría ya no existe",
+  "default-category-income": "Ingreso",
+  "select-shortcut": "Seleccione el atajo",
+  "all-spending-settings": "Todas las configuraciones de gastos"
 }

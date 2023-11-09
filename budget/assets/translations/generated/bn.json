@@ -827,5 +827,10 @@
   "only-income-categories": "শুধুমাত্র আয়ের বিভাগ",
   "only-expense-categories": "শুধুমাত্র ব্যয় বিভাগ",
   "transfer-in": "স্থানান্তর",
-  "transfer-out": "থেকে স্থানান্তর"
+  "transfer-out": "থেকে স্থানান্তর",
+  "cannot-create-transaction": "লেনদেন তৈরি করতে পারে না",
+  "category-no-longer-exists": "বিভাগ আর বিদ্যমান নেই",
+  "default-category-income": "আয়",
+  "select-shortcut": "শর্টকাট নির্বাচন করুন",
+  "all-spending-settings": "সমস্ত ব্যয় সেটিংস"
 }

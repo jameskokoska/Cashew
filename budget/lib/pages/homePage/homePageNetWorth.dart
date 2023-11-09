@@ -49,7 +49,15 @@ class HomePageNetWorth extends StatelessWidget {
                         onLongPress: () async {
                           await openBottomSheet(
                             context,
-                            NetWorthSettings(),
+                            PopupFramework(
+                              title: "net-worth-settings".tr(),
+                              child: WalletPickerPeriodCycle(
+                                allWalletsSettingKey: "netWorthAllWallets",
+                                cycleSettingsExtension: "NetWorth",
+                                homePageWidgetDisplay:
+                                    HomePageWidgetDisplay.NetWorth,
+                              ),
+                            ),
                           );
                           homePageStateKey.currentState?.refreshState();
                         },
@@ -91,115 +99,122 @@ class HomePageNetWorth extends StatelessWidget {
   }
 }
 
-class NetWorthSettings extends StatefulWidget {
-  const NetWorthSettings({super.key});
+class WalletPickerPeriodCycle extends StatefulWidget {
+  const WalletPickerPeriodCycle({
+    required this.allWalletsSettingKey,
+    required this.cycleSettingsExtension,
+    required this.homePageWidgetDisplay,
+    super.key,
+  });
+  final String allWalletsSettingKey;
+  final String cycleSettingsExtension;
+  final HomePageWidgetDisplay homePageWidgetDisplay;
 
   @override
-  State<NetWorthSettings> createState() => _NetWorthSettingsState();
+  State<WalletPickerPeriodCycle> createState() =>
+      _WalletPickerPeriodCycleState();
 }
 
-class _NetWorthSettingsState extends State<NetWorthSettings> {
-  bool allWalletsSelected = appStateSettings["netWorthAllWallets"];
+class _WalletPickerPeriodCycleState extends State<WalletPickerPeriodCycle> {
+  late bool allWalletsSelected = appStateSettings[widget.allWalletsSettingKey];
 
   @override
   Widget build(BuildContext context) {
-    return PopupFramework(
-      title: "net-worth-settings".tr(),
-      child: Column(
-        children: [
-          Row(
-            children: [
-              Expanded(
-                child: AnimatedOpacity(
-                  duration: Duration(milliseconds: 500),
-                  opacity: allWalletsSelected ? 1 : 0.5,
-                  child: OutlinedButtonStacked(
-                    filled: allWalletsSelected,
-                    alignLeft: true,
-                    alignBeside: true,
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                    text: "all-accounts".tr(),
-                    iconData: appStateSettings["outlinedIcons"]
-                        ? Icons.account_balance_wallet_outlined
-                        : Icons.account_balance_wallet_rounded,
-                    onTap: () {
-                      updateSettings("netWorthAllWallets", !allWalletsSelected,
-                          updateGlobalState: false);
-                      setState(() {
-                        allWalletsSelected = !allWalletsSelected;
-                      });
-                    },
-                  ),
+    return Column(
+      children: [
+        Row(
+          children: [
+            Expanded(
+              child: AnimatedOpacity(
+                duration: Duration(milliseconds: 500),
+                opacity: allWalletsSelected ? 1 : 0.5,
+                child: OutlinedButtonStacked(
+                  filled: allWalletsSelected,
+                  alignLeft: true,
+                  alignBeside: true,
+                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                  text: "all-accounts".tr(),
+                  iconData: appStateSettings["outlinedIcons"]
+                      ? Icons.account_balance_wallet_outlined
+                      : Icons.account_balance_wallet_rounded,
+                  onTap: () {
+                    updateSettings(
+                        widget.allWalletsSettingKey, !allWalletsSelected,
+                        updateGlobalState: false);
+                    setState(() {
+                      allWalletsSelected = !allWalletsSelected;
+                    });
+                  },
                 ),
               ),
-            ],
-          ),
-          SizedBox(height: 10),
-          // CheckItems(
-          //   triggerInitialOnChanged: false,
-          //   minVerticalPadding: 0,
-          //   allSelected: allWalletsSelected,
-          //   initial: (appStateSettings["netWorthSelectedWalletPks"] ?? [])
-          //       .cast<String>(),
-          //   items: [
-          //     for (String walletPk
-          //         in Provider.of<AllWallets>(context, listen: false)
-          //             .indexedByPk
-          //             .keys)
-          //       walletPk
-          //   ],
-          //   onChanged: (currentValues) {
-          //     updateSettings("netWorthAllWallets", false,
-          //         updateGlobalState: false);
-          //     setState(() {
-          //       allWalletsSelected = false;
-          //     });
-          //   },
-          //   displayFilter: (item, itemIndex) {
-          //     return Provider.of<AllWallets>(context, listen: false)
-          //         .indexedByPk[item]!
-          //         .name;
-          //   },
-          //   colorFilter: (item) {
-          //     return dynamicPastel(
-          //       context,
-          //       lightenPastel(
-          //         HexColor(
-          //             Provider.of<AllWallets>(context, listen: false)
-          //                 .indexedByPk[item]!
-          //                 .colour,
-          //             defaultColor: Theme.of(context).colorScheme.primary),
-          //         amount: 0.2,
-          //       ),
-          //       amount: 0.1,
-          //     );
-          //   },
-          // ),
-          EditHomePagePinnedWalletsPopup(
-            includeFramework: false,
-            homePageWidgetDisplay: HomePageWidgetDisplay.NetWorth,
-            highlightSelected: true,
-            useCheckMarks: true,
-            onAnySelected: () {
-              updateSettings("netWorthAllWallets", false,
-                  updateGlobalState: false);
-              setState(() {
-                allWalletsSelected = false;
-              });
-            },
-            allSelected: allWalletsSelected,
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 8.0),
-            child: HorizontalBreakAbove(
-              enabled: true,
-              child: PeriodCyclePicker(
-                cycleSettingsExtension: "NetWorth",
-              ),
+            ),
+          ],
+        ),
+        SizedBox(height: 10),
+        // CheckItems(
+        //   triggerInitialOnChanged: false,
+        //   minVerticalPadding: 0,
+        //   allSelected: allWalletsSelected,
+        //   initial: (appStateSettings["netWorthSelectedWalletPks"] ?? [])
+        //       .cast<String>(),
+        //   items: [
+        //     for (String walletPk
+        //         in Provider.of<AllWallets>(context, listen: false)
+        //             .indexedByPk
+        //             .keys)
+        //       walletPk
+        //   ],
+        //   onChanged: (currentValues) {
+        //     updateSettings("netWorthAllWallets", false,
+        //         updateGlobalState: false);
+        //     setState(() {
+        //       allWalletsSelected = false;
+        //     });
+        //   },
+        //   displayFilter: (item, itemIndex) {
+        //     return Provider.of<AllWallets>(context, listen: false)
+        //         .indexedByPk[item]!
+        //         .name;
+        //   },
+        //   colorFilter: (item) {
+        //     return dynamicPastel(
+        //       context,
+        //       lightenPastel(
+        //         HexColor(
+        //             Provider.of<AllWallets>(context, listen: false)
+        //                 .indexedByPk[item]!
+        //                 .colour,
+        //             defaultColor: Theme.of(context).colorScheme.primary),
+        //         amount: 0.2,
+        //       ),
+        //       amount: 0.1,
+        //     );
+        //   },
+        // ),
+        EditHomePagePinnedWalletsPopup(
+          includeFramework: false,
+          homePageWidgetDisplay: widget.homePageWidgetDisplay,
+          highlightSelected: true,
+          useCheckMarks: true,
+          onAnySelected: () {
+            updateSettings(widget.allWalletsSettingKey, false,
+                updateGlobalState: false);
+            setState(() {
+              allWalletsSelected = false;
+            });
+          },
+          allSelected: allWalletsSelected,
+        ),
+        Padding(
+          padding: const EdgeInsets.only(top: 8.0),
+          child: HorizontalBreakAbove(
+            enabled: true,
+            child: PeriodCyclePicker(
+              cycleSettingsExtension: widget.cycleSettingsExtension,
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

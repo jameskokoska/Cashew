@@ -827,5 +827,10 @@
   "only-income-categories": "Hanya kategori pendapatan",
   "only-expense-categories": "Hanya kategori pengeluaran",
   "transfer-in": "Transfer ke",
-  "transfer-out": "Transfer dari"
+  "transfer-out": "Transfer dari",
+  "cannot-create-transaction": "Tidak dapat membuat transaksi",
+  "category-no-longer-exists": "Kategori tidak ada lagi",
+  "default-category-income": "Penghasilan",
+  "select-shortcut": "Pilih jalan pintas",
+  "all-spending-settings": "Semua pengaturan pengeluaran"
 }

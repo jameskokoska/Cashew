@@ -827,5 +827,10 @@
   "only-income-categories": "Doar categorii de venituri",
   "only-expense-categories": "Doar categorii de cheltuieli",
   "transfer-in": "Transfer în",
-  "transfer-out": "Transfer de la"
+  "transfer-out": "Transfer de la",
+  "cannot-create-transaction": "Nu poate crea tranzacții",
+  "category-no-longer-exists": "Categoria nu mai există",
+  "default-category-income": "Sursa de venit",
+  "select-shortcut": "Selectați comandă rapidă",
+  "all-spending-settings": "Toate setările de cheltuieli"
 }

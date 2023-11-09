@@ -827,5 +827,10 @@
   "only-income-categories": "Pouze kategorie příjmů",
   "only-expense-categories": "Pouze kategorie výdajů",
   "transfer-in": "Převést do",
-  "transfer-out": "Přenos z"
+  "transfer-out": "Přenos z",
+  "cannot-create-transaction": "Nemůže vytvořit transakci",
+  "category-no-longer-exists": "Kategorie již neexistuje",
+  "default-category-income": "Příjem",
+  "select-shortcut": "Vyberte zkratku",
+  "all-spending-settings": "Všechna nastavení výdajů"
 }

@@ -827,5 +827,10 @@
   "only-income-categories": "केवल आय श्रेणियां",
   "only-expense-categories": "केवल व्यय श्रेणियां",
   "transfer-in": "स्थानांतरित करना",
-  "transfer-out": "इससे स्थानांतरित करें"
+  "transfer-out": "इससे स्थानांतरित करें",
+  "cannot-create-transaction": "लेनदेन नहीं बना सकते",
+  "category-no-longer-exists": "श्रेणी अब मौजूद नहीं है",
+  "default-category-income": "आय",
+  "select-shortcut": "शॉर्टकट का चयन करें",
+  "all-spending-settings": "सभी खर्च सेटिंग्स"
 }

@@ -287,45 +287,27 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
                 //   child: SizedBox(height: 7),
                 // ),
                 TransactionEntries(
-                  null,
-                  null,
+                  null, null,
                   listID: "TransactionsSearch",
                   simpleListRender: false,
                   noResultsMessage: "no-transactions-found".tr(),
                   noSearchResultsVariation: true,
                   searchFilters: searchFilters,
                   // limit: 250,
+                  showTotalCashFlow: true,
+                  extraCashFlowInformation: getWordedDateShortMore(
+                          searchFilters.dateTimeRange?.start ?? DateTime.now(),
+                          includeYear: true) +
+                      " - " +
+                      getWordedDateShortMore(
+                          searchFilters.dateTimeRange?.end ?? DateTime.now(),
+                          includeYear: true),
+                  onTapCashFlow: () {
+                    selectDateRange(context);
+                  },
                 ),
                 SliverToBoxAdapter(
-                  child: GestureDetector(
-                    onTap: () {
-                      selectDateRange(context);
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.only(
-                        left: 20,
-                        right: 20,
-                        top: 15,
-                        bottom: 50,
-                      ),
-                      child: TextFont(
-                        fontSize: 13,
-                        textAlign: TextAlign.center,
-                        textColor: getColor(context, "textLight"),
-                        text: "showing-transactions-from".tr() +
-                            "\n" +
-                            getWordedDateShortMore(
-                                searchFilters.dateTimeRange?.start ??
-                                    DateTime.now(),
-                                includeYear: true) +
-                            " - " +
-                            getWordedDateShortMore(
-                                searchFilters.dateTimeRange?.end ??
-                                    DateTime.now(),
-                                includeYear: true),
-                      ),
-                    ),
-                  ),
+                  child: SizedBox(height: 50),
                 ),
               ],
             ),

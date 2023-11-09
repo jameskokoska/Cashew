@@ -126,5 +126,15 @@ List<TransactionCategory> defaultCategories() {
       order: 10,
       income: false,
     ),
+    TransactionCategory(
+      categoryPk: "12",
+      name: "default-category-income".tr(),
+      colour: toHexString(Colors.green),
+      iconName: "coin.png",
+      dateCreated: DateTime.now(),
+      dateTimeModified: null,
+      order: 11,
+      income: false,
+    ),
   ];
 }

@@ -827,5 +827,10 @@
   "only-income-categories": "വരുമാന വിഭാഗങ്ങൾ മാത്രം",
   "only-expense-categories": "ചെലവ് വിഭാഗങ്ങൾ മാത്രം",
   "transfer-in": "കൈമാറുക",
-  "transfer-out": "നിന്ന് കൈമാറുക"
+  "transfer-out": "നിന്ന് കൈമാറുക",
+  "cannot-create-transaction": "ഇടപാട് സൃഷ്ടിക്കാൻ കഴിയില്ല",
+  "category-no-longer-exists": "വിഭാഗം മേലിൽ നിലവിലില്ല",
+  "default-category-income": "വരുമാനം",
+  "select-shortcut": "കുറുക്കുവഴി തിരഞ്ഞെടുക്കുക",
+  "all-spending-settings": "എല്ലാ ചെലവ് ക്രമീകരണങ്ങളും"
 }

@@ -199,9 +199,16 @@ class _EditHomePageState extends State<EditHomePage> {
             },
             extraWidgetsBelow: [],
             onTap: () async {
-              openBottomSheet(
+              await openBottomSheet(
                 context,
-                NetWorthSettings(),
+                PopupFramework(
+                  title: "net-worth-settings".tr(),
+                  child: WalletPickerPeriodCycle(
+                    allWalletsSettingKey: "netWorthAllWallets",
+                    cycleSettingsExtension: "NetWorth",
+                    homePageWidgetDisplay: HomePageWidgetDisplay.NetWorth,
+                  ),
+                ),
               );
             },
           ),

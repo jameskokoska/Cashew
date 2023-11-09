@@ -827,5 +827,10 @@
   "only-income-categories": "Тільки категорії доходів",
   "only-expense-categories": "Тільки категорії витрат",
   "transfer-in": "Перенести в",
-  "transfer-out": "Передати з"
+  "transfer-out": "Передати з",
+  "cannot-create-transaction": "Не вдається створити транзакцію",
+  "category-no-longer-exists": "Категорія більше не існує",
+  "default-category-income": "Дохід",
+  "select-shortcut": "Виберіть ярлик",
+  "all-spending-settings": "Усі налаштування витрат"
 }

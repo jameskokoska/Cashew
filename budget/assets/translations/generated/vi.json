@@ -827,5 +827,10 @@
   "only-income-categories": "Chỉ các loại thu nhập",
   "only-expense-categories": "Chỉ các loại chi phí",
   "transfer-in": "Chuyển vào",
-  "transfer-out": "Chuyển từ"
+  "transfer-out": "Chuyển từ",
+  "cannot-create-transaction": "Không thể tạo giao dịch",
+  "category-no-longer-exists": "Danh mục không còn tồn tại",
+  "default-category-income": "Thu nhập",
+  "select-shortcut": "Chọn phím tắt",
+  "all-spending-settings": "Tất cả các cài đặt chi tiêu"
 }

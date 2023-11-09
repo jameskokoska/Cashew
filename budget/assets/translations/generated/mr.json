@@ -98,7 +98,7 @@
   "auto-email-transactions": "वाहन ईमेल व्यवहार",
   "pay-subscriptions": "सदस्यता द्या",
   "pay-subscriptions-description": "देय तारखेनंतर देय म्हणून स्वयंचलितपणे सदस्यता चिन्हांकित करा",
-  "pay-repetitive": "पुन्हा परत द्या",
+  "pay-repetitive": "पुन्हा पुन्हा द्या",
   "pay-repetitive-description": "देय तारखेनंतर देय म्हणून स्वयंचलितपणे पुनरावृत्ती व्यवहार चिन्हांकित करा",
   "pay-upcoming": "आगामी पैसे द्या",
   "pay-upcoming-description": "देय तारखेनंतर देय म्हणून स्वयंचलितपणे आगामी व्यवहार चिन्हांकित करा",
@@ -827,5 +827,10 @@
   "only-income-categories": "केवळ उत्पन्न श्रेणी",
   "only-expense-categories": "केवळ खर्च श्रेणी",
   "transfer-in": "मध्ये हस्तांतरण",
-  "transfer-out": "पासून हस्तांतरण"
+  "transfer-out": "पासून हस्तांतरण",
+  "cannot-create-transaction": "व्यवहार तयार करू शकत नाही",
+  "category-no-longer-exists": "श्रेणी यापुढे अस्तित्त्वात नाही",
+  "default-category-income": "उत्पन्न",
+  "select-shortcut": "शॉर्टकट निवडा",
+  "all-spending-settings": "सर्व खर्च सेटिंग्ज"
 }

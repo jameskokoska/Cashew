@@ -993,8 +993,8 @@ class BlurBehind extends StatelessWidget {
   }
 }
 
-double MIN_HEIGHT = 700;
-double MAX_HEIGHT = 855;
+double MIN_HEIGHT_FOR_HEADER = 700;
+double MAX_HEIGHT_FOR_HEADER = 855;
 
 bool getCenteredTitle(
     {required BuildContext context, required bool backButtonEnabled}) {
@@ -1010,7 +1010,9 @@ bool getCenteredTitle(
 
 bool getCenteredTitleSmall(
     {required BuildContext context, required bool backButtonEnabled}) {
-  if (backButtonEnabled && MediaQuery.sizeOf(context).height <= MIN_HEIGHT) {
+  if (backButtonEnabled &&
+      (MediaQuery.sizeOf(context).height <= MIN_HEIGHT_FOR_HEADER ||
+          appStateSettings["forceSmallHeader"] == true)) {
     return true;
   } else if (backButtonEnabled && getPlatform() == PlatformOS.isIOS) {
     return true;
@@ -1035,12 +1037,15 @@ double getExpandedHeaderHeight(
           : 100
       : 200;
 
-  if (height >= MAX_HEIGHT) {
+  if (height >= MAX_HEIGHT_FOR_HEADER &&
+      appStateSettings["forceSmallHeader"] != true) {
     return maxHeaderHeight;
-  } else if (height <= MIN_HEIGHT) {
+  } else if (height <= MIN_HEIGHT_FOR_HEADER ||
+      appStateSettings["forceSmallHeader"] == true) {
     return minHeaderHeight;
   } else {
-    double heightPercentage = (height - MIN_HEIGHT) / (MAX_HEIGHT - MIN_HEIGHT);
+    double heightPercentage = (height - MIN_HEIGHT_FOR_HEADER) /
+        (MAX_HEIGHT_FOR_HEADER - MIN_HEIGHT_FOR_HEADER);
     double expandedHeaderHeight = minHeaderHeight +
         heightPercentage * (maxHeaderHeight - minHeaderHeight);
     return expandedHeaderHeight;

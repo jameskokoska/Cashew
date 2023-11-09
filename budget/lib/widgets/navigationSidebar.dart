@@ -3,9 +3,11 @@ import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
 import 'package:budget/pages/editCategoriesPage.dart';
 import 'package:budget/pages/exchangeRatesPage.dart';
+import 'package:budget/struct/navBarIconsData.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/accountAndBackup.dart';
 import 'package:budget/widgets/animatedExpanded.dart';
+import 'package:budget/widgets/bottomNavBar.dart';
 import 'package:budget/widgets/moreIcons.dart';
 import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/tappable.dart';
@@ -208,99 +210,42 @@ class NavigationSidebarState extends State<NavigationSidebar> {
                                     ? 40
                                     : 0,
                               ),
-                              NavigationSidebarButton(
-                                icon: Icons.home_rounded,
-                                label: "home".tr(),
-                                isSelected: selectedIndex == 0,
-                                onTap: () {
-                                  pageNavigationFrameworkKey.currentState!
-                                      .changePage(0, switchNavbar: true);
-                                },
+                              NavigationSidebarButtonWithNavBarIconData(
+                                navBarIconDataKey: "home",
+                                currentPageIndex: selectedIndex,
                               ),
-                              NavigationSidebarButton(
-                                icon: Icons.payments_rounded,
-                                label: "transactions".tr(),
-                                isSelected: selectedIndex == 1,
-                                onTap: () {
-                                  pageNavigationFrameworkKey.currentState!
-                                      .changePage(1, switchNavbar: true);
-                                },
+                              NavigationSidebarButtonWithNavBarIconData(
+                                navBarIconDataKey: "transactions",
+                                currentPageIndex: selectedIndex,
                               ),
-                              NavigationSidebarButton(
-                                icon: MoreIcons.chart_pie,
-                                iconScale: 0.87,
-                                label: "budgets".tr(),
-                                isSelected: selectedIndex == 2,
-                                onTap: () {
-                                  pageNavigationFrameworkKey.currentState!
-                                      .changePage(2, switchNavbar: true);
-                                },
+                              NavigationSidebarButtonWithNavBarIconData(
+                                navBarIconDataKey: "budgets",
+                                currentPageIndex: selectedIndex,
                               ),
-                              NavigationSidebarButton(
-                                icon: appStateSettings["outlinedIcons"]
-                                    ? Icons.savings_outlined
-                                    : Icons.savings_rounded,
-                                label: "goals".tr(),
-                                isSelected: selectedIndex == 14,
-                                onTap: () {
-                                  pageNavigationFrameworkKey.currentState!
-                                      .changePage(14, switchNavbar: true);
-                                },
+                              NavigationSidebarButtonWithNavBarIconData(
+                                navBarIconDataKey: "goals",
+                                currentPageIndex: selectedIndex,
                               ),
-                              NavigationSidebarButton(
-                                icon: appStateSettings["outlinedIcons"]
-                                    ? Icons.event_repeat_outlined
-                                    : Icons.event_repeat_rounded,
-                                label: "subscriptions".tr(),
-                                isSelected: selectedIndex == 5,
-                                onTap: () {
-                                  pageNavigationFrameworkKey.currentState!
-                                      .changePage(5, switchNavbar: true);
-                                },
+                              NavigationSidebarButtonWithNavBarIconData(
+                                navBarIconDataKey: "subscriptions",
+                                currentPageIndex: selectedIndex,
                               ),
-                              NavigationSidebarButton(
-                                icon: getTransactionTypeIcon(
-                                    TransactionSpecialType.upcoming),
-                                label: "scheduled".tr(),
-                                isSelected: selectedIndex == 16,
-                                onTap: () {
-                                  pageNavigationFrameworkKey.currentState!
-                                      .changePage(16, switchNavbar: true);
-                                },
+                              NavigationSidebarButtonWithNavBarIconData(
+                                navBarIconDataKey: "scheduled",
+                                currentPageIndex: selectedIndex,
                               ),
-                              NavigationSidebarButton(
-                                icon: getTransactionTypeIcon(
-                                    TransactionSpecialType.credit),
-                                label: "loans".tr(),
-                                isSelected: selectedIndex == 17,
-                                onTap: () {
-                                  pageNavigationFrameworkKey.currentState!
-                                      .changePage(17, switchNavbar: true);
-                                },
+                              NavigationSidebarButtonWithNavBarIconData(
+                                navBarIconDataKey: "loans",
+                                currentPageIndex: selectedIndex,
                               ),
-                              kIsWeb
-                                  ? SizedBox.shrink()
-                                  : NavigationSidebarButton(
-                                      icon: appStateSettings["outlinedIcons"]
-                                          ? Icons.notifications_outlined
-                                          : Icons.notifications_rounded,
-                                      label: "notifications".tr(),
-                                      isSelected: selectedIndex == 6,
-                                      onTap: () {
-                                        pageNavigationFrameworkKey.currentState!
-                                            .changePage(6, switchNavbar: true);
-                                      },
-                                    ),
-                              NavigationSidebarButton(
-                                icon: appStateSettings["outlinedIcons"]
-                                    ? Icons.receipt_long_outlined
-                                    : Icons.receipt_long_rounded,
-                                label: "all-spending".tr(),
-                                isSelected: selectedIndex == 7,
-                                onTap: () {
-                                  pageNavigationFrameworkKey.currentState!
-                                      .changePage(7, switchNavbar: true);
-                                },
+                              if (kIsWeb == false)
+                                NavigationSidebarButtonWithNavBarIconData(
+                                  navBarIconDataKey: "notifications",
+                                  currentPageIndex: selectedIndex,
+                                ),
+                              NavigationSidebarButtonWithNavBarIconData(
+                                navBarIconDataKey: "allSpending",
+                                currentPageIndex: selectedIndex,
                               ),
                               EditDataButtons(selectedIndex: selectedIndex),
                             ],
@@ -321,27 +266,13 @@ class NavigationSidebarState extends State<NavigationSidebar> {
                                 },
                                 isButtonSelected: selectedIndex == 8,
                               ),
-                              NavigationSidebarButton(
-                                icon: appStateSettings["outlinedIcons"]
-                                    ? Icons.settings_outlined
-                                    : Icons.settings_rounded,
-                                label: "settings".tr(),
-                                isSelected: selectedIndex == 4,
-                                onTap: () {
-                                  pageNavigationFrameworkKey.currentState!
-                                      .changePage(4, switchNavbar: true);
-                                },
+                              NavigationSidebarButtonWithNavBarIconData(
+                                navBarIconDataKey: "settings",
+                                currentPageIndex: selectedIndex,
                               ),
-                              NavigationSidebarButton(
-                                icon: appStateSettings["outlinedIcons"]
-                                    ? Icons.info_outlined
-                                    : Icons.info_outline_rounded,
-                                label: "about".tr(),
-                                isSelected: selectedIndex == 13,
-                                onTap: () {
-                                  pageNavigationFrameworkKey.currentState!
-                                      .changePage(13, switchNavbar: true);
-                                },
+                              NavigationSidebarButtonWithNavBarIconData(
+                                navBarIconDataKey: "about",
+                                currentPageIndex: selectedIndex,
                               ),
                               SyncButton(),
                               SizedBox(height: 10),
@@ -526,6 +457,35 @@ class _SyncButtonState extends State<SyncButton> {
   }
 }
 
+class NavigationSidebarButtonWithNavBarIconData extends StatelessWidget {
+  const NavigationSidebarButtonWithNavBarIconData({
+    required this.navBarIconDataKey,
+    required this.currentPageIndex,
+    this.useLongLabel = false,
+    super.key,
+  });
+  final String navBarIconDataKey;
+  final int currentPageIndex;
+  final bool useLongLabel;
+  @override
+  Widget build(BuildContext context) {
+    return NavigationSidebarButton(
+      icon: navBarIconsData[navBarIconDataKey]!.iconData,
+      label: useLongLabel == true
+          ? navBarIconsData[navBarIconDataKey]!.labelLong.tr()
+          : navBarIconsData[navBarIconDataKey]!.label.tr(),
+      isSelected:
+          navBarIconsData[navBarIconDataKey]!.navigationIndexedStackIndex ==
+              currentPageIndex,
+      onTap: () {
+        pageNavigationFrameworkKey.currentState!.changePage(
+            navBarIconsData[navBarIconDataKey]!.navigationIndexedStackIndex,
+            switchNavbar: true);
+      },
+    );
+  }
+}
+
 class NavigationSidebarButton extends StatelessWidget {
   const NavigationSidebarButton({
     super.key,
@@ -670,58 +630,30 @@ class _EdiDatatButtonsState extends State<EditDataButtons> {
                 ? Container(key: ValueKey(1))
                 : Column(
                     children: [
-                      NavigationSidebarButton(
-                        icon: appStateSettings["outlinedIcons"]
-                            ? Icons.account_balance_wallet_outlined
-                            : Icons.account_balance_wallet_rounded,
-                        label: "account-details".tr(),
-                        isSelected: widget.selectedIndex == 9,
-                        onTap: () {
-                          pageNavigationFrameworkKey.currentState!
-                              .changePage(9, switchNavbar: true);
-                        },
+                      NavigationSidebarButtonWithNavBarIconData(
+                        navBarIconDataKey: "accountDetails",
+                        currentPageIndex: widget.selectedIndex,
+                        useLongLabel: true,
                       ),
-                      NavigationSidebarButton(
-                        icon: MoreIcons.chart_pie,
-                        label: "budgets-details".tr(),
-                        isSelected: widget.selectedIndex == 10,
-                        onTap: () {
-                          pageNavigationFrameworkKey.currentState!
-                              .changePage(10, switchNavbar: true);
-                        },
+                      NavigationSidebarButtonWithNavBarIconData(
+                        navBarIconDataKey: "budgetDetails",
+                        currentPageIndex: widget.selectedIndex,
+                        useLongLabel: true,
                       ),
-                      NavigationSidebarButton(
-                        icon: appStateSettings["outlinedIcons"]
-                            ? Icons.category_outlined
-                            : Icons.category_rounded,
-                        label: "categories-details".tr(),
-                        isSelected: widget.selectedIndex == 11,
-                        onTap: () {
-                          pageNavigationFrameworkKey.currentState!
-                              .changePage(11, switchNavbar: true);
-                        },
+                      NavigationSidebarButtonWithNavBarIconData(
+                        navBarIconDataKey: "categoriesDetails",
+                        currentPageIndex: widget.selectedIndex,
+                        useLongLabel: true,
                       ),
-                      NavigationSidebarButton(
-                        icon: appStateSettings["outlinedIcons"]
-                            ? Icons.text_fields_outlined
-                            : Icons.text_fields_rounded,
-                        label: "titles-details".tr(),
-                        isSelected: widget.selectedIndex == 12,
-                        onTap: () {
-                          pageNavigationFrameworkKey.currentState!
-                              .changePage(12, switchNavbar: true);
-                        },
+                      NavigationSidebarButtonWithNavBarIconData(
+                        navBarIconDataKey: "titlesDetails",
+                        currentPageIndex: widget.selectedIndex,
+                        useLongLabel: true,
                       ),
-                      NavigationSidebarButton(
-                        icon: appStateSettings["outlinedIcons"]
-                            ? Icons.savings_outlined
-                            : Icons.savings_rounded,
-                        label: "goals-details".tr(),
-                        isSelected: widget.selectedIndex == 15,
-                        onTap: () {
-                          pageNavigationFrameworkKey.currentState!
-                              .changePage(15, switchNavbar: true);
-                        },
+                      NavigationSidebarButtonWithNavBarIconData(
+                        navBarIconDataKey: "goalsDetails",
+                        currentPageIndex: widget.selectedIndex,
+                        useLongLabel: true,
                       ),
                     ],
                   ),

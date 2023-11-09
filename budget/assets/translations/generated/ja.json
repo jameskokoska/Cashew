@@ -827,5 +827,10 @@
   "only-income-categories": "収入カテゴリのみ",
   "only-expense-categories": "費用カテゴリのみ",
   "transfer-in": "に転送します",
-  "transfer-out": "からの転送"
+  "transfer-out": "からの転送",
+  "cannot-create-transaction": "トランザクションを作成できません",
+  "category-no-longer-exists": "カテゴリは存在しなくなりました",
+  "default-category-income": "所得",
+  "select-shortcut": "ショートカットを選択します",
+  "all-spending-settings": "すべての支出設定"
 }

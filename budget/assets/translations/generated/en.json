@@ -827,5 +827,10 @@
   "only-income-categories": "Only Income Categories",
   "only-expense-categories": "Only Expense Categories",
   "transfer-in": "Transfer In",
-  "transfer-out": "Transfer Out"
+  "transfer-out": "Transfer Out",
+  "cannot-create-transaction": "Cannot Create Transaction",
+  "category-no-longer-exists": "Category no longer exists",
+  "default-category-income": "Income",
+  "select-shortcut": "Select Shortcut",
+  "all-spending-settings": "All Spending Settings"
 }

@@ -2,6 +2,7 @@ import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
 import 'package:budget/pages/accountsPage.dart';
+import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/debugPage.dart';
 import 'package:budget/pages/detailedChangelogPage.dart';
 import 'package:budget/pages/onBoardingPage.dart';
@@ -282,120 +283,6 @@ class AboutPage extends StatelessWidget {
           ),
         ),
         SizedBox(height: 15),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 7),
-          child: Center(
-            child: TextFont(
-              text: "graphics".tr(),
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              textAlign: TextAlign.center,
-              maxLines: 5,
-            ),
-          ),
-        ),
-        AboutInfoBox(
-          title: "freepik-credit".tr(),
-          link: "https://www.flaticon.com/authors/freepik",
-        ),
-        AboutInfoBox(
-          title: "font-awesome-credit".tr(),
-          link: "https://fontawesome.com/",
-        ),
-        AboutInfoBox(
-          title: "pch-vector-credit".tr(),
-          link: "https://www.freepik.com/author/pch-vector",
-        ),
-        Container(height: 15),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 7),
-          child: Center(
-            child: TextFont(
-              text: "major-tools".tr(),
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              textAlign: TextAlign.center,
-              maxLines: 5,
-            ),
-          ),
-        ),
-        AboutInfoBox(
-          title: "Flutter",
-          link: "https://flutter.dev/",
-        ),
-        AboutInfoBox(
-          title: "Google Cloud APIs",
-          link: "https://cloud.google.com/",
-        ),
-        AboutInfoBox(
-          title: "Drift SQL Database",
-          link: "https://drift.simonbinder.eu/",
-        ),
-        AboutInfoBox(
-          title: "FL Charts",
-          link: "https://github.com/imaNNeoFighT/fl_chart",
-        ),
-        AboutInfoBox(
-          title: "exchange-rates-api".tr(),
-          link: "https://github.com/fawazahmed0/currency-api",
-        ),
-        Container(height: 15),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 7),
-          child: Center(
-            child: TextFont(
-              text: "translations".tr().capitalizeFirst,
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              textAlign: TextAlign.center,
-              maxLines: 5,
-            ),
-          ),
-        ),
-        AboutInfoBox(
-          title: "Italian",
-          list: ["Thomas B."],
-        ),
-        AboutInfoBox(
-          title: "Polish",
-          list: ["Michał S."],
-        ),
-        AboutInfoBox(
-          title: "Serbian",
-          list: ["Jovan P."],
-        ),
-        AboutInfoBox(
-          title: "Swahili",
-          list: ["Anthony K."],
-        ),
-        AboutInfoBox(
-          title: "German",
-          list: ["Fabian S."],
-        ),
-        AboutInfoBox(
-          title: "Arabic",
-          list: ["Dorra Y."],
-        ),
-        AboutInfoBox(
-          title: "Arabic",
-          list: ["Dorra Y."],
-        ),
-        AboutInfoBox(
-          title: "Portuguese",
-          list: ["Alexander G.", "Jean J."],
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-          child: TranslationsHelp(
-            showIcon: false,
-            backgroundColor: (appStateSettings["materialYou"]
-                ? dynamicPastel(
-                    context, Theme.of(context).colorScheme.secondaryContainer,
-                    amountLight: 0.2, amountDark: 0.6)
-                : getColor(context, "lightDarkAccent")),
-          ),
-        ),
-        SizedBox(height: 40),
         Row(
           children: [
             Expanded(
@@ -543,6 +430,127 @@ class AboutPage extends StatelessWidget {
             ),
           ),
         ),
+        SizedBox(height: 20),
+        HorizontalBreak(),
+        SizedBox(height: 10),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 7),
+          child: Center(
+            child: TextFont(
+              text: "graphics".tr(),
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              textAlign: TextAlign.center,
+              maxLines: 5,
+            ),
+          ),
+        ),
+        AboutInfoBox(
+          title: "freepik-credit".tr(),
+          link: "https://www.flaticon.com/authors/freepik",
+        ),
+        AboutInfoBox(
+          title: "font-awesome-credit".tr(),
+          link: "https://fontawesome.com/",
+        ),
+        AboutInfoBox(
+          title: "pch-vector-credit".tr(),
+          link: "https://www.freepik.com/author/pch-vector",
+        ),
+        Container(height: 15),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 7),
+          child: Center(
+            child: TextFont(
+              text: "major-tools".tr(),
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              textAlign: TextAlign.center,
+              maxLines: 5,
+            ),
+          ),
+        ),
+        AboutInfoBox(
+          title: "Flutter",
+          link: "https://flutter.dev/",
+        ),
+        AboutInfoBox(
+          title: "Google Cloud APIs",
+          link: "https://cloud.google.com/",
+        ),
+        AboutInfoBox(
+          title: "Drift SQL Database",
+          link: "https://drift.simonbinder.eu/",
+        ),
+        AboutInfoBox(
+          title: "FL Charts",
+          link: "https://github.com/imaNNeoFighT/fl_chart",
+        ),
+        AboutInfoBox(
+          title: "exchange-rates-api".tr(),
+          link: "https://github.com/fawazahmed0/currency-api",
+        ),
+        Container(height: 15),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 7),
+          child: Center(
+            child: TextFont(
+              text: "translations".tr().capitalizeFirst,
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              textAlign: TextAlign.center,
+              maxLines: 5,
+            ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+          child: TranslationsHelp(
+            showIcon: false,
+            backgroundColor: (appStateSettings["materialYou"]
+                ? dynamicPastel(
+                    context, Theme.of(context).colorScheme.secondaryContainer,
+                    amountLight: 0.2, amountDark: 0.6)
+                : getColor(context, "lightDarkAccent")),
+          ),
+        ),
+        AboutInfoBox(
+          title: "Italian",
+          list: ["Thomas B."],
+        ),
+        AboutInfoBox(
+          title: "Polish",
+          list: ["Michał S."],
+        ),
+        AboutInfoBox(
+          title: "Serbian",
+          list: ["Jovan P."],
+        ),
+        AboutInfoBox(
+          title: "Swahili",
+          list: ["Anthony K."],
+        ),
+        AboutInfoBox(
+          title: "German",
+          list: ["Fabian S."],
+        ),
+        AboutInfoBox(
+          title: "Arabic",
+          list: ["Dorra Y."],
+        ),
+        AboutInfoBox(
+          title: "Arabic",
+          list: ["Dorra Y."],
+        ),
+        AboutInfoBox(
+          title: "Portuguese",
+          list: ["Alexander G.", "Jean J."],
+        ),
+        AboutInfoBox(
+          title: "Bulgarian",
+          list: ["Денислав С."],
+        ),
+        SizedBox(height: 20),
       ],
     );
   }

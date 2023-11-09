@@ -827,5 +827,10 @@
   "only-income-categories": "Apenas categorias de renda",
   "only-expense-categories": "Apenas categorias de despesas",
   "transfer-in": "Transferência para",
-  "transfer-out": "Transferir de"
+  "transfer-out": "Transferir de",
+  "cannot-create-transaction": "Não pode criar transação",
+  "category-no-longer-exists": "Categoria não existe mais",
+  "default-category-income": "Renda",
+  "select-shortcut": "Selecione atalho",
+  "all-spending-settings": "Todas as configurações de gastos"
 }

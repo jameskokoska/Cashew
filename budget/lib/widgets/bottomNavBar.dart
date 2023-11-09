@@ -1,13 +1,18 @@
+import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
+import 'package:budget/struct/navBarIconsData.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/fadeIn.dart';
+import 'package:budget/widgets/framework/popupFramework.dart';
 import 'package:budget/widgets/moreIcons.dart';
 import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
+import 'package:budget/widgets/outlinedButtonStacked.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/colors.dart';
+import 'package:flutter/services.dart';
 
 class BottomNavBar extends StatefulWidget {
   const BottomNavBar({required this.onChanged, Key? key}) : super(key: key);
@@ -20,14 +25,35 @@ class BottomNavBar extends StatefulWidget {
 class BottomNavBarState extends State<BottomNavBar> {
   int selectedIndex = 0;
 
-  void onItemTapped(int index) {
-    if (index == selectedIndex) {
+  void onItemTapped(int index, {bool allowReApply = false}) {
+    int navigationIndex = index;
+
+    try {
+      // Index 1 and 2 can be customized
+      if (index == 1) {
+        navigationIndex =
+            navBarIconsData[appStateSettings["customNavBarShortcut1"]]!
+                .navigationIndexedStackIndex;
+      } else if (index == 2) {
+        navigationIndex =
+            navBarIconsData[appStateSettings["customNavBarShortcut2"]]!
+                .navigationIndexedStackIndex;
+      }
+    } catch (e) {
+      print(e.toString() + " Problem accessing the navigation index");
+    }
+
+    if (index == selectedIndex && allowReApply == false) {
       if (index == 0) homePageStateKey.currentState?.scrollToTop();
-      if (index == 1) transactionsListPageStateKey.currentState?.scrollToTop();
-      if (index == 2) budgetsListPageStateKey.currentState?.scrollToTop();
+      if (navigationIndex == 1)
+        transactionsListPageStateKey.currentState?.scrollToTop();
+      if (navigationIndex == 2)
+        budgetsListPageStateKey.currentState?.scrollToTop();
       if (index == 3) settingsPageStateKey.currentState?.scrollToTop();
     } else {
-      widget.onChanged(index);
+      // We need to change to the navigation index, however the selectedIndex remains unchanged
+      // Since the selectedIndex is the index of the selected navigation bar entry
+      widget.onChanged(navigationIndex);
       setState(() {
         selectedIndex = index;
       });
@@ -69,28 +95,43 @@ class BottomNavBarState extends State<BottomNavBar> {
                     children: [
                       NavBarIcon(
                         onItemTapped: onItemTapped,
-                        icon: Icons.home_rounded,
+                        icon: navBarIconsData["home"]!.iconData,
                         index: 0,
                         currentIndex: selectedIndex,
                       ),
-                      NavBarIcon(
-                        onItemTapped: onItemTapped,
-                        icon: Icons.payments_rounded,
-                        index: 1,
-                        currentIndex: selectedIndex,
+                      CustomizableNavigationBarIcon(
+                        shortcutAppSettingKey: "customNavBarShortcut1",
+                        afterSet: () {
+                          onItemTapped(1, allowReApply: true);
+                        },
+                        navigationBarIconBuilder: (NavBarIconData iconData) {
+                          return NavBarIcon(
+                            icon: iconData.iconData,
+                            customIconScale: iconData.iconScale,
+                            onItemTapped: onItemTapped,
+                            index: 1,
+                            currentIndex: selectedIndex,
+                          );
+                        },
+                      ),
+                      CustomizableNavigationBarIcon(
+                        shortcutAppSettingKey: "customNavBarShortcut2",
+                        afterSet: () {
+                          onItemTapped(2, allowReApply: true);
+                        },
+                        navigationBarIconBuilder: (NavBarIconData iconData) {
+                          return NavBarIcon(
+                            icon: iconData.iconData,
+                            customIconScale: iconData.iconScale,
+                            onItemTapped: onItemTapped,
+                            index: 2,
+                            currentIndex: selectedIndex,
+                          );
+                        },
                       ),
                       NavBarIcon(
                         onItemTapped: onItemTapped,
-                        icon: MoreIcons.chart_pie,
-                        index: 2,
-                        currentIndex: selectedIndex,
-                        customIconScale: 0.87,
-                      ),
-                      NavBarIcon(
-                        onItemTapped: onItemTapped,
-                        icon: appStateSettings["outlinedIcons"]
-                            ? Icons.more_horiz_outlined
-                            : Icons.more_horiz_rounded,
+                        icon: navBarIconsData["more"]!.iconData,
                         index: 3,
                         currentIndex: selectedIndex,
                       ),
@@ -144,31 +185,164 @@ class BottomNavBarState extends State<BottomNavBar> {
           animationDuration: Duration(milliseconds: 1000),
           destinations: [
             NavigationDestination(
-              icon: Icon(Icons.home_rounded),
-              label: "home".tr(),
+              icon: Icon(navBarIconsData["home"]!.iconData),
+              label: navBarIconsData["home"]!.label.tr(),
               tooltip: "",
             ),
-            NavigationDestination(
-              icon: Icon(Icons.payments_rounded),
-              label: "transactions".tr(),
-              tooltip: "",
+            CustomizableNavigationBarIcon(
+              shortcutAppSettingKey: "customNavBarShortcut1",
+              afterSet: () {
+                onItemTapped(1, allowReApply: true);
+              },
+              navigationBarIconBuilder: (NavBarIconData iconData) {
+                return NavigationDestination(
+                  icon: Icon(iconData.iconData, size: iconData.iconSize),
+                  label: iconData.label.tr(),
+                  tooltip: "",
+                );
+              },
+            ),
+            CustomizableNavigationBarIcon(
+              shortcutAppSettingKey: "customNavBarShortcut2",
+              afterSet: () {
+                onItemTapped(2, allowReApply: true);
+              },
+              navigationBarIconBuilder: (NavBarIconData iconData) {
+                return NavigationDestination(
+                  icon: Icon(iconData.iconData, size: iconData.iconSize),
+                  label: iconData.label.tr(),
+                  tooltip: "",
+                );
+              },
             ),
             NavigationDestination(
-              icon: Icon(MoreIcons.chart_pie, size: 20),
-              label: "budgets".tr(),
-              tooltip: "",
-            ),
-            NavigationDestination(
-              icon: Icon(appStateSettings["outlinedIcons"]
-                  ? Icons.more_horiz_outlined
-                  : Icons.more_horiz_rounded),
-              label: "more".tr(),
+              icon: Icon(navBarIconsData["more"]!.iconData),
+              label: navBarIconsData["more"]!.label.tr(),
               tooltip: "",
             ),
           ],
           selectedIndex: selectedIndex,
           onDestinationSelected: onItemTapped,
         ),
+      ),
+    );
+  }
+}
+
+class CustomizableNavigationBarIcon extends StatelessWidget {
+  const CustomizableNavigationBarIcon({
+    required this.navigationBarIconBuilder,
+    required this.shortcutAppSettingKey,
+    required this.afterSet,
+    super.key,
+  });
+  final Widget Function(NavBarIconData) navigationBarIconBuilder;
+  final String shortcutAppSettingKey;
+  final VoidCallback afterSet;
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onLongPress: () async {
+        HapticFeedback.heavyImpact();
+        dynamic result = await openBottomSheet(
+          context,
+          PopupFramework(
+            title: "select-shortcut".tr(),
+            child: SelectNavBarShortcutPopup(
+              shortcutAppSettingKey: shortcutAppSettingKey,
+            ),
+          ),
+        );
+        if (result == true) {
+          // User did choose one
+          afterSet();
+        }
+      },
+      child: navigationBarIconBuilder(
+          navBarIconsData[appStateSettings[shortcutAppSettingKey]]!),
+    );
+  }
+}
+
+class SelectNavBarShortcutPopup extends StatelessWidget {
+  const SelectNavBarShortcutPopup(
+      {required this.shortcutAppSettingKey, super.key});
+  final String shortcutAppSettingKey;
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        NavBarShortcutSelection(
+          shortcutAppSettingKey: shortcutAppSettingKey,
+          navBarIconDataKey: "transactions",
+        ),
+        NavBarShortcutSelection(
+          shortcutAppSettingKey: shortcutAppSettingKey,
+          navBarIconDataKey: "budgets",
+        ),
+        NavBarShortcutSelection(
+          shortcutAppSettingKey: shortcutAppSettingKey,
+          navBarIconDataKey: "goals",
+        ),
+        NavBarShortcutSelection(
+          shortcutAppSettingKey: shortcutAppSettingKey,
+          navBarIconDataKey: "subscriptions",
+        ),
+        NavBarShortcutSelection(
+          shortcutAppSettingKey: shortcutAppSettingKey,
+          navBarIconDataKey: "scheduled",
+        ),
+        NavBarShortcutSelection(
+          shortcutAppSettingKey: shortcutAppSettingKey,
+          navBarIconDataKey: "loans",
+        ),
+        NavBarShortcutSelection(
+          shortcutAppSettingKey: shortcutAppSettingKey,
+          navBarIconDataKey: "allSpending",
+        ),
+      ],
+    );
+  }
+}
+
+class NavBarShortcutSelection extends StatelessWidget {
+  const NavBarShortcutSelection({
+    required this.shortcutAppSettingKey,
+    required this.navBarIconDataKey,
+    super.key,
+  });
+
+  final String shortcutAppSettingKey;
+  final String navBarIconDataKey;
+
+  @override
+  Widget build(BuildContext context) {
+    NavBarIconData iconData = navBarIconsData[navBarIconDataKey]!;
+    return Padding(
+      padding: const EdgeInsets.only(
+        bottom: 5,
+        top: 5,
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: OutlinedButtonStacked(
+              filled:
+                  appStateSettings[shortcutAppSettingKey] == navBarIconDataKey,
+              alignLeft: true,
+              alignBeside: true,
+              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+              text: iconData.label.tr().capitalizeFirst,
+              iconData: iconData.iconData,
+              iconScale: iconData.iconScale,
+              onTap: () async {
+                await updateSettings(shortcutAppSettingKey, navBarIconDataKey,
+                    updateGlobalState: false);
+                Navigator.pop(context, true);
+              },
+            ),
+          ),
+        ],
       ),
     );
   }

@@ -827,5 +827,10 @@
   "only-income-categories": "Csak a jövedelemkategóriák",
   "only-expense-categories": "Csak költségkategóriák",
   "transfer-in": "Áthelyez",
-  "transfer-out": "Átad"
+  "transfer-out": "Átad",
+  "cannot-create-transaction": "Nem hozhat létre tranzakciót",
+  "category-no-longer-exists": "A kategória már nem létezik",
+  "default-category-income": "Jövedelem",
+  "select-shortcut": "Válassza ki a parancsikont",
+  "all-spending-settings": "Minden kiadási beállítás"
 }

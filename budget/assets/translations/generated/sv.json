@@ -98,7 +98,7 @@
   "auto-email-transactions": "Auto -e -posttransaktioner",
   "pay-subscriptions": "Betala prenumerationer",
   "pay-subscriptions-description": "Markera automatiskt ett prenumeration som betalas efter förfallodagen",
-  "pay-repetitive": "Betala upprepade",
+  "pay-repetitive": "Betala repetitiva",
   "pay-repetitive-description": "Markera automatiskt en repetitiv transaktion som betalas efter förfallodagen",
   "pay-upcoming": "Ankommande",
   "pay-upcoming-description": "Markera automatiskt en kommande transaktion som betalas efter förfallodagen",
@@ -827,5 +827,10 @@
   "only-income-categories": "Endast inkomstkategorier",
   "only-expense-categories": "Endast kostnadskategorier",
   "transfer-in": "Överföra till",
-  "transfer-out": "Överföra från och med"
+  "transfer-out": "Överföra från och med",
+  "cannot-create-transaction": "Kan inte skapa transaktion",
+  "category-no-longer-exists": "Kategori finns inte längre",
+  "default-category-income": "Inkomst",
+  "select-shortcut": "Välj genväg",
+  "all-spending-settings": "Alla utgiftsinställningar"
 }

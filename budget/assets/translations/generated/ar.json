@@ -827,5 +827,10 @@
   "only-income-categories": "فئات الدخل فقط",
   "only-expense-categories": "فئات المصاريف فقط",
   "transfer-in": "نقل إلى",
-  "transfer-out": "تحويل من"
+  "transfer-out": "تحويل من",
+  "cannot-create-transaction": "لا يمكن إنشاء معاملة",
+  "category-no-longer-exists": "لم تعد الفئة موجودة",
+  "default-category-income": "دخل",
+  "select-shortcut": "حدد الاختصار",
+  "all-spending-settings": "جميع إعدادات الإنفاق"
 }

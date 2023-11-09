@@ -62,6 +62,9 @@ class TransactionEntries extends StatelessWidget {
     this.noResultsPadding,
     this.noResultsExtraWidget,
     this.limitPerDay,
+    this.showTotalCashFlow = false,
+    this.extraCashFlowInformation,
+    this.onTapCashFlow,
     super.key,
   });
   final DateTime? startDay;
@@ -98,6 +101,9 @@ class TransactionEntries extends StatelessWidget {
   final EdgeInsets? noResultsPadding;
   final Widget? noResultsExtraWidget;
   final int? limitPerDay;
+  final bool showTotalCashFlow;
+  final String? extraCashFlowInformation;
+  final VoidCallback? onTapCashFlow;
 
   Widget createTransactionEntry(
       List<TransactionWithCategory> transactionListForDay,
@@ -162,8 +168,10 @@ class TransactionEntries extends StatelessWidget {
 
             List<TransactionWithCategory> transactionListForDay = [];
             double totalSpentForDay = 0;
+            double totalSpent = 0;
             DateTime? currentDate;
             int totalUniqueDays = 0;
+            int totalNumberTransactions = snapshot.data!.length;
 
             for (TransactionWithCategory transactionWithCategory
                 in snapshot.data ?? []) {
@@ -180,13 +188,14 @@ class TransactionEntries extends StatelessWidget {
               }
               if (currentDate == currentTransactionDate) {
                 transactionListForDay.add(transactionWithCategory);
-                if (transactionWithCategory.transaction.paid)
+                if (transactionWithCategory.transaction.paid) {
                   totalSpentForDay += transactionWithCategory
                           .transaction.amount *
                       (amountRatioToPrimaryCurrencyGivenPk(
                               Provider.of<AllWallets>(context),
                               transactionWithCategory.transaction.walletFk) ??
                           0);
+                }
               }
 
               DateTime? nextTransactionDate =
@@ -283,11 +292,49 @@ class TransactionEntries extends StatelessWidget {
 
                   currentDate = null;
                   transactionListForDay = [];
+                  totalSpent += totalSpentForDay;
                   totalSpentForDay = 0;
                 }
               }
               currentTotalIndex++;
             }
+
+            if (showTotalCashFlow) {
+              if (totalSpent != 0)
+                widgetsOut.add(
+                  Tappable(
+                    onTap: onTapCashFlow,
+                    color: Colors.transparent,
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                        left: 10,
+                        right: 10,
+                        top: 10,
+                        bottom: 8,
+                      ),
+                      child: TextFont(
+                        text: "total-cash-flow".tr() +
+                            ": " +
+                            convertToMoney(
+                                Provider.of<AllWallets>(context), totalSpent) +
+                            "\n" +
+                            totalNumberTransactions.toString() +
+                            " " +
+                            (totalNumberTransactions == 1
+                                ? "transaction".tr().toLowerCase()
+                                : "transactions".tr().toLowerCase()) +
+                            (extraCashFlowInformation != null
+                                ? "\n" + (extraCashFlowInformation ?? "")
+                                : ""),
+                        fontSize: 13,
+                        textAlign: TextAlign.center,
+                        textColor: getColor(context, "textLight"),
+                      ),
+                    ),
+                  ),
+                );
+            }
+
             if (renderAsSlivers) {
               return MultiSliver(children: widgetsOut);
             } else {

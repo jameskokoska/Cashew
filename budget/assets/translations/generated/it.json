@@ -98,7 +98,7 @@
   "auto-email-transactions": "Transazioni e-mail automatiche",
   "pay-subscriptions": "Abbonamenti a pagamento",
   "pay-subscriptions-description": "Segna automaticamente un abbonamento come pagato dopo la data di scadenza",
-  "pay-repetitive": "Paga ripetitivi",
+  "pay-repetitive": "Pagare ripetitivo",
   "pay-repetitive-description": "Segna automaticamente una transazione ripetitiva come pagato dopo la data di scadenza",
   "pay-upcoming": "Paga imminente",
   "pay-upcoming-description": "Segna automaticamente una transazione imminente pagata dopo la data di scadenza",
@@ -827,5 +827,10 @@
   "only-income-categories": "Solo categorie di reddito",
   "only-expense-categories": "Solo categorie di spese",
   "transfer-in": "Trasferire in",
-  "transfer-out": "Trasferito da"
+  "transfer-out": "Trasferito da",
+  "cannot-create-transaction": "Non può creare transazione",
+  "category-no-longer-exists": "La categoria non esiste più",
+  "default-category-income": "Reddito",
+  "select-shortcut": "Seleziona scorciatoia",
+  "all-spending-settings": "Tutte le impostazioni di spesa"
 }

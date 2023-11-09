@@ -246,6 +246,7 @@ class _BillSplitterState extends State<BillSplitter> {
           padding:
               EdgeInsets.only(bottom: MediaQuery.viewPaddingOf(context).bottom),
           child: FAB(
+            onLongPressAddAllPopup: false,
             openPage: AddBillItemPage(
               splitPersons: splitPersons,
               addBillSplitterItem: addBillSplitterItem,
@@ -1293,6 +1294,7 @@ class _PeoplePageState extends State<PeoplePage> {
           padding:
               EdgeInsets.only(bottom: MediaQuery.viewPaddingOf(context).bottom),
           child: FAB(
+            onLongPressAddAllPopup: false,
             openPage: SizedBox.shrink(),
             onTap: () {
               openAddPersonPopup(

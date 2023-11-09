@@ -827,5 +827,10 @@
   "only-income-categories": "Vain tulokategoriat",
   "only-expense-categories": "Vain kustannusluokat",
   "transfer-in": "Siirtyä jhk",
-  "transfer-out": "Siirto jstk"
+  "transfer-out": "Siirto jstk",
+  "cannot-create-transaction": "Tapahtumaa ei voi luoda",
+  "category-no-longer-exists": "Luokkaa ei enää ole",
+  "default-category-income": "Tulo",
+  "select-shortcut": "Valitse pikakuvake",
+  "all-spending-settings": "Kaikki menot"
 }

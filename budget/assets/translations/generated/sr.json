@@ -827,5 +827,10 @@
   "only-income-categories": "Само категорије прихода",
   "only-expense-categories": "Само категорије трошкова",
   "transfer-in": "Пренос у",
-  "transfer-out": "Пренос из"
+  "transfer-out": "Пренос из",
+  "cannot-create-transaction": "Не може да створи трансакцију",
+  "category-no-longer-exists": "Категорија више не постоји",
+  "default-category-income": "Приход",
+  "select-shortcut": "Изаберите пречицу",
+  "all-spending-settings": "Све подешавања потрошње"
 }

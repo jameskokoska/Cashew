@@ -827,5 +827,10 @@
   "only-income-categories": "Bare inntektskategorier",
   "only-expense-categories": "Bare kostnadskategorier",
   "transfer-in": "Overfør til",
-  "transfer-out": "Overfør fra"
+  "transfer-out": "Overfør fra",
+  "cannot-create-transaction": "Kan ikke opprette transaksjon",
+  "category-no-longer-exists": "Kategori eksisterer ikke lenger",
+  "default-category-income": "Inntekt",
+  "select-shortcut": "Velg snarvei",
+  "all-spending-settings": "Alle utgiftsinnstillinger"
 }
