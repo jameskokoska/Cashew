@@ -33,6 +33,7 @@ String getChangelogString() {
     Fixed discard changes popup if total amount was 0
     Applied filters added padding for wide displays
     If settings page loaded and user not signed in yet, UI now properly updates when sign in finished
+    Database enum migration protection for backwards compatibility
     < 4.8.6
     Added account picker filters for all spending page
     Customizable navigation bar shortcuts - customize by long pressing in navigation bar

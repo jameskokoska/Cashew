@@ -135,8 +135,10 @@ class BudgetTransactionFiltersListInColumnConverter
   @override
   List<BudgetTransactionFilters> fromSql(String string_from_db) {
     List<int> ints = List<int>.from(json.decode(string_from_db));
-    List<BudgetTransactionFilters> filters =
-        ints.map((i) => BudgetTransactionFilters.values[i]).toList();
+    List<BudgetTransactionFilters> filters = ints
+        .where((i) => i >= 0 && i < BudgetTransactionFilters.values.length)
+        .map((i) => BudgetTransactionFilters.values[i])
+        .toList();
     return filters;
   }
 
@@ -153,9 +155,11 @@ class HomePageWidgetDisplayListInColumnConverter
   @override
   List<HomePageWidgetDisplay> fromSql(String string_from_db) {
     List<int> ints = List<int>.from(json.decode(string_from_db));
-    List<HomePageWidgetDisplay> filters =
-        ints.map((i) => HomePageWidgetDisplay.values[i]).toList();
-    return filters;
+    List<HomePageWidgetDisplay> widgetDisplays = ints
+        .where((i) => i >= 0 && i < HomePageWidgetDisplay.values.length)
+        .map((i) => HomePageWidgetDisplay.values[i])
+        .toList();
+    return widgetDisplays;
   }
 
   @override
