@@ -43,6 +43,7 @@ import 'package:budget/struct/initializeNotifications.dart';
 import 'package:budget/struct/upcomingTransactionsFunctions.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
+import 'package:budget/widgets/viewAllTransactionsButton.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -487,6 +488,36 @@ class SettingsPageContent extends StatelessWidget {
             return item.toLowerCase().tr();
           },
         ),
+        AnimatedExpanded(
+          // Indicates if it is enabled by default per device height
+          expand: MediaQuery.sizeOf(context).height > MIN_HEIGHT_FOR_HEADER &&
+              getPlatform() == PlatformOS.isAndroid,
+          child: SettingsContainerDropdown(
+            title: "header-height".tr(),
+            icon: appStateSettings["outlinedIcons"]
+                ? Icons.subtitles_outlined
+                : Icons.subtitles_rounded,
+            initial: appStateSettings["forceSmallHeader"].toString(),
+            items: ["true", "false"],
+            onChanged: (value) async {
+              bool boolValue = false;
+              if (value == "true") {
+                boolValue = true;
+              } else if (value == "false") {
+                boolValue = false;
+              }
+              await updateSettings("forceSmallHeader", boolValue,
+                  updateGlobalState: false, pagesNeedingRefresh: [0, 1, 2, 3]);
+              await updateSettings("forceSmallHeader", boolValue,
+                  updateGlobalState: true);
+            },
+            getLabel: (item) {
+              if (item == "true") return "short".tr();
+              if (item == "false") return "tall".tr();
+            },
+          ),
+        ),
+
         // EnterName(),
         SettingsHeader(title: "preferences".tr()),
         // SettingsContainerSwitch(
@@ -499,6 +530,15 @@ class SettingsPageContent extends StatelessWidget {
         //   initialValue: appStateSettings["batterySaver"],
         //   icon: appStateSettings["outlinedIcons"] ? Icons.battery_charging_full_outlined : Icons.battery_charging_full_rounded,
         // ),
+
+        SettingsContainerOpenPage(
+          openPage: EditHomePage(),
+          title: "edit-home-page".tr(),
+          icon: appStateSettings["outlinedIcons"]
+              ? Icons.home_outlined
+              : Icons.home_rounded,
+        ),
+
         notificationsGlobalEnabled && getIsFullScreen(context) == false
             ? SettingsContainerOpenPage(
                 openPage: NotificationsPage(),
@@ -509,58 +549,65 @@ class SettingsPageContent extends StatelessWidget {
               )
             : SizedBox.shrink(),
 
-        SettingsContainerOpenPage(
-          openPage: EditHomePage(),
-          title: "edit-home-page".tr(),
-          icon: appStateSettings["outlinedIcons"]
-              ? Icons.home_outlined
-              : Icons.home_rounded,
-        ),
-
-        SettingsContainerOpenPage(
-          onOpen: () {
-            checkIfExchangeRateChangeBefore();
-          },
-          onClosed: () {
-            checkIfExchangeRateChangeAfter();
-          },
-          openPage: ExchangeRates(),
-          title: "exchange-rates".tr(),
-          icon: appStateSettings["outlinedIcons"]
-              ? Icons.account_balance_wallet_outlined
-              : Icons.account_balance_wallet_rounded,
-        ),
-
-        ShowAccountLabelSettingToggle(),
-
-        BudgetTotalSpentToggle(),
-
         BiometricsSettingToggle(),
 
-        Builder(builder: (context) {
-          return SettingsContainer(
-            title: "language".tr(),
-            icon: appStateSettings["outlinedIcons"]
-                ? Icons.language_outlined
-                : Icons.language_rounded,
-            afterWidget: Tappable(
-              color: Theme.of(context).colorScheme.secondaryContainer,
-              borderRadius: 10,
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                child: TextFont(
-                  text: languageDisplayFilter(
-                      appStateSettings["locale"].toString()),
-                  fontSize: 14,
-                ),
+        SettingsContainer(
+          title: "language".tr(),
+          icon: appStateSettings["outlinedIcons"]
+              ? Icons.language_outlined
+              : Icons.language_rounded,
+          afterWidget: Tappable(
+            color: Theme.of(context).colorScheme.secondaryContainer,
+            borderRadius: 10,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+              child: TextFont(
+                text: languageDisplayFilter(
+                    appStateSettings["locale"].toString()),
+                fontSize: 14,
               ),
             ),
-            onTap: () {
-              openLanguagePicker(context);
-            },
-          );
-        }),
+          ),
+          onTap: () {
+            openLanguagePicker(context);
+          },
+        ),
+
+        SettingsContainerOpenPage(
+          openPage: PageFramework(
+            title: "more".tr(),
+            dragDownToDismiss: true,
+            listWidgets: [
+              SettingsHeader(title: "accounts".tr()),
+              ShowAccountLabelSettingToggle(),
+              SettingsContainerOpenPage(
+                onOpen: () {
+                  checkIfExchangeRateChangeBefore();
+                },
+                onClosed: () {
+                  checkIfExchangeRateChangeAfter();
+                },
+                openPage: ExchangeRates(),
+                title: "exchange-rates".tr(),
+                icon: appStateSettings["outlinedIcons"]
+                    ? Icons.account_balance_wallet_outlined
+                    : Icons.account_balance_wallet_rounded,
+              ),
+              SettingsHeader(title: "budgets".tr()),
+              TotalSpentToggle(),
+              SettingsHeader(title: "goals".tr()),
+              TotalSpentToggle(isForGoalTotal: true),
+              SettingsHeader(title: "titles".tr()),
+              AskForTitlesToggle(),
+              AutoTitlesToggle(),
+            ],
+          ),
+          title: "more-options".tr(),
+          description: "more-options-description".tr(),
+          icon: appStateSettings["outlinedIcons"]
+              ? Icons.app_registration_outlined
+              : Icons.app_registration_rounded,
+        ),
 
         SettingsHeader(title: "automation".tr()),
         // SettingsContainerOpenPage(
@@ -569,13 +616,26 @@ class SettingsPageContent extends StatelessWidget {
         //   icon: appStateSettings["outlinedIcons"] ? Icons.auto_fix_high_outlined : Icons.auto_fix_high_rounded,
         // ),
 
-        AutoPayUpcomingSetting(),
-        AutoPayRepetitiveSetting(),
-        AutoPaySubscriptionsSetting(),
-
-        AskForTitlesToggle(),
-
-        AutoTitlesToggle(),
+        SettingsContainer(
+          title: "auto-mark-transactions".tr(),
+          description: "auto-mark-transactions-description".tr(),
+          icon: Icons.check_circle_rounded,
+          onTap: () {
+            openBottomSheet(
+              context,
+              PopupFramework(
+                hasPadding: false,
+                child: Column(
+                  children: [
+                    AutoPayUpcomingSetting(),
+                    AutoPayRepetitiveSetting(),
+                    AutoPaySubscriptionsSetting(),
+                  ],
+                ),
+              ),
+            );
+          },
+        ),
 
         appStateSettings["emailScanning"]
             ? SettingsContainerOpenPage(
@@ -586,8 +646,6 @@ class SettingsPageContent extends StatelessWidget {
                     : Icons.mark_email_unread_rounded,
               )
             : SizedBox.shrink(),
-
-        SettingsHeader(title: "tools".tr()),
 
         SettingsContainerOpenPage(
           openPage: BillSplitter(),
@@ -633,8 +691,8 @@ class _BiometricsSettingToggleState extends State<BiometricsSettingToggle> {
       children: [
         biometricsAvailable
             ? SettingsContainerSwitch(
-                title: "require-biometrics".tr(),
-                description: "require-biometrics-description".tr(),
+                title: "biometric-lock".tr(),
+                description: "biometric-lock-description".tr(),
                 onSwitched: (value) async {
                   try {
                     bool result = await checkBiometrics(

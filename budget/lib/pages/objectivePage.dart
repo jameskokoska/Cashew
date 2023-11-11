@@ -25,6 +25,7 @@ import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/widgets/pieChart.dart';
+import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntries.dart';
 import 'package:budget/widgets/transactionEntry/transactionEntry.dart';
@@ -79,6 +80,19 @@ class _ObjectivePageContent extends StatefulWidget {
 class _ObjectivePageContentState extends State<_ObjectivePageContent> {
   final ConfettiController confettiController = ConfettiController();
   bool hasPlayedConfetti = false;
+
+  bool showTotalSpent = appStateSettings["showTotalSpentForObjective"];
+
+  _swapTotalSpentDisplay() {
+    setState(() {
+      showTotalSpent = !showTotalSpent;
+    });
+    updateSettings(
+      "showTotalSpentForObjective",
+      showTotalSpent,
+      updateGlobalState: true,
+    );
+  }
 
   @override
   void initState() {
@@ -256,7 +270,7 @@ class _ObjectivePageContentState extends State<_ObjectivePageContent> {
                                     canEditByLongPress: false,
                                     margin: EdgeInsets.zero,
                                   ),
-                                  SizedBox(height: 20),
+                                  SizedBox(height: 10),
                                   CountNumber(
                                     count: percentageTowardsGoal * 100,
                                     duration: Duration(milliseconds: 1000),
@@ -274,37 +288,76 @@ class _ObjectivePageContentState extends State<_ObjectivePageContent> {
                                       );
                                     },
                                   ),
-                                  SizedBox(height: 8),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    children: [
-                                      TextFont(
-                                        text: convertToMoney(
-                                            Provider.of<AllWallets>(context),
-                                            totalAmount),
-                                        fontSize: 18,
-                                        textColor: totalAmount >=
-                                                widget.objective.amount
-                                            ? getColor(context, "incomeAmount")
-                                            : getColor(context, "black"),
-                                      ),
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(bottom: 1),
-                                        child: TextFont(
-                                          text: " / " +
-                                              convertToMoney(
-                                                  Provider.of<AllWallets>(
-                                                      context),
-                                                  widget.objective.amount),
-                                          fontSize: 13,
-                                          textColor: getColor(context, "black")
-                                              .withOpacity(0.4),
+                                  Builder(builder: (context) {
+                                    String amountSpentLabel =
+                                        getObjectiveAmountSpentLabel(
+                                            context: context,
+                                            showTotalSpent: showTotalSpent,
+                                            objective: widget.objective,
+                                            totalAmount: totalAmount);
+                                    return AnimatedSizeSwitcher(
+                                      child: IntrinsicWidth(
+                                        key: ValueKey(showTotalSpent),
+                                        child: Tappable(
+                                          borderRadius: 15,
+                                          onTap: () {
+                                            _swapTotalSpentDisplay();
+                                          },
+                                          color: Colors.transparent,
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.end,
+                                              children: [
+                                                TextFont(
+                                                  text: amountSpentLabel,
+                                                  fontSize: 18,
+                                                  textColor: totalAmount >=
+                                                          widget
+                                                              .objective.amount
+                                                      ? getColor(context,
+                                                          "incomeAmount")
+                                                      : getColor(
+                                                          context, "black"),
+                                                ),
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          bottom: 1),
+                                                  child: TextFont(
+                                                    text: (isShowingAmountRemaining(
+                                                                showTotalSpent:
+                                                                    showTotalSpent,
+                                                                objective: widget
+                                                                    .objective,
+                                                                totalAmount:
+                                                                    totalAmount)
+                                                            ? " " +
+                                                                "remaining".tr()
+                                                            : "") +
+                                                        " / " +
+                                                        convertToMoney(
+                                                            Provider.of<
+                                                                    AllWallets>(
+                                                                context),
+                                                            widget.objective
+                                                                .amount),
+                                                    fontSize: 13,
+                                                    textColor: getColor(
+                                                            context, "black")
+                                                        .withOpacity(0.4),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
                                         ),
                                       ),
-                                    ],
-                                  ),
+                                    );
+                                  }),
                                 ],
                               ),
                             ],

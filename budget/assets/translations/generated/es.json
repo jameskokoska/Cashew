@@ -91,8 +91,6 @@
   "username": "Nombre de usuario",
   "battery-saver": "Ahorro de batería",
   "battery-saver-description": "Optimizar la interfaz de usuario para aumentar el rendimiento y ahorrar batería",
-  "require-biometrics": "Requiere biometría",
-  "require-biometrics-description": "Bloquear la aplicación con biometría",
   "verify-identity": "Verifique por favor su Identidad.",
   "automation": "Automatización",
   "auto-email-transactions": "Transacciones de correo electrónico automático",
@@ -832,5 +830,18 @@
   "category-no-longer-exists": "La categoría ya no existe",
   "default-category-income": "Ingreso",
   "select-shortcut": "Seleccione el atajo",
-  "all-spending-settings": "Todas las configuraciones de gastos"
+  "all-spending-settings": "Todas las configuraciones de gastos",
+  "goal-total-type": "Tipo total de objetivos",
+  "auto-mark-transactions": "Transacciones de pago automático",
+  "auto-mark-transactions-description": "Mark Transacciones atrasadas como se paga",
+  "more-options-description": "Cuentas, presupuestos, objetivos, títulos",
+  "header-height": "Altura del encabezado",
+  "tall": "Alto",
+  "short": "Corto",
+  "biometric-lock": "Bloqueo biométrico",
+  "biometric-lock-description": "Requiere biometría en el lanzamiento de la aplicación",
+  "remaining": "restante",
+  "created-transaction": "Transacción creada",
+  "most-common-transactions": "Transacciones más comunes",
+  "most-common-transactions-description": "Duplique rápidamente las transacciones más frecuentes enumeradas desde los últimos 2 meses seleccionando en la lista."
 }

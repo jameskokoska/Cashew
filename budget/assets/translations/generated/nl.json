@@ -91,8 +91,6 @@
   "username": "Gebruikersnaam",
   "battery-saver": "Batterij bespaarder",
   "battery-saver-description": "Optimaliseer de gebruikersinterface om de prestaties te verhogen en de batterij te besparen",
-  "require-biometrics": "Biometrie vereisen",
-  "require-biometrics-description": "Vergrendel de toepassing met biometrie",
   "verify-identity": "Bevestig uw identiteit alstublieft.",
   "automation": "Automatisering",
   "auto-email-transactions": "Auto -e -mailtransacties",
@@ -832,5 +830,18 @@
   "category-no-longer-exists": "Categorie bestaat niet meer",
   "default-category-income": "Inkomen",
   "select-shortcut": "Selecteer snelkoppeling",
-  "all-spending-settings": "Alle uitgaveninstellingen"
+  "all-spending-settings": "Alle uitgaveninstellingen",
+  "goal-total-type": "Doel totaal type",
+  "auto-mark-transactions": "Auto -betalingstransacties",
+  "auto-mark-transactions-description": "Markeer achterstallige transacties zoals betaald",
+  "more-options-description": "Accounts, budgetten, doelen, titels",
+  "header-height": "Koptekst",
+  "tall": "Lang",
+  "short": "Kort",
+  "biometric-lock": "Biometrische slot",
+  "biometric-lock-description": "Biometrie vereisen bij de app -lancering",
+  "remaining": "overig",
+  "created-transaction": "Gemaakte transactie",
+  "most-common-transactions": "Meest voorkomende transacties",
+  "most-common-transactions-description": "Dupliceer snel de meest frequente transacties die de afgelopen 2 maanden worden vermeld door in de lijst te selecteren."
 }

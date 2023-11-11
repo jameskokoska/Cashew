@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:budget/functions.dart';
 import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/homePage/homePageLineGraph.dart';
@@ -3524,6 +3526,18 @@ class FinanceDatabase extends _$FinanceDatabase {
         }).toList());
   }
 
+  Stream<Map<String, TransactionCategory>> watchAllCategoriesIndexed() {
+    return (select(categories)..orderBy([(w) => OrderingTerm.asc(w.order)]))
+        .watch()
+        .map((categories) {
+      Map<String, TransactionCategory> indexedByPk = {
+        for (TransactionCategory category in categories)
+          category.categoryPk: category,
+      };
+      return indexedByPk;
+    });
+  }
+
   Stream<Map<String, List<TransactionCategory>>>
       watchAllSubCategoriesIndexedByMainCategoryPk() {
     return (select(categories)..orderBy([(w) => OrderingTerm.asc(w.order)]))
@@ -4463,15 +4477,19 @@ class FinanceDatabase extends _$FinanceDatabase {
     Expression<bool> isInObjectivePks =
         onlyShowBasedOnObjectiveFks(tbl, searchFilters.objectivePks);
 
+    Expression<bool> isBalanceCorrectionAnd =
+        searchFilters.categoryPks.contains("0")
+            ? Constant(true)
+            : tbl.categoryFk.equals("0").not();
     Expression<bool> isIncome = searchFilters.expenseIncome.length <= 0
         ? Constant(true)
         : searchFilters.expenseIncome.contains(ExpenseIncome.income)
-            ? tbl.income.equals(true)
+            ? tbl.income.equals(true) & isBalanceCorrectionAnd
             : Constant(false);
     Expression<bool> isExpense = searchFilters.expenseIncome.length <= 0
         ? Constant(true)
         : searchFilters.expenseIncome.contains(ExpenseIncome.expense)
-            ? tbl.income.equals(false)
+            ? tbl.income.equals(false) & isBalanceCorrectionAnd
             : Constant(false);
 
     Expression<bool> isPaid = searchFilters.paidStatus.length <= 0
@@ -5554,4 +5572,30 @@ class FinanceDatabase extends _$FinanceDatabase {
   Stream<List<DeleteLog>> watchAllDeleteLogs() {
     return (select(deleteLogs)).watch();
   }
+
+  Stream<List<TransactionWithCount>> getCommonTransactions() {
+    // Database dates stored in seconds since epoch
+    final int threeMonthsAgo =
+        DateTime.now().subtract(Duration(days: 60)).millisecondsSinceEpoch ~/
+            1000;
+
+    return customSelect(
+      'SELECT *, COUNT(*) as "count" FROM transactions WHERE date_created >= $threeMonthsAgo GROUP BY transactions.category_fk, transactions.name ORDER BY count DESC, MAX(date_created) DESC LIMIT 5',
+      readsFrom: {transactions},
+    ).watch().map((rows) {
+      return rows
+          .map((row) => TransactionWithCount(
+                transaction: transactions.map(row.data),
+                count: row.read<int>('count'),
+              ))
+          .toList();
+    });
+  }
+}
+
+class TransactionWithCount {
+  final Transaction transaction;
+  final int count;
+
+  TransactionWithCount({required this.transaction, required this.count});
 }

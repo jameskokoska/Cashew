@@ -91,8 +91,6 @@
   "username": "Nazwa użytkownika",
   "battery-saver": "Program oszczędzający baterię",
   "battery-saver-description": "Zoptymalizuj interfejs użytkownika, aby zwiększyć wydajność i zaoszczędzić baterię",
-  "require-biometrics": "Wymagaj biometryki",
-  "require-biometrics-description": "Zablokuj aplikację biometrią",
   "verify-identity": "Proszę zweryfikuj swoją tożsamość.",
   "automation": "Automatyzacja",
   "auto-email-transactions": "Automatyczne transakcje e -mail",
@@ -832,5 +830,18 @@
   "category-no-longer-exists": "Kategoria już nie istnieje",
   "default-category-income": "Dochód",
   "select-shortcut": "Wybierz skrót",
-  "all-spending-settings": "Wszystkie ustawienia wydatków"
+  "all-spending-settings": "Wszystkie ustawienia wydatków",
+  "goal-total-type": "Całkowity rodzaj celu",
+  "auto-mark-transactions": "Transakcje Auto Pay",
+  "auto-mark-transactions-description": "Znacz zaległe transakcje jako zapłacone",
+  "more-options-description": "Konta, budżety, cele, tytuły",
+  "header-height": "Wysokość nagłówka",
+  "tall": "Wysoki",
+  "short": "Krótki",
+  "biometric-lock": "Zamek biometryczny",
+  "biometric-lock-description": "Wymagaj biometrii podczas uruchomienia aplikacji",
+  "remaining": "pozostały",
+  "created-transaction": "Utworzona transakcja",
+  "most-common-transactions": "Najczęstsze transakcje",
+  "most-common-transactions-description": "Szybko powielaj najczęstsze transakcje wymienione z ostatnich 2 miesięcy, wybierając na liście."
 }

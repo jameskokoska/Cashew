@@ -22,6 +22,17 @@ import 'listItem.dart';
 
 String getChangelogString() {
   return """
+    < 4.8.7
+    Long press add button to see list of most commonly added expenses and quickly duplicate them
+    Added goal total or remaining spending label setting
+    Header height setting
+    Rearranged settings page to reduce clutter and confusion
+    Balance correction is not considered when filtering search for income/expense - only when that category is selected
+    Fixed default color for goals progress bar to match theme
+    If upcoming payment had 0 total, no longer asks for amount
+    Fixed discard changes popup if total amount was 0
+    Applied filters added padding for wide displays
+    If settings page loaded and user not signed in yet, UI now properly updates when sign in finished
     < 4.8.6
     Added account picker filters for all spending page
     Customizable navigation bar shortcuts - customize by long pressing in navigation bar

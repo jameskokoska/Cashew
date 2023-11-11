@@ -91,8 +91,6 @@
   "username": "વપરાશકર્તા નામ",
   "battery-saver": "બ batteryટરી બચત કરનાર",
   "battery-saver-description": "પ્રદર્શન વધારવા અને બેટરી સાચવવા માટે UI ને optim પ્ટિમાઇઝ કરો",
-  "require-biometrics": "બાયોમેટ્રિક્સ જરૂરી છે",
-  "require-biometrics-description": "બાયોમેટ્રિક્સ સાથે એપ્લિકેશનને લ lock ક કરો",
   "verify-identity": "મહેરબાની કરીને તમારી ઓળખ ચકાસો.",
   "automation": "સ્વચાલિતતા",
   "auto-email-transactions": "સ્વત email ઇમેઇલ વ્યવહાર",
@@ -832,5 +830,18 @@
   "category-no-longer-exists": "વર્ગ હવે અસ્તિત્વમાં નથી",
   "default-category-income": "આવક",
   "select-shortcut": "શોર્ટકટ પસંદ કરો",
-  "all-spending-settings": "બધી ખર્ચ સેટિંગ્સ"
+  "all-spending-settings": "બધી ખર્ચ સેટિંગ્સ",
+  "goal-total-type": "ધ્યેય કુલ પ્રકાર",
+  "auto-mark-transactions": "ઓટો પગાર વ્યવહાર",
+  "auto-mark-transactions-description": "ચૂકવણી મુજબ ઓવરડ્યુ ટ્રાંઝેક્શનને ચિહ્નિત કરો",
+  "more-options-description": "હિસાબ, બજેટ, લક્ષ્યો, શીર્ષક",
+  "header-height": "મથારીની height ંચાઇ",
+  "tall": "Tallંચું",
+  "short": "ટૂંકું",
+  "biometric-lock": "જૈવિક લ lock ક",
+  "biometric-lock-description": "એપ્લિકેશન લોંચ પર બાયોમેટ્રિક્સ આવશ્યક છે",
+  "remaining": "બાકી",
+  "created-transaction": "સોબત",
+  "most-common-transactions": "સૌથી સામાન્ય વ્યવહાર",
+  "most-common-transactions-description": "સૂચિમાં પસંદગી કરીને છેલ્લા 2 મહિનાથી સૂચિબદ્ધ સૌથી વધુ વારંવારના વ્યવહારોની ઝડપથી ડુપ્લિકેટ કરો."
 }

@@ -531,7 +531,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
       transactionPk:
           widget.transaction != null ? widget.transaction!.transactionPk : "-1",
       name: (selectedTitle ?? "").trim(),
-      amount: (selectedIncome
+      amount: (selectedIncome || selectedAmount == 0 //Prevent negative 0
           ? (selectedAmount ?? 0).abs()
           : (selectedAmount ?? 0).abs() * -1),
       note: _noteInputController.text,
@@ -3488,7 +3488,6 @@ class _SelectCategoryWithIncomeExpenseSelectorState
     return PopupFramework(
       title: widget.setSelectedIncome == null ? "select-category".tr() : null,
       hasPadding: false,
-      aboveTitleSpace: widget.setSelectedIncome == null,
       outsideExtraWidget: widget.setSelectedIncome != null
           // Hide option to rearrange because income/expense selector is shown
           ? null

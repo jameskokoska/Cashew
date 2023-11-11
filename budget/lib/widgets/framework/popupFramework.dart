@@ -44,7 +44,7 @@ class PopupFramework extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              if (aboveTitleSpace) SizedBox(height: 17),
+              if (title != null) SizedBox(height: 17),
               getPlatform() == PlatformOS.isIOS
                   ? Stack(
                       alignment: Alignment.topLeft,

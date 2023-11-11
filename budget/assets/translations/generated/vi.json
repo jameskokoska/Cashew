@@ -91,8 +91,6 @@
   "username": "tên tài khoản",
   "battery-saver": "Tiết kiệm pin",
   "battery-saver-description": "Tối ưu hóa UI để tăng hiệu suất và tiết kiệm pin",
-  "require-biometrics": "Yêu cầu sinh trắc học",
-  "require-biometrics-description": "Khóa ứng dụng bằng sinh trắc học",
   "verify-identity": "Xin vui lòng xác nhận danh tính của bạn.",
   "automation": "Tự động hóa",
   "auto-email-transactions": "Giao dịch email tự động",
@@ -832,5 +830,18 @@
   "category-no-longer-exists": "Danh mục không còn tồn tại",
   "default-category-income": "Thu nhập",
   "select-shortcut": "Chọn phím tắt",
-  "all-spending-settings": "Tất cả các cài đặt chi tiêu"
+  "all-spending-settings": "Tất cả các cài đặt chi tiêu",
+  "goal-total-type": "Tổng số mục tiêu",
+  "auto-mark-transactions": "Giao dịch trả tiền tự động",
+  "auto-mark-transactions-description": "Đánh dấu các giao dịch quá hạn được trả tiền",
+  "more-options-description": "Tài khoản, ngân sách, mục tiêu, tiêu đề",
+  "header-height": "Chiều cao tiêu đề",
+  "tall": "Cao",
+  "short": "Ngắn",
+  "biometric-lock": "Khóa sinh trắc học",
+  "biometric-lock-description": "Yêu cầu sinh trắc học khi ra mắt ứng dụng",
+  "remaining": "còn lại",
+  "created-transaction": "Đã tạo giao dịch",
+  "most-common-transactions": "Giao dịch phổ biến nhất",
+  "most-common-transactions-description": "Nhanh chóng nhân đôi các giao dịch thường xuyên nhất được liệt kê trong 2 tháng qua bằng cách chọn trong danh sách."
 }

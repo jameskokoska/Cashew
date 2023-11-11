@@ -91,8 +91,6 @@
   "username": "ชื่อผู้ใช้",
   "battery-saver": "ประหยัดแบตเตอรี่",
   "battery-saver-description": "เพิ่มประสิทธิภาพ UI เพื่อเพิ่มประสิทธิภาพและประหยัดแบตเตอรี่",
-  "require-biometrics": "ต้องการชีวภาพ",
-  "require-biometrics-description": "ล็อคแอปพลิเคชันด้วยชีวภาพ",
   "verify-identity": "โปรดยืนยันตัวตนของคุณ",
   "automation": "ระบบอัตโนมัติ",
   "auto-email-transactions": "ธุรกรรมอีเมลอัตโนมัติ",
@@ -832,5 +830,18 @@
   "category-no-longer-exists": "หมวดหมู่ไม่มีอยู่อีกต่อไป",
   "default-category-income": "รายได้",
   "select-shortcut": "เลือกทางลัด",
-  "all-spending-settings": "การตั้งค่าการใช้จ่ายทั้งหมด"
+  "all-spending-settings": "การตั้งค่าการใช้จ่ายทั้งหมด",
+  "goal-total-type": "ประเภทเป้าหมายทั้งหมด",
+  "auto-mark-transactions": "ธุรกรรมการจ่ายเงินอัตโนมัติ",
+  "auto-mark-transactions-description": "ทำเครื่องหมายธุรกรรมที่เกินกำหนดตามที่จ่ายไป",
+  "more-options-description": "บัญชีงบประมาณเป้าหมายชื่อเรื่อง",
+  "header-height": "ความสูงส่วนหัว",
+  "tall": "สูง",
+  "short": "สั้น",
+  "biometric-lock": "ล็อคไบโอเมตริกซ์",
+  "biometric-lock-description": "ต้องการชีวภาพในการเปิดตัวแอป",
+  "remaining": "ที่เหลืออยู่",
+  "created-transaction": "สร้างธุรกรรม",
+  "most-common-transactions": "ธุรกรรมที่พบบ่อยที่สุด",
+  "most-common-transactions-description": "ทำธุรกรรมที่พบบ่อยที่สุดที่ระบุไว้อย่างรวดเร็วจาก 2 เดือนที่ผ่านมาโดยเลือกในรายการ"
 }

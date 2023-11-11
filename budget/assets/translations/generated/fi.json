@@ -91,8 +91,6 @@
   "username": "Käyttäjänimi",
   "battery-saver": "Akun säästäjä",
   "battery-saver-description": "Optimoi käyttöliittymä parantaaksesi suorituskykyä ja säästääksesi akkua",
-  "require-biometrics": "Vaativat biometriaa",
-  "require-biometrics-description": "Lukitse sovellus biometrisillä",
   "verify-identity": "Ole hyvä ja vahvista henkilöllisyytesi.",
   "automation": "Automaatio",
   "auto-email-transactions": "Automaattiset sähköpostit tapahtumat",
@@ -832,5 +830,18 @@
   "category-no-longer-exists": "Luokkaa ei enää ole",
   "default-category-income": "Tulo",
   "select-shortcut": "Valitse pikakuvake",
-  "all-spending-settings": "Kaikki menot"
+  "all-spending-settings": "Kaikki menot",
+  "goal-total-type": "Tavoitetyyppi",
+  "auto-mark-transactions": "Automaattiset palkkatapahtumat",
+  "auto-mark-transactions-description": "Mark erääntyneitä tapahtumia maksettuina",
+  "more-options-description": "Tilit, budjetit, tavoitteet, nimikkeet",
+  "header-height": "Otsikon korkeus",
+  "tall": "Pitkä",
+  "short": "Lyhyt",
+  "biometric-lock": "Biometrinen lukko",
+  "biometric-lock-description": "Vaativat biometriaa sovelluksen käynnistämisessä",
+  "remaining": "jäljelle jäänyt",
+  "created-transaction": "Luotu tapahtuma",
+  "most-common-transactions": "Yleisimmät liiketoimet",
+  "most-common-transactions-description": "Kopioi nopeasti viimeisen kahden kuukauden yleisimmät tapahtumat valitsemalla luettelossa."
 }

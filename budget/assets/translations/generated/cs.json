@@ -91,8 +91,6 @@
   "username": "Uživatelské jméno",
   "battery-saver": "Šetřič baterie",
   "battery-saver-description": "Optimalizujte uživatelské rozhraní pro zvýšení výkonu a uložení baterie",
-  "require-biometrics": "Vyžadovat biometriku",
-  "require-biometrics-description": "Zamkněte aplikaci biometrikou",
   "verify-identity": "Prosím ověřte svou identitu.",
   "automation": "Automatizace",
   "auto-email-transactions": "Automatické e -mailové transakce",
@@ -832,5 +830,18 @@
   "category-no-longer-exists": "Kategorie již neexistuje",
   "default-category-income": "Příjem",
   "select-shortcut": "Vyberte zkratku",
-  "all-spending-settings": "Všechna nastavení výdajů"
+  "all-spending-settings": "Všechna nastavení výdajů",
+  "goal-total-type": "Celkový typ cíle",
+  "auto-mark-transactions": "Transakce s automatickou výplatou",
+  "auto-mark-transactions-description": "Označte zpochybnění transakcí jako placené",
+  "more-options-description": "Účty, rozpočty, cíle, tituly",
+  "header-height": "Výška záhlaví",
+  "tall": "Vysoký",
+  "short": "Krátký",
+  "biometric-lock": "Biometrický zámek",
+  "biometric-lock-description": "Vyžadujte biometriku při spuštění aplikace",
+  "remaining": "zbývající",
+  "created-transaction": "Vytvořená transakce",
+  "most-common-transactions": "Nejběžnější transakce",
+  "most-common-transactions-description": "Rychle duplikujte nejčastější transakce uvedené z posledních 2 měsíců výběrem v seznamu."
 }

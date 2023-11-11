@@ -91,8 +91,6 @@
   "username": "Nama pengguna",
   "battery-saver": "Penyelamat bateri",
   "battery-saver-description": "Mengoptimumkan UI untuk meningkatkan prestasi dan menjimatkan bateri",
-  "require-biometrics": "Memerlukan biometrik",
-  "require-biometrics-description": "Kunci aplikasi dengan biometrik",
   "verify-identity": "Sila Sahkan Pengenalan Anda.",
   "automation": "Automasi",
   "auto-email-transactions": "Urus niaga e -mel automatik",
@@ -832,5 +830,18 @@
   "category-no-longer-exists": "Kategori tidak lagi wujud",
   "default-category-income": "Pendapatan",
   "select-shortcut": "Pilih pintasan",
-  "all-spending-settings": "Semua tetapan perbelanjaan"
+  "all-spending-settings": "Semua tetapan perbelanjaan",
+  "goal-total-type": "Jenis Jumlah Matlamat",
+  "auto-mark-transactions": "Urus Niaga Auto",
+  "auto-mark-transactions-description": "Tandakan transaksi tertunggak seperti yang dibayar",
+  "more-options-description": "Akaun, belanjawan, matlamat, tajuk",
+  "header-height": "Ketinggian header",
+  "tall": "Tinggi",
+  "short": "Pendek",
+  "biometric-lock": "Kunci biometrik",
+  "biometric-lock-description": "Memerlukan biometrik pada pelancaran aplikasi",
+  "remaining": "tinggal",
+  "created-transaction": "Transaksi yang dicipta",
+  "most-common-transactions": "Urus niaga yang paling biasa",
+  "most-common-transactions-description": "Cepat menduplikasi urus niaga yang paling kerap yang disenaraikan dari 2 bulan terakhir dengan memilih dalam senarai."
 }

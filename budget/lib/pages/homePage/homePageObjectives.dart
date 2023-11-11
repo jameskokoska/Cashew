@@ -49,7 +49,8 @@ class _HomePageObjectivesState extends State<HomePageObjectives> {
                 onTap: () {
                   openBottomSheet(
                     context,
-                    EditHomePagePinnedGoalsPopup(),
+                    EditHomePagePinnedGoalsPopup(
+                        showGoalsTotalLabelSetting: false),
                     useCustomController: true,
                   );
                 },
@@ -86,7 +87,8 @@ class _HomePageObjectivesState extends State<HomePageObjectives> {
                   onTap: () {
                     openBottomSheet(
                       context,
-                      EditHomePagePinnedGoalsPopup(),
+                      EditHomePagePinnedGoalsPopup(
+                          showGoalsTotalLabelSetting: false),
                       useCustomController: true,
                     );
                   },
@@ -183,7 +185,9 @@ class _HomePageObjectivesState extends State<HomePageObjectives> {
 }
 
 class EditHomePagePinnedGoalsPopup extends StatelessWidget {
-  const EditHomePagePinnedGoalsPopup({super.key});
+  const EditHomePagePinnedGoalsPopup(
+      {super.key, required this.showGoalsTotalLabelSetting});
+  final bool showGoalsTotalLabelSetting;
 
   @override
   Widget build(BuildContext context) {
@@ -199,6 +203,11 @@ class EditHomePagePinnedGoalsPopup extends StatelessWidget {
                   title: "select-goals".tr(),
                   child: Column(
                     children: [
+                      if (showGoalsTotalLabelSetting)
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(15),
+                          child: TotalSpentToggle(isForGoalTotal: true),
+                        ),
                       if (allObjectives.length <= 0)
                         NoResultsCreate(
                           message: "no-goals-found".tr(),

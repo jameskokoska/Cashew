@@ -86,16 +86,16 @@ List<TransactionCategory> defaultCategories() {
       order: 6,
       income: false,
     ),
-    TransactionCategory(
-      categoryPk: "8",
-      name: "default-category-sports".tr(),
-      colour: toHexString(Colors.cyan),
-      iconName: "sports.png",
-      dateCreated: DateTime.now(),
-      dateTimeModified: null,
-      order: 7,
-      income: false,
-    ),
+    // TransactionCategory(
+    //   categoryPk: "8",
+    //   name: "default-category-sports".tr(),
+    //   colour: toHexString(Colors.cyan),
+    //   iconName: "sports.png",
+    //   dateCreated: DateTime.now(),
+    //   dateTimeModified: null,
+    //   order: 7,
+    //   income: false,
+    // ),
     TransactionCategory(
       categoryPk: "9",
       name: "default-category-beauty".tr(),
@@ -129,12 +129,12 @@ List<TransactionCategory> defaultCategories() {
     TransactionCategory(
       categoryPk: "12",
       name: "default-category-income".tr(),
-      colour: toHexString(Colors.green),
+      colour: toHexString(Colors.deepPurple.shade300),
       iconName: "coin.png",
       dateCreated: DateTime.now(),
       dateTimeModified: null,
       order: 11,
-      income: false,
+      income: true,
     ),
   ];
 }

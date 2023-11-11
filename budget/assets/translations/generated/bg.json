@@ -91,8 +91,6 @@
   "username": "Потребителско име",
   "battery-saver": "Пестене на батерия",
   "battery-saver-description": "Оптимизирайте потребителския интерфейс, за да увеличите производителността и да запазите батерията",
-  "require-biometrics": "Изискват биометрия",
-  "require-biometrics-description": "Заключете приложението с биометрия",
   "verify-identity": "Моля, потвърди самоличността си.",
   "automation": "Автоматизация",
   "auto-email-transactions": "Автоматични имейл транзакции",
@@ -832,5 +830,18 @@
   "category-no-longer-exists": "Категорията вече не съществува",
   "default-category-income": "Доход",
   "select-shortcut": "Изберете пряк път",
-  "all-spending-settings": "Всички настройки за харчене"
+  "all-spending-settings": "Всички настройки за харчене",
+  "goal-total-type": "Общ тип цел",
+  "auto-mark-transactions": "Автоматични транзакции",
+  "auto-mark-transactions-description": "Маркирайте просрочените транзакции като платени",
+  "more-options-description": "Сметки, бюджети, цели, титли",
+  "header-height": "Височина на заглавката",
+  "tall": "Висок",
+  "short": "Къс",
+  "biometric-lock": "Биометрично заключване",
+  "biometric-lock-description": "Изисквайте биометрия при стартиране на приложението",
+  "remaining": "останал",
+  "created-transaction": "Създадена транзакция",
+  "most-common-transactions": "Най -често срещаните транзакции",
+  "most-common-transactions-description": "Бързо дублирайте най -честите транзакции, изброени от последните 2 месеца, като изберете в списъка."
 }

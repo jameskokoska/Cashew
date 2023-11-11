@@ -91,8 +91,6 @@
   "username": "ব্যবহারকারীর নাম",
   "battery-saver": "ব্যাটারি সেভার",
   "battery-saver-description": "কর্মক্ষমতা বাড়াতে এবং ব্যাটারি সংরক্ষণ করতে ইউআই অনুকূলিত করুন",
-  "require-biometrics": "বায়োমেট্রিক্স প্রয়োজন",
-  "require-biometrics-description": "বায়োমেট্রিক্স সহ অ্যাপ্লিকেশনটি লক করুন",
   "verify-identity": "আপনার পরিচয় যাচাই করুন.",
   "automation": "অটোমেশন",
   "auto-email-transactions": "অটো ইমেল লেনদেন",
@@ -832,5 +830,18 @@
   "category-no-longer-exists": "বিভাগ আর বিদ্যমান নেই",
   "default-category-income": "আয়",
   "select-shortcut": "শর্টকাট নির্বাচন করুন",
-  "all-spending-settings": "সমস্ত ব্যয় সেটিংস"
+  "all-spending-settings": "সমস্ত ব্যয় সেটিংস",
+  "goal-total-type": "লক্ষ্য মোট প্রকার",
+  "auto-mark-transactions": "অটো পে লেনদেন",
+  "auto-mark-transactions-description": "প্রদত্ত হিসাবে ওভারডু লেনদেন চিহ্নিত করুন",
+  "more-options-description": "অ্যাকাউন্ট, বাজেট, লক্ষ্য, শিরোনাম",
+  "header-height": "শিরোনাম উচ্চতা",
+  "tall": "লম্বা",
+  "short": "সংক্ষিপ্ত",
+  "biometric-lock": "বায়োমেট্রিক লক",
+  "biometric-lock-description": "অ্যাপ লঞ্চে বায়োমেট্রিক্স প্রয়োজন",
+  "remaining": "বাকি",
+  "created-transaction": "লেনদেন তৈরি",
+  "most-common-transactions": "সর্বাধিক সাধারণ লেনদেন",
+  "most-common-transactions-description": "তালিকায় নির্বাচন করে গত 2 মাস থেকে তালিকাভুক্ত সর্বাধিক ঘন ঘন লেনদেনগুলিকে দ্রুত নকল করুন।"
 }

@@ -91,8 +91,6 @@
   "username": "Имя пользователя",
   "battery-saver": "Спасение аккумулятора",
   "battery-saver-description": "Оптимизируйте пользовательский интерфейс для повышения производительности и сэкономить батарею",
-  "require-biometrics": "Требовать биометрии",
-  "require-biometrics-description": "Заблокируйте приложение с помощью биометрии",
   "verify-identity": "Пожалуйста, подтвердите вашу личность.",
   "automation": "Автоматизация",
   "auto-email-transactions": "Автоматические транзакции по электронной почте",
@@ -832,5 +830,18 @@
   "category-no-longer-exists": "Категория больше не существует",
   "default-category-income": "Доход",
   "select-shortcut": "Выберите ярлык",
-  "all-spending-settings": "Все настройки расходов"
+  "all-spending-settings": "Все настройки расходов",
+  "goal-total-type": "Цель Общий тип",
+  "auto-mark-transactions": "Auto Pay Transactions",
+  "auto-mark-transactions-description": "Отмечать просроченные транзакции как оплачиваемые",
+  "more-options-description": "Счета, бюджеты, цели, названия",
+  "header-height": "Высота заголовка",
+  "tall": "Высокий",
+  "short": "Короткий",
+  "biometric-lock": "Биометрический замок",
+  "biometric-lock-description": "Требовать биометрии при запуске приложения",
+  "remaining": "оставшийся",
+  "created-transaction": "Создана транзакция",
+  "most-common-transactions": "Наиболее распространенные транзакции",
+  "most-common-transactions-description": "Быстро дублировать наиболее частые транзакции, перечисленные за последние 2 месяца, выбрав в списке."
 }

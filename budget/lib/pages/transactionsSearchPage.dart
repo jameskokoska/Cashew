@@ -260,12 +260,16 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
                   child: SizedBox(height: 13),
                 ),
                 SliverToBoxAdapter(
-                  child: AppliedFilterChips(
-                    searchFilters: searchFilters,
-                    openFiltersSelection: () {
-                      selectFilters(context);
-                    },
-                    clearSearchFilters: clearSearchFilters,
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: getHorizontalPaddingConstrained(context)),
+                    child: AppliedFilterChips(
+                      searchFilters: searchFilters,
+                      openFiltersSelection: () {
+                        selectFilters(context);
+                      },
+                      clearSearchFilters: clearSearchFilters,
+                    ),
                   ),
                 ),
                 // SliverToBoxAdapter(
@@ -570,6 +574,7 @@ class AppliedFilterChips extends StatelessWidget {
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(100),
                                 child: Tappable(
+                                  color: Colors.transparent,
                                   child: Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: Icon(

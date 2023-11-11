@@ -91,8 +91,6 @@
   "username": "صارف نام",
   "battery-saver": "بیٹری سیور",
   "battery-saver-description": "کارکردگی بڑھانے اور بیٹری کو بچانے کے لئے UI کو بہتر بنائیں",
-  "require-biometrics": "بایومیٹرکس کی ضرورت ہے",
-  "require-biometrics-description": "درخواست کو بایومیٹرکس کے ساتھ لاک کریں",
   "verify-identity": "براہ کرم اپنی شناخت کی تصدیق کریں۔",
   "automation": "آٹومیشن",
   "auto-email-transactions": "آٹو ای میل لین دین",
@@ -832,5 +830,18 @@
   "category-no-longer-exists": "زمرہ اب موجود نہیں ہے",
   "default-category-income": "آمدنی",
   "select-shortcut": "شارٹ کٹ منتخب کریں",
-  "all-spending-settings": "تمام اخراجات کی ترتیبات"
+  "all-spending-settings": "تمام اخراجات کی ترتیبات",
+  "goal-total-type": "گول کل قسم",
+  "auto-mark-transactions": "آٹو تنخواہ کے لین دین",
+  "auto-mark-transactions-description": "ادائیگی کے مطابق واجب الادا لین دین کو نشان زد کریں",
+  "more-options-description": "اکاؤنٹس ، بجٹ ، اہداف ، عنوانات",
+  "header-height": "ہیڈر اونچائی",
+  "tall": "لمبا",
+  "short": "مختصر",
+  "biometric-lock": "بائیو میٹرک لاک",
+  "biometric-lock-description": "ایپ لانچ پر بایومیٹرکس کی ضرورت ہے",
+  "remaining": "باقی",
+  "created-transaction": "ٹرانزیکشن پیدا کیا",
+  "most-common-transactions": "سب سے عام لین دین",
+  "most-common-transactions-description": "فہرست میں منتخب کرکے پچھلے 2 مہینوں سے درج سب سے زیادہ بار بار لین دین کو جلدی سے نقل کریں۔"
 }

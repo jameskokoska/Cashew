@@ -127,22 +127,22 @@ Future openPayPopup(
     onSubmit: () async {
       if (runBefore != null) await runBefore();
       double amount = transaction.amount;
-      if (transaction.amount == 0) {
-        amount = await openBottomSheet(
-          context,
-          fullSnap: true,
-          PopupFramework(
-            title: "enter-amount".tr(),
-            underTitleSpace: false,
-            child: SelectAmount(
-              setSelectedAmount: (_, __) {},
-              nextLabel: "set-amount".tr(),
-              popWithAmount: true,
-            ),
-          ),
-        );
-        amount = amount.abs() * (transaction.income ? 1 : -1);
-      }
+      // if (transaction.amount == 0) {
+      //   amount = await openBottomSheet(
+      //     context,
+      //     fullSnap: true,
+      //     PopupFramework(
+      //       title: "enter-amount".tr(),
+      //       underTitleSpace: false,
+      //       child: SelectAmount(
+      //         setSelectedAmount: (_, __) {},
+      //         nextLabel: "set-amount".tr(),
+      //         popWithAmount: true,
+      //       ),
+      //     ),
+      //   );
+      //   amount = amount.abs() * (transaction.income ? 1 : -1);
+      // }
       Transaction transactionNew = transaction.copyWith(
         amount: amount,
         paid: true,

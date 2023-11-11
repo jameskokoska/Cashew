@@ -66,6 +66,7 @@ Future<Map<String, dynamic>> getDefaultPreferences() async {
     "customNavBarShortcut1": "transactions",
     "customNavBarShortcut2": "budgets",
     "showTotalSpentForBudget": false,
+    "showTotalSpentForObjective": true,
     "showCumulativeSpending": true,
     "removeZeroTransactionEntries": true,
     "ignorePastAmountSpent": false,

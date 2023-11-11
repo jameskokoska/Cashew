@@ -91,8 +91,6 @@
   "username": "Brukernavn",
   "battery-saver": "Batterisparer",
   "battery-saver-description": "Optimaliser brukergrensesnittet for å øke ytelsen og spare batteriet",
-  "require-biometrics": "Krever biometri",
-  "require-biometrics-description": "Lås applikasjonen med biometri",
   "verify-identity": "Vennligst bekreft din identitet.",
   "automation": "Automasjon",
   "auto-email-transactions": "Auto e -posttransaksjoner",
@@ -832,5 +830,18 @@
   "category-no-longer-exists": "Kategori eksisterer ikke lenger",
   "default-category-income": "Inntekt",
   "select-shortcut": "Velg snarvei",
-  "all-spending-settings": "Alle utgiftsinnstillinger"
+  "all-spending-settings": "Alle utgiftsinnstillinger",
+  "goal-total-type": "Mål Total type",
+  "auto-mark-transactions": "Auto Pay -transaksjoner",
+  "auto-mark-transactions-description": "Merk forfalte transaksjoner som betalt",
+  "more-options-description": "Kontoer, budsjetter, mål, titler",
+  "header-height": "Hodehøyde",
+  "tall": "Høy",
+  "short": "Kort",
+  "biometric-lock": "Biometrisk lås",
+  "biometric-lock-description": "Krever biometri ved applanseringen",
+  "remaining": "gjenstående",
+  "created-transaction": "Opprettet transaksjon",
+  "most-common-transactions": "Vanligste transaksjoner",
+  "most-common-transactions-description": "Dupliser raskt de hyppigste transaksjonene som er oppført fra de siste 2 månedene ved å velge på listen."
 }

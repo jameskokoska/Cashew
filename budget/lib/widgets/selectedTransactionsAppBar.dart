@@ -454,9 +454,20 @@ class SelectedTransactionsAppBar extends StatelessWidget {
   }
 }
 
-Future duplicateTransaction(BuildContext context, String transactionPk,
-    {bool showDuplicatedMessage = true}) async {
+Future duplicateTransaction(
+  BuildContext context,
+  String transactionPk, {
+  bool showDuplicatedMessage = true,
+  bool useCurrentDate = false,
+  double? customAmount,
+}) async {
   Transaction transaction = await database.getTransactionFromPk(transactionPk);
+  if (useCurrentDate) {
+    transaction = transaction.copyWith(dateCreated: DateTime.now());
+  }
+  if (customAmount != null) {
+    transaction = transaction.copyWith(amount: customAmount);
+  }
   await database.createOrUpdateTransaction(
     transaction,
     insert: true,

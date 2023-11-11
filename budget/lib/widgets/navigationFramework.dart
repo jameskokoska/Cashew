@@ -1,6 +1,7 @@
 import 'package:animations/animations.dart';
 import 'package:budget/colors.dart';
 import 'package:budget/database/initializeDefaultDatabase.dart';
+import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
 import 'package:budget/pages/aboutPage.dart';
@@ -28,12 +29,15 @@ import 'package:budget/pages/walletDetailsPage.dart';
 import 'package:budget/pages/creditDebtTransactionsPage.dart';
 import 'package:budget/struct/currencyFunctions.dart';
 import 'package:budget/struct/databaseGlobal.dart';
+import 'package:budget/struct/navBarIconsData.dart';
 import 'package:budget/struct/quickActions.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/struct/shareBudget.dart';
 import 'package:budget/struct/syncClient.dart';
 import 'package:budget/widgets/accountAndBackup.dart';
 import 'package:budget/widgets/bottomNavBar.dart';
+import 'package:budget/widgets/button.dart';
+import 'package:budget/widgets/categoryIcon.dart';
 import 'package:budget/widgets/fab.dart';
 import 'package:budget/widgets/framework/popupFramework.dart';
 import 'package:budget/widgets/importDB.dart';
@@ -43,21 +47,28 @@ import 'package:budget/widgets/notificationsSettings.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openContainerNavigation.dart';
 import 'package:budget/widgets/openPopup.dart';
+import 'package:budget/widgets/openSnackbar.dart';
 import 'package:budget/widgets/outlinedButtonStacked.dart';
 import 'package:budget/widgets/ratingPopup.dart';
+import 'package:budget/widgets/selectAmount.dart';
+import 'package:budget/widgets/selectChips.dart';
+import 'package:budget/widgets/selectedTransactionsAppBar.dart';
 import 'package:budget/widgets/showChangelog.dart';
 import 'package:budget/struct/initializeNotifications.dart';
 import 'package:budget/widgets/globalLoadingProgress.dart';
 import 'package:budget/widgets/globalSnackBar.dart';
 import 'package:budget/pages/editCategoriesPage.dart';
 import 'package:budget/struct/upcomingTransactionsFunctions.dart';
+import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/transactionEntry/transactionEntry.dart';
+import 'package:budget/widgets/transactionEntry/transactionLabel.dart';
 import 'package:easy_localization/easy_localization.dart' hide TextDirection;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_lazy_indexed_stack/flutter_lazy_indexed_stack.dart';
 import 'package:googleapis/drive/v3.dart';
+import 'package:provider/provider.dart';
 // import 'package:feature_discovery/feature_discovery.dart';
 
 class PageNavigationFramework extends StatefulWidget {
@@ -418,45 +429,198 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
 class AddMoreThingsPopup extends StatelessWidget {
   const AddMoreThingsPopup({super.key});
 
+  createTransactionFromCommon({
+    required BuildContext context,
+    required TransactionWithCount transactionWithCount,
+    required Map<String, TransactionCategory> categoriesIndexed,
+    double? customAmount,
+  }) async {
+    Navigator.pop(context);
+    await duplicateTransaction(
+      context,
+      transactionWithCount.transaction.transactionPk,
+      showDuplicatedMessage: false,
+      useCurrentDate: true,
+      customAmount: customAmount,
+    );
+    openSnackbar(
+      SnackbarMessage(
+        icon: navBarIconsData["transactions"]!.iconData,
+        title: "created-transaction".tr(),
+        description: getTransactionLabelSync(
+          transactionWithCount.transaction,
+          categoriesIndexed[transactionWithCount.transaction.categoryFk],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        AddThing(
-          iconData: appStateSettings["outlinedIcons"]
-              ? Icons.payments_outlined
-              : Icons.payments_rounded,
-          title: "transaction".tr(),
-          openPage: AddTransactionPage(
-              routesToPopAfterDelete: RoutesToPopAfterDelete.None),
+        StreamBuilder<Map<String, TransactionCategory>>(
+          stream: database.watchAllCategoriesIndexed(),
+          builder: (context, snapshotCategories) {
+            Map<String, TransactionCategory> categoriesIndexed =
+                snapshotCategories.data ?? {};
+            return StreamBuilder<List<TransactionWithCount>>(
+              stream: database.getCommonTransactions(),
+              builder: (context, snapshot) {
+                List<TransactionWithCount> commonTransactions =
+                    snapshot.data ?? [];
+                if (commonTransactions.length <= 0) {
+                  return AddThing(
+                    iconData: navBarIconsData["transactions"]!.iconData,
+                    title: "transaction".tr(),
+                    openPage: AddTransactionPage(
+                        routesToPopAfterDelete: RoutesToPopAfterDelete.None),
+                  );
+                }
+                return AddThing(
+                  infoButton: Transform.scale(
+                    scale: 1.8,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(100),
+                      child: Tappable(
+                        color: Colors.transparent,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Transform.scale(
+                            scale: 1.4,
+                            child: Icon(
+                              Icons.info_outlined,
+                              size: 10,
+                            ),
+                          ),
+                        ),
+                        onTap: () {
+                          openPopup(
+                            context,
+                            icon: navBarIconsData["transactions"]!.iconData,
+                            title: "most-common-transactions".tr(),
+                            description:
+                                "most-common-transactions-description".tr(),
+                            onSubmit: () {
+                              Navigator.pop(context);
+                            },
+                            onSubmitLabel: "ok".tr(),
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                  iconData: navBarIconsData["transactions"]!.iconData,
+                  title: "transaction".tr(),
+                  openPage: AddTransactionPage(
+                      routesToPopAfterDelete: RoutesToPopAfterDelete.None),
+                  widgetAfter: SelectChips(
+                      padding: EdgeInsets.symmetric(horizontal: 13),
+                      items: commonTransactions,
+                      getSelected: (_) {
+                        return false;
+                      },
+                      onLongPress:
+                          (TransactionWithCount transactionWithCount) async {
+                        double amount = await openBottomSheet(
+                          context,
+                          fullSnap: true,
+                          PopupFramework(
+                            title: "enter-amount".tr(),
+                            underTitleSpace: false,
+                            child: SelectAmount(
+                              setSelectedAmount: (_, __) {},
+                              nextLabel: "set-amount".tr(),
+                              popWithAmount: true,
+                            ),
+                          ),
+                        );
+                        amount = amount.abs() *
+                            (transactionWithCount.transaction.income ? 1 : -1);
+                        createTransactionFromCommon(
+                          context: context,
+                          transactionWithCount: transactionWithCount,
+                          categoriesIndexed: categoriesIndexed,
+                          customAmount: amount,
+                        );
+                      },
+                      onSelected:
+                          (TransactionWithCount transactionWithCount) async {
+                        createTransactionFromCommon(
+                          context: context,
+                          transactionWithCount: transactionWithCount,
+                          categoriesIndexed: categoriesIndexed,
+                        );
+                      },
+                      getLabel: (TransactionWithCount transactionWithCount) {
+                        return getTransactionLabelSync(
+                              transactionWithCount.transaction,
+                              categoriesIndexed[
+                                  transactionWithCount.transaction.categoryFk],
+                            ) +
+                            " " +
+                            "(" +
+                            convertToMoney(Provider.of<AllWallets>(context),
+                                transactionWithCount.transaction.amount) +
+                            ")";
+                      },
+                      getCustomBorderColor:
+                          (TransactionWithCount transactionWithCount) {
+                        return dynamicPastel(
+                          context,
+                          lightenPastel(
+                            HexColor(
+                              categoriesIndexed[transactionWithCount
+                                      .transaction.categoryFk]
+                                  ?.colour,
+                              defaultColor:
+                                  Theme.of(context).colorScheme.primary,
+                            ),
+                            amount: 0.3,
+                          ),
+                          amount: 0.4,
+                        );
+                      },
+                      getAvatar: (TransactionWithCount transactionWithCount) {
+                        return LayoutBuilder(builder: (context, constraints) {
+                          return CategoryIcon(
+                            categoryPk: "-1",
+                            category: categoriesIndexed[
+                                transactionWithCount.transaction.categoryFk],
+                            size: constraints.maxWidth,
+                            sizePadding: 0,
+                            noBackground: true,
+                            canEditByLongPress: false,
+                            margin: EdgeInsets.zero,
+                          );
+                        });
+                      }),
+                );
+              },
+            );
+          },
         ),
         AddThing(
-          iconData: MoreIcons.chart_pie,
+          iconData: navBarIconsData["budgets"]!.iconData,
           title: "budget".tr(),
           openPage: AddBudgetPage(
               routesToPopAfterDelete: RoutesToPopAfterDelete.None),
-          iconScale: 0.87,
+          iconScale: navBarIconsData["budgets"]!.iconScale,
         ),
         AddThing(
-          iconData: appStateSettings["outlinedIcons"]
-              ? Icons.savings_outlined
-              : Icons.savings_rounded,
+          iconData: navBarIconsData["goals"]!.iconData,
           title: "goal".tr(),
           openPage: AddObjectivePage(
               routesToPopAfterDelete: RoutesToPopAfterDelete.None),
         ),
         AddThing(
-          iconData: appStateSettings["outlinedIcons"]
-              ? Icons.category_outlined
-              : Icons.category_rounded,
+          iconData: navBarIconsData["categoriesDetails"]!.iconData,
           title: "category".tr(),
           openPage: AddCategoryPage(
               routesToPopAfterDelete: RoutesToPopAfterDelete.None),
         ),
         AddThing(
-          iconData: appStateSettings["outlinedIcons"]
-              ? Icons.account_balance_wallet_outlined
-              : Icons.account_balance_wallet_rounded,
+          iconData: navBarIconsData["accountDetails"]!.iconData,
           title: "account".tr(),
           openPage: AddWalletPage(
               routesToPopAfterDelete: RoutesToPopAfterDelete.None),
@@ -471,6 +635,8 @@ class AddThing extends StatelessWidget {
     required this.iconData,
     required this.title,
     required this.openPage,
+    this.widgetAfter,
+    this.infoButton,
     this.iconScale = 1,
     super.key,
   });
@@ -478,6 +644,8 @@ class AddThing extends StatelessWidget {
   final IconData iconData;
   final String title;
   final Widget openPage;
+  final Widget? widgetAfter;
+  final Widget? infoButton;
   final double iconScale;
 
   @override
@@ -494,7 +662,9 @@ class AddThing extends StatelessWidget {
               filled: false,
               alignLeft: true,
               alignBeside: true,
-              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+              padding: widgetAfter != null
+                  ? EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 5)
+                  : EdgeInsets.symmetric(horizontal: 20, vertical: 20),
               text: title.capitalizeFirst,
               iconData: iconData,
               iconScale: iconScale,
@@ -502,6 +672,11 @@ class AddThing extends StatelessWidget {
                 Navigator.pop(context);
                 pushRoute(context, openPage);
               },
+              afterWidget: widgetAfter,
+              afterWidgetPadding: widgetAfter != null
+                  ? EdgeInsets.only(bottom: 8)
+                  : EdgeInsets.zero,
+              infoButton: infoButton,
             ),
           ),
         ],

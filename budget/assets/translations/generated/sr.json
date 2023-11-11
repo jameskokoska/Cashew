@@ -91,8 +91,6 @@
   "username": "Корисничко име",
   "battery-saver": "Уштеда батерије",
   "battery-saver-description": "Оптимизирајте УИ да бисте повећали перформансе и уштедјели батерију",
-  "require-biometrics": "Захтевају биометрију",
-  "require-biometrics-description": "Закључајте апликацију биометријским",
   "verify-identity": "Молимо вас да потврдите свој идентитет.",
   "automation": "Аутоматизација",
   "auto-email-transactions": "Аутоматске трансакције путем е-поште",
@@ -832,5 +830,18 @@
   "category-no-longer-exists": "Категорија више не постоји",
   "default-category-income": "Приход",
   "select-shortcut": "Изаберите пречицу",
-  "all-spending-settings": "Све подешавања потрошње"
+  "all-spending-settings": "Све подешавања потрошње",
+  "goal-total-type": "Гоал Тотал Типе",
+  "auto-mark-transactions": "Аутоматско плаће",
+  "auto-mark-transactions-description": "Означите закашњеле трансакције као плаћене",
+  "more-options-description": "Рачуни, буџети, циљеви, наслови",
+  "header-height": "Висина заглавља",
+  "tall": "Висок",
+  "short": "Кратак",
+  "biometric-lock": "Биометријска брава",
+  "biometric-lock-description": "Захтевајте биометрију на лансирању апликације",
+  "remaining": "преостали",
+  "created-transaction": "Створена трансакција",
+  "most-common-transactions": "Најчешће трансакције",
+  "most-common-transactions-description": "Брзо дуплирајте најчешће трансакције наведене од последња 2 месеца одабиром на листи."
 }

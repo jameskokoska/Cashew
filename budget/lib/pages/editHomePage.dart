@@ -144,7 +144,7 @@ class _EditHomePageState extends State<EditHomePage> {
             onTap: () async {
               openBottomSheet(
                 context,
-                EditHomePagePinnedGoalsPopup(),
+                EditHomePagePinnedGoalsPopup(showGoalsTotalLabelSetting: true),
                 useCustomController: true,
               );
             },

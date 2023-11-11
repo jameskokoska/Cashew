@@ -163,6 +163,7 @@ Future<bool> signInGoogle(
               context == null || getIsFullScreen(context) ? true : false,
         );
         accountsPageStateKey.currentState?.refreshState();
+        settingsPageStateKey.currentState?.refreshState();
       } else {
         throw ("Login failed");
       }

@@ -91,8 +91,6 @@
   "username": "Jina la mtumiaji",
   "battery-saver": "Saver ya betri",
   "battery-saver-description": "Boresha UI ili kuongeza utendaji na uhifadhi betri",
-  "require-biometrics": "Zinahitaji biometri",
-  "require-biometrics-description": "Funga programu na biometri",
   "verify-identity": "Tafadhali thibitisha kitambulisho chako.",
   "automation": "Otomatiki",
   "auto-email-transactions": "Shughuli za barua pepe za kiotomatiki",
@@ -832,5 +830,18 @@
   "category-no-longer-exists": "Jamii haipo tena",
   "default-category-income": "Mapato",
   "select-shortcut": "Chagua njia ya mkato",
-  "all-spending-settings": "Mipangilio yote ya matumizi"
+  "all-spending-settings": "Mipangilio yote ya matumizi",
+  "goal-total-type": "Aina ya jumla ya lengo",
+  "auto-mark-transactions": "Shughuli za kulipia kiotomatiki",
+  "auto-mark-transactions-description": "Weka alama ya shughuli kama kulipwa",
+  "more-options-description": "Akaunti, bajeti, malengo, majina",
+  "header-height": "Urefu wa kichwa",
+  "tall": "Mrefu",
+  "short": "Fupi",
+  "biometric-lock": "Kufuli kwa biometriska",
+  "biometric-lock-description": "Zinahitaji biometri kwenye uzinduzi wa programu",
+  "remaining": "iliyobaki",
+  "created-transaction": "Iliyoundwa shughuli",
+  "most-common-transactions": "Shughuli za kawaida",
+  "most-common-transactions-description": "Haraka shughuli za mara kwa mara zilizoorodheshwa kutoka miezi 2 iliyopita kwa kuchagua kwenye orodha."
 }

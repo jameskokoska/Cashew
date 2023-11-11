@@ -91,8 +91,6 @@
   "username": "பயனர்பெயர்",
   "battery-saver": "பேட்டரி சேமிப்பாளர்",
   "battery-saver-description": "செயல்திறனை அதிகரிக்கவும் பேட்டரியைச் சேமிக்கவும் UI ஐ மேம்படுத்தவும்",
-  "require-biometrics": "பயோமெட்ரிக்ஸ் தேவை",
-  "require-biometrics-description": "பயோமெட்ரிக்ஸ் மூலம் பயன்பாட்டை பூட்டவும்",
   "verify-identity": "தயவுசெய்து உங்கள் அடையாளத்தை உறுதிப்படுத்தவும்.",
   "automation": "தானியங்கு",
   "auto-email-transactions": "ஆட்டோ மின்னஞ்சல் பரிவர்த்தனைகள்",
@@ -832,5 +830,18 @@
   "category-no-longer-exists": "வகை இனி இல்லை",
   "default-category-income": "வருமானம்",
   "select-shortcut": "குறுக்குவழியைத் தேர்ந்தெடுக்கவும்",
-  "all-spending-settings": "அனைத்து செலவு அமைப்புகளும்"
+  "all-spending-settings": "அனைத்து செலவு அமைப்புகளும்",
+  "goal-total-type": "இலக்கு மொத்த வகை",
+  "auto-mark-transactions": "ஆட்டோ ஊதிய பரிவர்த்தனைகள்",
+  "auto-mark-transactions-description": "தாமதமான பரிவர்த்தனைகளை செலுத்தியபடி குறிக்கவும்",
+  "more-options-description": "கணக்குகள், வரவு செலவுத் திட்டங்கள், குறிக்கோள்கள், தலைப்புகள்",
+  "header-height": "தலைப்பு உயரம்",
+  "tall": "உயரம்",
+  "short": "குறுகிய",
+  "biometric-lock": "பயோமெட்ரிக் பூட்டு",
+  "biometric-lock-description": "பயன்பாட்டு வெளியீட்டில் பயோமெட்ரிக்ஸ் தேவை",
+  "remaining": "மீதமுள்ள",
+  "created-transaction": "பரிவர்த்தனை உருவாக்கப்பட்டது",
+  "most-common-transactions": "மிகவும் பொதுவான பரிவர்த்தனைகள்",
+  "most-common-transactions-description": "பட்டியலில் தேர்ந்தெடுப்பதன் மூலம் கடந்த 2 மாதங்களிலிருந்து பட்டியலிடப்பட்ட அடிக்கடி ஏற்படும் பரிவர்த்தனைகளை விரைவாக நகலெடுக்கவும்."
 }

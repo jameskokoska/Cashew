@@ -194,7 +194,7 @@ class EditHomePagePinnedBudgetsPopup extends StatelessWidget {
                       if (showBudgetsTotalLabelSetting)
                         ClipRRect(
                           borderRadius: BorderRadius.circular(15),
-                          child: BudgetTotalSpentToggle(),
+                          child: TotalSpentToggle(),
                         ),
                       if (allBudgets.length <= 0)
                         NoResultsCreate(

@@ -91,8 +91,6 @@
   "username": "ユーザー名",
   "battery-saver": "バッテリーセーバー",
   "battery-saver-description": "UIを最適化してパフォーマンスを向上させ、バッテリーを保存します",
-  "require-biometrics": "生体認証が必要です",
-  "require-biometrics-description": "バイオメトリクスでアプリケーションをロックします",
   "verify-identity": "ご身分をお確認させてください。",
   "automation": "オートメーション",
   "auto-email-transactions": "自動メールトランザクション",
@@ -832,5 +830,18 @@
   "category-no-longer-exists": "カテゴリは存在しなくなりました",
   "default-category-income": "所得",
   "select-shortcut": "ショートカットを選択します",
-  "all-spending-settings": "すべての支出設定"
+  "all-spending-settings": "すべての支出設定",
+  "goal-total-type": "目標合計タイプ",
+  "auto-mark-transactions": "自動給与取引",
+  "auto-mark-transactions-description": "支払われたとおりの期限切れの取引をマークします",
+  "more-options-description": "アカウント、予算、目標、タイトル",
+  "header-height": "ヘッダーの高さ",
+  "tall": "高い",
+  "short": "短い",
+  "biometric-lock": "生体認証ロック",
+  "biometric-lock-description": "アプリの起動時に生体認証が必要です",
+  "remaining": "残り",
+  "created-transaction": "作成されたトランザクション",
+  "most-common-transactions": "最も一般的なトランザクション",
+  "most-common-transactions-description": "リスト内で選択して、過去2か月からリストされている最も頻繁なトランザクションをすばやく複製します。"
 }

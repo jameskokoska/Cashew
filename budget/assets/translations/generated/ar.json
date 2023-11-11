@@ -91,8 +91,6 @@
   "username": "اسم المستخدم",
   "battery-saver": "حافظ البطارية",
   "battery-saver-description": "قم بتحسين واجهة المستخدم لزيادة الأداء وحفظ البطارية",
-  "require-biometrics": "تتطلب القياسات الحيوية",
-  "require-biometrics-description": "قفل التطبيق مع القياسات الحيوية",
   "verify-identity": "يرجى التحقق من هويتك.",
   "automation": "أتمتة",
   "auto-email-transactions": "معاملات البريد الإلكتروني التلقائي",
@@ -832,5 +830,18 @@
   "category-no-longer-exists": "لم تعد الفئة موجودة",
   "default-category-income": "دخل",
   "select-shortcut": "حدد الاختصار",
-  "all-spending-settings": "جميع إعدادات الإنفاق"
+  "all-spending-settings": "جميع إعدادات الإنفاق",
+  "goal-total-type": "الهدف الإجمالي نوع",
+  "auto-mark-transactions": "معاملات دفع السيارات",
+  "auto-mark-transactions-description": "مارك المتأخر المعاملات على النحو المدفوع",
+  "more-options-description": "الحسابات والميزانيات والأهداف والألقاب",
+  "header-height": "ارتفاع رأس",
+  "tall": "طويل",
+  "short": "قصير",
+  "biometric-lock": "قفل القياس الحيوي",
+  "biometric-lock-description": "تتطلب القياسات الحيوية على إطلاق التطبيق",
+  "remaining": "متبقي",
+  "created-transaction": "تم إنشاؤها معاملة",
+  "most-common-transactions": "المعاملات الأكثر شيوعا",
+  "most-common-transactions-description": "تكرار بسرعة المعاملات الأكثر شيوعا المدرجة من الشهرين الماضيين من خلال الاختيار في القائمة."
 }

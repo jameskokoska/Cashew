@@ -91,8 +91,6 @@
   "username": "사용자 이름",
   "battery-saver": "배터리 세이버",
   "battery-saver-description": "UI를 최적화하여 성능을 높이고 배터리를 절약하십시오",
-  "require-biometrics": "생체 인식이 필요합니다",
-  "require-biometrics-description": "생체 인식으로 응용 프로그램을 잠그십시오",
   "verify-identity": "사용자의 신원을 확인하시기 바랍니다.",
   "automation": "오토메이션",
   "auto-email-transactions": "자동 이메일 거래",
@@ -832,5 +830,18 @@
   "category-no-longer-exists": "카테고리는 더 이상 존재하지 않습니다",
   "default-category-income": "소득",
   "select-shortcut": "바로 가기를 선택하십시오",
-  "all-spending-settings": "모든 지출 설정"
+  "all-spending-settings": "모든 지출 설정",
+  "goal-total-type": "목표 총 유형",
+  "auto-mark-transactions": "자동 급여 거래",
+  "auto-mark-transactions-description": "기한이 지난 거래를 지불하십시오",
+  "more-options-description": "계정, 예산, 목표, 제목",
+  "header-height": "헤더 높이",
+  "tall": "키가 큰",
+  "short": "짧은",
+  "biometric-lock": "생체 자물쇠",
+  "biometric-lock-description": "앱 출시시 생체 인식이 필요합니다",
+  "remaining": "남아 있습니다",
+  "created-transaction": "트랜잭션을 생성했습니다",
+  "most-common-transactions": "가장 일반적인 거래",
+  "most-common-transactions-description": "목록에서 선택하여 지난 2 개월 동안 나열된 가장 빈번한 거래를 빠르게 복제하십시오."
 }

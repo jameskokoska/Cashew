@@ -91,8 +91,6 @@
   "username": "ഉപയോക്തൃനാമം",
   "battery-saver": "ബാറ്ററി സേവർ",
   "battery-saver-description": "പ്രകടനം വർദ്ധിപ്പിക്കുന്നതിനും ബാറ്ററി സംരക്ഷിക്കുന്നതിനും യുഐ ഒപ്റ്റിമൈസ് ചെയ്യുക",
-  "require-biometrics": "ബയോമെട്രിക്സ് ആവശ്യമാണ്",
-  "require-biometrics-description": "ബയോമെട്രിക്സ് ഉപയോഗിച്ച് അപ്ലിക്കേഷൻ ലോക്കുചെയ്യുക",
   "verify-identity": "നിങ്ങളുടെ ഐഡന്റിറ്റി പരിശോധിക്കുക.",
   "automation": "യന്തവല്ക്കരണം",
   "auto-email-transactions": "യാന്ത്രിക ഇമെയിൽ ഇടപാടുകൾ",
@@ -832,5 +830,18 @@
   "category-no-longer-exists": "വിഭാഗം മേലിൽ നിലവിലില്ല",
   "default-category-income": "വരുമാനം",
   "select-shortcut": "കുറുക്കുവഴി തിരഞ്ഞെടുക്കുക",
-  "all-spending-settings": "എല്ലാ ചെലവ് ക്രമീകരണങ്ങളും"
+  "all-spending-settings": "എല്ലാ ചെലവ് ക്രമീകരണങ്ങളും",
+  "goal-total-type": "ലക്ഷ്യം ആകെ തരം",
+  "auto-mark-transactions": "യാന്ത്രിക ശമ്പള ഇടപാടുകൾ",
+  "auto-mark-transactions-description": "പണമടച്ചതായി കാലഹരണപ്പെട്ട ഇടപാടുകൾ അടയാളപ്പെടുത്തുക",
+  "more-options-description": "അക്കൗണ്ടുകൾ, ബജറ്റുകൾ, ലക്ഷ്യങ്ങൾ, ശീർഷകങ്ങൾ",
+  "header-height": "തലക്കെട്ട് ഉയരം",
+  "tall": "പൊക്കമുള്ള",
+  "short": "കുറിയ",
+  "biometric-lock": "ബയോമെട്രിക് ലോക്ക്",
+  "biometric-lock-description": "അപ്ലിക്കേഷൻ സമാരംഭത്തിൽ ബയോമെട്രിക്സ് ആവശ്യമാണ്",
+  "remaining": "അവശേഷിക്കുന്ന",
+  "created-transaction": "ഇടപാട് സൃഷ്ടിച്ചു",
+  "most-common-transactions": "ഏറ്റവും സാധാരണമായ ഇടപാടുകൾ",
+  "most-common-transactions-description": "ലിസ്റ്റിൽ തിരഞ്ഞെടുത്ത് കഴിഞ്ഞ 2 മാസത്തിൽ നിന്ന് ലിസ്റ്റുചെയ്തിരിക്കുന്ന ഏറ്റവും പതിവ് ഇടപാടുകൾ വേഗത്തിൽ തനിപ്പകർപ്പാക്കുക."
 }

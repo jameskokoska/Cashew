@@ -91,8 +91,6 @@
   "username": "Felhasználónév",
   "battery-saver": "Akkumulátor kímélő",
   "battery-saver-description": "Optimalizálja az UI -t a teljesítmény növelése és az akkumulátor megtakarítása érdekében",
-  "require-biometrics": "Biometria megkövetelése",
-  "require-biometrics-description": "Zárja be az alkalmazást biometrikusokkal",
   "verify-identity": "Kérem, igazolja magát.",
   "automation": "Automatizálás",
   "auto-email-transactions": "Autó e -mail tranzakciók",
@@ -832,5 +830,18 @@
   "category-no-longer-exists": "A kategória már nem létezik",
   "default-category-income": "Jövedelem",
   "select-shortcut": "Válassza ki a parancsikont",
-  "all-spending-settings": "Minden kiadási beállítás"
+  "all-spending-settings": "Minden kiadási beállítás",
+  "goal-total-type": "Cél teljes típusa",
+  "auto-mark-transactions": "Automatikus fizetés tranzakciók",
+  "auto-mark-transactions-description": "Jelölje meg a lejárt tranzakciókat fizetettként",
+  "more-options-description": "Számlák, költségvetések, célok, címek",
+  "header-height": "Fejlécmagasság",
+  "tall": "Magas",
+  "short": "Rövid",
+  "biometric-lock": "Biometrikus zár",
+  "biometric-lock-description": "Biometria megkövetelése az alkalmazás indításánál",
+  "remaining": "többi",
+  "created-transaction": "Létrehozta a tranzakciót",
+  "most-common-transactions": "Leggyakoribb tranzakciók",
+  "most-common-transactions-description": "Gyorsan megismételje az elmúlt 2 hónapban felsorolt ​​leggyakoribb tranzakciókat a listában való kiválasztással."
 }

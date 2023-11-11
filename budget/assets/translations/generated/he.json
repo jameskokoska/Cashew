@@ -91,8 +91,6 @@
   "username": "שם משתמש",
   "battery-saver": "שומר סוללה",
   "battery-saver-description": "אופטימיזציה של ממשק המשתמש כדי להגדיל את הביצועים ולחסוך סוללה",
-  "require-biometrics": "דורשים ביומטריה",
-  "require-biometrics-description": "נעל את היישום עם ביומטריה",
   "verify-identity": "אנא אשר את זהותך.",
   "automation": "אוטומציה",
   "auto-email-transactions": "עסקאות דוא\"ל אוטומטיות",
@@ -832,5 +830,18 @@
   "category-no-longer-exists": "קטגוריה כבר לא קיימת",
   "default-category-income": "הַכנָסָה",
   "select-shortcut": "בחר קיצור דרך",
-  "all-spending-settings": "כל הגדרות ההוצאות"
+  "all-spending-settings": "כל הגדרות ההוצאות",
+  "goal-total-type": "סוג מטרה כולל",
+  "auto-mark-transactions": "עסקאות לשלם אוטומטי",
+  "auto-mark-transactions-description": "סמן עסקאות איחור בתשלום",
+  "more-options-description": "חשבונות, תקציבים, יעדים, כותרות",
+  "header-height": "גובה הכותרת",
+  "tall": "גובה",
+  "short": "קצר",
+  "biometric-lock": "מנעול ביומטרי",
+  "biometric-lock-description": "דורשים ביומטריה בהשקת האפליקציה",
+  "remaining": "נוֹתָר",
+  "created-transaction": "יצרה עסקה",
+  "most-common-transactions": "העסקאות הנפוצות ביותר",
+  "most-common-transactions-description": "שכפול במהירות את העסקאות השכיחות ביותר המופיעות מהחודשיים האחרונים על ידי בחירה ברשימה."
 }

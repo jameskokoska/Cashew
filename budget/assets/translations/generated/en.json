@@ -91,8 +91,6 @@
   "username": "Username",
   "battery-saver": "Battery Saver",
   "battery-saver-description": "Optimize the UI to increase performance and save battery",
-  "require-biometrics": "Require Biometrics",
-  "require-biometrics-description": "Lock the application with biometrics",
   "verify-identity": "Please verify your identity.",
   "automation": "Automation",
   "auto-email-transactions": "Auto Email Transactions",
@@ -832,5 +830,18 @@
   "category-no-longer-exists": "Category no longer exists",
   "default-category-income": "Income",
   "select-shortcut": "Select Shortcut",
-  "all-spending-settings": "All Spending Settings"
+  "all-spending-settings": "All Spending Settings",
+  "goal-total-type": "Goal Total Type",
+  "auto-mark-transactions": "Auto Pay Transactions",
+  "auto-mark-transactions-description": "Mark overdue transactions as paid",
+  "more-options-description": "Accounts, budgets, goals, titles",
+  "header-height": "Header Height",
+  "tall": "Tall",
+  "short": "Short",
+  "biometric-lock": "Biometric Lock",
+  "biometric-lock-description": "Require biometrics on app launch",
+  "remaining": "left",
+  "created-transaction": "Created Transaction",
+  "most-common-transactions": "Most Common Transactions",
+  "most-common-transactions-description": "Quickly duplicate the most frequent transactions listed from the last 2 months by selecting in the list."
 }

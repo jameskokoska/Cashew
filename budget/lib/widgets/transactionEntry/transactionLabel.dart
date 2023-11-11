@@ -58,9 +58,9 @@ Future<String> getTransactionLabel(Transaction transaction,
 }
 
 String getTransactionLabelSync(
-    Transaction transaction, TransactionCategory category) {
+    Transaction transaction, TransactionCategory? category) {
   if (transaction.name.trim() == "") {
-    return category.name.capitalizeFirst;
+    return category?.name.capitalizeFirst ?? transaction.name.capitalizeFirst;
   } else {
     return transaction.name.capitalizeFirst;
   }

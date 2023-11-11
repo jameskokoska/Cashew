@@ -172,7 +172,7 @@ class _EditBudgetPageState extends State<EditBudgetPage> {
           SliverToBoxAdapter(
             child: AnimatedExpanded(
               expand: hideIfSearching(searchValue, isFocused, context) == false,
-              child: BudgetTotalSpentToggle(),
+              child: TotalSpentToggle(),
             ),
           ),
           StreamBuilder<List<Budget>>(
@@ -654,29 +654,36 @@ class NoResultsCreate extends StatelessWidget {
   }
 }
 
-class BudgetTotalSpentToggle extends StatefulWidget {
-  const BudgetTotalSpentToggle({super.key});
+class TotalSpentToggle extends StatefulWidget {
+  const TotalSpentToggle({bool this.isForGoalTotal = false, super.key});
+  final bool isForGoalTotal; //Otherwise it's for the budget setting
 
   @override
-  State<BudgetTotalSpentToggle> createState() => _BudgetTotalSpentToggleState();
+  State<TotalSpentToggle> createState() => _TotalSpentToggleState();
 }
 
-class _BudgetTotalSpentToggleState extends State<BudgetTotalSpentToggle> {
+class _TotalSpentToggleState extends State<TotalSpentToggle> {
   @override
   Widget build(BuildContext context) {
+    String appSettingKey = widget.isForGoalTotal
+        ? "showTotalSpentForObjective"
+        : "showTotalSpentForBudget";
+    String titleLabel = widget.isForGoalTotal
+        ? "goal-total-type".tr()
+        : "budget-total-type".tr();
     return SettingsContainer(
-      title: "budget-total-type".tr(),
-      description: appStateSettings["showTotalSpentForBudget"] == true
+      title: titleLabel,
+      description: appStateSettings[appSettingKey] == true
           ? "total-spent".tr().toLowerCase().capitalizeFirst
           : "total-remaining".tr().toLowerCase().capitalizeFirst,
       onTap: () {
         openBottomSheet(
           context,
           PopupFramework(
-            title: "budget-total-type".tr(),
+            title: titleLabel,
             child: RadioItems(
               items: ["total-remaining", "total-spent"],
-              initial: appStateSettings["showTotalSpentForBudget"] == true
+              initial: appStateSettings[appSettingKey] == true
                   ? "total-spent"
                   : "total-remaining",
               displayFilter: (label) {
@@ -688,8 +695,15 @@ class _BudgetTotalSpentToggleState extends State<BudgetTotalSpentToggle> {
               ],
               onChanged: (option) async {
                 bool result = option == "total-spent";
-                await updateSettings("showTotalSpentForBudget", result,
-                    pagesNeedingRefresh: [0, 2], updateGlobalState: false);
+                if (widget.isForGoalTotal) {
+                  await updateSettings(appSettingKey, result,
+                      updateGlobalState: true);
+                } else {
+                  await updateSettings(appSettingKey, result,
+                      pagesNeedingRefresh: [0, 2], updateGlobalState: false);
+                }
+
+                // Read the new settings value by setting state
                 setState(() {});
                 Navigator.pop(context);
               },

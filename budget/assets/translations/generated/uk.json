@@ -91,8 +91,6 @@
   "username": "Ім'я користувача",
   "battery-saver": "Заощадження акумулятора",
   "battery-saver-description": "Оптимізуйте інтерфейс користувача для підвищення продуктивності та заощадження акумулятора",
-  "require-biometrics": "Вимагати біометрії",
-  "require-biometrics-description": "Заблокувати додаток за допомогою біометрики",
   "verify-identity": "Будь ласка, перевірте вашу особистість.",
   "automation": "Автоматизація",
   "auto-email-transactions": "Автомобільні транзакції електронної пошти",
@@ -832,5 +830,18 @@
   "category-no-longer-exists": "Категорія більше не існує",
   "default-category-income": "Дохід",
   "select-shortcut": "Виберіть ярлик",
-  "all-spending-settings": "Усі налаштування витрат"
+  "all-spending-settings": "Усі налаштування витрат",
+  "goal-total-type": "Ціль загального типу",
+  "auto-mark-transactions": "Автоматичні операції з оплати",
+  "auto-mark-transactions-description": "Позначте прострочені операції як оплачені",
+  "more-options-description": "Рахунки, бюджети, цілі, титули",
+  "header-height": "Висота заголовка",
+  "tall": "Високий",
+  "short": "Короткий",
+  "biometric-lock": "Біометричний замок",
+  "biometric-lock-description": "Вимагати біометрики при запуску додатків",
+  "remaining": "що залишився",
+  "created-transaction": "Створена транзакція",
+  "most-common-transactions": "Найпоширеніші транзакції",
+  "most-common-transactions-description": "Швидко дублюйте найчастіші транзакції, перелічені за останні 2 місяці, вибравши у списку."
 }

@@ -91,8 +91,6 @@
   "username": "वापरकर्तानाव",
   "battery-saver": "बॅटरी सेव्हर",
   "battery-saver-description": "कार्यप्रदर्शन वाढविण्यासाठी आणि बॅटरी जतन करण्यासाठी यूआयला ऑप्टिमाइझ करा",
-  "require-biometrics": "बायोमेट्रिक्स आवश्यक आहे",
-  "require-biometrics-description": "बायोमेट्रिक्ससह अनुप्रयोग लॉक करा",
   "verify-identity": "आपली ओळख सत्यापित करा.",
   "automation": "ऑटोमेशन",
   "auto-email-transactions": "वाहन ईमेल व्यवहार",
@@ -832,5 +830,18 @@
   "category-no-longer-exists": "श्रेणी यापुढे अस्तित्त्वात नाही",
   "default-category-income": "उत्पन्न",
   "select-shortcut": "शॉर्टकट निवडा",
-  "all-spending-settings": "सर्व खर्च सेटिंग्ज"
+  "all-spending-settings": "सर्व खर्च सेटिंग्ज",
+  "goal-total-type": "ध्येय एकूण प्रकार",
+  "auto-mark-transactions": "वाहन वेतन व्यवहार",
+  "auto-mark-transactions-description": "देय म्हणून थकीत व्यवहार चिन्हांकित करा",
+  "more-options-description": "खाती, अर्थसंकल्प, ध्येय, शीर्षके",
+  "header-height": "शीर्षलेख उंची",
+  "tall": "उंच",
+  "short": "लहान",
+  "biometric-lock": "बायोमेट्रिक लॉक",
+  "biometric-lock-description": "अ‍ॅप लॉन्चवर बायोमेट्रिक्स आवश्यक आहे",
+  "remaining": "उर्वरित",
+  "created-transaction": "व्यवहार केला",
+  "most-common-transactions": "सर्वात सामान्य व्यवहार",
+  "most-common-transactions-description": "सूचीमध्ये निवडून गेल्या 2 महिन्यांपासून सूचीबद्ध केलेल्या सर्वात वारंवार व्यवहारांची द्रुतपणे डुप्लिकेट करा."
 }

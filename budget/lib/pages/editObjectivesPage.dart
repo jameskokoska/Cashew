@@ -9,6 +9,7 @@ import 'package:budget/pages/addObjectivePage.dart';
 import 'package:budget/pages/editBudgetPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
+import 'package:budget/widgets/animatedExpanded.dart';
 import 'package:budget/widgets/categoryIcon.dart';
 import 'package:budget/widgets/fab.dart';
 import 'package:budget/widgets/fadeIn.dart';
@@ -42,6 +43,7 @@ class _EditObjectivesPageState extends State<EditObjectivesPage> {
   bool dragDownToDismissEnabled = true;
   int currentReorder = -1;
   String searchValue = "";
+  bool isFocused = false;
 
   @override
   void initState() {
@@ -103,23 +105,36 @@ class _EditObjectivesPageState extends State<EditObjectivesPage> {
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.only(bottom: 8.0),
-              child: TextInput(
-                labelText: "search-goals-placeholder".tr(),
-                icon: appStateSettings["outlinedIcons"]
-                    ? Icons.search_outlined
-                    : Icons.search_rounded,
-                onSubmitted: (value) {
+              child: Focus(
+                onFocusChange: (value) {
                   setState(() {
-                    searchValue = value;
+                    isFocused = value;
                   });
                 },
-                onChanged: (value) {
-                  setState(() {
-                    searchValue = value;
-                  });
-                },
-                autoFocus: false,
+                child: TextInput(
+                  labelText: "search-goals-placeholder".tr(),
+                  icon: appStateSettings["outlinedIcons"]
+                      ? Icons.search_outlined
+                      : Icons.search_rounded,
+                  onSubmitted: (value) {
+                    setState(() {
+                      searchValue = value;
+                    });
+                  },
+                  onChanged: (value) {
+                    setState(() {
+                      searchValue = value;
+                    });
+                  },
+                  autoFocus: false,
+                ),
               ),
+            ),
+          ),
+          SliverToBoxAdapter(
+            child: AnimatedExpanded(
+              expand: hideIfSearching(searchValue, isFocused, context) == false,
+              child: TotalSpentToggle(isForGoalTotal: true),
             ),
           ),
           StreamBuilder<List<Objective>>(

@@ -91,8 +91,6 @@
   "username": "వినియోగదారు పేరు",
   "battery-saver": "బ్యాటరీ సేవర్",
   "battery-saver-description": "పనితీరును పెంచడానికి మరియు బ్యాటరీని సేవ్ చేయడానికి UI ని ఆప్టిమైజ్ చేయండి",
-  "require-biometrics": "బయోమెట్రిక్స్ అవసరం",
-  "require-biometrics-description": "బయోమెట్రిక్స్‌తో అనువర్తనాన్ని లాక్ చేయండి",
   "verify-identity": "దయచేసి మీ గుర్తింపు ని ధృవీకరించండి.",
   "automation": "ఆటోమేషన్",
   "auto-email-transactions": "ఆటో ఇమెయిల్ లావాదేవీలు",
@@ -832,5 +830,18 @@
   "category-no-longer-exists": "వర్గం ఇక లేదు",
   "default-category-income": "ఆదాయం",
   "select-shortcut": "సత్వరమార్గం ఎంచుకోండి",
-  "all-spending-settings": "అన్ని ఖర్చు సెట్టింగులు"
+  "all-spending-settings": "అన్ని ఖర్చు సెట్టింగులు",
+  "goal-total-type": "లక్ష్యం మొత్తం రకం",
+  "auto-mark-transactions": "ఆటో పే లావాదేవీలు",
+  "auto-mark-transactions-description": "చెల్లించినట్లు మీరిన లావాదేవీలను గుర్తించండి",
+  "more-options-description": "ఖాతాలు, బడ్జెట్లు, లక్ష్యాలు, శీర్షికలు",
+  "header-height": "హెడర్ ఎత్తు",
+  "tall": "పొడవైన",
+  "short": "చిన్నది",
+  "biometric-lock": "బయోమెట్రిక్ లాక్",
+  "biometric-lock-description": "అనువర్తన ప్రయోగంలో బయోమెట్రిక్స్ అవసరం",
+  "remaining": "మిగిలి ఉంది",
+  "created-transaction": "లావాదేవీని సృష్టించింది",
+  "most-common-transactions": "చాలా సాధారణ లావాదేవీలు",
+  "most-common-transactions-description": "జాబితాలో ఎంచుకోవడం ద్వారా గత 2 నెలల నుండి జాబితా చేయబడిన చాలా తరచుగా లావాదేవీలను త్వరగా నకిలీ చేయండి."
 }

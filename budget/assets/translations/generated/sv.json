@@ -91,8 +91,6 @@
   "username": "Användarnamn",
   "battery-saver": "Batterisparare",
   "battery-saver-description": "Optimera användargränssnittet för att öka prestandan och spara batteri",
-  "require-biometrics": "Kräver biometri",
-  "require-biometrics-description": "Lås applikationen med biometri",
   "verify-identity": "Var god verifiera din identitet.",
   "automation": "Automatisering",
   "auto-email-transactions": "Auto -e -posttransaktioner",
@@ -832,5 +830,18 @@
   "category-no-longer-exists": "Kategori finns inte längre",
   "default-category-income": "Inkomst",
   "select-shortcut": "Välj genväg",
-  "all-spending-settings": "Alla utgiftsinställningar"
+  "all-spending-settings": "Alla utgiftsinställningar",
+  "goal-total-type": "Mål total typ",
+  "auto-mark-transactions": "Bilbetalningstransaktioner",
+  "auto-mark-transactions-description": "Markera förfallna transaktioner som betalt",
+  "more-options-description": "Konton, budgetar, mål, titlar",
+  "header-height": "Rubrikhöjd",
+  "tall": "Lång",
+  "short": "Kort",
+  "biometric-lock": "Biometrisk lås",
+  "biometric-lock-description": "Kräver biometri vid applansering",
+  "remaining": "återstående",
+  "created-transaction": "Skapad transaktion",
+  "most-common-transactions": "Vanligaste transaktioner",
+  "most-common-transactions-description": "Duplicera snabbt de vanligaste transaktionerna från de senaste 2 månaderna genom att välja i listan."
 }
