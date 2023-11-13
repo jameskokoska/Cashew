@@ -843,5 +843,7 @@
   "most-common-transactions": "最も一般的なトランザクション",
   "most-common-transactions-description": "リスト内で選択して、過去2か月からリストされている最も頻繁なトランザクションをすばやく複製します。",
   "spending-limit-type": "支出制限タイプ",
-  "percent": "パーセント"
+  "percent": "パーセント",
+  "major-change-15": "ボタンを追加する長い押します",
+  "major-change-15-1": "頻繁なトランザクション、アカウント間のバランスを迅速に複製するなど"
 }

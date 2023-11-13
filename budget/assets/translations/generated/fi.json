@@ -843,5 +843,7 @@
   "most-common-transactions": "Yleisimmät liiketoimet",
   "most-common-transactions-description": "Kopioi nopeasti viimeisen kahden kuukauden yleisimmät tapahtumat valitsemalla luettelossa.",
   "spending-limit-type": "Menotrajatyyppi",
-  "percent": "Prosentti"
+  "percent": "Prosentti",
+  "major-change-15": "Lisää -painike pitkä paina",
+  "major-change-15-1": "Kopioi usein usein tapahtuvat tapahtumat, siirtotaseet tilit ja muut"
 }

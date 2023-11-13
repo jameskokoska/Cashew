@@ -843,5 +843,7 @@
   "most-common-transactions": "Shughuli za kawaida",
   "most-common-transactions-description": "Haraka shughuli za mara kwa mara zilizoorodheshwa kutoka miezi 2 iliyopita kwa kuchagua kwenye orodha.",
   "spending-limit-type": "Matumizi ya aina ya kikomo",
-  "percent": "Asilimia"
+  "percent": "Asilimia",
+  "major-change-15": "Ongeza kitufe cha Bonyeza kwa muda mrefu",
+  "major-change-15-1": "Haraka shughuli za mara kwa mara, uhamishe mizani kwenye akaunti na zaidi"
 }

@@ -52,7 +52,6 @@ class FAB extends StatelessWidget {
                     openBottomSheet(
                       context,
                       PopupFramework(
-                        title: "add".tr(),
                         child: AddMoreThingsPopup(),
                       ),
                     );

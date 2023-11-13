@@ -843,5 +843,7 @@
   "most-common-transactions": "Karamihan sa mga karaniwang transaksyon",
   "most-common-transactions-description": "Mabilis na madoble ang madalas na mga transaksyon na nakalista mula sa huling 2 buwan sa pamamagitan ng pagpili sa listahan.",
   "spending-limit-type": "Uri ng Limitasyon ng Paggastos",
-  "percent": "Porsyento"
+  "percent": "Porsyento",
+  "major-change-15": "Magdagdag ng pindutan ng Long Press",
+  "major-change-15-1": "Mabilis na doble"
 }

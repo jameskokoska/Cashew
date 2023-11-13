@@ -843,5 +843,7 @@
   "most-common-transactions": "Meest voorkomende transacties",
   "most-common-transactions-description": "Dupliceer snel de meest frequente transacties die de afgelopen 2 maanden worden vermeld door in de lijst te selecteren.",
   "spending-limit-type": "Uitgaven Limiet Type",
-  "percent": "Percentage"
+  "percent": "Percentage",
+  "major-change-15": "Toevoegen knop Druk lang op",
+  "major-change-15-1": "Dupliceer snel frequente transacties, transfer saldi over rekeningen en meer"
 }

@@ -843,5 +843,7 @@
   "most-common-transactions": "Leggyakoribb tranzakciók",
   "most-common-transactions-description": "Gyorsan megismételje az elmúlt 2 hónapban felsorolt ​​leggyakoribb tranzakciókat a listában való kiválasztással.",
   "spending-limit-type": "Kiadások korlátja",
-  "percent": "Százalék"
+  "percent": "Százalék",
+  "major-change-15": "Hozzáadás Hosszú gombnyomás",
+  "major-change-15-1": "Gyorsan megismételje a gyakori tranzakciókat, az átutalási egyenlegeket a számlák között és még sok más"
 }

@@ -843,5 +843,7 @@
   "most-common-transactions": "高频交易",
   "most-common-transactions-description": "选择列表以从过去两个月的交易中快速创建常用交易副本。",
   "spending-limit-type": "支出限额类型",
-  "percent": "百分"
+  "percent": "百分",
+  "major-change-15": "添加按钮长按",
+  "major-change-15-1": "快速复制频繁的交易，跨帐户转移余额等等"
 }

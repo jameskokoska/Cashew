@@ -843,5 +843,7 @@
   "most-common-transactions": "Mest almindelige transaktioner",
   "most-common-transactions-description": "Duplicerer hurtigt de hyppigste transaktioner, der er anført fra de sidste 2 måneder ved at vælge på listen.",
   "spending-limit-type": "Forbruget grænse type",
-  "percent": "Procent"
+  "percent": "Procent",
+  "major-change-15": "Tilføj knappen lang tryk",
+  "major-change-15-1": "Hurtigt duplikere hyppige transaktioner, overføresbalancer på tværs af konti og mere"
 }

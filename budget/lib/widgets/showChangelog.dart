@@ -11,6 +11,7 @@ import 'package:budget/pages/settingsPage.dart';
 import 'package:budget/pages/walletDetailsPage.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/button.dart';
+import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/framework/popupFramework.dart';
 import 'package:budget/widgets/openPopup.dart';
@@ -23,15 +24,16 @@ import 'listItem.dart';
 String getChangelogString() {
   return """
     < 4.8.8
+    Transfer balance and correct total balance added to quick actions (long press plus button)
     Significantly improved performance for transaction search page
-    Fixed generate preview data missing category
     More category icons
-    Improved absolute/percentage spending setting to dropdown
+    Homepage transaction list animates on changes
+    Improved absolute/percentage spending limits setting to dropdown
     Use 'en dash' for amount ranges
     Circular progress in budget page shows total spent instead of category limit progress
     Disabled lazy loading of transactions list on homepage
-    Homepage transaction list animated on changes
     Selected transactions dropdown menu follows colorscheme
+    Fixed generate preview data missing category
     < 4.8.7
     Long press add button to see list of most commonly added expenses and quickly duplicate them
     Added goal total or remaining spending label setting
@@ -1818,6 +1820,23 @@ Map<String, List<MajorChanges>> getMajorChanges() {
         info: [
           "major-change-14-1".tr(),
         ],
+      ),
+    ],
+    "< 4.8.8": [
+      MajorChanges(
+        "major-change-15".tr(),
+        Icons.add_box_rounded,
+        info: [
+          "major-change-15-1".tr(),
+        ],
+        onTap: (context) {
+          openBottomSheet(
+            context,
+            PopupFramework(
+              child: AddMoreThingsPopup(),
+            ),
+          );
+        },
       ),
     ],
   };

@@ -843,5 +843,7 @@
   "most-common-transactions": "Cele mai frecvente tranzacții",
   "most-common-transactions-description": "Duplicați rapid cele mai frecvente tranzacții enumerate din ultimele 2 luni selectând în listă.",
   "spending-limit-type": "Tip de limită de cheltuieli",
-  "percent": "La sută"
+  "percent": "La sută",
+  "major-change-15": "Adăugați butonul Long Apăsați",
+  "major-change-15-1": "Duplice rapid tranzacțiile frecvente, soldurile de transfer între conturi și multe altele"
 }

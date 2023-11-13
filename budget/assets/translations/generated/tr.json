@@ -843,5 +843,7 @@
   "most-common-transactions": "En yaygın işlemler",
   "most-common-transactions-description": "Listede seçilerek son 2 aydan itibaren listelenen en sık işlemleri hızla çoğaltın.",
   "spending-limit-type": "Harcama limit türü",
-  "percent": "Yüzde"
+  "percent": "Yüzde",
+  "major-change-15": "Düğme Uzun Ekle Basın",
+  "major-change-15-1": "Sık sık yapılan işlemleri hızlı bir şekilde kopyalayın, hesaplar arasında aktarım bakiyeleri ve daha fazlası"
 }

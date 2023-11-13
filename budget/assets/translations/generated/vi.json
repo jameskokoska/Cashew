@@ -843,5 +843,7 @@
   "most-common-transactions": "Giao dịch phổ biến nhất",
   "most-common-transactions-description": "Nhanh chóng nhân đôi các giao dịch thường xuyên nhất được liệt kê trong 2 tháng qua bằng cách chọn trong danh sách.",
   "spending-limit-type": "Loại giới hạn chi tiêu",
-  "percent": "Phần trăm"
+  "percent": "Phần trăm",
+  "major-change-15": "Thêm nút Nhấn dài",
+  "major-change-15-1": "Nhanh chóng sao chép các giao dịch thường xuyên, chuyển số cân bằng trên các tài khoản và hơn thế nữa"
 }

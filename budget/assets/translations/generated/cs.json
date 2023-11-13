@@ -843,5 +843,7 @@
   "most-common-transactions": "Nejběžnější transakce",
   "most-common-transactions-description": "Rychle duplikujte nejčastější transakce uvedené z posledních 2 měsíců výběrem v seznamu.",
   "spending-limit-type": "Typ limitu výdajů",
-  "percent": "Procent"
+  "percent": "Procent",
+  "major-change-15": "Přidat tlačítko Dlouhý stiskněte",
+  "major-change-15-1": "Rychle duplikujte časté transakce, převáděcí zůstatky napříč účty a další"
 }

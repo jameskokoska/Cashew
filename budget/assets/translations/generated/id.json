@@ -843,5 +843,7 @@
   "most-common-transactions": "Transaksi paling umum",
   "most-common-transactions-description": "Duplikat dengan cepat transaksi yang paling sering tercantum dari 2 bulan terakhir dengan memilih dalam daftar.",
   "spending-limit-type": "Jenis batas pengeluaran",
-  "percent": "Persen"
+  "percent": "Persen",
+  "major-change-15": "Tambahkan Tombol Tekan Panjang",
+  "major-change-15-1": "Duplikat dengan cepat transaksi, transfer saldo di seluruh akun dan banyak lagi"
 }

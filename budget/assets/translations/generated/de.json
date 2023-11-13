@@ -843,5 +843,7 @@
   "most-common-transactions": "Die häufigsten Transaktionen",
   "most-common-transactions-description": "Schnell duplizieren die häufigsten Transaktionen, die aus den letzten 2 Monaten aufgeführt sind, indem Sie in der Liste auswählen.",
   "spending-limit-type": "Ausgabenlimittyp",
-  "percent": "Prozent"
+  "percent": "Prozent",
+  "major-change-15": "Taste hinzufügen Lange Drücken",
+  "major-change-15-1": "Schnell doppelte häufige Transaktionen, Übertragungsguthaben über Konten übertragen und mehr"
 }

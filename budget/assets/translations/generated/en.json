@@ -843,5 +843,7 @@
   "most-common-transactions": "Most Common Transactions",
   "most-common-transactions-description": "Quickly duplicate the most frequent transactions listed from the last 2 months by selecting in the list.",
   "spending-limit-type": "Spending Limit Type",
-  "percent": "Percent"
+  "percent": "Percent",
+  "major-change-15": "Add Button Long Press",
+  "major-change-15-1": "Quickly duplicate frequent transactions, transfer balances across accounts and more"
 }

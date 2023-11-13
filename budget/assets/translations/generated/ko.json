@@ -843,5 +843,7 @@
   "most-common-transactions": "가장 일반적인 거래",
   "most-common-transactions-description": "목록에서 선택하여 지난 2 개월 동안 나열된 가장 빈번한 거래를 빠르게 복제하십시오.",
   "spending-limit-type": "지출 한도 유형",
-  "percent": "퍼센트"
+  "percent": "퍼센트",
+  "major-change-15": "버튼을 추가합니다",
+  "major-change-15-1": "자주 거래, 계정 간의 양도 잔액 등을 빠르게 복제합니다."
 }

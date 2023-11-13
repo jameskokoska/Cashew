@@ -843,5 +843,7 @@
   "most-common-transactions": "Transactions les plus courantes",
   "most-common-transactions-description": "Dupliquez rapidement les transactions les plus fréquentes énumérées depuis les 2 derniers mois en sélectionnant dans la liste.",
   "spending-limit-type": "Type de limite de dépenses",
-  "percent": "Pour cent"
+  "percent": "Pour cent",
+  "major-change-15": "Ajouter le bouton Long Appuyez",
+  "major-change-15-1": "Dupliquez rapidement les transactions fréquentes, les soldes de transfert sur les comptes et plus"
 }

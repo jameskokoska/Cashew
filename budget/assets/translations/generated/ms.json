@@ -843,5 +843,7 @@
   "most-common-transactions": "Urus niaga yang paling biasa",
   "most-common-transactions-description": "Cepat menduplikasi urus niaga yang paling kerap yang disenaraikan dari 2 bulan terakhir dengan memilih dalam senarai.",
   "spending-limit-type": "Jenis had perbelanjaan",
-  "percent": "Peratus"
+  "percent": "Peratus",
+  "major-change-15": "Tambah butang Tekan Long",
+  "major-change-15-1": "Cepat menduplikasi urus niaga yang kerap, baki pemindahan di seluruh akaun dan banyak lagi"
 }

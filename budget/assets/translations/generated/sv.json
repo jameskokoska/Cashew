@@ -843,5 +843,7 @@
   "most-common-transactions": "Vanligaste transaktioner",
   "most-common-transactions-description": "Duplicera snabbt de vanligaste transaktionerna från de senaste 2 månaderna genom att välja i listan.",
   "spending-limit-type": "Utgiftsgränstyp",
-  "percent": "Procent"
+  "percent": "Procent",
+  "major-change-15": "Lägg till knappen lång tryck på",
+  "major-change-15-1": "Snabbt duplicera frekventa transaktioner, överföra saldon över konton och mer"
 }

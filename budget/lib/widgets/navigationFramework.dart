@@ -459,6 +459,74 @@ class AddMoreThingsPopup extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
+        SizedBox(height: 5),
+        AddThing(
+          iconData: navBarIconsData["accountDetails"]!.iconData,
+          title: "account".tr(),
+          openPage: AddWalletPage(
+            routesToPopAfterDelete: RoutesToPopAfterDelete.None,
+          ),
+          widgetAfter: SelectChips(
+            padding: EdgeInsets.symmetric(horizontal: 13),
+            items: [
+              if (Provider.of<AllWallets>(context).list.length > 1)
+                "transfer-balance",
+              "correct-total-balance"
+            ],
+            getSelected: (_) {
+              return false;
+            },
+            onSelected: (String selection) async {
+              if (selection == "transfer-balance") {
+                Navigator.pop(context);
+                openBottomSheet(
+                  context,
+                  fullSnap: true,
+                  TransferBalancePopup(
+                    wallet: Provider.of<AllWallets>(context, listen: false)
+                        .indexedByPk[appStateSettings["selectedWalletPk"]]!,
+                  ),
+                );
+              } else if (selection == "correct-total-balance") {
+                TransactionWallet? wallet =
+                    Provider.of<AllWallets>(context, listen: false)
+                        .indexedByPk[appStateSettings["selectedWalletPk"]];
+                if (Provider.of<AllWallets>(context, listen: false)
+                        .list
+                        .length >
+                    1) {
+                  wallet = await selectWalletPopup(context);
+                }
+                if (wallet != null) {
+                  Navigator.pop(context);
+                  openBottomSheet(
+                    context,
+                    fullSnap: true,
+                    CorrectBalancePopup(wallet: wallet),
+                  );
+                }
+              }
+            },
+            getLabel: (String selection) {
+              return selection.tr();
+            },
+            getAvatar: (String selection) {
+              return LayoutBuilder(builder: (context2, constraints) {
+                return Icon(
+                  selection == "transfer-balance"
+                      ? appStateSettings["outlinedIcons"]
+                          ? Icons.compare_arrows_outlined
+                          : Icons.compare_arrows_rounded
+                      : appStateSettings["outlinedIcons"]
+                          ? Icons.library_add_outlined
+                          : Icons.library_add_rounded,
+                  color: Theme.of(context).colorScheme.primary,
+                  size: constraints.maxWidth,
+                );
+              });
+            },
+          ),
+        ),
         StreamBuilder<Map<String, TransactionCategory>>(
           stream: database.watchAllCategoriesIndexed(),
           builder: (context, snapshotCategories) {
@@ -515,86 +583,86 @@ class AddMoreThingsPopup extends StatelessWidget {
                   openPage: AddTransactionPage(
                       routesToPopAfterDelete: RoutesToPopAfterDelete.None),
                   widgetAfter: SelectChips(
-                      padding: EdgeInsets.symmetric(horizontal: 13),
-                      items: commonTransactions,
-                      getSelected: (_) {
-                        return false;
-                      },
-                      onLongPress:
-                          (TransactionWithCount transactionWithCount) async {
-                        double amount = await openBottomSheet(
-                          context,
-                          fullSnap: true,
-                          PopupFramework(
-                            title: "enter-amount".tr(),
-                            underTitleSpace: false,
-                            child: SelectAmount(
-                              setSelectedAmount: (_, __) {},
-                              nextLabel: "set-amount".tr(),
-                              popWithAmount: true,
-                            ),
+                    padding: EdgeInsets.symmetric(horizontal: 13),
+                    items: commonTransactions,
+                    getSelected: (_) {
+                      return false;
+                    },
+                    onLongPress:
+                        (TransactionWithCount transactionWithCount) async {
+                      double amount = await openBottomSheet(
+                        context,
+                        fullSnap: true,
+                        PopupFramework(
+                          title: "enter-amount".tr(),
+                          underTitleSpace: false,
+                          child: SelectAmount(
+                            setSelectedAmount: (_, __) {},
+                            nextLabel: "set-amount".tr(),
+                            popWithAmount: true,
                           ),
-                        );
-                        amount = amount.abs() *
-                            (transactionWithCount.transaction.income ? 1 : -1);
-                        createTransactionFromCommon(
-                          context: context,
-                          transactionWithCount: transactionWithCount,
-                          categoriesIndexed: categoriesIndexed,
-                          customAmount: amount,
-                        );
-                      },
-                      onSelected:
-                          (TransactionWithCount transactionWithCount) async {
-                        createTransactionFromCommon(
-                          context: context,
-                          transactionWithCount: transactionWithCount,
-                          categoriesIndexed: categoriesIndexed,
-                        );
-                      },
-                      getLabel: (TransactionWithCount transactionWithCount) {
-                        return getTransactionLabelSync(
-                              transactionWithCount.transaction,
-                              categoriesIndexed[
-                                  transactionWithCount.transaction.categoryFk],
-                            ) +
-                            " " +
-                            "(" +
-                            convertToMoney(Provider.of<AllWallets>(context),
-                                transactionWithCount.transaction.amount) +
-                            ")";
-                      },
-                      getCustomBorderColor:
-                          (TransactionWithCount transactionWithCount) {
-                        return dynamicPastel(
-                          context,
-                          lightenPastel(
-                            HexColor(
-                              categoriesIndexed[transactionWithCount
-                                      .transaction.categoryFk]
-                                  ?.colour,
-                              defaultColor:
-                                  Theme.of(context).colorScheme.primary,
-                            ),
-                            amount: 0.3,
-                          ),
-                          amount: 0.4,
-                        );
-                      },
-                      getAvatar: (TransactionWithCount transactionWithCount) {
-                        return LayoutBuilder(builder: (context, constraints) {
-                          return CategoryIcon(
-                            categoryPk: "-1",
-                            category: categoriesIndexed[
+                        ),
+                      );
+                      amount = amount.abs() *
+                          (transactionWithCount.transaction.income ? 1 : -1);
+                      createTransactionFromCommon(
+                        context: context,
+                        transactionWithCount: transactionWithCount,
+                        categoriesIndexed: categoriesIndexed,
+                        customAmount: amount,
+                      );
+                    },
+                    onSelected:
+                        (TransactionWithCount transactionWithCount) async {
+                      createTransactionFromCommon(
+                        context: context,
+                        transactionWithCount: transactionWithCount,
+                        categoriesIndexed: categoriesIndexed,
+                      );
+                    },
+                    getLabel: (TransactionWithCount transactionWithCount) {
+                      return getTransactionLabelSync(
+                            transactionWithCount.transaction,
+                            categoriesIndexed[
                                 transactionWithCount.transaction.categoryFk],
-                            size: constraints.maxWidth,
-                            sizePadding: 0,
-                            noBackground: true,
-                            canEditByLongPress: false,
-                            margin: EdgeInsets.zero,
-                          );
-                        });
-                      }),
+                          ) +
+                          " " +
+                          "(" +
+                          convertToMoney(Provider.of<AllWallets>(context),
+                              transactionWithCount.transaction.amount) +
+                          ")";
+                    },
+                    getCustomBorderColor:
+                        (TransactionWithCount transactionWithCount) {
+                      return dynamicPastel(
+                        context,
+                        lightenPastel(
+                          HexColor(
+                            categoriesIndexed[
+                                    transactionWithCount.transaction.categoryFk]
+                                ?.colour,
+                            defaultColor: Theme.of(context).colorScheme.primary,
+                          ),
+                          amount: 0.3,
+                        ),
+                        amount: 0.4,
+                      );
+                    },
+                    getAvatar: (TransactionWithCount transactionWithCount) {
+                      return LayoutBuilder(builder: (context, constraints) {
+                        return CategoryIcon(
+                          categoryPk: "-1",
+                          category: categoriesIndexed[
+                              transactionWithCount.transaction.categoryFk],
+                          size: constraints.maxWidth,
+                          sizePadding: 0,
+                          noBackground: true,
+                          canEditByLongPress: false,
+                          margin: EdgeInsets.zero,
+                        );
+                      });
+                    },
+                  ),
                 );
               },
             );
@@ -604,26 +672,23 @@ class AddMoreThingsPopup extends StatelessWidget {
           iconData: navBarIconsData["budgets"]!.iconData,
           title: "budget".tr(),
           openPage: AddBudgetPage(
-              routesToPopAfterDelete: RoutesToPopAfterDelete.None),
+            routesToPopAfterDelete: RoutesToPopAfterDelete.None,
+          ),
           iconScale: navBarIconsData["budgets"]!.iconScale,
         ),
         AddThing(
           iconData: navBarIconsData["goals"]!.iconData,
           title: "goal".tr(),
           openPage: AddObjectivePage(
-              routesToPopAfterDelete: RoutesToPopAfterDelete.None),
+            routesToPopAfterDelete: RoutesToPopAfterDelete.None,
+          ),
         ),
         AddThing(
           iconData: navBarIconsData["categoriesDetails"]!.iconData,
           title: "category".tr(),
           openPage: AddCategoryPage(
-              routesToPopAfterDelete: RoutesToPopAfterDelete.None),
-        ),
-        AddThing(
-          iconData: navBarIconsData["accountDetails"]!.iconData,
-          title: "account".tr(),
-          openPage: AddWalletPage(
-              routesToPopAfterDelete: RoutesToPopAfterDelete.None),
+            routesToPopAfterDelete: RoutesToPopAfterDelete.None,
+          ),
         ),
       ],
     );
@@ -635,6 +700,7 @@ class AddThing extends StatelessWidget {
     required this.iconData,
     required this.title,
     required this.openPage,
+    this.onTap,
     this.widgetAfter,
     this.infoButton,
     this.iconScale = 1,
@@ -644,6 +710,7 @@ class AddThing extends StatelessWidget {
   final IconData iconData;
   final String title;
   final Widget openPage;
+  final VoidCallback? onTap;
   final Widget? widgetAfter;
   final Widget? infoButton;
   final double iconScale;
@@ -669,8 +736,12 @@ class AddThing extends StatelessWidget {
               iconData: iconData,
               iconScale: iconScale,
               onTap: () {
-                Navigator.pop(context);
-                pushRoute(context, openPage);
+                if (onTap != null) {
+                  onTap!();
+                } else {
+                  Navigator.pop(context);
+                  pushRoute(context, openPage);
+                }
               },
               afterWidget: widgetAfter,
               afterWidgetPadding: widgetAfter != null
