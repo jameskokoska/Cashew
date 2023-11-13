@@ -277,8 +277,6 @@
   "merge-into-description-categories": "זה יעביר את כל העסקאות לקטגוריה החדשה וימחק את הקטגוריה הישנה",
   "merge": "לְמַזֵג",
   "set-title": "הגדר כותרת",
-  "absolute-spending-limits": "מגבלות הוצאות מוחלטות",
-  "absolute-spending-limits-description": "מגבלות הוצאות מוחלטות במקום אחוז",
   "enter-limit": "הזן גבול",
   "set-limit": "הגדר גבול",
   "of-budget": "של תקציב",
@@ -843,5 +841,7 @@
   "remaining": "נוֹתָר",
   "created-transaction": "יצרה עסקה",
   "most-common-transactions": "העסקאות הנפוצות ביותר",
-  "most-common-transactions-description": "שכפול במהירות את העסקאות השכיחות ביותר המופיעות מהחודשיים האחרונים על ידי בחירה ברשימה."
+  "most-common-transactions-description": "שכפול במהירות את העסקאות השכיחות ביותר המופיעות מהחודשיים האחרונים על ידי בחירה ברשימה.",
+  "spending-limit-type": "סוג הגבלת ההוצאות",
+  "percent": "אָחוּז"
 }

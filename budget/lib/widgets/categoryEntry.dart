@@ -12,6 +12,7 @@ import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/widgets/animatedCircularProgress.dart';
 import 'package:provider/provider.dart';
@@ -84,10 +85,11 @@ class CategoryEntry extends StatelessWidget {
     bool hasSubCategories =
         subCategoriesWithTotal.length > 0 && expandSubcategories != false;
 
+    double percentSpentWithCategoryLimit = isSubcategory
+        ? (categorySpent / mainCategorySpentIfSubcategory).abs()
+        : (categorySpent / totalSpent).abs();
     double percentSpent = categoryBudgetLimit == null
-        ? isSubcategory
-            ? (categorySpent / mainCategorySpentIfSubcategory).abs()
-            : (categorySpent / totalSpent).abs()
+        ? percentSpentWithCategoryLimit
         : isAbsoluteSpendingLimit
             ? ((categorySpent / categoryBudgetLimit!.amount).abs() > 1
                 ? 1
@@ -127,7 +129,7 @@ class CategoryEntry extends StatelessWidget {
               children: [
                 CategoryIconPercent(
                   category: category,
-                  percent: percentSpent * 100,
+                  percent: percentSpentWithCategoryLimit * 100,
                   progressBackgroundColor: appStateSettings["materialYou"]
                       ? budgetColorScheme.secondaryContainer
                       : selected
@@ -514,7 +516,7 @@ class CategoryIconPercent extends StatelessWidget {
           height: size + insetPadding,
           width: size + insetPadding,
           child: AnimatedCircularProgress(
-            percent: percent / 100,
+            percent: clampDouble(percent / 100, 0, 1),
             backgroundColor: progressBackgroundColor,
             foregroundColor: dynamicPastel(
               context,

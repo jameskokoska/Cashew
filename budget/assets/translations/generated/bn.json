@@ -277,8 +277,6 @@
   "merge-into-description-categories": "এটি সমস্ত লেনদেনকে নতুন বিভাগে স্থানান্তর করবে এবং পুরানো বিভাগটি মুছবে",
   "merge": "একত্রিত করা",
   "set-title": "শিরোনাম সেট করুন",
-  "absolute-spending-limits": "পরম ব্যয়ের সীমা",
-  "absolute-spending-limits-description": "শতাংশের পরিবর্তে পরম ব্যয়ের সীমা",
   "enter-limit": "সীমা প্রবেশ করান",
   "set-limit": "সীমা সেট করুন",
   "of-budget": "বাজেটের",
@@ -843,5 +841,7 @@
   "remaining": "বাকি",
   "created-transaction": "লেনদেন তৈরি",
   "most-common-transactions": "সর্বাধিক সাধারণ লেনদেন",
-  "most-common-transactions-description": "তালিকায় নির্বাচন করে গত 2 মাস থেকে তালিকাভুক্ত সর্বাধিক ঘন ঘন লেনদেনগুলিকে দ্রুত নকল করুন।"
+  "most-common-transactions-description": "তালিকায় নির্বাচন করে গত 2 মাস থেকে তালিকাভুক্ত সর্বাধিক ঘন ঘন লেনদেনগুলিকে দ্রুত নকল করুন।",
+  "spending-limit-type": "ব্যয় সীমা প্রকার",
+  "percent": "শতাংশ"
 }

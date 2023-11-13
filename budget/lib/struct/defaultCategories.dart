@@ -76,16 +76,6 @@ List<TransactionCategory> defaultCategories() {
     //   order: 6,
     //   income: false,
     // ),
-    TransactionCategory(
-      categoryPk: "7",
-      name: "default-category-gifts".tr(),
-      colour: toHexString(Colors.red),
-      iconName: "gift.png",
-      dateCreated: DateTime.now(),
-      dateTimeModified: null,
-      order: 6,
-      income: false,
-    ),
     // TransactionCategory(
     //   categoryPk: "8",
     //   name: "default-category-sports".tr(),
@@ -97,7 +87,17 @@ List<TransactionCategory> defaultCategories() {
     //   income: false,
     // ),
     TransactionCategory(
-      categoryPk: "9",
+      categoryPk: "7",
+      name: "default-category-gifts".tr(),
+      colour: toHexString(Colors.red),
+      iconName: "gift.png",
+      dateCreated: DateTime.now(),
+      dateTimeModified: null,
+      order: 6,
+      income: false,
+    ),
+    TransactionCategory(
+      categoryPk: "8",
       name: "default-category-beauty".tr(),
       colour: toHexString(Colors.purple),
       iconName: "flower.png",
@@ -107,7 +107,7 @@ List<TransactionCategory> defaultCategories() {
       income: false,
     ),
     TransactionCategory(
-      categoryPk: "10",
+      categoryPk: "9",
       name: "default-category-work".tr(),
       colour: toHexString(Colors.brown),
       iconName: "briefcase.png",
@@ -117,7 +117,7 @@ List<TransactionCategory> defaultCategories() {
       income: false,
     ),
     TransactionCategory(
-      categoryPk: "11",
+      categoryPk: "10",
       name: "default-category-travel".tr(),
       colour: toHexString(Colors.orange),
       iconName: "plane.png",
@@ -127,7 +127,7 @@ List<TransactionCategory> defaultCategories() {
       income: false,
     ),
     TransactionCategory(
-      categoryPk: "12",
+      categoryPk: "11",
       name: "default-category-income".tr(),
       colour: toHexString(Colors.deepPurple.shade300),
       iconName: "coin.png",

@@ -99,7 +99,7 @@
   "pay-repetitive": "تکراری پرداخت کنید",
   "pay-repetitive-description": "به طور خودکار یک معامله تکراری را که پس از موعد مقرر پرداخت می شود علامت گذاری کنید",
   "pay-upcoming": "پرداخت آینده",
-  "pay-upcoming-description": "به طور خودکار یک معامله آینده را همانطور که پس از موعد مقرر پرداخت می شود ، علامت گذاری کنید",
+  "pay-upcoming-description": "به طور خودکار یک معامله آینده را همانطور که پس از موعد مقرر پرداخت می شود علامت گذاری کنید",
   "import-csv": "وارد کردن پرونده CSV",
   "import-csv-description": "منبع داده CSV خارجی را وارد کنید",
   "rate-app": "نرخ {برنامه}",
@@ -277,8 +277,6 @@
   "merge-into-description-categories": "این همه معاملات را به دسته جدید منتقل می کند و دسته قدیمی را پاک می کند",
   "merge": "ادغام",
   "set-title": "عنوان تنظیم شده",
-  "absolute-spending-limits": "محدودیت های هزینه مطلق",
-  "absolute-spending-limits-description": "محدودیت هزینه های مطلق به جای درصدی",
   "enter-limit": "محدودیت را وارد کنید",
   "set-limit": "حد تعیین",
   "of-budget": "بودجه",
@@ -843,5 +841,7 @@
   "remaining": "باقی مانده",
   "created-transaction": "معامله ایجاد شده",
   "most-common-transactions": "متداول ترین معاملات",
-  "most-common-transactions-description": "با انتخاب در لیست ، سریعترین معاملات ذکر شده از 2 ماه گذشته را کپی کنید."
+  "most-common-transactions-description": "با انتخاب در لیست ، سریعترین معاملات ذکر شده از 2 ماه گذشته را کپی کنید.",
+  "spending-limit-type": "نوع محدودیت هزینه",
+  "percent": "درصد"
 }

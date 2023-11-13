@@ -277,8 +277,6 @@
   "merge-into-description-categories": "This will transfer all transactions to the new category and erase the old category",
   "merge": "Merge",
   "set-title": "Set Title",
-  "absolute-spending-limits": "Absolute Spending Limits",
-  "absolute-spending-limits-description": "Absolute spending limits instead of a percentage",
   "enter-limit": "Enter Limit",
   "set-limit": "Set Limit",
   "of-budget": "of budget",
@@ -843,5 +841,7 @@
   "remaining": "left",
   "created-transaction": "Created Transaction",
   "most-common-transactions": "Most Common Transactions",
-  "most-common-transactions-description": "Quickly duplicate the most frequent transactions listed from the last 2 months by selecting in the list."
+  "most-common-transactions-description": "Quickly duplicate the most frequent transactions listed from the last 2 months by selecting in the list.",
+  "spending-limit-type": "Spending Limit Type",
+  "percent": "Percent"
 }

@@ -272,44 +272,70 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
                     ),
                   ),
                 ),
-                // SliverToBoxAdapter(
-                //   child: SlidingSelectorIncomeExpense(
-                //       onSelected: (index) {
-                //         setState(() {
-                //           selectedIncome = index == 1
-                //               ? null
-                //               : index == 2
-                //                   ? false
-                //                   : true;
-                //         });
-                //         searchTransaction(selectedSearch,
-                //             income: selectedIncome);
-                //       },
-                //       alternateTheme: true),
+                Builder(builder: (context) {
+                  Widget dateRangeWidget = Tappable(
+                    borderRadius: 10,
+                    onTap: () {
+                      selectDateRange(context);
+                    },
+                    color: Colors.transparent,
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                        left: 10,
+                        right: 10,
+                        top: 10,
+                        bottom: 8,
+                      ),
+                      child: TextFont(
+                        text: getWordedDateShortMore(
+                                searchFilters.dateTimeRange?.start ??
+                                    DateTime.now(),
+                                includeYear: true) +
+                            " - " +
+                            getWordedDateShortMore(
+                                searchFilters.dateTimeRange?.end ??
+                                    DateTime.now(),
+                                includeYear: true),
+                        fontSize: 13,
+                        textAlign: TextAlign.center,
+                        textColor: getColor(context, "textLight"),
+                      ),
+                    ),
+                  );
+                  return TransactionEntries(
+                    renderType: TransactionEntriesRenderType.slivers,
+                    null, null,
+                    listID: "TransactionsSearch",
+                    noResultsMessage: "no-transactions-found".tr(),
+                    noSearchResultsVariation: true,
+                    searchFilters: searchFilters,
+                    // limit: 250,
+                    noResultsExtraWidget: dateRangeWidget,
+                    totalCashFlowExtraWidget: Transform.translate(
+                        offset: Offset(0, -15), child: dateRangeWidget),
+                    showTotalCashFlow: true,
+                  );
+                }),
+                // TransactionEntries(
+                //   simpleListRender: true,
+                //   null, null,
+                //   listID: "TransactionsSearch",
+                //   noResultsMessage: "no-transactions-found".tr(),
+                //   noSearchResultsVariation: true,
+                //   searchFilters: searchFilters,
+                //   // limit: 250,
+                //   showTotalCashFlow: true,
+                //   extraCashFlowInformation: getWordedDateShortMore(
+                //           searchFilters.dateTimeRange?.start ?? DateTime.now(),
+                //           includeYear: true) +
+                //       " - " +
+                //       getWordedDateShortMore(
+                //           searchFilters.dateTimeRange?.end ?? DateTime.now(),
+                //           includeYear: true),
+                //   onTapCashFlow: () {
+                //     selectDateRange(context);
+                //   },
                 // ),
-                // SliverToBoxAdapter(
-                //   child: SizedBox(height: 7),
-                // ),
-                TransactionEntries(
-                  null, null,
-                  listID: "TransactionsSearch",
-                  simpleListRender: false,
-                  noResultsMessage: "no-transactions-found".tr(),
-                  noSearchResultsVariation: true,
-                  searchFilters: searchFilters,
-                  // limit: 250,
-                  showTotalCashFlow: true,
-                  extraCashFlowInformation: getWordedDateShortMore(
-                          searchFilters.dateTimeRange?.start ?? DateTime.now(),
-                          includeYear: true) +
-                      " - " +
-                      getWordedDateShortMore(
-                          searchFilters.dateTimeRange?.end ?? DateTime.now(),
-                          includeYear: true),
-                  onTapCashFlow: () {
-                    selectDateRange(context);
-                  },
-                ),
                 SliverToBoxAdapter(
                   child: SizedBox(height: 50),
                 ),
@@ -433,7 +459,7 @@ class AppliedFilterChips extends StatelessWidget {
       out.add(
         AppliedFilterChip(
           label: convertToMoney(allWallets, searchFilters.amountRange!.start) +
-              " - " +
+              " – " +
               convertToMoney(
                 allWallets,
                 searchFilters.amountRange!.end,

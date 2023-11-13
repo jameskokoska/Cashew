@@ -277,8 +277,6 @@
   "merge-into-description-categories": "Tím se převede všechny transakce do nové kategorie a vymaže starou kategorii",
   "merge": "Spojit",
   "set-title": "Nastavit název",
-  "absolute-spending-limits": "Absolutní limity výdajů",
-  "absolute-spending-limits-description": "Absolutní limity výdajů namísto procenta",
   "enter-limit": "Zadejte limit",
   "set-limit": "Nastavit limit",
   "of-budget": "rozpočtu",
@@ -843,5 +841,7 @@
   "remaining": "zbývající",
   "created-transaction": "Vytvořená transakce",
   "most-common-transactions": "Nejběžnější transakce",
-  "most-common-transactions-description": "Rychle duplikujte nejčastější transakce uvedené z posledních 2 měsíců výběrem v seznamu."
+  "most-common-transactions-description": "Rychle duplikujte nejčastější transakce uvedené z posledních 2 měsíců výběrem v seznamu.",
+  "spending-limit-type": "Typ limitu výdajů",
+  "percent": "Procent"
 }

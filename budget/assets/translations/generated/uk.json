@@ -277,8 +277,6 @@
   "merge-into-description-categories": "Це перенесе всі транзакції на нову категорію та стерть стару категорію",
   "merge": "Об'єднання",
   "set-title": "Встановлений титул",
-  "absolute-spending-limits": "Абсолютні межі витрат",
-  "absolute-spending-limits-description": "Абсолютні межі витрат замість відсотків",
   "enter-limit": "Введіть ліміт",
   "set-limit": "Встановити обмеження",
   "of-budget": "бюджет",
@@ -843,5 +841,7 @@
   "remaining": "що залишився",
   "created-transaction": "Створена транзакція",
   "most-common-transactions": "Найпоширеніші транзакції",
-  "most-common-transactions-description": "Швидко дублюйте найчастіші транзакції, перелічені за останні 2 місяці, вибравши у списку."
+  "most-common-transactions-description": "Швидко дублюйте найчастіші транзакції, перелічені за останні 2 місяці, вибравши у списку.",
+  "spending-limit-type": "Тип ліміту витрат",
+  "percent": "Відсоток"
 }

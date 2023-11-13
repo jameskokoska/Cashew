@@ -96,7 +96,7 @@
   "auto-email-transactions": "Otomatik e -posta işlemleri",
   "pay-subscriptions": "Ödeme Abonelikleri",
   "pay-subscriptions-description": "Son tarihten sonra ödenen bir aboneliği otomatik olarak işaretleyin",
-  "pay-repetitive": "Ücret tekrarlayan",
+  "pay-repetitive": "Ödeme Tekrarlayan",
   "pay-repetitive-description": "Tekrarlayan bir işlemin son tarihten sonra ödendiği gibi otomatik olarak işaretlenmesi",
   "pay-upcoming": "Yaklaşan Ödeme",
   "pay-upcoming-description": "Yaklaşan bir işlemin son tarihten sonra ödendiği gibi otomatik olarak işaretlenmesi",
@@ -277,8 +277,6 @@
   "merge-into-description-categories": "Bu, tüm işlemleri yeni kategoriye aktaracak ve eski kategoriyi silecektir",
   "merge": "Birleştirmek",
   "set-title": "Başlık",
-  "absolute-spending-limits": "Mutlak harcama sınırları",
-  "absolute-spending-limits-description": "Yüzde yerine mutlak harcama sınırları",
   "enter-limit": "Sınır girin",
   "set-limit": "Sınırlamak",
   "of-budget": "bütçe",
@@ -843,5 +841,7 @@
   "remaining": "geriye kalan",
   "created-transaction": "Oluşturulan işlem",
   "most-common-transactions": "En yaygın işlemler",
-  "most-common-transactions-description": "Listede seçilerek son 2 aydan itibaren listelenen en sık işlemleri hızla çoğaltın."
+  "most-common-transactions-description": "Listede seçilerek son 2 aydan itibaren listelenen en sık işlemleri hızla çoğaltın.",
+  "spending-limit-type": "Harcama limit türü",
+  "percent": "Yüzde"
 }

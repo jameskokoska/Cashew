@@ -1,4 +1,5 @@
 import 'package:budget/database/tables.dart';
+import 'package:budget/functions.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/categoryLimits.dart';
@@ -34,8 +35,14 @@ class _EditBudgetLimitsPageState extends State<EditBudgetLimitsPage> {
           child: Padding(
             padding: EdgeInsets.symmetric(
                 horizontal: getHorizontalPaddingConstrained(context)),
-            child: SettingsContainerSwitch(
-              onSwitched: (value) async {
+            child: SettingsContainerDropdown(
+              title: "spending-limit-type".tr(),
+              icon: appStateSettings["outlinedIcons"]
+                  ? Icons.confirmation_num_outlined
+                  : Icons.confirmation_num_rounded,
+              initial: selectedIsAbsoluteSpendingLimit.toString(),
+              items: ["true", "false"],
+              onChanged: (value) async {
                 await database
                     .toggleAbsolutePercentSpendingCategoryBudgetLimits(
                   widget.budget.budgetPk,
@@ -49,13 +56,10 @@ class _EditBudgetLimitsPageState extends State<EditBudgetLimitsPage> {
                       !selectedIsAbsoluteSpendingLimit;
                 });
               },
-              initialValue: selectedIsAbsoluteSpendingLimit,
-              syncWithInitialValue: true,
-              title: "absolute-spending-limits".tr(),
-              description: "absolute-spending-limits-description".tr(),
-              icon: appStateSettings["outlinedIcons"]
-                  ? Icons.numbers_outlined
-                  : Icons.numbers_rounded,
+              getLabel: (item) {
+                if (item == "true") return "amount".tr().capitalizeFirst;
+                if (item == "false") return "percent".tr().capitalizeFirst;
+              },
             ),
           ),
         ),

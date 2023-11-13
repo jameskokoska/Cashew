@@ -277,8 +277,6 @@
   "merge-into-description-categories": "یہ تمام لین دین کو نئے زمرے میں منتقل کرے گا اور پرانے زمرے کو مٹا دے گا",
   "merge": "ضم",
   "set-title": "عنوان مقرر کریں",
-  "absolute-spending-limits": "مکمل اخراجات کی حدود",
-  "absolute-spending-limits-description": "ایک فیصد کے بجائے خرچ کی مطلق حدود",
   "enter-limit": "حد داخل کریں",
   "set-limit": "حد مقرر کریں",
   "of-budget": "بجٹ کا",
@@ -843,5 +841,7 @@
   "remaining": "باقی",
   "created-transaction": "ٹرانزیکشن پیدا کیا",
   "most-common-transactions": "سب سے عام لین دین",
-  "most-common-transactions-description": "فہرست میں منتخب کرکے پچھلے 2 مہینوں سے درج سب سے زیادہ بار بار لین دین کو جلدی سے نقل کریں۔"
+  "most-common-transactions-description": "فہرست میں منتخب کرکے پچھلے 2 مہینوں سے درج سب سے زیادہ بار بار لین دین کو جلدی سے نقل کریں۔",
+  "spending-limit-type": "خرچ کی حد کی قسم",
+  "percent": "فیصد"
 }

@@ -277,8 +277,6 @@
   "merge-into-description-categories": "สิ่งนี้จะโอนธุรกรรมทั้งหมดไปยังหมวดหมู่ใหม่และลบหมวดหมู่เก่า",
   "merge": "ผสาน",
   "set-title": "ตั้งชื่อ",
-  "absolute-spending-limits": "ขีด จำกัด การใช้จ่ายอย่างแน่นอน",
-  "absolute-spending-limits-description": "ขีด จำกัด การใช้จ่ายอย่างแน่นอนแทนเปอร์เซ็นต์",
   "enter-limit": "ป้อนขีด จำกัด",
   "set-limit": "กำหนดขีด จำกัด",
   "of-budget": "ของงบประมาณ",
@@ -843,5 +841,7 @@
   "remaining": "ที่เหลืออยู่",
   "created-transaction": "สร้างธุรกรรม",
   "most-common-transactions": "ธุรกรรมที่พบบ่อยที่สุด",
-  "most-common-transactions-description": "ทำธุรกรรมที่พบบ่อยที่สุดที่ระบุไว้อย่างรวดเร็วจาก 2 เดือนที่ผ่านมาโดยเลือกในรายการ"
+  "most-common-transactions-description": "ทำธุรกรรมที่พบบ่อยที่สุดที่ระบุไว้อย่างรวดเร็วจาก 2 เดือนที่ผ่านมาโดยเลือกในรายการ",
+  "spending-limit-type": "ประเภทขีด จำกัด การใช้จ่าย",
+  "percent": "เปอร์เซ็นต์"
 }

@@ -1614,7 +1614,7 @@ List<IconForCategory> iconObjects = [
       "dwelling",
       "shelter"
     ],
-    mostLikelyCategoryName: "Home",
+    mostLikelyCategoryName: "Housing",
   ),
   IconForCategory(
     icon: "hoodie.png",
@@ -4209,5 +4209,69 @@ List<IconForCategory> iconObjects = [
       "income"
     ],
     mostLikelyCategoryName: "Increase",
+  ),
+  IconForCategory(
+    icon: "house(1).png",
+    tags: [
+      "house",
+      "home",
+      "residence",
+      "dwelling",
+      "building",
+      "property",
+      "shelter",
+      "habitat",
+      "accommodation",
+      "housing"
+    ],
+    mostLikelyCategoryName: "Housing",
+  ),
+  IconForCategory(
+    icon: "water-bottle.png",
+    tags: [
+      "water-bottle",
+      "water",
+      "bottle",
+      "hydration",
+      "drink",
+      "beverage",
+      "refreshment",
+      "fluid",
+      "container",
+      "healthy"
+    ],
+    mostLikelyCategoryName: "Water",
+  ),
+  IconForCategory(
+    icon: "glass-of-water.png",
+    tags: [
+      "glass-of-water",
+      "water",
+      "glass",
+      "hydration",
+      "drink",
+      "beverage",
+      "refreshment",
+      "fluid",
+      "clear",
+      "healthy"
+    ],
+    mostLikelyCategoryName: "Water",
+  ),
+  IconForCategory(
+    icon: "cookies.png",
+    tags: [
+      "cookies",
+      "food",
+      "dessert",
+      "sweet",
+      "baked",
+      "chocolate-chip",
+      "snack",
+      "treat",
+      "biscuits",
+      "delicious"
+    ],
+    mostLikelyCategoryName: "Sweets",
   ),
 ];

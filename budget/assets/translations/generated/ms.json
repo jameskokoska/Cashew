@@ -97,7 +97,7 @@
   "pay-subscriptions": "Bayar langganan",
   "pay-subscriptions-description": "Menandakan langganan secara automatik seperti yang dibayar selepas tarikh tamat tempoh",
   "pay-repetitive": "Bayar berulang",
-  "pay-repetitive-description": "Menandakan urus niaga berulang secara automatik seperti yang dibayar selepas tarikh tamat tempoh",
+  "pay-repetitive-description": "Menandakan secara automatik transaksi berulang seperti yang dibayar selepas tarikh tamat tempoh",
   "pay-upcoming": "Bayar akan datang",
   "pay-upcoming-description": "Menandakan urus niaga yang akan datang secara automatik seperti yang dibayar selepas tarikh tamat tempoh",
   "import-csv": "Import fail CSV",
@@ -277,8 +277,6 @@
   "merge-into-description-categories": "Ini akan memindahkan semua urus niaga ke kategori baru dan memadamkan kategori lama",
   "merge": "Bergabung",
   "set-title": "Tetapkan tajuk",
-  "absolute-spending-limits": "Had perbelanjaan mutlak",
-  "absolute-spending-limits-description": "Had perbelanjaan mutlak dan bukannya peratusan",
   "enter-limit": "Masukkan had",
   "set-limit": "Tetapkan had",
   "of-budget": "bajet",
@@ -843,5 +841,7 @@
   "remaining": "tinggal",
   "created-transaction": "Transaksi yang dicipta",
   "most-common-transactions": "Urus niaga yang paling biasa",
-  "most-common-transactions-description": "Cepat menduplikasi urus niaga yang paling kerap yang disenaraikan dari 2 bulan terakhir dengan memilih dalam senarai."
+  "most-common-transactions-description": "Cepat menduplikasi urus niaga yang paling kerap yang disenaraikan dari 2 bulan terakhir dengan memilih dalam senarai.",
+  "spending-limit-type": "Jenis had perbelanjaan",
+  "percent": "Peratus"
 }

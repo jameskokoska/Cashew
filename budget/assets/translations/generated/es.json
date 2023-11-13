@@ -277,8 +277,6 @@
   "merge-into-description-categories": "Esto transferirá todas las transacciones a la nueva categoría y borrará la categoría anterior.",
   "merge": "Unir",
   "set-title": "Establecer el título",
-  "absolute-spending-limits": "Límites de gasto absoluto",
-  "absolute-spending-limits-description": "Límites de gasto absoluto en lugar de un porcentaje",
   "enter-limit": "Ingresar límite",
   "set-limit": "Límite establecido",
   "of-budget": "de presupuesto",
@@ -843,5 +841,7 @@
   "remaining": "restante",
   "created-transaction": "Transacción creada",
   "most-common-transactions": "Transacciones más comunes",
-  "most-common-transactions-description": "Duplique rápidamente las transacciones más frecuentes enumeradas desde los últimos 2 meses seleccionando en la lista."
+  "most-common-transactions-description": "Duplique rápidamente las transacciones más frecuentes enumeradas desde los últimos 2 meses seleccionando en la lista.",
+  "spending-limit-type": "Tipo de límite de gasto",
+  "percent": "Por ciento"
 }

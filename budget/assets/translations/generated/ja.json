@@ -277,8 +277,6 @@
   "merge-into-description-categories": "これにより、すべてのトランザクションが新しいカテゴリに転送され、古いカテゴリが消去されます",
   "merge": "マージ",
   "set-title": "タイトルを設定します",
-  "absolute-spending-limits": "絶対的な支出制限",
-  "absolute-spending-limits-description": "パーセンテージではなく、絶対的な支出制限",
   "enter-limit": "制限を入力します",
   "set-limit": "制限を設定します",
   "of-budget": "予算の",
@@ -843,5 +841,7 @@
   "remaining": "残り",
   "created-transaction": "作成されたトランザクション",
   "most-common-transactions": "最も一般的なトランザクション",
-  "most-common-transactions-description": "リスト内で選択して、過去2か月からリストされている最も頻繁なトランザクションをすばやく複製します。"
+  "most-common-transactions-description": "リスト内で選択して、過去2か月からリストされている最も頻繁なトランザクションをすばやく複製します。",
+  "spending-limit-type": "支出制限タイプ",
+  "percent": "パーセント"
 }

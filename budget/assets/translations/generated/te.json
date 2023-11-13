@@ -277,8 +277,6 @@
   "merge-into-description-categories": "ఇది అన్ని లావాదేవీలను కొత్త వర్గానికి బదిలీ చేస్తుంది మరియు పాత వర్గాన్ని చెరిపివేస్తుంది",
   "merge": "విలీనం",
   "set-title": "టైటిల్ సెట్",
-  "absolute-spending-limits": "సంపూర్ణ వ్యయ పరిమితులు",
-  "absolute-spending-limits-description": "ఒక శాతానికి బదులుగా సంపూర్ణ ఖర్చు పరిమితులు",
   "enter-limit": "పరిమితిని నమోదు చేయండి",
   "set-limit": "సెట్ పరిమితి",
   "of-budget": "బడ్జెట్",
@@ -843,5 +841,7 @@
   "remaining": "మిగిలి ఉంది",
   "created-transaction": "లావాదేవీని సృష్టించింది",
   "most-common-transactions": "చాలా సాధారణ లావాదేవీలు",
-  "most-common-transactions-description": "జాబితాలో ఎంచుకోవడం ద్వారా గత 2 నెలల నుండి జాబితా చేయబడిన చాలా తరచుగా లావాదేవీలను త్వరగా నకిలీ చేయండి."
+  "most-common-transactions-description": "జాబితాలో ఎంచుకోవడం ద్వారా గత 2 నెలల నుండి జాబితా చేయబడిన చాలా తరచుగా లావాదేవీలను త్వరగా నకిలీ చేయండి.",
+  "spending-limit-type": "ఖర్చు పరిమితి రకం",
+  "percent": "శాతం"
 }

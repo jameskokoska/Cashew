@@ -22,6 +22,16 @@ import 'listItem.dart';
 
 String getChangelogString() {
   return """
+    < 4.8.8
+    Significantly improved performance for transaction search page
+    Fixed generate preview data missing category
+    More category icons
+    Improved absolute/percentage spending setting to dropdown
+    Use 'en dash' for amount ranges
+    Circular progress in budget page shows total spent instead of category limit progress
+    Disabled lazy loading of transactions list on homepage
+    Homepage transaction list animated on changes
+    Selected transactions dropdown menu follows colorscheme
     < 4.8.7
     Long press add button to see list of most commonly added expenses and quickly duplicate them
     Added goal total or remaining spending label setting

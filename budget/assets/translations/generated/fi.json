@@ -277,8 +277,6 @@
   "merge-into-description-categories": "Tämä siirtää kaikki tapahtumat uuteen luokkaan ja poistaa vanhan luokan",
   "merge": "Yhdistää",
   "set-title": "Asettaa otsikko",
-  "absolute-spending-limits": "Absoluuttiset menolajat",
-  "absolute-spending-limits-description": "Absoluuttiset menolajat prosentuaalisesti",
   "enter-limit": "Kirjoittaa",
   "set-limit": "Asettaa",
   "of-budget": "budjetti",
@@ -843,5 +841,7 @@
   "remaining": "jäljelle jäänyt",
   "created-transaction": "Luotu tapahtuma",
   "most-common-transactions": "Yleisimmät liiketoimet",
-  "most-common-transactions-description": "Kopioi nopeasti viimeisen kahden kuukauden yleisimmät tapahtumat valitsemalla luettelossa."
+  "most-common-transactions-description": "Kopioi nopeasti viimeisen kahden kuukauden yleisimmät tapahtumat valitsemalla luettelossa.",
+  "spending-limit-type": "Menotrajatyyppi",
+  "percent": "Prosentti"
 }

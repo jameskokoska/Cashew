@@ -277,8 +277,6 @@
   "merge-into-description-categories": "Ez az összes tranzakciót továbbítja az új kategóriába, és törli a régi kategóriát",
   "merge": "Összeolvad",
   "set-title": "Beállítva a címet",
-  "absolute-spending-limits": "Abszolút kiadási korlátok",
-  "absolute-spending-limits-description": "Abszolút kiadási korlátok egy százalék helyett",
   "enter-limit": "Írja be a limitet",
   "set-limit": "Beállított határérték",
   "of-budget": "költségvetés",
@@ -843,5 +841,7 @@
   "remaining": "többi",
   "created-transaction": "Létrehozta a tranzakciót",
   "most-common-transactions": "Leggyakoribb tranzakciók",
-  "most-common-transactions-description": "Gyorsan megismételje az elmúlt 2 hónapban felsorolt ​​leggyakoribb tranzakciókat a listában való kiválasztással."
+  "most-common-transactions-description": "Gyorsan megismételje az elmúlt 2 hónapban felsorolt ​​leggyakoribb tranzakciókat a listában való kiválasztással.",
+  "spending-limit-type": "Kiadások korlátja",
+  "percent": "Százalék"
 }

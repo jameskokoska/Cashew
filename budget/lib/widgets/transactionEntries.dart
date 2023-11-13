@@ -25,11 +25,20 @@ import 'package:sliver_tools/sliver_tools.dart';
 import 'dart:math';
 import 'package:budget/struct/currencyFunctions.dart';
 import 'package:budget/struct/randomConstants.dart';
+import 'package:sticky_and_expandable_list/sticky_and_expandable_list.dart';
+
+enum TransactionEntriesRenderType {
+  slivers,
+  implicitlyAnimatedSlivers,
+  nonSlivers,
+  implicitlyAnimatedNonSlivers,
+}
 
 class TransactionEntries extends StatelessWidget {
   const TransactionEntries(
     this.startDay,
     this.endDay, {
+    this.renderType = TransactionEntriesRenderType.implicitlyAnimatedSlivers,
     this.search = "",
     this.categoryFks,
     this.categoryFksExclude,
@@ -37,13 +46,11 @@ class TransactionEntries extends StatelessWidget {
     this.onSelected,
     this.listID,
     this.income,
-    this.renderAsSlivers = true,
     this.budgetTransactionFilters,
     this.memberTransactionFilters,
     this.member,
     this.onlyShowTransactionsBelongingToBudgetPk,
     this.onlyShowTransactionsBelongingToObjectivePk,
-    this.simpleListRender = false,
     this.budget,
     this.dateDividerColor,
     this.transactionBackgroundColor,
@@ -61,12 +68,12 @@ class TransactionEntries extends StatelessWidget {
     this.showObjectivePercentage = true,
     this.noResultsPadding,
     this.noResultsExtraWidget,
+    this.totalCashFlowExtraWidget,
     this.limitPerDay,
     this.showTotalCashFlow = false,
-    this.extraCashFlowInformation,
-    this.onTapCashFlow,
     super.key,
   });
+  final TransactionEntriesRenderType renderType;
   final DateTime? startDay;
   final DateTime? endDay;
   final String search;
@@ -76,13 +83,11 @@ class TransactionEntries extends StatelessWidget {
   final Function(Transaction, bool)? onSelected;
   final String? listID;
   final bool? income;
-  final bool renderAsSlivers;
   final List<BudgetTransactionFilters>? budgetTransactionFilters;
   final List<String>? memberTransactionFilters;
   final String? member;
   final String? onlyShowTransactionsBelongingToBudgetPk;
   final String? onlyShowTransactionsBelongingToObjectivePk;
-  final bool simpleListRender;
   final Budget? budget;
   final Color? dateDividerColor;
   final Color? transactionBackgroundColor;
@@ -100,10 +105,9 @@ class TransactionEntries extends StatelessWidget {
   final bool showObjectivePercentage;
   final EdgeInsets? noResultsPadding;
   final Widget? noResultsExtraWidget;
+  final Widget? totalCashFlowExtraWidget;
   final int? limitPerDay;
   final bool showTotalCashFlow;
-  final String? extraCashFlowInformation;
-  final VoidCallback? onTapCashFlow;
 
   Widget createTransactionEntry(
       List<TransactionWithCategory> transactionListForDay,
@@ -160,18 +164,19 @@ class TransactionEntries extends StatelessWidget {
       ),
       builder: (context, snapshot) {
         if (snapshot.data != null && snapshot.hasData) {
-          // print(snapshot.data!.length);
+          List<Section> sectionsOut = [];
+          List<Widget> widgetsOut = [];
+          Widget totalCashFlowWidget = SizedBox.shrink();
+          double totalSpent = 0;
+          int totalNumberTransactions = (snapshot.data ?? []).length;
 
           if (snapshot.data!.length > 0) {
-            List<Widget> widgetsOut = [];
             int currentTotalIndex = 0;
 
             List<TransactionWithCategory> transactionListForDay = [];
             double totalSpentForDay = 0;
-            double totalSpent = 0;
             DateTime? currentDate;
             int totalUniqueDays = 0;
-            int totalNumberTransactions = snapshot.data!.length;
 
             for (TransactionWithCategory transactionWithCategory
                 in snapshot.data ?? []) {
@@ -230,43 +235,28 @@ class TransactionEntries extends StatelessWidget {
                               ? convertToMoney(Provider.of<AllWallets>(context),
                                   totalSpentForDay)
                               : "");
-                  if (renderAsSlivers) {
+
+                  if (renderType == TransactionEntriesRenderType.slivers) {
+                    sectionsOut.add(
+                      Section()
+                        ..expanded = true
+                        ..header = Transform.translate(
+                          offset: Offset(0, -1),
+                          child: dateDividerWidget,
+                        )
+                        ..items = [
+                          for (int index = 0;
+                              index < transactionListForDay.length;
+                              index++)
+                            createTransactionEntry(transactionListForDay,
+                                transactionListForDay[index], index),
+                        ],
+                    );
+                  } else if (renderType ==
+                      TransactionEntriesRenderType.implicitlyAnimatedSlivers) {
                     List<TransactionWithCategory> transactionListForDayCopy = [
                       ...transactionListForDay
                     ];
-                    Widget sliverList = simpleListRender
-                        ? SliverList(
-                            delegate: SliverChildBuilderDelegate(
-                              childCount: transactionListForDayCopy.length,
-                              (BuildContext context, int index) {
-                                TransactionWithCategory item =
-                                    transactionListForDayCopy[index];
-                                return createTransactionEntry(
-                                    transactionListForDayCopy, item, index);
-                              },
-                            ),
-                          )
-                        : SliverImplicitlyAnimatedList<TransactionWithCategory>(
-                            items: transactionListForDay,
-                            areItemsTheSame: (a, b) =>
-                                a.transaction.transactionPk ==
-                                b.transaction.transactionPk,
-                            insertDuration: Duration(milliseconds: 500),
-                            removeDuration: Duration(milliseconds: 500),
-                            updateDuration: Duration(milliseconds: 500),
-                            itemBuilder: (BuildContext context,
-                                Animation<double> animation,
-                                TransactionWithCategory item,
-                                int index) {
-                              return SizeFadeTransition(
-                                sizeFraction: 0.7,
-                                curve: Curves.easeInOut,
-                                animation: animation,
-                                child: createTransactionEntry(
-                                    transactionListForDayCopy, item, index),
-                              );
-                            },
-                          );
                     widgetsOut.add(
                       SliverStickyHeader(
                         header: Transform.translate(
@@ -277,11 +267,35 @@ class TransactionEntries extends StatelessWidget {
                                     : dateDividerWidget
                                 : SizedBox.shrink()),
                         sticky: true,
-                        sliver: sliverList,
+                        sliver: SliverImplicitlyAnimatedList<
+                            TransactionWithCategory>(
+                          items: transactionListForDay,
+                          areItemsTheSame: (a, b) =>
+                              a.transaction.transactionPk ==
+                              b.transaction.transactionPk,
+                          insertDuration: Duration(milliseconds: 500),
+                          removeDuration: Duration(milliseconds: 500),
+                          updateDuration: Duration(milliseconds: 500),
+                          itemBuilder: (BuildContext context,
+                              Animation<double> animation,
+                              TransactionWithCategory item,
+                              int index) {
+                            return SizeFadeTransition(
+                              sizeFraction: 0.7,
+                              curve: Curves.easeInOut,
+                              animation: animation,
+                              child: createTransactionEntry(
+                                  transactionListForDayCopy, item, index),
+                            );
+                          },
+                        ),
                       ),
                     );
-                  } else {
-                    // Render as non slivers
+                  } else if (renderType ==
+                          TransactionEntriesRenderType.nonSlivers ||
+                      renderType ==
+                          TransactionEntriesRenderType
+                              .implicitlyAnimatedNonSlivers) {
                     widgetsOut.add(dateDividerWidget);
                     for (int i = 0; i < transactionListForDay.length; i++) {
                       TransactionWithCategory item = transactionListForDay[i];
@@ -298,14 +312,51 @@ class TransactionEntries extends StatelessWidget {
               }
               currentTotalIndex++;
             }
+          } else {
+            Widget noResults = Column(
+              children: [
+                if (showNoResults)
+                  NoResults(
+                    message: noResultsMessage ??
+                        "no-transactions-within-time-range".tr() +
+                            "." +
+                            (budget != null
+                                ? ("\n" +
+                                    "(" +
+                                    getWordedDateShortMore(
+                                        startDay ?? DateTime.now()) +
+                                    " - " +
+                                    getWordedDateShortMore(
+                                        endDay ?? DateTime.now()) +
+                                    ")")
+                                : ""),
+                    tintColor: colorScheme != null
+                        ? colorScheme?.primary.withOpacity(0.6)
+                        : null,
+                    noSearchResultsVariation: noSearchResultsVariation,
+                    padding: noResultsPadding,
+                  ),
+                if (noResultsExtraWidget != null) noResultsExtraWidget!,
+              ],
+            );
+            if (renderType == TransactionEntriesRenderType.slivers ||
+                renderType ==
+                    TransactionEntriesRenderType.implicitlyAnimatedSlivers) {
+              return SliverToBoxAdapter(child: noResults);
+            } else if (renderType == TransactionEntriesRenderType.nonSlivers ||
+                renderType ==
+                    TransactionEntriesRenderType.implicitlyAnimatedNonSlivers) {
+              return noResults;
+            }
+          }
 
-            if (showTotalCashFlow) {
-              if (totalSpent != 0)
-                widgetsOut.add(
-                  Tappable(
-                    onTap: onTapCashFlow,
-                    color: Colors.transparent,
-                    child: Padding(
+          if (showTotalCashFlow) {
+            totalCashFlowWidget = Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Column(
+                  children: [
+                    Padding(
                       padding: const EdgeInsets.only(
                         left: 10,
                         right: 10,
@@ -322,30 +373,74 @@ class TransactionEntries extends StatelessWidget {
                             " " +
                             (totalNumberTransactions == 1
                                 ? "transaction".tr().toLowerCase()
-                                : "transactions".tr().toLowerCase()) +
-                            (extraCashFlowInformation != null
-                                ? "\n" + (extraCashFlowInformation ?? "")
-                                : ""),
+                                : "transactions".tr().toLowerCase()),
                         fontSize: 13,
                         textAlign: TextAlign.center,
                         textColor: getColor(context, "textLight"),
                       ),
                     ),
-                  ),
-                );
-            }
+                    if (totalCashFlowExtraWidget != null)
+                      totalCashFlowExtraWidget!,
+                  ],
+                ),
+              ],
+            );
+            if (renderType != TransactionEntriesRenderType.slivers)
+              widgetsOut.add(totalCashFlowWidget);
+          }
 
-            if (renderAsSlivers) {
-              return MultiSliver(children: widgetsOut);
-            } else {
-              return ListView(
-                scrollDirection: Axis.vertical,
-                children: widgetsOut,
-                shrinkWrap: true,
-                physics: ClampingScrollPhysics(),
-                padding: EdgeInsets.zero,
-              );
-            }
+          if (renderType == TransactionEntriesRenderType.slivers) {
+            return MultiSliver(
+              children: [
+                SliverExpandableList(
+                  builder: SliverExpandableChildDelegate<Widget, Section>(
+                    sectionList: sectionsOut,
+                    headerBuilder:
+                        (BuildContext context, int sectionIndex, int index) {
+                      return sectionsOut[sectionIndex].header;
+                    },
+                    itemBuilder: (context, sectionIndex, itemIndex, index) {
+                      Widget item = sectionsOut[sectionIndex].items[itemIndex];
+                      return item;
+                    },
+                  ),
+                ),
+                SliverToBoxAdapter(
+                  child: totalCashFlowWidget,
+                ),
+              ],
+            );
+          } else if (renderType ==
+              TransactionEntriesRenderType.implicitlyAnimatedSlivers) {
+            return MultiSliver(children: widgetsOut);
+          } else if (renderType == TransactionEntriesRenderType.nonSlivers) {
+            return ImplicitlyAnimatedList<Widget>(
+              items: widgetsOut,
+              areItemsTheSame: (a, b) => a.key.toString() == b.key.toString(),
+              insertDuration: Duration(milliseconds: 500),
+              removeDuration: Duration(milliseconds: 500),
+              updateDuration: Duration(milliseconds: 500),
+              itemBuilder: (BuildContext context, Animation<double> animation,
+                  Widget item, int index) {
+                return SizeFadeTransition(
+                  sizeFraction: 0.7,
+                  curve: Curves.easeInOut,
+                  animation: animation,
+                  child: item,
+                );
+              },
+              shrinkWrap: true,
+              physics: ClampingScrollPhysics(),
+            );
+          } else if (renderType ==
+              TransactionEntriesRenderType.implicitlyAnimatedNonSlivers) {
+            return ListView(
+              scrollDirection: Axis.vertical,
+              children: widgetsOut,
+              shrinkWrap: true,
+              physics: ClampingScrollPhysics(),
+              padding: EdgeInsets.zero,
+            );
           }
         } else {
           print(random.nextInt(100));
@@ -358,45 +453,39 @@ class TransactionEntries extends StatelessWidget {
                 ),
             ],
           );
-          if (renderAsSlivers) {
+          if (renderType == TransactionEntriesRenderType.slivers ||
+              renderType ==
+                  TransactionEntriesRenderType.implicitlyAnimatedSlivers) {
             return SliverToBoxAdapter(child: ghostTransactions);
-          } else {
+          } else if (renderType == TransactionEntriesRenderType.nonSlivers ||
+              renderType ==
+                  TransactionEntriesRenderType.implicitlyAnimatedNonSlivers) {
             return ghostTransactions;
           }
         }
-
-        Widget noResults = Column(
-          children: [
-            if (showNoResults)
-              NoResults(
-                message: noResultsMessage ??
-                    "no-transactions-within-time-range".tr() +
-                        "." +
-                        (budget != null
-                            ? ("\n" +
-                                "(" +
-                                getWordedDateShortMore(
-                                    startDay ?? DateTime.now()) +
-                                " - " +
-                                getWordedDateShortMore(
-                                    endDay ?? DateTime.now()) +
-                                ")")
-                            : ""),
-                tintColor: colorScheme != null
-                    ? colorScheme?.primary.withOpacity(0.6)
-                    : null,
-                noSearchResultsVariation: noSearchResultsVariation,
-                padding: noResultsPadding,
-              ),
-            if (noResultsExtraWidget != null) noResultsExtraWidget!,
-          ],
-        );
-        if (renderAsSlivers) {
-          return SliverToBoxAdapter(child: noResults);
-        } else {
-          return noResults;
-        }
+        return SizedBox.shrink();
       },
     );
+  }
+}
+
+class Section implements ExpandableListSection<Widget> {
+  late bool expanded;
+  late List<Widget> items;
+  late Widget header;
+
+  @override
+  List<Widget> getItems() {
+    return items;
+  }
+
+  @override
+  bool isSectionExpanded() {
+    return expanded;
+  }
+
+  @override
+  void setSectionExpanded(bool expanded) {
+    this.expanded = expanded;
   }
 }

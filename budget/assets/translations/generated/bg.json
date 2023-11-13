@@ -277,8 +277,6 @@
   "merge-into-description-categories": "Това ще прехвърли всички транзакции в новата категория и ще изтрие старата категория",
   "merge": "Сливане",
   "set-title": "Заглавие заглавие",
-  "absolute-spending-limits": "Абсолютни ограничения за разходите",
-  "absolute-spending-limits-description": "Абсолютни ограничения за разходите вместо процент",
   "enter-limit": "Въведете граница",
   "set-limit": "Задайте лимит",
   "of-budget": "на бюджета",
@@ -843,5 +841,7 @@
   "remaining": "останал",
   "created-transaction": "Създадена транзакция",
   "most-common-transactions": "Най -често срещаните транзакции",
-  "most-common-transactions-description": "Бързо дублирайте най -честите транзакции, изброени от последните 2 месеца, като изберете в списъка."
+  "most-common-transactions-description": "Бързо дублирайте най -честите транзакции, изброени от последните 2 месеца, като изберете в списъка.",
+  "spending-limit-type": "Тип лимит на разходите",
+  "percent": "Процент"
 }

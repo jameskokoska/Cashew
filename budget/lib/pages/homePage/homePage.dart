@@ -302,8 +302,11 @@ class HomePageState extends State<HomePage>
                           ),
                     enableDoubleColumn(context) == true
                         ? SizedBox.shrink()
-                        : HomeTransactionSlivers(
-                            selectedSlidingSelector: selectedSlidingSelector),
+                        : KeepAliveClientMixin(
+                            child: HomeTransactionSlivers(
+                                selectedSlidingSelector:
+                                    selectedSlidingSelector),
+                          ),
                     enableDoubleColumn(context) == true
                         ? SizedBox.shrink()
                         : Container(height: 7),

@@ -14,6 +14,7 @@ class HomeTransactionSlivers extends StatelessWidget {
       child: SizedBox(
         key: ValueKey(selectedSlidingSelector),
         child: TransactionEntries(
+          renderType: TransactionEntriesRenderType.nonSlivers,
           showNoResults: false,
           DateTime(
             DateTime.now().year,
@@ -30,7 +31,6 @@ class HomeTransactionSlivers extends StatelessWidget {
               : selectedSlidingSelector == 2
                   ? false
                   : true,
-          renderAsSlivers: false,
           dateDividerColor: Colors.transparent,
           useHorizontalPaddingConstrained: false,
           pastDaysLimitToShow: 7,

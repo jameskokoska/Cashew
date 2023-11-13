@@ -277,8 +277,6 @@
   "merge-into-description-categories": "이것은 모든 트랜잭션을 새 카테고리로 전송하고 이전 카테고리를 지우는 것입니다.",
   "merge": "병합",
   "set-title": "제목을 설정하십시오",
-  "absolute-spending-limits": "절대 지출 한도",
-  "absolute-spending-limits-description": "백분율 대신 절대 지출 한도",
   "enter-limit": "제한을 입력하십시오",
   "set-limit": "설정 제한",
   "of-budget": "예산의",
@@ -843,5 +841,7 @@
   "remaining": "남아 있습니다",
   "created-transaction": "트랜잭션을 생성했습니다",
   "most-common-transactions": "가장 일반적인 거래",
-  "most-common-transactions-description": "목록에서 선택하여 지난 2 개월 동안 나열된 가장 빈번한 거래를 빠르게 복제하십시오."
+  "most-common-transactions-description": "목록에서 선택하여 지난 2 개월 동안 나열된 가장 빈번한 거래를 빠르게 복제하십시오.",
+  "spending-limit-type": "지출 한도 유형",
+  "percent": "퍼센트"
 }

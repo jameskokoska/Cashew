@@ -277,8 +277,6 @@
   "merge-into-description-categories": "Ini akan mentransfer semua transaksi ke kategori baru dan menghapus kategori lama",
   "merge": "Menggabungkan",
   "set-title": "Tetapkan judul",
-  "absolute-spending-limits": "Batas pengeluaran absolut",
-  "absolute-spending-limits-description": "Batas pengeluaran absolut, bukan persentase",
   "enter-limit": "Masukkan batas",
   "set-limit": "Atur batas",
   "of-budget": "anggaran",
@@ -843,5 +841,7 @@
   "remaining": "tersisa",
   "created-transaction": "Transaksi yang dibuat",
   "most-common-transactions": "Transaksi paling umum",
-  "most-common-transactions-description": "Duplikat dengan cepat transaksi yang paling sering tercantum dari 2 bulan terakhir dengan memilih dalam daftar."
+  "most-common-transactions-description": "Duplikat dengan cepat transaksi yang paling sering tercantum dari 2 bulan terakhir dengan memilih dalam daftar.",
+  "spending-limit-type": "Jenis batas pengeluaran",
+  "percent": "Persen"
 }

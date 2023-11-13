@@ -277,8 +277,6 @@
   "merge-into-description-categories": "سيؤدي ذلك إلى نقل جميع المعاملات إلى الفئة الجديدة ومحو الفئة القديمة",
   "merge": "دمج",
   "set-title": "تعيين العنوان",
-  "absolute-spending-limits": "حدود الإنفاق المطلق",
-  "absolute-spending-limits-description": "حدود الإنفاق المطلق بدلاً من النسبة المئوية",
   "enter-limit": "أدخل الحد",
   "set-limit": "حدد الحد",
   "of-budget": "من الميزانية",
@@ -843,5 +841,7 @@
   "remaining": "متبقي",
   "created-transaction": "تم إنشاؤها معاملة",
   "most-common-transactions": "المعاملات الأكثر شيوعا",
-  "most-common-transactions-description": "تكرار بسرعة المعاملات الأكثر شيوعا المدرجة من الشهرين الماضيين من خلال الاختيار في القائمة."
+  "most-common-transactions-description": "تكرار بسرعة المعاملات الأكثر شيوعا المدرجة من الشهرين الماضيين من خلال الاختيار في القائمة.",
+  "spending-limit-type": "نوع الحد من الإنفاق",
+  "percent": "نسبه مئويه"
 }

@@ -184,7 +184,7 @@ Future generatePreviewData() async {
       name: "Vacation savings",
       amount: 520.0,
       note: "Some extra money to put towards a trip!",
-      categoryFk: "12",
+      categoryFk: "11",
       walletFk: "0",
       dateCreated: DateTime.now().subtract(Duration(days: 4)),
       dateTimeModified: null,
@@ -255,7 +255,7 @@ Future generatePreviewData() async {
       name: "Plane Ticket",
       amount: -1000.0,
       note: "",
-      categoryFk: "11",
+      categoryFk: "10",
       walletFk: "0",
       dateCreated: tripStart.subtract(Duration(minutes: 41)),
       dateTimeModified: null,
@@ -459,7 +459,7 @@ Future generatePreviewData() async {
       name: "Payroll",
       amount: 580.89,
       note: "",
-      categoryFk: "12",
+      categoryFk: "11",
       walletFk: "0",
       dateCreated: DateTime(DateTime.now().year, DateTime.now().month - 2, 1)
           .subtract(Duration(minutes: 17)),
@@ -483,7 +483,7 @@ Future generatePreviewData() async {
       name: "Payroll",
       amount: 780.55,
       note: "",
-      categoryFk: "12",
+      categoryFk: "11",
       walletFk: "0",
       dateCreated: DateTime(DateTime.now().year, DateTime.now().month - 1, 1)
           .subtract(Duration(minutes: 13)),
@@ -507,7 +507,7 @@ Future generatePreviewData() async {
       name: "Payroll",
       amount: 650.45,
       note: "",
-      categoryFk: "12",
+      categoryFk: "11",
       walletFk: "0",
       dateCreated: DateTime(DateTime.now().year, DateTime.now().month, 1)
           .subtract(Duration(minutes: 35)),
@@ -531,7 +531,7 @@ Future generatePreviewData() async {
       name: "Extra income",
       amount: 0.005,
       note: "",
-      categoryFk: "12",
+      categoryFk: "11",
       walletFk: "11",
       dateCreated: DateTime(DateTime.now().year, DateTime.now().month,
               DateTime.now().day - 20)
@@ -680,7 +680,7 @@ Future generatePreviewData() async {
     insert: true,
     CategoryBudgetLimit(
       categoryLimitPk: "-1",
-      categoryFk: "11",
+      categoryFk: "10",
       budgetFk: "10",
       amount: 1100,
       dateTimeModified: DateTime.now(),

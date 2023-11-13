@@ -277,8 +277,6 @@
   "merge-into-description-categories": "Dette overfører alle transaktioner til den nye kategori og sletter den gamle kategori",
   "merge": "Fusionere",
   "set-title": "Sæt titel",
-  "absolute-spending-limits": "Absolutte forbrugsgrænser",
-  "absolute-spending-limits-description": "Absolutte udgiftsgrænser i stedet for en procentdel",
   "enter-limit": "Indtast grænse",
   "set-limit": "Sæt grænse",
   "of-budget": "Budget",
@@ -843,5 +841,7 @@
   "remaining": "Resterende",
   "created-transaction": "Oprettet transaktion",
   "most-common-transactions": "Mest almindelige transaktioner",
-  "most-common-transactions-description": "Duplicerer hurtigt de hyppigste transaktioner, der er anført fra de sidste 2 måneder ved at vælge på listen."
+  "most-common-transactions-description": "Duplicerer hurtigt de hyppigste transaktioner, der er anført fra de sidste 2 måneder ved at vælge på listen.",
+  "spending-limit-type": "Forbruget grænse type",
+  "percent": "Procent"
 }

@@ -97,7 +97,7 @@
   "pay-subscriptions": "Magbayad ng mga subscription",
   "pay-subscriptions-description": "Awtomatikong markahan ang isang subscription bilang bayad pagkatapos ng takdang petsa",
   "pay-repetitive": "Magbayad ng paulit -ulit",
-  "pay-repetitive-description": "Awtomatikong markahan ang isang paulit -ulit na transaksyon na binabayaran pagkatapos ng takdang petsa",
+  "pay-repetitive-description": "Awtomatikong markahan ang isang paulit -ulit na transaksyon na nabayaran pagkatapos ng takdang petsa",
   "pay-upcoming": "Magbayad paparating",
   "pay-upcoming-description": "Awtomatikong markahan ang isang paparating na transaksyon na nabayaran pagkatapos ng takdang petsa",
   "import-csv": "I -import ang CSV file",
@@ -277,8 +277,6 @@
   "merge-into-description-categories": "Ililipat nito ang lahat ng mga transaksyon sa bagong kategorya at burahin ang lumang kategorya",
   "merge": "Pagsamahin",
   "set-title": "Itakda ang pamagat",
-  "absolute-spending-limits": "Ganap na mga limitasyon sa paggastos",
-  "absolute-spending-limits-description": "Ganap na mga limitasyon sa paggastos sa halip na isang porsyento",
   "enter-limit": "Ipasok ang Limitasyon",
   "set-limit": "Itakda ang Limitasyon",
   "of-budget": "ng badyet",
@@ -843,5 +841,7 @@
   "remaining": "natitira",
   "created-transaction": "Nilikha na transaksyon",
   "most-common-transactions": "Karamihan sa mga karaniwang transaksyon",
-  "most-common-transactions-description": "Mabilis na madoble ang madalas na mga transaksyon na nakalista mula sa huling 2 buwan sa pamamagitan ng pagpili sa listahan."
+  "most-common-transactions-description": "Mabilis na madoble ang madalas na mga transaksyon na nakalista mula sa huling 2 buwan sa pamamagitan ng pagpili sa listahan.",
+  "spending-limit-type": "Uri ng Limitasyon ng Paggastos",
+  "percent": "Porsyento"
 }

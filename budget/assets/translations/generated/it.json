@@ -96,7 +96,7 @@
   "auto-email-transactions": "Transazioni e-mail automatiche",
   "pay-subscriptions": "Abbonamenti a pagamento",
   "pay-subscriptions-description": "Segna automaticamente un abbonamento come pagato dopo la data di scadenza",
-  "pay-repetitive": "Paga ripetitivi",
+  "pay-repetitive": "Pagare ripetitivo",
   "pay-repetitive-description": "Segna automaticamente una transazione ripetitiva come pagato dopo la data di scadenza",
   "pay-upcoming": "Paga imminente",
   "pay-upcoming-description": "Segna automaticamente una transazione imminente come pagato dopo la data di scadenza",
@@ -277,8 +277,6 @@
   "merge-into-description-categories": "Tutte le transazioni verranno trasferite nella nuova categoria e verrà cancellata la vecchia categoria",
   "merge": "Unisci",
   "set-title": "Imposta Titolo",
-  "absolute-spending-limits": "Limiti di spesa assoluti",
-  "absolute-spending-limits-description": "Limiti di spesa assoluti anziché una percentuale",
   "enter-limit": "Inserire il limite",
   "set-limit": "Imposta limite",
   "of-budget": "di budget",
@@ -843,5 +841,7 @@
   "remaining": "residuo",
   "created-transaction": "Transazione creata",
   "most-common-transactions": "Transazioni più comuni",
-  "most-common-transactions-description": "Duplicare rapidamente le transazioni più frequenti elencate dagli ultimi 2 mesi selezionando nell'elenco."
+  "most-common-transactions-description": "Duplicare rapidamente le transazioni più frequenti elencate dagli ultimi 2 mesi selezionando nell'elenco.",
+  "spending-limit-type": "Tipo di limite di spesa",
+  "percent": "Per cento"
 }

@@ -20,6 +20,7 @@ Future<bool> initializeDefaultDatabase() async {
 }
 
 Future<bool> createDefaultCategories() async {
+  print("Creating default categories");
   for (TransactionCategory category in defaultCategories()) {
     try {
       await database.getCategory(category.categoryPk).$2;

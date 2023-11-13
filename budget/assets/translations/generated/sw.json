@@ -277,8 +277,6 @@
   "merge-into-description-categories": "Hii itahamisha shughuli zote kwa jamii mpya na kufuta jamii ya zamani",
   "merge": "Unganisha",
   "set-title": "Weka kichwa",
-  "absolute-spending-limits": "Matumizi kamili ya mipaka",
-  "absolute-spending-limits-description": "Matumizi kamili ya mipaka badala ya asilimia",
   "enter-limit": "Ingiza kikomo",
   "set-limit": "Weka kikomo",
   "of-budget": "ya bajeti",
@@ -843,5 +841,7 @@
   "remaining": "iliyobaki",
   "created-transaction": "Iliyoundwa shughuli",
   "most-common-transactions": "Shughuli za kawaida",
-  "most-common-transactions-description": "Haraka shughuli za mara kwa mara zilizoorodheshwa kutoka miezi 2 iliyopita kwa kuchagua kwenye orodha."
+  "most-common-transactions-description": "Haraka shughuli za mara kwa mara zilizoorodheshwa kutoka miezi 2 iliyopita kwa kuchagua kwenye orodha.",
+  "spending-limit-type": "Matumizi ya aina ya kikomo",
+  "percent": "Asilimia"
 }

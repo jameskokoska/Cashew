@@ -211,6 +211,8 @@ class TransactionsListPageState extends State<TransactionsListPage>
                                                 contextPageView),
                                       ),
                                       TransactionEntries(
+                                        renderType: TransactionEntriesRenderType
+                                            .implicitlyAnimatedSlivers,
                                         startDate,
                                         new DateTime(
                                             startDate.year,

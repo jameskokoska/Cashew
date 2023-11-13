@@ -96,7 +96,7 @@
   "auto-email-transactions": "Auto -e -posttransaktioner",
   "pay-subscriptions": "Betala prenumerationer",
   "pay-subscriptions-description": "Markera automatiskt ett prenumeration som betalas efter förfallodagen",
-  "pay-repetitive": "Betala repetitiva",
+  "pay-repetitive": "Betala upprepade",
   "pay-repetitive-description": "Markera automatiskt en repetitiv transaktion som betalas efter förfallodagen",
   "pay-upcoming": "Ankommande",
   "pay-upcoming-description": "Markera automatiskt en kommande transaktion som betalas efter förfallodagen",
@@ -277,8 +277,6 @@
   "merge-into-description-categories": "Detta kommer att överföra alla transaktioner till den nya kategorin och radera den gamla kategorin",
   "merge": "Sammanfoga",
   "set-title": "Titel",
-  "absolute-spending-limits": "Absoluta utgiftsgränser",
-  "absolute-spending-limits-description": "Absoluta utgiftsgränser istället för en procentandel",
   "enter-limit": "Gå in i gränsen",
   "set-limit": "Angränsande",
   "of-budget": "budget",
@@ -843,5 +841,7 @@
   "remaining": "återstående",
   "created-transaction": "Skapad transaktion",
   "most-common-transactions": "Vanligaste transaktioner",
-  "most-common-transactions-description": "Duplicera snabbt de vanligaste transaktionerna från de senaste 2 månaderna genom att välja i listan."
+  "most-common-transactions-description": "Duplicera snabbt de vanligaste transaktionerna från de senaste 2 månaderna genom att välja i listan.",
+  "spending-limit-type": "Utgiftsgränstyp",
+  "percent": "Procent"
 }

@@ -277,8 +277,6 @@
   "merge-into-description-categories": "આ તમામ વ્યવહારોને નવી કેટેગરીમાં સ્થાનાંતરિત કરશે અને જૂની કેટેગરી ભૂંસી નાખશે",
   "merge": "ભ્રષ્ટ કરવું",
   "set-title": "માલિકી હક",
-  "absolute-spending-limits": "સંપૂર્ણ ખર્ચ મર્યાદા",
-  "absolute-spending-limits-description": "ટકાવારીને બદલે સંપૂર્ણ ખર્ચ મર્યાદા",
   "enter-limit": "મર્યાદા દાખલ કરો",
   "set-limit": "નિર્ધારિત મર્યાદા",
   "of-budget": "બજેટની",
@@ -843,5 +841,7 @@
   "remaining": "બાકી",
   "created-transaction": "સોબત",
   "most-common-transactions": "સૌથી સામાન્ય વ્યવહાર",
-  "most-common-transactions-description": "સૂચિમાં પસંદગી કરીને છેલ્લા 2 મહિનાથી સૂચિબદ્ધ સૌથી વધુ વારંવારના વ્યવહારોની ઝડપથી ડુપ્લિકેટ કરો."
+  "most-common-transactions-description": "સૂચિમાં પસંદગી કરીને છેલ્લા 2 મહિનાથી સૂચિબદ્ધ સૌથી વધુ વારંવારના વ્યવહારોની ઝડપથી ડુપ્લિકેટ કરો.",
+  "spending-limit-type": "ખર્ચ મર્યાદા પ્રકાર",
+  "percent": "ટકા"
 }

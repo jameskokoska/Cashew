@@ -277,8 +277,6 @@
   "merge-into-description-categories": "हे सर्व व्यवहार नवीन श्रेणीमध्ये हस्तांतरित करेल आणि जुने श्रेणी मिटवेल",
   "merge": "विलीन",
   "set-title": "शीर्षक सेट करा",
-  "absolute-spending-limits": "परिपूर्ण खर्च मर्यादा",
-  "absolute-spending-limits-description": "टक्केवारीऐवजी निरपेक्ष खर्च मर्यादा",
   "enter-limit": "मर्यादा प्रविष्ट करा",
   "set-limit": "मर्यादा सेट करा",
   "of-budget": "अर्थसंकल्प",
@@ -843,5 +841,7 @@
   "remaining": "उर्वरित",
   "created-transaction": "व्यवहार केला",
   "most-common-transactions": "सर्वात सामान्य व्यवहार",
-  "most-common-transactions-description": "सूचीमध्ये निवडून गेल्या 2 महिन्यांपासून सूचीबद्ध केलेल्या सर्वात वारंवार व्यवहारांची द्रुतपणे डुप्लिकेट करा."
+  "most-common-transactions-description": "सूचीमध्ये निवडून गेल्या 2 महिन्यांपासून सूचीबद्ध केलेल्या सर्वात वारंवार व्यवहारांची द्रुतपणे डुप्लिकेट करा.",
+  "spending-limit-type": "खर्च मर्यादा प्रकार",
+  "percent": "टक्केवारी"
 }

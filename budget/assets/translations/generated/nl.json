@@ -99,7 +99,7 @@
   "pay-repetitive": "Repetitief betalen",
   "pay-repetitive-description": "Markeer automatisch een repetitieve transactie zoals betaald na de vervaldatum",
   "pay-upcoming": "Aankomen",
-  "pay-upcoming-description": "Markeer automatisch een komende transactie zoals betaald na de vervaldatum",
+  "pay-upcoming-description": "Markeer automatisch een aankomende transactie zoals betaald na de vervaldatum",
   "import-csv": "CSV -bestand importeren",
   "import-csv-description": "Importeer een externe CSV -gegevensbron",
   "rate-app": "Beoordeel app",
@@ -277,8 +277,6 @@
   "merge-into-description-categories": "Dit zal alle transacties overbrengen naar de nieuwe categorie en de oude categorie wissen",
   "merge": "Samenvoegen",
   "set-title": "Stel titel in",
-  "absolute-spending-limits": "Absolute bestedingslimieten",
-  "absolute-spending-limits-description": "Absolute bestedingslimieten in plaats van een percentage",
   "enter-limit": "Limiet in",
   "set-limit": "Instellen limiet",
   "of-budget": "budget",
@@ -843,5 +841,7 @@
   "remaining": "overig",
   "created-transaction": "Gemaakte transactie",
   "most-common-transactions": "Meest voorkomende transacties",
-  "most-common-transactions-description": "Dupliceer snel de meest frequente transacties die de afgelopen 2 maanden worden vermeld door in de lijst te selecteren."
+  "most-common-transactions-description": "Dupliceer snel de meest frequente transacties die de afgelopen 2 maanden worden vermeld door in de lijst te selecteren.",
+  "spending-limit-type": "Uitgaven Limiet Type",
+  "percent": "Percentage"
 }
