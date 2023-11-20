@@ -3,6 +3,7 @@ import 'package:budget/functions.dart';
 import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/addCategoryPage.dart';
 import 'package:budget/pages/addTransactionPage.dart';
+import 'package:budget/struct/currencyFunctions.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/categoryEntry.dart';
@@ -58,9 +59,11 @@ class _CategoryLimitsState extends State<CategoryLimits> {
               extraInfoWidget: StreamBuilder<double?>(
                 stream:
                     database.watchTotalOfCategoryLimitsInBudgetWithCategories(
+                  Provider.of<AllWallets>(context),
                   widget.budgetPk,
                   widget.categoryFks,
                   widget.categoryFksExclude,
+                  widget.isAbsoluteSpendingLimit,
                 ),
                 builder: (context, snapshot) {
                   bool isOver = widget.isAbsoluteSpendingLimit
@@ -148,7 +151,7 @@ class _CategoryLimitsState extends State<CategoryLimits> {
   }
 }
 
-class CategoryLimitEntry extends StatefulWidget {
+class CategoryLimitEntry extends StatelessWidget {
   const CategoryLimitEntry({
     required this.category,
     required this.budgetLimit,
@@ -167,37 +170,15 @@ class CategoryLimitEntry extends StatefulWidget {
   final bool isSubCategory;
 
   @override
-  State<CategoryLimitEntry> createState() => _CategoryLimitEntryState();
-}
-
-class _CategoryLimitEntryState extends State<CategoryLimitEntry> {
-  double selectedAmount = 0;
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  void didUpdateWidget(oldWidget) {
-    // when the snapshot loads the data, add it
-    if (widget.categoryLimit != null) {
-      setState(() {
-        selectedAmount = widget.categoryLimit!.amount;
-      });
-    }
-  }
-
-  void setAmount(double selectedAmountPassed) async {
-    setState(() {
-      selectedAmount = selectedAmountPassed;
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
+    double categoryLimitAmount = categoryLimit == null
+        ? 0
+        : isAbsoluteSpendingLimit
+            ? categoryBudgetLimitToPrimaryCurrency(
+                Provider.of<AllWallets>(context, listen: true), categoryLimit!)
+            : categoryLimit!.amount;
     return StreamBuilder<List<TransactionCategory>>(
-      stream: database
-          .watchAllSubCategoriesOfMainCategory(widget.category.categoryPk),
+      stream: database.watchAllSubCategoriesOfMainCategory(category.categoryPk),
       builder: (context, snapshot) {
         List<TransactionCategory> subCategories = snapshot.data ?? [];
         bool hasSubCategories = subCategories.length > 0;
@@ -207,36 +188,36 @@ class _CategoryLimitEntryState extends State<CategoryLimitEntry> {
           onTap: () async {
             enterCategoryLimitPopup(
               context,
-              widget.category,
-              widget.categoryLimit,
-              widget.budgetPk,
-              setAmount,
-              widget.isAbsoluteSpendingLimit,
+              category,
+              categoryLimit,
+              budgetPk,
+              (_) {},
+              isAbsoluteSpendingLimit,
             );
           },
           onLongPress: () {
             pushRoute(
               context,
               AddCategoryPage(
-                category: widget.category,
+                category: category,
                 routesToPopAfterDelete: RoutesToPopAfterDelete.One,
               ),
             );
           },
           child: Padding(
             padding: EdgeInsets.symmetric(
-              horizontal: widget.isSubCategory || hasSubCategories ? 16 : 25,
+              horizontal: isSubCategory || hasSubCategories ? 16 : 25,
               vertical: 3,
             ),
             child: Row(
               children: [
                 CategoryIconPercent(
-                  category: widget.category,
-                  percent: widget.isAbsoluteSpendingLimit
-                      ? (widget.budgetLimit == 0
+                  category: category,
+                  percent: isAbsoluteSpendingLimit
+                      ? (budgetLimit == 0
                           ? 0
-                          : (selectedAmount / widget.budgetLimit) * 100)
-                      : selectedAmount,
+                          : (categoryLimitAmount / budgetLimit) * 100)
+                      : categoryLimitAmount,
                   progressBackgroundColor:
                       getColor(context, "lightDarkAccentHeavy"),
                   size: 28,
@@ -250,29 +231,29 @@ class _CategoryLimitEntryState extends State<CategoryLimitEntry> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       TextFont(
-                        text: widget.category.name,
+                        text: category.name,
                         fontSize: 17,
                       ),
                       SizedBox(
                         height: 1,
                       ),
                       TextFont(
-                        text: widget.isAbsoluteSpendingLimit
-                            ? (widget.budgetLimit == 0
+                        text: isAbsoluteSpendingLimit
+                            ? (budgetLimit == 0
                                     ? "0"
-                                    : ((selectedAmount / widget.budgetLimit) *
+                                    : ((categoryLimitAmount / budgetLimit) *
                                             100)
                                         .toInt()
                                         .toString()) +
                                 "%" +
                                 " " +
-                                (widget.isSubCategory == true
+                                (isSubCategory == true
                                     ? "of-category".tr()
                                     : "of-budget".tr())
                             : (convertToMoney(Provider.of<AllWallets>(context),
-                                    widget.budgetLimit * selectedAmount / 100) +
+                                    budgetLimit * categoryLimitAmount / 100) +
                                 " " +
-                                (widget.isSubCategory == true
+                                (isSubCategory == true
                                     ? "of-category".tr()
                                     : "of-budget".tr())),
                         fontSize: 14,
@@ -283,24 +264,39 @@ class _CategoryLimitEntryState extends State<CategoryLimitEntry> {
                 ),
                 SizedBox(width: 10),
                 TappableTextEntry(
-                  title: widget.isAbsoluteSpendingLimit
-                      ? convertToMoney(
-                          Provider.of<AllWallets>(context), selectedAmount)
-                      : convertToPercent(selectedAmount),
-                  placeholder: widget.isAbsoluteSpendingLimit
-                      ? convertToMoney(Provider.of<AllWallets>(context), 0)
+                  title: isAbsoluteSpendingLimit
+                      ? convertToMoney(Provider.of<AllWallets>(context),
+                          categoryLimit?.amount ?? 0,
+                          currencyKey:
+                              Provider.of<AllWallets>(context, listen: true)
+                                  .indexedByPk[categoryLimit?.walletFk ??
+                                      appStateSettings["selectedWalletPk"]]
+                                  ?.currency)
+                      : convertToPercent(categoryLimit?.amount ?? 0),
+                  placeholder: isAbsoluteSpendingLimit
+                      ? convertToMoney(Provider.of<AllWallets>(context), 0,
+                          currencyKey:
+                              Provider.of<AllWallets>(context, listen: true)
+                                  .indexedByPk[categoryLimit?.walletFk ??
+                                      appStateSettings["selectedWalletPk"]]
+                                  ?.currency)
                       : convertToPercent(0),
-                  showPlaceHolderWhenTextEquals: widget.isAbsoluteSpendingLimit
-                      ? convertToMoney(Provider.of<AllWallets>(context), 0)
+                  showPlaceHolderWhenTextEquals: isAbsoluteSpendingLimit
+                      ? convertToMoney(Provider.of<AllWallets>(context), 0,
+                          currencyKey:
+                              Provider.of<AllWallets>(context, listen: true)
+                                  .indexedByPk[categoryLimit?.walletFk ??
+                                      appStateSettings["selectedWalletPk"]]
+                                  ?.currency)
                       : convertToPercent(0),
                   onTap: () {
                     enterCategoryLimitPopup(
                       context,
-                      widget.category,
-                      widget.categoryLimit,
-                      widget.budgetPk,
-                      setAmount,
-                      widget.isAbsoluteSpendingLimit,
+                      category,
+                      categoryLimit,
+                      budgetPk,
+                      (_) {},
+                      isAbsoluteSpendingLimit,
                     );
                   },
                   fontSize: 23,
@@ -314,9 +310,9 @@ class _CategoryLimitEntryState extends State<CategoryLimitEntry> {
           ),
         );
         if (hasSubCategories) {
-          double subCategoryBudgetLimit = widget.isAbsoluteSpendingLimit
-              ? selectedAmount
-              : selectedAmount / 100 * widget.budgetLimit;
+          double subCategoryBudgetLimit = isAbsoluteSpendingLimit
+              ? categoryLimitAmount
+              : categoryLimitAmount / 100 * budgetLimit;
           return SubCategoriesContainer(
             mainCategory: mainCategory,
             separatorBanner: Column(
@@ -331,9 +327,11 @@ class _CategoryLimitEntryState extends State<CategoryLimitEntry> {
                   extraInfoWidget: StreamBuilder<double?>(
                     stream: database
                         .watchTotalOfCategoryLimitsInBudgetWithSubCategories(
-                            widget.category.categoryPk),
+                            Provider.of<AllWallets>(context, listen: true),
+                            category.categoryPk,
+                            isAbsoluteSpendingLimit),
                     builder: (context, snapshot) {
-                      bool isOver = widget.isAbsoluteSpendingLimit
+                      bool isOver = isAbsoluteSpendingLimit
                           ? (snapshot.data ?? 0) > subCategoryBudgetLimit
                           : (snapshot.data ?? 0) > 100;
                       return CountNumber(
@@ -346,7 +344,7 @@ class _CategoryLimitEntryState extends State<CategoryLimitEntry> {
                             textColor: isOver
                                 ? getColor(context, "expenseRed")
                                 : getColor(context, "textLight"),
-                            text: widget.isAbsoluteSpendingLimit
+                            text: isAbsoluteSpendingLimit
                                 ? (convertToMoney(
                                         Provider.of<AllWallets>(context),
                                         number,
@@ -373,7 +371,7 @@ class _CategoryLimitEntryState extends State<CategoryLimitEntry> {
                 for (TransactionCategory category in subCategories)
                   StreamBuilder<CategoryBudgetLimit?>(
                     stream: database
-                        .getCategoryLimit(widget.budgetPk, category.categoryPk)
+                        .getCategoryLimit(budgetPk, category.categoryPk)
                         .$1,
                     builder: (context, snapshot) {
                       return CategoryLimitEntry(
@@ -381,9 +379,9 @@ class _CategoryLimitEntryState extends State<CategoryLimitEntry> {
                         key: ValueKey(category.categoryPk),
                         budgetLimit: subCategoryBudgetLimit,
                         categoryLimit: snapshot.data,
-                        budgetPk: widget.budgetPk,
+                        budgetPk: budgetPk,
                         isSubCategory: true,
-                        isAbsoluteSpendingLimit: widget.isAbsoluteSpendingLimit,
+                        isAbsoluteSpendingLimit: isAbsoluteSpendingLimit,
                       );
                     },
                   ),
@@ -396,7 +394,7 @@ class _CategoryLimitEntryState extends State<CategoryLimitEntry> {
                 padding: EdgeInsets.symmetric(horizontal: 7),
                 openPage: AddCategoryPage(
                   routesToPopAfterDelete: RoutesToPopAfterDelete.None,
-                  mainCategoryPkWhenSubCategory: widget.category.categoryPk,
+                  mainCategoryPkWhenSubCategory: category.categoryPk,
                 ),
                 width: null,
               ),
@@ -503,11 +501,14 @@ void enterCategoryLimitPopup(
   bool isAbsoluteSpendingLimit,
 ) async {
   double amount = categoryLimit != null ? categoryLimit.amount : 0;
+  String selectedWalletPk =
+      categoryLimit?.walletFk ?? appStateSettings["selectedWalletPk"];
   await openBottomSheet(
     context,
     PopupFramework(
       title: "enter-limit".tr(),
       subtitle: category.name,
+      hasPadding: isAbsoluteSpendingLimit == false,
       icon: CategoryIcon(
         categoryPk: category.categoryPk,
         size: 35,
@@ -559,6 +560,13 @@ void enterCategoryLimitPopup(
               },
               nextLabel: "set-limit".tr(),
               onlyShowCurrencyIcon: true,
+              enableWalletPicker: true,
+              padding: EdgeInsets.symmetric(horizontal: 18),
+              selectedWalletPk: selectedWalletPk,
+              walletPkForCurrency: selectedWalletPk,
+              setSelectedWalletPk: (walletPkPassed) {
+                selectedWalletPk = walletPkPassed;
+              },
             ),
     ),
   );
@@ -580,6 +588,7 @@ void enterCategoryLimitPopup(
         budgetFk: budgetPk,
         amount: amount,
         dateTimeModified: null,
+        walletFk: selectedWalletPk,
       ),
     );
   } else {
@@ -590,6 +599,7 @@ void enterCategoryLimitPopup(
         budgetFk: categoryLimit.budgetFk,
         amount: amount,
         dateTimeModified: null,
+        walletFk: selectedWalletPk,
       ),
     );
   }

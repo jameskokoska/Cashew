@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
+import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
@@ -160,6 +161,7 @@ Future<bool> updateSettings(
   required bool updateGlobalState,
   List<int> pagesNeedingRefresh = const [],
   bool forceGlobalStateUpdate = false,
+  bool setStateAllPageFrameworks = false,
 }) async {
   bool isChanged = appStateSettings[setting] != value;
 
@@ -177,6 +179,11 @@ Future<bool> updateSettings(
       appStateKey.currentState?.refreshAppState();
     }
   } else {
+    if (setStateAllPageFrameworks) {
+      refreshPageFrameworks();
+      // Since the transactions list page does not use PageFramework!
+      transactionsListPageStateKey.currentState?.refreshState();
+    }
     //Refresh any pages listed
     for (int page in pagesNeedingRefresh) {
       print("Pages Rebuilt and Refreshed: " + pagesNeedingRefresh.toString());

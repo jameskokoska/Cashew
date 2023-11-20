@@ -1,12 +1,21 @@
+import 'package:animations/animations.dart';
 import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/pages/pastBudgetsPage.dart';
+import 'package:budget/pages/transactionFilters.dart';
+import 'package:budget/pages/transactionsListPage.dart';
 import 'package:budget/pages/transactionsSearchPage.dart';
+import 'package:budget/pages/walletDetailsPage.dart';
+import 'package:budget/widgets/animatedExpanded.dart';
 import 'package:budget/widgets/button.dart';
+import 'package:budget/widgets/countNumber.dart';
 import 'package:budget/widgets/dateDivider.dart';
+import 'package:budget/widgets/framework/pageFramework.dart';
+import 'package:budget/widgets/openContainerNavigation.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
+import 'package:budget/widgets/transactionEntry/incomeAmountArrow.dart';
 import 'package:budget/widgets/transactionEntry/transactionEntry.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/struct/settings.dart';
@@ -26,6 +35,7 @@ import 'dart:math';
 import 'package:budget/struct/currencyFunctions.dart';
 import 'package:budget/struct/randomConstants.dart';
 import 'package:sticky_and_expandable_list/sticky_and_expandable_list.dart';
+import 'package:budget/widgets/openBottomSheet.dart';
 
 enum TransactionEntriesRenderType {
   slivers,
@@ -71,6 +81,9 @@ class TransactionEntries extends StatelessWidget {
     this.totalCashFlowExtraWidget,
     this.limitPerDay,
     this.showTotalCashFlow = false,
+    this.enableSpendingSummary = false,
+    this.showSpendingSummary = false,
+    this.onLongPressSpendingSummary,
     super.key,
   });
   final TransactionEntriesRenderType renderType;
@@ -108,6 +121,9 @@ class TransactionEntries extends StatelessWidget {
   final Widget? totalCashFlowExtraWidget;
   final int? limitPerDay;
   final bool showTotalCashFlow;
+  final bool enableSpendingSummary;
+  final bool showSpendingSummary;
+  final VoidCallback? onLongPressSpendingSummary;
 
   Widget createTransactionEntry(
       List<TransactionWithCategory> transactionListForDay,
@@ -142,6 +158,8 @@ class TransactionEntries extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // print(startDay);
+    // print(endDay);
     return StreamBuilder<List<TransactionWithCategory>>(
       stream: database.getTransactionCategoryWithDay(
         startDay,
@@ -168,151 +186,12 @@ class TransactionEntries extends StatelessWidget {
           List<Widget> widgetsOut = [];
           Widget totalCashFlowWidget = SizedBox.shrink();
           double totalSpent = 0;
+          double totalIncome = 0;
+          double totalExpense = 0;
           int totalNumberTransactions = (snapshot.data ?? []).length;
 
-          if (snapshot.data!.length > 0) {
-            int currentTotalIndex = 0;
-
-            List<TransactionWithCategory> transactionListForDay = [];
-            double totalSpentForDay = 0;
-            DateTime? currentDate;
-            int totalUniqueDays = 0;
-
-            for (TransactionWithCategory transactionWithCategory
-                in snapshot.data ?? []) {
-              if (pastDaysLimitToShow != null &&
-                  totalUniqueDays > pastDaysLimitToShow!) break;
-
-              DateTime currentTransactionDate = DateTime(
-                  transactionWithCategory.transaction.dateCreated.year,
-                  transactionWithCategory.transaction.dateCreated.month,
-                  transactionWithCategory.transaction.dateCreated.day);
-              if (currentDate == null) {
-                currentDate = currentTransactionDate;
-                totalUniqueDays++;
-              }
-              if (currentDate == currentTransactionDate) {
-                transactionListForDay.add(transactionWithCategory);
-                if (transactionWithCategory.transaction.paid) {
-                  totalSpentForDay += transactionWithCategory
-                          .transaction.amount *
-                      (amountRatioToPrimaryCurrencyGivenPk(
-                              Provider.of<AllWallets>(context),
-                              transactionWithCategory.transaction.walletFk) ??
-                          0);
-                }
-              }
-
-              DateTime? nextTransactionDate =
-                  (snapshot.data ?? []).length == currentTotalIndex + 1
-                      ? null
-                      : DateTime(
-                          (snapshot.data ?? [])[currentTotalIndex + 1]
-                              .transaction
-                              .dateCreated
-                              .year,
-                          (snapshot.data ?? [])[currentTotalIndex + 1]
-                              .transaction
-                              .dateCreated
-                              .month,
-                          (snapshot.data ?? [])[currentTotalIndex + 1]
-                              .transaction
-                              .dateCreated
-                              .day,
-                        );
-
-              if (nextTransactionDate == null ||
-                  nextTransactionDate != currentTransactionDate) {
-                if (transactionListForDay.length > 0) {
-                  Widget dateDividerWidget = includeDateDivider == false
-                      ? SizedBox.shrink()
-                      : DateDivider(
-                          useHorizontalPaddingConstrained:
-                              useHorizontalPaddingConstrained,
-                          color: dateDividerColor,
-                          date: currentTransactionDate,
-                          info: transactionListForDay.length > 1
-                              ? convertToMoney(Provider.of<AllWallets>(context),
-                                  totalSpentForDay)
-                              : "");
-
-                  if (renderType == TransactionEntriesRenderType.slivers) {
-                    sectionsOut.add(
-                      Section()
-                        ..expanded = true
-                        ..header = Transform.translate(
-                          offset: Offset(0, -1),
-                          child: dateDividerWidget,
-                        )
-                        ..items = [
-                          for (int index = 0;
-                              index < transactionListForDay.length;
-                              index++)
-                            createTransactionEntry(transactionListForDay,
-                                transactionListForDay[index], index),
-                        ],
-                    );
-                  } else if (renderType ==
-                      TransactionEntriesRenderType.implicitlyAnimatedSlivers) {
-                    List<TransactionWithCategory> transactionListForDayCopy = [
-                      ...transactionListForDay
-                    ];
-                    widgetsOut.add(
-                      SliverStickyHeader(
-                        header: Transform.translate(
-                            offset: Offset(0, -1),
-                            child: transactionListForDay.length > 0
-                                ? includeDateDivider == false
-                                    ? SizedBox.shrink()
-                                    : dateDividerWidget
-                                : SizedBox.shrink()),
-                        sticky: true,
-                        sliver: SliverImplicitlyAnimatedList<
-                            TransactionWithCategory>(
-                          items: transactionListForDay,
-                          areItemsTheSame: (a, b) =>
-                              a.transaction.transactionPk ==
-                              b.transaction.transactionPk,
-                          insertDuration: Duration(milliseconds: 500),
-                          removeDuration: Duration(milliseconds: 500),
-                          updateDuration: Duration(milliseconds: 500),
-                          itemBuilder: (BuildContext context,
-                              Animation<double> animation,
-                              TransactionWithCategory item,
-                              int index) {
-                            return SizeFadeTransition(
-                              sizeFraction: 0.7,
-                              curve: Curves.easeInOut,
-                              animation: animation,
-                              child: createTransactionEntry(
-                                  transactionListForDayCopy, item, index),
-                            );
-                          },
-                        ),
-                      ),
-                    );
-                  } else if (renderType ==
-                          TransactionEntriesRenderType.nonSlivers ||
-                      renderType ==
-                          TransactionEntriesRenderType
-                              .implicitlyAnimatedNonSlivers) {
-                    widgetsOut.add(dateDividerWidget);
-                    for (int i = 0; i < transactionListForDay.length; i++) {
-                      TransactionWithCategory item = transactionListForDay[i];
-                      widgetsOut.add(createTransactionEntry(
-                          transactionListForDay, item, i));
-                    }
-                  }
-
-                  currentDate = null;
-                  transactionListForDay = [];
-                  totalSpent += totalSpentForDay;
-                  totalSpentForDay = 0;
-                }
-              }
-              currentTotalIndex++;
-            }
-          } else {
+          if ((snapshot.data ?? []).length <= 0 &&
+              (showNoResults || noResultsExtraWidget != null)) {
             Widget noResults = Column(
               children: [
                 if (showNoResults)
@@ -343,11 +222,167 @@ class TransactionEntries extends StatelessWidget {
                 renderType ==
                     TransactionEntriesRenderType.implicitlyAnimatedSlivers) {
               return SliverToBoxAdapter(child: noResults);
+              // return SliverFillRemaining(
+              //   hasScrollBody: false,
+              //   child: Column(
+              //     mainAxisAlignment: MainAxisAlignment.center,
+              //     children: [
+              //       noResults,
+              //     ],
+              //   ),
+              // );
             } else if (renderType == TransactionEntriesRenderType.nonSlivers ||
                 renderType ==
                     TransactionEntriesRenderType.implicitlyAnimatedNonSlivers) {
               return noResults;
             }
+          }
+          int currentTotalIndex = 0;
+
+          List<TransactionWithCategory> transactionListForDay = [];
+          double totalSpentForDay = 0;
+          DateTime? currentDate;
+          int totalUniqueDays = 0;
+
+          for (TransactionWithCategory transactionWithCategory
+              in snapshot.data ?? []) {
+            if (pastDaysLimitToShow != null &&
+                totalUniqueDays > pastDaysLimitToShow!) break;
+
+            DateTime currentTransactionDate = DateTime(
+                transactionWithCategory.transaction.dateCreated.year,
+                transactionWithCategory.transaction.dateCreated.month,
+                transactionWithCategory.transaction.dateCreated.day);
+            if (currentDate == null) {
+              currentDate = currentTransactionDate;
+              totalUniqueDays++;
+            }
+            if (currentDate == currentTransactionDate) {
+              transactionListForDay.add(transactionWithCategory);
+              if (transactionWithCategory.transaction.paid) {
+                double amountForDay =
+                    transactionWithCategory.transaction.amount *
+                        (amountRatioToPrimaryCurrencyGivenPk(
+                            Provider.of<AllWallets>(context),
+                            transactionWithCategory.transaction.walletFk));
+                totalSpentForDay += amountForDay;
+                if (amountForDay < 0) {
+                  totalExpense += amountForDay;
+                }
+                if (amountForDay > 0) {
+                  totalIncome += amountForDay;
+                }
+              }
+            }
+
+            DateTime? nextTransactionDate =
+                (snapshot.data ?? []).length == currentTotalIndex + 1
+                    ? null
+                    : DateTime(
+                        (snapshot.data ?? [])[currentTotalIndex + 1]
+                            .transaction
+                            .dateCreated
+                            .year,
+                        (snapshot.data ?? [])[currentTotalIndex + 1]
+                            .transaction
+                            .dateCreated
+                            .month,
+                        (snapshot.data ?? [])[currentTotalIndex + 1]
+                            .transaction
+                            .dateCreated
+                            .day,
+                      );
+
+            if (nextTransactionDate == null ||
+                nextTransactionDate != currentTransactionDate) {
+              if (transactionListForDay.length > 0) {
+                Widget dateDividerWidget = includeDateDivider == false
+                    ? SizedBox.shrink()
+                    : DateDivider(
+                        useHorizontalPaddingConstrained:
+                            useHorizontalPaddingConstrained,
+                        color: dateDividerColor,
+                        date: currentTransactionDate,
+                        info: transactionListForDay.length > 1
+                            ? convertToMoney(Provider.of<AllWallets>(context),
+                                totalSpentForDay)
+                            : "");
+
+                if (renderType == TransactionEntriesRenderType.slivers) {
+                  sectionsOut.add(
+                    Section()
+                      ..expanded = true
+                      ..header = Transform.translate(
+                        offset: Offset(0, -1),
+                        child: dateDividerWidget,
+                      )
+                      ..items = [
+                        for (int index = 0;
+                            index < transactionListForDay.length;
+                            index++)
+                          createTransactionEntry(transactionListForDay,
+                              transactionListForDay[index], index),
+                      ],
+                  );
+                } else if (renderType ==
+                    TransactionEntriesRenderType.implicitlyAnimatedSlivers) {
+                  List<TransactionWithCategory> transactionListForDayCopy = [
+                    ...transactionListForDay
+                  ];
+                  widgetsOut.add(
+                    SliverStickyHeader(
+                      header: Transform.translate(
+                          offset: Offset(0, -1),
+                          child: transactionListForDay.length > 0
+                              ? includeDateDivider == false
+                                  ? SizedBox.shrink()
+                                  : dateDividerWidget
+                              : SizedBox.shrink()),
+                      sticky: true,
+                      sliver:
+                          SliverImplicitlyAnimatedList<TransactionWithCategory>(
+                        items: transactionListForDay,
+                        areItemsTheSame: (a, b) =>
+                            a.transaction.transactionPk ==
+                            b.transaction.transactionPk,
+                        insertDuration: Duration(milliseconds: 500),
+                        removeDuration: Duration(milliseconds: 500),
+                        updateDuration: Duration(milliseconds: 500),
+                        itemBuilder: (BuildContext context,
+                            Animation<double> animation,
+                            TransactionWithCategory item,
+                            int index) {
+                          return SizeFadeTransition(
+                            sizeFraction: 0.7,
+                            curve: Curves.easeInOut,
+                            animation: animation,
+                            child: createTransactionEntry(
+                                transactionListForDayCopy, item, index),
+                          );
+                        },
+                      ),
+                    ),
+                  );
+                } else if (renderType ==
+                        TransactionEntriesRenderType.nonSlivers ||
+                    renderType ==
+                        TransactionEntriesRenderType
+                            .implicitlyAnimatedNonSlivers) {
+                  widgetsOut.add(dateDividerWidget);
+                  for (int i = 0; i < transactionListForDay.length; i++) {
+                    TransactionWithCategory item = transactionListForDay[i];
+                    widgetsOut.add(
+                        createTransactionEntry(transactionListForDay, item, i));
+                  }
+                }
+
+                currentDate = null;
+                transactionListForDay = [];
+                totalSpent += totalSpentForDay;
+                totalSpentForDay = 0;
+              }
+            }
+            currentTotalIndex++;
           }
 
           if (showTotalCashFlow) {
@@ -389,6 +424,18 @@ class TransactionEntries extends StatelessWidget {
               widgetsOut.add(totalCashFlowWidget);
           }
 
+          if (enableSpendingSummary)
+            widgetsOut.insert(
+              0,
+              TransactionsEntriesSpendingSummary(
+                show: showSpendingSummary,
+                netSpending: totalSpent,
+                income: totalIncome,
+                expense: totalExpense,
+                onLongPress: onLongPressSpendingSummary,
+              ),
+            );
+
           if (renderType == TransactionEntriesRenderType.slivers) {
             return MultiSliver(
               children: [
@@ -429,8 +476,8 @@ class TransactionEntries extends StatelessWidget {
                   child: item,
                 );
               },
-              shrinkWrap: true,
               physics: ClampingScrollPhysics(),
+              shrinkWrap: true,
             );
           } else if (renderType ==
               TransactionEntriesRenderType.implicitlyAnimatedNonSlivers) {
@@ -443,7 +490,6 @@ class TransactionEntries extends StatelessWidget {
             );
           }
         } else {
-          print(random.nextInt(100));
           Widget ghostTransactions = Column(
             children: [
               for (int i = 0; i < 5 + random.nextInt(5); i++)
@@ -487,5 +533,161 @@ class Section implements ExpandableListSection<Widget> {
   @override
   void setSectionExpanded(bool expanded) {
     this.expanded = expanded;
+  }
+}
+
+class TransactionsEntriesSpendingSummary extends StatelessWidget {
+  const TransactionsEntriesSpendingSummary({
+    required this.show,
+    required this.netSpending,
+    required this.income,
+    required this.expense,
+    this.onLongPress,
+    super.key,
+  });
+
+  final bool show;
+  final double netSpending;
+  final double income;
+  final double expense;
+  final VoidCallback? onLongPress;
+
+  @override
+  Widget build(BuildContext context) {
+    double borderRadius = getPlatform() == PlatformOS.isIOS ? 5 : 10;
+    return AnimatedExpanded(
+      axis: Axis.vertical,
+      expand: show,
+      child: Padding(
+        padding: EdgeInsets.symmetric(
+          horizontal: getHorizontalPaddingConstrained(context) + 13,
+          vertical: 5,
+        ),
+        child: OpenContainerNavigation(
+          borderRadius: borderRadius,
+          openPage: WalletDetailsPage(wallet: null),
+          button: (openContainer) {
+            return Tappable(
+              borderRadius: borderRadius,
+              color: appStateSettings["materialYou"]
+                  ? dynamicPastel(
+                      context, Theme.of(context).colorScheme.secondaryContainer,
+                      amountDark: 0.5, amountLight: 0)
+                  : getColor(context, "canvasContainer"),
+              onTap: () {
+                // setState(() {
+                //   isExpanded = !isExpanded;
+                // });
+                openContainer();
+              },
+              onLongPress: onLongPress,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          IncomeOutcomeArrow(
+                            color: getColor(context, "expenseAmount"),
+                            isIncome: false,
+                            iconSize: 20,
+                            width: 17,
+                          ),
+                          Flexible(
+                            child: CountNumber(
+                              count: expense.abs(),
+                              duration: Duration(milliseconds: 450),
+                              initialCount: (0),
+                              textBuilder: (number) {
+                                return TextFont(
+                                  text: convertToMoney(
+                                      Provider.of<AllWallets>(context), number,
+                                      finalNumber: expense.abs()),
+                                  fontSize: 15,
+                                  textColor: getColor(context, "expenseAmount"),
+                                  autoSizeText: true,
+                                  minFontSize: 9,
+                                  maxLines: 1,
+                                );
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          IncomeOutcomeArrow(
+                            color: getColor(context, "incomeAmount"),
+                            isIncome: true,
+                            iconSize: 20,
+                            width: 17,
+                          ),
+                          Flexible(
+                            child: CountNumber(
+                              count: income.abs(),
+                              duration: Duration(milliseconds: 450),
+                              initialCount: (0),
+                              textBuilder: (number) {
+                                return TextFont(
+                                  text: convertToMoney(
+                                      Provider.of<AllWallets>(context), number,
+                                      finalNumber: income.abs()),
+                                  fontSize: 15,
+                                  textColor: getColor(context, "incomeAmount"),
+                                  autoSizeText: true,
+                                  minFontSize: 9,
+                                  maxLines: 1,
+                                );
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Flexible(
+                            child: CountNumber(
+                              count: netSpending.abs(),
+                              duration: Duration(milliseconds: 450),
+                              initialCount: (0),
+                              textBuilder: (number) {
+                                return TextFont(
+                                  text: "=" +
+                                      " " +
+                                      convertToMoney(
+                                          Provider.of<AllWallets>(context),
+                                          number,
+                                          finalNumber: netSpending.abs()),
+                                  fontSize: 15,
+                                  textColor: getColor(context, "black"),
+                                  autoSizeText: true,
+                                  minFontSize: 9,
+                                  maxLines: 1,
+                                );
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        ),
+      ),
+    );
   }
 }

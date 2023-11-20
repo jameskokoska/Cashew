@@ -1,10 +1,12 @@
 import 'package:budget/colors.dart';
+import 'package:budget/functions.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/outlinedButtonStacked.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntry/incomeAmountArrow.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class IncomeExpenseTabSelector extends StatefulWidget {
@@ -17,6 +19,10 @@ class IncomeExpenseTabSelector extends StatefulWidget {
   final String? expenseLabel;
   final Color? unselectedLabelColor;
   final bool showIcons;
+  final TabController? tabController;
+  final Widget? expenseCustomIcon;
+  final Widget? incomeCustomIcon;
+  final Widget Function(bool selectedIncome)? belowWidgetBuilder;
 
   IncomeExpenseTabSelector({
     required this.onTabChanged,
@@ -28,6 +34,10 @@ class IncomeExpenseTabSelector extends StatefulWidget {
     this.expenseLabel,
     this.unselectedLabelColor,
     this.showIcons = true,
+    this.tabController,
+    this.expenseCustomIcon,
+    this.incomeCustomIcon,
+    this.belowWidgetBuilder,
   });
 
   @override
@@ -44,11 +54,14 @@ class _IncomeExpenseTabSelectorState extends State<IncomeExpenseTabSelector>
   void initState() {
     super.initState();
     selectedIncome = widget.initialTabIsIncome;
-    _incomeTabController = TabController(
-      length: 2,
-      vsync: this,
-      initialIndex: selectedIncome ? 1 : 0,
-    );
+    _incomeTabController = widget.tabController ??
+        TabController(
+          length: 2,
+          vsync: this,
+          initialIndex: selectedIncome ? 1 : 0,
+        );
+    if (widget.tabController != null)
+      _incomeTabController.addListener(onControllerTabSwitch);
   }
 
   @override
@@ -62,15 +75,23 @@ class _IncomeExpenseTabSelectorState extends State<IncomeExpenseTabSelector>
     super.didUpdateWidget(oldWidget);
   }
 
+  void onControllerTabSwitch() {
+    setState(() {
+      selectedIncome = _incomeTabController.index != 0;
+    });
+  }
+
   @override
   void dispose() {
-    _incomeTabController.dispose();
+    if (widget.tabController == null) _incomeTabController.dispose();
+    if (widget.tabController != null)
+      _incomeTabController.removeListener(onControllerTabSwitch);
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Material(
+    Widget tabSelector = Material(
       color: widget.unselectedColor == null
           ? appStateSettings["materialYou"]
               ? Theme.of(context).colorScheme.primary.withOpacity(0.1)
@@ -107,6 +128,8 @@ class _IncomeExpenseTabSelectorState extends State<IncomeExpenseTabSelector>
               showIcons: widget.showIcons,
               label: widget.expenseLabel,
               isIncome: false,
+              customIcon: widget.expenseCustomIcon,
+              tabController: _incomeTabController,
             ),
           ),
           Tab(
@@ -115,11 +138,26 @@ class _IncomeExpenseTabSelectorState extends State<IncomeExpenseTabSelector>
               showIcons: widget.showIcons,
               label: widget.incomeLabel,
               isIncome: true,
+              customIcon: widget.incomeCustomIcon,
+              tabController: _incomeTabController,
             ),
           ),
         ],
       ),
     );
+    if (widget.belowWidgetBuilder == null)
+      return tabSelector;
+    else
+      return Column(
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(
+                getPlatform() == PlatformOS.isIOS ? 10 : 15),
+            child: tabSelector,
+          ),
+          widget.belowWidgetBuilder!(selectedIncome)
+        ],
+      );
   }
 }
 
@@ -129,16 +167,20 @@ class ExpenseIncomeSelectorLabel extends StatelessWidget {
     required this.showIcons,
     required this.isIncome,
     this.label,
+    this.customIcon,
+    this.tabController,
     super.key,
   });
   final bool selectedIncome;
   final bool showIcons;
   final String? label;
   final bool isIncome;
+  final Widget? customIcon;
+  final TabController? tabController;
 
   @override
   Widget build(BuildContext context) {
-    return Center(
+    Widget content = Center(
       child: Padding(
         padding: const EdgeInsets.only(top: 2),
         child: Row(
@@ -159,25 +201,45 @@ class ExpenseIncomeSelectorLabel extends StatelessWidget {
                       : getColor(context, "expenseAmount"),
                 ),
               ),
+            if (customIcon != null)
+              Padding(
+                padding: const EdgeInsets.only(right: 5),
+                child: customIcon!,
+              ),
             Flexible(
-              child: AnimatedOpacity(
-                duration: Duration(milliseconds: 300),
-                opacity: (isIncome && selectedIncome) ||
-                        (isIncome == false && selectedIncome == false)
-                    ? 1
-                    : 0.5,
-                child: TextFont(
-                  text: label ?? (isIncome ? "income".tr() : "expense".tr()),
-                  maxLines: 2,
-                  fontSize: 14.5,
-                  textAlign: TextAlign.center,
-                ),
+              child: TextFont(
+                text: label ?? (isIncome ? "income".tr() : "expense".tr()),
+                maxLines: 2,
+                fontSize: 14.5,
+                textAlign: TextAlign.center,
               ),
             ),
           ],
         ),
       ),
     );
+    return tabController == null
+        ? AnimatedOpacity(
+            duration: Duration(milliseconds: 300),
+            opacity: (isIncome && selectedIncome) ||
+                    (isIncome == false && selectedIncome == false)
+                ? 1
+                : 0.5,
+            child: content,
+          )
+        : AnimatedBuilder(
+            animation: tabController!.animation!,
+            builder: (BuildContext context, Widget? child) {
+              double animationProgress = isIncome
+                  ? 0.5 + tabController!.animation!.value * 0.5
+                  : 0.5 + (1 - tabController!.animation!.value) * 0.5;
+              return AnimatedOpacity(
+                duration: Duration(milliseconds: 300),
+                opacity: clampDouble(animationProgress, 0, 1),
+                child: content,
+              );
+            },
+          );
   }
 }
 

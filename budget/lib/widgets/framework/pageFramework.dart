@@ -15,6 +15,11 @@ import 'package:budget/colors.dart';
 import 'package:flutter/services.dart';
 
 ValueNotifier<bool> isSwipingToDismissPageDown = ValueNotifier<bool>(false);
+ValueNotifier<bool> callRefreshToPages = ValueNotifier<bool>(false);
+
+refreshPageFrameworks() async {
+  callRefreshToPages.value = !callRefreshToPages.value;
+}
 
 class PageFramework extends StatefulWidget {
   const PageFramework({
@@ -55,6 +60,8 @@ class PageFramework extends StatefulWidget {
     this.belowAppBarPaddingWhenCenteredTitleSmall,
     this.transparentAppBar = false,
     this.customScrollViewBuilder,
+    this.bodyBuilder,
+    this.scrollController,
   }) : super(key: key);
 
   final String title;
@@ -95,7 +102,10 @@ class PageFramework extends StatefulWidget {
   final Widget Function(
       ScrollController scrollController,
       ScrollPhysics? scrollPhysics,
-      Widget sliverAppbar)? customScrollViewBuilder;
+      Widget sliverAppBar)? customScrollViewBuilder;
+  final Widget Function(ScrollController scrollController,
+      ScrollPhysics? scrollPhysics, Widget sliverAppBar)? bodyBuilder;
+  final ScrollController? scrollController;
 
   @override
   State<PageFramework> createState() => PageFrameworkState();
@@ -157,7 +167,7 @@ class PageFrameworkState extends State<PageFramework>
     _animationControllerOpacity = AnimationController(vsync: this, value: 0.5);
     _animationControllerDragY = AnimationController(vsync: this, value: 0);
     _animationControllerDragY.duration = Duration(milliseconds: 1000);
-    _scrollController = ScrollController();
+    _scrollController = widget.scrollController ?? ScrollController();
     _scrollController.addListener(_scrollListener);
 
     WidgetsBinding.instance.addObserver(this);
@@ -340,62 +350,70 @@ class PageFrameworkState extends State<PageFramework>
     Widget scaffold = Scaffold(
       resizeToAvoidBottomInset: widget.resizeToAvoidBottomInset,
       backgroundColor: widget.backgroundColor,
-      body: Stack(
-        children: [
-          ScrollbarWrap(
-            child: widget.customScrollViewBuilder != null
-                ? widget.customScrollViewBuilder!(
-                    _scrollController,
-                    widget.scrollPhysics,
-                    sliverAppBar,
-                  )
-                : CustomScrollView(
-                    physics: widget.scrollPhysics,
-                    controller: _scrollController,
-                    slivers: [
-                      if (widget.enableHeader) sliverAppBar,
-                      if (widget.enableHeader &&
-                          (centeredTitleSmall || centeredTitle))
-                        SliverToBoxAdapter(
-                          child: Center(child: widget.subtitle),
-                        ),
-                      for (Widget sliver in widget.slivers)
-                        widget.horizontalPadding == 0
-                            ? sliver
-                            : SliverPadding(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: widget.horizontalPadding),
-                                sliver: sliver),
-                      widget.listWidgets != null
-                          ? SliverPadding(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: widget.horizontalPadding),
-                              sliver: SliverList(
-                                delegate: SliverChildListDelegate([
-                                  ...widget.listWidgets!,
-                                  widget.bottomPadding
-                                      ? SizedBox(
-                                          height: MediaQuery.paddingOf(context)
-                                                  .bottom +
-                                              15)
-                                      : SizedBox.shrink(),
-                                ]),
+      body: widget.bodyBuilder != null
+          ? widget.bodyBuilder!(
+              _scrollController,
+              widget.scrollPhysics,
+              sliverAppBar,
+            )
+          : Stack(
+              children: [
+                ScrollbarWrap(
+                  child: widget.customScrollViewBuilder != null
+                      ? widget.customScrollViewBuilder!(
+                          _scrollController,
+                          widget.scrollPhysics,
+                          sliverAppBar,
+                        )
+                      : CustomScrollView(
+                          physics: widget.scrollPhysics,
+                          controller: _scrollController,
+                          slivers: [
+                            if (widget.enableHeader) sliverAppBar,
+                            if (widget.enableHeader &&
+                                (centeredTitleSmall || centeredTitle))
+                              SliverToBoxAdapter(
+                                child: Center(child: widget.subtitle),
                               ),
-                            )
-                          : SliverToBoxAdapter(
-                              child: widget.bottomPadding
-                                  ? SizedBox(
-                                      height:
-                                          MediaQuery.paddingOf(context).bottom +
-                                              15)
-                                  : SizedBox.shrink(),
-                            ),
-                    ],
-                  ),
-          ),
-          widget.overlay ?? SizedBox.shrink(),
-        ],
-      ),
+                            for (Widget sliver in widget.slivers)
+                              widget.horizontalPadding == 0
+                                  ? sliver
+                                  : SliverPadding(
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: widget.horizontalPadding),
+                                      sliver: sliver),
+                            widget.listWidgets != null
+                                ? SliverPadding(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: widget.horizontalPadding),
+                                    sliver: SliverList(
+                                      delegate: SliverChildListDelegate([
+                                        ...widget.listWidgets!,
+                                        widget.bottomPadding
+                                            ? SizedBox(
+                                                height: MediaQuery.paddingOf(
+                                                            context)
+                                                        .bottom +
+                                                    15)
+                                            : SizedBox.shrink(),
+                                      ]),
+                                    ),
+                                  )
+                                : SliverToBoxAdapter(
+                                    child: widget.bottomPadding
+                                        ? SizedBox(
+                                            height:
+                                                MediaQuery.paddingOf(context)
+                                                        .bottom +
+                                                    15)
+                                        : SizedBox.shrink(),
+                                  ),
+                          ],
+                        ),
+                ),
+                widget.overlay ?? SizedBox.shrink(),
+              ],
+            ),
     );
     Widget? dragDownToDismissScaffold = null;
     if (widget.dragDownToDismiss) {
@@ -534,13 +552,23 @@ class PageFrameworkState extends State<PageFramework>
       child: child,
     );
 
+    Widget childListener = ValueListenableBuilder(
+      valueListenable: callRefreshToPages,
+      builder: (context, callRefreshToPagesValue, _) {
+        if (callRefreshToPagesValue == true) {
+          WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
+        }
+        return Container(child: child);
+      },
+    );
+
     if (widget.sharedBudgetRefresh == true) {
       return SharedBudgetRefresh(
-        child: child,
+        child: childListener,
         scrollController: _scrollController,
       );
     } else {
-      return child;
+      return childListener;
     }
   }
 }

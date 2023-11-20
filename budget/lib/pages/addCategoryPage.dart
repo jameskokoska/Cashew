@@ -12,6 +12,7 @@ import 'package:budget/widgets/editRowEntry.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/widgets/framework/popupFramework.dart';
 import 'package:budget/widgets/globalSnackBar.dart';
+import 'package:budget/widgets/iconButtonScaled.dart';
 import 'package:budget/widgets/incomeExpenseTabSelector.dart';
 import 'package:budget/widgets/listItem.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
@@ -1270,22 +1271,16 @@ class SelectIsSubcategory extends StatelessWidget {
                   iconData: appStateSettings["outlinedIcons"]
                       ? Icons.move_to_inbox_outlined
                       : Icons.move_to_inbox_rounded,
-                  infoButton: Transform.scale(
-                    scale: 1.3,
-                    child: IconButton(
-                      padding: EdgeInsets.zero,
-                      visualDensity: VisualDensity.compact,
-                      icon: Icon(
-                        Icons.info_outlined,
-                        size: 19,
-                      ),
-                      onPressed: () {
-                        openBottomSheet(
-                          context,
-                          SampleSubcategoriesPopup(),
-                        );
-                      },
-                    ),
+                  infoButton: IconButtonScaled(
+                    iconData: Icons.info_outlined,
+                    iconSize: 16,
+                    scale: 1.6,
+                    onTap: () {
+                      openBottomSheet(
+                        context,
+                        SampleSubcategoriesPopup(),
+                      );
+                    },
                   ),
                   onTap: () {
                     onTap(false);

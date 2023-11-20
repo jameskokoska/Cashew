@@ -45,8 +45,8 @@ class SelectAmount extends StatefulWidget {
     this.allowZero = false,
     this.padding = EdgeInsets.zero,
     this.enableWalletPicker = false,
-    this.setSelectedWallet,
-    this.selectedWallet,
+    this.setSelectedWalletPk,
+    this.selectedWalletPk,
     this.extraWidgetAboveNumbers,
     this.showEnteredNumber = true,
     this.convertToMoney = true,
@@ -63,8 +63,8 @@ class SelectAmount extends StatefulWidget {
   final bool allowZero;
   final EdgeInsets padding;
   final bool enableWalletPicker;
-  final Function(TransactionWallet)? setSelectedWallet;
-  final TransactionWallet? selectedWallet;
+  final Function(String)? setSelectedWalletPk;
+  final String? selectedWalletPk;
   final Widget? extraWidgetAboveNumbers;
   final bool showEnteredNumber;
   final bool convertToMoney;
@@ -75,13 +75,25 @@ class SelectAmount extends StatefulWidget {
 }
 
 class _SelectAmountState extends State<SelectAmount> {
-  late int numberDecimals;
   String amount = "";
 
   FocusNode _focusNode = FocusNode();
   late FocusAttachment _focusAttachment;
-  late TransactionWallet? selectedWallet;
   late String? walletPkForCurrency;
+  late String? selectedWalletPk = widget.selectedWalletPk;
+
+  TransactionWallet? getSelectedWallet({required bool listen}) {
+    return Provider.of<AllWallets>(context, listen: listen)
+        .indexedByPk[selectedWalletPk];
+  }
+
+  int getDecimals({required bool listen}) {
+    return getSelectedWallet(listen: listen)?.decimals ??
+        Provider.of<AllWallets>(context, listen: false)
+            .indexedByPk[appStateSettings["selectedWalletPk"]]
+            ?.decimals ??
+        2;
+  }
 
   bool isControlPressed = false;
 
@@ -89,17 +101,12 @@ class _SelectAmountState extends State<SelectAmount> {
   void initState() {
     // print(widget.allWallets);
     super.initState();
-    selectedWallet = widget.selectedWallet;
     walletPkForCurrency = widget.walletPkForCurrency;
-    numberDecimals = widget.selectedWallet?.decimals ??
-        Provider.of<AllWallets>(context, listen: false)
-            .indexedByPk[appStateSettings["selectedWalletPk"]]
-            ?.decimals ??
-        2;
     try {
       amount = widget.allDecimals
           ? double.parse(widget.amountPassed).toString()
-          : double.parse(widget.amountPassed).toStringAsFixed(numberDecimals);
+          : double.parse(widget.amountPassed)
+              .toStringAsFixed(getDecimals(listen: false));
     } catch (e) {
       print(e.toString());
     }
@@ -320,7 +327,6 @@ class _SelectAmountState extends State<SelectAmount> {
   }
 
   void removeAll() {
-    bottomSheetControllerGlobal.snapToExtent(0);
     setState(() {
       amount = "";
     });
@@ -398,7 +404,7 @@ class _SelectAmountState extends State<SelectAmount> {
     if (includesOperations(amount, false)) {
       return true;
     } else if (amount.contains(".") &&
-        amount.split(".")[1].length >= numberDecimals) {
+        amount.split(".")[1].length >= getDecimals(listen: false)) {
       return false;
     }
     return true;
@@ -434,13 +440,13 @@ class _SelectAmountState extends State<SelectAmount> {
         : convertToMoney(
             Provider.of<AllWallets>(context),
             calculateResult(amountConverted),
-            currencyKey: selectedWallet?.currency,
+            currencyKey: getSelectedWallet(listen: false)?.currency,
             allDecimals: true,
-            decimals: selectedWallet?.decimals == 2 &&
+            decimals: getSelectedWallet(listen: false)?.decimals == 2 &&
                     includesOperations(amount, true)
                 ? 2
                 : min(
-                    selectedWallet?.decimals ?? 1000,
+                    getSelectedWallet(listen: false)?.decimals ?? 1000,
                     includesOperations(amount, false)
                         ? countDecimalDigits(
                             calculateResult(amountConverted).toString())
@@ -520,16 +526,18 @@ class _SelectAmountState extends State<SelectAmount> {
                                         left: 5,
                                         top: 5,
                                       ),
-                                      child: TextFont(
-                                        autoSizeText: true,
-                                        maxLines: 1,
-                                        minFontSize: 16,
-
-                                        text: amountConverted,
-                                        // text: amount,
-                                        textAlign: TextAlign.right,
-                                        fontSize: 35,
-                                        fontWeight: FontWeight.bold,
+                                      child: AnimatedSizeSwitcher(
+                                        child: TextFont(
+                                          key: ValueKey(selectedWalletPk),
+                                          autoSizeText: true,
+                                          maxLines: 1,
+                                          minFontSize: 16,
+                                          text: amountConverted,
+                                          // text: amount,
+                                          textAlign: TextAlign.right,
+                                          fontSize: 35,
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -547,13 +555,17 @@ class _SelectAmountState extends State<SelectAmount> {
                                             vertical: 3.0),
                                         child: AnimatedExpanded(
                                           axis: Axis.horizontal,
-                                          expand: (selectedWallet?.walletPk ==
+                                          expand: (getSelectedWallet(
+                                                              listen: true)
+                                                          ?.walletPk ==
                                                       appStateSettings[
                                                           "selectedWalletPk"] ||
                                                   ((Provider.of<AllWallets>(
                                                               context)
                                                           .indexedByPk[
-                                                              selectedWallet
+                                                              getSelectedWallet(
+                                                                      listen:
+                                                                          true)
                                                                   ?.walletPk]
                                                           ?.currency) ==
                                                       Provider.of<AllWallets>(
@@ -565,14 +577,16 @@ class _SelectAmountState extends State<SelectAmount> {
                                               false,
                                           child: Tappable(
                                             key: ValueKey(
-                                                selectedWallet?.walletPk),
+                                                getSelectedWallet(listen: true)
+                                                    ?.walletPk),
                                             color: Theme.of(context)
                                                 .colorScheme
                                                 .secondaryContainer,
                                             borderRadius: 13,
                                             onTap: () {
                                               TransactionWallet? walletBefore =
-                                                  selectedWallet;
+                                                  getSelectedWallet(
+                                                      listen: false);
                                               // get the index of the primary wallet
                                               int index = 0;
                                               for (TransactionWallet wallet
@@ -588,51 +602,43 @@ class _SelectAmountState extends State<SelectAmount> {
                                                 index++;
                                               }
 
-                                              if (widget.setSelectedWallet !=
+                                              if (widget.setSelectedWalletPk !=
                                                   null)
-                                                widget.setSelectedWallet!(
+                                                widget.setSelectedWalletPk!(
                                                     Provider.of<AllWallets>(
                                                             context,
                                                             listen: false)
-                                                        .list[index]);
+                                                        .list[index]
+                                                        .walletPk);
                                               setState(() {
-                                                selectedWallet =
+                                                selectedWalletPk =
                                                     Provider.of<AllWallets>(
                                                             context,
                                                             listen: false)
-                                                        .list[index];
+                                                        .list[index]
+                                                        .walletPk;
                                                 walletPkForCurrency =
                                                     Provider.of<AllWallets>(
                                                             context,
                                                             listen: false)
                                                         .list[index]
                                                         .walletPk;
-                                                numberDecimals = selectedWallet
-                                                        ?.decimals ??
-                                                    Provider.of<AllWallets>(
-                                                            context,
-                                                            listen: false)
-                                                        .indexedByPk[
-                                                            appStateSettings[
-                                                                "selectedWalletPk"]]
-                                                        ?.decimals ??
-                                                    2;
                                                 try {
                                                   amount = (double.parse(
                                                               amount) *
                                                           (walletBefore == null
                                                               ? 1
                                                               : (amountRatioToPrimaryCurrencyGivenPk(
-                                                                      Provider.of<
-                                                                              AllWallets>(
-                                                                          context,
-                                                                          listen:
-                                                                              false),
-                                                                      walletBefore
-                                                                          .walletPk) ??
-                                                                  1)))
+                                                                  Provider.of<
+                                                                          AllWallets>(
+                                                                      context,
+                                                                      listen:
+                                                                          false),
+                                                                  walletBefore
+                                                                      .walletPk))))
                                                       .toStringAsFixed(
-                                                          numberDecimals);
+                                                          getDecimals(
+                                                              listen: false));
                                                 } catch (e) {}
                                                 amount = removeTrailingZeroes(
                                                     amount);
@@ -704,23 +710,18 @@ class _SelectAmountState extends State<SelectAmount> {
                           );
                         },
                         getSelected: (TransactionWallet wallet) {
-                          return selectedWallet?.walletPk == wallet.walletPk;
+                          return getSelectedWallet(listen: false)?.walletPk ==
+                              wallet.walletPk;
                         },
                         onSelected: (TransactionWallet wallet) {
-                          if (widget.setSelectedWallet != null)
-                            widget.setSelectedWallet!(wallet);
+                          if (widget.setSelectedWalletPk != null)
+                            widget.setSelectedWalletPk!(wallet.walletPk);
                           setState(() {
-                            selectedWallet = wallet;
+                            selectedWalletPk = wallet.walletPk;
                             walletPkForCurrency = wallet.walletPk;
-                            numberDecimals = selectedWallet?.decimals ??
-                                Provider.of<AllWallets>(context)
-                                    .indexedByPk[
-                                        appStateSettings["selectedWalletPk"]]
-                                    ?.decimals ??
-                                2;
                             try {
                               amount = double.parse(amount)
-                                  .toStringAsFixed(numberDecimals);
+                                  .toStringAsFixed(getDecimals(listen: false));
                             } catch (e) {}
                             amount = removeTrailingZeroes(amount);
                             addToAmount("");

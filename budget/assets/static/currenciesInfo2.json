@@ -929,7 +929,7 @@
 	"TRY": {
 		"symbol": "TL",
 		"name": "Turkish Lira",
-		"symbol_native": "TL",
+		"symbol_native": "₺",
 		"decimal_digits": 2,
 		"rounding": 0,
 		"code": "TRY",

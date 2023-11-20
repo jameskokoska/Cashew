@@ -37,7 +37,7 @@ import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 import 'firebase_options.dart';
 import 'package:easy_localization/easy_localization.dart';
 
-// Requires hot reload when changed
+// Requires hot restart when changed
 bool enableDevicePreview = false && kDebugMode;
 bool allowDebugFlags = true || kIsWeb;
 bool allowDangerousDebugFlags = kDebugMode;

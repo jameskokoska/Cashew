@@ -133,6 +133,7 @@ class PieChartOptions extends StatelessWidget {
     required this.toggleAllSubCategories,
     required this.colorScheme,
     required this.showAllSubcategories,
+    this.useHorizontalPaddingConstrained = true,
     super.key,
   });
   final bool hasSubCategories;
@@ -142,12 +143,15 @@ class PieChartOptions extends StatelessWidget {
   final VoidCallback toggleAllSubCategories;
   final ColorScheme colorScheme;
   final bool showAllSubcategories;
+  final bool useHorizontalPaddingConstrained;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(
-          horizontal: getHorizontalPaddingConstrained(context) + 2),
+          horizontal: getHorizontalPaddingConstrained(context,
+                  enabled: useHorizontalPaddingConstrained) +
+              2),
       child: Transform.translate(
         offset: Offset(0, 5),
         child: Align(

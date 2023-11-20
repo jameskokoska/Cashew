@@ -1,4 +1,5 @@
 import 'package:budget/struct/settings.dart';
+import 'package:budget/widgets/framework/popupFramework.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/scrollbarWrap.dart';
@@ -9,6 +10,8 @@ import 'package:budget/struct/shareBudget.dart';
 import 'package:budget/widgets/selectedTransactionsAppBar.dart';
 import 'package:budget/widgets/monthSelector.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
+import 'package:budget/widgets/settingsContainers.dart';
+import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntries.dart';
 import 'package:budget/widgets/transactionEntry/swipeToSelectTransactions.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -31,14 +34,19 @@ class TransactionsListPageState extends State<TransactionsListPage>
   }
 
   void scrollToTop({int duration = 1200}) {
-    _scrollController.animateTo(0,
-        duration: Duration(
-            milliseconds:
-                (getPlatform() == PlatformOS.isIOS ? duration * 0.2 : duration)
-                    .round()),
-        curve: getPlatform() == PlatformOS.isIOS
-            ? Curves.easeInOut
-            : Curves.elasticOut);
+    if (_scrollController.offset <= 0) {
+      pushRoute(context, TransactionsSearchPage());
+    } else {
+      _scrollController.animateTo(0,
+          duration: Duration(
+              milliseconds: (getPlatform() == PlatformOS.isIOS
+                      ? duration * 0.2
+                      : duration)
+                  .round()),
+          curve: getPlatform() == PlatformOS.isIOS
+              ? Curves.easeInOut
+              : Curves.elasticOut);
+    }
   }
 
   @override
@@ -50,7 +58,6 @@ class TransactionsListPageState extends State<TransactionsListPage>
   bool scaleInSearchIcon = false;
 
   late ScrollController _scrollController;
-  late AnimationController _animationControllerSearch;
   late PageController _pageController;
   late List<int> selectedTransactionIDs = [];
 
@@ -65,34 +72,14 @@ class TransactionsListPageState extends State<TransactionsListPage>
   void initState() {
     super.initState();
     _scrollController = ScrollController();
-    _scrollController.addListener(_scrollListener);
-    _animationControllerSearch = AnimationController(vsync: this, value: 1);
     _pageController = PageController(initialPage: 1000000);
   }
 
   @override
   void dispose() {
     _scrollController.dispose();
-    _animationControllerSearch.dispose();
     _pageController.dispose();
     super.dispose();
-  }
-
-  _scrollListener() {
-    double percent = _scrollController.offset /
-        (MediaQuery.paddingOf(context).top + 65 + 50);
-    if (percent >= 0 && percent <= 1) {
-      _animationControllerSearch.value = 1 - percent;
-    }
-    if (percent >= 1 && scaleInSearchIcon == false) {
-      setState(() {
-        scaleInSearchIcon = true;
-      });
-    } else if (percent < 1 && scaleInSearchIcon == true) {
-      setState(() {
-        scaleInSearchIcon = false;
-      });
-    }
   }
 
   @override
@@ -228,6 +215,31 @@ class TransactionsListPageState extends State<TransactionsListPage>
                                                     DateTime.now().year) +
                                             ".",
                                         showTotalCashFlow: true,
+                                        enableSpendingSummary: true,
+                                        showSpendingSummary: appStateSettings[
+                                            "showTransactionsMonthlySpendingSummary"],
+                                        onLongPressSpendingSummary: () {
+                                          openBottomSheet(
+                                            context,
+                                            PopupFramework(
+                                              hasPadding: false,
+                                              child: Column(
+                                                children: [
+                                                  TextFont(
+                                                    text:
+                                                        "enabled-in-settings-at-any-time"
+                                                            .tr(),
+                                                    fontSize: 14,
+                                                    maxLines: 5,
+                                                    textAlign: TextAlign.center,
+                                                  ),
+                                                  SizedBox(height: 5),
+                                                  ShowTransactionsMonthlySpendingSummarySettingToggle(),
+                                                ],
+                                              ),
+                                            ),
+                                          );
+                                        },
                                       ),
 
                                       // Wipe all remaining pixels off - sometimes graphics artifacts are left behind
@@ -309,6 +321,36 @@ class TransactionsListPageState extends State<TransactionsListPage>
           ),
         );
       },
+    );
+  }
+}
+
+class TransactionsSettings extends StatelessWidget {
+  const TransactionsSettings({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ShowTransactionsMonthlySpendingSummarySettingToggle();
+  }
+}
+
+class ShowTransactionsMonthlySpendingSummarySettingToggle
+    extends StatelessWidget {
+  const ShowTransactionsMonthlySpendingSummarySettingToggle({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return SettingsContainerSwitch(
+      title: "monthly-spending-summary".tr(),
+      description: "monthly-spending-summary-description".tr(),
+      onSwitched: (value) {
+        updateSettings("showTransactionsMonthlySpendingSummary", value,
+            updateGlobalState: false, pagesNeedingRefresh: [1]);
+      },
+      initialValue: appStateSettings["showTransactionsMonthlySpendingSummary"],
+      icon: appStateSettings["outlinedIcons"]
+          ? Icons.signpost_outlined
+          : Icons.signpost_rounded,
     );
   }
 }

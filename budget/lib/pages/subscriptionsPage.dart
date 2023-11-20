@@ -90,7 +90,7 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
                         context,
                         PopupFramework(
                           hasPadding: false,
-                          child: AutoPaySubscriptionsSetting(),
+                          child: SubscriptionSettings(),
                         ),
                       );
                     },
@@ -422,6 +422,15 @@ class UpcomingTransactionDateHeader extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class SubscriptionSettings extends StatelessWidget {
+  const SubscriptionSettings({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return AutoPaySubscriptionsSetting();
   }
 }
 

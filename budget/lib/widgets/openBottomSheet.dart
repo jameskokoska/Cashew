@@ -21,7 +21,8 @@ double getWidthBottomSheet(context) {
       : MediaQuery.sizeOf(context).width - getWidthNavigationSidebar(context);
 }
 
-double getHorizontalPaddingConstrained(context) {
+double getHorizontalPaddingConstrained(context, {bool enabled = true}) {
+  if (enabled == false) return 0;
   if (MediaQuery.sizeOf(context).width >= 550 &&
       MediaQuery.sizeOf(context).width <= 1000 &&
       getIsFullScreen(context) == false) {

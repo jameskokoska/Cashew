@@ -30,18 +30,27 @@ class ViewAllTransactionsButton extends StatelessWidget {
 }
 
 class LowKeyButton extends StatelessWidget {
-  const LowKeyButton(
-      {super.key, required this.onTap, required this.text, this.extraWidget});
+  const LowKeyButton({
+    super.key,
+    required this.onTap,
+    required this.text,
+    this.extraWidget,
+    this.color,
+    this.textColor,
+  });
   final VoidCallback onTap;
   final String text;
   final Widget? extraWidget;
+  final Color? color;
+  final Color? textColor;
 
   @override
   Widget build(BuildContext context) {
     return Tappable(
-      color: appStateSettings["materialYou"]
-          ? Theme.of(context).colorScheme.primary.withOpacity(0.1)
-          : getColor(context, "lightDarkAccent"),
+      color: color ??
+          (appStateSettings["materialYou"]
+              ? Theme.of(context).colorScheme.primary.withOpacity(0.1)
+              : getColor(context, "lightDarkAccent")),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
         child: Row(
@@ -51,7 +60,8 @@ class LowKeyButton extends StatelessWidget {
               text: text,
               textAlign: TextAlign.center,
               fontSize: 14,
-              textColor: getColor(context, "black").withOpacity(0.5),
+              textColor:
+                  textColor ?? getColor(context, "black").withOpacity(0.5),
             ),
             extraWidget ?? SizedBox.shrink(),
           ],

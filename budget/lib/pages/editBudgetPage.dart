@@ -257,7 +257,11 @@ class _EditBudgetPageState extends State<EditBudgetPage> {
                                   TextFont(
                                     text: convertToMoney(
                                         Provider.of<AllWallets>(context),
-                                        budget.amount),
+                                        budget.amount,
+                                        currencyKey:
+                                            Provider.of<AllWallets>(context)
+                                                .indexedByPk[budget.walletFk]
+                                                ?.currency),
                                     fontWeight: FontWeight.bold,
                                     fontSize: 18,
                                   ),
@@ -651,6 +655,15 @@ class NoResultsCreate extends StatelessWidget {
         SizedBox(height: 20),
       ],
     );
+  }
+}
+
+class BudgetSettings extends StatelessWidget {
+  const BudgetSettings({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return TotalSpentToggle();
   }
 }
 

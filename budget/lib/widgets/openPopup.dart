@@ -328,7 +328,6 @@ Future<T?> openPopupCustom<T extends Object?>(
         onWillPop: () async => barrierDismissible,
         child: Center(
           child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 25, vertical: 20),
             margin: EdgeInsets.only(
               left: 20,
               right: 20,
@@ -345,24 +344,27 @@ Future<T?> openPopupCustom<T extends Object?>(
                   getPlatform() == PlatformOS.isIOS ? 10 : 25),
               boxShadow: boxShadowGeneral(context),
             ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                title == null
-                    ? SizedBox.shrink()
-                    : Padding(
-                        padding: const EdgeInsets.only(bottom: 15),
-                        child: TextFont(
-                          text: title,
-                          fontSize: 25,
-                          fontWeight: FontWeight.bold,
-                          maxLines: 5,
-                          textAlign: TextAlign.center,
+            child: SingleChildScrollView(
+              padding: EdgeInsets.symmetric(horizontal: 25, vertical: 20),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  title == null
+                      ? SizedBox.shrink()
+                      : Padding(
+                          padding: const EdgeInsets.only(bottom: 15),
+                          child: TextFont(
+                            text: title,
+                            fontSize: 25,
+                            fontWeight: FontWeight.bold,
+                            maxLines: 5,
+                            textAlign: TextAlign.center,
+                          ),
                         ),
-                      ),
-                child,
-              ],
+                  child,
+                ],
+              ),
             ),
           ),
         ),

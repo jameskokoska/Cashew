@@ -6,6 +6,7 @@ import 'package:budget/pages/addCategoryPage.dart';
 import 'package:budget/pages/addWalletPage.dart';
 import 'package:budget/pages/editBudgetPage.dart';
 import 'package:budget/pages/editHomePage.dart';
+import 'package:budget/pages/editWalletsPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/framework/popupFramework.dart';
@@ -213,6 +214,19 @@ class EditHomePagePinnedWalletsPopup extends StatelessWidget {
         if (includeFramework) {
           return PopupFramework(
             title: "select-accounts".tr(),
+            outsideExtraWidget: IconButton(
+              iconSize: 25,
+              padding:
+                  EdgeInsets.all(getPlatform() == PlatformOS.isIOS ? 15 : 20),
+              icon: Icon(
+                appStateSettings["outlinedIcons"]
+                    ? Icons.edit_outlined
+                    : Icons.edit_rounded,
+              ),
+              onPressed: () async {
+                pushRoute(context, EditWalletsPage());
+              },
+            ),
             child: child,
           );
         } else {

@@ -17,6 +17,7 @@ import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/statusBox.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
+import 'package:budget/widgets/viewAllTransactionsButton.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -1069,6 +1070,100 @@ class LockedFeature extends StatelessWidget {
       borderRadius: 20,
       color: Colors.transparent,
       child: child,
+    );
+  }
+}
+
+class FadeOutAndLockFeature extends StatefulWidget {
+  const FadeOutAndLockFeature(
+      {required this.child,
+      this.actionAfter,
+      this.hasInitiallyDismissed = false,
+      super.key});
+  final Widget child;
+  final VoidCallback? actionAfter;
+  final bool hasInitiallyDismissed;
+
+  @override
+  State<FadeOutAndLockFeature> createState() => _FadeOutAndLockFeatureState();
+}
+
+class _FadeOutAndLockFeatureState extends State<FadeOutAndLockFeature> {
+  bool fadeIn = false;
+  bool dismissedPremium = false;
+
+  @override
+  void initState() {
+    Future.delayed(Duration.zero, () {
+      if (hidePremiumPopup() == false)
+        setState(() {
+          fadeIn = true;
+        });
+    });
+    super.initState();
+  }
+
+  void openPremiumPopup() async {
+    bool result = await premiumPopupPushRoute(context);
+    if (result == true) {
+      if (widget.actionAfter != null) widget.actionAfter!();
+      setState(() {
+        dismissedPremium = true;
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (hidePremiumPopup() ||
+        dismissedPremium ||
+        widget.hasInitiallyDismissed) {
+      return widget.child;
+    }
+    return Tappable(
+      color: Colors.transparent,
+      borderRadius: 15,
+      onTap: openPremiumPopup,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          IgnorePointer(
+            child: AnimatedOpacity(
+              opacity: fadeIn ? 0.07 : 1,
+              duration: Duration(milliseconds: 7000),
+              child: AnimatedOpacity(
+                opacity: fadeIn ? 0.25 : 1,
+                duration: Duration(milliseconds: 500),
+                child: widget.child,
+              ),
+            ),
+          ),
+          AnimatedOpacity(
+            opacity: fadeIn ? 1 : 0,
+            duration: Duration(milliseconds: 500),
+            child: Column(
+              children: [
+                TextFont(
+                  text: "unlock-with".tr(),
+                  fontSize: 15,
+                ),
+                SizedBox(height: 5),
+                CashewProBanner(fontColor: getColor(context, "black")),
+                SizedBox(height: 15),
+                LowKeyButton(
+                  onTap: openPremiumPopup,
+                  text: "learn-more".tr(),
+                  color: dynamicPastel(
+                    context,
+                    Theme.of(context).colorScheme.secondaryContainer,
+                    amount: 0.4,
+                  ).withOpacity(0.8),
+                )
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

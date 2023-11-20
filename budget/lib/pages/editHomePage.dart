@@ -11,6 +11,7 @@ import 'package:budget/pages/homePage/homePageWalletSwitcher.dart';
 import 'package:budget/pages/walletDetailsPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/modified/reorderable_list.dart';
+import 'package:budget/struct/navBarIconsData.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/editRowEntry.dart';
 import 'package:budget/widgets/moreIcons.dart';
@@ -46,6 +47,7 @@ class EditHomePageItem {
   final Function(bool value) onSwitched;
   final Function()? onTap;
   List<Widget>? extraWidgetsBelow;
+  final bool enabled;
 
   EditHomePageItem({
     required this.icon,
@@ -54,6 +56,7 @@ class EditHomePageItem {
     required this.onSwitched,
     this.onTap,
     this.extraWidgetsBelow,
+    this.enabled = true,
   });
 }
 
@@ -396,6 +399,17 @@ class _EditHomePageState extends State<EditHomePage> {
             },
             extraWidgetsBelow: [],
           ),
+          "transactionsList": EditHomePageItem(
+            icon: navBarIconsData["transactions"]!.iconData,
+            name: "transactions-list".tr(),
+            isEnabled:
+                isHomeScreenSectionEnabled(context, "showTransactionsList"),
+            onSwitched: (value) {
+              switchHomeScreenSection(context, "showTransactionsList", value);
+            },
+            extraWidgetsBelow: [],
+            enabled: enableDoubleColumn(context) == false,
+          ),
         };
         keyOrder = List<String>.from(appStateSettings["homePageOrder"]
             .map((element) => element.toString()));
@@ -464,7 +478,8 @@ class _EditHomePageState extends State<EditHomePage> {
                   key: ValueKey(index),
                 );
               String key = keyOrder[index];
-              if (editHomePageItems[key] == null)
+              if (editHomePageItems[key] == null ||
+                  editHomePageItems[key]?.enabled != true)
                 return Container(
                   key: ValueKey(index),
                 );
@@ -641,8 +656,12 @@ void switchHomeScreenSection(
 
 bool isHomeScreenSectionEnabled(BuildContext context, String sectionSetting) {
   if (enableDoubleColumn(context)) {
-    return appStateSettings[sectionSetting + "FullScreen"];
+    if (appStateSettings[sectionSetting + "FullScreen"] != null)
+      return appStateSettings[sectionSetting + "FullScreen"];
+    return false;
   } else {
-    return appStateSettings[sectionSetting];
+    if (appStateSettings[sectionSetting] != null)
+      return appStateSettings[sectionSetting];
+    return false;
   }
 }

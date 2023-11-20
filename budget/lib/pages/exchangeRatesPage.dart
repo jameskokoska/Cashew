@@ -190,10 +190,9 @@ class _ExchangeRatesState extends State<ExchangeRates> {
                                     text: " = " +
                                         (1 /
                                                 ((amountRatioToPrimaryCurrency(
-                                                        Provider.of<AllWallets>(
-                                                            context),
-                                                        key) ??
-                                                    1)))
+                                                    Provider.of<AllWallets>(
+                                                        context),
+                                                    key))))
                                             .toStringAsFixed(14),
                                     style: TextStyle(
                                       color: getColor(context, "black"),

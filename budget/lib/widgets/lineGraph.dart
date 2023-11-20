@@ -1,5 +1,6 @@
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
+import 'package:budget/struct/currencyFunctions.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/noResults.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
@@ -66,8 +67,8 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
       child: GestureDetector(
         child: LineChart(
           data,
-          swapAnimationDuration: const Duration(milliseconds: 2000),
-          swapAnimationCurve: Curves.fastLinearToSlowEaseIn,
+          duration: const Duration(milliseconds: 2000),
+          curve: Curves.fastLinearToSlowEaseIn,
           chartRendererKey: ValueKey(1),
         ),
       ),
@@ -118,7 +119,7 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
                   ),
                 ]),
           HorizontalLine(
-            y: 0.0001,
+            y: 0,
             color: dynamicPastel(context, widget.color, amount: 0.3)
                 .withOpacity(0.4),
           ),
@@ -236,20 +237,28 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
 
               return Padding(
                 padding: const EdgeInsets.only(right: 8.0),
-                child: TextFont(
-                  textAlign: TextAlign.right,
-                  text: getWordedNumber(
-                      Provider.of<AllWallets>(context, listen: false), value),
-                  textColor: dynamicPastel(context, widget.color,
-                          amount: 0.5, inverse: true)
-                      .withOpacity(0.3),
-                  fontSize: 13,
+                child: MediaQuery(
+                  data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+                  child: TextFont(
+                    textAlign: TextAlign.right,
+                    text: getWordedNumber(
+                        Provider.of<AllWallets>(context, listen: false), value),
+                    textColor: dynamicPastel(context, widget.color,
+                            amount: 0.5, inverse: true)
+                        .withOpacity(0.3),
+                    fontSize: 13,
+                  ),
                 ),
               );
             },
-            interval: ((widget.maxPair.y - widget.minPair.y) /
-                    (getIsFullScreen(context) ? 7 : 4))
-                .abs(),
+            // If the interval is equal to a really small number (almost 0, it freezes the app!)
+            interval: double.parse((widget.maxPair.y - widget.minPair.y)
+                        .toStringAsFixed(5)) ==
+                    0.0
+                ? 0.001
+                : ((widget.maxPair.y - widget.minPair.y) /
+                        (getIsFullScreen(context) ? 7 : 4))
+                    .abs(),
             reservedSize: (widget.minPair.y <= -10000
                     ? 55
                     : widget.minPair.y <= -1000
@@ -260,7 +269,9 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
                                     ? (widget.maxPair.y >= 1000 ? 37 : 33)
                                     : 25 + widget.extraLeftPaddingIfSmall) +
                                 extraHorizontalPadding) +
-                10,
+                10 +
+                measureCurrencyStringExtraWidth(
+                    Provider.of<AllWallets>(context)),
             // This interval needs more work
             // interval: ((((widget.maxPair.y).abs() + (widget.minPair.y).abs()) /
             //                 (getIsFullScreen(context) ? 7 : 3.6)) /
@@ -379,6 +390,7 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
                   fontSize: 12,
+                  fontFamilyFallback: ['Inter'],
                 ),
               );
             }).toList();
@@ -395,13 +407,15 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
 
   FlGridData get gridData => FlGridData(
         show: true,
-        verticalInterval:
-            ((widget.maxPair.x).abs() + (widget.minPair.x).abs()) /
-                        (getIsFullScreen(context) ? 6 : 4) ==
-                    0
-                ? 5
-                : ((widget.maxPair.x).abs() + (widget.minPair.x).abs()) /
-                    (getIsFullScreen(context) ? 6 : 4),
+        // If the interval is equal to a really small number (almost 0, it freezes the app!)
+        verticalInterval: double.parse(
+                    (((widget.maxPair.x).abs() + (widget.minPair.x).abs()) /
+                            (getIsFullScreen(context) ? 6 : 4))
+                        .toStringAsFixed(5)) ==
+                0
+            ? 5
+            : ((widget.maxPair.x).abs() + (widget.minPair.x).abs()) /
+                (getIsFullScreen(context) ? 6 : 4),
         // This interval needs more work, maybe follow the one from budgetHistoryLineGraph.dart
         // horizontalInterval:
         //     ((widget.maxPair.y).abs() + (widget.minPair.y).abs()) /
@@ -420,9 +434,14 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
             dashArray: [2, 8],
           );
         },
-        horizontalInterval: ((widget.maxPair.y - widget.minPair.y) /
-                (getIsFullScreen(context) ? 7 : 4))
-            .abs(),
+        // If the interval is equal to a really small number (almost 0, it freezes the app!)
+        horizontalInterval: double.parse(
+                    (widget.maxPair.y - widget.minPair.y).toStringAsFixed(5)) ==
+                0.0
+            ? 0.001
+            : ((widget.maxPair.y - widget.minPair.y) /
+                    (getIsFullScreen(context) ? 7 : 4))
+                .abs(),
         getDrawingHorizontalLine: (value) {
           return FlLine(
             color: dynamicPastel(context, widget.color, amount: 0.3)
@@ -684,5 +703,14 @@ class LineChartWrapper extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+double measureCurrencyStringExtraWidth(AllWallets allWallets) {
+  String currencyString = getCurrencyString(allWallets);
+  if (currencyString.length == "1") {
+    return 0;
+  } else {
+    return currencyString.length * 5;
   }
 }

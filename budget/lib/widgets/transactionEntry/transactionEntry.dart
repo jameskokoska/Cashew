@@ -153,9 +153,8 @@ class TransactionEntry extends StatelessWidget {
 
     return Padding(
       padding: EdgeInsets.symmetric(
-          horizontal: useHorizontalPaddingConstrained == false
-              ? 0
-              : getHorizontalPaddingConstrained(context)),
+          horizontal: getHorizontalPaddingConstrained(context,
+              enabled: useHorizontalPaddingConstrained)),
       child: TransactionEntryBox(
         transactionKey: transaction.transactionPk,
         child: ValueListenableBuilder(

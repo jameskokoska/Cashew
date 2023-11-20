@@ -300,6 +300,10 @@ class DebugPage extends StatelessWidget {
           label: "Fix migration (from db 37 above)",
           onTap: () async {
             await database.customStatement('PRAGMA user_version = 37');
+            if (kIsWeb) {
+              final html.Storage localStorage = html.window.localStorage;
+              localStorage["moor_db_version_db"] = "37";
+            }
             restartAppPopup(context);
           },
         ),

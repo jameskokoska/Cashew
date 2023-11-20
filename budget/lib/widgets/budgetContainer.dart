@@ -1,5 +1,6 @@
 import 'package:budget/database/tables.dart';
 import 'package:budget/pages/sharedBudgetSettings.dart';
+import 'package:budget/struct/currencyFunctions.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/animatedCircularProgress.dart';
 import 'package:budget/pages/addBudgetPage.dart';
@@ -48,6 +49,8 @@ class BudgetContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double budgetAmount = budgetAmountToPrimaryCurrency(
+        Provider.of<AllWallets>(context, listen: true), budget);
     DateTime dateForRangeLocal =
         dateForRange == null ? DateTime.now() : dateForRange!;
     DateTimeRange budgetRange = getBudgetDate(budget, dateForRangeLocal);
@@ -118,7 +121,7 @@ class BudgetContainer extends StatelessWidget {
                                     textAlign: TextAlign.left,
                                   ),
                                 ),
-                                budget.amount - totalSpent >= 0
+                                budgetAmount - totalSpent >= 0
                                     ? Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.start,
@@ -130,7 +133,7 @@ class BudgetContainer extends StatelessWidget {
                                               count: appStateSettings[
                                                       "showTotalSpentForBudget"]
                                                   ? totalSpent
-                                                  : budget.amount - totalSpent,
+                                                  : budgetAmount - totalSpent,
                                               duration:
                                                   Duration(milliseconds: 700),
                                               initialCount: (0),
@@ -143,7 +146,7 @@ class BudgetContainer extends StatelessWidget {
                                                     finalNumber: appStateSettings[
                                                             "showTotalSpentForBudget"]
                                                         ? totalSpent
-                                                        : budget.amount -
+                                                        : budgetAmount -
                                                             totalSpent,
                                                   ),
                                                   fontSize: 18,
@@ -153,27 +156,30 @@ class BudgetContainer extends StatelessWidget {
                                               },
                                             ),
                                           ),
-                                          Padding(
-                                            padding: const EdgeInsets.only(
-                                                bottom: 1.4),
-                                            child: Container(
-                                              child: TextFont(
-                                                text: (appStateSettings[
-                                                            "showTotalSpentForBudget"]
-                                                        ? " " +
-                                                            "spent-amount-of"
-                                                                .tr() +
-                                                            " "
-                                                        : " " +
-                                                            "remaining-amount-of"
-                                                                .tr() +
-                                                            " ") +
-                                                    convertToMoney(
-                                                        Provider.of<AllWallets>(
-                                                            context),
-                                                        budget.amount),
-                                                fontSize: 13,
-                                                textAlign: TextAlign.left,
+                                          Flexible(
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(
+                                                  bottom: 1.4),
+                                              child: Container(
+                                                child: TextFont(
+                                                  text: (appStateSettings[
+                                                              "showTotalSpentForBudget"]
+                                                          ? " " +
+                                                              "spent-amount-of"
+                                                                  .tr() +
+                                                              " "
+                                                          : " " +
+                                                              "remaining-amount-of"
+                                                                  .tr() +
+                                                              " ") +
+                                                      convertToMoney(
+                                                          Provider.of<
+                                                                  AllWallets>(
+                                                              context),
+                                                          budgetAmount),
+                                                  fontSize: 13,
+                                                  textAlign: TextAlign.left,
+                                                ),
                                               ),
                                             ),
                                           ),
@@ -191,7 +197,7 @@ class BudgetContainer extends StatelessWidget {
                                                       "showTotalSpentForBudget"]
                                                   ? totalSpent
                                                   : -1 *
-                                                      (budget.amount -
+                                                      (budgetAmount -
                                                           totalSpent),
                                               duration:
                                                   Duration(milliseconds: 700),
@@ -206,7 +212,7 @@ class BudgetContainer extends StatelessWidget {
                                                               "showTotalSpentForBudget"]
                                                           ? totalSpent
                                                           : -1 *
-                                                              (budget.amount -
+                                                              (budgetAmount -
                                                                   totalSpent)),
                                                   fontSize: 18,
                                                   textAlign: TextAlign.left,
@@ -215,26 +221,28 @@ class BudgetContainer extends StatelessWidget {
                                               },
                                             ),
                                           ),
-                                          Container(
-                                            padding: const EdgeInsets.only(
-                                                bottom: 1.4),
-                                            child: TextFont(
-                                              text: (appStateSettings[
-                                                          "showTotalSpentForBudget"]
-                                                      ? " " +
-                                                          "spent-amount-of"
-                                                              .tr() +
-                                                          " "
-                                                      : " " +
-                                                          "overspent-amount-of"
-                                                              .tr() +
-                                                          " ") +
-                                                  convertToMoney(
-                                                      Provider.of<AllWallets>(
-                                                          context),
-                                                      budget.amount),
-                                              fontSize: 13,
-                                              textAlign: TextAlign.left,
+                                          Flexible(
+                                            child: Container(
+                                              padding: const EdgeInsets.only(
+                                                  bottom: 1.4),
+                                              child: TextFont(
+                                                text: (appStateSettings[
+                                                            "showTotalSpentForBudget"]
+                                                        ? " " +
+                                                            "spent-amount-of"
+                                                                .tr() +
+                                                            " "
+                                                        : " " +
+                                                            "overspent-amount-of"
+                                                                .tr() +
+                                                            " ") +
+                                                    convertToMoney(
+                                                        Provider.of<AllWallets>(
+                                                            context),
+                                                        budgetAmount),
+                                                fontSize: 13,
+                                                textAlign: TextAlign.left,
+                                              ),
                                             ),
                                           ),
                                         ],
@@ -301,10 +309,10 @@ class BudgetContainer extends StatelessWidget {
                             : EdgeInsets.symmetric(horizontal: 15),
                         child: BudgetTimeline(
                           budget: budget,
-                          percent: budget.amount == 0
+                          percent: budgetAmount == 0
                               ? 0
-                              : (totalSpent / budget.amount * 100),
-                          yourPercent: budget.amount == 0
+                              : (totalSpent / budgetAmount * 100),
+                          yourPercent: budgetAmount == 0
                               ? 0
                               : snapshotTotalSpentByCurrentUserOnly.data == null
                                   ? 0
@@ -432,6 +440,8 @@ class DaySpending extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double budgetAmount = budgetAmountToPrimaryCurrency(
+        Provider.of<AllWallets>(context, listen: true), budget);
     bool isOutOfRange = budgetRange.end.difference(DateTime.now()).inDays < 0 ||
         budgetRange.start.difference(DateTime.now()).inDays > 0;
     Widget textWidget = Padding(
@@ -448,7 +458,7 @@ class DaySpending extends StatelessWidget {
                       .inDays +
                   1;
               double amount =
-                  ((totalAmount - budget.amount) / remainingDays) * -1;
+                  ((totalAmount - budgetAmount) / remainingDays) * -1;
               return TextFont(
                 textColor: getColor(context, "black").withAlpha(80),
                 text: isOutOfRange

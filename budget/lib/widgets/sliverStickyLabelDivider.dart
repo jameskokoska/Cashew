@@ -57,38 +57,39 @@ class StickyLabelDivider extends StatelessWidget {
     this.extraInfo,
     this.extraInfoWidget,
     this.color,
+    this.fontSize = 15,
   });
 
   final String info;
   final String? extraInfo;
   final Widget? extraInfoWidget;
   final Color? color;
+  final double fontSize;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       color: color == null ? Theme.of(context).canvasColor : color,
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 5),
       alignment: Alignment.centerLeft,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           TextFont(
             text: info,
-            fontSize: 15,
+            fontSize: fontSize,
             textColor: getColor(context, "textLight"),
           ),
-          extraInfo == null
-              ? SizedBox.shrink()
-              : Expanded(
-                  child: TextFont(
-                    text: extraInfo ?? "",
-                    fontSize: 15,
-                    textColor: getColor(context, "textLight"),
-                    textAlign: TextAlign.end,
-                  ),
-                ),
-          extraInfoWidget == null ? SizedBox.shrink() : extraInfoWidget!,
+          if (extraInfo != null)
+            Expanded(
+              child: TextFont(
+                text: extraInfo ?? "",
+                fontSize: fontSize,
+                textColor: getColor(context, "textLight"),
+                textAlign: TextAlign.end,
+              ),
+            ),
+          if (extraInfoWidget != null) extraInfoWidget!,
         ],
       ),
     );

@@ -100,18 +100,11 @@ class _UpcomingOverdueTransactionsState
                         : Icons.settings_rounded,
                     action: () {
                       openBottomSheet(
-                        context,
-                        PopupFramework(
-                          hasPadding: false,
-                          child: Column(
-                            children: [
-                              AutoPayUpcomingSetting(),
-                              AutoPayRepetitiveSetting(),
-                              AutoPaySubscriptionsSetting(),
-                            ],
-                          ),
-                        ),
-                      );
+                          context,
+                          PopupFramework(
+                            hasPadding: false,
+                            child: UpcomingOverdueSettings(),
+                          ));
                     },
                   ),
                 ],
@@ -454,6 +447,21 @@ class AutoPayRepetitiveSetting extends StatelessWidget {
       },
       initialValue: appStateSettings["automaticallyPayRepetitive"],
       icon: getTransactionTypeIcon(TransactionSpecialType.repetitive),
+    );
+  }
+}
+
+class UpcomingOverdueSettings extends StatelessWidget {
+  const UpcomingOverdueSettings({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        AutoPayUpcomingSetting(),
+        AutoPayRepetitiveSetting(),
+        AutoPaySubscriptionsSetting(),
+      ],
     );
   }
 }

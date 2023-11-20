@@ -189,6 +189,19 @@ class EditHomePagePinnedBudgetsPopup extends StatelessWidget {
                 List<Budget> allPinnedBudgets = snapshot2.data ?? [];
                 return PopupFramework(
                   title: "select-budgets".tr(),
+                  outsideExtraWidget: IconButton(
+                    iconSize: 25,
+                    padding: EdgeInsets.all(
+                        getPlatform() == PlatformOS.isIOS ? 15 : 20),
+                    icon: Icon(
+                      appStateSettings["outlinedIcons"]
+                          ? Icons.edit_outlined
+                          : Icons.edit_rounded,
+                    ),
+                    onPressed: () async {
+                      pushRoute(context, EditBudgetPage());
+                    },
+                  ),
                   child: Column(
                     children: [
                       if (showBudgetsTotalLabelSetting)

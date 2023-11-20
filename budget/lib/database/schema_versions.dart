@@ -4087,6 +4087,387 @@ class Shape29 extends i0.VersionedTable {
       columnsByName['budget_fks_exclude']! as i1.GeneratedColumn<String>;
 }
 
+final class _S45 extends i0.VersionedSchema {
+  _S45({required super.database}) : super(version: 45);
+  @override
+  late final List<i1.DatabaseSchemaEntity> entities = [
+    wallets,
+    categories,
+    objectives,
+    transactions,
+    budgets,
+    categoryBudgetLimits,
+    associatedTitles,
+    appSettings,
+    scannerTemplates,
+    deleteLogs,
+  ];
+  late final Shape24 wallets = Shape24(
+      source: i0.VersionedTable(
+        entityName: 'wallets',
+        withoutRowId: false,
+        isStrict: false,
+        tableConstraints: [
+          'PRIMARY KEY(wallet_pk)',
+        ],
+        columns: [
+          _column_67,
+          _column_1,
+          _column_2,
+          _column_3,
+          _column_4,
+          _column_5,
+          _column_6,
+          _column_7,
+          _column_8,
+          _column_87,
+        ],
+        attachedDatabase: database,
+      ),
+      alias: null);
+  late final Shape25 categories = Shape25(
+      source: i0.VersionedTable(
+        entityName: 'categories',
+        withoutRowId: false,
+        isStrict: false,
+        tableConstraints: [
+          'PRIMARY KEY(category_pk)',
+        ],
+        columns: [
+          _column_68,
+          _column_1,
+          _column_2,
+          _column_3,
+          _column_82,
+          _column_4,
+          _column_5,
+          _column_6,
+          _column_10,
+          _column_11,
+          _column_88,
+        ],
+        attachedDatabase: database,
+      ),
+      alias: null);
+  late final Shape30 objectives = Shape30(
+      source: i0.VersionedTable(
+        entityName: 'objectives',
+        withoutRowId: false,
+        isStrict: false,
+        tableConstraints: [
+          'PRIMARY KEY(objective_pk)',
+        ],
+        columns: [
+          _column_83,
+          _column_1,
+          _column_13,
+          _column_6,
+          _column_2,
+          _column_4,
+          _column_91,
+          _column_5,
+          _column_3,
+          _column_82,
+          _column_10,
+          _column_84,
+          _column_92,
+        ],
+        attachedDatabase: database,
+      ),
+      alias: null);
+  late final Shape29 transactions = Shape29(
+      source: i0.VersionedTable(
+        entityName: 'transactions',
+        withoutRowId: false,
+        isStrict: false,
+        tableConstraints: [
+          'PRIMARY KEY(transaction_pk)',
+        ],
+        columns: [
+          _column_69,
+          _column_1,
+          _column_13,
+          _column_14,
+          _column_70,
+          _column_89,
+          _column_92,
+          _column_4,
+          _column_5,
+          _column_81,
+          _column_10,
+          _column_18,
+          _column_19,
+          _column_91,
+          _column_20,
+          _column_21,
+          _column_22,
+          _column_23,
+          _column_24,
+          _column_11,
+          _column_25,
+          _column_26,
+          _column_27,
+          _column_28,
+          _column_29,
+          _column_30,
+          _column_72,
+          _column_85,
+          _column_90,
+        ],
+        attachedDatabase: database,
+      ),
+      alias: null);
+  late final Shape31 budgets = Shape31(
+      source: i0.VersionedTable(
+        entityName: 'budgets',
+        withoutRowId: false,
+        isStrict: false,
+        tableConstraints: [
+          'PRIMARY KEY(budget_pk)',
+        ],
+        columns: [
+          _column_73,
+          _column_1,
+          _column_13,
+          _column_2,
+          _column_33,
+          _column_34,
+          _column_93,
+          _column_35,
+          _column_86,
+          _column_10,
+          _column_37,
+          _column_38,
+          _column_19,
+          _column_4,
+          _column_5,
+          _column_39,
+          _column_6,
+          _column_92,
+          _column_40,
+          _column_41,
+          _column_27,
+          _column_42,
+          _column_30,
+          _column_43,
+          _column_44,
+          _column_66,
+        ],
+        attachedDatabase: database,
+      ),
+      alias: null);
+  late final Shape32 categoryBudgetLimits = Shape32(
+      source: i0.VersionedTable(
+        entityName: 'category_budget_limits',
+        withoutRowId: false,
+        isStrict: false,
+        tableConstraints: [
+          'PRIMARY KEY(category_limit_pk)',
+        ],
+        columns: [
+          _column_74,
+          _column_70,
+          _column_75,
+          _column_13,
+          _column_5,
+          _column_92,
+        ],
+        attachedDatabase: database,
+      ),
+      alias: null);
+  late final Shape16 associatedTitles = Shape16(
+      source: i0.VersionedTable(
+        entityName: 'associated_titles',
+        withoutRowId: false,
+        isStrict: false,
+        tableConstraints: [
+          'PRIMARY KEY(associated_title_pk)',
+        ],
+        columns: [
+          _column_76,
+          _column_70,
+          _column_48,
+          _column_4,
+          _column_5,
+          _column_6,
+          _column_49,
+        ],
+        attachedDatabase: database,
+      ),
+      alias: null);
+  late final Shape6 appSettings = Shape6(
+      source: i0.VersionedTable(
+        entityName: 'app_settings',
+        withoutRowId: false,
+        isStrict: false,
+        tableConstraints: [],
+        columns: [
+          _column_50,
+          _column_51,
+          _column_52,
+        ],
+        attachedDatabase: database,
+      ),
+      alias: null);
+  late final Shape17 scannerTemplates = Shape17(
+      source: i0.VersionedTable(
+        entityName: 'scanner_templates',
+        withoutRowId: false,
+        isStrict: false,
+        tableConstraints: [
+          'PRIMARY KEY(scanner_template_pk)',
+        ],
+        columns: [
+          _column_77,
+          _column_4,
+          _column_5,
+          _column_54,
+          _column_55,
+          _column_56,
+          _column_57,
+          _column_58,
+          _column_59,
+          _column_78,
+          _column_92,
+          _column_61,
+        ],
+        attachedDatabase: database,
+      ),
+      alias: null);
+  late final Shape18 deleteLogs = Shape18(
+      source: i0.VersionedTable(
+        entityName: 'delete_logs',
+        withoutRowId: false,
+        isStrict: false,
+        tableConstraints: [
+          'PRIMARY KEY(delete_log_pk)',
+        ],
+        columns: [
+          _column_79,
+          _column_80,
+          _column_63,
+          _column_65,
+        ],
+        attachedDatabase: database,
+      ),
+      alias: null);
+}
+
+class Shape30 extends i0.VersionedTable {
+  Shape30({required super.source, required super.alias}) : super.aliased();
+  i1.GeneratedColumn<String> get objectivePk =>
+      columnsByName['objective_pk']! as i1.GeneratedColumn<String>;
+  i1.GeneratedColumn<String> get name =>
+      columnsByName['name']! as i1.GeneratedColumn<String>;
+  i1.GeneratedColumn<double> get amount =>
+      columnsByName['amount']! as i1.GeneratedColumn<double>;
+  i1.GeneratedColumn<int> get order =>
+      columnsByName['order']! as i1.GeneratedColumn<int>;
+  i1.GeneratedColumn<String> get colour =>
+      columnsByName['colour']! as i1.GeneratedColumn<String>;
+  i1.GeneratedColumn<DateTime> get dateCreated =>
+      columnsByName['date_created']! as i1.GeneratedColumn<DateTime>;
+  i1.GeneratedColumn<DateTime> get endDate =>
+      columnsByName['end_date']! as i1.GeneratedColumn<DateTime>;
+  i1.GeneratedColumn<DateTime> get dateTimeModified =>
+      columnsByName['date_time_modified']! as i1.GeneratedColumn<DateTime>;
+  i1.GeneratedColumn<String> get iconName =>
+      columnsByName['icon_name']! as i1.GeneratedColumn<String>;
+  i1.GeneratedColumn<String> get emojiIconName =>
+      columnsByName['emoji_icon_name']! as i1.GeneratedColumn<String>;
+  i1.GeneratedColumn<bool> get income =>
+      columnsByName['income']! as i1.GeneratedColumn<bool>;
+  i1.GeneratedColumn<bool> get pinned =>
+      columnsByName['pinned']! as i1.GeneratedColumn<bool>;
+  i1.GeneratedColumn<String> get walletFk =>
+      columnsByName['wallet_fk']! as i1.GeneratedColumn<String>;
+}
+
+i1.GeneratedColumn<String> _column_92(String aliasedName) =>
+    i1.GeneratedColumn<String>('wallet_fk', aliasedName, false,
+        type: i1.DriftSqlType.string,
+        defaultConstraints: i1.GeneratedColumn.constraintIsAlways(
+            'REFERENCES wallets (wallet_pk)'),
+        defaultValue: const Constant("0"));
+
+class Shape31 extends i0.VersionedTable {
+  Shape31({required super.source, required super.alias}) : super.aliased();
+  i1.GeneratedColumn<String> get budgetPk =>
+      columnsByName['budget_pk']! as i1.GeneratedColumn<String>;
+  i1.GeneratedColumn<String> get name =>
+      columnsByName['name']! as i1.GeneratedColumn<String>;
+  i1.GeneratedColumn<double> get amount =>
+      columnsByName['amount']! as i1.GeneratedColumn<double>;
+  i1.GeneratedColumn<String> get colour =>
+      columnsByName['colour']! as i1.GeneratedColumn<String>;
+  i1.GeneratedColumn<DateTime> get startDate =>
+      columnsByName['start_date']! as i1.GeneratedColumn<DateTime>;
+  i1.GeneratedColumn<DateTime> get endDate =>
+      columnsByName['end_date']! as i1.GeneratedColumn<DateTime>;
+  i1.GeneratedColumn<String> get walletFks =>
+      columnsByName['wallet_fks']! as i1.GeneratedColumn<String>;
+  i1.GeneratedColumn<String> get categoryFks =>
+      columnsByName['category_fks']! as i1.GeneratedColumn<String>;
+  i1.GeneratedColumn<String> get categoryFksExclude =>
+      columnsByName['category_fks_exclude']! as i1.GeneratedColumn<String>;
+  i1.GeneratedColumn<bool> get income =>
+      columnsByName['income']! as i1.GeneratedColumn<bool>;
+  i1.GeneratedColumn<bool> get addedTransactionsOnly =>
+      columnsByName['added_transactions_only']! as i1.GeneratedColumn<bool>;
+  i1.GeneratedColumn<int> get periodLength =>
+      columnsByName['period_length']! as i1.GeneratedColumn<int>;
+  i1.GeneratedColumn<int> get reoccurrence =>
+      columnsByName['reoccurrence']! as i1.GeneratedColumn<int>;
+  i1.GeneratedColumn<DateTime> get dateCreated =>
+      columnsByName['date_created']! as i1.GeneratedColumn<DateTime>;
+  i1.GeneratedColumn<DateTime> get dateTimeModified =>
+      columnsByName['date_time_modified']! as i1.GeneratedColumn<DateTime>;
+  i1.GeneratedColumn<bool> get pinned =>
+      columnsByName['pinned']! as i1.GeneratedColumn<bool>;
+  i1.GeneratedColumn<int> get order =>
+      columnsByName['order']! as i1.GeneratedColumn<int>;
+  i1.GeneratedColumn<String> get walletFk =>
+      columnsByName['wallet_fk']! as i1.GeneratedColumn<String>;
+  i1.GeneratedColumn<String> get budgetTransactionFilters =>
+      columnsByName['budget_transaction_filters']!
+          as i1.GeneratedColumn<String>;
+  i1.GeneratedColumn<String> get memberTransactionFilters =>
+      columnsByName['member_transaction_filters']!
+          as i1.GeneratedColumn<String>;
+  i1.GeneratedColumn<String> get sharedKey =>
+      columnsByName['shared_key']! as i1.GeneratedColumn<String>;
+  i1.GeneratedColumn<int> get sharedOwnerMember =>
+      columnsByName['shared_owner_member']! as i1.GeneratedColumn<int>;
+  i1.GeneratedColumn<DateTime> get sharedDateUpdated =>
+      columnsByName['shared_date_updated']! as i1.GeneratedColumn<DateTime>;
+  i1.GeneratedColumn<String> get sharedMembers =>
+      columnsByName['shared_members']! as i1.GeneratedColumn<String>;
+  i1.GeneratedColumn<String> get sharedAllMembersEver =>
+      columnsByName['shared_all_members_ever']! as i1.GeneratedColumn<String>;
+  i1.GeneratedColumn<bool> get isAbsoluteSpendingLimit =>
+      columnsByName['is_absolute_spending_limit']! as i1.GeneratedColumn<bool>;
+}
+
+i1.GeneratedColumn<String> _column_93(String aliasedName) =>
+    i1.GeneratedColumn<String>('wallet_fks', aliasedName, true,
+        type: i1.DriftSqlType.string);
+
+class Shape32 extends i0.VersionedTable {
+  Shape32({required super.source, required super.alias}) : super.aliased();
+  i1.GeneratedColumn<String> get categoryLimitPk =>
+      columnsByName['category_limit_pk']! as i1.GeneratedColumn<String>;
+  i1.GeneratedColumn<String> get categoryFk =>
+      columnsByName['category_fk']! as i1.GeneratedColumn<String>;
+  i1.GeneratedColumn<String> get budgetFk =>
+      columnsByName['budget_fk']! as i1.GeneratedColumn<String>;
+  i1.GeneratedColumn<double> get amount =>
+      columnsByName['amount']! as i1.GeneratedColumn<double>;
+  i1.GeneratedColumn<DateTime> get dateTimeModified =>
+      columnsByName['date_time_modified']! as i1.GeneratedColumn<DateTime>;
+  i1.GeneratedColumn<String> get walletFk =>
+      columnsByName['wallet_fk']! as i1.GeneratedColumn<String>;
+}
+
 i1.OnUpgrade stepByStep({
   required Future<void> Function(i1.Migrator m, _S34 schema) from33To34,
   required Future<void> Function(i1.Migrator m, _S35 schema) from34To35,
@@ -4099,6 +4480,7 @@ i1.OnUpgrade stepByStep({
   required Future<void> Function(i1.Migrator m, _S42 schema) from41To42,
   required Future<void> Function(i1.Migrator m, _S43 schema) from42To43,
   required Future<void> Function(i1.Migrator m, _S44 schema) from43To44,
+  required Future<void> Function(i1.Migrator m, _S45 schema) from44To45,
 }) {
   return i1.Migrator.stepByStepHelper(step: (currentVersion, database) async {
     switch (currentVersion) {
@@ -4157,6 +4539,11 @@ i1.OnUpgrade stepByStep({
         final migrator = i1.Migrator(database, schema);
         await from43To44(migrator, schema);
         return 44;
+      case 44:
+        final schema = _S45(database: database);
+        final migrator = i1.Migrator(database, schema);
+        await from44To45(migrator, schema);
+        return 45;
       default:
         throw ArgumentError.value('Unknown migration from $currentVersion');
     }

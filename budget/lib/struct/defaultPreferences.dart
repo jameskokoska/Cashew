@@ -48,6 +48,7 @@ Future<Map<String, dynamic>> getDefaultPreferences() async {
     "showPieChartFullScreen": false,
     "showHeatMap": false,
     "showHeatMapFullScreen": true,
+    "showTransactionsList": true,
     "showUsernameWelcomeBanner": true,
     "homePageOrder": [
       "wallets",
@@ -61,6 +62,7 @@ Future<Map<String, dynamic>> getDefaultPreferences() async {
       "spendingGraph",
       "pieChart",
       "heatMap",
+      "transactionsList",
     ],
     // Values for customNavBarShortcuts are the keys of navBarIconsData
     "customNavBarShortcut1": "transactions",
@@ -111,7 +113,6 @@ Future<Map<String, dynamic>> getDefaultPreferences() async {
     "lineGraphStartDate": DateTime.now().toString(),
     "pieChartIsIncome": false,
     "netWorthAllWallets": true,
-    "allSpendingAllWallets": true,
     "showPastSpendingTrajectory": false,
     "lastSynced": null,
     "font": "Avenir",
@@ -142,8 +143,12 @@ Future<Map<String, dynamic>> getDefaultPreferences() async {
     "previewDemo": false,
     "purchaseID": null,
     "showAccountLabelTagInTransactionEntry": false,
+    "showTransactionsMonthlySpendingSummary": true,
     //Show all categories or only income/expense
     "showAllCategoriesWhenSelecting": true,
+    // Search filters strings
+    "searchTransactionsSetFiltersString": null,
+    "allSpendingSetFiltersString": null,
     // *********************************************************** //
     // For showing information within a certain cycle for all spending wallet details page
     // cycleSettingsExtension = ""
@@ -154,6 +159,7 @@ Future<Map<String, dynamic>> getDefaultPreferences() async {
         DateTime(DateTime.now().year, DateTime.now().month, 1).toString(),
     "customPeriodStartDate":
         DateTime(DateTime.now().year, DateTime.now().month, 1).toString(),
+    "customPeriodEndDate": null,
     "customPeriodPastDays": 30,
     // For showing information within a certain cycle for pie chart
     // cycleSettingsExtension = "PieChart"
@@ -164,6 +170,7 @@ Future<Map<String, dynamic>> getDefaultPreferences() async {
         DateTime(DateTime.now().year, DateTime.now().month, 1).toString(),
     "customPeriodStartDatePieChart":
         DateTime(DateTime.now().year, DateTime.now().month, 1).toString(),
+    "customPeriodEndDatePieChart": null,
     "customPeriodPastDaysPieChart": 30,
     // For showing information within a certain cycle for net worth
     // cycleSettingsExtension = "NetWorth"
@@ -174,6 +181,7 @@ Future<Map<String, dynamic>> getDefaultPreferences() async {
         DateTime(DateTime.now().year, DateTime.now().month, 1).toString(),
     "customPeriodStartDateNetWorth":
         DateTime(DateTime.now().year, DateTime.now().month, 1).toString(),
+    "customPeriodEndDateNetWorth": null,
     "customPeriodPastDaysNetWorth": 30,
     // For showing information within a certain cycle for income and expenses (allSpendingSummary)
     // cycleSettingsExtension = "AllSpendingSummary"
@@ -184,6 +192,7 @@ Future<Map<String, dynamic>> getDefaultPreferences() async {
         DateTime(DateTime.now().year, DateTime.now().month, 1).toString(),
     "customPeriodStartDateAllSpendingSummary":
         DateTime(DateTime.now().year, DateTime.now().month, 1).toString(),
+    "customPeriodEndDateAllSpendingSummary": null,
     "customPeriodPastDaysAllSpendingSummary": 30,
     // *********************************************************** //
   };

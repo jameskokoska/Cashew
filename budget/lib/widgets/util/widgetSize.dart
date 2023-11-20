@@ -21,7 +21,16 @@ class _WidgetSizeState extends State<WidgetSize> {
     SchedulerBinding.instance.addPostFrameCallback(postFrameCallback);
     return Container(
       key: widgetKey,
-      child: widget.child,
+      child: LayoutBuilder(builder: (context, constraints) {
+        if (constraints.hasBoundedWidth || constraints.hasBoundedHeight) {
+          // We need this second call because the first call might lead to this error:
+          // The size of this render object has not yet been determined because this render object has not yet been through layout, which typically means that the size getter was called too early in the pipeline (e.g., during the build phase) before the framework has determined the size and position of the render objects during layout.
+          // The second call will update the widget once it has been rendered with a bounded measurement
+          // And if the size is different, the UI will update accordingly
+          WidgetsBinding.instance.addPostFrameCallback(postFrameCallback);
+        }
+        return widget.child;
+      }),
     );
   }
 
@@ -32,11 +41,15 @@ class _WidgetSizeState extends State<WidgetSize> {
     var context = widgetKey.currentContext;
     if (context == null) return;
 
-    Size newSize = context.size ?? Size(0, 0);
-    if (oldSize == newSize) return;
+    try {
+      Size newSize = context.size ?? Size(0, 0);
+      if (oldSize == newSize) return;
 
-    oldSize = newSize;
-    widget.onChange(newSize);
+      oldSize = newSize;
+      widget.onChange(newSize);
+    } catch (e) {
+      print(e.toString());
+    }
   }
 }
 
@@ -59,7 +72,12 @@ class _WidgetSizeBuilderState extends State<WidgetSizeBuilder> {
     SchedulerBinding.instance.addPostFrameCallback(postFrameCallback);
     return Container(
       key: widgetKey,
-      child: widget.widgetBuilder(size),
+      child: LayoutBuilder(builder: (context, constraints) {
+        if (constraints.hasBoundedWidth || constraints.hasBoundedHeight) {
+          WidgetsBinding.instance.addPostFrameCallback(postFrameCallback);
+        }
+        return widget.widgetBuilder(size);
+      }),
     );
   }
 
@@ -69,13 +87,16 @@ class _WidgetSizeBuilderState extends State<WidgetSizeBuilder> {
   void postFrameCallback(_) {
     var context = widgetKey.currentContext;
     if (context == null) return;
+    try {
+      Size newSize = context.size ?? Size(0, 0);
+      if (oldSize == newSize) return;
 
-    Size newSize = context.size ?? Size(0, 0);
-    if (oldSize == newSize) return;
-
-    oldSize = newSize;
-    setState(() {
-      size = newSize;
-    });
+      oldSize = newSize;
+      setState(() {
+        size = newSize;
+      });
+    } catch (e) {
+      print(e.toString());
+    }
   }
 }

@@ -142,6 +142,7 @@ Future generatePreviewData() async {
       order: 1,
       walletFk: "0",
       isAbsoluteSpendingLimit: true,
+      income: false,
     ),
   );
   await database.createOrUpdateObjective(
@@ -157,6 +158,7 @@ Future generatePreviewData() async {
       emojiIconName: null,
       income: true,
       pinned: true,
+      walletFk: "0",
     ),
   );
   await database.createOrUpdateObjective(
@@ -172,6 +174,7 @@ Future generatePreviewData() async {
       emojiIconName: null,
       income: false,
       pinned: true,
+      walletFk: "0",
     ),
   );
   await database.createOrUpdateTransaction(
@@ -448,6 +451,7 @@ Future generatePreviewData() async {
       sharedMembers: null,
       sharedAllMembersEver: null,
       isAbsoluteSpendingLimit: false,
+      income: false,
     ),
   );
   await database.createOrUpdateTransaction(
@@ -654,6 +658,7 @@ Future generatePreviewData() async {
       budgetFk: "11",
       amount: 20.0,
       dateTimeModified: DateTime.now(),
+      walletFk: "0",
     ),
   );
   await database.createOrUpdateCategoryLimit(
@@ -664,6 +669,7 @@ Future generatePreviewData() async {
       budgetFk: "11",
       amount: 35.0,
       dateTimeModified: DateTime.now(),
+      walletFk: "0",
     ),
   );
   await database.createOrUpdateCategoryLimit(
@@ -674,6 +680,7 @@ Future generatePreviewData() async {
       budgetFk: "11",
       amount: 25.0,
       dateTimeModified: DateTime.now(),
+      walletFk: "0",
     ),
   );
   await database.createOrUpdateCategoryLimit(
@@ -684,6 +691,7 @@ Future generatePreviewData() async {
       budgetFk: "10",
       amount: 1100,
       dateTimeModified: DateTime.now(),
+      walletFk: "0",
     ),
   );
   loadingIndeterminateKey.currentState?.setVisibility(false);

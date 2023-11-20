@@ -1,9 +1,15 @@
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
+import 'package:budget/pages/editBudgetPage.dart';
+import 'package:budget/pages/editObjectivesPage.dart';
+import 'package:budget/pages/subscriptionsPage.dart';
+import 'package:budget/pages/transactionsListPage.dart';
+import 'package:budget/pages/upcomingOverdueTransactionsPage.dart';
 import 'package:budget/struct/navBarIconsData.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/widgets/framework/popupFramework.dart';
+import 'package:budget/widgets/iconButtonScaled.dart';
 import 'package:budget/widgets/moreIcons.dart';
 import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
@@ -275,30 +281,75 @@ class SelectNavBarShortcutPopup extends StatelessWidget {
         NavBarShortcutSelection(
           shortcutAppSettingKey: shortcutAppSettingKey,
           navBarIconDataKey: "transactions",
+          onSettings: () {
+            openBottomSheet(
+              context,
+              PopupFramework(
+                hasPadding: false,
+                child: TransactionsSettings(),
+              ),
+            );
+          },
         ),
         NavBarShortcutSelection(
           shortcutAppSettingKey: shortcutAppSettingKey,
           navBarIconDataKey: "budgets",
+          onSettings: () {
+            openBottomSheet(
+              context,
+              PopupFramework(
+                hasPadding: false,
+                child: BudgetSettings(),
+              ),
+            );
+          },
         ),
         NavBarShortcutSelection(
           shortcutAppSettingKey: shortcutAppSettingKey,
           navBarIconDataKey: "goals",
-        ),
-        NavBarShortcutSelection(
-          shortcutAppSettingKey: shortcutAppSettingKey,
-          navBarIconDataKey: "subscriptions",
-        ),
-        NavBarShortcutSelection(
-          shortcutAppSettingKey: shortcutAppSettingKey,
-          navBarIconDataKey: "scheduled",
-        ),
-        NavBarShortcutSelection(
-          shortcutAppSettingKey: shortcutAppSettingKey,
-          navBarIconDataKey: "loans",
+          onSettings: () {
+            openBottomSheet(
+              context,
+              PopupFramework(
+                hasPadding: false,
+                child: ObjectiveSettings(),
+              ),
+            );
+          },
         ),
         NavBarShortcutSelection(
           shortcutAppSettingKey: shortcutAppSettingKey,
           navBarIconDataKey: "allSpending",
+        ),
+        NavBarShortcutSelection(
+          shortcutAppSettingKey: shortcutAppSettingKey,
+          navBarIconDataKey: "subscriptions",
+          onSettings: () {
+            openBottomSheet(
+              context,
+              PopupFramework(
+                hasPadding: false,
+                child: SubscriptionSettings(),
+              ),
+            );
+          },
+        ),
+        NavBarShortcutSelection(
+          shortcutAppSettingKey: shortcutAppSettingKey,
+          navBarIconDataKey: "scheduled",
+          onSettings: () {
+            openBottomSheet(
+              context,
+              PopupFramework(
+                hasPadding: false,
+                child: UpcomingOverdueSettings(),
+              ),
+            );
+          },
+        ),
+        NavBarShortcutSelection(
+          shortcutAppSettingKey: shortcutAppSettingKey,
+          navBarIconDataKey: "loans",
         ),
       ],
     );
@@ -309,11 +360,13 @@ class NavBarShortcutSelection extends StatelessWidget {
   const NavBarShortcutSelection({
     required this.shortcutAppSettingKey,
     required this.navBarIconDataKey,
+    this.onSettings,
     super.key,
   });
 
   final String shortcutAppSettingKey;
   final String navBarIconDataKey;
+  final VoidCallback? onSettings;
 
   @override
   Widget build(BuildContext context) {
@@ -331,7 +384,14 @@ class NavBarShortcutSelection extends StatelessWidget {
                   appStateSettings[shortcutAppSettingKey] == navBarIconDataKey,
               alignLeft: true,
               alignBeside: true,
-              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+              padding: onSettings == null
+                  ? EdgeInsets.symmetric(horizontal: 20, vertical: 15)
+                  : EdgeInsets.only(
+                      left: 20,
+                      right: 5,
+                      top: 3,
+                      bottom: 3,
+                    ),
               text: iconData.label.tr().capitalizeFirst,
               iconData: iconData.iconData,
               iconScale: iconData.iconScale,
@@ -340,6 +400,17 @@ class NavBarShortcutSelection extends StatelessWidget {
                     updateGlobalState: false);
                 Navigator.pop(context, true);
               },
+              infoButton: onSettings == null
+                  ? null
+                  : IconButton(
+                      padding: EdgeInsets.all(15),
+                      onPressed: onSettings,
+                      icon: Icon(
+                        appStateSettings["outlinedIcons"]
+                            ? Icons.settings_outlined
+                            : Icons.settings_rounded,
+                      ),
+                    ),
             ),
           ),
         ],

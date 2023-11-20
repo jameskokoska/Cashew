@@ -5,6 +5,7 @@ import 'package:budget/pages/addCategoryPage.dart';
 import 'package:budget/pages/addObjectivePage.dart';
 import 'package:budget/pages/editBudgetPage.dart';
 import 'package:budget/pages/editHomePage.dart';
+import 'package:budget/pages/editObjectivesPage.dart';
 import 'package:budget/pages/objectivesListPage.dart';
 import 'package:budget/pages/transactionsSearchPage.dart';
 import 'package:budget/pages/walletDetailsPage.dart';
@@ -201,6 +202,19 @@ class EditHomePagePinnedGoalsPopup extends StatelessWidget {
                 List<Objective> allPinnedObjectives = snapshot2.data ?? [];
                 return PopupFramework(
                   title: "select-goals".tr(),
+                  outsideExtraWidget: IconButton(
+                    iconSize: 25,
+                    padding: EdgeInsets.all(
+                        getPlatform() == PlatformOS.isIOS ? 15 : 20),
+                    icon: Icon(
+                      appStateSettings["outlinedIcons"]
+                          ? Icons.edit_outlined
+                          : Icons.edit_rounded,
+                    ),
+                    onPressed: () async {
+                      pushRoute(context, EditObjectivesPage());
+                    },
+                  ),
                   child: Column(
                     children: [
                       if (showGoalsTotalLabelSetting)

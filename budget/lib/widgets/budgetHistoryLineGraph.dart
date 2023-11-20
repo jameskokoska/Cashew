@@ -1,6 +1,9 @@
+import 'dart:math';
+
 import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
+import 'package:budget/widgets/lineGraph.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -9,12 +12,172 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
-class BudgetHistoryLineGraph extends StatefulWidget {
+class BudgetHistoryLineGraph extends StatelessWidget {
   const BudgetHistoryLineGraph({
     super.key,
     required this.budget,
     required this.color,
+    this.lineColors,
     required this.dateRanges,
+    required this.spots,
+    required this.horizontalLineAt,
+    required this.maxY,
+    required this.minY,
+    required this.extraCategorySpots,
+    required this.categoriesMapped,
+    required this.loadAllEvenIfZero,
+    this.onTouchedIndex,
+    required this.setNoPastRegionsAreZero,
+  });
+
+  final Color color;
+  final List<Color>? lineColors;
+  final List<DateTimeRange> dateRanges;
+  final List<List<FlSpot>> spots;
+  final Budget budget;
+  final double? horizontalLineAt;
+  final double maxY;
+  final double minY;
+  final Function(int?)? onTouchedIndex;
+  final Map<String, List<FlSpot>> extraCategorySpots;
+  final Map<String, TransactionCategory> categoriesMapped;
+  final bool loadAllEvenIfZero;
+  final Function(bool) setNoPastRegionsAreZero;
+
+  @override
+  Widget build(BuildContext context) {
+    // Show 3 zero entries
+    int minimumNumberOfZero = 3;
+
+    List<DateTimeRange> filteredDateRanges = dateRanges;
+    List<List<FlSpot>> filteredSpotsFixedX = spots;
+    Map<String, List<FlSpot>> extraCategorySpotsFilteredFixedX =
+        extraCategorySpots;
+    if (loadAllEvenIfZero == false) {
+      filteredDateRanges = [];
+      filteredSpotsFixedX = [];
+      List<int> numberZeroList = [];
+      for (List<FlSpot> listSpot in spots) {
+        int numberZero = 0;
+        for (FlSpot spot in listSpot) {
+          if (double.parse(spot.y.toStringAsFixed(5)) == 0) {
+            numberZero++;
+          } else {
+            // Don't keep counting after there is a non-zero!
+            break;
+          }
+        }
+        numberZeroList.add(numberZero);
+      }
+
+      int minNumberZero =
+          numberZeroList.isNotEmpty ? numberZeroList.reduce(min) : 0;
+      // Always keep at least minimumNumberOfZero periods in view even if zero
+      if (dateRanges.length - minNumberZero <= minimumNumberOfZero) {
+        minNumberZero = dateRanges.length - minimumNumberOfZero;
+      }
+
+      filteredDateRanges =
+          dateRanges.take(dateRanges.length - minNumberZero).toList();
+
+      // Remove the zeroes
+      List<List<FlSpot>> filteredSpots = [];
+      for (List<FlSpot> listSpot in spots) {
+        filteredSpots.add(listSpot.sublist(minNumberZero));
+      }
+      // Fix the x values
+      for (List<FlSpot> listSpot in filteredSpots) {
+        int index = 0;
+        List<FlSpot> listSpotNew = [];
+        for (FlSpot spot in listSpot) {
+          listSpotNew.add(FlSpot(index.toDouble(), spot.y));
+          index++;
+        }
+        filteredSpotsFixedX.add(listSpotNew);
+      }
+
+      // Remove the zeroes
+      Map<String, List<FlSpot>> extraCategorySpotsFiltered = extraCategorySpots;
+      for (String key in extraCategorySpots.keys) {
+        extraCategorySpotsFiltered[key] =
+            extraCategorySpots[key]?.sublist(minNumberZero) ?? [];
+      }
+      // Fix the x values
+      for (String key in extraCategorySpotsFiltered.keys) {
+        List<FlSpot> listSpot = extraCategorySpotsFiltered[key] ?? [];
+        int index = 0;
+        List<FlSpot> listSpotNew = [];
+        for (FlSpot spot in listSpot) {
+          listSpotNew.add(FlSpot(index.toDouble(), spot.y));
+          index++;
+        }
+        extraCategorySpotsFilteredFixedX[key] = listSpotNew;
+      }
+
+      // If all regions are non-zero
+      // i.e. the oldest region loaded is not zero (If showing from April-November and April is non-zero)
+      // Then we set this to true which indicates all periods were displayed on the graph
+      if (filteredSpotsFixedX.firstOrNull?.length ==
+          spots.firstOrNull?.length) {
+        setNoPastRegionsAreZero(true);
+      }
+      if (filteredDateRanges.length <= 0 || filteredSpotsFixedX.length <= 0) {
+        filteredDateRanges = dateRanges;
+        filteredSpotsFixedX = spots;
+      }
+    }
+
+    if (filteredSpotsFixedX.isEmpty) {
+      filteredSpotsFixedX = [
+        [
+          for (int i = 0; i < minimumNumberOfZero; i++)
+            FlSpot(
+              i.toDouble(),
+              0.000000000001,
+            ),
+        ]
+      ];
+    }
+
+    List<List<FlSpot>> initialSpotsAll = [];
+    for (int i = 0; i < filteredSpotsFixedX.length; i++) {
+      List<FlSpot> initialSpots = [];
+      for (int j = 0; j < filteredSpotsFixedX[i].length; j++) {
+        initialSpots.add(FlSpot(
+          j.toDouble(),
+          0.000000000001,
+        ));
+      }
+      initialSpotsAll.add(initialSpots);
+    }
+
+    return _BudgetHistoryLineGraph(
+      budget: budget,
+      color: color,
+      lineColors: lineColors,
+      dateRanges: filteredDateRanges,
+      originalDateRanges: dateRanges,
+      spots: filteredSpotsFixedX,
+      initialSpots: initialSpotsAll,
+      horizontalLineAt: horizontalLineAt,
+      maxY: maxY,
+      minY: minY,
+      extraCategorySpots: extraCategorySpotsFilteredFixedX,
+      categoriesMapped: categoriesMapped,
+      onTouchedIndex: onTouchedIndex,
+      key: key,
+    );
+  }
+}
+
+class _BudgetHistoryLineGraph extends StatefulWidget {
+  const _BudgetHistoryLineGraph({
+    super.key,
+    required this.budget,
+    required this.color,
+    this.lineColors,
+    required this.dateRanges,
+    required this.originalDateRanges,
     required this.spots,
     required this.initialSpots,
     required this.horizontalLineAt,
@@ -26,9 +189,11 @@ class BudgetHistoryLineGraph extends StatefulWidget {
   });
 
   final Color color;
+  final List<Color>? lineColors;
   final List<DateTimeRange> dateRanges;
-  final List<FlSpot> spots;
-  final List<FlSpot> initialSpots;
+  final List<DateTimeRange> originalDateRanges;
+  final List<List<FlSpot>> spots;
+  final List<List<FlSpot>> initialSpots;
   final Budget budget;
   final double? horizontalLineAt;
   final double maxY;
@@ -38,10 +203,11 @@ class BudgetHistoryLineGraph extends StatefulWidget {
   final Map<String, TransactionCategory> categoriesMapped;
 
   @override
-  State<BudgetHistoryLineGraph> createState() => _BudgetHistoryLineGraphState();
+  State<_BudgetHistoryLineGraph> createState() =>
+      _BudgetHistoryLineGraphState();
 }
 
-class _BudgetHistoryLineGraphState extends State<BudgetHistoryLineGraph> {
+class _BudgetHistoryLineGraphState extends State<_BudgetHistoryLineGraph> {
   bool loaded = false;
   int? touchedValue = null;
 
@@ -58,66 +224,72 @@ class _BudgetHistoryLineGraphState extends State<BudgetHistoryLineGraph> {
   @override
   Widget build(BuildContext context) {
     final lineBarsData = [
-      LineChartBarData(
-        isStrokeCapRound: true,
-        spots: loaded ? widget.spots : widget.initialSpots,
-        isCurved: true,
-        preventCurveOverShooting: true,
-        barWidth: 3,
-        // shadow: const Shadow(
-        //   blurRadius: 8,
-        // ),
-        belowBarData: BarAreaData(
-          show: true,
-          gradient: LinearGradient(
-            colors: [
-              widget.color.withOpacity(0),
-              widget.color.withOpacity(0.3),
-              widget.color.withOpacity(0.6),
-            ],
-            begin: Alignment.bottomCenter,
-            end: Alignment.topCenter,
+      for (int i = 0; i < widget.spots.length; i++)
+        LineChartBarData(
+          isStrokeCapRound: true,
+          spots: loaded ? widget.spots[i] : widget.initialSpots[i],
+          isCurved: true,
+          preventCurveOverShooting: true,
+          barWidth: 3,
+          // shadow: const Shadow(
+          //   blurRadius: 8,
+          // ),
+          belowBarData: BarAreaData(
+            show: true,
+            gradient: LinearGradient(
+              colors: [
+                (widget.lineColors?[i] ?? widget.color).withOpacity(0),
+                (widget.lineColors?[i] ?? widget.color).withOpacity(0.3),
+                (widget.lineColors?[i] ?? widget.color).withOpacity(0.6),
+              ],
+              begin: Alignment.bottomCenter,
+              end: Alignment.topCenter,
+            ),
           ),
-        ),
-        dotData: FlDotData(
-          show: true,
-          getDotPainter: (spot, percent, barData, index) {
-            return FlDotCirclePainter(
-              radius: 4,
-              color: lightenPastel(widget.color, amount: 0.3).withOpacity(0.8),
-              strokeWidth: 0,
-            );
-          },
-        ),
-        color: lightenPastel(widget.color, amount: 0.3),
-      ),
-      LineChartBarData(
-        isStrokeCapRound: false,
-        spots: loaded ? widget.spots : widget.initialSpots,
-        isCurved: true,
-        preventCurveOverShooting: true,
-        barWidth: 0,
-        belowBarData: BarAreaData(
-          show: true,
-          applyCutOffY: true,
-          cutOffY: widget.horizontalLineAt,
-          gradient: LinearGradient(
-            colors: [
-              widget.color.withOpacity(0.15),
-              widget.color.withOpacity(0.15),
-              widget.color.withOpacity(0.15),
-            ],
-            begin: Alignment.bottomCenter,
-            end: Alignment.topCenter,
+          dotData: FlDotData(
+            show: true,
+            getDotPainter: (spot, percent, barData, index) {
+              return FlDotCirclePainter(
+                radius: 4,
+                color: lightenPastel(widget.lineColors?[i] ?? widget.color,
+                        amount: 0.3)
+                    .withOpacity(0.8),
+                strokeWidth: 0,
+              );
+            },
           ),
+          color:
+              lightenPastel(widget.lineColors?[i] ?? widget.color, amount: 0.3),
         ),
-        dotData: FlDotData(show: false),
-        color: Colors.transparent,
-      ),
+      if (widget.horizontalLineAt != null)
+        for (int i = 0; i < widget.spots.length; i++)
+          LineChartBarData(
+            isStrokeCapRound: false,
+            spots: loaded ? widget.spots[i] : widget.initialSpots[i],
+            isCurved: true,
+            preventCurveOverShooting: true,
+            barWidth: 0,
+            belowBarData: BarAreaData(
+              show: true,
+              applyCutOffY: true,
+              cutOffY: widget.horizontalLineAt ?? 0,
+              gradient: LinearGradient(
+                colors: [
+                  (widget.lineColors?[i] ?? widget.color).withOpacity(0.15),
+                  (widget.lineColors?[i] ?? widget.color).withOpacity(0.15),
+                  (widget.lineColors?[i] ?? widget.color).withOpacity(0.15),
+                ],
+                begin: Alignment.bottomCenter,
+                end: Alignment.topCenter,
+              ),
+            ),
+            dotData: FlDotData(show: false),
+            color: Colors.transparent,
+          ),
       for (String categoryPk in widget.extraCategorySpots.keys)
         LineChartBarData(
           isStrokeCapRound: true,
-          spots: widget.extraCategorySpots[categoryPk],
+          spots: widget.extraCategorySpots[categoryPk] ?? [],
           isCurved: true,
           curveSmoothness: 0.35,
           preventCurveOverShooting: true,
@@ -155,8 +327,8 @@ class _BudgetHistoryLineGraphState extends State<BudgetHistoryLineGraph> {
         top: 25,
       ),
       child: LineChart(
-        swapAnimationCurve: Curves.easeInOutCubicEmphasized,
-        swapAnimationDuration: Duration(milliseconds: 2000),
+        curve: Curves.easeInOutCubicEmphasized,
+        duration: Duration(milliseconds: 2000),
         LineChartData(
           lineBarsData: lineBarsData,
           minY: widget.minY,
@@ -171,7 +343,11 @@ class _BudgetHistoryLineGraphState extends State<BudgetHistoryLineGraph> {
                 return;
               }
 
-              double value = touchResponse.lineBarSpots![0].x;
+              // Correct the x value, because not all loaded periods may be shown in the graph
+              // because we remove the zero values
+              double value = (widget.originalDateRanges.length -
+                      (widget.spots.firstOrNull ?? []).length) +
+                  touchResponse.lineBarSpots![0].x;
               if (touchedValue != value.toInt()) if (widget.onTouchedIndex !=
                   null) widget.onTouchedIndex!(value.toInt());
 
@@ -192,9 +368,10 @@ class _BudgetHistoryLineGraphState extends State<BudgetHistoryLineGraph> {
               return spotIndexes.map((index) {
                 return TouchedSpotIndicatorData(
                   FlLine(
-                    color: widget.extraCategorySpots.keys.length <= 0
-                        ? widget.color
-                        : barData.color,
+                    color: (widget.extraCategorySpots.keys.length <= 0
+                            ? widget.color
+                            : barData.color) ??
+                        Theme.of(context).colorScheme.primary,
                     strokeWidth: 2,
                     dashArray: [2, 2],
                   ),
@@ -203,13 +380,18 @@ class _BudgetHistoryLineGraphState extends State<BudgetHistoryLineGraph> {
                     getDotPainter: (spot, percent, barData, index) =>
                         FlDotCirclePainter(
                       radius: 3,
-                      color: widget.extraCategorySpots.keys.length <= 0
-                          ? widget.color.withOpacity(0.9)
-                          : barData.color,
+                      color: (widget.extraCategorySpots.keys.length <= 0 &&
+                                  widget.lineColors == null
+                              ? widget.color.withOpacity(0.9)
+                              : barData.color) ??
+                          Theme.of(context).colorScheme.primary,
                       strokeWidth: 2,
-                      strokeColor: widget.extraCategorySpots.keys.length <= 0
-                          ? widget.color.withOpacity(0.9)
-                          : barData.color,
+                      strokeColor:
+                          (widget.extraCategorySpots.keys.length <= 0 &&
+                                      widget.lineColors == null
+                                  ? widget.color.withOpacity(0.9)
+                                  : barData.color) ??
+                              Theme.of(context).colorScheme.primary,
                     ),
                   ),
                 );
@@ -249,6 +431,7 @@ class _BudgetHistoryLineGraphState extends State<BudgetHistoryLineGraph> {
                           : lineBarSpot.bar.color,
                       fontWeight: FontWeight.bold,
                       fontSize: 12,
+                      fontFamilyFallback: ['Inter'],
                     ),
                   );
                 }).toList();
@@ -264,14 +447,21 @@ class _BudgetHistoryLineGraphState extends State<BudgetHistoryLineGraph> {
                             BudgetReoccurence.weekly ||
                         widget.budget.reoccurrence == BudgetReoccurence.daily
                     ? 35
-                    : null,
+                    : 22,
                 getTitlesWidget: (value, meta) {
                   DateTime startDate = widget.dateRanges[0].start;
-                  if (widget.spots.length - 1 - value.round() <
+                  if ((widget.spots.firstOrNull ?? []).length -
+                              1 -
+                              value.round() <
                           widget.dateRanges.length &&
-                      widget.spots.length - 1 - value.round() >= 0) {
+                      (widget.spots.firstOrNull ?? []).length -
+                              1 -
+                              value.round() >=
+                          0) {
                     startDate = widget
-                        .dateRanges[widget.spots.length - 1 - value.round()]
+                        .dateRanges[(widget.spots.firstOrNull ?? []).length -
+                            1 -
+                            value.round()]
                         .start;
                   }
                   if (value.toStringAsFixed(2) ==
@@ -336,64 +526,102 @@ class _BudgetHistoryLineGraphState extends State<BudgetHistoryLineGraph> {
                   }
                   return Padding(
                     padding: const EdgeInsets.only(right: 8.0),
-                    child: TextFont(
-                      textAlign: TextAlign.right,
-                      text: getWordedNumber(
-                          Provider.of<AllWallets>(context), value),
-                      textColor: dynamicPastel(context, widget.color,
-                              amount: 0.5, inverse: true)
-                          .withOpacity(0.3),
-                      fontSize: 13,
+                    child: MediaQuery(
+                      data:
+                          MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+                      child: TextFont(
+                        textAlign: TextAlign.right,
+                        text: getWordedNumber(
+                            Provider.of<AllWallets>(context), value),
+                        textColor: dynamicPastel(context, widget.color,
+                                amount: 0.5, inverse: true)
+                            .withOpacity(0.3),
+                        fontSize: 13,
+                      ),
                     ),
                   );
                 },
                 reservedSize: (widget.maxY >= 10000
-                    ? 55
-                    : widget.maxY >= 1000
-                        ? 45
-                        : widget.maxY >= 100
-                            ? 40
-                            : 40),
+                        ? 55
+                        : widget.maxY >= 1000
+                            ? 45
+                            : widget.maxY >= 100
+                                ? 40
+                                : 40) +
+                    measureCurrencyStringExtraWidth(
+                        Provider.of<AllWallets>(context)),
                 interval: (widget.maxY / 3.8),
               ),
             ),
           ),
+          extraLinesData: ExtraLinesData(
+            horizontalLines: [
+              HorizontalLine(
+                y: 0,
+                color: dynamicPastel(context, widget.color, amount: 0.3)
+                    .withOpacity(0.4),
+              ),
+              ...(widget.horizontalLineAt == null
+                  ? []
+                  : [
+                      HorizontalLine(
+                        y: widget.horizontalLineAt!,
+                        color: dynamicPastel(context, widget.color, amount: 0.3)
+                            .withOpacity(0.7),
+                        dashArray: [2, 2],
+                      ),
+                    ])
+            ],
+          ),
           gridData: FlGridData(
             show: true,
-            horizontalInterval: 1,
-            checkToShowHorizontalLine: (value) {
-              if (value == widget.horizontalLineAt) {
-                return true;
-              } else if (value == 0) {
-                return true;
-              } else if (value % ((widget.maxY / 3.8).ceil()) == 1) {
-                return true;
-              }
-              return false;
-            },
+            // checkToShowHorizontalLine: (value) {
+            //   if (value == widget.horizontalLineAt) {
+            //     return true;
+            //   } else if (value == 0) {
+            //     return true;
+            //   } else if (value % ((widget.maxY / 3.8).ceil()) == 1) {
+            //     return true;
+            //   }
+            //   return false;
+            // },
+            // getDrawingHorizontalLine: (value) {
+            //   if (value == widget.horizontalLineAt) {
+            //     return FlLine(
+            //       dashArray: [2, 2],
+            //       strokeWidth: 2,
+            //       color: dynamicPastel(context, widget.color, amount: 0.3)
+            //           .withOpacity(0.7),
+            //     );
+            //   } else if (value == 0) {
+            //     return FlLine(
+            //       color: dynamicPastel(context, widget.color, amount: 0.3)
+            //           .withOpacity(0.2),
+            //       strokeWidth: 2,
+            //     );
+            //   } else if (value % ((widget.maxY / 3.8).ceil()) == 1) {
+            //     return FlLine(
+            //       color: dynamicPastel(context, widget.color, amount: 0.3)
+            //           .withOpacity(0.2),
+            //       strokeWidth: 2,
+            //       dashArray: [2, 8],
+            //     );
+            //   }
+            //   return FlLine(color: Colors.transparent, strokeWidth: 0);
+            // },
+            // If the interval is equal to a really small number (almost 0, it freezes the app!)
+            horizontalInterval:
+                double.parse((widget.maxY).toStringAsFixed(5)) == 0.0
+                    ? 0.001
+                    : ((widget.maxY) / (getIsFullScreen(context) ? 7 : 4))
+                        .abs(),
             getDrawingHorizontalLine: (value) {
-              if (value == widget.horizontalLineAt) {
-                return FlLine(
-                  dashArray: [2, 2],
-                  strokeWidth: 2,
-                  color: dynamicPastel(context, widget.color, amount: 0.3)
-                      .withOpacity(0.7),
-                );
-              } else if (value == 0) {
-                return FlLine(
-                  color: dynamicPastel(context, widget.color, amount: 0.3)
-                      .withOpacity(0.2),
-                  strokeWidth: 2,
-                );
-              } else if (value % ((widget.maxY / 3.8).ceil()) == 1) {
-                return FlLine(
-                  color: dynamicPastel(context, widget.color, amount: 0.3)
-                      .withOpacity(0.2),
-                  strokeWidth: 2,
-                  dashArray: [2, 8],
-                );
-              }
-              return FlLine(color: Colors.transparent, strokeWidth: 0);
+              return FlLine(
+                color: dynamicPastel(context, widget.color, amount: 0.3)
+                    .withOpacity(0.2),
+                strokeWidth: 2,
+                dashArray: [2, 8],
+              );
             },
             getDrawingVerticalLine: (value) {
               return FlLine(

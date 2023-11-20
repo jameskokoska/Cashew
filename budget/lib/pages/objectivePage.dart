@@ -198,13 +198,16 @@ class _ObjectivePageContentState extends State<_ObjectivePageContent> {
                     widget.objective.objectivePk,
                   ),
                   builder: (context, snapshot) {
+                    double objectiveAmount = objectiveAmountToPrimaryCurrency(
+                        Provider.of<AllWallets>(context, listen: true),
+                        widget.objective);
                     double totalAmount = snapshot.data ?? 0;
                     if (widget.objective.income == false) {
                       totalAmount = totalAmount * -1;
                     }
-                    double percentageTowardsGoal = widget.objective.amount == 0
+                    double percentageTowardsGoal = objectiveAmount == 0
                         ? 0
-                        : totalAmount / widget.objective.amount;
+                        : totalAmount / objectiveAmount;
                     if (percentageTowardsGoal >= 1 &&
                         hasPlayedConfetti == false) {
                       confettiController.play();
@@ -293,7 +296,7 @@ class _ObjectivePageContentState extends State<_ObjectivePageContent> {
                                         getObjectiveAmountSpentLabel(
                                             context: context,
                                             showTotalSpent: showTotalSpent,
-                                            objective: widget.objective,
+                                            objectiveAmount: objectiveAmount,
                                             totalAmount: totalAmount);
                                     return AnimatedSizeSwitcher(
                                       child: IntrinsicWidth(
@@ -316,8 +319,7 @@ class _ObjectivePageContentState extends State<_ObjectivePageContent> {
                                                   text: amountSpentLabel,
                                                   fontSize: 18,
                                                   textColor: totalAmount >=
-                                                          widget
-                                                              .objective.amount
+                                                          objectiveAmount
                                                       ? getColor(context,
                                                           "incomeAmount")
                                                       : getColor(
@@ -331,8 +333,8 @@ class _ObjectivePageContentState extends State<_ObjectivePageContent> {
                                                     text: (isShowingAmountRemaining(
                                                                 showTotalSpent:
                                                                     showTotalSpent,
-                                                                objective: widget
-                                                                    .objective,
+                                                                objectiveAmount:
+                                                                    objectiveAmount,
                                                                 totalAmount:
                                                                     totalAmount)
                                                             ? " " +
@@ -343,8 +345,7 @@ class _ObjectivePageContentState extends State<_ObjectivePageContent> {
                                                             Provider.of<
                                                                     AllWallets>(
                                                                 context),
-                                                            widget.objective
-                                                                .amount),
+                                                            objectiveAmount),
                                                     fontSize: 13,
                                                     textColor: getColor(
                                                             context, "black")

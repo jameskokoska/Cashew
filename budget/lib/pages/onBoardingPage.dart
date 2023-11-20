@@ -119,6 +119,7 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
                     BudgetTransactionFilters.addedToObjective,
                   ])
           ],
+          income: false,
         ),
       );
     }

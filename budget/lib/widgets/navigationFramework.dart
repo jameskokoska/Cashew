@@ -40,6 +40,7 @@ import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/categoryIcon.dart';
 import 'package:budget/widgets/fab.dart';
 import 'package:budget/widgets/framework/popupFramework.dart';
+import 'package:budget/widgets/iconButtonScaled.dart';
 import 'package:budget/widgets/importDB.dart';
 import 'package:budget/widgets/moreIcons.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
@@ -546,37 +547,26 @@ class AddMoreThingsPopup extends StatelessWidget {
                   );
                 }
                 return AddThing(
-                  infoButton: Transform.scale(
+                  infoButton: IconButtonScaled(
+                    iconData: Icons.info_outlined,
+                    iconSize: 14,
                     scale: 1.8,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(100),
-                      child: Tappable(
-                        color: Colors.transparent,
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Transform.scale(
-                            scale: 1.4,
-                            child: Icon(
-                              Icons.info_outlined,
-                              size: 10,
-                            ),
-                          ),
-                        ),
-                        onTap: () {
-                          openPopup(
-                            context,
-                            icon: navBarIconsData["transactions"]!.iconData,
-                            title: "most-common-transactions".tr(),
-                            description:
-                                "most-common-transactions-description".tr(),
-                            onSubmit: () {
-                              Navigator.pop(context);
-                            },
-                            onSubmitLabel: "ok".tr(),
-                          );
+                    padding: EdgeInsets.all(5),
+                    onTap: () {
+                      openPopup(
+                        context,
+                        icon: appStateSettings["outlinedIcons"]
+                            ? Icons.dynamic_feed_outlined
+                            : Icons.dynamic_feed_rounded,
+                        title: "most-common-transactions".tr(),
+                        description:
+                            "most-common-transactions-description".tr(),
+                        onSubmit: () {
+                          Navigator.pop(context);
                         },
-                      ),
-                    ),
+                        onSubmitLabel: "ok".tr(),
+                      );
+                    },
                   ),
                   iconData: navBarIconsData["transactions"]!.iconData,
                   title: "transaction".tr(),

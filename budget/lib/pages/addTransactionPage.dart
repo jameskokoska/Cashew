@@ -6,9 +6,12 @@ import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/addCategoryPage.dart';
 import 'package:budget/pages/addObjectivePage.dart';
 import 'package:budget/pages/addWalletPage.dart';
+import 'package:budget/pages/editObjectivesPage.dart';
+import 'package:budget/pages/objectivesListPage.dart';
 import 'package:budget/pages/premiumPage.dart';
 import 'package:budget/pages/sharedBudgetSettings.dart';
 import 'package:budget/struct/databaseGlobal.dart';
+import 'package:budget/struct/navBarIconsData.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/struct/uploadAttachment.dart';
 import 'package:budget/widgets/button.dart';
@@ -57,6 +60,7 @@ import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/widgets/framework/popupFramework.dart';
 import 'package:budget/struct/currencyFunctions.dart';
 import 'package:budget/widgets/animatedExpanded.dart';
+import 'package:budget/widgets/iconButtonScaled.dart';
 
 import '../widgets/listItem.dart';
 import '../widgets/outlinedButtonStacked.dart';
@@ -127,7 +131,6 @@ class _AddTransactionPageState extends State<AddTransactionPage>
   Budget? selectedBudget;
   bool selectedBudgetIsShared = false;
   String selectedWalletPk = appStateSettings["selectedWalletPk"];
-  TransactionWallet? selectedWallet;
   bool notesInputFocused = false;
   bool showMoreOptions = false;
   List<String> selectedExcludedBudgetPks = [];
@@ -220,18 +223,10 @@ class _AddTransactionPageState extends State<AddTransactionPage>
   }
 
   void setSelectedType(String type) {
-    if (selectedType == TransactionSpecialType.credit ||
-        selectedType == TransactionSpecialType.debt) {
-      setSelectedIncome(selectedCategory?.income ?? false);
-    }
+    setSelectedIncome(selectedCategory?.income ?? false);
     setState(() {
       selectedType = transactionTypeDisplayToEnum[type];
     });
-    if (selectedType == TransactionSpecialType.credit) {
-      setSelectedIncome(false);
-    } else if (selectedType == TransactionSpecialType.debt) {
-      setSelectedIncome(true);
-    }
     return;
   }
 
@@ -270,6 +265,11 @@ class _AddTransactionPageState extends State<AddTransactionPage>
       selectedObjectivePk = selectedObjectivePkPassed;
     });
     return;
+  }
+
+  TransactionWallet? getSelectedWallet({required bool listen}) {
+    return Provider.of<AllWallets>(context, listen: listen)
+        .indexedByPk[selectedWalletPk];
   }
 
   Future<void> selectPeriodLength(BuildContext context) async {
@@ -351,10 +351,9 @@ class _AddTransactionPageState extends State<AddTransactionPage>
     });
   }
 
-  void setSelectedWalletPk(TransactionWallet selectedWalletPassed) {
+  void setSelectedWalletPk(String selectedWalletPkPassed) {
     setState(() {
-      selectedWalletPk = selectedWalletPassed.walletPk;
-      selectedWallet = selectedWalletPassed;
+      selectedWalletPk = selectedWalletPkPassed;
     });
   }
 
@@ -692,12 +691,6 @@ class _AddTransactionPageState extends State<AddTransactionPage>
         }
       });
     }
-    Future.delayed(Duration.zero, () async {
-      selectedWallet = await database.getWalletInstance(
-          widget.transaction == null
-              ? appStateSettings["selectedWalletPk"]
-              : widget.transaction!.walletFk);
-    });
     if (widget.selectedBudget != null) {
       selectedBudget = widget.selectedBudget;
       selectedBudgetPk = widget.selectedBudget!.budgetPk;
@@ -801,8 +794,8 @@ class _AddTransactionPageState extends State<AddTransactionPage>
         underTitleSpace: false,
         child: SelectAmount(
           enableWalletPicker: true,
-          selectedWallet: selectedWallet,
-          setSelectedWallet: setSelectedWalletPk,
+          selectedWalletPk: selectedWalletPk,
+          setSelectedWalletPk: setSelectedWalletPk,
           padding: EdgeInsets.symmetric(horizontal: 18),
           walletPkForCurrency: selectedWalletPk,
           // onlyShowCurrencyIcon:
@@ -917,9 +910,14 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                         copyToClipboard(
                           convertToMoney(
                             Provider.of<AllWallets>(context, listen: false),
+                            currencyKey:
+                                Provider.of<AllWallets>(context, listen: false)
+                                    .indexedByPk[selectedWalletPk]
+                                    ?.currency,
                             selectedAmount ?? 0,
                             finalNumber: selectedAmount ?? 0,
-                            decimals: selectedWallet?.decimals,
+                            decimals:
+                                getSelectedWallet(listen: false)?.decimals,
                           ),
                         );
                       },
@@ -973,12 +971,12 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                   text: convertToMoney(
                                     Provider.of<AllWallets>(context),
                                     selectedAmount ?? 0,
-                                    decimals: selectedWallet?.decimals,
-                                    currencyKey: selectedWallet?.currency,
+                                    decimals: getSelectedWallet(listen: true)
+                                        ?.decimals,
+                                    currencyKey: getSelectedWallet(listen: true)
+                                        ?.currency,
                                     addCurrencyName:
-                                        ((Provider.of<AllWallets>(context)
-                                                .indexedByPk[
-                                                    selectedWallet?.walletPk]
+                                        ((getSelectedWallet(listen: true)
                                                 ?.currency) !=
                                             Provider.of<AllWallets>(context)
                                                 .indexedByPk[appStateSettings[
@@ -993,11 +991,9 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                               ),
                             ),
                             Provider.of<AllWallets>(context).list.length <= 1 ||
-                                    selectedWallet?.walletPk ==
+                                    selectedWalletPk ==
                                         appStateSettings["selectedWalletPk"] ||
-                                    ((Provider.of<AllWallets>(context)
-                                            .indexedByPk[
-                                                selectedWallet?.walletPk]
+                                    ((getSelectedWallet(listen: true)
                                             ?.currency) ==
                                         Provider.of<AllWallets>(context)
                                             .indexedByPk[appStateSettings[
@@ -1028,10 +1024,9 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                           Provider.of<AllWallets>(context),
                                           (selectedAmount ?? 0) *
                                               (amountRatioToPrimaryCurrencyGivenPk(
-                                                      Provider.of<AllWallets>(
-                                                          context),
-                                                      selectedWalletPk) ??
-                                                  1),
+                                                  Provider.of<AllWallets>(
+                                                      context),
+                                                  selectedWalletPk)),
                                         ),
                                         fontSize: 18,
                                         maxLines: 1,
@@ -1478,23 +1473,59 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                     },
                                   ),
                                 ),
-                                items: <TransactionSpecialType?>[
+                                items: <dynamic>[
                                   null,
-                                  ...TransactionSpecialType.values
+                                  ...TransactionSpecialType.values,
+                                  "installments",
                                 ],
-                                getLabel: (TransactionSpecialType? item) {
-                                  return transactionTypeDisplayToEnum[item]
-                                          ?.toString()
-                                          .toLowerCase()
-                                          .tr() ??
-                                      "";
+                                getLabel: (item) {
+                                  if (item is TransactionSpecialType ||
+                                      item == null) {
+                                    return transactionTypeDisplayToEnum[item]
+                                            ?.toString()
+                                            .toLowerCase()
+                                            .tr() ??
+                                        "";
+                                  } else {
+                                    return "installments".tr();
+                                  }
                                 },
-                                onSelected: (TransactionSpecialType? item) {
-                                  setSelectedType(
-                                      transactionTypeDisplayToEnum[item]);
+                                onSelected: (item) {
+                                  if (item is TransactionSpecialType ||
+                                      item == null) {
+                                    setSelectedType(
+                                        transactionTypeDisplayToEnum[item]);
+                                  } else {
+                                    openPopup(
+                                      context,
+                                      title: "track-installments".tr(),
+                                      description:
+                                          "track-installments-description".tr(),
+                                      icon: navBarIconsData["goals"]!.iconData,
+                                      onCancel: () {
+                                        Navigator.pop(context);
+                                      },
+                                      onCancelLabel: "ok".tr(),
+                                      onSubmit: () {
+                                        Navigator.pop(context);
+                                        pushRoute(
+                                          context,
+                                          ObjectivesListPage(
+                                            backButton: true,
+                                          ),
+                                        );
+                                      },
+                                      onSubmitLabel: "create-goal".tr(),
+                                    );
+                                  }
                                 },
-                                getSelected: (TransactionSpecialType? item) {
-                                  return selectedType == item;
+                                getSelected: (item) {
+                                  if (item is TransactionSpecialType ||
+                                      item == null) {
+                                    return selectedType == item;
+                                  } else {
+                                    return false;
+                                  }
                                 },
                               ),
                             ),
@@ -1578,57 +1609,67 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                       ],
                                     ),
                                   ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      AnimatedExpanded(
-                                        expand: selectedEndDate != null,
-                                        axis: Axis.horizontal,
-                                        child: TextFont(
-                                          text: "until".tr(),
-                                          fontSize: 23,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      Flexible(
-                                        child: TappableTextEntry(
-                                          title: (selectedEndDate == null
-                                              ? ""
-                                              : getWordedDateShort(
-                                                  selectedEndDate!,
-                                                  includeYear:
-                                                      selectedEndDate!.year !=
-                                                          DateTime.now().year,
-                                                )),
-                                          placeholder: "until-forever".tr(),
-                                          showPlaceHolderWhenTextEquals: "",
-                                          onTap: () {
-                                            selectEndDate(context);
-                                          },
-                                          fontSize: 23,
-                                          fontWeight: FontWeight.bold,
-                                          internalPadding: EdgeInsets.symmetric(
-                                              vertical: 5, horizontal: 4),
-                                          padding: EdgeInsets.symmetric(
-                                              vertical: 0, horizontal: 5),
-                                        ),
-                                      ),
-                                      AnimatedExpanded(
-                                        expand: selectedEndDate != null,
-                                        axis: Axis.horizontal,
-                                        child: Opacity(
-                                          opacity: 0.5,
-                                          child: IconButton(
-                                            onPressed: () {
-                                              setSelectedEndDate(null);
-                                            },
-                                            tooltip: "clear".tr(),
-                                            icon: Icon(Icons.clear),
-                                            padding: EdgeInsets.all(15),
+                                  Padding(
+                                    padding: const EdgeInsets.only(bottom: 5),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        AnimatedExpanded(
+                                          expand: selectedEndDate != null,
+                                          axis: Axis.horizontal,
+                                          child: TextFont(
+                                            text: "until".tr(),
+                                            fontSize: 23,
+                                            fontWeight: FontWeight.bold,
                                           ),
                                         ),
-                                      )
-                                    ],
+                                        Flexible(
+                                          child: TappableTextEntry(
+                                            title: (selectedEndDate == null
+                                                ? ""
+                                                : getWordedDateShort(
+                                                    selectedEndDate!,
+                                                    includeYear:
+                                                        selectedEndDate!.year !=
+                                                            DateTime.now().year,
+                                                  )),
+                                            placeholder: "until-forever".tr(),
+                                            showPlaceHolderWhenTextEquals: "",
+                                            onTap: () {
+                                              selectEndDate(context);
+                                            },
+                                            fontSize: 23,
+                                            fontWeight: FontWeight.bold,
+                                            internalPadding:
+                                                EdgeInsets.symmetric(
+                                                    vertical: 5, horizontal: 4),
+                                            padding: EdgeInsets.symmetric(
+                                                vertical: 0, horizontal: 5),
+                                          ),
+                                        ),
+                                        AnimatedSizeSwitcher(
+                                          child: selectedEndDate != null
+                                              ? Opacity(
+                                                  key: ValueKey(1),
+                                                  opacity: 0.5,
+                                                  child: IconButtonScaled(
+                                                    tooltip: "clear".tr(),
+                                                    iconData:
+                                                        Icons.close_rounded,
+                                                    iconSize: 16,
+                                                    scale: 1.5,
+                                                    onTap: () {
+                                                      setSelectedEndDate(null);
+                                                    },
+                                                  ),
+                                                )
+                                              : Container(
+                                                  key: ValueKey(2),
+                                                ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ],
                               ),
@@ -1657,11 +1698,12 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                       items:
                                           Provider.of<AllWallets>(context).list,
                                       getSelected: (TransactionWallet wallet) {
-                                        return selectedWallet?.walletPk ==
+                                        return getSelectedWallet(listen: false)
+                                                ?.walletPk ==
                                             wallet.walletPk;
                                       },
                                       onSelected: (TransactionWallet wallet) {
-                                        setSelectedWalletPk(wallet);
+                                        setSelectedWalletPk(wallet.walletPk);
                                       },
                                       getCustomBorderColor:
                                           (TransactionWallet item) {
@@ -2980,8 +3022,11 @@ class HorizontalBreakAbove extends StatelessWidget {
 
 class HorizontalBreak extends StatelessWidget {
   const HorizontalBreak(
-      {this.padding = const EdgeInsets.symmetric(vertical: 10), super.key});
+      {this.padding = const EdgeInsets.symmetric(vertical: 10),
+      this.color,
+      super.key});
   final EdgeInsets padding;
+  final Color? color;
 
   @override
   Widget build(BuildContext context) {
@@ -2989,7 +3034,7 @@ class HorizontalBreak extends StatelessWidget {
       margin: padding,
       height: 2,
       decoration: BoxDecoration(
-        color: getColor(context, "dividerColor"),
+        color: color ?? getColor(context, "dividerColor"),
         borderRadius: BorderRadius.all(Radius.circular(15)),
       ),
     );
@@ -3733,7 +3778,15 @@ class _TransactionNotesTextInputState extends State<TransactionNotesTextInput> {
               }
             },
           ),
-          HorizontalBreak(padding: EdgeInsets.zero),
+          HorizontalBreak(
+            padding: EdgeInsets.zero,
+            color: dynamicPastel(
+              context,
+              Theme.of(context).colorScheme.secondaryContainer,
+              amount: 0.1,
+              inverse: true,
+            ),
+          ),
           LinkInNotes(
             color: (appStateSettings["materialYou"]
                 ? Theme.of(context).colorScheme.secondaryContainer

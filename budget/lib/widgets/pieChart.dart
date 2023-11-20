@@ -2,7 +2,9 @@ import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
+import 'package:budget/widgets/animatedExpanded.dart';
 import 'package:budget/widgets/categoryIcon.dart';
+import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/pinWheelReveal.dart';
 import 'package:budget/widgets/textWidgets.dart';
@@ -43,6 +45,15 @@ Future<List<CategoryTotalDetailed>> getCategoryDetails(
   return output;
 }
 
+class EmptyPieChart extends StatelessWidget {
+  const EmptyPieChart({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Placeholder();
+  }
+}
+
 class PieChartWrapper extends StatelessWidget {
   const PieChartWrapper({
     Key? key,
@@ -66,7 +77,6 @@ class PieChartWrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final List<CategoryWithTotal> dataFiltered = [];
-    if (data.length <= 0) return SizedBox.shrink();
     int numberZeroTransactions = 0;
     // Remove all the categories with a total of 0
     // This fixes the touch index offset for PieChartDisplay!
@@ -77,19 +87,34 @@ class PieChartWrapper extends StatelessWidget {
         dataFiltered.add(categoryWithTotal);
       }
     }
-    if (numberZeroTransactions == data.length) return SizedBox.shrink();
     return Container(
       width: enableDoubleColumn(context) == false ? 200 : 300,
       height: enableDoubleColumn(context) == false ? 200 : 300,
       child: Stack(
         alignment: Alignment.center,
         children: [
-          PieChartDisplay(
-            data: dataFiltered,
-            totalSpentAbsolute: totalSpentAbsolute,
-            setSelectedCategory: setSelectedCategory,
-            key: pieChartDisplayStateKey,
-            percentLabelOnTop: percentLabelOnTop,
+          ScaledAnimatedSwitcher(
+            keyToWatch:
+                (data.length <= 0 || numberZeroTransactions == data.length)
+                    .toString(),
+            child: data.length <= 0 || numberZeroTransactions == data.length
+                ? Container(
+                    key: ValueKey(1),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Theme.of(context)
+                          .colorScheme
+                          .secondaryContainer
+                          .withOpacity(0.3),
+                    ),
+                  )
+                : PieChartDisplay(
+                    data: dataFiltered,
+                    totalSpentAbsolute: totalSpentAbsolute,
+                    setSelectedCategory: setSelectedCategory,
+                    key: pieChartDisplayStateKey,
+                    percentLabelOnTop: percentLabelOnTop,
+                  ),
           ),
           IgnorePointer(
             child: Center(

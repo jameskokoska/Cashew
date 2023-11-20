@@ -1,5 +1,6 @@
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
+import 'package:budget/struct/currencyFunctions.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/categoryEntry.dart';
@@ -171,12 +172,14 @@ class ObjectivePercentTag extends StatelessWidget {
         objective.objectivePk,
       ),
       builder: (context, snapshot) {
+        double objectiveAmount = objectiveAmountToPrimaryCurrency(
+            Provider.of<AllWallets>(context, listen: true), objective);
         double totalAmount = snapshot.data ?? 0;
         if (objective.income == false) {
           totalAmount = totalAmount * -1;
         }
         double percentageTowardsGoal =
-            objective.amount == 0 ? 0 : totalAmount / objective.amount;
+            objectiveAmount == 0 ? 0 : totalAmount / objectiveAmount;
         percentageTowardsGoal =
             percentageTowardsGoal <= 0 ? 0 : percentageTowardsGoal;
         // Use layout builder
@@ -194,7 +197,7 @@ class ObjectivePercentTag extends StatelessWidget {
                         defaultColor: Theme.of(context).colorScheme.primary),
                     name: objective.name +
                         ": " +
-                        convertToPercent((totalAmount / objective.amount) * 100,
+                        convertToPercent((totalAmount / objectiveAmount) * 100,
                             numberDecimals: 0),
                   ),
                 ),

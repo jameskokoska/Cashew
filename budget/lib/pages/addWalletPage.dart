@@ -23,6 +23,7 @@ import 'package:budget/widgets/selectAmount.dart';
 import 'package:budget/widgets/selectColor.dart';
 import 'package:budget/widgets/settingsContainers.dart';
 import 'package:budget/widgets/tappable.dart';
+import 'package:budget/widgets/tappableTextEntry.dart';
 import 'package:budget/widgets/textInput.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/currencyPicker.dart';
@@ -91,11 +92,26 @@ class _AddWalletPageState extends State<AddWalletPage> {
     return;
   }
 
-  Future addWallet() async {
+  Future addWallet({bool popContext = true}) async {
     print("Added wallet");
-    await database.createOrUpdateWallet(
+    final int? rowId = await database.createOrUpdateWallet(
         insert: widget.wallet == null, await createTransactionWallet());
-    Navigator.pop(context);
+
+    // set initial amount
+    if (widget.wallet == null && initialBalance != 0) {
+      if (rowId != null) {
+        final TransactionWallet walletJustAdded =
+            await database.getWalletFromRowId(rowId);
+        await correctWalletBalance(context, initialBalance, initialBalance,
+            walletJustAdded, DateTime.now(), "");
+      }
+    }
+
+    if (popContext) {
+      Navigator.pop(context);
+    } else {
+      walletInitial = await createTransactionWallet();
+    }
   }
 
   Future<TransactionWallet> createTransactionWallet() async {
@@ -154,11 +170,9 @@ class _AddWalletPageState extends State<AddWalletPage> {
       selectedDecimals = widget.wallet!.decimals;
     }
     populateCurrencies();
-    if (widget.wallet == null) {
-      Future.delayed(Duration.zero, () async {
-        walletInitial = await createTransactionWallet();
-      });
-    }
+    Future.delayed(Duration.zero, () async {
+      walletInitial = await createTransactionWallet();
+    });
   }
 
   @override
@@ -234,6 +248,36 @@ class _AddWalletPageState extends State<AddWalletPage> {
     );
   }
 
+  double initialBalance = 0;
+  openEnterInitialBalanceBottomSheet() {
+    openBottomSheet(
+      context,
+      fullSnap: true,
+      PopupFramework(
+        title: "enter-amount".tr(),
+        hasPadding: false,
+        underTitleSpace: false,
+        child: SelectAmount(
+          enableWalletPicker: false,
+          padding: EdgeInsets.symmetric(horizontal: 18),
+          onlyShowCurrencyIcon: true,
+          selectedWalletPk: appStateSettings["selectedWalletPk"],
+          amountPassed: initialBalance.toString(),
+          setSelectedAmount: (amount, _) {
+            setState(() {
+              initialBalance = amount;
+            });
+          },
+          next: () async {
+            Navigator.pop(context);
+          },
+          nextLabel: "set-amount".tr(),
+          allowZero: true,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     List<Widget> currencyList = [];
@@ -285,7 +329,7 @@ class _AddWalletPageState extends State<AddWalletPage> {
         if (widget.wallet != null) {
           discardChangesPopup(
             context,
-            previousObject: widget.wallet,
+            previousObject: walletInitial,
             currentObject: await createTransactionWallet(),
           );
         } else {
@@ -311,7 +355,7 @@ class _AddWalletPageState extends State<AddWalletPage> {
             if (widget.wallet != null) {
               discardChangesPopup(
                 context,
-                previousObject: widget.wallet,
+                previousObject: walletInitial,
                 currentObject: await createTransactionWallet(),
               );
             } else {
@@ -322,7 +366,7 @@ class _AddWalletPageState extends State<AddWalletPage> {
             if (widget.wallet != null) {
               discardChangesPopup(
                 context,
-                previousObject: widget.wallet,
+                previousObject: walletInitial,
                 currentObject: await createTransactionWallet(),
               );
             } else {
@@ -383,11 +427,15 @@ class _AddWalletPageState extends State<AddWalletPage> {
                     icon: appStateSettings["outlinedIcons"]
                         ? Icons.library_add_outlined
                         : Icons.library_add_rounded,
-                    action: () {
+                    action: () async {
+                      // Save any changes made to the wallet
+                      await addWallet(popContext: false);
+                      TransactionWallet wallet =
+                          await createTransactionWallet();
                       openBottomSheet(
                         context,
                         fullSnap: true,
-                        CorrectBalancePopup(wallet: widget.wallet!),
+                        CorrectBalancePopup(wallet: wallet),
                       );
                     },
                   ),
@@ -398,11 +446,15 @@ class _AddWalletPageState extends State<AddWalletPage> {
                     icon: appStateSettings["outlinedIcons"]
                         ? Icons.compare_arrows_outlined
                         : Icons.compare_arrows_rounded,
-                    action: () {
+                    action: () async {
+                      // Save any changes made to the wallet
+                      await addWallet(popContext: false);
+                      TransactionWallet wallet =
+                          await createTransactionWallet();
                       openBottomSheet(
                         context,
                         fullSnap: true,
-                        TransferBalancePopup(wallet: widget.wallet!),
+                        TransferBalancePopup(wallet: wallet),
                       );
                     },
                   ),
@@ -476,9 +528,10 @@ class _AddWalletPageState extends State<AddWalletPage> {
                 ),
               ),
             ),
-            SliverToBoxAdapter(
-              child: SizedBox(height: 15),
-            ),
+            if (widget.wallet != null)
+              SliverToBoxAdapter(
+                child: SizedBox(height: 15),
+              ),
             SliverToBoxAdapter(
               child: widget.wallet == null
                   ? SizedBox.shrink()
@@ -495,6 +548,8 @@ class _AddWalletPageState extends State<AddWalletPage> {
                             : Icons.library_add_rounded,
                         label: "correct-total-balance".tr(),
                         onTap: () async {
+                          // Save any changes made to the wallet
+                          await addWallet(popContext: false);
                           TransactionWallet wallet =
                               await createTransactionWallet();
                           openBottomSheet(
@@ -527,12 +582,17 @@ class _AddWalletPageState extends State<AddWalletPage> {
                             : Icons.compare_arrows_rounded,
                         label: "transfer-balance".tr(),
                         onTap: () async {
-                          if (widget.wallet != null)
+                          if (widget.wallet != null) {
+                            // Save any changes made to the wallet
+                            await addWallet(popContext: false);
+                            TransactionWallet wallet =
+                                await createTransactionWallet();
                             openBottomSheet(
                               context,
                               fullSnap: true,
-                              TransferBalancePopup(wallet: widget.wallet!),
+                              TransferBalancePopup(wallet: wallet),
                             );
+                          }
                         },
                         color: Theme.of(context).colorScheme.secondaryContainer,
                         textColor:
@@ -572,6 +632,59 @@ class _AddWalletPageState extends State<AddWalletPage> {
                       ),
                     ),
             ),
+
+            if (widget.wallet == null)
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                    bottom: 10,
+                    left: 20,
+                    right: 20,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 14),
+                        child: TextFont(
+                          text: "starting-at".tr() + " ",
+                          fontSize: 17,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Flexible(
+                        child: TappableTextEntry(
+                          title: convertToMoney(
+                            Provider.of<AllWallets>(context),
+                            currencyKey: selectedCurrency,
+                            initialBalance,
+                          ),
+                          placeholder: convertToMoney(
+                            Provider.of<AllWallets>(context),
+                            currencyKey: selectedCurrency,
+                            initialBalance,
+                          ),
+                          showPlaceHolderWhenTextEquals: convertToMoney(
+                            Provider.of<AllWallets>(context),
+                            currencyKey: selectedCurrency,
+                            0,
+                          ),
+                          onTap: () {
+                            openEnterInitialBalanceBottomSheet();
+                          },
+                          fontSize: 32,
+                          fontWeight: FontWeight.bold,
+                          internalPadding:
+                              EdgeInsets.symmetric(vertical: 2, horizontal: 4),
+                          padding:
+                              EdgeInsets.symmetric(vertical: 10, horizontal: 3),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
 
             SliverStickyLabelDivider(
               info: "select-currency".tr(),

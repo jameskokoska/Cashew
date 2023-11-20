@@ -9,8 +9,8 @@ import 'package:budget/pages/homePage/homePageObjectives.dart';
 import 'package:budget/pages/homePage/homePagePieChart.dart';
 import 'package:budget/pages/homePage/homePageWalletList.dart';
 import 'package:budget/pages/homePage/homePageWalletSwitcher.dart';
-import 'package:budget/pages/homePage/homeTransactionSlivers.dart';
-import 'package:budget/pages/homePage/homeUpcomingTransactionSlivers.dart';
+import 'package:budget/pages/homePage/homeTransactions.dart';
+import 'package:budget/pages/homePage/homeUpcomingTransactions.dart';
 import 'package:budget/pages/homePage/homePageUsername.dart';
 import 'package:budget/pages/homePage/homePageBudgets.dart';
 import 'package:budget/pages/homePage/homePageUpcomingTransactions.dart';
@@ -119,6 +119,40 @@ class HomePageState extends State<HomePage>
             selectedSlidingSelector = index;
           });
         });
+    Widget? homePageTransactionsList =
+        isHomeScreenSectionEnabled(context, "showTransactionsList") == true ||
+                enableDoubleColumn(context)
+            ? Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  slidingSelector,
+                  SizedBox(height: 8),
+                  HomeUpcomingTransactions(
+                      selectedSlidingSelector: selectedSlidingSelector),
+                  HomeTransactions(
+                      selectedSlidingSelector: selectedSlidingSelector),
+                  SizedBox(height: 7),
+                  Center(
+                    child: ViewAllTransactionsButton(),
+                  ),
+                ],
+              )
+            : null;
+    if (homePageTransactionsList != null)
+      homePageTransactionsList = enableDoubleColumn(context)
+          ? Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(right: 5),
+                child: homePageTransactionsList,
+              ),
+            )
+          : KeepAliveClientMixin(
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 15),
+                child: homePageTransactionsList,
+              ),
+            );
 
     Map<String, Widget> homePageSections = {
       "wallets": HomePageWalletSwitcher(),
@@ -134,6 +168,7 @@ class HomePageState extends State<HomePage>
       "pieChart":
           HomePagePieChart(selectedSlidingSelector: selectedSlidingSelector),
       "heatMap": HomePageHeatMap(),
+      "transactionsList": homePageTransactionsList ?? SizedBox.shrink(),
     };
     bool showWelcomeBanner =
         appStateSettings["showUsernameWelcomeBanner"] != false;
@@ -248,7 +283,9 @@ class HomePageState extends State<HomePage>
                                 enableDoubleColumn(context) == false ||
                                         homePageSectionsAboveInFullScreen
                                                 .contains(sectionKey) ==
-                                            true
+                                            true ||
+                                        sectionKey == "transactionsList"
+                                    // Always show the transactions list in split section
                                     ? SizedBox.shrink()
                                     : homePageSections[sectionKey] ??
                                         SizedBox.shrink(),
@@ -257,63 +294,20 @@ class HomePageState extends State<HomePage>
                         ),
                         enableDoubleColumn(context) == false
                             ? SizedBox.shrink()
-                            : Expanded(
-                                child: Padding(
-                                  padding: const EdgeInsets.only(right: 5),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      slidingSelector,
-                                      SizedBox(height: 8),
-                                      HomeUpcomingTransactionSlivers(
-                                          selectedSlidingSelector:
-                                              selectedSlidingSelector),
-                                      HomeTransactionSlivers(
-                                          selectedSlidingSelector:
-                                              selectedSlidingSelector),
-                                      SizedBox(height: 7),
-                                      Center(
-                                        child: ViewAllTransactionsButton(),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
+                            : homePageSections["transactionsList"] ??
+                                SizedBox.shrink()
                       ],
                     ),
-                    enableDoubleColumn(context) == true
-                        ? SizedBox.shrink()
-                        : KeepAliveClientMixin(
-                            child: slidingSelector,
-                          ),
-                    enableDoubleColumn(context) == true
-                        ? SizedBox.shrink()
-                        : KeepAliveClientMixin(
-                            child: SizedBox(height: 8),
-                          ),
-                    enableDoubleColumn(context) == true
-                        ? SizedBox.shrink()
-                        : KeepAliveClientMixin(
-                            child: HomeUpcomingTransactionSlivers(
-                                selectedSlidingSelector:
-                                    selectedSlidingSelector),
-                          ),
-                    enableDoubleColumn(context) == true
-                        ? SizedBox.shrink()
-                        : KeepAliveClientMixin(
-                            child: HomeTransactionSlivers(
-                                selectedSlidingSelector:
-                                    selectedSlidingSelector),
-                          ),
-                    enableDoubleColumn(context) == true
-                        ? SizedBox.shrink()
-                        : Container(height: 7),
-                    enableDoubleColumn(context) == true
-                        ? SizedBox.shrink()
-                        : Center(child: ViewAllTransactionsButton()),
-                    SizedBox(height: 40),
+                    SizedBox(
+                      height: enableDoubleColumn(context) == true
+                          ? 40
+                          : appStateSettings["homePageOrder"][
+                                      appStateSettings["homePageOrder"].length -
+                                          1] ==
+                                  "transactionsList"
+                              ? 25
+                              : 73,
+                    ),
                     // Wipe all remaining pixels off - sometimes graphics artifacts are left behind
                     Container(height: 1, color: Theme.of(context).canvasColor),
                   ],

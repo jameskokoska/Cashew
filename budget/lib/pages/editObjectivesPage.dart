@@ -417,3 +417,12 @@ Future<dynamic> selectObjectivePopup(BuildContext context,
   if (objective == "none") return "none";
   return null;
 }
+
+class ObjectiveSettings extends StatelessWidget {
+  const ObjectiveSettings({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return TotalSpentToggle(isForGoalTotal: true);
+  }
+}

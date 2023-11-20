@@ -5,8 +5,8 @@ import 'package:budget/functions.dart';
 import 'package:budget/pages/homePage/homePage.dart';
 import 'package:budget/pages/homePage/homePageLineGraph.dart';
 import 'package:budget/pages/homePage/homePageWalletSwitcher.dart';
-import 'package:budget/pages/homePage/homeTransactionSlivers.dart';
-import 'package:budget/pages/homePage/homeUpcomingTransactionSlivers.dart';
+import 'package:budget/pages/homePage/homeTransactions.dart';
+import 'package:budget/pages/homePage/homeUpcomingTransactions.dart';
 import 'package:budget/pages/homePage/homePageUsername.dart';
 import 'package:budget/pages/homePage/homePageBudgets.dart';
 import 'package:budget/pages/homePage/homePageUpcomingTransactions.dart';
@@ -132,7 +132,7 @@ class _HeatMapGetPointsState extends State<HeatMapGetPoints> {
                   DateTime.now().month - monthsToLoad,
                   DateTime.now().day,
                 );
-                    indexDay.compareTo(DateTime.now()) < 0;
+                    indexDay.compareTo(DateTime.now()) <= 0;
                     indexDay = DateTime(
                         indexDay.year, indexDay.month, indexDay.day + 1)) {
                   //can be optimized...
@@ -144,15 +144,13 @@ class _HeatMapGetPointsState extends State<HeatMapGetPoints> {
                       if (transaction.income) {
                         totalForDay += transaction.amount.abs() *
                             (amountRatioToPrimaryCurrencyGivenPk(
-                                    Provider.of<AllWallets>(context),
-                                    transaction.walletFk) ??
-                                0);
+                                Provider.of<AllWallets>(context),
+                                transaction.walletFk));
                       } else {
                         totalForDay -= transaction.amount.abs() *
                             (amountRatioToPrimaryCurrencyGivenPk(
-                                    Provider.of<AllWallets>(context),
-                                    transaction.walletFk) ??
-                                0);
+                                Provider.of<AllWallets>(context),
+                                transaction.walletFk));
                       }
                     }
                   }

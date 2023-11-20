@@ -23,8 +23,7 @@ class TransactionEntryAmount extends StatelessWidget {
   Widget build(BuildContext context) {
     double count = transaction.amount.abs() *
         (amountRatioToPrimaryCurrencyGivenPk(
-                Provider.of<AllWallets>(context), transaction.walletFk) ??
-            1);
+            Provider.of<AllWallets>(context), transaction.walletFk));
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       mainAxisAlignment: MainAxisAlignment.center,

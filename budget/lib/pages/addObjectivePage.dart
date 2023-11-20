@@ -13,6 +13,7 @@ import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/categoryIcon.dart';
 import 'package:budget/widgets/dropdownSelect.dart';
 import 'package:budget/widgets/globalSnackBar.dart';
+import 'package:budget/widgets/iconButtonScaled.dart';
 import 'package:budget/widgets/incomeExpenseTabSelector.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
@@ -20,6 +21,7 @@ import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/widgets/framework/popupFramework.dart';
 import 'package:budget/widgets/openSnackbar.dart';
+import 'package:budget/widgets/periodCyclePicker.dart';
 import 'package:budget/widgets/saveBottomButton.dart';
 import 'package:budget/widgets/selectAmount.dart';
 import 'package:budget/widgets/selectCategoryImage.dart';
@@ -41,6 +43,7 @@ import 'package:provider/provider.dart';
 
 import '../widgets/listItem.dart';
 import '../widgets/outlinedButtonStacked.dart';
+import '../widgets/selectDateRange.dart';
 import '../widgets/sliverStickyLabelDivider.dart';
 import '../widgets/tappableTextEntry.dart';
 import 'exchangeRatesPage.dart';
@@ -73,10 +76,17 @@ class _AddObjectivePageState extends State<AddObjectivePage>
   DateTime? selectedEndDate = null;
   bool selectedIncome = true;
   bool selectedPin = true;
+  String selectedWalletPk = appStateSettings["selectedWalletPk"];
 
   FocusNode _titleFocusNode = FocusNode();
   late TabController _incomeTabController =
       TabController(length: 2, vsync: this);
+
+  setSelectedWalletPk(String walletPkPassed) {
+    setState(() {
+      selectedWalletPk = walletPkPassed;
+    });
+  }
 
   void setSelectedTitle(String title) {
     setState(() {
@@ -141,6 +151,7 @@ class _AddObjectivePageState extends State<AddObjectivePage>
       PopupFramework(
         title: "enter-amount".tr(),
         underTitleSpace: false,
+        hasPadding: false,
         child: SelectAmount(
           onlyShowCurrencyIcon: true,
           amountPassed: selectedAmount.toString(),
@@ -155,6 +166,15 @@ class _AddObjectivePageState extends State<AddObjectivePage>
             Navigator.pop(context);
           },
           nextLabel: "set-amount".tr(),
+          enableWalletPicker: true,
+          padding: EdgeInsets.symmetric(horizontal: 18),
+          setSelectedWalletPk: (walletPk) {
+            setState(() {
+              selectedWalletPk = walletPk;
+            });
+          },
+          walletPkForCurrency: selectedWalletPk,
+          selectedWalletPk: selectedWalletPk,
         ),
       ),
     );
@@ -220,6 +240,7 @@ class _AddObjectivePageState extends State<AddObjectivePage>
       amount: selectedAmount,
       income: selectedIncome,
       pinned: selectedPin,
+      walletFk: "0",
     );
   }
 
@@ -254,6 +275,7 @@ class _AddObjectivePageState extends State<AddObjectivePage>
       selectedEndDate = widget.objective!.endDate;
       selectedAmount = widget.objective!.amount;
       selectedPin = widget.objective!.pinned;
+      selectedWalletPk = widget.objective!.walletFk;
 
       selectedIncome = widget.objective!.income;
       if (widget.objective?.income == false) {
@@ -537,24 +559,40 @@ class _AddObjectivePageState extends State<AddObjectivePage>
                       ),
                     ),
                     Flexible(
-                      child: IntrinsicWidth(
-                        child: TappableTextEntry(
-                          title: convertToMoney(
-                              Provider.of<AllWallets>(context), selectedAmount),
-                          placeholder: convertToMoney(
-                              Provider.of<AllWallets>(context), 0),
-                          showPlaceHolderWhenTextEquals: convertToMoney(
-                              Provider.of<AllWallets>(context), 0),
-                          onTap: () {
-                            selectAmount(context);
-                          },
-                          fontSize: 32,
-                          fontWeight: FontWeight.bold,
-                          internalPadding:
-                              EdgeInsets.symmetric(vertical: 2, horizontal: 4),
-                          padding:
-                              EdgeInsets.symmetric(vertical: 10, horizontal: 3),
+                      child: TappableTextEntry(
+                        title: convertToMoney(
+                          Provider.of<AllWallets>(context),
+                          selectedAmount,
+                          currencyKey:
+                              Provider.of<AllWallets>(context, listen: true)
+                                  .indexedByPk[selectedWalletPk]
+                                  ?.currency,
                         ),
+                        placeholder: convertToMoney(
+                          Provider.of<AllWallets>(context),
+                          0,
+                          currencyKey:
+                              Provider.of<AllWallets>(context, listen: true)
+                                  .indexedByPk[selectedWalletPk]
+                                  ?.currency,
+                        ),
+                        showPlaceHolderWhenTextEquals: convertToMoney(
+                          Provider.of<AllWallets>(context),
+                          0,
+                          currencyKey:
+                              Provider.of<AllWallets>(context, listen: true)
+                                  .indexedByPk[selectedWalletPk]
+                                  ?.currency,
+                        ),
+                        onTap: () {
+                          selectAmount(context);
+                        },
+                        fontSize: 32,
+                        fontWeight: FontWeight.bold,
+                        internalPadding:
+                            EdgeInsets.symmetric(vertical: 2, horizontal: 4),
+                        padding:
+                            EdgeInsets.symmetric(vertical: 10, horizontal: 3),
                       ),
                     ),
                   ],
@@ -562,85 +600,15 @@ class _AddObjectivePageState extends State<AddObjectivePage>
               ),
             ),
             SliverToBoxAdapter(
-              child: SizedBox(height: 20),
+              child: SizedBox(height: 16),
             ),
             SliverToBoxAdapter(
               child: Center(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    TappableTextEntry(
-                      title: getWordedDateShortMore(
-                        selectedStartDate,
-                        includeYear:
-                            selectedStartDate.year != DateTime.now().year,
-                      ),
-                      placeholder: "",
-                      onTap: () {
-                        selectStartDate(context);
-                      },
-                      fontSize: 23,
-                      fontWeight: FontWeight.bold,
-                      internalPadding:
-                          EdgeInsets.symmetric(vertical: 5, horizontal: 4),
-                      padding: EdgeInsets.symmetric(vertical: 0, horizontal: 5),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        AnimatedExpanded(
-                          expand: selectedEndDate != null,
-                          child: Padding(
-                            padding: const EdgeInsets.only(top: 10, bottom: 0),
-                            child: Icon(
-                              Icons.arrow_downward_rounded,
-                              size: 25,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        TappableTextEntry(
-                          title: selectedEndDate == null
-                              ? ""
-                              : getWordedDateShortMore(
-                                  selectedEndDate!,
-                                  includeYear: selectedEndDate!.year !=
-                                      DateTime.now().year,
-                                ),
-                          placeholder: "until-forever".tr(),
-                          showPlaceHolderWhenTextEquals: "",
-                          onTap: () {
-                            selectEndDate(context);
-                          },
-                          fontSize: 23,
-                          fontWeight: FontWeight.bold,
-                          internalPadding:
-                              EdgeInsets.symmetric(vertical: 5, horizontal: 4),
-                          padding:
-                              EdgeInsets.symmetric(vertical: 0, horizontal: 5),
-                        ),
-                        AnimatedExpanded(
-                          expand: selectedEndDate != null,
-                          axis: Axis.horizontal,
-                          child: Opacity(
-                            opacity: 0.5,
-                            child: IconButton(
-                              onPressed: () {
-                                setSelectedEndDate(null);
-                              },
-                              tooltip: "clear".tr(),
-                              icon: Icon(Icons.clear),
-                              padding: EdgeInsets.all(15),
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                  ],
+                child: SelectDateRange(
+                  initialStartDate: selectedStartDate,
+                  initialEndDate: selectedEndDate,
+                  onSelectedStartDate: setSelectedStartDate,
+                  onSelectedEndDate: setSelectedEndDate,
                 ),
               ),
             ),

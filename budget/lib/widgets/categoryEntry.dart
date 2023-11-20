@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/pages/addCategoryPage.dart';
+import 'package:budget/struct/currencyFunctions.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/animatedExpanded.dart';
 import 'package:budget/widgets/categoryIcon.dart';
@@ -44,6 +45,7 @@ class CategoryEntry extends StatelessWidget {
     this.alwaysShow = false,
     this.isSubcategory = false,
     this.mainCategorySpentIfSubcategory = 0,
+    this.useHorizontalPaddingConstrained = true,
   }) : super(key: key);
 
   final TransactionCategory category;
@@ -71,10 +73,19 @@ class CategoryEntry extends StatelessWidget {
   final bool alwaysShow;
   final bool isSubcategory;
   final double mainCategorySpentIfSubcategory;
+  final bool useHorizontalPaddingConstrained;
 
   @override
   Widget build(BuildContext context) {
     Widget component;
+
+    double categoryLimitAmount = categoryBudgetLimit == null
+        ? 0
+        : isAbsoluteSpendingLimit
+            ? categoryBudgetLimitToPrimaryCurrency(
+                Provider.of<AllWallets>(context, listen: true),
+                categoryBudgetLimit!)
+            : categoryBudgetLimit!.amount;
 
     List<CategoryWithTotal> subCategoriesWithTotal =
         subcategoriesWithTotalMap?[category.categoryPk] ?? [];
@@ -91,32 +102,31 @@ class CategoryEntry extends StatelessWidget {
     double percentSpent = categoryBudgetLimit == null
         ? percentSpentWithCategoryLimit
         : isAbsoluteSpendingLimit
-            ? ((categorySpent / categoryBudgetLimit!.amount).abs() > 1
+            ? ((categorySpent / categoryLimitAmount).abs() > 1
                 ? 1
-                : (categorySpent / categoryBudgetLimit!.amount).abs())
-            : ((categorySpent /
-                            (categoryBudgetLimit!.amount / 100 * budgetLimit))
+                : (categorySpent / categoryLimitAmount).abs())
+            : ((categorySpent / (categoryLimitAmount / 100 * budgetLimit))
                         .abs() >
                     1
                 ? 1
-                : (categorySpent /
-                        (categoryBudgetLimit!.amount / 100 * budgetLimit))
+                : (categorySpent / (categoryLimitAmount / 100 * budgetLimit))
                     .abs());
     double amountSpent = categorySpent.abs();
     double spendingLimit = categoryBudgetLimit == null
         ? 0
         : isAbsoluteSpendingLimit
-            ? categoryBudgetLimit!.amount
-            : categoryBudgetLimit!.amount / 100 * budgetLimit;
+            ? categoryLimitAmount
+            : categoryLimitAmount / 100 * budgetLimit;
     bool isOverspent = categoryBudgetLimit == null
         ? false
         : isAbsoluteSpendingLimit
-            ? categorySpent > (categoryBudgetLimit?.amount ?? 0)
-            : categorySpent > (categoryBudgetLimit!.amount / 100 * budgetLimit);
+            ? categorySpent > categoryLimitAmount
+            : categorySpent > (categoryLimitAmount / 100 * budgetLimit);
     component = Padding(
       padding: EdgeInsets.symmetric(
         horizontal: isSubcategory == false
-            ? getHorizontalPaddingConstrained(context)
+            ? getHorizontalPaddingConstrained(context,
+                enabled: useHorizontalPaddingConstrained)
             : 0,
       ),
       child: Builder(
@@ -343,10 +353,8 @@ class CategoryEntry extends StatelessWidget {
                         budgetLimit: categoryBudgetLimit == null
                             ? budgetLimit
                             : isAbsoluteSpendingLimit
-                                ? (categoryBudgetLimit?.amount ?? 1)
-                                : (categoryBudgetLimit?.amount ?? 1) *
-                                    budgetLimit /
-                                    100,
+                                ? categoryLimitAmount
+                                : categoryLimitAmount * budgetLimit / 100,
                         categoryBudgetLimit:
                             subcategoryWithTotal.categoryBudgetLimit,
                         budgetColorScheme: budgetColorScheme,

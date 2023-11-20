@@ -1,5 +1,6 @@
 import 'package:budget/colors.dart';
 import 'package:budget/struct/settings.dart';
+import 'package:budget/widgets/animatedExpanded.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:flutter/foundation.dart';
@@ -40,7 +41,7 @@ class TappableTextEntry extends StatelessWidget {
     Widget titleBuilder(String? titlePassed) {
       return TextFont(
         autoSizeText: autoSizeText,
-        maxLines: 1,
+        maxLines: 2,
         minFontSize: 16,
         textAlign: TextAlign.left,
         fontSize: fontSize ?? 35,
@@ -58,35 +59,38 @@ class TappableTextEntry extends StatelessWidget {
       );
     }
 
-    return Tappable(
-      onTap: disabled == true ? null : onTap,
-      color: Colors.transparent,
-      borderRadius: 15,
-      child: Padding(
-        padding: padding,
-        child: AnimatedContainer(
-          curve: Curves.easeInOut,
-          duration: Duration(milliseconds: 250),
-          padding: internalPadding,
-          decoration: BoxDecoration(
-            border: Border(
-                bottom: BorderSide(
-                    width: disabled ? 0 : 1.5,
-                    color: disabled
-                        ? Colors.transparent
-                        : appStateSettings["materialYou"]
-                            ? Theme.of(context)
-                                .colorScheme
-                                .primary
-                                .withOpacity(0.2)
-                            : getColor(context, "lightDarkAccentHeavy"))),
-          ),
-          child: IntrinsicWidth(
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: customTitleBuilder != null
-                  ? customTitleBuilder!(titleBuilder)
-                  : titleBuilder(title),
+    return AnimatedSizeSwitcher(
+      child: Tappable(
+        key: ValueKey(title),
+        onTap: disabled == true ? null : onTap,
+        color: Colors.transparent,
+        borderRadius: 15,
+        child: Padding(
+          padding: padding,
+          child: AnimatedContainer(
+            curve: Curves.easeInOut,
+            duration: Duration(milliseconds: 250),
+            padding: internalPadding,
+            decoration: BoxDecoration(
+              border: Border(
+                  bottom: BorderSide(
+                      width: disabled ? 0 : 1.5,
+                      color: disabled
+                          ? Colors.transparent
+                          : appStateSettings["materialYou"]
+                              ? Theme.of(context)
+                                  .colorScheme
+                                  .primary
+                                  .withOpacity(0.2)
+                              : getColor(context, "lightDarkAccentHeavy"))),
+            ),
+            child: IntrinsicWidth(
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: customTitleBuilder != null
+                    ? customTitleBuilder!(titleBuilder)
+                    : titleBuilder(title),
+              ),
             ),
           ),
         ),

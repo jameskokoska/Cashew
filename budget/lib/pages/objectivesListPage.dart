@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
@@ -7,6 +9,7 @@ import 'package:budget/pages/addObjectivePage.dart';
 import 'package:budget/pages/editBudgetPage.dart';
 import 'package:budget/pages/editObjectivesPage.dart';
 import 'package:budget/pages/objectivePage.dart';
+import 'package:budget/struct/currencyFunctions.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/randomConstants.dart';
 import 'package:budget/struct/settings.dart';
@@ -97,6 +100,7 @@ class ObjectivesListPage extends StatelessWidget {
                   pinned: false,
                   iconName: "coconut-tree.png",
                   colour: toHexString(Colors.greenAccent),
+                  walletFk: "0",
                 ),
               );
               objectivesList.add(
@@ -110,6 +114,7 @@ class ObjectivesListPage extends StatelessWidget {
                   pinned: false,
                   iconName: "car(1).png",
                   colour: toHexString(Colors.orangeAccent),
+                  walletFk: "0",
                 ),
               );
             }
@@ -289,12 +294,14 @@ class ObjectiveContainer extends StatelessWidget {
         objective.objectivePk,
       ),
       builder: (context, snapshot) {
+        double objectiveAmount = objectiveAmountToPrimaryCurrency(
+            Provider.of<AllWallets>(context, listen: true), objective);
         double totalAmount = forcedTotalAmount ?? snapshot.data ?? 0;
         if (objective.income == false) {
           totalAmount = totalAmount * -1;
         }
         double percentageTowardsGoal =
-            objective.amount == 0 ? 0 : totalAmount / objective.amount;
+            objectiveAmount == 0 ? 0 : totalAmount / objectiveAmount;
         return Container(
           decoration: BoxDecoration(
             boxShadow: getPlatform() == PlatformOS.isIOS &&
@@ -447,7 +454,7 @@ class ObjectiveContainer extends StatelessWidget {
                                   context: context,
                                   showTotalSpent: appStateSettings[
                                       "showTotalSpentForObjective"],
-                                  objective: objective,
+                                  objectiveAmount: objectiveAmount,
                                   totalAmount: totalAmount,
                                 );
                                 return Row(
@@ -457,14 +464,14 @@ class ObjectiveContainer extends StatelessWidget {
                                       fontWeight: FontWeight.bold,
                                       text: amountSpentLabel,
                                       fontSize: 24,
-                                      textColor: totalAmount >= objective.amount
+                                      textColor: totalAmount >= objectiveAmount
                                           ? getColor(context, "incomeAmount")
                                           : getColor(context, "black"),
                                     ),
                                     if (isShowingAmountRemaining(
                                         showTotalSpent: appStateSettings[
                                             "showTotalSpentForObjective"],
-                                        objective: objective,
+                                        objectiveAmount: objectiveAmount,
                                         totalAmount: totalAmount))
                                       Padding(
                                         padding:
@@ -484,7 +491,7 @@ class ObjectiveContainer extends StatelessWidget {
                                             convertToMoney(
                                                 Provider.of<AllWallets>(
                                                     context),
-                                                objective.amount),
+                                                objectiveAmount),
                                         fontSize: 15,
                                         textColor: getColor(context, "black")
                                             .withOpacity(0.3),
@@ -615,6 +622,9 @@ class ObjectiveContainer extends StatelessWidget {
 String getObjectiveStatus(BuildContext context, Objective objective,
     double totalAmount, double percentageTowardsGoal,
     {bool addSpendingSavingIndication = false}) {
+  double objectiveAmount = objectiveAmountToPrimaryCurrency(
+      Provider.of<AllWallets>(context, listen: true), objective);
+
   String content;
   if (objective.endDate == null) return "";
   int remainingDays = objective.endDate!
@@ -624,7 +634,7 @@ String getObjectiveStatus(BuildContext context, Objective objective,
           )
           .inDays +
       1;
-  double amount = ((totalAmount - objective.amount) / remainingDays) * -1;
+  double amount = ((totalAmount - objectiveAmount) / remainingDays) * -1;
   if (percentageTowardsGoal >= 1) {
     content = "goal-reached".tr();
   } else if (remainingDays <= 0) {
@@ -648,24 +658,24 @@ String getObjectiveStatus(BuildContext context, Objective objective,
 
 bool isShowingAmountRemaining({
   required bool showTotalSpent,
-  required Objective objective,
+  required double objectiveAmount,
   required double totalAmount,
 }) {
-  return showTotalSpent == false && totalAmount < objective.amount;
+  return showTotalSpent == false && totalAmount < objectiveAmount;
 }
 
 String getObjectiveAmountSpentLabel({
   required BuildContext context,
   required bool showTotalSpent,
-  required Objective objective,
+  required double objectiveAmount,
   required double totalAmount,
 }) {
   bool showTotalRemaining = isShowingAmountRemaining(
       showTotalSpent: showTotalSpent,
-      objective: objective,
+      objectiveAmount: objectiveAmount,
       totalAmount: totalAmount);
   double amountSpent =
-      showTotalRemaining ? objective.amount - totalAmount : totalAmount;
+      showTotalRemaining ? objectiveAmount - totalAmount : totalAmount;
   String amountSpentLabel = convertToMoney(
     Provider.of<AllWallets>(context),
     amountSpent,

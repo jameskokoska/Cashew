@@ -23,6 +23,48 @@ import 'listItem.dart';
 
 String getChangelogString() {
   return """
+    < 4.8.9
+    Major all spending page improvements and additions
+    Currency support for budgets and goals totals
+    Currency support for budget category spending limits
+    Accounts can be filtered within a budget
+    Add transaction page copies correct transaction amount with currency
+    Applied filter chips with theme color follow the theme properly
+    Wallet changes properly reflect when selecting amounts
+    File saving permission fix for certain versions of Android
+    Improved add attachment divider color
+    Tapping transaction navbar icon for the second time opens transaction search page after scrolling to top
+    Fixed all spending page cycle filters for pie chart if selected certain wallets
+    When tapping view all transactions in all spending page and category selected, the category filter is applied
+    Increased default time period for search page (2 years) - because of optimizations!
+    Improved size transition when deselecting category on all spending page
+    Improved icon button paddings for clear and info buttons
+    Refactored and improved date range picker (if start date is after end date, they will be swapped)
+    Can set an end date when selecting time period for all spending page
+    Time range properly applied to transaction list in all spending page based on cycle
+    Search filters on transactions page stored in memory unless cleared
+    Filters on all spending page
+    All spending filter stored in memory unless cleared
+    Change the order/disable recent transactions on home page
+    Fixed graph display freeze when interval equal to almost 0
+    Borrowed and lent transactions are forced into using proper income/expense polarity
+    Changing header height properly updates all loaded pages
+    Added page settings to page shortcut picker
+    More options dropdown button will always show if there is only one option and small header is used
+    Fixed side titles spending size for some currencies
+    Removed old icon scaling code for transactions list page
+    Added edit budget, account, and goals list shortcut to popup from add button on home screen widgets
+    Custom color shows color gradient around color picker when system color selected
+    Fixed periods for repetition type of days for daylight savings
+    Added scrolling on custom popups, if content was too long
+    Added information about installment tracking to add transaction select type
+    When transferring or correcting an account balance, any edited changes are saved
+    Fixed font family fallback for line graph touch data
+    Fixed budget history line graph freeze when really large numbers displayed (issue with horizontal line drawing)
+    When adding an account, you can set an initial amount
+    All spending page full screen support
+    Pie chart home page widget follows background of container
+    Pie chart displays empty when no data
     < 4.8.8
     Transfer balance and correct total balance added to quick actions (long press plus button)
     Significantly improved performance for transaction search page
@@ -34,6 +76,8 @@ String getChangelogString() {
     Disabled lazy loading of transactions list on homepage
     Selected transactions dropdown menu follows colorscheme
     Fixed generate preview data missing category
+    Improved formatting of budget history containers
+    Budget history graph does not display zero periods initially
     < 4.8.7
     Long press add button to see list of most commonly added expenses and quickly duplicate them
     Added goal total or remaining spending label setting
@@ -1836,6 +1880,18 @@ Map<String, List<MajorChanges>> getMajorChanges() {
               child: AddMoreThingsPopup(),
             ),
           );
+        },
+      ),
+    ],
+    "< 4.8.9": [
+      MajorChanges(
+        "major-change-16".tr(),
+        Icons.receipt_long_rounded,
+        info: [
+          "major-change-16-1".tr(),
+        ],
+        onTap: (context) {
+          pushRoute(context, WalletDetailsPage(wallet: null));
         },
       ),
     ],

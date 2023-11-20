@@ -889,11 +889,10 @@ class _AddBillItemPageState extends State<AddBillItemPage> {
         hasPadding: false,
         underTitleSpace: false,
         child: SelectAmount(
-          enableWalletPicker: true,
+          enableWalletPicker: false,
           padding: EdgeInsets.symmetric(horizontal: 18),
           onlyShowCurrencyIcon: true,
-          selectedWallet: Provider.of<AllWallets>(context, listen: false)
-              .indexedByPk[appStateSettings["selectedWalletPk"]],
+          selectedWalletPk: appStateSettings["selectedWalletPk"],
           amountPassed: billSplitterItem.cost.toString(),
           setSelectedAmount: (amount, _) {
             setState(() {
@@ -1002,53 +1001,51 @@ class _AddBillItemPageState extends State<AddBillItemPage> {
                   ),
                 ),
                 TextFont(text: "×"),
-                Flexible(
-                  child: Padding(
-                    padding: const EdgeInsets.only(bottom: 7.5),
-                    child: TappableTextEntry(
-                      title: multiplierAmount.toStringAsFixed(2),
-                      placeholder: "1",
-                      showPlaceHolderWhenTextEquals: "1.00",
-                      onTap: () {
-                        openBottomSheet(
-                          context,
-                          fullSnap: true,
-                          PopupFramework(
-                            title: "enter-amount".tr(),
-                            subtitle:
-                                "bill-splitter-multiplier-description".tr(),
-                            child: SelectAmount(
-                              allowZero: true,
-                              allDecimals: true,
-                              convertToMoney: false,
-                              amountPassed: multiplierAmount.toString(),
-                              setSelectedAmount: (amount, __) {
-                                if (amount == 0) {
-                                  widget.setMultiplierAmount(1);
-                                  setState(() {
-                                    multiplierAmount = 1;
-                                  });
-                                } else {
-                                  widget.setMultiplierAmount(amount);
-                                  setState(() {
-                                    multiplierAmount = amount;
-                                  });
-                                }
-                              },
-                              next: () {
-                                print(multiplierAmount);
-                                Navigator.pop(context);
-                              },
-                              nextLabel: "set-amount".tr(),
-                              currencyKey: null,
-                              onlyShowCurrencyIcon: false,
-                            ),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 7.5),
+                  child: TappableTextEntry(
+                    title: multiplierAmount.toStringAsFixed(2),
+                    placeholder: "1",
+                    showPlaceHolderWhenTextEquals: "1.00",
+                    onTap: () {
+                      openBottomSheet(
+                        context,
+                        fullSnap: true,
+                        PopupFramework(
+                          title: "enter-amount".tr(),
+                          subtitle: "bill-splitter-multiplier-description".tr(),
+                          child: SelectAmount(
+                            allowZero: true,
+                            allDecimals: true,
+                            convertToMoney: false,
+                            amountPassed: multiplierAmount.toString(),
+                            setSelectedAmount: (amount, __) {
+                              if (amount == 0) {
+                                widget.setMultiplierAmount(1);
+                                setState(() {
+                                  multiplierAmount = 1;
+                                });
+                              } else {
+                                widget.setMultiplierAmount(amount);
+                                setState(() {
+                                  multiplierAmount = amount;
+                                });
+                              }
+                            },
+                            next: () {
+                              print(multiplierAmount);
+                              Navigator.pop(context);
+                            },
+                            nextLabel: "set-amount".tr(),
+                            currencyKey: null,
+                            onlyShowCurrencyIcon: false,
+                            enableWalletPicker: false,
                           ),
-                        );
-                      },
-                      fontSize: 27,
-                      padding: EdgeInsets.zero,
-                    ),
+                        ),
+                      );
+                    },
+                    fontSize: 27,
+                    padding: EdgeInsets.zero,
                   ),
                 ),
               ],

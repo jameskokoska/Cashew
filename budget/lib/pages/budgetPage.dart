@@ -192,6 +192,8 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
 
   @override
   Widget build(BuildContext context) {
+    double budgetAmount = budgetAmountToPrimaryCurrency(
+        Provider.of<AllWallets>(context, listen: true), widget.budget);
     DateTime dateForRange =
         widget.dateForRange == null ? DateTime.now() : widget.dateForRange!;
     DateTimeRange budgetRange = getBudgetDate(widget.budget, dateForRange);
@@ -422,7 +424,7 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                             },
                             isAbsoluteSpendingLimit:
                                 widget.budget.isAbsoluteSpendingLimit,
-                            budgetLimit: widget.budget.amount,
+                            budgetLimit: budgetAmount,
                             categoryBudgetLimit: category.categoryBudgetLimit,
                             budgetColorScheme: budgetColorScheme,
                             category: category.category,
@@ -513,11 +515,9 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                                         dateForRange: dateForRange,
                                         budget: widget.budget,
                                         large: true,
-                                        percent: widget.budget.amount == 0
+                                        percent: budgetAmount == 0
                                             ? 0
-                                            : s.totalSpent /
-                                                widget.budget.amount *
-                                                100,
+                                            : s.totalSpent / budgetAmount * 100,
                                         yourPercent: 0,
                                         todayPercent:
                                             widget.isPastBudget == true
@@ -647,12 +647,12 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                             widget.budget.addedTransactionsOnly == true
                         ? widget.budget.budgetPk
                         : null,
+                walletFks: widget.budget.walletFks ?? [],
                 budget: widget.budget,
                 dateDividerColor: pageBackgroundColor,
                 transactionBackgroundColor: pageBackgroundColor,
                 categoryTintColor: budgetColorScheme.primary,
                 colorScheme: budgetColorScheme,
-                noResultsPadding: EdgeInsets.symmetric(horizontal: 30),
                 noResultsExtraWidget: widget.budget.reoccurrence !=
                             BudgetReoccurence.custom &&
                         widget.isPastBudget == false &&
@@ -923,6 +923,9 @@ class _BudgetLineGraphState extends State<BudgetLineGraph> {
 
   @override
   Widget build(BuildContext context) {
+    double budgetAmount = budgetAmountToPrimaryCurrency(
+        Provider.of<AllWallets>(context, listen: true), widget.budget);
+
     return StreamBuilder<List<List<Transaction>>>(
       stream: mergedStreamsPastSpendingTotals,
       builder: (context, snapshot) {
@@ -974,9 +977,8 @@ class _BudgetLineGraphState extends State<BudgetLineGraph> {
                       indexDay.day == transaction.dateCreated.day) {
                     totalForDay += (transaction.amount *
                             (amountRatioToPrimaryCurrencyGivenPk(
-                                    Provider.of<AllWallets>(context),
-                                    transaction.walletFk) ??
-                                0)) *
+                                Provider.of<AllWallets>(context),
+                                transaction.walletFk))) *
                         -1;
                   }
 
@@ -990,9 +992,8 @@ class _BudgetLineGraphState extends State<BudgetLineGraph> {
                     print(indexDay);
                     totalForDay += (transaction.amount *
                             (amountRatioToPrimaryCurrencyGivenPk(
-                                    Provider.of<AllWallets>(context),
-                                    transaction.walletFk) ??
-                                0)) *
+                                Provider.of<AllWallets>(context),
+                                transaction.walletFk))) *
                         -1;
                   }
                 }
@@ -1047,8 +1048,8 @@ class _BudgetLineGraphState extends State<BudgetLineGraph> {
                           (widget.budget.addedTransactionsOnly &&
                               widget.budget.endDate.millisecondsSinceEpoch <
                                   DateTime.now().millisecondsSinceEpoch)
-                      ? widget.budget.amount
-                      : widget.budget.amount *
+                      ? budgetAmount
+                      : budgetAmount *
                           ((DateTime.now().millisecondsSinceEpoch -
                                   widget.budgetRange.start
                                       .millisecondsSinceEpoch) /
@@ -1139,6 +1140,9 @@ class _TotalSpentState extends State<TotalSpent> {
 
   @override
   Widget build(BuildContext context) {
+    double budgetAmount = budgetAmountToPrimaryCurrency(
+        Provider.of<AllWallets>(context, listen: true), widget.budget);
+
     return GestureDetector(
       onTap: () {
         _swapTotalSpentDisplay();
@@ -1150,7 +1154,7 @@ class _TotalSpentState extends State<TotalSpent> {
       child: AnimatedSwitcher(
         duration: Duration(milliseconds: 200),
         child: IntrinsicWidth(
-          child: widget.budget.amount - widget.totalSpent >= 0
+          child: budgetAmount - widget.totalSpent >= 0
               ? Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.end,
@@ -1159,7 +1163,7 @@ class _TotalSpentState extends State<TotalSpent> {
                       child: CountNumber(
                         count: showTotalSpent
                             ? widget.totalSpent
-                            : widget.budget.amount - widget.totalSpent,
+                            : budgetAmount - widget.totalSpent,
                         duration: Duration(milliseconds: 400),
                         initialCount: (0),
                         textBuilder: (number) {
@@ -1168,7 +1172,7 @@ class _TotalSpentState extends State<TotalSpent> {
                                 Provider.of<AllWallets>(context), number,
                                 finalNumber: showTotalSpent
                                     ? widget.totalSpent
-                                    : widget.budget.amount - widget.totalSpent),
+                                    : budgetAmount - widget.totalSpent),
                             fontSize: 22,
                             textAlign: TextAlign.left,
                             fontWeight: FontWeight.bold,
@@ -1184,8 +1188,8 @@ class _TotalSpentState extends State<TotalSpent> {
                         text: (showTotalSpent
                                 ? " " + "spent-amount-of".tr() + " "
                                 : " " + "remaining-amount-of".tr() + " ") +
-                            convertToMoney(Provider.of<AllWallets>(context),
-                                widget.budget.amount),
+                            convertToMoney(
+                                Provider.of<AllWallets>(context), budgetAmount),
                         fontSize: 15,
                         textAlign: TextAlign.left,
                         textColor:
@@ -1202,7 +1206,7 @@ class _TotalSpentState extends State<TotalSpent> {
                       child: CountNumber(
                         count: showTotalSpent
                             ? widget.totalSpent
-                            : -1 * (widget.budget.amount - widget.totalSpent),
+                            : -1 * (budgetAmount - widget.totalSpent),
                         duration: Duration(milliseconds: 400),
                         initialCount: (0),
                         textBuilder: (number) {
@@ -1211,9 +1215,7 @@ class _TotalSpentState extends State<TotalSpent> {
                                 Provider.of<AllWallets>(context), number,
                                 finalNumber: showTotalSpent
                                     ? widget.totalSpent
-                                    : -1 *
-                                        (widget.budget.amount -
-                                            widget.totalSpent)),
+                                    : -1 * (budgetAmount - widget.totalSpent)),
                             fontSize: 22,
                             textAlign: TextAlign.left,
                             fontWeight: FontWeight.bold,
@@ -1229,8 +1231,8 @@ class _TotalSpentState extends State<TotalSpent> {
                         text: (showTotalSpent
                                 ? " " + "spent-amount-of".tr() + " "
                                 : " " + "overspent-amount-of".tr() + " ") +
-                            convertToMoney(Provider.of<AllWallets>(context),
-                                widget.budget.amount),
+                            convertToMoney(
+                                Provider.of<AllWallets>(context), budgetAmount),
                         fontSize: 15,
                         textAlign: TextAlign.left,
                         textColor:

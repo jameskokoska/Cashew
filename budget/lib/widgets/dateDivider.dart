@@ -2,6 +2,7 @@ import 'dart:ui';
 import 'package:budget/colors.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
+import 'package:budget/widgets/sliverStickyLabelDivider.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/material/theme.dart';
@@ -34,28 +35,12 @@ class DateDivider extends StatelessWidget {
             ? 0
             : getHorizontalPaddingConstrained(context),
       ),
-      child: Container(
-        color: color == null ? Theme.of(context).canvasColor : color,
-        padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 5),
-        alignment: Alignment.centerLeft,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            TextFont(
-              text: getWordedDate(date,
-                  includeMonthDate: true, includeYearIfNotCurrentYear: true),
-              fontSize: 14,
-              textColor: getColor(context, "textLight"),
-            ),
-            info != null
-                ? TextFont(
-                    text: info!,
-                    fontSize: 14,
-                    textColor: getColor(context, "textLight"),
-                  )
-                : SizedBox()
-          ],
-        ),
+      child: StickyLabelDivider(
+        info: getWordedDate(date,
+            includeMonthDate: true, includeYearIfNotCurrentYear: true),
+        extraInfo: info,
+        color: color,
+        fontSize: 14,
       ),
     );
   }

@@ -1,5 +1,6 @@
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
+import 'package:budget/struct/currencyFunctions.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/categoryLimits.dart';
@@ -8,6 +9,7 @@ import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/settingsContainers.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class EditBudgetLimitsPage extends StatefulWidget {
   const EditBudgetLimitsPage(
@@ -27,6 +29,9 @@ class _EditBudgetLimitsPageState extends State<EditBudgetLimitsPage> {
 
   @override
   Widget build(BuildContext context) {
+    double budgetAmount = budgetAmountToPrimaryCurrency(
+        Provider.of<AllWallets>(context, listen: true), widget.budget);
+
     return PageFramework(
       dragDownToDismiss: true,
       title: "spending-goals".tr(),
@@ -45,8 +50,9 @@ class _EditBudgetLimitsPageState extends State<EditBudgetLimitsPage> {
               onChanged: (value) async {
                 await database
                     .toggleAbsolutePercentSpendingCategoryBudgetLimits(
+                  Provider.of<AllWallets>(context, listen: false),
                   widget.budget.budgetPk,
-                  widget.budget.amount,
+                  budgetAmount,
                   selectedIsAbsoluteSpendingLimit,
                 );
                 await database.createOrUpdateBudget(widget.budget.copyWith(
@@ -68,7 +74,7 @@ class _EditBudgetLimitsPageState extends State<EditBudgetLimitsPage> {
           categoryFks: widget.budget.categoryFks,
           categoryFksExclude: widget.budget.categoryFksExclude,
           budgetPk: widget.budget.budgetPk,
-          budgetLimit: widget.budget.amount,
+          budgetLimit: budgetAmount,
           showAddCategoryButton: (widget.budget.categoryFks == null ||
                   widget.budget.categoryFks?.isEmpty == true) ||
               (widget.budget.categoryFksExclude == null ||

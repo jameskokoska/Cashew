@@ -3,6 +3,7 @@ import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/pages/budgetPage.dart';
 import 'package:budget/pages/editHomePage.dart';
+import 'package:budget/pages/transactionFilters.dart';
 import 'package:budget/struct/currencyFunctions.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
@@ -100,18 +101,24 @@ class PastSpendingGraph extends StatelessWidget {
     required this.isIncome,
     this.monthsToLoad = 1,
     this.customStartDate,
+    this.customEndDate,
     this.walletPks,
     this.extraLeftPaddingIfSmall = 0,
     this.followCustomPeriodCycle = false,
     this.cycleSettingsExtension = "",
+    this.searchFilters,
+    this.forcedDateTimeRange,
   });
   final bool? isIncome;
   final int monthsToLoad;
   final DateTime? customStartDate;
+  final DateTime? customEndDate;
   final List<String>? walletPks;
   final double extraLeftPaddingIfSmall;
   final bool followCustomPeriodCycle;
   final String cycleSettingsExtension;
+  final SearchFilters? searchFilters;
+  final DateTimeRange? forcedDateTimeRange;
 
   @override
   Widget build(BuildContext context) {
@@ -137,6 +144,8 @@ class PastSpendingGraph extends StatelessWidget {
         allWallets: Provider.of<AllWallets>(context),
         followCustomPeriodCycle: followCustomPeriodCycle,
         cycleSettingsExtension: cycleSettingsExtension,
+        searchFilters: searchFilters,
+        forcedDateTimeRange: forcedDateTimeRange,
       ),
       builder: (context, snapshotTotalSpentBefore) {
         if (snapshotTotalSpentBefore.hasData) {
@@ -165,6 +174,8 @@ class PastSpendingGraph extends StatelessWidget {
               walletPks: walletPks,
               followCustomPeriodCycle: followCustomPeriodCycle,
               cycleSettingsExtension: cycleSettingsExtension,
+              searchFilters: searchFilters,
+              forcedDateTimeRange: forcedDateTimeRange,
             ),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
@@ -177,7 +188,7 @@ class PastSpendingGraph extends StatelessWidget {
                           DateTime.now().month - monthsToLoad,
                           DateTime.now().day,
                         );
-                    indexDay.compareTo(DateTime.now()) < 0;
+                    indexDay.compareTo(customEndDate ?? DateTime.now()) <= 0;
                     indexDay = DateTime(
                         indexDay.year, indexDay.month, indexDay.day + 1)) {
                   //can be optimized...
@@ -193,15 +204,13 @@ class PastSpendingGraph extends StatelessWidget {
                       if (transaction.income) {
                         totalForDay += transaction.amount.abs() *
                             (amountRatioToPrimaryCurrencyGivenPk(
-                                    Provider.of<AllWallets>(context),
-                                    transaction.walletFk) ??
-                                0);
+                                Provider.of<AllWallets>(context),
+                                transaction.walletFk));
                       } else {
                         totalForDay -= transaction.amount.abs() *
                             (amountRatioToPrimaryCurrencyGivenPk(
-                                    Provider.of<AllWallets>(context),
-                                    transaction.walletFk) ??
-                                0);
+                                Provider.of<AllWallets>(context),
+                                transaction.walletFk));
                       }
                     }
                   }
@@ -214,6 +223,7 @@ class PastSpendingGraph extends StatelessWidget {
                   isCurved: true,
                   extraLeftPaddingIfSmall: extraLeftPaddingIfSmall,
                   amountBefore: totalSpentBefore,
+                  endDate: customEndDate ?? DateTime.now(),
                 );
               }
               return SizedBox.shrink();

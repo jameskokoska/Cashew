@@ -104,11 +104,13 @@ class WalletPickerPeriodCycle extends StatefulWidget {
     required this.allWalletsSettingKey,
     required this.cycleSettingsExtension,
     required this.homePageWidgetDisplay,
+    this.onlyShowCycleOption = false,
     super.key,
   });
-  final String allWalletsSettingKey;
+  final String? allWalletsSettingKey;
   final String cycleSettingsExtension;
-  final HomePageWidgetDisplay homePageWidgetDisplay;
+  final HomePageWidgetDisplay? homePageWidgetDisplay;
+  final bool onlyShowCycleOption;
 
   @override
   State<WalletPickerPeriodCycle> createState() =>
@@ -122,35 +124,39 @@ class _WalletPickerPeriodCycleState extends State<WalletPickerPeriodCycle> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Row(
-          children: [
-            Expanded(
-              child: AnimatedOpacity(
-                duration: Duration(milliseconds: 500),
-                opacity: allWalletsSelected ? 1 : 0.5,
-                child: OutlinedButtonStacked(
-                  filled: allWalletsSelected,
-                  alignLeft: true,
-                  alignBeside: true,
-                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                  text: "all-accounts".tr(),
-                  iconData: appStateSettings["outlinedIcons"]
-                      ? Icons.account_balance_wallet_outlined
-                      : Icons.account_balance_wallet_rounded,
-                  onTap: () {
-                    updateSettings(
-                        widget.allWalletsSettingKey, !allWalletsSelected,
-                        updateGlobalState: false);
-                    setState(() {
-                      allWalletsSelected = !allWalletsSelected;
-                    });
-                  },
+        if (widget.homePageWidgetDisplay != null &&
+            widget.allWalletsSettingKey != null)
+          Row(
+            children: [
+              Expanded(
+                child: AnimatedOpacity(
+                  duration: Duration(milliseconds: 500),
+                  opacity: allWalletsSelected ? 1 : 0.5,
+                  child: OutlinedButtonStacked(
+                    filled: allWalletsSelected,
+                    alignLeft: true,
+                    alignBeside: true,
+                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                    text: "all-accounts".tr(),
+                    iconData: appStateSettings["outlinedIcons"]
+                        ? Icons.account_balance_wallet_outlined
+                        : Icons.account_balance_wallet_rounded,
+                    onTap: () {
+                      updateSettings(
+                          widget.allWalletsSettingKey!, !allWalletsSelected,
+                          updateGlobalState: false);
+                      setState(() {
+                        allWalletsSelected = !allWalletsSelected;
+                      });
+                    },
+                  ),
                 ),
               ),
-            ),
-          ],
-        ),
-        SizedBox(height: 10),
+            ],
+          ),
+        if (widget.homePageWidgetDisplay != null &&
+            widget.allWalletsSettingKey != null)
+          SizedBox(height: 10),
         // CheckItems(
         //   triggerInitialOnChanged: false,
         //   minVerticalPadding: 0,
@@ -191,26 +197,33 @@ class _WalletPickerPeriodCycleState extends State<WalletPickerPeriodCycle> {
         //     );
         //   },
         // ),
-        EditHomePagePinnedWalletsPopup(
-          includeFramework: false,
-          homePageWidgetDisplay: widget.homePageWidgetDisplay,
-          highlightSelected: true,
-          useCheckMarks: true,
-          onAnySelected: () {
-            updateSettings(widget.allWalletsSettingKey, false,
-                updateGlobalState: false);
-            setState(() {
-              allWalletsSelected = false;
-            });
-          },
-          allSelected: allWalletsSelected,
-        ),
+        if (widget.homePageWidgetDisplay != null &&
+            widget.allWalletsSettingKey != null)
+          EditHomePagePinnedWalletsPopup(
+            includeFramework: false,
+            homePageWidgetDisplay: widget.homePageWidgetDisplay!,
+            highlightSelected: true,
+            useCheckMarks: true,
+            onAnySelected: () {
+              updateSettings(widget.allWalletsSettingKey!, false,
+                  updateGlobalState: false);
+              setState(() {
+                allWalletsSelected = false;
+              });
+            },
+            allSelected: allWalletsSelected,
+          ),
         Padding(
-          padding: const EdgeInsets.only(top: 8.0),
+          padding: widget.homePageWidgetDisplay != null &&
+                  widget.allWalletsSettingKey != null
+              ? EdgeInsets.zero
+              : const EdgeInsets.only(top: 8.0),
           child: HorizontalBreakAbove(
-            enabled: true,
+            enabled: widget.homePageWidgetDisplay != null &&
+                widget.allWalletsSettingKey != null,
             child: PeriodCyclePicker(
               cycleSettingsExtension: widget.cycleSettingsExtension,
+              onlyShowCycleOption: widget.onlyShowCycleOption,
             ),
           ),
         ),

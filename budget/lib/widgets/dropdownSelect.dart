@@ -1,5 +1,6 @@
 import 'package:budget/functions.dart';
 import 'package:budget/struct/settings.dart';
+import 'package:budget/widgets/breathingAnimation.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:flutter/material.dart';
@@ -128,6 +129,7 @@ class DropdownItemMenu {
   final IconData icon;
   final Function action;
   final double? iconScale;
+  final bool selected;
 
   DropdownItemMenu({
     required this.id,
@@ -135,6 +137,7 @@ class DropdownItemMenu {
     required this.icon,
     required this.action,
     this.iconScale,
+    this.selected = false,
   });
 }
 
@@ -155,11 +158,47 @@ class CustomPopupMenuButton extends StatelessWidget {
     this.buttonPadding = 15,
   });
 
+  menuIconButtonBuilder(BuildContext context, DropdownItemMenu menuItem) {
+    return Tooltip(
+      message: menuItem.label,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          AnimatedScale(
+            scale: menuItem.selected ? 1.8 : 0,
+            curve: Curves.easeInOutCubicEmphasized,
+            duration: Duration(milliseconds: 700),
+            child: Container(
+              height: 22,
+              width: 22,
+              decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Theme.of(context).colorScheme.secondaryContainer),
+            ),
+          ),
+          IconButton(
+            padding: EdgeInsets.all(buttonPadding),
+            onPressed: () {
+              menuItem.action();
+            },
+            icon: Transform.scale(
+              scale: items[0].iconScale ?? 1,
+              child: Icon(
+                menuItem.icon,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    bool keepOutFirstConsideringHeader = keepOutFirst &&
-        getCenteredTitleSmall(context: context, backButtonEnabled: true) ==
-            false;
+    bool keepOutFirstConsideringHeader = (keepOutFirst &&
+            getCenteredTitleSmall(context: context, backButtonEnabled: true) ==
+                false) ||
+        this.items.length == 1;
     List<DropdownItemMenu> itemsFiltered = [...items];
     if ((keepOutFirstConsideringHeader || forceKeepOutFirst) &&
         items.length > 0) itemsFiltered.removeAt(0);
@@ -173,21 +212,7 @@ class CustomPopupMenuButton extends StatelessWidget {
             double offsetX = (length - 1 - idx) * 7;
             return Transform.translate(
               offset: Offset(offsetX, 0),
-              child: Tooltip(
-                message: item.value.label,
-                child: IconButton(
-                  padding: EdgeInsets.all(15),
-                  onPressed: () {
-                    item.value.action();
-                  },
-                  icon: Transform.scale(
-                    scale: item.value.iconScale ?? 1,
-                    child: Icon(
-                      item.value.icon,
-                    ),
-                  ),
-                ),
-              ),
+              child: menuIconButtonBuilder(context, item.value),
             );
           })
         ],
@@ -200,21 +225,7 @@ class CustomPopupMenuButton extends StatelessWidget {
             items.length > 0)
           Transform.translate(
             offset: Offset(itemsFiltered.isNotEmpty ? 7 : 0, 0),
-            child: Tooltip(
-              message: items[0].label,
-              child: IconButton(
-                padding: EdgeInsets.all(buttonPadding),
-                onPressed: () {
-                  items[0].action();
-                },
-                icon: Transform.scale(
-                  scale: items[0].iconScale ?? 1,
-                  child: Icon(
-                    items[0].icon,
-                  ),
-                ),
-              ),
-            ),
+            child: menuIconButtonBuilder(context, items[0]),
           ),
         if (itemsFiltered.isNotEmpty)
           Theme(
@@ -242,9 +253,33 @@ class CustomPopupMenuButton extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Transform.scale(
-                          scale: item.iconScale ?? 1,
-                          child: Icon(item.icon),
+                        Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            BreathingWidget(
+                              duration: Duration(milliseconds: 700),
+                              endScale: 1.2,
+                              child: Transform.scale(
+                                scale: 1.5,
+                                child: Container(
+                                  height: 20,
+                                  width: 20,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: item.selected
+                                        ? Theme.of(context)
+                                            .colorScheme
+                                            .secondaryContainer
+                                        : null,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Transform.scale(
+                              scale: item.iconScale ?? 1,
+                              child: Icon(item.icon),
+                            ),
+                          ],
                         ),
                         SizedBox(width: 9),
                         TextFont(

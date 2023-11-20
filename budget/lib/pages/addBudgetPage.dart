@@ -7,6 +7,7 @@ import 'package:budget/pages/editBudgetPage.dart';
 import 'package:budget/pages/editHomePage.dart';
 import 'package:budget/pages/premiumPage.dart';
 import 'package:budget/pages/sharedBudgetSettings.dart';
+import 'package:budget/struct/currencyFunctions.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/struct/shareBudget.dart';
@@ -127,6 +128,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
   FocusNode _titleFocusNode = FocusNode();
   bool increaseBudgetWarningShown = false;
   List<String>? selectedWalletFks = null;
+  String selectedWalletPk = appStateSettings["selectedWalletPk"];
 
   // BudgetsCompanion budget = BudgetsCompanion();
 
@@ -149,6 +151,10 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
       if (shared == true) selectedAddedTransactionsOnly = true;
       if (shared == false) selectedAddedTransactionsOnly = true;
     });
+  }
+
+  setSelectedWalletPk(String walletPkPassed) {
+    selectedWalletPk = walletPkPassed;
   }
 
   setAddedTransactionsOnly(bool addedOnly) {
@@ -296,7 +302,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
       order: widget.budget != null
           ? widget.budget!.order
           : await database.getAmountOfBudgets(),
-      walletFk: "0",
+      walletFk: selectedWalletPk,
       pinned: selectedPin,
       sharedKey: widget.budget != null ? currentInstance!.sharedKey : null,
       sharedOwnerMember:
@@ -321,6 +327,8 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
               : selectedMemberTransactionFilters,
       isAbsoluteSpendingLimit:
           currentInstance?.isAbsoluteSpendingLimit ?? false,
+      income: false,
+      walletFks: selectedWalletFks,
     );
   }
 
@@ -388,6 +396,8 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
       selectedColor = widget.budget!.colour == null
           ? null
           : HexColor(widget.budget!.colour);
+      selectedWalletPk = widget.budget!.walletFk;
+      selectedWalletFks = widget.budget!.walletFks;
 
       selectedBudgetTransactionFilters =
           widget.budget!.budgetTransactionFilters ??
@@ -522,6 +532,11 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
 
   @override
   Widget build(BuildContext context) {
+    double? budgetAmount = widget.budget == null
+        ? null
+        : budgetAmountToPrimaryCurrency(
+            Provider.of<AllWallets>(context, listen: true), widget.budget!);
+
     return WillPopScope(
       onWillPop: () async {
         if (widget.budget != null) {
@@ -685,6 +700,9 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                   setSelectedAmount: setSelectedAmount,
                   initialSelectedAmount: selectedAmount,
                   setSelectedPeriodLength: (length) {
+                    print("LENGTh");
+                    print(selectedPeriodLength);
+                    print(length);
                     setState(() {
                       selectedPeriodLength = length;
                     });
@@ -711,23 +729,32 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                   afterAmountEnteredDismissed: (amountEntered) {
                     if (widget.budget != null &&
                         amountEntered != null &&
-                        widget.budget!.amount < amountEntered &&
-                        increaseBudgetWarningShown == false) {
-                      increaseBudgetWarningShown = true;
-                      openPopup(
-                        context,
-                        title: "increase-budget-warning".tr(),
-                        description: "increase-budget-warning-description".tr(),
-                        icon: appStateSettings["outlinedIcons"]
-                            ? Icons.warning_outlined
-                            : Icons.warning_rounded,
-                        onSubmitLabel: "ok".tr(),
-                        onSubmit: () {
-                          Navigator.pop(context);
-                        },
-                      );
+                        budgetAmount != null) {
+                      amountEntered = amountRatioToPrimaryCurrencyGivenPk(
+                              Provider.of<AllWallets>(context, listen: false),
+                              selectedWalletPk) *
+                          amountEntered;
+                      if (budgetAmount < amountEntered &&
+                          increaseBudgetWarningShown == false) {
+                        increaseBudgetWarningShown = true;
+                        openPopup(
+                          context,
+                          title: "increase-budget-warning".tr(),
+                          description:
+                              "increase-budget-warning-description".tr(),
+                          icon: appStateSettings["outlinedIcons"]
+                              ? Icons.warning_outlined
+                              : Icons.warning_rounded,
+                          onSubmitLabel: "ok".tr(),
+                          onSubmit: () {
+                            Navigator.pop(context);
+                          },
+                        );
+                      }
                     }
                   },
+                  setSelectedWalletPk: setSelectedWalletPk,
+                  initialSelectedWalletPk: selectedWalletPk,
                 ),
                 SizedBox(height: 10),
               ],
@@ -1079,93 +1106,95 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                   ],
                 ),
               ),
-            // SliverStickyLabelDivider(
-            //   info: "select-accounts".tr(),
-            //   visible:
-            //       !((selectedShared == true || selectedAddedTransactionsOnly) &&
-            //           ((widget.budget != null &&
-            //                   widget.budget!.sharedKey == null &&
-            //                   widget.budget!.addedTransactionsOnly == false) ||
-            //               widget.budget == null)),
-            //   sliver: SliverToBoxAdapter(
-            //     child: StreamBuilder<List<TransactionWallet>>(
-            //       stream: database.watchAllWallets(),
-            //       builder: (context, snapshot) {
-            //         if (snapshot.hasData) {
-            //           return AnimatedExpanded(
-            //             expand: !(selectedShared == true ||
-            //                 selectedAddedTransactionsOnly),
-            //             child: Column(
-            //               crossAxisAlignment: CrossAxisAlignment.start,
-            //               children: [
-            //                 SizedBox(height: 5),
-            //                 SelectChips(
-            //                   items: [null, ...snapshot.data!],
-            //                   onLongPress: (TransactionWallet? item) {
-            //                     pushRoute(
-            //                       context,
-            //                       AddWalletPage(
-            //                         wallet: item,
-            //                         routesToPopAfterDelete:
-            //                             RoutesToPopAfterDelete.PreventDelete,
-            //                       ),
-            //                     );
-            //                   },
-            //                   getLabel: (TransactionWallet? item) {
-            //                     return item?.name ?? "all-accounts".tr();
-            //                   },
-            //                   onSelected: (TransactionWallet? item) {
-            //                     print(item);
-            //                     print(selectedWalletFks);
-            //                     if (selectedWalletFks == null && item != null) {
-            //                       selectedWalletFks = [];
-            //                     }
-            //                     if (item != null) {
-            //                       if (selectedWalletFks!
-            //                           .contains(item.walletPk)) {
-            //                         selectedWalletFks!.remove(item.walletPk);
-            //                       } else {
-            //                         selectedWalletFks!.add(item.walletPk);
-            //                       }
-            //                     }
-            //                     if (item == null ||
-            //                         (selectedWalletFks ?? []).length <= 0) {
-            //                       selectedWalletFks = null;
-            //                     }
-            //                     setState(() {});
-            //                   },
-            //                   getSelected: (TransactionWallet? item) {
-            //                     return selectedWalletFks == null && item == null
-            //                         ? true
-            //                         : (selectedWalletFks ?? [])
-            //                             .contains(item?.walletPk);
-            //                   },
-            //                   getCustomBorderColor: (TransactionWallet? item) {
-            //                     return dynamicPastel(
-            //                       context,
-            //                       lightenPastel(
-            //                         HexColor(
-            //                           item?.colour,
-            //                           defaultColor:
-            //                               Theme.of(context).colorScheme.primary,
-            //                         ),
-            //                         amount: 0.3,
-            //                       ),
-            //                       amount: 0.4,
-            //                     );
-            //                   },
-            //                 ),
-            //                 SizedBox(height: 10),
-            //               ],
-            //             ),
-            //           );
-            //         } else {
-            //           return SizedBox.shrink();
-            //         }
-            //       },
-            //     ),
-            //   ),
-            // ),
+            SliverStickyLabelDivider(
+              info: "select-accounts".tr(),
+              visible:
+                  !((selectedShared == true || selectedAddedTransactionsOnly) &&
+                      ((widget.budget != null &&
+                              widget.budget!.sharedKey == null &&
+                              widget.budget!.addedTransactionsOnly == false) ||
+                          widget.budget == null)),
+              sliver: SliverToBoxAdapter(
+                child: StreamBuilder<List<TransactionWallet>>(
+                  stream: database.watchAllWallets(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return AnimatedExpanded(
+                        expand: !(selectedShared == true ||
+                            selectedAddedTransactionsOnly),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(height: 5),
+                            SelectChips(
+                              items: [null, ...snapshot.data!],
+                              onLongPress: (TransactionWallet? item) {
+                                pushRoute(
+                                  context,
+                                  AddWalletPage(
+                                    wallet: item,
+                                    routesToPopAfterDelete:
+                                        RoutesToPopAfterDelete.PreventDelete,
+                                  ),
+                                );
+                              },
+                              getLabel: (TransactionWallet? item) {
+                                return item?.name ?? "all-accounts".tr();
+                              },
+                              onSelected: (TransactionWallet? item) {
+                                // print(item);
+                                // print(selectedWalletFks);
+                                if (selectedWalletFks == null && item != null) {
+                                  selectedWalletFks = [];
+                                }
+                                if (item != null) {
+                                  if (selectedWalletFks!
+                                      .contains(item.walletPk)) {
+                                    selectedWalletFks!.remove(item.walletPk);
+                                  } else {
+                                    selectedWalletFks!.add(item.walletPk);
+                                  }
+                                }
+                                if (item == null ||
+                                    (selectedWalletFks ?? []).length <= 0) {
+                                  selectedWalletFks = null;
+                                }
+                                setState(() {});
+                                determineBottomButton();
+                              },
+                              getSelected: (TransactionWallet? item) {
+                                return selectedWalletFks == null && item == null
+                                    ? true
+                                    : (selectedWalletFks ?? [])
+                                        .contains(item?.walletPk);
+                              },
+                              getCustomBorderColor: (TransactionWallet? item) {
+                                if (item == null) return null;
+                                return dynamicPastel(
+                                  context,
+                                  lightenPastel(
+                                    HexColor(
+                                      item.colour,
+                                      defaultColor:
+                                          Theme.of(context).colorScheme.primary,
+                                    ),
+                                    amount: 0.3,
+                                  ),
+                                  amount: 0.4,
+                                );
+                              },
+                            ),
+                            SizedBox(height: 10),
+                          ],
+                        ),
+                      );
+                    } else {
+                      return SizedBox.shrink();
+                    }
+                  },
+                ),
+              ),
+            ),
             SliverStickyLabelDivider(
               info: "select-categories".tr(),
               extraInfo: getSelectedCategoriesText(selectedCategoryPks),
@@ -1300,6 +1329,8 @@ class BudgetDetails extends StatefulWidget {
     required this.setSelectedRecurrence,
     required this.setSelectedStartDate,
     required this.setSelectedEndDate,
+    this.setSelectedWalletPk,
+    this.initialSelectedWalletPk,
     this.initialSelectedAmount,
     this.initialSelectedPeriodLength,
     this.initialSelectedStartDate,
@@ -1314,6 +1345,8 @@ class BudgetDetails extends StatefulWidget {
   final Function(String) setSelectedRecurrence;
   final Function(DateTime) setSelectedStartDate;
   final Function(DateTime?) setSelectedEndDate;
+  final Function(String)? setSelectedWalletPk;
+  final String? initialSelectedWalletPk;
   final double? initialSelectedAmount;
   final int? initialSelectedPeriodLength;
   final DateTime? initialSelectedStartDate;
@@ -1332,6 +1365,8 @@ class _BudgetDetailsState extends State<BudgetDetails> {
   late DateTime? selectedEndDate;
   late String selectedRecurrence;
   String selectedRecurrenceDisplay = "month";
+  late String selectedWalletPk;
+
   @override
   void initState() {
     selectedAmount = widget.initialSelectedAmount;
@@ -1340,6 +1375,8 @@ class _BudgetDetailsState extends State<BudgetDetails> {
         DateTime(DateTime.now().year, DateTime.now().month, 1);
     selectedEndDate = widget.initialSelectedEndDate;
     selectedRecurrence = widget.initialSelectedRecurrence ?? "Monthly";
+    selectedWalletPk =
+        widget.initialSelectedWalletPk ?? appStateSettings["selectedWalletPk"];
 
     if (selectedPeriodLength == 1) {
       selectedRecurrenceDisplay = nameRecurrence[selectedRecurrence];
@@ -1355,6 +1392,7 @@ class _BudgetDetailsState extends State<BudgetDetails> {
       fullSnap: true,
       PopupFramework(
         title: "enter-amount".tr(),
+        hasPadding: false,
         underTitleSpace: false,
         child: SelectAmount(
           onlyShowCurrencyIcon: true,
@@ -1370,6 +1408,18 @@ class _BudgetDetailsState extends State<BudgetDetails> {
             Navigator.pop(context);
           },
           nextLabel: "set-amount".tr(),
+          enableWalletPicker: true,
+          padding: EdgeInsets.symmetric(horizontal: 18),
+          setSelectedWalletPk: (walletPk) {
+            setState(() {
+              selectedWalletPk = walletPk;
+            });
+            if (widget.setSelectedWalletPk != null) {
+              widget.setSelectedWalletPk!(walletPk);
+            }
+          },
+          walletPkForCurrency: selectedWalletPk,
+          selectedWalletPk: selectedWalletPk,
         ),
       ),
     );
@@ -1509,11 +1559,26 @@ class _BudgetDetailsState extends State<BudgetDetails> {
               IntrinsicWidth(
                 child: TappableTextEntry(
                   title: convertToMoney(
-                      Provider.of<AllWallets>(context), selectedAmount ?? 0),
-                  placeholder:
-                      convertToMoney(Provider.of<AllWallets>(context), 0),
-                  showPlaceHolderWhenTextEquals:
-                      convertToMoney(Provider.of<AllWallets>(context), 0),
+                    Provider.of<AllWallets>(context),
+                    selectedAmount ?? 0,
+                    currencyKey: Provider.of<AllWallets>(context, listen: true)
+                        .indexedByPk[selectedWalletPk]
+                        ?.currency,
+                  ),
+                  placeholder: convertToMoney(
+                    Provider.of<AllWallets>(context),
+                    0,
+                    currencyKey: Provider.of<AllWallets>(context, listen: true)
+                        .indexedByPk[selectedWalletPk]
+                        ?.currency,
+                  ),
+                  showPlaceHolderWhenTextEquals: convertToMoney(
+                    Provider.of<AllWallets>(context),
+                    0,
+                    currencyKey: Provider.of<AllWallets>(context, listen: true)
+                        .indexedByPk[selectedWalletPk]
+                        ?.currency,
+                  ),
                   onTap: () {
                     selectAmount(context);
                   },
@@ -1677,6 +1742,7 @@ class _BudgetDetailsState extends State<BudgetDetails> {
                   order: -1,
                   walletFk: "",
                   isAbsoluteSpendingLimit: false,
+                  income: false,
                 ),
                 DateTime.now(),
               );

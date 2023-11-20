@@ -845,5 +845,20 @@
   "spending-limit-type": "Spending Limit Type",
   "percent": "Percent",
   "major-change-15": "Add Button Long Press",
-  "major-change-15-1": "Quickly duplicate frequent transactions, transfer balances across accounts and more"
+  "major-change-15-1": "Quickly duplicate frequent transactions, transfer balances across accounts and more",
+  "date-range": "Date Range",
+  "transactions-list": "Transactions List",
+  "monthly-spending-summary": "Monthly Spending Summary",
+  "monthly-spending-summary-description": "Transactions page cash flow banner",
+  "enabled-in-settings-at-any-time": "This can be enabled in the settings at any time",
+  "unlock-with": "Unlock with",
+  "learn-more": "Learn More",
+  "current": "Current",
+  "installments": "Installments",
+  "track-installments": "Installments",
+  "track-installments-description": "Set up a goal to track payment progress overtime. Add transactions to your goals to track your progress.",
+  "initial-account-balance": "Initial Account Balance",
+  "starting-at": "Starting at",
+  "major-change-16": "New Spending Page",
+  "major-change-16-1": "Revamped the all spending page with spending period history"
 }

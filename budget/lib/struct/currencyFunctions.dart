@@ -30,14 +30,14 @@ Future<bool> getExchangeRates() async {
   return true;
 }
 
-double? amountRatioToPrimaryCurrencyGivenPk(
+double amountRatioToPrimaryCurrencyGivenPk(
     AllWallets allWallets, String walletPk) {
-  if (allWallets.indexedByPk[walletPk] == null) return null;
+  if (allWallets.indexedByPk[walletPk] == null) return 1;
   return amountRatioToPrimaryCurrency(
       allWallets, allWallets.indexedByPk[walletPk]?.currency);
 }
 
-double? amountRatioToPrimaryCurrency(
+double amountRatioToPrimaryCurrency(
     AllWallets allWallets, String? walletCurrency) {
   if (walletCurrency == null) {
     return 1;
@@ -86,4 +86,21 @@ double getCurrencyExchangeRate(String? currencyKey) {
   } else {
     return 1;
   }
+}
+
+double budgetAmountToPrimaryCurrency(AllWallets allWallets, Budget budget) {
+  return budget.amount *
+      (amountRatioToPrimaryCurrencyGivenPk(allWallets, budget.walletFk));
+}
+
+double objectiveAmountToPrimaryCurrency(
+    AllWallets allWallets, Objective objective) {
+  return objective.amount *
+      (amountRatioToPrimaryCurrencyGivenPk(allWallets, objective.walletFk));
+}
+
+double categoryBudgetLimitToPrimaryCurrency(
+    AllWallets allWallets, CategoryBudgetLimit limit) {
+  return limit.amount *
+      (amountRatioToPrimaryCurrencyGivenPk(allWallets, limit.walletFk));
 }

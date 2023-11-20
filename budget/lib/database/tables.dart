@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:budget/functions.dart';
 import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/homePage/homePageLineGraph.dart';
+import 'package:budget/pages/transactionFilters.dart';
 import 'package:budget/pages/transactionsSearchPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/firebaseAuthGlobal.dart';
@@ -25,7 +26,7 @@ import 'package:flutter/material.dart' show DateTimeRange;
 import 'package:flutter/material.dart' show RangeValues;
 part 'tables.g.dart';
 
-int schemaVersionGlobal = 44;
+int schemaVersionGlobal = 45;
 
 // To update and migrate the database, check the README
 
@@ -81,7 +82,7 @@ enum HomePageWidgetDisplay {
   WalletSwitcher,
   WalletList,
   NetWorth,
-  AllSpending,
+  AllSpending, //Deprecated
 }
 
 List<HomePageWidgetDisplay> defaultWalletHomePageWidgetDisplay = [
@@ -265,7 +266,8 @@ class Transactions extends Table {
       .references(Categories, #categoryPk)
       .withDefault(const Constant(null))
       .nullable()();
-  TextColumn get walletFk => text().references(Wallets, #walletPk)();
+  TextColumn get walletFk =>
+      text().references(Wallets, #walletPk).withDefault(const Constant("0"))();
   // TextColumn get labelFks =>
   //     text().map(const IntListInColumnConverter()).nullable()();
   DateTimeColumn get dateCreated =>
@@ -358,6 +360,8 @@ class CategoryBudgetLimits extends Table {
   RealColumn get amount => real()();
   DateTimeColumn get dateTimeModified =>
       dateTime().withDefault(Constant(DateTime.now())).nullable()();
+  TextColumn get walletFk =>
+      text().references(Wallets, #walletPk).withDefault(const Constant("0"))();
 
   @override
   Set<Column> get primaryKey => {categoryLimitPk};
@@ -405,11 +409,14 @@ class Budgets extends Table {
       .nullable()(); // if null we are using the themes color
   DateTimeColumn get startDate => dateTime()();
   DateTimeColumn get endDate => dateTime()();
+  TextColumn get walletFks =>
+      text().map(const StringListInColumnConverter()).nullable()();
   TextColumn get categoryFks =>
       text().map(const StringListInColumnConverter()).nullable()();
   TextColumn get categoryFksExclude =>
       text().map(const StringListInColumnConverter()).nullable()();
   // BoolColumn get allCategoryFks => boolean()();
+  BoolColumn get income => boolean().withDefault(const Constant(false))();
   BoolColumn get addedTransactionsOnly =>
       boolean().withDefault(const Constant(false))();
   IntColumn get periodLength => integer()();
@@ -420,7 +427,8 @@ class Budgets extends Table {
       dateTime().withDefault(Constant(DateTime.now())).nullable()();
   BoolColumn get pinned => boolean().withDefault(const Constant(false))();
   IntColumn get order => integer()();
-  TextColumn get walletFk => text().references(Wallets, #walletPk)();
+  TextColumn get walletFk =>
+      text().references(Wallets, #walletPk).withDefault(const Constant("0"))();
   TextColumn get budgetTransactionFilters => text()
       .nullable()
       .withDefault(const Constant(null))
@@ -472,7 +480,8 @@ class ScannerTemplates extends Table {
   TextColumn get amountTransactionAfter => text().withLength(max: NAME_LIMIT)();
   TextColumn get defaultCategoryFk =>
       text().references(Categories, #categoryPk)();
-  TextColumn get walletFk => text().references(Wallets, #walletPk)();
+  TextColumn get walletFk =>
+      text().references(Wallets, #walletPk).withDefault(const Constant("0"))();
   // TODO: if it contains certain keyword ignore these emails
   BoolColumn get ignore => boolean().withDefault(const Constant(false))();
 
@@ -499,6 +508,8 @@ class Objectives extends Table {
   TextColumn get emojiIconName => text().nullable()();
   BoolColumn get income => boolean().withDefault(const Constant(false))();
   BoolColumn get pinned => boolean().withDefault(const Constant(true))();
+  TextColumn get walletFk =>
+      text().references(Wallets, #walletPk).withDefault(const Constant("0"))();
 
   @override
   Set<Column> get primaryKey => {objectivePk};
@@ -991,6 +1002,36 @@ class FinanceDatabase extends _$FinanceDatabase {
                       e.toString());
             }
           },
+          from44To45: (m, schema) async {
+            print("44 to 45");
+            try {
+              await m.addColumn(schema.budgets, schema.budgets.walletFks);
+            } catch (e) {
+              print("Migration Error: Error creating column budgets.walletFks" +
+                  e.toString());
+            }
+            try {
+              await m.addColumn(schema.budgets, schema.budgets.income);
+            } catch (e) {
+              print("Migration Error: Error creating column budgets.income " +
+                  e.toString());
+            }
+            try {
+              await m.addColumn(schema.objectives, schema.objectives.walletFk);
+            } catch (e) {
+              print(
+                  "Migration Error: Error creating column objectives.walletFk " +
+                      e.toString());
+            }
+            try {
+              await m.addColumn(schema.categoryBudgetLimits,
+                  schema.categoryBudgetLimits.walletFk);
+            } catch (e) {
+              print(
+                  "Migration Error: Error creating column categoryBudgetLimits.walletFk " +
+                      e.toString());
+            }
+          },
         )(migrator, from, to);
       },
       beforeOpen: (details) async {
@@ -1027,6 +1068,61 @@ class FinanceDatabase extends _$FinanceDatabase {
             } catch (e) {
               print(
                   "Migration Error: Error upgrading home page widget display default for wallets " +
+                      e.toString());
+            }
+          }
+          if (details.versionBefore! < 45) {
+            // Migration 44to45
+            print(
+                "Migration updating wallet objectives.walletFk to current wallet");
+            try {
+              List<Objective> allObjectives = await getAllObjectives();
+              List<Objective> objectivesInserting = [];
+              for (Objective objective in allObjectives) {
+                objectivesInserting.add(objective.copyWith(
+                    walletFk: appStateSettings["selectedWalletPk"]));
+              }
+              Future.delayed(Duration(milliseconds: 0), () async {
+                await updateBatchObjectivesOnly(objectivesInserting);
+              });
+            } catch (e) {
+              print(
+                  "Migration Error: Error upgrading objectives.walletFk to current wallet " +
+                      e.toString());
+            }
+
+            print(
+                "Migration updating wallet budget.walletFk to current wallet");
+            try {
+              List<Budget> allBudgets = await getAllBudgets();
+              List<Budget> budgetsInserting = [];
+              for (Budget budget in allBudgets) {
+                budgetsInserting.add(budget.copyWith(
+                    walletFk: appStateSettings["selectedWalletPk"]));
+              }
+              await updateBatchBudgetsOnly(budgetsInserting);
+            } catch (e) {
+              print(
+                  "Migration Error: Error upgrading objectives.walletFk to current wallet " +
+                      e.toString());
+            }
+
+            print(
+                "Migration updating wallet categoryBudgetLimits.walletFk to current wallet");
+            try {
+              List<CategoryBudgetLimit> allCategoryBudgetLimits =
+                  await getAllCategorySpendingLimits();
+              List<CategoryBudgetLimit> categoryBudgetLimitsInserting = [];
+              for (CategoryBudgetLimit categoryBudgetLimit
+                  in allCategoryBudgetLimits) {
+                categoryBudgetLimitsInserting.add(categoryBudgetLimit.copyWith(
+                    walletFk: appStateSettings["selectedWalletPk"]));
+              }
+              await updateBatchCategoryLimitsOnly(
+                  categoryBudgetLimitsInserting);
+            } catch (e) {
+              print(
+                  "Migration Error: Error upgrading objectives.walletFk to current wallet " +
                       e.toString());
             }
           }
@@ -1194,12 +1290,7 @@ class FinanceDatabase extends _$FinanceDatabase {
             onlyShowIfFollowsFilters(transactions,
                 budgetTransactionFilters: budgetTransactionFilters,
                 memberTransactionFilters: memberTransactionFilters) &
-            (start == null && end == null
-                ? Constant(true)
-                : start != null && end == null
-                    ? isOnDay(transactions.dateCreated, start)
-                    : onlyShowBasedOnTimeRange(
-                        transactions, start, end, budget)) &
+            onlyShowBasedOnTimeRange(transactions, start, end, budget) &
             (onlyShowBasedOnCategoryFks(
                     transactions, categoryFks, categoryFksExclude) |
                 onlyShowBasedOnSubcategoryFks(transactions, categoryFks)) &
@@ -2344,6 +2435,7 @@ class FinanceDatabase extends _$FinanceDatabase {
   }
 
   Future<bool> toggleAbsolutePercentSpendingCategoryBudgetLimits(
+    AllWallets allWallets,
     String budgetPk,
     double budgetSetAmount,
     bool absoluteToPercentage,
@@ -2361,9 +2453,15 @@ class FinanceDatabase extends _$FinanceDatabase {
         // This is a main category
         convertedAmount = categorySpendingLimit.amount;
         if (absoluteToPercentage) {
+          convertedAmount = categoryBudgetLimitToPrimaryCurrency(
+              allWallets, categorySpendingLimit);
           convertedAmount = convertedAmount / budgetSetAmount * 100;
         } else {
           convertedAmount = convertedAmount / 100 * budgetSetAmount;
+          convertedAmount = convertedAmount *
+              1 /
+              amountRatioToPrimaryCurrencyGivenPk(
+                  allWallets, categorySpendingLimit.walletFk);
         }
       } else {
         // This is a subcategory
@@ -2375,11 +2473,17 @@ class FinanceDatabase extends _$FinanceDatabase {
             (absoluteToPercentage ? budgetSetAmount : 100);
         convertedAmount = categorySpendingLimit.amount;
         if (absoluteToPercentage) {
+          convertedAmount = categoryBudgetLimitToPrimaryCurrency(
+              allWallets, categorySpendingLimit);
           convertedAmount = convertedAmount / convertedAmountMain * 100;
         } else {
           convertedAmount = (convertedAmount / 100) *
               (convertedAmountMain / 100) *
               (budgetSetAmount);
+          convertedAmount = convertedAmount *
+              1 /
+              amountRatioToPrimaryCurrencyGivenPk(
+                  allWallets, categorySpendingLimit.walletFk);
         }
       }
       limitsInserting.add(categorySpendingLimit.copyWith(
@@ -2638,6 +2742,10 @@ class FinanceDatabase extends _$FinanceDatabase {
         .getSingle();
   }
 
+  Future<TransactionWallet> getWalletFromRowId(int rowId) {
+    return (select(wallets)..where((w) => w.rowId.equals(rowId))).getSingle();
+  }
+
   Future<TransactionCategory> getCategoryFromRowId(int rowId) {
     return (select(categories)..where((c) => c.rowId.equals(rowId)))
         .getSingle();
@@ -2662,6 +2770,12 @@ class FinanceDatabase extends _$FinanceDatabase {
         transaction.amount == double.negativeInfinity ||
         transaction.amount.isNaN) {
       return null;
+    }
+
+    if (transaction.type == TransactionSpecialType.credit) {
+      transaction = transaction.copyWith(income: false);
+    } else if (transaction.type == TransactionSpecialType.debt) {
+      transaction = transaction.copyWith(income: true);
     }
 
     // we are saying we still need this category! - for syncing
@@ -3029,6 +3143,15 @@ class FinanceDatabase extends _$FinanceDatabase {
       List<CategoryBudgetLimit> limitsInserting) async {
     await batch((batch) {
       batch.insertAll(categoryBudgetLimits, limitsInserting,
+          mode: InsertMode.insertOrReplace);
+    });
+    return true;
+  }
+
+  Future<bool> updateBatchObjectivesOnly(
+      List<Objective> objectivesInserting) async {
+    await batch((batch) {
+      batch.insertAll(objectives, objectivesInserting,
           mode: InsertMode.insertOrReplace);
     });
     return true;
@@ -3638,6 +3761,10 @@ class FinanceDatabase extends _$FinanceDatabase {
                   : b.sharedKey.isNull())))
           ..orderBy([(c) => OrderingTerm.asc(c.order)]))
         .get();
+  }
+
+  Future<List<CategoryBudgetLimit>> getAllCategorySpendingLimits() {
+    return (select(categoryBudgetLimits)).get();
   }
 
   Future<List<Objective>> getAllObjectives() {
@@ -4329,41 +4456,104 @@ class FinanceDatabase extends _$FinanceDatabase {
   }
 
   Stream<double?> watchTotalOfCategoryLimitsInBudgetWithCategories(
+      AllWallets allWallets,
       String budgetPk,
       List<String>? categoryPks,
-      List<String>? categoryPksExclude) {
-    final totalAmt = categoryBudgetLimits.amount.sum();
-    JoinedSelectStatement<$CategoryBudgetLimitsTable, CategoryBudgetLimit>
-        query;
+      List<String>? categoryPksExclude,
+      bool isAbsoluteSpendingLimit) {
+    if (isAbsoluteSpendingLimit == false) {
+      final totalAmt = categoryBudgetLimits.amount.sum();
+      JoinedSelectStatement<$CategoryBudgetLimitsTable, CategoryBudgetLimit>
+          query;
 
-    query = selectOnly(categoryBudgetLimits)
-      ..join([
-        leftOuterJoin(categories,
-            categories.categoryPk.equalsExp(categoryBudgetLimits.categoryFk))
-      ])
-      ..addColumns([totalAmt])
-      ..where(categories.mainCategoryPk.isNull() &
-          categoryBudgetLimits.budgetFk.equals(budgetPk) &
-          isInCategory(categoryBudgetLimits, categoryPks, categoryPksExclude));
+      query = selectOnly(categoryBudgetLimits)
+        ..join([
+          leftOuterJoin(categories,
+              categories.categoryPk.equalsExp(categoryBudgetLimits.categoryFk))
+        ])
+        ..addColumns([totalAmt])
+        ..where(categories.mainCategoryPk.isNull() &
+            categoryBudgetLimits.budgetFk.equals(budgetPk) &
+            isInCategory(
+                categoryBudgetLimits, categoryPks, categoryPksExclude));
 
-    return query.map((row) => row.read(totalAmt)).watchSingleOrNull();
+      return query.map((row) => row.read(totalAmt)).watchSingleOrNull();
+    } else {
+      List<Stream<double?>> mergedStreams = [];
+      for (TransactionWallet wallet in allWallets.list) {
+        final totalAmt = categoryBudgetLimits.amount.sum();
+        JoinedSelectStatement<$CategoryBudgetLimitsTable, CategoryBudgetLimit>
+            query;
+
+        query = selectOnly(categoryBudgetLimits)
+          ..join([
+            leftOuterJoin(
+                categories,
+                categories.categoryPk
+                    .equalsExp(categoryBudgetLimits.categoryFk))
+          ])
+          ..addColumns([totalAmt])
+          ..where(categoryBudgetLimits.walletFk.equals(wallet.walletPk) &
+              categories.mainCategoryPk.isNull() &
+              categoryBudgetLimits.budgetFk.equals(budgetPk) &
+              isInCategory(
+                  categoryBudgetLimits, categoryPks, categoryPksExclude));
+
+        mergedStreams.add(query
+            .map(((row) =>
+                (row.read(totalAmt) ?? 0) *
+                (amountRatioToPrimaryCurrency(allWallets, wallet.currency))))
+            .watchSingle());
+      }
+
+      return totalDoubleStream(mergedStreams);
+    }
   }
 
   Stream<double?> watchTotalOfCategoryLimitsInBudgetWithSubCategories(
-      String mainCategoryPk) {
-    final totalAmt = categoryBudgetLimits.amount.sum();
-    JoinedSelectStatement<$CategoryBudgetLimitsTable, CategoryBudgetLimit>
-        query;
+      AllWallets allWallets,
+      String mainCategoryPk,
+      bool isAbsoluteSpendingLimit) {
+    if (isAbsoluteSpendingLimit == false) {
+      final totalAmt = categoryBudgetLimits.amount.sum();
+      JoinedSelectStatement<$CategoryBudgetLimitsTable, CategoryBudgetLimit>
+          query;
 
-    query = selectOnly(categoryBudgetLimits)
-      ..join([
-        leftOuterJoin(categories,
-            categories.categoryPk.equalsExp(categoryBudgetLimits.categoryFk))
-      ])
-      ..addColumns([totalAmt])
-      ..where(categories.mainCategoryPk.equals(mainCategoryPk));
+      query = selectOnly(categoryBudgetLimits)
+        ..join([
+          leftOuterJoin(categories,
+              categories.categoryPk.equalsExp(categoryBudgetLimits.categoryFk))
+        ])
+        ..addColumns([totalAmt])
+        ..where(categories.mainCategoryPk.equals(mainCategoryPk));
 
-    return query.map((row) => row.read(totalAmt)).watchSingleOrNull();
+      return query.map((row) => row.read(totalAmt)).watchSingleOrNull();
+    } else {
+      List<Stream<double?>> mergedStreams = [];
+      for (TransactionWallet wallet in allWallets.list) {
+        final totalAmt = categoryBudgetLimits.amount.sum();
+        JoinedSelectStatement<$CategoryBudgetLimitsTable, CategoryBudgetLimit>
+            query;
+
+        query = selectOnly(categoryBudgetLimits)
+          ..join([
+            leftOuterJoin(
+                categories,
+                categories.categoryPk
+                    .equalsExp(categoryBudgetLimits.categoryFk))
+          ])
+          ..addColumns([totalAmt])
+          ..where(categoryBudgetLimits.walletFk.equals(wallet.walletPk) &
+              categories.mainCategoryPk.equals(mainCategoryPk));
+
+        mergedStreams.add(query
+            .map(((row) =>
+                (row.read(totalAmt) ?? 0) *
+                (amountRatioToPrimaryCurrency(allWallets, wallet.currency))))
+            .watchSingle());
+      }
+      return totalDoubleStream(mergedStreams);
+    }
   }
 
   Stream<double?> watchTotalTowardsObjective(
@@ -4382,7 +4572,7 @@ class FinanceDatabase extends _$FinanceDatabase {
       mergedStreams.add(query
           .map(((row) =>
               (row.read(totalAmt) ?? 0) *
-              (amountRatioToPrimaryCurrency(allWallets, wallet.currency) ?? 0)))
+              (amountRatioToPrimaryCurrency(allWallets, wallet.currency))))
           .watchSingle());
     }
     return totalDoubleStream(mergedStreams);
@@ -4404,7 +4594,7 @@ class FinanceDatabase extends _$FinanceDatabase {
       mergedStreams.add(query
           .map(((row) =>
               (row.read(totalAmt) ?? 0) *
-              (amountRatioToPrimaryCurrency(allWallets, wallet.currency) ?? 0)))
+              (amountRatioToPrimaryCurrency(allWallets, wallet.currency))))
           .watchSingle());
     }
 
@@ -4441,6 +4631,7 @@ class FinanceDatabase extends _$FinanceDatabase {
                   // (allCashFlow
                   //     ? transactions.income.isIn([true, false])
                   //     : transactions.income.equals(false)) &
+                  onlyShowBasedOnWalletFks(transactions, budget?.walletFks) &
                   onlyShowIfNotExcludedFromBudget(
                       transactions, budget?.budgetPk) &
                   onlyShowIfCertainBudget(
@@ -4454,7 +4645,7 @@ class FinanceDatabase extends _$FinanceDatabase {
       mergedStreams.add(query
           .map(((row) =>
               (row.read(totalAmt) ?? 0) *
-              (amountRatioToPrimaryCurrency(allWallets, wallet.currency) ?? 0)))
+              (amountRatioToPrimaryCurrency(allWallets, wallet.currency))))
           .watchSingle());
     }
     return totalDoubleStream(mergedStreams);
@@ -4739,7 +4930,7 @@ class FinanceDatabase extends _$FinanceDatabase {
       mergedStreams.add(query
           .map(((row) =>
               (row.read(totalAmt) ?? 0) *
-              (amountRatioToPrimaryCurrency(allWallets, wallet.currency) ?? 0)))
+              (amountRatioToPrimaryCurrency(allWallets, wallet.currency))))
           .watchSingleOrNull());
     }
 
@@ -4778,7 +4969,7 @@ class FinanceDatabase extends _$FinanceDatabase {
       mergedStreams.add(query
           .map(((row) =>
               (row.read(totalAmt) ?? 0) *
-              (amountRatioToPrimaryCurrency(allWallets, wallet.currency) ?? 0)))
+              (amountRatioToPrimaryCurrency(allWallets, wallet.currency))))
           .watchSingleOrNull());
     }
     return totalDoubleStream(mergedStreams);
@@ -4854,12 +5045,19 @@ class FinanceDatabase extends _$FinanceDatabase {
 
   // If followCustomPeriodCycle is true, cycleSettingsExtension should always be passed in a value!
   Expression<bool> onlyShowIfFollowCustomPeriodCycle(
-      $TransactionsTable tbl, bool followCustomPeriodCycle,
-      {String cycleSettingsExtension = ""}) {
+    $TransactionsTable tbl,
+    bool followCustomPeriodCycle, {
+    String cycleSettingsExtension = "",
+    DateTimeRange? forcedDateTimeRange,
+  }) {
+    if (forcedDateTimeRange != null) {
+      return onlyShowBasedOnTimeRange(
+          tbl, forcedDateTimeRange.start, forcedDateTimeRange.end, null,
+          allTime: false);
+    }
     CycleType selectedPeriodType = CycleType.values[
         appStateSettings["selectedPeriodCycleType" + cycleSettingsExtension] ??
             0];
-
     if (followCustomPeriodCycle == false) {
       return Constant(true);
     } else if (selectedPeriodType == CycleType.allTime) {
@@ -4873,17 +5071,22 @@ class FinanceDatabase extends _$FinanceDatabase {
       return onlyShowBasedOnTimeRange(tbl, startDate, endDate, null,
           allTime: false);
     } else if (selectedPeriodType == CycleType.pastDays) {
-      DateTime startDate = DateTime.now().subtract(Duration(
-          days: (appStateSettings[
-                  "customPeriodPastDays" + cycleSettingsExtension] ??
-              0)));
+      DateTime startDate =
+          getStartDateOfSelectedCustomPeriod(cycleSettingsExtension) ??
+              DateTime.now();
       return tbl.dateCreated.isBiggerOrEqualValue(startDate);
-    } else if (selectedPeriodType == CycleType.startDate) {
-      DateTime startDate = DateTime.tryParse(appStateSettings[
-                  "customPeriodStartDate" + cycleSettingsExtension] ??
-              "") ??
-          DateTime.now();
-      return tbl.dateCreated.isBiggerOrEqualValue(startDate);
+    } else if (selectedPeriodType == CycleType.dateRange) {
+      DateTime startDate =
+          getStartDateOfSelectedCustomPeriod(cycleSettingsExtension) ??
+              DateTime.now();
+      DateTime? endDate =
+          getEndDateOfSelectedCustomPeriod(cycleSettingsExtension);
+      if (endDate != null) {
+        return onlyShowBasedOnTimeRange(tbl, startDate, endDate, null,
+            allTime: false);
+      } else {
+        return tbl.dateCreated.isBiggerOrEqualValue(startDate);
+      }
     }
     return Constant(true);
   }
@@ -5023,6 +5226,8 @@ class FinanceDatabase extends _$FinanceDatabase {
     // if a transaction does not have a subcategory assigned, does it show up in the total?
     bool countUnassignedTransactions = false,
     String cycleSettingsExtension = "",
+    SearchFilters? searchFilters,
+    DateTimeRange? forcedDateTimeRange,
   }) {
     DateTime startDate = DateTime(start.year, start.month, start.day);
     DateTime endDate = DateTime(end.year, end.month, end.day);
@@ -5036,13 +5241,25 @@ class FinanceDatabase extends _$FinanceDatabase {
 
       final query = (select(transactions)
         ..where((tbl) {
-          return onlyShowBasedOnTimeRange(
-                  transactions, startDate, endDate, budget, allTime: allTime) &
+          return onlyShowIfFollowsSearchFilters(
+                tbl,
+                searchFilters,
+                joinedWithSubcategoriesTable: null,
+                joinedWithCategories: false,
+                joinedWithBudgets: false,
+                joinedWithObjectives: false,
+              ) &
+              onlyShowBasedOnTimeRange(transactions, startDate, endDate, budget,
+                  allTime: allTime) &
               isInCategory(tbl, categoryFks, categoryFksExclude) &
+              onlyShowBasedOnWalletFks(tbl, budget?.walletFks) &
               onlyShowIfNotBalanceCorrection(transactions, isIncome) &
               onlyShowIfFollowCustomPeriodCycle(
-                  transactions, followCustomPeriodCycle,
-                  cycleSettingsExtension: cycleSettingsExtension) &
+                transactions,
+                followCustomPeriodCycle,
+                cycleSettingsExtension: cycleSettingsExtension,
+                forcedDateTimeRange: forcedDateTimeRange,
+              ) &
               tbl.paid.equals(true) &
               // evaluateIfNull(tbl.income.equals(income ?? false), income, true) &
               transactions.walletFk.equals(wallet.walletPk) &
@@ -5097,7 +5314,7 @@ class FinanceDatabase extends _$FinanceDatabase {
             row.readTableOrNull(categoryBudgetLimits);
 
         final double? total = (row.read(totalAmt) ?? 0) *
-            (amountRatioToPrimaryCurrency(allWallets, wallet.currency) ?? 0);
+            (amountRatioToPrimaryCurrency(allWallets, wallet.currency));
         final int? transactionCount = row.read(totalCount);
         return CategoryWithTotal(
             category: category,
@@ -5138,6 +5355,8 @@ class FinanceDatabase extends _$FinanceDatabase {
     required AllWallets allWallets,
     bool followCustomPeriodCycle = false,
     String cycleSettingsExtension = "",
+    SearchFilters? searchFilters,
+    DateTimeRange? forcedDateTimeRange,
   }) {
     // we have to convert currencies to account for all wallets
     List<Stream<double?>> mergedStreams = [];
@@ -5145,12 +5364,20 @@ class FinanceDatabase extends _$FinanceDatabase {
       final totalAmt = transactions.amount.sum();
       final query = selectOnly(transactions)
         ..addColumns([totalAmt])
-        ..where(transactions.walletFk.equals(wallet.walletPk) &
+        ..where(onlyShowIfFollowsSearchFilters(transactions, searchFilters,
+                joinedWithSubcategoriesTable: null,
+                joinedWithCategories: false,
+                joinedWithBudgets: false,
+                joinedWithObjectives: false) &
+            transactions.walletFk.equals(wallet.walletPk) &
             onlyShowIfNotBalanceCorrection(transactions, isIncome) &
             transactions.paid.equals(true) &
             onlyShowIfFollowCustomPeriodCycle(
-                transactions, followCustomPeriodCycle,
-                cycleSettingsExtension: cycleSettingsExtension) &
+              transactions,
+              followCustomPeriodCycle,
+              cycleSettingsExtension: cycleSettingsExtension,
+              forcedDateTimeRange: forcedDateTimeRange,
+            ) &
             evaluateIfNull(
                 transactions.walletFk.isIn(walletPks ?? []), walletPks, true) &
             onlyShowBasedOnTimeRange(transactions, startDate, null, null) &
@@ -5160,7 +5387,7 @@ class FinanceDatabase extends _$FinanceDatabase {
       mergedStreams.add(query
           .map((row) =>
               (row.read(totalAmt) ?? 0) *
-              (amountRatioToPrimaryCurrency(allWallets, wallet.currency) ?? 0))
+              (amountRatioToPrimaryCurrency(allWallets, wallet.currency)))
           .watchSingle());
     }
     return totalDoubleStream(mergedStreams);
@@ -5194,19 +5421,27 @@ class FinanceDatabase extends _$FinanceDatabase {
     DateTime? startDate,
     bool followCustomPeriodCycle = false,
     String cycleSettingsExtension = "",
+    SearchFilters? searchFilters,
+    DateTimeRange? forcedDateTimeRange,
   }) {
     final totalCount = transactions.transactionPk.count();
     final query = selectOnly(transactions)
       ..addColumns([totalCount])
-      ..where((isIncome == null
-              ? transactions.walletFk.isNotNull()
-              : isIncome == true
-                  ? transactions.income.equals(true)
-                  : transactions.income.equals(false)) &
+      ..where((onlyShowIfFollowsSearchFilters(transactions, searchFilters,
+                  joinedWithSubcategoriesTable: null,
+                  joinedWithCategories: false,
+                  joinedWithBudgets: false,
+                  joinedWithObjectives: false) &
+              (isIncome == null
+                  ? transactions.walletFk.isNotNull()
+                  : isIncome == true
+                      ? transactions.income.equals(true)
+                      : transactions.income.equals(false))) &
           onlyShowIfNotBalanceCorrection(transactions, isIncome) &
           onlyShowIfFollowCustomPeriodCycle(
               transactions, followCustomPeriodCycle,
-              cycleSettingsExtension: cycleSettingsExtension) &
+              cycleSettingsExtension: cycleSettingsExtension,
+              forcedDateTimeRange: forcedDateTimeRange) &
           onlyShowBasedOnTimeRange(transactions, startDate, null, null) &
           evaluateIfNull(
               transactions.walletFk.isIn(walletPks ?? []), walletPks, true));
@@ -5252,7 +5487,7 @@ class FinanceDatabase extends _$FinanceDatabase {
       mergedStreams.add(query
           .map((row) =>
               (row.read(totalAmt) ?? 0) *
-              (amountRatioToPrimaryCurrency(allWallets, wallet.currency) ?? 0))
+              (amountRatioToPrimaryCurrency(allWallets, wallet.currency)))
           .watchSingle());
     }
     return totalDoubleStream(mergedStreams);
@@ -5320,7 +5555,7 @@ class FinanceDatabase extends _$FinanceDatabase {
       mergedStreams.add(query
           .map((row) =>
               (row.read(totalAmt) ?? 0) *
-              (amountRatioToPrimaryCurrency(allWallets, wallet.currency) ?? 0))
+              (amountRatioToPrimaryCurrency(allWallets, wallet.currency)))
           .watchSingle());
     }
     return totalDoubleStream(mergedStreams);
@@ -5452,16 +5687,26 @@ class FinanceDatabase extends _$FinanceDatabase {
     List<String>? walletPks,
     bool followCustomPeriodCycle = false,
     String cycleSettingsExtension = "",
+    SearchFilters? searchFilters,
+    DateTimeRange? forcedDateTimeRange,
   }) {
     DateTime startDate = DateTime(start.year, start.month, start.day);
     DateTime endDate = DateTime(end.year, end.month, end.day);
     return (select(transactions)
           ..where((tbl) {
-            return isInCategory(tbl, categoryFks, categoryFksExclude) &
+            return onlyShowIfFollowsSearchFilters(transactions, searchFilters,
+                    joinedWithSubcategoriesTable: null,
+                    joinedWithCategories: false,
+                    joinedWithBudgets: false,
+                    joinedWithObjectives: false) &
+                isInCategory(tbl, categoryFks, categoryFksExclude) &
                 evaluateIfNull(tbl.paid.equals(true), isPaidOnly, true) &
                 onlyShowIfFollowCustomPeriodCycle(
-                    transactions, followCustomPeriodCycle,
-                    cycleSettingsExtension: cycleSettingsExtension) &
+                  transactions,
+                  followCustomPeriodCycle,
+                  cycleSettingsExtension: cycleSettingsExtension,
+                  forcedDateTimeRange: forcedDateTimeRange,
+                ) &
                 onlyShowIfFollowsFilters(tbl,
                     budgetTransactionFilters: budgetTransactionFilters,
                     memberTransactionFilters: memberTransactionFilters) &
@@ -5471,6 +5716,7 @@ class FinanceDatabase extends _$FinanceDatabase {
                 onlyShowIfCertainBudget(
                     tbl, onlyShowTransactionsBelongingToBudgetPk) &
                 onlyShowBasedOnWalletFks(tbl, walletPks) &
+                onlyShowBasedOnWalletFks(tbl, budget?.walletFks) &
                 onlyShowBasedOnIncome(tbl, isIncome);
           })
           ..orderBy([(t) => OrderingTerm.desc(t.dateCreated)]))
@@ -5492,6 +5738,8 @@ class FinanceDatabase extends _$FinanceDatabase {
     required AllWallets allWallets,
     bool followCustomPeriodCycle = false,
     String cycleSettingsExtension = "",
+    SearchFilters? searchFilters,
+    DateTimeRange? forcedDateTimeRange,
   }) {
     // the date, which acts as the end point and everything before this day is inclusive
     // for onlyShowBasedOnTimeRange, but we don't want to include this day
@@ -5501,10 +5749,18 @@ class FinanceDatabase extends _$FinanceDatabase {
       final totalAmt = transactions.amount.sum();
       final query = selectOnly(transactions)
         ..addColumns([totalAmt])
-        ..where(transactions.walletFk.equals(wallet.walletPk) &
+        ..where(onlyShowIfFollowsSearchFilters(transactions, searchFilters,
+                joinedWithSubcategoriesTable: null,
+                joinedWithCategories: false,
+                joinedWithBudgets: false,
+                joinedWithObjectives: false) &
+            transactions.walletFk.equals(wallet.walletPk) &
             onlyShowIfFollowCustomPeriodCycle(
-                transactions, followCustomPeriodCycle,
-                cycleSettingsExtension: cycleSettingsExtension) &
+              transactions,
+              followCustomPeriodCycle,
+              cycleSettingsExtension: cycleSettingsExtension,
+              forcedDateTimeRange: forcedDateTimeRange,
+            ) &
             evaluateIfNull(transactions.categoryFk.isIn(categoryFks),
                 categoryFks.length <= 0 ? null : true, true) &
             evaluateIfNull(transactions.paid.equals(true), isPaidOnly, true) &
@@ -5521,7 +5777,7 @@ class FinanceDatabase extends _$FinanceDatabase {
       mergedStreams.add(query
           .map((row) =>
               (row.read(totalAmt) ?? 0) *
-              (amountRatioToPrimaryCurrency(allWallets, wallet.currency) ?? 0))
+              (amountRatioToPrimaryCurrency(allWallets, wallet.currency)))
           .watchSingle());
     }
     return totalDoubleStream(mergedStreams);

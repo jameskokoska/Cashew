@@ -8,6 +8,7 @@ class OutlinedButtonStacked extends StatelessWidget {
   const OutlinedButtonStacked({
     super.key,
     required this.text,
+    this.fontSize,
     required this.onTap,
     required this.iconData,
     this.afterWidget,
@@ -19,8 +20,10 @@ class OutlinedButtonStacked extends StatelessWidget {
     this.transitionWhenFilled = true,
     this.infoButton,
     this.iconScale = 1,
+    this.borderRadius = 15,
   });
   final String text;
+  final double? fontSize;
   final void Function()? onTap;
   final IconData iconData;
   final Widget? afterWidget;
@@ -32,6 +35,7 @@ class OutlinedButtonStacked extends StatelessWidget {
   final bool transitionWhenFilled;
   final Widget? infoButton;
   final double iconScale;
+  final double borderRadius;
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -39,10 +43,11 @@ class OutlinedButtonStacked extends StatelessWidget {
         Expanded(
           child: Tappable(
             onTap: onTap,
-            borderRadius: 15,
+            borderRadius: borderRadius,
             color: Colors.transparent,
             child: OutlinedContainer(
               filled: filled,
+              borderRadius: borderRadius,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -73,7 +78,7 @@ class OutlinedButtonStacked extends StatelessWidget {
                                   SizedBox(height: 10),
                                   TextFont(
                                     text: text,
-                                    fontSize: 18,
+                                    fontSize: fontSize ?? 18,
                                     fontWeight: FontWeight.bold,
                                     maxLines: 2,
                                   ),
@@ -96,7 +101,7 @@ class OutlinedButtonStacked extends StatelessWidget {
                                   Expanded(
                                     child: TextFont(
                                       text: text,
-                                      fontSize: 22,
+                                      fontSize: fontSize ?? 22,
                                       fontWeight: FontWeight.bold,
                                       maxLines: 2,
                                     ),
@@ -129,9 +134,13 @@ class OutlinedButtonStacked extends StatelessWidget {
 
 class OutlinedContainer extends StatelessWidget {
   const OutlinedContainer(
-      {required this.child, this.filled = false, super.key});
+      {required this.child,
+      this.filled = false,
+      this.borderRadius = 15,
+      super.key});
   final Widget child;
   final bool filled;
+  final double borderRadius;
 
   @override
   Widget build(BuildContext context) {
@@ -147,7 +156,7 @@ class OutlinedContainer extends StatelessWidget {
         color: filled == true
             ? Theme.of(context).colorScheme.secondary.withOpacity(0.2)
             : Colors.transparent,
-        borderRadius: BorderRadius.circular(15),
+        borderRadius: BorderRadius.circular(borderRadius),
       ),
       child: child,
     );

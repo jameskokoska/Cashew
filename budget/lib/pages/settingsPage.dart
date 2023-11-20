@@ -10,6 +10,7 @@ import 'package:budget/pages/editObjectivesPage.dart';
 import 'package:budget/pages/exchangeRatesPage.dart';
 import 'package:budget/pages/objectivesListPage.dart';
 import 'package:budget/pages/premiumPage.dart';
+import 'package:budget/pages/transactionsListPage.dart';
 import 'package:budget/pages/upcomingOverdueTransactionsPage.dart';
 import 'package:budget/struct/languageMap.dart';
 import 'package:budget/struct/navBarIconsData.dart';
@@ -491,7 +492,7 @@ class SettingsPageContent extends StatelessWidget {
         AnimatedExpanded(
           // Indicates if it is enabled by default per device height
           expand: MediaQuery.sizeOf(context).height > MIN_HEIGHT_FOR_HEADER &&
-              getPlatform() == PlatformOS.isAndroid,
+              getPlatform() != PlatformOS.isIOS,
           child: SettingsContainerDropdown(
             title: "header-height".tr(),
             icon: appStateSettings["outlinedIcons"]
@@ -506,10 +507,13 @@ class SettingsPageContent extends StatelessWidget {
               } else if (value == "false") {
                 boolValue = false;
               }
-              await updateSettings("forceSmallHeader", boolValue,
-                  updateGlobalState: false, pagesNeedingRefresh: [0, 1, 2, 3]);
-              await updateSettings("forceSmallHeader", boolValue,
-                  updateGlobalState: true);
+              await updateSettings(
+                "forceSmallHeader",
+                boolValue,
+                updateGlobalState: false,
+                setStateAllPageFrameworks: true,
+                pagesNeedingRefresh: [0],
+              );
             },
             getLabel: (item) {
               if (item == "true") return "short".tr();
@@ -520,16 +524,6 @@ class SettingsPageContent extends StatelessWidget {
 
         // EnterName(),
         SettingsHeader(title: "preferences".tr()),
-        // SettingsContainerSwitch(
-        //   title: "battery-saver".tr(),
-        //   description: "battery-saver-description".tr(),
-        //   onSwitched: (value) {
-        //     updateSettings("batterySaver", value,
-        //         updateGlobalState: true, pagesNeedingRefresh: [0, 1, 2, 3]);
-        //   },
-        //   initialValue: appStateSettings["batterySaver"],
-        //   icon: appStateSettings["outlinedIcons"] ? Icons.battery_charging_full_outlined : Icons.battery_charging_full_rounded,
-        // ),
 
         SettingsContainerOpenPage(
           openPage: EditHomePage(),
@@ -577,7 +571,10 @@ class SettingsPageContent extends StatelessWidget {
           openPage: PageFramework(
             title: "more".tr(),
             dragDownToDismiss: true,
+            horizontalPadding: getHorizontalPaddingConstrained(context),
             listWidgets: [
+              SettingsHeader(title: "transactions".tr()),
+              TransactionsSettings(),
               SettingsHeader(title: "accounts".tr()),
               ShowAccountLabelSettingToggle(),
               SettingsContainerOpenPage(
@@ -594,9 +591,9 @@ class SettingsPageContent extends StatelessWidget {
                     : Icons.account_balance_wallet_rounded,
               ),
               SettingsHeader(title: "budgets".tr()),
-              TotalSpentToggle(),
+              BudgetSettings(),
               SettingsHeader(title: "goals".tr()),
-              TotalSpentToggle(isForGoalTotal: true),
+              ObjectiveSettings(),
               SettingsHeader(title: "titles".tr()),
               AskForTitlesToggle(),
               AutoTitlesToggle(),
@@ -625,13 +622,7 @@ class SettingsPageContent extends StatelessWidget {
               context,
               PopupFramework(
                 hasPadding: false,
-                child: Column(
-                  children: [
-                    AutoPayUpcomingSetting(),
-                    AutoPayRepetitiveSetting(),
-                    AutoPaySubscriptionsSetting(),
-                  ],
-                ),
+                child: UpcomingOverdueSettings(),
               ),
             );
           },
