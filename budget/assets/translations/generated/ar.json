@@ -96,7 +96,7 @@
   "auto-email-transactions": "معاملات البريد الإلكتروني التلقائي",
   "pay-subscriptions": "دفع الاشتراكات",
   "pay-subscriptions-description": "تلقائيا وضع علامة على الاشتراك على النحو المدفوع بعد تاريخ الاستحقاق",
-  "pay-repetitive": "دفع متكرر",
+  "pay-repetitive": "دفع متكررة",
   "pay-repetitive-description": "حدد تلقائيًا معاملة متكررة على النحو المدفوع بعد تاريخ الاستحقاق",
   "pay-upcoming": "دفع قادم",
   "pay-upcoming-description": "حدد تلقائيًا معاملة قادمة على النحو المدفوع بعد تاريخ الاستحقاق",
@@ -859,6 +859,6 @@
   "track-installments-description": "إعداد هدف لتتبع التقدم في العمل الإضافي. أضف معاملات إلى أهدافك لتتبع تقدمك.",
   "initial-account-balance": "رصيد الحساب الأولي",
   "starting-at": "بداية",
-  "major-change-16": "صفحة إنفاق جديدة",
+  "major-change-16": "صفحة جديدة جديدة",
   "major-change-16-1": "جددت صفحة الإنفاق جميعها مع سجل فترة القضاء"
 }

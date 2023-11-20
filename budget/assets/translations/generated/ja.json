@@ -859,6 +859,6 @@
   "track-installments-description": "支払いの進捗状況を時間外に追跡するという目標を設定します。目標にトランザクションを追加して、進捗状況を追跡します。",
   "initial-account-balance": "初期アカウント残高",
   "starting-at": "から始まります",
-  "major-change-16": "新しい支出ページ",
+  "major-change-16": "新しいすべての支出ページ",
   "major-change-16-1": "支出期間の歴史を持つすべての支出ページを刷新しました"
 }

@@ -23,6 +23,9 @@ import 'listItem.dart';
 
 String getChangelogString() {
   return """
+    < 4.9.0
+    Fixed wallet selection not attaching to goal
+    Renamed major changelog
     < 4.8.9
     Major all spending page improvements and additions
     Currency support for budgets and goals totals

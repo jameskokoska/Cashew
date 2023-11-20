@@ -240,7 +240,7 @@ class _AddObjectivePageState extends State<AddObjectivePage>
       amount: selectedAmount,
       income: selectedIncome,
       pinned: selectedPin,
-      walletFk: "0",
+      walletFk: selectedWalletPk,
     );
   }
 

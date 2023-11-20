@@ -96,7 +96,7 @@
   "auto-email-transactions": "Otomatik e -posta işlemleri",
   "pay-subscriptions": "Ödeme Abonelikleri",
   "pay-subscriptions-description": "Son tarihten sonra ödenen bir aboneliği otomatik olarak işaretleyin",
-  "pay-repetitive": "Ücret tekrarlayan",
+  "pay-repetitive": "Ödeme Tekrarlayan",
   "pay-repetitive-description": "Tekrarlayan bir işlemin son tarihten sonra ödendiği gibi otomatik olarak işaretlenmesi",
   "pay-upcoming": "Yaklaşan Ödeme",
   "pay-upcoming-description": "Yaklaşan bir işlemin son tarihten sonra ödendiği gibi otomatik olarak işaretlenmesi",
@@ -859,6 +859,6 @@
   "track-installments-description": "Ödeme ilerlemesini fazla mesai izlemek için bir hedef oluşturun. İlerlemenizi izlemek için hedeflerinize işlemler ekleyin.",
   "initial-account-balance": "İlk Hesap Bakiyesi",
   "starting-at": "Başlamak",
-  "major-change-16": "Yeni Harcama Sayfası",
+  "major-change-16": "Yeni Tüm Harcama Sayfası",
   "major-change-16-1": "Harcama dönemi geçmişi ile tüm harcama sayfasını yeniledi"
 }

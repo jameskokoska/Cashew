@@ -97,7 +97,7 @@
   "pay-subscriptions": "Magbayad ng mga subscription",
   "pay-subscriptions-description": "Awtomatikong markahan ang isang subscription bilang bayad pagkatapos ng takdang petsa",
   "pay-repetitive": "Magbayad ng paulit -ulit",
-  "pay-repetitive-description": "Awtomatikong markahan ang isang paulit -ulit na transaksyon na nabayaran pagkatapos ng takdang petsa",
+  "pay-repetitive-description": "Awtomatikong markahan ang isang paulit -ulit na transaksyon na binabayaran pagkatapos ng takdang petsa",
   "pay-upcoming": "Magbayad paparating",
   "pay-upcoming-description": "Awtomatikong markahan ang isang paparating na transaksyon na nabayaran pagkatapos ng takdang petsa",
   "import-csv": "I -import ang CSV file",
@@ -859,6 +859,6 @@
   "track-installments-description": "Mag -set up ng isang layunin upang subaybayan ang pag -unlad ng pag -unlad ng overtime. Magdagdag ng mga transaksyon sa iyong mga layunin upang subaybayan ang iyong pag -unlad.",
   "initial-account-balance": "Paunang balanse ng account",
   "starting-at": "Simula sa",
-  "major-change-16": "Bagong pahina ng paggastos",
+  "major-change-16": "Bago lahat ng pahina ng paggastos",
   "major-change-16-1": "Nabago ang lahat ng pahina ng paggastos sa kasaysayan ng paggastos"
 }

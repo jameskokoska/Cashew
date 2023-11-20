@@ -859,6 +859,6 @@
   "track-installments-description": "Állítson be egy célt a fizetés előrehaladásának túlórájának nyomon követésére. Adjon hozzá tranzakciókat a célokhoz az előrehaladás nyomon követése érdekében.",
   "initial-account-balance": "Kezdeti számlaegyenleg",
   "starting-at": "Kezdve",
-  "major-change-16": "Új kiadások oldal",
+  "major-change-16": "Új minden kiadási oldal",
   "major-change-16-1": "Megújította az összes kiadási oldalt a kiadási időszak előzményeivel"
 }
