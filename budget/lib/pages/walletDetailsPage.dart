@@ -19,6 +19,7 @@ import 'package:budget/widgets/budgetHistoryLineGraph.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/countNumber.dart';
 import 'package:budget/widgets/dropdownSelect.dart';
+import 'package:budget/widgets/editRowEntry.dart';
 import 'package:budget/widgets/framework/popupFramework.dart';
 import 'package:budget/widgets/incomeExpenseTabSelector.dart';
 import 'package:budget/widgets/navigationFramework.dart';
@@ -57,6 +58,8 @@ import 'package:budget/widgets/fab.dart';
 import 'package:budget/widgets/fadeIn.dart';
 import 'package:async/async.dart' show StreamZip;
 import 'package:sliver_tools/sliver_tools.dart';
+
+// Also known as the all spending page
 
 class WatchedWalletDetailsPage extends StatelessWidget {
   const WatchedWalletDetailsPage({required this.walletPk, super.key});
@@ -536,7 +539,7 @@ class _WalletDetailsPageState extends State<WalletDetailsPage>
                           Theme.of(context).colorScheme.onTertiaryContainer,
                       text: selectedDateTimeRange != null
                           ? getWordedDateShort(selectedDateTimeRange!.start) +
-                              " - " +
+                              " – " +
                               getWordedDateShort(selectedDateTimeRange!.end)
                           : getLabelOfSelectedCustomPeriod(""),
                       onTap: onTap,
@@ -589,138 +592,129 @@ class _WalletDetailsPageState extends State<WalletDetailsPage>
       ),
     );
 
-    Widget tabDateFilterSelectorHeader = Container(
-      color: Theme.of(context).canvasColor,
-      child: Padding(
-        padding: EdgeInsets.symmetric(
-            horizontal: getHorizontalPaddingConstrained(
-                  context,
-                  enabled: enableDoubleColumn(context) == false &&
-                      widget.wallet == null,
-                ) +
-                13),
-        child: IncomeExpenseTabSelector(
-          onTabChanged: (_) {},
-          initialTabIsIncome: false,
-          showIcons: false,
-          tabController: _tabController,
-          expenseLabel: "current".tr(),
-          incomeLabel: "history".tr(),
-          expenseCustomIcon: Icon(
-            appStateSettings["outlinedIcons"]
-                ? Icons.event_note_outlined
-                : Icons.event_note_rounded,
-          ),
-          incomeCustomIcon: Icon(
-            appStateSettings["outlinedIcons"]
-                ? Icons.history_outlined
-                : Icons.history_rounded,
-          ),
-          belowWidgetBuilder: (bool selectedHistoryTab) {
-            return Container(
-              color: Theme.of(context).canvasColor,
-              child: Padding(
-                padding: EdgeInsets.only(top: 10),
-                child: Row(
-                  children: [
-                    // Expanded(
-                    //   child: AnimatedSwitcher(
-                    //     duration: Duration(milliseconds: 500),
-                    //     child: OutlinedButtonStacked(
-                    //       key: ValueKey(getLabelOfSelectedCustomPeriod("")),
-                    //       fontSize: 18.5,
-                    //       borderRadius: 10,
-                    //       padding: EdgeInsets.symmetric(
-                    //           horizontal: 10, vertical: 5),
-                    //       text: getLabelOfSelectedCustomPeriod(""),
-                    //       iconData: appStateSettings["outlinedIcons"]
-                    //           ? Icons.timelapse_outlined
-                    //           : Icons.timelapse_rounded,
-                    //       onTap: () {
-                    //         selectAllSpendingPeriod();
-                    //       },
-                    //       alignBeside: true,
-                    //     ),
-                    //   ),
-                    // ),
-                    Expanded(
-                      child: AnimatedBuilder(
-                        animation: _tabController.animation!,
-                        builder: (BuildContext context, Widget? child) {
-                          double animationProgress =
-                              _tabController.animation!.value;
-                          return ClipRRect(
-                            borderRadius: BorderRadius.circular(
-                                getPlatform() == PlatformOS.isIOS ? 10 : 15),
-                            child: Stack(
-                              children: [
-                                IgnorePointer(
-                                  ignoring: animationProgress > 0.5,
-                                  child: Transform.translate(
-                                    offset: Offset(-animationProgress * 100, 0),
-                                    child: Opacity(
-                                      opacity: 1 - animationProgress,
-                                      child: selectedTabCurrent,
-                                    ),
-                                  ),
-                                ),
-                                IgnorePointer(
-                                  ignoring: animationProgress < 0.5,
-                                  child: Transform.translate(
-                                    offset: Offset(
-                                        (1 - animationProgress) * 100, 0),
-                                    child: Opacity(
-                                      opacity: animationProgress,
-                                      child: selectedTabHistory,
-                                    ),
-                                  ),
-                                ),
-                                selectedTabPeriodSelected(() {
-                                  if (animationProgress > 0.5) {
-                                    selectAllSpendingPeriod(
-                                        onlyShowCycleOption: true);
-                                  } else {
-                                    selectAllSpendingPeriod(
-                                        onlyShowCycleOption: false);
-                                  }
-                                }),
-                              ],
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                    clearSelectedPeriodButton,
-                    selectFiltersButton,
-                  ],
-                ),
-              ),
-            );
-          },
+    Widget tabDateFilterSelectorHeader = Padding(
+      padding: EdgeInsets.symmetric(
+          horizontal: getHorizontalPaddingConstrained(
+                context,
+                enabled: enableDoubleColumn(context) == false &&
+                    widget.wallet == null,
+              ) +
+              13),
+      child: IncomeExpenseTabSelector(
+        onTabChanged: (_) {},
+        initialTabIsIncome: false,
+        showIcons: false,
+        tabController: _tabController,
+        expenseLabel: "current".tr(),
+        incomeLabel: "history".tr(),
+        expenseCustomIcon: Icon(
+          appStateSettings["outlinedIcons"]
+              ? Icons.event_note_outlined
+              : Icons.event_note_rounded,
         ),
+        incomeCustomIcon: Icon(
+          appStateSettings["outlinedIcons"]
+              ? Icons.history_outlined
+              : Icons.history_rounded,
+        ),
+        belowWidgetBuilder: (bool selectedHistoryTab) {
+          return Padding(
+            padding: EdgeInsets.only(top: 10),
+            child: Row(
+              children: [
+                // Expanded(
+                //   child: AnimatedSwitcher(
+                //     duration: Duration(milliseconds: 500),
+                //     child: OutlinedButtonStacked(
+                //       key: ValueKey(getLabelOfSelectedCustomPeriod("")),
+                //       fontSize: 18.5,
+                //       borderRadius: 10,
+                //       padding: EdgeInsets.symmetric(
+                //           horizontal: 10, vertical: 5),
+                //       text: getLabelOfSelectedCustomPeriod(""),
+                //       iconData: appStateSettings["outlinedIcons"]
+                //           ? Icons.timelapse_outlined
+                //           : Icons.timelapse_rounded,
+                //       onTap: () {
+                //         selectAllSpendingPeriod();
+                //       },
+                //       alignBeside: true,
+                //     ),
+                //   ),
+                // ),
+                Expanded(
+                  child: AnimatedBuilder(
+                    animation: _tabController.animation!,
+                    builder: (BuildContext context, Widget? child) {
+                      double animationProgress =
+                          _tabController.animation!.value;
+                      return ClipRRect(
+                        borderRadius: BorderRadius.circular(
+                            getPlatform() == PlatformOS.isIOS ? 10 : 15),
+                        child: Stack(
+                          children: [
+                            IgnorePointer(
+                              ignoring: animationProgress > 0.5,
+                              child: Transform.translate(
+                                offset: Offset(-animationProgress * 100, 0),
+                                child: Opacity(
+                                  opacity: 1 - animationProgress,
+                                  child: selectedTabCurrent,
+                                ),
+                              ),
+                            ),
+                            IgnorePointer(
+                              ignoring: animationProgress < 0.5,
+                              child: Transform.translate(
+                                offset:
+                                    Offset((1 - animationProgress) * 100, 0),
+                                child: Opacity(
+                                  opacity: animationProgress,
+                                  child: selectedTabHistory,
+                                ),
+                              ),
+                            ),
+                            selectedTabPeriodSelected(() {
+                              if (animationProgress > 0.5) {
+                                selectAllSpendingPeriod(
+                                    onlyShowCycleOption: true);
+                              } else {
+                                selectAllSpendingPeriod(
+                                    onlyShowCycleOption: false);
+                              }
+                            }),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                ),
+                clearSelectedPeriodButton,
+                selectFiltersButton,
+              ],
+            ),
+          );
+        },
       ),
     );
 
     Widget appliedFilterChipsWidget =
         searchFilters != null && widget.wallet == null
-            ? Container(
-                color: Theme.of(context).canvasColor,
-                child: Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: getHorizontalPaddingConstrained(
-                      context,
-                      enabled: enableDoubleColumn(context) == false &&
-                          widget.wallet == null,
-                    ),
+            ? Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: getHorizontalPaddingConstrained(
+                    context,
+                    enabled: enableDoubleColumn(context) == false &&
+                        widget.wallet == null,
                   ),
-                  child: AppliedFilterChips(
-                    padding: EdgeInsets.only(top: 10),
-                    searchFilters: searchFilters!,
-                    openFiltersSelection: () {
-                      selectAllSpendingFilters();
-                    },
-                    clearSearchFilters: clearSearchFilters,
-                  ),
+                ),
+                child: AppliedFilterChips(
+                  padding: EdgeInsets.only(top: 10),
+                  searchFilters: searchFilters!,
+                  openFiltersSelection: () {
+                    selectAllSpendingFilters();
+                  },
+                  clearSearchFilters: clearSearchFilters,
                 ),
               )
             : SizedBox.shrink();
@@ -1157,8 +1151,7 @@ class _WalletCategoryPieChartState extends State<WalletCategoryPieChart> {
           padding: EdgeInsets.symmetric(
               horizontal: getHorizontalPaddingConstrained(
             context,
-            enabled: enableDoubleColumn(context) == false &&
-                widget.isAllSpending == false,
+            enabled: enableDoubleColumn(context) == false,
           )),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 13),
@@ -1647,19 +1640,7 @@ class _AllSpendingPastSpendingGraphState
                                     .secondaryContainer
                                     .withOpacity(0.3)
                                 : Colors.transparent
-                            : appStateSettings["materialYou"]
-                                ? dynamicPastel(
-                                    context,
-                                    Theme.of(context)
-                                        .colorScheme
-                                        .secondaryContainer,
-                                    amount: widget.selectedDateTimeRange ==
-                                            budgetRange
-                                        ? 0.2
-                                        : 0.5,
-                                  )
-                                : getColor(
-                                    context, "lightDarkAccentHeavyLight");
+                            : getStandardContainerColor(context);
                         double netSpending =
                             (nullIfIndexOutOfRange(incomeData, index) ?? 0)
                                     .toDouble()
@@ -1695,7 +1676,7 @@ class _AllSpendingPastSpendingGraphState
                                   ? []
                                   : boxShadowCheck(boxShadowGeneral(context)),
                             ),
-                            padding: EdgeInsets.only(
+                            margin: EdgeInsets.only(
                               left: getHorizontalPaddingConstrained(
                                     context,
                                     enabled:
@@ -1711,139 +1692,171 @@ class _AllSpendingPastSpendingGraphState
                               bottom:
                                   getPlatform() == PlatformOS.isIOS ? 0 : 10,
                             ),
-                            child: Tappable(
-                              borderRadius:
-                                  getPlatform() == PlatformOS.isIOS ? 0 : 20,
-                              color: containerColor,
-                              onTap: () {
-                                widget.onEntryTapped(budgetRange);
-                              },
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 30, vertical: 15),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Flexible(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(
+                                  getPlatform() == PlatformOS.isIOS ? 0 : 20),
+                              child: Stack(
+                                children: [
+                                  Tappable(
+                                    color: containerColor,
+                                    onTap: () {
+                                      widget.onEntryTapped(budgetRange);
+                                    },
+                                    child: Padding(
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 30, vertical: 15),
+                                      child: Row(
                                         mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        mainAxisSize: MainAxisSize.max,
+                                            MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Row(
+                                          Expanded(
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              mainAxisSize: MainAxisSize.max,
+                                              children: [
+                                                Row(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.end,
+                                                  children: [
+                                                    Flexible(
+                                                      child: TextFont(
+                                                        text: getPercentBetweenDates(
+                                                                    budgetRange,
+                                                                    DateTime
+                                                                        .now()) <=
+                                                                100
+                                                            ? "current-budget-period"
+                                                                .tr()
+                                                            : getWordedDateShortMore(
+                                                                budgetRange
+                                                                    .start),
+                                                        fontSize: 20,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      ),
+                                                    ),
+                                                    Padding(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                        bottom: 2,
+                                                        left: 5,
+                                                      ),
+                                                      child: TextFont(
+                                                        text: budgetRange.start
+                                                                    .year !=
+                                                                DateTime.now()
+                                                                    .year
+                                                            ? budgetRange
+                                                                .start.year
+                                                                .toString()
+                                                            : "",
+                                                        fontSize: 12,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                                SizedBox(height: 2),
+                                                TextFont(
+                                                  text: convertToMoney(
+                                                    Provider.of<AllWallets>(
+                                                        context),
+                                                    netSpending,
+                                                  ),
+                                                  fontSize: 16,
+                                                  textAlign: TextAlign.left,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          Column(
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.end,
                                             children: [
-                                              Flexible(
-                                                child: TextFont(
-                                                  text: getPercentBetweenDates(
-                                                              budgetRange,
-                                                              DateTime.now()) <=
-                                                          100
-                                                      ? "current-budget-period"
-                                                          .tr()
-                                                      : getWordedDateShortMore(
-                                                          budgetRange.start),
-                                                  fontSize: 20,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
+                                              Row(
+                                                mainAxisSize: MainAxisSize.min,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  IncomeOutcomeArrow(
+                                                    color: getColor(context,
+                                                        "incomeAmount"),
+                                                    isIncome: true,
+                                                    iconSize: 20,
+                                                    width: 17,
+                                                  ),
+                                                  Flexible(
+                                                    child: TextFont(
+                                                      text: convertToMoney(
+                                                          Provider.of<
+                                                                  AllWallets>(
+                                                              context),
+                                                          incomeSpending.abs()),
+                                                      fontSize: 16,
+                                                      textColor: getColor(
+                                                          context,
+                                                          "incomeAmount"),
+                                                      maxLines: 1,
+                                                    ),
+                                                  ),
+                                                ],
                                               ),
-                                              Padding(
-                                                padding: const EdgeInsets.only(
-                                                  bottom: 2,
-                                                  left: 5,
-                                                ),
-                                                child: TextFont(
-                                                  text: budgetRange
-                                                              .start.year !=
-                                                          DateTime.now().year
-                                                      ? budgetRange.start.year
-                                                          .toString()
-                                                      : "",
-                                                  fontSize: 12,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          SizedBox(height: 2),
-                                          TextFont(
-                                            text: convertToMoney(
-                                              Provider.of<AllWallets>(context),
-                                              netSpending,
-                                            ),
-                                            fontSize: 16,
-                                            textAlign: TextAlign.left,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    Flexible(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.end,
-                                        children: [
-                                          Row(
-                                            mainAxisSize: MainAxisSize.min,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              IncomeOutcomeArrow(
-                                                color: getColor(
-                                                    context, "incomeAmount"),
-                                                isIncome: true,
-                                                iconSize: 20,
-                                                width: 17,
-                                              ),
-                                              Flexible(
-                                                child: TextFont(
-                                                  text: convertToMoney(
-                                                      Provider.of<AllWallets>(
-                                                          context),
-                                                      incomeSpending.abs()),
-                                                  fontSize: 16,
-                                                  textColor: getColor(
-                                                      context, "incomeAmount"),
-                                                  maxLines: 1,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          SizedBox(height: 3),
-                                          Row(
-                                            mainAxisSize: MainAxisSize.min,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              IncomeOutcomeArrow(
-                                                color: getColor(
-                                                    context, "expenseAmount"),
-                                                isIncome: false,
-                                                iconSize: 20,
-                                                width: 17,
-                                              ),
-                                              Flexible(
-                                                child: TextFont(
-                                                  text: convertToMoney(
-                                                      Provider.of<AllWallets>(
-                                                          context),
-                                                      expenseSpending.abs()),
-                                                  fontSize: 16,
-                                                  textColor: getColor(
-                                                      context, "expenseAmount"),
-                                                  maxLines: 1,
-                                                ),
+                                              SizedBox(height: 3),
+                                              Row(
+                                                mainAxisSize: MainAxisSize.min,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  IncomeOutcomeArrow(
+                                                    color: getColor(context,
+                                                        "expenseAmount"),
+                                                    isIncome: false,
+                                                    iconSize: 20,
+                                                    width: 17,
+                                                  ),
+                                                  Flexible(
+                                                    child: TextFont(
+                                                      text: convertToMoney(
+                                                          Provider.of<
+                                                                  AllWallets>(
+                                                              context),
+                                                          expenseSpending
+                                                              .abs()),
+                                                      fontSize: 16,
+                                                      textColor: getColor(
+                                                          context,
+                                                          "expenseAmount"),
+                                                      maxLines: 1,
+                                                    ),
+                                                  ),
+                                                ],
                                               ),
                                             ],
                                           ),
                                         ],
                                       ),
                                     ),
-                                  ],
-                                ),
+                                  ),
+                                  if (getPlatform() != PlatformOS.isIOS)
+                                    Positioned(
+                                      top: 0,
+                                      bottom: 0,
+                                      child: AnimatedExpanded(
+                                        expand: widget.selectedDateTimeRange ==
+                                            budgetRange,
+                                        axis: Axis.horizontal,
+                                        child: Container(
+                                          width: 5,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary,
+                                        ),
+                                      ),
+                                    ),
+                                ],
                               ),
                             ),
                           ),

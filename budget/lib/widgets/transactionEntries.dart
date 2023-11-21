@@ -204,7 +204,7 @@ class TransactionEntries extends StatelessWidget {
                                     "(" +
                                     getWordedDateShortMore(
                                         startDay ?? DateTime.now()) +
-                                    " - " +
+                                    " – " +
                                     getWordedDateShortMore(
                                         endDay ?? DateTime.now()) +
                                     ")")
@@ -569,11 +569,7 @@ class TransactionsEntriesSpendingSummary extends StatelessWidget {
           button: (openContainer) {
             return Tappable(
               borderRadius: borderRadius,
-              color: appStateSettings["materialYou"]
-                  ? dynamicPastel(
-                      context, Theme.of(context).colorScheme.secondaryContainer,
-                      amountDark: 0.5, amountLight: 0)
-                  : getColor(context, "canvasContainer"),
+              color: getStandardContainerColor(context),
               onTap: () {
                 // setState(() {
                 //   isExpanded = !isExpanded;

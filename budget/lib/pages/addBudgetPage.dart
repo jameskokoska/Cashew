@@ -1109,11 +1109,11 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
             SliverStickyLabelDivider(
               info: "select-accounts".tr(),
               visible:
-                  !((selectedShared == true || selectedAddedTransactionsOnly) &&
+                  !(selectedShared == true || selectedAddedTransactionsOnly) &&
                       ((widget.budget != null &&
                               widget.budget!.sharedKey == null &&
                               widget.budget!.addedTransactionsOnly == false) ||
-                          widget.budget == null)),
+                          widget.budget == null),
               sliver: SliverToBoxAdapter(
                 child: StreamBuilder<List<TransactionWallet>>(
                   stream: database.watchAllWallets(),
@@ -1703,7 +1703,7 @@ class _BudgetDetailsState extends State<BudgetDetails> {
                                 title: selectedEndDate == null
                                     ? null
                                     : getWordedDateShort(selectedStartDate) +
-                                        " - " +
+                                        " – " +
                                         getWordedDateShort(selectedEndDate!),
                                 placeholder: "select-custom-period".tr(),
                                 onTap: () {},
@@ -1749,7 +1749,7 @@ class _BudgetDetailsState extends State<BudgetDetails> {
               String text = "current-period".tr() +
                   "\n" +
                   getWordedDateShortMore(budgetRange.start) +
-                  " - " +
+                  " – " +
                   getWordedDateShortMore(budgetRange.end);
               return Row(
                 mainAxisSize: MainAxisSize.max,

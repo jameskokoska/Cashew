@@ -23,6 +23,19 @@ import 'listItem.dart';
 
 String getChangelogString() {
   return """
+    < 4.9.1
+    When using an account with many decimals, zeroes now show up to the point of a number (You can now visually see how many zeroes after a decimal place entered)
+    Animated some settings icons
+    Increased date time range for date range picker
+    Search page defaults to load 5 years in the future to 5 years in the past
+    Fixed migration database lock possibility
+    Fixed spending goals totals across different budgets
+    Spending totals default to selected currency if not set (i.e. an account was deleted)
+    Fixed select wallet banner showing up when editing addable only budget
+    Fixed borrowed having incorrect polarity when adding
+    Fixed font sizes for date range selector
+    All spending formatting fixes
+    New category icons
     < 4.9.0
     Fixed wallet selection not attaching to goal
     Renamed major changelog

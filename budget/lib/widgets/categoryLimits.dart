@@ -59,11 +59,11 @@ class _CategoryLimitsState extends State<CategoryLimits> {
               extraInfoWidget: StreamBuilder<double?>(
                 stream:
                     database.watchTotalOfCategoryLimitsInBudgetWithCategories(
-                  Provider.of<AllWallets>(context),
-                  widget.budgetPk,
-                  widget.categoryFks,
-                  widget.categoryFksExclude,
-                  widget.isAbsoluteSpendingLimit,
+                  allWallets: Provider.of<AllWallets>(context),
+                  budgetPk: widget.budgetPk,
+                  categoryPks: widget.categoryFks,
+                  categoryPksExclude: widget.categoryFksExclude,
+                  isAbsoluteSpendingLimit: widget.isAbsoluteSpendingLimit,
                 ),
                 builder: (context, snapshot) {
                   bool isOver = widget.isAbsoluteSpendingLimit
@@ -113,6 +113,8 @@ class _CategoryLimitsState extends State<CategoryLimits> {
                                 budgetLimit: widget.budgetLimit,
                                 categoryLimit: snapshot.data,
                                 budgetPk: widget.budgetPk,
+                                categoryFks: widget.categoryFks,
+                                categoryFksExclude: widget.categoryFksExclude,
                                 isAbsoluteSpendingLimit:
                                     widget.isAbsoluteSpendingLimit,
                               );
@@ -157,6 +159,8 @@ class CategoryLimitEntry extends StatelessWidget {
     required this.budgetLimit,
     required this.categoryLimit,
     required this.budgetPk,
+    required this.categoryFks,
+    required this.categoryFksExclude,
     required this.isAbsoluteSpendingLimit,
     this.isSubCategory = false,
     super.key,
@@ -166,6 +170,8 @@ class CategoryLimitEntry extends StatelessWidget {
   final double budgetLimit;
   final CategoryBudgetLimit? categoryLimit;
   final String budgetPk;
+  final List<String>? categoryFks;
+  final List<String>? categoryFksExclude;
   final bool isAbsoluteSpendingLimit;
   final bool isSubCategory;
 
@@ -327,9 +333,14 @@ class CategoryLimitEntry extends StatelessWidget {
                   extraInfoWidget: StreamBuilder<double?>(
                     stream: database
                         .watchTotalOfCategoryLimitsInBudgetWithSubCategories(
-                            Provider.of<AllWallets>(context, listen: true),
-                            category.categoryPk,
-                            isAbsoluteSpendingLimit),
+                      allWallets:
+                          Provider.of<AllWallets>(context, listen: true),
+                      mainCategoryPk: category.categoryPk,
+                      budgetPk: budgetPk,
+                      categoryPks: categoryFks,
+                      categoryPksExclude: categoryFksExclude,
+                      isAbsoluteSpendingLimit: isAbsoluteSpendingLimit,
+                    ),
                     builder: (context, snapshot) {
                       bool isOver = isAbsoluteSpendingLimit
                           ? (snapshot.data ?? 0) > subCategoryBudgetLimit
@@ -382,6 +393,8 @@ class CategoryLimitEntry extends StatelessWidget {
                         budgetPk: budgetPk,
                         isSubCategory: true,
                         isAbsoluteSpendingLimit: isAbsoluteSpendingLimit,
+                        categoryFks: categoryFks,
+                        categoryFksExclude: categoryFksExclude,
                       );
                     },
                   ),

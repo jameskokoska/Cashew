@@ -67,9 +67,9 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
     });
     DateTimeRange initialDateTimeRange = DateTimeRange(
       start: DateTime(
-          DateTime.now().year - 2, DateTime.now().month, DateTime.now().day),
+          DateTime.now().year - 5, DateTime.now().month, DateTime.now().day),
       end: DateTime(
-          DateTime.now().year, DateTime.now().month + 1, DateTime.now().day),
+          DateTime.now().year + 5, DateTime.now().month, DateTime.now().day),
     );
     searchFilters = widget.initialFilters != null
         ? widget.initialFilters!
@@ -312,7 +312,7 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
                                 searchFilters.dateTimeRange?.start ??
                                     DateTime.now(),
                                 includeYear: true) +
-                            " - " +
+                            " – " +
                             getWordedDateShortMore(
                                 searchFilters.dateTimeRange?.end ??
                                     DateTime.now(),

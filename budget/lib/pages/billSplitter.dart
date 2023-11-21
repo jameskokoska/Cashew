@@ -1102,6 +1102,7 @@ class _AddBillItemPageState extends State<AddBillItemPage> {
                         ? 0
                         : (getPerson(splitPersons, item)?.percent ?? 0);
                 return TappableTextEntry(
+                  enableAnimatedSwitcher: false,
                   title: convertToPercent(percent),
                   placeholder: convertToPercent(0),
                   showPlaceHolderWhenTextEquals: convertToPercent(0),

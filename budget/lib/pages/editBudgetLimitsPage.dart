@@ -28,6 +28,17 @@ class _EditBudgetLimitsPageState extends State<EditBudgetLimitsPage> {
           widget.budget.isAbsoluteSpendingLimit;
 
   @override
+  void initState() {
+    Future.delayed(Duration(milliseconds: 0), () async {
+      await database.fixWanderingCategoryLimitsInBudget(
+        allWallets: Provider.of<AllWallets>(context, listen: false),
+        budgetPk: widget.budget.budgetPk,
+      );
+    });
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     double budgetAmount = budgetAmountToPrimaryCurrency(
         Provider.of<AllWallets>(context, listen: true), widget.budget);

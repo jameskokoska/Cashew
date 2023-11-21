@@ -1129,8 +1129,8 @@ class _FadeOutAndLockFeatureState extends State<FadeOutAndLockFeature> {
         children: [
           IgnorePointer(
             child: AnimatedOpacity(
-              opacity: fadeIn ? 0.07 : 1,
-              duration: Duration(milliseconds: 7000),
+              opacity: fadeIn ? 0.23 : 1,
+              duration: Duration(milliseconds: 5000),
               child: AnimatedOpacity(
                 opacity: fadeIn ? 0.25 : 1,
                 duration: Duration(milliseconds: 500),

@@ -430,6 +430,14 @@ class _SelectAmountState extends State<SelectAmount> {
     }
   }
 
+  bool doesNotContainOtherNumbers(String input) {
+    return !RegExp(r'[1-9]').hasMatch(input);
+  }
+
+  bool startsWithTwoZeroes(String input) {
+    return RegExp(r'^00').hasMatch(input);
+  }
+
   @override
   Widget build(BuildContext context) {
     _focusAttachment.reparent();
@@ -442,6 +450,9 @@ class _SelectAmountState extends State<SelectAmount> {
             calculateResult(amountConverted),
             currencyKey: getSelectedWallet(listen: false)?.currency,
             allDecimals: true,
+            forceAllDecimals: doesNotContainOtherNumbers(amount) &&
+                startsWithTwoZeroes(amount) == false &&
+                (getSelectedWallet(listen: false)?.decimals ?? 0) > 2,
             decimals: getSelectedWallet(listen: false)?.decimals == 2 &&
                     includesOperations(amount, true)
                 ? 2

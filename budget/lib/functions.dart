@@ -81,6 +81,7 @@ int countDecimalDigits(String value) {
   for (int i = decimalIndex + 1; i < value.length; i++) {
     count++;
   }
+  print(count);
   return count;
 }
 
@@ -108,6 +109,7 @@ String convertToMoney(
   int? decimals,
   bool? allDecimals,
   bool? addCurrencyName,
+  bool forceAllDecimals = false,
 }) {
   int numberDecimals = decimals ??
       allWallets.indexedByPk[appStateSettings["selectedWalletPk"]]?.decimals ??
@@ -129,11 +131,13 @@ String convertToMoney(
   if (finalNumber != null)
     finalNumber = double.parse(finalNumber.toStringAsFixed(numberDecimals));
   NumberFormat currency = NumberFormat.currency(
-    decimalDigits: allDecimals == true ||
-            hasDecimalPoints(finalNumber) ||
-            hasDecimalPoints(amount)
-        ? numberDecimals
-        : 0,
+    decimalDigits: forceAllDecimals
+        ? decimals
+        : allDecimals == true ||
+                hasDecimalPoints(finalNumber) ||
+                hasDecimalPoints(amount)
+            ? numberDecimals
+            : 0,
     locale: Platform.localeName,
     symbol: getCurrencyString(allWallets, currencyKey: currencyKey),
   );

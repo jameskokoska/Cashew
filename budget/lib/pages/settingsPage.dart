@@ -471,9 +471,13 @@ class SettingsPageContent extends StatelessWidget {
               ),
         SettingsContainerDropdown(
           title: "theme-mode".tr(),
-          icon: appStateSettings["outlinedIcons"]
-              ? Icons.lightbulb_outlined
-              : Icons.lightbulb_rounded,
+          icon: Theme.of(context).brightness == Brightness.light
+              ? appStateSettings["outlinedIcons"]
+                  ? Icons.lightbulb_outlined
+                  : Icons.lightbulb_rounded
+              : appStateSettings["outlinedIcons"]
+                  ? Icons.dark_mode_outlined
+                  : Icons.dark_mode_rounded,
           initial: appStateSettings["theme"].toString().capitalizeFirst,
           items: ["Light", "Dark", "System"],
           onChanged: (value) {
@@ -676,6 +680,7 @@ class BiometricsSettingToggle extends StatefulWidget {
 }
 
 class _BiometricsSettingToggleState extends State<BiometricsSettingToggle> {
+  bool isLocked = appStateSettings["requireAuth"];
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -690,9 +695,14 @@ class _BiometricsSettingToggleState extends State<BiometricsSettingToggle> {
                       checkAlways: true,
                       message: "verify-identity".tr(),
                     );
-                    if (result)
+                    if (result) {
                       updateSettings("requireAuth", value,
                           updateGlobalState: false);
+                      setState(() {
+                        isLocked = value;
+                      });
+                    }
+
                     return result;
                   } catch (e) {
                     openPopup(
@@ -726,9 +736,13 @@ class _BiometricsSettingToggleState extends State<BiometricsSettingToggle> {
                   }
                 },
                 initialValue: appStateSettings["requireAuth"],
-                icon: appStateSettings["outlinedIcons"]
-                    ? Icons.lock_outlined
-                    : Icons.lock_rounded,
+                icon: isLocked
+                    ? appStateSettings["outlinedIcons"]
+                        ? Icons.lock_outlined
+                        : Icons.lock_rounded
+                    : appStateSettings["outlinedIcons"]
+                        ? Icons.lock_open_outlined
+                        : Icons.lock_open_rounded,
               )
             : SizedBox.shrink(),
       ],

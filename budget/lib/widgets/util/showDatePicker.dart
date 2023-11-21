@@ -16,34 +16,19 @@ Future<DateTime?> showCustomDatePicker(
     context: context,
     initialDate: initialDate,
     initialEntryMode: initialEntryMode,
-    firstDate: DateTime(DateTime.now().year - 10),
-    lastDate: DateTime(DateTime.now().year + 2),
+    firstDate: DateTime(DateTime.now().year - 1000),
+    lastDate: DateTime(DateTime.now().year + 1000),
     builder: (BuildContext context2, Widget? child) {
-      if (appStateSettings["materialYou"]) {
-        return child ?? SizedBox.shrink();
-      }
       return Theme(
-        data: Theme.of(context).brightness == Brightness.light
-            ? ThemeData.light().copyWith(
-                useMaterial3: getPlatform() != PlatformOS.isIOS,
-                typography: Typography.material2021(),
-                primaryColor: Theme.of(context).colorScheme.primary,
-                colorScheme: ColorScheme.light(
-                    primary: Theme.of(context).colorScheme.primary),
-                buttonTheme:
-                    ButtonThemeData(textTheme: ButtonTextTheme.primary),
-                datePickerTheme: Theme.of(context).datePickerTheme,
-              )
-            : ThemeData.dark().copyWith(
-                useMaterial3: getPlatform() != PlatformOS.isIOS,
-                typography: Typography.material2021(),
-                primaryColor: Theme.of(context).colorScheme.secondary,
-                colorScheme: ColorScheme.dark(
-                    primary: Theme.of(context).colorScheme.secondary),
-                buttonTheme:
-                    ButtonThemeData(textTheme: ButtonTextTheme.primary),
-                datePickerTheme: Theme.of(context).datePickerTheme,
-              ),
+        data: Theme.of(context).copyWith(
+          useMaterial3: getPlatform() != PlatformOS.isIOS,
+          datePickerTheme: DatePickerTheme.of(context).copyWith(
+            headerHeadlineStyle: const TextStyle(
+              fontSize: 26,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
         child: child ?? SizedBox.shrink(),
       );
     },
@@ -57,36 +42,19 @@ Future<DateTimeRange?> showCustomDateRangePicker(
 }) async {
   return await showDateRangePicker(
     context: context,
-    firstDate: DateTime(DateTime.now().year - 15),
-    lastDate: DateTime(DateTime.now().year + 2),
+    firstDate: DateTime(DateTime.now().year - 1000),
+    lastDate: DateTime(DateTime.now().year + 1000),
     initialDateRange: initialDateRange,
     builder: (BuildContext context, Widget? child) {
-      if (appStateSettings["materialYou"]) {
-        return child ?? SizedBox.shrink();
-      }
       return Theme(
-        data: Theme.of(context).brightness == Brightness.light
-            ? ThemeData.light().copyWith(
-                useMaterial3: getPlatform() != PlatformOS.isIOS,
-                typography: Typography.material2021(),
-                primaryColor: Theme.of(context).colorScheme.primary,
-                colorScheme: ColorScheme.light(
-                  primary: Theme.of(context).colorScheme.primary,
-                ),
-                buttonTheme:
-                    ButtonThemeData(textTheme: ButtonTextTheme.primary),
-                datePickerTheme: Theme.of(context).datePickerTheme,
-              )
-            : ThemeData.dark().copyWith(
-                useMaterial3: getPlatform() != PlatformOS.isIOS,
-                typography: Typography.material2021(),
-                primaryColor: Theme.of(context).colorScheme.secondary,
-                colorScheme: ColorScheme.dark(
-                    primary: Theme.of(context).colorScheme.secondary),
-                buttonTheme:
-                    ButtonThemeData(textTheme: ButtonTextTheme.primary),
-                datePickerTheme: Theme.of(context).datePickerTheme,
-              ),
+        data: Theme.of(context).copyWith(
+          useMaterial3: getPlatform() != PlatformOS.isIOS,
+          datePickerTheme: DatePickerTheme.of(context).copyWith(
+            headerHeadlineStyle: const TextStyle(
+              fontSize: 18,
+            ),
+          ),
+        ),
         child: child ?? SizedBox.shrink(),
       );
     },

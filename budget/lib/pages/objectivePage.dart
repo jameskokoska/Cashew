@@ -377,7 +377,7 @@ class _ObjectivePageContentState extends State<_ObjectivePageContent> {
                                               DateTime.now().year,
                                     ) +
                                     (widget.objective.endDate != null
-                                        ? " - " +
+                                        ? " – " +
                                             getWordedDateShortMore(
                                               widget.objective.endDate!,
                                               includeYear: widget.objective

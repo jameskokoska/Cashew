@@ -1062,9 +1062,7 @@ class FinanceDatabase extends _$FinanceDatabase {
                     homePageWidgetDisplay:
                         Value(defaultWalletHomePageWidgetDisplay)));
               }
-              Future.delayed(Duration(milliseconds: 0), () async {
-                await updateBatchWalletsOnly(walletsInserting);
-              });
+              await updateBatchWalletsOnly(walletsInserting);
             } catch (e) {
               print(
                   "Migration Error: Error upgrading home page widget display default for wallets " +
@@ -1082,9 +1080,7 @@ class FinanceDatabase extends _$FinanceDatabase {
                 objectivesInserting.add(objective.copyWith(
                     walletFk: appStateSettings["selectedWalletPk"]));
               }
-              Future.delayed(Duration(milliseconds: 0), () async {
-                await updateBatchObjectivesOnly(objectivesInserting);
-              });
+              await updateBatchObjectivesOnly(objectivesInserting);
             } catch (e) {
               print(
                   "Migration Error: Error upgrading objectives.walletFk to current wallet " +
@@ -2773,9 +2769,11 @@ class FinanceDatabase extends _$FinanceDatabase {
     }
 
     if (transaction.type == TransactionSpecialType.credit) {
-      transaction = transaction.copyWith(income: false);
+      transaction = transaction.copyWith(
+          income: false, amount: transaction.amount.abs() * -1);
     } else if (transaction.type == TransactionSpecialType.debt) {
-      transaction = transaction.copyWith(income: true);
+      transaction =
+          transaction.copyWith(income: true, amount: transaction.amount.abs());
     }
 
     // we are saying we still need this category! - for syncing
@@ -4455,12 +4453,33 @@ class FinanceDatabase extends _$FinanceDatabase {
     });
   }
 
-  Stream<double?> watchTotalOfCategoryLimitsInBudgetWithCategories(
-      AllWallets allWallets,
-      String budgetPk,
-      List<String>? categoryPks,
-      List<String>? categoryPksExclude,
-      bool isAbsoluteSpendingLimit) {
+  // If a category budget limit is not tied to an existing wallet,
+  // make it the primary currency
+  // This is because the total banner category limits would be incorrect
+  // (Would not default to a factor of one since we loop through the wallets,
+  // not the wallets that the limits exist in)
+  Future<bool> fixWanderingCategoryLimitsInBudget({
+    required AllWallets allWallets,
+    required String budgetPk,
+  }) async {
+    List<CategoryBudgetLimit> wanderingLimits =
+        await (select(categoryBudgetLimits)
+              ..where((t) => t.walletFk.isNotIn(allWallets.indexedByPk.keys)))
+            .get();
+    for (CategoryBudgetLimit limit in wanderingLimits) {
+      await createOrUpdateCategoryLimit(
+          limit.copyWith(walletFk: appStateSettings["selectedWalletPk"]));
+    }
+    return true;
+  }
+
+  Stream<double?> watchTotalOfCategoryLimitsInBudgetWithCategories({
+    required AllWallets allWallets,
+    required String budgetPk,
+    required List<String>? categoryPks,
+    required List<String>? categoryPksExclude,
+    required bool isAbsoluteSpendingLimit,
+  }) {
     if (isAbsoluteSpendingLimit == false) {
       final totalAmt = categoryBudgetLimits.amount.sum();
       JoinedSelectStatement<$CategoryBudgetLimitsTable, CategoryBudgetLimit>
@@ -4511,9 +4530,12 @@ class FinanceDatabase extends _$FinanceDatabase {
   }
 
   Stream<double?> watchTotalOfCategoryLimitsInBudgetWithSubCategories(
-      AllWallets allWallets,
-      String mainCategoryPk,
-      bool isAbsoluteSpendingLimit) {
+      {required AllWallets allWallets,
+      required String mainCategoryPk,
+      required String budgetPk,
+      required List<String>? categoryPks,
+      required List<String>? categoryPksExclude,
+      required bool isAbsoluteSpendingLimit}) {
     if (isAbsoluteSpendingLimit == false) {
       final totalAmt = categoryBudgetLimits.amount.sum();
       JoinedSelectStatement<$CategoryBudgetLimitsTable, CategoryBudgetLimit>
@@ -4525,7 +4547,10 @@ class FinanceDatabase extends _$FinanceDatabase {
               categories.categoryPk.equalsExp(categoryBudgetLimits.categoryFk))
         ])
         ..addColumns([totalAmt])
-        ..where(categories.mainCategoryPk.equals(mainCategoryPk));
+        ..where(categories.mainCategoryPk.equals(mainCategoryPk) &
+            categoryBudgetLimits.budgetFk.equals(budgetPk) &
+            isInCategory(
+                categoryBudgetLimits, categoryPks, categoryPksExclude));
 
       return query.map((row) => row.read(totalAmt)).watchSingleOrNull();
     } else {
@@ -4544,7 +4569,10 @@ class FinanceDatabase extends _$FinanceDatabase {
           ])
           ..addColumns([totalAmt])
           ..where(categoryBudgetLimits.walletFk.equals(wallet.walletPk) &
-              categories.mainCategoryPk.equals(mainCategoryPk));
+              categories.mainCategoryPk.equals(mainCategoryPk) &
+              categoryBudgetLimits.budgetFk.equals(budgetPk) &
+              isInCategory(
+                  categoryBudgetLimits, categoryPks, categoryPksExclude));
 
         mergedStreams.add(query
             .map(((row) =>

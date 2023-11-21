@@ -481,7 +481,7 @@ class _CyclePeriodSelectionState extends State<CyclePeriodSelection> {
             child: TextFont(
               text: "(" +
                   getWordedDateShortMore(budgetRange.start) +
-                  " - " +
+                  " – " +
                   getWordedDateShortMore(budgetRange.end) +
                   ")",
               fontSize: 16,
@@ -609,7 +609,7 @@ String getLabelOfSelectedCustomPeriod(String cycleSettingsExtension) {
   } else if (selectedPeriodType == CycleType.cycle) {
     DateTimeRange dateRange = getCycleDateTimeRange(cycleSettingsExtension);
     return getWordedDateShort(dateRange.start) +
-        " - " +
+        " – " +
         getWordedDateShort(dateRange.end);
   } else if (selectedPeriodType == CycleType.pastDays) {
     int days =
@@ -628,7 +628,7 @@ String getLabelOfSelectedCustomPeriod(String cycleSettingsExtension) {
     return getWordedDateShort(startDate) +
         (endDate == null
             ? " " + "until-forever".tr().toLowerCase()
-            : (" - " + getWordedDateShort(endDate)));
+            : (" – " + getWordedDateShort(endDate)));
   }
   return "";
 }

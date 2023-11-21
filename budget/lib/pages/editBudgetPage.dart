@@ -296,7 +296,7 @@ class _EditBudgetPageState extends State<EditBudgetPage> {
                               ),
                               TextFont(
                                 text: getWordedDateShort(budgetRange.start) +
-                                    " - " +
+                                    " – " +
                                     getWordedDateShort(budgetRange.end),
                                 fontSize: 15,
                               ),

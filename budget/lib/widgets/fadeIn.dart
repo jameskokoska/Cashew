@@ -228,6 +228,7 @@ class ScaledAnimatedSwitcher extends StatelessWidget {
         return FadeTransition(
           opacity: fadeAnimation,
           child: ScaleTransition(
+            alignment: Alignment.center,
             scale: scaleAnimation,
             child: child,
           ),

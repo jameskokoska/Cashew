@@ -4,6 +4,7 @@ import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/animatedExpanded.dart';
 import 'package:budget/widgets/dropdownSelect.dart';
 import 'package:budget/widgets/editRowEntry.dart';
+import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openContainerNavigation.dart';
 import 'package:budget/widgets/tappable.dart';
@@ -524,14 +525,17 @@ class SettingsContainer extends StatelessWidget {
                               ? SizedBox.shrink()
                               : Padding(
                                   padding: const EdgeInsets.only(right: 16),
-                                  child: Transform.scale(
-                                    scale: iconScale ?? 1,
-                                    child: Icon(
-                                      icon,
-                                      size: iconSize ?? 30,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .secondary,
+                                  child: ScaledAnimatedSwitcher(
+                                    keyToWatch: icon.toString(),
+                                    child: Transform.scale(
+                                      scale: iconScale ?? 1,
+                                      child: Icon(
+                                        icon,
+                                        size: iconSize ?? 30,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .secondary,
+                                      ),
                                     ),
                                   ),
                                 ),

@@ -21,6 +21,7 @@ class TappableTextEntry extends StatelessWidget {
     this.showPlaceHolderWhenTextEquals,
     this.disabled = false,
     this.customTitleBuilder,
+    this.enableAnimatedSwitcher = true,
   }) : super(key: key);
 
   final String? title;
@@ -35,6 +36,7 @@ class TappableTextEntry extends StatelessWidget {
   final bool disabled;
   final Function(Widget Function(String? titlePassed) titleBuilder)?
       customTitleBuilder;
+  final bool enableAnimatedSwitcher;
 
   @override
   Widget build(BuildContext context) {
@@ -60,6 +62,7 @@ class TappableTextEntry extends StatelessWidget {
     }
 
     return AnimatedSizeSwitcher(
+      enabled: enableAnimatedSwitcher,
       child: Tappable(
         key: ValueKey(title),
         onTap: disabled == true ? null : onTap,
