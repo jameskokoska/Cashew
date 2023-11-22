@@ -329,8 +329,11 @@ class SelectedTransactionsAppBar extends StatelessWidget {
                           DropdownItemMenu(
                             id: "add-to-budget",
                             label: "add-to-budget".tr(),
-                            iconScale: 0.85,
-                            icon: MoreIcons.chart_pie,
+                            iconScale:
+                                appStateSettings["outlinedIcons"] ? 1 : 0.85,
+                            icon: appStateSettings["outlinedIcons"]
+                                ? Icons.donut_small_outlined
+                                : MoreIcons.chart_pie,
                             action: () async {
                               dynamic budget =
                                   await selectAddableBudgetPopup(context);
@@ -356,7 +359,9 @@ class SelectedTransactionsAppBar extends StatelessWidget {
 
                               openSnackbar(
                                 SnackbarMessage(
-                                  icon: MoreIcons.chart_pie,
+                                  icon: appStateSettings["outlinedIcons"]
+                                      ? Icons.donut_small_outlined
+                                      : MoreIcons.chart_pie,
                                   title: budget == "none"
                                       ? "removed-from-budget".tr()
                                       : "added-to-budget".tr(),

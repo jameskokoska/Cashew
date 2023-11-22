@@ -832,7 +832,7 @@
   "goal-total-type": "Mål Total type",
   "auto-mark-transactions": "Auto Pay Transactions",
   "auto-mark-transactions-description": "Marker forfaldne transaktioner som betalt",
-  "more-options-description": "Konti, budgetter, mål, titler",
+  "more-options-description": "Stil, konti, budgetter, mål, titler",
   "header-height": "HEADER Højde",
   "tall": "Høj",
   "short": "Kort",
@@ -860,5 +860,15 @@
   "initial-account-balance": "Første kontosaldo",
   "starting-at": "Begynder kl",
   "major-change-16": "Ny alle udgiftsside",
-  "major-change-16-1": "Gennemførte hele udgifterne med udgifter til forbrugsperiode"
+  "major-change-16-1": "Gennemførte hele udgifterne med udgifter til forbrugsperiode",
+  "font": "Skrifttype",
+  "platform": "Platform",
+  "personalization": "Personalisering",
+  "rounded": "Afrundet",
+  "outlined": "Skitseret",
+  "icon-style": "Ikonstil",
+  "more-options-description-theme": "Skrifttype, ikonstil, headerhøjde",
+  "style": "Stil",
+  "increase-text-contrast": "Forøg tekstkontrast",
+  "increase-text-contrast-description": "Forøg lettere tekstkontrast"
 }

@@ -832,7 +832,7 @@
   "goal-total-type": "Całkowity rodzaj celu",
   "auto-mark-transactions": "Transakcje Auto Pay",
   "auto-mark-transactions-description": "Znacz zaległe transakcje jako zapłacone",
-  "more-options-description": "Konta, budżety, cele, tytuły",
+  "more-options-description": "Styl, konta, budżety, cele, tytuły",
   "header-height": "Wysokość nagłówka",
   "tall": "Wysoki",
   "short": "Krótki",
@@ -860,5 +860,15 @@
   "initial-account-balance": "Początkowe saldo konta",
   "starting-at": "Zaczynając od",
   "major-change-16": "Nowa strona wydatków",
-  "major-change-16-1": "Odnowili stronę z całą historią wydatków z historią okresu wydatków"
+  "major-change-16-1": "Odnowili stronę z całą historią wydatków z historią okresu wydatków",
+  "font": "Czcionka",
+  "platform": "Platforma",
+  "personalization": "Personalizacja",
+  "rounded": "Bułczasty",
+  "outlined": "Nakreślone",
+  "icon-style": "Styl ikony",
+  "more-options-description-theme": "Czcionka, styl ikony, wysokość nagłówka",
+  "style": "Styl",
+  "increase-text-contrast": "Zwiększ kontrast tekstowy",
+  "increase-text-contrast-description": "Zwiększ lżejszy kontrast tekstowy"
 }

@@ -201,7 +201,9 @@ Future<bool> updateSettings(
     }
   }
 
-  if (setting == "batterySaver" || setting == "materialYou") {
+  if (setting == "batterySaver" ||
+      setting == "materialYou" ||
+      setting == "increaseTextContrast") {
     generateColors();
   }
 

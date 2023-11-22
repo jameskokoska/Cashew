@@ -832,7 +832,7 @@
   "goal-total-type": "Гоал Тотал Типе",
   "auto-mark-transactions": "Аутоматско плаће",
   "auto-mark-transactions-description": "Означите закашњеле трансакције као плаћене",
-  "more-options-description": "Рачуни, буџети, циљеви, наслови",
+  "more-options-description": "Стил, рачуни, буџети, циљеви, наслови",
   "header-height": "Висина заглавља",
   "tall": "Висок",
   "short": "Кратак",
@@ -860,5 +860,15 @@
   "initial-account-balance": "Почетни салдо рачуна",
   "starting-at": "Почетак",
   "major-change-16": "Нова страница сваке потрошње",
-  "major-change-16-1": "Преокренуо је све странице потрошње са историјом потрошње"
+  "major-change-16-1": "Преокренуо је све странице потрошње са историјом потрошње",
+  "font": "Фонт",
+  "platform": "Платформа",
+  "personalization": "Персонализација",
+  "rounded": "Заокружен",
+  "outlined": "Заглављен",
+  "icon-style": "Ицон Стиле",
+  "more-options-description-theme": "Фонт, стил икона, висина заглавља",
+  "style": "Стил",
+  "increase-text-contrast": "Повећајте контраст текста",
+  "increase-text-contrast-description": "Повећајте лакши текстуални контраст"
 }

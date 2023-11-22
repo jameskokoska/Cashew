@@ -832,7 +832,7 @@
   "goal-total-type": "目标总类型",
   "auto-mark-transactions": "自动支付交易",
   "auto-mark-transactions-description": "自动将过期交易标记为已支付",
-  "more-options-description": "账户、预算、目标、标题",
+  "more-options-description": "样式，帐户，预算，目标，标题",
   "header-height": "标题高度",
   "tall": "高",
   "short": "低",
@@ -860,5 +860,15 @@
   "initial-account-balance": "初始帐户余额",
   "starting-at": "从开始",
   "major-change-16": "新的所有支出页面",
-  "major-change-16-1": "修改了所有支出页面，并使用支出期历史记录"
+  "major-change-16-1": "修改了所有支出页面，并使用支出期历史记录",
+  "font": "字体",
+  "platform": "平台",
+  "personalization": "个性化",
+  "rounded": "圆形",
+  "outlined": "概述",
+  "icon-style": "图标样式",
+  "more-options-description-theme": "字体，图标样式，标题高度",
+  "style": "风格",
+  "increase-text-contrast": "增加文本对比度",
+  "increase-text-contrast-description": "增加文字对比度"
 }

@@ -12,6 +12,7 @@ class RadioItems<T> extends StatefulWidget {
   final Color? Function(T item)? colorFilter;
   final Function(T item)? onLongPress;
   final bool ifNullSelectNone;
+  final bool itemsAreFonts;
 
   const RadioItems({
     Key? key,
@@ -23,6 +24,7 @@ class RadioItems<T> extends StatefulWidget {
     this.displayFilter,
     this.colorFilter,
     this.ifNullSelectNone = false,
+    this.itemsAreFonts = false,
   }) : super(key: key);
 
   @override
@@ -74,13 +76,24 @@ class _RadioItemsState<T> extends State<RadioItems<T>> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    TextFont(
-                      fontSize: noDescription ? 18 : 16,
-                      text: widget.displayFilter == null
-                          ? item.toString()
-                          : widget.displayFilter!(item),
-                      maxLines: 3,
-                    ),
+                    if (widget.itemsAreFonts == true && item != "Avenir")
+                      Text(
+                        widget.displayFilter == null
+                            ? item.toString()
+                            : widget.displayFilter!(item),
+                        style: TextStyle(
+                          fontSize: noDescription ? 18 : 16,
+                          fontFamily: item.toString(),
+                        ),
+                      ),
+                    if (widget.itemsAreFonts == false || item == "Avenir")
+                      TextFont(
+                        fontSize: noDescription ? 18 : 16,
+                        text: widget.displayFilter == null
+                            ? item.toString()
+                            : widget.displayFilter!(item),
+                        maxLines: 3,
+                      ),
                     noDescription
                         ? SizedBox.shrink()
                         : TextFont(

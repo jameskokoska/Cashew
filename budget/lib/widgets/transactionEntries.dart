@@ -569,7 +569,11 @@ class TransactionsEntriesSpendingSummary extends StatelessWidget {
           button: (openContainer) {
             return Tappable(
               borderRadius: borderRadius,
-              color: getStandardContainerColor(context),
+              color: appStateSettings["materialYou"]
+                  ? dynamicPastel(
+                      context, Theme.of(context).colorScheme.secondaryContainer,
+                      amountDark: 0.5, amountLight: 0)
+                  : getColor(context, "canvasContainer"),
               onTap: () {
                 // setState(() {
                 //   isExpanded = !isExpanded;

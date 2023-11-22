@@ -482,6 +482,7 @@ class NavigationSidebarButtonWithNavBarIconData extends StatelessWidget {
             navBarIconsData[navBarIconDataKey]!.navigationIndexedStackIndex,
             switchNavbar: true);
       },
+      iconScale: navBarIconsData[navBarIconDataKey]?.iconScale ?? 1,
     );
   }
 }

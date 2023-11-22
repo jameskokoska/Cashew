@@ -832,7 +832,7 @@
   "goal-total-type": "ધ્યેય કુલ પ્રકાર",
   "auto-mark-transactions": "ઓટો પગાર વ્યવહાર",
   "auto-mark-transactions-description": "ચૂકવણી મુજબ ઓવરડ્યુ ટ્રાંઝેક્શનને ચિહ્નિત કરો",
-  "more-options-description": "હિસાબ, બજેટ, લક્ષ્યો, શીર્ષક",
+  "more-options-description": "શૈલી, એકાઉન્ટ્સ, બજેટ, લક્ષ્યો, શીર્ષક",
   "header-height": "મથારીની height ંચાઇ",
   "tall": "Tallંચું",
   "short": "ટૂંકું",
@@ -860,5 +860,15 @@
   "initial-account-balance": "પ્રારંભિક હિસાબ સિલક",
   "starting-at": "પ્રારંભ",
   "major-change-16": "નવું ખર્ચ પૃષ્ઠ",
-  "major-change-16-1": "ખર્ચના સમયગાળાના ઇતિહાસ સાથે બધા ખર્ચ પૃષ્ઠને સુધારેલ છે"
+  "major-change-16-1": "ખર્ચના સમયગાળાના ઇતિહાસ સાથે બધા ખર્ચ પૃષ્ઠને સુધારેલ છે",
+  "font": "સજાવટ",
+  "platform": "પ્લેટફોર્મ",
+  "personalization": "વૈયક્તિકરણ",
+  "rounded": "ગોળાકાર",
+  "outlined": "દર્શાવેલ",
+  "icon-style": "મૂર્તિ શૈલી",
+  "more-options-description-theme": "ફ ont ન્ટ, આયકન શૈલી, હેડર height ંચાઇ",
+  "style": "શૈલી",
+  "increase-text-contrast": "ટેક્સ્ટ વિરોધાભાસમાં વધારો",
+  "increase-text-contrast-description": "હળવા ટેક્સ્ટ વિરોધાભાસમાં વધારો"
 }

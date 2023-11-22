@@ -832,7 +832,7 @@
   "goal-total-type": "Gol toplam türü",
   "auto-mark-transactions": "Otomatik Ödeme İşlemleri",
   "auto-mark-transactions-description": "Mark gecikmiş işlemleri ödenen",
-  "more-options-description": "Hesaplar, bütçeler, hedefler, başlıklar",
+  "more-options-description": "Stil, Hesaplar, Bütçeler, Hedefler, Başlıklar",
   "header-height": "Başlık yüksekliği",
   "tall": "Uzun",
   "short": "Kısa",
@@ -860,5 +860,15 @@
   "initial-account-balance": "İlk Hesap Bakiyesi",
   "starting-at": "Başlamak",
   "major-change-16": "Yeni Tüm Harcama Sayfası",
-  "major-change-16-1": "Harcama dönemi geçmişi ile tüm harcama sayfasını yeniledi"
+  "major-change-16-1": "Harcama dönemi geçmişi ile tüm harcama sayfasını yeniledi",
+  "font": "Yazı tipi",
+  "platform": "Platform",
+  "personalization": "Kişiselleştirme",
+  "rounded": "Yuvarlak",
+  "outlined": "Özetlenmiş",
+  "icon-style": "İkon stili",
+  "more-options-description-theme": "Yazı tipi, simge stili, başlık yüksekliği",
+  "style": "Stil",
+  "increase-text-contrast": "Metin kontrastını artırın",
+  "increase-text-contrast-description": "Daha hafif metin kontrastını artırın"
 }

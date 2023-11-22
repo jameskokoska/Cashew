@@ -832,7 +832,7 @@
   "goal-total-type": "목표 총 유형",
   "auto-mark-transactions": "자동 급여 거래",
   "auto-mark-transactions-description": "기한이 지난 거래를 지불하십시오",
-  "more-options-description": "계정, 예산, 목표, 제목",
+  "more-options-description": "스타일, 계정, 예산, 목표, 제목",
   "header-height": "헤더 높이",
   "tall": "키가 큰",
   "short": "짧은",
@@ -860,5 +860,15 @@
   "initial-account-balance": "초기 계정 잔액",
   "starting-at": "시작",
   "major-change-16": "새로운 모든 지출 페이지",
-  "major-change-16-1": "지출 기간 역사로 모든 ​​지출 페이지를 개선했습니다"
+  "major-change-16-1": "지출 기간 역사로 모든 ​​지출 페이지를 개선했습니다",
+  "font": "폰트",
+  "platform": "플랫폼",
+  "personalization": "개인화",
+  "rounded": "반올림",
+  "outlined": "설명했습니다",
+  "icon-style": "아이콘 스타일",
+  "more-options-description-theme": "글꼴, 아이콘 스타일, 헤더 높이",
+  "style": "스타일",
+  "increase-text-contrast": "텍스트 대비를 높입니다",
+  "increase-text-contrast-description": "더 가벼운 텍스트 대비를 증가시킵니다"
 }

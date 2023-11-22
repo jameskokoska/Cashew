@@ -87,9 +87,7 @@ class _EditBudgetLimitsPageState extends State<EditBudgetLimitsPage> {
           budgetPk: widget.budget.budgetPk,
           budgetLimit: budgetAmount,
           showAddCategoryButton: (widget.budget.categoryFks == null ||
-                  widget.budget.categoryFks?.isEmpty == true) ||
-              (widget.budget.categoryFksExclude == null ||
-                  widget.budget.categoryFksExclude?.isEmpty == true),
+              widget.budget.categoryFks?.isEmpty == true),
         ),
       ],
     );

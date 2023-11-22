@@ -1676,22 +1676,25 @@ class _AllSpendingPastSpendingGraphState
                                   ? []
                                   : boxShadowCheck(boxShadowGeneral(context)),
                             ),
-                            margin: EdgeInsets.only(
-                              left: getHorizontalPaddingConstrained(
-                                    context,
-                                    enabled:
-                                        enableDoubleColumn(context) == false,
-                                  ) +
-                                  (getPlatform() == PlatformOS.isIOS ? 0 : 13),
-                              right: getHorizontalPaddingConstrained(
-                                    context,
-                                    enabled:
-                                        enableDoubleColumn(context) == false,
-                                  ) +
-                                  (getPlatform() == PlatformOS.isIOS ? 0 : 13),
-                              bottom:
-                                  getPlatform() == PlatformOS.isIOS ? 0 : 10,
-                            ),
+                            margin: getPlatform() == PlatformOS.isIOS
+                                ? EdgeInsets.zero
+                                : EdgeInsets.only(
+                                    left: getHorizontalPaddingConstrained(
+                                          context,
+                                          enabled:
+                                              enableDoubleColumn(context) ==
+                                                  false,
+                                        ) +
+                                        13,
+                                    right: getHorizontalPaddingConstrained(
+                                          context,
+                                          enabled:
+                                              enableDoubleColumn(context) ==
+                                                  false,
+                                        ) +
+                                        13,
+                                    bottom: 10,
+                                  ),
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(
                                   getPlatform() == PlatformOS.isIOS ? 0 : 20),
@@ -1704,7 +1707,18 @@ class _AllSpendingPastSpendingGraphState
                                     },
                                     child: Padding(
                                       padding: EdgeInsets.symmetric(
-                                          horizontal: 30, vertical: 15),
+                                          horizontal: (getPlatform() ==
+                                                      PlatformOS.isIOS
+                                                  ? getHorizontalPaddingConstrained(
+                                                      context,
+                                                      enabled:
+                                                          enableDoubleColumn(
+                                                                  context) ==
+                                                              false,
+                                                    )
+                                                  : 0) +
+                                              30,
+                                          vertical: 15),
                                       child: Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,

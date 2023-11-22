@@ -832,7 +832,7 @@
   "goal-total-type": "Jenis Jumlah Matlamat",
   "auto-mark-transactions": "Urus Niaga Auto",
   "auto-mark-transactions-description": "Tandakan transaksi tertunggak seperti yang dibayar",
-  "more-options-description": "Akaun, belanjawan, matlamat, tajuk",
+  "more-options-description": "Gaya, akaun, belanjawan, matlamat, tajuk",
   "header-height": "Ketinggian header",
   "tall": "Tinggi",
   "short": "Pendek",
@@ -860,5 +860,15 @@
   "initial-account-balance": "Baki akaun awal",
   "starting-at": "Bermula pada",
   "major-change-16": "Halaman Perbelanjaan Semua Baru",
-  "major-change-16-1": "Merombak halaman perbelanjaan semua dengan sejarah tempoh perbelanjaan"
+  "major-change-16-1": "Merombak halaman perbelanjaan semua dengan sejarah tempoh perbelanjaan",
+  "font": "Font",
+  "platform": "Platform",
+  "personalization": "Pemperibadian",
+  "rounded": "Bulat",
+  "outlined": "Digariskan",
+  "icon-style": "Gaya ikon",
+  "more-options-description-theme": "Font, gaya ikon, ketinggian header",
+  "style": "Gaya",
+  "increase-text-contrast": "Meningkatkan kontras teks",
+  "increase-text-contrast-description": "Meningkatkan kontras teks yang lebih ringan"
 }

@@ -832,7 +832,7 @@
   "goal-total-type": "Cél teljes típusa",
   "auto-mark-transactions": "Automatikus fizetés tranzakciók",
   "auto-mark-transactions-description": "Jelölje meg a lejárt tranzakciókat fizetettként",
-  "more-options-description": "Számlák, költségvetések, célok, címek",
+  "more-options-description": "Stílus, számlák, költségvetések, célok, címek",
   "header-height": "Fejlécmagasság",
   "tall": "Magas",
   "short": "Rövid",
@@ -860,5 +860,15 @@
   "initial-account-balance": "Kezdeti számlaegyenleg",
   "starting-at": "Kezdve",
   "major-change-16": "Új minden kiadási oldal",
-  "major-change-16-1": "Megújította az összes kiadási oldalt a kiadási időszak előzményeivel"
+  "major-change-16-1": "Megújította az összes kiadási oldalt a kiadási időszak előzményeivel",
+  "font": "Betűtípus",
+  "platform": "Felület",
+  "personalization": "Személyre szabás",
+  "rounded": "Lekerekített",
+  "outlined": "Vázolt",
+  "icon-style": "Ikonstílus",
+  "more-options-description-theme": "Betűtípus, ikon stílus, fejlécmagasság",
+  "style": "Stílus",
+  "increase-text-contrast": "Növelje a szöveges kontrasztot",
+  "increase-text-contrast-description": "Növelje a világosabb szöveges kontrasztot"
 }

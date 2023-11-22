@@ -831,7 +831,9 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                               padding: EdgeInsets.zero,
                               visualDensity: VisualDensity.compact,
                               icon: Icon(
-                                Icons.info_outlined,
+                                appStateSettings["outlinedIcons"]
+                                    ? Icons.info_outlined
+                                    : Icons.info_outline_rounded,
                                 size: 19,
                               ),
                               onPressed: () {
@@ -916,7 +918,9 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                                   padding: EdgeInsets.zero,
                                   visualDensity: VisualDensity.compact,
                                   icon: Icon(
-                                    Icons.info_outlined,
+                                    appStateSettings["outlinedIcons"]
+                                        ? Icons.info_outlined
+                                        : Icons.info_outline_rounded,
                                     size: 19,
                                   ),
                                   onPressed: () {

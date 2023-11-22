@@ -832,7 +832,7 @@
   "goal-total-type": "লক্ষ্য মোট প্রকার",
   "auto-mark-transactions": "অটো পে লেনদেন",
   "auto-mark-transactions-description": "প্রদত্ত হিসাবে ওভারডু লেনদেন চিহ্নিত করুন",
-  "more-options-description": "অ্যাকাউন্ট, বাজেট, লক্ষ্য, শিরোনাম",
+  "more-options-description": "স্টাইল, অ্যাকাউন্ট, বাজেট, লক্ষ্য, শিরোনাম",
   "header-height": "শিরোনাম উচ্চতা",
   "tall": "লম্বা",
   "short": "সংক্ষিপ্ত",
@@ -860,5 +860,15 @@
   "initial-account-balance": "প্রাথমিক অ্যাকাউন্ট ভারসাম্য",
   "starting-at": "শুরু",
   "major-change-16": "নতুন সমস্ত ব্যয় পৃষ্ঠা",
-  "major-change-16-1": "ব্যয় সময়ের ইতিহাসের সাথে সমস্ত ব্যয় পৃষ্ঠাটি পুনর্নির্মাণ করেছে"
+  "major-change-16-1": "ব্যয় সময়ের ইতিহাসের সাথে সমস্ত ব্যয় পৃষ্ঠাটি পুনর্নির্মাণ করেছে",
+  "font": "ফন্ট",
+  "platform": "প্ল্যাটফর্ম",
+  "personalization": "ব্যক্তিগতকরণ",
+  "rounded": "গোলাকার",
+  "outlined": "রূপরেখা",
+  "icon-style": "আইকন স্টাইল",
+  "more-options-description-theme": "ফন্ট, আইকন স্টাইল, শিরোনাম উচ্চতা",
+  "style": "স্টাইল",
+  "increase-text-contrast": "পাঠ্য বিপরীতে বৃদ্ধি করুন",
+  "increase-text-contrast-description": "হালকা পাঠ্য বিপরীতে বৃদ্ধি করুন"
 }

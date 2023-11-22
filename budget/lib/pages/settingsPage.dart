@@ -35,7 +35,9 @@ import 'package:budget/widgets/notificationsSettings.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/widgets/openPopup.dart';
+import 'package:budget/widgets/radioItems.dart';
 import 'package:budget/widgets/ratingPopup.dart';
+import 'package:budget/widgets/restartApp.dart';
 import 'package:budget/widgets/selectColor.dart';
 import 'package:budget/widgets/settingsContainers.dart';
 import 'package:budget/pages/walletDetailsPage.dart';
@@ -493,38 +495,6 @@ class SettingsPageContent extends StatelessWidget {
             return item.toLowerCase().tr();
           },
         ),
-        AnimatedExpanded(
-          // Indicates if it is enabled by default per device height
-          expand: MediaQuery.sizeOf(context).height > MIN_HEIGHT_FOR_HEADER &&
-              getPlatform() != PlatformOS.isIOS,
-          child: SettingsContainerDropdown(
-            title: "header-height".tr(),
-            icon: appStateSettings["outlinedIcons"]
-                ? Icons.subtitles_outlined
-                : Icons.subtitles_rounded,
-            initial: appStateSettings["forceSmallHeader"].toString(),
-            items: ["true", "false"],
-            onChanged: (value) async {
-              bool boolValue = false;
-              if (value == "true") {
-                boolValue = true;
-              } else if (value == "false") {
-                boolValue = false;
-              }
-              await updateSettings(
-                "forceSmallHeader",
-                boolValue,
-                updateGlobalState: false,
-                setStateAllPageFrameworks: true,
-                pagesNeedingRefresh: [0],
-              );
-            },
-            getLabel: (item) {
-              if (item == "true") return "short".tr();
-              if (item == "false") return "tall".tr();
-            },
-          ),
-        ),
 
         // EnterName(),
         SettingsHeader(title: "preferences".tr()),
@@ -572,37 +542,7 @@ class SettingsPageContent extends StatelessWidget {
         ),
 
         SettingsContainerOpenPage(
-          openPage: PageFramework(
-            title: "more".tr(),
-            dragDownToDismiss: true,
-            horizontalPadding: getHorizontalPaddingConstrained(context),
-            listWidgets: [
-              SettingsHeader(title: "transactions".tr()),
-              TransactionsSettings(),
-              SettingsHeader(title: "accounts".tr()),
-              ShowAccountLabelSettingToggle(),
-              SettingsContainerOpenPage(
-                onOpen: () {
-                  checkIfExchangeRateChangeBefore();
-                },
-                onClosed: () {
-                  checkIfExchangeRateChangeAfter();
-                },
-                openPage: ExchangeRates(),
-                title: "exchange-rates".tr(),
-                icon: appStateSettings["outlinedIcons"]
-                    ? Icons.account_balance_wallet_outlined
-                    : Icons.account_balance_wallet_rounded,
-              ),
-              SettingsHeader(title: "budgets".tr()),
-              BudgetSettings(),
-              SettingsHeader(title: "goals".tr()),
-              ObjectiveSettings(),
-              SettingsHeader(title: "titles".tr()),
-              AskForTitlesToggle(),
-              AutoTitlesToggle(),
-            ],
-          ),
+          openPage: MoreOptionsPagePreferences(),
           title: "more-options".tr(),
           description: "more-options-description".tr(),
           icon: appStateSettings["outlinedIcons"]
@@ -620,7 +560,9 @@ class SettingsPageContent extends StatelessWidget {
         SettingsContainer(
           title: "auto-mark-transactions".tr(),
           description: "auto-mark-transactions-description".tr(),
-          icon: Icons.check_circle_rounded,
+          icon: appStateSettings["outlinedIcons"]
+              ? Icons.check_circle_outlined
+              : Icons.check_circle_rounded,
           onTap: () {
             openBottomSheet(
               context,
@@ -666,6 +608,50 @@ class SettingsPageContent extends StatelessWidget {
           isOutlinedButton: false,
           forceButtonName: "google-drive".tr(),
         ),
+      ],
+    );
+  }
+}
+
+class MoreOptionsPagePreferences extends StatelessWidget {
+  const MoreOptionsPagePreferences({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return PageFramework(
+      title: "more".tr(),
+      dragDownToDismiss: true,
+      horizontalPadding: getHorizontalPaddingConstrained(context),
+      listWidgets: [
+        SettingsHeader(title: "style".tr()),
+        HeaderHeightSetting(),
+        OutlinedIconsSetting(),
+        FontPickerSetting(),
+        IncreaseTextContrastSetting(),
+        SettingsHeader(title: "transactions".tr()),
+        TransactionsSettings(),
+        SettingsHeader(title: "accounts".tr()),
+        ShowAccountLabelSettingToggle(),
+        SettingsContainerOpenPage(
+          onOpen: () {
+            checkIfExchangeRateChangeBefore();
+          },
+          onClosed: () {
+            checkIfExchangeRateChangeAfter();
+          },
+          openPage: ExchangeRates(),
+          title: "exchange-rates".tr(),
+          icon: appStateSettings["outlinedIcons"]
+              ? Icons.account_balance_wallet_outlined
+              : Icons.account_balance_wallet_rounded,
+        ),
+        SettingsHeader(title: "budgets".tr()),
+        BudgetSettings(),
+        SettingsHeader(title: "goals".tr()),
+        ObjectiveSettings(),
+        SettingsHeader(title: "titles".tr()),
+        AskForTitlesToggle(),
+        AutoTitlesToggle(),
       ],
     );
   }
@@ -748,4 +734,178 @@ class _BiometricsSettingToggleState extends State<BiometricsSettingToggle> {
       ],
     );
   }
+}
+
+class HeaderHeightSetting extends StatelessWidget {
+  const HeaderHeightSetting({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedExpanded(
+      // Indicates if it is enabled by default per device height
+      expand: MediaQuery.sizeOf(context).height > MIN_HEIGHT_FOR_HEADER &&
+          getPlatform() != PlatformOS.isIOS,
+      child: SettingsContainerDropdown(
+        title: "header-height".tr(),
+        icon: appStateSettings["outlinedIcons"]
+            ? Icons.subtitles_outlined
+            : Icons.subtitles_rounded,
+        initial: appStateSettings["forceSmallHeader"].toString(),
+        items: ["true", "false"],
+        onChanged: (value) async {
+          bool boolValue = false;
+          if (value == "true") {
+            boolValue = true;
+          } else if (value == "false") {
+            boolValue = false;
+          }
+          await updateSettings(
+            "forceSmallHeader",
+            boolValue,
+            updateGlobalState: false,
+            setStateAllPageFrameworks: true,
+            pagesNeedingRefresh: [0],
+          );
+        },
+        getLabel: (item) {
+          if (item == "true") return "short".tr();
+          if (item == "false") return "tall".tr();
+        },
+      ),
+    );
+  }
+}
+
+// Changing this setting needs to update the UI, that's not something that happens when setting global state
+class OutlinedIconsSetting extends StatelessWidget {
+  const OutlinedIconsSetting({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return SettingsContainerDropdown(
+      items: ["rounded", "outlined"],
+      onChanged: (value) async {
+        if (value == "rounded") {
+          await updateSettings("outlinedIcons", false,
+              updateGlobalState: false);
+        } else {
+          await updateSettings(
+            "outlinedIcons",
+            true,
+            updateGlobalState: false,
+          );
+        }
+        navBarIconsData = getNavBarIconsData();
+        RestartApp.restartApp(context);
+      },
+      getLabel: (value) {
+        return value.tr();
+      },
+      initial:
+          appStateSettings["outlinedIcons"] == true ? "outlined" : "rounded",
+      title: "icon-style".tr(),
+      icon: appStateSettings["outlinedIcons"]
+          ? Icons.star_outline
+          : Icons.star_rounded,
+    );
+  }
+}
+
+class IncreaseTextContrastSetting extends StatelessWidget {
+  const IncreaseTextContrastSetting({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return SettingsContainerSwitch(
+      title: "increase-text-contrast".tr(),
+      description: "increase-text-contrast-description".tr(),
+      onSwitched: (value) async {
+        await updateSettings("increaseTextContrast", value,
+            updateGlobalState: true);
+      },
+      initialValue: appStateSettings["increaseTextContrast"],
+      icon: appStateSettings["outlinedIcons"]
+          ? Icons.exposure_outlined
+          : Icons.exposure_rounded,
+      descriptionColor: appStateSettings["increaseTextContrast"]
+          ? getColor(context, "black").withOpacity(0.84)
+          : Theme.of(context).colorScheme.secondary.withOpacity(0.45),
+    );
+  }
+}
+
+class FontPickerSetting extends StatelessWidget {
+  const FontPickerSetting({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return SettingsContainer(
+      title: "font".tr().capitalizeFirst,
+      icon: appStateSettings["outlinedIcons"]
+          ? Icons.font_download_outlined
+          : Icons.font_download_rounded,
+      afterWidget: Tappable(
+        color: Theme.of(context).colorScheme.secondaryContainer,
+        borderRadius: 10,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+          child: Builder(builder: (context) {
+            String displayFontName =
+                fontNameDisplayFilter(appStateSettings["font"].toString());
+            return TextFont(
+              text: displayFontName,
+              fontSize: 14,
+            );
+          }),
+        ),
+      ),
+      onTap: () {
+        openFontPicker(context);
+      },
+    );
+  }
+}
+
+void openFontPicker(BuildContext context) {
+  openBottomSheet(
+    context,
+    PopupFramework(
+      title: "font".tr(),
+      child: RadioItems(
+        itemsAreFonts: true,
+        items: [
+          // These values match that of pubspec font family
+          "Avenir",
+          if (getPlatform() == PlatformOS.isIOS) "SFProText",
+          "DMSans",
+          "Metropolis",
+          "Inter",
+          "RobotoCondensed",
+          "(Platform)",
+        ],
+        initial: appStateSettings["font"].toString(),
+        displayFilter: fontNameDisplayFilter,
+        onChanged: (value) async {
+          updateSettings("font", value, updateGlobalState: true);
+          await Future.delayed(Duration(milliseconds: 50));
+          Navigator.pop(context);
+        },
+      ),
+    ),
+  );
+}
+
+String fontNameDisplayFilter(String value) {
+  if (value == "Avenir") {
+    return "default".tr().capitalizeFirst;
+  } else if (value == "(Platform)") {
+    return "platform".tr().capitalizeFirst;
+  } else if (value == "SFProText") {
+    return "San Francisco";
+  } else if (value == "DMSans") {
+    return "DM Sans";
+  } else if (value == "RobotoCondensed") {
+    return "Roboto Condensed";
+  }
+  return value.toString();
 }

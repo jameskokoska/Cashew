@@ -1449,7 +1449,9 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                     padding: EdgeInsets.zero,
                                     visualDensity: VisualDensity.compact,
                                     icon: Icon(
-                                      Icons.info_outlined,
+                                      appStateSettings["outlinedIcons"]
+                                          ? Icons.info_outlined
+                                          : Icons.info_outline_rounded,
                                       size: 19,
                                     ),
                                     onPressed: () {

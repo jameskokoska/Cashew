@@ -832,7 +832,7 @@
   "goal-total-type": "Celkový typ cíle",
   "auto-mark-transactions": "Transakce s automatickou výplatou",
   "auto-mark-transactions-description": "Označte zpochybnění transakcí jako placené",
-  "more-options-description": "Účty, rozpočty, cíle, tituly",
+  "more-options-description": "Styl, účty, rozpočty, cíle, tituly",
   "header-height": "Výška záhlaví",
   "tall": "Vysoký",
   "short": "Krátký",
@@ -860,5 +860,15 @@
   "initial-account-balance": "Počáteční zůstatek na účtu",
   "starting-at": "Počínaje",
   "major-change-16": "Nová stránka všech výdajů",
-  "major-change-16-1": "Vylepšil stránku všech výdajů s historií strávení období"
+  "major-change-16-1": "Vylepšil stránku všech výdajů s historií strávení období",
+  "font": "Písmo",
+  "platform": "Plošina",
+  "personalization": "Personalizace",
+  "rounded": "Zaoblený",
+  "outlined": "Nastíněno",
+  "icon-style": "Styl ikony",
+  "more-options-description-theme": "Písmo, styl ikon, výška záhlaví",
+  "style": "Styl",
+  "increase-text-contrast": "Zvýšit kontrast textu",
+  "increase-text-contrast-description": "Zvýšit lehčí kontrast textu"
 }

@@ -832,7 +832,7 @@
   "goal-total-type": "Obiectiv de tip total",
   "auto-mark-transactions": "Tranzacții cu plată automată",
   "auto-mark-transactions-description": "Marcați tranzacțiile întârziate ca plătite",
-  "more-options-description": "Conturi, bugete, obiective, titluri",
+  "more-options-description": "Stil, conturi, bugete, obiective, titluri",
   "header-height": "Înălțimea antetului",
   "tall": "Înalt",
   "short": "Mic de statura",
@@ -860,5 +860,15 @@
   "initial-account-balance": "Soldul contului inițial",
   "starting-at": "Începând cu",
   "major-change-16": "Noua pagină de cheltuieli",
-  "major-change-16-1": "A reînnoit pagina de cheltuieli cu istoricul perioadei de cheltuieli"
+  "major-change-16-1": "A reînnoit pagina de cheltuieli cu istoricul perioadei de cheltuieli",
+  "font": "Font",
+  "platform": "Platformă",
+  "personalization": "Personalizare",
+  "rounded": "Rotunjit",
+  "outlined": "Conturat",
+  "icon-style": "Stil de pictogramă",
+  "more-options-description-theme": "Font, stil pictogramă, înălțimea antetului",
+  "style": "Stil",
+  "increase-text-contrast": "Creșteți contrastul textului",
+  "increase-text-contrast-description": "Creșteți contrastul textului mai ușor"
 }

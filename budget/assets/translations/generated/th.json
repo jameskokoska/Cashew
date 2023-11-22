@@ -832,7 +832,7 @@
   "goal-total-type": "ประเภทเป้าหมายทั้งหมด",
   "auto-mark-transactions": "ธุรกรรมการจ่ายเงินอัตโนมัติ",
   "auto-mark-transactions-description": "ทำเครื่องหมายธุรกรรมที่เกินกำหนดตามที่จ่ายไป",
-  "more-options-description": "บัญชีงบประมาณเป้าหมายชื่อเรื่อง",
+  "more-options-description": "สไตล์บัญชีงบประมาณเป้าหมายชื่อเรื่อง",
   "header-height": "ความสูงส่วนหัว",
   "tall": "สูง",
   "short": "สั้น",
@@ -860,5 +860,15 @@
   "initial-account-balance": "ยอดเงินในบัญชีเริ่มต้น",
   "starting-at": "เริ่มต้นที่",
   "major-change-16": "ใหม่หน้าการใช้จ่ายทั้งหมด",
-  "major-change-16-1": "ปรับปรุงหน้าการใช้จ่ายทั้งหมดด้วยประวัติระยะเวลาการใช้จ่าย"
+  "major-change-16-1": "ปรับปรุงหน้าการใช้จ่ายทั้งหมดด้วยประวัติระยะเวลาการใช้จ่าย",
+  "font": "แบบอักษร",
+  "platform": "แพลตฟอร์ม",
+  "personalization": "การทำให้เป็นส่วนตัว",
+  "rounded": "ซึ่งได้ปัด",
+  "outlined": "ที่ระบุไว้",
+  "icon-style": "รูปแบบไอคอน",
+  "more-options-description-theme": "ตัวอักษร, สไตล์ไอคอน, ความสูงส่วนหัว",
+  "style": "สไตล์",
+  "increase-text-contrast": "เพิ่มความคมชัดของข้อความ",
+  "increase-text-contrast-description": "เพิ่มความคมชัดของข้อความที่เบากว่า"
 }

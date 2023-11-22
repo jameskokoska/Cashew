@@ -832,7 +832,7 @@
   "goal-total-type": "Type total d'objectif",
   "auto-mark-transactions": "Transactions de rémunération automatique",
   "auto-mark-transactions-description": "Marquer les transactions en souffrance comme payé",
-  "more-options-description": "Comptes, budgets, objectifs, titres",
+  "more-options-description": "Style, comptes, budgets, objectifs, titres",
   "header-height": "Hauteur de tête",
   "tall": "Grand",
   "short": "Court",
@@ -860,5 +860,15 @@
   "initial-account-balance": "Solde du compte initial",
   "starting-at": "Commencer à",
   "major-change-16": "Nouvelle page de dépenses toutes",
-  "major-change-16-1": "Remanié la page toutes dépenses avec l'historique des périodes de dépenses"
+  "major-change-16-1": "Remanié la page toutes dépenses avec l'historique des périodes de dépenses",
+  "font": "Police de caractère",
+  "platform": "Plate-forme",
+  "personalization": "Personnalisation",
+  "rounded": "Arrondi",
+  "outlined": "Décrit",
+  "icon-style": "Style icône",
+  "more-options-description-theme": "Police, style icône, hauteur d'en-tête",
+  "style": "Style",
+  "increase-text-contrast": "Augmenter le contraste du texte",
+  "increase-text-contrast-description": "Augmenter le contraste de texte plus léger"
 }

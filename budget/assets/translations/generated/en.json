@@ -832,7 +832,7 @@
   "goal-total-type": "Goal Total Type",
   "auto-mark-transactions": "Auto Pay Transactions",
   "auto-mark-transactions-description": "Mark overdue transactions as paid",
-  "more-options-description": "Accounts, budgets, goals, titles",
+  "more-options-description": "Style, accounts, budgets, goals, titles",
   "header-height": "Header Height",
   "tall": "Tall",
   "short": "Short",
@@ -860,5 +860,15 @@
   "initial-account-balance": "Initial Account Balance",
   "starting-at": "Starting at",
   "major-change-16": "New All Spending Page",
-  "major-change-16-1": "Revamped the all spending page with spending period history"
+  "major-change-16-1": "Revamped the all spending page with spending period history",
+  "font": "Font",
+  "platform": "Platform",
+  "personalization": "Personalization",
+  "rounded": "Rounded",
+  "outlined": "Outlined",
+  "icon-style": "Icon Style",
+  "more-options-description-theme": "Font, icon style, header height",
+  "style": "Style",
+  "increase-text-contrast": "High Text Contrast",
+  "increase-text-contrast-description": "Increase lighter text contrast"
 }

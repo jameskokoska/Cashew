@@ -118,7 +118,10 @@ class PremiumPage extends StatelessWidget {
                                               .tr(),
                                     ),
                                     SubscriptionFeature(
-                                      iconData: MoreIcons.chart_pie,
+                                      iconData:
+                                          appStateSettings["outlinedIcons"]
+                                              ? Icons.donut_small_outlined
+                                              : MoreIcons.chart_pie,
                                       label: "unlimited-budgets-and-goals".tr(),
                                       description:
                                           "unlimited-budgets-and-goals-description"

@@ -349,8 +349,8 @@ class ShowTransactionsMonthlySpendingSummarySettingToggle
       },
       initialValue: appStateSettings["showTransactionsMonthlySpendingSummary"],
       icon: appStateSettings["outlinedIcons"]
-          ? Icons.signpost_outlined
-          : Icons.signpost_rounded,
+          ? Icons.balance_outlined
+          : Icons.balance_rounded,
     );
   }
 }

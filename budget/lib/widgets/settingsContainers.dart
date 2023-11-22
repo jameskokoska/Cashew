@@ -27,6 +27,7 @@ class SettingsContainerSwitch extends StatefulWidget {
     this.enableBorderRadius = false,
     this.hasMoreOptionsIcon = false,
     this.runOnSwitchedInitially = false,
+    this.descriptionColor,
     Key? key,
   }) : super(key: key);
 
@@ -43,6 +44,7 @@ class SettingsContainerSwitch extends StatefulWidget {
   final bool enableBorderRadius;
   final bool hasMoreOptionsIcon;
   final bool runOnSwitchedInitially;
+  final Color? descriptionColor;
 
   @override
   State<SettingsContainerSwitch> createState() =>
@@ -126,6 +128,7 @@ class _SettingsContainerSwitchState extends State<SettingsContainerSwitch> {
         ),
         icon: widget.icon,
         verticalPadding: widget.verticalPadding,
+        descriptionColor: widget.descriptionColor,
       ),
     );
   }
@@ -145,6 +148,7 @@ class SettingsContainerOpenPage extends StatelessWidget {
     this.isOutlined,
     this.isOutlinedColumn,
     this.isWideOutlined,
+    this.descriptionColor,
   }) : super(key: key);
 
   final Widget openPage;
@@ -158,6 +162,7 @@ class SettingsContainerOpenPage extends StatelessWidget {
   final bool? isOutlined;
   final bool? isOutlinedColumn;
   final bool? isWideOutlined;
+  final Color? descriptionColor;
 
   @override
   Widget build(BuildContext context) {
@@ -215,6 +220,7 @@ class SettingsContainerOpenPage extends StatelessWidget {
             isOutlined: isOutlined,
             isOutlinedColumn: isOutlinedColumn,
             isWideOutlined: isWideOutlined,
+            descriptionColor: descriptionColor,
           );
         },
         openPage: openPage,
@@ -383,8 +389,12 @@ class SettingsContainerOutlined extends StatelessWidget {
                   text: description!,
                   fontSize: 11,
                   maxLines: 5,
-                  textColor:
-                      Theme.of(context).colorScheme.secondary.withOpacity(0.5),
+                  textColor: appStateSettings["increaseTextContrast"]
+                      ? getColor(context, "textLight")
+                      : Theme.of(context)
+                          .colorScheme
+                          .secondary
+                          .withOpacity(0.5),
                 ),
               ],
             );
@@ -467,6 +477,7 @@ class SettingsContainer extends StatelessWidget {
     this.enableBorderRadius = false,
     this.isWideOutlined,
     this.hasMoreOptionsIcon,
+    this.descriptionColor,
   }) : super(key: key);
 
   final String title;
@@ -483,6 +494,7 @@ class SettingsContainer extends StatelessWidget {
   final bool enableBorderRadius;
   final bool? isWideOutlined;
   final bool? hasMoreOptionsIcon;
+  final Color? descriptionColor;
 
   @override
   Widget build(BuildContext context) {
@@ -567,6 +579,7 @@ class SettingsContainer extends StatelessWidget {
                                           text: description!,
                                           fontSize: 14,
                                           maxLines: 5,
+                                          textColor: descriptionColor,
                                         ),
                                       ),
                                     ],
@@ -605,7 +618,7 @@ class SettingsHeader extends StatelessWidget {
         bottom: 7,
       ),
       child: TextFont(
-        text: title,
+        text: title.capitalizeFirst,
         fontSize: 15,
         fontWeight: FontWeight.bold,
         textColor: Theme.of(context).colorScheme.primary,

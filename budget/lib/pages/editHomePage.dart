@@ -119,7 +119,9 @@ class _EditHomePageState extends State<EditHomePage> {
             },
           ),
           "budgets": EditHomePageItem(
-            icon: MoreIcons.chart_pie,
+            icon: appStateSettings["outlinedIcons"]
+                ? Icons.donut_small_outlined
+                : MoreIcons.chart_pie,
             name: "budgets".tr(),
             isEnabled: isHomeScreenSectionEnabled(context, "showPinnedBudgets"),
             onSwitched: (value) {
@@ -172,8 +174,8 @@ class _EditHomePageState extends State<EditHomePage> {
           ),
           "allSpendingSummary": EditHomePageItem(
             icon: appStateSettings["outlinedIcons"]
-                ? Icons.expand_outlined
-                : Icons.expand_rounded,
+                ? Icons.swap_vert_outlined
+                : Icons.swap_vert_rounded,
             name: "income-and-expenses".tr(),
             isEnabled:
                 isHomeScreenSectionEnabled(context, "showAllSpendingSummary"),

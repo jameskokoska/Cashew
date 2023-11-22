@@ -399,13 +399,17 @@ class _AddWalletPageState extends State<AddWalletPage> {
                 DropdownItemMenu(
                   id: "info",
                   label: "info".tr(),
-                  icon: Icons.info,
+                  icon: appStateSettings["outlinedIcons"]
+                      ? Icons.info_outlined
+                      : Icons.info_outline_rounded,
                   action: () {
                     openPopup(
                       context,
                       title: "exchange-rate-notice".tr(),
                       description: "exchange-rate-notice-description".tr(),
-                      icon: Icons.info,
+                      icon: appStateSettings["outlinedIcons"]
+                          ? Icons.info_outlined
+                          : Icons.info_outline_rounded,
                       onCancel: () {
                         Navigator.pop(context);
                       },

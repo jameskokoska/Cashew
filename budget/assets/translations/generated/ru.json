@@ -832,7 +832,7 @@
   "goal-total-type": "Цель Общий тип",
   "auto-mark-transactions": "Auto Pay Transactions",
   "auto-mark-transactions-description": "Отмечать просроченные транзакции как оплачиваемые",
-  "more-options-description": "Счета, бюджеты, цели, названия",
+  "more-options-description": "Стиль, счета, бюджеты, цели, названия",
   "header-height": "Высота заголовка",
   "tall": "Высокий",
   "short": "Короткий",
@@ -860,5 +860,15 @@
   "initial-account-balance": "Начальный баланс счета",
   "starting-at": "Начиная с",
   "major-change-16": "Новая страница всех расходов",
-  "major-change-16-1": "Обновил страницу всех расходов с историей периода расходов"
+  "major-change-16-1": "Обновил страницу всех расходов с историей периода расходов",
+  "font": "Шрифт",
+  "platform": "Платформа",
+  "personalization": "Персонализация",
+  "rounded": "Округлый",
+  "outlined": "Изложено",
+  "icon-style": "Икона стиль",
+  "more-options-description-theme": "Шрифт, стиль иконы, высота заголовка",
+  "style": "Стиль",
+  "increase-text-contrast": "Увеличьте контраст",
+  "increase-text-contrast-description": "Увеличьте более легкий контраст текста"
 }

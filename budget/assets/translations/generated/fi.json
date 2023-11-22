@@ -832,7 +832,7 @@
   "goal-total-type": "Tavoitetyyppi",
   "auto-mark-transactions": "Automaattiset palkkatapahtumat",
   "auto-mark-transactions-description": "Mark erääntyneitä tapahtumia maksettuina",
-  "more-options-description": "Tilit, budjetit, tavoitteet, nimikkeet",
+  "more-options-description": "Tyyli, tilit, budjetit, tavoitteet, nimikkeet",
   "header-height": "Otsikon korkeus",
   "tall": "Pitkä",
   "short": "Lyhyt",
@@ -860,5 +860,15 @@
   "initial-account-balance": "Alkuperäinen tilin saldo",
   "starting-at": "Alussa",
   "major-change-16": "UUSI KAIKKI KÄYTTISIVU",
-  "major-change-16-1": "Uudisti kaikki kulutussivun meno -ajan historiaan"
+  "major-change-16-1": "Uudisti kaikki kulutussivun meno -ajan historiaan",
+  "font": "Fontti",
+  "platform": "Alusta",
+  "personalization": "Persoonallisuus",
+  "rounded": "Pyöristetty",
+  "outlined": "Hahmoteltu",
+  "icon-style": "Kuvaketyyli",
+  "more-options-description-theme": "Fontti, kuvaketyyli, otsikon korkeus",
+  "style": "Tyyli",
+  "increase-text-contrast": "Lisää tekstin kontrastia",
+  "increase-text-contrast-description": "Lisää kevyempää tekstin kontrastia"
 }

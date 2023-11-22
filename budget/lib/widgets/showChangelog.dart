@@ -1,16 +1,13 @@
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
-import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/addCategoryPage.dart';
-import 'package:budget/pages/detailedChangelogPage.dart';
 import 'package:budget/pages/editCategoriesPage.dart';
 import 'package:budget/pages/editHomePage.dart';
 import 'package:budget/pages/objectivesListPage.dart';
 import 'package:budget/pages/settingsPage.dart';
 import 'package:budget/pages/walletDetailsPage.dart';
 import 'package:budget/struct/settings.dart';
-import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/framework/popupFramework.dart';
@@ -21,8 +18,22 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'listItem.dart';
 
+// Device legend
+// Apple rejected app update because Android was referenced...
+// We use code names now!
+// (i) = iOS
+// (A) = Android
+
 String getChangelogString() {
   return """
+    < 4.9.2
+    Font and icon style settings
+    Fixed container background color for transaction spending summary (i)
+    Fixed all spending summary background color (i)
+    Fixed side navigation bar icon scaling
+    Increase text contrast setting for faded text
+    Moved header height setting to More Options
+    Removed add category button when adding spending limits for a category only budget
     < 4.9.1
     When using an account with many decimals, zeroes now show up to the point of a number (You can now visually see how many zeroes after a decimal place entered)
     Animated some settings icons
@@ -47,7 +58,7 @@ String getChangelogString() {
     Add transaction page copies correct transaction amount with currency
     Applied filter chips with theme color follow the theme properly
     Wallet changes properly reflect when selecting amounts
-    File saving permission fix for certain versions of Android
+    File saving permission fix for certain versions of (A)
     Improved add attachment divider color
     Tapping transaction navbar icon for the second time opens transaction search page after scrolling to top
     Fixed all spending page cycle filters for pie chart if selected certain wallets
@@ -112,7 +123,7 @@ String getChangelogString() {
     Added default income category
     Added cash flow to search transaction page
     If a category no longer exists when adding transaction, the category is cleared
-    Removed header line for iOS when selecting initial category because title in popup is empty
+    Removed header line for (i) when selecting initial category because title in popup is empty
     Added force small subheader debug flag
     Rearranged about page
     Added Bulgarian language support
@@ -121,7 +132,7 @@ String getChangelogString() {
     Option to reorder categories in popup
     Option to only show related income/expense categories when selecting
     Income and expense selector when selecting initial category
-    Fixed exact scheduling of notifications failing on Android 14+
+    Fixed exact scheduling of notifications failing on (A) 14+
     Adding subcategory page shows name of main category
     Tapping watched category opens watch categories bottom sheet
     Budget periods with zero total spent are not considered when determining average category spending 
@@ -261,9 +272,9 @@ String getChangelogString() {
     Linear gradient fixes when min/max is 0 for line graph
     Fix on press for category icon
     < 4.6.4
-    Launch screen logo for iOS
-    Removed opacity when snackbar tapped on iOS
-    Fixed gradient on budget line graph on iOS
+    Launch screen logo for (i)
+    Removed opacity when snackbar tapped on (i)
+    Fixed gradient on budget line graph on (i)
     Quick fix for today indicator size
     < 4.6.3
     Fixed padding for subcategories on large displays
@@ -278,7 +289,7 @@ String getChangelogString() {
     < 4.6.1
     Support for subcategory selection on budget page
     Rewrote pie chart and spending summary for budget details page to better support subcategories
-    iOS layout for subcategories
+    (i) layout for subcategories
     < 4.6.0
     Make subcategory into main category
     Merge subcategories support
@@ -356,7 +367,7 @@ String getChangelogString() {
     If no transactions in budget listed, added button to view past budget periods
     Removed past history page for custom budget period
     Added transfer balance settings button to account list page
-    System color only enabled by default on Android >=12 version
+    System color only enabled by default on (A) >=12 version
     Taxi, sandwich, subscription, category icons
     < 4.5.3
     Negative goal percentage shown in transaction entry
@@ -370,7 +381,7 @@ String getChangelogString() {
     Data import overwrite warning
     SQL files are saved instead of SQLITE
     Hot fix for default wallet creation database lock
-    Fix SQL file selection on iOS limitation
+    Fix SQL file selection on (i) limitation
     Database corruption detection (if incorrect file imported)
     < 4.5.0
     Can enable/disable homepage welcome banner
@@ -381,7 +392,7 @@ String getChangelogString() {
     Added arrow icons
     Fixed CSV export on web
     Fixed import SQL file restart popup
-    Import and Export DB working on web and Android
+    Import and Export DB working on web and (A)
     Enabled color emojis on web
     Some major changes can be tapped bringing the user to the related page 
     < 4.4.9
@@ -501,7 +512,7 @@ String getChangelogString() {
     Fixed expanded container on backup page
     Brought pack outlined icons in debug page
     < 4.3.3
-    iOS layout for objectives
+    (i) layout for objectives
     Added objectives to side navigation
     Select transactions add to objective in action bar
     Can now add income to budgets
@@ -556,12 +567,12 @@ String getChangelogString() {
     Collapsible side navigation panel when full screen
     Fixed box shadow for swipe to delete
     < 4.2.4
-    Documents access in Files for iOS
+    Documents access in Files for (i)
     Full snap popup sheet when entering name on home page
     Budget history conversion fix
     < 4.2.3
     Fixed parsing of number input when decimal separator is comma
-    Fixed Android crash on some devices
+    Fixed (A) crash on some devices
     < 4.2.2
     Fixed back swipe animation when cancelling a delete
     Fixed CSV parsing amount always returns income
@@ -572,7 +583,7 @@ String getChangelogString() {
     CSV import error if not all parameters assigned
     CSV import date format error has more information
     < 4.2.0
-    Fixed format of swipe to delete container on iOS
+    Fixed format of swipe to delete container on (i)
     Debug flag to enable outlined icons
     < 4.1.9
     Added swipe to delete when on edit data pages
@@ -602,7 +613,7 @@ String getChangelogString() {
     Fixed snackbar background shadow and color on dark mode
     Removed refresh pixels for navigation framework - removed the opacity jitter (however there still may be artifacts when the page is changed?)
     Removed legacy transaction amount colors support (Debug Option)
-    Removed old Android Navbar support (Debug Option)
+    Removed old (A) Navbar support (Debug Option)
     Navigation bar colors
     2 Weeks of notifications scheduled instead of just 1
     Can only request new icons if suggestion text field is not empty
@@ -620,7 +631,7 @@ String getChangelogString() {
     Added translations team to About page
     Select budget type popup only shown when not adding an initial Addable budget
     Improved empty days color for heatmap
-    Fixed system color for launch screen on iOS
+    Fixed system color for launch screen on (i)
     < 4.1.0
     New category icons
     Category icons sorted by recommended name
@@ -636,15 +647,15 @@ String getChangelogString() {
     Color fixes
     < 4.0.7
     Header color extended behind when swiping down to dismiss
-    New header for iOS
+    New header for (i)
     Removed blur components
     New app bar color theming
     Fixed font and colors for rich text
     Upgraded to Flutter 3.13.2
     < 4.0.6
-    Secondary header to match iOS style
-    Fixed transition backdrop for popup sheet on iOS
-    Fixed mixup with status bar icon color on iOS
+    Secondary header to match (i) style
+    Fixed transition backdrop for popup sheet on (i)
+    Fixed mixup with status bar icon color on (i)
     < 4.0.5
     Animated text style
     Added plus button to add category, title, budget, wallet in actions in edit page
@@ -654,9 +665,9 @@ String getChangelogString() {
     Discard changes popup when adding new transaction, category, and wallet
     Fixed select category icon bottom sheet sizing
     Fixed status bar icon color
-    Changed font for iOS back to default
-    Decreased vertical empty space in iOS
-    Added 'Done' button when editing multiline notes on transactions page for iOS to minimize keyboard
+    Changed font for (i) back to default
+    Decreased vertical empty space in (i)
+    Added 'Done' button when editing multiline notes on transactions page for (i) to minimize keyboard
     < 4.0.4
     Hot fix for adding transactions and budgets
     < 4.0.3
@@ -664,15 +675,15 @@ String getChangelogString() {
     < 4.0.2
     Fixed toggling between category spending limits when from edit budget page would cause inconsistent saving of data
     Fixed income arrow indicator width
-    Fixed swipe down background on backups page for iOS
-    Reworded Google Drive backup for iOS
+    Fixed swipe down background on backups page for (i)
+    Reworded Google Drive backup for (i)
     Added per day indication for amount remaining
     Fixed remaining days (added 1) to be more logical
-    Can swipe down to dismiss immediately with iOS scroll physics
+    Can swipe down to dismiss immediately with (i) scroll physics
     Heatmap scroll to load now loads if greater than extent
     Custom product IDs platform based support
     < 4.0.1
-    Fixed heatmap popup alignment for iOS
+    Fixed heatmap popup alignment for (i)
     Fixed background for premium products
     Fixed updating the period length and type for transactions
     Added transition for bottom action button in edit transaction page
@@ -712,19 +723,19 @@ String getChangelogString() {
     Scrollbar safe area removed (safe area is already applied in parent)
     When restart popup, side navigation is disabled
     New sync button on navbar, follows other navbar button styles
-    Material date pickers for iOS
+    Material date pickers for (i)
     < 3.9.2
     Yearly plan savings (Disabled for now)
     Upgraded to support Flutter 3.13
     < 3.9.1
     Significantly improves speed of CSV import - use batching
     CSV progress fix
-    iOS notifications status warning refreshes properly
-    iOS Google login fix
+    (i) notifications status warning refreshes properly
+    (i) Google login fix
     < 3.9.0
     Fixed locale loading for changelog
-    SF Pro font for iOS devices
-    Notification permission checks for iOS
+    SF Pro font for (i) devices
+    Notification permission checks for (i)
     < 3.8.9
     If not much height space when searching edit pages, the settings options are hidden
     Category transaction count no longer considers wallet
@@ -772,7 +783,7 @@ String getChangelogString() {
     Polished and improved delete process of everything
     Original due date stored when transaction paid
     Fixed left safe area
-    New navbar on Android
+    New navbar on (A)
     < 3.8.3
     Select wallet and select budget now uses radio buttons bottom popup
     Added rounding to decimal precision when converting to money
@@ -782,7 +793,7 @@ String getChangelogString() {
     When ask for transaction title disabled, full snap is not used anymore
     Fixed home page graph and selecting budget graph - using old number values for id
     Added bottom spacing to avoid add button for borrowed and lent pages
-    Fixed long press actions - such as long press to reorder for categories on iOS
+    Fixed long press actions - such as long press to reorder for categories on (i)
     Back button returns to homepage before exiting app
     Removed sync on every change option for non-web
     Fixed select budgets pin on home page edit
@@ -807,13 +818,13 @@ String getChangelogString() {
     Reduced popup snapping, increased snapping to max on certain popups
     Action bar has create transaction copy button
     < 3.8.0
-    Cashew pro background now extends past scrollable area - support for iOS over-scroll
+    Cashew pro background now extends past scrollable area - support for (i) over-scroll
     Proper currency for editing wallets row entry
-    Fixed iOS tappable long press but incomplete would freeze animation
+    Fixed (i) tappable long press but incomplete would freeze animation
     Swipe along checks to select transaction
     New transaction selection enabled for web
-    iOS new selection check icon for transactions
-    iOS rounded corners style for more components
+    (i) new selection check icon for transactions
+    (i) rounded corners style for more components
     < 3.7.9
     Suggest icon popup and suggestion container
     New divider colors
@@ -823,31 +834,31 @@ String getChangelogString() {
     Budget page progress bars contrast color fixes
     Selection click vibration instead of impacts
     Fixed biometrics crash
-    Back button exits app on Android
-    Fixed border on past budgets page when not in iOS
+    Back button exits app on (A)
+    Fixed border on past budgets page when not in (i)
     Edit spending goals button directly above categories on bigger screens
     < 3.7.8
     Bottom safe area for popups
     Extra action now located as a full bottom button for popup
     Refactored select amount widget
-    New tappable widget for iOS - Fade animation
+    New tappable widget for (i) - Fade animation
     Better horizontal padding resizing
     Increased width when using horizontal padding constrained
     Fixed safe area in horizontal mode, left and right safe areas
     Fixed subtitle animation speed
-    Long press vibration on iOS
-    Slow open container animation iOS
-    Animated budget containers disabled on iOS
-    Animated Premium banner disabled on iOS
-    Removed blur effects by default on iOS
+    Long press vibration on (i)
+    Slow open container animation (i)
+    Animated budget containers disabled on (i)
+    Animated Premium banner disabled on (i)
+    Removed blur effects by default on (i)
     < 3.7.7
     Added disable blur option
-    Fixed iOS onboarding page
+    Fixed (i) onboarding page
     Changelog can always be opened when forced
     < 3.7.6
     Fixed recommended spending amount sizes
     Backup limit shown in backup popup
-    iOS Google backups are branded as Google Drive
+    (i) Google backups are branded as Google Drive
     Fixed scroll to top for transactions list page
     Backup limit option hidden
     Premium banner uses open container animation
@@ -856,35 +867,35 @@ String getChangelogString() {
     Cashew Pro banner in settings
     Removed old implementation of associated titles lookup
     Added vibration when scrubbing through line graphs
-    New budget history container for iOS
+    New budget history container for (i)
     Current period in past budget periods is only labelled as current period if it is one
-    Fixed scroll animations when scrolled past 0 in iOS
+    Fixed scroll animations when scrolled past 0 in (i)
     Fixed past budget periods, if the 31 of the month it fails to show certain past periods, such as Feb
-    Removed vibration for iOS bottom sheet
+    Removed vibration for (i) bottom sheet
     Universal IO for locale on web
     Translations
     < 3.7.4
     Improved decimal precisions and support for comma locale
     Fixed animations in enter amount
     Added border color to wallet pickers
-    iOS homepage scroll animation fix
+    (i) homepage scroll animation fix
     Fixed amount range filters getting added on first open
     Spending goals moved to separate page
     New dropdown menu actions for app bar
     Fixed merge category
-    Google login warning on iOS
+    Google login warning on (i)
     Add element to database key generation uses auto increment
     Done for: wallets, budgets, transactions, categories, titles, scanner templates
     < 3.7.3
     Edit row action button animated scale switcher
-    iOS notification configurations
+    (i) notification configurations
     Can select primary wallet in edit wallets list page
     Pick custom color gradient outline
-    New iOS popup bottom sheet layout
-    New iOS edit row entries
-    Material You setting moved to accent color for iOS
+    New (i) popup bottom sheet layout
+    New (i) edit row entries
+    Material You setting moved to accent color for (i)
     Upcoming transaction icon changed
-    New iOS navigation bar
+    New (i) navigation bar
     Fixed max offset for back gesture animation
     Now can 'undo' back swipe progress be going in reverse
     Fixed add budget page pin icon pushed too far offscreen
@@ -895,11 +906,11 @@ String getChangelogString() {
     Fixed upcoming transaction actions removing popup not finding context after database updated
     Upcoming and Overdue transaction amounts get refreshed every 5 seconds - since the query uses DateTime.now() it needs to be refreshed
     If transaction type changed, createdAnotherFutureTransaction is now reset
-    Added blur behind app bar for iOS
-    Fixed scroll animations for iOS
+    Added blur behind app bar for (i)
+    Fixed scroll animations for (i)
     Added swipe to go back gesture
-    Refactored iOS debug settings
-    New iOS header colors and icons
+    Refactored (i) debug settings
+    New (i) header colors and icons
     Fixed range slider in filters
     Silent sign-in when platform error when not on web
     < 3.7.1
@@ -971,7 +982,7 @@ String getChangelogString() {
     Fixed translations
     < 3.6.2
     Search string no longer gets reset when filters cleared
-    Added quick action shortcuts on Android - Add transaction and view budgets
+    Added quick action shortcuts on (A) - Add transaction and view budgets
     Name entry is auto focused when adding a category, wallet etc.
     Fixed colors of background progress indicators on budget page
     Added shadow to category icons without background
@@ -983,7 +994,7 @@ String getChangelogString() {
     Used height of display instead of ratio
     Adjusted header height based on screen size
     < 3.6.1
-    Fixed Android keyboard height issue
+    Fixed (A) keyboard height issue
     Fixed color of bottom sheet for padding
     Added limo and parents icons
     Long press category limit entry to edit category
@@ -1134,7 +1145,7 @@ String getChangelogString() {
     Added bottom padding to each page w.r.t. safe area
     Added add transaction FAB to search page
     Added setting to mark subscriptions as paid automatically
-    iOS scroll physics when swiping page down to dismiss budget page shows proper color
+    (i) scroll physics when swiping page down to dismiss budget page shows proper color
     Lent and borrowed transactions pages complete
     Upcoming transactions notifications follow the time of the transaction
     Fixed category icon percentages on wallet details page
@@ -1151,16 +1162,16 @@ String getChangelogString() {
     Changelog hidden on first launch
     < 3.3.0
     Debts and credits work in progress - use if you lend money or someone owes you money
-    Fixed onWillPopScope and back swipe for iOS
-    iOS navigation debug flag
-    Splash color disabled on iOS
+    Fixed onWillPopScope and back swipe for (i)
+    (i) navigation debug flag
+    Splash color disabled on (i)
     Page transitions use new fade in from bottom animation
     Select chips follows height of ChoiceChip
     Select chips scroll to the selected chip
     < 3.2.2
     Officially removed DateTimeCreated - merged into dateCreated
     Removed right arrow on outlines settings containers
-    Ask for transaction title disabled by default for devices with older Android version (since keyboard height changes do not update the UI)
+    Ask for transaction title disabled by default for devices with older (A) version (since keyboard height changes do not update the UI)
     Bottom sheet snaps to 0.6 only if tall display
     Safe areas improvements
     Select category, add category button follows ratio of 1:1
@@ -1669,13 +1680,13 @@ String getChangelogString() {
     Improved empty budgets page when no transactions found
     No longer shows failed to sign in when first launch app
 
-    Adaptive icon for Android 13+
+    Adaptive icon for (A) 13+
     Upcoming transactions now show up on home page (within 3 days)
 
     New dropdown menu when selecting transactions to delete - shows amount selected and total cash flow of transactions
     Selected transactions cleared when using back button
     Today, Yesterday, Days of Week labels now include the month and date
-    Changed the way Google login permissions work (on Android)
+    Changed the way Google login permissions work (on (A))
     All permissions still required on Web for Gmail parsing to work (to avoid this error: gapi.auth2 has been initialized with different options.)
 
     Improvements to past budget pages (removed UI elements that don't make sense)

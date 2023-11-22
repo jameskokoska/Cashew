@@ -832,7 +832,7 @@
   "goal-total-type": "סוג מטרה כולל",
   "auto-mark-transactions": "עסקאות לשלם אוטומטי",
   "auto-mark-transactions-description": "סמן עסקאות איחור בתשלום",
-  "more-options-description": "חשבונות, תקציבים, יעדים, כותרות",
+  "more-options-description": "סגנון, חשבונות, תקציבים, יעדים, כותרות",
   "header-height": "גובה הכותרת",
   "tall": "גובה",
   "short": "קצר",
@@ -860,5 +860,15 @@
   "initial-account-balance": "יתרת חשבון ראשונית",
   "starting-at": "מתחיל ב",
   "major-change-16": "עמוד ההוצאות החדש של כל",
-  "major-change-16-1": "חידשה את עמוד ההוצאות עם היסטוריה של תקופת ההוצאות"
+  "major-change-16-1": "חידשה את עמוד ההוצאות עם היסטוריה של תקופת ההוצאות",
+  "font": "גוֹפָן",
+  "platform": "פּלַטפוֹרמָה",
+  "personalization": "התאמה אישית",
+  "rounded": "מְעוּגָל",
+  "outlined": "מתואר",
+  "icon-style": "סגנון אייקון",
+  "more-options-description-theme": "גופן, סגנון אייקון, גובה הכותרת",
+  "style": "סִגְנוֹן",
+  "increase-text-contrast": "הגדל את הניגודיות בטקסט",
+  "increase-text-contrast-description": "הגדל ניגודי טקסט קליל יותר"
 }

@@ -315,7 +315,9 @@ class ExportCSV extends StatelessWidget {
             Navigator.pop(context);
           },
           onSubmitLabel: "ok".tr(),
-          icon: Icons.warning_amber,
+          icon: appStateSettings["outlinedIcons"]
+              ? Icons.warning_amber_outlined
+              : Icons.warning_amber_rounded,
           title: "export-csv-warning".tr(),
           description: "export-csv-warning-description".tr(),
         );

@@ -832,7 +832,7 @@
   "goal-total-type": "ध्येय एकूण प्रकार",
   "auto-mark-transactions": "वाहन वेतन व्यवहार",
   "auto-mark-transactions-description": "देय म्हणून थकीत व्यवहार चिन्हांकित करा",
-  "more-options-description": "खाती, अर्थसंकल्प, ध्येय, शीर्षके",
+  "more-options-description": "शैली, खाती, बजेट, ध्येय, शीर्षके",
   "header-height": "शीर्षलेख उंची",
   "tall": "उंच",
   "short": "लहान",
@@ -860,5 +860,15 @@
   "initial-account-balance": "प्रारंभिक खाते शिल्लक",
   "starting-at": "सुरूवात",
   "major-change-16": "नवीन सर्व खर्च पृष्ठ",
-  "major-change-16-1": "खर्च कालावधी इतिहासासह सर्व खर्च पृष्ठ सुधारित केले"
+  "major-change-16-1": "खर्च कालावधी इतिहासासह सर्व खर्च पृष्ठ सुधारित केले",
+  "font": "फॉन्ट",
+  "platform": "प्लॅटफॉर्म",
+  "personalization": "वैयक्तिकरण",
+  "rounded": "गोलाकार",
+  "outlined": "बाह्यरेखा",
+  "icon-style": "चिन्ह शैली",
+  "more-options-description-theme": "फॉन्ट, आयकॉन शैली, शीर्षलेख उंची",
+  "style": "शैली",
+  "increase-text-contrast": "मजकूर कॉन्ट्रास्ट वाढवा",
+  "increase-text-contrast-description": "फिकट मजकूर कॉन्ट्रास्ट वाढवा"
 }

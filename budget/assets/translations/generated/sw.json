@@ -832,7 +832,7 @@
   "goal-total-type": "Aina ya jumla ya lengo",
   "auto-mark-transactions": "Shughuli za kulipia kiotomatiki",
   "auto-mark-transactions-description": "Weka alama ya shughuli kama kulipwa",
-  "more-options-description": "Akaunti, bajeti, malengo, majina",
+  "more-options-description": "Mtindo, akaunti, bajeti, malengo, majina",
   "header-height": "Urefu wa kichwa",
   "tall": "Mrefu",
   "short": "Fupi",
@@ -860,5 +860,15 @@
   "initial-account-balance": "Usawa wa akaunti ya awali",
   "starting-at": "Kuanzia saa",
   "major-change-16": "Ukurasa mpya wa matumizi",
-  "major-change-16-1": "Ilibadilisha ukurasa wote wa matumizi na historia ya kipindi cha matumizi"
+  "major-change-16-1": "Ilibadilisha ukurasa wote wa matumizi na historia ya kipindi cha matumizi",
+  "font": "Font",
+  "platform": "Jukwaa",
+  "personalization": "Ubinafsishaji",
+  "rounded": "Mviringo",
+  "outlined": "Imeainishwa",
+  "icon-style": "Mtindo wa ikoni",
+  "more-options-description-theme": "Fonti, mtindo wa icon, urefu wa kichwa",
+  "style": "Mtindo",
+  "increase-text-contrast": "Ongeza tofauti ya maandishi",
+  "increase-text-contrast-description": "Ongeza tofauti nyepesi ya maandishi"
 }

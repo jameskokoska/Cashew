@@ -832,7 +832,7 @@
   "goal-total-type": "Tổng số mục tiêu",
   "auto-mark-transactions": "Giao dịch trả tiền tự động",
   "auto-mark-transactions-description": "Đánh dấu các giao dịch quá hạn được trả tiền",
-  "more-options-description": "Tài khoản, ngân sách, mục tiêu, tiêu đề",
+  "more-options-description": "Phong cách, tài khoản, ngân sách, mục tiêu, tiêu đề",
   "header-height": "Chiều cao tiêu đề",
   "tall": "Cao",
   "short": "Ngắn",
@@ -860,5 +860,15 @@
   "initial-account-balance": "Số dư tài khoản ban đầu",
   "starting-at": "Bắt đầu tại",
   "major-change-16": "Trang chi tiêu mới",
-  "major-change-16-1": "Tái tân trang tất cả các trang chi tiêu với lịch sử thời gian chi tiêu"
+  "major-change-16-1": "Tái tân trang tất cả các trang chi tiêu với lịch sử thời gian chi tiêu",
+  "font": "Nét chữ",
+  "platform": "Nền tảng",
+  "personalization": "Cá nhân hóa",
+  "rounded": "Tròn",
+  "outlined": "Nêu",
+  "icon-style": "Phong cách biểu tượng",
+  "more-options-description-theme": "Phông chữ, kiểu biểu tượng, chiều cao tiêu đề",
+  "style": "Phong cách",
+  "increase-text-contrast": "Tăng độ tương phản văn bản",
+  "increase-text-contrast-description": "Tăng độ tương phản văn bản nhẹ hơn"
 }

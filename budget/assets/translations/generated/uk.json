@@ -832,7 +832,7 @@
   "goal-total-type": "Ціль загального типу",
   "auto-mark-transactions": "Автоматичні операції з оплати",
   "auto-mark-transactions-description": "Позначте прострочені операції як оплачені",
-  "more-options-description": "Рахунки, бюджети, цілі, титули",
+  "more-options-description": "Стиль, рахунки, бюджети, цілі, заголовки",
   "header-height": "Висота заголовка",
   "tall": "Високий",
   "short": "Короткий",
@@ -860,5 +860,15 @@
   "initial-account-balance": "Початковий баланс рахунку",
   "starting-at": "Починаючи з",
   "major-change-16": "Нова сторінка всіх витрат",
-  "major-change-16-1": "Оновив сторінку всіх витрат із історією періоду витрат"
+  "major-change-16-1": "Оновив сторінку всіх витрат із історією періоду витрат",
+  "font": "Шрифт",
+  "platform": "Платформа",
+  "personalization": "Персоналізація",
+  "rounded": "Закруглений",
+  "outlined": "Окреслений",
+  "icon-style": "Стиль ікони",
+  "more-options-description-theme": "Шрифт, стиль ікони, висота заголовка",
+  "style": "Стиль",
+  "increase-text-contrast": "Збільшити контраст тексту",
+  "increase-text-contrast-description": "Збільшити більш легкий контраст тексту"
 }

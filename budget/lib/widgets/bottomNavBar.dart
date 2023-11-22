@@ -151,6 +151,7 @@ class BottomNavBarState extends State<BottomNavBar> {
         ),
       );
     }
+    // Android navbar
     return Container(
       decoration: BoxDecoration(
         boxShadow: boxShadowSharp(context),

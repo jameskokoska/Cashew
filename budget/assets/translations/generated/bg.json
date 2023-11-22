@@ -832,7 +832,7 @@
   "goal-total-type": "Общ тип цел",
   "auto-mark-transactions": "Автоматични транзакции",
   "auto-mark-transactions-description": "Маркирайте просрочените транзакции като платени",
-  "more-options-description": "Сметки, бюджети, цели, титли",
+  "more-options-description": "Стил, акаунти, бюджети, цели, титли",
   "header-height": "Височина на заглавката",
   "tall": "Висок",
   "short": "Къс",
@@ -860,5 +860,15 @@
   "initial-account-balance": "Първоначално салдо по сметката",
   "starting-at": "Започвайки от",
   "major-change-16": "Нова страница за всички разходи",
-  "major-change-16-1": "Обнови цялата страница на разходите с историята на разходите"
+  "major-change-16-1": "Обнови цялата страница на разходите с историята на разходите",
+  "font": "Шрифт",
+  "platform": "Платформа",
+  "personalization": "Персонализация",
+  "rounded": "Заоблен",
+  "outlined": "Очертани",
+  "icon-style": "Икона стил",
+  "more-options-description-theme": "Шрифт, икона стил, височина на заглавката",
+  "style": "Стил",
+  "increase-text-contrast": "Увеличете контраста на текста",
+  "increase-text-contrast-description": "Увеличаване на по -лекия текст контраст"
 }

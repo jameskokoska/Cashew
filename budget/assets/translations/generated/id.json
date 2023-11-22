@@ -832,7 +832,7 @@
   "goal-total-type": "Jenis Total Sasaran",
   "auto-mark-transactions": "Transaksi Pembayaran Otomatis",
   "auto-mark-transactions-description": "Tandai transaksi yang sudah lewat waktu seperti yang dibayar",
-  "more-options-description": "Akun, anggaran, tujuan, judul",
+  "more-options-description": "Gaya, Akun, Anggaran, Sasaran, Judul",
   "header-height": "Tinggi header",
   "tall": "Tinggi",
   "short": "Pendek",
@@ -860,5 +860,15 @@
   "initial-account-balance": "Saldo akun awal",
   "starting-at": "Dimulai dari",
   "major-change-16": "Halaman semua pengeluaran baru",
-  "major-change-16-1": "Mengubah halaman semua pengeluaran dengan sejarah periode pengeluaran"
+  "major-change-16-1": "Mengubah halaman semua pengeluaran dengan sejarah periode pengeluaran",
+  "font": "Font",
+  "platform": "Platform",
+  "personalization": "Personalisasi",
+  "rounded": "Bulat",
+  "outlined": "Diuraikan",
+  "icon-style": "Gaya ikon",
+  "more-options-description-theme": "Font, gaya ikon, tinggi header",
+  "style": "Gaya",
+  "increase-text-contrast": "Tingkatkan kontras teks",
+  "increase-text-contrast-description": "Meningkatkan kontras teks yang lebih ringan"
 }

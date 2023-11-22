@@ -832,7 +832,7 @@
   "goal-total-type": "Ziel Gesamttyp",
   "auto-mark-transactions": "Auto -Pay -Transaktionen",
   "auto-mark-transactions-description": "Mark überfällige Transaktionen als bezahlt markieren",
-  "more-options-description": "Konten, Budgets, Ziele, Titel",
+  "more-options-description": "Stil, Konten, Budgets, Ziele, Titel",
   "header-height": "Headerhöhe",
   "tall": "Groß",
   "short": "Kurz",
@@ -860,5 +860,15 @@
   "initial-account-balance": "Erstkonto -Guthaben",
   "starting-at": "Beginnend bei",
   "major-change-16": "Neue alle Ausgabenseite",
-  "major-change-16-1": "Überarbeitete die gesamte Ausgabenseite mit Ausgabenzeitverlauf"
+  "major-change-16-1": "Überarbeitete die gesamte Ausgabenseite mit Ausgabenzeitverlauf",
+  "font": "Schriftart",
+  "platform": "Plattform",
+  "personalization": "Personalisierung",
+  "rounded": "Gerundet",
+  "outlined": "Umrissen",
+  "icon-style": "Symbolstil",
+  "more-options-description-theme": "Schriftart, Symbolstil, Headerhöhe",
+  "style": "Stil",
+  "increase-text-contrast": "Textkontrast erhöhen",
+  "increase-text-contrast-description": "Erhöhen Sie den Kontrast des leichteren Textes"
 }

@@ -230,14 +230,20 @@ class _BillSplitterState extends State<BillSplitter> {
               context,
               title: "bill-splitter".tr(),
               description: "bill-splitter-info".tr(),
-              icon: Icons.info,
+              icon: appStateSettings["outlinedIcons"]
+                  ? Icons.info_outlined
+                  : Icons.info_outline_rounded,
               onCancel: () {
                 Navigator.pop(context);
               },
               onCancelLabel: "ok".tr(),
             );
           },
-          icon: Icon(Icons.info),
+          icon: Icon(
+            appStateSettings["outlinedIcons"]
+                ? Icons.info_outlined
+                : Icons.info_outline_rounded,
+          ),
         ),
       ],
       horizontalPadding: getHorizontalPaddingConstrained(context),

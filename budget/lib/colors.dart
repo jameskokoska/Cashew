@@ -51,9 +51,11 @@ generateColors() {
     colors: {
       "white": Colors.white,
       "black": Colors.black,
-      "textLight": appStateSettings["materialYou"]
-          ? Colors.black.withOpacity(0.4)
-          : Color(0xFF888888),
+      "textLight": appStateSettings["increaseTextContrast"]
+          ? Colors.black.withOpacity(0.7)
+          : appStateSettings["materialYou"]
+              ? Colors.black.withOpacity(0.4)
+              : Color(0xFF888888),
       "lightDarkAccent": appStateSettings["materialYou"]
           ? lightenPastel(HexColor(appStateSettings["accentColor"]),
               amount: 0.6)
@@ -86,9 +88,11 @@ generateColors() {
     colors: {
       "white": Colors.black,
       "black": Colors.white,
-      "textLight": appStateSettings["materialYou"]
-          ? Colors.white.withOpacity(0.25)
-          : Color(0xFF494949),
+      "textLight": appStateSettings["increaseTextContrast"]
+          ? Colors.white.withOpacity(0.65)
+          : appStateSettings["materialYou"]
+              ? Colors.white.withOpacity(0.25)
+              : Color(0xFF494949),
       "lightDarkAccent": appStateSettings["materialYou"]
           ? darkenPastel(HexColor(appStateSettings["accentColor"]),
               amount: 0.83)

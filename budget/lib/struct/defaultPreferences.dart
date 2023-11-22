@@ -149,6 +149,7 @@ Future<Map<String, dynamic>> getDefaultPreferences() async {
     // Search filters strings
     "searchTransactionsSetFiltersString": null,
     "allSpendingSetFiltersString": null,
+    "increaseTextContrast": false,
     // *********************************************************** //
     // For showing information within a certain cycle for all spending wallet details page
     // cycleSettingsExtension = ""

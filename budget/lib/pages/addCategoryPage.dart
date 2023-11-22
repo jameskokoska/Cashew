@@ -1272,7 +1272,9 @@ class SelectIsSubcategory extends StatelessWidget {
                       ? Icons.move_to_inbox_outlined
                       : Icons.move_to_inbox_rounded,
                   infoButton: IconButtonScaled(
-                    iconData: Icons.info_outlined,
+                    iconData: appStateSettings["outlinedIcons"]
+                        ? Icons.info_outlined
+                        : Icons.info_outline_rounded,
                     iconSize: 16,
                     scale: 1.6,
                     onTap: () {

@@ -3,23 +3,29 @@ import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
 import 'package:budget/pages/homePage/homePage.dart';
+import 'package:budget/pages/settingsPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/button.dart';
+import 'package:budget/widgets/framework/popupFramework.dart';
 import 'package:budget/widgets/globalSnackBar.dart';
 import 'package:budget/widgets/notificationsSettings.dart';
+import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openSnackbar.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/database/generatePreviewData.dart';
+import 'package:budget/widgets/radioItems.dart';
+import 'package:budget/widgets/ratingPopup.dart';
 import 'package:budget/widgets/settingsContainers.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:in_app_review/in_app_review.dart';
 import 'package:universal_html/html.dart' as html;
 import 'package:budget/struct/randomConstants.dart';
-
+import 'package:budget/widgets/tappable.dart';
 import '../widgets/sliderSelector.dart';
 
 class DebugPage extends StatelessWidget {
@@ -117,25 +123,6 @@ class DebugPage extends StatelessWidget {
             icon: Icons.edit,
           ),
         ),
-        SettingsContainerDropdown(
-          title: "Font",
-          icon: appStateSettings["outlinedIcons"]
-              ? Icons.font_download_outlined
-              : Icons.font_download_rounded,
-          initial: appStateSettings["font"],
-          items: [
-            "Avenir",
-            "SFProText",
-            "Inter",
-            "DMSans",
-            "OpenSans",
-            "Metropolis",
-            "None (Default)",
-          ],
-          onChanged: (value) {
-            updateSettings("font", value, updateGlobalState: true);
-          },
-        ),
         SettingsContainerSwitch(
           onSwitched: (value) async {
             updateSettings("colorTintCategoryIcon", value,
@@ -210,18 +197,6 @@ class DebugPage extends StatelessWidget {
               : Icons.all_inbox_rounded,
         ),
         SettingsContainerSwitch(
-          enableBorderRadius: true,
-          onSwitched: (value) {
-            updateSettings("outlinedIcons", value,
-                pagesNeedingRefresh: [], updateGlobalState: true);
-          },
-          initialValue: appStateSettings["outlinedIcons"],
-          title: "Outlined icons",
-          description: "Use outlined icons",
-          icon: Icons.outlined_flag,
-        ),
-
-        SettingsContainerSwitch(
           title: "Emulate iOS",
           description: "Enables scroll behaviour and icons from iOS",
           onSwitched: (value) {
@@ -238,6 +213,20 @@ class DebugPage extends StatelessWidget {
           icon: appStateSettings["outlinedIcons"]
               ? Icons.apple_outlined
               : Icons.apple_rounded,
+        ),
+        FutureBuilder<bool>(
+          future: inAppReview.isAvailable(),
+          builder: (context, snapshot) {
+            return SettingsContainer(
+              icon: Icons.store,
+              title: "Test store review integration",
+              description: "Available: " + snapshot.data.toString(),
+              onTap: () async {
+                if (await inAppReview.isAvailable())
+                  inAppReview.requestReview();
+              },
+            );
+          },
         ),
         SettingsContainerSwitch(
           title: "Native iOS Navigation",

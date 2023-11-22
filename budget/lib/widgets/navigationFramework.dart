@@ -548,7 +548,9 @@ class AddMoreThingsPopup extends StatelessWidget {
                 }
                 return AddThing(
                   infoButton: IconButtonScaled(
-                    iconData: Icons.info_outlined,
+                    iconData: appStateSettings["outlinedIcons"]
+                        ? Icons.info_outlined
+                        : Icons.info_outline_rounded,
                     iconSize: 14,
                     scale: 1.8,
                     padding: EdgeInsets.all(5),

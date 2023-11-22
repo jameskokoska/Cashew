@@ -81,14 +81,20 @@ class _ExchangeRatesState extends State<ExchangeRates> {
               description: "exchange-rate-notice-description".tr() +
                   "\n\n" +
                   "tap-for-custom-exchange-rate".tr(),
-              icon: Icons.info,
+              icon: appStateSettings["outlinedIcons"]
+                  ? Icons.info_outlined
+                  : Icons.info_outline_rounded,
               onCancel: () {
                 Navigator.pop(context);
               },
               onCancelLabel: "ok".tr(),
             );
           },
-          icon: Icon(Icons.info),
+          icon: Icon(
+            appStateSettings["outlinedIcons"]
+                ? Icons.info_outlined
+                : Icons.info_outline_rounded,
+          ),
         ),
       ],
       slivers: [

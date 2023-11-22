@@ -832,7 +832,7 @@
   "goal-total-type": "ലക്ഷ്യം ആകെ തരം",
   "auto-mark-transactions": "യാന്ത്രിക ശമ്പള ഇടപാടുകൾ",
   "auto-mark-transactions-description": "പണമടച്ചതായി കാലഹരണപ്പെട്ട ഇടപാടുകൾ അടയാളപ്പെടുത്തുക",
-  "more-options-description": "അക്കൗണ്ടുകൾ, ബജറ്റുകൾ, ലക്ഷ്യങ്ങൾ, ശീർഷകങ്ങൾ",
+  "more-options-description": "ശൈലി, അക്കൗണ്ടുകൾ, ബജറ്റുകൾ, ലക്ഷ്യങ്ങൾ, ശീർഷകങ്ങൾ",
   "header-height": "തലക്കെട്ട് ഉയരം",
   "tall": "പൊക്കമുള്ള",
   "short": "കുറിയ",
@@ -860,5 +860,15 @@
   "initial-account-balance": "പ്രാരംഭ അക്കൗണ്ട് ബാലൻസ്",
   "starting-at": "ആരംഭിക്കുന്നു",
   "major-change-16": "പുതിയ എല്ലാ ചെലവ് പേജ്",
-  "major-change-16-1": "ചെലവ് ചരിത്രത്തോടെ എല്ലാ ചെലവ് പേജും പുതുക്കി"
+  "major-change-16-1": "ചെലവ് ചരിത്രത്തോടെ എല്ലാ ചെലവ് പേജും പുതുക്കി",
+  "font": "ഫോണ്ട്",
+  "platform": "വേദി",
+  "personalization": "വ്യക്തിവൽക്കരണം",
+  "rounded": "വൃത്താകൃതിയിലുള്ള",
+  "outlined": "വിവരിച്ചിരിക്കുന്നു",
+  "icon-style": "ഐക്കൺ ശൈലി",
+  "more-options-description-theme": "ഫോണ്ട്, ഐക്കൺ ശൈലി, തലക്കെട്ട് ഉയരം",
+  "style": "ശൈലി",
+  "increase-text-contrast": "ടെക്സ്റ്റ് ദൃശ്യതീവ്രത വർദ്ധിപ്പിക്കുക",
+  "increase-text-contrast-description": "ഭാരം കുറഞ്ഞ വാചക ദൃശ്യതീവ്രത വർദ്ധിപ്പിക്കുക"
 }

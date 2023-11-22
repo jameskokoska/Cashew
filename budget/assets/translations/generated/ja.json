@@ -832,7 +832,7 @@
   "goal-total-type": "目標合計タイプ",
   "auto-mark-transactions": "自動給与取引",
   "auto-mark-transactions-description": "支払われたとおりの期限切れの取引をマークします",
-  "more-options-description": "アカウント、予算、目標、タイトル",
+  "more-options-description": "スタイル、アカウント、予算、目標、タイトル",
   "header-height": "ヘッダーの高さ",
   "tall": "高い",
   "short": "短い",
@@ -860,5 +860,15 @@
   "initial-account-balance": "初期アカウント残高",
   "starting-at": "から始まります",
   "major-change-16": "新しいすべての支出ページ",
-  "major-change-16-1": "支出期間の歴史を持つすべての支出ページを刷新しました"
+  "major-change-16-1": "支出期間の歴史を持つすべての支出ページを刷新しました",
+  "font": "フォント",
+  "platform": "プラットホーム",
+  "personalization": "パーソナライズ",
+  "rounded": "丸い",
+  "outlined": "概説されています",
+  "icon-style": "アイコンスタイル",
+  "more-options-description-theme": "フォント、アイコンスタイル、ヘッダーの高さ",
+  "style": "スタイル",
+  "increase-text-contrast": "テキストのコントラストを増やします",
+  "increase-text-contrast-description": "軽いテキストコントラストを増やします"
 }

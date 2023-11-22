@@ -832,7 +832,7 @@
   "goal-total-type": "Mål total typ",
   "auto-mark-transactions": "Bilbetalningstransaktioner",
   "auto-mark-transactions-description": "Markera förfallna transaktioner som betalt",
-  "more-options-description": "Konton, budgetar, mål, titlar",
+  "more-options-description": "Stil, konton, budgetar, mål, titlar",
   "header-height": "Rubrikhöjd",
   "tall": "Lång",
   "short": "Kort",
@@ -860,5 +860,15 @@
   "initial-account-balance": "Initial kontosaldo",
   "starting-at": "Från och med",
   "major-change-16": "Ny alla utgiftssida",
-  "major-change-16-1": "Förnyftade alla utgiftssidan med historien om utgifter perioden"
+  "major-change-16-1": "Förnyftade alla utgiftssidan med historien om utgifter perioden",
+  "font": "Font",
+  "platform": "Plattform",
+  "personalization": "Personalisering",
+  "rounded": "Avrundad",
+  "outlined": "Skisserad",
+  "icon-style": "Ikonstil",
+  "more-options-description-theme": "Teckensnitt, ikonstil, rubrikhöjd",
+  "style": "Stil",
+  "increase-text-contrast": "Öka textkontrasten",
+  "increase-text-contrast-description": "Öka ljusare textkontrast"
 }
