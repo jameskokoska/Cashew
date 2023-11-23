@@ -1,4 +1,5 @@
 import 'package:budget/functions.dart';
+import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:flutter/material.dart';
@@ -76,7 +77,9 @@ class _RadioItemsState<T> extends State<RadioItems<T>> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    if (widget.itemsAreFonts == true && item != "Avenir")
+                    if (widget.itemsAreFonts == true &&
+                        (item != "Avenir" ||
+                            appStateSettings["font"] != "Avenir"))
                       Text(
                         widget.displayFilter == null
                             ? item.toString()
@@ -86,7 +89,9 @@ class _RadioItemsState<T> extends State<RadioItems<T>> {
                           fontFamily: item.toString(),
                         ),
                       ),
-                    if (widget.itemsAreFonts == false || item == "Avenir")
+                    if (widget.itemsAreFonts == false ||
+                        (item == "Avenir" &&
+                            appStateSettings["font"] == "Avenir"))
                       TextFont(
                         fontSize: noDescription ? 18 : 16,
                         text: widget.displayFilter == null

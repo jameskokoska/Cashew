@@ -149,9 +149,8 @@ class PopupFramework extends StatelessWidget {
                       // At least (initialBottomPadding) bottom padding
 
                       double initialBottomPadding = 10;
-                      double bottomSafeAreaPadding = MediaQuery.paddingOf(
-                              navigatorKey.currentContext ?? context)
-                          .bottom;
+                      double bottomSafeAreaPadding =
+                          MediaQuery.paddingOf(context).bottom;
 
                       bottomSafeAreaPadding =
                           bottomSafeAreaPadding - initialBottomPadding;

@@ -45,12 +45,15 @@ class TextFont extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var finalTextColor;
-    if (this.textColor == null) {
-      finalTextColor = getColor(context, "black");
-    } else {
-      finalTextColor = textColor;
+    Color finalTextColor = textColor ?? getColor(context, "black");
+    if (appStateSettings["increaseTextContrast"] == true) {
+      double threshold =
+          Theme.of(context).brightness == Brightness.light ? 0.7 : 0.65;
+      if (finalTextColor.alpha.toDouble() < (255 * threshold)) {
+        finalTextColor = finalTextColor.withOpacity(1 * threshold);
+      }
     }
+
     final TextStyle textStyle = TextStyle(
       fontWeight: this.fontWeight,
       fontSize: this.fontSize,

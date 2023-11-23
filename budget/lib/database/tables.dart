@@ -1722,7 +1722,7 @@ class FinanceDatabase extends _$FinanceDatabase {
     return (select(budgets)
           ..where((b) => (searchFor == null
               ? Constant(true)
-              : b.name.lower().like("%" + (searchFor).toLowerCase() + "%")))
+              : b.name.collate(Collate.noCase).like("%" + (searchFor) + "%")))
           ..orderBy([(b) => OrderingTerm.asc(b.order)])
           ..limit(limit ?? DEFAULT_LIMIT, offset: offset ?? DEFAULT_OFFSET))
         .watch();
@@ -1732,7 +1732,7 @@ class FinanceDatabase extends _$FinanceDatabase {
       {required String title, int? limit, int? offset}) {
     return (select(associatedTitles)
           ..where(
-              (t) => (t.title.lower().like("%" + (title).toLowerCase() + "%")))
+              (t) => (t.title.collate(Collate.noCase).like("%" + title + "%")))
           ..orderBy([(t) => OrderingTerm.desc(t.order)])
           ..limit(limit ?? DEFAULT_LIMIT, offset: offset ?? DEFAULT_OFFSET))
         .get();
@@ -1963,9 +1963,7 @@ class FinanceDatabase extends _$FinanceDatabase {
     return (select(wallets)
           ..where((w) => (searchFor == null
               ? Constant(true)
-              : w.name
-                  .lower()
-                  .like("%" + (searchFor).toLowerCase().trim() + "%")))
+              : w.name.collate(Collate.noCase).like("%" + (searchFor) + "%")))
           ..orderBy([(w) => OrderingTerm.asc(w.order)])
           ..limit(limit ?? DEFAULT_LIMIT, offset: offset ?? DEFAULT_OFFSET))
         .watch();
@@ -1985,8 +1983,8 @@ class FinanceDatabase extends _$FinanceDatabase {
               (searchFor == null
                   ? Constant(true)
                   : w.name
-                      .lower()
-                      .like("%" + (searchFor).toLowerCase().trim() + "%"))))
+                      .collate(Collate.noCase)
+                      .like("%" + (searchFor) + "%"))))
           ..orderBy([(w) => OrderingTerm.asc(w.order)]))
         .join([
       leftOuterJoin(
@@ -2347,9 +2345,7 @@ class FinanceDatabase extends _$FinanceDatabase {
     return (select(associatedTitles)
           ..where((t) => (searchFor == null
               ? Constant(true)
-              : t.title
-                  .lower()
-                  .like("%" + (searchFor).toLowerCase().trim() + "%")))
+              : t.title.collate(Collate.noCase).like("%" + (searchFor) + "%")))
           ..orderBy([(t) => OrderingTerm.desc(t.order)])
         // ..limit(limit ?? DEFAULT_LIMIT, offset: offset ?? DEFAULT_OFFSET)
         )
@@ -2370,7 +2366,7 @@ class FinanceDatabase extends _$FinanceDatabase {
       {int? limit, int? offset}) async {
     return (await (select(associatedTitles)
               ..where((t) =>
-                  t.title.lower().like(searchFor.toLowerCase().trim()) &
+                  t.title.collate(Collate.noCase).like("%" + searchFor + "%") &
                   t.categoryFk.equals(categoryFk))
             // ..limit(limit ?? DEFAULT_LIMIT, offset: offset ?? DEFAULT_OFFSET)
             )
@@ -2383,8 +2379,8 @@ class FinanceDatabase extends _$FinanceDatabase {
       {int? limit,
       int? offset}) async {
     return (await (select(associatedTitles)
-              ..where(
-                  (t) => t.title.lower().like(searchFor.toLowerCase().trim()))
+              ..where((t) =>
+                  t.title.collate(Collate.noCase).like("%" + searchFor + "%"))
             // ..limit(limit ?? DEFAULT_LIMIT, offset: offset ?? DEFAULT_OFFSET)
             )
             .get())
@@ -2396,7 +2392,7 @@ class FinanceDatabase extends _$FinanceDatabase {
     return (await (select(categories)
               ..where((c) =>
                   onlyShowMainCategoryListing(c) &
-                  c.name.lower().like(searchFor.toLowerCase().trim()))
+                  c.name.collate(Collate.noCase).like("%" + searchFor + "%"))
               ..limit(limit ?? DEFAULT_LIMIT, offset: offset ?? DEFAULT_OFFSET))
             .get())
         .first;
@@ -3611,8 +3607,8 @@ class FinanceDatabase extends _$FinanceDatabase {
               (searchFor == null
                   ? Constant(true)
                   : c.name
-                      .lower()
-                      .like("%" + (searchFor).toLowerCase().trim() + "%"))))
+                      .collate(Collate.noCase)
+                      .like("%" + (searchFor) + "%"))))
           ..orderBy([
             (c) => OrderingTerm.asc(c.mainCategoryPk),
             (c) => OrderingTerm.asc(c.order),
@@ -3631,8 +3627,8 @@ class FinanceDatabase extends _$FinanceDatabase {
               (searchFor == null
                   ? Constant(true)
                   : c.name
-                      .lower()
-                      .like("%" + (searchFor).toLowerCase().trim() + "%"))))
+                      .collate(Collate.noCase)
+                      .like("%" + (searchFor) + "%"))))
           ..orderBy([
             (c) => OrderingTerm.asc(c.order),
           ]))
@@ -3699,9 +3695,7 @@ class FinanceDatabase extends _$FinanceDatabase {
     return (select(objectives)
           ..where((i) => (searchFor == null
               ? Constant(true)
-              : i.name
-                  .lower()
-                  .like("%" + (searchFor).toLowerCase().trim() + "%")))
+              : i.name.collate(Collate.noCase).like("%" + (searchFor) + "%")))
           ..orderBy([(i) => OrderingTerm.asc(i.order)]))
         .watch();
   }
@@ -4826,26 +4820,26 @@ class FinanceDatabase extends _$FinanceDatabase {
         ? Constant(true)
         : (withCategories == true
                 ? categories.name
-                    .lower()
-                    .like("%" + searchQuery.toLowerCase() + "%")
+                    .collate(Collate.noCase)
+                    .like("%" + searchQuery + "%")
                 : Constant(false)) |
             (joinedWithSubcategoriesTable != null
                 ? joinedWithSubcategoriesTable.name
-                    .lower()
-                    .like("%" + searchQuery.toLowerCase() + "%")
+                    .collate(Collate.noCase)
+                    .like("%" + searchQuery + "%")
                 : Constant(false)) |
             (withBudgets == true
                 ? budgets.name
-                    .lower()
-                    .like("%" + searchQuery.toLowerCase() + "%")
+                    .collate(Collate.noCase)
+                    .like("%" + searchQuery + "%")
                 : Constant(false)) |
             (withObjectives == true
                 ? objectives.name
-                    .lower()
-                    .like("%" + searchQuery.toLowerCase() + "%")
+                    .collate(Collate.noCase)
+                    .like("%" + searchQuery + "%")
                 : Constant(false)) |
-            tbl.name.lower().like("%" + searchQuery.toLowerCase() + "%") |
-            tbl.note.lower().like("%" + searchQuery.toLowerCase() + "%");
+            tbl.name.collate(Collate.noCase).like("%" + searchQuery + "%") |
+            tbl.note.collate(Collate.noCase).like("%" + searchQuery + "%");
   }
 
   Expression<bool> onlyShowIfFollowsFilters($TransactionsTable tbl,

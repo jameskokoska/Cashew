@@ -1989,17 +1989,17 @@ class _DateButtonState extends State<DateButton> {
     return Tappable(
       color: Colors.transparent,
       onTap: () async {
-        final DateTime? picked =
-            await showCustomDatePicker(context, selectedDate);
-        if (picked != null && picked != selectedDate) {
-          setState(() {
-            selectedDate = selectedDate.copyWith(
-              year: picked.year,
-              month: picked.month,
-              day: picked.day,
-            );
-          });
-        }
+        final DateTime picked =
+            (await showCustomDatePicker(context, selectedDate) ?? selectedDate);
+        setState(() {
+          selectedDate = selectedDate.copyWith(
+            year: picked.year,
+            month: picked.month,
+            day: picked.day,
+            hour: selectedTime.hour,
+            minute: selectedTime.minute,
+          );
+        });
         widget.setSelectedDate(selectedDate);
       },
       borderRadius: 10,

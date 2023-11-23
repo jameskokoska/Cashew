@@ -19,13 +19,18 @@ import 'package:flutter/material.dart';
 import 'listItem.dart';
 
 // Device legend
-// Apple rejected app update because Android was referenced...
-// We use code names now!
+// Apple rejected app update because Android was referenced... We use code names now!
 // (i) = iOS
 // (A) = Android
 
 String getChangelogString() {
   return """
+    < 4.9.4
+    Fixed associated transaction titles with cyrillic script
+    Fixed search with cyrillic script
+    Increasing text contrast applies to all text fields (minimum opacity threshold)
+    Fixed cancelling date selection would reset the selected time
+    Default font displays in default font
     < 4.9.3
     Fixed bottom padding insets especially for floating action button
     Removed redundant font families
@@ -1993,6 +1998,10 @@ List<Widget>? getChangelogPointsWidgets(BuildContext context,
     int versionBookmark = versionInt;
     for (String string in changelog.split("\n")) {
       string = string.replaceFirst("    ", ""); // remove the indent
+      if (getPlatform() != PlatformOS.isIOS) {
+        string = string.replaceAll("(A)", "Android");
+        string = string.replaceAll("(i)", "iOS");
+      }
       if (string.startsWith("< ")) {
         if (forceShow) {
           changelogPoints.addAll(getAllMajorChangeWidgetsForVersion(

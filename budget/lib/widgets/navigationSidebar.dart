@@ -42,24 +42,18 @@ double getHeightNavigationSidebar(context) {
     return 0;
   } else {
     if (getPlatform() == PlatformOS.isIOS) {
-      return 70 +
-          MediaQuery.viewPaddingOf(navigatorKey.currentContext ?? context)
-              .bottom;
+      return 70 + MediaQuery.viewPaddingOf(context).bottom;
     } else {
-      return 80 +
-          MediaQuery.viewPaddingOf(navigatorKey.currentContext ?? context)
-              .bottom;
+      return 80 + MediaQuery.viewPaddingOf(context).bottom;
     }
   }
 }
 
 double getBottomInsetOfFAB(context) {
-  if (MediaQuery.viewPaddingOf(navigatorKey.currentContext ?? context).bottom <=
-      15) {
+  if (MediaQuery.viewPaddingOf(context).bottom <= 15) {
     return 15;
   } else {
-    return MediaQuery.viewPaddingOf(navigatorKey.currentContext ?? context)
-        .bottom;
+    return MediaQuery.viewPaddingOf(context).bottom;
   }
 }
 
