@@ -9,9 +9,9 @@
   <key>NSFaceIDUsageDescription</key>
   <string>Lock the application</string>
   <key>NSPhotoLibraryUsageDescription</key>
-  <string>Adding attachment image to a transaction</string>
+  <string>Cashew uses photos to attach to a transaction entry</string>
   <key>NSCameraUsageDescription</key>
-  <string>Adding attachment image to a transaction</string>
+  <string>Cashew uses the camera to capture a photo to be used as a transaction attachment</string>
   <key>ITSAppUsesNonExemptEncryption</key>
   <false/>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
