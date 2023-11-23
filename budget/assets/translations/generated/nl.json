@@ -99,7 +99,7 @@
   "pay-repetitive": "Repetitief betalen",
   "pay-repetitive-description": "Markeer automatisch een repetitieve transactie zoals betaald na de vervaldatum",
   "pay-upcoming": "Aankomen",
-  "pay-upcoming-description": "Markeer automatisch een aankomende transactie zoals betaald na de vervaldatum",
+  "pay-upcoming-description": "Markeer automatisch een komende transactie zoals betaald na de vervaldatum",
   "import-csv": "CSV -bestand importeren",
   "import-csv-description": "Importeer een externe CSV -gegevensbron",
   "rate-app": "Beoordeel app",

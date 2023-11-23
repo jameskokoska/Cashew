@@ -73,14 +73,10 @@ class _EditObjectivesPageState extends State<EditObjectivesPage> {
         title: "goals".tr(),
         scrollToTopButton: true,
         floatingActionButton: AnimateFABDelayed(
-          fab: Padding(
-            padding: EdgeInsets.only(
-                bottom: MediaQuery.viewPaddingOf(context).bottom),
-            child: FAB(
-              tooltip: "add-goal".tr(),
-              openPage: AddObjectivePage(
-                routesToPopAfterDelete: RoutesToPopAfterDelete.None,
-              ),
+          fab: FAB(
+            tooltip: "add-goal".tr(),
+            openPage: AddObjectivePage(
+              routesToPopAfterDelete: RoutesToPopAfterDelete.None,
             ),
           ),
         ),

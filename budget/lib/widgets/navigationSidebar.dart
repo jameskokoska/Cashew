@@ -10,6 +10,7 @@ import 'package:budget/widgets/animatedExpanded.dart';
 import 'package:budget/widgets/bottomNavBar.dart';
 import 'package:budget/widgets/moreIcons.dart';
 import 'package:budget/widgets/navigationFramework.dart';
+import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/util/showDatePicker.dart';
 import 'package:budget/widgets/textWidgets.dart';
@@ -33,6 +34,33 @@ double getWidthNavigationSidebar(context) {
           ? maxWidthNavigation
           : MediaQuery.sizeOf(context).width * screenPercent) +
       MediaQuery.viewPaddingOf(context).left;
+}
+
+double getHeightNavigationSidebar(context) {
+  if (getIsFullScreen(context)) {
+    // No navbar in full screen
+    return 0;
+  } else {
+    if (getPlatform() == PlatformOS.isIOS) {
+      return 70 +
+          MediaQuery.viewPaddingOf(navigatorKey.currentContext ?? context)
+              .bottom;
+    } else {
+      return 80 +
+          MediaQuery.viewPaddingOf(navigatorKey.currentContext ?? context)
+              .bottom;
+    }
+  }
+}
+
+double getBottomInsetOfFAB(context) {
+  if (MediaQuery.viewPaddingOf(navigatorKey.currentContext ?? context).bottom <=
+      15) {
+    return 15;
+  } else {
+    return MediaQuery.viewPaddingOf(navigatorKey.currentContext ?? context)
+        .bottom;
+  }
 }
 
 bool enableDoubleColumn(context) {

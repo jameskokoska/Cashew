@@ -280,21 +280,17 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
             backgroundColor: pageBackgroundColor,
             listID: pageId,
             floatingActionButton: AnimateFABDelayed(
-              fab: Padding(
-                padding: EdgeInsets.only(
-                    bottom: MediaQuery.viewPaddingOf(context).bottom),
-                child: FAB(
-                  tooltip: "add-transaction".tr(),
-                  openPage: AddTransactionPage(
-                    selectedBudget: widget.budget.sharedKey != null ||
-                            widget.budget.addedTransactionsOnly == true
-                        ? widget.budget
-                        : null,
-                    routesToPopAfterDelete: RoutesToPopAfterDelete.One,
-                  ),
-                  color: budgetColorScheme.secondary,
-                  colorPlus: budgetColorScheme.onSecondary,
+              fab: FAB(
+                tooltip: "add-transaction".tr(),
+                openPage: AddTransactionPage(
+                  selectedBudget: widget.budget.sharedKey != null ||
+                          widget.budget.addedTransactionsOnly == true
+                      ? widget.budget
+                      : null,
+                  routesToPopAfterDelete: RoutesToPopAfterDelete.One,
                 ),
+                color: budgetColorScheme.secondary,
+                colorPlus: budgetColorScheme.onSecondary,
               ),
             ),
             actions: [

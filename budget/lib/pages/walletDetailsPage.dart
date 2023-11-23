@@ -736,14 +736,10 @@ class _WalletDetailsPageState extends State<WalletDetailsPage>
             key: pageState,
             listID: listID,
             floatingActionButton: AnimateFABDelayed(
-              fab: Padding(
-                padding: EdgeInsets.only(
-                    bottom: MediaQuery.viewPaddingOf(context).bottom),
-                child: FAB(
-                  tooltip: "add-transaction".tr(),
-                  openPage: AddTransactionPage(
-                    routesToPopAfterDelete: RoutesToPopAfterDelete.One,
-                  ),
+              fab: FAB(
+                tooltip: "add-transaction".tr(),
+                openPage: AddTransactionPage(
+                  routesToPopAfterDelete: RoutesToPopAfterDelete.One,
                 ),
               ),
             ),
@@ -868,6 +864,10 @@ class _WalletDetailsPageState extends State<WalletDetailsPage>
             dragDownToDismiss: true,
             bodyBuilder: (scrollController, scrollPhysics, sliverAppBar) {
               if (widget.wallet == null && enableDoubleColumn(context)) {
+                double heightOfBanner = 56;
+                double topPaddingOfBanner =
+                    MediaQuery.viewPaddingOf(context).top;
+                double totalHeaderHeight = heightOfBanner + topPaddingOfBanner;
                 return Column(
                   children: [
                     Stack(
@@ -878,7 +878,9 @@ class _WalletDetailsPageState extends State<WalletDetailsPage>
                           children: [
                             Expanded(
                               child: Container(
-                                height: 56,
+                                height: totalHeaderHeight,
+                                padding:
+                                    EdgeInsets.only(top: topPaddingOfBanner),
                                 color: Theme.of(context)
                                     .colorScheme
                                     .secondaryContainer,
@@ -897,7 +899,11 @@ class _WalletDetailsPageState extends State<WalletDetailsPage>
                             ),
                           ],
                         ),
-                        Positioned(right: 10, child: selectFiltersButton)
+                        Positioned(
+                          top: topPaddingOfBanner,
+                          right: 10,
+                          child: selectFiltersButton,
+                        ),
                       ],
                     ),
                     ConstrainedBox(
@@ -906,7 +912,8 @@ class _WalletDetailsPageState extends State<WalletDetailsPage>
                         children: [
                           Expanded(
                             child: Container(
-                              height: MediaQuery.sizeOf(context).height - 56,
+                              height: MediaQuery.sizeOf(context).height -
+                                  totalHeaderHeight,
                               child: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 mainAxisAlignment:

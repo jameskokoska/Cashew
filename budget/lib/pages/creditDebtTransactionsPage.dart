@@ -57,18 +57,13 @@ class _CreditDebtTransactionsState extends State<CreditDebtTransactions> {
             resizeToAvoidBottomInset: true,
             floatingActionButton: AnimateFABDelayed(
               enabled: isCredit != null,
-              fab: Padding(
-                padding: EdgeInsets.only(
-                    bottom: MediaQuery.viewPaddingOf(context).bottom),
-                child: FAB(
-                  tooltip:
-                      isCredit == true ? "add-credit".tr() : "add-debt".tr(),
-                  openPage: AddTransactionPage(
-                    selectedType: isCredit == true
-                        ? TransactionSpecialType.credit
-                        : TransactionSpecialType.debt,
-                    routesToPopAfterDelete: RoutesToPopAfterDelete.None,
-                  ),
+              fab: FAB(
+                tooltip: isCredit == true ? "add-credit".tr() : "add-debt".tr(),
+                openPage: AddTransactionPage(
+                  selectedType: isCredit == true
+                      ? TransactionSpecialType.credit
+                      : TransactionSpecialType.debt,
+                  routesToPopAfterDelete: RoutesToPopAfterDelete.None,
                 ),
               ),
             ),

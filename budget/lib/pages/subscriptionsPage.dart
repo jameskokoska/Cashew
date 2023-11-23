@@ -60,15 +60,11 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
           PageFramework(
             listID: "Subscriptions",
             floatingActionButton: AnimateFABDelayed(
-              fab: Padding(
-                padding: EdgeInsets.only(
-                    bottom: MediaQuery.viewPaddingOf(context).bottom),
-                child: FAB(
-                  tooltip: "add-subscription".tr(),
-                  openPage: AddTransactionPage(
-                    selectedType: TransactionSpecialType.subscription,
-                    routesToPopAfterDelete: RoutesToPopAfterDelete.None,
-                  ),
+              fab: FAB(
+                tooltip: "add-subscription".tr(),
+                openPage: AddTransactionPage(
+                  selectedType: TransactionSpecialType.subscription,
+                  routesToPopAfterDelete: RoutesToPopAfterDelete.None,
                 ),
               ),
             ),

@@ -67,25 +67,21 @@ class _EditAssociatedTitlesPageState extends State<EditAssociatedTitlesPage> {
         title: "edit-titles".tr(),
         scrollToTopButton: true,
         floatingActionButton: AnimateFABDelayed(
-          fab: Padding(
-            padding: EdgeInsets.only(
-                bottom: MediaQuery.viewPaddingOf(context).bottom),
-            child: FAB(
-              tooltip: "add-title".tr(),
-              openPage: SizedBox.shrink(),
-              onTap: () {
-                openBottomSheet(
-                  context,
-                  fullSnap: true,
-                  AddAssociatedTitlePage(),
-                );
-                Future.delayed(Duration(milliseconds: 100), () {
-                  // Fix over-scroll stretch when keyboard pops up quickly
-                  bottomSheetControllerGlobal.scrollTo(0,
-                      duration: Duration(milliseconds: 100));
-                });
-              },
-            ),
+          fab: FAB(
+            tooltip: "add-title".tr(),
+            openPage: SizedBox.shrink(),
+            onTap: () {
+              openBottomSheet(
+                context,
+                fullSnap: true,
+                AddAssociatedTitlePage(),
+              );
+              Future.delayed(Duration(milliseconds: 100), () {
+                // Fix over-scroll stretch when keyboard pops up quickly
+                bottomSheetControllerGlobal.scrollTo(0,
+                    duration: Duration(milliseconds: 100));
+              });
+            },
           ),
         ),
         actions: [

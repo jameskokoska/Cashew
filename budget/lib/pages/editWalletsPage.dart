@@ -72,14 +72,10 @@ class _EditWalletsPageState extends State<EditWalletsPage> {
         scrollToTopButton: true,
         title: "edit-accounts".tr(),
         floatingActionButton: AnimateFABDelayed(
-          fab: Padding(
-            padding: EdgeInsets.only(
-                bottom: MediaQuery.viewPaddingOf(context).bottom),
-            child: FAB(
-              tooltip: "add-account".tr(),
-              openPage: AddWalletPage(
-                routesToPopAfterDelete: RoutesToPopAfterDelete.None,
-              ),
+          fab: FAB(
+            tooltip: "add-account".tr(),
+            openPage: AddWalletPage(
+              routesToPopAfterDelete: RoutesToPopAfterDelete.None,
             ),
           ),
         ),

@@ -96,7 +96,7 @@
   "auto-email-transactions": "Otomatik e -posta işlemleri",
   "pay-subscriptions": "Ödeme Abonelikleri",
   "pay-subscriptions-description": "Son tarihten sonra ödenen bir aboneliği otomatik olarak işaretleyin",
-  "pay-repetitive": "Ödeme Tekrarlayan",
+  "pay-repetitive": "Ücret tekrarlayan",
   "pay-repetitive-description": "Tekrarlayan bir işlemin son tarihten sonra ödendiği gibi otomatik olarak işaretlenmesi",
   "pay-upcoming": "Yaklaşan Ödeme",
   "pay-upcoming-description": "Yaklaşan bir işlemin son tarihten sonra ödendiği gibi otomatik olarak işaretlenmesi",

@@ -1,4 +1,5 @@
 import 'package:budget/functions.dart';
+import 'package:budget/main.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:flutter/material.dart';
@@ -145,9 +146,12 @@ class PopupFramework extends StatelessWidget {
               ),
               hasBottomSafeArea
                   ? Builder(builder: (context) {
+                      // At least (initialBottomPadding) bottom padding
+
                       double initialBottomPadding = 10;
-                      double bottomSafeAreaPadding =
-                          MediaQuery.paddingOf(context).bottom;
+                      double bottomSafeAreaPadding = MediaQuery.paddingOf(
+                              navigatorKey.currentContext ?? context)
+                          .bottom;
 
                       bottomSafeAreaPadding =
                           bottomSafeAreaPadding - initialBottomPadding;

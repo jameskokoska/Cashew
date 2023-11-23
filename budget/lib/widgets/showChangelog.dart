@@ -26,6 +26,9 @@ import 'listItem.dart';
 
 String getChangelogString() {
   return """
+    < 4.9.3
+    Fixed bottom padding insets especially for floating action button
+    Removed redundant font families
     < 4.9.2
     Font and icon style settings
     Fixed container background color for transaction spending summary (i)

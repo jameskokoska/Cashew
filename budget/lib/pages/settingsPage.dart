@@ -876,10 +876,10 @@ void openFontPicker(BuildContext context) {
         items: [
           // These values match that of pubspec font family
           "Avenir",
-          if (getPlatform() == PlatformOS.isIOS) "SFProText",
           "DMSans",
           "Metropolis",
-          "Inter",
+          // SF Pro removed - users on iOS can just select Platform font
+          // Inter is the font family fallback
           "RobotoCondensed",
           "(Platform)",
         ],
@@ -900,8 +900,6 @@ String fontNameDisplayFilter(String value) {
     return "default".tr().capitalizeFirst;
   } else if (value == "(Platform)") {
     return "platform".tr().capitalizeFirst;
-  } else if (value == "SFProText") {
-    return "San Francisco";
   } else if (value == "DMSans") {
     return "DM Sans";
   } else if (value == "RobotoCondensed") {

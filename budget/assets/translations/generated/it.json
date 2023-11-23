@@ -99,7 +99,7 @@
   "pay-repetitive": "Pagare ripetitivo",
   "pay-repetitive-description": "Segna automaticamente una transazione ripetitiva come pagato dopo la data di scadenza",
   "pay-upcoming": "Paga imminente",
-  "pay-upcoming-description": "Segna automaticamente una transazione imminente pagata dopo la data di scadenza",
+  "pay-upcoming-description": "Segna automaticamente una transazione imminente come pagato dopo la data di scadenza",
   "import-csv": "Importa file CSV",
   "import-csv-description": "Importa i dati da un file CSV esterno",
   "rate-app": "Vota {app}",

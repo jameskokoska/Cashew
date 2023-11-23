@@ -179,14 +179,10 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
               onScroll: _scrollListener,
               title: "search".tr(),
               floatingActionButton: AnimateFABDelayed(
-                fab: Padding(
-                  padding: EdgeInsets.only(
-                      bottom: MediaQuery.viewPaddingOf(context).bottom),
-                  child: FAB(
-                    tooltip: "add-transaction".tr(),
-                    openPage: AddTransactionPage(
-                      routesToPopAfterDelete: RoutesToPopAfterDelete.None,
-                    ),
+                fab: FAB(
+                  tooltip: "add-transaction".tr(),
+                  openPage: AddTransactionPage(
+                    routesToPopAfterDelete: RoutesToPopAfterDelete.None,
                   ),
                 ),
               ),

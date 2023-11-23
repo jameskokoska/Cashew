@@ -144,19 +144,15 @@ class _ObjectivePageContentState extends State<_ObjectivePageContent> {
             backgroundColor: pageBackgroundColor,
             listID: pageId,
             floatingActionButton: AnimateFABDelayed(
-              fab: Padding(
-                padding: EdgeInsets.only(
-                    bottom: MediaQuery.viewPaddingOf(context).bottom),
-                child: FAB(
-                  tooltip: "add-transaction".tr(),
-                  openPage: AddTransactionPage(
-                    selectedObjective: widget.objective,
-                    routesToPopAfterDelete: RoutesToPopAfterDelete.One,
-                    selectedIncome: widget.objective.income,
-                  ),
-                  color: objectiveColorScheme.secondary,
-                  colorPlus: objectiveColorScheme.onSecondary,
+              fab: FAB(
+                tooltip: "add-transaction".tr(),
+                openPage: AddTransactionPage(
+                  selectedObjective: widget.objective,
+                  routesToPopAfterDelete: RoutesToPopAfterDelete.One,
+                  selectedIncome: widget.objective.income,
                 ),
+                color: objectiveColorScheme.secondary,
+                colorPlus: objectiveColorScheme.onSecondary,
               ),
             ),
             expandedHeight: 56,

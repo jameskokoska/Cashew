@@ -248,21 +248,17 @@ class _BillSplitterState extends State<BillSplitter> {
       ],
       horizontalPadding: getHorizontalPaddingConstrained(context),
       floatingActionButton: AnimateFABDelayed(
-        fab: Padding(
-          padding:
-              EdgeInsets.only(bottom: MediaQuery.viewPaddingOf(context).bottom),
-          child: FAB(
-            onLongPressAddAllPopup: false,
-            openPage: AddBillItemPage(
-              splitPersons: splitPersons,
-              addBillSplitterItem: addBillSplitterItem,
-              deleteBillSplitterItem: deleteBillSplitterItem,
-              updateBillSplitterItem: updateBillSplitterItem,
-              addPerson: addPerson,
-              deletePerson: deletePerson,
-              multiplierAmount: multiplierAmount,
-              setMultiplierAmount: setMultiplierAmount,
-            ),
+        fab: FAB(
+          onLongPressAddAllPopup: false,
+          openPage: AddBillItemPage(
+            splitPersons: splitPersons,
+            addBillSplitterItem: addBillSplitterItem,
+            deleteBillSplitterItem: deleteBillSplitterItem,
+            updateBillSplitterItem: updateBillSplitterItem,
+            addPerson: addPerson,
+            deletePerson: deletePerson,
+            multiplierAmount: multiplierAmount,
+            setMultiplierAmount: setMultiplierAmount,
           ),
         ),
       ),
@@ -1294,20 +1290,16 @@ class _PeoplePageState extends State<PeoplePage> {
           ),
       ],
       floatingActionButton: AnimateFABDelayed(
-        fab: Padding(
-          padding:
-              EdgeInsets.only(bottom: MediaQuery.viewPaddingOf(context).bottom),
-          child: FAB(
-            onLongPressAddAllPopup: false,
-            openPage: SizedBox.shrink(),
-            onTap: () {
-              openAddPersonPopup(
-                context: context,
-                setState: setState,
-                addPerson: widget.addPerson,
-              );
-            },
-          ),
+        fab: FAB(
+          onLongPressAddAllPopup: false,
+          openPage: SizedBox.shrink(),
+          onTap: () {
+            openAddPersonPopup(
+              context: context,
+              setState: setState,
+              addPerson: widget.addPerson,
+            );
+          },
         ),
       ),
     );

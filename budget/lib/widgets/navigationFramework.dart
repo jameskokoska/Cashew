@@ -293,6 +293,7 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
 
         return false;
       },
+
       // The global Widget stack
       child: Stack(children: [
         Scaffold(
@@ -318,11 +319,7 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
           alignment: Alignment.bottomRight,
           child: Padding(
             padding: EdgeInsets.only(
-              bottom: (getIsFullScreen(context) == false
-                      ? 95 + MediaQuery.viewPaddingOf(context).bottom
-                      : 15 + MediaQuery.viewPaddingOf(context).bottom) -
-                  // iOS navbar is lower
-                  (getPlatform() == PlatformOS.isIOS ? 10 : 0),
+              bottom: getHeightNavigationSidebar(context) + 15,
               right: 15,
             ),
             child: Stack(

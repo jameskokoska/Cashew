@@ -2,6 +2,7 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:budget/functions.dart';
+import 'package:budget/main.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/struct/shareBudget.dart';
 import 'package:budget/widgets/button.dart';
@@ -474,55 +475,53 @@ class PageFrameworkState extends State<PageFramework>
           Align(
             alignment: Alignment.bottomRight,
             child: Padding(
-              padding: const EdgeInsets.only(bottom: 15, right: 15),
+              padding: EdgeInsets.only(
+                bottom: getBottomInsetOfFAB(context),
+                right: 15,
+              ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.end,
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   widget.scrollToTopButton
-                      ? Padding(
-                          padding: EdgeInsets.only(
-                              bottom: MediaQuery.viewPaddingOf(context).bottom),
-                          child: AnimatedBuilder(
-                            animation: _scrollToTopAnimationController,
-                            builder: (_, child) {
-                              return IgnorePointer(
-                                ignoring:
-                                    _scrollToTopAnimationController.value <=
-                                        0.1,
-                                child: Transform.translate(
-                                  offset: Offset(
-                                    0,
-                                    10 *
-                                        (1 -
-                                            CurvedAnimation(
-                                                    parent:
-                                                        _scrollToTopAnimationController,
-                                                    curve: Curves.easeInOut)
-                                                .value),
-                                  ),
-                                  child: child,
+                      ? AnimatedBuilder(
+                          animation: _scrollToTopAnimationController,
+                          builder: (_, child) {
+                            return IgnorePointer(
+                              ignoring:
+                                  _scrollToTopAnimationController.value <= 0.1,
+                              child: Transform.translate(
+                                offset: Offset(
+                                  0,
+                                  10 *
+                                      (1 -
+                                          CurvedAnimation(
+                                                  parent:
+                                                      _scrollToTopAnimationController,
+                                                  curve: Curves.easeInOut)
+                                              .value),
                                 ),
-                              );
-                            },
-                            child: FadeTransition(
-                              opacity: CurvedAnimation(
-                                  parent: _scrollToTopAnimationController,
-                                  curve: Curves.easeInOut),
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.only(right: 7, bottom: 1),
-                                child: Transform.rotate(
-                                  angle: pi / 2,
-                                  child: ButtonIcon(
-                                    icon: appStateSettings["outlinedIcons"]
-                                        ? Icons.chevron_left_outlined
-                                        : Icons.chevron_left_rounded,
-                                    onTap: () {
-                                      scrollToTop();
-                                    },
-                                  ),
+                                child: child,
+                              ),
+                            );
+                          },
+                          child: FadeTransition(
+                            opacity: CurvedAnimation(
+                                parent: _scrollToTopAnimationController,
+                                curve: Curves.easeInOut),
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.only(right: 7, bottom: 1),
+                              child: Transform.rotate(
+                                angle: pi / 2,
+                                child: ButtonIcon(
+                                  icon: appStateSettings["outlinedIcons"]
+                                      ? Icons.chevron_left_outlined
+                                      : Icons.chevron_left_rounded,
+                                  onTap: () {
+                                    scrollToTop();
+                                  },
                                 ),
                               ),
                             ),
