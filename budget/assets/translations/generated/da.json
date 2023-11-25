@@ -870,5 +870,9 @@
   "more-options-description-theme": "Skrifttype, ikonstil, headerhøjde",
   "style": "Stil",
   "increase-text-contrast": "Forøg tekstkontrast",
-  "increase-text-contrast-description": "Forøg lettere tekstkontrast"
+  "increase-text-contrast-description": "Forøg lettere tekstkontrast",
+  "update-both-transfers-question": "Opdater begge balanceoverførsler?",
+  "update-both-transfers-question-description": "En balanceoverførsel består af 2 transaktioner. Vil du opdatere begge dele?",
+  "only-current": "Kun nuværende",
+  "update-both": "Opdater begge"
 }

@@ -870,5 +870,9 @@
   "more-options-description-theme": "الخط ، نمط الرمز ، ارتفاع الرأس",
   "style": "أسلوب",
   "increase-text-contrast": "زيادة تباين النص",
-  "increase-text-contrast-description": "زيادة تباين النص أخف وزنا"
+  "increase-text-contrast-description": "زيادة تباين النص أخف وزنا",
+  "update-both-transfers-question": "تحديث كلا من نقل الرصيد؟",
+  "update-both-transfers-question-description": "يتكون نقل الرصيد من 2 معاملات. هل ترغب في تحديث كليهما؟",
+  "only-current": "الحالي فقط",
+  "update-both": "تحديث كليهما"
 }

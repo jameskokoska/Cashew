@@ -870,5 +870,9 @@
   "more-options-description-theme": "Fonte, estilo de ícone, altura do cabeçalho",
   "style": "Estilo",
   "increase-text-contrast": "Aumentar o contraste de texto",
-  "increase-text-contrast-description": "Aumentar o contraste de texto mais leve"
+  "increase-text-contrast-description": "Aumentar o contraste de texto mais leve",
+  "update-both-transfers-question": "Atualizar as duas transferências de equilíbrio?",
+  "update-both-transfers-question-description": "Uma transferência de saldo consiste em 2 transações. Você gostaria de atualizar os dois?",
+  "only-current": "Apenas atual",
+  "update-both": "Atualizar ambos"
 }

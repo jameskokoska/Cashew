@@ -870,5 +870,9 @@
   "more-options-description-theme": "Betűtípus, ikon stílus, fejlécmagasság",
   "style": "Stílus",
   "increase-text-contrast": "Növelje a szöveges kontrasztot",
-  "increase-text-contrast-description": "Növelje a világosabb szöveges kontrasztot"
+  "increase-text-contrast-description": "Növelje a világosabb szöveges kontrasztot",
+  "update-both-transfers-question": "Frissítse mindkét egyenlegátutasztást?",
+  "update-both-transfers-question-description": "Az egyenlegátadás 2 tranzakcióból áll. Szeretné frissíteni mindkettőt?",
+  "only-current": "Csak az áram",
+  "update-both": "Frissítse mindkettőt"
 }

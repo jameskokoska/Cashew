@@ -870,5 +870,9 @@
   "more-options-description-theme": "Fontti, kuvaketyyli, otsikon korkeus",
   "style": "Tyyli",
   "increase-text-contrast": "Lisää tekstin kontrastia",
-  "increase-text-contrast-description": "Lisää kevyempää tekstin kontrastia"
+  "increase-text-contrast-description": "Lisää kevyempää tekstin kontrastia",
+  "update-both-transfers-question": "Päivitä molemmat saldo -siirrot?",
+  "update-both-transfers-question-description": "Tasapainonsiirto koostuu kahdesta tapahtumasta. Haluatko päivittää molemmat?",
+  "only-current": "Vain virta",
+  "update-both": "Päivitä molemmat"
 }

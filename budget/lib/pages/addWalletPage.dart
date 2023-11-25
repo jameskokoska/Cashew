@@ -1264,14 +1264,8 @@ class _TransferBalancePopupState extends State<TransferBalancePopup> {
 
               await createCorrectionTransaction(
                 enteredAmount *
-                    (amountRatioFromToCurrency(
-                          allWallets
-                              .indexedByPk[
-                                  appStateSettings["selectedWalletPk"]]!
-                              .currency!,
-                          allWallets.indexedByPk[walletTo!.walletPk]!.currency!,
-                        ) ??
-                        1),
+                    getAmountRatioWalletTransferTo(
+                        allWallets, walletTo!.walletPk),
                 walletTo!,
                 note: note,
                 dateTime: selectedDateTime,
@@ -1284,16 +1278,8 @@ class _TransferBalancePopupState extends State<TransferBalancePopup> {
 
               await createCorrectionTransaction(
                 enteredAmount *
-                    -1 *
-                    (amountRatioFromToCurrency(
-                          allWallets
-                              .indexedByPk[
-                                  appStateSettings["selectedWalletPk"]]!
-                              .currency!,
-                          allWallets
-                              .indexedByPk[walletFrom.walletPk]!.currency!,
-                        ) ??
-                        1),
+                    getAmountRatioWalletTransferFrom(
+                        allWallets, walletFrom.walletPk),
                 walletFrom,
                 note: note,
                 dateTime: selectedDateTime,

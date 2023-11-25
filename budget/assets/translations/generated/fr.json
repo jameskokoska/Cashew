@@ -870,5 +870,9 @@
   "more-options-description-theme": "Police, style icône, hauteur d'en-tête",
   "style": "Style",
   "increase-text-contrast": "Augmenter le contraste du texte",
-  "increase-text-contrast-description": "Augmenter le contraste de texte plus léger"
+  "increase-text-contrast-description": "Augmenter le contraste de texte plus léger",
+  "update-both-transfers-question": "Mettre à jour les deux transferts d'équilibre?",
+  "update-both-transfers-question-description": "Un transfert de solde se compose de 2 transactions. Souhaitez-vous mettre à jour les deux?",
+  "only-current": "Uniquement courant",
+  "update-both": "Mettre à jour les deux"
 }

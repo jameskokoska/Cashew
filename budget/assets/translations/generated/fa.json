@@ -870,5 +870,9 @@
   "more-options-description-theme": "قلم ، سبک نماد ، ارتفاع هدر",
   "style": "سبک",
   "increase-text-contrast": "کنتراست متن را افزایش دهید",
-  "increase-text-contrast-description": "کنتراست متن سبک تر را افزایش دهید"
+  "increase-text-contrast-description": "کنتراست متن سبک تر را افزایش دهید",
+  "update-both-transfers-question": "هر دو انتقال تعادل را به روز کنید؟",
+  "update-both-transfers-question-description": "انتقال ترازو شامل 2 معاملات است. آیا دوست دارید هر دو را به روز کنید؟",
+  "only-current": "فقط جریان",
+  "update-both": "هر دو را به روز کنید"
 }

@@ -870,5 +870,9 @@
   "more-options-description-theme": "Шрифт, икона стил, височина на заглавката",
   "style": "Стил",
   "increase-text-contrast": "Увеличете контраста на текста",
-  "increase-text-contrast-description": "Увеличаване на по -лекия текст контраст"
+  "increase-text-contrast-description": "Увеличаване на по -лекия текст контраст",
+  "update-both-transfers-question": "Актуализирайте и двете трансфери на баланс?",
+  "update-both-transfers-question-description": "Прехвърлянето на баланс се състои от 2 транзакции. Искате ли да актуализирате и двете?",
+  "only-current": "Само ток",
+  "update-both": "Актуализирайте и двете"
 }

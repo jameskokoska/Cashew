@@ -870,5 +870,9 @@
   "more-options-description-theme": "ફ ont ન્ટ, આયકન શૈલી, હેડર height ંચાઇ",
   "style": "શૈલી",
   "increase-text-contrast": "ટેક્સ્ટ વિરોધાભાસમાં વધારો",
-  "increase-text-contrast-description": "હળવા ટેક્સ્ટ વિરોધાભાસમાં વધારો"
+  "increase-text-contrast-description": "હળવા ટેક્સ્ટ વિરોધાભાસમાં વધારો",
+  "update-both-transfers-question": "બંને બેલેન્સ ટ્રાન્સફર અપડેટ કરો?",
+  "update-both-transfers-question-description": "સંતુલન સ્થાનાંતરણમાં 2 વ્યવહારો હોય છે. તમે બંનેને અપડેટ કરવા માંગો છો?",
+  "only-current": "માત્ર વર્તમાન",
+  "update-both": "બંનેને અપડેટ કરો"
 }

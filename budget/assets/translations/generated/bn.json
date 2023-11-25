@@ -870,5 +870,9 @@
   "more-options-description-theme": "ফন্ট, আইকন স্টাইল, শিরোনাম উচ্চতা",
   "style": "স্টাইল",
   "increase-text-contrast": "পাঠ্য বিপরীতে বৃদ্ধি করুন",
-  "increase-text-contrast-description": "হালকা পাঠ্য বিপরীতে বৃদ্ধি করুন"
+  "increase-text-contrast-description": "হালকা পাঠ্য বিপরীতে বৃদ্ধি করুন",
+  "update-both-transfers-question": "উভয় ভারসাম্য স্থানান্তর আপডেট?",
+  "update-both-transfers-question-description": "একটি ভারসাম্য স্থানান্তর 2 লেনদেন নিয়ে গঠিত। আপনি উভয় আপডেট করতে চান?",
+  "only-current": "শুধুমাত্র কারেন্ট",
+  "update-both": "উভয় আপডেট"
 }

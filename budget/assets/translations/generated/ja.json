@@ -870,5 +870,9 @@
   "more-options-description-theme": "フォント、アイコンスタイル、ヘッダーの高さ",
   "style": "スタイル",
   "increase-text-contrast": "テキストのコントラストを増やします",
-  "increase-text-contrast-description": "軽いテキストコントラストを増やします"
+  "increase-text-contrast-description": "軽いテキストコントラストを増やします",
+  "update-both-transfers-question": "両方のバランス転送を更新しますか？",
+  "update-both-transfers-question-description": "バランス転送は、2つのトランザクションで構成されています。両方を更新しますか？",
+  "only-current": "電流のみ",
+  "update-both": "両方を更新します"
 }

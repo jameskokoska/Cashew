@@ -870,5 +870,9 @@
   "more-options-description-theme": "Yazı tipi, simge stili, başlık yüksekliği",
   "style": "Stil",
   "increase-text-contrast": "Metin kontrastını artırın",
-  "increase-text-contrast-description": "Daha hafif metin kontrastını artırın"
+  "increase-text-contrast-description": "Daha hafif metin kontrastını artırın",
+  "update-both-transfers-question": "Her iki denge transferini de güncelleyin?",
+  "update-both-transfers-question-description": "Denge transferi 2 işlemden oluşur. İkisini de güncellemek ister misiniz?",
+  "only-current": "Sadece güncel",
+  "update-both": "Her ikisini de güncelleyin"
 }

@@ -870,5 +870,9 @@
   "more-options-description-theme": "فونٹ ، آئکن اسٹائل ، ہیڈر اونچائی",
   "style": "انداز",
   "increase-text-contrast": "متن کے برعکس میں اضافہ کریں",
-  "increase-text-contrast-description": "ہلکے متن کے برعکس میں اضافہ کریں"
+  "increase-text-contrast-description": "ہلکے متن کے برعکس میں اضافہ کریں",
+  "update-both-transfers-question": "دونوں بیلنس ٹرانسفر کو اپ ڈیٹ کریں؟",
+  "update-both-transfers-question-description": "بیلنس ٹرانسفر 2 لین دین پر مشتمل ہے۔ کیا آپ دونوں کو اپ ڈیٹ کرنا چاہیں گے؟",
+  "only-current": "صرف موجودہ",
+  "update-both": "دونوں کو اپ ڈیٹ کریں"
 }

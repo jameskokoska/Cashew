@@ -870,5 +870,9 @@
   "more-options-description-theme": "Schriftart, Symbolstil, Headerhöhe",
   "style": "Stil",
   "increase-text-contrast": "Textkontrast erhöhen",
-  "increase-text-contrast-description": "Erhöhen Sie den Kontrast des leichteren Textes"
+  "increase-text-contrast-description": "Erhöhen Sie den Kontrast des leichteren Textes",
+  "update-both-transfers-question": "Beide Gleichgewichtsübertragungen aktualisieren?",
+  "update-both-transfers-question-description": "Eine Saldoübertragung besteht aus 2 Transaktionen. Möchten Sie beide aktualisieren?",
+  "only-current": "Nur Strom",
+  "update-both": "Aktualisieren Sie beide"
 }

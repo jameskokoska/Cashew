@@ -870,5 +870,9 @@
   "more-options-description-theme": "Шрифт, стиль иконы, высота заголовка",
   "style": "Стиль",
   "increase-text-contrast": "Увеличьте контраст",
-  "increase-text-contrast-description": "Увеличьте более легкий контраст текста"
+  "increase-text-contrast-description": "Увеличьте более легкий контраст текста",
+  "update-both-transfers-question": "Обновить оба перевода баланса?",
+  "update-both-transfers-question-description": "Передача баланса состоит из 2 транзакций. Хотели бы вы обновить оба?",
+  "only-current": "Только ток",
+  "update-both": "Обновить оба"
 }

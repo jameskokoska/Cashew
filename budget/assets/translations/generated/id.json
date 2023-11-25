@@ -870,5 +870,9 @@
   "more-options-description-theme": "Font, gaya ikon, tinggi header",
   "style": "Gaya",
   "increase-text-contrast": "Tingkatkan kontras teks",
-  "increase-text-contrast-description": "Meningkatkan kontras teks yang lebih ringan"
+  "increase-text-contrast-description": "Meningkatkan kontras teks yang lebih ringan",
+  "update-both-transfers-question": "Perbarui kedua transfer saldo?",
+  "update-both-transfers-question-description": "Transfer saldo terdiri dari 2 transaksi. Apakah Anda ingin memperbarui keduanya?",
+  "only-current": "Hanya arus",
+  "update-both": "Perbarui keduanya"
 }

@@ -870,5 +870,9 @@
   "more-options-description-theme": "எழுத்துரு, ஐகான் பாணி, தலைப்பு உயரம்",
   "style": "ஸ்டைல்",
   "increase-text-contrast": "உரை மாறுபாட்டை அதிகரிக்கவும்",
-  "increase-text-contrast-description": "இலகுவான உரை மாறுபாட்டை அதிகரிக்கவும்"
+  "increase-text-contrast-description": "இலகுவான உரை மாறுபாட்டை அதிகரிக்கவும்",
+  "update-both-transfers-question": "இருப்பு இடமாற்றங்கள் இரண்டையும் புதுப்பிக்கவா?",
+  "update-both-transfers-question-description": "ஒரு இருப்பு பரிமாற்றம் 2 பரிவர்த்தனைகளைக் கொண்டுள்ளது. இரண்டையும் புதுப்பிக்க விரும்புகிறீர்களா?",
+  "only-current": "மின்னோட்டம் மட்டுமே",
+  "update-both": "இரண்டையும் புதுப்பிக்கவும்"
 }

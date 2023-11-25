@@ -5873,6 +5873,84 @@ class FinanceDatabase extends _$FinanceDatabase {
           .toList();
     });
   }
+
+  // Created within a second, is of the opposite polarity
+  // category type of balance transaction
+  // Is not the current balance transaction
+  Future<Transaction?> getCloselyRelatedBalanceCorrectionTransaction(
+      Transaction originalBalanceCorrection) async {
+    bool isOtherIncome = !originalBalanceCorrection.income;
+    DateTime otherDateTime = originalBalanceCorrection.dateCreated;
+    try {
+      return (await (select(transactions)
+                ..where(
+                  (t) =>
+                      t.categoryFk.equals("0") &
+                      t.transactionPk
+                          .equals(originalBalanceCorrection.transactionPk)
+                          .not() &
+                      t.income.equals(isOtherIncome) &
+                      t.dateCreated.isBetweenValues(
+                        DateTime(
+                          otherDateTime.year,
+                          otherDateTime.month,
+                          otherDateTime.day,
+                          otherDateTime.hour,
+                          otherDateTime.minute,
+                          otherDateTime.second - 1,
+                        ),
+                        DateTime(
+                          otherDateTime.year,
+                          otherDateTime.month,
+                          otherDateTime.day,
+                          otherDateTime.hour,
+                          otherDateTime.minute,
+                          otherDateTime.second + 1,
+                        ),
+                      ),
+                ))
+              .get())
+          .firstOrNull;
+    } catch (e) {
+      print("No relating transfer transaction found");
+    }
+    return null;
+  }
+
+  // This corresponds to the logic set out when adding a transaction
+  // A comparison is made with what fields are replaced
+  Future updateCloselyRelatedBalanceTransfer(
+    AllWallets allWallets,
+    Transaction originalBalanceCorrection,
+    Transaction closeBalanceCorrection,
+  ) async {
+    closeBalanceCorrection = originalBalanceCorrection.copyWith(
+      transactionPk: closeBalanceCorrection.transactionPk,
+      walletFk: closeBalanceCorrection.walletFk,
+      name: closeBalanceCorrection.name,
+      note: closeBalanceCorrection.note,
+      income: closeBalanceCorrection.income,
+      amount: originalBalanceCorrection.amount.abs() *
+          double.parse(
+            (closeBalanceCorrection.income
+                    ? getAmountRatioWalletTransferTo(
+                        allWallets,
+                        closeBalanceCorrection.walletFk,
+                        enteredAmountWalletPk:
+                            originalBalanceCorrection.walletFk,
+                      )
+                    : getAmountRatioWalletTransferFrom(
+                        allWallets,
+                        closeBalanceCorrection.walletFk,
+                        enteredAmountWalletPk:
+                            originalBalanceCorrection.walletFk,
+                      ))
+                .toString(),
+          ),
+    );
+    return await createOrUpdateTransaction(closeBalanceCorrection,
+        insert: false);
+  }
 }
 
 class TransactionWithCount {

@@ -870,5 +870,9 @@
   "more-options-description-theme": "Γραμματοσειρά, στυλ εικονιδίων, ύψος κεφαλίδας",
   "style": "Στυλ",
   "increase-text-contrast": "Αύξηση της αντίθεσης κειμένου",
-  "increase-text-contrast-description": "Αυξήστε την αντίθεση με το ελαφρύτερο κείμενο"
+  "increase-text-contrast-description": "Αυξήστε την αντίθεση με το ελαφρύτερο κείμενο",
+  "update-both-transfers-question": "Ενημερώστε και τις δύο μεταφορές ισοζυγίου;",
+  "update-both-transfers-question-description": "Μια μεταφορά υπολοίπου αποτελείται από 2 συναλλαγές. Θέλετε να ενημερώσετε και τα δύο;",
+  "only-current": "Μόνο τρέχουσα",
+  "update-both": "Ενημερώστε και τα δύο"
 }

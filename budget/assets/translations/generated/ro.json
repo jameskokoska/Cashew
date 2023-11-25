@@ -870,5 +870,9 @@
   "more-options-description-theme": "Font, stil pictogramă, înălțimea antetului",
   "style": "Stil",
   "increase-text-contrast": "Creșteți contrastul textului",
-  "increase-text-contrast-description": "Creșteți contrastul textului mai ușor"
+  "increase-text-contrast-description": "Creșteți contrastul textului mai ușor",
+  "update-both-transfers-question": "Actualizați ambele transferuri de sold?",
+  "update-both-transfers-question-description": "Un transfer de sold este format din 2 tranzacții. Doriți să actualizați ambele?",
+  "only-current": "Numai curent",
+  "update-both": "Actualizați ambele"
 }

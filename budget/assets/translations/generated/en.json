@@ -642,9 +642,9 @@
   "spending-and-savings-goals": "Spending & Saving Goals",
   "upcoming-transaction-type-description-1": "A transaction that is unpaid",
   "upcoming-transaction-type-description-2": "Does not count towards your total unless marked 'Paid' or 'Deposited'",
-  "subscription-transaction-type-description-1": "Reoccuring transaction that will be shown on the subscriptions page",
+  "subscription-transaction-type-description-1": "Reccuring transaction that will be shown on the subscriptions page",
   "subscription-transaction-type-description-2": "Does not count towards your total unless marked 'Paid' or 'Deposited'",
-  "repetitive-transaction-type-description-1": "Reoccuring transaction",
+  "repetitive-transaction-type-description-1": "Reccuring transaction",
   "repetitive-transaction-type-description-2": "Does not count towards your total unless marked 'Paid' or 'Deposited'",
   "lent-transaction-type-description-1": "Transaction that you lent out",
   "lent-transaction-type-description-2": "Expense until marked 'Collected'",
@@ -870,5 +870,9 @@
   "more-options-description-theme": "Font, icon style, header height",
   "style": "Style",
   "increase-text-contrast": "High Text Contrast",
-  "increase-text-contrast-description": "Increase lighter text contrast"
+  "increase-text-contrast-description": "Increase lighter text contrast",
+  "update-both-transfers-question": "Update Both Balance Transfers?",
+  "update-both-transfers-question-description": "A balance transfer consists of 2 transactions. Would you like to update both?",
+  "only-current": "Only Current",
+  "update-both": "Update Both"
 }

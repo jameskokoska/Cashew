@@ -870,5 +870,9 @@
   "more-options-description-theme": "글꼴, 아이콘 스타일, 헤더 높이",
   "style": "스타일",
   "increase-text-contrast": "텍스트 대비를 높입니다",
-  "increase-text-contrast-description": "더 가벼운 텍스트 대비를 증가시킵니다"
+  "increase-text-contrast-description": "더 가벼운 텍스트 대비를 증가시킵니다",
+  "update-both-transfers-question": "두 잔액 전송을 모두 업데이트 하시겠습니까?",
+  "update-both-transfers-question-description": "잔액 이전은 2 개의 거래로 구성됩니다. 둘 다 업데이트 하시겠습니까?",
+  "only-current": "전류 만",
+  "update-both": "둘 다 업데이트하십시오"
 }

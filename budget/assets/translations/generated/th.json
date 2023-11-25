@@ -864,11 +864,15 @@
   "font": "แบบอักษร",
   "platform": "แพลตฟอร์ม",
   "personalization": "การทำให้เป็นส่วนตัว",
-  "rounded": "ที่ได้ถูกปัดเศษ",
+  "rounded": "ซึ่งได้ปัด",
   "outlined": "ที่ระบุไว้",
   "icon-style": "รูปแบบไอคอน",
   "more-options-description-theme": "ตัวอักษร, สไตล์ไอคอน, ความสูงส่วนหัว",
   "style": "สไตล์",
   "increase-text-contrast": "เพิ่มความคมชัดของข้อความ",
-  "increase-text-contrast-description": "เพิ่มความคมชัดของข้อความที่เบากว่า"
+  "increase-text-contrast-description": "เพิ่มความคมชัดของข้อความที่เบากว่า",
+  "update-both-transfers-question": "อัปเดตการถ่ายโอนยอดคงเหลือทั้งสอง?",
+  "update-both-transfers-question-description": "การถ่ายโอนยอดคงเหลือประกอบด้วย 2 ธุรกรรม คุณต้องการอัปเดตทั้งคู่หรือไม่?",
+  "only-current": "เฉพาะกระแสไฟฟ้า",
+  "update-both": "อัปเดตทั้งสอง"
 }

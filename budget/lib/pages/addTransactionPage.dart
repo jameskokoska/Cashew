@@ -431,6 +431,80 @@ class _AddTransactionPageState extends State<AddTransactionPage>
       }
       Transaction createdTransaction = await createTransaction();
 
+      if (widget.transaction != null) {
+        // Only ask if changes were made that will affect other balance correction
+        // set in the logic of updateCloselyRelatedBalanceTransfer
+        if (addDefaultMissingValues(widget.transaction!).copyWith(
+              dateTimeModified: Value(null),
+              walletFk: "",
+              name: "",
+              note: "",
+              income: false,
+              amount: widget.transaction!.amount.abs(),
+            ) !=
+            createdTransaction.copyWith(
+              dateTimeModified: Value(null),
+              walletFk: "",
+              name: "",
+              note: "",
+              income: false,
+              amount: createdTransaction.amount.abs(),
+            )) {
+          Transaction? closelyRelatedTransferCorrectionTransaction =
+              await database.getCloselyRelatedBalanceCorrectionTransaction(
+                  widget.transaction!);
+
+          if (closelyRelatedTransferCorrectionTransaction != null) {
+            await openPopup(
+              context,
+              title: "update-both-transfers-question".tr(),
+              description: "update-both-transfers-question-description".tr(),
+              descriptionWidget: IgnorePointer(
+                child: Column(
+                  children: [
+                    HorizontalBreak(
+                        padding: EdgeInsets.only(top: 15, bottom: 10)),
+                    TransactionEntry(
+                      useHorizontalPaddingConstrained: false,
+                      openPage: Container(),
+                      transaction: createTransaction(),
+                      containerColor: Theme.of(context)
+                          .colorScheme
+                          .secondaryContainer
+                          .withOpacity(0.4),
+                      customPadding: EdgeInsets.zero,
+                    ),
+                    SizedBox(height: 5),
+                    TransactionEntry(
+                      useHorizontalPaddingConstrained: false,
+                      openPage: Container(),
+                      transaction: closelyRelatedTransferCorrectionTransaction,
+                      containerColor: Colors.transparent,
+                      customPadding: EdgeInsets.zero,
+                    ),
+                  ],
+                ),
+              ),
+              onCancel: () {
+                Navigator.pop(context);
+              },
+              onCancelLabel: "only-current".tr(),
+              onSubmit: () async {
+                AllWallets allWallets =
+                    Provider.of<AllWallets>(context, listen: false);
+                await database.updateCloselyRelatedBalanceTransfer(
+                  allWallets,
+                  createdTransaction,
+                  closelyRelatedTransferCorrectionTransaction,
+                );
+                Navigator.pop(context);
+              },
+              onSubmitLabel: "update-both".tr(),
+            );
+          }
+        }
+      }
+
       final int? rowId = await database.createOrUpdateTransaction(
         insert: widget.transaction == null,
         createdTransaction,
@@ -2259,7 +2333,10 @@ class _SelectTitleState extends State<SelectTitle> {
                       noteInputController: widget.noteInputController,
                       setNotesInputFocused: (isFocused) {},
                       setSelectedNoteController: (note, {setInput = true}) {
-                        widget.setSelectedNote(note);
+                        // Adding this line jumps cursor to the end when editing,
+                        // we don't need because the noteInputController is already passed in!
+                        // widget.setSelectedNote(note);
+
                         // Update the size of the bottom sheet
                         // Need to do it slowly because the link container size is animated slowly
                         Future.delayed(Duration(milliseconds: 200), () {

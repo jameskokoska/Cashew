@@ -870,5 +870,9 @@
   "more-options-description-theme": "Шрифт, стиль ікони, висота заголовка",
   "style": "Стиль",
   "increase-text-contrast": "Збільшити контраст тексту",
-  "increase-text-contrast-description": "Збільшити більш легкий контраст тексту"
+  "increase-text-contrast-description": "Збільшити більш легкий контраст тексту",
+  "update-both-transfers-question": "Оновити обидва перекази балансу?",
+  "update-both-transfers-question-description": "Передача балансу складається з 2 транзакцій. Ви хотіли б оновити обидва?",
+  "only-current": "Тільки струм",
+  "update-both": "Оновіть і те, і інше"
 }

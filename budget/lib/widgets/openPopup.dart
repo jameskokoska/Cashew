@@ -19,6 +19,7 @@ Future<T?> openPopup<T extends Object?>(
   String? title,
   String? subtitle,
   String? description,
+  Widget? descriptionWidget,
   String? onSubmitLabel,
   String? onCancelLabel,
   String? onExtraLabel,
@@ -89,154 +90,143 @@ Future<T?> openPopup<T extends Object?>(
                       child: Column(
                         children: [
                           SizedBox(height: 17),
-                          icon != null
-                              ? Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 8.0, horizontal: 10),
-                                  child: Transform.scale(
-                                    scale: iconScale ?? 1,
-                                    child: Icon(
-                                      icon,
-                                      size: 65,
-                                      color:
-                                          Theme.of(context).colorScheme.primary,
-                                    ),
-                                  ),
-                                )
-                              : SizedBox.shrink(),
-                          title != null
-                              ? Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 8.0, horizontal: 10),
-                                  child: TextFont(
-                                    textAlign: TextAlign.center,
-                                    text: title,
-                                    fontSize: 23,
-                                    fontWeight: FontWeight.bold,
-                                    maxLines: 5,
-                                    textColor: Theme.of(context)
-                                        .colorScheme
-                                        .onPrimaryContainer,
-                                  ),
-                                )
-                              : SizedBox.shrink(),
-                          subtitle != null
-                              ? Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 8.0, horizontal: 10),
-                                  child: TextFont(
-                                    textAlign: TextAlign.center,
-                                    text: subtitle,
-                                    fontSize: 21,
-                                    fontWeight: FontWeight.bold,
-                                    maxLines: 5,
-                                    textColor: Theme.of(context)
-                                        .colorScheme
-                                        .onTertiaryContainer,
-                                  ),
-                                )
-                              : SizedBox.shrink(),
-                          description != null
-                              ? Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 8.0, horizontal: 10),
-                                  child: TextFont(
-                                    textAlign: TextAlign.center,
-                                    text: description,
-                                    fontSize: 16.5,
-                                    maxLines: 100,
-                                  ),
-                                )
-                              : SizedBox.shrink(),
-                          onSubmitLabel != null || onCancelLabel != null
-                              ? Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 16.0),
-                                  child: Wrap(
-                                    alignment: WrapAlignment.center,
-                                    runSpacing: 10,
-                                    children: [
-                                      onCancelLabel != null
-                                          ? IntrinsicWidth(
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 8.0),
-                                                child: Button(
-                                                  color: Theme.of(context)
-                                                      .colorScheme
-                                                      .tertiaryContainer,
-                                                  textColor: Theme.of(context)
-                                                      .colorScheme
-                                                      .onTertiaryContainer,
-                                                  label: onCancelLabel,
-                                                  onTap: onCancel ?? () {},
-                                                ),
-                                              ),
-                                            )
-                                          : SizedBox.shrink(),
-                                      onExtraLabel != null
-                                          ? IntrinsicWidth(
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 8.0),
-                                                child: Button(
-                                                  expandedLayout: true,
-                                                  color: Theme.of(context)
-                                                      .colorScheme
-                                                      .secondaryContainer,
-                                                  textColor: Theme.of(context)
-                                                      .colorScheme
-                                                      .onSecondaryContainer,
-                                                  label: onExtraLabel,
-                                                  onTap: onExtra ?? () {},
-                                                ),
-                                              ),
-                                            )
-                                          : SizedBox.shrink(),
-                                      onSubmitLabel != null
-                                          ? IntrinsicWidth(
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 8.0),
-                                                child: Button(
-                                                  color: Theme.of(context)
-                                                      .colorScheme
-                                                      .secondaryContainer,
-                                                  textColor: Theme.of(context)
-                                                      .colorScheme
-                                                      .onSecondaryContainer,
-                                                  label: onSubmitLabel,
-                                                  onTap: onSubmit ?? () {},
-                                                ),
-                                              ),
-                                            )
-                                          : SizedBox.shrink(),
-                                    ],
-                                  ),
-                                )
-                              : SizedBox.shrink(),
+                          if (icon != null)
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 8.0, horizontal: 10),
+                              child: Transform.scale(
+                                scale: iconScale ?? 1,
+                                child: Icon(
+                                  icon,
+                                  size: 65,
+                                  color: Theme.of(context).colorScheme.primary,
+                                ),
+                              ),
+                            ),
+                          if (title != null)
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 8.0, horizontal: 10),
+                              child: TextFont(
+                                textAlign: TextAlign.center,
+                                text: title,
+                                fontSize: 23,
+                                fontWeight: FontWeight.bold,
+                                maxLines: 5,
+                                textColor: Theme.of(context)
+                                    .colorScheme
+                                    .onPrimaryContainer,
+                              ),
+                            ),
+                          if (subtitle != null)
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 8.0, horizontal: 10),
+                              child: TextFont(
+                                textAlign: TextAlign.center,
+                                text: subtitle,
+                                fontSize: 21,
+                                fontWeight: FontWeight.bold,
+                                maxLines: 5,
+                                textColor: Theme.of(context)
+                                    .colorScheme
+                                    .onTertiaryContainer,
+                              ),
+                            ),
+                          if (description != null)
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 8.0, horizontal: 10),
+                              child: TextFont(
+                                textAlign: TextAlign.center,
+                                text: description,
+                                fontSize: 16.5,
+                                maxLines: 100,
+                              ),
+                            ),
+                          if (descriptionWidget != null) descriptionWidget,
+                          if (onSubmitLabel != null || onCancelLabel != null)
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 16.0),
+                              child: Wrap(
+                                alignment: WrapAlignment.center,
+                                runSpacing: 10,
+                                children: [
+                                  onCancelLabel != null
+                                      ? IntrinsicWidth(
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 8.0),
+                                            child: Button(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .tertiaryContainer,
+                                              textColor: Theme.of(context)
+                                                  .colorScheme
+                                                  .onTertiaryContainer,
+                                              label: onCancelLabel,
+                                              onTap: onCancel ?? () {},
+                                            ),
+                                          ),
+                                        )
+                                      : SizedBox.shrink(),
+                                  onExtraLabel != null
+                                      ? IntrinsicWidth(
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 8.0),
+                                            child: Button(
+                                              expandedLayout: true,
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .secondaryContainer,
+                                              textColor: Theme.of(context)
+                                                  .colorScheme
+                                                  .onSecondaryContainer,
+                                              label: onExtraLabel,
+                                              onTap: onExtra ?? () {},
+                                            ),
+                                          ),
+                                        )
+                                      : SizedBox.shrink(),
+                                  onSubmitLabel != null
+                                      ? IntrinsicWidth(
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 8.0),
+                                            child: Button(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .secondaryContainer,
+                                              textColor: Theme.of(context)
+                                                  .colorScheme
+                                                  .onSecondaryContainer,
+                                              label: onSubmitLabel,
+                                              onTap: onSubmit ?? () {},
+                                            ),
+                                          ),
+                                        )
+                                      : SizedBox.shrink(),
+                                ],
+                              ),
+                            ),
                           onExtraLabel2 == null
                               ? SizedBox(height: 17)
                               : SizedBox(height: 5),
                         ],
                       ),
                     ),
-                    onExtraLabel2 != null
-                        ? Button(
-                            borderRadius: borderRadius,
-                            expandedLayout: true,
-                            color:
-                                Theme.of(context).colorScheme.tertiaryContainer,
-                            textColor: Theme.of(context)
-                                .colorScheme
-                                .onTertiaryContainer,
-                            label: onExtraLabel2,
-                            onTap: onExtra2 ?? () {},
-                          )
-                        : SizedBox.shrink(),
+                    if (onExtraLabel2 != null)
+                      Button(
+                        borderRadius: borderRadius,
+                        expandedLayout: true,
+                        color: Theme.of(context).colorScheme.tertiaryContainer,
+                        textColor:
+                            Theme.of(context).colorScheme.onTertiaryContainer,
+                        label: onExtraLabel2,
+                        onTap: onExtra2 ?? () {},
+                      ),
                     // SizedBox(height: 16),
                   ],
                 ),

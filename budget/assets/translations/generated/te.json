@@ -870,5 +870,9 @@
   "more-options-description-theme": "ఫాంట్, ఐకాన్ స్టైల్, హెడర్ ఎత్తు",
   "style": "శైలి",
   "increase-text-contrast": "టెక్స్ట్ కాంట్రాస్ట్ పెంచండి",
-  "increase-text-contrast-description": "తేలికపాటి వచన కాంట్రాస్ట్‌ను పెంచండి"
+  "increase-text-contrast-description": "తేలికపాటి వచన కాంట్రాస్ట్‌ను పెంచండి",
+  "update-both-transfers-question": "రెండు బ్యాలెన్స్ బదిలీలను నవీకరించాలా?",
+  "update-both-transfers-question-description": "బ్యాలెన్స్ బదిలీలో 2 లావాదేవీలు ఉంటాయి. మీరు రెండింటినీ నవీకరించాలనుకుంటున్నారా?",
+  "only-current": "కరెంట్ మాత్రమే",
+  "update-both": "రెండింటినీ నవీకరించండి"
 }

@@ -870,5 +870,9 @@
   "more-options-description-theme": "Fonti, mtindo wa icon, urefu wa kichwa",
   "style": "Mtindo",
   "increase-text-contrast": "Ongeza tofauti ya maandishi",
-  "increase-text-contrast-description": "Ongeza tofauti nyepesi ya maandishi"
+  "increase-text-contrast-description": "Ongeza tofauti nyepesi ya maandishi",
+  "update-both-transfers-question": "Sasisha uhamishaji wote wa usawa?",
+  "update-both-transfers-question-description": "Uhamisho wa usawa una shughuli 2. Je! Ungependa kusasisha zote mbili?",
+  "only-current": "Sasa tu",
+  "update-both": "Sasisha zote mbili"
 }

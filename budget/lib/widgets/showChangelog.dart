@@ -25,6 +25,9 @@ import 'listItem.dart';
 
 String getChangelogString() {
   return """
+    < 4.9.5
+    When editing currency transfers, edits can be bundled with the pair of transfer transactions
+    Fixed note entry when first adding a transaction moving cursor to the end
     < 4.9.4
     Fixed associated transaction titles with cyrillic script
     Fixed search with cyrillic script

@@ -870,5 +870,9 @@
   "more-options-description-theme": "Teckensnitt, ikonstil, rubrikhöjd",
   "style": "Stil",
   "increase-text-contrast": "Öka textkontrasten",
-  "increase-text-contrast-description": "Öka ljusare textkontrast"
+  "increase-text-contrast-description": "Öka ljusare textkontrast",
+  "update-both-transfers-question": "Uppdatera båda balansöverföringar?",
+  "update-both-transfers-question-description": "En balansöverföring består av två transaktioner. Vill du uppdatera båda?",
+  "only-current": "Endast ström",
+  "update-both": "Uppdatera båda"
 }

@@ -870,5 +870,9 @@
   "more-options-description-theme": "Lettertype, icoonstijl, headerhoogte",
   "style": "Stijl",
   "increase-text-contrast": "Verhoog tekstcontrast",
-  "increase-text-contrast-description": "Verhoog lichter tekstcontrast"
+  "increase-text-contrast-description": "Verhoog lichter tekstcontrast",
+  "update-both-transfers-question": "Beide balansoverdracht bijwerken?",
+  "update-both-transfers-question-description": "Een balansoverdracht bestaat uit 2 transacties. Wilt u beide bijwerken?",
+  "only-current": "Alleen stroom",
+  "update-both": "Werk beide bij"
 }

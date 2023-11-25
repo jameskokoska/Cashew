@@ -870,5 +870,9 @@
   "more-options-description-theme": "Písmo, styl ikon, výška záhlaví",
   "style": "Styl",
   "increase-text-contrast": "Zvýšit kontrast textu",
-  "increase-text-contrast-description": "Zvýšit lehčí kontrast textu"
+  "increase-text-contrast-description": "Zvýšit lehčí kontrast textu",
+  "update-both-transfers-question": "Aktualizujte oba převody vyvážení?",
+  "update-both-transfers-question-description": "Přenos zůstatku se skládá ze 2 transakcí. Chcete aktualizovat oba?",
+  "only-current": "Pouze aktuální",
+  "update-both": "Aktualizujte oba"
 }

@@ -870,5 +870,9 @@
   "more-options-description-theme": "Фонт, стил икона, висина заглавља",
   "style": "Стил",
   "increase-text-contrast": "Повећајте контраст текста",
-  "increase-text-contrast-description": "Повећајте лакши текстуални контраст"
+  "increase-text-contrast-description": "Повећајте лакши текстуални контраст",
+  "update-both-transfers-question": "Ажурирајте оба трансфера баланса?",
+  "update-both-transfers-question-description": "Пренос равнотеже састоји се од 2 трансакције. Да ли желите да ажурирате оба?",
+  "only-current": "Само струја",
+  "update-both": "Ажурирање оба"
 }

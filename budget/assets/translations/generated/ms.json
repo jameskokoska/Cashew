@@ -870,5 +870,9 @@
   "more-options-description-theme": "Font, gaya ikon, ketinggian header",
   "style": "Gaya",
   "increase-text-contrast": "Meningkatkan kontras teks",
-  "increase-text-contrast-description": "Meningkatkan kontras teks yang lebih ringan"
+  "increase-text-contrast-description": "Meningkatkan kontras teks yang lebih ringan",
+  "update-both-transfers-question": "Kemas kini kedua -dua pemindahan baki?",
+  "update-both-transfers-question-description": "Pemindahan baki terdiri daripada 2 transaksi. Adakah anda ingin mengemas kini kedua -duanya?",
+  "only-current": "Hanya semasa",
+  "update-both": "Kemas kini kedua -duanya"
 }

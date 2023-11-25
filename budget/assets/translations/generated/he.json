@@ -870,5 +870,9 @@
   "more-options-description-theme": "גופן, סגנון אייקון, גובה הכותרת",
   "style": "סִגְנוֹן",
   "increase-text-contrast": "הגדל את הניגודיות בטקסט",
-  "increase-text-contrast-description": "הגדל ניגודי טקסט קליל יותר"
+  "increase-text-contrast-description": "הגדל ניגודי טקסט קליל יותר",
+  "update-both-transfers-question": "עדכן את שתי העברות האיזון?",
+  "update-both-transfers-question-description": "העברת יתרה מורכבת משתי עסקאות. האם תרצה לעדכן את שניהם?",
+  "only-current": "רק זרם",
+  "update-both": "עדכן את שניהם"
 }

@@ -870,5 +870,9 @@
   "more-options-description-theme": "Czcionka, styl ikony, wysokość nagłówka",
   "style": "Styl",
   "increase-text-contrast": "Zwiększ kontrast tekstowy",
-  "increase-text-contrast-description": "Zwiększ lżejszy kontrast tekstowy"
+  "increase-text-contrast-description": "Zwiększ lżejszy kontrast tekstowy",
+  "update-both-transfers-question": "Zaktualizuj oba transfery bilansowe?",
+  "update-both-transfers-question-description": "Przeniesienie salda składa się z 2 transakcji. Czy chciałbyś zaktualizować oba?",
+  "only-current": "Tylko prąd",
+  "update-both": "Zaktualizować oba"
 }

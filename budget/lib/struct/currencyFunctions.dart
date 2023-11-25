@@ -104,3 +104,31 @@ double categoryBudgetLimitToPrimaryCurrency(
   return limit.amount *
       (amountRatioToPrimaryCurrencyGivenPk(allWallets, limit.walletFk));
 }
+
+// Positive (input)
+double getAmountRatioWalletTransferTo(AllWallets allWallets, String walletToPk,
+    {String? enteredAmountWalletPk}) {
+  return amountRatioFromToCurrency(
+        allWallets
+            .indexedByPk[
+                enteredAmountWalletPk ?? appStateSettings["selectedWalletPk"]]!
+            .currency!,
+        allWallets.indexedByPk[walletToPk]!.currency!,
+      ) ??
+      1;
+}
+
+// Negative (output)
+double getAmountRatioWalletTransferFrom(
+    AllWallets allWallets, String walletFromPk,
+    {String? enteredAmountWalletPk}) {
+  return -1 *
+      (amountRatioFromToCurrency(
+            allWallets
+                .indexedByPk[enteredAmountWalletPk ??
+                    appStateSettings["selectedWalletPk"]]!
+                .currency!,
+            allWallets.indexedByPk[walletFromPk]!.currency!,
+          ) ??
+          1);
+}

@@ -93,6 +93,7 @@ class TransactionEntry extends StatelessWidget {
     this.allowSelect,
     this.highlightActionButton = false,
     this.showObjectivePercentage = true,
+    this.customPadding,
   }) : super(key: key);
 
   final Widget openPage;
@@ -111,6 +112,7 @@ class TransactionEntry extends StatelessWidget {
   final bool? allowSelect;
   final bool highlightActionButton;
   final bool showObjectivePercentage;
+  final EdgeInsets? customPadding;
 
   final double fabSize = 50;
 
@@ -192,9 +194,10 @@ class TransactionEntry extends StatelessWidget {
                         recentlyAddedTransactionInfo.value.isRunningAnimation;
                 int loopCount = recentlyAddedTransactionInfo.value.loopCount;
                 Widget transactionEntryWidget = Padding(
-                  padding: enableSelectionCheckmark
-                      ? const EdgeInsets.only(left: 5, right: 5)
-                      : const EdgeInsets.only(left: 13, right: 13),
+                  padding: customPadding ??
+                      (enableSelectionCheckmark
+                          ? const EdgeInsets.only(left: 5, right: 5)
+                          : const EdgeInsets.only(left: 13, right: 13)),
                   child: OpenContainerNavigation(
                     borderRadius: 0,
                     customBorderRadius: BorderRadius.vertical(

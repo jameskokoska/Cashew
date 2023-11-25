@@ -423,6 +423,7 @@ Future<bool> syncData(BuildContext context) async {
       await databaseSync.close();
       loadingProgressKey.currentState!.setProgressPercentage(1);
       canSyncData = true;
+      // By returning we do not update the time last synced!
       return false;
     }
 

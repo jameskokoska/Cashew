@@ -870,5 +870,9 @@
   "more-options-description-theme": "ഫോണ്ട്, ഐക്കൺ ശൈലി, തലക്കെട്ട് ഉയരം",
   "style": "ശൈലി",
   "increase-text-contrast": "ടെക്സ്റ്റ് ദൃശ്യതീവ്രത വർദ്ധിപ്പിക്കുക",
-  "increase-text-contrast-description": "ഭാരം കുറഞ്ഞ വാചക ദൃശ്യതീവ്രത വർദ്ധിപ്പിക്കുക"
+  "increase-text-contrast-description": "ഭാരം കുറഞ്ഞ വാചക ദൃശ്യതീവ്രത വർദ്ധിപ്പിക്കുക",
+  "update-both-transfers-question": "ബാലൻസ് ട്രാൻസ്ഫറുകളും അപ്ഡേറ്റുചെയ്യുക?",
+  "update-both-transfers-question-description": "ഒരു ബാലൻസ് ട്രാൻസ്ഫർ 2 ഇടപാടുകൾ ഉൾക്കൊള്ളുന്നു. രണ്ടും അപ്ഡേറ്റ് ചെയ്യാൻ നിങ്ങൾ ആഗ്രഹിക്കുന്നുണ്ടോ?",
+  "only-current": "നിലവിലുള്ളത് മാത്രം",
+  "update-both": "രണ്ടും അപ്ഡേറ്റുചെയ്യുക"
 }

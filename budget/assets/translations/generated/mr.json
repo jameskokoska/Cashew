@@ -870,5 +870,9 @@
   "more-options-description-theme": "फॉन्ट, आयकॉन शैली, शीर्षलेख उंची",
   "style": "शैली",
   "increase-text-contrast": "मजकूर कॉन्ट्रास्ट वाढवा",
-  "increase-text-contrast-description": "फिकट मजकूर कॉन्ट्रास्ट वाढवा"
+  "increase-text-contrast-description": "फिकट मजकूर कॉन्ट्रास्ट वाढवा",
+  "update-both-transfers-question": "दोन्ही शिल्लक हस्तांतरण अद्यतनित करा?",
+  "update-both-transfers-question-description": "शिल्लक हस्तांतरणात 2 व्यवहार असतात. आपण दोन्ही अद्यतनित करू इच्छिता?",
+  "only-current": "फक्त चालू",
+  "update-both": "दोन्ही अद्यतनित करा"
 }
