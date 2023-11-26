@@ -724,7 +724,7 @@
   "data-overwrite-warning": "เขียนทับข้อมูล",
   "data-overwrite-warning-description": "การนำเข้าข้อมูลจะเขียนทับข้อมูลปัจจุบันทั้งหมด!",
   "select-backup-file": "เลือกการสำรองข้อมูล",
-  "select-backup-file-description": "โปรดเลือกไฟล์ backup.sqlite ของคุณ",
+  "select-backup-file-description": "โปรดเลือกไฟล์ [.sqlite] or [.sql] ของคุณ",
   "database-corrupted": "ฐานข้อมูลเสียหาย",
   "database-corrupted-description": "ฐานข้อมูลของคุณเสียหาย คุณอาจนำเข้าไฟล์ผิด",
   "import-backup": "นำเข้าสำรอง",

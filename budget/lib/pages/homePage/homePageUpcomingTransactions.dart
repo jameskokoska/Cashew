@@ -4,6 +4,10 @@ import 'package:budget/pages/editHomePage.dart';
 import 'package:budget/pages/upcomingOverdueTransactionsPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
+import 'package:budget/widgets/framework/popupFramework.dart';
+import 'package:budget/widgets/navigationFramework.dart';
+import 'package:budget/widgets/openBottomSheet.dart';
+import 'package:budget/widgets/periodCyclePicker.dart';
 import 'package:budget/widgets/util/keepAliveClientMixin.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/transactionsAmountBox.dart';
@@ -36,10 +40,28 @@ class HomePageUpcomingTransactions extends StatelessWidget {
                   amountStream: database.watchTotalOfUpcomingOverdue(
                     Provider.of<AllWallets>(context),
                     false,
+                    followCustomPeriodCycle: true,
+                    cycleSettingsExtension: "OverdueUpcoming",
                   ),
                   textColor: getColor(context, "unPaidUpcoming"),
                   transactionsAmountStream:
-                      database.watchCountOfUpcomingOverdue(false),
+                      database.watchCountOfUpcomingOverdue(
+                    false,
+                    followCustomPeriodCycle: true,
+                    cycleSettingsExtension: "OverdueUpcoming",
+                  ),
+                  onLongPress: () async {
+                    await openBottomSheet(
+                      context,
+                      PopupFramework(
+                        title: "select-period".tr(),
+                        child: PeriodCyclePicker(
+                          cycleSettingsExtension: "OverdueUpcoming",
+                        ),
+                      ),
+                    );
+                    homePageStateKey.currentState?.refreshState();
+                  },
                 ),
               );
             }),
@@ -53,10 +75,28 @@ class HomePageUpcomingTransactions extends StatelessWidget {
                   amountStream: database.watchTotalOfUpcomingOverdue(
                     Provider.of<AllWallets>(context),
                     true,
+                    followCustomPeriodCycle: true,
+                    cycleSettingsExtension: "OverdueUpcoming",
                   ),
                   textColor: getColor(context, "unPaidOverdue"),
                   transactionsAmountStream:
-                      database.watchCountOfUpcomingOverdue(true),
+                      database.watchCountOfUpcomingOverdue(
+                    true,
+                    followCustomPeriodCycle: true,
+                    cycleSettingsExtension: "OverdueUpcoming",
+                  ),
+                  onLongPress: () async {
+                    await openBottomSheet(
+                      context,
+                      PopupFramework(
+                        title: "select-period".tr(),
+                        child: PeriodCyclePicker(
+                          cycleSettingsExtension: "OverdueUpcoming",
+                        ),
+                      ),
+                    );
+                    homePageStateKey.currentState?.refreshState();
+                  },
                 ),
               );
             }),

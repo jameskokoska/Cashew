@@ -724,7 +724,7 @@
   "data-overwrite-warning": "Overwrite ng data",
   "data-overwrite-warning-description": "Ang pag -import ng data ay mai -overwrite ang lahat ng kasalukuyang data!",
   "select-backup-file": "Piliin ang backup",
-  "select-backup-file-description": "Mangyaring piliin ang iyong backup.sqlite file.",
+  "select-backup-file-description": "Mangyaring piliin ang iyong [.sqlite] or [.sql] file.",
   "database-corrupted": "Nasira ang database",
   "database-corrupted-description": "Ang iyong database ay nasira. Maaaring na -import mo ang maling file.",
   "import-backup": "I -import ang backup",

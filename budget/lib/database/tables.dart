@@ -5224,6 +5224,85 @@ class FinanceDatabase extends _$FinanceDatabase {
         : Constant(true));
   }
 
+  Stream<double?> watchTotalOfBudget({
+    required AllWallets allWallets,
+    required DateTime start,
+    required DateTime end,
+    required List<String>? categoryFks,
+    required List<String>? categoryFksExclude,
+    required List<BudgetTransactionFilters>? budgetTransactionFilters,
+    required List<String>? memberTransactionFilters,
+    String? member,
+    String? onlyShowTransactionsBelongingToBudgetPk,
+    Budget? budget,
+    bool allTime = false,
+    List<String>? walletPks,
+    bool? isIncome = null,
+    bool followCustomPeriodCycle = false,
+    String? mainCategoryPkIfSubCategories,
+    String cycleSettingsExtension = "",
+    SearchFilters? searchFilters,
+    DateTimeRange? forcedDateTimeRange,
+    bool paidOnly = true,
+  }) {
+    DateTime startDate = DateTime(start.year, start.month, start.day);
+    DateTime endDate = DateTime(end.year, end.month, end.day);
+    // we have to convert currencies to account for all wallets
+    List<Stream<double?>> mergedStreams = [];
+    for (TransactionWallet wallet in allWallets.list) {
+      if (walletPks != null && walletPks.contains(wallet.walletPk) == false)
+        continue;
+      final totalAmt = transactions.amount.sum();
+      final query = selectOnly(transactions)
+        ..addColumns([totalAmt])
+        // This query should match that of the one below!
+        // watchTotalSpentInEachCategoryInTimeRangeFromCategories
+        // If you make changes to this, make changes here: watchTotalSpentInEachCategoryInTimeRangeFromCategories
+        ..where(onlyShowIfFollowsSearchFilters(
+              transactions,
+              searchFilters,
+              joinedWithSubcategoriesTable: null,
+              joinedWithCategories: false,
+              joinedWithBudgets: false,
+              joinedWithObjectives: false,
+            ) &
+            onlyShowBasedOnTimeRange(transactions, startDate, endDate, budget,
+                allTime: allTime) &
+            isInCategory(transactions, categoryFks, categoryFksExclude) &
+            onlyShowBasedOnWalletFks(transactions, budget?.walletFks) &
+            onlyShowIfNotBalanceCorrection(transactions, isIncome) &
+            onlyShowIfFollowCustomPeriodCycle(
+              transactions,
+              followCustomPeriodCycle,
+              cycleSettingsExtension: cycleSettingsExtension,
+              forcedDateTimeRange: forcedDateTimeRange,
+            ) &
+            (paidOnly == true
+                ? transactions.paid.equals(true)
+                : Constant(true)) &
+            // evaluateIfNull(tbl.income.equals(income ?? false), income, true) &
+            transactions.walletFk.equals(wallet.walletPk) &
+            onlyShowIfFollowsFilters(transactions,
+                budgetTransactionFilters: budgetTransactionFilters,
+                memberTransactionFilters: memberTransactionFilters) &
+            onlyShowIfMember(transactions, member) &
+            onlyShowBasedOnIncome(transactions, isIncome) &
+            onlyShowIfNotExcludedFromBudget(transactions, budget?.budgetPk) &
+            onlyShowIfCertainBudget(
+                transactions, onlyShowTransactionsBelongingToBudgetPk) &
+            (mainCategoryPkIfSubCategories == null
+                ? Constant(true)
+                : transactions.categoryFk
+                    .equals(mainCategoryPkIfSubCategories)));
+      mergedStreams.add(query
+          .map((row) =>
+              (row.read(totalAmt) ?? 0) *
+              (amountRatioToPrimaryCurrency(allWallets, wallet.currency)))
+          .watchSingle());
+    }
+    return totalDoubleStream(mergedStreams);
+  }
+
   // The total amount of that category will always be that last column
   // print(snapshot.data![0].rawData.data["transactions.category_fk"]);
   // print(snapshot.data![0].rawData.data["c" + (snapshot.data![0].rawData.data.length).toString()]);
@@ -5250,6 +5329,7 @@ class FinanceDatabase extends _$FinanceDatabase {
     String cycleSettingsExtension = "",
     SearchFilters? searchFilters,
     DateTimeRange? forcedDateTimeRange,
+    bool paidOnly = true,
   }) {
     DateTime startDate = DateTime(start.year, start.month, start.day);
     DateTime endDate = DateTime(end.year, end.month, end.day);
@@ -5263,6 +5343,9 @@ class FinanceDatabase extends _$FinanceDatabase {
 
       final query = (select(transactions)
         ..where((tbl) {
+          // This query should match that of the one above!
+          // watchTotalOfBudget
+          // If you make changes to this, make changes here: watchTotalOfBudget
           return onlyShowIfFollowsSearchFilters(
                 tbl,
                 searchFilters,
@@ -5282,7 +5365,7 @@ class FinanceDatabase extends _$FinanceDatabase {
                 cycleSettingsExtension: cycleSettingsExtension,
                 forcedDateTimeRange: forcedDateTimeRange,
               ) &
-              tbl.paid.equals(true) &
+              (paidOnly == true ? tbl.paid.equals(true) : Constant(true)) &
               // evaluateIfNull(tbl.income.equals(income ?? false), income, true) &
               transactions.walletFk.equals(wallet.walletPk) &
               onlyShowIfFollowsFilters(tbl,
@@ -5471,8 +5554,12 @@ class FinanceDatabase extends _$FinanceDatabase {
   }
 
   Stream<double?> watchTotalOfUpcomingOverdue(
-      AllWallets allWallets, bool? isOverdueTransactions,
-      {String? searchString}) {
+    AllWallets allWallets,
+    bool? isOverdueTransactions, {
+    String? searchString,
+    bool followCustomPeriodCycle = false,
+    String cycleSettingsExtension = "",
+  }) {
     List<Stream<double?>> mergedStreams = [];
     for (TransactionWallet wallet in allWallets.list) {
       final totalAmt = transactions.amount.sum();
@@ -5485,8 +5572,12 @@ class FinanceDatabase extends _$FinanceDatabase {
           leftOuterJoin(subCategories,
               subCategories.categoryPk.equalsExp(transactions.subCategoryFk)),
         ])
-        ..where(onlyShowTransactionBasedOnSearchQuery(
-                transactions, searchString,
+        ..where(onlyShowIfFollowCustomPeriodCycle(
+              transactions,
+              followCustomPeriodCycle,
+              cycleSettingsExtension: cycleSettingsExtension,
+            ) &
+            onlyShowTransactionBasedOnSearchQuery(transactions, searchString,
                 withCategories: true,
                 joinedWithSubcategoriesTable: subCategories) &
             // transactions.income.equals(false) &
@@ -5515,8 +5606,12 @@ class FinanceDatabase extends _$FinanceDatabase {
     return totalDoubleStream(mergedStreams);
   }
 
-  Stream<List<int?>> watchCountOfUpcomingOverdue(bool? isOverdueTransactions,
-      {String? searchString}) {
+  Stream<List<int?>> watchCountOfUpcomingOverdue(
+    bool? isOverdueTransactions, {
+    String? searchString,
+    bool followCustomPeriodCycle = false,
+    String cycleSettingsExtension = "",
+  }) {
     final totalCount = transactions.transactionPk.count();
     final $CategoriesTable subCategories = alias(categories, 'subCategories');
 
@@ -5528,7 +5623,12 @@ class FinanceDatabase extends _$FinanceDatabase {
         leftOuterJoin(subCategories,
             subCategories.categoryPk.equalsExp(transactions.subCategoryFk)),
       ])
-      ..where(onlyShowTransactionBasedOnSearchQuery(transactions, searchString,
+      ..where(onlyShowIfFollowCustomPeriodCycle(
+            transactions,
+            followCustomPeriodCycle,
+            cycleSettingsExtension: cycleSettingsExtension,
+          ) &
+          onlyShowTransactionBasedOnSearchQuery(transactions, searchString,
               withCategories: true,
               joinedWithSubcategoriesTable: subCategories) &
           transactions.skipPaid.equals(false) &
@@ -5546,8 +5646,13 @@ class FinanceDatabase extends _$FinanceDatabase {
     return query.map((row) => row.read(totalCount)).watch();
   }
 
-  Stream<double?> watchTotalOfCreditDebt(AllWallets allWallets, bool? isCredit,
-      {String? searchString}) {
+  Stream<double?> watchTotalOfCreditDebt(
+    AllWallets allWallets,
+    bool? isCredit, {
+    String? searchString,
+    bool followCustomPeriodCycle = false,
+    String cycleSettingsExtension = "",
+  }) {
     List<Stream<double?>> mergedStreams = [];
     for (TransactionWallet wallet in allWallets.list) {
       final totalAmt = transactions.amount.sum();
@@ -5560,7 +5665,12 @@ class FinanceDatabase extends _$FinanceDatabase {
           leftOuterJoin(subCategories,
               subCategories.categoryPk.equalsExp(transactions.subCategoryFk)),
         ])
-        ..where(transactions.paid.equals(true) &
+        ..where(onlyShowIfFollowCustomPeriodCycle(
+              transactions,
+              followCustomPeriodCycle,
+              cycleSettingsExtension: cycleSettingsExtension,
+            ) &
+            transactions.paid.equals(true) &
             onlyShowTransactionBasedOnSearchQuery(transactions, searchString,
                 withCategories: true,
                 joinedWithSubcategoriesTable: subCategories) &
@@ -5584,7 +5694,11 @@ class FinanceDatabase extends _$FinanceDatabase {
   }
 
   Stream<List<int?>> watchCountOfCreditDebt(
-      bool? isCredit, String? searchString) {
+    bool? isCredit,
+    String? searchString, {
+    bool followCustomPeriodCycle = false,
+    String cycleSettingsExtension = "",
+  }) {
     final totalCount = transactions.transactionPk.count();
     final $CategoriesTable subCategories = alias(categories, 'subCategories');
 
@@ -5596,7 +5710,12 @@ class FinanceDatabase extends _$FinanceDatabase {
         leftOuterJoin(subCategories,
             subCategories.categoryPk.equalsExp(transactions.subCategoryFk)),
       ])
-      ..where(transactions.paid.equals(true) &
+      ..where(onlyShowIfFollowCustomPeriodCycle(
+            transactions,
+            followCustomPeriodCycle,
+            cycleSettingsExtension: cycleSettingsExtension,
+          ) &
+          transactions.paid.equals(true) &
           onlyShowTransactionBasedOnSearchQuery(transactions, searchString,
               withCategories: true,
               joinedWithSubcategoriesTable: subCategories) &

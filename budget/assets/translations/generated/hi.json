@@ -724,7 +724,7 @@
   "data-overwrite-warning": "आंकड़ा अधिलेखित",
   "data-overwrite-warning-description": "डेटा आयात करना सभी वर्तमान डेटा को अधिलेखित कर देगा!",
   "select-backup-file": "बैकअप का चयन करें",
-  "select-backup-file-description": "कृपया अपनी Backup.sqlite फ़ाइल का चयन करें।",
+  "select-backup-file-description": "कृपया अपनी [.sqlite] or [.sql] फ़ाइल का चयन करें।",
   "database-corrupted": "डेटाबेस भ्रष्ट",
   "database-corrupted-description": "आपका डेटाबेस दूषित है। आपने गलत फ़ाइल का आयात किया होगा।",
   "import-backup": "आयात बैकअप",

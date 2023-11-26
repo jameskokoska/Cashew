@@ -443,9 +443,8 @@ class _BudgetHistoryLineGraphState extends State<_BudgetHistoryLineGraph> {
                               getWordedDateShort(dateRange.end) +
                               "\n",
                           style: TextStyle(
-                            color: widget.extraCategorySpots.keys.length <= 0
-                                ? Colors.white.withOpacity(0.9)
-                                : getColor(context, "black").withOpacity(0.7),
+                            color: getColor(context, "black")
+                                .withOpacity(lineBarsSpot.length > 1 ? 0.7 : 1),
                             fontWeight: FontWeight.bold,
                             fontSize: 12,
                             fontFamilyFallback: ['Inter'],
@@ -468,7 +467,7 @@ class _BudgetHistoryLineGraphState extends State<_BudgetHistoryLineGraph> {
                           height: index == 0 &&
                                   widget.showDateOnHover &&
                                   lineBarsSpot.length > 1
-                              ? 2
+                              ? 1.8
                               : null,
                         ),
                       ),

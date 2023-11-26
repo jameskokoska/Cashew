@@ -534,6 +534,7 @@ class ObjectiveContainer extends StatelessWidget {
                                   defaultColor:
                                       Theme.of(context).colorScheme.primary,
                                 ),
+                                ghostPercent: 0,
                                 percent: percentageTowardsGoal * 100,
                                 todayPercent: -1,
                                 showToday: false,

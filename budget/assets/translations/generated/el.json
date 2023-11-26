@@ -724,7 +724,7 @@
   "data-overwrite-warning": "Αντικαθιστώ τα δεδομένα",
   "data-overwrite-warning-description": "Η εισαγωγή δεδομένων θα αντικαταστήσει όλα τα τρέχοντα δεδομένα!",
   "select-backup-file": "Επιλέξτε αντίγραφο ασφαλείας",
-  "select-backup-file-description": "Επιλέξτε το αρχείο backup.sqlite.",
+  "select-backup-file-description": "Επιλέξτε το αρχείο [.sqlite] or [.sql].",
   "database-corrupted": "Η βάση δεδομένων είναι κατεστραμμένη",
   "database-corrupted-description": "Η βάση δεδομένων σας είναι κατεστραμμένη. Μπορεί να έχετε εισαγάγει το λάθος αρχείο.",
   "import-backup": "Εισαγωγή αντιγράφου ασφαλείας",

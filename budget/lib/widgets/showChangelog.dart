@@ -25,6 +25,11 @@ import 'listItem.dart';
 
 String getChangelogString() {
   return """
+    < 4.9.7
+    Homepage banner can be disabled on full screen
+    Upcoming transactions shown in light progress bar for current budget progress
+    Added cycle filters for upcoming/overdue and lent/borrowed homepage section
+    Fixed hover color of date range tooltip in light mode
     < 4.9.6
     Hovering all spending history graph, shows the date range in tooltip
     Monthly spending summary shows proper polarity of net spending

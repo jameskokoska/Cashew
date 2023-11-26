@@ -724,7 +724,7 @@
   "data-overwrite-warning": "Данните презаписват",
   "data-overwrite-warning-description": "Импортирането на данни ще презапише всички текущи данни!",
   "select-backup-file": "Изберете резервно копие",
-  "select-backup-file-description": "Моля, изберете вашия файл Backup.sqlite.",
+  "select-backup-file-description": "Моля, изберете вашия файл [.sqlite] or [.sql].",
   "database-corrupted": "База данни корумпирана",
   "database-corrupted-description": "Вашата база данни е повредена. Може да сте импортирали грешен файл.",
   "import-backup": "Импортиране на резервно копие",

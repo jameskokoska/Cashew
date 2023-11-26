@@ -724,7 +724,7 @@
   "data-overwrite-warning": "Data Overwrite",
   "data-overwrite-warning-description": "Mengimport data akan menimpa semua data semasa!",
   "select-backup-file": "Pilih sandaran",
-  "select-backup-file-description": "Sila pilih fail Backup.sqlite anda.",
+  "select-backup-file-description": "Sila pilih fail [.sqlite] or [.sql] anda.",
   "database-corrupted": "Pangkalan data rosak",
   "database-corrupted-description": "Pangkalan data anda rosak. Anda mungkin telah mengimport fail yang salah.",
   "import-backup": "Import sandaran",

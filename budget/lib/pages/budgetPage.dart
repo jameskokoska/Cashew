@@ -8,6 +8,7 @@ import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/editBudgetLimitsPage.dart';
 import 'package:budget/pages/pastBudgetsPage.dart';
 import 'package:budget/pages/premiumPage.dart';
+import 'package:budget/pages/transactionFilters.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/struct/spendingSummaryHelper.dart';
@@ -507,18 +508,55 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                                             getHorizontalPaddingConstrained(
                                                 context),
                                       ),
-                                      child: BudgetTimeline(
-                                        dateForRange: dateForRange,
-                                        budget: widget.budget,
-                                        large: true,
-                                        percent: budgetAmount == 0
-                                            ? 0
-                                            : s.totalSpent / budgetAmount * 100,
-                                        yourPercent: 0,
-                                        todayPercent:
-                                            widget.isPastBudget == true
-                                                ? -1
-                                                : todayPercent,
+                                      child: StreamBuilder<double?>(
+                                        stream: database.watchTotalOfBudget(
+                                          allWallets:
+                                              Provider.of<AllWallets>(context),
+                                          start: budgetRange.start,
+                                          end: budgetRange.end,
+                                          categoryFks:
+                                              widget.budget.categoryFks,
+                                          categoryFksExclude:
+                                              widget.budget.categoryFksExclude,
+                                          budgetTransactionFilters: widget
+                                              .budget.budgetTransactionFilters,
+                                          memberTransactionFilters: widget
+                                              .budget.memberTransactionFilters,
+                                          member: selectedMember,
+                                          onlyShowTransactionsBelongingToBudgetPk:
+                                              widget.budget.sharedKey != null ||
+                                                      widget.budget
+                                                              .addedTransactionsOnly ==
+                                                          true
+                                                  ? widget.budget.budgetPk
+                                                  : null,
+                                          budget: widget.budget,
+                                          searchFilters: SearchFilters(
+                                              paidStatus: [PaidStatus.notPaid]),
+                                          paidOnly: false,
+                                        ),
+                                        builder: (context, snapshot) {
+                                          return BudgetTimeline(
+                                            dateForRange: dateForRange,
+                                            budget: widget.budget,
+                                            large: true,
+                                            percent: budgetAmount == 0
+                                                ? 0
+                                                : s.totalSpent /
+                                                    budgetAmount *
+                                                    100,
+                                            yourPercent: 0,
+                                            todayPercent:
+                                                widget.isPastBudget == true
+                                                    ? -1
+                                                    : todayPercent,
+                                            ghostPercent: budgetAmount == 0
+                                                ? 0
+                                                : (((snapshot.data ?? 0) * -1) /
+                                                        budgetAmount) *
+                                                    100,
+                                          );
+                                        },
                                       ),
                                     ),
                                     widget.isPastBudget == true

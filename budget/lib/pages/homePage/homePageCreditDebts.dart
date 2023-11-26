@@ -4,6 +4,10 @@ import 'package:budget/pages/creditDebtTransactionsPage.dart';
 import 'package:budget/pages/editHomePage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
+import 'package:budget/widgets/framework/popupFramework.dart';
+import 'package:budget/widgets/navigationFramework.dart';
+import 'package:budget/widgets/openBottomSheet.dart';
+import 'package:budget/widgets/periodCyclePicker.dart';
 import 'package:budget/widgets/util/keepAliveClientMixin.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/transactionsAmountBox.dart';
@@ -29,11 +33,29 @@ class HomePageCreditDebts extends StatelessWidget {
                 amountStream: database.watchTotalOfCreditDebt(
                   Provider.of<AllWallets>(context),
                   true,
+                  followCustomPeriodCycle: true,
+                  cycleSettingsExtension: "CreditDebts",
                 ),
                 textColor: getColor(context, "unPaidUpcoming"),
-                transactionsAmountStream:
-                    database.watchCountOfCreditDebt(true, null),
+                transactionsAmountStream: database.watchCountOfCreditDebt(
+                  true,
+                  null,
+                  followCustomPeriodCycle: true,
+                  cycleSettingsExtension: "CreditDebts",
+                ),
                 openPage: CreditDebtTransactions(isCredit: true),
+                onLongPress: () async {
+                  await openBottomSheet(
+                    context,
+                    PopupFramework(
+                      title: "select-period".tr(),
+                      child: PeriodCyclePicker(
+                        cycleSettingsExtension: "CreditDebts",
+                      ),
+                    ),
+                  );
+                  homePageStateKey.currentState?.refreshState();
+                },
               ),
             ),
             SizedBox(width: 13),
@@ -43,11 +65,29 @@ class HomePageCreditDebts extends StatelessWidget {
                 amountStream: database.watchTotalOfCreditDebt(
                   Provider.of<AllWallets>(context),
                   false,
+                  cycleSettingsExtension: "CreditDebts",
+                  followCustomPeriodCycle: true,
                 ),
                 textColor: getColor(context, "unPaidOverdue"),
-                transactionsAmountStream:
-                    database.watchCountOfCreditDebt(false, null),
+                transactionsAmountStream: database.watchCountOfCreditDebt(
+                  false,
+                  null,
+                  cycleSettingsExtension: "CreditDebts",
+                  followCustomPeriodCycle: true,
+                ),
                 openPage: CreditDebtTransactions(isCredit: false),
+                onLongPress: () async {
+                  await openBottomSheet(
+                    context,
+                    PopupFramework(
+                      title: "select-period".tr(),
+                      child: PeriodCyclePicker(
+                        cycleSettingsExtension: "CreditDebts",
+                      ),
+                    ),
+                  );
+                  homePageStateKey.currentState?.refreshState();
+                },
               ),
             ),
           ],

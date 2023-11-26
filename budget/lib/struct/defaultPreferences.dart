@@ -50,6 +50,7 @@ Future<Map<String, dynamic>> getDefaultPreferences() async {
     "showHeatMapFullScreen": true,
     "showTransactionsList": true,
     "showUsernameWelcomeBanner": true,
+    "showUsernameWelcomeBannerFullScreen": true,
     "homePageOrder": [
       "wallets",
       "walletsList",
@@ -195,6 +196,28 @@ Future<Map<String, dynamic>> getDefaultPreferences() async {
         DateTime(DateTime.now().year, DateTime.now().month, 1).toString(),
     "customPeriodEndDateAllSpendingSummary": null,
     "customPeriodPastDaysAllSpendingSummary": 30,
+    // For showing information within a certain cycle for overdue and upcoming (overdueUpcoming)
+    // cycleSettingsExtension = "OverdueUpcoming"
+    "selectedPeriodCycleTypeOverdueUpcoming": CycleType.allTime.index,
+    "cyclePeriodLengthOverdueUpcoming": 1,
+    "cycleReoccurrenceOverdueUpcoming": BudgetReoccurence.monthly.index,
+    "cycleStartDateOverdueUpcoming":
+        DateTime(DateTime.now().year, DateTime.now().month, 1).toString(),
+    "customPeriodStartDateOverdueUpcoming":
+        DateTime(DateTime.now().year, DateTime.now().month, 1).toString(),
+    "customPeriodEndDateOverdueUpcoming": null,
+    "customPeriodPastDaysOverdueUpcoming": 30,
+    // For showing information within a certain cycle for credits and debts (loans) (creditDebts)
+    // cycleSettingsExtension = "CreditDebts"
+    "selectedPeriodCycleTypeCreditDebts": CycleType.allTime.index,
+    "cyclePeriodLengthCreditDebts": 1,
+    "cycleReoccurrenceCreditDebts": BudgetReoccurence.monthly.index,
+    "cycleStartDateCreditDebts":
+        DateTime(DateTime.now().year, DateTime.now().month, 1).toString(),
+    "customPeriodStartDateCreditDebts":
+        DateTime(DateTime.now().year, DateTime.now().month, 1).toString(),
+    "customPeriodEndDateCreditDebts": null,
+    "customPeriodPastDaysCreditDebts": 30,
     // *********************************************************** //
   };
 }

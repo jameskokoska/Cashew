@@ -724,7 +724,7 @@
   "data-overwrite-warning": "الكتابة فوق البيانات",
   "data-overwrite-warning-description": "سوف استيراد البيانات الكتابة فوق جميع البيانات الحالية!",
   "select-backup-file": "حدد النسخ الاحتياطي",
-  "select-backup-file-description": "يرجى تحديد ملف backup.sqlite الخاص بك.",
+  "select-backup-file-description": "يرجى تحديد ملف [.sqlite] or [.sql] الخاص بك.",
   "database-corrupted": "قاعدة البيانات تالفة",
   "database-corrupted-description": "قاعدة البيانات الخاصة بك تالفة. قد تكون قد استوردت الملف الخطأ.",
   "import-backup": "استيراد النسخ الاحتياطي",

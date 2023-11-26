@@ -724,7 +724,7 @@
   "data-overwrite-warning": "Substituição de dados",
   "data-overwrite-warning-description": "A importação de dados substituirá todos os dados atuais!",
   "select-backup-file": "Selecionar Backup",
-  "select-backup-file-description": "Selecione seu arquivo backup.sqlite.",
+  "select-backup-file-description": "Selecione seu arquivo [.sqlite] or [.sql].",
   "database-corrupted": "Banco de dados corrompido",
   "database-corrupted-description": "Seu banco de dados está corrompido. Você pode ter importado o arquivo errado.",
   "import-backup": "Importar backup",

@@ -162,6 +162,16 @@ class _EditHomePageState extends State<EditHomePage> {
             onSwitched: (value) {
               switchHomeScreenSection(context, "showOverdueUpcoming", value);
             },
+            onTap: () async {
+              openBottomSheet(
+                context,
+                PopupFramework(
+                  title: "select-period".tr(),
+                  child: PeriodCyclePicker(
+                      cycleSettingsExtension: "OverdueUpcoming"),
+                ),
+              );
+            },
           ),
           "creditDebts": EditHomePageItem(
             icon: getTransactionTypeIcon(TransactionSpecialType.credit),
@@ -170,6 +180,16 @@ class _EditHomePageState extends State<EditHomePage> {
             isEnabled: isHomeScreenSectionEnabled(context, "showCreditDebt"),
             onSwitched: (value) {
               switchHomeScreenSection(context, "showCreditDebt", value);
+            },
+            onTap: () async {
+              openBottomSheet(
+                context,
+                PopupFramework(
+                  title: "select-period".tr(),
+                  child:
+                      PeriodCyclePicker(cycleSettingsExtension: "CreditDebts"),
+                ),
+              );
             },
           ),
           "allSpendingSummary": EditHomePageItem(
@@ -443,23 +463,23 @@ class _EditHomePageState extends State<EditHomePage> {
         dragDownToDismissEnabled: dragDownToDismissEnabled,
         title: "edit-home".tr(),
         slivers: [
-          if (enableDoubleColumn(context) == false)
-            SliverToBoxAdapter(
-              child: HomePageEditRowEntryUsername(
-                iconData: appStateSettings["outlinedIcons"]
-                    ? Icons.edit_outlined
-                    : Icons.edit_rounded,
-                initialValue: appStateSettings["showUsernameWelcomeBanner"],
-                name: appStateSettings["username"] == null ||
-                        appStateSettings["username"] == ""
-                    ? "homepage-banner".tr()
-                    : "username-banner".tr(),
-                onChanged: (value) {
-                  updateSettings("showUsernameWelcomeBanner", value,
-                      updateGlobalState: false);
-                },
-              ),
+          SliverToBoxAdapter(
+            child: HomePageEditRowEntryUsername(
+              iconData: appStateSettings["outlinedIcons"]
+                  ? Icons.edit_outlined
+                  : Icons.edit_rounded,
+              initialValue: isHomeScreenSectionEnabled(
+                  context, "showUsernameWelcomeBanner"),
+              name: appStateSettings["username"] == null ||
+                      appStateSettings["username"] == ""
+                  ? "homepage-banner".tr()
+                  : "username-banner".tr(),
+              onChanged: (value) {
+                switchHomeScreenSection(
+                    context, "showUsernameWelcomeBanner", value);
+              },
             ),
+          ),
           SliverReorderableList(
             onReorderStart: (index) {
               HapticFeedback.heavyImpact();

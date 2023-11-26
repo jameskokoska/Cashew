@@ -724,7 +724,7 @@
   "data-overwrite-warning": "Takwimu Zima",
   "data-overwrite-warning-description": "Kuingiza data itaondoa data zote za sasa!",
   "select-backup-file": "Chagua Backup",
-  "select-backup-file-description": "Tafadhali chagua faili yako ya backup.sqlite.",
+  "select-backup-file-description": "Tafadhali chagua faili yako ya [.sqlite] or [.sql].",
   "database-corrupted": "Database imeharibiwa",
   "database-corrupted-description": "Database yako imeharibiwa. Labda umeingiza faili isiyofaa.",
   "import-backup": "Kuagiza chelezo",

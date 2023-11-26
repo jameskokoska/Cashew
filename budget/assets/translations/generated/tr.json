@@ -724,7 +724,7 @@
   "data-overwrite-warning": "Verilerin üzerine yazma",
   "data-overwrite-warning-description": "Verilerin içe aktarılması tüm geçerli verilerin üzerine yazılır!",
   "select-backup-file": "Yedeklemeyi seçin",
-  "select-backup-file-description": "Lütfen Backup.sqlite dosyanızı seçin.",
+  "select-backup-file-description": "Lütfen [.sqlite] or [.sql] dosyanızı seçin.",
   "database-corrupted": "Veritabanı bozuk",
   "database-corrupted-description": "Veritabanınız bozuk. Yanlış dosyayı içe aktarmış olabilirsiniz.",
   "import-backup": "Yedekleme İçe Aktarma",

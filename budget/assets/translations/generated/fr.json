@@ -724,7 +724,7 @@
   "data-overwrite-warning": "Écrasement des données",
   "data-overwrite-warning-description": "L'importation de données écrasera toutes les données actuelles!",
   "select-backup-file": "Sélectionner la sauvegarde",
-  "select-backup-file-description": "Veuillez sélectionner votre fichier backup.sqlite.",
+  "select-backup-file-description": "Veuillez sélectionner votre fichier [.sqlite] or [.sql].",
   "database-corrupted": "Base de données corrompue",
   "database-corrupted-description": "Votre base de données est corrompue. Vous avez peut-être importé le mauvais fichier.",
   "import-backup": "Sauvegarde d'importation",

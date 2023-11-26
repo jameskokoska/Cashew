@@ -207,7 +207,7 @@ class HomePageState extends State<HomePage>
       "transactionsList": homePageTransactionsList ?? SizedBox.shrink(),
     };
     bool showWelcomeBanner =
-        appStateSettings["showUsernameWelcomeBanner"] != false;
+        isHomeScreenSectionEnabled(context, "showUsernameWelcomeBanner");
     bool useSmallBanner = showWelcomeBanner == false;
 
     List<String> homePageSectionsAboveInFullScreen = [
