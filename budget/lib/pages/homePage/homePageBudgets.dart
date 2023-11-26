@@ -33,8 +33,6 @@ class _HomePageBudgetsState extends State<HomePageBudgets> {
 
   @override
   Widget build(BuildContext context) {
-    if (isHomeScreenSectionEnabled(context, "showPinnedBudgets") == false)
-      return SizedBox.shrink();
     return KeepAliveClientMixin(
       child: StreamBuilder<List<Budget>>(
         stream: database.getAllPinnedBudgets().$1,

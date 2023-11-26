@@ -1561,6 +1561,7 @@ class _AllSpendingPastSpendingGraphState
                               child: Padding(
                                 padding: const EdgeInsets.only(right: 5),
                                 child: BudgetHistoryLineGraph(
+                                  showDateOnHover: true,
                                   onTouchedIndex: (index) {},
                                   color: dynamicPastel(
                                     context,

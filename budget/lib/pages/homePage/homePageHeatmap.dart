@@ -43,25 +43,14 @@ import 'package:provider/provider.dart';
 import '../../widgets/linearGradientFadedEdges.dart';
 import '../../widgets/transactionEntry/incomeAmountArrow.dart';
 
-class HomePageHeatMap extends StatelessWidget {
+class HomePageHeatMap extends StatefulWidget {
   const HomePageHeatMap({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    if (isHomeScreenSectionEnabled(context, "showHeatMap") == false)
-      return SizedBox.shrink();
-    return KeepAliveClientMixin(child: HeatMapGetPoints());
-  }
+  State<HomePageHeatMap> createState() => _HomePageHeatMapState();
 }
 
-class HeatMapGetPoints extends StatefulWidget {
-  const HeatMapGetPoints({super.key});
-
-  @override
-  State<HeatMapGetPoints> createState() => _HeatMapGetPointsState();
-}
-
-class _HeatMapGetPointsState extends State<HeatMapGetPoints> {
+class _HomePageHeatMapState extends State<HomePageHeatMap> {
   int monthsToLoad = 5;
   @override
   void initState() {
@@ -83,97 +72,100 @@ class _HeatMapGetPointsState extends State<HeatMapGetPoints> {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<double?>(
-      stream: database.getTotalBeforeStartDateInTimeRangeFromCategories(
-        DateTime(
-          DateTime.now().year,
-          DateTime.now().month - monthsToLoad,
-          DateTime.now().day,
+    return KeepAliveClientMixin(
+      child: StreamBuilder<double?>(
+        stream: database.getTotalBeforeStartDateInTimeRangeFromCategories(
+          DateTime(
+            DateTime.now().year,
+            DateTime.now().month - monthsToLoad,
+            DateTime.now().day,
+          ),
+          [],
+          true,
+          true,
+          null,
+          null,
+          null,
+          allWallets: Provider.of<AllWallets>(context),
         ),
-        [],
-        true,
-        true,
-        null,
-        null,
-        null,
-        allWallets: Provider.of<AllWallets>(context),
-      ),
-      builder: (context, snapshotTotalSpentBefore) {
-        if (snapshotTotalSpentBefore.hasData) {
-          double totalSpentBefore = appStateSettings["ignorePastAmountSpent"]
-              ? 0
-              : snapshotTotalSpentBefore.data!;
-          return StreamBuilder<List<Transaction>>(
-            stream: database.getTransactionsInTimeRangeFromCategories(
-              DateTime(
-                DateTime.now().year,
-                DateTime.now().month - monthsToLoad,
-                DateTime.now().day,
-              ),
-              DateTime(
-                DateTime.now().year,
-                DateTime.now().month,
-                DateTime.now().day,
-              ),
-              null,
-              null,
-              true,
-              null,
-              null,
-              null,
-            ),
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                bool cumulative = false;
-                double cumulativeTotal = totalSpentBefore;
-                List<Pair> points = [];
-                for (DateTime indexDay = DateTime(
+        builder: (context, snapshotTotalSpentBefore) {
+          if (snapshotTotalSpentBefore.hasData) {
+            double totalSpentBefore = appStateSettings["ignorePastAmountSpent"]
+                ? 0
+                : snapshotTotalSpentBefore.data!;
+            return StreamBuilder<List<Transaction>>(
+              stream: database.getTransactionsInTimeRangeFromCategories(
+                DateTime(
                   DateTime.now().year,
                   DateTime.now().month - monthsToLoad,
                   DateTime.now().day,
-                );
-                    indexDay.compareTo(DateTime.now()) <= 0;
-                    indexDay = DateTime(
-                        indexDay.year, indexDay.month, indexDay.day + 1)) {
-                  //can be optimized...
-                  double totalForDay = 0;
-                  for (Transaction transaction in snapshot.data!) {
-                    if (indexDay.year == transaction.dateCreated.year &&
-                        indexDay.month == transaction.dateCreated.month &&
-                        indexDay.day == transaction.dateCreated.day) {
-                      if (transaction.income) {
-                        totalForDay += transaction.amount.abs() *
-                            (amountRatioToPrimaryCurrencyGivenPk(
-                                Provider.of<AllWallets>(context),
-                                transaction.walletFk));
-                      } else {
-                        totalForDay -= transaction.amount.abs() *
-                            (amountRatioToPrimaryCurrencyGivenPk(
-                                Provider.of<AllWallets>(context),
-                                transaction.walletFk));
+                ),
+                DateTime(
+                  DateTime.now().year,
+                  DateTime.now().month,
+                  DateTime.now().day,
+                ),
+                null,
+                null,
+                true,
+                null,
+                null,
+                null,
+              ),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  bool cumulative = false;
+                  double cumulativeTotal = totalSpentBefore;
+                  List<Pair> points = [];
+                  for (DateTime indexDay = DateTime(
+                    DateTime.now().year,
+                    DateTime.now().month - monthsToLoad,
+                    DateTime.now().day,
+                  );
+                      indexDay.compareTo(DateTime.now()) <= 0;
+                      indexDay = DateTime(
+                          indexDay.year, indexDay.month, indexDay.day + 1)) {
+                    //can be optimized...
+                    double totalForDay = 0;
+                    for (Transaction transaction in snapshot.data!) {
+                      if (indexDay.year == transaction.dateCreated.year &&
+                          indexDay.month == transaction.dateCreated.month &&
+                          indexDay.day == transaction.dateCreated.day) {
+                        if (transaction.income) {
+                          totalForDay += transaction.amount.abs() *
+                              (amountRatioToPrimaryCurrencyGivenPk(
+                                  Provider.of<AllWallets>(context),
+                                  transaction.walletFk));
+                        } else {
+                          totalForDay -= transaction.amount.abs() *
+                              (amountRatioToPrimaryCurrencyGivenPk(
+                                  Provider.of<AllWallets>(context),
+                                  transaction.walletFk));
+                        }
                       }
                     }
+                    cumulativeTotal += totalForDay;
+                    points.add(
+                      Pair(
+                        points.length.toDouble(),
+                        cumulative ? cumulativeTotal : totalForDay,
+                        dateTime: indexDay,
+                      ),
+                    );
                   }
-                  cumulativeTotal += totalForDay;
-                  points.add(
-                    Pair(
-                      points.length.toDouble(),
-                      cumulative ? cumulativeTotal : totalForDay,
-                      dateTime: indexDay,
-                    ),
-                  );
+                  // for (Pair point in points) {
+                  //   print((point.x.toString() + "," + point.y.toString()));
+                  // }
+                  return HeatMap(
+                      points: points, loadMoreMonths: loadMoreMonths);
                 }
-                // for (Pair point in points) {
-                //   print((point.x.toString() + "," + point.y.toString()));
-                // }
-                return HeatMap(points: points, loadMoreMonths: loadMoreMonths);
-              }
-              return SizedBox.shrink();
-            },
-          );
-        }
-        return SizedBox.shrink();
-      },
+                return SizedBox.shrink();
+              },
+            );
+          }
+          return SizedBox.shrink();
+        },
+      ),
     );
   }
 }

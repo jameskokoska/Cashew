@@ -20,8 +20,6 @@ class HomePagePieChart extends StatelessWidget {
   final int selectedSlidingSelector;
   @override
   Widget build(BuildContext context) {
-    if (isHomeScreenSectionEnabled(context, "showPieChart") == false)
-      return SizedBox.shrink();
     bool isIncome = appStateSettings["pieChartIsIncome"];
     return KeepAliveClientMixin(
       child: Padding(

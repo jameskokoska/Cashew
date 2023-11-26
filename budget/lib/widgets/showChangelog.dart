@@ -25,6 +25,10 @@ import 'listItem.dart';
 
 String getChangelogString() {
   return """
+    < 4.9.6
+    Hovering all spending history graph, shows the date range in tooltip
+    Monthly spending summary shows proper polarity of net spending
+    Fixed home page transaction list after spacing if disabled homepage section after the transactions list
     < 4.9.5
     When editing currency transfers, edits can be bundled with the pair of transfer transactions
     Fixed note entry when first adding a transaction moving cursor to the end

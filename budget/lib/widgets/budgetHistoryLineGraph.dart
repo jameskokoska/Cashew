@@ -28,6 +28,7 @@ class BudgetHistoryLineGraph extends StatelessWidget {
     required this.loadAllEvenIfZero,
     this.onTouchedIndex,
     required this.setNoPastRegionsAreZero,
+    this.showDateOnHover = false,
   });
 
   final Color color;
@@ -43,6 +44,7 @@ class BudgetHistoryLineGraph extends StatelessWidget {
   final Map<String, TransactionCategory> categoriesMapped;
   final bool loadAllEvenIfZero;
   final Function(bool) setNoPastRegionsAreZero;
+  final bool showDateOnHover;
 
   @override
   Widget build(BuildContext context) {
@@ -165,6 +167,7 @@ class BudgetHistoryLineGraph extends StatelessWidget {
       extraCategorySpots: extraCategorySpotsFilteredFixedX,
       categoriesMapped: categoriesMapped,
       onTouchedIndex: onTouchedIndex,
+      showDateOnHover: showDateOnHover,
       key: key,
     );
   }
@@ -185,6 +188,7 @@ class _BudgetHistoryLineGraph extends StatefulWidget {
     required this.minY,
     required this.extraCategorySpots,
     required this.categoriesMapped,
+    required this.showDateOnHover,
     this.onTouchedIndex,
   });
 
@@ -201,6 +205,7 @@ class _BudgetHistoryLineGraph extends StatefulWidget {
   final Function(int?)? onTouchedIndex;
   final Map<String, List<FlSpot>> extraCategorySpots;
   final Map<String, TransactionCategory> categoriesMapped;
+  final bool showDateOnHover;
 
   @override
   State<_BudgetHistoryLineGraph> createState() =>
@@ -398,6 +403,7 @@ class _BudgetHistoryLineGraphState extends State<_BudgetHistoryLineGraph> {
               }).toList();
             },
             touchTooltipData: LineTouchTooltipData(
+              maxContentWidth: 170,
               tooltipBgColor: widget.extraCategorySpots.keys.length <= 0 &&
                       (widget.lineColors == null ||
                           (widget.lineColors?.length ?? 0) <= 0)
@@ -415,26 +421,58 @@ class _BudgetHistoryLineGraphState extends State<_BudgetHistoryLineGraph> {
               tooltipPadding:
                   EdgeInsets.only(left: 8, right: 8, top: 8, bottom: 6),
               getTooltipItems: (List<LineBarSpot> lineBarsSpot) {
-                return lineBarsSpot.map((LineBarSpot lineBarSpot) {
+                return lineBarsSpot.asMap().entries.map((entry) {
+                  LineBarSpot lineBarSpot = entry.value;
+                  int index = entry.key;
                   // hide touch data for the overage line
                   if (lineBarSpot.bar.color == Colors.transparent) {
                     return null;
                   }
+                  DateTimeRange dateRange = widget.dateRanges[
+                      widget.dateRanges.length -
+                          1 -
+                          (lineBarsSpot.first.x).round()];
                   return LineTooltipItem(
-                    convertToMoney(
-                        Provider.of<AllWallets>(context, listen: false),
-                        lineBarSpot.y),
-                    TextStyle(
-                      color: lineBarSpot.bar.color ==
-                              lightenPastel(widget.color, amount: 0.3)
-                          ? widget.extraCategorySpots.keys.length <= 0
-                              ? Colors.white.withOpacity(0.9)
-                              : getColor(context, "black").withOpacity(0.7)
-                          : lineBarSpot.bar.color,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 12,
-                      fontFamilyFallback: ['Inter'],
-                    ),
+                    "",
+                    TextStyle(),
+                    children: [
+                      if (index == 0 && widget.showDateOnHover)
+                        TextSpan(
+                          text: getWordedDateShort(dateRange.start) +
+                              " – " +
+                              getWordedDateShort(dateRange.end) +
+                              "\n",
+                          style: TextStyle(
+                            color: widget.extraCategorySpots.keys.length <= 0
+                                ? Colors.white.withOpacity(0.9)
+                                : getColor(context, "black").withOpacity(0.7),
+                            fontWeight: FontWeight.bold,
+                            fontSize: 12,
+                            fontFamilyFallback: ['Inter'],
+                          ),
+                        ),
+                      TextSpan(
+                        text: convertToMoney(
+                            Provider.of<AllWallets>(context, listen: false),
+                            lineBarSpot.y),
+                        style: TextStyle(
+                          color: lineBarSpot.bar.color ==
+                                  lightenPastel(widget.color, amount: 0.3)
+                              ? widget.extraCategorySpots.keys.length <= 0
+                                  ? Colors.white.withOpacity(0.9)
+                                  : getColor(context, "black").withOpacity(0.7)
+                              : lineBarSpot.bar.color,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 12,
+                          fontFamilyFallback: ['Inter'],
+                          height: index == 0 &&
+                                  widget.showDateOnHover &&
+                                  lineBarsSpot.length > 1
+                              ? 2
+                              : null,
+                        ),
+                      ),
+                    ],
                   );
                 }).toList();
               },

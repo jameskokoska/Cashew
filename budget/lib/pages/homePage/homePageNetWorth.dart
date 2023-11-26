@@ -25,8 +25,6 @@ class HomePageNetWorth extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (isHomeScreenSectionEnabled(context, "showNetWorth") == false)
-      return SizedBox.shrink();
     return KeepAliveClientMixin(
       child: StreamBuilder<List<TransactionWallet>>(
           stream:

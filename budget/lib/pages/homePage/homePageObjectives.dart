@@ -37,9 +37,6 @@ class _HomePageObjectivesState extends State<HomePageObjectives> {
   double height = 0;
   @override
   Widget build(BuildContext context) {
-    if (isHomeScreenSectionEnabled(context, "showObjectives") == false)
-      return SizedBox.shrink();
-
     Widget child = KeepAliveClientMixin(
       child: StreamBuilder<List<Objective>>(
         stream: database.getAllPinnedObjectives().$1,

@@ -108,6 +108,20 @@ class HomePageState extends State<HomePage>
     super.dispose();
   }
 
+  bool areAllDisabledAfterTransactionsList(
+      Map<String, Widget?> homePageSections) {
+    int countAfter = -1;
+    for (String sectionKey in appStateSettings["homePageOrder"]) {
+      if (sectionKey == "transactionsList" &&
+          homePageSections[sectionKey] != null) {
+        countAfter = 0;
+      } else if (countAfter == 0 && homePageSections[sectionKey] != null) {
+        countAfter++;
+      }
+    }
+    return countAfter == 0;
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -154,20 +168,42 @@ class HomePageState extends State<HomePage>
               ),
             );
 
-    Map<String, Widget> homePageSections = {
-      "wallets": HomePageWalletSwitcher(),
-      "walletsList": HomePageWalletList(),
-      "budgets": HomePageBudgets(),
-      "overdueUpcoming": HomePageUpcomingTransactions(),
-      "allSpendingSummary": HomePageAllSpendingSummary(),
-      "netWorth": HomePageNetWorth(),
-      "objectives": HomePageObjectives(),
-      "creditDebts": HomePageCreditDebts(),
-      "spendingGraph":
-          HomePageLineGraph(selectedSlidingSelector: selectedSlidingSelector),
-      "pieChart":
-          HomePagePieChart(selectedSlidingSelector: selectedSlidingSelector),
-      "heatMap": HomePageHeatMap(),
+    Map<String, Widget?> homePageSections = {
+      "wallets": isHomeScreenSectionEnabled(context, "showWalletSwitcher")
+          ? HomePageWalletSwitcher()
+          : null,
+      "walletsList": isHomeScreenSectionEnabled(context, "showWalletList")
+          ? HomePageWalletList()
+          : null,
+      "budgets": isHomeScreenSectionEnabled(context, "showPinnedBudgets")
+          ? HomePageBudgets()
+          : null,
+      "overdueUpcoming":
+          isHomeScreenSectionEnabled(context, "showOverdueUpcoming")
+              ? HomePageUpcomingTransactions()
+              : null,
+      "allSpendingSummary":
+          isHomeScreenSectionEnabled(context, "showAllSpendingSummary")
+              ? HomePageAllSpendingSummary()
+              : null,
+      "netWorth": isHomeScreenSectionEnabled(context, "showNetWorth")
+          ? HomePageNetWorth()
+          : null,
+      "objectives": isHomeScreenSectionEnabled(context, "showObjectives")
+          ? HomePageObjectives()
+          : null,
+      "creditDebts": isHomeScreenSectionEnabled(context, "showCreditDebt")
+          ? HomePageCreditDebts()
+          : null,
+      "spendingGraph": isHomeScreenSectionEnabled(context, "showSpendingGraph")
+          ? HomePageLineGraph(selectedSlidingSelector: selectedSlidingSelector)
+          : null,
+      "pieChart": isHomeScreenSectionEnabled(context, "showPieChart")
+          ? HomePagePieChart(selectedSlidingSelector: selectedSlidingSelector)
+          : null,
+      "heatMap": isHomeScreenSectionEnabled(context, "showHeatMap")
+          ? HomePageHeatMap()
+          : null,
       "transactionsList": homePageTransactionsList ?? SizedBox.shrink(),
     };
     bool showWelcomeBanner =
@@ -252,6 +288,7 @@ class HomePageState extends State<HomePage>
                             ),
                           )
                         : SizedBox(height: 5),
+                    // Not full screen
                     ...[
                       for (String sectionKey
                           in appStateSettings["homePageOrder"])
@@ -301,10 +338,8 @@ class HomePageState extends State<HomePage>
                     SizedBox(
                       height: enableDoubleColumn(context) == true
                           ? 40
-                          : appStateSettings["homePageOrder"][
-                                      appStateSettings["homePageOrder"].length -
-                                          1] ==
-                                  "transactionsList"
+                          : areAllDisabledAfterTransactionsList(
+                                  homePageSections)
                               ? 25
                               : 73,
                     ),

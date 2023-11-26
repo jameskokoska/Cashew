@@ -24,8 +24,6 @@ import 'package:provider/provider.dart';
 class HomePageWalletSwitcher extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    if (isHomeScreenSectionEnabled(context, "showWalletSwitcher") == false)
-      return SizedBox.shrink();
     return KeepAliveClientMixin(
       child: Padding(
         padding: const EdgeInsets.only(bottom: 13.0),

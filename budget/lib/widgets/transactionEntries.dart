@@ -429,7 +429,7 @@ class TransactionEntries extends StatelessWidget {
               0,
               TransactionsEntriesSpendingSummary(
                 show: showSpendingSummary,
-                netSpending: totalSpent,
+                netSpending: totalIncome + totalExpense,
                 income: totalIncome,
                 expense: totalExpense,
                 onLongPress: onLongPressSpendingSummary,
@@ -658,7 +658,7 @@ class TransactionsEntriesSpendingSummary extends StatelessWidget {
                         children: [
                           Flexible(
                             child: CountNumber(
-                              count: netSpending.abs(),
+                              count: netSpending,
                               duration: Duration(milliseconds: 450),
                               initialCount: (0),
                               textBuilder: (number) {

@@ -24,8 +24,6 @@ class HomePageLineGraph extends StatelessWidget {
   final int selectedSlidingSelector;
   @override
   Widget build(BuildContext context) {
-    if (isHomeScreenSectionEnabled(context, "showSpendingGraph") == false)
-      return SizedBox.shrink();
     return KeepAliveClientMixin(
       child: Padding(
         padding: const EdgeInsets.only(bottom: 13),

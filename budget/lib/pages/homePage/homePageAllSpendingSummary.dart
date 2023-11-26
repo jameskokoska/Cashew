@@ -21,8 +21,6 @@ class HomePageAllSpendingSummary extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (isHomeScreenSectionEnabled(context, "showAllSpendingSummary") == false)
-      return SizedBox.shrink();
     return KeepAliveClientMixin(
       child: Padding(
         padding: const EdgeInsets.only(bottom: 13, left: 13, right: 13),
