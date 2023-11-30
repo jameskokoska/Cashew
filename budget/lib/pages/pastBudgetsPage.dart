@@ -302,7 +302,9 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
             ),
             padding: EdgeInsets.all(8),
             child: Icon(
-              Icons.category_outlined,
+              appStateSettings["outlinedIcons"]
+                  ? Icons.category_outlined
+                  : Icons.category_rounded,
               color: selectedCategoryFks.length > 0
                   ? budgetColorScheme.tertiary
                   : budgetColorScheme.onSecondaryContainer,

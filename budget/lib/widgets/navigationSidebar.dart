@@ -393,11 +393,13 @@ class _SyncButtonState extends State<SyncButton> {
         flipIcon: true,
         padding: EdgeInsets.zero,
         iconOnly: true,
-        onTap: () {
-          runAllCloudFunctions(
-            context,
-            forceSignIn: true,
-          );
+        onTap: () async {
+          if (runningCloudFunctions == false) {
+            await runAllCloudFunctions(
+              context,
+              forceSignIn: true,
+            );
+          }
         },
       ),
     );
@@ -409,12 +411,14 @@ class _SyncButtonState extends State<SyncButton> {
         child: Tappable(
           borderRadius: getPlatform() == PlatformOS.isIOS ? 10 : 50,
           onTap: () async {
-            refreshButtonKey.currentState?.startAnimation();
-            await runAllCloudFunctions(
-              context,
-              forceSignIn: true,
-            );
-            refreshButtonKey.currentState?.startAnimation();
+            if (runningCloudFunctions == false) {
+              refreshButtonKey.currentState?.startAnimation();
+              await runAllCloudFunctions(
+                context,
+                forceSignIn: true,
+              );
+              refreshButtonKey.currentState?.startAnimation();
+            }
           },
           // Do not use Animated Switcher because otherwise duplicate key!
           child: appStateSettings["expandedNavigationSidebar"]
@@ -434,17 +438,6 @@ class _SyncButtonState extends State<SyncButton> {
                             child: TimerBuilder.periodic(
                               Duration(seconds: 5),
                               builder: (context) {
-                                DateTime? timeLastSynced = null;
-                                try {
-                                  if (appStateSettings["lastSynced"] == null)
-                                    throw ("lastSynced is null!");
-                                  timeLastSynced = DateTime.tryParse(
-                                    appStateSettings["lastSynced"],
-                                  );
-                                } catch (e) {
-                                  // print("Error parsing time last synced: " +
-                                  //     e.toString());
-                                }
                                 return TextFont(
                                   textAlign: TextAlign.left,
                                   textColor: getColor(context, "textLight"),
@@ -452,9 +445,9 @@ class _SyncButtonState extends State<SyncButton> {
                                   maxLines: 3,
                                   text: "synced".tr() +
                                       " " +
-                                      (timeLastSynced == null
+                                      (getTimeLastSynced() == null
                                           ? "never".tr()
-                                          : getTimeAgo(timeLastSynced)),
+                                          : getTimeAgo(getTimeLastSynced()!)),
                                 );
                               },
                             ),
@@ -477,6 +470,20 @@ class _SyncButtonState extends State<SyncButton> {
       ),
     );
   }
+}
+
+DateTime? getTimeLastSynced() {
+  DateTime? timeLastSynced = null;
+  try {
+    if (appStateSettings["lastSynced"] == null) throw ("lastSynced is null!");
+    timeLastSynced = DateTime.tryParse(
+      appStateSettings["lastSynced"],
+    );
+  } catch (e) {
+    // print("Error parsing time last synced: " +
+    //     e.toString());
+  }
+  return timeLastSynced;
 }
 
 class NavigationSidebarButtonWithNavBarIconData extends StatelessWidget {

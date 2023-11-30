@@ -239,6 +239,9 @@ class _EditCategoriesPageState extends State<EditCategoriesPage> {
                                         return CategoryIcon(
                                           categoryPk: "-1",
                                           category: category,
+                                          emojiSize:
+                                              constraints.maxWidth * 0.73,
+                                          emojiScale: 1.2,
                                           size: constraints.maxWidth,
                                           sizePadding: 0,
                                           noBackground: true,

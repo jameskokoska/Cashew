@@ -28,6 +28,7 @@ import 'package:budget/widgets/framework/popupFramework.dart';
 import 'package:budget/widgets/settingsContainers.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
+import 'package:budget/widgets/util/saveFile.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -1235,24 +1236,34 @@ class _BackupManagementState extends State<BackupManagement> {
                                                         const EdgeInsets.only(
                                                       left: 8.0,
                                                     ),
-                                                    child: ButtonIcon(
-                                                      color: appStateSettings[
-                                                              "materialYou"]
-                                                          ? Theme.of(context)
-                                                              .colorScheme
-                                                              .onSecondaryContainer
-                                                              .withOpacity(0.08)
-                                                          : getColor(context,
-                                                                  "lightDarkAccentHeavy")
-                                                              .withOpacity(0.7),
-                                                      onTap: () {
-                                                        saveDriveFileToDevice(
-                                                            driveApiState,
-                                                            file.value);
-                                                      },
-                                                      icon: Icons
-                                                          .download_rounded,
-                                                    ),
+                                                    child: Builder(
+                                                        builder: (boxContext) {
+                                                      return ButtonIcon(
+                                                        color: appStateSettings[
+                                                                "materialYou"]
+                                                            ? Theme.of(context)
+                                                                .colorScheme
+                                                                .onSecondaryContainer
+                                                                .withOpacity(
+                                                                    0.08)
+                                                            : getColor(context,
+                                                                    "lightDarkAccentHeavy")
+                                                                .withOpacity(
+                                                                    0.7),
+                                                        onTap: () {
+                                                          saveDriveFileToDevice(
+                                                            boxContext:
+                                                                boxContext,
+                                                            driveApi:
+                                                                driveApiState,
+                                                            fileToSave:
+                                                                file.value,
+                                                          );
+                                                        },
+                                                        icon: Icons
+                                                            .download_rounded,
+                                                      );
+                                                    }),
                                                   ),
                                             Padding(
                                               padding: const EdgeInsets.only(
@@ -1471,10 +1482,10 @@ class LoadingShimmerDriveFiles extends StatelessWidget {
   }
 }
 
-Future<bool> saveDriveFileToDevice(
-  drive.DriveApi driveApi,
-  drive.File fileToSave, {
-  String? customDirectory,
+Future<bool> saveDriveFileToDevice({
+  required BuildContext boxContext,
+  required drive.DriveApi driveApi,
+  required drive.File fileToSave,
 }) async {
   List<int> dataStore = [];
   dynamic response = await driveApi.files
@@ -1492,82 +1503,14 @@ Future<bool> saveDriveFileToDevice(
           .replaceAll(":", "-") +
       ".sql";
 
-  if (kIsWeb) {
-    try {
-      String base64String = base64Encode(dataStore);
-      AnchorElement anchor = AnchorElement(
-          href: 'data:application/octet-stream;base64,$base64String')
-        ..download = fileName
-        ..style.display = 'none';
-      anchor.click();
-      openSnackbar(SnackbarMessage(
-        title: "backup-downloaded-success".tr(),
-        description: fileName,
-        icon: appStateSettings["outlinedIcons"]
-            ? Icons.download_done_outlined
-            : Icons.download_done_rounded,
-      ));
-      return true;
-    } catch (e) {
-      openSnackbar(SnackbarMessage(
-        title: "error-downloading".tr(),
-        description: e.toString(),
-        icon: appStateSettings["outlinedIcons"]
-            ? Icons.warning_outlined
-            : Icons.warning_rounded,
-      ));
-      print("Error saving file to device: " + e.toString());
-      return false;
-    }
-  }
-
-  try {
-    String directory = customDirectory ??
-        (getPlatform() == PlatformOS.isAndroid
-            ? "/storage/emulated/0/Download"
-            : (await getApplicationDocumentsDirectory()).path);
-
-    String filePath = "${directory}/${fileName}";
-    File savedFile = File(filePath);
-    await savedFile.writeAsBytes(dataStore);
-    openSnackbar(SnackbarMessage(
-      title: "backup-downloaded-success".tr(),
-      description: filePath,
-      icon: appStateSettings["outlinedIcons"]
-          ? Icons.download_done_outlined
-          : Icons.download_done_rounded,
-      timeout: Duration(milliseconds: 5000),
-    ));
-    return true;
-  } catch (e) {
-    if (customDirectory == null) {
-      String? selectedDirectory = await FilePicker.platform.getDirectoryPath();
-      if (selectedDirectory == null) {
-        openSnackbar(SnackbarMessage(
-          title: "error-exporting".tr(),
-          description: "no-folder-selected".tr(),
-          icon: appStateSettings["outlinedIcons"]
-              ? Icons.warning_outlined
-              : Icons.warning_rounded,
-        ));
-        print("Error saving file to device: " + e.toString());
-        return false;
-      } else {
-        return await saveDriveFileToDevice(driveApi, fileToSave,
-            customDirectory: selectedDirectory);
-      }
-    } else {
-      openSnackbar(SnackbarMessage(
-        title: "error-exporting".tr(),
-        description: e.toString(),
-        icon: appStateSettings["outlinedIcons"]
-            ? Icons.warning_outlined
-            : Icons.warning_rounded,
-      ));
-      print("Error saving file to device: " + e.toString());
-      return false;
-    }
-  }
+  return await saveFile(
+    boxContext: boxContext,
+    dataStore: dataStore,
+    dataString: null,
+    fileName: fileName,
+    successMessage: "backup-downloaded-success".tr(),
+    errorMessage: "error-downloading".tr(),
+  );
 }
 
 bool openBackupReminderPopupCheck(BuildContext context) {

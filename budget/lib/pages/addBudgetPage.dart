@@ -1399,6 +1399,7 @@ class _BudgetDetailsState extends State<BudgetDetails> {
         hasPadding: false,
         underTitleSpace: false,
         child: SelectAmount(
+          hideWalletPickerIfOneCurrency: true,
           onlyShowCurrencyIcon: true,
           amountPassed: selectedAmount.toString(),
           setSelectedAmount: (amount, calculation) {

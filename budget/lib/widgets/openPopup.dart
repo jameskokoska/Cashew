@@ -26,6 +26,7 @@ Future<T?> openPopup<T extends Object?>(
   String? onExtraLabel2,
   VoidCallback? onSubmit,
   VoidCallback? onCancel,
+  Function(BuildContext context)? onCancelWithBoxContext,
   VoidCallback? onExtra,
   VoidCallback? onExtra2,
   bool barrierDismissible = true,
@@ -158,16 +159,28 @@ Future<T?> openPopup<T extends Object?>(
                                           child: Padding(
                                             padding: const EdgeInsets.symmetric(
                                                 horizontal: 8.0),
-                                            child: Button(
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .tertiaryContainer,
-                                              textColor: Theme.of(context)
-                                                  .colorScheme
-                                                  .onTertiaryContainer,
-                                              label: onCancelLabel,
-                                              onTap: onCancel ?? () {},
-                                            ),
+                                            child:
+                                                Builder(builder: (boxContext) {
+                                              return Button(
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .tertiaryContainer,
+                                                textColor: Theme.of(context)
+                                                    .colorScheme
+                                                    .onTertiaryContainer,
+                                                label: onCancelLabel,
+                                                onTap: () {
+                                                  if (onCancel != null) {
+                                                    onCancel();
+                                                  }
+                                                  if (onCancelWithBoxContext !=
+                                                      null) {
+                                                    onCancelWithBoxContext(
+                                                        boxContext);
+                                                  }
+                                                },
+                                              );
+                                            }),
                                           ),
                                         )
                                       : SizedBox.shrink(),

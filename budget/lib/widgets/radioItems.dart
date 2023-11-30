@@ -14,6 +14,7 @@ class RadioItems<T> extends StatefulWidget {
   final Function(T item)? onLongPress;
   final bool ifNullSelectNone;
   final bool itemsAreFonts;
+  final bool Function(T item)? getSelected;
 
   const RadioItems({
     Key? key,
@@ -24,6 +25,7 @@ class RadioItems<T> extends StatefulWidget {
     this.onLongPress,
     this.displayFilter,
     this.colorFilter,
+    this.getSelected,
     this.ifNullSelectNone = false,
     this.itemsAreFonts = false,
   }) : super(key: key);
@@ -48,7 +50,9 @@ class _RadioItemsState<T> extends State<RadioItems<T>> {
     for (T item in widget.items) {
       index += 1;
       bool selected = false;
-      if (currentValue == item) selected = true;
+      if (currentValue == item ||
+          (widget.getSelected != null && widget.getSelected!(item)))
+        selected = true;
       if (item == null && widget.ifNullSelectNone == true) selected = false;
       bool noDescription = widget.descriptions == null ||
           widget.descriptions!.length <= index ||

@@ -66,12 +66,13 @@ class TransactionEntries extends StatelessWidget {
     this.transactionBackgroundColor,
     this.categoryTintColor,
     this.useHorizontalPaddingConstrained = true,
-    this.limit,
     this.showNoResults = true,
     this.colorScheme,
     this.noSearchResultsVariation = false,
     this.noResultsMessage,
     this.searchFilters,
+    this.limit = 2500,
+    this.limitPerDay = 250,
     this.pastDaysLimitToShow,
     this.includeDateDivider = true,
     this.allowSelect = true,
@@ -79,7 +80,6 @@ class TransactionEntries extends StatelessWidget {
     this.noResultsPadding,
     this.noResultsExtraWidget,
     this.totalCashFlowExtraWidget,
-    this.limitPerDay,
     this.showTotalCashFlow = false,
     this.enableSpendingSummary = false,
     this.showSpendingSummary = false,
@@ -259,7 +259,8 @@ class TransactionEntries extends StatelessWidget {
             }
             if (currentDate == currentTransactionDate) {
               transactionListForDay.add(transactionWithCategory);
-              if (transactionWithCategory.transaction.paid) {
+              if (transactionWithCategory.transaction.paid &&
+                  transactionWithCategory.transaction.categoryFk != "0") {
                 double amountForDay =
                     transactionWithCategory.transaction.amount *
                         (amountRatioToPrimaryCurrencyGivenPk(

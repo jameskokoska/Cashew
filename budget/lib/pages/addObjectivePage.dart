@@ -153,6 +153,7 @@ class _AddObjectivePageState extends State<AddObjectivePage>
         underTitleSpace: false,
         hasPadding: false,
         child: SelectAmount(
+          hideWalletPickerIfOneCurrency: true,
           onlyShowCurrencyIcon: true,
           amountPassed: selectedAmount.toString(),
           setSelectedAmount: (amount, calculation) {

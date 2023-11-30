@@ -25,6 +25,45 @@ import 'listItem.dart';
 
 String getChangelogString() {
   return """
+    < 4.9.9
+    Improved CSV import when the first row is not the header
+    Improved CSV import tries to parse date with common date formats
+    Fixed crash when importing many entries with CSV - database would process titles too much
+    Optimized title creation when importing CSV
+    Added excluded from budget transaction filters
+    Deleting a transfer prompts to delete the related transfer
+    Can enter color code when selecting custom color
+    Account picker hidden if all the same currency on goals and budgets
+    Attached files are only visible by account owner
+    Improved links in notes of a transaction
+    Added ability to remove links
+    Added default limit for max transactions loaded in list
+    < 4.9.8
+    Search filters on transactions monthly page
+    Search filters hides goals, addable budgets, and accounts selector if empty
+    Removed added to other budget filters (irrelevant)
+    Balance correction not counted towards monthly spending summary totals and daily spending banner totals
+    If transaction is balance correction, amount is displayed as a faded color to indicate it is not added towards totals
+    Added swipe down to refresh animation on tab pages
+    Fixed emoji size for chip selection
+    Fixed subcategories able to be selected as the main category
+    Fixed pie chart not adding to 100% in budget page
+    If file access fails, share sheet option with file
+    Installments/payment plan tracking when creating transactions (linking to goals) (put on hold)
+    Repetitive transactions will stop repeating after a goal is reached (if no end date set)
+    In select popups (budget, account, goal), can long press to edit item entry
+    Added setting to change the date transactions are marked as paid (default: today, can now be changed to keep original transaction date)
+    Fixed negative zero in transaction entry goals progress tag
+    Fixed crash when setting past days to a really large number on all spending graph
+    Fixed naming of withdraw balance transfers
+    Search page default initial date set to 1900 and next fifth year in the future
+    All spending page properly respects selected date range for transactions
+    Exported files use share sheet (i)
+    Share sheet support for large displays (i)
+    Choice chips icon padding tweaks
+    Safe routing popping for leaving feedback
+    Email popup only asks if blank when leaving feedback
+    Fixed improper date range on hover when all spending was 0
     < 4.9.7
     Homepage banner can be disabled on full screen
     Upcoming transactions shown in light progress bar for current budget progress

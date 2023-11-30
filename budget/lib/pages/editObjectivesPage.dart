@@ -7,6 +7,7 @@ import 'package:budget/functions.dart';
 import 'package:budget/pages/addCategoryPage.dart';
 import 'package:budget/pages/addObjectivePage.dart';
 import 'package:budget/pages/editBudgetPage.dart';
+import 'package:budget/struct/currencyFunctions.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/animatedExpanded.dart';
@@ -29,6 +30,7 @@ import 'package:flutter/material.dart' hide SliverReorderableList;
 import 'package:flutter/services.dart' hide TextInput;
 import 'package:budget/widgets/editRowEntry.dart';
 import 'package:budget/modified/reorderable_list.dart';
+import 'package:provider/provider.dart';
 
 class EditObjectivesPage extends StatefulWidget {
   EditObjectivesPage({
@@ -355,56 +357,103 @@ Future<DeletePopupAction?> deleteObjectivePopup(
 }
 
 // either "none", null, or a Objective type
-Future<dynamic> selectObjectivePopup(BuildContext context,
-    {String? removeWalletPk}) async {
+Future<dynamic> selectObjectivePopup(
+  BuildContext context, {
+  Objective? selectedObjective,
+  includeAmount = false,
+  bool canSelectNoGoal = true,
+  bool showAddButton = false,
+}) async {
   dynamic objective = await openBottomSheet(
     context,
     PopupFramework(
       title: "select-goal".tr(),
-      child: StreamBuilder<List<Objective>>(
-        stream: database.watchAllObjectives(),
-        builder: (context, snapshot) {
-          if (snapshot.hasData &&
-              (snapshot.data != null && snapshot.data!.length > 0)) {
-            List<Objective> addableObjectives = snapshot.data!;
-            return RadioItems(
-              ifNullSelectNone: true,
-              items: [null, ...addableObjectives],
-              colorFilter: (Objective? objective) {
-                if (objective == null) return null;
-                return dynamicPastel(
-                  context,
-                  lightenPastel(
-                    HexColor(
-                      objective.colour,
-                      defaultColor: Theme.of(context).colorScheme.primary,
-                    ),
-                    amount: 0.2,
-                  ),
-                  amount: 0.1,
+      child: Column(
+        children: [
+          StreamBuilder<List<Objective>>(
+            stream: database.watchAllObjectives(),
+            builder: (context, snapshot) {
+              if (snapshot.hasData &&
+                  (snapshot.data != null && snapshot.data!.length > 0)) {
+                List<Objective> addableObjectives = snapshot.data!;
+                return RadioItems(
+                  ifNullSelectNone: true,
+                  items: [if (canSelectNoGoal) null, ...addableObjectives],
+                  onLongPress: (Objective? objective) {
+                    pushRoute(
+                      context,
+                      AddObjectivePage(
+                        routesToPopAfterDelete: RoutesToPopAfterDelete.One,
+                        objective: objective,
+                      ),
+                    );
+                  },
+                  colorFilter: (Objective? objective) {
+                    if (objective == null) return null;
+                    return dynamicPastel(
+                      context,
+                      lightenPastel(
+                        HexColor(
+                          objective.colour,
+                          defaultColor: Theme.of(context).colorScheme.primary,
+                        ),
+                        amount: 0.2,
+                      ),
+                      amount: 0.1,
+                    );
+                  },
+                  displayFilter: (Objective? objective) {
+                    return (objective?.name ?? "no-goal".tr()) +
+                        (includeAmount && objective != null
+                            ? (" (" +
+                                convertToMoney(
+                                  Provider.of<AllWallets>(context),
+                                  objectiveAmountToPrimaryCurrency(
+                                          Provider.of<AllWallets>(context),
+                                          objective) *
+                                      ((objective.income) ? 1 : -1),
+                                ) +
+                                ")")
+                            : "");
+                  },
+                  initial: selectedObjective,
+                  onChanged: (Objective? objective) async {
+                    if (objective == null)
+                      Navigator.of(context).pop("none");
+                    else
+                      Navigator.of(context).pop(objective);
+                  },
                 );
-              },
-              displayFilter: (Objective? objective) {
-                return objective?.name ?? "no-goal".tr();
-              },
-              initial: null,
-              onChanged: (Objective? objective) async {
-                if (objective == null)
-                  Navigator.of(context).pop("none");
-                else
-                  Navigator.of(context).pop(objective);
-              },
-            );
-          } else {
-            return NoResultsCreate(
-              message: "no-goals-found".tr(),
-              buttonLabel: "create-goal".tr(),
-              route: AddObjectivePage(
-                routesToPopAfterDelete: RoutesToPopAfterDelete.None,
-              ),
-            );
-          }
-        },
+              } else {
+                return NoResultsCreate(
+                  message: "no-goals-found".tr(),
+                  buttonLabel: "create-goal".tr(),
+                  route: AddObjectivePage(
+                    routesToPopAfterDelete: RoutesToPopAfterDelete.None,
+                  ),
+                );
+              }
+            },
+          ),
+          if (showAddButton)
+            Row(
+              children: [
+                Expanded(
+                  child: AddButton(
+                    padding: EdgeInsets.only(top: 7),
+                    onTap: () {
+                      pushRoute(
+                        context,
+                        AddObjectivePage(
+                          routesToPopAfterDelete: RoutesToPopAfterDelete.None,
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ],
+            )
+        ],
       ),
     ),
   );
@@ -421,4 +470,34 @@ class ObjectiveSettings extends StatelessWidget {
   Widget build(BuildContext context) {
     return TotalSpentToggle(isForGoalTotal: true);
   }
+}
+
+// First entry is numberOfInstallmentPaymentsDisplay
+// Second entry is amountPerInstallmentPaymentDisplay
+List<double> getInstallmentPaymentCalculations({
+  required AllWallets allWallets,
+  required Objective objective,
+  required int? numberOfInstallmentPayments,
+  required double? amountPerInstallmentPayment,
+}) {
+  double objectiveTotalInCurrentCurrency =
+      objectiveAmountToPrimaryCurrency(allWallets, objective);
+  double numberOfInstallmentPaymentsDisplay =
+      (numberOfInstallmentPayments ?? 0) * 1.0;
+  double amountPerInstallmentPaymentDisplay = amountPerInstallmentPayment ?? 0;
+  if (numberOfInstallmentPayments == null) {
+    numberOfInstallmentPaymentsDisplay =
+        objectiveTotalInCurrentCurrency / amountPerInstallmentPaymentDisplay;
+  } else if (amountPerInstallmentPayment == null) {
+    // We add a small decimal because we need to make sure the amount reaches the actual goal when dividing
+    // We need the percentage goal achieved to reach above 100% so it stops creating transactions
+    // And also so we actually achieve our goal
+    amountPerInstallmentPaymentDisplay =
+        objectiveTotalInCurrentCurrency / numberOfInstallmentPaymentsDisplay +
+            0.00000000000001;
+  }
+  return [
+    numberOfInstallmentPaymentsDisplay,
+    amountPerInstallmentPaymentDisplay
+  ];
 }

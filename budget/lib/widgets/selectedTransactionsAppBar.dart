@@ -297,7 +297,10 @@ class SelectedTransactionsAppBar extends StatelessWidget {
                                 : Icons.account_balance_wallet_rounded,
                             action: () async {
                               TransactionWallet? wallet =
-                                  await selectWalletPopup(context);
+                                  await selectWalletPopup(
+                                context,
+                                allowEditWallet: true,
+                              );
                               if (wallet == null) return;
                               List<Transaction> transactions = await database
                                   .getTransactionsFromPk(value[pageID]!);

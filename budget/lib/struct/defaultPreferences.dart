@@ -79,6 +79,7 @@ Future<Map<String, dynamic>> getDefaultPreferences() async {
     "automaticallyPayUpcoming": true,
     "automaticallyPayRepetitive": true,
     "automaticallyPaySubscriptions": true,
+    "markAsPaidOnOriginalDay": false,
     "batterySaver": false,
     "username": "",
     "hasOnboarded": false,
@@ -150,6 +151,7 @@ Future<Map<String, dynamic>> getDefaultPreferences() async {
     // Search filters strings
     "searchTransactionsSetFiltersString": null,
     "allSpendingSetFiltersString": null,
+    "transactionsListPageSetFiltersString": null,
     "increaseTextContrast": false,
     // *********************************************************** //
     // For showing information within a certain cycle for all spending wallet details page

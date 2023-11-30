@@ -185,7 +185,7 @@ class AccountsPageState extends State<AccountsPage> {
                                   child: OutlinedButtonStacked(
                                     text: "backup".tr(),
                                     iconData: appStateSettings["outlinedIcons"]
-                                        ? Icons.cloud_upload_rounded
+                                        ? Icons.cloud_upload_outlined
                                         : Icons.cloud_upload_rounded,
                                     onTap: () async {
                                       setState(() {

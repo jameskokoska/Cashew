@@ -157,7 +157,8 @@ class _RatingPopupState extends State<RatingPopup> {
             label: "submit".tr(),
             onTap: () async {
               // Remind user to provide email
-              if (_feedbackController.text != "") {
+              if (_feedbackController.text != "" &&
+                  _feedbackControllerEmail.text == "") {
                 dynamic result = await openPopup(
                   context,
                   icon: appStateSettings["outlinedIcons"]
@@ -167,17 +168,18 @@ class _RatingPopupState extends State<RatingPopup> {
                   description: "provide-email-question-description".tr(),
                   onCancelLabel: "submit-anyway".tr(),
                   onCancel: () {
-                    Navigator.pop(context, true);
+                    Navigator.maybePop(context, true);
                   },
                   onSubmitLabel: "go-back".tr(),
                   onSubmit: () {
-                    Navigator.pop(context, false);
+                    Navigator.maybePop(context, false);
                   },
                 );
                 if (result == false) return;
               }
 
-              Navigator.pop(context);
+              Navigator.maybePop(context);
+
               shareFeedback(
                 _feedbackController.text,
                 "rating",
@@ -200,14 +202,12 @@ Future<bool> shareFeedback(String feedbackText, String feedbackType,
 
   try {
     if ((selectedStars ?? 0) >= 4) {
-      openLoadingPopup(navbarStateKey.currentContext!);
       if (await inAppReview.isAvailable()) inAppReview.requestReview();
     }
   } catch (e) {
     print(e.toString());
     error = true;
   }
-  Navigator.pop(navbarStateKey.currentContext!);
 
   try {
     FirebaseFirestore? db = await firebaseGetDBInstanceAnonymous();

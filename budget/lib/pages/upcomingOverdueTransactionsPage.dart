@@ -438,11 +438,36 @@ class AutoPayRepetitiveSetting extends StatelessWidget {
         await updateSettings("automaticallyPayRepetitive", value,
             updateGlobalState: false);
         // Repetitive and subscriptions are handled by the same function
-        await markSubscriptionsAsPaid();
+        await markSubscriptionsAsPaid(context);
         await setUpcomingNotifications(context);
       },
       initialValue: appStateSettings["automaticallyPayRepetitive"],
       icon: getTransactionTypeIcon(TransactionSpecialType.repetitive),
+    );
+  }
+}
+
+class MarkAsPaidOnDaySetting extends StatelessWidget {
+  const MarkAsPaidOnDaySetting({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return SettingsContainerDropdown(
+      title: "paid-date".tr(),
+      icon: appStateSettings["outlinedIcons"]
+          ? Icons.event_available_outlined
+          : Icons.event_available_rounded,
+      initial: appStateSettings["markAsPaidOnOriginalDay"].toString(),
+      items: ["false", "true"],
+      onChanged: (value) async {
+        updateSettings(
+            "markAsPaidOnOriginalDay", value == "true" ? true : false,
+            updateGlobalState: false);
+      },
+      getLabel: (item) {
+        if (item == "false") return "current-date".tr().capitalizeFirst;
+        if (item == "true") return "transaction-date".tr().capitalizeFirst;
+      },
     );
   }
 }

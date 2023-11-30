@@ -129,6 +129,13 @@ class _SelectChipsState<T> extends State<SelectChips<T>> {
                               avatar,
                             ],
                           ),
+                    labelPadding: avatar == null
+                        ? null
+                        : EdgeInsets.only(
+                            left: 5, right: 10, top: 1, bottom: 1),
+                    padding: avatar == null
+                        ? null
+                        : EdgeInsets.only(left: 10, top: 7, bottom: 7),
                     showCheckmark:
                         widget.allowMultipleSelected == true && avatar == null,
                     materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,

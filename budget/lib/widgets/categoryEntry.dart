@@ -25,7 +25,6 @@ class CategoryEntry extends StatelessWidget {
     required this.category,
     required this.transactionCount,
     required this.categorySpent,
-    required this.totalSpentAbsolute,
     required this.totalSpent,
     required this.onTap,
     required this.selected,
@@ -50,7 +49,6 @@ class CategoryEntry extends StatelessWidget {
 
   final TransactionCategory category;
   final int transactionCount;
-  final double totalSpentAbsolute;
   final double totalSpent;
   final double categorySpent;
   final Function(TransactionCategory category,
@@ -359,7 +357,6 @@ class CategoryEntry extends StatelessWidget {
                             subcategoryWithTotal.categoryBudgetLimit,
                         budgetColorScheme: budgetColorScheme,
                         category: subcategoryWithTotal.category,
-                        totalSpentAbsolute: totalSpentAbsolute,
                         totalSpent: totalSpent,
                         transactionCount: subcategoryWithTotal.transactionCount,
                         categorySpent: showIncomeExpenseIcons == true

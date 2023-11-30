@@ -159,6 +159,7 @@ class _EditWalletsPageState extends State<EditWalletsPage> {
                     context,
                     fullSnap: true,
                     TransferBalancePopup(
+                      allowEditWallet: true,
                       wallet: Provider.of<AllWallets>(context, listen: false)
                           .indexedByPk[appStateSettings["selectedWalletPk"]]!,
                     ),
@@ -376,6 +377,7 @@ void mergeWalletPopup(
     context,
     removeWalletPk: walletOriginal.walletPk,
     subtitle: "account-to-transfer-all-transactions-to".tr(),
+    allowEditWallet: false,
   );
   if (selectedWalletResult != null) {
     final result = await openPopup(
@@ -438,7 +440,8 @@ void mergeWalletPopup(
 Future<TransactionWallet?> selectWalletPopup(BuildContext context,
     {String? removeWalletPk,
     String? subtitle,
-    TransactionWallet? selectedWallet}) async {
+    TransactionWallet? selectedWallet,
+    required bool allowEditWallet}) async {
   dynamic wallet = await openBottomSheet(
     context,
     PopupFramework(
@@ -459,6 +462,10 @@ Future<TransactionWallet?> selectWalletPopup(BuildContext context,
               );
             }
             return RadioItems(
+              getSelected: (TransactionWallet? wallet) {
+                if (wallet?.walletPk == selectedWallet?.walletPk) return true;
+                return false;
+              },
               items: walletsWithoutOneDeleted,
               colorFilter: (TransactionWallet? wallet) {
                 if (wallet == null) return null;
@@ -484,6 +491,16 @@ Future<TransactionWallet?> selectWalletPopup(BuildContext context,
               initial: selectedWallet,
               onChanged: (TransactionWallet? wallet) async {
                 Navigator.of(context).pop(wallet);
+              },
+              onLongPress: (TransactionWallet? wallet) {
+                if (allowEditWallet)
+                  pushRoute(
+                    context,
+                    AddWalletPage(
+                      routesToPopAfterDelete: RoutesToPopAfterDelete.One,
+                      wallet: wallet,
+                    ),
+                  );
               },
             );
           } else {

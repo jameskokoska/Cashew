@@ -131,6 +131,7 @@ Future<bool> runAllCloudFunctions(BuildContext context,
     print("Error running sync functions on load: " + e.toString());
     loadingIndeterminateKey.currentState!.setVisibility(false);
     runningCloudFunctions = false;
+    canSyncData = true;
     if (e is DetailedApiRequestError &&
             e.status == 401 &&
             forceSignIn == true ||
@@ -206,7 +207,7 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
 
       // Mark subscriptions as paid AFTER syncing with cloud
       // Maybe another device already marked them as paid
-      await markSubscriptionsAsPaid();
+      await markSubscriptionsAsPaid(context);
       await markUpcomingAsPaid();
 
       // Should do this after syncing and after the subscriptions/upcoming transactions auto paid for
@@ -481,6 +482,7 @@ class AddMoreThingsPopup extends StatelessWidget {
                   context,
                   fullSnap: true,
                   TransferBalancePopup(
+                    allowEditWallet: true,
                     wallet: Provider.of<AllWallets>(context, listen: false)
                         .indexedByPk[appStateSettings["selectedWalletPk"]]!,
                   ),
@@ -493,7 +495,10 @@ class AddMoreThingsPopup extends StatelessWidget {
                         .list
                         .length >
                     1) {
-                  wallet = await selectWalletPopup(context);
+                  wallet = await selectWalletPopup(
+                    context,
+                    allowEditWallet: true,
+                  );
                 }
                 if (wallet != null) {
                   Navigator.pop(context);
@@ -643,6 +648,8 @@ class AddMoreThingsPopup extends StatelessWidget {
                           categoryPk: "-1",
                           category: categoriesIndexed[
                               transactionWithCount.transaction.categoryFk],
+                          emojiSize: constraints.maxWidth * 0.73,
+                          emojiScale: 1.2,
                           size: constraints.maxWidth,
                           sizePadding: 0,
                           noBackground: true,

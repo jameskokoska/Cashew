@@ -629,6 +629,7 @@ class MoreOptionsPagePreferences extends StatelessWidget {
         FontPickerSetting(),
         IncreaseTextContrastSetting(),
         SettingsHeader(title: "transactions".tr()),
+        MarkAsPaidOnDaySetting(),
         TransactionsSettings(),
         SettingsHeader(title: "accounts".tr()),
         ShowAccountLabelSettingToggle(),

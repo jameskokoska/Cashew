@@ -428,15 +428,26 @@ class _BudgetHistoryLineGraphState extends State<_BudgetHistoryLineGraph> {
                   if (lineBarSpot.bar.color == Colors.transparent) {
                     return null;
                   }
-                  DateTimeRange dateRange = widget.dateRanges[
-                      widget.dateRanges.length -
-                          1 -
-                          (lineBarsSpot.first.x).round()];
+                  DateTimeRange? dateRange;
+                  try {
+                    List<DateTimeRange> dateRanges = widget.dateRanges
+                        .take(widget.spots.first.length)
+                        .toList();
+                    dateRange = dateRanges[
+                        dateRanges.length - 1 - (lineBarsSpot.first.x).round()];
+                  } catch (e) {
+                    print(
+                        "Error with date ranges passed in, length mismatched that of lines: " +
+                            e.toString());
+                  }
+
                   return LineTooltipItem(
                     "",
                     TextStyle(),
                     children: [
-                      if (index == 0 && widget.showDateOnHover)
+                      if (dateRange != null &&
+                          index == 0 &&
+                          widget.showDateOnHover)
                         TextSpan(
                           text: getWordedDateShort(dateRange.start) +
                               " – " +

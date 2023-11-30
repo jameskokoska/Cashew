@@ -201,14 +201,14 @@ Future<String?> uploadFileToDrive({
   drive.File driveFileCreated =
       await driveApi.files.create(driveFile, uploadMedia: media);
 
-  drive.Permission permission = drive.Permission();
-  permission.role = "reader";
-  permission.type = "anyone";
-  await driveApi.permissions.create(
-    permission,
-    driveFileCreated.id!,
-    sendNotificationEmail: false,
-  );
+  // Only if we want attachments to be publicly available
+  // drive.Permission permission = drive.Permission();
+  // permission.role = "reader";
+  // await driveApi.permissions.create(
+  //   permission,
+  //   driveFileCreated.id!,
+  //   sendNotificationEmail: false,
+  // );
 
   // Retrieve the updated metadata for the file with permissions
   drive.File fileOnDrive = await driveApi.files.get(driveFileCreated.id!,

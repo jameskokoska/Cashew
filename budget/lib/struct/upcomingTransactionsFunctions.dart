@@ -16,8 +16,10 @@ import 'package:drift/drift.dart' hide Column;
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
+import 'package:provider/provider.dart';
 
-createNewSubscriptionTransaction(context, Transaction transaction) async {
+createNewSubscriptionTransaction(
+    BuildContext context, Transaction transaction) async {
   if (transaction.createdAnotherFutureTransaction == false) {
     if (transaction.type == TransactionSpecialType.subscription ||
         transaction.type == TransactionSpecialType.repetitive) {
@@ -59,6 +61,29 @@ createNewSubscriptionTransaction(context, Transaction transaction) async {
         return;
       }
 
+      //Goal reached
+      if (transaction.objectiveFk != null && transaction.endDate == null) {
+        Objective objective =
+            await database.getObjectiveInstance(transaction.objectiveFk!);
+        double? totalSpentOfObjective = await database.getTotalTowardsObjective(
+            Provider.of<AllWallets>(context, listen: false),
+            transaction.objectiveFk!);
+        bool willBeOverObjective = (totalSpentOfObjective ?? 0) >=
+            (objective.amount * (objective.income ? 1 : -1));
+        if (willBeOverObjective) {
+          openSnackbar(
+            SnackbarMessage(
+              title: "goal-reached".tr(),
+              description: "for".tr().capitalizeFirst + " " + objective.name,
+              icon: appStateSettings["outlinedIcons"]
+                  ? Icons.event_available_outlined
+                  : Icons.event_available_rounded,
+            ),
+          );
+          return;
+        }
+      }
+
       Transaction newTransaction = transaction.copyWith(
         paid: false,
         transactionPk: "-1",
@@ -67,26 +92,24 @@ createNewSubscriptionTransaction(context, Transaction transaction) async {
       );
       await database.createOrUpdateTransaction(insert: true, newTransaction);
 
-      if (context != null) {
-        openSnackbar(
-          SnackbarMessage(
-            title: "created-new-transaction".tr(),
-            description: getWordedDateShort(newDate),
-            icon: appStateSettings["outlinedIcons"]
-                ? Icons.event_repeat_outlined
-                : Icons.event_repeat_rounded,
-            onTap: () {
-              pushRoute(
-                context,
-                AddTransactionPage(
-                  transaction: newTransaction,
-                  routesToPopAfterDelete: RoutesToPopAfterDelete.One,
-                ),
-              );
-            },
-          ),
-        );
-      }
+      openSnackbar(
+        SnackbarMessage(
+          title: "created-new-transaction".tr(),
+          description: getWordedDateShort(newDate),
+          icon: appStateSettings["outlinedIcons"]
+              ? Icons.event_repeat_outlined
+              : Icons.event_repeat_rounded,
+          onTap: () {
+            pushRoute(
+              context,
+              AddTransactionPage(
+                transaction: newTransaction,
+                routesToPopAfterDelete: RoutesToPopAfterDelete.One,
+              ),
+            );
+          },
+        ),
+      );
     }
   }
 }
@@ -146,7 +169,8 @@ Future openPayPopup(
       Transaction transactionNew = transaction.copyWith(
         amount: amount,
         paid: true,
-        dateCreated: DateTime.now(),
+        dateCreated:
+            appStateSettings["markAsPaidOnOriginalDay"] ? null : DateTime.now(),
         createdAnotherFutureTransaction: Value(true),
         originalDateDue: Value(transaction.dateCreated),
       );
@@ -290,7 +314,8 @@ Future openUnpayDebtCreditPopup(
   );
 }
 
-Future<bool> markSubscriptionsAsPaid({int? iteration}) async {
+Future<bool> markSubscriptionsAsPaid(BuildContext context,
+    {int? iteration}) async {
   if (appStateSettings["automaticallyPaySubscriptions"] ||
       appStateSettings["automaticallyPayRepetitive"]) {
     // Loop through, because a new one that was created automatically may be past due
@@ -313,11 +338,11 @@ Future<bool> markSubscriptionsAsPaid({int? iteration}) async {
           createdAnotherFutureTransaction: Value(true),
         );
         await database.createOrUpdateTransaction(transactionNew);
-        await createNewSubscriptionTransaction(null, transaction);
+        await createNewSubscriptionTransaction(context, transaction);
       }
     }
     if (hasUpdatedASubscription) {
-      await markSubscriptionsAsPaid(iteration: (iteration ?? 0) + 1);
+      await markSubscriptionsAsPaid(context, iteration: (iteration ?? 0) + 1);
     }
     print("Automatically paid subscriptions with iteration: " +
         iteration.toString());

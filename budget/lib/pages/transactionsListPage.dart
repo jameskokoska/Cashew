@@ -1,3 +1,4 @@
+import 'package:budget/pages/transactionFilters.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/framework/popupFramework.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
@@ -19,6 +20,8 @@ import 'package:flutter/material.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 import 'package:budget/widgets/util/sliverPinnedOverlapInjector.dart';
 import 'package:budget/widgets/util/multiDirectionalInfiniteScroll.dart';
+
+import '../widgets/pullDownToRefreshSync.dart';
 
 class TransactionsListPage extends StatefulWidget {
   const TransactionsListPage({Key? key}) : super(key: key);
@@ -63,6 +66,8 @@ class TransactionsListPageState extends State<TransactionsListPage>
 
   GlobalKey<MonthSelectorState> monthSelectorStateKey = GlobalKey();
 
+  late SearchFilters searchFilters;
+
   onSelected(Transaction transaction, bool selected) {
     // print(transaction.transactionPk.toString() + " selected!");
     // print(globalSelectedID["Transactions"]);
@@ -73,6 +78,13 @@ class TransactionsListPageState extends State<TransactionsListPage>
     super.initState();
     _scrollController = ScrollController();
     _pageController = PageController(initialPage: 1000000);
+
+    searchFilters = SearchFilters();
+    searchFilters.loadFilterString(
+      appStateSettings["transactionsListPageSetFiltersString"],
+      skipDateTimeRange: true,
+      skipSearchQuery: true,
+    );
   }
 
   @override
@@ -82,12 +94,46 @@ class TransactionsListPageState extends State<TransactionsListPage>
     super.dispose();
   }
 
+  Future<void> selectFilters(BuildContext context) async {
+    await openBottomSheet(
+      context,
+      PopupFramework(
+        title: "filters".tr(),
+        hasPadding: false,
+        child: TransactionFiltersSelection(
+          setSearchFilters: setSearchFilters,
+          searchFilters: searchFilters,
+          clearSearchFilters: clearSearchFilters,
+        ),
+      ),
+    );
+    Future.delayed(Duration(milliseconds: 250), () {
+      updateSettings(
+        "transactionsListPageSetFiltersString",
+        searchFilters.getFilterString(),
+        updateGlobalState: false,
+      );
+      setState(() {});
+    });
+  }
+
+  void setSearchFilters(SearchFilters searchFilters) {
+    this.searchFilters = searchFilters;
+  }
+
+  void clearSearchFilters() {
+    searchFilters.clearSearchFilters();
+    updateSettings("transactionsListPageSetFiltersString", null,
+        updateGlobalState: false);
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder(
       valueListenable: cancelParentScroll,
       builder: (context, value, widget) {
-        return SharedBudgetRefresh(
+        return PullDownToRefreshSync(
           scrollController: _scrollController,
           child: Stack(
             children: [
@@ -115,15 +161,47 @@ class TransactionsListPageState extends State<TransactionsListPage>
                               title: "transactions".tr(),
                               actions: [
                                 IconButton(
+                                  tooltip: "filters".tr(),
+                                  onPressed: () {
+                                    selectFilters(context);
+                                  },
+                                  padding: EdgeInsets.all(15 - 8),
+                                  icon: AnimatedContainer(
+                                    duration: Duration(milliseconds: 500),
+                                    decoration: BoxDecoration(
+                                      color: searchFilters.isClear()
+                                          ? Colors.transparent
+                                          : Theme.of(context)
+                                              .colorScheme
+                                              .tertiary
+                                              .withOpacity(0.1),
+                                      borderRadius: BorderRadius.circular(100),
+                                    ),
+                                    padding: EdgeInsets.all(8),
+                                    child: Icon(
+                                      appStateSettings["outlinedIcons"]
+                                          ? Icons.filter_alt_outlined
+                                          : Icons.filter_alt_rounded,
+                                      color: searchFilters.isClear()
+                                          ? null
+                                          : Theme.of(context)
+                                              .colorScheme
+                                              .tertiary,
+                                    ),
+                                  ),
+                                ),
+                                IconButton(
                                   padding: EdgeInsets.all(15),
                                   tooltip: "search-transactions".tr(),
                                   onPressed: () {
                                     pushRoute(
                                         context, TransactionsSearchPage());
                                   },
-                                  icon: Icon(appStateSettings["outlinedIcons"]
-                                      ? Icons.search_outlined
-                                      : Icons.search_rounded),
+                                  icon: Icon(
+                                    appStateSettings["outlinedIcons"]
+                                        ? Icons.search_outlined
+                                        : Icons.search_rounded,
+                                  ),
                                 ),
                               ],
                             ),
@@ -151,6 +229,16 @@ class TransactionsListPageState extends State<TransactionsListPage>
                                     }
                                   },
                                 ),
+                              ),
+                            ),
+                            SliverToBoxAdapter(
+                              child: AppliedFilterChips(
+                                searchFilters: searchFilters,
+                                openFiltersSelection: () {
+                                  selectFilters(context);
+                                },
+                                clearSearchFilters: clearSearchFilters,
+                                padding: EdgeInsets.symmetric(vertical: 5),
                               ),
                             ),
                           ],
@@ -198,6 +286,7 @@ class TransactionsListPageState extends State<TransactionsListPage>
                                                 contextPageView),
                                       ),
                                       TransactionEntries(
+                                        searchFilters: searchFilters,
                                         renderType: TransactionEntriesRenderType
                                             .implicitlyAnimatedSlivers,
                                         startDate,

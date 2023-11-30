@@ -33,6 +33,10 @@ import 'package:budget/widgets/framework/popupFramework.dart';
 
 import '../widgets/amountRangeSlider.dart';
 
+int roundToNearestNextFifthYear(int year) {
+  return (((year + 5) / 5).ceil()) * 5;
+}
+
 class TransactionsSearchPage extends StatefulWidget {
   const TransactionsSearchPage({this.initialFilters, Key? key})
       : super(key: key);
@@ -66,10 +70,8 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
       _searchFocusNode.requestFocus();
     });
     DateTimeRange initialDateTimeRange = DateTimeRange(
-      start: DateTime(
-          DateTime.now().year - 5, DateTime.now().month, DateTime.now().day),
-      end: DateTime(
-          DateTime.now().year + 5, DateTime.now().month, DateTime.now().day),
+      start: DateTime(1900),
+      end: DateTime(roundToNearestNextFifthYear(DateTime.now().year)),
     );
     searchFilters = widget.initialFilters != null
         ? widget.initialFilters!

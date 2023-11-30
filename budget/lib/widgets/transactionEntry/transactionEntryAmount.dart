@@ -122,5 +122,9 @@ Color getTransactionAmountColor(BuildContext context, Transaction transaction) {
                       ? getColor(context, "textLight")
                       // getColor(context, "unPaidOverdue")
                       : getColor(context, "textLight");
+  if (transaction.categoryFk == "0") {
+    return dynamicPastel(context, color,
+        inverse: true, amountLight: 0.3, amountDark: 0.25);
+  }
   return color;
 }

@@ -939,13 +939,22 @@ Future<String> getDeviceInfo() async {
 }
 
 List<String> extractLinks(String text) {
-  RegExp regExp = RegExp(r'https?://(?:www\.)?\S+');
+  RegExp regExp = RegExp(r'https?:\/\/(?:www\.)?\S+(?=\s)');
   Iterable<RegExpMatch> matches = regExp.allMatches(text);
   List<String> links = [];
   for (RegExpMatch match in matches) {
     links.add(match.group(0)!);
   }
   return links;
+}
+
+String getDomainNameFromURL(String text) {
+  RegExp regExp = RegExp(
+      r'^(?:https?:\/\/)?(?:[^@\/\n]+@)?(?:www\.)?([^:\/?\n]+)',
+      multiLine: true,
+      caseSensitive: false);
+  Match? match = regExp.firstMatch(text);
+  return match?.group(1) ?? '';
 }
 
 void openUrl(String link) async {

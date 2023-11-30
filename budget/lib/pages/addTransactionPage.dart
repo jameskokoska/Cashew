@@ -69,6 +69,64 @@ import '../widgets/tappableTextEntry.dart';
 //TODO
 //only show the tags that correspond to selected category
 //put recent used tags at the top? when no category selected
+String modifyString(String original, String newString) {
+  if (newString.length >= original.length) {
+    return original;
+  }
+
+  // Replace characters in newString with zero-width spaces
+  String modifiedString = newString;
+
+  for (int i = newString.length; i < original.length; i++) {
+    modifiedString += '\u200b'; // Zero-width space
+  }
+  print(original.length);
+  print(modifiedString.length);
+  return modifiedString;
+}
+
+class LinkColorizer extends TextEditingController {
+  final Pattern pattern;
+
+  LinkColorizer({String? initialText})
+      : pattern = RegExp(r'https?:\/\/(?:www\.)?\S+(?=\s)') {
+    this.text = initialText ?? '';
+  }
+  @override
+  TextSpan buildTextSpan({
+    required BuildContext context,
+    TextStyle? style,
+    required bool withComposing,
+  }) {
+    List<InlineSpan> children = [];
+    text.splitMapJoin(
+      pattern,
+      onMatch: (Match match) {
+        String websiteNameClean = getDomainNameFromURL(match[0] ?? "");
+        children.add(
+          TextSpan(
+            text: modifyString(match[0] ?? "", " " + websiteNameClean + " "),
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.onSecondaryContainer,
+              backgroundColor: dynamicPastel(
+                context,
+                Theme.of(context).colorScheme.secondaryContainer,
+                inverse: true,
+                amount: 0.2,
+              ),
+            ),
+          ),
+        );
+        return match[0] ?? "";
+      },
+      onNonMatch: (String text) {
+        children.add(TextSpan(text: text, style: style));
+        return text;
+      },
+    );
+    return TextSpan(style: style, children: children);
+  }
+}
 
 dynamic transactionTypeDisplayToEnum = {
   "Default": null,
@@ -134,6 +192,9 @@ class _AddTransactionPageState extends State<AddTransactionPage>
   bool notesInputFocused = false;
   bool showMoreOptions = false;
   List<String> selectedExcludedBudgetPks = [];
+  bool isSettingUpInstallment = false;
+  int? numberOfInstallmentPayments = null;
+  double? amountPerInstallmentPayment = null;
 
   String? textAddTransaction = "add-transaction".tr();
 
@@ -429,6 +490,21 @@ class _AddTransactionPageState extends State<AddTransactionPage>
         // }
         await addAssociatedTitles(selectedTitle!, selectedCategory!);
       }
+      if (isSettingUpInstallment && selectedObjectivePk != null) {
+        Objective objective =
+            await database.getObjectiveInstance(selectedObjectivePk!);
+        selectedType = TransactionSpecialType.repetitive;
+        selectedWalletPk = appStateSettings["selectedWalletPk"];
+        selectedAmount = getInstallmentPaymentCalculations(
+          allWallets: Provider.of<AllWallets>(context, listen: false),
+          objective: objective,
+          numberOfInstallmentPayments: numberOfInstallmentPayments,
+          amountPerInstallmentPayment: amountPerInstallmentPayment,
+        )[1];
+        selectedIncome = objective.income;
+        selectedEndDate = null;
+      }
+
       Transaction createdTransaction = await createTransaction();
 
       if (widget.transaction != null) {
@@ -694,7 +770,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
       _titleInputController =
           new TextEditingController(text: widget.transaction!.name);
       _noteInputController =
-          new TextEditingController(text: widget.transaction!.note);
+          new LinkColorizer(initialText: widget.transaction!.note);
       selectedTitle = widget.transaction!.name;
       selectedDate = widget.transaction!.dateCreated;
       selectedEndDate = widget.transaction!.endDate;
@@ -889,6 +965,83 @@ class _AddTransactionPageState extends State<AddTransactionPage>
     );
   }
 
+  void initializeInstallment() async {
+    dynamic objective = await selectObjectivePopup(
+      context,
+      canSelectNoGoal: false,
+      includeAmount: true,
+      selectedObjective: selectedObjectivePk == null
+          ? null
+          : await database.getObjectiveInstance(selectedObjectivePk!),
+      showAddButton: true,
+    );
+    if (objective == null && selectedObjectivePk != null) {
+      objective = await database.getObjectiveInstance(selectedObjectivePk!);
+    }
+    if (objective is Objective) {
+      isSettingUpInstallment = true;
+      setSelectedObjectivePk(objective.objectivePk);
+      setSelectedType("Repetitive");
+      setSelectedAmount(objective.amount, "");
+    }
+  }
+
+  void resetInitializeInstallment() {
+    if (isSettingUpInstallment == true) {
+      isSettingUpInstallment = false;
+      setSelectedObjectivePk(null);
+    }
+  }
+
+  Future<void> selectInstallmentLength(BuildContext context) async {
+    openBottomSheet(
+      context,
+      PopupFramework(
+        title: "enter-payment-period".tr(),
+        child: SelectAmountValue(
+          amountPassed: (numberOfInstallmentPayments ?? 0).toString(),
+          setSelectedAmount: (amount, _) {
+            setState(() {
+              amountPerInstallmentPayment = null;
+              numberOfInstallmentPayments = amount.toInt();
+            });
+          },
+          next: () async {
+            Navigator.pop(context);
+          },
+          nextLabel: "set-amount".tr(),
+        ),
+      ),
+    );
+  }
+
+  Future<void> selectAmountPerInstallment(BuildContext context) async {
+    openBottomSheet(
+      context,
+      PopupFramework(
+        title: "enter-payment-amount".tr(),
+        hasPadding: false,
+        underTitleSpace: false,
+        child: SelectAmount(
+          enableWalletPicker: false,
+          padding: EdgeInsets.symmetric(horizontal: 18),
+          onlyShowCurrencyIcon: true,
+          amountPassed: (amountPerInstallmentPayment ?? 0).toString(),
+          setSelectedAmount: (amount, _) {
+            setState(() {
+              numberOfInstallmentPayments = null;
+              amountPerInstallmentPayment = amount;
+            });
+          },
+          next: () {
+            Navigator.pop(context);
+          },
+          nextLabel: "set-amount".tr(),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     Color categoryColor = dynamicPastel(
@@ -912,7 +1065,8 @@ class _AddTransactionPageState extends State<AddTransactionPage>
         children: [
           AnimatedExpanded(
             expand: !(selectedType == TransactionSpecialType.credit ||
-                selectedType == TransactionSpecialType.debt),
+                selectedType == TransactionSpecialType.debt ||
+                isSettingUpInstallment),
             child: IncomeExpenseTabSelector(
               onTabChanged: setSelectedIncome,
               initialTabIsIncome: selectedIncome,
@@ -1024,92 +1178,152 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                       color: Colors.transparent,
                       onLongPress: onLongPress,
                       onTap: () {
-                        selectAmountPopup();
+                        if (isSettingUpInstallment) {
+                          initializeInstallment();
+                        } else {
+                          selectAmountPopup();
+                        }
                       },
                       child: Container(
                         padding: const EdgeInsets.only(right: 37),
                         height: 136,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Container(height: 5),
-                            AnimatedSwitcher(
-                              duration: Duration(milliseconds: 350),
-                              child: Align(
-                                key: ValueKey(selectedWalletPk.toString() +
-                                    selectedAmount.toString()),
-                                alignment: Alignment.centerRight,
-                                child: TextFont(
-                                  textAlign: TextAlign.right,
-                                  text: convertToMoney(
-                                    Provider.of<AllWallets>(context),
-                                    selectedAmount ?? 0,
-                                    decimals: getSelectedWallet(listen: true)
-                                        ?.decimals,
-                                    currencyKey: getSelectedWallet(listen: true)
-                                        ?.currency,
-                                    addCurrencyName:
-                                        ((getSelectedWallet(listen: true)
-                                                ?.currency) !=
-                                            Provider.of<AllWallets>(context)
-                                                .indexedByPk[appStateSettings[
-                                                    "selectedWalletPk"]]
-                                                ?.currency),
-                                  ),
-                                  fontSize: 32,
-                                  fontWeight: FontWeight.bold,
-                                  maxLines: 1,
-                                  autoSizeText: true,
-                                ),
-                              ),
-                            ),
-                            Provider.of<AllWallets>(context).list.length <= 1 ||
-                                    selectedWalletPk ==
-                                        appStateSettings["selectedWalletPk"] ||
-                                    ((getSelectedWallet(listen: true)
-                                            ?.currency) ==
-                                        Provider.of<AllWallets>(context)
-                                            .indexedByPk[appStateSettings[
-                                                "selectedWalletPk"]]
-                                            ?.currency)
-                                ? AnimatedSizeSwitcher(
-                                    switcherDuration:
-                                        Duration(milliseconds: 350),
-                                    child: Container(
-                                      key: ValueKey(
-                                          selectedCategory?.name ?? ""),
-                                      width: double.infinity,
-                                      child: TextFont(
-                                        textAlign: TextAlign.right,
-                                        fontSize: 18,
-                                        text: selectedCategory?.name ?? "",
-                                        maxLines: 2,
-                                      ),
-                                    ),
-                                  )
-                                : AnimatedSwitcher(
+                        child: isSettingUpInstallment &&
+                                selectedObjectivePk != null
+                            ? StreamBuilder<Objective>(
+                                stream:
+                                    database.getObjective(selectedObjectivePk!),
+                                builder: (context, snapshot) {
+                                  if (snapshot.data == null)
+                                    return SizedBox.shrink();
+                                  return AnimatedSwitcher(
                                     duration: Duration(milliseconds: 350),
                                     child: Align(
+                                      key: ValueKey(
+                                          selectedObjectivePk.toString()),
+                                      alignment: Alignment.centerRight,
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.end,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          TextFont(
+                                            textAlign: TextAlign.right,
+                                            text: convertToMoney(
+                                              Provider.of<AllWallets>(context),
+                                              objectiveAmountToPrimaryCurrency(
+                                                Provider.of<AllWallets>(context,
+                                                    listen: true),
+                                                snapshot.data!,
+                                              ),
+                                            ),
+                                            fontSize: 32,
+                                            fontWeight: FontWeight.bold,
+                                            maxLines: 1,
+                                            autoSizeText: true,
+                                          ),
+                                          TextFont(
+                                            textAlign: TextAlign.right,
+                                            fontSize: 18,
+                                            text: snapshot.data?.name ?? "",
+                                            maxLines: 2,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                },
+                              )
+                            : Column(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Container(height: 5),
+                                  AnimatedSwitcher(
+                                    duration: Duration(milliseconds: 350),
+                                    child: Align(
+                                      key: ValueKey(
+                                          selectedWalletPk.toString() +
+                                              selectedAmount.toString()),
                                       alignment: Alignment.centerRight,
                                       child: TextFont(
                                         textAlign: TextAlign.right,
                                         text: convertToMoney(
                                           Provider.of<AllWallets>(context),
-                                          (selectedAmount ?? 0) *
-                                              (amountRatioToPrimaryCurrencyGivenPk(
-                                                  Provider.of<AllWallets>(
-                                                      context),
-                                                  selectedWalletPk)),
+                                          selectedAmount ?? 0,
+                                          decimals:
+                                              getSelectedWallet(listen: true)
+                                                  ?.decimals,
+                                          currencyKey:
+                                              getSelectedWallet(listen: true)
+                                                  ?.currency,
+                                          addCurrencyName: ((getSelectedWallet(
+                                                      listen: true)
+                                                  ?.currency) !=
+                                              Provider.of<AllWallets>(context)
+                                                  .indexedByPk[appStateSettings[
+                                                      "selectedWalletPk"]]
+                                                  ?.currency),
                                         ),
-                                        fontSize: 18,
+                                        fontSize: 32,
+                                        fontWeight: FontWeight.bold,
                                         maxLines: 1,
                                         autoSizeText: true,
                                       ),
                                     ),
                                   ),
-                          ],
-                        ),
+                                  Provider.of<AllWallets>(context)
+                                                  .list
+                                                  .length <=
+                                              1 ||
+                                          selectedWalletPk ==
+                                              appStateSettings[
+                                                  "selectedWalletPk"] ||
+                                          ((getSelectedWallet(listen: true)
+                                                  ?.currency) ==
+                                              Provider.of<AllWallets>(context)
+                                                  .indexedByPk[appStateSettings[
+                                                      "selectedWalletPk"]]
+                                                  ?.currency)
+                                      ? AnimatedSizeSwitcher(
+                                          switcherDuration:
+                                              Duration(milliseconds: 350),
+                                          child: Container(
+                                            key: ValueKey(
+                                                selectedCategory?.name ?? ""),
+                                            width: double.infinity,
+                                            child: TextFont(
+                                              textAlign: TextAlign.right,
+                                              fontSize: 18,
+                                              text:
+                                                  selectedCategory?.name ?? "",
+                                              maxLines: 2,
+                                            ),
+                                          ),
+                                        )
+                                      : AnimatedSwitcher(
+                                          duration: Duration(milliseconds: 350),
+                                          child: Align(
+                                            alignment: Alignment.centerRight,
+                                            child: TextFont(
+                                              textAlign: TextAlign.right,
+                                              text: convertToMoney(
+                                                Provider.of<AllWallets>(
+                                                    context),
+                                                (selectedAmount ?? 0) *
+                                                    (amountRatioToPrimaryCurrencyGivenPk(
+                                                        Provider.of<AllWallets>(
+                                                            context),
+                                                        selectedWalletPk)),
+                                              ),
+                                              fontSize: 18,
+                                              maxLines: 1,
+                                              autoSizeText: true,
+                                            ),
+                                          ),
+                                        ),
+                                ],
+                              ),
                       ),
                     );
                   },
@@ -1192,6 +1406,8 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                     return CategoryIcon(
                                       categoryPk: "-1",
                                       category: category,
+                                      emojiSize: constraints.maxWidth * 0.73,
+                                      emojiScale: 1.2,
                                       size: constraints.maxWidth,
                                       sizePadding: 0,
                                       noBackground: true,
@@ -1304,7 +1520,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                 ? IconButton(
                     padding: EdgeInsets.all(15),
                     tooltip: "delete-transaction".tr(),
-                    onPressed: () {
+                    onPressed: () async {
                       deleteTransactionPopup(
                         context,
                         transaction: widget.transaction!,
@@ -1566,12 +1782,8 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                     return "installments".tr();
                                   }
                                 },
-                                onSelected: (item) {
-                                  if (item is TransactionSpecialType ||
-                                      item == null) {
-                                    setSelectedType(
-                                        transactionTypeDisplayToEnum[item]);
-                                  } else {
+                                onSelected: (item) async {
+                                  if (item == "installments") {
                                     openPopup(
                                       context,
                                       title: "track-installments".tr(),
@@ -1593,10 +1805,21 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                       },
                                       onSubmitLabel: "create-goal".tr(),
                                     );
+                                    // initializeInstallment();
+                                  } else if (item is TransactionSpecialType ||
+                                      item == null) {
+                                    resetInitializeInstallment();
+                                    setSelectedType(
+                                        transactionTypeDisplayToEnum[item]);
                                   }
                                 },
                                 getSelected: (item) {
-                                  if (item is TransactionSpecialType ||
+                                  if (isSettingUpInstallment &&
+                                      item == "installments") {
+                                    return true;
+                                  } else if (isSettingUpInstallment) {
+                                    return false;
+                                  } else if (item is TransactionSpecialType ||
                                       item == null) {
                                     return selectedType == item;
                                   } else {
@@ -1605,6 +1828,167 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                 },
                               ),
                             ),
+                          ),
+                          AnimatedSizeSwitcher(
+                            child: isSettingUpInstallment == false ||
+                                    selectedObjectivePk == null
+                                ? Container(
+                                    key: ValueKey(1),
+                                  )
+                                : StreamBuilder<Objective>(
+                                    key: ValueKey(2),
+                                    stream: database
+                                        .getObjective(selectedObjectivePk!),
+                                    builder: (context, snapshot) {
+                                      if (snapshot.data == null)
+                                        return SizedBox.shrink();
+                                      return Padding(
+                                        padding: const EdgeInsets.only(top: 5),
+                                        child: Column(
+                                          children: [
+                                            Row(
+                                              children: [
+                                                Expanded(
+                                                  child: Builder(
+                                                      builder: (context) {
+                                                    List<double> results =
+                                                        getInstallmentPaymentCalculations(
+                                                      allWallets: Provider.of<
+                                                          AllWallets>(context),
+                                                      objective: snapshot.data!,
+                                                      numberOfInstallmentPayments:
+                                                          numberOfInstallmentPayments,
+                                                      amountPerInstallmentPayment:
+                                                          amountPerInstallmentPayment,
+                                                    );
+                                                    double
+                                                        numberOfInstallmentPaymentsDisplay =
+                                                        results[0];
+                                                    double
+                                                        amountPerInstallmentPaymentDisplay =
+                                                        results[1];
+
+                                                    String
+                                                        displayNumberOfInstallmentPaymentsDisplay =
+                                                        numberOfInstallmentPaymentsDisplay ==
+                                                                double.infinity
+                                                            ? "0"
+                                                            : removeTrailingZeroes(
+                                                                numberOfInstallmentPaymentsDisplay
+                                                                    .toStringAsFixed(
+                                                                        3));
+                                                    String
+                                                        displayAmountPerInstallmentPaymentDisplay =
+                                                        convertToMoney(
+                                                            Provider.of<
+                                                                    AllWallets>(
+                                                                context),
+                                                            amountPerInstallmentPaymentDisplay ==
+                                                                    double
+                                                                        .infinity
+                                                                ? 0
+                                                                : amountPerInstallmentPaymentDisplay);
+                                                    return Wrap(
+                                                      alignment:
+                                                          WrapAlignment.center,
+                                                      crossAxisAlignment:
+                                                          WrapCrossAlignment
+                                                              .center,
+                                                      children: [
+                                                        TappableTextEntry(
+                                                          title:
+                                                              displayNumberOfInstallmentPaymentsDisplay,
+                                                          placeholder:
+                                                              numberOfInstallmentPayments ==
+                                                                      null
+                                                                  ? displayNumberOfInstallmentPaymentsDisplay
+                                                                  : "",
+                                                          showPlaceHolderWhenTextEquals:
+                                                              numberOfInstallmentPayments ==
+                                                                      null
+                                                                  ? displayNumberOfInstallmentPaymentsDisplay
+                                                                  : "",
+                                                          onTap: () {
+                                                            selectInstallmentLength(
+                                                                context);
+                                                          },
+                                                          fontSize: 23,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          internalPadding:
+                                                              EdgeInsets
+                                                                  .symmetric(
+                                                                      vertical:
+                                                                          4,
+                                                                      horizontal:
+                                                                          4),
+                                                          padding: EdgeInsets
+                                                              .symmetric(
+                                                                  vertical: 0,
+                                                                  horizontal:
+                                                                      3),
+                                                        ),
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .symmetric(
+                                                                  horizontal:
+                                                                      3),
+                                                          child: TextFont(
+                                                            text: numberOfInstallmentPayments ==
+                                                                    1
+                                                                ? "payment-of"
+                                                                    .tr()
+                                                                : "payments-of"
+                                                                    .tr(),
+                                                            fontSize: 23,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          ),
+                                                        ),
+                                                        TappableTextEntry(
+                                                          title:
+                                                              displayAmountPerInstallmentPaymentDisplay,
+                                                          placeholder:
+                                                              amountPerInstallmentPayment ==
+                                                                      null
+                                                                  ? displayAmountPerInstallmentPaymentDisplay
+                                                                  : "",
+                                                          showPlaceHolderWhenTextEquals:
+                                                              amountPerInstallmentPayment ==
+                                                                      null
+                                                                  ? displayAmountPerInstallmentPaymentDisplay
+                                                                  : "",
+                                                          onTap: () {
+                                                            selectAmountPerInstallment(
+                                                                context);
+                                                          },
+                                                          fontSize: 23,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          internalPadding:
+                                                              EdgeInsets
+                                                                  .symmetric(
+                                                                      vertical:
+                                                                          4,
+                                                                      horizontal:
+                                                                          4),
+                                                          padding: EdgeInsets
+                                                              .symmetric(
+                                                                  vertical: 0,
+                                                                  horizontal:
+                                                                      3),
+                                                        ),
+                                                      ],
+                                                    );
+                                                  }),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    }),
                           ),
                           AnimatedExpanded(
                             expand: selectedType ==
@@ -1621,7 +2005,6 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                       children: [
                                         Expanded(
                                           child: Wrap(
-                                            key: ValueKey(1),
                                             alignment: WrapAlignment.center,
                                             crossAxisAlignment:
                                                 WrapCrossAlignment.center,
@@ -1685,66 +2068,100 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                       ],
                                     ),
                                   ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(bottom: 5),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        AnimatedExpanded(
-                                          expand: selectedEndDate != null,
-                                          axis: Axis.horizontal,
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      AnimatedExpanded(
+                                        expand: isSettingUpInstallment &&
+                                            selectedObjectivePk != null,
+                                        axis: Axis.vertical,
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 5),
                                           child: TextFont(
-                                            text: "until".tr(),
+                                            text: "until-goal-reached"
+                                                .tr()
+                                                .toLowerCase(),
                                             fontSize: 23,
                                             fontWeight: FontWeight.bold,
+                                            textAlign: TextAlign.center,
                                           ),
                                         ),
-                                        Flexible(
-                                          child: TappableTextEntry(
-                                            title: (selectedEndDate == null
-                                                ? ""
-                                                : getWordedDateShort(
-                                                    selectedEndDate!,
-                                                    includeYear:
-                                                        selectedEndDate!.year !=
-                                                            DateTime.now().year,
-                                                  )),
-                                            placeholder: "until-forever".tr(),
-                                            showPlaceHolderWhenTextEquals: "",
-                                            onTap: () {
-                                              selectEndDate(context);
-                                            },
-                                            fontSize: 23,
-                                            fontWeight: FontWeight.bold,
-                                            internalPadding:
-                                                EdgeInsets.symmetric(
-                                                    vertical: 5, horizontal: 4),
-                                            padding: EdgeInsets.symmetric(
-                                                vertical: 0, horizontal: 5),
+                                      ),
+                                    ],
+                                  ),
+                                  AnimatedExpanded(
+                                    axis: Axis.vertical,
+                                    expand: isSettingUpInstallment == false,
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(bottom: 5),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          AnimatedExpanded(
+                                            expand: selectedEndDate != null,
+                                            axis: Axis.horizontal,
+                                            child: TextFont(
+                                              text: "until".tr(),
+                                              fontSize: 23,
+                                              fontWeight: FontWeight.bold,
+                                            ),
                                           ),
-                                        ),
-                                        AnimatedSizeSwitcher(
-                                          child: selectedEndDate != null
-                                              ? Opacity(
-                                                  key: ValueKey(1),
-                                                  opacity: 0.5,
-                                                  child: IconButtonScaled(
-                                                    tooltip: "clear".tr(),
-                                                    iconData:
-                                                        Icons.close_rounded,
-                                                    iconSize: 16,
-                                                    scale: 1.5,
-                                                    onTap: () {
-                                                      setSelectedEndDate(null);
-                                                    },
+                                          Flexible(
+                                            child: TappableTextEntry(
+                                              title: (selectedEndDate == null
+                                                  ? ""
+                                                  : getWordedDateShort(
+                                                      selectedEndDate!,
+                                                      includeYear:
+                                                          selectedEndDate!
+                                                                  .year !=
+                                                              DateTime.now()
+                                                                  .year,
+                                                    )),
+                                              placeholder:
+                                                  selectedObjectivePk != null
+                                                      ? "until-goal-reached"
+                                                          .tr()
+                                                      : "until-forever".tr(),
+                                              showPlaceHolderWhenTextEquals: "",
+                                              onTap: () {
+                                                selectEndDate(context);
+                                              },
+                                              fontSize: 23,
+                                              fontWeight: FontWeight.bold,
+                                              internalPadding:
+                                                  EdgeInsets.symmetric(
+                                                      vertical: 5,
+                                                      horizontal: 4),
+                                              padding: EdgeInsets.symmetric(
+                                                  vertical: 0, horizontal: 5),
+                                            ),
+                                          ),
+                                          AnimatedSizeSwitcher(
+                                            child: selectedEndDate != null
+                                                ? Opacity(
+                                                    key: ValueKey(1),
+                                                    opacity: 0.5,
+                                                    child: IconButtonScaled(
+                                                      tooltip: "clear".tr(),
+                                                      iconData:
+                                                          Icons.close_rounded,
+                                                      iconSize: 16,
+                                                      scale: 1.5,
+                                                      onTap: () {
+                                                        setSelectedEndDate(
+                                                            null);
+                                                      },
+                                                    ),
+                                                  )
+                                                : Container(
+                                                    key: ValueKey(2),
                                                   ),
-                                                )
-                                              : Container(
-                                                  key: ValueKey(2),
-                                                ),
-                                        ),
-                                      ],
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ],
@@ -1754,74 +2171,81 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                           // Wallet picker is in Select Amount... consider removing?
                           Provider.of<AllWallets>(context).list.length <= 1
                               ? SizedBox.shrink()
-                              : HorizontalBreakAbove(
-                                  enabled: enableDoubleColumn(context),
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(top: 5),
-                                    child: SelectChips(
-                                      allowMultipleSelected: false,
-                                      onLongPress: (TransactionWallet wallet) {
-                                        pushRoute(
-                                          context,
-                                          AddWalletPage(
-                                            wallet: wallet,
-                                            routesToPopAfterDelete:
-                                                RoutesToPopAfterDelete
-                                                    .PreventDelete,
-                                          ),
-                                        );
-                                      },
-                                      items:
-                                          Provider.of<AllWallets>(context).list,
-                                      getSelected: (TransactionWallet wallet) {
-                                        return getSelectedWallet(listen: false)
-                                                ?.walletPk ==
-                                            wallet.walletPk;
-                                      },
-                                      onSelected: (TransactionWallet wallet) {
-                                        setSelectedWalletPk(wallet.walletPk);
-                                      },
-                                      getCustomBorderColor:
-                                          (TransactionWallet item) {
-                                        return dynamicPastel(
-                                          context,
-                                          lightenPastel(
-                                            HexColor(
-                                              item.colour,
-                                              defaultColor: Theme.of(context)
-                                                  .colorScheme
-                                                  .primary,
+                              : AnimatedExpanded(
+                                  axis: Axis.vertical,
+                                  expand: isSettingUpInstallment == false,
+                                  child: HorizontalBreakAbove(
+                                    enabled: enableDoubleColumn(context),
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(top: 5),
+                                      child: SelectChips(
+                                        allowMultipleSelected: false,
+                                        onLongPress:
+                                            (TransactionWallet wallet) {
+                                          pushRoute(
+                                            context,
+                                            AddWalletPage(
+                                              wallet: wallet,
+                                              routesToPopAfterDelete:
+                                                  RoutesToPopAfterDelete
+                                                      .PreventDelete,
                                             ),
-                                            amount: 0.3,
+                                          );
+                                        },
+                                        items: Provider.of<AllWallets>(context)
+                                            .list,
+                                        getSelected:
+                                            (TransactionWallet wallet) {
+                                          return getSelectedWallet(
+                                                      listen: false)
+                                                  ?.walletPk ==
+                                              wallet.walletPk;
+                                        },
+                                        onSelected: (TransactionWallet wallet) {
+                                          setSelectedWalletPk(wallet.walletPk);
+                                        },
+                                        getCustomBorderColor:
+                                            (TransactionWallet item) {
+                                          return dynamicPastel(
+                                            context,
+                                            lightenPastel(
+                                              HexColor(
+                                                item.colour,
+                                                defaultColor: Theme.of(context)
+                                                    .colorScheme
+                                                    .primary,
+                                              ),
+                                              amount: 0.3,
+                                            ),
+                                            amount: 0.4,
+                                          );
+                                        },
+                                        getLabel: (TransactionWallet wallet) {
+                                          return wallet.name ==
+                                                  wallet.currency
+                                                      .toString()
+                                                      .toUpperCase()
+                                              ? wallet.currency
+                                                  .toString()
+                                                  .toUpperCase()
+                                              : wallet.name +
+                                                  " (" +
+                                                  wallet.currency
+                                                      .toString()
+                                                      .toUpperCase() +
+                                                  ")";
+                                        },
+                                        extraWidget: AddButton(
+                                          onTap: () {},
+                                          width: 40,
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 5, vertical: 1),
+                                          openPage: AddWalletPage(
+                                            routesToPopAfterDelete:
+                                                RoutesToPopAfterDelete.None,
                                           ),
-                                          amount: 0.4,
-                                        );
-                                      },
-                                      getLabel: (TransactionWallet wallet) {
-                                        return wallet.name ==
-                                                wallet.currency
-                                                    .toString()
-                                                    .toUpperCase()
-                                            ? wallet.currency
-                                                .toString()
-                                                .toUpperCase()
-                                            : wallet.name +
-                                                " (" +
-                                                wallet.currency
-                                                    .toString()
-                                                    .toUpperCase() +
-                                                ")";
-                                      },
-                                      extraWidget: AddButton(
-                                        onTap: () {},
-                                        width: 40,
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 5, vertical: 1),
-                                        openPage: AddWalletPage(
-                                          routesToPopAfterDelete:
-                                              RoutesToPopAfterDelete.None,
+                                          borderRadius: 8,
                                         ),
-                                        borderRadius: 8,
                                       ),
                                     ),
                                   ),
@@ -1831,10 +2255,17 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                             setSelectedBudget: setSelectedBudgetPk,
                             horizontalBreak: true,
                           ),
-                          SelectObjective(
-                            setSelectedObjective: setSelectedObjectivePk,
-                            selectedObjectivePk: selectedObjectivePk,
-                            horizontalBreak: true,
+                          IgnorePointer(
+                            ignoring: isSettingUpInstallment,
+                            child: AnimatedExpanded(
+                              axis: Axis.vertical,
+                              expand: isSettingUpInstallment == false,
+                              child: SelectObjective(
+                                setSelectedObjective: setSelectedObjectivePk,
+                                selectedObjectivePk: selectedObjectivePk,
+                                horizontalBreak: true,
+                              ),
+                            ),
                           ),
                           AnimatedExpanded(
                             expand: selectedBudgetPk != null &&
@@ -2447,6 +2878,8 @@ class SelectText extends StatefulWidget {
     this.popContext = true,
     this.popContextWhenSet = false,
     this.inputFormatters,
+    this.backgroundColor,
+    this.margin = const EdgeInsets.only(bottom: 14),
   }) : super(key: key);
   final Function(String) setSelectedText;
   final String? selectedText;
@@ -2462,6 +2895,8 @@ class SelectText extends StatefulWidget {
   final bool popContext;
   final bool popContextWhenSet;
   final List<TextInputFormatter>? inputFormatters;
+  final Color? backgroundColor;
+  final EdgeInsets margin;
 
   @override
   _SelectTextState createState() => _SelectTextState();
@@ -2484,48 +2919,44 @@ class _SelectTextState extends State<SelectText> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Container(
-          width: getWidthBottomSheet(context) - 36,
-          child: TextInput(
-            inputFormatters: widget.inputFormatters,
-            focusNode: _focusNode,
-            textCapitalization: widget.textCapitalization,
-            icon: widget.icon != null
-                ? widget.icon
-                : appStateSettings["outlinedIcons"]
-                    ? Icons.title_outlined
-                    : Icons.title_rounded,
-            initialValue: widget.selectedText,
-            autoFocus: widget.autoFocus,
-            readOnly: widget.readOnly,
-            onEditingComplete: () {
-              widget.setSelectedText(input ?? "");
-              if (widget.popContext) {
-                Navigator.pop(context);
-              }
-              if (widget.next != null) {
-                widget.next!();
-              }
-              if (widget.nextWithInput != null) {
-                widget.nextWithInput!(input ?? "");
-              }
-            },
-            onChanged: (text) {
-              input = text;
-              widget.setSelectedText(input!);
-              if (widget.popContextWhenSet) {
-                Navigator.pop(context);
-              }
-            },
-            labelText: widget.placeholder ?? widget.labelText,
-            padding: EdgeInsets.zero,
-          ),
-        ),
-        Container(height: 14),
-      ],
+    return Container(
+      padding: widget.margin,
+      width: getWidthBottomSheet(context) - 36,
+      child: TextInput(
+        backgroundColor: widget.backgroundColor,
+        inputFormatters: widget.inputFormatters,
+        focusNode: _focusNode,
+        textCapitalization: widget.textCapitalization,
+        icon: widget.icon != null
+            ? widget.icon
+            : appStateSettings["outlinedIcons"]
+                ? Icons.title_outlined
+                : Icons.title_rounded,
+        initialValue: widget.selectedText,
+        autoFocus: widget.autoFocus,
+        readOnly: widget.readOnly,
+        onEditingComplete: () {
+          widget.setSelectedText(input ?? "");
+          if (widget.popContext) {
+            Navigator.pop(context);
+          }
+          if (widget.next != null) {
+            widget.next!();
+          }
+          if (widget.nextWithInput != null) {
+            widget.nextWithInput!(input ?? "");
+          }
+        },
+        onChanged: (text) {
+          input = text;
+          widget.setSelectedText(input!);
+          if (widget.popContextWhenSet) {
+            Navigator.pop(context);
+          }
+        },
+        labelText: widget.placeholder ?? widget.labelText,
+        padding: EdgeInsets.zero,
+      ),
     );
   }
 }
@@ -3002,7 +3433,7 @@ class _SelectExcludeBudgetState extends State<SelectExcludeBudget> {
         if (snapshot.hasData) {
           if (snapshot.data!.length <= 0)
             return Padding(
-              padding: const EdgeInsets.all(5),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
               child: TextFont(
                 text: "no-budgets-found".tr(),
                 fontSize: 16,
@@ -3134,6 +3565,8 @@ void deleteTransactionPopup(
     subtitle: transactionName,
   );
   if (action == DeletePopupAction.Delete) {
+    await checkToDeleteCloselyRelatedBalanceCorrectionTransaction(context,
+        transaction: transaction);
     if (routesToPopAfterDelete == RoutesToPopAfterDelete.All) {
       Navigator.of(context).popUntil((route) => route.isFirst);
     } else if (routesToPopAfterDelete == RoutesToPopAfterDelete.One) {
@@ -3149,6 +3582,60 @@ void deleteTransactionPopup(
         ),
       );
     });
+  }
+}
+
+Future checkToDeleteCloselyRelatedBalanceCorrectionTransaction(
+  BuildContext context, {
+  required Transaction transaction,
+}) async {
+  if (transaction.categoryFk == "0") {
+    Transaction? closelyRelatedTransferCorrectionTransaction = await database
+        .getCloselyRelatedBalanceCorrectionTransaction(transaction);
+    if (closelyRelatedTransferCorrectionTransaction != null) {
+      await openPopup(
+        context,
+        title: "delete-both-transfers-question".tr(),
+        description: "delete-both-transfers-question-description".tr(),
+        descriptionWidget: IgnorePointer(
+          child: Column(
+            children: [
+              HorizontalBreak(padding: EdgeInsets.only(top: 15, bottom: 10)),
+              TransactionEntry(
+                useHorizontalPaddingConstrained: false,
+                openPage: Container(),
+                transaction: transaction,
+                containerColor: Theme.of(context)
+                    .colorScheme
+                    .secondaryContainer
+                    .withOpacity(0.4),
+                customPadding: EdgeInsets.zero,
+              ),
+              SizedBox(height: 5),
+              TransactionEntry(
+                useHorizontalPaddingConstrained: false,
+                openPage: Container(),
+                transaction: closelyRelatedTransferCorrectionTransaction,
+                containerColor: Colors.transparent,
+                customPadding: EdgeInsets.zero,
+              ),
+            ],
+          ),
+        ),
+        onCancel: () {
+          Navigator.pop(context);
+        },
+        onCancelLabel: "only-current".tr(),
+        onSubmit: () async {
+          openLoadingPopupTryCatch(() async {
+            await database.deleteTransaction(
+                closelyRelatedTransferCorrectionTransaction.transactionPk);
+          });
+          Navigator.pop(context);
+        },
+        onSubmitLabel: "delete-both".tr(),
+      );
+    }
   }
 }
 
@@ -3718,6 +4205,7 @@ class LinkInNotes extends StatelessWidget {
     this.iconData,
     this.iconDataAfter,
     this.color,
+    this.extraWidget,
     super.key,
   });
   final String link;
@@ -3726,6 +4214,7 @@ class LinkInNotes extends StatelessWidget {
   final IconData? iconData;
   final IconData? iconDataAfter;
   final Color? color;
+  final Widget? extraWidget;
 
   @override
   Widget build(BuildContext context) {
@@ -3739,7 +4228,8 @@ class LinkInNotes extends StatelessWidget {
                   : getColor(context, "canvasContainer")),
               amount: 0.2),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+        padding: EdgeInsets.only(
+            left: 15, right: extraWidget == null ? 15 : 0, top: 10, bottom: 10),
         child: Row(
           children: [
             Icon(
@@ -3751,15 +4241,13 @@ class LinkInNotes extends StatelessWidget {
             SizedBox(width: 10),
             Expanded(
               child: TextFont(
-                text: link
-                    .replaceFirst("www.", "")
-                    .replaceFirst("http://", "")
-                    .replaceFirst("https://", ""),
+                text: getDomainNameFromURL(link),
                 fontSize: 16,
                 maxLines: 1,
               ),
             ),
             if (iconDataAfter != null) Icon(iconDataAfter),
+            if (extraWidget != null) extraWidget!,
           ],
         ),
       ),
@@ -3792,8 +4280,16 @@ class _TransactionNotesTextInputState extends State<TransactionNotesTextInput> {
     if (link == null) return;
     String noteUpdated = widget.noteInputController.text +
         (widget.noteInputController.text == "" ? "" : "\n") +
-        (link);
+        (link) +
+        " ";
 
+    widget.setSelectedNoteController(noteUpdated);
+    updateExtractedLinks(noteUpdated);
+  }
+
+  void removeLinkFromNote(String link) {
+    String noteUpdated =
+        widget.noteInputController.text.replaceAll(link + " ", "");
     widget.setSelectedNoteController(noteUpdated);
     updateExtractedLinks(noteUpdated);
   }
@@ -4002,6 +4498,35 @@ class _TransactionNotesTextInputState extends State<TransactionNotesTextInput> {
                           onTap: () {
                             openUrl(link);
                           },
+                          extraWidget: Padding(
+                            padding: const EdgeInsets.only(right: 11, left: 5),
+                            child: IconButtonScaled(
+                              iconData: appStateSettings["outlinedIcons"]
+                                  ? Icons.remove_outlined
+                                  : Icons.remove_rounded,
+                              iconSize: 16,
+                              scale: 1.6,
+                              onTap: () {
+                                openPopup(
+                                  context,
+                                  icon: appStateSettings["outlinedIcons"]
+                                      ? Icons.link_off_outlined
+                                      : Icons.link_off_rounded,
+                                  title: "remove-link-question".tr(),
+                                  description: "remove-link-description".tr(),
+                                  onCancel: () {
+                                    Navigator.pop(context);
+                                  },
+                                  onCancelLabel: "cancel".tr(),
+                                  onSubmit: () {
+                                    removeLinkFromNote(link);
+                                    Navigator.pop(context);
+                                  },
+                                  onSubmitLabel: "remove".tr(),
+                                );
+                              },
+                            ),
+                          ),
                         ),
                     ],
                   ),

@@ -16,6 +16,7 @@ import 'package:budget/widgets/progressBar.dart';
 import 'package:budget/widgets/settingsContainers.dart';
 import 'package:budget/widgets/textInput.dart';
 import 'package:budget/widgets/textWidgets.dart';
+import 'package:budget/widgets/util/saveFile.dart';
 import 'package:drift/drift.dart' hide Column, Table;
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
@@ -33,87 +34,17 @@ import 'package:universal_html/html.dart' show AnchorElement;
 import 'package:file_picker/file_picker.dart';
 
 Future saveCSV(
-  String csv,
-  String fileName, {
-  String? customDirectory,
-}) async {
-  if (kIsWeb) {
-    try {
-      List<int> dataStore = utf8.encode(csv);
-      String base64String = base64Encode(dataStore);
-      AnchorElement anchor = AnchorElement(
-          href: 'data:application/octet-stream;base64,$base64String')
-        ..download = fileName
-        ..style.display = 'none';
-      anchor.click();
-      openSnackbar(SnackbarMessage(
-        title: "csv-saved-success".tr(),
-        description: fileName,
-        icon: appStateSettings["outlinedIcons"]
-            ? Icons.download_done_outlined
-            : Icons.download_done_rounded,
-      ));
-      return true;
-    } catch (e) {
-      openSnackbar(SnackbarMessage(
-        title: "error-exporting".tr(),
-        description: e.toString(),
-        icon: appStateSettings["outlinedIcons"]
-            ? Icons.warning_outlined
-            : Icons.warning_rounded,
-      ));
-      print("Error saving file to device: " + e.toString());
-      return false;
-    }
-  }
-
-  try {
-    String directory = customDirectory ??
-        (getPlatform() == PlatformOS.isAndroid
-            ? "/storage/emulated/0/Download"
-            : (await getApplicationDocumentsDirectory()).path);
-
-    String filePath = "${directory}/${fileName}";
-    File savedFile = File(filePath);
-    await savedFile.writeAsString(csv);
-
-    openSnackbar(SnackbarMessage(
-      title: "csv-saved-success".tr(),
-      description: filePath,
-      icon: appStateSettings["outlinedIcons"]
-          ? Icons.download_done_outlined
-          : Icons.download_done_rounded,
-      timeout: Duration(milliseconds: 5000),
-    ));
-    return true;
-  } catch (e) {
-    if (customDirectory == null) {
-      String? selectedDirectory = await FilePicker.platform.getDirectoryPath();
-      if (selectedDirectory == null) {
-        openSnackbar(SnackbarMessage(
-          title: "error-exporting".tr(),
-          description: "no-folder-selected".tr(),
-          icon: appStateSettings["outlinedIcons"]
-              ? Icons.warning_outlined
-              : Icons.warning_rounded,
-        ));
-        print("Error saving file to device: " + e.toString());
-        return false;
-      } else {
-        return await saveCSV(csv, fileName, customDirectory: selectedDirectory);
-      }
-    } else {
-      openSnackbar(SnackbarMessage(
-        title: "error-exporting".tr(),
-        description: e.toString(),
-        icon: appStateSettings["outlinedIcons"]
-            ? Icons.warning_outlined
-            : Icons.warning_rounded,
-      ));
-      print("Error saving file to device: " + e.toString());
-      return false;
-    }
-  }
+    {required BuildContext boxContext,
+    required String csv,
+    required String fileName}) async {
+  return await saveFile(
+    boxContext: boxContext,
+    dataStore: null,
+    dataString: csv,
+    fileName: fileName,
+    successMessage: "csv-saved-success".tr(),
+    errorMessage: "error-exporting".tr(),
+  );
 }
 
 Map<String, String> convertStringToMap(String inputString,
@@ -180,7 +111,7 @@ Map<String, String> convertStringToMap(String inputString,
 class ExportCSV extends StatelessWidget {
   const ExportCSV({super.key});
 
-  Future exportCSV() async {
+  Future exportCSV({required BuildContext boxContext}) async {
     await openLoadingPopupTryCatch(() async {
       List<Map<String, String>> output = [];
       List<TransactionWithCategory> transactions = await database
@@ -300,33 +231,35 @@ class ExportCSV extends StatelessWidget {
               .replaceAll(" ", "-")
               .replaceAll(":", "-") +
           ".csv";
-      await saveCSV(csv, fileName);
+      await saveCSV(boxContext: boxContext, csv: csv, fileName: fileName);
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return SettingsContainer(
-      onTap: () async {
-        await openPopup(
-          context,
-          barrierDismissible: false,
-          onSubmit: () {
-            Navigator.pop(context);
-          },
-          onSubmitLabel: "ok".tr(),
-          icon: appStateSettings["outlinedIcons"]
-              ? Icons.warning_amber_outlined
-              : Icons.warning_amber_rounded,
-          title: "export-csv-warning".tr(),
-          description: "export-csv-warning-description".tr(),
-        );
-        await exportCSV();
-      },
-      title: "export-csv".tr(),
-      icon: appStateSettings["outlinedIcons"]
-          ? Icons.file_present_outlined
-          : Icons.file_present_rounded,
-    );
+    return Builder(builder: (boxContext) {
+      return SettingsContainer(
+        onTap: () async {
+          await openPopup(
+            context,
+            barrierDismissible: false,
+            onSubmit: () {
+              Navigator.pop(context);
+            },
+            onSubmitLabel: "ok".tr(),
+            icon: appStateSettings["outlinedIcons"]
+                ? Icons.warning_amber_outlined
+                : Icons.warning_amber_rounded,
+            title: "export-csv-warning".tr(),
+            description: "export-csv-warning-description".tr(),
+          );
+          await exportCSV(boxContext: boxContext);
+        },
+        title: "export-csv".tr(),
+        icon: appStateSettings["outlinedIcons"]
+            ? Icons.file_present_outlined
+            : Icons.file_present_rounded,
+      );
+    });
   }
 }

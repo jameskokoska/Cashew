@@ -186,18 +186,31 @@ class _WalletDetailsPageState extends State<WalletDetailsPage>
   DateTimeRange? getDateTimeRangeForPassedSearchFilters() {
     if (selectedDateTimeRange != null) return selectedDateTimeRange;
     if (getStartDateOfSelectedCustomPeriod("") == null) return null;
-    return DateTimeRange(
+    try {
+      return DateTimeRange(
         start: getStartDateOfSelectedCustomPeriod("") ?? DateTime.now(),
         end: getEndDateOfSelectedCustomPeriod("") ??
             DateTime(
               DateTime.now().year,
               DateTime.now().month + 1,
               DateTime.now().day,
-            ));
+            ),
+      );
+    } catch (e) {
+      print("Date range error");
+    }
+    return null;
   }
 
   @override
   Widget build(BuildContext context) {
+    // Make the information displayed follow the date range of search filters
+    // Force set date time range in case its set back to null we want to override its original value
+    searchFilters = searchFilters?.copyWith(
+      dateTimeRange: getDateTimeRangeForPassedSearchFilters(),
+      forceSetDateTimeRange: true,
+    );
+
     ColorScheme walletColorScheme = widget.wallet == null
         ? Theme.of(context).colorScheme
         : ColorScheme.fromSeed(
@@ -574,12 +587,12 @@ class _WalletDetailsPageState extends State<WalletDetailsPage>
         padding: const EdgeInsets.only(left: 7),
         child: ButtonIcon(
           key: ValueKey(
-            searchFilters?.isClear(),
+            searchFilters?.isClear(ignoreDateTimeRange: true),
           ),
-          color: searchFilters?.isClear() == true
+          color: searchFilters?.isClear(ignoreDateTimeRange: true) == true
               ? null
               : Theme.of(context).colorScheme.tertiaryContainer,
-          iconColor: searchFilters?.isClear() == true
+          iconColor: searchFilters?.isClear(ignoreDateTimeRange: true) == true
               ? null
               : Theme.of(context).colorScheme.onTertiaryContainer,
           onTap: () {
@@ -792,7 +805,8 @@ class _WalletDetailsPageState extends State<WalletDetailsPage>
                         openBottomSheet(
                           context,
                           fullSnap: true,
-                          TransferBalancePopup(wallet: widget.wallet!),
+                          TransferBalancePopup(
+                              wallet: widget.wallet!, allowEditWallet: false),
                         );
                       },
                     ),
@@ -1230,7 +1244,6 @@ class _WalletCategoryPieChartState extends State<WalletCategoryPieChart> {
                     extraText: isIncome ? "of-income".tr() : "of-expense".tr(),
                     budgetColorScheme: widget.walletColorScheme,
                     category: category.category,
-                    totalSpentAbsolute: s.totalSpentAbsolute,
                     totalSpent: s.totalSpent,
                     transactionCount: category.transactionCount,
                     categorySpent: category.total,
@@ -1279,7 +1292,7 @@ class _WalletCategoryPieChartState extends State<WalletCategoryPieChart> {
                     isPastBudget: true,
                     pieChartDisplayStateKey: _pieChartDisplayStateKey,
                     data: s.dataFilterUnassignedTransactions,
-                    totalSpentAbsolute: s.totalSpentAbsolute,
+                    totalSpent: s.totalSpent,
                     setSelectedCategory: (categoryPk, category) async {
                       setState(() {
                         selectedCategory = category;

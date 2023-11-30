@@ -31,6 +31,8 @@ class CategoryIcon extends StatelessWidget {
     this.cacheImage = false,
     this.enableTooltip = false,
     this.correctionEmojiPaddingBottom = 0,
+    this.emojiSize,
+    this.emojiScale = 1,
   }) : super(key: key);
 
   final String? categoryPk;
@@ -51,6 +53,8 @@ class CategoryIcon extends StatelessWidget {
   final bool cacheImage;
   final bool enableTooltip;
   final double? correctionEmojiPaddingBottom;
+  final double? emojiSize;
+  final double emojiScale;
 
   Widget categoryIconWidget(context, TransactionCategory? category) {
     Widget child = Column(
@@ -163,7 +167,8 @@ class CategoryIcon extends StatelessWidget {
             category?.emojiIconName != null
                 ? EmojiIcon(
                     emojiIconName: category?.emojiIconName,
-                    size: size,
+                    size: emojiSize ?? size,
+                    emojiScale: emojiScale,
                     correctionPaddingBottom: correctionEmojiPaddingBottom,
                   )
                 : SizedBox.shrink(),
@@ -272,22 +277,30 @@ class EmojiIcon extends StatelessWidget {
     required this.emojiIconName,
     required this.size,
     this.correctionPaddingBottom,
+    this.emojiScale = 1,
     super.key,
   });
   final String? emojiIconName;
   final double size;
   final double? correctionPaddingBottom;
+  final double emojiScale;
 
   @override
   Widget build(BuildContext context) {
-    return IgnorePointer(
-      child: Padding(
-        padding: EdgeInsets.only(
-            bottom: size * 0.185 - (correctionPaddingBottom ?? 0)),
-        child: TextFont(
-          text: emojiIconName ?? "",
-          textAlign: TextAlign.center,
-          fontSize: size,
+    return MediaQuery(
+      data: MediaQueryData(textScaleFactor: 1),
+      child: IgnorePointer(
+        child: Padding(
+          padding: EdgeInsets.only(
+              bottom: size * 0.185 - (correctionPaddingBottom ?? 0)),
+          child: Transform.scale(
+            scale: emojiScale,
+            child: TextFont(
+              text: emojiIconName ?? "",
+              textAlign: TextAlign.center,
+              fontSize: size,
+            ),
+          ),
         ),
       ),
     );

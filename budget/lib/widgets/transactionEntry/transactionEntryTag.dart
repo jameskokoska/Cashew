@@ -177,6 +177,7 @@ class ObjectivePercentTag extends StatelessWidget {
         double totalAmount = snapshot.data ?? 0;
         if (objective.income == false) {
           totalAmount = totalAmount * -1;
+          if (totalAmount == 0) totalAmount = totalAmount.abs();
         }
         double percentageTowardsGoal =
             objectiveAmount == 0 ? 0 : totalAmount / objectiveAmount;

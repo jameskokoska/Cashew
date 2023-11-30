@@ -58,7 +58,7 @@ class PieChartWrapper extends StatelessWidget {
   const PieChartWrapper({
     Key? key,
     required this.data,
-    required this.totalSpentAbsolute,
+    required this.totalSpent,
     required this.setSelectedCategory,
     required this.isPastBudget,
     required this.pieChartDisplayStateKey,
@@ -66,7 +66,7 @@ class PieChartWrapper extends StatelessWidget {
     this.percentLabelOnTop = false,
   }) : super(key: key);
   final List<CategoryWithTotal> data;
-  final double totalSpentAbsolute;
+  final double totalSpent;
   final Function(String categoryPk, TransactionCategory? category)
       setSelectedCategory;
   final bool isPastBudget;
@@ -110,7 +110,7 @@ class PieChartWrapper extends StatelessWidget {
                   )
                 : PieChartDisplay(
                     data: dataFiltered,
-                    totalSpentAbsolute: totalSpentAbsolute,
+                    totalSpent: totalSpent,
                     setSelectedCategory: setSelectedCategory,
                     key: pieChartDisplayStateKey,
                     percentLabelOnTop: percentLabelOnTop,
@@ -152,12 +152,12 @@ class PieChartDisplay extends StatefulWidget {
   PieChartDisplay({
     Key? key,
     required this.data,
-    required this.totalSpentAbsolute,
+    required this.totalSpent,
     required this.setSelectedCategory,
     this.percentLabelOnTop = false,
   }) : super(key: key);
   final List<CategoryWithTotal> data;
-  final double totalSpentAbsolute;
+  final double totalSpent;
   final Function(String categoryPk, TransactionCategory? category)
       setSelectedCategory;
   final bool percentLabelOnTop;
@@ -299,9 +299,9 @@ class PieChartDisplayState extends State<PieChartDisplay> {
       );
       return PieChartSectionData(
         color: color,
-        value: widget.totalSpentAbsolute <= 0
+        value: widget.totalSpent <= 0
             ? 5
-            : (widget.data[i].total / widget.totalSpentAbsolute).abs(),
+            : (widget.data[i].total / widget.totalSpent).abs(),
         title: "",
         radius: radius,
         badgeWidget: _Badge(
@@ -313,9 +313,9 @@ class PieChartDisplayState extends State<PieChartDisplay> {
           categoryColor: HexColor(widget.data[i].category.colour,
               defaultColor: Theme.of(context).colorScheme.primary),
           emojiIconName: widget.data[i].category.emojiIconName,
-          percent: widget.totalSpentAbsolute == 0
+          percent: widget.totalSpent == 0
               ? 0
-              : (widget.data[i].total / widget.totalSpentAbsolute * 100).abs(),
+              : (widget.data[i].total / widget.totalSpent * 100).abs(),
           isTouched: isTouched,
         ),
         titlePositionPercentageOffset: 1.4,

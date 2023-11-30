@@ -558,6 +558,8 @@ DateTime? getStartDateOfSelectedCustomPeriod(
         days: (appStateSettings[
                 "customPeriodPastDays" + cycleSettingsExtension] ??
             0)));
+    if (startDate.year <= 1900) return DateTime(1900);
+    if (startDate.isAfter(DateTime.now())) return DateTime(1900);
     return startDate;
   } else if (selectedPeriodType == CycleType.dateRange) {
     DateTime startDate = DateTime.tryParse(appStateSettings[
@@ -583,12 +585,18 @@ DateTime? getEndDateOfSelectedCustomPeriod(
 
   // If it is a cycle, we want the end date to be null (display everything up to today!)
   // Therefore, do not add this code in!
-  // if (selectedPeriodType == CycleType.cycle) {
-  //   DateTimeRange budgetRange = getCycleDateTimeRange(cycleSettingsExtension);
-  //   DateTime endDate = DateTime(
-  //       budgetRange.end.year, budgetRange.end.month, budgetRange.end.day);
-  //   return endDate;
-  // }
+  if (selectedPeriodType == CycleType.cycle) {
+    DateTimeRange budgetRange = getCycleDateTimeRange(cycleSettingsExtension);
+    DateTime endDate = DateTime(
+        budgetRange.end.year, budgetRange.end.month, budgetRange.end.day);
+    return endDate;
+  }
+
+  if (selectedPeriodType == CycleType.pastDays) {
+    DateTime endDate =
+        DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+    return endDate;
+  }
 
   if (selectedPeriodType == CycleType.dateRange) {
     DateTime? endDate = DateTime.tryParse(

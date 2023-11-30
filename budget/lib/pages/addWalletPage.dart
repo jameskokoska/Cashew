@@ -458,7 +458,10 @@ class _AddWalletPageState extends State<AddWalletPage> {
                       openBottomSheet(
                         context,
                         fullSnap: true,
-                        TransferBalancePopup(wallet: wallet),
+                        TransferBalancePopup(
+                          wallet: wallet,
+                          allowEditWallet: false,
+                        ),
                       );
                     },
                   ),
@@ -594,7 +597,10 @@ class _AddWalletPageState extends State<AddWalletPage> {
                             openBottomSheet(
                               context,
                               fullSnap: true,
-                              TransferBalancePopup(wallet: wallet),
+                              TransferBalancePopup(
+                                wallet: wallet,
+                                allowEditWallet: false,
+                              ),
                             );
                           }
                         },
@@ -1036,8 +1042,10 @@ Future createCorrectionTransaction(double amount, TransactionWallet wallet,
 }
 
 class TransferBalancePopup extends StatefulWidget {
-  const TransferBalancePopup({required this.wallet, super.key});
+  const TransferBalancePopup(
+      {required this.wallet, required this.allowEditWallet, super.key});
   final TransactionWallet wallet;
+  final bool allowEditWallet;
 
   @override
   State<TransferBalancePopup> createState() => _TransferBalancePopupState();
@@ -1059,7 +1067,7 @@ class _TransferBalancePopupState extends State<TransferBalancePopup> {
       child: AnimatedSizeSwitcher(
         clipBehavior: Clip.none,
         child: Tappable(
-          key: ValueKey(walletFrom.walletPk),
+          key: ValueKey(wallet?.walletPk),
           color: getColor(context, "lightDarkAccentHeavyLight"),
           borderRadius: 12,
           child: Container(
@@ -1087,8 +1095,11 @@ class _TransferBalancePopupState extends State<TransferBalancePopup> {
             ),
           ),
           onTap: () async {
-            dynamic result =
-                await selectWalletPopup(context, selectedWallet: wallet);
+            dynamic result = await selectWalletPopup(
+              context,
+              selectedWallet: wallet,
+              allowEditWallet: widget.allowEditWallet,
+            );
             if (result is TransactionWallet) {
               onSelected(result);
             }
@@ -1243,8 +1254,11 @@ class _TransferBalancePopupState extends State<TransferBalancePopup> {
             allowZero: true,
             next: () async {
               if (walletTo == null) {
-                dynamic result =
-                    await selectWalletPopup(context, selectedWallet: walletTo);
+                dynamic result = await selectWalletPopup(
+                  context,
+                  selectedWallet: walletTo,
+                  allowEditWallet: widget.allowEditWallet,
+                );
                 if (result is TransactionWallet) {
                   setState(() {
                     walletTo = result;
@@ -1262,17 +1276,21 @@ class _TransferBalancePopupState extends State<TransferBalancePopup> {
               AllWallets allWallets =
                   Provider.of<AllWallets>(context, listen: false);
 
+              // Want these times to be the same so we know the pairing of balance corrections
+              DateTime selectedDateTimeSetToNow =
+                  selectedDateTime ?? DateTime.now();
+
               await createCorrectionTransaction(
                 enteredAmount *
                     getAmountRatioWalletTransferTo(
                         allWallets, walletTo!.walletPk),
                 walletTo!,
                 note: note,
-                dateTime: selectedDateTime,
+                dateTime: selectedDateTimeSetToNow,
                 title: selectedTitle == ""
                     ? (allWallets.indexedByPk[walletTo!.walletPk]!.name +
                         " " +
-                        "transfer-in".tr())
+                        (isNegative ? "transfer-out".tr() : "transfer-in".tr()))
                     : selectedTitle,
               );
 
@@ -1282,11 +1300,13 @@ class _TransferBalancePopupState extends State<TransferBalancePopup> {
                         allWallets, walletFrom.walletPk),
                 walletFrom,
                 note: note,
-                dateTime: selectedDateTime,
+                dateTime: selectedDateTimeSetToNow,
                 title: selectedTitle == ""
                     ? (allWallets.indexedByPk[walletFrom.walletPk]!.name +
                         " " +
-                        "transfer-out".tr())
+                        (isNegative == false
+                            ? "transfer-out".tr()
+                            : "transfer-in".tr()))
                     : selectedTitle,
               );
 

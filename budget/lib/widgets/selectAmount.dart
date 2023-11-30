@@ -51,6 +51,7 @@ class SelectAmount extends StatefulWidget {
     this.showEnteredNumber = true,
     this.convertToMoney = true,
     this.allDecimals = false,
+    this.hideWalletPickerIfOneCurrency = false,
   }) : super(key: key);
   final Function(double, String) setSelectedAmount;
   final String amountPassed;
@@ -69,6 +70,7 @@ class SelectAmount extends StatefulWidget {
   final bool showEnteredNumber;
   final bool convertToMoney;
   final bool allDecimals;
+  final bool hideWalletPickerIfOneCurrency;
 
   @override
   _SelectAmountState createState() => _SelectAmountState();
@@ -558,7 +560,10 @@ class _SelectAmountState extends State<SelectAmount> {
                                       Provider.of<AllWallets>(context)
                                               .list
                                               .length <=
-                                          1
+                                          1 ||
+                                      (widget.hideWalletPickerIfOneCurrency &&
+                                          Provider.of<AllWallets>(context)
+                                              .allContainSameCurrency())
                                   ? SizedBox.shrink()
                                   : MediaQuery(
                                       child: Padding(
@@ -703,7 +708,10 @@ class _SelectAmountState extends State<SelectAmount> {
                   ),
                 ),
               widget.enableWalletPicker == false ||
-                      Provider.of<AllWallets>(context).list.length <= 1
+                      Provider.of<AllWallets>(context).list.length <= 1 ||
+                      (widget.hideWalletPickerIfOneCurrency &&
+                          Provider.of<AllWallets>(context)
+                              .allContainSameCurrency())
                   ? SizedBox.shrink()
                   : Padding(
                       padding: const EdgeInsets.only(top: 3),

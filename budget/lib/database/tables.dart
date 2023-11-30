@@ -556,6 +556,14 @@ class AllWallets {
   final List<TransactionWallet> list;
   final Map<String, TransactionWallet> indexedByPk;
   AllWallets({required this.list, required this.indexedByPk});
+
+  bool allContainSameCurrency() {
+    if (list.isEmpty) {
+      return false;
+    }
+    final String? firstCurrency = list.first.currency;
+    return list.every((wallet) => wallet.currency == firstCurrency);
+  }
 }
 
 class CategoryWithTotal {
@@ -2776,6 +2784,17 @@ class FinanceDatabase extends _$FinanceDatabase {
     try {
       TransactionCategory categoryInUse =
           await getCategoryInstance(transaction.categoryFk);
+
+      // Somehow a subcategory got selected as the main category!
+      // Lets swap them - otherwise the wandering transactions algorithm will delete it!
+      if (categoryInUse.mainCategoryPk != null) {
+        transaction = transaction.copyWith(
+          categoryFk: categoryInUse.mainCategoryPk,
+          subCategoryFk: Value(transaction.categoryFk),
+        );
+        categoryInUse = await getCategoryInstance(transaction.categoryFk);
+      }
+
       await createOrUpdateCategory(
         categoryInUse.copyWith(dateTimeModified: Value(DateTime.now())),
         updateSharedEntry: false,
@@ -3101,6 +3120,15 @@ class FinanceDatabase extends _$FinanceDatabase {
       List<TransactionsCompanion> transactionsInserting) async {
     await batch((batch) {
       batch.insertAll(transactions, transactionsInserting,
+          mode: InsertMode.insert);
+    });
+    return true;
+  }
+
+  Future<bool> createBatchAssociatedTitlesOnly(
+      List<AssociatedTitlesCompanion> titlesInserting) async {
+    await batch((batch) {
+      batch.insertAll(associatedTitles, titlesInserting,
           mode: InsertMode.insert);
     });
     return true;
@@ -4600,6 +4628,28 @@ class FinanceDatabase extends _$FinanceDatabase {
     return totalDoubleStream(mergedStreams);
   }
 
+  Future<double?> getTotalTowardsObjective(
+      AllWallets allWallets, String objectivePk) async {
+    double totalAmount = 0;
+    for (TransactionWallet wallet in allWallets.list) {
+      final totalAmt = transactions.amount.sum();
+      JoinedSelectStatement<$TransactionsTable, Transaction> query;
+
+      query = selectOnly(transactions)
+        ..addColumns([totalAmt])
+        ..where(transactions.objectiveFk.equals(objectivePk) &
+            transactions.walletFk.equals(wallet.walletPk) &
+            transactions.paid.equals(true));
+
+      totalAmount += await query
+          .map(((row) =>
+              (row.read(totalAmt) ?? 0) *
+              (amountRatioToPrimaryCurrency(allWallets, wallet.currency))))
+          .getSingle();
+    }
+    return totalAmount;
+  }
+
   Stream<double?> watchTotalSpentGivenList(
       AllWallets allWallets, List<String> transactionPks) {
     List<Stream<double?>> mergedStreams = [];
@@ -4691,6 +4741,8 @@ class FinanceDatabase extends _$FinanceDatabase {
         onlyShowBasedOnSubcategoryFks(tbl, searchFilters.subcategoryPks);
     Expression<bool> isInBudgetPks =
         onlyShowBasedOnBudgetFks(tbl, searchFilters.budgetPks);
+    Expression<bool> isInExcludedBudgetPks =
+        onlyShowBasedOnExcludedBudgetFks(tbl, searchFilters.excludedBudgetPks);
     Expression<bool> isInObjectivePks =
         onlyShowBasedOnObjectiveFks(tbl, searchFilters.objectivePks);
 
@@ -4787,6 +4839,7 @@ class FinanceDatabase extends _$FinanceDatabase {
         isInCategoryPks &
         isInSubcategoryPks &
         isInBudgetPks &
+        isInExcludedBudgetPks &
         isInObjectivePks &
         isInQuery &
         (isIncome | isExpense) &
@@ -5153,6 +5206,15 @@ class FinanceDatabase extends _$FinanceDatabase {
                 ? tbl.sharedReferenceBudgetPk
                     .isIn(budgetFks.map((value) => value ?? "0").toList())
                 : Constant(true));
+  }
+
+  Expression<bool> onlyShowBasedOnExcludedBudgetFks(
+      $TransactionsTable tbl, List<String>? excludedBudgetFks) {
+    Expression<bool> result = Constant(true);
+    for (String excludedBudgetFk in excludedBudgetFks ?? []) {
+      result = result & tbl.budgetFksExclude.contains(excludedBudgetFk);
+    }
+    return result;
   }
 
   Expression<bool> onlyShowBasedOnObjectiveFks(
@@ -6069,6 +6131,15 @@ class FinanceDatabase extends _$FinanceDatabase {
     );
     return await createOrUpdateTransaction(closeBalanceCorrection,
         insert: false);
+  }
+
+  Stream<List<Budget>> watchAllExcludedTransactionsBudgetsInUse() {
+    return customSelect(
+      "SELECT DISTINCT budgets.* FROM transactions INNER JOIN budgets ON transactions.budget_fks_exclude LIKE '%' || budgets.budget_pk || '%'",
+      readsFrom: {transactions, budgets},
+    ).watch().map((rows) {
+      return rows.map((row) => budgets.map(row.data)).toList();
+    });
   }
 }
 

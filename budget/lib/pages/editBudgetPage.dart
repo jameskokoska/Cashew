@@ -584,6 +584,15 @@ Future<dynamic> selectAddableBudgetPopup(BuildContext context,
                 else
                   Navigator.of(context).pop(budget);
               },
+              onLongPress: (Budget? budget) {
+                pushRoute(
+                  context,
+                  AddBudgetPage(
+                    routesToPopAfterDelete: RoutesToPopAfterDelete.One,
+                    budget: budget,
+                  ),
+                );
+              },
             );
           } else {
             return NoResultsCreate(

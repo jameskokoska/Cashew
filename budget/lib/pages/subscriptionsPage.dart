@@ -426,7 +426,11 @@ class SubscriptionSettings extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AutoPaySubscriptionsSetting();
+    return Column(
+      children: [
+        AutoPaySubscriptionsSetting(),
+      ],
+    );
   }
 }
 
@@ -442,7 +446,7 @@ class AutoPaySubscriptionsSetting extends StatelessWidget {
         // Need to change setting first, otherwise the function would not run!
         await updateSettings("automaticallyPaySubscriptions", value,
             updateGlobalState: false);
-        await markSubscriptionsAsPaid();
+        await markSubscriptionsAsPaid(context);
         await setUpcomingNotifications(context);
       },
       initialValue: appStateSettings["automaticallyPaySubscriptions"],

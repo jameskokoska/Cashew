@@ -45,6 +45,7 @@ import 'package:budget/widgets/slidingSelectorIncomeExpense.dart';
 import 'package:provider/provider.dart';
 
 import '../../widgets/linearGradientFadedEdges.dart';
+import '../../widgets/pullDownToRefreshSync.dart';
 import '../../widgets/util/rightSideClipper.dart';
 
 class HomePage extends StatefulWidget {
@@ -216,7 +217,7 @@ class HomePageState extends State<HomePage>
     ];
     return SwipeToSelectTransactions(
       listID: "0",
-      child: SharedBudgetRefresh(
+      child: PullDownToRefreshSync(
         scrollController: _scrollController,
         child: Stack(
           children: [

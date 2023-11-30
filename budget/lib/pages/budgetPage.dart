@@ -122,7 +122,7 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
   }
 
   Widget pieChart({
-    required double totalSpentAbsolute,
+    required double totalSpent,
     required ColorScheme budgetColorScheme,
     required DateTimeRange budgetRange,
     required bool showAllSubcategories,
@@ -141,7 +141,7 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
           child: PieChartWrapper(
             pieChartDisplayStateKey: _pieChartDisplayStateKey,
             data: dataFilterUnassignedTransactions,
-            totalSpentAbsolute: totalSpentAbsolute,
+            totalSpent: totalSpent,
             setSelectedCategory: (categoryPk, category) async {
               setState(() {
                 selectedCategory = category;
@@ -425,7 +425,6 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                             categoryBudgetLimit: category.categoryBudgetLimit,
                             budgetColorScheme: budgetColorScheme,
                             category: category.category,
-                            totalSpentAbsolute: s.totalSpentAbsolute,
                             totalSpent: s.totalSpent,
                             transactionCount: category.transactionCount,
                             categorySpent: showIncomeExpenseIcons == true
@@ -469,6 +468,7 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                         );
                       },
                     );
+                    print(s.totalSpent);
                     return SliverToBoxAdapter(
                       child: Column(
                         children: [
@@ -594,7 +594,7 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                           if (snapshot.data!.length > 0)
                             pieChart(
                               budgetRange: budgetRange,
-                              totalSpentAbsolute: s.totalSpentAbsolute,
+                              totalSpent: s.totalSpent,
                               budgetColorScheme: budgetColorScheme,
                               showAllSubcategories: showAllSubcategories,
                               toggleAllSubCategories: toggleAllSubcategories,

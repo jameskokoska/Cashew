@@ -72,7 +72,7 @@ class _ImportCSVState extends State<ImportCSV> {
           DecodingResult decoded = await CharsetDetector.autoDecode(fileBytes);
           csvString = decoded.string;
         }
-        print(csvString);
+        // print(csvString);
         return csvString;
       } else {
         throw "no-file-selected".tr();
@@ -113,10 +113,13 @@ class _ImportCSVState extends State<ImportCSV> {
       fileContents = fileContents
           .map((row) => row + List.filled(maxColumns - row.length, ""))
           .toList();
-
-      List<String> headers = fileContents[0];
-      List<String> firstEntry = fileContents[1];
-
+      int headersIndex =
+          _findListIndexWithMultipleNonEmptyStrings(fileContents) ?? 0;
+      List<String> headers = fileContents[headersIndex];
+      List<String> firstEntry = fileContents[
+          _findListIndexWithMultipleNonEmptyStrings(fileContents,
+                  afterIndex: headersIndex) ??
+              1];
       String dateFormat = "";
       Map<String, Map<String, dynamic>> assignedColumns = {
         "date": {
@@ -200,10 +203,10 @@ class _ImportCSVState extends State<ImportCSV> {
               Navigator.pop(context);
             },
             onSubmitLabel: "ok".tr(),
-            onCancel: () {
+            onCancelWithBoxContext: (BuildContext boxContext) {
               importFromSheets
                   ? getGoogleSheetTemplate(context)
-                  : saveSampleCSV();
+                  : saveSampleCSV(boxContext: boxContext);
             },
             onCancelLabel: "get-template".tr(),
           );
@@ -465,16 +468,16 @@ class _ImportCSVState extends State<ImportCSV> {
                         Navigator.pop(context);
                       },
                       onSubmitLabel: "ok".tr(),
-                      onCancel: () {
+                      onCancelWithBoxContext: (BuildContext boxContext) {
                         importFromSheets
                             ? getGoogleSheetTemplate(context)
-                            : saveSampleCSV();
+                            : saveSampleCSV(boxContext: boxContext);
                       },
                       onCancelLabel: "get-template".tr(),
                     );
                   }
                 },
-              )
+              ),
             ],
           ),
         ),
@@ -505,7 +508,7 @@ class _ImportCSVState extends State<ImportCSV> {
         if (assignedColumns[key]!["setHeaderValue"] == "") {
           throw "Please make sure you select a parameter for each required field.";
         }
-        print(assignedColumns[key]!["setHeaderIndex"]);
+        // print(assignedColumns[key]!["setHeaderIndex"]);
       }
     } catch (e) {
       throw (e.toString());
@@ -513,6 +516,14 @@ class _ImportCSVState extends State<ImportCSV> {
     if (noPop == false) Navigator.of(context).pop();
     // Open the progress bar
     // This Widget opened will actually do the importing
+
+    int headersIndex =
+        _findListIndexWithMultipleNonEmptyStrings(fileContents) ?? 0;
+    int firstEntryIndex = _findListIndexWithMultipleNonEmptyStrings(
+            fileContents,
+            afterIndex: headersIndex) ??
+        1;
+
     openPopupCustom(
       context,
       title: "importing-loading".tr(),
@@ -531,7 +542,7 @@ class _ImportCSVState extends State<ImportCSV> {
             description: "successfully-imported".tr() +
                 " " +
                 // Subtract one, since we don't count the header of the CSV as an entry
-                (fileContents.length - 1).toString() +
+                (fileContents.length - firstEntryIndex).toString() +
                 " " +
                 "transactions".tr().toLowerCase() +
                 ".",
@@ -567,7 +578,7 @@ class _ImportCSVState extends State<ImportCSV> {
   }
 
   _enterGoogleSheetURL() {
-    print(DateTime.now().toString());
+    // print(DateTime.now().toString());
     openBottomSheet(
       context,
       fullSnap: true,
@@ -660,22 +671,24 @@ class _ImportCSVState extends State<ImportCSV> {
           icon: appStateSettings["outlinedIcons"]
               ? Icons.file_open_outlined
               : Icons.file_open_rounded,
-          afterWidget: LowKeyButton(
-            onTap: () async {
-              saveSampleCSV();
-            },
-            extraWidget: Padding(
-              padding: const EdgeInsets.only(left: 4),
-              child: Icon(
-                appStateSettings["outlinedIcons"]
-                    ? Icons.download_outlined
-                    : Icons.download_rounded,
-                size: 18,
-                color: getColor(context, "black").withOpacity(0.5),
+          afterWidget: Builder(builder: (boxContext) {
+            return LowKeyButton(
+              onTap: () async {
+                saveSampleCSV(boxContext: boxContext);
+              },
+              extraWidget: Padding(
+                padding: const EdgeInsets.only(left: 4),
+                child: Icon(
+                  appStateSettings["outlinedIcons"]
+                      ? Icons.download_outlined
+                      : Icons.download_rounded,
+                  size: 18,
+                  color: getColor(context, "black").withOpacity(0.5),
+                ),
               ),
-            ),
-            text: "template".tr(),
-          ),
+              text: "template".tr(),
+            );
+          }),
         ),
         SettingsContainer(
           onTap: () async {
@@ -729,7 +742,7 @@ getGoogleSheetTemplate(BuildContext context) {
   );
 }
 
-Future saveSampleCSV() async {
+Future saveSampleCSV({required BuildContext boxContext}) async {
   await openLoadingPopupTryCatch(() async {
     List<List<dynamic>> csvData = [];
     csvData.add([
@@ -757,7 +770,8 @@ Future saveSampleCSV() async {
       "",
     ]);
     String csv = ListToCsvConverter().convert(csvData);
-    return saveCSV(csv, "Cashew-csv-template.csv");
+    return saveCSV(
+        boxContext: boxContext, csv: csv, fileName: "Cashew-csv-template.csv");
   });
   return;
 }
@@ -780,6 +794,13 @@ class ImportingEntriesPopup extends StatefulWidget {
   State<ImportingEntriesPopup> createState() => _ImportingEntriesPopupState();
 }
 
+class ImportingTransactionAndTitle {
+  ImportingTransactionAndTitle(this.transaction, this.title);
+
+  Transaction transaction;
+  TransactionAssociatedTitle? title;
+}
+
 class _ImportingEntriesPopupState extends State<ImportingEntriesPopup> {
   double currentPercent = 0;
   int currentFileLength = 0;
@@ -792,7 +813,7 @@ class _ImportingEntriesPopupState extends State<ImportingEntriesPopup> {
         widget.assignedColumns, widget.dateFormat, widget.fileContents));
   }
 
-  Future<Transaction> _importEntry(
+  Future<ImportingTransactionAndTitle> _importEntry(
       Map<String, Map<String, dynamic>> assignedColumns,
       String dateFormat,
       List<String> row,
@@ -883,10 +904,11 @@ class _ImportingEntriesPopupState extends State<ImportingEntriesPopup> {
     }
     categoryFk = selectedCategory.categoryPk;
 
-    if (name != "") {
-      // print("attempting to add " + name);
-      await addAssociatedTitles(name, selectedCategory);
-    }
+    // This will cause the app to crash if importing too many, so we now use batching
+    // if (name != "") {
+    //   // print("attempting to add " + name);
+    //   await addAssociatedTitles(name, selectedCategory);
+    // }
 
     String walletFk = "0";
     if (assignedColumns["wallet"]!["setHeaderIndex"] == -1 ||
@@ -951,38 +973,70 @@ class _ImportingEntriesPopupState extends State<ImportingEntriesPopup> {
         dateCreated.second,
       );
     } catch (e) {
-      // No custom date format entered
-      if (dateFormat == "")
-        throw "Failed to parse date and time! Please use the custom 'Date Format' that matches your data. \n\n Details: " +
-            e.toString();
-      DateFormat format =
-          DateFormat(dateFormat.toString(), context.locale.toString());
-      try {
-        dateCreated = format.parse(
-            row[assignedColumns["date"]!["setHeaderIndex"]].toString().trim());
-        dateCreated =
-            DateTime(dateCreated.year, dateCreated.month, dateCreated.day);
-      } catch (e) {
-        throw "Failed to parse date and time! Please use the custom 'Date Format' that matches your data. \n\n  Details: " +
-            e.toString();
+      String stringToParse =
+          row[assignedColumns["date"]!["setHeaderIndex"]].toString().trim();
+      DateTime? result;
+      if (dateFormat == "") {
+        // Try a few common date formats
+        for (String commonFormat in getCommonDateFormats()) {
+          result = tryDateFormatting(context, commonFormat, stringToParse);
+          if (result != null) break;
+        }
+        if (result == null) {
+          throw "Failed to parse date and time! Please use the custom 'Date Format' that matches your data. \n\n  Details: " +
+              e.toString();
+        } else {
+          print("Successfully parsed data with a common date format: " +
+              result.toString());
+          dateCreated = result;
+        }
+      } else {
+        DateFormat format =
+            DateFormat(dateFormat.toString(), context.locale.toString());
+        try {
+          dateCreated = format.parse(stringToParse);
+          dateCreated = DateTime(
+            dateCreated.year,
+            dateCreated.month,
+            dateCreated.day,
+            dateCreated.hour,
+            dateCreated.minute,
+          );
+        } catch (e) {
+          throw "Failed to parse date and time! Please use the custom 'Date Format' that matches your data. \n\n  Details: " +
+              e.toString();
+        }
       }
     }
 
     bool income = amount > 0;
 
-    return Transaction(
-      transactionPk: "-1",
-      name: name,
-      amount: amount,
-      note: note,
-      categoryFk: categoryFk,
-      walletFk: walletFk,
-      dateCreated: dateCreated,
-      dateTimeModified: null,
-      income: income,
-      paid: true,
-      skipPaid: false,
-      methodAdded: MethodAdded.csv,
+    return ImportingTransactionAndTitle(
+      Transaction(
+        transactionPk: "-1",
+        name: name,
+        amount: amount,
+        note: note,
+        categoryFk: categoryFk,
+        walletFk: walletFk,
+        dateCreated: dateCreated,
+        dateTimeModified: DateTime.now(),
+        income: income,
+        paid: true,
+        skipPaid: false,
+        methodAdded: MethodAdded.csv,
+      ),
+      name == ""
+          ? null
+          : TransactionAssociatedTitle(
+              associatedTitlePk: "-1",
+              categoryFk: selectedCategory.categoryPk,
+              isExactMatch: false,
+              title: name.trim(),
+              dateCreated: dateCreated,
+              dateTimeModified: DateTime.now(),
+              order: 0,
+            ),
     );
   }
 
@@ -990,12 +1044,16 @@ class _ImportingEntriesPopupState extends State<ImportingEntriesPopup> {
       String dateFormat, List<List<String>> fileContents) async {
     try {
       List<TransactionsCompanion> transactionsInserting = [];
-      for (int i = 0; i < fileContents.length; i++) {
-        if (i == 0) {
-          // This is the first row where the headings are defined
-          // Dont import, it is not an entry
-          continue;
-        }
+      List<AssociatedTitlesCompanion> titlesInserting = [];
+
+      int headersIndex =
+          _findListIndexWithMultipleNonEmptyStrings(fileContents) ?? 0;
+      int firstEntryIndex = _findListIndexWithMultipleNonEmptyStrings(
+              fileContents,
+              afterIndex: headersIndex) ??
+          1;
+
+      for (int i = firstEntryIndex; i < fileContents.length; i++) {
         setState(() {
           currentPercent = i / fileContents.length * 100;
           currentEntryIndex = i;
@@ -1015,22 +1073,42 @@ class _ImportingEntriesPopupState extends State<ImportingEntriesPopup> {
             }
           }
         }
-        Transaction transactionToAdd = await _importEntry(
+        ImportingTransactionAndTitle transactionAndTitle = await _importEntry(
           assignedColumns,
           dateFormat,
           row,
           i,
           transactionTypeIndex: transactionTypeIndex,
         );
-        TransactionsCompanion companionToInsert =
-            transactionToAdd.toCompanion(true);
-        // Use auto incremented ID when inserting
-        companionToInsert =
-            companionToInsert.copyWith(transactionPk: Value.absent());
-
-        transactionsInserting.add(companionToInsert);
+        // Use auto generated ID when inserting
+        TransactionsCompanion companionTransactionToInsert =
+            transactionAndTitle.transaction.toCompanion(true);
+        companionTransactionToInsert = companionTransactionToInsert.copyWith(
+            transactionPk: Value.absent());
+        transactionsInserting.add(companionTransactionToInsert);
+        // Use auto generated ID when inserting
+        if (transactionAndTitle.title != null) {
+          AssociatedTitlesCompanion companionTitleToInsert =
+              transactionAndTitle.title!.toCompanion(true);
+          companionTitleToInsert = companionTitleToInsert.copyWith(
+              associatedTitlePk: Value.absent());
+          titlesInserting.add(companionTitleToInsert);
+        }
       }
+
+      // Sort and remove duplicate titles
+      titlesInserting
+          .sort((a, b) => b.dateCreated.value.compareTo(a.dateCreated.value));
+      Map<String, AssociatedTitlesCompanion> titlesMap = {};
+      for (AssociatedTitlesCompanion item in titlesInserting) {
+        titlesMap[item.title.value] = item;
+      }
+      List<AssociatedTitlesCompanion> filteredList = titlesMap.values.toList();
+
       await database.createBatchTransactionsOnly(transactionsInserting);
+      await database.createBatchAssociatedTitlesOnly(filteredList);
+      await database.fixOrderAssociatedTitles();
+
       widget.next();
     } catch (e) {
       openPopup(
@@ -1068,4 +1146,92 @@ class _ImportingEntriesPopupState extends State<ImportingEntriesPopup> {
       ],
     );
   }
+}
+
+int? _findListIndexWithMultipleNonEmptyStrings(List<List<String>> lists,
+    {int? afterIndex}) {
+  for (int i = 0; i < lists.length; i++) {
+    if (afterIndex != null && i <= afterIndex) {
+      continue;
+    }
+    List<String> innerList = lists[i];
+    int nonEmptyCount = innerList.where((str) => str.isNotEmpty).length;
+
+    // There needs to be at least three entries in the row before it is valid!
+    // Otherwise we can just ignore it, it is probably just comments in the CSV
+    // or other junk written there for documentation
+    if (nonEmptyCount > 3) {
+      return i;
+    }
+  }
+  return null;
+}
+
+DateTime? tryDateFormatting(
+    BuildContext context, String dateFormat, String stringToParse) {
+  DateFormat format =
+      DateFormat(dateFormat.toString(), context.locale.toString());
+  DateTime? dateCreated;
+  try {
+    dateCreated = format.parse(stringToParse.trim());
+    dateCreated =
+        DateTime(dateCreated.year, dateCreated.month, dateCreated.day);
+  } catch (e) {
+    print("Failed to parse date and time!" + e.toString());
+  }
+  return dateCreated;
+}
+
+List<String> getCommonDateFormats() {
+  return [
+    "yyyy-MM-dd'T'HH:mm:ss",
+    "MM/dd/yyyy HH:mm:ss",
+    "dd.MM.yyyy HH:mm:ss",
+    "yyyyMMdd'T'HHmmss",
+    "yyyy/MM/dd HH:mm:ss",
+    "dd-MM-yyyy HH:mm:ss",
+    "MM.dd.yyyy HH:mm:ss",
+    "yyyyMMdd'T'HH:mm:ss",
+    "yyyy-MM-dd HH:mm:ss",
+    "dd/MM/yyyy HH:mm",
+    "yyyy/MM/dd",
+    "MM/dd/yyyy",
+    "dd.MM.yyyy",
+    "yyyyMMdd",
+    "yyyy-MM-dd",
+    "dd/MM/yyyy",
+    "MM.dd.yyyy",
+    "dd-MM-yyyy",
+    "MMM dd, yyyy HH:mm:ss",
+    "MMM dd, yyyy",
+    "EEEE, dd MMMM yyyy HH:mm:ss",
+    "EEEE, dd MMMM yyyy",
+    "HH:mm:ss dd/MM/yyyy",
+    "HH:mm:ss yyyy-MM-dd",
+    "HH:mm:ss MM/dd/yyyy",
+    "HH:mm:ss dd.MM.yyyy",
+    "HHmmss yyyyMMdd",
+    "HH:mm:ss yyyy/MM/dd",
+    "HH:mm:ss dd-MM-yyyy",
+    "HH:mm:ss MM.dd.yyyy",
+    "HH:mm:ss dd/MM/yyyy",
+    "HH:mm:ss MM.dd.yyyy",
+    "HH:mm:ss dd-MM-yyyy",
+    "HH:mm:ss MMM dd, yyyy",
+    "HH:mm:ss EEEE, dd MMMM yyyy",
+    "HH:mm:ss dd/MM/yyyy",
+    "HH:mm:ss MM.dd.yyyy",
+    "HH:mm:ss dd-MM-yyyy",
+    "HH:mm:ss MMM dd, yyyy",
+    "HH:mm:ss EEEE, dd MMMM yyyy",
+    "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
+    "yyyy-MM-dd'T'HH:mm:ss.SSSZ",
+    "yyyy-MM-dd'T'HH:mm:ss.SSSX",
+    "yyyy-MM-dd'T'HH:mm:ss.SSSXX",
+    "yyyy-MM-dd'T'HH:mm:ss.SSSXXX",
+    "yyyy-MM-dd'T'HH:mm:ss.SSSSSS",
+    "yyyy-MM-dd HH:mm:ss.SSS",
+    "yyyy-MM-dd HH:mm:ss",
+    "yyyy-MM-dd HH:mm",
+  ];
 }

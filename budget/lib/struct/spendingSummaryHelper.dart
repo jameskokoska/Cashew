@@ -16,7 +16,6 @@ import 'package:flutter/material.dart';
 
 class TotalSpentCategoriesSummary {
   double totalSpent;
-  double totalSpentAbsolute;
   Map<String, List<CategoryWithTotal>>
       subCategorySpendingIndexedByMainCategoryPk;
   Map<String, double> totalSpentOfCategoriesRemoveUnassignedTransactions;
@@ -25,7 +24,6 @@ class TotalSpentCategoriesSummary {
 
   TotalSpentCategoriesSummary({
     this.totalSpent = 0,
-    this.totalSpentAbsolute = 0,
     this.subCategorySpendingIndexedByMainCategoryPk = const {},
     this.totalSpentOfCategoriesRemoveUnassignedTransactions = const {},
     this.dataFilterUnassignedTransactions = const [],
@@ -58,8 +56,6 @@ TotalSpentCategoriesSummary watchTotalSpentInTimeRangeHelper({
       if (categoryWithTotal.category.mainCategoryPk == null) {
         s.totalSpent = s.totalSpent + categoryWithTotal.total;
       }
-      s.totalSpentAbsolute =
-          s.totalSpentAbsolute + categoryWithTotal.total.abs();
 
       if (categoryWithTotal.category.mainCategoryPk != null) {
         if (s.subCategorySpendingIndexedByMainCategoryPk[

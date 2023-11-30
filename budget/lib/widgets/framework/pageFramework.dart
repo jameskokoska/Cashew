@@ -15,6 +15,8 @@ import 'package:flutter/material.dart';
 import 'package:budget/colors.dart';
 import 'package:flutter/services.dart';
 
+import '../pullDownToRefreshSync.dart';
+
 ValueNotifier<bool> isSwipingToDismissPageDown = ValueNotifier<bool>(false);
 ValueNotifier<bool> callRefreshToPages = ValueNotifier<bool>(false);
 
@@ -49,7 +51,6 @@ class PageFramework extends StatefulWidget {
     this.actions,
     this.expandedHeight,
     this.listID,
-    this.sharedBudgetRefresh = false,
     this.horizontalPadding = 0,
     this.backgroundColor,
     this.resizeToAvoidBottomInset = false,
@@ -89,7 +90,6 @@ class PageFramework extends StatefulWidget {
   final List<Widget>? actions;
   final double? expandedHeight;
   final String? listID;
-  final bool? sharedBudgetRefresh;
   final double horizontalPadding;
   final Color? backgroundColor;
   final bool resizeToAvoidBottomInset;
@@ -561,8 +561,8 @@ class PageFrameworkState extends State<PageFramework>
       },
     );
 
-    if (widget.sharedBudgetRefresh == true) {
-      return SharedBudgetRefresh(
+    if (widget.backButton == false) {
+      return PullDownToRefreshSync(
         child: childListener,
         scrollController: _scrollController,
       );
