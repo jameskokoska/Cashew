@@ -85,10 +85,10 @@ String modifyString(String original, String newString) {
   return modifiedString;
 }
 
-class LinkColorizer extends TextEditingController {
+class LinkHighlighter extends TextEditingController {
   final Pattern pattern;
 
-  LinkColorizer({String? initialText})
+  LinkHighlighter({String? initialText})
       : pattern = RegExp(r'https?:\/\/(?:www\.)?\S+(?=\s)') {
     this.text = initialText ?? '';
   }
@@ -770,7 +770,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
       _titleInputController =
           new TextEditingController(text: widget.transaction!.name);
       _noteInputController =
-          new LinkColorizer(initialText: widget.transaction!.note);
+          new LinkHighlighter(initialText: widget.transaction!.note);
       selectedTitle = widget.transaction!.name;
       selectedDate = widget.transaction!.dateCreated;
       selectedEndDate = widget.transaction!.endDate;
@@ -809,7 +809,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
       }
 
       _titleInputController = new TextEditingController();
-      _noteInputController = new TextEditingController();
+      _noteInputController = new LinkHighlighter();
 
       Future.delayed(Duration(milliseconds: 0), () async {
         await premiumPopupAddTransaction(context);
@@ -4288,8 +4288,12 @@ class _TransactionNotesTextInputState extends State<TransactionNotesTextInput> {
   }
 
   void removeLinkFromNote(String link) {
+    String originalText = widget.noteInputController.text;
     String noteUpdated =
         widget.noteInputController.text.replaceAll(link + " ", "");
+    if (noteUpdated == originalText) {
+      noteUpdated = widget.noteInputController.text.replaceAll(link + "\n", "");
+    }
     widget.setSelectedNoteController(noteUpdated);
     updateExtractedLinks(noteUpdated);
   }

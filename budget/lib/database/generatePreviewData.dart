@@ -781,47 +781,47 @@ Future generatePreviewData() async {
     );
   }
 
-  if (allowDangerousDebugFlags) {
-    // Large database test
+  // if (allowDangerousDebugFlags) {
+  //   // Large database test
 
-    List<TransactionsCompanion> insert = [];
+  //   List<TransactionsCompanion> insert = [];
 
-    for (int i = 0; i < 35000; i++) {
-      insert.add(
-        Transaction(
-          methodAdded: MethodAdded.preview,
-          transactionPk: uuid.v4(),
-          name: "",
-          amount: -(10 + Random().nextDouble() * 200),
-          note: "",
-          categoryFk: (Random().nextInt(2) == 0 ? 6 : 10).toString(),
-          walletFk: "0",
-          dateCreated: DateTime.now().subtract(Duration(days: i)),
-          income: false,
-          paid: true,
-          skipPaid: true,
-        ).toCompanion(true),
-      );
-    }
-    for (int i = 0; i < 35000; i++) {
-      insert.add(
-        Transaction(
-          methodAdded: MethodAdded.preview,
-          transactionPk: uuid.v4(),
-          name: "",
-          amount: -(10 + Random().nextDouble() * 200),
-          note: "",
-          categoryFk: (Random().nextInt(2) == 0 ? 6 : 10).toString(),
-          walletFk: "0",
-          dateCreated: DateTime.now().subtract(Duration(days: i)),
-          income: false,
-          paid: true,
-          skipPaid: true,
-        ).toCompanion(true),
-      );
-    }
-    await database.createBatchTransactionsOnly(insert);
-  }
+  //   for (int i = 0; i < 35000; i++) {
+  //     insert.add(
+  //       Transaction(
+  //         methodAdded: MethodAdded.preview,
+  //         transactionPk: uuid.v4(),
+  //         name: "",
+  //         amount: -(10 + Random().nextDouble() * 200),
+  //         note: "",
+  //         categoryFk: (Random().nextInt(2) == 0 ? 6 : 10).toString(),
+  //         walletFk: "0",
+  //         dateCreated: DateTime.now().subtract(Duration(days: i)),
+  //         income: false,
+  //         paid: true,
+  //         skipPaid: true,
+  //       ).toCompanion(true),
+  //     );
+  //   }
+  //   for (int i = 0; i < 35000; i++) {
+  //     insert.add(
+  //       Transaction(
+  //         methodAdded: MethodAdded.preview,
+  //         transactionPk: uuid.v4(),
+  //         name: "",
+  //         amount: -(10 + Random().nextDouble() * 200),
+  //         note: "",
+  //         categoryFk: (Random().nextInt(2) == 0 ? 6 : 10).toString(),
+  //         walletFk: "0",
+  //         dateCreated: DateTime.now().subtract(Duration(days: i)),
+  //         income: false,
+  //         paid: true,
+  //         skipPaid: true,
+  //       ).toCompanion(true),
+  //     );
+  //   }
+  //   await database.createBatchTransactionsOnly(insert);
+  // }
 
   loadingIndeterminateKey.currentState?.setVisibility(false);
 }
