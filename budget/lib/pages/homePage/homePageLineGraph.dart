@@ -7,9 +7,12 @@ import 'package:budget/pages/transactionFilters.dart';
 import 'package:budget/struct/currencyFunctions.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
+import 'package:budget/widgets/globalLoadingProgress.dart';
+import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/util/keepAliveClientMixin.dart';
 import 'package:budget/widgets/lineGraph.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -17,6 +20,7 @@ enum LineGraphDisplay {
   Default30Days,
   CustomStartDate,
   Budget,
+  AllTime,
 }
 
 class HomePageLineGraph extends StatelessWidget {
@@ -45,48 +49,59 @@ class HomePageLineGraph extends StatelessWidget {
                           : null,
                 )
               : appStateSettings["lineGraphDisplayType"] ==
-                      LineGraphDisplay.CustomStartDate.index
+                      LineGraphDisplay.AllTime.index
                   ? PastSpendingGraph(
                       isIncome: selectedSlidingSelector == 2
                           ? false
                           : selectedSlidingSelector == 3
                               ? true
                               : null,
-                      customStartDate: DateTime.parse(
-                          appStateSettings["lineGraphStartDate"]),
+                      allTimeUpToFirstTransaction: true,
                     )
-                  : StreamBuilder<Budget>(
-                      stream: database.getBudget(
-                          appStateSettings["lineGraphReferenceBudgetPk"]
-                              .toString()),
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          Budget budget = snapshot.data!;
-                          ColorScheme budgetColorScheme = ColorScheme.fromSeed(
-                            seedColor: HexColor(budget.colour,
-                                defaultColor:
-                                    Theme.of(context).colorScheme.primary),
-                            brightness: determineBrightnessTheme(context),
-                          );
-                          return Column(
-                            children: [
-                              BudgetLineGraph(
-                                key: ValueKey(budget.budgetPk),
-                                budget: budget,
-                                budgetColorScheme: budgetColorScheme,
-                                dateForRange: DateTime.now(),
-                                budgetRange:
-                                    getBudgetDate(budget, DateTime.now()),
-                                isPastBudget: false,
-                                selectedCategory: null,
-                                showPastSpending: false,
-                              ),
-                            ],
-                          );
-                        }
-                        return SizedBox.shrink();
-                      },
-                    ),
+                  : appStateSettings["lineGraphDisplayType"] ==
+                          LineGraphDisplay.CustomStartDate.index
+                      ? PastSpendingGraph(
+                          isIncome: selectedSlidingSelector == 2
+                              ? false
+                              : selectedSlidingSelector == 3
+                                  ? true
+                                  : null,
+                          customStartDate: DateTime.parse(
+                              appStateSettings["lineGraphStartDate"]),
+                        )
+                      : StreamBuilder<Budget>(
+                          stream: database.getBudget(
+                              appStateSettings["lineGraphReferenceBudgetPk"]
+                                  .toString()),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              Budget budget = snapshot.data!;
+                              ColorScheme budgetColorScheme =
+                                  ColorScheme.fromSeed(
+                                seedColor: HexColor(budget.colour,
+                                    defaultColor:
+                                        Theme.of(context).colorScheme.primary),
+                                brightness: determineBrightnessTheme(context),
+                              );
+                              return Column(
+                                children: [
+                                  BudgetLineGraph(
+                                    key: ValueKey(budget.budgetPk),
+                                    budget: budget,
+                                    budgetColorScheme: budgetColorScheme,
+                                    dateForRange: DateTime.now(),
+                                    budgetRange:
+                                        getBudgetDate(budget, DateTime.now()),
+                                    isPastBudget: false,
+                                    selectedCategory: null,
+                                    showPastSpending: false,
+                                  ),
+                                ],
+                              );
+                            }
+                            return SizedBox.shrink();
+                          },
+                        ),
         ),
       ),
     );
@@ -106,6 +121,9 @@ class PastSpendingGraph extends StatelessWidget {
     this.cycleSettingsExtension = "",
     this.searchFilters,
     this.forcedDateTimeRange,
+    this.hideIfOnlyOneEntry = false,
+    this.builder,
+    this.allTimeUpToFirstTransaction = false,
   });
   final bool? isIncome;
   final int monthsToLoad;
@@ -117,21 +135,40 @@ class PastSpendingGraph extends StatelessWidget {
   final String cycleSettingsExtension;
   final SearchFilters? searchFilters;
   final DateTimeRange? forcedDateTimeRange;
+  final bool hideIfOnlyOneEntry;
+  final Widget Function(Widget)? builder;
+  final bool allTimeUpToFirstTransaction;
 
-  @override
-  Widget build(BuildContext context) {
-    DateTime? customStartDateChecked = customStartDate;
+  Widget buildLineChart(BuildContext context,
+      {DateTime? earliestTransactionDate}) {
+    DateTime? customStartDateCheckedNull =
+        earliestTransactionDate ?? customStartDate;
     if (customStartDate?.isAfter(DateTime.now()) ?? false) {
-      customStartDateChecked = DateTime.now();
+      customStartDateCheckedNull = DateTime.now();
     }
+    DateTime customStartDateChecked = customStartDateCheckedNull ??
+        DateTime(
+          DateTime.now().year,
+          DateTime.now().month - monthsToLoad,
+          DateTime.now().day,
+        );
+
+    DateTime customEndDateChecked = customEndDate ?? DateTime.now();
+
+    // Days limit no longer needed, it was incorporated into calculatePoints()
+    // by using 'resolution'
+    // int daysLimit = 365 * 250;
+    // Duration difference =
+    //     customStartDateChecked.difference(customEndDateChecked);
+    // if (difference.inDays.abs() > daysLimit) {
+    //   print("daysLimitReached!");
+    //   customStartDateChecked =
+    //       customEndDateChecked.subtract(Duration(days: daysLimit));
+    // }
+
     return StreamBuilder<double?>(
       stream: database.getTotalBeforeStartDateInTimeRangeFromCategories(
-        customStartDateChecked ??
-            DateTime(
-              DateTime.now().year,
-              DateTime.now().month - monthsToLoad,
-              DateTime.now().day,
-            ),
+        customStartDateChecked,
         [],
         true,
         true,
@@ -152,17 +189,8 @@ class PastSpendingGraph extends StatelessWidget {
               : snapshotTotalSpentBefore.data!;
           return StreamBuilder<List<Transaction>>(
             stream: database.getTransactionsInTimeRangeFromCategories(
-              customStartDateChecked ??
-                  DateTime(
-                    DateTime.now().year,
-                    DateTime.now().month - monthsToLoad,
-                    DateTime.now().day,
-                  ),
-              DateTime(
-                DateTime.now().year,
-                DateTime.now().month,
-                DateTime.now().day,
-              ),
+              customStartDateChecked,
+              customEndDateChecked,
               null,
               null,
               true,
@@ -177,51 +205,44 @@ class PastSpendingGraph extends StatelessWidget {
             ),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                bool cumulative = appStateSettings["showCumulativeSpending"];
-                double cumulativeTotal = totalSpentBefore;
-                List<Pair> points = [];
-                for (DateTime indexDay = customStartDateChecked ??
-                        DateTime(
-                          DateTime.now().year,
-                          DateTime.now().month - monthsToLoad,
-                          DateTime.now().day,
-                        );
-                    indexDay.compareTo(customEndDate ?? DateTime.now()) <= 0;
-                    indexDay = DateTime(
-                        indexDay.year, indexDay.month, indexDay.day + 1)) {
-                  //can be optimized...
-                  double totalForDay = 0;
-                  for (Transaction transaction in snapshot.data!) {
-                    // Remove balance correction transactions if not showing all transactions
-                    if (isIncome != null && transaction.categoryFk == "0") {
-                      continue;
-                    }
-                    if (indexDay.year == transaction.dateCreated.year &&
-                        indexDay.month == transaction.dateCreated.month &&
-                        indexDay.day == transaction.dateCreated.day) {
-                      if (transaction.income) {
-                        totalForDay += transaction.amount.abs() *
-                            (amountRatioToPrimaryCurrencyGivenPk(
-                                Provider.of<AllWallets>(context),
-                                transaction.walletFk));
-                      } else {
-                        totalForDay -= transaction.amount.abs() *
-                            (amountRatioToPrimaryCurrencyGivenPk(
-                                Provider.of<AllWallets>(context),
-                                transaction.walletFk));
+                return FutureBuilder<List<Pair>>(
+                  future: compute(
+                    calculatePoints,
+                    CalculatePointsParams(
+                      transactions: snapshot.data ?? [],
+                      customStartDate: customStartDateChecked,
+                      customEndDate: customEndDateChecked,
+                      totalSpentBefore: totalSpentBefore,
+                      isIncome: isIncome,
+                      allWallets:
+                          Provider.of<AllWallets>(context, listen: false),
+                      showCumulativeSpending:
+                          appStateSettings["showCumulativeSpending"],
+                    ),
+                  ),
+                  builder: (context, snapshotPoints) {
+                    Widget lineChartWidget;
+                    if (snapshotPoints.hasData == false) {
+                      lineChartWidget = IndeterminateProgressBar();
+                    } else {
+                      List<Pair> points = snapshotPoints.data ?? [];
+                      if (points.length <= 1 && hideIfOnlyOneEntry == true) {
+                        return SizedBox.shrink();
                       }
+                      lineChartWidget = LineChartWrapper(
+                        points: [points],
+                        isCurved: true,
+                        extraLeftPaddingIfSmall: extraLeftPaddingIfSmall,
+                        amountBefore: totalSpentBefore,
+                        endDate: customEndDateChecked,
+                      );
                     }
-                  }
-                  cumulativeTotal += totalForDay;
-                  points.add(Pair(points.length.toDouble(),
-                      cumulative ? cumulativeTotal : totalForDay));
-                }
-                return LineChartWrapper(
-                  points: [points],
-                  isCurved: true,
-                  extraLeftPaddingIfSmall: extraLeftPaddingIfSmall,
-                  amountBefore: totalSpentBefore,
-                  endDate: customEndDate ?? DateTime.now(),
+                    if (builder != null) {
+                      return builder!(lineChartWidget);
+                    } else {
+                      return lineChartWidget;
+                    }
+                  },
                 );
               }
               return SizedBox.shrink();
@@ -232,4 +253,124 @@ class PastSpendingGraph extends StatelessWidget {
       },
     );
   }
+
+  @override
+  Widget build(BuildContext context) {
+    if (allTimeUpToFirstTransaction) {
+      return StreamBuilder<DateTime?>(
+        stream: database.watchEarliestTransactionDateTime(
+            searchFilters: searchFilters),
+        builder: (context, snapshot) {
+          if (snapshot.hasData == false) return SizedBox.shrink();
+          return buildLineChart(context,
+              earliestTransactionDate: snapshot.data);
+        },
+      );
+    }
+    return buildLineChart(context);
+  }
+}
+
+class CalculatePointsParams {
+  final List<Transaction> transactions;
+  final DateTime customStartDate;
+  final DateTime customEndDate;
+  final double totalSpentBefore;
+  final bool? isIncome;
+  final AllWallets allWallets;
+  final bool showCumulativeSpending;
+  final bool invertPolarity;
+
+  CalculatePointsParams({
+    required this.transactions,
+    required this.customStartDate,
+    required this.customEndDate,
+    required this.totalSpentBefore,
+    required this.isIncome,
+    required this.allWallets,
+    required this.showCumulativeSpending,
+    this.invertPolarity = false,
+  });
+}
+
+List<Pair> calculatePoints(CalculatePointsParams p) {
+  double cumulativeTotal = p.totalSpentBefore;
+  List<Pair> points = [];
+  Map<DateTime, double> dailyTotals = {};
+  double transactionsBeforeStartDateTotal = 0;
+  int invertPolarity = p.invertPolarity ? -1 : 1;
+
+  for (Transaction transaction in p.transactions) {
+    // Remove balance correction transactions if not showing all transactions
+    if (p.isIncome != null && transaction.categoryFk == "0") {
+      continue;
+    }
+
+    DateTime day = DateTime(transaction.dateCreated.year,
+        transaction.dateCreated.month, transaction.dateCreated.day);
+
+    double amount = transaction.income
+        ? transaction.amount.abs() *
+            amountRatioToPrimaryCurrencyGivenPk(
+                p.allWallets, transaction.walletFk) *
+            invertPolarity
+        : -transaction.amount.abs() *
+            amountRatioToPrimaryCurrencyGivenPk(
+                p.allWallets, transaction.walletFk) *
+            invertPolarity;
+
+    if (p.customStartDate.millisecondsSinceEpoch >
+        transaction.dateCreated.millisecondsSinceEpoch) {
+      transactionsBeforeStartDateTotal += (transaction.amount *
+              (amountRatioToPrimaryCurrencyGivenPk(
+                  p.allWallets, transaction.walletFk))) *
+          invertPolarity;
+    }
+
+    dailyTotals[day] = (dailyTotals[day] ?? 0) + amount;
+  }
+
+  cumulativeTotal += transactionsBeforeStartDateTotal;
+
+  // Higher number is more resolution!
+  // Means for every resolutionThreshold point, it will skip one
+  double resolutionThreshold = 500;
+  double resolution =
+      (dailyTotals.length / resolutionThreshold).round().toDouble();
+  if (resolution <= 1) resolution = 1;
+
+  //print("Input length: " + dailyTotals.length.toString());
+
+  int index = -1;
+
+  for (DateTime indexDay = p.customStartDate;
+      indexDay.compareTo(p.customEndDate) <= 0;
+      indexDay = DateTime(indexDay.year, indexDay.month, indexDay.day + 1)) {
+    index++;
+    if (indexDay == p.customStartDate) {
+      indexDay = DateTime(p.customStartDate.year, p.customStartDate.month,
+          p.customStartDate.day);
+    }
+
+    double totalForDay = dailyTotals[indexDay] ?? 0;
+    cumulativeTotal += totalForDay;
+    if (indexDay !=
+            DateTime(p.customStartDate.year, p.customStartDate.month,
+                p.customStartDate.day) &&
+        indexDay !=
+            DateTime(p.customEndDate.year, p.customEndDate.month,
+                p.customEndDate.day) &&
+        index % resolution >= 1) continue;
+    points.add(
+      Pair(
+        index.toDouble(),
+        p.showCumulativeSpending ? cumulativeTotal : totalForDay,
+        dateTime: indexDay,
+      ),
+    );
+  }
+
+  //print("Output length: " + points.length.toString());
+
+  return points;
 }

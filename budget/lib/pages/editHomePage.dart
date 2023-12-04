@@ -249,6 +249,7 @@ class _EditHomePageState extends State<EditHomePage> {
             extraWidgetsBelow: [],
             onTap: () async {
               String defaultLabel = "default-line-graph".tr();
+              String allTimeLabel = "all-time".tr();
               String customLabel = "custom-line-graph".tr();
               List<Budget> allBudgets = await database.getAllBudgets();
               openBottomSheet(
@@ -258,6 +259,7 @@ class _EditHomePageState extends State<EditHomePage> {
                   child: RadioItems(
                     items: [
                       defaultLabel,
+                      allTimeLabel,
                       customLabel,
                       ...[
                         for (Budget budget in allBudgets)
@@ -295,15 +297,25 @@ class _EditHomePageState extends State<EditHomePage> {
                             LineGraphDisplay.Default30Days.index
                         ? defaultLabel
                         : appStateSettings["lineGraphDisplayType"] ==
-                                LineGraphDisplay.CustomStartDate.index
-                            ? customLabel
-                            : appStateSettings["lineGraphReferenceBudgetPk"]
-                                .toString(),
+                                LineGraphDisplay.AllTime.index
+                            ? allTimeLabel
+                            : appStateSettings["lineGraphDisplayType"] ==
+                                    LineGraphDisplay.CustomStartDate.index
+                                ? customLabel
+                                : appStateSettings["lineGraphReferenceBudgetPk"]
+                                    .toString(),
                     onChanged: (value) async {
                       if (value == defaultLabel) {
                         updateSettings(
                           "lineGraphDisplayType",
                           LineGraphDisplay.Default30Days.index,
+                          pagesNeedingRefresh: [],
+                          updateGlobalState: false,
+                        );
+                      } else if (value == allTimeLabel) {
+                        updateSettings(
+                          "lineGraphDisplayType",
+                          LineGraphDisplay.AllTime.index,
                           pagesNeedingRefresh: [],
                           updateGlobalState: false,
                         );
@@ -358,58 +370,19 @@ class _EditHomePageState extends State<EditHomePage> {
             },
           ),
           "pieChart": EditHomePageItem(
-              icon: appStateSettings["outlinedIcons"]
-                  ? Icons.pie_chart_outline
-                  : Icons.pie_chart_rounded,
-              name: "pie-chart".tr(),
-              isEnabled: isHomeScreenSectionEnabled(context, "showPieChart"),
-              onSwitched: (value) {
-                switchHomeScreenSection(context, "showPieChart", value);
-              },
-              extraWidgetsBelow: [],
-              onTap: () {
-                openBottomSheet(
-                  context,
-                  PopupFramework(
-                    title: "select-type".tr(),
-                    child: Column(
-                      children: [
-                        RadioItems(
-                          items: <String>[
-                            "expense",
-                            "income",
-                          ],
-                          displayFilter: (type) {
-                            return type.toString().tr();
-                          },
-                          initial: appStateSettings["pieChartIsIncome"] == true
-                              ? "income"
-                              : "expense",
-                          onChanged: (type) async {
-                            if (type == "expense") {
-                              updateSettings("pieChartIsIncome", false,
-                                  updateGlobalState: false);
-                            } else {
-                              updateSettings("pieChartIsIncome", true,
-                                  updateGlobalState: false);
-                            }
-                            Navigator.of(context).pop();
-                          },
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 5),
-                          child: HorizontalBreakAbove(
-                            enabled: true,
-                            child: PeriodCyclePicker(
-                              cycleSettingsExtension: "PieChart",
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              }),
+            icon: appStateSettings["outlinedIcons"]
+                ? Icons.pie_chart_outline
+                : Icons.pie_chart_rounded,
+            name: "pie-chart".tr(),
+            isEnabled: isHomeScreenSectionEnabled(context, "showPieChart"),
+            onSwitched: (value) {
+              switchHomeScreenSection(context, "showPieChart", value);
+            },
+            extraWidgetsBelow: [],
+            onTap: () {
+              openPieChartHomePageBottomSheetSettings(context);
+            },
+          ),
           "heatMap": EditHomePageItem(
             icon: appStateSettings["outlinedIcons"]
                 ? Icons.grid_on_outlined
@@ -580,6 +553,50 @@ class _EditHomePageState extends State<EditHomePage> {
       ),
     );
   }
+}
+
+Future openPieChartHomePageBottomSheetSettings(BuildContext context) async {
+  await openBottomSheet(
+    context,
+    PopupFramework(
+      title: "select-type".tr(),
+      child: Column(
+        children: [
+          RadioItems(
+            items: <String>[
+              "expense",
+              "income",
+            ],
+            displayFilter: (type) {
+              return type.toString().tr();
+            },
+            initial: appStateSettings["pieChartIsIncome"] == true
+                ? "income"
+                : "expense",
+            onChanged: (type) async {
+              if (type == "expense") {
+                updateSettings("pieChartIsIncome", false,
+                    updateGlobalState: false);
+              } else {
+                updateSettings("pieChartIsIncome", true,
+                    updateGlobalState: false);
+              }
+              Navigator.of(context).pop();
+            },
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 5),
+            child: HorizontalBreakAbove(
+              enabled: true,
+              child: PeriodCyclePicker(
+                cycleSettingsExtension: "PieChart",
+              ),
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
 }
 
 class HomePageEditRowEntryUsername extends StatefulWidget {

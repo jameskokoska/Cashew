@@ -678,6 +678,43 @@ class AddMoreThingsPopup extends StatelessWidget {
           openPage: AddObjectivePage(
             routesToPopAfterDelete: RoutesToPopAfterDelete.None,
           ),
+          widgetAfter: SelectChips(
+            padding: EdgeInsets.symmetric(horizontal: 13),
+            items: ["installment"],
+            getSelected: (_) {
+              return false;
+            },
+            // extraWidget: SelectChipsAddButtonExtraWidget(
+            //   openPage: AddObjectivePage(
+            //     routesToPopAfterDelete: RoutesToPopAfterDelete.None,
+            //   ),
+            //   shouldPushRoute: true,
+            //   popCurrentRoute: true,
+            // ),
+            // extraWidgetAtBeginning: true,
+            onSelected: (String selection) async {
+              if (navigatorKey.currentContext == null) {
+                startCreatingInstallment(context: context);
+              } else {
+                Navigator.pop(context);
+                startCreatingInstallment(context: navigatorKey.currentContext!);
+              }
+            },
+            getLabel: (String selection) {
+              return selection.tr();
+            },
+            getAvatar: (String selection) {
+              return LayoutBuilder(builder: (context2, constraints) {
+                return Icon(
+                  appStateSettings["outlinedIcons"]
+                      ? Icons.punch_clock_outlined
+                      : Icons.punch_clock_rounded,
+                  color: Theme.of(context).colorScheme.primary,
+                  size: constraints.maxWidth,
+                );
+              });
+            },
+          ),
         ),
         AddThing(
           iconData: navBarIconsData["categoriesDetails"]!.iconData,

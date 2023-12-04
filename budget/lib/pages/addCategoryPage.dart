@@ -1,11 +1,13 @@
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/modified/reorderable_list.dart';
+import 'package:budget/pages/accountsPage.dart';
 import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/editAssociatedTitlesPage.dart';
 import 'package:budget/pages/editCategoriesPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
+import 'package:budget/widgets/animatedExpanded.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/categoryIcon.dart';
 import 'package:budget/widgets/editRowEntry.dart';
@@ -34,6 +36,8 @@ import 'package:flutter/material.dart' hide SliverReorderableList;
 import 'dart:async';
 import 'package:budget/colors.dart';
 import 'package:flutter/services.dart' hide TextInput;
+
+import '../widgets/extraInfoBoxes.dart';
 
 class AddCategoryPage extends StatefulWidget {
   AddCategoryPage({
@@ -510,28 +514,69 @@ class _AddCategoryPageState extends State<AddCategoryPage>
                       Expanded(
                         child: IntrinsicWidth(
                           child: Padding(
-                            padding:
-                                const EdgeInsets.only(right: 20, bottom: 40),
-                            child: TextInput(
-                              autoFocus: kIsWeb && getIsFullScreen(context),
-                              focusNode: _titleFocusNode,
-                              labelText: "name-placeholder".tr(),
-                              bubbly: false,
-                              controller: _titleController,
-                              onChanged: (text) {
-                                setSelectedTitle(text,
-                                    userAttemptedToChangeTitlePassed: true);
-                              },
-                              padding: EdgeInsets.zero,
-                              fontSize: getIsFullScreen(context) ? 34 : 27,
-                              fontWeight: FontWeight.bold,
-                              topContentPadding: 40,
-                            ),
+                            padding: const EdgeInsets.only(right: 20),
+                            child: Builder(builder: (context) {
+                              return Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  TextInput(
+                                    autoFocus:
+                                        kIsWeb && getIsFullScreen(context),
+                                    focusNode: _titleFocusNode,
+                                    labelText: "name-placeholder".tr(),
+                                    bubbly: false,
+                                    controller: _titleController,
+                                    onChanged: (text) {
+                                      setSelectedTitle(text,
+                                          userAttemptedToChangeTitlePassed:
+                                              true);
+                                    },
+                                    padding: EdgeInsets.zero,
+                                    fontSize:
+                                        getIsFullScreen(context) ? 34 : 27,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  if (widget.category?.categoryPk != "0")
+                                    SizedBox(height: 17),
+                                  if (widget.category?.categoryPk == "0")
+                                    AnimatedOpacity(
+                                      opacity: selectedTitle !=
+                                                  "balance-correction".tr() &&
+                                              selectedTitle !=
+                                                  "balance-correction"
+                                                      .tr()
+                                                      .capitalizeFirstofEach
+                                          ? 1
+                                          : 0,
+                                      duration: Duration(milliseconds: 500),
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(left: 5),
+                                        child: TextFont(
+                                          text: "balance-correction".tr(),
+                                          fontSize: 15,
+                                          textColor:
+                                              getColor(context, "textLight"),
+                                        ),
+                                      ),
+                                    ),
+                                ],
+                              );
+                            }),
                           ),
                         ),
                       ),
                     ],
                   ),
+                  if (widget.category?.categoryPk == "0")
+                    Padding(
+                      padding: const EdgeInsets.only(
+                          left: 15, right: 15, bottom: 15),
+                      child: TipBox(
+                        onTap: () {},
+                        text: "balance-correction-category-info".tr(),
+                        settingsString: null,
+                      ),
+                    ),
                   Container(
                     height: 65,
                     child: SelectColor(
@@ -540,7 +585,8 @@ class _AddCategoryPageState extends State<AddCategoryPage>
                       setSelectedColor: setSelectedColor,
                     ),
                   ),
-                  widgetCategory == null ||
+                  widget.category?.categoryPk == "0" ||
+                          widgetCategory == null ||
                           widget.routesToPopAfterDelete ==
                               RoutesToPopAfterDelete.PreventDelete
                       ? SizedBox.shrink()
@@ -614,10 +660,12 @@ class _AddCategoryPageState extends State<AddCategoryPage>
                                 .onSecondaryContainer,
                           ),
                         ),
-                  widgetCategory == null
+                  widget.category?.categoryPk == "0" || widgetCategory == null
                       ? SizedBox.shrink()
                       : SizedBox(height: 20),
-                  widgetCategory == null || isSubCategory
+                  widget.category?.categoryPk == "0" ||
+                          widgetCategory == null ||
+                          isSubCategory
                       ? SizedBox.shrink()
                       : Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -627,7 +675,7 @@ class _AddCategoryPageState extends State<AddCategoryPage>
                             fontSize: 16,
                           ),
                         ),
-                  widgetCategory == null
+                  widget.category?.categoryPk == "0" || widgetCategory == null
                       ? SizedBox.shrink()
                       : SizedBox(height: 5),
                 ],
@@ -649,7 +697,10 @@ class _AddCategoryPageState extends State<AddCategoryPage>
                   },
                 ),
               )),
-            if ((widgetCategory == null || isSubCategory) == false)
+            if ((widget.category?.categoryPk == "0" ||
+                    widgetCategory == null ||
+                    isSubCategory) ==
+                false)
               StreamBuilder<List<TransactionCategory>>(
                 stream: database.watchAllSubCategoriesOfMainCategory(
                     widget.category!.categoryPk),
@@ -833,7 +884,9 @@ class _AddCategoryPageState extends State<AddCategoryPage>
                 mainAxisSize: MainAxisSize.max,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  widgetCategory == null || isSubCategory
+                  widget.category?.categoryPk == "0" ||
+                          widgetCategory == null ||
+                          isSubCategory
                       ? SizedBox.shrink()
                       : Row(
                           children: [

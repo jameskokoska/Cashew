@@ -3,9 +3,11 @@ import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
 import 'package:budget/pages/accountsPage.dart';
 import 'package:budget/pages/addBudgetPage.dart';
+import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/editObjectivesPage.dart';
 import 'package:budget/pages/editWalletsPage.dart';
 import 'package:budget/pages/premiumPage.dart';
+import 'package:budget/struct/currencyFunctions.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/animatedExpanded.dart';
@@ -24,6 +26,7 @@ import 'package:budget/widgets/openSnackbar.dart';
 import 'package:budget/widgets/periodCyclePicker.dart';
 import 'package:budget/widgets/saveBottomButton.dart';
 import 'package:budget/widgets/selectAmount.dart';
+import 'package:budget/widgets/selectCategory.dart';
 import 'package:budget/widgets/selectCategoryImage.dart';
 import 'package:budget/widgets/selectColor.dart';
 import 'package:budget/widgets/settingsContainers.dart';
@@ -703,6 +706,406 @@ class SelectObjectiveTypePopup extends StatelessWidget {
                       ),
                     ],
                   ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+Future<bool> startCreatingInstallment(
+    {required BuildContext context, Objective? initialObjective}) async {
+  dynamic objective = initialObjective ??
+      await selectObjectivePopup(context,
+          canSelectNoGoal: false, includeAmount: true, showAddButton: true);
+  if (objective is Objective) {
+    dynamic result = await openBottomSheet(
+      context,
+      fullSnap: true,
+      InstallmentObjectivePopup(objective: objective),
+    );
+    if (result == true) return true;
+  }
+  return false;
+}
+
+class InstallmentObjectivePopup extends StatefulWidget {
+  const InstallmentObjectivePopup({required this.objective, super.key});
+  final Objective objective;
+
+  @override
+  State<InstallmentObjectivePopup> createState() =>
+      _InstallmentObjectivePopupState();
+}
+
+class _InstallmentObjectivePopupState extends State<InstallmentObjectivePopup> {
+  double enteredAmount = 0;
+  bool isNegative = false;
+  TimeOfDay? selectedTime = null;
+  DateTime? selectedDateTime = null;
+  String selectedTitle = "";
+  TransactionCategory? selectedCategory;
+
+  int selectedPeriodLength = 1;
+  String selectedRecurrence = "Monthly";
+  String selectedRecurrenceDisplay = "month";
+  BudgetReoccurence selectedRecurrenceEnum = BudgetReoccurence.monthly;
+
+  int? numberOfInstallmentPayments = null;
+  double? amountPerInstallmentPayment = null;
+
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration.zero, () async {
+      selectedCategory = (await database.getAllCategories()).firstOrNull;
+      setState(() {});
+    });
+  }
+
+  Future<void> selectAmountPerInstallment(BuildContext context) async {
+    openBottomSheet(
+      context,
+      PopupFramework(
+        title: "enter-payment-amount".tr(),
+        hasPadding: false,
+        underTitleSpace: false,
+        child: SelectAmount(
+          enableWalletPicker: false,
+          padding: EdgeInsets.symmetric(horizontal: 18),
+          onlyShowCurrencyIcon: true,
+          amountPassed: (amountPerInstallmentPayment ?? 0).toString(),
+          setSelectedAmount: (amount, _) {
+            setState(() {
+              numberOfInstallmentPayments = null;
+              amountPerInstallmentPayment = amount;
+            });
+          },
+          next: () {
+            Navigator.pop(context);
+          },
+          nextLabel: "set-amount".tr(),
+        ),
+      ),
+    );
+  }
+
+  Future<void> selectInstallmentLength(BuildContext context) async {
+    openBottomSheet(
+      context,
+      PopupFramework(
+        title: "enter-payment-period".tr(),
+        child: SelectAmountValue(
+          amountPassed: (numberOfInstallmentPayments ?? 0).toString(),
+          setSelectedAmount: (amount, _) {
+            setState(() {
+              amountPerInstallmentPayment = null;
+              numberOfInstallmentPayments = amount.toInt();
+            });
+          },
+          next: () async {
+            Navigator.pop(context);
+          },
+          nextLabel: "set-amount".tr(),
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    Widget editTransferDetails = Column(
+      children: [
+        Container(
+          width: getWidthBottomSheet(context) - 36,
+          child: TextInput(
+            icon: appStateSettings["outlinedIcons"]
+                ? Icons.title_outlined
+                : Icons.title_rounded,
+            autoFocus: false,
+            onChanged: (text) async {
+              selectedTitle = text;
+            },
+            initialValue: selectedTitle,
+            labelText: "title-placeholder".tr(),
+            padding: EdgeInsets.only(bottom: 13),
+          ),
+        ),
+        DateButton(
+          internalPadding: EdgeInsets.only(right: 5),
+          initialSelectedDate: selectedDateTime ?? DateTime.now(),
+          initialSelectedTime: TimeOfDay(
+              hour: selectedDateTime?.hour ?? TimeOfDay.now().hour,
+              minute: selectedDateTime?.minute ?? TimeOfDay.now().minute),
+          setSelectedDate: (date) {
+            selectedDateTime = date;
+          },
+          setSelectedTime: (time) {
+            selectedDateTime = (selectedDateTime ?? DateTime.now())
+                .copyWith(hour: time.hour, minute: time.minute);
+          },
+        ),
+      ],
+    );
+
+    return PopupFramework(
+      title: "installment".tr(),
+      subtitle: widget.objective.name +
+          " (" +
+          convertToMoney(
+              Provider.of<AllWallets>(context),
+              objectiveAmountToPrimaryCurrency(
+                      Provider.of<AllWallets>(context), widget.objective) *
+                  ((widget.objective.income) ? 1 : -1)) +
+          ")",
+      underTitleSpace: false,
+      hasPadding: false,
+      child: Column(
+        children: [
+          Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 18),
+                child: Builder(
+                  builder: (context) {
+                    List<double> results = getInstallmentPaymentCalculations(
+                      allWallets: Provider.of<AllWallets>(context),
+                      objective: widget.objective,
+                      numberOfInstallmentPayments: numberOfInstallmentPayments,
+                      amountPerInstallmentPayment: amountPerInstallmentPayment,
+                    );
+                    double numberOfInstallmentPaymentsDisplay = results[0];
+                    double amountPerInstallmentPaymentDisplay = results[1];
+
+                    String displayNumberOfInstallmentPaymentsDisplay =
+                        numberOfInstallmentPaymentsDisplay == double.infinity
+                            ? "0"
+                            : removeTrailingZeroes(
+                                numberOfInstallmentPaymentsDisplay
+                                    .toStringAsFixed(3));
+                    String displayAmountPerInstallmentPaymentDisplay =
+                        convertToMoney(
+                            Provider.of<AllWallets>(context),
+                            amountPerInstallmentPaymentDisplay ==
+                                    double.infinity
+                                ? 0
+                                : amountPerInstallmentPaymentDisplay);
+                    return Column(
+                      children: [
+                        Wrap(
+                          alignment: WrapAlignment.center,
+                          crossAxisAlignment: WrapCrossAlignment.center,
+                          children: [
+                            TappableTextEntry(
+                              title: displayNumberOfInstallmentPaymentsDisplay,
+                              placeholder: numberOfInstallmentPayments == null
+                                  ? displayNumberOfInstallmentPaymentsDisplay
+                                  : "",
+                              showPlaceHolderWhenTextEquals:
+                                  numberOfInstallmentPayments == null
+                                      ? displayNumberOfInstallmentPaymentsDisplay
+                                      : "",
+                              onTap: () {
+                                selectInstallmentLength(context);
+                              },
+                              fontSize: 23,
+                              fontWeight: FontWeight.bold,
+                              internalPadding: EdgeInsets.symmetric(
+                                  vertical: 4, horizontal: 4),
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 0, horizontal: 3),
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 3),
+                              child: TextFont(
+                                text: numberOfInstallmentPayments == 1
+                                    ? "payment-of".tr()
+                                    : "payments-of".tr(),
+                                fontSize: 23,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            TappableTextEntry(
+                              title: displayAmountPerInstallmentPaymentDisplay,
+                              placeholder: amountPerInstallmentPayment == null
+                                  ? displayAmountPerInstallmentPaymentDisplay
+                                  : "",
+                              showPlaceHolderWhenTextEquals:
+                                  amountPerInstallmentPayment == null
+                                      ? displayAmountPerInstallmentPaymentDisplay
+                                      : "",
+                              onTap: () {
+                                selectAmountPerInstallment(context);
+                              },
+                              fontSize: 23,
+                              fontWeight: FontWeight.bold,
+                              internalPadding: EdgeInsets.symmetric(
+                                  vertical: 4, horizontal: 4),
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 0, horizontal: 3),
+                            ),
+                          ],
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 5),
+                          child: TextFont(
+                            text: "until-goal-reached".tr().toLowerCase(),
+                            fontSize: 23,
+                            fontWeight: FontWeight.bold,
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ],
+                    );
+                  },
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 18),
+                child: Wrap(
+                  alignment: WrapAlignment.center,
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  children: [
+                    TextFont(
+                      text: "repeat-every".tr(),
+                      fontSize: 23,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        TappableTextEntry(
+                          title: selectedPeriodLength.toString(),
+                          placeholder: "0",
+                          showPlaceHolderWhenTextEquals: "0",
+                          onTap: () {
+                            selectPeriodLength(
+                              context: context,
+                              selectedPeriodLength: selectedPeriodLength,
+                              setSelectedPeriodLength: (period) =>
+                                  setSelectedPeriodLength(
+                                period: period,
+                                selectedRecurrence: selectedRecurrence,
+                                setPeriodLength: (selectedPeriodLength,
+                                    selectedRecurrenceDisplay) {
+                                  this.selectedPeriodLength =
+                                      selectedPeriodLength;
+                                  this.selectedRecurrenceDisplay =
+                                      selectedRecurrenceDisplay;
+                                  setState(() {});
+                                },
+                              ),
+                            );
+                          },
+                          fontSize: 23,
+                          fontWeight: FontWeight.bold,
+                          internalPadding:
+                              EdgeInsets.symmetric(vertical: 4, horizontal: 4),
+                          padding:
+                              EdgeInsets.symmetric(vertical: 0, horizontal: 3),
+                        ),
+                        TappableTextEntry(
+                          title: selectedRecurrenceDisplay
+                              .toString()
+                              .toLowerCase()
+                              .tr()
+                              .toLowerCase(),
+                          placeholder: "",
+                          onTap: () {
+                            selectRecurrence(
+                              context: context,
+                              selectedRecurrence: selectedRecurrence,
+                              selectedPeriodLength: selectedPeriodLength,
+                              onChanged: (selectedRecurrence,
+                                  selectedRecurrenceEnum,
+                                  selectedRecurrenceDisplay) {
+                                this.selectedRecurrence = selectedRecurrence;
+                                this.selectedRecurrenceEnum =
+                                    selectedRecurrenceEnum;
+                                this.selectedRecurrenceDisplay =
+                                    selectedRecurrenceDisplay;
+                                setState(() {});
+                              },
+                            );
+                          },
+                          fontSize: 23,
+                          fontWeight: FontWeight.bold,
+                          internalPadding:
+                              EdgeInsets.symmetric(vertical: 4, horizontal: 4),
+                          padding:
+                              EdgeInsets.symmetric(vertical: 0, horizontal: 3),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+              ),
+              SizedBox(height: 10),
+              HorizontalBreak(
+                color: Theme.of(context)
+                    .colorScheme
+                    .secondaryContainer
+                    .withOpacity(0.5),
+              ),
+              SizedBox(height: 4),
+              if (selectedCategory != null)
+                SelectCategory(
+                  horizontalList: true,
+                  listPadding: EdgeInsets.symmetric(horizontal: 10),
+                  addButton: false,
+                  setSelectedCategory: (category) {
+                    setState(() {
+                      selectedCategory = category;
+                    });
+                  },
+                  popRoute: false,
+                  selectedCategory: selectedCategory,
+                ),
+              SizedBox(height: 15),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 18),
+                child: editTransferDetails,
+              ),
+              SizedBox(height: 15),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 18),
+                child: Button(
+                  label: "add-transaction".tr(),
+                  width: MediaQuery.sizeOf(context).width,
+                  onTap: () async {
+                    Transaction transaction = Transaction(
+                      transactionPk: "-1",
+                      name: selectedTitle,
+                      amount: getInstallmentPaymentCalculations(
+                        allWallets:
+                            Provider.of<AllWallets>(context, listen: false),
+                        objective: widget.objective,
+                        numberOfInstallmentPayments:
+                            numberOfInstallmentPayments,
+                        amountPerInstallmentPayment:
+                            amountPerInstallmentPayment,
+                      )[1],
+                      note: "",
+                      categoryFk: selectedCategory?.categoryPk ?? "-1",
+                      walletFk: appStateSettings["selectedWalletPk"],
+                      dateCreated: selectedDateTime ?? DateTime.now(),
+                      income: widget.objective.income,
+                      paid: false,
+                      skipPaid: false,
+                      createdAnotherFutureTransaction: false,
+                      type: TransactionSpecialType.repetitive,
+                      periodLength: selectedPeriodLength,
+                      reoccurrence: selectedRecurrenceEnum,
+                      objectiveFk: widget.objective.objectivePk,
+                    );
+                    await database.createOrUpdateTransaction(transaction,
+                        insert: true);
+                    Navigator.maybePop(context, true);
+                  },
                 ),
               ),
             ],

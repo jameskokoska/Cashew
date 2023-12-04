@@ -555,6 +555,10 @@ class AboutPage extends StatelessWidget {
           list: ["Clyde"],
         ),
         AboutInfoBox(
+          title: "Chinese (Traditional)",
+          list: ["qazlll456"],
+        ),
+        AboutInfoBox(
           title: "Hindi",
           list: ["Dikshant S."],
         ),

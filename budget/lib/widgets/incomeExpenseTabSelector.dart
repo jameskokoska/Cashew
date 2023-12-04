@@ -331,3 +331,129 @@ class _IncomeExpenseButtonSelectorState
     );
   }
 }
+
+class IncomeExpenseTransferTabSelector extends StatefulWidget {
+  final Function(int tabIndex) onTabChanged;
+  final int initialTab;
+  final Color? color;
+  final Color? unselectedColor;
+  final String? incomeLabel;
+  final String? expenseLabel;
+  final Color? unselectedLabelColor;
+
+  IncomeExpenseTransferTabSelector({
+    required this.onTabChanged,
+    required this.initialTab,
+    this.color,
+    this.unselectedColor,
+    this.incomeLabel,
+    this.expenseLabel,
+    this.unselectedLabelColor,
+  });
+
+  @override
+  _IncomeExpenseTransferTabSelectorState createState() =>
+      _IncomeExpenseTransferTabSelectorState();
+}
+
+class _IncomeExpenseTransferTabSelectorState
+    extends State<IncomeExpenseTransferTabSelector>
+    with SingleTickerProviderStateMixin {
+  late TabController _incomeTabController;
+  int selectedTab = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    selectedTab = widget.initialTab;
+    _incomeTabController = TabController(
+      length: 3,
+      vsync: this,
+      initialIndex: selectedTab,
+    );
+  }
+
+  void onControllerTabSwitch() {
+    setState(() {
+      selectedTab = _incomeTabController.index;
+    });
+  }
+
+  @override
+  void didUpdateWidget(covariant IncomeExpenseTransferTabSelector oldWidget) {
+    _incomeTabController.animateTo(widget.initialTab);
+    setState(() {
+      selectedTab = widget.initialTab;
+    });
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: widget.unselectedColor == null
+          ? appStateSettings["materialYou"]
+              ? Theme.of(context).colorScheme.primary.withOpacity(0.1)
+              : Theme.of(context).brightness == Brightness.dark
+                  ? getColor(context, "lightDarkAccentHeavyLight")
+                      .withOpacity(0.5)
+                  : Colors.black.withOpacity(0.07)
+          : widget.unselectedColor,
+      child: TabBar(
+        controller: _incomeTabController,
+        dividerColor: Colors.transparent,
+        indicatorColor: Colors.transparent,
+        indicatorSize: TabBarIndicatorSize.tab,
+        indicator: BoxDecoration(
+          color: widget.color != null
+              ? widget.color
+              : (appStateSettings["materialYou"]
+                  ? Theme.of(context).colorScheme.primary.withOpacity(0.25)
+                  : getColor(context, "black").withOpacity(0.15)),
+        ),
+        labelColor: getColor(context, "black"),
+        unselectedLabelColor: widget.unselectedLabelColor ??
+            getColor(context, "black").withOpacity(0.3),
+        onTap: (value) {
+          widget.onTabChanged(value);
+          setState(() {
+            selectedTab = value;
+          });
+        },
+        tabs: [
+          Tab(
+            child: ExpenseIncomeSelectorLabel(
+              selectedIncome: selectedTab == 1 || selectedTab == 2,
+              label: widget.expenseLabel,
+              isIncome: false,
+              customIcon: null,
+              showIcons: true,
+            ),
+          ),
+          Tab(
+            child: ExpenseIncomeSelectorLabel(
+              selectedIncome: selectedTab == 1,
+              label: widget.incomeLabel,
+              isIncome: true,
+              customIcon: null,
+              showIcons: true,
+            ),
+          ),
+          Tab(
+            child: ExpenseIncomeSelectorLabel(
+              selectedIncome: selectedTab == 2,
+              showIcons: false,
+              label: "transfer".tr(),
+              isIncome: true,
+              customIcon: Icon(
+                appStateSettings["outlinedIcons"]
+                    ? Icons.compare_arrows_outlined
+                    : Icons.compare_arrows_rounded,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

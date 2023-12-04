@@ -36,34 +36,38 @@ class TransactionEntryTag extends StatelessWidget {
       child: Row(
         children: [
           if (appStateSettings["showAccountLabelTagInTransactionEntry"] == true)
-            TransactionTag(
-              color: HexColor(
-                  Provider.of<AllWallets>(context)
-                      .indexedByPk[transaction.walletFk]
-                      ?.colour,
-                  defaultColor: Theme.of(context).colorScheme.primary),
-              name: Provider.of<AllWallets>(context)
-                      .indexedByPk[transaction.walletFk]
-                      ?.name ??
-                  "",
+            Flexible(
+              child: TransactionTag(
+                color: HexColor(
+                    Provider.of<AllWallets>(context)
+                        .indexedByPk[transaction.walletFk]
+                        ?.colour,
+                    defaultColor: Theme.of(context).colorScheme.primary),
+                name: Provider.of<AllWallets>(context)
+                        .indexedByPk[transaction.walletFk]
+                        ?.name ??
+                    "",
+              ),
             ),
           if (transaction.subCategoryFk != null)
-            Builder(builder: (context) {
-              if (subCategory != null) {
-                return SubCategoryTag(category: subCategory!);
-              } else {
-                return StreamBuilder<TransactionCategory?>(
-                  stream: database.getCategory(transaction.subCategoryFk!).$1,
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      TransactionCategory? category = snapshot.data!;
-                      return SubCategoryTag(category: category);
-                    }
-                    return SizedBox.shrink();
-                  },
-                );
-              }
-            }),
+            Flexible(
+              child: Builder(builder: (context) {
+                if (subCategory != null) {
+                  return SubCategoryTag(category: subCategory!);
+                } else {
+                  return StreamBuilder<TransactionCategory?>(
+                    stream: database.getCategory(transaction.subCategoryFk!).$1,
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        TransactionCategory? category = snapshot.data!;
+                        return SubCategoryTag(category: category);
+                      }
+                      return SizedBox.shrink();
+                    },
+                  );
+                }
+              }),
+            ),
           if (transaction.sharedReferenceBudgetPk != null)
             Flexible(
               child: Builder(builder: (context) {
@@ -94,7 +98,7 @@ class TransactionEntryTag extends StatelessWidget {
               }),
             ),
           if (transaction.objectiveFk != null)
-            Expanded(
+            Flexible(
               child: Builder(builder: (context) {
                 if (objective != null) {
                   return ObjectivePercentTag(
@@ -130,29 +134,27 @@ class SubCategoryTag extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Flexible(
-      child: TransactionTag(
-        color: HexColor(category.colour,
-            defaultColor: Theme.of(context).colorScheme.primary),
-        name: (category.emojiIconName != null
-                ? ((category.emojiIconName ?? "") + " ")
-                : "") +
-            category.name,
-        leading: category.emojiIconName != null
-            ? null
-            : Padding(
-                padding: const EdgeInsets.only(right: 3),
-                child: CategoryIcon(
-                  categoryPk: "-1",
-                  category: category,
-                  size: 14,
-                  sizePadding: 1,
-                  noBackground: true,
-                  canEditByLongPress: false,
-                  margin: EdgeInsets.zero,
-                ),
+    return TransactionTag(
+      color: HexColor(category.colour,
+          defaultColor: Theme.of(context).colorScheme.primary),
+      name: (category.emojiIconName != null
+              ? ((category.emojiIconName ?? "") + " ")
+              : "") +
+          category.name,
+      leading: category.emojiIconName != null
+          ? null
+          : Padding(
+              padding: const EdgeInsets.only(right: 3),
+              child: CategoryIcon(
+                categoryPk: "-1",
+                category: category,
+                size: 14,
+                sizePadding: 1,
+                noBackground: true,
+                canEditByLongPress: false,
+                margin: EdgeInsets.zero,
               ),
-      ),
+            ),
     );
   }
 }
@@ -183,48 +185,14 @@ class ObjectivePercentTag extends StatelessWidget {
             objectiveAmount == 0 ? 0 : totalAmount / objectiveAmount;
         percentageTowardsGoal =
             percentageTowardsGoal <= 0 ? 0 : percentageTowardsGoal;
-        // Use layout builder
-        // https://stackoverflow.com/questions/65933330/expanded-and-flexible-not-filling-entire-row
-        return LayoutBuilder(
-          builder: (context, constraints) {
-            return Row(
-              children: [
-                ConstrainedBox(
-                  constraints: BoxConstraints(
-                      maxWidth: constraints.maxWidth *
-                          (showObjectivePercentageCheck ? 0.8 : 1)),
-                  child: TransactionTag(
-                    color: HexColor(objective.colour,
-                        defaultColor: Theme.of(context).colorScheme.primary),
-                    name: objective.name +
-                        ": " +
-                        convertToPercent((totalAmount / objectiveAmount) * 100,
-                            numberDecimals: 0),
-                  ),
-                ),
-                if (showObjectivePercentageCheck) SizedBox(width: 7),
-                if (showObjectivePercentageCheck)
-                  Expanded(
-                    child: ThinProgress(
-                      backgroundColor: appStateSettings["materialYou"]
-                          ? Theme.of(context).colorScheme.secondaryContainer
-                          : getColor(context, "lightDarkAccentHeavy"),
-                      color: dynamicPastel(
-                        context,
-                        HexColor(
-                          objective.colour,
-                          defaultColor: Theme.of(context).colorScheme.primary,
-                        ),
-                        inverse: true,
-                        amountLight: 0.1,
-                        amountDark: 0.1,
-                      ),
-                      progress: percentageTowardsGoal,
-                    ),
-                  ),
-              ],
-            );
-          },
+        return TransactionTag(
+          color: HexColor(objective.colour,
+              defaultColor: Theme.of(context).colorScheme.primary),
+          name: objective.name +
+              ": " +
+              convertToPercent((totalAmount / objectiveAmount) * 100,
+                  numberDecimals: 0),
+          progress: percentageTowardsGoal,
         );
       },
     );
@@ -235,39 +203,68 @@ class TransactionTag extends StatelessWidget {
   final Color color;
   final String name;
   final Widget? leading;
+  final double? progress;
 
   TransactionTag({
     required this.color,
     required this.name,
     this.leading,
+    this.progress,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 3),
-      child: Container(
-        decoration: BoxDecoration(
-          color: color.withOpacity(0.25),
-          borderRadius: BorderRadius.circular(6),
-        ),
-        padding: EdgeInsets.symmetric(horizontal: 4.5, vertical: 1.05),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            leading ?? SizedBox.shrink(),
-            Flexible(
-              child: TextFont(
-                text: name,
-                fontSize: 11.5,
-                textColor: getColor(context, "black").withOpacity(0.7),
-                maxLines: 1,
-              ),
+    Widget tagWidget = Container(
+      decoration: BoxDecoration(
+        color: color.withOpacity(progress != null ? 0.15 : 0.25),
+        borderRadius: BorderRadius.circular(6),
+      ),
+      padding: EdgeInsets.symmetric(horizontal: 4.5, vertical: 1.05),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          leading ?? SizedBox.shrink(),
+          Flexible(
+            child: TextFont(
+              text: name,
+              fontSize: 11.5,
+              textColor: getColor(context, "black").withOpacity(0.7),
+              maxLines: 1,
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
+    if (progress != null)
+      return Padding(
+        padding: const EdgeInsets.only(left: 3),
+        child: Stack(
+          children: [
+            tagWidget,
+            Positioned(
+              top: 0,
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: Stack(
+                children: [
+                  FractionallySizedBox(
+                    widthFactor: progress,
+                    heightFactor: 1,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: color.withOpacity(0.2),
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
+      );
+    return Padding(padding: EdgeInsets.only(left: 3), child: tagWidget);
   }
 }
 

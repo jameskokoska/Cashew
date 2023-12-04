@@ -110,6 +110,7 @@ String convertToMoney(
   bool? allDecimals,
   bool? addCurrencyName,
   bool forceAllDecimals = false,
+  String? customLocale,
 }) {
   int numberDecimals = decimals ??
       allWallets.indexedByPk[appStateSettings["selectedWalletPk"]]?.decimals ??
@@ -138,9 +139,12 @@ String convertToMoney(
                 hasDecimalPoints(amount)
             ? numberDecimals
             : 0,
-    locale: Platform.localeName,
+    locale: customLocale ??
+        appStateSettings["numberFormatLocale"] ??
+        Platform.localeName,
     symbol: getCurrencyString(allWallets, currencyKey: currencyKey),
   );
+  if (amount == 10000.96) print(currency.format(amount));
   // If there is no currency symbol, use the currency code
   if (getCurrencyString(allWallets, currencyKey: currencyKey) == "") {
     addCurrencyName = true;
@@ -955,6 +959,25 @@ String getDomainNameFromURL(String text) {
       caseSensitive: false);
   Match? match = regExp.firstMatch(text);
   return match?.group(1) ?? '';
+}
+
+String cleanupNoteStringWithURLs(String text) {
+  RegExp regExp = RegExp(
+      r'^(?:https?:\/\/)?(?:[^@\/\n]+@)?(?:www\.)?([^:\/?\n]+)',
+      multiLine: true,
+      caseSensitive: false);
+
+  Iterable<Match> matches = regExp.allMatches(text);
+
+  String modifiedText = text;
+
+  for (Match match in matches) {
+    if (match.group(0) != null)
+      modifiedText = modifiedText.replaceFirst(
+          match.group(0)!, getDomainNameFromURL(match.group(0)!));
+  }
+
+  return modifiedText;
 }
 
 void openUrl(String link) async {

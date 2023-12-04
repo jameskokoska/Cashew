@@ -278,11 +278,11 @@ class CategoryEntry extends StatelessWidget {
                                                   .toStringAsFixed(0)) +
                                           "% " +
                                           (extraText ??
-                                                  (isSubcategory
+                                              ((isSubcategory
                                                       ? "of-subcategory"
                                                       : "of-spending"))
-                                              .toString()
-                                              .tr();
+                                                  .toString()
+                                                  .tr());
 
                                       return TextFont(
                                         text: text,

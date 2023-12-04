@@ -96,6 +96,7 @@ Future<Map<String, dynamic>> getDefaultPreferences() async {
     "submittedFeedback": false,
     "canShowBackupReminderPopup": true,
     "canShowTransactionActionButtonTip": true,
+    "autoLoginDisabledOnWebTip": true,
     "notifications": true,
     "notificationHour": 20,
     "notificationMinute": 0,
@@ -146,6 +147,7 @@ Future<Map<String, dynamic>> getDefaultPreferences() async {
     "purchaseID": null,
     "showAccountLabelTagInTransactionEntry": false,
     "showTransactionsMonthlySpendingSummary": true,
+    "showTransactionsBalanceTransferTab": true,
     //Show all categories or only income/expense
     "showAllCategoriesWhenSelecting": true,
     // Search filters strings
@@ -153,6 +155,10 @@ Future<Map<String, dynamic>> getDefaultPreferences() async {
     "allSpendingSetFiltersString": null,
     "transactionsListPageSetFiltersString": null,
     "increaseTextContrast": false,
+    "numberFormatLocale": null,
+    "netAllSpendingTotal": false,
+    "extraZerosButton": null, //will be null, 00 or 000
+    "allSpendingLastPage": 0, //index of the last tab on the all spending page
     // *********************************************************** //
     // For showing information within a certain cycle for all spending wallet details page
     // cycleSettingsExtension = ""

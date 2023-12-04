@@ -1,4 +1,7 @@
+import 'package:budget/functions.dart';
+import 'package:budget/pages/addCategoryPage.dart';
 import 'package:budget/struct/settings.dart';
+import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:flutter/material.dart';
@@ -245,6 +248,36 @@ class _SelectChipsState<T> extends State<SelectChips<T>> {
           )
         ],
       ),
+    );
+  }
+}
+
+class SelectChipsAddButtonExtraWidget extends StatelessWidget {
+  const SelectChipsAddButtonExtraWidget({
+    this.shouldPushRoute = false,
+    required this.openPage,
+    this.popCurrentRoute = false,
+    super.key,
+  });
+  final bool shouldPushRoute;
+  final Widget openPage;
+  final bool popCurrentRoute;
+
+  @override
+  Widget build(BuildContext context) {
+    return AddButton(
+      onTap: () {
+        if (popCurrentRoute) {
+          Navigator.maybePop(context);
+        }
+        if (shouldPushRoute) {
+          pushRoute(context, openPage);
+        }
+      },
+      width: 40,
+      padding: EdgeInsets.symmetric(horizontal: 5, vertical: 1),
+      openPage: shouldPushRoute ? null : openPage,
+      borderRadius: 8,
     );
   }
 }

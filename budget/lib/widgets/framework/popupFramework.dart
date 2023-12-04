@@ -59,7 +59,7 @@ class PopupFramework extends StatelessWidget {
                               Padding(
                                 padding: EdgeInsets.symmetric(horizontal: 18),
                                 child: TextFont(
-                                  text: title ?? "",
+                                  text: (title ?? "").capitalizeFirstofEach,
                                   fontSize: 23,
                                   fontWeight: FontWeight.bold,
                                   maxLines: 5,
@@ -112,7 +112,7 @@ class PopupFramework extends StatelessWidget {
                               children: [
                                 if (title != null)
                                   TextFont(
-                                    text: title ?? "",
+                                    text: (title ?? "").capitalizeFirstofEach,
                                     fontSize: title!.length > 16 ? 23 : 29,
                                     fontWeight: FontWeight.bold,
                                     maxLines: 5,
@@ -140,7 +140,7 @@ class PopupFramework extends StatelessWidget {
                 SizedBox(height: 13),
               Padding(
                 padding: hasPadding
-                    ? EdgeInsets.only(left: 18, right: 18)
+                    ? EdgeInsets.symmetric(horizontal: 18)
                     : EdgeInsets.zero,
                 child: child,
               ),

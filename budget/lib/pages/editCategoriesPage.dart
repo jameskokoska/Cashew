@@ -220,18 +220,14 @@ class _EditCategoriesPageState extends State<EditCategoriesPage> {
                                     getLabel: (TransactionCategory category) {
                                       return category.name;
                                     },
-                                    extraWidget: AddButton(
-                                      onTap: () {},
-                                      width: 40,
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: 5, vertical: 1),
+                                    extraWidget:
+                                        SelectChipsAddButtonExtraWidget(
                                       openPage: AddCategoryPage(
                                         routesToPopAfterDelete:
                                             RoutesToPopAfterDelete.One,
                                         mainCategoryPkWhenSubCategory:
                                             category.categoryPk,
                                       ),
-                                      borderRadius: 8,
                                     ),
                                     getAvatar: (TransactionCategory category) {
                                       return LayoutBuilder(

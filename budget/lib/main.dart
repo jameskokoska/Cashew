@@ -68,12 +68,9 @@ void main() async {
       enabled: enableDevicePreview,
       builder: (context) => EasyLocalization(
         useOnlyLangCode: true,
-        supportedLocales: [
-          for (String languageCode in supportedLanguagesSet)
-            Locale(languageCode)
-        ],
+        supportedLocales: supportedLocales.values.toList(),
         path: 'assets/translations/generated',
-        fallbackLocale: Locale(supportedLanguagesSet.toList()[0]),
+        fallbackLocale: supportedLocales.values.toList().first,
         child: RestartApp(
           child: InitializeApp(key: appStateKey),
         ),

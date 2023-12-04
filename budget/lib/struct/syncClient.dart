@@ -10,12 +10,15 @@ import 'package:budget/widgets/accountAndBackup.dart';
 import 'package:budget/widgets/globalSnackBar.dart';
 import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
+import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/openSnackbar.dart';
 import 'package:budget/widgets/util/debouncer.dart';
 import 'package:budget/widgets/walletEntry.dart';
+// import 'package:drift/web.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+// import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 import 'package:googleapis/drive/v3.dart' as drive;
@@ -271,17 +274,43 @@ Future<bool> syncData(BuildContext context) async {
       dataStore.insertAll(dataStore.length, data);
     }
 
+    FinanceDatabase databaseSync;
+
     if (kIsWeb) {
-      final html.Storage localStorage = html.window.localStorage;
-      localStorage["moor_db_str_syncdb"] =
-          bin2str.encode(Uint8List.fromList(dataStore));
+      String dataEncoded = bin2str.encode(Uint8List.fromList(dataStore));
+
+      try {
+        databaseSync = await constructDb('syncdb',
+            initialDataWeb: Uint8List.fromList(dataStore));
+      } catch (e) {
+        double megabytes = dataEncoded.length / (1024 * 1024);
+        await openPopup(
+          context,
+          title: "syncing-failed".tr(),
+          description: e.toString() +
+              "\n\n" +
+              megabytes.toString() +
+              " MB in size" +
+              " when syncing with " +
+              file.name.toString(),
+          icon: appStateSettings["outlinedIcons"]
+              ? Icons.sync_problem_outlined
+              : Icons.sync_problem_rounded,
+          onSubmit: () {
+            Navigator.pop(context);
+          },
+          onSubmitLabel: "ok".tr(),
+        );
+        // final html.Storage localStorage = html.window.localStorage;
+        // localStorage["moor_db_str_syncdb"] = "";
+        throw (e);
+      }
     } else {
       final dbFolder = await getApplicationDocumentsDirectory();
       final dbFile = File(p.join(dbFolder.path, 'syncdb.sqlite'));
       await dbFile.writeAsBytes(dataStore);
+      databaseSync = await constructDb('syncdb');
     }
-
-    FinanceDatabase databaseSync = await constructDb('syncdb');
 
     try {
       List<TransactionWallet> newWallets =
@@ -423,6 +452,22 @@ Future<bool> syncData(BuildContext context) async {
       await databaseSync.close();
       loadingProgressKey.currentState!.setProgressPercentage(1);
       canSyncData = true;
+      await openPopup(
+        context,
+        title: "syncing-failed".tr(),
+        description: "sync-fail-reason".tr() + "\n\n" + file.name.toString(),
+        icon: appStateSettings["outlinedIcons"]
+            ? Icons.sync_problem_outlined
+            : Icons.sync_problem_rounded,
+        onCancel: () {
+          Navigator.pop(context);
+        },
+        onCancelLabel: "close".tr(),
+        onSubmit: () {
+          chooseBackup(context, isManaging: true, isClientSync: true);
+        },
+        onSubmitLabel: "manage".tr(),
+      );
       // By returning we do not update the time last synced!
       return false;
     }

@@ -737,8 +737,13 @@ class _AddWalletPageState extends State<AddWalletPage> {
 }
 
 class CorrectBalancePopup extends StatefulWidget {
-  const CorrectBalancePopup({required this.wallet, super.key});
+  const CorrectBalancePopup({
+    required this.wallet,
+    this.showAllEditDetails = false,
+    super.key,
+  });
   final TransactionWallet wallet;
+  final bool showAllEditDetails;
 
   @override
   State<CorrectBalancePopup> createState() => _CorrectBalancePopupState();
@@ -753,64 +758,76 @@ class _CorrectBalancePopupState extends State<CorrectBalancePopup> {
 
   @override
   Widget build(BuildContext context) {
-    return PopupFramework(
-      title: "enter-amount".tr(),
-      underTitleSpace: false,
-      outsideExtraWidget: IconButton(
-        iconSize: 25,
-        padding: EdgeInsets.all(getPlatform() == PlatformOS.isIOS ? 15 : 20),
-        icon: Icon(
-          appStateSettings["outlinedIcons"]
-              ? Icons.edit_outlined
-              : Icons.edit_rounded,
+    Widget editTransferDetails = Column(
+      children: [
+        Container(
+          width: getWidthBottomSheet(context) - 36,
+          child: TextInput(
+            icon: appStateSettings["outlinedIcons"]
+                ? Icons.title_outlined
+                : Icons.title_rounded,
+            autoFocus: widget.showAllEditDetails == false,
+            onChanged: (text) async {
+              selectedTitle = text;
+            },
+            onEditingComplete: widget.showAllEditDetails == true
+                ? null
+                : () {
+                    if (widget.showAllEditDetails) Navigator.maybePop(context);
+                  },
+            initialValue: selectedTitle,
+            labelText: "transfer-balance".tr(),
+            padding: EdgeInsets.only(bottom: 13),
+          ),
         ),
-        onPressed: () async {
-          openBottomSheet(
-            context,
-            PopupFramework(
-              child: Column(
-                children: [
-                  Container(
-                    width: getWidthBottomSheet(context) - 36,
-                    child: TextInput(
-                      icon: appStateSettings["outlinedIcons"]
-                          ? Icons.title_outlined
-                          : Icons.title_rounded,
-                      autoFocus: true,
-                      onChanged: (text) async {
-                        selectedTitle = text;
-                      },
-                      labelText: "title-placeholder".tr(),
-                      padding: EdgeInsets.only(bottom: 13),
-                    ),
-                  ),
-                  DateButton(
-                    internalPadding: EdgeInsets.only(right: 5),
-                    initialSelectedDate: selectedDateTime ?? DateTime.now(),
-                    initialSelectedTime: TimeOfDay(
-                        hour: selectedDateTime?.hour ?? TimeOfDay.now().hour,
-                        minute:
-                            selectedDateTime?.minute ?? TimeOfDay.now().minute),
-                    setSelectedDate: (date) {
-                      selectedDateTime = date;
-                    },
-                    setSelectedTime: (time) {
-                      selectedDateTime = (selectedDateTime ?? DateTime.now())
-                          .copyWith(hour: time.hour, minute: time.minute);
-                    },
-                  ),
-                ],
+        DateButton(
+          internalPadding: EdgeInsets.only(right: 5),
+          initialSelectedDate: selectedDateTime ?? DateTime.now(),
+          initialSelectedTime: TimeOfDay(
+              hour: selectedDateTime?.hour ?? TimeOfDay.now().hour,
+              minute: selectedDateTime?.minute ?? TimeOfDay.now().minute),
+          setSelectedDate: (date) {
+            selectedDateTime = date;
+          },
+          setSelectedTime: (time) {
+            selectedDateTime = (selectedDateTime ?? DateTime.now())
+                .copyWith(hour: time.hour, minute: time.minute);
+          },
+        ),
+      ],
+    );
+
+    return PopupFramework(
+      title: "correct-balance".tr(),
+      subtitle: widget.wallet.name,
+      underTitleSpace: false,
+      outsideExtraWidget: widget.showAllEditDetails
+          ? null
+          : IconButton(
+              iconSize: 25,
+              padding:
+                  EdgeInsets.all(getPlatform() == PlatformOS.isIOS ? 15 : 20),
+              icon: Icon(
+                appStateSettings["outlinedIcons"]
+                    ? Icons.edit_outlined
+                    : Icons.edit_rounded,
               ),
-              title: "transaction-details".tr(),
+              onPressed: () async {
+                // Fix over-scroll stretch when keyboard pops up quickly
+                Future.delayed(Duration(milliseconds: 100), () {
+                  bottomSheetControllerGlobal.scrollTo(0,
+                      duration: Duration(milliseconds: 100));
+                });
+                await openBottomSheet(
+                  context,
+                  PopupFramework(
+                    child: editTransferDetails,
+                    title: "transaction-details".tr(),
+                  ),
+                );
+                setState(() {});
+              },
             ),
-          );
-          // Fix over-scroll stretch when keyboard pops up quickly
-          Future.delayed(Duration(milliseconds: 100), () {
-            bottomSheetControllerGlobal.scrollTo(0,
-                duration: Duration(milliseconds: 100));
-          });
-        },
-      ),
       child: StreamBuilder<double?>(
         stream: database.watchTotalOfWalletNoConversion(
           widget.wallet.walletPk,
@@ -819,6 +836,11 @@ class _CorrectBalancePopupState extends State<CorrectBalancePopup> {
           double totalWalletAmount = snapshot.data ?? 0;
           return Column(
             children: [
+              if (widget.showAllEditDetails)
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 10),
+                  child: editTransferDetails,
+                ),
               SizedBox(height: 10),
               Wrap(
                 alignment: WrapAlignment.center,
@@ -997,10 +1019,9 @@ Future<bool> correctWalletBalance(
   return true;
 }
 
-Future createCorrectionTransaction(double amount, TransactionWallet wallet,
-    {String? note, DateTime? dateTime, String? title}) async {
+Future<TransactionCategory> initializeBalanceCorrectionCategory() async {
   try {
-    await database.getCategory("0").$2;
+    return await database.getCategory("0").$2;
   } catch (e) {
     print(
         e.toString() + "- creating default category amount balancing category");
@@ -1021,7 +1042,13 @@ Future createCorrectionTransaction(double amount, TransactionWallet wallet,
         income: false,
       ),
     );
+    return await database.getCategory("0").$2;
   }
+}
+
+Future createCorrectionTransaction(double amount, TransactionWallet wallet,
+    {String? note, DateTime? dateTime, String? title}) async {
+  await initializeBalanceCorrectionCategory();
 
   await database.createOrUpdateTransaction(
     insert: true,
@@ -1042,23 +1069,37 @@ Future createCorrectionTransaction(double amount, TransactionWallet wallet,
 }
 
 class TransferBalancePopup extends StatefulWidget {
-  const TransferBalancePopup(
-      {required this.wallet, required this.allowEditWallet, super.key});
+  const TransferBalancePopup({
+    required this.wallet,
+    required this.allowEditWallet,
+    this.showAllEditDetails = false,
+    this.initialAmount,
+    this.initialDate,
+    this.initialTitle,
+    super.key,
+  });
   final TransactionWallet wallet;
   final bool allowEditWallet;
+  final bool showAllEditDetails;
+  final double? initialAmount;
+  final DateTime? initialDate;
+  final String? initialTitle;
 
   @override
   State<TransferBalancePopup> createState() => _TransferBalancePopupState();
 }
 
 class _TransferBalancePopupState extends State<TransferBalancePopup> {
-  double enteredAmount = 0;
+  late double enteredAmount = widget.initialAmount ?? 0;
   bool isNegative = false;
   late TransactionWallet walletFrom = widget.wallet;
   TransactionWallet? walletTo;
-  TimeOfDay? selectedTime = null;
-  DateTime? selectedDateTime = null;
-  String selectedTitle = "";
+  late TimeOfDay? selectedTime = widget.initialDate != null
+      ? TimeOfDay(
+          hour: widget.initialDate!.hour, minute: widget.initialDate!.minute)
+      : null;
+  late DateTime? selectedDateTime = widget.initialDate ?? null;
+  late String selectedTitle = widget.initialTitle ?? "";
 
   Widget walletSelector(TransactionWallet? wallet,
       Function(TransactionWallet wallet) onSelected) {
@@ -1111,66 +1152,81 @@ class _TransferBalancePopupState extends State<TransferBalancePopup> {
 
   @override
   Widget build(BuildContext context) {
-    return PopupFramework(
-      title: "enter-amount".tr(),
-      underTitleSpace: false,
-      outsideExtraWidget: IconButton(
-        iconSize: 25,
-        padding: EdgeInsets.all(getPlatform() == PlatformOS.isIOS ? 15 : 20),
-        icon: Icon(
-          appStateSettings["outlinedIcons"]
-              ? Icons.edit_outlined
-              : Icons.edit_rounded,
+    Widget editTransferDetails = Column(
+      children: [
+        Container(
+          width: getWidthBottomSheet(context) - 36,
+          child: TextInput(
+            icon: appStateSettings["outlinedIcons"]
+                ? Icons.title_outlined
+                : Icons.title_rounded,
+            autoFocus: widget.showAllEditDetails == false,
+            onChanged: (text) async {
+              selectedTitle = text;
+            },
+            onEditingComplete: widget.showAllEditDetails == true
+                ? null
+                : () {
+                    if (widget.showAllEditDetails) Navigator.maybePop(context);
+                  },
+            initialValue: selectedTitle,
+            labelText: "transfer-balance".tr(),
+            padding: EdgeInsets.only(bottom: 13),
+          ),
         ),
-        onPressed: () async {
-          openBottomSheet(
-            context,
-            PopupFramework(
-              child: Column(
-                children: [
-                  Container(
-                    width: getWidthBottomSheet(context) - 36,
-                    child: TextInput(
-                      icon: appStateSettings["outlinedIcons"]
-                          ? Icons.title_outlined
-                          : Icons.title_rounded,
-                      autoFocus: true,
-                      onChanged: (text) async {
-                        selectedTitle = text;
-                      },
-                      labelText: "title-placeholder".tr(),
-                      padding: EdgeInsets.only(bottom: 13),
-                    ),
-                  ),
-                  DateButton(
-                    internalPadding: EdgeInsets.only(right: 5),
-                    initialSelectedDate: selectedDateTime ?? DateTime.now(),
-                    initialSelectedTime: TimeOfDay(
-                        hour: selectedDateTime?.hour ?? TimeOfDay.now().hour,
-                        minute:
-                            selectedDateTime?.minute ?? TimeOfDay.now().minute),
-                    setSelectedDate: (date) {
-                      selectedDateTime = date;
-                    },
-                    setSelectedTime: (time) {
-                      selectedDateTime = (selectedDateTime ?? DateTime.now())
-                          .copyWith(hour: time.hour, minute: time.minute);
-                    },
-                  ),
-                ],
+        DateButton(
+          internalPadding: EdgeInsets.only(right: 5),
+          initialSelectedDate: selectedDateTime ?? DateTime.now(),
+          initialSelectedTime: TimeOfDay(
+              hour: selectedDateTime?.hour ?? TimeOfDay.now().hour,
+              minute: selectedDateTime?.minute ?? TimeOfDay.now().minute),
+          setSelectedDate: (date) {
+            selectedDateTime = date;
+          },
+          setSelectedTime: (time) {
+            selectedDateTime = (selectedDateTime ?? DateTime.now())
+                .copyWith(hour: time.hour, minute: time.minute);
+          },
+        ),
+      ],
+    );
+    return PopupFramework(
+      title: "transfer-balance".tr(),
+      underTitleSpace: false,
+      outsideExtraWidget: widget.showAllEditDetails
+          ? null
+          : IconButton(
+              iconSize: 25,
+              padding:
+                  EdgeInsets.all(getPlatform() == PlatformOS.isIOS ? 15 : 20),
+              icon: Icon(
+                appStateSettings["outlinedIcons"]
+                    ? Icons.edit_outlined
+                    : Icons.edit_rounded,
               ),
-              title: "transaction-details".tr(),
+              onPressed: () async {
+                // Fix over-scroll stretch when keyboard pops up quickly
+                Future.delayed(Duration(milliseconds: 100), () {
+                  bottomSheetControllerGlobal.scrollTo(0,
+                      duration: Duration(milliseconds: 100));
+                });
+                await openBottomSheet(
+                  context,
+                  PopupFramework(
+                    child: editTransferDetails,
+                    title: "transaction-details".tr(),
+                  ),
+                );
+                setState(() {});
+              },
             ),
-          );
-          // Fix over-scroll stretch when keyboard pops up quickly
-          Future.delayed(Duration(milliseconds: 100), () {
-            bottomSheetControllerGlobal.scrollTo(0,
-                duration: Duration(milliseconds: 100));
-          });
-        },
-      ),
       child: Column(
         children: [
+          if (widget.showAllEditDetails)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 10),
+              child: editTransferDetails,
+            ),
           SizedBox(height: 13),
           Wrap(
             alignment: WrapAlignment.center,
@@ -1242,7 +1298,7 @@ class _TransferBalancePopupState extends State<TransferBalancePopup> {
               runOnSwitchedInitially: true,
             ),
             showEnteredNumber: false,
-            amountPassed: "0",
+            amountPassed: enteredAmount.toString(),
             setSelectedAmount: (amount, calculation) {
               setState(() {
                 if (isNegative == true)
@@ -1320,7 +1376,7 @@ class _TransferBalancePopupState extends State<TransferBalancePopup> {
                 ),
               );
 
-              Navigator.pop(context);
+              Navigator.pop(context, true);
             },
             nextLabel: walletTo == null
                 ? "select-account".tr()

@@ -23,6 +23,8 @@ import 'package:budget/widgets/selectCategory.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntry/transactionEntry.dart';
+import 'package:budget/widgets/util/showDatePicker.dart';
+import 'package:budget/widgets/util/showTimePicker.dart';
 import 'package:drift/drift.dart' hide Column;
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -239,6 +241,75 @@ class SelectedTransactionsAppBar extends StatelessWidget {
                               },
                             ),
                           DropdownItemMenu(
+                            id: "change-date",
+                            label: "change-date".tr(),
+                            icon: appStateSettings["outlinedIcons"]
+                                ? Icons.calendar_month_outlined
+                                : Icons.calendar_month_rounded,
+                            action: () async {
+                              List<Transaction> transactions = await database
+                                  .getTransactionsFromPk(value[pageID]!);
+                              if (transactions.length <= 0) return;
+                              DateTime? selectedDate =
+                                  await showCustomDatePicker(
+                                      context, transactions.first.dateCreated);
+                              if (selectedDate == null) {
+                                openSnackbar(
+                                  SnackbarMessage(
+                                    icon: appStateSettings["outlinedIcons"]
+                                        ? Icons.warning_outlined
+                                        : Icons.warning_rounded,
+                                    title: "date-not-selected".tr(),
+                                  ),
+                                );
+                                return;
+                              }
+                              TimeOfDay? selectedTime =
+                                  await showCustomTimePicker(
+                                context,
+                                TimeOfDay(
+                                  hour: transactions.first.dateCreated.hour,
+                                  minute: transactions.first.dateCreated.minute,
+                                ),
+                              );
+                              if (selectedTime == null) {
+                                openSnackbar(
+                                  SnackbarMessage(
+                                    icon: appStateSettings["outlinedIcons"]
+                                        ? Icons.warning_outlined
+                                        : Icons.warning_rounded,
+                                    title: "time-not-selected".tr(),
+                                  ),
+                                );
+                                return;
+                              }
+                              selectedDate = selectedDate.copyWith(
+                                hour: selectedTime.hour,
+                                minute: selectedTime.minute,
+                              );
+                              await database
+                                  .updateDateTimeCreatedOfTransactions(
+                                      transactions, selectedDate);
+                              openSnackbar(
+                                SnackbarMessage(
+                                  icon: appStateSettings["outlinedIcons"]
+                                      ? Icons.calendar_month_outlined
+                                      : Icons.calendar_month_rounded,
+                                  title: "changed-date".tr(),
+                                  description: "for".tr().capitalizeFirst +
+                                      " " +
+                                      transactions.length.toString() +
+                                      " " +
+                                      (transactions.length == 1
+                                          ? "transaction".tr().toLowerCase()
+                                          : "transactions".tr().toLowerCase()),
+                                ),
+                              );
+                              globalSelectedID.value[pageID] = [];
+                              globalSelectedID.notifyListeners();
+                            },
+                          ),
+                          DropdownItemMenu(
                             id: "change-category",
                             label: "change-category".tr(),
                             icon: appStateSettings["outlinedIcons"]
@@ -273,8 +344,8 @@ class SelectedTransactionsAppBar extends StatelessWidget {
                               openSnackbar(
                                 SnackbarMessage(
                                   icon: appStateSettings["outlinedIcons"]
-                                      ? Icons.account_balance_wallet_outlined
-                                      : Icons.account_balance_wallet_rounded,
+                                      ? Icons.category_outlined
+                                      : Icons.category_rounded,
                                   title: "changed-category".tr(),
                                   description: "for".tr().capitalizeFirst +
                                       " " +

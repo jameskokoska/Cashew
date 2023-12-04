@@ -25,6 +25,44 @@ import 'listItem.dart';
 
 String getChangelogString() {
   return """
+    < 5.0.0
+    If only one day selected in time range for all spending, line chart hidden
+    Fixed time range for one day selected in all spending page
+    Fixed hex color picker resetting cursor to beginning when invalid character entered
+    Tweaked colors of highlighted links and link containers in notes
+    All spending line graph for all time shows all time
+    Fixed spending graph wouldn't load totals of transactions in the future
+    Spending graph home page section can be set to all time
+    Support for traditional Chinese language
+    Update the date and time of multiple selected transactions at once
+    Number format settings selector in more options
+    Number format settings description of adding decimal precision
+    Double column layout enabled if the navigation sidebar is minimized
+    Auto login web app limitation note in settings
+    Overdue transactions auto payment info
+    If syncing fails, popup with more information is shown
+    Notes with links are less cluttered with the URL shortened
+    Extra zeros button (00) or (000) under formatting settings
+    All spending page remembers last tab selected
+    Added ATM and sim category icons
+    Added fun santa hat and new years party hat to homepage during certain times of the year
+    Long press pie chart home page section to edit time period
+    Optimized line graph showing spending with multithreading and resolution
+    Optimized all spending page category selection
+    Optimized heatmap calculations
+    Optimized budget details page line chart
+    Migrated web database to IndexedDb to avoid local storage limits
+    Removed ability to make balance correction a subcategory
+    Added transfer balance tab when creating new transaction
+    Added information when editing balance correction category
+    Fixed editing details of balance correction or correcting balance would not have initial values for custom title and date
+    Fixed goal reached calculation for expense goals when determining whether to create another repetitive transaction
+    Improved goal progress bar in transaction entry
+    Fixed changing the type of a transaction would reset the selected income/expense
+    When marking a repetitive transaction as paid, it also marks the other balance correction
+    Can create installment transactions for goals
+    Setup installment payments if goal is empty directly on page
+    Setup installments on long press (+) button page
     < 4.9.9
     Improved CSV import when the first row is not the header
     Improved CSV import tries to parse date with common date formats

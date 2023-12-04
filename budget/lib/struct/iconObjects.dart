@@ -4344,4 +4344,52 @@ List<IconForCategory> iconObjects = [
     ],
     mostLikelyCategoryName: "Water",
   ),
+  IconForCategory(
+    icon: "atm-machine(2).png",
+    tags: [
+      "atm-machine(2)",
+      "atm",
+      "cash",
+      "money",
+      "banking",
+      "withdrawal",
+      "transaction",
+      "finance",
+      "automated",
+      "machine"
+    ],
+    mostLikelyCategoryName: "Bank",
+  ),
+  IconForCategory(
+    icon: "atm-machine(1).png",
+    tags: [
+      "atm-machine(1)",
+      "atm",
+      "cash",
+      "money",
+      "banking",
+      "withdrawal",
+      "transaction",
+      "finance",
+      "automated",
+      "machine"
+    ],
+    mostLikelyCategoryName: "Bank",
+  ),
+  IconForCategory(
+    icon: "sim-card.png",
+    tags: [
+      "sim-card",
+      "sim",
+      "card",
+      "mobile",
+      "communication",
+      "phone",
+      "cellular",
+      "telecom",
+      "network",
+      "technology"
+    ],
+    mostLikelyCategoryName: "Phone",
+  ),
 ];

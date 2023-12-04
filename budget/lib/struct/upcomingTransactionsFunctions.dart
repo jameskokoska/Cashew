@@ -68,8 +68,17 @@ createNewSubscriptionTransaction(
         double? totalSpentOfObjective = await database.getTotalTowardsObjective(
             Provider.of<AllWallets>(context, listen: false),
             transaction.objectiveFk!);
+
         bool willBeOverObjective = (totalSpentOfObjective ?? 0) >=
             (objective.amount * (objective.income ? 1 : -1));
+
+        if (objective.income == false)
+          willBeOverObjective = !willBeOverObjective;
+
+        if ((totalSpentOfObjective ?? 0) ==
+            (objective.amount * (objective.income ? 1 : -1)))
+          willBeOverObjective = true;
+
         if (willBeOverObjective) {
           openSnackbar(
             SnackbarMessage(
@@ -135,21 +144,15 @@ Future openPayPopup(
     onExtraLabel: "skip".tr(),
     onExtra: () async {
       if (runBefore != null) await runBefore();
-      Transaction transactionNew = transaction.copyWith(
-        skipPaid: true,
-        dateCreated: DateTime.now(),
-        createdAnotherFutureTransaction: Value(true),
+      Navigator.pop(context);
+      await markAsSkipped(
+        transaction: transaction,
       );
-      Navigator.pop(context, true);
-      await database.createOrUpdateTransaction(transactionNew);
-      await createNewSubscriptionTransaction(
-          navigatorKey.currentContext!, transaction);
-      await setUpcomingNotifications(navigatorKey.currentContext!);
     },
     onSubmitLabel: transaction.income ? "deposit".tr() : "pay".tr(),
     onSubmit: () async {
       if (runBefore != null) await runBefore();
-      double amount = transaction.amount;
+      //double amount = transaction.amount;
       // if (transaction.amount == 0) {
       //   amount = await openBottomSheet(
       //     context,
@@ -166,21 +169,66 @@ Future openPayPopup(
       //   );
       //   amount = amount.abs() * (transaction.income ? 1 : -1);
       // }
-      Transaction transactionNew = transaction.copyWith(
-        amount: amount,
-        paid: true,
-        dateCreated:
-            appStateSettings["markAsPaidOnOriginalDay"] ? null : DateTime.now(),
-        createdAnotherFutureTransaction: Value(true),
-        originalDateDue: Value(transaction.dateCreated),
+      Navigator.pop(context);
+      await markAsPaid(
+        transaction: transaction,
       );
-      Navigator.pop(context, true);
-      await database.createOrUpdateTransaction(transactionNew);
-      await createNewSubscriptionTransaction(
-          navigatorKey.currentContext!, transaction);
-      await setUpcomingNotifications(navigatorKey.currentContext!);
     },
   );
+}
+
+Future markAsPaid({
+  required Transaction transaction,
+  // Avoid infinite recursion
+  bool updatingCloselyRelated = false,
+}) async {
+  if (updatingCloselyRelated == false && transaction.categoryFk == "0") {
+    Transaction? closelyRelatedTransferCorrectionTransaction = await database
+        .getCloselyRelatedBalanceCorrectionTransaction(transaction);
+    if (closelyRelatedTransferCorrectionTransaction != null) {
+      await markAsPaid(
+        transaction: closelyRelatedTransferCorrectionTransaction,
+        updatingCloselyRelated: true,
+      );
+    }
+  }
+  Transaction transactionNew = transaction.copyWith(
+    paid: true,
+    dateCreated:
+        appStateSettings["markAsPaidOnOriginalDay"] ? null : DateTime.now(),
+    createdAnotherFutureTransaction: Value(true),
+    originalDateDue: Value(transaction.dateCreated),
+  );
+  await database.createOrUpdateTransaction(transactionNew);
+  await createNewSubscriptionTransaction(
+      navigatorKey.currentContext!, transaction);
+  await setUpcomingNotifications(navigatorKey.currentContext!);
+}
+
+Future markAsSkipped({
+  required Transaction transaction,
+  // Avoid infinite recursion
+  bool updatingCloselyRelated = false,
+}) async {
+  if (updatingCloselyRelated == false && transaction.categoryFk == "0") {
+    Transaction? closelyRelatedTransferCorrectionTransaction = await database
+        .getCloselyRelatedBalanceCorrectionTransaction(transaction);
+    if (closelyRelatedTransferCorrectionTransaction != null) {
+      await markAsSkipped(
+        transaction: closelyRelatedTransferCorrectionTransaction,
+        updatingCloselyRelated: true,
+      );
+    }
+  }
+  Transaction transactionNew = transaction.copyWith(
+    skipPaid: true,
+    dateCreated: DateTime.now(),
+    createdAnotherFutureTransaction: Value(true),
+  );
+  await database.createOrUpdateTransaction(transactionNew);
+  await createNewSubscriptionTransaction(
+      navigatorKey.currentContext!, transaction);
+  await setUpcomingNotifications(navigatorKey.currentContext!);
 }
 
 Future openPayDebtCreditPopup(

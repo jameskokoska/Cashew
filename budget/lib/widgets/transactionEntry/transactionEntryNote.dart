@@ -56,7 +56,7 @@ class TransactionEntryNote extends StatelessWidget {
             showDuration: getIsFullScreen(context) == false || kIsWeb == false
                 ? Duration(milliseconds: 10000)
                 : Duration(milliseconds: 100),
-            message: transaction.note,
+            message: cleanupNoteStringWithURLs(transaction.note),
             child: Padding(
               padding:
                   const EdgeInsets.only(left: 5, right: 3, top: 10, bottom: 10),

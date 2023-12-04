@@ -53,7 +53,7 @@ Future<bool> importDBFileFromDevice(BuildContext context) async {
     return false;
   }
   if (kIsWeb) {
-    List<int> fileBytes = result.files.single.bytes!;
+    Uint8List fileBytes = result.files.single.bytes!;
     await overwriteDefaultDB(fileBytes);
   } else {
     File file = File(result.files.single.path ?? "");

@@ -482,7 +482,26 @@ class UpcomingOverdueSettings extends StatelessWidget {
         AutoPayUpcomingSetting(),
         AutoPayRepetitiveSetting(),
         AutoPaySubscriptionsSetting(),
+        AutoPaySettingDescription(),
       ],
+    );
+  }
+}
+
+class AutoPaySettingDescription extends StatelessWidget {
+  const AutoPaySettingDescription({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 13, bottom: 3, left: 25, right: 25),
+      child: TextFont(
+        text: "auto-pay-description".tr(),
+        fontSize: 14,
+        textColor: getColor(context, "textLight"),
+        textAlign: TextAlign.center,
+        maxLines: 5,
+      ),
     );
   }
 }

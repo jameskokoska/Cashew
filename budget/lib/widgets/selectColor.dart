@@ -617,8 +617,8 @@ class ColorCodeFormatter extends TextInputFormatter {
     return TextEditingValue(
       text: formattedText,
       selection: TextSelection.collapsed(
-        offset: newValue.selection.baseOffset > 8
-            ? 8
+        offset: formattedText == _formatColorCode(oldValue.text)
+            ? oldValue.selection.baseOffset
             : newValue.selection.baseOffset,
       ),
     );

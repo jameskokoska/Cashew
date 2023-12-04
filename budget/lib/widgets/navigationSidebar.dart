@@ -58,7 +58,8 @@ double getBottomInsetOfFAB(context) {
 }
 
 bool enableDoubleColumn(context) {
-  double minScreenWidth = 1000;
+  // double minScreenWidth = 1000;
+  double minScreenWidth = 750 + getWidthNavigationSidebar(context);
   return MediaQuery.sizeOf(context).width > minScreenWidth ? true : false;
 }
 
@@ -338,11 +339,11 @@ class SidebarClock extends StatelessWidget {
                         textColor: getColor(context, "black"),
                         fontSize: 48,
                         fontWeight: FontWeight.bold,
+                        // Remove any am/pm indication by substring
                         text: DateFormat.jm(context.locale.toString())
                             .format(now)
-                            .replaceAll("AM", "")
-                            .replaceAll("PM", "")
-                            .replaceAll(" ", ""),
+                            .substring(0, 5)
+                            .trim(),
                       ),
                       TextFont(
                         textColor: getColor(context, "black").withOpacity(0.5),

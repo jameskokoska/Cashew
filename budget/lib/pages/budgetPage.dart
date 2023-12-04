@@ -3,9 +3,11 @@ import 'dart:math';
 
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
+import 'package:budget/pages/accountsPage.dart';
 import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/editBudgetLimitsPage.dart';
+import 'package:budget/pages/homePage/homePageLineGraph.dart';
 import 'package:budget/pages/pastBudgetsPage.dart';
 import 'package:budget/pages/premiumPage.dart';
 import 'package:budget/pages/transactionFilters.dart';
@@ -15,6 +17,7 @@ import 'package:budget/struct/spendingSummaryHelper.dart';
 import 'package:budget/widgets/animatedExpanded.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/dropdownSelect.dart';
+import 'package:budget/widgets/extraInfoBoxes.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/selectedTransactionsAppBar.dart';
 import 'package:budget/widgets/budgetContainer.dart';
@@ -468,7 +471,7 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                         );
                       },
                     );
-                    print(s.totalSpent);
+                    // print(s.totalSpent);
                     return SliverToBoxAdapter(
                       child: Column(
                         children: [
@@ -693,8 +696,13 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                         widget.isPastBudgetButCurrentPeriod == false
                     ? Padding(
                         padding: const EdgeInsets.only(top: 20),
-                        child: Tappable(
-                          borderRadius: 15,
+                        child: ExtraInfoButton(
+                          onTap: () {
+                            pushRoute(
+                              context,
+                              PastBudgetsPage(budgetPk: widget.budget.budgetPk),
+                            );
+                          },
                           color: dynamicPastel(
                             context,
                             budgetColorScheme.secondaryContainer,
@@ -703,59 +711,23 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                             amountDark:
                                 appStateSettings["materialYou"] ? 0.4 : 0.55,
                           ),
-                          onTap: () {
-                            pushRoute(
+                          icon: appStateSettings["outlinedIcons"]
+                              ? Icons.history_outlined
+                              : Icons.history_rounded,
+                          buttonIconColor: dynamicPastel(
                               context,
-                              PastBudgetsPage(budgetPk: widget.budget.budgetPk),
-                            );
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 15, vertical: 10),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                ButtonIcon(
-                                  onTap: () {
-                                    pushRoute(
-                                      context,
-                                      PastBudgetsPage(
-                                          budgetPk: widget.budget.budgetPk),
-                                    );
-                                  },
-                                  icon: appStateSettings["outlinedIcons"]
-                                      ? Icons.history_outlined
-                                      : Icons.history_rounded,
-                                  color: dynamicPastel(
-                                      context,
-                                      HexColor(widget.budget.colour,
-                                          defaultColor: Theme.of(context)
-                                              .colorScheme
-                                              .primary),
-                                      amount: 0.5),
-                                  iconColor: dynamicPastel(
-                                      context,
-                                      HexColor(widget.budget.colour,
-                                          defaultColor: Theme.of(context)
-                                              .colorScheme
-                                              .primary),
-                                      amount: 0.7,
-                                      inverse: true),
-                                  size: 38,
-                                  iconPadding: 18,
-                                ),
-                                SizedBox(width: 10),
-                                Flexible(
-                                  child: TextFont(
-                                    text: "view-previous-budget-periods".tr(),
-                                    fontSize: 17,
-                                    maxLines: 2,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
+                              HexColor(widget.budget.colour,
+                                  defaultColor:
+                                      Theme.of(context).colorScheme.primary),
+                              amount: 0.5),
+                          buttonIconColorIcon: dynamicPastel(
+                              context,
+                              HexColor(widget.budget.colour,
+                                  defaultColor:
+                                      Theme.of(context).colorScheme.primary),
+                              amount: 0.7,
+                              inverse: true),
+                          text: "view-previous-budget-periods".tr(),
                         ),
                       )
                     : SizedBox.shrink(),
@@ -965,87 +937,48 @@ class _BudgetLineGraphState extends State<BudgetLineGraph> {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           if (snapshot.data!.length <= 0) return SizedBox.shrink();
-          bool cumulative = appStateSettings["showCumulativeSpending"];
           DateTime budgetRangeEnd = widget.budgetRange.end;
           if (showCompressedView && budgetRangeEnd.isAfter(DateTime.now())) {
             budgetRangeEnd = DateTime.now();
           }
-          int totalZeroes = 0;
+          bool allZeroes = true;
           List<List<Pair>> pointsList = [];
+
           for (int snapshotIndex = 0;
               snapshotIndex < snapshot.data!.length;
               snapshotIndex++) {
-            double cumulativeTotal = 0;
-            List<Pair> points = [];
-            // day limit used to keep max days shown to that of the current length of the current budget (for example, some monthly periods will be 28 days because of February)
-            // this should be eventually fixed better
-            // as some days are no longer accounted for in the previous budgets term
+            var p = CalculatePointsParams(
+              transactions: snapshot.data![snapshotIndex],
+              customStartDate: dateTimeRanges[snapshotIndex].start,
+              customEndDate: showCompressedView
+                  ? budgetRangeEnd
+                  : dateTimeRanges[snapshotIndex].end,
+              totalSpentBefore: 0,
+              isIncome: null,
+              allWallets: Provider.of<AllWallets>(context, listen: false),
+              showCumulativeSpending:
+                  appStateSettings["showCumulativeSpending"],
+              invertPolarity: true,
+            );
+            List<Pair> points = calculatePoints(p);
 
-            // get longest month, add those days as an offset difference of the current duration
-            // TODO day count broken for some days...
-            // int dayCount = (dateTimeRanges[snapshotIndex].duration.inDays -
-            //         longestDateRange)
-            //     .abs();
-            // for (int dayCounter = 0; dayCounter < dayCount; dayCounter++) {
-            //   points.add(Pair(points.length.toDouble(), 0));
-            // }
-
-            for (DateTime indexDay = dateTimeRanges[snapshotIndex].start;
-                indexDay.compareTo(dateTimeRanges[snapshotIndex].end) <= 0;
-                indexDay =
-                    DateTime(indexDay.year, indexDay.month, indexDay.day + 1)) {
-              if (showCompressedView && indexDay.isAfter(DateTime.now())) break;
-              // dayCount++;
-
-              //can be optimized...
-              double totalForDay = 0;
-
-              for (Transaction transaction in snapshot.data![snapshotIndex]) {
-                if (widget.selectedCategory == null ||
-                    transaction.categoryFk ==
-                        widget.selectedCategory?.categoryPk ||
-                    transaction.subCategoryFk ==
-                        widget.selectedCategory?.categoryPk) {
-                  if (indexDay.year == transaction.dateCreated.year &&
-                      indexDay.month == transaction.dateCreated.month &&
-                      indexDay.day == transaction.dateCreated.day) {
-                    totalForDay += (transaction.amount *
-                            (amountRatioToPrimaryCurrencyGivenPk(
-                                Provider.of<AllWallets>(context),
-                                transaction.walletFk))) *
-                        -1;
-                  }
-
-                  // If it is the first day of a custom time period and it is a added budget
-                  // We want to get the total spent of all before this day!
-                  if (indexDay == dateTimeRanges[0].start &&
-                      widget.budget.addedTransactionsOnly &&
-                      widget.budget.reoccurrence == BudgetReoccurence.custom &&
-                      indexDay.millisecondsSinceEpoch >
-                          transaction.dateCreated.millisecondsSinceEpoch) {
-                    print(indexDay);
-                    totalForDay += (transaction.amount *
-                            (amountRatioToPrimaryCurrencyGivenPk(
-                                Provider.of<AllWallets>(context),
-                                transaction.walletFk))) *
-                        -1;
-                  }
+            if (allZeroes == true) {
+              for (Pair point in points) {
+                if (point.y != 0) {
+                  allZeroes = false;
+                  break;
                 }
               }
-              cumulativeTotal += totalForDay;
-              points.add(Pair(points.length.toDouble(),
-                  cumulative ? cumulativeTotal : totalForDay));
-              if (totalForDay == 0) totalZeroes++;
             }
             pointsList.add(points);
           }
+
           Color lineColor = widget.selectedCategory?.categoryPk != null &&
                   widget.selectedCategory != null
               ? HexColor(widget.selectedCategory!.colour,
                   defaultColor: Theme.of(context).colorScheme.primary)
               : widget.budgetColorScheme.primary;
-          if (widget.showIfNone == false && totalZeroes == pointsList[0].length)
-            return SizedBox.shrink();
+          if (widget.showIfNone == false && allZeroes) return SizedBox.shrink();
           return Stack(
             children: [
               Padding(

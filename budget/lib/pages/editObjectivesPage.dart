@@ -496,6 +496,8 @@ List<double> getInstallmentPaymentCalculations({
         objectiveTotalInCurrentCurrency / numberOfInstallmentPaymentsDisplay +
             0.00000000000001;
   }
+  amountPerInstallmentPaymentDisplay =
+      amountPerInstallmentPaymentDisplay * (objective.income ? 1 : -1);
   return [
     numberOfInstallmentPaymentsDisplay,
     amountPerInstallmentPaymentDisplay

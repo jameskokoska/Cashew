@@ -2,6 +2,7 @@ import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/addTransactionPage.dart';
+import 'package:budget/pages/upcomingOverdueTransactionsPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/initializeNotifications.dart';
 import 'package:budget/struct/upcomingTransactionsFunctions.dart';
@@ -429,6 +430,7 @@ class SubscriptionSettings extends StatelessWidget {
     return Column(
       children: [
         AutoPaySubscriptionsSetting(),
+        AutoPaySettingDescription(),
       ],
     );
   }

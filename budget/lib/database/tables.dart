@@ -4214,6 +4214,18 @@ class FinanceDatabase extends _$FinanceDatabase {
     return true;
   }
 
+  Future updateDateTimeCreatedOfTransactions(
+      List<Transaction> transactionsToUpdate, DateTime dateCreated) async {
+    List<Transaction> allTransactionsToUpdate = [];
+    for (Transaction transaction in transactionsToUpdate) {
+      allTransactionsToUpdate.add(transaction.copyWith(
+        dateCreated: dateCreated,
+        dateTimeModified: Value(DateTime.now()),
+      ));
+    }
+    await updateBatchTransactionsOnly(allTransactionsToUpdate);
+  }
+
   // Returns the number of updates transactions
   Future<int> moveTransactionsToBudget(
       List<Transaction> transactionsToMove, String? addedBudgetPk) async {
@@ -5926,6 +5938,62 @@ class FinanceDatabase extends _$FinanceDatabase {
         .watch();
   }
 
+  Stream<double?> watchTotalNetBeforeStartDate({
+    required SearchFilters? searchFilters,
+    required AllWallets allWallets,
+    required DateTime startDate,
+    required bool? isIncome,
+  }) {
+    // the date, which acts as the end point and everything before this day is inclusive
+    // for onlyShowBasedOnTimeRange, but we don't want to include this day
+    List<Stream<double?>> mergedStreams = [];
+    for (TransactionWallet wallet in allWallets.list) {
+      final totalAmt = transactions.amount.sum();
+      final query = selectOnly(transactions)
+        ..addColumns([totalAmt])
+        ..where(
+          transactions.walletFk.equals(wallet.walletPk) &
+              transactions.paid.equals(true) &
+              transactions.dateCreated.isSmallerOrEqualValue(startDate) &
+              onlyShowIfFollowsSearchFilters(transactions, searchFilters,
+                  joinedWithSubcategoriesTable: null,
+                  joinedWithCategories: false,
+                  joinedWithBudgets: false,
+                  joinedWithObjectives: false) &
+              onlyShowBasedOnIncome(transactions, isIncome),
+        );
+      mergedStreams.add(query
+          .map((row) =>
+              (row.read(totalAmt) ?? 0) *
+              (amountRatioToPrimaryCurrency(allWallets, wallet.currency)))
+          .watchSingle());
+    }
+    return totalDoubleStream(mergedStreams);
+  }
+
+  Stream<DateTime?> watchEarliestTransactionDateTime({
+    required SearchFilters? searchFilters,
+  }) {
+    final query = select(transactions)
+      ..where((t) =>
+          t.paid.equals(true) &
+          onlyShowIfFollowsSearchFilters(t, searchFilters,
+              joinedWithSubcategoriesTable: null,
+              joinedWithCategories: false,
+              joinedWithBudgets: false,
+              joinedWithObjectives: false))
+      ..orderBy([(t) => OrderingTerm.asc(t.dateCreated)])
+      ..limit(1);
+
+    return query.watch().map((rows) {
+      if (rows.isNotEmpty) {
+        return rows.first.dateCreated;
+      } else {
+        return null;
+      }
+    });
+  }
+
   Stream<double?> getTotalBeforeStartDateInTimeRangeFromCategories(
     DateTime start,
     List<String> categoryFks,
@@ -6067,6 +6135,12 @@ class FinanceDatabase extends _$FinanceDatabase {
                 ..where(
                   (t) =>
                       t.categoryFk.equals("0") &
+                      evaluateIfNull(
+                        t.type
+                            .equals(originalBalanceCorrection.type?.index ?? 0),
+                        originalBalanceCorrection.type?.index,
+                        true,
+                      ) &
                       t.transactionPk
                           .equals(originalBalanceCorrection.transactionPk)
                           .not() &
@@ -6129,6 +6203,7 @@ class FinanceDatabase extends _$FinanceDatabase {
                 .toString(),
           ),
     );
+    print(closeBalanceCorrection);
     return await createOrUpdateTransaction(closeBalanceCorrection,
         insert: false);
   }

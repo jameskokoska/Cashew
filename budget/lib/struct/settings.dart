@@ -276,7 +276,7 @@ void openLanguagePicker(BuildContext context) {
           RadioItems(
             items: [
               "System",
-              for (String languageCode in supportedLanguagesSet) languageCode,
+              for (String localeKey in supportedLocales.keys) localeKey,
             ],
             initial: appStateSettings["locale"].toString(),
             displayFilter: languageDisplayFilter,
@@ -284,7 +284,8 @@ void openLanguagePicker(BuildContext context) {
               if (value == "System") {
                 context.resetLocale();
               } else {
-                context.setLocale(Locale(value));
+                if (supportedLocales[value] != null)
+                  context.setLocale(supportedLocales[value]!);
               }
               updateSettings(
                 "locale",

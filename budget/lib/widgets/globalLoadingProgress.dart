@@ -123,21 +123,29 @@ class GlobalLoadingIndeterminateState
                 bottomRight: Radius.circular(5),
                 topRight: Radius.circular(5),
               ),
-              child: LinearProgressIndicator(
-                color: dynamicPastel(
-                    context, Theme.of(context).colorScheme.primary,
-                    amount: 0.5),
-                backgroundColor: getBottomNavbarBackgroundColor(
-                  brightness: Theme.of(context).brightness,
-                  colorScheme: Theme.of(context).colorScheme,
-                  lightDarkAccent: getColor(context, "lightDarkAccent"),
-                ),
-                minHeight: 3,
-              ),
+              child: IndeterminateProgressBar(),
             ),
           ),
         ),
       ),
+    );
+  }
+}
+
+class IndeterminateProgressBar extends StatelessWidget {
+  const IndeterminateProgressBar({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return LinearProgressIndicator(
+      color: dynamicPastel(context, Theme.of(context).colorScheme.primary,
+          amount: 0.5),
+      backgroundColor: getBottomNavbarBackgroundColor(
+        brightness: Theme.of(context).brightness,
+        colorScheme: Theme.of(context).colorScheme,
+        lightDarkAccent: getColor(context, "lightDarkAccent"),
+      ),
+      minHeight: 3,
     );
   }
 }

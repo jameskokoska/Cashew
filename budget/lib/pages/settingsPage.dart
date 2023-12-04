@@ -12,6 +12,7 @@ import 'package:budget/pages/objectivesListPage.dart';
 import 'package:budget/pages/premiumPage.dart';
 import 'package:budget/pages/transactionsListPage.dart';
 import 'package:budget/pages/upcomingOverdueTransactionsPage.dart';
+import 'package:budget/struct/currencyFunctions.dart';
 import 'package:budget/struct/languageMap.dart';
 import 'package:budget/struct/navBarIconsData.dart';
 import 'package:budget/widgets/animatedExpanded.dart';
@@ -45,16 +46,21 @@ import 'package:budget/struct/initializeBiometrics.dart';
 import 'package:budget/struct/initializeNotifications.dart';
 import 'package:budget/struct/upcomingTransactionsFunctions.dart';
 import 'package:budget/widgets/tappable.dart';
+import 'package:budget/widgets/tappableTextEntry.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/viewAllTransactionsButton.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/main.dart';
+import 'package:intl/number_symbols.dart';
+import 'package:intl/number_symbols_data.dart';
+import 'package:provider/provider.dart';
 import '../functions.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/framework/popupFramework.dart';
 import 'package:app_settings/app_settings.dart';
+import 'package:universal_io/io.dart';
 
 //To get SHA1 Key run
 // ./gradlew signingReport
@@ -100,7 +106,7 @@ class MoreActionsPageState extends State<MoreActionsPage>
             items: [
               DropdownItemMenu(
                 id: "about-app",
-                label: "about-app".tr(namedArgs: {"app": globalAppName}).tr(),
+                label: "about-app".tr(namedArgs: {"app": globalAppName}),
                 icon: appStateSettings["outlinedIcons"]
                     ? Icons.info_outlined
                     : Icons.info_outline_rounded,
@@ -629,7 +635,6 @@ class MoreOptionsPagePreferences extends StatelessWidget {
         FontPickerSetting(),
         IncreaseTextContrastSetting(),
         SettingsHeader(title: "transactions".tr()),
-        MarkAsPaidOnDaySetting(),
         TransactionsSettings(),
         SettingsHeader(title: "accounts".tr()),
         ShowAccountLabelSettingToggle(),
@@ -653,6 +658,9 @@ class MoreOptionsPagePreferences extends StatelessWidget {
         SettingsHeader(title: "titles".tr()),
         AskForTitlesToggle(),
         AutoTitlesToggle(),
+        SettingsHeader(title: "formatting".tr()),
+        NumberFormattingSetting(),
+        ExtraZerosButtonSetting(),
       ],
     );
   }
@@ -907,4 +915,131 @@ String fontNameDisplayFilter(String value) {
     return "Roboto Condensed";
   }
   return value.toString();
+}
+
+class NumberFormattingSetting extends StatelessWidget {
+  const NumberFormattingSetting({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return SettingsContainer(
+      title: "number-format".tr(),
+      icon: appStateSettings["outlinedIcons"]
+          ? Icons.one_x_mobiledata_outlined
+          : Icons.one_x_mobiledata_rounded,
+      afterWidget: IgnorePointer(
+        child: Tappable(
+          color: Theme.of(context).colorScheme.secondaryContainer,
+          borderRadius: 10,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+            child: TextFont(
+              text: convertToMoney(
+                Provider.of<AllWallets>(context, listen: true),
+                1000.23,
+              ),
+              fontSize: 14,
+            ),
+          ),
+        ),
+      ),
+      onTap: () async {
+        await openBottomSheet(
+          context,
+          fullSnap: true,
+          SetNumberFormatPopup(),
+        );
+      },
+    );
+  }
+}
+
+class SetNumberFormatPopup extends StatefulWidget {
+  const SetNumberFormatPopup({super.key});
+
+  @override
+  State<SetNumberFormatPopup> createState() => _SetNumberFormatPopupState();
+}
+
+class _SetNumberFormatPopupState extends State<SetNumberFormatPopup> {
+  @override
+  Widget build(BuildContext context) {
+    List<String?> items = [
+      null,
+      "en",
+      "tr",
+      "af",
+      "ar",
+      "de",
+      "fr",
+    ];
+    return PopupFramework(
+      title: "number-format".tr(),
+      child: Column(
+        children: [
+          RadioItems(
+            items: items,
+            initial: appStateSettings["numberFormatLocale"],
+            displayFilter: (item) {
+              if (item == null)
+                return "default".tr() +
+                    " " +
+                    "(" +
+                    convertToMoney(
+                        Provider.of<AllWallets>(context, listen: true), 1000.23,
+                        customLocale: Platform.localeName) +
+                    ")";
+              return convertToMoney(
+                  Provider.of<AllWallets>(context, listen: true), 1000.23,
+                  customLocale: item);
+            },
+            onChanged: (value) {
+              updateSettings("numberFormatLocale", value,
+                  updateGlobalState: true);
+              Navigator.of(context).pop();
+            },
+          ),
+          SizedBox(height: 5),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            child: TextFont(
+              text: "decimal-precision-edit-account-info".tr(),
+              fontSize: 14,
+              maxLines: 5,
+              textAlign: TextAlign.center,
+              textColor: getColor(context, "textLight"),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class ExtraZerosButtonSetting extends StatelessWidget {
+  const ExtraZerosButtonSetting({this.enableBorderRadius = false, super.key});
+  final bool enableBorderRadius;
+  @override
+  Widget build(BuildContext context) {
+    return SettingsContainerDropdown(
+      enableBorderRadius: enableBorderRadius,
+      title: "extra-zeros-button".tr(),
+      icon: appStateSettings["outlinedIcons"]
+          ? Icons.check_box_outline_blank_outlined
+          : Icons.check_box_outline_blank_rounded,
+      initial: appStateSettings["extraZerosButton"].toString(),
+      items: ["", "00", "000"],
+      onChanged: (value) async {
+        updateSettings(
+          "extraZerosButton",
+          value == "" ? null : value,
+          updateGlobalState: false,
+        );
+      },
+      getLabel: (item) {
+        if (item == "") return "none".tr().capitalizeFirst;
+        return item;
+      },
+    );
+  }
 }

@@ -13,6 +13,7 @@ import 'package:budget/widgets/animatedCircularProgress.dart';
 import 'package:budget/widgets/animatedExpanded.dart';
 import 'package:budget/widgets/categoryIcon.dart';
 import 'package:budget/widgets/dropdownSelect.dart';
+import 'package:budget/widgets/extraInfoBoxes.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/selectedTransactionsAppBar.dart';
 import 'package:budget/widgets/budgetContainer.dart';
@@ -61,7 +62,6 @@ class ObjectivePage extends StatelessWidget {
           }
           return SizedBox.shrink();
         });
-    ;
   }
 }
 
@@ -460,6 +460,21 @@ class _ObjectivePageContentState extends State<_ObjectivePageContent> {
                     widget.objective.objectivePk,
                 showObjectivePercentage: false,
                 noResultsMessage: "no-transactions-found".tr(),
+                showNoResults: false,
+                noResultsExtraWidget: ExtraInfoButton(
+                  onTap: () {
+                    startCreatingInstallment(
+                        context: context, initialObjective: widget.objective);
+                  },
+                  color: Theme.of(context)
+                      .colorScheme
+                      .secondaryContainer
+                      .withOpacity(0.4),
+                  icon: appStateSettings["outlinedIcons"]
+                      ? Icons.punch_clock_outlined
+                      : Icons.punch_clock_rounded,
+                  text: "setup-installment-payments".tr(),
+                ),
               ),
               // Wipe all remaining pixels off - sometimes graphics artifacts are left behind
               SliverToBoxAdapter(

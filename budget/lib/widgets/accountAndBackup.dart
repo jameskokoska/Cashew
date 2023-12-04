@@ -44,8 +44,6 @@ import 'package:shimmer/shimmer.dart';
 import 'package:universal_html/html.dart' as html;
 import 'dart:io';
 import 'package:budget/struct/randomConstants.dart';
-import 'package:universal_html/html.dart' show AnchorElement;
-import 'package:file_picker/file_picker.dart';
 
 Future<bool> checkConnection() async {
   late bool isConnected;
@@ -332,56 +330,6 @@ Future<void> createBackupInBackground(context) async {
   return;
 }
 
-class DBFileInfo {
-  DBFileInfo(
-    this.dbFileBytes,
-    this.mediaStream,
-  );
-
-  var dbFileBytes;
-  Stream<List<int>> mediaStream;
-}
-
-Future<DBFileInfo> getCurrentDBFileInfo() async {
-  var dbFileBytes;
-  late Stream<List<int>> mediaStream;
-  if (kIsWeb) {
-    final html.Storage localStorage = html.window.localStorage;
-    dbFileBytes = bin2str.decode(localStorage["moor_db_str_db"] ?? "");
-    mediaStream = Stream.value(dbFileBytes);
-  } else {
-    final dbFolder = await getApplicationDocumentsDirectory();
-    final dbFile = File(p.join(dbFolder.path, 'db.sqlite'));
-    print("FILE SIZE:" + (dbFile.lengthSync() / 1e+6).toString());
-    // Share.shareFiles([p.join(dbFolder.path, 'db.sqlite')],
-    //     text: 'Database');
-    // await file.readAsBytes();
-    dbFileBytes = await dbFile.readAsBytes();
-    mediaStream = Stream.value(List<int>.from(dbFileBytes));
-  }
-  return DBFileInfo(dbFileBytes, mediaStream);
-}
-
-Future overwriteDefaultDB(List<int> dataStore) async {
-  if (kIsWeb) {
-    final html.Storage localStorage = html.window.localStorage;
-    localStorage.clear();
-    localStorage["moor_db_str_db"] =
-        bin2str.encode(Uint8List.fromList(dataStore));
-    // extract the db number and set it to this to run migrator
-    // localStorage["moor_db_version_db"] =
-    //     (file.name ?? "-").split("-")[1].replaceAll("v", "");
-  } else {
-    final dbFolder = await getApplicationDocumentsDirectory();
-    final dbFile = File(p.join(dbFolder.path, 'db.sqlite'));
-    await dbFile.writeAsBytes(dataStore);
-    // Share.shareFiles([p.join(dbFolder.path, 'db.sqlite')],
-    //     text: 'Database');
-  }
-  // we need to be able to sync with others after the restore
-  await sharedPreferences.setString("dateOfLastSyncedWithClient", "{}");
-}
-
 Future forceDeleteDB() async {
   if (kIsWeb) {
     final html.Storage localStorage = html.window.localStorage;
@@ -539,9 +487,11 @@ Future<void> deleteRecentBackups(context, amountToKeep,
       throw "Failed to login to Google Drive";
     }
 
-    final fileList = await driveApi.files.list(
-        spaces: 'appDataFolder', $fields: 'files(id, name, modifiedTime)');
-    final files = fileList.files;
+    drive.FileList fileList = await driveApi.files.list(
+      spaces: 'appDataFolder',
+      $fields: 'files(id, name, modifiedTime, size)',
+    );
+    List<drive.File>? files = fileList.files;
     if (files == null) {
       throw "No backups found.";
     }
@@ -619,7 +569,7 @@ Future<void> loadBackup(
         dataStore.insertAll(dataStore.length, data);
       },
       onDone: () async {
-        await overwriteDefaultDB(dataStore);
+        await overwriteDefaultDB(Uint8List.fromList(dataStore));
 
         // if this is added, it doesn't restore the database properly on web
         // await database.close();
@@ -806,7 +756,8 @@ Future<(drive.DriveApi? driveApi, List<drive.File>?)> getDriveFiles() async {
     drive.DriveApi driveApi = drive.DriveApi(authenticateClient);
 
     drive.FileList fileList = await driveApi.files.list(
-        spaces: 'appDataFolder', $fields: 'files(id, name, modifiedTime)');
+        spaces: 'appDataFolder',
+        $fields: 'files(id, name, modifiedTime, size)');
     return (driveApi, fileList.files);
   } catch (e) {
     if (e is DetailedApiRequestError && e.status == 401) {
@@ -894,8 +845,7 @@ class _BackupManagementState extends State<BackupManagement> {
             updateGlobalState: false);
       }
     }
-    Iterable<dynamic> filesMap = filesState.asMap().entries;
-
+    Iterable<MapEntry<int, drive.File>> filesMap = filesState.asMap().entries;
     return PopupFramework(
       title: widget.isClientSync
           ? "devices".tr().capitalizeFirst
@@ -1091,7 +1041,7 @@ class _BackupManagementState extends State<BackupManagement> {
               : SizedBox.shrink(),
           ...filesMap
               .map(
-                (file) => AnimatedSizeSwitcher(
+                (MapEntry<int, drive.File> file) => AnimatedSizeSwitcher(
                   child: deletedIndices.contains(file.key)
                       ? Container(
                           key: ValueKey(1),
@@ -1300,7 +1250,15 @@ class _BackupManagementState extends State<BackupManagement> {
                                                                         .now())
                                                                 .toLocal(),
                                                             includeTimeIfToday:
-                                                                true),
+                                                                true) +
+                                                        "\n" +
+                                                        convertBytesToMB(file
+                                                                    .value
+                                                                    .size ??
+                                                                "0")
+                                                            .toStringAsFixed(
+                                                                2) +
+                                                        " MB",
                                                     onSubmit: () async {
                                                       Navigator.pop(context);
                                                       loadingIndeterminateKey
@@ -1377,6 +1335,17 @@ class _BackupManagementState extends State<BackupManagement> {
         ],
       ),
     );
+  }
+}
+
+double convertBytesToMB(String bytesString) {
+  try {
+    int bytes = int.parse(bytesString);
+    double megabytes = bytes / (1024 * 1024);
+    return megabytes;
+  } catch (e) {
+    print("Error parsing bytes string: $e");
+    return 0.0; // or throw an exception, depending on your requirements
   }
 }
 

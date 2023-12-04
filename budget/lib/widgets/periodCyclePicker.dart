@@ -94,6 +94,9 @@ class _PeriodCyclePickerState extends State<PeriodCyclePicker> {
           },
           extraWidget: CyclePeriodSelection(
             cycleSettingsExtension: widget.cycleSettingsExtension,
+            selected: widget.onlyShowCycleOption
+                ? true
+                : selectedCycle == CycleType.cycle,
           ),
           selectedCycle:
               widget.onlyShowCycleOption ? CycleType.cycle : selectedCycle,
@@ -221,8 +224,10 @@ class CyclePeriodSelection extends StatefulWidget {
   const CyclePeriodSelection({
     super.key,
     required this.cycleSettingsExtension,
+    required this.selected,
   });
   final String cycleSettingsExtension;
+  final bool selected;
   @override
   State<CyclePeriodSelection> createState() => _CyclePeriodSelectionState();
 }
@@ -486,7 +491,12 @@ class _CyclePeriodSelectionState extends State<CyclePeriodSelection> {
                   ")",
               fontSize: 16,
               maxLines: 3,
-              textColor: getColor(context, "textLight"),
+              textColor: Theme.of(context).brightness == Brightness.dark &&
+                      appStateSettings["materialYou"] == false &&
+                      widget.selected
+                  ? getColor(context, "black").withOpacity(
+                      0.5) //Fix contrast when selected and not material you and dark mode
+                  : getColor(context, "textLight"),
               textAlign: TextAlign.center,
             ),
           );

@@ -114,50 +114,29 @@ class _HomePageHeatMapState extends State<HomePageHeatMap> {
               ),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
-                  bool cumulative = false;
-                  double cumulativeTotal = totalSpentBefore;
                   List<Pair> points = [];
-                  for (DateTime indexDay = DateTime(
-                    DateTime.now().year,
-                    DateTime.now().month - monthsToLoad,
-                    DateTime.now().day,
+                  var p = CalculatePointsParams(
+                    transactions: snapshot.data ?? [],
+                    customStartDate: DateTime(
+                      DateTime.now().year,
+                      DateTime.now().month - monthsToLoad,
+                      DateTime.now().day,
+                    ),
+                    customEndDate: DateTime.now(),
+                    totalSpentBefore: totalSpentBefore,
+                    isIncome: null,
+                    allWallets: Provider.of<AllWallets>(context, listen: false),
+                    showCumulativeSpending: false,
                   );
-                      indexDay.compareTo(DateTime.now()) <= 0;
-                      indexDay = DateTime(
-                          indexDay.year, indexDay.month, indexDay.day + 1)) {
-                    //can be optimized...
-                    double totalForDay = 0;
-                    for (Transaction transaction in snapshot.data!) {
-                      if (indexDay.year == transaction.dateCreated.year &&
-                          indexDay.month == transaction.dateCreated.month &&
-                          indexDay.day == transaction.dateCreated.day) {
-                        if (transaction.income) {
-                          totalForDay += transaction.amount.abs() *
-                              (amountRatioToPrimaryCurrencyGivenPk(
-                                  Provider.of<AllWallets>(context),
-                                  transaction.walletFk));
-                        } else {
-                          totalForDay -= transaction.amount.abs() *
-                              (amountRatioToPrimaryCurrencyGivenPk(
-                                  Provider.of<AllWallets>(context),
-                                  transaction.walletFk));
-                        }
-                      }
-                    }
-                    cumulativeTotal += totalForDay;
-                    points.add(
-                      Pair(
-                        points.length.toDouble(),
-                        cumulative ? cumulativeTotal : totalForDay,
-                        dateTime: indexDay,
-                      ),
-                    );
-                  }
+                  points = calculatePoints(p);
+
                   // for (Pair point in points) {
                   //   print((point.x.toString() + "," + point.y.toString()));
                   // }
                   return HeatMap(
-                      points: points, loadMoreMonths: loadMoreMonths);
+                    points: points,
+                    loadMoreMonths: loadMoreMonths,
+                  );
                 }
                 return SizedBox.shrink();
               },

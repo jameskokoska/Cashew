@@ -252,7 +252,7 @@ class _BudgetHistoryLineGraphState extends State<_BudgetHistoryLineGraph> {
             ),
           ),
           dotData: FlDotData(
-            show: true,
+            show: widget.spots.first.length < 30,
             getDotPainter: (spot, percent, barData, index) {
               return FlDotCirclePainter(
                 radius: 4,
@@ -441,6 +441,23 @@ class _BudgetHistoryLineGraphState extends State<_BudgetHistoryLineGraph> {
                             e.toString());
                   }
 
+                  String startAndEndDateString = "";
+                  if (dateRange != null && widget.showDateOnHover) {
+                    String startDateString =
+                        getWordedDateShort(dateRange.start);
+                    String endDateString = getWordedDateShort(dateRange.end);
+                    if (startDateString == endDateString) {
+                      startAndEndDateString =
+                          getWordedDateShort(dateRange.start);
+                    } else {
+                      startAndEndDateString =
+                          getWordedDateShort(dateRange.start) +
+                              " – " +
+                              getWordedDateShort(dateRange.end);
+                    }
+                    startAndEndDateString = startAndEndDateString + "\n";
+                  }
+
                   return LineTooltipItem(
                     "",
                     TextStyle(),
@@ -449,10 +466,7 @@ class _BudgetHistoryLineGraphState extends State<_BudgetHistoryLineGraph> {
                           index == 0 &&
                           widget.showDateOnHover)
                         TextSpan(
-                          text: getWordedDateShort(dateRange.start) +
-                              " – " +
-                              getWordedDateShort(dateRange.end) +
-                              "\n",
+                          text: startAndEndDateString,
                           style: TextStyle(
                             color: getColor(context, "black")
                                 .withOpacity(lineBarsSpot.length > 1 ? 0.7 : 1),
@@ -591,16 +605,25 @@ class _BudgetHistoryLineGraphState extends State<_BudgetHistoryLineGraph> {
                     ),
                   );
                 },
-                reservedSize: (widget.maxY >= 10000
+                interval: double.parse(
+                            (widget.maxY - widget.minY).toStringAsFixed(5)) ==
+                        0.0
+                    ? 0.001
+                    : ((widget.maxY - widget.minY) /
+                            (getIsFullScreen(context) ? 7 : 4))
+                        .abs(),
+                reservedSize: (widget.minY <= -10000
                         ? 55
-                        : widget.maxY >= 1000
+                        : widget.minY <= -1000
                             ? 45
-                            : widget.maxY >= 100
+                            : widget.minY <= -100
                                 ? 40
-                                : 40) +
+                                : (widget.maxY >= 100
+                                    ? (widget.maxY >= 1000 ? 37 : 33)
+                                    : 25)) +
+                    10 +
                     measureCurrencyStringExtraWidth(
                         Provider.of<AllWallets>(context)),
-                interval: (widget.maxY / 3.8),
               ),
             ),
           ),
@@ -661,9 +684,11 @@ class _BudgetHistoryLineGraphState extends State<_BudgetHistoryLineGraph> {
             // },
             // If the interval is equal to a really small number (almost 0, it freezes the app!)
             horizontalInterval:
-                double.parse((widget.maxY).toStringAsFixed(5)) == 0.0
+                double.parse((widget.maxY - widget.minY).toStringAsFixed(5)) ==
+                        0.0
                     ? 0.001
-                    : ((widget.maxY) / (getIsFullScreen(context) ? 7 : 4))
+                    : ((widget.maxY - widget.minY) /
+                            (getIsFullScreen(context) ? 7 : 4))
                         .abs(),
             getDrawingHorizontalLine: (value) {
               return FlLine(
