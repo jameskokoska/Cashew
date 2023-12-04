@@ -41,14 +41,27 @@ Cashew is a full-fledged, feature-rich application designed to empower users in 
 ---
 
 ## Feature
-Cashew was featured on [YouTube](https://www.youtube.com/watch?v=2MwWmqcn--s&t=261s)!
-Thanks [Sam Beckman](https://www.youtube.com/@sambeckman)!
+
 
 <a href="https://www.youtube.com/watch?v=2MwWmqcn--s&t=261s">
   <div align="center">
     <img width="80%" src="promotional/youtube-promo/thumbnail.png" alt="Review Video">
   </div>
 </a>
+<p align="center">
+  Cashew was featured on <a href="https://www.youtube.com/watch?v=2MwWmqcn--s&t=261s">YouTube</a>!
+  Thanks <a href="https://www.youtube.com/@sambeckman">Sam Beckman</a>!
+</p>
+
+<br>
+
+
+<div align="center">
+  <img width="80%" src="promotional/play-store-feature.png" alt="Play Store Feature">
+</div>
+<p align="center">
+  Cashew was featured on <a href="https://play.google.com/store/apps/editorial?id=mc_apps_new_on_play_fcp">Google Play's Editorial 'New Apps We Love'</a>!
+</p>
 
 ## Release
 Check out the [official website](https://cashewapp.web.app/)!
