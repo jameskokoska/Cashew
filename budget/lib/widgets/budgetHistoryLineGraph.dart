@@ -21,14 +21,13 @@ class BudgetHistoryLineGraph extends StatelessWidget {
     required this.dateRanges,
     required this.spots,
     required this.horizontalLineAt,
-    required this.maxY,
-    required this.minY,
     required this.extraCategorySpots,
     required this.categoriesMapped,
     required this.loadAllEvenIfZero,
     this.onTouchedIndex,
     required this.setNoPastRegionsAreZero,
     this.showDateOnHover = false,
+    this.forceMinYIfPositive,
   });
 
   final Color color;
@@ -37,14 +36,13 @@ class BudgetHistoryLineGraph extends StatelessWidget {
   final List<List<FlSpot>> spots;
   final Budget budget;
   final double? horizontalLineAt;
-  final double maxY;
-  final double minY;
   final Function(int?)? onTouchedIndex;
   final Map<String, List<FlSpot>> extraCategorySpots;
   final Map<String, TransactionCategory> categoriesMapped;
   final bool loadAllEvenIfZero;
   final Function(bool) setNoPastRegionsAreZero;
   final bool showDateOnHover;
+  final double? forceMinYIfPositive;
 
   @override
   Widget build(BuildContext context) {
@@ -129,13 +127,40 @@ class BudgetHistoryLineGraph extends StatelessWidget {
       }
     }
 
+    print(filteredSpotsFixedX);
+
+    double minY = double.infinity;
+    double maxY = double.negativeInfinity;
+    for (List<FlSpot> spots in filteredSpotsFixedX) {
+      for (FlSpot flSpot in spots) {
+        if (flSpot.y < minY) {
+          minY = flSpot.y;
+        }
+        if (flSpot.y > maxY) {
+          maxY = flSpot.y;
+        }
+      }
+    }
+
+    if (minY == 0 || minY == double.infinity) {
+      minY = -0.00000000000001;
+    }
+
+    if (forceMinYIfPositive != null && minY > 0) {
+      minY = forceMinYIfPositive ?? 0;
+    }
+
+    if (maxY == double.infinity) {
+      maxY = 1;
+    }
+
     if (filteredSpotsFixedX.isEmpty) {
       filteredSpotsFixedX = [
         [
           for (int i = 0; i < minimumNumberOfZero; i++)
             FlSpot(
               i.toDouble(),
-              0.000000000001,
+              minY,
             ),
         ]
       ];
@@ -147,7 +172,7 @@ class BudgetHistoryLineGraph extends StatelessWidget {
       for (int j = 0; j < filteredSpotsFixedX[i].length; j++) {
         initialSpots.add(FlSpot(
           j.toDouble(),
-          0.000000000001,
+          minY,
         ));
       }
       initialSpotsAll.add(initialSpots);
@@ -239,18 +264,71 @@ class _BudgetHistoryLineGraphState extends State<_BudgetHistoryLineGraph> {
           // shadow: const Shadow(
           //   blurRadius: 8,
           // ),
-          belowBarData: BarAreaData(
-            show: true,
-            gradient: LinearGradient(
-              colors: [
-                (widget.lineColors?[i] ?? widget.color).withOpacity(0),
-                (widget.lineColors?[i] ?? widget.color).withOpacity(0.3),
-                (widget.lineColors?[i] ?? widget.color).withOpacity(0.6),
-              ],
-              begin: Alignment.bottomCenter,
-              end: Alignment.topCenter,
-            ),
-          ),
+          aboveBarData: widget.minY >= -1e-14
+              ? null
+              : BarAreaData(
+                  applyCutOffY: true,
+                  cutOffY: 0,
+                  show: widget.minY >= 0 && widget.maxY >= 0
+                      ? false
+                      : i != 0
+                          ? false
+                          : true,
+                  gradient: LinearGradient(
+                    colors: [
+                      i == 0
+                          ? (widget.lineColors?[i] ?? widget.color)
+                              .withAlpha(100)
+                          : (widget.lineColors?[i] ?? widget.color)
+                              .withAlpha(1),
+                      (widget.lineColors?[i] ?? widget.color).withAlpha(1),
+                    ],
+                    begin: Alignment.bottomCenter,
+                    end: Alignment(
+                        0,
+                        widget.maxY > 0
+                            ? -(widget.minY).abs() /
+                                ((widget.maxY).abs() + (widget.minY).abs())
+                            : -1),
+                  ),
+                  // gradientFrom: Offset(
+                  //     0,
+                  //     ((widget.maxY).abs()) /
+                  //         ((widget.maxY).abs() + (widget.minY).abs())),
+                ),
+          belowBarData: widget.minY >= -1e-14
+              ? BarAreaData(
+                  show: true,
+                  gradient: LinearGradient(
+                    colors: [
+                      (widget.lineColors?[i] ?? widget.color).withOpacity(0),
+                      (widget.lineColors?[i] ?? widget.color).withOpacity(0.3),
+                      (widget.lineColors?[i] ?? widget.color).withOpacity(0.6),
+                    ],
+                    begin: Alignment.bottomCenter,
+                    end: Alignment.topCenter,
+                  ),
+                )
+              : BarAreaData(
+                  applyCutOffY: true,
+                  cutOffY: 0,
+                  show: widget.minY <= 0 && widget.maxY <= 0 ? false : true,
+                  gradient: LinearGradient(
+                    colors: [
+                      i == 0
+                          ? (widget.lineColors?[i] ?? widget.color)
+                              .withAlpha(100)
+                          : (widget.lineColors?[i] ?? widget.color)
+                              .withAlpha(1),
+                      (widget.lineColors?[i] ?? widget.color).withAlpha(1),
+                    ],
+                    begin: Alignment.topCenter,
+                    end: Alignment(
+                        0,
+                        (widget.maxY).abs() /
+                            ((widget.maxY).abs() + (widget.minY).abs())),
+                  ),
+                ),
           dotData: FlDotData(
             show: widget.spots.first.length < 30,
             getDotPainter: (spot, percent, barData, index) {
@@ -447,13 +525,17 @@ class _BudgetHistoryLineGraphState extends State<_BudgetHistoryLineGraph> {
                         getWordedDateShort(dateRange.start);
                     String endDateString = getWordedDateShort(dateRange.end);
                     if (startDateString == endDateString) {
-                      startAndEndDateString =
-                          getWordedDateShort(dateRange.start);
+                      startAndEndDateString = getWordedDateShort(
+                          dateRange.start,
+                          includeYear:
+                              dateRange.start.year != DateTime.now().year);
                     } else {
                       startAndEndDateString =
                           getWordedDateShort(dateRange.start) +
                               " – " +
-                              getWordedDateShort(dateRange.end);
+                              getWordedDateShort(dateRange.end,
+                                  includeYear: dateRange.end.year !=
+                                      DateTime.now().year);
                     }
                     startAndEndDateString = startAndEndDateString + "\n";
                   }

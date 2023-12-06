@@ -21,7 +21,8 @@ import 'package:budget/colors.dart';
 import 'package:timer_builder/timer_builder.dart';
 
 // returns 0 if no navigation sidebar should be shown
-double getWidthNavigationSidebar(context) {
+double getWidthNavigationSidebar(BuildContext context) {
+  if (context == null) return 0;
   double screenPercent = 0.3;
   double maxWidthNavigation = 270;
   double minScreenWidth = 700;

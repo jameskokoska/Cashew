@@ -1,5 +1,6 @@
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
+import 'package:budget/pages/objectivePage.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/breathingAnimation.dart';
 import 'package:budget/widgets/categoryIcon.dart';
@@ -94,6 +95,7 @@ class TransactionEntry extends StatelessWidget {
     this.highlightActionButton = false,
     this.showObjectivePercentage = true,
     this.customPadding,
+    this.openLoanPage = true,
   }) : super(key: key);
 
   final Widget openPage;
@@ -113,6 +115,7 @@ class TransactionEntry extends StatelessWidget {
   final bool highlightActionButton;
   final bool showObjectivePercentage;
   final EdgeInsets? customPadding;
+  final bool openLoanPage;
 
   final double fabSize = 50;
 
@@ -152,6 +155,8 @@ class TransactionEntry extends StatelessWidget {
                 Provider.of<AllWallets>(context)
                     .indexedByPk[appStateSettings["selectedWalletPk"]]
                     ?.currency);
+
+    bool shouldOpenLoanPage = false;
 
     return Padding(
       padding: EdgeInsets.symmetric(
@@ -233,6 +238,10 @@ class TransactionEntry extends StatelessWidget {
                             selectTransaction(transaction, selected, true);
                           },
                           onTap: () async {
+                            if (shouldOpenLoanPage) {
+                              flashTransaction(transaction.transactionPk,
+                                  flashCount: 2);
+                            }
                             openContainer();
                           },
                           child: AnimatedContainer(
@@ -405,7 +414,11 @@ class TransactionEntry extends StatelessWidget {
                         ),
                       );
                     },
-                    openPage: openPage,
+                    // Open the corresponding loan breakdown page if transaction tapped
+                    openPage: shouldOpenLoanPage &&
+                            transaction.objectiveFk != null
+                        ? ObjectivePage(objectivePk: transaction.objectiveFk!)
+                        : openPage,
                   ),
                 );
                 // Only render the visibility detector when we know this transaction entry
@@ -433,6 +446,13 @@ class TransactionEntry extends StatelessWidget {
       ),
     );
   }
+}
+
+void flashTransaction(String transactionPk, {int flashCount = 5}) {
+  recentlyAddedTransactionInfo.value.shouldAnimate = true;
+  recentlyAddedTransactionInfo.value.transactionPk = transactionPk;
+  recentlyAddedTransactionInfo.value.loopCount = flashCount;
+  recentlyAddedTransactionInfo.notifyListeners();
 }
 
 class FlashingContainer extends StatefulWidget {

@@ -57,7 +57,7 @@ Cashew is a full-fledged, feature-rich application designed to empower users in 
 
 
 <div align="center">
-  <img width="80%" src="promotional/play-store-feature.png" alt="Play Store Feature">
+  <img width="80%" src="promotional/play-store-feature/play-store-feature.png" alt="Play Store Feature">
 </div>
 <p align="center">
   Cashew was featured on <a href="https://play.google.com/store/apps/editorial?id=mc_apps_new_on_play_fcp">Google Play's Editorial 'New Apps We Love'</a>!

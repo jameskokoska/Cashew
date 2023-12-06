@@ -19,6 +19,7 @@ class SelectChips<T> extends StatefulWidget {
     required this.onSelected,
     required this.getLabel,
     this.getCustomBorderColor,
+    this.getCustomSelectedColor,
     this.extraWidget,
     this.extraWidgetAtBeginning = false,
     this.onLongPress,
@@ -36,6 +37,7 @@ class SelectChips<T> extends StatefulWidget {
   final Function(T) onSelected;
   final String Function(T) getLabel;
   final Color? Function(T)? getCustomBorderColor;
+  final Color? Function(T)? getCustomSelectedColor;
   final Widget? extraWidget;
   final bool extraWidgetAtBeginning;
   final Function(T)? onLongPress;
@@ -142,10 +144,13 @@ class _SelectChipsState<T> extends State<SelectChips<T>> {
                     showCheckmark:
                         widget.allowMultipleSelected == true && avatar == null,
                     materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    selectedColor: widget.selectedColor ??
-                        (appStateSettings["materialYou"]
-                            ? null
-                            : getColor(context, "lightDarkAccentHeavy")),
+                    selectedColor: widget.getCustomSelectedColor != null &&
+                            widget.getCustomSelectedColor!(item) != null
+                        ? widget.getCustomSelectedColor!(item)
+                        : widget.selectedColor ??
+                            (appStateSettings["materialYou"]
+                                ? null
+                                : getColor(context, "lightDarkAccentHeavy")),
                     side: widget.getCustomBorderColor == null ||
                             widget.getCustomBorderColor!(item) == null
                         ? null

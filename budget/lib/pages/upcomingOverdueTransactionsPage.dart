@@ -187,7 +187,7 @@ class _UpcomingOverdueTransactionsState
                   child: AnimatedExpanded(
                     expand: searchValue != null,
                     child: Padding(
-                      padding: const EdgeInsets.only(bottom: 8.0, top: 8),
+                      padding: const EdgeInsets.only(bottom: 4.0, top: 8),
                       child: TextInput(
                         labelText: "search-transactions-placeholder".tr(),
                         icon: appStateSettings["outlinedIcons"]
@@ -211,7 +211,7 @@ class _UpcomingOverdueTransactionsState
                 ),
               ),
               SliverToBoxAdapter(
-                child: SizedBox(height: 10),
+                child: SizedBox(height: 15),
               ),
               StreamBuilder<List<Transaction>>(
                 stream: database.watchAllOverdueUpcomingTransactions(

@@ -1006,7 +1006,9 @@ class _AddBillItemPageState extends State<AddBillItemPage> {
                 Padding(
                   padding: const EdgeInsets.only(bottom: 7.5),
                   child: TappableTextEntry(
-                    title: multiplierAmount.toStringAsFixed(2),
+                    title: multiplierAmount
+                        .toStringAsFixed(2)
+                        .replaceAll(".", getDecimalSeparator()),
                     placeholder: "1",
                     showPlaceHolderWhenTextEquals: "1.00",
                     onTap: () {

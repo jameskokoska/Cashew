@@ -201,7 +201,10 @@ class CustomPopupMenuButton extends StatelessWidget {
         this.items.length == 1;
     List<DropdownItemMenu> itemsFiltered = [...items];
     if ((keepOutFirstConsideringHeader || forceKeepOutFirst) &&
-        items.length > 0) itemsFiltered.removeAt(0);
+        items.length > 0) {
+      itemsFiltered.removeAt(0);
+      if (items.length == 2) itemsFiltered.removeAt(0);
+    }
 
     if (showButtons) {
       return Row(
@@ -224,8 +227,16 @@ class CustomPopupMenuButton extends StatelessWidget {
         if ((keepOutFirstConsideringHeader || forceKeepOutFirst) &&
             items.length > 0)
           Transform.translate(
-            offset: Offset(itemsFiltered.isNotEmpty ? 7 : 0, 0),
+            offset: Offset(
+                itemsFiltered.isNotEmpty || items.length == 2 ? 7 : 0, 0),
             child: menuIconButtonBuilder(context, items[0]),
+          ),
+        if ((keepOutFirstConsideringHeader || forceKeepOutFirst) &&
+            items.length > 0 &&
+            items.length == 2)
+          Transform.translate(
+            offset: Offset(itemsFiltered.isNotEmpty ? 7 : 0, 0),
+            child: menuIconButtonBuilder(context, items[1]),
           ),
         if (itemsFiltered.isNotEmpty)
           Theme(

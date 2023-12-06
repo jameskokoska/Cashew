@@ -12,6 +12,7 @@ import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/countNumber.dart';
 import 'package:budget/widgets/dropdownSelect.dart';
 import 'package:budget/widgets/globalSnackBar.dart';
+import 'package:budget/widgets/iconButtonScaled.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
@@ -838,10 +839,9 @@ class _CorrectBalancePopupState extends State<CorrectBalancePopup> {
             children: [
               if (widget.showAllEditDetails)
                 Padding(
-                  padding: const EdgeInsets.only(bottom: 10),
+                  padding: const EdgeInsets.only(bottom: 15),
                   child: editTransferDetails,
                 ),
-              SizedBox(height: 10),
               Wrap(
                 alignment: WrapAlignment.center,
                 crossAxisAlignment: WrapCrossAlignment.center,
@@ -1100,6 +1100,7 @@ class _TransferBalancePopupState extends State<TransferBalancePopup> {
       : null;
   late DateTime? selectedDateTime = widget.initialDate ?? null;
   late String selectedTitle = widget.initialTitle ?? "";
+  double transferFee = 0;
 
   Widget walletSelector(TransactionWallet? wallet,
       Function(TransactionWallet wallet) onSelected) {
@@ -1240,14 +1241,37 @@ class _TransferBalancePopupState extends State<TransferBalancePopup> {
               }),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: AnimatedRotation(
-                  duration: Duration(milliseconds: 1200),
-                  turns: isNegative ? 0.5 : 1,
-                  curve: ElasticOutCurve(0.6),
-                  child: Icon(
-                    appStateSettings["outlinedIcons"]
-                        ? Icons.arrow_forward_outlined
-                        : Icons.arrow_forward_rounded,
+                child: Tappable(
+                  color: dynamicPastel(
+                    context,
+                    Theme.of(context)
+                        .colorScheme
+                        .secondaryContainer
+                        .withOpacity(0.5),
+                    inverse: true,
+                  ),
+                  borderRadius: 100,
+                  onTap: () {
+                    setState(() {
+                      isNegative = !isNegative;
+                      if (isNegative == true)
+                        enteredAmount = enteredAmount.abs() * -1;
+                      else
+                        enteredAmount = enteredAmount.abs();
+                    });
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: AnimatedRotation(
+                      duration: Duration(milliseconds: 1200),
+                      turns: isNegative ? 0.5 : 1,
+                      curve: ElasticOutCurve(0.6),
+                      child: Icon(
+                        appStateSettings["outlinedIcons"]
+                            ? Icons.arrow_forward_outlined
+                            : Icons.arrow_forward_rounded,
+                      ),
+                    ),
                   ),
                 ),
               ),
@@ -1270,8 +1294,6 @@ class _TransferBalancePopupState extends State<TransferBalancePopup> {
                 Provider.of<AllWallets>(context),
                 enteredAmount
                     .abs(), //We flip the arrow instead of showing negative
-                currencyKey: widget.wallet.currency,
-                decimals: widget.wallet.decimals,
                 addCurrencyName: true,
               ),
               textAlign: TextAlign.center,
@@ -1279,24 +1301,25 @@ class _TransferBalancePopupState extends State<TransferBalancePopup> {
               fontWeight: FontWeight.bold,
             ),
           ),
-          SizedBox(height: 5),
+          SizedBox(height: 10),
           SelectAmount(
-            extraWidgetAboveNumbers: SettingsContainerSwitch(
-              title: "withdraw-amount".tr(),
-              onSwitched: (value) {
-                setState(() {
-                  isNegative = value;
-                  if (isNegative == true)
-                    enteredAmount = enteredAmount.abs() * -1;
-                  else
-                    enteredAmount = enteredAmount.abs();
-                });
-              },
-              enableBorderRadius: true,
-              initialValue: false,
-              syncWithInitialValue: false,
-              runOnSwitchedInitially: true,
-            ),
+            // extraWidgetAboveNumbers: SettingsContainerSwitch(
+            //   title: "withdraw-amount".tr(),
+            //   onSwitched: (value) {
+            //     setState(() {
+            //       isNegative = value;
+            //       if (isNegative == true)
+            //         enteredAmount = enteredAmount.abs() * -1;
+            //       else
+            //         enteredAmount = enteredAmount.abs();
+            //     });
+            //   },
+            //   enableBorderRadius: true,
+            //   initialValue: false,
+            //   syncWithInitialValue: false,
+            //   runOnSwitchedInitially: true,
+            // ),
+            hideNextButton: true,
             showEnteredNumber: false,
             amountPassed: enteredAmount.toString(),
             setSelectedAmount: (amount, calculation) {
@@ -1308,80 +1331,117 @@ class _TransferBalancePopupState extends State<TransferBalancePopup> {
               });
             },
             allowZero: true,
-            next: () async {
-              if (walletTo == null) {
-                dynamic result = await selectWalletPopup(
-                  context,
-                  selectedWallet: walletTo,
-                  allowEditWallet: widget.allowEditWallet,
-                );
-                if (result is TransactionWallet) {
-                  setState(() {
-                    walletTo = result;
-                  });
-                }
-                return;
-              }
-
-              String transferString = walletFrom.name +
-                  (isNegative ? " ← " : " → ") +
-                  walletTo!.name;
-
-              String note = "transferred-balance".tr() + "\n" + transferString;
-
-              AllWallets allWallets =
-                  Provider.of<AllWallets>(context, listen: false);
-
-              // Want these times to be the same so we know the pairing of balance corrections
-              DateTime selectedDateTimeSetToNow =
-                  selectedDateTime ?? DateTime.now();
-
-              await createCorrectionTransaction(
-                enteredAmount *
-                    getAmountRatioWalletTransferTo(
-                        allWallets, walletTo!.walletPk),
-                walletTo!,
-                note: note,
-                dateTime: selectedDateTimeSetToNow,
-                title: selectedTitle == ""
-                    ? (allWallets.indexedByPk[walletTo!.walletPk]!.name +
-                        " " +
-                        (isNegative ? "transfer-out".tr() : "transfer-in".tr()))
-                    : selectedTitle,
-              );
-
-              await createCorrectionTransaction(
-                enteredAmount *
-                    getAmountRatioWalletTransferFrom(
-                        allWallets, walletFrom.walletPk),
-                walletFrom,
-                note: note,
-                dateTime: selectedDateTimeSetToNow,
-                title: selectedTitle == ""
-                    ? (allWallets.indexedByPk[walletFrom.walletPk]!.name +
-                        " " +
-                        (isNegative == false
-                            ? "transfer-out".tr()
-                            : "transfer-in".tr()))
-                    : selectedTitle,
-              );
-
-              openSnackbar(
-                SnackbarMessage(
-                  title: "transferred-balance".tr(),
-                  description: transferString,
-                  icon: appStateSettings["outlinedIcons"]
-                      ? Icons.compare_arrows_outlined
-                      : Icons.compare_arrows_rounded,
-                ),
-              );
-
-              Navigator.pop(context, true);
-            },
-            nextLabel: walletTo == null
-                ? "select-account".tr()
-                : "transfer-amount".tr(),
           ),
+          Row(
+            children: [
+              Expanded(
+                child: Button(
+                  expandedLayout: true,
+                  label: walletTo == null
+                      ? "select-account".tr()
+                      : "transfer-amount".tr(),
+                  onTap: () async {
+                    if (walletTo == null) {
+                      dynamic result = await selectWalletPopup(
+                        context,
+                        selectedWallet: walletTo,
+                        allowEditWallet: widget.allowEditWallet,
+                      );
+                      if (result is TransactionWallet) {
+                        setState(() {
+                          walletTo = result;
+                        });
+                      }
+                      return;
+                    }
+
+                    String transferString = walletFrom.name +
+                        (isNegative ? " ← " : " → ") +
+                        walletTo!.name;
+
+                    String note =
+                        "transferred-balance".tr() + "\n" + transferString;
+
+                    AllWallets allWallets =
+                        Provider.of<AllWallets>(context, listen: false);
+
+                    // Want these times to be the same so we know the pairing of balance corrections
+                    DateTime selectedDateTimeSetToNow =
+                        selectedDateTime ?? DateTime.now();
+
+                    await createCorrectionTransaction(
+                      enteredAmount *
+                          getAmountRatioWalletTransferTo(
+                              allWallets, walletTo!.walletPk),
+                      walletTo!,
+                      note: note,
+                      dateTime: selectedDateTimeSetToNow,
+                      title: selectedTitle == ""
+                          ? (allWallets.indexedByPk[walletTo!.walletPk]!.name +
+                              " " +
+                              (isNegative
+                                  ? "transfer-out".tr()
+                                  : "transfer-in".tr()))
+                          : selectedTitle,
+                    );
+
+                    await createCorrectionTransaction(
+                      enteredAmount *
+                          getAmountRatioWalletTransferFrom(
+                              allWallets, walletFrom.walletPk),
+                      walletFrom,
+                      note: note,
+                      dateTime: selectedDateTimeSetToNow,
+                      title: selectedTitle == ""
+                          ? (allWallets.indexedByPk[walletFrom.walletPk]!.name +
+                              " " +
+                              (isNegative == false
+                                  ? "transfer-out".tr()
+                                  : "transfer-in".tr()))
+                          : selectedTitle,
+                    );
+
+                    // Deal with transfer fee
+                    if (transferFee != 0) {
+                      String transferFeeNote = "transfer-fee".tr() +
+                          "\n" +
+                          "from".tr().capitalizeFirst +
+                          " " +
+                          walletFrom.name;
+                      await createCorrectionTransaction(
+                        (transferFee *
+                                    getAmountRatioWalletTransferFrom(
+                                        allWallets, walletFrom.walletPk))
+                                .abs() *
+                            -1,
+                        walletFrom,
+                        note: transferFeeNote,
+                        // Subtract 2 seconds so it's not in close proximity to the other paired balance correction
+                        // This is because getCloselyRelatedBalanceCorrectionTransaction relies on the time...
+                        dateTime: selectedDateTimeSetToNow
+                            .subtract(Duration(seconds: 2)),
+                        title: selectedTitle == ""
+                            ? "transfer-fee".tr()
+                            : selectedTitle,
+                      );
+                    }
+
+                    openSnackbar(
+                      SnackbarMessage(
+                        title: "transferred-balance".tr(),
+                        description: transferString,
+                        icon: appStateSettings["outlinedIcons"]
+                            ? Icons.compare_arrows_outlined
+                            : Icons.compare_arrows_rounded,
+                      ),
+                    );
+
+                    Navigator.pop(context, true);
+                  },
+                ),
+              ),
+            ],
+          )
         ],
       ),
     );

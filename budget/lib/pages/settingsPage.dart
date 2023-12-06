@@ -156,11 +156,25 @@ class MorePages extends StatelessWidget {
                             "settings-and-customization-description".tr(),
                         isOutlined: true,
                         // description: "Theme, Language, CSV Import",
-                        // isWideOutlined: true,
+                        isWideOutlined: true,
                       ),
                     ),
                   ],
                 ),
+          Row(
+            children: [
+              Expanded(
+                child: SettingsContainerOpenPage(
+                  openPage: WalletDetailsPage(wallet: null),
+                  title: navBarIconsData["allSpending"]!.labelLong.tr(),
+                  icon: navBarIconsData["allSpending"]!.iconData,
+                  description: "all-spending-description".tr(),
+                  isOutlined: true,
+                  isWideOutlined: true,
+                ),
+              ),
+            ],
+          ),
           Row(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -228,9 +242,10 @@ class MorePages extends StatelessWidget {
                     ),
                     Expanded(
                       child: SettingsContainerOpenPage(
-                        openPage: WalletDetailsPage(wallet: null),
-                        title: navBarIconsData["allSpending"]!.label.tr(),
-                        icon: navBarIconsData["allSpending"]!.iconData,
+                        openPage: UpcomingOverdueTransactions(
+                            overdueTransactions: null),
+                        title: navBarIconsData["scheduled"]!.label.tr(),
+                        icon: navBarIconsData["scheduled"]!.iconData,
                         isOutlined: true,
                       ),
                     ),
@@ -243,10 +258,11 @@ class MorePages extends StatelessWidget {
                   children: [
                     Expanded(
                       child: SettingsContainerOpenPage(
-                        openPage: UpcomingOverdueTransactions(
-                            overdueTransactions: null),
-                        title: navBarIconsData["scheduled"]!.label.tr(),
-                        icon: navBarIconsData["scheduled"]!.iconData,
+                        openPage: ObjectivesListPage(
+                          backButton: true,
+                        ),
+                        title: navBarIconsData["goals"]!.label.tr(),
+                        icon: navBarIconsData["goals"]!.iconData,
                         isOutlined: true,
                       ),
                     ),
@@ -259,16 +275,6 @@ class MorePages extends StatelessWidget {
                       ),
                     ),
                   ],
-                ),
-          hasSideNavigation
-              ? SizedBox.shrink()
-              : SettingsContainerOpenPage(
-                  openPage: ObjectivesListPage(
-                    backButton: true,
-                  ),
-                  title: navBarIconsData["goals"]!.labelLong.tr(),
-                  icon: navBarIconsData["goals"]!.iconData,
-                  isOutlined: true,
                 ),
           hasSideNavigation
               ? SizedBox.shrink()

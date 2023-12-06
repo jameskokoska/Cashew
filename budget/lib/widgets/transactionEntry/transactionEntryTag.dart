@@ -7,6 +7,7 @@ import 'package:budget/widgets/categoryEntry.dart';
 import 'package:budget/widgets/categoryIcon.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/util/infiniteRotationAnimation.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/colors.dart';
 import 'package:provider/provider.dart';
@@ -102,6 +103,7 @@ class TransactionEntryTag extends StatelessWidget {
               child: Builder(builder: (context) {
                 if (objective != null) {
                   return ObjectivePercentTag(
+                    transaction: transaction,
                     objective: objective!,
                     showObjectivePercentageCheck: showObjectivePercentageCheck,
                   );
@@ -112,6 +114,7 @@ class TransactionEntryTag extends StatelessWidget {
                     if (snapshot.hasData) {
                       Objective objective = snapshot.data!;
                       return ObjectivePercentTag(
+                        transaction: transaction,
                         objective: objective,
                         showObjectivePercentageCheck:
                             showObjectivePercentageCheck,
@@ -161,9 +164,11 @@ class SubCategoryTag extends StatelessWidget {
 
 class ObjectivePercentTag extends StatelessWidget {
   const ObjectivePercentTag(
-      {required this.objective,
+      {required this.transaction,
+      required this.objective,
       required this.showObjectivePercentageCheck,
       super.key});
+  final Transaction transaction;
   final Objective objective;
   final bool showObjectivePercentageCheck;
   @override
@@ -179,20 +184,26 @@ class ObjectivePercentTag extends StatelessWidget {
         double totalAmount = snapshot.data ?? 0;
         if (objective.income == false) {
           totalAmount = totalAmount * -1;
-          if (totalAmount == 0) totalAmount = totalAmount.abs();
+          if (totalAmount.abs() == 0) totalAmount = totalAmount.abs();
         }
         double percentageTowardsGoal =
             objectiveAmount == 0 ? 0 : totalAmount / objectiveAmount;
         percentageTowardsGoal =
             percentageTowardsGoal <= 0 ? 0 : percentageTowardsGoal;
-        return TransactionTag(
-          color: HexColor(objective.colour,
-              defaultColor: Theme.of(context).colorScheme.primary),
-          name: objective.name +
-              ": " +
-              convertToPercent((totalAmount / objectiveAmount) * 100,
-                  numberDecimals: 0),
-          progress: percentageTowardsGoal,
+        return Row(
+          children: [
+            Expanded(
+              child: TransactionTag(
+                color: HexColor(objective.colour,
+                    defaultColor: Theme.of(context).colorScheme.primary),
+                name: objective.name +
+                    ": " +
+                    convertToPercent((totalAmount / objectiveAmount) * 100,
+                        numberDecimals: 0),
+                progress: percentageTowardsGoal,
+              ),
+            ),
+          ],
         );
       },
     );
@@ -249,7 +260,7 @@ class TransactionTag extends StatelessWidget {
               child: Stack(
                 children: [
                   FractionallySizedBox(
-                    widthFactor: progress,
+                    widthFactor: progress?.clamp(0, 1),
                     heightFactor: 1,
                     child: Container(
                       decoration: BoxDecoration(

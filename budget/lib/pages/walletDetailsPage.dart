@@ -1872,10 +1872,8 @@ class _AllSpendingPastSpendingGraphState
                       return SliverToBoxAdapter(
                         child: SizedBox.shrink(),
                       );
-                    double maxY = 0.1;
-                    double minY = -0.00000000000001;
+                    double minimumYValue = 0.00000000001;
                     List<List<FlSpot>> allSpots = [];
-
                     if (widget.appStateSettingsNetAllSpendingTotal) {
                       List<FlSpot> spots = [];
                       if (expenseData.toSet().length > 1) {
@@ -1884,14 +1882,9 @@ class _AllSpendingPastSpendingGraphState
                           total = total +
                               (expenseData[i] ?? 0).abs() * -1 +
                               (nullIfIndexOutOfRange(incomeData, i) ?? 0).abs();
-                          if (total > maxY) {
-                            maxY = total.abs();
-                          } else if (total < minY) {
-                            minY = total;
-                          }
                           spots.add(FlSpot(
                             expenseData.length - 1 - i.toDouble(),
-                            (total).abs() == 0 ? 0.00000000001 : total,
+                            (total).abs() == 0 ? minimumYValue : total,
                           ));
                         }
                         allSpots.add(spots);
@@ -1900,13 +1893,10 @@ class _AllSpendingPastSpendingGraphState
                       List<FlSpot> spots = [];
                       if (expenseData.toSet().length > 1) {
                         for (int i = expenseData.length - 1; i >= 0; i--) {
-                          if ((expenseData[i] ?? 0).abs() > maxY) {
-                            maxY = (expenseData[i] ?? 0).abs();
-                          }
                           spots.add(FlSpot(
                             expenseData.length - 1 - i.toDouble(),
                             (expenseData[i] ?? 0).abs() == 0
-                                ? 0.00000000001
+                                ? minimumYValue
                                 : (expenseData[i] ?? 0).abs(),
                           ));
                         }
@@ -1917,13 +1907,10 @@ class _AllSpendingPastSpendingGraphState
                       if (incomeData.toSet().length > 1) {
                         spots = [];
                         for (int i = incomeData.length - 1; i >= 0; i--) {
-                          if ((incomeData[i] ?? 0).abs() > maxY) {
-                            maxY = (incomeData[i] ?? 0).abs();
-                          }
                           spots.add(FlSpot(
                             incomeData.length - 1 - i.toDouble(),
                             (incomeData[i] ?? 0).abs() == 0
-                                ? 0.00000000001
+                                ? minimumYValue
                                 : (incomeData[i] ?? 0).abs(),
                           ));
                         }
@@ -1953,39 +1940,44 @@ class _AllSpendingPastSpendingGraphState
                                       child: Padding(
                                         padding:
                                             const EdgeInsets.only(right: 5),
-                                        child: BudgetHistoryLineGraph(
-                                          showDateOnHover: true,
-                                          onTouchedIndex: (index) {},
-                                          color: dynamicPastel(
-                                            context,
-                                            Theme.of(context)
-                                                .colorScheme
-                                                .primary,
-                                            amountLight: 0.4,
-                                            amountDark: 0.2,
+                                        child: ClipRRect(
+                                          child: BudgetHistoryLineGraph(
+                                            forceMinYIfPositive: widget
+                                                    .appStateSettingsNetAllSpendingTotal
+                                                ? null
+                                                : 0,
+                                            showDateOnHover: true,
+                                            onTouchedIndex: (index) {},
+                                            color: dynamicPastel(
+                                              context,
+                                              Theme.of(context)
+                                                  .colorScheme
+                                                  .primary,
+                                              amountLight: 0.4,
+                                              amountDark: 0.2,
+                                            ),
+                                            dateRanges: dateTimeRanges,
+                                            lineColors: allSpots.length > 1
+                                                ? [
+                                                    getColor(context,
+                                                        "expenseAmount"),
+                                                    getColor(context,
+                                                        "incomeAmount"),
+                                                  ]
+                                                : null,
+                                            spots: allSpots,
+                                            horizontalLineAt: null,
+                                            budget:
+                                                getCustomCycleTempBudget(""),
+                                            extraCategorySpots: {},
+                                            categoriesMapped: {},
+                                            loadAllEvenIfZero:
+                                                amountLoadedPressedOnce,
+                                            setNoPastRegionsAreZero:
+                                                (bool value) {
+                                              amountLoadedPressedOnce = true;
+                                            },
                                           ),
-                                          dateRanges: dateTimeRanges,
-                                          maxY: maxY,
-                                          minY: minY,
-                                          lineColors: allSpots.length > 1
-                                              ? [
-                                                  getColor(
-                                                      context, "expenseAmount"),
-                                                  getColor(
-                                                      context, "incomeAmount"),
-                                                ]
-                                              : null,
-                                          spots: allSpots,
-                                          horizontalLineAt: null,
-                                          budget: getCustomCycleTempBudget(""),
-                                          extraCategorySpots: {},
-                                          categoriesMapped: {},
-                                          loadAllEvenIfZero:
-                                              amountLoadedPressedOnce,
-                                          setNoPastRegionsAreZero:
-                                              (bool value) {
-                                            amountLoadedPressedOnce = true;
-                                          },
                                         ),
                                       ),
                                     ),

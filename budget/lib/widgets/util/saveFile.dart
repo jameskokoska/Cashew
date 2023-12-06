@@ -153,6 +153,7 @@ Future<bool> saveFile({
     ));
     return true;
   } catch (e) {
+    print("Error saving file to device: " + e.toString());
     if (customDirectory == null) {
       // Try again with selecting a custom directory
       String? selectedDirectory = await FilePicker.platform.getDirectoryPath();
@@ -164,7 +165,7 @@ Future<bool> saveFile({
               ? Icons.warning_outlined
               : Icons.warning_rounded,
         ));
-        print("Error saving file to device: " + e.toString());
+        print("No folder selected");
         return false;
       } else {
         return await saveFile(

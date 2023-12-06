@@ -191,6 +191,7 @@ class ExportCSV extends StatelessWidget {
               "iconName",
               "decimals",
               "homePageWidgetDisplay",
+              "currencyFormat",
             ],
             keysToReplace: {
               "name": "accountName", //"walletName"

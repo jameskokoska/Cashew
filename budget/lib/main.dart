@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:budget/functions.dart';
 import 'package:budget/struct/iconObjects.dart';
 import 'package:budget/struct/keyboardIntents.dart';
@@ -67,7 +68,9 @@ void main() async {
     DevicePreview(
       enabled: enableDevicePreview,
       builder: (context) => EasyLocalization(
-        useOnlyLangCode: true,
+        // The custom LocaleLoader only references the LangCode
+        useOnlyLangCode: false,
+        assetLoader: RootBundleAssetLoaderCustomLocaleLoader(),
         supportedLocales: supportedLocales.values.toList(),
         path: 'assets/translations/generated',
         fallbackLocale: supportedLocales.values.toList().first,
@@ -124,6 +127,11 @@ class App extends StatelessWidget {
       supportedLocales: context.supportedLocales,
       locale:
           enableDevicePreview ? DevicePreview.locale(context) : context.locale,
+      // localeListResolutionCallback: (systemLocales, supportedLocales) {
+      //   print("LOCALE:" + context.locale.toString());
+      //   print("LOCALE:" + Platform.localeName);
+      //   return null;
+      // },
       shortcuts: shortcuts,
       actions: keyboardIntents,
       themeAnimationDuration: Duration(milliseconds: 300),

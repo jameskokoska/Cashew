@@ -263,6 +263,7 @@ String languageDisplayFilter(String languageKey) {
 }
 
 void openLanguagePicker(BuildContext context) {
+  print(appStateSettings["locale"]);
   openBottomSheet(
     context,
     PopupFramework(

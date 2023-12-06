@@ -25,6 +25,31 @@ import 'listItem.dart';
 
 String getChangelogString() {
   return """
+    < 5.0.1
+    Fixed comma separator amounts not following number format
+    Fixed selecting category on budget page properly displays spending graph for that category
+    Colorful background for selected subcategory chips
+    Installments supports subcategories
+    Prevent add of installment transaction if missing period or amount
+    Fixed goal progress out of bounds in tag
+    All spending graph tooltip shows year if not the current year
+    All spending history graph tooltip shows year if not the current year
+    All spending graph zooms to show proper range when using cumulative spending
+    Fixed gradient for all spending history graph
+    Based on when you hit the (+) only certain types of transactions are selectable
+    Heatmap first day follows locale
+    Tap the arrow to withdraw (or select in the opposite way)
+    Long pressing tabs in add transaction allows you to edit if transfer tab is shown
+    Removed withdraw amount when transferring balance
+    Removed pin from goals list (as it only applies to the homepage)
+    Rearranged pages on More page
+    Renamed all spending page shortcut on More page
+    Added extra padding around extra popup button to increase visibility
+    When language uses fallback font, the font is changed
+    Improved snackbar title when new repetitive transaction created in the future
+    Fixed creating installment would calculate to infinite amount if set to 0
+    Fixed locale for Traditional Chinese language support
+    Fixed exporting CSV template would give error if file already existed
     < 5.0.0
     If only one day selected in time range for all spending, line chart hidden
     Fixed time range for one day selected in all spending page

@@ -1,7 +1,16 @@
+import 'dart:io';
+
 import 'package:budget/colors.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+
+// Don't use Inter or the offset
+Set<String> fallbackFontLocales = {
+  "zh",
+  "zh_Hant",
+  "ja",
+};
 
 class TextFont extends StatelessWidget {
   final String text;
@@ -57,7 +66,10 @@ class TextFont extends StatelessWidget {
     final TextStyle textStyle = TextStyle(
       fontWeight: this.fontWeight,
       fontSize: this.fontSize,
-      fontFamily: appStateSettings["font"],
+      fontFamily: fallbackFontLocales.contains(appStateSettings["locale"]) &&
+              appStateSettings["font"] == "Avenir"
+          ? "DMSans"
+          : appStateSettings["font"],
       fontFamilyFallback: ['Inter'],
       color: finalTextColor,
       decoration: TextDecoration.underline,
@@ -79,8 +91,15 @@ class TextFont extends StatelessWidget {
         duration: Duration(milliseconds: 200),
         style: textStyle,
         child: Transform.translate(
-          offset: Offset(0,
-              this.fontSize * (appStateSettings["font"] == "Avenir" ? 0.1 : 0)),
+          offset: Offset(
+            0,
+            this.fontSize *
+                (fallbackFontLocales.contains(appStateSettings["locale"]) ==
+                            true ||
+                        appStateSettings["font"] != "Avenir"
+                    ? 0
+                    : 0.1),
+          ),
           child: selectableText == true
               ? SelectableText(
                   textPassed,

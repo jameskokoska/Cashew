@@ -100,11 +100,14 @@ createNewSubscriptionTransaction(
         createdAnotherFutureTransaction: Value(false),
       );
       await database.createOrUpdateTransaction(insert: true, newTransaction);
-
+      String transactionName = await getTransactionLabel(transaction);
       openSnackbar(
         SnackbarMessage(
-          title: "created-new-transaction".tr(),
-          description: getWordedDateShort(newDate),
+          title: (transaction.income ? "deposited".tr() : "paid".tr()) +
+              ": " +
+              transactionName,
+          description:
+              "created-new-for".tr() + " " + getWordedDateShort(newDate),
           icon: appStateSettings["outlinedIcons"]
               ? Icons.event_repeat_outlined
               : Icons.event_repeat_rounded,
@@ -257,9 +260,9 @@ Future openPayDebtCreditPopup(
       Navigator.pop(context, false);
     },
     onSubmitLabel: transaction.type == TransactionSpecialType.credit
-        ? "collect".tr()
+        ? "collect-all".tr()
         : transaction.type == TransactionSpecialType.debt
-            ? "settle".tr()
+            ? "settle-all".tr()
             : "",
     onSubmit: () async {
       if (runBefore != null) await runBefore();
@@ -269,6 +272,103 @@ Future openPayDebtCreditPopup(
       );
       Navigator.pop(context, true);
       await database.createOrUpdateTransaction(transactionNew);
+    },
+    onExtraLabel2: transaction.type == TransactionSpecialType.credit
+        ? "partially-collect".tr()
+        : transaction.type == TransactionSpecialType.debt
+            ? "partially-settle".tr()
+            : "",
+    onExtra2: () async {
+      double selectedAmount = 0;
+      String selectedWalletFk = transaction.walletFk;
+
+      await openBottomSheet(
+        context,
+        fullSnap: true,
+        PopupFramework(
+          title: transaction.type == TransactionSpecialType.credit
+              ? "amount-collected".tr()
+              : transaction.type == TransactionSpecialType.debt
+                  ? "amount-settled".tr()
+                  : "",
+          hasPadding: false,
+          underTitleSpace: false,
+          child: SelectAmount(
+            padding: EdgeInsets.symmetric(horizontal: 18),
+            onlyShowCurrencyIcon: true,
+            selectedWalletPk: selectedWalletFk,
+            walletPkForCurrency: selectedWalletFk,
+            setSelectedWalletPk: (walletFk) {
+              selectedWalletFk = walletFk;
+            },
+            allowZero: true,
+            allDecimals: true,
+            convertToMoney: true,
+            setSelectedAmount: (amount, __) {
+              selectedAmount = amount;
+            },
+            next: () {
+              Navigator.pop(context);
+            },
+            nextLabel: "set-amount".tr(),
+            currencyKey: null,
+            enableWalletPicker: true,
+          ),
+        ),
+      );
+      if (selectedAmount == 0) {
+        return;
+      }
+      Navigator.pop(context, true);
+
+      TransactionCategory category =
+          await database.getCategory(transaction.categoryFk).$2;
+      String transactionLabel = getTransactionLabelSync(transaction, category);
+      int numberOfObjectives =
+          (await database.getTotalCountOfObjectives())[0] ?? 0;
+      // Invert the amount, because the objective is of opposite polarity of the current transaction
+      // Borrowed is considered positive
+      // Lent is considered negative
+      int? rowId = await database.createOrUpdateObjective(
+        Objective(
+          amount: transaction.amount.abs(), //always positive
+          income: !transaction.income,
+          objectivePk: "-1",
+          name: transactionLabel,
+          order: numberOfObjectives,
+          dateCreated: transaction.dateCreated,
+          pinned: false,
+          walletFk: transaction.walletFk,
+          iconName: category.iconName,
+          emojiIconName: category.emojiIconName,
+          colour: category.colour,
+        ),
+        insert: true,
+      );
+      // final Objective objectiveJustAdded =
+      //     await database.getObjectiveFromRowId(rowId);
+      // Set up the initial amount
+      // await database.createOrUpdateTransaction(
+      //   transaction.copyWith(
+      //     type: Value(null),
+      //     objectiveFk: Value(objectiveJustAdded.objectivePk),
+      //     amount: transaction.amount,
+      //     name: "initial-record".tr(),
+      //   ),
+      // );
+      // Add the first payment/record
+      // Inverse polarity!
+      // await database.createOrUpdateTransaction(
+      //   transaction.copyWith(
+      //     type: Value(null),
+      //     objectiveFk: Value(objectiveJustAdded.objectivePk),
+      //     income: !transaction.income,
+      //     amount: selectedAmount * (!transaction.income ? 1 : -1),
+      //     dateCreated: DateTime.now(),
+      //     walletFk: selectedWalletFk,
+      //   ),
+      //   insert: true,
+      // );
     },
   );
 }

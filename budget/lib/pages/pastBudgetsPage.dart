@@ -477,15 +477,6 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
                                               amountDark: 0.2,
                                             ),
                                             dateRanges: dateTimeRanges,
-                                            maxY: selectedCategoryFks.length > 0
-                                                ? maxY
-                                                : budgetAmount +
-                                                            0.0000000000001 >
-                                                        maxY
-                                                    ? budgetAmount +
-                                                        0.0000000000001
-                                                    : maxY,
-                                            minY: minY,
                                             spots: [spots],
                                             horizontalLineAt: budgetAmount,
                                             budget: widget.budget,
@@ -499,6 +490,7 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
                                                 (bool value) {
                                               amountLoadedPressedOnce = true;
                                             },
+                                            forceMinYIfPositive: 0,
                                           );
                                           if (getCenteredTitle(
                                               context: context,

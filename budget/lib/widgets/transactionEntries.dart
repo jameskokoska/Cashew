@@ -84,6 +84,7 @@ class TransactionEntries extends StatelessWidget {
     this.enableSpendingSummary = false,
     this.showSpendingSummary = false,
     this.onLongPressSpendingSummary,
+    this.openLoanPage = true,
     super.key,
   });
   final TransactionEntriesRenderType renderType;
@@ -124,12 +125,14 @@ class TransactionEntries extends StatelessWidget {
   final bool enableSpendingSummary;
   final bool showSpendingSummary;
   final VoidCallback? onLongPressSpendingSummary;
+  final bool openLoanPage;
 
   Widget createTransactionEntry(
       List<TransactionWithCategory> transactionListForDay,
       TransactionWithCategory item,
       int index) {
     return TransactionEntry(
+      openLoanPage: openLoanPage,
       transactionBefore:
           nullIfIndexOutOfRange(transactionListForDay, index - 1)?.transaction,
       transactionAfter:

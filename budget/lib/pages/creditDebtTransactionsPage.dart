@@ -56,7 +56,6 @@ class _CreditDebtTransactionsState extends State<CreditDebtTransactions> {
           PageFramework(
             resizeToAvoidBottomInset: true,
             floatingActionButton: AnimateFABDelayed(
-              enabled: isCredit != null,
               fab: FAB(
                 tooltip: isCredit == true ? "add-credit".tr() : "add-debt".tr(),
                 openPage: AddTransactionPage(

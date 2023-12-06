@@ -898,8 +898,12 @@ class _BudgetLineGraphState extends State<BudgetLineGraph> {
               .add(database.getTransactionsInTimeRangeFromCategories(
             budgetRange.start,
             budgetRange.end,
-            widget.budget.categoryFks,
-            widget.budget.categoryFksExclude,
+            widget.selectedCategory != null
+                ? [widget.selectedCategory!.categoryPk]
+                : widget.budget.categoryFks,
+            widget.selectedCategory != null
+                ? []
+                : widget.budget.categoryFksExclude,
             true,
             null,
             widget.budget.budgetTransactionFilters,

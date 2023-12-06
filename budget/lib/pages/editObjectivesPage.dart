@@ -164,15 +164,6 @@ class _EditObjectivesPageState extends State<EditObjectivesPage> {
                   itemBuilder: (context, index) {
                     Objective objective = snapshot.data![index];
                     return EditRowEntry(
-                      extraIcon: objective.pinned
-                          ? Icons.push_pin_rounded
-                          : Icons.push_pin_outlined,
-                      onExtra: () async {
-                        Objective updatedObjective =
-                            objective.copyWith(pinned: !objective.pinned);
-                        await database
-                            .createOrUpdateObjective(updatedObjective);
-                      },
                       canReorder: searchValue == "" &&
                           (snapshot.data ?? []).length != 1,
                       currentReorder:

@@ -57,6 +57,7 @@ class SelectAmount extends StatefulWidget {
     this.convertToMoney = true,
     this.allDecimals = false,
     this.hideWalletPickerIfOneCurrency = false,
+    this.hideNextButton = false,
   }) : super(key: key);
   final Function(double, String) setSelectedAmount;
   final String amountPassed;
@@ -76,6 +77,7 @@ class SelectAmount extends StatefulWidget {
   final bool convertToMoney;
   final bool allDecimals;
   final bool hideWalletPickerIfOneCurrency;
+  final bool hideNextButton;
 
   @override
   _SelectAmountState createState() => _SelectAmountState();
@@ -451,7 +453,9 @@ class _SelectAmountState extends State<SelectAmount> {
     String amountConverted = amount;
     if (amountConverted == "") amountConverted = "0";
     amountConverted = widget.convertToMoney == false
-        ? calculateResult(amountConverted).toString()
+        ? calculateResult(amountConverted)
+            .toString()
+            .replaceAll(".", getDecimalSeparator())
         : convertToMoney(
             Provider.of<AllWallets>(context),
             calculateResult(amountConverted),
@@ -1006,42 +1010,43 @@ class _SelectAmountState extends State<SelectAmount> {
                 ),
               ),
               SizedBox(height: 15),
-              Padding(
-                padding: widget.padding,
-                child: AnimatedSwitcher(
-                  duration: Duration(milliseconds: 500),
-                  child: widget.allowZero || (amount != "" && amount != "0")
-                      ? Button(
-                          key: Key("addSuccess"),
-                          label: widget.nextLabel ?? "",
-                          width: MediaQuery.sizeOf(context).width,
-                          onTap: () {
-                            if (widget.allowZero && amount == "") {
-                              widget.setSelectedAmount(0, "");
-                            }
-                            if (widget.next != null) {
-                              widget.next!();
-                            }
-                            if (widget.popWithAmount) {
-                              Navigator.pop(
-                                  context,
-                                  (amount == ""
-                                      ? 0
-                                      : includesOperations(amount, false)
-                                          ? calculateResult(amount)
-                                          : double.tryParse(amount) ?? 0));
-                            }
-                          },
-                        )
-                      : Button(
-                          key: Key("addNoSuccess"),
-                          label: widget.nextLabel ?? "",
-                          width: MediaQuery.sizeOf(context).width,
-                          onTap: () {},
-                          color: Colors.grey,
-                        ),
-                ),
-              )
+              if (widget.hideNextButton == false)
+                Padding(
+                  padding: widget.padding,
+                  child: AnimatedSwitcher(
+                    duration: Duration(milliseconds: 500),
+                    child: widget.allowZero || (amount != "" && amount != "0")
+                        ? Button(
+                            key: Key("addSuccess"),
+                            label: widget.nextLabel ?? "",
+                            width: MediaQuery.sizeOf(context).width,
+                            onTap: () {
+                              if (widget.allowZero && amount == "") {
+                                widget.setSelectedAmount(0, "");
+                              }
+                              if (widget.next != null) {
+                                widget.next!();
+                              }
+                              if (widget.popWithAmount) {
+                                Navigator.pop(
+                                    context,
+                                    (amount == ""
+                                        ? 0
+                                        : includesOperations(amount, false)
+                                            ? calculateResult(amount)
+                                            : double.tryParse(amount) ?? 0));
+                              }
+                            },
+                          )
+                        : Button(
+                            key: Key("addNoSuccess"),
+                            label: widget.nextLabel ?? "",
+                            width: MediaQuery.sizeOf(context).width,
+                            onTap: () {},
+                            color: Colors.grey,
+                          ),
+                  ),
+                )
             ],
           ),
         ),

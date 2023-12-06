@@ -27,6 +27,7 @@ class Button extends StatefulWidget {
     this.expandedLayout = false,
     this.flexibleLayout = false,
     this.disabled = false,
+    this.onDisabled,
   }) : super(key: key);
   final String label;
   final double? width;
@@ -45,6 +46,7 @@ class Button extends StatefulWidget {
   final bool expandedLayout;
   final bool flexibleLayout;
   final bool disabled;
+  final VoidCallback? onDisabled;
 
   @override
   _ButtonState createState() => _ButtonState();
@@ -116,6 +118,8 @@ class _ButtonState extends State<Button> with TickerProviderStateMixin {
           onTap: () {
             _shrink();
             if (widget.disabled == false) widget.onTap();
+            if (widget.disabled == true && widget.onDisabled != null)
+              widget.onDisabled!();
           },
           borderRadius:
               getPlatform() == PlatformOS.isIOS && widget.borderRadius == null

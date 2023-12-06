@@ -770,8 +770,10 @@ Future saveSampleCSV({required BuildContext boxContext}) async {
       "",
     ]);
     String csv = ListToCsvConverter().convert(csvData);
-    return saveCSV(
-        boxContext: boxContext, csv: csv, fileName: "Cashew-csv-template.csv");
+    String fileName = "cashew-import-template" +
+        DateTime.now().millisecondsSinceEpoch.toString() +
+        ".csv";
+    return saveCSV(boxContext: boxContext, csv: csv, fileName: fileName);
   });
   return;
 }

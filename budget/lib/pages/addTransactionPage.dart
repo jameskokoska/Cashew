@@ -451,10 +451,8 @@ class _AddTransactionPageState extends State<AddTransactionPage>
         // Do the flash animation only if the date was changed
         if (transactionJustAdded.dateCreated !=
             widget.transaction?.dateCreated) {
-          recentlyAddedTransactionInfo.value.shouldAnimate = true;
-          recentlyAddedTransactionInfo.value.transactionPk =
-              transactionJustAdded.transactionPk;
-          recentlyAddedTransactionInfo.value.loopCount = 5;
+          flashTransaction(transactionJustAdded.transactionPk);
+
           // If a new transaction with an added date of 5 minutes of less before, flash only a bit
           if (widget.transaction == null &&
               transactionJustAdded.dateCreated.isAfter(
@@ -462,9 +460,10 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                   Duration(minutes: 5),
                 ),
               )) {
-            recentlyAddedTransactionInfo.value.loopCount = 2;
+            flashTransaction(transactionJustAdded.transactionPk, flashCount: 2);
+          } else {
+            flashTransaction(transactionJustAdded.transactionPk);
           }
-          recentlyAddedTransactionInfo.notifyListeners();
         }
       }
 
@@ -960,17 +959,20 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                   );
                                 },
                                 selectedTransactionType: selectedType,
+                                transactionTypesToShow:
+                                    getTransactionSpecialTypesToShowGivenInitialTypeWhenAddingTransaction(
+                                  widget.selectedType,
+                                  false,
+                                ),
                               ),
                             ),
                           );
                         },
                       ),
                     ),
-                    items: <dynamic>[
-                      null,
-                      ...TransactionSpecialType.values,
-                      "installments",
-                    ],
+                    items:
+                        getTransactionSpecialTypesToShowGivenInitialTypeWhenAddingTransaction(
+                            widget.selectedType, false),
                     getLabel: (item) {
                       if (item is TransactionSpecialType || item == null) {
                         return transactionTypeDisplayToEnum[item]
@@ -1378,6 +1380,9 @@ class _AddTransactionPageState extends State<AddTransactionPage>
       ),
     );
 
+    bool enableBalanceTransferTab = widget.transaction == null &&
+        Provider.of<AllWallets>(context).indexedByPk.keys.length > 1;
+
     Widget transactionAmountAndCategoryHeader = AnimatedContainer(
       curve: Curves.easeInOut,
       duration: Duration(milliseconds: 300),
@@ -1386,8 +1391,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
         children: [
           GestureDetector(
             onLongPress: () async {
-              if (Provider.of<AllWallets>(context).indexedByPk.keys.length <=
-                  1) {
+              if (enableBalanceTransferTab) {
                 await openBottomSheet(
                   context,
                   PopupFramework(
@@ -1401,14 +1405,9 @@ class _AddTransactionPageState extends State<AddTransactionPage>
             child: AnimatedExpanded(
               expand: !(selectedType == TransactionSpecialType.credit ||
                   selectedType == TransactionSpecialType.debt),
-              child: widget.transaction == null &&
-                      appStateSettings["showTransactionsBalanceTransferTab"] ==
+              child: appStateSettings["showTransactionsBalanceTransferTab"] ==
                           true &&
-                      Provider.of<AllWallets>(context, listen: false)
-                              .indexedByPk
-                              .keys
-                              .length >
-                          1
+                      enableBalanceTransferTab
                   ? IncomeExpenseTransferTabSelector(
                       onTabChanged: (int index) async {
                         if (index == 0) {
@@ -1458,6 +1457,12 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                       color: categoryColor,
                       unselectedColor: Colors.black.withOpacity(0.2),
                       unselectedLabelColor: Colors.white.withOpacity(0.3),
+                      incomeLabel: selectedCategory?.categoryPk == "0"
+                          ? "transfer-in".tr()
+                          : null,
+                      expenseLabel: selectedCategory?.categoryPk == "0"
+                          ? "transfer-out".tr()
+                          : null,
                     ),
             ),
           ),
@@ -1656,92 +1661,14 @@ class _AddTransactionPageState extends State<AddTransactionPage>
             ],
           ),
           if (selectedCategory != null)
-            StreamBuilder<List<TransactionCategory>>(
-              stream: database.watchAllSubCategoriesOfMainCategory(
-                  selectedCategory!.categoryPk),
-              builder: (context, snapshot) {
-                List<TransactionCategory> subCategories = snapshot.data ?? [];
-                return AnimatedSizeSwitcher(
-                  child: (subCategories.length <= 0)
-                      ? Container()
-                      : Column(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(bottom: 6),
-                              child: SelectChips(
-                                allowMultipleSelected: false,
-                                selectedColor: Theme.of(context)
-                                    .canvasColor
-                                    .withOpacity(0.6),
-                                onLongPress: (category) {
-                                  pushRoute(
-                                    context,
-                                    AddCategoryPage(
-                                      category: category,
-                                      routesToPopAfterDelete:
-                                          RoutesToPopAfterDelete.One,
-                                    ),
-                                  );
-                                },
-                                items: subCategories,
-                                getSelected: (TransactionCategory category) {
-                                  return selectedSubCategory?.categoryPk ==
-                                      category.categoryPk;
-                                },
-                                onSelected: (TransactionCategory category) {
-                                  setSelectedSubCategory(category,
-                                      toggle: true);
-                                },
-                                getCustomBorderColor:
-                                    (TransactionCategory category) {
-                                  return dynamicPastel(
-                                    context,
-                                    lightenPastel(
-                                      HexColor(
-                                        category.colour,
-                                        defaultColor: Theme.of(context)
-                                            .colorScheme
-                                            .primary,
-                                      ),
-                                      amount: 0.3,
-                                    ),
-                                    amount: 0.4,
-                                  );
-                                },
-                                getLabel: (TransactionCategory category) {
-                                  return category.name;
-                                },
-                                extraWidget: SelectChipsAddButtonExtraWidget(
-                                  openPage: AddCategoryPage(
-                                    routesToPopAfterDelete:
-                                        RoutesToPopAfterDelete.One,
-                                    mainCategoryPkWhenSubCategory:
-                                        selectedCategory?.categoryPk,
-                                  ),
-                                ),
-                                getAvatar: (TransactionCategory category) {
-                                  return LayoutBuilder(
-                                      builder: (context, constraints) {
-                                    return CategoryIcon(
-                                      categoryPk: "-1",
-                                      category: category,
-                                      emojiSize: constraints.maxWidth * 0.73,
-                                      emojiScale: 1.2,
-                                      size: constraints.maxWidth,
-                                      sizePadding: 0,
-                                      noBackground: true,
-                                      canEditByLongPress: false,
-                                      margin: EdgeInsets.zero,
-                                    );
-                                  });
-                                },
-                              ),
-                            ),
-                          ],
-                        ),
-                );
+            SelectSubcategoryChips(
+              setSelectedSubCategory: (category) {
+                setSelectedSubCategory(category, toggle: true);
               },
-            ),
+              selectedCategoryPk: selectedCategory!.categoryPk,
+              selectedSubCategoryPk: selectedSubCategory?.categoryPk,
+              padding: const EdgeInsets.only(bottom: 6),
+            )
         ],
       ),
     );
@@ -3231,11 +3158,13 @@ class SelectTransactionTypePopup extends StatelessWidget {
     required this.setTransactionType,
     this.selectedTransactionType,
     this.onlyShowOneTransactionType,
+    this.transactionTypesToShow,
     super.key,
   });
   final Function(TransactionSpecialType? transactionType) setTransactionType;
   final TransactionSpecialType? selectedTransactionType;
   final TransactionSpecialType? onlyShowOneTransactionType;
+  final List<dynamic>? transactionTypesToShow;
 
   @override
   Widget build(BuildContext context) {
@@ -3245,6 +3174,7 @@ class SelectTransactionTypePopup extends StatelessWidget {
           TransactionTypeInfoEntry(
             selectedTransactionType: selectedTransactionType,
             setTransactionType: setTransactionType,
+            transactionTypesToShow: transactionTypesToShow,
             transactionType: null,
             title: "default".tr(),
             onTap: () {
@@ -3258,6 +3188,7 @@ class SelectTransactionTypePopup extends StatelessWidget {
         TransactionTypeInfoEntry(
           selectedTransactionType: selectedTransactionType,
           setTransactionType: setTransactionType,
+          transactionTypesToShow: transactionTypesToShow,
           transactionType: TransactionSpecialType.upcoming,
           title: "upcoming".tr(),
           childrenDescription: [
@@ -3273,6 +3204,7 @@ class SelectTransactionTypePopup extends StatelessWidget {
         TransactionTypeInfoEntry(
           selectedTransactionType: selectedTransactionType,
           setTransactionType: setTransactionType,
+          transactionTypesToShow: transactionTypesToShow,
           transactionType: TransactionSpecialType.subscription,
           title: "subscription".tr(),
           childrenDescription: [
@@ -3288,6 +3220,7 @@ class SelectTransactionTypePopup extends StatelessWidget {
         TransactionTypeInfoEntry(
           selectedTransactionType: selectedTransactionType,
           setTransactionType: setTransactionType,
+          transactionTypesToShow: transactionTypesToShow,
           transactionType: TransactionSpecialType.repetitive,
           title: "repetitive".tr(),
           childrenDescription: [
@@ -3303,6 +3236,7 @@ class SelectTransactionTypePopup extends StatelessWidget {
         TransactionTypeInfoEntry(
           selectedTransactionType: selectedTransactionType,
           setTransactionType: setTransactionType,
+          transactionTypesToShow: transactionTypesToShow,
           transactionType: TransactionSpecialType.credit,
           title: "lent".tr(),
           childrenDescription: [
@@ -3321,6 +3255,7 @@ class SelectTransactionTypePopup extends StatelessWidget {
         TransactionTypeInfoEntry(
           selectedTransactionType: selectedTransactionType,
           setTransactionType: setTransactionType,
+          transactionTypesToShow: transactionTypesToShow,
           transactionType: TransactionSpecialType.debt,
           title: "borrowed".tr(),
           childrenDescription: [
@@ -3429,6 +3364,7 @@ class TransactionTypeInfoEntry extends StatelessWidget {
   final TransactionSpecialType? transactionType;
   final TransactionSpecialType? onlyShowOneTransactionType;
   final VoidCallback? onTap;
+  final List<dynamic>? transactionTypesToShow;
 
   TransactionTypeInfoEntry({
     Key? key,
@@ -3440,10 +3376,13 @@ class TransactionTypeInfoEntry extends StatelessWidget {
     required this.transactionType,
     this.onlyShowOneTransactionType,
     this.onTap,
+    this.transactionTypesToShow,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    if (transactionTypesToShow?.contains(transactionType) == false)
+      return SizedBox.shrink();
     if (onlyShowOneTransactionType == null ||
         onlyShowOneTransactionType == transactionType) {
       return Padding(
@@ -3507,6 +3446,7 @@ Future<MainAndSubcategory> selectCategorySequence(
   Function(bool?)? setSelectedIncome,
   required bool?
       selectedIncomeInitial, // if this is null, always show all categories
+  String? subtitle,
 }) async {
   MainAndSubcategory mainAndSubcategory = MainAndSubcategory();
   dynamic result = await openBottomSheet(
@@ -3531,6 +3471,7 @@ Future<MainAndSubcategory> selectCategorySequence(
         context,
         PopupFramework(
           title: "select-subcategory".tr(),
+          subtitle: subtitle,
           child: SelectCategory(
             skipIfSet: skipIfSet,
             selectedCategory: selectedSubCategory,
@@ -4181,4 +4122,148 @@ void setSelectedPeriodLength({
     setPeriodLength(selectedPeriodLength, selectedRecurrenceDisplay);
   }
   return;
+}
+
+class SelectSubcategoryChips extends StatelessWidget {
+  const SelectSubcategoryChips(
+      {required this.selectedCategoryPk,
+      required this.selectedSubCategoryPk,
+      required this.setSelectedSubCategory,
+      this.padding = EdgeInsets.zero,
+      super.key});
+  final String selectedCategoryPk;
+  final String? selectedSubCategoryPk;
+  final Function(TransactionCategory category) setSelectedSubCategory;
+  final EdgeInsets padding;
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<List<TransactionCategory>>(
+      stream: database.watchAllSubCategoriesOfMainCategory(selectedCategoryPk),
+      builder: (context, snapshot) {
+        List<TransactionCategory> subCategories = snapshot.data ?? [];
+        return AnimatedSizeSwitcher(
+          child: (subCategories.length <= 0)
+              ? Container()
+              : Column(
+                  children: [
+                    Padding(
+                      padding: padding,
+                      child: SelectChips(
+                        allowMultipleSelected: false,
+                        selectedColor:
+                            Theme.of(context).canvasColor.withOpacity(0.6),
+                        onLongPress: (category) {
+                          pushRoute(
+                            context,
+                            AddCategoryPage(
+                              category: category,
+                              routesToPopAfterDelete:
+                                  RoutesToPopAfterDelete.One,
+                            ),
+                          );
+                        },
+                        items: subCategories,
+                        getSelected: (TransactionCategory category) {
+                          return selectedSubCategoryPk == category.categoryPk;
+                        },
+                        onSelected: (TransactionCategory category) {
+                          setSelectedSubCategory(category);
+                        },
+                        getCustomSelectedColor: (TransactionCategory category) {
+                          return dynamicPastel(
+                            context,
+                            lightenPastel(
+                              HexColor(
+                                category.colour,
+                                defaultColor:
+                                    Theme.of(context).colorScheme.primary,
+                              ),
+                              amount: 0.3,
+                            ),
+                            amount: 0.5,
+                          ).withOpacity(0.7);
+                        },
+                        getCustomBorderColor: (TransactionCategory category) {
+                          return dynamicPastel(
+                            context,
+                            lightenPastel(
+                              HexColor(
+                                category.colour,
+                                defaultColor:
+                                    Theme.of(context).colorScheme.primary,
+                              ),
+                              amount: 0.3,
+                            ),
+                            amount: 0.4,
+                          );
+                        },
+                        getLabel: (TransactionCategory category) {
+                          return category.name;
+                        },
+                        extraWidget: SelectChipsAddButtonExtraWidget(
+                          openPage: AddCategoryPage(
+                            routesToPopAfterDelete: RoutesToPopAfterDelete.One,
+                            mainCategoryPkWhenSubCategory: selectedCategoryPk,
+                          ),
+                        ),
+                        getAvatar: (TransactionCategory category) {
+                          return LayoutBuilder(builder: (context, constraints) {
+                            return CategoryIcon(
+                              categoryPk: "-1",
+                              category: category,
+                              emojiSize: constraints.maxWidth * 0.73,
+                              emojiScale: 1.2,
+                              size: constraints.maxWidth,
+                              sizePadding: 0,
+                              noBackground: true,
+                              canEditByLongPress: false,
+                              margin: EdgeInsets.zero,
+                            );
+                          });
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+        );
+      },
+    );
+  }
+}
+
+List<dynamic>
+    getTransactionSpecialTypesToShowGivenInitialTypeWhenAddingTransaction(
+        TransactionSpecialType? transactionType, bool isAddedToLoanObjective) {
+  List<dynamic> defaultList = [
+    null,
+    ...TransactionSpecialType.values,
+    "installments"
+  ];
+  if (isAddedToLoanObjective)
+    return [
+      null,
+      TransactionSpecialType.upcoming,
+      TransactionSpecialType.repetitive,
+      TransactionSpecialType.subscription,
+    ];
+  else if (transactionType == null)
+    return defaultList;
+  else if ([TransactionSpecialType.credit, TransactionSpecialType.debt]
+      .contains(transactionType))
+    return [TransactionSpecialType.credit, TransactionSpecialType.debt];
+  else if ([
+    TransactionSpecialType.subscription,
+  ].contains(transactionType))
+    return [TransactionSpecialType.subscription];
+  else if ([
+    TransactionSpecialType.upcoming,
+    TransactionSpecialType.repetitive,
+    TransactionSpecialType.subscription,
+  ].contains(transactionType))
+    return [
+      TransactionSpecialType.upcoming,
+      TransactionSpecialType.repetitive,
+      TransactionSpecialType.subscription
+    ];
+  return defaultList;
 }

@@ -231,14 +231,22 @@ Future<T?> openPopup<T extends Object?>(
                       ),
                     ),
                     if (onExtraLabel2 != null)
-                      Button(
-                        borderRadius: borderRadius,
-                        expandedLayout: true,
-                        color: Theme.of(context).colorScheme.tertiaryContainer,
-                        textColor:
-                            Theme.of(context).colorScheme.onTertiaryContainer,
-                        label: onExtraLabel2,
-                        onTap: onExtra2 ?? () {},
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          left: 10,
+                          right: 10,
+                          bottom: 12,
+                        ),
+                        child: Button(
+                          borderRadius: borderRadius,
+                          expandedLayout: true,
+                          color:
+                              Theme.of(context).colorScheme.tertiaryContainer,
+                          textColor:
+                              Theme.of(context).colorScheme.onTertiaryContainer,
+                          label: onExtraLabel2,
+                          onTap: onExtra2 ?? () {},
+                        ),
                       ),
                     // SizedBox(height: 16),
                   ],

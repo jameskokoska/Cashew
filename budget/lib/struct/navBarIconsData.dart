@@ -87,6 +87,7 @@ Map<String, NavBarIconData> getNavBarIconsData() {
           ? Icons.receipt_long_outlined
           : Icons.receipt_long_rounded,
       label: "all-spending",
+      labelLong: "all-spending-summary",
       navigationIndexedStackIndex: 7,
     ),
     "settings": NavBarIconData(

@@ -372,15 +372,17 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
               }
               DateTime currentDate =
                   widget.endDate == null ? DateTime.now() : widget.endDate!;
+              DateTime tooltipDate = DateTime(
+                currentDate.year,
+                currentDate.month,
+                currentDate.day -
+                    widget.maxPair.x.toInt() +
+                    lineBarSpot.x.toInt(),
+              );
               return LineTooltipItem(
                 getWordedDateShort(
-                      DateTime(
-                        currentDate.year,
-                        currentDate.month,
-                        currentDate.day -
-                            widget.maxPair.x.toInt() +
-                            lineBarSpot.x.toInt(),
-                      ),
+                      tooltipDate,
+                      includeYear: DateTime.now().year != tooltipDate.year,
                     ) +
                     "\n" +
                     convertToMoney(

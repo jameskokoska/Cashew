@@ -199,7 +199,10 @@ class HeatMap extends StatelessWidget {
     final int lastDayGridLocation =
         7 - (totalWeeksBeforeFixed * 7 - totalDaysBeforeFixed);
     // Subtract one here so the first day of the week is sunday
-    int extraDaysOffsetAtStart = (lastDayGridLocation - lastDateWeekday) - 1;
+    int extraDaysOffsetAtStart = (lastDayGridLocation - lastDateWeekday) -
+        1 +
+        // Follow the locale (1 is Monday, 0 if for Sunday)
+        MaterialLocalizations.of(context).firstDayOfWeekIndex;
     if (extraDaysOffsetAtStart > 0) {
       extraDaysOffsetAtStart = 7 - extraDaysOffsetAtStart.abs();
     } else {

@@ -81,174 +81,194 @@ class ObjectivesListPage extends StatelessWidget {
           ),
       ],
       slivers: [
-        StreamBuilder<List<Objective>>(
-          stream: database.watchAllObjectives(),
-          builder: (context, snapshot) {
-            bool showDemoObjectives = false;
-            List<Objective> objectivesList = [...(snapshot.data ?? [])];
-            if (snapshot.hasData == false ||
-                (objectivesList.length <= 0 && snapshot.hasData)) {
-              showDemoObjectives = true;
-              objectivesList.add(
-                Objective(
-                  objectivePk: "-3",
-                  name: "example-goals-1".tr(),
-                  amount: 1500,
-                  order: 0,
-                  dateCreated: DateTime.now().subtract(Duration(days: 40)),
-                  income: false,
-                  pinned: false,
-                  iconName: "coconut-tree.png",
-                  colour: toHexString(Colors.greenAccent),
-                  walletFk: "0",
-                ),
-              );
-              objectivesList.add(
-                Objective(
-                  objectivePk: "-2",
-                  name: "example-goals-2".tr(),
-                  amount: 2000,
-                  order: 0,
-                  dateCreated: DateTime.now().subtract(Duration(days: 10)),
-                  income: false,
-                  pinned: false,
-                  iconName: "car(1).png",
-                  colour: toHexString(Colors.orangeAccent),
-                  walletFk: "0",
-                ),
-              );
-            }
-            Widget addButton = Column(
-              children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: Padding(
-                        padding: EdgeInsets.only(
-                          top: getPlatform() == PlatformOS.isIOS ? 10 : 0,
-                          bottom: 20,
-                        ),
+        ObjectiveList(showExamplesIfEmpty: true),
+        SliverToBoxAdapter(
+          child: SizedBox(height: 50),
+        ),
+      ],
+    );
+  }
+}
+
+class ObjectiveList extends StatelessWidget {
+  const ObjectiveList({
+    required this.showExamplesIfEmpty,
+    this.showAddButton = true,
+    this.searchFor,
+    this.isIncome,
+    super.key,
+  });
+  final bool showExamplesIfEmpty;
+  final bool showAddButton;
+  final String? searchFor;
+  final bool? isIncome;
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<List<Objective>>(
+      stream: database.watchAllObjectives(searchFor: searchFor),
+      builder: (context, snapshot) {
+        bool showDemoObjectives = false;
+        List<Objective> objectivesList = [...(snapshot.data ?? [])];
+        if (showExamplesIfEmpty &&
+            (snapshot.hasData == false ||
+                (objectivesList.length <= 0 && snapshot.hasData))) {
+          showDemoObjectives = true;
+          objectivesList.add(
+            Objective(
+              objectivePk: "-3",
+              name: "example-goals-1".tr(),
+              amount: 1500,
+              order: 0,
+              dateCreated: DateTime.now().subtract(Duration(days: 40)),
+              income: false,
+              pinned: false,
+              iconName: "coconut-tree.png",
+              colour: toHexString(Colors.greenAccent),
+              walletFk: "0",
+            ),
+          );
+          objectivesList.add(
+            Objective(
+              objectivePk: "-2",
+              name: "example-goals-2".tr(),
+              amount: 2000,
+              order: 0,
+              dateCreated: DateTime.now().subtract(Duration(days: 10)),
+              income: false,
+              pinned: false,
+              iconName: "car(1).png",
+              colour: toHexString(Colors.orangeAccent),
+              walletFk: "0",
+            ),
+          );
+        }
+        Widget addButton = showAddButton == false
+            ? SizedBox.shrink()
+            : Column(
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
                         child: Padding(
-                          padding: EdgeInsets.symmetric(
-                            horizontal:
-                                getPlatform() == PlatformOS.isIOS ? 13 : 0,
+                          padding: EdgeInsets.only(
+                            top: getPlatform() == PlatformOS.isIOS ? 10 : 0,
+                            bottom: 20,
                           ),
-                          child: AddButton(
-                            onTap: () {},
-                            openPage: AddObjectivePage(
-                              routesToPopAfterDelete:
-                                  RoutesToPopAfterDelete.PreventDelete,
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal:
+                                  getPlatform() == PlatformOS.isIOS ? 13 : 0,
                             ),
-                            height: 150,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                if (showDemoObjectives)
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 8.0),
-                    child: TextFont(
-                      text: "example-goals".tr(),
-                      textColor: getColor(context, "black").withOpacity(0.25),
-                      fontSize: 16,
-                      textAlign: TextAlign.center,
-                    ),
-                  )
-              ],
-            );
-            return SliverPadding(
-              padding: EdgeInsets.symmetric(
-                vertical: getPlatform() == PlatformOS.isIOS ? 3 : 7,
-                horizontal: getPlatform() == PlatformOS.isIOS ? 0 : 13,
-              ),
-              sliver: enableDoubleColumn(context)
-                  ? SliverGrid(
-                      gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                        maxCrossAxisExtent: 500.0,
-                        mainAxisExtent: 160,
-                        mainAxisSpacing:
-                            getPlatform() == PlatformOS.isIOS ? 0 : 15.0,
-                        crossAxisSpacing:
-                            getPlatform() == PlatformOS.isIOS ? 0 : 15.0,
-                        childAspectRatio: 5,
-                      ),
-                      delegate: SliverChildBuilderDelegate(
-                        (BuildContext context, int index) {
-                          if ((showDemoObjectives && index == 0) ||
-                              (showDemoObjectives == false &&
-                                  index == objectivesList.length)) {
-                            return AddButton(
+                            child: AddButton(
                               onTap: () {},
                               openPage: AddObjectivePage(
                                 routesToPopAfterDelete:
                                     RoutesToPopAfterDelete.PreventDelete,
                               ),
-                            );
-                          } else {
-                            Objective objective = objectivesList[
-                                index - (showDemoObjectives ? 1 : 0)];
-                            return ObjectiveContainer(
-                              index: index,
-                              objective: objective,
-                              forcedTotalAmount: showDemoObjectives
-                                  ? (objective.income
-                                          ? randomInt[index].toDouble()
-                                          : randomInt[index].toDouble() * -1) *
-                                      15
-                                  : null,
-                              forcedNumberTransactions:
-                                  showDemoObjectives ? randomInt[index] : null,
-                            );
-                          }
-                        },
-                        childCount: (objectivesList.length) + 1,
+                              height: 150,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  if (showDemoObjectives)
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 8.0),
+                      child: TextFont(
+                        text: "example-goals".tr(),
+                        textColor: getColor(context, "black").withOpacity(0.25),
+                        fontSize: 16,
+                        textAlign: TextAlign.center,
                       ),
                     )
-                  : SliverList(
-                      delegate: SliverChildBuilderDelegate(
-                        (BuildContext context, int index) {
-                          if ((showDemoObjectives && index == 0) ||
-                              (showDemoObjectives == false &&
-                                  index == objectivesList.length)) {
-                            return addButton;
-                          } else {
-                            Objective objective = objectivesList[
-                                index - (showDemoObjectives ? 1 : 0)];
-                            return Padding(
-                              padding: EdgeInsets.only(
-                                bottom: getPlatform() == PlatformOS.isIOS
-                                    ? 0
-                                    : 16.0,
-                              ),
-                              child: ObjectiveContainer(
-                                index: index,
-                                objective: objective,
-                                forcedTotalAmount: showDemoObjectives
-                                    ? (objective.income
-                                            ? randomInt[index].toDouble()
-                                            : randomInt[index].toDouble() *
-                                                -1) *
-                                        15
-                                    : null,
-                                forcedNumberTransactions: showDemoObjectives
-                                    ? randomInt[index]
-                                    : null,
-                              ),
-                            );
-                          }
-                        },
-                        childCount: (objectivesList.length) + 1,
-                      ),
-                    ),
-            );
-          },
-        ),
-        SliverToBoxAdapter(
-          child: SizedBox(height: 50),
-        ),
-      ],
+                ],
+              );
+        return SliverPadding(
+          padding: EdgeInsets.symmetric(
+            vertical: getPlatform() == PlatformOS.isIOS ? 3 : 7,
+            horizontal: getPlatform() == PlatformOS.isIOS ? 0 : 13,
+          ),
+          sliver: enableDoubleColumn(context)
+              ? SliverGrid(
+                  gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                    maxCrossAxisExtent: 500.0,
+                    mainAxisExtent: 160,
+                    mainAxisSpacing:
+                        getPlatform() == PlatformOS.isIOS ? 0 : 15.0,
+                    crossAxisSpacing:
+                        getPlatform() == PlatformOS.isIOS ? 0 : 15.0,
+                    childAspectRatio: 5,
+                  ),
+                  delegate: SliverChildBuilderDelegate(
+                    (BuildContext context, int index) {
+                      if ((showDemoObjectives && index == 0) ||
+                          (showDemoObjectives == false &&
+                              index == objectivesList.length)) {
+                        return showAddButton == false
+                            ? SizedBox.shrink()
+                            : AddButton(
+                                onTap: () {},
+                                openPage: AddObjectivePage(
+                                  routesToPopAfterDelete:
+                                      RoutesToPopAfterDelete.PreventDelete,
+                                ),
+                              );
+                      } else {
+                        Objective objective = objectivesList[
+                            index - (showDemoObjectives ? 1 : 0)];
+                        return ObjectiveContainer(
+                          index: index,
+                          objective: objective,
+                          forcedTotalAmount: showDemoObjectives
+                              ? (objective.income
+                                      ? randomInt[index].toDouble()
+                                      : randomInt[index].toDouble() * -1) *
+                                  15
+                              : null,
+                          forcedNumberTransactions:
+                              showDemoObjectives ? randomInt[index] : null,
+                        );
+                      }
+                    },
+                    childCount: (objectivesList.length) + 1,
+                  ),
+                )
+              : SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    (BuildContext context, int index) {
+                      if ((showDemoObjectives && index == 0) ||
+                          (showDemoObjectives == false &&
+                              index == objectivesList.length)) {
+                        return addButton;
+                      } else {
+                        Objective objective = objectivesList[
+                            index - (showDemoObjectives ? 1 : 0)];
+                        return Padding(
+                          padding: EdgeInsets.only(
+                            bottom:
+                                getPlatform() == PlatformOS.isIOS ? 0 : 16.0,
+                          ),
+                          child: ObjectiveContainer(
+                            index: index,
+                            objective: objective,
+                            forcedTotalAmount: showDemoObjectives
+                                ? (objective.income
+                                        ? randomInt[index].toDouble()
+                                        : randomInt[index].toDouble() * -1) *
+                                    15
+                                : null,
+                            forcedNumberTransactions:
+                                showDemoObjectives ? randomInt[index] : null,
+                          ),
+                        );
+                      }
+                    },
+                    childCount: (objectivesList.length) + 1,
+                  ),
+                ),
+        );
+      },
     );
   }
 }
@@ -642,7 +662,7 @@ String getObjectiveStatus(BuildContext context, Objective objective,
     content = "goal-overdue".tr();
   } else {
     content = (addSpendingSavingIndication
-            ? (objective.income ? "save".tr() + " " : "spend".tr() + " ")
+            ? (objective.income ? ("save".tr()) + " " : ("spend".tr()) + " ")
             : "") +
         convertToMoney(Provider.of<AllWallets>(context), amount.abs()) +
         "/" +
