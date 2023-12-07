@@ -36,29 +36,51 @@ Future<bool> getExchangeRates() async {
 }
 
 double amountRatioToPrimaryCurrencyGivenPk(
-    AllWallets allWallets, String walletPk) {
+  AllWallets allWallets,
+  String walletPk, {
+  Map<String, dynamic>? appStateSettingsPassed,
+}) {
   if (allWallets.indexedByPk[walletPk] == null) return 1;
   return amountRatioToPrimaryCurrency(
-      allWallets, allWallets.indexedByPk[walletPk]?.currency);
+    allWallets,
+    allWallets.indexedByPk[walletPk]?.currency,
+    appStateSettingsPassed: appStateSettingsPassed,
+  );
 }
 
 double amountRatioToPrimaryCurrency(
-    AllWallets allWallets, String? walletCurrency) {
+  AllWallets allWallets,
+  String? walletCurrency, {
+  Map<String, dynamic>? appStateSettingsPassed,
+}) {
   if (walletCurrency == null) {
     return 1;
   }
-  if (allWallets.indexedByPk[appStateSettings["selectedWalletPk"]]?.currency ==
+  if (allWallets
+          .indexedByPk[
+              (appStateSettingsPassed ?? appStateSettings)["selectedWalletPk"]]
+          ?.currency ==
       walletCurrency) {
     return 1;
   }
-  if (allWallets.indexedByPk[appStateSettings["selectedWalletPk"]] == null) {
+  if (allWallets.indexedByPk[
+          (appStateSettingsPassed ?? appStateSettings)["selectedWalletPk"]] ==
+      null) {
     return 1;
   }
 
   double exchangeRateFromUSDToTarget = getCurrencyExchangeRate(
-      allWallets.indexedByPk[appStateSettings["selectedWalletPk"]]?.currency);
-  double exchangeRateFromCurrentToUSD =
-      1 / getCurrencyExchangeRate(walletCurrency);
+    allWallets
+        .indexedByPk[
+            (appStateSettingsPassed ?? appStateSettings)["selectedWalletPk"]]
+        ?.currency,
+    appStateSettingsPassed: appStateSettingsPassed,
+  );
+  double exchangeRateFromCurrentToUSD = 1 /
+      getCurrencyExchangeRate(
+        walletCurrency,
+        appStateSettingsPassed: appStateSettingsPassed,
+      );
   return exchangeRateFromUSDToTarget * exchangeRateFromCurrentToUSD;
 }
 
@@ -82,12 +104,23 @@ String getCurrencyString(AllWallets allWallets, {String? currencyKey}) {
           : (currenciesJSON[selectedWalletCurrency]?["Symbol"] ?? "");
 }
 
-double getCurrencyExchangeRate(String? currencyKey) {
+double getCurrencyExchangeRate(
+  String? currencyKey, {
+  Map<String, dynamic>? appStateSettingsPassed,
+}) {
   if (currencyKey == null || currencyKey == "") return 1;
-  if (appStateSettings["customCurrencyAmounts"]?[currencyKey] != null) {
-    return appStateSettings["customCurrencyAmounts"][currencyKey].toDouble();
-  } else if (appStateSettings["cachedCurrencyExchange"]?[currencyKey] != null) {
-    return appStateSettings["cachedCurrencyExchange"][currencyKey].toDouble();
+  if ((appStateSettingsPassed ?? appStateSettings)["customCurrencyAmounts"]
+          ?[currencyKey] !=
+      null) {
+    return (appStateSettingsPassed ?? appStateSettings)["customCurrencyAmounts"]
+            [currencyKey]
+        .toDouble();
+  } else if ((appStateSettingsPassed ??
+          appStateSettings)["cachedCurrencyExchange"]?[currencyKey] !=
+      null) {
+    return (appStateSettingsPassed ??
+            appStateSettings)["cachedCurrencyExchange"][currencyKey]
+        .toDouble();
   } else {
     return 1;
   }

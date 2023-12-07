@@ -35,6 +35,8 @@ String getChangelogString() {
     Cumulative all spending includes balance correction so net value is accurate
     Fixed currency when entering initial amount of wallet
     Fixed all spending cumulative page if only income transactions
+    Fixed spending graph total with currencies
+    Transaction page properly refreshes when changing date total
     < 5.0.1
     Fixed comma separator amounts not following number format
     Fixed selecting category on budget page properly displays spending graph for that category

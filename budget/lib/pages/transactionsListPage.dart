@@ -495,7 +495,7 @@ class NetSpendingDayTotalSetting extends StatelessWidget {
       items: ["false", "true"],
       onChanged: (value) async {
         updateSettings("netSpendingDayTotal", value == "true" ? true : false,
-            updateGlobalState: true);
+            updateGlobalState: true, pagesNeedingRefresh: [1]);
       },
       getLabel: (item) {
         if (item == "false") return "day-total".tr().capitalizeFirst;

@@ -127,6 +127,7 @@ class _HomePageHeatMapState extends State<HomePageHeatMap> {
                     isIncome: null,
                     allWallets: Provider.of<AllWallets>(context, listen: false),
                     showCumulativeSpending: false,
+                    appStateSettingsPassed: appStateSettings,
                   );
                   points = calculatePoints(p);
 

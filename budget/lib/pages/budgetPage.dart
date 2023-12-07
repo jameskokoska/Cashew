@@ -963,6 +963,7 @@ class _BudgetLineGraphState extends State<BudgetLineGraph> {
               showCumulativeSpending:
                   appStateSettings["showCumulativeSpending"],
               invertPolarity: true,
+              appStateSettingsPassed: appStateSettings,
             );
             List<Pair> points = calculatePoints(p);
 

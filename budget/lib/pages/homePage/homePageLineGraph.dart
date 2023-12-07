@@ -218,6 +218,7 @@ class PastSpendingGraph extends StatelessWidget {
                           Provider.of<AllWallets>(context, listen: false),
                       showCumulativeSpending:
                           appStateSettings["showCumulativeSpending"],
+                      appStateSettingsPassed: appStateSettings,
                     ),
                   ),
                   builder: (context, snapshotPoints) {
@@ -279,6 +280,7 @@ class CalculatePointsParams {
   final bool? isIncome;
   final AllWallets allWallets;
   final bool showCumulativeSpending;
+  final Map<String, dynamic> appStateSettingsPassed;
   final bool invertPolarity;
 
   CalculatePointsParams({
@@ -289,6 +291,7 @@ class CalculatePointsParams {
     required this.isIncome,
     required this.allWallets,
     required this.showCumulativeSpending,
+    required this.appStateSettingsPassed,
     this.invertPolarity = false,
   });
 }
@@ -308,22 +311,30 @@ List<Pair> calculatePoints(CalculatePointsParams p) {
 
     DateTime day = DateTime(transaction.dateCreated.year,
         transaction.dateCreated.month, transaction.dateCreated.day);
-
     double amount = transaction.income
         ? transaction.amount.abs() *
             amountRatioToPrimaryCurrencyGivenPk(
-                p.allWallets, transaction.walletFk) *
+              p.allWallets,
+              transaction.walletFk,
+              appStateSettingsPassed: p.appStateSettingsPassed,
+            ) *
             invertPolarity
         : -transaction.amount.abs() *
             amountRatioToPrimaryCurrencyGivenPk(
-                p.allWallets, transaction.walletFk) *
+              p.allWallets,
+              transaction.walletFk,
+              appStateSettingsPassed: p.appStateSettingsPassed,
+            ) *
             invertPolarity;
 
     if (p.customStartDate.millisecondsSinceEpoch >
         transaction.dateCreated.millisecondsSinceEpoch) {
       transactionsBeforeStartDateTotal += (transaction.amount *
               (amountRatioToPrimaryCurrencyGivenPk(
-                  p.allWallets, transaction.walletFk))) *
+                p.allWallets,
+                transaction.walletFk,
+                appStateSettingsPassed: p.appStateSettingsPassed,
+              ))) *
           invertPolarity;
     }
 
