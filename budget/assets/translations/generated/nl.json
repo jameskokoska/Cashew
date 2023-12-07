@@ -944,5 +944,7 @@
   "missing-installment-period-and-amount": "Selecteer een betalingslengte of bedrag",
   "all-spending-summary": "Alle SAMENVATTING",
   "all-spending-description": "Uw bestedingsstatistieken allemaal op één plek",
-  "created-new-for": "Nieuw gemaakt voor"
+  "created-new-for": "Nieuw gemaakt voor",
+  "date-banner-total": "Datum Banner totaal",
+  "day-total": "Dagtotaal"
 }

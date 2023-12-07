@@ -914,7 +914,7 @@
   "deducted-from": "నుండి తీసివేయబడింది",
   "transfer-fee": "బదిలీ రుసుము",
   "collect-all": "అన్నీ సేకరించండి",
-  "settle-all": "అన్నీ స్థిరపడండి",
+  "settle-all": "అన్నీ పరిష్కరించండి",
   "edit-loan": "రుణాన్ని సవరించండి",
   "delete-loan": "రుణాన్ని తొలగించండి",
   "delete-loan-question": "రుణాన్ని తొలగించాలా?",
@@ -944,5 +944,7 @@
   "missing-installment-period-and-amount": "దయచేసి చెల్లింపు పొడవు లేదా మొత్తాన్ని ఎంచుకోండి",
   "all-spending-summary": "అన్ని ఖర్చు సారాంశం",
   "all-spending-description": "మీ ఖర్చు గణాంకాలు అన్నీ ఒకే చోట",
-  "created-new-for": "కొత్తగా సృష్టించబడింది"
+  "created-new-for": "కొత్తగా సృష్టించబడింది",
+  "date-banner-total": "తేదీ బ్యానర్ మొత్తం",
+  "day-total": "రోజు మొత్తం"
 }

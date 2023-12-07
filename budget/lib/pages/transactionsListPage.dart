@@ -430,6 +430,7 @@ class TransactionsSettings extends StatelessWidget {
     return Column(
       children: [
         MarkAsPaidOnDaySetting(),
+        NetSpendingDayTotalSetting(),
         ShowTransactionsMonthlySpendingSummarySettingToggle(),
         ShowTransactionsBalanceTransferTabSettingToggle(),
       ],
@@ -476,6 +477,30 @@ class ShowTransactionsBalanceTransferTabSettingToggle extends StatelessWidget {
       icon: appStateSettings["outlinedIcons"]
           ? Icons.compare_arrows_outlined
           : Icons.compare_arrows_rounded,
+    );
+  }
+}
+
+class NetSpendingDayTotalSetting extends StatelessWidget {
+  const NetSpendingDayTotalSetting({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return SettingsContainerDropdown(
+      title: "date-banner-total".tr(),
+      icon: appStateSettings["outlinedIcons"]
+          ? Icons.playlist_add_outlined
+          : Icons.playlist_add_rounded,
+      initial: appStateSettings["netSpendingDayTotal"].toString(),
+      items: ["false", "true"],
+      onChanged: (value) async {
+        updateSettings("netSpendingDayTotal", value == "true" ? true : false,
+            updateGlobalState: true);
+      },
+      getLabel: (item) {
+        if (item == "false") return "day-total".tr().capitalizeFirst;
+        if (item == "true") return "net-total".tr().capitalizeFirst;
+      },
     );
   }
 }

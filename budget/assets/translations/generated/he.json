@@ -944,5 +944,7 @@
   "missing-installment-period-and-amount": "אנא בחר אורך תשלום או סכום",
   "all-spending-summary": "כל סיכום ההוצאות",
   "all-spending-description": "סטטיסטיקת ההוצאות שלך הכל במקום אחד",
-  "created-new-for": "נוצר חדש עבור"
+  "created-new-for": "נוצר חדש עבור",
+  "date-banner-total": "סה\"כ באנר תאריך",
+  "day-total": "יום סה\"כ"
 }

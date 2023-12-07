@@ -925,7 +925,7 @@
   "initial-loan-record": "Första lånepost",
   "initial-record": "Initialprotokoll",
   "loan": "Lån",
-  "loan-accomplished": "Lånad",
+  "loan-accomplished": "Lån genomförd",
   "loan-overdue": "Förfallen lån",
   "interest": "Intressera",
   "loan-transaction-type": "Låne transaktionstyp",
@@ -939,10 +939,12 @@
   "one-time-loan-description-1": "Betalas eller samlas in en gång en gång",
   "partially-collect": "Delvis samla in",
   "partially-settle": "Delvis bosätta sig",
-  "select-initial-transaction-category": "Välj den första transaktionskategorin",
+  "select-initial-transaction-category": "Välj initial transaktionskategori",
   "cannot-create-installment": "Kan inte skapa avbetalning",
   "missing-installment-period-and-amount": "Välj en betalningslängd eller belopp",
   "all-spending-summary": "All utgiftsöversikt",
   "all-spending-description": "Din utgiftsstatistik på ett ställe",
-  "created-new-for": "Skapat nytt för"
+  "created-new-for": "Skapat nytt för",
+  "date-banner-total": "Datumbanner totalt",
+  "day-total": "Dags total"
 }

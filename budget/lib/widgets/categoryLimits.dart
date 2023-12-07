@@ -574,6 +574,7 @@ void enterCategoryLimitPopup(
               nextLabel: "set-limit".tr(),
               onlyShowCurrencyIcon: true,
               enableWalletPicker: true,
+              hideWalletPickerIfOneCurrency: true,
               padding: EdgeInsets.symmetric(horizontal: 18),
               selectedWalletPk: selectedWalletPk,
               walletPkForCurrency: selectedWalletPk,

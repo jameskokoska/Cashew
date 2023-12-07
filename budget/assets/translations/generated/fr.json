@@ -941,8 +941,10 @@
   "partially-settle": "S'installer partiellement",
   "select-initial-transaction-category": "Sélectionnez la catégorie de transaction initiale",
   "cannot-create-installment": "Impossible de créer un versement",
-  "missing-installment-period-and-amount": "Veuillez sélectionner une durée de paiement ou un montant",
+  "missing-installment-period-and-amount": "Veuillez sélectionner une durée ou un montant de paiement",
   "all-spending-summary": "Tous les résumés des dépenses",
   "all-spending-description": "Vos statistiques de dépenses en un seul endroit",
-  "created-new-for": "Créé nouveau pour"
+  "created-new-for": "Créé nouveau pour",
+  "date-banner-total": "Bannière de date total",
+  "day-total": "Total du jour"
 }

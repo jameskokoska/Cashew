@@ -944,5 +944,7 @@
   "missing-installment-period-and-amount": "Selecione um comprimento de pagamento ou valor",
   "all-spending-summary": "Todos os gastos resumo",
   "all-spending-description": "Suas estatísticas de gastos tudo em um só lugar",
-  "created-new-for": "Criou novo para"
+  "created-new-for": "Criou novo para",
+  "date-banner-total": "Data Banner Total",
+  "day-total": "Total do dia"
 }

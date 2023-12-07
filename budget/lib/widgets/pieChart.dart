@@ -299,7 +299,7 @@ class PieChartDisplayState extends State<PieChartDisplay> {
       );
       return PieChartSectionData(
         color: color,
-        value: widget.totalSpent <= 0
+        value: widget.totalSpent == 0
             ? 5
             : (widget.data[i].total / widget.totalSpent).abs(),
         title: "",

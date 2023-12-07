@@ -944,5 +944,7 @@
   "missing-installment-period-and-amount": "لطفاً طول یا مبلغ پرداخت را انتخاب کنید",
   "all-spending-summary": "همه خلاصه هزینه ها",
   "all-spending-description": "آمار خرج کردن شما همه در یک مکان",
-  "created-new-for": "جدید برای"
+  "created-new-for": "جدید برای",
+  "date-banner-total": "کل بنر تاریخ",
+  "day-total": "کل روز"
 }

@@ -159,10 +159,7 @@ class TransactionEntries extends StatelessWidget {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    // print(startDay);
-    // print(endDay);
+  Widget transactionEntryListBuilder(double? initialNetValue) {
     return StreamBuilder<List<TransactionWithCategory>>(
       stream: database.getTransactionCategoryWithDay(
         startDay,
@@ -188,6 +185,7 @@ class TransactionEntries extends StatelessWidget {
           List<Section> sectionsOut = [];
           List<Widget> widgetsOut = [];
           Widget totalCashFlowWidget = SizedBox.shrink();
+          double netSpent = initialNetValue ?? 0;
           double totalSpent = 0;
           double totalIncome = 0;
           double totalExpense = 0;
@@ -244,6 +242,7 @@ class TransactionEntries extends StatelessWidget {
 
           List<TransactionWithCategory> transactionListForDay = [];
           double totalSpentForDay = 0;
+          double totalSpentForDayWithBalanceCorrection = 0;
           DateTime? currentDate;
           int totalUniqueDays = 0;
 
@@ -262,6 +261,14 @@ class TransactionEntries extends StatelessWidget {
             }
             if (currentDate == currentTransactionDate) {
               transactionListForDay.add(transactionWithCategory);
+              if (transactionWithCategory.transaction.paid) {
+                // Include balance correction when calculating the net
+                totalSpentForDayWithBalanceCorrection +=
+                    transactionWithCategory.transaction.amount *
+                        (amountRatioToPrimaryCurrencyGivenPk(
+                            Provider.of<AllWallets>(context),
+                            transactionWithCategory.transaction.walletFk));
+              }
               if (transactionWithCategory.transaction.paid &&
                   transactionWithCategory.transaction.categoryFk != "0") {
                 double amountForDay =
@@ -307,10 +314,16 @@ class TransactionEntries extends StatelessWidget {
                             useHorizontalPaddingConstrained,
                         color: dateDividerColor,
                         date: currentTransactionDate,
-                        info: transactionListForDay.length > 1
-                            ? convertToMoney(Provider.of<AllWallets>(context),
-                                totalSpentForDay)
-                            : "");
+                        info: appStateSettings["netSpendingDayTotal"] == true
+                            ? convertToMoney(
+                                Provider.of<AllWallets>(context),
+                                netSpent,
+                              )
+                            : transactionListForDay.length > 1
+                                ? convertToMoney(
+                                    Provider.of<AllWallets>(context),
+                                    totalSpentForDay)
+                                : "");
 
                 if (renderType == TransactionEntriesRenderType.slivers) {
                   sectionsOut.add(
@@ -382,8 +395,10 @@ class TransactionEntries extends StatelessWidget {
 
                 currentDate = null;
                 transactionListForDay = [];
-                totalSpent += totalSpentForDay;
+                totalSpent += totalSpentForDayWithBalanceCorrection;
+                netSpent = netSpent - totalSpentForDayWithBalanceCorrection;
                 totalSpentForDay = 0;
+                totalSpentForDayWithBalanceCorrection = 0;
               }
             }
             currentTotalIndex++;
@@ -514,6 +529,64 @@ class TransactionEntries extends StatelessWidget {
           }
         }
         return SizedBox.shrink();
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (appStateSettings["netSpendingDayTotal"] == false)
+      return transactionEntryListBuilder(null);
+    return StreamBuilder<double?>(
+      // Use a reference point and subtract the totals of the transactions from this reference point to
+      // get the net at that point in time
+      //
+      // Ideally we refactor all the queries so they only rely on the search filters!
+
+      stream: database.watchTotalNetBeforeStartDateTransactionCategoryWithDay(
+        end: DateTime(
+          endDay?.year ??
+              searchFilters?.dateTimeRange?.end.year ??
+              DateTime.now().year,
+          endDay?.month ??
+              searchFilters?.dateTimeRange?.end.month ??
+              DateTime.now().month,
+          (endDay?.day ??
+                  searchFilters?.dateTimeRange?.end.day ??
+                  DateTime.now().day) +
+              (budget == null ? 1 : 0),
+          //Add one because want the total from the start of the next day because we get everything BEFORE this date,
+          // Only add one if not a budget! because a different query is used if it is a budget
+        ),
+        start: startDay,
+        allWallets: Provider.of<AllWallets>(context),
+        search: search,
+        categoryFks: categoryFks,
+        categoryFksExclude: categoryFksExclude,
+        walletFks: walletFks,
+        income: income,
+        budgetTransactionFilters: budgetTransactionFilters,
+        memberTransactionFilters: memberTransactionFilters,
+        member: member,
+        onlyShowTransactionsBelongingToBudgetPk:
+            onlyShowTransactionsBelongingToBudgetPk,
+        onlyShowTransactionsBelongingToObjectivePk:
+            onlyShowTransactionsBelongingToObjectivePk,
+        searchFilters: searchFilters,
+        limit: limit,
+        budget: budget,
+      ),
+      builder: (context, snapshotNetTotal) {
+        if (snapshotNetTotal.hasData == false) if (renderType ==
+                TransactionEntriesRenderType.slivers ||
+            renderType ==
+                TransactionEntriesRenderType.implicitlyAnimatedSlivers)
+          return SliverToBoxAdapter(
+            child: SizedBox.shrink(),
+          );
+        else
+          return SizedBox.shrink();
+        return transactionEntryListBuilder(snapshotNetTotal.data);
       },
     );
   }

@@ -944,5 +944,7 @@
   "missing-installment-period-and-amount": "கட்டண நீளம் அல்லது தொகையைத் தேர்ந்தெடுக்கவும்",
   "all-spending-summary": "அனைத்து செலவு சுருக்கமும்",
   "all-spending-description": "உங்கள் செலவு புள்ளிவிவரங்கள் அனைத்தும் ஒரே இடத்தில்",
-  "created-new-for": "புதியதாக உருவாக்கப்பட்டது"
+  "created-new-for": "புதியதாக உருவாக்கப்பட்டது",
+  "date-banner-total": "தேதி பேனர் மொத்தம்",
+  "day-total": "நாள் மொத்தம்"
 }

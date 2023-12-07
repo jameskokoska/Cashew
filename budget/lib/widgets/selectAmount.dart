@@ -459,7 +459,8 @@ class _SelectAmountState extends State<SelectAmount> {
         : convertToMoney(
             Provider.of<AllWallets>(context),
             calculateResult(amountConverted),
-            currencyKey: getSelectedWallet(listen: false)?.currency,
+            currencyKey: widget.currencyKey ??
+                getSelectedWallet(listen: false)?.currency,
             allDecimals: true,
             forceAllDecimals: doesNotContainOtherNumbers(amount) &&
                 startsWithTwoZeroes(amount) == false &&

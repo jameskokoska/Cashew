@@ -944,5 +944,7 @@
   "missing-installment-period-and-amount": "Seleccione una duración o cantidad de pago",
   "all-spending-summary": "Resumen de todo el gasto",
   "all-spending-description": "Sus estadísticas de gasto en un solo lugar",
-  "created-new-for": "Creado nuevo para"
+  "created-new-for": "Creado nuevo para",
+  "date-banner-total": "Total de banner de fecha",
+  "day-total": "Total de un día"
 }

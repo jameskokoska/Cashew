@@ -944,5 +944,7 @@
   "missing-installment-period-and-amount": "Kérjük, válassza ki a fizetési hosszát vagy összeget",
   "all-spending-summary": "Minden kiadási összefoglaló",
   "all-spending-description": "Az Ön kiadásának statisztikái egy helyen",
-  "created-new-for": "Új létrehozott"
+  "created-new-for": "Új létrehozott",
+  "date-banner-total": "Dátum zászló teljes",
+  "day-total": "Napi nap"
 }

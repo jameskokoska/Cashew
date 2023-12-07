@@ -944,5 +944,7 @@
   "missing-installment-period-and-amount": "Tafadhali chagua urefu wa malipo au kiasi",
   "all-spending-summary": "Muhtasari wote wa matumizi",
   "all-spending-description": "Takwimu zako za matumizi yote katika sehemu moja",
-  "created-new-for": "Imeundwa mpya kwa"
+  "created-new-for": "Imeundwa mpya kwa",
+  "date-banner-total": "Jumla ya bendera ya tarehe",
+  "day-total": "Jumla ya siku"
 }

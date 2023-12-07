@@ -914,7 +914,7 @@
   "deducted-from": "Detratto da",
   "transfer-fee": "Tassa di trasferimento",
   "collect-all": "Raccogli tutto",
-  "settle-all": "Sistemare tutto",
+  "settle-all": "Siateggi tutto",
   "edit-loan": "Modifica prestito",
   "delete-loan": "Elimina il prestito",
   "delete-loan-question": "Elimina il prestito?",
@@ -937,12 +937,14 @@
   "partial-payments-loan-description-1": "Pagato o raccolto per un periodo di tempo",
   "one-time-loan": "Un prestito a tempo",
   "one-time-loan-description-1": "Pagato o raccolto una sola volta",
-  "partially-collect": "Collezionare parzialmente",
+  "partially-collect": "Raccogliere parzialmente",
   "partially-settle": "Parzialmente accontentarsi",
   "select-initial-transaction-category": "Seleziona la categoria delle transazioni iniziali",
   "cannot-create-installment": "Impossibile creare rate",
   "missing-installment-period-and-amount": "Seleziona una durata o l'importo del pagamento",
   "all-spending-summary": "Tutto il riassunto della spesa",
   "all-spending-description": "Le tue statistiche di spesa tutte in un unico posto",
-  "created-new-for": "Creato nuovo per"
+  "created-new-for": "Creato nuovo per",
+  "date-banner-total": "Data Banner Totale",
+  "day-total": "Giorno totale"
 }

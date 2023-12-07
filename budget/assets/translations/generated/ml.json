@@ -944,5 +944,7 @@
   "missing-installment-period-and-amount": "ഒരു പേയ്മെന്റ് ദൈർഘ്യം അല്ലെങ്കിൽ തുക തിരഞ്ഞെടുക്കുക",
   "all-spending-summary": "എല്ലാ ചെലവ് സംഗ്രഹവും",
   "all-spending-description": "നിങ്ങളുടെ ചെലവ് സ്ഥിതിവിവരക്കണക്കുകൾ എല്ലാം ഒരിടത്ത്",
-  "created-new-for": "പുതിയത് സൃഷ്ടിച്ചു"
+  "created-new-for": "പുതിയത് സൃഷ്ടിച്ചു",
+  "date-banner-total": "തീയതി ബാനർ ആകെ",
+  "day-total": "ആകെ ദിവസം"
 }

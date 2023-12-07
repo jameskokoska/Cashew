@@ -944,5 +944,7 @@
   "missing-installment-period-and-amount": "Изаберите дужину плаћања или количину",
   "all-spending-summary": "Сав сажетак потрошње",
   "all-spending-description": "Ваша статистика потрошње све на једном месту",
-  "created-new-for": "Створио ново за"
+  "created-new-for": "Створио ново за",
+  "date-banner-total": "Датум Баннер Укупно",
+  "day-total": "Укупан дан"
 }

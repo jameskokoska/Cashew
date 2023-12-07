@@ -863,7 +863,7 @@
   "personalization": "Персонализация",
   "rounded": "Округлый",
   "outlined": "Изложено",
-  "icon-style": "Иконовый стиль",
+  "icon-style": "Икона стиль",
   "more-options-description-theme": "Шрифт, стиль иконы, высота заголовка",
   "style": "Стиль",
   "increase-text-contrast": "Увеличьте контраст",
@@ -941,8 +941,10 @@
   "partially-settle": "Частично урегулируйте",
   "select-initial-transaction-category": "Выберите начальную категорию транзакции",
   "cannot-create-installment": "Не может создать взнос",
-  "missing-installment-period-and-amount": "Пожалуйста, выберите длину платежа или сумму",
+  "missing-installment-period-and-amount": "Выберите длину или сумму платежа",
   "all-spending-summary": "Все расходы на резюме",
   "all-spending-description": "Ваша статистика расходов все в одном месте",
-  "created-new-for": "Создал новое для"
+  "created-new-for": "Создал новое для",
+  "date-banner-total": "Дата баннера Итого",
+  "day-total": "День общего числа"
 }

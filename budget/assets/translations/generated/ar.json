@@ -934,7 +934,7 @@
   "interest-description-1": "لا تحسب تجاه إجمالي القرض",
   "initial-loan-payment-description-1": "الخصم الأولي أو التجميع من الصوم الكبير أو الأموال المقترضة",
   "partial-payments-loan": "قرض المدفوعات الجزئية",
-  "partial-payments-loan-description-1": "مدفوعة الأجر أو جمعها على مدار فترة من الزمن",
+  "partial-payments-loan-description-1": "مدفوع الأجر أو جمعه على مدى فترة من الزمن",
   "one-time-loan": "قرض لمرة واحدة",
   "one-time-loan-description-1": "مدفوع الأجر أو جمع مرة واحدة فقط",
   "partially-collect": "جمع جزئيا",
@@ -944,5 +944,7 @@
   "missing-installment-period-and-amount": "الرجاء تحديد طول الدفع أو المبلغ",
   "all-spending-summary": "جميع ملخص الإنفاق",
   "all-spending-description": "إحصائيات الإنفاق الخاصة بك في مكان واحد",
-  "created-new-for": "تم إنشاؤها جديد ل"
+  "created-new-for": "تم إنشاؤها جديد ل",
+  "date-banner-total": "إجمالي شعار التاريخ",
+  "day-total": "مجموع اليوم"
 }

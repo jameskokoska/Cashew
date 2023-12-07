@@ -1225,6 +1225,96 @@ class FinanceDatabase extends _$FinanceDatabase {
     return (query.watch(), query.get());
   }
 
+  // get the net total of the list of transactions that would come before a start date (i.e. total net at that point in time)
+  // Used for net date banner total setting
+  Stream<double?> watchTotalNetBeforeStartDateTransactionCategoryWithDay({
+    required AllWallets allWallets,
+    DateTime? start,
+    required DateTime end,
+    String search = "",
+    // Search will be ignored... if these params are passed in
+    List<String>? categoryFks,
+    List<String>? categoryFksExclude,
+    List<String> walletFks = const [],
+    bool? income,
+    required List<BudgetTransactionFilters>? budgetTransactionFilters,
+    required List<String>? memberTransactionFilters,
+    String? member,
+    String? onlyShowTransactionsBelongingToBudgetPk,
+    String? onlyShowTransactionsBelongingToObjectivePk,
+    SearchFilters? searchFilters,
+    int? limit,
+    Budget? budget,
+  }) {
+    final $CategoriesTable subCategories = alias(categories, 'subCategories');
+    // the date, which acts as the end point and everything before this day is inclusive
+    // for onlyShowBasedOnTimeRange, but we don't want to include this day
+    List<Stream<double?>> mergedStreams = [];
+    for (TransactionWallet wallet in allWallets.list) {
+      final totalAmt = transactions.amount.sum();
+      final query = selectOnly(transactions)
+        ..join([
+          innerJoin(categories,
+              categories.categoryPk.equalsExp(transactions.categoryFk)),
+          leftOuterJoin(
+            budgets,
+            budgets.budgetPk.equalsExp(transactions.sharedReferenceBudgetPk),
+          ),
+          leftOuterJoin(
+            objectives,
+            objectives.objectivePk.equalsExp(transactions.objectiveFk),
+          ),
+          leftOuterJoin(subCategories,
+              subCategories.categoryPk.equalsExp(transactions.subCategoryFk)),
+        ])
+        ..addColumns([totalAmt])
+        ..where(
+          transactions.walletFk.equals(wallet.walletPk) &
+              transactions.paid.equals(true) &
+              // If we use a budget time period,
+              // Only calculate the net spending within that period!
+              (budget == null
+                  ? transactions.dateCreated.isSmallerOrEqualValue(end)
+                  : onlyShowBasedOnTimeRange(
+                      transactions, start, end, budget)) &
+              // Should match that of getTransactionCategoryWithDay
+              onlyShowBalanceCorrectionIfIsIncomeIsNull(transactions, income) &
+              onlyShowTransactionBasedOnSearchQuery(transactions, search,
+                  withCategories: true,
+                  joinedWithSubcategoriesTable: subCategories) &
+              // Pass in the subcategories table so we can search name based on subcategory
+              onlyShowIfFollowsSearchFilters(
+                transactions,
+                searchFilters,
+                joinedWithSubcategoriesTable: subCategories,
+                joinedWithBudgets: true,
+                joinedWithCategories: true,
+                joinedWithObjectives: true,
+              ) &
+              onlyShowIfFollowsFilters(transactions,
+                  budgetTransactionFilters: budgetTransactionFilters,
+                  memberTransactionFilters: memberTransactionFilters) &
+              (onlyShowBasedOnCategoryFks(
+                      transactions, categoryFks, categoryFksExclude) |
+                  onlyShowBasedOnSubcategoryFks(transactions, categoryFks)) &
+              onlyShowBasedOnWalletFks(transactions, walletFks) &
+              onlyShowBasedOnIncome(transactions, income) &
+              onlyShowIfMember(transactions, member) &
+              onlyShowIfNotExcludedFromBudget(transactions, budget?.budgetPk) &
+              onlyShowIfCertainBudget(
+                  transactions, onlyShowTransactionsBelongingToBudgetPk) &
+              onlyShowIfCertainObjective(
+                  transactions, onlyShowTransactionsBelongingToObjectivePk),
+        );
+      mergedStreams.add(query
+          .map((row) =>
+              (row.read(totalAmt) ?? 0) *
+              (amountRatioToPrimaryCurrency(allWallets, wallet.currency)))
+          .watchSingle());
+    }
+    return totalDoubleStream(mergedStreams);
+  }
+
   //get transactions that occurred on a given day and category
   Stream<List<TransactionWithCategory>> getTransactionCategoryWithDay(
     DateTime? start,
@@ -1278,6 +1368,7 @@ class FinanceDatabase extends _$FinanceDatabase {
         OrderingTerm.desc(transactions.dateCreated)
       ])
       ..where(
+        // Should match that of getTransactionCategoryWithDay
         onlyShowBalanceCorrectionIfIsIncomeIsNull(transactions, income) &
             onlyShowTransactionBasedOnSearchQuery(transactions, search,
                 withCategories: true,
@@ -5536,6 +5627,7 @@ class FinanceDatabase extends _$FinanceDatabase {
     String cycleSettingsExtension = "",
     SearchFilters? searchFilters,
     DateTimeRange? forcedDateTimeRange,
+    bool includeBalanceCorrection = false,
   }) {
     // we have to convert currencies to account for all wallets
     List<Stream<double?>> mergedStreams = [];
@@ -5549,7 +5641,8 @@ class FinanceDatabase extends _$FinanceDatabase {
                 joinedWithBudgets: false,
                 joinedWithObjectives: false) &
             transactions.walletFk.equals(wallet.walletPk) &
-            onlyShowIfNotBalanceCorrection(transactions, isIncome) &
+            (onlyShowIfNotBalanceCorrection(transactions, isIncome) |
+                Constant(includeBalanceCorrection)) &
             transactions.paid.equals(true) &
             onlyShowIfFollowCustomPeriodCycle(
               transactions,
@@ -5938,6 +6031,7 @@ class FinanceDatabase extends _$FinanceDatabase {
         .watch();
   }
 
+  // Related query: watchTotalNetBeforeStartDateTransactionCategoryWithDay
   Stream<double?> watchTotalNetBeforeStartDate({
     required SearchFilters? searchFilters,
     required AllWallets allWallets,

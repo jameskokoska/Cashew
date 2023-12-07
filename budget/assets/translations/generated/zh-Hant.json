@@ -888,7 +888,7 @@
   "excluded-from": "排除在",
   "remove-link-question": "刪除鏈接？",
   "remove-link-description": "注意：附件將 *不 *從您的Google驅動器中刪除",
-  "auto-pay-description": "開放時，逾期交易自動標記為付款",
+  "auto-pay-description": "開放時，逾期交易自動標記為已付款",
   "change-date": "改變日期",
   "changed-date": "更改日期",
   "date-not-selected": "未選擇日期",
@@ -944,5 +944,7 @@
   "missing-installment-period-and-amount": "請選擇付款時間或金額",
   "all-spending-summary": "所有支出摘要",
   "all-spending-description": "您的支出統計數據全部在一個地方",
-  "created-new-for": "創建了新的"
+  "created-new-for": "創建了新的",
+  "date-banner-total": "日期橫幅總數",
+  "day-total": "一天總數"
 }

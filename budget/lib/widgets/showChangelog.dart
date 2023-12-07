@@ -25,6 +25,16 @@ import 'listItem.dart';
 
 String getChangelogString() {
   return """
+    < 5.0.2
+    Fixed income pie chart in all spending
+    Transfer balance button still appears when prevent delete enabled when editing wallet
+    Income/expense tabs renamed when balance correction
+    Refactored and organized CSV export columns
+    Total cash flow for transactions list includes balance correction
+    Date banner total option (can set the total displayed in the date banner to a net total)
+    Cumulative all spending includes balance correction so net value is accurate
+    Fixed currency when entering initial amount of wallet
+    Fixed all spending cumulative page if only income transactions
     < 5.0.1
     Fixed comma separator amounts not following number format
     Fixed selecting category on budget page properly displays spending graph for that category

@@ -944,5 +944,7 @@
   "missing-installment-period-and-amount": "Please select a payment length or amount",
   "all-spending-summary": "All Spending Summary",
   "all-spending-description": "Your spending statistics all in one place",
-  "created-new-for": "Created new for"
+  "created-new-for": "Created new for",
+  "date-banner-total": "Date Banner Total",
+  "day-total": "Day Total"
 }

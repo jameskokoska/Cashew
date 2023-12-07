@@ -931,7 +931,7 @@
   "loan-transaction-type": "Тип заемна транзакция",
   "loan-payment": "Плащане за заем",
   "loan-payment-description-1": "Бройте общата сума на плащането на заема",
-  "interest-description-1": "Не се брои към общия заем",
+  "interest-description-1": "Не се отчита за общия заем",
   "initial-loan-payment-description-1": "Първоначалното приспадане или събиране на пари или заети пари",
   "partial-payments-loan": "Заем за частични плащания",
   "partial-payments-loan-description-1": "Платени или събрани за определен период от време",
@@ -944,5 +944,7 @@
   "missing-installment-period-and-amount": "Моля, изберете дължина на плащането или сума",
   "all-spending-summary": "Всички обобщени разходи",
   "all-spending-description": "Вашата статистика за разходите всичко на едно място",
-  "created-new-for": "Създаден нов за"
+  "created-new-for": "Създаден нов за",
+  "date-banner-total": "Дата на банер общо",
+  "day-total": "Общо ден"
 }

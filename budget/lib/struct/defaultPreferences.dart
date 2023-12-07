@@ -157,6 +157,7 @@ Future<Map<String, dynamic>> getDefaultPreferences() async {
     "increaseTextContrast": false,
     "numberFormatLocale": null,
     "netAllSpendingTotal": false,
+    "netSpendingDayTotal": false,
     "extraZerosButton": null, //will be null, 00 or 000
     "allSpendingLastPage": 0, //index of the last tab on the all spending page
     // *********************************************************** //

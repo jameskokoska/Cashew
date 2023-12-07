@@ -131,26 +131,13 @@ class ExportCSV extends StatelessWidget {
         Map<String, String> merged = {
           ...convertStringToMap(
             inputTransactionString,
-            keysToIgnore: [
-              "transactionPk",
-              "categoryFk",
-              "walletFk",
-              "dateTimeModified",
-              "transactionOwnerEmail",
-              "transactionOriginalOwnerEmail",
-              "sharedKey",
-              "sharedOldKey",
-              "sharedStatus",
-              "sharedDateUpdated",
-              "sharedReferenceBudgetPk",
-              "paid",
-              "createdAnotherFutureTransaction",
-              "skipPaid",
-              // "originalDateDue",
-              "upcomingTransactionNotification",
-              "objectiveFk",
-              "subCategoryFk",
-              "endDate",
+            keysToShow: [
+              "name",
+              "amount",
+              "note",
+              "dateCreated",
+              "income",
+              "type",
             ],
             keysToReplace: {
               "dateCreated": "date",
@@ -158,17 +145,17 @@ class ExportCSV extends StatelessWidget {
           ),
           ...convertStringToMap(
             inputCategoryString,
-            keysToIgnore: [
-              "categoryPk",
-              "dateTimeModified",
-              "order",
-              "income",
-              "methodAdded",
-              "mainCategoryPk"
+            keysToShow: [
+              "name",
+              "colour",
+              "iconName",
+              "emojiIconName",
             ],
             keysToReplace: {
               "dateCreated": "categoryDateCreated",
-              "name": "categoryName",
+              "name": "category name",
+              "colour": "color",
+              "emojiIconName": "emoji",
             },
           ),
           ...convertStringToMap(
@@ -177,7 +164,7 @@ class ExportCSV extends StatelessWidget {
               "name",
             ],
             keysToReplace: {
-              "name": "subcategoryName",
+              "name": "subcategory",
             },
           ),
           ...convertStringToMap(
@@ -194,7 +181,7 @@ class ExportCSV extends StatelessWidget {
               "currencyFormat",
             ],
             keysToReplace: {
-              "name": "accountName", //"walletName"
+              "name": "account", //"walletName"
             },
           ),
           ...convertStringToMap(
@@ -203,7 +190,7 @@ class ExportCSV extends StatelessWidget {
               "name",
             ],
             keysToReplace: {
-              "name": "budgetName",
+              "name": "budget",
             },
           ),
           ...convertStringToMap(
@@ -212,7 +199,7 @@ class ExportCSV extends StatelessWidget {
               "name",
             ],
             keysToReplace: {
-              "name": "objectiveName",
+              "name": "objective",
             },
           ),
         };

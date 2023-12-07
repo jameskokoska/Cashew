@@ -944,5 +944,7 @@
   "missing-installment-period-and-amount": "कृपया देय लांबी किंवा रक्कम निवडा",
   "all-spending-summary": "सर्व खर्च सारांश",
   "all-spending-description": "आपल्या खर्चाची आकडेवारी सर्व एकाच ठिकाणी",
-  "created-new-for": "यासाठी नवीन तयार केले"
+  "created-new-for": "यासाठी नवीन तयार केले",
+  "date-banner-total": "एकूण तारीख बॅनर",
+  "day-total": "दिवस एकूण"
 }

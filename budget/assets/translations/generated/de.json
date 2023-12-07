@@ -939,10 +939,12 @@
   "one-time-loan-description-1": "Nur einmal bezahlt oder gesammelt",
   "partially-collect": "Teilweise sammeln",
   "partially-settle": "Teilweise niederlassen",
-  "select-initial-transaction-category": "Wählen Sie die erste Transaktionskategorie",
+  "select-initial-transaction-category": "Wählen Sie die Kategorie der ersten Transaktion aus",
   "cannot-create-installment": "Rate kann nicht erstellen",
   "missing-installment-period-and-amount": "Bitte wählen Sie eine Zahlungslänge oder einen Zahlungsbetrag aus",
   "all-spending-summary": "Alle Ausgabenzusammenfassung",
   "all-spending-description": "Ihre Ausgabenstatistiken an einem Ort",
-  "created-new-for": "Neu erstellt für"
+  "created-new-for": "Neu erstellt für",
+  "date-banner-total": "Datum Banner Gesamt",
+  "day-total": "Tag total"
 }

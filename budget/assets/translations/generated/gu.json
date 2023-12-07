@@ -874,7 +874,7 @@
   "update-both": "બંનેને અપડેટ કરો",
   "delete-both-transfers-question": "બંને સંતુલન સ્થાનાંતરણને કા delete ી નાખો?",
   "delete-both-transfers-question-description": "સંતુલન સ્થાનાંતરણમાં 2 વ્યવહારો હોય છે. તમે બંનેને કા delete ી નાખવા માંગો છો?",
-  "delete-both": "બંનેને કા .ી નાખો",
+  "delete-both": "બંનેને કા delો",
   "paid-date": "ચૂકવેલ તારીખ",
   "current-date": "આજની તારીખ",
   "transaction-date": "વ્યવહારની તારીખ",
@@ -932,7 +932,7 @@
   "loan-payment": "લોન ચુકવણી",
   "loan-payment-description-1": "લોનની ચુકવણીની કુલ ગણતરી",
   "interest-description-1": "કુલ લોન તરફ ગણી નથી",
-  "initial-loan-payment-description-1": "પ્રારંભિક કપાત અથવા લેન્ટ અથવા ઉધાર લીધેલા પૈસા સંગ્રહ",
+  "initial-loan-payment-description-1": "પ્રારંભિક કપાત અથવા લેન્ટ અથવા ઉધાર લીધેલા પૈસાનો સંગ્રહ",
   "partial-payments-loan": "આંશિક ચુકવણી લોન",
   "partial-payments-loan-description-1": "ચૂકવણી અથવા સમયગાળા દરમિયાન એકત્રિત",
   "one-time-loan": "એક વખતની લોન",
@@ -944,5 +944,7 @@
   "missing-installment-period-and-amount": "કૃપા કરીને ચુકવણીની લંબાઈ અથવા રકમ પસંદ કરો",
   "all-spending-summary": "બધા ખર્ચ સારાંશ",
   "all-spending-description": "તમારા ખર્ચના આંકડા બધા એક જગ્યાએ",
-  "created-new-for": "માટે નવું બનાવ્યું"
+  "created-new-for": "માટે નવું બનાવ્યું",
+  "date-banner-total": "તારીખનું બેનર કુલ",
+  "day-total": "દહો"
 }

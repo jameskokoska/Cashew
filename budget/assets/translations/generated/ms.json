@@ -937,12 +937,14 @@
   "partial-payments-loan-description-1": "Dibayar atau dikumpulkan dalam tempoh masa",
   "one-time-loan": "Pinjaman satu masa",
   "one-time-loan-description-1": "Dibayar atau dikumpulkan sekali sahaja",
-  "partially-collect": "Sebahagiannya mengumpul",
+  "partially-collect": "Mengumpulkan sebahagian",
   "partially-settle": "Sebahagiannya menetap",
   "select-initial-transaction-category": "Pilih Kategori Transaksi Awal",
   "cannot-create-installment": "Tidak dapat membuat ansuran",
   "missing-installment-period-and-amount": "Sila pilih panjang atau jumlah pembayaran",
   "all-spending-summary": "Semua ringkasan perbelanjaan",
   "all-spending-description": "Statistik perbelanjaan anda semua di satu tempat",
-  "created-new-for": "Dicipta baru untuk"
+  "created-new-for": "Dicipta baru untuk",
+  "date-banner-total": "Jumlah Banner Tarikh",
+  "day-total": "Jumlah hari"
 }

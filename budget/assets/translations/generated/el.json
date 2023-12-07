@@ -889,7 +889,7 @@
   "remove-link-question": "Κατάργηση συνδέσμου;",
   "remove-link-description": "Σημείωση: Τα συνημμένα δεν θα διαγραφούν από το Google Drive σας",
   "auto-pay-description": "Οι καθυστερημένες συναλλαγές επισημαίνονται αυτόματα ως καταβάλλονται όταν ανοίξει η εφαρμογή",
-  "change-date": "Ημερομηνία αλλαγής",
+  "change-date": "Ημερομηνία μεταβολής",
   "changed-date": "Μεταβληθείσα ημερομηνία",
   "date-not-selected": "Η ημερομηνία δεν έχει επιλεγεί",
   "time-not-selected": "Ο χρόνος δεν επιλεγεί",
@@ -930,7 +930,7 @@
   "interest": "Ενδιαφέρον",
   "loan-transaction-type": "Τύπος συναλλαγής δανείου",
   "loan-payment": "Πληρωμή δανείου",
-  "loan-payment-description-1": "Μετρώστε το σύνολο της πληρωμής του δανείου",
+  "loan-payment-description-1": "Μετρώστε προς το σύνολο της πληρωμής του δανείου",
   "interest-description-1": "Δεν μετράει προς το σύνολο του δανείου",
   "initial-loan-payment-description-1": "Την αρχική έκπτωση ή συλλογή δανεισμένων χρημάτων",
   "partial-payments-loan": "Δάνειο μερικής πληρωμής",
@@ -939,10 +939,12 @@
   "one-time-loan-description-1": "Που καταβάλλεται ή συλλέγεται μόνο μία φορά",
   "partially-collect": "Εν μέρει συλλέξτε",
   "partially-settle": "Μερικώς εγκατασταθεί",
-  "select-initial-transaction-category": "Επιλέξτε αρχική κατηγορία συναλλαγών",
+  "select-initial-transaction-category": "Επιλέξτε την αρχική κατηγορία συναλλαγών",
   "cannot-create-installment": "Δεν είναι δυνατή η δημιουργία δόσεων",
   "missing-installment-period-and-amount": "Επιλέξτε ένα μήκος ή ένα ποσό πληρωμής",
   "all-spending-summary": "Όλες οι συνοπτικές δαπάνες",
   "all-spending-description": "Τα στατιστικά δαπανών σας όλα σε ένα μέρος",
-  "created-new-for": "Δημιουργήθηκε νέα για"
+  "created-new-for": "Δημιουργήθηκε νέα για",
+  "date-banner-total": "Σύνολο ημερομηνίας Banner",
+  "day-total": "Συνολικό ημερήσιο"
 }

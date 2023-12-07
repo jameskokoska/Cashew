@@ -1390,6 +1390,7 @@ class _WalletCategoryPieChartState extends State<WalletCategoryPieChart> {
               TotalSpentCategoriesSummary s = watchTotalSpentInTimeRangeHelper(
                   dataInput: snapshot.data ?? [],
                   showAllSubcategories: showAllSubcategories);
+              print(s.totalSpent);
               List<Widget> categoryEntries = [];
               snapshot.data!.asMap().forEach((index, category) {
                 categoryEntries.add(
@@ -1612,6 +1613,7 @@ class _AllSpendingPastSpendingGraphState
         database.watchTotalOfWallet(
           null,
           isIncome: true,
+          includeBalanceCorrection: widget.appStateSettingsNetAllSpendingTotal,
           allWallets: Provider.of<AllWallets>(context, listen: false),
           followCustomPeriodCycle: false,
           cycleSettingsExtension: "",
@@ -1623,6 +1625,7 @@ class _AllSpendingPastSpendingGraphState
         database.watchTotalOfWallet(
           null,
           isIncome: false,
+          includeBalanceCorrection: widget.appStateSettingsNetAllSpendingTotal,
           allWallets: Provider.of<AllWallets>(context, listen: false),
           followCustomPeriodCycle: false,
           cycleSettingsExtension: "",
@@ -1876,19 +1879,17 @@ class _AllSpendingPastSpendingGraphState
                     List<List<FlSpot>> allSpots = [];
                     if (widget.appStateSettingsNetAllSpendingTotal) {
                       List<FlSpot> spots = [];
-                      if (expenseData.toSet().length > 1) {
-                        double total = totalNetBefore;
-                        for (int i = expenseData.length - 1; i >= 0; i--) {
-                          total = total +
-                              (expenseData[i] ?? 0).abs() * -1 +
-                              (nullIfIndexOutOfRange(incomeData, i) ?? 0).abs();
-                          spots.add(FlSpot(
-                            expenseData.length - 1 - i.toDouble(),
-                            (total).abs() == 0 ? minimumYValue : total,
-                          ));
-                        }
-                        allSpots.add(spots);
+                      double total = totalNetBefore;
+                      for (int i = expenseData.length - 1; i >= 0; i--) {
+                        total = total +
+                            (expenseData[i] ?? 0).abs() * -1 +
+                            (nullIfIndexOutOfRange(incomeData, i) ?? 0).abs();
+                        spots.add(FlSpot(
+                          expenseData.length - 1 - i.toDouble(),
+                          (total).abs() == 0 ? minimumYValue : total,
+                        ));
                       }
+                      allSpots.add(spots);
                     } else {
                       List<FlSpot> spots = [];
                       if (expenseData.toSet().length > 1) {

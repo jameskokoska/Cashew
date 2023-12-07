@@ -944,5 +944,7 @@
   "missing-installment-period-and-amount": "Mangyaring pumili ng isang haba ng pagbabayad o halaga",
   "all-spending-summary": "Lahat ng buod ng paggastos",
   "all-spending-description": "Ang iyong mga istatistika sa paggastos lahat sa isang lugar",
-  "created-new-for": "Nilikha bago para sa"
+  "created-new-for": "Nilikha bago para sa",
+  "date-banner-total": "Kabuuan ng Petsa ng Petsa",
+  "day-total": "Kabuuan ng Araw"
 }

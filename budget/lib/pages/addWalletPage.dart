@@ -272,6 +272,7 @@ class _AddWalletPageState extends State<AddWalletPage> {
           next: () async {
             Navigator.pop(context);
           },
+          currencyKey: selectedCurrency,
           nextLabel: "set-amount".tr(),
           allowZero: true,
         ),
@@ -573,9 +574,7 @@ class _AddWalletPageState extends State<AddWalletPage> {
                     ),
             ),
             SliverToBoxAdapter(
-              child: widget.wallet == null ||
-                      widget.routesToPopAfterDelete ==
-                          RoutesToPopAfterDelete.PreventDelete
+              child: widget.wallet == null
                   ? SizedBox.shrink()
                   : Padding(
                       padding: const EdgeInsets.only(

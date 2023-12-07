@@ -914,7 +914,7 @@
   "deducted-from": "Dikurangi dari",
   "transfer-fee": "Biaya transfer",
   "collect-all": "Kumpulkan semua",
-  "settle-all": "Menyelesaikan semua",
+  "settle-all": "Selesaikan semua",
   "edit-loan": "Edit pinjaman",
   "delete-loan": "Hapus pinjaman",
   "delete-loan-question": "Hapus pinjaman?",
@@ -944,5 +944,7 @@
   "missing-installment-period-and-amount": "Pilih panjang atau jumlah pembayaran",
   "all-spending-summary": "Semua ringkasan pengeluaran",
   "all-spending-description": "Statistik pengeluaran Anda semuanya di satu tempat",
-  "created-new-for": "Dibuat baru untuk"
+  "created-new-for": "Dibuat baru untuk",
+  "date-banner-total": "Total spanduk tanggal",
+  "day-total": "Total hari"
 }

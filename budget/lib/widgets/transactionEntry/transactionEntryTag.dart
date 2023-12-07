@@ -192,7 +192,7 @@ class ObjectivePercentTag extends StatelessWidget {
             percentageTowardsGoal <= 0 ? 0 : percentageTowardsGoal;
         return Row(
           children: [
-            Expanded(
+            Flexible(
               child: TransactionTag(
                 color: HexColor(objective.colour,
                     defaultColor: Theme.of(context).colorScheme.primary),

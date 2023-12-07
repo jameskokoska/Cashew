@@ -943,6 +943,8 @@
   "cannot-create-installment": "Kan ikke opprette avdrag",
   "missing-installment-period-and-amount": "Velg en betalingslengde eller beløp",
   "all-spending-summary": "Alle sammendrag av forbruk",
-  "all-spending-description": "Utgiftsstatistikken din alt på ett sted",
-  "created-new-for": "Opprettet nytt for"
+  "all-spending-description": "Utgiftsstatistikken din på ett sted",
+  "created-new-for": "Opprettet nytt for",
+  "date-banner-total": "Dato banner totalt",
+  "day-total": "Dag totalt"
 }

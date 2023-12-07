@@ -150,7 +150,7 @@ class BudgetHistoryLineGraph extends StatelessWidget {
       minY = forceMinYIfPositive ?? 0;
     }
 
-    if (maxY == double.infinity) {
+    if (maxY == double.negativeInfinity) {
       maxY = 1;
     }
 

@@ -944,5 +944,7 @@
   "missing-installment-period-and-amount": "支払いの長さまたは金額を選択してください",
   "all-spending-summary": "すべての支出概要",
   "all-spending-description": "あなたの支出統計はすべて1か所で",
-  "created-new-for": "新しいために作成されました"
+  "created-new-for": "新しいために作成されました",
+  "date-banner-total": "日付バナー合計",
+  "day-total": "日合計"
 }

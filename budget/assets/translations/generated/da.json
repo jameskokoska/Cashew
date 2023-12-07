@@ -911,7 +911,7 @@
   "show-balance-transfer-tab-description": "Når du opretter en ny transaktion",
   "correct-balance": "Korrekt balance",
   "setup-installment-payments": "Opsæt afdragsbetalinger",
-  "deducted-from": "Fratrækket fra",
+  "deducted-from": "Fratrukket fra",
   "transfer-fee": "Overførselssum",
   "collect-all": "Saml alle",
   "settle-all": "Sæt alle sammen",
@@ -935,14 +935,16 @@
   "initial-loan-payment-description-1": "Det første fradrag eller indsamling af fasten eller lånte penge",
   "partial-payments-loan": "Delvis betalingslån",
   "partial-payments-loan-description-1": "Betalt eller indsamlet over en periode",
-  "one-time-loan": "Et tidslån",
+  "one-time-loan": "Én tidslån",
   "one-time-loan-description-1": "Betalt eller indsamlet kun én gang",
-  "partially-collect": "Indsamle delvist",
+  "partially-collect": "Delvis indsamle",
   "partially-settle": "Delvis bosættelse",
   "select-initial-transaction-category": "Vælg den første transaktionskategori",
   "cannot-create-installment": "Kan ikke oprette rate",
   "missing-installment-period-and-amount": "Vælg en betalingslængde eller et beløb",
   "all-spending-summary": "Alle udgiftsoversigt",
   "all-spending-description": "Din udgiftsstatistik alt på ét sted",
-  "created-new-for": "Oprettet nyt til"
+  "created-new-for": "Oprettet nyt til",
+  "date-banner-total": "Dato banner i alt",
+  "day-total": "Dag i alt"
 }

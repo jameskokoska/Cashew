@@ -888,7 +888,7 @@
   "excluded-from": "Wykluczone z",
   "remove-link-question": "Usuń link?",
   "remove-link-description": "Uwaga: załączniki * nie zostaną * usunięte z dysku Google",
-  "auto-pay-description": "Dopuszczalne transakcje są automatycznie oznaczone jako opłacone po otwarciu aplikacji",
+  "auto-pay-description": "Dopuszczalne transakcje są automatycznie oznaczone jako opłacane po otwarciu aplikacji",
   "change-date": "Zmień datę",
   "changed-date": "Zmieniona data",
   "date-not-selected": "Data nie została wybrana",
@@ -944,5 +944,7 @@
   "missing-installment-period-and-amount": "Wybierz długość lub kwotę płatności",
   "all-spending-summary": "Wszystkie podsumowanie wydatków",
   "all-spending-description": "Twoje statystyki wydatków w jednym miejscu",
-  "created-new-for": "Stworzony nowy dla"
+  "created-new-for": "Stworzony nowy dla",
+  "date-banner-total": "Banner daty łącznie",
+  "day-total": "Całkowity dzień"
 }

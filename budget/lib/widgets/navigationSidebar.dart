@@ -301,7 +301,8 @@ class NavigationSidebarState extends State<NavigationSidebar> {
                               SyncButton(),
                               SizedBox(height: 10),
                               SizedBox(
-                                  height: MediaQuery.paddingOf(context).bottom),
+                                  height:
+                                      MediaQuery.viewPaddingOf(context).bottom),
                             ],
                           ),
                         ],

@@ -943,6 +943,8 @@
   "cannot-create-installment": "किस्त नहीं बना सकते",
   "missing-installment-period-and-amount": "कृपया भुगतान की लंबाई या राशि का चयन करें",
   "all-spending-summary": "सभी खर्च सारांश",
-  "all-spending-description": "आपके खर्च करने वाले आँकड़े सभी एक ही स्थान पर",
-  "created-new-for": "के लिए नया बनाया गया"
+  "all-spending-description": "आपके खर्च करने वाले आँकड़े सभी एक ही स्थान पर हैं",
+  "created-new-for": "के लिए नया बनाया गया",
+  "date-banner-total": "दिनांक बैनर कुल",
+  "day-total": "दिन का कुल"
 }

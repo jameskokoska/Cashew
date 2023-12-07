@@ -888,7 +888,7 @@
   "excluded-from": "থেকে বাদ",
   "remove-link-question": "লিঙ্ক সরান?",
   "remove-link-description": "দ্রষ্টব্য: সংযুক্তিগুলি আপনার গুগল ড্রাইভ থেকে মুছে ফেলা হবে না *",
-  "auto-pay-description": "অতিরিক্ত লেনদেনগুলি স্বয়ংক্রিয়ভাবে অ্যাপ্লিকেশনটি খোলার সময় প্রদত্ত হিসাবে চিহ্নিত করা হয়",
+  "auto-pay-description": "অ্যাপটি খোলার সময় অতিরিক্ত লেনদেনগুলি স্বয়ংক্রিয়ভাবে প্রদত্ত হিসাবে চিহ্নিত করা হয়",
   "change-date": "তারিখ পরিবর্তন",
   "changed-date": "তারিখ পরিবর্তিত",
   "date-not-selected": "তারিখ নির্বাচিত নয়",
@@ -936,7 +936,7 @@
   "partial-payments-loan": "আংশিক পেমেন্ট loan ণ",
   "partial-payments-loan-description-1": "একটি সময়ের মধ্যে অর্থ প্রদান বা সংগ্রহ করা",
   "one-time-loan": "এক সময় loan ণ",
-  "one-time-loan-description-1": "প্রদত্ত বা কেবল একবার সংগ্রহ করা",
+  "one-time-loan-description-1": "কেবলমাত্র একবার অর্থ প্রদান বা সংগ্রহ করা",
   "partially-collect": "আংশিক সংগ্রহ",
   "partially-settle": "আংশিক নিষ্পত্তি",
   "select-initial-transaction-category": "প্রাথমিক লেনদেনের বিভাগ নির্বাচন করুন",
@@ -944,5 +944,7 @@
   "missing-installment-period-and-amount": "একটি অর্থ প্রদানের দৈর্ঘ্য বা পরিমাণ নির্বাচন করুন",
   "all-spending-summary": "সমস্ত ব্যয় সংক্ষিপ্তসার",
   "all-spending-description": "আপনার ব্যয়ের পরিসংখ্যান সমস্ত এক জায়গায়",
-  "created-new-for": "জন্য নতুন তৈরি"
+  "created-new-for": "জন্য নতুন তৈরি",
+  "date-banner-total": "তারিখ ব্যানার মোট",
+  "day-total": "মোট দিন"
 }

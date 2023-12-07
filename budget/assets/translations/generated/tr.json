@@ -944,5 +944,7 @@
   "missing-installment-period-and-amount": "Lütfen bir ödeme uzunluğu veya tutarı seçin",
   "all-spending-summary": "Tüm harcama özeti",
   "all-spending-description": "Harcama istatistikleriniz tek bir yerde",
-  "created-new-for": "İçin yeni yaratıldı"
+  "created-new-for": "İçin yeni yaratıldı",
+  "date-banner-total": "Tarih banner toplamı",
+  "day-total": "Günlük Günlük"
 }

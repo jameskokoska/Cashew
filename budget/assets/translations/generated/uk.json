@@ -930,7 +930,7 @@
   "interest": "Інтерес",
   "loan-transaction-type": "Тип транзакції позики",
   "loan-payment": "Оплата позик",
-  "loan-payment-description-1": "Порахуйте до загальної кількості платежів",
+  "loan-payment-description-1": "Зараховуйте до загальної кількості платежів позики",
   "interest-description-1": "Не враховує до загальної позики",
   "initial-loan-payment-description-1": "Початкове відрахування або збирання позиції або запозичених грошей",
   "partial-payments-loan": "Часткові платежі позики",
@@ -944,5 +944,7 @@
   "missing-installment-period-and-amount": "Виберіть довжину оплати або суму",
   "all-spending-summary": "Всі витрачаються на підсумок",
   "all-spending-description": "Ваша статистика витрат все в одному місці",
-  "created-new-for": "Створив новий для"
+  "created-new-for": "Створив новий для",
+  "date-banner-total": "Дата банера Всього",
+  "day-total": "Всього дня"
 }

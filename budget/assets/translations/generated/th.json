@@ -917,7 +917,7 @@
   "settle-all": "ชำระทั้งหมด",
   "edit-loan": "แก้ไขสินเชื่อ",
   "delete-loan": "ลบเงินกู้",
-  "delete-loan-question": "ลบเงินกู้?",
+  "delete-loan-question": "ลบสินเชื่อ?",
   "delete-loan-warning": "การทำธุรกรรมที่เพิ่มเข้าไปในเงินกู้นี้จะไม่เชื่อมโยงกับเงินกู้นี้อีกต่อไป พวกเขาจะสูญเสียความสนใจและแท็กการชำระเงินครั้งแรก การทำธุรกรรมจะไม่ถูกลบ",
   "remove-transactions-from-loan-question": "ลบธุรกรรม?",
   "deleted-loan": "เงินกู้ที่ถูกลบ",
@@ -944,5 +944,7 @@
   "missing-installment-period-and-amount": "โปรดเลือกความยาวหรือจำนวนเงินการชำระเงิน",
   "all-spending-summary": "สรุปการใช้จ่ายทั้งหมด",
   "all-spending-description": "สถิติการใช้จ่ายของคุณทั้งหมดในที่เดียว",
-  "created-new-for": "สร้างใหม่สำหรับ"
+  "created-new-for": "สร้างใหม่สำหรับ",
+  "date-banner-total": "วันที่แบนเนอร์วันที่",
+  "day-total": "รวมวัน"
 }
