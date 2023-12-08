@@ -933,8 +933,8 @@
   "loan-payment-description-1": "Loan ণের অর্থ প্রদানের মোটের দিকে গণনা করুন",
   "interest-description-1": "মোট loan ণের দিকে গণনা করে না",
   "initial-loan-payment-description-1": "প্রাথমিক ছাড় বা লেন্ট বা ধার করা অর্থ সংগ্রহ",
-  "partial-payments-loan": "আংশিক পেমেন্ট loan ণ",
-  "partial-payments-loan-description-1": "একটি সময়ের মধ্যে অর্থ প্রদান বা সংগ্রহ করা",
+  "long-term-loan": "দীর্ঘ মেয়াদি ঋণ",
+  "long-term-loan-description-1": "প্রদত্ত বা কিস্তিতে সংগ্রহ করা",
   "one-time-loan": "এক সময় loan ণ",
   "one-time-loan-description-1": "কেবলমাত্র একবার অর্থ প্রদান বা সংগ্রহ করা",
   "partially-collect": "আংশিক সংগ্রহ",
@@ -946,5 +946,11 @@
   "all-spending-description": "আপনার ব্যয়ের পরিসংখ্যান সমস্ত এক জায়গায়",
   "created-new-for": "জন্য নতুন তৈরি",
   "date-banner-total": "তারিখ ব্যানার মোট",
-  "day-total": "মোট দিন"
+  "day-total": "মোট দিন",
+  "no-loans-found": "কোনও loans ণ পাওয়া যায় নি।",
+  "search-loans-placeholder": "অনুসন্ধান loans ণ ...",
+  "long-term": "দীর্ঘ মেয়াদী",
+  "one-time": "একবার",
+  "in-app-subscription-terms-1": "বার্ষিক এবং মাসিক সাবস্ক্রিপশনগুলি স্বয়ংক্রিয়ভাবে পুনর্নবীকরণ এবং অবিলম্বে চার্জ করে। যে কোনও সময় বাতিল করুন",
+  "in-app-subscription-terms-2": "গুগল প্লেতে।"
 }

@@ -55,7 +55,7 @@ class PremiumPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
+    Widget premiumPageWidget = Stack(
       children: [
         PremiumBackground(),
         PageFramework(
@@ -107,48 +107,51 @@ class PremiumPage extends StatelessWidget {
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 8.0),
                                 child: IntrinsicWidth(
-                                  child: Column(children: [
-                                    SubscriptionFeature(
-                                      iconData:
-                                          appStateSettings["outlinedIcons"]
-                                              ? Icons.thumb_up_outlined
-                                              : Icons.thumb_up_rounded,
-                                      label: "support-the-developer".tr(),
-                                      description:
-                                          "support-the-developer-description"
-                                              .tr(),
-                                    ),
-                                    SubscriptionFeature(
-                                      iconData:
-                                          appStateSettings["outlinedIcons"]
-                                              ? Icons.donut_small_outlined
-                                              : MoreIcons.chart_pie,
-                                      label: "unlimited-budgets-and-goals".tr(),
-                                      description:
-                                          "unlimited-budgets-and-goals-description"
-                                              .tr(),
-                                    ),
-                                    SubscriptionFeature(
-                                      iconData:
-                                          appStateSettings["outlinedIcons"]
-                                              ? Icons.history_outlined
-                                              : Icons.history_rounded,
-                                      label: "past-budget-periods".tr(),
-                                      description:
-                                          "past-budget-periods-description"
-                                              .tr(),
-                                    ),
-                                    SubscriptionFeature(
-                                      iconData:
-                                          appStateSettings["outlinedIcons"]
-                                              ? Icons.color_lens_outlined
-                                              : Icons.color_lens_rounded,
-                                      label: "unlimited-color-picker".tr(),
-                                      description:
-                                          "unlimited-color-picker-description"
-                                              .tr(),
-                                    ),
-                                  ]),
+                                  child: Column(
+                                    children: [
+                                      SubscriptionFeature(
+                                        iconData:
+                                            appStateSettings["outlinedIcons"]
+                                                ? Icons.thumb_up_outlined
+                                                : Icons.thumb_up_rounded,
+                                        label: "support-the-developer".tr(),
+                                        description:
+                                            "support-the-developer-description"
+                                                .tr(),
+                                      ),
+                                      SubscriptionFeature(
+                                        iconData:
+                                            appStateSettings["outlinedIcons"]
+                                                ? Icons.donut_small_outlined
+                                                : MoreIcons.chart_pie,
+                                        label:
+                                            "unlimited-budgets-and-goals".tr(),
+                                        description:
+                                            "unlimited-budgets-and-goals-description"
+                                                .tr(),
+                                      ),
+                                      SubscriptionFeature(
+                                        iconData:
+                                            appStateSettings["outlinedIcons"]
+                                                ? Icons.history_outlined
+                                                : Icons.history_rounded,
+                                        label: "past-budget-periods".tr(),
+                                        description:
+                                            "past-budget-periods-description"
+                                                .tr(),
+                                      ),
+                                      SubscriptionFeature(
+                                        iconData:
+                                            appStateSettings["outlinedIcons"]
+                                                ? Icons.color_lens_outlined
+                                                : Icons.color_lens_rounded,
+                                        label: "unlimited-color-picker".tr(),
+                                        description:
+                                            "unlimited-color-picker-description"
+                                                .tr(),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                               SizedBox(
@@ -159,42 +162,39 @@ class PremiumPage extends StatelessWidget {
                                 key: purchasesStateKey,
                                 popRouteWithPurchase: popRouteWithPurchase,
                               ),
-                              SizedBox(height: 15),
+                              SizedBox(height: 10),
                             ],
                           ),
-                          canDismiss
-                              ? SizedBox.shrink()
-                              : Opacity(
-                                  opacity: 0.7,
+                          if (canDismiss == false)
+                            Opacity(
+                              opacity: 0.7,
+                              child: Padding(
+                                padding: const EdgeInsets.only(top: 4),
+                                child: Tappable(
+                                  onTap: () async {
+                                    await openPopupCustom(
+                                      context,
+                                      barrierDismissible: false,
+                                      child: FreePremiumMessage(),
+                                    );
+                                  },
+                                  color: darkenPastel(
+                                          Theme.of(context).colorScheme.primary,
+                                          amount: 0.3)
+                                      .withOpacity(0.5),
+                                  borderRadius: 15,
                                   child: Padding(
-                                    padding: const EdgeInsets.only(top: 4),
-                                    child: Tappable(
-                                      onTap: () async {
-                                        await openPopupCustom(
-                                          context,
-                                          barrierDismissible: false,
-                                          child: FreePremiumMessage(),
-                                        );
-                                      },
-                                      color: darkenPastel(
-                                              Theme.of(context)
-                                                  .colorScheme
-                                                  .primary,
-                                              amount: 0.3)
-                                          .withOpacity(0.5),
-                                      borderRadius: 15,
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 13, vertical: 9),
-                                        child: TextFont(
-                                          text: "continue-for-free".tr(),
-                                          fontSize: 13.5,
-                                          textColor: Colors.white,
-                                        ),
-                                      ),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 13, vertical: 9),
+                                    child: TextFont(
+                                      text: "continue-for-free".tr(),
+                                      fontSize: 13.5,
+                                      textColor: Colors.white,
                                     ),
                                   ),
                                 ),
+                              ),
+                            ),
                         ],
                       ),
                     ),
@@ -231,6 +231,75 @@ class PremiumPage extends StatelessWidget {
             ),
           ],
         ),
+      ],
+    );
+    bool enableSubscriptionAboutBanner =
+        (getPlatform(ignoreEmulation: true) == PlatformOS.isAndroid &&
+            appStateSettings["purchaseID"] != productIDs["lifetime"]);
+    return Column(
+      children: [
+        Expanded(
+          child: Stack(
+            children: [
+              Container(color: Colors.black),
+              ClipRRect(
+                borderRadius: BorderRadius.circular(
+                  enableSubscriptionAboutBanner ? 23 : 0,
+                ),
+                child: premiumPageWidget,
+              ),
+            ],
+          ),
+        ),
+        if (enableSubscriptionAboutBanner)
+          Container(
+            color: Colors.black,
+            child: Row(
+              children: [
+                Expanded(
+                  child: Tappable(
+                    borderRadius: 10,
+                    onTap: () {
+                      openManagePurchase();
+                    },
+                    color: Colors.transparent,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 15, vertical: 10),
+                      child: TextFont(
+                        text: "",
+                        maxLines: 25,
+                        textAlign: TextAlign.center,
+                        richTextSpan: [
+                          TextSpan(
+                            text: "in-app-subscription-terms-1".tr() + " ",
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.white.withOpacity(0.3),
+                              fontFamily: appStateSettings["font"],
+                              fontFamilyFallback: ['Inter'],
+                            ),
+                          ),
+                          TextSpan(
+                            text: "in-app-subscription-terms-2".tr(),
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.white.withOpacity(0.3),
+                              fontFamily: appStateSettings["font"],
+                              fontFamilyFallback: ['Inter'],
+                              decoration: TextDecoration.underline,
+                              decorationStyle: TextDecorationStyle.solid,
+                              decorationColor: Colors.white.withOpacity(0.3),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
       ],
     );
   }
@@ -390,22 +459,25 @@ class CashewProBanner extends StatelessWidget {
   }
 }
 
+openManagePurchase() {
+  if (appStateSettings["purchaseID"] == productIDs["lifetime"]) {
+    return;
+  } else if (getPlatform(ignoreEmulation: true) == PlatformOS.isIOS) {
+    openUrl("https://apps.apple.com/account/subscriptions");
+  } else if (appStateSettings["purchaseID"] == productIDs["monthly"]) {
+    openUrl(
+        "https://play.google.com/store/account/subscriptions?sku=cashew.pro.monthly&package=com.budget.tracker_app");
+  } else if (appStateSettings["purchaseID"] == productIDs["yearly"]) {
+    openUrl(
+        "https://play.google.com/store/account/subscriptions?sku=cashew.pro.yearly&package=com.budget.tracker_app");
+  } else {
+    if (getPlatform(ignoreEmulation: true) == PlatformOS.isAndroid)
+      openUrl("https://play.google.com/store/account/subscriptions");
+  }
+}
+
 class ManageSubscription extends StatelessWidget {
   const ManageSubscription({super.key});
-
-  openManagePurchase() {
-    if (appStateSettings["purchaseID"] == productIDs["lifetime"]) {
-      return;
-    } else if (getPlatform(ignoreEmulation: true) == PlatformOS.isIOS) {
-      openUrl("https://apps.apple.com/account/subscriptions");
-    } else if (appStateSettings["purchaseID"] == productIDs["monthly"]) {
-      openUrl(
-          "https://play.google.com/store/account/subscriptions?sku=cashew.pro.monthly&package=com.budget.tracker_app");
-    } else if (appStateSettings["purchaseID"] == productIDs["yearly"]) {
-      openUrl(
-          "https://play.google.com/store/account/subscriptions?sku=cashew.pro.yearly&package=com.budget.tracker_app");
-    }
-  }
 
   @override
   Widget build(BuildContext context) {

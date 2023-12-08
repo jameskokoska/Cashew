@@ -933,8 +933,8 @@
   "loan-payment-description-1": "قرض کی ادائیگی کی کل گنجائش",
   "interest-description-1": "قرض کے کل کی گنتی نہیں کرتا ہے",
   "initial-loan-payment-description-1": "ابتدائی کٹوتی یا لینٹ یا قرض لینے والی رقم کا مجموعہ",
-  "partial-payments-loan": "جزوی ادائیگی کا قرض",
-  "partial-payments-loan-description-1": "ادائیگی یا وقتا فوقتا جمع کیا گیا",
+  "long-term-loan": "طویل مدتی قرض",
+  "long-term-loan-description-1": "ادائیگی یا قسطوں میں جمع",
   "one-time-loan": "ایک وقت کا قرض",
   "one-time-loan-description-1": "صرف ایک بار ادائیگی یا جمع",
   "partially-collect": "جزوی طور پر جمع کریں",
@@ -946,5 +946,11 @@
   "all-spending-description": "آپ کے اخراجات کے اعدادوشمار ایک ہی جگہ پر ہیں",
   "created-new-for": "کے لئے نیا بنایا",
   "date-banner-total": "تاریخ بینر کل",
-  "day-total": "دن کل"
+  "day-total": "دن کل",
+  "no-loans-found": "کوئی قرض نہیں ملا۔",
+  "search-loans-placeholder": "تلاش قرضوں ...",
+  "long-term": "طویل مدتی",
+  "one-time": "ایک بار",
+  "in-app-subscription-terms-1": "سالانہ اور ماہانہ سبسکرپشنز خود بخود تجدید کریں اور فوری طور پر چارج کریں۔ کسی بھی وقت منسوخ کریں",
+  "in-app-subscription-terms-2": "گوگل پلے میں"
 }

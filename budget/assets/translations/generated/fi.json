@@ -933,8 +933,8 @@
   "loan-payment-description-1": "Laske lainan kokonaismäärä",
   "interest-description-1": "Ei lasketa lainan kokonaismäärään",
   "initial-loan-payment-description-1": "Alkuperäinen vähennys tai paaston tai lainannut rahan keräys",
-  "partial-payments-loan": "Osittainen maksulaina",
-  "partial-payments-loan-description-1": "Maksettu tai kerätty tietyn ajanjakson ajan",
+  "long-term-loan": "Pitkäaikainen laina",
+  "long-term-loan-description-1": "Maksettu tai kerätty erissä",
   "one-time-loan": "Ajan laina",
   "one-time-loan-description-1": "Maksettu tai kerätty vain kerran",
   "partially-collect": "Kerätä osittain",
@@ -946,5 +946,11 @@
   "all-spending-description": "Kulutustilastosi yhdessä yhdessä paikassa",
   "created-new-for": "Luotu uusi",
   "date-banner-total": "Päivämäärä Banner Yhteensä",
-  "day-total": "Kokonaismäärä"
+  "day-total": "Kokonaismäärä",
+  "no-loans-found": "Lainoja ei löydy.",
+  "search-loans-placeholder": "Hakulainat ...",
+  "long-term": "Pitkäaikainen",
+  "one-time": "Kerran",
+  "in-app-subscription-terms-1": "Vuosi- ja kuukausitilaukset uudistuvat automaattisesti ja veloittavat välittömästi. Peruuta milloin tahansa",
+  "in-app-subscription-terms-2": "Google Playssa."
 }

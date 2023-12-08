@@ -910,7 +910,7 @@
   "show-balance-transfer-tab": "علامة تبويب نقل الرصيد",
   "show-balance-transfer-tab-description": "عند إنشاء معاملة جديدة",
   "correct-balance": "التوازن الصحيح",
-  "setup-installment-payments": "الإعداد مدفوعات التقسيط",
+  "setup-installment-payments": "إعدادات التقسيط",
   "deducted-from": "خصم من",
   "transfer-fee": "رسوم التحويل",
   "collect-all": "اجمعها كلها",
@@ -933,8 +933,8 @@
   "loan-payment-description-1": "عد نحو إجمالي دفع القرض",
   "interest-description-1": "لا تحسب تجاه إجمالي القرض",
   "initial-loan-payment-description-1": "الخصم الأولي أو التجميع من الصوم الكبير أو الأموال المقترضة",
-  "partial-payments-loan": "قرض المدفوعات الجزئية",
-  "partial-payments-loan-description-1": "مدفوع الأجر أو جمعه على مدى فترة من الزمن",
+  "long-term-loan": "قرض طويل الأجل",
+  "long-term-loan-description-1": "مدفوع الأجر أو جمعه على أقساط",
   "one-time-loan": "قرض لمرة واحدة",
   "one-time-loan-description-1": "مدفوع الأجر أو جمع مرة واحدة فقط",
   "partially-collect": "جمع جزئيا",
@@ -946,5 +946,11 @@
   "all-spending-description": "إحصائيات الإنفاق الخاصة بك في مكان واحد",
   "created-new-for": "تم إنشاؤها جديد ل",
   "date-banner-total": "إجمالي شعار التاريخ",
-  "day-total": "مجموع اليوم"
+  "day-total": "مجموع اليوم",
+  "no-loans-found": "لم يتم العثور على قروض.",
+  "search-loans-placeholder": "قروض البحث ...",
+  "long-term": "طويل الأمد",
+  "one-time": "مره واحده",
+  "in-app-subscription-terms-1": "تجديد الاشتراكات السنوية والشهرية تلقائيًا وشحنها على الفور. إلغاء في أي وقت",
+  "in-app-subscription-terms-2": "في Google Play."
 }

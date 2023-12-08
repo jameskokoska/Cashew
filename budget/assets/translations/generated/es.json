@@ -933,8 +933,8 @@
   "loan-payment-description-1": "Cuente para el total de pago del préstamo",
   "interest-description-1": "No cuenta para el total de préstamos",
   "initial-loan-payment-description-1": "La deducción o colección inicial de dinero prestado o prestado",
-  "partial-payments-loan": "Préstamo de pagos parciales",
-  "partial-payments-loan-description-1": "Pagado o recolectado durante un período de tiempo",
+  "long-term-loan": "Préstamo a largo plazo",
+  "long-term-loan-description-1": "Pagado o recolectado en cuotas",
   "one-time-loan": "Préstamo único",
   "one-time-loan-description-1": "Pagado o recolectado solo una vez",
   "partially-collect": "Recolectar parcialmente",
@@ -945,6 +945,12 @@
   "all-spending-summary": "Resumen de todo el gasto",
   "all-spending-description": "Sus estadísticas de gasto en un solo lugar",
   "created-new-for": "Creado nuevo para",
-  "date-banner-total": "Total de banner de fecha",
-  "day-total": "Total de un día"
+  "date-banner-total": "Banner de fecha total",
+  "day-total": "Total de un día",
+  "no-loans-found": "No se encontraron préstamos.",
+  "search-loans-placeholder": "Préstamos de búsqueda ...",
+  "long-term": "A largo plazo",
+  "one-time": "Una vez",
+  "in-app-subscription-terms-1": "Las suscripciones anuales y mensuales se renuevan automáticamente y cobran de inmediato. Cancelar en cualquier momento",
+  "in-app-subscription-terms-2": "en Google Play."
 }

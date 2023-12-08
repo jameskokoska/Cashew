@@ -917,7 +917,7 @@
   "settle-all": "Rendezze az összeset",
   "edit-loan": "Kölcsön szerkesztése",
   "delete-loan": "Hitel törlése",
-  "delete-loan-question": "A hitel törlése?",
+  "delete-loan-question": "A kölcsön törlése?",
   "delete-loan-warning": "A hitelhez hozzáadott tranzakciók már nem kapcsolódnak ehhez a hitelhez. Elveszítik a kamat- és kezdeti fizetési címkéket. A tranzakciókat nem töröljük.",
   "remove-transactions-from-loan-question": "Távolítsa el a tranzakciókat?",
   "deleted-loan": "Törölt kölcsön",
@@ -933,8 +933,8 @@
   "loan-payment-description-1": "Számoljon a hitel teljes fizetési összegébe",
   "interest-description-1": "Nem számít a kölcsön teljes számába",
   "initial-loan-payment-description-1": "A nagyböjt vagy a kölcsönzött pénz kezdeti levonása vagy gyűjtése",
-  "partial-payments-loan": "Részleges fizetési kölcsön",
-  "partial-payments-loan-description-1": "Egy ideig fizetett vagy összegyűjtött",
+  "long-term-loan": "Hosszú távú kölcsön",
+  "long-term-loan-description-1": "Részletekben fizetett vagy összegyűjtött",
   "one-time-loan": "Egyszeri kölcsön",
   "one-time-loan-description-1": "Csak egyszer fizetett vagy összegyűjtött",
   "partially-collect": "Részben gyűjt",
@@ -946,5 +946,11 @@
   "all-spending-description": "Az Ön kiadásának statisztikái egy helyen",
   "created-new-for": "Új létrehozott",
   "date-banner-total": "Dátum zászló teljes",
-  "day-total": "Napi nap"
+  "day-total": "Napi nap",
+  "no-loans-found": "Nem találtak kölcsönöket.",
+  "search-loans-placeholder": "Keresési kölcsönök ...",
+  "long-term": "Hosszútávú",
+  "one-time": "Egyszer",
+  "in-app-subscription-terms-1": "Az éves és havi előfizetések automatikusan megújulnak, és azonnal számítanak fel. Törölje bármikor",
+  "in-app-subscription-terms-2": "A Google Play -ben."
 }

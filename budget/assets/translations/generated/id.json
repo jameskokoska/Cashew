@@ -933,8 +933,8 @@
   "loan-payment-description-1": "Menghitung ke arah total pembayaran pinjaman",
   "interest-description-1": "Tidak dihitung terhadap total pinjaman",
   "initial-loan-payment-description-1": "Pengurangan awal atau pengumpulan uang pinjaman atau pinjaman",
-  "partial-payments-loan": "Pinjaman pembayaran parsial",
-  "partial-payments-loan-description-1": "Dibayar atau dikumpulkan selama periode waktu tertentu",
+  "long-term-loan": "Pinjaman jangka panjang",
+  "long-term-loan-description-1": "Dibayar atau dikumpulkan dengan angsuran",
   "one-time-loan": "Satu kali pinjaman",
   "one-time-loan-description-1": "Dibayar atau dikumpulkan hanya sekali",
   "partially-collect": "Mengumpulkan sebagian",
@@ -946,5 +946,11 @@
   "all-spending-description": "Statistik pengeluaran Anda semuanya di satu tempat",
   "created-new-for": "Dibuat baru untuk",
   "date-banner-total": "Total spanduk tanggal",
-  "day-total": "Total hari"
+  "day-total": "Total hari",
+  "no-loans-found": "Tidak ada pinjaman yang ditemukan.",
+  "search-loans-placeholder": "Cari pinjaman ...",
+  "long-term": "Jangka panjang",
+  "one-time": "Satu kali",
+  "in-app-subscription-terms-1": "Langganan tahunan dan bulanan memperbarui secara otomatis dan segera dikenakan biaya. Batalkan kapan saja",
+  "in-app-subscription-terms-2": "di Google Play."
 }

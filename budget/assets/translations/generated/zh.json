@@ -888,7 +888,7 @@
   "excluded-from": "排除在",
   "remove-link-question": "删除链接？",
   "remove-link-description": "注意：附件将 *不 *从您的Google驱动器中删除",
-  "auto-pay-description": "开放时，逾期交易自动标记为已付款",
+  "auto-pay-description": "开放时，逾期交易自动标记为付款",
   "change-date": "改变日期",
   "changed-date": "更改日期",
   "date-not-selected": "未选择日期",
@@ -933,8 +933,8 @@
   "loan-payment-description-1": "计算贷款的付款总计",
   "interest-description-1": "不计入贷款总计",
   "initial-loan-payment-description-1": "借出或借钱的最初扣除或收集",
-  "partial-payments-loan": "部分付款贷款",
-  "partial-payments-loan-description-1": "一段时间内付款或收集",
+  "long-term-loan": "长期贷款",
+  "long-term-loan-description-1": "分期付款或收集",
   "one-time-loan": "一次贷款",
   "one-time-loan-description-1": "仅支付或收集一次",
   "partially-collect": "部分收集",
@@ -946,5 +946,11 @@
   "all-spending-description": "您的支出统计数据全部在一个地方",
   "created-new-for": "创建了新的",
   "date-banner-total": "日期横幅总数",
-  "day-total": "一天总数"
+  "day-total": "一天总数",
+  "no-loans-found": "找不到贷款。",
+  "search-loans-placeholder": "搜索贷款...",
+  "long-term": "长期",
+  "one-time": "一度",
+  "in-app-subscription-terms-1": "每年和每月订阅会自动续订并立即收费。随时取消",
+  "in-app-subscription-terms-2": "在Google Play中。"
 }

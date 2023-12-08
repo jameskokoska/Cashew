@@ -933,8 +933,8 @@
   "loan-payment-description-1": "Tel mee voor de betaling van de lening",
   "interest-description-1": "Telt niet mee voor het totaal van de lening",
   "initial-loan-payment-description-1": "De eerste aftrek of inzameling van vastgelegde of geleend geld",
-  "partial-payments-loan": "Gedeeltelijke betalingslening",
-  "partial-payments-loan-description-1": "Betaald of verzameld gedurende een bepaalde periode",
+  "long-term-loan": "Langlopende lening",
+  "long-term-loan-description-1": "Betaald of verzameld in termijnen",
   "one-time-loan": "Eén keerlening",
   "one-time-loan-description-1": "Slechts één keer betaald of verzameld",
   "partially-collect": "Gedeeltelijk verzamelen",
@@ -946,5 +946,11 @@
   "all-spending-description": "Uw bestedingsstatistieken allemaal op één plek",
   "created-new-for": "Nieuw gemaakt voor",
   "date-banner-total": "Datum Banner totaal",
-  "day-total": "Dagtotaal"
+  "day-total": "Dagtotaal",
+  "no-loans-found": "Geen leningen gevonden.",
+  "search-loans-placeholder": "Zoekleningen ...",
+  "long-term": "Langetermijn",
+  "one-time": "Een keer",
+  "in-app-subscription-terms-1": "Jaarlijkse en maandelijkse abonnementen verlengen automatisch en laadt onmiddellijk in rekening. Annuleer altijd",
+  "in-app-subscription-terms-2": "in Google Play."
 }

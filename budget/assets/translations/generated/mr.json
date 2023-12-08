@@ -933,8 +933,8 @@
   "loan-payment-description-1": "कर्जाच्या देयकाच्या एकूण दिशेने मोजा",
   "interest-description-1": "कर्ज एकूणकडे मोजत नाही",
   "initial-loan-payment-description-1": "प्रारंभिक कपात किंवा लेंट किंवा कर्ज घेतलेल्या पैशांचा संग्रह",
-  "partial-payments-loan": "आंशिक देयके कर्ज",
-  "partial-payments-loan-description-1": "काही कालावधीत पैसे दिले किंवा गोळा केले",
+  "long-term-loan": "दीर्घकालीन कर्ज",
+  "long-term-loan-description-1": "हप्त्यांमध्ये पैसे दिले किंवा गोळा केले",
   "one-time-loan": "एक वेळ कर्ज",
   "one-time-loan-description-1": "फक्त एकदाच पैसे दिले किंवा गोळा केले",
   "partially-collect": "अंशतः गोळा",
@@ -946,5 +946,11 @@
   "all-spending-description": "आपल्या खर्चाची आकडेवारी सर्व एकाच ठिकाणी",
   "created-new-for": "यासाठी नवीन तयार केले",
   "date-banner-total": "एकूण तारीख बॅनर",
-  "day-total": "दिवस एकूण"
+  "day-total": "दिवस एकूण",
+  "no-loans-found": "कर्ज सापडले नाही.",
+  "search-loans-placeholder": "शोध कर्ज ...",
+  "long-term": "दीर्घकालीन",
+  "one-time": "एकावेळी",
+  "in-app-subscription-terms-1": "वार्षिक आणि मासिक सदस्यता स्वयंचलितपणे नूतनीकरण करतात आणि त्वरित शुल्क आकारतात. कधीही रद्द करा",
+  "in-app-subscription-terms-2": "गूगल प्ले मध्ये."
 }

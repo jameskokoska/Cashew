@@ -933,8 +933,8 @@
   "loan-payment-description-1": "Telle mot lånets betaling totalt",
   "interest-description-1": "Teller ikke mot lånets totale",
   "initial-loan-payment-description-1": "Den første fradraget eller innkrevingen av lånte eller lånte penger",
-  "partial-payments-loan": "Delvis betalingslån",
-  "partial-payments-loan-description-1": "Betalt eller samlet over en periode",
+  "long-term-loan": "Langsiktig lån",
+  "long-term-loan-description-1": "Betalt eller samlet inn i avdrag",
   "one-time-loan": "One Time Loan",
   "one-time-loan-description-1": "Betalt eller samlet bare en gang",
   "partially-collect": "Delvis samle inn",
@@ -946,5 +946,11 @@
   "all-spending-description": "Utgiftsstatistikken din på ett sted",
   "created-new-for": "Opprettet nytt for",
   "date-banner-total": "Dato banner totalt",
-  "day-total": "Dag totalt"
+  "day-total": "Dag totalt",
+  "no-loans-found": "Ingen lån funnet.",
+  "search-loans-placeholder": "Søkelån ...",
+  "long-term": "Langsiktig",
+  "one-time": "En gang",
+  "in-app-subscription-terms-1": "Årlige og månedlige abonnement fornyer automatisk og krever umiddelbart. Avbryt når som helst",
+  "in-app-subscription-terms-2": "I Google Play."
 }

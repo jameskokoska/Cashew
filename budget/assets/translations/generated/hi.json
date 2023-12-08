@@ -933,8 +933,8 @@
   "loan-payment-description-1": "ऋण के भुगतान की ओर गिनती करें",
   "interest-description-1": "कुल ऋण की ओर नहीं गिना जाता है",
   "initial-loan-payment-description-1": "प्रारंभिक कटौती या उधार या उधार लिए गए पैसे का संग्रह",
-  "partial-payments-loan": "आंशिक भुगतान ऋण",
-  "partial-payments-loan-description-1": "समय की अवधि में भुगतान या एकत्र किया गया",
+  "long-term-loan": "लंबी अवधि के ऋण",
+  "long-term-loan-description-1": "किस्तों में भुगतान या एकत्र किया गया",
   "one-time-loan": "एक समय ऋण",
   "one-time-loan-description-1": "केवल एक बार भुगतान या एकत्र किया गया",
   "partially-collect": "आंशिक रूप से इकट्ठा करें",
@@ -946,5 +946,11 @@
   "all-spending-description": "आपके खर्च करने वाले आँकड़े सभी एक ही स्थान पर हैं",
   "created-new-for": "के लिए नया बनाया गया",
   "date-banner-total": "दिनांक बैनर कुल",
-  "day-total": "दिन का कुल"
+  "day-total": "कुल दिन",
+  "no-loans-found": "कोई ऋण नहीं मिला।",
+  "search-loans-placeholder": "खोज ऋण ...",
+  "long-term": "दीर्घकालिक",
+  "one-time": "वन टाइम",
+  "in-app-subscription-terms-1": "वार्षिक और मासिक सदस्यता स्वचालित रूप से नवीनीकृत और तुरंत चार्ज। कभी भी रद्द करें",
+  "in-app-subscription-terms-2": "Google Play में।"
 }

@@ -933,8 +933,8 @@
   "loan-payment-description-1": "Hesabu kuelekea jumla ya malipo ya mkopo",
   "interest-description-1": "Haihesabu kuelekea jumla ya mkopo",
   "initial-loan-payment-description-1": "Kupunguzwa kwa awali au mkusanyiko wa pesa zilizokopwa au zilizokopwa",
-  "partial-payments-loan": "Mkopo wa malipo ya sehemu",
-  "partial-payments-loan-description-1": "Kulipwa au kukusanywa kwa muda mrefu",
+  "long-term-loan": "Mkopo wa muda mrefu",
+  "long-term-loan-description-1": "Kulipwa au kukusanywa kwa awamu",
   "one-time-loan": "Mkopo wa wakati mmoja",
   "one-time-loan-description-1": "Kulipwa au kukusanywa mara moja tu",
   "partially-collect": "Kukusanya sehemu",
@@ -946,5 +946,11 @@
   "all-spending-description": "Takwimu zako za matumizi yote katika sehemu moja",
   "created-new-for": "Imeundwa mpya kwa",
   "date-banner-total": "Jumla ya bendera ya tarehe",
-  "day-total": "Jumla ya siku"
+  "day-total": "Jumla ya siku",
+  "no-loans-found": "Hakuna mikopo iliyopatikana.",
+  "search-loans-placeholder": "Tafuta Mikopo ...",
+  "long-term": "Muda mrefu",
+  "one-time": "Mara moja",
+  "in-app-subscription-terms-1": "Usajili wa kila mwaka na wa kila mwezi husasisha moja kwa moja na malipo mara moja. Ghairi wakati wowote",
+  "in-app-subscription-terms-2": "Katika Google Play."
 }

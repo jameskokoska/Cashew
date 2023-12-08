@@ -933,8 +933,8 @@
   "loan-payment-description-1": "לספור את סך התשלום של ההלוואה",
   "interest-description-1": "לא נחשב לסך ההלוואה",
   "initial-loan-payment-description-1": "הניכוי הראשוני או הגבייה של הכסף מושך או מושאל",
-  "partial-payments-loan": "הלוואת תשלומים חלקית",
-  "partial-payments-loan-description-1": "שילם או נאסף לאורך פרק זמן",
+  "long-term-loan": "הלוואה לטווח ארוך",
+  "long-term-loan-description-1": "שילם או נאסף בתשלומים",
   "one-time-loan": "הלוואה חד פעמית",
   "one-time-loan-description-1": "שילם או נאסף רק פעם אחת",
   "partially-collect": "אסוף חלקית",
@@ -946,5 +946,11 @@
   "all-spending-description": "סטטיסטיקת ההוצאות שלך הכל במקום אחד",
   "created-new-for": "נוצר חדש עבור",
   "date-banner-total": "סה\"כ באנר תאריך",
-  "day-total": "יום סה\"כ"
+  "day-total": "יום סה\"כ",
+  "no-loans-found": "לא נמצאו הלוואות.",
+  "search-loans-placeholder": "חיפוש הלוואות ...",
+  "long-term": "טווח ארוך",
+  "one-time": "פעם אחת",
+  "in-app-subscription-terms-1": "מנויים שנתיים וחודשיים מתחדשים באופן אוטומטי וחייבים מייד. בטל בכל עת",
+  "in-app-subscription-terms-2": "ב- Google Play."
 }

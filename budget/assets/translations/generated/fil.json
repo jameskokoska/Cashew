@@ -933,8 +933,8 @@
   "loan-payment-description-1": "Bilangin sa kabuuan ng pagbabayad ng utang",
   "interest-description-1": "Ay hindi mabibilang patungo sa kabuuang utang",
   "initial-loan-payment-description-1": "Ang paunang pagbabawas o koleksyon ng pautang o hiniram na pera",
-  "partial-payments-loan": "Bahagyang Payment Loan",
-  "partial-payments-loan-description-1": "Bayad o nakolekta sa loob ng isang tagal ng panahon",
+  "long-term-loan": "Pangmatagalang pautang",
+  "long-term-loan-description-1": "Bayad o nakolekta sa mga installment",
   "one-time-loan": "Isang beses na pautang",
   "one-time-loan-description-1": "Bayad o nakolekta lamang ng isang beses",
   "partially-collect": "Bahagyang mangolekta",
@@ -946,5 +946,11 @@
   "all-spending-description": "Ang iyong mga istatistika sa paggastos lahat sa isang lugar",
   "created-new-for": "Nilikha bago para sa",
   "date-banner-total": "Kabuuan ng Petsa ng Petsa",
-  "day-total": "Kabuuan ng Araw"
+  "day-total": "Kabuuan ng Araw",
+  "no-loans-found": "Walang nahanap na pautang.",
+  "search-loans-placeholder": "Mga pautang sa paghahanap ...",
+  "long-term": "Pangmatagalang",
+  "one-time": "Isang beses",
+  "in-app-subscription-terms-1": "Taunang at buwanang mga subscription awtomatikong i -renew at singilin kaagad. Kanselahin anumang oras",
+  "in-app-subscription-terms-2": "Sa Google Play."
 }

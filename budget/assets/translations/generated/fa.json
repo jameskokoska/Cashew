@@ -933,8 +933,8 @@
   "loan-payment-description-1": "به کل پرداخت وام حساب کنید",
   "interest-description-1": "به کل وام حساب نمی شود",
   "initial-loan-payment-description-1": "کسر اولیه یا جمع آوری پول وام یا وام گرفته شده",
-  "partial-payments-loan": "وام پرداخت جزئی",
-  "partial-payments-loan-description-1": "پرداخت یا جمع آوری شده در یک دوره زمانی",
+  "long-term-loan": "وام بلند مدت",
+  "long-term-loan-description-1": "پرداخت یا جمع آوری شده در اقساط",
   "one-time-loan": "وام یک بار",
   "one-time-loan-description-1": "فقط یک بار پرداخت یا جمع آوری شده است",
   "partially-collect": "تا حدی جمع آوری",
@@ -946,5 +946,11 @@
   "all-spending-description": "آمار خرج کردن شما همه در یک مکان",
   "created-new-for": "جدید برای",
   "date-banner-total": "کل بنر تاریخ",
-  "day-total": "کل روز"
+  "day-total": "کل روز",
+  "no-loans-found": "هیچ وام پیدا نشده است.",
+  "search-loans-placeholder": "وام جستجو ...",
+  "long-term": "بلند مدت",
+  "one-time": "سر وقت",
+  "in-app-subscription-terms-1": "اشتراک های سالانه و ماهانه به طور خودکار تمدید می شود و بلافاصله شارژ می شود. هر زمان را لغو کنید",
+  "in-app-subscription-terms-2": "در Google Play."
 }

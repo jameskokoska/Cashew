@@ -933,8 +933,8 @@
   "loan-payment-description-1": "Tính vào tổng số thanh toán của khoản vay",
   "interest-description-1": "Không tính vào tổng số tiền vay",
   "initial-loan-payment-description-1": "Việc khấu trừ hoặc thu hồi ban đầu số tiền cho mượn hoặc đã mượn",
-  "partial-payments-loan": "Khoản vay thanh toán một phần",
-  "partial-payments-loan-description-1": "Được thanh toán hoặc thu hồi trong một khoảng thời gian",
+  "long-term-loan": "Khoản vay thanh toán một phần",
+  "long-term-loan-description-1": "Được thanh toán hoặc thu hồi trong một khoảng thời gian",
   "one-time-loan": "Khoản vay một lần",
   "one-time-loan-description-1": "Chỉ được thanh toán hoặc thu hồi một lần",
   "partially-collect": "Thu hồi một phần",
@@ -946,5 +946,11 @@
   "all-spending-description": "Tất cả số liệu thống kê chi tiêu của bạn ở một nơi",
   "created-new-for": "Được tạo mới cho",
   "date-banner-total": "Tổng số banner ngày",
-  "day-total": "Tổng số ngày"
+  "day-total": "Tổng số ngày",
+  "no-loans-found": "Không tìm thấy các khoản vay.",
+  "search-loans-placeholder": "Các khoản vay tìm kiếm ...",
+  "long-term": "Dài hạn",
+  "one-time": "Một lần",
+  "in-app-subscription-terms-1": "Đăng ký hàng năm và hàng tháng tự động gia hạn và tính phí ngay lập tức. Hủy bất cứ lúc nào",
+  "in-app-subscription-terms-2": "Trong google play."
 }

@@ -910,7 +910,7 @@
   "show-balance-transfer-tab": "Zakładka transferu salda",
   "show-balance-transfer-tab-description": "Podczas tworzenia nowej transakcji",
   "correct-balance": "Poprawna równowaga",
-  "setup-installment-payments": "Płatności instalacyjne konfiguracji",
+  "setup-installment-payments": "Płatności ratalne konfiguracji",
   "deducted-from": "Odliczona od",
   "transfer-fee": "Opłata za transfer",
   "collect-all": "Zebrać wszystkie",
@@ -933,8 +933,8 @@
   "loan-payment-description-1": "Liczyć do całkowitej płatności pożyczki",
   "interest-description-1": "Nie liczy się do całkowitej pożyczki",
   "initial-loan-payment-description-1": "Początkowe odliczenie lub zbieranie pożyczonych lub pożyczonych pieniędzy",
-  "partial-payments-loan": "Pożyczka częściowa płatności",
-  "partial-payments-loan-description-1": "Zapłacone lub zebrane przez okres czasu",
+  "long-term-loan": "Długoterminowa pożyczka",
+  "long-term-loan-description-1": "Opłacane lub zebrane w ratach",
   "one-time-loan": "Jednorazowa pożyczka",
   "one-time-loan-description-1": "Opłacane lub zebrane tylko raz",
   "partially-collect": "Częściowo zbierać",
@@ -946,5 +946,11 @@
   "all-spending-description": "Twoje statystyki wydatków w jednym miejscu",
   "created-new-for": "Stworzony nowy dla",
   "date-banner-total": "Banner daty łącznie",
-  "day-total": "Całkowity dzień"
+  "day-total": "Całkowity dzień",
+  "no-loans-found": "Nie znaleziono pożyczek.",
+  "search-loans-placeholder": "Wyszukaj pożyczki ...",
+  "long-term": "Długoterminowy",
+  "one-time": "Jeden raz",
+  "in-app-subscription-terms-1": "Roczne i miesięczne subskrypcje odnawiają automatycznie i natychmiast pobierają opłaty. Anuluj w dowolnym momencie",
+  "in-app-subscription-terms-2": "W Google Play."
 }

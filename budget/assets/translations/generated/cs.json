@@ -917,7 +917,7 @@
   "settle-all": "Urovnat všechny",
   "edit-loan": "Upravit půjčku",
   "delete-loan": "Odstranit půjčku",
-  "delete-loan-question": "Smazat půjčku?",
+  "delete-loan-question": "Odstranit půjčku?",
   "delete-loan-warning": "Transakce přidané k této půjčce již nebudou s touto půjčkou spojeny. Ztratí svůj zájem a počáteční platební značky. Transakce nebudou smazány.",
   "remove-transactions-from-loan-question": "Odebrat transakce?",
   "deleted-loan": "Smazaná půjčka",
@@ -933,8 +933,8 @@
   "loan-payment-description-1": "Počítejte se do celkové platby půjčky",
   "interest-description-1": "Nepočítá se do celkového počtu půjček",
   "initial-loan-payment-description-1": "Počáteční odpočet nebo sběr půjčených nebo vypůjčených peněz",
-  "partial-payments-loan": "Částečné platby půjčky",
-  "partial-payments-loan-description-1": "Zaplaceno nebo shromážděno po určitou dobu",
+  "long-term-loan": "Dlouhodobá půjčka",
+  "long-term-loan-description-1": "Zaplaceno nebo shromážděno ve splátkách",
   "one-time-loan": "Jednorázová půjčka",
   "one-time-loan-description-1": "Zaplaceno nebo shromážděno pouze jednou",
   "partially-collect": "Částečně sbírat",
@@ -946,5 +946,11 @@
   "all-spending-description": "Vaše statistiky výdajů na jednom místě",
   "created-new-for": "Vytvořil nové pro",
   "date-banner-total": "Celkem banneru datum",
-  "day-total": "Den celkem"
+  "day-total": "Den celkem",
+  "no-loans-found": "Žádné půjčky.",
+  "search-loans-placeholder": "Hledat půjčky ...",
+  "long-term": "Dlouhodobý",
+  "one-time": "Jednou",
+  "in-app-subscription-terms-1": "Roční a měsíční předplatné se automaticky obnovují a okamžitě nabíjí. Zrušit kdykoli",
+  "in-app-subscription-terms-2": "V Google Play."
 }
