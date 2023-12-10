@@ -1036,6 +1036,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.0"
+  notification_listener_service:
+    dependency: "direct main"
+    description:
+      name: notification_listener_service
+      sha256: "75c01f1d7317ec432aee15e2dc18444be22f6c7b0d6d0edd5481bba19b27ad90"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.3.3"
   package_config:
     dependency: transitive
     description:

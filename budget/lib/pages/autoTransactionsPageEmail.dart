@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
@@ -27,6 +28,91 @@ import 'package:provider/provider.dart';
 import '../functions.dart';
 import 'package:googleapis/gmail/v1.dart' as gMail;
 import 'package:html/parser.dart';
+import 'package:notification_listener_service/notification_event.dart';
+import 'package:notification_listener_service/notification_listener_service.dart';
+
+StreamSubscription<ServiceNotificationEvent>? notificationListenerSubscription;
+
+Future initNotificationScanning() async {
+  if (getPlatform(ignoreEmulation: true) != PlatformOS.isAndroid) return;
+  notificationListenerSubscription?.cancel();
+  if (appStateSettings["readDismissedNotificationsToCreateTransaction"] != true)
+    return;
+
+  bool status = await NotificationListenerService.isPermissionGranted();
+  if (status != true) {
+    status = await NotificationListenerService.requestPermission();
+  }
+
+  if (status == true) {
+    notificationListenerSubscription =
+        NotificationListenerService.notificationsStream.listen(onNotification);
+  }
+}
+
+onNotification(ServiceNotificationEvent event) async {
+  print(event);
+  if (event.hasRemoved != true) return;
+  if (event.title == null) return;
+  if (navigatorKey.currentContext == null) return;
+  if (appStateSettings[
+              "readDismissedNotificationsToCreateTransactionPackageName"] !=
+          "" &&
+      event.packageName?.contains(appStateSettings[
+              "readDismissedNotificationsToCreateTransactionPackageName"]) !=
+          true) return;
+
+  double? amountExtracted;
+  if (event.content != null) {
+    amountExtracted = getAmountFromString(event.content ?? "");
+  }
+  if (amountExtracted == null && event.title != null) {
+    amountExtracted = getAmountFromString(event.title ?? "");
+  }
+  String? title =
+      (event.title ?? "").toLowerCase().trim().capitalizeFirstofEach;
+  title = filterEmailTitle(title);
+
+  TransactionAssociatedTitle? foundTitle = await getLikeAssociatedTitle(title);
+  TransactionCategory? category =
+      (await database.getCategoryInstanceOrNull(foundTitle?.categoryFk ?? ""));
+
+  pushRoute(
+    navigatorKey.currentContext!,
+    AddTransactionPage(
+      routesToPopAfterDelete: RoutesToPopAfterDelete.None,
+      selectedAmount: amountExtracted,
+      selectedTitle: title,
+      selectedCategory: category,
+      startInitialAddTransactionSequence: false,
+    ),
+  );
+}
+
+class InitializeNotificationService extends StatefulWidget {
+  const InitializeNotificationService({required this.child, super.key});
+  final Widget child;
+
+  @override
+  State<InitializeNotificationService> createState() =>
+      _InitializeNotificationServiceState();
+}
+
+class _InitializeNotificationServiceState
+    extends State<InitializeNotificationService> {
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration.zero, () async {
+      initNotificationScanning();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return widget.child;
+  }
+}
 
 class AutoTransactionsPageEmail extends StatefulWidget {
   const AutoTransactionsPageEmail({Key? key}) : super(key: key);
@@ -261,38 +347,14 @@ Future<void> parseEmailsInBackground(context,
           continue;
         }
 
-        List result = await getRelatingAssociatedTitle(title);
-        TransactionAssociatedTitle? foundTitle = result[0];
-        String categoryId;
+        TransactionAssociatedTitle? foundTitle =
+            await getLikeAssociatedTitle(title);
 
-        if (foundTitle != null) {
-          print("FOUND TITLE");
-          categoryId =
-              (await database.getCategoryInstance(foundTitle.categoryFk))
-                  .categoryPk;
-        } else {
-          print("NO FOUND TITLE");
-          categoryId = templateFound!.defaultCategoryFk;
-        }
-        print("NEXT");
-
-        TransactionCategory selectedCategory;
-        try {
-          // Check if the set category exists
-          selectedCategory = await database.getCategoryInstance(categoryId);
-        } catch (e) {
-          openSnackbar(
-            SnackbarMessage(
-              title:
-                  "The transaction category cannot be found for this email! " +
-                      e.toString(),
-              onTap: () {
-                pushRoute(context, AutoTransactionsPageEmail());
-              },
-            ),
-          );
-          continue;
-        }
+        TransactionCategory? selectedCategory =
+            (await database.getCategoryInstanceOrNull(foundTitle?.categoryFk ??
+                templateFound?.defaultCategoryFk ??
+                ""));
+        if (selectedCategory == null) continue;
 
         title = filterEmailTitle(title);
 
@@ -303,7 +365,7 @@ Future<void> parseEmailsInBackground(context,
           name: title,
           amount: (amountDouble).abs() * -1,
           note: "",
-          categoryFk: categoryId,
+          categoryFk: selectedCategory.categoryPk,
           walletFk: appStateSettings["selectedWalletPk"],
           dateCreated: messageDate,
           dateTimeModified: null,

@@ -2,6 +2,7 @@ import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
+import 'package:budget/pages/autoTransactionsPageEmail.dart';
 import 'package:budget/pages/homePage/homePage.dart';
 import 'package:budget/pages/settingsPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
@@ -17,6 +18,7 @@ import 'package:budget/database/generatePreviewData.dart';
 import 'package:budget/widgets/radioItems.dart';
 import 'package:budget/widgets/ratingPopup.dart';
 import 'package:budget/widgets/settingsContainers.dart';
+import 'package:budget/widgets/textInput.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
@@ -122,6 +124,39 @@ class DebugPage extends StatelessWidget {
             initialValue: appStateSettings["massEditSelectedTransactions"],
             icon: Icons.edit,
           ),
+        ),
+        if (getPlatform(ignoreEmulation: true) == PlatformOS.isAndroid)
+          SettingsContainerSwitch(
+            onSwitched: (value) async {
+              await updateSettings(
+                  "readDismissedNotificationsToCreateTransaction", value,
+                  updateGlobalState: false);
+              if (value == true) {
+                initNotificationScanning();
+              } else {
+                notificationListenerSubscription?.cancel();
+              }
+            },
+            title: "Notification Transactions",
+            description:
+                "When a notification is dismissed and the app is open, attempt to add a transaction given its information. Works best with GPay.",
+            initialValue: appStateSettings[
+                "readDismissedNotificationsToCreateTransaction"],
+            icon: appStateSettings["outlinedIcons"]
+                ? Icons.edit_notifications_outlined
+                : Icons.edit_notifications_rounded,
+          ),
+        TextInput(
+          labelText: "Notification Package Name",
+          initialValue: appStateSettings[
+              "readDismissedNotificationsToCreateTransactionPackageName"],
+          onChanged: (value) {
+            updateSettings(
+              "readDismissedNotificationsToCreateTransactionPackageName",
+              value,
+              updateGlobalState: false,
+            );
+          },
         ),
         SettingsContainerSwitch(
           onSwitched: (value) async {

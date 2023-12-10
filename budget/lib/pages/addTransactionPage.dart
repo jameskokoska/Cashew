@@ -95,6 +95,10 @@ class AddTransactionPage extends StatefulWidget {
     this.selectedType,
     this.selectedObjective,
     this.selectedIncome,
+    this.selectedAmount,
+    this.selectedTitle,
+    this.selectedCategory,
+    this.startInitialAddTransactionSequence = true,
     required this.routesToPopAfterDelete,
   }) : super(key: key);
 
@@ -105,6 +109,10 @@ class AddTransactionPage extends StatefulWidget {
   final Objective? selectedObjective;
   final RoutesToPopAfterDelete routesToPopAfterDelete;
   final bool? selectedIncome;
+  final double? selectedAmount;
+  final String? selectedTitle;
+  final TransactionCategory? selectedCategory;
+  final bool startInitialAddTransactionSequence;
 
   @override
   _AddTransactionPageState createState() => _AddTransactionPageState();
@@ -679,6 +687,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
 
       Future.delayed(Duration(milliseconds: 0), () async {
         await premiumPopupAddTransaction(context);
+        if (widget.startInitialAddTransactionSequence == false) return;
         if (appStateSettings["askForTransactionTitle"]) {
           openBottomSheet(
             context,
@@ -719,6 +728,18 @@ class _AddTransactionPageState extends State<AddTransactionPage>
       } else {
         selectedObjectivePk = widget.selectedObjective!.objectivePk;
       }
+    }
+    if (widget.selectedAmount != null) {
+      selectedAmount = widget.selectedAmount;
+    }
+    if (widget.selectedCategory != null) {
+      selectedCategory = widget.selectedCategory;
+    }
+    if (widget.selectedTitle != null) {
+      selectedTitle = widget.selectedTitle;
+      Future.delayed(Duration.zero, () {
+        setSelectedTitle(widget.selectedTitle ?? "");
+      });
     }
     if (widget.selectedIncome != null) {
       selectedIncome = widget.selectedIncome!;
@@ -2256,7 +2277,8 @@ class _SelectTitleState extends State<SelectTitle> {
                               ),
                               !foundFromCategory
                                   ? TextFont(
-                                      text: selectedAssociatedTitle!.title,
+                                      text:
+                                          selectedAssociatedTitle?.title ?? "",
                                       fontSize: 16,
                                     )
                                   : Container(),
