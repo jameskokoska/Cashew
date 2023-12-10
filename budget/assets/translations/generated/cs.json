@@ -959,5 +959,11 @@
   "long-term-loans": "Dlouhodobé půjčky",
   "customize-period-for-account-totals": "Přizpůsobte si období pro součty účtu.",
   "borrowed-funds": "Vypůjčené prostředky",
-  "lent-funds": "Půjčené prostředky"
+  "lent-funds": "Půjčené prostředky",
+  "settle-and-collect-all": "Usadit/sbírat všechny",
+  "settled-and-collected": "Usadil se a shromáždil",
+  "to-pay": "Platit",
+  "to-collect": "Sbírat",
+  "major-change-17": "Dlouhodobé půjčky",
+  "major-change-17-1": "Sledujte zapůjčené a vypůjčené peníze po dobu několika splátek"
 }

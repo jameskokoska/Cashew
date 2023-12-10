@@ -5242,12 +5242,12 @@ class FinanceDatabase extends _$FinanceDatabase {
               isFilterSelectedWithDefaults(budgetTransactionFilters,
                   BudgetTransactionFilters.includeDebtAndCredit),
             ) |
-            ((tbl.type.isNotIn([
+            (((tbl.type.isNotIn([
                       TransactionSpecialType.credit.index,
                       TransactionSpecialType.debt.index
-                    ]) &
-                    (tbl.objectiveLoanFk.isNull())) |
-                tbl.type.isNull())
+                    ]) |
+                    tbl.type.isNull()) &
+                (tbl.objectiveLoanFk.isNull())))
         : Constant(true);
 
     Expression<bool> includeAddedToObjective = budgetTransactionFilters

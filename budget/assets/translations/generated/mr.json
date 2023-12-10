@@ -959,5 +959,11 @@
   "long-term-loans": "दीर्घकालीन कर्ज",
   "customize-period-for-account-totals": "खात्याच्या बेरीजसाठी कालावधी सानुकूलित करा.",
   "borrowed-funds": "कर्ज घेतले",
-  "lent-funds": "लेंट फंड"
+  "lent-funds": "लेंट फंड",
+  "settle-and-collect-all": "सर्व काही सेटल/गोळा करा",
+  "settled-and-collected": "स्थायिक आणि गोळा केले",
+  "to-pay": "पैसे देणे",
+  "to-collect": "गोळा करण्यासाठी",
+  "major-change-17": "दीर्घकालीन कर्ज",
+  "major-change-17-1": "एकाधिक परतफेडच्या कालावधीत लेंट आणि कर्ज घेतलेल्या पैशाचा मागोवा घ्या"
 }

@@ -959,5 +959,11 @@
   "long-term-loans": "Långtidslån",
   "customize-period-for-account-totals": "Anpassa period för kontototaler.",
   "borrowed-funds": "Lånade medel",
-  "lent-funds": "Fastlånade medel"
+  "lent-funds": "Fastlånade medel",
+  "settle-and-collect-all": "Sätt dig/samla alla",
+  "settled-and-collected": "Bosatt och samlad",
+  "to-pay": "Att betala",
+  "to-collect": "Samla",
+  "major-change-17": "Långtidslån",
+  "major-change-17-1": "Spåra fastan och lånade pengar under en period av flera återbetalningar"
 }

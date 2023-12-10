@@ -959,5 +959,11 @@
   "long-term-loans": "وام های بلند مدت",
   "customize-period-for-account-totals": "دوره را برای کل حساب سفارشی کنید.",
   "borrowed-funds": "بودجه وام گرفته شده",
-  "lent-funds": "وجوه وام"
+  "lent-funds": "وجوه وام",
+  "settle-and-collect-all": "حل و فصل/جمع آوری همه",
+  "settled-and-collected": "مستقر و جمع آوری شده",
+  "to-pay": "پرداخت",
+  "to-collect": "جمع شدن",
+  "major-change-17": "وام های بلند مدت",
+  "major-change-17-1": "وام و وام گرفته شده را در طی یک دوره بازپرداخت چندگانه وام بگیرید"
 }

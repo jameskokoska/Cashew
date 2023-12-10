@@ -959,5 +959,11 @@
   "long-term-loans": "Mikopo ya muda mrefu",
   "customize-period-for-account-totals": "Badilisha kipindi kwa jumla ya akaunti.",
   "borrowed-funds": "Fedha zilizokopwa",
-  "lent-funds": "Fedha za Lent"
+  "lent-funds": "Fedha za Lent",
+  "settle-and-collect-all": "Kaa/kukusanya yote",
+  "settled-and-collected": "Makazi na kukusanywa",
+  "to-pay": "Kulipa",
+  "to-collect": "Kukusanya",
+  "major-change-17": "Mikopo ya muda mrefu",
+  "major-change-17-1": "Fuatilia pesa na kukopa pesa kwa kipindi cha ulipaji kadhaa"
 }

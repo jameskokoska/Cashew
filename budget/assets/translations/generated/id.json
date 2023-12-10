@@ -959,5 +959,11 @@
   "long-term-loans": "Pinjaman jangka panjang",
   "customize-period-for-account-totals": "Kustomisasi periode untuk total akun.",
   "borrowed-funds": "Dana yang dipinjam",
-  "lent-funds": "Dana Prapaskah"
+  "lent-funds": "Dana Prapaskah",
+  "settle-and-collect-all": "Selesaikan/kumpulkan semua",
+  "settled-and-collected": "Diselesaikan dan dikumpulkan",
+  "to-pay": "Membayar",
+  "to-collect": "Untuk mengumpulkan",
+  "major-change-17": "Pinjaman jangka panjang",
+  "major-change-17-1": "Lacak Prapaskah dan meminjam uang selama beberapa periode pembayaran ganda"
 }

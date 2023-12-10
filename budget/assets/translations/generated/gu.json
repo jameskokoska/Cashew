@@ -959,5 +959,11 @@
   "long-term-loans": "લાંબા ગાળાની લોન",
   "customize-period-for-account-totals": "એકાઉન્ટના સરેરાશ માટે અવધિને કસ્ટમાઇઝ કરો.",
   "borrowed-funds": "ઉધાર",
-  "lent-funds": "આપેલ ભંડોળ"
+  "lent-funds": "આપેલ ભંડોળ",
+  "settle-and-collect-all": "પતાવટ/બધા એકત્રિત કરો",
+  "settled-and-collected": "સ્થાયી અને એકત્રિત",
+  "to-pay": "ચૂકવવા",
+  "to-collect": "એકત્રિત કરવા માટે",
+  "major-change-17": "લાંબા ગાળાની લોન",
+  "major-change-17-1": "બહુવિધ ચુકવણીઓના સમયગાળા દરમિયાન લેન્ટ અને ઉધાર પૈસા ટ્ર track ક કરો"
 }

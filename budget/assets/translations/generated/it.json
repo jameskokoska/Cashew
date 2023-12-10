@@ -959,5 +959,11 @@
   "long-term-loans": "Prestiti a lungo termine",
   "customize-period-for-account-totals": "Personalizza il periodo per i totali dell'account.",
   "borrowed-funds": "Fondi presi in prestito",
-  "lent-funds": "Fondi prestati"
+  "lent-funds": "Fondi prestati",
+  "settle-and-collect-all": "Siateggi/raccogli tutto",
+  "settled-and-collected": "Sistemato e raccolto",
+  "to-pay": "Pagare",
+  "to-collect": "Raccogliere",
+  "major-change-17": "Prestiti a lungo termine",
+  "major-change-17-1": "Traccia la Quaresima e il denaro preso in prestito per un periodo di rimborsi multipli"
 }

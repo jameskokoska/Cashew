@@ -959,5 +959,11 @@
   "long-term-loans": "قروض طويلة الأجل",
   "customize-period-for-account-totals": "تخصيص الفترة لمجموعات الحساب.",
   "borrowed-funds": "الأموال المقترضة",
-  "lent-funds": "أموال الصوم الكبير"
+  "lent-funds": "أموال الصوم الكبير",
+  "settle-and-collect-all": "تسوية/جمع كل شيء",
+  "settled-and-collected": "استقر وجمع",
+  "to-pay": "لدفع",
+  "to-collect": "لجمع",
+  "major-change-17": "قروض طويلة الأجل",
+  "major-change-17-1": "قرض المسار والاقتراض الأموال على مدى فترة من السدادات المتعددة"
 }

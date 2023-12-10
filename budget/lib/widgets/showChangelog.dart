@@ -2068,6 +2068,18 @@ Map<String, List<MajorChanges>> getMajorChanges() {
         },
       ),
     ],
+    "< 5.0.3": [
+      MajorChanges(
+        "major-change-17".tr(),
+        Icons.av_timer_rounded,
+        info: [
+          "major-change-17-1".tr(),
+        ],
+        onTap: (context) {
+          pushRoute(context, WalletDetailsPage(wallet: null));
+        },
+      ),
+    ],
   };
 }
 

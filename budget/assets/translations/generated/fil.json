@@ -959,5 +959,11 @@
   "long-term-loans": "Pangmatagalang pautang",
   "customize-period-for-account-totals": "Ipasadya ang panahon para sa kabuuan ng account.",
   "borrowed-funds": "Hiniram na pondo",
-  "lent-funds": "Mga pondo ng Kuwaresma"
+  "lent-funds": "Mga pondo ng Kuwaresma",
+  "settle-and-collect-all": "Mag -ayos/mangolekta ng lahat",
+  "settled-and-collected": "Naayos at nakolekta",
+  "to-pay": "Magbayad",
+  "to-collect": "Upang mangolekta",
+  "major-change-17": "Pangmatagalang pautang",
+  "major-change-17-1": "Subaybayan ang Kuwaresma at Humiram ng Pera sa loob ng isang Panahon ng Maramihang Mga Pagbabayad"
 }

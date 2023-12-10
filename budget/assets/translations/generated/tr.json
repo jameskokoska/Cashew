@@ -959,5 +959,11 @@
   "long-term-loans": "Uzun vadeli krediler",
   "customize-period-for-account-totals": "Hesap toplamları için süreyi özelleştirin.",
   "borrowed-funds": "Ödünç alınmış fonlar",
-  "lent-funds": "Ödünç fonlar"
+  "lent-funds": "Ödünç fonlar",
+  "settle-and-collect-all": "Her şeyi yerleştirmek/toplamak",
+  "settled-and-collected": "Yerleşmiş ve toplanmış",
+  "to-pay": "Ödemek",
+  "to-collect": "Toplamak",
+  "major-change-17": "Uzun vadeli krediler",
+  "major-change-17-1": "Birden fazla geri ödeme döneminde ödünç ve ödünç alınan parayı takip edin"
 }

@@ -959,5 +959,11 @@
   "long-term-loans": "Langzeitdarlehen",
   "customize-period-for-account-totals": "Passen Sie den Zeitraum für Kontosummen an.",
   "borrowed-funds": "Geliehene Mittel",
-  "lent-funds": "Gelisegelder"
+  "lent-funds": "Gelisegelder",
+  "settle-and-collect-all": "Alle sammeln/sammeln",
+  "settled-and-collected": "Niedergelassen und gesammelt",
+  "to-pay": "Bezahlen",
+  "to-collect": "Sammeln",
+  "major-change-17": "Langzeitdarlehen",
+  "major-change-17-1": "Verfolgen Sie die Fastenzeit und das geliehene Geld über einen Zeitraum mehrerer Rückzahlungen"
 }

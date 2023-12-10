@@ -943,7 +943,7 @@
   "search-loans-placeholder": "Keresési kölcsönök ...",
   "long-term": "Hosszútávú",
   "one-time": "Egyszer",
-  "in-app-subscription-terms-1": "Az éves és havi előfizetések automatikusan megújulnak, és azonnal felszámolják. Törölje bármikor",
+  "in-app-subscription-terms-1": "Az éves és havi előfizetések automatikusan megújulnak, és azonnal számítanak fel. Törölje bármikor",
   "in-app-subscription-terms-2": "A Google Play -ben.",
   "add-record": "Adjon hozzá nyilvántartást",
   "no-loan": "Nincs kölcsön",
@@ -959,5 +959,11 @@
   "long-term-loans": "Hosszú távú kölcsönök",
   "customize-period-for-account-totals": "Testreszabhatja a számla összesített periódusát.",
   "borrowed-funds": "Kölcsönzött pénzeszközök",
-  "lent-funds": "Kölcsönzött pénzeszközök"
+  "lent-funds": "Kölcsönzött pénzeszközök",
+  "settle-and-collect-all": "Telepedje le/gyűjtse össze az összeset",
+  "settled-and-collected": "Letelepedett és összegyűjtött",
+  "to-pay": "Fizetni",
+  "to-collect": "Gyűjteni",
+  "major-change-17": "Hosszú távú kölcsönök",
+  "major-change-17-1": "Kövesse és kölcsönvett pénzt több visszafizetési időszak alatt"
 }

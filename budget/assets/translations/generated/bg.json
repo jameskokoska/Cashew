@@ -959,5 +959,11 @@
   "long-term-loans": "Дългосрочни заеми",
   "customize-period-for-account-totals": "Персонализирайте периода за общите акаунти.",
   "borrowed-funds": "Заемни средства",
-  "lent-funds": "Заемат средства"
+  "lent-funds": "Заемат средства",
+  "settle-and-collect-all": "Уредете/Съберете всички",
+  "settled-and-collected": "Заселени и събрани",
+  "to-pay": "Да платя",
+  "to-collect": "Събирам",
+  "major-change-17": "Дългосрочни заеми",
+  "major-change-17-1": "Проследявайте заем и заемни пари за период от множество изплащания"
 }

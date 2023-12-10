@@ -959,5 +959,11 @@
   "long-term-loans": "Langsiktige lån",
   "customize-period-for-account-totals": "Tilpass perioden for kontototaler.",
   "borrowed-funds": "Lånte midler",
-  "lent-funds": "Lånte ut midler"
+  "lent-funds": "Lånte ut midler",
+  "settle-and-collect-all": "Settle/samle alle",
+  "settled-and-collected": "Avgjort og samlet",
+  "to-pay": "Å betale",
+  "to-collect": "Å samle",
+  "major-change-17": "Langsiktige lån",
+  "major-change-17-1": "Spor lånte og lånte penger over en periode med flere tilbakebetaling"
 }

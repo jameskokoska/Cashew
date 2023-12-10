@@ -959,5 +959,11 @@
   "long-term-loans": "长期贷款",
   "customize-period-for-account-totals": "自定义帐户总计。",
   "borrowed-funds": "借资金",
-  "lent-funds": "借了资金"
+  "lent-funds": "借了资金",
+  "settle-and-collect-all": "定居/收集",
+  "settled-and-collected": "定居并收集",
+  "to-pay": "支付",
+  "to-collect": "去收集",
+  "major-change-17": "长期贷款",
+  "major-change-17-1": "跟踪四旬期并借钱在多个还款期间"
 }

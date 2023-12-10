@@ -959,5 +959,11 @@
   "long-term-loans": "Préstamos a largo plazo",
   "customize-period-for-account-totals": "Período de personalización para los totales de las cuentas.",
   "borrowed-funds": "Fondos prestados",
-  "lent-funds": "Fondos de la prestación"
+  "lent-funds": "Fondos de la prestación",
+  "settle-and-collect-all": "Establecer/recolectar todo",
+  "settled-and-collected": "Establecido y recolectado",
+  "to-pay": "Pagar",
+  "to-collect": "Para coleccionar",
+  "major-change-17": "Préstamos a largo plazo",
+  "major-change-17-1": "Seguimiento de dinero prestado y prestado durante un período de pagos múltiples"
 }

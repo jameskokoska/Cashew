@@ -953,11 +953,17 @@
   "no-long-term-loans-found": "Không tìm thấy các khoản vay dài hạn.",
   "create-loan": "Tạo khoản vay",
   "change-loan-amount-tip-lent": "Để thay đổi tổng số tiền, hãy thêm bản ghi giao dịch 'Đã thanh toán' vào khoản vay.",
-  "change-loan-amount-tip-borrowed": "Để thay đổi tổng số tiền, hãy thêm bản ghi 'thu thập' giao dịch vào khoản vay.",
+  "change-loan-amount-tip-borrowed": "Để thay đổi tổng số tiền, hãy thêm bản ghi giao dịch 'Đã thu hồi' vào khoản vay.",
   "until-loan-reached": "Cho đến khi đạt được khoản vay",
   "initial-record": "Bản ghi ban đầu",
   "long-term-loans": "Các khoản vay dài hạn",
   "customize-period-for-account-totals": "Tùy chỉnh khoảng thời gian cho tổng tài khoản.",
   "borrowed-funds": "Vốn vay",
-  "lent-funds": "Cho vay tiền"
+  "lent-funds": "Vốn cho vay",
+  "settle-and-collect-all": "Giải quyết/thu thập tất cả",
+  "settled-and-collected": "Giải quyết và thu thập",
+  "to-pay": "Trả",
+  "to-collect": "Để thu thập",
+  "major-change-17": "Khoản vay dài hạn",
+  "major-change-17-1": "Theo dõi Mùa Chay và vay tiền trong một khoảng thời gian nhiều khoản hoàn trả"
 }

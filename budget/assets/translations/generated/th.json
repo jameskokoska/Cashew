@@ -959,5 +959,11 @@
   "long-term-loans": "สินเชื่อระยะยาว",
   "customize-period-for-account-totals": "กำหนดระยะเวลาสำหรับยอดรวมบัญชี",
   "borrowed-funds": "เงินกู้",
-  "lent-funds": "เงินให้ยืม"
+  "lent-funds": "เงินให้ยืม",
+  "settle-and-collect-all": "ชำระ/รวบรวมทั้งหมด",
+  "settled-and-collected": "ตัดสินและรวบรวม",
+  "to-pay": "จ่าย",
+  "to-collect": "เพื่อรวบรวม",
+  "major-change-17": "สินเชื่อระยะยาว",
+  "major-change-17-1": "ติดตามการเข้าพรรษาและยืมเงินในช่วงระยะเวลาการชำระคืนหลายครั้ง"
 }

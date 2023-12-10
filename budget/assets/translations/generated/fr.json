@@ -959,5 +959,11 @@
   "long-term-loans": "Prêts à long terme",
   "customize-period-for-account-totals": "Personnalisez la période pour les totaux du compte.",
   "borrowed-funds": "Fonds empruntés",
-  "lent-funds": "Fonds de Carême"
+  "lent-funds": "Fonds de Carême",
+  "settle-and-collect-all": "Régler / récupérer tout",
+  "settled-and-collected": "Installé et collecté",
+  "to-pay": "Payer",
+  "to-collect": "Collecter",
+  "major-change-17": "Prêts à long terme",
+  "major-change-17-1": "Suivre le Carême et emprunter de l'argent sur une période de remboursement multiples"
 }

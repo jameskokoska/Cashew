@@ -943,7 +943,7 @@
   "search-loans-placeholder": "Zoekleningen ...",
   "long-term": "Langetermijn",
   "one-time": "Een keer",
-  "in-app-subscription-terms-1": "Jaarlijkse en maandelijkse abonnementen vernieuwen automatisch en laadt onmiddellijk in rekening. Annuleer altijd",
+  "in-app-subscription-terms-1": "Jaarlijkse en maandelijkse abonnementen verlengen automatisch en laadt onmiddellijk in rekening. Annuleer altijd",
   "in-app-subscription-terms-2": "in Google Play.",
   "add-record": "Record toevoegen",
   "no-loan": "Geen lening",
@@ -959,5 +959,11 @@
   "long-term-loans": "Langdurige leningen",
   "customize-period-for-account-totals": "Periode aanpassen voor accounttotalen.",
   "borrowed-funds": "Geleende fondsen",
-  "lent-funds": "Lent fondsen"
+  "lent-funds": "Lent fondsen",
+  "settle-and-collect-all": "Regelen/verzamel alles",
+  "settled-and-collected": "Geregeld en verzameld",
+  "to-pay": "Betalen",
+  "to-collect": "Verzamelen",
+  "major-change-17": "Langdurige leningen",
+  "major-change-17-1": "Volg Lent en leende geld over een periode van meerdere terugbetalingen"
 }

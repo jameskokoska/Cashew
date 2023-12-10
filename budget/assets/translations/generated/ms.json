@@ -959,5 +959,11 @@
   "long-term-loans": "Pinjaman jangka panjang",
   "customize-period-for-account-totals": "Sesuaikan tempoh untuk jumlah akaun.",
   "borrowed-funds": "Dana yang dipinjam",
-  "lent-funds": "Dana yang dipinjamkan"
+  "lent-funds": "Dana yang dipinjamkan",
+  "settle-and-collect-all": "Selesaikan/kumpulkan semua",
+  "settled-and-collected": "Diselesaikan dan dikumpulkan",
+  "to-pay": "Bayar",
+  "to-collect": "Untuk mengumpul",
+  "major-change-17": "Pinjaman jangka panjang",
+  "major-change-17-1": "Jejaki Lent dan Meminjam Wang dalam Tempoh Pelbagai Bayaran Balik"
 }

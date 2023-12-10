@@ -959,5 +959,11 @@
   "long-term-loans": "Дугорочни кредити",
   "customize-period-for-account-totals": "Прилагодите период за износ рачуна.",
   "borrowed-funds": "Позајмљена средства",
-  "lent-funds": "Позајмљена средства"
+  "lent-funds": "Позајмљена средства",
+  "settle-and-collect-all": "Стисните / сакупи све",
+  "settled-and-collected": "Насељено и прикупљено",
+  "to-pay": "Платити",
+  "to-collect": "Сакупити",
+  "major-change-17": "Дугорочни кредити",
+  "major-change-17-1": "Праћење позајмљених и позајмљено новац у периоду од више отплате"
 }

@@ -959,5 +959,11 @@
   "long-term-loans": "दीर्घकालिक ऋण",
   "customize-period-for-account-totals": "खाता योग के लिए अवधि अनुकूलित करें।",
   "borrowed-funds": "उधार ली गई धनराशि",
-  "lent-funds": "दांतेदार धनराशि"
+  "lent-funds": "दांतेदार धनराशि",
+  "settle-and-collect-all": "सभी को बसाना/इकट्ठा करना",
+  "settled-and-collected": "बसा हुआ और एकत्र किया गया",
+  "to-pay": "भुगतान करने के लिए",
+  "to-collect": "इकट्ठा करने के लिए",
+  "major-change-17": "दीर्घकालिक ऋण",
+  "major-change-17-1": "कई पुनर्भुगतान की अवधि में लेंट और उधार लिया पैसा ट्रैक करें"
 }

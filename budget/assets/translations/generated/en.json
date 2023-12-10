@@ -959,5 +959,11 @@
   "long-term-loans": "Long Term Loans",
   "customize-period-for-account-totals": "Customize period for account totals.",
   "borrowed-funds": "Borrowed funds",
-  "lent-funds": "Lent funds"
+  "lent-funds": "Lent funds",
+  "settle-and-collect-all": "Settle/Collect All",
+  "settled-and-collected": "Settled and Collected",
+  "to-pay": "To Pay",
+  "to-collect": "To Collect",
+  "major-change-17": "Long Term Loans",
+  "major-change-17-1": "Track lent and borrowed money over a period of multiple repayments"
 }

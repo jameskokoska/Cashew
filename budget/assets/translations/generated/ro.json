@@ -959,5 +959,11 @@
   "long-term-loans": "Împrumuturi pe termen lung",
   "customize-period-for-account-totals": "Personalizarea perioadei pentru totalul contului.",
   "borrowed-funds": "Fonduri împrumutate",
-  "lent-funds": "Fonduri împrumutate"
+  "lent-funds": "Fonduri împrumutate",
+  "settle-and-collect-all": "Depune/colectează toate",
+  "settled-and-collected": "Stabilit și colectat",
+  "to-pay": "A plăti",
+  "to-collect": "A colecta",
+  "major-change-17": "Împrumuturi pe termen lung",
+  "major-change-17-1": "Urmăriți banii Postul și împrumutați pe o perioadă de rambursări multiple"
 }

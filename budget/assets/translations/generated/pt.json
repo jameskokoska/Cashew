@@ -959,5 +959,11 @@
   "long-term-loans": "Empréstimos de longo prazo",
   "customize-period-for-account-totals": "Personalize o período para totais de conta.",
   "borrowed-funds": "Fundos emprestados",
-  "lent-funds": "Fundos emprestados"
+  "lent-funds": "Fundos emprestados",
+  "settle-and-collect-all": "Liquidar/coletar tudo",
+  "settled-and-collected": "Liquidado e coletado",
+  "to-pay": "Pagar",
+  "to-collect": "Coletar",
+  "major-change-17": "Empréstimos de longo prazo",
+  "major-change-17-1": "Rastrear dinheiro emprestado e emprestado por um período de vários pagamentos"
 }

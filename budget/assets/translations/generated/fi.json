@@ -959,5 +959,11 @@
   "long-term-loans": "Pitkäaikaiset lainat",
   "customize-period-for-account-totals": "Mukauta tilien kokonaismääriä.",
   "borrowed-funds": "Lainatut varat",
-  "lent-funds": "Lainata"
+  "lent-funds": "Lainata",
+  "settle-and-collect-all": "Ratkaista/kerätä kaikki",
+  "settled-and-collected": "Asettui ja kerätty",
+  "to-pay": "Maksaa",
+  "to-collect": "Kerätä",
+  "major-change-17": "Pitkäaikaiset lainat",
+  "major-change-17-1": "Seuraa lainaa ja lainasi rahaa useiden takaisinmaksujen aikana"
 }

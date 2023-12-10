@@ -959,5 +959,11 @@
   "long-term-loans": "長期ローン",
   "customize-period-for-account-totals": "アカウントの合計の期間をカスタマイズします。",
   "borrowed-funds": "借りた資金",
-  "lent-funds": "貸し出し資金"
+  "lent-funds": "貸し出し資金",
+  "settle-and-collect-all": "すべてを解決/収集します",
+  "settled-and-collected": "定住して収集されました",
+  "to-pay": "支払う",
+  "to-collect": "集める",
+  "major-change-17": "長期ローン",
+  "major-change-17-1": "複数の返済の期間にわたって貸し出しと借りたお金を追跡する"
 }

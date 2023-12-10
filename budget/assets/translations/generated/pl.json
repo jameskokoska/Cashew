@@ -959,5 +959,11 @@
   "long-term-loans": "Pożyczki długoterminowe",
   "customize-period-for-account-totals": "Dostosuj okres dla sum konta.",
   "borrowed-funds": "Pożyczone fundusze",
-  "lent-funds": "Pożyczały fundusze"
+  "lent-funds": "Pożyczały fundusze",
+  "settle-and-collect-all": "Rozstrzygnij/zbieraj wszystkie",
+  "settled-and-collected": "Rozstrzygnięte i zebrane",
+  "to-pay": "Płacić",
+  "to-collect": "Zbierać",
+  "major-change-17": "Pożyczki długoterminowe",
+  "major-change-17-1": "Śledź pożyczony i pożyczył pieniądze w okresie wielu spłat"
 }

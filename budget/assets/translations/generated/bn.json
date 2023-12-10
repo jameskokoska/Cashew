@@ -959,5 +959,11 @@
   "long-term-loans": "দীর্ঘমেয়াদী loans ণ",
   "customize-period-for-account-totals": "অ্যাকাউন্টের মোটের জন্য সময়কাল কাস্টমাইজ করুন।",
   "borrowed-funds": "ধার করা তহবিল",
-  "lent-funds": "তহবিল ধার"
+  "lent-funds": "তহবিল ধার",
+  "settle-and-collect-all": "সমস্ত নিষ্পত্তি/সংগ্রহ করুন",
+  "settled-and-collected": "নিষ্পত্তি এবং সংগ্রহ করা",
+  "to-pay": "পরিশোধ করতে",
+  "to-collect": "সংগ্রহ করতে",
+  "major-change-17": "দীর্ঘমেয়াদী loans ণ",
+  "major-change-17-1": "একাধিক ay ণ পরিশোধের সময়কালে লেন্ট এবং ধার করা অর্থ ট্র্যাক করুন"
 }

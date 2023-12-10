@@ -959,5 +959,11 @@
   "long-term-loans": "장기 대출",
   "customize-period-for-account-totals": "계정 총계에 대한 기간을 사용자 정의하십시오.",
   "borrowed-funds": "빌린 자금",
-  "lent-funds": "빌린 자금"
+  "lent-funds": "빌린 자금",
+  "settle-and-collect-all": "모두 정착/수집하십시오",
+  "settled-and-collected": "정착 및 수집",
+  "to-pay": "지불하기 위해",
+  "to-collect": "수집합니다",
+  "major-change-17": "장기 대출",
+  "major-change-17-1": "여러 번 상환 기간 동안 사순절 및 빌린 돈을 추적"
 }
