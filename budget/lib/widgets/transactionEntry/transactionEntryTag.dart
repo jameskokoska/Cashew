@@ -1,5 +1,6 @@
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
+import 'package:budget/pages/objectivesListPage.dart';
 import 'package:budget/struct/currencyFunctions.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
@@ -98,6 +99,33 @@ class TransactionEntryTag extends StatelessWidget {
                 }
               }),
             ),
+          if (transaction.objectiveLoanFk != null)
+            Flexible(
+              child: Builder(builder: (context) {
+                if (objective != null) {
+                  return ObjectivePercentTag(
+                    transaction: transaction,
+                    objective: objective!,
+                    showObjectivePercentageCheck: showObjectivePercentageCheck,
+                  );
+                }
+                return StreamBuilder<Objective>(
+                  stream: database.getObjective(transaction.objectiveLoanFk!),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      Objective objective = snapshot.data!;
+                      return ObjectivePercentTag(
+                        transaction: transaction,
+                        objective: objective,
+                        showObjectivePercentageCheck:
+                            showObjectivePercentageCheck,
+                      );
+                    }
+                    return Container();
+                  },
+                );
+              }),
+            ),
           if (transaction.objectiveFk != null)
             Flexible(
               child: Builder(builder: (context) {
@@ -173,23 +201,9 @@ class ObjectivePercentTag extends StatelessWidget {
   final bool showObjectivePercentageCheck;
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<double?>(
-      stream: database.watchTotalTowardsObjective(
-        Provider.of<AllWallets>(context),
-        objective.objectivePk,
-      ),
-      builder: (context, snapshot) {
-        double objectiveAmount = objectiveAmountToPrimaryCurrency(
-            Provider.of<AllWallets>(context, listen: true), objective);
-        double totalAmount = snapshot.data ?? 0;
-        if (objective.income == false) {
-          totalAmount = totalAmount * -1;
-          if (totalAmount.abs() == 0) totalAmount = totalAmount.abs();
-        }
-        double percentageTowardsGoal =
-            objectiveAmount == 0 ? 0 : totalAmount / objectiveAmount;
-        percentageTowardsGoal =
-            percentageTowardsGoal <= 0 ? 0 : percentageTowardsGoal;
+    return WatchTotalAndAmountOfObjective(
+      objective: objective,
+      builder: (objectiveAmount, totalAmount, percentageTowardsGoal) {
         return Row(
           children: [
             Flexible(
@@ -198,7 +212,7 @@ class ObjectivePercentTag extends StatelessWidget {
                     defaultColor: Theme.of(context).colorScheme.primary),
                 name: objective.name +
                     ": " +
-                    convertToPercent((totalAmount / objectiveAmount) * 100,
+                    convertToPercent(percentageTowardsGoal * 100,
                         numberDecimals: 0),
                 progress: percentageTowardsGoal,
               ),

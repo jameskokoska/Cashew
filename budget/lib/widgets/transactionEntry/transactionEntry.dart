@@ -95,7 +95,7 @@ class TransactionEntry extends StatelessWidget {
     this.highlightActionButton = false,
     this.showObjectivePercentage = true,
     this.customPadding,
-    this.openLoanPage = true,
+    this.allowOpenIntoObjectiveLoanPage = true,
   }) : super(key: key);
 
   final Widget openPage;
@@ -115,7 +115,7 @@ class TransactionEntry extends StatelessWidget {
   final bool highlightActionButton;
   final bool showObjectivePercentage;
   final EdgeInsets? customPadding;
-  final bool openLoanPage;
+  final bool allowOpenIntoObjectiveLoanPage;
 
   final double fabSize = 50;
 
@@ -136,6 +136,113 @@ class TransactionEntry extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Work in progress: Group transfers together into one transaction entry
+    // if (widget.disableGrouping == false &&
+    //     widget.transactionAfter?.pairedTransactionFk ==
+    //         widget.transaction.transactionPk) {
+    //   return Row(
+    //     children: [
+    //       Expanded(
+    //         child: Tappable(
+    //           onTap: () {
+    //             setState(() {
+    //               expanded = !expanded;
+    //             });
+    //           },
+    //           child: Column(
+    //             children: [
+    //               Row(
+    //                 children: [
+    //                   Icon(
+    //                     appStateSettings["outlinedIcons"]
+    //                         ? Icons.compare_arrows_outlined
+    //                         : Icons.compare_arrows_rounded,
+    //                     color: Theme.of(context).colorScheme.secondary,
+    //                   ),
+    //                   Padding(
+    //                     padding: const EdgeInsets.only(left: 10),
+    //                     child: TextFont(
+    //                       text: "Transfer",
+    //                       fontSize: 16,
+    //                     ),
+    //                   ),
+    //                   Icon(appStateSettings["outlinedIcons"]
+    //                       ? Icons.arrow_drop_down_outlined
+    //                       : Icons.arrow_drop_down_rounded),
+    //                 ],
+    //               ),
+    //               AnimatedExpanded(
+    //                 axis: Axis.vertical,
+    //                 expand: expanded,
+    //                 child: Column(
+    //                   children: [
+    //                     TransactionEntry(
+    //                       openPage: widget.openPage,
+    //                       transaction: widget.transaction,
+    //                       listID: widget.listID,
+    //                       category: widget.category,
+    //                       subCategory: widget.subCategory,
+    //                       budget: widget.budget,
+    //                       objective: widget.objective,
+    //                       onSelected: widget.onSelected,
+    //                       containerColor: widget.containerColor,
+    //                       useHorizontalPaddingConstrained:
+    //                           widget.useHorizontalPaddingConstrained,
+    //                       categoryTintColor: widget.categoryTintColor,
+    //                       transactionBefore: widget.transactionBefore,
+    //                       transactionAfter: widget.transactionAfter,
+    //                       allowSelect: widget.allowSelect,
+    //                       highlightActionButton: widget.highlightActionButton,
+    //                       showObjectivePercentage:
+    //                           widget.showObjectivePercentage,
+    //                       customPadding: widget.customPadding,
+    //                       allowOpenIntoObjectiveLoanPage:
+    //                           widget.allowOpenIntoObjectiveLoanPage,
+    //                       disableGrouping: true,
+    //                     ),
+    //                     if (widget.transactionAfter != null)
+    //                       TransactionEntry(
+    //                         openPage: widget.openPage,
+    //                         transaction: widget.transactionAfter!,
+    //                         listID: widget.listID,
+    //                         category: widget.category,
+    //                         subCategory: widget.subCategory,
+    //                         budget: widget.budget,
+    //                         objective: widget.objective,
+    //                         onSelected: widget.onSelected,
+    //                         containerColor: widget.containerColor,
+    //                         useHorizontalPaddingConstrained:
+    //                             widget.useHorizontalPaddingConstrained,
+    //                         categoryTintColor: widget.categoryTintColor,
+    //                         transactionBefore: widget.transactionBefore,
+    //                         transactionAfter: widget.transactionAfter,
+    //                         allowSelect: widget.allowSelect,
+    //                         highlightActionButton: widget.highlightActionButton,
+    //                         showObjectivePercentage:
+    //                             widget.showObjectivePercentage,
+    //                         customPadding: widget.customPadding,
+    //                         allowOpenIntoObjectiveLoanPage:
+    //                             widget.allowOpenIntoObjectiveLoanPage,
+    //                         disableGrouping: true,
+    //                       ),
+    //                   ],
+    //                 ),
+    //               ),
+    //             ],
+    //           ),
+    //         ),
+    //       ),
+    //     ],
+    //   );
+    // } else if (widget.disableGrouping == false &&
+    //     widget.transaction.pairedTransactionFk != null &&
+    //     (widget.transactionBefore?.transactionPk ==
+    //             widget.transaction.pairedTransactionFk ||
+    //         widget.transactionAfter?.transactionPk ==
+    //             widget.transaction.pairedTransactionFk)) {
+    //   return SizedBox.shrink();
+    // }
+
     bool enableSelectionCheckmark = getPlatform() == PlatformOS.isIOS ||
         (kIsWeb && getIsFullScreen(context));
     if (globalSelectedID.value[listID ?? "0"] == null) {
@@ -155,8 +262,6 @@ class TransactionEntry extends StatelessWidget {
                 Provider.of<AllWallets>(context)
                     .indexedByPk[appStateSettings["selectedWalletPk"]]
                     ?.currency);
-
-    bool shouldOpenLoanPage = false;
 
     return Padding(
       padding: EdgeInsets.symmetric(
@@ -238,10 +343,6 @@ class TransactionEntry extends StatelessWidget {
                             selectTransaction(transaction, selected, true);
                           },
                           onTap: () async {
-                            if (shouldOpenLoanPage) {
-                              flashTransaction(transaction.transactionPk,
-                                  flashCount: 2);
-                            }
                             openContainer();
                           },
                           child: AnimatedContainer(
@@ -310,34 +411,30 @@ class TransactionEntry extends StatelessWidget {
                                     },
                                     tintColor: categoryTintColor,
                                   ),
-                                  transaction.type == null
-                                      ? SizedBox(
-                                          width: 10,
-                                        )
-                                      : Builder(builder: (context) {
-                                          Widget actionButton =
-                                              TransactionEntryActionButton(
-                                            transaction: transaction,
-                                            iconColor: iconColor,
-                                            containerColor: containerColor,
-                                          );
-                                          if (highlightActionButton) {
-                                            actionButton = BreathingWidget(
-                                              duration:
-                                                  Duration(milliseconds: 600),
-                                              endScale: 1.2,
-                                              child: actionButton,
-                                            );
-                                          }
-                                          return AnimatedSwitcher(
-                                            duration:
-                                                Duration(milliseconds: 800),
-                                            child: isTransactionActionDealtWith(
-                                                    transaction)
-                                                ? Container(child: actionButton)
-                                                : actionButton,
-                                          );
-                                        }),
+                                  Builder(builder: (context) {
+                                    Widget actionButton =
+                                        TransactionEntryActionButton(
+                                      transaction: transaction,
+                                      iconColor: iconColor,
+                                      containerColor: containerColor,
+                                      allowOpenIntoObjectiveLoanPage:
+                                          allowOpenIntoObjectiveLoanPage,
+                                    );
+                                    if (highlightActionButton) {
+                                      actionButton = BreathingWidget(
+                                        duration: Duration(milliseconds: 600),
+                                        endScale: 1.2,
+                                        child: actionButton,
+                                      );
+                                    }
+                                    return AnimatedSwitcher(
+                                      duration: Duration(milliseconds: 800),
+                                      child: isTransactionActionDealtWith(
+                                              transaction)
+                                          ? Container(child: actionButton)
+                                          : actionButton,
+                                    );
+                                  }),
                                   Expanded(
                                     child: Column(
                                       mainAxisAlignment:
@@ -367,6 +464,8 @@ class TransactionEntry extends StatelessWidget {
                                                     transaction.sharedStatus ==
                                                         null) ||
                                                 (transaction.objectiveFk !=
+                                                    null) ||
+                                                (transaction.objectiveLoanFk !=
                                                     null) ||
                                                 (transaction.subCategoryFk !=
                                                     null) ||
@@ -415,10 +514,7 @@ class TransactionEntry extends StatelessWidget {
                       );
                     },
                     // Open the corresponding loan breakdown page if transaction tapped
-                    openPage: shouldOpenLoanPage &&
-                            transaction.objectiveFk != null
-                        ? ObjectivePage(objectivePk: transaction.objectiveFk!)
-                        : openPage,
+                    openPage: openPage,
                   ),
                 );
                 // Only render the visibility detector when we know this transaction entry

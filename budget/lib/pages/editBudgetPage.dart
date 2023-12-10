@@ -213,14 +213,19 @@ class _EditBudgetPageState extends State<EditBudgetPage> {
                       children: [
                         EditRowEntry(
                           key: ValueKey(budget.budgetPk),
-                          // extraIcon: budget.pinned
-                          //     ? Icons.push_pin_rounded
-                          //     : Icons.push_pin_outlined,
-                          // onExtra: () async {
-                          //   Budget updatedBudget =
-                          //       budget.copyWith(pinned: !budget.pinned);
-                          //   await database.createOrUpdateBudget(updatedBudget);
-                          // },
+                          extraIcon: budget.archived
+                              ? appStateSettings["outlinedIcons"]
+                                  ? Icons.visibility_off_outlined
+                                  : Icons.visibility_off_rounded
+                              : appStateSettings["outlinedIcons"]
+                                  ? Icons.visibility_outlined
+                                  : Icons.visibility_rounded,
+                          onExtra: () async {
+                            Budget updatedBudget =
+                                budget.copyWith(archived: !budget.archived);
+                            await database.createOrUpdateBudget(updatedBudget);
+                          },
+                          opacity: budget.archived ? 0.5 : 1,
                           canReorder: searchValue == "" &&
                               (snapshot.data ?? []).length != 1,
                           currentReorder:

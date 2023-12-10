@@ -60,7 +60,6 @@ class TransactionEntries extends StatelessWidget {
     this.memberTransactionFilters,
     this.member,
     this.onlyShowTransactionsBelongingToBudgetPk,
-    this.onlyShowTransactionsBelongingToObjectivePk,
     this.budget,
     this.dateDividerColor,
     this.transactionBackgroundColor,
@@ -84,7 +83,8 @@ class TransactionEntries extends StatelessWidget {
     this.enableSpendingSummary = false,
     this.showSpendingSummary = false,
     this.onLongPressSpendingSummary,
-    this.openLoanPage = true,
+    this.allowOpenIntoObjectiveLoanPage = true,
+    this.showNumberOfDaysUntilForFutureDates = false,
     super.key,
   });
   final TransactionEntriesRenderType renderType;
@@ -101,7 +101,6 @@ class TransactionEntries extends StatelessWidget {
   final List<String>? memberTransactionFilters;
   final String? member;
   final String? onlyShowTransactionsBelongingToBudgetPk;
-  final String? onlyShowTransactionsBelongingToObjectivePk;
   final Budget? budget;
   final Color? dateDividerColor;
   final Color? transactionBackgroundColor;
@@ -125,14 +124,14 @@ class TransactionEntries extends StatelessWidget {
   final bool enableSpendingSummary;
   final bool showSpendingSummary;
   final VoidCallback? onLongPressSpendingSummary;
-  final bool openLoanPage;
+  final bool allowOpenIntoObjectiveLoanPage;
+  final bool showNumberOfDaysUntilForFutureDates;
 
   Widget createTransactionEntry(
       List<TransactionWithCategory> transactionListForDay,
       TransactionWithCategory item,
       int index) {
     return TransactionEntry(
-      openLoanPage: openLoanPage,
       transactionBefore:
           nullIfIndexOutOfRange(transactionListForDay, index - 1)?.transaction,
       transactionAfter:
@@ -156,6 +155,7 @@ class TransactionEntries extends StatelessWidget {
       listID: listID,
       allowSelect: allowSelect,
       showObjectivePercentage: showObjectivePercentage,
+      allowOpenIntoObjectiveLoanPage: allowOpenIntoObjectiveLoanPage,
     );
   }
 
@@ -174,8 +174,6 @@ class TransactionEntries extends StatelessWidget {
         member: member,
         onlyShowTransactionsBelongingToBudgetPk:
             onlyShowTransactionsBelongingToBudgetPk,
-        onlyShowTransactionsBelongingToObjectivePk:
-            onlyShowTransactionsBelongingToObjectivePk,
         searchFilters: searchFilters,
         limit: limit,
         budget: budget,
@@ -244,12 +242,12 @@ class TransactionEntries extends StatelessWidget {
           double totalSpentForDay = 0;
           double totalSpentForDayWithBalanceCorrection = 0;
           DateTime? currentDate;
-          int totalUniqueDays = 0;
+          int totalPastUniqueDays = 0;
 
           for (TransactionWithCategory transactionWithCategory
               in snapshot.data ?? []) {
             if (pastDaysLimitToShow != null &&
-                totalUniqueDays > pastDaysLimitToShow!) break;
+                totalPastUniqueDays > pastDaysLimitToShow!) break;
 
             DateTime currentTransactionDate = DateTime(
                 transactionWithCategory.transaction.dateCreated.year,
@@ -257,7 +255,8 @@ class TransactionEntries extends StatelessWidget {
                 transactionWithCategory.transaction.dateCreated.day);
             if (currentDate == null) {
               currentDate = currentTransactionDate;
-              totalUniqueDays++;
+              if (currentDate.millisecondsSinceEpoch <
+                  DateTime.now().millisecondsSinceEpoch) totalPastUniqueDays++;
             }
             if (currentDate == currentTransactionDate) {
               transactionListForDay.add(transactionWithCategory);
@@ -307,6 +306,10 @@ class TransactionEntries extends StatelessWidget {
             if (nextTransactionDate == null ||
                 nextTransactionDate != currentTransactionDate) {
               if (transactionListForDay.length > 0) {
+                int daysDifference = DateTime(DateTime.now().year,
+                        DateTime.now().month, DateTime.now().day)
+                    .difference(currentTransactionDate)
+                    .inDays;
                 Widget dateDividerWidget = includeDateDivider == false
                     ? SizedBox.shrink()
                     : DateDivider(
@@ -314,6 +317,15 @@ class TransactionEntries extends StatelessWidget {
                             useHorizontalPaddingConstrained,
                         color: dateDividerColor,
                         date: currentTransactionDate,
+                        afterDate: daysDifference >= 0 ||
+                                showNumberOfDaysUntilForFutureDates == false
+                            ? ""
+                            : " • " +
+                                (daysDifference * -1).toString() +
+                                " " +
+                                (daysDifference == 1
+                                    ? "day".tr()
+                                    : "days".tr()),
                         info: appStateSettings["netSpendingDayTotal"] == true
                             ? convertToMoney(
                                 Provider.of<AllWallets>(context),
@@ -570,8 +582,6 @@ class TransactionEntries extends StatelessWidget {
         member: member,
         onlyShowTransactionsBelongingToBudgetPk:
             onlyShowTransactionsBelongingToBudgetPk,
-        onlyShowTransactionsBelongingToObjectivePk:
-            onlyShowTransactionsBelongingToObjectivePk,
         searchFilters: searchFilters,
         limit: limit,
         budget: budget,

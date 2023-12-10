@@ -27,7 +27,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class HomePageObjectives extends StatefulWidget {
-  const HomePageObjectives({super.key});
+  const HomePageObjectives({super.key, required this.objectiveType});
+  final ObjectiveType objectiveType;
 
   @override
   State<HomePageObjectives> createState() => _HomePageObjectivesState();
@@ -39,7 +40,9 @@ class _HomePageObjectivesState extends State<HomePageObjectives> {
   Widget build(BuildContext context) {
     Widget child = KeepAliveClientMixin(
       child: StreamBuilder<List<Objective>>(
-        stream: database.getAllPinnedObjectives().$1,
+        stream: database
+            .getAllPinnedObjectives(objectiveType: widget.objectiveType)
+            .$1,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             if (snapshot.data!.length == 0) {
@@ -48,7 +51,9 @@ class _HomePageObjectivesState extends State<HomePageObjectives> {
                   openBottomSheet(
                     context,
                     EditHomePagePinnedGoalsPopup(
-                        showGoalsTotalLabelSetting: false),
+                      showGoalsTotalLabelSetting: false,
+                      objectiveType: widget.objectiveType,
+                    ),
                     useCustomController: true,
                   );
                 },
@@ -86,7 +91,9 @@ class _HomePageObjectivesState extends State<HomePageObjectives> {
                     openBottomSheet(
                       context,
                       EditHomePagePinnedGoalsPopup(
-                          showGoalsTotalLabelSetting: false),
+                        showGoalsTotalLabelSetting: false,
+                        objectiveType: widget.objectiveType,
+                      ),
                       useCustomController: true,
                     );
                   },
@@ -183,129 +190,148 @@ class _HomePageObjectivesState extends State<HomePageObjectives> {
 }
 
 class EditHomePagePinnedGoalsPopup extends StatelessWidget {
-  const EditHomePagePinnedGoalsPopup(
-      {super.key, required this.showGoalsTotalLabelSetting});
+  const EditHomePagePinnedGoalsPopup({
+    super.key,
+    required this.showGoalsTotalLabelSetting,
+    required this.objectiveType,
+  });
   final bool showGoalsTotalLabelSetting;
+  final ObjectiveType objectiveType;
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<List<Objective>>(
-        stream: database.watchAllObjectives(),
-        builder: (context, snapshot) {
-          List<Objective> allObjectives = snapshot.data ?? [];
-          return StreamBuilder<List<Objective>>(
-              stream: database.getAllPinnedObjectives().$1,
-              builder: (context, snapshot2) {
-                List<Objective> allPinnedObjectives = snapshot2.data ?? [];
-                return PopupFramework(
-                  title: "select-goals".tr(),
-                  outsideExtraWidget: IconButton(
-                    iconSize: 25,
-                    padding: EdgeInsets.all(
-                        getPlatform() == PlatformOS.isIOS ? 15 : 20),
-                    icon: Icon(
-                      appStateSettings["outlinedIcons"]
-                          ? Icons.edit_outlined
-                          : Icons.edit_rounded,
+      stream: database.watchAllObjectives(objectiveType: objectiveType),
+      builder: (context, snapshot) {
+        List<Objective> allObjectives = snapshot.data ?? [];
+        return StreamBuilder<List<Objective>>(
+          stream:
+              database.getAllPinnedObjectives(objectiveType: objectiveType).$1,
+          builder: (context, snapshot2) {
+            List<Objective> allPinnedObjectives = snapshot2.data ?? [];
+            return PopupFramework(
+              title: objectiveType == ObjectiveType.goal
+                  ? "select-goals".tr()
+                  : "select-loans".tr(),
+              outsideExtraWidget: IconButton(
+                iconSize: 25,
+                padding:
+                    EdgeInsets.all(getPlatform() == PlatformOS.isIOS ? 15 : 20),
+                icon: Icon(
+                  appStateSettings["outlinedIcons"]
+                      ? Icons.edit_outlined
+                      : Icons.edit_rounded,
+                ),
+                onPressed: () async {
+                  pushRoute(
+                    context,
+                    EditObjectivesPage(
+                      objectiveType: objectiveType,
                     ),
-                    onPressed: () async {
-                      pushRoute(context, EditObjectivesPage());
+                  );
+                },
+              ),
+              child: Column(
+                children: [
+                  if (showGoalsTotalLabelSetting)
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(15),
+                      child: TotalSpentToggle(isForGoalTotal: true),
+                    ),
+                  if (allObjectives.length <= 0)
+                    NoResultsCreate(
+                      message: objectiveType == ObjectiveType.goal
+                          ? "no-goals-found".tr()
+                          : "no-long-term-loans-found".tr(),
+                      buttonLabel: objectiveType == ObjectiveType.goal
+                          ? "create-goal".tr()
+                          : "create-loan".tr(),
+                      route: AddObjectivePage(
+                        routesToPopAfterDelete: RoutesToPopAfterDelete.None,
+                        objectiveType: objectiveType,
+                      ),
+                    ),
+                  SelectItems(
+                    syncWithInitial: true,
+                    checkboxCustomIconSelected: Icons.push_pin_rounded,
+                    checkboxCustomIconUnselected: Icons.push_pin_outlined,
+                    items: [
+                      for (Objective objective in allObjectives)
+                        objective.objectivePk.toString()
+                    ],
+                    getColor: (objectivePk, selected) {
+                      for (Objective objective in allObjectives)
+                        if (objective.objectivePk.toString() ==
+                            objectivePk.toString()) {
+                          return HexColor(objective.colour,
+                                  defaultColor:
+                                      Theme.of(context).colorScheme.primary)
+                              .withOpacity(selected == true ? 0.7 : 0.5);
+                        }
+                      return null;
+                    },
+                    displayFilter: (objectivePk) {
+                      for (Objective objective in allObjectives)
+                        if (objective.objectivePk.toString() ==
+                            objectivePk.toString()) {
+                          return objective.name;
+                        }
+                      return "";
+                    },
+                    initialItems: [
+                      for (Objective objective in allPinnedObjectives)
+                        objective.objectivePk.toString()
+                    ],
+                    onChangedSingleItem: (value) async {
+                      Objective objective = allObjectives[allObjectives
+                          .indexWhere((item) => item.objectivePk == value)];
+                      Objective objectiveToUpdate = await database
+                          .getObjectiveInstance(objective.objectivePk);
+                      await database.createOrUpdateObjective(
+                        objectiveToUpdate.copyWith(
+                            pinned: !objectiveToUpdate.pinned),
+                      );
+                    },
+                    onLongPress: (String objectivePk) async {
+                      Objective objective =
+                          await database.getObjectiveInstance(objectivePk);
+                      pushRoute(
+                        context,
+                        AddObjectivePage(
+                          routesToPopAfterDelete: RoutesToPopAfterDelete.One,
+                          objective: objective,
+                        ),
+                      );
                     },
                   ),
-                  child: Column(
-                    children: [
-                      if (showGoalsTotalLabelSetting)
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(15),
-                          child: TotalSpentToggle(isForGoalTotal: true),
-                        ),
-                      if (allObjectives.length <= 0)
-                        NoResultsCreate(
-                          message: "no-goals-found".tr(),
-                          buttonLabel: "create-goal".tr(),
-                          route: AddObjectivePage(
-                            routesToPopAfterDelete: RoutesToPopAfterDelete.None,
-                          ),
-                        ),
-                      SelectItems(
-                        syncWithInitial: true,
-                        checkboxCustomIconSelected: Icons.push_pin_rounded,
-                        checkboxCustomIconUnselected: Icons.push_pin_outlined,
-                        items: [
-                          for (Objective objective in allObjectives)
-                            objective.objectivePk.toString()
-                        ],
-                        getColor: (objectivePk, selected) {
-                          for (Objective objective in allObjectives)
-                            if (objective.objectivePk.toString() ==
-                                objectivePk.toString()) {
-                              return HexColor(objective.colour,
-                                      defaultColor:
-                                          Theme.of(context).colorScheme.primary)
-                                  .withOpacity(selected == true ? 0.7 : 0.5);
-                            }
-                          return null;
-                        },
-                        displayFilter: (objectivePk) {
-                          for (Objective objective in allObjectives)
-                            if (objective.objectivePk.toString() ==
-                                objectivePk.toString()) {
-                              return objective.name;
-                            }
-                          return "";
-                        },
-                        initialItems: [
-                          for (Objective objective in allPinnedObjectives)
-                            objective.objectivePk.toString()
-                        ],
-                        onChangedSingleItem: (value) async {
-                          Objective objective = allObjectives[allObjectives
-                              .indexWhere((item) => item.objectivePk == value)];
-                          Objective objectiveToUpdate = await database
-                              .getObjectiveInstance(objective.objectivePk);
-                          await database.createOrUpdateObjective(
-                            objectiveToUpdate.copyWith(
-                                pinned: !objectiveToUpdate.pinned),
-                          );
-                        },
-                        onLongPress: (String objectivePk) async {
-                          Objective objective =
-                              await database.getObjectiveInstance(objectivePk);
-                          pushRoute(
-                            context,
-                            AddObjectivePage(
-                              routesToPopAfterDelete:
-                                  RoutesToPopAfterDelete.One,
-                              objective: objective,
-                            ),
-                          );
-                        },
+                  if (allObjectives.length > 0)
+                    AddButton(
+                      onTap: () {},
+                      height: 50,
+                      width: null,
+                      padding: const EdgeInsets.only(
+                        left: 13,
+                        right: 13,
+                        bottom: 13,
+                        top: 13,
                       ),
-                      if (allObjectives.length > 0)
-                        AddButton(
-                          onTap: () {},
-                          height: 50,
-                          width: null,
-                          padding: const EdgeInsets.only(
-                            left: 13,
-                            right: 13,
-                            bottom: 13,
-                            top: 13,
-                          ),
-                          openPage: AddObjectivePage(
-                            routesToPopAfterDelete: RoutesToPopAfterDelete.None,
-                          ),
-                          afterOpenPage: () {
-                            Future.delayed(Duration(milliseconds: 100), () {
-                              bottomSheetControllerGlobalCustomAssigned
-                                  ?.snapToExtent(0);
-                            });
-                          },
-                        ),
-                    ],
-                  ),
-                );
-              });
-        });
+                      openPage: AddObjectivePage(
+                        routesToPopAfterDelete: RoutesToPopAfterDelete.None,
+                        objectiveType: objectiveType,
+                      ),
+                      afterOpenPage: () {
+                        Future.delayed(Duration(milliseconds: 100), () {
+                          bottomSheetControllerGlobalCustomAssigned
+                              ?.snapToExtent(0);
+                        });
+                      },
+                    ),
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
   }
 }

@@ -67,7 +67,8 @@ createNewSubscriptionTransaction(
             await database.getObjectiveInstance(transaction.objectiveFk!);
         double? totalSpentOfObjective = await database.getTotalTowardsObjective(
             Provider.of<AllWallets>(context, listen: false),
-            transaction.objectiveFk!);
+            transaction.objectiveFk!,
+            objective.type);
 
         bool willBeOverObjective = (totalSpentOfObjective ?? 0) >=
             (objective.amount * (objective.income ? 1 : -1));
@@ -131,12 +132,14 @@ Future openPayPopup(
   Transaction transaction, {
   Function? runBefore,
 }) async {
+  String transactionName = await getTransactionLabel(transaction);
   return await openPopup(
     context,
     icon: appStateSettings["outlinedIcons"]
         ? Icons.check_circle_outlined
         : Icons.check_circle_rounded,
     title: (transaction.income ? "deposit".tr() : "pay".tr()) + "?",
+    subtitle: transactionName,
     description: transaction.income
         ? "deposit-description".tr()
         : "pay-description".tr(),
@@ -239,6 +242,7 @@ Future openPayDebtCreditPopup(
   Transaction transaction, {
   Function? runBefore,
 }) async {
+  String transactionName = await getTransactionLabel(transaction);
   return await openPopup(
     context,
     icon: appStateSettings["outlinedIcons"]
@@ -250,6 +254,7 @@ Future openPayDebtCreditPopup(
                 ? "settled".tr()
                 : "") +
         "?",
+    subtitle: transactionName,
     description: transaction.type == TransactionSpecialType.credit
         ? "collect-description".tr()
         : transaction.type == TransactionSpecialType.debt
@@ -273,6 +278,106 @@ Future openPayDebtCreditPopup(
       Navigator.pop(context, true);
       await database.createOrUpdateTransaction(transactionNew);
     },
+    onExtraLabel2: transaction.type == TransactionSpecialType.credit
+        ? "partially-collect".tr()
+        : transaction.type == TransactionSpecialType.debt
+            ? "partially-settle".tr()
+            : "",
+    onExtra2: () async {
+      double selectedAmount = 0;
+      String selectedWalletFk = transaction.walletFk;
+
+      await openBottomSheet(
+        context,
+        fullSnap: true,
+        PopupFramework(
+          title: transaction.type == TransactionSpecialType.credit
+              ? "amount-collected".tr()
+              : transaction.type == TransactionSpecialType.debt
+                  ? "amount-settled".tr()
+                  : "",
+          hasPadding: false,
+          underTitleSpace: false,
+          child: SelectAmount(
+            padding: EdgeInsets.symmetric(horizontal: 18),
+            onlyShowCurrencyIcon: true,
+            selectedWalletPk: selectedWalletFk,
+            walletPkForCurrency: selectedWalletFk,
+            setSelectedWalletPk: (walletFk) {
+              selectedWalletFk = walletFk;
+            },
+            allowZero: true,
+            allDecimals: true,
+            convertToMoney: true,
+            setSelectedAmount: (amount, __) {
+              selectedAmount = amount;
+            },
+            next: () {
+              Navigator.pop(context);
+            },
+            nextLabel: "set-amount".tr(),
+            currencyKey: null,
+            enableWalletPicker: true,
+          ),
+        ),
+      );
+      if (selectedAmount == 0) {
+        return;
+      }
+      Navigator.pop(context, true);
+
+      TransactionCategory category =
+          await database.getCategory(transaction.categoryFk).$2;
+      String transactionLabel = getTransactionLabelSync(transaction, category);
+      int numberOfObjectives = (await database.getTotalCountOfObjectives(
+              objectiveType: ObjectiveType.loan))[0] ??
+          0;
+      // Invert the amount, because the objective is of opposite polarity of the current transaction
+      // Borrowed is considered positive
+      // Lent is considered negative
+      int? rowId = await database.createOrUpdateObjective(
+        Objective(
+          amount: transaction.amount.abs(), //always positive
+          income: !transaction.income,
+          objectivePk: "-1",
+          name: transactionLabel,
+          order: numberOfObjectives,
+          dateCreated: transaction.dateCreated,
+          pinned: false,
+          walletFk: transaction.walletFk,
+          iconName: category.iconName,
+          emojiIconName: category.emojiIconName,
+          colour: category.colour,
+          type: ObjectiveType.loan,
+          archived: false,
+        ),
+        insert: true,
+      );
+      final Objective objectiveJustAdded =
+          await database.getObjectiveFromRowId(rowId);
+      // Set up the initial amount
+      await database.createOrUpdateTransaction(
+        transaction.copyWith(
+          type: Value(null),
+          objectiveLoanFk: Value(objectiveJustAdded.objectivePk),
+          amount: transaction.amount,
+          name: "initial-record".tr(),
+        ),
+      );
+      // Add the first payment/record
+      // Inverse polarity!
+      await database.createOrUpdateTransaction(
+        transaction.copyWith(
+          type: Value(null),
+          objectiveLoanFk: Value(objectiveJustAdded.objectivePk),
+          income: !transaction.income,
+          amount: selectedAmount * (!transaction.income ? 1 : -1),
+          dateCreated: DateTime.now(),
+          walletFk: selectedWalletFk,
+        ),
+        insert: true,
+      );
+    },
   );
 }
 
@@ -281,12 +386,14 @@ Future openRemoveSkipPopup(
   Transaction transaction, {
   Function? runBefore,
 }) async {
+  String transactionName = await getTransactionLabel(transaction);
   return await openPopup(
     context,
     icon: appStateSettings["outlinedIcons"]
         ? Icons.unpublished_outlined
         : Icons.unpublished_rounded,
     title: "remove-skip".tr() + "?",
+    subtitle: transactionName,
     description: "remove-skip-description".tr(),
     onCancelLabel: "cancel".tr(),
     onCancel: () {
@@ -309,11 +416,13 @@ Future openUnpayPopup(
   Transaction transaction, {
   Function? runBefore,
 }) async {
+  String transactionName = await getTransactionLabel(transaction);
   return await openPopup(context,
       icon: appStateSettings["outlinedIcons"]
           ? Icons.unpublished_outlined
           : Icons.unpublished_rounded,
       title: "remove-payment".tr() + "?",
+      subtitle: transactionName,
       description: "remove-payment-description".tr(),
       onCancelLabel: "cancel".tr(),
       onCancel: () {
@@ -340,12 +449,14 @@ Future openUnpayDebtCreditPopup(
   Transaction transaction, {
   Function? runBefore,
 }) async {
+  String transactionName = await getTransactionLabel(transaction);
   return await openPopup(
     context,
     icon: appStateSettings["outlinedIcons"]
         ? Icons.unpublished_outlined
         : Icons.unpublished_rounded,
     title: "remove-payment".tr() + "?",
+    subtitle: transactionName,
     description: "remove-payment-description".tr(),
     onCancelLabel: "cancel".tr(),
     onCancel: () {

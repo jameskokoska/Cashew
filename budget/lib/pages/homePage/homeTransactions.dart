@@ -12,6 +12,7 @@ class HomeTransactions extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       child: TransactionEntries(
+        showNumberOfDaysUntilForFutureDates: true,
         renderType: TransactionEntriesRenderType.nonSlivers,
         showNoResults: false,
         DateTime(
@@ -22,7 +23,7 @@ class HomeTransactions extends StatelessWidget {
         DateTime(
           DateTime.now().year,
           DateTime.now().month,
-          DateTime.now().day,
+          DateTime.now().day + 4,
         ),
         income: selectedSlidingSelector == 1
             ? null

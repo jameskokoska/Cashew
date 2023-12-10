@@ -67,7 +67,7 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
       if (!currentFocus.hasPrimaryFocus) {
         currentFocus.unfocus();
       }
-      _searchFocusNode.requestFocus();
+      //_searchFocusNode.requestFocus();
     });
     DateTimeRange initialDateTimeRange = DateTimeRange(
       start: DateTime(1900),
@@ -79,12 +79,11 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
     if (widget.initialFilters == null) {
       searchFilters.loadFilterString(
         appStateSettings["searchTransactionsSetFiltersString"],
-        skipDateTimeRange: true,
+        skipDateTimeRange: false,
         skipSearchQuery: true,
       );
     }
-    if (widget.initialFilters == null ||
-        widget.initialFilters?.dateTimeRange == null) {
+    if (searchFilters.dateTimeRange == null) {
       searchFilters.dateTimeRange = initialDateTimeRange;
     }
 
@@ -146,10 +145,16 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
       searchFilters.dateTimeRange,
       initialEntryMode: DatePickerEntryMode.input,
     );
-    if (picked != null)
+    if (picked != null) {
       setState(() {
         searchFilters.dateTimeRange = picked;
       });
+      updateSettings(
+        "searchTransactionsSetFiltersString",
+        searchFilters.getFilterString(),
+        updateGlobalState: false,
+      );
+    }
   }
 
   @override

@@ -35,6 +35,7 @@ class EditRowEntry extends StatelessWidget {
     this.iconAlignment,
     this.hasMoreOptionsIcon = false,
     this.disableActions = false,
+    this.opacity,
     Key? key,
   }) : super(key: key);
   final int index;
@@ -58,6 +59,7 @@ class EditRowEntry extends StatelessWidget {
   final Alignment? iconAlignment;
   final bool hasMoreOptionsIcon;
   final bool disableActions;
+  final double? opacity;
 
   @override
   Widget build(BuildContext context) {
@@ -396,7 +398,7 @@ class EditRowEntry extends StatelessWidget {
     }
     return AnimatedOpacity(
       duration: Duration(milliseconds: 200),
-      opacity: currentReorder ? 0.6 : 1,
+      opacity: currentReorder ? 0.6 : (opacity ?? 1),
       child: Column(
         children: [
           getPlatform() == PlatformOS.isIOS && index == 0

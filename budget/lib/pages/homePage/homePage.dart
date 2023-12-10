@@ -10,7 +10,6 @@ import 'package:budget/pages/homePage/homePagePieChart.dart';
 import 'package:budget/pages/homePage/homePageWalletList.dart';
 import 'package:budget/pages/homePage/homePageWalletSwitcher.dart';
 import 'package:budget/pages/homePage/homeTransactions.dart';
-import 'package:budget/pages/homePage/homeUpcomingTransactions.dart';
 import 'package:budget/pages/homePage/homePageUsername.dart';
 import 'package:budget/pages/homePage/homePageBudgets.dart';
 import 'package:budget/pages/homePage/homePageUpcomingTransactions.dart';
@@ -135,16 +134,13 @@ class HomePageState extends State<HomePage>
           });
         });
     Widget? homePageTransactionsList =
-        isHomeScreenSectionEnabled(context, "showTransactionsList") == true ||
-                enableDoubleColumn(context)
+        isHomeScreenSectionEnabled(context, "showTransactionsList") == true
             ? Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   slidingSelector,
                   SizedBox(height: 8),
-                  HomeUpcomingTransactions(
-                      selectedSlidingSelector: selectedSlidingSelector),
                   HomeTransactions(
                       selectedSlidingSelector: selectedSlidingSelector),
                   SizedBox(height: 7),
@@ -191,11 +187,15 @@ class HomePageState extends State<HomePage>
           ? HomePageNetWorth()
           : null,
       "objectives": isHomeScreenSectionEnabled(context, "showObjectives")
-          ? HomePageObjectives()
+          ? HomePageObjectives(objectiveType: ObjectiveType.goal)
           : null,
       "creditDebts": isHomeScreenSectionEnabled(context, "showCreditDebt")
           ? HomePageCreditDebts()
           : null,
+      "objectiveLoans":
+          isHomeScreenSectionEnabled(context, "showObjectiveLoans")
+              ? HomePageObjectives(objectiveType: ObjectiveType.loan)
+              : null,
       "spendingGraph": isHomeScreenSectionEnabled(context, "showSpendingGraph")
           ? HomePageLineGraph(selectedSlidingSelector: selectedSlidingSelector)
           : null,

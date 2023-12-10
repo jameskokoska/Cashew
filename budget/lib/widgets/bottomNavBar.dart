@@ -261,6 +261,10 @@ class CustomizableNavigationBarIcon extends StatelessWidget {
           ),
         );
         if (result == true) {
+          // Refresh this because we want to open up the budgets detail page
+          // When the budgets icon is tapped on the more page
+          // If budgets were removed
+          settingsPageStateKey.currentState?.refreshState();
           // User did choose one
           afterSet();
         }

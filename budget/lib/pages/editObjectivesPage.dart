@@ -34,8 +34,10 @@ import 'package:provider/provider.dart';
 
 class EditObjectivesPage extends StatefulWidget {
   EditObjectivesPage({
+    required this.objectiveType,
     Key? key,
   }) : super(key: key);
+  final ObjectiveType objectiveType;
 
   @override
   _EditObjectivesPageState createState() => _EditObjectivesPageState();
@@ -50,7 +52,7 @@ class _EditObjectivesPageState extends State<EditObjectivesPage> {
   @override
   void initState() {
     Future.delayed(Duration.zero, () {
-      database.fixOrderObjectives();
+      database.fixOrderObjectives(objectiveType: widget.objectiveType);
     });
     super.initState();
   }
@@ -72,25 +74,33 @@ class _EditObjectivesPageState extends State<EditObjectivesPage> {
         horizontalPadding: getHorizontalPaddingConstrained(context),
         dragDownToDismiss: true,
         dragDownToDismissEnabled: dragDownToDismissEnabled,
-        title: "goals".tr(),
+        title: widget.objectiveType == ObjectiveType.loan
+            ? "loans".tr()
+            : "goals".tr(),
         scrollToTopButton: true,
         floatingActionButton: AnimateFABDelayed(
           fab: FAB(
-            tooltip: "add-goal".tr(),
+            tooltip: widget.objectiveType == ObjectiveType.loan
+                ? "add-loan".tr()
+                : "add-goal".tr(),
             openPage: AddObjectivePage(
               routesToPopAfterDelete: RoutesToPopAfterDelete.None,
+              objectiveType: widget.objectiveType,
             ),
           ),
         ),
         actions: [
           IconButton(
             padding: EdgeInsets.all(15),
-            tooltip: "add-goal".tr(),
+            tooltip: widget.objectiveType == ObjectiveType.loan
+                ? "add-loan".tr()
+                : "add-goal".tr(),
             onPressed: () {
               pushRoute(
                 context,
                 AddObjectivePage(
                   routesToPopAfterDelete: RoutesToPopAfterDelete.None,
+                  objectiveType: widget.objectiveType,
                 ),
               );
             },
@@ -110,7 +120,9 @@ class _EditObjectivesPageState extends State<EditObjectivesPage> {
                   });
                 },
                 child: TextInput(
-                  labelText: "search-goals-placeholder".tr(),
+                  labelText: widget.objectiveType == ObjectiveType.loan
+                      ? "search-loans-placeholder".tr()
+                      : "search-goals-placeholder".tr(),
                   icon: appStateSettings["outlinedIcons"]
                       ? Icons.search_outlined
                       : Icons.search_rounded,
@@ -137,12 +149,16 @@ class _EditObjectivesPageState extends State<EditObjectivesPage> {
           ),
           StreamBuilder<List<Objective>>(
             stream: database.watchAllObjectives(
-                searchFor: searchValue == "" ? null : searchValue),
+              objectiveType: widget.objectiveType,
+              searchFor: searchValue == "" ? null : searchValue,
+            ),
             builder: (context, snapshot) {
               if (snapshot.hasData && (snapshot.data ?? []).length <= 0) {
                 return SliverToBoxAdapter(
                   child: NoResults(
-                    message: "no-goals-found".tr(),
+                    message: widget.objectiveType == ObjectiveType.loan
+                        ? "no-loans-found".tr()
+                        : "no-goals-found".tr(),
                   ),
                 );
               }
@@ -164,6 +180,20 @@ class _EditObjectivesPageState extends State<EditObjectivesPage> {
                   itemBuilder: (context, index) {
                     Objective objective = snapshot.data![index];
                     return EditRowEntry(
+                      extraIcon: objective.archived
+                          ? appStateSettings["outlinedIcons"]
+                              ? Icons.visibility_off_outlined
+                              : Icons.visibility_off_rounded
+                          : appStateSettings["outlinedIcons"]
+                              ? Icons.visibility_outlined
+                              : Icons.visibility_rounded,
+                      onExtra: () async {
+                        Objective updatedObjective =
+                            objective.copyWith(archived: !objective.archived);
+                        await database
+                            .createOrUpdateObjective(updatedObjective);
+                      },
+                      opacity: objective.archived ? 0.5 : 1,
                       canReorder: searchValue == "" &&
                           (snapshot.data ?? []).length != 1,
                       currentReorder:
@@ -206,8 +236,14 @@ class _EditObjectivesPageState extends State<EditObjectivesPage> {
                                 TextFont(
                                   textAlign: TextAlign.left,
                                   text: objective.income
-                                      ? "savings-goal".tr()
-                                      : "expense-goal".tr(),
+                                      ? widget.objectiveType ==
+                                              ObjectiveType.loan
+                                          ? "lent-funds".tr()
+                                          : "savings-goal".tr()
+                                      : widget.objectiveType ==
+                                              ObjectiveType.loan
+                                          ? "borrowed-funds".tr()
+                                          : "expense-goal".tr(),
                                   fontSize: 14,
                                   textColor: getColor(context, "black")
                                       .withOpacity(0.65),
@@ -270,10 +306,12 @@ class _EditObjectivesPageState extends State<EditObjectivesPage> {
                     Objective oldObjective = snapshot.data![_intPrevious];
                     if (_intNew > _intPrevious) {
                       await database.moveObjective(oldObjective.objectivePk,
-                          _intNew - 1, oldObjective.order);
+                          _intNew - 1, oldObjective.order,
+                          objectiveType: widget.objectiveType);
                     } else {
-                      await database.moveObjective(oldObjective.objectivePk,
-                          _intNew, oldObjective.order);
+                      await database.moveObjective(
+                          oldObjective.objectivePk, _intNew, oldObjective.order,
+                          objectiveType: widget.objectiveType);
                     }
                     return true;
                   },
@@ -300,7 +338,9 @@ Future<DeletePopupAction?> deleteObjectivePopup(
 }) async {
   DeletePopupAction? action = await openDeletePopup(
     context,
-    title: "delete-goal-question".tr(),
+    title: objective.type == ObjectiveType.loan
+        ? "delete-loan-question".tr()
+        : "delete-goal-question".tr(),
     subtitle: objective.name,
   );
   if (action == DeletePopupAction.Delete) {
@@ -311,8 +351,12 @@ Future<DeletePopupAction?> deleteObjectivePopup(
     if (numTransactions != null && numTransactions > 0) {
       result = await openPopup(
         context,
-        title: "remove-transactions-from-goal-question".tr(),
-        description: "delete-goal-warning".tr(),
+        title: objective.type == ObjectiveType.loan
+            ? "remove-transactions-from-loan-question".tr()
+            : "remove-transactions-from-goal-question".tr(),
+        description: objective.type == ObjectiveType.loan
+            ? "delete-loan-warning".tr()
+            : "delete-goal-warning".tr(),
         icon: appStateSettings["outlinedIcons"]
             ? Icons.warning_outlined
             : Icons.warning_rounded,
@@ -323,7 +367,9 @@ Future<DeletePopupAction?> deleteObjectivePopup(
         onSubmit: () async {
           Navigator.pop(context, true);
         },
-        onSubmitLabel: "delete-goal".tr(),
+        onSubmitLabel: objective.type == ObjectiveType.loan
+            ? "delete-loan".tr()
+            : "delete-goal".tr(),
       );
     }
     if (result == true) {
@@ -336,7 +382,9 @@ Future<DeletePopupAction?> deleteObjectivePopup(
         await database.deleteObjective(context, objective);
         openSnackbar(
           SnackbarMessage(
-            title: "deleted-goal".tr(),
+            title: objective.type == ObjectiveType.loan
+                ? "deleted-loan".tr()
+                : "deleted-goal".tr(),
             icon: Icons.delete,
             description: objective.name,
           ),
@@ -362,7 +410,8 @@ Future<dynamic> selectObjectivePopup(
       child: Column(
         children: [
           StreamBuilder<List<Objective>>(
-            stream: database.watchAllObjectives(),
+            stream:
+                database.watchAllObjectives(objectiveType: ObjectiveType.goal),
             builder: (context, snapshot) {
               if (snapshot.hasData &&
                   (snapshot.data != null && snapshot.data!.length > 0)) {
@@ -470,15 +519,22 @@ List<double> getInstallmentPaymentCalculations({
   required Objective objective,
   required int? numberOfInstallmentPayments,
   required double? amountPerInstallmentPayment,
+  required String amountPerInstallmentPaymentWalletPk,
 }) {
+  double amountPerInstallmentPaymentInCurrentCurrency =
+      (amountPerInstallmentPayment ?? 0) *
+          amountRatioToPrimaryCurrencyGivenPk(
+              allWallets, amountPerInstallmentPaymentWalletPk);
   double objectiveTotalInCurrentCurrency =
       objectiveAmountToPrimaryCurrency(allWallets, objective);
   double numberOfInstallmentPaymentsDisplay =
       (numberOfInstallmentPayments ?? 0) * 1.0;
-  double amountPerInstallmentPaymentDisplay = amountPerInstallmentPayment ?? 0;
+  double amountPerInstallmentPaymentDisplay =
+      amountPerInstallmentPaymentInCurrentCurrency;
   if (numberOfInstallmentPayments == null) {
     numberOfInstallmentPaymentsDisplay =
         objectiveTotalInCurrentCurrency / amountPerInstallmentPaymentDisplay;
+    amountPerInstallmentPaymentDisplay = amountPerInstallmentPayment ?? 0;
   } else if (amountPerInstallmentPayment == null) {
     // We add a small decimal because we need to make sure the amount reaches the actual goal when dividing
     // We need the percentage goal achieved to reach above 100% so it stops creating transactions

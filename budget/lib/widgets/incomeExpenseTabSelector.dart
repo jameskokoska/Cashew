@@ -23,6 +23,7 @@ class IncomeExpenseTabSelector extends StatefulWidget {
   final Widget? expenseCustomIcon;
   final Widget? incomeCustomIcon;
   final Widget Function(bool selectedIncome)? belowWidgetBuilder;
+  final bool hasBorderRadius;
 
   IncomeExpenseTabSelector({
     required this.onTabChanged,
@@ -38,6 +39,7 @@ class IncomeExpenseTabSelector extends StatefulWidget {
     this.expenseCustomIcon,
     this.incomeCustomIcon,
     this.belowWidgetBuilder,
+    this.hasBorderRadius = true,
   });
 
   @override
@@ -91,72 +93,70 @@ class _IncomeExpenseTabSelectorState extends State<IncomeExpenseTabSelector>
 
   @override
   Widget build(BuildContext context) {
-    Widget tabSelector = Material(
-      color: widget.unselectedColor == null
-          ? appStateSettings["materialYou"]
-              ? Theme.of(context).colorScheme.primary.withOpacity(0.1)
-              : Theme.of(context).brightness == Brightness.dark
-                  ? getColor(context, "lightDarkAccentHeavyLight")
-                      .withOpacity(0.5)
-                  : Colors.black.withOpacity(0.07)
-          : widget.unselectedColor,
-      child: TabBar(
-        controller: _incomeTabController,
-        dividerColor: Colors.transparent,
-        indicatorColor: Colors.transparent,
-        indicatorSize: TabBarIndicatorSize.tab,
-        indicator: BoxDecoration(
-          color: widget.color != null
-              ? widget.color
-              : (appStateSettings["materialYou"]
-                  ? Theme.of(context).colorScheme.primary.withOpacity(0.25)
-                  : getColor(context, "black").withOpacity(0.15)),
+    Widget tabSelector = ClipRRect(
+      borderRadius: widget.hasBorderRadius
+          ? BorderRadius.circular(getPlatform() == PlatformOS.isIOS ? 10 : 15)
+          : BorderRadius.zero,
+      child: Material(
+        color: widget.unselectedColor == null
+            ? appStateSettings["materialYou"]
+                ? Theme.of(context).colorScheme.primary.withOpacity(0.1)
+                : Theme.of(context).brightness == Brightness.dark
+                    ? getColor(context, "lightDarkAccentHeavyLight")
+                        .withOpacity(0.5)
+                    : Colors.black.withOpacity(0.07)
+            : widget.unselectedColor,
+        child: TabBar(
+          controller: _incomeTabController,
+          dividerColor: Colors.transparent,
+          indicatorColor: Colors.transparent,
+          indicatorSize: TabBarIndicatorSize.tab,
+          indicator: BoxDecoration(
+            color: widget.color != null
+                ? widget.color
+                : (appStateSettings["materialYou"]
+                    ? Theme.of(context).colorScheme.primary.withOpacity(0.25)
+                    : getColor(context, "black").withOpacity(0.15)),
+          ),
+          labelColor: getColor(context, "black"),
+          unselectedLabelColor: widget.unselectedLabelColor ??
+              getColor(context, "black").withOpacity(0.3),
+          onTap: (value) {
+            widget.onTabChanged(value == 1);
+            setState(() {
+              selectedIncome = value == 1;
+            });
+          },
+          tabs: [
+            Tab(
+              child: ExpenseIncomeSelectorLabel(
+                selectedIncome: selectedIncome,
+                showIcons: widget.showIcons,
+                label: widget.expenseLabel,
+                isIncome: false,
+                customIcon: widget.expenseCustomIcon,
+                tabController: _incomeTabController,
+              ),
+            ),
+            Tab(
+              child: ExpenseIncomeSelectorLabel(
+                selectedIncome: selectedIncome,
+                showIcons: widget.showIcons,
+                label: widget.incomeLabel,
+                isIncome: true,
+                customIcon: widget.incomeCustomIcon,
+                tabController: _incomeTabController,
+              ),
+            ),
+          ],
         ),
-        labelColor: getColor(context, "black"),
-        unselectedLabelColor: widget.unselectedLabelColor ??
-            getColor(context, "black").withOpacity(0.3),
-        onTap: (value) {
-          widget.onTabChanged(value == 1);
-          setState(() {
-            selectedIncome = value == 1;
-          });
-        },
-        tabs: [
-          Tab(
-            child: ExpenseIncomeSelectorLabel(
-              selectedIncome: selectedIncome,
-              showIcons: widget.showIcons,
-              label: widget.expenseLabel,
-              isIncome: false,
-              customIcon: widget.expenseCustomIcon,
-              tabController: _incomeTabController,
-            ),
-          ),
-          Tab(
-            child: ExpenseIncomeSelectorLabel(
-              selectedIncome: selectedIncome,
-              showIcons: widget.showIcons,
-              label: widget.incomeLabel,
-              isIncome: true,
-              customIcon: widget.incomeCustomIcon,
-              tabController: _incomeTabController,
-            ),
-          ),
-        ],
       ),
     );
     if (widget.belowWidgetBuilder == null)
       return tabSelector;
     else
       return Column(
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(
-                getPlatform() == PlatformOS.isIOS ? 10 : 15),
-            child: tabSelector,
-          ),
-          widget.belowWidgetBuilder!(selectedIncome)
-        ],
+        children: [tabSelector, widget.belowWidgetBuilder!(selectedIncome)],
       );
   }
 }

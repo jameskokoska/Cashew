@@ -35,6 +35,7 @@ class HomePageCreditDebts extends StatelessWidget {
                   true,
                   followCustomPeriodCycle: true,
                   cycleSettingsExtension: "CreditDebts",
+                  selectedTab: null,
                 ),
                 textColor: getColor(context, "unPaidUpcoming"),
                 transactionsAmountStream: database.watchCountOfCreditDebt(
@@ -42,6 +43,7 @@ class HomePageCreditDebts extends StatelessWidget {
                   null,
                   followCustomPeriodCycle: true,
                   cycleSettingsExtension: "CreditDebts",
+                  selectedTab: null,
                 ),
                 openPage: CreditDebtTransactions(isCredit: true),
                 onLongPress: () async {
@@ -67,6 +69,7 @@ class HomePageCreditDebts extends StatelessWidget {
                   false,
                   cycleSettingsExtension: "CreditDebts",
                   followCustomPeriodCycle: true,
+                  selectedTab: null,
                 ),
                 textColor: getColor(context, "unPaidOverdue"),
                 transactionsAmountStream: database.watchCountOfCreditDebt(
@@ -74,6 +77,7 @@ class HomePageCreditDebts extends StatelessWidget {
                   null,
                   cycleSettingsExtension: "CreditDebts",
                   followCustomPeriodCycle: true,
+                  selectedTab: null,
                 ),
                 openPage: CreditDebtTransactions(isCredit: false),
                 onLongPress: () async {

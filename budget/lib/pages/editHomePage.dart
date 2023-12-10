@@ -47,7 +47,6 @@ class EditHomePageItem {
   final Function(bool value) onSwitched;
   final Function()? onTap;
   List<Widget>? extraWidgetsBelow;
-  final bool enabled;
 
   EditHomePageItem({
     required this.icon,
@@ -56,7 +55,6 @@ class EditHomePageItem {
     required this.onSwitched,
     this.onTap,
     this.extraWidgetsBelow,
-    this.enabled = true,
   });
 }
 
@@ -94,6 +92,7 @@ class _EditHomePageState extends State<EditHomePage> {
                 context,
                 EditHomePagePinnedWalletsPopup(
                   homePageWidgetDisplay: HomePageWidgetDisplay.WalletSwitcher,
+                  showCyclePicker: true,
                 ),
                 useCustomController: true,
               );
@@ -113,6 +112,7 @@ class _EditHomePageState extends State<EditHomePage> {
                 context,
                 EditHomePagePinnedWalletsPopup(
                   homePageWidgetDisplay: HomePageWidgetDisplay.WalletList,
+                  showCyclePicker: true,
                 ),
                 useCustomController: true,
               );
@@ -149,7 +149,9 @@ class _EditHomePageState extends State<EditHomePage> {
             onTap: () async {
               openBottomSheet(
                 context,
-                EditHomePagePinnedGoalsPopup(showGoalsTotalLabelSetting: true),
+                EditHomePagePinnedGoalsPopup(
+                    showGoalsTotalLabelSetting: true,
+                    objectiveType: ObjectiveType.goal),
                 useCustomController: true,
               );
             },
@@ -189,6 +191,27 @@ class _EditHomePageState extends State<EditHomePage> {
                   child:
                       PeriodCyclePicker(cycleSettingsExtension: "CreditDebts"),
                 ),
+              );
+            },
+          ),
+          "objectiveLoans": EditHomePageItem(
+            icon: appStateSettings["outlinedIcons"]
+                ? Icons.av_timer_outlined
+                : Icons.av_timer_rounded,
+            name: "long-term-loans".tr(),
+            isEnabled:
+                isHomeScreenSectionEnabled(context, "showObjectiveLoans"),
+            onSwitched: (value) {
+              switchHomeScreenSection(context, "showObjectiveLoans", value);
+            },
+            onTap: () async {
+              openBottomSheet(
+                context,
+                EditHomePagePinnedGoalsPopup(
+                  showGoalsTotalLabelSetting: true,
+                  objectiveType: ObjectiveType.loan,
+                ),
+                useCustomController: true,
               );
             },
           ),
@@ -403,7 +426,6 @@ class _EditHomePageState extends State<EditHomePage> {
               switchHomeScreenSection(context, "showTransactionsList", value);
             },
             extraWidgetsBelow: [],
-            enabled: enableDoubleColumn(context) == false,
           ),
         };
         keyOrder = List<String>.from(appStateSettings["homePageOrder"]
@@ -473,8 +495,7 @@ class _EditHomePageState extends State<EditHomePage> {
                   key: ValueKey(index),
                 );
               String key = keyOrder[index];
-              if (editHomePageItems[key] == null ||
-                  editHomePageItems[key]?.enabled != true)
+              if (editHomePageItems[key] == null)
                 return Container(
                   key: ValueKey(index),
                 );

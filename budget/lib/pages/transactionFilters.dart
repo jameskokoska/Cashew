@@ -41,6 +41,7 @@ class SearchFilters {
     this.budgetPks = const [],
     this.excludedBudgetPks = const [],
     this.objectivePks = const [],
+    this.objectiveLoanPks = const [],
     this.expenseIncome = const [],
     this.paidStatus = const [],
     this.transactionTypes = const [],
@@ -59,6 +60,8 @@ class SearchFilters {
     excludedBudgetPks =
         this.excludedBudgetPks.isEmpty ? [] : this.excludedBudgetPks;
     objectivePks = this.objectivePks.isEmpty ? [] : this.objectivePks;
+    objectiveLoanPks =
+        this.objectiveLoanPks.isEmpty ? [] : this.objectiveLoanPks;
     expenseIncome = this.expenseIncome.isEmpty ? [] : this.expenseIncome;
     paidStatus = this.paidStatus.isEmpty ? [] : this.paidStatus;
     transactionTypes =
@@ -78,6 +81,7 @@ class SearchFilters {
   List<String?> budgetPks;
   List<String> excludedBudgetPks;
   List<String?> objectivePks;
+  List<String?> objectiveLoanPks;
   List<ExpenseIncome> expenseIncome;
   List<PaidStatus> paidStatus;
   List<TransactionSpecialType?> transactionTypes;
@@ -95,6 +99,7 @@ class SearchFilters {
     List<String?>? budgetPks,
     List<String>? excludedBudgetPks,
     List<String?>? objectivePks,
+    List<String?>? objectiveLoanPks,
     List<ExpenseIncome>? expenseIncome,
     List<PaidStatus>? paidStatus,
     List<TransactionSpecialType?>? transactionTypes,
@@ -112,6 +117,7 @@ class SearchFilters {
       budgetPks: budgetPks ?? this.budgetPks,
       excludedBudgetPks: excludedBudgetPks ?? this.excludedBudgetPks,
       objectivePks: objectivePks ?? this.objectivePks,
+      objectiveLoanPks: objectiveLoanPks ?? this.objectiveLoanPks,
       expenseIncome: expenseIncome ?? this.expenseIncome,
       paidStatus: paidStatus ?? this.paidStatus,
       transactionTypes: transactionTypes ?? this.transactionTypes,
@@ -133,6 +139,7 @@ class SearchFilters {
     budgetPks = [];
     excludedBudgetPks = [];
     objectivePks = [];
+    objectiveLoanPks = [];
     expenseIncome = [];
     paidStatus = [];
     transactionTypes = [];
@@ -151,6 +158,7 @@ class SearchFilters {
         budgetPks.isEmpty &&
         excludedBudgetPks.isEmpty &&
         objectivePks.isEmpty &&
+        objectiveLoanPks.isEmpty &&
         expenseIncome.isEmpty &&
         paidStatus.isEmpty &&
         transactionTypes.isEmpty &&
@@ -206,6 +214,13 @@ class SearchFilters {
               objectivePks.add(null);
             } else {
               objectivePks.add(value);
+            }
+            break;
+          case 'objectiveLoanPks':
+            if (value == "null") {
+              objectiveLoanPks.add(null);
+            } else {
+              objectiveLoanPks.add(value);
             }
             break;
           case 'expenseIncome':
@@ -297,6 +312,9 @@ class SearchFilters {
     }
     for (String? element in objectivePks) {
       outString += "objectivePks:-:" + element.toString() + ":-:";
+    }
+    for (String? element in objectivePks) {
+      outString += "objectiveLoanPks:-:" + element.toString() + ":-:";
     }
     for (ExpenseIncome element in expenseIncome) {
       outString += "expenseIncome:-:" + (element.index).toString() + ":-:";
@@ -701,7 +719,8 @@ class _TransactionFiltersSelectionState
         ),
 
         StreamBuilder<List<Objective>>(
-          stream: database.watchAllObjectives(),
+          stream: database.watchAllObjectives(
+              objectiveType: ObjectiveType.goal, archivedLast: true),
           builder: (context, snapshot) {
             if (snapshot.data != null && snapshot.data!.length <= 0)
               return SizedBox.shrink();
@@ -733,6 +752,63 @@ class _TransactionFiltersSelectionState
                 },
                 getSelected: (Objective? item) {
                   return selectedFilters.objectivePks
+                      .contains(item?.objectivePk);
+                },
+                getCustomBorderColor: (Objective? item) {
+                  if (item == null) return null;
+                  return dynamicPastel(
+                    context,
+                    lightenPastel(
+                      HexColor(
+                        item.colour,
+                        defaultColor: Theme.of(context).colorScheme.primary,
+                      ),
+                      amount: 0.3,
+                    ),
+                    amount: 0.4,
+                  );
+                },
+              );
+            } else {
+              return SizedBox.shrink();
+            }
+          },
+        ),
+
+        StreamBuilder<List<Objective>>(
+          stream: database.watchAllObjectives(
+              objectiveType: ObjectiveType.loan, archivedLast: true),
+          builder: (context, snapshot) {
+            if (snapshot.data != null && snapshot.data!.length <= 0)
+              return SizedBox.shrink();
+            if (snapshot.hasData) {
+              return SelectChips(
+                items: [null, ...snapshot.data!],
+                onLongPress: (Objective? item) {
+                  pushRoute(
+                    context,
+                    AddObjectivePage(
+                      objective: item,
+                      routesToPopAfterDelete:
+                          RoutesToPopAfterDelete.PreventDelete,
+                    ),
+                  );
+                },
+                getLabel: (Objective? item) {
+                  if (item == null) return "no-loan".tr();
+                  return item.name;
+                },
+                onSelected: (Objective? item) {
+                  if (selectedFilters.objectiveLoanPks
+                      .contains(item?.objectivePk)) {
+                    selectedFilters.objectiveLoanPks.remove(item?.objectivePk);
+                  } else {
+                    selectedFilters.objectiveLoanPks.add(item?.objectivePk);
+                  }
+                  setSearchFilters();
+                },
+                getSelected: (Objective? item) {
+                  return selectedFilters.objectiveLoanPks
                       .contains(item?.objectivePk);
                 },
                 getCustomBorderColor: (Objective? item) {
@@ -974,7 +1050,8 @@ class AppliedFilterChips extends StatelessWidget {
       ));
     }
     // Objectives
-    for (Objective objective in await database.getAllObjectives()) {
+    for (Objective objective
+        in await database.getAllObjectives(objectiveType: ObjectiveType.goal)) {
       if (searchFilters.objectivePks.contains(objective.objectivePk))
         out.add(AppliedFilterChip(
           label: objective.name,
@@ -988,6 +1065,25 @@ class AppliedFilterChips extends StatelessWidget {
     if (searchFilters.objectivePks.contains(null)) {
       out.add(AppliedFilterChip(
         label: "no-goal".tr(),
+        openFiltersSelection: openFiltersSelection,
+      ));
+    }
+    // Loan Objectives
+    for (Objective objective
+        in await database.getAllObjectives(objectiveType: ObjectiveType.loan)) {
+      if (searchFilters.objectiveLoanPks.contains(objective.objectivePk))
+        out.add(AppliedFilterChip(
+          label: objective.name,
+          customBorderColor: HexColor(
+            objective.colour,
+            defaultColor: Theme.of(context).colorScheme.primary,
+          ),
+          openFiltersSelection: openFiltersSelection,
+        ));
+    }
+    if (searchFilters.objectiveLoanPks.contains(null)) {
+      out.add(AppliedFilterChip(
+        label: "no-loan".tr(),
         openFiltersSelection: openFiltersSelection,
       ));
     }

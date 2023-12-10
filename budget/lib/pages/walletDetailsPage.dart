@@ -80,6 +80,8 @@ class WatchedWalletDetailsPage extends StatelessWidget {
   }
 }
 
+bool categoryIsSelectedOnAllSpending = false;
+
 class WalletDetailsPage extends StatefulWidget {
   final TransactionWallet? wallet;
   const WalletDetailsPage({required this.wallet, Key? key}) : super(key: key);
@@ -95,24 +97,21 @@ class _WalletDetailsPageState extends State<WalletDetailsPage>
       : widget.wallet!.walletPk.toString() + " Wallet Summary";
   GlobalKey<PageFrameworkState> pageState = GlobalKey();
   SearchFilters? searchFilters;
-  late TabController _tabController;
-  late ScrollController _scrollController;
+  late ScrollController _scrollController = ScrollController();
+  late TabController _tabController = TabController(
+    length: widget.wallet == null ? 2 : 1,
+    vsync: this,
+    initialIndex: widget.wallet == null
+        ? (appStateSettings["allSpendingLastPage"] == 1 ? 1 : 0)
+        : 0,
+  );
   DateTimeRange? selectedDateTimeRange;
   bool appStateSettingsNetAllSpendingTotal =
       appStateSettings["netAllSpendingTotal"] == true;
 
   @override
   void initState() {
-    print(appStateSettings["allSpendingLastPage"]);
-    _tabController = TabController(
-      length: widget.wallet == null ? 2 : 1,
-      vsync: this,
-      initialIndex: widget.wallet == null
-          ? (appStateSettings["allSpendingLastPage"] == 1 ? 1 : 0)
-          : 0,
-    );
     _tabController.addListener(onTabController);
-    _scrollController = ScrollController();
     if (widget.wallet == null) {
       allSpendingHistoryDismissedPremium = false;
       searchFilters = SearchFilters();
@@ -649,6 +648,7 @@ class _WalletDetailsPageState extends State<WalletDetailsPage>
               ) +
               13),
       child: IncomeExpenseTabSelector(
+        hasBorderRadius: true,
         onTabChanged: (_) {},
         initialTabIsIncome: appStateSettings["allSpendingLastPage"] == 1,
         showIcons: false,
@@ -1212,6 +1212,11 @@ class _WalletDetailsCategorySelectionState
             setState(() {
               selectedCategory = category;
             });
+            if (category == null) {
+              categoryIsSelectedOnAllSpending = false;
+            } else {
+              categoryIsSelectedOnAllSpending = true;
+            }
           },
           onSelectedIncome: (bool isIncome) {
             setState(() {
@@ -1344,22 +1349,18 @@ class _WalletCategoryPieChartState extends State<WalletCategoryPieChart> {
               decoration: BoxDecoration(
                 boxShadow: boxShadowCheck(boxShadowGeneral(context)),
               ),
-              child: ClipRRect(
-                borderRadius: getPlatform() == PlatformOS.isIOS
-                    ? BorderRadius.circular(10)
-                    : BorderRadius.circular(15),
-                child: IncomeExpenseTabSelector(
-                  onTabChanged: (income) {
-                    setState(() {
-                      isIncome = income;
-                      selectedCategory = null;
-                    });
-                    _pieChartDisplayStateKey.currentState?.setTouchedIndex(-1);
-                    widget.onSelectedIncome(income);
-                    widget.onSelectedCategory(selectedCategory);
-                  },
-                  initialTabIsIncome: false,
-                ),
+              child: IncomeExpenseTabSelector(
+                hasBorderRadius: true,
+                onTabChanged: (income) {
+                  setState(() {
+                    isIncome = income;
+                    selectedCategory = null;
+                  });
+                  _pieChartDisplayStateKey.currentState?.setTouchedIndex(-1);
+                  widget.onSelectedIncome(income);
+                  widget.onSelectedCategory(selectedCategory);
+                },
+                initialTabIsIncome: false,
               ),
             ),
           ),
@@ -1390,7 +1391,7 @@ class _WalletCategoryPieChartState extends State<WalletCategoryPieChart> {
               TotalSpentCategoriesSummary s = watchTotalSpentInTimeRangeHelper(
                   dataInput: snapshot.data ?? [],
                   showAllSubcategories: showAllSubcategories);
-              print(s.totalSpent);
+              // print(s.totalSpent);
               List<Widget> categoryEntries = [];
               snapshot.data!.asMap().forEach((index, category) {
                 categoryEntries.add(

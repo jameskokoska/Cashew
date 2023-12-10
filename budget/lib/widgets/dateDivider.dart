@@ -20,12 +20,14 @@ class DateDivider extends StatelessWidget {
     this.info,
     this.color,
     this.useHorizontalPaddingConstrained = true,
+    this.afterDate = "",
   }) : super(key: key);
 
   final DateTime date;
   final String? info;
   final Color? color;
   final bool useHorizontalPaddingConstrained;
+  final String afterDate;
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +39,8 @@ class DateDivider extends StatelessWidget {
       ),
       child: StickyLabelDivider(
         info: getWordedDate(date,
-            includeMonthDate: true, includeYearIfNotCurrentYear: true),
+                includeMonthDate: true, includeYearIfNotCurrentYear: true) +
+            afterDate,
         extraInfo: info,
         color: color,
         fontSize: 14,

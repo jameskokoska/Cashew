@@ -25,6 +25,18 @@ import 'listItem.dart';
 
 String getChangelogString() {
   return """
+    < 5.0.3
+    Long term/partial loan tracking!
+    Can disable transactions list on full screen
+    Improved upcoming transactions in home page list
+    Added period selection for accounts list homepage sections
+    If budgets page not pinned to tab bar, budgets on More page opens budgets list
+    Swapped home page income and expense order
+    Goal installments support currencies
+    Fixed back button gesture to deselect categories when all spending set to main tab page
+    All spending page shortcut hidden when sidebar shown
+    Can hide (archive) budgets and goals
+    Set date in search page is remembered
     < 5.0.2
     Fixed income pie chart in all spending
     Transfer balance button still appears when prevent delete enabled when editing wallet

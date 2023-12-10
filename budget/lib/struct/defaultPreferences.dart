@@ -40,6 +40,8 @@ Future<Map<String, dynamic>> getDefaultPreferences() async {
     "showNetWorthFullScreen": false,
     "showOverdueUpcoming": false,
     "showOverdueUpcomingFullScreen": true,
+    "showObjectiveLoans": false,
+    "showObjectiveLoansFullScreen": true,
     "showCreditDebt": false,
     "showCreditDebtFullScreen": true,
     "showSpendingGraph": true,
@@ -49,6 +51,7 @@ Future<Map<String, dynamic>> getDefaultPreferences() async {
     "showHeatMap": false,
     "showHeatMapFullScreen": true,
     "showTransactionsList": true,
+    "showTransactionsListFullScreen": true,
     "showUsernameWelcomeBanner": true,
     "showUsernameWelcomeBannerFullScreen": true,
     "homePageOrder": [
@@ -60,6 +63,7 @@ Future<Map<String, dynamic>> getDefaultPreferences() async {
       "netWorth",
       "overdueUpcoming",
       "creditDebts",
+      "objectiveLoans",
       "spendingGraph",
       "pieChart",
       "heatMap",
@@ -160,6 +164,7 @@ Future<Map<String, dynamic>> getDefaultPreferences() async {
     "netSpendingDayTotal": false,
     "extraZerosButton": null, //will be null, 00 or 000
     "allSpendingLastPage": 0, //index of the last tab on the all spending page
+    "loansLastPage": 0, //index of the last tab on the loans page
     // *********************************************************** //
     // For showing information within a certain cycle for all spending wallet details page
     // cycleSettingsExtension = ""
@@ -227,6 +232,28 @@ Future<Map<String, dynamic>> getDefaultPreferences() async {
         DateTime(DateTime.now().year, DateTime.now().month, 1).toString(),
     "customPeriodEndDateCreditDebts": null,
     "customPeriodPastDaysCreditDebts": 30,
+    // // For showing information within a certain cycle for wallets homepage section
+    // // cycleSettingsExtension = "Wallets"
+    // "selectedPeriodCycleTypeWallets": CycleType.allTime.index,
+    // "cyclePeriodLengthWallets": 1,
+    // "cycleReoccurrenceWallets": BudgetReoccurence.monthly.index,
+    // "cycleStartDateWallets":
+    //     DateTime(DateTime.now().year, DateTime.now().month, 1).toString(),
+    // "customPeriodStartDateWallets":
+    //     DateTime(DateTime.now().year, DateTime.now().month, 1).toString(),
+    // "customPeriodEndDateWallets": null,
+    // "customPeriodPastDaysWallets": 30,
+    // // For showing information within a certain cycle for walletsList homepage section
+    // // cycleSettingsExtension = "WalletsList"
+    // "selectedPeriodCycleTypeWalletsList": CycleType.allTime.index,
+    // "cyclePeriodLengthWalletsList": 1,
+    // "cycleReoccurrenceWalletsList": BudgetReoccurence.monthly.index,
+    // "cycleStartDateWalletsList":
+    //     DateTime(DateTime.now().year, DateTime.now().month, 1).toString(),
+    // "customPeriodStartDateWalletsList":
+    //     DateTime(DateTime.now().year, DateTime.now().month, 1).toString(),
+    // "customPeriodEndDateWalletsList": null,
+    // "customPeriodPastDaysWalletsList": 30,
     // *********************************************************** //
   };
 }

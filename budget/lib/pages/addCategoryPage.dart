@@ -438,14 +438,10 @@ class _AddCategoryPageState extends State<AddCategoryPage>
                   if (isSubCategory == false)
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 13),
-                      child: ClipRRect(
-                        borderRadius: getPlatform() == PlatformOS.isIOS
-                            ? BorderRadius.circular(10)
-                            : BorderRadius.circular(15),
-                        child: IncomeExpenseTabSelector(
-                          onTabChanged: setSelectedIncome,
-                          initialTabIsIncome: selectedIncome,
-                        ),
+                      child: IncomeExpenseTabSelector(
+                        onTabChanged: setSelectedIncome,
+                        initialTabIsIncome: selectedIncome,
+                        hasBorderRadius: true,
                       ),
                     ),
                   Row(

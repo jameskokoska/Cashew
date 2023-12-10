@@ -17,7 +17,9 @@ import 'package:flutter/material.dart'
     hide SliverReorderableList, ReorderableDelayedDragStartListener;
 
 class BudgetsListPage extends StatefulWidget {
-  const BudgetsListPage({Key? key}) : super(key: key);
+  const BudgetsListPage({required this.enableBackButton, Key? key})
+      : super(key: key);
+  final bool enableBackButton;
 
   @override
   State<BudgetsListPage> createState() => BudgetsListPageState();
@@ -43,7 +45,8 @@ class BudgetsListPageState extends State<BudgetsListPage>
     return PageFramework(
       key: pageState,
       title: "budgets".tr(),
-      backButton: false,
+      backButton: widget.enableBackButton,
+      dragDownToDismiss: widget.enableBackButton,
       horizontalPadding: enableDoubleColumn(context) == false
           ? getHorizontalPaddingConstrained(context)
           : 0,
@@ -85,7 +88,7 @@ class BudgetsListPageState extends State<BudgetsListPage>
       ],
       slivers: [
         StreamBuilder<List<Budget>>(
-          stream: database.watchAllBudgets(),
+          stream: database.watchAllBudgets(hideArchived: true),
           builder: (context, snapshot) {
             if (snapshot.hasData && (snapshot.data ?? []).length <= 0) {
               return SliverPadding(

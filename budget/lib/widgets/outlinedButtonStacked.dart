@@ -137,20 +137,22 @@ class OutlinedContainer extends StatelessWidget {
       {required this.child,
       this.filled = false,
       this.borderRadius = 15,
+      this.borderColor,
       super.key});
   final Widget child;
   final bool filled;
   final double borderRadius;
-
+  final Color? borderColor;
   @override
   Widget build(BuildContext context) {
     return AnimatedContainer(
       duration: Duration(milliseconds: 250),
       decoration: BoxDecoration(
         border: Border.all(
-          color: (appStateSettings["materialYou"]
-              ? Theme.of(context).colorScheme.secondary.withOpacity(0.5)
-              : getColor(context, "lightDarkAccentHeavy")),
+          color: borderColor ??
+              (appStateSettings["materialYou"]
+                  ? Theme.of(context).colorScheme.secondary.withOpacity(0.5)
+                  : getColor(context, "lightDarkAccentHeavy")),
           width: 2,
         ),
         color: filled == true

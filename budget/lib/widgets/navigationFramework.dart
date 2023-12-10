@@ -241,7 +241,8 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
     pages = [
       HomePage(key: homePageStateKey), // 0
       TransactionsListPage(key: transactionsListPageStateKey), //1
-      BudgetsListPage(key: budgetsListPageStateKey), //2
+      BudgetsListPage(
+          key: budgetsListPageStateKey, enableBackButton: false), //2
       MoreActionsPage(key: settingsPageStateKey), //3
     ];
     pagesExtended = [
@@ -256,7 +257,7 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
       EditAssociatedTitlesPage(), //12
       AboutPage(), //13
       ObjectivesListPage(backButton: false), //14
-      EditObjectivesPage(), //15
+      EditObjectivesPage(objectiveType: ObjectiveType.goal), //15
       UpcomingOverdueTransactions(overdueTransactions: null), //16
       CreditDebtTransactions(isCredit: null), //17
     ];
@@ -288,6 +289,10 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
           if (currentPage == 0) {
             return true;
           } else {
+            // Allow back button deselect a selected category first on All Spending page
+            if (currentPage == 7 && categoryIsSelectedOnAllSpending) {
+              return true;
+            }
             changePage(0);
           }
         }
@@ -665,12 +670,65 @@ class AddMoreThingsPopup extends StatelessWidget {
           },
         ),
         AddThing(
-          iconData: navBarIconsData["budgets"]!.iconData,
-          title: "budget".tr(),
-          openPage: AddBudgetPage(
+          iconData: navBarIconsData["loans"]!.iconData,
+          title: navBarIconsData["loans"]!.label.tr(),
+          openPage: AddObjectivePage(
             routesToPopAfterDelete: RoutesToPopAfterDelete.None,
+            objectiveType: ObjectiveType.loan,
           ),
-          iconScale: navBarIconsData["budgets"]!.iconScale,
+          widgetAfter: SelectChips(
+            padding: EdgeInsets.symmetric(horizontal: 13),
+            items: ["long-term", "one-time"],
+            getSelected: (_) {
+              return false;
+            },
+            // extraWidget: SelectChipsAddButtonExtraWidget(
+            //   openPage: AddObjectivePage(
+            //     routesToPopAfterDelete: RoutesToPopAfterDelete.None,
+            //   ),
+            //   shouldPushRoute: true,
+            //   popCurrentRoute: true,
+            // ),
+            // extraWidgetAtBeginning: true,
+            onSelected: (String selection) async {
+              Navigator.pop(context);
+              if (selection == "long-term") {
+                pushRoute(
+                  context,
+                  AddObjectivePage(
+                    routesToPopAfterDelete: RoutesToPopAfterDelete.None,
+                    objectiveType: ObjectiveType.loan,
+                  ),
+                );
+              } else {
+                pushRoute(
+                  context,
+                  AddTransactionPage(
+                    routesToPopAfterDelete: RoutesToPopAfterDelete.None,
+                    selectedType: TransactionSpecialType.credit,
+                  ),
+                );
+              }
+            },
+            getLabel: (String selection) {
+              return selection.tr();
+            },
+            getAvatar: (String selection) {
+              return LayoutBuilder(builder: (context2, constraints) {
+                return Icon(
+                  selection == "long-term"
+                      ? appStateSettings["outlinedIcons"]
+                          ? Icons.av_timer_outlined
+                          : Icons.av_timer_rounded
+                      : appStateSettings["outlinedIcons"]
+                          ? Icons.event_available_outlined
+                          : Icons.event_available_rounded,
+                  color: Theme.of(context).colorScheme.primary,
+                  size: constraints.maxWidth,
+                );
+              });
+            },
+          ),
         ),
         AddThing(
           iconData: navBarIconsData["goals"]!.iconData,
@@ -715,6 +773,14 @@ class AddMoreThingsPopup extends StatelessWidget {
               });
             },
           ),
+        ),
+        AddThing(
+          iconData: navBarIconsData["budgets"]!.iconData,
+          title: "budget".tr(),
+          openPage: AddBudgetPage(
+            routesToPopAfterDelete: RoutesToPopAfterDelete.None,
+          ),
+          iconScale: navBarIconsData["budgets"]!.iconScale,
         ),
         AddThing(
           iconData: navBarIconsData["categoriesDetails"]!.iconData,

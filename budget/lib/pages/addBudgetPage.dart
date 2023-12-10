@@ -304,6 +304,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
           : await database.getAmountOfBudgets(),
       walletFk: selectedWalletPk,
       pinned: selectedPin,
+      archived: widget.budget?.archived ?? false,
       sharedKey: widget.budget != null ? currentInstance!.sharedKey : null,
       sharedOwnerMember:
           widget.budget != null ? currentInstance!.sharedOwnerMember : null,
@@ -1748,6 +1749,7 @@ class _BudgetDetailsState extends State<BudgetDetails> {
                   walletFk: "",
                   isAbsoluteSpendingLimit: false,
                   income: false,
+                  archived: false,
                 ),
                 DateTime.now(),
               );

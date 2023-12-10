@@ -3,6 +3,7 @@ import 'package:budget/database/initializeDefaultDatabase.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/pages/addCategoryPage.dart';
+import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/addWalletPage.dart';
 import 'package:budget/pages/editBudgetPage.dart';
 import 'package:budget/pages/editHomePage.dart';
@@ -10,6 +11,8 @@ import 'package:budget/pages/editWalletsPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/framework/popupFramework.dart';
+import 'package:budget/widgets/periodCyclePicker.dart';
+import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/util/keepAliveClientMixin.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
@@ -22,6 +25,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class HomePageWalletSwitcher extends StatelessWidget {
+  const HomePageWalletSwitcher({super.key});
+
   @override
   Widget build(BuildContext context) {
     return KeepAliveClientMixin(
@@ -107,6 +112,7 @@ class EditHomePagePinnedWalletsPopup extends StatelessWidget {
     this.useCheckMarks = false,
     this.onAnySelected,
     this.allSelected = false,
+    this.showCyclePicker = false,
   });
 
   final HomePageWidgetDisplay homePageWidgetDisplay;
@@ -115,6 +121,7 @@ class EditHomePagePinnedWalletsPopup extends StatelessWidget {
   final bool useCheckMarks;
   final Function? onAnySelected;
   final bool allSelected;
+  final bool showCyclePicker;
 
   @override
   Widget build(BuildContext context) {
@@ -207,6 +214,36 @@ class EditHomePagePinnedWalletsPopup extends StatelessWidget {
                   });
                 },
               ),
+            // if (showCyclePicker &&
+            //         homePageWidgetDisplay ==
+            //             HomePageWidgetDisplay.WalletSwitcher ||
+            //     homePageWidgetDisplay == HomePageWidgetDisplay.WalletList)
+            //   HorizontalBreakAbove(
+            //     enabled: true,
+            //     child: Column(
+            //       children: [
+            //         Padding(
+            //           padding: const EdgeInsets.only(
+            //               bottom: 10, left: 15, right: 15, top: 4),
+            //           child: TextFont(
+            //             text: "customize-period-for-account-totals".tr(),
+            //             textAlign: TextAlign.center,
+            //             fontSize: 16,
+            //             textColor: getColor(context, "black").withOpacity(0.8),
+            //           ),
+            //         ),
+            //         PeriodCyclePicker(
+            //           cycleSettingsExtension: homePageWidgetDisplay ==
+            //                   HomePageWidgetDisplay.WalletSwitcher
+            //               ? "Wallets"
+            //               : homePageWidgetDisplay ==
+            //                       HomePageWidgetDisplay.WalletList
+            //                   ? "WalletsList"
+            //                   : "",
+            //         ),
+            //       ],
+            //     ),
+            //   ),
           ],
         );
         if (includeFramework) {

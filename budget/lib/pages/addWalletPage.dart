@@ -1045,14 +1045,19 @@ Future<TransactionCategory> initializeBalanceCorrectionCategory() async {
   }
 }
 
-Future createCorrectionTransaction(double amount, TransactionWallet wallet,
-    {String? note, DateTime? dateTime, String? title}) async {
+Future<String?> createCorrectionTransaction(
+    double amount, TransactionWallet wallet,
+    {String? note,
+    DateTime? dateTime,
+    String? title,
+    String? pairedTransactionFk}) async {
   await initializeBalanceCorrectionCategory();
 
-  await database.createOrUpdateTransaction(
+  int? rowId = await database.createOrUpdateTransaction(
     insert: true,
     updateSharedEntry: false,
     Transaction(
+      pairedTransactionFk: pairedTransactionFk,
       transactionPk: "-1",
       name: title ?? "",
       amount: amount,
@@ -1065,6 +1070,12 @@ Future createCorrectionTransaction(double amount, TransactionWallet wallet,
       skipPaid: false,
     ),
   );
+  if (rowId != null) {
+    final Transaction transactionJustAdded =
+        await database.getTransactionFromRowId(rowId);
+    return transactionJustAdded.transactionPk;
+  }
+  return null;
 }
 
 class TransferBalancePopup extends StatefulWidget {
@@ -1099,7 +1110,7 @@ class _TransferBalancePopupState extends State<TransferBalancePopup> {
       : null;
   late DateTime? selectedDateTime = widget.initialDate ?? null;
   late String selectedTitle = widget.initialTitle ?? "";
-  double transferFee = 0;
+  // double transferFee = 0;
 
   Widget walletSelector(TransactionWallet? wallet,
       Function(TransactionWallet wallet) onSelected) {
@@ -1333,6 +1344,52 @@ class _TransferBalancePopupState extends State<TransferBalancePopup> {
           ),
           Row(
             children: [
+              // Padding(
+              //   padding: const EdgeInsets.only(right: 5),
+              //   child: Button(
+              //     label: transferFee == 0
+              //         ? "transfer-fee".tr()
+              //         : convertToMoney(
+              //             Provider.of<AllWallets>(context),
+              //             transferFee.abs(),
+              //             addCurrencyName: true,
+              //           ),
+              //     onTap: () async {
+              //       await openBottomSheet(
+              //         context,
+              //         fullSnap: true,
+              //         PopupFramework(
+              //           title: "transfer-fee".tr(),
+              //           subtitle: "deducted-from".tr().capitalizeFirst +
+              //               " " +
+              //               walletFrom.name,
+              //           hasPadding: false,
+              //           underTitleSpace: false,
+              //           child: SelectAmount(
+              //             padding: EdgeInsets.symmetric(horizontal: 18),
+              //             onlyShowCurrencyIcon: true,
+              //             allowZero: true,
+              //             allDecimals: true,
+              //             convertToMoney: true,
+              //             setSelectedAmount: (amount, __) {
+              //               transferFee = amount;
+              //             },
+              //             amountPassed: transferFee.toString(),
+              //             next: () {
+              //               Navigator.pop(context);
+              //             },
+              //             nextLabel: "set-amount".tr(),
+              //             currencyKey: null,
+              //             enableWalletPicker: false,
+              //           ),
+              //         ),
+              //       );
+              //       setState(() {});
+              //     },
+              //     color: Theme.of(context).colorScheme.tertiaryContainer,
+              //     textColor: Theme.of(context).colorScheme.onTertiaryContainer,
+              //   ),
+              // ),
               Expanded(
                 child: Button(
                   expandedLayout: true,
@@ -1368,7 +1425,7 @@ class _TransferBalancePopupState extends State<TransferBalancePopup> {
                     DateTime selectedDateTimeSetToNow =
                         selectedDateTime ?? DateTime.now();
 
-                    await createCorrectionTransaction(
+                    String? transactionPk = await createCorrectionTransaction(
                       enteredAmount *
                           getAmountRatioWalletTransferTo(
                               allWallets, walletTo!.walletPk),
@@ -1385,6 +1442,7 @@ class _TransferBalancePopupState extends State<TransferBalancePopup> {
                     );
 
                     await createCorrectionTransaction(
+                      pairedTransactionFk: transactionPk,
                       enteredAmount *
                           getAmountRatioWalletTransferFrom(
                               allWallets, walletFrom.walletPk),
@@ -1399,31 +1457,30 @@ class _TransferBalancePopupState extends State<TransferBalancePopup> {
                                   : "transfer-in".tr()))
                           : selectedTitle,
                     );
-
                     // Deal with transfer fee
-                    if (transferFee != 0) {
-                      String transferFeeNote = "transfer-fee".tr() +
-                          "\n" +
-                          "from".tr().capitalizeFirst +
-                          " " +
-                          walletFrom.name;
-                      await createCorrectionTransaction(
-                        (transferFee *
-                                    getAmountRatioWalletTransferFrom(
-                                        allWallets, walletFrom.walletPk))
-                                .abs() *
-                            -1,
-                        walletFrom,
-                        note: transferFeeNote,
-                        // Subtract 2 seconds so it's not in close proximity to the other paired balance correction
-                        // This is because getCloselyRelatedBalanceCorrectionTransaction relies on the time...
-                        dateTime: selectedDateTimeSetToNow
-                            .subtract(Duration(seconds: 2)),
-                        title: selectedTitle == ""
-                            ? "transfer-fee".tr()
-                            : selectedTitle,
-                      );
-                    }
+                    // if (transferFee != 0) {
+                    //   String transferFeeNote = "transfer-fee".tr() +
+                    //       "\n" +
+                    //       "from".tr().capitalizeFirst +
+                    //       " " +
+                    //       walletFrom.name;
+                    //   await createCorrectionTransaction(
+                    //     (transferFee *
+                    //                 getAmountRatioWalletTransferFrom(
+                    //                     allWallets, walletFrom.walletPk))
+                    //             .abs() *
+                    //         -1,
+                    //     walletFrom,
+                    //     note: transferFeeNote,
+                    //     // Subtract 2 seconds so it's not in close proximity to the other paired balance correction
+                    //     // This is because getCloselyRelatedBalanceCorrectionTransaction relies on the time...
+                    //     dateTime: selectedDateTimeSetToNow
+                    //         .subtract(Duration(seconds: 2)),
+                    //     title: selectedTitle == ""
+                    //         ? "transfer-fee".tr()
+                    //         : selectedTitle,
+                    //   );
+                    // }
 
                     openSnackbar(
                       SnackbarMessage(

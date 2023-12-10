@@ -1,8 +1,12 @@
 import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
+import 'package:budget/pages/addTransactionPage.dart';
+import 'package:budget/pages/objectivePage.dart';
+import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/struct/upcomingTransactionsFunctions.dart';
+import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:easy_localization/src/public_ext.dart';
@@ -14,23 +18,88 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 
 class TransactionEntryActionButton extends StatelessWidget {
-  const TransactionEntryActionButton(
-      {required this.transaction,
-      required this.iconColor,
-      this.containerColor,
-      super.key});
+  const TransactionEntryActionButton({
+    required this.transaction,
+    required this.iconColor,
+    required this.allowOpenIntoObjectiveLoanPage,
+    this.containerColor,
+    super.key,
+  });
   final Transaction transaction;
   final Color iconColor;
   final Color? containerColor;
+  final bool allowOpenIntoObjectiveLoanPage;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        if (transaction.type != null)
+          ActionButton(
+            dealtWith: isTransactionActionDealtWith(transaction),
+            message: getTransactionActionNameFromType(transaction),
+            onTap: () => openTransactionActionFromType(context, transaction),
+            containerColor: containerColor,
+            iconColor: iconColor,
+            iconData: getTransactionTypeIcon(transaction.type),
+          ),
+        if (transaction.objectiveLoanFk != null)
+          ActionButton(
+            dealtWith: false,
+            message: "loan".tr(),
+            onTap: allowOpenIntoObjectiveLoanPage
+                ? () => pushRoute(context,
+                    ObjectivePage(objectivePk: transaction.objectiveLoanFk!))
+                : () async {
+                    Objective loanObjective = await database
+                        .getObjectiveInstance(transaction.objectiveLoanFk!);
+                    pushRoute(
+                      context,
+                      AddTransactionPage(
+                        routesToPopAfterDelete: RoutesToPopAfterDelete.None,
+                        selectedObjective: loanObjective,
+                        selectedIncome: loanObjective.income,
+                      ),
+                    );
+                  },
+            containerColor: containerColor,
+            iconColor: iconColor,
+            iconData: getTransactionTypeIcon(
+              transaction.income
+                  ? TransactionSpecialType.debt
+                  : TransactionSpecialType.credit,
+            ),
+          ),
+        if (transaction.type == null && transaction.objectiveLoanFk == null)
+          SizedBox(width: 10)
+      ],
+    );
+  }
+}
+
+class ActionButton extends StatelessWidget {
+  const ActionButton({
+    required this.dealtWith,
+    required this.message,
+    required this.onTap,
+    required this.containerColor,
+    required this.iconColor,
+    required this.iconData,
+    super.key,
+  });
+  final bool dealtWith;
+  final String message;
+  final VoidCallback onTap;
+  final Color? containerColor;
+  final Color iconColor;
+  final IconData iconData;
 
   @override
   Widget build(BuildContext context) {
     return Tooltip(
-      message: getTransactionActionNameFromType(transaction),
+      message: message,
       child: GestureDetector(
-        onTap: () {
-          openTransactionActionFromType(context, transaction);
-        },
+        onTap: onTap,
         child: Padding(
           padding: const EdgeInsets.only(
             left: 6,
@@ -39,23 +108,21 @@ class TransactionEntryActionButton extends StatelessWidget {
             right: 6,
           ),
           child: Transform.scale(
-            scale: isTransactionActionDealtWith(transaction) ? 0.92 : 1,
+            scale: dealtWith ? 0.92 : 1,
             child: Tappable(
-              color: !isTransactionActionDealtWith(transaction)
+              color: !dealtWith
                   ? Theme.of(context)
                       .colorScheme
                       .secondaryContainer
                       .withOpacity(0.6)
                   : iconColor.withOpacity(0.7),
-              onTap: () {
-                openTransactionActionFromType(context, transaction);
-              },
+              onTap: onTap,
               borderRadius: 100,
               child: Padding(
                 padding: const EdgeInsets.all(6),
                 child: Icon(
-                  getTransactionTypeIcon(transaction.type),
-                  color: isTransactionActionDealtWith(transaction)
+                  iconData,
+                  color: dealtWith
                       ? (containerColor == null
                           ? Theme.of(context).canvasColor
                           : containerColor)

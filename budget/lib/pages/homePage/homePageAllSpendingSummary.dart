@@ -42,44 +42,6 @@ class HomePageAllSpendingSummary extends StatelessWidget {
                   );
                   homePageStateKey.currentState?.refreshState();
                 },
-                label: "income".tr(),
-                amountStream: database.watchTotalOfWallet(
-                  null,
-                  isIncome: true,
-                  allWallets: Provider.of<AllWallets>(context),
-                  followCustomPeriodCycle: true,
-                  cycleSettingsExtension: "AllSpendingSummary",
-                ),
-                textColor: getColor(context, "incomeAmount"),
-                transactionsAmountStream:
-                    database.watchTotalCountOfTransactionsInWallet(
-                  null,
-                  isIncome: true,
-                  followCustomPeriodCycle: true,
-                  cycleSettingsExtension: "AllSpendingSummary",
-                ),
-                openPage: TransactionsSearchPage(
-                  initialFilters: SearchFilters(
-                    expenseIncome: [ExpenseIncome.income],
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(width: 13),
-            Expanded(
-              child: TransactionsAmountBox(
-                onLongPress: () async {
-                  await openBottomSheet(
-                    context,
-                    PopupFramework(
-                      title: "select-period".tr(),
-                      child: PeriodCyclePicker(
-                        cycleSettingsExtension: "AllSpendingSummary",
-                      ),
-                    ),
-                  );
-                  homePageStateKey.currentState?.refreshState();
-                },
                 label: "expense".tr(),
                 amountStream: database.watchTotalOfWallet(
                   null,
@@ -99,6 +61,44 @@ class HomePageAllSpendingSummary extends StatelessWidget {
                 openPage: TransactionsSearchPage(
                   initialFilters: SearchFilters(
                     expenseIncome: [ExpenseIncome.expense],
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(width: 13),
+            Expanded(
+              child: TransactionsAmountBox(
+                onLongPress: () async {
+                  await openBottomSheet(
+                    context,
+                    PopupFramework(
+                      title: "select-period".tr(),
+                      child: PeriodCyclePicker(
+                        cycleSettingsExtension: "AllSpendingSummary",
+                      ),
+                    ),
+                  );
+                  homePageStateKey.currentState?.refreshState();
+                },
+                label: "income".tr(),
+                amountStream: database.watchTotalOfWallet(
+                  null,
+                  isIncome: true,
+                  allWallets: Provider.of<AllWallets>(context),
+                  followCustomPeriodCycle: true,
+                  cycleSettingsExtension: "AllSpendingSummary",
+                ),
+                textColor: getColor(context, "incomeAmount"),
+                transactionsAmountStream:
+                    database.watchTotalCountOfTransactionsInWallet(
+                  null,
+                  isIncome: true,
+                  followCustomPeriodCycle: true,
+                  cycleSettingsExtension: "AllSpendingSummary",
+                ),
+                openPage: TransactionsSearchPage(
+                  initialFilters: SearchFilters(
+                    expenseIncome: [ExpenseIncome.income],
                   ),
                 ),
               ),

@@ -311,21 +311,13 @@ List<Pair> calculatePoints(CalculatePointsParams p) {
 
     DateTime day = DateTime(transaction.dateCreated.year,
         transaction.dateCreated.month, transaction.dateCreated.day);
-    double amount = transaction.income
-        ? transaction.amount.abs() *
-            amountRatioToPrimaryCurrencyGivenPk(
-              p.allWallets,
-              transaction.walletFk,
-              appStateSettingsPassed: p.appStateSettingsPassed,
-            ) *
-            invertPolarity
-        : -transaction.amount.abs() *
-            amountRatioToPrimaryCurrencyGivenPk(
-              p.allWallets,
-              transaction.walletFk,
-              appStateSettingsPassed: p.appStateSettingsPassed,
-            ) *
-            invertPolarity;
+    double amount = transaction.amount *
+        amountRatioToPrimaryCurrencyGivenPk(
+          p.allWallets,
+          transaction.walletFk,
+          appStateSettingsPassed: p.appStateSettingsPassed,
+        ) *
+        invertPolarity;
 
     if (p.customStartDate.millisecondsSinceEpoch >
         transaction.dateCreated.millisecondsSinceEpoch) {

@@ -4,9 +4,11 @@ import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/addObjectivePage.dart';
 import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/editBudgetLimitsPage.dart';
+import 'package:budget/pages/editObjectivesPage.dart';
 import 'package:budget/pages/objectivesListPage.dart';
 import 'package:budget/pages/pastBudgetsPage.dart';
 import 'package:budget/pages/premiumPage.dart';
+import 'package:budget/pages/transactionFilters.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/animatedCircularProgress.dart';
@@ -14,7 +16,10 @@ import 'package:budget/widgets/animatedExpanded.dart';
 import 'package:budget/widgets/categoryIcon.dart';
 import 'package:budget/widgets/dropdownSelect.dart';
 import 'package:budget/widgets/extraInfoBoxes.dart';
+import 'package:budget/widgets/framework/popupFramework.dart';
+import 'package:budget/widgets/listItem.dart';
 import 'package:budget/widgets/openPopup.dart';
+import 'package:budget/widgets/outlinedButtonStacked.dart';
 import 'package:budget/widgets/selectedTransactionsAppBar.dart';
 import 'package:budget/widgets/budgetContainer.dart';
 import 'package:budget/widgets/categoryEntry.dart';
@@ -164,7 +169,7 @@ class _ObjectivePageContentState extends State<_ObjectivePageContent> {
                 items: [
                   DropdownItemMenu(
                     id: "edit-goals",
-                    label: "edit-goals".tr(),
+                    label: "edit-goal".tr(),
                     icon: appStateSettings["outlinedIcons"]
                         ? Icons.edit_outlined
                         : Icons.edit_rounded,
@@ -178,6 +183,22 @@ class _ObjectivePageContentState extends State<_ObjectivePageContent> {
                       );
                     },
                   ),
+                  // Only show for loan goal
+                  if (widget.objective.type == ObjectiveType.loan)
+                    DropdownItemMenu(
+                      id: "delete-goal",
+                      label: "delete-goal".tr(),
+                      icon: appStateSettings["outlinedIcons"]
+                          ? Icons.delete_outlined
+                          : Icons.delete_rounded,
+                      action: () {
+                        deleteObjectivePopup(
+                          context,
+                          objective: widget.objective,
+                          routesToPopAfterDelete: RoutesToPopAfterDelete.One,
+                        );
+                      },
+                    ),
                 ],
               ),
             ],
@@ -188,22 +209,10 @@ class _ObjectivePageContentState extends State<_ObjectivePageContent> {
             dragDownToDismiss: true,
             slivers: [
               SliverToBoxAdapter(
-                child: StreamBuilder<double?>(
-                  stream: database.watchTotalTowardsObjective(
-                    Provider.of<AllWallets>(context),
-                    widget.objective.objectivePk,
-                  ),
-                  builder: (context, snapshot) {
-                    double objectiveAmount = objectiveAmountToPrimaryCurrency(
-                        Provider.of<AllWallets>(context, listen: true),
-                        widget.objective);
-                    double totalAmount = snapshot.data ?? 0;
-                    if (widget.objective.income == false) {
-                      totalAmount = totalAmount * -1;
-                    }
-                    double percentageTowardsGoal = objectiveAmount == 0
-                        ? 0
-                        : totalAmount / objectiveAmount;
+                child: WatchTotalAndAmountOfObjective(
+                  objective: widget.objective,
+                  builder:
+                      (objectiveAmount, totalAmount, percentageTowardsGoal) {
                     if (percentageTowardsGoal >= 1 &&
                         hasPlayedConfetti == false) {
                       confettiController.play();
@@ -355,54 +364,72 @@ class _ObjectivePageContentState extends State<_ObjectivePageContent> {
                                       ),
                                     );
                                   }),
+                                  if (widget.objective.type ==
+                                      ObjectiveType.loan)
+                                    TextFont(
+                                      text: showTotalSpent
+                                          ? (widget.objective.income
+                                              ? "collected".tr()
+                                              : "paid".tr())
+                                          : (widget.objective.income
+                                              ? "to-collect".tr()
+                                              : "to-pay".tr()),
+                                      fontSize: 18,
+                                      textColor: getColor(context, "black"),
+                                    ),
                                 ],
                               ),
                             ],
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(
-                              top: 20.0, left: 20, right: 20),
-                          child: Column(
-                            children: [
-                              TextFont(
-                                text: getWordedDateShortMore(
-                                      widget.objective.dateCreated,
-                                      includeYear:
-                                          widget.objective.dateCreated.year !=
-                                              DateTime.now().year,
-                                    ) +
-                                    (widget.objective.endDate != null
-                                        ? " – " +
-                                            getWordedDateShortMore(
-                                              widget.objective.endDate!,
-                                              includeYear: widget.objective
-                                                      .endDate!.year !=
-                                                  DateTime.now().year,
-                                            )
-                                        : ""),
-                                maxLines: 3,
-                                textAlign: TextAlign.center,
-                                fontSize: 21,
-                                fontWeight: FontWeight.bold,
-                              ),
-                              if (widget.objective.endDate != null)
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 12),
-                                  child: TextFont(
-                                    text: getObjectiveStatus(
-                                      context,
-                                      widget.objective,
-                                      totalAmount,
-                                      percentageTowardsGoal,
-                                      addSpendingSavingIndication: true,
-                                    ),
-                                    maxLines: 3,
-                                    textAlign: TextAlign.center,
-                                    fontSize: 16,
-                                  ),
+                          padding: EdgeInsets.symmetric(
+                              horizontal:
+                                  getHorizontalPaddingConstrained(context)),
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                                top: 20.0, left: 20, right: 20),
+                            child: Column(
+                              children: [
+                                TextFont(
+                                  text: getWordedDateShortMore(
+                                        widget.objective.dateCreated,
+                                        includeYear:
+                                            widget.objective.dateCreated.year !=
+                                                DateTime.now().year,
+                                      ) +
+                                      (widget.objective.endDate != null
+                                          ? " – " +
+                                              getWordedDateShortMore(
+                                                widget.objective.endDate!,
+                                                includeYear: widget.objective
+                                                        .endDate!.year !=
+                                                    DateTime.now().year,
+                                              )
+                                          : ""),
+                                  maxLines: 3,
+                                  textAlign: TextAlign.center,
+                                  fontSize: 21,
+                                  fontWeight: FontWeight.bold,
                                 ),
-                            ],
+                                if (widget.objective.endDate != null)
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 12),
+                                    child: TextFont(
+                                      text: getObjectiveStatus(
+                                        context,
+                                        widget.objective,
+                                        totalAmount,
+                                        percentageTowardsGoal,
+                                        addSpendingSavingIndication: true,
+                                      ),
+                                      maxLines: 3,
+                                      textAlign: TextAlign.center,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                              ],
+                            ),
                           ),
                         ),
                       ],
@@ -456,25 +483,33 @@ class _ObjectivePageContentState extends State<_ObjectivePageContent> {
                 transactionBackgroundColor: pageBackgroundColor,
                 categoryTintColor: objectiveColorScheme.primary,
                 colorScheme: objectiveColorScheme,
-                onlyShowTransactionsBelongingToObjectivePk:
-                    widget.objective.objectivePk,
+                searchFilters: widget.objective.type == ObjectiveType.loan
+                    ? SearchFilters().copyWith(
+                        objectiveLoanPks: [widget.objective.objectivePk])
+                    : SearchFilters()
+                        .copyWith(objectivePks: [widget.objective.objectivePk]),
+                allowOpenIntoObjectiveLoanPage: false,
                 showObjectivePercentage: false,
                 noResultsMessage: "no-transactions-found".tr(),
                 showNoResults: false,
-                noResultsExtraWidget: ExtraInfoButton(
-                  onTap: () {
-                    startCreatingInstallment(
-                        context: context, initialObjective: widget.objective);
-                  },
-                  color: Theme.of(context)
-                      .colorScheme
-                      .secondaryContainer
-                      .withOpacity(0.4),
-                  icon: appStateSettings["outlinedIcons"]
-                      ? Icons.punch_clock_outlined
-                      : Icons.punch_clock_rounded,
-                  text: "setup-installment-payments".tr(),
-                ),
+                noResultsExtraWidget:
+                    widget.objective.type == ObjectiveType.goal
+                        ? ExtraInfoButton(
+                            onTap: () {
+                              startCreatingInstallment(
+                                  context: context,
+                                  initialObjective: widget.objective);
+                            },
+                            color: Theme.of(context)
+                                .colorScheme
+                                .secondaryContainer
+                                .withOpacity(0.4),
+                            icon: appStateSettings["outlinedIcons"]
+                                ? Icons.punch_clock_outlined
+                                : Icons.punch_clock_rounded,
+                            text: "setup-installment-payments".tr(),
+                          )
+                        : SizedBox.shrink(),
               ),
               // Wipe all remaining pixels off - sometimes graphics artifacts are left behind
               SliverToBoxAdapter(

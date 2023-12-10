@@ -129,6 +129,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
   bool initiallySettingSelectedIncome = false;
   String? selectedPayer;
   String? selectedObjectivePk;
+  String? selectedObjectiveLoanPk;
   String? selectedBudgetPk;
   Budget? selectedBudget;
   bool selectedBudgetIsShared = false;
@@ -136,6 +137,9 @@ class _AddTransactionPageState extends State<AddTransactionPage>
   bool notesInputFocused = false;
   bool showMoreOptions = false;
   List<String> selectedExcludedBudgetPks = [];
+  late bool isAddedToLoanObjective =
+      widget.selectedObjective?.type == ObjectiveType.loan ||
+          widget.transaction?.objectiveLoanFk != null;
   // bool isSettingUpBalanceTransfer = false;
 
   String? textAddTransaction = "add-transaction".tr();
@@ -163,7 +167,8 @@ class _AddTransactionPageState extends State<AddTransactionPage>
 
   void setSelectedCategory(TransactionCategory category,
       {bool setIncome = true}) {
-    if (setIncome) setSelectedIncome(category.income);
+    if (isAddedToLoanObjective == false && setIncome)
+      setSelectedIncome(category.income);
     setState(() {
       if (selectedCategory != category) selectedSubCategory = null;
       selectedCategory = category;
@@ -537,6 +542,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
     Transaction createdTransaction = Transaction(
       transactionPk:
           widget.transaction != null ? widget.transaction!.transactionPk : "-1",
+      pairedTransactionFk: widget.transaction?.pairedTransactionFk,
       name: (selectedTitle ?? "").trim(),
       amount: (selectedIncome || selectedAmount == 0 //Prevent negative 0
           ? (selectedAmount ?? 0).abs()
@@ -583,6 +589,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
           ? widget.transaction!.originalDateDue
           : null,
       objectiveFk: selectedObjectivePk,
+      objectiveLoanFk: selectedObjectiveLoanPk,
       budgetFksExclude:
           selectedExcludedBudgetPks.isEmpty ? null : selectedExcludedBudgetPks,
     );
@@ -648,6 +655,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
       selectedPayer = widget.transaction!.transactionOwnerEmail;
       selectedBudgetPk = widget.transaction!.sharedReferenceBudgetPk;
       selectedObjectivePk = widget.transaction!.objectiveFk;
+      selectedObjectiveLoanPk = widget.transaction!.objectiveLoanFk;
       selectedExcludedBudgetPks = widget.transaction!.budgetFksExclude ?? [];
       // var amountString = widget.transaction!.amount.toStringAsFixed(2);
       // if (amountString.substring(amountString.length - 2) == "00") {
@@ -706,7 +714,11 @@ class _AddTransactionPageState extends State<AddTransactionPage>
       selectedBudgetIsShared = widget.selectedBudget!.sharedKey != null;
     }
     if (widget.selectedObjective != null) {
-      selectedObjectivePk = widget.selectedObjective!.objectivePk;
+      if (widget.selectedObjective?.type == ObjectiveType.loan) {
+        selectedObjectiveLoanPk = widget.selectedObjective!.objectivePk;
+      } else {
+        selectedObjectivePk = widget.selectedObjective!.objectivePk;
+      }
     }
     if (widget.selectedIncome != null) {
       selectedIncome = widget.selectedIncome!;
@@ -962,7 +974,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                 transactionTypesToShow:
                                     getTransactionSpecialTypesToShowGivenInitialTypeWhenAddingTransaction(
                                   widget.selectedType,
-                                  false,
+                                  isAddedToLoanObjective,
                                 ),
                               ),
                             ),
@@ -972,7 +984,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                     ),
                     items:
                         getTransactionSpecialTypesToShowGivenInitialTypeWhenAddingTransaction(
-                            widget.selectedType, false),
+                            widget.selectedType, isAddedToLoanObjective),
                     getLabel: (item) {
                       if (item is TransactionSpecialType || item == null) {
                         return transactionTypeDisplayToEnum[item]
@@ -1131,9 +1143,11 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                         includeYear: selectedEndDate!.year !=
                                             DateTime.now().year,
                                       )),
-                                placeholder: selectedObjectivePk != null
-                                    ? "until-goal-reached".tr()
-                                    : "until-forever".tr(),
+                                placeholder: selectedObjectiveLoanPk != null
+                                    ? "until-loan-reached".tr()
+                                    : selectedObjectivePk != null
+                                        ? "until-goal-reached".tr()
+                                        : "until-forever".tr(),
                                 showPlaceHolderWhenTextEquals: "",
                                 onTap: () {
                                   selectEndDate(context);
@@ -1236,11 +1250,12 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                 setSelectedBudget: setSelectedBudgetPk,
                 horizontalBreak: true,
               ),
-              SelectObjective(
-                setSelectedObjective: setSelectedObjectivePk,
-                selectedObjectivePk: selectedObjectivePk,
-                horizontalBreak: true,
-              ),
+              if (isAddedToLoanObjective == false)
+                SelectObjective(
+                  setSelectedObjective: setSelectedObjectivePk,
+                  selectedObjectivePk: selectedObjectivePk,
+                  horizontalBreak: true,
+                ),
               AnimatedExpanded(
                 expand:
                     selectedBudgetPk != null && selectedBudgetIsShared == true,
@@ -1380,7 +1395,8 @@ class _AddTransactionPageState extends State<AddTransactionPage>
       ),
     );
 
-    bool enableBalanceTransferTab = widget.transaction == null &&
+    bool enableBalanceTransferTab = isAddedToLoanObjective == false &&
+        widget.transaction == null &&
         Provider.of<AllWallets>(context).indexedByPk.keys.length > 1;
 
     Widget transactionAmountAndCategoryHeader = AnimatedContainer(
@@ -1451,18 +1467,23 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                       unselectedLabelColor: Colors.white.withOpacity(0.3),
                     )
                   : IncomeExpenseTabSelector(
+                      hasBorderRadius: false,
                       onTabChanged: setSelectedIncome,
                       initialTabIsIncome: selectedIncome,
                       syncWithInitial: true,
                       color: categoryColor,
                       unselectedColor: Colors.black.withOpacity(0.2),
                       unselectedLabelColor: Colors.white.withOpacity(0.3),
-                      incomeLabel: selectedCategory?.categoryPk == "0"
-                          ? "transfer-in".tr()
-                          : null,
-                      expenseLabel: selectedCategory?.categoryPk == "0"
-                          ? "transfer-out".tr()
-                          : null,
+                      incomeLabel: isAddedToLoanObjective
+                          ? "collected".tr()
+                          : selectedCategory?.categoryPk == "0"
+                              ? "transfer-in".tr()
+                              : null,
+                      expenseLabel: isAddedToLoanObjective
+                          ? "paid".tr()
+                          : selectedCategory?.categoryPk == "0"
+                              ? "transfer-out".tr()
+                              : null,
                     ),
             ),
           ),
@@ -1698,8 +1719,12 @@ class _AddTransactionPageState extends State<AddTransactionPage>
           belowAppBarPaddingWhenCenteredTitleSmall: 0,
           resizeToAvoidBottomInset: true,
           title: widget.transaction == null
-              ? "add-transaction".tr()
-              : "edit-transaction".tr(),
+              ? isAddedToLoanObjective
+                  ? "add-record"
+                  : "add-transaction".tr()
+              : isAddedToLoanObjective
+                  ? "edit-record"
+                  : "edit-transaction".tr(),
           dragDownToDismiss: true,
           onBackButton: () async {
             if (widget.transaction != null) {
@@ -2808,7 +2833,8 @@ class _SelectObjectiveState extends State<SelectObjective> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<List<Objective>>(
-      stream: database.watchAllObjectives(),
+      stream: database.watchAllObjectives(
+          objectiveType: ObjectiveType.goal, archivedLast: true),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           if (snapshot.data!.length <= 0) return Container();
@@ -3322,6 +3348,7 @@ class SelectTransactionTypePopup extends StatelessWidget {
                         in TransactionSpecialType.values)
                       IgnorePointer(
                         child: TransactionEntryActionButton(
+                          allowOpenIntoObjectiveLoanPage: false,
                           transaction: Transaction(
                             transactionPk: "-1",
                             name: "",
@@ -3452,6 +3479,7 @@ Future<MainAndSubcategory> selectCategorySequence(
   dynamic result = await openBottomSheet(
     context,
     SelectCategoryWithIncomeExpenseSelector(
+      subtitle: subtitle,
       extraWidgetAfter: extraWidgetAfter,
       skipIfSet: skipIfSet,
       selectedCategory: selectedCategory,
@@ -3471,7 +3499,6 @@ Future<MainAndSubcategory> selectCategorySequence(
         context,
         PopupFramework(
           title: "select-subcategory".tr(),
-          subtitle: subtitle,
           child: SelectCategory(
             skipIfSet: skipIfSet,
             selectedCategory: selectedSubCategory,
@@ -3549,6 +3576,7 @@ class SelectCategoryWithIncomeExpenseSelector extends StatefulWidget {
     required this.setSelectedSubCategory,
     required this.setSelectedIncome,
     required this.selectedIncomeInitial,
+    this.subtitle,
     super.key,
   });
 
@@ -3560,6 +3588,7 @@ class SelectCategoryWithIncomeExpenseSelector extends StatefulWidget {
   final Function(TransactionCategory?)? setSelectedSubCategory;
   final Function(bool?)? setSelectedIncome;
   final bool? selectedIncomeInitial;
+  final String? subtitle;
 
   @override
   State<SelectCategoryWithIncomeExpenseSelector> createState() =>
@@ -3588,6 +3617,7 @@ class _SelectCategoryWithIncomeExpenseSelectorState
   Widget build(BuildContext context) {
     return PopupFramework(
       title: widget.setSelectedIncome == null ? "select-category".tr() : null,
+      subtitle: widget.subtitle,
       hasPadding: false,
       outsideExtraWidget: widget.setSelectedIncome != null
           // Hide option to rearrange because income/expense selector is shown

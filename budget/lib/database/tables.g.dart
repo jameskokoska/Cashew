@@ -64,6 +64,12 @@ class $WalletsTable extends Wallets
   late final GeneratedColumn<String> currency = GeneratedColumn<String>(
       'currency', aliasedName, true,
       type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _currencyFormatMeta =
+      const VerificationMeta('currencyFormat');
+  @override
+  late final GeneratedColumn<String> currencyFormat = GeneratedColumn<String>(
+      'currency_format', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
   static const VerificationMeta _decimalsMeta =
       const VerificationMeta('decimals');
   @override
@@ -93,13 +99,15 @@ class $WalletsTable extends Wallets
         dateTimeModified,
         order,
         currency,
+        currencyFormat,
         decimals,
         homePageWidgetDisplay
       ];
   @override
-  String get aliasedName => _alias ?? 'wallets';
+  String get aliasedName => _alias ?? actualTableName;
   @override
-  String get actualTableName => 'wallets';
+  String get actualTableName => $name;
+  static const String $name = 'wallets';
   @override
   VerificationContext validateIntegrity(Insertable<TransactionWallet> instance,
       {bool isInserting = false}) {
@@ -145,6 +153,12 @@ class $WalletsTable extends Wallets
       context.handle(_currencyMeta,
           currency.isAcceptableOrUnknown(data['currency']!, _currencyMeta));
     }
+    if (data.containsKey('currency_format')) {
+      context.handle(
+          _currencyFormatMeta,
+          currencyFormat.isAcceptableOrUnknown(
+              data['currency_format']!, _currencyFormatMeta));
+    }
     if (data.containsKey('decimals')) {
       context.handle(_decimalsMeta,
           decimals.isAcceptableOrUnknown(data['decimals']!, _decimalsMeta));
@@ -176,6 +190,8 @@ class $WalletsTable extends Wallets
           .read(DriftSqlType.int, data['${effectivePrefix}order'])!,
       currency: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}currency']),
+      currencyFormat: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}currency_format']),
       decimals: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}decimals'])!,
       homePageWidgetDisplay: $WalletsTable.$converterhomePageWidgetDisplayn
@@ -207,6 +223,7 @@ class TransactionWallet extends DataClass
   final DateTime? dateTimeModified;
   final int order;
   final String? currency;
+  final String? currencyFormat;
   final int decimals;
   final List<HomePageWidgetDisplay>? homePageWidgetDisplay;
   const TransactionWallet(
@@ -218,6 +235,7 @@ class TransactionWallet extends DataClass
       this.dateTimeModified,
       required this.order,
       this.currency,
+      this.currencyFormat,
       required this.decimals,
       this.homePageWidgetDisplay});
   @override
@@ -238,6 +256,9 @@ class TransactionWallet extends DataClass
     map['order'] = Variable<int>(order);
     if (!nullToAbsent || currency != null) {
       map['currency'] = Variable<String>(currency);
+    }
+    if (!nullToAbsent || currencyFormat != null) {
+      map['currency_format'] = Variable<String>(currencyFormat);
     }
     map['decimals'] = Variable<int>(decimals);
     if (!nullToAbsent || homePageWidgetDisplay != null) {
@@ -265,6 +286,9 @@ class TransactionWallet extends DataClass
       currency: currency == null && nullToAbsent
           ? const Value.absent()
           : Value(currency),
+      currencyFormat: currencyFormat == null && nullToAbsent
+          ? const Value.absent()
+          : Value(currencyFormat),
       decimals: Value(decimals),
       homePageWidgetDisplay: homePageWidgetDisplay == null && nullToAbsent
           ? const Value.absent()
@@ -285,6 +309,7 @@ class TransactionWallet extends DataClass
           serializer.fromJson<DateTime?>(json['dateTimeModified']),
       order: serializer.fromJson<int>(json['order']),
       currency: serializer.fromJson<String?>(json['currency']),
+      currencyFormat: serializer.fromJson<String?>(json['currencyFormat']),
       decimals: serializer.fromJson<int>(json['decimals']),
       homePageWidgetDisplay: serializer.fromJson<List<HomePageWidgetDisplay>?>(
           json['homePageWidgetDisplay']),
@@ -302,6 +327,7 @@ class TransactionWallet extends DataClass
       'dateTimeModified': serializer.toJson<DateTime?>(dateTimeModified),
       'order': serializer.toJson<int>(order),
       'currency': serializer.toJson<String?>(currency),
+      'currencyFormat': serializer.toJson<String?>(currencyFormat),
       'decimals': serializer.toJson<int>(decimals),
       'homePageWidgetDisplay': serializer
           .toJson<List<HomePageWidgetDisplay>?>(homePageWidgetDisplay),
@@ -317,6 +343,7 @@ class TransactionWallet extends DataClass
           Value<DateTime?> dateTimeModified = const Value.absent(),
           int? order,
           Value<String?> currency = const Value.absent(),
+          Value<String?> currencyFormat = const Value.absent(),
           int? decimals,
           Value<List<HomePageWidgetDisplay>?> homePageWidgetDisplay =
               const Value.absent()}) =>
@@ -331,6 +358,8 @@ class TransactionWallet extends DataClass
             : this.dateTimeModified,
         order: order ?? this.order,
         currency: currency.present ? currency.value : this.currency,
+        currencyFormat:
+            currencyFormat.present ? currencyFormat.value : this.currencyFormat,
         decimals: decimals ?? this.decimals,
         homePageWidgetDisplay: homePageWidgetDisplay.present
             ? homePageWidgetDisplay.value
@@ -347,6 +376,7 @@ class TransactionWallet extends DataClass
           ..write('dateTimeModified: $dateTimeModified, ')
           ..write('order: $order, ')
           ..write('currency: $currency, ')
+          ..write('currencyFormat: $currencyFormat, ')
           ..write('decimals: $decimals, ')
           ..write('homePageWidgetDisplay: $homePageWidgetDisplay')
           ..write(')'))
@@ -354,8 +384,18 @@ class TransactionWallet extends DataClass
   }
 
   @override
-  int get hashCode => Object.hash(walletPk, name, colour, iconName, dateCreated,
-      dateTimeModified, order, currency, decimals, homePageWidgetDisplay);
+  int get hashCode => Object.hash(
+      walletPk,
+      name,
+      colour,
+      iconName,
+      dateCreated,
+      dateTimeModified,
+      order,
+      currency,
+      currencyFormat,
+      decimals,
+      homePageWidgetDisplay);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -368,6 +408,7 @@ class TransactionWallet extends DataClass
           other.dateTimeModified == this.dateTimeModified &&
           other.order == this.order &&
           other.currency == this.currency &&
+          other.currencyFormat == this.currencyFormat &&
           other.decimals == this.decimals &&
           other.homePageWidgetDisplay == this.homePageWidgetDisplay);
 }
@@ -381,6 +422,7 @@ class WalletsCompanion extends UpdateCompanion<TransactionWallet> {
   final Value<DateTime?> dateTimeModified;
   final Value<int> order;
   final Value<String?> currency;
+  final Value<String?> currencyFormat;
   final Value<int> decimals;
   final Value<List<HomePageWidgetDisplay>?> homePageWidgetDisplay;
   final Value<int> rowid;
@@ -393,6 +435,7 @@ class WalletsCompanion extends UpdateCompanion<TransactionWallet> {
     this.dateTimeModified = const Value.absent(),
     this.order = const Value.absent(),
     this.currency = const Value.absent(),
+    this.currencyFormat = const Value.absent(),
     this.decimals = const Value.absent(),
     this.homePageWidgetDisplay = const Value.absent(),
     this.rowid = const Value.absent(),
@@ -406,6 +449,7 @@ class WalletsCompanion extends UpdateCompanion<TransactionWallet> {
     this.dateTimeModified = const Value.absent(),
     required int order,
     this.currency = const Value.absent(),
+    this.currencyFormat = const Value.absent(),
     this.decimals = const Value.absent(),
     this.homePageWidgetDisplay = const Value.absent(),
     this.rowid = const Value.absent(),
@@ -420,6 +464,7 @@ class WalletsCompanion extends UpdateCompanion<TransactionWallet> {
     Expression<DateTime>? dateTimeModified,
     Expression<int>? order,
     Expression<String>? currency,
+    Expression<String>? currencyFormat,
     Expression<int>? decimals,
     Expression<String>? homePageWidgetDisplay,
     Expression<int>? rowid,
@@ -433,6 +478,7 @@ class WalletsCompanion extends UpdateCompanion<TransactionWallet> {
       if (dateTimeModified != null) 'date_time_modified': dateTimeModified,
       if (order != null) 'order': order,
       if (currency != null) 'currency': currency,
+      if (currencyFormat != null) 'currency_format': currencyFormat,
       if (decimals != null) 'decimals': decimals,
       if (homePageWidgetDisplay != null)
         'home_page_widget_display': homePageWidgetDisplay,
@@ -449,6 +495,7 @@ class WalletsCompanion extends UpdateCompanion<TransactionWallet> {
       Value<DateTime?>? dateTimeModified,
       Value<int>? order,
       Value<String?>? currency,
+      Value<String?>? currencyFormat,
       Value<int>? decimals,
       Value<List<HomePageWidgetDisplay>?>? homePageWidgetDisplay,
       Value<int>? rowid}) {
@@ -461,6 +508,7 @@ class WalletsCompanion extends UpdateCompanion<TransactionWallet> {
       dateTimeModified: dateTimeModified ?? this.dateTimeModified,
       order: order ?? this.order,
       currency: currency ?? this.currency,
+      currencyFormat: currencyFormat ?? this.currencyFormat,
       decimals: decimals ?? this.decimals,
       homePageWidgetDisplay:
           homePageWidgetDisplay ?? this.homePageWidgetDisplay,
@@ -495,11 +543,15 @@ class WalletsCompanion extends UpdateCompanion<TransactionWallet> {
     if (currency.present) {
       map['currency'] = Variable<String>(currency.value);
     }
+    if (currencyFormat.present) {
+      map['currency_format'] = Variable<String>(currencyFormat.value);
+    }
     if (decimals.present) {
       map['decimals'] = Variable<int>(decimals.value);
     }
     if (homePageWidgetDisplay.present) {
       final converter = $WalletsTable.$converterhomePageWidgetDisplayn;
+
       map['home_page_widget_display'] =
           Variable<String>(converter.toSql(homePageWidgetDisplay.value));
     }
@@ -520,6 +572,7 @@ class WalletsCompanion extends UpdateCompanion<TransactionWallet> {
           ..write('dateTimeModified: $dateTimeModified, ')
           ..write('order: $order, ')
           ..write('currency: $currency, ')
+          ..write('currencyFormat: $currencyFormat, ')
           ..write('decimals: $decimals, ')
           ..write('homePageWidgetDisplay: $homePageWidgetDisplay, ')
           ..write('rowid: $rowid')
@@ -630,9 +683,10 @@ class $CategoriesTable extends Categories
         mainCategoryPk
       ];
   @override
-  String get aliasedName => _alias ?? 'categories';
+  String get aliasedName => _alias ?? actualTableName;
   @override
-  String get actualTableName => 'categories';
+  String get actualTableName => $name;
+  static const String $name = 'categories';
   @override
   VerificationContext validateIntegrity(
       Insertable<TransactionCategory> instance,
@@ -1070,6 +1124,7 @@ class CategoriesCompanion extends UpdateCompanion<TransactionCategory> {
     }
     if (methodAdded.present) {
       final converter = $CategoriesTable.$convertermethodAddedn;
+
       map['method_added'] = Variable<int>(converter.toSql(methodAdded.value));
     }
     if (mainCategoryPk.present) {
@@ -1115,6 +1170,14 @@ class $ObjectivesTable extends Objectives
       type: DriftSqlType.string,
       requiredDuringInsert: false,
       clientDefault: () => uuid.v4());
+  static const VerificationMeta _typeMeta = const VerificationMeta('type');
+  @override
+  late final GeneratedColumnWithTypeConverter<ObjectiveType, int> type =
+      GeneratedColumn<int>('type', aliasedName, false,
+              type: DriftSqlType.int,
+              requiredDuringInsert: false,
+              defaultValue: Constant(0))
+          .withConverter<ObjectiveType>($ObjectivesTable.$convertertype);
   static const VerificationMeta _nameMeta = const VerificationMeta('name');
   @override
   late final GeneratedColumn<String> name = GeneratedColumn<String>(
@@ -1191,6 +1254,16 @@ class $ObjectivesTable extends Objectives
       defaultConstraints:
           GeneratedColumn.constraintIsAlways('CHECK ("pinned" IN (0, 1))'),
       defaultValue: const Constant(true));
+  static const VerificationMeta _archivedMeta =
+      const VerificationMeta('archived');
+  @override
+  late final GeneratedColumn<bool> archived = GeneratedColumn<bool>(
+      'archived', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("archived" IN (0, 1))'),
+      defaultValue: const Constant(false));
   static const VerificationMeta _walletFkMeta =
       const VerificationMeta('walletFk');
   @override
@@ -1204,6 +1277,7 @@ class $ObjectivesTable extends Objectives
   @override
   List<GeneratedColumn> get $columns => [
         objectivePk,
+        type,
         name,
         amount,
         order,
@@ -1215,12 +1289,14 @@ class $ObjectivesTable extends Objectives
         emojiIconName,
         income,
         pinned,
+        archived,
         walletFk
       ];
   @override
-  String get aliasedName => _alias ?? 'objectives';
+  String get aliasedName => _alias ?? actualTableName;
   @override
-  String get actualTableName => 'objectives';
+  String get actualTableName => $name;
+  static const String $name = 'objectives';
   @override
   VerificationContext validateIntegrity(Insertable<Objective> instance,
       {bool isInserting = false}) {
@@ -1232,6 +1308,7 @@ class $ObjectivesTable extends Objectives
           objectivePk.isAcceptableOrUnknown(
               data['objective_pk']!, _objectivePkMeta));
     }
+    context.handle(_typeMeta, const VerificationResult.success());
     if (data.containsKey('name')) {
       context.handle(
           _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
@@ -1288,6 +1365,10 @@ class $ObjectivesTable extends Objectives
       context.handle(_pinnedMeta,
           pinned.isAcceptableOrUnknown(data['pinned']!, _pinnedMeta));
     }
+    if (data.containsKey('archived')) {
+      context.handle(_archivedMeta,
+          archived.isAcceptableOrUnknown(data['archived']!, _archivedMeta));
+    }
     if (data.containsKey('wallet_fk')) {
       context.handle(_walletFkMeta,
           walletFk.isAcceptableOrUnknown(data['wallet_fk']!, _walletFkMeta));
@@ -1303,6 +1384,8 @@ class $ObjectivesTable extends Objectives
     return Objective(
       objectivePk: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}objective_pk'])!,
+      type: $ObjectivesTable.$convertertype.fromSql(attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}type'])!),
       name: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
       amount: attachedDatabase.typeMapping
@@ -1325,6 +1408,8 @@ class $ObjectivesTable extends Objectives
           .read(DriftSqlType.bool, data['${effectivePrefix}income'])!,
       pinned: attachedDatabase.typeMapping
           .read(DriftSqlType.bool, data['${effectivePrefix}pinned'])!,
+      archived: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}archived'])!,
       walletFk: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}wallet_fk'])!,
     );
@@ -1334,10 +1419,14 @@ class $ObjectivesTable extends Objectives
   $ObjectivesTable createAlias(String alias) {
     return $ObjectivesTable(attachedDatabase, alias);
   }
+
+  static JsonTypeConverter2<ObjectiveType, int, int> $convertertype =
+      const EnumIndexConverter<ObjectiveType>(ObjectiveType.values);
 }
 
 class Objective extends DataClass implements Insertable<Objective> {
   final String objectivePk;
+  final ObjectiveType type;
   final String name;
   final double amount;
   final int order;
@@ -1349,9 +1438,11 @@ class Objective extends DataClass implements Insertable<Objective> {
   final String? emojiIconName;
   final bool income;
   final bool pinned;
+  final bool archived;
   final String walletFk;
   const Objective(
       {required this.objectivePk,
+      required this.type,
       required this.name,
       required this.amount,
       required this.order,
@@ -1363,11 +1454,16 @@ class Objective extends DataClass implements Insertable<Objective> {
       this.emojiIconName,
       required this.income,
       required this.pinned,
+      required this.archived,
       required this.walletFk});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['objective_pk'] = Variable<String>(objectivePk);
+    {
+      final converter = $ObjectivesTable.$convertertype;
+      map['type'] = Variable<int>(converter.toSql(type));
+    }
     map['name'] = Variable<String>(name);
     map['amount'] = Variable<double>(amount);
     map['order'] = Variable<int>(order);
@@ -1389,6 +1485,7 @@ class Objective extends DataClass implements Insertable<Objective> {
     }
     map['income'] = Variable<bool>(income);
     map['pinned'] = Variable<bool>(pinned);
+    map['archived'] = Variable<bool>(archived);
     map['wallet_fk'] = Variable<String>(walletFk);
     return map;
   }
@@ -1396,6 +1493,7 @@ class Objective extends DataClass implements Insertable<Objective> {
   ObjectivesCompanion toCompanion(bool nullToAbsent) {
     return ObjectivesCompanion(
       objectivePk: Value(objectivePk),
+      type: Value(type),
       name: Value(name),
       amount: Value(amount),
       order: Value(order),
@@ -1416,6 +1514,7 @@ class Objective extends DataClass implements Insertable<Objective> {
           : Value(emojiIconName),
       income: Value(income),
       pinned: Value(pinned),
+      archived: Value(archived),
       walletFk: Value(walletFk),
     );
   }
@@ -1425,6 +1524,8 @@ class Objective extends DataClass implements Insertable<Objective> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return Objective(
       objectivePk: serializer.fromJson<String>(json['objectivePk']),
+      type: $ObjectivesTable.$convertertype
+          .fromJson(serializer.fromJson<int>(json['type'])),
       name: serializer.fromJson<String>(json['name']),
       amount: serializer.fromJson<double>(json['amount']),
       order: serializer.fromJson<int>(json['order']),
@@ -1437,6 +1538,7 @@ class Objective extends DataClass implements Insertable<Objective> {
       emojiIconName: serializer.fromJson<String?>(json['emojiIconName']),
       income: serializer.fromJson<bool>(json['income']),
       pinned: serializer.fromJson<bool>(json['pinned']),
+      archived: serializer.fromJson<bool>(json['archived']),
       walletFk: serializer.fromJson<String>(json['walletFk']),
     );
   }
@@ -1445,6 +1547,8 @@ class Objective extends DataClass implements Insertable<Objective> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'objectivePk': serializer.toJson<String>(objectivePk),
+      'type':
+          serializer.toJson<int>($ObjectivesTable.$convertertype.toJson(type)),
       'name': serializer.toJson<String>(name),
       'amount': serializer.toJson<double>(amount),
       'order': serializer.toJson<int>(order),
@@ -1456,12 +1560,14 @@ class Objective extends DataClass implements Insertable<Objective> {
       'emojiIconName': serializer.toJson<String?>(emojiIconName),
       'income': serializer.toJson<bool>(income),
       'pinned': serializer.toJson<bool>(pinned),
+      'archived': serializer.toJson<bool>(archived),
       'walletFk': serializer.toJson<String>(walletFk),
     };
   }
 
   Objective copyWith(
           {String? objectivePk,
+          ObjectiveType? type,
           String? name,
           double? amount,
           int? order,
@@ -1473,9 +1579,11 @@ class Objective extends DataClass implements Insertable<Objective> {
           Value<String?> emojiIconName = const Value.absent(),
           bool? income,
           bool? pinned,
+          bool? archived,
           String? walletFk}) =>
       Objective(
         objectivePk: objectivePk ?? this.objectivePk,
+        type: type ?? this.type,
         name: name ?? this.name,
         amount: amount ?? this.amount,
         order: order ?? this.order,
@@ -1490,12 +1598,14 @@ class Objective extends DataClass implements Insertable<Objective> {
             emojiIconName.present ? emojiIconName.value : this.emojiIconName,
         income: income ?? this.income,
         pinned: pinned ?? this.pinned,
+        archived: archived ?? this.archived,
         walletFk: walletFk ?? this.walletFk,
       );
   @override
   String toString() {
     return (StringBuffer('Objective(')
           ..write('objectivePk: $objectivePk, ')
+          ..write('type: $type, ')
           ..write('name: $name, ')
           ..write('amount: $amount, ')
           ..write('order: $order, ')
@@ -1507,6 +1617,7 @@ class Objective extends DataClass implements Insertable<Objective> {
           ..write('emojiIconName: $emojiIconName, ')
           ..write('income: $income, ')
           ..write('pinned: $pinned, ')
+          ..write('archived: $archived, ')
           ..write('walletFk: $walletFk')
           ..write(')'))
         .toString();
@@ -1515,6 +1626,7 @@ class Objective extends DataClass implements Insertable<Objective> {
   @override
   int get hashCode => Object.hash(
       objectivePk,
+      type,
       name,
       amount,
       order,
@@ -1526,12 +1638,14 @@ class Objective extends DataClass implements Insertable<Objective> {
       emojiIconName,
       income,
       pinned,
+      archived,
       walletFk);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is Objective &&
           other.objectivePk == this.objectivePk &&
+          other.type == this.type &&
           other.name == this.name &&
           other.amount == this.amount &&
           other.order == this.order &&
@@ -1543,11 +1657,13 @@ class Objective extends DataClass implements Insertable<Objective> {
           other.emojiIconName == this.emojiIconName &&
           other.income == this.income &&
           other.pinned == this.pinned &&
+          other.archived == this.archived &&
           other.walletFk == this.walletFk);
 }
 
 class ObjectivesCompanion extends UpdateCompanion<Objective> {
   final Value<String> objectivePk;
+  final Value<ObjectiveType> type;
   final Value<String> name;
   final Value<double> amount;
   final Value<int> order;
@@ -1559,10 +1675,12 @@ class ObjectivesCompanion extends UpdateCompanion<Objective> {
   final Value<String?> emojiIconName;
   final Value<bool> income;
   final Value<bool> pinned;
+  final Value<bool> archived;
   final Value<String> walletFk;
   final Value<int> rowid;
   const ObjectivesCompanion({
     this.objectivePk = const Value.absent(),
+    this.type = const Value.absent(),
     this.name = const Value.absent(),
     this.amount = const Value.absent(),
     this.order = const Value.absent(),
@@ -1574,11 +1692,13 @@ class ObjectivesCompanion extends UpdateCompanion<Objective> {
     this.emojiIconName = const Value.absent(),
     this.income = const Value.absent(),
     this.pinned = const Value.absent(),
+    this.archived = const Value.absent(),
     this.walletFk = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   ObjectivesCompanion.insert({
     this.objectivePk = const Value.absent(),
+    this.type = const Value.absent(),
     required String name,
     required double amount,
     required int order,
@@ -1590,6 +1710,7 @@ class ObjectivesCompanion extends UpdateCompanion<Objective> {
     this.emojiIconName = const Value.absent(),
     this.income = const Value.absent(),
     this.pinned = const Value.absent(),
+    this.archived = const Value.absent(),
     this.walletFk = const Value.absent(),
     this.rowid = const Value.absent(),
   })  : name = Value(name),
@@ -1597,6 +1718,7 @@ class ObjectivesCompanion extends UpdateCompanion<Objective> {
         order = Value(order);
   static Insertable<Objective> custom({
     Expression<String>? objectivePk,
+    Expression<int>? type,
     Expression<String>? name,
     Expression<double>? amount,
     Expression<int>? order,
@@ -1608,11 +1730,13 @@ class ObjectivesCompanion extends UpdateCompanion<Objective> {
     Expression<String>? emojiIconName,
     Expression<bool>? income,
     Expression<bool>? pinned,
+    Expression<bool>? archived,
     Expression<String>? walletFk,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
       if (objectivePk != null) 'objective_pk': objectivePk,
+      if (type != null) 'type': type,
       if (name != null) 'name': name,
       if (amount != null) 'amount': amount,
       if (order != null) 'order': order,
@@ -1624,6 +1748,7 @@ class ObjectivesCompanion extends UpdateCompanion<Objective> {
       if (emojiIconName != null) 'emoji_icon_name': emojiIconName,
       if (income != null) 'income': income,
       if (pinned != null) 'pinned': pinned,
+      if (archived != null) 'archived': archived,
       if (walletFk != null) 'wallet_fk': walletFk,
       if (rowid != null) 'rowid': rowid,
     });
@@ -1631,6 +1756,7 @@ class ObjectivesCompanion extends UpdateCompanion<Objective> {
 
   ObjectivesCompanion copyWith(
       {Value<String>? objectivePk,
+      Value<ObjectiveType>? type,
       Value<String>? name,
       Value<double>? amount,
       Value<int>? order,
@@ -1642,10 +1768,12 @@ class ObjectivesCompanion extends UpdateCompanion<Objective> {
       Value<String?>? emojiIconName,
       Value<bool>? income,
       Value<bool>? pinned,
+      Value<bool>? archived,
       Value<String>? walletFk,
       Value<int>? rowid}) {
     return ObjectivesCompanion(
       objectivePk: objectivePk ?? this.objectivePk,
+      type: type ?? this.type,
       name: name ?? this.name,
       amount: amount ?? this.amount,
       order: order ?? this.order,
@@ -1657,6 +1785,7 @@ class ObjectivesCompanion extends UpdateCompanion<Objective> {
       emojiIconName: emojiIconName ?? this.emojiIconName,
       income: income ?? this.income,
       pinned: pinned ?? this.pinned,
+      archived: archived ?? this.archived,
       walletFk: walletFk ?? this.walletFk,
       rowid: rowid ?? this.rowid,
     );
@@ -1667,6 +1796,11 @@ class ObjectivesCompanion extends UpdateCompanion<Objective> {
     final map = <String, Expression>{};
     if (objectivePk.present) {
       map['objective_pk'] = Variable<String>(objectivePk.value);
+    }
+    if (type.present) {
+      final converter = $ObjectivesTable.$convertertype;
+
+      map['type'] = Variable<int>(converter.toSql(type.value));
     }
     if (name.present) {
       map['name'] = Variable<String>(name.value);
@@ -1701,6 +1835,9 @@ class ObjectivesCompanion extends UpdateCompanion<Objective> {
     if (pinned.present) {
       map['pinned'] = Variable<bool>(pinned.value);
     }
+    if (archived.present) {
+      map['archived'] = Variable<bool>(archived.value);
+    }
     if (walletFk.present) {
       map['wallet_fk'] = Variable<String>(walletFk.value);
     }
@@ -1714,6 +1851,7 @@ class ObjectivesCompanion extends UpdateCompanion<Objective> {
   String toString() {
     return (StringBuffer('ObjectivesCompanion(')
           ..write('objectivePk: $objectivePk, ')
+          ..write('type: $type, ')
           ..write('name: $name, ')
           ..write('amount: $amount, ')
           ..write('order: $order, ')
@@ -1725,6 +1863,7 @@ class ObjectivesCompanion extends UpdateCompanion<Objective> {
           ..write('emojiIconName: $emojiIconName, ')
           ..write('income: $income, ')
           ..write('pinned: $pinned, ')
+          ..write('archived: $archived, ')
           ..write('walletFk: $walletFk, ')
           ..write('rowid: $rowid')
           ..write(')'))
@@ -1746,6 +1885,16 @@ class $TransactionsTable extends Transactions
       type: DriftSqlType.string,
       requiredDuringInsert: false,
       clientDefault: () => uuid.v4());
+  static const VerificationMeta _pairedTransactionFkMeta =
+      const VerificationMeta('pairedTransactionFk');
+  @override
+  late final GeneratedColumn<String> pairedTransactionFk =
+      GeneratedColumn<String>('paired_transaction_fk', aliasedName, true,
+          type: DriftSqlType.string,
+          requiredDuringInsert: false,
+          defaultConstraints: GeneratedColumn.constraintIsAlways(
+              'REFERENCES transactions (transaction_pk)'),
+          defaultValue: const Constant(null));
   static const VerificationMeta _nameMeta = const VerificationMeta('name');
   @override
   late final GeneratedColumn<String> name = GeneratedColumn<String>(
@@ -1957,6 +2106,15 @@ class $TransactionsTable extends Transactions
       requiredDuringInsert: false,
       defaultConstraints: GeneratedColumn.constraintIsAlways(
           'REFERENCES objectives (objective_pk)'));
+  static const VerificationMeta _objectiveLoanFkMeta =
+      const VerificationMeta('objectiveLoanFk');
+  @override
+  late final GeneratedColumn<String> objectiveLoanFk = GeneratedColumn<String>(
+      'objective_loan_fk', aliasedName, true,
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'REFERENCES objectives (objective_pk)'));
   static const VerificationMeta _budgetFksExcludeMeta =
       const VerificationMeta('budgetFksExclude');
   @override
@@ -1969,6 +2127,7 @@ class $TransactionsTable extends Transactions
   @override
   List<GeneratedColumn> get $columns => [
         transactionPk,
+        pairedTransactionFk,
         name,
         amount,
         note,
@@ -1996,12 +2155,14 @@ class $TransactionsTable extends Transactions
         sharedDateUpdated,
         sharedReferenceBudgetPk,
         objectiveFk,
+        objectiveLoanFk,
         budgetFksExclude
       ];
   @override
-  String get aliasedName => _alias ?? 'transactions';
+  String get aliasedName => _alias ?? actualTableName;
   @override
-  String get actualTableName => 'transactions';
+  String get actualTableName => $name;
+  static const String $name = 'transactions';
   @override
   VerificationContext validateIntegrity(Insertable<Transaction> instance,
       {bool isInserting = false}) {
@@ -2012,6 +2173,12 @@ class $TransactionsTable extends Transactions
           _transactionPkMeta,
           transactionPk.isAcceptableOrUnknown(
               data['transaction_pk']!, _transactionPkMeta));
+    }
+    if (data.containsKey('paired_transaction_fk')) {
+      context.handle(
+          _pairedTransactionFkMeta,
+          pairedTransactionFk.isAcceptableOrUnknown(
+              data['paired_transaction_fk']!, _pairedTransactionFkMeta));
     }
     if (data.containsKey('name')) {
       context.handle(
@@ -2149,6 +2316,12 @@ class $TransactionsTable extends Transactions
           objectiveFk.isAcceptableOrUnknown(
               data['objective_fk']!, _objectiveFkMeta));
     }
+    if (data.containsKey('objective_loan_fk')) {
+      context.handle(
+          _objectiveLoanFkMeta,
+          objectiveLoanFk.isAcceptableOrUnknown(
+              data['objective_loan_fk']!, _objectiveLoanFkMeta));
+    }
     context.handle(_budgetFksExcludeMeta, const VerificationResult.success());
     return context;
   }
@@ -2161,6 +2334,8 @@ class $TransactionsTable extends Transactions
     return Transaction(
       transactionPk: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}transaction_pk'])!,
+      pairedTransactionFk: attachedDatabase.typeMapping.read(
+          DriftSqlType.string, data['${effectivePrefix}paired_transaction_fk']),
       name: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
       amount: attachedDatabase.typeMapping
@@ -2224,6 +2399,8 @@ class $TransactionsTable extends Transactions
           data['${effectivePrefix}shared_reference_budget_pk']),
       objectiveFk: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}objective_fk']),
+      objectiveLoanFk: attachedDatabase.typeMapping.read(
+          DriftSqlType.string, data['${effectivePrefix}objective_loan_fk']),
       budgetFksExclude: $TransactionsTable.$converterbudgetFksExcluden.fromSql(
           attachedDatabase.typeMapping.read(DriftSqlType.string,
               data['${effectivePrefix}budget_fks_exclude'])),
@@ -2262,6 +2439,7 @@ class $TransactionsTable extends Transactions
 
 class Transaction extends DataClass implements Insertable<Transaction> {
   final String transactionPk;
+  final String? pairedTransactionFk;
   final String name;
   final double amount;
   final String note;
@@ -2289,9 +2467,11 @@ class Transaction extends DataClass implements Insertable<Transaction> {
   final DateTime? sharedDateUpdated;
   final String? sharedReferenceBudgetPk;
   final String? objectiveFk;
+  final String? objectiveLoanFk;
   final List<String>? budgetFksExclude;
   const Transaction(
       {required this.transactionPk,
+      this.pairedTransactionFk,
       required this.name,
       required this.amount,
       required this.note,
@@ -2319,11 +2499,15 @@ class Transaction extends DataClass implements Insertable<Transaction> {
       this.sharedDateUpdated,
       this.sharedReferenceBudgetPk,
       this.objectiveFk,
+      this.objectiveLoanFk,
       this.budgetFksExclude});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['transaction_pk'] = Variable<String>(transactionPk);
+    if (!nullToAbsent || pairedTransactionFk != null) {
+      map['paired_transaction_fk'] = Variable<String>(pairedTransactionFk);
+    }
     map['name'] = Variable<String>(name);
     map['amount'] = Variable<double>(amount);
     map['note'] = Variable<String>(note);
@@ -2395,6 +2579,9 @@ class Transaction extends DataClass implements Insertable<Transaction> {
     if (!nullToAbsent || objectiveFk != null) {
       map['objective_fk'] = Variable<String>(objectiveFk);
     }
+    if (!nullToAbsent || objectiveLoanFk != null) {
+      map['objective_loan_fk'] = Variable<String>(objectiveLoanFk);
+    }
     if (!nullToAbsent || budgetFksExclude != null) {
       final converter = $TransactionsTable.$converterbudgetFksExcluden;
       map['budget_fks_exclude'] =
@@ -2406,6 +2593,9 @@ class Transaction extends DataClass implements Insertable<Transaction> {
   TransactionsCompanion toCompanion(bool nullToAbsent) {
     return TransactionsCompanion(
       transactionPk: Value(transactionPk),
+      pairedTransactionFk: pairedTransactionFk == null && nullToAbsent
+          ? const Value.absent()
+          : Value(pairedTransactionFk),
       name: Value(name),
       amount: Value(amount),
       note: Value(note),
@@ -2470,6 +2660,9 @@ class Transaction extends DataClass implements Insertable<Transaction> {
       objectiveFk: objectiveFk == null && nullToAbsent
           ? const Value.absent()
           : Value(objectiveFk),
+      objectiveLoanFk: objectiveLoanFk == null && nullToAbsent
+          ? const Value.absent()
+          : Value(objectiveLoanFk),
       budgetFksExclude: budgetFksExclude == null && nullToAbsent
           ? const Value.absent()
           : Value(budgetFksExclude),
@@ -2481,6 +2674,8 @@ class Transaction extends DataClass implements Insertable<Transaction> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return Transaction(
       transactionPk: serializer.fromJson<String>(json['transactionPk']),
+      pairedTransactionFk:
+          serializer.fromJson<String?>(json['pairedTransactionFk']),
       name: serializer.fromJson<String>(json['name']),
       amount: serializer.fromJson<double>(json['amount']),
       note: serializer.fromJson<String>(json['note']),
@@ -2519,6 +2714,7 @@ class Transaction extends DataClass implements Insertable<Transaction> {
       sharedReferenceBudgetPk:
           serializer.fromJson<String?>(json['sharedReferenceBudgetPk']),
       objectiveFk: serializer.fromJson<String?>(json['objectiveFk']),
+      objectiveLoanFk: serializer.fromJson<String?>(json['objectiveLoanFk']),
       budgetFksExclude:
           serializer.fromJson<List<String>?>(json['budgetFksExclude']),
     );
@@ -2528,6 +2724,7 @@ class Transaction extends DataClass implements Insertable<Transaction> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'transactionPk': serializer.toJson<String>(transactionPk),
+      'pairedTransactionFk': serializer.toJson<String?>(pairedTransactionFk),
       'name': serializer.toJson<String>(name),
       'amount': serializer.toJson<double>(amount),
       'note': serializer.toJson<String>(note),
@@ -2564,12 +2761,14 @@ class Transaction extends DataClass implements Insertable<Transaction> {
       'sharedReferenceBudgetPk':
           serializer.toJson<String?>(sharedReferenceBudgetPk),
       'objectiveFk': serializer.toJson<String?>(objectiveFk),
+      'objectiveLoanFk': serializer.toJson<String?>(objectiveLoanFk),
       'budgetFksExclude': serializer.toJson<List<String>?>(budgetFksExclude),
     };
   }
 
   Transaction copyWith(
           {String? transactionPk,
+          Value<String?> pairedTransactionFk = const Value.absent(),
           String? name,
           double? amount,
           String? note,
@@ -2597,9 +2796,13 @@ class Transaction extends DataClass implements Insertable<Transaction> {
           Value<DateTime?> sharedDateUpdated = const Value.absent(),
           Value<String?> sharedReferenceBudgetPk = const Value.absent(),
           Value<String?> objectiveFk = const Value.absent(),
+          Value<String?> objectiveLoanFk = const Value.absent(),
           Value<List<String>?> budgetFksExclude = const Value.absent()}) =>
       Transaction(
         transactionPk: transactionPk ?? this.transactionPk,
+        pairedTransactionFk: pairedTransactionFk.present
+            ? pairedTransactionFk.value
+            : this.pairedTransactionFk,
         name: name ?? this.name,
         amount: amount ?? this.amount,
         note: note ?? this.note,
@@ -2648,6 +2851,9 @@ class Transaction extends DataClass implements Insertable<Transaction> {
             ? sharedReferenceBudgetPk.value
             : this.sharedReferenceBudgetPk,
         objectiveFk: objectiveFk.present ? objectiveFk.value : this.objectiveFk,
+        objectiveLoanFk: objectiveLoanFk.present
+            ? objectiveLoanFk.value
+            : this.objectiveLoanFk,
         budgetFksExclude: budgetFksExclude.present
             ? budgetFksExclude.value
             : this.budgetFksExclude,
@@ -2656,6 +2862,7 @@ class Transaction extends DataClass implements Insertable<Transaction> {
   String toString() {
     return (StringBuffer('Transaction(')
           ..write('transactionPk: $transactionPk, ')
+          ..write('pairedTransactionFk: $pairedTransactionFk, ')
           ..write('name: $name, ')
           ..write('amount: $amount, ')
           ..write('note: $note, ')
@@ -2686,6 +2893,7 @@ class Transaction extends DataClass implements Insertable<Transaction> {
           ..write('sharedDateUpdated: $sharedDateUpdated, ')
           ..write('sharedReferenceBudgetPk: $sharedReferenceBudgetPk, ')
           ..write('objectiveFk: $objectiveFk, ')
+          ..write('objectiveLoanFk: $objectiveLoanFk, ')
           ..write('budgetFksExclude: $budgetFksExclude')
           ..write(')'))
         .toString();
@@ -2694,6 +2902,7 @@ class Transaction extends DataClass implements Insertable<Transaction> {
   @override
   int get hashCode => Object.hashAll([
         transactionPk,
+        pairedTransactionFk,
         name,
         amount,
         note,
@@ -2721,6 +2930,7 @@ class Transaction extends DataClass implements Insertable<Transaction> {
         sharedDateUpdated,
         sharedReferenceBudgetPk,
         objectiveFk,
+        objectiveLoanFk,
         budgetFksExclude
       ]);
   @override
@@ -2728,6 +2938,7 @@ class Transaction extends DataClass implements Insertable<Transaction> {
       identical(this, other) ||
       (other is Transaction &&
           other.transactionPk == this.transactionPk &&
+          other.pairedTransactionFk == this.pairedTransactionFk &&
           other.name == this.name &&
           other.amount == this.amount &&
           other.note == this.note &&
@@ -2758,11 +2969,13 @@ class Transaction extends DataClass implements Insertable<Transaction> {
           other.sharedDateUpdated == this.sharedDateUpdated &&
           other.sharedReferenceBudgetPk == this.sharedReferenceBudgetPk &&
           other.objectiveFk == this.objectiveFk &&
+          other.objectiveLoanFk == this.objectiveLoanFk &&
           other.budgetFksExclude == this.budgetFksExclude);
 }
 
 class TransactionsCompanion extends UpdateCompanion<Transaction> {
   final Value<String> transactionPk;
+  final Value<String?> pairedTransactionFk;
   final Value<String> name;
   final Value<double> amount;
   final Value<String> note;
@@ -2790,10 +3003,12 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
   final Value<DateTime?> sharedDateUpdated;
   final Value<String?> sharedReferenceBudgetPk;
   final Value<String?> objectiveFk;
+  final Value<String?> objectiveLoanFk;
   final Value<List<String>?> budgetFksExclude;
   final Value<int> rowid;
   const TransactionsCompanion({
     this.transactionPk = const Value.absent(),
+    this.pairedTransactionFk = const Value.absent(),
     this.name = const Value.absent(),
     this.amount = const Value.absent(),
     this.note = const Value.absent(),
@@ -2821,11 +3036,13 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
     this.sharedDateUpdated = const Value.absent(),
     this.sharedReferenceBudgetPk = const Value.absent(),
     this.objectiveFk = const Value.absent(),
+    this.objectiveLoanFk = const Value.absent(),
     this.budgetFksExclude = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   TransactionsCompanion.insert({
     this.transactionPk = const Value.absent(),
+    this.pairedTransactionFk = const Value.absent(),
     required String name,
     required double amount,
     required String note,
@@ -2853,6 +3070,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
     this.sharedDateUpdated = const Value.absent(),
     this.sharedReferenceBudgetPk = const Value.absent(),
     this.objectiveFk = const Value.absent(),
+    this.objectiveLoanFk = const Value.absent(),
     this.budgetFksExclude = const Value.absent(),
     this.rowid = const Value.absent(),
   })  : name = Value(name),
@@ -2861,6 +3079,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
         categoryFk = Value(categoryFk);
   static Insertable<Transaction> custom({
     Expression<String>? transactionPk,
+    Expression<String>? pairedTransactionFk,
     Expression<String>? name,
     Expression<double>? amount,
     Expression<String>? note,
@@ -2888,11 +3107,14 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
     Expression<DateTime>? sharedDateUpdated,
     Expression<String>? sharedReferenceBudgetPk,
     Expression<String>? objectiveFk,
+    Expression<String>? objectiveLoanFk,
     Expression<String>? budgetFksExclude,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
       if (transactionPk != null) 'transaction_pk': transactionPk,
+      if (pairedTransactionFk != null)
+        'paired_transaction_fk': pairedTransactionFk,
       if (name != null) 'name': name,
       if (amount != null) 'amount': amount,
       if (note != null) 'note': note,
@@ -2925,6 +3147,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
       if (sharedReferenceBudgetPk != null)
         'shared_reference_budget_pk': sharedReferenceBudgetPk,
       if (objectiveFk != null) 'objective_fk': objectiveFk,
+      if (objectiveLoanFk != null) 'objective_loan_fk': objectiveLoanFk,
       if (budgetFksExclude != null) 'budget_fks_exclude': budgetFksExclude,
       if (rowid != null) 'rowid': rowid,
     });
@@ -2932,6 +3155,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
 
   TransactionsCompanion copyWith(
       {Value<String>? transactionPk,
+      Value<String?>? pairedTransactionFk,
       Value<String>? name,
       Value<double>? amount,
       Value<String>? note,
@@ -2959,10 +3183,12 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
       Value<DateTime?>? sharedDateUpdated,
       Value<String?>? sharedReferenceBudgetPk,
       Value<String?>? objectiveFk,
+      Value<String?>? objectiveLoanFk,
       Value<List<String>?>? budgetFksExclude,
       Value<int>? rowid}) {
     return TransactionsCompanion(
       transactionPk: transactionPk ?? this.transactionPk,
+      pairedTransactionFk: pairedTransactionFk ?? this.pairedTransactionFk,
       name: name ?? this.name,
       amount: amount ?? this.amount,
       note: note ?? this.note,
@@ -2995,6 +3221,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
       sharedReferenceBudgetPk:
           sharedReferenceBudgetPk ?? this.sharedReferenceBudgetPk,
       objectiveFk: objectiveFk ?? this.objectiveFk,
+      objectiveLoanFk: objectiveLoanFk ?? this.objectiveLoanFk,
       budgetFksExclude: budgetFksExclude ?? this.budgetFksExclude,
       rowid: rowid ?? this.rowid,
     );
@@ -3005,6 +3232,10 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
     final map = <String, Expression>{};
     if (transactionPk.present) {
       map['transaction_pk'] = Variable<String>(transactionPk.value);
+    }
+    if (pairedTransactionFk.present) {
+      map['paired_transaction_fk'] =
+          Variable<String>(pairedTransactionFk.value);
     }
     if (name.present) {
       map['name'] = Variable<String>(name.value);
@@ -3041,6 +3272,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
     }
     if (reoccurrence.present) {
       final converter = $TransactionsTable.$converterreoccurrencen;
+
       map['reoccurrence'] = Variable<int>(converter.toSql(reoccurrence.value));
     }
     if (endDate.present) {
@@ -3052,6 +3284,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
     }
     if (type.present) {
       final converter = $TransactionsTable.$convertertypen;
+
       map['type'] = Variable<int>(converter.toSql(type.value));
     }
     if (paid.present) {
@@ -3066,6 +3299,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
     }
     if (methodAdded.present) {
       final converter = $TransactionsTable.$convertermethodAddedn;
+
       map['method_added'] = Variable<int>(converter.toSql(methodAdded.value));
     }
     if (transactionOwnerEmail.present) {
@@ -3084,6 +3318,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
     }
     if (sharedStatus.present) {
       final converter = $TransactionsTable.$convertersharedStatusn;
+
       map['shared_status'] = Variable<int>(converter.toSql(sharedStatus.value));
     }
     if (sharedDateUpdated.present) {
@@ -3096,8 +3331,12 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
     if (objectiveFk.present) {
       map['objective_fk'] = Variable<String>(objectiveFk.value);
     }
+    if (objectiveLoanFk.present) {
+      map['objective_loan_fk'] = Variable<String>(objectiveLoanFk.value);
+    }
     if (budgetFksExclude.present) {
       final converter = $TransactionsTable.$converterbudgetFksExcluden;
+
       map['budget_fks_exclude'] =
           Variable<String>(converter.toSql(budgetFksExclude.value));
     }
@@ -3111,6 +3350,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
   String toString() {
     return (StringBuffer('TransactionsCompanion(')
           ..write('transactionPk: $transactionPk, ')
+          ..write('pairedTransactionFk: $pairedTransactionFk, ')
           ..write('name: $name, ')
           ..write('amount: $amount, ')
           ..write('note: $note, ')
@@ -3141,6 +3381,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
           ..write('sharedDateUpdated: $sharedDateUpdated, ')
           ..write('sharedReferenceBudgetPk: $sharedReferenceBudgetPk, ')
           ..write('objectiveFk: $objectiveFk, ')
+          ..write('objectiveLoanFk: $objectiveLoanFk, ')
           ..write('budgetFksExclude: $budgetFksExclude, ')
           ..write('rowid: $rowid')
           ..write(')'))
@@ -3223,6 +3464,16 @@ class $BudgetsTable extends Budgets with TableInfo<$BudgetsTable, Budget> {
       requiredDuringInsert: false,
       defaultConstraints:
           GeneratedColumn.constraintIsAlways('CHECK ("income" IN (0, 1))'),
+      defaultValue: const Constant(false));
+  static const VerificationMeta _archivedMeta =
+      const VerificationMeta('archived');
+  @override
+  late final GeneratedColumn<bool> archived = GeneratedColumn<bool>(
+      'archived', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("archived" IN (0, 1))'),
       defaultValue: const Constant(false));
   static const VerificationMeta _addedTransactionsOnlyMeta =
       const VerificationMeta('addedTransactionsOnly');
@@ -3370,6 +3621,7 @@ class $BudgetsTable extends Budgets with TableInfo<$BudgetsTable, Budget> {
         categoryFks,
         categoryFksExclude,
         income,
+        archived,
         addedTransactionsOnly,
         periodLength,
         reoccurrence,
@@ -3388,9 +3640,10 @@ class $BudgetsTable extends Budgets with TableInfo<$BudgetsTable, Budget> {
         isAbsoluteSpendingLimit
       ];
   @override
-  String get aliasedName => _alias ?? 'budgets';
+  String get aliasedName => _alias ?? actualTableName;
   @override
-  String get actualTableName => 'budgets';
+  String get actualTableName => $name;
+  static const String $name = 'budgets';
   @override
   VerificationContext validateIntegrity(Insertable<Budget> instance,
       {bool isInserting = false}) {
@@ -3434,6 +3687,10 @@ class $BudgetsTable extends Budgets with TableInfo<$BudgetsTable, Budget> {
     if (data.containsKey('income')) {
       context.handle(_incomeMeta,
           income.isAcceptableOrUnknown(data['income']!, _incomeMeta));
+    }
+    if (data.containsKey('archived')) {
+      context.handle(_archivedMeta,
+          archived.isAcceptableOrUnknown(data['archived']!, _archivedMeta));
     }
     if (data.containsKey('added_transactions_only')) {
       context.handle(
@@ -3533,6 +3790,8 @@ class $BudgetsTable extends Budgets with TableInfo<$BudgetsTable, Budget> {
               data['${effectivePrefix}category_fks_exclude'])),
       income: attachedDatabase.typeMapping
           .read(DriftSqlType.bool, data['${effectivePrefix}income'])!,
+      archived: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}archived'])!,
       addedTransactionsOnly: attachedDatabase.typeMapping.read(
           DriftSqlType.bool,
           data['${effectivePrefix}added_transactions_only'])!,
@@ -3639,6 +3898,7 @@ class Budget extends DataClass implements Insertable<Budget> {
   final List<String>? categoryFks;
   final List<String>? categoryFksExclude;
   final bool income;
+  final bool archived;
   final bool addedTransactionsOnly;
   final int periodLength;
   final BudgetReoccurence? reoccurrence;
@@ -3666,6 +3926,7 @@ class Budget extends DataClass implements Insertable<Budget> {
       this.categoryFks,
       this.categoryFksExclude,
       required this.income,
+      required this.archived,
       required this.addedTransactionsOnly,
       required this.periodLength,
       this.reoccurrence,
@@ -3707,6 +3968,7 @@ class Budget extends DataClass implements Insertable<Budget> {
           Variable<String>(converter.toSql(categoryFksExclude));
     }
     map['income'] = Variable<bool>(income);
+    map['archived'] = Variable<bool>(archived);
     map['added_transactions_only'] = Variable<bool>(addedTransactionsOnly);
     map['period_length'] = Variable<int>(periodLength);
     if (!nullToAbsent || reoccurrence != null) {
@@ -3773,6 +4035,7 @@ class Budget extends DataClass implements Insertable<Budget> {
           ? const Value.absent()
           : Value(categoryFksExclude),
       income: Value(income),
+      archived: Value(archived),
       addedTransactionsOnly: Value(addedTransactionsOnly),
       periodLength: Value(periodLength),
       reoccurrence: reoccurrence == null && nullToAbsent
@@ -3825,6 +4088,7 @@ class Budget extends DataClass implements Insertable<Budget> {
       categoryFksExclude:
           serializer.fromJson<List<String>?>(json['categoryFksExclude']),
       income: serializer.fromJson<bool>(json['income']),
+      archived: serializer.fromJson<bool>(json['archived']),
       addedTransactionsOnly:
           serializer.fromJson<bool>(json['addedTransactionsOnly']),
       periodLength: serializer.fromJson<int>(json['periodLength']),
@@ -3868,6 +4132,7 @@ class Budget extends DataClass implements Insertable<Budget> {
       'categoryFksExclude':
           serializer.toJson<List<String>?>(categoryFksExclude),
       'income': serializer.toJson<bool>(income),
+      'archived': serializer.toJson<bool>(archived),
       'addedTransactionsOnly': serializer.toJson<bool>(addedTransactionsOnly),
       'periodLength': serializer.toJson<int>(periodLength),
       'reoccurrence': serializer.toJson<int?>(
@@ -3904,6 +4169,7 @@ class Budget extends DataClass implements Insertable<Budget> {
           Value<List<String>?> categoryFks = const Value.absent(),
           Value<List<String>?> categoryFksExclude = const Value.absent(),
           bool? income,
+          bool? archived,
           bool? addedTransactionsOnly,
           int? periodLength,
           Value<BudgetReoccurence?> reoccurrence = const Value.absent(),
@@ -3934,6 +4200,7 @@ class Budget extends DataClass implements Insertable<Budget> {
             ? categoryFksExclude.value
             : this.categoryFksExclude,
         income: income ?? this.income,
+        archived: archived ?? this.archived,
         addedTransactionsOnly:
             addedTransactionsOnly ?? this.addedTransactionsOnly,
         periodLength: periodLength ?? this.periodLength,
@@ -3980,6 +4247,7 @@ class Budget extends DataClass implements Insertable<Budget> {
           ..write('categoryFks: $categoryFks, ')
           ..write('categoryFksExclude: $categoryFksExclude, ')
           ..write('income: $income, ')
+          ..write('archived: $archived, ')
           ..write('addedTransactionsOnly: $addedTransactionsOnly, ')
           ..write('periodLength: $periodLength, ')
           ..write('reoccurrence: $reoccurrence, ')
@@ -4012,6 +4280,7 @@ class Budget extends DataClass implements Insertable<Budget> {
         categoryFks,
         categoryFksExclude,
         income,
+        archived,
         addedTransactionsOnly,
         periodLength,
         reoccurrence,
@@ -4043,6 +4312,7 @@ class Budget extends DataClass implements Insertable<Budget> {
           other.categoryFks == this.categoryFks &&
           other.categoryFksExclude == this.categoryFksExclude &&
           other.income == this.income &&
+          other.archived == this.archived &&
           other.addedTransactionsOnly == this.addedTransactionsOnly &&
           other.periodLength == this.periodLength &&
           other.reoccurrence == this.reoccurrence &&
@@ -4072,6 +4342,7 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
   final Value<List<String>?> categoryFks;
   final Value<List<String>?> categoryFksExclude;
   final Value<bool> income;
+  final Value<bool> archived;
   final Value<bool> addedTransactionsOnly;
   final Value<int> periodLength;
   final Value<BudgetReoccurence?> reoccurrence;
@@ -4100,6 +4371,7 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
     this.categoryFks = const Value.absent(),
     this.categoryFksExclude = const Value.absent(),
     this.income = const Value.absent(),
+    this.archived = const Value.absent(),
     this.addedTransactionsOnly = const Value.absent(),
     this.periodLength = const Value.absent(),
     this.reoccurrence = const Value.absent(),
@@ -4129,6 +4401,7 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
     this.categoryFks = const Value.absent(),
     this.categoryFksExclude = const Value.absent(),
     this.income = const Value.absent(),
+    this.archived = const Value.absent(),
     this.addedTransactionsOnly = const Value.absent(),
     required int periodLength,
     this.reoccurrence = const Value.absent(),
@@ -4163,6 +4436,7 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
     Expression<String>? categoryFks,
     Expression<String>? categoryFksExclude,
     Expression<bool>? income,
+    Expression<bool>? archived,
     Expression<bool>? addedTransactionsOnly,
     Expression<int>? periodLength,
     Expression<int>? reoccurrence,
@@ -4193,6 +4467,7 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
       if (categoryFksExclude != null)
         'category_fks_exclude': categoryFksExclude,
       if (income != null) 'income': income,
+      if (archived != null) 'archived': archived,
       if (addedTransactionsOnly != null)
         'added_transactions_only': addedTransactionsOnly,
       if (periodLength != null) 'period_length': periodLength,
@@ -4229,6 +4504,7 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
       Value<List<String>?>? categoryFks,
       Value<List<String>?>? categoryFksExclude,
       Value<bool>? income,
+      Value<bool>? archived,
       Value<bool>? addedTransactionsOnly,
       Value<int>? periodLength,
       Value<BudgetReoccurence?>? reoccurrence,
@@ -4257,6 +4533,7 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
       categoryFks: categoryFks ?? this.categoryFks,
       categoryFksExclude: categoryFksExclude ?? this.categoryFksExclude,
       income: income ?? this.income,
+      archived: archived ?? this.archived,
       addedTransactionsOnly:
           addedTransactionsOnly ?? this.addedTransactionsOnly,
       periodLength: periodLength ?? this.periodLength,
@@ -4304,20 +4581,26 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
     }
     if (walletFks.present) {
       final converter = $BudgetsTable.$converterwalletFksn;
+
       map['wallet_fks'] = Variable<String>(converter.toSql(walletFks.value));
     }
     if (categoryFks.present) {
       final converter = $BudgetsTable.$convertercategoryFksn;
+
       map['category_fks'] =
           Variable<String>(converter.toSql(categoryFks.value));
     }
     if (categoryFksExclude.present) {
       final converter = $BudgetsTable.$convertercategoryFksExcluden;
+
       map['category_fks_exclude'] =
           Variable<String>(converter.toSql(categoryFksExclude.value));
     }
     if (income.present) {
       map['income'] = Variable<bool>(income.value);
+    }
+    if (archived.present) {
+      map['archived'] = Variable<bool>(archived.value);
     }
     if (addedTransactionsOnly.present) {
       map['added_transactions_only'] =
@@ -4328,6 +4611,7 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
     }
     if (reoccurrence.present) {
       final converter = $BudgetsTable.$converterreoccurrencen;
+
       map['reoccurrence'] = Variable<int>(converter.toSql(reoccurrence.value));
     }
     if (dateCreated.present) {
@@ -4347,11 +4631,13 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
     }
     if (budgetTransactionFilters.present) {
       final converter = $BudgetsTable.$converterbudgetTransactionFiltersn;
+
       map['budget_transaction_filters'] =
           Variable<String>(converter.toSql(budgetTransactionFilters.value));
     }
     if (memberTransactionFilters.present) {
       final converter = $BudgetsTable.$convertermemberTransactionFiltersn;
+
       map['member_transaction_filters'] =
           Variable<String>(converter.toSql(memberTransactionFilters.value));
     }
@@ -4360,6 +4646,7 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
     }
     if (sharedOwnerMember.present) {
       final converter = $BudgetsTable.$convertersharedOwnerMembern;
+
       map['shared_owner_member'] =
           Variable<int>(converter.toSql(sharedOwnerMember.value));
     }
@@ -4368,11 +4655,13 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
     }
     if (sharedMembers.present) {
       final converter = $BudgetsTable.$convertersharedMembersn;
+
       map['shared_members'] =
           Variable<String>(converter.toSql(sharedMembers.value));
     }
     if (sharedAllMembersEver.present) {
       final converter = $BudgetsTable.$convertersharedAllMembersEvern;
+
       map['shared_all_members_ever'] =
           Variable<String>(converter.toSql(sharedAllMembersEver.value));
     }
@@ -4399,6 +4688,7 @@ class BudgetsCompanion extends UpdateCompanion<Budget> {
           ..write('categoryFks: $categoryFks, ')
           ..write('categoryFksExclude: $categoryFksExclude, ')
           ..write('income: $income, ')
+          ..write('archived: $archived, ')
           ..write('addedTransactionsOnly: $addedTransactionsOnly, ')
           ..write('periodLength: $periodLength, ')
           ..write('reoccurrence: $reoccurrence, ')
@@ -4486,9 +4776,10 @@ class $CategoryBudgetLimitsTable extends CategoryBudgetLimits
         walletFk
       ];
   @override
-  String get aliasedName => _alias ?? 'category_budget_limits';
+  String get aliasedName => _alias ?? actualTableName;
   @override
-  String get actualTableName => 'category_budget_limits';
+  String get actualTableName => $name;
+  static const String $name = 'category_budget_limits';
   @override
   VerificationContext validateIntegrity(
       Insertable<CategoryBudgetLimit> instance,
@@ -4856,9 +5147,10 @@ class $AssociatedTitlesTable extends AssociatedTitles
         isExactMatch
       ];
   @override
-  String get aliasedName => _alias ?? 'associated_titles';
+  String get aliasedName => _alias ?? actualTableName;
   @override
-  String get actualTableName => 'associated_titles';
+  String get actualTableName => $name;
+  static const String $name = 'associated_titles';
   @override
   VerificationContext validateIntegrity(
       Insertable<TransactionAssociatedTitle> instance,
@@ -5219,9 +5511,10 @@ class $AppSettingsTable extends AppSettings
   @override
   List<GeneratedColumn> get $columns => [settingsPk, settingsJSON, dateUpdated];
   @override
-  String get aliasedName => _alias ?? 'app_settings';
+  String get aliasedName => _alias ?? actualTableName;
   @override
-  String get actualTableName => 'app_settings';
+  String get actualTableName => $name;
+  static const String $name = 'app_settings';
   @override
   VerificationContext validateIntegrity(Insertable<AppSetting> instance,
       {bool isInserting = false}) {
@@ -5528,9 +5821,10 @@ class $ScannerTemplatesTable extends ScannerTemplates
         ignore
       ];
   @override
-  String get aliasedName => _alias ?? 'scanner_templates';
+  String get aliasedName => _alias ?? actualTableName;
   @override
-  String get actualTableName => 'scanner_templates';
+  String get actualTableName => $name;
+  static const String $name = 'scanner_templates';
   @override
   VerificationContext validateIntegrity(Insertable<ScannerTemplate> instance,
       {bool isInserting = false}) {
@@ -6087,9 +6381,10 @@ class $DeleteLogsTable extends DeleteLogs
   List<GeneratedColumn> get $columns =>
       [deleteLogPk, entryPk, type, dateTimeModified];
   @override
-  String get aliasedName => _alias ?? 'delete_logs';
+  String get aliasedName => _alias ?? actualTableName;
   @override
-  String get actualTableName => 'delete_logs';
+  String get actualTableName => $name;
+  static const String $name = 'delete_logs';
   @override
   VerificationContext validateIntegrity(Insertable<DeleteLog> instance,
       {bool isInserting = false}) {
@@ -6295,6 +6590,7 @@ class DeleteLogsCompanion extends UpdateCompanion<DeleteLog> {
     }
     if (type.present) {
       final converter = $DeleteLogsTable.$convertertype;
+
       map['type'] = Variable<int>(converter.toSql(type.value));
     }
     if (dateTimeModified.present) {

@@ -34,16 +34,26 @@ class HomeUpcomingTransactions extends StatelessWidget {
             return SizedBox.shrink();
           }
           List<Widget> children = [];
+          Transaction? transactionBefore;
           for (Transaction transaction in snapshot.data!) {
             children.add(
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  UpcomingTransactionDateHeader(
-                    transaction: transaction,
-                    small: true,
-                    useHorizontalPaddingConstrained: false,
-                  ),
+                  if (transactionBefore == null ||
+                      DateTime(
+                              transactionBefore.dateCreated.year,
+                              transactionBefore.dateCreated.month,
+                              transactionBefore.dateCreated.day) !=
+                          DateTime(
+                            transaction.dateCreated.year,
+                            transaction.dateCreated.month,
+                            transaction.dateCreated.day,
+                          ))
+                    UpcomingTransactionDateHeader(
+                      transaction: transaction,
+                      useHorizontalPaddingConstrained: false,
+                    ),
                   TransactionEntry(
                     useHorizontalPaddingConstrained: false,
                     openPage: AddTransactionPage(
@@ -56,6 +66,7 @@ class HomeUpcomingTransactions extends StatelessWidget {
                 ],
               ),
             );
+            transactionBefore = transaction;
           }
           return Column(children: children);
         } else {

@@ -38,11 +38,15 @@ import 'tappableTextEntry.dart';
 
 class SelectedTransactionsAppBar extends StatelessWidget {
   const SelectedTransactionsAppBar(
-      {Key? key, required this.pageID, this.colorScheme})
+      {Key? key,
+      required this.pageID,
+      this.enableSettleAllButton = false,
+      this.colorScheme})
       : super(key: key);
 
   final String pageID;
   final ColorScheme? colorScheme;
+  final bool enableSettleAllButton;
 
   @override
   Widget build(BuildContext context) {
@@ -200,6 +204,37 @@ class SelectedTransactionsAppBar extends StatelessWidget {
                               }
                             },
                           ),
+                          if (enableSettleAllButton)
+                            DropdownItemMenu(
+                              id: "settle-all",
+                              label: "settle-and-collect-all".tr(),
+                              icon: appStateSettings["outlinedIcons"]
+                                  ? Icons.check_circle_outline
+                                  : Icons.check_circle_rounded,
+                              action: () async {
+                                for (int i = 0;
+                                    i < value[pageID]!.length;
+                                    i++) {
+                                  await settleTransactions(
+                                    value[pageID]![i],
+                                  );
+                                }
+                                openSnackbar(
+                                  SnackbarMessage(
+                                    icon: appStateSettings["outlinedIcons"]
+                                        ? Icons.check_circle_outline
+                                        : Icons.check_circle_rounded,
+                                    title: "settled-and-collected".tr(),
+                                    description:
+                                        value[pageID]!.length.toString() +
+                                            " " +
+                                            "transactions".tr().toLowerCase(),
+                                  ),
+                                );
+                                globalSelectedID.value[pageID] = [];
+                                globalSelectedID.notifyListeners();
+                              },
+                            ),
                           if (value[pageID] != null &&
                               value[pageID]!.length <= 10)
                             DropdownItemMenu(
@@ -475,7 +510,10 @@ class SelectedTransactionsAppBar extends StatelessWidget {
                                   .getTransactionsFromPk(value[pageID]!);
                               int numberMoved =
                                   await database.moveTransactionsToObjective(
-                                      transactions, objectivePkToMoveTo);
+                                transactions,
+                                objectivePkToMoveTo,
+                                ObjectiveType.goal,
+                              );
 
                               openSnackbar(
                                 SnackbarMessage(
@@ -534,6 +572,18 @@ class SelectedTransactionsAppBar extends StatelessWidget {
   }
 }
 
+Future settleTransactions(String transactionPk) async {
+  Transaction transaction = await database.getTransactionFromPk(transactionPk);
+  if (transaction.type == TransactionSpecialType.credit ||
+      transaction.type == TransactionSpecialType.debt) {
+    Transaction transactionNew = transaction.copyWith(
+      //we don't want it to count towards the total - net is zero now
+      paid: false,
+    );
+    await database.createOrUpdateTransaction(transactionNew);
+  }
+}
+
 Future duplicateTransaction(
   BuildContext context,
   String transactionPk, {
@@ -548,6 +598,11 @@ Future duplicateTransaction(
   if (customAmount != null) {
     transaction = transaction.copyWith(amount: customAmount);
   }
+  // Add one second so when transactions sorted, they don't change positions when updated
+  // Since the transaction list is sorted by date created
+  transaction = transaction.copyWith(
+    dateCreated: transaction.dateCreated.add(Duration(seconds: 1)),
+  );
   await database.createOrUpdateTransaction(
     transaction,
     insert: true,

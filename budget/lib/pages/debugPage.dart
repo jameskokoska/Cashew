@@ -298,6 +298,13 @@ class DebugPage extends StatelessWidget {
         ),
         SizedBox(height: 20),
         Button(
+          label: "Fix transaction polarity",
+          onTap: () async {
+            await database.fixTransactionPolarity();
+          },
+        ),
+        SizedBox(height: 20),
+        Button(
             label: "View Delete Logs",
             onTap: () async {
               pushRoute(

@@ -4,6 +4,7 @@ import 'package:budget/pages/aboutPage.dart';
 import 'package:budget/pages/addObjectivePage.dart';
 import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/billSplitter.dart';
+import 'package:budget/pages/budgetsListPage.dart';
 import 'package:budget/pages/creditDebtTransactionsPage.dart';
 import 'package:budget/pages/editHomePage.dart';
 import 'package:budget/pages/editObjectivesPage.dart';
@@ -140,41 +141,40 @@ class MorePages extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 4),
       child: Column(
         children: [
-          hasSideNavigation
-              ? SizedBox.shrink()
-              : Row(
-                  children: [
-                    Expanded(
-                      flex: 1,
-                      child: SettingsContainerOpenPage(
-                        openPage: SettingsPageFramework(
-                          key: settingsPageFrameworkStateKey,
-                        ),
-                        title: navBarIconsData["settings"]!.labelLong.tr(),
-                        icon: navBarIconsData["settings"]!.iconData,
-                        description:
-                            "settings-and-customization-description".tr(),
-                        isOutlined: true,
-                        // description: "Theme, Language, CSV Import",
-                        isWideOutlined: true,
-                      ),
+          if (hasSideNavigation == false)
+            Row(
+              children: [
+                Expanded(
+                  flex: 1,
+                  child: SettingsContainerOpenPage(
+                    openPage: SettingsPageFramework(
+                      key: settingsPageFrameworkStateKey,
                     ),
-                  ],
+                    title: navBarIconsData["settings"]!.labelLong.tr(),
+                    icon: navBarIconsData["settings"]!.iconData,
+                    description: "settings-and-customization-description".tr(),
+                    isOutlined: true,
+                    // description: "Theme, Language, CSV Import",
+                    isWideOutlined: true,
+                  ),
                 ),
-          Row(
-            children: [
-              Expanded(
-                child: SettingsContainerOpenPage(
-                  openPage: WalletDetailsPage(wallet: null),
-                  title: navBarIconsData["allSpending"]!.labelLong.tr(),
-                  icon: navBarIconsData["allSpending"]!.iconData,
-                  description: "all-spending-description".tr(),
-                  isOutlined: true,
-                  isWideOutlined: true,
+              ],
+            ),
+          if (hasSideNavigation == false)
+            Row(
+              children: [
+                Expanded(
+                  child: SettingsContainerOpenPage(
+                    openPage: WalletDetailsPage(wallet: null),
+                    title: navBarIconsData["allSpending"]!.labelLong.tr(),
+                    icon: navBarIconsData["allSpending"]!.iconData,
+                    description: "all-spending-description".tr(),
+                    isOutlined: true,
+                    isWideOutlined: true,
+                  ),
                 ),
-              ),
-            ],
-          ),
+              ],
+            ),
           Row(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -208,123 +208,124 @@ class MorePages extends StatelessWidget {
               ),
             ],
           ),
-          hasSideNavigation
-              ? SizedBox.shrink()
-              : Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    notificationsGlobalEnabled
-                        ? Expanded(
-                            child: SettingsContainerOpenPage(
-                              openPage: NotificationsPage(),
-                              title:
-                                  navBarIconsData["notifications"]!.label.tr(),
-                              icon: navBarIconsData["notifications"]!.iconData,
-                              isOutlined: true,
-                            ),
-                          )
-                        : SizedBox.shrink(),
-                    Expanded(child: GoogleAccountLoginButton()),
-                  ],
-                ),
-          hasSideNavigation
-              ? SizedBox.shrink()
-              : Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Expanded(
-                      child: SettingsContainerOpenPage(
-                        openPage: SubscriptionsPage(),
-                        title: navBarIconsData["subscriptions"]!.label.tr(),
-                        icon: navBarIconsData["subscriptions"]!.iconData,
-                        isOutlined: true,
-                      ),
-                    ),
-                    Expanded(
-                      child: SettingsContainerOpenPage(
-                        openPage: UpcomingOverdueTransactions(
-                            overdueTransactions: null),
-                        title: navBarIconsData["scheduled"]!.label.tr(),
-                        icon: navBarIconsData["scheduled"]!.iconData,
-                        isOutlined: true,
-                      ),
-                    ),
-                  ],
-                ),
-          hasSideNavigation
-              ? SizedBox.shrink()
-              : Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Expanded(
-                      child: SettingsContainerOpenPage(
-                        openPage: ObjectivesListPage(
-                          backButton: true,
+          if (hasSideNavigation == false)
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                notificationsGlobalEnabled
+                    ? Expanded(
+                        child: SettingsContainerOpenPage(
+                          openPage: NotificationsPage(),
+                          title: navBarIconsData["notifications"]!.label.tr(),
+                          icon: navBarIconsData["notifications"]!.iconData,
+                          isOutlined: true,
                         ),
-                        title: navBarIconsData["goals"]!.label.tr(),
-                        icon: navBarIconsData["goals"]!.iconData,
-                        isOutlined: true,
-                      ),
-                    ),
-                    Expanded(
-                      child: SettingsContainerOpenPage(
-                        openPage: CreditDebtTransactions(isCredit: null),
-                        title: navBarIconsData["loans"]!.label.tr(),
-                        icon: navBarIconsData["loans"]!.iconData,
-                        isOutlined: true,
-                      ),
-                    ),
-                  ],
+                      )
+                    : SizedBox.shrink(),
+                Expanded(child: GoogleAccountLoginButton()),
+              ],
+            ),
+          if (hasSideNavigation == false)
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Expanded(
+                  child: SettingsContainerOpenPage(
+                    openPage: SubscriptionsPage(),
+                    title: navBarIconsData["subscriptions"]!.label.tr(),
+                    icon: navBarIconsData["subscriptions"]!.iconData,
+                    isOutlined: true,
+                  ),
                 ),
-          hasSideNavigation
-              ? SizedBox.shrink()
-              : Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Expanded(
-                      flex: 1,
-                      child: SettingsContainerOpenPage(
-                        isOutlinedColumn: true,
-                        openPage: EditWalletsPage(),
-                        title: navBarIconsData["accountDetails"]!.label.tr(),
-                        icon: navBarIconsData["accountDetails"]!.iconData,
-                        isOutlined: true,
-                      ),
-                    ),
-                    Expanded(
-                      flex: 1,
-                      child: SettingsContainerOpenPage(
-                        isOutlinedColumn: true,
-                        openPage: EditBudgetPage(),
-                        title: navBarIconsData["budgetDetails"]!.label.tr(),
-                        icon: navBarIconsData["budgetDetails"]!.iconData,
-                        iconScale: navBarIconsData["budgetDetails"]!.iconScale,
-                        isOutlined: true,
-                      ),
-                    ),
-                    Expanded(
-                      flex: 1,
-                      child: SettingsContainerOpenPage(
-                        isOutlinedColumn: true,
-                        openPage: EditCategoriesPage(),
-                        title: navBarIconsData["categoriesDetails"]!.label.tr(),
-                        icon: navBarIconsData["categoriesDetails"]!.iconData,
-                        isOutlined: true,
-                      ),
-                    ),
-                    Expanded(
-                      flex: 1,
-                      child: SettingsContainerOpenPage(
-                        isOutlinedColumn: true,
-                        openPage: EditAssociatedTitlesPage(),
-                        title: navBarIconsData["titlesDetails"]!.label.tr(),
-                        icon: navBarIconsData["titlesDetails"]!.iconData,
-                        isOutlined: true,
-                      ),
-                    )
-                  ],
+                Expanded(
+                  child: SettingsContainerOpenPage(
+                    openPage:
+                        UpcomingOverdueTransactions(overdueTransactions: null),
+                    title: navBarIconsData["scheduled"]!.label.tr(),
+                    icon: navBarIconsData["scheduled"]!.iconData,
+                    isOutlined: true,
+                  ),
                 ),
-          hasSideNavigation ? SettingsPageContent() : SizedBox.shrink(),
+              ],
+            ),
+          if (hasSideNavigation == false)
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Expanded(
+                  child: SettingsContainerOpenPage(
+                    openPage: ObjectivesListPage(
+                      backButton: true,
+                    ),
+                    title: navBarIconsData["goals"]!.label.tr(),
+                    icon: navBarIconsData["goals"]!.iconData,
+                    isOutlined: true,
+                  ),
+                ),
+                Expanded(
+                  child: SettingsContainerOpenPage(
+                    openPage: CreditDebtTransactions(isCredit: null),
+                    title: navBarIconsData["loans"]!.label.tr(),
+                    icon: navBarIconsData["loans"]!.iconData,
+                    isOutlined: true,
+                  ),
+                ),
+              ],
+            ),
+          if (hasSideNavigation == false)
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Expanded(
+                  flex: 1,
+                  child: SettingsContainerOpenPage(
+                    isOutlinedColumn: true,
+                    openPage: EditWalletsPage(),
+                    title: navBarIconsData["accountDetails"]!.label.tr(),
+                    icon: navBarIconsData["accountDetails"]!.iconData,
+                    isOutlined: true,
+                  ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: SettingsContainerOpenPage(
+                    isOutlinedColumn: true,
+                    // If budget page not pinned to home, open budget list page
+                    openPage: appStateSettings["customNavBarShortcut1"] !=
+                                "budgets" &&
+                            appStateSettings["customNavBarShortcut2"] !=
+                                "budgets"
+                        ? BudgetsListPage(enableBackButton: true)
+                        : EditBudgetPage(),
+                    title: navBarIconsData["budgetDetails"]!.label.tr(),
+                    icon: navBarIconsData["budgetDetails"]!.iconData,
+                    iconScale: navBarIconsData["budgetDetails"]!.iconScale,
+                    isOutlined: true,
+                  ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: SettingsContainerOpenPage(
+                    isOutlinedColumn: true,
+                    openPage: EditCategoriesPage(),
+                    title: navBarIconsData["categoriesDetails"]!.label.tr(),
+                    icon: navBarIconsData["categoriesDetails"]!.iconData,
+                    isOutlined: true,
+                  ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: SettingsContainerOpenPage(
+                    isOutlinedColumn: true,
+                    openPage: EditAssociatedTitlesPage(),
+                    title: navBarIconsData["titlesDetails"]!.label.tr(),
+                    icon: navBarIconsData["titlesDetails"]!.iconData,
+                    isOutlined: true,
+                  ),
+                )
+              ],
+            ),
+          if (hasSideNavigation) SettingsPageContent(),
         ],
       ),
     );

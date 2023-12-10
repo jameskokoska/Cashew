@@ -475,6 +475,7 @@ class _CyclePeriodSelectionState extends State<CyclePeriodSelection> {
               walletFk: "",
               isAbsoluteSpendingLimit: false,
               income: false,
+              archived: false,
             ),
             DateTime.now(),
           );
@@ -527,6 +528,7 @@ Budget getCustomCycleTempBudget(String cycleSettingsExtension) {
     walletFk: "",
     isAbsoluteSpendingLimit: false,
     income: false,
+    archived: false,
   );
 }
 

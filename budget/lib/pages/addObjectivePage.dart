@@ -4,6 +4,7 @@ import 'package:budget/main.dart';
 import 'package:budget/pages/accountsPage.dart';
 import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/addTransactionPage.dart';
+import 'package:budget/pages/addWalletPage.dart';
 import 'package:budget/pages/editObjectivesPage.dart';
 import 'package:budget/pages/editWalletsPage.dart';
 import 'package:budget/pages/premiumPage.dart';
@@ -14,6 +15,7 @@ import 'package:budget/widgets/animatedExpanded.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/categoryIcon.dart';
 import 'package:budget/widgets/dropdownSelect.dart';
+import 'package:budget/widgets/extraInfoBoxes.dart';
 import 'package:budget/widgets/globalSnackBar.dart';
 import 'package:budget/widgets/iconButtonScaled.dart';
 import 'package:budget/widgets/incomeExpenseTabSelector.dart';
@@ -56,11 +58,13 @@ class AddObjectivePage extends StatefulWidget {
     Key? key,
     this.objective,
     required this.routesToPopAfterDelete,
+    this.objectiveType = ObjectiveType.goal,
   }) : super(key: key);
 
   //When a wallet is passed in, we are editing that wallet
   final Objective? objective;
   final RoutesToPopAfterDelete routesToPopAfterDelete;
+  final ObjectiveType objectiveType;
 
   @override
   _AddObjectivePageState createState() => _AddObjectivePageState();
@@ -77,13 +81,17 @@ class _AddObjectivePageState extends State<AddObjectivePage>
   double selectedAmount = 0;
   DateTime selectedStartDate = DateTime.now();
   DateTime? selectedEndDate = null;
-  bool selectedIncome = true;
+  late bool selectedIncome =
+      widget.objectiveType == ObjectiveType.goal ? true : false;
   bool selectedPin = true;
   String selectedWalletPk = appStateSettings["selectedWalletPk"];
 
   FocusNode _titleFocusNode = FocusNode();
   late TabController _incomeTabController =
       TabController(length: 2, vsync: this);
+
+  late ObjectiveType objectiveType =
+      widget.objective?.type ?? widget.objectiveType;
 
   setSelectedWalletPk(String walletPkPassed) {
     setState(() {
@@ -134,14 +142,6 @@ class _AddObjectivePageState extends State<AddObjectivePage>
   void setSelectedIncome(bool income) {
     setState(() {
       selectedIncome = income;
-    });
-    determineBottomButton();
-    return;
-  }
-
-  void setSelectedPin() {
-    setState(() {
-      selectedPin = !selectedPin;
     });
     determineBottomButton();
     return;
@@ -215,15 +215,61 @@ class _AddObjectivePageState extends State<AddObjectivePage>
   }
 
   Future addObjective() async {
+    MainAndSubcategory? mainAndSubcategory;
+    if (widget.objective == null &&
+        widget.objectiveType == ObjectiveType.loan) {
+      mainAndSubcategory = await selectCategorySequence(
+        context,
+        selectedCategory: null,
+        setSelectedCategory: (_) {},
+        selectedSubCategory: null,
+        setSelectedSubCategory: (_) {},
+        selectedIncomeInitial: null,
+        subtitle: "select-first-transaction-category".tr(),
+      );
+      if (mainAndSubcategory.main == null) {
+        return;
+      }
+    }
+
     print("Added objective");
-    await database.createOrUpdateObjective(
+    int rowId = await database.createOrUpdateObjective(
         insert: widget.objective == null, await createObjective());
+
+    // Create the initial transaction if it is a loan
+    if (widget.objective == null &&
+        widget.objectiveType == ObjectiveType.loan) {
+      final Objective objectiveJustAdded =
+          await database.getObjectiveFromRowId(rowId);
+      if (mainAndSubcategory?.main != null) {
+        await database.createOrUpdateTransaction(
+          insert: true,
+          Transaction(
+            transactionPk: "-1",
+            name: "initial-record".tr(),
+            note: "",
+            amount: selectedAmount.abs() * (!selectedIncome ? 1 : -1),
+            categoryFk: mainAndSubcategory!.main!.categoryPk,
+            subCategoryFk: mainAndSubcategory.sub?.categoryPk,
+            walletFk: selectedWalletPk,
+            dateCreated: DateTime.now(),
+            income: !selectedIncome,
+            paid: true,
+            skipPaid: false,
+            type: null,
+            objectiveLoanFk: objectiveJustAdded.objectivePk,
+          ),
+        );
+      }
+    }
     Navigator.pop(context);
   }
 
   Future<Objective> createObjective() async {
-    int numberOfObjectives =
-        (await database.getTotalCountOfObjectives())[0] ?? 0;
+    int numberOfObjectives = (await database.getTotalCountOfObjectives(
+            objectiveType:
+                widget.objective?.type ?? widget.objectiveType))[0] ??
+        0;
     if (selectedEndDate != null &&
         selectedStartDate.isAfter(selectedEndDate!)) {
       selectedEndDate = null;
@@ -245,6 +291,8 @@ class _AddObjectivePageState extends State<AddObjectivePage>
       income: selectedIncome,
       pinned: selectedPin,
       walletFk: selectedWalletPk,
+      archived: widget.objective?.archived ?? false,
+      type: widget.objective?.type ?? widget.objectiveType,
     );
   }
 
@@ -290,8 +338,9 @@ class _AddObjectivePageState extends State<AddObjectivePage>
     } else {
       Future.delayed(Duration.zero, () async {
         if (widget.objective == null) {
-          bool result = await premiumPopupObjectives(context);
-          if (result == true) {
+          bool result = await premiumPopupObjectives(context,
+              objectiveType: objectiveType);
+          if (result == true && objectiveType != ObjectiveType.loan) {
             openBottomSheet(
               context,
               fullSnap: false,
@@ -356,7 +405,13 @@ class _AddObjectivePageState extends State<AddObjectivePage>
           horizontalPadding: getHorizontalPaddingConstrained(context),
           resizeToAvoidBottomInset: true,
           dragDownToDismiss: true,
-          title: widget.objective == null ? "add-goal".tr() : "edit-goal".tr(),
+          title: objectiveType == ObjectiveType.goal
+              ? (widget.objective == null ? "add-goal".tr() : "edit-goal".tr())
+              : objectiveType == ObjectiveType.loan
+                  ? (widget.objective == null
+                      ? "add-loan".tr()
+                      : "edit-loan".tr())
+                  : "",
           onBackButton: () async {
             if (widget.objective != null) {
               discardChangesPopup(
@@ -390,7 +445,9 @@ class _AddObjectivePageState extends State<AddObjectivePage>
                         RoutesToPopAfterDelete.PreventDelete)
                   DropdownItemMenu(
                     id: "delete-goal",
-                    label: "delete-goal".tr(),
+                    label: widget.objective?.type == ObjectiveType.loan
+                        ? "delete-loan".tr()
+                        : "delete-goal".tr(),
                     icon: appStateSettings["outlinedIcons"]
                         ? Icons.delete_outlined
                         : Icons.delete_rounded,
@@ -428,7 +485,9 @@ class _AddObjectivePageState extends State<AddObjectivePage>
                       )
                     : SaveBottomButton(
                         label: widget.objective == null
-                            ? "add-goal".tr()
+                            ? objectiveType == ObjectiveType.loan
+                                ? "add-loan".tr()
+                                : "add-goal".tr()
                             : "save-changes".tr(),
                         onTap: () async {
                           await addObjective();
@@ -440,17 +499,32 @@ class _AddObjectivePageState extends State<AddObjectivePage>
             SliverToBoxAdapter(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 13),
-                child: ClipRRect(
-                  borderRadius: getPlatform() == PlatformOS.isIOS
-                      ? BorderRadius.circular(10)
-                      : BorderRadius.circular(15),
-                  child: IncomeExpenseTabSelector(
-                    onTabChanged: setSelectedIncome,
-                    initialTabIsIncome: selectedIncome,
-                    syncWithInitial: true,
-                    expenseLabel: "expense-goal".tr(),
-                    incomeLabel: "savings-goal".tr(),
-                  ),
+                child: IncomeExpenseTabSelector(
+                  hasBorderRadius: true,
+                  onTabChanged: setSelectedIncome,
+                  initialTabIsIncome: selectedIncome,
+                  syncWithInitial: true,
+                  expenseLabel: objectiveType == ObjectiveType.goal
+                      ? "expense-goal".tr()
+                      : objectiveType == ObjectiveType.loan
+                          ? "borrowed".tr()
+                          : "",
+                  incomeLabel: objectiveType == ObjectiveType.goal
+                      ? "savings-goal".tr()
+                      : objectiveType == ObjectiveType.loan
+                          ? "lent".tr()
+                          : "",
+                  showIcons: objectiveType != ObjectiveType.loan,
+                  expenseCustomIcon: objectiveType == ObjectiveType.goal
+                      ? null
+                      : Icon(
+                          getTransactionTypeIcon(TransactionSpecialType.debt),
+                        ),
+                  incomeCustomIcon: objectiveType == ObjectiveType.goal
+                      ? null
+                      : Icon(
+                          getTransactionTypeIcon(TransactionSpecialType.credit),
+                        ),
                 ),
               ),
             ),
@@ -547,64 +621,95 @@ class _AddObjectivePageState extends State<AddObjectivePage>
                 height: 10,
               ),
             ),
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 14),
-                      child: TextFont(
-                        text: "goal".tr() + " ",
-                        fontSize: 17,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Flexible(
-                      child: TappableTextEntry(
-                        title: convertToMoney(
-                          Provider.of<AllWallets>(context),
-                          selectedAmount,
-                          currencyKey:
-                              Provider.of<AllWallets>(context, listen: true)
-                                  .indexedByPk[selectedWalletPk]
-                                  ?.currency,
-                        ),
-                        placeholder: convertToMoney(
-                          Provider.of<AllWallets>(context),
-                          0,
-                          currencyKey:
-                              Provider.of<AllWallets>(context, listen: true)
-                                  .indexedByPk[selectedWalletPk]
-                                  ?.currency,
-                        ),
-                        showPlaceHolderWhenTextEquals: convertToMoney(
-                          Provider.of<AllWallets>(context),
-                          0,
-                          currencyKey:
-                              Provider.of<AllWallets>(context, listen: true)
-                                  .indexedByPk[selectedWalletPk]
-                                  ?.currency,
-                        ),
+            widget.objective != null && objectiveType == ObjectiveType.loan
+                ? SliverToBoxAdapter(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 22, vertical: 10),
+                      child: TipBox(
                         onTap: () {
-                          selectAmount(context);
+                          pushRoute(
+                            context,
+                            AddTransactionPage(
+                              routesToPopAfterDelete:
+                                  RoutesToPopAfterDelete.None,
+                              selectedObjective: widget.objective,
+                              selectedIncome: !selectedIncome,
+                            ),
+                          );
                         },
-                        fontSize: 32,
-                        fontWeight: FontWeight.bold,
-                        internalPadding:
-                            EdgeInsets.symmetric(vertical: 2, horizontal: 4),
-                        padding:
-                            EdgeInsets.symmetric(vertical: 10, horizontal: 3),
+                        text: selectedIncome
+                            ? "change-loan-amount-tip-lent".tr()
+                            : "change-loan-amount-tip-borrowed".tr(),
+                        settingsString: null,
                       ),
                     ),
-                  ],
-                ),
-              ),
-            ),
+                  )
+                : SliverToBoxAdapter(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 14),
+                            child: AnimatedSizeSwitcher(
+                              child: TextFont(
+                                key: ValueKey(selectedIncome.toString()),
+                                text: objectiveType == ObjectiveType.loan
+                                    ? selectedIncome
+                                        ? "lent".tr()
+                                        : "borrowed".tr()
+                                    : "goal".tr() + " ",
+                                fontSize: 17,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                          Flexible(
+                            child: TappableTextEntry(
+                              title: convertToMoney(
+                                Provider.of<AllWallets>(context),
+                                selectedAmount,
+                                currencyKey: Provider.of<AllWallets>(context,
+                                        listen: true)
+                                    .indexedByPk[selectedWalletPk]
+                                    ?.currency,
+                              ),
+                              placeholder: convertToMoney(
+                                Provider.of<AllWallets>(context),
+                                0,
+                                currencyKey: Provider.of<AllWallets>(context,
+                                        listen: true)
+                                    .indexedByPk[selectedWalletPk]
+                                    ?.currency,
+                              ),
+                              showPlaceHolderWhenTextEquals: convertToMoney(
+                                Provider.of<AllWallets>(context),
+                                0,
+                                currencyKey: Provider.of<AllWallets>(context,
+                                        listen: true)
+                                    .indexedByPk[selectedWalletPk]
+                                    ?.currency,
+                              ),
+                              onTap: () {
+                                selectAmount(context);
+                              },
+                              fontSize: 32,
+                              fontWeight: FontWeight.bold,
+                              internalPadding: EdgeInsets.symmetric(
+                                  vertical: 2, horizontal: 4),
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 10, horizontal: 5),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
             SliverToBoxAdapter(
-              child: SizedBox(height: 16),
+              child: SizedBox(height: 10),
             ),
             SliverToBoxAdapter(
               child: Center(
@@ -742,12 +847,13 @@ class InstallmentObjectivePopup extends StatefulWidget {
 }
 
 class _InstallmentObjectivePopupState extends State<InstallmentObjectivePopup> {
-  double enteredAmount = 0;
   bool isNegative = false;
   TimeOfDay? selectedTime = null;
   DateTime? selectedDateTime = null;
   String selectedTitle = "";
+  String selectedWalletPk = appStateSettings["selectedWalletPk"];
   TransactionCategory? selectedCategory;
+  TransactionCategory? selectedSubCategory;
 
   int selectedPeriodLength = 1;
   String selectedRecurrence = "Monthly";
@@ -774,14 +880,21 @@ class _InstallmentObjectivePopupState extends State<InstallmentObjectivePopup> {
         hasPadding: false,
         underTitleSpace: false,
         child: SelectAmount(
-          enableWalletPicker: false,
+          enableWalletPicker: true,
+          hideWalletPickerIfOneCurrency: true,
           padding: EdgeInsets.symmetric(horizontal: 18),
           onlyShowCurrencyIcon: true,
           amountPassed: (amountPerInstallmentPayment ?? 0).toString(),
           setSelectedAmount: (amount, _) {
             setState(() {
               numberOfInstallmentPayments = null;
-              amountPerInstallmentPayment = amount;
+              amountPerInstallmentPayment = amount == 0 ? null : amount;
+            });
+          },
+          selectedWalletPk: selectedWalletPk,
+          setSelectedWalletPk: (walletPk) {
+            setState(() {
+              selectedWalletPk = walletPk;
             });
           },
           next: () {
@@ -803,7 +916,9 @@ class _InstallmentObjectivePopupState extends State<InstallmentObjectivePopup> {
           setSelectedAmount: (amount, _) {
             setState(() {
               amountPerInstallmentPayment = null;
-              numberOfInstallmentPayments = amount.toInt();
+              selectedWalletPk = appStateSettings["selectedWalletPk"];
+              numberOfInstallmentPayments =
+                  amount.toInt() == 0 ? null : amount.toInt();
             });
           },
           next: () async {
@@ -876,6 +991,7 @@ class _InstallmentObjectivePopupState extends State<InstallmentObjectivePopup> {
                       objective: widget.objective,
                       numberOfInstallmentPayments: numberOfInstallmentPayments,
                       amountPerInstallmentPayment: amountPerInstallmentPayment,
+                      amountPerInstallmentPaymentWalletPk: selectedWalletPk,
                     );
                     double numberOfInstallmentPaymentsDisplay = results[0];
                     double amountPerInstallmentPaymentDisplay = results[1];
@@ -888,11 +1004,14 @@ class _InstallmentObjectivePopupState extends State<InstallmentObjectivePopup> {
                                     .toStringAsFixed(3));
                     String displayAmountPerInstallmentPaymentDisplay =
                         convertToMoney(
-                            Provider.of<AllWallets>(context),
-                            amountPerInstallmentPaymentDisplay ==
-                                    double.infinity
-                                ? 0
-                                : amountPerInstallmentPaymentDisplay);
+                      Provider.of<AllWallets>(context),
+                      amountPerInstallmentPaymentDisplay == double.infinity
+                          ? 0
+                          : amountPerInstallmentPaymentDisplay,
+                      currencyKey: Provider.of<AllWallets>(context)
+                          .indexedByPk[selectedWalletPk]
+                          ?.currency,
+                    );
                     return Column(
                       children: [
                         Wrap(
@@ -1058,6 +1177,13 @@ class _InstallmentObjectivePopupState extends State<InstallmentObjectivePopup> {
                   listPadding: EdgeInsets.symmetric(horizontal: 10),
                   addButton: false,
                   setSelectedCategory: (category) {
+                    // Clear the subcategory
+                    if (category.categoryPk != selectedCategory?.categoryPk) {
+                      setState(() {
+                        selectedSubCategory = null;
+                      });
+                    }
+
                     setState(() {
                       selectedCategory = category;
                     });
@@ -1065,7 +1191,24 @@ class _InstallmentObjectivePopupState extends State<InstallmentObjectivePopup> {
                   popRoute: false,
                   selectedCategory: selectedCategory,
                 ),
-              SizedBox(height: 15),
+              SizedBox(height: 6),
+              if (selectedCategory != null)
+                SelectSubcategoryChips(
+                  setSelectedSubCategory: (category) {
+                    if (selectedSubCategory?.categoryPk ==
+                        category.categoryPk) {
+                      selectedSubCategory = null;
+                    } else {
+                      selectedSubCategory = category;
+                    }
+                    setState(
+                      () {},
+                    );
+                  },
+                  selectedCategoryPk: selectedCategory!.categoryPk,
+                  selectedSubCategoryPk: selectedSubCategory?.categoryPk,
+                ),
+              SizedBox(height: 9),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 18),
                 child: editTransferDetails,
@@ -1074,6 +1217,21 @@ class _InstallmentObjectivePopupState extends State<InstallmentObjectivePopup> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 18),
                 child: Button(
+                  disabled: selectedCategory == null ||
+                      (amountPerInstallmentPayment == null &&
+                          numberOfInstallmentPayments == null),
+                  onDisabled: () {
+                    openSnackbar(
+                      SnackbarMessage(
+                        title: "cannot-create-installment".tr(),
+                        description:
+                            "missing-installment-period-and-amount".tr(),
+                        icon: appStateSettings["outlinedIcons"]
+                            ? Icons.warning_amber_outlined
+                            : Icons.warning_amber_rounded,
+                      ),
+                    );
+                  },
                   label: "add-transaction".tr(),
                   width: MediaQuery.sizeOf(context).width,
                   onTap: () async {
@@ -1088,10 +1246,12 @@ class _InstallmentObjectivePopupState extends State<InstallmentObjectivePopup> {
                             numberOfInstallmentPayments,
                         amountPerInstallmentPayment:
                             amountPerInstallmentPayment,
+                        amountPerInstallmentPaymentWalletPk: selectedWalletPk,
                       )[1],
                       note: "",
                       categoryFk: selectedCategory?.categoryPk ?? "-1",
-                      walletFk: appStateSettings["selectedWalletPk"],
+                      subCategoryFk: selectedSubCategory?.categoryPk,
+                      walletFk: selectedWalletPk,
                       dateCreated: selectedDateTime ?? DateTime.now(),
                       income: widget.objective.income,
                       paid: false,
