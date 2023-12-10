@@ -2,6 +2,7 @@ import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
 import 'package:budget/pages/addCategoryPage.dart';
+import 'package:budget/pages/creditDebtTransactionsPage.dart';
 import 'package:budget/pages/editCategoriesPage.dart';
 import 'package:budget/pages/editHomePage.dart';
 import 'package:budget/pages/objectivesListPage.dart';
@@ -2076,7 +2077,12 @@ Map<String, List<MajorChanges>> getMajorChanges() {
           "major-change-17-1".tr(),
         ],
         onTap: (context) {
-          pushRoute(context, WalletDetailsPage(wallet: null));
+          pushRoute(
+            context,
+            CreditDebtTransactions(
+              isCredit: null,
+            ),
+          );
         },
       ),
     ],
