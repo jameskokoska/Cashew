@@ -965,5 +965,7 @@
   "to-pay": "Att betala",
   "to-collect": "Samla",
   "major-change-17": "Långtidslån",
-  "major-change-17-1": "Spåra fastan och lånade pengar under en period av flera återbetalningar"
+  "major-change-17-1": "Spåra fastan och lånade pengar under en period av flera återbetalningar",
+  "amount-collected": "Insamlad belopp",
+  "amount-settled": "Belopp avgjort"
 }

@@ -965,5 +965,7 @@
   "to-pay": "Fizetni",
   "to-collect": "Gyűjteni",
   "major-change-17": "Hosszú távú kölcsönök",
-  "major-change-17-1": "Kövesse és kölcsönvett pénzt több visszafizetési időszak alatt"
+  "major-change-17-1": "Kövesse és kölcsönvett pénzt több visszafizetési időszak alatt",
+  "amount-collected": "Összegyűjtött összeg",
+  "amount-settled": "Az összeg rendezett"
 }

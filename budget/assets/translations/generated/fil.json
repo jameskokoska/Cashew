@@ -965,5 +965,7 @@
   "to-pay": "Magbayad",
   "to-collect": "Upang mangolekta",
   "major-change-17": "Pangmatagalang pautang",
-  "major-change-17-1": "Subaybayan ang Kuwaresma at Humiram ng Pera sa loob ng isang Panahon ng Maramihang Mga Pagbabayad"
+  "major-change-17-1": "Subaybayan ang Kuwaresma at Humiram ng Pera sa loob ng isang Panahon ng Maramihang Mga Pagbabayad",
+  "amount-collected": "Halagang nakolekta",
+  "amount-settled": "Halaga na naayos"
 }

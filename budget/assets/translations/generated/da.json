@@ -965,5 +965,7 @@
   "to-pay": "At betale",
   "to-collect": "At samle",
   "major-change-17": "Langsigtede lån",
-  "major-change-17-1": "Spor udlånt og lånte penge over en periode med flere tilbagebetalinger"
+  "major-change-17-1": "Spor udlånt og lånte penge over en periode med flere tilbagebetalinger",
+  "amount-collected": "Indsamlet beløb",
+  "amount-settled": "Beløb afgjort"
 }

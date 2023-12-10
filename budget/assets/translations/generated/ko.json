@@ -965,5 +965,7 @@
   "to-pay": "지불하기 위해",
   "to-collect": "수집합니다",
   "major-change-17": "장기 대출",
-  "major-change-17-1": "여러 번 상환 기간 동안 사순절 및 빌린 돈을 추적"
+  "major-change-17-1": "여러 번 상환 기간 동안 사순절 및 빌린 돈을 추적",
+  "amount-collected": "수집 된 금액",
+  "amount-settled": "금액이 정착되었습니다"
 }

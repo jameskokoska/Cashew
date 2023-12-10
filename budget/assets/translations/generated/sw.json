@@ -965,5 +965,7 @@
   "to-pay": "Kulipa",
   "to-collect": "Kukusanya",
   "major-change-17": "Mikopo ya muda mrefu",
-  "major-change-17-1": "Fuatilia pesa na kukopa pesa kwa kipindi cha ulipaji kadhaa"
+  "major-change-17-1": "Fuatilia pesa na kukopa pesa kwa kipindi cha ulipaji kadhaa",
+  "amount-collected": "Kiasi kilichokusanywa",
+  "amount-settled": "Kiasi kimewekwa"
 }

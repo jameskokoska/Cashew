@@ -965,5 +965,7 @@
   "to-pay": "Bayar",
   "to-collect": "Untuk mengumpul",
   "major-change-17": "Pinjaman jangka panjang",
-  "major-change-17-1": "Jejaki Lent dan Meminjam Wang dalam Tempoh Pelbagai Bayaran Balik"
+  "major-change-17-1": "Jejaki Lent dan Meminjam Wang dalam Tempoh Pelbagai Bayaran Balik",
+  "amount-collected": "Jumlah yang dikumpulkan",
+  "amount-settled": "Jumlah yang diselesaikan"
 }

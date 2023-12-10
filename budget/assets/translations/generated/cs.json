@@ -965,5 +965,7 @@
   "to-pay": "Platit",
   "to-collect": "Sbírat",
   "major-change-17": "Dlouhodobé půjčky",
-  "major-change-17-1": "Sledujte zapůjčené a vypůjčené peníze po dobu několika splátek"
+  "major-change-17-1": "Sledujte zapůjčené a vypůjčené peníze po dobu několika splátek",
+  "amount-collected": "Shromážděná částka",
+  "amount-settled": "Částka usazená"
 }

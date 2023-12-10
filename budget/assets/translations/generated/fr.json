@@ -965,5 +965,7 @@
   "to-pay": "Payer",
   "to-collect": "Collecter",
   "major-change-17": "Prêts à long terme",
-  "major-change-17-1": "Suivre le Carême et emprunter de l'argent sur une période de remboursement multiples"
+  "major-change-17-1": "Suivre le Carême et emprunter de l'argent sur une période de remboursement multiples",
+  "amount-collected": "Montant collecté",
+  "amount-settled": "Montant réglé"
 }

@@ -965,5 +965,7 @@
   "to-pay": "To Pay",
   "to-collect": "To Collect",
   "major-change-17": "Long Term Loans",
-  "major-change-17-1": "Track lent and borrowed money over a period of multiple repayments"
+  "major-change-17-1": "Track lent and borrowed money over a period of multiple repayments",
+  "amount-collected": "Amount Collected",
+  "amount-settled": "Amount Settled"
 }

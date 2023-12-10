@@ -965,5 +965,7 @@
   "to-pay": "Płacić",
   "to-collect": "Zbierać",
   "major-change-17": "Pożyczki długoterminowe",
-  "major-change-17-1": "Śledź pożyczony i pożyczył pieniądze w okresie wielu spłat"
+  "major-change-17-1": "Śledź pożyczony i pożyczył pieniądze w okresie wielu spłat",
+  "amount-collected": "Zebrana kwota",
+  "amount-settled": "Kwota rozstrzygana"
 }

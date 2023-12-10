@@ -1741,10 +1741,10 @@ class _AddTransactionPageState extends State<AddTransactionPage>
           resizeToAvoidBottomInset: true,
           title: widget.transaction == null
               ? isAddedToLoanObjective
-                  ? "add-record"
+                  ? "add-record".tr()
                   : "add-transaction".tr()
               : isAddedToLoanObjective
-                  ? "edit-record"
+                  ? "edit-record".tr()
                   : "edit-transaction".tr(),
           dragDownToDismiss: true,
           onBackButton: () async {

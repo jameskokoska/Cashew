@@ -965,5 +965,7 @@
   "to-pay": "Pagar",
   "to-collect": "Coletar",
   "major-change-17": "Empréstimos de longo prazo",
-  "major-change-17-1": "Rastrear dinheiro emprestado e emprestado por um período de vários pagamentos"
+  "major-change-17-1": "Rastrear dinheiro emprestado e emprestado por um período de vários pagamentos",
+  "amount-collected": "Valor coletado",
+  "amount-settled": "Quantidade liquidada"
 }

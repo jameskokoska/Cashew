@@ -965,5 +965,7 @@
   "to-pay": "Bezahlen",
   "to-collect": "Sammeln",
   "major-change-17": "Langzeitdarlehen",
-  "major-change-17-1": "Verfolgen Sie die Fastenzeit und das geliehene Geld über einen Zeitraum mehrerer Rückzahlungen"
+  "major-change-17-1": "Verfolgen Sie die Fastenzeit und das geliehene Geld über einen Zeitraum mehrerer Rückzahlungen",
+  "amount-collected": "Betrag gesammelt",
+  "amount-settled": "Betrag beigelegt"
 }

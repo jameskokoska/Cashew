@@ -965,5 +965,7 @@
   "to-pay": "支付",
   "to-collect": "去收集",
   "major-change-17": "長期貸款",
-  "major-change-17-1": "跟踪四旬期並藉錢在多個還款期間"
+  "major-change-17-1": "跟踪四旬期並藉錢在多個還款期間",
+  "amount-collected": "收集的金額",
+  "amount-settled": "金額解決"
 }

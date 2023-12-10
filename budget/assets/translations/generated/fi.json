@@ -965,5 +965,7 @@
   "to-pay": "Maksaa",
   "to-collect": "Kerätä",
   "major-change-17": "Pitkäaikaiset lainat",
-  "major-change-17-1": "Seuraa lainaa ja lainasi rahaa useiden takaisinmaksujen aikana"
+  "major-change-17-1": "Seuraa lainaa ja lainasi rahaa useiden takaisinmaksujen aikana",
+  "amount-collected": "Kerätty määrä",
+  "amount-settled": "Summa ratkaistu"
 }

@@ -965,5 +965,7 @@
   "to-pay": "Trả",
   "to-collect": "Để thu thập",
   "major-change-17": "Khoản vay dài hạn",
-  "major-change-17-1": "Theo dõi Mùa Chay và vay tiền trong một khoảng thời gian nhiều khoản hoàn trả"
+  "major-change-17-1": "Theo dõi Mùa Chay và vay tiền trong một khoảng thời gian nhiều khoản hoàn trả",
+  "amount-collected": "Số tiền thu được",
+  "amount-settled": "Số tiền đã giải quyết"
 }

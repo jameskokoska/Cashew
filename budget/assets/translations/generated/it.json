@@ -965,5 +965,7 @@
   "to-pay": "Pagare",
   "to-collect": "Raccogliere",
   "major-change-17": "Prestiti a lungo termine",
-  "major-change-17-1": "Traccia la Quaresima e il denaro preso in prestito per un periodo di rimborsi multipli"
+  "major-change-17-1": "Traccia la Quaresima e il denaro preso in prestito per un periodo di rimborsi multipli",
+  "amount-collected": "Importo raccolto",
+  "amount-settled": "Importo risolto"
 }

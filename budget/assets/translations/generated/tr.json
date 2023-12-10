@@ -965,5 +965,7 @@
   "to-pay": "Ödemek",
   "to-collect": "Toplamak",
   "major-change-17": "Uzun vadeli krediler",
-  "major-change-17-1": "Birden fazla geri ödeme döneminde ödünç ve ödünç alınan parayı takip edin"
+  "major-change-17-1": "Birden fazla geri ödeme döneminde ödünç ve ödünç alınan parayı takip edin",
+  "amount-collected": "Toplanan miktar",
+  "amount-settled": "Yerleşmiş miktar"
 }

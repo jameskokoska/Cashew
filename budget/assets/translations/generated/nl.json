@@ -965,5 +965,7 @@
   "to-pay": "Betalen",
   "to-collect": "Verzamelen",
   "major-change-17": "Langdurige leningen",
-  "major-change-17-1": "Volg Lent en leende geld over een periode van meerdere terugbetalingen"
+  "major-change-17-1": "Volg Lent en leende geld over een periode van meerdere terugbetalingen",
+  "amount-collected": "Verzameld bedrag",
+  "amount-settled": "Bedrag geregeld"
 }

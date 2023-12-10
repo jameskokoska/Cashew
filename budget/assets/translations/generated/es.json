@@ -965,5 +965,7 @@
   "to-pay": "Pagar",
   "to-collect": "Para coleccionar",
   "major-change-17": "Préstamos a largo plazo",
-  "major-change-17-1": "Seguimiento de dinero prestado y prestado durante un período de pagos múltiples"
+  "major-change-17-1": "Seguimiento de dinero prestado y prestado durante un período de pagos múltiples",
+  "amount-collected": "Cantidad recolectada",
+  "amount-settled": "Monto establecido"
 }
