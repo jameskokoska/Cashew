@@ -323,7 +323,7 @@ class TransactionEntries extends StatelessWidget {
                             : " • " +
                                 (daysDifference * -1).toString() +
                                 " " +
-                                (daysDifference == 1
+                                (daysDifference * -1 == 1
                                     ? "day".tr()
                                     : "days".tr()),
                         info: appStateSettings["netSpendingDayTotal"] == true
