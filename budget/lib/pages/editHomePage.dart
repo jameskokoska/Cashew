@@ -614,7 +614,7 @@ class PanelSectionSeparator extends StatelessWidget {
         )),
         if (orderKey == "ORDER:CENTER")
           TextFont(
-            text: "center-top".tr(),
+            text: "top-center".tr(),
             fontSize: 16,
             textAlign: TextAlign.right,
           ),

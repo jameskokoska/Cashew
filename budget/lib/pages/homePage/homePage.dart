@@ -138,6 +138,7 @@ class HomePageState extends State<HomePage>
             ? Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   slidingSelector,
                   SizedBox(height: 8),
@@ -153,11 +154,8 @@ class HomePageState extends State<HomePage>
             : null;
     if (homePageTransactionsList != null)
       homePageTransactionsList = enableDoubleColumn(context)
-          ? Expanded(
-              child: Padding(
-                padding: const EdgeInsets.only(right: 5),
-                child: homePageTransactionsList,
-              ),
+          ? KeepAliveClientMixin(
+              child: homePageTransactionsList,
             )
           : KeepAliveClientMixin(
               child: Padding(
