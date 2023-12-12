@@ -83,8 +83,7 @@ class _AddObjectivePageState extends State<AddObjectivePage>
   double selectedAmount = 0;
   DateTime selectedStartDate = DateTime.now();
   DateTime? selectedEndDate = null;
-  late bool selectedIncome = widget.selectedIncome ??
-      (widget.objectiveType == ObjectiveType.goal ? true : false);
+  late bool selectedIncome = widget.selectedIncome ?? true;
   bool selectedPin = true;
   String selectedWalletPk = appStateSettings["selectedWalletPk"];
 
@@ -501,31 +500,40 @@ class _AddObjectivePageState extends State<AddObjectivePage>
             SliverToBoxAdapter(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 13),
+                // Flip the order if ObjectiveType.loan
                 child: IncomeExpenseTabSelector(
                   hasBorderRadius: true,
-                  onTabChanged: setSelectedIncome,
-                  initialTabIsIncome: selectedIncome,
+                  onTabChanged: (isIncome) {
+                    if (objectiveType == ObjectiveType.loan) {
+                      setSelectedIncome(!isIncome);
+                    } else {
+                      setSelectedIncome(isIncome);
+                    }
+                  },
+                  initialTabIsIncome: objectiveType == ObjectiveType.loan
+                      ? !selectedIncome
+                      : selectedIncome,
                   syncWithInitial: true,
                   expenseLabel: objectiveType == ObjectiveType.goal
                       ? "expense-goal".tr()
                       : objectiveType == ObjectiveType.loan
-                          ? "borrowed".tr()
+                          ? "lent".tr()
                           : "",
                   incomeLabel: objectiveType == ObjectiveType.goal
                       ? "savings-goal".tr()
                       : objectiveType == ObjectiveType.loan
-                          ? "lent".tr()
+                          ? "borrowed".tr()
                           : "",
                   showIcons: objectiveType != ObjectiveType.loan,
                   expenseCustomIcon: objectiveType == ObjectiveType.goal
                       ? null
                       : Icon(
-                          getTransactionTypeIcon(TransactionSpecialType.debt),
+                          getTransactionTypeIcon(TransactionSpecialType.credit),
                         ),
                   incomeCustomIcon: objectiveType == ObjectiveType.goal
                       ? null
                       : Icon(
-                          getTransactionTypeIcon(TransactionSpecialType.credit),
+                          getTransactionTypeIcon(TransactionSpecialType.debt),
                         ),
                 ),
               ),

@@ -37,11 +37,11 @@ String getChangelogString() {
     Improved loan/borrowed transaction type descriptions
     Fixed total loans amount owing when tab initialized to long term loan page
     Loan filtering is more intuitive - now includes transactions from long term loans
+    Flipped order of lent/borrowed when creating long term loan
     < 5.0.3
     Long term/partial loan tracking!
     Can disable transactions list on full screen
     Improved upcoming transactions in home page list
-    Added period selection for accounts list homepage sections
     If budgets page not pinned to tab bar, budgets on More page opens budgets list
     Swapped home page income and expense order
     Goal installments support currencies
