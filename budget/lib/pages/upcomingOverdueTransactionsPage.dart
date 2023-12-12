@@ -372,7 +372,7 @@ class CenteredAmountAndNumTransactions extends StatelessWidget {
                                   finalNumber: totalAmount.abs()),
                               fontSize: 30,
                               textColor: getTextColor != null
-                                  ? (getTextColor!(number) ?? textColor)
+                                  ? (getTextColor!(totalAmount) ?? textColor)
                                   : textColor,
                               fontWeight: FontWeight.bold,
                             );
