@@ -644,11 +644,9 @@
   "repetitive-transaction-type-description-1": "Reocuparea tranzacției",
   "repetitive-transaction-type-description-2": "Nu contează spre totalul dvs. decât dacă este marcat „plătit” sau „depus”",
   "lent-transaction-type-description-1": "Tranzacție pe care ai împrumutat -o",
-  "lent-transaction-type-description-2": "Cheltuieli până la marcate „colectate”",
-  "lent-transaction-type-description-3": "Odată „colectat”, nu va conta pentru totalul dvs.",
+  "lent-transaction-type-description-2": "Flux de numerar negativ până când este marcat „colectat”",
   "borrowed-transaction-type-description-1": "Tranzacția împrumutată de la cineva",
-  "borrowed-transaction-type-description-2": "Venit până la marcare „stabilită”",
-  "borrowed-transaction-type-description-3": "Odată „soluționată”, nu va conta pentru totalul dvs.",
+  "borrowed-transaction-type-description-2": "Flux de numerar pozitiv până când este marcat „stabilit”",
   "select-transaction-type": "Selectați tipul de tranzacție",
   "mark-transaction-help-description": "Marcați o tranzacție specială atingând butonul de acțiune în intrarea tranzacției",
   "increase-budget-warning": "Luați în considerare bugetul dvs.",
@@ -967,5 +965,9 @@
   "major-change-17": "Împrumuturi pe termen lung",
   "major-change-17-1": "Urmăriți banii Postul și împrumutați pe o perioadă de rambursări multiple",
   "amount-collected": "Suma colectată",
-  "amount-settled": "Suma decontată"
+  "amount-settled": "Suma decontată",
+  "right-panel": "Panoul din dreapta",
+  "left-panel": "Panoul din stânga",
+  "top-center": "Centru de sus",
+  "of-total": "de total"
 }

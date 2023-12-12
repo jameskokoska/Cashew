@@ -428,8 +428,10 @@ class _EditHomePageState extends State<EditHomePage> {
             extraWidgetsBelow: [],
           ),
         };
-        keyOrder = List<String>.from(appStateSettings["homePageOrder"]
-            .map((element) => element.toString()));
+        keyOrder = List<String>.from(
+            appStateSettings[getHomePageOrderSettingsKey(context)]
+                .map((element) => element.toString()));
+        print(keyOrder);
       });
     });
     super.initState();
@@ -456,8 +458,14 @@ class _EditHomePageState extends State<EditHomePage> {
         horizontalPadding: getHorizontalPaddingConstrained(context),
         dragDownToDismiss: true,
         dragDownToDismissEnabled: dragDownToDismissEnabled,
-        title: "edit-home".tr(),
+        title: "top-center".tr(),
         slivers: [
+          if (enableDoubleColumn(context))
+            SliverToBoxAdapter(
+              child: PanelSectionSeparator(
+                orderKey: "ORDER:CENTER",
+              ),
+            ),
           SliverToBoxAdapter(
             child: HomePageEditRowEntryUsername(
               iconData: appStateSettings["outlinedIcons"]
@@ -495,6 +503,17 @@ class _EditHomePageState extends State<EditHomePage> {
                   key: ValueKey(index),
                 );
               String key = keyOrder[index];
+
+              if (["ORDER:LEFT", "ORDER:RIGHT"].contains(key)) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15),
+                  key: ValueKey(key),
+                  child: PanelSectionSeparator(
+                    orderKey: key,
+                  ),
+                );
+              }
+
               if (editHomePageItems[key] == null)
                 return Container(
                   key: ValueKey(index),
@@ -502,10 +521,10 @@ class _EditHomePageState extends State<EditHomePage> {
 
               return EditRowEntry(
                 canReorder: true,
+                key: ValueKey(key),
                 currentReorder: currentReorder != -1 && currentReorder != index,
                 padding:
                     EdgeInsets.only(left: 18, right: 0, top: 16, bottom: 16),
-                key: ValueKey(key),
                 extraWidget: Row(
                   children: [
                     getPlatform() == PlatformOS.isIOS
@@ -556,7 +575,7 @@ class _EditHomePageState extends State<EditHomePage> {
                 openPage: Container(),
               );
             },
-            itemCount: editHomePageItems.keys.length,
+            itemCount: keyOrder.length,
             onReorder: (oldIndex, newIndex) async {
               setState(() {
                 if (oldIndex < newIndex) {
@@ -565,13 +584,52 @@ class _EditHomePageState extends State<EditHomePage> {
                 final String item = keyOrder.removeAt(oldIndex);
                 keyOrder.insert(newIndex, item);
               });
-              updateSettings("homePageOrder", keyOrder,
+              updateSettings(getHomePageOrderSettingsKey(context), keyOrder,
                   pagesNeedingRefresh: [], updateGlobalState: false);
               return true;
             },
           ),
         ],
       ),
+    );
+  }
+}
+
+class PanelSectionSeparator extends StatelessWidget {
+  const PanelSectionSeparator({required this.orderKey, super.key});
+  final String orderKey;
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        if (orderKey == "ORDER:LEFT")
+          TextFont(
+            text: "left-panel".tr(),
+            fontSize: 16,
+            textAlign: TextAlign.left,
+          ),
+        Expanded(
+            child: HorizontalBreak(
+          padding: const EdgeInsets.all(15),
+        )),
+        if (orderKey == "ORDER:CENTER")
+          TextFont(
+            text: "center-top".tr(),
+            fontSize: 16,
+            textAlign: TextAlign.right,
+          ),
+        if (orderKey == "ORDER:CENTER")
+          Expanded(
+              child: HorizontalBreak(
+            padding: const EdgeInsets.all(15),
+          )),
+        if (orderKey == "ORDER:RIGHT")
+          TextFont(
+            text: "right-panel".tr(),
+            fontSize: 16,
+            textAlign: TextAlign.right,
+          ),
+      ],
     );
   }
 }
@@ -724,4 +782,47 @@ bool isHomeScreenSectionEnabled(BuildContext context, String sectionSetting) {
       return appStateSettings[sectionSetting];
     return false;
   }
+}
+
+String getHomePageOrderSettingsKey(BuildContext context) {
+  if (enableDoubleColumn(context)) {
+    return "homePageOrderFullScreen";
+  } else {
+    return "homePageOrder";
+  }
+}
+
+fixHomePageOrder(Map<String, dynamic> defaultPreferences, settingsKey) {
+  List<String> defaultPrefPageOrder = List<String>.from(
+      defaultPreferences[settingsKey].map((element) => element.toString()));
+  List<String> currentPageOrder = List<String>.from(
+      appStateSettings[settingsKey].map((element) => element.toString()));
+  int index = 0;
+  for (String key in [...currentPageOrder]) {
+    if (!defaultPrefPageOrder.contains(key)) {
+      currentPageOrder.removeWhere((item) => item == key);
+      // print("Fixed homepage ordering: " + currentPageOrder.toString());
+    }
+    index++;
+  }
+  index = 0;
+  String? keyBefore;
+  for (String key in defaultPrefPageOrder) {
+    if (!currentPageOrder.contains(key)) {
+      int indexOfItem =
+          keyBefore == null ? -1 : currentPageOrder.indexOf(keyBefore);
+      // print("Fixed homepage ordering finding " + keyBefore.toString());
+      if (indexOfItem != -1) {
+        // print("Fixed homepage ordering inserted at" +
+        //     (indexOfItem + 1).toString());
+        currentPageOrder.insert(indexOfItem + 1, key);
+      } else {
+        currentPageOrder.insert(index, key);
+      }
+      // print("Fixed homepage ordering: " + currentPageOrder.toString());
+    }
+    keyBefore = key;
+    index++;
+  }
+  appStateSettings[settingsKey] = currentPageOrder;
 }

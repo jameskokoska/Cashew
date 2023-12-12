@@ -644,11 +644,9 @@
   "repetitive-transaction-type-description-1": "ٹرانزیکشن کو دوبارہ حاصل کرنا",
   "repetitive-transaction-type-description-2": "جب تک 'ادائیگی' یا 'جمع' کو نشان زد نہیں کیا جاتا ہے تب تک آپ کے کل کی گنتی نہیں ہوتی ہے",
   "lent-transaction-type-description-1": "لین دین جو آپ نے دیا تھا",
-  "lent-transaction-type-description-2": "جب تک 'جمع' کو نشان زد نہیں کیا جاتا ہے",
-  "lent-transaction-type-description-3": "ایک بار 'جمع' ہونے کے بعد یہ آپ کے کل کے حساب سے نہیں ہوگا",
+  "lent-transaction-type-description-2": "منفی نقد بہاؤ جب تک 'جمع' کو نشان زد نہیں کیا جاتا ہے",
   "borrowed-transaction-type-description-1": "کسی سے لین دین کا قرض لیا گیا",
-  "borrowed-transaction-type-description-2": "انکم جب تک 'آباد' کو نشان زد نہیں کیا جاتا ہے",
-  "borrowed-transaction-type-description-3": "ایک بار 'آباد' ہونے کے بعد یہ آپ کے کل کے حساب سے نہیں ہوگا",
+  "borrowed-transaction-type-description-2": "مثبت نقد بہاؤ جب تک 'آباد' کو نشان زد نہ کریں",
   "select-transaction-type": "لین دین کی قسم منتخب کریں",
   "mark-transaction-help-description": "ٹرانزیکشن انٹری میں ایکشن بٹن کو ٹیپ کرکے خصوصی لین دین کو نشان زد کریں",
   "increase-budget-warning": "اپنے بجٹ پر غور کریں",
@@ -967,5 +965,9 @@
   "major-change-17": "طویل مدتی قرضے",
   "major-change-17-1": "متعدد ادائیگیوں کی مدت میں لینٹ اور قرض لیا",
   "amount-collected": "جمع شدہ رقم",
-  "amount-settled": "رقم طے شدہ"
+  "amount-settled": "رقم طے شدہ",
+  "right-panel": "دائیں پینل",
+  "left-panel": "بائیں پینل",
+  "top-center": "ٹاپ سینٹر",
+  "of-total": "کل کی"
 }

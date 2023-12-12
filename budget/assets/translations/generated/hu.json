@@ -644,11 +644,9 @@
   "repetitive-transaction-type-description-1": "Tranzakció újbóli elhelyezése",
   "repetitive-transaction-type-description-2": "Csak akkor számít be a teljesbe, ha a „fizetett” vagy a „letétbe helyezett” megjelöléssel rendelkezik",
   "lent-transaction-type-description-1": "Tranzakció, amelyet kölcsönadott",
-  "lent-transaction-type-description-2": "A költségek „összegyűjtött” jelöléséig",
-  "lent-transaction-type-description-3": "Miután a „összegyűjtött”, nem számít a teljesbe",
+  "lent-transaction-type-description-2": "Negatív cash flow, amíg a „összegyűjtött” meg nem jelzik",
   "borrowed-transaction-type-description-1": "Valakitól kölcsönzött tranzakció",
-  "borrowed-transaction-type-description-2": "A jövedelem addig, amíg a „rendezéséről” nem jelölik meg",
-  "borrowed-transaction-type-description-3": "Miután a 'rendeződött', nem számít a teljesbe",
+  "borrowed-transaction-type-description-2": "A pozitív pénzáramlás addig, amíg a „rendezést nem jelölik”",
   "select-transaction-type": "Válassza a Tranzakció Type lehetőséget",
   "mark-transaction-help-description": "Jelöljön meg egy speciális tranzakciót a Tranzakció bejegyzésében a Művelet gomb megérintésével",
   "increase-budget-warning": "Fontolja meg a költségvetését",
@@ -967,5 +965,9 @@
   "major-change-17": "Hosszú távú kölcsönök",
   "major-change-17-1": "Kövesse és kölcsönvett pénzt több visszafizetési időszak alatt",
   "amount-collected": "Összegyűjtött összeg",
-  "amount-settled": "Az összeg rendezett"
+  "amount-settled": "Az összeg rendezett",
+  "right-panel": "Jobb oldali panel",
+  "left-panel": "Bal oldali panel",
+  "top-center": "Felső középpont",
+  "of-total": "összesen"
 }

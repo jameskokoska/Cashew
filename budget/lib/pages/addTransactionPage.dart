@@ -175,8 +175,11 @@ class _AddTransactionPageState extends State<AddTransactionPage>
 
   void setSelectedCategory(TransactionCategory category,
       {bool setIncome = true}) {
-    if (isAddedToLoanObjective == false && setIncome)
+    if (isAddedToLoanObjective == false &&
+        setIncome &&
+        category.categoryPk != "0") {
       setSelectedIncome(category.income);
+    }
     setState(() {
       if (selectedCategory != category) selectedSubCategory = null;
       selectedCategory = category;
@@ -378,6 +381,8 @@ class _AddTransactionPageState extends State<AddTransactionPage>
       if (widget.transaction != null) {
         // Only ask if changes were made that will affect other balance correction
         // set in the logic of updateCloselyRelatedBalanceTransfer
+
+        // If these fields are touched they will not trigger the popup
         if (addDefaultMissingValues(widget.transaction!).copyWith(
               dateTimeModified: Value(null),
               walletFk: "",
@@ -385,6 +390,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
               note: "",
               income: false,
               amount: widget.transaction!.amount.abs(),
+              objectiveFk: Value(null),
             ) !=
             createdTransaction.copyWith(
               dateTimeModified: Value(null),
@@ -393,6 +399,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
               note: "",
               income: false,
               amount: createdTransaction.amount.abs(),
+              objectiveFk: Value(null),
             )) {
           Transaction? closelyRelatedTransferCorrectionTransaction =
               await database.getCloselyRelatedBalanceCorrectionTransaction(
@@ -3294,9 +3301,6 @@ class SelectTransactionTypePopup extends StatelessWidget {
             ListItem(
               "lent-transaction-type-description-2".tr(),
             ),
-            ListItem(
-              "lent-transaction-type-description-3".tr(),
-            ),
           ],
           onlyShowOneTransactionType: onlyShowOneTransactionType,
         ),
@@ -3312,9 +3316,6 @@ class SelectTransactionTypePopup extends StatelessWidget {
             ),
             ListItem(
               "borrowed-transaction-type-description-2".tr(),
-            ),
-            ListItem(
-              "borrowed-transaction-type-description-3".tr(),
             ),
           ],
           onlyShowOneTransactionType: onlyShowOneTransactionType,

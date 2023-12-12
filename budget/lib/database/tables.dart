@@ -1351,7 +1351,7 @@ class FinanceDatabase extends _$FinanceDatabase {
                 ? transactions.dateCreated.isSmallerOrEqualValue(end)
                 : onlyShowBasedOnTimeRange(transactions, start, end, budget)) &
             // Should match that of getTransactionCategoryWithDay
-            onlyShowBalanceCorrectionIfIsIncomeIsNull(transactions, income) &
+            onlyShowIfNotBalanceCorrection(transactions, income) &
             onlyShowTransactionBasedOnSearchQuery(transactions, search,
                 withCategories: true,
                 joinedWithSubcategoriesTable: subCategories) &
@@ -1439,7 +1439,7 @@ class FinanceDatabase extends _$FinanceDatabase {
       ])
       ..where(
         // Should match that of getTransactionCategoryWithDay
-        onlyShowBalanceCorrectionIfIsIncomeIsNull(transactions, income) &
+        onlyShowIfNotBalanceCorrection(transactions, income) &
             onlyShowTransactionBasedOnSearchQuery(transactions, search,
                 withCategories: true,
                 joinedWithSubcategoriesTable: subCategories) &
@@ -3839,9 +3839,9 @@ class FinanceDatabase extends _$FinanceDatabase {
                   ? onlyShowMainCategoryListing(c)
                   : c.mainCategoryPk.isIn(mainCategoryPks)) &
               (selectedIncome == true
-                  ? c.income.equals(true)
+                  ? c.income.equals(true) & c.categoryPk.equals("0").not()
                   : selectedIncome == false
-                      ? c.income.equals(false)
+                      ? c.income.equals(false) & c.categoryPk.equals("0").not()
                       : Constant(true)) &
               (searchFor == null
                   ? Constant(true)
@@ -5050,15 +5050,18 @@ class FinanceDatabase extends _$FinanceDatabase {
         searchFilters.categoryPks.contains("0")
             ? Constant(true)
             : tbl.categoryFk.equals("0").not();
+    Expression<bool> isNotLoan = tbl.objectiveLoanFk.isNull() &
+        tbl.type.isNotInValues(
+            [TransactionSpecialType.credit, TransactionSpecialType.debt]);
     Expression<bool> isIncome = searchFilters.expenseIncome.length <= 0
         ? Constant(true)
         : searchFilters.expenseIncome.contains(ExpenseIncome.income)
-            ? tbl.income.equals(true) & isBalanceCorrectionAnd
+            ? tbl.income.equals(true) & isBalanceCorrectionAnd & isNotLoan
             : Constant(false);
     Expression<bool> isExpense = searchFilters.expenseIncome.length <= 0
         ? Constant(true)
         : searchFilters.expenseIncome.contains(ExpenseIncome.expense)
-            ? tbl.income.equals(false) & isBalanceCorrectionAnd
+            ? tbl.income.equals(false) & isBalanceCorrectionAnd & isNotLoan
             : Constant(false);
 
     Expression<bool> isPaid = searchFilters.paidStatus.length <= 0
@@ -5087,9 +5090,17 @@ class FinanceDatabase extends _$FinanceDatabase {
             ? tbl.skipPaid.equals(true) & tbl.type.isNotNull()
             : Constant(false);
 
+    Expression<bool> isLongTermLoanBorrowed = Constant(false);
+    Expression<bool> isLongTermLoanLent = Constant(false);
+    if (searchFilters.transactionTypes.contains(TransactionSpecialType.credit))
+      isLongTermLoanLent = tbl.objectiveLoanFk.isNotNull() & tbl.income.not();
+    if (searchFilters.transactionTypes.contains(TransactionSpecialType.debt))
+      isLongTermLoanBorrowed = tbl.objectiveLoanFk.isNotNull() & tbl.income;
     Expression<bool> isTransactionType =
         searchFilters.transactionTypes.length > 0
-            ? tbl.type.isInValues(searchFilters.transactionTypes)
+            ? tbl.type.isInValues(searchFilters.transactionTypes) |
+                isLongTermLoanLent |
+                isLongTermLoanBorrowed
             : Constant(true);
 
     Expression<bool> includeShared =
@@ -5150,15 +5161,6 @@ class FinanceDatabase extends _$FinanceDatabase {
         (includeShared | includeAdded) &
         isInAmountRange &
         isMethodAdded;
-  }
-
-  Expression<bool> onlyShowBalanceCorrectionIfIsIncomeIsNull(
-    $TransactionsTable tbl,
-    bool? isIncome,
-  ) {
-    return isIncome == null
-        ? Constant(true)
-        : transactions.categoryFk.equals("0").not();
   }
 
   Expression<bool> onlyShowTransactionBasedOnSearchQuery(
@@ -5419,9 +5421,13 @@ class FinanceDatabase extends _$FinanceDatabase {
 
   // Balance correction category has pk "0"
   // We also want to include these transactions if isIncome is null (total net spending)
+  // Also remove loans transactions here - we don't want loans to contribute to our other totals, only net
   Expression<bool> onlyShowIfNotBalanceCorrection(
       $TransactionsTable tbl, bool? isIncome) {
-    return (tbl.categoryFk.equals("0").not() |
+    return ((tbl.objectiveLoanFk.isNull() &
+            tbl.type.isNotInValues(
+                [TransactionSpecialType.credit, TransactionSpecialType.debt]) &
+            tbl.categoryFk.equals("0").not()) |
         (isIncome == null ? Constant(true) : Constant(false)));
   }
 
@@ -6065,11 +6071,15 @@ class FinanceDatabase extends _$FinanceDatabase {
                 cycleSettingsExtension: cycleSettingsExtension,
               ) &
               transactions.paid.equals(true) &
-              (selectedTab == 0 || selectedTab == null
+              (selectedTab == 0 ||
+                      selectedTab == null ||
+                      searchString == null ||
+                      searchString == ""
                   ? onlyShowTransactionBasedOnSearchQuery(
                       transactions, searchString,
                       withCategories: true,
                       joinedWithSubcategoriesTable: subCategories)
+                  // Only apply this tab specific total when searching
                   : (objectives.name
                       .collate(Collate.noCase)
                       .like("%" + (searchString ?? "") + "%"))) &
@@ -6553,6 +6563,7 @@ class FinanceDatabase extends _$FinanceDatabase {
       name: closeBalanceCorrection.name,
       note: closeBalanceCorrection.note,
       income: closeBalanceCorrection.income,
+      objectiveFk: Value(closeBalanceCorrection.objectiveFk),
       amount: originalBalanceCorrection.amount.abs() *
           double.parse(
             (closeBalanceCorrection.income

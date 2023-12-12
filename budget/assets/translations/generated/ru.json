@@ -644,11 +644,9 @@
   "repetitive-transaction-type-description-1": "Повторяя транзакцию",
   "repetitive-transaction-type-description-2": "Не учитывается к вашему общему количеству, если не отмечен «оплаченный» или «депонированный»",
   "lent-transaction-type-description-1": "Транзакция, которую вы предоставили",
-  "lent-transaction-type-description-2": "Расходы, пока не отмечены «",
-  "lent-transaction-type-description-3": "После того, как он соберется",
+  "lent-transaction-type-description-2": "Отрицательный денежный поток, пока не отмечен «собран»",
   "borrowed-transaction-type-description-1": "Транзакция заимствована у кого -то",
-  "borrowed-transaction-type-description-2": "Доход, пока не отмечен «урегулирован»",
-  "borrowed-transaction-type-description-3": "После «урегулирована», это не будет учитывать ваш общий",
+  "borrowed-transaction-type-description-2": "Положительный денежный поток, пока не отмечен «урегулирован»",
   "select-transaction-type": "Выберите тип транзакции",
   "mark-transaction-help-description": "Отметьте специальную транзакцию, нажав кнопку действия в записи транзакции",
   "increase-budget-warning": "Рассмотрим свой бюджет",
@@ -967,5 +965,9 @@
   "major-change-17": "Долгосрочные кредиты",
   "major-change-17-1": "Отслеживание Великого поста и заимствования денег в течение нескольких выплат",
   "amount-collected": "Сумма собрана",
-  "amount-settled": "Сумма урегулирована"
+  "amount-settled": "Сумма урегулирована",
+  "right-panel": "Правая панель",
+  "left-panel": "Левая панель",
+  "top-center": "Верхний центр",
+  "of-total": "всего"
 }

@@ -644,11 +644,9 @@
   "repetitive-transaction-type-description-1": "Transaksi teraktifasi ulang",
   "repetitive-transaction-type-description-2": "Tidak dihitung terhadap total Anda kecuali ditandai 'dibayar' atau 'disimpan'",
   "lent-transaction-type-description-1": "Transaksi yang Anda pinjamkan",
-  "lent-transaction-type-description-2": "Biaya sampai ditandai 'dikumpulkan'",
-  "lent-transaction-type-description-3": "Setelah 'dikumpulkan' itu tidak akan diperhitungkan dalam total Anda",
+  "lent-transaction-type-description-2": "Arus kas negatif sampai bertanda 'dikumpulkan'",
   "borrowed-transaction-type-description-1": "Transaksi dipinjam dari seseorang",
-  "borrowed-transaction-type-description-2": "Penghasilan sampai ditandai 'diselesaikan'",
-  "borrowed-transaction-type-description-3": "Setelah 'menetap' itu tidak akan diperhitungkan dalam total Anda",
+  "borrowed-transaction-type-description-2": "Arus kas positif sampai ditandai 'diselesaikan'",
   "select-transaction-type": "Pilih jenis transaksi",
   "mark-transaction-help-description": "Tandai transaksi khusus dengan mengetuk tombol tindakan di entri transaksi",
   "increase-budget-warning": "Pertimbangkan anggaran Anda",
@@ -967,5 +965,9 @@
   "major-change-17": "Pinjaman jangka panjang",
   "major-change-17-1": "Lacak Prapaskah dan meminjam uang selama beberapa periode pembayaran ganda",
   "amount-collected": "Jumlah yang dikumpulkan",
-  "amount-settled": "Jumlah diselesaikan"
+  "amount-settled": "Jumlah diselesaikan",
+  "right-panel": "Panel kanan",
+  "left-panel": "Panel kiri",
+  "top-center": "Top Center",
+  "of-total": "dari total"
 }

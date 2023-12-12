@@ -127,8 +127,6 @@ class BudgetHistoryLineGraph extends StatelessWidget {
       }
     }
 
-    print(filteredSpotsFixedX);
-
     double minY = double.infinity;
     double maxY = double.negativeInfinity;
     for (List<FlSpot> spots in filteredSpotsFixedX) {
@@ -560,7 +558,7 @@ class _BudgetHistoryLineGraphState extends State<_BudgetHistoryLineGraph> {
                       TextSpan(
                         text: convertToMoney(
                             Provider.of<AllWallets>(context, listen: false),
-                            lineBarSpot.y),
+                            lineBarSpot.y == -1e-14 ? 0 : lineBarSpot.y),
                         style: TextStyle(
                           color: lineBarSpot.bar.color ==
                                   lightenPastel(widget.color, amount: 0.3)

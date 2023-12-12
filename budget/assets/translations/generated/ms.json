@@ -644,11 +644,9 @@
   "repetitive-transaction-type-description-1": "Menggalakkan transaksi",
   "repetitive-transaction-type-description-2": "Tidak dikira ke arah jumlah anda melainkan ditandakan 'dibayar' atau 'disimpan'",
   "lent-transaction-type-description-1": "Urus niaga yang anda pinjamkan",
-  "lent-transaction-type-description-2": "Perbelanjaan sehingga ditandakan 'dikumpulkan'",
-  "lent-transaction-type-description-3": "Setelah 'dikumpulkan' tidak akan dikira ke arah jumlah anda",
+  "lent-transaction-type-description-2": "Aliran tunai negatif sehingga ditandakan 'dikumpulkan'",
   "borrowed-transaction-type-description-1": "Transaksi yang dipinjam dari seseorang",
-  "borrowed-transaction-type-description-2": "Pendapatan sehingga ditandakan 'diselesaikan'",
-  "borrowed-transaction-type-description-3": "Setelah 'diselesaikan' tidak akan dikira ke arah jumlah anda",
+  "borrowed-transaction-type-description-2": "Aliran tunai positif sehingga ditandakan 'diselesaikan'",
   "select-transaction-type": "Pilih jenis transaksi",
   "mark-transaction-help-description": "Tandakan transaksi khas dengan mengetuk butang tindakan dalam entri urus niaga",
   "increase-budget-warning": "Pertimbangkan anggaran anda",
@@ -967,5 +965,9 @@
   "major-change-17": "Pinjaman jangka panjang",
   "major-change-17-1": "Jejaki Lent dan Meminjam Wang dalam Tempoh Pelbagai Bayaran Balik",
   "amount-collected": "Jumlah yang dikumpulkan",
-  "amount-settled": "Jumlah yang diselesaikan"
+  "amount-settled": "Jumlah yang diselesaikan",
+  "right-panel": "Panel kanan",
+  "left-panel": "Panel kiri",
+  "top-center": "Pusat teratas",
+  "of-total": "jumlahnya"
 }

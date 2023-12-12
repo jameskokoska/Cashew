@@ -59,12 +59,14 @@ class AddObjectivePage extends StatefulWidget {
     this.objective,
     required this.routesToPopAfterDelete,
     this.objectiveType = ObjectiveType.goal,
+    this.selectedIncome,
   }) : super(key: key);
 
   //When a wallet is passed in, we are editing that wallet
   final Objective? objective;
   final RoutesToPopAfterDelete routesToPopAfterDelete;
   final ObjectiveType objectiveType;
+  final bool? selectedIncome;
 
   @override
   _AddObjectivePageState createState() => _AddObjectivePageState();
@@ -81,8 +83,8 @@ class _AddObjectivePageState extends State<AddObjectivePage>
   double selectedAmount = 0;
   DateTime selectedStartDate = DateTime.now();
   DateTime? selectedEndDate = null;
-  late bool selectedIncome =
-      widget.objectiveType == ObjectiveType.goal ? true : false;
+  late bool selectedIncome = widget.selectedIncome ??
+      (widget.objectiveType == ObjectiveType.goal ? true : false);
   bool selectedPin = true;
   String selectedWalletPk = appStateSettings["selectedWalletPk"];
 

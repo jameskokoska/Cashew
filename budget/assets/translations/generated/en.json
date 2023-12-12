@@ -644,11 +644,9 @@
   "repetitive-transaction-type-description-1": "Reccuring transaction",
   "repetitive-transaction-type-description-2": "Does not count towards your total unless marked 'Paid' or 'Deposited'",
   "lent-transaction-type-description-1": "Transaction that you lent out",
-  "lent-transaction-type-description-2": "Expense until marked 'Collected'",
-  "lent-transaction-type-description-3": "Once 'Collected' it will not count towards your total",
+  "lent-transaction-type-description-2": "Negative cash flow until marked 'Collected'",
   "borrowed-transaction-type-description-1": "Transaction borrowed from someone",
-  "borrowed-transaction-type-description-2": "Income until marked 'Settled'",
-  "borrowed-transaction-type-description-3": "Once 'Settled' it will not count towards your total",
+  "borrowed-transaction-type-description-2": "Positive cash flow until marked 'Settled'",
   "select-transaction-type": "Select Transaction Type",
   "mark-transaction-help-description": "Mark a special transaction by tapping the action button in the transaction entry",
   "increase-budget-warning": "Consider Your Budget",
@@ -967,5 +965,9 @@
   "major-change-17": "Long Term Loans",
   "major-change-17-1": "Track lent and borrowed money over a period of multiple repayments",
   "amount-collected": "Amount Collected",
-  "amount-settled": "Amount Settled"
+  "amount-settled": "Amount Settled",
+  "right-panel": "Right Panel",
+  "left-panel": "Left Panel",
+  "top-center": "Top Center",
+  "of-total": "of total"
 }

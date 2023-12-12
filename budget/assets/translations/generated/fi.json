@@ -644,11 +644,9 @@
   "repetitive-transaction-type-description-1": "Tapahtuma",
   "repetitive-transaction-type-description-2": "Ei lasketa kokonaismääräsi, ellei merkitty 'maksettu' tai 'talletettu'",
   "lent-transaction-type-description-1": "Tapahtuma, jonka lainat",
-  "lent-transaction-type-description-2": "Kulut, kunnes \"kerätään\"",
-  "lent-transaction-type-description-3": "Kun 'kerätään', sitä ei lasketa kokonaismääräsi",
+  "lent-transaction-type-description-2": "Negatiivinen kassavirta, kunnes \"kerätään\"",
   "borrowed-transaction-type-description-1": "Kauppa lainaten joltakin",
-  "borrowed-transaction-type-description-2": "Tulot, kunnes \"ratkaistaan\"",
-  "borrowed-transaction-type-description-3": "Kun 'asettunut', sitä ei lasketa kokonaismäärään",
+  "borrowed-transaction-type-description-2": "Positiivinen kassavirta, kunnes \"asettu\"",
   "select-transaction-type": "Valitse tapahtumatyyppi",
   "mark-transaction-help-description": "Merkitse erityinen tapahtuma napauttamalla toimintapainiketta tapahtuman merkinnässä",
   "increase-budget-warning": "Harkitse budjettiasi",
@@ -967,5 +965,9 @@
   "major-change-17": "Pitkäaikaiset lainat",
   "major-change-17-1": "Seuraa lainaa ja lainasi rahaa useiden takaisinmaksujen aikana",
   "amount-collected": "Kerätty määrä",
-  "amount-settled": "Summa ratkaistu"
+  "amount-settled": "Summa ratkaistu",
+  "right-panel": "Oikea paneeli",
+  "left-panel": "Vasen paneeli",
+  "top-center": "Huippukeskus",
+  "of-total": "yhteensä"
 }

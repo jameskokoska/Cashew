@@ -644,11 +644,9 @@
   "repetitive-transaction-type-description-1": "Genoptagelse af transaktion",
   "repetitive-transaction-type-description-2": "Tæller ikke med til dit samlede, medmindre markeret 'betalt' eller 'deponeret'",
   "lent-transaction-type-description-1": "Transaktion, som du lånte ud",
-  "lent-transaction-type-description-2": "Udgifter, indtil de er markeret 'indsamlet'",
-  "lent-transaction-type-description-3": "En gang 'indsamlet' tæller det ikke med dit samlede",
+  "lent-transaction-type-description-2": "Negativ pengestrøm indtil markeret 'indsamlet'",
   "borrowed-transaction-type-description-1": "Transaktion lånt fra nogen",
-  "borrowed-transaction-type-description-2": "Indkomst indtil markeret 'afviklet'",
-  "borrowed-transaction-type-description-3": "En gang 'afviklet' tæller det ikke med dit samlede",
+  "borrowed-transaction-type-description-2": "Positiv pengestrøm, indtil den er markeret 'bosættet'",
   "select-transaction-type": "Vælg transaktionstype",
   "mark-transaction-help-description": "Marker en speciel transaktion ved at trykke på handlingsknappen i transaktionsindgangen",
   "increase-budget-warning": "Overvej dit budget",
@@ -967,5 +965,9 @@
   "major-change-17": "Langsigtede lån",
   "major-change-17-1": "Spor udlånt og lånte penge over en periode med flere tilbagebetalinger",
   "amount-collected": "Indsamlet beløb",
-  "amount-settled": "Beløb afgjort"
+  "amount-settled": "Beløb afgjort",
+  "right-panel": "Højre panel",
+  "left-panel": "Venstre panel",
+  "top-center": "Øverste centrum",
+  "of-total": "af total"
 }

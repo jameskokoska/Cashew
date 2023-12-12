@@ -144,7 +144,6 @@ String convertToMoney(
         Platform.localeName,
     symbol: getCurrencyString(allWallets, currencyKey: currencyKey),
   );
-  if (amount == 10000.96) print(currency.format(amount));
   // If there is no currency symbol, use the currency code
   if (getCurrencyString(allWallets, currencyKey: currencyKey) == "") {
     addCurrencyName = true;

@@ -644,11 +644,9 @@
   "repetitive-transaction-type-description-1": "トランザクションの再発",
   "repetitive-transaction-type-description-2": "「支払」または「預け入れ」とマークされていない限り、合計にカウントされません",
   "lent-transaction-type-description-1": "あなたが貸し出した取引",
-  "lent-transaction-type-description-2": "「収集」とマークされるまでの費用",
-  "lent-transaction-type-description-3": "「収集」したら、合計にカウントされません",
+  "lent-transaction-type-description-2": "「収集」とマークされるまで、負のキャッシュフロー",
   "borrowed-transaction-type-description-1": "誰かから借りた取引",
-  "borrowed-transaction-type-description-2": "「解決」とマークされるまで収入",
-  "borrowed-transaction-type-description-3": "「落ち着いた」とあなたの合計にはカウントされません",
+  "borrowed-transaction-type-description-2": "「解決」とマークされるまでプラスのキャッシュフロー",
   "select-transaction-type": "トランザクションタイプを選択します",
   "mark-transaction-help-description": "トランザクションエントリのアクションボタンをタップして、特別なトランザクションをマークします",
   "increase-budget-warning": "あなたの予算を考慮してください",
@@ -967,5 +965,9 @@
   "major-change-17": "長期ローン",
   "major-change-17-1": "複数の返済の期間にわたって貸し出しと借りたお金を追跡する",
   "amount-collected": "収集された量",
-  "amount-settled": "和解した金額"
+  "amount-settled": "和解した金額",
+  "right-panel": "右パネル",
+  "left-panel": "左パネル",
+  "top-center": "トップセンター",
+  "of-total": "合計"
 }

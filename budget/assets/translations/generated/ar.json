@@ -644,11 +644,9 @@
   "repetitive-transaction-type-description-1": "إعادة تهيج المعاملة",
   "repetitive-transaction-type-description-2": "لا تحسب تجاه إجماليك ما لم يتم وضع علامة \"مدفوعة\" أو \"مودعة\"",
   "lent-transaction-type-description-1": "المعاملة التي قدمتها",
-  "lent-transaction-type-description-2": "المصاريف حتى تميز \"تم جمعها\"",
-  "lent-transaction-type-description-3": "بمجرد \"جمعها\" ، لن يتم احتسابها نحو المجموع",
+  "lent-transaction-type-description-2": "التدفق النقدي السلبي حتى يتم وضع علامة \"تم جمعه\"",
   "borrowed-transaction-type-description-1": "استعارت المعاملة من شخص ما",
-  "borrowed-transaction-type-description-2": "الدخل حتى يحدد \"تسوية\"",
-  "borrowed-transaction-type-description-3": "بمجرد \"الاستقرار\" ، لن يتم احتسابها نحو المجموع",
+  "borrowed-transaction-type-description-2": "التدفق النقدي الإيجابي حتى تم وضع علامة عليه \"استقر\"",
   "select-transaction-type": "حدد نوع المعاملة",
   "mark-transaction-help-description": "حدد معاملة خاصة عن طريق النقر على زر الإجراء في إدخال المعاملة",
   "increase-budget-warning": "النظر في ميزانيتك",
@@ -967,5 +965,9 @@
   "major-change-17": "قروض طويلة الأجل",
   "major-change-17-1": "قرض المسار والاقتراض الأموال على مدى فترة من السدادات المتعددة",
   "amount-collected": "المبلغ الذي تم جمعه",
-  "amount-settled": "المبلغ تسوية"
+  "amount-settled": "المبلغ تسوية",
+  "right-panel": "اللوحة اليمنى",
+  "left-panel": "اللوحة اليسرى",
+  "top-center": "مركز أعلى",
+  "of-total": "من الكل"
 }

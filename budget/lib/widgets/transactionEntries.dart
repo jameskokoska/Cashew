@@ -269,7 +269,12 @@ class TransactionEntries extends StatelessWidget {
                             transactionWithCategory.transaction.walletFk));
               }
               if (transactionWithCategory.transaction.paid &&
-                  transactionWithCategory.transaction.categoryFk != "0") {
+                  transactionWithCategory.transaction.categoryFk != "0" &&
+                  transactionWithCategory.transaction.type !=
+                      TransactionSpecialType.credit &&
+                  transactionWithCategory.transaction.type !=
+                      TransactionSpecialType.debt &&
+                  transactionWithCategory.transaction.objectiveLoanFk == null) {
                 double amountForDay =
                     transactionWithCategory.transaction.amount *
                         (amountRatioToPrimaryCurrencyGivenPk(

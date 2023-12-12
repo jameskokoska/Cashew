@@ -644,11 +644,9 @@
   "repetitive-transaction-type-description-1": "거래 재발",
   "repetitive-transaction-type-description-2": "'유료'또는 '예금'으로 표시되지 않는 한 총계에 포함되지 않습니다.",
   "lent-transaction-type-description-1": "당신이 빌린 거래",
-  "lent-transaction-type-description-2": "'수집'으로 표시 될 때까지 비용",
-  "lent-transaction-type-description-3": "'수집'되면 총계에 포함되지 않습니다.",
+  "lent-transaction-type-description-2": "'수집'으로 표시 될 때까지 부정적인 현금 흐름",
   "borrowed-transaction-type-description-1": "거래가 누군가로부터 차용되었습니다",
-  "borrowed-transaction-type-description-2": "'정착'으로 표시 될 때까지의 소득",
-  "borrowed-transaction-type-description-3": "일단 '정착'하면 총계에 포함되지 않습니다.",
+  "borrowed-transaction-type-description-2": "'정착'으로 표시 될 때까지 긍정적 인 현금 흐름",
   "select-transaction-type": "트랜잭션 유형을 선택하십시오",
   "mark-transaction-help-description": "트랜잭션 항목에서 조치 버튼을 탭하여 특별 트랜잭션 표시",
   "increase-budget-warning": "예산을 고려하십시오",
@@ -967,5 +965,9 @@
   "major-change-17": "장기 대출",
   "major-change-17-1": "여러 번 상환 기간 동안 사순절 및 빌린 돈을 추적",
   "amount-collected": "수집 된 금액",
-  "amount-settled": "금액이 정착되었습니다"
+  "amount-settled": "금액이 정착되었습니다",
+  "right-panel": "오른쪽 패널",
+  "left-panel": "왼쪽 패널",
+  "top-center": "최고 센터",
+  "of-total": "총계"
 }

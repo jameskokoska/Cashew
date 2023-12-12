@@ -644,11 +644,9 @@
   "repetitive-transaction-type-description-1": "Transaction réoccupée",
   "repetitive-transaction-type-description-2": "Ne compte pas pour votre total, sauf s'il est marqué «payé» ou «déposé»",
   "lent-transaction-type-description-1": "Transaction que vous avez prêté",
-  "lent-transaction-type-description-2": "Dépense jusqu'à ce qu'il soit marqué «collecté»",
-  "lent-transaction-type-description-3": "Une fois «collecté», il ne comptera pas pour votre total",
+  "lent-transaction-type-description-2": "Flux de trésorerie négatifs jusqu'à ce qu'il soit marqué `` collecté ''",
   "borrowed-transaction-type-description-1": "Transaction empruntée à quelqu'un",
-  "borrowed-transaction-type-description-2": "Le revenu jusqu'à ce qu'il soit marqué «réglé»",
-  "borrowed-transaction-type-description-3": "Une fois «réglé», il ne comptera pas pour votre total",
+  "borrowed-transaction-type-description-2": "Flux de trésorerie positifs jusqu'à ce qu'il soit marqué «réglé»",
   "select-transaction-type": "Sélectionner le type de transaction",
   "mark-transaction-help-description": "Marquez une transaction spéciale en appuyant le bouton d'action dans la saisie de transaction",
   "increase-budget-warning": "Considérez votre budget",
@@ -967,5 +965,9 @@
   "major-change-17": "Prêts à long terme",
   "major-change-17-1": "Suivre le Carême et emprunter de l'argent sur une période de remboursement multiples",
   "amount-collected": "Montant collecté",
-  "amount-settled": "Montant réglé"
+  "amount-settled": "Montant réglé",
+  "right-panel": "Panneau de droite",
+  "left-panel": "Panneau de gauche",
+  "top-center": "Centre supérieur",
+  "of-total": "Du total"
 }

@@ -644,11 +644,9 @@
   "repetitive-transaction-type-description-1": "Opakování transakce",
   "repetitive-transaction-type-description-2": "Nepočítá se do celkového počtu, pokud není označeno „placené“ nebo „uloženo“",
   "lent-transaction-type-description-1": "Transakce, kterou jste půjčili",
-  "lent-transaction-type-description-2": "Výdaje, dokud není označen „shromážděn“",
-  "lent-transaction-type-description-3": "Jakmile je „shromážděno“, nebude se započítávat do vašeho celkového počtu",
+  "lent-transaction-type-description-2": "Negativní peněžní tok, dokud není označen „shromážděn“",
   "borrowed-transaction-type-description-1": "Transakce si půjčila od někoho",
-  "borrowed-transaction-type-description-2": "Příjem, dokud není označen „usazeno“",
-  "borrowed-transaction-type-description-3": "Jakmile se „usadí“, nebude se započítávat do vašeho celkového počtu",
+  "borrowed-transaction-type-description-2": "Pozitivní peněžní tok, dokud není označen „usazený“",
   "select-transaction-type": "Vyberte typ transakce",
   "mark-transaction-help-description": "Označte speciální transakci klepnutím na tlačítko Akce při zadání transakce",
   "increase-budget-warning": "Zvažte svůj rozpočet",
@@ -967,5 +965,9 @@
   "major-change-17": "Dlouhodobé půjčky",
   "major-change-17-1": "Sledujte zapůjčené a vypůjčené peníze po dobu několika splátek",
   "amount-collected": "Shromážděná částka",
-  "amount-settled": "Částka usazená"
+  "amount-settled": "Částka usazená",
+  "right-panel": "Pravý panel",
+  "left-panel": "Levý panel",
+  "top-center": "Horní centrum",
+  "of-total": "celkem"
 }

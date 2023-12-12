@@ -26,6 +26,17 @@ import 'listItem.dart';
 
 String getChangelogString() {
   return """
+    < 5.0.4
+    Better custom home page sections ordering on full screen
+    Removed income/expense references when using a balance correction category
+    Selecting balance correction no longer switches income/expense
+    Changing goal does not update both balance corrections
+    Fixed label for income category spending on budget page
+    Loaded search filter for date loads at least one year into the future
+    Loans are no longer counted towards income/expense totals
+    Improved loan/borrowed transaction type descriptions
+    Fixed total loans amount owing when tab initialized to long term loan page
+    Loan filtering is more intuitive - now includes transactions from long term loans
     < 5.0.3
     Long term/partial loan tracking!
     Can disable transactions list on full screen

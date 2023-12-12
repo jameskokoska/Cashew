@@ -644,11 +644,9 @@
   "repetitive-transaction-type-description-1": "Kufanya tena shughuli",
   "repetitive-transaction-type-description-2": "Haihesabu jumla yako isipokuwa alama 'iliyolipwa' au 'iliyohifadhiwa'",
   "lent-transaction-type-description-1": "Shughuli ambayo umekopa",
-  "lent-transaction-type-description-2": "Gharama mpaka alama 'kukusanywa'",
-  "lent-transaction-type-description-3": "Mara tu 'ikiwa imekusanywa' haitahesabu jumla yako",
+  "lent-transaction-type-description-2": "Mtiririko mbaya wa pesa hadi uweke alama 'kukusanywa'",
   "borrowed-transaction-type-description-1": "Shughuli iliyokopwa kutoka kwa mtu",
-  "borrowed-transaction-type-description-2": "Mapato mpaka alama 'kutulia'",
-  "borrowed-transaction-type-description-3": "Mara tu 'kutulia' haitahesabu jumla yako",
+  "borrowed-transaction-type-description-2": "Mtiririko mzuri wa pesa hadi uweke alama 'kutulia'",
   "select-transaction-type": "Chagua Aina ya Ununuzi",
   "mark-transaction-help-description": "Weka alama shughuli maalum kwa kugonga kitufe cha hatua kwenye kiingilio cha manunuzi",
   "increase-budget-warning": "Fikiria bajeti yako",
@@ -967,5 +965,9 @@
   "major-change-17": "Mikopo ya muda mrefu",
   "major-change-17-1": "Fuatilia pesa na kukopa pesa kwa kipindi cha ulipaji kadhaa",
   "amount-collected": "Kiasi kilichokusanywa",
-  "amount-settled": "Kiasi kimewekwa"
+  "amount-settled": "Kiasi kimewekwa",
+  "right-panel": "Jopo la kulia",
+  "left-panel": "Jopo la kushoto",
+  "top-center": "Kituo cha juu",
+  "of-total": "ya jumla"
 }

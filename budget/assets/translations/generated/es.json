@@ -644,11 +644,9 @@
   "repetitive-transaction-type-description-1": "Transacción recurrente",
   "repetitive-transaction-type-description-2": "No cuenta para su total a menos que sea marcado 'pagado' o 'depositado'",
   "lent-transaction-type-description-1": "Transacción que prestaste",
-  "lent-transaction-type-description-2": "Gastos hasta que se marque 'recolectado'",
-  "lent-transaction-type-description-3": "Una vez 'recolectado', no contará para su total",
+  "lent-transaction-type-description-2": "Flujo de caja negativo hasta que se marque 'recolectado'",
   "borrowed-transaction-type-description-1": "Transacción tomada de alguien",
-  "borrowed-transaction-type-description-2": "Ingresos hasta que se marque 'establecido'",
-  "borrowed-transaction-type-description-3": "Una vez 'establecido', no contará para su total",
+  "borrowed-transaction-type-description-2": "Flujo de caja positivo hasta que se marque 'liquidado'",
   "select-transaction-type": "Seleccionar el tipo de transacción",
   "mark-transaction-help-description": "Marque una transacción especial tocando el botón de acción en la entrada de la transacción",
   "increase-budget-warning": "Considere su presupuesto",
@@ -967,5 +965,9 @@
   "major-change-17": "Préstamos a largo plazo",
   "major-change-17-1": "Seguimiento de dinero prestado y prestado durante un período de pagos múltiples",
   "amount-collected": "Cantidad recolectada",
-  "amount-settled": "Monto establecido"
+  "amount-settled": "Monto establecido",
+  "right-panel": "Panel derecho",
+  "left-panel": "Panel izquierdo",
+  "top-center": "Centro Superior",
+  "of-total": "del total"
 }

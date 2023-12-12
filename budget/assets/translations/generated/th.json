@@ -644,11 +644,9 @@
   "repetitive-transaction-type-description-1": "การทำธุรกรรมใหม่",
   "repetitive-transaction-type-description-2": "ไม่นับรวมกับยอดรวมของคุณเว้นแต่จะทำเครื่องหมายว่า 'จ่าย' หรือ 'ฝาก'",
   "lent-transaction-type-description-1": "ธุรกรรมที่คุณให้ยืม",
-  "lent-transaction-type-description-2": "ค่าใช้จ่ายจนกว่าจะทำเครื่องหมาย 'รวบรวม'",
-  "lent-transaction-type-description-3": "เมื่อ 'รวบรวม' มันจะไม่นับรวมเป็นผลรวมของคุณ",
+  "lent-transaction-type-description-2": "กระแสเงินสดติดลบจนกระทั่งทำเครื่องหมาย 'รวบรวม'",
   "borrowed-transaction-type-description-1": "ธุรกรรมที่ยืมมาจากใครบางคน",
-  "borrowed-transaction-type-description-2": "รายได้จนกว่าจะทำเครื่องหมาย 'ตัดสิน'",
-  "borrowed-transaction-type-description-3": "เมื่อ 'ตัดสิน' มันจะไม่นับรวมเป็นผลรวมของคุณ",
+  "borrowed-transaction-type-description-2": "กระแสเงินสดบวกจนกว่าจะทำเครื่องหมาย 'ตัดสิน'",
   "select-transaction-type": "เลือกประเภทธุรกรรม",
   "mark-transaction-help-description": "ทำเครื่องหมายธุรกรรมพิเศษโดยแตะปุ่มการกระทำในรายการธุรกรรม",
   "increase-budget-warning": "พิจารณางบประมาณของคุณ",
@@ -967,5 +965,9 @@
   "major-change-17": "สินเชื่อระยะยาว",
   "major-change-17-1": "ติดตามการเข้าพรรษาและยืมเงินในช่วงระยะเวลาการชำระคืนหลายครั้ง",
   "amount-collected": "จำนวนเงินที่รวบรวม",
-  "amount-settled": "จำนวนเงินที่ตัดสิน"
+  "amount-settled": "จำนวนเงินที่ตัดสิน",
+  "right-panel": "แผงด้านขวา",
+  "left-panel": "แผงด้านซ้าย",
+  "top-center": "ศูนย์กลาง",
+  "of-total": "ทั้งหมด"
 }

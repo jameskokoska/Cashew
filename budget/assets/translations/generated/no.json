@@ -644,11 +644,9 @@
   "repetitive-transaction-type-description-1": "Gjenopptatt transaksjon",
   "repetitive-transaction-type-description-2": "Teller ikke mot totalen din med mindre merket 'betalt' eller 'deponert'",
   "lent-transaction-type-description-1": "Transaksjon som du lånte ut",
-  "lent-transaction-type-description-2": "Utgifter til de er markert 'samlet'",
-  "lent-transaction-type-description-3": "Når den er samlet inn ', vil det ikke telle mot totalen din",
+  "lent-transaction-type-description-2": "Negativ kontantstrøm til de er merket 'samlet'",
   "borrowed-transaction-type-description-1": "Transaksjon lånt fra noen",
-  "borrowed-transaction-type-description-2": "Inntekt til de er merket 'avgjort'",
-  "borrowed-transaction-type-description-3": "Når den er \"avgjort\", vil det ikke telle mot totalen din",
+  "borrowed-transaction-type-description-2": "Positiv kontantstrøm til de er merket 'avgjort'",
   "select-transaction-type": "Velg transaksjonstype",
   "mark-transaction-help-description": "Merk en spesiell transaksjon ved å trykke på handlingsknappen i transaksjonsoppføringen",
   "increase-budget-warning": "Tenk på budsjettet ditt",
@@ -967,5 +965,9 @@
   "major-change-17": "Langsiktige lån",
   "major-change-17-1": "Spor lånte og lånte penger over en periode med flere tilbakebetaling",
   "amount-collected": "Beløp samlet inn",
-  "amount-settled": "Beløp avgjort"
+  "amount-settled": "Beløp avgjort",
+  "right-panel": "Høyre panel",
+  "left-panel": "Venstre panel",
+  "top-center": "Toppsenter",
+  "of-total": "av totalt"
 }

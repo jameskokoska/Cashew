@@ -283,9 +283,11 @@ class _EditCategoriesPageState extends State<EditCategoriesPage> {
                                           ),
                                           TextFont(
                                             textAlign: TextAlign.left,
-                                            text: category.income
-                                                ? "income".tr()
-                                                : "expense".tr(),
+                                            text: category.categoryPk == "0"
+                                                ? "balance-correction".tr()
+                                                : category.income
+                                                    ? "income".tr()
+                                                    : "expense".tr(),
                                             fontSize: 14,
                                             textColor:
                                                 getColor(context, "black")

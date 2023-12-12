@@ -644,11 +644,9 @@
   "repetitive-transaction-type-description-1": "Переробляючи транзакцію",
   "repetitive-transaction-type-description-2": "Не враховується до вашої загальної кількості, якщо не відзначається \"сплачений\" або \"депонований\"",
   "lent-transaction-type-description-1": "Транзакція, яку ви подали",
-  "lent-transaction-type-description-2": "Витрати до позначення \"зібраних\"",
-  "lent-transaction-type-description-3": "Після \"зібраного\" він не враховуватиметься до вашого загального",
+  "lent-transaction-type-description-2": "Негативний грошовий потік до позначення \"зібрано\"",
   "borrowed-transaction-type-description-1": "Транзакція, запозичена у когось",
-  "borrowed-transaction-type-description-2": "Дохід до позначення \"врегульовано\"",
-  "borrowed-transaction-type-description-3": "Після того, як \"врегульовано\", він не врахуватиметься до вашого загального",
+  "borrowed-transaction-type-description-2": "Позитивний грошовий потік, поки не позначений \"врегульовано\"",
   "select-transaction-type": "Виберіть Тип транзакції",
   "mark-transaction-help-description": "Позначте спеціальну транзакцію, натиснувши кнопку дії в записі транзакції",
   "increase-budget-warning": "Розгляньте свій бюджет",
@@ -967,5 +965,9 @@
   "major-change-17": "Довгострокові позики",
   "major-change-17-1": "Відстежувати посту та позичали гроші протягом періоду декількох виплат",
   "amount-collected": "Сума зібрана",
-  "amount-settled": "Сума врегульована"
+  "amount-settled": "Сума врегульована",
+  "right-panel": "Права панель",
+  "left-panel": "Ліва панель",
+  "top-center": "Верхній центр",
+  "of-total": "загалом"
 }

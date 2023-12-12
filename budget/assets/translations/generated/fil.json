@@ -644,11 +644,9 @@
   "repetitive-transaction-type-description-1": "Reccuring transaksyon",
   "repetitive-transaction-type-description-2": "Hindi mabibilang patungo sa iyong kabuuan maliban kung minarkahan ang 'bayad' o 'idineposito'",
   "lent-transaction-type-description-1": "Transaksyon na ipinahiram mo",
-  "lent-transaction-type-description-2": "Gastos hanggang sa minarkahang 'nakolekta'",
-  "lent-transaction-type-description-3": "Kapag 'nakolekta' hindi ito mabibilang sa iyong kabuuan",
+  "lent-transaction-type-description-2": "Negatibong daloy ng cash hanggang sa minarkahang 'nakolekta'",
   "borrowed-transaction-type-description-1": "Transaksyon na hiniram mula sa isang tao",
-  "borrowed-transaction-type-description-2": "Kita hanggang sa minarkahang 'husay'",
-  "borrowed-transaction-type-description-3": "Kapag 'naayos' hindi ito mabibilang sa iyong kabuuan",
+  "borrowed-transaction-type-description-2": "Positibong daloy ng cash hanggang sa minarkahang 'naayos'",
   "select-transaction-type": "Piliin ang Uri ng Transaksyon",
   "mark-transaction-help-description": "Markahan ang isang espesyal na transaksyon sa pamamagitan ng pag -tap sa pindutan ng pagkilos sa pagpasok sa transaksyon",
   "increase-budget-warning": "Isaalang -alang ang iyong badyet",
@@ -967,5 +965,9 @@
   "major-change-17": "Pangmatagalang pautang",
   "major-change-17-1": "Subaybayan ang Kuwaresma at Humiram ng Pera sa loob ng isang Panahon ng Maramihang Mga Pagbabayad",
   "amount-collected": "Halagang nakolekta",
-  "amount-settled": "Halaga na naayos"
+  "amount-settled": "Halaga na naayos",
+  "right-panel": "Kanang panel",
+  "left-panel": "Kaliwang panel",
+  "top-center": "Nangungunang sentro",
+  "of-total": "ng kabuuan"
 }

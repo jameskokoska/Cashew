@@ -644,11 +644,9 @@
   "repetitive-transaction-type-description-1": "RECCURING TRANSAZIONE",
   "repetitive-transaction-type-description-2": "Non conta per il totale se non contrassegnato \"pagato\" o \"depositato\"",
   "lent-transaction-type-description-1": "Transazione che hai prestato",
-  "lent-transaction-type-description-2": "Spese fino a quando non è stato contrassegnato \"raccolto\"",
-  "lent-transaction-type-description-3": "Una volta \"raccolto\" non contarà per il totale",
+  "lent-transaction-type-description-2": "Flusso di cassa negativo fino a quando non è stato contrassegnato \"raccolto\"",
   "borrowed-transaction-type-description-1": "Transazione presa in prestito da qualcuno",
-  "borrowed-transaction-type-description-2": "Reddito fino a segnalare \"risolto\"",
-  "borrowed-transaction-type-description-3": "Una volta \"sistemato\" non conta per il tuo totale",
+  "borrowed-transaction-type-description-2": "Flusso di cassa positivo fino a quando non è stato contrassegnato \"",
   "select-transaction-type": "Seleziona il tipo di transazione",
   "mark-transaction-help-description": "Segna una transazione speciale toccando il pulsante Azione nella voce della transazione",
   "increase-budget-warning": "Considera il tuo budget",
@@ -967,5 +965,9 @@
   "major-change-17": "Prestiti a lungo termine",
   "major-change-17-1": "Traccia la Quaresima e il denaro preso in prestito per un periodo di rimborsi multipli",
   "amount-collected": "Importo raccolto",
-  "amount-settled": "Importo risolto"
+  "amount-settled": "Importo risolto",
+  "right-panel": "Pannello a destra",
+  "left-panel": "Pannello a sinistra",
+  "top-center": "Centro superiore",
+  "of-total": "di totale"
 }

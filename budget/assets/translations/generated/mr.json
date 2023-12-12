@@ -644,11 +644,9 @@
   "repetitive-transaction-type-description-1": "पुन्हा व्यवहार करणे",
   "repetitive-transaction-type-description-2": "'पेड' किंवा 'जमा' चिन्हांकित केल्याशिवाय आपल्या एकूणकडे मोजले जात नाही",
   "lent-transaction-type-description-1": "आपण कर्ज दिले आहे",
-  "lent-transaction-type-description-2": "'संग्रहित' होईपर्यंत खर्च",
-  "lent-transaction-type-description-3": "एकदा 'संग्रहित' केल्यावर ते आपल्या एकूणकडे मोजले जाणार नाही",
+  "lent-transaction-type-description-2": "'संग्रहित' होईपर्यंत नकारात्मक रोख प्रवाह",
   "borrowed-transaction-type-description-1": "व्यवहार एखाद्याकडून कर्ज घेतले",
-  "borrowed-transaction-type-description-2": "'सेटलमेंट' होईपर्यंत उत्पन्न",
-  "borrowed-transaction-type-description-3": "एकदा 'सेटलमेंट' झाल्यावर ते तुमच्या एकूणकडे मोजले जाणार नाही",
+  "borrowed-transaction-type-description-2": "'सेटलमेंट' होईपर्यंत सकारात्मक रोख प्रवाह",
   "select-transaction-type": "व्यवहार प्रकार निवडा",
   "mark-transaction-help-description": "व्यवहाराच्या प्रवेशात अ‍ॅक्शन बटण टॅप करून विशेष व्यवहार चिन्हांकित करा",
   "increase-budget-warning": "आपल्या बजेटचा विचार करा",
@@ -967,5 +965,9 @@
   "major-change-17": "दीर्घकालीन कर्ज",
   "major-change-17-1": "एकाधिक परतफेडच्या कालावधीत लेंट आणि कर्ज घेतलेल्या पैशाचा मागोवा घ्या",
   "amount-collected": "रक्कम गोळा केली",
-  "amount-settled": "रक्कम सेटल"
+  "amount-settled": "रक्कम सेटल",
+  "right-panel": "उजवा पॅनेल",
+  "left-panel": "डावा पॅनेल",
+  "top-center": "शीर्ष केंद्र",
+  "of-total": "एकूण"
 }

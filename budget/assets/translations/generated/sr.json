@@ -644,11 +644,9 @@
   "repetitive-transaction-type-description-1": "Поновна трансакција",
   "repetitive-transaction-type-description-2": "Не рачуна се према вашем укупном ако није означено \"плаћено\" или \"депоновано\"",
   "lent-transaction-type-description-1": "Трансакција коју сте позајмили",
-  "lent-transaction-type-description-2": "Трошак док се не обележе \"прикупљено\"",
-  "lent-transaction-type-description-3": "Једном када се \"прикупља\" неће рачунати према вашем укупном",
+  "lent-transaction-type-description-2": "Негативан ток новца док се не обележи \"прикупљено\"",
   "borrowed-transaction-type-description-1": "Трансакција позајмљена од некога",
-  "borrowed-transaction-type-description-2": "Приход док се не обележе \"решено\"",
-  "borrowed-transaction-type-description-3": "Једном када се \"реши\", неће се рачунати према вашем укупном",
+  "borrowed-transaction-type-description-2": "Позитиван ток новца док се не обележе \"решено\"",
   "select-transaction-type": "Одаберите врсту трансакције",
   "mark-transaction-help-description": "Означите посебну трансакцију додиром гумба акције у улазу у трансакцију",
   "increase-budget-warning": "Размислите о свом буџету",
@@ -967,5 +965,9 @@
   "major-change-17": "Дугорочни кредити",
   "major-change-17-1": "Праћење позајмљених и позајмљено новац у периоду од више отплате",
   "amount-collected": "Прикупљени износ",
-  "amount-settled": "Измирени износ"
+  "amount-settled": "Измирени износ",
+  "right-panel": "Десни панел",
+  "left-panel": "Леве плоче",
+  "top-center": "Топ центар",
+  "of-total": "од укупно"
 }

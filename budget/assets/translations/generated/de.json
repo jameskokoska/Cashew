@@ -644,11 +644,9 @@
   "repetitive-transaction-type-description-1": "Wiederholung der Transaktion",
   "repetitive-transaction-type-description-2": "Zählt nicht zu Ihrer Gesamtsumme, es sei denn, sie markiert \"bezahlt\" oder \"deponiert\"",
   "lent-transaction-type-description-1": "Transaktion, die Sie ausgeliehen haben",
-  "lent-transaction-type-description-2": "Kosten bis zum „gesammelten“ markiert",
-  "lent-transaction-type-description-3": "Sobald es 'gesammelt'",
+  "lent-transaction-type-description-2": "Negativer Cashflow bis zum „gesammelten“ markiert",
   "borrowed-transaction-type-description-1": "Transaktion von jemandem ausgeliehen",
-  "borrowed-transaction-type-description-2": "Einkommen bis zum markierten \"Beigelegten\"",
-  "borrowed-transaction-type-description-3": "Sobald es sich gelegt hat, wird es nicht zu Ihrer Gesamtsumme angerechnet",
+  "borrowed-transaction-type-description-2": "Positiver Cashflow bis zum markierten \"Beigelegten\"",
   "select-transaction-type": "Wählen Sie den Transaktionstyp",
   "mark-transaction-help-description": "Markieren Sie eine spezielle Transaktion, indem Sie auf die Aktionstaste im Transaktioneintrag tippen",
   "increase-budget-warning": "Betrachten Sie Ihr Budget",
@@ -967,5 +965,9 @@
   "major-change-17": "Langzeitdarlehen",
   "major-change-17-1": "Verfolgen Sie die Fastenzeit und das geliehene Geld über einen Zeitraum mehrerer Rückzahlungen",
   "amount-collected": "Betrag gesammelt",
-  "amount-settled": "Betrag beigelegt"
+  "amount-settled": "Betrag beigelegt",
+  "right-panel": "Rechte Panel",
+  "left-panel": "Linker Feld",
+  "top-center": "Oben in der Mitte",
+  "of-total": "von insgesamt"
 }

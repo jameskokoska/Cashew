@@ -644,11 +644,9 @@
   "repetitive-transaction-type-description-1": "تکرار مجدد معامله",
   "repetitive-transaction-type-description-2": "به کل شما حساب نمی شود مگر اینکه \"پرداخت شده\" یا \"واریز شده\" مشخص شود",
   "lent-transaction-type-description-1": "معامله ای که وام داده اید",
-  "lent-transaction-type-description-2": "هزینه تا زمان مشخص شدن \"جمع آوری\"",
-  "lent-transaction-type-description-3": "پس از جمع آوری \"به کل شما حساب نمی شود",
+  "lent-transaction-type-description-2": "جریان نقدی منفی تا زمانی که \"جمع آوری\" مشخص شود",
   "borrowed-transaction-type-description-1": "معامله از کسی وام گرفته شده است",
-  "borrowed-transaction-type-description-2": "درآمد تا مشخص شده \"حل و فصل\"",
-  "borrowed-transaction-type-description-3": "هنگامی که \"حل و فصل\" شد ، به کل شما حساب نمی شود",
+  "borrowed-transaction-type-description-2": "جریان نقدی مثبت تا زمانی که مشخص شود \"حل و فصل شده\"",
   "select-transaction-type": "نوع معامله را انتخاب کنید",
   "mark-transaction-help-description": "با بهره گیری از دکمه اقدام در ورودی معامله ، یک معامله ویژه را علامت گذاری کنید",
   "increase-budget-warning": "بودجه خود را در نظر بگیرید",
@@ -967,5 +965,9 @@
   "major-change-17": "وام های بلند مدت",
   "major-change-17-1": "وام و وام گرفته شده را در طی یک دوره بازپرداخت چندگانه وام بگیرید",
   "amount-collected": "مقدار جمع آوری شده",
-  "amount-settled": "مقدار حل شده"
+  "amount-settled": "مقدار حل شده",
+  "right-panel": "تابلو راست",
+  "left-panel": "تابلو چپ",
+  "top-center": "مرکز عالی",
+  "of-total": "از کل"
 }

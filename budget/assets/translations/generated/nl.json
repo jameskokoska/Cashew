@@ -644,11 +644,9 @@
   "repetitive-transaction-type-description-1": "Reicuring Transaction",
   "repetitive-transaction-type-description-2": "Telt niet mee voor uw totaal, tenzij gemarkeerd 'betaald' of 'gedeponeerd'",
   "lent-transaction-type-description-1": "Transactie die u hebt uitgelegd",
-  "lent-transaction-type-description-2": "Kosten tot het gemarkeerd 'verzameld'",
-  "lent-transaction-type-description-3": "Eenmaal 'verzameld' zal het niet meetellen voor uw totaal",
+  "lent-transaction-type-description-2": "Negatieve kasstroom tot gemarkeerd 'verzameld'",
   "borrowed-transaction-type-description-1": "Transactie geleend van iemand",
-  "borrowed-transaction-type-description-2": "Inkomsten totdat het gemarkeerd is 'geregeld'",
-  "borrowed-transaction-type-description-3": "Eenmaal 'geregeld' zal het niet meetellen voor uw totaal",
+  "borrowed-transaction-type-description-2": "Positieve kasstroom totdat het gemarkeerd is 'geregeld'",
   "select-transaction-type": "Selecteer Transactietype",
   "mark-transaction-help-description": "Markeer een speciale transactie door op de actieknop te tikken in de transactie -invoer",
   "increase-budget-warning": "Overweeg uw budget",
@@ -967,5 +965,9 @@
   "major-change-17": "Langdurige leningen",
   "major-change-17-1": "Volg Lent en leende geld over een periode van meerdere terugbetalingen",
   "amount-collected": "Verzameld bedrag",
-  "amount-settled": "Bedrag geregeld"
+  "amount-settled": "Bedrag geregeld",
+  "right-panel": "Rechterpaneel",
+  "left-panel": "Linkerpaneel",
+  "top-center": "Midden boven",
+  "of-total": "van totaal"
 }

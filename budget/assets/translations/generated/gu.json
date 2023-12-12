@@ -644,11 +644,9 @@
   "repetitive-transaction-type-description-1": "પુન reપ્રધાન -સોજન",
   "repetitive-transaction-type-description-2": "જ્યાં સુધી 'પેઇડ' અથવા 'જમા કરાયેલ' ચિહ્નિત ન થાય ત્યાં સુધી તમારા કુલ તરફ ગણાય નહીં",
   "lent-transaction-type-description-1": "ટ્રાન્ઝેક્શન કે જે તમે આપ્યું છે",
-  "lent-transaction-type-description-2": "ચિહ્નિત ન થાય ત્યાં સુધી ખર્ચ",
-  "lent-transaction-type-description-3": "એકવાર 'એકત્રિત' થઈ જાય તે તમારા કુલ તરફ ગણાશે નહીં",
+  "lent-transaction-type-description-2": "ચિહ્નિત ન થાય ત્યાં સુધી નકારાત્મક રોકડ પ્રવાહ",
   "borrowed-transaction-type-description-1": "વ્યવહાર કોઈની પાસેથી ઉધાર લીધો",
-  "borrowed-transaction-type-description-2": "'સમાધાન' ચિહ્નિત થાય ત્યાં સુધી આવક",
-  "borrowed-transaction-type-description-3": "એકવાર 'પતાવટ' થઈ જાય તે તમારા કુલ તરફ ગણી શકશે નહીં",
+  "borrowed-transaction-type-description-2": "'સ્થાયી' ચિહ્નિત થાય ત્યાં સુધી સકારાત્મક રોકડ પ્રવાહ",
   "select-transaction-type": "વ્યવહાર પ્રકાર પસંદ કરો",
   "mark-transaction-help-description": "ટ્રાંઝેક્શન એન્ટ્રીમાં એક્શન બટનને ટેપ કરીને વિશેષ વ્યવહારને ચિહ્નિત કરો",
   "increase-budget-warning": "તમારા બજેટને ધ્યાનમાં લો",
@@ -874,7 +872,7 @@
   "update-both": "બંનેને અપડેટ કરો",
   "delete-both-transfers-question": "બંને સંતુલન સ્થાનાંતરણને કા delete ી નાખો?",
   "delete-both-transfers-question-description": "સંતુલન સ્થાનાંતરણમાં 2 વ્યવહારો હોય છે. તમે બંનેને કા delete ી નાખવા માંગો છો?",
-  "delete-both": "બંનેને કા delો",
+  "delete-both": "બંનેને કા .ી નાખો",
   "paid-date": "ચૂકવેલ તારીખ",
   "current-date": "આજની તારીખ",
   "transaction-date": "વ્યવહારની તારીખ",
@@ -967,5 +965,9 @@
   "major-change-17": "લાંબા ગાળાની લોન",
   "major-change-17-1": "બહુવિધ ચુકવણીઓના સમયગાળા દરમિયાન લેન્ટ અને ઉધાર પૈસા ટ્ર track ક કરો",
   "amount-collected": "એકત્રિત રકમ",
-  "amount-settled": "સમાધાન થઈ ગયું"
+  "amount-settled": "સમાધાન થઈ ગયું",
+  "right-panel": "જમણી પેનલ",
+  "left-panel": "ડાબી પેનલ",
+  "top-center": "ટોચનું કેન્દ્ર",
+  "of-total": "કુલ"
 }

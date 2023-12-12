@@ -146,18 +146,19 @@ class DebugPage extends StatelessWidget {
                 ? Icons.edit_notifications_outlined
                 : Icons.edit_notifications_rounded,
           ),
-        TextInput(
-          labelText: "Notification Package Name",
-          initialValue: appStateSettings[
-              "readDismissedNotificationsToCreateTransactionPackageName"],
-          onChanged: (value) {
-            updateSettings(
-              "readDismissedNotificationsToCreateTransactionPackageName",
-              value,
-              updateGlobalState: false,
-            );
-          },
-        ),
+        if (getPlatform(ignoreEmulation: true) == PlatformOS.isAndroid)
+          TextInput(
+            labelText: "Notification Package Name",
+            initialValue: appStateSettings[
+                "readDismissedNotificationsToCreateTransactionPackageName"],
+            onChanged: (value) {
+              updateSettings(
+                "readDismissedNotificationsToCreateTransactionPackageName",
+                value,
+                updateGlobalState: false,
+              );
+            },
+          ),
         SettingsContainerSwitch(
           onSwitched: (value) async {
             updateSettings("colorTintCategoryIcon", value,

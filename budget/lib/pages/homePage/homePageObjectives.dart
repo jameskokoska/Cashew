@@ -173,19 +173,7 @@ class _HomePageObjectivesState extends State<HomePageObjectives> {
       ),
     );
 
-    if (enableDoubleColumn(context)) {
-      return LinearGradientFadedEdges(
-        enableLeft: false,
-        enableBottom: false,
-        enableTop: false,
-        child: ClipRRect(
-          clipper: RightSideClipper(),
-          child: child,
-        ),
-      );
-    } else {
-      return child;
-    }
+    return child;
   }
 }
 

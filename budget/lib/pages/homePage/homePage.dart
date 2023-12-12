@@ -147,6 +147,7 @@ class HomePageState extends State<HomePage>
                   Center(
                     child: ViewAllTransactionsButton(),
                   ),
+                  if (enableDoubleColumn(context)) SizedBox(height: 35),
                 ],
               )
             : null;
@@ -211,10 +212,27 @@ class HomePageState extends State<HomePage>
         isHomeScreenSectionEnabled(context, "showUsernameWelcomeBanner");
     bool useSmallBanner = showWelcomeBanner == false;
 
-    List<String> homePageSectionsAboveInFullScreen = [
-      "wallets",
-      "budgets",
-    ];
+    List<String> homePageSectionsFullScreenCenter = [];
+    List<String> homePageSectionsFullScreenLeft = [];
+    List<String> homePageSectionsFullScreenRight = [];
+
+    String section = "";
+
+    for (String item
+        in appStateSettings[getHomePageOrderSettingsKey(context)]) {
+      if (item == "ORDER:LEFT") {
+        section = item;
+      } else if (item == "ORDER:RIGHT") {
+        section = item;
+      } else if (section == "ORDER:LEFT") {
+        homePageSectionsFullScreenLeft.add(item);
+      } else if (section == "ORDER:RIGHT") {
+        homePageSectionsFullScreenRight.add(item);
+      } else {
+        homePageSectionsFullScreenCenter.add(item);
+      }
+    }
+
     return SwipeToSelectTransactions(
       listID: "0",
       child: PullDownToRefreshSync(
@@ -290,52 +308,69 @@ class HomePageState extends State<HomePage>
                           )
                         : SizedBox(height: 5),
                     // Not full screen
-                    ...[
+                    if (enableDoubleColumn(context) != true) ...[
                       for (String sectionKey
                           in appStateSettings["homePageOrder"])
-                        enableDoubleColumn(context) == true
-                            ? SizedBox.shrink()
-                            : homePageSections[sectionKey] ?? SizedBox.shrink()
+                        homePageSections[sectionKey] ?? SizedBox.shrink()
                     ],
                     // Full screen top section
-                    ...[
+                    if (enableDoubleColumn(context) == true) ...[
                       for (String sectionKey
-                          in appStateSettings["homePageOrder"])
-                        enableDoubleColumn(context) == false ||
-                                homePageSectionsAboveInFullScreen
-                                        .contains(sectionKey) ==
-                                    false
-                            ? SizedBox.shrink()
-                            : homePageSections[sectionKey] ?? SizedBox.shrink()
+                          in appStateSettings["homePageOrderFullScreen"])
+                        if (homePageSectionsFullScreenCenter
+                            .contains(sectionKey))
+                          homePageSections[sectionKey] ?? SizedBox.shrink()
                     ],
                     // Full screen bottom split section
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Expanded(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              for (String sectionKey
-                                  in appStateSettings["homePageOrder"])
-                                enableDoubleColumn(context) == false ||
-                                        homePageSectionsAboveInFullScreen
-                                                .contains(sectionKey) ==
-                                            true ||
-                                        sectionKey == "transactionsList"
-                                    // Always show the transactions list in split section
-                                    ? SizedBox.shrink()
-                                    : homePageSections[sectionKey] ??
-                                        SizedBox.shrink(),
-                            ],
-                          ),
-                        ),
-                        enableDoubleColumn(context) == false
-                            ? SizedBox.shrink()
-                            : homePageSections["transactionsList"] ??
-                                SizedBox.shrink()
-                      ],
-                    ),
+                    if (enableDoubleColumn(context) == true)
+                      LayoutBuilder(builder: (context, constraints) {
+                        print(constraints);
+                        return Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Flexible(
+                              child: Column(
+                                children: [
+                                  for (String sectionKey in appStateSettings[
+                                      "homePageOrderFullScreen"])
+                                    if (homePageSectionsFullScreenLeft
+                                        .contains(sectionKey))
+                                      LinearGradientFadedEdges(
+                                        enableLeft: false,
+                                        enableBottom: false,
+                                        enableTop: false,
+                                        child: ClipRRect(
+                                          clipper: RightSideClipper(),
+                                          child: homePageSections[sectionKey] ??
+                                              SizedBox.shrink(),
+                                        ),
+                                      ),
+                                ],
+                              ),
+                            ),
+                            Flexible(
+                              child: Column(
+                                children: [
+                                  for (String sectionKey in appStateSettings[
+                                      "homePageOrderFullScreen"])
+                                    if (homePageSectionsFullScreenRight
+                                        .contains(sectionKey))
+                                      LinearGradientFadedEdges(
+                                        enableRight: false,
+                                        enableBottom: false,
+                                        enableTop: false,
+                                        child: ClipRRect(
+                                          clipper: RightSideClipper(),
+                                          child: homePageSections[sectionKey] ??
+                                              SizedBox.shrink(),
+                                        ),
+                                      ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        );
+                      }),
                     SizedBox(
                       height: enableDoubleColumn(context) == true
                           ? 40

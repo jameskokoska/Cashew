@@ -82,6 +82,16 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
         skipDateTimeRange: false,
         skipSearchQuery: true,
       );
+      // Keep at least one year into the future loaded
+      if (searchFilters.dateTimeRange != null &&
+          searchFilters.dateTimeRange!.end
+              .isBefore(DateTime.now().add(Duration(days: 365)))) {
+        searchFilters.dateTimeRange = DateTimeRange(
+          start:
+              searchFilters.dateTimeRange?.start ?? initialDateTimeRange.start,
+          end: DateTime(roundToNearestNextFifthYear(DateTime.now().year)),
+        );
+      }
     }
     if (searchFilters.dateTimeRange == null) {
       searchFilters.dateTimeRange = initialDateTimeRange;

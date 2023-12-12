@@ -286,6 +286,7 @@ class CenteredAmountAndNumTransactions extends StatelessWidget {
     required this.numTransactionsStream,
     required this.totalAmountStream,
     required this.textColor,
+    this.getTextColor,
     this.getInitialText,
     this.showIncomeArrow = true,
     super.key,
@@ -295,6 +296,7 @@ class CenteredAmountAndNumTransactions extends StatelessWidget {
   final Stream<double?> totalAmountStream;
   final Color textColor;
   final String? Function(double totalAmount)? getInitialText;
+  final Color? Function(double totalAmount)? getTextColor;
   final bool showIncomeArrow;
 
   @override
@@ -369,7 +371,9 @@ class CenteredAmountAndNumTransactions extends StatelessWidget {
                                   Provider.of<AllWallets>(context), number,
                                   finalNumber: totalAmount.abs()),
                               fontSize: 30,
-                              textColor: textColor,
+                              textColor: getTextColor != null
+                                  ? (getTextColor!(number) ?? textColor)
+                                  : textColor,
                               fontWeight: FontWeight.bold,
                             );
                           },

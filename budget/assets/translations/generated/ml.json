@@ -644,11 +644,9 @@
   "repetitive-transaction-type-description-1": "ഇടപാട് വീണ്ടും",
   "repetitive-transaction-type-description-2": "'പണമടച്ച' അല്ലെങ്കിൽ 'നിക്ഷേപിച്ച' എന്ന് അടയാളപ്പെടുത്തിയിട്ടില്ലെങ്കിൽ നിങ്ങളുടെ ടോട്ടലിലേക്ക് കണക്കാക്കില്ല",
   "lent-transaction-type-description-1": "നിങ്ങൾ കടം കൊടുത്ത ഇടപാട്",
-  "lent-transaction-type-description-2": "'ശേഖരിച്ചത്' എന്ന് അടയാളപ്പെടുത്തിയതുവരെ ചെലവ്",
-  "lent-transaction-type-description-3": "ഒരിക്കൽ 'ശേഖരിച്ചു' ഇത് നിങ്ങളുടെ ആകെ ഭാഗമായി കണക്കാക്കില്ല",
+  "lent-transaction-type-description-2": "'ശേഖരിച്ചത്' എന്ന് അടയാളപ്പെടുത്തിയതുവരെ നെഗറ്റീവ് ക്യാഷ് ഫ്ലോ",
   "borrowed-transaction-type-description-1": "ഇടപാട് ആരോടെങ്കിലും കടമെടുത്തു",
-  "borrowed-transaction-type-description-2": "'സെറ്റിൽഡ്' വരെ വരുമാനം",
-  "borrowed-transaction-type-description-3": "ഒരിക്കൽ 'തീർപ്പാക്കി' ഇത് നിങ്ങളുടെ ആകെ ഭാഗമായി കണക്കാക്കില്ല",
+  "borrowed-transaction-type-description-2": "അടയാളപ്പെടുത്തിയതുവരെ പോസിറ്റീവ് പണമൊഴുക്ക് 'തീർപ്പാക്കി'",
   "select-transaction-type": "ഇടപാട് തരം തിരഞ്ഞെടുക്കുക",
   "mark-transaction-help-description": "ഇടപാട് എൻട്രിയിലെ പ്രവർത്തനം ബട്ടൺ ടാപ്പുചെയ്യുന്നതിലൂടെ ഒരു പ്രത്യേക ഇടപാട് അടയാളപ്പെടുത്തുക",
   "increase-budget-warning": "നിങ്ങളുടെ ബജറ്റ് പരിഗണിക്കുക",
@@ -967,5 +965,9 @@
   "major-change-17": "ദീർഘകാല വായ്പകൾ",
   "major-change-17-1": "ഒന്നിലധികം തിരിച്ചടവ് കാലയളവിൽ നോമ്പും കടമെടുത്ത പണവും ട്രാക്കുചെയ്യുക",
   "amount-collected": "ശേഖരിച്ച തുക",
-  "amount-settled": "തുക പരിഹരിച്ചു"
+  "amount-settled": "തുക പരിഹരിച്ചു",
+  "right-panel": "വലത് പാനൽ",
+  "left-panel": "ഇടത് പാനൽ",
+  "top-center": "മുൻനിര കേന്ദ്രം",
+  "of-total": "മൊത്തം"
 }

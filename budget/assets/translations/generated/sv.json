@@ -644,11 +644,9 @@
   "repetitive-transaction-type-description-1": "Återuppträdanden",
   "repetitive-transaction-type-description-2": "Räknar inte med din summa såvida det inte är märkt \"betalat\" eller \"deponerat\"",
   "lent-transaction-type-description-1": "Transaktion som du lånade ut",
-  "lent-transaction-type-description-2": "Kostnad tills det är markerat \"samlat\"",
-  "lent-transaction-type-description-3": "När det är \"samlat\" kommer det inte att räkna med din totala",
+  "lent-transaction-type-description-2": "Negativt kassaflöde tills det är markerat \"samlat\"",
   "borrowed-transaction-type-description-1": "Transaktion lånad från någon",
-  "borrowed-transaction-type-description-2": "Inkomst tills det är markerat \"avgjort\"",
-  "borrowed-transaction-type-description-3": "En gång \"avgjort\" kommer det inte att räkna med din totala",
+  "borrowed-transaction-type-description-2": "Positivt kassaflöde tills det är markerat \"avgjort\"",
   "select-transaction-type": "Välj transaktionstyp",
   "mark-transaction-help-description": "Markera en speciell transaktion genom att trycka på åtgärdsknappen i transaktionsposten",
   "increase-budget-warning": "Tänk på din budget",
@@ -967,5 +965,9 @@
   "major-change-17": "Långtidslån",
   "major-change-17-1": "Spåra fastan och lånade pengar under en period av flera återbetalningar",
   "amount-collected": "Insamlad belopp",
-  "amount-settled": "Belopp avgjort"
+  "amount-settled": "Belopp avgjort",
+  "right-panel": "Högerpanel",
+  "left-panel": "Vänsterpanel",
+  "top-center": "Övre centrum",
+  "of-total": "total"
 }

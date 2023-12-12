@@ -644,11 +644,9 @@
   "repetitive-transaction-type-description-1": "पुनर्जन्म लेन -देन",
   "repetitive-transaction-type-description-2": "जब तक 'भुगतान' या 'जमा' को चिह्नित नहीं किया जाता है, तब तक आपके कुल की ओर नहीं गिना जाता है",
   "lent-transaction-type-description-1": "लेनदेन जो आप उधार देते हैं",
-  "lent-transaction-type-description-2": "'एकत्र' के रूप में चिह्नित होने तक व्यय",
-  "lent-transaction-type-description-3": "एक बार 'एकत्र' यह आपके कुल की ओर नहीं गिना जाएगा",
+  "lent-transaction-type-description-2": "नकारात्मक नकदी प्रवाह तक चिह्नित 'एकत्र'",
   "borrowed-transaction-type-description-1": "किसी से उधार लिया गया लेनदेन",
-  "borrowed-transaction-type-description-2": "आय को 'बसे' तक चिह्नित करें",
-  "borrowed-transaction-type-description-3": "एक बार 'बसे' यह आपके कुल की ओर नहीं गिना जाएगा",
+  "borrowed-transaction-type-description-2": "सकारात्मक नकदी प्रवाह तक चिह्नित 'बसे'",
   "select-transaction-type": "लेनदेन प्रकार का चयन करें",
   "mark-transaction-help-description": "लेनदेन प्रविष्टि में एक्शन बटन को टैप करके एक विशेष लेनदेन को चिह्नित करें",
   "increase-budget-warning": "अपने बजट पर विचार करें",
@@ -967,5 +965,9 @@
   "major-change-17": "दीर्घकालिक ऋण",
   "major-change-17-1": "कई पुनर्भुगतान की अवधि में लेंट और उधार लिया पैसा ट्रैक करें",
   "amount-collected": "एकत्र राशि",
-  "amount-settled": "तय राशि"
+  "amount-settled": "तय राशि",
+  "right-panel": "दाहिनी पैनल",
+  "left-panel": "वाम पैनल",
+  "top-center": "शीर्ष केंद्र",
+  "of-total": "का कुल"
 }

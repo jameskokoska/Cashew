@@ -197,11 +197,18 @@ class _CreditDebtTransactionsState extends State<CreditDebtTransactions>
                 return null;
               }
             },
-            textColor: isCredit == null
-                ? getColor(context, "black")
-                : isCredit == true
-                    ? getColor(context, "unPaidUpcoming")
-                    : getColor(context, "unPaidOverdue"),
+            getTextColor: (totalAmount) {
+              return isCredit == null
+                  ? totalAmount == 0
+                      ? getColor(context, "black")
+                      : totalAmount < 0
+                          ? getColor(context, "unPaidUpcoming")
+                          : getColor(context, "unPaidOverdue")
+                  : isCredit == true
+                      ? getColor(context, "unPaidUpcoming")
+                      : getColor(context, "unPaidOverdue");
+            },
+            textColor: Colors.black,
           ),
         ),
       ),
@@ -534,6 +541,8 @@ class AddLoanPopup extends StatelessWidget {
                       AddObjectivePage(
                         routesToPopAfterDelete: RoutesToPopAfterDelete.None,
                         objectiveType: ObjectiveType.loan,
+                        selectedIncome: selectedTransactionType ==
+                            TransactionSpecialType.credit,
                       ),
                     );
                   },

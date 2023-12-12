@@ -99,29 +99,33 @@ class TransactionEntryAmount extends StatelessWidget {
 }
 
 Color getTransactionAmountColor(BuildContext context, Transaction transaction) {
-  Color color = (transaction.type == TransactionSpecialType.credit ||
-              transaction.type == TransactionSpecialType.debt) &&
-          transaction.paid
-      ? transaction.type == TransactionSpecialType.credit
-          ? getColor(context, "unPaidUpcoming")
-          : transaction.type == TransactionSpecialType.debt
-              ? getColor(context, "unPaidOverdue")
-              : getColor(context, "textLight")
+  Color color = transaction.objectiveLoanFk != null && transaction.paid
+      ? transaction.income
+          ? getColor(context, "unPaidOverdue")
+          : getColor(context, "unPaidUpcoming")
       : (transaction.type == TransactionSpecialType.credit ||
                   transaction.type == TransactionSpecialType.debt) &&
-              transaction.paid == false
-          ? getColor(context, "textLight")
-          : transaction.paid
-              ? transaction.income == true
-                  ? getColor(context, "incomeAmount")
-                  : getColor(context, "expenseAmount")
-              : transaction.skipPaid
-                  ? getColor(context, "textLight")
-                  : transaction.dateCreated.millisecondsSinceEpoch <=
-                          DateTime.now().millisecondsSinceEpoch
+              transaction.paid
+          ? transaction.type == TransactionSpecialType.credit
+              ? getColor(context, "unPaidUpcoming")
+              : transaction.type == TransactionSpecialType.debt
+                  ? getColor(context, "unPaidOverdue")
+                  : getColor(context, "textLight")
+          : (transaction.type == TransactionSpecialType.credit ||
+                      transaction.type == TransactionSpecialType.debt) &&
+                  transaction.paid == false
+              ? getColor(context, "textLight")
+              : transaction.paid
+                  ? transaction.income == true
+                      ? getColor(context, "incomeAmount")
+                      : getColor(context, "expenseAmount")
+                  : transaction.skipPaid
                       ? getColor(context, "textLight")
-                      // getColor(context, "unPaidOverdue")
-                      : getColor(context, "textLight");
+                      : transaction.dateCreated.millisecondsSinceEpoch <=
+                              DateTime.now().millisecondsSinceEpoch
+                          ? getColor(context, "textLight")
+                          // getColor(context, "unPaidOverdue")
+                          : getColor(context, "textLight");
   if (transaction.categoryFk == "0") {
     return dynamicPastel(context, color,
         inverse: true, amountLight: 0.3, amountDark: 0.25);

@@ -435,7 +435,8 @@ class _AddCategoryPageState extends State<AddCategoryPage>
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.max,
                 children: [
-                  if (isSubCategory == false)
+                  if (isSubCategory == false &&
+                      widget.category?.categoryPk != "0")
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 13),
                       child: IncomeExpenseTabSelector(

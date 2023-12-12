@@ -644,11 +644,9 @@
   "repetitive-transaction-type-description-1": "Yeniden Çıkarma İşlemi",
   "repetitive-transaction-type-description-2": "'Ücretli' veya 'yatırılmış' olarak işaretlenmiş olmadıkça toplamınıza sayılmaz",
   "lent-transaction-type-description-1": "Ödünç verdiğin işlem",
-  "lent-transaction-type-description-2": "'Toplanan' olarak işaretlenene kadar masraf",
-  "lent-transaction-type-description-3": "'Toplandığında' toplamınıza sayılmaz",
+  "lent-transaction-type-description-2": "'Toplanan' olarak işaretlenene kadar negatif nakit akışı",
   "borrowed-transaction-type-description-1": "Birinden ödünç alındı",
-  "borrowed-transaction-type-description-2": "'Yerleşmiş' olarak işaretlenene kadar gelir",
-  "borrowed-transaction-type-description-3": "Bir kez 'yerleştiğinde' toplamınıza sayılmaz",
+  "borrowed-transaction-type-description-2": "'Yerleşmiş' olarak işaretlenene kadar pozitif nakit akışı",
   "select-transaction-type": "İşlem Türünü Seçin",
   "mark-transaction-help-description": "İşlem girişindeki eylem düğmesine dokunarak özel bir işlem işaretleyin",
   "increase-budget-warning": "Bütçenizi düşünün",
@@ -967,5 +965,9 @@
   "major-change-17": "Uzun vadeli krediler",
   "major-change-17-1": "Birden fazla geri ödeme döneminde ödünç ve ödünç alınan parayı takip edin",
   "amount-collected": "Toplanan miktar",
-  "amount-settled": "Yerleşmiş miktar"
+  "amount-settled": "Yerleşmiş miktar",
+  "right-panel": "Sağ panel",
+  "left-panel": "Sol panel",
+  "top-center": "Üst merkez",
+  "of-total": "Toplam"
 }

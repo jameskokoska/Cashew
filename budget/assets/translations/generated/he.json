@@ -644,11 +644,9 @@
   "repetitive-transaction-type-description-1": "עסקה מחודשת",
   "repetitive-transaction-type-description-2": "לא נחשב לסך הכל שלך אלא אם כן מסומן 'בתשלום' או 'מופקדים'",
   "lent-transaction-type-description-1": "עסקה שהשאלת",
-  "lent-transaction-type-description-2": "הוצאה עד לסמן 'נאסף'",
-  "lent-transaction-type-description-3": "ברגע ש'אסוף 'זה לא ייחשב לסך הכל שלך",
+  "lent-transaction-type-description-2": "תזרים מזומנים שלילי עד לסמן 'נאסף'",
   "borrowed-transaction-type-description-1": "עסקה הושאלה ממישהו",
-  "borrowed-transaction-type-description-2": "הכנסה עד לסמן 'מיושב'",
-  "borrowed-transaction-type-description-3": "לאחר ש'הסדר 'זה לא יחשב לסך הכל שלך",
+  "borrowed-transaction-type-description-2": "תזרים מזומנים חיובי עד לסמן 'מיושב'",
   "select-transaction-type": "בחר סוג עסקה",
   "mark-transaction-help-description": "סמן עסקה מיוחדת על ידי הקשה על כפתור הפעולה בכניסה לעסקה",
   "increase-budget-warning": "שקול את התקציב שלך",
@@ -967,5 +965,9 @@
   "major-change-17": "הלוואות לטווח הארוך",
   "major-change-17-1": "עקוב אחר השאלון והשאיל כסף על תקופה של החזר רב",
   "amount-collected": "סכום שנאסף",
-  "amount-settled": "הסכום התיישב"
+  "amount-settled": "הסכום התיישב",
+  "right-panel": "לוח ימני",
+  "left-panel": "הפאנל השמאלי",
+  "top-center": "מרכז עליון",
+  "of-total": "מסה\"כ"
 }

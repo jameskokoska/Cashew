@@ -71,7 +71,9 @@ class TransactionEntryActionButton extends StatelessWidget {
             ),
           ),
         if (transaction.type == null && transaction.objectiveLoanFk == null)
-          SizedBox(width: 10)
+          SizedBox(width: 10),
+        if (transaction.type != null || transaction.objectiveLoanFk != null)
+          SizedBox(width: 6),
       ],
     );
   }
@@ -105,7 +107,7 @@ class ActionButton extends StatelessWidget {
             left: 6,
             top: 5.5,
             bottom: 5.5,
-            right: 6,
+            right: 0,
           ),
           child: Transform.scale(
             scale: dealtWith ? 0.92 : 1,

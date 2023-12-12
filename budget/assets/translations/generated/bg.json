@@ -644,11 +644,9 @@
   "repetitive-transaction-type-description-1": "Повторно настъпи транзакция",
   "repetitive-transaction-type-description-2": "Не се брои към общия ви език, освен ако не е отбелязано „платено“ или „депозирано“",
   "lent-transaction-type-description-1": "Транзакция, която сте отпуснали",
-  "lent-transaction-type-description-2": "Разход до маркиране „Събрано“",
-  "lent-transaction-type-description-3": "Веднъж „събрани“, той няма да се отчита към вашия брой",
+  "lent-transaction-type-description-2": "Отрицателен паричен поток до маркиране „Събрано“",
   "borrowed-transaction-type-description-1": "Транзакция, заимствана от някого",
-  "borrowed-transaction-type-description-2": "Доход до маркиране „уредени“",
-  "borrowed-transaction-type-description-3": "След като се уреди “, той няма да се отчита към вашия брой",
+  "borrowed-transaction-type-description-2": "Положителен паричен поток до отбелязване на „уредени“",
   "select-transaction-type": "Изберете Тип транзакция",
   "mark-transaction-help-description": "Маркирайте специална транзакция, като докоснете бутона за действие в записа на транзакцията",
   "increase-budget-warning": "Помислете за вашия бюджет",
@@ -967,5 +965,9 @@
   "major-change-17": "Дългосрочни заеми",
   "major-change-17-1": "Проследявайте заем и заемни пари за период от множество изплащания",
   "amount-collected": "Събраната сума",
-  "amount-settled": "Сумата уредена"
+  "amount-settled": "Сумата уредена",
+  "right-panel": "Десен панел",
+  "left-panel": "Ляв панел",
+  "top-center": "Топ център",
+  "of-total": "от общо"
 }

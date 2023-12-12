@@ -62,6 +62,22 @@ onNotification(ServiceNotificationEvent event) async {
               "readDismissedNotificationsToCreateTransactionPackageName"]) !=
           true) return;
 
+  if (event.packageName != null &&
+      appStateSettings[
+              "readDismissedNotificationsToCreateTransactionPackageName"] ==
+          "") {
+    openSnackbar(
+      SnackbarMessage(
+        title: "Opened From Notification",
+        description: event.packageName,
+        icon: appStateSettings["outlinedIcons"]
+            ? Icons.edit_notifications_outlined
+            : Icons.edit_notifications_rounded,
+        timeout: Duration(milliseconds: 5000),
+      ),
+    );
+  }
+
   double? amountExtracted;
   if (event.content != null) {
     amountExtracted = getAmountFromString(event.content ?? "");

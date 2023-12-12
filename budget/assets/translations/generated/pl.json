@@ -644,11 +644,9 @@
   "repetitive-transaction-type-description-1": "Transakcja ponowna skurcz",
   "repetitive-transaction-type-description-2": "Nie liczy się w stosunku do twojej suma, chyba że oznaczono „zapłacone” lub „zdeponowane”",
   "lent-transaction-type-description-1": "Transakcja, którą pożyczyłeś",
-  "lent-transaction-type-description-2": "Koszt, aż oznaczony „zebrany”",
-  "lent-transaction-type-description-3": "Po „zebraniu” nie będzie się liczyć do twojej całkowitej",
+  "lent-transaction-type-description-2": "Ujemne przepływy pieniężne, aż oznaczone „zebrane”",
   "borrowed-transaction-type-description-1": "Transakcja pożyczona od kogoś",
-  "borrowed-transaction-type-description-2": "Dochód do momentu oznaczonego „rozstrzygnięcia”",
-  "borrowed-transaction-type-description-3": "Po „osiedleniu się” nie będzie się liczyć w stosunku do twojej całkowitej",
+  "borrowed-transaction-type-description-2": "Dodatkowe przepływy pieniężne, aż oznaczone „rozstrzygnięte”",
   "select-transaction-type": "Wybierz typ transakcji",
   "mark-transaction-help-description": "Zaznacz specjalną transakcję, stukając przyciskiem akcji w wprowadzaniu transakcji",
   "increase-budget-warning": "Rozważ swój budżet",
@@ -967,5 +965,9 @@
   "major-change-17": "Pożyczki długoterminowe",
   "major-change-17-1": "Śledź pożyczony i pożyczył pieniądze w okresie wielu spłat",
   "amount-collected": "Zebrana kwota",
-  "amount-settled": "Kwota rozstrzygana"
+  "amount-settled": "Kwota rozstrzygana",
+  "right-panel": "Prawy panel",
+  "left-panel": "Lewy panel",
+  "top-center": "Top Center",
+  "of-total": "ogółem"
 }
