@@ -17,36 +17,24 @@ import 'package:budget/pages/homePage/homePageAllSpendingSummary.dart';
 import 'package:budget/pages/editHomePage.dart';
 import 'package:budget/pages/settingsPage.dart';
 import 'package:budget/pages/homePage/homePageCreditDebts.dart';
-import 'package:budget/struct/currencyFunctions.dart';
-import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
-import 'package:budget/struct/shareBudget.dart';
 import 'package:budget/widgets/animatedExpanded.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
-import 'package:budget/widgets/framework/popupFramework.dart';
-import 'package:budget/widgets/lineGraph.dart';
-import 'package:budget/widgets/openBottomSheet.dart';
-import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/ratingPopup.dart';
 import 'package:budget/widgets/selectedTransactionsAppBar.dart';
 import 'package:budget/widgets/util/keepAliveClientMixin.dart';
-import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
-import 'package:budget/widgets/transactionEntries.dart';
 import 'package:budget/widgets/transactionEntry/swipeToSelectTransactions.dart';
-import 'package:budget/widgets/transactionEntry/transactionEntryAmount.dart';
 import 'package:budget/widgets/viewAllTransactionsButton.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/widgets/scrollbarWrap.dart';
 import 'package:budget/widgets/slidingSelectorIncomeExpense.dart';
-import 'package:provider/provider.dart';
-
-import '../../widgets/linearGradientFadedEdges.dart';
-import '../../widgets/pullDownToRefreshSync.dart';
-import '../../widgets/util/rightSideClipper.dart';
+import 'package:budget/widgets/linearGradientFadedEdges.dart';
+import 'package:budget/widgets/pullDownToRefreshSync.dart';
+import 'package:budget/widgets/util/rightSideClipper.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({
@@ -482,7 +470,7 @@ class _HomePageRatingBoxState extends State<HomePageRatingBox> {
                           shareFeedback(
                             "from-homepage-stars",
                             "rating",
-                            selectedStars: i + 1,
+                            selectedStars: i,
                           );
                           hide();
                         }
