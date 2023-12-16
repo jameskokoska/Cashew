@@ -40,8 +40,18 @@ Cashew is a full-fledged, feature-rich application designed to empower users in 
 
 ---
 
-## Feature
+## Features
 
+<a href="https://youtu.be/NYZd7IKn1oY?t=536">
+  <div align="center">
+    <img width="80%" src="promotional/youtube-promo/thumbnail-year-best.png" alt="Review Video">
+  </div>
+</a>
+<p align="center">
+  Cashew was featured on <a href="https://www.youtube.com/watch?v=2MwWmqcn--s&t=261s">YouTube</a> on 'The Best Apps of 2023!'
+</p>
+
+<br>
 
 <a href="https://www.youtube.com/watch?v=2MwWmqcn--s&t=261s">
   <div align="center">
@@ -49,8 +59,7 @@ Cashew is a full-fledged, feature-rich application designed to empower users in 
   </div>
 </a>
 <p align="center">
-  Cashew was featured on <a href="https://www.youtube.com/watch?v=2MwWmqcn--s&t=261s">YouTube</a>!
-  Thanks <a href="https://www.youtube.com/@sambeckman">Sam Beckman</a>!
+  Cashew was featured on <a href="https://www.youtube.com/watch?v=2MwWmqcn--s&t=261s">YouTube</a> on 'Top Android Apps! (November 2023)'
 </p>
 
 <br>
@@ -60,7 +69,7 @@ Cashew is a full-fledged, feature-rich application designed to empower users in 
   <img width="80%" src="promotional/play-store-feature/play-store-feature.png" alt="Play Store Feature">
 </div>
 <p align="center">
-  Cashew was featured on <a href="https://play.google.com/store/apps/editorial?id=mc_apps_new_on_play_fcp">Google Play's Editorial 'New Apps We Love'</a>!
+  Cashew was featured on <a href="https://play.google.com/store/apps/editorial?id=mc_apps_new_on_play_fcp">Google Play's Editorial 'New Apps We Love'</a> (November 2023)!
 </p>
 
 ## Release
@@ -131,6 +140,9 @@ The translations are available here: https://docs.google.com/spreadsheets/d/1QQq
 
 ## Developer Notes
 
+### Pull Requests and Contributions
+Unfortunately, I am currently not accepting contributions due to licensing and credits. Since this application turns some profits, I want to avoid any muddy water when it comes to compensation for contributions. You are free to submit an [issue](https://github.com/jameskokoska/Cashew/issues) and I can consider it!
+
 ### Android Release
 * To build an app-bundle Android release, run `flutter build appbundle --release`
 
@@ -200,3 +212,6 @@ Note: required Firebase.
 
 ### Objectives vs. Goals
 * `Objectives` have been been renamed to `Goals` on the front-end but internally, the name `Objectives` is still used.
+
+### Long Term Loans
+* Long term loans create a goal. However, the goals total is not used. Instead the total of the goal is calculated by totalling the proper polarity of transactions of the opposite type. For example, if it was a loan of 100$ lent out, the initial transaction would be 100$ of negative polarity (expense) and that would be the total of the goal. When a payment is made, it is made in the opposite (positive) polarity (income) and added to the total 'paid back'. We can easily find how much is remaining by taking the difference (or the addition including polarities).
