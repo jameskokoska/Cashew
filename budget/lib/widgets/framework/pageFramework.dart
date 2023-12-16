@@ -5,6 +5,7 @@ import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/struct/shareBudget.dart';
+import 'package:budget/widgets/animatedExpanded.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
@@ -706,21 +707,24 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
               child: Transform.scale(
                 scale: percent * 0.15 + 1,
                 child: titleWidget ??
-                    TextFont(
-                      text: getIsFullScreen(context) == false &&
-                              titleString.length > 20
-                          ? titleString.split(" ")[0]
-                          : titleString,
-                      fontSize: centeredTitleSmallWithDefault
-                          ? (enableDoubleColumn(context) ? 19 : 16)
-                          : 22,
-                      fontWeight: FontWeight.bold,
-                      textColor: textColor == null
-                          ? Theme.of(context).colorScheme.onSecondaryContainer
-                          : textColor,
-                      textAlign: centeredTitleWithDefault
-                          ? TextAlign.center
-                          : TextAlign.left,
+                    AnimatedSizeSwitcher(
+                      child: TextFont(
+                        key: ValueKey(titleString),
+                        text: getIsFullScreen(context) == false &&
+                                titleString.length > 20
+                            ? titleString.split(" ")[0]
+                            : titleString,
+                        fontSize: centeredTitleSmallWithDefault
+                            ? (enableDoubleColumn(context) ? 19 : 16)
+                            : 22,
+                        fontWeight: FontWeight.bold,
+                        textColor: textColor == null
+                            ? Theme.of(context).colorScheme.onSecondaryContainer
+                            : textColor,
+                        textAlign: centeredTitleWithDefault
+                            ? TextAlign.center
+                            : TextAlign.left,
+                      ),
                     ),
               ),
             ),

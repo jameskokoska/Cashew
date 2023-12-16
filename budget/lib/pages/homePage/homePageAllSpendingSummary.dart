@@ -43,21 +43,14 @@ class HomePageAllSpendingSummary extends StatelessWidget {
                   homePageStateKey.currentState?.refreshState();
                 },
                 label: "expense".tr(),
-                amountStream: database.watchTotalOfWallet(
-                  null,
+                totalWithCountStream: database.watchTotalWithCountOfWallet(
                   isIncome: false,
                   allWallets: Provider.of<AllWallets>(context),
                   followCustomPeriodCycle: true,
                   cycleSettingsExtension: "AllSpendingSummary",
+                  onlyIncomeAndExpense: true,
                 ),
                 textColor: getColor(context, "expenseAmount"),
-                transactionsAmountStream:
-                    database.watchTotalCountOfTransactionsInWallet(
-                  null,
-                  isIncome: false,
-                  followCustomPeriodCycle: true,
-                  cycleSettingsExtension: "AllSpendingSummary",
-                ),
                 openPage: TransactionsSearchPage(
                   initialFilters: SearchFilters(
                     expenseIncome: [ExpenseIncome.expense],
@@ -81,21 +74,14 @@ class HomePageAllSpendingSummary extends StatelessWidget {
                   homePageStateKey.currentState?.refreshState();
                 },
                 label: "income".tr(),
-                amountStream: database.watchTotalOfWallet(
-                  null,
+                totalWithCountStream: database.watchTotalWithCountOfWallet(
                   isIncome: true,
                   allWallets: Provider.of<AllWallets>(context),
                   followCustomPeriodCycle: true,
                   cycleSettingsExtension: "AllSpendingSummary",
+                  onlyIncomeAndExpense: true,
                 ),
                 textColor: getColor(context, "incomeAmount"),
-                transactionsAmountStream:
-                    database.watchTotalCountOfTransactionsInWallet(
-                  null,
-                  isIncome: true,
-                  followCustomPeriodCycle: true,
-                  cycleSettingsExtension: "AllSpendingSummary",
-                ),
                 openPage: TransactionsSearchPage(
                   initialFilters: SearchFilters(
                     expenseIncome: [ExpenseIncome.income],

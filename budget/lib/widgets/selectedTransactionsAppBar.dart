@@ -53,9 +53,9 @@ class SelectedTransactionsAppBar extends StatelessWidget {
     ColorScheme colorScheme = this.colorScheme ?? Theme.of(context).colorScheme;
     return ValueListenableBuilder(
       valueListenable: globalSelectedID,
-      builder: (context, value, widget) {
-        List<String> listOfIDs = (value)[pageID] ?? [];
-        bool animateIn = (value)[pageID] != null && (value)[pageID]!.length > 0;
+      builder: (context, Map<String, List<String>> value, widget) {
+        List<String> listOfIDs = value[pageID] ?? [];
+        bool animateIn = value[pageID] != null && listOfIDs.length > 0;
         return AnimatedPositioned(
           left: 0,
           right: 0,
@@ -180,365 +180,6 @@ class SelectedTransactionsAppBar extends StatelessWidget {
                           ],
                         ),
                       ),
-                      CustomPopupMenuButton(
-                        colorScheme: colorScheme,
-                        showButtons: enableDoubleColumn(context),
-                        keepOutFirst: true,
-                        // There is no header taking up space, we can always keep out the delete button
-                        forceKeepOutFirst: true,
-                        items: [
-                          DropdownItemMenu(
-                            id: "delete-transactions",
-                            label: "delete-transactions".tr(),
-                            icon: Icons.delete,
-                            action: () async {
-                              dynamic result = await deleteTransactionsPopup(
-                                context,
-                                transactionPks: value[pageID]!,
-                                routesToPopAfterDelete:
-                                    RoutesToPopAfterDelete.None,
-                              );
-                              if (result == DeletePopupAction.Delete) {
-                                globalSelectedID.value[pageID] = [];
-                                globalSelectedID.notifyListeners();
-                              }
-                            },
-                          ),
-                          if (enableSettleAllButton)
-                            DropdownItemMenu(
-                              id: "settle-all",
-                              label: "settle-and-collect-all".tr(),
-                              icon: appStateSettings["outlinedIcons"]
-                                  ? Icons.check_circle_outline
-                                  : Icons.check_circle_rounded,
-                              action: () async {
-                                for (int i = 0;
-                                    i < value[pageID]!.length;
-                                    i++) {
-                                  await settleTransactions(
-                                    value[pageID]![i],
-                                  );
-                                }
-                                openSnackbar(
-                                  SnackbarMessage(
-                                    icon: appStateSettings["outlinedIcons"]
-                                        ? Icons.check_circle_outline
-                                        : Icons.check_circle_rounded,
-                                    title: "settled-and-collected".tr(),
-                                    description:
-                                        value[pageID]!.length.toString() +
-                                            " " +
-                                            "transactions".tr().toLowerCase(),
-                                  ),
-                                );
-                                globalSelectedID.value[pageID] = [];
-                                globalSelectedID.notifyListeners();
-                              },
-                            ),
-                          if (value[pageID] != null &&
-                              value[pageID]!.length <= 10)
-                            DropdownItemMenu(
-                              id: "create-copy",
-                              label: "duplicate".tr(),
-                              icon: appStateSettings["outlinedIcons"]
-                                  ? Icons.file_copy_outlined
-                                  : Icons.file_copy_rounded,
-                              iconScale: 0.97,
-                              action: () async {
-                                bool showDetailedSnackbarMessage =
-                                    value[pageID]!.length <= 1;
-                                for (int i = 0;
-                                    i < value[pageID]!.length;
-                                    i++) {
-                                  await duplicateTransaction(
-                                    context,
-                                    value[pageID]![i],
-                                    showDuplicatedMessage:
-                                        showDetailedSnackbarMessage,
-                                  );
-                                }
-                                if (showDetailedSnackbarMessage == false) {
-                                  openSnackbar(
-                                    SnackbarMessage(
-                                      icon: appStateSettings["outlinedIcons"]
-                                          ? Icons.file_copy_outlined
-                                          : Icons.file_copy_rounded,
-                                      title: "created-copy".tr(),
-                                      description:
-                                          value[pageID]!.length.toString() +
-                                              " " +
-                                              "transactions".tr().toLowerCase(),
-                                    ),
-                                  );
-                                }
-                                globalSelectedID.value[pageID] = [];
-                                globalSelectedID.notifyListeners();
-                              },
-                            ),
-                          DropdownItemMenu(
-                            id: "change-date",
-                            label: "change-date".tr(),
-                            icon: appStateSettings["outlinedIcons"]
-                                ? Icons.calendar_month_outlined
-                                : Icons.calendar_month_rounded,
-                            action: () async {
-                              List<Transaction> transactions = await database
-                                  .getTransactionsFromPk(value[pageID]!);
-                              if (transactions.length <= 0) return;
-                              DateTime? selectedDate =
-                                  await showCustomDatePicker(
-                                      context, transactions.first.dateCreated);
-                              if (selectedDate == null) {
-                                openSnackbar(
-                                  SnackbarMessage(
-                                    icon: appStateSettings["outlinedIcons"]
-                                        ? Icons.warning_outlined
-                                        : Icons.warning_rounded,
-                                    title: "date-not-selected".tr(),
-                                  ),
-                                );
-                                return;
-                              }
-                              TimeOfDay? selectedTime =
-                                  await showCustomTimePicker(
-                                context,
-                                TimeOfDay(
-                                  hour: transactions.first.dateCreated.hour,
-                                  minute: transactions.first.dateCreated.minute,
-                                ),
-                              );
-                              if (selectedTime == null) {
-                                openSnackbar(
-                                  SnackbarMessage(
-                                    icon: appStateSettings["outlinedIcons"]
-                                        ? Icons.warning_outlined
-                                        : Icons.warning_rounded,
-                                    title: "time-not-selected".tr(),
-                                  ),
-                                );
-                                return;
-                              }
-                              selectedDate = selectedDate.copyWith(
-                                hour: selectedTime.hour,
-                                minute: selectedTime.minute,
-                              );
-                              await database
-                                  .updateDateTimeCreatedOfTransactions(
-                                      transactions, selectedDate);
-                              openSnackbar(
-                                SnackbarMessage(
-                                  icon: appStateSettings["outlinedIcons"]
-                                      ? Icons.calendar_month_outlined
-                                      : Icons.calendar_month_rounded,
-                                  title: "changed-date".tr(),
-                                  description: "for".tr().capitalizeFirst +
-                                      " " +
-                                      transactions.length.toString() +
-                                      " " +
-                                      (transactions.length == 1
-                                          ? "transaction".tr().toLowerCase()
-                                          : "transactions".tr().toLowerCase()),
-                                ),
-                              );
-                              globalSelectedID.value[pageID] = [];
-                              globalSelectedID.notifyListeners();
-                            },
-                          ),
-                          DropdownItemMenu(
-                            id: "change-category",
-                            label: "change-category".tr(),
-                            icon: appStateSettings["outlinedIcons"]
-                                ? Icons.category_outlined
-                                : Icons.category_rounded,
-                            action: () async {
-                              MainAndSubcategory mainAndSubcategory =
-                                  await selectCategorySequence(
-                                context,
-                                selectedCategory: null,
-                                setSelectedCategory: (_) {},
-                                selectedSubCategory: null,
-                                setSelectedSubCategory: (_) {},
-                                selectedIncomeInitial: null,
-                              );
-                              TransactionCategory? category =
-                                  mainAndSubcategory.main;
-                              print(mainAndSubcategory.sub);
-                              if (category == null) return;
-                              TransactionCategory? subCategory =
-                                  mainAndSubcategory.sub;
-                              List<Transaction> transactions = await database
-                                  .getTransactionsFromPk(value[pageID]!);
-                              await database.moveTransactionsToCategory(
-                                transactions,
-                                category.categoryPk,
-                                subCategory?.categoryPk,
-                                mainAndSubcategory
-                                        .ignoredSubcategorySelection ==
-                                    false,
-                              );
-                              openSnackbar(
-                                SnackbarMessage(
-                                  icon: appStateSettings["outlinedIcons"]
-                                      ? Icons.category_outlined
-                                      : Icons.category_rounded,
-                                  title: "changed-category".tr(),
-                                  description: "for".tr().capitalizeFirst +
-                                      " " +
-                                      transactions.length.toString() +
-                                      " " +
-                                      (transactions.length == 1
-                                          ? "transaction".tr().toLowerCase()
-                                          : "transactions".tr().toLowerCase()),
-                                ),
-                              );
-                              globalSelectedID.value[pageID] = [];
-                              globalSelectedID.notifyListeners();
-                            },
-                          ),
-                          DropdownItemMenu(
-                            id: "change-account",
-                            label: "change-account".tr(),
-                            icon: appStateSettings["outlinedIcons"]
-                                ? Icons.account_balance_wallet_outlined
-                                : Icons.account_balance_wallet_rounded,
-                            action: () async {
-                              TransactionWallet? wallet =
-                                  await selectWalletPopup(
-                                context,
-                                allowEditWallet: true,
-                              );
-                              if (wallet == null) return;
-                              List<Transaction> transactions = await database
-                                  .getTransactionsFromPk(value[pageID]!);
-                              await database.moveWalletTransactions(
-                                Provider.of<AllWallets>(context, listen: false),
-                                null,
-                                wallet.walletPk,
-                                transactionsToMove: transactions,
-                              );
-                              openSnackbar(
-                                SnackbarMessage(
-                                  icon: appStateSettings["outlinedIcons"]
-                                      ? Icons.account_balance_wallet_outlined
-                                      : Icons.account_balance_wallet_rounded,
-                                  title: "changed-account".tr(),
-                                  description: "for".tr().capitalizeFirst +
-                                      " " +
-                                      transactions.length.toString() +
-                                      " " +
-                                      (transactions.length == 1
-                                          ? "transaction".tr().toLowerCase()
-                                          : "transactions".tr().toLowerCase()),
-                                ),
-                              );
-                              globalSelectedID.value[pageID] = [];
-                              globalSelectedID.notifyListeners();
-                            },
-                          ),
-                          DropdownItemMenu(
-                            id: "add-to-budget",
-                            label: "add-to-budget".tr(),
-                            iconScale:
-                                appStateSettings["outlinedIcons"] ? 1 : 0.85,
-                            icon: appStateSettings["outlinedIcons"]
-                                ? Icons.donut_small_outlined
-                                : MoreIcons.chart_pie,
-                            action: () async {
-                              dynamic budget =
-                                  await selectAddableBudgetPopup(context);
-                              print(budget);
-                              if (budget == null) return;
-
-                              String? budgetPkToMoveTo;
-                              if (budget == "none") {
-                                budgetPkToMoveTo = null;
-                              } else {
-                                budgetPkToMoveTo = budget.budgetPk;
-                              }
-                              List<Transaction> transactions = await database
-                                  .getTransactionsFromPk(value[pageID]!);
-                              int numberMoved =
-                                  await database.moveTransactionsToBudget(
-                                      transactions, budgetPkToMoveTo);
-
-                              // Some transactions weren't moved to a budget
-                              // if (transactions.length != numberMoved) {
-                              //   showIncomeCannotBeAddedToBudgetWarning();
-                              // }
-
-                              openSnackbar(
-                                SnackbarMessage(
-                                  icon: appStateSettings["outlinedIcons"]
-                                      ? Icons.donut_small_outlined
-                                      : MoreIcons.chart_pie,
-                                  title: budget == "none"
-                                      ? "removed-from-budget".tr()
-                                      : "added-to-budget".tr(),
-                                  description: "for".tr().capitalizeFirst +
-                                      " " +
-                                      numberMoved.toString() +
-                                      " " +
-                                      (numberMoved == 1
-                                          ? "transaction".tr().toLowerCase()
-                                          : "transactions".tr().toLowerCase()),
-                                ),
-                              );
-
-                              globalSelectedID.value[pageID] = [];
-                              globalSelectedID.notifyListeners();
-                            },
-                          ),
-                          DropdownItemMenu(
-                            id: "add-to-goal",
-                            label: "add-to-goal".tr(),
-                            iconScale: 0.85,
-                            icon: appStateSettings["outlinedIcons"]
-                                ? Icons.savings_outlined
-                                : Icons.savings_rounded,
-                            action: () async {
-                              dynamic objective =
-                                  await selectObjectivePopup(context);
-                              if (objective == null) return;
-
-                              String? objectivePkToMoveTo;
-                              if (objective == "none") {
-                                objectivePkToMoveTo = null;
-                              } else {
-                                objectivePkToMoveTo = objective.objectivePk;
-                              }
-                              List<Transaction> transactions = await database
-                                  .getTransactionsFromPk(value[pageID]!);
-                              int numberMoved =
-                                  await database.moveTransactionsToObjective(
-                                transactions,
-                                objectivePkToMoveTo,
-                                ObjectiveType.goal,
-                              );
-
-                              openSnackbar(
-                                SnackbarMessage(
-                                  icon: appStateSettings["outlinedIcons"]
-                                      ? Icons.savings_outlined
-                                      : Icons.savings_rounded,
-                                  title: objective == "none"
-                                      ? "removed-from-goal".tr()
-                                      : "added-to-goal-action".tr(),
-                                  description: "for".tr().capitalizeFirst +
-                                      " " +
-                                      numberMoved.toString() +
-                                      " " +
-                                      (numberMoved == 1
-                                          ? "transaction".tr().toLowerCase()
-                                          : "transactions".tr().toLowerCase()),
-                                ),
-                              );
-
-                              globalSelectedID.value[pageID] = [];
-                              globalSelectedID.notifyListeners();
-                            },
-                          ),
-                        ],
-                      ),
                       if (appStateSettings["massEditSelectedTransactions"] ==
                           true)
                         IconButton(
@@ -555,17 +196,473 @@ class SelectedTransactionsAppBar extends StatelessWidget {
                                   (value)[pageID]!.length.toString() +
                                   " Selected",
                               child: EditSelectedTransactions(
-                                transactionIDs: value[pageID]!,
+                                transactionIDs: listOfIDs,
                               ),
                             );
                           },
                         ),
+                      SelectedTransactionsAppBarMenu(
+                        pageID: pageID,
+                        selectedTransactionPks: listOfIDs,
+                        colorScheme: colorScheme,
+                        enableSettleAllButton: enableSettleAllButton,
+                      )
                     ],
                   ),
                 ),
               ],
             ),
           ),
+        );
+      },
+    );
+  }
+}
+
+class SelectedTransactionsAppBarMenu extends StatelessWidget {
+  const SelectedTransactionsAppBarMenu(
+      {Key? key,
+      required this.pageID,
+      required this.enableSettleAllButton,
+      required this.colorScheme,
+      required this.selectedTransactionPks})
+      : super(key: key);
+
+  final String pageID;
+  final ColorScheme colorScheme;
+  final bool enableSettleAllButton;
+  final List<String> selectedTransactionPks;
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<List<Objective>>(
+      stream: database.watchAllObjectives(objectiveType: ObjectiveType.loan),
+      builder: (context, loansSnapshot) {
+        return StreamBuilder<List<Objective>>(
+          stream:
+              database.watchAllObjectives(objectiveType: ObjectiveType.goal),
+          builder: (context, goalsSnapshot) {
+            return StreamBuilder<List<Budget>>(
+              stream: database.watchAllAddableBudgets(),
+              builder: (context, addableBudgetsSnapshot) {
+                bool enableObjectiveLoansSection =
+                    (loansSnapshot.data ?? []).length > 0;
+                bool enableObjectiveSelection =
+                    (goalsSnapshot.data ?? []).length > 0;
+                bool enableAddableBudgetSelection =
+                    (addableBudgetsSnapshot.data ?? []).length > 0;
+                bool enableWalletSelection =
+                    Provider.of<AllWallets>(context, listen: true)
+                            .indexedByPk
+                            .length >
+                        1;
+                bool enableDuplicate = selectedTransactionPks.length <= 10;
+
+                return CustomPopupMenuButton(
+                  colorScheme: colorScheme,
+                  showButtons: enableDoubleColumn(context),
+                  keepOutFirst: true,
+                  // There is no header taking up space, we can always keep out the delete button
+                  forceKeepOutFirst: true,
+                  items: [
+                    DropdownItemMenu(
+                      id: "delete-transactions",
+                      label: "delete-transactions".tr(),
+                      icon: Icons.delete,
+                      action: () async {
+                        dynamic result = await deleteTransactionsPopup(
+                          context,
+                          transactionPks: selectedTransactionPks,
+                          routesToPopAfterDelete: RoutesToPopAfterDelete.None,
+                        );
+                        if (result == DeletePopupAction.Delete) {
+                          globalSelectedID.value[pageID] = [];
+                          globalSelectedID.notifyListeners();
+                        }
+                      },
+                    ),
+                    if (enableSettleAllButton)
+                      DropdownItemMenu(
+                        id: "settle-all",
+                        label: "settle-and-collect-all".tr(),
+                        icon: appStateSettings["outlinedIcons"]
+                            ? Icons.check_circle_outline
+                            : Icons.check_circle_rounded,
+                        action: () async {
+                          for (int i = 0;
+                              i < selectedTransactionPks.length;
+                              i++) {
+                            await settleTransactions(
+                              selectedTransactionPks[i],
+                            );
+                          }
+                          openSnackbar(
+                            SnackbarMessage(
+                              icon: appStateSettings["outlinedIcons"]
+                                  ? Icons.check_circle_outline
+                                  : Icons.check_circle_rounded,
+                              title: "settled-and-collected".tr(),
+                              description:
+                                  selectedTransactionPks.length.toString() +
+                                      " " +
+                                      "transactions".tr().toLowerCase(),
+                            ),
+                          );
+                          globalSelectedID.value[pageID] = [];
+                          globalSelectedID.notifyListeners();
+                        },
+                      ),
+                    if (enableDuplicate)
+                      DropdownItemMenu(
+                        id: "create-copy",
+                        label: "duplicate".tr(),
+                        icon: appStateSettings["outlinedIcons"]
+                            ? Icons.file_copy_outlined
+                            : Icons.file_copy_rounded,
+                        iconScale: 0.97,
+                        action: () async {
+                          bool showDetailedSnackbarMessage =
+                              selectedTransactionPks.length <= 1;
+                          for (int i = 0;
+                              i < selectedTransactionPks.length;
+                              i++) {
+                            await duplicateTransaction(
+                              context,
+                              selectedTransactionPks[i],
+                              showDuplicatedMessage:
+                                  showDetailedSnackbarMessage,
+                            );
+                          }
+                          if (showDetailedSnackbarMessage == false) {
+                            openSnackbar(
+                              SnackbarMessage(
+                                icon: appStateSettings["outlinedIcons"]
+                                    ? Icons.file_copy_outlined
+                                    : Icons.file_copy_rounded,
+                                title: "created-copy".tr(),
+                                description:
+                                    selectedTransactionPks.length.toString() +
+                                        " " +
+                                        "transactions".tr().toLowerCase(),
+                              ),
+                            );
+                          }
+                          globalSelectedID.value[pageID] = [];
+                          globalSelectedID.notifyListeners();
+                        },
+                      ),
+                    DropdownItemMenu(
+                      id: "change-date",
+                      label: "change-date".tr(),
+                      icon: appStateSettings["outlinedIcons"]
+                          ? Icons.calendar_month_outlined
+                          : Icons.calendar_month_rounded,
+                      action: () async {
+                        List<Transaction> transactions = await database
+                            .getTransactionsFromPk(selectedTransactionPks);
+                        if (transactions.length <= 0) return;
+                        DateTime? selectedDate = await showCustomDatePicker(
+                            context, transactions.first.dateCreated);
+                        if (selectedDate == null) {
+                          openSnackbar(
+                            SnackbarMessage(
+                              icon: appStateSettings["outlinedIcons"]
+                                  ? Icons.warning_outlined
+                                  : Icons.warning_rounded,
+                              title: "date-not-selected".tr(),
+                            ),
+                          );
+                          return;
+                        }
+                        TimeOfDay? selectedTime = await showCustomTimePicker(
+                          context,
+                          TimeOfDay(
+                            hour: transactions.first.dateCreated.hour,
+                            minute: transactions.first.dateCreated.minute,
+                          ),
+                        );
+                        if (selectedTime == null) {
+                          openSnackbar(
+                            SnackbarMessage(
+                              icon: appStateSettings["outlinedIcons"]
+                                  ? Icons.warning_outlined
+                                  : Icons.warning_rounded,
+                              title: "time-not-selected".tr(),
+                            ),
+                          );
+                          return;
+                        }
+                        selectedDate = selectedDate.copyWith(
+                          hour: selectedTime.hour,
+                          minute: selectedTime.minute,
+                        );
+                        await database.updateDateTimeCreatedOfTransactions(
+                            transactions, selectedDate);
+                        openSnackbar(
+                          SnackbarMessage(
+                            icon: appStateSettings["outlinedIcons"]
+                                ? Icons.calendar_month_outlined
+                                : Icons.calendar_month_rounded,
+                            title: "changed-date".tr(),
+                            description: "for".tr().capitalizeFirst +
+                                " " +
+                                transactions.length.toString() +
+                                " " +
+                                (transactions.length == 1
+                                    ? "transaction".tr().toLowerCase()
+                                    : "transactions".tr().toLowerCase()),
+                          ),
+                        );
+                        globalSelectedID.value[pageID] = [];
+                        globalSelectedID.notifyListeners();
+                      },
+                    ),
+                    DropdownItemMenu(
+                      id: "change-category",
+                      label: "change-category".tr(),
+                      icon: appStateSettings["outlinedIcons"]
+                          ? Icons.category_outlined
+                          : Icons.category_rounded,
+                      action: () async {
+                        MainAndSubcategory mainAndSubcategory =
+                            await selectCategorySequence(
+                          context,
+                          selectedCategory: null,
+                          setSelectedCategory: (_) {},
+                          selectedSubCategory: null,
+                          setSelectedSubCategory: (_) {},
+                          selectedIncomeInitial: null,
+                        );
+                        TransactionCategory? category = mainAndSubcategory.main;
+                        print(mainAndSubcategory.sub);
+                        if (category == null) return;
+                        TransactionCategory? subCategory =
+                            mainAndSubcategory.sub;
+                        List<Transaction> transactions = await database
+                            .getTransactionsFromPk(selectedTransactionPks);
+                        await database.moveTransactionsToCategory(
+                          transactions,
+                          category.categoryPk,
+                          subCategory?.categoryPk,
+                          mainAndSubcategory.ignoredSubcategorySelection ==
+                              false,
+                        );
+                        openSnackbar(
+                          SnackbarMessage(
+                            icon: appStateSettings["outlinedIcons"]
+                                ? Icons.category_outlined
+                                : Icons.category_rounded,
+                            title: "changed-category".tr(),
+                            description: "for".tr().capitalizeFirst +
+                                " " +
+                                transactions.length.toString() +
+                                " " +
+                                (transactions.length == 1
+                                    ? "transaction".tr().toLowerCase()
+                                    : "transactions".tr().toLowerCase()),
+                          ),
+                        );
+                        globalSelectedID.value[pageID] = [];
+                        globalSelectedID.notifyListeners();
+                      },
+                    ),
+                    if (enableWalletSelection)
+                      DropdownItemMenu(
+                        id: "change-account",
+                        label: "change-account".tr(),
+                        icon: appStateSettings["outlinedIcons"]
+                            ? Icons.account_balance_wallet_outlined
+                            : Icons.account_balance_wallet_rounded,
+                        action: () async {
+                          TransactionWallet? wallet = await selectWalletPopup(
+                            context,
+                            allowEditWallet: true,
+                          );
+                          if (wallet == null) return;
+                          List<Transaction> transactions = await database
+                              .getTransactionsFromPk(selectedTransactionPks);
+                          await database.moveWalletTransactions(
+                            Provider.of<AllWallets>(context, listen: false),
+                            null,
+                            wallet.walletPk,
+                            transactionsToMove: transactions,
+                          );
+                          openSnackbar(
+                            SnackbarMessage(
+                              icon: appStateSettings["outlinedIcons"]
+                                  ? Icons.account_balance_wallet_outlined
+                                  : Icons.account_balance_wallet_rounded,
+                              title: "changed-account".tr(),
+                              description: "for".tr().capitalizeFirst +
+                                  " " +
+                                  transactions.length.toString() +
+                                  " " +
+                                  (transactions.length == 1
+                                      ? "transaction".tr().toLowerCase()
+                                      : "transactions".tr().toLowerCase()),
+                            ),
+                          );
+                          globalSelectedID.value[pageID] = [];
+                          globalSelectedID.notifyListeners();
+                        },
+                      ),
+                    if (enableAddableBudgetSelection)
+                      DropdownItemMenu(
+                        id: "add-to-budget",
+                        label: "add-to-budget".tr(),
+                        iconScale: appStateSettings["outlinedIcons"] ? 1 : 0.85,
+                        icon: appStateSettings["outlinedIcons"]
+                            ? Icons.donut_small_outlined
+                            : MoreIcons.chart_pie,
+                        action: () async {
+                          dynamic budget =
+                              await selectAddableBudgetPopup(context);
+                          print(budget);
+                          if (budget == null) return;
+
+                          String? budgetPkToMoveTo;
+                          if (budget == "none") {
+                            budgetPkToMoveTo = null;
+                          } else {
+                            budgetPkToMoveTo = budget.budgetPk;
+                          }
+                          List<Transaction> transactions = await database
+                              .getTransactionsFromPk(selectedTransactionPks);
+                          int numberMoved =
+                              await database.moveTransactionsToBudget(
+                                  transactions, budgetPkToMoveTo);
+
+                          // Some transactions weren't moved to a budget
+                          // if (transactions.length != numberMoved) {
+                          //   showIncomeCannotBeAddedToBudgetWarning();
+                          // }
+
+                          openSnackbar(
+                            SnackbarMessage(
+                              icon: appStateSettings["outlinedIcons"]
+                                  ? Icons.donut_small_outlined
+                                  : MoreIcons.chart_pie,
+                              title: budget == "none"
+                                  ? "removed-from-budget".tr()
+                                  : "added-to-budget".tr(),
+                              description: "for".tr().capitalizeFirst +
+                                  " " +
+                                  numberMoved.toString() +
+                                  " " +
+                                  (numberMoved == 1
+                                      ? "transaction".tr().toLowerCase()
+                                      : "transactions".tr().toLowerCase()),
+                            ),
+                          );
+
+                          globalSelectedID.value[pageID] = [];
+                          globalSelectedID.notifyListeners();
+                        },
+                      ),
+                    if (enableObjectiveSelection)
+                      DropdownItemMenu(
+                        id: "add-to-goal",
+                        label: "add-to-goal".tr(),
+                        iconScale: 0.85,
+                        icon: appStateSettings["outlinedIcons"]
+                            ? Icons.savings_outlined
+                            : Icons.savings_rounded,
+                        action: () async {
+                          dynamic objective =
+                              await selectObjectivePopup(context);
+                          if (objective == null) return;
+
+                          String? objectivePkToMoveTo;
+                          if (objective == "none") {
+                            objectivePkToMoveTo = null;
+                          } else {
+                            objectivePkToMoveTo = objective.objectivePk;
+                          }
+                          List<Transaction> transactions = await database
+                              .getTransactionsFromPk(selectedTransactionPks);
+                          int numberMoved =
+                              await database.moveTransactionsToObjective(
+                            transactions,
+                            objectivePkToMoveTo,
+                            ObjectiveType.goal,
+                          );
+
+                          openSnackbar(
+                            SnackbarMessage(
+                              icon: appStateSettings["outlinedIcons"]
+                                  ? Icons.savings_outlined
+                                  : Icons.savings_rounded,
+                              title: objective == "none"
+                                  ? "removed-from-goal".tr()
+                                  : "added-to-goal-action".tr(),
+                              description: "for".tr().capitalizeFirst +
+                                  " " +
+                                  numberMoved.toString() +
+                                  " " +
+                                  (numberMoved == 1
+                                      ? "transaction".tr().toLowerCase()
+                                      : "transactions".tr().toLowerCase()),
+                            ),
+                          );
+
+                          globalSelectedID.value[pageID] = [];
+                          globalSelectedID.notifyListeners();
+                        },
+                      ),
+                    if (enableObjectiveLoansSection)
+                      DropdownItemMenu(
+                        id: "add-to-loan",
+                        label: "add-to-loan".tr(),
+                        icon: getTransactionTypeIcon(
+                            TransactionSpecialType.credit),
+                        action: () async {
+                          dynamic objective = await selectObjectivePopup(
+                              context,
+                              objectiveType: ObjectiveType.loan);
+                          if (objective == null) return;
+
+                          String? objectivePkToMoveTo;
+                          if (objective == "none") {
+                            objectivePkToMoveTo = null;
+                          } else {
+                            objectivePkToMoveTo = objective.objectivePk;
+                          }
+                          List<Transaction> transactions = await database
+                              .getTransactionsFromPk(selectedTransactionPks);
+                          int numberMoved =
+                              await database.moveTransactionsToObjective(
+                            transactions,
+                            objectivePkToMoveTo,
+                            ObjectiveType.loan,
+                          );
+
+                          openSnackbar(
+                            SnackbarMessage(
+                              icon: appStateSettings["outlinedIcons"]
+                                  ? Icons.savings_outlined
+                                  : Icons.savings_rounded,
+                              title: objective == "none"
+                                  ? "removed-from-loan".tr()
+                                  : "added-to-loan-action".tr(),
+                              description: "for".tr().capitalizeFirst +
+                                  " " +
+                                  numberMoved.toString() +
+                                  " " +
+                                  (numberMoved == 1
+                                      ? "transaction".tr().toLowerCase()
+                                      : "transactions".tr().toLowerCase()),
+                            ),
+                          );
+
+                          globalSelectedID.value[pageID] = [];
+                          globalSelectedID.notifyListeners();
+                        },
+                      ),
+                  ],
+                );
+              },
+            );
+          },
         );
       },
     );

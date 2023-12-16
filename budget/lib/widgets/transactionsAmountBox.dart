@@ -18,9 +18,8 @@ class TransactionsAmountBox extends StatelessWidget {
     this.openPage,
     this.onLongPress,
     required this.label,
-    required this.amountStream,
+    required this.totalWithCountStream,
     required this.textColor,
-    required this.transactionsAmountStream,
     this.absolute = true,
     this.getTextColor,
     this.currencyKey,
@@ -29,9 +28,8 @@ class TransactionsAmountBox extends StatelessWidget {
   final Widget? openPage;
   final Function? onLongPress;
   final String label;
-  final Stream<double?> amountStream;
+  final Stream<TotalWithCount?> totalWithCountStream;
   final Color textColor;
-  final Stream<List<int?>> transactionsAmountStream;
   final bool absolute;
   final String? currencyKey;
   final Function(double)? getTextColor;
@@ -68,59 +66,57 @@ class TransactionsAmountBox extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     ),
                     SizedBox(height: 6),
-                    StreamBuilder<double?>(
-                      stream: amountStream,
+                    StreamBuilder<TotalWithCount?>(
+                      stream: totalWithCountStream,
                       builder: (context, snapshot) {
-                        return CountNumber(
-                          count:
-                              snapshot.hasData == false || snapshot.data == null
+                        double totalSpent = snapshot.data?.total ?? 0;
+                        int totalCount = snapshot.data?.count ?? 0;
+                        return Column(
+                          children: [
+                            CountNumber(
+                              count: snapshot.hasData == false ||
+                                      snapshot.data == null
                                   ? 0
                                   : absolute == true
-                                      ? (snapshot.data ?? 0).abs()
-                                      : (snapshot.data ?? 0),
-                          duration: Duration(milliseconds: 1000),
-                          initialCount: (0),
-                          textBuilder: (number) {
-                            return TextFont(
-                              text: convertToMoney(
-                                  Provider.of<AllWallets>(context), number,
-                                  currencyKey: currencyKey,
-                                  addCurrencyName: currencyKey != null,
-                                  finalNumber: snapshot.hasData == false ||
-                                          snapshot.data == null
-                                      ? 0
-                                      : absolute == true
-                                          ? (snapshot.data ?? 0).abs()
-                                          : (snapshot.data ?? 0)),
-                              textColor: getTextColor != null
-                                  ? getTextColor!(snapshot.data ?? 0)
-                                  : textColor,
-                              fontWeight: FontWeight.bold,
-                              autoSizeText: true,
-                              fontSize: 21,
-                              maxFontSize: 21,
-                              minFontSize: 10,
-                              maxLines: 1,
-                            );
-                          },
-                        );
-                      },
-                    ),
-                    SizedBox(height: 6),
-                    StreamBuilder<List<int?>>(
-                      stream: transactionsAmountStream,
-                      builder: (context, snapshot) {
-                        return TextFont(
-                          text: snapshot.hasData == false ||
-                                  snapshot.data![0] == null
-                              ? "/"
-                              : (snapshot.data![0].toString() +
+                                      ? (totalSpent).abs()
+                                      : (totalSpent),
+                              duration: Duration(milliseconds: 1000),
+                              initialCount: (0),
+                              textBuilder: (number) {
+                                return TextFont(
+                                  text: convertToMoney(
+                                      Provider.of<AllWallets>(context), number,
+                                      currencyKey: currencyKey,
+                                      addCurrencyName: currencyKey != null,
+                                      finalNumber: snapshot.hasData == false ||
+                                              snapshot.data == null
+                                          ? 0
+                                          : absolute == true
+                                              ? (totalSpent).abs()
+                                              : (totalSpent)),
+                                  textColor: getTextColor != null
+                                      ? getTextColor!(totalSpent)
+                                      : textColor,
+                                  fontWeight: FontWeight.bold,
+                                  autoSizeText: true,
+                                  fontSize: 21,
+                                  maxFontSize: 21,
+                                  minFontSize: 10,
+                                  maxLines: 1,
+                                );
+                              },
+                            ),
+                            SizedBox(height: 6),
+                            TextFont(
+                              text: totalCount.toString() +
                                   " " +
-                                  (snapshot.data![0] == 1
+                                  (totalCount == 1
                                       ? "transaction".tr().toLowerCase()
-                                      : "transactions".tr().toLowerCase())),
-                          fontSize: 13,
-                          textColor: getColor(context, "textLight"),
+                                      : "transactions".tr().toLowerCase()),
+                              fontSize: 13,
+                              textColor: getColor(context, "textLight"),
+                            ),
+                          ],
                         );
                       },
                     ),

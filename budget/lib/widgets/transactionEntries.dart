@@ -55,7 +55,6 @@ class TransactionEntries extends StatelessWidget {
     this.walletFks = const [],
     this.onSelected,
     this.listID,
-    this.income,
     this.budgetTransactionFilters,
     this.memberTransactionFilters,
     this.member,
@@ -96,7 +95,6 @@ class TransactionEntries extends StatelessWidget {
   final List<String> walletFks;
   final Function(Transaction, bool)? onSelected;
   final String? listID;
-  final bool? income;
   final List<BudgetTransactionFilters>? budgetTransactionFilters;
   final List<String>? memberTransactionFilters;
   final String? member;
@@ -168,7 +166,6 @@ class TransactionEntries extends StatelessWidget {
         categoryFks: categoryFks,
         categoryFksExclude: categoryFksExclude,
         walletFks: walletFks,
-        income: income,
         budgetTransactionFilters: budgetTransactionFilters,
         memberTransactionFilters: memberTransactionFilters,
         member: member,
@@ -269,12 +266,7 @@ class TransactionEntries extends StatelessWidget {
                             transactionWithCategory.transaction.walletFk));
               }
               if (transactionWithCategory.transaction.paid &&
-                  transactionWithCategory.transaction.categoryFk != "0" &&
-                  transactionWithCategory.transaction.type !=
-                      TransactionSpecialType.credit &&
-                  transactionWithCategory.transaction.type !=
-                      TransactionSpecialType.debt &&
-                  transactionWithCategory.transaction.objectiveLoanFk == null) {
+                  transactionWithCategory.transaction.categoryFk != "0") {
                 double amountForDay =
                     transactionWithCategory.transaction.amount *
                         (amountRatioToPrimaryCurrencyGivenPk(
@@ -581,7 +573,6 @@ class TransactionEntries extends StatelessWidget {
         categoryFks: categoryFks,
         categoryFksExclude: categoryFksExclude,
         walletFks: walletFks,
-        income: income,
         budgetTransactionFilters: budgetTransactionFilters,
         memberTransactionFilters: memberTransactionFilters,
         member: member,

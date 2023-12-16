@@ -672,7 +672,6 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                 categoryFksExclude: selectedCategory != null
                     ? null
                     : widget.budget.categoryFksExclude,
-                income: null,
                 listID: pageId,
                 budgetTransactionFilters:
                     widget.budget.budgetTransactionFilters,

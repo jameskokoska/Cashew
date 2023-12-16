@@ -3,6 +3,7 @@ import 'package:budget/functions.dart';
 import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/addWalletPage.dart';
+import 'package:budget/pages/creditDebtTransactionsPage.dart';
 import 'package:budget/pages/editHomePage.dart';
 import 'package:budget/pages/homePage/homePageLineGraph.dart';
 import 'package:budget/pages/homePage/homePageNetWorth.dart';
@@ -11,6 +12,7 @@ import 'package:budget/pages/pastBudgetsPage.dart';
 import 'package:budget/pages/premiumPage.dart';
 import 'package:budget/pages/transactionFilters.dart';
 import 'package:budget/pages/transactionsSearchPage.dart';
+import 'package:budget/pages/upcomingOverdueTransactionsPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/struct/spendingSummaryHelper.dart';
@@ -278,25 +280,17 @@ class _WalletDetailsPageState extends State<WalletDetailsPage>
                         currencyKey: Provider.of<AllWallets>(context)
                             .indexedByPk[appStateSettings["selectedWalletPk"]]
                             ?.currency,
-                        amountStream: database.watchTotalOfWallet(
-                          walletPks,
+                        totalWithCountStream:
+                            database.watchTotalWithCountOfWallet(
                           isIncome: null,
                           allWallets: Provider.of<AllWallets>(context),
                           followCustomPeriodCycle: widget.wallet == null,
                           cycleSettingsExtension: "",
-                          searchFilters: searchFilters,
+                          searchFilters: (searchFilters ?? SearchFilters())
+                              .copyWith(walletPks: walletPks),
                           forcedDateTimeRange: selectedDateTimeRange,
                         ),
                         textColor: getColor(context, "black"),
-                        transactionsAmountStream:
-                            database.watchTotalCountOfTransactionsInWallet(
-                          walletPks,
-                          isIncome: null,
-                          followCustomPeriodCycle: widget.wallet == null,
-                          cycleSettingsExtension: "",
-                          searchFilters: searchFilters,
-                          forcedDateTimeRange: selectedDateTimeRange,
-                        ),
                         openPage: TransactionsSearchPage(
                           initialFilters: (searchFilters == null
                                   ? SearchFilters()
@@ -324,95 +318,288 @@ class _WalletDetailsPageState extends State<WalletDetailsPage>
                   enabled: enableDoubleColumn(context) == false &&
                       widget.wallet == null,
                 )),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Expanded(
-                      child: TransactionsAmountBox(
-                        onLongPress: () {
-                          selectAllSpendingPeriod();
-                        },
-                        label: "expense".tr(),
-                        amountStream: database.watchTotalOfWallet(
-                          walletPks,
-                          isIncome: false,
-                          allWallets: Provider.of<AllWallets>(context),
-                          followCustomPeriodCycle: widget.wallet == null,
-                          cycleSettingsExtension: "",
-                          searchFilters: searchFilters,
-                          forcedDateTimeRange: selectedDateTimeRange,
-                        ),
-                        textColor: getColor(context, "expenseAmount"),
-                        transactionsAmountStream:
-                            database.watchTotalCountOfTransactionsInWallet(
-                          walletPks,
-                          isIncome: false,
-                          followCustomPeriodCycle: widget.wallet == null,
-                          cycleSettingsExtension: "",
-                          searchFilters: searchFilters,
-                          forcedDateTimeRange: selectedDateTimeRange,
-                        ),
-                        openPage: TransactionsSearchPage(
-                          initialFilters: (searchFilters == null
-                                  ? SearchFilters()
-                                  : searchFilters)
-                              ?.copyWith(
-                            dateTimeRange:
-                                getDateTimeRangeForPassedSearchFilters(),
-                            walletPks: widget.wallet == null
-                                ? null
-                                : [widget.wallet?.walletPk ?? ""],
-                            expenseIncome: [ExpenseIncome.expense],
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: getColor(context, "lightDarkAccentHeavyLight"),
+                    boxShadow: boxShadowCheck(boxShadowGeneral(context)),
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(15),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        SizedBox(height: 10),
+                        AmountSpentEntryRow(
+                          forceShow: true,
+                          openPage: TransactionsSearchPage(
+                            initialFilters: (searchFilters == null
+                                    ? SearchFilters()
+                                    : searchFilters)
+                                ?.copyWith(
+                              dateTimeRange:
+                                  getDateTimeRangeForPassedSearchFilters(),
+                              walletPks: widget.wallet == null
+                                  ? null
+                                  : [widget.wallet?.walletPk ?? ""],
+                              expenseIncome: [ExpenseIncome.expense],
+                            ),
                           ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(width: 13),
-                    Expanded(
-                      child: TransactionsAmountBox(
-                        onLongPress: () {
-                          selectAllSpendingPeriod();
-                        },
-                        label: "income".tr(),
-                        amountStream: database.watchTotalOfWallet(
-                          walletPks,
-                          isIncome: true,
-                          allWallets: Provider.of<AllWallets>(context),
-                          followCustomPeriodCycle: widget.wallet == null,
-                          cycleSettingsExtension: "",
-                          searchFilters: searchFilters,
-                          forcedDateTimeRange: selectedDateTimeRange,
-                        ),
-                        textColor: getColor(context, "incomeAmount"),
-                        transactionsAmountStream:
-                            database.watchTotalCountOfTransactionsInWallet(
-                          walletPks,
-                          isIncome: true,
-                          followCustomPeriodCycle: widget.wallet == null,
-                          cycleSettingsExtension: "",
-                          searchFilters: searchFilters,
-                          forcedDateTimeRange: selectedDateTimeRange,
-                        ),
-                        openPage: TransactionsSearchPage(
-                          initialFilters: (searchFilters == null
-                                  ? SearchFilters()
-                                  : searchFilters)
-                              ?.copyWith(
-                            dateTimeRange:
-                                getDateTimeRangeForPassedSearchFilters(),
-                            walletPks: widget.wallet == null
-                                ? null
-                                : [widget.wallet?.walletPk ?? ""],
-                            expenseIncome: [ExpenseIncome.income],
+                          textColor: getColor(context, "expenseAmount"),
+                          label: "expense".tr(),
+                          totalWithCountStream:
+                              database.watchTotalWithCountOfWallet(
+                            isIncome: false,
+                            allWallets: Provider.of<AllWallets>(context),
+                            followCustomPeriodCycle: widget.wallet == null,
+                            cycleSettingsExtension: "",
+                            searchFilters: (searchFilters ?? SearchFilters())
+                                .copyWith(walletPks: walletPks),
+                            forcedDateTimeRange: selectedDateTimeRange,
+                            onlyIncomeAndExpense: true,
                           ),
+                          onLongPress: () {
+                            selectAllSpendingPeriod();
+                          },
                         ),
-                      ),
+                        AmountSpentEntryRow(
+                          forceShow: true,
+                          openPage: TransactionsSearchPage(
+                            initialFilters: (searchFilters == null
+                                    ? SearchFilters()
+                                    : searchFilters)
+                                ?.copyWith(
+                              dateTimeRange:
+                                  getDateTimeRangeForPassedSearchFilters(),
+                              walletPks: widget.wallet == null
+                                  ? null
+                                  : [widget.wallet?.walletPk ?? ""],
+                              expenseIncome: [ExpenseIncome.income],
+                            ),
+                          ),
+                          textColor: getColor(context, "incomeAmount"),
+                          label: "income".tr(),
+                          totalWithCountStream:
+                              database.watchTotalWithCountOfWallet(
+                            isIncome: true,
+                            allWallets: Provider.of<AllWallets>(context),
+                            followCustomPeriodCycle: widget.wallet == null,
+                            cycleSettingsExtension: "",
+                            searchFilters: (searchFilters ?? SearchFilters())
+                                .copyWith(walletPks: walletPks),
+                            forcedDateTimeRange: selectedDateTimeRange,
+                            onlyIncomeAndExpense: true,
+                          ),
+                          onLongPress: () {
+                            selectAllSpendingPeriod();
+                          },
+                        ),
+                        AmountSpentEntryRow(
+                          openPage: UpcomingOverdueTransactions(
+                              overdueTransactions: false),
+                          textColor: getColor(context, "unPaidUpcoming"),
+                          label: "upcoming".tr(),
+                          totalWithCountStream:
+                              database.watchTotalWithCountOfUpcomingOverdue(
+                            isOverdueTransactions: false,
+                            allWallets: Provider.of<AllWallets>(context),
+                            followCustomPeriodCycle: widget.wallet == null,
+                            cycleSettingsExtension: "",
+                            searchFilters: searchFilters,
+                            forcedDateTimeRange: selectedDateTimeRange,
+                          ),
+                          onLongPress: () {
+                            selectAllSpendingPeriod();
+                          },
+                        ),
+                        AmountSpentEntryRow(
+                          openPage: UpcomingOverdueTransactions(
+                              overdueTransactions: true),
+                          textColor: getColor(context, "unPaidOverdue"),
+                          label: "overdue".tr(),
+                          totalWithCountStream:
+                              database.watchTotalWithCountOfUpcomingOverdue(
+                            isOverdueTransactions: true,
+                            allWallets: Provider.of<AllWallets>(context),
+                            followCustomPeriodCycle: widget.wallet == null,
+                            cycleSettingsExtension: "",
+                            searchFilters: searchFilters,
+                            forcedDateTimeRange: selectedDateTimeRange,
+                          ),
+                          onLongPress: () {
+                            selectAllSpendingPeriod();
+                          },
+                        ),
+                        // Only show borrowed and lent totals when all time
+                        // There is no point in showing it for time periods, because when marked as collected/paid
+                        // It doesn't count towards total, and partial loans may not include all transactions and calculate properly
+                        // I guess we could track amount paid back/amount lent out for period instead
+                        // But that's not what this does...
+                        AmountSpentEntryRow(
+                          hide: selectedDateTimeRange != null,
+                          extraText: CycleType.values[appStateSettings[
+                                          "selectedPeriodCycleType"] ??
+                                      0] !=
+                                  CycleType.allTime
+                              ? "all-time".tr()
+                              : null,
+                          openPage: CreditDebtTransactions(isCredit: true),
+                          textColor: getColor(context, "unPaidUpcoming"),
+                          label: "lent".tr(),
+                          totalWithCountStream:
+                              database.watchTotalWithCountOfCreditDebt(
+                            isCredit: true,
+                            allWallets: Provider.of<AllWallets>(context),
+                            followCustomPeriodCycle: widget.wallet == null,
+                            cycleSettingsExtension: null, //all time
+                            searchFilters: searchFilters?.copyWith(
+                              dateTimeRange: null,
+                              forceSetDateTimeRange: true,
+                            ),
+                            forcedDateTimeRange: selectedDateTimeRange,
+                            selectedTab: null,
+                          ),
+                          onLongPress: () {
+                            selectAllSpendingPeriod();
+                          },
+                        ),
+                        AmountSpentEntryRow(
+                          hide: selectedDateTimeRange != null,
+                          extraText: CycleType.values[appStateSettings[
+                                          "selectedPeriodCycleType"] ??
+                                      0] !=
+                                  CycleType.allTime
+                              ? "all-time".tr()
+                              : null,
+                          openPage: CreditDebtTransactions(isCredit: false),
+                          textColor: getColor(context, "unPaidOverdue"),
+                          label: "borrowed".tr(),
+                          totalWithCountStream:
+                              database.watchTotalWithCountOfCreditDebt(
+                            isCredit: false,
+                            allWallets: Provider.of<AllWallets>(context),
+                            followCustomPeriodCycle: widget.wallet == null,
+                            cycleSettingsExtension: null, //all time
+                            searchFilters: searchFilters?.copyWith(
+                              dateTimeRange: null,
+                              forceSetDateTimeRange: true,
+                            ),
+                            forcedDateTimeRange: selectedDateTimeRange,
+                            selectedTab: null,
+                          ),
+                          onLongPress: () {
+                            selectAllSpendingPeriod();
+                          },
+                        ),
+                        SizedBox(height: 10),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
               ),
             ),
+            // Padding(
+            //   padding: const EdgeInsets.only(bottom: 13, left: 13, right: 13),
+            //   child: Padding(
+            //     padding: EdgeInsets.symmetric(
+            //         horizontal: getHorizontalPaddingConstrained(
+            //       context,
+            //       enabled: enableDoubleColumn(context) == false &&
+            //           widget.wallet == null,
+            //     )),
+            //     child: Row(
+            //       crossAxisAlignment: CrossAxisAlignment.center,
+            //       mainAxisAlignment: MainAxisAlignment.center,
+            //       children: [
+            //         Expanded(
+            //           child: TransactionsAmountBox(
+            //             onLongPress: () {
+            //               selectAllSpendingPeriod();
+            //             },
+            //             label: "expense".tr(),
+            //             amountStream: database.watchTotalOfWallet(
+            //               isIncome: false,
+            //               allWallets: Provider.of<AllWallets>(context),
+            //               followCustomPeriodCycle: widget.wallet == null,
+            //               cycleSettingsExtension: "",
+            //               searchFilters: (searchFilters ?? SearchFilters())
+            //                   .copyWith(walletPks: walletPks),
+            //               forcedDateTimeRange: selectedDateTimeRange,
+            //               onlyIncomeAndExpense: true,
+            //             ),
+            //             textColor: getColor(context, "expenseAmount"),
+            //             transactionsAmountStream:
+            //                 database.watchTotalCountOfTransactionsInWallet(
+            //               isIncome: false,
+            //               followCustomPeriodCycle: widget.wallet == null,
+            //               cycleSettingsExtension: "",
+            //               searchFilters: (searchFilters ?? SearchFilters())
+            //                   .copyWith(walletPks: walletPks),
+            //               forcedDateTimeRange: selectedDateTimeRange,
+            //               onlyIncomeAndExpense: true,
+            //             ),
+            //             openPage: TransactionsSearchPage(
+            //               initialFilters: (searchFilters == null
+            //                       ? SearchFilters()
+            //                       : searchFilters)
+            //                   ?.copyWith(
+            //                 dateTimeRange:
+            //                     getDateTimeRangeForPassedSearchFilters(),
+            //                 walletPks: widget.wallet == null
+            //                     ? null
+            //                     : [widget.wallet?.walletPk ?? ""],
+            //                 expenseIncome: [ExpenseIncome.expense],
+            //               ),
+            //             ),
+            //           ),
+            //         ),
+            //         SizedBox(width: 13),
+            //         Expanded(
+            //           child: TransactionsAmountBox(
+            //             onLongPress: () {
+            //               selectAllSpendingPeriod();
+            //             },
+            //             label: "income".tr(),
+            //             amountStream: database.watchTotalOfWallet(
+            //               isIncome: true,
+            //               allWallets: Provider.of<AllWallets>(context),
+            //               followCustomPeriodCycle: widget.wallet == null,
+            //               cycleSettingsExtension: "",
+            //               searchFilters: (searchFilters ?? SearchFilters())
+            //                   .copyWith(walletPks: walletPks),
+            //               forcedDateTimeRange: selectedDateTimeRange,
+            //               onlyIncomeAndExpense: true,
+            //             ),
+            //             textColor: getColor(context, "incomeAmount"),
+            //             transactionsAmountStream:
+            //                 database.watchTotalCountOfTransactionsInWallet(
+            //               isIncome: true,
+            //               followCustomPeriodCycle: widget.wallet == null,
+            //               cycleSettingsExtension: "",
+            //               searchFilters: (searchFilters ?? SearchFilters())
+            //                   .copyWith(walletPks: walletPks),
+            //               forcedDateTimeRange: selectedDateTimeRange,
+            //               onlyIncomeAndExpense: true,
+            //             ),
+            //             openPage: TransactionsSearchPage(
+            //               initialFilters: (searchFilters == null
+            //                       ? SearchFilters()
+            //                       : searchFilters)
+            //                   ?.copyWith(
+            //                 dateTimeRange:
+            //                     getDateTimeRangeForPassedSearchFilters(),
+            //                 walletPks: widget.wallet == null
+            //                     ? null
+            //                     : [widget.wallet?.walletPk ?? ""],
+            //                 expenseIncome: [ExpenseIncome.income],
+            //               ),
+            //             ),
+            //           ),
+            //         ),
+            //       ],
+            //     ),
+            //   ),
+            // ),
             WalletDetailsLineGraph(
               walletPks: walletPks,
               followCustomPeriodCycle: widget.wallet == null,
@@ -1242,8 +1429,10 @@ class _WalletDetailsCategorySelectionState
           limit: selectedCategory == null ? 0 : 10,
           listID: widget.listID,
           showNoResults: false,
-          income: isIncome,
-          searchFilters: widget.searchFilters,
+          // isIncome should be treated like outgoing/incoming
+          searchFilters: widget.searchFilters?.copyWith(
+            positiveCashFlow: isIncome,
+          ),
           useHorizontalPaddingConstrained:
               enableDoubleColumn(context) == false && widget.wallet == null,
         ),
@@ -1361,6 +1550,8 @@ class _WalletCategoryPieChartState extends State<WalletCategoryPieChart> {
                   widget.onSelectedCategory(selectedCategory);
                 },
                 initialTabIsIncome: false,
+                incomeLabel: "incoming".tr(),
+                expenseLabel: "outgoing".tr(),
               ),
             ),
           ),
@@ -1583,8 +1774,8 @@ class AllSpendingPastSpendingGraph extends StatefulWidget {
 
 class _AllSpendingPastSpendingGraphState
     extends State<AllSpendingPastSpendingGraph> {
-  Stream<List<double?>>? mergedStreamsIncome;
-  Stream<List<double?>>? mergedStreamsExpense;
+  Stream<List<TotalWithCount?>>? mergedStreamsIncome;
+  Stream<List<TotalWithCount?>>? mergedStreamsExpense;
   List<DateTimeRange> dateTimeRanges = [];
   int amountLoaded = 8;
   bool amountLoadedPressedOnce = false;
@@ -1603,16 +1794,15 @@ class _AllSpendingPastSpendingGraphState
 
   void loadLines(amountLoaded) async {
     dateTimeRanges = [];
-    List<Stream<double?>> watchedStreamsIncome = [];
-    List<Stream<double?>> watchedStreamsExpense = [];
+    List<Stream<TotalWithCount?>> watchedStreamsIncome = [];
+    List<Stream<TotalWithCount?>> watchedStreamsExpense = [];
     for (int index = 0; index < amountLoaded; index++) {
       DateTime datePast = getCycleDatePastToDetermineBudgetDate("", index);
       DateTimeRange budgetRange =
           getCycleDateTimeRange("", currentDate: datePast);
       dateTimeRanges.add(budgetRange);
       watchedStreamsIncome.add(
-        database.watchTotalOfWallet(
-          null,
+        database.watchTotalWithCountOfWallet(
           isIncome: true,
           includeBalanceCorrection: widget.appStateSettingsNetAllSpendingTotal,
           allWallets: Provider.of<AllWallets>(context, listen: false),
@@ -1623,8 +1813,7 @@ class _AllSpendingPastSpendingGraphState
         ),
       );
       watchedStreamsExpense.add(
-        database.watchTotalOfWallet(
-          null,
+        database.watchTotalWithCountOfWallet(
           isIncome: false,
           includeBalanceCorrection: widget.appStateSettingsNetAllSpendingTotal,
           allWallets: Provider.of<AllWallets>(context, listen: false),
@@ -1864,14 +2053,15 @@ class _AllSpendingPastSpendingGraphState
                 (snapshotTotalExpenseBefore.data ?? 0);
             double totalIncomeBefore = snapshotTotalIncomeBefore.data ?? 0;
             double totalExpenseBefore = snapshotTotalExpenseBefore.data ?? 0;
-            return StreamBuilder<List<double?>>(
+            return StreamBuilder<List<TotalWithCount?>>(
               stream: mergedStreamsIncome,
               builder: (context, snapshotIncome) {
-                List<double?> incomeData = snapshotIncome.data ?? [];
-                return StreamBuilder<List<double?>>(
+                List<TotalWithCount?> incomeData = snapshotIncome.data ?? [];
+                return StreamBuilder<List<TotalWithCount?>>(
                   stream: mergedStreamsExpense,
                   builder: (context, snapshotExpense) {
-                    List<double?> expenseData = snapshotExpense.data ?? [];
+                    List<TotalWithCount?> expenseData =
+                        snapshotExpense.data ?? [];
                     if (expenseData.length <= 0 && incomeData.length <= 0)
                       return SliverToBoxAdapter(
                         child: SizedBox.shrink(),
@@ -1882,8 +2072,10 @@ class _AllSpendingPastSpendingGraphState
                       List<FlSpot> spots = [];
                       double total = totalNetBefore;
                       for (int i = expenseData.length - 1; i >= 0; i--) {
+                        if (expenseData[i] == null) continue;
+                        TotalWithCount currentExpenseData = expenseData[i]!;
                         total = total +
-                            (expenseData[i] ?? 0).abs() * -1 +
+                            (currentExpenseData).total.abs() * -1 +
                             (nullIfIndexOutOfRange(incomeData, i) ?? 0).abs();
                         spots.add(FlSpot(
                           expenseData.length - 1 - i.toDouble(),
@@ -1895,11 +2087,13 @@ class _AllSpendingPastSpendingGraphState
                       List<FlSpot> spots = [];
                       if (expenseData.toSet().length > 1) {
                         for (int i = expenseData.length - 1; i >= 0; i--) {
+                          if (expenseData[i] == null) continue;
+                          TotalWithCount currentExpenseData = expenseData[i]!;
                           spots.add(FlSpot(
                             expenseData.length - 1 - i.toDouble(),
-                            (expenseData[i] ?? 0).abs() == 0
+                            (currentExpenseData).total.abs() == 0
                                 ? minimumYValue
-                                : (expenseData[i] ?? 0).abs(),
+                                : (currentExpenseData).total.abs(),
                           ));
                         }
                         allSpots.add(spots);
@@ -1909,11 +2103,13 @@ class _AllSpendingPastSpendingGraphState
                       if (incomeData.toSet().length > 1) {
                         spots = [];
                         for (int i = incomeData.length - 1; i >= 0; i--) {
+                          if (incomeData[i] == null) continue;
+                          TotalWithCount currentIncomeData = incomeData[i]!;
                           spots.add(FlSpot(
                             incomeData.length - 1 - i.toDouble(),
-                            (incomeData[i] ?? 0).abs() == 0
+                            (currentIncomeData).total.abs() == 0
                                 ? minimumYValue
-                                : (incomeData[i] ?? 0).abs(),
+                                : (currentIncomeData).total.abs(),
                           ));
                         }
                         allSpots.add(spots);
@@ -2042,19 +2238,18 @@ class _AllSpendingPastSpendingGraphState
                             List<double> totalIncomePoints = [];
                             List<double> totalExpensePoints = [];
                             for (int i = amountLoaded - 1; i >= 0; i--) {
-                              double netSpending =
-                                  (nullIfIndexOutOfRange(incomeData, i) ?? 0)
-                                          .toDouble()
-                                          .abs() +
-                                      (nullIfIndexOutOfRange(expenseData, i) ??
-                                                  0)
-                                              .toDouble()
-                                              .abs() *
-                                          -1;
                               double expenseSpending =
-                                  (nullIfIndexOutOfRange(expenseData, i) ?? 0);
+                                  (nullIfIndexOutOfRange(expenseData, i) ??
+                                          TotalWithCount(total: 0, count: 0))
+                                      .total;
                               double incomeSpending =
-                                  (nullIfIndexOutOfRange(incomeData, i) ?? 0);
+                                  (nullIfIndexOutOfRange(incomeData, i) ??
+                                          TotalWithCount(total: 0, count: 0))
+                                      .total;
+
+                              double netSpending =
+                                  expenseSpending.toDouble().abs() +
+                                      incomeSpending.toDouble().abs() * -1;
 
                               if (widget.appStateSettingsNetAllSpendingTotal) {
                                 currentTotalNetSpending += netSpending;
@@ -2203,6 +2398,124 @@ class SelectedPeriodHeaderLabel extends StatelessWidget {
       ),
       borderRadius: getPlatform() == PlatformOS.isIOS ? 10 : 15,
       onTap: onTap,
+    );
+  }
+}
+
+class AmountSpentEntryRow extends StatelessWidget {
+  const AmountSpentEntryRow({
+    super.key,
+    required this.openPage,
+    required this.textColor,
+    required this.label,
+    required this.totalWithCountStream,
+    required this.onLongPress,
+    this.hide = false,
+    this.forceShow = false,
+    this.extraText,
+  });
+  final Color textColor;
+  final String label;
+  final Widget openPage;
+  final Stream<TotalWithCount?> totalWithCountStream;
+  final VoidCallback onLongPress;
+  final bool hide;
+  final bool forceShow;
+  final String? extraText;
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<TotalWithCount?>(
+      stream: totalWithCountStream,
+      builder: (context, snapshot) {
+        double totalSpent = (snapshot.data?.total ?? 0).abs();
+        int totalCount = snapshot.data?.count ?? 0;
+        return AnimatedExpanded(
+          axis: Axis.vertical,
+          expand: forceShow || (totalSpent != 0 && hide == false),
+          child: OpenContainerNavigation(
+            borderRadius: 0,
+            openPage: openPage,
+            closedColor: getColor(context, "lightDarkAccentHeavyLight"),
+            button: (openContainer) {
+              return Tappable(
+                color: getColor(context, "lightDarkAccentHeavyLight"),
+                borderRadius: 0,
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
+                  child: Container(
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: TextFont(
+                            text: "",
+                            maxLines: 1,
+                            textAlign: TextAlign.left,
+                            richTextSpan: [
+                              TextSpan(
+                                text: label,
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  color: getColor(context, "black"),
+                                  fontFamily: appStateSettings["font"],
+                                  fontFamilyFallback: ['Inter'],
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              TextSpan(
+                                text: "  " +
+                                    "(" +
+                                    totalCount.toString() +
+                                    (extraText == null
+                                        ? ""
+                                        : ", " + (extraText ?? "")) +
+                                    ")",
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  color: getColor(context, "textLight"),
+                                  fontFamily: appStateSettings["font"],
+                                  fontFamilyFallback: ['Inter'],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        CountNumber(
+                          lazyFirstRender: false,
+                          count: totalSpent,
+                          duration: Duration(milliseconds: 1000),
+                          initialCount: 0,
+                          textBuilder: (number) {
+                            return TextFont(
+                              textAlign: TextAlign.right,
+                              text: convertToMoney(
+                                Provider.of<AllWallets>(context),
+                                number,
+                                finalNumber: totalSpent.abs(),
+                              ),
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              textColor: textColor,
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                onTap: () async {
+                  openContainer();
+                },
+                onLongPress: onLongPress,
+              );
+            },
+          ),
+        );
+      },
     );
   }
 }

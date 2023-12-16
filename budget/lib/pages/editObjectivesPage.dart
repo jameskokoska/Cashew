@@ -402,16 +402,18 @@ Future<dynamic> selectObjectivePopup(
   includeAmount = false,
   bool canSelectNoGoal = true,
   bool showAddButton = false,
+  ObjectiveType objectiveType = ObjectiveType.goal,
 }) async {
   dynamic objective = await openBottomSheet(
     context,
     PopupFramework(
-      title: "select-goal".tr(),
+      title: objectiveType == ObjectiveType.loan
+          ? "select-loan".tr()
+          : "select-goal".tr(),
       child: Column(
         children: [
           StreamBuilder<List<Objective>>(
-            stream:
-                database.watchAllObjectives(objectiveType: ObjectiveType.goal),
+            stream: database.watchAllObjectives(objectiveType: objectiveType),
             builder: (context, snapshot) {
               if (snapshot.hasData &&
                   (snapshot.data != null && snapshot.data!.length > 0)) {
@@ -443,7 +445,10 @@ Future<dynamic> selectObjectivePopup(
                     );
                   },
                   displayFilter: (Objective? objective) {
-                    return (objective?.name ?? "no-goal".tr()) +
+                    return (objective?.name ??
+                            (objectiveType == ObjectiveType.loan
+                                ? "no-loan".tr()
+                                : "no-goal".tr())) +
                         (includeAmount && objective != null
                             ? (" (" +
                                 convertToMoney(
@@ -470,6 +475,7 @@ Future<dynamic> selectObjectivePopup(
                   buttonLabel: "create-goal".tr(),
                   route: AddObjectivePage(
                     routesToPopAfterDelete: RoutesToPopAfterDelete.None,
+                    objectiveType: objectiveType,
                   ),
                 );
               }
@@ -486,6 +492,7 @@ Future<dynamic> selectObjectivePopup(
                         context,
                         AddObjectivePage(
                           routesToPopAfterDelete: RoutesToPopAfterDelete.None,
+                          objectiveType: objectiveType,
                         ),
                       );
                     },

@@ -109,12 +109,10 @@ class _UpcomingOverdueTransactionsState
             slivers: [
               SliverToBoxAdapter(
                   child: CenteredAmountAndNumTransactions(
-                numTransactionsStream: database.watchCountOfUpcomingOverdue(
-                    overdueTransactions,
-                    searchString: searchValue),
-                totalAmountStream: database.watchTotalOfUpcomingOverdue(
-                  Provider.of<AllWallets>(context),
-                  overdueTransactions,
+                totalWithCountStream:
+                    database.watchTotalWithCountOfUpcomingOverdue(
+                  allWallets: Provider.of<AllWallets>(context),
+                  isOverdueTransactions: overdueTransactions,
                   searchString: searchValue,
                 ),
                 textColor: overdueTransactions == null
@@ -283,8 +281,7 @@ class _UpcomingOverdueTransactionsState
 
 class CenteredAmountAndNumTransactions extends StatelessWidget {
   const CenteredAmountAndNumTransactions({
-    required this.numTransactionsStream,
-    required this.totalAmountStream,
+    required this.totalWithCountStream,
     required this.textColor,
     this.getTextColor,
     this.getInitialText,
@@ -292,8 +289,7 @@ class CenteredAmountAndNumTransactions extends StatelessWidget {
     super.key,
   });
 
-  final Stream<List<int?>> numTransactionsStream;
-  final Stream<double?> totalAmountStream;
+  final Stream<TotalWithCount?> totalWithCountStream;
   final Color textColor;
   final String? Function(double totalAmount)? getInitialText;
   final Color? Function(double totalAmount)? getTextColor;
@@ -306,21 +302,19 @@ class CenteredAmountAndNumTransactions extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         SizedBox(height: 10),
-        StreamBuilder<double?>(
-          stream: totalAmountStream,
+        StreamBuilder<TotalWithCount?>(
+          stream: totalWithCountStream,
           builder: (context, snapshot) {
-            double totalAmount =
-                snapshot.hasData == false || snapshot.data == null
-                    ? 0
-                    : (snapshot.data ?? 0);
+            double totalSpent = snapshot.data?.total ?? 0;
+            int totalCount = snapshot.data?.count ?? 0;
             return Column(
               children: [
                 AnimatedSizeSwitcher(
                   child: getInitialText != null &&
-                          getInitialText!(totalAmount) != null
+                          getInitialText!(totalSpent) != null
                       ? TextFont(
-                          key: ValueKey(getInitialText!(totalAmount) ?? ""),
-                          text: getInitialText!(totalAmount) ?? "",
+                          key: ValueKey(getInitialText!(totalSpent) ?? ""),
+                          text: getInitialText!(totalSpent) ?? "",
                           fontSize: 16,
                           textColor: getColor(context, "textLight"),
                         )
@@ -335,8 +329,8 @@ class CenteredAmountAndNumTransactions extends StatelessWidget {
                     copyToClipboard(
                       convertToMoney(
                         Provider.of<AllWallets>(context, listen: false),
-                        totalAmount.abs(),
-                        finalNumber: snapshot.hasData ? snapshot.data! : 0,
+                        totalSpent.abs(),
+                        finalNumber: totalSpent,
                       ),
                     );
                   },
@@ -348,31 +342,31 @@ class CenteredAmountAndNumTransactions extends StatelessWidget {
                       children: [
                         showIncomeArrow
                             ? AnimatedSizeSwitcher(
-                                child: totalAmount == 0
+                                child: totalSpent == 0
                                     ? Container(
                                         key: ValueKey(1),
                                       )
                                     : IncomeOutcomeArrow(
                                         key: ValueKey(2),
                                         color: textColor,
-                                        isIncome: totalAmount > 0,
+                                        isIncome: totalSpent > 0,
                                         iconSize: 30,
                                         width: 20,
                                       ),
                               )
                             : SizedBox.shrink(),
                         CountNumber(
-                          count: totalAmount.abs(),
+                          count: totalSpent.abs(),
                           duration: Duration(milliseconds: 450),
                           initialCount: (0),
                           textBuilder: (number) {
                             return TextFont(
                               text: convertToMoney(
                                   Provider.of<AllWallets>(context), number,
-                                  finalNumber: totalAmount.abs()),
+                                  finalNumber: totalSpent.abs()),
                               fontSize: 30,
                               textColor: getTextColor != null
-                                  ? (getTextColor!(totalAmount) ?? textColor)
+                                  ? (getTextColor!(totalSpent) ?? textColor)
                                   : textColor,
                               fontWeight: FontWeight.bold,
                             );
@@ -382,23 +376,16 @@ class CenteredAmountAndNumTransactions extends StatelessWidget {
                     ),
                   ),
                 ),
-              ],
-            );
-          },
-        ),
-        StreamBuilder<List<int?>>(
-          stream: numTransactionsStream,
-          builder: (context, snapshot) {
-            return TextFont(
-              text: snapshot.hasData == false || snapshot.data![0] == null
-                  ? "/"
-                  : snapshot.data![0].toString() +
+                TextFont(
+                  text: totalCount.toString() +
                       " " +
-                      (snapshot.data![0] == 1
+                      (totalCount == 1
                           ? "transaction".tr().toLowerCase()
                           : "transactions".tr().toLowerCase()),
-              fontSize: 16,
-              textColor: getColor(context, "textLight"),
+                  fontSize: 16,
+                  textColor: getColor(context, "textLight"),
+                ),
+              ],
             );
           },
         ),

@@ -64,8 +64,8 @@ class HomePageNetWorth extends StatelessWidget {
                         currencyKey: Provider.of<AllWallets>(context)
                             .indexedByPk[appStateSettings["selectedWalletPk"]]
                             ?.currency,
-                        amountStream: database.watchTotalOfWallet(
-                          walletPks,
+                        totalWithCountStream:
+                            database.watchTotalWithCountOfWallet(
                           isIncome: null,
                           allWallets: Provider.of<AllWallets>(context),
                           followCustomPeriodCycle: true,
@@ -77,13 +77,6 @@ class HomePageNetWorth extends StatelessWidget {
                         //         ? getColor(context, "incomeAmount")
                         //         : getColor(context, "expenseAmount"),
                         textColor: getColor(context, "black"),
-                        transactionsAmountStream:
-                            database.watchTotalCountOfTransactionsInWallet(
-                          walletPks,
-                          isIncome: null,
-                          followCustomPeriodCycle: true,
-                          cycleSettingsExtension: "NetWorth",
-                        ),
                         openPage: WalletDetailsPage(wallet: null),
                       ),
                     ),

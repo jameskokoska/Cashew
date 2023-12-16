@@ -26,6 +26,22 @@ import 'listItem.dart';
 
 String getChangelogString() {
   return """
+    < 5.0.5
+    Long pressing date selector sets to current date and time
+    When creating any transaction, it can be added to a long term loan 
+    Loan transactions can be edited and removed from a loan
+    Can select multiple transactions and add to goal
+    Improved income/expense selector when adding transaction
+    Multiple transaction selection actions only appear if relevant to users data
+    Fixed automatic payment for transactions would be duplicated
+    Account transfers supported for long term loan transactions
+    Pie chart homepage, revamped selection - all, positive cashflow, negative cashflow
+    Fixed custom currency exchange rate, always references USD for proper conversion when entered
+    All spending page spending amount breakdown improvements - see expense, income, upcoming, overdue,lent, and borrowed totals
+    Ability to add custom currencies
+    Refactored total and count queries
+    Title and note contains filters
+    If a row fails when importing CSV, it will skip
     < 5.0.4
     Better custom home page sections ordering on full screen
     Removed income/expense references when using a balance correction category

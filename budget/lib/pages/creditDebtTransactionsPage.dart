@@ -176,14 +176,9 @@ class _CreditDebtTransactionsState extends State<CreditDebtTransactions>
         child: Padding(
           padding: const EdgeInsets.only(bottom: 8.0),
           child: CenteredAmountAndNumTransactions(
-            numTransactionsStream: database.watchCountOfCreditDebt(
-              isCredit,
-              searchValue,
-              selectedTab: _tabController.index,
-            ),
-            totalAmountStream: database.watchTotalOfCreditDebt(
-              Provider.of<AllWallets>(context),
-              isCredit,
+            totalWithCountStream: database.watchTotalWithCountOfCreditDebt(
+              allWallets: Provider.of<AllWallets>(context),
+              isCredit: isCredit,
               searchString: searchValue,
               selectedTab: _tabController.index,
             ),

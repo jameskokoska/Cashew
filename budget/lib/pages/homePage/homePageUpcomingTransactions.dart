@@ -37,19 +37,14 @@ class HomePageUpcomingTransactions extends StatelessWidget {
                   openPage:
                       UpcomingOverdueTransactions(overdueTransactions: false),
                   label: "upcoming".tr(),
-                  amountStream: database.watchTotalOfUpcomingOverdue(
-                    Provider.of<AllWallets>(context),
-                    false,
+                  totalWithCountStream:
+                      database.watchTotalWithCountOfUpcomingOverdue(
+                    allWallets: Provider.of<AllWallets>(context),
+                    isOverdueTransactions: false,
                     followCustomPeriodCycle: true,
                     cycleSettingsExtension: "OverdueUpcoming",
                   ),
                   textColor: getColor(context, "unPaidUpcoming"),
-                  transactionsAmountStream:
-                      database.watchCountOfUpcomingOverdue(
-                    false,
-                    followCustomPeriodCycle: true,
-                    cycleSettingsExtension: "OverdueUpcoming",
-                  ),
                   onLongPress: () async {
                     await openBottomSheet(
                       context,
@@ -72,19 +67,14 @@ class HomePageUpcomingTransactions extends StatelessWidget {
                   openPage:
                       UpcomingOverdueTransactions(overdueTransactions: true),
                   label: "overdue".tr(),
-                  amountStream: database.watchTotalOfUpcomingOverdue(
-                    Provider.of<AllWallets>(context),
-                    true,
+                  totalWithCountStream:
+                      database.watchTotalWithCountOfUpcomingOverdue(
+                    allWallets: Provider.of<AllWallets>(context),
+                    isOverdueTransactions: true,
                     followCustomPeriodCycle: true,
                     cycleSettingsExtension: "OverdueUpcoming",
                   ),
                   textColor: getColor(context, "unPaidOverdue"),
-                  transactionsAmountStream:
-                      database.watchCountOfUpcomingOverdue(
-                    true,
-                    followCustomPeriodCycle: true,
-                    cycleSettingsExtension: "OverdueUpcoming",
-                  ),
                   onLongPress: () async {
                     await openBottomSheet(
                       context,

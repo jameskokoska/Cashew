@@ -14,10 +14,12 @@ class TransactionEntryAmount extends StatelessWidget {
   const TransactionEntryAmount({
     required this.transaction,
     required this.showOtherCurrency,
+    required this.unsetCustomCurrency,
     super.key,
   });
   final Transaction transaction;
   final bool showOtherCurrency;
+  final bool unsetCustomCurrency;
 
   @override
   Widget build(BuildContext context) {
@@ -70,6 +72,7 @@ class TransactionEntryAmount extends StatelessWidget {
             ),
           ],
         ),
+        // Original amount:
         AnimatedSizeSwitcher(
           child: showOtherCurrency
               ? TextFont(

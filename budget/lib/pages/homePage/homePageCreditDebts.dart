@@ -30,21 +30,14 @@ class HomePageCreditDebts extends StatelessWidget {
             Expanded(
               child: TransactionsAmountBox(
                 label: "lent".tr(),
-                amountStream: database.watchTotalOfCreditDebt(
-                  Provider.of<AllWallets>(context),
-                  true,
+                totalWithCountStream: database.watchTotalWithCountOfCreditDebt(
+                  allWallets: Provider.of<AllWallets>(context),
+                  isCredit: true,
                   followCustomPeriodCycle: true,
                   cycleSettingsExtension: "CreditDebts",
                   selectedTab: null,
                 ),
                 textColor: getColor(context, "unPaidUpcoming"),
-                transactionsAmountStream: database.watchCountOfCreditDebt(
-                  true,
-                  null,
-                  followCustomPeriodCycle: true,
-                  cycleSettingsExtension: "CreditDebts",
-                  selectedTab: null,
-                ),
                 openPage: CreditDebtTransactions(isCredit: true),
                 onLongPress: () async {
                   await openBottomSheet(
@@ -64,21 +57,14 @@ class HomePageCreditDebts extends StatelessWidget {
             Expanded(
               child: TransactionsAmountBox(
                 label: "borrowed".tr(),
-                amountStream: database.watchTotalOfCreditDebt(
-                  Provider.of<AllWallets>(context),
-                  false,
+                totalWithCountStream: database.watchTotalWithCountOfCreditDebt(
+                  allWallets: Provider.of<AllWallets>(context),
+                  isCredit: false,
                   cycleSettingsExtension: "CreditDebts",
                   followCustomPeriodCycle: true,
                   selectedTab: null,
                 ),
                 textColor: getColor(context, "unPaidOverdue"),
-                transactionsAmountStream: database.watchCountOfCreditDebt(
-                  false,
-                  null,
-                  cycleSettingsExtension: "CreditDebts",
-                  followCustomPeriodCycle: true,
-                  selectedTab: null,
-                ),
                 openPage: CreditDebtTransactions(isCredit: false),
                 onLongPress: () async {
                   await openBottomSheet(

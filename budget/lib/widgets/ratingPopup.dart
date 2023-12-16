@@ -26,6 +26,8 @@ import 'package:budget/widgets/framework/popupFramework.dart';
 final InAppReview inAppReview = InAppReview.instance;
 
 bool openRatingPopupCheck(BuildContext context) {
+  // Disable this for now, we have the new in-home page review popup
+  return false;
   if ((appStateSettings["numLogins"] + 1) % 10 == 0 &&
       appStateSettings["submittedFeedback"] != true) {
     openBottomSheet(context, RatingPopup(), fullSnap: true);
@@ -59,53 +61,19 @@ class _RatingPopupState extends State<RatingPopup> {
       subtitle: "rate-app-subtitle".tr(namedArgs: {"app": globalAppName}),
       child: Column(
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              for (int i = 0; i < 5; i++)
-                Tappable(
-                  color: Colors.transparent,
-                  borderRadius: 100,
-                  onTap: () {
-                    setState(() {
-                      selectedStars = i;
-                      print(selectedStars);
-                    });
-                  },
-                  child: ScaleIn(
-                    delay: Duration(milliseconds: 300 + 100 * i),
-                    child: ScalingWidget(
-                      keyToWatch: (i <= (selectedStars ?? 0)).toString(),
-                      child: AnimatedSwitcher(
-                        duration: Duration(milliseconds: 300),
-                        child: Icon(
-                          appStateSettings["outlinedIcons"]
-                              ? Icons.star_outlined
-                              : Icons.star_rounded,
-                          key: ValueKey(i <= (selectedStars ?? -1)),
-                          size: getWidthBottomSheet(context) - 100 < 60 * 5
-                              ? (getWidthBottomSheet(context) - 100) / 5
-                              : 60,
-                          color: selectedStars != null &&
-                                  i <= (selectedStars ?? 0)
-                              ? appStateSettings["materialYou"]
-                                  ? Theme.of(context)
-                                      .colorScheme
-                                      .primary
-                                      .withOpacity(0.7)
-                                  : getColor(context, "starYellow")
-                              : appStateSettings["materialYou"]
-                                  ? Theme.of(context)
-                                      .colorScheme
-                                      .secondary
-                                      .withOpacity(0.2)
-                                  : getColor(context, "lightDarkAccentHeavy"),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-            ],
+          ScalingStars(
+            selectedStars: selectedStars,
+            onTap: (i) {
+              setState(() {
+                selectedStars = i;
+              });
+            },
+            size: getWidthBottomSheet(context) - 100 < 60 * 5
+                ? (getWidthBottomSheet(context) - 100) / 5
+                : 60,
+            color: appStateSettings["materialYou"]
+                ? Theme.of(context).colorScheme.primary.withOpacity(0.7)
+                : getColor(context, "starYellow"),
           ),
           SizedBox(height: 15),
           TextInput(
@@ -256,4 +224,61 @@ Future<bool> shareFeedback(String feedbackText, String feedbackType,
   }
 
   return true;
+}
+
+class ScalingStars extends StatelessWidget {
+  const ScalingStars(
+      {required this.selectedStars,
+      required this.onTap,
+      required this.size,
+      required this.color,
+      this.loop = false,
+      this.loopDelay = Duration.zero,
+      super.key});
+  final int? selectedStars;
+  final Function(int index) onTap;
+  final double size;
+  final Color color;
+  final bool loop;
+  final Duration loopDelay;
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        for (int i = 0; i < 5; i++)
+          Tappable(
+            color: Colors.transparent,
+            borderRadius: 100,
+            onTap: () => onTap(i),
+            child: ScaleIn(
+              loop: loop,
+              loopDelay: loopDelay,
+              delay: Duration(milliseconds: 300 + 100 * i),
+              child: ScalingWidget(
+                keyToWatch: (i <= (selectedStars ?? 0)).toString(),
+                child: AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 300),
+                  child: Icon(
+                    appStateSettings["outlinedIcons"]
+                        ? Icons.star_outlined
+                        : Icons.star_rounded,
+                    key: ValueKey(i <= (selectedStars ?? -1)),
+                    size: size,
+                    color: selectedStars != null && i <= (selectedStars ?? 0)
+                        ? color
+                        : appStateSettings["materialYou"]
+                            ? Theme.of(context)
+                                .colorScheme
+                                .secondary
+                                .withOpacity(0.2)
+                            : getColor(context, "lightDarkAccentHeavy"),
+                  ),
+                ),
+              ),
+            ),
+          ),
+      ],
+    );
+  }
 }

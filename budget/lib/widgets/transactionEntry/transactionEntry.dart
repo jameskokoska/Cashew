@@ -1,6 +1,8 @@
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
+import 'package:budget/main.dart';
 import 'package:budget/pages/objectivePage.dart';
+import 'package:budget/struct/currencyFunctions.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/breathingAnimation.dart';
 import 'package:budget/widgets/categoryIcon.dart';
@@ -254,14 +256,22 @@ class TransactionEntry extends StatelessWidget {
         context, Theme.of(context).colorScheme.primary,
         amount: 0.3);
 
+    String? walletCurrency = Provider.of<AllWallets>(context)
+        .indexedByPk[appStateSettings["selectedWalletPk"]]
+        ?.currency;
+    String? transactionCurrency = Provider.of<AllWallets>(context)
+        .indexedByPk[transaction.walletFk]
+        ?.currency;
+    // is the currency a customCurrency or does it actually exist in our table
+    // and a custom exchange rate has not been set
     bool showOtherCurrency =
         transaction.walletFk != appStateSettings["selectedWalletPk"] &&
-            ((Provider.of<AllWallets>(context)
-                    .indexedByPk[transaction.walletFk]
-                    ?.currency) !=
-                Provider.of<AllWallets>(context)
-                    .indexedByPk[appStateSettings["selectedWalletPk"]]
-                    ?.currency);
+            ((walletCurrency) != transactionCurrency);
+    bool unsetCustomCurrency = (currenciesJSON[transactionCurrency] == null ||
+            currenciesJSON[walletCurrency] == null) &&
+        (appStateSettings["customCurrencyAmounts"][walletCurrency] == null ||
+            appStateSettings["customCurrencyAmounts"][transactionCurrency] ==
+                null);
 
     return Padding(
       padding: EdgeInsets.symmetric(
@@ -505,6 +515,7 @@ class TransactionEntry extends StatelessWidget {
                                   TransactionEntryAmount(
                                     transaction: transaction,
                                     showOtherCurrency: showOtherCurrency,
+                                    unsetCustomCurrency: unsetCustomCurrency,
                                   ),
                                 ],
                               ),

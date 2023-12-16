@@ -51,7 +51,9 @@ class _CurrencyPickerState extends State<CurrencyPicker> {
             selectedCurrency != "") {
           popularCurrenciesLocal =
               popularCurrencies.sublist(0, popularCurrencies.length - 1);
-          popularCurrenciesLocal.insert(0, widget.initialCurrency!);
+          // Don't add again if selected and custom currency
+          if (currenciesJSON[widget.initialCurrency] != null)
+            popularCurrenciesLocal.insert(0, widget.initialCurrency!);
         }
       });
     }
@@ -105,7 +107,9 @@ class _CurrencyPickerState extends State<CurrencyPicker> {
       setState(() {
         popularCurrenciesLocal =
             popularCurrencies.sublist(0, popularCurrencies.length - 1);
-        popularCurrenciesLocal.insert(0, currency);
+        // Don't add again if selected and custom currency
+        if (currenciesJSON[currency] != null)
+          popularCurrenciesLocal.insert(0, currency);
       });
     }
     widget.onSelected(currency);
@@ -152,9 +156,17 @@ class _CurrencyPickerState extends State<CurrencyPicker> {
                   runAlignment: WrapAlignment.center,
                   crossAxisAlignment: WrapCrossAlignment.center,
                   children: [
+                    for (dynamic currencyKey
+                        in appStateSettings["customCurrencies"])
+                      CurrencyItem(
+                        customCurrency: true,
+                        currencyKey: currencyKey.toString(),
+                        selected: selectedCurrency == currencyKey,
+                        onSelected: onSelected,
+                      ),
                     for (String currencyKey in popularCurrenciesLocal)
                       CurrencyItem(
-                        currencyKey: currencyKey,
+                        currencyKey: currencyKey.toString(),
                         selected: selectedCurrency == currencyKey,
                         onSelected: onSelected,
                       )
@@ -215,10 +227,12 @@ class CurrencyItem extends StatelessWidget {
     required this.currencyKey,
     required this.selected,
     required this.onSelected,
+    this.customCurrency = false,
   });
   final String currencyKey;
   final bool selected;
   final Function(String) onSelected;
+  final bool customCurrency;
 
   @override
   Widget build(BuildContext context) {
@@ -255,22 +269,26 @@ class CurrencyItem extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  if (currenciesJSON[currencyKey]?["NotKnown"] != true)
+                  if (customCurrency == false &&
+                      currenciesJSON[currencyKey]?["NotKnown"] != true)
                     TextFont(
                       text: currencyKey.toUpperCase(),
                       fontSize: 18,
                     ),
                   TextFont(
-                    text: currenciesJSON[currencyKey]?["Symbol"] == null ||
-                            currenciesJSON[currencyKey]?["Symbol"] == ""
-                        ? (currenciesJSON[currencyKey]?["Code"]
-                                .toString()
-                                .allCaps ??
-                            "")
-                        : (currenciesJSON[currencyKey]?["Symbol"] ?? ""),
+                    text: customCurrency
+                        ? currencyKey.toUpperCase()
+                        : currenciesJSON[currencyKey]?["Symbol"] == null ||
+                                currenciesJSON[currencyKey]?["Symbol"] == ""
+                            ? (currenciesJSON[currencyKey]?["Code"]
+                                    .toString()
+                                    .allCaps ??
+                                "")
+                            : (currenciesJSON[currencyKey]?["Symbol"] ?? ""),
                     autoSizeText: true,
                     maxFontSize: 50,
-                    fontSize: currenciesJSON[currencyKey]?["NotKnown"] == true
+                    fontSize: customCurrency ||
+                            currenciesJSON[currencyKey]?["NotKnown"] == true
                         ? 20
                         : 25,
                     fontWeight: FontWeight.bold,
@@ -288,8 +306,11 @@ class CurrencyItem extends StatelessWidget {
                               .toString()
                               .capitalizeFirst ??
                           "",
-                      autoSizeText: true,
-                      maxFontSize: 50,
+                      fontSize: 10,
+                    ),
+                  if (customCurrency)
+                    TextFont(
+                      text: "custom-currency".tr(),
                       fontSize: 10,
                     ),
                 ],

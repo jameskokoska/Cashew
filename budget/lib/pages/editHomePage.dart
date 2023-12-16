@@ -458,7 +458,7 @@ class _EditHomePageState extends State<EditHomePage> {
         horizontalPadding: getHorizontalPaddingConstrained(context),
         dragDownToDismiss: true,
         dragDownToDismissEnabled: dragDownToDismissEnabled,
-        title: "top-center".tr(),
+        title: "edit-home".tr(),
         slivers: [
           if (enableDoubleColumn(context))
             SliverToBoxAdapter(
@@ -643,23 +643,16 @@ Future openPieChartHomePageBottomSheetSettings(BuildContext context) async {
         children: [
           RadioItems(
             items: <String>[
-              "expense",
-              "income",
+              "all",
+              "outgoing",
+              "incoming",
             ],
             displayFilter: (type) {
               return type.toString().tr();
             },
-            initial: appStateSettings["pieChartIsIncome"] == true
-                ? "income"
-                : "expense",
+            initial: appStateSettings["pieChartTotal"],
             onChanged: (type) async {
-              if (type == "expense") {
-                updateSettings("pieChartIsIncome", false,
-                    updateGlobalState: false);
-              } else {
-                updateSettings("pieChartIsIncome", true,
-                    updateGlobalState: false);
-              }
+              updateSettings("pieChartTotal", type, updateGlobalState: false);
               Navigator.of(context).pop();
             },
           ),

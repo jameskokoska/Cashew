@@ -250,6 +250,18 @@ class DebugPage extends StatelessWidget {
               ? Icons.apple_outlined
               : Icons.apple_rounded,
         ),
+        SettingsContainerSwitch(
+          title: "Fancy budget animations on iOS",
+          description: "Enables the animated goo on iOS",
+          onSwitched: (value) {
+            updateSettings("iOSAnimatedGoo", value,
+                pagesNeedingRefresh: [], updateGlobalState: true);
+          },
+          initialValue: appStateSettings["iOSAnimatedGoo"] == true,
+          icon: appStateSettings["outlinedIcons"]
+              ? Icons.animation_outlined
+              : Icons.animation_rounded,
+        ),
         FutureBuilder<bool>(
           future: inAppReview.isAvailable(),
           builder: (context, snapshot) {

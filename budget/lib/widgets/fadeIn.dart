@@ -63,12 +63,16 @@ class ScaleIn extends StatefulWidget {
     this.duration,
     this.curve = const ElasticOutCurve(0.5),
     this.delay = Duration.zero,
+    this.loopDelay = Duration.zero,
+    this.loop = false,
   }) : super(key: key);
 
   final Widget child;
   final Duration? duration;
   final Curve curve;
   final Duration delay;
+  final Duration loopDelay;
+  final loop;
 
   @override
   _ScaleInState createState() => _ScaleInState();
@@ -98,6 +102,19 @@ class _ScaleInState extends State<ScaleIn> with SingleTickerProviderStateMixin {
         }
       });
     }
+
+    if (widget.loop)
+      _controller.addStatusListener((status) {
+        if (status == AnimationStatus.completed) {
+          Future.delayed(widget.loopDelay, () {
+            if (mounted) {
+              _controller.reverse();
+            }
+          });
+        } else if (status == AnimationStatus.dismissed) {
+          _controller.forward();
+        }
+      });
   }
 
   @override

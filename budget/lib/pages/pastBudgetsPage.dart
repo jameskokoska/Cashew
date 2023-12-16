@@ -1148,22 +1148,25 @@ class PastBudgetContainer extends StatelessWidget {
                                       },
                                     ),
                                   ),
-                                  Container(
-                                    padding: const EdgeInsets.only(bottom: 0),
-                                    child: TextFont(
-                                      text: (appStateSettings[
-                                                  "showTotalSpentForBudget"]
-                                              ? " " +
-                                                  "spent-amount-of".tr() +
-                                                  " "
-                                              : " " +
-                                                  "overspent-amount-of".tr() +
-                                                  " ") +
-                                          convertToMoney(
-                                              Provider.of<AllWallets>(context),
-                                              budgetAmount),
-                                      fontSize: 12,
-                                      textAlign: TextAlign.left,
+                                  Flexible(
+                                    child: Container(
+                                      padding: const EdgeInsets.only(bottom: 0),
+                                      child: TextFont(
+                                        text: (appStateSettings[
+                                                    "showTotalSpentForBudget"]
+                                                ? " " +
+                                                    "spent-amount-of".tr() +
+                                                    " "
+                                                : " " +
+                                                    "overspent-amount-of".tr() +
+                                                    " ") +
+                                            convertToMoney(
+                                                Provider.of<AllWallets>(
+                                                    context),
+                                                budgetAmount),
+                                        fontSize: 12,
+                                        textAlign: TextAlign.left,
+                                      ),
                                     ),
                                   ),
                                 ],

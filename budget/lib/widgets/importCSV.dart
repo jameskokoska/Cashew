@@ -1044,6 +1044,7 @@ class _ImportingEntriesPopupState extends State<ImportingEntriesPopup> {
 
   Future<void> _importEntries(Map<String, Map<String, dynamic>> assignedColumns,
       String dateFormat, List<List<String>> fileContents) async {
+    List<String> skippedError = [];
     try {
       List<TransactionsCompanion> transactionsInserting = [];
       List<AssociatedTitlesCompanion> titlesInserting = [];
@@ -1075,13 +1076,22 @@ class _ImportingEntriesPopupState extends State<ImportingEntriesPopup> {
             }
           }
         }
-        ImportingTransactionAndTitle transactionAndTitle = await _importEntry(
-          assignedColumns,
-          dateFormat,
-          row,
-          i,
-          transactionTypeIndex: transactionTypeIndex,
-        );
+        ImportingTransactionAndTitle? transactionAndTitle;
+        try {
+          transactionAndTitle = await _importEntry(
+            assignedColumns,
+            dateFormat,
+            row,
+            i,
+            transactionTypeIndex: transactionTypeIndex,
+          );
+        } catch (e) {
+          transactionAndTitle = null;
+          skippedError
+              .add("Skipping row #" + i.toString() + "\n" + e.toString());
+        }
+        if (transactionAndTitle == null) continue;
+
         // Use auto generated ID when inserting
         TransactionsCompanion companionTransactionToInsert =
             transactionAndTitle.transaction.toCompanion(true);
@@ -1110,6 +1120,26 @@ class _ImportingEntriesPopupState extends State<ImportingEntriesPopup> {
       await database.createBatchTransactionsOnly(transactionsInserting);
       await database.createBatchAssociatedTitlesOnly(filteredList);
       await database.fixOrderAssociatedTitles();
+
+      if (skippedError.length >= 0) {
+        await openPopup(
+          context,
+          title: "csv-error".tr(),
+          description: "Skipped importing " +
+              skippedError.length.toString() +
+              " entries: " +
+              "\n\n" +
+              skippedError.take(10).join("\n\n"),
+          icon: appStateSettings["outlinedIcons"]
+              ? Icons.error_outlined
+              : Icons.error_rounded,
+          onSubmitLabel: "ok".tr(),
+          onSubmit: () {
+            Navigator.of(context).pop();
+          },
+          barrierDismissible: false,
+        );
+      }
 
       widget.next();
     } catch (e) {

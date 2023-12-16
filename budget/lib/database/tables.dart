@@ -1312,7 +1312,6 @@ class FinanceDatabase extends _$FinanceDatabase {
     List<String>? categoryFks,
     List<String>? categoryFksExclude,
     List<String> walletFks = const [],
-    bool? income,
     required List<BudgetTransactionFilters>? budgetTransactionFilters,
     required List<String>? memberTransactionFilters,
     String? member,
@@ -1351,7 +1350,6 @@ class FinanceDatabase extends _$FinanceDatabase {
                 ? transactions.dateCreated.isSmallerOrEqualValue(end)
                 : onlyShowBasedOnTimeRange(transactions, start, end, budget)) &
             // Should match that of getTransactionCategoryWithDay
-            onlyShowIfNotBalanceCorrection(transactions, income) &
             onlyShowTransactionBasedOnSearchQuery(transactions, search,
                 withCategories: true,
                 joinedWithSubcategoriesTable: subCategories) &
@@ -1371,7 +1369,6 @@ class FinanceDatabase extends _$FinanceDatabase {
                     transactions, categoryFks, categoryFksExclude) |
                 onlyShowBasedOnSubcategoryFks(transactions, categoryFks)) &
             onlyShowBasedOnWalletFks(transactions, walletFks) &
-            onlyShowBasedOnIncome(transactions, income) &
             onlyShowIfMember(transactions, member) &
             onlyShowIfNotExcludedFromBudget(transactions, budget?.budgetPk) &
             onlyShowIfCertainBudget(
@@ -1394,7 +1391,6 @@ class FinanceDatabase extends _$FinanceDatabase {
     List<String>? categoryFks,
     List<String>? categoryFksExclude,
     List<String> walletFks = const [],
-    bool? income,
     required List<BudgetTransactionFilters>? budgetTransactionFilters,
     required List<String>? memberTransactionFilters,
     String? member,
@@ -1439,8 +1435,7 @@ class FinanceDatabase extends _$FinanceDatabase {
       ])
       ..where(
         // Should match that of getTransactionCategoryWithDay
-        onlyShowIfNotBalanceCorrection(transactions, income) &
-            onlyShowTransactionBasedOnSearchQuery(transactions, search,
+        onlyShowTransactionBasedOnSearchQuery(transactions, search,
                 withCategories: true,
                 joinedWithSubcategoriesTable: subCategories) &
             // Pass in the subcategories table so we can search name based on subcategory
@@ -1460,7 +1455,6 @@ class FinanceDatabase extends _$FinanceDatabase {
                     transactions, categoryFks, categoryFksExclude) |
                 onlyShowBasedOnSubcategoryFks(transactions, categoryFks)) &
             onlyShowBasedOnWalletFks(transactions, walletFks) &
-            onlyShowBasedOnIncome(transactions, income) &
             onlyShowIfMember(transactions, member) &
             onlyShowIfNotExcludedFromBudget(transactions, budget?.budgetPk) &
             onlyShowIfCertainBudget(
@@ -2959,6 +2953,24 @@ class FinanceDatabase extends _$FinanceDatabase {
         .getSingle();
   }
 
+  Transaction cleanseTransactionForLongTermLoan(Transaction transaction) {
+    if (transaction.objectiveLoanFk != null) {
+      transaction = transaction.copyWith(objectiveFk: Value(null));
+      if (transaction.type == TransactionSpecialType.credit ||
+          transaction.type == TransactionSpecialType.debt) {
+        transaction = transaction.copyWith(type: Value(null));
+      }
+    }
+    if (transaction.objectiveFk != null) {
+      transaction = transaction.copyWith(objectiveLoanFk: Value(null));
+    }
+    if (transaction.type == TransactionSpecialType.credit ||
+        transaction.type == TransactionSpecialType.debt) {
+      transaction = transaction.copyWith(objectiveLoanFk: Value(null));
+    }
+    return transaction;
+  }
+
   // create or update a new transaction
   Future<int?>? createOrUpdateTransaction(
     Transaction transaction, {
@@ -3025,6 +3037,9 @@ class FinanceDatabase extends _$FinanceDatabase {
         transaction = transaction.copyWith(subCategoryFk: Value(null));
       }
     }
+
+    // Restrict transaction details when added to long term loan
+    transaction = cleanseTransactionForLongTermLoan(transaction);
 
     // Update the servers entry of the transaction
     if (transaction.paid && updateSharedEntry == true) {
@@ -4510,20 +4525,36 @@ class FinanceDatabase extends _$FinanceDatabase {
     List<Transaction> allTransactionsToUpdate = [];
     for (Transaction transaction in transactionsToMove) {
       if (objectiveType == ObjectiveType.goal) {
-        if (transaction.objectiveLoanFk == null || objectivePk == null) {
-          allTransactionsToUpdate.add(transaction.copyWith(
+        if (objectivePk == null) {
+          transaction = transaction.copyWith(
+            objectiveFk: Value(null),
+          );
+        } else {
+          transaction = transaction.copyWith(
             objectiveFk: Value(objectivePk),
-            dateTimeModified: Value(DateTime.now()),
-          ));
+            objectiveLoanFk: Value(null),
+          );
         }
       } else if (objectiveType == ObjectiveType.loan) {
-        if (transaction.objectiveFk == null || objectivePk == null) {
-          allTransactionsToUpdate.add(transaction.copyWith(
+        if (objectivePk == null) {
+          transaction = transaction.copyWith(
+            objectiveLoanFk: Value(null),
+          );
+        } else {
+          transaction = transaction.copyWith(
+            objectiveFk: Value(null),
             objectiveLoanFk: Value(objectivePk),
-            dateTimeModified: Value(DateTime.now()),
-          ));
+          );
         }
       }
+
+      transaction = cleanseTransactionForLongTermLoan(transaction);
+
+      transaction = transaction.copyWith(
+        dateTimeModified: Value(DateTime.now()),
+      );
+
+      allTransactionsToUpdate.add(transaction);
     }
     await updateBatchTransactionsOnly(allTransactionsToUpdate);
     return allTransactionsToUpdate.length;
@@ -5063,6 +5094,11 @@ class FinanceDatabase extends _$FinanceDatabase {
         : searchFilters.expenseIncome.contains(ExpenseIncome.expense)
             ? tbl.income.equals(false) & isBalanceCorrectionAnd & isNotLoan
             : Constant(false);
+    Expression<bool> isPositiveCashFlow =
+        searchFilters.positiveCashFlow == true ||
+                searchFilters.positiveCashFlow == false
+            ? tbl.income.equals(searchFilters.positiveCashFlow == true)
+            : Constant(true);
 
     Expression<bool> isPaid = searchFilters.paidStatus.length <= 0
         ? Constant(true)
@@ -5146,6 +5182,16 @@ class FinanceDatabase extends _$FinanceDatabase {
       withObjectives: joinedWithObjectives,
     );
 
+    String? titleContains = searchFilters.titleContains;
+    Expression<bool> isInTitleContains = titleContains == null
+        ? Constant(true)
+        : tbl.name.collate(Collate.noCase).like("%" + titleContains + "%");
+    String? noteContains = searchFilters.noteContains;
+
+    Expression<bool> isInNoteContains = noteContains == null
+        ? Constant(true)
+        : tbl.note.collate(Collate.noCase).like("%" + noteContains + "%");
+
     return isInWalletPks &
         isInCategoryPks &
         isInSubcategoryPks &
@@ -5155,12 +5201,15 @@ class FinanceDatabase extends _$FinanceDatabase {
         isInObjectiveLoanPks &
         isInQuery &
         (isIncome | isExpense) &
+        isPositiveCashFlow &
         (isPaid | isNotPaid | isSkippedPaid) &
         isInDateTimeRange &
         isTransactionType &
         (includeShared | includeAdded) &
         isInAmountRange &
-        isMethodAdded;
+        isMethodAdded &
+        isInTitleContains &
+        isInNoteContains;
   }
 
   Expression<bool> onlyShowTransactionBasedOnSearchQuery(
@@ -5421,13 +5470,9 @@ class FinanceDatabase extends _$FinanceDatabase {
 
   // Balance correction category has pk "0"
   // We also want to include these transactions if isIncome is null (total net spending)
-  // Also remove loans transactions here - we don't want loans to contribute to our other totals, only net
   Expression<bool> onlyShowIfNotBalanceCorrection(
       $TransactionsTable tbl, bool? isIncome) {
-    return ((tbl.objectiveLoanFk.isNull() &
-            tbl.type.isNotInValues(
-                [TransactionSpecialType.credit, TransactionSpecialType.debt]) &
-            tbl.categoryFk.equals("0").not()) |
+    return ((tbl.categoryFk.equals("0").not()) |
         (isIncome == null ? Constant(true) : Constant(false)));
   }
 
@@ -5844,8 +5889,18 @@ class FinanceDatabase extends _$FinanceDatabase {
     // });
   }
 
-  Stream<double?> watchTotalOfWallet(
-    List<String>? walletPks, {
+  // Remove balance correction and
+  // remove loans transactions here - we don't want loans to contribute to our other totals, only net
+  Expression<bool> onlyShowIfOnlyExpenseAndIncome(
+      $TransactionsTable tbl, bool enabled) {
+    return (enabled == false ? Constant(true) : Constant(false)) |
+        ((tbl.objectiveLoanFk.isNull() &
+            tbl.type.isNotInValues(
+                [TransactionSpecialType.credit, TransactionSpecialType.debt]) &
+            tbl.categoryFk.equals("0").not()));
+  }
+
+  Stream<TotalWithCount?> watchTotalWithCountOfWallet({
     bool? isIncome = null,
     DateTime? startDate,
     required AllWallets allWallets,
@@ -5854,13 +5909,18 @@ class FinanceDatabase extends _$FinanceDatabase {
     SearchFilters? searchFilters,
     DateTimeRange? forcedDateTimeRange,
     bool includeBalanceCorrection = false,
+    bool onlyIncomeAndExpense = false, //Remove loan and balance corrections
+    bool useAbsoluteSum = false,
   }) {
     // we have to convert currencies to account for all wallets
-    List<Stream<double?>> mergedStreams = [];
+    List<Stream<TotalWithCount?>> mergedStreams = [];
     for (TransactionWallet wallet in allWallets.list) {
-      final totalAmt = transactions.amount.sum();
+      final totalAmt = useAbsoluteSum
+          ? transactions.amount.abs().sum()
+          : transactions.amount.sum();
+      final totalCount = transactions.transactionPk.count();
       final query = selectOnly(transactions)
-        ..addColumns([totalAmt])
+        ..addColumns([totalAmt, totalCount])
         ..where(onlyShowIfFollowsSearchFilters(transactions, searchFilters,
                 joinedWithSubcategoriesTable: null,
                 joinedWithCategories: false,
@@ -5869,6 +5929,7 @@ class FinanceDatabase extends _$FinanceDatabase {
             transactions.walletFk.equals(wallet.walletPk) &
             (onlyShowIfNotBalanceCorrection(transactions, isIncome) |
                 Constant(includeBalanceCorrection)) &
+            onlyShowIfOnlyExpenseAndIncome(transactions, onlyIncomeAndExpense) &
             transactions.paid.equals(true) &
             onlyShowIfFollowCustomPeriodCycle(
               transactions,
@@ -5876,19 +5937,18 @@ class FinanceDatabase extends _$FinanceDatabase {
               cycleSettingsExtension: cycleSettingsExtension,
               forcedDateTimeRange: forcedDateTimeRange,
             ) &
-            evaluateIfNull(
-                transactions.walletFk.isIn(walletPks ?? []), walletPks, true) &
             onlyShowBasedOnTimeRange(transactions, startDate, null, null) &
             evaluateIfNull(
                 transactions.income.equals(isIncome ?? true), isIncome, true) &
             onlyShowBasedOnIncome(transactions, isIncome));
       mergedStreams.add(query
-          .map((row) =>
-              (row.read(totalAmt) ?? 0) *
-              (amountRatioToPrimaryCurrency(allWallets, wallet.currency)))
+          .map((row) => TotalWithCount(
+              total: (row.read(totalAmt) ?? 0) *
+                  (amountRatioToPrimaryCurrency(allWallets, wallet.currency)),
+              count: row.read(totalCount) ?? 0))
           .watchSingle());
     }
-    return totalDoubleStream(mergedStreams);
+    return totalTotalWithCountStream(mergedStreams);
   }
 
   Stream<double?> watchTotalOfWalletNoConversion(
@@ -5913,62 +5973,38 @@ class FinanceDatabase extends _$FinanceDatabase {
     return query.map((row) => row.read(totalAmt)).watchSingleOrNull();
   }
 
-  Stream<List<int?>> watchTotalCountOfTransactionsInWallet(
-    List<String>? walletPks, {
-    bool? isIncome = null,
-    DateTime? startDate,
+  Stream<TotalWithCount?> watchTotalWithCountOfUpcomingOverdue({
+    required AllWallets allWallets,
+    required bool? isOverdueTransactions,
+    String? searchString,
     bool followCustomPeriodCycle = false,
     String cycleSettingsExtension = "",
     SearchFilters? searchFilters,
     DateTimeRange? forcedDateTimeRange,
   }) {
-    final totalCount = transactions.transactionPk.count();
-    final query = selectOnly(transactions)
-      ..addColumns([totalCount])
-      ..where((onlyShowIfFollowsSearchFilters(transactions, searchFilters,
-                  joinedWithSubcategoriesTable: null,
-                  joinedWithCategories: false,
-                  joinedWithBudgets: false,
-                  joinedWithObjectives: false) &
-              (isIncome == null
-                  ? transactions.walletFk.isNotNull()
-                  : isIncome == true
-                      ? transactions.income.equals(true)
-                      : transactions.income.equals(false))) &
-          onlyShowIfNotBalanceCorrection(transactions, isIncome) &
-          onlyShowIfFollowCustomPeriodCycle(
-              transactions, followCustomPeriodCycle,
-              cycleSettingsExtension: cycleSettingsExtension,
-              forcedDateTimeRange: forcedDateTimeRange) &
-          onlyShowBasedOnTimeRange(transactions, startDate, null, null) &
-          evaluateIfNull(
-              transactions.walletFk.isIn(walletPks ?? []), walletPks, true));
-    return query.map((row) => row.read(totalCount)).watch();
-  }
-
-  Stream<double?> watchTotalOfUpcomingOverdue(
-    AllWallets allWallets,
-    bool? isOverdueTransactions, {
-    String? searchString,
-    bool followCustomPeriodCycle = false,
-    String cycleSettingsExtension = "",
-  }) {
-    List<Stream<double?>> mergedStreams = [];
+    List<Stream<TotalWithCount?>> mergedStreams = [];
     for (TransactionWallet wallet in allWallets.list) {
       final totalAmt = transactions.amount.sum();
+      final totalCount = transactions.transactionPk.count();
       final $CategoriesTable subCategories = alias(categories, 'subCategories');
       final query = selectOnly(transactions)
-        ..addColumns([totalAmt])
+        ..addColumns([totalAmt, totalCount])
         ..join([
           innerJoin(categories,
               categories.categoryPk.equalsExp(transactions.categoryFk)),
           leftOuterJoin(subCategories,
               subCategories.categoryPk.equalsExp(transactions.subCategoryFk)),
         ])
-        ..where(onlyShowIfFollowCustomPeriodCycle(
+        ..where(onlyShowIfFollowsSearchFilters(transactions, searchFilters,
+                joinedWithSubcategoriesTable: null,
+                joinedWithCategories: false,
+                joinedWithBudgets: false,
+                joinedWithObjectives: false) &
+            onlyShowIfFollowCustomPeriodCycle(
               transactions,
               followCustomPeriodCycle,
               cycleSettingsExtension: cycleSettingsExtension,
+              forcedDateTimeRange: forcedDateTimeRange,
             ) &
             onlyShowTransactionBasedOnSearchQuery(transactions, searchString,
                 withCategories: true,
@@ -5991,71 +6027,44 @@ class FinanceDatabase extends _$FinanceDatabase {
                 transactions.type
                     .equals(TransactionSpecialType.upcoming.index)));
       mergedStreams.add(query
-          .map((row) =>
-              (row.read(totalAmt) ?? 0) *
-              (amountRatioToPrimaryCurrency(allWallets, wallet.currency)))
+          .map((row) => TotalWithCount(
+              total: (row.read(totalAmt) ?? 0) *
+                  (amountRatioToPrimaryCurrency(allWallets, wallet.currency)),
+              count: row.read(totalCount) ?? 0))
           .watchSingle());
     }
-    return totalDoubleStream(mergedStreams);
+    return totalTotalWithCountStream(mergedStreams);
   }
 
-  Stream<List<int?>> watchCountOfUpcomingOverdue(
-    bool? isOverdueTransactions, {
-    String? searchString,
-    bool followCustomPeriodCycle = false,
-    String cycleSettingsExtension = "",
-  }) {
-    final totalCount = transactions.transactionPk.count();
-    final $CategoriesTable subCategories = alias(categories, 'subCategories');
-
-    final query = selectOnly(transactions)
-      ..addColumns([totalCount])
-      ..join([
-        innerJoin(categories,
-            categories.categoryPk.equalsExp(transactions.categoryFk)),
-        leftOuterJoin(subCategories,
-            subCategories.categoryPk.equalsExp(transactions.subCategoryFk)),
-      ])
-      ..where(onlyShowIfFollowCustomPeriodCycle(
-            transactions,
-            followCustomPeriodCycle,
-            cycleSettingsExtension: cycleSettingsExtension,
-          ) &
-          onlyShowTransactionBasedOnSearchQuery(transactions, searchString,
-              withCategories: true,
-              joinedWithSubcategoriesTable: subCategories) &
-          transactions.skipPaid.equals(false) &
-          transactions.paid.equals(false) &
-          (isOverdueTransactions == null
-              ? Constant(true)
-              : isOverdueTransactions == true
-                  ? transactions.dateCreated.isSmallerThanValue(DateTime.now())
-                  : transactions.dateCreated
-                      .isBiggerThanValue(DateTime.now())) &
-          (transactions.type.equals(TransactionSpecialType.subscription.index) |
-              transactions.type
-                  .equals(TransactionSpecialType.repetitive.index) |
-              transactions.type.equals(TransactionSpecialType.upcoming.index)));
-    return query.map((row) => row.read(totalCount)).watch();
+  Stream<TotalWithCount?> totalTotalWithCountStream(
+      List<Stream<TotalWithCount?>> mergedStreams) {
+    return StreamZip(mergedStreams)
+        .map((list) => list.where((x) => x != null))
+        .map((list) => list.reduce((acc, val) => TotalWithCount(
+            total: (acc?.total ?? 0) + (val?.total ?? 0),
+            count: (acc?.count ?? 0) + (val?.count ?? 0))));
   }
 
-  Stream<double?> watchTotalOfCreditDebt(
-    AllWallets allWallets,
-    bool? isCredit, {
+  Stream<TotalWithCount?> watchTotalWithCountOfCreditDebt({
+    required AllWallets allWallets,
+    required bool? isCredit,
     String? searchString,
     bool followCustomPeriodCycle = false,
-    String cycleSettingsExtension = "",
+    String? cycleSettingsExtension = "",
+    SearchFilters? searchFilters,
+    DateTimeRange? forcedDateTimeRange,
     // selectedTab == 0 : one-time
     // selectedTab == 1 : long-term
     // Only apply selectedTab when searching
     required int? selectedTab,
   }) {
-    List<Stream<double?>> mergedStreams = [];
+    List<Stream<TotalWithCount?>> mergedStreams = [];
     for (TransactionWallet wallet in allWallets.list) {
       final totalAmt = transactions.amount.sum();
+      final totalCount = transactions.transactionPk.count();
       final $CategoriesTable subCategories = alias(categories, 'subCategories');
       final query = selectOnly(transactions)
-        ..addColumns([totalAmt])
+        ..addColumns([totalAmt, totalCount])
         ..join([
           innerJoin(categories,
               categories.categoryPk.equalsExp(transactions.categoryFk)),
@@ -6065,11 +6074,19 @@ class FinanceDatabase extends _$FinanceDatabase {
               objectives.objectivePk.equalsExp(transactions.objectiveLoanFk)),
         ])
         ..where(
-          onlyShowIfFollowCustomPeriodCycle(
-                transactions,
-                followCustomPeriodCycle,
-                cycleSettingsExtension: cycleSettingsExtension,
-              ) &
+          onlyShowIfFollowsSearchFilters(transactions, searchFilters,
+                  joinedWithSubcategoriesTable: null,
+                  joinedWithCategories: false,
+                  joinedWithBudgets: false,
+                  joinedWithObjectives: false) &
+              (cycleSettingsExtension == null
+                  ? Constant(true)
+                  : onlyShowIfFollowCustomPeriodCycle(
+                      transactions,
+                      followCustomPeriodCycle,
+                      cycleSettingsExtension: cycleSettingsExtension,
+                      forcedDateTimeRange: forcedDateTimeRange,
+                    )) &
               transactions.paid.equals(true) &
               (selectedTab == 0 ||
                       selectedTab == null ||
@@ -6101,65 +6118,13 @@ class FinanceDatabase extends _$FinanceDatabase {
                               objectives.income.equals(false))),
         );
       mergedStreams.add(query
-          .map((row) =>
-              (row.read(totalAmt) ?? 0) *
-              (amountRatioToPrimaryCurrency(allWallets, wallet.currency)))
+          .map((row) => TotalWithCount(
+              total: (row.read(totalAmt) ?? 0) *
+                  (amountRatioToPrimaryCurrency(allWallets, wallet.currency)),
+              count: row.read(totalCount) ?? 0))
           .watchSingle());
     }
-    return totalDoubleStream(mergedStreams);
-  }
-
-  Stream<List<int?>> watchCountOfCreditDebt(
-    bool? isCredit,
-    String? searchString, {
-    bool followCustomPeriodCycle = false,
-    String cycleSettingsExtension = "",
-    // selectedTab == 0 : one-time
-    // selectedTab == 1 : long-term
-    // Only apply selectedTab when searching
-    required int? selectedTab,
-  }) {
-    final totalCount = transactions.transactionPk.count();
-    final $CategoriesTable subCategories = alias(categories, 'subCategories');
-
-    final query = selectOnly(transactions)
-      ..addColumns([totalCount])
-      ..join([
-        innerJoin(categories,
-            categories.categoryPk.equalsExp(transactions.categoryFk)),
-        leftOuterJoin(subCategories,
-            subCategories.categoryPk.equalsExp(transactions.subCategoryFk)),
-        leftOuterJoin(objectives,
-            objectives.objectivePk.equalsExp(transactions.objectiveLoanFk)),
-      ])
-      ..where(onlyShowIfFollowCustomPeriodCycle(
-            transactions,
-            followCustomPeriodCycle,
-            cycleSettingsExtension: cycleSettingsExtension,
-          ) &
-          transactions.paid.equals(true) &
-          (selectedTab == 0 || selectedTab == null
-              ? onlyShowTransactionBasedOnSearchQuery(
-                  transactions, searchString,
-                  withCategories: true,
-                  joinedWithSubcategoriesTable: subCategories)
-              : (objectives.name
-                  .collate(Collate.noCase)
-                  .like("%" + (searchString ?? "") + "%"))) &
-          (isCredit == null
-              ? transactions.type.equals(TransactionSpecialType.credit.index) |
-                  transactions.type.equals(TransactionSpecialType.debt.index) |
-                  transactions.objectiveLoanFk.isNotNull()
-              : isCredit
-                  ? transactions.type
-                          .equals(TransactionSpecialType.credit.index) |
-                      (transactions.objectiveLoanFk.isNotNull() &
-                          objectives.income.equals(true))
-                  : transactions.type
-                          .equals(TransactionSpecialType.debt.index) |
-                      (transactions.objectiveLoanFk.isNotNull() &
-                          objectives.income.equals(false))));
-    return query.map((row) => row.read(totalCount)).watch();
+    return totalTotalWithCountStream(mergedStreams);
   }
 
   Stream<List<Transaction>> watchAllCreditDebtTransactions(
@@ -6564,6 +6529,7 @@ class FinanceDatabase extends _$FinanceDatabase {
       note: closeBalanceCorrection.note,
       income: closeBalanceCorrection.income,
       objectiveFk: Value(closeBalanceCorrection.objectiveFk),
+      objectiveLoanFk: Value(closeBalanceCorrection.objectiveLoanFk),
       amount: originalBalanceCorrection.amount.abs() *
           double.parse(
             (closeBalanceCorrection.income
@@ -6613,4 +6579,11 @@ class TransactionWithCount {
   final int count;
 
   TransactionWithCount({required this.transaction, required this.count});
+}
+
+class TotalWithCount {
+  final double total;
+  final int count;
+
+  TotalWithCount({required this.total, required this.count});
 }

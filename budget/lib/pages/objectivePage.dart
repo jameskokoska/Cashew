@@ -169,7 +169,9 @@ class _ObjectivePageContentState extends State<_ObjectivePageContent> {
                 items: [
                   DropdownItemMenu(
                     id: "edit-goals",
-                    label: "edit-goal".tr(),
+                    label: widget.objective.type == ObjectiveType.loan
+                        ? "edit-loan".tr()
+                        : "edit-goal".tr(),
                     icon: appStateSettings["outlinedIcons"]
                         ? Icons.edit_outlined
                         : Icons.edit_rounded,
@@ -187,7 +189,9 @@ class _ObjectivePageContentState extends State<_ObjectivePageContent> {
                   if (widget.objective.type == ObjectiveType.loan)
                     DropdownItemMenu(
                       id: "delete-goal",
-                      label: "delete-goal".tr(),
+                      label: widget.objective.type == ObjectiveType.loan
+                          ? "delete-loan".tr()
+                          : "delete-goal".tr(),
                       icon: appStateSettings["outlinedIcons"]
                           ? Icons.delete_outlined
                           : Icons.delete_rounded,
@@ -477,7 +481,6 @@ class _ObjectivePageContentState extends State<_ObjectivePageContent> {
               TransactionEntries(
                 null,
                 null,
-                income: null,
                 listID: pageId,
                 dateDividerColor: pageBackgroundColor,
                 transactionBackgroundColor: pageBackgroundColor,

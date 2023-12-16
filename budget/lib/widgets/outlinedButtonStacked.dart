@@ -138,13 +138,16 @@ class OutlinedContainer extends StatelessWidget {
       this.filled = false,
       this.borderRadius = 15,
       this.borderColor,
+      this.enabled = true,
       super.key});
   final Widget child;
   final bool filled;
   final double borderRadius;
   final Color? borderColor;
+  final bool enabled;
   @override
   Widget build(BuildContext context) {
+    if (enabled == false) return child;
     return AnimatedContainer(
       duration: Duration(milliseconds: 250),
       decoration: BoxDecoration(
