@@ -977,7 +977,7 @@
   "select-loan": "選擇貸款",
   "title-contains": "標題包含",
   "notes-contain": "筆記包含",
-  "outgoing": "向外",
+  "outgoing": "外向",
   "incoming": "傳入",
   "add-currency": "添加貨幣",
   "currency": "貨幣",
@@ -989,5 +989,7 @@
   "enjoying-cashew-question": "喜歡這個應用嗎？",
   "consider-rating": "如果您喜歡該應用程序，請考慮留下評論😄謝謝！",
   "no-thanks": "不，謝謝",
-  "rate": "速度！"
+  "rate": "速度！",
+  "of-outgoing": "外向",
+  "of-incoming": "接入"
 }

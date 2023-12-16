@@ -2072,11 +2072,18 @@ class _AllSpendingPastSpendingGraphState
                       List<FlSpot> spots = [];
                       double total = totalNetBefore;
                       for (int i = expenseData.length - 1; i >= 0; i--) {
-                        if (expenseData[i] == null) continue;
-                        TotalWithCount currentExpenseData = expenseData[i]!;
+                        double expenseSpending =
+                            (nullIfIndexOutOfRange(expenseData, i) ??
+                                    TotalWithCount(total: 0, count: 0))
+                                .total;
+                        double incomeSpending =
+                            (nullIfIndexOutOfRange(incomeData, i) ??
+                                    TotalWithCount(total: 0, count: 0))
+                                .total;
+
                         total = total +
-                            (currentExpenseData).total.abs() * -1 +
-                            (nullIfIndexOutOfRange(incomeData, i) ?? 0).abs();
+                            expenseSpending.abs() * -1 +
+                            incomeSpending.abs();
                         spots.add(FlSpot(
                           expenseData.length - 1 - i.toDouble(),
                           (total).abs() == 0 ? minimumYValue : total,
@@ -2087,13 +2094,16 @@ class _AllSpendingPastSpendingGraphState
                       List<FlSpot> spots = [];
                       if (expenseData.toSet().length > 1) {
                         for (int i = expenseData.length - 1; i >= 0; i--) {
-                          if (expenseData[i] == null) continue;
-                          TotalWithCount currentExpenseData = expenseData[i]!;
+                          double expenseSpending =
+                              (nullIfIndexOutOfRange(expenseData, i) ??
+                                      TotalWithCount(total: 0, count: 0))
+                                  .total;
+
                           spots.add(FlSpot(
                             expenseData.length - 1 - i.toDouble(),
-                            (currentExpenseData).total.abs() == 0
+                            expenseSpending.abs() == 0
                                 ? minimumYValue
-                                : (currentExpenseData).total.abs(),
+                                : expenseSpending.abs(),
                           ));
                         }
                         allSpots.add(spots);
@@ -2104,12 +2114,15 @@ class _AllSpendingPastSpendingGraphState
                         spots = [];
                         for (int i = incomeData.length - 1; i >= 0; i--) {
                           if (incomeData[i] == null) continue;
-                          TotalWithCount currentIncomeData = incomeData[i]!;
+                          double incomeSpending =
+                              (nullIfIndexOutOfRange(incomeData, i) ??
+                                      TotalWithCount(total: 0, count: 0))
+                                  .total;
                           spots.add(FlSpot(
                             incomeData.length - 1 - i.toDouble(),
-                            (currentIncomeData).total.abs() == 0
+                            incomeSpending.abs() == 0
                                 ? minimumYValue
-                                : (currentIncomeData).total.abs(),
+                                : incomeSpending.abs(),
                           ));
                         }
                         allSpots.add(spots);

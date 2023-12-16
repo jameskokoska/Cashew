@@ -26,6 +26,12 @@ import 'listItem.dart';
 
 String getChangelogString() {
   return """
+    < 5.0.6
+    Translation fixes for category totals
+    When long term loan selected, polarity slider in add transaction follows default
+    Icon for title/notes filter
+    If row entry could not be reordered, opacity still follows that of archived status
+    If a transactions payment has been removed, auto payments no longer marks it as paid
     < 5.0.5
     Long pressing date selector sets to current date and time
     When creating any transaction, it can be added to a long term loan 
@@ -33,7 +39,7 @@ String getChangelogString() {
     Can select multiple transactions and add to goal
     Improved income/expense selector when adding transaction
     Multiple transaction selection actions only appear if relevant to users data
-    Fixed automatic payment for transactions would be duplicated
+    Fixed automatic payment for transactions would be duplicated when synced
     Account transfers supported for long term loan transactions
     Pie chart homepage, revamped selection - all, positive cashflow, negative cashflow
     Fixed custom currency exchange rate, always references USD for proper conversion when entered

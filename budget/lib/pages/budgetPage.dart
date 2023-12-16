@@ -396,6 +396,7 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                       (index, category) {
                         categoryEntries.add(
                           CategoryEntry(
+                            isForBudget: true,
                             selectedSubCategoryPk: selectedCategory?.categoryPk,
                             expandSubcategories: showAllSubcategories ||
                                 category.category.categoryPk ==

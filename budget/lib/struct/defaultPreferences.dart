@@ -163,6 +163,7 @@ Future<Map<String, dynamic>> getDefaultPreferences() async {
     "expandedNavigationSidebar": true,
     "locale": "System",
     "disableShadows": false,
+    "showTransactionPk": false,
     "showBackupLimit": false,
     "outlinedIcons": false,
     "premiumPopupAddTransactionCount": -5,

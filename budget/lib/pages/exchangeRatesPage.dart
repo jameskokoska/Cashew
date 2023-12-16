@@ -259,82 +259,85 @@ class _ExchangeRatesState extends State<ExchangeRates> {
                               ?[key])
                           .toString(),
                       key: ValueKey(key),
-                      child: Tappable(
-                        onTap: () async {
-                          await openBottomSheet(
-                            context,
-                            SetCustomCurrency(currencyKey: key),
-                          );
-                          setState(() {});
-                        },
-                        color: isCustomCurrency ||
-                                appStateSettings["customCurrencyAmounts"]
-                                        ?[key] ==
-                                    null
-                            ? Colors.transparent
-                            : Theme.of(context).colorScheme.secondaryContainer,
-                        child: Padding(
-                          padding: EdgeInsets.only(
-                              left: 8,
-                              right: 8,
-                              bottom: isCustomCurrency ? 5 : 0),
-                          child: OutlinedContainer(
-                            enabled: isCustomCurrency,
-                            filled: appStateSettings["customCurrencyAmounts"]
-                                    ?[key] !=
-                                null,
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 7),
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    child: TextFont(
-                                      text: "",
-                                      maxLines: 3,
-                                      richTextSpan: [
-                                        TextSpan(
-                                          text: (isUnsetCustomCurrency
-                                                  ? " " + "1 USD"
-                                                  : "") +
-                                              " = " +
-                                              calculatedExchangeRateString,
-                                          style: TextStyle(
-                                            color: getColor(context, "black"),
-                                            fontFamily:
-                                                appStateSettings["font"],
-                                            fontFamilyFallback: ['Inter'],
-                                            fontSize: 16,
+                      child: Padding(
+                        padding:
+                            EdgeInsets.only(bottom: isCustomCurrency ? 5 : 0),
+                        child: Tappable(
+                          onTap: () async {
+                            await openBottomSheet(
+                              context,
+                              SetCustomCurrency(currencyKey: key),
+                            );
+                            setState(() {});
+                          },
+                          color: isCustomCurrency ||
+                                  appStateSettings["customCurrencyAmounts"]
+                                          ?[key] ==
+                                      null
+                              ? Colors.transparent
+                              : Theme.of(context)
+                                  .colorScheme
+                                  .secondaryContainer,
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 8),
+                            child: OutlinedContainer(
+                              enabled: isCustomCurrency,
+                              filled: appStateSettings["customCurrencyAmounts"]
+                                      ?[key] !=
+                                  null,
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 7),
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      child: TextFont(
+                                        text: "",
+                                        maxLines: 3,
+                                        richTextSpan: [
+                                          TextSpan(
+                                            text: (isUnsetCustomCurrency
+                                                    ? " " + "1 USD"
+                                                    : "") +
+                                                " = " +
+                                                calculatedExchangeRateString,
+                                            style: TextStyle(
+                                              color: getColor(context, "black"),
+                                              fontFamily:
+                                                  appStateSettings["font"],
+                                              fontFamilyFallback: ['Inter'],
+                                              fontSize: 16,
+                                            ),
                                           ),
-                                        ),
-                                        TextSpan(
-                                          text: " " + key.allCaps,
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontFamily:
-                                                appStateSettings["font"],
-                                            fontFamilyFallback: ['Inter'],
-                                            color: getColor(context, "black"),
-                                            fontSize: 16,
+                                          TextSpan(
+                                            text: " " + key.allCaps,
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontFamily:
+                                                  appStateSettings["font"],
+                                              fontFamilyFallback: ['Inter'],
+                                              color: getColor(context, "black"),
+                                              fontSize: 16,
+                                            ),
                                           ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  if (isCustomCurrency)
-                                    IconButton(
-                                      padding: EdgeInsets.all(15),
-                                      tooltip: "delete-currency".tr(),
-                                      onPressed: () {
-                                        deleteCustomCurrency(key);
-                                      },
-                                      icon: Icon(
-                                        appStateSettings["outlinedIcons"]
-                                            ? Icons.delete_outlined
-                                            : Icons.delete_rounded,
+                                        ],
                                       ),
                                     ),
-                                ],
+                                    if (isCustomCurrency)
+                                      IconButton(
+                                        padding: EdgeInsets.all(15),
+                                        tooltip: "delete-currency".tr(),
+                                        onPressed: () {
+                                          deleteCustomCurrency(key);
+                                        },
+                                        icon: Icon(
+                                          appStateSettings["outlinedIcons"]
+                                              ? Icons.delete_outlined
+                                              : Icons.delete_rounded,
+                                        ),
+                                      ),
+                                  ],
+                                ),
                               ),
                             ),
                           ),

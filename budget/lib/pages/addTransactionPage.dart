@@ -1319,6 +1319,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
               SelectObjective(
                 setSelectedObjective: setSelectedLoanObjectivePk,
                 selectedObjectivePk: selectedObjectiveLoanPk,
+                setSelectedIncome: setSelectedIncome,
                 horizontalBreak: true,
                 objectiveType: ObjectiveType.loan,
               ),
@@ -1431,6 +1432,18 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                         ],
                       ),
               ),
+
+              if (appStateSettings["showTransactionPk"] == true)
+                Padding(
+                  padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
+                  child: TextFont(
+                    text: widget.transaction?.transactionPk ?? "",
+                    fontSize: 13,
+                    textColor: getColor(context, "textLight"),
+                    textAlign: TextAlign.center,
+                    maxLines: 4,
+                  ),
+                ),
 
               widget.transaction == null ||
                       widget.transaction!.sharedDateUpdated == null
@@ -2926,6 +2939,7 @@ class SelectObjective extends StatefulWidget {
     this.wrapped,
     this.horizontalBreak = false,
     required this.objectiveType,
+    this.setSelectedIncome,
     super.key,
   });
   final Function(String?) setSelectedObjective;
@@ -2934,6 +2948,7 @@ class SelectObjective extends StatefulWidget {
   final bool? wrapped;
   final bool horizontalBreak;
   final ObjectiveType objectiveType;
+  final Function(bool isIncome)? setSelectedIncome;
 
   @override
   State<SelectObjective> createState() => _SelectObjectiveState();
@@ -2995,6 +3010,10 @@ class _SelectObjectiveState extends State<SelectObjective> {
                     widget.setSelectedObjective(
                       item?.objectivePk,
                     );
+                    if (item?.type == ObjectiveType.loan &&
+                        widget.setSelectedIncome != null) {
+                      widget.setSelectedIncome!(item?.income ?? false);
+                    }
                     setState(() {
                       selectedObjectivePk = item?.objectivePk;
                     });

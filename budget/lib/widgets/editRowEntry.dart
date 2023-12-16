@@ -372,30 +372,6 @@ class EditRowEntry extends StatelessWidget {
         boxShadow: boxShadow,
       );
     }
-    if (!canReorder) {
-      return Column(
-        children: [
-          getPlatform() == PlatformOS.isIOS && index == 0
-              ? Container(
-                  height: 1.5,
-                  color: getColor(context, "dividerColor"),
-                )
-              : SizedBox.shrink(),
-          Padding(
-            padding: EdgeInsets.symmetric(
-                horizontal: getPlatform() == PlatformOS.isIOS ? 0 : 10,
-                vertical: getPlatform() == PlatformOS.isIOS ? 0 : 5),
-            child: container,
-          ),
-          getPlatform() == PlatformOS.isIOS
-              ? Container(
-                  height: 1.5,
-                  color: getColor(context, "dividerColor"),
-                )
-              : SizedBox.shrink(),
-        ],
-      );
-    }
     return AnimatedOpacity(
       duration: Duration(milliseconds: 200),
       opacity: currentReorder ? 0.6 : (opacity ?? 1),
@@ -414,6 +390,7 @@ class EditRowEntry extends StatelessWidget {
             child: ReorderableDelayedDragStartListener(
               index: index,
               child: container,
+              enabled: canReorder,
             ),
           ),
           getPlatform() == PlatformOS.isIOS

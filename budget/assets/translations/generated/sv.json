@@ -969,7 +969,7 @@
   "left-panel": "Vänsterpanel",
   "top-center": "Övre centrum",
   "of-total": "total",
-  "date-reset": "Datumåterställning",
+  "date-reset": "Datum återställning",
   "set-to-current-date-and-time": "Ställ in på aktuellt datum och tid",
   "add-to-loan": "Lägg till lån",
   "added-to-loan-action": "Tillagd till lånet",
@@ -989,5 +989,7 @@
   "enjoying-cashew-question": "Njuter av appen?",
   "consider-rating": "Överväg att lämna en recension om du gillar appen 😄 Tack!",
   "no-thanks": "Nej tack",
-  "rate": "Betygsätta!"
+  "rate": "Betygsätta!",
+  "of-outgoing": "av utgående",
+  "of-incoming": "inkommande"
 }

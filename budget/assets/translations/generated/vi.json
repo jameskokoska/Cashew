@@ -981,13 +981,15 @@
   "incoming": "Hướng vào",
   "add-currency": "Thêm tiền tệ",
   "currency": "Tiền tệ",
-  "unset": "Unst",
+  "unset": "Bỏ đặt",
   "delete-currency": "Xóa tiền tệ",
   "delete-currency-question": "Xóa tiền tệ?",
   "custom-currency": "Tiền tệ tùy chỉnh",
-  "select-an-entry-to-set-custom-exchange-rate": "Chọn một mục để đặt tỷ giá hối đoái tùy chỉnh. Lưu ý: Tất cả các tính toán tỷ giá hối đoái sử dụng USD làm tài liệu tham khảo.",
-  "enjoying-cashew-question": "Thưởng thức ứng dụng?",
+  "select-an-entry-to-set-custom-exchange-rate": "Chọn một mục nhập để đặt tỷ giá hối đoái tùy chỉnh. Lưu ý: Tất cả các tính toán tỷ giá hối đoái đều sử dụng USD làm tham chiếu.",
+  "enjoying-cashew-question": "Yêu thích Cashew?",
   "consider-rating": "Cân nhắc để lại đánh giá nếu bạn thích ứng dụng 😄 Cảm ơn bạn!",
-  "no-thanks": "Không, cám ơn",
-  "rate": "Tỷ lệ!"
+  "no-thanks": "Không, Cám ơn",
+  "rate": "Xếp hạng!",
+  "of-outgoing": "đi",
+  "of-incoming": "đến của"
 }

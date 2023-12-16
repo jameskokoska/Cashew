@@ -989,5 +989,7 @@
   "enjoying-cashew-question": "Nautitko sovelluksesta?",
   "consider-rating": "Harkitse arvostelun jättämistä, jos nautit sovelluksesta 😄 Kiitos!",
   "no-thanks": "Ei kiitos",
-  "rate": "Arvioin!"
+  "rate": "Arvioin!",
+  "of-outgoing": "lähtevä",
+  "of-incoming": "saapuva"
 }

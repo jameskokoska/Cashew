@@ -86,6 +86,9 @@ Map<String, NavBarIconData> getNavBarIconsData() {
       iconData: appStateSettings["outlinedIcons"]
           ? Icons.receipt_long_outlined
           : Icons.receipt_long_rounded,
+      // This icon is pretty cool, could suit it
+      // ? Icons.data_thresholding_outlined
+      // : Icons.data_thresholding_rounded,
       label: "all-spending",
       labelLong: "all-spending-summary",
       navigationIndexedStackIndex: 7,

@@ -969,7 +969,7 @@
   "left-panel": "Bal oldali panel",
   "top-center": "Felső középpont",
   "of-total": "összesen",
-  "date-reset": "A dátum visszaállítása",
+  "date-reset": "Dátum visszaállítása",
   "set-to-current-date-and-time": "Állítsa be az aktuális dátumra és időre",
   "add-to-loan": "Hozzáadás a hitelhez",
   "added-to-loan-action": "Hozzáadva a kölcsönhez",
@@ -989,5 +989,7 @@
   "enjoying-cashew-question": "Élvezi az alkalmazást?",
   "consider-rating": "Fontolja meg a felülvizsgálat elhagyását, ha élvezi az alkalmazást 😄 Köszönöm!",
   "no-thanks": "Nem köszönöm",
-  "rate": "Mérték!"
+  "rate": "Mérték!",
+  "of-outgoing": "kimenő",
+  "of-incoming": "bejövő"
 }

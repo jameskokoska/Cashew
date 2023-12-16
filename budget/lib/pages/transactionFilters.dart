@@ -909,6 +909,9 @@ class _TransactionFiltersSelectionState
                   selectedFilters.titleContains = value.trim();
                 },
                 initialValue: selectedFilters.titleContains,
+                icon: appStateSettings["outlinedIcons"]
+                    ? Icons.title_outlined
+                    : Icons.title_rounded,
               ),
               SizedBox(height: 7),
               TextInput(
@@ -918,6 +921,9 @@ class _TransactionFiltersSelectionState
                   selectedFilters.noteContains = value.trim();
                 },
                 initialValue: selectedFilters.noteContains,
+                icon: appStateSettings["outlinedIcons"]
+                    ? Icons.sticky_note_2_outlined
+                    : Icons.sticky_note_2_rounded,
               )
             ],
           ),

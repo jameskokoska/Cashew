@@ -45,6 +45,7 @@ class CategoryEntry extends StatelessWidget {
     this.isSubcategory = false,
     this.mainCategorySpentIfSubcategory = 0,
     this.useHorizontalPaddingConstrained = true,
+    this.isForBudget = false,
   }) : super(key: key);
 
   final TransactionCategory category;
@@ -72,6 +73,7 @@ class CategoryEntry extends StatelessWidget {
   final bool isSubcategory;
   final double mainCategorySpentIfSubcategory;
   final bool useHorizontalPaddingConstrained;
+  final bool isForBudget;
 
   @override
   Widget build(BuildContext context) {
@@ -283,8 +285,12 @@ class CategoryEntry extends StatelessWidget {
                                               ? "of-subcategory".tr()
                                               : showIncomeExpenseIcons &&
                                                       categorySpent > 0
-                                                  ? "of-total".tr()
-                                                  : "of-spending".tr());
+                                                  ? isForBudget
+                                                      ? "of-total".tr()
+                                                      : "of-incoming".tr()
+                                                  : isForBudget
+                                                      ? "of-spending".tr()
+                                                      : "of-outgoing".tr());
 
                                       return TextFont(
                                         text: text,

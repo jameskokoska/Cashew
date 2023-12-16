@@ -317,6 +317,15 @@ class DebugPage extends StatelessWidget {
           initialValue: appStateSettings["disableShadows"],
           icon: Icons.dark_mode,
         ),
+        SettingsContainerSwitch(
+          title: "Show transaction ID",
+          description: "On transactions page",
+          onSwitched: (value) {
+            updateSettings("showTransactionPk", value, updateGlobalState: true);
+          },
+          initialValue: appStateSettings["showTransactionPk"] == true,
+          icon: Icons.password,
+        ),
         Padding(
           padding: const EdgeInsets.only(top: 8.0, left: 13, right: 13),
           child: TextFont(text: "Animation Scale"),
