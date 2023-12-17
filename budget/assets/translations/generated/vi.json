@@ -586,8 +586,8 @@
   "help": "Giúp đỡ",
   "create-template-copy-description": "Tạo một bản sao và lưu nó vào Google Drive của bạn. Chỉnh sửa trang tính với dữ liệu của bạn và nhập nó!",
   "get-template": "Nhận mẫu",
-  "correct-total-balance": "Điều chỉnh tổng số dư",
-  "default-category-account-amount-balancing": "Điều chỉnh cân bằng",
+  "correct-total-balance": "Tổng số dư chính xác",
+  "default-category-account-amount-balancing": "Điều chỉnh số dư",
   "negative-amount": "Số tiền âm",
   "update-total-balance": "Cập nhật tổng số dư",
   "updated-total-balance": "Đã cập nhật tổng số dư",
@@ -977,8 +977,8 @@
   "select-loan": "Chọn khoản vay",
   "title-contains": "Tiêu đề chứa",
   "notes-contain": "Ghi chú chứa",
-  "outgoing": "Hướng ra",
-  "incoming": "Hướng vào",
+  "outgoing": "Chi phí",
+  "incoming": "Thu nhập",
   "add-currency": "Thêm tiền tệ",
   "currency": "Tiền tệ",
   "unset": "Bỏ đặt",
@@ -990,6 +990,6 @@
   "consider-rating": "Cân nhắc để lại đánh giá nếu bạn thích ứng dụng 😄 Cảm ơn bạn!",
   "no-thanks": "Không, Cám ơn",
   "rate": "Xếp hạng!",
-  "of-outgoing": "đi",
-  "of-incoming": "đến của"
+  "of-outgoing": "của chi phí",
+  "of-incoming": "của thu nhập"
 }

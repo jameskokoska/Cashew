@@ -26,6 +26,10 @@ import 'listItem.dart';
 
 String getChangelogString() {
   return """
+    < 5.0.7
+    Hot fix for net worth and selected accounts
+    Hot fix for search one time loans after deleting long term loan
+    French language updated
     < 5.0.6
     Translation fixes for category totals
     When long term loan selected, polarity slider in add transaction follows default

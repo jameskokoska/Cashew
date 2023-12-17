@@ -3,6 +3,7 @@ import 'package:budget/database/tables.dart';
 import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/editHomePage.dart';
 import 'package:budget/pages/homePage/homePageWalletSwitcher.dart';
+import 'package:budget/pages/transactionFilters.dart';
 import 'package:budget/pages/transactionsSearchPage.dart';
 import 'package:budget/pages/walletDetailsPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
@@ -70,6 +71,8 @@ class HomePageNetWorth extends StatelessWidget {
                           allWallets: Provider.of<AllWallets>(context),
                           followCustomPeriodCycle: true,
                           cycleSettingsExtension: "NetWorth",
+                          searchFilters:
+                              SearchFilters(walletPks: walletPks ?? []),
                         ),
                         // getTextColor: (amount) => amount == 0
                         //     ? getColor(context, "black")
