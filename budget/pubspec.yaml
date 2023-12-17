@@ -92,7 +92,8 @@ dependencies:
   confetti: ^0.7.0
   image_picker: ^1.0.4
   flutter_displaymode: ^0.6.0
-  notification_listener_service: ^0.3.3  
+  notification_listener_service: ^0.3.3
+  home_widget: ^0.4.0
 
 # flutter pub run flutter_launcher_icons:main
 flutter_icons:

@@ -17,6 +17,7 @@ import 'package:budget/pages/homePage/homePageAllSpendingSummary.dart';
 import 'package:budget/pages/editHomePage.dart';
 import 'package:budget/pages/settingsPage.dart';
 import 'package:budget/pages/homePage/homePageCreditDebts.dart';
+import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/animatedExpanded.dart';
 import 'package:budget/widgets/button.dart';
@@ -35,6 +36,8 @@ import 'package:budget/widgets/slidingSelectorIncomeExpense.dart';
 import 'package:budget/widgets/linearGradientFadedEdges.dart';
 import 'package:budget/widgets/pullDownToRefreshSync.dart';
 import 'package:budget/widgets/util/rightSideClipper.dart';
+import 'package:home_widget/home_widget.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({
@@ -226,6 +229,8 @@ class HomePageState extends State<HomePage>
         scrollController: _scrollController,
         child: Stack(
           children: [
+            CheckWidgetLaunch(),
+            RenderNetWorthWidget(),
             Scaffold(
               resizeToAvoidBottomInset: false,
               body: ScrollbarWrap(
@@ -514,6 +519,128 @@ class _HomePageRatingBoxState extends State<HomePageRatingBox> {
                 ),
               ),
             ),
+    );
+  }
+}
+
+class CheckWidgetLaunch extends StatefulWidget {
+  const CheckWidgetLaunch({super.key});
+
+  @override
+  State<CheckWidgetLaunch> createState() => _CheckWidgetLaunchState();
+}
+
+class _CheckWidgetLaunchState extends State<CheckWidgetLaunch> {
+  @override
+  void initState() {
+    super.initState();
+    HomeWidget.setAppGroupId('YOUR_GROUP_ID');
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _checkForWidgetLaunch();
+    HomeWidget.widgetClicked.listen(_launchedFromWidget);
+  }
+
+  void _checkForWidgetLaunch() {
+    HomeWidget.initiallyLaunchedFromHomeWidget().then(_launchedFromWidget);
+  }
+
+  void _launchedFromWidget(Uri? uri) {
+    String data = (uri ?? "").toString();
+    List<String> params = data.split(",");
+    String? widgetId = nullIfIndexOutOfRange(params, 1);
+    if (nullIfIndexOutOfRange(params, 0) == "edit") {
+      if (lockAppWaitForRestart == false) {
+        Navigator.of(context).popUntil((route) => route.isFirst);
+        pushRoute(
+          context,
+          PageFramework(
+            dragDownToDismiss: true,
+            title: "Widget",
+            listWidgets: [TextFont(text: "Widget id: " + (widgetId ?? ""))],
+          ),
+        );
+      }
+    }
+    showDialog(
+      context: context,
+      builder: (buildContext) => AlertDialog(
+        title: Text('App started from HomeScreenWidget'),
+        content: Text('Here is the URI: ${params}'),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox.shrink();
+  }
+}
+
+class RenderNetWorthWidget extends StatefulWidget {
+  const RenderNetWorthWidget({super.key});
+
+  @override
+  State<RenderNetWorthWidget> createState() => _RenderNetWorthWidgetState();
+}
+
+class _RenderNetWorthWidgetState extends State<RenderNetWorthWidget> {
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration.zero, () async {
+      await HomeWidget.saveWidgetData<String>(
+          'backgroundColor',
+          (Theme.of(context)
+              .colorScheme
+              .primary
+              .withAlpha(0)
+              .value
+              .toString()));
+      await HomeWidget.saveWidgetData<String>(
+          'netWorthTitle', "net-worth".tr());
+      await HomeWidget.updateWidget(
+        name: 'NetWorthWidgetProvider',
+      );
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<TotalWithCount?>(
+      stream: database.watchTotalWithCountOfWallet(
+        isIncome: null,
+        allWallets: Provider.of<AllWallets>(context),
+        followCustomPeriodCycle: true,
+        cycleSettingsExtension: "NetWorth",
+      ),
+      builder: (context, snapshot) {
+        Future.delayed(Duration.zero, () async {
+          int totalCount = snapshot.data?.count ?? 0;
+          String netWorthTransactionsNumber = totalCount.toString() +
+              " " +
+              (totalCount == 1
+                  ? "transaction".tr().toLowerCase()
+                  : "transactions".tr().toLowerCase());
+          double totalSpent = snapshot.data?.total ?? 0;
+          String netWorthAmount = convertToMoney(
+            Provider.of<AllWallets>(context, listen: false),
+            totalSpent,
+          );
+          await HomeWidget.saveWidgetData<String>(
+              'netWorthAmount', netWorthAmount);
+          await HomeWidget.saveWidgetData<String>(
+              'netWorthTransactionsNumber', netWorthTransactionsNumber);
+          await HomeWidget.updateWidget(
+            name: 'NetWorthWidgetProvider',
+          );
+        });
+
+        return const SizedBox.shrink();
+      },
     );
   }
 }
