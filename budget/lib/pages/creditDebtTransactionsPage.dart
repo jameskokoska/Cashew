@@ -343,6 +343,7 @@ class _CreditDebtTransactionsState extends State<CreditDebtTransactions>
                   if (snapshot.hasData == false) return SizedBox.shrink();
                   if ((snapshot.data?.length ?? 0) <= 0) {
                     numberLongTerm = 0;
+                    _tabController.index = 0;
                     return CustomScrollView(
                       controller: _scrollController,
                       slivers: [
