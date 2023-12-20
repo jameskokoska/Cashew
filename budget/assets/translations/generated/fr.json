@@ -102,7 +102,7 @@
   "pay-upcoming-description": "Marquer automatiquement une transaction à venir comme payée après la date d'échéance",
   "import-csv": "Importer le fichier CSV",
   "import-csv-description": "Importer une source de données CSV externe",
-  "rate-app": "Application de taux",
+  "rate-app": "Noter l'application",
   "rate-app-subtitle": "Partagez vos commentaires avec le développeur pour aider à améliorer {app}",
   "rate-app-privacy": "Seules les étoiles, les commentaires et la date seront partagés.",
   "rate-app-privacy-email": "Seules les étoiles, les commentaires (e-mail si fournie) et la date seront partagées.",
@@ -989,7 +989,8 @@
   "enjoying-cashew-question": "Vous appréciez Cashew ?",
   "consider-rating": "Pensez à laisser une critique si vous aimez l'application 😄 Merci!",
   "no-thanks": "Non merci",
-  "rate": "Note !",
+  "rate": "Noter l'application !",
   "of-outgoing": "de sortant",
-  "of-incoming": "de entrant"
+  "of-incoming": "de entrant",
+  "applies-to-homepage": "S'applique à la page d'accueil"
 }

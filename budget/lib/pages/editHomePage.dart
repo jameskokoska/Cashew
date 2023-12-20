@@ -3,10 +3,13 @@ import 'package:budget/database/tables.dart';
 import 'package:budget/pages/addObjectivePage.dart';
 import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/editBudgetPage.dart';
+import 'package:budget/pages/homePage/homePageAllSpendingSummary.dart';
 import 'package:budget/pages/homePage/homePageBudgets.dart';
+import 'package:budget/pages/homePage/homePageCreditDebts.dart';
 import 'package:budget/pages/homePage/homePageLineGraph.dart';
 import 'package:budget/pages/homePage/homePageNetWorth.dart';
 import 'package:budget/pages/homePage/homePageObjectives.dart';
+import 'package:budget/pages/homePage/homePageUpcomingTransactions.dart';
 import 'package:budget/pages/homePage/homePageWalletSwitcher.dart';
 import 'package:budget/pages/walletDetailsPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
@@ -165,14 +168,7 @@ class _EditHomePageState extends State<EditHomePage> {
               switchHomeScreenSection(context, "showOverdueUpcoming", value);
             },
             onTap: () async {
-              openBottomSheet(
-                context,
-                PopupFramework(
-                  title: "select-period".tr(),
-                  child: PeriodCyclePicker(
-                      cycleSettingsExtension: "OverdueUpcoming"),
-                ),
-              );
+              openOverdueUpcomingSettings(context);
             },
           ),
           "creditDebts": EditHomePageItem(
@@ -184,14 +180,7 @@ class _EditHomePageState extends State<EditHomePage> {
               switchHomeScreenSection(context, "showCreditDebt", value);
             },
             onTap: () async {
-              openBottomSheet(
-                context,
-                PopupFramework(
-                  title: "select-period".tr(),
-                  child:
-                      PeriodCyclePicker(cycleSettingsExtension: "CreditDebts"),
-                ),
-              );
+              openCreditDebtsSettings(context);
             },
           ),
           "objectiveLoans": EditHomePageItem(
@@ -226,14 +215,7 @@ class _EditHomePageState extends State<EditHomePage> {
               switchHomeScreenSection(context, "showAllSpendingSummary", value);
             },
             onTap: () async {
-              openBottomSheet(
-                context,
-                PopupFramework(
-                  title: "select-period".tr(),
-                  child: PeriodCyclePicker(
-                      cycleSettingsExtension: "AllSpendingSummary"),
-                ),
-              );
+              await openAllSpendingSettings(context);
             },
           ),
           "netWorth": EditHomePageItem(
@@ -247,17 +229,7 @@ class _EditHomePageState extends State<EditHomePage> {
             },
             extraWidgetsBelow: [],
             onTap: () async {
-              await openBottomSheet(
-                context,
-                PopupFramework(
-                  title: "net-worth-settings".tr(),
-                  child: WalletPickerPeriodCycle(
-                    allWalletsSettingKey: "netWorthAllWallets",
-                    cycleSettingsExtension: "NetWorth",
-                    homePageWidgetDisplay: HomePageWidgetDisplay.NetWorth,
-                  ),
-                ),
-              );
+              await openNetWorthSettings(context);
             },
           ),
           "spendingGraph": EditHomePageItem(
@@ -638,7 +610,8 @@ Future openPieChartHomePageBottomSheetSettings(BuildContext context) async {
   await openBottomSheet(
     context,
     PopupFramework(
-      title: "select-type".tr(),
+      title: "pie-chart".tr(),
+      subtitle: "applies-to-homepage".tr(),
       child: Column(
         children: [
           RadioItems(

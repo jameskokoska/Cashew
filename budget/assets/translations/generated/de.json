@@ -991,5 +991,6 @@
   "no-thanks": "Nein danke",
   "rate": "Rate!",
   "of-outgoing": "von Ausgang",
-  "of-incoming": "von eingehenden"
+  "of-incoming": "von eingehenden",
+  "applies-to-homepage": "Gilt für die Homepage"
 }

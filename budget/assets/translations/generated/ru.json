@@ -991,5 +991,6 @@
   "no-thanks": "Нет, спасибо",
   "rate": "Ставка!",
   "of-outgoing": "общительного",
-  "of-incoming": "входящего"
+  "of-incoming": "входящего",
+  "applies-to-homepage": "Относится к домашней странице"
 }

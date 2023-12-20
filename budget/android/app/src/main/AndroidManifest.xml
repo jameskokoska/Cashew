@@ -76,6 +76,38 @@
                 <action android:name="android.service.notification.NotificationListenerService" />
             </intent-filter>
         </service>
+        <receiver android:name="PlusWidgetProvider"
+            android:exported="true" android:label="Transaction Shortcut">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data android:name="android.appwidget.provider"
+                android:resource="@xml/plus_widget" />
+        </receiver>
+        <receiver android:name="TransferWidgetProvider"
+            android:exported="true" android:label="Transfer Shortcut">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data android:name="android.appwidget.provider"
+                android:resource="@xml/transfer_widget" />
+        </receiver>
+        <receiver android:name="NetWorthPlusWidgetProvider"
+            android:exported="true" android:label="Net Total Wide">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data android:name="android.appwidget.provider"
+                android:resource="@xml/net_worth_plus_widget" />
+        </receiver>
+        <receiver android:name="NetWorthWidgetProvider"
+            android:exported="true" android:label="Net Total">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data android:name="android.appwidget.provider"
+                android:resource="@xml/net_worth_widget" />
+        </receiver>
         <!-- <service android:name="im.zoe.labs.flutter_notification_listener.NotificationsHandlerService"
             android:label="Flutter Notifications Handler"
             android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">

@@ -87,7 +87,7 @@ enum HomePageWidgetDisplay {
   WalletSwitcher,
   WalletList,
   NetWorth,
-  AllSpending, //Deprecated
+  AllSpendingSummary, //Income/Expense homescreen
 }
 
 List<HomePageWidgetDisplay> defaultWalletHomePageWidgetDisplay = [

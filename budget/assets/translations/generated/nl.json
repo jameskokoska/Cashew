@@ -991,5 +991,6 @@
   "no-thanks": "Nee bedankt",
   "rate": "Tarief!",
   "of-outgoing": "uitgaan",
-  "of-incoming": "inkomend"
+  "of-incoming": "inkomend",
+  "applies-to-homepage": "Geldt op de startpagina"
 }

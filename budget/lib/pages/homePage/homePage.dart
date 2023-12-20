@@ -2,6 +2,7 @@ import 'package:budget/colors.dart';
 import 'package:budget/database/generatePreviewData.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
+import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/homePage/homePageHeatmap.dart';
 import 'package:budget/pages/homePage/homePageLineGraph.dart';
 import 'package:budget/pages/homePage/homePageNetWorth.dart';
@@ -17,10 +18,16 @@ import 'package:budget/pages/homePage/homePageAllSpendingSummary.dart';
 import 'package:budget/pages/editHomePage.dart';
 import 'package:budget/pages/settingsPage.dart';
 import 'package:budget/pages/homePage/homePageCreditDebts.dart';
+import 'package:budget/pages/transactionFilters.dart';
+import 'package:budget/pages/walletDetailsPage.dart';
+import 'package:budget/struct/databaseGlobal.dart';
+import 'package:budget/struct/initializeNotifications.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/animatedExpanded.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
+import 'package:budget/widgets/openBottomSheet.dart';
+import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/ratingPopup.dart';
 import 'package:budget/widgets/selectedTransactionsAppBar.dart';
 import 'package:budget/widgets/util/keepAliveClientMixin.dart';
@@ -35,6 +42,10 @@ import 'package:budget/widgets/slidingSelectorIncomeExpense.dart';
 import 'package:budget/widgets/linearGradientFadedEdges.dart';
 import 'package:budget/widgets/pullDownToRefreshSync.dart';
 import 'package:budget/widgets/util/rightSideClipper.dart';
+import 'package:home_widget/home_widget.dart';
+import 'package:provider/provider.dart';
+import 'package:budget/pages/addWalletPage.dart';
+import 'package:budget/widgets/util/checkWidgetLaunch.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({
@@ -226,6 +237,8 @@ class HomePageState extends State<HomePage>
         scrollController: _scrollController,
         child: Stack(
           children: [
+            AndroidOnly(child: CheckWidgetLaunch()),
+            AndroidOnly(child: RenderHomePageWidgets()),
             Scaffold(
               resizeToAvoidBottomInset: false,
               body: ScrollbarWrap(

@@ -490,6 +490,7 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
                                                 (bool value) {
                                               amountLoadedPressedOnce = true;
                                             },
+                                            forceMaxY: maxY,
                                             forceMinYIfPositive: 0,
                                           );
                                           if (getCenteredTitle(
