@@ -26,6 +26,14 @@ import 'listItem.dart';
 
 String getChangelogString() {
   return """
+    < 5.0.8
+    Transfer balance app quick shortcut
+    Ability to select certain accounts for income/expense total on homepage
+    Fixed budget history limit when watching selected categories
+    New all spending summary no longer shows on wallet details page
+    Most common transactions amount properly converted to main currency 
+    Renamed and refactored homepage section settings
+    Home screen widgets and shortcuts (A)
     < 5.0.7
     Hot fix for net worth and selected accounts
     Hot fix for search one time loans after deleting long term loan

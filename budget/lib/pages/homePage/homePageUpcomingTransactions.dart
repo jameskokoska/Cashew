@@ -46,15 +46,7 @@ class HomePageUpcomingTransactions extends StatelessWidget {
                   ),
                   textColor: getColor(context, "unPaidUpcoming"),
                   onLongPress: () async {
-                    await openBottomSheet(
-                      context,
-                      PopupFramework(
-                        title: "select-period".tr(),
-                        child: PeriodCyclePicker(
-                          cycleSettingsExtension: "OverdueUpcoming",
-                        ),
-                      ),
-                    );
+                    await openOverdueUpcomingSettings(context);
                     homePageStateKey.currentState?.refreshState();
                   },
                 ),
@@ -76,15 +68,7 @@ class HomePageUpcomingTransactions extends StatelessWidget {
                   ),
                   textColor: getColor(context, "unPaidOverdue"),
                   onLongPress: () async {
-                    await openBottomSheet(
-                      context,
-                      PopupFramework(
-                        title: "select-period".tr(),
-                        child: PeriodCyclePicker(
-                          cycleSettingsExtension: "OverdueUpcoming",
-                        ),
-                      ),
-                    );
+                    await openOverdueUpcomingSettings(context);
                     homePageStateKey.currentState?.refreshState();
                   },
                 ),
@@ -95,4 +79,15 @@ class HomePageUpcomingTransactions extends StatelessWidget {
       ),
     );
   }
+}
+
+Future openOverdueUpcomingSettings(BuildContext context) {
+  return openBottomSheet(
+    context,
+    PopupFramework(
+      title: "overdue-and-upcoming".tr(),
+      subtitle: "applies-to-homepage".tr(),
+      child: PeriodCyclePicker(cycleSettingsExtension: "OverdueUpcoming"),
+    ),
+  );
 }

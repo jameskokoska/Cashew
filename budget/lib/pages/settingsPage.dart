@@ -49,6 +49,7 @@ import 'package:budget/struct/upcomingTransactionsFunctions.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/tappableTextEntry.dart';
 import 'package:budget/widgets/textWidgets.dart';
+import 'package:budget/widgets/util/checkWidgetLaunch.dart';
 import 'package:budget/widgets/viewAllTransactionsButton.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
@@ -455,6 +456,7 @@ class SettingsPageContent extends StatelessWidget {
                             updateSettings("accentSystemColor", false,
                                 updateGlobalState: true);
                             generateColors();
+                            updateWidgetColorsAndText(context);
                           },
                           useSystemColorPrompt: true,
                         ),
@@ -495,14 +497,15 @@ class SettingsPageContent extends StatelessWidget {
                   : Icons.dark_mode_rounded,
           initial: appStateSettings["theme"].toString().capitalizeFirst,
           items: ["Light", "Dark", "System"],
-          onChanged: (value) {
+          onChanged: (value) async {
             if (value == "Light") {
-              updateSettings("theme", "light", updateGlobalState: true);
+              await updateSettings("theme", "light", updateGlobalState: true);
             } else if (value == "Dark") {
-              updateSettings("theme", "dark", updateGlobalState: true);
+              await updateSettings("theme", "dark", updateGlobalState: true);
             } else if (value == "System") {
-              updateSettings("theme", "system", updateGlobalState: true);
+              await updateSettings("theme", "system", updateGlobalState: true);
             }
+            updateWidgetColorsAndText(context);
           },
           getLabel: (item) {
             return item.toLowerCase().tr();

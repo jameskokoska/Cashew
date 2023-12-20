@@ -40,15 +40,7 @@ class HomePageCreditDebts extends StatelessWidget {
                 textColor: getColor(context, "unPaidUpcoming"),
                 openPage: CreditDebtTransactions(isCredit: true),
                 onLongPress: () async {
-                  await openBottomSheet(
-                    context,
-                    PopupFramework(
-                      title: "select-period".tr(),
-                      child: PeriodCyclePicker(
-                        cycleSettingsExtension: "CreditDebts",
-                      ),
-                    ),
-                  );
+                  await openCreditDebtsSettings(context);
                   homePageStateKey.currentState?.refreshState();
                 },
               ),
@@ -67,15 +59,7 @@ class HomePageCreditDebts extends StatelessWidget {
                 textColor: getColor(context, "unPaidOverdue"),
                 openPage: CreditDebtTransactions(isCredit: false),
                 onLongPress: () async {
-                  await openBottomSheet(
-                    context,
-                    PopupFramework(
-                      title: "select-period".tr(),
-                      child: PeriodCyclePicker(
-                        cycleSettingsExtension: "CreditDebts",
-                      ),
-                    ),
-                  );
+                  await openCreditDebtsSettings(context);
                   homePageStateKey.currentState?.refreshState();
                 },
               ),
@@ -85,4 +69,15 @@ class HomePageCreditDebts extends StatelessWidget {
       ),
     );
   }
+}
+
+Future openCreditDebtsSettings(BuildContext context) {
+  return openBottomSheet(
+    context,
+    PopupFramework(
+      title: "loans".tr(),
+      subtitle: "applies-to-homepage".tr(),
+      child: PeriodCyclePicker(cycleSettingsExtension: "CreditDebts"),
+    ),
+  );
 }

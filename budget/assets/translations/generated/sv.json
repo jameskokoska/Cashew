@@ -991,5 +991,6 @@
   "no-thanks": "Nej tack",
   "rate": "Betygsätta!",
   "of-outgoing": "av utgående",
-  "of-incoming": "inkommande"
+  "of-incoming": "inkommande",
+  "applies-to-homepage": "Gäller hemsidan"
 }

@@ -17,24 +17,41 @@ class NetWorthWidgetProvider : HomeWidgetProvider() {
         appWidgetIds.forEach { widgetId ->
 
             val views = RemoteViews(context.packageName, R.layout.net_worth_widget_layout).apply {
+                try {
+                  setTextViewText(R.id.net_worth_title, widgetData.getString("netWorthTitle", null)
+                  ?: "Net Worth")
 
-                setTextViewText(R.id.net_worth_title, widgetData.getString("netWorthTitle", null)
-                ?: "Net Worth")
+                  setTextViewText(R.id.net_worth_amount, widgetData.getString("netWorthAmount", null)
+                  ?: "0.00")
 
-                setTextViewText(R.id.net_worth_amount, widgetData.getString("netWorthAmount", null)
-                ?: "0.00")
+                  setTextViewText(R.id.net_worth_transactions_number, widgetData.getString("netWorthTransactionsNumber", null)
+                  ?: "0 transactions")
+                }catch (e: Exception){}
 
-                setTextViewText(R.id.net_worth_transactions_number, widgetData.getString("netWorthTransactionsNumber", null)
-                ?: "0 transactions")
-                
-                // Detect App opened via Click inside Flutter
-                val pendingIntentWithData = HomeWidgetLaunchIntent.getActivity(
-                        context,
-                        MainActivity::class.java,
-                        Uri.parse("launch,${widgetId}"))
-                setOnClickPendingIntent(R.id.widget_container, pendingIntentWithData)
+                try {
+                  setInt(R.id.widget_background, "setColorFilter",  android.graphics.Color.parseColor(widgetData.getString("widgetColorBackground", null)
+                  ?: "#FFFFFF"));
+                }catch (e: Exception){}
+
+                try {
+                  setInt(R.id.net_worth_title, "setTextColor",  android.graphics.Color.parseColor(widgetData.getString("widgetColorText", null)
+                  ?: "#FFFFFF"))
+                  setInt(R.id.net_worth_amount, "setTextColor",  android.graphics.Color.parseColor(widgetData.getString("widgetColorText", null)
+                  ?: "#FFFFFF"))
+                  setInt(R.id.net_worth_transactions_number, "setTextColor",  android.graphics.Color.parseColor(widgetData.getString("widgetColorText", null)
+                  ?: "#FFFFFF"))
+                }catch (e: Exception){}
+
+                try {
+                  val pendingIntentWithData = HomeWidgetLaunchIntent.getActivity(
+                          context,
+                          MainActivity::class.java,
+                          Uri.parse("addTransaction"))
+                  setOnClickPendingIntent(R.id.widget_container, pendingIntentWithData)
+                }catch (e: Exception){}
 
             }
+
             appWidgetManager.updateAppWidget(widgetId, views)
         }
     }

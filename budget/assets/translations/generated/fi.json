@@ -991,5 +991,6 @@
   "no-thanks": "Ei kiitos",
   "rate": "Arvioin!",
   "of-outgoing": "lähtevä",
-  "of-incoming": "saapuva"
+  "of-incoming": "saapuva",
+  "applies-to-homepage": "Koskee kotisivua"
 }

@@ -46,18 +46,7 @@ class HomePageNetWorth extends StatelessWidget {
                     Expanded(
                       child: TransactionsAmountBox(
                         onLongPress: () async {
-                          await openBottomSheet(
-                            context,
-                            PopupFramework(
-                              title: "net-worth-settings".tr(),
-                              child: WalletPickerPeriodCycle(
-                                allWalletsSettingKey: "netWorthAllWallets",
-                                cycleSettingsExtension: "NetWorth",
-                                homePageWidgetDisplay:
-                                    HomePageWidgetDisplay.NetWorth,
-                              ),
-                            ),
-                          );
+                          await openNetWorthSettings(context);
                           homePageStateKey.currentState?.refreshState();
                         },
                         label: "net-worth".tr(),
@@ -224,4 +213,19 @@ class _WalletPickerPeriodCycleState extends State<WalletPickerPeriodCycle> {
       ],
     );
   }
+}
+
+Future openNetWorthSettings(BuildContext context) {
+  return openBottomSheet(
+    context,
+    PopupFramework(
+      title: "net-worth".tr(),
+      subtitle: "applies-to-homepage".tr(),
+      child: WalletPickerPeriodCycle(
+        allWalletsSettingKey: "netWorthAllWallets",
+        cycleSettingsExtension: "NetWorth",
+        homePageWidgetDisplay: HomePageWidgetDisplay.NetWorth,
+      ),
+    ),
+  );
 }

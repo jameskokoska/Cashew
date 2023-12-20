@@ -991,5 +991,6 @@
   "no-thanks": "Nej tak",
   "rate": "Sats!",
   "of-outgoing": "af udadvendt",
-  "of-incoming": "af indkommende"
+  "of-incoming": "af indkommende",
+  "applies-to-homepage": "Gælder for hjemmesiden"
 }

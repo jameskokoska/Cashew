@@ -991,5 +991,6 @@
   "no-thanks": "ไม่เป็นไรขอบคุณ",
   "rate": "ประเมิน!",
   "of-outgoing": "ของขาออก",
-  "of-incoming": "ของการเข้ามา"
+  "of-incoming": "ของการเข้ามา",
+  "applies-to-homepage": "ใช้กับโฮมเพจ"
 }

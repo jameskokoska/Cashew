@@ -991,5 +991,6 @@
   "no-thanks": "No, gracias",
   "rate": "¡Tasa!",
   "of-outgoing": "de saliente",
-  "of-incoming": "de entrante"
+  "of-incoming": "de entrante",
+  "applies-to-homepage": "Se aplica a la página de inicio"
 }

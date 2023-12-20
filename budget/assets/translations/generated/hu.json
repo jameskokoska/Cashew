@@ -991,5 +991,6 @@
   "no-thanks": "Nem köszönöm",
   "rate": "Mérték!",
   "of-outgoing": "kimenő",
-  "of-incoming": "bejövő"
+  "of-incoming": "bejövő",
+  "applies-to-homepage": "Vonatkozik a honlapra"
 }

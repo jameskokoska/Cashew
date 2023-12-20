@@ -1,6 +1,7 @@
 import 'package:budget/functions.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/bottomNavBar.dart';
+import 'package:budget/widgets/util/checkWidgetLaunch.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -424,4 +425,10 @@ Color getBottomNavbarBackgroundColor({
   } else {
     return lightDarkAccent;
   }
+}
+
+String colorToHex(Color color) {
+  Color opaqueColor = color.withAlpha(255);
+  String hexString = opaqueColor.value.toRadixString(16).padLeft(6, '0');
+  return "#" + hexString.substring(2);
 }
