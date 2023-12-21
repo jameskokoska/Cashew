@@ -30,6 +30,7 @@ import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/ratingPopup.dart';
 import 'package:budget/widgets/selectedTransactionsAppBar.dart';
+import 'package:budget/widgets/util/debouncer.dart';
 import 'package:budget/widgets/util/keepAliveClientMixin.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntry/swipeToSelectTransactions.dart';
@@ -83,7 +84,8 @@ class _CheckWidgetLaunchState extends State<CheckWidgetLaunch> {
     HomeWidget.initiallyLaunchedFromHomeWidget().then(_launchedFromWidget);
   }
 
-  void _launchedFromWidget(Uri? uri) {
+  // For some reason, older Android versions open an entirely new app instance... weird!
+  void _launchedFromWidget(Uri? uri) async {
     String widgetPayload = (uri ?? "").toString();
     if (widgetPayload == "addTransaction") {
       pushRoute(
@@ -93,13 +95,20 @@ class _CheckWidgetLaunchState extends State<CheckWidgetLaunch> {
         ),
       );
     } else if (widgetPayload == "transferTransaction") {
+      // This fixes an issue on older versions of Android where the route would popup twice
+      // We can detect when this is going to happen if the Provider is not yet loaded, so just pop
+      // the route when this is called so the first time routing does not persist (i.e. we end with one route)
+      if (Provider.of<AllWallets>(context, listen: false)
+              .indexedByPk[appStateSettings["selectedWalletPk"]] ==
+          null) Navigator.of(context).popUntil((route) => route.isFirst);
+
       openBottomSheet(
         context,
         fullSnap: true,
         TransferBalancePopup(
           allowEditWallet: true,
           wallet: Provider.of<AllWallets>(context, listen: false)
-              .indexedByPk[appStateSettings["selectedWalletPk"]]!,
+              .indexedByPk[appStateSettings["selectedWalletPk"]],
           showAllEditDetails: true,
         ),
       );

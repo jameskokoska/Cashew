@@ -5,12 +5,14 @@ import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/pages/addCategoryPage.dart';
 import 'package:budget/pages/addWalletPage.dart';
+import 'package:budget/pages/editWalletsPage.dart';
 import 'package:budget/pages/settingsPage.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/animatedExpanded.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/framework/popupFramework.dart';
 import 'package:budget/widgets/globalSnackBar.dart';
+import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/openSnackbar.dart';
@@ -447,6 +449,21 @@ class _SelectAmountState extends State<SelectAmount> {
     return RegExp(r'^00').hasMatch(input);
   }
 
+  setSelectedWallet(TransactionWallet wallet) {
+    if (widget.setSelectedWalletPk != null)
+      widget.setSelectedWalletPk!(wallet.walletPk);
+    setState(() {
+      selectedWalletPk = wallet.walletPk;
+      walletPkForCurrency = wallet.walletPk;
+      try {
+        amount =
+            double.parse(amount).toStringAsFixed(getDecimals(listen: false));
+      } catch (e) {}
+      amount = removeTrailingZeroes(amount);
+      addToAmount("");
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     _focusAttachment.reparent();
@@ -742,18 +759,7 @@ class _SelectAmountState extends State<SelectAmount> {
                               wallet.walletPk;
                         },
                         onSelected: (TransactionWallet wallet) {
-                          if (widget.setSelectedWalletPk != null)
-                            widget.setSelectedWalletPk!(wallet.walletPk);
-                          setState(() {
-                            selectedWalletPk = wallet.walletPk;
-                            walletPkForCurrency = wallet.walletPk;
-                            try {
-                              amount = double.parse(amount)
-                                  .toStringAsFixed(getDecimals(listen: false));
-                            } catch (e) {}
-                            amount = removeTrailingZeroes(amount);
-                            addToAmount("");
-                          });
+                          setSelectedWallet(wallet);
                         },
                         getLabel: (TransactionWallet wallet) {
                           return wallet.name ==
@@ -778,7 +784,33 @@ class _SelectAmountState extends State<SelectAmount> {
                             amount: 0.4,
                           );
                         },
-                        extraWidget: SelectChipsAddButtonExtraWidget(
+                        extraWidgetBefore: enableDoubleColumn(context) ==
+                                    true ||
+                                Provider.of<AllWallets>(context, listen: false)
+                                        .indexedByPk
+                                        .length <=
+                                    3
+                            ? null
+                            : SelectChipsAddButtonExtraWidget(
+                                openPage: null,
+                                onTap: () async {
+                                  dynamic result = await selectWalletPopup(
+                                    context,
+                                    selectedWallet: Provider.of<AllWallets>(
+                                            context,
+                                            listen: false)
+                                        .indexedByPk[selectedWalletPk],
+                                    allowEditWallet: true,
+                                  );
+                                  if (result is TransactionWallet) {
+                                    setSelectedWallet(result);
+                                  }
+                                },
+                                iconData: appStateSettings["outlinedIcons"]
+                                    ? Icons.expand_more_outlined
+                                    : Icons.expand_more_rounded,
+                              ),
+                        extraWidgetAfter: SelectChipsAddButtonExtraWidget(
                           openPage: AddWalletPage(
                             routesToPopAfterDelete: RoutesToPopAfterDelete.None,
                           ),

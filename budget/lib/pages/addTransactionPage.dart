@@ -99,6 +99,7 @@ class AddTransactionPage extends StatefulWidget {
     this.selectedTitle,
     this.selectedCategory,
     this.startInitialAddTransactionSequence = true,
+    this.transferBalancePopup = false,
     required this.routesToPopAfterDelete,
   }) : super(key: key);
 
@@ -113,6 +114,7 @@ class AddTransactionPage extends StatefulWidget {
   final String? selectedTitle;
   final TransactionCategory? selectedCategory;
   final bool startInitialAddTransactionSequence;
+  final bool transferBalancePopup;
 
   @override
   _AddTransactionPageState createState() => _AddTransactionPageState();
@@ -721,6 +723,10 @@ class _AddTransactionPageState extends State<AddTransactionPage>
       _noteInputController = new LinkHighlighter();
 
       Future.delayed(Duration(milliseconds: 0), () async {
+        if (widget.transferBalancePopup) {
+          openTransferBalancePopup();
+          return;
+        }
         await premiumPopupAddTransaction(context);
         if (widget.startInitialAddTransactionSequence == false) return;
         if (appStateSettings["askForTransactionTitle"]) {
@@ -912,6 +918,31 @@ class _AddTransactionPageState extends State<AddTransactionPage>
   //   }
   // }
 
+  Future openTransferBalancePopup() async {
+    bool? initialIsNegative;
+    if (selectedObjectiveLoanPk != null) {
+      initialIsNegative = selectedIncome;
+    }
+    dynamic result = await openBottomSheet(
+      context,
+      fullSnap: true,
+      TransferBalancePopup(
+        allowEditWallet: true,
+        wallet: Provider.of<AllWallets>(context, listen: false)
+            .indexedByPk[appStateSettings["selectedWalletPk"]]!,
+        showAllEditDetails: true,
+        initialAmount: selectedAmount,
+        initialDate: selectedDate,
+        initialTitle: selectedTitle,
+        initialObjectiveLoanPk: selectedObjectiveLoanPk,
+        initialIsNegative: initialIsNegative,
+      ),
+    );
+    if (result == true) {
+      Navigator.pop(context);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     Color categoryColor = dynamicPastel(
@@ -1002,8 +1033,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                   child: SelectChips(
                     allowMultipleSelected: false,
                     wrapped: enableDoubleColumn(context),
-                    extraWidgetAtBeginning: true,
-                    extraWidget: Transform.scale(
+                    extraWidgetBefore: Transform.scale(
                       scale: 1.3,
                       child: IconButton(
                         padding: EdgeInsets.zero,
@@ -1292,7 +1322,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                     wallet.currency.toString().toUpperCase() +
                                     ")";
                           },
-                          extraWidget: SelectChipsAddButtonExtraWidget(
+                          extraWidgetAfter: SelectChipsAddButtonExtraWidget(
                             openPage: AddWalletPage(
                               routesToPopAfterDelete:
                                   RoutesToPopAfterDelete.None,
@@ -1548,31 +1578,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                             child: Tappable(
                               color: Colors.black.withOpacity(0.2),
                               onTap: () async {
-                                bool? initialIsNegative;
-                                if (selectedObjectiveLoanPk != null) {
-                                  initialIsNegative = selectedIncome;
-                                }
-                                dynamic result = await openBottomSheet(
-                                  context,
-                                  fullSnap: true,
-                                  TransferBalancePopup(
-                                    allowEditWallet: true,
-                                    wallet: Provider.of<AllWallets>(context,
-                                                listen: false)
-                                            .indexedByPk[
-                                        appStateSettings["selectedWalletPk"]]!,
-                                    showAllEditDetails: true,
-                                    initialAmount: selectedAmount,
-                                    initialDate: selectedDate,
-                                    initialTitle: selectedTitle,
-                                    initialObjectiveLoanPk:
-                                        selectedObjectiveLoanPk,
-                                    initialIsNegative: initialIsNegative,
-                                  ),
-                                );
-                                if (result == true) {
-                                  Navigator.pop(context);
-                                }
+                                openTransferBalancePopup();
                               },
                               child: ExpenseIncomeSelectorLabel(
                                 selectedIncome: false,
@@ -2886,7 +2892,7 @@ class _SelectAddedBudgetState extends State<SelectAddedBudget> {
                       ),
                     );
                   },
-                  extraWidget: SelectChipsAddButtonExtraWidget(
+                  extraWidgetAfter: SelectChipsAddButtonExtraWidget(
                     openPage: AddBudgetPage(
                       isAddedOnlyBudget: true,
                       routesToPopAfterDelete: RoutesToPopAfterDelete.One,
@@ -2994,7 +3000,7 @@ class _SelectObjectiveState extends State<SelectObjective> {
                       ),
                     );
                   },
-                  extraWidget: SelectChipsAddButtonExtraWidget(
+                  extraWidgetAfter: SelectChipsAddButtonExtraWidget(
                     openPage: AddObjectivePage(
                       routesToPopAfterDelete: RoutesToPopAfterDelete.One,
                     ),
@@ -3105,7 +3111,7 @@ class _SelectExcludeBudgetState extends State<SelectExcludeBudget> {
                     ),
                   );
                 },
-                extraWidget: SelectChipsAddButtonExtraWidget(
+                extraWidgetAfter: SelectChipsAddButtonExtraWidget(
                   openPage: AddBudgetPage(
                     routesToPopAfterDelete: RoutesToPopAfterDelete.One,
                   ),
@@ -4368,7 +4374,7 @@ class SelectSubcategoryChips extends StatelessWidget {
                         getLabel: (TransactionCategory category) {
                           return category.name;
                         },
-                        extraWidget: SelectChipsAddButtonExtraWidget(
+                        extraWidgetAfter: SelectChipsAddButtonExtraWidget(
                           openPage: AddCategoryPage(
                             routesToPopAfterDelete: RoutesToPopAfterDelete.One,
                             mainCategoryPkWhenSubCategory: selectedCategoryPk,

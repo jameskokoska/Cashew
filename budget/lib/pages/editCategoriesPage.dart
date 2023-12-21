@@ -220,7 +220,7 @@ class _EditCategoriesPageState extends State<EditCategoriesPage> {
                                     getLabel: (TransactionCategory category) {
                                       return category.name;
                                     },
-                                    extraWidget:
+                                    extraWidgetAfter:
                                         SelectChipsAddButtonExtraWidget(
                                       openPage: AddCategoryPage(
                                         routesToPopAfterDelete:

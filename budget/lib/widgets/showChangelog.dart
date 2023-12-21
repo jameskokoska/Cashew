@@ -26,6 +26,12 @@ import 'listItem.dart';
 
 String getChangelogString() {
   return """
+    < 5.0.9
+    Expense and income homepage selected time range and wallets for apply when search page opened
+    Dropdown account selector when more than 3 accounts in Enter Amount popup
+    Biometric workflow stops completely before re-authenticating
+    Changed open source shortcut to about
+    Fix home screen widget double launch
     < 5.0.8
     Transfer balance app quick shortcut
     Ability to select certain accounts for income/expense total on homepage

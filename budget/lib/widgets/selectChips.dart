@@ -20,8 +20,8 @@ class SelectChips<T> extends StatefulWidget {
     required this.getLabel,
     this.getCustomBorderColor,
     this.getCustomSelectedColor,
-    this.extraWidget,
-    this.extraWidgetAtBeginning = false,
+    this.extraWidgetBefore,
+    this.extraWidgetAfter,
     this.onLongPress,
     this.wrapped = false,
     this.extraHorizontalPadding,
@@ -38,8 +38,8 @@ class SelectChips<T> extends StatefulWidget {
   final String Function(T) getLabel;
   final Color? Function(T)? getCustomBorderColor;
   final Color? Function(T)? getCustomSelectedColor;
-  final Widget? extraWidget;
-  final bool extraWidgetAtBeginning;
+  final Widget? extraWidgetBefore;
+  final Widget? extraWidgetAfter;
   final Function(T)? onLongPress;
   final bool wrapped;
   final double? extraHorizontalPadding;
@@ -74,8 +74,7 @@ class _SelectChipsState<T> extends State<SelectChips<T>> {
           currentIndex++;
         }
         // Extra widget at beginning
-        if (widget.extraWidget != null &&
-            widget.extraWidgetAtBeginning == true &&
+        if (widget.extraWidgetBefore != null &&
             scrollToIndex != null &&
             scrollToIndex > 0) {
           scrollToIndex = scrollToIndex + 1;
@@ -102,8 +101,8 @@ class _SelectChipsState<T> extends State<SelectChips<T>> {
   @override
   Widget build(BuildContext context) {
     List<Widget> children = [
-      if (widget.extraWidget != null && widget.extraWidgetAtBeginning == true)
-        widget.extraWidget ?? SizedBox.shrink(),
+      if (widget.extraWidgetBefore != null)
+        widget.extraWidgetBefore ?? SizedBox.shrink(),
       ...List<Widget>.generate(
         widget.items.length,
         (int index) {
@@ -172,8 +171,8 @@ class _SelectChipsState<T> extends State<SelectChips<T>> {
           );
         },
       ).toList(),
-      if (widget.extraWidget != null && widget.extraWidgetAtBeginning == false)
-        widget.extraWidget ?? SizedBox.shrink()
+      if (widget.extraWidgetAfter != null)
+        widget.extraWidgetAfter ?? SizedBox.shrink(),
     ];
 
     return Padding(
@@ -194,7 +193,7 @@ class _SelectChipsState<T> extends State<SelectChips<T>> {
                             heightOfScroll = size.height;
                           });
                         },
-                        child: widget.extraWidgetAtBeginning == false
+                        child: widget.extraWidgetBefore == null
                             ? children[0]
                             : children[1],
                       ),
@@ -259,29 +258,23 @@ class _SelectChipsState<T> extends State<SelectChips<T>> {
 
 class SelectChipsAddButtonExtraWidget extends StatelessWidget {
   const SelectChipsAddButtonExtraWidget({
-    this.shouldPushRoute = false,
     required this.openPage,
-    this.popCurrentRoute = false,
+    this.onTap,
+    this.iconData,
     super.key,
   });
-  final bool shouldPushRoute;
-  final Widget openPage;
-  final bool popCurrentRoute;
+  final Widget? openPage;
+  final IconData? iconData;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
     return AddButton(
-      onTap: () {
-        if (popCurrentRoute) {
-          Navigator.maybePop(context);
-        }
-        if (shouldPushRoute) {
-          pushRoute(context, openPage);
-        }
-      },
+      icon: iconData,
+      onTap: onTap ?? () {},
       width: 40,
-      padding: EdgeInsets.symmetric(horizontal: 5, vertical: 1),
-      openPage: shouldPushRoute ? null : openPage,
+      padding: EdgeInsets.symmetric(horizontal: 5, vertical: 0),
+      openPage: openPage,
       borderRadius: 8,
     );
   }

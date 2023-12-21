@@ -33,7 +33,7 @@ void runQuickActionsPayLoads(context) async {
           TransferBalancePopup(
             allowEditWallet: true,
             wallet: Provider.of<AllWallets>(context, listen: false)
-                .indexedByPk[appStateSettings["selectedWalletPk"]]!,
+                .indexedByPk[appStateSettings["selectedWalletPk"]],
             showAllEditDetails: true,
           ),
         );

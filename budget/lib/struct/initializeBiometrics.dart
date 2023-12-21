@@ -3,13 +3,15 @@ import 'package:budget/main.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/breathingAnimation.dart';
 import 'package:budget/widgets/tappable.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:local_auth/local_auth.dart';
 
-Future<bool> checkBiometrics(
-    {bool checkAlways = false,
-    String message = 'Please authenticate to continue.'}) async {
+Future<bool> checkBiometrics({
+  bool checkAlways = false,
+  String message = 'Please authenticate to continue.',
+}) async {
   if (kIsWeb) return true;
   final LocalAuthentication auth = LocalAuthentication();
   final bool requireAuth = checkAlways || appStateSettings["requireAuth"];
@@ -17,9 +19,11 @@ Future<bool> checkBiometrics(
       await auth.isDeviceSupported();
   bool didAuthenticate = false;
   if (requireAuth == true && biometricsAvailable == true) {
+    await auth.stopAuthentication();
     didAuthenticate = await auth.authenticate(
-        localizedReason: message,
-        options: const AuthenticationOptions(biometricOnly: true));
+      localizedReason: message,
+      options: const AuthenticationOptions(biometricOnly: true),
+    );
   } else {
     didAuthenticate = true;
   }
@@ -59,7 +63,8 @@ class _InitializeBiometricsState extends State<InitializeBiometrics> {
           setState(() {
             authenticated = null;
           });
-          final bool result = await checkBiometrics();
+          final bool result =
+              await checkBiometrics(message: "verify-identity".tr());
           setState(() {
             authenticated = result;
           });

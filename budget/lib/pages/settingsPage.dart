@@ -102,23 +102,6 @@ class MoreActionsPageState extends State<MoreActionsPage>
         title: "more-actions".tr(),
         backButton: false,
         horizontalPadding: getHorizontalPaddingConstrained(context),
-        actions: [
-          CustomPopupMenuButton(
-            showButtons: true,
-            items: [
-              DropdownItemMenu(
-                id: "about-app",
-                label: "about-app".tr(namedArgs: {"app": globalAppName}),
-                icon: appStateSettings["outlinedIcons"]
-                    ? Icons.info_outlined
-                    : Icons.info_outline_rounded,
-                action: () {
-                  pushRoute(context, AboutPage());
-                },
-              ),
-            ],
-          ),
-        ],
         listWidgets: [
           Padding(
             padding: const EdgeInsets.only(bottom: 8.0),
@@ -179,17 +162,25 @@ class MorePages extends StatelessWidget {
           Row(
             mainAxisSize: MainAxisSize.min,
             children: [
+              // Expanded(
+              //   child: Padding(
+              //     padding: EdgeInsets.symmetric(vertical: 5, horizontal: 4),
+              //     child: SettingsContainer(
+              //       onTap: () {
+              //         openUrl("https://github.com/jameskokoska/Cashew");
+              //       },
+              //       title: "open-source".tr(),
+              //       icon: MoreIcons.github,
+              //       isOutlined: true,
+              //     ),
+              //   ),
+              // ),
               Expanded(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(vertical: 5, horizontal: 4),
-                  child: SettingsContainer(
-                    onTap: () {
-                      openUrl("https://github.com/jameskokoska/Cashew");
-                    },
-                    title: "open-source".tr(),
-                    icon: MoreIcons.github,
-                    isOutlined: true,
-                  ),
+                child: SettingsContainerOpenPage(
+                  openPage: AboutPage(),
+                  title: "about-app".tr(namedArgs: {"app": globalAppName}),
+                  icon: navBarIconsData["about"]!.iconData,
+                  isOutlined: true,
                 ),
               ),
               Expanded(

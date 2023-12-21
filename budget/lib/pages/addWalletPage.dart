@@ -1096,7 +1096,7 @@ class TransferBalancePopup extends StatefulWidget {
     this.initialIsNegative,
     super.key,
   });
-  final TransactionWallet wallet;
+  final TransactionWallet? wallet;
   final bool allowEditWallet;
   final bool showAllEditDetails;
   final double? initialAmount;
@@ -1112,7 +1112,7 @@ class TransferBalancePopup extends StatefulWidget {
 class _TransferBalancePopupState extends State<TransferBalancePopup> {
   late double enteredAmount = widget.initialAmount ?? 0;
   late bool isNegative = widget.initialIsNegative ?? false;
-  late TransactionWallet walletFrom = widget.wallet;
+  late TransactionWallet? walletFrom = widget.wallet;
   TransactionWallet? walletTo;
   late TimeOfDay? selectedTime = widget.initialDate != null
       ? TimeOfDay(
@@ -1121,6 +1121,18 @@ class _TransferBalancePopupState extends State<TransferBalancePopup> {
   late DateTime? selectedDateTime = widget.initialDate ?? null;
   late String selectedTitle = widget.initialTitle ?? "";
   // double transferFee = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration.zero, () async {
+      if (widget.wallet == null) {
+        walletFrom = await database
+            .getWalletInstance(appStateSettings["selectedWalletPk"]);
+        setState(() {});
+      }
+    });
+  }
 
   Widget walletSelector(TransactionWallet? wallet,
       Function(TransactionWallet wallet) onSelected) {
@@ -1407,6 +1419,9 @@ class _TransferBalancePopupState extends State<TransferBalancePopup> {
                       ? "select-account".tr()
                       : "transfer-amount".tr(),
                   onTap: () async {
+                    TransactionWallet walletFrom = this.walletFrom ??
+                        Provider.of<AllWallets>(context, listen: false)
+                            .indexedByPk[appStateSettings["selectedWalletPk"]]!;
                     if (walletTo == null) {
                       dynamic result = await selectWalletPopup(
                         context,

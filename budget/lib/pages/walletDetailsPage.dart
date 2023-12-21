@@ -65,6 +65,29 @@ import 'package:sliver_tools/sliver_tools.dart';
 
 // Also known as the all spending page
 
+DateTimeRange? getDateTimeRangeForPassedSearchFilters(
+    {required String cycleSettingsExtension,
+    DateTimeRange? selectedDateTimeRange}) {
+  if (selectedDateTimeRange != null) return selectedDateTimeRange;
+  if (getStartDateOfSelectedCustomPeriod(cycleSettingsExtension) == null)
+    return null;
+  try {
+    return DateTimeRange(
+      start: getStartDateOfSelectedCustomPeriod(cycleSettingsExtension) ??
+          DateTime.now(),
+      end: getEndDateOfSelectedCustomPeriod(cycleSettingsExtension) ??
+          DateTime(
+            DateTime.now().year,
+            DateTime.now().month + 1,
+            DateTime.now().day,
+          ),
+    );
+  } catch (e) {
+    print("Date range error");
+  }
+  return null;
+}
+
 class WatchedWalletDetailsPage extends StatelessWidget {
   const WatchedWalletDetailsPage({required this.walletPk, super.key});
   final String walletPk;
@@ -202,31 +225,14 @@ class _WalletDetailsPageState extends State<WalletDetailsPage>
     this.searchFilters = searchFilters;
   }
 
-  DateTimeRange? getDateTimeRangeForPassedSearchFilters() {
-    if (selectedDateTimeRange != null) return selectedDateTimeRange;
-    if (getStartDateOfSelectedCustomPeriod("") == null) return null;
-    try {
-      return DateTimeRange(
-        start: getStartDateOfSelectedCustomPeriod("") ?? DateTime.now(),
-        end: getEndDateOfSelectedCustomPeriod("") ??
-            DateTime(
-              DateTime.now().year,
-              DateTime.now().month + 1,
-              DateTime.now().day,
-            ),
-      );
-    } catch (e) {
-      print("Date range error");
-    }
-    return null;
-  }
-
   @override
   Widget build(BuildContext context) {
     // Make the information displayed follow the date range of search filters
     // Force set date time range in case its set back to null we want to override its original value
     searchFilters = searchFilters?.copyWith(
-      dateTimeRange: getDateTimeRangeForPassedSearchFilters(),
+      dateTimeRange: getDateTimeRangeForPassedSearchFilters(
+          cycleSettingsExtension: "",
+          selectedDateTimeRange: selectedDateTimeRange),
       forceSetDateTimeRange: true,
     );
 
@@ -297,7 +303,10 @@ class _WalletDetailsPageState extends State<WalletDetailsPage>
                                   : searchFilters)
                               ?.copyWith(
                             dateTimeRange:
-                                getDateTimeRangeForPassedSearchFilters(),
+                                getDateTimeRangeForPassedSearchFilters(
+                                    cycleSettingsExtension: "",
+                                    selectedDateTimeRange:
+                                        selectedDateTimeRange),
                             walletPks: widget.wallet == null
                                 ? null
                                 : [widget.wallet?.walletPk ?? ""],
@@ -339,7 +348,10 @@ class _WalletDetailsPageState extends State<WalletDetailsPage>
                                       : searchFilters)
                                   ?.copyWith(
                                 dateTimeRange:
-                                    getDateTimeRangeForPassedSearchFilters(),
+                                    getDateTimeRangeForPassedSearchFilters(
+                                        cycleSettingsExtension: "",
+                                        selectedDateTimeRange:
+                                            selectedDateTimeRange),
                                 walletPks: widget.wallet == null
                                     ? null
                                     : [widget.wallet?.walletPk ?? ""],
@@ -371,7 +383,10 @@ class _WalletDetailsPageState extends State<WalletDetailsPage>
                                       : searchFilters)
                                   ?.copyWith(
                                 dateTimeRange:
-                                    getDateTimeRangeForPassedSearchFilters(),
+                                    getDateTimeRangeForPassedSearchFilters(
+                                        cycleSettingsExtension: "",
+                                        selectedDateTimeRange:
+                                            selectedDateTimeRange),
                                 walletPks: widget.wallet == null
                                     ? null
                                     : [widget.wallet?.walletPk ?? ""],
@@ -537,7 +552,10 @@ class _WalletDetailsPageState extends State<WalletDetailsPage>
                                     : searchFilters)
                                 ?.copyWith(
                               dateTimeRange:
-                                  getDateTimeRangeForPassedSearchFilters(),
+                                  getDateTimeRangeForPassedSearchFilters(
+                                      cycleSettingsExtension: "",
+                                      selectedDateTimeRange:
+                                          selectedDateTimeRange),
                               walletPks: widget.wallet == null
                                   ? null
                                   : [widget.wallet?.walletPk ?? ""],
@@ -571,7 +589,10 @@ class _WalletDetailsPageState extends State<WalletDetailsPage>
                                     : searchFilters)
                                 ?.copyWith(
                               dateTimeRange:
-                                  getDateTimeRangeForPassedSearchFilters(),
+                                  getDateTimeRangeForPassedSearchFilters(
+                                      cycleSettingsExtension: "",
+                                      selectedDateTimeRange:
+                                          selectedDateTimeRange),
                               walletPks: widget.wallet == null
                                   ? null
                                   : [widget.wallet?.walletPk ?? ""],
@@ -601,8 +622,11 @@ class _WalletDetailsPageState extends State<WalletDetailsPage>
         selectedDateTimeRange: selectedDateTimeRange,
         wallet: widget.wallet,
         listID: listID,
-        getDateTimeRangeForPassedSearchFilters:
-            getDateTimeRangeForPassedSearchFilters,
+        getDateTimeRangeForPassedSearchFilters: () =>
+            getDateTimeRangeForPassedSearchFilters(
+          cycleSettingsExtension: "",
+          selectedDateTimeRange: selectedDateTimeRange,
+        ),
       ),
       SliverToBoxAdapter(child: SizedBox(height: 40)),
     ];

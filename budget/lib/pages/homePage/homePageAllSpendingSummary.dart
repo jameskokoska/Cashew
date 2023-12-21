@@ -4,6 +4,7 @@ import 'package:budget/pages/editHomePage.dart';
 import 'package:budget/pages/homePage/homePageNetWorth.dart';
 import 'package:budget/pages/transactionFilters.dart';
 import 'package:budget/pages/transactionsSearchPage.dart';
+import 'package:budget/pages/walletDetailsPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/framework/popupFramework.dart';
@@ -59,7 +60,10 @@ class HomePageAllSpendingSummary extends StatelessWidget {
                       ),
                       textColor: getColor(context, "expenseAmount"),
                       openPage: TransactionsSearchPage(
-                        initialFilters: SearchFilters(
+                        initialFilters: SearchFilters().copyWith(
+                          dateTimeRange: getDateTimeRangeForPassedSearchFilters(
+                              cycleSettingsExtension: "AllSpendingSummary"),
+                          walletPks: walletPks ?? [],
                           expenseIncome: [ExpenseIncome.expense],
                         ),
                       ),
@@ -85,7 +89,10 @@ class HomePageAllSpendingSummary extends StatelessWidget {
                       ),
                       textColor: getColor(context, "incomeAmount"),
                       openPage: TransactionsSearchPage(
-                        initialFilters: SearchFilters(
+                        initialFilters: SearchFilters().copyWith(
+                          dateTimeRange: getDateTimeRangeForPassedSearchFilters(
+                              cycleSettingsExtension: "AllSpendingSummary"),
+                          walletPks: walletPks ?? [],
                           expenseIncome: [ExpenseIncome.income],
                         ),
                       ),
