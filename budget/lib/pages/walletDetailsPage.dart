@@ -1522,8 +1522,8 @@ class _WalletCategoryPieChartState extends State<WalletCategoryPieChart> {
       showAllSubcategories = !showAllSubcategories;
     });
     Future.delayed(Duration(milliseconds: 10), () {
-      _pieChartDisplayStateKey.currentState!
-          .setTouchedCategoryPk(selectedCategory?.categoryPk);
+      _pieChartDisplayStateKey.currentState
+          ?.setTouchedCategoryPk(selectedCategory?.categoryPk);
     });
 
     updateSettings("showAllSubcategories", showAllSubcategories,
@@ -1618,24 +1618,24 @@ class _WalletCategoryPieChartState extends State<WalletCategoryPieChart> {
                         setState(() {
                           selectedCategory = null;
                         });
-                        _pieChartDisplayStateKey.currentState!
-                            .setTouchedIndex(-1);
+                        _pieChartDisplayStateKey.currentState
+                            ?.setTouchedIndex(-1);
                       } else {
                         if (showAllSubcategories ||
                             tappedCategory.mainCategoryPk == null) {
                           setState(() {
                             selectedCategory = tappedCategory;
                           });
-                          _pieChartDisplayStateKey.currentState!
-                              .setTouchedCategoryPk(tappedCategory.categoryPk);
+                          _pieChartDisplayStateKey.currentState
+                              ?.setTouchedCategoryPk(tappedCategory.categoryPk);
                         } else {
                           // We are tapping a subcategoryEntry and it is not in the pie chart
                           // because showAllSubcategories is false and mainCategoryPk is not null
                           setState(() {
                             selectedCategory = tappedCategory;
                           });
-                          _pieChartDisplayStateKey.currentState!
-                              .setTouchedCategoryPk(
+                          _pieChartDisplayStateKey.currentState
+                              ?.setTouchedCategoryPk(
                                   tappedCategory.mainCategoryPk);
                         }
                       }
@@ -1672,8 +1672,8 @@ class _WalletCategoryPieChartState extends State<WalletCategoryPieChart> {
                       setState(() {
                         selectedCategory = null;
                       });
-                      _pieChartDisplayStateKey.currentState!
-                          .setTouchedIndex(-1);
+                      _pieChartDisplayStateKey.currentState
+                          ?.setTouchedIndex(-1);
                       widget.onSelectedCategory(selectedCategory);
                     },
                     onEditSpendingGoals: null,
@@ -2269,8 +2269,8 @@ class _AllSpendingPastSpendingGraphState
                                       .total;
 
                               double netSpending =
-                                  expenseSpending.toDouble().abs() +
-                                      incomeSpending.toDouble().abs() * -1;
+                                  expenseSpending.toDouble().abs() * -1 +
+                                      incomeSpending.toDouble().abs();
 
                               if (widget.appStateSettingsNetAllSpendingTotal) {
                                 currentTotalNetSpending += netSpending;

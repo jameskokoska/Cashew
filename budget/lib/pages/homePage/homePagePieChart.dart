@@ -22,8 +22,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class HomePagePieChart extends StatelessWidget {
-  const HomePagePieChart({required this.selectedSlidingSelector, super.key});
+  const HomePagePieChart(
+      {required this.pieChartDisplayStateKey,
+      required this.selectedSlidingSelector,
+      super.key});
   final int selectedSlidingSelector;
+  final GlobalKey<PieChartDisplayState> pieChartDisplayStateKey;
   @override
   Widget build(BuildContext context) {
     bool? isIncome = appStateSettings["pieChartTotal"] == "all"
@@ -43,6 +47,9 @@ class HomePagePieChart extends StatelessWidget {
             onLongPress: () async {
               await openPieChartHomePageBottomSheetSettings(context);
               homePageStateKey.currentState?.refreshState();
+            },
+            onTap: () {
+              pieChartDisplayStateKey.currentState?.setTouchedIndex(-1);
             },
             color: getColor(context, "lightDarkAccentHeavyLight"),
             child: Padding(
@@ -99,8 +106,9 @@ class HomePagePieChart extends StatelessWidget {
                                 padding: EdgeInsets.only(
                                     right: showTopCategoriesLegend ? 20 : 0),
                                 child: PieChartWrapper(
+                                  pieChartDisplayStateKey:
+                                      pieChartDisplayStateKey,
                                   isPastBudget: true,
-                                  pieChartDisplayStateKey: null,
                                   data: snapshot.data!,
                                   totalSpent: total,
                                   setSelectedCategory:

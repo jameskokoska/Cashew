@@ -176,7 +176,7 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
             setState(() {
               selectedCategory = null;
             });
-            _pieChartDisplayStateKey.currentState!.setTouchedIndex(-1);
+            _pieChartDisplayStateKey.currentState?.setTouchedIndex(-1);
           },
           colorScheme: budgetColorScheme,
           onEditSpendingGoals: () {
@@ -440,16 +440,16 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                                 setState(() {
                                   selectedCategory = null;
                                 });
-                                _pieChartDisplayStateKey.currentState!
-                                    .setTouchedIndex(-1);
+                                _pieChartDisplayStateKey.currentState
+                                    ?.setTouchedIndex(-1);
                               } else {
                                 if (showAllSubcategories ||
                                     tappedCategory.mainCategoryPk == null) {
                                   setState(() {
                                     selectedCategory = tappedCategory;
                                   });
-                                  _pieChartDisplayStateKey.currentState!
-                                      .setTouchedCategoryPk(
+                                  _pieChartDisplayStateKey.currentState
+                                      ?.setTouchedCategoryPk(
                                           tappedCategory.categoryPk);
                                 } else {
                                   // We are tapping a subcategoryEntry and it is not in the pie chart
@@ -457,8 +457,8 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                                   setState(() {
                                     selectedCategory = tappedCategory;
                                   });
-                                  _pieChartDisplayStateKey.currentState!
-                                      .setTouchedCategoryPk(
+                                  _pieChartDisplayStateKey.currentState
+                                      ?.setTouchedCategoryPk(
                                           tappedCategory.mainCategoryPk);
                                 }
                               }
@@ -588,8 +588,8 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                                       selectedMember = member;
                                       selectedCategory = null;
                                     });
-                                    _pieChartDisplayStateKey.currentState!
-                                        .setTouchedIndex(-1);
+                                    _pieChartDisplayStateKey.currentState
+                                        ?.setTouchedIndex(-1);
                                   },
                                 )
                               : SizedBox.shrink(),

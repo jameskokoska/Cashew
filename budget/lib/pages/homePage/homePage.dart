@@ -28,6 +28,7 @@ import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
+import 'package:budget/widgets/pieChart.dart';
 import 'package:budget/widgets/ratingPopup.dart';
 import 'package:budget/widgets/selectedTransactionsAppBar.dart';
 import 'package:budget/widgets/util/keepAliveClientMixin.dart';
@@ -122,6 +123,8 @@ class HomePageState extends State<HomePage>
     return countAfter == 0;
   }
 
+  GlobalKey<PieChartDisplayState> _pieChartDisplayStateKey = GlobalKey();
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -199,7 +202,10 @@ class HomePageState extends State<HomePage>
           ? HomePageLineGraph(selectedSlidingSelector: selectedSlidingSelector)
           : null,
       "pieChart": isHomeScreenSectionEnabled(context, "showPieChart")
-          ? HomePagePieChart(selectedSlidingSelector: selectedSlidingSelector)
+          ? HomePagePieChart(
+              pieChartDisplayStateKey: _pieChartDisplayStateKey,
+              selectedSlidingSelector: selectedSlidingSelector,
+            )
           : null,
       "heatMap": isHomeScreenSectionEnabled(context, "showHeatMap")
           ? HomePageHeatMap()

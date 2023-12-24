@@ -784,14 +784,18 @@ class _SelectAmountState extends State<SelectAmount> {
                             amount: 0.4,
                           );
                         },
-                        extraWidgetBefore: enableDoubleColumn(context) ==
-                                    true ||
+                        extraWidgetBefore: Provider.of<AllWallets>(context,
+                                                listen: false)
+                                            .indexedByPk
+                                            .length >
+                                        3 &&
+                                    enableDoubleColumn(context) == false ||
                                 Provider.of<AllWallets>(context, listen: false)
-                                        .indexedByPk
-                                        .length <=
-                                    3
-                            ? null
-                            : SelectChipsAddButtonExtraWidget(
+                                            .indexedByPk
+                                            .length >
+                                        5 &&
+                                    enableDoubleColumn(context) == true
+                            ? SelectChipsAddButtonExtraWidget(
                                 openPage: null,
                                 onTap: () async {
                                   dynamic result = await selectWalletPopup(
@@ -801,6 +805,7 @@ class _SelectAmountState extends State<SelectAmount> {
                                             listen: false)
                                         .indexedByPk[selectedWalletPk],
                                     allowEditWallet: true,
+                                    allowDeleteWallet: false,
                                   );
                                   if (result is TransactionWallet) {
                                     setSelectedWallet(result);
@@ -809,7 +814,8 @@ class _SelectAmountState extends State<SelectAmount> {
                                 iconData: appStateSettings["outlinedIcons"]
                                     ? Icons.expand_more_outlined
                                     : Icons.expand_more_rounded,
-                              ),
+                              )
+                            : null,
                         extraWidgetAfter: SelectChipsAddButtonExtraWidget(
                           openPage: AddWalletPage(
                             routesToPopAfterDelete: RoutesToPopAfterDelete.None,

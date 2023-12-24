@@ -437,11 +437,14 @@ void mergeWalletPopup(
   }
 }
 
-Future<TransactionWallet?> selectWalletPopup(BuildContext context,
-    {String? removeWalletPk,
-    String? subtitle,
-    TransactionWallet? selectedWallet,
-    required bool allowEditWallet}) async {
+Future<TransactionWallet?> selectWalletPopup(
+  BuildContext context, {
+  String? removeWalletPk,
+  String? subtitle,
+  TransactionWallet? selectedWallet,
+  required bool allowEditWallet,
+  bool allowDeleteWallet = true,
+}) async {
   dynamic wallet = await openBottomSheet(
     context,
     PopupFramework(
@@ -497,7 +500,9 @@ Future<TransactionWallet?> selectWalletPopup(BuildContext context,
                   pushRoute(
                     context,
                     AddWalletPage(
-                      routesToPopAfterDelete: RoutesToPopAfterDelete.One,
+                      routesToPopAfterDelete: allowDeleteWallet == false
+                          ? RoutesToPopAfterDelete.None
+                          : RoutesToPopAfterDelete.One,
                       wallet: wallet,
                     ),
                   );

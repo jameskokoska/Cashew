@@ -26,6 +26,14 @@ import 'listItem.dart';
 
 String getChangelogString() {
   return """
+    < 5.1.1
+    Fixed re-rendering of pie chart home page graph
+    < 5.1.0
+    Fixed polarity of net spending in all spending page history tab
+    Only allow one widget launch per app lifecycle/resume
+    Updated translations
+    Tapping background of homepage pie chart deselects selected category
+    Dropdown account picker when selecting amount for full screen when more than 5 accounts
     < 5.0.9
     Expense and income homepage selected time range and wallets for apply when search page opened
     Dropdown account selector when more than 3 accounts in Enter Amount popup

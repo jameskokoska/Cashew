@@ -34,6 +34,7 @@ import 'package:budget/widgets/util/debouncer.dart';
 import 'package:budget/widgets/util/keepAliveClientMixin.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntry/swipeToSelectTransactions.dart';
+import 'package:budget/widgets/util/onAppResume.dart';
 import 'package:budget/widgets/viewAllTransactionsButton.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -66,6 +67,8 @@ class CheckWidgetLaunch extends StatefulWidget {
   State<CheckWidgetLaunch> createState() => _CheckWidgetLaunchState();
 }
 
+bool hasDoneWidgetAction = false;
+
 class _CheckWidgetLaunchState extends State<CheckWidgetLaunch> {
   @override
   void initState() {
@@ -86,6 +89,10 @@ class _CheckWidgetLaunchState extends State<CheckWidgetLaunch> {
 
   // For some reason, older Android versions open an entirely new app instance... weird!
   void _launchedFromWidget(Uri? uri) async {
+    // Only perform one widget action per launch/continue of the app
+    if (hasDoneWidgetAction == true) return;
+    hasDoneWidgetAction = true;
+
     String widgetPayload = (uri ?? "").toString();
     if (widgetPayload == "addTransaction") {
       pushRoute(
@@ -124,7 +131,12 @@ class _CheckWidgetLaunchState extends State<CheckWidgetLaunch> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox.shrink();
+    return OnAppResume(
+      onAppResume: () {
+        hasDoneWidgetAction = false;
+      },
+      child: SizedBox.shrink(),
+    );
   }
 }
 
