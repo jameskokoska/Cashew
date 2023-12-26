@@ -59,7 +59,7 @@
   "lent": "Cho mượn",
   "borrowed": "Mượn",
   "all": "Tất cả",
-  "no-transactions-within-time-range": "Không có giao dịch trong phạm vi thời gian",
+  "no-transactions-within-time-range": "Không có giao dịch nào trong khoảng thời gian",
   "total-cash-flow": "Tổng dòng tiền",
   "today": "Hôm nay",
   "yesterday": "Hôm qua",
@@ -994,7 +994,7 @@
   "of-incoming": "của thu nhập",
   "applies-to-homepage": "Áp dụng cho trang chủ",
   "and-applies-to-widget": "và tiện ích ứng dụng",
-  "widgets": "Widgets",
-  "net-worth-total-widget": "Tổng giá trị ròng",
-  "select-accounts-and-time-period": "Chọn tài khoản và khoảng thời gian"
+  "widgets": "Tiện ích",
+  "net-worth-total-widget": "Tiện ích tổng giá trị ròng",
+  "select-accounts-and-time-period": "Chọn tài khoản và giai đoạn"
 }

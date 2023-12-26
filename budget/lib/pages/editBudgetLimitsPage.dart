@@ -59,19 +59,21 @@ class _EditBudgetLimitsPageState extends State<EditBudgetLimitsPage> {
               initial: selectedIsAbsoluteSpendingLimit.toString(),
               items: ["true", "false"],
               onChanged: (value) async {
-                await database
-                    .toggleAbsolutePercentSpendingCategoryBudgetLimits(
-                  Provider.of<AllWallets>(context, listen: false),
-                  widget.budget.budgetPk,
-                  budgetAmount,
-                  selectedIsAbsoluteSpendingLimit,
-                );
-                await database.createOrUpdateBudget(widget.budget.copyWith(
-                    isAbsoluteSpendingLimit: !selectedIsAbsoluteSpendingLimit));
-                setState(() {
-                  selectedIsAbsoluteSpendingLimit =
-                      !selectedIsAbsoluteSpendingLimit;
-                });
+                bool result = value == "true";
+                if (result != selectedIsAbsoluteSpendingLimit) {
+                  await database
+                      .toggleAbsolutePercentSpendingCategoryBudgetLimits(
+                    Provider.of<AllWallets>(context, listen: false),
+                    widget.budget.budgetPk,
+                    budgetAmount,
+                    !result,
+                  );
+                  await database.createOrUpdateBudget(
+                      widget.budget.copyWith(isAbsoluteSpendingLimit: result));
+                  setState(() {
+                    selectedIsAbsoluteSpendingLimit = result;
+                  });
+                }
               },
               getLabel: (item) {
                 if (item == "true") return "amount".tr().capitalizeFirst;

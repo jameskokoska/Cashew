@@ -26,6 +26,12 @@ import 'listItem.dart';
 
 String getChangelogString() {
   return """
+    < 5.1.2
+    Fixed toggle between spending limit type for spending goals in a budget
+    Added font family fallback for base components
+    Delete option for recommended titles
+    Focus is cleared when title is selected
+    When in full screen wide, account picker wraps
     < 5.1.1
     New all spending period drop down selector: quickly change selected period on all spending page when viewing details of selected period
     Increased transaction max amount to 999,999,999,999 from 100,000,000

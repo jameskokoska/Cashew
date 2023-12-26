@@ -6,6 +6,7 @@ import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/addCategoryPage.dart';
 import 'package:budget/pages/addObjectivePage.dart';
 import 'package:budget/pages/addWalletPage.dart';
+import 'package:budget/pages/editAssociatedTitlesPage.dart';
 import 'package:budget/pages/editObjectivesPage.dart';
 import 'package:budget/pages/editWalletsPage.dart';
 import 'package:budget/pages/objectivesListPage.dart';
@@ -1273,6 +1274,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                       child: Padding(
                         padding: const EdgeInsets.only(top: 5),
                         child: SelectChips(
+                          wrapped: enableDoubleColumn(context),
                           extraWidgetBeforeSticky: true,
                           allowMultipleSelected: false,
                           onLongPress: (TransactionWallet wallet) {
@@ -4514,15 +4516,6 @@ class _TitleInputState extends State<TitleInput> {
                 autoFocus: kIsWeb && getIsFullScreen(context),
               ),
             ),
-            HorizontalBreak(
-              padding: EdgeInsets.zero,
-              color: dynamicPastel(
-                context,
-                Theme.of(context).colorScheme.secondaryContainer,
-                amount: 0.1,
-                inverse: true,
-              ),
-            ),
             AnimatedSizeSwitcher(
               child: foundAssociatedTitles.length <= 0
                   ? Container(
@@ -4535,6 +4528,15 @@ class _TitleInputState extends State<TitleInput> {
                       alignment: Alignment.topCenter,
                       child: Column(
                         children: [
+                          HorizontalBreak(
+                            padding: EdgeInsets.zero,
+                            color: dynamicPastel(
+                              context,
+                              Theme.of(context).colorScheme.secondaryContainer,
+                              amount: 0.1,
+                              inverse: true,
+                            ),
+                          ),
                           for (TransactionAssociatedTitle foundAssociatedTitle
                               in foundAssociatedTitles)
                             Container(
@@ -4560,6 +4562,7 @@ class _TitleInputState extends State<TitleInput> {
                                   setState(() {
                                     foundAssociatedTitles = [];
                                   });
+                                  FocusScope.of(context).unfocus();
                                 },
                                 child: Row(
                                   children: [
@@ -4570,20 +4573,36 @@ class _TitleInputState extends State<TitleInput> {
                                         size: 23,
                                         margin: EdgeInsets.zero,
                                         sizePadding: 16,
-                                        borderRadius: 10,
+                                        borderRadius: 0,
                                       ),
                                     ),
                                     SizedBox(width: 13),
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        TextFont(
-                                          text: foundAssociatedTitle.title,
-                                          fontSize: 16,
-                                        ),
-                                      ],
-                                    )
+                                    Expanded(
+                                      child: TextFont(
+                                        text: foundAssociatedTitle.title,
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                    Opacity(
+                                      opacity: 0.65,
+                                      child: IconButtonScaled(
+                                        iconData:
+                                            appStateSettings["outlinedIcons"]
+                                                ? Icons.clear_outlined
+                                                : Icons.clear_rounded,
+                                        iconSize: 18,
+                                        scale: 1.1,
+                                        onTap: () async {
+                                          await deleteAssociatedTitlePopup(
+                                            context,
+                                            title: foundAssociatedTitle,
+                                            routesToPopAfterDelete:
+                                                RoutesToPopAfterDelete.None,
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                    SizedBox(width: 5),
                                   ],
                                 ),
                               ),

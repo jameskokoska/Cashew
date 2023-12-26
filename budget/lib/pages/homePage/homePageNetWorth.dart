@@ -1,5 +1,6 @@
 import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
+import 'package:budget/functions.dart';
 import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/editHomePage.dart';
 import 'package:budget/pages/homePage/homePageWalletSwitcher.dart';
@@ -220,7 +221,10 @@ Future openNetWorthSettings(BuildContext context) {
     context,
     PopupFramework(
       title: "net-worth".tr(),
-      subtitle: "applies-to-homepage".tr() + " " + "and-applies-to-widget".tr(),
+      subtitle: "applies-to-homepage".tr() +
+          (getPlatform(ignoreEmulation: true) == PlatformOS.isAndroid
+              ? " " + "and-applies-to-widget".tr()
+              : ""),
       child: WalletPickerPeriodCycle(
         allWalletsSettingKey: "netWorthAllWallets",
         cycleSettingsExtension: "NetWorth",
