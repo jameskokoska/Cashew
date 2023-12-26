@@ -23,6 +23,7 @@ import 'package:budget/widgets/countNumber.dart';
 import 'package:budget/widgets/dropdownSelect.dart';
 import 'package:budget/widgets/editRowEntry.dart';
 import 'package:budget/widgets/framework/popupFramework.dart';
+import 'package:budget/widgets/iconButtonScaled.dart';
 import 'package:budget/widgets/incomeExpenseTabSelector.dart';
 import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
@@ -50,6 +51,7 @@ import 'package:budget/widgets/transactionsAmountBox.dart';
 import 'package:budget/widgets/util/keepAliveClientMixin.dart';
 import 'package:budget/widgets/util/showDatePicker.dart';
 import 'package:budget/widgets/util/sliverPinnedOverlapInjector.dart';
+import 'package:budget/widgets/util/widgetSize.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/foundation.dart';
@@ -63,6 +65,7 @@ import 'package:budget/widgets/fab.dart';
 import 'package:budget/widgets/fadeIn.dart';
 import 'package:async/async.dart' show StreamZip;
 import 'package:sliver_tools/sliver_tools.dart';
+import 'package:budget/widgets/util/rightSideClipper.dart';
 
 // Also known as the all spending page
 
@@ -131,7 +134,10 @@ class _WalletDetailsPageState extends State<WalletDetailsPage>
         ? (appStateSettings["allSpendingLastPage"] == 1 ? 1 : 0)
         : 0,
   );
+
   DateTimeRange? selectedDateTimeRange;
+  int? selectedDateTimeRangeIndex;
+
   bool appStateSettingsNetAllSpendingTotal =
       appStateSettings["netAllSpendingTotal"] == true;
 
@@ -224,6 +230,22 @@ class _WalletDetailsPageState extends State<WalletDetailsPage>
 
   void setSearchFilters(SearchFilters searchFilters) {
     this.searchFilters = searchFilters;
+  }
+
+  void changeSelectedDateRange(int delta) {
+    int index = (selectedDateTimeRangeIndex ?? 0) - delta;
+    if (selectedDateTimeRangeIndex != null && index >= 0) {
+      setState(() {
+        selectedDateTimeRangeIndex = index;
+        selectedDateTimeRange = getCycleDateTimeRange(
+          "",
+          currentDate: getDatePastToDetermineBudgetDate(
+            index,
+            getCustomCycleTempBudget(""),
+          ),
+        );
+      });
+    }
   }
 
   @override
@@ -637,14 +659,16 @@ class _WalletDetailsPageState extends State<WalletDetailsPage>
         appStateSettingsNetAllSpendingTotal:
             appStateSettingsNetAllSpendingTotal,
         searchFilters: searchFilters,
-        onEntryTapped: (DateTimeRange tappedRange) {
+        onEntryTapped: (DateTimeRange tappedRange, int tappedRangeIndex) {
           setState(() {
             // Clear selection is tapped again when full split screen
             if (enableDoubleColumn(context) &&
                 tappedRange == selectedDateTimeRange) {
               selectedDateTimeRange = null;
+              selectedDateTimeRangeIndex = null;
             } else {
               selectedDateTimeRange = tappedRange;
+              selectedDateTimeRangeIndex = tappedRangeIndex;
             }
           });
           Future.delayed(Duration(milliseconds: 100), () {
@@ -1258,82 +1282,152 @@ class _WalletDetailsPageState extends State<WalletDetailsPage>
                   ],
                 );
               }
-              return NestedScrollView(
-                controller: _scrollController,
-                headerSliverBuilder:
-                    (BuildContext contextHeader, bool innerBoxIsScrolled) {
-                  return <Widget>[
-                    SliverOverlapAbsorber(
-                      handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
-                          contextHeader),
-                      sliver: MultiSliver(
-                        children: [
-                          sliverAppBar,
-                          if (widget.wallet == null)
-                            SliverToBoxAdapter(
-                                child: tabDateFilterSelectorHeader),
-                          if (searchFilters != null && widget.wallet == null)
-                            SliverToBoxAdapter(child: appliedFilterChipsWidget),
-                        ],
-                      ),
-                    ),
-                  ];
-                },
-                body: Builder(
-                  builder: (contextPageView) {
-                    return TabBarView(
-                      controller: _tabController,
-                      children: [
-                        SwipeToSelectTransactions(
-                          listID: listID,
-                          child: ScrollbarWrap(
-                            child: CustomScrollView(
-                              slivers: [
-                                SliverPinnedOverlapInjector(
-                                  handle: NestedScrollView
-                                      .sliverOverlapAbsorberHandleFor(
-                                          contextPageView),
-                                ),
-                                ...currentTabPage,
-                              ],
-                            ),
+              return Stack(
+                children: [
+                  NestedScrollView(
+                    controller: _scrollController,
+                    headerSliverBuilder:
+                        (BuildContext contextHeader, bool innerBoxIsScrolled) {
+                      return <Widget>[
+                        SliverOverlapAbsorber(
+                          handle:
+                              NestedScrollView.sliverOverlapAbsorberHandleFor(
+                                  contextHeader),
+                          sliver: MultiSliver(
+                            children: [
+                              sliverAppBar,
+                              if (widget.wallet == null)
+                                SliverToBoxAdapter(
+                                    child: tabDateFilterSelectorHeader),
+                              if (searchFilters != null &&
+                                  widget.wallet == null)
+                                SliverToBoxAdapter(
+                                    child: appliedFilterChipsWidget),
+                            ],
                           ),
                         ),
-                        if (widget.wallet == null)
-                          SwipeToSelectTransactions(
-                            listID: listID,
-                            child: ScrollbarWrap(
-                              child: CustomScrollView(
-                                slivers: [
-                                  SliverPinnedOverlapInjector(
-                                    handle: NestedScrollView
-                                        .sliverOverlapAbsorberHandleFor(
-                                            contextPageView),
-                                  ),
-                                  ...historyTabPage,
-                                ],
+                      ];
+                    },
+                    body: Builder(
+                      builder: (contextPageView) {
+                        return TabBarView(
+                          controller: _tabController,
+                          children: [
+                            SwipeToSelectTransactions(
+                              listID: listID,
+                              child: ScrollbarWrap(
+                                child: CustomScrollView(
+                                  slivers: [
+                                    SliverPinnedOverlapInjector(
+                                      handle: NestedScrollView
+                                          .sliverOverlapAbsorberHandleFor(
+                                              contextPageView),
+                                    ),
+                                    ...currentTabPage,
+                                  ],
+                                ),
                               ),
                             ),
+                            if (widget.wallet == null)
+                              SwipeToSelectTransactions(
+                                listID: listID,
+                                child: ScrollbarWrap(
+                                  child: CustomScrollView(
+                                    slivers: [
+                                      SliverPinnedOverlapInjector(
+                                        handle: NestedScrollView
+                                            .sliverOverlapAbsorberHandleFor(
+                                                contextPageView),
+                                      ),
+                                      ...historyTabPage,
+                                    ],
+                                  ),
+                                ),
+                              ),
+                          ],
+                        );
+                      },
+                    ),
+                  ),
+                  // Selected period dropdown switcher
+                  AnimatedBuilder(
+                    animation: _tabController.animation!,
+                    builder: (BuildContext context, Widget? child) {
+                      double animationProgress =
+                          _tabController.animation!.value;
+                      return SelectedPeriodAppBar(
+                        scrollController: _scrollController,
+                        forceHide: selectedDateTimeRange == null,
+                        animationProgress: animationProgress,
+                        selectPeriodContent: Padding(
+                          padding: const EdgeInsets.only(bottom: 3, top: 3),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 10),
+                                child: IconButtonScaled(
+                                  iconData: appStateSettings["outlinedIcons"]
+                                      ? Icons.chevron_left_outlined
+                                      : Icons.chevron_left_rounded,
+                                  iconSize: 18,
+                                  scale: 1,
+                                  onTap: () {
+                                    changeSelectedDateRange(-1);
+                                  },
+                                ),
+                              ),
+                              Flexible(
+                                child: AnimatedSizeSwitcher(
+                                  child: TextFont(
+                                    key: ValueKey(timeRangeString),
+                                    text: timeRangeString,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18,
+                                    textAlign: TextAlign.center,
+                                    textColor: Theme.of(context)
+                                        .colorScheme
+                                        .onSecondaryContainer,
+                                    maxLines: 2,
+                                  ),
+                                ),
+                              ),
+                              IgnorePointer(
+                                ignoring: selectedDateTimeRangeIndex == 0,
+                                child: AnimatedOpacity(
+                                  duration: Duration(milliseconds: 200),
+                                  opacity:
+                                      selectedDateTimeRangeIndex == 0 ? 0.5 : 1,
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 10),
+                                    child: IconButtonScaled(
+                                      iconData:
+                                          appStateSettings["outlinedIcons"]
+                                              ? Icons.chevron_right_outlined
+                                              : Icons.chevron_right_rounded,
+                                      iconSize: 18,
+                                      scale: 1,
+                                      onTap: () {
+                                        changeSelectedDateRange(1);
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
-                      ],
-                    );
-                  },
-                ),
+                        ),
+                      );
+                    },
+                  ),
+                ],
               );
             },
           ),
           SelectedTransactionsAppBar(
             pageID: listID,
-          ),
-          AnimatedBuilder(
-            animation: _tabController.animation!,
-            builder: (BuildContext context, Widget? child) {
-              double animationProgress = _tabController.animation!.value;
-              return SelectedPeriodAppBar(
-                scrollController: _scrollController,
-                forceHide: animationProgress > 0.5,
-              );
-            },
           ),
         ],
       ),
@@ -1341,65 +1435,19 @@ class _WalletDetailsPageState extends State<WalletDetailsPage>
   }
 }
 
-// class SelectedPeriodAppBar extends StatefulWidget {
-//   const SelectedPeriodAppBar({required this.scrollController, Key? key})
-//       : super(key: key);
-
-//   final ScrollController scrollController;
-
-//   @override
-//   _SelectedPeriodAppBarState createState() => _SelectedPeriodAppBarState();
-// }
-
-// class _SelectedPeriodAppBarState extends State<SelectedPeriodAppBar> {
-//   double translationPercent = 0.0;
-
-//   @override
-//   void initState() {
-//     super.initState();
-//     widget.scrollController.addListener(_onScroll);
-//   }
-
-//   @override
-//   void dispose() {
-//     widget.scrollController.removeListener(_onScroll);
-//     super.dispose();
-//   }
-
-//   void _onScroll() {
-//     double? translationPercentTemp;
-//     double startAnimatingScrollOffset = 100;
-//     print(widget.scrollController.offset);
-//     if (startAnimatingScrollOffset < widget.scrollController.offset)
-//       translationPercentTemp = clampDouble(
-//           (widget.scrollController.offset - startAnimatingScrollOffset) / 100,
-//           0,
-//           1);
-//     if (translationPercentTemp != null &&
-//         translationPercentTemp != translationPercent) {
-//       setState(() {
-//         translationPercent = translationPercentTemp ?? 0;
-//       });
-//     }
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     double totalTranslation = 56 + MediaQuery.of(context).padding.top;
-//     return Positioned(
-//       top: translationPercent * totalTranslation,
-//       child: Container(height: 100, width: 500, color: Colors.red),
-//     );
-//   }
-// }
-
 class SelectedPeriodAppBar extends StatefulWidget {
-  const SelectedPeriodAppBar(
-      {required this.scrollController, required this.forceHide, Key? key})
-      : super(key: key);
+  const SelectedPeriodAppBar({
+    required this.scrollController,
+    required this.forceHide,
+    required this.selectPeriodContent,
+    required this.animationProgress,
+    Key? key,
+  }) : super(key: key);
 
   final ScrollController scrollController;
   final bool forceHide;
+  final Widget selectPeriodContent;
+  final double animationProgress;
 
   @override
   _SelectedPeriodAppBarState createState() => _SelectedPeriodAppBarState();
@@ -1407,16 +1455,6 @@ class SelectedPeriodAppBar extends StatefulWidget {
 
 class _SelectedPeriodAppBarState extends State<SelectedPeriodAppBar> {
   bool dropdown = false;
-
-  @override
-  void didUpdateWidget(covariant SelectedPeriodAppBar oldWidget) {
-    if (widget.forceHide == true) {
-      setState(() {
-        dropdown = false;
-      });
-    }
-    super.didUpdateWidget(oldWidget);
-  }
 
   @override
   void initState() {
@@ -1446,15 +1484,66 @@ class _SelectedPeriodAppBarState extends State<SelectedPeriodAppBar> {
     }
   }
 
+  Size bannerSize = Size(0, 0);
+
   @override
   Widget build(BuildContext context) {
     double totalTranslation = 56 + MediaQuery.of(context).padding.top;
-    return AnimatedPositioned(
-      curve: Curves.easeInOutCubicEmphasized,
-      duration: Duration(milliseconds: 500),
-      top: dropdown ? totalTranslation : 0,
-      child: Container(height: 100, width: 500, color: Colors.red),
+    return Transform.translate(
+      offset: Offset(0, -1),
+      child: ClipRRect(
+        clipper: TopSideClipper(totalTranslation),
+        child: Stack(
+          children: [
+            AnimatedPositioned(
+              curve: Curves.easeInOutCubicEmphasized,
+              duration: Duration(milliseconds: 650),
+              top: (dropdown &&
+                      widget.animationProgress < 0.5 &&
+                      widget.forceHide == false)
+                  ? totalTranslation
+                  : (-bannerSize.height),
+              left: 0,
+              right: 0,
+              child: WidgetSize(
+                onChange: (size) {
+                  bannerSize = size;
+                },
+                child: Container(
+                  child: widget.selectPeriodContent,
+                  decoration: BoxDecoration(
+                    boxShadow: boxShadowCheck(boxShadowSharp(context)),
+                    color: dynamicPastel(context,
+                        Theme.of(context).colorScheme.secondaryContainer),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
+  }
+}
+
+class TopSideClipper extends CustomClipper<RRect> {
+  final double customAmount;
+
+  TopSideClipper(this.customAmount);
+
+  @override
+  RRect getClip(Size size) {
+    final radius = Radius.circular(0);
+    final topRect = RRect.fromRectAndRadius(
+      Rect.fromPoints(Offset(0, customAmount), Offset(size.width, size.height)),
+      radius,
+    );
+    return topRect;
+  }
+
+  @override
+  bool shouldReclip(CustomClipper<RRect> oldClipper) {
+    return false;
   }
 }
 
@@ -1899,7 +1988,7 @@ class AllSpendingPastSpendingGraph extends StatefulWidget {
     super.key,
   });
   final SearchFilters? searchFilters;
-  final Function(DateTimeRange) onEntryTapped;
+  final Function(DateTimeRange tappedRange, int tappedRangeIndex) onEntryTapped;
   final DateTimeRange? selectedDateTimeRange;
   final bool appStateSettingsNetAllSpendingTotal;
 
@@ -2019,7 +2108,7 @@ class _AllSpendingPastSpendingGraphState
               Tappable(
                 color: containerColor,
                 onTap: () {
-                  widget.onEntryTapped(budgetRange);
+                  widget.onEntryTapped(budgetRange, index);
                 },
                 child: Padding(
                   padding: EdgeInsets.symmetric(

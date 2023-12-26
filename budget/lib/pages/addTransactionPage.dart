@@ -966,20 +966,12 @@ class _AddTransactionPageState extends State<AddTransactionPage>
         enableDoubleColumn(context)
             ? Container(height: 20)
             : Container(height: 10),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 22),
-          child: TextInput(
-            padding: EdgeInsets.zero,
-            labelText: "title-placeholder".tr(),
-            icon: appStateSettings["outlinedIcons"]
-                ? Icons.title_outlined
-                : Icons.title_rounded,
-            controller: _titleInputController,
-            onChanged: (text) async {
-              setSelectedTitle(text, setInput: false);
-            },
-            autoFocus: kIsWeb && getIsFullScreen(context),
-          ),
+        TitleInput(
+          setSelectedTitle: (title) {
+            setSelectedTitle(title, setInput: false);
+          },
+          titleInputController: _titleInputController,
+          setSelectedCategory: setSelectedCategory,
         ),
         Container(height: 14),
         Padding(
@@ -2392,7 +2384,7 @@ class _SelectTitleState extends State<SelectTitle> {
                     width: getWidthBottomSheet(context) - 36,
                   )
                 : Container(
-                    key: ValueKey(selectedCategory!.categoryPk),
+                    key: ValueKey(selectedCategory?.categoryPk),
                     width: getWidthBottomSheet(context) - 36,
                     padding: EdgeInsets.only(top: 13),
                     child: Tappable(
@@ -4469,4 +4461,140 @@ List<dynamic>
       TransactionSpecialType.subscription
     ];
   return defaultList;
+}
+
+class TitleInput extends StatefulWidget {
+  const TitleInput({
+    required this.setSelectedTitle,
+    required this.titleInputController,
+    required this.setSelectedCategory,
+    super.key,
+  });
+  final Function(String title) setSelectedTitle;
+  final TextEditingController titleInputController;
+  final Function(TransactionCategory category) setSelectedCategory;
+
+  @override
+  State<TitleInput> createState() => _TitleInputState();
+}
+
+class _TitleInputState extends State<TitleInput> {
+  List<TransactionAssociatedTitle> foundAssociatedTitles = [];
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 22),
+      child: ClipRRect(
+        borderRadius:
+            BorderRadius.circular(getPlatform() == PlatformOS.isIOS ? 8 : 15),
+        child: Column(
+          children: [
+            Focus(
+              onFocusChange: (value) {
+                if (value == false)
+                  setState(() {
+                    foundAssociatedTitles = [];
+                  });
+              },
+              child: TextInput(
+                borderRadius: BorderRadius.zero,
+                padding: EdgeInsets.zero,
+                labelText: "title-placeholder".tr(),
+                icon: appStateSettings["outlinedIcons"]
+                    ? Icons.title_outlined
+                    : Icons.title_rounded,
+                controller: widget.titleInputController,
+                onChanged: (text) async {
+                  widget.setSelectedTitle(text);
+                  foundAssociatedTitles = await database
+                      .getSimilarAssociatedTitles(title: text, limit: 3);
+                  setState(() {});
+                },
+                autoFocus: kIsWeb && getIsFullScreen(context),
+              ),
+            ),
+            HorizontalBreak(
+              padding: EdgeInsets.zero,
+              color: dynamicPastel(
+                context,
+                Theme.of(context).colorScheme.secondaryContainer,
+                amount: 0.1,
+                inverse: true,
+              ),
+            ),
+            AnimatedSizeSwitcher(
+              child: foundAssociatedTitles.length <= 0
+                  ? Container(
+                      key: ValueKey(0),
+                    )
+                  : AnimatedSize(
+                      key: ValueKey(1),
+                      duration: Duration(milliseconds: 200),
+                      curve: Curves.easeInOut,
+                      alignment: Alignment.topCenter,
+                      child: Column(
+                        children: [
+                          for (TransactionAssociatedTitle foundAssociatedTitle
+                              in foundAssociatedTitles)
+                            Container(
+                              color: appStateSettings["materialYou"]
+                                  ? Theme.of(context)
+                                      .colorScheme
+                                      .secondaryContainer
+                                  : getColor(context, "canvasContainer"),
+                              key: ValueKey(
+                                  foundAssociatedTitle.associatedTitlePk),
+                              child: Tappable(
+                                borderRadius: 0,
+                                color: Colors.transparent,
+                                onTap: () async {
+                                  String categoryFk =
+                                      foundAssociatedTitle.categoryFk;
+                                  widget.setSelectedCategory(await database
+                                      .getCategoryInstance(categoryFk));
+                                  widget.setSelectedTitle(
+                                      foundAssociatedTitle.title);
+                                  setTextInput(widget.titleInputController,
+                                      foundAssociatedTitle.title);
+                                  setState(() {
+                                    foundAssociatedTitles = [];
+                                  });
+                                },
+                                child: Row(
+                                  children: [
+                                    IgnorePointer(
+                                      child: CategoryIcon(
+                                        categoryPk:
+                                            foundAssociatedTitle.categoryFk,
+                                        size: 23,
+                                        margin: EdgeInsets.zero,
+                                        sizePadding: 16,
+                                        borderRadius: 10,
+                                      ),
+                                    ),
+                                    SizedBox(width: 13),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        TextFont(
+                                          text: foundAssociatedTitle.title,
+                                          fontSize: 16,
+                                        ),
+                                      ],
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                        ],
+                      ),
+                    ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }

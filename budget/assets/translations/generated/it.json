@@ -992,5 +992,9 @@
   "rate": "Valutare!",
   "of-outgoing": "di estroverso",
   "of-incoming": "di entrata",
-  "applies-to-homepage": "Si applica alla home page"
+  "applies-to-homepage": "Si applica alla home page",
+  "and-applies-to-widget": "e widget app",
+  "widgets": "Widget",
+  "net-worth-total-widget": "Widget totale del patrimonio netto",
+  "select-accounts-and-time-period": "Seleziona account e periodo di tempo"
 }

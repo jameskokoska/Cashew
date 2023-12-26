@@ -992,5 +992,9 @@
   "rate": "Τιμή!",
   "of-outgoing": "εξερχόμενος",
   "of-incoming": "εισερχόμενος",
-  "applies-to-homepage": "Ισχύει για την αρχική σελίδα"
+  "applies-to-homepage": "Ισχύει για την αρχική σελίδα",
+  "and-applies-to-widget": "και το widget εφαρμογών",
+  "widgets": "Widgets",
+  "net-worth-total-widget": "Συνολικό widget καθαρής αξίας",
+  "select-accounts-and-time-period": "Επιλέξτε λογαριασμούς και χρονική περίοδο"
 }

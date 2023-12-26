@@ -992,5 +992,9 @@
   "rate": "نرخ!",
   "of-outgoing": "دور",
   "of-incoming": "ورودی",
-  "applies-to-homepage": "مربوط به صفحه اصلی است"
+  "applies-to-homepage": "مربوط به صفحه اصلی است",
+  "and-applies-to-widget": "و ویجت برنامه",
+  "widgets": "ویراچه",
+  "net-worth-total-widget": "ویجت کل ارزش خالص",
+  "select-accounts-and-time-period": "حساب ها و دوره زمانی را انتخاب کنید"
 }

@@ -992,5 +992,9 @@
   "rate": "ประเมิน!",
   "of-outgoing": "ของขาออก",
   "of-incoming": "ของการเข้ามา",
-  "applies-to-homepage": "ใช้กับหน้าแรก"
+  "applies-to-homepage": "ใช้กับหน้าแรก",
+  "and-applies-to-widget": "และวิดเจ็ตแอพ",
+  "widgets": "วิดเจ็ต",
+  "net-worth-total-widget": "วิดเจ็ตรวมมูลค่าสุทธิ",
+  "select-accounts-and-time-period": "เลือกบัญชีและช่วงเวลา"
 }

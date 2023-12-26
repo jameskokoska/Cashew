@@ -992,5 +992,9 @@
   "rate": "Betygsätta!",
   "of-outgoing": "av utgående",
   "of-incoming": "inkommande",
-  "applies-to-homepage": "Gäller hemsidan"
+  "applies-to-homepage": "Gäller hemsidan",
+  "and-applies-to-widget": "och appwidget",
+  "widgets": "Widget",
+  "net-worth-total-widget": "Nettovärde total widget",
+  "select-accounts-and-time-period": "Välj konton och tidsperiod"
 }

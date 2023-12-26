@@ -992,5 +992,9 @@
   "rate": "Arvioin!",
   "of-outgoing": "lähtevä",
   "of-incoming": "saapuva",
-  "applies-to-homepage": "Koskee kotisivua"
+  "applies-to-homepage": "Koskee kotisivua",
+  "and-applies-to-widget": "ja APP -widget",
+  "widgets": "Widgetit",
+  "net-worth-total-widget": "Nettovarallisuus kokonaiswidget",
+  "select-accounts-and-time-period": "Valitse tilit ja ajanjakso"
 }

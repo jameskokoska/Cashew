@@ -992,5 +992,9 @@
   "rate": "Mérték!",
   "of-outgoing": "kimenő",
   "of-incoming": "bejövő",
-  "applies-to-homepage": "Vonatkozik a honlapra"
+  "applies-to-homepage": "Vonatkozik a honlapra",
+  "and-applies-to-widget": "és az alkalmazás widget",
+  "widgets": "Kütyü",
+  "net-worth-total-widget": "Nettó vagyon teljes widget",
+  "select-accounts-and-time-period": "Válassza ki a Fiókok és az Időszak időtartamát"
 }

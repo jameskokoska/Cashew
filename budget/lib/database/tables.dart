@@ -2980,7 +2980,7 @@ class FinanceDatabase extends _$FinanceDatabase {
   }) async {
     if (updateSharedEntry == true && appStateSettings["sharedBudgets"] == false)
       updateSharedEntry = false;
-    double maxAmount = 100000000;
+    double maxAmount = 999999999999;
     if (transaction.amount >= maxAmount)
       transaction = transaction.copyWith(amount: maxAmount);
     else if (transaction.amount <= -maxAmount)
@@ -3751,7 +3751,7 @@ class FinanceDatabase extends _$FinanceDatabase {
       {bool updateSharedEntry = true, bool insert = false}) async {
     budget = limitBudgetPeriod(budget);
 
-    double maxAmount = 100000000;
+    double maxAmount = 999999999999;
     if (budget.amount >= maxAmount) budget = budget.copyWith(amount: maxAmount);
 
     if (updateSharedEntry == true && appStateSettings["sharedBudgets"] == false)
@@ -6299,7 +6299,7 @@ class FinanceDatabase extends _$FinanceDatabase {
     return totalDoubleStream(mergedStreams);
   }
 
-  Stream<DateTime?> watchEarliestTransactionDateTime({
+  Stream<EarliestLatestDateTme?> watchEarliestLatestTransactionDateTime({
     required SearchFilters? searchFilters,
   }) {
     final query = select(transactions)
@@ -6310,12 +6310,12 @@ class FinanceDatabase extends _$FinanceDatabase {
               joinedWithCategories: false,
               joinedWithBudgets: false,
               joinedWithObjectives: false))
-      ..orderBy([(t) => OrderingTerm.asc(t.dateCreated)])
-      ..limit(1);
+      ..orderBy([(t) => OrderingTerm.asc(t.dateCreated)]);
 
     return query.watch().map((rows) {
       if (rows.isNotEmpty) {
-        return rows.first.dateCreated;
+        return EarliestLatestDateTme(
+            earliest: rows.first.dateCreated, latest: rows.last.dateCreated);
       } else {
         return null;
       }
@@ -6586,4 +6586,11 @@ class TotalWithCount {
   final int count;
 
   TotalWithCount({required this.total, required this.count});
+}
+
+class EarliestLatestDateTme {
+  final DateTime earliest;
+  final DateTime latest;
+
+  EarliestLatestDateTme({required this.earliest, required this.latest});
 }

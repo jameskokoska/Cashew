@@ -87,7 +87,10 @@ class _SelectChipsState<T> extends State<SelectChips<T>> {
             index: scrollToIndex,
             duration: Duration(milliseconds: 500),
             curve: Curves.easeInOutCubicEmphasized,
-            alignment: widget.extraWidgetBeforeSticky ? 0.4 : 0.06,
+            alignment: widget.extraWidgetBeforeSticky &&
+                    widget.extraWidgetBefore != null
+                ? 0.4
+                : 0.06,
           );
         }
       });
@@ -181,7 +184,8 @@ class _SelectChipsState<T> extends State<SelectChips<T>> {
 
     EdgeInsets scrollPadding = widget.padding ??
         EdgeInsets.only(
-          left: widget.extraWidgetBeforeSticky == true
+          left: widget.extraWidgetBeforeSticky == true &&
+                  widget.extraWidgetBefore != null
               ? (widget.extraHorizontalPadding ?? 0) + 3
               : (widget.extraHorizontalPadding ?? 0) + 18,
           right: (widget.extraHorizontalPadding ?? 0) + 18,
@@ -248,7 +252,8 @@ class _SelectChipsState<T> extends State<SelectChips<T>> {
                           enableBottom: false,
                           enableRight: false,
                           enableTop: false,
-                          enableLeft: widget.extraWidgetBeforeSticky,
+                          enableLeft: widget.extraWidgetBeforeSticky &&
+                              widget.extraWidgetBefore != null,
                           child: SizedBox(
                             height: heightOfScroll,
                             child: widget.scrollablePositionedList == false

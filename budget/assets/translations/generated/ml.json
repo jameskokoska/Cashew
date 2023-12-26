@@ -992,5 +992,9 @@
   "rate": "നിരക്ക്!",
   "of-outgoing": "Out ട്ട്ഗോയിംഗ്",
   "of-incoming": "ഇൻകമിംഗ്",
-  "applies-to-homepage": "ഹോംപേജിന് ബാധകമാണ്"
+  "applies-to-homepage": "ഹോംപേജിന് ബാധകമാണ്",
+  "and-applies-to-widget": "ഒപ്പം അപ്ലിക്കേഷനും വിജറ്റ്",
+  "widgets": "വിഡ്ജറ്റുകൾ",
+  "net-worth-total-widget": "മൊത്തം വിജറ്റ് മൂല്യം",
+  "select-accounts-and-time-period": "അക്കൗണ്ടുകളും സമയപരിധിയും തിരഞ്ഞെടുക്കുക"
 }

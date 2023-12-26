@@ -992,5 +992,9 @@
   "rate": "ציון!",
   "of-outgoing": "של יוצא",
   "of-incoming": "של נכנס",
-  "applies-to-homepage": "חל על דף הבית"
+  "applies-to-homepage": "חל על דף הבית",
+  "and-applies-to-widget": "ווידג'ט אפליקציות",
+  "widgets": "ווידג'טים",
+  "net-worth-total-widget": "הווידג'ט הכולל של שווי נטו",
+  "select-accounts-and-time-period": "בחר חשבונות ותקופת זמן"
 }

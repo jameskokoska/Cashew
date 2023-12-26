@@ -992,5 +992,9 @@
   "rate": "Rată!",
   "of-outgoing": "de ieșire",
   "of-incoming": "de primire",
-  "applies-to-homepage": "Se aplică paginii de pornire"
+  "applies-to-homepage": "Se aplică paginii de pornire",
+  "and-applies-to-widget": "și Widget App",
+  "widgets": "Widgets",
+  "net-worth-total-widget": "Widget total de valoare netă",
+  "select-accounts-and-time-period": "Selectați conturi și perioada de timp"
 }

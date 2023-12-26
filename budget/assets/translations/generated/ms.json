@@ -992,5 +992,9 @@
   "rate": "Nilai!",
   "of-outgoing": "keluar",
   "of-incoming": "masuk",
-  "applies-to-homepage": "Berlaku di laman utama"
+  "applies-to-homepage": "Berlaku di laman utama",
+  "and-applies-to-widget": "dan widget aplikasi",
+  "widgets": "Widget",
+  "net-worth-total-widget": "Widget Jumlah Berhubungan Bersih",
+  "select-accounts-and-time-period": "Pilih akaun dan tempoh masa"
 }

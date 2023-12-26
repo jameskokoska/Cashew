@@ -992,5 +992,9 @@
   "rate": "Avaliar!",
   "of-outgoing": "de saída",
   "of-incoming": "de entrada",
-  "applies-to-homepage": "Aplica -se à página inicial"
+  "applies-to-homepage": "Aplica -se à página inicial",
+  "and-applies-to-widget": "e widget de aplicativo",
+  "widgets": "Widgets",
+  "net-worth-total-widget": "Widget total de patrimônio líquido",
+  "select-accounts-and-time-period": "Selecione contas e período de tempo"
 }

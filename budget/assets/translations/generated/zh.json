@@ -992,5 +992,9 @@
   "rate": "速度！",
   "of-outgoing": "外向",
   "of-incoming": "接入",
-  "applies-to-homepage": "适用于主页"
+  "applies-to-homepage": "适用于主页",
+  "and-applies-to-widget": "和应用小部件",
+  "widgets": "小部件",
+  "net-worth-total-widget": "净资产总小部件",
+  "select-accounts-and-time-period": "选择帐户和时间段"
 }

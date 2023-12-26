@@ -992,5 +992,9 @@
   "rate": "¡Tasa!",
   "of-outgoing": "de saliente",
   "of-incoming": "de entrante",
-  "applies-to-homepage": "Se aplica a la página de inicio"
+  "applies-to-homepage": "Se aplica a la página de inicio",
+  "and-applies-to-widget": "y widget de la aplicación",
+  "widgets": "Widgets",
+  "net-worth-total-widget": "Widget total de patrimonio neto",
+  "select-accounts-and-time-period": "Seleccionar cuentas y período de tiempo"
 }

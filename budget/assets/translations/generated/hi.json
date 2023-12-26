@@ -992,5 +992,9 @@
   "rate": "दर!",
   "of-outgoing": "आउटगोइंग का",
   "of-incoming": "इनकमिंग",
-  "applies-to-homepage": "मुखपृष्ठ पर लागू होता है"
+  "applies-to-homepage": "मुखपृष्ठ पर लागू होता है",
+  "and-applies-to-widget": "और ऐप विजेट",
+  "widgets": "विजेट",
+  "net-worth-total-widget": "निवल मूल्य विजेट",
+  "select-accounts-and-time-period": "खातों और समय अवधि का चयन करें"
 }

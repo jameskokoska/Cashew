@@ -992,5 +992,9 @@
   "rate": "Стопа!",
   "of-outgoing": "одлазног",
   "of-incoming": "долазног",
-  "applies-to-homepage": "Односи се на почетну страницу"
+  "applies-to-homepage": "Односи се на почетну страницу",
+  "and-applies-to-widget": "и Апп додатак",
+  "widgets": "Видгети",
+  "net-worth-total-widget": "Нето вриједна тотална виџета",
+  "select-accounts-and-time-period": "Изаберите рачуне и временски период"
 }

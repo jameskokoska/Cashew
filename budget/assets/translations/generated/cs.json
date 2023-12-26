@@ -992,5 +992,9 @@
   "rate": "Hodnotit!",
   "of-outgoing": "odchozí",
   "of-incoming": "příchozí",
-  "applies-to-homepage": "Platí pro domovskou stránku"
+  "applies-to-homepage": "Platí pro domovskou stránku",
+  "and-applies-to-widget": "a widget aplikací",
+  "widgets": "Widgety",
+  "net-worth-total-widget": "Čistá hodnota celkového widgetu",
+  "select-accounts-and-time-period": "Vyberte účty a časové období"
 }

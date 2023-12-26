@@ -992,5 +992,9 @@
   "rate": "비율!",
   "of-outgoing": "나가는 것",
   "of-incoming": "들어오는 것",
-  "applies-to-homepage": "홈페이지에 적용됩니다"
+  "applies-to-homepage": "홈페이지에 적용됩니다",
+  "and-applies-to-widget": "앱 위젯",
+  "widgets": "위젯",
+  "net-worth-total-widget": "순 가치 총 위젯",
+  "select-accounts-and-time-period": "계정 및 기간을 선택하십시오"
 }

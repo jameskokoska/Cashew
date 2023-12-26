@@ -992,5 +992,9 @@
   "rate": "Wskaźnik!",
   "of-outgoing": "wychodzący",
   "of-incoming": "przychodzące",
-  "applies-to-homepage": "Dotyczy strony głównej"
+  "applies-to-homepage": "Dotyczy strony głównej",
+  "and-applies-to-widget": "i widżet aplikacji",
+  "widgets": "Widżety",
+  "net-worth-total-widget": "Całkowity widżet wartości netto",
+  "select-accounts-and-time-period": "Wybierz konta i okres czasu"
 }

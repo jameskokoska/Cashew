@@ -992,5 +992,9 @@
   "rate": "Oran!",
   "of-outgoing": "giden",
   "of-incoming": "Gelen",
-  "applies-to-homepage": "Ana sayfa için geçerlidir"
+  "applies-to-homepage": "Ana sayfa için geçerlidir",
+  "and-applies-to-widget": "ve uygulama widget'ı",
+  "widgets": "Widget'lar",
+  "net-worth-total-widget": "Net değerinde toplam widget",
+  "select-accounts-and-time-period": "Hesapları ve Zaman Dönemi'ni seçin"
 }

@@ -27,9 +27,16 @@ import 'listItem.dart';
 String getChangelogString() {
   return """
     < 5.1.1
+    New all spending period drop down selector: quickly change selected period on all spending page when viewing details of selected period
+    Increased transaction max amount to 999,999,999,999 from 100,000,000
+    When showing all time, line graph includes transactions past the current date
+    When setting a title of a transaction, when editing details, it suggests titles
     Fixed re-rendering of pie chart home page graph
     Initial amount when adding wallet properly supports decimal precision
     Dropdown account picker if more than 3 when adding transaction
+    Removed number format that would put subtraction at the end of the currency string
+    Added explicit home page widget settings section in More Options
+    Translation updates
     < 5.1.0
     Fixed polarity of net spending in all spending page history tab
     Only allow one widget launch per app lifecycle/resume

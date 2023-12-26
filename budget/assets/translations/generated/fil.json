@@ -992,5 +992,9 @@
   "rate": "Rate!",
   "of-outgoing": "ng palabas",
   "of-incoming": "ng papasok",
-  "applies-to-homepage": "Nalalapat sa homepage"
+  "applies-to-homepage": "Nalalapat sa homepage",
+  "and-applies-to-widget": "at widget ng app",
+  "widgets": "Mga widget",
+  "net-worth-total-widget": "Net nagkakahalaga ng kabuuang widget",
+  "select-accounts-and-time-period": "Piliin ang mga account at tagal ng oras"
 }

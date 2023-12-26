@@ -992,5 +992,9 @@
   "rate": "شرح!",
   "of-outgoing": "سبکدوش ہونے کا",
   "of-incoming": "آنے والی",
-  "applies-to-homepage": "ہوم پیج پر لاگو ہوتا ہے"
+  "applies-to-homepage": "ہوم پیج پر لاگو ہوتا ہے",
+  "and-applies-to-widget": "اور ایپ ویجیٹ",
+  "widgets": "ویجٹ",
+  "net-worth-total-widget": "خالص مالیت کل ویجیٹ",
+  "select-accounts-and-time-period": "اکاؤنٹس اور وقت کی مدت منتخب کریں"
 }

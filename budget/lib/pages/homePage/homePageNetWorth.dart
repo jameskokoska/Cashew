@@ -220,7 +220,7 @@ Future openNetWorthSettings(BuildContext context) {
     context,
     PopupFramework(
       title: "net-worth".tr(),
-      subtitle: "applies-to-homepage".tr(),
+      subtitle: "applies-to-homepage".tr() + " " + "and-applies-to-widget".tr(),
       child: WalletPickerPeriodCycle(
         allWalletsSettingKey: "netWorthAllWallets",
         cycleSettingsExtension: "NetWorth",

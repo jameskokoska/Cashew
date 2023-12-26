@@ -992,5 +992,9 @@
   "rate": "Vurdere!",
   "of-outgoing": "av utgående",
   "of-incoming": "av innkommende",
-  "applies-to-homepage": "Gjelder hjemmesiden"
+  "applies-to-homepage": "Gjelder hjemmesiden",
+  "and-applies-to-widget": "og app -widget",
+  "widgets": "Widgets",
+  "net-worth-total-widget": "Nettverdien Total widget",
+  "select-accounts-and-time-period": "Velg kontoer og tidsperiode"
 }

@@ -992,5 +992,9 @@
   "rate": "விகிதம்!",
   "of-outgoing": "வெளிச்செல்லும்",
   "of-incoming": "உள்வரும்",
-  "applies-to-homepage": "முகப்புப்பக்கத்திற்கு பொருந்தும்"
+  "applies-to-homepage": "முகப்புப்பக்கத்திற்கு பொருந்தும்",
+  "and-applies-to-widget": "மற்றும் பயன்பாட்டு விட்ஜெட்",
+  "widgets": "விட்ஜெட்டுகள்",
+  "net-worth-total-widget": "நிகர மதிப்பு மொத்த விட்ஜெட்",
+  "select-accounts-and-time-period": "கணக்குகள் மற்றும் கால அவகாசம் என்பதைத் தேர்ந்தெடுக்கவும்"
 }

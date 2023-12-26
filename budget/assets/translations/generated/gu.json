@@ -992,5 +992,9 @@
   "rate": "દર!",
   "of-outgoing": "આઉટગોઇંગથી",
   "of-incoming": "આવનારી",
-  "applies-to-homepage": "હોમપેજ પર લાગુ પડે છે"
+  "applies-to-homepage": "હોમપેજ પર લાગુ પડે છે",
+  "and-applies-to-widget": "અને એપ્લિકેશન વિજેટ",
+  "widgets": "વિજેટો",
+  "net-worth-total-widget": "કુલ મૂલ્યની કિંમત",
+  "select-accounts-and-time-period": "એકાઉન્ટ્સ અને સમયગાળો પસંદ કરો"
 }

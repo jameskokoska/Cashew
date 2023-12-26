@@ -992,5 +992,9 @@
   "rate": "معدل!",
   "of-outgoing": "من المنتهية ولايته",
   "of-incoming": "الواردة",
-  "applies-to-homepage": "ينطبق على الصفحة الرئيسية"
+  "applies-to-homepage": "ينطبق على الصفحة الرئيسية",
+  "and-applies-to-widget": "و App Widget",
+  "widgets": "الحاجيات",
+  "net-worth-total-widget": "صافي القيمة الإجمالية عنصر واجهة مستخدم",
+  "select-accounts-and-time-period": "حدد الحسابات والفترة الزمنية"
 }

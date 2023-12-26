@@ -9,6 +9,7 @@ import 'package:budget/pages/creditDebtTransactionsPage.dart';
 import 'package:budget/pages/editHomePage.dart';
 import 'package:budget/pages/editObjectivesPage.dart';
 import 'package:budget/pages/exchangeRatesPage.dart';
+import 'package:budget/pages/homePage/homePageNetWorth.dart';
 import 'package:budget/pages/objectivesListPage.dart';
 import 'package:budget/pages/premiumPage.dart';
 import 'package:budget/pages/transactionsListPage.dart';
@@ -659,6 +660,10 @@ class MoreOptionsPagePreferences extends StatelessWidget {
         SettingsHeader(title: "titles".tr()),
         AskForTitlesToggle(),
         AutoTitlesToggle(),
+        if (getPlatform(ignoreEmulation: true) == PlatformOS.isAndroid)
+          SettingsHeader(title: "widgets".tr()),
+        if (getPlatform(ignoreEmulation: true) == PlatformOS.isAndroid)
+          NetWorthWidgetSetting(),
         SettingsHeader(title: "formatting".tr()),
         NumberFormattingSetting(),
         ExtraZerosButtonSetting(),
@@ -965,12 +970,13 @@ class SetNumberFormatPopup extends StatefulWidget {
 class _SetNumberFormatPopupState extends State<SetNumberFormatPopup> {
   @override
   Widget build(BuildContext context) {
+    // AppData\Local\Pub\Cache\hosted\pub.dev\intl-0.18.1\lib\number_symbols_data.dart
     List<String?> items = [
       null,
       "en",
       "tr",
       "af",
-      "ar",
+      // "ar", // puts the negative sign at the end, remove this option
       "de",
       "fr",
     ];
@@ -1041,6 +1047,24 @@ class ExtraZerosButtonSetting extends StatelessWidget {
         if (item == "") return "none".tr().capitalizeFirst;
         return item;
       },
+    );
+  }
+}
+
+class NetWorthWidgetSetting extends StatelessWidget {
+  const NetWorthWidgetSetting({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return SettingsContainer(
+      title: "net-worth-total-widget".tr(),
+      description: "select-accounts-and-time-period".tr(),
+      onTap: () {
+        openNetWorthSettings(context);
+      },
+      icon: appStateSettings["outlinedIcons"]
+          ? Icons.area_chart_outlined
+          : Icons.area_chart_rounded,
     );
   }
 }

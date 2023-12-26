@@ -992,5 +992,9 @@
   "rate": "Rate!",
   "of-outgoing": "von Ausgang",
   "of-incoming": "von eingehenden",
-  "applies-to-homepage": "Gilt für die Homepage"
+  "applies-to-homepage": "Gilt für die Homepage",
+  "and-applies-to-widget": "und App Widget",
+  "widgets": "Widgets",
+  "net-worth-total-widget": "Nettovermögen Total Widget",
+  "select-accounts-and-time-period": "Wählen Sie Konten und Zeitraum aus"
 }

@@ -992,5 +992,9 @@
   "rate": "Rate!",
   "of-outgoing": "of outgoing",
   "of-incoming": "of incoming",
-  "applies-to-homepage": "Applies to the homepage"
+  "applies-to-homepage": "Applies to the homepage",
+  "and-applies-to-widget": "and app widget",
+  "widgets": "Widgets",
+  "net-worth-total-widget": "Net Worth Total Widget",
+  "select-accounts-and-time-period": "Select accounts and time period"
 }

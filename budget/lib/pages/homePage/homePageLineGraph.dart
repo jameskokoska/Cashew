@@ -140,7 +140,7 @@ class PastSpendingGraph extends StatelessWidget {
   final bool allTimeUpToFirstTransaction;
 
   Widget buildLineChart(BuildContext context,
-      {DateTime? earliestTransactionDate}) {
+      {DateTime? earliestTransactionDate, DateTime? latestTransactionDate}) {
     DateTime? customStartDateCheckedNull =
         earliestTransactionDate ?? customStartDate;
     if (customStartDate?.isAfter(DateTime.now()) ?? false) {
@@ -153,7 +153,8 @@ class PastSpendingGraph extends StatelessWidget {
           DateTime.now().day,
         );
 
-    DateTime customEndDateChecked = customEndDate ?? DateTime.now();
+    DateTime customEndDateChecked =
+        customEndDate ?? latestTransactionDate ?? DateTime.now();
 
     // Days limit no longer needed, it was incorporated into calculatePoints()
     // by using 'resolution'
@@ -258,13 +259,16 @@ class PastSpendingGraph extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (allTimeUpToFirstTransaction) {
-      return StreamBuilder<DateTime?>(
-        stream: database.watchEarliestTransactionDateTime(
+      return StreamBuilder<EarliestLatestDateTme?>(
+        stream: database.watchEarliestLatestTransactionDateTime(
             searchFilters: searchFilters),
         builder: (context, snapshot) {
           if (snapshot.hasData == false) return SizedBox.shrink();
-          return buildLineChart(context,
-              earliestTransactionDate: snapshot.data);
+          return buildLineChart(
+            context,
+            earliestTransactionDate: snapshot.data?.earliest,
+            latestTransactionDate: snapshot.data?.latest,
+          );
         },
       );
     }

@@ -992,5 +992,9 @@
   "rate": "Оценете!",
   "of-outgoing": "на изходящ",
   "of-incoming": "на входящо",
-  "applies-to-homepage": "Важи за началната страница"
+  "applies-to-homepage": "Важи за началната страница",
+  "and-applies-to-widget": "и джаджа за приложения",
+  "widgets": "Джаджи",
+  "net-worth-total-widget": "Обща джаджа с нетна стойност",
+  "select-accounts-and-time-period": "Изберете акаунти и период от време"
 }

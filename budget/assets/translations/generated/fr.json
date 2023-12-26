@@ -992,5 +992,9 @@
   "rate": "Noter l'application !",
   "of-outgoing": "de sortant",
   "of-incoming": "de entrant",
-  "applies-to-homepage": "S'applique à la page d'accueil"
+  "applies-to-homepage": "S'applique à la page d'accueil",
+  "and-applies-to-widget": "et le widget de l'application",
+  "widgets": "Widgets",
+  "net-worth-total-widget": "Widget total de valeur nette",
+  "select-accounts-and-time-period": "Sélectionnez les comptes et la période"
 }

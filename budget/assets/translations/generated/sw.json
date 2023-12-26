@@ -992,5 +992,9 @@
   "rate": "Kiwango!",
   "of-outgoing": "ya anayemaliza muda wake",
   "of-incoming": "ya inayoingia",
-  "applies-to-homepage": "Inatumika kwa ukurasa wa nyumbani"
+  "applies-to-homepage": "Inatumika kwa ukurasa wa nyumbani",
+  "and-applies-to-widget": "na widget ya programu",
+  "widgets": "Vilivyoandikwa",
+  "net-worth-total-widget": "Net yenye thamani ya jumla ya widget",
+  "select-accounts-and-time-period": "Chagua akaunti na kipindi cha wakati"
 }

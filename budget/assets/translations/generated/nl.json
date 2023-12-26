@@ -992,5 +992,9 @@
   "rate": "Tarief!",
   "of-outgoing": "uitgaan",
   "of-incoming": "inkomend",
-  "applies-to-homepage": "Geldt op de startpagina"
+  "applies-to-homepage": "Geldt op de startpagina",
+  "and-applies-to-widget": "en app -widget",
+  "widgets": "Widgets",
+  "net-worth-total-widget": "Netto waarde totale widget",
+  "select-accounts-and-time-period": "Selecteer Accounts en tijdsperiode"
 }
