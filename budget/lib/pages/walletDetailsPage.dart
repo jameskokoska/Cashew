@@ -52,6 +52,7 @@ import 'package:budget/widgets/util/showDatePicker.dart';
 import 'package:budget/widgets/util/sliverPinnedOverlapInjector.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/colors.dart';
 import 'package:budget/widgets/viewAllTransactionsButton.dart';
@@ -890,7 +891,7 @@ class _WalletDetailsPageState extends State<WalletDetailsPage>
                     animation: _tabController.animation!,
                     builder: (BuildContext context, Widget? child) {
                       double animationProgress =
-                          _tabController.animation!.value;
+                          _tabController.animation?.value ?? 0;
                       return ClipRRect(
                         borderRadius: BorderRadius.circular(
                             getPlatform() == PlatformOS.isIOS ? 10 : 15),
@@ -1324,8 +1325,135 @@ class _WalletDetailsPageState extends State<WalletDetailsPage>
           SelectedTransactionsAppBar(
             pageID: listID,
           ),
+          AnimatedBuilder(
+            animation: _tabController.animation!,
+            builder: (BuildContext context, Widget? child) {
+              double animationProgress = _tabController.animation!.value;
+              return SelectedPeriodAppBar(
+                scrollController: _scrollController,
+                forceHide: animationProgress > 0.5,
+              );
+            },
+          ),
         ],
       ),
+    );
+  }
+}
+
+// class SelectedPeriodAppBar extends StatefulWidget {
+//   const SelectedPeriodAppBar({required this.scrollController, Key? key})
+//       : super(key: key);
+
+//   final ScrollController scrollController;
+
+//   @override
+//   _SelectedPeriodAppBarState createState() => _SelectedPeriodAppBarState();
+// }
+
+// class _SelectedPeriodAppBarState extends State<SelectedPeriodAppBar> {
+//   double translationPercent = 0.0;
+
+//   @override
+//   void initState() {
+//     super.initState();
+//     widget.scrollController.addListener(_onScroll);
+//   }
+
+//   @override
+//   void dispose() {
+//     widget.scrollController.removeListener(_onScroll);
+//     super.dispose();
+//   }
+
+//   void _onScroll() {
+//     double? translationPercentTemp;
+//     double startAnimatingScrollOffset = 100;
+//     print(widget.scrollController.offset);
+//     if (startAnimatingScrollOffset < widget.scrollController.offset)
+//       translationPercentTemp = clampDouble(
+//           (widget.scrollController.offset - startAnimatingScrollOffset) / 100,
+//           0,
+//           1);
+//     if (translationPercentTemp != null &&
+//         translationPercentTemp != translationPercent) {
+//       setState(() {
+//         translationPercent = translationPercentTemp ?? 0;
+//       });
+//     }
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     double totalTranslation = 56 + MediaQuery.of(context).padding.top;
+//     return Positioned(
+//       top: translationPercent * totalTranslation,
+//       child: Container(height: 100, width: 500, color: Colors.red),
+//     );
+//   }
+// }
+
+class SelectedPeriodAppBar extends StatefulWidget {
+  const SelectedPeriodAppBar(
+      {required this.scrollController, required this.forceHide, Key? key})
+      : super(key: key);
+
+  final ScrollController scrollController;
+  final bool forceHide;
+
+  @override
+  _SelectedPeriodAppBarState createState() => _SelectedPeriodAppBarState();
+}
+
+class _SelectedPeriodAppBarState extends State<SelectedPeriodAppBar> {
+  bool dropdown = false;
+
+  @override
+  void didUpdateWidget(covariant SelectedPeriodAppBar oldWidget) {
+    if (widget.forceHide == true) {
+      setState(() {
+        dropdown = false;
+      });
+    }
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    widget.scrollController.addListener(_onScroll);
+  }
+
+  @override
+  void dispose() {
+    widget.scrollController.removeListener(_onScroll);
+    super.dispose();
+  }
+
+  void _onScroll() {
+    bool tempDropdown;
+    if (widget.scrollController.offset /
+            widget.scrollController.position.maxScrollExtent >=
+        0.99)
+      tempDropdown = true;
+    else
+      tempDropdown = false;
+
+    if (tempDropdown != dropdown) {
+      setState(() {
+        dropdown = tempDropdown;
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    double totalTranslation = 56 + MediaQuery.of(context).padding.top;
+    return AnimatedPositioned(
+      curve: Curves.easeInOutCubicEmphasized,
+      duration: Duration(milliseconds: 500),
+      top: dropdown ? totalTranslation : 0,
+      child: Container(height: 100, width: 500, color: Colors.red),
     );
   }
 }

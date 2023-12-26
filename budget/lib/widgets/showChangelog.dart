@@ -28,6 +28,8 @@ String getChangelogString() {
   return """
     < 5.1.1
     Fixed re-rendering of pie chart home page graph
+    Initial amount when adding wallet properly supports decimal precision
+    Dropdown account picker if more than 3 when adding transaction
     < 5.1.0
     Fixed polarity of net spending in all spending page history tab
     Only allow one widget launch per app lifecycle/resume

@@ -275,6 +275,7 @@ class _AddWalletPageState extends State<AddWalletPage> {
           currencyKey: selectedCurrency,
           nextLabel: "set-amount".tr(),
           allowZero: true,
+          decimals: selectedDecimals == 2 ? null : selectedDecimals,
         ),
       ),
     );
@@ -671,6 +672,7 @@ class _AddWalletPageState extends State<AddWalletPage> {
                             Provider.of<AllWallets>(context),
                             currencyKey: selectedCurrency,
                             initialBalance,
+                            decimals: selectedDecimals,
                           ),
                           placeholder: convertToMoney(
                             Provider.of<AllWallets>(context),

@@ -7,6 +7,7 @@ import 'package:budget/pages/addCategoryPage.dart';
 import 'package:budget/pages/addObjectivePage.dart';
 import 'package:budget/pages/addWalletPage.dart';
 import 'package:budget/pages/editObjectivesPage.dart';
+import 'package:budget/pages/editWalletsPage.dart';
 import 'package:budget/pages/objectivesListPage.dart';
 import 'package:budget/pages/premiumPage.dart';
 import 'package:budget/pages/sharedBudgetSettings.dart';
@@ -1280,6 +1281,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                       child: Padding(
                         padding: const EdgeInsets.only(top: 5),
                         child: SelectChips(
+                          extraWidgetBeforeSticky: true,
                           allowMultipleSelected: false,
                           onLongPress: (TransactionWallet wallet) {
                             pushRoute(
@@ -1299,6 +1301,33 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                           onSelected: (TransactionWallet wallet) {
                             setSelectedWalletPk(wallet.walletPk);
                           },
+                          extraWidgetBefore: Provider.of<AllWallets>(context,
+                                              listen: false)
+                                          .indexedByPk
+                                          .length >
+                                      3 &&
+                                  enableDoubleColumn(context) == false
+                              ? SelectChipsAddButtonExtraWidget(
+                                  openPage: null,
+                                  onTap: () async {
+                                    dynamic result = await selectWalletPopup(
+                                      context,
+                                      selectedWallet: Provider.of<AllWallets>(
+                                              context,
+                                              listen: false)
+                                          .indexedByPk[selectedWalletPk],
+                                      allowEditWallet: true,
+                                      allowDeleteWallet: false,
+                                    );
+                                    if (result is TransactionWallet) {
+                                      setSelectedWalletPk(result.walletPk);
+                                    }
+                                  },
+                                  iconData: appStateSettings["outlinedIcons"]
+                                      ? Icons.expand_more_outlined
+                                      : Icons.expand_more_rounded,
+                                )
+                              : null,
                           getCustomBorderColor: (TransactionWallet item) {
                             return dynamicPastel(
                               context,

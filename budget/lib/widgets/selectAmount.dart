@@ -60,6 +60,7 @@ class SelectAmount extends StatefulWidget {
     this.allDecimals = false,
     this.hideWalletPickerIfOneCurrency = false,
     this.hideNextButton = false,
+    this.decimals,
   }) : super(key: key);
   final Function(double, String) setSelectedAmount;
   final String amountPassed;
@@ -80,6 +81,7 @@ class SelectAmount extends StatefulWidget {
   final bool allDecimals;
   final bool hideWalletPickerIfOneCurrency;
   final bool hideNextButton;
+  final int? decimals;
 
   @override
   _SelectAmountState createState() => _SelectAmountState();
@@ -99,7 +101,8 @@ class _SelectAmountState extends State<SelectAmount> {
   }
 
   int getDecimals({required bool listen}) {
-    return getSelectedWallet(listen: listen)?.decimals ??
+    return widget.decimals ??
+        getSelectedWallet(listen: listen)?.decimals ??
         Provider.of<AllWallets>(context, listen: false)
             .indexedByPk[appStateSettings["selectedWalletPk"]]
             ?.decimals ??
@@ -482,16 +485,17 @@ class _SelectAmountState extends State<SelectAmount> {
             forceAllDecimals: doesNotContainOtherNumbers(amount) &&
                 startsWithTwoZeroes(amount) == false &&
                 (getSelectedWallet(listen: false)?.decimals ?? 0) > 2,
-            decimals: getSelectedWallet(listen: false)?.decimals == 2 &&
-                    includesOperations(amount, true)
-                ? 2
-                : min(
-                    getSelectedWallet(listen: false)?.decimals ?? 1000,
-                    includesOperations(amount, false)
-                        ? countDecimalDigits(
-                            calculateResult(amountConverted).toString())
-                        : countDecimalDigits(amount),
-                  ),
+            decimals: widget.decimals ??
+                (getSelectedWallet(listen: false)?.decimals == 2 &&
+                        includesOperations(amount, true)
+                    ? 2
+                    : min(
+                        getSelectedWallet(listen: false)?.decimals ?? 1000,
+                        includesOperations(amount, false)
+                            ? countDecimalDigits(
+                                calculateResult(amountConverted).toString())
+                            : countDecimalDigits(amount),
+                      )),
           );
     return Column(
       children: [
@@ -789,12 +793,12 @@ class _SelectAmountState extends State<SelectAmount> {
                                             .indexedByPk
                                             .length >
                                         3 &&
-                                    enableDoubleColumn(context) == false ||
+                                    getIsFullScreen(context) == false ||
                                 Provider.of<AllWallets>(context, listen: false)
                                             .indexedByPk
                                             .length >
                                         5 &&
-                                    enableDoubleColumn(context) == true
+                                    getIsFullScreen(context) == true
                             ? SelectChipsAddButtonExtraWidget(
                                 openPage: null,
                                 onTap: () async {
