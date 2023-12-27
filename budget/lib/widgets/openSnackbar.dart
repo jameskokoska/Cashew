@@ -3,9 +3,9 @@ import 'package:budget/widgets/navigationFramework.dart';
 
 openSnackbar(SnackbarMessage message, {bool postIfQueue = true}) {
   snackbarKey.currentState!.post(message, postIfQueue: postIfQueue);
-  // ScaffoldMessenger.of(context).showSnackBar(
-  //   SnackBar(
-  //       behavior: SnackBarBehavior.floating,
+  // ScaffoldMessenger.of(context).showSnackbar(
+  //   Snackbar(
+  //       behavior: SnackbarBehavior.floating,
   //       margin: EdgeInsets.only(bottom: 14, left: 20, right: 90),
   //       padding: EdgeInsets.symmetric(horizontal: 15, vertical: 12),
   //       shape: RoundedRectangleBorder(

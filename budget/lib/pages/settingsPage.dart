@@ -729,8 +729,10 @@ class _BiometricsSettingToggleState extends State<BiometricsSettingToggle> {
                         Navigator.pop(context);
                         // On iOS the notification app settings page also has
                         // the permission for biometrics
+                        // this modification could be wrong, need to check documentation on iOS appSettings
                         if (getPlatform() == PlatformOS.isIOS) {
-                          AppSettings.openNotificationSettings();
+                          AppSettings.openAppSettings(
+                              type: AppSettingsType.settings);
                         }
                       },
                     );

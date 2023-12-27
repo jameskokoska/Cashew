@@ -25,6 +25,7 @@ import 'package:flutter/material.dart';
 import 'package:sa3_liquid/sa3_liquid.dart';
 import 'package:budget/widgets/openContainerNavigation.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
+import 'package:budget/widgets/globalSnackBar.dart';
 
 bool premiumPopupEnabled = kIsWeb == false;
 bool tryStoreEnabled = kIsWeb == false && kDebugMode == false;
@@ -561,39 +562,35 @@ void listenToPurchaseUpdated({
   required bool popRouteWithPurchase,
 }) {
   // ignore: avoid_function_literals_in_foreach_calls
+  //Updated erroring code below
   purchaseDetailsList.forEach((PurchaseDetails purchaseDetails) async {
     if (productIDs.values.toSet().contains(purchaseDetails.productID)) {
       if (purchaseDetails.status == PurchaseStatus.purchased ||
           purchaseDetails.status == PurchaseStatus.restored) {
         updateSettings("purchaseID", purchaseDetails.productID,
             updateGlobalState: false, pagesNeedingRefresh: [3]);
-        print("Purchased " + purchaseDetails.productID);
-        if (popRouteWithPurchase == true &&
-            navigatorKey.currentContext != null) {
+        if (popRouteWithPurchase && navigatorKey.currentContext != null) {
           Navigator.pop(navigatorKey.currentContext!, true);
         }
       }
-
-      if (purchaseDetails.status == PurchaseStatus.pending) {
-        print("Loading purchase");
-      } else {
-        if (purchaseDetails.status == PurchaseStatus.error ||
-            purchaseDetails.status == PurchaseStatus.canceled) {
-          if (navigatorKey.currentContext != null) {
-            SnackBar snackBar = SnackBar(
-              content: Text('error-processing-order'.tr()),
-            );
-            ScaffoldMessenger.of(navigatorKey.currentContext!)
-                .showSnackBar(snackBar);
-          }
-        } else if (purchaseDetails.status == PurchaseStatus.purchased) {
-          if (navigatorKey.currentContext != null) {
-            SnackBar snackBar = SnackBar(
-              content: Text('order-confirmation'.tr()),
-            );
-            ScaffoldMessenger.of(navigatorKey.currentContext!)
-                .showSnackBar(snackBar);
-          }
+      if (purchaseDetails.status == PurchaseStatus.error ||
+          purchaseDetails.status == PurchaseStatus.canceled) {
+        if (navigatorKey.currentContext != null) {
+          SnackBar snackBar = SnackBar(
+            content: Text('error-processing-order'.tr()),
+          );
+          ScaffoldMessenger.of(navigatorKey.currentContext!)
+              .showSnackBar(snackBar);
+        }
+        return;
+      }
+      if (purchaseDetails.status == PurchaseStatus.purchased) {
+        if (navigatorKey.currentContext != null) {
+          SnackBar snackBar = SnackBar(
+            content: Text('order-confirmation'.tr()),
+          );
+          ScaffoldMessenger.of(navigatorKey.currentContext!)
+              .showSnackBar(snackBar);
         }
         if (purchaseDetails.pendingCompletePurchase) {
           await InAppPurchase.instance.completePurchase(purchaseDetails);
@@ -654,19 +651,21 @@ Future<Map<String, ProductDetails>> initializeStoreAndPurchases(
   return {};
 }
 
+//Fixed erroring code below
 Future restorePurchases(BuildContext context) async {
   if (storeProducts.isEmpty) {
     SnackBar snackBar = SnackBar(
       content: Text('error-processing-order'.tr()),
     );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
-  } else {
-    await InAppPurchase.instance.restorePurchases();
-    SnackBar snackBar = SnackBar(
-      content: Text('any-previous-purchases-restored'.tr()),
-    );
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    return;
   }
+  await InAppPurchase.instance.restorePurchases();
+  SnackBar snackBar = SnackBar(
+    content: Text('any-previous-purchases-restored'.tr()),
+  );
+  if (!context.mounted) return;
+  ScaffoldMessenger.of(context).showSnackBar(snackBar);
 }
 
 bool hidePremiumPopup() {

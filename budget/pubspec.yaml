@@ -23,24 +23,24 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  simple_animations: ^4.1.0
+  simple_animations: ^5.0.2
   sa3_liquid: ^1.0.1
   intl: ^0.18.0
   animations: ^2.0.1
   flutter_sticky_header: ^0.6.0
   sticky_and_expandable_list: ^1.1.3
-  fl_chart: ^0.64.0
+  fl_chart: ^0.66.0
   # database dependencies
   drift: ^2.14.0
   sqlite3_flutter_libs: ^0.5.0
   path_provider: ^2.0.0
   path: ^1.8.3
   math_expressions: ^2.2.0
-  share_plus: ^4.0.4
+  share_plus: ^7.2.1
   google_sign_in: ^6.1.4
-  googleapis: ^11.2.0
+  googleapis: ^12.0.0
   universal_html: ^2.0.8
-  flutter_charset_detector: ^1.0.2
+  flutter_charset_detector: ^2.0.0
   file_picker: ^6.1.1
   auto_size_text: ^3.0.0
   shared_preferences: ^2.0.13
@@ -49,19 +49,19 @@ dependencies:
     path: ./packages/sliding_sheet-0.5.2-modified/
   implicitly_animated_reorderable_list:
     path: ./packages/implicitly_animated_reorderable_list-0.4.2-modified/
-  shimmer: ^2.0.0
+  shimmer: ^3.0.0
   carousel_slider: ^4.2.1
   # flutter_notification_listener: ^1.3.2
   # installed_apps: ^1.3.1
   url_launcher: ^6.1.7
-  flutter_launcher_icons: "^0.10.0"
-  package_info_plus: ^4.0.2
+  flutter_launcher_icons: ^0.13.1
+  package_info_plus: ^5.0.1
   # mrx_charts: ^0.1.3
   transparent_image: ^2.0.0
-  lottie: ^1.4.3
-  pausable_timer: ^1.0.0+6
+  lottie: ^2.7.0
+  pausable_timer: ^3.1.0+3
   animated_fractionally_sized_box: ^2.0.1
-  flutter_local_notifications: ^14.0.0+1
+  flutter_local_notifications: ^16.2.0
   system_theme: ^2.3.1
   firebase_core: ^2.7.1
   firebase_auth: ^4.2.2
@@ -76,7 +76,7 @@ dependencies:
   timer_builder: ^2.0.0
   device_info_plus: ^9.1.0
   flutter_lazy_indexed_stack: ^0.0.4
-  app_settings: ^4.2.0
+  app_settings: ^5.1.1
   provider: ^6.0.5
   in_app_review: ^2.0.6
   flutter_native_timezone: ^2.0.0

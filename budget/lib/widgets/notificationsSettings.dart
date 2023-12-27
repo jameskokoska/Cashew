@@ -526,11 +526,12 @@ Future<bool> checkNotificationsPermissionIOS() async {
   return true;
 }
 
+//Updated to .areNotificationsEnabled()
 Future<bool> checkNotificationsPermissionAndroid() async {
   bool? result = await flutterLocalNotificationsPlugin
       .resolvePlatformSpecificImplementation<
           AndroidFlutterLocalNotificationsPlugin>()
-      ?.requestPermission();
+      ?.areNotificationsEnabled();
   if (result != true) return false;
   return true;
 }
