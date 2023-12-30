@@ -300,6 +300,7 @@ class SettingsContainerOutlined extends StatelessWidget {
     this.onTap,
     this.onLongPress,
     this.verticalPadding,
+    this.horizontalPadding,
     this.iconSize,
     this.iconScale,
     this.isExpanded = true,
@@ -314,6 +315,7 @@ class SettingsContainerOutlined extends StatelessWidget {
   final VoidCallback? onTap;
   final VoidCallback? onLongPress;
   final double? verticalPadding;
+  final double? horizontalPadding;
   final double? iconSize;
   final double? iconScale;
   final bool isExpanded;
@@ -336,12 +338,13 @@ class SettingsContainerOutlined extends StatelessWidget {
           borderRadius: BorderRadius.circular(10),
         ),
         padding: EdgeInsets.only(
-          left: 3,
-          right: 3,
+          left: horizontalPadding ?? 3,
+          right: horizontalPadding ?? 3,
           top: verticalPadding ?? 14,
           bottom: verticalPadding ?? 14,
         ),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             icon == null
                 ? SizedBox.shrink()
@@ -470,6 +473,7 @@ class SettingsContainer extends StatelessWidget {
     this.onTap,
     this.onLongPress,
     this.verticalPadding,
+    this.horizontalPadding,
     this.iconSize,
     this.iconScale,
     this.isOutlined,
@@ -487,6 +491,7 @@ class SettingsContainer extends StatelessWidget {
   final VoidCallback? onTap;
   final VoidCallback? onLongPress;
   final double? verticalPadding;
+  final double? horizontalPadding;
   final double? iconSize;
   final double? iconScale;
   final bool? isOutlined;
@@ -514,6 +519,7 @@ class SettingsContainer extends StatelessWidget {
               onTap: onTap,
               onLongPress: onLongPress,
               verticalPadding: verticalPadding,
+              horizontalPadding: horizontalPadding,
               isOutlinedColumn: isOutlinedColumn,
               isWideOutlined: isWideOutlined,
             )
@@ -523,7 +529,7 @@ class SettingsContainer extends StatelessWidget {
               onLongPress: onLongPress,
               child: Padding(
                 padding: EdgeInsets.symmetric(
-                  horizontal: 18,
+                  horizontal: horizontalPadding ?? 18,
                   vertical: verticalPadding ?? 11,
                 ),
                 child: Row(

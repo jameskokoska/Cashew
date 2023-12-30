@@ -20,7 +20,7 @@ import 'package:budget/struct/notificationsGlobal.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/globalLoadingProgress.dart';
 import 'package:budget/struct/scrollBehaviorOverride.dart';
-import 'package:budget/widgets/globalSnackBar.dart';
+import 'package:budget/widgets/globalSnackbar.dart';
 import 'package:budget/struct/initializeNotifications.dart';
 import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/restartApp.dart';

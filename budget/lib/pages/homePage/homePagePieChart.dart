@@ -113,7 +113,6 @@ class HomePagePieChart extends StatelessWidget {
                                   totalSpent: total,
                                   setSelectedCategory:
                                       (categoryPk, category) {},
-                                  percentLabelOnTop: true,
                                   middleColor: getColor(
                                       context, "lightDarkAccentHeavyLight"),
                                 ),

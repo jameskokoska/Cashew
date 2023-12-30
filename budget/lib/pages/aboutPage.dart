@@ -578,6 +578,10 @@ class AboutPage extends StatelessWidget {
           title: "Russian",
           list: ["Ilya A."],
         ),
+        AboutInfoBox(
+          title: "Romanian",
+          list: ["Valentin G."],
+        ),
         SizedBox(height: 20),
       ],
     );

@@ -57,7 +57,7 @@ import 'package:budget/widgets/selectedTransactionsAppBar.dart';
 import 'package:budget/widgets/showChangelog.dart';
 import 'package:budget/struct/initializeNotifications.dart';
 import 'package:budget/widgets/globalLoadingProgress.dart';
-import 'package:budget/widgets/globalSnackBar.dart';
+import 'package:budget/widgets/globalSnackbar.dart';
 import 'package:budget/pages/editCategoriesPage.dart';
 import 'package:budget/struct/upcomingTransactionsFunctions.dart';
 import 'package:budget/widgets/tappable.dart';

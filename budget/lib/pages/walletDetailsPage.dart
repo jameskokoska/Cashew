@@ -1513,8 +1513,12 @@ class _SelectedPeriodAppBarState extends State<SelectedPeriodAppBar> {
                   child: widget.selectPeriodContent,
                   decoration: BoxDecoration(
                     boxShadow: boxShadowCheck(boxShadowSharp(context)),
-                    color: dynamicPastel(context,
-                        Theme.of(context).colorScheme.secondaryContainer),
+                    color: dynamicPastel(
+                      context,
+                      Theme.of(context).colorScheme.secondaryContainer,
+                      amountDark: 0.15,
+                      amountLight: 0.3,
+                    ),
                   ),
                 ),
               ),
@@ -1936,7 +1940,7 @@ class WalletDetailsLineGraph extends StatelessWidget {
     DateTime? customPeriodEndDate = getEndDateOfSelectedCustomPeriod("",
         forcedDateTimeRange: selectedDateTimeRange);
     return PastSpendingGraph(
-      allTimeUpToFirstTransaction: customPeriodStartDate == null,
+      allTimeUpToFirstTransaction: selectedDateTimeRange == null,
       isIncome: null,
       walletPks: walletPks,
       followCustomPeriodCycle: followCustomPeriodCycle,

@@ -144,26 +144,29 @@ class PopupFramework extends StatelessWidget {
                     : EdgeInsets.zero,
                 child: child,
               ),
-              hasBottomSafeArea
-                  ? Builder(builder: (context) {
-                      // At least (initialBottomPadding) bottom padding
+              if (hasBottomSafeArea)
+                Builder(
+                  builder: (context) {
+                    // At least (initialBottomPadding) bottom padding
 
-                      double initialBottomPadding = 10;
-                      double bottomSafeAreaPadding =
-                          MediaQuery.paddingOf(context).bottom;
+                    double initialBottomPadding = 10;
+                    double bottomSafeAreaPadding =
+                        MediaQuery.paddingOf(context).bottom;
 
-                      bottomSafeAreaPadding =
-                          bottomSafeAreaPadding - initialBottomPadding;
+                    bottomSafeAreaPadding =
+                        bottomSafeAreaPadding - initialBottomPadding;
 
-                      if (bottomSafeAreaPadding < initialBottomPadding) {
-                        bottomSafeAreaPadding = initialBottomPadding;
-                      }
+                    if (bottomSafeAreaPadding < initialBottomPadding) {
+                      bottomSafeAreaPadding = initialBottomPadding;
+                    }
 
-                      // print(MediaQuery.paddingOf(context).bottom);
-                      // print(bottomSafeAreaPadding);
-                      return SizedBox(height: bottomSafeAreaPadding);
-                    })
-                  : SizedBox.shrink()
+                    // print(MediaQuery.paddingOf(context).bottom);
+                    // print(bottomSafeAreaPadding);
+                    return SizedBox(
+                      height: bottomSafeAreaPadding,
+                    );
+                  },
+                ),
             ],
           ),
         ),

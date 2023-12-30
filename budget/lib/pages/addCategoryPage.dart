@@ -13,7 +13,7 @@ import 'package:budget/widgets/categoryIcon.dart';
 import 'package:budget/widgets/editRowEntry.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/widgets/framework/popupFramework.dart';
-import 'package:budget/widgets/globalSnackBar.dart';
+import 'package:budget/widgets/globalSnackbar.dart';
 import 'package:budget/widgets/iconButtonScaled.dart';
 import 'package:budget/widgets/incomeExpenseTabSelector.dart';
 import 'package:budget/widgets/listItem.dart';
@@ -26,6 +26,7 @@ import 'package:budget/widgets/saveBottomButton.dart';
 import 'package:budget/widgets/selectCategory.dart';
 import 'package:budget/widgets/selectCategoryImage.dart';
 import 'package:budget/widgets/selectColor.dart';
+import 'package:budget/widgets/settingsContainers.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textInput.dart';
 import 'package:budget/widgets/textWidgets.dart';
@@ -593,14 +594,8 @@ class _AddCategoryPageState extends State<AddCategoryPage>
                             right: 20,
                             top: 20,
                           ),
-                          child: Button(
-                            flexibleLayout: true,
-                            icon: appStateSettings["outlinedIcons"]
-                                ? Icons.merge_outlined
-                                : Icons.merge_rounded,
-                            label: isSubCategory
-                                ? "merge-subcategory".tr()
-                                : "merge-category".tr(),
+                          child: SettingsContainer(
+                            isOutlined: true,
                             onTap: () async {
                               if (widget.category != null) {
                                 if (isSubCategory) {
@@ -618,12 +613,14 @@ class _AddCategoryPageState extends State<AddCategoryPage>
                                 }
                               }
                             },
-                            color: Theme.of(context)
-                                .colorScheme
-                                .secondaryContainer,
-                            textColor: Theme.of(context)
-                                .colorScheme
-                                .onSecondaryContainer,
+                            title: isSubCategory
+                                ? "merge-subcategory".tr()
+                                : "merge-category".tr(),
+                            icon: appStateSettings["outlinedIcons"]
+                                ? Icons.merge_outlined
+                                : Icons.merge_rounded,
+                            iconScale: 1,
+                            isWideOutlined: true,
                           ),
                         ),
                   widgetCategory == null ||
@@ -637,24 +634,20 @@ class _AddCategoryPageState extends State<AddCategoryPage>
                             right: 20,
                             top: 10,
                           ),
-                          child: Button(
-                            flexibleLayout: true,
-                            icon: appStateSettings["outlinedIcons"]
-                                ? Icons.inbox_outlined
-                                : Icons.inbox_rounded,
-                            label: "make-main-category".tr(),
+                          child: SettingsContainer(
+                            isOutlined: true,
                             onTap: () async {
                               makeMainCategoryPopup(context,
                                   subcategoryOriginal: widget.category!,
                                   routesToPopAfterDelete:
                                       widget.routesToPopAfterDelete);
                             },
-                            color: Theme.of(context)
-                                .colorScheme
-                                .secondaryContainer,
-                            textColor: Theme.of(context)
-                                .colorScheme
-                                .onSecondaryContainer,
+                            title: "make-main-category".tr(),
+                            icon: appStateSettings["outlinedIcons"]
+                                ? Icons.inbox_outlined
+                                : Icons.inbox_rounded,
+                            iconScale: 1,
+                            isWideOutlined: true,
                           ),
                         ),
                   widget.category?.categoryPk == "0" || widgetCategory == null
@@ -714,12 +707,8 @@ class _AddCategoryPageState extends State<AddCategoryPage>
                           top: 10,
                           bottom: 8,
                         ),
-                        child: Button(
-                          flexibleLayout: true,
-                          icon: appStateSettings["outlinedIcons"]
-                              ? Icons.move_to_inbox_outlined
-                              : Icons.move_to_inbox_rounded,
-                          label: "make-subcategory".tr(),
+                        child: SettingsContainer(
+                          isOutlined: true,
                           onTap: () async {
                             if (widget.category != null)
                               makeSubCategoryPopup(
@@ -729,11 +718,12 @@ class _AddCategoryPageState extends State<AddCategoryPage>
                                     widget.routesToPopAfterDelete,
                               );
                           },
-                          color:
-                              Theme.of(context).colorScheme.secondaryContainer,
-                          textColor: Theme.of(context)
-                              .colorScheme
-                              .onSecondaryContainer,
+                          title: "make-subcategory".tr(),
+                          icon: appStateSettings["outlinedIcons"]
+                              ? Icons.move_to_inbox_outlined
+                              : Icons.move_to_inbox_rounded,
+                          iconScale: 1,
+                          isWideOutlined: true,
                         ),
                       ),
                     );
@@ -753,101 +743,107 @@ class _AddCategoryPageState extends State<AddCategoryPage>
                     },
                     itemBuilder: (context, index) {
                       TransactionCategory category = subCategories[index];
-                      return EditRowEntry(
-                        index: index,
-                        canReorder: subCategories.length != 1,
-                        currentReorder:
-                            currentReorder != -1 && currentReorder != index,
-                        padding: EdgeInsets.symmetric(
-                          vertical: 7,
-                          horizontal:
-                              getPlatform() == PlatformOS.isIOS ? 17 : 7,
-                        ),
-                        canDelete: widget.routesToPopAfterDelete !=
-                            RoutesToPopAfterDelete.PreventDelete,
+                      return Padding(
                         key: ValueKey(category.categoryPk),
-                        content: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            SizedBox(width: 3),
-                            CategoryIcon(
-                              categoryPk: category.categoryPk,
-                              size: 25,
-                              margin: EdgeInsets.zero,
-                              sizePadding: 20,
-                              borderRadius: 1000,
-                              category: category,
-                              onLongPress: null,
-                              onTap: null,
-                              canEditByLongPress: false,
-                            ),
-                            SizedBox(width: 15),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  TextFont(
-                                    text: category.name
-                                    // +
-                                    //     " - " +
-                                    //     category.order.toString()
-                                    ,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16,
-                                  ),
-                                  StreamBuilder<List<int?>>(
-                                    stream: database
-                                        .watchTotalCountOfTransactionsInSubCategory(
-                                            category.categoryPk),
-                                    builder: (context, snapshot) {
-                                      if (snapshot.hasData &&
-                                          snapshot.data != null) {
-                                        return TextFont(
-                                          textAlign: TextAlign.left,
-                                          text: snapshot.data![0].toString() +
-                                              " " +
-                                              (snapshot.data![0] == 1
-                                                  ? "transaction"
-                                                      .tr()
-                                                      .toLowerCase()
-                                                  : "transactions"
-                                                      .tr()
-                                                      .toLowerCase()),
-                                          fontSize: 14,
-                                          textColor: getColor(context, "black")
-                                              .withOpacity(0.65),
-                                        );
-                                      } else {
-                                        return TextFont(
-                                          textAlign: TextAlign.left,
-                                          text: "/ transactions",
-                                          fontSize: 14,
-                                          textColor: getColor(context, "black")
-                                              .withOpacity(0.65),
-                                        );
-                                      }
-                                    },
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                        onDelete: () async {
-                          return (await deleteCategoryPopup(
-                                context,
+                        padding: const EdgeInsets.symmetric(horizontal: 4),
+                        child: EditRowEntry(
+                          index: index,
+                          canReorder: subCategories.length != 1,
+                          currentReorder:
+                              currentReorder != -1 && currentReorder != index,
+                          padding: EdgeInsets.symmetric(
+                            vertical: 7,
+                            horizontal:
+                                getPlatform() == PlatformOS.isIOS ? 17 : 7,
+                          ),
+                          canDelete: widget.routesToPopAfterDelete !=
+                              RoutesToPopAfterDelete.PreventDelete,
+                          content: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              SizedBox(width: 3),
+                              CategoryIcon(
+                                categoryPk: category.categoryPk,
+                                size: 25,
+                                margin: EdgeInsets.zero,
+                                sizePadding: 20,
+                                borderRadius: 1000,
                                 category: category,
-                                routesToPopAfterDelete:
-                                    RoutesToPopAfterDelete.None,
-                              )) ==
-                              DeletePopupAction.Delete;
-                        },
-                        openPage: AddCategoryPage(
-                          category: category,
-                          routesToPopAfterDelete: widget.routesToPopAfterDelete,
-                          mainCategoryPkWhenSubCategory:
-                              widget.category!.categoryPk,
+                                onLongPress: null,
+                                onTap: null,
+                                canEditByLongPress: false,
+                              ),
+                              SizedBox(width: 15),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    TextFont(
+                                      text: category.name
+                                      // +
+                                      //     " - " +
+                                      //     category.order.toString()
+                                      ,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16,
+                                    ),
+                                    StreamBuilder<List<int?>>(
+                                      stream: database
+                                          .watchTotalCountOfTransactionsInSubCategory(
+                                              category.categoryPk),
+                                      builder: (context, snapshot) {
+                                        if (snapshot.hasData &&
+                                            snapshot.data != null) {
+                                          return TextFont(
+                                            textAlign: TextAlign.left,
+                                            text: snapshot.data![0].toString() +
+                                                " " +
+                                                (snapshot.data![0] == 1
+                                                    ? "transaction"
+                                                        .tr()
+                                                        .toLowerCase()
+                                                    : "transactions"
+                                                        .tr()
+                                                        .toLowerCase()),
+                                            fontSize: 14,
+                                            textColor:
+                                                getColor(context, "black")
+                                                    .withOpacity(0.65),
+                                          );
+                                        } else {
+                                          return TextFont(
+                                            textAlign: TextAlign.left,
+                                            text: "/ transactions",
+                                            fontSize: 14,
+                                            textColor:
+                                                getColor(context, "black")
+                                                    .withOpacity(0.65),
+                                          );
+                                        }
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                          onDelete: () async {
+                            return (await deleteCategoryPopup(
+                                  context,
+                                  category: category,
+                                  routesToPopAfterDelete:
+                                      RoutesToPopAfterDelete.None,
+                                )) ==
+                                DeletePopupAction.Delete;
+                          },
+                          openPage: AddCategoryPage(
+                            category: category,
+                            routesToPopAfterDelete:
+                                widget.routesToPopAfterDelete,
+                            mainCategoryPkWhenSubCategory:
+                                widget.category!.categoryPk,
+                          ),
                         ),
                       );
                     },

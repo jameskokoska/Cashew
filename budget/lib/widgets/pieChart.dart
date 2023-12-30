@@ -63,7 +63,6 @@ class PieChartWrapper extends StatelessWidget {
     required this.isPastBudget,
     required this.pieChartDisplayStateKey,
     this.middleColor,
-    this.percentLabelOnTop = false,
   }) : super(key: key);
   final List<CategoryWithTotal> data;
   final double totalSpent;
@@ -72,7 +71,6 @@ class PieChartWrapper extends StatelessWidget {
   final bool isPastBudget;
   final GlobalKey<PieChartDisplayState>? pieChartDisplayStateKey;
   final Color? middleColor;
-  final bool percentLabelOnTop;
 
   @override
   Widget build(BuildContext context) {
@@ -113,7 +111,6 @@ class PieChartWrapper extends StatelessWidget {
                     totalSpent: totalSpent,
                     setSelectedCategory: setSelectedCategory,
                     key: pieChartDisplayStateKey,
-                    percentLabelOnTop: percentLabelOnTop,
                   ),
           ),
           IgnorePointer(
@@ -154,13 +151,11 @@ class PieChartDisplay extends StatefulWidget {
     required this.data,
     required this.totalSpent,
     required this.setSelectedCategory,
-    this.percentLabelOnTop = false,
   }) : super(key: key);
   final List<CategoryWithTotal> data;
   final double totalSpent;
   final Function(String categoryPk, TransactionCategory? category)
       setSelectedCategory;
-  final bool percentLabelOnTop;
 
   @override
   State<StatefulWidget> createState() => PieChartDisplayState();
@@ -269,6 +264,7 @@ class PieChartDisplayState extends State<PieChartDisplay> {
   }
 
   List<PieChartSectionData> showingSections() {
+    double totalPercentAccumulated = 0;
     return List.generate(widget.data.length, (i) {
       final bool isTouched = i == touchedIndex;
       final double radius = enableDoubleColumn(context) == false
@@ -297,6 +293,10 @@ class PieChartDisplayState extends State<PieChartDisplay> {
             (isTouchingSameColorSection && i % 3 == 0 ? 0.2 : 0) +
             (isTouchingSameColorSection && i % 3 == 1 ? 0.35 : 0),
       );
+      double percent = widget.totalSpent == 0
+          ? 0
+          : (widget.data[i].total / widget.totalSpent * 100).abs();
+      totalPercentAccumulated = totalPercentAccumulated + percent;
       return PieChartSectionData(
         color: color,
         value: widget.totalSpent == 0
@@ -305,7 +305,7 @@ class PieChartDisplayState extends State<PieChartDisplay> {
         title: "",
         radius: radius,
         badgeWidget: _Badge(
-          percentLabelOnTop: widget.percentLabelOnTop,
+          totalPercentAccumulated: totalPercentAccumulated,
           showLabels: i < showLabels,
           scale: widgetScale,
           color: color,
@@ -313,9 +313,7 @@ class PieChartDisplayState extends State<PieChartDisplay> {
           categoryColor: HexColor(widget.data[i].category.colour,
               defaultColor: Theme.of(context).colorScheme.primary),
           emojiIconName: widget.data[i].category.emojiIconName,
-          percent: widget.totalSpent == 0
-              ? 0
-              : (widget.data[i].total / widget.totalSpent * 100).abs(),
+          percent: percent,
           isTouched: isTouched,
         ),
         titlePositionPercentageOffset: 1.4,
@@ -334,7 +332,7 @@ class _Badge extends StatelessWidget {
   final bool isTouched;
   final bool showLabels;
   final Color categoryColor;
-  final bool percentLabelOnTop;
+  final double totalPercentAccumulated;
 
   const _Badge({
     Key? key,
@@ -346,7 +344,7 @@ class _Badge extends StatelessWidget {
     required this.isTouched,
     required this.showLabels,
     required this.categoryColor,
-    required this.percentLabelOnTop,
+    required this.totalPercentAccumulated,
   }) : super(key: key);
 
   @override
@@ -380,7 +378,11 @@ class _Badge extends StatelessWidget {
                 opacity: this.scale == 1 ? 0 : 1,
                 child: Center(
                   child: Transform.translate(
-                    offset: Offset(0, percentLabelOnTop ? -34 : 34),
+                    offset: Offset(
+                      0,
+                      // Prevent overlapping labels when displayed on top
+                      totalPercentAccumulated < 60 ? -34 : 34,
+                    ),
                     child: IntrinsicWidth(
                       child: Container(
                         height: 20,

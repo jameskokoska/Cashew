@@ -26,6 +26,11 @@ import 'listItem.dart';
 
 String getChangelogString() {
   return """
+    < 5.1.3
+    Fixed overlapping pie chart labels
+    Improved background color for all spending time range quick switch header
+    Fixed wallet details page line graph shows all time range
+    Improved edit wallets and categories page actions
     < 5.1.2
     Fixed toggle between spending limit type for spending goals in a budget
     Added font family fallback for base components

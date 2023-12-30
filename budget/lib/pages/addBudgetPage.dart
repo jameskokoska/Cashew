@@ -14,7 +14,7 @@ import 'package:budget/struct/shareBudget.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/countNumber.dart';
 import 'package:budget/widgets/dropdownSelect.dart';
-import 'package:budget/widgets/globalSnackBar.dart';
+import 'package:budget/widgets/globalSnackbar.dart';
 import 'package:budget/widgets/incomeExpenseTabSelector.dart';
 import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
@@ -607,31 +607,6 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                 //     setSelectedPin();
                 //   },
                 // ),
-                if (widget.budget != null)
-                  DropdownItemMenu(
-                    id: "spending-goals",
-                    label: "spending-goals".tr(),
-                    icon: appStateSettings["outlinedIcons"]
-                        ? Icons.fact_check_outlined
-                        : Icons.fact_check_rounded,
-                    action: () async {
-                      Budget budget = await createBudget();
-                      pushRoute(
-                        context,
-                        StreamBuilder<Budget>(
-                          stream: database.getBudget(widget.budget!.budgetPk),
-                          builder: (context, snapshot) {
-                            if (snapshot.data == null) return SizedBox.shrink();
-                            return EditBudgetLimitsPage(
-                              budget: budget,
-                              currentIsAbsoluteSpendingLimit:
-                                  snapshot.data!.isAbsoluteSpendingLimit,
-                            );
-                          },
-                        ),
-                      );
-                    },
-                  ),
               ],
             ),
           ],
@@ -760,6 +735,45 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                 SizedBox(height: 10),
               ],
             ),
+            // SliverToBoxAdapter(
+            //   child: widget.budget == null
+            //       ? SizedBox.shrink()
+            //       : Padding(
+            //           padding: const EdgeInsets.only(
+            //             left: 20,
+            //             right: 20,
+            //             bottom: 15,
+            //           ),
+            //           child: SettingsContainer(
+            //             isOutlined: true,
+            //             onTap: () async {
+            //               Budget budget = await createBudget();
+            //               pushRoute(
+            //                 context,
+            //                 StreamBuilder<Budget>(
+            //                   stream:
+            //                       database.getBudget(widget.budget!.budgetPk),
+            //                   builder: (context, snapshot) {
+            //                     if (snapshot.data == null)
+            //                       return SizedBox.shrink();
+            //                     return EditBudgetLimitsPage(
+            //                       budget: budget,
+            //                       currentIsAbsoluteSpendingLimit:
+            //                           snapshot.data!.isAbsoluteSpendingLimit,
+            //                     );
+            //                   },
+            //                 ),
+            //               );
+            //             },
+            //             title: "set-spending-goals".tr(),
+            //             icon: appStateSettings["outlinedIcons"]
+            //                 ? Icons.fact_check_outlined
+            //                 : Icons.fact_check_rounded,
+            //             iconScale: 1,
+            //             isWideOutlined: true,
+            //           ),
+            //         ),
+            // ),
             SliverToBoxAdapter(
               child: widget.budget == null
                   ? SizedBox.shrink()

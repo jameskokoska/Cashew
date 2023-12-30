@@ -335,21 +335,21 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                         );
                       },
                     ),
-                  DropdownItemMenu(
-                    id: "spending-goals",
-                    label: "spending-goals".tr(),
-                    icon: appStateSettings["outlinedIcons"]
-                        ? Icons.fact_check_outlined
-                        : Icons.fact_check_rounded,
-                    action: () {
-                      pushRoute(
-                        context,
-                        EditBudgetLimitsPage(
-                          budget: widget.budget,
-                        ),
-                      );
-                    },
-                  ),
+                  // DropdownItemMenu(
+                  //   id: "spending-goals",
+                  //   label: "spending-goals".tr(),
+                  //   icon: appStateSettings["outlinedIcons"]
+                  //       ? Icons.fact_check_outlined
+                  //       : Icons.fact_check_rounded,
+                  //   action: () {
+                  //     pushRoute(
+                  //       context,
+                  //       EditBudgetLimitsPage(
+                  //         budget: widget.budget,
+                  //       ),
+                  //     );
+                  //   },
+                  // ),
                 ],
               ),
             ],
