@@ -15,12 +15,14 @@ class TipBox extends StatefulWidget {
     required this.text,
     required this.settingsString,
     this.richTextSpan,
+    this.padding = EdgeInsets.zero,
     super.key,
   });
   final VoidCallback onTap;
   final String text;
   final List<TextSpan>? richTextSpan;
   final String? settingsString;
+  final EdgeInsets padding;
 
   @override
   State<TipBox> createState() => _TipBoxState();
@@ -35,60 +37,63 @@ class _TipBoxState extends State<TipBox> {
     return AnimatedExpanded(
       axis: Axis.vertical,
       expand: isVisible,
-      child: Tappable(
-        onTap: widget.onTap,
-        color:
-            Theme.of(context).colorScheme.secondaryContainer.withOpacity(0.7),
-        borderRadius: getIsFullScreen(context) ? 15 : 10,
-        child: Padding(
-          padding: EdgeInsets.only(
-              left: 15,
-              right: widget.settingsString == null ? 15 : 2,
-              top: 2,
-              bottom: 2),
-          child: Row(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(right: 12),
-                child: Icon(
-                  appStateSettings["outlinedIcons"]
-                      ? Icons.lightbulb_outlined
-                      : Icons.lightbulb_outline_rounded,
-                  color: Theme.of(context).colorScheme.secondary,
-                  size: 31,
-                ),
-              ),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: TextFont(
-                    textColor:
-                        Theme.of(context).colorScheme.onSecondaryContainer,
-                    text: widget.text,
-                    richTextSpan: widget.richTextSpan,
-                    maxLines: 15,
-                    fontSize: getIsFullScreen(context) ? 15 : 14,
-                  ),
-                ),
-              ),
-              if (widget.settingsString != null)
-                IconButton(
-                  padding: EdgeInsets.all(15),
-                  tooltip: "remove-tip".tr(),
-                  onPressed: () async {
-                    setState(() {
-                      isVisible = false;
-                    });
-                    updateSettings(widget.settingsString!, false,
-                        updateGlobalState: false);
-                  },
-                  icon: Icon(
+      child: Padding(
+        padding: widget.padding,
+        child: Tappable(
+          onTap: widget.onTap,
+          color:
+              Theme.of(context).colorScheme.secondaryContainer.withOpacity(0.7),
+          borderRadius: getIsFullScreen(context) ? 15 : 10,
+          child: Padding(
+            padding: EdgeInsets.only(
+                left: 15,
+                right: widget.settingsString == null ? 15 : 2,
+                top: 2,
+                bottom: 2),
+            child: Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(right: 12),
+                  child: Icon(
                     appStateSettings["outlinedIcons"]
-                        ? Icons.close_outlined
-                        : Icons.close_rounded,
+                        ? Icons.lightbulb_outlined
+                        : Icons.lightbulb_outline_rounded,
+                    color: Theme.of(context).colorScheme.secondary,
+                    size: 31,
                   ),
                 ),
-            ],
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: TextFont(
+                      textColor:
+                          Theme.of(context).colorScheme.onSecondaryContainer,
+                      text: widget.text,
+                      richTextSpan: widget.richTextSpan,
+                      maxLines: 15,
+                      fontSize: getIsFullScreen(context) ? 15 : 14,
+                    ),
+                  ),
+                ),
+                if (widget.settingsString != null)
+                  IconButton(
+                    padding: EdgeInsets.all(15),
+                    tooltip: "remove-tip".tr(),
+                    onPressed: () async {
+                      setState(() {
+                        isVisible = false;
+                      });
+                      updateSettings(widget.settingsString!, false,
+                          updateGlobalState: false);
+                    },
+                    icon: Icon(
+                      appStateSettings["outlinedIcons"]
+                          ? Icons.close_outlined
+                          : Icons.close_rounded,
+                    ),
+                  ),
+              ],
+            ),
           ),
         ),
       ),

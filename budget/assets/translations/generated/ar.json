@@ -996,5 +996,20 @@
   "and-applies-to-widget": "و App Widget",
   "widgets": "الحاجيات",
   "net-worth-total-widget": "صافي القيمة الإجمالية عنصر واجهة مستخدم",
-  "select-accounts-and-time-period": "حدد الحسابات والفترة الزمنية"
+  "select-accounts-and-time-period": "حدد الحسابات والفترة الزمنية",
+  "credit": "ائتمان",
+  "debit": "دَين",
+  "credit-summary": "ملخص الائتمان",
+  "due-on": "بسبب",
+  "current-statement-period": "فترة البيان الحالية",
+  "of-credit": "من الائتمان",
+  "of-debit": "من الخصم",
+  "account-total": "إجمالي الحساب",
+  "view-all-spending-page-tip": "عرض صفحة \"كل الإنفاق\" للحصول على تفصيل مفصل لأموالك مع مرور الوقت.",
+  "credit-limit": "الحد الائتماني",
+  "due": "حق",
+  "credit-payment": "دفعة ائتمانية",
+  "add-payment": "أضف الدفع",
+  "next-payment": "الدفعة التالية",
+  "next-payment-due": "الدفع التالي مستحق"
 }

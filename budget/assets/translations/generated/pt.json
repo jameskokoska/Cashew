@@ -996,5 +996,20 @@
   "and-applies-to-widget": "e widget de aplicativo",
   "widgets": "Widgets",
   "net-worth-total-widget": "Widget total de patrimônio líquido",
-  "select-accounts-and-time-period": "Selecione contas e período de tempo"
+  "select-accounts-and-time-period": "Selecione contas e período de tempo",
+  "credit": "Crédito",
+  "debit": "Débito",
+  "credit-summary": "Resumo do crédito",
+  "due-on": "devido a",
+  "current-statement-period": "Período da declaração atual",
+  "of-credit": "de crédito",
+  "of-debit": "de débito",
+  "account-total": "Conta total",
+  "view-all-spending-page-tip": "Veja a página de 'todos os gastos' para obter um detalhamento detalhado de suas finanças ao longo do tempo.",
+  "credit-limit": "Limite de crédito",
+  "due": "devido",
+  "credit-payment": "Pagamento de crédito",
+  "add-payment": "Adicione pagamento",
+  "next-payment": "Próximo pagamento",
+  "next-payment-due": "Próximo pagamento devido"
 }

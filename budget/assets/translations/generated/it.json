@@ -996,5 +996,20 @@
   "and-applies-to-widget": "e widget app",
   "widgets": "Widget",
   "net-worth-total-widget": "Widget totale del patrimonio netto",
-  "select-accounts-and-time-period": "Seleziona account e periodo di tempo"
+  "select-accounts-and-time-period": "Seleziona account e periodo di tempo",
+  "credit": "Credito",
+  "debit": "Addebito",
+  "credit-summary": "Riepilogo del credito",
+  "due-on": "dovuto per",
+  "current-statement-period": "Periodo di dichiarazione attuale",
+  "of-credit": "di credito",
+  "of-debit": "di debito",
+  "account-total": "Totale del conto",
+  "view-all-spending-page-tip": "Visualizza la pagina \"All Spense\" per una rottura dettagliata delle tue finanze nel tempo.",
+  "credit-limit": "Limite di credito",
+  "due": "dovuto",
+  "credit-payment": "Pagamento del credito",
+  "add-payment": "Aggiungi pagamento",
+  "next-payment": "Pagamento successivo",
+  "next-payment-due": "Pagamento successivo dovuto"
 }

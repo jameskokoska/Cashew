@@ -996,5 +996,20 @@
   "and-applies-to-widget": "și Widget App",
   "widgets": "Widgets",
   "net-worth-total-widget": "Widget total de valoare netă",
-  "select-accounts-and-time-period": "Selectați conturi și perioada de timp"
+  "select-accounts-and-time-period": "Selectați conturi și perioada de timp",
+  "credit": "Credit",
+  "debit": "Debit",
+  "credit-summary": "Rezumatul creditului",
+  "due-on": "datorat pe",
+  "current-statement-period": "Perioada actuală a declarației",
+  "of-credit": "de credit",
+  "of-debit": "de debit",
+  "account-total": "Cont total",
+  "view-all-spending-page-tip": "Vizualizați pagina „toate cheltuielile” pentru o defalcare detaliată a finanțelor dvs. în timp.",
+  "credit-limit": "Limita de credit",
+  "due": "datorat",
+  "credit-payment": "Plata creditului",
+  "add-payment": "Adăugați plata",
+  "next-payment": "Următoarea plată",
+  "next-payment-due": "Următoarea plată datorată"
 }

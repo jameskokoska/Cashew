@@ -996,5 +996,20 @@
   "and-applies-to-widget": "и виджет приложений",
   "widgets": "Виджеты",
   "net-worth-total-widget": "Чистый вариант общий виджет",
-  "select-accounts-and-time-period": "Выберите учетные записи и период времени"
+  "select-accounts-and-time-period": "Выберите учетные записи и период времени",
+  "credit": "Кредит",
+  "debit": "Дебет",
+  "credit-summary": "Кредит резюме",
+  "due-on": "выполнить к",
+  "current-statement-period": "Текущий период заявления",
+  "of-credit": "кредита",
+  "of-debit": "дебет",
+  "account-total": "Общая учетная запись",
+  "view-all-spending-page-tip": "Посмотреть страницу «Все расходы» для подробного разбивки ваших финансов с течением времени.",
+  "credit-limit": "Кредитный лимит",
+  "due": "должный",
+  "credit-payment": "Кредитный платеж",
+  "add-payment": "Добавить оплату",
+  "next-payment": "Следующий платеж",
+  "next-payment-due": "Следующий оплата причитается"
 }

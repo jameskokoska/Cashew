@@ -996,5 +996,20 @@
   "and-applies-to-widget": "και το widget εφαρμογών",
   "widgets": "Widgets",
   "net-worth-total-widget": "Συνολικό widget καθαρής αξίας",
-  "select-accounts-and-time-period": "Επιλέξτε λογαριασμούς και χρονική περίοδο"
+  "select-accounts-and-time-period": "Επιλέξτε λογαριασμούς και χρονική περίοδο",
+  "credit": "Πίστωση",
+  "debit": "Χρέωση",
+  "credit-summary": "Περίληψη πίστωσης",
+  "due-on": "οφείλεται στις",
+  "current-statement-period": "Τρέχουσα περίοδος δήλωσης",
+  "of-credit": "πίστωσης",
+  "of-debit": "χρεωστικός",
+  "account-total": "Συνολικά",
+  "view-all-spending-page-tip": "Δείτε τη σελίδα \"Όλες οι δαπάνες\" για λεπτομερή κατανομή των οικονομικών σας με την πάροδο του χρόνου.",
+  "credit-limit": "Πιστωτικό όριο",
+  "due": "λόγω",
+  "credit-payment": "Πληρωμή πιστώσεων",
+  "add-payment": "Προσθέστε πληρωμή",
+  "next-payment": "Επόμενη πληρωμή",
+  "next-payment-due": "Επόμενη πληρωμή"
 }

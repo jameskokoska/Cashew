@@ -996,5 +996,20 @@
   "and-applies-to-widget": "మరియు అనువర్తన విడ్జెట్",
   "widgets": "విడ్జెట్లు",
   "net-worth-total-widget": "నికర విలువ మొత్తం విడ్జెట్",
-  "select-accounts-and-time-period": "ఖాతాలు మరియు కాల వ్యవధిని ఎంచుకోండి"
+  "select-accounts-and-time-period": "ఖాతాలు మరియు కాల వ్యవధిని ఎంచుకోండి",
+  "credit": "క్రెడిట్",
+  "debit": "డెబిట్",
+  "credit-summary": "క్రెడిట్ సారాంశం",
+  "due-on": "ఎందుకంటే",
+  "current-statement-period": "ప్రస్తుత స్టేట్మెంట్ వ్యవధి",
+  "of-credit": "క్రెడిట్",
+  "of-debit": "డెబిట్",
+  "account-total": "ఖాతా మొత్తం",
+  "view-all-spending-page-tip": "కాలక్రమేణా మీ ఆర్ధికవ్యవస్థ యొక్క వివరణాత్మక విచ్ఛిన్నం కోసం 'అన్ని ఖర్చు' పేజీని చూడండి.",
+  "credit-limit": "క్రెడిట్ పరిమితి",
+  "due": "గడువు",
+  "credit-payment": "క్రెడిట్ చెల్లింపు",
+  "add-payment": "చెల్లింపును జోడించండి",
+  "next-payment": "తదుపరి చెల్లింపు",
+  "next-payment-due": "తదుపరి చెల్లింపు"
 }

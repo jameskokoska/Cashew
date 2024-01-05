@@ -1337,7 +1337,9 @@ List<IconForCategory> iconObjects = [
       "give",
       "receive",
       "wrapping paper",
-      "bow"
+      "bow",
+      "christmas",
+      "holidays",
     ],
     mostLikelyCategoryName: "Gifts",
   ),
@@ -2177,7 +2179,7 @@ List<IconForCategory> iconObjects = [
       "child",
       "gift",
       "future",
-      "wealth"
+      "wealth",
     ],
     mostLikelyCategoryName: "Savings",
   ),
@@ -2542,7 +2544,8 @@ List<IconForCategory> iconObjects = [
       "holiday",
       "seasonal",
       "snowflake",
-      "festive"
+      "festive",
+      "christmas",
     ],
     mostLikelyCategoryName: "Winter",
   ),
@@ -3397,7 +3400,8 @@ List<IconForCategory> iconObjects = [
       "accessory",
       "style",
       "clothing",
-      "head"
+      "head",
+      "christmas",
     ],
     mostLikelyCategoryName: "Winter",
   ),
@@ -4388,8 +4392,73 @@ List<IconForCategory> iconObjects = [
       "cellular",
       "telecom",
       "network",
-      "technology"
+      "technology",
+      "plan"
     ],
     mostLikelyCategoryName: "Phone",
+  ),
+  IconForCategory(
+    icon: "christmas-tree.png",
+    tags: [
+      "christmas-tree",
+      "christmas",
+      "tree",
+      "holiday",
+      "festive",
+      "celebration",
+      "decor",
+      "ornament",
+      "seasonal",
+      "winter"
+    ],
+    mostLikelyCategoryName: "Holidays",
+  ),
+  IconForCategory(
+    icon: "confetti(2).png",
+    tags: [
+      "confetti(2)",
+      "confetti",
+      "celebration",
+      "party",
+      "event",
+      "festive",
+      "colorful",
+      "paper",
+      "fun",
+      "scattered"
+    ],
+    mostLikelyCategoryName: "Parties",
+  ),
+  IconForCategory(
+    icon: "safe-box.png",
+    tags: [
+      "safe-box",
+      "safe",
+      "security",
+      "vault",
+      "protection",
+      "lock",
+      "secure",
+      "strongbox",
+      "money",
+      "safety"
+    ],
+    mostLikelyCategoryName: "Safe",
+  ),
+  IconForCategory(
+    icon: "security-box.png",
+    tags: [
+      "security-box",
+      "security",
+      "box",
+      "safe",
+      "vault",
+      "protection",
+      "lock",
+      "secure",
+      "strongbox",
+      "safety"
+    ],
+    mostLikelyCategoryName: "Safe",
   ),
 ];

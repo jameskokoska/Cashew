@@ -450,14 +450,14 @@ Future<TransactionWallet?> selectWalletPopup(
     PopupFramework(
       title: "select-account".tr(),
       subtitle: subtitle,
-      child: StreamBuilder<List<TransactionWallet>>(
-        stream: database.watchAllWallets(),
+      child: StreamBuilder<List<WalletWithDetails>>(
+        stream: database.watchAllWalletsWithDetails(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            List<TransactionWallet> walletsWithoutOneDeleted = snapshot.data!;
+            List<WalletWithDetails> walletsWithoutOneDeleted = snapshot.data!;
             if (removeWalletPk != null)
               walletsWithoutOneDeleted.removeWhere(
-                  (TransactionWallet w) => w.walletPk == removeWalletPk);
+                  (WalletWithDetails w) => w.wallet.walletPk == removeWalletPk);
             if (walletsWithoutOneDeleted.isEmpty) {
               return Padding(
                 padding: const EdgeInsets.only(bottom: 15),
@@ -465,12 +465,16 @@ Future<TransactionWallet?> selectWalletPopup(
               );
             }
             return RadioItems(
-              getSelected: (TransactionWallet? wallet) {
+              getSelected: (Object? object) {
+                TransactionWallet? wallet;
+                if (object is WalletWithDetails) wallet = object.wallet;
                 if (wallet?.walletPk == selectedWallet?.walletPk) return true;
                 return false;
               },
               items: walletsWithoutOneDeleted,
-              colorFilter: (TransactionWallet? wallet) {
+              colorFilter: (Object? object) {
+                TransactionWallet? wallet;
+                if (object is WalletWithDetails) wallet = object.wallet;
                 if (wallet == null) return null;
                 return dynamicPastel(
                   context,
@@ -484,18 +488,36 @@ Future<TransactionWallet?> selectWalletPopup(
                   amount: 0.1,
                 );
               },
-              displayFilter: (TransactionWallet? wallet) {
-                return (wallet?.name ?? "") +
-                    " " +
-                    "(" +
-                    (wallet?.currency ?? "").allCaps +
-                    ")";
+              displayFilter: (Object? object) {
+                TransactionWallet? wallet;
+                if (object is WalletWithDetails) wallet = object.wallet;
+                return wallet?.name ?? "";
+              },
+              getEndInfo: (Object? object) {
+                TransactionWallet? wallet;
+                double totalSpent = 0;
+                if (object is WalletWithDetails) {
+                  wallet = object.wallet;
+                  totalSpent = object.totalSpent ?? 0;
+                }
+                return convertToMoney(
+                  Provider.of<AllWallets>(context),
+                  totalSpent,
+                  finalNumber: totalSpent,
+                  currencyKey: wallet?.currency,
+                  decimals: wallet?.decimals,
+                  addCurrencyName: true,
+                );
               },
               initial: selectedWallet,
-              onChanged: (TransactionWallet? wallet) async {
+              onChanged: (Object? object) {
+                TransactionWallet? wallet;
+                if (object is WalletWithDetails) wallet = object.wallet;
                 Navigator.of(context).pop(wallet);
               },
-              onLongPress: (TransactionWallet? wallet) {
+              onLongPress: (Object? object) {
+                TransactionWallet? wallet;
+                if (object is WalletWithDetails) wallet = object.wallet;
                 if (allowEditWallet)
                   pushRoute(
                     context,

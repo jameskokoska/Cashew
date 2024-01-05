@@ -996,5 +996,20 @@
   "and-applies-to-widget": "ja APP -widget",
   "widgets": "Widgetit",
   "net-worth-total-widget": "Nettovarallisuus kokonaiswidget",
-  "select-accounts-and-time-period": "Valitse tilit ja ajanjakso"
+  "select-accounts-and-time-period": "Valitse tilit ja ajanjakso",
+  "credit": "Luotto",
+  "debit": "Veloittaa",
+  "credit-summary": "Luottoyhteenveto",
+  "due-on": "erääntyy",
+  "current-statement-period": "Nykyinen lausuntokausi",
+  "of-credit": "luottoa",
+  "of-debit": "veloitus",
+  "account-total": "Tilin kokonaismäärä",
+  "view-all-spending-page-tip": "Katso 'kaikki menot' -sivulle yksityiskohtainen jakautuminen taloudestasi ajan myötä.",
+  "credit-limit": "Luottoraja",
+  "due": "erääntyvä",
+  "credit-payment": "Luottomaksu",
+  "add-payment": "Lisätä maksua",
+  "next-payment": "Seuraava maksu",
+  "next-payment-due": "Seuraava maksu"
 }

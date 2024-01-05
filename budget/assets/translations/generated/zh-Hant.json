@@ -996,5 +996,20 @@
   "and-applies-to-widget": "和應用小部件",
   "widgets": "小部件",
   "net-worth-total-widget": "淨資產總小部件",
-  "select-accounts-and-time-period": "選擇帳戶和時間段"
+  "select-accounts-and-time-period": "選擇帳戶和時間段",
+  "credit": "信用",
+  "debit": "借方",
+  "credit-summary": "信用摘要",
+  "due-on": "由於上",
+  "current-statement-period": "當前聲明期",
+  "of-credit": "信用",
+  "of-debit": "借方",
+  "account-total": "帳戶總計",
+  "view-all-spending-page-tip": "查看“所有支出”頁面，以詳細介紹您的財務時間。",
+  "credit-limit": "信用額度",
+  "due": "到期的",
+  "credit-payment": "信用付款",
+  "add-payment": "添加付款",
+  "next-payment": "下一個付款",
+  "next-payment-due": "下一次付款應付"
 }

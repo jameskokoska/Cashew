@@ -996,5 +996,20 @@
   "and-applies-to-widget": "ווידג'ט אפליקציות",
   "widgets": "ווידג'טים",
   "net-worth-total-widget": "הווידג'ט הכולל של שווי נטו",
-  "select-accounts-and-time-period": "בחר חשבונות ותקופת זמן"
+  "select-accounts-and-time-period": "בחר חשבונות ותקופת זמן",
+  "credit": "אַשׁרַאי",
+  "debit": "חוֹבָה",
+  "credit-summary": "סיכום אשראי",
+  "due-on": "בגלל",
+  "current-statement-period": "תקופת הצהרה נוכחית",
+  "of-credit": "של קרדיט",
+  "of-debit": "של חיוב",
+  "account-total": "חשבון סה\"כ",
+  "view-all-spending-page-tip": "צפה בדף 'כל ההוצאות' לפירוט מפורט של הכספים שלך לאורך זמן.",
+  "credit-limit": "מסגרת אשראי",
+  "due": "נודע",
+  "credit-payment": "תשלום אשראי",
+  "add-payment": "הוסף תשלום",
+  "next-payment": "התשלום הבא",
+  "next-payment-due": "התשלום הבא המגיע"
 }

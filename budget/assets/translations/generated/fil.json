@@ -996,5 +996,20 @@
   "and-applies-to-widget": "at widget ng app",
   "widgets": "Mga widget",
   "net-worth-total-widget": "Net nagkakahalaga ng kabuuang widget",
-  "select-accounts-and-time-period": "Piliin ang mga account at tagal ng oras"
+  "select-accounts-and-time-period": "Piliin ang mga account at tagal ng oras",
+  "credit": "Kredito",
+  "debit": "Utang",
+  "credit-summary": "Buod ng kredito",
+  "due-on": "dahil sa",
+  "current-statement-period": "Kasalukuyang Panahon ng Pahayag",
+  "of-credit": "ng kredito",
+  "of-debit": "ng debit",
+  "account-total": "Kabuuan ng account",
+  "view-all-spending-page-tip": "Tingnan ang pahina ng 'All Spending' para sa isang detalyadong pagkasira ng iyong pananalapi sa paglipas ng panahon.",
+  "credit-limit": "Limitasyon ng kredito",
+  "due": "Dahil sa",
+  "credit-payment": "Pagbabayad ng kredito",
+  "add-payment": "Magdagdag ng pagbabayad",
+  "next-payment": "Susunod na pagbabayad",
+  "next-payment-due": "Susunod na pagbabayad"
 }

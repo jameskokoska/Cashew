@@ -996,5 +996,20 @@
   "and-applies-to-widget": "и джаджа за приложения",
   "widgets": "Джаджи",
   "net-worth-total-widget": "Обща джаджа с нетна стойност",
-  "select-accounts-and-time-period": "Изберете акаунти и период от време"
+  "select-accounts-and-time-period": "Изберете акаунти и период от време",
+  "credit": "Кредит",
+  "debit": "Дебит",
+  "credit-summary": "Обобщение на кредита",
+  "due-on": "дължи се на",
+  "current-statement-period": "Текущ период на изявление",
+  "of-credit": "на кредит",
+  "of-debit": "на дебит",
+  "account-total": "Общо акаунт",
+  "view-all-spending-page-tip": "Вижте страницата „Всички разходи“ за подробна разбивка на вашите финанси във времето.",
+  "credit-limit": "Кредитен лимит",
+  "due": "в следствие",
+  "credit-payment": "Кредитно плащане",
+  "add-payment": "Добавете плащане",
+  "next-payment": "Следващо плащане",
+  "next-payment-due": "Следващото дължимо плащане"
 }

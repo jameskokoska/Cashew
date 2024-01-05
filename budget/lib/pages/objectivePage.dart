@@ -20,6 +20,7 @@ import 'package:budget/widgets/framework/popupFramework.dart';
 import 'package:budget/widgets/listItem.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/outlinedButtonStacked.dart';
+import 'package:budget/widgets/selectCategoryImage.dart';
 import 'package:budget/widgets/selectedTransactionsAppBar.dart';
 import 'package:budget/widgets/budgetContainer.dart';
 import 'package:budget/widgets/categoryEntry.dart';
@@ -35,6 +36,7 @@ import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntries.dart';
 import 'package:budget/widgets/transactionEntry/transactionEntry.dart';
+import 'package:drift/drift.dart' show Value;
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -221,9 +223,11 @@ class _ObjectivePageContentState extends State<_ObjectivePageContent> {
                         hasPlayedConfetti == false) {
                       confettiController.play();
                       hasPlayedConfetti = true;
-                    } else {
-                      hasPlayedConfetti = false;
                     }
+                    // Only play the confetti once, so leave this out
+                    // else {
+                    //   hasPlayedConfetti = false;
+                    // }
                     return Column(
                       children: [
                         Padding(
@@ -281,6 +285,53 @@ class _ObjectivePageContentState extends State<_ObjectivePageContent> {
                                     borderRadius: 100,
                                     canEditByLongPress: false,
                                     margin: EdgeInsets.zero,
+                                    onTap: () async {
+                                      await openBottomSheet(
+                                        context,
+                                        PopupFramework(
+                                          title: "select-icon".tr(),
+                                          child: SelectCategoryImage(
+                                            setSelectedImage:
+                                                (String? selection) async {
+                                              String? selectedIcon =
+                                                  (selection ?? "")
+                                                      .replaceFirst(
+                                                          "assets/categories/",
+                                                          "");
+                                              Objective newObjective =
+                                                  widget.objective.copyWith(
+                                                iconName: Value(selectedIcon),
+                                                emojiIconName: Value(null),
+                                              );
+                                              await database
+                                                  .createOrUpdateObjective(
+                                                newObjective,
+                                              );
+                                            },
+                                            setSelectedEmoji:
+                                                (String? selection) async {
+                                              Objective newObjective =
+                                                  widget.objective.copyWith(
+                                                iconName: Value(null),
+                                                emojiIconName: Value(selection),
+                                              );
+                                              await database
+                                                  .createOrUpdateObjective(
+                                                newObjective,
+                                              );
+                                              print(newObjective);
+                                            },
+                                            selectedImage:
+                                                "assets/categories/" +
+                                                    widget.objective.iconName
+                                                        .toString(),
+                                            setSelectedTitle: (String?
+                                                titleRecommendation) {},
+                                          ),
+                                        ),
+                                        showScrollbar: true,
+                                      );
+                                    },
                                   ),
                                   SizedBox(height: 10),
                                   CountNumber(
@@ -371,7 +422,8 @@ class _ObjectivePageContentState extends State<_ObjectivePageContent> {
                                   if (widget.objective.type ==
                                       ObjectiveType.loan)
                                     TextFont(
-                                      text: showTotalSpent
+                                      text: showTotalSpent ||
+                                              totalAmount >= objectiveAmount
                                           ? (widget.objective.income
                                               ? "collected".tr()
                                               : "paid".tr())

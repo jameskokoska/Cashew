@@ -996,5 +996,20 @@
   "and-applies-to-widget": "आणि अ‍ॅप विजेट",
   "widgets": "विजेट्स",
   "net-worth-total-widget": "निव्वळ किमतीची एकूण विजेट",
-  "select-accounts-and-time-period": "खाती आणि वेळ कालावधी निवडा"
+  "select-accounts-and-time-period": "खाती आणि वेळ कालावधी निवडा",
+  "credit": "पत",
+  "debit": "डेबिट",
+  "credit-summary": "क्रेडिट सारांश",
+  "due-on": "ला देय",
+  "current-statement-period": "चालू विधान कालावधी",
+  "of-credit": "पत",
+  "of-debit": "डेबिटचा",
+  "account-total": "खाते एकूण",
+  "view-all-spending-page-tip": "वेळोवेळी आपल्या वित्तपुरवठ्याच्या तपशीलवार विघटनासाठी 'सर्व खर्च' पृष्ठ पहा.",
+  "credit-limit": "पत मर्यादा",
+  "due": "देय",
+  "credit-payment": "पत देयके",
+  "add-payment": "देयक जोडा",
+  "next-payment": "पुढील देयक",
+  "next-payment-due": "पुढील देय देय"
 }

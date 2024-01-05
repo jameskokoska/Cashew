@@ -996,5 +996,20 @@
   "and-applies-to-widget": "ve uygulama widget'ı",
   "widgets": "Widget'lar",
   "net-worth-total-widget": "Net değerinde toplam widget",
-  "select-accounts-and-time-period": "Hesapları ve Zaman Dönemi'ni seçin"
+  "select-accounts-and-time-period": "Hesapları ve Zaman Dönemi'ni seçin",
+  "credit": "Kredi",
+  "debit": "Borç",
+  "credit-summary": "Kredi Özeti",
+  "due-on": "ödenen",
+  "current-statement-period": "Mevcut ifade dönemi",
+  "of-credit": "kredi",
+  "of-debit": "borçlu",
+  "account-total": "Hesap toplamı",
+  "view-all-spending-page-tip": "Mali durumunuzun zaman içinde ayrıntılı olarak dökümü için 'All Harcanma' sayfasını görüntüleyin.",
+  "credit-limit": "Kredi limiti",
+  "due": "vadesi dolmuş",
+  "credit-payment": "Kredi ödeme",
+  "add-payment": "Ödeme Ekle",
+  "next-payment": "Sonraki ödeme",
+  "next-payment-due": "Sonraki Ödeme Sonu"
 }

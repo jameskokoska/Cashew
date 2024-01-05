@@ -26,6 +26,17 @@ import 'listItem.dart';
 
 String getChangelogString() {
   return """
+    < 5.1.4
+    Selecting account shows total amount in the account
+    Time and period range in wallet details page
+    Default categories are not created after backup just restored
+    Vault and holiday category icons
+    Improved fix for overlapping pie chart labels
+    Fixed loading past budget spending periods, -0 would be shown as the total percent
+    Fixed collected/borrowed label when long term loan achieved
+    Limited confetti to play only once
+    Change goal/long term loan icon by tapping it in the details page
+    Partially collecting/settling a loan auto fills with total amount
     < 5.1.3
     Fixed overlapping pie chart labels
     Improved background color for all spending time range quick switch header

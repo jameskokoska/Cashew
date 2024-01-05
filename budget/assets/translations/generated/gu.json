@@ -996,5 +996,20 @@
   "and-applies-to-widget": "અને એપ્લિકેશન વિજેટ",
   "widgets": "વિજેટો",
   "net-worth-total-widget": "કુલ મૂલ્યની કિંમત",
-  "select-accounts-and-time-period": "એકાઉન્ટ્સ અને સમયગાળો પસંદ કરો"
+  "select-accounts-and-time-period": "એકાઉન્ટ્સ અને સમયગાળો પસંદ કરો",
+  "credit": "જમા",
+  "debit": "ઉધાર",
+  "credit-summary": "સારાંશ",
+  "due-on": "ને કારણે",
+  "current-statement-period": "વર્તમાન નિવેદન સમયગાળો",
+  "of-credit": "શાખ",
+  "of-debit": "ઉધારનો",
+  "account-total": "હિસાબ",
+  "view-all-spending-page-tip": "સમય જતાં તમારી નાણાકીય બાબતોના વિગતવાર ભંગાણ માટે 'ઓલ ખર્ચ' પૃષ્ઠ જુઓ.",
+  "credit-limit": "શાખ -હદ",
+  "due": "યોગ્ય",
+  "credit-payment": "ઉદાર ચુકવણી",
+  "add-payment": "ચુકવણી ઉમેરો",
+  "next-payment": "આગામી ચુકવણી",
+  "next-payment-due": "બાકી ચૂકવણી"
 }

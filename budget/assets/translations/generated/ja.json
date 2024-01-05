@@ -996,5 +996,20 @@
   "and-applies-to-widget": "およびアプリウィジェット",
   "widgets": "ウィジェット",
   "net-worth-total-widget": "純資産合計ウィジェット",
-  "select-accounts-and-time-period": "アカウントと期間を選択します"
+  "select-accounts-and-time-period": "アカウントと期間を選択します",
+  "credit": "クレジット",
+  "debit": "デビット",
+  "credit-summary": "クレジットサマリー",
+  "due-on": "予定",
+  "current-statement-period": "現在のステートメント期間",
+  "of-credit": "クレジットの",
+  "of-debit": "デビットの",
+  "account-total": "アカウント合計",
+  "view-all-spending-page-tip": "「すべての支出」ページを表示して、時間の経過とともに財務の詳細な内訳をご覧ください。",
+  "credit-limit": "クレジット制限",
+  "due": "期限",
+  "credit-payment": "クレジット支払い",
+  "add-payment": "支払いを追加します",
+  "next-payment": "次の支払い",
+  "next-payment-due": "次の支払い期限"
 }

@@ -996,5 +996,20 @@
   "and-applies-to-widget": "dan widget aplikasi",
   "widgets": "Widget",
   "net-worth-total-widget": "Widget Jumlah Berhubungan Bersih",
-  "select-accounts-and-time-period": "Pilih akaun dan tempoh masa"
+  "select-accounts-and-time-period": "Pilih akaun dan tempoh masa",
+  "credit": "Kredit",
+  "debit": "Debit",
+  "credit-summary": "Ringkasan Kredit",
+  "due-on": "Berdasarkan",
+  "current-statement-period": "Tempoh penyata semasa",
+  "of-credit": "kredit",
+  "of-debit": "debit",
+  "account-total": "Jumlah akaun",
+  "view-all-spending-page-tip": "Lihat halaman 'semua perbelanjaan' untuk pecahan terperinci kewangan anda dari masa ke masa.",
+  "credit-limit": "Had kredit",
+  "due": "kerana",
+  "credit-payment": "Pembayaran kredit",
+  "add-payment": "Tambah pembayaran",
+  "next-payment": "Pembayaran seterusnya",
+  "next-payment-due": "Pembayaran seterusnya"
 }

@@ -996,5 +996,20 @@
   "and-applies-to-widget": "এবং অ্যাপ উইজেট",
   "widgets": "উইজেটস",
   "net-worth-total-widget": "নিট মূল্য মোট উইজেট",
-  "select-accounts-and-time-period": "অ্যাকাউন্ট এবং সময়কাল নির্বাচন করুন"
+  "select-accounts-and-time-period": "অ্যাকাউন্ট এবং সময়কাল নির্বাচন করুন",
+  "credit": "ক্রেডিট",
+  "debit": "ডেবিট",
+  "credit-summary": "ক্রেডিট সংক্ষিপ্তসার",
+  "due-on": "কারণে",
+  "current-statement-period": "বর্তমান বিবৃতি সময়কাল",
+  "of-credit": "ক্রেডিট",
+  "of-debit": "ডেবিট",
+  "account-total": "মোট অ্যাকাউন্ট",
+  "view-all-spending-page-tip": "সময়ের সাথে আপনার অর্থের বিশদ ভাঙ্গনের জন্য 'সমস্ত ব্যয়' পৃষ্ঠাটি দেখুন।",
+  "credit-limit": "ক্রেডিট সীমা",
+  "due": "বাকি",
+  "credit-payment": "ক্রেডিট পেমেন্ট",
+  "add-payment": "অর্থ প্রদান যোগ করুন",
+  "next-payment": "পরবর্তী অর্থ প্রদান",
+  "next-payment-due": "পরবর্তী অর্থ প্রদানের কারণে"
 }

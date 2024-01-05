@@ -996,5 +996,20 @@
   "and-applies-to-widget": "et le widget de l'application",
   "widgets": "Widgets",
   "net-worth-total-widget": "Widget total de valeur nette",
-  "select-accounts-and-time-period": "Sélectionnez les comptes et la période"
+  "select-accounts-and-time-period": "Sélectionnez les comptes et la période",
+  "credit": "Crédit",
+  "debit": "Débit",
+  "credit-summary": "Résumé du crédit",
+  "due-on": "dû sur",
+  "current-statement-period": "Période de déclaration actuelle",
+  "of-credit": "de crédit",
+  "of-debit": "de débit",
+  "account-total": "Compte total",
+  "view-all-spending-page-tip": "Consultez la page «toutes dépenses» pour une ventilation détaillée de vos finances au fil du temps.",
+  "credit-limit": "Limite de crédit",
+  "due": "exigible",
+  "credit-payment": "Paiement de crédit",
+  "add-payment": "Ajouter un paiement",
+  "next-payment": "Prochain paiement",
+  "next-payment-due": "Paiement suivant dû"
 }

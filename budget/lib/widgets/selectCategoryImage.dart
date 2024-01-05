@@ -76,7 +76,6 @@ class _SelectCategoryImageState extends State<SelectCategoryImage> {
                   ? Icons.emoji_emotions_outlined
                   : Icons.emoji_emotions_rounded,
               setSelectedText: (value) {
-                widget.setSelectedImage(null);
                 widget.setSelectedEmoji(value);
               },
               popContextWhenSet: true,
@@ -189,7 +188,6 @@ class _SelectCategoryImageState extends State<SelectCategoryImage> {
                     iconPath: "assets/categories/" + image.icon,
                     onTap: () {
                       widget.setSelectedImage(image.icon);
-                      widget.setSelectedEmoji(null);
                       if (context.locale.toString() == "en")
                         widget.setSelectedTitle(image.mostLikelyCategoryName);
                       setState(() {

@@ -996,5 +996,20 @@
   "and-applies-to-widget": "ഒപ്പം അപ്ലിക്കേഷനും വിജറ്റ്",
   "widgets": "വിഡ്ജറ്റുകൾ",
   "net-worth-total-widget": "മൊത്തം വിജറ്റ് മൂല്യം",
-  "select-accounts-and-time-period": "അക്കൗണ്ടുകളും സമയപരിധിയും തിരഞ്ഞെടുക്കുക"
+  "select-accounts-and-time-period": "അക്കൗണ്ടുകളും സമയപരിധിയും തിരഞ്ഞെടുക്കുക",
+  "credit": "കീര്ത്തി",
+  "debit": "അപരാതം",
+  "credit-summary": "ക്രെഡിറ്റ് സംഗ്രഹം",
+  "due-on": "കാരണം",
+  "current-statement-period": "നിലവിലെ സ്റ്റേറ്റ്മെന്റ് കാലയളവ്",
+  "of-credit": "ക്രെഡിറ്റ്",
+  "of-debit": "ഡെബിറ്റിന്റെ",
+  "account-total": "ആകെ അക്കൗണ്ട്",
+  "view-all-spending-page-tip": "കാലക്രമേണ നിങ്ങളുടെ ധനകാര്യത്തിന്റെ വിശദമായ തകർച്ചയ്ക്കായി 'എല്ലാ ചെലവും' പേജ് കാണുക.",
+  "credit-limit": "ക്രെഡിറ്റ് പരിധി",
+  "due": "കുടിശ്ശിക",
+  "credit-payment": "ക്രെഡിറ്റ് പേയ്മെന്റ്",
+  "add-payment": "പേയ്മെന്റ് ചേർക്കുക",
+  "next-payment": "അടുത്ത പേയ്മെന്റ്",
+  "next-payment-due": "അടുത്ത പണമടയ്ക്കൽ"
 }

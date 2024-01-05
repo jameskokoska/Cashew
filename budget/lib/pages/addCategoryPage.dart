@@ -90,6 +90,7 @@ class _AddCategoryPageState extends State<AddCategoryPage>
   void setSelectedImage(String? image) {
     setState(() {
       selectedImage = (image ?? "").replaceFirst("assets/categories/", "");
+      selectedEmoji = null;
     });
     determineBottomButton();
     return;
@@ -98,6 +99,7 @@ class _AddCategoryPageState extends State<AddCategoryPage>
   void setSelectedEmoji(String? emoji) {
     setState(() {
       selectedEmoji = emoji;
+      selectedImage = null;
     });
     determineBottomButton();
     return;

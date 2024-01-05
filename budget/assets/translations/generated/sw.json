@@ -996,5 +996,20 @@
   "and-applies-to-widget": "na widget ya programu",
   "widgets": "Vilivyoandikwa",
   "net-worth-total-widget": "Net yenye thamani ya jumla ya widget",
-  "select-accounts-and-time-period": "Chagua akaunti na kipindi cha wakati"
+  "select-accounts-and-time-period": "Chagua akaunti na kipindi cha wakati",
+  "credit": "Mikopo",
+  "debit": "Deni",
+  "credit-summary": "Muhtasari wa mkopo",
+  "due-on": "kwa sababu",
+  "current-statement-period": "Kipindi cha taarifa ya sasa",
+  "of-credit": "ya mkopo",
+  "of-debit": "ya deni",
+  "account-total": "Jumla ya akaunti",
+  "view-all-spending-page-tip": "Angalia ukurasa wa 'Matumizi yote' kwa kuvunjika kwa kina kwa fedha zako kwa wakati.",
+  "credit-limit": "Kikomo cha mkopo",
+  "due": "kwa sababu",
+  "credit-payment": "Malipo ya mkopo",
+  "add-payment": "Ongeza malipo",
+  "next-payment": "Malipo yanayofuata",
+  "next-payment-due": "Malipo yanayofuata"
 }

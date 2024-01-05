@@ -996,5 +996,20 @@
   "and-applies-to-widget": "and app widget",
   "widgets": "Widgets",
   "net-worth-total-widget": "Net Worth Total Widget",
-  "select-accounts-and-time-period": "Select accounts and time period"
+  "select-accounts-and-time-period": "Select accounts and time period",
+  "credit": "Credit",
+  "debit": "Debit",
+  "credit-summary": "Credit Summary",
+  "due-on": "due on",
+  "current-statement-period": "Current Statement Period",
+  "of-credit": "of credit",
+  "of-debit": "of debit",
+  "account-total": "Account Total",
+  "view-all-spending-page-tip": "View the 'All Spending' page for a detailed breakdown of your finances over time.",
+  "credit-limit": "Credit Limit",
+  "due": "due",
+  "credit-payment": "Credit Payment",
+  "add-payment": "Add Payment",
+  "next-payment": "Next payment",
+  "next-payment-due": "Next Payment Due"
 }

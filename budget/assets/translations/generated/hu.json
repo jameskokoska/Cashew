@@ -996,5 +996,20 @@
   "and-applies-to-widget": "és az alkalmazás widget",
   "widgets": "Kütyü",
   "net-worth-total-widget": "Nettó vagyon teljes widget",
-  "select-accounts-and-time-period": "Válassza ki a Fiókok és az Időszak időtartamát"
+  "select-accounts-and-time-period": "Válassza ki a Fiókok és az Időszak időtartamát",
+  "credit": "Hitel",
+  "debit": "Terhelés",
+  "credit-summary": "Hitelképességi összefoglaló",
+  "due-on": "esedékes",
+  "current-statement-period": "Aktuális kimutatási időszak",
+  "of-credit": "hitelképesség",
+  "of-debit": "terhelés",
+  "account-total": "Számla teljes",
+  "view-all-spending-page-tip": "Tekintse meg az „összes kiadás” oldalt a pénzügyeinek részletes bontásához az idő múlásával.",
+  "credit-limit": "Hitelkeret",
+  "due": "esedékes",
+  "credit-payment": "Hitelfizetés",
+  "add-payment": "Fizetés adása",
+  "next-payment": "Következő fizetés",
+  "next-payment-due": "Következő fizetés esedékes"
 }

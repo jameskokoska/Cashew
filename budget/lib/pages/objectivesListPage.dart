@@ -416,6 +416,7 @@ class ObjectiveContainer extends StatelessWidget {
                                   ],
                                 ),
                               ),
+                              SizedBox(width: 5),
                               CategoryIcon(
                                 categoryPk: "-1",
                                 category: TransactionCategory(

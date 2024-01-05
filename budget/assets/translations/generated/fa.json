@@ -996,5 +996,20 @@
   "and-applies-to-widget": "و ویجت برنامه",
   "widgets": "ویراچه",
   "net-worth-total-widget": "ویجت کل ارزش خالص",
-  "select-accounts-and-time-period": "حساب ها و دوره زمانی را انتخاب کنید"
+  "select-accounts-and-time-period": "حساب ها و دوره زمانی را انتخاب کنید",
+  "credit": "اعتبار",
+  "debit": "بدهی",
+  "credit-summary": "خلاصه اعتبار",
+  "due-on": "در",
+  "current-statement-period": "دوره بیانیه فعلی",
+  "of-credit": "اعتبار",
+  "of-debit": "بدهی",
+  "account-total": "کل حساب",
+  "view-all-spending-page-tip": "برای تفکیک دقیق امور مالی خود به مرور زمان ، صفحه \"همه هزینه ها\" را مشاهده کنید.",
+  "credit-limit": "محدودیت اعتبار",
+  "due": "ناشی از",
+  "credit-payment": "پرداخت اعتباری",
+  "add-payment": "اضافه پرداخت",
+  "next-payment": "پرداخت بعدی",
+  "next-payment-due": "پرداخت بعدی"
 }

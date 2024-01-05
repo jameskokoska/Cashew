@@ -26,12 +26,14 @@ import 'package:budget/widgets/framework/popupFramework.dart';
 
 Map<String, dynamic> appStateSettings = {};
 bool isDatabaseCorrupted = false;
+bool isDatabaseImportedOnThisSession = false;
 
 Future<bool> initializeSettings() async {
   packageInfoGlobal = await PackageInfo.fromPlatform();
 
   Map<String, dynamic> userSettings = await getUserSettings();
   if (userSettings["databaseJustImported"] == true) {
+    isDatabaseImportedOnThisSession = true;
     try {
       print("Settings were loaded from backup, trying to restore");
       String storedSettings = (await database.getSettings()).settingsJSON;

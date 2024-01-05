@@ -1016,6 +1016,9 @@ class PastBudgetContainer extends StatelessWidget {
             totalSpent = totalSpent + category.total;
           });
           totalSpent = totalSpent * -1;
+          if (totalSpent == -0) {
+            totalSpent = 0;
+          }
 
           return Padding(
             padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),

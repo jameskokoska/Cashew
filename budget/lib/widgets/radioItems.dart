@@ -7,7 +7,8 @@ import 'package:flutter/material.dart';
 class RadioItems<T> extends StatefulWidget {
   final T initial;
   final List<T> items;
-  final List<String>? descriptions;
+  final String Function(T item)? getDescription;
+  final String Function(T item)? getEndInfo;
   final Function(T item) onChanged;
   final String Function(T item)? displayFilter;
   final Color? Function(T item)? colorFilter;
@@ -20,7 +21,8 @@ class RadioItems<T> extends StatefulWidget {
     Key? key,
     required this.initial,
     required this.items,
-    this.descriptions,
+    this.getDescription,
+    this.getEndInfo,
     required this.onChanged,
     this.onLongPress,
     this.displayFilter,
@@ -54,9 +56,8 @@ class _RadioItemsState<T> extends State<RadioItems<T>> {
           (widget.getSelected != null && widget.getSelected!(item)))
         selected = true;
       if (item == null && widget.ifNullSelectNone == true) selected = false;
-      bool noDescription = widget.descriptions == null ||
-          widget.descriptions!.length <= index ||
-          widget.descriptions![index] == "";
+      bool noDescription =
+          widget.getDescription == null || widget.getDescription!(item) == "";
       children.add(
         AnimatedSwitcher(
           duration: Duration(milliseconds: 150),
@@ -76,40 +77,63 @@ class _RadioItemsState<T> extends State<RadioItems<T>> {
               widget.onChanged(item);
             },
             child: ListTile(
+              contentPadding: EdgeInsets.only(
+                  left: 16, right: widget.getEndInfo == null ? 16 : 7),
               title: Transform.translate(
                 offset: Offset(-12, 0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    if (widget.itemsAreFonts == true &&
-                        (item != "Avenir" ||
-                            appStateSettings["font"] != "Avenir"))
-                      Text(
-                        widget.displayFilter == null
-                            ? item.toString()
-                            : widget.displayFilter!(item),
-                        style: TextStyle(
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          if (widget.itemsAreFonts == true &&
+                              (item != "Avenir" ||
+                                  appStateSettings["font"] != "Avenir"))
+                            Text(
+                              widget.displayFilter == null
+                                  ? item.toString()
+                                  : widget.displayFilter!(item),
+                              style: TextStyle(
+                                fontSize: noDescription ? 18 : 16,
+                                fontFamily: item.toString(),
+                              ),
+                            ),
+                          if (widget.itemsAreFonts == false ||
+                              (item == "Avenir" &&
+                                  appStateSettings["font"] == "Avenir"))
+                            TextFont(
+                              fontSize: noDescription ? 18 : 16,
+                              text: widget.displayFilter == null
+                                  ? item.toString()
+                                  : widget.displayFilter!(item),
+                              maxLines: 3,
+                            ),
+                          noDescription
+                              ? SizedBox.shrink()
+                              : TextFont(
+                                  fontSize: 14,
+                                  text: widget.getDescription == null
+                                      ? ""
+                                      : widget.getDescription!(item),
+                                  maxLines: 3,
+                                ),
+                        ],
+                      ),
+                    ),
+                    if (widget.getEndInfo != null)
+                      Padding(
+                        padding: const EdgeInsets.only(left: 3),
+                        child: TextFont(
                           fontSize: noDescription ? 18 : 16,
-                          fontFamily: item.toString(),
+                          text: widget.getEndInfo == null
+                              ? ""
+                              : widget.getEndInfo!(item),
+                          maxLines: 3,
+                          textAlign: TextAlign.right,
                         ),
                       ),
-                    if (widget.itemsAreFonts == false ||
-                        (item == "Avenir" &&
-                            appStateSettings["font"] == "Avenir"))
-                      TextFont(
-                        fontSize: noDescription ? 18 : 16,
-                        text: widget.displayFilter == null
-                            ? item.toString()
-                            : widget.displayFilter!(item),
-                        maxLines: 3,
-                      ),
-                    noDescription
-                        ? SizedBox.shrink()
-                        : TextFont(
-                            fontSize: 14,
-                            text: widget.descriptions![index],
-                            maxLines: 3,
-                          ),
                   ],
                 ),
               ),

@@ -996,5 +996,20 @@
   "and-applies-to-widget": "i widżet aplikacji",
   "widgets": "Widżety",
   "net-worth-total-widget": "Całkowity widżet wartości netto",
-  "select-accounts-and-time-period": "Wybierz konta i okres czasu"
+  "select-accounts-and-time-period": "Wybierz konta i okres czasu",
+  "credit": "Kredyt",
+  "debit": "Obciążyć",
+  "credit-summary": "Podsumowanie kredytu",
+  "due-on": "termin",
+  "current-statement-period": "Obecny okres oświadczenia",
+  "of-credit": "kredytu",
+  "of-debit": "debetowy",
+  "account-total": "Całkowita konto",
+  "view-all-spending-page-tip": "Zobacz stronę „wszystkie wydatki”, aby uzyskać szczegółowy podział finansów w czasie.",
+  "credit-limit": "Limit kredytowy",
+  "due": "należny",
+  "credit-payment": "Płatność kredytowa",
+  "add-payment": "Dodaj płatność",
+  "next-payment": "Następna zapłata",
+  "next-payment-due": "Następna należna płatność"
 }

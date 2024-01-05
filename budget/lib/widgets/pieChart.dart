@@ -381,7 +381,9 @@ class _Badge extends StatelessWidget {
                     offset: Offset(
                       0,
                       // Prevent overlapping labels when displayed on top
-                      totalPercentAccumulated < 60 ? -34 : 34,
+                      // Divider percent by 2, because the label is in the middle
+                      // This means any label location that is past 50% will change orientation
+                      totalPercentAccumulated - percent / 2 < 50 ? -34 : 34,
                     ),
                     child: IntrinsicWidth(
                       child: Container(

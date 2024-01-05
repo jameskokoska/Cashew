@@ -996,5 +996,20 @@
   "and-applies-to-widget": "og app -widget",
   "widgets": "Widgets",
   "net-worth-total-widget": "Nettoværdi Total widget",
-  "select-accounts-and-time-period": "Vælg konti og tidsperiode"
+  "select-accounts-and-time-period": "Vælg konti og tidsperiode",
+  "credit": "Kredit",
+  "debit": "Debit",
+  "credit-summary": "Kreditoversigt",
+  "due-on": "forfalder på",
+  "current-statement-period": "Nuværende erklæringsperiode",
+  "of-credit": "af kredit",
+  "of-debit": "af debet",
+  "account-total": "Konto i alt",
+  "view-all-spending-page-tip": "Se siden 'Alle udgifter' for en detaljeret sammenbrud af din økonomi over tid.",
+  "credit-limit": "Kredit grænse",
+  "due": "på grund",
+  "credit-payment": "Kreditbetaling",
+  "add-payment": "Tilføj betaling",
+  "next-payment": "Næste betaling",
+  "next-payment-due": "Næste betaling forfaldne"
 }

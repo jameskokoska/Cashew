@@ -996,5 +996,20 @@
   "and-applies-to-widget": "اور ایپ ویجیٹ",
   "widgets": "ویجٹ",
   "net-worth-total-widget": "خالص مالیت کل ویجیٹ",
-  "select-accounts-and-time-period": "اکاؤنٹس اور وقت کی مدت منتخب کریں"
+  "select-accounts-and-time-period": "اکاؤنٹس اور وقت کی مدت منتخب کریں",
+  "credit": "کریڈٹ",
+  "debit": "ڈیبٹ",
+  "credit-summary": "کریڈٹ کا خلاصہ",
+  "due-on": "اس کی وجہ سے",
+  "current-statement-period": "موجودہ بیان کی مدت",
+  "of-credit": "کریڈٹ",
+  "of-debit": "ڈیبٹ کی",
+  "account-total": "اکاؤنٹ کل",
+  "view-all-spending-page-tip": "وقت کے ساتھ اپنے مالی معاملات میں تفصیلی خرابی کے لئے 'تمام اخراجات' کا صفحہ دیکھیں۔",
+  "credit-limit": "ادھار کی حد",
+  "due": "وجہ",
+  "credit-payment": "کریڈٹ ادائیگی",
+  "add-payment": "ادائیگی شامل کریں",
+  "next-payment": "اگلی ادائیگی",
+  "next-payment-due": "اگلی ادائیگی واجب الادا ہے"
 }

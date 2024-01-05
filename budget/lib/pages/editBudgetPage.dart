@@ -712,10 +712,15 @@ class _TotalSpentToggleState extends State<TotalSpentToggle> {
               displayFilter: (label) {
                 return label.tr();
               },
-              descriptions: [
-                "total-remaining-example".tr(),
-                "total-spent-example".tr()
-              ],
+              getDescription: (String label) {
+                if (label == "total-remaining") {
+                  return "total-remaining-example".tr();
+                } else if (label == "total-spent") {
+                  return "total-spent-example".tr();
+                } else {
+                  return "";
+                }
+              },
               onChanged: (option) async {
                 bool result = option == "total-spent";
                 if (widget.isForGoalTotal) {

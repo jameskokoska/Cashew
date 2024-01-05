@@ -996,5 +996,20 @@
   "and-applies-to-widget": "และวิดเจ็ตแอพ",
   "widgets": "วิดเจ็ต",
   "net-worth-total-widget": "วิดเจ็ตรวมมูลค่าสุทธิ",
-  "select-accounts-and-time-period": "เลือกบัญชีและช่วงเวลา"
+  "select-accounts-and-time-period": "เลือกบัญชีและช่วงเวลา",
+  "credit": "เครดิต",
+  "debit": "การหักบัญชี",
+  "credit-summary": "สรุปเครดิต",
+  "due-on": "ครบกำหนด",
+  "current-statement-period": "ระยะเวลางบ",
+  "of-credit": "ของเครดิต",
+  "of-debit": "ของเดบิต",
+  "account-total": "ยอดรวมบัญชี",
+  "view-all-spending-page-tip": "ดูหน้า 'การใช้จ่ายทั้งหมด' สำหรับรายละเอียดรายละเอียดทางการเงินของคุณเมื่อเวลาผ่านไป",
+  "credit-limit": "วงเงิน",
+  "due": "เนื่องจาก",
+  "credit-payment": "การชำระเครดิต",
+  "add-payment": "เพิ่มการชำระเงิน",
+  "next-payment": "การชำระเงินครั้งต่อไป",
+  "next-payment-due": "การชำระเงินครั้งต่อไปที่ครบกำหนด"
 }

@@ -996,5 +996,20 @@
   "and-applies-to-widget": "och appwidget",
   "widgets": "Widget",
   "net-worth-total-widget": "Nettovärde total widget",
-  "select-accounts-and-time-period": "Välj konton och tidsperiod"
+  "select-accounts-and-time-period": "Välj konton och tidsperiod",
+  "credit": "Kreditera",
+  "debit": "Debitera",
+  "credit-summary": "Kreditöversikt",
+  "due-on": "betalas på",
+  "current-statement-period": "Nuvarande uttalandeperiod",
+  "of-credit": "av kredit",
+  "of-debit": "debitera",
+  "account-total": "Totalt konto",
+  "view-all-spending-page-tip": "Visa sidan \"alla utgifter\" för en detaljerad uppdelning av din ekonomi över tid.",
+  "credit-limit": "Kreditgräns",
+  "due": "på grund av",
+  "credit-payment": "Kreditbetalning",
+  "add-payment": "Lägga till betalning",
+  "next-payment": "Nästa betalning",
+  "next-payment-due": "Nästa betalning förfaller"
 }

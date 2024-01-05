@@ -996,5 +996,20 @@
   "and-applies-to-widget": "a widget aplikací",
   "widgets": "Widgety",
   "net-worth-total-widget": "Čistá hodnota celkového widgetu",
-  "select-accounts-and-time-period": "Vyberte účty a časové období"
+  "select-accounts-and-time-period": "Vyberte účty a časové období",
+  "credit": "Kredit",
+  "debit": "Debet",
+  "credit-summary": "Shrnutí kreditu",
+  "due-on": "splatné",
+  "current-statement-period": "Aktuální období prohlášení",
+  "of-credit": "úvěru",
+  "of-debit": "debetu",
+  "account-total": "Celkový účet",
+  "view-all-spending-page-tip": "Zobrazení stránky „Všechny výdaje“ pro podrobné poruchy vašich financí v průběhu času.",
+  "credit-limit": "Úvěrový limit",
+  "due": "z důvodu",
+  "credit-payment": "Úvěrová platba",
+  "add-payment": "Přidejte platbu",
+  "next-payment": "Další platba",
+  "next-payment-due": "Další splatná platba"
 }

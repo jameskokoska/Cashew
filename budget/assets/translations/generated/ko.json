@@ -996,5 +996,20 @@
   "and-applies-to-widget": "앱 위젯",
   "widgets": "위젯",
   "net-worth-total-widget": "순 가치 총 위젯",
-  "select-accounts-and-time-period": "계정 및 기간을 선택하십시오"
+  "select-accounts-and-time-period": "계정 및 기간을 선택하십시오",
+  "credit": "신용 거래",
+  "debit": "차변",
+  "credit-summary": "신용 요약",
+  "due-on": "예정입니다",
+  "current-statement-period": "현재 성명서 기간",
+  "of-credit": "신용",
+  "of-debit": "차변",
+  "account-total": "계정 총",
+  "view-all-spending-page-tip": "시간이 지남에 따라 재무에 대한 자세한 내용을 보려면 '모든 지출'페이지를 참조하십시오.",
+  "credit-limit": "신용 한도",
+  "due": "~로 인한",
+  "credit-payment": "신용 지불",
+  "add-payment": "지불을 추가하십시오",
+  "next-payment": "다음 지불",
+  "next-payment-due": "다음 지불 마감"
 }

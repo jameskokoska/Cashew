@@ -996,5 +996,20 @@
   "and-applies-to-widget": "und App Widget",
   "widgets": "Widgets",
   "net-worth-total-widget": "Nettovermögen Total Widget",
-  "select-accounts-and-time-period": "Wählen Sie Konten und Zeitraum aus"
+  "select-accounts-and-time-period": "Wählen Sie Konten und Zeitraum aus",
+  "credit": "Kredit",
+  "debit": "Lastschrift",
+  "credit-summary": "Kreditübersicht",
+  "due-on": "fällig am",
+  "current-statement-period": "Aktueller Aussagezeitraum",
+  "of-credit": "von Kredit",
+  "of-debit": "von Debit",
+  "account-total": "Konto Gesamt",
+  "view-all-spending-page-tip": "Sehen Sie sich die Seite \"Alle Ausgaben\" für eine detaillierte Aufschlüsselung Ihrer Finanzen im Laufe der Zeit an.",
+  "credit-limit": "Kreditlimit",
+  "due": "fällig",
+  "credit-payment": "Kreditzahlung",
+  "add-payment": "Zahlung hinzufügen",
+  "next-payment": "Nächste Zahlung",
+  "next-payment-due": "Nächste Zahlung fällig"
 }

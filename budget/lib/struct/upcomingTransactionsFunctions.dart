@@ -321,6 +321,7 @@ Future openPayDebtCreditPopup(
           hasPadding: false,
           underTitleSpace: false,
           child: SelectAmount(
+            amountPassed: transaction.amount.abs().toString(),
             padding: EdgeInsets.symmetric(horizontal: 18),
             onlyShowCurrencyIcon: true,
             selectedWalletPk: selectedWalletFk,

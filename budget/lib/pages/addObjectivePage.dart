@@ -111,6 +111,7 @@ class _AddObjectivePageState extends State<AddObjectivePage>
   void setSelectedImage(String? image) {
     setState(() {
       selectedImage = (image ?? "").replaceFirst("assets/categories/", "");
+      selectedEmoji = null;
     });
     determineBottomButton();
     return;
@@ -119,6 +120,7 @@ class _AddObjectivePageState extends State<AddObjectivePage>
   void setSelectedEmoji(String? emoji) {
     setState(() {
       selectedEmoji = emoji;
+      selectedImage = null;
     });
     determineBottomButton();
     return;

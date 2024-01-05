@@ -996,5 +996,20 @@
   "and-applies-to-widget": "en app -widget",
   "widgets": "Widgets",
   "net-worth-total-widget": "Netto waarde totale widget",
-  "select-accounts-and-time-period": "Selecteer Accounts en tijdsperiode"
+  "select-accounts-and-time-period": "Selecteer Accounts en tijdsperiode",
+  "credit": "Credit",
+  "debit": "Debiteren",
+  "credit-summary": "Kredietoverzicht",
+  "due-on": "verschuldigd op",
+  "current-statement-period": "Huidige verklaringperiode",
+  "of-credit": "krediet",
+  "of-debit": "debet",
+  "account-total": "Account totaal",
+  "view-all-spending-page-tip": "Bekijk de pagina 'All uitgaven' voor een gedetailleerde uitsplitsing van uw financiën in de loop van de tijd.",
+  "credit-limit": "Kredietlimiet",
+  "due": "vanwege",
+  "credit-payment": "Kredietbetaling",
+  "add-payment": "Voeg betaling toe",
+  "next-payment": "Volgende betaling",
+  "next-payment-due": "Volgende betaling verschuldigd"
 }

@@ -996,5 +996,20 @@
   "and-applies-to-widget": "и Апп додатак",
   "widgets": "Видгети",
   "net-worth-total-widget": "Нето вриједна тотална виџета",
-  "select-accounts-and-time-period": "Изаберите рачуне и временски период"
+  "select-accounts-and-time-period": "Изаберите рачуне и временски период",
+  "credit": "Кредит",
+  "debit": "Задужење",
+  "credit-summary": "Резиме кредита",
+  "due-on": "за",
+  "current-statement-period": "Период тренутне изјаве",
+  "of-credit": "кредит",
+  "of-debit": "задужен",
+  "account-total": "Укупно рачуна",
+  "view-all-spending-page-tip": "Погледајте страницу \"све потрошње\" за детаљни прекид својих финансија током времена.",
+  "credit-limit": "Кредитни лимит",
+  "due": "доспев",
+  "credit-payment": "Плаћање кредита",
+  "add-payment": "Додавање уплате",
+  "next-payment": "Следеће плаћање",
+  "next-payment-due": "Следеће исплате"
 }
