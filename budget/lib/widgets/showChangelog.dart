@@ -27,14 +27,16 @@ import 'listItem.dart';
 String getChangelogString() {
   return """
     < 5.1.7
+    Overspent/over saved text for budgets displays amount total information of the current period
+    Fixed rerender lag when opening transaction on search page
+    Extra zeroes button new number layout
     Fixed spacing for bottom titles of line graph
     Fixed small separation between amount input buttons
     Translation fixes
     Fix multiple transaction saving events
     Fix delete account action in account picker for transaction
-    < 5.1.6
-    Fixed padding for full screen devices
     < 5.1.5
+    Fixed padding for full screen devices
     Fixed title searching with category name when adding a transaction (title has priority)
     Fixed wallet details page swipe to dismiss header
     Installment payment setup button follows objective colorscheme

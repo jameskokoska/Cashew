@@ -61,14 +61,6 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
 
   @override
   void initState() {
-    Future.delayed(Duration(milliseconds: 0), () {
-      // This detaches the focus so that any popup does not trigger a rerendering of list widgets
-      FocusScopeNode currentFocus = FocusScope.of(context);
-      if (!currentFocus.hasPrimaryFocus) {
-        currentFocus.unfocus();
-      }
-      //_searchFocusNode.requestFocus();
-    });
     DateTimeRange initialDateTimeRange = DateTimeRange(
       start: DateTime(1900),
       end: DateTime(roundToNearestNextFifthYear(DateTime.now().year)),
@@ -185,9 +177,10 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
             onPointerDown: (_) {
               //Minimize keyboard when tap non interactive widget
               FocusScopeNode currentFocus = FocusScope.of(context);
-              if (!currentFocus.hasPrimaryFocus) {
-                currentFocus.unfocus();
-              }
+              // Always unfocus, otherwise rerenders occur!
+              //if (!currentFocus.hasPrimaryFocus) {
+              currentFocus.unfocus();
+              //}
             },
             child: PageFramework(
               scrollToTopButton: true,

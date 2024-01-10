@@ -987,13 +987,16 @@ class _SelectAmountState extends State<SelectAmount> {
                                                 addToAmount(appStateSettings[
                                                     "extraZerosButton"]);
                                               }),
-                                        CalculatorButton(
-                                          label: "<",
-                                          editAmount: () {
-                                            removeToAmount();
-                                          },
-                                          onLongPress: removeAll,
-                                        ),
+                                        if (appStateSettings[
+                                                "extraZerosButton"] ==
+                                            null)
+                                          CalculatorButton(
+                                            label: "<",
+                                            editAmount: () {
+                                              removeToAmount();
+                                            },
+                                            onLongPress: removeAll,
+                                          ),
                                       ],
                                     ),
                                   ],
@@ -1002,10 +1005,16 @@ class _SelectAmountState extends State<SelectAmount> {
                               Flexible(
                                 flex: 1,
                                 child: Column(
+                                  mainAxisSize: MainAxisSize.max,
                                   children: [
                                     Row(
                                       children: [
                                         CalculatorButton(
+                                          height: appStateSettings[
+                                                      "extraZerosButton"] !=
+                                                  null
+                                              ? 60 * 4 / 5
+                                              : 60,
                                           label: "÷",
                                           editAmount: () {
                                             addToAmount("÷");
@@ -1016,24 +1025,41 @@ class _SelectAmountState extends State<SelectAmount> {
                                     Row(
                                       children: [
                                         CalculatorButton(
-                                            label: "×",
-                                            editAmount: () {
-                                              addToAmount("×");
-                                            }),
+                                          height: appStateSettings[
+                                                      "extraZerosButton"] !=
+                                                  null
+                                              ? 60 * 4 / 5
+                                              : 60,
+                                          label: "×",
+                                          editAmount: () {
+                                            addToAmount("×");
+                                          },
+                                        ),
                                       ],
                                     ),
                                     Row(
                                       children: [
                                         CalculatorButton(
-                                            label: "-",
-                                            editAmount: () {
-                                              addToAmount("-");
-                                            }),
+                                          height: appStateSettings[
+                                                      "extraZerosButton"] !=
+                                                  null
+                                              ? 60 * 4 / 5
+                                              : 60,
+                                          label: "-",
+                                          editAmount: () {
+                                            addToAmount("-");
+                                          },
+                                        ),
                                       ],
                                     ),
                                     Row(
                                       children: [
                                         CalculatorButton(
+                                          height: appStateSettings[
+                                                      "extraZerosButton"] !=
+                                                  null
+                                              ? 60 * 4 / 5
+                                              : 60,
                                           label: "+",
                                           editAmount: () {
                                             addToAmount("+");
@@ -1041,6 +1067,24 @@ class _SelectAmountState extends State<SelectAmount> {
                                         ),
                                       ],
                                     ),
+                                    if (appStateSettings["extraZerosButton"] !=
+                                        null)
+                                      Row(
+                                        children: [
+                                          CalculatorButton(
+                                            height: appStateSettings[
+                                                        "extraZerosButton"] !=
+                                                    null
+                                                ? 60 * 4 / 5
+                                                : 60,
+                                            label: "<",
+                                            editAmount: () {
+                                              removeToAmount();
+                                            },
+                                            onLongPress: removeAll,
+                                          ),
+                                        ],
+                                      ),
                                   ],
                                 ),
                               )
@@ -1105,11 +1149,13 @@ class CalculatorButton extends StatelessWidget {
     required this.editAmount,
     this.onLongPress = null,
     this.disabled = false,
+    this.height = 60,
   }) : super(key: key);
   final String label;
   final VoidCallback editAmount;
   final VoidCallback? onLongPress;
   final bool disabled;
+  final double? height;
   @override
   Widget build(BuildContext context) {
     Color buttonColor = appStateSettings["materialYou"]
@@ -1136,7 +1182,7 @@ class CalculatorButton extends StatelessWidget {
                 onLongPress: onLongPress,
                 onTap: editAmount,
                 child: Container(
-                  height: 60,
+                  height: height,
                   child: Center(
                     child: label == "<"
                         ? Icon(appStateSettings["outlinedIcons"]

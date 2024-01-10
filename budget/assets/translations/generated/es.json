@@ -1030,5 +1030,6 @@
   "expense-budget": "Presupuesto de gastos",
   "savings-budget-description-1": "Rastree sus ingresos y presupueste sus ahorros",
   "expense-budget-description-1": "Rastree sus gastos y presupueste sus gastos",
-  "end-date-reached": "Fecha de finalización alcanzada"
+  "end-date-reached": "Fecha de finalización alcanzada",
+  "over": "más que"
 }

@@ -1030,5 +1030,6 @@
   "expense-budget": "Költség -költségvetés",
   "savings-budget-description-1": "Kövesse nyomon a jövedelmét és a megtakarítások költségvetését",
   "expense-budget-description-1": "Kövesse nyomon a költségeket és költségvetse ki a kiadásait",
-  "end-date-reached": "A befejezési dátum elért"
+  "end-date-reached": "A befejezési dátum elért",
+  "over": "több mint"
 }

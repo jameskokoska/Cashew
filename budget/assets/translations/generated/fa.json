@@ -1030,5 +1030,6 @@
   "expense-budget": "بودجه هزینه",
   "savings-budget-description-1": "درآمد خود را پیگیری کنید و پس انداز خود را پس انداز کنید",
   "expense-budget-description-1": "هزینه های خود را پیگیری کنید و هزینه های خود را بودجه خود را بودجه کنید",
-  "end-date-reached": "تاریخ پایان رسید"
+  "end-date-reached": "تاریخ پایان رسید",
+  "over": "بیشتر از"
 }

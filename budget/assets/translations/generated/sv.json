@@ -1030,5 +1030,6 @@
   "expense-budget": "Utgiftsbudget",
   "savings-budget-description-1": "Spåra din inkomst och budgetera dina besparingar",
   "expense-budget-description-1": "Spåra dina utgifter och budgetera dina utgifter",
-  "end-date-reached": "Slutdatum nådde"
+  "end-date-reached": "Slutdatum nådde",
+  "over": "mer än"
 }

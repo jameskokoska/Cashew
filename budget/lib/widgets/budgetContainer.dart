@@ -437,28 +437,17 @@ class DaySpending extends StatelessWidget {
                       )
                       .inDays +
                   1;
-              double amount = ((totalAmount - budgetAmount) / remainingDays) *
-                  determineBudgetPolarity(budget);
               return TextFont(
                 textColor: getColor(context, "black").withAlpha(80),
                 text: isOutOfRange
                     ? ""
-                    : (amount < 0
-                            ? "saving-tracking".tr()
-                            : "spending-tracking".tr()) +
-                        " " +
-                        convertToMoney(
-                            Provider.of<AllWallets>(context), amount.abs()) +
-                        "/" +
-                        "day".tr() +
-                        " " +
-                        "for".tr() +
-                        " " +
-                        remainingDays.toString() +
-                        " " +
-                        (remainingDays == 1
-                            ? "more-day".tr()
-                            : "more-days".tr()),
+                    : getAmountPerDayString(
+                        context,
+                        totalAmount: totalAmount,
+                        budgetAmount: budgetAmount,
+                        budget: budget,
+                        remainingDays: remainingDays,
+                      ),
                 fontSize: large ? 14 : 13,
                 textAlign: TextAlign.center,
                 maxLines: 4,
@@ -477,6 +466,51 @@ class DaySpending extends StatelessWidget {
       ),
     );
   }
+}
+
+String getAmountPerDayString(
+  BuildContext context, {
+  required double totalAmount,
+  required double budgetAmount,
+  required Budget budget,
+  required int remainingDays,
+}) {
+  bool isIncomeBudget = budget.income;
+  double amountPerDay = ((totalAmount - budgetAmount) / remainingDays) *
+      determineBudgetPolarity(budget);
+  String remainingDaysString = "for".tr() +
+      " " +
+      remainingDays.toString() +
+      " " +
+      (remainingDays == 1 ? "more-day".tr() : "more-days".tr());
+  bool isOverBudget =
+      amountPerDay > 0 && isIncomeBudget || amountPerDay < 0 && !isIncomeBudget
+          ? true
+          : false;
+
+  if (isOverBudget) {
+    return convertToMoney(
+            Provider.of<AllWallets>(context),
+            !appStateSettings["showTotalSpentForBudget"]
+                ? totalAmount
+                : totalAmount - budgetAmount) +
+        (appStateSettings["showTotalSpentForBudget"]
+            ? (" " + "over".tr() + " ")
+            : " / ") +
+        convertToMoney(Provider.of<AllWallets>(context), budgetAmount) +
+        " " +
+        remainingDaysString;
+  }
+
+  return (amountPerDay < 0
+          ? "saving-tracking".tr()
+          : "spending-tracking".tr()) +
+      " " +
+      convertToMoney(Provider.of<AllWallets>(context), amountPerDay.abs()) +
+      "/" +
+      "day".tr() +
+      " " +
+      remainingDaysString;
 }
 
 class AnimatedGooBackground extends StatelessWidget {

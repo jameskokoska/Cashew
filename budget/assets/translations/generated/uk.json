@@ -1030,5 +1030,6 @@
   "expense-budget": "Бюджет витрат",
   "savings-budget-description-1": "Відстежуйте свій дохід та бюджет своїх заощаджень",
   "expense-budget-description-1": "Відстежуйте свої витрати та бюджет",
-  "end-date-reached": "Дата закінчення досягнута"
+  "end-date-reached": "Дата закінчення досягнута",
+  "over": "більше ніж"
 }

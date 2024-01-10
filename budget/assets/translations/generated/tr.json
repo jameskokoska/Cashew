@@ -1030,5 +1030,6 @@
   "expense-budget": "Gider Bütçesi",
   "savings-budget-description-1": "Gelirinizi izleyin ve tasarruflarınızı bütçeleyin",
   "expense-budget-description-1": "Giderlerinizi takip edin ve harcamalarınızı bütçe",
-  "end-date-reached": "Bitiş tarihi ulaşıldı"
+  "end-date-reached": "Bitiş tarihi ulaşıldı",
+  "over": "bundan fazla"
 }

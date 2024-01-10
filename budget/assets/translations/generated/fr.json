@@ -1030,5 +1030,6 @@
   "expense-budget": "Budget des dépenses",
   "savings-budget-description-1": "Suivez vos revenus et budgétisez votre épargne",
   "expense-budget-description-1": "Suivez vos dépenses et budgétisé vos dépenses",
-  "end-date-reached": "Date de fin atteinte"
+  "end-date-reached": "Date de fin atteinte",
+  "over": "plus que"
 }

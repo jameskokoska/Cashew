@@ -1030,5 +1030,6 @@
   "expense-budget": "費用予算",
   "savings-budget-description-1": "収入を追跡し、貯蓄を予算化します",
   "expense-budget-description-1": "費用を追跡し、支出を予算化します",
-  "end-date-reached": "終了日に達しました"
+  "end-date-reached": "終了日に達しました",
+  "over": "より多い"
 }

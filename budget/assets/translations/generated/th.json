@@ -1030,5 +1030,6 @@
   "expense-budget": "งบประมาณค่าใช้จ่าย",
   "savings-budget-description-1": "ติดตามรายได้และงบประมาณการออมของคุณ",
   "expense-budget-description-1": "ติดตามค่าใช้จ่ายและงบประมาณการใช้จ่ายของคุณ",
-  "end-date-reached": "ถึงวันที่สิ้นสุด"
+  "end-date-reached": "ถึงวันที่สิ้นสุด",
+  "over": "มากกว่า"
 }

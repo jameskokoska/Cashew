@@ -1030,5 +1030,6 @@
   "expense-budget": "费用预算",
   "savings-budget-description-1": "跟踪您的收入并预算您的储蓄",
   "expense-budget-description-1": "跟踪您的费用并预算您的支出",
-  "end-date-reached": "结束日期达到了"
+  "end-date-reached": "结束日期达到了",
+  "over": "多于"
 }

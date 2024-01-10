@@ -1030,5 +1030,6 @@
   "expense-budget": "व्यय बजट",
   "savings-budget-description-1": "अपनी आय को ट्रैक करें और अपनी बचत को बजट दें",
   "expense-budget-description-1": "अपने खर्चों को ट्रैक करें और अपने खर्च को बजट दें",
-  "end-date-reached": "अंत तिथि पहुंची"
+  "end-date-reached": "अंत तिथि पहुंची",
+  "over": "इससे अधिक"
 }

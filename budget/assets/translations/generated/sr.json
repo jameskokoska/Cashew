@@ -1030,5 +1030,6 @@
   "expense-budget": "Буџет за трошкове",
   "savings-budget-description-1": "Пратите свој приход и буџет уштеде",
   "expense-budget-description-1": "Пратите трошкове и буџет своје потрошње",
-  "end-date-reached": "Достигнут крајњи датум"
+  "end-date-reached": "Достигнут крајњи датум",
+  "over": "више од"
 }

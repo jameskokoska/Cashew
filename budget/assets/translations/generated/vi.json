@@ -481,7 +481,7 @@
   "lifetime": "Trọn đời",
   "exchange-rates-api": "API tỷ giá hối đoái",
   "exchange-rates": "Tỷ giá hối đoái",
-  "active": "Có hiệu lực",
+  "active": "Hiệu lực",
   "edit-home-page": "Chỉnh sửa trang chủ",
   "delete-category": "Xóa danh mục",
   "manage": "Quản lý",
@@ -1029,6 +1029,7 @@
   "savings-budget": "Ngân sách tiết kiệm",
   "expense-budget": "Ngân sách chi phí",
   "savings-budget-description-1": "Theo dõi thu nhập và lập ngân sách cho khoản tiết kiệm của bạn",
-  "expense-budget-description-1": "Theo dõi chi phí và lập ngân sách chi tiêu của bạn",
-  "end-date-reached": "Ngày kết thúc đạt được"
+  "expense-budget-description-1": "Theo dõi chi phí và lập ngân sách cho chi tiêu của bạn",
+  "end-date-reached": "Đã đến ngày kết thúc",
+  "over": "nhiều hơn"
 }

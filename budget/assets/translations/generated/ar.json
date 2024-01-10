@@ -1030,5 +1030,6 @@
   "expense-budget": "ميزانية المصاريف",
   "savings-budget-description-1": "تتبع دخلك وميزانيتك مدخراتك",
   "expense-budget-description-1": "تتبع نفقاتك وميزانيتك إنفاقك",
-  "end-date-reached": "تم الوصول إلى تاريخ الانتهاء"
+  "end-date-reached": "تم الوصول إلى تاريخ الانتهاء",
+  "over": "أكثر من"
 }

@@ -1030,5 +1030,6 @@
   "expense-budget": "Kustannusbudjetti",
   "savings-budget-description-1": "Seuraa tulojasi ja budjetti säästöjäsi",
   "expense-budget-description-1": "Seuraa kulut ja budjetti kulut",
-  "end-date-reached": "Päättymispäivämäärä"
+  "end-date-reached": "Päättymispäivämäärä",
+  "over": "enemmän kuin"
 }

@@ -1030,5 +1030,6 @@
   "expense-budget": "Ausgabenbudget",
   "savings-budget-description-1": "Verfolgen Sie Ihr Einkommen und budgetieren Sie Ihre Einsparungen",
   "expense-budget-description-1": "Verfolgen Sie Ihre Ausgaben und budgetieren Sie Ihre Ausgaben",
-  "end-date-reached": "Enddatum erreicht"
+  "end-date-reached": "Enddatum erreicht",
+  "over": "mehr als"
 }
