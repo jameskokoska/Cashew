@@ -30,6 +30,8 @@ String getChangelogString() {
     Fixed spacing for bottom titles of line graph
     Fixed small separation between amount input buttons
     Translation fixes
+    Fix multiple transaction saving events
+    Fix delete account action in account picker for transaction
     < 5.1.6
     Fixed padding for full screen devices
     < 5.1.5

@@ -45,6 +45,7 @@ import 'package:budget/widgets/transactionEntry/transactionEntry.dart';
 import 'package:budget/widgets/transactionEntry/transactionEntryTypeButton.dart';
 import 'package:budget/widgets/transactionEntry/transactionLabel.dart';
 import 'package:budget/widgets/util/contextMenu.dart';
+import 'package:budget/widgets/util/debouncer.dart';
 import 'package:budget/widgets/util/showDatePicker.dart';
 import 'package:budget/widgets/util/widgetSize.dart';
 import 'package:budget/widgets/viewAllTransactionsButton.dart';
@@ -341,7 +342,16 @@ class _AddTransactionPageState extends State<AddTransactionPage>
     );
   }
 
+  bool lockAddTransaction = false;
   Future<bool> addTransaction() async {
+    if (lockAddTransaction) return false;
+    lockAddTransaction = true;
+    bool result = await addTransactionLocked();
+    lockAddTransaction = false;
+    return result;
+  }
+
+  Future<bool> addTransactionLocked() async {
     if (appStateSettings["canShowTransactionActionButtonTip"] == true &&
         selectedType != null) {
       await openBottomSheet(
@@ -524,7 +534,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
         TransactionSpecialType.subscription,
         TransactionSpecialType.upcoming
       ].contains(createdTransaction.type)) {
-        await setUpcomingNotifications(context);
+        setUpcomingNotifications(context);
       }
 
       // recentlyAddedTransactionID.value =

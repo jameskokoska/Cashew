@@ -523,7 +523,7 @@ Future<TransactionWallet?> selectWalletPopup(
                     context,
                     AddWalletPage(
                       routesToPopAfterDelete: allowDeleteWallet == false
-                          ? RoutesToPopAfterDelete.None
+                          ? RoutesToPopAfterDelete.PreventDelete
                           : RoutesToPopAfterDelete.One,
                       wallet: wallet,
                     ),
