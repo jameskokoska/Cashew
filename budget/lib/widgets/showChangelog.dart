@@ -26,6 +26,10 @@ import 'listItem.dart';
 
 String getChangelogString() {
   return """
+    < 5.1.7
+    Fixed spacing for bottom titles of line graph
+    Fixed small separation between amount input buttons
+    Translation fixes
     < 5.1.6
     Fixed padding for full screen devices
     < 5.1.5

@@ -1025,9 +1025,10 @@
   "spending": "ખર્ચ",
   "include-expense": "ખર્ચ",
   "include-expense-description-1": "આવક વ્યવહારો બજેટમાં શામેલ કરવામાં આવશે",
-  "include-expense-description-2": "ખર્ચ બજેટ કુલ આવક સાથે ઘટશે",
+  "include-expense-description-2": "બચત બજેટ કુલ ખર્ચ સાથે ઘટશે",
   "savings-budget": "બચત અંદાજપત્ર",
   "expense-budget": "ખર્ચ બજેટ",
   "savings-budget-description-1": "તમારી આવક અને બજેટ તમારી બચતને ટ્ર track ક કરો",
-  "expense-budget-description-1": "તમારા ખર્ચ અને તમારા ખર્ચના બજેટને ટ્ર track ક કરો"
+  "expense-budget-description-1": "તમારા ખર્ચ અને તમારા ખર્ચના બજેટને ટ્ર track ક કરો",
+  "end-date-reached": "અંતિમ તારીખ પહોંચી"
 }

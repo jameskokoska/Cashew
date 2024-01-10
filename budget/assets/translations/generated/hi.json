@@ -1025,9 +1025,10 @@
   "spending": "खर्च",
   "include-expense": "व्यय",
   "include-expense-description-1": "बजट में आय लेनदेन शामिल किया जाएगा",
-  "include-expense-description-2": "खर्च का बजट कुल आय के साथ कम हो जाएगा",
+  "include-expense-description-2": "खर्च के साथ कुल बजट में कमी आएगी",
   "savings-budget": "बचत बजट",
   "expense-budget": "व्यय बजट",
   "savings-budget-description-1": "अपनी आय को ट्रैक करें और अपनी बचत को बजट दें",
-  "expense-budget-description-1": "अपने खर्चों को ट्रैक करें और अपने खर्च को बजट दें"
+  "expense-budget-description-1": "अपने खर्चों को ट्रैक करें और अपने खर्च को बजट दें",
+  "end-date-reached": "अंत तिथि पहुंची"
 }

@@ -1025,9 +1025,10 @@
   "spending": "செலவு",
   "include-expense": "செலவு",
   "include-expense-description-1": "வருமான பரிவர்த்தனைகள் பட்ஜெட்டில் சேர்க்கப்படும்",
-  "include-expense-description-2": "செலவு பட்ஜெட் மொத்தம் வருமானத்துடன் குறையும்",
+  "include-expense-description-2": "சேமிப்பு பட்ஜெட் மொத்தம் செலவுகளுடன் குறையும்",
   "savings-budget": "சேமிப்பு பட்ஜெட்",
   "expense-budget": "செலவு பட்ஜெட்",
   "savings-budget-description-1": "உங்கள் வருமானம் மற்றும் பட்ஜெட்டில் உங்கள் சேமிப்பைக் கண்காணிக்கவும்",
-  "expense-budget-description-1": "உங்கள் செலவுகள் மற்றும் உங்கள் செலவினங்களைக் கண்காணிக்கவும்"
+  "expense-budget-description-1": "உங்கள் செலவுகள் மற்றும் உங்கள் செலவினங்களைக் கண்காணிக்கவும்",
+  "end-date-reached": "இறுதி தேதி எட்டப்பட்டது"
 }

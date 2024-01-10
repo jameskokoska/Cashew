@@ -1025,9 +1025,10 @@
   "spending": "Perbelanjaan",
   "include-expense": "Perbelanjaan",
   "include-expense-description-1": "Urus niaga pendapatan akan dimasukkan dalam belanjawan",
-  "include-expense-description-2": "Jumlah belanjawan perbelanjaan akan berkurang dengan pendapatan",
+  "include-expense-description-2": "Jumlah belanjawan penjimatan akan berkurang dengan perbelanjaan",
   "savings-budget": "Belanjawan simpanan",
   "expense-budget": "Belanjawan perbelanjaan",
   "savings-budget-description-1": "Jejaki pendapatan dan anggaran simpanan anda",
-  "expense-budget-description-1": "Jejaki perbelanjaan dan anggaran perbelanjaan anda"
+  "expense-budget-description-1": "Jejaki perbelanjaan dan anggaran perbelanjaan anda",
+  "end-date-reached": "Tarikh akhir dicapai"
 }

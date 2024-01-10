@@ -1025,9 +1025,10 @@
   "spending": "Spesa",
   "include-expense": "Spese",
   "include-expense-description-1": "Le transazioni di reddito saranno incluse nel budget",
-  "include-expense-description-2": "Il totale del budget di spesa diminuirà con il reddito",
+  "include-expense-description-2": "Il totale del budget di risparmio diminuirà con le spese",
   "savings-budget": "Budget di risparmio",
   "expense-budget": "Budget di spesa",
   "savings-budget-description-1": "Tieni traccia del tuo reddito e del tuo budget i tuoi risparmi",
-  "expense-budget-description-1": "Tieni traccia delle tue spese e budge al tuo budget della spesa"
+  "expense-budget-description-1": "Tieni traccia delle tue spese e budge al tuo budget della spesa",
+  "end-date-reached": "Data di fine raggiunta"
 }

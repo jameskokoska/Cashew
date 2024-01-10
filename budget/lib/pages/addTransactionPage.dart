@@ -2043,21 +2043,18 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                     : Flexible(
                         child: Container(
                           constraints: BoxConstraints(maxWidth: 900),
-                          child: FractionallySizedBox(
-                            widthFactor: 0.95,
-                            child: Column(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 23),
-                                  child: ClipRRect(
-                                    child: transactionAmountAndCategoryHeader,
-                                    borderRadius: BorderRadius.circular(13),
-                                  ),
+                          child: Column(
+                            children: [
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 13),
+                                child: ClipRRect(
+                                  child: transactionAmountAndCategoryHeader,
+                                  borderRadius: BorderRadius.circular(15),
                                 ),
-                                transactionTextInput,
-                              ],
-                            ),
+                              ),
+                              transactionTextInput,
+                            ],
                           ),
                         ),
                       ),

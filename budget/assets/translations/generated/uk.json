@@ -1025,9 +1025,10 @@
   "spending": "Витрати",
   "include-expense": "Витрата",
   "include-expense-description-1": "Операції з доходів будуть включені в бюджет",
-  "include-expense-description-2": "Загальна сума бюджету витрат зменшиться з доходом",
+  "include-expense-description-2": "Загальна сума економії бюджету зменшиться за рахунок витрат",
   "savings-budget": "Бюджет заощаджень",
   "expense-budget": "Бюджет витрат",
   "savings-budget-description-1": "Відстежуйте свій дохід та бюджет своїх заощаджень",
-  "expense-budget-description-1": "Відстежуйте свої витрати та бюджет"
+  "expense-budget-description-1": "Відстежуйте свої витрати та бюджет",
+  "end-date-reached": "Дата закінчення досягнута"
 }

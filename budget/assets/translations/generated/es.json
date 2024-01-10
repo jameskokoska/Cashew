@@ -1025,9 +1025,10 @@
   "spending": "Gasto",
   "include-expense": "Gastos",
   "include-expense-description-1": "Las transacciones de ingresos se incluirán en el presupuesto",
-  "include-expense-description-2": "El total del presupuesto de gastos disminuirá con los ingresos",
+  "include-expense-description-2": "El total de presupuesto de ahorro disminuirá con los gastos",
   "savings-budget": "Presupuesto de ahorro",
   "expense-budget": "Presupuesto de gastos",
   "savings-budget-description-1": "Rastree sus ingresos y presupueste sus ahorros",
-  "expense-budget-description-1": "Rastree sus gastos y presupueste sus gastos"
+  "expense-budget-description-1": "Rastree sus gastos y presupueste sus gastos",
+  "end-date-reached": "Fecha de finalización alcanzada"
 }

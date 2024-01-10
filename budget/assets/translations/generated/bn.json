@@ -1025,9 +1025,10 @@
   "spending": "ব্যয়",
   "include-expense": "ব্যয়",
   "include-expense-description-1": "আয়ের লেনদেন বাজেটে অন্তর্ভুক্ত করা হবে",
-  "include-expense-description-2": "ব্যয় বাজেটের মোট আয়ের সাথে হ্রাস পাবে",
+  "include-expense-description-2": "সঞ্চয় বাজেটের মোট ব্যয় সহ হ্রাস পাবে",
   "savings-budget": "সঞ্চয় বাজেট",
   "expense-budget": "ব্যয় বাজেট",
   "savings-budget-description-1": "আপনার আয় ট্র্যাক করুন এবং আপনার সঞ্চয় বাজেট করুন",
-  "expense-budget-description-1": "আপনার ব্যয় ট্র্যাক করুন এবং আপনার ব্যয় বাজেট করুন"
+  "expense-budget-description-1": "আপনার ব্যয় ট্র্যাক করুন এবং আপনার ব্যয় বাজেট করুন",
+  "end-date-reached": "শেষ তারিখ পৌঁছেছে"
 }

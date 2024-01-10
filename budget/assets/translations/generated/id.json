@@ -1025,9 +1025,10 @@
   "spending": "Pengeluaran",
   "include-expense": "Pengeluaran",
   "include-expense-description-1": "Transaksi pendapatan akan dimasukkan dalam anggaran",
-  "include-expense-description-2": "Total anggaran pengeluaran akan berkurang dengan pendapatan",
+  "include-expense-description-2": "Total anggaran tabungan akan berkurang dengan biaya",
   "savings-budget": "Anggaran tabungan",
   "expense-budget": "Anggaran pengeluaran",
   "savings-budget-description-1": "Lacak Penghasilan Anda dan Anggarkan Tabungan Anda",
-  "expense-budget-description-1": "Lacak pengeluaran Anda dan anggarkan pengeluaran Anda"
+  "expense-budget-description-1": "Lacak pengeluaran Anda dan anggarkan pengeluaran Anda",
+  "end-date-reached": "Tanggal akhir tercapai"
 }

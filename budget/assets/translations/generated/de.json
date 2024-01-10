@@ -1025,9 +1025,10 @@
   "spending": "Ausgaben",
   "include-expense": "Kosten",
   "include-expense-description-1": "Einkommenstransaktionen werden im Budget aufgenommen",
-  "include-expense-description-2": "Das Ausgabenbudget wird mit dem Einkommen sinken",
+  "include-expense-description-2": "Die Summe des Sparbudgets wird mit den Ausgaben sinken",
   "savings-budget": "Sparbudget",
   "expense-budget": "Ausgabenbudget",
   "savings-budget-description-1": "Verfolgen Sie Ihr Einkommen und budgetieren Sie Ihre Einsparungen",
-  "expense-budget-description-1": "Verfolgen Sie Ihre Ausgaben und budgetieren Sie Ihre Ausgaben"
+  "expense-budget-description-1": "Verfolgen Sie Ihre Ausgaben und budgetieren Sie Ihre Ausgaben",
+  "end-date-reached": "Enddatum erreicht"
 }

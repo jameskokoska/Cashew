@@ -1025,9 +1025,10 @@
   "spending": "Menot",
   "include-expense": "Kulut",
   "include-expense-description-1": "Tulot liiketoimet sisällytetään talousarvioon",
-  "include-expense-description-2": "Menobudjetin kokonaismäärä vähenee tulojen kanssa",
+  "include-expense-description-2": "Säästöbudjetin kokonaismäärä vähenee kulujen kanssa",
   "savings-budget": "Säästöbudjetti",
   "expense-budget": "Kustannusbudjetti",
   "savings-budget-description-1": "Seuraa tulojasi ja budjetti säästöjäsi",
-  "expense-budget-description-1": "Seuraa kulut ja budjetti kulut"
+  "expense-budget-description-1": "Seuraa kulut ja budjetti kulut",
+  "end-date-reached": "Päättymispäivämäärä"
 }

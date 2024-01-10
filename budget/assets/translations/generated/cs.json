@@ -1025,9 +1025,10 @@
   "spending": "Výdaje",
   "include-expense": "Výdaje",
   "include-expense-description-1": "Transakce příjmů budou zahrnuty do rozpočtu",
-  "include-expense-description-2": "Celková částka výdajů se sníží s příjmy",
+  "include-expense-description-2": "Celková částka úsporného rozpočtu se sníží s výdaji",
   "savings-budget": "Úspora rozpočtu",
   "expense-budget": "Rozpočet výdajů",
   "savings-budget-description-1": "Sledujte svůj příjem a rozpočet vaše úspory",
-  "expense-budget-description-1": "Sledujte své výdaje a rozpočet na své výdaje"
+  "expense-budget-description-1": "Sledujte své výdaje a rozpočet na své výdaje",
+  "end-date-reached": "Datum ukončení bylo dosaženo"
 }

@@ -1025,9 +1025,10 @@
   "spending": "支出",
   "include-expense": "費用",
   "include-expense-description-1": "収入取引は予算に含まれます",
-  "include-expense-description-2": "支出予算の合計は収入とともに減少します",
+  "include-expense-description-2": "節約予算の合計は、費用とともに減少します",
   "savings-budget": "節約予算",
   "expense-budget": "費用予算",
   "savings-budget-description-1": "収入を追跡し、貯蓄を予算化します",
-  "expense-budget-description-1": "費用を追跡し、支出を予算化します"
+  "expense-budget-description-1": "費用を追跡し、支出を予算化します",
+  "end-date-reached": "終了日に達しました"
 }

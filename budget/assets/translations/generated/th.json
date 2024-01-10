@@ -1025,9 +1025,10 @@
   "spending": "การใช้จ่าย",
   "include-expense": "ค่าใช้จ่าย",
   "include-expense-description-1": "การทำธุรกรรมรายได้จะรวมอยู่ในงบประมาณ",
-  "include-expense-description-2": "ยอดรวมงบประมาณการใช้จ่ายจะลดลงด้วยรายได้",
+  "include-expense-description-2": "ยอดรวมงบประมาณการออมจะลดลงด้วยค่าใช้จ่าย",
   "savings-budget": "งบประมาณการออม",
   "expense-budget": "งบประมาณค่าใช้จ่าย",
   "savings-budget-description-1": "ติดตามรายได้และงบประมาณการออมของคุณ",
-  "expense-budget-description-1": "ติดตามค่าใช้จ่ายและงบประมาณการใช้จ่ายของคุณ"
+  "expense-budget-description-1": "ติดตามค่าใช้จ่ายและงบประมาณการใช้จ่ายของคุณ",
+  "end-date-reached": "ถึงวันที่สิ้นสุด"
 }

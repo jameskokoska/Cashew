@@ -1025,9 +1025,10 @@
   "spending": "ചിലവഴിക്കുക",
   "include-expense": "ചെലവ്",
   "include-expense-description-1": "വരുമാന ഇടപാടുകൾ ബജറ്റിൽ ഉൾപ്പെടുത്തും",
-  "include-expense-description-2": "ചെലവ് ബജറ്റ് ആകെ വരുമാനം കുറയ്ക്കും",
+  "include-expense-description-2": "ലാഭിക്കൽ ബജറ്റ് ആകെ ചെലവുകൾ കുറയ്ക്കും",
   "savings-budget": "സേവിംഗ്സ് ബജറ്റ്",
   "expense-budget": "ചെലവ് ബജറ്റ്",
   "savings-budget-description-1": "നിങ്ങളുടെ വരുമാനവും ബജറ്റും ട്രാക്കുചെയ്യുക",
-  "expense-budget-description-1": "നിങ്ങളുടെ ചെലവുകൾ നിങ്ങളുടെ ചെലവുകളും ബജറ്റിയും ട്രാക്കുചെയ്യുക"
+  "expense-budget-description-1": "നിങ്ങളുടെ ചെലവുകൾ നിങ്ങളുടെ ചെലവുകളും ബജറ്റിയും ട്രാക്കുചെയ്യുക",
+  "end-date-reached": "അവസാന തീയതി എത്തി"
 }

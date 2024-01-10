@@ -1025,9 +1025,10 @@
   "spending": "Разходи",
   "include-expense": "Разход",
   "include-expense-description-1": "В бюджета ще бъдат включени сделки с доходи",
-  "include-expense-description-2": "Общият бюджет на разходите ще намалее с доходите",
+  "include-expense-description-2": "Общият брой на спестяващия бюджет ще намалее с разходите",
   "savings-budget": "Бюджет за спестявания",
   "expense-budget": "Бюджет на разходите",
   "savings-budget-description-1": "Проследете доходите и бюджета си вашите спестявания",
-  "expense-budget-description-1": "Проследявайте разходите си и бюджетирайте разходите си"
+  "expense-budget-description-1": "Проследявайте разходите си и бюджетирайте разходите си",
+  "end-date-reached": "Крайна дата е достигната"
 }

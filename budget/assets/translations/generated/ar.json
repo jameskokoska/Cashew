@@ -1025,9 +1025,10 @@
   "spending": "الإنفاق",
   "include-expense": "مصروف",
   "include-expense-description-1": "سيتم تضمين معاملات الدخل في الميزانية",
-  "include-expense-description-2": "سوف ينخفض ​​إجمالي ميزانية الإنفاق مع الدخل",
+  "include-expense-description-2": "سوف ينخفض ​​إجمالي ميزانية الادخار مع النفقات",
   "savings-budget": "ميزانية الادخار",
   "expense-budget": "ميزانية المصاريف",
   "savings-budget-description-1": "تتبع دخلك وميزانيتك مدخراتك",
-  "expense-budget-description-1": "تتبع نفقاتك وميزانيتك إنفاقك"
+  "expense-budget-description-1": "تتبع نفقاتك وميزانيتك إنفاقك",
+  "end-date-reached": "تم الوصول إلى تاريخ الانتهاء"
 }

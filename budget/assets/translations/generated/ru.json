@@ -1025,9 +1025,10 @@
   "spending": "Расходы",
   "include-expense": "Расход",
   "include-expense-description-1": "Сделки с доходами будут включены в бюджет",
-  "include-expense-description-2": "Общая сумма бюджета расходов уменьшится с доходом",
+  "include-expense-description-2": "Общая сумма сберегательного бюджета уменьшится с расходами",
   "savings-budget": "Сберегательный бюджет",
   "expense-budget": "Бюджет расходов",
   "savings-budget-description-1": "Отслеживайте свой доход и бюджет свои сбережения",
-  "expense-budget-description-1": "Отслеживайте свои расходы и бюджет ваши расходы"
+  "expense-budget-description-1": "Отслеживайте свои расходы и бюджет ваши расходы",
+  "end-date-reached": "Достигнута дата окончания"
 }

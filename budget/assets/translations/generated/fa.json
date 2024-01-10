@@ -1025,9 +1025,10 @@
   "spending": "هزینه",
   "include-expense": "هزینه",
   "include-expense-description-1": "معاملات درآمد در بودجه گنجانده می شود",
-  "include-expense-description-2": "بودجه هزینه با درآمد کاهش می یابد",
+  "include-expense-description-2": "بودجه پس انداز با هزینه کاهش می یابد",
   "savings-budget": "بودجه پس انداز",
   "expense-budget": "بودجه هزینه",
   "savings-budget-description-1": "درآمد خود را پیگیری کنید و پس انداز خود را پس انداز کنید",
-  "expense-budget-description-1": "هزینه های خود را پیگیری کنید و هزینه های خود را بودجه خود را بودجه کنید"
+  "expense-budget-description-1": "هزینه های خود را پیگیری کنید و هزینه های خود را بودجه خود را بودجه کنید",
+  "end-date-reached": "تاریخ پایان رسید"
 }

@@ -1025,9 +1025,10 @@
   "spending": "Harcama",
   "include-expense": "Masraf",
   "include-expense-description-1": "Gelir işlemleri bütçeye dahil edilecek",
-  "include-expense-description-2": "Harcama bütçesi toplamı gelirle azalacak",
+  "include-expense-description-2": "Tasarruf bütçesi toplamı giderlerle azalacaktır",
   "savings-budget": "Tasarruf Bütçesi",
   "expense-budget": "Gider Bütçesi",
   "savings-budget-description-1": "Gelirinizi izleyin ve tasarruflarınızı bütçeleyin",
-  "expense-budget-description-1": "Giderlerinizi takip edin ve harcamalarınızı bütçe"
+  "expense-budget-description-1": "Giderlerinizi takip edin ve harcamalarınızı bütçe",
+  "end-date-reached": "Bitiş tarihi ulaşıldı"
 }

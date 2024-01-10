@@ -1025,9 +1025,10 @@
   "spending": "Gastos",
   "include-expense": "Despesa",
   "include-expense-description-1": "As transações de renda serão incluídas no orçamento",
-  "include-expense-description-2": "O total do orçamento de gastos diminuirá com a renda",
+  "include-expense-description-2": "O total do orçamento de economia diminuirá com as despesas",
   "savings-budget": "Orçamento de poupança",
   "expense-budget": "Orçamento de despesa",
   "savings-budget-description-1": "Rastreie sua renda e orçamento suas economias",
-  "expense-budget-description-1": "Acompanhe suas despesas e orçem seus gastos"
+  "expense-budget-description-1": "Acompanhe suas despesas e orçem seus gastos",
+  "end-date-reached": "Data de término alcançada"
 }

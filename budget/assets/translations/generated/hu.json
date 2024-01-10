@@ -1025,9 +1025,10 @@
   "spending": "Kiadások",
   "include-expense": "Költség",
   "include-expense-description-1": "A jövedelmi tranzakciókat a költségvetésbe foglalják",
-  "include-expense-description-2": "A kiadási költségvetés összege a jövedelemmel csökken",
+  "include-expense-description-2": "A megtakarítási költségvetés összege a költségekkel csökken",
   "savings-budget": "Megtakarítási költségvetés",
   "expense-budget": "Költség -költségvetés",
   "savings-budget-description-1": "Kövesse nyomon a jövedelmét és a megtakarítások költségvetését",
-  "expense-budget-description-1": "Kövesse nyomon a költségeket és költségvetse ki a kiadásait"
+  "expense-budget-description-1": "Kövesse nyomon a költségeket és költségvetse ki a kiadásait",
+  "end-date-reached": "A befejezési dátum elért"
 }

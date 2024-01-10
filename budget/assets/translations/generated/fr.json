@@ -1025,9 +1025,10 @@
   "spending": "Dépenses",
   "include-expense": "Frais",
   "include-expense-description-1": "Les transactions de revenus seront incluses dans le budget",
-  "include-expense-description-2": "Le total du budget des dépenses diminuera avec les revenus",
+  "include-expense-description-2": "Le total du budget d'épargne diminuera avec les dépenses",
   "savings-budget": "Budget d'épargne",
   "expense-budget": "Budget des dépenses",
   "savings-budget-description-1": "Suivez vos revenus et budgétisez votre épargne",
-  "expense-budget-description-1": "Suivez vos dépenses et budgétisé vos dépenses"
+  "expense-budget-description-1": "Suivez vos dépenses et budgétisé vos dépenses",
+  "end-date-reached": "Date de fin atteinte"
 }

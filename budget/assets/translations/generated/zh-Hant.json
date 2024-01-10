@@ -1025,9 +1025,10 @@
   "spending": "開支",
   "include-expense": "費用",
   "include-expense-description-1": "收入交易將包括在預算中",
-  "include-expense-description-2": "支出預算總計會隨收入而減少",
+  "include-expense-description-2": "儲蓄預算總計將隨著費用而減少",
   "savings-budget": "儲蓄預算",
   "expense-budget": "費用預算",
   "savings-budget-description-1": "跟踪您的收入並預算您的儲蓄",
-  "expense-budget-description-1": "跟踪您的費用並預算您的支出"
+  "expense-budget-description-1": "跟踪您的費用並預算您的支出",
+  "end-date-reached": "結束日期達到了"
 }

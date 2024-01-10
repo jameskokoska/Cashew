@@ -1025,9 +1025,10 @@
   "spending": "Paggastos",
   "include-expense": "Gastos",
   "include-expense-description-1": "Ang mga transaksyon sa kita ay isasama sa badyet",
-  "include-expense-description-2": "Ang kabuuang badyet sa paggastos ay bababa sa kita",
+  "include-expense-description-2": "Ang kabuuang pag -save ng badyet ay bababa sa mga gastos",
   "savings-budget": "Badyet ng pagtitipid",
   "expense-budget": "Badyet sa gastos",
   "savings-budget-description-1": "Subaybayan ang iyong kita at badyet ang iyong pagtitipid",
-  "expense-budget-description-1": "Subaybayan ang iyong mga gastos at badyet ang iyong paggasta"
+  "expense-budget-description-1": "Subaybayan ang iyong mga gastos at badyet ang iyong paggasta",
+  "end-date-reached": "Naabot ang petsa ng pagtatapos"
 }

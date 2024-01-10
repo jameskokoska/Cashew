@@ -1025,9 +1025,10 @@
   "spending": "Matumizi",
   "include-expense": "Gharama",
   "include-expense-description-1": "Uuzaji wa mapato utajumuishwa katika bajeti",
-  "include-expense-description-2": "Jumla ya bajeti ya matumizi itapungua na mapato",
+  "include-expense-description-2": "Jumla ya bajeti ya kuokoa itapungua na gharama",
   "savings-budget": "Bajeti ya Akiba",
   "expense-budget": "Bajeti ya gharama",
   "savings-budget-description-1": "Fuatilia mapato yako na bajeti ya akiba yako",
-  "expense-budget-description-1": "Fuatilia gharama zako na bajeti matumizi yako"
+  "expense-budget-description-1": "Fuatilia gharama zako na bajeti matumizi yako",
+  "end-date-reached": "Tarehe ya mwisho ilifikiwa"
 }

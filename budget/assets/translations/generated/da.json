@@ -1025,9 +1025,10 @@
   "spending": "Udgifter",
   "include-expense": "Bekostning",
   "include-expense-description-1": "Indkomsttransaktioner vil blive inkluderet i budgettet",
-  "include-expense-description-2": "Det samlede udgiftsbudget falder med indkomst",
+  "include-expense-description-2": "Det samlede belastningsbudget falder med udgifter",
   "savings-budget": "Besparelsesbudget",
   "expense-budget": "Udgiftsbudget",
   "savings-budget-description-1": "Spor din indkomst og budgettere dine besparelser",
-  "expense-budget-description-1": "Spor dine udgifter og budgettere dine udgifter"
+  "expense-budget-description-1": "Spor dine udgifter og budgettere dine udgifter",
+  "end-date-reached": "Slutdato nået"
 }

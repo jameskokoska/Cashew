@@ -1025,9 +1025,10 @@
   "spending": "Utgifter",
   "include-expense": "Kostnader",
   "include-expense-description-1": "Inntektstransaksjoner vil bli inkludert i budsjettet",
-  "include-expense-description-2": "Utgiftsbudsjettet totalt vil avta med inntekten",
+  "include-expense-description-2": "Sparebudsjettet totalt vil avta med utgiftene",
   "savings-budget": "Sparebudsjett",
   "expense-budget": "Utgiftsbudsjett",
   "savings-budget-description-1": "Spor inntekten og budsjettet sparepengene dine",
-  "expense-budget-description-1": "Spore utgiftene dine og budsjetter utgiftene dine"
+  "expense-budget-description-1": "Spore utgiftene dine og budsjetter utgiftene dine",
+  "end-date-reached": "Sluttdato nådd"
 }

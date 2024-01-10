@@ -1025,9 +1025,10 @@
   "spending": "खर्च करणे",
   "include-expense": "खर्च",
   "include-expense-description-1": "अर्थसंकल्पात उत्पन्नाच्या व्यवहाराचा समावेश केला जाईल",
-  "include-expense-description-2": "खर्च बजेट एकूण उत्पन्नासह कमी होईल",
+  "include-expense-description-2": "बचत बजेट एकूण खर्चासह कमी होईल",
   "savings-budget": "बचत बजेट",
   "expense-budget": "खर्च बजेट",
   "savings-budget-description-1": "आपल्या उत्पन्नाचा मागोवा घ्या आणि आपली बचत बजेट करा",
-  "expense-budget-description-1": "आपल्या खर्चाचा मागोवा घ्या आणि आपला खर्च बजेट करा"
+  "expense-budget-description-1": "आपल्या खर्चाचा मागोवा घ्या आणि आपला खर्च बजेट करा",
+  "end-date-reached": "शेवटची तारीख गाठली"
 }

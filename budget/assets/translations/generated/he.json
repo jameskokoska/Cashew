@@ -1025,9 +1025,10 @@
   "spending": "הוצאות",
   "include-expense": "הוֹצָאָה",
   "include-expense-description-1": "עסקאות הכנסה ייכללו בתקציב",
-  "include-expense-description-2": "סך תקציב ההוצאות יקטן עם ההכנסה",
+  "include-expense-description-2": "סך התקציב החיסכון יקטן עם ההוצאות",
   "savings-budget": "תקציב חיסכון",
   "expense-budget": "תקציב הוצאות",
   "savings-budget-description-1": "עקוב אחר הכנסותיך ותקצב את החיסכון שלך",
-  "expense-budget-description-1": "עקוב אחר ההוצאות שלך ותקצב את ההוצאות שלך"
+  "expense-budget-description-1": "עקוב אחר ההוצאות שלך ותקצב את ההוצאות שלך",
+  "end-date-reached": "תאריך הסיום הגיע"
 }

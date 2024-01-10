@@ -1025,9 +1025,10 @@
   "spending": "Трошење",
   "include-expense": "Трошак",
   "include-expense-description-1": "Трансакције о приходима биће укључене у буџет",
-  "include-expense-description-2": "Потрошња буџет ће се смањити са приходима",
+  "include-expense-description-2": "Укупни уштеди буџет ће се смањити са трошковима",
   "savings-budget": "Буџет штедње",
   "expense-budget": "Буџет за трошкове",
   "savings-budget-description-1": "Пратите свој приход и буџет уштеде",
-  "expense-budget-description-1": "Пратите трошкове и буџет своје потрошње"
+  "expense-budget-description-1": "Пратите трошкове и буџет своје потрошње",
+  "end-date-reached": "Достигнут крајњи датум"
 }

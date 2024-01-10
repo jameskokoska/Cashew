@@ -831,11 +831,11 @@ class _SelectAmountState extends State<SelectAmount> {
               Padding(
                 padding: widget.padding,
                 child: Center(
-                  child: Container(
-                    constraints: BoxConstraints(maxWidth: 400),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(
-                          getPlatform() == PlatformOS.isIOS ? 10 : 20),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(
+                        getPlatform() == PlatformOS.isIOS ? 10 : 20),
+                    child: Container(
+                      constraints: BoxConstraints(maxWidth: 400),
                       child: Column(
                         children: [
                           if (widget.extraWidgetAboveNumbers != null)
@@ -1112,31 +1112,42 @@ class CalculatorButton extends StatelessWidget {
   final bool disabled;
   @override
   Widget build(BuildContext context) {
+    Color buttonColor = appStateSettings["materialYou"]
+        ? Theme.of(context).colorScheme.secondaryContainer
+        : Theme.of(context).brightness == Brightness.light
+            ? getColor(context, "lightDarkAccentHeavy")
+            : getColor(context, "lightDarkAccentHeavyLight");
     return Expanded(
-      child: AnimatedOpacity(
-        duration: Duration(milliseconds: 200),
-        opacity: disabled ? 0.5 : 1,
-        child: IgnorePointer(
-          ignoring: disabled,
-          child: Tappable(
-            color: appStateSettings["materialYou"]
-                ? Theme.of(context).colorScheme.secondaryContainer
-                : Theme.of(context).brightness == Brightness.light
-                    ? getColor(context, "lightDarkAccentHeavy")
-                    : getColor(context, "lightDarkAccentHeavyLight"),
-            onLongPress: onLongPress,
-            onTap: editAmount,
-            child: Container(
-              height: 60,
-              child: Center(
-                child: label != "<"
-                    ? TextFont(
-                        fontSize: 24,
-                        text: label,
-                      )
-                    : Icon(appStateSettings["outlinedIcons"]
-                        ? Icons.backspace_outlined
-                        : Icons.backspace_rounded),
+      child: Transform.scale(
+        scale: 1.01,
+        child: AnimatedContainer(
+          duration: Duration(milliseconds: 200),
+          color: disabled
+              ? dynamicPastel(context, buttonColor,
+                  amountDark: 0.15, amountLight: 0.3)
+              : buttonColor,
+          child: AnimatedOpacity(
+            duration: Duration(milliseconds: 200),
+            opacity: disabled ? 0.5 : 1,
+            child: IgnorePointer(
+              ignoring: disabled,
+              child: Tappable(
+                color: Colors.transparent,
+                onLongPress: onLongPress,
+                onTap: editAmount,
+                child: Container(
+                  height: 60,
+                  child: Center(
+                    child: label == "<"
+                        ? Icon(appStateSettings["outlinedIcons"]
+                            ? Icons.backspace_outlined
+                            : Icons.backspace_rounded)
+                        : TextFont(
+                            fontSize: 24,
+                            text: label,
+                          ),
+                  ),
+                ),
               ),
             ),
           ),
@@ -1345,11 +1356,11 @@ class _SelectAmountValueState extends State<SelectAmountValue> {
           ),
         Container(height: 10),
         Center(
-          child: Container(
-            constraints: BoxConstraints(maxWidth: 400),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(
-                  getPlatform() == PlatformOS.isIOS ? 10 : 20),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(
+                getPlatform() == PlatformOS.isIOS ? 10 : 20),
+            child: Container(
+              constraints: BoxConstraints(maxWidth: 400),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [

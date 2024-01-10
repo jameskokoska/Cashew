@@ -1025,9 +1025,10 @@
   "spending": "Uitgaven",
   "include-expense": "Kosten",
   "include-expense-description-1": "Inkomstentransacties worden opgenomen in de begroting",
-  "include-expense-description-2": "Het totaal van de bestedingsbudget zal afnemen met inkomsten",
+  "include-expense-description-2": "Het totaal van het spaarbudget zal afnemen met de kosten",
   "savings-budget": "Spaarbudget",
   "expense-budget": "Kostenbudget",
   "savings-budget-description-1": "Volg uw inkomsten en budget uw spaargeld",
-  "expense-budget-description-1": "Volg uw uitgaven en budget uw uitgaven"
+  "expense-budget-description-1": "Volg uw uitgaven en budget uw uitgaven",
+  "end-date-reached": "Einddatum bereikt"
 }

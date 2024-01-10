@@ -1025,9 +1025,10 @@
   "spending": "Spending",
   "include-expense": "Expense",
   "include-expense-description-1": "Expense transactions will be included in the budget",
-  "include-expense-description-2": "The saving budget total will increase with expenses",
+  "include-expense-description-2": "The saving budget total will decrease with expenses",
   "savings-budget": "Savings budget",
   "expense-budget": "Expense budget",
   "savings-budget-description-1": "Track your income and budget your savings",
-  "expense-budget-description-1": "Track your expenses and budget your spending"
+  "expense-budget-description-1": "Track your expenses and budget your spending",
+  "end-date-reached": "End Date Reached"
 }

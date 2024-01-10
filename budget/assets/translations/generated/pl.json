@@ -1025,9 +1025,10 @@
   "spending": "Wydatki",
   "include-expense": "Koszt",
   "include-expense-description-1": "Transakcje dochodowe zostaną uwzględnione w budżecie",
-  "include-expense-description-2": "Łączna liczba budżetu wydatków spadnie wraz z dochodami",
+  "include-expense-description-2": "Suma budżetu oszczędnościowego spadnie wraz z wydatkami",
   "savings-budget": "Budżet oszczędnościowy",
   "expense-budget": "Budżet wydatków",
   "savings-budget-description-1": "Śledź swoje dochody i budżet na swoje oszczędności",
-  "expense-budget-description-1": "Śledź swoje wydatki i budżet na wydatki"
+  "expense-budget-description-1": "Śledź swoje wydatki i budżet na wydatki",
+  "end-date-reached": "Data zakończenia osiągnięta"
 }

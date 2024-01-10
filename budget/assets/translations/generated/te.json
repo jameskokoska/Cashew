@@ -1025,9 +1025,10 @@
   "spending": "ఖర్చు",
   "include-expense": "ఖర్చు",
   "include-expense-description-1": "ఆదాయ లావాదేవీలు బడ్జెట్‌లో చేర్చబడతాయి",
-  "include-expense-description-2": "ఖర్చు బడ్జెట్ మొత్తం ఆదాయంతో తగ్గుతుంది",
+  "include-expense-description-2": "పొదుపు బడ్జెట్ మొత్తం ఖర్చులతో తగ్గుతుంది",
   "savings-budget": "పొదుపు బడ్జెట్",
   "expense-budget": "ఖర్చు బడ్జెట్",
   "savings-budget-description-1": "మీ ఆదాయాన్ని ట్రాక్ చేయండి మరియు మీ పొదుపులను బడ్జెట్ చేయండి",
-  "expense-budget-description-1": "మీ ఖర్చులను ట్రాక్ చేయండి మరియు మీ ఖర్చును బడ్జెట్ చేయండి"
+  "expense-budget-description-1": "మీ ఖర్చులను ట్రాక్ చేయండి మరియు మీ ఖర్చును బడ్జెట్ చేయండి",
+  "end-date-reached": "ముగింపు తేదీ చేరుకుంది"
 }

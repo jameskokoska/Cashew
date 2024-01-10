@@ -592,7 +592,7 @@ class _BudgetHistoryLineGraphState extends State<_BudgetHistoryLineGraph> {
                 reservedSize: widget.budget.reoccurrence ==
                             BudgetReoccurence.weekly ||
                         widget.budget.reoccurrence == BudgetReoccurence.daily
-                    ? 35
+                    ? 38
                     : 22,
                 getTitlesWidget: (value, meta) {
                   DateTime startDate = widget.dateRanges[0].start;

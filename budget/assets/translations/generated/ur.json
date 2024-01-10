@@ -1025,9 +1025,10 @@
   "spending": "خرچ کرنا",
   "include-expense": "خرچہ",
   "include-expense-description-1": "آمدنی کے لین دین کو بجٹ میں شامل کیا جائے گا",
-  "include-expense-description-2": "اخراجات کے بجٹ میں کل آمدنی میں کمی واقع ہوگی",
+  "include-expense-description-2": "بچت کے بجٹ میں اخراجات کے ساتھ کل کم ہوجائے گا",
   "savings-budget": "بچت کا بجٹ",
   "expense-budget": "اخراجات کا بجٹ",
   "savings-budget-description-1": "اپنی آمدنی کو ٹریک کریں اور اپنی بچت کو بجٹ دیں",
-  "expense-budget-description-1": "اپنے اخراجات کو ٹریک کریں اور اپنے اخراجات کو بجٹ دیں"
+  "expense-budget-description-1": "اپنے اخراجات کو ٹریک کریں اور اپنے اخراجات کو بجٹ دیں",
+  "end-date-reached": "آخری تاریخ تک پہنچ گئی"
 }
