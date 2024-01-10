@@ -419,8 +419,11 @@ class _ColorIconCustomState extends State<ColorIconCustom> {
         onPressed: () async {
           enterColorCodeBottomSheet(
             context,
-            initialSelectedColor: widget.initialSelectedColor,
-            setSelectedColor: widget.onTap,
+            initialSelectedColor: selectedColor,
+            setSelectedColor: (Color color) {
+              widget.onTap(color);
+              selectedColor = color;
+            },
           );
         },
       ),

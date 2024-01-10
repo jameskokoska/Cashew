@@ -365,13 +365,21 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
                                       for (int i = snapshot.data!.length - 1;
                                           i >= 0;
                                           i--) {
-                                        if ((snapshot.data![i] ?? 0) * -1 <
+                                        if ((snapshot.data![i] ?? 0) *
+                                                determineBudgetPolarity(
+                                                    widget.budget) <
                                             minY) {
-                                          minY = (snapshot.data![i] ?? 0) * -1;
+                                          minY = (snapshot.data![i] ?? 0) *
+                                              determineBudgetPolarity(
+                                                  widget.budget);
                                         }
-                                        if ((snapshot.data![i] ?? 0) * -1 >
+                                        if ((snapshot.data![i] ?? 0) *
+                                                determineBudgetPolarity(
+                                                    widget.budget) >
                                             maxY) {
-                                          maxY = (snapshot.data![i] ?? 0) * -1;
+                                          maxY = (snapshot.data![i] ?? 0) *
+                                              determineBudgetPolarity(
+                                                  widget.budget);
                                         }
                                         spots.add(FlSpot(
                                           snapshot.data!.length -
@@ -379,7 +387,9 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
                                               i.toDouble(),
                                           (snapshot.data![i] ?? 0).abs() == 0
                                               ? 0.00000000001
-                                              : (snapshot.data![i] ?? 0) * -1,
+                                              : (snapshot.data![i] ?? 0) *
+                                                  determineBudgetPolarity(
+                                                      widget.budget),
                                         ));
                                       }
                                       // print(minY);
@@ -1015,7 +1025,7 @@ class PastBudgetContainer extends StatelessWidget {
           snapshot.data!.forEach((category) {
             totalSpent = totalSpent + category.total;
           });
-          totalSpent = totalSpent * -1;
+          totalSpent = totalSpent * determineBudgetPolarity(budget);
           if (totalSpent == -0) {
             totalSpent = 0;
           }
@@ -1101,15 +1111,8 @@ class PastBudgetContainer extends StatelessWidget {
                                             const EdgeInsets.only(bottom: 0.5),
                                         child: Container(
                                           child: TextFont(
-                                            text: (appStateSettings[
-                                                        "showTotalSpentForBudget"]
-                                                    ? " " +
-                                                        "spent-amount-of".tr() +
-                                                        " "
-                                                    : " " +
-                                                        "remaining-amount-of"
-                                                            .tr() +
-                                                        " ") +
+                                            text: getBudgetSpentText(
+                                                    budget.income) +
                                                 convertToMoney(
                                                     Provider.of<AllWallets>(
                                                         context),
@@ -1131,7 +1134,7 @@ class PastBudgetContainer extends StatelessWidget {
                                       count: appStateSettings[
                                               "showTotalSpentForBudget"]
                                           ? totalSpent
-                                          : -1 * (budgetAmount - totalSpent),
+                                          : totalSpent - budgetAmount,
                                       duration: Duration(milliseconds: 700),
                                       initialCount: (0),
                                       textBuilder: (number) {
@@ -1142,9 +1145,7 @@ class PastBudgetContainer extends StatelessWidget {
                                               finalNumber: appStateSettings[
                                                       "showTotalSpentForBudget"]
                                                   ? totalSpent
-                                                  : -1 *
-                                                      (budgetAmount -
-                                                          totalSpent)),
+                                                  : totalSpent - budgetAmount),
                                           fontSize: 16,
                                           textAlign: TextAlign.left,
                                           fontWeight: FontWeight.bold,
@@ -1156,14 +1157,8 @@ class PastBudgetContainer extends StatelessWidget {
                                     child: Container(
                                       padding: const EdgeInsets.only(bottom: 0),
                                       child: TextFont(
-                                        text: (appStateSettings[
-                                                    "showTotalSpentForBudget"]
-                                                ? " " +
-                                                    "spent-amount-of".tr() +
-                                                    " "
-                                                : " " +
-                                                    "overspent-amount-of".tr() +
-                                                    " ") +
+                                        text: getBudgetOverSpentText(
+                                                budget.income) +
                                             convertToMoney(
                                                 Provider.of<AllWallets>(
                                                     context),

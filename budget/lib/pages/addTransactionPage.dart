@@ -740,7 +740,6 @@ class _AddTransactionPageState extends State<AddTransactionPage>
               selectedTitle: selectedTitle,
               setSelectedNote: setSelectedNoteController,
               setSelectedTitle: setSelectedTitleController,
-              selectedCategory: selectedCategory,
               setSelectedCategory: setSelectedCategory,
               next: () {
                 afterSetTitle();
@@ -2254,7 +2253,6 @@ class SelectTitle extends StatefulWidget {
     Key? key,
     required this.setSelectedTitle,
     required this.setSelectedNote,
-    this.selectedCategory,
     required this.setSelectedCategory,
     this.selectedTitle,
     required this.noteInputController,
@@ -2262,7 +2260,6 @@ class SelectTitle extends StatefulWidget {
   }) : super(key: key);
   final Function(String) setSelectedTitle;
   final Function(String) setSelectedNote;
-  final TransactionCategory? selectedCategory;
   final Function(TransactionCategory) setSelectedCategory;
   final String? selectedTitle;
   final TextEditingController noteInputController;
@@ -2274,7 +2271,6 @@ class SelectTitle extends StatefulWidget {
 
 class _SelectTitleState extends State<SelectTitle> {
   int selectedIndex = 0;
-  String? input = "";
   bool foundFromCategory = false;
   TransactionCategory? selectedCategory;
   TransactionAssociatedTitle? selectedAssociatedTitle;
@@ -2282,20 +2278,34 @@ class _SelectTitleState extends State<SelectTitle> {
   @override
   void initState() {
     super.initState();
-    selectedCategory = widget.selectedCategory;
-    input = widget.selectedTitle;
   }
 
-  void selectTitle() {
-    widget.setSelectedCategory(selectedCategory!);
-    if (foundFromCategory == false)
-      widget.setSelectedTitle(selectedAssociatedTitle?.title ?? "");
-    else
-      widget.setSelectedTitle("");
+  void selectTitle() async {
+    if (selectedCategory != null) {
+      widget.setSelectedCategory(selectedCategory!);
+
+      if (foundFromCategory == false)
+        widget.setSelectedTitle(selectedAssociatedTitle?.title ?? "");
+      else
+        widget.setSelectedTitle("");
+    }
+
     Navigator.pop(context);
     if (widget.next != null) {
       widget.next!();
     }
+  }
+
+  void resetTitleSearch() {
+    setState(() {
+      selectedCategory = null;
+      selectedAssociatedTitle = null;
+      foundFromCategory = false;
+    });
+    // Update the size of the bottom sheet
+    Future.delayed(Duration(milliseconds: 300), () {
+      bottomSheetControllerGlobal.snapToExtent(0);
+    });
   }
 
   @override
@@ -2315,43 +2325,39 @@ class _SelectTitleState extends State<SelectTitle> {
                   : Icons.title_rounded,
               initialValue: widget.selectedTitle,
               autoFocus: true,
-              onEditingComplete: () {
-                //if selected a tag and a category is set, then go to enter amount
-                //else enter amount
-                if (selectedCategory?.name.toString().trim().toLowerCase() ==
-                    input?.toString().trim().toLowerCase()) {
-                  widget.setSelectedTitle("");
-                } else {
-                  widget.setSelectedTitle(
-                      selectedAssociatedTitle?.title ?? input ?? "");
-                }
-
-                if (selectedCategory != null) {
-                  widget.setSelectedCategory(selectedCategory!);
-                }
-                Navigator.pop(context);
-                if (widget.next != null) {
-                  widget.next!();
-                }
-              },
+              onEditingComplete: selectTitle,
               onChanged: (text) async {
-                input = text;
-                widget.setSelectedTitle(input!);
+                widget.setSelectedTitle(text.trim());
 
-                List result = await getRelatingAssociatedTitle(text);
-                TransactionAssociatedTitle? selectedTitleLocal = result[0];
-                String? categoryFk = result[1];
-                bool foundFromCategoryLocal = result[2];
+                if (text.trim() == "" || text.trim().length < 2) {
+                  resetTitleSearch();
+                  return;
+                }
+
+                TransactionAssociatedTitle? selectedTitleLocal =
+                    await getLikeAssociatedTitle(text);
+                bool foundFromCategoryLocal = false;
 
                 if (selectedTitleLocal == null) {
-                  selectedTitleLocal = await getLikeAssociatedTitle(text);
-                  categoryFk = selectedTitleLocal?.categoryFk;
-                  foundFromCategoryLocal = false;
+                  TransactionCategory? selectedCategoryLocal =
+                      await database.getRelatingCategory(text.trim());
+                  if (selectedCategoryLocal != null) {
+                    selectedTitleLocal = TransactionAssociatedTitle(
+                      associatedTitlePk: "-1",
+                      categoryFk: selectedCategoryLocal.categoryPk,
+                      title: selectedCategoryLocal.name,
+                      dateCreated: selectedCategoryLocal.dateCreated,
+                      order: -1,
+                      isExactMatch: false,
+                    );
+                    foundFromCategoryLocal = true;
+                  }
                 }
 
-                if (categoryFk != null) {
-                  TransactionCategory? foundCategory =
-                      await database.getCategoryInstance(categoryFk);
+                if (selectedTitleLocal != null) {
+                  TransactionCategory? foundCategory = await database
+                      .getCategoryInstanceOrNull(selectedTitleLocal.categoryFk);
+
                   // Update the size of the bottom sheet
                   Future.delayed(Duration(milliseconds: 100), () {
                     bottomSheetControllerGlobal.snapToExtent(0);
@@ -2362,15 +2368,7 @@ class _SelectTitleState extends State<SelectTitle> {
                     foundFromCategory = foundFromCategoryLocal;
                   });
                 } else {
-                  setState(() {
-                    selectedCategory = null;
-                    selectedAssociatedTitle = null;
-                    foundFromCategory = foundFromCategoryLocal;
-                  });
-                  // Update the size of the bottom sheet
-                  Future.delayed(Duration(milliseconds: 300), () {
-                    bottomSheetControllerGlobal.snapToExtent(0);
-                  });
+                  resetTitleSearch();
                 }
               },
               labelText: "title-placeholder".tr(),
@@ -2380,7 +2378,7 @@ class _SelectTitleState extends State<SelectTitle> {
           AnimatedSizeSwitcher(
             sizeDuration: Duration(milliseconds: 400),
             sizeCurve: Curves.easeInOut,
-            child: selectedCategory == null
+            child: selectedAssociatedTitle == null
                 ? Container(
                     key: ValueKey(0),
                     width: getWidthBottomSheet(context) - 36,
@@ -2705,112 +2703,15 @@ class _EnterTextButtonState extends State<EnterTextButton> {
   }
 }
 
-getRelatingAssociatedTitleLimited(String text) async {
-  String? categoryFk;
-  bool foundFromCategoryLocal = false;
-  TransactionAssociatedTitle? selectedTitleLocal;
-
-  TransactionAssociatedTitle relatingTitle;
-  try {
-    relatingTitle = await database.getRelatingAssociatedTitle(text);
-    categoryFk = relatingTitle.categoryFk;
-    selectedTitleLocal = relatingTitle;
-  } catch (e) {
-    print("No relating titles found!");
-  }
-
-  if (categoryFk == null) {
-    TransactionCategory relatingCategory;
-    try {
-      relatingCategory = await database.getRelatingCategory(text);
-    } catch (e) {
-      print("No category names found!");
-      return [selectedTitleLocal, categoryFk, foundFromCategoryLocal];
-    }
-
-    TransactionCategory category = relatingCategory;
-    categoryFk = category.categoryPk;
-    selectedTitleLocal = TransactionAssociatedTitle(
-      associatedTitlePk: "-1",
-      title: category.name,
-      categoryFk: category.categoryPk,
-      dateCreated: category.dateCreated,
-      dateTimeModified: null,
-      order: category.order,
-      isExactMatch: false,
-    );
-    foundFromCategoryLocal = true;
-  }
-  return [selectedTitleLocal, categoryFk, foundFromCategoryLocal];
-}
-
 Future<TransactionAssociatedTitle?> getLikeAssociatedTitle(String text) async {
-  if (text.trim() == "" || text.trim().length < 2) {
-    return null;
-  }
   List<TransactionAssociatedTitle> similarTitles =
       await database.getSimilarAssociatedTitles(title: text);
   return similarTitles.isEmpty ? null : similarTitles[0];
 }
 
-getRelatingAssociatedTitle(String text) async {
-  String? categoryFk = null;
-  TransactionAssociatedTitle? selectedTitleLocal;
-
-  // getLikeAssociatedTitle is more efficient since it uses queries
-  //
-  // Alternative:
-  // be more efficient when finding
-  // lookup if title matches exactly category name in database
-  // then get list of all associated titles that contain that title in database
-  // then loop through those to see which match
-  // instead of getting all then looping
-
-  // List<TransactionAssociatedTitle> allTitles =
-  //     (await database.getAllAssociatedTitles());
-
-  // for (TransactionAssociatedTitle title in allTitles) {
-  //   if (text.toLowerCase().contains(title.title.toLowerCase())) {
-  //     categoryFk = title.categoryFk;
-  //     selectedTitleLocal = title;
-  //     break;
-  //   }
-  // }
-
-  bool foundFromCategoryLocal = false;
-  // if (categoryFk != null) {
-  // print("SEARCHING");
-  List<TransactionCategory> allCategories = (await database.getAllCategories());
-  // print(allCategories);
-  for (TransactionCategory category in allCategories) {
-    if (text.toLowerCase().contains(category.name.toLowerCase())) {
-      categoryFk = category.categoryPk;
-      selectedTitleLocal = TransactionAssociatedTitle(
-        associatedTitlePk: "-1",
-        title: category.name,
-        categoryFk: category.categoryPk,
-        dateCreated: category.dateCreated,
-        dateTimeModified: null,
-        order: category.order,
-        isExactMatch: false,
-      );
-      foundFromCategoryLocal = true;
-
-      break;
-    }
-  }
-  // }
-
-  return [selectedTitleLocal, categoryFk, foundFromCategoryLocal];
-}
-
 Future<bool> addAssociatedTitles(
     String selectedTitle, TransactionCategory selectedCategory) async {
   if (appStateSettings["autoAddAssociatedTitles"]) {
-    List result = await getRelatingAssociatedTitle(selectedTitle);
-    TransactionAssociatedTitle? foundTitle = result[0];
-    int length = await database.getAmountOfAssociatedTitles();
-
     try {
       // Should this check be moved directly into createOrUpdateAssociatedTitle?
       TransactionAssociatedTitle checkIfAlreadyExists =
@@ -2828,31 +2729,20 @@ Future<bool> addAssociatedTitles(
       print(e.toString());
     }
 
-    if (foundTitle == null ||
-        (foundTitle.categoryFk != selectedCategory.categoryPk ||
-                foundTitle.title.trim() != selectedTitle.trim()) &&
-            !(foundTitle.categoryFk == selectedCategory.categoryPk &&
-                foundTitle.title.trim() == selectedTitle.trim())) {
-      //Should just add to the end but be sorted in opposite direction on edit titles page
-      //Also when it loops through getRelatingAssociatedTitle it should reverse the order
-      // It's way faster to avoid pushing elements all down by 1 spot
-      // I think it also fixes race conditions when writing quickly to the db
-      // print("successfully added title " + selectedTitle);
-      //it makes sense to add a new title if the exisitng one is from a different category, it will bump this one down and take priority
+    int length = await database.getAmountOfAssociatedTitles();
 
-      await database.createOrUpdateAssociatedTitle(
-        insert: true,
-        TransactionAssociatedTitle(
-          associatedTitlePk: "-1",
-          categoryFk: selectedCategory.categoryPk,
-          isExactMatch: false,
-          title: selectedTitle.trim(),
-          dateCreated: DateTime.now(),
-          dateTimeModified: null,
-          order: length,
-        ),
-      );
-    }
+    await database.createOrUpdateAssociatedTitle(
+      insert: true,
+      TransactionAssociatedTitle(
+        associatedTitlePk: "-1",
+        categoryFk: selectedCategory.categoryPk,
+        isExactMatch: false,
+        title: selectedTitle.trim(),
+        dateCreated: DateTime.now(),
+        dateTimeModified: null,
+        order: length,
+      ),
+    );
   }
   return true;
 }

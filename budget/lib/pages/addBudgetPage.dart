@@ -119,6 +119,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
   String selectedRecurrence = "Monthly";
   bool selectedPin = true;
   bool selectedShared = false;
+  bool selectedIncome = false;
   bool selectedAddedTransactionsOnly = false;
   List<BudgetTransactionFilters> selectedBudgetTransactionFilters = [
     BudgetTransactionFilters.defaultBudgetTransactionFilters
@@ -151,6 +152,14 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
       if (shared == true) selectedAddedTransactionsOnly = true;
       if (shared == false) selectedAddedTransactionsOnly = true;
     });
+  }
+
+  setSelectedIncome(bool income) {
+    setState(() {
+      selectedIncome = income;
+    });
+    determineBottomButton();
+    return;
   }
 
   setSelectedWalletPk(String walletPkPassed) {
@@ -328,7 +337,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
               : selectedMemberTransactionFilters,
       isAbsoluteSpendingLimit:
           currentInstance?.isAbsoluteSpendingLimit ?? false,
-      income: false,
+      income: selectedIncome,
       walletFks: selectedWalletFks,
     );
   }
@@ -359,17 +368,23 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
             fullSnap: false,
             SelectBudgetTypePopup(setBudgetType: setSelectedBudgetType),
           );
-          if (result == "All Transactions") {
-            await openBottomSheet(
-              context,
-              fullSnap: false,
-              ViewBudgetTransactionFilterInfo(
-                selectedBudgetFilters: selectedBudgetTransactionFilters,
-                setSelectedBudgetFilters: setSelectedBudgetFilters,
-                popOnDefault: true,
-              ),
-            );
-          }
+          // if (result == "All Transactions") {
+          //   await openBottomSheet(
+          //     context,
+          //     fullSnap: false,
+          //     ViewBudgetTransactionFilterInfo(
+          //       isIncomeBudget: selectedIncome,
+          //       selectedBudgetFilters: selectedBudgetTransactionFilters,
+          //       setSelectedBudgetFilters: setSelectedBudgetFilters,
+          //       popOnDefault: true,
+          //     ),
+          //   );
+          // }
+          dynamic result2 = await openBottomSheet(
+            context,
+            fullSnap: false,
+            SelectBudgetIncomeTypePopup(setBudgetIncome: setSelectedIncome),
+          );
         }
       }
 
@@ -384,6 +399,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
     if (widget.budget != null) {
       //We are editing a budget
       //Fill in the information from the passed in budget
+      selectedIncome = widget.budget!.income;
       selectedTitle = widget.budget!.name;
       selectedPin = widget.budget!.pinned;
       selectedAmount = widget.budget!.amount;
@@ -520,8 +536,10 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
             context,
             fullSnap: false,
             ViewBudgetTransactionFilterInfo(
-                selectedBudgetFilters: selectedBudgetTransactionFilters,
-                setSelectedBudgetFilters: setSelectedBudgetFilters),
+              isIncomeBudget: selectedIncome,
+              selectedBudgetFilters: selectedBudgetTransactionFilters,
+              setSelectedBudgetFilters: setSelectedBudgetFilters,
+            ),
           );
         },
         onCancelLabel: "info".tr(),
@@ -646,6 +664,17 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
             ColumnSliver(
               centered: true,
               children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 13),
+                  child: IncomeExpenseTabSelector(
+                    onTabChanged: setSelectedIncome,
+                    initialTabIsIncome: selectedIncome,
+                    syncWithInitial: true,
+                    hasBorderRadius: true,
+                    incomeLabel: "savings-budget".tr(),
+                    expenseLabel: "expense-budget".tr(),
+                  ),
+                ),
                 SizedBox(height: 4),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -663,7 +692,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                       padding: EdgeInsets.only(left: 7, right: 7),
                       fontSize: 30,
                       fontWeight: FontWeight.bold,
-                      topContentPadding: 20,
+                      topContentPadding: 18,
                     ),
                   ),
                 ),
@@ -765,7 +794,9 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
             //                 ),
             //               );
             //             },
-            //             title: "set-spending-goals".tr(),
+            //             title:  widget.budget?.income == true
+            //                ? "set-saving-goals".tr()
+            //                : "set-spending-goals".tr(),
             //             icon: appStateSettings["outlinedIcons"]
             //                 ? Icons.fact_check_outlined
             //                 : Icons.fact_check_rounded,
@@ -788,7 +819,9 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                         icon: appStateSettings["outlinedIcons"]
                             ? Icons.fact_check_outlined
                             : Icons.fact_check_rounded,
-                        label: "set-spending-goals".tr(),
+                        label: widget.budget?.income == true
+                            ? "set-saving-goals".tr()
+                            : "set-spending-goals".tr(),
                         onTap: () async {
                           Budget budget = await createBudget();
                           pushRoute(
@@ -942,10 +975,12 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                                       context,
                                       fullSnap: false,
                                       ViewBudgetTransactionFilterInfo(
-                                          selectedBudgetFilters:
-                                              selectedBudgetTransactionFilters,
-                                          setSelectedBudgetFilters:
-                                              setSelectedBudgetFilters),
+                                        isIncomeBudget: selectedIncome,
+                                        selectedBudgetFilters:
+                                            selectedBudgetTransactionFilters,
+                                        setSelectedBudgetFilters:
+                                            setSelectedBudgetFilters,
+                                      ),
                                     );
                                   },
                                 ),
@@ -975,7 +1010,9 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                                     : item ==
                                             BudgetTransactionFilters
                                                 .includeIncome
-                                        ? "include-income".tr()
+                                        ? selectedIncome
+                                            ? "include-expense".tr()
+                                            : "include-income".tr()
                                         : item ==
                                                 BudgetTransactionFilters
                                                     .addedToOtherBudget
@@ -1250,7 +1287,8 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
             ),
             SliverStickyLabelDivider(
               info: "select-exclude-categories".tr(),
-              extraInfo: getSelectedCategoriesText(selectedCategoryPksExclude),
+              extraInfo: getSelectedCategoriesText(selectedCategoryPksExclude,
+                  defaultText: "no-categories".tr()),
               visible:
                   !(selectedShared == true || selectedAddedTransactionsOnly) &&
                       ((widget.budget != null &&
@@ -1301,9 +1339,10 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
   }
 }
 
-String getSelectedCategoriesText(List<String>? categoryFks) {
+String getSelectedCategoriesText(List<String>? categoryFks,
+    {String? defaultText}) {
   if (categoryFks == null || categoryFks.isEmpty == true) {
-    return "all-categories".tr();
+    return defaultText ?? "all-categories".tr();
   } else {
     if (categoryFks.length == 1) {
       return categoryFks.length.toString() +
@@ -1801,6 +1840,79 @@ class _BudgetDetailsState extends State<BudgetDetails> {
   }
 }
 
+class SelectBudgetIncomeTypePopup extends StatelessWidget {
+  const SelectBudgetIncomeTypePopup({required this.setBudgetIncome, super.key});
+  final Function(bool isIncome) setBudgetIncome;
+
+  @override
+  Widget build(BuildContext context) {
+    return PopupFramework(
+      title: "select-budget-type".tr(),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Expanded(
+                child: OutlinedButtonStacked(
+                  alignLeft: true,
+                  alignBeside: true,
+                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                  text: "savings-budget".tr(),
+                  iconData: appStateSettings["outlinedIcons"]
+                      ? Icons.savings_outlined
+                      : Icons.savings_rounded,
+                  onTap: () {
+                    setBudgetIncome(true);
+                    Navigator.pop(context);
+                  },
+                  afterWidget: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      ListItem(
+                        "savings-budget-description-1".tr(),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 13),
+          Row(
+            children: [
+              Expanded(
+                child: OutlinedButtonStacked(
+                  alignLeft: true,
+                  alignBeside: true,
+                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                  text: "expense-budget".tr(),
+                  iconData: appStateSettings["outlinedIcons"]
+                      ? Icons.request_quote_outlined
+                      : Icons.request_quote_rounded,
+                  onTap: () async {
+                    setBudgetIncome(false);
+                    Navigator.pop(context);
+                  },
+                  afterWidget: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      ListItem(
+                        "expense-budget-description-1".tr(),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class SelectBudgetTypePopup extends StatelessWidget {
   const SelectBudgetTypePopup({
     required this.setBudgetType,
@@ -1899,12 +2011,14 @@ class SelectBudgetTypePopup extends StatelessWidget {
 
 class ViewBudgetTransactionFilterInfo extends StatefulWidget {
   const ViewBudgetTransactionFilterInfo({
+    required this.isIncomeBudget,
     required this.selectedBudgetFilters,
     required this.setSelectedBudgetFilters,
     this.popOnDefault = false,
     super.key,
   });
 
+  final bool isIncomeBudget;
   final List<BudgetTransactionFilters> selectedBudgetFilters;
   final void Function(List<BudgetTransactionFilters>) setSelectedBudgetFilters;
   final bool popOnDefault;
@@ -1996,24 +2110,44 @@ class _ViewBudgetTransactionFilterInfoState
               ),
             ],
           ),
-          FilterTypeInfoEntry(
-            selectedBudgetFilters: selectedBudgetFilters,
-            setSelectedBudgetFilters: widget.setSelectedBudgetFilters,
-            budgetTransactionFilter: BudgetTransactionFilters.includeIncome,
-            title: "include-income".tr(),
-            childrenDescription: [
-              ListItem(
-                "include-income-description-1".tr(),
-              ),
-              ListItem(
-                "include-income-description-2".tr(),
-              ),
-            ],
-            icon: appStateSettings["outlinedIcons"]
-                ? Icons.arrow_drop_up_outlined
-                : Icons.arrow_drop_up_rounded,
-            onTap: onTap,
-          ),
+          if (widget.isIncomeBudget == false)
+            FilterTypeInfoEntry(
+              selectedBudgetFilters: selectedBudgetFilters,
+              setSelectedBudgetFilters: widget.setSelectedBudgetFilters,
+              budgetTransactionFilter: BudgetTransactionFilters.includeIncome,
+              title: "include-income".tr(),
+              childrenDescription: [
+                ListItem(
+                  "include-income-description-1".tr(),
+                ),
+                ListItem(
+                  "include-income-description-2".tr(),
+                ),
+              ],
+              icon: appStateSettings["outlinedIcons"]
+                  ? Icons.arrow_drop_up_outlined
+                  : Icons.arrow_drop_up_rounded,
+              onTap: onTap,
+            ),
+          if (widget.isIncomeBudget == true)
+            FilterTypeInfoEntry(
+              selectedBudgetFilters: selectedBudgetFilters,
+              setSelectedBudgetFilters: widget.setSelectedBudgetFilters,
+              budgetTransactionFilter: BudgetTransactionFilters.includeIncome,
+              title: "include-expense".tr(),
+              childrenDescription: [
+                ListItem(
+                  "include-expense-description-1".tr(),
+                ),
+                ListItem(
+                  "include-expense-description-2".tr(),
+                ),
+              ],
+              icon: appStateSettings["outlinedIcons"]
+                  ? Icons.arrow_drop_down_outlined
+                  : Icons.arrow_drop_down_rounded,
+              onTap: onTap,
+            ),
           FilterTypeInfoEntry(
             selectedBudgetFilters: selectedBudgetFilters,
             setSelectedBudgetFilters: widget.setSelectedBudgetFilters,

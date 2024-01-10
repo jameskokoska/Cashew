@@ -78,7 +78,7 @@ class BudgetContainer extends StatelessWidget {
           snapshot.data!.forEach((category) {
             totalSpent = totalSpent + category.total;
           });
-          totalSpent = totalSpent * -1;
+          totalSpent = totalSpent * determineBudgetPolarity(budget);
           return Container(
             // height: height,
             child: ClipRRect(
@@ -150,16 +150,8 @@ class BudgetContainer extends StatelessWidget {
                                               bottom: 1.4),
                                           child: Container(
                                             child: TextFont(
-                                              text: (appStateSettings[
-                                                          "showTotalSpentForBudget"]
-                                                      ? " " +
-                                                          "spent-amount-of"
-                                                              .tr() +
-                                                          " "
-                                                      : " " +
-                                                          "remaining-amount-of"
-                                                              .tr() +
-                                                          " ") +
+                                              text: getBudgetSpentText(
+                                                      budget.income) +
                                                   convertToMoney(
                                                       Provider.of<AllWallets>(
                                                           context),
@@ -181,8 +173,7 @@ class BudgetContainer extends StatelessWidget {
                                           count: appStateSettings[
                                                   "showTotalSpentForBudget"]
                                               ? totalSpent
-                                              : -1 *
-                                                  (budgetAmount - totalSpent),
+                                              : totalSpent - budgetAmount,
                                           duration: Duration(milliseconds: 700),
                                           initialCount: (0),
                                           textBuilder: (number) {
@@ -194,9 +185,8 @@ class BudgetContainer extends StatelessWidget {
                                                   finalNumber: appStateSettings[
                                                           "showTotalSpentForBudget"]
                                                       ? totalSpent
-                                                      : -1 *
-                                                          (budgetAmount -
-                                                              totalSpent)),
+                                                      : totalSpent -
+                                                          budgetAmount),
                                               fontSize: 18,
                                               textAlign: TextAlign.left,
                                               fontWeight: FontWeight.bold,
@@ -209,15 +199,8 @@ class BudgetContainer extends StatelessWidget {
                                           padding: const EdgeInsets.only(
                                               bottom: 1.4),
                                           child: TextFont(
-                                            text: (appStateSettings[
-                                                        "showTotalSpentForBudget"]
-                                                    ? " " +
-                                                        "spent-amount-of".tr() +
-                                                        " "
-                                                    : " " +
-                                                        "overspent-amount-of"
-                                                            .tr() +
-                                                        " ") +
+                                            text: getBudgetOverSpentText(
+                                                    budget.income) +
                                                 convertToMoney(
                                                     Provider.of<AllWallets>(
                                                         context),
@@ -320,7 +303,9 @@ class BudgetContainer extends StatelessWidget {
                             dateForRange: dateForRangeLocal,
                             ghostPercent: budgetAmount == 0
                                 ? 0
-                                : (((snapshot.data ?? 0) * -1) / budgetAmount) *
+                                : (((snapshot.data ?? 0) *
+                                            determineBudgetPolarity(budget)) /
+                                        budgetAmount) *
                                     100,
                           );
                         }),
@@ -452,8 +437,8 @@ class DaySpending extends StatelessWidget {
                       )
                       .inDays +
                   1;
-              double amount =
-                  ((totalAmount - budgetAmount) / remainingDays) * -1;
+              double amount = ((totalAmount - budgetAmount) / remainingDays) *
+                  determineBudgetPolarity(budget);
               return TextFont(
                 textColor: getColor(context, "black").withAlpha(80),
                 text: isOutOfRange

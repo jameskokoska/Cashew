@@ -1121,7 +1121,7 @@ class _ImportingEntriesPopupState extends State<ImportingEntriesPopup> {
       await database.createBatchAssociatedTitlesOnly(filteredList);
       await database.fixOrderAssociatedTitles();
 
-      if (skippedError.length >= 0) {
+      if (skippedError.length > 0) {
         await openPopup(
           context,
           title: "csv-error".tr(),

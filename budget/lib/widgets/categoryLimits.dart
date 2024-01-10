@@ -25,6 +25,7 @@ import 'tappableTextEntry.dart';
 
 class CategoryLimits extends StatefulWidget {
   const CategoryLimits({
+    required this.isIncomeBudget,
     required this.budgetPk,
     required this.budgetLimit,
     required this.categoryFks,
@@ -33,6 +34,7 @@ class CategoryLimits extends StatefulWidget {
     required this.isAbsoluteSpendingLimit,
     super.key,
   });
+  final bool isIncomeBudget;
   final String budgetPk;
   final List<String>? categoryFks;
   final List<String>? categoryFksExclude;
@@ -55,7 +57,9 @@ class _CategoryLimitsState extends State<CategoryLimits> {
         builder: (context, snapshot) {
           if (snapshot.hasData && snapshot.data != null) {
             return SliverStickyLabelDivider(
-              info: "category-spending-goals".tr(),
+              info: widget.isIncomeBudget
+                  ? "category-saving-goals".tr()
+                  : "category-spending-goals".tr(),
               extraInfoWidget: StreamBuilder<double?>(
                 stream:
                     database.watchTotalOfCategoryLimitsInBudgetWithCategories(

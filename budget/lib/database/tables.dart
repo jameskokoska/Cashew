@@ -1363,6 +1363,7 @@ class FinanceDatabase extends _$FinanceDatabase {
               joinedWithObjectives: true,
             ) &
             onlyShowIfFollowsFilters(transactions,
+                budget: budget,
                 budgetTransactionFilters: budgetTransactionFilters,
                 memberTransactionFilters: memberTransactionFilters) &
             (onlyShowBasedOnCategoryFks(
@@ -1448,6 +1449,7 @@ class FinanceDatabase extends _$FinanceDatabase {
               joinedWithObjectives: true,
             ) &
             onlyShowIfFollowsFilters(transactions,
+                budget: budget,
                 budgetTransactionFilters: budgetTransactionFilters,
                 memberTransactionFilters: memberTransactionFilters) &
             onlyShowBasedOnTimeRange(transactions, start, end, budget) &
@@ -1542,6 +1544,7 @@ class FinanceDatabase extends _$FinanceDatabase {
               joinedWithObjectives: false,
             ) &
             onlyShowIfFollowsFilters(transactions,
+                budget: budget,
                 budgetTransactionFilters: budgetTransactionFilters,
                 memberTransactionFilters: memberTransactionFilters) &
             onlyShowBasedOnTimeRange(transactions, startDate, endDate, budget) &
@@ -2577,7 +2580,7 @@ class FinanceDatabase extends _$FinanceDatabase {
         .first;
   }
 
-  Future<TransactionAssociatedTitle> getRelatingAssociatedTitle(
+  Future<TransactionAssociatedTitle?> getRelatingAssociatedTitle(
       String searchFor,
       {int? limit,
       int? offset}) async {
@@ -2587,10 +2590,10 @@ class FinanceDatabase extends _$FinanceDatabase {
             // ..limit(limit ?? DEFAULT_LIMIT, offset: offset ?? DEFAULT_OFFSET)
             )
             .get())
-        .first;
+        .firstOrNull;
   }
 
-  Future<TransactionCategory> getRelatingCategory(String searchFor,
+  Future<TransactionCategory?> getRelatingCategory(String searchFor,
       {int? limit, int? offset}) async {
     return (await (select(categories)
               ..where((c) =>
@@ -2598,7 +2601,7 @@ class FinanceDatabase extends _$FinanceDatabase {
                   c.name.collate(Collate.noCase).like("%" + searchFor + "%"))
               ..limit(limit ?? DEFAULT_LIMIT, offset: offset ?? DEFAULT_OFFSET))
             .get())
-        .first;
+        .firstOrNull;
   }
 
   Stream<List<TransactionAssociatedTitle>> watchAllAssociatedTitlesInCategory(
@@ -5039,6 +5042,7 @@ class FinanceDatabase extends _$FinanceDatabase {
                       transactions, onlyShowTransactionsBelongingToBudgetPk) &
                   transactions.walletFk.equals(wallet.walletPk) &
                   onlyShowIfFollowsFilters(transactions,
+                      budget: budget,
                       budgetTransactionFilters: budgetTransactionFilters,
                       memberTransactionFilters: memberTransactionFilters),
             ));
@@ -5247,9 +5251,12 @@ class FinanceDatabase extends _$FinanceDatabase {
             tbl.note.collate(Collate.noCase).like("%" + searchQuery + "%");
   }
 
-  Expression<bool> onlyShowIfFollowsFilters($TransactionsTable tbl,
-      {List<BudgetTransactionFilters>? budgetTransactionFilters,
-      List<String>? memberTransactionFilters}) {
+  Expression<bool> onlyShowIfFollowsFilters(
+    $TransactionsTable tbl, {
+    required Budget? budget,
+    required List<BudgetTransactionFilters>? budgetTransactionFilters,
+    required List<String>? memberTransactionFilters,
+  }) {
     Expression<bool> memberIncluded = memberTransactionFilters == null
         ? Constant(true)
         : (tbl.sharedKey.isNotNull() &
@@ -5283,7 +5290,9 @@ class FinanceDatabase extends _$FinanceDatabase {
               isFilterSelectedWithDefaults(budgetTransactionFilters,
                   BudgetTransactionFilters.includeIncome),
             ) |
-            (tbl.income.equals(false))
+            (budget?.income == true
+                ? (tbl.income.equals(true))
+                : (tbl.income.equals(false)))
         : Constant(true);
 
     Expression<bool> includeDebtAndCredit = budgetTransactionFilters
@@ -5342,19 +5351,22 @@ class FinanceDatabase extends _$FinanceDatabase {
     List<Stream<double?>> mergedStreams = [];
     for (TransactionWallet wallet in allWallets.list) {
       final totalAmt = transactions.amount.sum();
-      JoinedSelectStatement<$TransactionsTable, Transaction> query =
-          (selectOnly(transactions)
-            ..addColumns([totalAmt])
-            ..where(transactions.paid.equals(true) &
-                //transactions.income.equals(false) &
-                transactions.walletFk.equals(wallet.walletPk) &
-                onlyShowBasedOnTimeRange(
-                    transactions, startDate, endDate, null) &
-                onlyShowIfFollowsFilters(transactions,
-                    memberTransactionFilters: [
-                      appStateSettings["currentUserEmail"] ?? ""
-                    ]) &
-                transactions.sharedReferenceBudgetPk.equals(budgetPk)));
+      JoinedSelectStatement<$TransactionsTable,
+          Transaction> query = (selectOnly(transactions)
+        ..addColumns([totalAmt])
+        ..where(transactions.paid.equals(true) &
+            //transactions.income.equals(false) &
+            transactions.walletFk.equals(wallet.walletPk) &
+            onlyShowBasedOnTimeRange(transactions, startDate, endDate, null) &
+            onlyShowIfFollowsFilters(
+              transactions,
+              budget: null,
+              budgetTransactionFilters: null,
+              memberTransactionFilters: [
+                appStateSettings["currentUserEmail"] ?? ""
+              ],
+            ) &
+            transactions.sharedReferenceBudgetPk.equals(budgetPk)));
       mergedStreams.add(query
           .map(((row) =>
               (row.read(totalAmt) ?? 0) *
@@ -5719,6 +5731,7 @@ class FinanceDatabase extends _$FinanceDatabase {
             // evaluateIfNull(tbl.income.equals(income ?? false), income, true) &
             transactions.walletFk.equals(wallet.walletPk) &
             onlyShowIfFollowsFilters(transactions,
+                budget: budget,
                 budgetTransactionFilters: budgetTransactionFilters,
                 memberTransactionFilters: memberTransactionFilters) &
             onlyShowIfMember(transactions, member) &
@@ -5805,6 +5818,7 @@ class FinanceDatabase extends _$FinanceDatabase {
               // evaluateIfNull(tbl.income.equals(income ?? false), income, true) &
               transactions.walletFk.equals(wallet.walletPk) &
               onlyShowIfFollowsFilters(tbl,
+                  budget: budget,
                   budgetTransactionFilters: budgetTransactionFilters,
                   memberTransactionFilters: memberTransactionFilters) &
               onlyShowIfMember(tbl, member) &
@@ -6250,6 +6264,7 @@ class FinanceDatabase extends _$FinanceDatabase {
                   forcedDateTimeRange: forcedDateTimeRange,
                 ) &
                 onlyShowIfFollowsFilters(tbl,
+                    budget: budget,
                     budgetTransactionFilters: budgetTransactionFilters,
                     memberTransactionFilters: memberTransactionFilters) &
                 onlyShowBasedOnTimeRange(tbl, startDate, endDate, budget) &
@@ -6364,6 +6379,7 @@ class FinanceDatabase extends _$FinanceDatabase {
                 categoryFks.length <= 0 ? null : true, true) &
             evaluateIfNull(transactions.paid.equals(true), isPaidOnly, true) &
             onlyShowIfFollowsFilters(transactions,
+                budget: budget,
                 budgetTransactionFilters: budgetTransactionFilters,
                 memberTransactionFilters: memberTransactionFilters) &
             onlyShowBasedOnTimeRange(transactions, null, startDate, budget) &

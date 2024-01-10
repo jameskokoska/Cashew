@@ -253,7 +253,6 @@ class _BillSplitterState extends State<BillSplitter> {
           openPage: AddBillItemPage(
             splitPersons: splitPersons,
             addBillSplitterItem: addBillSplitterItem,
-            deleteBillSplitterItem: deleteBillSplitterItem,
             updateBillSplitterItem: updateBillSplitterItem,
             addPerson: addPerson,
             deletePerson: deletePerson,
@@ -616,7 +615,6 @@ class BillSplitterItemEntry extends StatelessWidget {
                 billSplitterItem: billSplitterItem,
                 billSplitterItemIndex: billSplitterItemIndex,
                 addBillSplitterItem: addBillSplitterItem,
-                deleteBillSplitterItem: deleteBillSplitterItem,
                 updateBillSplitterItem: updateBillSplitterItem,
                 addPerson: addPerson,
                 deletePerson: deletePerson,
@@ -807,7 +805,6 @@ class AddBillItemPage extends StatefulWidget {
     this.billSplitterItem,
     this.billSplitterItemIndex,
     required this.addBillSplitterItem,
-    required this.deleteBillSplitterItem,
     required this.updateBillSplitterItem,
     required this.addPerson,
     required this.deletePerson,
@@ -819,8 +816,6 @@ class AddBillItemPage extends StatefulWidget {
   final BillSplitterItem? billSplitterItem;
   final int? billSplitterItemIndex;
   final Function(BillSplitterItem) addBillSplitterItem;
-  final Future<DeletePopupAction?> Function(BillSplitterItem)
-      deleteBillSplitterItem;
   final bool Function(SplitPerson) addPerson;
   final Function(SplitPerson) deletePerson;
   final Function(BillSplitterItem, int? index) updateBillSplitterItem;
@@ -939,24 +934,6 @@ class _AddBillItemPageState extends State<AddBillItemPage> {
               : "edit-item".tr(),
           dragDownToDismiss: true,
           horizontalPadding: getHorizontalPaddingConstrained(context) + 13,
-          actions: [
-            widget.billSplitterItem != null
-                ? IconButton(
-                    padding: EdgeInsets.all(15),
-                    tooltip: "delete-item",
-                    onPressed: () async {
-                      if (await widget
-                              .deleteBillSplitterItem(billSplitterItem) ==
-                          DeletePopupAction.Delete) {
-                        Navigator.pop(context);
-                      }
-                    },
-                    icon: Icon(appStateSettings["outlinedIcons"]
-                        ? Icons.delete_outlined
-                        : Icons.delete_rounded),
-                  )
-                : SizedBox.shrink(),
-          ],
           listWidgets: [
             Row(
               mainAxisAlignment: MainAxisAlignment.center,

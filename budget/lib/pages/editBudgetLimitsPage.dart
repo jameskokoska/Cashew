@@ -45,14 +45,18 @@ class _EditBudgetLimitsPageState extends State<EditBudgetLimitsPage> {
 
     return PageFramework(
       dragDownToDismiss: true,
-      title: "spending-goals".tr(),
+      title: widget.budget.income == true
+          ? "saving-goals".tr()
+          : "spending-goals".tr(),
       slivers: [
         SliverToBoxAdapter(
           child: Padding(
             padding: EdgeInsets.symmetric(
                 horizontal: getHorizontalPaddingConstrained(context)),
             child: SettingsContainerDropdown(
-              title: "spending-limit-type".tr(),
+              title: widget.budget.income == true
+                  ? "saving-limit-type".tr()
+                  : "spending-limit-type".tr(),
               icon: appStateSettings["outlinedIcons"]
                   ? Icons.confirmation_num_outlined
                   : Icons.confirmation_num_rounded,
@@ -83,6 +87,7 @@ class _EditBudgetLimitsPageState extends State<EditBudgetLimitsPage> {
           ),
         ),
         CategoryLimits(
+          isIncomeBudget: widget.budget.income,
           isAbsoluteSpendingLimit: selectedIsAbsoluteSpendingLimit,
           categoryFks: widget.budget.categoryFks,
           categoryFksExclude: widget.budget.categoryFksExclude,

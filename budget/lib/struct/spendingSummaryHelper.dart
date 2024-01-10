@@ -47,6 +47,7 @@ class TotalSpentCategoriesSummary {
 TotalSpentCategoriesSummary watchTotalSpentInTimeRangeHelper({
   required List<CategoryWithTotal> dataInput,
   required bool showAllSubcategories,
+  required int multiplyTotalBy,
 }) {
   TotalSpentCategoriesSummary s = TotalSpentCategoriesSummary();
 
@@ -115,13 +116,14 @@ TotalSpentCategoriesSummary watchTotalSpentInTimeRangeHelper({
 
   s.hasSubCategories = s.subCategorySpendingIndexedByMainCategoryPk.isNotEmpty;
 
-  s.totalSpent = s.totalSpent * -1;
+  s.totalSpent = s.totalSpent * multiplyTotalBy;
 
   return s;
 }
 
 class PieChartOptions extends StatelessWidget {
   const PieChartOptions({
+    required this.isIncomeBudget,
     required this.hasSubCategories,
     required this.selectedCategory,
     required this.onClearSelection,
@@ -132,6 +134,7 @@ class PieChartOptions extends StatelessWidget {
     this.useHorizontalPaddingConstrained = true,
     super.key,
   });
+  final bool isIncomeBudget;
   final bool hasSubCategories;
   final TransactionCategory? selectedCategory;
   final VoidCallback onClearSelection;
@@ -205,7 +208,9 @@ class PieChartOptions extends StatelessWidget {
                       ),
                     if (onEditSpendingGoals != null)
                       Tooltip(
-                        message: "edit-spending-goals".tr(),
+                        message: isIncomeBudget
+                            ? "edit-saving-goals".tr()
+                            : "edit-spending-goals".tr(),
                         child: IconButton(
                           padding: EdgeInsets.all(15),
                           onPressed: onEditSpendingGoals,

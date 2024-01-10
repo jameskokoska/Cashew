@@ -102,14 +102,15 @@ class _TipBoxState extends State<TipBox> {
 }
 
 class ExtraInfoButton extends StatelessWidget {
-  const ExtraInfoButton(
-      {required this.onTap,
-      required this.color,
-      required this.icon,
-      required this.text,
-      this.buttonIconColor,
-      this.buttonIconColorIcon,
-      super.key});
+  const ExtraInfoButton({
+    required this.onTap,
+    required this.color,
+    required this.icon,
+    required this.text,
+    this.buttonIconColor,
+    this.buttonIconColorIcon,
+    super.key,
+  });
   final VoidCallback onTap;
   final Color color;
   final IconData icon;

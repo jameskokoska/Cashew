@@ -26,6 +26,14 @@ import 'listItem.dart';
 
 String getChangelogString() {
   return """
+    < 5.1.5
+    Fixed title searching with category name when adding a transaction (title has priority)
+    Fixed wallet details page swipe to dismiss header
+    Installment payment setup button follows objective colorscheme
+    Hex color picker fixes
+    Removed ability to long press and set custom period for loan totals on all spending page that always show all time
+    Removed bill splitter deleting item on edit page
+    Fixed CSV import error always opening
     < 5.1.4
     Selecting account shows total amount in the account
     Time and period range in wallet details page

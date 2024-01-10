@@ -555,14 +555,31 @@ class _ObjectivePageContentState extends State<_ObjectivePageContent> {
                                   context: context,
                                   initialObjective: widget.objective);
                             },
-                            color: Theme.of(context)
-                                .colorScheme
-                                .secondaryContainer
-                                .withOpacity(0.4),
                             icon: appStateSettings["outlinedIcons"]
                                 ? Icons.punch_clock_outlined
                                 : Icons.punch_clock_rounded,
                             text: "setup-installment-payments".tr(),
+                            color: dynamicPastel(
+                              context,
+                              objectiveColorScheme.secondaryContainer,
+                              amountLight:
+                                  appStateSettings["materialYou"] ? 0.25 : 0.4,
+                              amountDark:
+                                  appStateSettings["materialYou"] ? 0.4 : 0.55,
+                            ),
+                            buttonIconColor: dynamicPastel(
+                                context,
+                                HexColor(widget.objective.colour,
+                                    defaultColor:
+                                        Theme.of(context).colorScheme.primary),
+                                amount: 0.5),
+                            buttonIconColorIcon: dynamicPastel(
+                                context,
+                                HexColor(widget.objective.colour,
+                                    defaultColor:
+                                        Theme.of(context).colorScheme.primary),
+                                amount: 0.7,
+                                inverse: true),
                           )
                         : SizedBox.shrink(),
               ),

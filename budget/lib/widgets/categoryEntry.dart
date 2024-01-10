@@ -45,7 +45,7 @@ class CategoryEntry extends StatelessWidget {
     this.isSubcategory = false,
     this.mainCategorySpentIfSubcategory = 0,
     this.useHorizontalPaddingConstrained = true,
-    this.isForBudget = false,
+    this.getPercentageAfterText,
   }) : super(key: key);
 
   final TransactionCategory category;
@@ -73,7 +73,7 @@ class CategoryEntry extends StatelessWidget {
   final bool isSubcategory;
   final double mainCategorySpentIfSubcategory;
   final bool useHorizontalPaddingConstrained;
-  final bool isForBudget;
+  final String Function(double categorySpent)? getPercentageAfterText;
 
   @override
   Widget build(BuildContext context) {
@@ -120,8 +120,8 @@ class CategoryEntry extends StatelessWidget {
     bool isOverspent = categoryBudgetLimit == null
         ? false
         : isAbsoluteSpendingLimit
-            ? categorySpent > categoryLimitAmount
-            : categorySpent > (categoryLimitAmount / 100 * budgetLimit);
+            ? categorySpent.abs() > categoryLimitAmount
+            : categorySpent.abs() > (categoryLimitAmount / 100 * budgetLimit);
     component = Padding(
       padding: EdgeInsets.symmetric(
         horizontal: isSubcategory == false
@@ -283,14 +283,10 @@ class CategoryEntry extends StatelessWidget {
                                           " " +
                                           (isSubcategory
                                               ? "of-subcategory".tr()
-                                              : showIncomeExpenseIcons &&
-                                                      categorySpent > 0
-                                                  ? isForBudget
-                                                      ? "of-total".tr()
-                                                      : "of-incoming".tr()
-                                                  : isForBudget
-                                                      ? "of-spending".tr()
-                                                      : "of-outgoing".tr());
+                                              : getPercentageAfterText == null
+                                                  ? ""
+                                                  : getPercentageAfterText!(
+                                                      categorySpent));
 
                                       return TextFont(
                                         text: text,

@@ -619,75 +619,72 @@ class _WalletDetailsPageState extends State<WalletDetailsPage>
               )
             : SizedBox.shrink();
 
+    Widget totalNetContainer = Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 13),
+      child: Padding(
+        padding: EdgeInsets.symmetric(
+            horizontal: getHorizontalPaddingConstrained(
+          context,
+          enabled:
+              enableDoubleColumn(context) == false && widget.wallet == null,
+        )),
+        child: TransactionsAmountBox(
+          onLongPress: () {
+            if (widget.wallet == null) {
+              selectAllSpendingPeriod();
+            }
+          },
+          label:
+              widget.wallet != null ? "account-total".tr() : "net-total".tr(),
+          absolute: false,
+          currencyKey: Provider.of<AllWallets>(context)
+              .indexedByPk[appStateSettings["selectedWalletPk"]]
+              ?.currency,
+          totalWithCountStream: database.watchTotalWithCountOfWallet(
+            isIncome: null,
+            allWallets: Provider.of<AllWallets>(context),
+            cycleSettingsExtension: "",
+            // When wallet type is normal, forcefully show all time for net-spending
+            followCustomPeriodCycle: widget.wallet == null ? true : false,
+            searchFilters: widget.wallet != null
+                ? SearchFilters().copyWith(walletPks: walletPks)
+                : (searchFilters ?? SearchFilters())
+                    .copyWith(walletPks: walletPks),
+            forcedDateTimeRange: selectedDateTimeRange,
+          ),
+          textColor: getColor(context, "black"),
+          openPage: TransactionsSearchPage(
+            initialFilters: widget.wallet != null
+                ? SearchFilters().copyWith(walletPks: walletPks)
+                : (searchFilters == null ? SearchFilters() : searchFilters)
+                    ?.copyWith(
+                    dateTimeRange: getDateTimeRangeForPassedSearchFilters(
+                      cycleSettingsExtension: "",
+                      selectedDateTimeRange: selectedDateTimeRange,
+                    ),
+                    walletPks: walletPks,
+                  ),
+          ),
+        ),
+      ),
+    );
+
     List<Widget> currentTabPage = [
       SliverToBoxAdapter(
         child: Column(
           children: [
             SizedBox(height: 10),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 13, left: 13, right: 13),
-              child: Padding(
-                padding: EdgeInsets.symmetric(
-                    horizontal: getHorizontalPaddingConstrained(
-                  context,
-                  enabled: enableDoubleColumn(context) == false &&
-                      widget.wallet == null,
-                )),
+            if (widget.wallet == null)
+              Padding(
+                padding: const EdgeInsets.only(bottom: 13),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Expanded(
-                      child: TransactionsAmountBox(
-                        onLongPress: () {
-                          if (widget.wallet == null) {
-                            selectAllSpendingPeriod();
-                          }
-                        },
-                        label: widget.wallet != null
-                            ? "account-total".tr()
-                            : "net-total".tr(),
-                        absolute: false,
-                        currencyKey: Provider.of<AllWallets>(context)
-                            .indexedByPk[appStateSettings["selectedWalletPk"]]
-                            ?.currency,
-                        totalWithCountStream:
-                            database.watchTotalWithCountOfWallet(
-                          isIncome: null,
-                          allWallets: Provider.of<AllWallets>(context),
-
-                          cycleSettingsExtension: "",
-                          // When wallet type is normal, forcefully show all time for net-spending
-                          followCustomPeriodCycle: true,
-                          searchFilters: widget.wallet != null
-                              ? SearchFilters().copyWith(walletPks: walletPks)
-                              : (searchFilters ?? SearchFilters())
-                                  .copyWith(walletPks: walletPks),
-                          forcedDateTimeRange: selectedDateTimeRange,
-                        ),
-                        textColor: getColor(context, "black"),
-                        openPage: TransactionsSearchPage(
-                          initialFilters: widget.wallet != null
-                              ? SearchFilters().copyWith(walletPks: walletPks)
-                              : (searchFilters == null
-                                      ? SearchFilters()
-                                      : searchFilters)
-                                  ?.copyWith(
-                                  dateTimeRange:
-                                      getDateTimeRangeForPassedSearchFilters(
-                                    cycleSettingsExtension: "",
-                                    selectedDateTimeRange:
-                                        selectedDateTimeRange,
-                                  ),
-                                  walletPks: walletPks,
-                                ),
-                        ),
-                      ),
-                    ),
+                    Expanded(child: totalNetContainer),
                   ],
                 ),
               ),
-            ),
             if (widget.wallet != null)
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 13),
@@ -697,19 +694,19 @@ class _WalletDetailsPageState extends State<WalletDetailsPage>
                       padding: const EdgeInsets.only(bottom: 13),
                       child: selectedTabCurrent,
                     ),
-                    TipBox(
-                      padding: const EdgeInsets.only(bottom: 13),
-                      onTap: () {
-                        pushRoute(
-                          context,
-                          WalletDetailsPage(
-                            wallet: null,
-                          ),
-                        );
-                      },
-                      text: "view-all-spending-page-tip".tr(),
-                      settingsString: "allSpendingPageTip",
-                    ),
+                    // TipBox(
+                    //   padding: const EdgeInsets.only(bottom: 13),
+                    //   onTap: () {
+                    //     pushRoute(
+                    //       context,
+                    //       WalletDetailsPage(
+                    //         wallet: null,
+                    //       ),
+                    //     );
+                    //   },
+                    //   text: "view-all-spending-page-tip".tr(),
+                    //   settingsString: "allSpendingPageTip",
+                    // ),
                   ],
                 ),
               ),
@@ -871,7 +868,8 @@ class _WalletDetailsPageState extends State<WalletDetailsPage>
                               selectedTab: null,
                             ),
                             onLongPress: () {
-                              selectAllSpendingPeriod();
+                              // Since always all time, disable long press custom period for these rows
+                              //selectAllSpendingPeriod();
                             },
                           ),
                           AmountSpentEntryRow(
@@ -899,7 +897,8 @@ class _WalletDetailsPageState extends State<WalletDetailsPage>
                               selectedTab: null,
                             ),
                             onLongPress: () {
-                              selectAllSpendingPeriod();
+                              // Since always all time, disable long press custom period for these rows
+                              //selectAllSpendingPeriod();
                             },
                           ),
                           SizedBox(height: 10),
@@ -1329,6 +1328,12 @@ class _WalletDetailsPageState extends State<WalletDetailsPage>
                           sliver: MultiSliver(
                             children: [
                               sliverAppBar,
+                              if (widget.wallet != null)
+                                SliverToBoxAdapter(
+                                    child: Padding(
+                                  padding: const EdgeInsets.only(top: 8),
+                                  child: totalNetContainer,
+                                )),
                               if (widget.wallet == null)
                                 SliverToBoxAdapter(
                                     child: tabDateFilterSelectorHeader),
@@ -1842,8 +1847,10 @@ class _WalletCategoryPieChartState extends State<WalletCategoryPieChart> {
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               TotalSpentCategoriesSummary s = watchTotalSpentInTimeRangeHelper(
-                  dataInput: snapshot.data ?? [],
-                  showAllSubcategories: showAllSubcategories);
+                dataInput: snapshot.data ?? [],
+                showAllSubcategories: showAllSubcategories,
+                multiplyTotalBy: -1,
+              );
               // print(s.totalSpent);
               List<Widget> categoryEntries = [];
               snapshot.data!.asMap().forEach((index, category) {
@@ -1901,6 +1908,11 @@ class _WalletCategoryPieChartState extends State<WalletCategoryPieChart> {
                             category.category.categoryPk,
                     allSelected: selectedCategory == null,
                     showIncomeExpenseIcons: true,
+                    getPercentageAfterText: (double categorySpent) {
+                      return categorySpent > 0
+                          ? "of-incoming".tr()
+                          : "of-outgoing".tr();
+                    },
                   ),
                 );
               });
@@ -1920,6 +1932,7 @@ class _WalletCategoryPieChartState extends State<WalletCategoryPieChart> {
                     },
                   ),
                   PieChartOptions(
+                    isIncomeBudget: false,
                     hasSubCategories: s.hasSubCategories,
                     selectedCategory: selectedCategory,
                     onClearSelection: () {
