@@ -665,7 +665,9 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
               centered: true,
               children: [
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 13),
+                  padding: EdgeInsets.symmetric(
+                      horizontal:
+                          13 + getHorizontalPaddingConstrained(context)),
                   child: IncomeExpenseTabSelector(
                     onTabChanged: setSelectedIncome,
                     initialTabIsIncome: selectedIncome,
@@ -809,41 +811,47 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
               child: widget.budget == null
                   ? SizedBox.shrink()
                   : Padding(
-                      padding: const EdgeInsets.only(
-                        left: 20,
-                        right: 20,
-                        bottom: 15,
-                      ),
-                      child: Button(
-                        flexibleLayout: true,
-                        icon: appStateSettings["outlinedIcons"]
-                            ? Icons.fact_check_outlined
-                            : Icons.fact_check_rounded,
-                        label: widget.budget?.income == true
-                            ? "set-saving-goals".tr()
-                            : "set-spending-goals".tr(),
-                        onTap: () async {
-                          Budget budget = await createBudget();
-                          pushRoute(
-                            context,
-                            StreamBuilder<Budget>(
-                              stream:
-                                  database.getBudget(widget.budget!.budgetPk),
-                              builder: (context, snapshot) {
-                                if (snapshot.data == null)
-                                  return SizedBox.shrink();
-                                return EditBudgetLimitsPage(
-                                  budget: budget,
-                                  currentIsAbsoluteSpendingLimit:
-                                      snapshot.data!.isAbsoluteSpendingLimit,
-                                );
-                              },
-                            ),
-                          );
-                        },
-                        color: Theme.of(context).colorScheme.secondaryContainer,
-                        textColor:
-                            Theme.of(context).colorScheme.onSecondaryContainer,
+                      padding: EdgeInsets.symmetric(
+                          horizontal: getHorizontalPaddingConstrained(context)),
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                          left: 20,
+                          right: 20,
+                          bottom: 15,
+                        ),
+                        child: Button(
+                          flexibleLayout: true,
+                          icon: appStateSettings["outlinedIcons"]
+                              ? Icons.fact_check_outlined
+                              : Icons.fact_check_rounded,
+                          label: widget.budget?.income == true
+                              ? "set-saving-goals".tr()
+                              : "set-spending-goals".tr(),
+                          onTap: () async {
+                            Budget budget = await createBudget();
+                            pushRoute(
+                              context,
+                              StreamBuilder<Budget>(
+                                stream:
+                                    database.getBudget(widget.budget!.budgetPk),
+                                builder: (context, snapshot) {
+                                  if (snapshot.data == null)
+                                    return SizedBox.shrink();
+                                  return EditBudgetLimitsPage(
+                                    budget: budget,
+                                    currentIsAbsoluteSpendingLimit:
+                                        snapshot.data!.isAbsoluteSpendingLimit,
+                                  );
+                                },
+                              ),
+                            );
+                          },
+                          color:
+                              Theme.of(context).colorScheme.secondaryContainer,
+                          textColor: Theme.of(context)
+                              .colorScheme
+                              .onSecondaryContainer,
+                        ),
                       ),
                     ),
             ),

@@ -26,6 +26,8 @@ import 'listItem.dart';
 
 String getChangelogString() {
   return """
+    < 5.1.6
+    Fixed padding for full screen devices
     < 5.1.5
     Fixed title searching with category name when adding a transaction (title has priority)
     Fixed wallet details page swipe to dismiss header

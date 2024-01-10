@@ -687,7 +687,8 @@ class _WalletDetailsPageState extends State<WalletDetailsPage>
               ),
             if (widget.wallet != null)
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 13),
+                padding: EdgeInsets.symmetric(
+                    horizontal: 13 + getHorizontalPaddingConstrained(context)),
                 child: Column(
                   children: [
                     Padding(
@@ -913,11 +914,8 @@ class _WalletDetailsPageState extends State<WalletDetailsPage>
                 padding: const EdgeInsets.only(bottom: 13, left: 13, right: 13),
                 child: Padding(
                   padding: EdgeInsets.symmetric(
-                      horizontal: getHorizontalPaddingConstrained(
-                    context,
-                    enabled: enableDoubleColumn(context) == false &&
-                        widget.wallet == null,
-                  )),
+                    horizontal: getHorizontalPaddingConstrained(context),
+                  ),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -1330,10 +1328,18 @@ class _WalletDetailsPageState extends State<WalletDetailsPage>
                               sliverAppBar,
                               if (widget.wallet != null)
                                 SliverToBoxAdapter(
+                                  child: Padding(
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal:
+                                          getHorizontalPaddingConstrained(
+                                              context),
+                                    ),
                                     child: Padding(
-                                  padding: const EdgeInsets.only(top: 8),
-                                  child: totalNetContainer,
-                                )),
+                                      padding: const EdgeInsets.only(top: 8),
+                                      child: totalNetContainer,
+                                    ),
+                                  ),
+                                ),
                               if (widget.wallet == null)
                                 SliverToBoxAdapter(
                                     child: tabDateFilterSelectorHeader),
@@ -1797,7 +1803,8 @@ class _WalletCategoryPieChartState extends State<WalletCategoryPieChart> {
           padding: EdgeInsets.symmetric(
               horizontal: getHorizontalPaddingConstrained(
             context,
-            enabled: enableDoubleColumn(context) == false,
+            enabled: enableDoubleColumn(context) == false ||
+                widget.isAllSpending == false,
           )),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 13),
@@ -1857,8 +1864,8 @@ class _WalletCategoryPieChartState extends State<WalletCategoryPieChart> {
                 categoryEntries.add(
                   CategoryEntry(
                     useHorizontalPaddingConstrained:
-                        enableDoubleColumn(context) == false &&
-                            widget.isAllSpending,
+                        enableDoubleColumn(context) == false ||
+                            widget.isAllSpending == false,
                     selectedSubCategoryPk: selectedCategory?.categoryPk,
                     expandSubcategories: showAllSubcategories ||
                         category.category.categoryPk ==
