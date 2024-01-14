@@ -1903,14 +1903,64 @@ class FinanceDatabase extends _$FinanceDatabase {
         .watch();
   }
 
-  Future<List<TransactionAssociatedTitle>> getSimilarAssociatedTitles(
-      {required String title, int? limit, int? offset}) {
-    return (select(associatedTitles)
-          ..where(
-              (t) => (t.title.collate(Collate.noCase).like("%" + title + "%")))
-          ..orderBy([(t) => OrderingTerm.desc(t.order)])
-          ..limit(limit ?? DEFAULT_LIMIT, offset: offset ?? DEFAULT_OFFSET))
-        .get();
+  Future<List<TransactionAssociatedTitleWithCategory>>
+      getSimilarAssociatedTitles({
+    required String title,
+    int? limit,
+    int? offset,
+    bool alsoSearchCategories = true,
+  }) async {
+    limit = limit ?? DEFAULT_LIMIT;
+
+    List<TransactionAssociatedTitleWithCategory> list =
+        (await (select(associatedTitles).join([
+      leftOuterJoin(categories,
+          categories.categoryPk.equalsExp(associatedTitles.categoryFk)),
+    ])
+                  ..where(associatedTitles.title
+                      .collate(Collate.noCase)
+                      .like("%" + title + "%"))
+                  ..orderBy([OrderingTerm.desc(associatedTitles.order)])
+                  ..limit(limit, offset: offset ?? DEFAULT_OFFSET))
+                .get())
+            .map((rows) {
+      return TransactionAssociatedTitleWithCategory(
+        title: rows.readTable(associatedTitles),
+        category: rows.readTable(categories),
+      );
+    }).toList();
+
+    if (alsoSearchCategories == false || list.length > limit) return list;
+
+    if (limit - list.length < 0)
+      limit = 0;
+    else
+      limit = limit - list.length;
+
+    list.addAll((await (select(categories)
+              ..where(
+                  (c) => c.name.collate(Collate.noCase).like("%" + title + "%"))
+              ..orderBy([
+                (c) => OrderingTerm.asc(c.mainCategoryPk),
+                (c) => OrderingTerm.asc(c.order),
+              ])
+              ..limit(limit, offset: offset ?? DEFAULT_OFFSET))
+            .get())
+        .map((TransactionCategory category) {
+      return TransactionAssociatedTitleWithCategory(
+        title: TransactionAssociatedTitle(
+          associatedTitlePk: category.mainCategoryPk == null ? "-1" : "-2",
+          categoryFk: category.categoryPk,
+          title: category.name,
+          dateCreated: category.dateCreated,
+          order: -1,
+          isExactMatch: false,
+        ),
+        category: category,
+      );
+    }).toList());
+
+    return list;
   }
 
   (Stream<List<TransactionWallet>>, Future<List<TransactionWallet>>)
@@ -2546,16 +2596,27 @@ class FinanceDatabase extends _$FinanceDatabase {
         .insert((companionToInsert), mode: InsertMode.insertOrReplace);
   }
 
-  Stream<List<TransactionAssociatedTitle>> watchAllAssociatedTitles(
+  Stream<List<TransactionAssociatedTitleWithCategory>> watchAllAssociatedTitles(
       {String? searchFor, int? limit, int? offset}) {
-    return (select(associatedTitles)
-          ..where((t) => (searchFor == null
+    return (select(associatedTitles).join([
+      leftOuterJoin(categories,
+          categories.categoryPk.equalsExp(associatedTitles.categoryFk)),
+    ])
+          ..where(searchFor == null
               ? Constant(true)
-              : t.title.collate(Collate.noCase).like("%" + (searchFor) + "%")))
-          ..orderBy([(t) => OrderingTerm.desc(t.order)])
+              : associatedTitles.title
+                  .collate(Collate.noCase)
+                  .like("%" + (searchFor) + "%"))
+          ..orderBy([OrderingTerm.desc(associatedTitles.order)])
         // ..limit(limit ?? DEFAULT_LIMIT, offset: offset ?? DEFAULT_OFFSET)
         )
-        .watch();
+        .watch()
+        .map((rows) => rows.map((row) {
+              return TransactionAssociatedTitleWithCategory(
+                title: row.readTable(associatedTitles),
+                category: row.readTable(categories),
+              );
+            }).toList());
   }
 
   Future<List<TransactionAssociatedTitle>> getAllAssociatedTitles(
@@ -2594,10 +2655,12 @@ class FinanceDatabase extends _$FinanceDatabase {
   }
 
   Future<TransactionCategory?> getRelatingCategory(String searchFor,
-      {int? limit, int? offset}) async {
+      {int? limit, int? offset, bool onlySubCategories = false}) async {
     return (await (select(categories)
               ..where((c) =>
-                  onlyShowMainCategoryListing(c) &
+                  (onlySubCategories
+                      ? onlyShowMainCategoryListing(c).not()
+                      : onlyShowMainCategoryListing(c)) &
                   c.name.collate(Collate.noCase).like("%" + searchFor + "%"))
               ..limit(limit ?? DEFAULT_LIMIT, offset: offset ?? DEFAULT_OFFSET))
             .get())
@@ -3930,6 +3993,36 @@ class FinanceDatabase extends _$FinanceDatabase {
       return indexedByPk;
     });
   }
+
+  // Stream<Map<String, ListSubCategoriesWithMainCategory>>
+  //     watchAllSubCategoriesIndexedByMainCategoryPk() {
+  //   final totalCount = transactions.transactionPk.count();
+
+  //   return ((select(categories)..orderBy([(w) => OrderingTerm.asc(w.order)]))
+  //           .join([
+  //     leftOuterJoin(transactions,
+  //         transactions.categoryFk.equalsExp(categories.categoryPk)),
+  //   ])
+  //         ..groupBy([categories.categoryPk])
+  //         ..addColumns([totalCount]))
+  //       .watch()
+  //       .map((rows) {
+  //     Map<String, ListSubCategoriesWithMainCategory> indexedByPk = {};
+  //     for (TypedResult row in rows) {
+  //       TransactionCategory category = row.readTable(categories);
+  //       indexedByPk[category.categoryPk] = ListSubCategoriesWithMainCategory(
+  //           mainCategory: CategoryWithDetails(
+  //               category: category, numberTransactions: row.read(totalCount)),
+  //           subcategories: rows
+  //               .where((TypedResult row) =>
+  //                   row.readTable(categories).mainCategoryPk ==
+  //                   category.categoryPk)
+  //               .map((row) => row.readTable(categories))
+  //               .toList());
+  //     }
+  //     return indexedByPk;
+  //   });
+  // }
 
   Stream<List<TransactionCategory>> watchAllSubCategoriesOfMainCategory(
       String mainCategoryPk) {
@@ -6609,4 +6702,12 @@ class EarliestLatestDateTme {
   final DateTime latest;
 
   EarliestLatestDateTme({required this.earliest, required this.latest});
+}
+
+class TransactionAssociatedTitleWithCategory {
+  final TransactionAssociatedTitle title;
+  final TransactionCategory category;
+
+  TransactionAssociatedTitleWithCategory(
+      {required this.title, required this.category});
 }

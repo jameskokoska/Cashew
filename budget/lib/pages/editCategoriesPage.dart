@@ -129,16 +129,43 @@ class _EditCategoriesPageState extends State<EditCategoriesPage> {
                     snapshotSubCategories.data ?? {};
                 return StreamBuilder<List<CategoryWithDetails>>(
                   stream: database.watchAllMainCategoriesWithDetails(
-                      searchFor: searchValue == "" ? null : searchValue),
+                      searchFor: null),
+                  // Do the search below, we search through any subcategories that may have a name
                   builder: (context, snapshot) {
-                    if (snapshot.hasData && (snapshot.data ?? []).length <= 0) {
+                    List<CategoryWithDetails> categoriesToShow =
+                        snapshot.data ?? [];
+
+                    // Search through categories that have a subcategory name
+                    categoriesToShow = categoriesToShow
+                        .where(
+                          (CategoryWithDetails c) =>
+                              c.category.name
+                                  .toLowerCase()
+                                  .trim()
+                                  .contains(searchValue.toLowerCase().trim()) ||
+                              (subCategoriesIndexedByMainPk[
+                                          c.category.categoryPk] ??
+                                      [])
+                                  .any(
+                                (TransactionCategory subCategory) => subCategory
+                                    .name
+                                    .toLowerCase()
+                                    .trim()
+                                    .contains(
+                                      searchValue.toLowerCase().trim(),
+                                    ),
+                              ),
+                        )
+                        .toList();
+
+                    if (snapshot.hasData && categoriesToShow.length <= 0) {
                       return SliverToBoxAdapter(
                         child: NoResults(
                           message: "no-categories-found".tr(),
                         ),
                       );
                     }
-                    if (snapshot.hasData && (snapshot.data ?? []).length > 0) {
+                    if (snapshot.hasData && categoriesToShow.length > 0) {
                       return SliverReorderableList(
                         onReorderStart: (index) {
                           HapticFeedback.heavyImpact();
@@ -155,7 +182,7 @@ class _EditCategoriesPageState extends State<EditCategoriesPage> {
                         },
                         itemBuilder: (context, index) {
                           CategoryWithDetails categoryDetails =
-                              snapshot.data![index];
+                              categoriesToShow[index];
                           TransactionCategory category =
                               categoryDetails.category;
                           List<TransactionCategory> subCategories =
@@ -164,7 +191,7 @@ class _EditCategoriesPageState extends State<EditCategoriesPage> {
                                   [];
                           return EditRowEntry(
                             canReorder: searchValue == "" &&
-                                (snapshot.data ?? []).length != 1,
+                                categoriesToShow.length != 1,
                             currentReorder:
                                 currentReorder != -1 && currentReorder != index,
                             padding: EdgeInsets.symmetric(
@@ -337,10 +364,10 @@ class _EditCategoriesPageState extends State<EditCategoriesPage> {
                             ),
                           );
                         },
-                        itemCount: snapshot.data!.length,
+                        itemCount: categoriesToShow.length,
                         onReorder: (_intPrevious, _intNew) async {
                           CategoryWithDetails oldCategoryDetails =
-                              snapshot.data![_intPrevious];
+                              categoriesToShow[_intPrevious];
                           TransactionCategory oldCategory =
                               oldCategoryDetails.category;
 

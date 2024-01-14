@@ -751,6 +751,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
               setSelectedNote: setSelectedNoteController,
               setSelectedTitle: setSelectedTitleController,
               setSelectedCategory: setSelectedCategory,
+              setSelectedSubCategory: setSelectedSubCategory,
               next: () {
                 afterSetTitle();
               },
@@ -982,6 +983,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
           },
           titleInputController: _titleInputController,
           setSelectedCategory: setSelectedCategory,
+          setSelectedSubCategory: setSelectedSubCategory,
         ),
         Container(height: 14),
         Padding(
@@ -2261,6 +2263,7 @@ class SelectTitle extends StatefulWidget {
     required this.setSelectedTitle,
     required this.setSelectedNote,
     required this.setSelectedCategory,
+    required this.setSelectedSubCategory,
     this.selectedTitle,
     required this.noteInputController,
     this.next,
@@ -2268,6 +2271,7 @@ class SelectTitle extends StatefulWidget {
   final Function(String) setSelectedTitle;
   final Function(String) setSelectedNote;
   final Function(TransactionCategory) setSelectedCategory;
+  final Function(TransactionCategory) setSelectedSubCategory;
   final String? selectedTitle;
   final TextEditingController noteInputController;
   final VoidCallback? next;
@@ -2278,9 +2282,15 @@ class SelectTitle extends StatefulWidget {
 
 class _SelectTitleState extends State<SelectTitle> {
   int selectedIndex = 0;
-  bool foundFromCategory = false;
-  TransactionCategory? selectedCategory;
-  TransactionAssociatedTitle? selectedAssociatedTitle;
+  TransactionAssociatedTitleWithCategory? selectedAssociatedTitle;
+  bool get foundFromCategory {
+    return selectedAssociatedTitle?.title.associatedTitlePk == "-1" ||
+        selectedAssociatedTitle?.title.associatedTitlePk == "-2";
+  }
+
+  bool get foundFromSubCategory {
+    return selectedAssociatedTitle?.title.associatedTitlePk == "-2";
+  }
 
   @override
   void initState() {
@@ -2288,11 +2298,19 @@ class _SelectTitleState extends State<SelectTitle> {
   }
 
   void selectTitle() async {
-    if (selectedCategory != null) {
-      widget.setSelectedCategory(selectedCategory!);
+    if (selectedAssociatedTitle?.category != null) {
+      if (foundFromSubCategory) {
+        if (selectedAssociatedTitle!.category.mainCategoryPk != null) {
+          widget.setSelectedCategory(await database.getCategoryInstance(
+              selectedAssociatedTitle!.category.mainCategoryPk!));
+          widget.setSelectedSubCategory(selectedAssociatedTitle!.category);
+        }
+      } else {
+        widget.setSelectedCategory(selectedAssociatedTitle!.category);
+      }
 
       if (foundFromCategory == false)
-        widget.setSelectedTitle(selectedAssociatedTitle?.title ?? "");
+        widget.setSelectedTitle(selectedAssociatedTitle?.title.title ?? "");
       else
         widget.setSelectedTitle("");
     }
@@ -2305,9 +2323,7 @@ class _SelectTitleState extends State<SelectTitle> {
 
   void resetTitleSearch() {
     setState(() {
-      selectedCategory = null;
       selectedAssociatedTitle = null;
-      foundFromCategory = false;
     });
     // Update the size of the bottom sheet
     Future.delayed(Duration(milliseconds: 300), () {
@@ -2341,38 +2357,18 @@ class _SelectTitleState extends State<SelectTitle> {
                   return;
                 }
 
-                TransactionAssociatedTitle? selectedTitleLocal =
-                    await getLikeAssociatedTitle(text);
-                bool foundFromCategoryLocal = false;
-
-                if (selectedTitleLocal == null) {
-                  TransactionCategory? selectedCategoryLocal =
-                      await database.getRelatingCategory(text.trim());
-                  if (selectedCategoryLocal != null) {
-                    selectedTitleLocal = TransactionAssociatedTitle(
-                      associatedTitlePk: "-1",
-                      categoryFk: selectedCategoryLocal.categoryPk,
-                      title: selectedCategoryLocal.name,
-                      dateCreated: selectedCategoryLocal.dateCreated,
-                      order: -1,
-                      isExactMatch: false,
-                    );
-                    foundFromCategoryLocal = true;
-                  }
-                }
+                TransactionAssociatedTitleWithCategory? selectedTitleLocal =
+                    (await database.getSimilarAssociatedTitles(
+                            title: text, limit: 1))
+                        .firstOrNull;
 
                 if (selectedTitleLocal != null) {
-                  TransactionCategory? foundCategory = await database
-                      .getCategoryInstanceOrNull(selectedTitleLocal.categoryFk);
-
                   // Update the size of the bottom sheet
                   Future.delayed(Duration(milliseconds: 100), () {
                     bottomSheetControllerGlobal.snapToExtent(0);
                   });
                   setState(() {
-                    selectedCategory = foundCategory;
                     selectedAssociatedTitle = selectedTitleLocal;
-                    foundFromCategory = foundFromCategoryLocal;
                   });
                 } else {
                   resetTitleSearch();
@@ -2391,7 +2387,7 @@ class _SelectTitleState extends State<SelectTitle> {
                     width: getWidthBottomSheet(context) - 36,
                   )
                 : Container(
-                    key: ValueKey(selectedCategory?.categoryPk),
+                    key: ValueKey(selectedAssociatedTitle?.category.categoryPk),
                     width: getWidthBottomSheet(context) - 36,
                     padding: EdgeInsets.only(top: 13),
                     child: Tappable(
@@ -2405,29 +2401,34 @@ class _SelectTitleState extends State<SelectTitle> {
                           CategoryIcon(
                             categoryPk: "-1",
                             size: 40,
-                            category: selectedCategory,
+                            category: selectedAssociatedTitle?.category,
                             margin: EdgeInsets.zero,
                             onTap: () {
                               selectTitle();
                             },
                           ),
                           SizedBox(width: 10),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              TextFont(
-                                text: selectedCategory?.name ?? "",
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
-                              !foundFromCategory
-                                  ? TextFont(
-                                      text:
-                                          selectedAssociatedTitle?.title ?? "",
-                                      fontSize: 16,
-                                    )
-                                  : Container(),
-                            ],
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                TextFont(
+                                  text:
+                                      selectedAssociatedTitle?.category.name ??
+                                          "",
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                !foundFromCategory
+                                    ? TextFont(
+                                        text: selectedAssociatedTitle
+                                                ?.title.title ??
+                                            "",
+                                        fontSize: 16,
+                                      )
+                                    : Container(),
+                              ],
+                            ),
                           )
                         ],
                       ),
@@ -2708,12 +2709,6 @@ class _EnterTextButtonState extends State<EnterTextButton> {
       ),
     );
   }
-}
-
-Future<TransactionAssociatedTitle?> getLikeAssociatedTitle(String text) async {
-  List<TransactionAssociatedTitle> similarTitles =
-      await database.getSimilarAssociatedTitles(title: text);
-  return similarTitles.isEmpty ? null : similarTitles[0];
 }
 
 Future<bool> addAssociatedTitles(
@@ -4367,18 +4362,20 @@ class TitleInput extends StatefulWidget {
     required this.setSelectedTitle,
     required this.titleInputController,
     required this.setSelectedCategory,
+    required this.setSelectedSubCategory,
     super.key,
   });
   final Function(String title) setSelectedTitle;
   final TextEditingController titleInputController;
   final Function(TransactionCategory category) setSelectedCategory;
+  final Function(TransactionCategory category) setSelectedSubCategory;
 
   @override
   State<TitleInput> createState() => _TitleInputState();
 }
 
 class _TitleInputState extends State<TitleInput> {
-  List<TransactionAssociatedTitle> foundAssociatedTitles = [];
+  List<TransactionAssociatedTitleWithCategory> foundAssociatedTitles = [];
 
   @override
   Widget build(BuildContext context) {
@@ -4406,8 +4403,11 @@ class _TitleInputState extends State<TitleInput> {
                 controller: widget.titleInputController,
                 onChanged: (text) async {
                   widget.setSelectedTitle(text);
-                  foundAssociatedTitles = await database
-                      .getSimilarAssociatedTitles(title: text, limit: 3);
+                  foundAssociatedTitles =
+                      await database.getSimilarAssociatedTitles(
+                    title: text,
+                    limit: enableDoubleColumn(context) ? 5 : 3,
+                  );
                   setState(() {});
                 },
                 autoFocus: kIsWeb && getIsFullScreen(context),
@@ -4420,7 +4420,7 @@ class _TitleInputState extends State<TitleInput> {
                     )
                   : AnimatedSize(
                       key: ValueKey(1),
-                      duration: Duration(milliseconds: 200),
+                      duration: Duration(milliseconds: 250),
                       curve: Curves.easeInOut,
                       alignment: Alignment.topCenter,
                       child: Column(
@@ -4434,7 +4434,7 @@ class _TitleInputState extends State<TitleInput> {
                               inverse: true,
                             ),
                           ),
-                          for (TransactionAssociatedTitle foundAssociatedTitle
+                          for (TransactionAssociatedTitleWithCategory foundAssociatedTitle
                               in foundAssociatedTitles)
                             Container(
                               color: appStateSettings["materialYou"]
@@ -4443,19 +4443,42 @@ class _TitleInputState extends State<TitleInput> {
                                       .secondaryContainer
                                   : getColor(context, "canvasContainer"),
                               key: ValueKey(
-                                  foundAssociatedTitle.associatedTitlePk),
+                                  foundAssociatedTitle.title.associatedTitlePk +
+                                      foundAssociatedTitle.category.categoryPk),
                               child: Tappable(
                                 borderRadius: 0,
                                 color: Colors.transparent,
                                 onTap: () async {
-                                  String categoryFk =
-                                      foundAssociatedTitle.categoryFk;
-                                  widget.setSelectedCategory(await database
-                                      .getCategoryInstance(categoryFk));
-                                  widget.setSelectedTitle(
-                                      foundAssociatedTitle.title);
-                                  setTextInput(widget.titleInputController,
-                                      foundAssociatedTitle.title);
+                                  if (foundAssociatedTitle
+                                          .category.mainCategoryPk !=
+                                      null) {
+                                    widget.setSelectedCategory(
+                                        await database.getCategoryInstance(
+                                            foundAssociatedTitle
+                                                .category.mainCategoryPk!));
+                                    widget.setSelectedSubCategory(
+                                        foundAssociatedTitle.category);
+                                  } else {
+                                    widget.setSelectedCategory(
+                                        foundAssociatedTitle.category);
+                                  }
+
+                                  if (foundAssociatedTitle
+                                              .title.associatedTitlePk !=
+                                          "-1" &&
+                                      foundAssociatedTitle
+                                              .title.associatedTitlePk !=
+                                          "-2") {
+                                    widget.setSelectedTitle(
+                                        foundAssociatedTitle.title.title);
+                                    setTextInput(widget.titleInputController,
+                                        foundAssociatedTitle.title.title);
+                                  } else {
+                                    widget.setSelectedTitle("");
+                                    setTextInput(
+                                        widget.titleInputController, "");
+                                  }
+
                                   setState(() {
                                     foundAssociatedTitles = [];
                                   });
@@ -4465,8 +4488,8 @@ class _TitleInputState extends State<TitleInput> {
                                   children: [
                                     IgnorePointer(
                                       child: CategoryIcon(
-                                        categoryPk:
-                                            foundAssociatedTitle.categoryFk,
+                                        categoryPk: foundAssociatedTitle
+                                            .title.categoryFk,
                                         size: 23,
                                         margin: EdgeInsets.zero,
                                         sizePadding: 16,
@@ -4476,28 +4499,48 @@ class _TitleInputState extends State<TitleInput> {
                                     SizedBox(width: 13),
                                     Expanded(
                                       child: TextFont(
-                                        text: foundAssociatedTitle.title,
+                                        text: foundAssociatedTitle.title.title,
                                         fontSize: 16,
                                       ),
                                     ),
                                     Opacity(
                                       opacity: 0.65,
-                                      child: IconButtonScaled(
-                                        iconData:
-                                            appStateSettings["outlinedIcons"]
-                                                ? Icons.clear_outlined
-                                                : Icons.clear_rounded,
-                                        iconSize: 18,
-                                        scale: 1.1,
-                                        onTap: () async {
-                                          await deleteAssociatedTitlePopup(
-                                            context,
-                                            title: foundAssociatedTitle,
-                                            routesToPopAfterDelete:
-                                                RoutesToPopAfterDelete.None,
-                                          );
-                                        },
-                                      ),
+                                      child: foundAssociatedTitle.title
+                                                      .associatedTitlePk ==
+                                                  "-1" ||
+                                              foundAssociatedTitle.title
+                                                      .associatedTitlePk ==
+                                                  "-2"
+                                          ? Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 7.5),
+                                              child: Icon(
+                                                appStateSettings[
+                                                        "outlinedIcons"]
+                                                    ? Icons.category_outlined
+                                                    : Icons.category_rounded,
+                                                size: 20,
+                                              ),
+                                            )
+                                          : IconButtonScaled(
+                                              iconData: appStateSettings[
+                                                      "outlinedIcons"]
+                                                  ? Icons.clear_outlined
+                                                  : Icons.clear_rounded,
+                                              iconSize: 18,
+                                              scale: 1.1,
+                                              onTap: () async {
+                                                await deleteAssociatedTitlePopup(
+                                                  context,
+                                                  title: foundAssociatedTitle
+                                                      .title,
+                                                  routesToPopAfterDelete:
+                                                      RoutesToPopAfterDelete
+                                                          .None,
+                                                );
+                                              },
+                                            ),
                                     ),
                                     SizedBox(width: 5),
                                   ],

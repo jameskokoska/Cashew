@@ -349,7 +349,7 @@ getWordedDate(DateTime date,
       extraYear;
 }
 
-setTextInput(inputController, value) {
+setTextInput(TextEditingController inputController, String value) {
   inputController.value = TextEditingValue(
     text: value,
     selection: TextSelection.fromPosition(

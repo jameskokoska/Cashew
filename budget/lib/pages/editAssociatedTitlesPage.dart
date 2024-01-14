@@ -147,132 +147,129 @@ class _EditAssociatedTitlesPageState extends State<EditAssociatedTitlesPage> {
               child: AutoTitlesToggle(),
             ),
           ),
-          StreamBuilder<Map<String, TransactionCategory>>(
-              stream: database.watchAllCategoriesMapped(),
-              builder: (context, mappedCategoriesSnapshot) {
-                return StreamBuilder<List<TransactionAssociatedTitle>>(
-                  stream: database.watchAllAssociatedTitles(
-                      searchFor: searchValue == "" ? null : searchValue),
-                  builder: (context, snapshot) {
-                    // print(snapshot.data);
-                    if (snapshot.hasData && (snapshot.data ?? []).length <= 0) {
-                      return SliverToBoxAdapter(
-                        child: NoResults(
-                          message: "no-titles-found".tr(),
+          StreamBuilder<List<TransactionAssociatedTitleWithCategory>>(
+            stream: database.watchAllAssociatedTitles(
+                searchFor: searchValue == "" ? null : searchValue),
+            builder: (context, snapshot) {
+              List<TransactionAssociatedTitleWithCategory> titles =
+                  snapshot.data ?? [];
+              // print(snapshot.data);
+              if (snapshot.hasData && titles.length <= 0) {
+                return SliverToBoxAdapter(
+                  child: NoResults(
+                    message: "no-titles-found".tr(),
+                  ),
+                );
+              }
+              if (snapshot.hasData && titles.length > 0) {
+                return SliverReorderableList(
+                  onReorderStart: (index) {
+                    HapticFeedback.heavyImpact();
+                    setState(() {
+                      dragDownToDismissEnabled = false;
+                      currentReorder = index;
+                    });
+                  },
+                  onReorderEnd: (_) {
+                    setState(() {
+                      dragDownToDismissEnabled = true;
+                      currentReorder = -1;
+                    });
+                  },
+                  itemBuilder: (context, index) {
+                    TransactionAssociatedTitle associatedTitle =
+                        titles[index].title;
+                    VoidCallback onTap = () {
+                      openBottomSheet(
+                        context,
+                        fullSnap: true,
+                        AddAssociatedTitlePage(
+                          associatedTitle: associatedTitle,
                         ),
                       );
-                    }
-                    if (snapshot.hasData && (snapshot.data ?? []).length > 0) {
-                      return SliverReorderableList(
-                        onReorderStart: (index) {
-                          HapticFeedback.heavyImpact();
-                          setState(() {
-                            dragDownToDismissEnabled = false;
-                            currentReorder = index;
-                          });
-                        },
-                        onReorderEnd: (_) {
-                          setState(() {
-                            dragDownToDismissEnabled = true;
-                            currentReorder = -1;
-                          });
-                        },
-                        itemBuilder: (context, index) {
-                          TransactionAssociatedTitle associatedTitle =
-                              snapshot.data![index];
-                          return EditRowEntry(
-                            canReorder: searchValue == "" &&
-                                (snapshot.data ?? []).length != 1,
-                            onTap: () {
-                              openBottomSheet(
-                                context,
-                                fullSnap: true,
-                                AddAssociatedTitlePage(
-                                  associatedTitle: associatedTitle,
-                                ),
-                              );
-                              Future.delayed(Duration(milliseconds: 100), () {
-                                // Fix over-scroll stretch when keyboard pops up quickly
-                                bottomSheetControllerGlobal.scrollTo(0,
-                                    duration: Duration(milliseconds: 100));
-                              });
-                            },
-                            padding: EdgeInsets.symmetric(
-                                vertical: 7,
-                                horizontal:
-                                    getPlatform() == PlatformOS.isIOS ? 17 : 7),
-                            currentReorder:
-                                currentReorder != -1 && currentReorder != index,
-                            index: index,
-                            content: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                SizedBox(width: 3),
-                                CategoryIcon(
-                                  categoryPk: associatedTitle.categoryFk,
-                                  size: 25,
-                                  margin: EdgeInsets.zero,
-                                  sizePadding: 20,
-                                  borderRadius: 1000,
-                                  category: mappedCategoriesSnapshot
-                                      .data![associatedTitle.categoryFk],
-                                ),
-                                SizedBox(width: 15),
-                                Expanded(
-                                  child: TextFont(
-                                    text: associatedTitle.title
-                                    // +
-                                    //     " - " +
-                                    //     associatedTitle.order.toString()
-                                    ,
-                                    fontSize: 16,
-                                    maxLines: 3,
-                                  ),
-                                ),
-                              ],
+                      Future.delayed(Duration(milliseconds: 100), () {
+                        // Fix over-scroll stretch when keyboard pops up quickly
+                        bottomSheetControllerGlobal.scrollTo(0,
+                            duration: Duration(milliseconds: 100));
+                      });
+                    };
+                    return EditRowEntry(
+                      canReorder: searchValue == "" &&
+                          (snapshot.data ?? []).length != 1,
+                      onTap: onTap,
+                      padding: EdgeInsets.symmetric(
+                          vertical: 7,
+                          horizontal:
+                              getPlatform() == PlatformOS.isIOS ? 17 : 7),
+                      currentReorder:
+                          currentReorder != -1 && currentReorder != index,
+                      index: index,
+                      content: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          SizedBox(width: 3),
+                          CategoryIcon(
+                            categoryPk: associatedTitle.categoryFk,
+                            size: 25,
+                            margin: EdgeInsets.zero,
+                            sizePadding: 20,
+                            borderRadius: 1000,
+                            category: titles[index].category,
+                            onTap: onTap,
+                          ),
+                          SizedBox(width: 15),
+                          Expanded(
+                            child: TextFont(
+                              text: associatedTitle.title
+                              // +
+                              //     " - " +
+                              //     associatedTitle.order.toString()
+                              ,
+                              fontSize: 16,
+                              maxLines: 3,
                             ),
-                            onDelete: () async {
-                              return (await deleteAssociatedTitlePopup(
-                                    context,
-                                    title: associatedTitle,
-                                    routesToPopAfterDelete:
-                                        RoutesToPopAfterDelete.None,
-                                  )) ==
-                                  DeletePopupAction.Delete;
-                            },
-                            openPage: Container(),
-                            key: ValueKey(associatedTitle.associatedTitlePk),
-                          );
-                        },
-                        itemCount: snapshot.data!.length,
-                        onReorder: (_intPrevious, _intNew) async {
-                          TransactionAssociatedTitle oldTitle =
-                              snapshot.data![_intPrevious];
-                          _intNew = snapshot.data!.length - _intNew;
-                          _intPrevious = snapshot.data!.length - _intPrevious;
-                          if (_intNew > _intPrevious) {
-                            await database.moveAssociatedTitle(
-                                oldTitle.associatedTitlePk,
-                                _intNew - 1,
-                                oldTitle.order);
-                          } else {
-                            await database.moveAssociatedTitle(
-                                oldTitle.associatedTitlePk,
-                                _intNew,
-                                oldTitle.order);
-                          }
-
-                          return true;
-                        },
-                      );
-                    }
-                    return SliverToBoxAdapter(
-                      child: Container(),
+                          ),
+                        ],
+                      ),
+                      onDelete: () async {
+                        return (await deleteAssociatedTitlePopup(
+                              context,
+                              title: associatedTitle,
+                              routesToPopAfterDelete:
+                                  RoutesToPopAfterDelete.None,
+                            )) ==
+                            DeletePopupAction.Delete;
+                      },
+                      openPage: Container(),
+                      key: ValueKey(associatedTitle.associatedTitlePk),
                     );
                   },
+                  itemCount: snapshot.data!.length,
+                  onReorder: (_intPrevious, _intNew) async {
+                    TransactionAssociatedTitle oldTitle =
+                        titles[_intPrevious].title;
+                    _intNew = snapshot.data!.length - _intNew;
+                    _intPrevious = snapshot.data!.length - _intPrevious;
+                    if (_intNew > _intPrevious) {
+                      await database.moveAssociatedTitle(
+                          oldTitle.associatedTitlePk,
+                          _intNew - 1,
+                          oldTitle.order);
+                    } else {
+                      await database.moveAssociatedTitle(
+                          oldTitle.associatedTitlePk, _intNew, oldTitle.order);
+                    }
+
+                    return true;
+                  },
                 );
-              }),
+              }
+              return SliverToBoxAdapter(
+                child: Container(),
+              );
+            },
+          ),
           SliverToBoxAdapter(
             child: SizedBox(height: 85),
           ),

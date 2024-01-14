@@ -89,9 +89,11 @@ onNotification(ServiceNotificationEvent event) async {
       (event.title ?? "").toLowerCase().trim().capitalizeFirstofEach;
   title = filterEmailTitle(title);
 
-  TransactionAssociatedTitle? foundTitle = await getLikeAssociatedTitle(title);
-  TransactionCategory? category =
-      (await database.getCategoryInstanceOrNull(foundTitle?.categoryFk ?? ""));
+  TransactionAssociatedTitleWithCategory? foundTitle =
+      (await database.getSimilarAssociatedTitles(title: title, limit: 1))
+          .firstOrNull;
+
+  TransactionCategory? category = foundTitle?.category;
 
   pushRoute(
     navigatorKey.currentContext!,
@@ -363,13 +365,11 @@ Future<void> parseEmailsInBackground(context,
           continue;
         }
 
-        TransactionAssociatedTitle? foundTitle =
-            await getLikeAssociatedTitle(title);
+        TransactionAssociatedTitleWithCategory? foundTitle =
+            (await database.getSimilarAssociatedTitles(title: title, limit: 1))
+                .firstOrNull;
 
-        TransactionCategory? selectedCategory =
-            (await database.getCategoryInstanceOrNull(foundTitle?.categoryFk ??
-                templateFound?.defaultCategoryFk ??
-                ""));
+        TransactionCategory? selectedCategory = foundTitle?.category;
         if (selectedCategory == null) continue;
 
         title = filterEmailTitle(title);

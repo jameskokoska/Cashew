@@ -27,6 +27,9 @@ import 'listItem.dart';
 String getChangelogString() {
   return """
     < 5.1.8
+    Significantly improved associated title searching
+    Search category and subcategory when entering title
+    Search categories on edit categories page includes searching subcategories
     12/24 hour clock format setting
     Custom currency for transfers (tap the transfer amount to change the currency to another existing account's currency)
     When full screen, moved notifications to settings page
