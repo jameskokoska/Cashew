@@ -1314,37 +1314,42 @@ class _TransferBalancePopupState extends State<TransferBalancePopup> {
           Tappable(
             color: Colors.transparent,
             borderRadius: 15,
-            onTap: () async {
-              // Always ensure that the current widget.wallet appears in the list!
+            onTap: Provider.of<AllWallets>(context).allContainSameCurrency()
+                ? null
+                : () async {
+                    // Always ensure that the current widget.wallet appears in the list!
 
-              Set<String> uniqueCurrencies = {widget.wallet?.currency ?? ""};
-              List<TransactionWallet> duplicateCurrencyWallets = [];
+                    Set<String> uniqueCurrencies = {
+                      widget.wallet?.currency ?? ""
+                    };
+                    List<TransactionWallet> duplicateCurrencyWallets = [];
 
-              for (TransactionWallet wallet
-                  in Provider.of<AllWallets>(context, listen: false).list) {
-                if (!uniqueCurrencies.add(wallet.currency ?? "")) {
-                  duplicateCurrencyWallets.add(wallet);
-                }
-              }
+                    for (TransactionWallet wallet
+                        in Provider.of<AllWallets>(context, listen: false)
+                            .list) {
+                      if (!uniqueCurrencies.add(wallet.currency ?? "")) {
+                        duplicateCurrencyWallets.add(wallet);
+                      }
+                    }
 
-              duplicateCurrencyWallets
-                  .removeWhere((w) => w.walletPk == widget.wallet?.walletPk);
+                    duplicateCurrencyWallets.removeWhere(
+                        (w) => w.walletPk == widget.wallet?.walletPk);
 
-              dynamic result = await selectWalletPopup(
-                context,
-                removeWalletPks: duplicateCurrencyWallets
-                    .map((wallet) => wallet.walletPk)
-                    .toList(),
-                title: "select-currency".tr(),
-                selectedWallet: walletForCurrency,
-                allowEditWallet: false,
-                currencyOnly: true,
-              );
-              if (result is TransactionWallet)
-                setState(() {
-                  walletForCurrency = result;
-                });
-            },
+                    dynamic result = await selectWalletPopup(
+                      context,
+                      removeWalletPks: duplicateCurrencyWallets
+                          .map((wallet) => wallet.walletPk)
+                          .toList(),
+                      title: "select-currency".tr(),
+                      selectedWallet: walletForCurrency,
+                      allowEditWallet: false,
+                      currencyOnly: true,
+                    );
+                    if (result is TransactionWallet)
+                      setState(() {
+                        walletForCurrency = result;
+                      });
+                  },
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 7, horizontal: 11),
               child: AnimatedSizeSwitcher(

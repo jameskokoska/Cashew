@@ -1014,7 +1014,7 @@
   "next-payment-due": "Thanh toán đến hạn tiếp theo",
   "no-categories": "Không danh mục",
   "saved-amount-of": "tiết kiệm",
-  "over-saved-amount-of": "quá mức tiết kiệm",
+  "over-saved-amount-of": "vượt mức tiết kiệm",
   "of-saving": "đang tiết kiệm",
   "set-saving-goals": "Đặt danh mục mục tiêu tiết kiệm",
   "edit-saving-goals": "Chỉnh sửa mục tiêu tiết kiệm",
@@ -1031,8 +1031,8 @@
   "savings-budget-description-1": "Theo dõi thu nhập và lập ngân sách cho khoản tiết kiệm của bạn",
   "expense-budget-description-1": "Theo dõi chi phí và lập ngân sách cho chi tiêu của bạn",
   "end-date-reached": "Đã đến ngày kết thúc",
-  "over": "quá mức",
+  "over": "vượt mức",
   "clock-format": "Định dạng đồng hồ",
   "24-hour": "24 giờ",
-  "12-hour": "12Giờ"
+  "12-hour": "12 giờ"
 }

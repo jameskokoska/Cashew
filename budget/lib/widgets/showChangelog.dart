@@ -28,7 +28,7 @@ String getChangelogString() {
   return """
     < 5.1.8
     12/24 hour clock format setting
-    Custom currency for transfers (tap the transfer amount to change the currency)
+    Custom currency for transfers (tap the transfer amount to change the currency to another existing account's currency)
     When full screen, moved notifications to settings page
     After clearing title/note filter, the filter will be removed
     If no room in long term loan or goal total, extra information hidden
