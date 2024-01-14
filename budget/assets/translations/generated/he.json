@@ -1031,5 +1031,8 @@
   "savings-budget-description-1": "עקוב אחר הכנסותיך ותקצב את החיסכון שלך",
   "expense-budget-description-1": "עקוב אחר ההוצאות שלך ותקצב את ההוצאות שלך",
   "end-date-reached": "תאריך הסיום הגיע",
-  "over": "יותר מ"
+  "over": "יותר מ",
+  "clock-format": "פורמט שעון",
+  "24-hour": "24 שעות",
+  "12-hour": "12 שעות"
 }

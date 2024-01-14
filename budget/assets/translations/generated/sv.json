@@ -1031,5 +1031,8 @@
   "savings-budget-description-1": "Spåra din inkomst och budgetera dina besparingar",
   "expense-budget-description-1": "Spåra dina utgifter och budgetera dina utgifter",
   "end-date-reached": "Slutdatum nådde",
-  "over": "mer än"
+  "over": "mer än",
+  "clock-format": "Klockformat",
+  "24-hour": "24 timmar",
+  "12-hour": "12 timmar"
 }

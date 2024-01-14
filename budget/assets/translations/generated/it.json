@@ -1031,5 +1031,8 @@
   "savings-budget-description-1": "Tieni traccia del tuo reddito e del tuo budget i tuoi risparmi",
   "expense-budget-description-1": "Tieni traccia delle tue spese e budge al tuo budget della spesa",
   "end-date-reached": "Data di fine raggiunta",
-  "over": "più di"
+  "over": "più di",
+  "clock-format": "Formato dell'orologio",
+  "24-hour": "24 ore",
+  "12-hour": "12 ore"
 }

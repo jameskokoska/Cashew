@@ -1031,5 +1031,8 @@
   "savings-budget-description-1": "Subaybayan ang iyong kita at badyet ang iyong pagtitipid",
   "expense-budget-description-1": "Subaybayan ang iyong mga gastos at badyet ang iyong paggasta",
   "end-date-reached": "Naabot ang petsa ng pagtatapos",
-  "over": "Higit pa sa"
+  "over": "Higit pa sa",
+  "clock-format": "Format ng orasan",
+  "24-hour": "24 oras na",
+  "12-hour": "12 oras"
 }

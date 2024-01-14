@@ -1031,5 +1031,8 @@
   "savings-budget-description-1": "Śledź swoje dochody i budżet na swoje oszczędności",
   "expense-budget-description-1": "Śledź swoje wydatki i budżet na wydatki",
   "end-date-reached": "Data zakończenia osiągnięta",
-  "over": "więcej niż"
+  "over": "więcej niż",
+  "clock-format": "Format zegara",
+  "24-hour": "24 godziny",
+  "12-hour": "12 godzin"
 }

@@ -1031,5 +1031,8 @@
   "savings-budget-description-1": "Пратите свој приход и буџет уштеде",
   "expense-budget-description-1": "Пратите трошкове и буџет своје потрошње",
   "end-date-reached": "Достигнут крајњи датум",
-  "over": "више од"
+  "over": "више од",
+  "clock-format": "Формат сата",
+  "24-hour": "24 сата",
+  "12-hour": "12 сати"
 }

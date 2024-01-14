@@ -375,7 +375,7 @@ void mergeWalletPopup(
 }) async {
   var selectedWalletResult = await selectWalletPopup(
     context,
-    removeWalletPk: walletOriginal.walletPk,
+    removeWalletPks: [walletOriginal.walletPk],
     subtitle: "account-to-transfer-all-transactions-to".tr(),
     allowEditWallet: false,
   );
@@ -439,25 +439,27 @@ void mergeWalletPopup(
 
 Future<TransactionWallet?> selectWalletPopup(
   BuildContext context, {
-  String? removeWalletPk,
+  List<String>? removeWalletPks,
   String? subtitle,
   TransactionWallet? selectedWallet,
   required bool allowEditWallet,
   bool allowDeleteWallet = true,
+  bool currencyOnly = false,
+  String? title,
 }) async {
   dynamic wallet = await openBottomSheet(
     context,
     PopupFramework(
-      title: "select-account".tr(),
+      title: title ?? "select-account".tr(),
       subtitle: subtitle,
       child: StreamBuilder<List<WalletWithDetails>>(
         stream: database.watchAllWalletsWithDetails(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             List<WalletWithDetails> walletsWithoutOneDeleted = snapshot.data!;
-            if (removeWalletPk != null)
-              walletsWithoutOneDeleted.removeWhere(
-                  (WalletWithDetails w) => w.wallet.walletPk == removeWalletPk);
+            if (removeWalletPks != null)
+              walletsWithoutOneDeleted.removeWhere((WalletWithDetails w) =>
+                  removeWalletPks.contains(w.wallet.walletPk));
             if (walletsWithoutOneDeleted.isEmpty) {
               return Padding(
                 padding: const EdgeInsets.only(bottom: 15),
@@ -491,24 +493,29 @@ Future<TransactionWallet?> selectWalletPopup(
               displayFilter: (Object? object) {
                 TransactionWallet? wallet;
                 if (object is WalletWithDetails) wallet = object.wallet;
+                if (currencyOnly) {
+                  return (wallet?.currency ?? "").allCaps;
+                }
                 return wallet?.name ?? "";
               },
-              getEndInfo: (Object? object) {
-                TransactionWallet? wallet;
-                double totalSpent = 0;
-                if (object is WalletWithDetails) {
-                  wallet = object.wallet;
-                  totalSpent = object.totalSpent ?? 0;
-                }
-                return convertToMoney(
-                  Provider.of<AllWallets>(context),
-                  totalSpent,
-                  finalNumber: totalSpent,
-                  currencyKey: wallet?.currency,
-                  decimals: wallet?.decimals,
-                  addCurrencyName: true,
-                );
-              },
+              getEndInfo: currencyOnly
+                  ? null
+                  : (Object? object) {
+                      TransactionWallet? wallet;
+                      double totalSpent = 0;
+                      if (object is WalletWithDetails) {
+                        wallet = object.wallet;
+                        totalSpent = object.totalSpent ?? 0;
+                      }
+                      return convertToMoney(
+                        Provider.of<AllWallets>(context),
+                        totalSpent,
+                        finalNumber: totalSpent,
+                        currencyKey: wallet?.currency,
+                        decimals: wallet?.decimals,
+                        addCurrencyName: true,
+                      );
+                    },
               initial: selectedWallet,
               onChanged: (Object? object) {
                 TransactionWallet? wallet;

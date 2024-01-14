@@ -1,14 +1,22 @@
 import 'package:budget/colors.dart';
+import 'package:budget/functions.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
-bool is24HourFormat(BuildContext context) {
+bool? isSetting24HourFormat() {
+  if (appStateSettings["use24HourFormat"] == "12-hour") return false;
+  if (appStateSettings["use24HourFormat"] == "24-hour") return true;
+  return null;
+}
+
+bool isSystem24HourFormat(BuildContext context) {
   DateFormat format = DateFormat.jm(context.locale.toString());
   String formattedTime =
       format.format(DateTime.now()).toUpperCase().replaceAll(".", "");
-  return !formattedTime.contains("AM") && !formattedTime.contains("PM");
+  return MediaQuery.alwaysUse24HourFormatOf(context) ||
+      !formattedTime.contains("AM") && !formattedTime.contains("PM");
 }
 
 class TimeDigits extends StatelessWidget {
@@ -18,7 +26,7 @@ class TimeDigits extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     bool use24HourFormat =
-        MediaQuery.alwaysUse24HourFormatOf(context) || is24HourFormat(context);
+        isSetting24HourFormat() ?? isSystem24HourFormat(context);
     String hours = "";
     String minutes = "";
     if (use24HourFormat) {
@@ -33,6 +41,13 @@ class TimeDigits extends StatelessWidget {
     minutes = timeOfDay.minute.toString().length == 1
         ? "0" + timeOfDay.minute.toString()
         : timeOfDay.minute.toString();
+    DateTime dateTimeFromTime = DateTime(
+      DateTime.now().year,
+      DateTime.now().month,
+      DateTime.now().day,
+      timeOfDay.hour,
+      timeOfDay.minute,
+    );
     Color backgroundColor = appStateSettings["materialYou"]
         ? dynamicPastel(
             context, Theme.of(context).colorScheme.secondaryContainer,
@@ -86,7 +101,7 @@ class TimeDigits extends StatelessWidget {
                 child: Transform.scale(
                   scale: 0.8,
                   child: TextFont(
-                    text: timeOfDay.hour < 12 ? "AM" : "PM",
+                    text: getMeridiemString(dateTimeFromTime),
                     fontSize: 18,
                   ),
                 ),

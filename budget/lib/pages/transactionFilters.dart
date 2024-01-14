@@ -906,7 +906,11 @@ class _TransactionFiltersSelectionState
                 padding: EdgeInsets.zero,
                 labelText: "title-contains".tr() + "...",
                 onChanged: (value) {
-                  selectedFilters.titleContains = value.trim();
+                  if (value.trim() == "") {
+                    selectedFilters.titleContains = null;
+                  } else {
+                    selectedFilters.titleContains = value.trim();
+                  }
                 },
                 initialValue: selectedFilters.titleContains,
                 icon: appStateSettings["outlinedIcons"]
@@ -918,7 +922,11 @@ class _TransactionFiltersSelectionState
                 padding: EdgeInsets.zero,
                 labelText: "notes-contain".tr() + "...",
                 onChanged: (value) {
-                  selectedFilters.noteContains = value.trim();
+                  if (value.trim() == "") {
+                    selectedFilters.noteContains = null;
+                  } else {
+                    selectedFilters.noteContains = value.trim();
+                  }
                 },
                 initialValue: selectedFilters.noteContains,
                 icon: appStateSettings["outlinedIcons"]

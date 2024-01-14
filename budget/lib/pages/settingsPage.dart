@@ -50,7 +50,9 @@ import 'package:budget/struct/upcomingTransactionsFunctions.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/tappableTextEntry.dart';
 import 'package:budget/widgets/textWidgets.dart';
+import 'package:budget/widgets/timeDigits.dart';
 import 'package:budget/widgets/util/checkWidgetLaunch.dart';
+import 'package:budget/widgets/util/showTimePicker.dart';
 import 'package:budget/widgets/viewAllTransactionsButton.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
@@ -201,23 +203,23 @@ class MorePages extends StatelessWidget {
               ),
             ],
           ),
-          if (hasSideNavigation == false)
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                notificationsGlobalEnabled
-                    ? Expanded(
-                        child: SettingsContainerOpenPage(
-                          openPage: NotificationsPage(),
-                          title: navBarIconsData["notifications"]!.label.tr(),
-                          icon: navBarIconsData["notifications"]!.iconData,
-                          isOutlined: true,
-                        ),
-                      )
-                    : SizedBox.shrink(),
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              notificationsGlobalEnabled
+                  ? Expanded(
+                      child: SettingsContainerOpenPage(
+                        openPage: NotificationsPage(),
+                        title: navBarIconsData["notifications"]!.label.tr(),
+                        icon: navBarIconsData["notifications"]!.iconData,
+                        isOutlined: true,
+                      ),
+                    )
+                  : SizedBox.shrink(),
+              if (hasSideNavigation == false)
                 Expanded(child: GoogleAccountLoginButton()),
-              ],
-            ),
+            ],
+          ),
           if (hasSideNavigation == false)
             Row(
               mainAxisSize: MainAxisSize.min,
@@ -487,20 +489,14 @@ class SettingsPageContent extends StatelessWidget {
               : appStateSettings["outlinedIcons"]
                   ? Icons.dark_mode_outlined
                   : Icons.dark_mode_rounded,
-          initial: appStateSettings["theme"].toString().capitalizeFirst,
-          items: ["Light", "Dark", "System"],
+          initial: appStateSettings["theme"].toString(),
+          items: ["light", "dark", "system"],
           onChanged: (value) async {
-            if (value == "Light") {
-              await updateSettings("theme", "light", updateGlobalState: true);
-            } else if (value == "Dark") {
-              await updateSettings("theme", "dark", updateGlobalState: true);
-            } else if (value == "System") {
-              await updateSettings("theme", "system", updateGlobalState: true);
-            }
+            await updateSettings("theme", value, updateGlobalState: true);
             updateWidgetColorsAndText(context);
           },
           getLabel: (item) {
-            return item.toLowerCase().tr();
+            return item.tr();
           },
         ),
 
@@ -666,6 +662,7 @@ class MoreOptionsPagePreferences extends StatelessWidget {
           NetWorthWidgetSetting(),
         SettingsHeader(title: "formatting".tr()),
         NumberFormattingSetting(),
+        Time24HourFormatSetting(),
         ExtraZerosButtonSetting(),
       ],
     );
@@ -955,6 +952,28 @@ class NumberFormattingSetting extends StatelessWidget {
           fullSnap: true,
           SetNumberFormatPopup(),
         );
+      },
+    );
+  }
+}
+
+class Time24HourFormatSetting extends StatelessWidget {
+  const Time24HourFormatSetting({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return SettingsContainerDropdown(
+      title: "clock-format".tr(),
+      icon: appStateSettings["outlinedIcons"]
+          ? Icons.history_toggle_off_outlined
+          : Icons.history_toggle_off_rounded,
+      initial: appStateSettings["use24HourFormat"].toString(),
+      items: ["system", "12-hour", "24-hour"],
+      onChanged: (value) async {
+        await updateSettings("use24HourFormat", value, updateGlobalState: true);
+      },
+      getLabel: (item) {
+        return item.tr();
       },
     );
   }

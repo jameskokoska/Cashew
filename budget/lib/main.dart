@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:budget/functions.dart';
 import 'package:budget/pages/autoTransactionsPageEmail.dart';
+import 'package:budget/pages/settingsPage.dart';
 import 'package:budget/struct/iconObjects.dart';
 import 'package:budget/struct/keyboardIntents.dart';
 import 'package:budget/widgets/bottomNavBar.dart';
@@ -367,6 +368,7 @@ class App extends StatelessWidget {
             ),
           ),
         );
+
         if (kIsWeb) {
           return FadeIn(
               duration: Duration(milliseconds: 1000), child: mainWidget);

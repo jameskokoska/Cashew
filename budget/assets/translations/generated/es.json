@@ -1031,5 +1031,8 @@
   "savings-budget-description-1": "Rastree sus ingresos y presupueste sus ahorros",
   "expense-budget-description-1": "Rastree sus gastos y presupueste sus gastos",
   "end-date-reached": "Fecha de finalización alcanzada",
-  "over": "más que"
+  "over": "más que",
+  "clock-format": "Formato de reloj",
+  "24-hour": "24 horas",
+  "12-hour": "12 horas"
 }

@@ -8,6 +8,7 @@ import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/openSnackbar.dart';
 import 'package:budget/widgets/restartApp.dart';
 import 'package:budget/widgets/selectAmount.dart';
+import 'package:budget/widgets/timeDigits.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
@@ -192,9 +193,30 @@ String getMonth(DateTime dateTime, {bool includeYear = false}) {
       .format(dateTime);
 }
 
-String getWordedTime(DateTime dateTime) {
-  return DateFormat.jm(navigatorKey.currentContext?.locale.toString())
-      .format(dateTime);
+String getWordedTime(
+  String? locale,
+  DateTime dateTime,
+) {
+  if (isSetting24HourFormat() == null) {
+    return DateFormat.jm(
+            locale ?? navigatorKey.currentContext?.locale.toString())
+        .format(dateTime);
+  } else {
+    if (isSetting24HourFormat() == true) {
+      return DateFormat("H:mm").format(dateTime);
+    } else {
+      return DateFormat("h:mm aa").format(dateTime);
+    }
+  }
+}
+
+String getMeridiemString(DateTime dateTime) {
+  // or can use
+  // MaterialLocalizations.of(context).anteMeridiemAbbreviation
+  // and
+  // MaterialLocalizations.of(context).postMeridiemAbbreviation
+
+  return DateFormat("aa").format(dateTime).replaceAll(".", "").allCaps;
 }
 
 checkYesterdayTodayTomorrow(DateTime date) {
@@ -240,17 +262,17 @@ String getWordedDateShort(
 // e.g. Today/Yesterday/Tomorrow/Tuesday/ March 15
 String getWordedDateShortMore(DateTime date,
     {includeYear = false, includeTime = false, includeTimeIfToday = false}) {
+  final String? locale = navigatorKey.currentContext?.locale.toString();
+
   if (checkYesterdayTodayTomorrow(date) != false) {
     if (includeTimeIfToday) {
       return checkYesterdayTodayTomorrow(date) +
           " - " +
-          DateFormat('h:mm aaa', navigatorKey.currentContext?.locale.toString())
-              .format(date);
+          getWordedTime(locale, date);
     } else {
       return checkYesterdayTodayTomorrow(date);
     }
   }
-  final locale = navigatorKey.currentContext?.locale.toString();
   if (includeYear) {
     return DateFormat.MMMMd(locale).format(date) +
         ", " +
@@ -260,7 +282,7 @@ String getWordedDateShortMore(DateTime date,
         ", " +
         DateFormat.y(locale).format(date) +
         " - " +
-        DateFormat('h:mm aaa', locale).format(date);
+        getWordedTime(locale, date);
   }
   return DateFormat.MMMMd(locale).format(date);
 }

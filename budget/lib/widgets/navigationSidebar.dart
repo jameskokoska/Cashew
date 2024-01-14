@@ -12,6 +12,7 @@ import 'package:budget/widgets/moreIcons.dart';
 import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/tappable.dart';
+import 'package:budget/widgets/timeDigits.dart';
 import 'package:budget/widgets/util/showDatePicker.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -262,11 +263,11 @@ class NavigationSidebarState extends State<NavigationSidebar> {
                                 navBarIconDataKey: "loans",
                                 currentPageIndex: selectedIndex,
                               ),
-                              if (kIsWeb == false)
-                                NavigationSidebarButtonWithNavBarIconData(
-                                  navBarIconDataKey: "notifications",
-                                  currentPageIndex: selectedIndex,
-                                ),
+                              // if (notificationsGlobalEnabled)
+                              //   NavigationSidebarButtonWithNavBarIconData(
+                              //     navBarIconDataKey: "notifications",
+                              //     currentPageIndex: selectedIndex,
+                              //   ),
                               NavigationSidebarButtonWithNavBarIconData(
                                 navBarIconDataKey: "allSpending",
                                 currentPageIndex: selectedIndex,
@@ -337,16 +338,42 @@ class SidebarClock extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      TextFont(
-                        textColor: getColor(context, "black"),
-                        fontSize: 48,
-                        fontWeight: FontWeight.bold,
-                        // Remove any am/pm indication by substring
-                        text: DateFormat.jm(context.locale.toString())
-                            .format(now)
-                            .substring(0, 5)
-                            .trim(),
-                      ),
+                      isSetting24HourFormat() ??
+                              isSystem24HourFormat(context) == true
+                          ? TextFont(
+                              textColor: getColor(context, "black"),
+                              fontSize: 48,
+                              fontWeight: FontWeight.bold,
+                              // Remove any am/pm indication by substring
+                              text: getWordedTime(null, now)
+                                  .substring(0, 5)
+                                  .trim(),
+                            )
+                          : Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                TextFont(
+                                  textColor: getColor(context, "black"),
+                                  fontSize: 45,
+                                  fontWeight: FontWeight.bold,
+                                  // Remove any am/pm indication by substring
+                                  text: getWordedTime(null, now)
+                                      .substring(0, 5)
+                                      .trim(),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      bottom: 4.4, left: 7),
+                                  child: TextFont(
+                                    textColor: getColor(context, "black"),
+                                    fontSize: 25,
+                                    fontWeight: FontWeight.bold,
+                                    text: getMeridiemString(now),
+                                  ),
+                                ),
+                              ],
+                            ),
                       TextFont(
                         textColor: getColor(context, "black").withOpacity(0.5),
                         fontSize: 20,

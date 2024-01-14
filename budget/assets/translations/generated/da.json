@@ -1031,5 +1031,8 @@
   "savings-budget-description-1": "Spor din indkomst og budgettere dine besparelser",
   "expense-budget-description-1": "Spor dine udgifter og budgettere dine udgifter",
   "end-date-reached": "Slutdato nået",
-  "over": "mere end"
+  "over": "mere end",
+  "clock-format": "Urformat",
+  "24-hour": "24 timer",
+  "12-hour": "12 timer"
 }

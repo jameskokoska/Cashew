@@ -1031,5 +1031,8 @@
   "savings-budget-description-1": "Seuraa tulojasi ja budjetti säästöjäsi",
   "expense-budget-description-1": "Seuraa kulut ja budjetti kulut",
   "end-date-reached": "Päättymispäivämäärä",
-  "over": "enemmän kuin"
+  "over": "enemmän kuin",
+  "clock-format": "Kellonmuoto",
+  "24-hour": "24 tuntia",
+  "12-hour": "12 tunti"
 }

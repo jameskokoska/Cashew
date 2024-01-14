@@ -61,6 +61,10 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
 
   @override
   void initState() {
+    Future.delayed(Duration.zero, () {
+      FocusScopeNode currentFocus = FocusScope.of(context);
+      currentFocus.unfocus();
+    });
     DateTimeRange initialDateTimeRange = DateTimeRange(
       start: DateTime(1900),
       end: DateTime(roundToNearestNextFifthYear(DateTime.now().year)),

@@ -444,36 +444,49 @@ class ObjectiveContainer extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
                               Flexible(
-                                child: StreamBuilder<int?>(
-                                  stream: database
-                                      .getTotalCountOfTransactionsInObjective(
-                                          objective.objectivePk)
-                                      .$1,
-                                  builder: (context, snapshot) {
-                                    int numberTransactions =
-                                        forcedNumberTransactions ??
-                                            snapshot.data ??
-                                            0;
-                                    return TextFont(
-                                      textAlign: TextAlign.left,
-                                      text:
-                                          (objective.type == ObjectiveType.loan
-                                              ? "\n" +
-                                                  (objective.income
-                                                      ? "lent-funds".tr()
-                                                      : "borrowed-funds".tr())
-                                              : (numberTransactions.toString() +
-                                                  " " +
-                                                  (numberTransactions == 1
-                                                      ? "transaction"
-                                                          .tr()
-                                                          .toLowerCase()
-                                                      : "transactions"
-                                                          .tr()
-                                                          .toLowerCase()))),
-                                      fontSize: 15,
-                                      textColor: getColor(context, "black")
-                                          .withOpacity(0.65),
+                                child: LayoutBuilder(
+                                  builder: (context, constraints) {
+                                    if (constraints.maxWidth <= 73) {
+                                      return SizedBox.shrink();
+                                    }
+                                    return StreamBuilder<int?>(
+                                      stream: database
+                                          .getTotalCountOfTransactionsInObjective(
+                                              objective.objectivePk)
+                                          .$1,
+                                      builder: (context, snapshot) {
+                                        int numberTransactions =
+                                            forcedNumberTransactions ??
+                                                snapshot.data ??
+                                                0;
+                                        return Padding(
+                                          padding:
+                                              const EdgeInsets.only(bottom: 2),
+                                          child: TextFont(
+                                            textAlign: TextAlign.left,
+                                            text: (objective.type ==
+                                                    ObjectiveType.loan
+                                                ? "\n" +
+                                                    (objective.income
+                                                        ? "lent".tr()
+                                                        : "borrowed".tr())
+                                                : (numberTransactions
+                                                        .toString() +
+                                                    " " +
+                                                    (numberTransactions == 1
+                                                        ? "transaction"
+                                                            .tr()
+                                                            .toLowerCase()
+                                                        : "transactions"
+                                                            .tr()
+                                                            .toLowerCase()))),
+                                            fontSize: 15,
+                                            textColor:
+                                                getColor(context, "black")
+                                                    .withOpacity(0.65),
+                                          ),
+                                        );
+                                      },
                                     );
                                   },
                                 ),

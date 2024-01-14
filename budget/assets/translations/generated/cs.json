@@ -1031,5 +1031,8 @@
   "savings-budget-description-1": "Sledujte svůj příjem a rozpočet vaše úspory",
   "expense-budget-description-1": "Sledujte své výdaje a rozpočet na své výdaje",
   "end-date-reached": "Datum ukončení bylo dosaženo",
-  "over": "více než"
+  "over": "více než",
+  "clock-format": "Formát hodin",
+  "24-hour": "24 hodin",
+  "12-hour": "12 hodin"
 }

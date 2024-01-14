@@ -1031,5 +1031,8 @@
   "savings-budget-description-1": "Suivez vos revenus et budgétisez votre épargne",
   "expense-budget-description-1": "Suivez vos dépenses et budgétisé vos dépenses",
   "end-date-reached": "Date de fin atteinte",
-  "over": "plus que"
+  "over": "plus que",
+  "clock-format": "Format d'horloge",
+  "24-hour": "24 heures",
+  "12-hour": "12 heures"
 }

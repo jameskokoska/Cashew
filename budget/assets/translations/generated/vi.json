@@ -1031,5 +1031,8 @@
   "savings-budget-description-1": "Theo dõi thu nhập và lập ngân sách cho khoản tiết kiệm của bạn",
   "expense-budget-description-1": "Theo dõi chi phí và lập ngân sách cho chi tiêu của bạn",
   "end-date-reached": "Đã đến ngày kết thúc",
-  "over": "nhiều hơn"
+  "over": "quá mức",
+  "clock-format": "Định dạng đồng hồ",
+  "24-hour": "24 giờ",
+  "12-hour": "12Giờ"
 }

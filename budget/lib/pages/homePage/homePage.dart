@@ -331,7 +331,6 @@ class HomePageState extends State<HomePage>
                     // Full screen bottom split section
                     if (enableDoubleColumn(context) == true)
                       LayoutBuilder(builder: (context, constraints) {
-                        print(constraints);
                         return Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [

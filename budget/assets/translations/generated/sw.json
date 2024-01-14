@@ -1031,5 +1031,8 @@
   "savings-budget-description-1": "Fuatilia mapato yako na bajeti ya akiba yako",
   "expense-budget-description-1": "Fuatilia gharama zako na bajeti matumizi yako",
   "end-date-reached": "Tarehe ya mwisho ilifikiwa",
-  "over": "zaidi ya"
+  "over": "zaidi ya",
+  "clock-format": "Fomati ya saa",
+  "24-hour": "Saa 24",
+  "12-hour": "Saa 12"
 }

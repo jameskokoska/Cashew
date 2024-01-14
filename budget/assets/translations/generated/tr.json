@@ -1031,5 +1031,8 @@
   "savings-budget-description-1": "Gelirinizi izleyin ve tasarruflarınızı bütçeleyin",
   "expense-budget-description-1": "Giderlerinizi takip edin ve harcamalarınızı bütçe",
   "end-date-reached": "Bitiş tarihi ulaşıldı",
-  "over": "bundan fazla"
+  "over": "bundan fazla",
+  "clock-format": "Saat biçimi",
+  "24-hour": "24 saat",
+  "12-hour": "12 saat"
 }

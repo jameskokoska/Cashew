@@ -272,7 +272,8 @@ class _UpcomingTransactionsNotificationsSettingsState
                                     description: getWordedDateShortMore(
                                             transaction.dateCreated) +
                                         ", " +
-                                        getWordedTime(transaction.dateCreated),
+                                        getWordedTime(
+                                            null, transaction.dateCreated),
                                     onSwitched: (value) async {
                                       await database.createOrUpdateTransaction(
                                           transaction.copyWith(

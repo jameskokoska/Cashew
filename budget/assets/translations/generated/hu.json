@@ -1031,5 +1031,8 @@
   "savings-budget-description-1": "Kövesse nyomon a jövedelmét és a megtakarítások költségvetését",
   "expense-budget-description-1": "Kövesse nyomon a költségeket és költségvetse ki a kiadásait",
   "end-date-reached": "A befejezési dátum elért",
-  "over": "több mint"
+  "over": "több mint",
+  "clock-format": "Óra formátum",
+  "24-hour": "24 óra",
+  "12-hour": "12 óra"
 }

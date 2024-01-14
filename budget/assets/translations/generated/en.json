@@ -1031,5 +1031,8 @@
   "savings-budget-description-1": "Track your income and budget your savings",
   "expense-budget-description-1": "Track your expenses and budget your spending",
   "end-date-reached": "End Date Reached",
-  "over": "over"
+  "over": "over",
+  "clock-format": "Clock Format",
+  "24-hour": "24 Hour",
+  "12-hour": "12 Hour"
 }

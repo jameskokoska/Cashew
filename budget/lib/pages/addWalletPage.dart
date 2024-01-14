@@ -1107,6 +1107,15 @@ class _TransferBalancePopupState extends State<TransferBalancePopup> {
       : null;
   late DateTime? selectedDateTime = widget.initialDate ?? null;
   late String selectedTitle = widget.initialTitle ?? "";
+  late TransactionWallet? walletForCurrency =
+      Provider.of<AllWallets>(context, listen: false)
+                  .indexedByPk[appStateSettings["selectedWalletPk"]]
+                  ?.currency ==
+              widget.wallet?.currency
+          ? widget.wallet
+          : Provider.of<AllWallets>(context, listen: false)
+              .indexedByPk[appStateSettings["selectedWalletPk"]];
+
   // double transferFee = 0;
 
   @override
@@ -1301,26 +1310,66 @@ class _TransferBalancePopupState extends State<TransferBalancePopup> {
               }),
             ],
           ),
-          SizedBox(height: 10),
-          AnimatedSizeSwitcher(
-            clipBehavior: Clip.none,
-            child: TextFont(
-              key: ValueKey(enteredAmount),
-              autoSizeText: true,
-              maxLines: 1,
-              minFontSize: 16,
-              text: convertToMoney(
-                Provider.of<AllWallets>(context),
-                enteredAmount
-                    .abs(), //We flip the arrow instead of showing negative
-                addCurrencyName: true,
+          SizedBox(height: 3),
+          Tappable(
+            color: Colors.transparent,
+            borderRadius: 15,
+            onTap: () async {
+              // Always ensure that the current widget.wallet appears in the list!
+
+              Set<String> uniqueCurrencies = {widget.wallet?.currency ?? ""};
+              List<TransactionWallet> duplicateCurrencyWallets = [];
+
+              for (TransactionWallet wallet
+                  in Provider.of<AllWallets>(context, listen: false).list) {
+                if (!uniqueCurrencies.add(wallet.currency ?? "")) {
+                  duplicateCurrencyWallets.add(wallet);
+                }
+              }
+
+              duplicateCurrencyWallets
+                  .removeWhere((w) => w.walletPk == widget.wallet?.walletPk);
+
+              dynamic result = await selectWalletPopup(
+                context,
+                removeWalletPks: duplicateCurrencyWallets
+                    .map((wallet) => wallet.walletPk)
+                    .toList(),
+                title: "select-currency".tr(),
+                selectedWallet: walletForCurrency,
+                allowEditWallet: false,
+                currencyOnly: true,
+              );
+              if (result is TransactionWallet)
+                setState(() {
+                  walletForCurrency = result;
+                });
+            },
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 7, horizontal: 11),
+              child: AnimatedSizeSwitcher(
+                clipBehavior: Clip.none,
+                child: TextFont(
+                  key: ValueKey(enteredAmount.toString() +
+                      (walletForCurrency?.currency ?? "")),
+                  autoSizeText: true,
+                  maxLines: 1,
+                  minFontSize: 16,
+                  text: convertToMoney(
+                    Provider.of<AllWallets>(context),
+                    enteredAmount
+                        .abs(), //We flip the arrow instead of showing negative
+                    addCurrencyName: true,
+                    currencyKey: walletForCurrency?.currency ?? null,
+                  ),
+                  textAlign: TextAlign.center,
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-              textAlign: TextAlign.center,
-              fontSize: 30,
-              fontWeight: FontWeight.bold,
             ),
           ),
-          SizedBox(height: 10),
+          SizedBox(height: 3),
           SelectAmount(
             // extraWidgetAboveNumbers: SettingsContainerSwitch(
             //   title: "withdraw-amount".tr(),
@@ -1406,6 +1455,16 @@ class _TransferBalancePopupState extends State<TransferBalancePopup> {
                       ? "select-account".tr()
                       : "transfer-amount".tr(),
                   onTap: () async {
+                    AllWallets allWallets =
+                        Provider.of<AllWallets>(context, listen: false);
+
+                    // Convert the entered amount to the primary currency, then create transactions
+                    if (walletForCurrency != null) {
+                      enteredAmount = enteredAmount *
+                          amountRatioToPrimaryCurrencyGivenPk(
+                              allWallets, walletForCurrency!.walletPk);
+                    }
+
                     TransactionWallet walletFrom = this.walletFrom ??
                         Provider.of<AllWallets>(context, listen: false)
                             .indexedByPk[appStateSettings["selectedWalletPk"]]!;
@@ -1429,9 +1488,6 @@ class _TransferBalancePopupState extends State<TransferBalancePopup> {
 
                     String note =
                         "transferred-balance".tr() + "\n" + transferString;
-
-                    AllWallets allWallets =
-                        Provider.of<AllWallets>(context, listen: false);
 
                     // Want these times to be the same so we know the pairing of balance corrections
                     DateTime selectedDateTimeSetToNow =

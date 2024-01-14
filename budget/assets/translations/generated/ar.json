@@ -1031,5 +1031,8 @@
   "savings-budget-description-1": "تتبع دخلك وميزانيتك مدخراتك",
   "expense-budget-description-1": "تتبع نفقاتك وميزانيتك إنفاقك",
   "end-date-reached": "تم الوصول إلى تاريخ الانتهاء",
-  "over": "أكثر من"
+  "over": "أكثر من",
+  "clock-format": "تنسيق الساعة",
+  "24-hour": "24 ساعة",
+  "12-hour": "12 ساعة"
 }

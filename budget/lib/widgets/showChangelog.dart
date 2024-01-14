@@ -26,6 +26,13 @@ import 'listItem.dart';
 
 String getChangelogString() {
   return """
+    < 5.1.8
+    12/24 hour clock format setting
+    Custom currency for transfers (tap the transfer amount to change the currency)
+    When full screen, moved notifications to settings page
+    After clearing title/note filter, the filter will be removed
+    If no room in long term loan or goal total, extra information hidden
+    Fixed initial touch unfocus when entering transaction search page
     < 5.1.7
     Overspent/over saved text for budgets displays amount total information of the current period
     Fixed rerender lag when opening transaction on search page

@@ -1031,5 +1031,8 @@
   "savings-budget-description-1": "Jejaki pendapatan dan anggaran simpanan anda",
   "expense-budget-description-1": "Jejaki perbelanjaan dan anggaran perbelanjaan anda",
   "end-date-reached": "Tarikh akhir dicapai",
-  "over": "lebih daripada"
+  "over": "lebih daripada",
+  "clock-format": "Format Jam",
+  "24-hour": "24 jam",
+  "12-hour": "12 jam"
 }
