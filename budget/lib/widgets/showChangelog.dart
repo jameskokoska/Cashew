@@ -33,6 +33,7 @@ String getChangelogString() {
     Widget background opacity (A)
     More category icons
     Fixed sidebar clock not displaying time in 24 hour mode
+    Date and time picker follows set color theme type 
     < 5.1.8
     Significantly improved associated title searching
     Search category and subcategory when entering title
