@@ -31,7 +31,7 @@ class _SliderSelectorState extends State<SliderSelector> {
       max: widget.max,
       value: _currentSliderValue,
       divisions: widget.divisions,
-      label: _currentSliderValue.toStringAsFixed(1).toString(),
+      label: _currentSliderValue.toStringAsFixed(2).toString(),
       onChanged: (double value) {
         widget.onChange(value);
         setState(() {

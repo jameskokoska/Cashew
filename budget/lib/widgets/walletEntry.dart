@@ -1,10 +1,15 @@
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
+import 'package:budget/main.dart';
 import 'package:budget/pages/addWalletPage.dart';
+import 'package:budget/pages/homePage/homePageWalletSwitcher.dart';
+import 'package:budget/pages/transactionFilters.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/animatedExpanded.dart';
 import 'package:budget/widgets/fadeIn.dart';
+import 'package:budget/widgets/navigationFramework.dart';
+import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openContainerNavigation.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/tappable.dart';
@@ -152,21 +157,38 @@ class WalletEntry extends StatelessWidget {
 }
 
 class WalletEntryRow extends StatelessWidget {
-  const WalletEntryRow(
-      {super.key, required this.walletWithDetails, required this.selected});
+  const WalletEntryRow({
+    super.key,
+    required this.walletWithDetails,
+    required this.selected,
+    this.isCurrencyRow = false,
+  });
   final WalletWithDetails walletWithDetails;
   final bool selected;
+  final bool isCurrencyRow;
 
   @override
   Widget build(BuildContext context) {
     return OpenContainerNavigation(
       borderRadius: 0,
-      openPage:
-          WatchedWalletDetailsPage(walletPk: walletWithDetails.wallet.walletPk),
+      openPage: isCurrencyRow
+          ? WalletDetailsPage(
+              wallet: null,
+              initialSearchFilters: SearchFilters(
+                walletPks: Provider.of<AllWallets>(context)
+                    .list
+                    .where((wallet) =>
+                        wallet.currency == walletWithDetails.wallet.currency)
+                    .map((e) => e.walletPk)
+                    .toList(),
+              ),
+            )
+          : WatchedWalletDetailsPage(
+              walletPk: walletWithDetails.wallet.walletPk),
       closedColor: getColor(context, "lightDarkAccentHeavyLight"),
       button: (openContainer) {
         return Tappable(
-          color: getColor(context, "lightDarkAccentHeavyLight"),
+          color: Colors.transparent,
           borderRadius: 0,
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
@@ -221,7 +243,11 @@ class WalletEntryRow extends StatelessWidget {
                               left: 10,
                             ),
                             child: TextFont(
-                              text: walletWithDetails.wallet.name,
+                              text: isCurrencyRow
+                                  ? (walletWithDetails.wallet.currency ?? "")
+                                      .toString()
+                                      .allCaps
+                                  : walletWithDetails.wallet.name,
                               fontWeight: FontWeight.bold,
                               fontSize: 18,
                             ),
@@ -257,19 +283,32 @@ class WalletEntryRow extends StatelessWidget {
             ),
           ),
           onTap: () async {
-            if (selected) {
+            if (selected || isCurrencyRow) {
               openContainer();
             } else {
               setPrimaryWallet(walletWithDetails.wallet.walletPk);
             }
           },
-          onLongPress: () {
-            pushRoute(
+          onLongPress: () async {
+            if (isCurrencyRow) {
+              await openBottomSheet(
+                context,
+                EditHomePagePinnedWalletsPopup(
+                  homePageWidgetDisplay: HomePageWidgetDisplay.WalletList,
+                  showCyclePicker: true,
+                ),
+                useCustomController: true,
+              );
+              homePageStateKey.currentState?.refreshState();
+            } else {
+              pushRoute(
                 context,
                 AddWalletPage(
                   wallet: walletWithDetails.wallet,
                   routesToPopAfterDelete: RoutesToPopAfterDelete.All,
-                ));
+                ),
+              );
+            }
           },
         );
       },
@@ -280,5 +319,6 @@ class WalletEntryRow extends StatelessWidget {
 // set selectedWallet, update selectedWallet
 Future<bool> setPrimaryWallet(String walletPk) async {
   await updateSettings("selectedWalletPk", walletPk, updateGlobalState: true);
+  homePageStateKey.currentState?.refreshState();
   return true;
 }

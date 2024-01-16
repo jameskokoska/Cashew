@@ -1034,5 +1034,9 @@
   "over": "over",
   "clock-format": "Clock Format",
   "24-hour": "24 Hour",
-  "12-hour": "12 Hour"
+  "12-hour": "12 Hour",
+  "widget-theme": "Widget Theme",
+  "widget-background-opacity": "Background Opacity",
+  "currency-total": "Currency Total",
+  "currency-total-description": "List all account currency totals"
 }

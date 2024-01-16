@@ -47,6 +47,7 @@ import 'package:home_widget/home_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:budget/pages/addWalletPage.dart';
 import 'package:budget/widgets/util/checkWidgetLaunch.dart';
+import 'package:flutter/foundation.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({
@@ -442,6 +443,7 @@ class _HomePageRatingBoxState extends State<HomePageRatingBox> {
 
   @override
   Widget build(BuildContext context) {
+    if (kIsWeb) return SizedBox.shrink();
     return AnimatedSizeSwitcher(
       child: hidden
           ? Container(

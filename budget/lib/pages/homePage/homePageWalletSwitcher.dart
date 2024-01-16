@@ -12,6 +12,7 @@ import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/framework/popupFramework.dart';
 import 'package:budget/widgets/periodCyclePicker.dart';
+import 'package:budget/widgets/settingsContainers.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/util/keepAliveClientMixin.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
@@ -213,6 +214,29 @@ class EditHomePagePinnedWalletsPopup extends StatelessWidget {
                     bottomSheetControllerGlobalCustomAssigned?.snapToExtent(0);
                   });
                 },
+              ),
+            if (homePageWidgetDisplay == HomePageWidgetDisplay.WalletList &&
+                Provider.of<AllWallets>(context).allContainSameCurrency() ==
+                    false &&
+                Provider.of<AllWallets>(context)
+                        .containsMultipleAccountsWithSameCurrency() ==
+                    true)
+              HorizontalBreakAbove(
+                enabled: true,
+                child: SettingsContainerSwitch(
+                  enableBorderRadius: true,
+                  title: "currency-total".tr(),
+                  description: "currency-total-description".tr(),
+                  onSwitched: (value) {
+                    updateSettings("walletsListCurrencyBreakdown", value,
+                        updateGlobalState: false, pagesNeedingRefresh: [1]);
+                  },
+                  initialValue:
+                      appStateSettings["walletsListCurrencyBreakdown"],
+                  icon: appStateSettings["outlinedIcons"]
+                      ? Icons.view_list_outlined
+                      : Icons.view_list_rounded,
+                ),
               ),
             // if (showCyclePicker &&
             //         homePageWidgetDisplay ==

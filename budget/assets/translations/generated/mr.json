@@ -1034,5 +1034,9 @@
   "over": "पेक्षा जास्त",
   "clock-format": "घड्याळ स्वरूप",
   "24-hour": "24 तास",
-  "12-hour": "12 तास"
+  "12-hour": "12 तास",
+  "widget-theme": "विजेट थीम",
+  "widget-background-opacity": "पार्श्वभूमी अस्पष्टता",
+  "currency-total": "चलन एकूण",
+  "currency-total-description": "सर्व खाते चलन बेरीजची यादी करा"
 }

@@ -1034,5 +1034,9 @@
   "over": "mer än",
   "clock-format": "Klockformat",
   "24-hour": "24 timmar",
-  "12-hour": "12 timmar"
+  "12-hour": "12 timmar",
+  "widget-theme": "Widget tema",
+  "widget-background-opacity": "Bakgrundspacitet",
+  "currency-total": "Valuta total",
+  "currency-total-description": "Lista alla kontonvaluta totaler"
 }

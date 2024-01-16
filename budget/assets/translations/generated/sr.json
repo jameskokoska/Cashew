@@ -1034,5 +1034,9 @@
   "over": "више од",
   "clock-format": "Формат сата",
   "24-hour": "24 сата",
-  "12-hour": "12 сати"
+  "12-hour": "12 сати",
+  "widget-theme": "Тема виџета",
+  "widget-background-opacity": "Опацити позадинских спорова",
+  "currency-total": "Укупно валуте",
+  "currency-total-description": "Наведите све укупне вредности валуте рачуна"
 }

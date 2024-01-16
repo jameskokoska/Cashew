@@ -427,8 +427,74 @@ Color getBottomNavbarBackgroundColor({
   }
 }
 
+// For Android widget hex color code conversion
 String colorToHex(Color color) {
   Color opaqueColor = color.withAlpha(255);
   String hexString = opaqueColor.value.toRadixString(16).padLeft(6, '0');
   return "#" + hexString.substring(2);
 }
+
+ThemeData lightTheme = ThemeData(
+  pageTransitionsTheme: PageTransitionsTheme(builders: {
+    // the page route animation is set in pushRoute() - functions.dart
+    TargetPlatform.android: appStateSettings["iOSNavigation"]
+        ? CupertinoPageTransitionsBuilder()
+        : ZoomPageTransitionsBuilder(),
+    TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+  }),
+  fontFamily: appStateSettings["font"],
+  fontFamilyFallback: ['Inter'],
+  colorScheme: getColorScheme(Brightness.light),
+  useMaterial3: true,
+  applyElevationOverlayColor: false,
+  typography: Typography.material2014(),
+  canvasColor: appStateSettings["materialYou"]
+      ? lightenPastel(getSettingConstants(appStateSettings)["accentColor"],
+          amount: 0.91)
+      : Colors.white,
+  appBarTheme: AppBarTheme(
+    systemOverlayStyle: getSystemUiOverlayStyle(Brightness.light),
+  ),
+  splashColor: appStateSettings["materialYou"]
+      ? darkenPastel(
+              lightenPastel(
+                  getSettingConstants(appStateSettings)["accentColor"],
+                  amount: 0.8),
+              amount: 0.2)
+          .withOpacity(0.5)
+      : null,
+  extensions: <ThemeExtension<dynamic>>[appColorsLight],
+);
+
+ThemeData darkTheme = ThemeData(
+  pageTransitionsTheme: PageTransitionsTheme(builders: {
+    // the page route animation is set in pushRoute() - functions.dart
+    TargetPlatform.android: appStateSettings["iOSNavigation"]
+        ? CupertinoPageTransitionsBuilder()
+        : ZoomPageTransitionsBuilder(),
+    TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+  }),
+  fontFamily: appStateSettings["font"],
+  fontFamilyFallback: ['Inter'],
+  colorScheme: getColorScheme(Brightness.dark),
+  useMaterial3: true,
+  typography: Typography.material2014(),
+  canvasColor: appStateSettings["materialYou"]
+      ? darkenPastel(getSettingConstants(appStateSettings)["accentColor"],
+          amount: 0.92)
+      : Colors.black,
+  appBarTheme: AppBarTheme(
+    systemOverlayStyle: getSystemUiOverlayStyle(Brightness.dark),
+  ),
+  splashColor: getPlatform() == PlatformOS.isIOS
+      ? Colors.transparent
+      : appStateSettings["materialYou"]
+          ? darkenPastel(
+                  lightenPastel(
+                      getSettingConstants(appStateSettings)["accentColor"],
+                      amount: 0.86),
+                  amount: 0.1)
+              .withOpacity(0.2)
+          : null,
+  extensions: <ThemeExtension<dynamic>>[appColorsDark],
+);

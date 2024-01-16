@@ -1034,5 +1034,9 @@
   "over": "più di",
   "clock-format": "Formato dell'orologio",
   "24-hour": "24 ore",
-  "12-hour": "12 ore"
+  "12-hour": "12 ore",
+  "widget-theme": "Tema del widget",
+  "widget-background-opacity": "Opacità di fondo",
+  "currency-total": "Totale valuta",
+  "currency-total-description": "Elenca tutti i totali della valuta dell'account"
 }

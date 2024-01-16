@@ -17,6 +17,7 @@ import 'package:budget/pages/upcomingOverdueTransactionsPage.dart';
 import 'package:budget/struct/currencyFunctions.dart';
 import 'package:budget/struct/languageMap.dart';
 import 'package:budget/struct/navBarIconsData.dart';
+import 'package:budget/widgets/amountRangeSlider.dart';
 import 'package:budget/widgets/animatedExpanded.dart';
 import 'package:budget/widgets/bottomNavBar.dart';
 import 'package:budget/widgets/dropdownSelect.dart';
@@ -47,6 +48,7 @@ import 'package:budget/pages/walletDetailsPage.dart';
 import 'package:budget/struct/initializeBiometrics.dart';
 import 'package:budget/struct/initializeNotifications.dart';
 import 'package:budget/struct/upcomingTransactionsFunctions.dart';
+import 'package:budget/widgets/sliderSelector.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/tappableTextEntry.dart';
 import 'package:budget/widgets/textWidgets.dart';
@@ -490,7 +492,7 @@ class SettingsPageContent extends StatelessWidget {
                   ? Icons.dark_mode_outlined
                   : Icons.dark_mode_rounded,
           initial: appStateSettings["theme"].toString(),
-          items: ["light", "dark", "system"],
+          items: ["system", "light", "dark"],
           onChanged: (value) async {
             await updateSettings("theme", value, updateGlobalState: true);
             updateWidgetColorsAndText(context);
@@ -656,16 +658,93 @@ class MoreOptionsPagePreferences extends StatelessWidget {
         SettingsHeader(title: "titles".tr()),
         AskForTitlesToggle(),
         AutoTitlesToggle(),
-        if (getPlatform(ignoreEmulation: true) == PlatformOS.isAndroid)
-          SettingsHeader(title: "widgets".tr()),
-        if (getPlatform(ignoreEmulation: true) == PlatformOS.isAndroid)
-          NetWorthWidgetSetting(),
+        WidgetSettings(),
         SettingsHeader(title: "formatting".tr()),
         NumberFormattingSetting(),
         Time24HourFormatSetting(),
         ExtraZerosButtonSetting(),
       ],
     );
+  }
+}
+
+class WidgetSettings extends StatelessWidget {
+  const WidgetSettings({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    if (getPlatform(ignoreEmulation: true) != PlatformOS.isAndroid)
+      return SizedBox.shrink();
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SettingsHeader(title: "widgets".tr()),
+        NetWorthWidgetSetting(),
+        SettingsContainerDropdown(
+          title: "widget-theme".tr(),
+          icon: appStateSettings["outlinedIcons"]
+              ? Icons.contrast_outlined
+              : Icons.contrast_rounded,
+          initial: appStateSettings["widgetTheme"].toString(),
+          items: ["system", "light", "dark"],
+          onChanged: (value) async {
+            await updateSettings("widgetTheme", value,
+                updateGlobalState: false);
+            updateWidgetColorsAndText(context);
+          },
+          getLabel: (item) {
+            return item.tr();
+          },
+        ),
+        SettingsContainer(
+          title: "widget-background-opacity".tr(),
+          icon: appStateSettings["outlinedIcons"]
+              ? Icons.blur_on_outlined
+              : Icons.blur_on_rounded,
+          descriptionWidget: Container(
+            height: 28,
+            padding: EdgeInsets.only(right: 10),
+            child: SliderTheme(
+              data: SliderThemeData(
+                trackShape: CustomTrackShape(),
+                thumbShape: RoundSliderThumbShape(enabledThumbRadius: 9),
+              ),
+              child: SliderSelector(
+                min: 0,
+                max: 1,
+                initialValue:
+                    (appStateSettings["widgetOpacity"] ?? 1).toDouble(),
+                onChange: (value) {},
+                divisions: 20,
+                onFinished: (value) {
+                  updateSettings("widgetOpacity", value,
+                      updateGlobalState: false);
+                  updateWidgetColorsAndText(context);
+                },
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class CustomTrackShape extends RoundedRectSliderTrackShape {
+  @override
+  Rect getPreferredRect({
+    required RenderBox parentBox,
+    Offset offset = Offset.zero,
+    required SliderThemeData sliderTheme,
+    bool isEnabled = false,
+    bool isDiscrete = false,
+  }) {
+    final trackHeight = sliderTheme.trackHeight;
+    final trackLeft = offset.dx;
+    final trackTop =
+        offset.dy + (parentBox.size.height - (trackHeight ?? 0)) / 2;
+    final trackWidth = parentBox.size.width;
+    return Rect.fromLTWH(trackLeft, trackTop, trackWidth, (trackHeight ?? 0));
   }
 }
 

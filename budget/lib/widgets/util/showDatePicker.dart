@@ -18,10 +18,10 @@ Future<DateTime?> showCustomDatePicker(
     initialEntryMode: initialEntryMode,
     firstDate: DateTime(DateTime.now().year - 1000),
     lastDate: DateTime(DateTime.now().year + 1000),
-    builder: (BuildContext context2, Widget? child) {
+    builder: (BuildContext context, Widget? child) {
       return Theme(
         data: Theme.of(context).copyWith(
-          useMaterial3: getPlatform() != PlatformOS.isIOS,
+          useMaterial3: appStateSettings["materialYou"],
           datePickerTheme: DatePickerTheme.of(context).copyWith(
             headerHeadlineStyle: const TextStyle(
               fontSize: 26,
@@ -48,7 +48,7 @@ Future<DateTimeRange?> showCustomDateRangePicker(
     builder: (BuildContext context, Widget? child) {
       return Theme(
         data: Theme.of(context).copyWith(
-          useMaterial3: getPlatform() != PlatformOS.isIOS,
+          useMaterial3: appStateSettings["materialYou"],
           datePickerTheme: DatePickerTheme.of(context).copyWith(
             headerHeadlineStyle: const TextStyle(
               fontSize: 18,

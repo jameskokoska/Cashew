@@ -1034,5 +1034,9 @@
   "over": "więcej niż",
   "clock-format": "Format zegara",
   "24-hour": "24 godziny",
-  "12-hour": "12 godzin"
+  "12-hour": "12 godzin",
+  "widget-theme": "Motyw widżetu",
+  "widget-background-opacity": "Krycie tła",
+  "currency-total": "Całkowita waluta",
+  "currency-total-description": "Wymień wszystkie sumy walutowe konta"
 }

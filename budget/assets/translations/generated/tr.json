@@ -1034,5 +1034,9 @@
   "over": "bundan fazla",
   "clock-format": "Saat biçimi",
   "24-hour": "24 saat",
-  "12-hour": "12 saat"
+  "12-hour": "12 saat",
+  "widget-theme": "Widget teması",
+  "widget-background-opacity": "Arka plan opaklığı",
+  "currency-total": "Para birimi toplamı",
+  "currency-total-description": "Tüm hesap para toplamlarını listeleyin"
 }

@@ -1034,5 +1034,9 @@
   "over": "vượt mức",
   "clock-format": "Định dạng đồng hồ",
   "24-hour": "24 giờ",
-  "12-hour": "12 giờ"
+  "12-hour": "12 giờ",
+  "widget-theme": "Chủ đề Widget",
+  "widget-background-opacity": "Độ mờ nền",
+  "currency-total": "Tổng số tiền tệ",
+  "currency-total-description": "Liệt kê tất cả các tổng số tiền tệ tài khoản"
 }

@@ -1034,5 +1034,9 @@
   "over": "több mint",
   "clock-format": "Óra formátum",
   "24-hour": "24 óra",
-  "12-hour": "12 óra"
+  "12-hour": "12 óra",
+  "widget-theme": "Widget téma",
+  "widget-background-opacity": "Háttérképesség",
+  "currency-total": "Valuta teljes",
+  "currency-total-description": "Sorolja fel az összes számla valuta összegét"
 }

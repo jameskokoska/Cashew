@@ -1034,5 +1034,9 @@
   "over": "plus que",
   "clock-format": "Format d'horloge",
   "24-hour": "24 heures",
-  "12-hour": "12 heures"
+  "12-hour": "12 heures",
+  "widget-theme": "Thème du widget",
+  "widget-background-opacity": "Opacité de fond",
+  "currency-total": "Total de devises",
+  "currency-total-description": "Énumérez tous les totaux de devises du compte"
 }

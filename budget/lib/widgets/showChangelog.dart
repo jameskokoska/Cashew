@@ -26,6 +26,13 @@ import 'listItem.dart';
 
 String getChangelogString() {
   return """
+    < 5.1.9
+    Reorder theme mode settings, system is always first
+    If multiple accounts with different currencies, can enable currency total summary in accounts list homepage widget
+    Widget light and dark mode (A)
+    Widget background opacity (A)
+    More category icons
+    Fixed sidebar clock not displaying time in 24 hour mode
     < 5.1.8
     Significantly improved associated title searching
     Search category and subcategory when entering title
@@ -2275,6 +2282,10 @@ List<Widget>? getChangelogPointsWidgets(BuildContext context,
       if (getPlatform() != PlatformOS.isIOS) {
         string = string.replaceAll("(A)", "Android");
         string = string.replaceAll("(i)", "iOS");
+      }
+      // Skip android changes on iOS
+      if (getPlatform() == PlatformOS.isIOS && string.contains(("(A)"))) {
+        continue;
       }
       if (string.startsWith("< ")) {
         if (forceShow) {

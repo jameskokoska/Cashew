@@ -34,6 +34,11 @@ class NetWorthWidgetProvider : HomeWidgetProvider() {
                 }catch (e: Exception){}
 
                 try {
+                  val alpha = Integer.parseInt(widgetData.getString("widgetAlpha", null)?: "255")
+                  setInt(R.id.widget_background, "setImageAlpha",  alpha);
+                }catch (e: Exception){}
+
+                try {
                   setInt(R.id.net_worth_title, "setTextColor",  android.graphics.Color.parseColor(widgetData.getString("widgetColorText", null)
                   ?: "#FFFFFF"))
                   setInt(R.id.net_worth_amount, "setTextColor",  android.graphics.Color.parseColor(widgetData.getString("widgetColorText", null)

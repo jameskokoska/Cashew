@@ -114,7 +114,10 @@ bool categoryIsSelectedOnAllSpending = false;
 
 class WalletDetailsPage extends StatefulWidget {
   final TransactionWallet? wallet;
-  const WalletDetailsPage({required this.wallet, Key? key}) : super(key: key);
+  final SearchFilters? initialSearchFilters;
+  const WalletDetailsPage(
+      {required this.wallet, this.initialSearchFilters, Key? key})
+      : super(key: key);
 
   @override
   State<WalletDetailsPage> createState() => _WalletDetailsPageState();
@@ -146,7 +149,9 @@ class _WalletDetailsPageState extends State<WalletDetailsPage>
   void initState() {
     _tabController.addListener(onTabController);
     searchFilters = SearchFilters();
-    if (widget.wallet == null) {
+    if (widget.initialSearchFilters != null) {
+      searchFilters = widget.initialSearchFilters;
+    } else if (widget.wallet == null) {
       allSpendingHistoryDismissedPremium = false;
       searchFilters?.loadFilterString(
         appStateSettings["allSpendingSetFiltersString"],

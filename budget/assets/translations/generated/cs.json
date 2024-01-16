@@ -1034,5 +1034,9 @@
   "over": "více než",
   "clock-format": "Formát hodin",
   "24-hour": "24 hodin",
-  "12-hour": "12 hodin"
+  "12-hour": "12 hodin",
+  "widget-theme": "Téma widgetu",
+  "widget-background-opacity": "Neprůhlednost pozadí",
+  "currency-total": "Měna Celkem",
+  "currency-total-description": "Seznam součtů měny všech účtů"
 }

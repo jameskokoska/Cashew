@@ -1034,5 +1034,9 @@
   "over": "اس سے زیادہ",
   "clock-format": "گھڑی کی شکل",
   "24-hour": "24 گھنٹہ",
-  "12-hour": "12 گھنٹہ"
+  "12-hour": "12 گھنٹہ",
+  "widget-theme": "ویجیٹ تھیم",
+  "widget-background-opacity": "پس منظر کی دھندلاپن",
+  "currency-total": "کرنسی کل",
+  "currency-total-description": "تمام اکاؤنٹ کرنسی کے مجموعی فہرست بنائیں"
 }

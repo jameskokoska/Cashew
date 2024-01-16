@@ -1034,5 +1034,9 @@
   "over": "Higit pa sa",
   "clock-format": "Format ng orasan",
   "24-hour": "24 oras na",
-  "12-hour": "12 oras"
+  "12-hour": "12 oras",
+  "widget-theme": "Tema ng widget",
+  "widget-background-opacity": "Opacity ng background",
+  "currency-total": "Kabuuan ng pera",
+  "currency-total-description": "Ilista ang lahat ng kabuuan ng pera ng account"
 }

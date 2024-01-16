@@ -1034,5 +1034,9 @@
   "over": "больше, чем",
   "clock-format": "Формат часов",
   "24-hour": "24 часа",
-  "12-hour": "12 часов"
+  "12-hour": "12 часов",
+  "widget-theme": "Тема виджета",
+  "widget-background-opacity": "Фоновая непрозрачность",
+  "currency-total": "Всего валюта",
+  "currency-total-description": "Перечислите все общие валюты учетной записи"
 }

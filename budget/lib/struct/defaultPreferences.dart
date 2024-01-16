@@ -26,6 +26,8 @@ Future<Map<String, dynamic>> getDefaultPreferences() async {
     "selectedSubscriptionType": 0,
     "accentColor": toHexString(Color(0xFF1B447A)),
     "accentSystemColor": await systemColorByDefault(),
+    "widgetOpacity": 1,
+    "widgetTheme": "system", //system, light, dark
     // FullScreen is added if the section has its own preference when full screen (double column)
     "showWalletSwitcher": true,
     "showWalletSwitcherFullScreen": true,
@@ -142,6 +144,7 @@ Future<Map<String, dynamic>> getDefaultPreferences() async {
     "lineGraphStartDate": DateTime.now().toString(),
     "pieChartTotal": "all", // all, outgoing, incoming
     "netWorthAllWallets": true,
+    "walletsListCurrencyBreakdown": false,
     "allSpendingSummaryAllWallets": true,
     "showPastSpendingTrajectory": false,
     "lastSynced": null,

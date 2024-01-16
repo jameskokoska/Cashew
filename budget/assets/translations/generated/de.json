@@ -1034,5 +1034,9 @@
   "over": "mehr als",
   "clock-format": "Taktformat",
   "24-hour": "24 Stunden",
-  "12-hour": "12 Stunden"
+  "12-hour": "12 Stunden",
+  "widget-theme": "Widget -Thema",
+  "widget-background-opacity": "Hintergrundliege",
+  "currency-total": "Währung Gesamt",
+  "currency-total-description": "Listen Sie alle Kontosummen auf den Kontowährung auf"
 }

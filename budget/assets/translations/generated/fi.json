@@ -1034,5 +1034,9 @@
   "over": "enemmän kuin",
   "clock-format": "Kellonmuoto",
   "24-hour": "24 tuntia",
-  "12-hour": "12 tunti"
+  "12-hour": "12 tunti",
+  "widget-theme": "Widget -teema",
+  "widget-background-opacity": "Taustan opasiteetti",
+  "currency-total": "Valuutan kokonaismäärä",
+  "currency-total-description": "Luettele kaikki tilin valuutan kokonaismäärät"
 }

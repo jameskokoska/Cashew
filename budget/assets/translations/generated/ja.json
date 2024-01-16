@@ -1034,5 +1034,9 @@
   "over": "より多い",
   "clock-format": "クロック形式",
   "24-hour": "24時間",
-  "12-hour": "12時間"
+  "12-hour": "12時間",
+  "widget-theme": "ウィジェットテーマ",
+  "widget-background-opacity": "背景の不透明度",
+  "currency-total": "通貨合計",
+  "currency-total-description": "すべてのアカウント通貨の合計をリストします"
 }

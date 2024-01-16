@@ -1034,5 +1034,9 @@
   "over": "มากกว่า",
   "clock-format": "รูปแบบนาฬิกา",
   "24-hour": "24 ชั่วโมง",
-  "12-hour": "12 ชั่วโมง"
+  "12-hour": "12 ชั่วโมง",
+  "widget-theme": "ธีมวิดเจ็ต",
+  "widget-background-opacity": "ความทึบแสง",
+  "currency-total": "รวมสกุลเงิน",
+  "currency-total-description": "แสดงรายการสกุลเงินทั้งหมดบัญชีทั้งหมด"
 }

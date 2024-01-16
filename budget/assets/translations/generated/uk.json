@@ -1034,5 +1034,9 @@
   "over": "більше ніж",
   "clock-format": "Формат годинника",
   "24-hour": "24 години",
-  "12-hour": "12 годин"
+  "12-hour": "12 годин",
+  "widget-theme": "Тема віджетів",
+  "widget-background-opacity": "Фонова непрозорість",
+  "currency-total": "Всього валюти",
+  "currency-total-description": "Перелічіть усі підсумки валюти рахунку"
 }

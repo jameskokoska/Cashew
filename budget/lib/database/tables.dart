@@ -578,6 +578,26 @@ class AllWallets {
     final String? firstCurrency = list.first.currency;
     return list.every((wallet) => wallet.currency == firstCurrency);
   }
+
+  bool containsMultipleAccountsWithSameCurrency() {
+    if (list.isEmpty) {
+      return false;
+    }
+
+    final Set<String> uniqueCurrencies = {};
+
+    for (TransactionWallet wallet in list) {
+      final String? currency = wallet.currency;
+
+      if (uniqueCurrencies.contains(currency)) {
+        return true;
+      } else {
+        uniqueCurrencies.add(currency!);
+      }
+    }
+
+    return false;
+  }
 }
 
 class CategoryWithTotal {
@@ -1914,7 +1934,7 @@ class FinanceDatabase extends _$FinanceDatabase {
 
     List<TransactionAssociatedTitleWithCategory> list =
         (await (select(associatedTitles).join([
-      leftOuterJoin(categories,
+      innerJoin(categories,
           categories.categoryPk.equalsExp(associatedTitles.categoryFk)),
     ])
                   ..where(associatedTitles.title
@@ -2199,7 +2219,9 @@ class FinanceDatabase extends _$FinanceDatabase {
   }
 
   Stream<List<WalletWithDetails>> watchAllWalletsWithDetails(
-      {String? searchFor, HomePageWidgetDisplay? homePageWidgetDisplay}) {
+      {String? searchFor,
+      HomePageWidgetDisplay? homePageWidgetDisplay,
+      bool mergeLikeCurrencies = false}) {
     JoinedSelectStatement<HasResultSet, dynamic> query;
     final totalCount = transactions.transactionPk.count();
     final totalSpent =
@@ -2228,7 +2250,7 @@ class FinanceDatabase extends _$FinanceDatabase {
       //             : homePageWidgetDisplay == HomePageWidgetDisplay.WalletList
       //                 ? "WalletsList"
       //                 : ""))
-      ..groupBy([wallets.walletPk])
+      ..groupBy(mergeLikeCurrencies ? [wallets.currency] : [wallets.walletPk])
       ..addColumns([totalCount, totalSpent]);
 
     return query.watch().map((rows) => rows.map((row) {
@@ -2599,7 +2621,9 @@ class FinanceDatabase extends _$FinanceDatabase {
   Stream<List<TransactionAssociatedTitleWithCategory>> watchAllAssociatedTitles(
       {String? searchFor, int? limit, int? offset}) {
     return (select(associatedTitles).join([
-      leftOuterJoin(categories,
+      // Inner instead of outer because transaction category is required
+      // If we do an outer join and the title does not have a category, the query will fail
+      innerJoin(categories,
           categories.categoryPk.equalsExp(associatedTitles.categoryFk)),
     ])
           ..where(searchFor == null

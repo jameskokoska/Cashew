@@ -3079,10 +3079,12 @@ class HorizontalBreakAbove extends StatelessWidget {
   const HorizontalBreakAbove({
     required this.child,
     this.enabled = true,
+    this.padding = const EdgeInsets.symmetric(vertical: 10),
     super.key,
   });
   final Widget child;
   final bool enabled;
+  final EdgeInsets padding;
 
   @override
   Widget build(BuildContext context) {
@@ -3090,7 +3092,7 @@ class HorizontalBreakAbove extends StatelessWidget {
     return Column(
       children: [
         // Divider(indent: 10, endIndent: 10),
-        HorizontalBreak(),
+        HorizontalBreak(padding: padding),
         child,
       ],
     );

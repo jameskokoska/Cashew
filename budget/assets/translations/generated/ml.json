@@ -1034,5 +1034,9 @@
   "over": "അതിലും കൂടുതൽ",
   "clock-format": "ക്ലോക്ക് ഫോർമാറ്റ്",
   "24-hour": "24 മണിക്കൂർ",
-  "12-hour": "12 മണിക്കൂർ"
+  "12-hour": "12 മണിക്കൂർ",
+  "widget-theme": "വിജറ്റ് തീം",
+  "widget-background-opacity": "പശ്ചാത്തല അതാര്യത",
+  "currency-total": "കറൻസി ആകെ",
+  "currency-total-description": "എല്ലാ അക്കൗണ്ട് കറൻസി ആകെ പട്ടികപ്പെടുത്തുക"
 }

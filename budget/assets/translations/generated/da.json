@@ -1034,5 +1034,9 @@
   "over": "mere end",
   "clock-format": "Urformat",
   "24-hour": "24 timer",
-  "12-hour": "12 timer"
+  "12-hour": "12 timer",
+  "widget-theme": "Widget -tema",
+  "widget-background-opacity": "Baggrundsopacitet",
+  "currency-total": "Valuta i alt",
+  "currency-total-description": "Liste over alle kontortotaler"
 }

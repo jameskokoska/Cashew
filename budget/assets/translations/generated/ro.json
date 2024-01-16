@@ -1034,5 +1034,9 @@
   "over": "mai mult decât",
   "clock-format": "Formatul ceasului",
   "24-hour": "24 de ore",
-  "12-hour": "12 ore"
+  "12-hour": "12 ore",
+  "widget-theme": "Tema widgetului",
+  "widget-background-opacity": "Opacitate de fond",
+  "currency-total": "Total valutar",
+  "currency-total-description": "Enumerați toate totalul monedei contului"
 }

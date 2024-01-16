@@ -1,3 +1,4 @@
+import 'package:budget/colors.dart';
 import 'package:budget/pages/settingsPage.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/settingsContainers.dart';
@@ -29,6 +30,9 @@ Future<TimeOfDay?> showCustomTimePicker(
               displayLarge: TextStyle(
                 fontSize: 65,
                 fontWeight: FontWeight.w300,
+              ),
+              bodySmall: TextStyle(
+                color: getColor(context, "textLight"),
               ),
             ),
           ),

@@ -1034,5 +1034,9 @@
   "over": "விட",
   "clock-format": "கடிகார வடிவம்",
   "24-hour": "24 மணி நேரம்",
-  "12-hour": "12 மணி நேரம்"
+  "12-hour": "12 மணி நேரம்",
+  "widget-theme": "விட்ஜெட் தீம்",
+  "widget-background-opacity": "பின்னணி ஒளிபுகாநிலை",
+  "currency-total": "நாணய மொத்தம்",
+  "currency-total-description": "அனைத்து கணக்கு நாணய மொத்தங்களையும் பட்டியலிடுங்கள்"
 }

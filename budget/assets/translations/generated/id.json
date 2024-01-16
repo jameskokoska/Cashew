@@ -1034,5 +1034,9 @@
   "over": "lebih dari",
   "clock-format": "Format jam",
   "24-hour": "24 jam",
-  "12-hour": "12 jam"
+  "12-hour": "12 jam",
+  "widget-theme": "Tema widget",
+  "widget-background-opacity": "Opacity latar belakang",
+  "currency-total": "Total mata uang",
+  "currency-total-description": "Sebutkan semua total mata uang akun"
 }

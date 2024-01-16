@@ -1034,5 +1034,9 @@
   "over": "повече от",
   "clock-format": "Формат на часовника",
   "24-hour": "24 часа",
-  "12-hour": "12 часа"
+  "12-hour": "12 часа",
+  "widget-theme": "Тема на джаджа",
+  "widget-background-opacity": "Фон непрозрачност",
+  "currency-total": "Общо валута",
+  "currency-total-description": "Избройте всички суми на валутата на акаунта"
 }

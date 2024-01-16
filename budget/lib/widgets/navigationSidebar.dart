@@ -345,7 +345,8 @@ class SidebarClock extends StatelessWidget {
                               fontSize: 48,
                               fontWeight: FontWeight.bold,
                               // Remove any am/pm indication by substring
-                              text: getWordedTime(null, now)
+                              // Add extra spaces so substring never fails
+                              text: (getWordedTime(null, now) + "      ")
                                   .substring(0, 5)
                                   .trim(),
                             )

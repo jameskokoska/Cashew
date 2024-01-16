@@ -1034,5 +1034,9 @@
   "over": "lebih daripada",
   "clock-format": "Format Jam",
   "24-hour": "24 jam",
-  "12-hour": "12 jam"
+  "12-hour": "12 jam",
+  "widget-theme": "Tema widget",
+  "widget-background-opacity": "Kelegapan latar belakang",
+  "currency-total": "Jumlah mata wang",
+  "currency-total-description": "Senaraikan semua jumlah mata wang akaun"
 }

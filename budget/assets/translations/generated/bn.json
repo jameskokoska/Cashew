@@ -1034,5 +1034,9 @@
   "over": "অধিক",
   "clock-format": "ঘড়ি ফর্ম্যাট",
   "24-hour": "২ 4 ঘণ্টা",
-  "12-hour": "12 ঘন্টা"
+  "12-hour": "12 ঘন্টা",
+  "widget-theme": "উইজেট থিম",
+  "widget-background-opacity": "পটভূমি অস্বচ্ছতা",
+  "currency-total": "মুদ্রা মোট",
+  "currency-total-description": "সমস্ত অ্যাকাউন্ট মুদ্রার মোট তালিকাভুক্ত করুন"
 }

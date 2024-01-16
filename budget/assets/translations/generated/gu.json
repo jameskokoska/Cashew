@@ -1034,5 +1034,9 @@
   "over": "કરતાં વધુ",
   "clock-format": "ઘડિયાળનું બંધારણ",
   "24-hour": "24 કલાક",
-  "12-hour": "12 કલાક"
+  "12-hour": "12 કલાક",
+  "widget-theme": "વિજેટ થીમ",
+  "widget-background-opacity": "પૃષ્ઠભૂમિ",
+  "currency-total": "ચલણ કુલ",
+  "currency-total-description": "બધા ખાતા ચલણની સૂચિ બનાવો"
 }

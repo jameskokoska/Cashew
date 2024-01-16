@@ -150,18 +150,35 @@ class RenderHomePageWidgets extends StatefulWidget {
 Future updateWidgetColorsAndText(BuildContext context) async {
   if (getPlatform(ignoreEmulation: true) != PlatformOS.isAndroid) return;
   await Future.delayed(Duration(milliseconds: 500), () async {
+    double widgetBackgroundOpacity =
+        (double.tryParse((appStateSettings["widgetOpacity"] ?? 1).toString()) ??
+                1)
+            .clamp(0, 1);
+    ThemeData widgetTheme = appStateSettings["widgetTheme"] == "light"
+        ? lightTheme
+        : appStateSettings["widgetTheme"] == "dark"
+            ? darkTheme
+            : Theme.of(context);
+
     await HomeWidget.saveWidgetData<String>('netWorthTitle', "net-worth".tr());
     await HomeWidget.saveWidgetData<String>(
       'widgetColorBackground',
-      colorToHex(Theme.of(context).colorScheme.secondaryContainer),
+      colorToHex(widgetTheme.colorScheme.secondaryContainer),
+    );
+    await HomeWidget.saveWidgetData<String>(
+      'widgetAlpha',
+      widgetTheme.colorScheme.secondaryContainer
+          .withOpacity(widgetBackgroundOpacity)
+          .alpha
+          .toString(),
     );
     await HomeWidget.saveWidgetData<String>(
       'widgetColorPrimary',
-      colorToHex(Theme.of(context).colorScheme.primary),
+      colorToHex(widgetTheme.colorScheme.primary),
     );
     await HomeWidget.saveWidgetData<String>(
       'widgetColorText',
-      colorToHex(Theme.of(context).colorScheme.onSecondaryContainer),
+      colorToHex(widgetTheme.colorScheme.onSecondaryContainer),
     );
     await HomeWidget.updateWidget(
       name: 'NetWorthWidgetProvider',

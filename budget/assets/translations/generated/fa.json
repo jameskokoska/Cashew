@@ -1034,5 +1034,9 @@
   "over": "بیشتر از",
   "clock-format": "قالب ساعت",
   "24-hour": "24 ساعته",
-  "12-hour": "12 ساعته"
+  "12-hour": "12 ساعته",
+  "widget-theme": "تم ویجت",
+  "widget-background-opacity": "کدو",
+  "currency-total": "کل ارز",
+  "currency-total-description": "لیست کلیه ارزهای حساب را لیست کنید"
 }

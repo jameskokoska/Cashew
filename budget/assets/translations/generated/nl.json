@@ -1034,5 +1034,9 @@
   "over": "meer dan",
   "clock-format": "Klokformaat",
   "24-hour": "24 uur",
-  "12-hour": "12 uur"
+  "12-hour": "12 uur",
+  "widget-theme": "Widget -thema",
+  "widget-background-opacity": "Achtergrond Dekking",
+  "currency-total": "Valuta totaal",
+  "currency-total-description": "Maak een lijst van alle totalen van de accountvaluta"
 }

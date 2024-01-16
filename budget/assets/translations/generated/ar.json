@@ -1034,5 +1034,9 @@
   "over": "أكثر من",
   "clock-format": "تنسيق الساعة",
   "24-hour": "24 ساعة",
-  "12-hour": "12 ساعة"
+  "12-hour": "12 ساعة",
+  "widget-theme": "موضوع القطعة",
+  "widget-background-opacity": "عتامة الخلفية",
+  "currency-total": "إجمالي العملة",
+  "currency-total-description": "قائمة جميع إجماليات عملة الحساب"
 }

@@ -1034,5 +1034,9 @@
   "over": "zaidi ya",
   "clock-format": "Fomati ya saa",
   "24-hour": "Saa 24",
-  "12-hour": "Saa 12"
+  "12-hour": "Saa 12",
+  "widget-theme": "Mandhari ya widget",
+  "widget-background-opacity": "Opacity ya nyuma",
+  "currency-total": "Jumla ya sarafu",
+  "currency-total-description": "Orodhesha jumla ya sarafu ya akaunti"
 }

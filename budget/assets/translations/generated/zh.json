@@ -1034,5 +1034,9 @@
   "over": "多于",
   "clock-format": "时钟格式",
   "24-hour": "24小时",
-  "12-hour": "12小时"
+  "12-hour": "12小时",
+  "widget-theme": "小部件主题",
+  "widget-background-opacity": "背景不透明度",
+  "currency-total": "货币总数",
+  "currency-total-description": "列出所有帐户货币总计"
 }

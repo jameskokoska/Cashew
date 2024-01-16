@@ -1034,5 +1034,9 @@
   "over": "περισσότερο από",
   "clock-format": "Μορφή ρολογιού",
   "24-hour": "24ωρο",
-  "12-hour": "12 ώρες"
+  "12-hour": "12 ώρες",
+  "widget-theme": "Θέμα widget",
+  "widget-background-opacity": "Αδιαφάνεια φόντου",
+  "currency-total": "Συνολικά νόμισμα",
+  "currency-total-description": "Καταγράψτε όλα τα σύνολα νομισμάτων λογαριασμού"
 }

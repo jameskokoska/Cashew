@@ -482,6 +482,7 @@ class SettingsContainer extends StatelessWidget {
     this.isWideOutlined,
     this.hasMoreOptionsIcon,
     this.descriptionColor,
+    this.descriptionWidget,
   }) : super(key: key);
 
   final String title;
@@ -500,6 +501,7 @@ class SettingsContainer extends StatelessWidget {
   final bool? isWideOutlined;
   final bool? hasMoreOptionsIcon;
   final Color? descriptionColor;
+  final Widget? descriptionWidget;
 
   @override
   Widget build(BuildContext context) {
@@ -558,7 +560,8 @@ class SettingsContainer extends StatelessWidget {
                                   ),
                                 ),
                           Expanded(
-                            child: description == null
+                            child: description == null &&
+                                    descriptionWidget == null
                                 ? TextFont(
                                     fixParagraphMargin: true,
                                     text: title,
@@ -578,16 +581,23 @@ class SettingsContainer extends StatelessWidget {
                                         fontWeight: FontWeight.bold,
                                         maxLines: 5,
                                       ),
-                                      Container(height: 3),
-                                      AnimatedSizeSwitcher(
-                                        child: TextFont(
-                                          key: ValueKey(description.toString()),
-                                          text: description!,
-                                          fontSize: 14,
-                                          maxLines: 5,
-                                          textColor: descriptionColor,
+                                      if (descriptionWidget != null)
+                                        descriptionWidget!,
+                                      if (description != null)
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(top: 3),
+                                          child: AnimatedSizeSwitcher(
+                                            child: TextFont(
+                                              key: ValueKey(
+                                                  description.toString()),
+                                              text: description ?? "",
+                                              fontSize: 14,
+                                              maxLines: 5,
+                                              textColor: descriptionColor,
+                                            ),
+                                          ),
                                         ),
-                                      ),
                                     ],
                                   ),
                           ),

@@ -24,6 +24,11 @@ class PlusWidgetProvider : HomeWidgetProvider() {
                 }catch (e: Exception){}
 
                 try {
+                  val alpha = Integer.parseInt(widgetData.getString("widgetAlpha", null)?: "255")
+                  setInt(R.id.widget_background, "setImageAlpha",  alpha);
+                }catch (e: Exception){}
+
+                try {
                   setInt(R.id.plus_title, "setTextColor",  android.graphics.Color.parseColor(widgetData.getString("widgetColorText", null)
                   ?: "#FFFFFF"))
                 }catch (e: Exception){}
