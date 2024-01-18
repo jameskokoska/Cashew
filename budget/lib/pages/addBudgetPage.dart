@@ -230,7 +230,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
   }
 
   Future addBudget() async {
-    loadingIndeterminateKey.currentState!.setVisibility(true);
+    loadingIndeterminateKey.currentState?.setVisibility(true);
     Budget createdBudget = await createBudget();
     print("Added budget");
     int result = await database.createOrUpdateBudget(
@@ -257,11 +257,11 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
             onSubmitLabel: "ok".tr(),
           );
         });
-        loadingIndeterminateKey.currentState!.setVisibility(false);
+        loadingIndeterminateKey.currentState?.setVisibility(false);
         return;
       }
     }
-    loadingIndeterminateKey.currentState!.setVisibility(false);
+    loadingIndeterminateKey.currentState?.setVisibility(false);
     if (result == -1 && appStateSettings["sharedBudgets"] == true) {
       openPopup(
         context,

@@ -24,7 +24,7 @@ class AddEmailTemplate extends StatefulWidget {
     required this.messagesList,
     this.scannerTemplate,
   }) : super(key: key);
-  final List<gMail.Message> messagesList;
+  final List<String> messagesList;
   //When a transaction is passed in, we are editing that transaction
   final ScannerTemplate? scannerTemplate;
 
@@ -470,12 +470,12 @@ class _AddEmailTemplateState extends State<AddEmailTemplate> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25),
                     child: Button(
-                        label: "Select Email",
+                        label: "Select Message",
                         onTap: () {
                           openBottomSheet(
                             context,
                             PopupFramework(
-                              title: "Select Email",
+                              title: "Select Message",
                               hasPadding: false,
                               child: EmailsList(
                                 backgroundColor: getColor(context, "white"),

@@ -590,6 +590,17 @@ class SettingsPageContent extends StatelessWidget {
               )
             : SizedBox.shrink(),
 
+        appStateSettings["notificationScanningDebug"] &&
+                getPlatform(ignoreEmulation: true) == PlatformOS.isAndroid
+            ? SettingsContainerOpenPage(
+                title: "Notification Transactions",
+                openPage: AutoTransactionsPageNotifications(),
+                icon: appStateSettings["outlinedIcons"]
+                    ? Icons.edit_notifications_outlined
+                    : Icons.edit_notifications_rounded,
+              )
+            : SizedBox.shrink(),
+
         SettingsContainerOpenPage(
           openPage: BillSplitter(),
           title: "bill-splitter".tr(),
@@ -686,8 +697,9 @@ class WidgetSettings extends StatelessWidget {
               ? Icons.contrast_outlined
               : Icons.contrast_rounded,
           initial: appStateSettings["widgetTheme"].toString(),
-          items: ["system", "light", "dark"],
+          items: ["app", "light", "dark"],
           onChanged: (value) async {
+            if (value == "app") value = "system";
             await updateSettings("widgetTheme", value,
                 updateGlobalState: false);
             updateWidgetColorsAndText(context);

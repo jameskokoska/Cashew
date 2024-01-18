@@ -114,10 +114,10 @@ class _EditBudgetPageState extends State<EditBudgetPage> {
           appStateSettings["sharedBudgets"] == false
               ? SizedBox.shrink()
               : RefreshButton(onTap: () async {
-                  loadingIndeterminateKey.currentState!.setVisibility(true);
+                  loadingIndeterminateKey.currentState?.setVisibility(true);
                   await syncPendingQueueOnServer();
                   await getCloudBudgets();
-                  loadingIndeterminateKey.currentState!.setVisibility(false);
+                  loadingIndeterminateKey.currentState?.setVisibility(false);
                 }),
           IconButton(
             padding: EdgeInsets.all(15),

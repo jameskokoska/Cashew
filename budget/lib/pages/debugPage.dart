@@ -128,36 +128,15 @@ class DebugPage extends StatelessWidget {
         if (getPlatform(ignoreEmulation: true) == PlatformOS.isAndroid)
           SettingsContainerSwitch(
             onSwitched: (value) async {
-              await updateSettings(
-                  "readDismissedNotificationsToCreateTransaction", value,
+              await updateSettings("notificationScanningDebug", value,
                   updateGlobalState: false);
-              if (value == true) {
-                initNotificationScanning();
-              } else {
-                notificationListenerSubscription?.cancel();
-              }
             },
             title: "Notification Transactions",
-            description:
-                "When a notification is dismissed and the app is open, attempt to add a transaction given its information. Works best with GPay.",
-            initialValue: appStateSettings[
-                "readDismissedNotificationsToCreateTransaction"],
+            description: "Still in testing, enables the settings option",
+            initialValue: appStateSettings["notificationScanningDebug"],
             icon: appStateSettings["outlinedIcons"]
                 ? Icons.edit_notifications_outlined
                 : Icons.edit_notifications_rounded,
-          ),
-        if (getPlatform(ignoreEmulation: true) == PlatformOS.isAndroid)
-          TextInput(
-            labelText: "Notification Package Name",
-            initialValue: appStateSettings[
-                "readDismissedNotificationsToCreateTransactionPackageName"],
-            onChanged: (value) {
-              updateSettings(
-                "readDismissedNotificationsToCreateTransactionPackageName",
-                value,
-                updateGlobalState: false,
-              );
-            },
           ),
         SettingsContainerSwitch(
           onSwitched: (value) async {

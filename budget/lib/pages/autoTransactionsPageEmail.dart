@@ -32,17 +32,14 @@ import 'package:notification_listener_service/notification_event.dart';
 import 'package:notification_listener_service/notification_listener_service.dart';
 
 StreamSubscription<ServiceNotificationEvent>? notificationListenerSubscription;
+List<String> recentCapturedNotifications = [];
 
 Future initNotificationScanning() async {
   if (getPlatform(ignoreEmulation: true) != PlatformOS.isAndroid) return;
   notificationListenerSubscription?.cancel();
-  if (appStateSettings["readDismissedNotificationsToCreateTransaction"] != true)
-    return;
+  if (appStateSettings["notificationScanning"] != true) return;
 
-  bool status = await NotificationListenerService.isPermissionGranted();
-  if (status != true) {
-    status = await NotificationListenerService.requestPermission();
-  }
+  bool status = await requestReadNotificationPermission();
 
   if (status == true) {
     notificationListenerSubscription =
@@ -50,61 +47,19 @@ Future initNotificationScanning() async {
   }
 }
 
+Future<bool> requestReadNotificationPermission() async {
+  bool status = await NotificationListenerService.isPermissionGranted();
+  if (status != true) {
+    status = await NotificationListenerService.requestPermission();
+  }
+  return status;
+}
+
 onNotification(ServiceNotificationEvent event) async {
-  print(event);
-  if (event.hasRemoved != true) return;
-  if (event.title == null) return;
-  if (navigatorKey.currentContext == null) return;
-  if (appStateSettings[
-              "readDismissedNotificationsToCreateTransactionPackageName"] !=
-          "" &&
-      event.packageName?.contains(appStateSettings[
-              "readDismissedNotificationsToCreateTransactionPackageName"]) !=
-          true) return;
-
-  if (event.packageName != null &&
-      appStateSettings[
-              "readDismissedNotificationsToCreateTransactionPackageName"] ==
-          "") {
-    openSnackbar(
-      SnackbarMessage(
-        title: "Opened From Notification",
-        description: event.packageName,
-        icon: appStateSettings["outlinedIcons"]
-            ? Icons.edit_notifications_outlined
-            : Icons.edit_notifications_rounded,
-        timeout: Duration(milliseconds: 5000),
-      ),
-    );
-  }
-
-  double? amountExtracted;
-  if (event.content != null) {
-    amountExtracted = getAmountFromString(event.content ?? "");
-  }
-  if (amountExtracted == null && event.title != null) {
-    amountExtracted = getAmountFromString(event.title ?? "");
-  }
-  String? title =
-      (event.title ?? "").toLowerCase().trim().capitalizeFirstofEach;
-  title = filterEmailTitle(title);
-
-  TransactionAssociatedTitleWithCategory? foundTitle =
-      (await database.getSimilarAssociatedTitles(title: title, limit: 1))
-          .firstOrNull;
-
-  TransactionCategory? category = foundTitle?.category;
-
-  pushRoute(
-    navigatorKey.currentContext!,
-    AddTransactionPage(
-      routesToPopAfterDelete: RoutesToPopAfterDelete.None,
-      selectedAmount: amountExtracted,
-      selectedTitle: title,
-      selectedCategory: category,
-      startInitialAddTransactionSequence: false,
-    ),
-  );
+  String messageString = getNotificationMessage(event);
+  recentCapturedNotifications.insert(0, messageString);
+  recentCapturedNotifications.take(50);
+  queueTransactionFromMessage(messageString);
 }
 
 class InitializeNotificationService extends StatefulWidget {
@@ -129,6 +84,189 @@ class _InitializeNotificationServiceState
   @override
   Widget build(BuildContext context) {
     return widget.child;
+  }
+}
+
+Future queueTransactionFromMessage(String messageString) async {
+  String? title;
+  double? amountDouble;
+  List<ScannerTemplate> scannerTemplates =
+      await database.getAllScannerTemplates();
+  ScannerTemplate? templateFound;
+
+  for (ScannerTemplate scannerTemplate in scannerTemplates) {
+    if (messageString.contains(scannerTemplate.contains)) {
+      templateFound = scannerTemplate;
+      title = getTransactionTitleFromEmail(
+          messageString,
+          scannerTemplate.titleTransactionBefore,
+          scannerTemplate.titleTransactionAfter);
+      amountDouble = getTransactionAmountFromEmail(
+          messageString,
+          scannerTemplate.amountTransactionBefore,
+          scannerTemplate.amountTransactionAfter);
+      break;
+    }
+  }
+
+  if (templateFound == null) return false;
+
+  if (amountDouble == null) amountDouble = getAmountFromString(title ?? "");
+
+  TransactionCategory? category;
+  if (title != null) {
+    TransactionAssociatedTitleWithCategory? foundTitle =
+        (await database.getSimilarAssociatedTitles(title: title, limit: 1))
+            .firstOrNull;
+    category = foundTitle?.category;
+  }
+  if (category == null) {
+    category = await database
+        .getCategoryInstanceOrNull(templateFound.defaultCategoryFk ?? "");
+  }
+
+  pushRoute(
+    navigatorKey.currentContext!,
+    AddTransactionPage(
+      routesToPopAfterDelete: RoutesToPopAfterDelete.None,
+      selectedAmount: amountDouble,
+      selectedTitle: title,
+      selectedCategory: category,
+      startInitialAddTransactionSequence: false,
+    ),
+  );
+}
+
+String getNotificationMessage(ServiceNotificationEvent event) {
+  String output = "";
+  output = output + "Package name: " + event.packageName.toString() + "\n";
+  output =
+      output + "Notification removed: " + event.hasRemoved.toString() + "\n";
+  output = output + "\n----\n\n";
+  output = output + "Notification Title: " + event.title.toString() + "\n\n";
+  output = output + "Notification Content: " + event.content.toString();
+  return output;
+}
+
+class AutoTransactionsPageNotifications extends StatefulWidget {
+  const AutoTransactionsPageNotifications({Key? key}) : super(key: key);
+
+  @override
+  State<AutoTransactionsPageNotifications> createState() =>
+      _AutoTransactionsPageNotificationsState();
+}
+
+class _AutoTransactionsPageNotificationsState
+    extends State<AutoTransactionsPageNotifications> {
+  bool canReadEmails = true;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return PageFramework(
+      dragDownToDismiss: true,
+      title: "Auto Transactions",
+      actions: [
+        RefreshButton(onTap: () async {
+          loadingIndeterminateKey.currentState?.setVisibility(true);
+          setState(() {});
+          loadingIndeterminateKey.currentState?.setVisibility(false);
+        }),
+      ],
+      listWidgets: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 5, left: 20, right: 20),
+          child: TextFont(
+            text:
+                "Transactions can be created automatically based on your notifications.",
+            fontSize: 14,
+            maxLines: 10,
+          ),
+        ),
+        SettingsContainerSwitch(
+          onSwitched: (value) async {
+            await updateSettings("notificationScanning", value,
+                updateGlobalState: false);
+            if (value == true) {
+              bool status = await requestReadNotificationPermission();
+              if (status == false) {
+                await updateSettings("notificationScanning", false,
+                    updateGlobalState: false);
+              } else {
+                initNotificationScanning();
+              }
+            } else {
+              notificationListenerSubscription?.cancel();
+            }
+          },
+          title: "Notification Transactions",
+          description:
+              "When a notification is dismissed and the app is open, attempt to add a transaction given its information. Create a template so Cashew understands the format of a notification.",
+          initialValue: appStateSettings["notificationScanning"],
+        ),
+        StreamBuilder<List<ScannerTemplate>>(
+          stream: database.watchAllScannerTemplates(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              if (snapshot.data!.length <= 0) {
+                return Padding(
+                  padding: const EdgeInsets.all(5),
+                  child: StatusBox(
+                    title: "Notification Configuration Missing",
+                    description: "Please add a configuration.",
+                    icon: appStateSettings["outlinedIcons"]
+                        ? Icons.warning_outlined
+                        : Icons.warning_rounded,
+                    color: Theme.of(context).colorScheme.error,
+                  ),
+                );
+              }
+              return Column(
+                children: [
+                  for (ScannerTemplate scannerTemplate in snapshot.data!)
+                    ScannerTemplateEntry(
+                      messagesList: recentCapturedNotifications,
+                      scannerTemplate: scannerTemplate,
+                    )
+                ],
+              );
+            } else {
+              return Container();
+            }
+          },
+        ),
+        OpenContainerNavigation(
+          openPage: AddEmailTemplate(
+            messagesList: recentCapturedNotifications,
+          ),
+          borderRadius: 15,
+          button: (openContainer) {
+            return Row(
+              children: [
+                Expanded(
+                  child: AddButton(
+                    padding: EdgeInsets.only(
+                      left: 15,
+                      right: 15,
+                      bottom: 9,
+                      top: 4,
+                    ),
+                    onTap: openContainer,
+                  ),
+                ),
+              ],
+            );
+          },
+        ),
+        EmailsList(
+          messagesList: recentCapturedNotifications,
+        ),
+      ],
+    );
   }
 }
 
@@ -165,10 +303,10 @@ class _AutoTransactionsPageEmailState extends State<AutoTransactionsPageEmail> {
       title: "Auto Transactions",
       actions: [
         RefreshButton(onTap: () async {
-          loadingIndeterminateKey.currentState!.setVisibility(true);
+          loadingIndeterminateKey.currentState?.setVisibility(true);
           await parseEmailsInBackground(context,
               sayUpdates: true, forceParse: true);
-          loadingIndeterminateKey.currentState!.setVisibility(false);
+          loadingIndeterminateKey.currentState?.setVisibility(false);
         }),
       ],
       listWidgets: [
@@ -314,15 +452,15 @@ Future<void> parseEmailsInBackground(context,
             doesEmailContain = true;
             templateFound = scannerTemplate;
             title = getTransactionTitleFromEmail(
-                context,
-                messageString,
-                scannerTemplate.titleTransactionBefore,
-                scannerTemplate.titleTransactionAfter);
+              messageString,
+              scannerTemplate.titleTransactionBefore,
+              scannerTemplate.titleTransactionAfter,
+            );
             amountDouble = getTransactionAmountFromEmail(
-                context,
-                messageString,
-                scannerTemplate.amountTransactionBefore,
-                scannerTemplate.amountTransactionAfter);
+              messageString,
+              scannerTemplate.amountTransactionBefore,
+              scannerTemplate.amountTransactionAfter,
+            );
             break;
           }
         }
@@ -446,7 +584,7 @@ Future<void> parseEmailsInBackground(context,
   }
 }
 
-String? getTransactionTitleFromEmail(context, String messageString,
+String? getTransactionTitleFromEmail(String messageString,
     String titleTransactionBefore, String titleTransactionAfter) {
   String? title;
   try {
@@ -461,7 +599,7 @@ String? getTransactionTitleFromEmail(context, String messageString,
   return title;
 }
 
-double? getTransactionAmountFromEmail(context, String messageString,
+double? getTransactionAmountFromEmail(String messageString,
     String amountTransactionBefore, String amountTransactionAfter) {
   double? amountDouble;
   try {
@@ -487,7 +625,7 @@ class _GmailApiScreenState extends State<GmailApiScreen> {
       appStateSettings["EmailAutoTransactions-amountOfEmails"] ?? 10;
 
   late gMail.GmailApi gmailApi;
-  List<gMail.Message> messagesList = [];
+  List<String> messagesList = [];
 
   @override
   void initState() {
@@ -513,7 +651,8 @@ class _GmailApiScreenState extends State<GmailApiScreen> {
               .get(googleUser!.id.toString(), message.id!);
           // print(DateTime.fromMillisecondsSinceEpoch(
           //     int.parse(messageData.internalDate ?? "")));
-          messagesList.add(messageData);
+          String emailMessageString = getEmailMessage(messageData);
+          messagesList.add(emailMessageString);
           currentEmailIndex++;
           loadingProgressKey.currentState!
               .setProgressPercentage(currentEmailIndex / amountOfEmails);
@@ -663,7 +802,7 @@ class ScannerTemplateEntry extends StatelessWidget {
     super.key,
   });
   final ScannerTemplate scannerTemplate;
-  final List<gMail.Message> messagesList;
+  final List<String> messagesList;
 
   @override
   Widget build(BuildContext context) {
@@ -749,7 +888,7 @@ class EmailsList extends StatelessWidget {
     this.backgroundColor,
     super.key,
   });
-  final List<gMail.Message> messagesList;
+  final List<String> messagesList;
   final Function(String)? onTap;
   final Color? backgroundColor;
 
@@ -761,8 +900,7 @@ class EmailsList extends StatelessWidget {
         if (snapshot.hasData) {
           List<ScannerTemplate> scannerTemplates = snapshot.data!;
           List<Widget> messageTxt = [];
-          for (var m in messagesList) {
-            String messageString = getEmailMessage(m);
+          for (String messageString in messagesList) {
             bool doesEmailContain = false;
             String? title;
             double? amountDouble;
@@ -773,12 +911,10 @@ class EmailsList extends StatelessWidget {
                 doesEmailContain = true;
                 templateFound = scannerTemplate.templateName;
                 title = getTransactionTitleFromEmail(
-                    context,
                     messageString,
                     scannerTemplate.titleTransactionBefore,
                     scannerTemplate.titleTransactionAfter);
                 amountDouble = getTransactionAmountFromEmail(
-                    context,
                     messageString,
                     scannerTemplate.amountTransactionBefore,
                     scannerTemplate.amountTransactionAfter);
@@ -807,6 +943,8 @@ class EmailsList extends StatelessWidget {
                               getColor(context, "lightDarkAccent"),
                   onTap: () {
                     if (onTap != null) onTap!(messageString);
+                    if (onTap == null)
+                      queueTransactionFromMessage(messageString);
                   },
                   child: Row(
                     children: [
