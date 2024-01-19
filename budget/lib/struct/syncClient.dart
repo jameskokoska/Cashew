@@ -98,11 +98,11 @@ Future<bool> createSyncBackup(
 
   print("Creating sync backup");
   if (changeMadeSync)
-    loadingIndeterminateKey.currentState!.setVisibility(true, opacity: 0.4);
+    loadingIndeterminateKey.currentState?.setVisibility(true, opacity: 0.4);
   if (syncTimeoutTimer?.isActive == true) {
     // openSnackbar(SnackbarMessage(title: "Please wait..."));
     if (changeMadeSync)
-      loadingIndeterminateKey.currentState!.setVisibility(false);
+      loadingIndeterminateKey.currentState?.setVisibility(false);
     return false;
   } else {
     syncTimeoutTimer = Timer(Duration(milliseconds: 5000), () {
@@ -122,7 +122,7 @@ Future<bool> createSyncBackup(
   }
   if (hasSignedIn == false) {
     if (changeMadeSync)
-      loadingIndeterminateKey.currentState!.setVisibility(false);
+      loadingIndeterminateKey.currentState?.setVisibility(false);
     return false;
   }
 
@@ -131,7 +131,7 @@ Future<bool> createSyncBackup(
   drive.DriveApi driveApi = drive.DriveApi(authenticateClient);
   if (driveApi == null) {
     if (changeMadeSync)
-      loadingIndeterminateKey.currentState!.setVisibility(false);
+      loadingIndeterminateKey.currentState?.setVisibility(false);
     throw "Failed to login to Google Drive";
   }
 
@@ -151,7 +151,7 @@ Future<bool> createSyncBackup(
   await createBackup(null,
       silentBackup: true, deleteOldBackups: true, clientIDForSync: clientID);
   if (changeMadeSync)
-    loadingIndeterminateKey.currentState!.setVisibility(false);
+    loadingIndeterminateKey.currentState?.setVisibility(false);
   return true;
 }
 
@@ -241,7 +241,7 @@ Future<bool> syncData(BuildContext context) async {
   int currentFileIndex = 0;
   loadingProgressKey.currentState!.setProgressPercentage(0);
   for (drive.File file in filesToDownloadSyncChanges) {
-    loadingIndeterminateKey.currentState!.setVisibility(true);
+    loadingIndeterminateKey.currentState?.setVisibility(true);
 
     // we don't want to restore this clients backup
     if (isCurrentDeviceSyncBackupFile(file.name)) continue;

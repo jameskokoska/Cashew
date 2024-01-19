@@ -1038,5 +1038,6 @@
   "widget-theme": "Widget -Thema",
   "widget-background-opacity": "Hintergrundliege",
   "currency-total": "Währung Gesamt",
-  "currency-total-description": "Listen Sie alle Kontosummen auf den Kontowährung auf"
+  "currency-total-description": "Listen Sie alle Kontosummen auf den Kontowährung auf",
+  "app": "Anwendung"
 }

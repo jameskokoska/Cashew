@@ -1038,5 +1038,6 @@
   "widget-theme": "Widget -tema",
   "widget-background-opacity": "Bakgrunn opacitet",
   "currency-total": "Valuta totalt",
-  "currency-total-description": "Liste opp alle kontovalutasotaler"
+  "currency-total-description": "Liste opp alle kontovalutasotaler",
+  "app": "applikasjon"
 }

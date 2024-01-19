@@ -1038,5 +1038,6 @@
   "widget-theme": "Motyw widżetu",
   "widget-background-opacity": "Krycie tła",
   "currency-total": "Całkowita waluta",
-  "currency-total-description": "Wymień wszystkie sumy walutowe konta"
+  "currency-total-description": "Wymień wszystkie sumy walutowe konta",
+  "app": "Aplikacja"
 }

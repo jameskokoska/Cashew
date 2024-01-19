@@ -1038,5 +1038,6 @@
   "widget-theme": "Widget tema",
   "widget-background-opacity": "Bakgrundspacitet",
   "currency-total": "Valuta total",
-  "currency-total-description": "Lista alla kontonvaluta totaler"
+  "currency-total-description": "Lista alla kontonvaluta totaler",
+  "app": "Ansökan"
 }

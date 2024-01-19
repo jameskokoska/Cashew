@@ -1038,5 +1038,6 @@
   "widget-theme": "Tema widget",
   "widget-background-opacity": "Opacity latar belakang",
   "currency-total": "Total mata uang",
-  "currency-total-description": "Sebutkan semua total mata uang akun"
+  "currency-total-description": "Sebutkan semua total mata uang akun",
+  "app": "Aplikasi"
 }

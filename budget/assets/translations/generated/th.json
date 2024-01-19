@@ -1038,5 +1038,6 @@
   "widget-theme": "ธีมวิดเจ็ต",
   "widget-background-opacity": "ความทึบแสง",
   "currency-total": "รวมสกุลเงิน",
-  "currency-total-description": "แสดงรายการสกุลเงินทั้งหมดบัญชีทั้งหมด"
+  "currency-total-description": "แสดงรายการสกุลเงินทั้งหมดบัญชีทั้งหมด",
+  "app": "แอปพลิเคชัน"
 }

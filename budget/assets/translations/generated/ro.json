@@ -1038,5 +1038,6 @@
   "widget-theme": "Tema widgetului",
   "widget-background-opacity": "Opacitate de fond",
   "currency-total": "Total valutar",
-  "currency-total-description": "Enumerați toate totalul monedei contului"
+  "currency-total-description": "Enumerați toate totalul monedei contului",
+  "app": "Aplicație"
 }

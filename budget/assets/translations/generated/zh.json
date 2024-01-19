@@ -1038,5 +1038,6 @@
   "widget-theme": "小部件主题",
   "widget-background-opacity": "背景不透明度",
   "currency-total": "货币总数",
-  "currency-total-description": "列出所有帐户货币总计"
+  "currency-total-description": "列出所有帐户货币总计",
+  "app": "应用"
 }

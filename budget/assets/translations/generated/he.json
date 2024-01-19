@@ -1038,5 +1038,6 @@
   "widget-theme": "נושא הווידג'ט",
   "widget-background-opacity": "אטימות רקע",
   "currency-total": "סה\"כ מטבע",
-  "currency-total-description": "רשום את כל סיכומי מטבע החשבון"
+  "currency-total-description": "רשום את כל סיכומי מטבע החשבון",
+  "app": "יישום"
 }

@@ -112,24 +112,24 @@ Future<bool> runAllCloudFunctions(BuildContext context,
   runningCloudFunctions = true;
   errorSigningInDuringCloud = false;
   try {
-    loadingIndeterminateKey.currentState!.setVisibility(true);
+    loadingIndeterminateKey.currentState?.setVisibility(true);
     await syncData(context);
     if (appStateSettings["emailScanningPullToRefresh"] ||
         entireAppLoaded == false) {
-      loadingIndeterminateKey.currentState!.setVisibility(true);
+      loadingIndeterminateKey.currentState?.setVisibility(true);
       await parseEmailsInBackground(context, forceParse: true);
     }
-    loadingIndeterminateKey.currentState!.setVisibility(true);
+    loadingIndeterminateKey.currentState?.setVisibility(true);
     await syncPendingQueueOnServer(); //sync before download
-    loadingIndeterminateKey.currentState!.setVisibility(true);
+    loadingIndeterminateKey.currentState?.setVisibility(true);
     await getCloudBudgets();
-    loadingIndeterminateKey.currentState!.setVisibility(true);
+    loadingIndeterminateKey.currentState?.setVisibility(true);
     await createBackupInBackground(context);
-    loadingIndeterminateKey.currentState!.setVisibility(true);
+    loadingIndeterminateKey.currentState?.setVisibility(true);
     await getExchangeRates();
   } catch (e) {
     print("Error running sync functions on load: " + e.toString());
-    loadingIndeterminateKey.currentState!.setVisibility(false);
+    loadingIndeterminateKey.currentState?.setVisibility(false);
     runningCloudFunctions = false;
     canSyncData = true;
     if (e is DetailedApiRequestError &&
@@ -143,7 +143,7 @@ Future<bool> runAllCloudFunctions(BuildContext context,
     }
     return false;
   }
-  loadingIndeterminateKey.currentState!.setVisibility(false);
+  loadingIndeterminateKey.currentState?.setVisibility(false);
   Future.delayed(Duration(milliseconds: 2000), () {
     runningCloudFunctions = false;
   });

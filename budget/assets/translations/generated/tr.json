@@ -1038,5 +1038,6 @@
   "widget-theme": "Widget teması",
   "widget-background-opacity": "Arka plan opaklığı",
   "currency-total": "Para birimi toplamı",
-  "currency-total-description": "Tüm hesap para toplamlarını listeleyin"
+  "currency-total-description": "Tüm hesap para toplamlarını listeleyin",
+  "app": "Başvuru"
 }

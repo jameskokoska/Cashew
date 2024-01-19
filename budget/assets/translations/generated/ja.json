@@ -1038,5 +1038,6 @@
   "widget-theme": "ウィジェットテーマ",
   "widget-background-opacity": "背景の不透明度",
   "currency-total": "通貨合計",
-  "currency-total-description": "すべてのアカウント通貨の合計をリストします"
+  "currency-total-description": "すべてのアカウント通貨の合計をリストします",
+  "app": "応用"
 }

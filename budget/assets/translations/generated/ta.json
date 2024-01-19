@@ -1038,5 +1038,6 @@
   "widget-theme": "விட்ஜெட் தீம்",
   "widget-background-opacity": "பின்னணி ஒளிபுகாநிலை",
   "currency-total": "நாணய மொத்தம்",
-  "currency-total-description": "அனைத்து கணக்கு நாணய மொத்தங்களையும் பட்டியலிடுங்கள்"
+  "currency-total-description": "அனைத்து கணக்கு நாணய மொத்தங்களையும் பட்டியலிடுங்கள்",
+  "app": "விண்ணப்பம்"
 }

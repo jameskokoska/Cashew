@@ -1038,5 +1038,6 @@
   "widget-theme": "Tema ng widget",
   "widget-background-opacity": "Opacity ng background",
   "currency-total": "Kabuuan ng pera",
-  "currency-total-description": "Ilista ang lahat ng kabuuan ng pera ng account"
+  "currency-total-description": "Ilista ang lahat ng kabuuan ng pera ng account",
+  "app": "Application"
 }

@@ -4326,13 +4326,13 @@ class FinanceDatabase extends _$FinanceDatabase {
   // delete budget given key
   Future<int> deleteBudget(context, Budget budget) async {
     if (budget.sharedKey != null) {
-      loadingIndeterminateKey.currentState!.setVisibility(true);
+      loadingIndeterminateKey.currentState?.setVisibility(true);
       if (budget.sharedOwnerMember == SharedOwnerMember.owner) {
         bool result = await removedSharedFromBudget(budget);
       } else {
         bool result = await leaveSharedBudget(budget);
       }
-      loadingIndeterminateKey.currentState!.setVisibility(false);
+      loadingIndeterminateKey.currentState?.setVisibility(false);
     }
     if (budget.addedTransactionsOnly) {
       // Clear the budget the transactions are added to

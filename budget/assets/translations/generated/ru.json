@@ -1038,5 +1038,6 @@
   "widget-theme": "Тема виджета",
   "widget-background-opacity": "Фоновая непрозрачность",
   "currency-total": "Всего валюта",
-  "currency-total-description": "Перечислите все общие валюты учетной записи"
+  "currency-total-description": "Перечислите все общие валюты учетной записи",
+  "app": "Приложение"
 }

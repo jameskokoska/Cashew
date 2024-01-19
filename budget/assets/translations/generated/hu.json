@@ -1038,5 +1038,6 @@
   "widget-theme": "Widget téma",
   "widget-background-opacity": "Háttérképesség",
   "currency-total": "Valuta teljes",
-  "currency-total-description": "Sorolja fel az összes számla valuta összegét"
+  "currency-total-description": "Sorolja fel az összes számla valuta összegét",
+  "app": "Alkalmazás"
 }

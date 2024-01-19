@@ -1038,5 +1038,6 @@
   "widget-theme": "Widget Theme",
   "widget-background-opacity": "Background Opacity",
   "currency-total": "Currency Total",
-  "currency-total-description": "List all account currency totals"
+  "currency-total-description": "List all account currency totals",
+  "app": "App"
 }

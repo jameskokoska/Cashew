@@ -1038,5 +1038,6 @@
   "widget-theme": "विजेट थीम",
   "widget-background-opacity": "पार्श्वभूमी अस्पष्टता",
   "currency-total": "चलन एकूण",
-  "currency-total-description": "सर्व खाते चलन बेरीजची यादी करा"
+  "currency-total-description": "सर्व खाते चलन बेरीजची यादी करा",
+  "app": "अर्ज"
 }

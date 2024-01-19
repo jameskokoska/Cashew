@@ -1038,5 +1038,6 @@
   "widget-theme": "Widget -tema",
   "widget-background-opacity": "Baggrundsopacitet",
   "currency-total": "Valuta i alt",
-  "currency-total-description": "Liste over alle kontortotaler"
+  "currency-total-description": "Liste over alle kontortotaler",
+  "app": "Ansøgning"
 }

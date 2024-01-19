@@ -1038,5 +1038,6 @@
   "widget-theme": "Téma widgetu",
   "widget-background-opacity": "Neprůhlednost pozadí",
   "currency-total": "Měna Celkem",
-  "currency-total-description": "Seznam součtů měny všech účtů"
+  "currency-total-description": "Seznam součtů měny všech účtů",
+  "app": "aplikace"
 }

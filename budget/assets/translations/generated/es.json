@@ -1038,5 +1038,6 @@
   "widget-theme": "Tema de widget",
   "widget-background-opacity": "Opacidad de fondo",
   "currency-total": "Total de moneda",
-  "currency-total-description": "Enumere todos los totales de moneda de cuentas"
+  "currency-total-description": "Enumere todos los totales de moneda de cuentas",
+  "app": "Solicitud"
 }

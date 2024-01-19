@@ -1038,5 +1038,6 @@
   "widget-theme": "小部件主題",
   "widget-background-opacity": "背景不透明度",
   "currency-total": "貨幣總數",
-  "currency-total-description": "列出所有帳戶貨幣總計"
+  "currency-total-description": "列出所有帳戶貨幣總計",
+  "app": "應用"
 }

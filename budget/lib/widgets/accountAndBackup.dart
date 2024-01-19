@@ -255,7 +255,7 @@ Future<bool> signInAndSync(BuildContext context,
   }
 
   if (result != true) return false;
-  loadingIndeterminateKey.currentState!.setVisibility(true);
+  loadingIndeterminateKey.currentState?.setVisibility(true);
   try {
     await signInGoogle(
       context: context,
@@ -268,23 +268,23 @@ Future<bool> signInAndSync(BuildContext context,
           pagesNeedingRefresh: [0], updateGlobalState: false);
     }
     if (googleUser != null) {
-      loadingIndeterminateKey.currentState!.setVisibility(true);
+      loadingIndeterminateKey.currentState?.setVisibility(true);
       await syncData(context);
-      loadingIndeterminateKey.currentState!.setVisibility(true);
+      loadingIndeterminateKey.currentState?.setVisibility(true);
       await syncPendingQueueOnServer();
-      loadingIndeterminateKey.currentState!.setVisibility(true);
+      loadingIndeterminateKey.currentState?.setVisibility(true);
       await getCloudBudgets();
-      loadingIndeterminateKey.currentState!.setVisibility(true);
+      loadingIndeterminateKey.currentState?.setVisibility(true);
       await createBackupInBackground(context);
     } else {
       throw ("cannot sync data - user not logged in");
     }
-    loadingIndeterminateKey.currentState!.setVisibility(false);
+    loadingIndeterminateKey.currentState?.setVisibility(false);
     return true;
   } catch (e) {
     print("Error syncing data after login!");
     print(e.toString());
-    loadingIndeterminateKey.currentState!.setVisibility(false);
+    loadingIndeterminateKey.currentState?.setVisibility(false);
     return false;
   }
 }
@@ -383,7 +383,7 @@ Future<void> createBackup(
   // Backup user settings
   try {
     if (silentBackup == false || silentBackup == null) {
-      loadingIndeterminateKey.currentState!.setVisibility(true);
+      loadingIndeterminateKey.currentState?.setVisibility(true);
     }
     String userSettings = sharedPreferences.getString('userSettings') ?? "";
     if (userSettings == "") throw ("No settings stored");
@@ -451,11 +451,11 @@ Future<void> createBackup(
           pagesNeedingRefresh: [], updateGlobalState: false);
 
     if (silentBackup == false || silentBackup == null) {
-      loadingIndeterminateKey.currentState!.setVisibility(false);
+      loadingIndeterminateKey.currentState?.setVisibility(false);
     }
   } catch (e) {
     if (silentBackup == false || silentBackup == null) {
-      loadingIndeterminateKey.currentState!.setVisibility(false);
+      loadingIndeterminateKey.currentState?.setVisibility(false);
     }
     if (e is DetailedApiRequestError && e.status == 401) {
       await refreshGoogleSignIn();
@@ -477,7 +477,7 @@ Future<void> deleteRecentBackups(context, amountToKeep,
     {bool? silentDelete}) async {
   try {
     if (silentDelete == false || silentDelete == null) {
-      loadingIndeterminateKey.currentState!.setVisibility(true);
+      loadingIndeterminateKey.currentState?.setVisibility(true);
     }
 
     final authHeaders = await googleUser!.authHeaders;
@@ -506,11 +506,11 @@ Future<void> deleteRecentBackups(context, amountToKeep,
       if (!isSyncBackupFile(file.name)) index++;
     });
     if (silentDelete == false || silentDelete == null) {
-      loadingIndeterminateKey.currentState!.setVisibility(false);
+      loadingIndeterminateKey.currentState?.setVisibility(false);
     }
   } catch (e) {
     if (silentDelete == false || silentDelete == null) {
-      loadingIndeterminateKey.currentState!.setVisibility(false);
+      loadingIndeterminateKey.currentState?.setVisibility(false);
     }
     openSnackbar(
       SnackbarMessage(

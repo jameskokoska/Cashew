@@ -1038,5 +1038,6 @@
   "widget-theme": "Тема виџета",
   "widget-background-opacity": "Опацити позадинских спорова",
   "currency-total": "Укупно валуте",
-  "currency-total-description": "Наведите све укупне вредности валуте рачуна"
+  "currency-total-description": "Наведите све укупне вредности валуте рачуна",
+  "app": "Апликација"
 }

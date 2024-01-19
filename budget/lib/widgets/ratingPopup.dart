@@ -165,7 +165,7 @@ class _RatingPopupState extends State<RatingPopup> {
 
 Future<bool> shareFeedback(String feedbackText, String feedbackType,
     {String? feedbackEmail, int? selectedStars}) async {
-  loadingIndeterminateKey.currentState!.setVisibility(true);
+  loadingIndeterminateKey.currentState?.setVisibility(true);
   bool error = false;
 
   try {
@@ -216,7 +216,7 @@ Future<bool> shareFeedback(String feedbackText, String feedbackType,
             : Icons.warning_rounded,
         timeout: Duration(milliseconds: 2500)));
   }
-  loadingIndeterminateKey.currentState!.setVisibility(false);
+  loadingIndeterminateKey.currentState?.setVisibility(false);
 
   if (selectedStars != -1) {
     updateSettings("submittedFeedback", true,

@@ -1038,5 +1038,6 @@
   "widget-theme": "Widget -teema",
   "widget-background-opacity": "Taustan opasiteetti",
   "currency-total": "Valuutan kokonaismäärä",
-  "currency-total-description": "Luettele kaikki tilin valuutan kokonaismäärät"
+  "currency-total-description": "Luettele kaikki tilin valuutan kokonaismäärät",
+  "app": "Soveltaminen"
 }

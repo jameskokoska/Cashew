@@ -1038,5 +1038,6 @@
   "widget-theme": "Thème du widget",
   "widget-background-opacity": "Opacité de fond",
   "currency-total": "Total de devises",
-  "currency-total-description": "Énumérez tous les totaux de devises du compte"
+  "currency-total-description": "Énumérez tous les totaux de devises du compte",
+  "app": "Application"
 }

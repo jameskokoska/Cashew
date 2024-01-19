@@ -1038,5 +1038,6 @@
   "widget-theme": "উইজেট থিম",
   "widget-background-opacity": "পটভূমি অস্বচ্ছতা",
   "currency-total": "মুদ্রা মোট",
-  "currency-total-description": "সমস্ত অ্যাকাউন্ট মুদ্রার মোট তালিকাভুক্ত করুন"
+  "currency-total-description": "সমস্ত অ্যাকাউন্ট মুদ্রার মোট তালিকাভুক্ত করুন",
+  "app": "আবেদন"
 }

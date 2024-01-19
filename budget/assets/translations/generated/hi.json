@@ -1038,5 +1038,6 @@
   "widget-theme": "विजेट थीम",
   "widget-background-opacity": "पृष्ठभूमि अस्पष्टता",
   "currency-total": "मुद्रा कुल",
-  "currency-total-description": "सभी खाता मुद्रा योगों को सूचीबद्ध करें"
+  "currency-total-description": "सभी खाता मुद्रा योगों को सूचीबद्ध करें",
+  "app": "आवेदन"
 }

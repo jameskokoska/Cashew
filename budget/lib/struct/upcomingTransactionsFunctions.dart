@@ -299,6 +299,16 @@ Future openPayDebtCreditPopup(
       );
       Navigator.pop(context, true);
       await database.createOrUpdateTransaction(transactionNew);
+
+      // Make a separate transaction for one time loan collections... something like below?
+      // Transaction transactionNew = transaction.copyWith(
+      //   //we don't want it to count towards the total - net is zero now
+      //   dateCreated: DateTime.now(),
+      //   income: !transaction.income,
+      //   pairedTransactionFk: Value(transaction.transactionPk),
+      // );
+      // Navigator.pop(context, true);
+      // await database.createOrUpdateTransaction(transactionNew, insert: true);
     },
     onExtraLabel2: transaction.type == TransactionSpecialType.credit
         ? "partially-collect".tr()
@@ -306,7 +316,7 @@ Future openPayDebtCreditPopup(
             ? "partially-settle".tr()
             : "",
     onExtra2: () async {
-      double selectedAmount = 0;
+      double selectedAmount = transaction.amount.abs();
       String selectedWalletFk = transaction.walletFk;
 
       await openBottomSheet(
@@ -321,7 +331,7 @@ Future openPayDebtCreditPopup(
           hasPadding: false,
           underTitleSpace: false,
           child: SelectAmount(
-            amountPassed: transaction.amount.abs().toString(),
+            amountPassed: selectedAmount.toString(),
             padding: EdgeInsets.symmetric(horizontal: 18),
             onlyShowCurrencyIcon: true,
             selectedWalletPk: selectedWalletFk,

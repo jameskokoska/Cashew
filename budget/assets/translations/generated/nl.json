@@ -1038,5 +1038,6 @@
   "widget-theme": "Widget -thema",
   "widget-background-opacity": "Achtergrond Dekking",
   "currency-total": "Valuta totaal",
-  "currency-total-description": "Maak een lijst van alle totalen van de accountvaluta"
+  "currency-total-description": "Maak een lijst van alle totalen van de accountvaluta",
+  "app": "Sollicitatie"
 }
