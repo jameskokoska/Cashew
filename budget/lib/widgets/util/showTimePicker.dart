@@ -1,4 +1,5 @@
 import 'package:budget/colors.dart';
+import 'package:budget/functions.dart';
 import 'package:budget/pages/settingsPage.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/settingsContainers.dart';
@@ -26,6 +27,10 @@ Future<TimeOfDay?> showCustomTimePicker(
                   onTertiaryContainer:
                       Theme.of(context).colorScheme.onPrimaryContainer,
                 ),
+            shadowColor: getPlatform() == PlatformOS.isIOS &&
+                    appStateSettings["materialYou"]
+                ? Theme.of(context).colorScheme.secondaryContainer
+                : null,
             textTheme: TextTheme(
               displayLarge: TextStyle(
                 fontSize: 65,

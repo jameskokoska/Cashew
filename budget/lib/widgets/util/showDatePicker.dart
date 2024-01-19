@@ -1,11 +1,7 @@
+import 'package:budget/colors.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:flutter/material.dart';
-
-// Currently there is a bug (Flutter 3.13) where the shadow behind date pickers
-// when using Material 3 is always white
-// For now, we disable the material 3 theming on iOS for date pickers
-// useMaterial3: getPlatform() != PlatformOS.isIOS,
 
 Future<DateTime?> showCustomDatePicker(
   BuildContext context,
@@ -28,6 +24,10 @@ Future<DateTime?> showCustomDatePicker(
               fontWeight: FontWeight.bold,
             ),
           ),
+          shadowColor: getPlatform() == PlatformOS.isIOS &&
+                  appStateSettings["materialYou"]
+              ? Theme.of(context).colorScheme.secondaryContainer
+              : null,
         ),
         child: child ?? SizedBox.shrink(),
       );
