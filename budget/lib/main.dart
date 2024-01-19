@@ -123,6 +123,9 @@ class App extends StatelessWidget {
     //   child:
     print("Rebuilt Material App");
 
+    lightTheme = getLightTheme();
+    darkTheme = getDarkTheme();
+
     return MaterialApp(
       showPerformanceOverlay: kProfileMode,
       localizationsDelegates: context.localizationDelegates,

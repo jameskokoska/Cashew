@@ -154,11 +154,12 @@ Future updateWidgetColorsAndText(BuildContext context) async {
         (double.tryParse((appStateSettings["widgetOpacity"] ?? 1).toString()) ??
                 1)
             .clamp(0, 1);
-    ThemeData widgetTheme = appStateSettings["widgetTheme"] == "light"
-        ? lightTheme
-        : appStateSettings["widgetTheme"] == "dark"
-            ? darkTheme
-            : Theme.of(context);
+    ThemeData widgetTheme =
+        lightTheme != null && appStateSettings["widgetTheme"] == "light"
+            ? lightTheme!
+            : darkTheme != null && appStateSettings["widgetTheme"] == "dark"
+                ? darkTheme!
+                : Theme.of(context);
 
     await HomeWidget.saveWidgetData<String>('netWorthTitle', "net-worth".tr());
     await HomeWidget.saveWidgetData<String>(
