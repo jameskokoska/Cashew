@@ -319,7 +319,7 @@ Future openPayDebtCreditPopup(
       double selectedAmount = transaction.amount.abs();
       String selectedWalletFk = transaction.walletFk;
 
-      await openBottomSheet(
+      dynamic result = await openBottomSheet(
         context,
         fullSnap: true,
         PopupFramework(
@@ -346,7 +346,7 @@ Future openPayDebtCreditPopup(
               selectedAmount = amount;
             },
             next: () {
-              Navigator.pop(context);
+              Navigator.pop(context, true);
             },
             nextLabel: "set-amount".tr(),
             currencyKey: null,
@@ -354,9 +354,8 @@ Future openPayDebtCreditPopup(
           ),
         ),
       );
-      if (selectedAmount == 0) {
-        return;
-      }
+      if (selectedAmount == 0 || result != true) return;
+
       Navigator.pop(context, true);
 
       TransactionCategory category =
