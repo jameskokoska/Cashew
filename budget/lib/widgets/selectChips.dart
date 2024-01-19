@@ -1,3 +1,4 @@
+import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/pages/addCategoryPage.dart';
 import 'package:budget/struct/settings.dart';
@@ -118,59 +119,71 @@ class _SelectChipsState<T> extends State<SelectChips<T>> {
           String label = widget.getLabel(item);
           Widget? avatar =
               widget.getAvatar == null ? null : widget.getAvatar!(item);
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 5),
-            child: Material(
-              color: Colors.transparent,
-              child: Tappable(
-                onLongPress: () {
-                  if (widget.onLongPress != null) widget.onLongPress!(item);
-                },
+          double opacity = 1;
+          if (item is Budget && item.archived == true ||
+              item is Objective && item.archived == true) {
+            if (selected) {
+              opacity = 0.6;
+            } else {
+              opacity = 0.3;
+            }
+          }
+          return Opacity(
+            opacity: opacity,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 5),
+              child: Material(
                 color: Colors.transparent,
-                child: Theme(
-                  data: Theme.of(context)
-                      .copyWith(canvasColor: Colors.transparent),
-                  child: ChoiceChip(
-                    avatar: avatar == null
-                        ? null
-                        : Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              avatar,
-                            ],
-                          ),
-                    labelPadding: avatar == null
-                        ? null
-                        : EdgeInsets.only(
-                            left: 5, right: 10, top: 1, bottom: 1),
-                    padding: avatar == null
-                        ? null
-                        : EdgeInsets.only(left: 10, top: 7, bottom: 7),
-                    showCheckmark:
-                        widget.allowMultipleSelected == true && avatar == null,
-                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    selectedColor: widget.getCustomSelectedColor != null &&
-                            widget.getCustomSelectedColor!(item) != null
-                        ? widget.getCustomSelectedColor!(item)
-                        : widget.selectedColor ??
-                            (appStateSettings["materialYou"]
-                                ? null
-                                : getColor(context, "lightDarkAccentHeavy")),
-                    side: widget.getCustomBorderColor == null ||
-                            widget.getCustomBorderColor!(item) == null
-                        ? null
-                        : BorderSide(
-                            color: widget.getCustomBorderColor!(item)!,
-                          ),
-                    label: TextFont(
-                      text: label,
-                      fontSize: 15,
+                child: Tappable(
+                  onLongPress: () {
+                    if (widget.onLongPress != null) widget.onLongPress!(item);
+                  },
+                  color: Colors.transparent,
+                  child: Theme(
+                    data: Theme.of(context)
+                        .copyWith(canvasColor: Colors.transparent),
+                    child: ChoiceChip(
+                      avatar: avatar == null
+                          ? null
+                          : Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              mainAxisSize: MainAxisSize.max,
+                              children: [
+                                avatar,
+                              ],
+                            ),
+                      labelPadding: avatar == null
+                          ? null
+                          : EdgeInsets.only(
+                              left: 5, right: 10, top: 1, bottom: 1),
+                      padding: avatar == null
+                          ? null
+                          : EdgeInsets.only(left: 10, top: 7, bottom: 7),
+                      showCheckmark: widget.allowMultipleSelected == true &&
+                          avatar == null,
+                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      selectedColor: widget.getCustomSelectedColor != null &&
+                              widget.getCustomSelectedColor!(item) != null
+                          ? widget.getCustomSelectedColor!(item)
+                          : widget.selectedColor ??
+                              (appStateSettings["materialYou"]
+                                  ? null
+                                  : getColor(context, "lightDarkAccentHeavy")),
+                      side: widget.getCustomBorderColor == null ||
+                              widget.getCustomBorderColor!(item) == null
+                          ? null
+                          : BorderSide(
+                              color: widget.getCustomBorderColor!(item)!,
+                            ),
+                      label: TextFont(
+                        text: label,
+                        fontSize: 15,
+                      ),
+                      selected: selected,
+                      onSelected: (bool selected) {
+                        widget.onSelected(item);
+                      },
                     ),
-                    selected: selected,
-                    onSelected: (bool selected) {
-                      widget.onSelected(item);
-                    },
                   ),
                 ),
               ),

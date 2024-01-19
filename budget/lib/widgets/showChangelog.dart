@@ -36,6 +36,7 @@ String getChangelogString() {
     Date and time picker follows set color theme type 
     Fixed associated titles join
     Fixed partially collected loan filled in amount not collecting
+    Archived items have opacity in selection list
     < 5.1.8
     Significantly improved associated title searching
     Search category and subcategory when entering title
