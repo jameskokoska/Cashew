@@ -955,6 +955,29 @@ class _AddTransactionPageState extends State<AddTransactionPage>
     }
   }
 
+  void openSelectSpecialTransactionTypeInfo() {
+    openBottomSheet(
+      context,
+      fullSnap: false,
+      PopupFramework(
+        title: "select-transaction-type".tr(),
+        child: SelectTransactionTypePopup(
+          setTransactionType: (type) {
+            setSelectedType(
+              transactionTypeDisplayToEnum[type],
+            );
+          },
+          selectedTransactionType: selectedType,
+          transactionTypesToShow:
+              getTransactionSpecialTypesToShowGivenInitialTypeWhenAddingTransaction(
+            widget.selectedType,
+            isAddedToLoanObjective,
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     Color categoryColor = dynamicPastel(
@@ -1038,6 +1061,9 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                   child: SelectChips(
                     allowMultipleSelected: false,
                     wrapped: enableDoubleColumn(context),
+                    onLongPress: (item) {
+                      openSelectSpecialTransactionTypeInfo();
+                    },
                     extraWidgetBefore: Transform.scale(
                       scale: 1.3,
                       child: IconButton(
@@ -1050,26 +1076,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                           size: 19,
                         ),
                         onPressed: () {
-                          openBottomSheet(
-                            context,
-                            fullSnap: false,
-                            PopupFramework(
-                              title: "select-transaction-type".tr(),
-                              child: SelectTransactionTypePopup(
-                                setTransactionType: (type) {
-                                  setSelectedType(
-                                    transactionTypeDisplayToEnum[type],
-                                  );
-                                },
-                                selectedTransactionType: selectedType,
-                                transactionTypesToShow:
-                                    getTransactionSpecialTypesToShowGivenInitialTypeWhenAddingTransaction(
-                                  widget.selectedType,
-                                  isAddedToLoanObjective,
-                                ),
-                              ),
-                            ),
-                          );
+                          openSelectSpecialTransactionTypeInfo();
                         },
                       ),
                     ),

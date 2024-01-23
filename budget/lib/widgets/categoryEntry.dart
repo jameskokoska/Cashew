@@ -274,12 +274,12 @@ class CategoryEntry extends StatelessWidget {
                                       ),
                                     )
                                   : Builder(builder: (context) {
-                                      String text = (totalSpent == 0
-                                              ? "0"
-                                              : (percentSpent * 100)
-                                                  .toStringAsFixed(0)) +
-                                          "%";
-                                      text = text +
+                                      String percentString = convertToPercent(
+                                        percentSpent * 100,
+                                        numberDecimals: 0,
+                                        useLessThanZero: true,
+                                      );
+                                      String text = percentString +
                                           " " +
                                           (isSubcategory
                                               ? "of-subcategory".tr()

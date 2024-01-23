@@ -162,10 +162,12 @@ class WalletEntryRow extends StatelessWidget {
     required this.walletWithDetails,
     required this.selected,
     this.isCurrencyRow = false,
+    this.percent,
   });
   final WalletWithDetails walletWithDetails;
   final bool selected;
   final bool isCurrencyRow;
+  final double? percent;
 
   @override
   Widget build(BuildContext context) {
@@ -243,13 +245,41 @@ class WalletEntryRow extends StatelessWidget {
                               left: 10,
                             ),
                             child: TextFont(
-                              text: isCurrencyRow
-                                  ? (walletWithDetails.wallet.currency ?? "")
-                                      .toString()
-                                      .allCaps
-                                  : walletWithDetails.wallet.name,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18,
+                              textAlign: TextAlign.right,
+                              text: "",
+                              maxLines: 1,
+                              richTextSpan: [
+                                TextSpan(
+                                  text: isCurrencyRow
+                                      ? (walletWithDetails.wallet.currency ??
+                                              "")
+                                          .toString()
+                                          .allCaps
+                                      : walletWithDetails.wallet.name,
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    color: getColor(context, "black"),
+                                    fontFamily: appStateSettings["font"],
+                                    fontFamilyFallback: ['Inter'],
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                if (percent != null)
+                                  TextSpan(
+                                    text: "  " +
+                                        "(" +
+                                        convertToPercent(percent ?? 0,
+                                            useLessThanZero: true,
+                                            numberDecimals: 0) +
+                                        ")",
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      color: getColor(context, "textLight"),
+                                      fontFamily: appStateSettings["font"],
+                                      fontFamilyFallback: ['Inter'],
+                                    ),
+                                  ),
+                              ],
                             ),
                           ),
                         ),

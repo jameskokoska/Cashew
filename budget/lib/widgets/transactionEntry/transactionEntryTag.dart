@@ -213,7 +213,7 @@ class ObjectivePercentTag extends StatelessWidget {
                 name: objective.name +
                     ": " +
                     convertToPercent(percentageTowardsGoal * 100,
-                        numberDecimals: 0),
+                        numberDecimals: 0, useLessThanZero: true),
                 progress: percentageTowardsGoal,
               ),
             ),

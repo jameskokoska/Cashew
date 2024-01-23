@@ -144,7 +144,7 @@ class RenderHomePageWidgets extends StatefulWidget {
   const RenderHomePageWidgets({super.key});
 
   @override
-  State<RenderHomePageWidgets> createState() => _RenderHomePageWidgetsState();
+  State<RenderHomePageWidgets> createState() => RenderHomePageWidgetsState();
 }
 
 Future updateWidgetColorsAndText(BuildContext context) async {
@@ -198,13 +198,17 @@ Future updateWidgetColorsAndText(BuildContext context) async {
   return;
 }
 
-class _RenderHomePageWidgetsState extends State<RenderHomePageWidgets> {
+class RenderHomePageWidgetsState extends State<RenderHomePageWidgets> {
   @override
   void initState() {
     super.initState();
     Future.delayed(Duration.zero, () async {
       updateWidgetColorsAndText(context);
     });
+  }
+
+  void refreshState() {
+    setState(() {});
   }
 
   @override

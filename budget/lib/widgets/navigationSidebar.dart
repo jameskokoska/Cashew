@@ -200,8 +200,12 @@ class NavigationSidebarState extends State<NavigationSidebar> {
                                           if (navigatorKey.currentContext !=
                                               null) {
                                             await showCustomDatePicker(
-                                                navigatorKey.currentContext!,
-                                                DateTime.now());
+                                              navigatorKey.currentContext!,
+                                              DateTime.now(),
+                                              cancelText: "",
+                                              helpText: "",
+                                              confirmText: "close".tr(),
+                                            );
                                             isCalendarOpened = false;
                                           }
                                         },

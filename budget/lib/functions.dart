@@ -35,7 +35,9 @@ extension CapExtension on String {
 }
 
 String convertToPercent(double amount,
-    {double? finalNumber, int? numberDecimals}) {
+    {double? finalNumber, int? numberDecimals, bool useLessThanZero = false}) {
+  if (amount == -0) amount = 0;
+  if (finalNumber == -0) finalNumber = 0;
   int numberDecimalsGet = numberDecimals != null
       ? numberDecimals
       : finalNumber == null
@@ -47,6 +49,17 @@ String convertToPercent(double amount,
               : getDecimalPlaces(finalNumber);
 
   String roundedAmount = amount.toStringAsFixed(numberDecimalsGet);
+  if (useLessThanZero &&
+      roundedAmount == "0" &&
+      (finalNumber == null && amount.abs() != 0 ||
+          finalNumber != null && finalNumber.abs() != 0)) {
+    if (finalNumber == null && amount < 0 ||
+        finalNumber != null && finalNumber < 0) {
+      roundedAmount = "< -1";
+    } else {
+      roundedAmount = "< 1";
+    }
+  }
 
   return roundedAmount + "%";
 }

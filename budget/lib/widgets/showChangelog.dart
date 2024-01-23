@@ -26,6 +26,15 @@ import 'listItem.dart';
 
 String getChangelogString() {
   return """
+    < 5.2.0
+    If rounded to 0% but not exactly 0%, < 1% is used instead
+    Improved help text in view calendar
+    Widget automatically updates when settings changed (A)
+    Removed ability to select accounts when only one account for net total settings
+    Tapping an upcoming transaction opens overdue tab
+    Currency total includes percentage
+    Long press transaction type when adding transaction opens info popup
+    Long press goal/long term loan amount to copy total to clipboard
     < 5.1.9
     Reorder theme mode settings, system is always first
     If multiple accounts with different currencies, can enable currency total summary in accounts list homepage widget

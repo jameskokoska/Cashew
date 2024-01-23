@@ -106,10 +106,15 @@ class _WalletPickerPeriodCycleState extends State<WalletPickerPeriodCycle> {
 
   @override
   Widget build(BuildContext context) {
+    // We can hide the all wallets selection if only one wallet
+    // If no wallets selected, all of them are by default, so even if user removes one
+    // and we didn't have any selected, we are okay!
+    bool showAllWalletsSelection = widget.homePageWidgetDisplay != null &&
+        widget.allWalletsSettingKey != null &&
+        Provider.of<AllWallets>(context).list.length > 1;
     return Column(
       children: [
-        if (widget.homePageWidgetDisplay != null &&
-            widget.allWalletsSettingKey != null)
+        if (showAllWalletsSelection)
           Row(
             children: [
               Expanded(
@@ -138,9 +143,7 @@ class _WalletPickerPeriodCycleState extends State<WalletPickerPeriodCycle> {
               ),
             ],
           ),
-        if (widget.homePageWidgetDisplay != null &&
-            widget.allWalletsSettingKey != null)
-          SizedBox(height: 10),
+        if (showAllWalletsSelection) SizedBox(height: 10),
         // CheckItems(
         //   triggerInitialOnChanged: false,
         //   minVerticalPadding: 0,
@@ -181,8 +184,7 @@ class _WalletPickerPeriodCycleState extends State<WalletPickerPeriodCycle> {
         //     );
         //   },
         // ),
-        if (widget.homePageWidgetDisplay != null &&
-            widget.allWalletsSettingKey != null)
+        if (showAllWalletsSelection)
           EditHomePagePinnedWalletsPopup(
             includeFramework: false,
             homePageWidgetDisplay: widget.homePageWidgetDisplay!,
@@ -198,13 +200,11 @@ class _WalletPickerPeriodCycleState extends State<WalletPickerPeriodCycle> {
             allSelected: allWalletsSelected,
           ),
         Padding(
-          padding: widget.homePageWidgetDisplay != null &&
-                  widget.allWalletsSettingKey != null
+          padding: showAllWalletsSelection
               ? EdgeInsets.zero
               : const EdgeInsets.only(top: 8.0),
           child: HorizontalBreakAbove(
-            enabled: widget.homePageWidgetDisplay != null &&
-                widget.allWalletsSettingKey != null,
+            enabled: showAllWalletsSelection,
             child: PeriodCyclePicker(
               cycleSettingsExtension: widget.cycleSettingsExtension,
               onlyShowCycleOption: widget.onlyShowCycleOption,

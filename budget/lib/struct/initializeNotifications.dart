@@ -74,9 +74,10 @@ void runNotificationPayLoads(context) {
       ),
     );
   } else if (notificationPayload == "upcomingTransaction") {
+    // When the notification comes in, the transaction is past due!
     pushRoute(
       context,
-      UpcomingOverdueTransactions(overdueTransactions: false),
+      UpcomingOverdueTransactions(overdueTransactions: true),
     );
   }
   notificationPayload = "";

@@ -345,6 +345,7 @@ class _ObjectivePageContentState extends State<_ObjectivePageContent> {
                                           finalNumber:
                                               percentageTowardsGoal * 100,
                                           numberDecimals: 0,
+                                          useLessThanZero: true,
                                         ),
                                         fontSize: 28,
                                         fontWeight: FontWeight.bold,
@@ -354,15 +355,19 @@ class _ObjectivePageContentState extends State<_ObjectivePageContent> {
                                   Builder(builder: (context) {
                                     String amountSpentLabel =
                                         getObjectiveAmountSpentLabel(
-                                            context: context,
-                                            showTotalSpent: showTotalSpent,
-                                            objectiveAmount: objectiveAmount,
-                                            totalAmount: totalAmount);
+                                      context: context,
+                                      showTotalSpent: showTotalSpent,
+                                      objectiveAmount: objectiveAmount,
+                                      totalAmount: totalAmount,
+                                    );
                                     return AnimatedSizeSwitcher(
                                       child: IntrinsicWidth(
                                         key: ValueKey(showTotalSpent),
                                         child: Tappable(
                                           borderRadius: 15,
+                                          onLongPress: () {
+                                            copyToClipboard(amountSpentLabel);
+                                          },
                                           onTap: () {
                                             _swapTotalSpentDisplay();
                                           },

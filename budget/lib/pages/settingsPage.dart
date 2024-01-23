@@ -686,11 +686,23 @@ class WidgetSettings extends StatelessWidget {
   Widget build(BuildContext context) {
     if (getPlatform(ignoreEmulation: true) != PlatformOS.isAndroid)
       return SizedBox.shrink();
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SettingsHeader(title: "widgets".tr()),
-        NetWorthWidgetSetting(),
+        SettingsContainer(
+          title: "net-worth-total-widget".tr(),
+          description: "select-accounts-and-time-period".tr(),
+          onTap: () async {
+            await openNetWorthSettings(context);
+            // We need to resfresh the widget rendering since it exists on the homepage!
+            homePageStateKey.currentState?.refreshState();
+          },
+          icon: appStateSettings["outlinedIcons"]
+              ? Icons.area_chart_outlined
+              : Icons.area_chart_rounded,
+        ),
         SettingsContainerDropdown(
           title: "widget-theme".tr(),
           icon: appStateSettings["outlinedIcons"]
@@ -1157,24 +1169,6 @@ class ExtraZerosButtonSetting extends StatelessWidget {
         if (item == "") return "none".tr().capitalizeFirst;
         return item;
       },
-    );
-  }
-}
-
-class NetWorthWidgetSetting extends StatelessWidget {
-  const NetWorthWidgetSetting({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return SettingsContainer(
-      title: "net-worth-total-widget".tr(),
-      description: "select-accounts-and-time-period".tr(),
-      onTap: () {
-        openNetWorthSettings(context);
-      },
-      icon: appStateSettings["outlinedIcons"]
-          ? Icons.area_chart_outlined
-          : Icons.area_chart_rounded,
     );
   }
 }

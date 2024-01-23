@@ -114,6 +114,11 @@ class HomePageWalletList extends StatelessWidget {
                         stream: database.watchAllWalletsWithDetails(
                             mergeLikeCurrencies: true),
                         builder: (context, snapshot) {
+                          double totalAmountSpent = (snapshot.data ?? []).fold(
+                              0.0,
+                              (double acc, WalletWithDetails wallet) =>
+                                  acc + (wallet.totalSpent ?? 0.0));
+
                           if (snapshot.hasData) {
                             return Column(
                               mainAxisSize: MainAxisSize.max,
@@ -131,6 +136,12 @@ class HomePageWalletList extends StatelessWidget {
                                         walletDetails.wallet.currency,
                                     walletWithDetails: walletDetails,
                                     isCurrencyRow: true,
+                                    percent: (totalAmountSpent == 0
+                                            ? 0
+                                            : (walletDetails.totalSpent ?? 0) /
+                                                totalAmountSpent) *
+                                        -1 *
+                                        100,
                                   ),
                                 if (snapshot.hasData &&
                                     snapshot.data!.length > 0)

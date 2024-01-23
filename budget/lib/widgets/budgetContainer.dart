@@ -694,10 +694,8 @@ class BudgetProgress extends StatelessWidget {
     return Container(
       child: Center(
         child: TextFont(
-          text: (percent.toStringAsFixed(0) == "-0"
-                  ? "0"
-                  : percent.toStringAsFixed(0)) +
-              "%",
+          text: convertToPercent(percent,
+              numberDecimals: 0, useLessThanZero: true),
           textColor: color,
           fontSize: large ? 16 : 14,
           textAlign: TextAlign.center,

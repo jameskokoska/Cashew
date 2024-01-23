@@ -1191,7 +1191,8 @@ class PastBudgetContainer extends StatelessWidget {
                           textBuilder: (value) {
                             return TextFont(
                               autoSizeText: true,
-                              text: value.toStringAsFixed(0) + "%",
+                              text: convertToPercent(value,
+                                  numberDecimals: 0, useLessThanZero: true),
                               fontSize: 16,
                               textAlign: TextAlign.center,
                               fontWeight: FontWeight.bold,

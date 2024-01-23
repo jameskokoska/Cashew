@@ -111,7 +111,10 @@ Future queueTransactionFromMessage(String messageString) async {
 
   if (templateFound == null) return false;
 
-  if (amountDouble == null) amountDouble = getAmountFromString(title ?? "");
+  //if (amountDouble == null) amountDouble = getAmountFromString(title ?? "");
+  // We don't need this line, we can still queue up a transaction without these details,
+  // however maybe the user doesn't want to queue it up if its missing details?
+  if (amountDouble == null || title == null) return false;
 
   TransactionCategory? category;
   if (title != null) {

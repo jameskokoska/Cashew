@@ -7,6 +7,9 @@ Future<DateTime?> showCustomDatePicker(
   BuildContext context,
   DateTime initialDate, {
   DatePickerEntryMode initialEntryMode = DatePickerEntryMode.calendar,
+  String? helpText,
+  String? cancelText,
+  String? confirmText,
 }) async {
   return await showDatePicker(
     context: context,
@@ -14,6 +17,9 @@ Future<DateTime?> showCustomDatePicker(
     initialEntryMode: initialEntryMode,
     firstDate: DateTime(DateTime.now().year - 1000),
     lastDate: DateTime(DateTime.now().year + 1000),
+    helpText: helpText,
+    cancelText: cancelText,
+    confirmText: confirmText,
     builder: (BuildContext context, Widget? child) {
       return Theme(
         data: Theme.of(context).copyWith(
