@@ -77,7 +77,9 @@ Future<DateTime?> selectDateAndTimeSequence(
   DateTime? selectedDateTime = await showCustomDatePicker(
     context,
     initialDate,
-    confirmText: "next-date-time".tr(),
+    confirmText: appStateSettings["materialYou"]
+        ? "next-date-time".tr()
+        : "next-date-time".tr().allCaps,
   );
   if (selectedDateTime == null) {
     openSnackbar(
@@ -85,7 +87,7 @@ Future<DateTime?> selectDateAndTimeSequence(
         icon: appStateSettings["outlinedIcons"]
             ? Icons.warning_outlined
             : Icons.warning_rounded,
-        title: "date-not-selected".tr().allCaps,
+        title: "date-not-selected".tr(),
       ),
     );
     return null;
@@ -96,7 +98,9 @@ Future<DateTime?> selectDateAndTimeSequence(
       hour: initialDate.hour,
       minute: initialDate.minute,
     ),
-    confirmText: "set-date-time".tr().allCaps,
+    confirmText: appStateSettings["materialYou"]
+        ? "set-date-time".tr()
+        : "set-date-time".tr().allCaps,
   );
   if (selectedTime == null) {
     openSnackbar(

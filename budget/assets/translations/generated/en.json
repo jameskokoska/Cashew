@@ -1041,6 +1041,6 @@
   "currency-total-description": "List all account currency totals",
   "app": "App",
   "set-color": "Set Color",
-  "next-date-time": "NEXT",
-  "set-date-time": "SET"
+  "next-date-time": "Next",
+  "set-date-time": "Set"
 }

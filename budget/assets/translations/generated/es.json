@@ -1041,6 +1041,6 @@
   "currency-total-description": "Enumere todos los totales de moneda de cuentas",
   "app": "Solicitud",
   "set-color": "Color colectivo",
-  "next-date-time": "PRÓXIMO",
-  "set-date-time": "COLOCAR"
+  "next-date-time": "Próximo",
+  "set-date-time": "Colocar"
 }
