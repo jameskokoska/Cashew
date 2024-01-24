@@ -946,20 +946,17 @@ class _InstallmentObjectivePopupState extends State<InstallmentObjectivePopup> {
   Widget build(BuildContext context) {
     Widget editTransferDetails = Column(
       children: [
-        Container(
-          width: getWidthBottomSheet(context) - 36,
-          child: TextInput(
-            icon: appStateSettings["outlinedIcons"]
-                ? Icons.title_outlined
-                : Icons.title_rounded,
-            autoFocus: false,
-            onChanged: (text) async {
-              selectedTitle = text;
-            },
-            initialValue: selectedTitle,
-            labelText: "title-placeholder".tr(),
-            padding: EdgeInsets.only(bottom: 13),
-          ),
+        TextInput(
+          icon: appStateSettings["outlinedIcons"]
+              ? Icons.title_outlined
+              : Icons.title_rounded,
+          autoFocus: false,
+          onChanged: (text) async {
+            selectedTitle = text;
+          },
+          initialValue: selectedTitle,
+          labelText: "title-placeholder".tr(),
+          padding: EdgeInsets.only(bottom: 13),
         ),
         DateButton(
           internalPadding: EdgeInsets.only(right: 5),

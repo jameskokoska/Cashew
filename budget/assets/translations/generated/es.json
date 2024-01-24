@@ -549,7 +549,7 @@
   "summary": "Resumen",
   "edit-item": "Elemento de edición",
   "add-item": "Añadir artículo",
-  "update-item": "",
+  "update-item": "Artículo de actualización",
   "delete-item": "Eliminar elemento",
   "owed-to-you": "Le debió",
   "name": "Nombre",
@@ -1039,5 +1039,8 @@
   "widget-background-opacity": "Opacidad de fondo",
   "currency-total": "Total de moneda",
   "currency-total-description": "Enumere todos los totales de moneda de cuentas",
-  "app": "Solicitud"
+  "app": "Solicitud",
+  "set-color": "Color colectivo",
+  "next-date-time": "PRÓXIMO",
+  "set-date-time": "COLOCAR"
 }

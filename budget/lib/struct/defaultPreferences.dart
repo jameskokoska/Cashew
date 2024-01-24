@@ -285,6 +285,12 @@ Future<Map<String, dynamic>> getDefaultPreferences() async {
     // "customPeriodEndDateWalletsList": null,
     // "customPeriodPastDaysWalletsList": 30,
     // *********************************************************** //
+    //
+    // Web app asks to login every time on launch setting, on by default - still testing
+    // because Safari blocks popups when webpage loads? so there is no point!
+    // The last synced button is there though!
+    // "webForceLoginPopupOnLaunch": true,
+    //
   };
 }
 

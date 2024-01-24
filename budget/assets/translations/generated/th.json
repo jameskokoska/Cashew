@@ -549,7 +549,7 @@
   "summary": "สรุป",
   "edit-item": "แก้ไขรายการ",
   "add-item": "เพิ่มรายการ",
-  "update-item": "",
+  "update-item": "อัปเดตรายการ",
   "delete-item": "ลบรายการ",
   "owed-to-you": "เป็นหนี้คุณ",
   "name": "ชื่อ",
@@ -1039,5 +1039,8 @@
   "widget-background-opacity": "ความทึบแสง",
   "currency-total": "รวมสกุลเงิน",
   "currency-total-description": "แสดงรายการสกุลเงินทั้งหมดบัญชีทั้งหมด",
-  "app": "แอปพลิเคชัน"
+  "app": "แอปพลิเคชัน",
+  "set-color": "ตั้งค่าสี",
+  "next-date-time": "ต่อไป",
+  "set-date-time": "ชุด"
 }

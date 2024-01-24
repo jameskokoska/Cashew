@@ -1039,5 +1039,8 @@
   "widget-background-opacity": "背景不透明度",
   "currency-total": "貨幣總數",
   "currency-total-description": "列出所有帳戶貨幣總計",
-  "app": "應用"
+  "app": "應用",
+  "set-color": "設置顏色",
+  "next-date-time": "下一個",
+  "set-date-time": "放"
 }

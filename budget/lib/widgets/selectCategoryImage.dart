@@ -69,25 +69,21 @@ class _SelectCategoryImageState extends State<SelectCategoryImage> {
       fullSnap: true,
       PopupFramework(
         title: "enter-emoji".tr(),
-        child: Column(
-          children: [
-            SelectText(
-              icon: appStateSettings["outlinedIcons"]
-                  ? Icons.emoji_emotions_outlined
-                  : Icons.emoji_emotions_rounded,
-              setSelectedText: (value) {
-                widget.setSelectedEmoji(value);
-              },
-              popContextWhenSet: true,
-              inputFormatters: [
-                FilteringTextInputFormatter.allow(RegExp(
-                    r'(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])'))
-              ],
-              placeholder: "enter-emoji-placeholder".tr() + " 😀...",
-              autoFocus: false,
-              requestLateAutoFocus: true,
-            ),
+        child: SelectText(
+          buttonLabel: null,
+          icon: appStateSettings["outlinedIcons"]
+              ? Icons.emoji_emotions_outlined
+              : Icons.emoji_emotions_rounded,
+          setSelectedText: (value) {
+            widget.setSelectedEmoji(value);
+          },
+          popContextWhenSet: true,
+          inputFormatters: [
+            FilteringTextInputFormatter.allow(RegExp(
+                r'(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])'))
           ],
+          placeholder: "enter-emoji-placeholder".tr() + " 😀...",
+          autoFocus: true,
         ),
       ),
     );

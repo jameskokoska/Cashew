@@ -549,7 +549,7 @@
   "summary": "Streszczenie",
   "edit-item": "Edytuj rzecz",
   "add-item": "Dodaj Przedmiot",
-  "update-item": "",
+  "update-item": "Aktualizacja elementu",
   "delete-item": "Usuń przedmiot",
   "owed-to-you": "Winien ci",
   "name": "Nazwa",
@@ -1039,5 +1039,8 @@
   "widget-background-opacity": "Krycie tła",
   "currency-total": "Całkowita waluta",
   "currency-total-description": "Wymień wszystkie sumy walutowe konta",
-  "app": "Aplikacja"
+  "app": "Aplikacja",
+  "set-color": "Ustaw kolor",
+  "next-date-time": "NASTĘPNY",
+  "set-date-time": "USTAWIĆ"
 }

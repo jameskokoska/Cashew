@@ -549,7 +549,7 @@
   "summary": "Краткое содержание",
   "edit-item": "Редакт. пункт",
   "add-item": "Добавить элемент",
-  "update-item": "",
+  "update-item": "Обновить элемент",
   "delete-item": "Удалить пункт",
   "owed-to-you": "Задолженность тебе",
   "name": "Имя",
@@ -1039,5 +1039,8 @@
   "widget-background-opacity": "Фоновая непрозрачность",
   "currency-total": "Всего валюта",
   "currency-total-description": "Перечислите все общие валюты учетной записи",
-  "app": "Приложение"
+  "app": "Приложение",
+  "set-color": "Установить цвет",
+  "next-date-time": "СЛЕДУЮЩИЙ",
+  "set-date-time": "НАБОР"
 }

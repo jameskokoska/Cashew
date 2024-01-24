@@ -549,7 +549,7 @@
   "summary": "ملخص",
   "edit-item": "تعديل عنصر",
   "add-item": "اضافة عنصر",
-  "update-item": "",
+  "update-item": "تحديث العنصر",
   "delete-item": "حذف العنصر",
   "owed-to-you": "مدين لك",
   "name": "اسم",
@@ -1039,5 +1039,8 @@
   "widget-background-opacity": "عتامة الخلفية",
   "currency-total": "إجمالي العملة",
   "currency-total-description": "قائمة جميع إجماليات عملة الحساب",
-  "app": "طلب"
+  "app": "طلب",
+  "set-color": "ضبط اللون",
+  "next-date-time": "التالي",
+  "set-date-time": "تعيين"
 }

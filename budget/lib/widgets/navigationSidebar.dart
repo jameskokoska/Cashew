@@ -473,16 +473,27 @@ class _SyncButtonState extends State<SyncButton> {
                             child: TimerBuilder.periodic(
                               Duration(seconds: 5),
                               builder: (context) {
+                                DateTime? dateTimeLastSynced =
+                                    getTimeLastSynced();
+                                int diff = DateTime.now()
+                                    .difference(
+                                        dateTimeLastSynced ?? DateTime.now())
+                                    .inDays;
                                 return TextFont(
                                   textAlign: TextAlign.left,
-                                  textColor: getColor(context, "textLight"),
+                                  textColor: diff > 1
+                                      ? Theme.of(context)
+                                          .colorScheme
+                                          .onErrorContainer
+                                          .withOpacity(0.5)
+                                      : getColor(context, "textLight"),
                                   fontSize: 13,
                                   maxLines: 3,
                                   text: "synced".tr() +
                                       " " +
-                                      (getTimeLastSynced() == null
+                                      (dateTimeLastSynced == null
                                           ? "never".tr()
-                                          : getTimeAgo(getTimeLastSynced()!)),
+                                          : getTimeAgo(dateTimeLastSynced)),
                                 );
                               },
                             ),

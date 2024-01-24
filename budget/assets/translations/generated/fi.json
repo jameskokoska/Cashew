@@ -549,7 +549,7 @@
   "summary": "Yhteenveto",
   "edit-item": "Muokkaa kohdetta",
   "add-item": "Lisää tavara",
-  "update-item": "",
+  "update-item": "Päivityskohta",
   "delete-item": "Poista kohde",
   "owed-to-you": "Sinulle",
   "name": "Nimi",
@@ -1039,5 +1039,8 @@
   "widget-background-opacity": "Taustan opasiteetti",
   "currency-total": "Valuutan kokonaismäärä",
   "currency-total-description": "Luettele kaikki tilin valuutan kokonaismäärät",
-  "app": "Soveltaminen"
+  "app": "Soveltaminen",
+  "set-color": "Aseta väri",
+  "next-date-time": "SEURAAVA",
+  "set-date-time": "ASETA"
 }

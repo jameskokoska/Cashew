@@ -1039,5 +1039,8 @@
   "widget-background-opacity": "背景不透明度",
   "currency-total": "货币总数",
   "currency-total-description": "列出所有帐户货币总计",
-  "app": "应用"
+  "app": "应用",
+  "set-color": "设置颜色",
+  "next-date-time": "下一个",
+  "set-date-time": "放"
 }

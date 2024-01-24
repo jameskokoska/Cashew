@@ -549,7 +549,7 @@
   "summary": "סיכום",
   "edit-item": "ערוך פריט",
   "add-item": "הוסף פריט",
-  "update-item": "",
+  "update-item": "עדכון פריט",
   "delete-item": "למחוק פריט",
   "owed-to-you": "חייב לך",
   "name": "שֵׁם",
@@ -1039,5 +1039,8 @@
   "widget-background-opacity": "אטימות רקע",
   "currency-total": "סה\"כ מטבע",
   "currency-total-description": "רשום את כל סיכומי מטבע החשבון",
-  "app": "יישום"
+  "app": "יישום",
+  "set-color": "הגדר צבע",
+  "next-date-time": "הַבָּא",
+  "set-date-time": "מַעֲרֶכֶת"
 }

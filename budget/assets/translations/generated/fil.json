@@ -549,7 +549,7 @@
   "summary": "Buod",
   "edit-item": "I -edit ang item",
   "add-item": "Magdagdag ng item",
-  "update-item": "",
+  "update-item": "I -update ang item",
   "delete-item": "Tanggalin ang item",
   "owed-to-you": "May utang sa iyo",
   "name": "Pangalan",
@@ -1039,5 +1039,8 @@
   "widget-background-opacity": "Opacity ng background",
   "currency-total": "Kabuuan ng pera",
   "currency-total-description": "Ilista ang lahat ng kabuuan ng pera ng account",
-  "app": "Application"
+  "app": "Application",
+  "set-color": "Itakda ang Kulay",
+  "next-date-time": "Susunod",
+  "set-date-time": "ITAKDA"
 }

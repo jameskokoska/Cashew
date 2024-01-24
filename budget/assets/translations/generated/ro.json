@@ -549,7 +549,7 @@
   "summary": "rezumat",
   "edit-item": "Editați articolul",
   "add-item": "Adaugare element",
-  "update-item": "",
+  "update-item": "Actualizați elementul",
   "delete-item": "Sterge articolul",
   "owed-to-you": "Datorat -o",
   "name": "Nume",
@@ -1039,5 +1039,8 @@
   "widget-background-opacity": "Opacitate de fond",
   "currency-total": "Total valutar",
   "currency-total-description": "Enumerați toate totalul monedei contului",
-  "app": "Aplicație"
+  "app": "Aplicație",
+  "set-color": "Setați culoarea",
+  "next-date-time": "URMĂTORUL",
+  "set-date-time": "A STABILIT"
 }

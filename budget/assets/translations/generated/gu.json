@@ -549,7 +549,7 @@
   "summary": "સારાંશ",
   "edit-item": "વસ્તુ સંપાદિત કરો",
   "add-item": "વસ્તુ ઉમેરો",
-  "update-item": "",
+  "update-item": "વસ્તુ અપડેટ કરો",
   "delete-item": "વસ્તુ કા Delete ી નાખો",
   "owed-to-you": "તમને ow ણી",
   "name": "નામ",
@@ -1039,5 +1039,8 @@
   "widget-background-opacity": "પૃષ્ઠભૂમિ",
   "currency-total": "ચલણ કુલ",
   "currency-total-description": "બધા ખાતા ચલણની સૂચિ બનાવો",
-  "app": "નિયમ"
+  "app": "નિયમ",
+  "set-color": "રંગ",
+  "next-date-time": "આગલું",
+  "set-date-time": "સમૂહ"
 }

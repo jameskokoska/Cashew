@@ -756,6 +756,11 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                 afterSetTitle();
               },
               noteInputController: _noteInputController,
+              setSelectedDateTime: (DateTime date) {
+                setState(() {
+                  selectedDate = date;
+                });
+              },
             ),
           );
           // Fix over-scroll stretch when keyboard pops up quickly
@@ -2271,6 +2276,7 @@ class SelectTitle extends StatefulWidget {
     required this.setSelectedNote,
     required this.setSelectedCategory,
     required this.setSelectedSubCategory,
+    required this.setSelectedDateTime,
     this.selectedTitle,
     required this.noteInputController,
     this.next,
@@ -2279,6 +2285,7 @@ class SelectTitle extends StatefulWidget {
   final Function(String) setSelectedNote;
   final Function(TransactionCategory) setSelectedCategory;
   final Function(TransactionCategory) setSelectedSubCategory;
+  final Function(DateTime) setSelectedDateTime;
   final String? selectedTitle;
   final TextEditingController noteInputController;
   final VoidCallback? next;
@@ -2290,6 +2297,7 @@ class SelectTitle extends StatefulWidget {
 class _SelectTitleState extends State<SelectTitle> {
   int selectedIndex = 0;
   TransactionAssociatedTitleWithCategory? selectedAssociatedTitle;
+  DateTime selectedDateTime = DateTime.now();
   bool get foundFromCategory {
     return selectedAssociatedTitle?.title.associatedTitlePk == "-1" ||
         selectedAssociatedTitle?.title.associatedTitlePk == "-2";
@@ -2342,13 +2350,27 @@ class _SelectTitleState extends State<SelectTitle> {
   Widget build(BuildContext context) {
     return PopupFramework(
       title: "enter-title".tr(),
-      hasBottomSafeArea: false,
+      outsideExtraWidget: IconButton(
+        iconSize: 25,
+        padding: EdgeInsets.all(getPlatform() == PlatformOS.isIOS ? 15 : 20),
+        icon: Icon(
+          appStateSettings["outlinedIcons"]
+              ? Icons.calendar_month_outlined
+              : Icons.calendar_month_rounded,
+        ),
+        onPressed: () async {
+          DateTime? dateTimeSelected =
+              await selectDateAndTimeSequence(context, selectedDateTime);
+          if (dateTimeSelected == null) return;
+          selectedDateTime = dateTimeSelected;
+          widget.setSelectedDateTime(dateTimeSelected);
+        },
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
-            width: getWidthBottomSheet(context) - 36,
             child: TextInput(
               icon: appStateSettings["outlinedIcons"]
                   ? Icons.title_outlined
@@ -2391,11 +2413,9 @@ class _SelectTitleState extends State<SelectTitle> {
             child: selectedAssociatedTitle == null
                 ? Container(
                     key: ValueKey(0),
-                    width: getWidthBottomSheet(context) - 36,
                   )
                 : Container(
                     key: ValueKey(selectedAssociatedTitle?.category.categoryPk),
-                    width: getWidthBottomSheet(context) - 36,
                     padding: EdgeInsets.only(top: 13),
                     child: Tappable(
                       borderRadius: 15,
@@ -2447,7 +2467,6 @@ class _SelectTitleState extends State<SelectTitle> {
               ? Padding(
                   padding: const EdgeInsets.only(top: 13),
                   child: Container(
-                    width: getWidthBottomSheet(context) - 36,
                     child: TransactionNotesTextInput(
                       noteInputController: widget.noteInputController,
                       setNotesInputFocused: (isFocused) {},
@@ -2491,11 +2510,10 @@ class _SelectTitleState extends State<SelectTitle> {
           //     },
           //   ),
           // ),
-          Container(height: 20),
+          SizedBox(height: 15),
           widget.next != null
               ? Button(
                   label: "select-category".tr(),
-                  width: getWidthBottomSheet(context),
                   onTap: () {
                     Navigator.pop(context);
                     if (widget.next != null) {
@@ -2504,7 +2522,6 @@ class _SelectTitleState extends State<SelectTitle> {
                   },
                 )
               : SizedBox.shrink(),
-          SizedBox(height: 10),
         ],
       ),
     );
@@ -2567,7 +2584,8 @@ class SelectText extends StatefulWidget {
     this.popContextWhenSet = false,
     this.inputFormatters,
     this.backgroundColor,
-    this.margin = const EdgeInsets.only(bottom: 14),
+    this.widgetBeside,
+    required this.buttonLabel,
   }) : super(key: key);
   final Function(String) setSelectedText;
   final String? selectedText;
@@ -2584,7 +2602,8 @@ class SelectText extends StatefulWidget {
   final bool popContextWhenSet;
   final List<TextInputFormatter>? inputFormatters;
   final Color? backgroundColor;
-  final EdgeInsets margin;
+  final Widget? widgetBeside;
+  final String? buttonLabel;
 
   @override
   _SelectTextState createState() => _SelectTextState();
@@ -2605,46 +2624,63 @@ class _SelectTextState extends State<SelectText> {
       });
   }
 
+  onEditingComplete() {
+    widget.setSelectedText(input ?? "");
+    if (widget.popContext) {
+      Navigator.pop(context);
+    }
+    if (widget.next != null) {
+      widget.next!();
+    }
+    if (widget.nextWithInput != null) {
+      widget.nextWithInput!(input ?? "");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: widget.margin,
-      width: getWidthBottomSheet(context) - 36,
-      child: TextInput(
-        backgroundColor: widget.backgroundColor,
-        inputFormatters: widget.inputFormatters,
-        focusNode: _focusNode,
-        textCapitalization: widget.textCapitalization,
-        icon: widget.icon != null
-            ? widget.icon
-            : appStateSettings["outlinedIcons"]
-                ? Icons.title_outlined
-                : Icons.title_rounded,
-        initialValue: widget.selectedText,
-        autoFocus: widget.autoFocus,
-        readOnly: widget.readOnly,
-        onEditingComplete: () {
-          widget.setSelectedText(input ?? "");
-          if (widget.popContext) {
-            Navigator.pop(context);
-          }
-          if (widget.next != null) {
-            widget.next!();
-          }
-          if (widget.nextWithInput != null) {
-            widget.nextWithInput!(input ?? "");
-          }
-        },
-        onChanged: (text) {
-          input = text;
-          widget.setSelectedText(input!);
-          if (widget.popContextWhenSet) {
-            Navigator.pop(context);
-          }
-        },
-        labelText: widget.placeholder ?? widget.labelText,
-        padding: EdgeInsets.zero,
-      ),
+    return Column(
+      children: [
+        Row(
+          children: [
+            Expanded(
+              child: TextInput(
+                backgroundColor: widget.backgroundColor,
+                inputFormatters: widget.inputFormatters,
+                focusNode: _focusNode,
+                textCapitalization: widget.textCapitalization,
+                icon: widget.icon != null
+                    ? widget.icon
+                    : appStateSettings["outlinedIcons"]
+                        ? Icons.title_outlined
+                        : Icons.title_rounded,
+                initialValue: widget.selectedText,
+                autoFocus: widget.autoFocus,
+                readOnly: widget.readOnly,
+                onEditingComplete: onEditingComplete,
+                onChanged: (text) {
+                  input = text;
+                  widget.setSelectedText(input!);
+                  if (widget.popContextWhenSet) {
+                    Navigator.pop(context);
+                  }
+                },
+                labelText: widget.placeholder ?? widget.labelText,
+                padding: EdgeInsets.zero,
+              ),
+            ),
+            if (widget.widgetBeside != null) widget.widgetBeside!,
+          ],
+        ),
+        SizedBox(
+          height: widget.buttonLabel != null ? 15 : 5,
+        ),
+        if (widget.buttonLabel != null)
+          Button(
+            label: widget.buttonLabel ?? "",
+            onTap: onEditingComplete,
+          ),
+      ],
     );
   }
 }
@@ -2699,6 +2735,7 @@ class _EnterTextButtonState extends State<EnterTextButton> {
                 labelText: widget.title,
                 selectedText: _textController.text,
                 placeholder: widget.placeholder,
+                buttonLabel: null,
               ),
             ),
           );

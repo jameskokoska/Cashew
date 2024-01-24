@@ -549,7 +549,7 @@
   "summary": "സംഗഹം",
   "edit-item": "ഇനം എഡിറ്റുചെയ്യുക",
   "add-item": "ഇനം ചേർക്കുക",
-  "update-item": "",
+  "update-item": "ഇനം അപ്ഡേറ്റുചെയ്യുക",
   "delete-item": "ഇനം ഇല്ലാതാക്കുക",
   "owed-to-you": "നിങ്ങൾക്ക് കടപ്പെട്ടിരിക്കുന്നു",
   "name": "പേര്",
@@ -1039,5 +1039,8 @@
   "widget-background-opacity": "പശ്ചാത്തല അതാര്യത",
   "currency-total": "കറൻസി ആകെ",
   "currency-total-description": "എല്ലാ അക്കൗണ്ട് കറൻസി ആകെ പട്ടികപ്പെടുത്തുക",
-  "app": "അപേക്ഷ"
+  "app": "അപേക്ഷ",
+  "set-color": "നിറം സജ്ജമാക്കുക",
+  "next-date-time": "അടുത്തത്",
+  "set-date-time": "സജ്ജീകൃതരംഗം"
 }

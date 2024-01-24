@@ -585,43 +585,39 @@ class _ImportCSVState extends State<ImportCSV> {
       PopupFramework(
         title: "enter-google-sheet-url".tr(),
         subtitle: "enter-google-sheet-url-description".tr(),
-        child: Column(
-          children: [
-            SelectText(
-              icon: appStateSettings["outlinedIcons"]
-                  ? Icons.link_outlined
-                  : Icons.link_rounded,
-              setSelectedText: (_) {},
-              nextWithInput: (url) async {
-                String? csvString;
-                await openLoadingPopupTryCatch(() async {
-                  String? csvURL = convertGoogleSheetsUrlToCsvUrl(url);
-                  csvString = await fetchDataFromCsvUrl(csvURL);
-                }, onError: (e) {
-                  openPopup(
-                    context,
-                    title: "csv-error".tr(),
-                    description: e.toString(),
-                    icon: appStateSettings["outlinedIcons"]
-                        ? Icons.error_outlined
-                        : Icons.error_rounded,
-                    onSubmitLabel: "ok".tr(),
-                    onSubmit: () {
-                      Navigator.of(context).pop();
-                    },
-                    barrierDismissible: false,
-                  );
-                });
-                if (csvString != null) {
-                  _assignColumns(csvString!, importFromSheets: true);
-                }
-              },
-              placeholder:
-                  "https://docs.google.com/spreadsheets/d/1Eiib2fiaC8SNdau8T8TBQql-wyWXVYOLJY-7Ycuky4I/edit?usp=sharing",
-              autoFocus: false,
-              requestLateAutoFocus: true,
-            ),
-          ],
+        child: SelectText(
+          buttonLabel: "import".tr(),
+          icon: appStateSettings["outlinedIcons"]
+              ? Icons.link_outlined
+              : Icons.link_rounded,
+          setSelectedText: (_) {},
+          nextWithInput: (url) async {
+            String? csvString;
+            await openLoadingPopupTryCatch(() async {
+              String? csvURL = convertGoogleSheetsUrlToCsvUrl(url);
+              csvString = await fetchDataFromCsvUrl(csvURL);
+            }, onError: (e) {
+              openPopup(
+                context,
+                title: "csv-error".tr(),
+                description: e.toString(),
+                icon: appStateSettings["outlinedIcons"]
+                    ? Icons.error_outlined
+                    : Icons.error_rounded,
+                onSubmitLabel: "ok".tr(),
+                onSubmit: () {
+                  Navigator.of(context).pop();
+                },
+                barrierDismissible: false,
+              );
+            });
+            if (csvString != null) {
+              _assignColumns(csvString!, importFromSheets: true);
+            }
+          },
+          placeholder:
+              "https://docs.google.com/spreadsheets/d/1Eiib2fiaC8SNdau8T8TBQql-wyWXVYOLJY-7Ycuky4I/edit?usp=sharing",
+          autoFocus: true,
         ),
       ),
     );

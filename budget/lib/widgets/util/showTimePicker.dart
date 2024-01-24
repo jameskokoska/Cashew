@@ -9,12 +9,14 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 Future<TimeOfDay?> showCustomTimePicker(
-    BuildContext context, TimeOfDay initialTime) async {
+    BuildContext context, TimeOfDay initialTime,
+    {String? confirmText}) async {
   TimeOfDay? newTime = await showTimePicker(
     context: context,
     initialTime: initialTime,
     initialEntryMode: TimePickerEntryMode.dial,
     helpText: "",
+    confirmText: confirmText,
     builder: (BuildContext context, Widget? child) {
       child = Apply24HourFormatSetting(child: child ?? SizedBox.shrink());
 
@@ -69,8 +71,10 @@ Future<TimeOfDay?> showCustomTimePicker(
 }
 
 class Apply24HourFormatSetting extends StatelessWidget {
-  const Apply24HourFormatSetting({required this.child, super.key});
+  const Apply24HourFormatSetting(
+      {required this.child, super.key, this.customConfirmText});
   final Widget child;
+  final String? customConfirmText;
 
   @override
   Widget build(BuildContext context) {
@@ -83,7 +87,8 @@ class Apply24HourFormatSetting extends StatelessWidget {
           MaterialLocalizations.of(context).postMeridiemAbbreviation,
       customCancelButtonLabel:
           MaterialLocalizations.of(context).cancelButtonLabel,
-      customOkButtonLabel: MaterialLocalizations.of(context).okButtonLabel,
+      customOkButtonLabel:
+          customConfirmText ?? MaterialLocalizations.of(context).okButtonLabel,
       customTimePickerHourLabel:
           MaterialLocalizations.of(context).timePickerHourLabel,
       customTimePickerMinuteLabel:

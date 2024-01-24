@@ -549,7 +549,7 @@
   "summary": "Összefoglalás",
   "edit-item": "Tétel szerkesztése",
   "add-item": "Tétel hozzáadása",
-  "update-item": "",
+  "update-item": "Frissítse az elemet",
   "delete-item": "Az elem törlése",
   "owed-to-you": "Tartozott neked",
   "name": "Név",
@@ -1039,5 +1039,8 @@
   "widget-background-opacity": "Háttérképesség",
   "currency-total": "Valuta teljes",
   "currency-total-description": "Sorolja fel az összes számla valuta összegét",
-  "app": "Alkalmazás"
+  "app": "Alkalmazás",
+  "set-color": "Színes szín",
+  "next-date-time": "KÖVETKEZŐ",
+  "set-date-time": "KÉSZLET"
 }

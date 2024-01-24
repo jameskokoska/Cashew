@@ -549,7 +549,7 @@
   "summary": "సారాంశం",
   "edit-item": "అంశాన్ని సవరించండి",
   "add-item": "వస్తువు జోడించు",
-  "update-item": "",
+  "update-item": "అంశాన్ని నవీకరించండి",
   "delete-item": "అంశాన్ని తొలగించండి",
   "owed-to-you": "మీకు రుణపడి ఉంది",
   "name": "పేరు",
@@ -1039,5 +1039,8 @@
   "widget-background-opacity": "నేపథ్య అస్పష్టత",
   "currency-total": "కరెన్సీ మొత్తం",
   "currency-total-description": "అన్ని ఖాతా కరెన్సీ మొత్తాలను జాబితా చేయండి",
-  "app": "అప్లికేషన్"
+  "app": "అప్లికేషన్",
+  "set-color": "రంగును సెట్ చేయండి",
+  "next-date-time": "తరువాత",
+  "set-date-time": "సెట్"
 }

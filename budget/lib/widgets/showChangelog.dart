@@ -35,6 +35,9 @@ String getChangelogString() {
     Currency total includes percentage
     Long press transaction type when adding transaction opens info popup
     Long press goal/long term loan amount to copy total to clipboard
+    Consistent popup enter text confirmation buttons and spacing
+    Set date time button when initially adding a transaction
+    Warning text color in sidebar when synced more than 1 day ago 
     < 5.1.9
     Reorder theme mode settings, system is always first
     If multiple accounts with different currencies, can enable currency total summary in accounts list homepage widget

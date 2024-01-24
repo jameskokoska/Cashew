@@ -549,7 +549,7 @@
   "summary": "Περίληψη",
   "edit-item": "Επεξεργασία αντικειμένου",
   "add-item": "Πρόσθεσε είδος",
-  "update-item": "",
+  "update-item": "Ενημέρωση στοιχείου",
   "delete-item": "Διαγραφή αντικειμένου",
   "owed-to-you": "Σας οφείλεται",
   "name": "Ονομα",
@@ -1039,5 +1039,8 @@
   "widget-background-opacity": "Αδιαφάνεια φόντου",
   "currency-total": "Συνολικά νόμισμα",
   "currency-total-description": "Καταγράψτε όλα τα σύνολα νομισμάτων λογαριασμού",
-  "app": "Εφαρμογή"
+  "app": "Εφαρμογή",
+  "set-color": "Ρυθμίζω το χρώμα",
+  "next-date-time": "ΕΠΟΜΕΝΟ",
+  "set-date-time": "ΣΕΙΡΑ"
 }

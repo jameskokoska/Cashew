@@ -1039,5 +1039,8 @@
   "widget-background-opacity": "Опацити позадинских спорова",
   "currency-total": "Укупно валуте",
   "currency-total-description": "Наведите све укупне вредности валуте рачуна",
-  "app": "Апликација"
+  "app": "Апликација",
+  "set-color": "Подесити боју",
+  "next-date-time": "СЛЕДЕЋИ",
+  "set-date-time": "КОМПЛЕТ"
 }

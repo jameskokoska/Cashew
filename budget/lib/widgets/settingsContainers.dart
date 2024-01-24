@@ -28,6 +28,9 @@ class SettingsContainerSwitch extends StatefulWidget {
     this.hasMoreOptionsIcon = false,
     this.runOnSwitchedInitially = false,
     this.descriptionColor,
+    this.backgroundColor,
+    this.isOutlined,
+    this.horizontalPadding,
     Key? key,
   }) : super(key: key);
 
@@ -45,6 +48,9 @@ class SettingsContainerSwitch extends StatefulWidget {
   final bool hasMoreOptionsIcon;
   final bool runOnSwitchedInitially;
   final Color? descriptionColor;
+  final Color? backgroundColor;
+  final bool? isOutlined;
+  final double? horizontalPadding;
 
   @override
   State<SettingsContainerSwitch> createState() =>
@@ -101,6 +107,9 @@ class _SettingsContainerSwitchState extends State<SettingsContainerSwitch> {
       duration: Duration(milliseconds: 300),
       opacity: waiting ? 0.5 : 1,
       child: SettingsContainer(
+        isOutlined: widget.isOutlined,
+        horizontalPadding: widget.horizontalPadding,
+        backgroundColor: widget.backgroundColor,
         hasMoreOptionsIcon: widget.hasMoreOptionsIcon,
         enableBorderRadius: widget.enableBorderRadius,
         onLongPress: widget.onLongPress,
@@ -412,8 +421,8 @@ class SettingsContainerOutlined extends StatelessWidget {
           borderRadius: BorderRadius.circular(10),
         ),
         padding: EdgeInsets.only(
-          left: 13,
-          right: 4,
+          left: horizontalPadding ?? 13,
+          right: horizontalPadding ?? 4,
           top: verticalPadding ?? 14,
           bottom: verticalPadding ?? 14,
         ),
@@ -448,7 +457,7 @@ class SettingsContainerOutlined extends StatelessWidget {
                       child: textContent,
                     ),
                   ),
-            Opacity(opacity: 0.5, child: afterWidget ?? SizedBox())
+            afterWidget ?? SizedBox()
           ],
         ),
       );
@@ -483,6 +492,7 @@ class SettingsContainer extends StatelessWidget {
     this.hasMoreOptionsIcon,
     this.descriptionColor,
     this.descriptionWidget,
+    this.backgroundColor,
   }) : super(key: key);
 
   final String title;
@@ -502,6 +512,7 @@ class SettingsContainer extends StatelessWidget {
   final bool? hasMoreOptionsIcon;
   final Color? descriptionColor;
   final Widget? descriptionWidget;
+  final Color? backgroundColor;
 
   @override
   Widget build(BuildContext context) {
@@ -526,7 +537,7 @@ class SettingsContainer extends StatelessWidget {
               isWideOutlined: isWideOutlined,
             )
           : Tappable(
-              color: Colors.transparent,
+              color: backgroundColor ?? Colors.transparent,
               onTap: onTap,
               onLongPress: onLongPress,
               child: Padding(

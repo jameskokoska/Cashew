@@ -1039,5 +1039,8 @@
   "widget-background-opacity": "Opacidade de fundo",
   "currency-total": "Total da moeda",
   "currency-total-description": "Liste todos os totais da moeda da conta",
-  "app": "Aplicativo"
+  "app": "Aplicativo",
+  "set-color": "Defina a cor",
+  "next-date-time": "PRÓXIMO",
+  "set-date-time": "DEFINIR"
 }

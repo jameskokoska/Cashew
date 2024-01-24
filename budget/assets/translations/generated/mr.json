@@ -549,7 +549,7 @@
   "summary": "सारांश",
   "edit-item": "आयटम संपादित करा",
   "add-item": "सामान जोडा",
-  "update-item": "",
+  "update-item": "आयटम अद्यतनित करा",
   "delete-item": "आयटम हटवा",
   "owed-to-you": "तुला .णी",
   "name": "नाव",
@@ -1039,5 +1039,8 @@
   "widget-background-opacity": "पार्श्वभूमी अस्पष्टता",
   "currency-total": "चलन एकूण",
   "currency-total-description": "सर्व खाते चलन बेरीजची यादी करा",
-  "app": "अर्ज"
+  "app": "अर्ज",
+  "set-color": "रंग सेट करा",
+  "next-date-time": "पुढे",
+  "set-date-time": "सेट"
 }

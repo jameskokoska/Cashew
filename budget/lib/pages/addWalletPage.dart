@@ -749,25 +749,22 @@ class _CorrectBalancePopupState extends State<CorrectBalancePopup> {
   Widget build(BuildContext context) {
     Widget editTransferDetails = Column(
       children: [
-        Container(
-          width: getWidthBottomSheet(context) - 36,
-          child: TextInput(
-            icon: appStateSettings["outlinedIcons"]
-                ? Icons.title_outlined
-                : Icons.title_rounded,
-            autoFocus: widget.showAllEditDetails == false,
-            onChanged: (text) async {
-              selectedTitle = text;
-            },
-            onEditingComplete: widget.showAllEditDetails == true
-                ? null
-                : () {
-                    if (widget.showAllEditDetails) Navigator.maybePop(context);
-                  },
-            initialValue: selectedTitle,
-            labelText: "transfer-balance".tr(),
-            padding: EdgeInsets.only(bottom: 13),
-          ),
+        TextInput(
+          icon: appStateSettings["outlinedIcons"]
+              ? Icons.title_outlined
+              : Icons.title_rounded,
+          autoFocus: widget.showAllEditDetails == false,
+          onChanged: (text) async {
+            selectedTitle = text;
+          },
+          onEditingComplete: widget.showAllEditDetails == true
+              ? null
+              : () {
+                  if (widget.showAllEditDetails) Navigator.maybePop(context);
+                },
+          initialValue: selectedTitle,
+          labelText: "transfer-balance".tr(),
+          padding: EdgeInsets.only(bottom: 13),
         ),
         DateButton(
           internalPadding: EdgeInsets.only(right: 5),
@@ -1183,25 +1180,22 @@ class _TransferBalancePopupState extends State<TransferBalancePopup> {
   Widget build(BuildContext context) {
     Widget editTransferDetails = Column(
       children: [
-        Container(
-          width: getWidthBottomSheet(context) - 36,
-          child: TextInput(
-            icon: appStateSettings["outlinedIcons"]
-                ? Icons.title_outlined
-                : Icons.title_rounded,
-            autoFocus: widget.showAllEditDetails == false,
-            onChanged: (text) async {
-              selectedTitle = text;
-            },
-            onEditingComplete: widget.showAllEditDetails == true
-                ? null
-                : () {
-                    if (widget.showAllEditDetails) Navigator.maybePop(context);
-                  },
-            initialValue: selectedTitle,
-            labelText: "transfer-balance".tr(),
-            padding: EdgeInsets.only(bottom: 13),
-          ),
+        TextInput(
+          icon: appStateSettings["outlinedIcons"]
+              ? Icons.title_outlined
+              : Icons.title_rounded,
+          autoFocus: widget.showAllEditDetails == false,
+          onChanged: (text) async {
+            selectedTitle = text;
+          },
+          onEditingComplete: widget.showAllEditDetails == true
+              ? null
+              : () {
+                  if (widget.showAllEditDetails) Navigator.maybePop(context);
+                },
+          initialValue: selectedTitle,
+          labelText: "transfer-balance".tr(),
+          padding: EdgeInsets.only(bottom: 13),
         ),
         DateButton(
           internalPadding: EdgeInsets.only(right: 5),

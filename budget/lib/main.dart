@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:budget/functions.dart';
+import 'package:budget/pages/accountsPage.dart';
 import 'package:budget/pages/autoTransactionsPageEmail.dart';
 import 'package:budget/pages/settingsPage.dart';
 import 'package:budget/struct/iconObjects.dart';
@@ -244,6 +245,7 @@ class App extends StatelessWidget {
                                         )
                                       : child ?? SizedBox.shrink(),
                                   GlobalSnackbar(key: snackbarKey),
+                                  // SignInWithGoogleFlyIn(),
                                   hasRightSafeArea
                                       ? Align(
                                           alignment: Alignment.centerRight,

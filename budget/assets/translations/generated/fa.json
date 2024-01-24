@@ -549,7 +549,7 @@
   "summary": "خلاصه",
   "edit-item": "ویرایش آیتم",
   "add-item": "این مورد را اضافه کنید",
-  "update-item": "",
+  "update-item": "مورد به روزرسانی",
   "delete-item": "حذف آیتم",
   "owed-to-you": "مدیون شما",
   "name": "نام",
@@ -1039,5 +1039,8 @@
   "widget-background-opacity": "کدو",
   "currency-total": "کل ارز",
   "currency-total-description": "لیست کلیه ارزهای حساب را لیست کنید",
-  "app": "کاربرد"
+  "app": "کاربرد",
+  "set-color": "رنگ",
+  "next-date-time": "بعد",
+  "set-date-time": "تنظیم"
 }

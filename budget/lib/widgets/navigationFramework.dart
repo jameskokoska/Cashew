@@ -142,6 +142,10 @@ Future<bool> runAllCloudFunctions(BuildContext context,
       // This stems from silent sign-in not providing the credentials for GDrive API for e.g.
       await refreshGoogleSignIn();
       runAllCloudFunctions(context);
+    } else {
+      if (kIsWeb && appStateSettings["webForceLoginPopupOnLaunch"] == true) {
+        signOutGoogle();
+      }
     }
     return false;
   }

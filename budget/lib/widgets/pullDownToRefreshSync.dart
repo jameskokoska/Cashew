@@ -186,6 +186,7 @@ class _PullDownToRefreshSyncState extends State<PullDownToRefreshSync>
                     child: TimerBuilder.periodic(
                       Duration(seconds: 5),
                       builder: (context) {
+                        DateTime? dateTimeLastSynced = getTimeLastSynced();
                         return Center(
                           child: TextFont(
                             textAlign: TextAlign.center,
@@ -194,9 +195,9 @@ class _PullDownToRefreshSyncState extends State<PullDownToRefreshSync>
                             maxLines: 3,
                             text: "synced".tr() +
                                 " " +
-                                (getTimeLastSynced() == null
+                                (dateTimeLastSynced == null
                                     ? "never".tr()
-                                    : getTimeAgo(getTimeLastSynced()!)),
+                                    : getTimeAgo(dateTimeLastSynced)),
                           ),
                         );
                       },

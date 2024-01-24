@@ -211,6 +211,7 @@ class _SharedBudgetSettingsState extends State<SharedBudgetSettings> {
                                   title: "Add Member",
                                   subtitle: "Enter the email of the member",
                                   child: SelectText(
+                                    buttonLabel: "Add Member",
                                     setSelectedText: (_) {},
                                     placeholder: "example@example.com",
                                     nextWithInput: (text) async {
@@ -510,6 +511,7 @@ class CategoryMemberContainer extends StatelessWidget {
                 child: Column(
                   children: [
                     SelectText(
+                      buttonLabel: null,
                       icon: appStateSettings["outlinedIcons"]
                           ? Icons.person_outlined
                           : Icons.person_rounded,
@@ -520,6 +522,7 @@ class CategoryMemberContainer extends StatelessWidget {
                       autoFocus: false,
                     ),
                     SelectText(
+                      buttonLabel: "Edit Member",
                       icon: appStateSettings["outlinedIcons"]
                           ? Icons.sell_outlined
                           : Icons.sell_rounded,
@@ -536,7 +539,6 @@ class CategoryMemberContainer extends StatelessWidget {
                       placeholder: "Nickname",
                       textCapitalization: TextCapitalization.words,
                       autoFocus: true,
-                      requestLateAutoFocus: true,
                     ),
                   ],
                 ),
@@ -636,6 +638,7 @@ memberPopup(context, String member) {
           Opacity(
             opacity: 0.4,
             child: SelectText(
+              buttonLabel: null,
               icon: appStateSettings["outlinedIcons"]
                   ? Icons.person_outlined
                   : Icons.person_rounded,
@@ -647,6 +650,7 @@ memberPopup(context, String member) {
             ),
           ),
           SelectText(
+            buttonLabel: "Edit Nickname",
             icon: appStateSettings["outlinedIcons"]
                 ? Icons.sell_outlined
                 : Icons.sell_rounded,
@@ -661,7 +665,6 @@ memberPopup(context, String member) {
             selectedText: appStateSettings["usersNicknames"][member] ?? "",
             placeholder: "Nickname",
             autoFocus: false,
-            requestLateAutoFocus: true,
           ),
         ],
       ),

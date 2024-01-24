@@ -549,7 +549,7 @@
   "summary": "まとめ",
   "edit-item": "アイテムを編集します",
   "add-item": "アイテムを追加します",
-  "update-item": "",
+  "update-item": "アイテムを更新します",
   "delete-item": "アイテムを削除します",
   "owed-to-you": "あなたに負っています",
   "name": "名前",
@@ -1039,5 +1039,8 @@
   "widget-background-opacity": "背景の不透明度",
   "currency-total": "通貨合計",
   "currency-total-description": "すべてのアカウント通貨の合計をリストします",
-  "app": "応用"
+  "app": "応用",
+  "set-color": "色を設定します",
+  "next-date-time": "次",
+  "set-date-time": "セット"
 }

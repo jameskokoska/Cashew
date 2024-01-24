@@ -549,7 +549,7 @@
   "summary": "Samenvatting",
   "edit-item": "Item bewerken",
   "add-item": "Voeg item toe",
-  "update-item": "",
+  "update-item": "Update item bijwerken",
   "delete-item": "Verwijder item",
   "owed-to-you": "Aan jou verschuldigd",
   "name": "Naam",
@@ -1039,5 +1039,8 @@
   "widget-background-opacity": "Achtergrond Dekking",
   "currency-total": "Valuta totaal",
   "currency-total-description": "Maak een lijst van alle totalen van de accountvaluta",
-  "app": "Sollicitatie"
+  "app": "Sollicitatie",
+  "set-color": "Instellen",
+  "next-date-time": "VOLGENDE",
+  "set-date-time": "SET"
 }

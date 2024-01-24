@@ -549,7 +549,7 @@
   "summary": "souhrn",
   "edit-item": "Upravit položku",
   "add-item": "Přidat položku",
-  "update-item": "",
+  "update-item": "Aktualizovat položku",
   "delete-item": "Odstranit položku",
   "owed-to-you": "Dlužil ti",
   "name": "název",
@@ -1039,5 +1039,8 @@
   "widget-background-opacity": "Neprůhlednost pozadí",
   "currency-total": "Měna Celkem",
   "currency-total-description": "Seznam součtů měny všech účtů",
-  "app": "aplikace"
+  "app": "aplikace",
+  "set-color": "Nastavit barvu",
+  "next-date-time": "DALŠÍ",
+  "set-date-time": "SOUBOR"
 }

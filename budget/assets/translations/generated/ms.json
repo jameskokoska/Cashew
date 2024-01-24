@@ -549,7 +549,7 @@
   "summary": "Ringkasan",
   "edit-item": "Edit item",
   "add-item": "Tambah item",
-  "update-item": "",
+  "update-item": "Kemas kini item",
   "delete-item": "Padam item",
   "owed-to-you": "Terhutang kepada anda",
   "name": "Nama",
@@ -1039,5 +1039,8 @@
   "widget-background-opacity": "Kelegapan latar belakang",
   "currency-total": "Jumlah mata wang",
   "currency-total-description": "Senaraikan semua jumlah mata wang akaun",
-  "app": "Permohonan"
+  "app": "Permohonan",
+  "set-color": "Tetapkan warna",
+  "next-date-time": "Seterusnya",
+  "set-date-time": "Tetapkan"
 }

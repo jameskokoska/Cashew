@@ -549,7 +549,7 @@
   "summary": "Sammendrag",
   "edit-item": "Rediger element",
   "add-item": "Legg til vare",
-  "update-item": "",
+  "update-item": "Oppdateringselement",
   "delete-item": "Slett elementet",
   "owed-to-you": "Skyldes deg",
   "name": "Navn",
@@ -1039,5 +1039,8 @@
   "widget-background-opacity": "Bakgrunn opacitet",
   "currency-total": "Valuta totalt",
   "currency-total-description": "Liste opp alle kontovalutasotaler",
-  "app": "applikasjon"
+  "app": "applikasjon",
+  "set-color": "Sett farge",
+  "next-date-time": "NESTE",
+  "set-date-time": "SETT"
 }

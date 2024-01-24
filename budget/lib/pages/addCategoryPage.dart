@@ -953,6 +953,7 @@ class _AddCategoryPageState extends State<AddCategoryPage>
                                       PopupFramework(
                                         title: "set-title".tr(),
                                         child: SelectText(
+                                          buttonLabel: "set-title".tr(),
                                           setSelectedText: (_) {},
                                           labelText: "set-title".tr(),
                                           placeholder: "title-placeholder".tr(),
@@ -1087,6 +1088,7 @@ class AssociatedTitleContainer extends StatelessWidget {
             PopupFramework(
               title: "set-title".tr(),
               child: SelectText(
+                buttonLabel: "set-title".tr(),
                 setSelectedText: (text) {
                   titleName = text;
                   setTitle(text);

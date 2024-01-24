@@ -1,6 +1,10 @@
 import 'package:budget/colors.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/struct/settings.dart';
+import 'package:budget/widgets/globalSnackbar.dart';
+import 'package:budget/widgets/openSnackbar.dart';
+import 'package:budget/widgets/util/showTimePicker.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 Future<DateTime?> showCustomDatePicker(
@@ -66,4 +70,48 @@ Future<DateTimeRange?> showCustomDateRangePicker(
     },
     initialEntryMode: initialEntryMode,
   );
+}
+
+Future<DateTime?> selectDateAndTimeSequence(
+    BuildContext context, DateTime initialDate) async {
+  DateTime? selectedDateTime = await showCustomDatePicker(
+    context,
+    initialDate,
+    confirmText: "next-date-time".tr(),
+  );
+  if (selectedDateTime == null) {
+    openSnackbar(
+      SnackbarMessage(
+        icon: appStateSettings["outlinedIcons"]
+            ? Icons.warning_outlined
+            : Icons.warning_rounded,
+        title: "date-not-selected".tr().allCaps,
+      ),
+    );
+    return null;
+  }
+  TimeOfDay? selectedTime = await showCustomTimePicker(
+    context,
+    TimeOfDay(
+      hour: initialDate.hour,
+      minute: initialDate.minute,
+    ),
+    confirmText: "set-date-time".tr().allCaps,
+  );
+  if (selectedTime == null) {
+    openSnackbar(
+      SnackbarMessage(
+        icon: appStateSettings["outlinedIcons"]
+            ? Icons.warning_outlined
+            : Icons.warning_rounded,
+        title: "time-not-selected".tr(),
+      ),
+    );
+    return null;
+  }
+  selectedDateTime = selectedDateTime.copyWith(
+    hour: selectedTime.hour,
+    minute: selectedTime.minute,
+  );
+  return selectedDateTime;
 }

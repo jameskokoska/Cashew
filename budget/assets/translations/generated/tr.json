@@ -549,7 +549,7 @@
   "summary": "Özet",
   "edit-item": "Ögeyi düzenle",
   "add-item": "Öğe eklemek",
-  "update-item": "",
+  "update-item": "Öğe Güncelle",
   "delete-item": "Öğeyi silmek",
   "owed-to-you": "Sana borçlu",
   "name": "İsim",
@@ -1039,5 +1039,8 @@
   "widget-background-opacity": "Arka plan opaklığı",
   "currency-total": "Para birimi toplamı",
   "currency-total-description": "Tüm hesap para toplamlarını listeleyin",
-  "app": "Başvuru"
+  "app": "Başvuru",
+  "set-color": "Renk ayarlamak",
+  "next-date-time": "SONRAKİ",
+  "set-date-time": "AYARLAMAK"
 }

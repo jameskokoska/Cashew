@@ -1039,5 +1039,8 @@
   "widget-background-opacity": "Background Opacity",
   "currency-total": "Currency Total",
   "currency-total-description": "List all account currency totals",
-  "app": "App"
+  "app": "App",
+  "set-color": "Set Color",
+  "next-date-time": "NEXT",
+  "set-date-time": "SET"
 }

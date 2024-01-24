@@ -549,7 +549,7 @@
   "summary": "Zusammenfassung",
   "edit-item": "Element bearbeiten",
   "add-item": "Artikel hinzufügen",
-  "update-item": "",
+  "update-item": "Artikel aktualisieren",
   "delete-item": "Element löschen",
   "owed-to-you": "Dir geschuldet",
   "name": "Name",
@@ -1039,5 +1039,8 @@
   "widget-background-opacity": "Hintergrundliege",
   "currency-total": "Währung Gesamt",
   "currency-total-description": "Listen Sie alle Kontosummen auf den Kontowährung auf",
-  "app": "Anwendung"
+  "app": "Anwendung",
+  "set-color": "Farbe setzen",
+  "next-date-time": "NÄCHSTE",
+  "set-date-time": "SATZ"
 }

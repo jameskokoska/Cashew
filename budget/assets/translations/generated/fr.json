@@ -1039,5 +1039,8 @@
   "widget-background-opacity": "Opacité de fond",
   "currency-total": "Total de devises",
   "currency-total-description": "Énumérez tous les totaux de devises du compte",
-  "app": "Application"
+  "app": "Application",
+  "set-color": "Régler la couleur",
+  "next-date-time": "SUIVANT",
+  "set-date-time": "ENSEMBLE"
 }

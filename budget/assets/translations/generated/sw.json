@@ -1039,5 +1039,8 @@
   "widget-background-opacity": "Opacity ya nyuma",
   "currency-total": "Jumla ya sarafu",
   "currency-total-description": "Orodhesha jumla ya sarafu ya akaunti",
-  "app": "Maombi"
+  "app": "Maombi",
+  "set-color": "Weka rangi",
+  "next-date-time": "Ifuatayo",
+  "set-date-time": "Seti"
 }

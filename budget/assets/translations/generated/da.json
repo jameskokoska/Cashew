@@ -549,7 +549,7 @@
   "summary": "Resumé",
   "edit-item": "Rediger vare",
   "add-item": "Tilføj vare",
-  "update-item": "",
+  "update-item": "Opdateringsselement",
   "delete-item": "Slet vare",
   "owed-to-you": "Skyldes dig",
   "name": "Navn",
@@ -1039,5 +1039,8 @@
   "widget-background-opacity": "Baggrundsopacitet",
   "currency-total": "Valuta i alt",
   "currency-total-description": "Liste over alle kontortotaler",
-  "app": "Ansøgning"
+  "app": "Ansøgning",
+  "set-color": "Indstil farve",
+  "next-date-time": "NÆSTE",
+  "set-date-time": "SÆT"
 }

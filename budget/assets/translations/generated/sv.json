@@ -549,7 +549,7 @@
   "summary": "Sammanfattning",
   "edit-item": "Redigera objekt",
   "add-item": "Lägg till vara",
-  "update-item": "",
+  "update-item": "Uppdateringsobjekt",
   "delete-item": "Radera sak",
   "owed-to-you": "Skyldig dig",
   "name": "namn",
@@ -1039,5 +1039,8 @@
   "widget-background-opacity": "Bakgrundspacitet",
   "currency-total": "Valuta total",
   "currency-total-description": "Lista alla kontonvaluta totaler",
-  "app": "Ansökan"
+  "app": "Ansökan",
+  "set-color": "Få färg",
+  "next-date-time": "NÄSTA",
+  "set-date-time": "UPPSÄTTNING"
 }

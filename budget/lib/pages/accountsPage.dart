@@ -3,11 +3,14 @@ import 'dart:io';
 import 'package:budget/colors.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
+import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/accountAndBackup.dart';
 import 'package:budget/widgets/animatedExpanded.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/dropdownSelect.dart';
+import 'package:budget/widgets/fadeIn.dart';
+import 'package:budget/widgets/iconButtonScaled.dart';
 import 'package:budget/widgets/moreIcons.dart';
 import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
@@ -283,43 +286,65 @@ class AccountsPageState extends State<AccountsPage> {
                         ),
                       ),
                       if (kIsWeb)
-                        Padding(
+                        TipBox(
                           padding: const EdgeInsets.symmetric(
                               vertical: 20, horizontal: 7),
-                          child: TipBox(
-                            settingsString: "autoLoginDisabledOnWebTip",
-                            onTap: () {
-                              openUrl(
-                                  "https://pub.dev/packages/google_sign_in_web#differences-between-google-identity-services-sdk-and-google-sign-in-for-web-sdk");
-                            },
-                            text: "",
-                            richTextSpan: [
-                              TextSpan(
-                                text: "why-is-auto-login-disabled-on-web".tr() +
-                                    " ",
-                                style: TextStyle(
-                                  color: getColor(context, "black"),
-                                  fontFamily: appStateSettings["font"],
-                                  fontFamilyFallback: ['Inter'],
-                                ),
+                          settingsString: "autoLoginDisabledOnWebTip",
+                          onTap: () {
+                            openUrl(
+                                "https://pub.dev/packages/google_sign_in_web#differences-between-google-identity-services-sdk-and-google-sign-in-for-web-sdk");
+                          },
+                          text: "",
+                          richTextSpan: [
+                            TextSpan(
+                              text: "why-is-auto-login-disabled-on-web".tr() +
+                                  " ",
+                              style: TextStyle(
+                                color: getColor(context, "black"),
+                                fontFamily: appStateSettings["font"],
+                                fontFamilyFallback: ['Inter'],
                               ),
-                              TextSpan(
-                                text: "read-more-here".tr() + ".",
-                                style: TextStyle(
-                                  decoration: TextDecoration.underline,
-                                  decorationStyle: TextDecorationStyle.solid,
-                                  decorationColor:
-                                      getColor(context, "unPaidOverdue")
-                                          .withOpacity(0.8),
-                                  color: getColor(context, "unPaidOverdue")
-                                      .withOpacity(0.8),
-                                  fontFamily: appStateSettings["font"],
-                                  fontFamilyFallback: ['Inter'],
-                                ),
+                            ),
+                            TextSpan(
+                              text: "read-more-here".tr() + ".",
+                              style: TextStyle(
+                                decoration: TextDecoration.underline,
+                                decorationStyle: TextDecorationStyle.solid,
+                                decorationColor:
+                                    getColor(context, "unPaidOverdue")
+                                        .withOpacity(0.8),
+                                color: getColor(context, "unPaidOverdue")
+                                    .withOpacity(0.8),
+                                fontFamily: appStateSettings["font"],
+                                fontFamilyFallback: ['Inter'],
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
+                      // if (kIsWeb)
+                      //   Padding(
+                      //     padding: const EdgeInsets.symmetric(
+                      //         horizontal: 18, vertical: 15),
+                      //     child: SettingsContainerSwitch(
+                      //       icon: appStateSettings["outlinedIcons"]
+                      //           ? Icons.key_outlined
+                      //           : Icons.key_rounded,
+                      //       isOutlined: true,
+                      //       horizontalPadding: 20,
+                      //       title: "automatic-google-login-popup-web".tr(),
+                      //       description:
+                      //           "automatic-google-login-popup-web-description"
+                      //               .tr(),
+                      //       initialValue: appStateSettings[
+                      //               "webForceLoginPopupOnLaunch"] ==
+                      //           true,
+                      //       onSwitched: (value) async {
+                      //         await updateSettings(
+                      //             "webForceLoginPopupOnLaunch", value,
+                      //             updateGlobalState: false);
+                      //       },
+                      //     ),
+                      //   ),
                       getPlatform() == PlatformOS.isIOS
                           ? Padding(
                               padding: const EdgeInsets.symmetric(
@@ -389,6 +414,144 @@ class BackupsCloudBackupButton extends StatelessWidget {
           ? Icons.folder_outlined
           : Icons.folder_rounded,
       onTap: onTap,
+    );
+  }
+}
+
+class SignInWithGoogleFlyIn extends StatefulWidget {
+  const SignInWithGoogleFlyIn({super.key});
+
+  @override
+  State<SignInWithGoogleFlyIn> createState() => _SignInWithGoogleFlyInState();
+}
+
+class _SignInWithGoogleFlyInState extends State<SignInWithGoogleFlyIn> {
+  bool hide = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 20),
+      child: SlideFadeTransition(
+        animate: true,
+        animationDuration: Duration(milliseconds: 1700),
+        curve: ElasticOutCurve(0.8),
+        delayStart: Duration(milliseconds: 1900),
+        offset: -0.5,
+        child: AnimatedExpanded(
+          expand: !hide,
+          child: Align(
+            alignment: Alignment.topRight,
+            child: ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: 400),
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(13)),
+                  color: getColor(context, "lightDarkAccentHeavyLight"),
+                  boxShadow: boxShadowCheck(boxShadowSharp(context)),
+                ),
+                child: Tappable(
+                  onTap: () async {
+                    await signInGoogle();
+                    setState(() {
+                      hide = true;
+                    });
+                  },
+                  borderRadius: 13,
+                  color: dynamicPastel(
+                    context,
+                    Theme.of(context).colorScheme.secondaryContainer,
+                    amount: 0.6,
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Flexible(
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                            left: 25,
+                            right: 15,
+                            top: 15,
+                            bottom: 15,
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                children: [
+                                  Icon(
+                                    MoreIcons.google,
+                                    size: 25,
+                                  ),
+                                  SizedBox(width: 10),
+                                  TextFont(
+                                    text: "sign-in-with-google".tr(),
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18,
+                                  ),
+                                ],
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 18.0),
+                                child: IconButtonScaled(
+                                  iconData: appStateSettings["outlinedIcons"]
+                                      ? Icons.close_outlined
+                                      : Icons.close_rounded,
+                                  iconSize: 18,
+                                  scale: 1.5,
+                                  onTap: () async {
+                                    setState(() {
+                                      hide = true;
+                                    });
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      HorizontalBreak(
+                        padding: EdgeInsets.zero,
+                        color: dynamicPastel(
+                          context,
+                          Theme.of(context).colorScheme.secondaryContainer,
+                          amount: 0.1,
+                          inverse: true,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 22, vertical: 12),
+                        child: Button(
+                          label: "Continue with Google",
+                          onTap: () async {
+                            await signInGoogle();
+                            setState(() {
+                              hide = true;
+                            });
+                          },
+                          color: Theme.of(context).colorScheme.primary,
+                          textColor: Theme.of(context).colorScheme.onPrimary,
+                          borderRadius: 5,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            left: 22, right: 22, bottom: 22),
+                        child: TextFont(
+                          text: "onboarding-info-3".tr(),
+                          maxLines: 10,
+                          fontSize: 15,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

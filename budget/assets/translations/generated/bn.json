@@ -549,7 +549,7 @@
   "summary": "সারসংক্ষেপ",
   "edit-item": "আইটেম সম্পাদনা করুন",
   "add-item": "আইটেম যোগ করুন",
-  "update-item": "",
+  "update-item": "আইটেম আপডেট করুন",
   "delete-item": "আইটেম মুছুন",
   "owed-to-you": "তোমাকে owed ণী",
   "name": "নাম",
@@ -1039,5 +1039,8 @@
   "widget-background-opacity": "পটভূমি অস্বচ্ছতা",
   "currency-total": "মুদ্রা মোট",
   "currency-total-description": "সমস্ত অ্যাকাউন্ট মুদ্রার মোট তালিকাভুক্ত করুন",
-  "app": "আবেদন"
+  "app": "আবেদন",
+  "set-color": "রঙ সেট করুন",
+  "next-date-time": "পরবর্তী",
+  "set-date-time": "সেট"
 }

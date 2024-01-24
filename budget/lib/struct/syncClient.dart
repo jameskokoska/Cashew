@@ -87,7 +87,7 @@ Future<bool> createSyncBackup(
     return false;
   // create the auto syncs after 10 seconds of no changes
   if (changeMadeSync == true &&
-      appStateSettings["syncEveryChange"] == true &&
+      (appStateSettings["syncEveryChange"] == true && kIsWeb) &&
       changeMadeSyncWaitForDebounce == true) {
     print("Running sync debouncer");
     backupDebounce.run(() {
@@ -189,8 +189,12 @@ Future<bool> syncData(BuildContext context) async {
   if (appStateSettings["backupSync"] == false) return false;
   if (appStateSettings["hasSignedIn"] == false) return false;
   if (errorSigningInDuringCloud == true) return false;
+
+  // We only want to prevent this if silent sign in, otherwise we can show the user the google login popup every time on web?
   // Prevent sign-in on web - background sign-in cannot access Google Drive etc.
-  if (kIsWeb && !entireAppLoaded) return false;
+  if (kIsWeb &&
+      !entireAppLoaded &&
+      appStateSettings["webForceLoginPopupOnLaunch"] != true) return false;
 
   canSyncData = false;
 

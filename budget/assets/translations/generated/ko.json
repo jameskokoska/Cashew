@@ -549,7 +549,7 @@
   "summary": "요약",
   "edit-item": "항목 편집",
   "add-item": "아이템 추가",
-  "update-item": "",
+  "update-item": "업데이트 항목",
   "delete-item": "항목 삭제",
   "owed-to-you": "당신에게 빚을졌습니다",
   "name": "이름",
@@ -1039,5 +1039,8 @@
   "widget-background-opacity": "배경 불투명도",
   "currency-total": "통화 총",
   "currency-total-description": "모든 계정 통화 총계를 나열하십시오",
-  "app": "애플리케이션"
+  "app": "애플리케이션",
+  "set-color": "색상 설정",
+  "next-date-time": "다음",
+  "set-date-time": "세트"
 }

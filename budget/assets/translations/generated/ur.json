@@ -549,7 +549,7 @@
   "summary": "خلاصہ",
   "edit-item": "آئٹم میں ترمیم کریں",
   "add-item": "آئٹم شامل کریں",
-  "update-item": "",
+  "update-item": "آئٹم کو اپ ڈیٹ کریں",
   "delete-item": "آئٹم کو حذف کریں",
   "owed-to-you": "آپ کا مقروض",
   "name": "نام",
@@ -1039,5 +1039,8 @@
   "widget-background-opacity": "پس منظر کی دھندلاپن",
   "currency-total": "کرنسی کل",
   "currency-total-description": "تمام اکاؤنٹ کرنسی کے مجموعی فہرست بنائیں",
-  "app": "درخواست"
+  "app": "درخواست",
+  "set-color": "رنگ سیٹ کریں",
+  "next-date-time": "اگلے",
+  "set-date-time": "سیٹ"
 }

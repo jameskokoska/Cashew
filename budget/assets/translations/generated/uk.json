@@ -1039,5 +1039,8 @@
   "widget-background-opacity": "Фонова непрозорість",
   "currency-total": "Всього валюти",
   "currency-total-description": "Перелічіть усі підсумки валюти рахунку",
-  "app": "Застосування"
+  "app": "Застосування",
+  "set-color": "Встановити колір",
+  "next-date-time": "Наступний",
+  "set-date-time": "Встановити"
 }

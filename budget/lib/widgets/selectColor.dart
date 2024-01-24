@@ -564,47 +564,37 @@ class _HexColorPickerState extends State<HexColorPicker> {
   @override
   Widget build(BuildContext context) {
     print(selectedColor);
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Expanded(
-            child: SelectText(
-              margin: EdgeInsets.zero,
-              icon: appStateSettings["outlinedIcons"]
-                  ? Icons.color_lens_outlined
-                  : Icons.color_lens_rounded,
-              setSelectedText: setColor,
-              nextWithInput: (String input) {
-                setColor(input);
-                widget.setSelectedColor(selectedColor);
-              },
-              selectedText: toHexString(widget.initialSelectedColor)
-                  .toString()
-                  .allCaps
-                  .replaceAll("0XFF", "0x"),
-              placeholder: toHexString(widget.initialSelectedColor)
-                  .toString()
-                  .allCaps
-                  .replaceAll("0XFF", "0x"),
-              autoFocus: false,
-              requestLateAutoFocus: true,
-              inputFormatters: [ColorCodeFormatter()],
-            ),
+    return SelectText(
+      buttonLabel: "set-color".tr(),
+      icon: appStateSettings["outlinedIcons"]
+          ? Icons.color_lens_outlined
+          : Icons.color_lens_rounded,
+      setSelectedText: setColor,
+      nextWithInput: (String input) {
+        setColor(input);
+        widget.setSelectedColor(selectedColor);
+      },
+      selectedText: toHexString(widget.initialSelectedColor)
+          .toString()
+          .allCaps
+          .replaceAll("0XFF", "0x"),
+      placeholder: toHexString(widget.initialSelectedColor)
+          .toString()
+          .allCaps
+          .replaceAll("0XFF", "0x"),
+      autoFocus: true,
+      inputFormatters: [ColorCodeFormatter()],
+      widgetBeside: Padding(
+        padding: const EdgeInsets.only(left: 12),
+        child: AnimatedContainer(
+          duration: Duration(milliseconds: 500),
+          height: 45,
+          width: 45,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: selectedColor,
           ),
-          SizedBox(width: 15),
-          AnimatedContainer(
-            duration: Duration(milliseconds: 500),
-            height: 45,
-            width: 45,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: selectedColor,
-            ),
-          )
-        ],
+        ),
       ),
     );
   }

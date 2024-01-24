@@ -856,6 +856,7 @@ class _AddBillItemPageState extends State<AddBillItemPage> {
           PopupFramework(
             title: "set-title".tr(),
             child: SelectText(
+              buttonLabel: "enter-amount".tr(),
               setSelectedText: (value) {
                 _titleInputController.text = value;
                 billSplitterItem.name = value;
@@ -1193,6 +1194,7 @@ void openAddPersonPopup({
     PopupFramework(
       title: "add-name".tr(),
       child: SelectText(
+        buttonLabel: "add-name".tr(),
         popContext: false,
         setSelectedText: (_) {},
         placeholder: "name-placeholder".tr(),
@@ -1419,12 +1421,18 @@ Future<bool> generateLoanTransactionsFromBillSummary(
       ),
     ),
   );
+  // Fix over-scroll stretch when keyboard pops up quickly
+  Future.delayed(Duration(milliseconds: 100), () {
+    bottomSheetControllerGlobal.scrollTo(0,
+        duration: Duration(milliseconds: 100));
+  });
   String billName = await openBottomSheet(
     context,
     fullSnap: true,
     PopupFramework(
       title: "set-title".tr(),
       child: SelectText(
+        buttonLabel: "set-title".tr(),
         setSelectedText: (value) {},
         labelText: "set-title".tr(),
         placeholder: "title-placeholder".tr(),

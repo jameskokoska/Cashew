@@ -177,6 +177,7 @@ class _ExchangeRatesState extends State<ExchangeRates> {
                       PopupFramework(
                         title: "add-currency".tr(),
                         child: SelectText(
+                          buttonLabel: "add-currency".tr(),
                           icon: appStateSettings["outlinedIcons"]
                               ? Icons.account_balance_wallet_outlined
                               : Icons.account_balance_wallet_rounded,
@@ -186,11 +187,15 @@ class _ExchangeRatesState extends State<ExchangeRates> {
                           },
                           selectedText: "",
                           placeholder: "currency".tr(),
-                          autoFocus: false,
-                          requestLateAutoFocus: true,
+                          autoFocus: true,
                         ),
                       ),
                     );
+                    // Fix over-scroll stretch when keyboard pops up quickly
+                    Future.delayed(Duration(milliseconds: 100), () {
+                      bottomSheetControllerGlobal.scrollTo(0,
+                          duration: Duration(milliseconds: 100));
+                    });
                   },
                   icon: appStateSettings["outlinedIcons"]
                       ? Icons.add_outlined

@@ -1039,5 +1039,8 @@
   "widget-background-opacity": "Opacità di fondo",
   "currency-total": "Totale valuta",
   "currency-total-description": "Elenca tutti i totali della valuta dell'account",
-  "app": "Applicazione"
+  "app": "Applicazione",
+  "set-color": "Set di colore",
+  "next-date-time": "PROSSIMO",
+  "set-date-time": "IMPOSTATO"
 }

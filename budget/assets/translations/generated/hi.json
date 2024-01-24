@@ -549,7 +549,7 @@
   "summary": "सारांश",
   "edit-item": "संपादित आइटम",
   "add-item": "मद जोड़ें",
-  "update-item": "",
+  "update-item": "अद्यतन आइटम",
   "delete-item": "चीज़ें हटाएं",
   "owed-to-you": "आप के लिए बकाया है",
   "name": "नाम",
@@ -1039,5 +1039,8 @@
   "widget-background-opacity": "पृष्ठभूमि अस्पष्टता",
   "currency-total": "मुद्रा कुल",
   "currency-total-description": "सभी खाता मुद्रा योगों को सूचीबद्ध करें",
-  "app": "आवेदन"
+  "app": "आवेदन",
+  "set-color": "रंग सेट करना",
+  "next-date-time": "अगला",
+  "set-date-time": "तय करना"
 }

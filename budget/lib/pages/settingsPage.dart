@@ -357,23 +357,19 @@ Future enterNameBottomSheet(context) async {
     fullSnap: true,
     PopupFramework(
       title: "enter-name".tr(),
-      child: Column(
-        children: [
-          SelectText(
-            icon: appStateSettings["outlinedIcons"]
-                ? Icons.person_outlined
-                : Icons.person_rounded,
-            setSelectedText: (_) {},
-            nextWithInput: (text) {
-              updateSettings("username", text.trim(),
-                  pagesNeedingRefresh: [0], updateGlobalState: false);
-            },
-            selectedText: appStateSettings["username"],
-            placeholder: "nickname".tr(),
-            autoFocus: false,
-            requestLateAutoFocus: true,
-          ),
-        ],
+      child: SelectText(
+        buttonLabel: "set-name".tr(),
+        icon: appStateSettings["outlinedIcons"]
+            ? Icons.person_outlined
+            : Icons.person_rounded,
+        setSelectedText: (_) {},
+        nextWithInput: (text) {
+          updateSettings("username", text.trim(),
+              pagesNeedingRefresh: [0], updateGlobalState: false);
+        },
+        selectedText: appStateSettings["username"],
+        placeholder: "nickname".tr(),
+        autoFocus: true,
       ),
     ),
   );

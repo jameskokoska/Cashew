@@ -361,41 +361,10 @@ class SelectedTransactionsAppBarMenu extends StatelessWidget {
                         List<Transaction> transactions = await database
                             .getTransactionsFromPk(selectedTransactionPks);
                         if (transactions.length <= 0) return;
-                        DateTime? selectedDate = await showCustomDatePicker(
-                            context, transactions.first.dateCreated);
-                        if (selectedDate == null) {
-                          openSnackbar(
-                            SnackbarMessage(
-                              icon: appStateSettings["outlinedIcons"]
-                                  ? Icons.warning_outlined
-                                  : Icons.warning_rounded,
-                              title: "date-not-selected".tr(),
-                            ),
-                          );
-                          return;
-                        }
-                        TimeOfDay? selectedTime = await showCustomTimePicker(
-                          context,
-                          TimeOfDay(
-                            hour: transactions.first.dateCreated.hour,
-                            minute: transactions.first.dateCreated.minute,
-                          ),
-                        );
-                        if (selectedTime == null) {
-                          openSnackbar(
-                            SnackbarMessage(
-                              icon: appStateSettings["outlinedIcons"]
-                                  ? Icons.warning_outlined
-                                  : Icons.warning_rounded,
-                              title: "time-not-selected".tr(),
-                            ),
-                          );
-                          return;
-                        }
-                        selectedDate = selectedDate.copyWith(
-                          hour: selectedTime.hour,
-                          minute: selectedTime.minute,
-                        );
+                        DateTime? selectedDate =
+                            await selectDateAndTimeSequence(
+                                context, transactions.first.dateCreated);
+                        if (selectedDate == null) return;
                         await database.updateDateTimeCreatedOfTransactions(
                             transactions, selectedDate);
                         openSnackbar(

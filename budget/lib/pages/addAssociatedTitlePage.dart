@@ -86,12 +86,18 @@ class _AddAssociatedTitlePageState extends State<AddAssociatedTitlePage> {
       });
     } else {}
     // requestLateAutoFocus
-    if (widget.associatedTitle == null)
-      _focusNode.requestFocus();
-    else
-      Future.delayed(Duration(milliseconds: 250), () {
-        _focusNode.requestFocus();
-      });
+    // if (widget.associatedTitle == null)
+    //   _focusNode.requestFocus();
+    // else
+    //   Future.delayed(Duration(milliseconds: 250), () {
+    //     _focusNode.requestFocus();
+    //   });
+    _focusNode.requestFocus();
+    // Fix over-scroll stretch when keyboard pops up quickly
+    Future.delayed(Duration(milliseconds: 100), () {
+      bottomSheetControllerGlobal.scrollTo(0,
+          duration: Duration(milliseconds: 100));
+    });
   }
 
   updateInitial() async {

@@ -549,7 +549,7 @@
   "summary": "Ringkasan",
   "edit-item": "Ubah Item",
   "add-item": "Tambah Item",
-  "update-item": "",
+  "update-item": "Perbarui item",
   "delete-item": "Hapus Item",
   "owed-to-you": "Berhutang padamu",
   "name": "Nama",
@@ -1039,5 +1039,8 @@
   "widget-background-opacity": "Opacity latar belakang",
   "currency-total": "Total mata uang",
   "currency-total-description": "Sebutkan semua total mata uang akun",
-  "app": "Aplikasi"
+  "app": "Aplikasi",
+  "set-color": "Atur warna",
+  "next-date-time": "BERIKUTNYA",
+  "set-date-time": "MENGATUR"
 }
