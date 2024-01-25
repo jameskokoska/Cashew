@@ -384,75 +384,87 @@ class _CreditDebtTransactionsState extends State<CreditDebtTransactions>
                                               ) +
                                               13,
                                     ),
-                                    child: Row(
-                                      children: [
-                                        Expanded(
-                                          child: IncomeExpenseTabSelector(
-                                            hasBorderRadius: true,
-                                            onTabChanged: (_) {},
-                                            initialTabIsIncome: false,
-                                            showIcons: false,
-                                            tabController: _tabController,
-                                            expenseLabel: "one-time".tr(),
-                                            expenseCustomIcon: Icon(
-                                              appStateSettings["outlinedIcons"]
-                                                  ? Icons
-                                                      .event_available_outlined
-                                                  : Icons
-                                                      .event_available_rounded,
-                                            ),
-                                            incomeLabel: "long-term".tr(),
-                                            incomeCustomIcon: Icon(
-                                              appStateSettings["outlinedIcons"]
-                                                  ? Icons.av_timer_outlined
-                                                  : Icons.av_timer_rounded,
+                                    child: Padding(
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal:
+                                            getHorizontalPaddingConstrained(
+                                                context),
+                                      ),
+                                      child: Row(
+                                        children: [
+                                          Expanded(
+                                            child: IncomeExpenseTabSelector(
+                                              hasBorderRadius: true,
+                                              onTabChanged: (_) {},
+                                              initialTabIsIncome: false,
+                                              showIcons: false,
+                                              tabController: _tabController,
+                                              expenseLabel: "one-time".tr(),
+                                              expenseCustomIcon: Icon(
+                                                appStateSettings[
+                                                        "outlinedIcons"]
+                                                    ? Icons
+                                                        .event_available_outlined
+                                                    : Icons
+                                                        .event_available_rounded,
+                                              ),
+                                              incomeLabel: "long-term".tr(),
+                                              incomeCustomIcon: Icon(
+                                                appStateSettings[
+                                                        "outlinedIcons"]
+                                                    ? Icons.av_timer_outlined
+                                                    : Icons.av_timer_rounded,
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                        AnimatedBuilder(
-                                          animation: _tabController.animation!,
-                                          builder: (BuildContext context,
-                                              Widget? child) {
-                                            return ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(15),
-                                              child: SizeTransition(
-                                                sizeFactor:
-                                                    _tabController.animation!,
-                                                axis: Axis.horizontal,
-                                                child: FadeTransition(
-                                                  opacity:
+                                          AnimatedBuilder(
+                                            animation:
+                                                _tabController.animation!,
+                                            builder: (BuildContext context,
+                                                Widget? child) {
+                                              return ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(15),
+                                                child: SizeTransition(
+                                                  sizeFactor:
                                                       _tabController.animation!,
-                                                  child: Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            left: 7),
-                                                    child: ButtonIcon(
-                                                      size: 48,
-                                                      iconPadding: 25,
-                                                      key: ValueKey(2),
-                                                      onTap: () {
-                                                        pushRoute(
-                                                          context,
-                                                          EditObjectivesPage(
-                                                            objectiveType:
-                                                                ObjectiveType
-                                                                    .loan,
-                                                          ),
-                                                        );
-                                                      },
-                                                      icon: appStateSettings[
-                                                              "outlinedIcons"]
-                                                          ? Icons.edit_outlined
-                                                          : Icons.edit_rounded,
+                                                  axis: Axis.horizontal,
+                                                  child: FadeTransition(
+                                                    opacity: _tabController
+                                                        .animation!,
+                                                    child: Padding(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              left: 7),
+                                                      child: ButtonIcon(
+                                                        size: 48,
+                                                        iconPadding: 25,
+                                                        key: ValueKey(2),
+                                                        onTap: () {
+                                                          pushRoute(
+                                                            context,
+                                                            EditObjectivesPage(
+                                                              objectiveType:
+                                                                  ObjectiveType
+                                                                      .loan,
+                                                            ),
+                                                          );
+                                                        },
+                                                        icon: appStateSettings[
+                                                                "outlinedIcons"]
+                                                            ? Icons
+                                                                .edit_outlined
+                                                            : Icons
+                                                                .edit_rounded,
+                                                      ),
                                                     ),
                                                   ),
                                                 ),
-                                              ),
-                                            );
-                                          },
-                                        ),
-                                      ],
+                                              );
+                                            },
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ),

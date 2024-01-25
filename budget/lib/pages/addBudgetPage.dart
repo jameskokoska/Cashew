@@ -547,6 +547,30 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
     }
   }
 
+  void openTransactionsToIncludeInfo() {
+    openBottomSheet(
+      context,
+      fullSnap: false,
+      ViewBudgetTransactionFilterInfo(
+        isIncomeBudget: selectedIncome,
+        selectedBudgetFilters: selectedBudgetTransactionFilters,
+        setSelectedBudgetFilters: setSelectedBudgetFilters,
+      ),
+    );
+  }
+
+  void openBudgetTypeInfo() {
+    openBottomSheet(
+      context,
+      fullSnap: false,
+      SelectBudgetTypePopup(
+        setBudgetType: setSelectedBudgetType,
+        selectedBudgetTypeAdded: selectedAddedTransactionsOnly,
+        selectedBudgetTypeAll: selectedAddedTransactionsOnly == false,
+      ),
+    );
+  }
+
   GlobalKey<_BudgetDetailsState> _budgetDetailsStateKey = GlobalKey();
 
   @override
@@ -891,21 +915,12 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                                     : Icons.info_outline_rounded,
                                 size: 19,
                               ),
-                              onPressed: () {
-                                openBottomSheet(
-                                  context,
-                                  fullSnap: false,
-                                  SelectBudgetTypePopup(
-                                    setBudgetType: setSelectedBudgetType,
-                                    selectedBudgetTypeAdded:
-                                        selectedAddedTransactionsOnly,
-                                    selectedBudgetTypeAll:
-                                        selectedAddedTransactionsOnly == false,
-                                  ),
-                                );
-                              },
+                              onPressed: openBudgetTypeInfo,
                             ),
                           ),
+                          onLongPress: (_) {
+                            openBudgetTypeInfo();
+                          },
                           wrapped: true,
                           items: <String>[
                             "Added Only",
@@ -978,21 +993,12 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
                                         : Icons.info_outline_rounded,
                                     size: 19,
                                   ),
-                                  onPressed: () {
-                                    openBottomSheet(
-                                      context,
-                                      fullSnap: false,
-                                      ViewBudgetTransactionFilterInfo(
-                                        isIncomeBudget: selectedIncome,
-                                        selectedBudgetFilters:
-                                            selectedBudgetTransactionFilters,
-                                        setSelectedBudgetFilters:
-                                            setSelectedBudgetFilters,
-                                      ),
-                                    );
-                                  },
+                                  onPressed: openTransactionsToIncludeInfo,
                                 ),
                               ),
+                              onLongPress: (_) {
+                                openTransactionsToIncludeInfo();
+                              },
                               items: [
                                 BudgetTransactionFilters
                                     .defaultBudgetTransactionFilters,

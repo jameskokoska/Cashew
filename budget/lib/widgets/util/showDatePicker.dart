@@ -85,8 +85,8 @@ Future<DateTime?> selectDateAndTimeSequence(
     openSnackbar(
       SnackbarMessage(
         icon: appStateSettings["outlinedIcons"]
-            ? Icons.warning_outlined
-            : Icons.warning_rounded,
+            ? Icons.event_busy_outlined
+            : Icons.event_busy_rounded,
         title: "date-not-selected".tr(),
       ),
     );

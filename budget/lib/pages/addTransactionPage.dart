@@ -1080,9 +1080,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                               : Icons.info_outline_rounded,
                           size: 19,
                         ),
-                        onPressed: () {
-                          openSelectSpecialTransactionTypeInfo();
-                        },
+                        onPressed: openSelectSpecialTransactionTypeInfo,
                       ),
                     ),
                     items:

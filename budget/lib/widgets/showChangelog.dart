@@ -34,6 +34,7 @@ String getChangelogString() {
     Tapping an upcoming transaction opens overdue tab
     Currency total includes percentage
     Long press transaction type when adding transaction opens info popup
+    Long press budget options when adding budget opens info popup
     Long press goal/long term loan amount to copy total to clipboard
     Consistent popup enter text confirmation buttons and spacing
     Set date time button when initially adding a transaction
