@@ -6,6 +6,7 @@ import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/addWalletPage.dart';
 import 'package:budget/pages/editHomePage.dart';
 import 'package:budget/pages/homePage/homePageWalletSwitcher.dart';
+import 'package:budget/struct/currencyFunctions.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/navigationFramework.dart';
@@ -115,9 +116,14 @@ class HomePageWalletList extends StatelessWidget {
                             mergeLikeCurrencies: true),
                         builder: (context, snapshot) {
                           double totalAmountSpent = (snapshot.data ?? []).fold(
-                              0.0,
-                              (double acc, WalletWithDetails wallet) =>
-                                  acc + (wallet.totalSpent ?? 0.0));
+                              0.0, (double acc, WalletWithDetails wallet) {
+                            return acc +
+                                (wallet.totalSpent ?? 0.0) *
+                                    amountRatioToPrimaryCurrency(
+                                        Provider.of<AllWallets>(context),
+                                        wallet.wallet.currency);
+                          });
+                          print(totalAmountSpent);
 
                           if (snapshot.hasData) {
                             return Column(
@@ -137,11 +143,22 @@ class HomePageWalletList extends StatelessWidget {
                                     walletWithDetails: walletDetails,
                                     isCurrencyRow: true,
                                     percent: (totalAmountSpent == 0
-                                            ? 0
-                                            : (walletDetails.totalSpent ?? 0) /
-                                                totalAmountSpent) *
-                                        -1 *
-                                        100,
+                                                ? 0
+                                                : ((walletDetails.totalSpent ??
+                                                            0) *
+                                                        amountRatioToPrimaryCurrency(
+                                                            Provider.of<
+                                                                    AllWallets>(
+                                                                context),
+                                                            walletDetails.wallet
+                                                                .currency)) /
+                                                    totalAmountSpent)
+                                            .abs() *
+                                        100
+                                    // * ((walletDetails.totalSpent ?? 0) < 0
+                                    //     ? -1
+                                    //     : 1)
+                                    ,
                                   ),
                                 if (snapshot.hasData &&
                                     snapshot.data!.length > 0)

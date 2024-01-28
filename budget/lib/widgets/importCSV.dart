@@ -81,7 +81,12 @@ class _ImportCSVState extends State<ImportCSV> {
       openPopup(
         context,
         title: "csv-error".tr(),
-        description: e.toString(),
+        description: "consider-csv-template".tr() + "\n" + e.toString(),
+        onCancelWithBoxContext: (BuildContext boxContext) async {
+          await saveSampleCSV(boxContext: boxContext);
+          Navigator.pop(context);
+        },
+        onCancelLabel: "get-template".tr(),
         icon: appStateSettings["outlinedIcons"]
             ? Icons.error_outlined
             : Icons.error_rounded,
@@ -198,17 +203,18 @@ class _ImportCSVState extends State<ImportCSV> {
                 ? Icons.warning_outlined
                 : Icons.warning_rounded,
             title: "csv-error".tr(),
-            description: "consider-csv-template".tr() + e.toString(),
+            description: "consider-csv-template".tr() + "\n" + e.toString(),
+            onCancelWithBoxContext: (BuildContext boxContext) async {
+              await importFromSheets
+                  ? getGoogleSheetTemplate(context)
+                  : saveSampleCSV(boxContext: boxContext);
+              Navigator.pop(context);
+            },
+            onCancelLabel: "get-template".tr(),
             onSubmit: () {
               Navigator.pop(context);
             },
             onSubmitLabel: "ok".tr(),
-            onCancelWithBoxContext: (BuildContext boxContext) {
-              importFromSheets
-                  ? getGoogleSheetTemplate(context)
-                  : saveSampleCSV(boxContext: boxContext);
-            },
-            onCancelLabel: "get-template".tr(),
           );
         }
       }
@@ -463,15 +469,17 @@ class _ImportCSVState extends State<ImportCSV> {
                           ? Icons.warning_outlined
                           : Icons.warning_rounded,
                       title: "csv-error".tr(),
-                      description: "consider-csv-template".tr() + e.toString(),
+                      description:
+                          "consider-csv-template".tr() + "\n" + e.toString(),
                       onSubmit: () {
                         Navigator.pop(context);
                       },
                       onSubmitLabel: "ok".tr(),
-                      onCancelWithBoxContext: (BuildContext boxContext) {
-                        importFromSheets
+                      onCancelWithBoxContext: (BuildContext boxContext) async {
+                        await importFromSheets
                             ? getGoogleSheetTemplate(context)
                             : saveSampleCSV(boxContext: boxContext);
+                        Navigator.pop(context);
                       },
                       onCancelLabel: "get-template".tr(),
                     );
@@ -486,7 +494,12 @@ class _ImportCSVState extends State<ImportCSV> {
       openPopup(
         context,
         title: "csv-error".tr(),
-        description: e.toString(),
+        description: "consider-csv-template".tr() + "\n" + e.toString(),
+        onCancelWithBoxContext: (BuildContext boxContext) async {
+          await saveSampleCSV(boxContext: boxContext);
+          Navigator.pop(context);
+        },
+        onCancelLabel: "get-template".tr(),
         icon: appStateSettings["outlinedIcons"]
             ? Icons.error_outlined
             : Icons.error_rounded,
@@ -600,7 +613,12 @@ class _ImportCSVState extends State<ImportCSV> {
               openPopup(
                 context,
                 title: "csv-error".tr(),
-                description: e.toString(),
+                description: "consider-csv-template".tr() + "\n" + e.toString(),
+                onCancelWithBoxContext: (BuildContext boxContext) async {
+                  await saveSampleCSV(boxContext: boxContext);
+                  Navigator.pop(context);
+                },
+                onCancelLabel: "get-template".tr(),
                 icon: appStateSettings["outlinedIcons"]
                     ? Icons.error_outlined
                     : Icons.error_rounded,
@@ -1121,11 +1139,18 @@ class _ImportingEntriesPopupState extends State<ImportingEntriesPopup> {
         await openPopup(
           context,
           title: "csv-error".tr(),
-          description: "Skipped importing " +
+          description: "consider-csv-template".tr() +
+              "\n" +
+              "Skipped importing " +
               skippedError.length.toString() +
               " entries: " +
               "\n\n" +
               skippedError.take(10).join("\n\n"),
+          onCancelWithBoxContext: (BuildContext boxContext) async {
+            await saveSampleCSV(boxContext: boxContext);
+            Navigator.pop(context);
+          },
+          onCancelLabel: "get-template".tr(),
           icon: appStateSettings["outlinedIcons"]
               ? Icons.error_outlined
               : Icons.error_rounded,
@@ -1142,7 +1167,12 @@ class _ImportingEntriesPopupState extends State<ImportingEntriesPopup> {
       openPopup(
         context,
         title: "csv-error".tr(),
-        description: e.toString(),
+        description: "consider-csv-template".tr() + "\n" + e.toString(),
+        onCancelWithBoxContext: (BuildContext boxContext) async {
+          await saveSampleCSV(boxContext: boxContext);
+          Navigator.pop(context);
+        },
+        onCancelLabel: "get-template".tr(),
         icon: appStateSettings["outlinedIcons"]
             ? Icons.error_outlined
             : Icons.error_rounded,

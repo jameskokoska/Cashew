@@ -1947,11 +1947,72 @@ class FinanceDatabase extends _$FinanceDatabase {
       return TransactionAssociatedTitleWithCategory(
         title: rows.readTable(associatedTitles),
         category: rows.readTable(categories),
+        type: TitleType.TitleExists,
       );
     }).toList();
 
-    if (alsoSearchCategories == false || list.length > limit) return list;
+    if (list.length > limit) return list;
+    if (limit - list.length < 0)
+      limit = 0;
+    else
+      limit = limit - list.length;
 
+    // Search based on individual words
+    list.addAll((await (select(associatedTitles).join([
+      innerJoin(categories,
+          categories.categoryPk.equalsExp(associatedTitles.categoryFk)),
+    ])
+              ..where(associatedTitles.title
+                  .collate(Collate.noCase)
+                  .isIn(title.split(" ")))
+              ..orderBy([OrderingTerm.desc(associatedTitles.order)])
+              ..limit(limit, offset: offset ?? DEFAULT_OFFSET))
+            .get())
+        .map((rows) {
+      TransactionAssociatedTitle foundTitle = rows.readTable(associatedTitles);
+      return TransactionAssociatedTitleWithCategory(
+        title: foundTitle.copyWith(
+            title: completePartialTitle(title, foundTitle.title)),
+        category: rows.readTable(categories),
+        type: TitleType.PartialTitleExists,
+        partialTitleString: foundTitle.title,
+      );
+    }).toList());
+
+    if (list.length > limit) return list;
+    if (limit - list.length < 0)
+      limit = 0;
+    else
+      limit = limit - list.length;
+
+    // Search based on last word, complete last word
+    String? lastWord = title.split(" ").lastOrNull;
+    if (lastWord != null && lastWord.trim() != "" && lastWord.length > 1)
+      list.addAll((await (select(associatedTitles).join([
+        innerJoin(categories,
+            categories.categoryPk.equalsExp(associatedTitles.categoryFk)),
+      ])
+                ..where(associatedTitles.title
+                    .collate(Collate.noCase)
+                    .like("%" + lastWord + "%"))
+                ..orderBy([OrderingTerm.desc(associatedTitles.order)])
+                ..limit(limit, offset: offset ?? DEFAULT_OFFSET))
+              .get())
+          .map((rows) {
+        TransactionAssociatedTitle foundTitle =
+            rows.readTable(associatedTitles);
+        return TransactionAssociatedTitleWithCategory(
+          title: foundTitle.copyWith(
+              title: completePartialTitle(title, foundTitle.title)),
+          category: rows.readTable(categories),
+          type: TitleType.PartialTitleExists,
+          partialTitleString: foundTitle.title,
+        );
+      }).toList());
+
+    // Search category names
+
+    if (alsoSearchCategories == false || list.length > limit) return list;
     if (limit - list.length < 0)
       limit = 0;
     else
@@ -1969,7 +2030,7 @@ class FinanceDatabase extends _$FinanceDatabase {
         .map((TransactionCategory category) {
       return TransactionAssociatedTitleWithCategory(
         title: TransactionAssociatedTitle(
-          associatedTitlePk: category.mainCategoryPk == null ? "-1" : "-2",
+          associatedTitlePk: "-1",
           categoryFk: category.categoryPk,
           title: category.name,
           dateCreated: category.dateCreated,
@@ -1977,10 +2038,25 @@ class FinanceDatabase extends _$FinanceDatabase {
           isExactMatch: false,
         ),
         category: category,
+        type: category.mainCategoryPk == null
+            ? TitleType.CategoryName
+            : TitleType.SubCategoryName,
       );
     }).toList());
 
     return list;
+  }
+
+  String completePartialTitle(String typedText, String titleText) {
+    if (typedText.contains(titleText)) {
+      return typedText;
+    } else {
+      List<String> splitText = typedText.split(" ");
+      if (splitText.isNotEmpty) {
+        splitText.removeLast();
+      }
+      return splitText.join(" ") + " " + titleText;
+    }
   }
 
   (Stream<List<TransactionWallet>>, Future<List<TransactionWallet>>)
@@ -2639,6 +2715,7 @@ class FinanceDatabase extends _$FinanceDatabase {
               return TransactionAssociatedTitleWithCategory(
                 title: row.readTable(associatedTitles),
                 category: row.readTable(categories),
+                type: TitleType.TitleExists,
               );
             }).toList());
   }
@@ -2650,32 +2727,6 @@ class FinanceDatabase extends _$FinanceDatabase {
         // ..limit(limit ?? DEFAULT_LIMIT, offset: offset ?? DEFAULT_OFFSET)
         )
         .get();
-  }
-
-  Future<TransactionAssociatedTitle> getRelatingAssociatedTitleWithCategory(
-      String searchFor, String categoryFk,
-      {int? limit, int? offset}) async {
-    return (await (select(associatedTitles)
-              ..where((t) =>
-                  t.title.collate(Collate.noCase).like("%" + searchFor + "%") &
-                  t.categoryFk.equals(categoryFk))
-            // ..limit(limit ?? DEFAULT_LIMIT, offset: offset ?? DEFAULT_OFFSET)
-            )
-            .get())
-        .first;
-  }
-
-  Future<TransactionAssociatedTitle?> getRelatingAssociatedTitle(
-      String searchFor,
-      {int? limit,
-      int? offset}) async {
-    return (await (select(associatedTitles)
-              ..where((t) =>
-                  t.title.collate(Collate.noCase).like("%" + searchFor + "%"))
-            // ..limit(limit ?? DEFAULT_LIMIT, offset: offset ?? DEFAULT_OFFSET)
-            )
-            .get())
-        .firstOrNull;
   }
 
   Future<TransactionCategory?> getRelatingCategory(String searchFor,
@@ -6728,10 +6779,23 @@ class EarliestLatestDateTme {
   EarliestLatestDateTme({required this.earliest, required this.latest});
 }
 
+enum TitleType {
+  TitleExists,
+  CategoryName,
+  SubCategoryName,
+  PartialTitleExists,
+}
+
 class TransactionAssociatedTitleWithCategory {
   final TransactionAssociatedTitle title;
   final TransactionCategory category;
+  final TitleType type;
+  final String? partialTitleString;
 
-  TransactionAssociatedTitleWithCategory(
-      {required this.title, required this.category});
+  TransactionAssociatedTitleWithCategory({
+    required this.type,
+    required this.title,
+    required this.category,
+    this.partialTitleString,
+  });
 }

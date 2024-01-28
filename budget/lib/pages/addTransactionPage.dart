@@ -2294,15 +2294,12 @@ class SelectTitle extends StatefulWidget {
 
 class _SelectTitleState extends State<SelectTitle> {
   int selectedIndex = 0;
+  String selectedText = "";
   TransactionAssociatedTitleWithCategory? selectedAssociatedTitle;
   DateTime selectedDateTime = DateTime.now();
   bool get foundFromCategory {
-    return selectedAssociatedTitle?.title.associatedTitlePk == "-1" ||
-        selectedAssociatedTitle?.title.associatedTitlePk == "-2";
-  }
-
-  bool get foundFromSubCategory {
-    return selectedAssociatedTitle?.title.associatedTitlePk == "-2";
+    return selectedAssociatedTitle?.type == TitleType.CategoryName ||
+        selectedAssociatedTitle?.type == TitleType.SubCategoryName;
   }
 
   @override
@@ -2312,7 +2309,7 @@ class _SelectTitleState extends State<SelectTitle> {
 
   void selectTitle() async {
     if (selectedAssociatedTitle?.category != null) {
-      if (foundFromSubCategory) {
+      if (selectedAssociatedTitle?.type == TitleType.SubCategoryName) {
         if (selectedAssociatedTitle!.category.mainCategoryPk != null) {
           widget.setSelectedCategory(await database.getCategoryInstance(
               selectedAssociatedTitle!.category.mainCategoryPk!));
@@ -2377,6 +2374,7 @@ class _SelectTitleState extends State<SelectTitle> {
               autoFocus: true,
               onEditingComplete: selectTitle,
               onChanged: (text) async {
+                selectedText = text;
                 widget.setSelectedTitle(text.trim());
 
                 if (text.trim() == "" || text.trim().length < 2) {
@@ -2446,10 +2444,16 @@ class _SelectTitleState extends State<SelectTitle> {
                                 ),
                                 !foundFromCategory
                                     ? TextFont(
-                                        text: selectedAssociatedTitle
-                                                ?.title.title ??
-                                            "",
-                                        fontSize: 16,
+                                        text: "",
+                                        richTextSpan: generateSpans(
+                                          context: context,
+                                          fontSize: 16,
+                                          mainText: selectedAssociatedTitle
+                                                  ?.title.title ??
+                                              "",
+                                          boldedText: selectedAssociatedTitle
+                                              ?.partialTitleString,
+                                        ),
                                       )
                                     : Container(),
                               ],
@@ -2757,18 +2761,35 @@ Future<bool> addAssociatedTitles(
     String selectedTitle, TransactionCategory selectedCategory) async {
   if (appStateSettings["autoAddAssociatedTitles"]) {
     try {
-      // Should this check be moved directly into createOrUpdateAssociatedTitle?
-      TransactionAssociatedTitle checkIfAlreadyExists =
-          await database.getRelatingAssociatedTitleWithCategory(
-              selectedTitle, selectedCategory.categoryPk);
-      // This is more efficient than shifting the associated title since this uses batching
-      await database.deleteAssociatedTitle(
-          checkIfAlreadyExists.associatedTitlePk, checkIfAlreadyExists.order);
-      int length = await database.getAmountOfAssociatedTitles();
-      await database.createOrUpdateAssociatedTitle(
-          checkIfAlreadyExists.copyWith(order: length));
-      print("already has this title, moved to top");
-      return true;
+      TransactionAssociatedTitleWithCategory? foundTitle =
+          (await database.getSimilarAssociatedTitles(
+        title: selectedTitle,
+        limit: 1,
+      ))
+              .firstOrNull;
+
+      if (foundTitle?.type == TitleType.PartialTitleExists ||
+          foundTitle?.type == TitleType.CategoryName ||
+          foundTitle?.type == TitleType.SubCategoryName) {
+        return false;
+      }
+
+      TransactionAssociatedTitle? checkIfAlreadyExists =
+          foundTitle?.title.copyWith(
+        categoryFk: selectedCategory.categoryPk,
+      );
+
+      if (checkIfAlreadyExists != null) {
+        print("already has this title, moved to top");
+
+        // This is more efficient than shifting the associated title since this uses batching
+        await database.deleteAssociatedTitle(
+            checkIfAlreadyExists.associatedTitlePk, checkIfAlreadyExists.order);
+        int length = await database.getAmountOfAssociatedTitles();
+        await database.createOrUpdateAssociatedTitle(
+            checkIfAlreadyExists.copyWith(order: length));
+        return true;
+      }
     } catch (e) {
       print(e.toString());
     }
@@ -4507,12 +4528,10 @@ class _TitleInputState extends State<TitleInput> {
                                         foundAssociatedTitle.category);
                                   }
 
-                                  if (foundAssociatedTitle
-                                              .title.associatedTitlePk !=
-                                          "-1" &&
-                                      foundAssociatedTitle
-                                              .title.associatedTitlePk !=
-                                          "-2") {
+                                  if (foundAssociatedTitle.type !=
+                                          TitleType.CategoryName &&
+                                      foundAssociatedTitle.type !=
+                                          TitleType.SubCategoryName) {
                                     widget.setSelectedTitle(
                                         foundAssociatedTitle.title.title);
                                     setTextInput(widget.titleInputController,
@@ -4542,19 +4561,23 @@ class _TitleInputState extends State<TitleInput> {
                                     ),
                                     SizedBox(width: 13),
                                     Expanded(
-                                      child: TextFont(
-                                        text: foundAssociatedTitle.title.title,
+                                        child: TextFont(
+                                      text: "",
+                                      richTextSpan: generateSpans(
+                                        context: context,
                                         fontSize: 16,
+                                        mainText:
+                                            foundAssociatedTitle.title.title,
+                                        boldedText: foundAssociatedTitle
+                                            .partialTitleString,
                                       ),
-                                    ),
+                                    )),
                                     Opacity(
                                       opacity: 0.65,
-                                      child: foundAssociatedTitle.title
-                                                      .associatedTitlePk ==
-                                                  "-1" ||
-                                              foundAssociatedTitle.title
-                                                      .associatedTitlePk ==
-                                                  "-2"
+                                      child: foundAssociatedTitle.type ==
+                                                  TitleType.CategoryName ||
+                                              foundAssociatedTitle.type ==
+                                                  TitleType.SubCategoryName
                                           ? Padding(
                                               padding:
                                                   const EdgeInsets.symmetric(

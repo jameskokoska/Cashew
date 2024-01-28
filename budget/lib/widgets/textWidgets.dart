@@ -145,23 +145,39 @@ class TextFont extends StatelessWidget {
   }
 }
 
-class TextHeader extends StatelessWidget {
-  const TextHeader({required this.text, Key? key}) : super(key: key);
-  final String text;
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      color: Theme.of(context).canvasColor,
-      child: Padding(
-        padding:
-            const EdgeInsets.only(left: 18.0, right: 18, top: 10, bottom: 5),
-        child: TextFont(
-          text: text,
-          fontSize: 33,
-          fontWeight: FontWeight.bold,
-        ),
+List<TextSpan> generateSpans({
+  required BuildContext context,
+  required String mainText,
+  required String? boldedText,
+  required double fontSize,
+}) {
+  List<TextSpan> spans = [];
+  final List<String> textParts = mainText.split(boldedText ?? "");
+
+  TextStyle textStyle = TextStyle(
+    color: getColor(context, "black"),
+    fontFamily: appStateSettings["font"],
+    fontFamilyFallback: ['Inter'],
+    fontSize: fontSize,
+  );
+
+  for (int i = 0; i < textParts.length; i++) {
+    spans.add(
+      TextSpan(
+        text: textParts[i],
+        style: textStyle,
       ),
     );
+
+    if (i < textParts.length - 1) {
+      spans.add(TextSpan(
+        text: boldedText,
+        style: textStyle.copyWith(
+          fontWeight: FontWeight.bold,
+        ),
+      ));
+    }
   }
+
+  return spans;
 }
