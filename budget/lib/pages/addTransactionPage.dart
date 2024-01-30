@@ -101,6 +101,7 @@ class AddTransactionPage extends StatefulWidget {
     this.selectedAmount,
     this.selectedTitle,
     this.selectedCategory,
+    this.selectedSubCategory,
     this.startInitialAddTransactionSequence = true,
     this.transferBalancePopup = false,
     required this.routesToPopAfterDelete,
@@ -116,6 +117,7 @@ class AddTransactionPage extends StatefulWidget {
   final double? selectedAmount;
   final String? selectedTitle;
   final TransactionCategory? selectedCategory;
+  final TransactionCategory? selectedSubCategory;
   final bool startInitialAddTransactionSequence;
   final bool transferBalancePopup;
 
@@ -787,10 +789,13 @@ class _AddTransactionPageState extends State<AddTransactionPage>
       }
     }
     if (widget.selectedAmount != null) {
-      selectedAmount = widget.selectedAmount;
+      selectedAmount = (widget.selectedAmount ?? 0).abs();
     }
     if (widget.selectedCategory != null) {
       selectedCategory = widget.selectedCategory;
+    }
+    if (widget.selectedSubCategory != null) {
+      selectedSubCategory = widget.selectedSubCategory;
     }
     if (widget.selectedTitle != null) {
       selectedTitle = widget.selectedTitle;
@@ -2768,8 +2773,7 @@ Future<bool> addAssociatedTitles(
       ))
               .firstOrNull;
 
-      if (foundTitle?.type == TitleType.PartialTitleExists ||
-          foundTitle?.type == TitleType.CategoryName ||
+      if (foundTitle?.type == TitleType.CategoryName ||
           foundTitle?.type == TitleType.SubCategoryName) {
         return false;
       }
@@ -2779,7 +2783,9 @@ Future<bool> addAssociatedTitles(
         categoryFk: selectedCategory.categoryPk,
       );
 
-      if (checkIfAlreadyExists != null) {
+      if (checkIfAlreadyExists != null &&
+          foundTitle?.title.categoryFk == selectedCategory.categoryPk &&
+          foundTitle?.title.title.trim() == selectedTitle.trim()) {
         print("already has this title, moved to top");
 
         // This is more efficient than shifting the associated title since this uses batching
@@ -4507,9 +4513,6 @@ class _TitleInputState extends State<TitleInput> {
                                       .colorScheme
                                       .secondaryContainer
                                   : getColor(context, "canvasContainer"),
-                              key: ValueKey(
-                                  foundAssociatedTitle.title.associatedTitlePk +
-                                      foundAssociatedTitle.category.categoryPk),
                               child: Tappable(
                                 borderRadius: 0,
                                 color: Colors.transparent,

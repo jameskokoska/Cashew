@@ -1142,34 +1142,39 @@ class _WalletDetailsPageState extends State<WalletDetailsPage>
                     ),
                   ],
                 ),
-              // if (widget.wallet == null)
-              //   CustomPopupMenuButton(
-              //     showButtons: true,
-              //     keepOutFirst: true,
-              //     items: [
-              //       DropdownItemMenu(
-              //         id: "select-period",
-              //         label: "select-period-tooltip".tr(),
-              //         icon: appStateSettings["outlinedIcons"]
-              //             ? Icons.timelapse_outlined
-              //             : Icons.timelapse_rounded,
-              //         action: () async {
-              //           selectAllSpendingPeriod();
-              //         },
-              //       ),
-              //       DropdownItemMenu(
-              //         id: "filters",
-              //         label: "filters".tr(),
-              //         icon: appStateSettings["outlinedIcons"]
-              //             ? Icons.filter_alt_outlined
-              //             : Icons.filter_alt_rounded,
-              //         action: () async {
-              //           selectAllSpendingFilters();
-              //         },
-              //         selected: searchFilters?.isClear() == false,
-              //       ),
-              //     ],
-              //   ),
+              if (widget.wallet == null)
+                AppBarIconAppear(
+                  scrollController: _scrollController,
+                  child: CustomPopupMenuButton(
+                    showButtons: true,
+                    keepOutFirst: true,
+                    items: [
+                      // DropdownItemMenu(
+                      //   id: "select-period",
+                      //   label: "select-period-tooltip".tr(),
+                      //   icon: appStateSettings["outlinedIcons"]
+                      //       ? Icons.timelapse_outlined
+                      //       : Icons.timelapse_rounded,
+                      //   action: () async {
+                      //     selectAllSpendingPeriod();
+                      //   },
+                      // ),
+                      DropdownItemMenu(
+                        id: "filters",
+                        label: "filters".tr(),
+                        icon: appStateSettings["outlinedIcons"]
+                            ? Icons.filter_alt_outlined
+                            : Icons.filter_alt_rounded,
+                        action: () async {
+                          selectAllSpendingFilters();
+                        },
+                        selected:
+                            searchFilters?.isClear(ignoreDateTimeRange: true) ==
+                                false,
+                      ),
+                    ],
+                  ),
+                ),
             ],
             dragDownToDismiss: true,
             bodyBuilder: (scrollController, scrollPhysics, sliverAppBar) {
@@ -1479,6 +1484,66 @@ class _WalletDetailsPageState extends State<WalletDetailsPage>
             pageID: listID,
           ),
         ],
+      ),
+    );
+  }
+}
+
+class AppBarIconAppear extends StatefulWidget {
+  const AppBarIconAppear({
+    required this.scrollController,
+    required this.child,
+    Key? key,
+  }) : super(key: key);
+
+  final ScrollController scrollController;
+  final Widget child;
+
+  @override
+  _AppBarIconAppearState createState() => _AppBarIconAppearState();
+}
+
+class _AppBarIconAppearState extends State<AppBarIconAppear> {
+  bool animateIn = false;
+
+  @override
+  void initState() {
+    super.initState();
+    widget.scrollController.addListener(_onScroll);
+  }
+
+  @override
+  void dispose() {
+    widget.scrollController.removeListener(_onScroll);
+    super.dispose();
+  }
+
+  void _onScroll() {
+    bool tempAnimateIn;
+    if (widget.scrollController.offset /
+            widget.scrollController.position.maxScrollExtent >=
+        0.99)
+      tempAnimateIn = true;
+    else
+      tempAnimateIn = false;
+
+    if (tempAnimateIn != animateIn) {
+      setState(() {
+        animateIn = tempAnimateIn;
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedOpacity(
+      duration: Duration(milliseconds: 100),
+      opacity: animateIn ? 1 : 0,
+      child: AnimatedScale(
+        scale: animateIn ? 1 : 0,
+        duration: Duration(milliseconds: 500),
+        curve: Curves.easeInOutCubicEmphasized,
+        child: widget.child,
       ),
     );
   }

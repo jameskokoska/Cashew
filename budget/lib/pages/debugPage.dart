@@ -305,6 +305,17 @@ class DebugPage extends StatelessWidget {
           initialValue: appStateSettings["showTransactionPk"] == true,
           icon: Icons.password,
         ),
+        SettingsContainerSwitch(
+          title: "Long term loan difference feature",
+          description: "Instead of a common goal",
+          onSwitched: (value) {
+            updateSettings("longTermLoansDifferenceFeature", value,
+                updateGlobalState: true);
+          },
+          initialValue:
+              appStateSettings["longTermLoansDifferenceFeature"] == true,
+          icon: Icons.calculate,
+        ),
         Padding(
           padding: const EdgeInsets.only(top: 8.0, left: 13, right: 13),
           child: TextFont(text: "Animation Scale"),
@@ -337,6 +348,15 @@ class DebugPage extends StatelessWidget {
           label: "Fix transaction polarity",
           onTap: () async {
             await database.fixTransactionPolarity();
+          },
+        ),
+        SizedBox(height: 20),
+        Button(
+          expandedLayout: true,
+          label:
+              "Clean database delete logs (WARNING: Make sure you sync with all other devices first!)",
+          onTap: () async {
+            await database.deleteAllDeleteLogs();
           },
         ),
         SizedBox(height: 20),

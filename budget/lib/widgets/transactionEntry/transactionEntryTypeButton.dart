@@ -3,10 +3,12 @@ import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/objectivePage.dart';
+import 'package:budget/pages/objectivesListPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/struct/upcomingTransactionsFunctions.dart';
 import 'package:budget/widgets/openPopup.dart';
+import 'package:budget/widgets/selectedTransactionsAppBar.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:easy_localization/src/public_ext.dart';
@@ -53,14 +55,24 @@ class TransactionEntryActionButton extends StatelessWidget {
                 : () async {
                     Objective loanObjective = await database
                         .getObjectiveInstance(transaction.objectiveLoanFk!);
-                    pushRoute(
-                      context,
-                      AddTransactionPage(
-                        routesToPopAfterDelete: RoutesToPopAfterDelete.None,
-                        selectedObjective: loanObjective,
-                        selectedIncome: loanObjective.income,
-                      ),
-                    );
+                    if (getIsDifferenceOnlyLoan(loanObjective)) {
+                      database.createOrUpdateTransaction(
+                        transaction.copyWith(
+                          income: !transaction.income,
+                          amount: transaction.amount * -1,
+                        ),
+                        insert: true,
+                      );
+                    } else {
+                      pushRoute(
+                        context,
+                        AddTransactionPage(
+                          routesToPopAfterDelete: RoutesToPopAfterDelete.None,
+                          selectedObjective: loanObjective,
+                          selectedIncome: loanObjective.income,
+                        ),
+                      );
+                    }
                   },
             containerColor: containerColor,
             iconColor: iconColor,

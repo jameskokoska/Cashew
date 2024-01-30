@@ -172,8 +172,14 @@ class CustomPopupMenuButton extends StatelessWidget {
               height: 22,
               width: 22,
               decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Theme.of(context).colorScheme.secondaryContainer),
+                shape: BoxShape.circle,
+                color: dynamicPastel(
+                  context,
+                  Theme.of(context).colorScheme.secondaryContainer,
+                  inverse: true,
+                  amount: 0.2,
+                ).withOpacity(0.6),
+              ),
             ),
           ),
           IconButton(

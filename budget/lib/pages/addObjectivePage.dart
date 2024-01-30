@@ -86,6 +86,7 @@ class _AddObjectivePageState extends State<AddObjectivePage>
   late bool selectedIncome = widget.selectedIncome ?? true;
   bool selectedPin = true;
   String selectedWalletPk = appStateSettings["selectedWalletPk"];
+  bool isDifferenceOnlyLoan = false;
 
   FocusNode _titleFocusNode = FocusNode();
   late TabController _incomeTabController =
@@ -145,6 +146,7 @@ class _AddObjectivePageState extends State<AddObjectivePage>
   void setSelectedIncome(bool income) {
     setState(() {
       selectedIncome = income;
+      isDifferenceOnlyLoan = false;
     });
     determineBottomButton();
     return;
@@ -220,7 +222,8 @@ class _AddObjectivePageState extends State<AddObjectivePage>
   Future addObjective() async {
     MainAndSubcategory? mainAndSubcategory;
     if (widget.objective == null &&
-        widget.objectiveType == ObjectiveType.loan) {
+        widget.objectiveType == ObjectiveType.loan &&
+        isDifferenceOnlyLoan == false) {
       mainAndSubcategory = await selectCategorySequence(
         context,
         selectedCategory: null,
@@ -241,7 +244,8 @@ class _AddObjectivePageState extends State<AddObjectivePage>
 
     // Create the initial transaction if it is a loan
     if (widget.objective == null &&
-        widget.objectiveType == ObjectiveType.loan) {
+        widget.objectiveType == ObjectiveType.loan &&
+        isDifferenceOnlyLoan == false) {
       final Objective objectiveJustAdded =
           await database.getObjectiveFromRowId(rowId);
       if (mainAndSubcategory?.main != null) {
@@ -290,7 +294,12 @@ class _AddObjectivePageState extends State<AddObjectivePage>
           : numberOfObjectives,
       emojiIconName: selectedEmoji,
       iconName: selectedImage,
-      amount: selectedAmount,
+      amount: isDifferenceOnlyLoan == true &&
+              appStateSettings["longTermLoansDifferenceFeature"] == true
+          ? 0
+          : selectedAmount == 0
+              ? 1
+              : selectedAmount,
       income: selectedIncome,
       pinned: selectedPin,
       walletFk: selectedWalletPk,
@@ -331,6 +340,8 @@ class _AddObjectivePageState extends State<AddObjectivePage>
       selectedAmount = widget.objective!.amount;
       selectedPin = widget.objective!.pinned;
       selectedWalletPk = widget.objective!.walletFk;
+      isDifferenceOnlyLoan = widget.objective!.type == ObjectiveType.loan &&
+          widget.objective!.amount == 0;
 
       selectedIncome = widget.objective!.income;
       if (widget.objective?.income == false) {
@@ -478,7 +489,9 @@ class _AddObjectivePageState extends State<AddObjectivePage>
                     },
                     disabled: false,
                   )
-                : selectedAmount == 0
+                : selectedAmount == 0 &&
+                        widget.objective == null &&
+                        isDifferenceOnlyLoan == false
                     ? SaveBottomButton(
                         label: "set-amount".tr(),
                         onTap: () async {
@@ -503,40 +516,79 @@ class _AddObjectivePageState extends State<AddObjectivePage>
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 13),
                 // Flip the order if ObjectiveType.loan
-                child: IncomeExpenseTabSelector(
-                  hasBorderRadius: true,
-                  onTabChanged: (isIncome) {
-                    if (objectiveType == ObjectiveType.loan) {
-                      setSelectedIncome(!isIncome);
-                    } else {
-                      setSelectedIncome(isIncome);
-                    }
-                  },
-                  initialTabIsIncome: objectiveType == ObjectiveType.loan
-                      ? !selectedIncome
-                      : selectedIncome,
-                  syncWithInitial: true,
-                  expenseLabel: objectiveType == ObjectiveType.goal
-                      ? "expense-goal".tr()
-                      : objectiveType == ObjectiveType.loan
-                          ? "lent".tr()
-                          : "",
-                  incomeLabel: objectiveType == ObjectiveType.goal
-                      ? "savings-goal".tr()
-                      : objectiveType == ObjectiveType.loan
-                          ? "borrowed".tr()
-                          : "",
-                  showIcons: objectiveType != ObjectiveType.loan,
-                  expenseCustomIcon: objectiveType == ObjectiveType.goal
-                      ? null
-                      : Icon(
-                          getTransactionTypeIcon(TransactionSpecialType.credit),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: AnimatedOpacity(
+                        duration: Duration(milliseconds: 500),
+                        opacity: isDifferenceOnlyLoan ? 0.5 : 1,
+                        child: IncomeExpenseTabSelector(
+                          hasBorderRadius: true,
+                          onTabChanged: (isIncome) {
+                            if (objectiveType == ObjectiveType.loan) {
+                              setSelectedIncome(!isIncome);
+                            } else {
+                              setSelectedIncome(isIncome);
+                            }
+                          },
+                          initialTabIsIncome:
+                              objectiveType == ObjectiveType.loan
+                                  ? !selectedIncome
+                                  : selectedIncome,
+                          syncWithInitial: true,
+                          expenseLabel: objectiveType == ObjectiveType.goal
+                              ? "expense-goal".tr()
+                              : objectiveType == ObjectiveType.loan
+                                  ? "lent".tr()
+                                  : "",
+                          incomeLabel: objectiveType == ObjectiveType.goal
+                              ? "savings-goal".tr()
+                              : objectiveType == ObjectiveType.loan
+                                  ? "borrowed".tr()
+                                  : "",
+                          showIcons: objectiveType != ObjectiveType.loan,
+                          expenseCustomIcon: objectiveType == ObjectiveType.goal
+                              ? null
+                              : Icon(
+                                  getTransactionTypeIcon(
+                                      TransactionSpecialType.credit),
+                                ),
+                          incomeCustomIcon: objectiveType == ObjectiveType.goal
+                              ? null
+                              : Icon(
+                                  getTransactionTypeIcon(
+                                      TransactionSpecialType.debt),
+                                ),
                         ),
-                  incomeCustomIcon: objectiveType == ObjectiveType.goal
-                      ? null
-                      : Icon(
-                          getTransactionTypeIcon(TransactionSpecialType.debt),
+                      ),
+                    ),
+                    if (appStateSettings["longTermLoansDifferenceFeature"] ==
+                            true &&
+                        (widget.objectiveType == ObjectiveType.loan ||
+                            widget.objective?.type == ObjectiveType.loan))
+                      Padding(
+                        padding: const EdgeInsets.only(left: 7),
+                        child: ButtonIcon(
+                          onTap: () {
+                            setState(() {
+                              isDifferenceOnlyLoan = true;
+                            });
+                            determineBottomButton();
+                          },
+                          icon: appStateSettings["outlinedIcons"]
+                              ? Icons.hourglass_empty_outlined
+                              : Icons.hourglass_empty_rounded,
+                          color: isDifferenceOnlyLoan == false
+                              ? null
+                              : Theme.of(context).colorScheme.tertiaryContainer,
+                          iconColor: isDifferenceOnlyLoan == false
+                              ? null
+                              : Theme.of(context)
+                                  .colorScheme
+                                  .onTertiaryContainer,
                         ),
+                      ),
+                  ],
                 ),
               ),
             ),
@@ -657,69 +709,74 @@ class _AddObjectivePageState extends State<AddObjectivePage>
                       ),
                     ),
                   )
-                : SliverToBoxAdapter(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(bottom: 14),
-                            child: AnimatedSizeSwitcher(
-                              child: TextFont(
-                                key: ValueKey(selectedIncome.toString()),
-                                text: objectiveType == ObjectiveType.loan
-                                    ? selectedIncome
-                                        ? "lent".tr()
-                                        : "borrowed".tr()
-                                    : "goal".tr() + " ",
-                                fontSize: 17,
-                                fontWeight: FontWeight.bold,
+                : isDifferenceOnlyLoan
+                    ? SliverToBoxAdapter(child: SizedBox.shrink())
+                    : SliverToBoxAdapter(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 14),
+                                child: AnimatedSizeSwitcher(
+                                  child: TextFont(
+                                    key: ValueKey(selectedIncome.toString()),
+                                    text: objectiveType == ObjectiveType.loan
+                                        ? selectedIncome
+                                            ? "lent".tr()
+                                            : "borrowed".tr()
+                                        : "goal".tr() + " ",
+                                    fontSize: 17,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
                               ),
-                            ),
+                              Flexible(
+                                child: TappableTextEntry(
+                                  title: convertToMoney(
+                                    Provider.of<AllWallets>(context),
+                                    selectedAmount,
+                                    currencyKey: Provider.of<AllWallets>(
+                                            context,
+                                            listen: true)
+                                        .indexedByPk[selectedWalletPk]
+                                        ?.currency,
+                                  ),
+                                  placeholder: convertToMoney(
+                                    Provider.of<AllWallets>(context),
+                                    0,
+                                    currencyKey: Provider.of<AllWallets>(
+                                            context,
+                                            listen: true)
+                                        .indexedByPk[selectedWalletPk]
+                                        ?.currency,
+                                  ),
+                                  showPlaceHolderWhenTextEquals: convertToMoney(
+                                    Provider.of<AllWallets>(context),
+                                    0,
+                                    currencyKey: Provider.of<AllWallets>(
+                                            context,
+                                            listen: true)
+                                        .indexedByPk[selectedWalletPk]
+                                        ?.currency,
+                                  ),
+                                  onTap: () {
+                                    selectAmount(context);
+                                  },
+                                  fontSize: 32,
+                                  fontWeight: FontWeight.bold,
+                                  internalPadding: EdgeInsets.symmetric(
+                                      vertical: 2, horizontal: 4),
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: 10, horizontal: 5),
+                                ),
+                              ),
+                            ],
                           ),
-                          Flexible(
-                            child: TappableTextEntry(
-                              title: convertToMoney(
-                                Provider.of<AllWallets>(context),
-                                selectedAmount,
-                                currencyKey: Provider.of<AllWallets>(context,
-                                        listen: true)
-                                    .indexedByPk[selectedWalletPk]
-                                    ?.currency,
-                              ),
-                              placeholder: convertToMoney(
-                                Provider.of<AllWallets>(context),
-                                0,
-                                currencyKey: Provider.of<AllWallets>(context,
-                                        listen: true)
-                                    .indexedByPk[selectedWalletPk]
-                                    ?.currency,
-                              ),
-                              showPlaceHolderWhenTextEquals: convertToMoney(
-                                Provider.of<AllWallets>(context),
-                                0,
-                                currencyKey: Provider.of<AllWallets>(context,
-                                        listen: true)
-                                    .indexedByPk[selectedWalletPk]
-                                    ?.currency,
-                              ),
-                              onTap: () {
-                                selectAmount(context);
-                              },
-                              fontSize: 32,
-                              fontWeight: FontWeight.bold,
-                              internalPadding: EdgeInsets.symmetric(
-                                  vertical: 2, horizontal: 4),
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 10, horizontal: 5),
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
-                    ),
-                  ),
             SliverToBoxAdapter(
               child: SizedBox(height: 10),
             ),

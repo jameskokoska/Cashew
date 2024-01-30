@@ -7,6 +7,7 @@ import 'package:budget/functions.dart';
 import 'package:budget/pages/addCategoryPage.dart';
 import 'package:budget/pages/addObjectivePage.dart';
 import 'package:budget/pages/editBudgetPage.dart';
+import 'package:budget/pages/objectivesListPage.dart';
 import 'package:budget/struct/currencyFunctions.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
@@ -235,15 +236,17 @@ class _EditObjectivesPageState extends State<EditObjectivesPage> {
                                 ),
                                 TextFont(
                                   textAlign: TextAlign.left,
-                                  text: objective.income
-                                      ? widget.objectiveType ==
-                                              ObjectiveType.loan
-                                          ? "lent-funds".tr()
-                                          : "savings-goal".tr()
-                                      : widget.objectiveType ==
-                                              ObjectiveType.loan
-                                          ? "borrowed-funds".tr()
-                                          : "expense-goal".tr(),
+                                  text: getIsDifferenceOnlyLoan(objective)
+                                      ? "difference-loan".tr()
+                                      : objective.income
+                                          ? widget.objectiveType ==
+                                                  ObjectiveType.loan
+                                              ? "lent-funds".tr()
+                                              : "savings-goal".tr()
+                                          : widget.objectiveType ==
+                                                  ObjectiveType.loan
+                                              ? "borrowed-funds".tr()
+                                              : "expense-goal".tr(),
                                   fontSize: 14,
                                   textColor: getColor(context, "black")
                                       .withOpacity(0.65),

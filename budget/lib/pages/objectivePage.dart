@@ -124,6 +124,32 @@ class _ObjectivePageContentState extends State<_ObjectivePageContent> {
 
   @override
   Widget build(BuildContext context) {
+    Widget numberTransactionsWidget = StreamBuilder<int?>(
+      stream: database
+          .getTotalCountOfTransactionsInObjective(widget.objective.objectivePk)
+          .$1,
+      builder: (context, snapshot) {
+        if (snapshot.hasData && snapshot.data != null) {
+          return TextFont(
+            textAlign: TextAlign.center,
+            text: snapshot.data.toString() +
+                " " +
+                (snapshot.data == 1
+                    ? "transaction".tr().toLowerCase()
+                    : "transactions".tr().toLowerCase()),
+            fontSize: 16,
+            maxLines: 3,
+          );
+        } else {
+          return TextFont(
+            textAlign: TextAlign.center,
+            text: "/ transactions",
+            fontSize: 16,
+            maxLines: 3,
+          );
+        }
+      },
+    );
     ColorScheme objectiveColorScheme = ColorScheme.fromSeed(
       seedColor: HexColor(widget.objective.colour,
           defaultColor: Theme.of(context).colorScheme.primary),
@@ -217,8 +243,8 @@ class _ObjectivePageContentState extends State<_ObjectivePageContent> {
               SliverToBoxAdapter(
                 child: WatchTotalAndAmountOfObjective(
                   objective: widget.objective,
-                  builder:
-                      (objectiveAmount, totalAmount, percentageTowardsGoal) {
+                  builder: (double objectiveAmount, double totalAmount,
+                      double percentageTowardsGoal) {
                     if (percentageTowardsGoal >= 1 &&
                         hasPlayedConfetti == false) {
                       confettiController.play();
@@ -334,27 +360,31 @@ class _ObjectivePageContentState extends State<_ObjectivePageContent> {
                                     },
                                   ),
                                   SizedBox(height: 10),
-                                  CountNumber(
-                                    count: percentageTowardsGoal * 100,
-                                    duration: Duration(milliseconds: 1000),
-                                    initialCount: (0),
-                                    textBuilder: (value) {
-                                      return TextFont(
-                                        text: convertToPercent(
-                                          value,
-                                          finalNumber:
-                                              percentageTowardsGoal * 100,
-                                          numberDecimals: 0,
-                                          useLessThanZero: true,
+                                  getIsDifferenceOnlyLoan(widget.objective)
+                                      ? SizedBox.shrink()
+                                      : CountNumber(
+                                          count: percentageTowardsGoal * 100,
+                                          duration:
+                                              Duration(milliseconds: 1000),
+                                          initialCount: (0),
+                                          textBuilder: (value) {
+                                            return TextFont(
+                                              text: convertToPercent(
+                                                value,
+                                                finalNumber:
+                                                    percentageTowardsGoal * 100,
+                                                numberDecimals: 0,
+                                                useLessThanZero: true,
+                                              ),
+                                              fontSize: 28,
+                                              fontWeight: FontWeight.bold,
+                                            );
+                                          },
                                         ),
-                                        fontSize: 28,
-                                        fontWeight: FontWeight.bold,
-                                      );
-                                    },
-                                  ),
                                   Builder(builder: (context) {
                                     String amountSpentLabel =
                                         getObjectiveAmountSpentLabel(
+                                      objective: widget.objective,
                                       context: context,
                                       showTotalSpent: showTotalSpent,
                                       objectiveAmount: objectiveAmount,
@@ -369,56 +399,91 @@ class _ObjectivePageContentState extends State<_ObjectivePageContent> {
                                             copyToClipboard(amountSpentLabel);
                                           },
                                           onTap: () {
-                                            _swapTotalSpentDisplay();
+                                            if (getIsDifferenceOnlyLoan(
+                                                    widget.objective) ==
+                                                false) {
+                                              _swapTotalSpentDisplay();
+                                            }
                                           },
                                           color: Colors.transparent,
                                           child: Padding(
                                             padding: const EdgeInsets.all(8.0),
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.end,
-                                              children: [
-                                                TextFont(
-                                                  text: amountSpentLabel,
-                                                  fontSize: 18,
-                                                  textColor: totalAmount >=
-                                                          objectiveAmount
-                                                      ? getColor(context,
-                                                          "incomeAmount")
-                                                      : getColor(
-                                                          context, "black"),
-                                                ),
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          bottom: 1),
-                                                  child: TextFont(
-                                                    text: (isShowingAmountRemaining(
-                                                                showTotalSpent:
-                                                                    showTotalSpent,
-                                                                objectiveAmount:
-                                                                    objectiveAmount,
-                                                                totalAmount:
-                                                                    totalAmount)
-                                                            ? " " +
-                                                                "remaining".tr()
-                                                            : "") +
-                                                        " / " +
-                                                        convertToMoney(
-                                                            Provider.of<
-                                                                    AllWallets>(
-                                                                context),
-                                                            objectiveAmount),
-                                                    fontSize: 13,
-                                                    textColor: getColor(
-                                                            context, "black")
-                                                        .withOpacity(0.4),
+                                            child: getIsDifferenceOnlyLoan(
+                                                    widget.objective)
+                                                ? TextFont(
+                                                    text: amountSpentLabel,
+                                                    fontSize: 28,
+                                                    fontWeight: FontWeight.bold,
+                                                    textColor:
+                                                        percentageTowardsGoal ==
+                                                                1
+                                                            ? getColor(context,
+                                                                "black")
+                                                            : getDifferenceOfLoan(
+                                                                      widget
+                                                                          .objective,
+                                                                      totalAmount,
+                                                                      objectiveAmount,
+                                                                    ) <
+                                                                    0
+                                                                ? getColor(
+                                                                    context,
+                                                                    "unPaidUpcoming",
+                                                                  )
+                                                                : getColor(
+                                                                    context,
+                                                                    "unPaidOverdue",
+                                                                  ),
+                                                  )
+                                                : Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment.end,
+                                                    children: [
+                                                      TextFont(
+                                                        text: amountSpentLabel,
+                                                        fontSize: 18,
+                                                        textColor: totalAmount >=
+                                                                objectiveAmount
+                                                            ? getColor(context,
+                                                                "incomeAmount")
+                                                            : getColor(context,
+                                                                "black"),
+                                                      ),
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .only(
+                                                                bottom: 1),
+                                                        child: TextFont(
+                                                          text: (isShowingAmountRemaining(
+                                                                      showTotalSpent:
+                                                                          showTotalSpent,
+                                                                      objectiveAmount:
+                                                                          objectiveAmount,
+                                                                      totalAmount:
+                                                                          totalAmount)
+                                                                  ? " " +
+                                                                      "remaining"
+                                                                          .tr()
+                                                                  : "") +
+                                                              " / " +
+                                                              convertToMoney(
+                                                                  Provider.of<
+                                                                          AllWallets>(
+                                                                      context),
+                                                                  objectiveAmount),
+                                                          fontSize: 13,
+                                                          textColor: getColor(
+                                                                  context,
+                                                                  "black")
+                                                              .withOpacity(0.4),
+                                                        ),
+                                                      ),
+                                                    ],
                                                   ),
-                                                ),
-                                              ],
-                                            ),
                                           ),
                                         ),
                                       ),
@@ -427,114 +492,106 @@ class _ObjectivePageContentState extends State<_ObjectivePageContent> {
                                   if (widget.objective.type ==
                                       ObjectiveType.loan)
                                     TextFont(
-                                      text: showTotalSpent ||
-                                              totalAmount >= objectiveAmount
-                                          ? (widget.objective.income
-                                              ? "collected".tr()
-                                              : "paid".tr())
-                                          : (widget.objective.income
-                                              ? "to-collect".tr()
-                                              : "to-pay".tr()),
+                                      text: getIsDifferenceOnlyLoan(
+                                              widget.objective)
+                                          ? percentageTowardsGoal == 1
+                                              ? "all-settled".tr()
+                                              : (getDifferenceOfLoan(
+                                                          widget.objective,
+                                                          totalAmount,
+                                                          objectiveAmount) >
+                                                      0)
+                                                  ? "to-pay".tr()
+                                                  : "to-collect".tr()
+                                          : ((showTotalSpent ||
+                                                  totalAmount >=
+                                                      objectiveAmount)
+                                              ? (widget.objective.income
+                                                  ? "collected".tr()
+                                                  : "paid".tr())
+                                              : (widget.objective.income
+                                                  ? "to-collect".tr()
+                                                  : "to-pay".tr())),
                                       fontSize: 18,
                                       textColor: getColor(context, "black"),
                                     ),
+                                  if (getIsDifferenceOnlyLoan(widget.objective))
+                                    numberTransactionsWidget,
                                 ],
                               ),
                             ],
                           ),
                         ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal:
-                                  getHorizontalPaddingConstrained(context)),
-                          child: Padding(
-                            padding: const EdgeInsets.only(
-                                top: 20.0, left: 20, right: 20),
-                            child: Column(
-                              children: [
-                                TextFont(
-                                  text: getWordedDateShortMore(
-                                        widget.objective.dateCreated,
-                                        includeYear:
-                                            widget.objective.dateCreated.year !=
-                                                DateTime.now().year,
-                                      ) +
-                                      (widget.objective.endDate != null
-                                          ? " – " +
-                                              getWordedDateShortMore(
-                                                widget.objective.endDate!,
-                                                includeYear: widget.objective
-                                                        .endDate!.year !=
-                                                    DateTime.now().year,
-                                              )
-                                          : ""),
-                                  maxLines: 3,
-                                  textAlign: TextAlign.center,
-                                  fontSize: 21,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                                if (widget.objective.endDate != null)
-                                  Padding(
-                                    padding: const EdgeInsets.only(top: 12),
-                                    child: TextFont(
-                                      text: getObjectiveStatus(
-                                        context,
-                                        widget.objective,
-                                        totalAmount,
-                                        percentageTowardsGoal,
-                                        addSpendingSavingIndication: true,
-                                      ),
-                                      maxLines: 3,
-                                      textAlign: TextAlign.center,
-                                      fontSize: 16,
-                                    ),
+                        if (getIsDifferenceOnlyLoan(widget.objective) == false)
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal:
+                                    getHorizontalPaddingConstrained(context)),
+                            child: Padding(
+                              padding: const EdgeInsets.only(
+                                  top: 20.0, left: 20, right: 20),
+                              child: Column(
+                                children: [
+                                  TextFont(
+                                    text: getWordedDateShortMore(
+                                          widget.objective.dateCreated,
+                                          includeYear: widget
+                                                  .objective.dateCreated.year !=
+                                              DateTime.now().year,
+                                        ) +
+                                        (widget.objective.endDate != null
+                                            ? " – " +
+                                                getWordedDateShortMore(
+                                                  widget.objective.endDate!,
+                                                  includeYear: widget.objective
+                                                          .endDate!.year !=
+                                                      DateTime.now().year,
+                                                )
+                                            : ""),
+                                    maxLines: 3,
+                                    textAlign: TextAlign.center,
+                                    fontSize: 21,
+                                    fontWeight: FontWeight.bold,
                                   ),
-                              ],
+                                  if (widget.objective.endDate != null)
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 12),
+                                      child: TextFont(
+                                        text: getObjectiveStatus(
+                                          context,
+                                          widget.objective,
+                                          totalAmount,
+                                          percentageTowardsGoal,
+                                          addSpendingSavingIndication: true,
+                                        ),
+                                        maxLines: 3,
+                                        textAlign: TextAlign.center,
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                ],
+                              ),
                             ),
                           ),
-                        ),
                       ],
                     );
                   },
                 ),
               ),
-              SliverPadding(
-                padding: EdgeInsets.only(
-                  top: 5,
-                  left: 20,
-                  right: 20,
-                  bottom: 30,
-                ),
-                sliver: SliverToBoxAdapter(
-                  child: StreamBuilder<int?>(
-                    stream: database
-                        .getTotalCountOfTransactionsInObjective(
-                            widget.objective.objectivePk)
-                        .$1,
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData && snapshot.data != null) {
-                        return TextFont(
-                          textAlign: TextAlign.center,
-                          text: snapshot.data.toString() +
-                              " " +
-                              (snapshot.data == 1
-                                  ? "transaction".tr().toLowerCase()
-                                  : "transactions".tr().toLowerCase()),
-                          fontSize: 16,
-                          maxLines: 3,
-                        );
-                      } else {
-                        return TextFont(
-                          textAlign: TextAlign.center,
-                          text: "/ transactions",
-                          fontSize: 16,
-                          maxLines: 3,
-                        );
-                      }
-                    },
+              if (getIsDifferenceOnlyLoan(widget.objective) == true)
+                SliverToBoxAdapter(child: SizedBox(height: 20)),
+              if (getIsDifferenceOnlyLoan(widget.objective) == false)
+                SliverPadding(
+                  padding: EdgeInsets.only(
+                    top: 5,
+                    left: 20,
+                    right: 20,
+                    bottom: 30,
+                  ),
+                  sliver: SliverToBoxAdapter(
+                    child: numberTransactionsWidget,
                   ),
                 ),
-              ),
               TransactionEntries(
                 null,
                 null,
@@ -550,8 +607,11 @@ class _ObjectivePageContentState extends State<_ObjectivePageContent> {
                         .copyWith(objectivePks: [widget.objective.objectivePk]),
                 allowOpenIntoObjectiveLoanPage: false,
                 showObjectivePercentage: false,
-                noResultsMessage: "no-transactions-found".tr(),
-                showNoResults: false,
+                noResultsMessage: "no-transactions-found".tr() +
+                    (widget.objective.type == ObjectiveType.loan
+                        ? "\n" + "add-record-using-plus-button"
+                        : ""),
+                showNoResults: widget.objective.type == ObjectiveType.loan,
                 noResultsExtraWidget:
                     widget.objective.type == ObjectiveType.goal
                         ? ExtraInfoButton(
@@ -586,7 +646,7 @@ class _ObjectivePageContentState extends State<_ObjectivePageContent> {
                                 amount: 0.7,
                                 inverse: true),
                           )
-                        : SizedBox.shrink(),
+                        : null,
               ),
               // Wipe all remaining pixels off - sometimes graphics artifacts are left behind
               SliverToBoxAdapter(

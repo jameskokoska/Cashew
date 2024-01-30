@@ -1923,6 +1923,24 @@ class FinanceDatabase extends _$FinanceDatabase {
         .watch();
   }
 
+  List<TransactionAssociatedTitleWithCategory>
+      removeDuplicateTransactionAssociatedTitleWithCategory(
+    List<TransactionAssociatedTitleWithCategory> inputList,
+  ) {
+    Set<String> uniqueTitlePks = Set<String>();
+    List<TransactionAssociatedTitleWithCategory> result = [];
+
+    for (TransactionAssociatedTitleWithCategory associatedTitleWithCategory
+        in inputList) {
+      if (uniqueTitlePks
+          .add(associatedTitleWithCategory.title.associatedTitlePk)) {
+        result.add(associatedTitleWithCategory);
+      }
+    }
+
+    return result;
+  }
+
   Future<List<TransactionAssociatedTitleWithCategory>>
       getSimilarAssociatedTitles({
     required String title,
@@ -1979,7 +1997,8 @@ class FinanceDatabase extends _$FinanceDatabase {
       );
     }).toList());
 
-    if (list.length > limit) return list;
+    if (list.length > limit)
+      return removeDuplicateTransactionAssociatedTitleWithCategory(list);
     if (limit - list.length < 0)
       limit = 0;
     else
@@ -2012,7 +2031,8 @@ class FinanceDatabase extends _$FinanceDatabase {
 
     // Search category names
 
-    if (alsoSearchCategories == false || list.length > limit) return list;
+    if (alsoSearchCategories == false || list.length > limit)
+      return removeDuplicateTransactionAssociatedTitleWithCategory(list);
     if (limit - list.length < 0)
       limit = 0;
     else
@@ -2044,7 +2064,7 @@ class FinanceDatabase extends _$FinanceDatabase {
       );
     }).toList());
 
-    return list;
+    return removeDuplicateTransactionAssociatedTitleWithCategory(list);
   }
 
   String completePartialTitle(String typedText, String titleText) {

@@ -123,7 +123,6 @@ class HomePageWalletList extends StatelessWidget {
                                         Provider.of<AllWallets>(context),
                                         wallet.wallet.currency);
                           });
-                          print(totalAmountSpent);
 
                           if (snapshot.hasData) {
                             return Column(

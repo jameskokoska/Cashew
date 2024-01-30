@@ -30,6 +30,19 @@ import 'package:flutter/material.dart'
     hide SliverReorderableList, ReorderableDelayedDragStartListener;
 import 'package:provider/provider.dart';
 
+bool getIsDifferenceOnlyLoan(Objective objective) {
+  return objective.amount == 0 && objective.type == ObjectiveType.loan;
+}
+
+// negative to collect / you are owed
+// positive to pay back / you owe
+double getDifferenceOfLoan(
+    Objective objective, double totalAmount, double objectiveAmount) {
+  return objective.income
+      ? totalAmount - objectiveAmount
+      : objectiveAmount - totalAmount;
+}
+
 class ObjectivesListPage extends StatelessWidget {
   const ObjectivesListPage({required this.backButton, Key? key})
       : super(key: key);
@@ -272,6 +285,7 @@ class ObjectiveList extends StatelessWidget {
                                 : null,
                             forcedNumberTransactions:
                                 showDemoObjectives ? randomInt[index] : null,
+                            dynamicHeight: true,
                           ),
                         );
                       }
@@ -292,6 +306,7 @@ class ObjectiveContainer extends StatelessWidget {
     this.forcedTotalAmount,
     this.forcedNumberTransactions,
     this.forceAndroidBubbleDesign = false, //forced on the homepage
+    this.dynamicHeight = false,
     super.key,
   });
   final Objective objective;
@@ -299,6 +314,7 @@ class ObjectiveContainer extends StatelessWidget {
   final double? forcedTotalAmount;
   final int? forcedNumberTransactions;
   final bool forceAndroidBubbleDesign;
+  final bool dynamicHeight;
 
   @override
   Widget build(BuildContext context) {
@@ -352,7 +368,9 @@ class ObjectiveContainer extends StatelessWidget {
                 child: Padding(
                   padding: EdgeInsets.only(
                     top: 18,
-                    bottom: 23,
+                    bottom: getIsDifferenceOnlyLoan(objective) && dynamicHeight
+                        ? 13
+                        : 23,
                   ),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -373,46 +391,54 @@ class ObjectiveContainer extends StatelessWidget {
                                       fontSize: 24,
                                       fontWeight: FontWeight.bold,
                                     ),
-                                    Row(
-                                      children: [
-                                        Flexible(
-                                          child: Padding(
-                                            padding:
-                                                const EdgeInsets.only(right: 3),
-                                            child: Padding(
-                                              padding: const EdgeInsets.only(
-                                                  bottom: 3),
-                                              child:
-                                                  Builder(builder: (context) {
-                                                String content =
-                                                    getWordedDateShortMore(
-                                                  objective.dateCreated,
-                                                  includeYear: objective
-                                                          .dateCreated.year !=
-                                                      DateTime.now().year,
-                                                );
-                                                if (objective.endDate != null) {
-                                                  content = getObjectiveStatus(
-                                                    context,
-                                                    objective,
-                                                    totalAmount,
-                                                    percentageTowardsGoal,
-                                                  );
-                                                }
-                                                return TextFont(
-                                                  text: content,
-                                                  fontSize: 15,
-                                                  textColor:
-                                                      getColor(context, "black")
-                                                          .withOpacity(0.65),
-                                                  maxLines: 1,
-                                                );
-                                              }),
-                                            ),
+                                    getIsDifferenceOnlyLoan(objective)
+                                        ? SizedBox.shrink()
+                                        : Row(
+                                            children: [
+                                              Flexible(
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          right: 3),
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            bottom: 3),
+                                                    child: Builder(
+                                                        builder: (context) {
+                                                      String content =
+                                                          getWordedDateShortMore(
+                                                        objective.dateCreated,
+                                                        includeYear: objective
+                                                                .dateCreated
+                                                                .year !=
+                                                            DateTime.now().year,
+                                                      );
+                                                      if (objective.endDate !=
+                                                          null) {
+                                                        content =
+                                                            getObjectiveStatus(
+                                                          context,
+                                                          objective,
+                                                          totalAmount,
+                                                          percentageTowardsGoal,
+                                                        );
+                                                      }
+                                                      return TextFont(
+                                                        text: content,
+                                                        fontSize: 15,
+                                                        textColor: getColor(
+                                                                context,
+                                                                "black")
+                                                            .withOpacity(0.65),
+                                                        maxLines: 1,
+                                                      );
+                                                    }),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
                                           ),
-                                        ),
-                                      ],
-                                    ),
                                   ],
                                 ),
                               ),
@@ -438,6 +464,12 @@ class ObjectiveContainer extends StatelessWidget {
                               ),
                             ],
                           ),
+                          if (getIsDifferenceOnlyLoan(objective) &&
+                              dynamicHeight == false)
+                            SizedBox(height: 20),
+                          if (getIsDifferenceOnlyLoan(objective) &&
+                              dynamicHeight)
+                            SizedBox(height: 7),
                           SizedBox(height: 4),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -448,6 +480,19 @@ class ObjectiveContainer extends StatelessWidget {
                                   builder: (context, constraints) {
                                     if (constraints.maxWidth <= 73) {
                                       return SizedBox.shrink();
+                                    }
+                                    if (objective.type == ObjectiveType.loan &&
+                                        getIsDifferenceOnlyLoan(objective) ==
+                                            false) {
+                                      return TextFont(
+                                        textAlign: TextAlign.left,
+                                        text: (objective.income
+                                            ? "lent".tr()
+                                            : "borrowed".tr()),
+                                        fontSize: 15,
+                                        textColor: getColor(context, "black")
+                                            .withOpacity(0.65),
+                                      );
                                     }
                                     return StreamBuilder<int?>(
                                       stream: database
@@ -464,14 +509,8 @@ class ObjectiveContainer extends StatelessWidget {
                                               const EdgeInsets.only(bottom: 2),
                                           child: TextFont(
                                             textAlign: TextAlign.left,
-                                            text: (objective.type ==
-                                                    ObjectiveType.loan
-                                                ? "\n" +
-                                                    (objective.income
-                                                        ? "lent".tr()
-                                                        : "borrowed".tr())
-                                                : (numberTransactions
-                                                        .toString() +
+                                            text:
+                                                numberTransactions.toString() +
                                                     " " +
                                                     (numberTransactions == 1
                                                         ? "transaction"
@@ -479,7 +518,7 @@ class ObjectiveContainer extends StatelessWidget {
                                                             .toLowerCase()
                                                         : "transactions"
                                                             .tr()
-                                                            .toLowerCase()))),
+                                                            .toLowerCase()),
                                             fontSize: 15,
                                             textColor:
                                                 getColor(context, "black")
@@ -494,12 +533,60 @@ class ObjectiveContainer extends StatelessWidget {
                               Builder(builder: (context) {
                                 String amountSpentLabel =
                                     getObjectiveAmountSpentLabel(
+                                  objective: objective,
                                   context: context,
                                   showTotalSpent: appStateSettings[
                                       "showTotalSpentForObjective"],
                                   objectiveAmount: objectiveAmount,
                                   totalAmount: totalAmount,
                                 );
+                                if (getIsDifferenceOnlyLoan(objective))
+                                  return Row(
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    children: [
+                                      TextFont(
+                                        fontWeight: FontWeight.bold,
+                                        text: amountSpentLabel,
+                                        fontSize: 24,
+                                        textColor: percentageTowardsGoal == 1
+                                            ? getColor(context, "black")
+                                            : getDifferenceOfLoan(
+                                                      objective,
+                                                      totalAmount,
+                                                      objectiveAmount,
+                                                    ) <
+                                                    0
+                                                ? getColor(
+                                                    context,
+                                                    "unPaidUpcoming",
+                                                  )
+                                                : getColor(
+                                                    context,
+                                                    "unPaidOverdue",
+                                                  ),
+                                      ),
+                                      if (percentageTowardsGoal != 1)
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(bottom: 2),
+                                          child: TextFont(
+                                            text: " " +
+                                                (getDifferenceOfLoan(
+                                                                objective,
+                                                                totalAmount,
+                                                                objectiveAmount) >
+                                                            0
+                                                        ? "to-pay".tr()
+                                                        : "to-collect".tr())
+                                                    .toLowerCase(),
+                                            fontSize: 15,
+                                            textColor:
+                                                getColor(context, "black")
+                                                    .withOpacity(0.3),
+                                          ),
+                                        ),
+                                    ],
+                                  );
                                 return Row(
                                   crossAxisAlignment: CrossAxisAlignment.end,
                                   children: [
@@ -557,71 +644,73 @@ class ObjectiveContainer extends StatelessWidget {
                           SizedBox(height: 8),
                         ]),
                       ),
-                      Padding(
-                        padding: objective.endDate == null
-                            ? containerPadding
-                            : const EdgeInsets.symmetric(horizontal: 15),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            if (objective.endDate != null)
-                              Padding(
-                                padding: const EdgeInsets.only(right: 7),
-                                child: TextFont(
-                                  textAlign: TextAlign.center,
-                                  text: getWordedDateShort(
-                                    objective.dateCreated,
-                                    includeYear: objective.dateCreated.year !=
-                                        DateTime.now().year,
+                      if (getIsDifferenceOnlyLoan(objective) == false)
+                        Padding(
+                          padding: objective.endDate == null
+                              ? containerPadding
+                              : const EdgeInsets.symmetric(horizontal: 15),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              if (objective.endDate != null)
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 7),
+                                  child: TextFont(
+                                    textAlign: TextAlign.center,
+                                    text: getWordedDateShort(
+                                      objective.dateCreated,
+                                      includeYear: objective.dateCreated.year !=
+                                          DateTime.now().year,
+                                    ),
+                                    fontSize: 12,
+                                    textColor: getColor(context, "black")
+                                        .withOpacity(0.3),
                                   ),
-                                  fontSize: 12,
-                                  textColor: getColor(context, "black")
-                                      .withOpacity(0.3),
                                 ),
-                              ),
-                            Expanded(
-                              child: BudgetProgress(
-                                color: HexColor(
-                                  objective.colour,
-                                  defaultColor:
-                                      Theme.of(context).colorScheme.primary,
-                                ),
-                                ghostPercent: 0,
-                                percent: percentageTowardsGoal * 100,
-                                todayPercent: -1,
-                                showToday: false,
-                                yourPercent: 0,
-                                padding: EdgeInsets.zero,
-                                enableShake: false,
-                                backgroundColor: (getPlatform() ==
-                                                PlatformOS.isIOS &&
-                                            forceAndroidBubbleDesign ==
-                                                false) ||
-                                        appStateSettings["materialYou"] == false
-                                    ? null
-                                    : Theme.of(context)
-                                        .colorScheme
-                                        .secondaryContainer,
-                              ),
-                            ),
-                            if (objective.endDate != null)
-                              Padding(
-                                padding: const EdgeInsets.only(left: 7),
-                                child: TextFont(
-                                  textAlign: TextAlign.center,
-                                  text: getWordedDateShort(
-                                    objective.endDate!,
-                                    includeYear: objective.endDate?.year !=
-                                        DateTime.now().year,
+                              Expanded(
+                                child: BudgetProgress(
+                                  color: HexColor(
+                                    objective.colour,
+                                    defaultColor:
+                                        Theme.of(context).colorScheme.primary,
                                   ),
-                                  fontSize: 12,
-                                  textColor: getColor(context, "black")
-                                      .withOpacity(0.3),
+                                  ghostPercent: 0,
+                                  percent: percentageTowardsGoal * 100,
+                                  todayPercent: -1,
+                                  showToday: false,
+                                  yourPercent: 0,
+                                  padding: EdgeInsets.zero,
+                                  enableShake: false,
+                                  backgroundColor:
+                                      (getPlatform() == PlatformOS.isIOS &&
+                                                  forceAndroidBubbleDesign ==
+                                                      false) ||
+                                              appStateSettings["materialYou"] ==
+                                                  false
+                                          ? null
+                                          : Theme.of(context)
+                                              .colorScheme
+                                              .secondaryContainer,
                                 ),
                               ),
-                          ],
+                              if (objective.endDate != null)
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 7),
+                                  child: TextFont(
+                                    textAlign: TextAlign.center,
+                                    text: getWordedDateShort(
+                                      objective.endDate!,
+                                      includeYear: objective.endDate?.year !=
+                                          DateTime.now().year,
+                                    ),
+                                    fontSize: 12,
+                                    textColor: getColor(context, "black")
+                                        .withOpacity(0.3),
+                                  ),
+                                ),
+                            ],
+                          ),
                         ),
-                      ),
                     ],
                   ),
                 ),
@@ -731,6 +820,7 @@ bool isShowingAmountRemaining({
 
 String getObjectiveAmountSpentLabel({
   required BuildContext context,
+  required Objective objective,
   required bool showTotalSpent,
   required double objectiveAmount,
   required double totalAmount,
@@ -741,6 +831,10 @@ String getObjectiveAmountSpentLabel({
       totalAmount: totalAmount);
   double amountSpent =
       showTotalRemaining ? objectiveAmount - totalAmount : totalAmount;
+  if (getIsDifferenceOnlyLoan(objective)) {
+    amountSpent =
+        getDifferenceOfLoan(objective, totalAmount, objectiveAmount).abs();
+  }
   String amountSpentLabel = convertToMoney(
     Provider.of<AllWallets>(context),
     amountSpent,
@@ -772,6 +866,14 @@ class WatchTotalAndAmountOfObjective extends StatelessWidget {
               double percentageTowardsGoal =
                   objectiveAmount == 0 ? 0 : totalAmount / objectiveAmount;
               if (percentageTowardsGoal == -0) percentageTowardsGoal = 0;
+              if (getIsDifferenceOnlyLoan(objective)) {
+                if (objectiveAmount == totalAmount &&
+                    snapshot.hasData &&
+                    snapshotAmount.hasData)
+                  percentageTowardsGoal = 1;
+                else
+                  percentageTowardsGoal = 0;
+              }
               return builder(
                   objectiveAmount * (objective.income ? -1 : 1),
                   totalAmount * (objective.income ? -1 : 1),

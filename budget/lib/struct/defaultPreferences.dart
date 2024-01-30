@@ -194,7 +194,9 @@ Future<Map<String, dynamic>> getDefaultPreferences() async {
     "extraZerosButton": null, //will be null, 00 or 000
     "allSpendingLastPage": 0, //index of the last tab on the all spending page
     "loansLastPage": 0, //index of the last tab on the loans page
-    "loansUseDifferenceInsteadOfTotalGoal": false,
+    // "loansUseDifferenceInsteadOfTotalGoal": false,
+    // "loansHideDate": false,
+    "longTermLoansDifferenceFeature": false,
     // *********************************************************** //
     // For showing information within a certain cycle for all spending wallet details page
     // cycleSettingsExtension = ""

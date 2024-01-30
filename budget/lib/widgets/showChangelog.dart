@@ -39,9 +39,11 @@ String getChangelogString() {
     Consistent popup enter text confirmation buttons and spacing
     Set date time button when initially adding a transaction
     Warning text color in sidebar when synced more than 1 day ago
-    Improved titles auto complete with partial titles
+    Titles auto complete with partial titles
     If import CSV import fails, use template recommendation shows
     Fixed percentage spent per currency to take exchange rate into account 
+    All spending page filter icon when scrolled past bottom
+    No transactions found on long term loans page if all deleted
     < 5.1.9
     Reorder theme mode settings, system is always first
     If multiple accounts with different currencies, can enable currency total summary in accounts list homepage widget
