@@ -2388,12 +2388,11 @@ class _SelectTitleState extends State<SelectTitle> {
           AnimatedExpanded(
             expand: customDateTimeSelected,
             child: Padding(
-              padding: const EdgeInsets.only(bottom: 8),
+              padding: const EdgeInsets.only(bottom: 13),
               child: AnimatedSwitcher(
                 duration: Duration(milliseconds: 300),
                 child: DateButton(
-                  internalPadding: const EdgeInsets.only(
-                      left: 4, top: 6, bottom: 6, right: 4),
+                  internalPadding: EdgeInsets.only(right: 5),
                   key: ValueKey(selectedDateTime.toString()),
                   initialSelectedDate: selectedDateTime,
                   initialSelectedTime: TimeOfDay(

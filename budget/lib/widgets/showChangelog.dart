@@ -44,6 +44,7 @@ String getChangelogString() {
     Fixed percentage spent per currency to take exchange rate into account 
     All spending page filter icon when scrolled past bottom
     No transactions found on long term loans page if all deleted
+    When adding an account, defaults to device currency
     < 5.1.9
     Reorder theme mode settings, system is always first
     If multiple accounts with different currencies, can enable currency total summary in accounts list homepage widget

@@ -68,7 +68,8 @@ class _AddWalletPageState extends State<AddWalletPage> {
   Map<String, dynamic> currencies = {};
   bool customCurrencyIcon = false;
   String? searchCurrency = "";
-  String selectedCurrency = "usd"; //if no currency selected use empty string
+  String selectedCurrency =
+      getDevicesDefaultCurrencyCode(); //if no currency selected use empty string
   int selectedDecimals = 2;
   FocusNode _titleFocusNode = FocusNode();
 
