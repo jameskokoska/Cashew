@@ -27,7 +27,7 @@ class TransactionEntryNote extends StatelessWidget {
   Widget build(BuildContext context) {
     return transaction.note.toString().trim() != ""
         ? Tooltip(
-            padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+            padding: EdgeInsets.only(left: 15, right: 15, top: 10, bottom: 8),
             margin: EdgeInsets.symmetric(horizontal: 15),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),

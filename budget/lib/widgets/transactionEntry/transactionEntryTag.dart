@@ -32,7 +32,9 @@ class TransactionEntryTag extends StatelessWidget {
   Widget build(BuildContext context) {
     bool showObjectivePercentageCheck = showObjectivePercentage;
     if (transaction.sharedReferenceBudgetPk != null ||
-        transaction.subCategoryFk != null) showObjectivePercentageCheck = false;
+        transaction.subCategoryFk != null ||
+        (objective != null && getIsDifferenceOnlyLoan(objective!)))
+      showObjectivePercentageCheck = false;
     return Padding(
       padding: const EdgeInsets.only(top: 1.0),
       child: Row(
@@ -113,6 +115,7 @@ class TransactionEntryTag extends StatelessWidget {
                   stream: database.getObjective(transaction.objectiveLoanFk!),
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
+                      if (snapshot.data == null) return Container();
                       Objective objective = snapshot.data!;
                       return ObjectivePercentTag(
                         transaction: transaction,
@@ -201,6 +204,19 @@ class ObjectivePercentTag extends StatelessWidget {
   final bool showObjectivePercentageCheck;
   @override
   Widget build(BuildContext context) {
+    if (getIsDifferenceOnlyLoan(objective)) {
+      return Row(
+        children: [
+          Flexible(
+            child: TransactionTag(
+              color: HexColor(objective.colour,
+                  defaultColor: Theme.of(context).colorScheme.primary),
+              name: objective.name,
+            ),
+          ),
+        ],
+      );
+    }
     return WatchTotalAndAmountOfObjective(
       objective: objective,
       builder: (objectiveAmount, totalAmount, percentageTowardsGoal) {

@@ -1042,5 +1042,8 @@
   "app": "แอปพลิเคชัน",
   "set-color": "ตั้งค่าสี",
   "next-date-time": "ต่อไป",
-  "set-date-time": "ชุด"
+  "set-date-time": "ชุด",
+  "add-record-using-plus-button": "เพิ่มบันทึกโดยใช้ปุ่ม [+]",
+  "all-settled": "ทั้งหมดตัดสิน",
+  "difference-loan": "เงินกู้ที่แตกต่างกัน"
 }

@@ -1042,5 +1042,8 @@
   "app": "Application",
   "set-color": "Régler la couleur",
   "next-date-time": "Suivant",
-  "set-date-time": "Ensemble"
+  "set-date-time": "Ensemble",
+  "add-record-using-plus-button": "Ajoutez un enregistrement à l'aide du bouton [+].",
+  "all-settled": "Tous installés",
+  "difference-loan": "Prêt de différence"
 }

@@ -1536,15 +1536,9 @@ class _AppBarIconAppearState extends State<AppBarIconAppear> {
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedOpacity(
-      duration: Duration(milliseconds: 100),
-      opacity: animateIn ? 1 : 0,
-      child: AnimatedScale(
-        scale: animateIn ? 1 : 0,
-        duration: Duration(milliseconds: 500),
-        curve: Curves.easeInOutCubicEmphasized,
-        child: widget.child,
-      ),
+    return AnimatedScaleOpacity(
+      animateIn: animateIn,
+      child: widget.child,
     );
   }
 }

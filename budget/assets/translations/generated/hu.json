@@ -1042,5 +1042,8 @@
   "app": "Alkalmazás",
   "set-color": "Színes szín",
   "next-date-time": "Következő",
-  "set-date-time": "Készlet"
+  "set-date-time": "Készlet",
+  "add-record-using-plus-button": "Adjon hozzá egy rekordot a [+] gomb használatával.",
+  "all-settled": "Minden rendeződött",
+  "difference-loan": "Különbséghitel"
 }

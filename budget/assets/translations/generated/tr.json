@@ -1042,5 +1042,8 @@
   "app": "Başvuru",
   "set-color": "Renk ayarlamak",
   "next-date-time": "Sonraki",
-  "set-date-time": "Ayarlamak"
+  "set-date-time": "Ayarlamak",
+  "add-record-using-plus-button": "[+] Düğmesini kullanarak bir kayıt ekleyin.",
+  "all-settled": "Herşey ayarlandı",
+  "difference-loan": "Fark kredisi"
 }

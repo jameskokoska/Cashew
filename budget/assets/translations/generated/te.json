@@ -1042,5 +1042,8 @@
   "app": "అప్లికేషన్",
   "set-color": "రంగును సెట్ చేయండి",
   "next-date-time": "తరువాత",
-  "set-date-time": "సెట్"
+  "set-date-time": "సెట్",
+  "add-record-using-plus-button": "[+] బటన్‌ను ఉపయోగించి రికార్డును జోడించండి.",
+  "all-settled": "అన్నీ స్థిరపడ్డాయి",
+  "difference-loan": "వ్యత్యాస రుణం"
 }

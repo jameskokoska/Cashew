@@ -1042,5 +1042,8 @@
   "app": "അപേക്ഷ",
   "set-color": "നിറം സജ്ജമാക്കുക",
   "next-date-time": "അടുത്തത്",
-  "set-date-time": "സജ്ജീകൃതരംഗം"
+  "set-date-time": "സജ്ജീകൃതരംഗം",
+  "add-record-using-plus-button": "[+] ബട്ടൺ ഉപയോഗിച്ച് ഒരു റെക്കോർഡ് ചേർക്കുക.",
+  "all-settled": "എല്ലാം സ്ഥിരതാമസമാക്കി",
+  "difference-loan": "വ്യത്യാസ വായ്പ"
 }

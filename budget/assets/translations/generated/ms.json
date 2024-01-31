@@ -1042,5 +1042,8 @@
   "app": "Permohonan",
   "set-color": "Tetapkan warna",
   "next-date-time": "Seterusnya",
-  "set-date-time": "Tetapkan"
+  "set-date-time": "Tetapkan",
+  "add-record-using-plus-button": "Tambah rekod menggunakan butang [+].",
+  "all-settled": "Semua diselesaikan",
+  "difference-loan": "Pinjaman perbezaan"
 }

@@ -1042,5 +1042,8 @@
   "app": "درخواست",
   "set-color": "رنگ سیٹ کریں",
   "next-date-time": "اگلے",
-  "set-date-time": "سیٹ"
+  "set-date-time": "سیٹ",
+  "add-record-using-plus-button": "[+] بٹن کا استعمال کرتے ہوئے ایک ریکارڈ شامل کریں۔",
+  "all-settled": "سب طے شدہ",
+  "difference-loan": "فرق قرض"
 }

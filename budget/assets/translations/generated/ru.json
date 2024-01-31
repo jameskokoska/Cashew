@@ -1042,5 +1042,8 @@
   "app": "Приложение",
   "set-color": "Установить цвет",
   "next-date-time": "Следующий",
-  "set-date-time": "Набор"
+  "set-date-time": "Набор",
+  "add-record-using-plus-button": "Добавьте запись, используя кнопку [+].",
+  "all-settled": "Все урегулированы",
+  "difference-loan": "Разница в кредит"
 }

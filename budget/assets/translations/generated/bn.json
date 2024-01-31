@@ -1042,5 +1042,8 @@
   "app": "আবেদন",
   "set-color": "রঙ সেট করুন",
   "next-date-time": "পরবর্তী",
-  "set-date-time": "সেট"
+  "set-date-time": "সেট",
+  "add-record-using-plus-button": "[+] বোতামটি ব্যবহার করে একটি রেকর্ড যুক্ত করুন।",
+  "all-settled": "সব স্থির",
+  "difference-loan": "পার্থক্য loan ণ"
 }

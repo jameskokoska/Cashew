@@ -1042,5 +1042,8 @@
   "app": "Soveltaminen",
   "set-color": "Aseta väri",
   "next-date-time": "Seuraava",
-  "set-date-time": "Aseta"
+  "set-date-time": "Aseta",
+  "add-record-using-plus-button": "Lisää tietue käyttämällä [+] -painiketta.",
+  "all-settled": "Kaikki asettuneet",
+  "difference-loan": "Erolaina"
 }

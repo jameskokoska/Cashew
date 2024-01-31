@@ -486,3 +486,24 @@ class AnimatedClipRRect extends StatelessWidget {
     );
   }
 }
+
+class AnimatedScaleOpacity extends StatelessWidget {
+  const AnimatedScaleOpacity(
+      {required this.child, required this.animateIn, super.key});
+  final Widget child;
+  final bool animateIn;
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedOpacity(
+      duration: Duration(milliseconds: 100),
+      opacity: animateIn ? 1 : 0,
+      child: AnimatedScale(
+        scale: animateIn ? 1 : 0,
+        duration: Duration(milliseconds: 500),
+        curve: Curves.easeInOutCubicEmphasized,
+        child: child,
+      ),
+    );
+  }
+}

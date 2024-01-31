@@ -1042,5 +1042,8 @@
   "app": "आवेदन",
   "set-color": "रंग सेट करना",
   "next-date-time": "अगला",
-  "set-date-time": "तय करना"
+  "set-date-time": "तय करना",
+  "add-record-using-plus-button": "[+] बटन का उपयोग करके एक रिकॉर्ड जोड़ें।",
+  "all-settled": "सभी व्यवस्थित हो गए",
+  "difference-loan": "अंतर ऋण"
 }

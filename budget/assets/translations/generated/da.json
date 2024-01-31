@@ -1042,5 +1042,8 @@
   "app": "Ansøgning",
   "set-color": "Indstil farve",
   "next-date-time": "Næste",
-  "set-date-time": "Sæt"
+  "set-date-time": "Sæt",
+  "add-record-using-plus-button": "Tilføj en post ved hjælp af [+] -knappen.",
+  "all-settled": "Alle afgjort",
+  "difference-loan": "Forskellån"
 }

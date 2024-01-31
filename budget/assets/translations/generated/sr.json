@@ -1042,5 +1042,8 @@
   "app": "Апликација",
   "set-color": "Подесити боју",
   "next-date-time": "Следећи",
-  "set-date-time": "Комплет"
+  "set-date-time": "Комплет",
+  "add-record-using-plus-button": "Додајте запис помоћу [+] тастера.",
+  "all-settled": "Сви су се населили",
+  "difference-loan": "Зајам за разлику"
 }

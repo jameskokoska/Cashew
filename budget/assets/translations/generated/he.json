@@ -1042,5 +1042,8 @@
   "app": "יישום",
   "set-color": "הגדר צבע",
   "next-date-time": "הַבָּא",
-  "set-date-time": "מַעֲרֶכֶת"
+  "set-date-time": "מַעֲרֶכֶת",
+  "add-record-using-plus-button": "הוסף רשומה באמצעות כפתור [+].",
+  "all-settled": "כולם התיישבו",
+  "difference-loan": "הלוואת הבדל"
 }

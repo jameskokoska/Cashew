@@ -20,8 +20,9 @@ bool isSystem24HourFormat(BuildContext context) {
 }
 
 class TimeDigits extends StatelessWidget {
-  const TimeDigits({required this.timeOfDay, super.key});
+  const TimeDigits({required this.timeOfDay, this.backgroundColor, super.key});
   final TimeOfDay timeOfDay;
+  final Color? backgroundColor;
 
   @override
   Widget build(BuildContext context) {
@@ -48,11 +49,12 @@ class TimeDigits extends StatelessWidget {
       timeOfDay.hour,
       timeOfDay.minute,
     );
-    Color backgroundColor = appStateSettings["materialYou"]
-        ? dynamicPastel(
-            context, Theme.of(context).colorScheme.secondaryContainer,
-            amountLight: 0, amountDark: 0.6)
-        : getColor(context, "lightDarkAccent");
+    Color backgroundColor = this.backgroundColor ??
+        (appStateSettings["materialYou"]
+            ? dynamicPastel(
+                context, Theme.of(context).colorScheme.secondaryContainer,
+                amountLight: 0, amountDark: 0.6)
+            : getColor(context, "lightDarkAccent"));
     return Row(
       children: [
         Container(

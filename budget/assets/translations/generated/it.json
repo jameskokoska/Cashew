@@ -1042,5 +1042,8 @@
   "app": "Applicazione",
   "set-color": "Set di colore",
   "next-date-time": "Prossimo",
-  "set-date-time": "Impostato"
+  "set-date-time": "Impostato",
+  "add-record-using-plus-button": "Aggiungi un record utilizzando il pulsante [+].",
+  "all-settled": "Tutto sistemato",
+  "difference-loan": "Prestito di differenza"
 }

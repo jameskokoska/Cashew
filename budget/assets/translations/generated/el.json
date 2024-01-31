@@ -1042,5 +1042,8 @@
   "app": "Εφαρμογή",
   "set-color": "Ρυθμίζω το χρώμα",
   "next-date-time": "Επόμενο",
-  "set-date-time": "Σειρά"
+  "set-date-time": "Σειρά",
+  "add-record-using-plus-button": "Προσθέστε μια εγγραφή χρησιμοποιώντας το κουμπί [+].",
+  "all-settled": "Όλοι εγκατεστημένοι",
+  "difference-loan": "Διαφορά δάνειο"
 }

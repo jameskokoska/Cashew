@@ -1042,5 +1042,8 @@
   "app": "Aplicativo",
   "set-color": "Defina a cor",
   "next-date-time": "Próximo",
-  "set-date-time": "Definir"
+  "set-date-time": "Definir",
+  "add-record-using-plus-button": "Adicione um registro usando o botão [+].",
+  "all-settled": "Tudo resolvido",
+  "difference-loan": "Empréstimo de diferença"
 }

@@ -1042,5 +1042,8 @@
   "app": "애플리케이션",
   "set-color": "색상 설정",
   "next-date-time": "다음",
-  "set-date-time": "세트"
+  "set-date-time": "세트",
+  "add-record-using-plus-button": "[+] 버튼을 사용하여 레코드를 추가하십시오.",
+  "all-settled": "모두 정착했습니다",
+  "difference-loan": "차이 대출"
 }

@@ -2143,12 +2143,14 @@ class DateButton extends StatefulWidget {
     required this.setSelectedTime,
     this.internalPadding =
         const EdgeInsets.only(left: 20, top: 6, bottom: 6, right: 4),
+    this.timeBackgroundColor,
   }) : super(key: key);
   final DateTime initialSelectedDate;
   final TimeOfDay initialSelectedTime;
   final Function(DateTime) setSelectedDate;
   final Function(TimeOfDay) setSelectedTime;
   final EdgeInsets internalPadding;
+  final Color? timeBackgroundColor;
 
   @override
   State<DateButton> createState() => _DateButtonState();
@@ -2262,6 +2264,7 @@ class _DateButtonState extends State<DateButton> {
                     hour: selectedTime.hour,
                     minute: selectedTime.minute,
                   ),
+                  backgroundColor: widget.timeBackgroundColor,
                 ),
               ),
             ),
@@ -2302,6 +2305,7 @@ class _SelectTitleState extends State<SelectTitle> {
   String selectedText = "";
   TransactionAssociatedTitleWithCategory? selectedAssociatedTitle;
   DateTime selectedDateTime = DateTime.now();
+  bool customDateTimeSelected = false;
   bool get foundFromCategory {
     return selectedAssociatedTitle?.type == TitleType.CategoryName ||
         selectedAssociatedTitle?.type == TitleType.SubCategoryName;
@@ -2314,7 +2318,8 @@ class _SelectTitleState extends State<SelectTitle> {
 
   void selectTitle() async {
     if (selectedAssociatedTitle?.category != null) {
-      if (selectedAssociatedTitle?.type == TitleType.SubCategoryName) {
+      if (selectedAssociatedTitle?.type == TitleType.SubCategoryName ||
+          selectedAssociatedTitle?.category.mainCategoryPk != null) {
         if (selectedAssociatedTitle!.category.mainCategoryPk != null) {
           widget.setSelectedCategory(await database.getCategoryInstance(
               selectedAssociatedTitle!.category.mainCategoryPk!));
@@ -2350,26 +2355,66 @@ class _SelectTitleState extends State<SelectTitle> {
   Widget build(BuildContext context) {
     return PopupFramework(
       title: "enter-title".tr(),
-      outsideExtraWidget: IconButton(
-        iconSize: 25,
-        padding: EdgeInsets.all(getPlatform() == PlatformOS.isIOS ? 15 : 20),
-        icon: Icon(
-          appStateSettings["outlinedIcons"]
-              ? Icons.calendar_month_outlined
-              : Icons.calendar_month_rounded,
+      outsideExtraWidget: AnimatedScaleOpacity(
+        animateIn: customDateTimeSelected == false,
+        child: IconButton(
+          iconSize: 25,
+          padding: EdgeInsets.all(getPlatform() == PlatformOS.isIOS ? 15 : 20),
+          icon: Icon(
+            appStateSettings["outlinedIcons"]
+                ? Icons.calendar_month_outlined
+                : Icons.calendar_month_rounded,
+          ),
+          onPressed: () async {
+            DateTime? dateTimeSelected =
+                await selectDateAndTimeSequence(context, selectedDateTime);
+            if (dateTimeSelected == null) return;
+            setState(() {
+              customDateTimeSelected = true;
+              selectedDateTime = dateTimeSelected;
+            });
+            widget.setSelectedDateTime(selectedDateTime);
+            // Update the size of the bottom sheet
+            Future.delayed(Duration(milliseconds: 100), () {
+              bottomSheetControllerGlobal.snapToExtent(0);
+            });
+          },
         ),
-        onPressed: () async {
-          DateTime? dateTimeSelected =
-              await selectDateAndTimeSequence(context, selectedDateTime);
-          if (dateTimeSelected == null) return;
-          selectedDateTime = dateTimeSelected;
-          widget.setSelectedDateTime(dateTimeSelected);
-        },
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          AnimatedExpanded(
+            expand: customDateTimeSelected,
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 8),
+              child: AnimatedSwitcher(
+                duration: Duration(milliseconds: 300),
+                child: DateButton(
+                  internalPadding: const EdgeInsets.only(
+                      left: 4, top: 6, bottom: 6, right: 4),
+                  key: ValueKey(selectedDateTime.toString()),
+                  initialSelectedDate: selectedDateTime,
+                  initialSelectedTime: TimeOfDay(
+                      hour: selectedDateTime.hour,
+                      minute: selectedDateTime.minute),
+                  setSelectedDate: (date) {
+                    selectedDateTime = date;
+                    widget.setSelectedDateTime(selectedDateTime);
+                  },
+                  setSelectedTime: (time) {
+                    selectedDateTime = selectedDateTime.copyWith(
+                        hour: time.hour, minute: time.minute);
+                    widget.setSelectedDateTime(selectedDateTime);
+                  },
+                  timeBackgroundColor: (appStateSettings["materialYou"]
+                      ? Theme.of(context).colorScheme.secondaryContainer
+                      : getColor(context, "canvasContainer")),
+                ),
+              ),
+            ),
+          ),
           Container(
             child: TextInput(
               icon: appStateSettings["outlinedIcons"]

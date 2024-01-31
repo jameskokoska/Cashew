@@ -170,7 +170,7 @@
   "select-budget": "Presupuesto seleccionado",
   "select-budgets": "Seleccionar presupuestos",
   "default-line-graph": "Predeterminado (30 días)",
-  "select-category": "selecciona una categoría",
+  "select-category": "Selecciona una categoría",
   "enter-title": "Ingrese el título",
   "associated-titles": "Títulos asociados",
   "associated-titles-description": "Si un título de transacción contiene alguna de las frases enumeradas, se agregará a esta categoría",
@@ -1042,5 +1042,8 @@
   "app": "Solicitud",
   "set-color": "Color colectivo",
   "next-date-time": "Próximo",
-  "set-date-time": "Colocar"
+  "set-date-time": "Colocar",
+  "add-record-using-plus-button": "Agregue un registro usando el botón [+].",
+  "all-settled": "Todo resuelto",
+  "difference-loan": "Préstamo de diferencia"
 }

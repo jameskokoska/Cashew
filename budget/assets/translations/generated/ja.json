@@ -1042,5 +1042,8 @@
   "app": "応用",
   "set-color": "色を設定します",
   "next-date-time": "次",
-  "set-date-time": "セット"
+  "set-date-time": "セット",
+  "add-record-using-plus-button": "[+]ボタンを使用してレコードを追加します。",
+  "all-settled": "すべてが落ち着きました",
+  "difference-loan": "差異ローン"
 }

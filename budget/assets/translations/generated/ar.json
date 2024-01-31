@@ -1042,5 +1042,8 @@
   "app": "طلب",
   "set-color": "ضبط اللون",
   "next-date-time": "التالي",
-  "set-date-time": "تعيين"
+  "set-date-time": "تعيين",
+  "add-record-using-plus-button": "إضافة سجل باستخدام زر [+].",
+  "all-settled": "كل ما استقر",
+  "difference-loan": "قرض الفرق"
 }

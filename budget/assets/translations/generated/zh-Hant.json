@@ -1042,5 +1042,8 @@
   "app": "應用",
   "set-color": "設置顏色",
   "next-date-time": "下一個",
-  "set-date-time": "放"
+  "set-date-time": "放",
+  "add-record-using-plus-button": "使用[+]按鈕添加記錄。",
+  "all-settled": "所有人都解決了",
+  "difference-loan": "差異貸款"
 }

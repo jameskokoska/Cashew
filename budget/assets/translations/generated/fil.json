@@ -1042,5 +1042,8 @@
   "app": "Application",
   "set-color": "Itakda ang Kulay",
   "next-date-time": "Susunod",
-  "set-date-time": "Itakda"
+  "set-date-time": "Itakda",
+  "add-record-using-plus-button": "Magdagdag ng isang tala gamit ang pindutan ng [+].",
+  "all-settled": "Lahat ay naayos",
+  "difference-loan": "Pagkakaiba ng pautang"
 }

@@ -1042,5 +1042,8 @@
   "app": "விண்ணப்பம்",
   "set-color": "வண்ணத்தை அமைக்கவும்",
   "next-date-time": "அடுத்தது",
-  "set-date-time": "அமைக்கவும்"
+  "set-date-time": "அமைக்கவும்",
+  "add-record-using-plus-button": "[+] பொத்தானைப் பயன்படுத்தி பதிவைச் சேர்க்கவும்.",
+  "all-settled": "அனைத்தும் குடியேறின",
+  "difference-loan": "வேறுபாடு கடன்"
 }

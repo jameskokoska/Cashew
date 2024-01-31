@@ -1042,5 +1042,8 @@
   "app": "નિયમ",
   "set-color": "રંગ",
   "next-date-time": "આગલું",
-  "set-date-time": "સમૂહ"
+  "set-date-time": "સમૂહ",
+  "add-record-using-plus-button": "[+] બટનનો ઉપયોગ કરીને રેકોર્ડ ઉમેરો.",
+  "all-settled": "બધા સ્થાયી થયા",
+  "difference-loan": "ફરક લોન"
 }

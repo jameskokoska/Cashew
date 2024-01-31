@@ -1042,5 +1042,8 @@
   "app": "aplikace",
   "set-color": "Nastavit barvu",
   "next-date-time": "další",
-  "set-date-time": "Soubor"
+  "set-date-time": "Soubor",
+  "add-record-using-plus-button": "Přidejte záznam pomocí tlačítka [+].",
+  "all-settled": "Všichni se usadili",
+  "difference-loan": "Rozdílná půjčka"
 }

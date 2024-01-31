@@ -1042,5 +1042,8 @@
   "app": "Ansökan",
   "set-color": "Få färg",
   "next-date-time": "Nästa",
-  "set-date-time": "Uppsättning"
+  "set-date-time": "Uppsättning",
+  "add-record-using-plus-button": "Lägg till en post med knappen [+].",
+  "all-settled": "Alla avgjorda",
+  "difference-loan": "Skillnadslån"
 }

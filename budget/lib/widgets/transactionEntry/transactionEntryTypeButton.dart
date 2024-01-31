@@ -60,6 +60,7 @@ class TransactionEntryActionButton extends StatelessWidget {
                         transaction.copyWith(
                           income: !transaction.income,
                           amount: transaction.amount * -1,
+                          dateCreated: DateTime.now(),
                         ),
                         insert: true,
                       );

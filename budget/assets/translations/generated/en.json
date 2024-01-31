@@ -690,7 +690,7 @@
   "balance-correction-description-1": "Include account transfers and account correction transactions",
   "balance-correction-selected": "Balance Correction Selected",
   "balance-correction-selected-info": "Please use the budget transaction filters to modify whether to include the Balance Correction category.",
-  "period-cycle-picker-description": "This will apply to the homepage [Income and Expenses], [Net Worth], [Pie Chart], and the [All Spending] page.",
+  "period-cycle-picker-description": "Новий віджет власного капіталу на головній сторінці",
   "previous": "Previous",
   "every": "Every",
   "major-change-7": "Custom Periods",
@@ -1042,5 +1042,8 @@
   "app": "App",
   "set-color": "Set Color",
   "next-date-time": "Next",
-  "set-date-time": "Set"
+  "set-date-time": "Set",
+  "add-record-using-plus-button": "Add a record using the + button.",
+  "all-settled": "All Settled",
+  "difference-loan": "Difference loan"
 }
