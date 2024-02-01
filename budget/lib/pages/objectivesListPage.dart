@@ -310,6 +310,10 @@ class ObjectiveListDifferenceLoan extends StatelessWidget {
   final String? searchFor;
   @override
   Widget build(BuildContext context) {
+    if (appStateSettings["longTermLoansDifferenceFeature"] == false)
+      return SliverToBoxAdapter(
+        child: SizedBox.shrink(),
+      );
     return StreamBuilder<List<Objective>>(
       stream: database.watchAllObjectives(
         objectiveType: ObjectiveType.loan,

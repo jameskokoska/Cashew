@@ -185,68 +185,69 @@ class _HomePageObjectivesState extends State<HomePageObjectives> {
               }
             },
           ),
-          StreamBuilder<List<Objective>>(
-            stream: database
-                .getAllPinnedObjectives(
-                  objectiveType: widget.objectiveType,
-                  showDifferenceLoans: true,
-                )
-                .$1,
-            builder: (context, snapshot) {
-              if (snapshot.hasData &&
-                  snapshot.data != null &&
-                  (snapshot.data?.length ?? 0) > 0) {
-                List<Widget> objectiveItems = [
-                  if (snapshot.hasData && snapshot.data!.length > 0)
-                    SizedBox(height: 8),
-                  ...(snapshot.data?.map((Objective objective) {
-                        return ObjectiveContainerDifferenceLoan(
-                          objective: objective,
-                          index: 0,
-                          forceAndroidBubbleDesign: true,
-                          rowEntry: true,
-                        );
-                      }).toList() ??
-                      []),
-                  if (snapshot.hasData && snapshot.data!.length > 0)
-                    SizedBox(height: 8),
-                ];
-
-                return Padding(
-                  padding:
-                      const EdgeInsets.only(bottom: 13, left: 13, right: 13),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      boxShadow: boxShadowCheck(boxShadowGeneral(context)),
-                      borderRadius: BorderRadius.circular(borderRadius),
-                    ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(borderRadius),
-                      child: Tappable(
-                        color: getColor(context, "lightDarkAccentHeavyLight"),
-                        borderRadius: borderRadius,
-                        onLongPress: () async {
-                          openBottomSheet(
-                            context,
-                            EditHomePagePinnedGoalsPopup(
-                              showGoalsTotalLabelSetting: false,
-                              objectiveType: widget.objectiveType,
-                            ),
-                            useCustomController: true,
+          if (appStateSettings["longTermLoansDifferenceFeature"] == true)
+            StreamBuilder<List<Objective>>(
+              stream: database
+                  .getAllPinnedObjectives(
+                    objectiveType: widget.objectiveType,
+                    showDifferenceLoans: true,
+                  )
+                  .$1,
+              builder: (context, snapshot) {
+                if (snapshot.hasData &&
+                    snapshot.data != null &&
+                    (snapshot.data?.length ?? 0) > 0) {
+                  List<Widget> objectiveItems = [
+                    if (snapshot.hasData && snapshot.data!.length > 0)
+                      SizedBox(height: 8),
+                    ...(snapshot.data?.map((Objective objective) {
+                          return ObjectiveContainerDifferenceLoan(
+                            objective: objective,
+                            index: 0,
+                            forceAndroidBubbleDesign: true,
+                            rowEntry: true,
                           );
-                        },
-                        child: Column(
-                          children: objectiveItems,
+                        }).toList() ??
+                        []),
+                    if (snapshot.hasData && snapshot.data!.length > 0)
+                      SizedBox(height: 8),
+                  ];
+
+                  return Padding(
+                    padding:
+                        const EdgeInsets.only(bottom: 13, left: 13, right: 13),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        boxShadow: boxShadowCheck(boxShadowGeneral(context)),
+                        borderRadius: BorderRadius.circular(borderRadius),
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(borderRadius),
+                        child: Tappable(
+                          color: getColor(context, "lightDarkAccentHeavyLight"),
+                          borderRadius: borderRadius,
+                          onLongPress: () async {
+                            openBottomSheet(
+                              context,
+                              EditHomePagePinnedGoalsPopup(
+                                showGoalsTotalLabelSetting: false,
+                                objectiveType: widget.objectiveType,
+                              ),
+                              useCustomController: true,
+                            );
+                          },
+                          child: Column(
+                            children: objectiveItems,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                );
-              } else {
-                return SizedBox.shrink();
-              }
-            },
-          ),
+                  );
+                } else {
+                  return SizedBox.shrink();
+                }
+              },
+            ),
         ],
       ),
     );
