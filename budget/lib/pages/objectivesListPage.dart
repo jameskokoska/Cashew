@@ -132,7 +132,8 @@ class ObjectiveList extends StatelessWidget {
       ),
       builder: (context, snapshot) {
         bool showDemoObjectives = false;
-        List<Objective> objectivesList = snapshot.data ?? [];
+        // Need to use spread operator or else demo objectives glitches in and out when first loaded
+        List<Objective> objectivesList = [...(snapshot.data ?? [])];
         if (showExamplesIfEmpty &&
             (snapshot.hasData == false ||
                 (objectivesList.length <= 0 && snapshot.hasData))) {
