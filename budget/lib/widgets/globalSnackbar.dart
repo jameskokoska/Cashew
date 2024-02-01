@@ -183,8 +183,12 @@ class GlobalSnackbarState extends State<GlobalSnackbar>
                             amountLight: 1, amountDark: 0.4)
                         : getColor(context, "lightDarkAccent"),
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 12, vertical: 8),
+                      padding: EdgeInsets.only(
+                        left: 12,
+                        right: currentMessage?.icon == null ? 12 : 17,
+                        top: 8,
+                        bottom: 8,
+                      ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.center,

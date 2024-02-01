@@ -338,7 +338,10 @@ class _CreditDebtTransactionsState extends State<CreditDebtTransactions>
             bodyBuilder: (scrollController, scrollPhysics, sliverAppBar) {
               return StreamBuilder<List<Objective?>>(
                 stream: database.watchAllObjectives(
-                    objectiveType: ObjectiveType.loan, hideArchived: true),
+                  objectiveType: ObjectiveType.loan,
+                  hideArchived: true,
+                  showDifferenceLoans: null,
+                ),
                 builder: (context, snapshot) {
                   if (snapshot.hasData == false) return SizedBox.shrink();
                   if ((snapshot.data?.length ?? 0) <= 0) {
@@ -498,6 +501,9 @@ class _CreditDebtTransactionsState extends State<CreditDebtTransactions>
                                       .sliverOverlapAbsorberHandleFor(
                                     contextPageView,
                                   ),
+                                ),
+                                ObjectiveListDifferenceLoan(
+                                  searchFor: searchValue,
                                 ),
                                 ...longTermLoansList
                               ],

@@ -7,6 +7,7 @@ import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/addCategoryPage.dart';
 import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/editBudgetPage.dart';
+import 'package:budget/pages/objectivesListPage.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/animatedExpanded.dart';
 import 'package:budget/widgets/button.dart';
@@ -1496,11 +1497,17 @@ Future<bool> generateLoanTransactionsFromBillSummary(
     note = note.trim();
     bool isThePayee = summary.splitPerson.name == payee;
 
+    Objective? associatedPersonLoan;
+    if (appStateSettings["longTermLoansDifferenceFeature"] == true) {
+      associatedPersonLoan = await database
+          .getPersonsLongTermDifferenceLoanInstance(summary.splitPerson.name);
+    }
+
     await database.createOrUpdateTransaction(
       insert: true,
       Transaction(
         transactionPk: "-1",
-        name: isThePayee
+        name: isThePayee || associatedPersonLoan != null
             ? billName.trim()
             : (summary.splitPerson.name.trim() + " - " + billName.trim()),
         amount: amountSpentTotal.abs() * -1,
@@ -1512,6 +1519,7 @@ Future<bool> generateLoanTransactionsFromBillSummary(
         paid: true,
         type: isThePayee ? null : TransactionSpecialType.credit,
         skipPaid: false,
+        objectiveLoanFk: associatedPersonLoan?.objectivePk,
       ),
     );
   }

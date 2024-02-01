@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:budget/functions.dart';
 import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/homePage/homePageLineGraph.dart';
+import 'package:budget/pages/objectivesListPage.dart';
 import 'package:budget/pages/transactionFilters.dart';
 import 'package:budget/pages/transactionsSearchPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
@@ -2099,10 +2100,18 @@ class FinanceDatabase extends _$FinanceDatabase {
   }
 
   (Stream<List<Objective>>, Future<List<Objective>>) getAllPinnedObjectives(
-      {int? limit, int? offset, required ObjectiveType objectiveType}) {
+      {int? limit,
+      int? offset,
+      required ObjectiveType objectiveType,
+      bool? showDifferenceLoans}) {
     final query = (select(objectives)
       ..where((tbl) =>
-          tbl.type.equals(objectiveType.index) & tbl.pinned.equals(true))
+          (showDifferenceLoans == null
+              ? Constant(true)
+              : getIsDifferenceOnlyLoanFromTable(tbl)
+                  .equals(showDifferenceLoans)) &
+          tbl.type.equals(objectiveType.index) &
+          tbl.pinned.equals(true))
       ..orderBy([(b) => OrderingTerm.asc(b.order)])
       ..limit(limit ?? DEFAULT_LIMIT, offset: offset ?? DEFAULT_OFFSET));
     return (query.watch(), query.get());
@@ -3984,6 +3993,23 @@ class FinanceDatabase extends _$FinanceDatabase {
         .getSingle();
   }
 
+  // getIsDifferenceOnlyLoan(objective)
+  Expression<bool> getIsDifferenceOnlyLoanFromTable($ObjectivesTable o) {
+    if (appStateSettings["longTermLoansDifferenceFeature"] == false)
+      return Constant(false);
+    return o.amount.equals(0) & o.type.equals(ObjectiveType.loan.index);
+  }
+
+  Future<Objective?> getPersonsLongTermDifferenceLoanInstance(
+      String personName) {
+    return (select(objectives)
+          ..where((o) =>
+              (o.name.trim().lower().equals(personName.trim().toLowerCase()) |
+                  o.name.equals(personName)) &
+              getIsDifferenceOnlyLoanFromTable(o)))
+        .getSingleOrNull();
+  }
+
   // get category given name
   Future<TransactionCategory> getCategoryInstanceGivenName(String name) async {
     return (await (select(categories)
@@ -4143,12 +4169,19 @@ class FinanceDatabase extends _$FinanceDatabase {
     bool hideArchived = false,
     bool archivedLast = false,
     required ObjectiveType objectiveType,
+
+    //If null - include both, if true - only difference, if false - no difference
+    bool? showDifferenceLoans = null,
   }) {
     return (select(objectives)
           ..where((i) =>
               (hideArchived == true
                   ? i.archived.equals(false)
                   : Constant(true)) &
+              (showDifferenceLoans == null
+                  ? Constant(true)
+                  : getIsDifferenceOnlyLoanFromTable(i)
+                      .equals(showDifferenceLoans)) &
               i.type.equals(objectiveType.index) &
               onlyShowBasedOnIncomeObjective(i, isIncome) &
               (searchFor == null

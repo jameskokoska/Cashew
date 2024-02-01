@@ -181,120 +181,109 @@ class EditHomePagePinnedBudgetsPopup extends StatelessWidget {
         stream: database.watchAllBudgets(),
         builder: (context, snapshot) {
           List<Budget> allBudgets = snapshot.data ?? [];
-          return StreamBuilder<List<Budget>>(
-              stream: database.getAllPinnedBudgets().$1,
-              builder: (context, snapshot2) {
-                List<Budget> allPinnedBudgets = snapshot2.data ?? [];
-                return PopupFramework(
-                  title: "select-budgets".tr(),
-                  outsideExtraWidget: IconButton(
-                    iconSize: 25,
-                    padding: EdgeInsets.all(
-                        getPlatform() == PlatformOS.isIOS ? 15 : 20),
-                    icon: Icon(
-                      appStateSettings["outlinedIcons"]
-                          ? Icons.edit_outlined
-                          : Icons.edit_rounded,
+          return PopupFramework(
+            title: "select-budgets".tr(),
+            outsideExtraWidget: IconButton(
+              iconSize: 25,
+              padding:
+                  EdgeInsets.all(getPlatform() == PlatformOS.isIOS ? 15 : 20),
+              icon: Icon(
+                appStateSettings["outlinedIcons"]
+                    ? Icons.edit_outlined
+                    : Icons.edit_rounded,
+              ),
+              onPressed: () async {
+                pushRoute(context, EditBudgetPage());
+              },
+            ),
+            child: Column(
+              children: [
+                if (showBudgetsTotalLabelSetting)
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(15),
+                    child: TotalSpentToggle(),
+                  ),
+                if (allBudgets.length <= 0)
+                  NoResultsCreate(
+                    message: "no-budgets-found".tr(),
+                    buttonLabel: "create-budget".tr(),
+                    route: AddBudgetPage(
+                      routesToPopAfterDelete: RoutesToPopAfterDelete.None,
                     ),
-                    onPressed: () async {
-                      pushRoute(context, EditBudgetPage());
+                  ),
+                SelectItems(
+                  syncWithInitial: true,
+                  checkboxCustomIconSelected: Icons.push_pin_rounded,
+                  checkboxCustomIconUnselected: Icons.push_pin_outlined,
+                  items: [
+                    for (Budget budget in allBudgets) budget.budgetPk.toString()
+                  ],
+                  getColor: (budgetPk, selected) {
+                    for (Budget budget in allBudgets)
+                      if (budget.budgetPk.toString() == budgetPk.toString()) {
+                        return HexColor(budget.colour,
+                                defaultColor:
+                                    Theme.of(context).colorScheme.primary)
+                            .withOpacity(selected == true ? 0.7 : 0.5);
+                      }
+                    return null;
+                  },
+                  displayFilter: (budgetPk) {
+                    for (Budget budget in allBudgets)
+                      if (budget.budgetPk.toString() == budgetPk.toString()) {
+                        return budget.name;
+                      }
+                    return "";
+                  },
+                  initialItems: [
+                    for (Budget budget in allBudgets)
+                      if (budget.pinned) budget.budgetPk.toString()
+                  ],
+                  onChangedSingleItem: (value) async {
+                    Budget budget = allBudgets[allBudgets
+                        .indexWhere((item) => item.budgetPk == value)];
+                    Budget budgetToUpdate =
+                        await database.getBudgetInstance(budget.budgetPk);
+                    await database.createOrUpdateBudget(
+                      budgetToUpdate.copyWith(pinned: !budgetToUpdate.pinned),
+                      updateSharedEntry: false,
+                    );
+                  },
+                  onLongPress: (String budgetPk) async {
+                    Budget budget = await database.getBudgetInstance(budgetPk);
+                    pushRoute(
+                      context,
+                      AddBudgetPage(
+                        routesToPopAfterDelete: RoutesToPopAfterDelete.One,
+                        budget: budget,
+                      ),
+                    );
+                  },
+                ),
+                if (allBudgets.length > 0)
+                  AddButton(
+                    onTap: () {},
+                    height: 50,
+                    width: null,
+                    padding: const EdgeInsets.only(
+                      left: 13,
+                      right: 13,
+                      bottom: 13,
+                      top: 13,
+                    ),
+                    openPage: AddBudgetPage(
+                      routesToPopAfterDelete: RoutesToPopAfterDelete.None,
+                    ),
+                    afterOpenPage: () {
+                      Future.delayed(Duration(milliseconds: 100), () {
+                        bottomSheetControllerGlobalCustomAssigned
+                            ?.snapToExtent(0);
+                      });
                     },
                   ),
-                  child: Column(
-                    children: [
-                      if (showBudgetsTotalLabelSetting)
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(15),
-                          child: TotalSpentToggle(),
-                        ),
-                      if (allBudgets.length <= 0)
-                        NoResultsCreate(
-                          message: "no-budgets-found".tr(),
-                          buttonLabel: "create-budget".tr(),
-                          route: AddBudgetPage(
-                            routesToPopAfterDelete: RoutesToPopAfterDelete.None,
-                          ),
-                        ),
-                      SelectItems(
-                        syncWithInitial: true,
-                        checkboxCustomIconSelected: Icons.push_pin_rounded,
-                        checkboxCustomIconUnselected: Icons.push_pin_outlined,
-                        items: [
-                          for (Budget budget in allBudgets)
-                            budget.budgetPk.toString()
-                        ],
-                        getColor: (budgetPk, selected) {
-                          for (Budget budget in allBudgets)
-                            if (budget.budgetPk.toString() ==
-                                budgetPk.toString()) {
-                              return HexColor(budget.colour,
-                                      defaultColor:
-                                          Theme.of(context).colorScheme.primary)
-                                  .withOpacity(selected == true ? 0.7 : 0.5);
-                            }
-                          return null;
-                        },
-                        displayFilter: (budgetPk) {
-                          for (Budget budget in allBudgets)
-                            if (budget.budgetPk.toString() ==
-                                budgetPk.toString()) {
-                              return budget.name;
-                            }
-                          return "";
-                        },
-                        initialItems: [
-                          for (Budget budget in allPinnedBudgets)
-                            budget.budgetPk.toString()
-                        ],
-                        onChangedSingleItem: (value) async {
-                          Budget budget = allBudgets[allBudgets
-                              .indexWhere((item) => item.budgetPk == value)];
-                          Budget budgetToUpdate =
-                              await database.getBudgetInstance(budget.budgetPk);
-                          await database.createOrUpdateBudget(
-                            budgetToUpdate.copyWith(
-                                pinned: !budgetToUpdate.pinned),
-                            updateSharedEntry: false,
-                          );
-                        },
-                        onLongPress: (String budgetPk) async {
-                          Budget budget =
-                              await database.getBudgetInstance(budgetPk);
-                          pushRoute(
-                            context,
-                            AddBudgetPage(
-                              routesToPopAfterDelete:
-                                  RoutesToPopAfterDelete.One,
-                              budget: budget,
-                            ),
-                          );
-                        },
-                      ),
-                      if (allBudgets.length > 0)
-                        AddButton(
-                          onTap: () {},
-                          height: 50,
-                          width: null,
-                          padding: const EdgeInsets.only(
-                            left: 13,
-                            right: 13,
-                            bottom: 13,
-                            top: 13,
-                          ),
-                          openPage: AddBudgetPage(
-                            routesToPopAfterDelete: RoutesToPopAfterDelete.None,
-                          ),
-                          afterOpenPage: () {
-                            Future.delayed(Duration(milliseconds: 100), () {
-                              bottomSheetControllerGlobalCustomAssigned
-                                  ?.snapToExtent(0);
-                            });
-                          },
-                        ),
-                    ],
-                  ),
-                );
-              });
+              ],
+            ),
+          );
         });
   }
 }

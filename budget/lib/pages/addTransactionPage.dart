@@ -2354,33 +2354,37 @@ class _SelectTitleState extends State<SelectTitle> {
   @override
   Widget build(BuildContext context) {
     return PopupFramework(
-      title: "enter-title".tr(),
-      outsideExtraWidget: AnimatedScaleOpacity(
-        animateIn: customDateTimeSelected == false,
-        child: IconButton(
-          iconSize: 25,
-          padding: EdgeInsets.all(getPlatform() == PlatformOS.isIOS ? 15 : 20),
-          icon: Icon(
-            appStateSettings["outlinedIcons"]
-                ? Icons.calendar_month_outlined
-                : Icons.calendar_month_rounded,
-          ),
-          onPressed: () async {
-            DateTime? dateTimeSelected =
-                await selectDateAndTimeSequence(context, selectedDateTime);
-            if (dateTimeSelected == null) return;
-            setState(() {
-              customDateTimeSelected = true;
-              selectedDateTime = dateTimeSelected;
-            });
-            widget.setSelectedDateTime(selectedDateTime);
-            // Update the size of the bottom sheet
-            Future.delayed(Duration(milliseconds: 100), () {
-              bottomSheetControllerGlobal.snapToExtent(0);
-            });
-          },
-        ),
-      ),
+      title: customDateTimeSelected == true &&
+              getPlatform() == PlatformOS.isAndroid &&
+              getWidthNavigationSidebar(context) <= 0
+          ? null
+          : "enter-title".tr(),
+      outsideExtraWidget: customDateTimeSelected
+          ? SizedBox.shrink()
+          : IconButton(
+              iconSize: 25,
+              padding:
+                  EdgeInsets.all(getPlatform() == PlatformOS.isIOS ? 15 : 20),
+              icon: Icon(
+                appStateSettings["outlinedIcons"]
+                    ? Icons.calendar_month_outlined
+                    : Icons.calendar_month_rounded,
+              ),
+              onPressed: () async {
+                DateTime? dateTimeSelected =
+                    await selectDateAndTimeSequence(context, selectedDateTime);
+                if (dateTimeSelected == null) return;
+                setState(() {
+                  customDateTimeSelected = true;
+                  selectedDateTime = dateTimeSelected;
+                });
+                widget.setSelectedDateTime(selectedDateTime);
+                // Update the size of the bottom sheet
+                Future.delayed(Duration(milliseconds: 100), () {
+                  bottomSheetControllerGlobal.snapToExtent(0);
+                });
+              },
+            ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.center,

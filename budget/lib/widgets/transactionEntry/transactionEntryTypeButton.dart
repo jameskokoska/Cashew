@@ -7,10 +7,13 @@ import 'package:budget/pages/objectivesListPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/struct/upcomingTransactionsFunctions.dart';
+import 'package:budget/widgets/globalSnackbar.dart';
 import 'package:budget/widgets/openPopup.dart';
+import 'package:budget/widgets/openSnackbar.dart';
 import 'package:budget/widgets/selectedTransactionsAppBar.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
+import 'package:budget/widgets/transactionEntry/transactionLabel.dart';
 import 'package:easy_localization/src/public_ext.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/material/colors.dart';
@@ -63,6 +66,18 @@ class TransactionEntryActionButton extends StatelessWidget {
                           dateCreated: DateTime.now(),
                         ),
                         insert: true,
+                      );
+                      String transactionLabel =
+                          await getTransactionLabel(transaction);
+                      openSnackbar(
+                        SnackbarMessage(
+                          title: "paid".tr(),
+                          description: transactionLabel,
+                          icon: appStateSettings["outlinedIcons"]
+                              ? Icons.check_circle_outlined
+                              : Icons.check_circle_rounded,
+                          timeout: Duration(milliseconds: 2500),
+                        ),
                       );
                     } else {
                       pushRoute(
