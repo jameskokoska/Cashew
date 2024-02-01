@@ -320,6 +320,10 @@ class ObjectiveListDifferenceLoan extends StatelessWidget {
       ),
       builder: (context, snapshot) {
         List<Objective> objectivesList = snapshot.data ?? [];
+        if (objectivesList.length <= 0)
+          return SliverToBoxAdapter(
+            child: SizedBox.shrink(),
+          );
         return SliverPadding(
           padding: EdgeInsets.symmetric(
             vertical: getPlatform() == PlatformOS.isIOS ? 3 : 7,
