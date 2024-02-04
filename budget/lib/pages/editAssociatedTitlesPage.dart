@@ -221,8 +221,7 @@ class _EditAssociatedTitlesPageState extends State<EditAssociatedTitlesPage> {
                           SizedBox(width: 15),
                           Expanded(
                             child: TextFont(
-                              text: associatedTitle.title +
-                                  associatedTitle.order.toString()
+                              text: associatedTitle.title
                               // +
                               //     " - " +
                               //     associatedTitle.order.toString()
