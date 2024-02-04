@@ -1,33 +1,40 @@
 import 'package:animations/animations.dart';
+import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/breathingAnimation.dart';
+import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:local_auth/local_auth.dart';
 
-Future<bool> checkBiometrics({
+// Returns null if there was an error or if biometrics are unavailable
+Future<bool?> checkBiometrics({
   bool checkAlways = false,
-  String message = 'Please authenticate to continue.',
 }) async {
-  if (kIsWeb) return true;
-  final LocalAuthentication auth = LocalAuthentication();
-  final bool requireAuth = checkAlways || appStateSettings["requireAuth"];
-  biometricsAvailable = kIsWeb == false && await auth.canCheckBiometrics ||
-      await auth.isDeviceSupported();
-  bool didAuthenticate = false;
-  if (requireAuth == true && biometricsAvailable == true) {
-    await auth.stopAuthentication();
-    didAuthenticate = await auth.authenticate(
-      localizedReason: message,
-      options: const AuthenticationOptions(biometricOnly: true),
-    );
-  } else {
-    didAuthenticate = true;
+  try {
+    if (kIsWeb) return true;
+    final LocalAuthentication auth = LocalAuthentication();
+    final bool requireAuth = checkAlways || appStateSettings["requireAuth"];
+    biometricsAvailable = kIsWeb == false && await auth.canCheckBiometrics ||
+        await auth.isDeviceSupported();
+    if (biometricsAvailable == false) {
+      return null;
+    } else if (requireAuth == true && biometricsAvailable == true) {
+      await auth.stopAuthentication();
+      return await auth.authenticate(
+        localizedReason: "verify-identity".tr(),
+        options: const AuthenticationOptions(biometricOnly: true),
+      );
+    } else {
+      return true;
+    }
+  } catch (e) {
+    print("Error with biometrics: " + e.toString());
+    return null;
   }
-  return didAuthenticate;
 }
 
 class InitializeBiometrics extends StatefulWidget {
@@ -44,10 +51,37 @@ class _InitializeBiometricsState extends State<InitializeBiometrics> {
   void initState() {
     super.initState();
     Future.delayed(Duration.zero, () async {
-      final bool result = await checkBiometrics();
+      final bool? result = await checkBiometrics();
       setState(() {
         authenticated = result;
       });
+    });
+  }
+
+  _biometricErrorPopup() {
+    // Wait so that we get a context on the navigatorKey
+    // Since Initialize biometrics does not have access to Material navigator in the widget tree
+    // because we want to keep the app fully locked
+    Future.delayed(Duration(milliseconds: 500), () {
+      if (navigatorKey.currentContext == null) return;
+      openPopup(
+        navigatorKey.currentContext!,
+        barrierDismissible: false,
+        icon: appStateSettings["outlinedIcons"]
+            ? Icons.warning_outlined
+            : Icons.warning_rounded,
+        title: getPlatform() == PlatformOS.isIOS
+            ? "biometrics-disabled".tr()
+            : "biometrics-error".tr(),
+        description: getPlatform() == PlatformOS.isIOS
+            ? "biometrics-disabled-description".tr()
+            : "biometrics-error-description".tr(),
+        onSubmitLabel: "ok".tr(),
+        onSubmit: () {
+          updateSettings("requireAuth", false, updateGlobalState: false);
+          Navigator.pop(navigatorKey.currentContext!);
+        },
+      );
     });
   }
 
@@ -63,11 +97,16 @@ class _InitializeBiometricsState extends State<InitializeBiometrics> {
           setState(() {
             authenticated = null;
           });
-          final bool result =
-              await checkBiometrics(message: "verify-identity".tr());
+          bool? result = await checkBiometrics();
           setState(() {
             authenticated = result;
           });
+          if (result == null) {
+            _biometricErrorPopup();
+            setState(() {
+              authenticated = true;
+            });
+          }
         },
         child: Column(
           key: ValueKey(0),

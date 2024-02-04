@@ -1455,7 +1455,7 @@ Future<bool> generateLoanTransactionsFromBillSummary(
       ),
     ),
   );
-  print(category);
+  int i = 0;
   for (SplitPersonSummary summary in billSummary) {
     String note = "";
     double amountSpentTotal = 0;
@@ -1514,7 +1514,7 @@ Future<bool> generateLoanTransactionsFromBillSummary(
         note: note,
         categoryFk: category.categoryPk,
         walletFk: appStateSettings["selectedWalletPk"],
-        dateCreated: DateTime.now(),
+        dateCreated: DateTime.now().add(Duration(seconds: i)),
         income: false,
         paid: true,
         type: isThePayee ? null : TransactionSpecialType.credit,
@@ -1522,6 +1522,7 @@ Future<bool> generateLoanTransactionsFromBillSummary(
         objectiveLoanFk: associatedPersonLoan?.objectivePk,
       ),
     );
+    i++;
   }
   openSnackbar(
     SnackbarMessage(

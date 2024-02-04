@@ -45,6 +45,9 @@ String getChangelogString() {
     All spending page filter icon when scrolled past bottom
     No transactions found on long term loans page if all deleted
     When adding an account, defaults to device currency
+    When restoring a backup, sync operations are cancelled
+    If biometrics unavailable on a device, they are disabled
+    Optimized fix out of order elements when data page opened
     < 5.1.9
     Reorder theme mode settings, system is always first
     If multiple accounts with different currencies, can enable currency total summary in accounts list homepage widget

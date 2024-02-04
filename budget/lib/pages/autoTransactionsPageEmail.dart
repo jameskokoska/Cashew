@@ -117,12 +117,10 @@ Future queueTransactionFromMessage(String messageString) async {
   if (amountDouble == null || title == null) return false;
 
   TransactionCategory? category;
-  if (title != null) {
-    TransactionAssociatedTitleWithCategory? foundTitle =
-        (await database.getSimilarAssociatedTitles(title: title, limit: 1))
-            .firstOrNull;
-    category = foundTitle?.category;
-  }
+  TransactionAssociatedTitleWithCategory? foundTitle =
+      (await database.getSimilarAssociatedTitles(title: title, limit: 1))
+          .firstOrNull;
+  category = foundTitle?.category;
   if (category == null) {
     category = await database
         .getCategoryInstanceOrNull(templateFound.defaultCategoryFk ?? "");
@@ -427,8 +425,8 @@ Future<void> parseEmailsInBackground(context,
       }
       for (gMail.Message message in results.messages!) {
         currentEmailIndex++;
-        loadingProgressKey.currentState!
-            .setProgressPercentage(currentEmailIndex / amountOfEmails);
+        loadingProgressKey.currentState
+            ?.setProgressPercentage(currentEmailIndex / amountOfEmails);
         // await Future.delayed(Duration(milliseconds: 1000));
 
         // Remove this to always parse emails
@@ -657,12 +655,12 @@ class _GmailApiScreenState extends State<GmailApiScreen> {
           String emailMessageString = getEmailMessage(messageData);
           messagesList.add(emailMessageString);
           currentEmailIndex++;
-          loadingProgressKey.currentState!
-              .setProgressPercentage(currentEmailIndex / amountOfEmails);
+          loadingProgressKey.currentState
+              ?.setProgressPercentage(currentEmailIndex / amountOfEmails);
           if (mounted) {
             setState(() {});
           } else {
-            loadingProgressKey.currentState!.setProgressPercentage(0);
+            loadingProgressKey.currentState?.setProgressPercentage(0);
             break;
           }
         }

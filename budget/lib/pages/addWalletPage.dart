@@ -1517,7 +1517,8 @@ class _TransferBalancePopupState extends State<TransferBalancePopup> {
                               allWallets, walletFrom.walletPk),
                       walletFrom,
                       note: note,
-                      dateTime: selectedDateTimeSetToNow,
+                      dateTime:
+                          selectedDateTimeSetToNow.add(Duration(seconds: 1)),
                       title: selectedTitle == ""
                           ? (allWallets.indexedByPk[walletFrom.walletPk]!.name +
                               " " +

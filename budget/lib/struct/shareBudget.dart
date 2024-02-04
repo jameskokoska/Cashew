@@ -72,7 +72,7 @@ Future<bool> shareBudget(Budget? budgetToShare, context) async {
   );
 
   openSnackbar(SnackbarMessage(title: "Shared Budget"));
-  loadingProgressKey.currentState!.setProgressPercentage(0);
+  loadingProgressKey.currentState?.setProgressPercentage(0);
   return true;
 }
 

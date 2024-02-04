@@ -560,6 +560,8 @@ Future<void> loadBackup(
   try {
     openLoadingPopup(context);
 
+    await cancelAndPreventSyncOperation();
+
     List<int> dataStore = [];
     dynamic response = await driveApi.files
         .get(file.id ?? "", downloadOptions: drive.DownloadOptions.fullMedia);

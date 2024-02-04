@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'package:async/async.dart';
+
 import 'dart:convert';
 
 import 'package:budget/database/binary_string_conversion.dart';
@@ -179,8 +181,25 @@ class SyncLog {
 // Only allow one sync at a time
 bool canSyncData = true;
 
-// load the latest backup and import any newly modified data into the db
+bool requestSyncDataCancel = false;
+
+final CancelableCompleter<bool> syncDataCompleter =
+    CancelableCompleter(onCancel: () {
+  requestSyncDataCancel = true;
+});
+
+Future<dynamic> cancelAndPreventSyncOperation() async {
+  requestSyncDataCancel = true;
+  return await syncDataCompleter.operation.cancel();
+}
+
 Future<bool> syncData(BuildContext context) async {
+  syncDataCompleter.complete(Future.value(_syncData(context)));
+  return syncDataCompleter.operation.value;
+}
+
+// load the latest backup and import any newly modified data into the db
+Future<bool> _syncData(BuildContext context) async {
   if (canSyncData == false) return false;
   // Syncing data seems to fail on iOS debug mode (at least on iPad).
   // When actually creating the entries, it seems the device disconnects.
@@ -243,8 +262,16 @@ Future<bool> syncData(BuildContext context) async {
   List<drive.File> filesSyncing = [];
 
   int currentFileIndex = 0;
-  loadingProgressKey.currentState!.setProgressPercentage(0);
+  loadingProgressKey.currentState?.setProgressPercentage(0);
   for (drive.File file in filesToDownloadSyncChanges) {
+    if (requestSyncDataCancel == true) {
+      loadingProgressKey.currentState?.setProgressPercentage(0);
+      loadingIndeterminateKey.currentState?.setVisibility(false);
+      print("Cancelling sync!");
+      requestSyncDataCancel = false;
+      return false;
+    }
+
     loadingIndeterminateKey.currentState?.setVisibility(true);
 
     // we don't want to restore this clients backup
@@ -454,7 +481,7 @@ Future<bool> syncData(BuildContext context) async {
       );
       filesSyncing.remove(file);
       await databaseSync.close();
-      loadingProgressKey.currentState!.setProgressPercentage(1);
+      loadingProgressKey.currentState?.setProgressPercentage(1);
       canSyncData = true;
       await openPopup(
         context,
@@ -477,7 +504,7 @@ Future<bool> syncData(BuildContext context) async {
     }
 
     currentFileIndex = currentFileIndex + 1;
-    loadingProgressKey.currentState!.setProgressPercentage(
+    loadingProgressKey.currentState?.setProgressPercentage(
         currentFileIndex / filesToDownloadSyncChanges.length);
 
     await databaseSync.close();
@@ -503,10 +530,10 @@ Future<bool> syncData(BuildContext context) async {
     updateGlobalState: getIsFullScreen(context) ? true : false,
   );
 
-  loadingProgressKey.currentState!.setProgressPercentage(0.999);
+  loadingProgressKey.currentState?.setProgressPercentage(0.999);
 
   Future.delayed(Duration(milliseconds: 300), () {
-    loadingProgressKey.currentState!.setProgressPercentage(1);
+    loadingProgressKey.currentState?.setProgressPercentage(1);
   });
 
   canSyncData = true;

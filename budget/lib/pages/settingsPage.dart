@@ -352,6 +352,11 @@ class EnterName extends StatelessWidget {
 }
 
 Future enterNameBottomSheet(context) async {
+  Future.delayed(Duration(milliseconds: 100), () {
+    // Fix over-scroll stretch when keyboard pops up quickly
+    bottomSheetControllerGlobal.scrollTo(0,
+        duration: Duration(milliseconds: 100));
+  });
   return await openBottomSheet(
     context,
     fullSnap: true,
@@ -787,21 +792,8 @@ class _BiometricsSettingToggleState extends State<BiometricsSettingToggle> {
                 title: "biometric-lock".tr(),
                 description: "biometric-lock-description".tr(),
                 onSwitched: (value) async {
-                  try {
-                    bool result = await checkBiometrics(
-                      checkAlways: true,
-                      message: "verify-identity".tr(),
-                    );
-                    if (result) {
-                      updateSettings("requireAuth", value,
-                          updateGlobalState: false);
-                      setState(() {
-                        isLocked = value;
-                      });
-                    }
-
-                    return result;
-                  } catch (e) {
+                  bool? result = await checkBiometrics(checkAlways: true);
+                  if (result == null) {
                     openPopup(
                       context,
                       icon: appStateSettings["outlinedIcons"]
@@ -830,7 +822,14 @@ class _BiometricsSettingToggleState extends State<BiometricsSettingToggle> {
                         }
                       },
                     );
+                  } else if (result) {
+                    updateSettings("requireAuth", value,
+                        updateGlobalState: false);
+                    setState(() {
+                      isLocked = value;
+                    });
                   }
+                  return result;
                 },
                 initialValue: appStateSettings["requireAuth"],
                 icon: isLocked

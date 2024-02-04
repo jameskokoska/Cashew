@@ -221,6 +221,7 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
       await setUpcomingNotifications(context);
 
       database.deleteWanderingTransactions();
+      database.deleteWanderingTitles();
 
       entireAppLoaded = true;
 

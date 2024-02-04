@@ -2984,16 +2984,22 @@ class FinanceDatabase extends _$FinanceDatabase {
     List<Budget> budgetsList = await (select(budgets)
           ..orderBy([(t) => OrderingTerm.asc(t.order)]))
         .get();
+    bool requiresUpdate = false;
     for (int i = 0; i < budgetsList.length; i++) {
+      if (budgetsList[i].order != i && requiresUpdate == false)
+        requiresUpdate = true;
       budgetsList[i] = budgetsList[i].copyWith(
         order: i,
         // Don't update the dateTimeModified, opening the page will cause them all to have a new dateTimeModified... when something was actually not modified
         // dateTimeModified: Value(DateTime.now()),
       );
     }
-    await batch((batch) {
-      batch.insertAll(budgets, budgetsList, mode: InsertMode.replace);
-    });
+    if (requiresUpdate) {
+      print("Fixing order for budgets");
+      await batch((batch) {
+        batch.insertAll(budgets, budgetsList, mode: InsertMode.replace);
+      });
+    }
     return true;
   }
 
@@ -3003,16 +3009,22 @@ class FinanceDatabase extends _$FinanceDatabase {
           ..where((t) => t.type.equals(objectiveType.index))
           ..orderBy([(t) => OrderingTerm.asc(t.order)]))
         .get();
+    bool requiresUpdate = false;
     for (int i = 0; i < objectivesList.length; i++) {
+      if (objectivesList[i].order != i && requiresUpdate == false)
+        requiresUpdate = true;
       objectivesList[i] = objectivesList[i].copyWith(
         order: i,
         // Don't update the dateTimeModified, opening the page will cause them all to have a new dateTimeModified... when something was actually not modified
         // dateTimeModified: Value(DateTime.now()),
       );
     }
-    await batch((batch) {
-      batch.insertAll(objectives, objectivesList, mode: InsertMode.replace);
-    });
+    if (requiresUpdate) {
+      print("Fixing order for objectives");
+      await batch((batch) {
+        batch.insertAll(objectives, objectivesList, mode: InsertMode.replace);
+      });
+    }
     return true;
   }
 
@@ -3024,16 +3036,22 @@ class FinanceDatabase extends _$FinanceDatabase {
               : c.mainCategoryPk.equals(mainCategoryPkIfSubCategoryOrderFixing))
           ..orderBy([(t) => OrderingTerm.asc(t.order)]))
         .get();
+    bool requiresUpdate = false;
     for (int i = 0; i < categoriesList.length; i++) {
+      if (categoriesList[i].order != i && requiresUpdate == false)
+        requiresUpdate = true;
       categoriesList[i] = categoriesList[i].copyWith(
         order: i,
         // Don't update the dateTimeModified, opening the page will cause them all to have a new dateTimeModified... when something was actually not modified
         // dateTimeModified: Value(DateTime.now()),
       );
     }
-    await batch((batch) {
-      batch.insertAll(categories, categoriesList, mode: InsertMode.replace);
-    });
+    if (requiresUpdate) {
+      print("Fixing order for categories");
+      await batch((batch) {
+        batch.insertAll(categories, categoriesList, mode: InsertMode.replace);
+      });
+    }
     return true;
   }
 
@@ -3041,16 +3059,22 @@ class FinanceDatabase extends _$FinanceDatabase {
     List<TransactionWallet> walletsList = await (select(wallets)
           ..orderBy([(t) => OrderingTerm.asc(t.order)]))
         .get();
+    bool requiresUpdate = false;
     for (int i = 0; i < walletsList.length; i++) {
+      if (walletsList[i].order != i && requiresUpdate == false)
+        requiresUpdate = true;
       walletsList[i] = walletsList[i].copyWith(
         order: i,
         // Don't update the dateTimeModified, opening the page will cause them all to have a new dateTimeModified... when something was actually not modified
         // dateTimeModified: Value(DateTime.now()),
       );
     }
-    await batch((batch) {
-      batch.insertAll(wallets, walletsList, mode: InsertMode.replace);
-    });
+    if (requiresUpdate) {
+      print("Fixing order for wallets");
+      await batch((batch) {
+        batch.insertAll(wallets, walletsList, mode: InsertMode.replace);
+      });
+    }
     return true;
   }
 
@@ -3059,17 +3083,24 @@ class FinanceDatabase extends _$FinanceDatabase {
         await (select(associatedTitles)
               ..orderBy([(t) => OrderingTerm.asc(t.order)]))
             .get();
+    bool requiresUpdate = false;
     for (int i = 0; i < associatedTitlesList.length; i++) {
+      if (associatedTitlesList[i].order != i && requiresUpdate == false)
+        requiresUpdate = true;
       associatedTitlesList[i] = associatedTitlesList[i].copyWith(
         order: i,
         // Don't update the dateTimeModified, opening the page will cause them all to have a new dateTimeModified... when something was actually not modified
         // dateTimeModified: Value(DateTime.now()),
       );
     }
-    await batch((batch) {
-      batch.insertAll(associatedTitles, associatedTitlesList,
-          mode: InsertMode.replace);
-    });
+    if (requiresUpdate) {
+      print("Fixing order for titles");
+      await batch((batch) {
+        batch.insertAll(associatedTitles, associatedTitlesList,
+            mode: InsertMode.replace);
+      });
+    }
+
     return true;
   }
 
@@ -6657,6 +6688,29 @@ class FinanceDatabase extends _$FinanceDatabase {
     for (Transaction transaction in wanderingTransactions) {
       await deleteTransaction(transaction.transactionPk,
           updateSharedEntry: true);
+    }
+    if (wanderingTransactions.isNotEmpty) {
+      print(
+          "Deleted wandering transactions (transactions without an existing category)");
+    }
+    return true;
+  }
+
+  // titles not belonging to a category should be deleted
+  Future<bool> deleteWanderingTitles() async {
+    List<TransactionCategory> allCategories = await getAllCategories();
+    List<String> categoryPks =
+        allCategories.map((category) => category.categoryPk).toList();
+    List<TransactionAssociatedTitle> wanderingTitles =
+        await (select(associatedTitles)
+              ..where((t) => t.categoryFk.isNotIn(categoryPks)))
+            .get();
+    for (TransactionAssociatedTitle title in wanderingTitles) {
+      await deleteAssociatedTitle(title.associatedTitlePk, title.order);
+    }
+    if (wanderingTitles.isNotEmpty) {
+      print("Deleted wandering titles (titles without an existing category)");
+      await fixOrderAssociatedTitles();
     }
     return true;
   }
