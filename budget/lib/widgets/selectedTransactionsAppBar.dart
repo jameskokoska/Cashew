@@ -116,20 +116,24 @@ class SelectedTransactionsAppBar extends StatelessWidget {
                                     duration: Duration(milliseconds: 250),
                                     initialCount: (0),
                                     textBuilder: (number) {
-                                      return Wrap(
-                                        alignment: WrapAlignment.spaceBetween,
+                                      return Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 10),
-                                            child: TextFont(
-                                              text:
-                                                  listOfIDs.length.toString() +
-                                                      " " +
-                                                      "selected".tr(),
-                                              fontSize: 17.5,
-                                              textAlign: TextAlign.left,
-                                              maxLines: 1,
+                                          Flexible(
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 10),
+                                              child: TextFont(
+                                                text: listOfIDs.length
+                                                        .toString() +
+                                                    " " +
+                                                    "selected".tr(),
+                                                fontSize: 17.5,
+                                                textAlign: TextAlign.left,
+                                                maxLines: 1,
+                                              ),
                                             ),
                                           ),
                                           Transform.translate(

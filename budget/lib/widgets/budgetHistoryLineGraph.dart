@@ -613,7 +613,7 @@ class _BudgetHistoryLineGraphState extends State<_BudgetHistoryLineGraph> {
                   if (value.toStringAsFixed(2) ==
                       value.round().toStringAsFixed(2)) {
                     return Padding(
-                      padding: const EdgeInsets.only(top: 8.0),
+                      padding: const EdgeInsets.only(top: 7),
                       child: MediaQuery(
                         data: MediaQuery.of(context)
                             .copyWith(textScaleFactor: 1.0),

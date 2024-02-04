@@ -231,74 +231,79 @@ class _SelectChipsState<T> extends State<SelectChips<T>> {
                   ),
                 )
               : SizedBox.shrink(),
-          Row(
-            children: [
-              if (widget.extraWidgetBefore != null &&
-                  widget.extraWidgetBeforeSticky)
-                SizedBox(
-                  height: heightOfScroll,
-                  child: Padding(
-                    padding: EdgeInsets.only(
-                        left: (widget.extraHorizontalPadding ?? 0) + 18),
-                    child: widget.extraWidgetBefore ?? SizedBox.shrink(),
+          ConstrainedBox(
+            constraints: BoxConstraints(
+                maxHeight: widget.wrapped ? double.infinity : heightOfScroll),
+            child: Row(
+              children: [
+                if (widget.extraWidgetBefore != null &&
+                    widget.extraWidgetBeforeSticky)
+                  SizedBox(
+                    height: heightOfScroll,
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                          left: (widget.extraHorizontalPadding ?? 0) + 18),
+                      child: widget.extraWidgetBefore ?? SizedBox.shrink(),
+                    ),
+                  ),
+                Expanded(
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: widget.wrapped
+                        ? Padding(
+                            padding: widget.padding ??
+                                EdgeInsets.symmetric(
+                                    horizontal:
+                                        (widget.extraHorizontalPadding ?? 0) +
+                                            18),
+                            child: Wrap(
+                              runSpacing: 10,
+                              children: [
+                                for (Widget child in children)
+                                  SizedBox(height: heightOfScroll, child: child)
+                              ],
+                            ),
+                          )
+                        : LinearGradientFadedEdges(
+                            enableBottom: false,
+                            enableRight: false,
+                            enableTop: false,
+                            enableLeft: widget.extraWidgetBeforeSticky &&
+                                widget.extraWidgetBefore != null,
+                            child: SizedBox(
+                              height: heightOfScroll,
+                              child: widget.scrollablePositionedList == false
+                                  ? SingleChildScrollView(
+                                      child: Row(
+                                        children: children,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                      ),
+                                      padding: scrollPadding,
+                                      scrollDirection: Axis.horizontal,
+                                    )
+                                  : ScrollablePositionedList.builder(
+                                      itemCount: children.length,
+                                      itemBuilder: (context, index) =>
+                                          children[index],
+                                      itemScrollController:
+                                          itemScrollController,
+                                      scrollOffsetController:
+                                          scrollOffsetController,
+                                      padding: scrollPadding,
+                                      scrollDirection: Axis.horizontal,
+                                      shrinkWrap: true,
+                                      // physics:
+                                      //     isDoneAnimation ? ScrollPhysics() : BouncingScrollPhysics(),
+                                    ),
+                            ),
+                          ),
                   ),
                 ),
-              Expanded(
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: widget.wrapped
-                      ? Padding(
-                          padding: widget.padding ??
-                              EdgeInsets.symmetric(
-                                  horizontal:
-                                      (widget.extraHorizontalPadding ?? 0) +
-                                          18),
-                          child: Wrap(
-                            runSpacing: 10,
-                            children: [
-                              for (Widget child in children)
-                                SizedBox(height: heightOfScroll, child: child)
-                            ],
-                          ),
-                        )
-                      : LinearGradientFadedEdges(
-                          enableBottom: false,
-                          enableRight: false,
-                          enableTop: false,
-                          enableLeft: widget.extraWidgetBeforeSticky &&
-                              widget.extraWidgetBefore != null,
-                          child: SizedBox(
-                            height: heightOfScroll,
-                            child: widget.scrollablePositionedList == false
-                                ? SingleChildScrollView(
-                                    child: Row(
-                                      children: children,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                    ),
-                                    padding: scrollPadding,
-                                    scrollDirection: Axis.horizontal,
-                                  )
-                                : ScrollablePositionedList.builder(
-                                    itemCount: children.length,
-                                    itemBuilder: (context, index) =>
-                                        children[index],
-                                    itemScrollController: itemScrollController,
-                                    scrollOffsetController:
-                                        scrollOffsetController,
-                                    padding: scrollPadding,
-                                    scrollDirection: Axis.horizontal,
-                                    shrinkWrap: true,
-                                    // physics:
-                                    //     isDoneAnimation ? ScrollPhysics() : BouncingScrollPhysics(),
-                                  ),
-                          ),
-                        ),
-                ),
-              ),
-            ],
+              ],
+            ),
           )
         ],
       ),

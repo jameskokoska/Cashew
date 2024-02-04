@@ -260,8 +260,10 @@ class HomePageState extends State<HomePage>
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         useSmallBanner
-                            ? HomePageWelcomeBannerSmall(
-                                showUsername: showUsername,
+                            ? Expanded(
+                                child: HomePageWelcomeBannerSmall(
+                                  showUsername: showUsername,
+                                ),
                               )
                             : SizedBox.shrink(),
                         Tooltip(

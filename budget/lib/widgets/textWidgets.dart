@@ -109,6 +109,7 @@ class TextFont extends StatelessWidget {
                 )
               : richTextSpan != null
                   ? RichText(
+                      textScaleFactor: MediaQuery.of(context).textScaleFactor,
                       textAlign: textAlign,
                       maxLines: maxLines,
                       overflow: overflow ?? TextOverflow.ellipsis,

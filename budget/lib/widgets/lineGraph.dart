@@ -193,15 +193,18 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
               //   showTodayTomorrow: false,
               // );
 
-              return Padding(
-                padding: const EdgeInsets.only(top: 8.0),
-                child: TextFont(
-                  textAlign: TextAlign.center,
-                  fontSize: 13,
-                  text: text,
-                  textColor: dynamicPastel(context, widget.color,
-                          amount: 0.8, inverse: true)
-                      .withOpacity(0.5),
+              return MediaQuery(
+                data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: TextFont(
+                    textAlign: TextAlign.center,
+                    fontSize: 13,
+                    text: text,
+                    textColor: dynamicPastel(context, widget.color,
+                            amount: 0.8, inverse: true)
+                        .withOpacity(0.5),
+                  ),
                 ),
               );
             },

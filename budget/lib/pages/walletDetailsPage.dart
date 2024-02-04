@@ -551,6 +551,7 @@ class _WalletDetailsPageState extends State<WalletDetailsPage>
                         borderRadius: BorderRadius.circular(
                             getPlatform() == PlatformOS.isIOS ? 10 : 15),
                         child: Stack(
+                          alignment: Alignment.center,
                           children: [
                             IgnorePointer(
                               ignoring: animationProgress > 0.5,
