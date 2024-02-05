@@ -194,6 +194,7 @@ class _ObjectivePageContentState extends State<_ObjectivePageContent> {
                 showButtons: enableDoubleColumn(context),
                 keepOutFirst: true,
                 forceKeepOutFirst: true,
+                colorScheme: objectiveColorScheme,
                 items: [
                   DropdownItemMenu(
                     id: "edit-goals",

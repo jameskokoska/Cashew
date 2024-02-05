@@ -67,8 +67,8 @@ class SelectedTransactionsAppBar extends StatelessWidget {
             child: Column(
               children: [
                 Container(
-                  padding:
-                      EdgeInsets.only(top: MediaQuery.paddingOf(context).top),
+                  padding: EdgeInsets.only(
+                      top: MediaQuery.paddingOf(context).top + 2),
                   decoration: BoxDecoration(
                     // borderRadius: BorderRadius.only(
                     //   bottomLeft: Radius.circular(

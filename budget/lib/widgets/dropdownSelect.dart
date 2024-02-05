@@ -191,8 +191,20 @@ class CustomPopupMenuButton extends StatelessWidget {
               scale: items[0].iconScale ?? 1,
               child: Icon(
                 menuItem.icon,
+                color: colorScheme == null
+                    ? null
+                    : dynamicPastel(
+                        context,
+                        colorScheme?.onSecondaryContainer ?? Colors.red,
+                      ),
               ),
             ),
+            color: colorScheme == null
+                ? null
+                : dynamicPastel(
+                    context,
+                    colorScheme?.onSecondaryContainer ?? Colors.red,
+                  ),
           ),
         ],
       ),
