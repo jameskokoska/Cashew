@@ -1064,14 +1064,16 @@ class WatchTotalAndAmountOfObjective extends StatelessWidget {
                   ((snapshot.data ?? 0) - (snapshotAmount.data ?? 0)) * -1;
               double percentageTowardsGoal =
                   objectiveAmount == 0 ? 0 : totalAmount / objectiveAmount;
-              if (percentageTowardsGoal == -0) percentageTowardsGoal = 0;
+              percentageTowardsGoal = absoluteZero(percentageTowardsGoal);
               if (getIsDifferenceOnlyLoan(objective)) {
                 int numberDecimals = Provider.of<AllWallets>(context)
                         .indexedByPk[appStateSettings["selectedWalletPk"]]
                         ?.decimals ??
                     2;
-                if (objectiveAmount.toStringAsFixed(numberDecimals) ==
-                        totalAmount.toStringAsFixed(numberDecimals) &&
+                if ((absoluteZero(objectiveAmount)
+                            .toStringAsFixed(numberDecimals) ==
+                        absoluteZero(totalAmount)
+                            .toStringAsFixed(numberDecimals)) &&
                     snapshot.hasData &&
                     snapshotAmount.hasData)
                   percentageTowardsGoal = 1;
@@ -1091,7 +1093,7 @@ class WatchTotalAndAmountOfObjective extends StatelessWidget {
           if (objective.income == false) totalAmount = totalAmount * -1;
           double percentageTowardsGoal =
               objectiveAmount == 0 ? 0 : totalAmount / objectiveAmount;
-          if (percentageTowardsGoal == -0) percentageTowardsGoal = 0;
+          percentageTowardsGoal = absoluteZero(percentageTowardsGoal);
           return builder(objectiveAmount, totalAmount, percentageTowardsGoal);
         }
       },

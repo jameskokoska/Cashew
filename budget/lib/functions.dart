@@ -36,8 +36,9 @@ extension CapExtension on String {
 
 String convertToPercent(double amount,
     {double? finalNumber, int? numberDecimals, bool useLessThanZero = false}) {
-  if (amount == -0) amount = 0;
-  if (finalNumber == -0) finalNumber = 0;
+  amount = absoluteZero(amount);
+  finalNumber = absoluteZeroNull(finalNumber);
+
   int numberDecimalsGet = numberDecimals != null
       ? numberDecimals
       : finalNumber == null
@@ -136,9 +137,8 @@ String convertToMoney(
           : numberDecimals
       : numberDecimals;
 
-  if (amount == -0.0) {
-    amount = amount.abs();
-  }
+  amount = absoluteZero(amount);
+
   if (amount == double.infinity || amount == double.negativeInfinity) {
     return "Infinity";
   }
@@ -1182,4 +1182,15 @@ Future<bool> setHighRefreshRate() async {
     print("Error setting high refresh rate: " + e.toString());
   }
   return false;
+}
+
+double absoluteZero(double number) {
+  if (number == -0) return number.abs();
+  return number;
+}
+
+double? absoluteZeroNull(double? number) {
+  if (number == null) return null;
+  if (number == -0) return number.abs();
+  return number;
 }
