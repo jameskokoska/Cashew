@@ -64,6 +64,7 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
     Future.delayed(Duration.zero, () {
       FocusScopeNode currentFocus = FocusScope.of(context);
       currentFocus.unfocus();
+      _searchFocusNode.requestFocus();
     });
     DateTimeRange initialDateTimeRange = DateTimeRange(
       start: DateTime(1900),

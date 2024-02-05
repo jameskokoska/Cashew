@@ -55,6 +55,12 @@ class _InitializeBiometricsState extends State<InitializeBiometrics> {
       setState(() {
         authenticated = result;
       });
+      if (result == null) {
+        _biometricErrorPopup();
+        setState(() {
+          authenticated = true;
+        });
+      }
     });
   }
 
@@ -70,12 +76,8 @@ class _InitializeBiometricsState extends State<InitializeBiometrics> {
         icon: appStateSettings["outlinedIcons"]
             ? Icons.warning_outlined
             : Icons.warning_rounded,
-        title: getPlatform() == PlatformOS.isIOS
-            ? "biometrics-disabled".tr()
-            : "biometrics-error".tr(),
-        description: getPlatform() == PlatformOS.isIOS
-            ? "biometrics-disabled-description".tr()
-            : "biometrics-error-description".tr(),
+        title: "biometrics-error".tr(),
+        description: "biometrics-error-description".tr(),
         onSubmitLabel: "ok".tr(),
         onSubmit: () {
           updateSettings("requireAuth", false, updateGlobalState: false);

@@ -48,6 +48,8 @@ String getChangelogString() {
     When restoring a backup, sync operations are cancelled
     If biometrics unavailable on a device, they are disabled
     Optimized fix out of order elements when data page opened
+    Search requests focus automatically
+    Keyboard focus resumes on app refocus from recent apps
     < 5.1.9
     Reorder theme mode settings, system is always first
     If multiple accounts with different currencies, can enable currency total summary in accounts list homepage widget
