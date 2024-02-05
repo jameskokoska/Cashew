@@ -1066,7 +1066,12 @@ class WatchTotalAndAmountOfObjective extends StatelessWidget {
                   objectiveAmount == 0 ? 0 : totalAmount / objectiveAmount;
               if (percentageTowardsGoal == -0) percentageTowardsGoal = 0;
               if (getIsDifferenceOnlyLoan(objective)) {
-                if (objectiveAmount == totalAmount &&
+                int numberDecimals = Provider.of<AllWallets>(context)
+                        .indexedByPk[appStateSettings["selectedWalletPk"]]
+                        ?.decimals ??
+                    2;
+                if (objectiveAmount.toStringAsFixed(numberDecimals) ==
+                        totalAmount.toStringAsFixed(numberDecimals) &&
                     snapshot.hasData &&
                     snapshotAmount.hasData)
                   percentageTowardsGoal = 1;
