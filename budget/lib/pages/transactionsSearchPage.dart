@@ -185,6 +185,7 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
               // Always unfocus, otherwise rerenders occur!
               //if (!currentFocus.hasPrimaryFocus) {
               currentFocus.unfocus();
+              _searchFocusNode.unfocus();
               //}
             },
             child: PageFramework(

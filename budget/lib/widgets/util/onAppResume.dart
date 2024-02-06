@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
 
+AppLifecycleState appLifecycleState = AppLifecycleState.resumed;
+
 class OnAppResume extends StatefulWidget {
   const OnAppResume({
     super.key,
     required this.child,
     required this.onAppResume,
     this.onAppPaused,
+    this.updateGlobalAppLifecycleState = false,
   });
 
   final Widget child;
   final VoidCallback onAppResume;
   final VoidCallback? onAppPaused;
+  final bool updateGlobalAppLifecycleState;
 
   @override
   State<OnAppResume> createState() => _OnAppResumeState();
@@ -50,6 +54,7 @@ class _OnAppResumeState extends State<OnAppResume> with WidgetsBindingObserver {
     }
 
     _lastState = state;
+    if (widget.updateGlobalAppLifecycleState) appLifecycleState = state;
   }
 
   @override

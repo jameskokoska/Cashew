@@ -184,6 +184,7 @@ class App extends StatelessWidget {
         }
 
         Widget mainWidget = OnAppResume(
+          updateGlobalAppLifecycleState: true,
           onAppResume: () async {
             await setHighRefreshRate();
           },

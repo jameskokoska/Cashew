@@ -19,14 +19,21 @@ class ResumeTextFieldFocus extends StatelessWidget {
     if (getPlatform() == PlatformOS.isAndroid) {
       return Focus(
         onFocusChange: (value) {
-          _currentTextInputFocus = FocusScope.of(context).focusedChild;
+          if (value == false &&
+              appLifecycleState == AppLifecycleState.resumed) {
+            Future.delayed(Duration(milliseconds: 50), () {
+              _currentTextInputFocus = FocusScope.of(context).focusedChild;
+            });
+          } else if (appLifecycleState == AppLifecycleState.resumed) {
+            _currentTextInputFocus = FocusScope.of(context).focusedChild;
+          }
         },
         child: OnAppResume(
-          onAppPaused: () {
-            FocusScope.of(context).unfocus();
-          },
           onAppResume: () {
-            _currentTextInputFocus?.requestFocus();
+            _currentTextInputFocus?.unfocus();
+            Future.delayed(Duration(milliseconds: 5), () {
+              _currentTextInputFocus?.requestFocus();
+            });
           },
           child: child,
         ),
