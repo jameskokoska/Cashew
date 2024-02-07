@@ -10,18 +10,21 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:local_auth/local_auth.dart';
 
-// Returns null if there was an error or if biometrics are unavailable
 Future<bool?> checkBiometrics({
   bool checkAlways = false,
 }) async {
+  final bool requireAuth =
+      checkAlways || appStateSettings["requireAuth"] == true;
   try {
     if (kIsWeb) return true;
     final LocalAuthentication auth = LocalAuthentication();
-    final bool requireAuth = checkAlways || appStateSettings["requireAuth"];
     biometricsAvailable = kIsWeb == false && await auth.canCheckBiometrics ||
         await auth.isDeviceSupported();
     if (biometricsAvailable == false) {
-      return null;
+      if (requireAuth)
+        return null;
+      else
+        return false;
     } else if (requireAuth == true && biometricsAvailable == true) {
       await auth.stopAuthentication();
       return await auth.authenticate(
@@ -33,7 +36,10 @@ Future<bool?> checkBiometrics({
     }
   } catch (e) {
     print("Error with biometrics: " + e.toString());
-    return null;
+    if (requireAuth)
+      return null;
+    else
+      return false;
   }
 }
 
