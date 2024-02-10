@@ -25,6 +25,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../addButton.dart';
+
 class HomePageWalletSwitcher extends StatelessWidget {
   const HomePageWalletSwitcher({super.key});
 
@@ -84,7 +86,8 @@ class HomePageWalletSwitcher extends StatelessWidget {
                                   useCustomController: true,
                                 );
                               },
-                              // icon: Icons.format_list_bulleted_add,
+                              labelUnder: "account".tr(),
+                              icon: Icons.format_list_bulleted_add,
                             ),
                           ),
                         ),
@@ -200,7 +203,7 @@ class EditHomePagePinnedWalletsPopup extends StatelessWidget {
                 onTap: () {},
                 height: 50,
                 width: null,
-                padding: const EdgeInsets.only(
+                margin: const EdgeInsets.only(
                   left: 13,
                   right: 13,
                   bottom: 13,

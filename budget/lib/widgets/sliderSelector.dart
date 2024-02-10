@@ -9,6 +9,7 @@ class SliderSelector extends StatefulWidget {
     this.divisions,
     required this.min,
     required this.max,
+    this.displayFilter,
   });
 
   final Function(double) onChange;
@@ -17,6 +18,7 @@ class SliderSelector extends StatefulWidget {
   final int? divisions;
   final double min;
   final double max;
+  final String Function(double)? displayFilter;
 
   @override
   State<SliderSelector> createState() => _SliderSelectorState();
@@ -31,7 +33,9 @@ class _SliderSelectorState extends State<SliderSelector> {
       max: widget.max,
       value: _currentSliderValue,
       divisions: widget.divisions,
-      label: _currentSliderValue.toStringAsFixed(2).toString(),
+      label: widget.displayFilter != null
+          ? widget.displayFilter!(_currentSliderValue)
+          : _currentSliderValue.toStringAsFixed(2).toString(),
       onChanged: (double value) {
         widget.onChange(value);
         setState(() {

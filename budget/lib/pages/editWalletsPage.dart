@@ -21,6 +21,7 @@ import 'package:budget/widgets/settingsContainers.dart';
 import 'package:budget/widgets/textInput.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/walletEntry.dart';
+import 'package:drift/drift.dart' show Value;
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart' hide SliverReorderableList;
 import 'package:flutter/services.dart' hide TextInput;
@@ -408,20 +409,29 @@ void mergeWalletPopup(
           walletOriginal.walletPk,
           selectedWalletResult.walletPk,
         );
-        try {
+        if (walletOriginal.walletPk == "0") {
+          // If the source if the main wallet (we cannot delete it)
+          // Move transactions the other way and update parameters if moving to main wallet
+
+          // Update the primary wallet to match source
+          await database.createOrUpdateWallet(
+              selectedWalletResult.copyWith(walletPk: walletOriginal.walletPk));
+          // Force move transactions over
+          await database.transferTransactionsOnly(
+              selectedWalletResult.walletPk, walletOriginal.walletPk);
+          // Delete the duplicate
+          await database.deleteWallet(
+              selectedWalletResult.walletPk, selectedWalletResult.order);
+        } else {
+          await database.moveWalletTransactions(
+            Provider.of<AllWallets>(context, listen: false),
+            walletOriginal.walletPk,
+            selectedWalletResult.walletPk,
+          );
           await database.deleteWallet(
               walletOriginal.walletPk, walletOriginal.order);
-        } catch (e) {
-          openSnackbar(
-            SnackbarMessage(
-              title: "cannot-remove".tr(),
-              description: "cannot-remove-default-account".tr(),
-              icon: appStateSettings["outlinedIcons"]
-                  ? Icons.warning_outlined
-                  : Icons.warning_rounded,
-            ),
-          );
         }
+
         openSnackbar(
           SnackbarMessage(
             title: "merged-account".tr(),

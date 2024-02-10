@@ -95,6 +95,7 @@ dependencies:
   flutter_displaymode: ^0.6.0
   notification_listener_service: ^0.3.3
   home_widget: ^0.4.0
+  material_symbols_icons: ^4.2719.1
 
 # flutter pub run flutter_launcher_icons:main
 flutter_icons:

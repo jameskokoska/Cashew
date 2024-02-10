@@ -31,6 +31,8 @@ import 'package:html/parser.dart';
 import 'package:notification_listener_service/notification_event.dart';
 import 'package:notification_listener_service/notification_listener_service.dart';
 
+import 'addButton.dart';
+
 StreamSubscription<ServiceNotificationEvent>? notificationListenerSubscription;
 List<String> recentCapturedNotifications = [];
 
@@ -250,7 +252,7 @@ class _AutoTransactionsPageNotificationsState
               children: [
                 Expanded(
                   child: AddButton(
-                    padding: EdgeInsets.only(
+                    margin: EdgeInsets.only(
                       left: 15,
                       right: 15,
                       bottom: 9,
@@ -771,7 +773,7 @@ class _GmailApiScreenState extends State<GmailApiScreen> {
                 children: [
                   Expanded(
                     child: AddButton(
-                      padding: EdgeInsets.only(
+                      margin: EdgeInsets.only(
                         left: 15,
                         right: 15,
                         bottom: 9,

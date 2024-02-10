@@ -20,6 +20,7 @@ import 'package:budget/colors.dart';
 import 'package:provider/provider.dart';
 import 'package:budget/widgets/framework/popupFramework.dart';
 
+import '../pages/addButton.dart';
 import 'sliverStickyLabelDivider.dart';
 import 'tappableTextEntry.dart';
 
@@ -137,7 +138,7 @@ class _CategoryLimitsState extends State<CategoryLimits> {
                           ),
                           child: AddButton(
                             onTap: () {},
-                            padding: EdgeInsets.zero,
+                            margin: EdgeInsets.zero,
                             openPage: AddCategoryPage(
                               routesToPopAfterDelete:
                                   RoutesToPopAfterDelete.None,
@@ -408,7 +409,7 @@ class CategoryLimitEntry extends StatelessWidget {
               padding: EdgeInsets.only(top: 5, bottom: 7),
               child: AddButton(
                 onTap: () {},
-                padding: EdgeInsets.symmetric(horizontal: 7),
+                margin: EdgeInsets.symmetric(horizontal: 7),
                 openPage: AddCategoryPage(
                   routesToPopAfterDelete: RoutesToPopAfterDelete.None,
                   mainCategoryPkWhenSubCategory: category.categoryPk,

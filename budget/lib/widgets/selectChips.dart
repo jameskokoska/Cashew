@@ -11,6 +11,7 @@ import 'dart:async';
 import 'package:budget/colors.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
+import '../pages/addButton.dart';
 import 'util/widgetSize.dart';
 
 class SelectChips<T> extends StatefulWidget {
@@ -328,7 +329,7 @@ class SelectChipsAddButtonExtraWidget extends StatelessWidget {
       icon: iconData,
       onTap: onTap ?? () {},
       width: 40,
-      padding: EdgeInsets.symmetric(horizontal: 5, vertical: 0),
+      margin: EdgeInsets.symmetric(horizontal: 5, vertical: 0),
       openPage: openPage,
       borderRadius: 8,
     );

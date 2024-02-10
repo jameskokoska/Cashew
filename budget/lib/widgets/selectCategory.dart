@@ -17,6 +17,8 @@ import 'package:flutter/material.dart'
 import 'package:flutter/services.dart';
 import 'package:reorderable_grid_view/reorderable_grid_view.dart';
 
+import '../pages/addButton.dart';
+
 class SelectCategory extends StatefulWidget {
   SelectCategory({
     Key? key,
@@ -261,7 +263,7 @@ class _SelectCategoryState extends State<SelectCategory> {
                               ),
                               child: AddButton(
                                 onTap: () {},
-                                padding: EdgeInsets.symmetric(horizontal: 7),
+                                margin: EdgeInsets.symmetric(horizontal: 7),
                                 openPage: AddCategoryPage(
                                     routesToPopAfterDelete:
                                         RoutesToPopAfterDelete.None,

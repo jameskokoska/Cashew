@@ -1012,6 +1012,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.5.0"
+  material_symbols_icons:
+    dependency: "direct main"
+    description:
+      name: material_symbols_icons
+      sha256: fee941060cb717c74d370dbcb7a735f224d1e93d705dc5b552ee40e0697d5691
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.2719.1"
   math_expressions:
     dependency: "direct main"
     description:

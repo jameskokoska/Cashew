@@ -30,6 +30,8 @@ import 'package:flutter/material.dart'
     hide SliverReorderableList, ReorderableDelayedDragStartListener;
 import 'package:provider/provider.dart';
 
+import 'addButton.dart';
+
 bool getIsDifferenceOnlyLoan(Objective objective) {
   return objective.amount == 0 &&
       objective.type == ObjectiveType.loan &&
@@ -251,8 +253,8 @@ class ObjectiveList extends StatelessWidget {
                           objective: objective,
                           forcedTotalAmount: showDemoObjectives
                               ? (objective.income
-                                      ? randomInt[index].toDouble()
-                                      : randomInt[index].toDouble() * -1) *
+                                      ? randomInt[index].toDouble() * -1
+                                      : randomInt[index].toDouble()) *
                                   15
                               : null,
                           forcedNumberTransactions:
@@ -283,8 +285,8 @@ class ObjectiveList extends StatelessWidget {
                             objective: objective,
                             forcedTotalAmount: showDemoObjectives
                                 ? (objective.income
-                                        ? randomInt[index].toDouble()
-                                        : randomInt[index].toDouble() * -1) *
+                                        ? randomInt[index].toDouble() * -1
+                                        : randomInt[index].toDouble()) *
                                     15
                                 : null,
                             forcedNumberTransactions:
@@ -398,6 +400,11 @@ class ObjectiveContainer extends StatelessWidget {
     Widget child = WatchTotalAndAmountOfObjective(
       objective: objective,
       builder: (objectiveAmount, totalAmount, percentageTowardsGoal) {
+        if (forcedTotalAmount != null) {
+          totalAmount = forcedTotalAmount ?? totalAmount;
+          percentageTowardsGoal = (forcedTotalAmount ?? 0) / objectiveAmount;
+        }
+
         return Container(
           decoration: BoxDecoration(
             boxShadow: getPlatform() == PlatformOS.isIOS &&

@@ -21,6 +21,8 @@ import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/framework/popupFramework.dart';
 import 'package:budget/struct/randomConstants.dart';
 
+import 'addButton.dart';
+
 class SharedBudgetSettings extends StatefulWidget {
   SharedBudgetSettings({
     Key? key,
@@ -198,7 +200,7 @@ class _SharedBudgetSettingsState extends State<SharedBudgetSettings> {
                     children: [
                       Expanded(
                         child: AddButton(
-                            padding: EdgeInsets.only(
+                            margin: EdgeInsets.only(
                               left: 15,
                               right: 15,
                               bottom: 9,

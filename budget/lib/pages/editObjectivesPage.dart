@@ -33,6 +33,8 @@ import 'package:budget/widgets/editRowEntry.dart';
 import 'package:budget/modified/reorderable_list.dart';
 import 'package:provider/provider.dart';
 
+import 'addButton.dart';
+
 class EditObjectivesPage extends StatefulWidget {
   EditObjectivesPage({
     required this.objectiveType,
@@ -489,7 +491,7 @@ Future<dynamic> selectObjectivePopup(
               children: [
                 Expanded(
                   child: AddButton(
-                    padding: EdgeInsets.only(top: 7),
+                    margin: EdgeInsets.only(top: 7),
                     onTap: () {
                       pushRoute(
                         context,

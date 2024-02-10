@@ -4705,11 +4705,11 @@ class FinanceDatabase extends _$FinanceDatabase {
     List<Transaction>? transactionsToMove,
   }) async {
     List<Transaction> transactionsForMove = transactionsToMove ??
-        await (select(transactions)
+        (await (select(transactions)
               ..where((tbl) {
                 return tbl.walletFk.equals(walletPk!);
               }))
-            .get();
+            .get());
     List<Transaction> allTransactionsToUpdate = [];
     for (Transaction transaction in transactionsForMove) {
       allTransactionsToUpdate.add(transaction.copyWith(
@@ -4719,6 +4719,24 @@ class FinanceDatabase extends _$FinanceDatabase {
                     allWallets.indexedByPk[toWalletPk]?.currency ?? "usd") ??
                 1) *
             transaction.amount,
+        dateTimeModified: Value(DateTime.now()),
+        walletFk: toWalletPk,
+      ));
+    }
+    await updateBatchTransactionsOnly(allTransactionsToUpdate);
+    return true;
+  }
+
+  Future<bool> transferTransactionsOnly(
+      String walletPk, String toWalletPk) async {
+    List<Transaction> transactionsForMove = (await (select(transactions)
+          ..where((tbl) {
+            return tbl.walletFk.equals(walletPk);
+          }))
+        .get());
+    List<Transaction> allTransactionsToUpdate = [];
+    for (Transaction transaction in transactionsForMove) {
+      allTransactionsToUpdate.add(transaction.copyWith(
         dateTimeModified: Value(DateTime.now()),
         walletFk: toWalletPk,
       ));

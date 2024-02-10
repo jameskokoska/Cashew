@@ -20,6 +20,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 import '../../widgets/util/widgetSize.dart';
+import '../addButton.dart';
 
 class HomePageBudgets extends StatefulWidget {
   const HomePageBudgets({super.key});
@@ -38,7 +39,7 @@ class _HomePageBudgetsState extends State<HomePageBudgets> {
         stream: database.getAllPinnedBudgets().$1,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            if (snapshot.data!.length == 0) {
+            if (snapshot.data?.length == 0) {
               return AddButton(
                 onTap: () {
                   openBottomSheet(
@@ -51,8 +52,9 @@ class _HomePageBudgetsState extends State<HomePageBudgets> {
                 },
                 height: 160,
                 width: null,
-                padding: const EdgeInsets.only(left: 13, right: 13, bottom: 13),
-                // icon: Icons.format_list_bulleted_add,
+                margin: const EdgeInsets.only(left: 13, right: 13, bottom: 13),
+                labelUnder: "budget".tr(),
+                icon: Icons.format_list_bulleted_add,
               );
             }
             // if (snapshot.data!.length == 1) {
@@ -89,8 +91,9 @@ class _HomePageBudgetsState extends State<HomePageBudgets> {
                   },
                   height: null,
                   width: null,
-                  padding: EdgeInsets.all(0),
-                  // icon: Icons.format_list_bulleted_add,
+                  margin: EdgeInsets.all(0),
+                  labelUnder: "budget".tr(),
+                  icon: Icons.format_list_bulleted_add,
                 ),
               ),
             ];
@@ -265,7 +268,7 @@ class EditHomePagePinnedBudgetsPopup extends StatelessWidget {
                     onTap: () {},
                     height: 50,
                     width: null,
-                    padding: const EdgeInsets.only(
+                    margin: const EdgeInsets.only(
                       left: 13,
                       right: 13,
                       bottom: 13,

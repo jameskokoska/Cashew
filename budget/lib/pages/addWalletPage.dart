@@ -13,6 +13,7 @@ import 'package:budget/widgets/countNumber.dart';
 import 'package:budget/widgets/dropdownSelect.dart';
 import 'package:budget/widgets/globalSnackbar.dart';
 import 'package:budget/widgets/iconButtonScaled.dart';
+import 'package:budget/widgets/moreIcons.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
@@ -40,6 +41,7 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:budget/colors.dart';
 import 'package:provider/provider.dart';
+import 'package:material_symbols_icons/material_symbols_icons.dart';
 
 import '../widgets/sliverStickyLabelDivider.dart';
 import 'exchangeRatesPage.dart';
@@ -230,6 +232,7 @@ class _AddWalletPageState extends State<AddWalletPage> {
       context,
       PopupFramework(
         title: "decimal-precision".tr(),
+        subtitle: "decimal-precision-description".tr(),
         child: SelectAmountValue(
           amountPassed: selectedDecimals.toString(),
           setSelectedAmount: (amount, _) {
@@ -565,39 +568,44 @@ class _AddWalletPageState extends State<AddWalletPage> {
                               ),
                             ),
                           ),
-                          Expanded(
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 4),
-                              child: SettingsContainer(
-                                isOutlinedColumn: true,
-                                isOutlined: true,
-                                onTap: () async {
-                                  if (widget.wallet != null) {
-                                    // Save any changes made to the wallet
-                                    await addWallet(popContext: false);
-                                    TransactionWallet wallet =
-                                        await createTransactionWallet();
-                                    openBottomSheet(
-                                      context,
-                                      fullSnap: true,
-                                      TransferBalancePopup(
-                                        wallet: wallet,
-                                        allowEditWallet: false,
-                                      ),
-                                    );
-                                  }
-                                },
-                                title: "transfer-balance".tr(),
-                                icon: appStateSettings["outlinedIcons"]
-                                    ? Icons.compare_arrows_outlined
-                                    : Icons.compare_arrows_rounded,
-                                iconScale: 1,
-                                isWideOutlined: true,
-                                horizontalPadding: 5,
+                          if (Provider.of<AllWallets>(context)
+                                  .indexedByPk
+                                  .keys
+                                  .length >
+                              1)
+                            Expanded(
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 4),
+                                child: SettingsContainer(
+                                  isOutlinedColumn: true,
+                                  isOutlined: true,
+                                  onTap: () async {
+                                    if (widget.wallet != null) {
+                                      // Save any changes made to the wallet
+                                      await addWallet(popContext: false);
+                                      TransactionWallet wallet =
+                                          await createTransactionWallet();
+                                      openBottomSheet(
+                                        context,
+                                        fullSnap: true,
+                                        TransferBalancePopup(
+                                          wallet: wallet,
+                                          allowEditWallet: false,
+                                        ),
+                                      );
+                                    }
+                                  },
+                                  title: "transfer-balance".tr(),
+                                  icon: appStateSettings["outlinedIcons"]
+                                      ? Icons.compare_arrows_outlined
+                                      : Icons.compare_arrows_rounded,
+                                  iconScale: 1,
+                                  isWideOutlined: true,
+                                  horizontalPadding: 5,
+                                ),
                               ),
                             ),
-                          ),
                           Expanded(
                             child: Padding(
                               padding:
@@ -610,8 +618,8 @@ class _AddWalletPageState extends State<AddWalletPage> {
                                 },
                                 title: "decimal-precision".tr(),
                                 icon: appStateSettings["outlinedIcons"]
-                                    ? Icons.more_horiz_outlined
-                                    : Icons.more_horiz_rounded,
+                                    ? Symbols.decimal_increase_sharp
+                                    : Symbols.decimal_increase_rounded,
                                 iconScale: 1,
                                 isWideOutlined: true,
                                 horizontalPadding: 5,
@@ -693,11 +701,11 @@ class _AddWalletPageState extends State<AddWalletPage> {
                     },
                     title: "decimal-precision".tr(),
                     icon: appStateSettings["outlinedIcons"]
-                        ? Icons.more_horiz_outlined
-                        : Icons.more_horiz_rounded,
+                        ? Symbols.decimal_increase_sharp
+                        : Symbols.decimal_increase_rounded,
                     iconScale: 1,
                     isWideOutlined: true,
-                    horizontalPadding: 5,
+                    horizontalPadding: 15,
                   ),
                 ),
               ),
@@ -1479,6 +1487,19 @@ class _TransferBalancePopupState extends State<TransferBalancePopup> {
                           walletTo = result;
                         });
                       }
+                      return;
+                    }
+
+                    if (walletFrom.walletPk == walletTo?.walletPk) {
+                      openSnackbar(
+                        SnackbarMessage(
+                          icon: appStateSettings["outlinedIcons"]
+                              ? Icons.warning_outlined
+                              : Icons.warning_rounded,
+                          title: "same-accounts".tr(),
+                          description: "select-2-different-accounts".tr(),
+                        ),
+                      );
                       return;
                     }
 

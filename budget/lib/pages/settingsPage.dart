@@ -746,6 +746,9 @@ class WidgetSettings extends StatelessWidget {
                       updateGlobalState: false);
                   updateWidgetColorsAndText(context);
                 },
+                displayFilter: (double number) {
+                  return convertToPercent(number * 100, numberDecimals: 0);
+                },
               ),
             ),
           ),

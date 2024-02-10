@@ -39,6 +39,7 @@ import 'package:budget/colors.dart';
 import 'package:flutter/services.dart' hide TextInput;
 
 import '../widgets/extraInfoBoxes.dart';
+import 'addButton.dart';
 
 class AddCategoryPage extends StatefulWidget {
   AddCategoryPage({
@@ -893,7 +894,7 @@ class _AddCategoryPageState extends State<AddCategoryPage>
                                   mainCategoryPkWhenSubCategory:
                                       widget.category!.categoryPk,
                                 ),
-                                padding: EdgeInsets.only(
+                                margin: EdgeInsets.only(
                                   left: 13,
                                   right: 13,
                                   bottom: 6,
@@ -940,7 +941,7 @@ class _AddCategoryPageState extends State<AddCategoryPage>
                           children: [
                             Expanded(
                               child: AddButton(
-                                  padding: EdgeInsets.only(
+                                  margin: EdgeInsets.only(
                                     left: 15,
                                     right: 15,
                                     bottom: 9,
@@ -1144,92 +1145,6 @@ class AssociatedTitleContainer extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-}
-
-class AddButton extends StatelessWidget {
-  const AddButton({
-    Key? key,
-    required this.onTap,
-    this.padding = EdgeInsets.zero,
-    this.width = 110,
-    this.height = 52,
-    this.openPage,
-    this.borderRadius = 15,
-    this.icon,
-    this.afterOpenPage,
-    this.onOpenPage,
-  }) : super(key: key);
-
-  final VoidCallback onTap;
-  final EdgeInsets padding;
-  final double? width;
-  final double? height;
-  final double borderRadius;
-  final Widget? openPage;
-  final IconData? icon;
-  final Function? afterOpenPage;
-  final Function? onOpenPage;
-
-  @override
-  Widget build(BuildContext context) {
-    Color color = appStateSettings["materialYou"]
-        ? Theme.of(context).colorScheme.secondary.withOpacity(0.3)
-        : getColor(context, "lightDarkAccentHeavy");
-    Widget getButton(onTap) {
-      return Tappable(
-        color: Colors.transparent,
-        borderRadius: borderRadius,
-        child: Container(
-          decoration: BoxDecoration(
-            border: Border.all(
-              width: 1.5,
-              color: color,
-            ),
-            borderRadius: BorderRadius.circular(borderRadius),
-          ),
-          width: width,
-          height: height,
-          child: Center(
-            child: Icon(
-              icon ??
-                  (appStateSettings["outlinedIcons"]
-                      ? Icons.add_outlined
-                      : Icons.add_rounded),
-              size: 22,
-              color: color,
-            ),
-          ),
-        ),
-        onTap: () {
-          onTap();
-        },
-      );
-    }
-
-    if (openPage != null) {
-      return Padding(
-        padding: padding,
-        child: OpenContainerNavigation(
-          openPage: openPage!,
-          button: (openPage) {
-            return getButton(openPage);
-          },
-          borderRadius: borderRadius,
-          onClosed: () {
-            if (afterOpenPage != null) afterOpenPage!();
-          },
-          onOpen: () {
-            if (onOpenPage != null) onOpenPage!();
-          },
-        ),
-      );
-    }
-    Widget button = getButton(onTap);
-    return Padding(
-      padding: padding,
-      child: button,
     );
   }
 }

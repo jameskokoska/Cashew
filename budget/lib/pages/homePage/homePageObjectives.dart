@@ -27,6 +27,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../addButton.dart';
+
 class HomePageObjectives extends StatefulWidget {
   const HomePageObjectives({super.key, required this.objectiveType});
   final ObjectiveType objectiveType;
@@ -51,7 +53,7 @@ class _HomePageObjectivesState extends State<HomePageObjectives> {
                 .$1,
             builder: (context, snapshot) {
               if (snapshot.hasData && snapshot.data != null) {
-                if (snapshot.data!.length == 0) {
+                if (snapshot.data?.length == 0) {
                   return AddButton(
                     onTap: () {
                       openBottomSheet(
@@ -65,9 +67,12 @@ class _HomePageObjectivesState extends State<HomePageObjectives> {
                     },
                     height: 160,
                     width: null,
-                    padding:
+                    labelUnder: widget.objectiveType == ObjectiveType.goal
+                        ? "goal".tr()
+                        : "long-term-loan".tr(),
+                    margin:
                         const EdgeInsets.only(left: 13, right: 13, bottom: 13),
-                    // icon: Icons.format_list_bulleted_add,
+                    icon: Icons.format_list_bulleted_add,
                   );
                 }
                 // if (snapshot.data!.length == 1) {
@@ -113,8 +118,11 @@ class _HomePageObjectivesState extends State<HomePageObjectives> {
                       },
                       height: null,
                       width: null,
-                      padding: EdgeInsets.all(0),
-                      // icon: Icons.format_list_bulleted_add,
+                      margin: EdgeInsets.all(0),
+                      labelUnder: widget.objectiveType == ObjectiveType.goal
+                          ? "goal".tr()
+                          : "loan".tr(),
+                      icon: Icons.format_list_bulleted_add,
                     ),
                   ),
                 ];
@@ -373,7 +381,7 @@ class EditHomePagePinnedGoalsPopup extends StatelessWidget {
                   onTap: () {},
                   height: 50,
                   width: null,
-                  padding: const EdgeInsets.only(
+                  margin: const EdgeInsets.only(
                     left: 13,
                     right: 13,
                     bottom: 13,
