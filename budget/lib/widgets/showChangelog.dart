@@ -26,6 +26,20 @@ import 'listItem.dart';
 
 String getChangelogString() {
   return """
+    < 5.2.1
+    Transfer transactions always ordered with transfer out (negative amount) listed first
+    Removed last word title autocomplete predictions
+    Capitalization inherits from auto completed titles
+    Auto refocus only if focus was not lost
+    Changed homepage add button icons and added labels
+    Added percentage label to widget opacity slider (A)
+    Decimal precision icon change and description
+    Prevent transfers between same account
+    Transfer button hidden if only one account
+    When tapping support, Cashew Pro options highlight
+    Fixed demo goals amount
+    Enabled merging an account from primary account, primary account is changed instead of deleted
+    Biometric unavailable popup only shows if lock was once enabled
     < 5.2.0
     If rounded to 0% but not exactly 0%, < 1% is used instead
     Improved help text in view calendar
