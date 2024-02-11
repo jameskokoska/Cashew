@@ -264,7 +264,6 @@
   "system": "Sistem",
   "light": "Terang",
   "dark": "Gelap",
-  "decimal-precision": "Ketepatan desimal",
   "view-all-currencies": "Lihat semua mata uang",
   "no-currencies-found": "Tidak ada mata uang yang ditemukan.",
   "no-transactions-found": "Tidak ada transaksi yang ditemukan.",
@@ -496,7 +495,7 @@
   "successfully-imported": "Berhasil diimpor",
   "please-restart-the-application": "Harap mulai ulang aplikasi",
   "biometrics-disabled": "Biometrik dinonaktifkan",
-  "biometrics-disabled-description": "Ketuk di sini untuk mengaktifkan biometrik di halaman Pengaturan dan coba lagi",
+  "biometrics-disabled-description": "Aktifkan biometrik di halaman Pengaturan dan coba lagi",
   "biometrics-error": "Kesalahan biometrik",
   "biometrics-error-description": "Ada kesalahan menggunakan biometrik perangkat",
   "from-the-developer": "Dari pengembang",
@@ -1045,5 +1044,10 @@
   "set-date-time": "Mengatur",
   "add-record-using-plus-button": "Tambahkan catatan menggunakan tombol [+].",
   "all-settled": "Semua diselesaikan",
-  "difference-loan": "Pinjaman perbedaan"
+  "difference-loan": "Pinjaman perbedaan",
+  "open-settings": "Buka Pengaturan",
+  "decimal-precision": "Ketepatan desimal",
+  "decimal-precision-description": "Tempat desimal untuk pembulatan jumlah transaksi",
+  "same-accounts": "Akun yang sama",
+  "select-2-different-accounts": "Pilih 2 akun yang berbeda"
 }

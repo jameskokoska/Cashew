@@ -264,7 +264,6 @@
   "system": "System",
   "light": "Lys",
   "dark": "Mørk",
-  "decimal-precision": "Desimal presisjon",
   "view-all-currencies": "Se alle valutaer",
   "no-currencies-found": "Ingen valutaer funnet.",
   "no-transactions-found": "Ingen transaksjoner funnet.",
@@ -496,7 +495,7 @@
   "successfully-imported": "Vellykket importert",
   "please-restart-the-application": "Vennligst start søknaden på nytt",
   "biometrics-disabled": "Biometri deaktivert",
-  "biometrics-disabled-description": "Trykk her for å aktivere biometri på innstillingssiden og prøv igjen",
+  "biometrics-disabled-description": "Aktiver biometri på innstillingssiden og prøv på nytt",
   "biometrics-error": "Biometrifeil",
   "biometrics-error-description": "Det var en feil ved bruk av enhetene biometri",
   "from-the-developer": "Fra utvikleren",
@@ -1045,5 +1044,10 @@
   "set-date-time": "Sett",
   "add-record-using-plus-button": "Legg til en post ved hjelp av [+] -knappen.",
   "all-settled": "Alt avgjort",
-  "difference-loan": "Forskjell lån"
+  "difference-loan": "Forskjell lån",
+  "open-settings": "Åpne innstillinger",
+  "decimal-precision": "Desimal presisjon",
+  "decimal-precision-description": "Desimaler for transaksjonsbeløp avrunding",
+  "same-accounts": "Samme kontoer",
+  "select-2-different-accounts": "Velg 2 forskjellige kontoer"
 }

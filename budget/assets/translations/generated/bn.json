@@ -264,7 +264,6 @@
   "system": "পদ্ধতি",
   "light": "আলো",
   "dark": "অন্ধকার",
-  "decimal-precision": "দশমিক নির্ভুলতা",
   "view-all-currencies": "সমস্ত মুদ্রা দেখুন",
   "no-currencies-found": "কোনও মুদ্রা পাওয়া যায় নি।",
   "no-transactions-found": "কোনও লেনদেন পাওয়া যায় নি।",
@@ -496,7 +495,7 @@
   "successfully-imported": "সফলভাবে আমদানি করা",
   "please-restart-the-application": "আবেদনটি পুনরায় চালু করুন",
   "biometrics-disabled": "বায়োমেট্রিক্স অক্ষম",
-  "biometrics-disabled-description": "সেটিংস পৃষ্ঠায় বায়োমেট্রিক্স সক্ষম করতে এখানে আলতো চাপুন এবং আবার চেষ্টা করুন",
+  "biometrics-disabled-description": "সেটিংস পৃষ্ঠায় বায়োমেট্রিক্স সক্ষম করুন এবং আবার চেষ্টা করুন",
   "biometrics-error": "বায়োমেট্রিক্স ত্রুটি",
   "biometrics-error-description": "ডিভাইসগুলি বায়োমেট্রিক্স ব্যবহার করে একটি ত্রুটি ছিল",
   "from-the-developer": "বিকাশকারী থেকে",
@@ -1045,5 +1044,10 @@
   "set-date-time": "সেট",
   "add-record-using-plus-button": "[+] বোতামটি ব্যবহার করে একটি রেকর্ড যুক্ত করুন।",
   "all-settled": "সব স্থির",
-  "difference-loan": "পার্থক্য loan ণ"
+  "difference-loan": "পার্থক্য loan ণ",
+  "open-settings": "ওপেন সেটিংস",
+  "decimal-precision": "দশমিক নির্ভুলতা",
+  "decimal-precision-description": "গোলাকার লেনদেনের পরিমাণের জন্য দশমিক স্থান",
+  "same-accounts": "একই অ্যাকাউন্ট",
+  "select-2-different-accounts": "2 টি পৃথক অ্যাকাউন্ট নির্বাচন করুন"
 }

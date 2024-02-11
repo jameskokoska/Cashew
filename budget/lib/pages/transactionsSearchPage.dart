@@ -180,13 +180,8 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
         children: [
           Listener(
             onPointerDown: (_) {
-              //Minimize keyboard when tap non interactive widget
-              FocusScopeNode currentFocus = FocusScope.of(context);
-              // Always unfocus, otherwise rerenders occur!
-              //if (!currentFocus.hasPrimaryFocus) {
-              currentFocus.unfocus();
               _searchFocusNode.unfocus();
-              //}
+              minimizeKeyboard(context);
             },
             child: PageFramework(
               scrollToTopButton: true,

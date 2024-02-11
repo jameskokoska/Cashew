@@ -2005,40 +2005,39 @@ class FinanceDatabase extends _$FinanceDatabase {
     else
       limit = limit - list.length;
 
-    // Search based on last word, complete last word
-    String? lastWord = title.split(" ").lastOrNull;
-    if (lastWord != null && lastWord.trim() != "" && lastWord.length > 1)
-      list.addAll((await (select(associatedTitles).join([
-        innerJoin(categories,
-            categories.categoryPk.equalsExp(associatedTitles.categoryFk)),
-      ])
-                ..where(associatedTitles.title
-                    .collate(Collate.noCase)
-                    .like("%" + lastWord + "%"))
-                ..orderBy([OrderingTerm.desc(associatedTitles.order)])
-                ..limit(limit, offset: offset ?? DEFAULT_OFFSET))
-              .get())
-          .map((rows) {
-        TransactionAssociatedTitle foundTitle =
-            rows.readTable(associatedTitles);
-        return TransactionAssociatedTitleWithCategory(
-          title: foundTitle.copyWith(
-              title: completePartialTitle(title, foundTitle.title)),
-          category: rows.readTable(categories),
-          type: TitleType.PartialTitleExists,
-          partialTitleString: foundTitle.title,
-        );
-      }).toList());
+    // // Search based on last word, complete last word
+    // String? lastWord = title.split(" ").lastOrNull;
+    // if (lastWord != null && lastWord.trim() != "" && lastWord.length > 1)
+    //   list.addAll((await (select(associatedTitles).join([
+    //     innerJoin(categories,
+    //         categories.categoryPk.equalsExp(associatedTitles.categoryFk)),
+    //   ])
+    //             ..where(associatedTitles.title
+    //                 .collate(Collate.noCase)
+    //                 .like("%" + lastWord + "%"))
+    //             ..orderBy([OrderingTerm.desc(associatedTitles.order)])
+    //             ..limit(limit, offset: offset ?? DEFAULT_OFFSET))
+    //           .get())
+    //       .map((rows) {
+    //     TransactionAssociatedTitle foundTitle =
+    //         rows.readTable(associatedTitles);
+    //     return TransactionAssociatedTitleWithCategory(
+    //       title: foundTitle.copyWith(
+    //           title: completePartialTitle(title, foundTitle.title)),
+    //       category: rows.readTable(categories),
+    //       type: TitleType.PartialTitleExists,
+    //       partialTitleString: foundTitle.title,
+    //     );
+    //   }).toList());
+
+    // if (alsoSearchCategories == false || list.length > limit)
+    //   return removeDuplicateTransactionAssociatedTitleWithCategory(list);
+    // if (limit - list.length < 0)
+    //   limit = 0;
+    // else
+    //   limit = limit - list.length;
 
     // Search category names
-
-    if (alsoSearchCategories == false || list.length > limit)
-      return removeDuplicateTransactionAssociatedTitleWithCategory(list);
-    if (limit - list.length < 0)
-      limit = 0;
-    else
-      limit = limit - list.length;
-
     list.addAll((await (select(categories)
               ..where(
                   (c) => c.name.collate(Collate.noCase).like("%" + title + "%"))
@@ -2069,8 +2068,9 @@ class FinanceDatabase extends _$FinanceDatabase {
   }
 
   String completePartialTitle(String typedText, String titleText) {
-    if (typedText.contains(titleText)) {
-      return typedText;
+    if (typedText.toLowerCase().contains(titleText.toLowerCase())) {
+      return typedText.replaceAllMapped(
+          RegExp(titleText, caseSensitive: false), (match) => titleText);
     } else {
       List<String> splitText = typedText.split(" ");
       if (splitText.isNotEmpty) {
@@ -3199,6 +3199,21 @@ class FinanceDatabase extends _$FinanceDatabase {
     } else if (transaction.type == TransactionSpecialType.debt) {
       transaction =
           transaction.copyWith(income: true, amount: transaction.amount.abs());
+    }
+
+    // Preserve order of balance correction transaction
+    // Negative entries at 30 seconds on the minute
+    // Positive entries at 31 seconds on the minute
+    if (transaction.categoryFk == "0") {
+      if (transaction.amount < 0) {
+        transaction = transaction.copyWith(
+            dateCreated: transaction.dateCreated
+                .copyWith(second: 30, millisecond: 0, microsecond: 0));
+      } else if (transaction.amount > 0) {
+        transaction = transaction.copyWith(
+            dateCreated: transaction.dateCreated
+                .copyWith(second: 31, millisecond: 0, microsecond: 0));
+      }
     }
 
     // we are saying we still need this category! - for syncing

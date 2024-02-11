@@ -264,7 +264,6 @@
   "system": "Sistem",
   "light": "Ușoară",
   "dark": "Întuneric",
-  "decimal-precision": "Precizie zecimală",
   "view-all-currencies": "Vizualizați toate monedele",
   "no-currencies-found": "Nu s -au găsit valute.",
   "no-transactions-found": "Nu au fost găsite tranzacții.",
@@ -496,7 +495,7 @@
   "successfully-imported": "Importat cu succes",
   "please-restart-the-application": "Vă rugăm să reporniți cererea",
   "biometrics-disabled": "Biometrie dezactivată",
-  "biometrics-disabled-description": "Atingeți aici pentru a activa biometria în pagina Setări și încercați din nou",
+  "biometrics-disabled-description": "Activați biometrie în pagina Setări și încercați din nou",
   "biometrics-error": "Eroare de biometrie",
   "biometrics-error-description": "A existat o eroare folosind biometria dispozitivelor",
   "from-the-developer": "De la dezvoltator",
@@ -1045,5 +1044,10 @@
   "set-date-time": "A stabilit",
   "add-record-using-plus-button": "Adăugați o înregistrare folosind butonul [+].",
   "all-settled": "Toate stabilite",
-  "difference-loan": "Împrumut de diferență"
+  "difference-loan": "Împrumut de diferență",
+  "open-settings": "Deschide setările",
+  "decimal-precision": "Precizie zecimală",
+  "decimal-precision-description": "Locuri zecimale pentru rotunjirea tranzacției",
+  "same-accounts": "Aceleași conturi",
+  "select-2-different-accounts": "Selectați 2 conturi diferite"
 }

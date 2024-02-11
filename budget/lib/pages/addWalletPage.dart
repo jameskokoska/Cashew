@@ -349,11 +349,7 @@ class _AddWalletPageState extends State<AddWalletPage> {
       },
       child: GestureDetector(
         onTap: () {
-          //Minimize keyboard when tap non interactive widget
-          FocusScopeNode currentFocus = FocusScope.of(context);
-          if (!currentFocus.hasPrimaryFocus) {
-            currentFocus.unfocus();
-          }
+          minimizeKeyboard(context);
         },
         child: PageFramework(
           resizeToAvoidBottomInset: true,
@@ -1520,7 +1516,8 @@ class _TransferBalancePopupState extends State<TransferBalancePopup> {
                               allWallets, walletTo!.walletPk),
                       walletTo!,
                       note: note,
-                      dateTime: selectedDateTimeSetToNow,
+                      dateTime:
+                          selectedDateTimeSetToNow.add(Duration(seconds: 1)),
                       title: selectedTitle == ""
                           ? (allWallets.indexedByPk[walletTo!.walletPk]!.name +
                               " " +
@@ -1538,8 +1535,7 @@ class _TransferBalancePopupState extends State<TransferBalancePopup> {
                               allWallets, walletFrom.walletPk),
                       walletFrom,
                       note: note,
-                      dateTime:
-                          selectedDateTimeSetToNow.add(Duration(seconds: 1)),
+                      dateTime: selectedDateTimeSetToNow,
                       title: selectedTitle == ""
                           ? (allWallets.indexedByPk[walletFrom.walletPk]!.name +
                               " " +

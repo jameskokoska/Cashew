@@ -264,7 +264,6 @@
   "system": "سیستم",
   "light": "سبک",
   "dark": "تاریک",
-  "decimal-precision": "دقت اعشاری",
   "view-all-currencies": "مشاهده همه ارزها",
   "no-currencies-found": "هیچ ارز یافت نشده است.",
   "no-transactions-found": "هیچ معامله ای یافت نشد.",
@@ -496,7 +495,7 @@
   "successfully-imported": "با موفقیت وارداتی",
   "please-restart-the-application": "لطفاً برنامه را مجدداً راه اندازی کنید",
   "biometrics-disabled": "بیومتریک غیرفعال",
-  "biometrics-disabled-description": "برای فعال کردن بیومتریک در صفحه تنظیمات ، در اینجا ضربه بزنید و دوباره امتحان کنید",
+  "biometrics-disabled-description": "بیومتریک را در صفحه تنظیمات فعال کنید و دوباره امتحان کنید",
   "biometrics-error": "خطای بیومتریک",
   "biometrics-error-description": "با استفاده از بیومتریک دستگاه ها خطایی رخ داد",
   "from-the-developer": "از توسعه دهنده",
@@ -1045,5 +1044,10 @@
   "set-date-time": "تنظیم",
   "add-record-using-plus-button": "با استفاده از دکمه [+] یک رکورد اضافه کنید.",
   "all-settled": "همه حل و فصل شدند",
-  "difference-loan": "وام اختلاف"
+  "difference-loan": "وام تفاوت",
+  "open-settings": "تنظیمات باز",
+  "decimal-precision": "دقت اعشاری",
+  "decimal-precision-description": "مکان های اعشاری برای گردآوری مبلغ معامله",
+  "same-accounts": "حسابهای مشابه",
+  "select-2-different-accounts": "2 حساب مختلف را انتخاب کنید"
 }

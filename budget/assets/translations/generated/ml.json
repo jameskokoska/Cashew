@@ -264,7 +264,6 @@
   "system": "ഏര്പ്പാട്",
   "light": "ഭാരംകുറഞ്ഞ",
   "dark": "ഇരുണ്ട",
-  "decimal-precision": "ദശാംശ കൃത്യത",
   "view-all-currencies": "എല്ലാ കറൻസികളും കാണുക",
   "no-currencies-found": "കറൻസികളൊന്നും കണ്ടെത്തിയില്ല.",
   "no-transactions-found": "ഇടപാടുകളൊന്നും കണ്ടെത്തിയില്ല.",
@@ -1045,5 +1044,10 @@
   "set-date-time": "സജ്ജീകൃതരംഗം",
   "add-record-using-plus-button": "[+] ബട്ടൺ ഉപയോഗിച്ച് ഒരു റെക്കോർഡ് ചേർക്കുക.",
   "all-settled": "എല്ലാം സ്ഥിരതാമസമാക്കി",
-  "difference-loan": "വ്യത്യാസ വായ്പ"
+  "difference-loan": "വ്യത്യാസ വായ്പ",
+  "open-settings": "ക്രമീകരണങ്ങൾ തുറക്കുക",
+  "decimal-precision": "ദശാംശ കൃത്യത",
+  "decimal-precision-description": "ഇടപാട് തുകയ്ക്കുള്ള ദശാംശ സ്ഥാനങ്ങൾ",
+  "same-accounts": "സമാന അക്കൗണ്ടുകൾ",
+  "select-2-different-accounts": "2 വ്യത്യസ്ത അക്കൗണ്ടുകൾ തിരഞ്ഞെടുക്കുക"
 }

@@ -264,7 +264,6 @@
   "system": "نظام",
   "light": "روشنی",
   "dark": "تاریک",
-  "decimal-precision": "اعشاریہ صحت سے متعلق",
   "view-all-currencies": "تمام کرنسیوں کو دیکھیں",
   "no-currencies-found": "کوئی کرنسی نہیں ملی۔",
   "no-transactions-found": "کوئی لین دین نہیں ملا۔",
@@ -496,7 +495,7 @@
   "successfully-imported": "کامیابی کے ساتھ درآمد",
   "please-restart-the-application": "براہ کرم درخواست کو دوبارہ شروع کریں",
   "biometrics-disabled": "بایومیٹرکس غیر فعال",
-  "biometrics-disabled-description": "ترتیبات کے صفحے میں بائیو میٹرکس کو فعال کرنے کے لئے یہاں ٹیپ کریں اور دوبارہ کوشش کریں",
+  "biometrics-disabled-description": "ترتیبات کے صفحے میں بایومیٹرکس کو فعال کریں اور دوبارہ کوشش کریں",
   "biometrics-error": "بایومیٹرکس کی خرابی",
   "biometrics-error-description": "ڈیوائسز بائیو میٹرکس کا استعمال کرتے ہوئے ایک غلطی تھی",
   "from-the-developer": "ڈویلپر سے",
@@ -1045,5 +1044,10 @@
   "set-date-time": "سیٹ",
   "add-record-using-plus-button": "[+] بٹن کا استعمال کرتے ہوئے ایک ریکارڈ شامل کریں۔",
   "all-settled": "سب طے شدہ",
-  "difference-loan": "فرق قرض"
+  "difference-loan": "فرق قرض",
+  "open-settings": "کھلی ترتیبات",
+  "decimal-precision": "اعشاریہ صحت سے متعلق",
+  "decimal-precision-description": "ٹرانزیکشن کی رقم کے لئے اعشاریہ مقامات",
+  "same-accounts": "ایک ہی اکاؤنٹس",
+  "select-2-different-accounts": "2 مختلف اکاؤنٹس منتخب کریں"
 }

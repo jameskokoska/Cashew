@@ -264,7 +264,6 @@
   "system": "அமைப்பு",
   "light": "ஒளி",
   "dark": "இருள்",
-  "decimal-precision": "தசம துல்லியம்",
   "view-all-currencies": "அனைத்து நாணயங்களையும் காண்க",
   "no-currencies-found": "நாணயங்கள் எதுவும் கிடைக்கவில்லை.",
   "no-transactions-found": "பரிவர்த்தனைகள் எதுவும் கிடைக்கவில்லை.",
@@ -496,7 +495,7 @@
   "successfully-imported": "வெற்றிகரமாக இறக்குமதி செய்யப்பட்டது",
   "please-restart-the-application": "விண்ணப்பத்தை மறுதொடக்கம் செய்யுங்கள்",
   "biometrics-disabled": "பயோமெட்ரிக்ஸ் முடக்கப்பட்டது",
-  "biometrics-disabled-description": "அமைப்புகள் பக்கத்தில் பயோமெட்ரிக்ஸை இயக்க இங்கே தட்டவும், மீண்டும் முயற்சிக்கவும்",
+  "biometrics-disabled-description": "அமைப்புகள் பக்கத்தில் பயோமெட்ரிக்ஸை இயக்கி மீண்டும் முயற்சிக்கவும்",
   "biometrics-error": "பயோமெட்ரிக்ஸ் பிழை",
   "biometrics-error-description": "சாதனங்கள் பயோமெட்ரிக்ஸைப் பயன்படுத்தி பிழை ஏற்பட்டது",
   "from-the-developer": "டெவலப்பரிடமிருந்து",
@@ -1045,5 +1044,10 @@
   "set-date-time": "அமைக்கவும்",
   "add-record-using-plus-button": "[+] பொத்தானைப் பயன்படுத்தி பதிவைச் சேர்க்கவும்.",
   "all-settled": "அனைத்தும் குடியேறின",
-  "difference-loan": "வேறுபாடு கடன்"
+  "difference-loan": "வேறுபாடு கடன்",
+  "open-settings": "திறந்த அமைப்புகள்",
+  "decimal-precision": "தசம துல்லியம்",
+  "decimal-precision-description": "பரிவர்த்தனை அளவு வட்டமிடுவதற்கான தசம இடங்கள்",
+  "same-accounts": "அதே கணக்குகள்",
+  "select-2-different-accounts": "2 வெவ்வேறு கணக்குகளைத் தேர்ந்தெடுக்கவும்"
 }

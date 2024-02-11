@@ -153,7 +153,11 @@ List<TextSpan> generateSpans({
   required double fontSize,
 }) {
   List<TextSpan> spans = [];
-  final List<String> textParts = mainText.split(boldedText ?? "");
+
+  final String lowercaseMainText = mainText.toLowerCase();
+  final String lowercaseBoldedText = boldedText?.toLowerCase() ?? "";
+
+  final List<String> textParts = lowercaseMainText.split(lowercaseBoldedText);
 
   TextStyle textStyle = TextStyle(
     color: getColor(context, "black"),
@@ -163,9 +167,16 @@ List<TextSpan> generateSpans({
   );
 
   for (int i = 0; i < textParts.length; i++) {
+    final String textPart = textParts[i];
+
+    final int startIndex = lowercaseMainText.indexOf(textPart);
+    final int endIndex = startIndex + textPart.length;
+    final String originalCasedTextPart =
+        mainText.substring(startIndex, endIndex);
+
     spans.add(
       TextSpan(
-        text: textParts[i],
+        text: originalCasedTextPart,
         style: textStyle,
       ),
     );

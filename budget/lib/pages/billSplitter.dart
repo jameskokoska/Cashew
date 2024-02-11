@@ -925,11 +925,7 @@ class _AddBillItemPageState extends State<AddBillItemPage> {
       },
       child: GestureDetector(
         onTap: () {
-          //Minimize keyboard when tap non interactive widget
-          FocusScopeNode currentFocus = FocusScope.of(context);
-          if (!currentFocus.hasPrimaryFocus) {
-            currentFocus.unfocus();
-          }
+          minimizeKeyboard(context);
         },
         child: PageFramework(
           title: widget.billSplitterItem == null

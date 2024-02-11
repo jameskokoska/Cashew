@@ -264,7 +264,6 @@
   "system": "System",
   "light": "Hell",
   "dark": "Dunkel",
-  "decimal-precision": "Dezimalpräzision",
   "view-all-currencies": "Alle Währungen anzeigen",
   "no-currencies-found": "Keine Währungen gefunden.",
   "no-transactions-found": "Keine Transaktionen gefunden.",
@@ -496,7 +495,7 @@
   "successfully-imported": "Erfolgreich importiert",
   "please-restart-the-application": "Bitte starten Sie die Bewerbung neu",
   "biometrics-disabled": "Biometrie deaktiviert",
-  "biometrics-disabled-description": "Tippen Sie hier, um die Biometrie auf der Seite \"Einstellungen\" zu aktivieren, und versuchen Sie es erneut",
+  "biometrics-disabled-description": "Aktivieren Sie die Biometrie auf der Seite \"Einstellungen\" und versuchen Sie es erneut",
   "biometrics-error": "Biometriefehler",
   "biometrics-error-description": "Es gab einen Fehler mit der Biometrie der Geräte",
   "from-the-developer": "Vom Entwickler",
@@ -1045,5 +1044,10 @@
   "set-date-time": "Satz",
   "add-record-using-plus-button": "Fügen Sie einen Datensatz mit der Schaltfläche [+] hinzu.",
   "all-settled": "Alles erledigt",
-  "difference-loan": "Differenzdarlehen"
+  "difference-loan": "Differenzdarlehen",
+  "open-settings": "Einstellungen öffnen",
+  "decimal-precision": "Dezimalpräzision",
+  "decimal-precision-description": "Dezimalstellen für die Transaktionsbetragsrundung",
+  "same-accounts": "Gleiche Konten",
+  "select-2-different-accounts": "Wählen Sie 2 verschiedene Konten aus"
 }

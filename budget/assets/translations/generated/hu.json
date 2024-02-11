@@ -264,7 +264,6 @@
   "system": "Rendszer",
   "light": "Fény",
   "dark": "Sötét",
-  "decimal-precision": "Tizedes pontosság",
   "view-all-currencies": "Az összes valuta megtekintése",
   "no-currencies-found": "Nincs valuta.",
   "no-transactions-found": "Nincs tranzakció.",
@@ -496,7 +495,7 @@
   "successfully-imported": "Sikeresen importált",
   "please-restart-the-application": "Kérjük, indítsa újra az alkalmazást",
   "biometrics-disabled": "A biometria fogyatékkal élők",
-  "biometrics-disabled-description": "Koppintson ide a biometria engedélyezéséhez a beállítások oldalon, és próbálkozzon újra",
+  "biometrics-disabled-description": "Engedélyezze a biometrikus anyagokat a beállítások oldalon, és próbálja újra",
   "biometrics-error": "Biometrikus hiba",
   "biometrics-error-description": "Hiba történt az eszközök biometria használatával",
   "from-the-developer": "A fejlesztőtől",
@@ -1045,5 +1044,10 @@
   "set-date-time": "Készlet",
   "add-record-using-plus-button": "Adjon hozzá egy rekordot a [+] gomb használatával.",
   "all-settled": "Minden rendeződött",
-  "difference-loan": "Különbséghitel"
+  "difference-loan": "Különbséghitel",
+  "open-settings": "Nyisd meg a beállításokat",
+  "decimal-precision": "Tizedes pontosság",
+  "decimal-precision-description": "Tizedesjegyek a tranzakciós összeg kerekítéséhez",
+  "same-accounts": "Ugyanazok a számlák",
+  "select-2-different-accounts": "Válasszon 2 különböző fiókot"
 }

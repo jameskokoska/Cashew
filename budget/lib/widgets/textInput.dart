@@ -10,6 +10,13 @@ import 'package:flutter/services.dart';
 import '../colors.dart';
 
 FocusNode? _currentTextInputFocus;
+bool shouldAutoRefocus = false;
+
+void minimizeKeyboard(BuildContext context) {
+  FocusScopeNode currentFocus = FocusScope.of(context);
+  currentFocus.unfocus();
+  shouldAutoRefocus = false;
+}
 
 class ResumeTextFieldFocus extends StatelessWidget {
   const ResumeTextFieldFocus({super.key, required this.child});
@@ -27,13 +34,19 @@ class ResumeTextFieldFocus extends StatelessWidget {
           } else if (appLifecycleState == AppLifecycleState.resumed) {
             _currentTextInputFocus = FocusScope.of(context).focusedChild;
           }
+
+          Future.delayed(Duration(milliseconds: 50), () {
+            shouldAutoRefocus = value;
+          });
         },
         child: OnAppResume(
           onAppResume: () {
-            _currentTextInputFocus?.unfocus();
-            Future.delayed(Duration(milliseconds: 5), () {
-              _currentTextInputFocus?.requestFocus();
-            });
+            if (shouldAutoRefocus) {
+              _currentTextInputFocus?.unfocus();
+              Future.delayed(Duration(milliseconds: 5), () {
+                _currentTextInputFocus?.requestFocus();
+              });
+            }
           },
           child: child,
         ),

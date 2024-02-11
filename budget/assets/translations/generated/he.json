@@ -264,7 +264,6 @@
   "system": "מערכת",
   "light": "אוֹר",
   "dark": "אפל",
-  "decimal-precision": "דיוק עשרוני",
   "view-all-currencies": "צפה בכל המטבעות",
   "no-currencies-found": "לא נמצאו מטבעות.",
   "no-transactions-found": "לא נמצאו עסקאות.",
@@ -496,7 +495,7 @@
   "successfully-imported": "מיובא בהצלחה",
   "please-restart-the-application": "אנא הפעל מחדש את הבקשה",
   "biometrics-disabled": "ביומטריה מושבתת",
-  "biometrics-disabled-description": "הקש כאן כדי לאפשר ביומטריה בדף ההגדרות ונסה שוב",
+  "biometrics-disabled-description": "הפעל ביומטריה בדף ההגדרות ונסה שוב",
   "biometrics-error": "שגיאת ביומטריה",
   "biometrics-error-description": "הייתה שגיאה בשימוש במכשירים ביומטריה",
   "from-the-developer": "מהמפתח",
@@ -1045,5 +1044,10 @@
   "set-date-time": "מַעֲרֶכֶת",
   "add-record-using-plus-button": "הוסף רשומה באמצעות כפתור [+].",
   "all-settled": "כולם התיישבו",
-  "difference-loan": "הלוואת הבדל"
+  "difference-loan": "הלוואת הבדל",
+  "open-settings": "פתח הגדרות",
+  "decimal-precision": "דיוק עשרוני",
+  "decimal-precision-description": "מקומות עשרוניים לעיגול סכום העסקה",
+  "same-accounts": "אותם חשבונות",
+  "select-2-different-accounts": "בחר 2 חשבונות שונים"
 }

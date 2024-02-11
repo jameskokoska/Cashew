@@ -264,7 +264,6 @@
   "system": "系统",
   "light": "浅色",
   "dark": "深色",
-  "decimal-precision": "小数点",
   "view-all-currencies": "查看所有货币",
   "no-currencies-found": "找不到货币。",
   "no-transactions-found": "找不到交易。",
@@ -496,7 +495,7 @@
   "successfully-imported": "导入成功",
   "please-restart-the-application": "请重启应用",
   "biometrics-disabled": "已禁用生物信息识别",
-  "biometrics-disabled-description": "点击此处在设置页面启用生物信息识别并重试",
+  "biometrics-disabled-description": "在设置页面中启用生物识别技术，然后重试",
   "biometrics-error": "生物信息识别出错",
   "biometrics-error-description": "使用设备生物信息识别时出错",
   "from-the-developer": "开发者的话",
@@ -1045,5 +1044,10 @@
   "set-date-time": "放",
   "add-record-using-plus-button": "使用[+]按钮添加记录。",
   "all-settled": "所有人都解决了",
-  "difference-loan": "差异贷款"
+  "difference-loan": "差异贷款",
+  "open-settings": "打开设置",
+  "decimal-precision": "小数点",
+  "decimal-precision-description": "交易金额四舍五入的小数位",
+  "same-accounts": "相同的帐户",
+  "select-2-different-accounts": "选择2个不同的帐户"
 }

@@ -264,7 +264,6 @@
   "system": "Järjestelmä",
   "light": "Valaistus",
   "dark": "Tumma",
-  "decimal-precision": "Tarkkuus",
   "view-all-currencies": "Katso kaikki valuutat",
   "no-currencies-found": "Ei valuutat löydy.",
   "no-transactions-found": "Tapahtumia ei löydy.",
@@ -496,7 +495,7 @@
   "successfully-imported": "Tuonti menestyksekkäästi",
   "please-restart-the-application": "Käynnistä sovellus uudelleen",
   "biometrics-disabled": "Biometriset tiedot poistettu käytöstä",
-  "biometrics-disabled-description": "Napauta tätä, jotta biometriset tiedot otetaan käyttöön asetussivulla ja yritä uudelleen",
+  "biometrics-disabled-description": "Ota biometriset tiedot asetussivulla ja yritä uudelleen",
   "biometrics-error": "Biometrinen virhe",
   "biometrics-error-description": "Laitteiden biometriset tiedot olivat virhe",
   "from-the-developer": "Kehittäjältä",
@@ -1045,5 +1044,10 @@
   "set-date-time": "Aseta",
   "add-record-using-plus-button": "Lisää tietue käyttämällä [+] -painiketta.",
   "all-settled": "Kaikki asettuneet",
-  "difference-loan": "Erolaina"
+  "difference-loan": "Erolaina",
+  "open-settings": "Avaa asetukset",
+  "decimal-precision": "Tarkkuus",
+  "decimal-precision-description": "Desimaalit tapahtumien määrän pyöristämiselle",
+  "same-accounts": "Samat tilit",
+  "select-2-different-accounts": "Valitse 2 erilaista tiliä"
 }

@@ -264,7 +264,6 @@
   "system": "వ్యవస్థ",
   "light": "కాంతి",
   "dark": "చీకటి",
-  "decimal-precision": "దశాంశ ఖచ్చితత్వం",
   "view-all-currencies": "అన్ని కరెన్సీలను చూడండి",
   "no-currencies-found": "కరెన్సీలు కనుగొనబడలేదు.",
   "no-transactions-found": "లావాదేవీలు కనుగొనబడలేదు.",
@@ -496,7 +495,7 @@
   "successfully-imported": "విజయవంతంగా దిగుమతి చేయబడింది",
   "please-restart-the-application": "దయచేసి దరఖాస్తును పున art ప్రారంభించండి",
   "biometrics-disabled": "బయోమెట్రిక్స్ నిలిపివేయబడింది",
-  "biometrics-disabled-description": "సెట్టింగుల పేజీలో బయోమెట్రిక్‌లను ప్రారంభించడానికి ఇక్కడ నొక్కండి మరియు మళ్లీ ప్రయత్నించండి",
+  "biometrics-disabled-description": "సెట్టింగుల పేజీలో బయోమెట్రిక్‌లను ప్రారంభించండి మరియు మళ్లీ ప్రయత్నించండి",
   "biometrics-error": "బయోమెట్రిక్స్ లోపం",
   "biometrics-error-description": "పరికరాల బయోమెట్రిక్స్ ఉపయోగించి లోపం ఉంది",
   "from-the-developer": "డెవలపర్ నుండి",
@@ -1045,5 +1044,10 @@
   "set-date-time": "సెట్",
   "add-record-using-plus-button": "[+] బటన్‌ను ఉపయోగించి రికార్డును జోడించండి.",
   "all-settled": "అన్నీ స్థిరపడ్డాయి",
-  "difference-loan": "వ్యత్యాస రుణం"
+  "difference-loan": "వ్యత్యాస రుణం",
+  "open-settings": "సెట్టింగులు తెరవండి",
+  "decimal-precision": "దశాంశ ఖచ్చితత్వం",
+  "decimal-precision-description": "లావాదేవీ మొత్తం రౌండింగ్ కోసం దశాంశ స్థానాలు",
+  "same-accounts": "అదే ఖాతాలు",
+  "select-2-different-accounts": "2 వేర్వేరు ఖాతాలను ఎంచుకోండి"
 }

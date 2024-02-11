@@ -264,7 +264,6 @@
   "system": "Mfumo",
   "light": "Mwanga",
   "dark": "Giza",
-  "decimal-precision": "Usahihi wa decimal",
   "view-all-currencies": "Tazama sarafu zote",
   "no-currencies-found": "Hakuna sarafu zilizopatikana.",
   "no-transactions-found": "Hakuna shughuli zilizopatikana.",
@@ -496,7 +495,7 @@
   "successfully-imported": "Kufanikiwa kuingizwa",
   "please-restart-the-application": "Tafadhali anzisha tena programu",
   "biometrics-disabled": "Biometri imelemazwa",
-  "biometrics-disabled-description": "Gonga hapa ili kuwezesha biometri kwenye ukurasa wa Mipangilio na ujaribu tena",
+  "biometrics-disabled-description": "Washa biometri kwenye ukurasa wa mipangilio na ujaribu tena",
   "biometrics-error": "Kosa la biometri",
   "biometrics-error-description": "Kulikuwa na kosa kwa kutumia vifaa vya biometri",
   "from-the-developer": "Kutoka kwa msanidi programu",
@@ -1045,5 +1044,10 @@
   "set-date-time": "Seti",
   "add-record-using-plus-button": "Ongeza rekodi kwa kutumia kitufe cha [+].",
   "all-settled": "Zote zimetulia",
-  "difference-loan": "Mkopo tofauti"
+  "difference-loan": "Mkopo tofauti",
+  "open-settings": "Mipangilio ya Fungua",
+  "decimal-precision": "Usahihi wa decimal",
+  "decimal-precision-description": "Maeneo ya decimal kwa kiwango cha ununuzi",
+  "same-accounts": "Akaunti sawa",
+  "select-2-different-accounts": "Chagua akaunti 2 tofauti"
 }

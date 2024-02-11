@@ -264,7 +264,6 @@
   "system": "Система",
   "light": "Светлина",
   "dark": "Тъмно",
-  "decimal-precision": "Десетична точност",
   "view-all-currencies": "Вижте всички валути",
   "no-currencies-found": "Не са намерени валути.",
   "no-transactions-found": "Не са намерени транзакции.",
@@ -496,7 +495,7 @@
   "successfully-imported": "Успешно внесени",
   "please-restart-the-application": "Моля, рестартирайте приложението",
   "biometrics-disabled": "Биометрия деактивирана",
-  "biometrics-disabled-description": "Докоснете тук, за да активирате биометрията в страницата Настройки и опитайте отново",
+  "biometrics-disabled-description": "Активирайте биометрията в страницата Настройки и опитайте отново",
   "biometrics-error": "Грешка в биометрията",
   "biometrics-error-description": "Имаше грешка с помощта на биометрията на устройствата",
   "from-the-developer": "От разработчика",
@@ -1045,5 +1044,10 @@
   "set-date-time": "Комплект",
   "add-record-using-plus-button": "Добавете запис с помощта на бутона [+].",
   "all-settled": "Всички се уредиха",
-  "difference-loan": "Разлика заем"
+  "difference-loan": "Разлика заем",
+  "open-settings": "Отворени настройки",
+  "decimal-precision": "Десетична точност",
+  "decimal-precision-description": "Десетични знаци за закръгляне на сумата на транзакцията",
+  "same-accounts": "Същите акаунти",
+  "select-2-different-accounts": "Изберете 2 различни акаунта"
 }

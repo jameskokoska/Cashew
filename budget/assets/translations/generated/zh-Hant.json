@@ -264,7 +264,6 @@
   "system": "系統",
   "light": "淺色",
   "dark": "深色",
-  "decimal-precision": "精確到小數點",
   "view-all-currencies": "查看所有貨幣",
   "no-currencies-found": "找不到貨幣。",
   "no-transactions-found": "找不到交易。",
@@ -496,7 +495,7 @@
   "successfully-imported": "導入成功",
   "please-restart-the-application": "請重新啟動程序",
   "biometrics-disabled": "已禁用生物資訊識別",
-  "biometrics-disabled-description": "點擊此處以在設置頁面中啟用生物識別技術，然後重試",
+  "biometrics-disabled-description": "在設置頁面中啟用生物識別技術，然後重試",
   "biometrics-error": "生物識別錯誤",
   "biometrics-error-description": "使用生物識別技術裝置出錯了",
   "from-the-developer": "來自開發人員",
@@ -1045,5 +1044,10 @@
   "set-date-time": "放",
   "add-record-using-plus-button": "使用[+]按鈕添加記錄。",
   "all-settled": "所有人都解決了",
-  "difference-loan": "差異貸款"
+  "difference-loan": "差異貸款",
+  "open-settings": "打開設置",
+  "decimal-precision": "精確到小數點",
+  "decimal-precision-description": "交易金額四捨五入的小數位",
+  "same-accounts": "相同的帳戶",
+  "select-2-different-accounts": "選擇2個不同的帳戶"
 }

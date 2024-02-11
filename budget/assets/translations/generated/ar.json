@@ -264,7 +264,6 @@
   "system": "نظام",
   "light": "ضوء",
   "dark": "مظلم",
-  "decimal-precision": "الدقة العشرية",
   "view-all-currencies": "عرض جميع العملات",
   "no-currencies-found": "لم يتم العثور على عملات.",
   "no-transactions-found": "لم يتم العثور على معاملات.",
@@ -496,7 +495,7 @@
   "successfully-imported": "تم استيرادها بنجاح",
   "please-restart-the-application": "الرجاء إعادة تشغيل التطبيق",
   "biometrics-disabled": "القياسات الحيوية معاق",
-  "biometrics-disabled-description": "اضغط هنا لتمكين القياسات الحيوية في صفحة الإعدادات وحاول مرة أخرى",
+  "biometrics-disabled-description": "تمكين القياسات الحيوية في صفحة الإعدادات وحاول مرة أخرى",
   "biometrics-error": "خطأ القياسات الحيوية",
   "biometrics-error-description": "كان هناك خطأ باستخدام القياسات الحيوية للأجهزة",
   "from-the-developer": "من المطور",
@@ -1045,5 +1044,10 @@
   "set-date-time": "تعيين",
   "add-record-using-plus-button": "إضافة سجل باستخدام زر [+].",
   "all-settled": "كل ما استقر",
-  "difference-loan": "قرض الفرق"
+  "difference-loan": "قرض الفرق",
+  "open-settings": "أفتح الإعدادات",
+  "decimal-precision": "الدقة العشرية",
+  "decimal-precision-description": "أماكن عشرية لالتقاط مبلغ المعاملات",
+  "same-accounts": "نفس الحسابات",
+  "select-2-different-accounts": "حدد 2 حساب مختلف"
 }

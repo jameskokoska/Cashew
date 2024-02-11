@@ -264,7 +264,6 @@
   "system": "પદ્ધતિ",
   "light": "પ્રકાશ",
   "dark": "અંધારું",
-  "decimal-precision": "દશાંશ ચોકસાઈ",
   "view-all-currencies": "બધી ચલણો જુઓ",
   "no-currencies-found": "કોઈ કરન્સી મળી નથી.",
   "no-transactions-found": "કોઈ વ્યવહાર મળ્યાં નથી.",
@@ -496,7 +495,7 @@
   "successfully-imported": "સફળતાપૂર્વક આયાત",
   "please-restart-the-application": "કૃપા કરીને એપ્લિકેશન ફરીથી પ્રારંભ કરો",
   "biometrics-disabled": "બાયોમેટ્રિક્સ અક્ષમ",
-  "biometrics-disabled-description": "સેટિંગ્સ પૃષ્ઠમાં બાયોમેટ્રિક્સને સક્ષમ કરવા માટે અહીં ટેપ કરો અને ફરીથી પ્રયાસ કરો",
+  "biometrics-disabled-description": "સેટિંગ્સ પૃષ્ઠમાં બાયોમેટ્રિક્સને સક્ષમ કરો અને ફરીથી પ્રયાસ કરો",
   "biometrics-error": "બાયોમેટ્રિક્સ ભૂલ",
   "biometrics-error-description": "બાયોમેટ્રિક્સ ઉપકરણોનો ઉપયોગ કરીને ભૂલ હતી",
   "from-the-developer": "વિકાસકર્તા તરફથી",
@@ -1045,5 +1044,10 @@
   "set-date-time": "સમૂહ",
   "add-record-using-plus-button": "[+] બટનનો ઉપયોગ કરીને રેકોર્ડ ઉમેરો.",
   "all-settled": "બધા સ્થાયી થયા",
-  "difference-loan": "ફરક લોન"
+  "difference-loan": "ફરક લોન",
+  "open-settings": "ખુલ્લી સેટિંગ્સ",
+  "decimal-precision": "દશાંશ ચોકસાઈ",
+  "decimal-precision-description": "વ્યવહારની રકમ ગોળાકાર માટે દશાંશ સ્થાનો",
+  "same-accounts": "સરખી હિસાબ",
+  "select-2-different-accounts": "2 વિવિધ એકાઉન્ટ્સ પસંદ કરો"
 }

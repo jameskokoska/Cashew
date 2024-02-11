@@ -1,6 +1,7 @@
 import 'package:budget/functions.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
+import 'package:budget/widgets/textInput.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/colors.dart';
 import 'package:flutter/services.dart';
@@ -70,7 +71,7 @@ Future openBottomSheet(
   bool reAssignBottomSheetControllerGlobal = true,
 }) async {
   //minimize keyboard when open
-  FocusScope.of(context).unfocus();
+  minimizeKeyboard(context);
   if (reAssignBottomSheetControllerGlobal)
     bottomSheetControllerGlobal = new SheetController();
   if (useCustomController == true)

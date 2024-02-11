@@ -6,6 +6,7 @@ import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/widgets/globalSnackbar.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openSnackbar.dart';
+import 'package:budget/widgets/textInput.dart';
 import 'package:drift/drift.dart' hide Column;
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -31,11 +32,7 @@ Future<T?> openPopup<T extends Object?>(
   VoidCallback? onExtra2,
   bool barrierDismissible = true,
 }) {
-  //Minimize keyboard when tap non interactive widget
-  FocusScopeNode currentFocus = FocusScope.of(context);
-  if (!currentFocus.hasPrimaryFocus) {
-    currentFocus.unfocus();
-  }
+  minimizeKeyboard(context);
   return showGeneralDialog(
     context: context,
     barrierDismissible: barrierDismissible,

@@ -264,7 +264,6 @@
   "system": "Система",
   "light": "Свет",
   "dark": "Темный",
-  "decimal-precision": "Десятичная точность",
   "view-all-currencies": "Просмотреть все валюты",
   "no-currencies-found": "Валюты не найдены.",
   "no-transactions-found": "Транзакций не найдено.",
@@ -496,7 +495,7 @@
   "successfully-imported": "Успешно импортируется",
   "please-restart-the-application": "Пожалуйста, перезапустите заявку",
   "biometrics-disabled": "Биометрия отключена",
-  "biometrics-disabled-description": "Нажмите здесь, чтобы включить биометрику на странице настроек и повторите попытку",
+  "biometrics-disabled-description": "Включить биометрику на странице настроек и попробуйте еще раз",
   "biometrics-error": "Ошибка биометрии",
   "biometrics-error-description": "Была ошибка с использованием биометрии устройств",
   "from-the-developer": "От разработчика",
@@ -1045,5 +1044,10 @@
   "set-date-time": "Набор",
   "add-record-using-plus-button": "Добавьте запись, используя кнопку [+].",
   "all-settled": "Все урегулированы",
-  "difference-loan": "Разница в кредит"
+  "difference-loan": "Разница в кредит",
+  "open-settings": "Открыть настройки",
+  "decimal-precision": "Десятичная точность",
+  "decimal-precision-description": "Десятичные места для округления транзакции",
+  "same-accounts": "Те же счета",
+  "select-2-different-accounts": "Выберите 2 разных учетных записей"
 }

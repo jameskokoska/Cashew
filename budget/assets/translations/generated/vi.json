@@ -264,7 +264,6 @@
   "system": "Hệ thống",
   "light": "Sáng",
   "dark": "Tối",
-  "decimal-precision": "Độ chính xác thập phân",
   "view-all-currencies": "Xem hết các loại tiền tệ",
   "no-currencies-found": "Không tìm thấy tiền tệ.",
   "no-transactions-found": "Không tìm thấy giao dịch nào.",
@@ -496,7 +495,7 @@
   "successfully-imported": "Nhập thành công",
   "please-restart-the-application": "Vui lòng khởi động lại ứng dụng",
   "biometrics-disabled": "Đã tắt sinh trắc học",
-  "biometrics-disabled-description": "Nhấn vào đây để bật sinh trắc học trong trang thiết đặt và thử lại",
+  "biometrics-disabled-description": "Bật sinh trắc học trong trang Cài đặt và thử lại",
   "biometrics-error": "Lỗi sinh trắc học",
   "biometrics-error-description": "Có một lỗi khi dùng sinh trắc học thiết bị",
   "from-the-developer": "Từ nhà phát triển",
@@ -1045,5 +1044,10 @@
   "set-date-time": "Đặt",
   "add-record-using-plus-button": "Thêm một bản ghi bằng nút +.",
   "all-settled": "Đã thanh toán tất cả",
-  "difference-loan": "Khoản vay chênh lệch"
+  "difference-loan": "Khoản vay khác nhau",
+  "open-settings": "Mở thiết đặt",
+  "decimal-precision": "Độ chính xác thập phân",
+  "decimal-precision-description": "Vị trí thập phân để làm tròn số tiền giao dịch",
+  "same-accounts": "Cùng tài khoản",
+  "select-2-different-accounts": "Chọn 2 tài khoản khác nhau"
 }

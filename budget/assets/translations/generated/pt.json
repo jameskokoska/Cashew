@@ -264,7 +264,6 @@
   "system": "Sistema",
   "light": "Claro",
   "dark": "Escuro",
-  "decimal-precision": "Precisão decimal",
   "view-all-currencies": "Ver todas as moedas",
   "no-currencies-found": "Nenhuma moeda encontrada.",
   "no-transactions-found": "Nenhuma transação encontrada.",
@@ -496,7 +495,7 @@
   "successfully-imported": "Importado com sucesso",
   "please-restart-the-application": "Por favor, reinicie o aplicativo",
   "biometrics-disabled": "Biometria desativada",
-  "biometrics-disabled-description": "Toque aqui para ativar a biometria na página Configurações e tente novamente",
+  "biometrics-disabled-description": "Ativar biometria na página Configurações e tente novamente",
   "biometrics-error": "Erro de biometria",
   "biometrics-error-description": "Houve um erro usando a biometria do dispositivo",
   "from-the-developer": "Do desenvolvedor",
@@ -1045,5 +1044,10 @@
   "set-date-time": "Definir",
   "add-record-using-plus-button": "Adicione um registro usando o botão [+].",
   "all-settled": "Tudo resolvido",
-  "difference-loan": "Empréstimo de diferença"
+  "difference-loan": "Empréstimo de diferença",
+  "open-settings": "Abrir configurações",
+  "decimal-precision": "Precisão decimal",
+  "decimal-precision-description": "Locais decimais para arredondamento da quantidade de transação",
+  "same-accounts": "Mesmos contas",
+  "select-2-different-accounts": "Selecione 2 contas diferentes"
 }

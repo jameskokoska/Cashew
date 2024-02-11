@@ -10,6 +10,7 @@ import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/animatedExpanded.dart';
 import 'package:budget/widgets/breathingAnimation.dart';
 import 'package:budget/widgets/button.dart';
+import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/widgets/moreIcons.dart';
 import 'package:budget/widgets/navigationFramework.dart';
@@ -18,6 +19,7 @@ import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/statusBox.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
+import 'package:budget/widgets/transactionEntry/transactionEntry.dart';
 import 'package:budget/widgets/viewAllTransactionsButton.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
@@ -172,11 +174,16 @@ class PremiumPage extends StatelessWidget {
                                 padding: const EdgeInsets.only(top: 4),
                                 child: Tappable(
                                   onTap: () async {
-                                    await openPopupCustom(
+                                    var result = await openPopupCustom(
                                       context,
                                       barrierDismissible: false,
                                       child: FreePremiumMessage(),
                                     );
+                                    // Highlight support options
+                                    if (result is bool && result == false) {
+                                      purchasesStateKey.currentState
+                                          ?.highlightProducts();
+                                    }
                                   },
                                   color: darkenPastel(
                                           Theme.of(context).colorScheme.primary,
@@ -369,7 +376,7 @@ class _FreePremiumMessageState extends State<FreePremiumMessage> {
                     updateSettings("premiumPopupFreeSeen", true,
                         updateGlobalState: false);
                   }
-                  Navigator.pop(context);
+                  Navigator.pop(context, false); //Pop current popup route
                 },
               ),
             ),
@@ -387,7 +394,7 @@ class _FreePremiumMessageState extends State<FreePremiumMessage> {
                           : ""),
                   onTap: () {
                     if (timerUp) {
-                      Navigator.pop(context); //Pop current route
+                      Navigator.pop(context, true); //Pop current popup route
                       Navigator.pop(context, true); //Pop premium page route
                       updateSettings("premiumPopupFreeSeen", true,
                           updateGlobalState: false);
@@ -778,10 +785,18 @@ class Products extends StatefulWidget {
 class ProductsState extends State<Products> {
   bool hasProducts = storeProducts.isNotEmpty;
   bool loading = true;
+  bool animateHighlightProducts = false;
 
   void refreshState() {
     print("refresh products");
     setState(() {});
+  }
+
+  void highlightProducts() {
+    print("highlight products");
+    setState(() {
+      animateHighlightProducts = true;
+    });
   }
 
   @override
@@ -842,94 +857,105 @@ class ProductsState extends State<Products> {
                       children: [
                         ClipRRect(
                           borderRadius: BorderRadius.circular(20),
-                          child: Container(
-                            color: dynamicPastel(
-                              context,
-                              Theme.of(context).colorScheme.primaryContainer,
-                              amountDark: 0.2,
-                              amountLight: 0.6,
-                            ).withOpacity(0.45),
-                            child: Column(
-                              children: [
-                                Builder(
-                                  builder: (context) {
-                                    if (storeProducts[productIDs["yearly"]] ==
-                                            null ||
-                                        storeProducts[productIDs["monthly"]] ==
-                                            null) {
-                                      return SizedBox.shrink();
-                                    }
-                                    final double monthlyPrice =
-                                        storeProducts[productIDs["monthly"]]!
-                                            .rawPrice;
-                                    final double monthlyPriceForYear =
-                                        (monthlyPrice * 12);
-                                    return storeProducts[
-                                                productIDs["yearly"]] ==
-                                            null
-                                        ? SizedBox.shrink()
-                                        : SubscriptionOption(
-                                            label:
-                                                "yearly".tr().capitalizeFirst,
-                                            price: storeProducts[
-                                                    productIDs["yearly"]]!
-                                                .price,
-                                            extraPadding:
-                                                EdgeInsets.only(top: 13 / 2),
-                                            onTap: () {
-                                              InAppPurchase.instance
-                                                  .buyNonConsumable(
-                                                purchaseParam: PurchaseParam(
-                                                  productDetails: storeProducts[
-                                                      productIDs["yearly"]]!,
-                                                ),
-                                              );
-                                            },
-                                            originalPrice: storeProducts[
-                                                        productIDs["yearly"]]!
-                                                    .currencySymbol +
-                                                monthlyPriceForYear
-                                                    .toStringAsFixed(2),
-                                          );
-                                  },
-                                ),
-                                storeProducts[productIDs["monthly"]] == null
-                                    ? SizedBox.shrink()
-                                    : SubscriptionOption(
-                                        label: "monthly".tr().capitalizeFirst,
-                                        price: storeProducts[
-                                                productIDs["monthly"]]!
-                                            .price,
-                                        onTap: () {
-                                          InAppPurchase.instance
-                                              .buyNonConsumable(
-                                            purchaseParam: PurchaseParam(
-                                              productDetails: storeProducts[
-                                                  productIDs["monthly"]]!,
-                                            ),
-                                          );
-                                        },
-                                      ),
-                                storeProducts[productIDs["lifetime"]] == null
-                                    ? SizedBox.shrink()
-                                    : SubscriptionOption(
-                                        label: "lifetime".tr().capitalizeFirst,
-                                        price: storeProducts[
-                                                productIDs["lifetime"]]!
-                                            .price,
-                                        extraPadding:
-                                            EdgeInsets.only(bottom: 13 / 2),
-                                        onTap: () {
-                                          InAppPurchase.instance
-                                              .buyNonConsumable(
-                                            purchaseParam: PurchaseParam(
-                                              productDetails: storeProducts[
-                                                  productIDs["lifetime"]]!,
-                                            ),
-                                          );
-                                        },
-                                      ),
-                              ],
+                          child: FlashingContainer(
+                            isAnimating: animateHighlightProducts,
+                            backgroundColor:
+                                Theme.of(context).colorScheme.primary,
+                            loopCount: 2,
+                            flashDuration: Duration(milliseconds: 650),
+                            child: Container(
+                              color: dynamicPastel(
+                                context,
+                                Theme.of(context).colorScheme.primaryContainer,
+                                amountDark: 0.2,
+                                amountLight: 0.6,
+                              ).withOpacity(0.45),
+                              child: Column(
+                                children: [
+                                  Builder(
+                                    builder: (context) {
+                                      if (storeProducts[productIDs["yearly"]] ==
+                                              null ||
+                                          storeProducts[
+                                                  productIDs["monthly"]] ==
+                                              null) {
+                                        return SizedBox.shrink();
+                                      }
+                                      final double monthlyPrice =
+                                          storeProducts[productIDs["monthly"]]!
+                                              .rawPrice;
+                                      final double monthlyPriceForYear =
+                                          (monthlyPrice * 12);
+                                      return storeProducts[
+                                                  productIDs["yearly"]] ==
+                                              null
+                                          ? SizedBox.shrink()
+                                          : SubscriptionOption(
+                                              label:
+                                                  "yearly".tr().capitalizeFirst,
+                                              price: storeProducts[
+                                                      productIDs["yearly"]]!
+                                                  .price,
+                                              extraPadding:
+                                                  EdgeInsets.only(top: 13 / 2),
+                                              onTap: () {
+                                                InAppPurchase.instance
+                                                    .buyNonConsumable(
+                                                  purchaseParam: PurchaseParam(
+                                                    productDetails:
+                                                        storeProducts[
+                                                            productIDs[
+                                                                "yearly"]]!,
+                                                  ),
+                                                );
+                                              },
+                                              originalPrice: storeProducts[
+                                                          productIDs["yearly"]]!
+                                                      .currencySymbol +
+                                                  monthlyPriceForYear
+                                                      .toStringAsFixed(2),
+                                            );
+                                    },
+                                  ),
+                                  storeProducts[productIDs["monthly"]] == null
+                                      ? SizedBox.shrink()
+                                      : SubscriptionOption(
+                                          label: "monthly".tr().capitalizeFirst,
+                                          price: storeProducts[
+                                                  productIDs["monthly"]]!
+                                              .price,
+                                          onTap: () {
+                                            InAppPurchase.instance
+                                                .buyNonConsumable(
+                                              purchaseParam: PurchaseParam(
+                                                productDetails: storeProducts[
+                                                    productIDs["monthly"]]!,
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                  storeProducts[productIDs["lifetime"]] == null
+                                      ? SizedBox.shrink()
+                                      : SubscriptionOption(
+                                          label:
+                                              "lifetime".tr().capitalizeFirst,
+                                          price: storeProducts[
+                                                  productIDs["lifetime"]]!
+                                              .price,
+                                          extraPadding:
+                                              EdgeInsets.only(bottom: 13 / 2),
+                                          onTap: () {
+                                            InAppPurchase.instance
+                                                .buyNonConsumable(
+                                              purchaseParam: PurchaseParam(
+                                                productDetails: storeProducts[
+                                                    productIDs["lifetime"]]!,
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                ],
+                              ),
                             ),
                           ),
                         ),

@@ -264,7 +264,6 @@
   "system": "체계",
   "light": "빛",
   "dark": "어두운",
-  "decimal-precision": "소수점 정밀도",
   "view-all-currencies": "모든 통화를보십시오",
   "no-currencies-found": "통화가 발견되지 않았습니다.",
   "no-transactions-found": "거래가 발견되지 않았습니다.",
@@ -496,7 +495,7 @@
   "successfully-imported": "성공적으로 가져 왔습니다",
   "please-restart-the-application": "신청서를 다시 시작하십시오",
   "biometrics-disabled": "생체 인식이 비활성화되었습니다",
-  "biometrics-disabled-description": "설정 페이지에서 생체 인식을 활성화하려면 여기를 탭하고 다시 시도하십시오.",
+  "biometrics-disabled-description": "설정 페이지에서 생체 인식을 활성화하고 다시 시도하십시오",
   "biometrics-error": "생체 인식 오류",
   "biometrics-error-description": "장치 생체 인식을 사용하는 오류가있었습니다",
   "from-the-developer": "개발자로부터",
@@ -1045,5 +1044,10 @@
   "set-date-time": "세트",
   "add-record-using-plus-button": "[+] 버튼을 사용하여 레코드를 추가하십시오.",
   "all-settled": "모두 정착했습니다",
-  "difference-loan": "차이 대출"
+  "difference-loan": "차이 대출",
+  "open-settings": "열기 설정",
+  "decimal-precision": "소수점 정밀도",
+  "decimal-precision-description": "거래 금액 반올림을위한 소수점 이하",
+  "same-accounts": "같은 계정",
+  "select-2-different-accounts": "2 개의 다른 계정을 선택하십시오"
 }

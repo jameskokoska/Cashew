@@ -264,7 +264,6 @@
   "system": "Sistem",
   "light": "Işık",
   "dark": "Karanlık",
-  "decimal-precision": "Ondalık hassasiyet",
   "view-all-currencies": "Tüm para birimlerini görüntüle",
   "no-currencies-found": "Para birimi bulunamadı.",
   "no-transactions-found": "İşlem bulunamadı.",
@@ -496,7 +495,7 @@
   "successfully-imported": "Başarıyla ithal edildi",
   "please-restart-the-application": "Lütfen uygulamayı yeniden başlatın",
   "biometrics-disabled": "Biyometri devre dışı",
-  "biometrics-disabled-description": "Ayarlar sayfasında biyometri etkinleştirmek için buraya dokunun ve tekrar deneyin",
+  "biometrics-disabled-description": "Ayarlar sayfasında biyometri etkinleştirin ve tekrar deneyin",
   "biometrics-error": "Biyometri hatası",
   "biometrics-error-description": "Biyometri cihazlarını kullanan bir hata vardı",
   "from-the-developer": "Geliştiriciden",
@@ -1045,5 +1044,10 @@
   "set-date-time": "Ayarlamak",
   "add-record-using-plus-button": "[+] Düğmesini kullanarak bir kayıt ekleyin.",
   "all-settled": "Herşey ayarlandı",
-  "difference-loan": "Fark kredisi"
+  "difference-loan": "Fark kredisi",
+  "open-settings": "Ayarları aç",
+  "decimal-precision": "Ondalık hassasiyet",
+  "decimal-precision-description": "İşlem miktarı yuvarlama için ondalık yerler",
+  "same-accounts": "Aynı hesaplar",
+  "select-2-different-accounts": "2 farklı hesap seçin"
 }

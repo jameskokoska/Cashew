@@ -264,7 +264,6 @@
   "system": "Sistema",
   "light": "Chiaro",
   "dark": "Scuro",
-  "decimal-precision": "Precisione decimali",
   "view-all-currencies": "Mostra tutte le valute",
   "no-currencies-found": "Nessuna valuta trovata.",
   "no-transactions-found": "Nessuna transazione trovata.",
@@ -496,7 +495,7 @@
   "successfully-imported": "Importato con successo",
   "please-restart-the-application": "Si prega di riavviare l'applicazione",
   "biometrics-disabled": "Impronta digitale disabilitata",
-  "biometrics-disabled-description": "Tocca qui per abilitare l'impronta digitale nella pagina delle impostazioni e riprovare",
+  "biometrics-disabled-description": "Abilita la biometria nella pagina delle impostazioni e riprova",
   "biometrics-error": "Errore nell'impronta",
   "biometrics-error-description": "Si è verificato un errore nell'utilizzare l'impronta digitale dei dispositivi",
   "from-the-developer": "Dallo sviluppatore",
@@ -1045,5 +1044,10 @@
   "set-date-time": "Impostato",
   "add-record-using-plus-button": "Aggiungi un record utilizzando il pulsante [+].",
   "all-settled": "Tutto sistemato",
-  "difference-loan": "Prestito di differenza"
+  "difference-loan": "Prestito di differenza",
+  "open-settings": "Impostazioni aperte",
+  "decimal-precision": "Precisione decimali",
+  "decimal-precision-description": "Posti decimali per l'arrotondamento dell'importo delle transazioni",
+  "same-accounts": "Stessi account",
+  "select-2-different-accounts": "Seleziona 2 account diversi"
 }

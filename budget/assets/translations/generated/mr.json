@@ -264,7 +264,6 @@
   "system": "प्रणाली",
   "light": "प्रकाश",
   "dark": "गडद",
-  "decimal-precision": "दशांश सुस्पष्टता",
   "view-all-currencies": "सर्व चलने पहा",
   "no-currencies-found": "कोणतीही चलने सापडली नाहीत.",
   "no-transactions-found": "कोणतेही व्यवहार सापडले नाहीत.",
@@ -496,7 +495,7 @@
   "successfully-imported": "यशस्वीरित्या आयात केले",
   "please-restart-the-application": "कृपया अर्ज पुन्हा सुरू करा",
   "biometrics-disabled": "बायोमेट्रिक्स अक्षम",
-  "biometrics-disabled-description": "सेटिंग्ज पृष्ठामध्ये बायोमेट्रिक्स सक्षम करण्यासाठी येथे टॅप करा आणि पुन्हा प्रयत्न करा",
+  "biometrics-disabled-description": "सेटिंग्ज पृष्ठामध्ये बायोमेट्रिक्स सक्षम करा आणि पुन्हा प्रयत्न करा",
   "biometrics-error": "बायोमेट्रिक्स त्रुटी",
   "biometrics-error-description": "बायोमेट्रिक्स डिव्हाइस वापरुन एक त्रुटी आली",
   "from-the-developer": "विकसकाकडून",
@@ -1045,5 +1044,10 @@
   "set-date-time": "सेट",
   "add-record-using-plus-button": "[+] बटण वापरून रेकॉर्ड जोडा.",
   "all-settled": "सर्व सेटल",
-  "difference-loan": "फरक कर्ज"
+  "difference-loan": "फरक कर्ज",
+  "open-settings": "सेटिंग्ज उघडा",
+  "decimal-precision": "दशांश सुस्पष्टता",
+  "decimal-precision-description": "व्यवहाराच्या रकमेसाठी दशांश ठिकाणे",
+  "same-accounts": "समान खाती",
+  "select-2-different-accounts": "2 भिन्न खाती निवडा"
 }

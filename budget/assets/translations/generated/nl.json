@@ -264,7 +264,6 @@
   "system": "Systeem",
   "light": "Licht",
   "dark": "Donker",
-  "decimal-precision": "Decimale precisie",
   "view-all-currencies": "Bekijk alle valuta",
   "no-currencies-found": "Geen valuta's gevonden.",
   "no-transactions-found": "Geen transacties gevonden.",
@@ -496,7 +495,7 @@
   "successfully-imported": "Succesvol geïmporteerd",
   "please-restart-the-application": "Start de applicatie opnieuw op",
   "biometrics-disabled": "Biometrie uitgeschakeld",
-  "biometrics-disabled-description": "Tik hier om biometrie op de instellingenpagina in te schakelen en probeer het opnieuw",
+  "biometrics-disabled-description": "Schakel biometrie in op de pagina Instellingen en probeer het opnieuw",
   "biometrics-error": "Biometrische fout",
   "biometrics-error-description": "Er was een foutmelding met behulp van de biometrie van de apparaten",
   "from-the-developer": "Van de ontwikkelaar",
@@ -1045,5 +1044,10 @@
   "set-date-time": "Set",
   "add-record-using-plus-button": "Voeg een record toe met de knop [+].",
   "all-settled": "Allemaal geregeld",
-  "difference-loan": "Verschillening"
+  "difference-loan": "Verschillening",
+  "open-settings": "Open instellingen",
+  "decimal-precision": "Decimale precisie",
+  "decimal-precision-description": "Decimale plaatsen voor afronding van transactiebedrag",
+  "same-accounts": "Dezelfde accounts",
+  "select-2-different-accounts": "Selecteer 2 verschillende accounts"
 }

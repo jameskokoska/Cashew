@@ -264,7 +264,6 @@
   "system": "System",
   "light": "Jasny",
   "dark": "Ciemny",
-  "decimal-precision": "Liczba po przecinku",
   "view-all-currencies": "Zobacz wszystkie waluty",
   "no-currencies-found": "Nie znaleziono żadnych walut.",
   "no-transactions-found": "Nie znaleziono transakcji.",
@@ -496,7 +495,7 @@
   "successfully-imported": "Pomyślnie zaimportowany",
   "please-restart-the-application": "Uruchom ponownie aplikację",
   "biometrics-disabled": "Zabezpieczenia biometryczne wyłączone",
-  "biometrics-disabled-description": "Stuknij tutaj, aby włączyć biometrię na stronie Ustawienia i spróbuj ponownie",
+  "biometrics-disabled-description": "Włącz biometrię na stronie Ustawienia i spróbuj ponownie",
   "biometrics-error": "Błąd biometryki",
   "biometrics-error-description": "Wystąpił błąd przy użyciu biometrii urządzeń",
   "from-the-developer": "Od dewelopera",
@@ -1045,5 +1044,10 @@
   "set-date-time": "Ustawić",
   "add-record-using-plus-button": "Dodaj rekord za pomocą przycisku [+].",
   "all-settled": "Wszystkie się rozstrzygnęły",
-  "difference-loan": "Pożyczka na różnicę"
+  "difference-loan": "Pożyczka na różnicę",
+  "open-settings": "Otwórz ustawienia",
+  "decimal-precision": "Liczba po przecinku",
+  "decimal-precision-description": "Miejsca dziesiętne do zaokrąglania",
+  "same-accounts": "Te same konta",
+  "select-2-different-accounts": "Wybierz 2 różne konta"
 }

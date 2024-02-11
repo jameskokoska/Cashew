@@ -264,7 +264,6 @@
   "system": "Système",
   "light": "Lumière",
   "dark": "Sombre",
-  "decimal-precision": "Précision décimale",
   "view-all-currencies": "Afficher toutes les devises",
   "no-currencies-found": "Aucune devise trouvée.",
   "no-transactions-found": "Aucune transaction trouvée.",
@@ -496,7 +495,7 @@
   "successfully-imported": "Importé avec succès",
   "please-restart-the-application": "Veuillez redémarrer la demande",
   "biometrics-disabled": "Biométrie désactivée",
-  "biometrics-disabled-description": "Appuyez ici pour activer la biométrie dans la page des paramètres et réessayer",
+  "biometrics-disabled-description": "Activer la biométrie dans la page des paramètres et réessayer",
   "biometrics-error": "Erreur de biométrie",
   "biometrics-error-description": "Il y avait une erreur en utilisant les appareils biométriques",
   "from-the-developer": "Du développeur",
@@ -1045,5 +1044,10 @@
   "set-date-time": "Ensemble",
   "add-record-using-plus-button": "Ajoutez un enregistrement à l'aide du bouton [+].",
   "all-settled": "Tous installés",
-  "difference-loan": "Prêt de différence"
+  "difference-loan": "Prêt de différence",
+  "open-settings": "Paramètres ouvrir",
+  "decimal-precision": "Précision décimale",
+  "decimal-precision-description": "Décimaux pour le montant de la transaction Arrondi",
+  "same-accounts": "Mêmes comptes",
+  "select-2-different-accounts": "Sélectionnez 2 comptes différents"
 }

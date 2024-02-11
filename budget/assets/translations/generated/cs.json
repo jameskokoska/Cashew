@@ -264,7 +264,6 @@
   "system": "Systém",
   "light": "Světlo",
   "dark": "Temný",
-  "decimal-precision": "Desetinná přesnost",
   "view-all-currencies": "Zobrazit všechny měny",
   "no-currencies-found": "Nalezeny žádné měny.",
   "no-transactions-found": "Nebyly nalezeny žádné transakce.",
@@ -496,7 +495,7 @@
   "successfully-imported": "Úspěšně importováno",
   "please-restart-the-application": "Restartujte aplikaci",
   "biometrics-disabled": "Biometrie deaktivována",
-  "biometrics-disabled-description": "Klepnutím zde povolíte biometriku na stránce Nastavení a zkuste to znovu",
+  "biometrics-disabled-description": "Povolte biometriku na stránce Nastavení a zkuste to znovu",
   "biometrics-error": "Chyba biometrie",
   "biometrics-error-description": "Došlo k chybě pomocí biometrie zařízení",
   "from-the-developer": "Od vývojáře",
@@ -1045,5 +1044,10 @@
   "set-date-time": "Soubor",
   "add-record-using-plus-button": "Přidejte záznam pomocí tlačítka [+].",
   "all-settled": "Všichni se usadili",
-  "difference-loan": "Rozdílná půjčka"
+  "difference-loan": "Rozdílná půjčka",
+  "open-settings": "Otevřené nastavení",
+  "decimal-precision": "Desetinná přesnost",
+  "decimal-precision-description": "Desetinná místa pro zaokrouhlování částky transakce",
+  "same-accounts": "Stejné účty",
+  "select-2-different-accounts": "Vyberte 2 různé účty"
 }

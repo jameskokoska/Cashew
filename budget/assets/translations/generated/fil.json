@@ -264,7 +264,6 @@
   "system": "Sistema",
   "light": "Magaan",
   "dark": "Madilim",
-  "decimal-precision": "Desimal na katumpakan",
   "view-all-currencies": "Tingnan ang lahat ng mga pera",
   "no-currencies-found": "Walang nahanap na pera.",
   "no-transactions-found": "Walang nahanap na mga transaksyon.",
@@ -496,7 +495,7 @@
   "successfully-imported": "Matagumpay na na -import",
   "please-restart-the-application": "Mangyaring i -restart ang application",
   "biometrics-disabled": "Hindi pinagana ang Biometrics",
-  "biometrics-disabled-description": "Tapikin dito upang paganahin ang biometrics sa pahina ng mga setting at subukang muli",
+  "biometrics-disabled-description": "Paganahin ang biometrics sa pahina ng mga setting at subukang muli",
   "biometrics-error": "Error sa biometrics",
   "biometrics-error-description": "Nagkaroon ng isang error gamit ang mga aparato ng biometrics",
   "from-the-developer": "Mula sa developer",
@@ -1045,5 +1044,10 @@
   "set-date-time": "Itakda",
   "add-record-using-plus-button": "Magdagdag ng isang tala gamit ang pindutan ng [+].",
   "all-settled": "Lahat ay naayos",
-  "difference-loan": "Pagkakaiba ng pautang"
+  "difference-loan": "Pagkakaiba ng pautang",
+  "open-settings": "Buksan ang settings",
+  "decimal-precision": "Desimal na katumpakan",
+  "decimal-precision-description": "Mga lugar na desimal para sa pag -ikot ng halaga ng transaksyon",
+  "same-accounts": "Parehong mga account",
+  "select-2-different-accounts": "Piliin ang 2 iba't ibang mga account"
 }

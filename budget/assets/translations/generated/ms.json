@@ -264,7 +264,6 @@
   "system": "Sistem",
   "light": "Cahaya",
   "dark": "Gelap",
-  "decimal-precision": "Ketepatan perpuluhan",
   "view-all-currencies": "Lihat semua mata wang",
   "no-currencies-found": "Tiada mata wang yang dijumpai.",
   "no-transactions-found": "Tiada urus niaga yang dijumpai.",
@@ -496,7 +495,7 @@
   "successfully-imported": "Berjaya diimport",
   "please-restart-the-application": "Sila mulakan semula permohonan",
   "biometrics-disabled": "Biometrik dilumpuhkan",
-  "biometrics-disabled-description": "Ketik di sini untuk membolehkan biometrik di halaman tetapan dan cuba lagi",
+  "biometrics-disabled-description": "Dayakan biometrik di halaman tetapan dan cuba lagi",
   "biometrics-error": "Kesalahan biometrik",
   "biometrics-error-description": "Terdapat ralat menggunakan biometrik peranti",
   "from-the-developer": "Dari pemaju",
@@ -1045,5 +1044,10 @@
   "set-date-time": "Tetapkan",
   "add-record-using-plus-button": "Tambah rekod menggunakan butang [+].",
   "all-settled": "Semua diselesaikan",
-  "difference-loan": "Pinjaman perbezaan"
+  "difference-loan": "Pinjaman perbezaan",
+  "open-settings": "Buka Tetapan",
+  "decimal-precision": "Ketepatan perpuluhan",
+  "decimal-precision-description": "Tempat perpuluhan untuk jumlah urus niaga",
+  "same-accounts": "Akaun yang sama",
+  "select-2-different-accounts": "Pilih 2 akaun yang berbeza"
 }

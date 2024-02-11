@@ -13,6 +13,7 @@ import 'package:budget/widgets/selectedTransactionsAppBar.dart';
 import 'package:budget/widgets/monthSelector.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/widgets/settingsContainers.dart';
+import 'package:budget/widgets/textInput.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntries.dart';
 import 'package:budget/widgets/transactionEntry/swipeToSelectTransactions.dart';
@@ -141,11 +142,7 @@ class TransactionsListPageState extends State<TransactionsListPage>
             children: [
               GestureDetector(
                 onTap: () {
-                  //Minimize keyboard when tap non interactive widget
-                  FocusScopeNode currentFocus = FocusScope.of(context);
-                  if (!currentFocus.hasPrimaryFocus) {
-                    currentFocus.unfocus();
-                  }
+                  minimizeKeyboard(context);
                 },
                 child: NestedScrollView(
                   controller: _scrollController,

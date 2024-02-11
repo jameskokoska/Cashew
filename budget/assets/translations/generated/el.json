@@ -264,7 +264,6 @@
   "system": "Σύστημα",
   "light": "Φως",
   "dark": "Σκοτάδι",
-  "decimal-precision": "Δεκαδική ακρίβεια",
   "view-all-currencies": "Δείτε όλα τα νομίσματα",
   "no-currencies-found": "Δεν βρέθηκαν νομίσματα.",
   "no-transactions-found": "Δεν βρέθηκαν συναλλαγές.",
@@ -496,7 +495,7 @@
   "successfully-imported": "Επιτυχώς εισαγάγει",
   "please-restart-the-application": "Επανεκκινήστε την εφαρμογή",
   "biometrics-disabled": "Η βιομετρία απενεργοποιείται",
-  "biometrics-disabled-description": "Πατήστε εδώ για να ενεργοποιήσετε τη βιομετρία στη σελίδα ρυθμίσεων και δοκιμάστε ξανά",
+  "biometrics-disabled-description": "Ενεργοποιήστε τη βιομετρία στη σελίδα ρυθμίσεων και δοκιμάστε ξανά",
   "biometrics-error": "Σφάλμα βιομετρίας",
   "biometrics-error-description": "Υπήρχε σφάλμα χρησιμοποιώντας τις βιομετρικές συσκευές",
   "from-the-developer": "Από τον προγραμματιστή",
@@ -1045,5 +1044,10 @@
   "set-date-time": "Σειρά",
   "add-record-using-plus-button": "Προσθέστε μια εγγραφή χρησιμοποιώντας το κουμπί [+].",
   "all-settled": "Όλοι εγκατεστημένοι",
-  "difference-loan": "Διαφορά δάνειο"
+  "difference-loan": "Διαφορά δάνειο",
+  "open-settings": "Ανοίξτε τις ρυθμίσεις",
+  "decimal-precision": "Δεκαδική ακρίβεια",
+  "decimal-precision-description": "Δεκαδικά μέρη για στρογγυλοποίηση ποσού συναλλαγών",
+  "same-accounts": "Ίδιοι λογαριασμοί",
+  "select-2-different-accounts": "Επιλέξτε 2 διαφορετικούς λογαριασμούς"
 }
