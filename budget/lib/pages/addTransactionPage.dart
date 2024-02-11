@@ -2829,7 +2829,9 @@ Future<bool> addAssociatedTitles(
 
       if (checkIfAlreadyExists != null &&
           foundTitle?.title.categoryFk == selectedCategory.categoryPk &&
-          foundTitle?.title.title.trim() == selectedTitle.trim()) {
+          (foundTitle?.partialTitleString?.trim() == selectedTitle.trim() ||
+              (foundTitle?.partialTitleString == null &&
+                  foundTitle?.title.title.trim() == selectedTitle.trim()))) {
         print("already has this title, moved to top");
 
         // This is more efficient than shifting the associated title since this uses batching
