@@ -15,7 +15,9 @@ bool shouldAutoRefocus = false;
 void minimizeKeyboard(BuildContext context) {
   FocusScopeNode currentFocus = FocusScope.of(context);
   currentFocus.unfocus();
-  shouldAutoRefocus = false;
+  Future.delayed(Duration(milliseconds: 10), () {
+    shouldAutoRefocus = false;
+  });
 }
 
 class ResumeTextFieldFocus extends StatelessWidget {
@@ -35,8 +37,8 @@ class ResumeTextFieldFocus extends StatelessWidget {
             _currentTextInputFocus = FocusScope.of(context).focusedChild;
           }
 
-          Future.delayed(Duration(milliseconds: 50), () {
-            shouldAutoRefocus = value;
+          Future.delayed(Duration(milliseconds: value ? 5 : 0), () {
+            shouldAutoRefocus = true;
           });
         },
         child: OnAppResume(
@@ -45,6 +47,7 @@ class ResumeTextFieldFocus extends StatelessWidget {
               _currentTextInputFocus?.unfocus();
               Future.delayed(Duration(milliseconds: 5), () {
                 _currentTextInputFocus?.requestFocus();
+                shouldAutoRefocus = true;
               });
             }
           },
