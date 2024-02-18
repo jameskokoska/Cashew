@@ -1049,5 +1049,6 @@
   "decimal-precision": "اعشاریہ صحت سے متعلق",
   "decimal-precision-description": "ٹرانزیکشن کی رقم کے لئے اعشاریہ مقامات",
   "same-accounts": "ایک ہی اکاؤنٹس",
-  "select-2-different-accounts": "2 مختلف اکاؤنٹس منتخب کریں"
+  "select-2-different-accounts": "2 مختلف اکاؤنٹس منتخب کریں",
+  "include-amount": "رقم شامل کریں"
 }

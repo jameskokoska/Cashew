@@ -1047,7 +1047,8 @@
   "difference-loan": "เงินกู้ที่แตกต่างกัน",
   "open-settings": "เปิดการตั้งค่า",
   "decimal-precision": "ความแม่นยำของทศนิยม",
-  "decimal-precision-description": "ทศนิยมสถานที่สำหรับการทำธุรกรรมการปัดเศษ",
+  "decimal-precision-description": "ทศนิยมสถานที่สำหรับการปัดเศษจำนวนธุรกรรม",
   "same-accounts": "บัญชีเดียวกัน",
-  "select-2-different-accounts": "เลือก 2 บัญชีที่แตกต่างกัน"
+  "select-2-different-accounts": "เลือก 2 บัญชีที่แตกต่างกัน",
+  "include-amount": "รวมจำนวนเงิน"
 }

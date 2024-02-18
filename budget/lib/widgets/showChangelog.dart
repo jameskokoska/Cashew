@@ -26,6 +26,14 @@ import 'listItem.dart';
 
 String getChangelogString() {
   return """
+    < 5.2.2
+    Exclude transaction from counting towards reports and totals (in more options)
+    Graph axis label supports locale and short form for > 1,000
+    Fixed text focus resume for inactive app
+    If accounts all have same currency, currency label is removed in select chips
+    Defocus and remove focus node from cache when navigating
+    Fixed confetti canvas size for completed loans/goals
+    Removed selectable accent colors that don't change the app theme
     < 5.2.1
     Transfer transactions always ordered with transfer out (negative amount) listed first
     Removed last word title autocomplete predictions

@@ -1049,5 +1049,6 @@
   "decimal-precision": "Decimale precisie",
   "decimal-precision-description": "Decimale plaatsen voor afronding van transactiebedrag",
   "same-accounts": "Dezelfde accounts",
-  "select-2-different-accounts": "Selecteer 2 verschillende accounts"
+  "select-2-different-accounts": "Selecteer 2 verschillende accounts",
+  "include-amount": "BETREKKING VAN BEDRIJF"
 }

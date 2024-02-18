@@ -1049,5 +1049,6 @@
   "decimal-precision": "दशमलव परिशुद्धता",
   "decimal-precision-description": "लेन -देन राशि के लिए दशमलव स्थान",
   "same-accounts": "एक ही खाते",
-  "select-2-different-accounts": "2 अलग -अलग खातों का चयन करें"
+  "select-2-different-accounts": "2 अलग -अलग खातों का चयन करें",
+  "include-amount": "राशि शामिल करें"
 }

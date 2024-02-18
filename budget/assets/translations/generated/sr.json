@@ -1039,7 +1039,7 @@
   "currency-total": "Укупно валуте",
   "currency-total-description": "Наведите све укупне вредности валуте рачуна",
   "app": "Апликација",
-  "set-color": "Подесите боју",
+  "set-color": "Подесити боју",
   "next-date-time": "Следећи",
   "set-date-time": "Комплет",
   "add-record-using-plus-button": "Додајте запис помоћу [+] тастера.",
@@ -1049,5 +1049,6 @@
   "decimal-precision": "Децимална прецизност",
   "decimal-precision-description": "Децимална места за заокруживање износа трансакције",
   "same-accounts": "Исти рачуни",
-  "select-2-different-accounts": "Изаберите 2 различита рачуна"
+  "select-2-different-accounts": "Изаберите 2 различита рачуна",
+  "include-amount": "Укључите износ"
 }

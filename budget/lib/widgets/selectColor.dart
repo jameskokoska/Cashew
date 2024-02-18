@@ -27,6 +27,7 @@ class SelectColor extends StatefulWidget {
     this.includeThemeColor = true, // Will return null if theme color is chosen
     this.useSystemColorPrompt =
         false, // Will show the option to use the system color (horizontalList must be disabled)
+    this.selectableColorsList,
   }) : super(key: key);
   final Function(Color?)? setSelectedColor;
   final Color? selectedColor;
@@ -35,6 +36,7 @@ class SelectColor extends StatefulWidget {
   final bool supportCustomColors;
   final bool includeThemeColor;
   final bool? useSystemColorPrompt;
+  final List<Color>? selectableColorsList;
 
   @override
   _SelectColorState createState() => _SelectColorState();
@@ -44,48 +46,53 @@ class _SelectColorState extends State<SelectColor> {
   Color? selectedColor;
   int? selectedIndex;
   bool useSystemColor = appStateSettings["accentSystemColor"];
+  late List<Color> selectableColorsList;
 
   @override
   void initState() {
     super.initState();
-    if (widget.selectedColor != null) {
-      int index = 0;
-      Future.delayed(Duration.zero, () {
-        for (Color color in selectableColors(context)) {
-          if (color.toString() == widget.selectedColor.toString()) {
+    Future.delayed(Duration.zero, () {
+      selectableColorsList =
+          widget.selectableColorsList ?? selectableColors(context);
+      if (widget.supportCustomColors) {
+        selectableColorsList.add(Colors.transparent);
+      }
+      if (widget.includeThemeColor) {
+        selectableColorsList.insert(0, Colors.transparent);
+      }
+
+      if (widget.selectedColor != null) {
+        int index = 0;
+        Future.delayed(Duration.zero, () {
+          for (Color color in selectableColorsList) {
+            if (color.toString() == widget.selectedColor.toString()) {
+              setState(() {
+                selectedIndex = index;
+                selectedColor = widget.selectedColor;
+              });
+              return;
+            }
+            index++;
+          }
+          print("color not found - must be custom color");
+          if (useSystemColor == false)
             setState(() {
-              selectedIndex = index;
+              selectedIndex = -1;
               selectedColor = widget.selectedColor;
             });
-            return;
-          }
-          index++;
-        }
-        print("color not found - must be custom color");
-        if (useSystemColor == false)
-          setState(() {
-            selectedIndex = -1;
-            selectedColor = widget.selectedColor;
-          });
-      });
-    } else {
-      setState(() {
-        selectedIndex = 0;
-        selectedColor = null;
-      });
-    }
+        });
+      } else {
+        setState(() {
+          selectedIndex = 0;
+          selectedColor = null;
+        });
+      }
+    });
   }
 
   //find the selected category using selectedCategory
   @override
   Widget build(BuildContext context) {
-    List<Color> selectableColorsList = selectableColors(context);
-    if (widget.supportCustomColors) {
-      selectableColorsList.add(Colors.transparent);
-    }
-    if (widget.includeThemeColor) {
-      selectableColorsList.insert(0, Colors.transparent);
-    }
     if (widget.horizontalList) {
       return LinearGradientFadedEdges(
         enableTop: false,

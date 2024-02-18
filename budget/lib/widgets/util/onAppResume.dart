@@ -8,12 +8,14 @@ class OnAppResume extends StatefulWidget {
     required this.child,
     required this.onAppResume,
     this.onAppPaused,
+    this.onAppInactive,
     this.updateGlobalAppLifecycleState = false,
   });
 
   final Widget child;
   final VoidCallback onAppResume;
   final VoidCallback? onAppPaused;
+  final VoidCallback? onAppInactive;
   final bool updateGlobalAppLifecycleState;
 
   @override
@@ -47,6 +49,10 @@ class _OnAppResumeState extends State<OnAppResume> with WidgetsBindingObserver {
         (_lastState == AppLifecycleState.paused ||
             _lastState == AppLifecycleState.inactive)) {
       widget.onAppResume();
+    }
+
+    if (widget.onAppInactive != null && state == AppLifecycleState.inactive) {
+      widget.onAppInactive!();
     }
 
     if (widget.onAppPaused != null && state == AppLifecycleState.paused) {

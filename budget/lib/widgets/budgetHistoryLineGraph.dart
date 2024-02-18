@@ -678,7 +678,7 @@ class _BudgetHistoryLineGraphState extends State<_BudgetHistoryLineGraph> {
                       child: TextFont(
                         textAlign: TextAlign.right,
                         text: getWordedNumber(
-                            Provider.of<AllWallets>(context), value),
+                            context, Provider.of<AllWallets>(context), value),
                         textColor: dynamicPastel(context, widget.color,
                                 amount: 0.5, inverse: true)
                             .withOpacity(0.3),

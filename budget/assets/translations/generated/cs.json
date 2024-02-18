@@ -1049,5 +1049,6 @@
   "decimal-precision": "Desetinná přesnost",
   "decimal-precision-description": "Desetinná místa pro zaokrouhlování částky transakce",
   "same-accounts": "Stejné účty",
-  "select-2-different-accounts": "Vyberte 2 různé účty"
+  "select-2-different-accounts": "Vyberte 2 různé účty",
+  "include-amount": "Zahrnout částku"
 }

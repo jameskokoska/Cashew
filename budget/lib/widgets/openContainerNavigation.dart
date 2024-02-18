@@ -1,5 +1,6 @@
 import 'package:budget/functions.dart';
 import 'package:budget/struct/settings.dart';
+import 'package:budget/widgets/textInput.dart';
 import 'package:flutter/material.dart';
 import 'package:animations/animations.dart';
 
@@ -29,6 +30,7 @@ class OpenContainerNavigation extends StatelessWidget {
   Widget build(BuildContext context) {
     if (appStateSettings["batterySaver"] || appStateSettings["iOSNavigation"]) {
       Widget child = button(() async {
+        minimizeKeyboard(context);
         if (onOpen != null) onOpen!();
         await pushRoute(context, openPage);
         if (onClosed != null) onClosed!();

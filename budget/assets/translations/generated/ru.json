@@ -1049,5 +1049,6 @@
   "decimal-precision": "Десятичная точность",
   "decimal-precision-description": "Десятичные места для округления транзакции",
   "same-accounts": "Те же счета",
-  "select-2-different-accounts": "Выберите 2 разных учетных записей"
+  "select-2-different-accounts": "Выберите 2 разных учетных записей",
+  "include-amount": "Включить сумму"
 }

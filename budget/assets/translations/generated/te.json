@@ -1049,5 +1049,6 @@
   "decimal-precision": "దశాంశ ఖచ్చితత్వం",
   "decimal-precision-description": "లావాదేవీ మొత్తం రౌండింగ్ కోసం దశాంశ స్థానాలు",
   "same-accounts": "అదే ఖాతాలు",
-  "select-2-different-accounts": "2 వేర్వేరు ఖాతాలను ఎంచుకోండి"
+  "select-2-different-accounts": "2 వేర్వేరు ఖాతాలను ఎంచుకోండి",
+  "include-amount": "మొత్తాన్ని చేర్చండి"
 }

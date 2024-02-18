@@ -1049,5 +1049,6 @@
   "decimal-precision": "Độ chính xác thập phân",
   "decimal-precision-description": "Vị trí thập phân để làm tròn số tiền giao dịch",
   "same-accounts": "Cùng tài khoản",
-  "select-2-different-accounts": "Chọn 2 tài khoản khác nhau"
+  "select-2-different-accounts": "Chọn 2 tài khoản khác nhau",
+  "include-amount": "Bao gồm số tiền"
 }

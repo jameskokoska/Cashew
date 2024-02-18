@@ -1049,5 +1049,6 @@
   "decimal-precision": "দশমিক নির্ভুলতা",
   "decimal-precision-description": "গোলাকার লেনদেনের পরিমাণের জন্য দশমিক স্থান",
   "same-accounts": "একই অ্যাকাউন্ট",
-  "select-2-different-accounts": "2 টি পৃথক অ্যাকাউন্ট নির্বাচন করুন"
+  "select-2-different-accounts": "2 টি পৃথক অ্যাকাউন্ট নির্বাচন করুন",
+  "include-amount": "পরিমাণ অন্তর্ভুক্ত করুন"
 }

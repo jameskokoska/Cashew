@@ -51,6 +51,11 @@ class ResumeTextFieldFocus extends StatelessWidget {
               });
             }
           },
+          onAppInactive: () {
+            if (shouldAutoRefocus) {
+              _currentTextInputFocus = FocusScope.of(context).focusedChild;
+            }
+          },
           child: child,
         ),
       );

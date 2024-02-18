@@ -1049,5 +1049,6 @@
   "decimal-precision": "ദശാംശ കൃത്യത",
   "decimal-precision-description": "ഇടപാട് തുകയ്ക്കുള്ള ദശാംശ സ്ഥാനങ്ങൾ",
   "same-accounts": "സമാന അക്കൗണ്ടുകൾ",
-  "select-2-different-accounts": "2 വ്യത്യസ്ത അക്കൗണ്ടുകൾ തിരഞ്ഞെടുക്കുക"
+  "select-2-different-accounts": "2 വ്യത്യസ്ത അക്കൗണ്ടുകൾ തിരഞ്ഞെടുക്കുക",
+  "include-amount": "തുക ഉൾപ്പെടുത്തുക"
 }

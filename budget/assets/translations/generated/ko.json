@@ -1049,5 +1049,6 @@
   "decimal-precision": "소수점 정밀도",
   "decimal-precision-description": "거래 금액 반올림을위한 소수점 이하",
   "same-accounts": "같은 계정",
-  "select-2-different-accounts": "2 개의 다른 계정을 선택하십시오"
+  "select-2-different-accounts": "2 개의 다른 계정을 선택하십시오",
+  "include-amount": "금액을 포함하십시오"
 }

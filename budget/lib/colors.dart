@@ -288,6 +288,20 @@ List<Color> selectableColors(context) {
   ];
 }
 
+List<Color> selectableAccentColors(context) {
+  return [
+    Theme.of(context).colorScheme.selectableColorGreen,
+    Theme.of(context).colorScheme.selectableColorCyan,
+    Theme.of(context).colorScheme.selectableColorBlue,
+    Theme.of(context).colorScheme.selectableColorInidigo,
+    Theme.of(context).colorScheme.selectableColorDeepPurple,
+    Theme.of(context).colorScheme.selectableColorPurple,
+    Theme.of(context).colorScheme.selectableColorRed,
+    Theme.of(context).colorScheme.selectableColorOrange,
+    Theme.of(context).colorScheme.selectableColorYellow,
+  ];
+}
+
 const ColorFilter greyScale = ColorFilter.matrix(<double>[
   0.2126,
   0.7152,

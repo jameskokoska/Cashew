@@ -1049,5 +1049,6 @@
   "decimal-precision": "دقت اعشاری",
   "decimal-precision-description": "مکان های اعشاری برای گردآوری مبلغ معامله",
   "same-accounts": "حسابهای مشابه",
-  "select-2-different-accounts": "2 حساب مختلف را انتخاب کنید"
+  "select-2-different-accounts": "2 حساب مختلف را انتخاب کنید",
+  "include-amount": "شامل مقدار"
 }

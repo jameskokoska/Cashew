@@ -1049,5 +1049,6 @@
   "decimal-precision": "Precisão decimal",
   "decimal-precision-description": "Locais decimais para arredondamento da quantidade de transação",
   "same-accounts": "Mesmos contas",
-  "select-2-different-accounts": "Selecione 2 contas diferentes"
+  "select-2-different-accounts": "Selecione 2 contas diferentes",
+  "include-amount": "Inclua o valor"
 }

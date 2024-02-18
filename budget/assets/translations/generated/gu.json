@@ -1049,5 +1049,6 @@
   "decimal-precision": "દશાંશ ચોકસાઈ",
   "decimal-precision-description": "વ્યવહારની રકમ ગોળાકાર માટે દશાંશ સ્થાનો",
   "same-accounts": "સરખી હિસાબ",
-  "select-2-different-accounts": "2 વિવિધ એકાઉન્ટ્સ પસંદ કરો"
+  "select-2-different-accounts": "2 વિવિધ એકાઉન્ટ્સ પસંદ કરો",
+  "include-amount": "સમાવિષ્ટ રકમ"
 }

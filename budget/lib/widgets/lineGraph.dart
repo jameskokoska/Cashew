@@ -244,7 +244,7 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
                   data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
                   child: TextFont(
                     textAlign: TextAlign.right,
-                    text: getWordedNumber(
+                    text: getWordedNumber(context,
                         Provider.of<AllWallets>(context, listen: false), value),
                     textColor: dynamicPastel(context, widget.color,
                             amount: 0.5, inverse: true)

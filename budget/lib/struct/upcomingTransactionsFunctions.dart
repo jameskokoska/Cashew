@@ -107,8 +107,9 @@ Future createNewSubscriptionTransaction(
           title: (transaction.income ? "deposited".tr() : "paid".tr()) +
               ": " +
               transactionName,
-          description:
-              "created-new-for".tr() + " " + getWordedDateShort(newDate),
+          description: "created-new-for".tr() +
+              " " +
+              getWordedDateShort(newDate, lowerCaseTodayTomorrow: true),
           icon: appStateSettings["outlinedIcons"]
               ? Icons.event_repeat_outlined
               : Icons.event_repeat_rounded,
@@ -462,6 +463,7 @@ Future openUnpayPopup(
       },
       onSubmitLabel: "remove".tr(),
       onSubmit: () async {
+        if (runBefore != null) await runBefore();
         await database.deleteTransaction(transaction.transactionPk);
         Transaction transactionNew = transaction.copyWith(
           paid: false,

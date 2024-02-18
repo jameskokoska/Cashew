@@ -444,6 +444,7 @@ class SettingsPageContent extends StatelessWidget {
                               )
                             : SizedBox.shrink(),
                         SelectColor(
+                          selectableColorsList: selectableAccentColors(context),
                           includeThemeColor: false,
                           selectedColor: selectedColor,
                           setSelectedColor: (color) {

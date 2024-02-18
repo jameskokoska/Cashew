@@ -670,6 +670,10 @@ class _ObjectivePageContentState extends State<_ObjectivePageContent> {
               maximumSize: Size(15, 15),
               minimumSize: Size(10, 10),
               numberOfParticles: 15,
+              canvas: Size(
+                MediaQuery.sizeOf(context).width,
+                MediaQuery.sizeOf(context).height,
+              ),
             ),
           )
         ],

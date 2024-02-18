@@ -1049,5 +1049,6 @@
   "decimal-precision": "Usahihi wa decimal",
   "decimal-precision-description": "Maeneo ya decimal kwa kiwango cha ununuzi",
   "same-accounts": "Akaunti sawa",
-  "select-2-different-accounts": "Chagua akaunti 2 tofauti"
+  "select-2-different-accounts": "Chagua akaunti 2 tofauti",
+  "include-amount": "Ni pamoja na kiasi"
 }

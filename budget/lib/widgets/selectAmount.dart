@@ -766,13 +766,8 @@ class _SelectAmountState extends State<SelectAmount> {
                           setSelectedWallet(wallet);
                         },
                         getLabel: (TransactionWallet wallet) {
-                          return wallet.name ==
-                                  wallet.currency.toString().toUpperCase()
-                              ? wallet.currency.toString().toUpperCase()
-                              : wallet.name +
-                                  " (" +
-                                  wallet.currency.toString().toUpperCase() +
-                                  ")";
+                          return getWalletStringName(
+                              Provider.of<AllWallets>(context), wallet);
                         },
                         getCustomBorderColor: (TransactionWallet item) {
                           return dynamicPastel(

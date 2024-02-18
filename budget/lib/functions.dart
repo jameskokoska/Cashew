@@ -8,6 +8,7 @@ import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/openSnackbar.dart';
 import 'package:budget/widgets/restartApp.dart';
 import 'package:budget/widgets/selectAmount.dart';
+import 'package:budget/widgets/textInput.dart';
 import 'package:budget/widgets/timeDigits.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
@@ -282,9 +283,13 @@ String getWordedDateShort(
   DateTime date, {
   includeYear = false,
   showTodayTomorrow = true,
+  lowerCaseTodayTomorrow = false,
 }) {
   if (showTodayTomorrow && checkYesterdayTodayTomorrow(date) != false) {
-    return checkYesterdayTodayTomorrow(date);
+    String todayTomorrowOut = checkYesterdayTodayTomorrow(date);
+    return lowerCaseTodayTomorrow
+        ? todayTomorrowOut.toLowerCase()
+        : todayTomorrowOut;
   }
 
   final locale = navigatorKey.currentContext?.locale.toString();
@@ -603,26 +608,15 @@ DateTimeRange getBudgetDate(Budget budget, DateTime currentDate) {
           budget.startDate.day));
 }
 
-String getWordedNumber(AllWallets allWallets, double value) {
-  if (value >= 100000) {
-    return getCurrencyString(allWallets) +
-        (value / 1000).toStringAsFixed(0) +
-        "K";
-  } else if (value >= 1000) {
-    return getCurrencyString(allWallets) +
-        (value / 1000).toStringAsFixed(1) +
-        "K";
-  } else if (value <= -100000) {
-    return getCurrencyString(allWallets) +
-        (value / 1000).toStringAsFixed(0) +
-        "K";
-  } else if (value <= -1000) {
-    return getCurrencyString(allWallets) +
-        (value / 1000).toStringAsFixed(1) +
-        "K";
-  } else {
-    return getCurrencyString(allWallets) + value.toInt().toString();
+String getWordedNumber(
+    BuildContext context, AllWallets allWallets, double value) {
+  if (removeTrailingZeroes(value.toStringAsFixed(10)) == "0") {
+    return getCurrencyString(allWallets) + "0";
   }
+  return getCurrencyString(allWallets) +
+      NumberFormat.compact(locale: context.locale.toString())
+          .format(value)
+          .toString();
 }
 
 double getPercentBetweenDates(DateTimeRange timeRange, DateTime currentTime) {
@@ -890,6 +884,7 @@ class CustomMaterialPageRoute extends MaterialPageRoute {
 
 Future<dynamic> pushRoute(BuildContext context, Widget page,
     {String? routeName}) async {
+  minimizeKeyboard(context);
   if (appStateSettings["iOSNavigation"]) {
     return await Navigator.push(
       context,
@@ -1217,4 +1212,16 @@ double? absoluteZeroNull(double? number) {
   if (number == null) return null;
   if (number == -0) return number.abs();
   return number;
+}
+
+// Will only include the currency if the user has wallets of different currencies
+// e.g. Wallet (USD)
+String getWalletStringName(AllWallets allWallets, TransactionWallet wallet) {
+  if (wallet.name == wallet.currency.toString().toUpperCase()) {
+    return wallet.currency.toString().toUpperCase();
+  } else if (allWallets.allContainSameCurrency() == true) {
+    return wallet.name;
+  } else {
+    return wallet.name + " (" + wallet.currency.toString().toUpperCase() + ")";
+  }
 }
