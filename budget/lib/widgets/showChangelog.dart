@@ -31,7 +31,7 @@ String getChangelogString() {
     Graph axis label supports locale and short form for > 1,000
     Fixed text focus resume for inactive app
     If accounts all have same currency, currency label is removed in select chips
-    Defocus and remove focus node from cache when navigating
+    Unfocus and remove focus node from cache when navigating
     Fixed confetti canvas size for completed loans/goals
     Removed selectable accent colors that don't change the app theme
     < 5.2.1

@@ -46,7 +46,7 @@ class _SelectColorState extends State<SelectColor> {
   Color? selectedColor;
   int? selectedIndex;
   bool useSystemColor = appStateSettings["accentSystemColor"];
-  late List<Color> selectableColorsList;
+  List<Color> selectableColorsList = [];
 
   @override
   void initState() {
@@ -63,30 +63,26 @@ class _SelectColorState extends State<SelectColor> {
 
       if (widget.selectedColor != null) {
         int index = 0;
-        Future.delayed(Duration.zero, () {
-          for (Color color in selectableColorsList) {
-            if (color.toString() == widget.selectedColor.toString()) {
-              setState(() {
-                selectedIndex = index;
-                selectedColor = widget.selectedColor;
-              });
-              return;
-            }
-            index++;
-          }
-          print("color not found - must be custom color");
-          if (useSystemColor == false)
+        for (Color color in selectableColorsList) {
+          if (color.toString() == widget.selectedColor.toString()) {
             setState(() {
-              selectedIndex = -1;
+              selectedIndex = index;
               selectedColor = widget.selectedColor;
             });
-        });
+            return;
+          }
+          index++;
+        }
+        print("color not found - must be custom color");
+        if (useSystemColor == false) {
+          selectedIndex = -1;
+          selectedColor = widget.selectedColor;
+        }
       } else {
-        setState(() {
-          selectedIndex = 0;
-          selectedColor = null;
-        });
+        selectedIndex = 0;
+        selectedColor = null;
       }
+      setState(() {});
     });
   }
 
