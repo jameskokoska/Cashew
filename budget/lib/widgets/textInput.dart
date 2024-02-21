@@ -33,7 +33,8 @@ class ResumeTextFieldFocus extends StatelessWidget {
             Future.delayed(Duration(milliseconds: 50), () {
               _currentTextInputFocus = FocusScope.of(context).focusedChild;
             });
-          } else if (appLifecycleState == AppLifecycleState.resumed) {
+          } else if (value == true &&
+              appLifecycleState == AppLifecycleState.resumed) {
             _currentTextInputFocus = FocusScope.of(context).focusedChild;
           }
 
@@ -43,17 +44,14 @@ class ResumeTextFieldFocus extends StatelessWidget {
         },
         child: OnAppResume(
           onAppResume: () {
-            if (shouldAutoRefocus) {
+            if (shouldAutoRefocus && _currentTextInputFocus != null) {
               _currentTextInputFocus?.unfocus();
-              Future.delayed(Duration(milliseconds: 5), () {
+              // 30 milliseconds seems optimal
+              // Especially when app is resuming back from an inactive state (notification panel opened and then closed)
+              Future.delayed(Duration(milliseconds: 30), () {
                 _currentTextInputFocus?.requestFocus();
                 shouldAutoRefocus = true;
               });
-            }
-          },
-          onAppInactive: () {
-            if (shouldAutoRefocus) {
-              _currentTextInputFocus = FocusScope.of(context).focusedChild;
             }
           },
           child: child,

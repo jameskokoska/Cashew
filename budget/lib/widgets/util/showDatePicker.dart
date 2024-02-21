@@ -3,6 +3,7 @@ import 'package:budget/functions.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/globalSnackbar.dart';
 import 'package:budget/widgets/openSnackbar.dart';
+import 'package:budget/widgets/textInput.dart';
 import 'package:budget/widgets/util/showTimePicker.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +16,7 @@ Future<DateTime?> showCustomDatePicker(
   String? cancelText,
   String? confirmText,
 }) async {
+  minimizeKeyboard(context);
   return await showDatePicker(
     context: context,
     initialDate: initialDate,
@@ -50,6 +52,7 @@ Future<DateTimeRange?> showCustomDateRangePicker(
   DateTimeRange? initialDateRange, {
   DatePickerEntryMode initialEntryMode = DatePickerEntryMode.calendar,
 }) async {
+  minimizeKeyboard(context);
   return await showDateRangePicker(
     context: context,
     firstDate: DateTime(DateTime.now().year - 1000),
