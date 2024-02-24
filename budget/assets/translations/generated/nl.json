@@ -1050,5 +1050,10 @@
   "decimal-precision-description": "Decimale plaatsen voor afronding van transactiebedrag",
   "same-accounts": "Dezelfde accounts",
   "select-2-different-accounts": "Selecteer 2 verschillende accounts",
-  "include-amount": "BETREKKING VAN BEDRIJF"
+  "include-amount": "BETREKKING VAN BEDRIJF",
+  "percentage-precision": "Percentage precisie",
+  "0-decimals": "0 decimalen",
+  "1-decimal": "1 decimalen",
+  "2-decimals": "2 decimalen",
+  "onwards": "verder"
 }

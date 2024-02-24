@@ -1050,5 +1050,10 @@
   "decimal-precision-description": "ഇടപാട് തുകയ്ക്കുള്ള ദശാംശ സ്ഥാനങ്ങൾ",
   "same-accounts": "സമാന അക്കൗണ്ടുകൾ",
   "select-2-different-accounts": "2 വ്യത്യസ്ത അക്കൗണ്ടുകൾ തിരഞ്ഞെടുക്കുക",
-  "include-amount": "തുക ഉൾപ്പെടുത്തുക"
+  "include-amount": "തുക ഉൾപ്പെടുത്തുക",
+  "percentage-precision": "ശതമാനം കൃത്യത",
+  "0-decimals": "0 ദശാംശങ്ങൾ",
+  "1-decimal": "1 ദശാംശങ്ങൾ",
+  "2-decimals": "2 ദശാംശങ്ങൾ",
+  "onwards": "മുതലുള്ള"
 }

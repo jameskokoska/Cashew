@@ -1,4 +1,5 @@
 import 'package:budget/struct/settings.dart';
+import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/widgets/tappable.dart';
@@ -228,9 +229,10 @@ class MonthSelectorState extends State<MonthSelector> {
                       ),
                       Align(
                         alignment: Alignment.bottomCenter,
-                        child: AnimatedScale(
+                        child: AnimatedScaleOpacity(
                           duration: Duration(milliseconds: 500),
-                          scale: isSelected ? 1 : 0,
+                          durationOpacity: const Duration(milliseconds: 300),
+                          animateIn: isSelected,
                           curve: isSelected
                               ? Curves.decelerate
                               : Curves.easeOutQuart,
@@ -254,9 +256,10 @@ class MonthSelectorState extends State<MonthSelector> {
             ),
             Align(
               alignment: Alignment.centerLeft,
-              child: AnimatedScale(
-                scale: showScrollBottom ? 1 : 0,
+              child: AnimatedScaleOpacity(
+                animateIn: showScrollBottom,
                 duration: const Duration(milliseconds: 400),
+                durationOpacity: const Duration(milliseconds: 200),
                 alignment: Alignment.centerLeft,
                 curve: Curves.fastOutSlowIn,
                 child: Padding(
@@ -290,9 +293,10 @@ class MonthSelectorState extends State<MonthSelector> {
             ),
             Align(
               alignment: Alignment.centerRight,
-              child: AnimatedScale(
-                scale: showScrollTop ? 1 : 0,
+              child: AnimatedScaleOpacity(
+                animateIn: showScrollTop,
                 duration: const Duration(milliseconds: 400),
+                durationOpacity: const Duration(milliseconds: 200),
                 alignment: Alignment.centerRight,
                 curve: Curves.fastOutSlowIn,
                 child: Padding(

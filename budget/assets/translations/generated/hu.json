@@ -1050,5 +1050,10 @@
   "decimal-precision-description": "Tizedesjegyek a tranzakciós összeg kerekítéséhez",
   "same-accounts": "Ugyanazok a számlák",
   "select-2-different-accounts": "Válasszon 2 különböző fiókot",
-  "include-amount": "Tartalmazza az összeget"
+  "include-amount": "Tartalmazza az összeget",
+  "percentage-precision": "Százalékos pontosság",
+  "0-decimals": "0 tizedesjegyek",
+  "1-decimal": "1 tizedesjegy",
+  "2-decimals": "2 tizedesjegy",
+  "onwards": "kezdve"
 }

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:budget/database/tables.dart';
 import 'package:budget/main.dart';
 import 'package:budget/pages/subscriptionsPage.dart';
@@ -60,48 +62,61 @@ extension DateUtils on DateTime {
 }
 
 String convertToPercent(double amount,
-    {double? finalNumber, int? numberDecimals, bool useLessThanZero = false}) {
+    {double? finalNumber,
+    int? numberDecimals,
+    bool useLessThanZero = false,
+    bool shouldRemoveTrailingZeroes = false}) {
   amount = absoluteZero(amount);
   finalNumber = absoluteZeroNull(finalNumber);
 
+  if (amount == 0 || finalNumber == 0) return "0%";
+
   int numberDecimalsGet = numberDecimals != null
       ? numberDecimals
-      : finalNumber == null
-          ? getDecimalPlaces(amount) > 2
-              ? 2
-              : getDecimalPlaces(amount)
-          : getDecimalPlaces(finalNumber) > 2
-              ? 2
-              : getDecimalPlaces(finalNumber);
+      : (int.tryParse(appStateSettings["percentagePrecision"].toString()) ?? 0);
 
   String roundedAmount = amount.toStringAsFixed(numberDecimalsGet);
+
+  if (shouldRemoveTrailingZeroes) {
+    if (finalNumber != null) {
+      int finalTrailingZeroes = countNonTrailingZeroes(
+          finalNumber.toStringAsFixed(numberDecimalsGet));
+      roundedAmount = finalNumber
+          .toStringAsFixed(max(finalTrailingZeroes, numberDecimalsGet));
+    } else {
+      roundedAmount = removeTrailingZeroes(roundedAmount);
+    }
+  }
+
   if (useLessThanZero &&
       roundedAmount == "0" &&
       (finalNumber == null && amount.abs() != 0 ||
           finalNumber != null && finalNumber.abs() != 0)) {
-    if (finalNumber == null && amount < 0 ||
-        finalNumber != null && finalNumber < 0) {
-      roundedAmount = "< -1";
-    } else {
-      roundedAmount = "< 1";
+    if (numberDecimalsGet == 0) {
+      if (finalNumber == null && amount < 0 ||
+          finalNumber != null && finalNumber < 0) {
+        roundedAmount = "< -1";
+      } else {
+        roundedAmount = "< 1";
+      }
+    } else if (numberDecimalsGet == 1) {
+      if (finalNumber == null && amount < 0.1 ||
+          finalNumber != null && finalNumber < 0.1) {
+        roundedAmount = "< -0.1";
+      } else {
+        roundedAmount = "< 0.1";
+      }
+    } else if (numberDecimalsGet == 2) {
+      if (finalNumber == null && amount < 0.01 ||
+          finalNumber != null && finalNumber < 0.01) {
+        roundedAmount = "< -0.01";
+      } else {
+        roundedAmount = "< 0.01";
+      }
     }
   }
 
   return roundedAmount + "%";
-}
-
-int getDecimalPlaces(double number) {
-  final decimalString = number.toString();
-  final decimalIndex = decimalString.indexOf('.');
-
-  if (decimalIndex == -1) {
-    return 0;
-  } else {
-    final decimalPlaces = decimalString.length - decimalIndex - 1;
-    final trailingZeros =
-        decimalString.substring(decimalIndex + 1).replaceAll('0', '');
-    return trailingZeros.isEmpty ? 0 : decimalPlaces;
-  }
 }
 
 String removeLastCharacter(String text) {
@@ -141,17 +156,17 @@ bool hasDecimalPoints(double? value) {
   return false;
 }
 
-String convertToMoney(
-  AllWallets allWallets,
-  double amount, {
-  String? currencyKey,
-  double? finalNumber,
-  int? decimals,
-  bool? allDecimals,
-  bool? addCurrencyName,
-  bool forceAllDecimals = false,
-  String? customLocale,
-}) {
+String convertToMoney(AllWallets allWallets, double amount,
+    {String? currencyKey,
+    double? finalNumber,
+    int? decimals,
+    bool? allDecimals,
+    bool? addCurrencyName,
+    bool forceHideCurrencyName = false,
+    bool forceAllDecimals = false,
+    String? customLocale,
+    NumberFormat Function(int? decimalDigits, String? locale, String? symbol)?
+        getCustomNumberFormat}) {
   int numberDecimals = decimals ??
       allWallets.indexedByPk[appStateSettings["selectedWalletPk"]]?.decimals ??
       2;
@@ -170,21 +185,29 @@ String convertToMoney(
   amount = double.parse(amount.toStringAsFixed(numberDecimals));
   if (finalNumber != null)
     finalNumber = double.parse(finalNumber.toStringAsFixed(numberDecimals));
-  NumberFormat currency = NumberFormat.currency(
-    decimalDigits: forceAllDecimals
-        ? decimals
-        : allDecimals == true ||
-                hasDecimalPoints(finalNumber) ||
-                hasDecimalPoints(amount)
-            ? numberDecimals
-            : 0,
-    locale: customLocale ??
-        appStateSettings["numberFormatLocale"] ??
-        Platform.localeName,
-    symbol: getCurrencyString(allWallets, currencyKey: currencyKey),
-  );
+
+  int? decimalDigits = forceAllDecimals
+      ? decimals
+      : allDecimals == true ||
+              hasDecimalPoints(finalNumber) ||
+              hasDecimalPoints(amount)
+          ? numberDecimals
+          : 0;
+  String? locale = customLocale ??
+      appStateSettings["numberFormatLocale"] ??
+      Platform.localeName;
+  String? symbol = getCurrencyString(allWallets, currencyKey: currencyKey);
+  NumberFormat currency = getCustomNumberFormat != null
+      ? getCustomNumberFormat(decimalDigits, locale, symbol)
+      : NumberFormat.currency(
+          decimalDigits: decimalDigits,
+          locale: locale,
+          symbol: symbol,
+        );
+
   // If there is no currency symbol, use the currency code
-  if (getCurrencyString(allWallets, currencyKey: currencyKey) == "") {
+  if (forceHideCurrencyName == false &&
+      getCurrencyString(allWallets, currencyKey: currencyKey) == "") {
     addCurrencyName = true;
   }
   String formatOutput = currency.format(amount).trim();
@@ -614,9 +637,25 @@ String getWordedNumber(
     return getCurrencyString(allWallets) + "0";
   }
   return getCurrencyString(allWallets) +
-      NumberFormat.compact(locale: context.locale.toString())
-          .format(value)
-          .toString();
+      convertToMoney(
+        allWallets,
+        value,
+        forceHideCurrencyName: true,
+        addCurrencyName: false,
+        getCustomNumberFormat: (decimalDigits, locale, currencySymbol) {
+          final NumberFormat formatter = NumberFormat.compact(locale: locale);
+          formatter.maximumFractionDigits = value.abs() < 1000
+              ? value.abs() < 10
+                  ? (decimalDigits ?? 2)
+                  : 0
+              : 1;
+          formatter.minimumFractionDigits =
+              value.abs() < 10 ? (decimalDigits ?? 2) : 0;
+          formatter.significantDigitsInUse = false;
+          formatter.currencyName = currencySymbol;
+          return formatter;
+        },
+      );
 }
 
 double getPercentBetweenDates(DateTimeRange timeRange, DateTime currentTime) {

@@ -489,20 +489,31 @@ class AnimatedClipRRect extends StatelessWidget {
 
 class AnimatedScaleOpacity extends StatelessWidget {
   const AnimatedScaleOpacity(
-      {required this.child, required this.animateIn, super.key});
+      {required this.child,
+      required this.animateIn,
+      this.duration = const Duration(milliseconds: 500),
+      this.durationOpacity = const Duration(milliseconds: 100),
+      this.alignment = Alignment.center,
+      this.curve = Curves.easeInOutCubicEmphasized,
+      super.key});
   final Widget child;
   final bool animateIn;
+  final Duration duration;
+  final Duration durationOpacity;
+  final Alignment alignment;
+  final Curve curve;
 
   @override
   Widget build(BuildContext context) {
     return AnimatedOpacity(
-      duration: Duration(milliseconds: 100),
+      duration: durationOpacity,
       opacity: animateIn ? 1 : 0,
       child: AnimatedScale(
         scale: animateIn ? 1 : 0,
-        duration: Duration(milliseconds: 500),
-        curve: Curves.easeInOutCubicEmphasized,
+        duration: duration,
+        curve: curve,
         child: child,
+        alignment: alignment,
       ),
     );
   }

@@ -1050,5 +1050,10 @@
   "decimal-precision-description": "Tempat desimal untuk pembulatan jumlah transaksi",
   "same-accounts": "Akun yang sama",
   "select-2-different-accounts": "Pilih 2 akun yang berbeda",
-  "include-amount": "Termasuk jumlah"
+  "include-amount": "Termasuk jumlah",
+  "percentage-precision": "Persentase presisi",
+  "0-decimals": "0 desimal",
+  "1-decimal": "1 desimal",
+  "2-decimals": "2 desimal",
+  "onwards": "dan seterusnya"
 }

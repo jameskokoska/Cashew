@@ -1050,5 +1050,10 @@
   "decimal-precision-description": "Dezimalstellen für die Transaktionsbetragsrundung",
   "same-accounts": "Gleiche Konten",
   "select-2-different-accounts": "Wählen Sie 2 verschiedene Konten aus",
-  "include-amount": "Betrag einschließen"
+  "include-amount": "Betrag einschließen",
+  "percentage-precision": "Prozentuale Präzision",
+  "0-decimals": "0 Dezimalstellen",
+  "1-decimal": "1 Dezimalstellen",
+  "2-decimals": "2 Dezimalstellen",
+  "onwards": "voran"
 }

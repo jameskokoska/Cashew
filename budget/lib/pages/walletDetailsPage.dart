@@ -1007,7 +1007,10 @@ class _WalletDetailsPageState extends State<WalletDetailsPage>
               walletPks: walletPks,
               followCustomPeriodCycle: widget.wallet == null,
               cycleSettingsExtension: "",
-              searchFilters: searchFilters,
+              searchFilters: widget.wallet != null
+                  ? SearchFilters().copyWith(walletPks: walletPks)
+                  : (searchFilters ?? SearchFilters())
+                      .copyWith(walletPks: walletPks),
               selectedDateTimeRange: selectedDateTimeRange,
             ),
           ],

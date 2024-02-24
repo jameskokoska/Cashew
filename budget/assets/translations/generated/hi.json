@@ -1050,5 +1050,10 @@
   "decimal-precision-description": "लेन -देन राशि के लिए दशमलव स्थान",
   "same-accounts": "एक ही खाते",
   "select-2-different-accounts": "2 अलग -अलग खातों का चयन करें",
-  "include-amount": "राशि शामिल करें"
+  "include-amount": "राशि शामिल करें",
+  "percentage-precision": "प्रतिशत परिशुद्धता",
+  "0-decimals": "0 दशमलव",
+  "1-decimal": "1 दशमलव",
+  "2-decimals": "2 दशमलव",
+  "onwards": "से आगे"
 }

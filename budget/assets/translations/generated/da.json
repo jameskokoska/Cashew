@@ -1047,8 +1047,13 @@
   "difference-loan": "Forskellån",
   "open-settings": "Åbne indstillinger",
   "decimal-precision": "Decimal præcision",
-  "decimal-precision-description": "Decimalsteder til transaktionsbeløb afrunding",
+  "decimal-precision-description": "Decimalsteder for transaktionsbeløb afrunding",
   "same-accounts": "Samme konti",
   "select-2-different-accounts": "Vælg 2 forskellige konti",
-  "include-amount": "Inkluderer beløb"
+  "include-amount": "Inkluderer beløb",
+  "percentage-precision": "Procentdel præcision",
+  "0-decimals": "0 decimaler",
+  "1-decimal": "1 decimaler",
+  "2-decimals": "2 decimaler",
+  "onwards": "fremefter"
 }

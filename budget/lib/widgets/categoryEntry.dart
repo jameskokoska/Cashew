@@ -276,7 +276,6 @@ class CategoryEntry extends StatelessWidget {
                                   : Builder(builder: (context) {
                                       String percentString = convertToPercent(
                                         percentSpent * 100,
-                                        numberDecimals: 0,
                                         useLessThanZero: true,
                                       );
                                       String text = percentString +

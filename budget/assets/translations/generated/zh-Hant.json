@@ -1050,5 +1050,10 @@
   "decimal-precision-description": "交易金額四捨五入的小數位",
   "same-accounts": "相同的帳戶",
   "select-2-different-accounts": "選擇2個不同的帳戶",
-  "include-amount": "包括金額"
+  "include-amount": "包括金額",
+  "percentage-precision": "精度百分比",
+  "0-decimals": "0小數",
+  "1-decimal": "1個小數",
+  "2-decimals": "2個小數",
+  "onwards": "向前"
 }

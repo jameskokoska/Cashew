@@ -1050,5 +1050,10 @@
   "decimal-precision-description": "Maeneo ya decimal kwa kiwango cha ununuzi",
   "same-accounts": "Akaunti sawa",
   "select-2-different-accounts": "Chagua akaunti 2 tofauti",
-  "include-amount": "Ni pamoja na kiasi"
+  "include-amount": "Ni pamoja na kiasi",
+  "percentage-precision": "Usahihi wa asilimia",
+  "0-decimals": "Madawati 0",
+  "1-decimal": "1 Desimals",
+  "2-decimals": "2 Desimals",
+  "onwards": "kuendelea"
 }

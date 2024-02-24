@@ -1050,5 +1050,10 @@
   "decimal-precision-description": "Децимална места за заокруживање износа трансакције",
   "same-accounts": "Исти рачуни",
   "select-2-different-accounts": "Изаберите 2 различита рачуна",
-  "include-amount": "Укључите износ"
+  "include-amount": "Укључите износ",
+  "percentage-precision": "Проценат прецизност",
+  "0-decimals": "0 децимала",
+  "1-decimal": "1 децимала",
+  "2-decimals": "2 децимала",
+  "onwards": "надаље"
 }

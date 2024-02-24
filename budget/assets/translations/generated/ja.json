@@ -1044,11 +1044,16 @@
   "set-date-time": "セット",
   "add-record-using-plus-button": "[+]ボタンを使用してレコードを追加します。",
   "all-settled": "すべてが落ち着きました",
-  "difference-loan": "差額ローン",
+  "difference-loan": "差異ローン",
   "open-settings": "設定を開く",
   "decimal-precision": "10進精度",
   "decimal-precision-description": "トランザクション額の丸めの小数点",
   "same-accounts": "同じアカウント",
   "select-2-different-accounts": "2つの異なるアカウントを選択します",
-  "include-amount": "金額を含めます"
+  "include-amount": "金額を含めます",
+  "percentage-precision": "精度の割合",
+  "0-decimals": "0デシマル",
+  "1-decimal": "1つの小数",
+  "2-decimals": "2つの小数",
+  "onwards": "以降"
 }

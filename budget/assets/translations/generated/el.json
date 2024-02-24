@@ -1050,5 +1050,10 @@
   "decimal-precision-description": "Δεκαδικά μέρη για στρογγυλοποίηση ποσού συναλλαγών",
   "same-accounts": "Ίδιοι λογαριασμοί",
   "select-2-different-accounts": "Επιλέξτε 2 διαφορετικούς λογαριασμούς",
-  "include-amount": "Περιλαμβάνει το ποσό"
+  "include-amount": "Περιλαμβάνει το ποσό",
+  "percentage-precision": "Ποσοστιαία ακρίβεια",
+  "0-decimals": "0 δεκαδικά ψηφία",
+  "1-decimal": "1 δεκαδικό",
+  "2-decimals": "2 δεκαδικά ψηφία",
+  "onwards": "εμπρός"
 }

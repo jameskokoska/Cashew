@@ -1050,5 +1050,10 @@
   "decimal-precision-description": "מקומות עשרוניים לעיגול סכום העסקה",
   "same-accounts": "אותם חשבונות",
   "select-2-different-accounts": "בחר 2 חשבונות שונים",
-  "include-amount": "כלול סכום"
+  "include-amount": "כלול סכום",
+  "percentage-precision": "אחוז דיוק",
+  "0-decimals": "0 עשרונים",
+  "1-decimal": "1 עשרונים",
+  "2-decimals": "2 עשרונים",
+  "onwards": "ואילך"
 }

@@ -1050,5 +1050,10 @@
   "decimal-precision-description": "Desimaler for transaksjonsbeløp avrunding",
   "same-accounts": "Samme kontoer",
   "select-2-different-accounts": "Velg 2 forskjellige kontoer",
-  "include-amount": "Inkluderer beløp"
+  "include-amount": "Inkluder beløp",
+  "percentage-precision": "Prosentvis presisjon",
+  "0-decimals": "0 desimaler",
+  "1-decimal": "1 desimaler",
+  "2-decimals": "2 desimaler",
+  "onwards": "fremover"
 }

@@ -161,10 +161,9 @@ class PieChartOptions extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               mainAxisSize: MainAxisSize.max,
               children: [
-                AnimatedScale(
-                  scale: showClearButton ? 1 : 0,
-                  duration: Duration(milliseconds: 500),
-                  curve: Curves.easeInOutCubicEmphasized,
+                AnimatedScaleOpacity(
+                  animateIn: showClearButton,
+                  durationOpacity: Duration(milliseconds: 300),
                   child: Tooltip(
                     message: "clear-selection".tr(),
                     child: IconButton(

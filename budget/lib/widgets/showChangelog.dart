@@ -28,6 +28,7 @@ String getChangelogString() {
   return """
     < 5.2.2
     Exclude transaction from counting towards reports and totals (in more options)
+    Percentage decimal precision setting (in Settings > More Options > Formatting)
     Graph axis label supports locale and short form for > 1,000
     Fixed text focus resume for inactive app
     If accounts all have same currency, currency label is removed in select chips

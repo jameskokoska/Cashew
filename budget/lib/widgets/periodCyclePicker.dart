@@ -647,7 +647,7 @@ String getLabelOfSelectedCustomPeriod(String cycleSettingsExtension) {
         getEndDateOfSelectedCustomPeriod(cycleSettingsExtension);
     return getWordedDateShort(startDate) +
         (endDate == null
-            ? " " + "until-forever".tr().toLowerCase()
+            ? " " + "onwards".tr().toLowerCase()
             : (" – " + getWordedDateShort(endDate)));
   }
   return "";

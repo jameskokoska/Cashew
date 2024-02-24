@@ -1050,5 +1050,10 @@
   "decimal-precision-description": "Miejsca dziesiętne do zaokrąglania",
   "same-accounts": "Te same konta",
   "select-2-different-accounts": "Wybierz 2 różne konta",
-  "include-amount": "Uwzględnij kwotę"
+  "include-amount": "Uwzględnij kwotę",
+  "percentage-precision": "Procent precyzji",
+  "0-decimals": "0 dziesiętne",
+  "1-decimal": "1 dziesiętne",
+  "2-decimals": "2 dziesiętne",
+  "onwards": "dalej"
 }

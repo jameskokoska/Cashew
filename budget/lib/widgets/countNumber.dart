@@ -133,12 +133,16 @@ class _CountNumberState extends State<CountNumber> {
               .indexedByPk[appStateSettings["selectedWalletPk"]]
               ?.decimals ??
           2;
-      decimals = ((widget.decimals ?? currentSelectedDecimals) > 2
-          ? widget.count.toString().split('.')[1].length <
-                  (widget.decimals ?? currentSelectedDecimals)
-              ? widget.count.toString().split('.')[1].length
-              : (widget.decimals ?? currentSelectedDecimals)
-          : (widget.decimals ?? currentSelectedDecimals));
+      if (widget.count.toString().contains('.')) {
+        decimals = ((widget.decimals ?? currentSelectedDecimals) > 2
+            ? widget.count.toString().split('.')[1].length <
+                    (widget.decimals ?? currentSelectedDecimals)
+                ? widget.count.toString().split('.')[1].length
+                : (widget.decimals ?? currentSelectedDecimals)
+            : (widget.decimals ?? currentSelectedDecimals));
+      } else {
+        decimals = (widget.decimals ?? currentSelectedDecimals);
+      }
     }
 
     if (appStateSettings["batterySaver"]) {

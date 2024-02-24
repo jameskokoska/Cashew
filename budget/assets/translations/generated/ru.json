@@ -1050,5 +1050,10 @@
   "decimal-precision-description": "Десятичные места для округления транзакции",
   "same-accounts": "Те же счета",
   "select-2-different-accounts": "Выберите 2 разных учетных записей",
-  "include-amount": "Включить сумму"
+  "include-amount": "Включить сумму",
+  "percentage-precision": "Процентная точность",
+  "0-decimals": "0 Десятиц",
+  "1-decimal": "1 десятичные десятки",
+  "2-decimals": "2 десятичных десятиц",
+  "onwards": "далее"
 }

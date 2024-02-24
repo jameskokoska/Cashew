@@ -1044,11 +1044,16 @@
   "set-date-time": "Встановити",
   "add-record-using-plus-button": "Додайте запис за допомогою кнопки [+].",
   "all-settled": "Все врегульовано",
-  "difference-loan": "Різниця",
+  "difference-loan": "Різниця позики",
   "open-settings": "Відкриті налаштування",
   "decimal-precision": "Десяткова точність",
-  "decimal-precision-description": "Десяткові місця для округлення суми транзакцій",
+  "decimal-precision-description": "Десяткові місця для округлення кількості транзакцій",
   "same-accounts": "Такі ж рахунки",
   "select-2-different-accounts": "Виберіть 2 різних облікових записів",
-  "include-amount": "Включити суму"
+  "include-amount": "Включити суму",
+  "percentage-precision": "Відсоткова точність",
+  "0-decimals": "0 десятків",
+  "1-decimal": "1 десятки",
+  "2-decimals": "2 десятки",
+  "onwards": "далі"
 }

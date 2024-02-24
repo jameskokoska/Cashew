@@ -1050,5 +1050,10 @@
   "decimal-precision-description": "Décimaux pour le montant de la transaction Arrondi",
   "same-accounts": "Mêmes comptes",
   "select-2-different-accounts": "Sélectionnez 2 comptes différents",
-  "include-amount": "Inclure le montant"
+  "include-amount": "Inclure le montant",
+  "percentage-precision": "Pourcentage de précision",
+  "0-decimals": "0 décimales",
+  "1-decimal": "1 décimales",
+  "2-decimals": "2 décimales",
+  "onwards": "À partir de"
 }

@@ -1050,5 +1050,10 @@
   "decimal-precision-description": "거래 금액 반올림을위한 소수점 이하",
   "same-accounts": "같은 계정",
   "select-2-different-accounts": "2 개의 다른 계정을 선택하십시오",
-  "include-amount": "금액을 포함하십시오"
+  "include-amount": "금액을 포함하십시오",
+  "percentage-precision": "비율 정밀도",
+  "0-decimals": "0 데시 말",
+  "1-decimal": "1 데시 말",
+  "2-decimals": "2 명의 소수",
+  "onwards": "이후"
 }

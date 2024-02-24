@@ -1050,5 +1050,10 @@
   "decimal-precision-description": "Decimalplatser för avrundning av transaktionsbelopp",
   "same-accounts": "Samma konton",
   "select-2-different-accounts": "Välj 2 olika konton",
-  "include-amount": "Inkludera belopp"
+  "include-amount": "Inkludera belopp",
+  "percentage-precision": "Procentuell precision",
+  "0-decimals": "0 decimaler",
+  "1-decimal": "1 decimaler",
+  "2-decimals": "2 decimaler",
+  "onwards": "framåt"
 }

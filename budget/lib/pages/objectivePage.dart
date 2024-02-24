@@ -374,7 +374,6 @@ class _ObjectivePageContentState extends State<_ObjectivePageContent> {
                                                 value,
                                                 finalNumber:
                                                     percentageTowardsGoal * 100,
-                                                numberDecimals: 0,
                                                 useLessThanZero: true,
                                               ),
                                               fontSize: 28,
@@ -660,22 +659,21 @@ class _ObjectivePageContentState extends State<_ObjectivePageContent> {
             pageID: pageId,
             colorScheme: objectiveColorScheme,
           ),
-          Align(
-            alignment: Alignment.topCenter,
-            child: ConfettiWidget(
-              shouldLoop: true,
-              confettiController: confettiController,
-              gravity: 0.2,
-              blastDirectionality: BlastDirectionality.explosive,
-              maximumSize: Size(15, 15),
-              minimumSize: Size(10, 10),
-              numberOfParticles: 15,
-              canvas: Size(
-                MediaQuery.sizeOf(context).width,
-                MediaQuery.sizeOf(context).height,
+          IgnorePointer(
+            child: Align(
+              alignment: Alignment.topCenter,
+              child: ConfettiWidget(
+                shouldLoop: true,
+                confettiController: confettiController,
+                gravity: 0.2,
+                blastDirectionality: BlastDirectionality.explosive,
+                maximumSize: Size(15, 15),
+                minimumSize: Size(10, 10),
+                numberOfParticles: 15,
+                canvas: Size.infinite,
               ),
             ),
-          )
+          ),
         ],
       ),
     );

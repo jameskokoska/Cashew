@@ -1050,5 +1050,10 @@
   "decimal-precision-description": "Decimal places for transaction amount rounding",
   "same-accounts": "Same Accounts",
   "select-2-different-accounts": "Select 2 different accounts",
-  "include-amount": "Include Amount"
+  "include-amount": "Include Amount",
+  "percentage-precision": "Percentage Precision",
+  "0-decimals": "0 Decimals",
+  "1-decimal": "1 Decimals",
+  "2-decimals": "2 Decimals",
+  "onwards": "onwards"
 }

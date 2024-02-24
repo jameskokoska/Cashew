@@ -269,8 +269,7 @@ class WalletEntryRow extends StatelessWidget {
                                     text: "  " +
                                         "(" +
                                         convertToPercent(percent ?? 0,
-                                            useLessThanZero: true,
-                                            numberDecimals: 0) +
+                                            useLessThanZero: true) +
                                         ")",
                                     style: TextStyle(
                                       fontSize: 15,

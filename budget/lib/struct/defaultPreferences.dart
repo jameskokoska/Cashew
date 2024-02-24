@@ -192,6 +192,7 @@ Future<Map<String, dynamic>> getDefaultPreferences() async {
     "netAllSpendingTotal": false,
     "netSpendingDayTotal": false,
     "extraZerosButton": null, //will be null, 00 or 000
+    "percentagePrecision": 0, //number of decimals to round percentages to
     "allSpendingLastPage": 0, //index of the last tab on the all spending page
     "loansLastPage": 0, //index of the last tab on the loans page
     // "loansUseDifferenceInsteadOfTotalGoal": false,

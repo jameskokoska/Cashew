@@ -1050,5 +1050,10 @@
   "decimal-precision-description": "Vị trí thập phân để làm tròn số tiền giao dịch",
   "same-accounts": "Cùng tài khoản",
   "select-2-different-accounts": "Chọn 2 tài khoản khác nhau",
-  "include-amount": "Bao gồm số tiền"
+  "include-amount": "Bao gồm số tiền",
+  "percentage-precision": "Độ chính xác tỷ lệ phần trăm",
+  "0-decimals": "0 số thập phân",
+  "1-decimal": "1 số thập phân",
+  "2-decimals": "2 số thập phân",
+  "onwards": "trở đi"
 }

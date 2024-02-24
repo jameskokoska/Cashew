@@ -1050,5 +1050,10 @@
   "decimal-precision-description": "গোলাকার লেনদেনের পরিমাণের জন্য দশমিক স্থান",
   "same-accounts": "একই অ্যাকাউন্ট",
   "select-2-different-accounts": "2 টি পৃথক অ্যাকাউন্ট নির্বাচন করুন",
-  "include-amount": "পরিমাণ অন্তর্ভুক্ত করুন"
+  "include-amount": "পরিমাণ অন্তর্ভুক্ত করুন",
+  "percentage-precision": "শতাংশের নির্ভুলতা",
+  "0-decimals": "0 দশমিক",
+  "1-decimal": "1 দশমিক",
+  "2-decimals": "2 দশমিক",
+  "onwards": "এগিয়ে"
 }

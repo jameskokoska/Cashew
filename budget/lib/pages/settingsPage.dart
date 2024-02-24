@@ -674,6 +674,7 @@ class MoreOptionsPagePreferences extends StatelessWidget {
         WidgetSettings(),
         SettingsHeader(title: "formatting".tr()),
         NumberFormattingSetting(),
+        PercentagePrecisionSetting(),
         Time24HourFormatSetting(),
         ExtraZerosButtonSetting(),
       ],
@@ -1167,6 +1168,39 @@ class ExtraZerosButtonSetting extends StatelessWidget {
       getLabel: (item) {
         if (item == "") return "none".tr().capitalizeFirst;
         return item;
+      },
+    );
+  }
+}
+
+class PercentagePrecisionSetting extends StatelessWidget {
+  const PercentagePrecisionSetting({super.key});
+  @override
+  Widget build(BuildContext context) {
+    return SettingsContainerDropdown(
+      title: "percentage-precision".tr(),
+      icon: appStateSettings["outlinedIcons"]
+          ? Icons.percent_outlined
+          : Icons.percent_rounded,
+      initial: appStateSettings["percentagePrecision"] == 2
+          ? "2-decimals"
+          : appStateSettings["percentagePrecision"] == 1
+              ? "1-decimal"
+              : "0-decimals",
+      items: ["0-decimals", "1-decimal", "2-decimals"],
+      onChanged: (value) async {
+        updateSettings(
+          "percentagePrecision",
+          value == "2-decimals"
+              ? 2
+              : value == "1-decimal"
+                  ? 1
+                  : 0,
+          updateGlobalState: true,
+        );
+      },
+      getLabel: (item) {
+        return item.tr();
       },
     );
   }

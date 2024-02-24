@@ -1050,5 +1050,10 @@
   "decimal-precision-description": "Десетични знаци за закръгляне на сумата на транзакцията",
   "same-accounts": "Същите акаунти",
   "select-2-different-accounts": "Изберете 2 различни акаунта",
-  "include-amount": "Включете сума"
+  "include-amount": "Включете сума",
+  "percentage-precision": "Процентна точност",
+  "0-decimals": "0 десетични знаци",
+  "1-decimal": "1 десетични знаци",
+  "2-decimals": "2 десетични знаци",
+  "onwards": "нататък"
 }

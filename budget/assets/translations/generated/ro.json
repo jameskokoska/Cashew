@@ -1050,5 +1050,10 @@
   "decimal-precision-description": "Locuri zecimale pentru rotunjirea tranzacției",
   "same-accounts": "Aceleași conturi",
   "select-2-different-accounts": "Selectați 2 conturi diferite",
-  "include-amount": "Include suma"
+  "include-amount": "Include suma",
+  "percentage-precision": "Precizie procentuală",
+  "0-decimals": "0 zecimale",
+  "1-decimal": "1 zecimale",
+  "2-decimals": "2 zecimale",
+  "onwards": "mai departe"
 }

@@ -1044,11 +1044,16 @@
   "set-date-time": "تنظیم",
   "add-record-using-plus-button": "با استفاده از دکمه [+] یک رکورد اضافه کنید.",
   "all-settled": "همه حل و فصل شدند",
-  "difference-loan": "وام تفاوت",
+  "difference-loan": "وام اختلاف",
   "open-settings": "تنظیمات باز",
   "decimal-precision": "دقت اعشاری",
   "decimal-precision-description": "مکان های اعشاری برای گردآوری مبلغ معامله",
   "same-accounts": "حسابهای مشابه",
   "select-2-different-accounts": "2 حساب مختلف را انتخاب کنید",
-  "include-amount": "شامل مقدار"
+  "include-amount": "شامل مقدار",
+  "percentage-precision": "دقت درصد",
+  "0-decimals": "0 اعشار",
+  "1-decimal": "1 اعشار",
+  "2-decimals": "2 اعشار",
+  "onwards": "به بعد"
 }

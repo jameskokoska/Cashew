@@ -1539,3 +1539,22 @@ String removeTrailingZeroes(String input) {
   }
   return input.substring(0, index + 1);
 }
+
+int countNonTrailingZeroes(String input) {
+  int decimalIndex = input.indexOf('.');
+
+  if (decimalIndex == -1) {
+    return 0;
+  }
+
+  int count = 0;
+  for (int i = decimalIndex + 1; i < input.length; i++) {
+    if (input[i] != '0') {
+      count++;
+    } else if (count > 0) {
+      break;
+    }
+  }
+
+  return count;
+}

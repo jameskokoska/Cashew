@@ -361,7 +361,6 @@ class _Badge extends StatelessWidget {
         duration: Duration(milliseconds: 500),
         child: Container(
           key: ValueKey(iconName),
-          width: 45,
           height: 45,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
@@ -400,7 +399,7 @@ class _Badge extends StatelessWidget {
                         child: Center(
                           child: MediaQuery(
                             child: TextFont(
-                              text: percent.toStringAsFixed(0) + '%',
+                              text: convertToPercent(percent),
                               fontSize: 10,
                               fontWeight: FontWeight.bold,
                               textAlign: TextAlign.center,

@@ -1047,8 +1047,13 @@
   "difference-loan": "Rozdílná půjčka",
   "open-settings": "Otevřené nastavení",
   "decimal-precision": "Desetinná přesnost",
-  "decimal-precision-description": "Desetinná místa pro zaokrouhlování částky transakce",
+  "decimal-precision-description": "Desetinná místa pro zaokrouhlení částky transakce",
   "same-accounts": "Stejné účty",
   "select-2-different-accounts": "Vyberte 2 různé účty",
-  "include-amount": "Zahrnout částku"
+  "include-amount": "Zahrnout částku",
+  "percentage-precision": "Procentní přesnost",
+  "0-decimals": "0 desetinných míst",
+  "1-decimal": "1 desetinná místa",
+  "2-decimals": "2 desetinná místa",
+  "onwards": "dále"
 }

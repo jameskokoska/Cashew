@@ -1050,5 +1050,10 @@
   "decimal-precision-description": "Mga lugar na desimal para sa pag -ikot ng halaga ng transaksyon",
   "same-accounts": "Parehong mga account",
   "select-2-different-accounts": "Piliin ang 2 iba't ibang mga account",
-  "include-amount": "Isama ang halaga"
+  "include-amount": "Isama ang halaga",
+  "percentage-precision": "Porsyento na katumpakan",
+  "0-decimals": "0 decimals",
+  "1-decimal": "1 decimals",
+  "2-decimals": "2 decimals",
+  "onwards": "pasulong"
 }

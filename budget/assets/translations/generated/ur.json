@@ -1050,5 +1050,10 @@
   "decimal-precision-description": "لین دین کی رقم کے لئے اعشاریہ اعشاریہ",
   "same-accounts": "ایک ہی اکاؤنٹس",
   "select-2-different-accounts": "2 مختلف اکاؤنٹس منتخب کریں",
-  "include-amount": "رقم شامل کریں"
+  "include-amount": "رقم شامل کریں",
+  "percentage-precision": "فیصد صحت سے متعلق",
+  "0-decimals": "0 اعشاریہ",
+  "1-decimal": "1 اعشاریہ",
+  "2-decimals": "2 اعشاریہ",
+  "onwards": "آگے"
 }

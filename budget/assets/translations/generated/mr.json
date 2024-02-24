@@ -1050,5 +1050,10 @@
   "decimal-precision-description": "व्यवहाराच्या रकमेसाठी दशांश ठिकाणे",
   "same-accounts": "समान खाती",
   "select-2-different-accounts": "2 भिन्न खाती निवडा",
-  "include-amount": "रक्कम समाविष्ट करा"
+  "include-amount": "रक्कम समाविष्ट करा",
+  "percentage-precision": "टक्केवारी अचूकता",
+  "0-decimals": "0 दशांश",
+  "1-decimal": "1 दशांश",
+  "2-decimals": "2 दशांश",
+  "onwards": "पुढे"
 }

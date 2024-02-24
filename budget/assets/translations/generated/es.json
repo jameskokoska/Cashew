@@ -1050,5 +1050,10 @@
   "decimal-precision-description": "Posición decimal para el redondeo de la transacción",
   "same-accounts": "Mismas cuentas",
   "select-2-different-accounts": "Seleccione 2 cuentas diferentes",
-  "include-amount": "Incluir la cantidad"
+  "include-amount": "Incluir la cantidad",
+  "percentage-precision": "Porcentaje de precisión",
+  "0-decimals": "0 decimales",
+  "1-decimal": "1 decimales",
+  "2-decimals": "2 decimales",
+  "onwards": "adelante"
 }

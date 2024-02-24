@@ -1047,8 +1047,13 @@
   "difference-loan": "Erolaina",
   "open-settings": "Avaa asetukset",
   "decimal-precision": "Tarkkuus",
-  "decimal-precision-description": "Desimaalit tapahtumien määrän pyöristämiselle",
+  "decimal-precision-description": "Desimaalit Transaktiomäärän pyöristämiselle",
   "same-accounts": "Samat tilit",
   "select-2-different-accounts": "Valitse 2 erilaista tiliä",
-  "include-amount": "Sisällytä määrä"
+  "include-amount": "Sisällytä määrä",
+  "percentage-precision": "Prosentuaalinen tarkkuus",
+  "0-decimals": "0 desimaali",
+  "1-decimal": "1 desimaali",
+  "2-decimals": "2 desimaalia",
+  "onwards": "eteenpäin"
 }

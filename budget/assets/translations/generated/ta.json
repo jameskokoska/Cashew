@@ -1050,5 +1050,10 @@
   "decimal-precision-description": "பரிவர்த்தனை அளவு வட்டமிடுவதற்கான தசம இடங்கள்",
   "same-accounts": "அதே கணக்குகள்",
   "select-2-different-accounts": "2 வெவ்வேறு கணக்குகளைத் தேர்ந்தெடுக்கவும்",
-  "include-amount": "அளவு அடங்கும்"
+  "include-amount": "அளவு அடங்கும்",
+  "percentage-precision": "சதவீதம் துல்லியம்",
+  "0-decimals": "0 தசமங்கள்",
+  "1-decimal": "1 தசமங்கள்",
+  "2-decimals": "2 தசமங்கள்",
+  "onwards": "பின்னர்"
 }

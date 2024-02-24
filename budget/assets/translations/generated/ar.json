@@ -1050,5 +1050,10 @@
   "decimal-precision-description": "أماكن عشرية لالتقاط مبلغ المعاملات",
   "same-accounts": "نفس الحسابات",
   "select-2-different-accounts": "حدد 2 حساب مختلف",
-  "include-amount": "تشمل المبلغ"
+  "include-amount": "تشمل المبلغ",
+  "percentage-precision": "النسبة المئوية الدقة",
+  "0-decimals": "0 العشرية",
+  "1-decimal": "1 عشرية",
+  "2-decimals": "2 عشرية",
+  "onwards": "فصاعدا"
 }

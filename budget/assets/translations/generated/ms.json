@@ -1050,5 +1050,10 @@
   "decimal-precision-description": "Tempat perpuluhan untuk jumlah urus niaga",
   "same-accounts": "Akaun yang sama",
   "select-2-different-accounts": "Pilih 2 akaun yang berbeza",
-  "include-amount": "Termasuk jumlah"
+  "include-amount": "Termasuk jumlah",
+  "percentage-precision": "Ketepatan peratusan",
+  "0-decimals": "0 perpuluhan",
+  "1-decimal": "1 perpuluhan",
+  "2-decimals": "2 perpuluhan",
+  "onwards": "seterusnya"
 }
