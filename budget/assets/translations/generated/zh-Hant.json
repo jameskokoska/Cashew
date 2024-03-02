@@ -1055,5 +1055,7 @@
   "0-decimals": "0小數",
   "1-decimal": "1個小數",
   "2-decimals": "2個小數",
-  "onwards": "向前"
+  "onwards": "向前",
+  "failed-to-preview-image": "無法預覽圖像",
+  "open-link": "打開鏈接"
 }

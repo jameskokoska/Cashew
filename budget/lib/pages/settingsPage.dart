@@ -93,7 +93,7 @@ class MoreActionsPageState extends State<MoreActionsPage>
   }
 
   void scrollToTop() {
-    pageState.currentState!.scrollToTop();
+    pageState.currentState?.scrollToTop();
   }
 
   @override

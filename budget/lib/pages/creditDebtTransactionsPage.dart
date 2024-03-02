@@ -41,10 +41,10 @@ class CreditDebtTransactions extends StatefulWidget {
   final bool? isCredit;
 
   @override
-  State<CreditDebtTransactions> createState() => _CreditDebtTransactionsState();
+  State<CreditDebtTransactions> createState() => CreditDebtTransactionsState();
 }
 
-class _CreditDebtTransactionsState extends State<CreditDebtTransactions>
+class CreditDebtTransactionsState extends State<CreditDebtTransactions>
     with SingleTickerProviderStateMixin {
   String pageId = "CreditDebt";
   late ScrollController _scrollController = ScrollController();
@@ -58,6 +58,11 @@ class _CreditDebtTransactionsState extends State<CreditDebtTransactions>
   String? searchValue;
   FocusNode _searchFocusNode = FocusNode();
   int? numberLongTerm;
+  GlobalKey<PageFrameworkState> pageState = GlobalKey();
+
+  void scrollToTop() {
+    pageState.currentState?.scrollToTop();
+  }
 
   @override
   void initState() {
@@ -310,6 +315,7 @@ class _CreditDebtTransactionsState extends State<CreditDebtTransactions>
       child: Stack(
         children: [
           PageFramework(
+            key: pageState,
             scrollController: _scrollController,
             resizeToAvoidBottomInset: true,
             floatingActionButton: AnimateFABDelayed(

@@ -1,15 +1,12 @@
 import 'package:budget/database/generatePreviewData.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
-import 'package:budget/pages/accountsPage.dart';
 import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/addCategoryPage.dart';
 import 'package:budget/pages/addObjectivePage.dart';
 import 'package:budget/pages/addWalletPage.dart';
 import 'package:budget/pages/editAssociatedTitlesPage.dart';
-import 'package:budget/pages/editObjectivesPage.dart';
 import 'package:budget/pages/editWalletsPage.dart';
-import 'package:budget/pages/objectivesListPage.dart';
 import 'package:budget/pages/premiumPage.dart';
 import 'package:budget/pages/sharedBudgetSettings.dart';
 import 'package:budget/pages/transactionsListPage.dart';
@@ -17,14 +14,15 @@ import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/navBarIconsData.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/struct/uploadAttachment.dart';
+import 'package:budget/widgets/accountAndBackup.dart';
+import 'package:budget/widgets/navigationFramework.dart';
+import 'package:googleapis/drive/v3.dart' as drive;
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/categoryIcon.dart';
 import 'package:budget/widgets/dropdownSelect.dart';
-import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/widgets/globalSnackbar.dart';
 import 'package:budget/widgets/incomeExpenseTabSelector.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
-import 'package:budget/widgets/pieChart.dart';
 import 'package:budget/widgets/selectedTransactionsAppBar.dart';
 import 'package:budget/widgets/settingsContainers.dart';
 import 'package:budget/widgets/sliverStickyLabelDivider.dart';
@@ -41,18 +39,15 @@ import 'package:budget/widgets/textInput.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/selectChips.dart';
 import 'package:budget/widgets/saveBottomButton.dart';
-import 'package:budget/widgets/transactionEntry/incomeAmountArrow.dart';
 import 'package:budget/widgets/transactionEntry/transactionEntry.dart';
 import 'package:budget/widgets/transactionEntry/transactionEntryTypeButton.dart';
 import 'package:budget/widgets/transactionEntry/transactionLabel.dart';
 import 'package:budget/widgets/util/contextMenu.dart';
-import 'package:budget/widgets/util/debouncer.dart';
 import 'package:budget/widgets/util/showDatePicker.dart';
 import 'package:budget/widgets/util/widgetSize.dart';
 import 'package:budget/widgets/viewAllTransactionsButton.dart';
 import 'package:drift/drift.dart' hide Column;
 import 'package:easy_localization/easy_localization.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
@@ -66,12 +61,10 @@ import 'package:budget/widgets/framework/popupFramework.dart';
 import 'package:budget/struct/currencyFunctions.dart';
 import 'package:budget/widgets/animatedExpanded.dart';
 import 'package:budget/widgets/iconButtonScaled.dart';
-import 'package:material_symbols_icons/symbols.dart';
-
-import '../struct/linkHighlighter.dart';
-import '../widgets/listItem.dart';
-import '../widgets/outlinedButtonStacked.dart';
-import '../widgets/tappableTextEntry.dart';
+import 'package:budget/struct/linkHighlighter.dart';
+import 'package:budget/widgets/listItem.dart';
+import 'package:budget/widgets/outlinedButtonStacked.dart';
+import 'package:budget/widgets/tappableTextEntry.dart';
 
 //TODO
 //only show the tags that correspond to selected category
@@ -1057,6 +1050,8 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                 child: AnimatedSwitcher(
                   duration: Duration(milliseconds: 300),
                   child: DateButton(
+                    internalPadding:
+                        EdgeInsets.only(left: 12, bottom: 6, top: 6, right: 8),
                     key: ValueKey(selectedDate.toString()),
                     initialSelectedDate: selectedDate,
                     initialSelectedTime: TimeOfDay(
@@ -1445,8 +1440,8 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                       enabled: enableDoubleColumn(context),
                       child: Padding(
                         padding: const EdgeInsets.only(
-                          left: 20,
-                          right: 20,
+                          left: 22,
+                          right: 22,
                           bottom: 8,
                           top: 5,
                         ),
@@ -1507,8 +1502,8 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                 if (selectedType == null)
                                   Padding(
                                     padding: const EdgeInsets.only(
-                                      left: 20,
-                                      right: 20,
+                                      left: 22,
+                                      right: 22,
                                       bottom: 8,
                                       top: 5,
                                     ),
@@ -1524,8 +1519,8 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                 if (widget.transaction != null)
                                   Padding(
                                     padding: const EdgeInsets.only(
-                                      left: 20,
-                                      right: 20,
+                                      left: 22,
+                                      right: 22,
                                       bottom: 8,
                                       top: 5,
                                     ),
@@ -2473,7 +2468,7 @@ class _SelectTitleState extends State<SelectTitle> {
               child: AnimatedSwitcher(
                 duration: Duration(milliseconds: 300),
                 child: DateButton(
-                  internalPadding: EdgeInsets.only(right: 5),
+                  internalPadding: EdgeInsets.zero,
                   key: ValueKey(selectedDateTime.toString()),
                   initialSelectedDate: selectedDateTime,
                   initialSelectedTime: TimeOfDay(
@@ -3974,6 +3969,103 @@ class ReorderCategoriesPopup extends StatelessWidget {
   }
 }
 
+String? getFileIdFromUrl(String url) {
+  RegExp regExp = RegExp(r"/d/([a-zA-Z0-9_-]+)");
+  Match? match = regExp.firstMatch(url);
+  if (match != null && match.groupCount >= 1) {
+    return match.group(1)!;
+  } else {
+    return null;
+  }
+}
+
+Future<List<int>?> getGoogleDriveFileImageData(String url) async {
+  dynamic result = await openLoadingPopupTryCatch(
+    () async {
+      String? fileId = getFileIdFromUrl(url);
+      if (fileId == null) throw ("No file id found!");
+
+      if (googleUser == null) {
+        await signInGoogle(
+            drivePermissions: true, drivePermissionsAttachments: true);
+      }
+
+      final authHeaders = await googleUser!.authHeaders;
+      final authenticateClient = GoogleAuthClient(authHeaders);
+      drive.DriveApi driveApi = drive.DriveApi(authenticateClient);
+
+      List<int> dataStore = [];
+
+      drive.File fileMetadata =
+          await driveApi.files.get(fileId, $fields: 'size') as drive.File;
+      int totalBytes = int.parse(fileMetadata.size ?? "0");
+
+      dynamic response = await driveApi.files
+          .get(fileId, downloadOptions: drive.DownloadOptions.fullMedia);
+
+      num receivedBytes = 0;
+
+      loadingProgressKey.currentState?.setProgressPercentage(0);
+
+      await for (var data in response.stream) {
+        dataStore.insertAll(dataStore.length, data);
+        receivedBytes += data.length;
+        double progress = receivedBytes / totalBytes;
+        loadingProgressKey.currentState?.setProgressPercentage(progress);
+      }
+      loadingProgressKey.currentState?.setProgressPercentage(0);
+      return dataStore;
+    },
+    onError: (error) {
+      loadingProgressKey.currentState?.setProgressPercentage(0);
+      print(error);
+    },
+  );
+  if (result is List<int>) return result;
+  return null;
+}
+
+class RenderImageData extends StatelessWidget {
+  const RenderImageData(
+      {required this.imageData, required this.openLinkOnError, super.key});
+  final List<int>? imageData;
+  final VoidCallback openLinkOnError;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onLongPress: () {
+        openLinkOnError();
+      },
+      child: Image.memory(
+        Uint8List.fromList(imageData ?? []),
+        errorBuilder: (context, error, stackTrace) => Center(
+          child: Tappable(
+            onTap: openLinkOnError,
+            color: Colors.transparent,
+            borderRadius: 15,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 25),
+              child: Column(
+                children: [
+                  TextFont(
+                    fontSize: 18,
+                    text: "failed-to-preview-image".tr(),
+                    textAlign: TextAlign.center,
+                    maxLines: 4,
+                  ),
+                  SizedBox(height: 15),
+                  LowKeyButton(onTap: openLinkOnError, text: "open-link".tr()),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class LinkInNotes extends StatelessWidget {
   const LinkInNotes({
     required this.link,
@@ -4191,7 +4283,8 @@ class _TransactionNotesTextInputState extends State<TransactionNotesTextInput> {
                                         true) {
                                       String? result = await getPhotoAndUpload(
                                           source: ImageSource.camera);
-                                      addAttachmentLinkToNote(result);
+                                      if (result != null)
+                                        addAttachmentLinkToNote(result);
                                     }
                                   },
                                 ),
@@ -4278,37 +4371,89 @@ class _TransactionNotesTextInputState extends State<TransactionNotesTextInput> {
                           onLongPress: () {
                             copyToClipboard(link);
                           },
-                          onTap: () {
+                          onTap: () async {
                             openUrl(link);
                           },
-                          extraWidget: Padding(
-                            padding: const EdgeInsets.only(right: 11, left: 5),
-                            child: IconButtonScaled(
-                              iconData: appStateSettings["outlinedIcons"]
-                                  ? Icons.remove_outlined
-                                  : Icons.remove_rounded,
-                              iconSize: 16,
-                              scale: 1.6,
-                              onTap: () {
-                                openPopup(
-                                  context,
-                                  icon: appStateSettings["outlinedIcons"]
-                                      ? Icons.link_off_outlined
-                                      : Icons.link_off_rounded,
-                                  title: "remove-link-question".tr(),
-                                  description: "remove-link-description".tr(),
-                                  onCancel: () {
-                                    Navigator.pop(context);
+                          extraWidget: Row(
+                            children: [
+                              if (link.contains("drive.google.com"))
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.only(right: 3, left: 5),
+                                  child: IconButtonScaled(
+                                    iconData: appStateSettings["outlinedIcons"]
+                                        ? Icons.photo_outlined
+                                        : Icons.photo_rounded,
+                                    iconSize: 16,
+                                    scale: 1.6,
+                                    onTap: () async {
+                                      List<int>? result =
+                                          await getGoogleDriveFileImageData(
+                                              link);
+                                      if (result == null) {
+                                        openUrl(link);
+                                      } else {
+                                        openBottomSheet(
+                                          context,
+                                          PopupFramework(
+                                            child: ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(
+                                                      getPlatform() ==
+                                                              PlatformOS.isIOS
+                                                          ? 10
+                                                          : 15),
+                                              child: RenderImageData(
+                                                imageData: result,
+                                                openLinkOnError: () {
+                                                  openUrl(link);
+                                                },
+                                              ),
+                                            ),
+                                          ),
+                                        );
+                                        // Update the size of the bottom sheet
+                                        Future.delayed(
+                                            Duration(milliseconds: 300), () {
+                                          bottomSheetControllerGlobal
+                                              .snapToExtent(0);
+                                        });
+                                      }
+                                    },
+                                  ),
+                                ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(right: 11, left: 5),
+                                child: IconButtonScaled(
+                                  iconData: appStateSettings["outlinedIcons"]
+                                      ? Icons.remove_outlined
+                                      : Icons.remove_rounded,
+                                  iconSize: 16,
+                                  scale: 1.6,
+                                  onTap: () {
+                                    openPopup(
+                                      context,
+                                      icon: appStateSettings["outlinedIcons"]
+                                          ? Icons.link_off_outlined
+                                          : Icons.link_off_rounded,
+                                      title: "remove-link-question".tr(),
+                                      description:
+                                          "remove-link-description".tr(),
+                                      onCancel: () {
+                                        Navigator.pop(context);
+                                      },
+                                      onCancelLabel: "cancel".tr(),
+                                      onSubmit: () {
+                                        removeLinkFromNote(link);
+                                        Navigator.pop(context);
+                                      },
+                                      onSubmitLabel: "remove".tr(),
+                                    );
                                   },
-                                  onCancelLabel: "cancel".tr(),
-                                  onSubmit: () {
-                                    removeLinkFromNote(link);
-                                    Navigator.pop(context);
-                                  },
-                                  onSubmitLabel: "remove".tr(),
-                                );
-                              },
-                            ),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                     ],

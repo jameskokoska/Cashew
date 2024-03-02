@@ -1055,5 +1055,7 @@
   "0-decimals": "0 العشرية",
   "1-decimal": "1 عشرية",
   "2-decimals": "2 عشرية",
-  "onwards": "فصاعدا"
+  "onwards": "فصاعدا",
+  "failed-to-preview-image": "فشل في معاينة الصورة",
+  "open-link": "افتح الرابط"
 }

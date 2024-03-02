@@ -26,6 +26,17 @@ import 'listItem.dart';
 
 String getChangelogString() {
   return """
+    < 5.2.3
+    Fix currency rates API
+    File attachment in-app image preview
+    File attachments use device date time instead of UTC
+    Custom tab pages, can tap the active tab again to scroll to top
+    Most repeated transactions list only show if are of normal transaction type
+    Disabled automatic home page section enable when adding first budget/goal
+    Remove delete button from app bar for long term loans
+    Consistent padding alignment for date picker
+    UI alignment fixes
+    Border radius tweaks (i)
     < 5.2.2
     Exclude transaction from counting towards reports and totals (in more options)
     Percentage decimal precision setting (in Settings > More Options > Formatting)

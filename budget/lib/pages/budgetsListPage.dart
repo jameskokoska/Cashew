@@ -36,7 +36,7 @@ class BudgetsListPageState extends State<BudgetsListPage>
   }
 
   void scrollToTop() {
-    pageState.currentState!.scrollToTop();
+    pageState.currentState?.scrollToTop();
   }
 
   @override

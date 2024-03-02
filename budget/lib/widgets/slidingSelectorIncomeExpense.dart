@@ -58,6 +58,9 @@ class SlidingSelectorIncomeExpense extends StatelessWidget {
                     ? Theme.of(context).colorScheme.primary.withOpacity(0.1)
                     : getColor(context, "lightDarkAccentHeavyLight"),
                 child: TabBar(
+                  splashFactory: getPlatform() == PlatformOS.isIOS
+                      ? NoSplash.splashFactory
+                      : null,
                   splashBorderRadius: borderRadius,
                   onTap: (value) {
                     onSelected(value + 1);

@@ -1,4 +1,5 @@
 import 'package:budget/colors.dart';
+import 'package:budget/functions.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
@@ -20,7 +21,7 @@ class OutlinedButtonStacked extends StatelessWidget {
     this.transitionWhenFilled = true,
     this.infoButton,
     this.iconScale = 1,
-    this.borderRadius = 15,
+    this.borderRadius,
   });
   final String text;
   final double? fontSize;
@@ -35,19 +36,21 @@ class OutlinedButtonStacked extends StatelessWidget {
   final bool transitionWhenFilled;
   final Widget? infoButton;
   final double iconScale;
-  final double borderRadius;
+  final double? borderRadius;
   @override
   Widget build(BuildContext context) {
+    double borderRadiusValue =
+        borderRadius ?? (getPlatform() == PlatformOS.isIOS ? 10 : 15);
     return Row(
       children: [
         Expanded(
           child: Tappable(
             onTap: onTap,
-            borderRadius: borderRadius,
+            borderRadius: borderRadiusValue,
             color: Colors.transparent,
             child: OutlinedContainer(
               filled: filled,
-              borderRadius: borderRadius,
+              borderRadius: borderRadiusValue,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -136,18 +139,20 @@ class OutlinedContainer extends StatelessWidget {
   const OutlinedContainer(
       {required this.child,
       this.filled = false,
-      this.borderRadius = 15,
+      this.borderRadius,
       this.borderColor,
       this.enabled = true,
       super.key});
   final Widget child;
   final bool filled;
-  final double borderRadius;
+  final double? borderRadius;
   final Color? borderColor;
   final bool enabled;
   @override
   Widget build(BuildContext context) {
     if (enabled == false) return child;
+    double borderRadiusValue =
+        borderRadius ?? (getPlatform() == PlatformOS.isIOS ? 10 : 15);
     return AnimatedContainer(
       duration: Duration(milliseconds: 250),
       decoration: BoxDecoration(
@@ -161,7 +166,7 @@ class OutlinedContainer extends StatelessWidget {
         color: filled == true
             ? Theme.of(context).colorScheme.secondary.withOpacity(0.2)
             : Colors.transparent,
-        borderRadius: BorderRadius.circular(borderRadius),
+        borderRadius: BorderRadius.circular(borderRadiusValue),
       ),
       child: child,
     );

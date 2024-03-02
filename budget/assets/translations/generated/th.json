@@ -1047,7 +1047,7 @@
   "difference-loan": "เงินกู้ที่แตกต่างกัน",
   "open-settings": "เปิดการตั้งค่า",
   "decimal-precision": "ความแม่นยำของทศนิยม",
-  "decimal-precision-description": "ทศนิยมสถานที่สำหรับการทำธุรกรรมการปัดเศษ",
+  "decimal-precision-description": "ทศนิยมสถานที่สำหรับการปัดเศษจำนวนธุรกรรม",
   "same-accounts": "บัญชีเดียวกัน",
   "select-2-different-accounts": "เลือก 2 บัญชีที่แตกต่างกัน",
   "include-amount": "รวมจำนวนเงิน",
@@ -1055,5 +1055,7 @@
   "0-decimals": "0 ทศนิยม",
   "1-decimal": "1 ทศนิยม",
   "2-decimals": "2 ทศนิยม",
-  "onwards": "เป็นต้นไป"
+  "onwards": "เป็นต้นไป",
+  "failed-to-preview-image": "ไม่สามารถดูตัวอย่างภาพได้",
+  "open-link": "เปิดลิ้งค์"
 }

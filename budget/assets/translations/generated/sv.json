@@ -1055,5 +1055,7 @@
   "0-decimals": "0 decimaler",
   "1-decimal": "1 decimaler",
   "2-decimals": "2 decimaler",
-  "onwards": "framåt"
+  "onwards": "framåt",
+  "failed-to-preview-image": "Det gick inte att förhandsgranska bilden",
+  "open-link": "Öppen länk"
 }

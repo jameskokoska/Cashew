@@ -1055,5 +1055,7 @@
   "0-decimals": "0 decimais",
   "1-decimal": "1 decimais",
   "2-decimals": "2 decimais",
-  "onwards": "em diante"
+  "onwards": "em diante",
+  "failed-to-preview-image": "Falha ao visualizar a imagem",
+  "open-link": "Link aberto"
 }

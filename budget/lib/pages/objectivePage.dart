@@ -215,23 +215,24 @@ class _ObjectivePageContentState extends State<_ObjectivePageContent> {
                     },
                   ),
                   // Only show for loan goal
-                  if (widget.objective.type == ObjectiveType.loan)
-                    DropdownItemMenu(
-                      id: "delete-goal",
-                      label: widget.objective.type == ObjectiveType.loan
-                          ? "delete-loan".tr()
-                          : "delete-goal".tr(),
-                      icon: appStateSettings["outlinedIcons"]
-                          ? Icons.delete_outlined
-                          : Icons.delete_rounded,
-                      action: () {
-                        deleteObjectivePopup(
-                          context,
-                          objective: widget.objective,
-                          routesToPopAfterDelete: RoutesToPopAfterDelete.One,
-                        );
-                      },
-                    ),
+                  // if (widget.objective.type == ObjectiveType.loan &&
+                  //     getIsDifferenceOnlyLoan(widget.objective) == false)
+                  //   DropdownItemMenu(
+                  //     id: "delete-goal",
+                  //     label: widget.objective.type == ObjectiveType.loan
+                  //         ? "delete-loan".tr()
+                  //         : "delete-goal".tr(),
+                  //     icon: appStateSettings["outlinedIcons"]
+                  //         ? Icons.delete_outlined
+                  //         : Icons.delete_rounded,
+                  //     action: () {
+                  //       deleteObjectivePopup(
+                  //         context,
+                  //         objective: widget.objective,
+                  //         routesToPopAfterDelete: RoutesToPopAfterDelete.One,
+                  //       );
+                  //     },
+                  //   ),
                 ],
               ),
             ],

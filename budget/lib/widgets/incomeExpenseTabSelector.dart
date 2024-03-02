@@ -112,6 +112,8 @@ class _IncomeExpenseTabSelectorState extends State<IncomeExpenseTabSelector>
                     : Colors.black.withOpacity(0.07)
             : widget.unselectedColor,
         child: TabBar(
+          splashFactory:
+              getPlatform() == PlatformOS.isIOS ? NoSplash.splashFactory : null,
           controller: _incomeTabController,
           dividerColor: Colors.transparent,
           indicatorColor: Colors.transparent,
@@ -272,13 +274,14 @@ class _IncomeExpenseButtonSelectorState
 
   @override
   Widget build(BuildContext context) {
+    double borderRadius = getPlatform() == PlatformOS.isIOS ? 10 : 15;
     return Padding(
       padding: const EdgeInsets.only(left: 18, right: 18, bottom: 13),
       child: Row(
         children: [
           Expanded(
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(15),
+              borderRadius: BorderRadius.circular(borderRadius),
               child: Tappable(
                 onTap: () {
                   if (selectedIncome == false) {
@@ -310,7 +313,7 @@ class _IncomeExpenseButtonSelectorState
           SizedBox(width: 13),
           Expanded(
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(15),
+              borderRadius: BorderRadius.circular(borderRadius),
               child: Tappable(
                 onTap: () {
                   if (selectedIncome == true) {

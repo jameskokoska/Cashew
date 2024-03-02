@@ -1055,5 +1055,7 @@
   "0-decimals": "0 decimalen",
   "1-decimal": "1 decimalen",
   "2-decimals": "2 decimalen",
-  "onwards": "verder"
+  "onwards": "verder",
+  "failed-to-preview-image": "Kan de afbeelding niet bekijken",
+  "open-link": "Open link"
 }

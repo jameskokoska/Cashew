@@ -6,6 +6,7 @@ import 'package:budget/pages/upcomingOverdueTransactionsPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/initializeNotifications.dart';
 import 'package:budget/struct/upcomingTransactionsFunctions.dart';
+import 'package:budget/widgets/animatedExpanded.dart';
 import 'package:budget/widgets/dropdownSelect.dart';
 import 'package:budget/widgets/framework/popupFramework.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
@@ -31,7 +32,7 @@ class SubscriptionsPage extends StatefulWidget {
   const SubscriptionsPage({Key? key}) : super(key: key);
 
   @override
-  State<SubscriptionsPage> createState() => _SubscriptionsPageState();
+  State<SubscriptionsPage> createState() => SubscriptionsPageState();
 }
 
 enum SelectedSubscriptionsType {
@@ -40,9 +41,14 @@ enum SelectedSubscriptionsType {
   total,
 }
 
-class _SubscriptionsPageState extends State<SubscriptionsPage> {
+class SubscriptionsPageState extends State<SubscriptionsPage> {
   SelectedSubscriptionsType selectedType = SelectedSubscriptionsType
       .values[appStateSettings["selectedSubscriptionType"]];
+  GlobalKey<PageFrameworkState> pageState = GlobalKey();
+
+  void scrollToTop() {
+    pageState.currentState?.scrollToTop();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,6 +65,7 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
       child: Stack(
         children: [
           PageFramework(
+            key: pageState,
             listID: "Subscriptions",
             floatingActionButton: AnimateFABDelayed(
               fab: FAB(
@@ -131,14 +138,18 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
                       ),
                       Padding(
                         padding: EdgeInsets.only(top: 5),
-                        child: TextFont(
-                          text: selectedType == SelectedSubscriptionsType.yearly
-                              ? "yearly-subscriptions".tr()
-                              : selectedType ==
-                                      SelectedSubscriptionsType.monthly
-                                  ? "monthly-subscriptions".tr()
-                                  : "total-subscriptions".tr(),
-                          fontSize: 16,
+                        child: AnimatedSizeSwitcher(
+                          child: TextFont(
+                            key: ValueKey(selectedType.toString()),
+                            text:
+                                selectedType == SelectedSubscriptionsType.yearly
+                                    ? "yearly-subscriptions".tr()
+                                    : selectedType ==
+                                            SelectedSubscriptionsType.monthly
+                                        ? "monthly-subscriptions".tr()
+                                        : "total-subscriptions".tr(),
+                            fontSize: 16,
+                          ),
                         ),
                       ),
                       Padding(

@@ -42,14 +42,19 @@ class UpcomingOverdueTransactions extends StatefulWidget {
 
   @override
   State<UpcomingOverdueTransactions> createState() =>
-      _UpcomingOverdueTransactionsState();
+      UpcomingOverdueTransactionsState();
 }
 
-class _UpcomingOverdueTransactionsState
+class UpcomingOverdueTransactionsState
     extends State<UpcomingOverdueTransactions> {
   late bool? overdueTransactions = widget.overdueTransactions;
   String? searchValue;
   FocusNode _searchFocusNode = FocusNode();
+  GlobalKey<PageFrameworkState> pageState = GlobalKey();
+
+  void scrollToTop() {
+    pageState.currentState?.scrollToTop();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -67,6 +72,7 @@ class _UpcomingOverdueTransactionsState
       child: Stack(
         children: [
           PageFramework(
+            key: pageState,
             resizeToAvoidBottomInset: true,
             floatingActionButton: AnimateFABDelayed(
               enabled: overdueTransactions == null,

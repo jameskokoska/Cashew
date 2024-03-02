@@ -243,7 +243,7 @@ class CurrencyItem extends StatelessWidget {
         onTap: () {
           onSelected(currencyKey);
         },
-        borderRadius: 15,
+        borderRadius: getPlatform() == PlatformOS.isIOS ? 10 : 15,
         color: selected
             ? Theme.of(context).colorScheme.secondaryContainer
             : appStateSettings["materialYou"]
@@ -253,7 +253,8 @@ class CurrencyItem extends StatelessWidget {
                 : getColor(context, "lightDarkAccent"),
         child: AnimatedContainer(
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15),
+            borderRadius: BorderRadius.circular(
+                getPlatform() == PlatformOS.isIOS ? 10 : 15),
             border: Border.all(
               width: appStateSettings["materialYou"] ? 2 : 0,
               color: appStateSettings["materialYou"] == true && selected

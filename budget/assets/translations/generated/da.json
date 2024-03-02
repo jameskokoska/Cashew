@@ -1055,5 +1055,7 @@
   "0-decimals": "0 decimaler",
   "1-decimal": "1 decimaler",
   "2-decimals": "2 decimaler",
-  "onwards": "fremefter"
+  "onwards": "fremefter",
+  "failed-to-preview-image": "Kunne ikke forhåndsvise billedet",
+  "open-link": "Åben link"
 }

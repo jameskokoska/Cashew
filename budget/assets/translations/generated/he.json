@@ -1055,5 +1055,7 @@
   "0-decimals": "0 עשרונים",
   "1-decimal": "1 עשרונים",
   "2-decimals": "2 עשרונים",
-  "onwards": "ואילך"
+  "onwards": "ואילך",
+  "failed-to-preview-image": "תצוגה מקדימה של תמונה נכשלה",
+  "open-link": "קישור פתוח"
 }

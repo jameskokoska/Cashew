@@ -519,7 +519,9 @@ class SettingsContainer extends StatelessWidget {
     return ClipRRect(
       borderRadius: BorderRadius.circular(
           (enableBorderRadius || getIsFullScreen(context)) && isOutlined != true
-              ? 20
+              ? getPlatform() == PlatformOS.isIOS
+                  ? 10
+                  : 20
               : 0),
       child: isOutlined == true
           ? SettingsContainerOutlined(

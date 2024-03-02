@@ -1055,5 +1055,7 @@
   "0-decimals": "0 दशमलव",
   "1-decimal": "1 दशमलव",
   "2-decimals": "2 दशमलव",
-  "onwards": "से आगे"
+  "onwards": "से आगे",
+  "failed-to-preview-image": "छवि का पूर्वावलोकन करने में विफल",
+  "open-link": "खुला लिंक"
 }

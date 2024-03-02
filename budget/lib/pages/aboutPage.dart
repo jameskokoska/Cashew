@@ -71,7 +71,7 @@ class AboutPage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Tappable(
-                    borderRadius: 15,
+                    borderRadius: getPlatform() == PlatformOS.isIOS ? 10 : 15,
                     onLongPress: () {
                       if (allowDebugFlags)
                         pushRoute(
@@ -124,7 +124,7 @@ class AboutPage extends StatelessWidget {
                     context, Theme.of(context).colorScheme.secondaryContainer,
                     amountLight: 0.2, amountDark: 0.6)
                 : getColor(context, "lightDarkAccent"),
-            borderRadius: 15,
+            borderRadius: getPlatform() == PlatformOS.isIOS ? 10 : 15,
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 15),
               child: Column(
@@ -216,7 +216,7 @@ class AboutPage extends StatelessWidget {
                     context, Theme.of(context).colorScheme.secondaryContainer,
                     amountLight: 0.2, amountDark: 0.6)
                 : getColor(context, "lightDarkAccent"),
-            borderRadius: 15,
+            borderRadius: getPlatform() == PlatformOS.isIOS ? 10 : 15,
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 15),
               child: Column(
@@ -257,7 +257,7 @@ class AboutPage extends StatelessWidget {
                     context, Theme.of(context).colorScheme.secondaryContainer,
                     amountLight: 0.2, amountDark: 0.6)
                 : getColor(context, "lightDarkAccent"),
-            borderRadius: 15,
+            borderRadius: getPlatform() == PlatformOS.isIOS ? 10 : 15,
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 15),
               child: Column(
@@ -488,7 +488,7 @@ class AboutPage extends StatelessWidget {
         ),
         AboutInfoBox(
           title: "exchange-rates-api".tr(),
-          link: "https://github.com/fawazahmed0/currency-api",
+          link: "https://github.com/fawazahmed0/exchange-api",
         ),
         Container(height: 15),
         Padding(
@@ -647,7 +647,7 @@ class AboutInfoBox extends StatelessWidget {
                     context, Theme.of(context).colorScheme.secondaryContainer,
                     amountLight: 0.2, amountDark: 0.6)
                 : getColor(context, "lightDarkAccent")),
-        borderRadius: 15,
+        borderRadius: getPlatform() == PlatformOS.isIOS ? 10 : 15,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 15),
           child: Column(

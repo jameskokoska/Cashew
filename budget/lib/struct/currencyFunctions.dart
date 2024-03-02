@@ -17,13 +17,13 @@ Future<bool> getExchangeRates() async {
       appStateSettings["cachedCurrencyExchange"];
   try {
     Uri url = Uri.parse(
-        "https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/usd.min.json");
+        "https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/usd.min.json");
     dynamic response = await http.get(url);
     if (response.statusCode == 200) {
       cachedCurrencyExchange = json.decode(response.body)?["usd"];
     }
   } catch (e) {
-    print(e.toString());
+    print("Error getting currency rates: " + e.toString());
     return false;
   }
   // print(cachedCurrencyExchange);

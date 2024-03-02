@@ -145,7 +145,7 @@ class _ExchangeRatesState extends State<ExchangeRates> {
         SliverToBoxAdapter(
           child: AboutInfoBox(
             title: "exchange-rates-api".tr(),
-            link: "https://github.com/fawazahmed0/currency-api",
+            link: "https://github.com/fawazahmed0/exchange-api",
           ),
         ),
         SliverToBoxAdapter(

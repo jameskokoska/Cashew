@@ -1044,7 +1044,7 @@
   "set-date-time": "セット",
   "add-record-using-plus-button": "[+]ボタンを使用してレコードを追加します。",
   "all-settled": "すべてが落ち着きました",
-  "difference-loan": "差異ローン",
+  "difference-loan": "差額ローン",
   "open-settings": "設定を開く",
   "decimal-precision": "10進精度",
   "decimal-precision-description": "トランザクション額の丸めの小数点",
@@ -1055,5 +1055,7 @@
   "0-decimals": "0デシマル",
   "1-decimal": "1つの小数",
   "2-decimals": "2つの小数",
-  "onwards": "以降"
+  "onwards": "以降",
+  "failed-to-preview-image": "画像のプレビューに失敗しました",
+  "open-link": "オープンリンク"
 }

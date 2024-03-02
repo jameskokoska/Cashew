@@ -2655,32 +2655,32 @@ class FinanceDatabase extends _$FinanceDatabase {
           companionToInsert.copyWith(objectivePk: Value.absent());
 
       // If homepage section disabled and user added an objective, enable homepage section
-      if (appStateSettings[objective.type == ObjectiveType.goal
-                  ? "showObjectives"
-                  : "showObjectiveLoans"] ==
-              false &&
-          objective.pinned == true) {
-        int amountObjectives =
-            (await getAllObjectives(objectiveType: objective.type)).length;
-        if (amountObjectives <= 0) {
-          await updateSettings(
-            objective.type == ObjectiveType.goal
-                ? "showObjectives"
-                : "showObjectiveLoans",
-            true,
-            updateGlobalState: false,
-            pagesNeedingRefresh: [0],
-          );
-          await updateSettings(
-            objective.type == ObjectiveType.goal
-                ? "showObjectivesFullScreen"
-                : "showObjectivesFullScreen",
-            true,
-            updateGlobalState: false,
-            pagesNeedingRefresh: [0],
-          );
-        }
-      }
+      // if (appStateSettings[objective.type == ObjectiveType.goal
+      //             ? "showObjectives"
+      //             : "showObjectiveLoans"] ==
+      //         false &&
+      //     objective.pinned == true) {
+      //   int amountObjectives =
+      //       (await getAllObjectives(objectiveType: objective.type)).length;
+      //   if (amountObjectives <= 0) {
+      //     await updateSettings(
+      //       objective.type == ObjectiveType.goal
+      //           ? "showObjectives"
+      //           : "showObjectiveLoans",
+      //       true,
+      //       updateGlobalState: false,
+      //       pagesNeedingRefresh: [0],
+      //     );
+      //     await updateSettings(
+      //       objective.type == ObjectiveType.goal
+      //           ? "showObjectivesFullScreen"
+      //           : "showObjectivesFullScreen",
+      //       true,
+      //       updateGlobalState: false,
+      //       pagesNeedingRefresh: [0],
+      //     );
+      //   }
+      // }
     }
 
     return into(objectives)
@@ -4001,16 +4001,16 @@ class FinanceDatabase extends _$FinanceDatabase {
       companionToInsert = companionToInsert.copyWith(budgetPk: Value.absent());
 
       // If homepage section disabled and user added a budget, enable homepage section
-      if (appStateSettings["showPinnedBudgets"] == false &&
-          budget.pinned == true) {
-        int amountBudgets = (await getAllBudgets()).length;
-        if (amountBudgets <= 0) {
-          await updateSettings("showPinnedBudgets", true,
-              updateGlobalState: false, pagesNeedingRefresh: [0]);
-          await updateSettings("showPinnedBudgetsFullScreen", true,
-              updateGlobalState: false, pagesNeedingRefresh: [0]);
-        }
-      }
+      // if (appStateSettings["showPinnedBudgets"] == false &&
+      //     budget.pinned == true) {
+      //   int amountBudgets = (await getAllBudgets()).length;
+      //   if (amountBudgets <= 0) {
+      //     await updateSettings("showPinnedBudgets", true,
+      //         updateGlobalState: false, pagesNeedingRefresh: [0]);
+      //     await updateSettings("showPinnedBudgetsFullScreen", true,
+      //         updateGlobalState: false, pagesNeedingRefresh: [0]);
+      //   }
+      // }
     }
 
     return into(budgets)
@@ -6763,7 +6763,8 @@ class FinanceDatabase extends _$FinanceDatabase {
             1000;
 
     return customSelect(
-      'SELECT *, COUNT(*) as "count" FROM transactions WHERE date_created >= $threeMonthsAgo GROUP BY transactions.category_fk, transactions.name ORDER BY count DESC, MAX(date_created) DESC LIMIT 5',
+      // and name != \'\' (users may use subcategory transactions that are repeated, might not have a title)
+      'SELECT *, COUNT(*) as "count" FROM transactions WHERE date_created >= $threeMonthsAgo and type IS NULL GROUP BY transactions.category_fk, transactions.name ORDER BY count DESC, MAX(date_created) DESC LIMIT 5',
       readsFrom: {transactions},
     ).watch().map((rows) {
       return rows

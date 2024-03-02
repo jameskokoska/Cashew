@@ -120,10 +120,10 @@ class WalletDetailsPage extends StatefulWidget {
       : super(key: key);
 
   @override
-  State<WalletDetailsPage> createState() => _WalletDetailsPageState();
+  State<WalletDetailsPage> createState() => WalletDetailsPageState();
 }
 
-class _WalletDetailsPageState extends State<WalletDetailsPage>
+class WalletDetailsPageState extends State<WalletDetailsPage>
     with SingleTickerProviderStateMixin {
   late String listID = widget.wallet == null
       ? "All Spending Summary"
@@ -144,6 +144,11 @@ class _WalletDetailsPageState extends State<WalletDetailsPage>
 
   bool appStateSettingsNetAllSpendingTotal =
       appStateSettings["netAllSpendingTotal"] == true;
+
+  void scrollToTop() {
+    print("SCROLLING TO TOP");
+    pageState.currentState?.scrollToTop();
+  }
 
   @override
   void initState() {
@@ -453,7 +458,8 @@ class _WalletDetailsPageState extends State<WalletDetailsPage>
       animation: _tabController.animation!,
       builder: (BuildContext context, Widget? child) {
         return ClipRRect(
-          borderRadius: BorderRadius.circular(15),
+          borderRadius: BorderRadius.circular(
+              getPlatform() == PlatformOS.isIOS ? 10 : 15),
           child: SizeTransition(
             sizeFactor: _tabController.animation!,
             axis: Axis.horizontal,

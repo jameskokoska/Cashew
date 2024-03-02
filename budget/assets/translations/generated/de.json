@@ -1055,5 +1055,7 @@
   "0-decimals": "0 Dezimalstellen",
   "1-decimal": "1 Dezimalstellen",
   "2-decimals": "2 Dezimalstellen",
-  "onwards": "voran"
+  "onwards": "voran",
+  "failed-to-preview-image": "Die Vorschau von Bild versäumt es",
+  "open-link": "Verbindung öffnen"
 }

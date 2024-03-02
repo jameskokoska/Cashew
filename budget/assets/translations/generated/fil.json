@@ -1055,5 +1055,7 @@
   "0-decimals": "0 decimals",
   "1-decimal": "1 decimals",
   "2-decimals": "2 decimals",
-  "onwards": "pasulong"
+  "onwards": "pasulong",
+  "failed-to-preview-image": "Nabigong i -preview ang imahe",
+  "open-link": "Bukas na link"
 }

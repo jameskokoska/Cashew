@@ -1055,5 +1055,7 @@
   "0-decimals": "0 দশমিক",
   "1-decimal": "1 দশমিক",
   "2-decimals": "2 দশমিক",
-  "onwards": "এগিয়ে"
+  "onwards": "এগিয়ে",
+  "failed-to-preview-image": "চিত্রের পূর্বরূপ দেখতে ব্যর্থ",
+  "open-link": "খোলা সংযুক্তি"
 }

@@ -1055,5 +1055,7 @@
   "0-decimals": "0 tizedesjegyek",
   "1-decimal": "1 tizedesjegy",
   "2-decimals": "2 tizedesjegy",
-  "onwards": "kezdve"
+  "onwards": "kezdve",
+  "failed-to-preview-image": "Nem sikerült megtekinteni a képet",
+  "open-link": "Link megnyitása"
 }

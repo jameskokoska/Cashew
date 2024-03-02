@@ -47,17 +47,29 @@ double getDifferenceOfLoan(
       : objectiveAmount - totalAmount;
 }
 
-class ObjectivesListPage extends StatelessWidget {
+class ObjectivesListPage extends StatefulWidget {
   const ObjectivesListPage({required this.backButton, Key? key})
       : super(key: key);
   final bool backButton;
 
   @override
+  State<ObjectivesListPage> createState() => ObjectivesListPageState();
+}
+
+class ObjectivesListPageState extends State<ObjectivesListPage> {
+  GlobalKey<PageFrameworkState> pageState = GlobalKey();
+
+  void scrollToTop() {
+    pageState.currentState?.scrollToTop();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return PageFramework(
+      key: pageState,
       dragDownToDismiss: true,
       title: "goals".tr(),
-      backButton: backButton,
+      backButton: widget.backButton,
       horizontalPadding: enableDoubleColumn(context) == false
           ? getHorizontalPaddingConstrained(context)
           : 0,

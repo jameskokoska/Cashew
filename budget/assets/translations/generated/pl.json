@@ -1055,5 +1055,7 @@
   "0-decimals": "0 dziesiętne",
   "1-decimal": "1 dziesiętne",
   "2-decimals": "2 dziesiętne",
-  "onwards": "dalej"
+  "onwards": "dalej",
+  "failed-to-preview-image": "Nie udało się podglądu obrazu",
+  "open-link": "Otwórz link"
 }

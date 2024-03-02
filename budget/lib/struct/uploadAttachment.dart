@@ -192,8 +192,7 @@ Future<String?> uploadFileToDrive({
   drive.Media media = new drive.Media(mediaStream, fileBytes.length);
 
   drive.File driveFile = new drive.File();
-  final timestamp =
-      DateFormat("yyyy-MM-dd-hhmmss").format(DateTime.now().toUtc());
+  String timestamp = DateFormat("yyyy-MM-dd-hhmmss").format(DateTime.now());
   driveFile.name = timestamp + fileName;
   driveFile.modifiedTime = DateTime.now().toUtc();
   driveFile.parents = [folderId];

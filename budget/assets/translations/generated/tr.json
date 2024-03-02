@@ -1055,5 +1055,7 @@
   "0-decimals": "0 ondalık sayılar",
   "1-decimal": "1 ondalık sayılar",
   "2-decimals": "2 ondalık sayılar",
-  "onwards": "itibaren"
+  "onwards": "itibaren",
+  "failed-to-preview-image": "Resmi önizlemedi",
+  "open-link": "Linki aç"
 }

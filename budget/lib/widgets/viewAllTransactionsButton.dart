@@ -1,3 +1,4 @@
+import 'package:budget/functions.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/tappable.dart';
@@ -68,7 +69,7 @@ class LowKeyButton extends StatelessWidget {
         ),
       ),
       onTap: onTap,
-      borderRadius: 13,
+      borderRadius: getPlatform() == PlatformOS.isIOS ? 8 : 13,
     );
   }
 }

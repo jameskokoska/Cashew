@@ -473,14 +473,16 @@ ThemeData getLightTheme() {
     appBarTheme: AppBarTheme(
       systemOverlayStyle: getSystemUiOverlayStyle(Brightness.light),
     ),
-    splashColor: appStateSettings["materialYou"]
-        ? darkenPastel(
-                lightenPastel(
-                    getSettingConstants(appStateSettings)["accentColor"],
-                    amount: 0.8),
-                amount: 0.2)
-            .withOpacity(0.5)
-        : null,
+    splashColor: getPlatform() == PlatformOS.isIOS
+        ? Colors.transparent
+        : appStateSettings["materialYou"]
+            ? darkenPastel(
+                    lightenPastel(
+                        getSettingConstants(appStateSettings)["accentColor"],
+                        amount: 0.8),
+                    amount: 0.2)
+                .withOpacity(0.5)
+            : null,
     extensions: <ThemeExtension<dynamic>>[appColorsLight],
   );
 }

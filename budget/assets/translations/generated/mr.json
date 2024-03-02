@@ -1055,5 +1055,7 @@
   "0-decimals": "0 दशांश",
   "1-decimal": "1 दशांश",
   "2-decimals": "2 दशांश",
-  "onwards": "पुढे"
+  "onwards": "पुढे",
+  "failed-to-preview-image": "प्रतिमेचे पूर्वावलोकन करण्यात अयशस्वी",
+  "open-link": "ओपन लिंक"
 }

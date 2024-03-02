@@ -1044,7 +1044,7 @@
   "set-date-time": "تنظیم",
   "add-record-using-plus-button": "با استفاده از دکمه [+] یک رکورد اضافه کنید.",
   "all-settled": "همه حل و فصل شدند",
-  "difference-loan": "وام اختلاف",
+  "difference-loan": "وام تفاوت",
   "open-settings": "تنظیمات باز",
   "decimal-precision": "دقت اعشاری",
   "decimal-precision-description": "مکان های اعشاری برای گردآوری مبلغ معامله",
@@ -1055,5 +1055,7 @@
   "0-decimals": "0 اعشار",
   "1-decimal": "1 اعشار",
   "2-decimals": "2 اعشار",
-  "onwards": "به بعد"
+  "onwards": "به بعد",
+  "failed-to-preview-image": "پیش نمایش تصویر انجام نشد",
+  "open-link": "لینک باز"
 }

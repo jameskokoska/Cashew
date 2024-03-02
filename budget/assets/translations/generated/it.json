@@ -1047,7 +1047,7 @@
   "difference-loan": "Prestito di differenza",
   "open-settings": "Impostazioni aperte",
   "decimal-precision": "Precisione decimali",
-  "decimal-precision-description": "Posizioni decimali per l'arrotondamento dell'importo delle transazioni",
+  "decimal-precision-description": "Posti decimali per l'arrotondamento dell'importo delle transazioni",
   "same-accounts": "Stessi account",
   "select-2-different-accounts": "Seleziona 2 account diversi",
   "include-amount": "Includere l'importo",
@@ -1055,5 +1055,7 @@
   "0-decimals": "0 decimali",
   "1-decimal": "1 decimali",
   "2-decimals": "2 decimali",
-  "onwards": "avanti"
+  "onwards": "avanti",
+  "failed-to-preview-image": "Impossibile in anteprima immagine",
+  "open-link": "Link aperto"
 }

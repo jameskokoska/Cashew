@@ -1055,5 +1055,7 @@
   "0-decimals": "0 децимала",
   "1-decimal": "1 децимала",
   "2-decimals": "2 децимала",
-  "onwards": "надаље"
+  "onwards": "надаље",
+  "failed-to-preview-image": "Није успело да прегледате слику",
+  "open-link": "Отвори линк"
 }

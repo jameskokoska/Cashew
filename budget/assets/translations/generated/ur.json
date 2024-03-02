@@ -1047,7 +1047,7 @@
   "difference-loan": "فرق قرض",
   "open-settings": "کھلی ترتیبات",
   "decimal-precision": "اعشاریہ صحت سے متعلق",
-  "decimal-precision-description": "لین دین کی رقم کے لئے اعشاریہ اعشاریہ",
+  "decimal-precision-description": "ٹرانزیکشن کی رقم کے لئے اعشاریہ مقامات",
   "same-accounts": "ایک ہی اکاؤنٹس",
   "select-2-different-accounts": "2 مختلف اکاؤنٹس منتخب کریں",
   "include-amount": "رقم شامل کریں",
@@ -1055,5 +1055,7 @@
   "0-decimals": "0 اعشاریہ",
   "1-decimal": "1 اعشاریہ",
   "2-decimals": "2 اعشاریہ",
-  "onwards": "آگے"
+  "onwards": "آگے",
+  "failed-to-preview-image": "تصویر کا پیش نظارہ کرنے میں ناکام",
+  "open-link": "لنک کھولیں"
 }

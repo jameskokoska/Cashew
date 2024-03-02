@@ -1055,5 +1055,7 @@
   "0-decimals": "0 데시 말",
   "1-decimal": "1 데시 말",
   "2-decimals": "2 명의 소수",
-  "onwards": "이후"
+  "onwards": "이후",
+  "failed-to-preview-image": "이미지를 미리 보지 못했습니다",
+  "open-link": "열기 링크"
 }

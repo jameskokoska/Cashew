@@ -1055,5 +1055,7 @@
   "0-decimals": "0 zecimale",
   "1-decimal": "1 zecimale",
   "2-decimals": "2 zecimale",
-  "onwards": "mai departe"
+  "onwards": "mai departe",
+  "failed-to-preview-image": "Nu a reușit să previzualizeze imaginea",
+  "open-link": "Deschide link-ul"
 }

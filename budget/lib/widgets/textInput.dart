@@ -25,7 +25,7 @@ class ResumeTextFieldFocus extends StatelessWidget {
   final Widget child;
   @override
   Widget build(BuildContext context) {
-    if (getPlatform() == PlatformOS.isAndroid) {
+    if (getPlatform(ignoreEmulation: true) == PlatformOS.isAndroid) {
       return Focus(
         onFocusChange: (value) {
           if (value == false &&

@@ -206,7 +206,7 @@ class ButtonIcon extends StatelessWidget {
       color: color == null
           ? Theme.of(context).colorScheme.secondaryContainer
           : color,
-      borderRadius: 15,
+      borderRadius: getPlatform() == PlatformOS.isIOS ? 10 : 15,
       onTap: onTap,
     );
   }

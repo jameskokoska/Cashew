@@ -56,6 +56,16 @@ class BottomNavBarState extends State<BottomNavBar> {
       if (navigationIndex == 2)
         budgetsListPageStateKey.currentState?.scrollToTop();
       if (index == 3) settingsPageStateKey.currentState?.scrollToTop();
+      if (navigationIndex == 5)
+        subscriptionsPageStateKey.currentState?.scrollToTop();
+      if (navigationIndex == 7)
+        walletDetailsAllSpendingPageStateKey.currentState?.scrollToTop();
+      if (navigationIndex == 14)
+        objectivesListPageStateKey.currentState?.scrollToTop();
+      if (navigationIndex == 16)
+        upcomingOverdueTransactionsStateKey.currentState?.scrollToTop();
+      if (navigationIndex == 17)
+        creditDebtTransactionsKey.currentState?.scrollToTop();
     } else {
       // We need to change to the navigation index, however the selectedIndex remains unchanged
       // Since the selectedIndex is the index of the selected navigation bar entry

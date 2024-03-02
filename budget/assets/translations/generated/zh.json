@@ -1055,5 +1055,7 @@
   "0-decimals": "0小数",
   "1-decimal": "1个小数",
   "2-decimals": "2个小数",
-  "onwards": "向前"
+  "onwards": "向前",
+  "failed-to-preview-image": "无法预览图像",
+  "open-link": "打开链接"
 }
