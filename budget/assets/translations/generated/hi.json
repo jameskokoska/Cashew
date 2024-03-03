@@ -1057,5 +1057,7 @@
   "2-decimals": "2 दशमलव",
   "onwards": "से आगे",
   "failed-to-preview-image": "छवि का पूर्वावलोकन करने में विफल",
-  "open-link": "खुला लिंक"
+  "open-link": "खुला लिंक",
+  "category-not-selected": "श्रेणी का चयन नहीं किया गया",
+  "all-transactions-require-a-category": "सभी लेनदेन को एक श्रेणी की आवश्यकता होती है"
 }

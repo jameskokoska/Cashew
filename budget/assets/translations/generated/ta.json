@@ -1057,5 +1057,7 @@
   "2-decimals": "2 தசமங்கள்",
   "onwards": "பின்னர்",
   "failed-to-preview-image": "படத்தை முன்னோட்டமிடுவதில் தோல்வி",
-  "open-link": "திறந்த இணைப்பு"
+  "open-link": "திறந்த இணைப்பு",
+  "category-not-selected": "வகை தேர்ந்தெடுக்கப்படவில்லை",
+  "all-transactions-require-a-category": "அனைத்து பரிவர்த்தனைகளுக்கும் ஒரு வகை தேவை"
 }

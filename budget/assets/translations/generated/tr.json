@@ -1057,5 +1057,7 @@
   "2-decimals": "2 ondalık sayılar",
   "onwards": "itibaren",
   "failed-to-preview-image": "Resmi önizlemedi",
-  "open-link": "Linki aç"
+  "open-link": "Linki aç",
+  "category-not-selected": "Kategori seçilmedi",
+  "all-transactions-require-a-category": "Tüm işlemler bir kategori gerektirir"
 }

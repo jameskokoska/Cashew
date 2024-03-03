@@ -1057,5 +1057,7 @@
   "2-decimals": "2 decimalen",
   "onwards": "verder",
   "failed-to-preview-image": "Kan de afbeelding niet bekijken",
-  "open-link": "Open link"
+  "open-link": "Open link",
+  "category-not-selected": "Categorie niet geselecteerd",
+  "all-transactions-require-a-category": "Alle transacties vereisen een categorie"
 }

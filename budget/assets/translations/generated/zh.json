@@ -1057,5 +1057,7 @@
   "2-decimals": "2个小数",
   "onwards": "向前",
   "failed-to-preview-image": "无法预览图像",
-  "open-link": "打开链接"
+  "open-link": "打开链接",
+  "category-not-selected": "类别未选择",
+  "all-transactions-require-a-category": "所有交易都需要类别"
 }

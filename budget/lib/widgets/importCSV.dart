@@ -17,6 +17,7 @@ import 'package:budget/widgets/progressBar.dart';
 import 'package:budget/widgets/settingsContainers.dart';
 import 'package:budget/widgets/textInput.dart';
 import 'package:budget/widgets/textWidgets.dart';
+import 'package:budget/struct/commonDateFormats.dart';
 import 'package:budget/widgets/viewAllTransactionsButton.dart';
 import 'package:drift/drift.dart' hide Column, Table;
 import 'package:easy_localization/easy_localization.dart';
@@ -1238,58 +1239,4 @@ DateTime? tryDateFormatting(
     print("Failed to parse date and time!" + e.toString());
   }
   return dateCreated;
-}
-
-List<String> getCommonDateFormats() {
-  return [
-    "yyyy-MM-dd'T'HH:mm:ss",
-    "MM/dd/yyyy HH:mm:ss",
-    "dd.MM.yyyy HH:mm:ss",
-    "yyyyMMdd'T'HHmmss",
-    "yyyy/MM/dd HH:mm:ss",
-    "dd-MM-yyyy HH:mm:ss",
-    "MM.dd.yyyy HH:mm:ss",
-    "yyyyMMdd'T'HH:mm:ss",
-    "yyyy-MM-dd HH:mm:ss",
-    "dd/MM/yyyy HH:mm",
-    "yyyy/MM/dd",
-    "MM/dd/yyyy",
-    "dd.MM.yyyy",
-    "yyyyMMdd",
-    "yyyy-MM-dd",
-    "dd/MM/yyyy",
-    "MM.dd.yyyy",
-    "dd-MM-yyyy",
-    "MMM dd, yyyy HH:mm:ss",
-    "MMM dd, yyyy",
-    "EEEE, dd MMMM yyyy HH:mm:ss",
-    "EEEE, dd MMMM yyyy",
-    "HH:mm:ss dd/MM/yyyy",
-    "HH:mm:ss yyyy-MM-dd",
-    "HH:mm:ss MM/dd/yyyy",
-    "HH:mm:ss dd.MM.yyyy",
-    "HHmmss yyyyMMdd",
-    "HH:mm:ss yyyy/MM/dd",
-    "HH:mm:ss dd-MM-yyyy",
-    "HH:mm:ss MM.dd.yyyy",
-    "HH:mm:ss dd/MM/yyyy",
-    "HH:mm:ss MM.dd.yyyy",
-    "HH:mm:ss dd-MM-yyyy",
-    "HH:mm:ss MMM dd, yyyy",
-    "HH:mm:ss EEEE, dd MMMM yyyy",
-    "HH:mm:ss dd/MM/yyyy",
-    "HH:mm:ss MM.dd.yyyy",
-    "HH:mm:ss dd-MM-yyyy",
-    "HH:mm:ss MMM dd, yyyy",
-    "HH:mm:ss EEEE, dd MMMM yyyy",
-    "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
-    "yyyy-MM-dd'T'HH:mm:ss.SSSZ",
-    "yyyy-MM-dd'T'HH:mm:ss.SSSX",
-    "yyyy-MM-dd'T'HH:mm:ss.SSSXX",
-    "yyyy-MM-dd'T'HH:mm:ss.SSSXXX",
-    "yyyy-MM-dd'T'HH:mm:ss.SSSSSS",
-    "yyyy-MM-dd HH:mm:ss.SSS",
-    "yyyy-MM-dd HH:mm:ss",
-    "yyyy-MM-dd HH:mm",
-  ];
 }

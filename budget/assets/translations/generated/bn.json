@@ -1057,5 +1057,7 @@
   "2-decimals": "2 দশমিক",
   "onwards": "এগিয়ে",
   "failed-to-preview-image": "চিত্রের পূর্বরূপ দেখতে ব্যর্থ",
-  "open-link": "খোলা সংযুক্তি"
+  "open-link": "খোলা সংযুক্তি",
+  "category-not-selected": "বিভাগ নির্বাচিত নয়",
+  "all-transactions-require-a-category": "সমস্ত লেনদেনের জন্য একটি বিভাগ প্রয়োজন"
 }

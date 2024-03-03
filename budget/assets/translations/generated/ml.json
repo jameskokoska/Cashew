@@ -1057,5 +1057,7 @@
   "2-decimals": "2 ദശാംശങ്ങൾ",
   "onwards": "മുതലുള്ള",
   "failed-to-preview-image": "ചിത്രം തിരയുന്നതിൽ പരാജയപ്പെട്ടു",
-  "open-link": "ലിങ്ക് തുറക്കുക"
+  "open-link": "ലിങ്ക് തുറക്കുക",
+  "category-not-selected": "വിഭാഗം തിരഞ്ഞെടുത്തിട്ടില്ല",
+  "all-transactions-require-a-category": "എല്ലാ ഇടപാടുകളും ഒരു വിഭാഗം ആവശ്യമാണ്"
 }

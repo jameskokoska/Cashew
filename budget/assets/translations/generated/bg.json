@@ -1057,5 +1057,7 @@
   "2-decimals": "2 десетични знаци",
   "onwards": "нататък",
   "failed-to-preview-image": "Неуспешно визуализация на изображението",
-  "open-link": "Отвори линк"
+  "open-link": "Отвори линк",
+  "category-not-selected": "Категория не е избрана",
+  "all-transactions-require-a-category": "Всички транзакции изискват категория"
 }

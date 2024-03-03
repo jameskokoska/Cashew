@@ -1057,5 +1057,7 @@
   "2-decimals": "2 desetinná místa",
   "onwards": "dále",
   "failed-to-preview-image": "Nepodařilo se k náhledu obrázku",
-  "open-link": "Otevřít odkaz"
+  "open-link": "Otevřít odkaz",
+  "category-not-selected": "Kategorie není vybrána",
+  "all-transactions-require-a-category": "Všechny transakce vyžadují kategorii"
 }

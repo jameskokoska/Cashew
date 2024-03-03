@@ -1057,5 +1057,7 @@
   "2-decimals": "2 اعشاریہ",
   "onwards": "آگے",
   "failed-to-preview-image": "تصویر کا پیش نظارہ کرنے میں ناکام",
-  "open-link": "لنک کھولیں"
+  "open-link": "لنک کھولیں",
+  "category-not-selected": "زمرہ منتخب نہیں کیا گیا ہے",
+  "all-transactions-require-a-category": "تمام لین دین میں ایک زمرے کی ضرورت ہوتی ہے"
 }

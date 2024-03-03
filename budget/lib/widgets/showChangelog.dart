@@ -37,6 +37,8 @@ String getChangelogString() {
     Consistent padding alignment for date picker
     UI alignment fixes
     Border radius tweaks (i)
+    Deep linking API (A)
+    Fix color picker initial color value
     < 5.2.2
     Exclude transaction from counting towards reports and totals (in more options)
     Percentage decimal precision setting (in Settings > More Options > Formatting)

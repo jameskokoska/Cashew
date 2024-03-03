@@ -1057,5 +1057,7 @@
   "2-decimals": "2 દશાંશ",
   "onwards": "દૂર",
   "failed-to-preview-image": "છબીનું પૂર્વાવલોકન કરવામાં નિષ્ફળ",
-  "open-link": "ખુલ્લી કડી"
+  "open-link": "ખુલ્લી કડી",
+  "category-not-selected": "કેટેગરી પસંદ નથી",
+  "all-transactions-require-a-category": "બધા વ્યવહારોને કેટેગરીની જરૂર હોય છે"
 }

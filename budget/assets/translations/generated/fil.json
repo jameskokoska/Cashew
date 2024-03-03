@@ -1057,5 +1057,7 @@
   "2-decimals": "2 decimals",
   "onwards": "pasulong",
   "failed-to-preview-image": "Nabigong i -preview ang imahe",
-  "open-link": "Bukas na link"
+  "open-link": "Bukas na link",
+  "category-not-selected": "Hindi napili ang kategorya",
+  "all-transactions-require-a-category": "Ang lahat ng mga transaksyon ay nangangailangan ng isang kategorya"
 }

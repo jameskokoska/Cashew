@@ -1057,5 +1057,7 @@
   "2-decimals": "2つの小数",
   "onwards": "以降",
   "failed-to-preview-image": "画像のプレビューに失敗しました",
-  "open-link": "オープンリンク"
+  "open-link": "オープンリンク",
+  "category-not-selected": "選択されていないカテゴリ",
+  "all-transactions-require-a-category": "すべてのトランザクションにはカテゴリが必要です"
 }

@@ -1057,5 +1057,7 @@
   "2-decimals": "2 perpuluhan",
   "onwards": "seterusnya",
   "failed-to-preview-image": "Gagal Pratonton Imej",
-  "open-link": "Pautan Terbuka"
+  "open-link": "Pautan Terbuka",
+  "category-not-selected": "Kategori tidak dipilih",
+  "all-transactions-require-a-category": "Semua urus niaga memerlukan kategori"
 }

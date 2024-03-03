@@ -1057,5 +1057,7 @@
   "2-decimals": "2 עשרונים",
   "onwards": "ואילך",
   "failed-to-preview-image": "תצוגה מקדימה של תמונה נכשלה",
-  "open-link": "קישור פתוח"
+  "open-link": "קישור פתוח",
+  "category-not-selected": "קטגוריה לא נבחרה",
+  "all-transactions-require-a-category": "כל העסקאות דורשות קטגוריה"
 }

@@ -125,7 +125,8 @@ class _SelectColorState extends State<SelectColor> {
                     : widget.supportCustomColors &&
                             index + 1 == selectableColorsList.length
                         ? ColorIconCustom(
-                            initialSelectedColor: selectedColor ?? Colors.red,
+                            initialSelectedColor: selectedColor ??
+                                Theme.of(context).colorScheme.primary,
                             outline: selectedIndex == -1 ||
                                 selectedIndex ==
                                     selectableColorsList.length - 1,
@@ -442,7 +443,11 @@ class _ColorIconCustomState extends State<ColorIconCustom> {
               onChange: (color, colorSliderPositionPassed,
                   shadeSliderPositionPassed) {
                 setState(() {
-                  selectedColor = color;
+                  // only set selected color after a slider change, we want to keep the
+                  // value of widget.initialSelectedColor for the hex picker
+                  if (colorSliderPosition != null) {
+                    selectedColor = color;
+                  }
                   colorSliderPosition = colorSliderPositionPassed;
                   shadeSliderPosition = shadeSliderPositionPassed;
                 });
@@ -520,18 +525,19 @@ Future enterColorCodeBottomSheet(
   required Function(Color) setSelectedColor,
 }) async {
   Navigator.pop(context);
+  // Fix over-scroll stretch when keyboard pops up quickly
+  Future.delayed(Duration(milliseconds: 100), () {
+    bottomSheetControllerGlobal.scrollTo(0,
+        duration: Duration(milliseconds: 100));
+  });
   return await openBottomSheet(
     context,
     fullSnap: true,
     PopupFramework(
       title: "enter-color-code".tr(),
-      child: Column(
-        children: [
-          HexColorPicker(
-            initialSelectedColor: initialSelectedColor,
-            setSelectedColor: setSelectedColor,
-          )
-        ],
+      child: HexColorPicker(
+        initialSelectedColor: initialSelectedColor,
+        setSelectedColor: setSelectedColor,
       ),
     ),
   );

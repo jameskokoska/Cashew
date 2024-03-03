@@ -1057,5 +1057,7 @@
   "2-decimals": "2 tizedesjegy",
   "onwards": "kezdve",
   "failed-to-preview-image": "Nem sikerült megtekinteni a képet",
-  "open-link": "Link megnyitása"
+  "open-link": "Link megnyitása",
+  "category-not-selected": "A kategória nem választva",
+  "all-transactions-require-a-category": "Minden tranzakcióhoz kategóriát igényel"
 }

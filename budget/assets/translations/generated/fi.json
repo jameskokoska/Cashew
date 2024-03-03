@@ -1057,5 +1057,7 @@
   "2-decimals": "2 desimaalia",
   "onwards": "eteenpäin",
   "failed-to-preview-image": "Kuvan esikatselu epäonnistui",
-  "open-link": "Avaa linkki"
+  "open-link": "Avaa linkki",
+  "category-not-selected": "Luokkaa ei ole valittu",
+  "all-transactions-require-a-category": "Kaikki tapahtumat vaativat luokkaa"
 }

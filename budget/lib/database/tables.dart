@@ -2771,6 +2771,16 @@ class FinanceDatabase extends _$FinanceDatabase {
         .firstOrNull;
   }
 
+  Future<TransactionWallet?> getRelatingWallet(String searchFor,
+      {int? limit}) async {
+    return (await (select(wallets)
+              ..where((c) =>
+                  c.name.collate(Collate.noCase).like("%" + searchFor + "%"))
+              ..limit(limit ?? DEFAULT_LIMIT))
+            .get())
+        .firstOrNull;
+  }
+
   Stream<List<TransactionAssociatedTitle>> watchAllAssociatedTitlesInCategory(
       String categoryFk,
       {int? limit}) {

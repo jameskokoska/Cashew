@@ -1057,5 +1057,7 @@
   "2-decimals": "2 दशांश",
   "onwards": "पुढे",
   "failed-to-preview-image": "प्रतिमेचे पूर्वावलोकन करण्यात अयशस्वी",
-  "open-link": "ओपन लिंक"
+  "open-link": "ओपन लिंक",
+  "category-not-selected": "श्रेणी निवडलेली नाही",
+  "all-transactions-require-a-category": "सर्व व्यवहारांना श्रेणी आवश्यक आहे"
 }

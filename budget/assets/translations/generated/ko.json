@@ -1057,5 +1057,7 @@
   "2-decimals": "2 명의 소수",
   "onwards": "이후",
   "failed-to-preview-image": "이미지를 미리 보지 못했습니다",
-  "open-link": "열기 링크"
+  "open-link": "열기 링크",
+  "category-not-selected": "범주가 선택되지 않았습니다",
+  "all-transactions-require-a-category": "모든 거래에는 범주가 필요합니다"
 }

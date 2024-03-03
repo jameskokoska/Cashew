@@ -1057,5 +1057,7 @@
   "2-decimals": "2 Desimals",
   "onwards": "kuendelea",
   "failed-to-preview-image": "Imeshindwa hakiki picha",
-  "open-link": "Kiunga cha wazi"
+  "open-link": "Kiunga cha wazi",
+  "category-not-selected": "Jamii haijachaguliwa",
+  "all-transactions-require-a-category": "Shughuli zote zinahitaji kitengo"
 }

@@ -1057,5 +1057,7 @@
   "2-decimals": "2 decimales",
   "onwards": "adelante",
   "failed-to-preview-image": "No se pudo obtener una vista previa de imagen",
-  "open-link": "Enlace abierto"
+  "open-link": "Enlace abierto",
+  "category-not-selected": "Categoría no seleccionada",
+  "all-transactions-require-a-category": "Todas las transacciones requieren una categoría"
 }

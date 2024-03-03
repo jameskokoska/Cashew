@@ -1057,5 +1057,7 @@
   "2-decimals": "2 décimales",
   "onwards": "À partir de",
   "failed-to-preview-image": "Échec de l'image de prévisualisation",
-  "open-link": "Ouvrir le lien"
+  "open-link": "Ouvrir le lien",
+  "category-not-selected": "Catégorie non sélectionnée",
+  "all-transactions-require-a-category": "Toutes les transactions nécessitent une catégorie"
 }

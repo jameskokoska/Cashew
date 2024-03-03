@@ -1057,5 +1057,7 @@
   "2-decimals": "2 decimaler",
   "onwards": "framåt",
   "failed-to-preview-image": "Det gick inte att förhandsgranska bilden",
-  "open-link": "Öppen länk"
+  "open-link": "Öppen länk",
+  "category-not-selected": "Kategori är inte vald",
+  "all-transactions-require-a-category": "Alla transaktioner kräver en kategori"
 }

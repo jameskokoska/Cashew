@@ -1057,5 +1057,7 @@
   "2-decimals": "2 десятичных десятиц",
   "onwards": "далее",
   "failed-to-preview-image": "Не удалось просмотреть изображение",
-  "open-link": "Открыть ссылку"
+  "open-link": "Открыть ссылку",
+  "category-not-selected": "Категория не выбрана",
+  "all-transactions-require-a-category": "Все транзакции требуют категории"
 }

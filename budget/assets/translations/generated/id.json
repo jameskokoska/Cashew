@@ -1057,5 +1057,7 @@
   "2-decimals": "2 desimal",
   "onwards": "dan seterusnya",
   "failed-to-preview-image": "Gagal Pratinjau Gambar",
-  "open-link": "Buka tautan"
+  "open-link": "Buka tautan",
+  "category-not-selected": "Kategori tidak dipilih",
+  "all-transactions-require-a-category": "Semua transaksi membutuhkan kategori"
 }

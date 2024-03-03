@@ -1057,5 +1057,7 @@
   "2-decimals": "2 عشرية",
   "onwards": "فصاعدا",
   "failed-to-preview-image": "فشل في معاينة الصورة",
-  "open-link": "افتح الرابط"
+  "open-link": "افتح الرابط",
+  "category-not-selected": "الفئة غير محددة",
+  "all-transactions-require-a-category": "تتطلب جميع المعاملات فئة"
 }

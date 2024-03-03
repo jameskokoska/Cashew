@@ -1057,5 +1057,7 @@
   "2-decimals": "2 zecimale",
   "onwards": "mai departe",
   "failed-to-preview-image": "Nu a reușit să previzualizeze imaginea",
-  "open-link": "Deschide link-ul"
+  "open-link": "Deschide link-ul",
+  "category-not-selected": "Categoria nu a fost selectată",
+  "all-transactions-require-a-category": "Toate tranzacțiile necesită o categorie"
 }

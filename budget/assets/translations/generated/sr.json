@@ -1057,5 +1057,7 @@
   "2-decimals": "2 децимала",
   "onwards": "надаље",
   "failed-to-preview-image": "Није успело да прегледате слику",
-  "open-link": "Отвори линк"
+  "open-link": "Отвори линк",
+  "category-not-selected": "Категорија Није изабрана",
+  "all-transactions-require-a-category": "Све трансакције захтевају категорију"
 }

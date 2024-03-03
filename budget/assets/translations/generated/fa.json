@@ -1057,5 +1057,7 @@
   "2-decimals": "2 اعشار",
   "onwards": "به بعد",
   "failed-to-preview-image": "پیش نمایش تصویر انجام نشد",
-  "open-link": "لینک باز"
+  "open-link": "لینک باز",
+  "category-not-selected": "دسته بندی انتخاب نشده است",
+  "all-transactions-require-a-category": "همه معاملات به یک دسته نیاز دارند"
 }

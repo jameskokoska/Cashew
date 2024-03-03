@@ -97,6 +97,9 @@ class AddTransactionPage extends StatefulWidget {
     this.selectedTitle,
     this.selectedCategory,
     this.selectedSubCategory,
+    this.selectedWallet,
+    this.selectedDate,
+    this.selectedNotes,
     this.startInitialAddTransactionSequence = true,
     this.transferBalancePopup = false,
     required this.routesToPopAfterDelete,
@@ -113,6 +116,9 @@ class AddTransactionPage extends StatefulWidget {
   final String? selectedTitle;
   final TransactionCategory? selectedCategory;
   final TransactionCategory? selectedSubCategory;
+  final TransactionWallet? selectedWallet;
+  final DateTime? selectedDate;
+  final String? selectedNotes;
   final bool startInitialAddTransactionSequence;
   final bool transferBalancePopup;
 
@@ -766,6 +772,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                   selectedDate = date;
                 });
               },
+              selectedDate: widget.selectedDate,
             ),
           );
           // Fix over-scroll stretch when keyboard pops up quickly
@@ -793,6 +800,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
     }
     if (widget.selectedAmount != null) {
       selectedAmount = (widget.selectedAmount ?? 0).abs();
+      selectedIncome = (widget.selectedAmount ?? -1).isNegative == false;
     }
     if (widget.selectedCategory != null) {
       selectedCategory = widget.selectedCategory;
@@ -808,6 +816,15 @@ class _AddTransactionPageState extends State<AddTransactionPage>
     }
     if (widget.selectedIncome != null) {
       selectedIncome = widget.selectedIncome!;
+    }
+    if (widget.selectedWallet != null) {
+      selectedWalletPk = widget.selectedWallet!.walletPk;
+    }
+    if (widget.selectedDate != null) {
+      selectedDate = widget.selectedDate!;
+    }
+    if (widget.selectedNotes != null) {
+      setSelectedNoteController(widget.selectedNotes ?? "");
     }
     if (widget.transaction == null) {
       Future.delayed(Duration.zero, () {
@@ -2356,6 +2373,7 @@ class SelectTitle extends StatefulWidget {
     required this.setSelectedSubCategory,
     required this.setSelectedDateTime,
     this.selectedTitle,
+    this.selectedDate,
     required this.noteInputController,
     this.next,
   }) : super(key: key);
@@ -2365,6 +2383,7 @@ class SelectTitle extends StatefulWidget {
   final Function(TransactionCategory) setSelectedSubCategory;
   final Function(DateTime) setSelectedDateTime;
   final String? selectedTitle;
+  final DateTime? selectedDate;
   final TextEditingController noteInputController;
   final VoidCallback? next;
 
@@ -2385,6 +2404,11 @@ class _SelectTitleState extends State<SelectTitle> {
 
   @override
   void initState() {
+    if (widget.selectedDate != null) {
+      selectedDateTime = widget.selectedDate ?? DateTime.now();
+      customDateTimeSelected = true;
+    }
+
     super.initState();
   }
 
@@ -2866,6 +2890,11 @@ class _EnterTextButtonState extends State<EnterTextButton> {
               ),
             ),
           );
+          // Fix over-scroll stretch when keyboard pops up quickly
+          Future.delayed(Duration(milliseconds: 100), () {
+            bottomSheetControllerGlobal.scrollTo(0,
+                duration: Duration(milliseconds: 100));
+          });
         },
         borderRadius: 15,
         child: IgnorePointer(
@@ -3726,6 +3755,7 @@ Future<MainAndSubcategory> selectCategorySequence(
   required bool?
       selectedIncomeInitial, // if this is null, always show all categories
   String? subtitle,
+  bool allowReorder = true,
 }) async {
   MainAndSubcategory mainAndSubcategory = MainAndSubcategory();
   dynamic result = await openBottomSheet(
@@ -3740,6 +3770,7 @@ Future<MainAndSubcategory> selectCategorySequence(
       setSelectedSubCategory: setSelectedSubCategory,
       setSelectedIncome: setSelectedIncome,
       selectedIncomeInitial: selectedIncomeInitial,
+      allowReorder: allowReorder,
     ),
   );
   if (result != null && result is TransactionCategory) {
@@ -3828,6 +3859,7 @@ class SelectCategoryWithIncomeExpenseSelector extends StatefulWidget {
     required this.setSelectedSubCategory,
     required this.setSelectedIncome,
     required this.selectedIncomeInitial,
+    this.allowReorder = true,
     this.subtitle,
     super.key,
   });
@@ -3840,6 +3872,7 @@ class SelectCategoryWithIncomeExpenseSelector extends StatefulWidget {
   final Function(TransactionCategory?)? setSelectedSubCategory;
   final Function(bool?)? setSelectedIncome;
   final bool? selectedIncomeInitial;
+  final bool allowReorder;
   final String? subtitle;
 
   @override
@@ -3902,17 +3935,18 @@ class _SelectCategoryWithIncomeExpenseSelectorState
                       }
                     },
                   ),
-                DropdownItemMenu(
-                  id: "reorder-categories",
-                  label: "reorder-categories".tr(),
-                  icon: appStateSettings["outlinedIcons"]
-                      ? Icons.flip_to_front_outlined
-                      : Icons.flip_to_front_rounded,
-                  action: () async {
-                    Navigator.pop(context);
-                    openBottomSheet(context, ReorderCategoriesPopup());
-                  },
-                ),
+                if (widget.allowReorder)
+                  DropdownItemMenu(
+                    id: "reorder-categories",
+                    label: "reorder-categories".tr(),
+                    icon: appStateSettings["outlinedIcons"]
+                        ? Icons.flip_to_front_outlined
+                        : Icons.flip_to_front_rounded,
+                    action: () async {
+                      Navigator.pop(context);
+                      openBottomSheet(context, ReorderCategoriesPopup());
+                    },
+                  ),
               ],
             ),
       child: Column(

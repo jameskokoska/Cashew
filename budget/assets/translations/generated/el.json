@@ -1057,5 +1057,7 @@
   "2-decimals": "2 δεκαδικά ψηφία",
   "onwards": "εμπρός",
   "failed-to-preview-image": "Αποτυχία προεπισκόπησης της εικόνας",
-  "open-link": "Ανοίξτε σύνδεσμο"
+  "open-link": "Ανοίξτε σύνδεσμο",
+  "category-not-selected": "Η κατηγορία δεν έχει επιλεγεί",
+  "all-transactions-require-a-category": "Όλες οι συναλλαγές απαιτούν κατηγορία"
 }

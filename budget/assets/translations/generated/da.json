@@ -1057,5 +1057,7 @@
   "2-decimals": "2 decimaler",
   "onwards": "fremefter",
   "failed-to-preview-image": "Kunne ikke forhåndsvise billedet",
-  "open-link": "Åben link"
+  "open-link": "Åben link",
+  "category-not-selected": "Kategori ikke valgt",
+  "all-transactions-require-a-category": "Alle transaktioner kræver en kategori"
 }
