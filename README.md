@@ -132,7 +132,7 @@ Only supported in the Android and Web App versions as of now. Deep links allow d
 ### Examples (for Android)
 Ensure Cashew is installed on the device you are launching these URLs from.
 
-#### Example 1: Create an expense transaction on the current time for 100 with the category Shopping at the current time
+#### Example 1: Create an expense transaction for 100 with the category Shopping at the current time
 https://cashewapp.web.app/addTransaction?amount=-100&title=All%20the%20shopping&category=Shopping&notes=Went%20shopping
 #### Example 2: Create an income transaction with a missing category at the current time
 https://cashewapp.web.app/addTransaction?amount=100&title=Income&notes=Got%20money
