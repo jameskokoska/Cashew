@@ -126,6 +126,53 @@ Changes and progress about development is all heavily documented in GitHub [comm
 - ~~Unsupported: Auto Email Transaction Parsing (Beta): Automatically parse transaction details from email receipts, making expense tracking effortless and efficient.~~
 
 
+## App Links
+Only supported in the Android and Web App versions as of now. Deep links allow direct navigation and automation of actions using application URLs. Some examples are below:
+
+### Examples (for Android)
+Ensure Cashew is installed on the device you are launching these URLs from.
+
+#### Example 1: Create an expense transaction on the current time for 100 with the category Shopping at the current time
+https://cashewapp.web.app/addTransaction?amount=-100&title=All%20the%20shopping&category=Shopping&notes=Went%20shopping
+#### Example 2: Create an income transaction with a missing category at the current time
+https://cashewapp.web.app/addTransaction?amount=100&title=Income&notes=Got%20money
+#### Example 3: Open the add transaction page with a custom date with prefilled details
+https://cashewapp.web.app/addTransactionRoute?amount=-50&title=All%20the%20shopping&notes=Went%20shopping&date=2024-03-02
+
+### Routes
+| Routes for Android | Routes for Web App
+|-----------------|-----------------|
+| `cashew://budget.app/[Endpoint here]` | `https://budget-track.web.app/[Endpoint here]` |
+| `https://cashewapp.web.app/[Endpoint here]` | |
+
+### Endpoints
+| Endpoint        | Description                                          |
+|-----------------|------------------------------------------------------|
+| `/addTransaction` | Add a new transaction without a UI prompt (unless a category is missing). |
+| `/addTransactionRoute` | Open the add new transaction route with information filled in. |
+
+### Parameters
+| Parameter | Description | Required | Default |
+|---|---|---|---|
+| `amount` | The amount of the transaction. If negative, it represents an expense; if positive, it represents income. | No | 0 |
+| `title` | The title of the transaction. If an associated title is found and the category is not set, the associated title's category will be used. | No | Empty string |
+| `notes` | The notes associated with the transaction. | No | Empty string |
+| `date` | The date of the transaction. Supported string formats can be found in the `getCommonDateFormats()` method [here](https://github.com/jameskokoska/Cashew/blob/main/budget/lib/widgets/importCSV.dart#L1243-L1295). | No | Current time |
+| `category` | The name of the category to add the transaction to. Executes a name search, takes the first entry, not case sensitive. | Yes | Prompt user |
+| `subcategory` | The name of the subcategory to add the transaction to. If provided, it overwrites the category if a subcategory is found under a main category. Executes a name search, takes the first entry, not case sensitive. | No | None |
+| `account` | The name of the account. Executes a name search, takes the first entry, not case sensitive. | No | Primary account |
+
+### Testing
+#### Using ADB
+You can use ADB to test app links. For example
+
+```shell
+adb shell am start -a android.intent.action.VIEW -d "https://cashewapp.web.app/addTransaction?amount=-70\&title=Grocery%20Shopping\&date=2024-03-02\&category=Food\&subcategory=Groceries\&notes=Bought%20fruits%20and%20vegetables\&account=test"
+```
+
+#### Using links
+You can click links and open them with Cashew. See the example section above to test.
+
 ## Bundled Packages
 This repository contains, bundled in, modified versions of the discontinued packages listed below. They can be found in the folder `/budget/packages`
 * https://pub.dev/packages/implicitly_animated_reorderable_list
