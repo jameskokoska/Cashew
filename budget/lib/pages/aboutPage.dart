@@ -20,6 +20,7 @@ import 'package:budget/widgets/showChangelog.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/colors.dart';
 
@@ -430,7 +431,41 @@ class AboutPage extends StatelessWidget {
             ),
           ),
         ),
-        SizedBox(height: 20),
+        SizedBox(height: 10),
+        if (getPlatform(ignoreEmulation: true) == PlatformOS.isAndroid ||
+            kIsWeb)
+          Padding(
+            padding: const EdgeInsets.only(top: 10, bottom: 10),
+            child: HorizontalBreakAbove(
+                child: Column(
+              children: [
+                SizedBox(height: 10),
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 15, vertical: 7),
+                  child: Center(
+                    child: TextFont(
+                      text: "advanced-automation".tr(),
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      textAlign: TextAlign.center,
+                      maxLines: 5,
+                    ),
+                  ),
+                ),
+                AboutInfoBox(
+                  title: "deep-linking".tr(),
+                  showLink: false,
+                  link:
+                      "https://github.com/jameskokoska/Cashew?tab=readme-ov-file#app-links",
+                  list: [
+                    "deep-linking-description".tr(),
+                  ],
+                ),
+              ],
+            )),
+          ),
+        SizedBox(height: 10),
         HorizontalBreak(),
         SizedBox(height: 10),
         Padding(
@@ -621,6 +656,7 @@ class AboutInfoBox extends StatelessWidget {
     this.list,
     this.color,
     this.padding,
+    this.showLink = true,
   }) : super(key: key);
 
   final String title;
@@ -628,6 +664,7 @@ class AboutInfoBox extends StatelessWidget {
   final List<String>? list;
   final Color? color;
   final EdgeInsets? padding;
+  final bool showLink;
 
   @override
   Widget build(BuildContext context) {
@@ -660,12 +697,13 @@ class AboutInfoBox extends StatelessWidget {
                 maxLines: 5,
               ),
               SizedBox(height: 6),
-              if (link != null)
+              if (link != null && showLink)
                 TextFont(
                   text: link ?? "",
                   fontSize: 14,
                   textAlign: TextAlign.center,
                   textColor: getColor(context, "textLight"),
+                  maxLines: 1,
                 ),
               for (String item in list ?? [])
                 TextFont(
@@ -673,6 +711,7 @@ class AboutInfoBox extends StatelessWidget {
                   fontSize: 14,
                   textAlign: TextAlign.center,
                   textColor: getColor(context, "textLight"),
+                  maxLines: 10,
                 ),
             ],
           ),

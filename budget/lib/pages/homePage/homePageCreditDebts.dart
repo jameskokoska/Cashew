@@ -37,6 +37,14 @@ class HomePageCreditDebts extends StatelessWidget {
                   cycleSettingsExtension: "CreditDebts",
                   selectedTab: null,
                 ),
+                totalWithCountStream2:
+                    database.watchTotalWithCountOfCreditDebtLongTermLoansOffset(
+                  allWallets: Provider.of<AllWallets>(context),
+                  isCredit: true,
+                  followCustomPeriodCycle: true,
+                  cycleSettingsExtension: "CreditDebts",
+                  selectedTab: null,
+                ),
                 textColor: getColor(context, "unPaidUpcoming"),
                 openPage: CreditDebtTransactions(isCredit: true),
                 onLongPress: () async {
@@ -50,6 +58,14 @@ class HomePageCreditDebts extends StatelessWidget {
               child: TransactionsAmountBox(
                 label: "borrowed".tr(),
                 totalWithCountStream: database.watchTotalWithCountOfCreditDebt(
+                  allWallets: Provider.of<AllWallets>(context),
+                  isCredit: false,
+                  cycleSettingsExtension: "CreditDebts",
+                  followCustomPeriodCycle: true,
+                  selectedTab: null,
+                ),
+                totalWithCountStream2:
+                    database.watchTotalWithCountOfCreditDebtLongTermLoansOffset(
                   allWallets: Provider.of<AllWallets>(context),
                   isCredit: false,
                   cycleSettingsExtension: "CreditDebts",

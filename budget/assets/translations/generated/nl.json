@@ -1059,5 +1059,11 @@
   "failed-to-preview-image": "Kan de afbeelding niet bekijken",
   "open-link": "Open link",
   "category-not-selected": "Categorie niet geselecteerd",
-  "all-transactions-require-a-category": "Alle transacties vereisen een categorie"
+  "all-transactions-require-a-category": "Alle transacties vereisen een categorie",
+  "total-offset": "Totale offset",
+  "total-offset-description": "Compenseer het totaal van de lening door een bedrag in te voeren. Handig als de lening rente of andere niet -verantwoord heeft verzameld voor kosten die het totaal verhogen.",
+  "advanced-automation": "Geavanceerde automatisering",
+  "deep-linking": "App -links",
+  "deep-linking-description": "Automatiseer het invoegen van transacties met behulp van APP -URL's. Tik op voor meer informatie en bekijk de documentatie.",
+  "added-transaction": "Toegevoegde transactie"
 }

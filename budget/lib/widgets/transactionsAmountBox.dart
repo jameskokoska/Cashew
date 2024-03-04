@@ -1,6 +1,7 @@
 import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
+import 'package:budget/pages/upcomingOverdueTransactionsPage.dart';
 import 'package:budget/widgets/openContainerNavigation.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
@@ -19,6 +20,7 @@ class TransactionsAmountBox extends StatelessWidget {
     this.onLongPress,
     required this.label,
     required this.totalWithCountStream,
+    this.totalWithCountStream2,
     required this.textColor,
     this.absolute = true,
     this.getTextColor,
@@ -29,6 +31,7 @@ class TransactionsAmountBox extends StatelessWidget {
   final Function? onLongPress;
   final String label;
   final Stream<TotalWithCount?> totalWithCountStream;
+  final Stream<TotalWithCount?>? totalWithCountStream2;
   final Color textColor;
   final bool absolute;
   final String? currencyKey;
@@ -66,8 +69,9 @@ class TransactionsAmountBox extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     ),
                     SizedBox(height: 6),
-                    StreamBuilder<TotalWithCount?>(
-                      stream: totalWithCountStream,
+                    DoubleTotalWithCountStreamBuilder(
+                      totalWithCountStream: totalWithCountStream,
+                      totalWithCountStream2: totalWithCountStream2,
                       builder: (context, snapshot) {
                         double totalSpent = snapshot.data?.total ?? 0;
                         int totalCount = snapshot.data?.count ?? 0;

@@ -428,11 +428,12 @@ packages:
   file_picker:
     dependency: "direct main"
     description:
-      name: file_picker
-      sha256: "4e42aacde3b993c5947467ab640882c56947d9d27342a5b6f2895b23956954a6"
-      url: "https://pub.dev"
-    source: hosted
-    version: "6.1.1"
+      path: "."
+      ref: HEAD
+      resolved-ref: ccbb9a384491cc0759f94618bb3859411e228091
+      url: "https://github.com/melWiss/flutter_file_picker.git"
+    source: git
+    version: "6.0.1"
   file_selector_linux:
     dependency: transitive
     description:

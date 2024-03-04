@@ -1059,5 +1059,11 @@
   "failed-to-preview-image": "Nie udało się podglądu obrazu",
   "open-link": "Otwórz link",
   "category-not-selected": "Kategoria nie została wybrana",
-  "all-transactions-require-a-category": "Wszystkie transakcje wymagają kategorii"
+  "all-transactions-require-a-category": "Wszystkie transakcje wymagają kategorii",
+  "total-offset": "Całkowite przesunięcie",
+  "total-offset-description": "Zrównuj sumę pożyczki, wprowadzając kwotę. Przydatne, jeśli pożyczka zgromadziła odsetki lub inne nieznane za zwiększenie kosztów.",
+  "advanced-automation": "Zaawansowana automatyzacja",
+  "deep-linking": "Linki aplikacji",
+  "deep-linking-description": "Zautomatyzuj wprowadzenie transakcji za pomocą adresów URL aplikacji. Stuknij, aby dowiedzieć się więcej i wyświetlić dokumentację.",
+  "added-transaction": "Dodano transakcję"
 }

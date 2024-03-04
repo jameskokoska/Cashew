@@ -1059,5 +1059,11 @@
   "failed-to-preview-image": "پیش نمایش تصویر انجام نشد",
   "open-link": "لینک باز",
   "category-not-selected": "دسته بندی انتخاب نشده است",
-  "all-transactions-require-a-category": "همه معاملات به یک دسته نیاز دارند"
+  "all-transactions-require-a-category": "همه معاملات به یک دسته نیاز دارند",
+  "total-offset": "کل",
+  "total-offset-description": "با وارد کردن یک مبلغ ، کل وام را جبران کنید. مفید است اگر وام برای افزایش هزینه ها ، سود یا سایر موارد غیرقابل حساب را جمع کند.",
+  "advanced-automation": "اتوماسیون پیشرفته",
+  "deep-linking": "پیوندهای برنامه",
+  "deep-linking-description": "درج معاملات با استفاده از URL های برنامه. برای یادگیری بیشتر و مشاهده مستندات ضربه بزنید.",
+  "added-transaction": "معامله اضافه شده"
 }

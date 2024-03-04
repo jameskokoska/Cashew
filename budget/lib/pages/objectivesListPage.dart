@@ -1,12 +1,7 @@
-import 'dart:collection';
-
 import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
-import 'package:budget/pages/addBudgetPage.dart';
-import 'package:budget/pages/addCategoryPage.dart';
 import 'package:budget/pages/addObjectivePage.dart';
-import 'package:budget/pages/editBudgetPage.dart';
 import 'package:budget/pages/editObjectivesPage.dart';
 import 'package:budget/pages/objectivePage.dart';
 import 'package:budget/struct/currencyFunctions.dart';
@@ -15,27 +10,24 @@ import 'package:budget/struct/randomConstants.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/budgetContainer.dart';
 import 'package:budget/widgets/categoryIcon.dart';
-import 'package:budget/widgets/editRowEntry.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
-import 'package:budget/widgets/noResults.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/widgets/openContainerNavigation.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
-import 'package:budget/widgets/util/widgetSize.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart'
     hide SliverReorderableList, ReorderableDelayedDragStartListener;
 import 'package:provider/provider.dart';
-
 import 'addButton.dart';
 
+// This defines what a difference only loan can be
 bool getIsDifferenceOnlyLoan(Objective objective) {
-  return objective.amount == 0 &&
+  return objective.amount == -1 &&
       objective.type == ObjectiveType.loan &&
-      appStateSettings["longTermLoansDifferenceFeature"];
+      appStateSettings["longTermLoansDifferenceFeature"] == true;
 }
 
 // negative to collect / you are owed
@@ -491,6 +483,7 @@ class ObjectiveContainer extends StatelessWidget {
                                                     objective,
                                                     totalAmount,
                                                     percentageTowardsGoal,
+                                                    objectiveAmount,
                                                   );
                                                 }
                                                 return TextFont(
@@ -980,11 +973,8 @@ class ObjectiveContainerDifferenceLoan extends StatelessWidget {
 }
 
 String getObjectiveStatus(BuildContext context, Objective objective,
-    double totalAmount, double percentageTowardsGoal,
+    double totalAmount, double percentageTowardsGoal, double objectiveAmount,
     {bool addSpendingSavingIndication = false}) {
-  double objectiveAmount = objectiveAmountToPrimaryCurrency(
-      Provider.of<AllWallets>(context, listen: true), objective);
-
   String content;
   if (objective.endDate == null) return "";
   int remainingDays = objective.endDate!
@@ -1078,7 +1068,18 @@ class WatchTotalAndAmountOfObjective extends StatelessWidget {
             stream: database.watchTotalAmountObjectiveLoan(
                 Provider.of<AllWallets>(context, listen: true), objective),
             builder: (context, snapshotAmount) {
-              double objectiveAmount = snapshotAmount.data ?? 0;
+              double objectiveAmount = (snapshotAmount.data ?? 0);
+              if (getIsDifferenceOnlyLoan(objective) == false) {
+                double objectiveAmountConverted = objective.amount *
+                    amountRatioToPrimaryCurrency(
+                      Provider.of<AllWallets>(context),
+                      Provider.of<AllWallets>(context)
+                          .indexedByPk[objective.walletFk]
+                          ?.currency,
+                    );
+                objectiveAmount = objectiveAmount +
+                    (objectiveAmountConverted * (objective.income ? -1 : 1));
+              }
               double totalAmount =
                   ((snapshot.data ?? 0) - (snapshotAmount.data ?? 0)) * -1;
               double percentageTowardsGoal =

@@ -1059,5 +1059,11 @@
   "failed-to-preview-image": "Kunne ikke forhåndsvise image",
   "open-link": "Åpen lenke",
   "category-not-selected": "Kategori ikke valgt",
-  "all-transactions-require-a-category": "Alle transaksjoner krever en kategori"
+  "all-transactions-require-a-category": "Alle transaksjoner krever en kategori",
+  "total-offset": "Total forskyvning",
+  "total-offset-description": "Utlignet totalen av lånet ved å legge inn et beløp. Nyttig hvis lånet har akkumulert renter eller annen ikke -regnskap for kostnadene som øker totalen.",
+  "advanced-automation": "Avansert automatisering",
+  "deep-linking": "App lenker",
+  "deep-linking-description": "Automatiser innsetting av transaksjoner ved hjelp av APP -URL -er. Trykk for å lære mer og se dokumentasjonen.",
+  "added-transaction": "Lagt til transaksjon"
 }

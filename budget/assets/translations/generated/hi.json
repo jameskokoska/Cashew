@@ -1059,5 +1059,11 @@
   "failed-to-preview-image": "छवि का पूर्वावलोकन करने में विफल",
   "open-link": "खुला लिंक",
   "category-not-selected": "श्रेणी का चयन नहीं किया गया",
-  "all-transactions-require-a-category": "सभी लेनदेन को एक श्रेणी की आवश्यकता होती है"
+  "all-transactions-require-a-category": "सभी लेनदेन को एक श्रेणी की आवश्यकता होती है",
+  "total-offset": "कुल ऑफसेट",
+  "total-offset-description": "एक राशि में प्रवेश करके ऋण की कुल ऑफसेट करें। उपयोगी यदि ऋण कुल बढ़ाने की लागत के लिए ब्याज या अन्य बेहिसाब है।",
+  "advanced-automation": "उन्नत स्वचालन",
+  "deep-linking": "ऐप लिंक",
+  "deep-linking-description": "APP URL का उपयोग करके लेनदेन के सम्मिलन को स्वचालित करें। अधिक जानने के लिए टैप करें और प्रलेखन देखें।",
+  "added-transaction": "जोड़ा गया लेनदेन"
 }

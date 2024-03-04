@@ -739,7 +739,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
       });
     } else {
       if (widget.selectedType != null) {
-        selectedType = widget.selectedType;
+        setSelectedType(transactionTypeDisplayToEnum[widget.selectedType]);
       }
 
       _titleInputController = new TextEditingController();

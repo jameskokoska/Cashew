@@ -1059,5 +1059,11 @@
   "failed-to-preview-image": "Die Vorschau von Bild versäumt es",
   "open-link": "Verbindung öffnen",
   "category-not-selected": "Kategorie nicht ausgewählt",
-  "all-transactions-require-a-category": "Alle Transaktionen erfordern eine Kategorie"
+  "all-transactions-require-a-category": "Alle Transaktionen erfordern eine Kategorie",
+  "total-offset": "Gesamtversatz",
+  "total-offset-description": "Setzen Sie die Summe des Darlehens aus, indem Sie einen Betrag eingeben. Nützlich, wenn das Darlehen Zinsen oder andere nicht berücksichtige Kosten angesammelt hat, um die Gesamtsumme zu erhöhen.",
+  "advanced-automation": "Erweiterte Automatisierung",
+  "deep-linking": "App -Links",
+  "deep-linking-description": "Automatisieren Sie das Insertion von Transaktionen mithilfe von App -URLs. Tippen Sie auf, um mehr zu erfahren und die Dokumentation anzusehen.",
+  "added-transaction": "Transaktion hinzugefügt"
 }

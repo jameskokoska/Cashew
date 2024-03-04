@@ -285,9 +285,55 @@ class UpcomingOverdueTransactionsState
   }
 }
 
+class DoubleTotalWithCountStreamBuilder extends StatelessWidget {
+  const DoubleTotalWithCountStreamBuilder({
+    required this.totalWithCountStream,
+    this.totalWithCountStream2,
+    required this.builder,
+    super.key,
+  });
+
+  final Stream<TotalWithCount?> totalWithCountStream;
+  final Stream<TotalWithCount?>? totalWithCountStream2;
+  final Widget Function(BuildContext, AsyncSnapshot<TotalWithCount?>) builder;
+
+  @override
+  Widget build(BuildContext context) {
+    if (totalWithCountStream2 != null) {
+      return StreamBuilder<TotalWithCount?>(
+        stream: totalWithCountStream,
+        builder: (context, snapshot1) {
+          return StreamBuilder<TotalWithCount?>(
+            stream: totalWithCountStream2,
+            builder: (context, snapshot2) {
+              final total1 = snapshot1.data;
+              final total2 = snapshot2.data;
+              return builder(
+                context,
+                AsyncSnapshot<TotalWithCount>.withData(
+                  ConnectionState.done,
+                  TotalWithCount(
+                    total: (total1?.total ?? 0) + (total2?.total ?? 0),
+                    count: (total1?.count ?? 0) + (total2?.count ?? 0),
+                  ),
+                ),
+              );
+            },
+          );
+        },
+      );
+    }
+    return StreamBuilder<TotalWithCount?>(
+      stream: totalWithCountStream,
+      builder: builder,
+    );
+  }
+}
+
 class CenteredAmountAndNumTransactions extends StatelessWidget {
   const CenteredAmountAndNumTransactions({
     required this.totalWithCountStream,
+    this.totalWithCountStream2,
     required this.textColor,
     this.getTextColor,
     this.getInitialText,
@@ -296,6 +342,7 @@ class CenteredAmountAndNumTransactions extends StatelessWidget {
   });
 
   final Stream<TotalWithCount?> totalWithCountStream;
+  final Stream<TotalWithCount?>? totalWithCountStream2;
   final Color textColor;
   final String? Function(double totalAmount)? getInitialText;
   final Color? Function(double totalAmount)? getTextColor;
@@ -308,8 +355,9 @@ class CenteredAmountAndNumTransactions extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         SizedBox(height: 10),
-        StreamBuilder<TotalWithCount?>(
-          stream: totalWithCountStream,
+        DoubleTotalWithCountStreamBuilder(
+          totalWithCountStream: totalWithCountStream,
+          totalWithCountStream2: totalWithCountStream2,
           builder: (context, snapshot) {
             double totalSpent = snapshot.data?.total ?? 0;
             int totalCount = snapshot.data?.count ?? 0;

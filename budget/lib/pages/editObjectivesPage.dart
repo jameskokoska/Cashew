@@ -454,7 +454,9 @@ Future<dynamic> selectObjectivePopup(
                             (objectiveType == ObjectiveType.loan
                                 ? "no-loan".tr()
                                 : "no-goal".tr())) +
-                        (includeAmount && objective != null
+                        (includeAmount &&
+                                objective != null &&
+                                objectiveType != ObjectiveType.loan
                             ? (" (" +
                                 convertToMoney(
                                   Provider.of<AllWallets>(context),

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:budget/colors.dart';
 import 'package:budget/database/generatePreviewData.dart';
 import 'package:budget/database/tables.dart';
@@ -70,10 +72,18 @@ class CheckWidgetLaunch extends StatefulWidget {
 bool hasDoneWidgetAction = false;
 
 class _CheckWidgetLaunchState extends State<CheckWidgetLaunch> {
+  Timer? cancelTimer;
+
   @override
   void initState() {
     super.initState();
     HomeWidget.setAppGroupId('WIDGET_GROUP_ID');
+  }
+
+  @override
+  void dispose() {
+    cancelTimer?.cancel();
+    super.dispose();
   }
 
   @override
@@ -88,20 +98,21 @@ class _CheckWidgetLaunchState extends State<CheckWidgetLaunch> {
   }
 
   // For some reason, older Android versions open an entirely new app instance... weird!
+  // has this been fixed with: android:launchMode="singleInstance" ?
   void _launchedFromWidget(Uri? uri) async {
     // Only perform one widget action per launch/continue of the app
     if (hasDoneWidgetAction == true) return;
     hasDoneWidgetAction = true;
 
     String widgetPayload = (uri ?? "").toString();
-    if (widgetPayload == "addTransaction") {
+    if (widgetPayload == "addTransactionWidget") {
       pushRoute(
         context,
         AddTransactionPage(
           routesToPopAfterDelete: RoutesToPopAfterDelete.None,
         ),
       );
-    } else if (widgetPayload == "transferTransaction") {
+    } else if (widgetPayload == "transferTransactionWidget") {
       // This fixes an issue on older versions of Android where the route would popup twice
       // We can detect when this is going to happen if the Provider is not yet loaded, so just pop
       // the route when this is called so the first time routing does not persist (i.e. we end with one route)
@@ -119,7 +130,7 @@ class _CheckWidgetLaunchState extends State<CheckWidgetLaunch> {
           showAllEditDetails: true,
         ),
       );
-    } else if (widgetPayload == "netWorthLaunch") {
+    } else if (widgetPayload == "netWorthLaunchWidget") {
       pushRoute(
         context,
         WalletDetailsPage(
@@ -127,6 +138,13 @@ class _CheckWidgetLaunchState extends State<CheckWidgetLaunch> {
         ),
       );
     }
+    _scheduleHasDoneWidgetAction();
+  }
+
+  void _scheduleHasDoneWidgetAction() {
+    cancelTimer = Timer(Duration(milliseconds: 3000), () {
+      hasDoneWidgetAction = false;
+    });
   }
 
   @override
@@ -134,6 +152,7 @@ class _CheckWidgetLaunchState extends State<CheckWidgetLaunch> {
     return OnAppResume(
       onAppResume: () {
         hasDoneWidgetAction = false;
+        cancelTimer?.cancel();
       },
       child: SizedBox.shrink(),
     );

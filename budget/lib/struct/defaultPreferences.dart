@@ -4,8 +4,11 @@ import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
 import 'package:budget/pages/homePage/homePageLineGraph.dart';
 import 'package:budget/pages/walletDetailsPage.dart';
+import 'package:budget/struct/databaseGlobal.dart';
+import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/notificationsSettings.dart';
 import 'package:budget/widgets/periodCyclePicker.dart';
+import 'package:drift/drift.dart' show Value;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:device_info_plus/device_info_plus.dart';
@@ -294,11 +297,35 @@ Future<Map<String, dynamic>> getDefaultPreferences() async {
     // The last synced button is there though!
     // "webForceLoginPopupOnLaunch": true,
     //
+
+    // This key is used as a migration
+    // "migratedSetLongTermLoansAmountTo0": false,
   };
 }
 
-dynamic attemptToMigrateCyclePreferences(
-    dynamic currentUserSettings, String key) {
+Future attemptToMigrateSetLongTermLoansAmountTo0() async {
+  try {
+    if (appStateSettings["hasOnboarded"] == true &&
+        appStateSettings["migratedSetLongTermLoansAmountTo0"] != true) {
+      print("Migrating setting long term loans amounts to 0");
+      appStateSettings["migratedSetLongTermLoansAmountTo0"] = true;
+      List<Objective> objectivesInserting = [];
+      List<Objective> allObjectives =
+          await database.getAllObjectives(objectiveType: ObjectiveType.loan);
+      for (Objective objective in allObjectives) {
+        objectivesInserting.add(objective.copyWith(
+            amount: 0, dateTimeModified: Value(DateTime.now())));
+      }
+      await database.updateBatchObjectivesOnly(objectivesInserting);
+    }
+  } catch (e) {
+    print(
+        "Error migrating setting long term loans amounts to 0 " + e.toString());
+  }
+}
+
+Map<String, dynamic> attemptToMigrateCyclePreferences(
+    Map<String, dynamic> currentUserSettings, String key) {
   try {
     if (
         // This is a setting we need to find a value for

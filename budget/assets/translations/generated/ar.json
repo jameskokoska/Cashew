@@ -1059,5 +1059,11 @@
   "failed-to-preview-image": "فشل في معاينة الصورة",
   "open-link": "افتح الرابط",
   "category-not-selected": "الفئة غير محددة",
-  "all-transactions-require-a-category": "تتطلب جميع المعاملات فئة"
+  "all-transactions-require-a-category": "تتطلب جميع المعاملات فئة",
+  "total-offset": "إزاحة الكلية",
+  "total-offset-description": "تعويض إجمالي القرض عن طريق إدخال مبلغ. مفيد إذا كان القرض قد جمع الفوائد أو غيرها من العواصلة للتكاليف التي تزيد من المجموع.",
+  "advanced-automation": "الأتمتة المتقدمة",
+  "deep-linking": "روابط التطبيق",
+  "deep-linking-description": "أتمتة إدراج المعاملات باستخدام عناوين URL APP. اضغط لمعرفة المزيد وعرض الوثائق.",
+  "added-transaction": "معاملة أضيفت"
 }

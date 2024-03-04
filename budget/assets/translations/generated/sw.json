@@ -1059,5 +1059,11 @@
   "failed-to-preview-image": "Imeshindwa hakiki picha",
   "open-link": "Kiunga cha wazi",
   "category-not-selected": "Jamii haijachaguliwa",
-  "all-transactions-require-a-category": "Shughuli zote zinahitaji kitengo"
+  "all-transactions-require-a-category": "Shughuli zote zinahitaji kitengo",
+  "total-offset": "Jumla ya kukabiliana",
+  "total-offset-description": "Ondoa jumla ya mkopo kwa kuingia kiasi. Inatumika ikiwa mkopo umekusanya riba au nyingine isiyo na hesabu kwa gharama inayoongeza jumla.",
+  "advanced-automation": "Otomatiki ya hali ya juu",
+  "deep-linking": "Viungo vya programu",
+  "deep-linking-description": "Ondoa uingizaji wa shughuli kwa kutumia URL za programu. Gonga ili ujifunze zaidi na uangalie nyaraka.",
+  "added-transaction": "Shughuli iliyoongezwa"
 }

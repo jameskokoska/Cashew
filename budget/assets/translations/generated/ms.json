@@ -1059,5 +1059,11 @@
   "failed-to-preview-image": "Gagal Pratonton Imej",
   "open-link": "Pautan Terbuka",
   "category-not-selected": "Kategori tidak dipilih",
-  "all-transactions-require-a-category": "Semua urus niaga memerlukan kategori"
+  "all-transactions-require-a-category": "Semua urus niaga memerlukan kategori",
+  "total-offset": "Jumlah Offset",
+  "total-offset-description": "Mengimbangi jumlah pinjaman dengan memasukkan jumlah. Berguna jika pinjaman telah mengumpulkan faedah atau yang lain yang tidak dapat dipertanggungjawabkan untuk kos yang semakin meningkat.",
+  "advanced-automation": "Automasi Lanjutan",
+  "deep-linking": "Pautan aplikasi",
+  "deep-linking-description": "Automatikkan penyisipan urus niaga menggunakan URL aplikasi. Ketik untuk mengetahui lebih lanjut dan lihat dokumentasi.",
+  "added-transaction": "Menambah transaksi"
 }

@@ -16,6 +16,7 @@ class TipBox extends StatefulWidget {
     required this.settingsString,
     this.richTextSpan,
     this.padding = EdgeInsets.zero,
+    this.borderRadius,
     super.key,
   });
   final VoidCallback onTap;
@@ -23,6 +24,7 @@ class TipBox extends StatefulWidget {
   final List<TextSpan>? richTextSpan;
   final String? settingsString;
   final EdgeInsets padding;
+  final double? borderRadius;
 
   @override
   State<TipBox> createState() => _TipBoxState();
@@ -43,7 +45,8 @@ class _TipBoxState extends State<TipBox> {
           onTap: widget.onTap,
           color:
               Theme.of(context).colorScheme.secondaryContainer.withOpacity(0.7),
-          borderRadius: getIsFullScreen(context) ? 15 : 10,
+          borderRadius:
+              widget.borderRadius ?? (getIsFullScreen(context) ? 15 : 10),
           child: Padding(
             padding: EdgeInsets.only(
                 left: 15,

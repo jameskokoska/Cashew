@@ -1059,5 +1059,11 @@
   "failed-to-preview-image": "Échec de l'image de prévisualisation",
   "open-link": "Ouvrir le lien",
   "category-not-selected": "Catégorie non sélectionnée",
-  "all-transactions-require-a-category": "Toutes les transactions nécessitent une catégorie"
+  "all-transactions-require-a-category": "Toutes les transactions nécessitent une catégorie",
+  "total-offset": "Décalage total",
+  "total-offset-description": "Compenser le total du prêt en entrant un montant. Utile si le prêt a accumulé des intérêts ou d'autres personnes non comptabilisées pour augmenter le total.",
+  "advanced-automation": "Automatisation avancée",
+  "deep-linking": "Liens d'application",
+  "deep-linking-description": "Automatisez l'insertion des transactions à l'aide des URL de l'application. Appuyez pour en savoir plus et affichez la documentation.",
+  "added-transaction": "Transaction supplémentaire"
 }

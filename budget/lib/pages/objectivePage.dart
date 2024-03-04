@@ -122,6 +122,42 @@ class _ObjectivePageContentState extends State<_ObjectivePageContent> {
     }
   }
 
+  openSelectIconPopup() {
+    openBottomSheet(
+      context,
+      PopupFramework(
+        title: "select-icon".tr(),
+        child: SelectCategoryImage(
+          setSelectedImage: (String? selection) async {
+            String? selectedIcon =
+                (selection ?? "").replaceFirst("assets/categories/", "");
+            Objective newObjective = widget.objective.copyWith(
+              iconName: Value(selectedIcon),
+              emojiIconName: Value(null),
+            );
+            await database.createOrUpdateObjective(
+              newObjective,
+            );
+          },
+          setSelectedEmoji: (String? selection) async {
+            Objective newObjective = widget.objective.copyWith(
+              iconName: Value(null),
+              emojiIconName: Value(selection),
+            );
+            await database.createOrUpdateObjective(
+              newObjective,
+            );
+            print(newObjective);
+          },
+          selectedImage:
+              "assets/categories/" + widget.objective.iconName.toString(),
+          setSelectedTitle: (String? titleRecommendation) {},
+        ),
+      ),
+      showScrollbar: true,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     Widget numberTransactionsWidget = StreamBuilder<int?>(
@@ -313,52 +349,11 @@ class _ObjectivePageContentState extends State<_ObjectivePageContent> {
                                     borderRadius: 100,
                                     canEditByLongPress: false,
                                     margin: EdgeInsets.zero,
-                                    onTap: () async {
-                                      await openBottomSheet(
-                                        context,
-                                        PopupFramework(
-                                          title: "select-icon".tr(),
-                                          child: SelectCategoryImage(
-                                            setSelectedImage:
-                                                (String? selection) async {
-                                              String? selectedIcon =
-                                                  (selection ?? "")
-                                                      .replaceFirst(
-                                                          "assets/categories/",
-                                                          "");
-                                              Objective newObjective =
-                                                  widget.objective.copyWith(
-                                                iconName: Value(selectedIcon),
-                                                emojiIconName: Value(null),
-                                              );
-                                              await database
-                                                  .createOrUpdateObjective(
-                                                newObjective,
-                                              );
-                                            },
-                                            setSelectedEmoji:
-                                                (String? selection) async {
-                                              Objective newObjective =
-                                                  widget.objective.copyWith(
-                                                iconName: Value(null),
-                                                emojiIconName: Value(selection),
-                                              );
-                                              await database
-                                                  .createOrUpdateObjective(
-                                                newObjective,
-                                              );
-                                              print(newObjective);
-                                            },
-                                            selectedImage:
-                                                "assets/categories/" +
-                                                    widget.objective.iconName
-                                                        .toString(),
-                                            setSelectedTitle: (String?
-                                                titleRecommendation) {},
-                                          ),
-                                        ),
-                                        showScrollbar: true,
-                                      );
+                                    onLongPress: () {
+                                      openSelectIconPopup();
+                                    },
+                                    onTap: () {
+                                      openSelectIconPopup();
                                     },
                                   ),
                                   SizedBox(height: 10),
@@ -563,6 +558,7 @@ class _ObjectivePageContentState extends State<_ObjectivePageContent> {
                                           widget.objective,
                                           totalAmount,
                                           percentageTowardsGoal,
+                                          objectiveAmount,
                                           addSpendingSavingIndication: true,
                                         ),
                                         maxLines: 3,

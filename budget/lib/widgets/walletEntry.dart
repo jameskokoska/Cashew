@@ -245,7 +245,7 @@ class WalletEntryRow extends StatelessWidget {
                               left: 10,
                             ),
                             child: TextFont(
-                              textAlign: TextAlign.right,
+                              textAlign: TextAlign.left,
                               text: "",
                               maxLines: 1,
                               richTextSpan: [

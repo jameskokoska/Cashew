@@ -26,6 +26,18 @@ import 'listItem.dart';
 
 String getChangelogString() {
   return """
+    < 5.2.4
+    Improved UI layout when creating a goal/long term loan
+    Long term loan offset (useful for adding interest to long term loan totals)
+    Deep linking API (A): Automate the adding of transactions using app URL links (view [About] page for information)
+    Fix color picker initial color value
+    Fix importing of backup and CSV files (A)
+    Fix widget launching add transaction route twice
+    Fix account list name alignment
+    Fix widget action launch timeout on first launch
+    Fix adding transaction from subscription/upcoming page defaults to unpaid
+    Fix archived long term loan amounts no longer count towards total summary
+    Fix long term loan total amounts and collect/settle amounts per day
     < 5.2.3
     Fix currency rates API
     File attachment in-app image preview
@@ -37,8 +49,6 @@ String getChangelogString() {
     Consistent padding alignment for date picker
     UI alignment fixes
     Border radius tweaks (i)
-    Deep linking API (A)
-    Fix color picker initial color value
     < 5.2.2
     Exclude transaction from counting towards reports and totals (in more options)
     Percentage decimal precision setting (in Settings > More Options > Formatting)

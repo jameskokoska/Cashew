@@ -46,13 +46,13 @@ class NetWorthPlusWidgetProvider : HomeWidgetProvider() {
                   val plusButtonIntent = HomeWidgetLaunchIntent.getActivity(
                           context,
                           MainActivity::class.java,
-                          Uri.parse("addTransaction"))
+                          Uri.parse("addTransactionWidget"))
                   setOnClickPendingIntent(R.id.plus_button, plusButtonIntent)
                   
                   val pendingIntentWithData = HomeWidgetLaunchIntent.getActivity(
                           context,
                           MainActivity::class.java,
-                          Uri.parse("netWorthLaunch"))
+                          Uri.parse("netWorthLaunchWidget"))
                   setOnClickPendingIntent(R.id.widget_container, pendingIntentWithData)
                 }catch (e: Exception){}
 

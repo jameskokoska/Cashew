@@ -370,7 +370,7 @@ Future openPayDebtCreditPopup(
       // Lent is considered negative
       int? rowId = await database.createOrUpdateObjective(
         Objective(
-          amount: transaction.amount.abs(), //always positive
+          amount: 0,
           income: !transaction.income,
           objectivePk: "-1",
           name: transactionLabel,

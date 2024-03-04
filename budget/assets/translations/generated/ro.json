@@ -1059,5 +1059,11 @@
   "failed-to-preview-image": "Nu a reușit să previzualizeze imaginea",
   "open-link": "Deschide link-ul",
   "category-not-selected": "Categoria nu a fost selectată",
-  "all-transactions-require-a-category": "Toate tranzacțiile necesită o categorie"
+  "all-transactions-require-a-category": "Toate tranzacțiile necesită o categorie",
+  "total-offset": "Offset total",
+  "total-offset-description": "Compensați totalul împrumutului prin introducerea unei sume. Util dacă împrumutul a acumulat dobândă sau alte necontractate pentru costurile crescând totalul.",
+  "advanced-automation": "Automatizare avansată",
+  "deep-linking": "Link -uri pentru aplicații",
+  "deep-linking-description": "Automatizați inserarea tranzacțiilor folosind adresele URL ale aplicației. Atingeți pentru a afla mai multe și vizualizați documentația.",
+  "added-transaction": "Tranzacție adăugată"
 }

@@ -1059,5 +1059,11 @@
   "failed-to-preview-image": "Nabigong i -preview ang imahe",
   "open-link": "Bukas na link",
   "category-not-selected": "Hindi napili ang kategorya",
-  "all-transactions-require-a-category": "Ang lahat ng mga transaksyon ay nangangailangan ng isang kategorya"
+  "all-transactions-require-a-category": "Ang lahat ng mga transaksyon ay nangangailangan ng isang kategorya",
+  "total-offset": "Kabuuang offset",
+  "total-offset-description": "I -offset ang kabuuan ng pautang sa pamamagitan ng pagpasok ng isang halaga. Kapaki -pakinabang kung ang pautang ay naipon ang interes o iba pang hindi nabilang para sa mga gastos sa pagtaas ng kabuuan.",
+  "advanced-automation": "Advanced na automation",
+  "deep-linking": "Mga Link ng App",
+  "deep-linking-description": "I -automate ang pagpasok ng mga transaksyon gamit ang mga URL ng APP. Tapikin upang malaman ang higit pa at tingnan ang dokumentasyon.",
+  "added-transaction": "Nagdagdag ng transaksyon"
 }

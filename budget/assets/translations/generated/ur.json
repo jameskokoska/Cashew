@@ -1059,5 +1059,11 @@
   "failed-to-preview-image": "تصویر کا پیش نظارہ کرنے میں ناکام",
   "open-link": "لنک کھولیں",
   "category-not-selected": "زمرہ منتخب نہیں کیا گیا ہے",
-  "all-transactions-require-a-category": "تمام لین دین میں ایک زمرے کی ضرورت ہوتی ہے"
+  "all-transactions-require-a-category": "تمام لین دین میں ایک زمرے کی ضرورت ہوتی ہے",
+  "total-offset": "کل آفسیٹ",
+  "total-offset-description": "کسی رقم میں داخل ہوکر قرض کی کل کو آفسیٹ کریں۔ مفید ہے اگر قرض میں سود یا دیگر غیر حساب کتاب جمع ہوچکے ہیں۔",
+  "advanced-automation": "اعلی درجے کی آٹومیشن",
+  "deep-linking": "ایپ لنکس",
+  "deep-linking-description": "ایپ یو آر ایل کا استعمال کرتے ہوئے لین دین کے اندراج کو خود کار بنائیں۔ مزید جاننے کے لئے ٹیپ کریں اور دستاویزات کو دیکھیں۔",
+  "added-transaction": "شامل ٹرانزیکشن"
 }

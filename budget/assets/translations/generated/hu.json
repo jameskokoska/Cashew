@@ -1059,5 +1059,11 @@
   "failed-to-preview-image": "Nem sikerült megtekinteni a képet",
   "open-link": "Link megnyitása",
   "category-not-selected": "A kategória nem választva",
-  "all-transactions-require-a-category": "Minden tranzakcióhoz kategóriát igényel"
+  "all-transactions-require-a-category": "Minden tranzakcióhoz kategóriát igényel",
+  "total-offset": "Teljes eltolás",
+  "total-offset-description": "A hitel összegének összegének megadásával történő eltolódása. Hasznos, ha a hitel felhalmozódott kamatba vagy egyéb, a költségek növelésére nem számoltak be.",
+  "advanced-automation": "Fejlett automatizálás",
+  "deep-linking": "App linkek",
+  "deep-linking-description": "Az APP URL -ek segítségével automatizálja a tranzakciók beillesztését. Érintse meg a további információkat, és tekintse meg a dokumentációt.",
+  "added-transaction": "Hozzáadott tranzakció"
 }

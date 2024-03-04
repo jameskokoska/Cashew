@@ -1059,5 +1059,11 @@
   "failed-to-preview-image": "Gagal Pratinjau Gambar",
   "open-link": "Buka tautan",
   "category-not-selected": "Kategori tidak dipilih",
-  "all-transactions-require-a-category": "Semua transaksi membutuhkan kategori"
+  "all-transactions-require-a-category": "Semua transaksi membutuhkan kategori",
+  "total-offset": "Total offset",
+  "total-offset-description": "Mengimbangi total pinjaman dengan memasukkan jumlah. Berguna jika pinjaman telah mengumpulkan bunga atau biaya lain yang tidak terhitung untuk meningkatkan total.",
+  "advanced-automation": "Otomatisasi Lanjutan",
+  "deep-linking": "Tautan aplikasi",
+  "deep-linking-description": "Otomatiskan penyisipan transaksi menggunakan URL aplikasi. Ketuk untuk mempelajari lebih lanjut dan melihat dokumentasi.",
+  "added-transaction": "Ditambahkan transaksi"
 }

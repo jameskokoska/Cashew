@@ -14,11 +14,13 @@ class SelectDateRange extends StatefulWidget {
     required this.initialEndDate,
     required this.onSelectedStartDate,
     required this.onSelectedEndDate,
+    this.padding = const EdgeInsets.symmetric(vertical: 10),
   });
   final DateTime? initialStartDate;
   final DateTime? initialEndDate;
   final Function(DateTime?) onSelectedStartDate;
   final Function(DateTime?) onSelectedEndDate;
+  final EdgeInsets padding;
 
   @override
   State<SelectDateRange> createState() => _SelectDateRangeState();
@@ -31,7 +33,7 @@ class _SelectDateRangeState extends State<SelectDateRange> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10),
+      padding: widget.padding,
       child: Column(
         children: [
           Row(

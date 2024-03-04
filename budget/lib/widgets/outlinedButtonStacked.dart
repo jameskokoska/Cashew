@@ -88,29 +88,12 @@ class OutlinedButtonStacked extends StatelessWidget {
                                   infoButton ?? SizedBox.shrink()
                                 ],
                               )
-                            : Row(
-                                children: [
-                                  Transform.scale(
-                                    scale: iconScale,
-                                    child: Icon(
-                                      iconData,
-                                      size: 28,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .secondary,
-                                    ),
-                                  ),
-                                  SizedBox(width: 10),
-                                  Expanded(
-                                    child: TextFont(
-                                      text: text,
-                                      fontSize: fontSize ?? 22,
-                                      fontWeight: FontWeight.bold,
-                                      maxLines: 2,
-                                    ),
-                                  ),
-                                  infoButton ?? SizedBox.shrink(),
-                                ],
+                            : HeaderWithIconAndInfo(
+                                iconData: iconData,
+                                iconScale: iconScale,
+                                text: text,
+                                infoButton: infoButton,
+                                fontSize: fontSize,
                               ),
                         afterWidget == null
                             ? SizedBox.shrink()
@@ -169,6 +152,53 @@ class OutlinedContainer extends StatelessWidget {
         borderRadius: BorderRadius.circular(borderRadiusValue),
       ),
       child: child,
+    );
+  }
+}
+
+class HeaderWithIconAndInfo extends StatelessWidget {
+  final IconData iconData;
+  final double iconScale;
+  final String text;
+  final double? fontSize;
+  final Widget? infoButton;
+  final EdgeInsets padding;
+
+  HeaderWithIconAndInfo({
+    required this.iconData,
+    this.iconScale = 1,
+    required this.text,
+    this.fontSize,
+    this.infoButton,
+    this.padding = EdgeInsets.zero,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: padding,
+      child: Row(
+        children: [
+          Transform.scale(
+            scale: iconScale,
+            child: Icon(
+              iconData,
+              size: 28,
+              color: Theme.of(context).colorScheme.secondary,
+            ),
+          ),
+          SizedBox(width: 10),
+          Expanded(
+            child: TextFont(
+              text: text,
+              fontSize: fontSize ?? 22,
+              fontWeight: FontWeight.bold,
+              maxLines: 2,
+            ),
+          ),
+          infoButton ?? SizedBox.shrink(),
+        ],
+      ),
     );
   }
 }

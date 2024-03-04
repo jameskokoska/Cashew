@@ -1059,5 +1059,11 @@
   "failed-to-preview-image": "No se pudo obtener una vista previa de imagen",
   "open-link": "Enlace abierto",
   "category-not-selected": "Categoría no seleccionada",
-  "all-transactions-require-a-category": "Todas las transacciones requieren una categoría"
+  "all-transactions-require-a-category": "Todas las transacciones requieren una categoría",
+  "total-offset": "Compensación total",
+  "total-offset-description": "Compensar el total del préstamo ingresando un monto. Útil si el préstamo ha acumulado intereses u otros no contabilizados para los costos que aumentan el total.",
+  "advanced-automation": "Automatización avanzada",
+  "deep-linking": "Enlaces de aplicaciones",
+  "deep-linking-description": "Automatice la inserción de transacciones utilizando URL de aplicaciones. Toque para obtener más información y ver la documentación.",
+  "added-transaction": "Transacción agregada"
 }

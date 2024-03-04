@@ -1059,5 +1059,11 @@
   "failed-to-preview-image": "છબીનું પૂર્વાવલોકન કરવામાં નિષ્ફળ",
   "open-link": "ખુલ્લી કડી",
   "category-not-selected": "કેટેગરી પસંદ નથી",
-  "all-transactions-require-a-category": "બધા વ્યવહારોને કેટેગરીની જરૂર હોય છે"
+  "all-transactions-require-a-category": "બધા વ્યવહારોને કેટેગરીની જરૂર હોય છે",
+  "total-offset": "કુલ -ફસેટ",
+  "total-offset-description": "રકમ દાખલ કરીને લોનની કુલને સરભર કરો. ઉપયોગી જો લોન કુલ વધતા ખર્ચ માટે વ્યાજ અથવા અન્ય બિનહિસાબી સંચિત કરે છે.",
+  "advanced-automation": "અદ્યતન સ્વચાલિત",
+  "deep-linking": "એપ્લિકેશન લિંક્સ",
+  "deep-linking-description": "એપ્લિકેશન URL નો ઉપયોગ કરીને ટ્રાન્ઝેક્શનના નિવેશને સ્વચાલિત કરો. વધુ જાણવા અને દસ્તાવેજીકરણ જોવા માટે ટેપ કરો.",
+  "added-transaction": "ઉમેરાયેલ લેવડદેવડ"
 }

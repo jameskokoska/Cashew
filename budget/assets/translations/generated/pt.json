@@ -1059,5 +1059,11 @@
   "failed-to-preview-image": "Falha ao visualizar a imagem",
   "open-link": "Link aberto",
   "category-not-selected": "Categoria não selecionada",
-  "all-transactions-require-a-category": "Todas as transações requerem uma categoria"
+  "all-transactions-require-a-category": "Todas as transações requerem uma categoria",
+  "total-offset": "Offset total",
+  "total-offset-description": "Compensando o total do empréstimo, inserindo um valor. Útil se o empréstimo acumular juros ou outro não contabilizado para custos, aumentando o total.",
+  "advanced-automation": "Automação avançada",
+  "deep-linking": "Links de aplicativos",
+  "deep-linking-description": "Automatize a inserção de transações usando URLs de aplicativos. Toque para saber mais e ver a documentação.",
+  "added-transaction": "Transação adicionada"
 }

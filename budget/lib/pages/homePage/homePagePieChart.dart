@@ -35,15 +35,17 @@ class HomePagePieChart extends StatelessWidget {
         : appStateSettings["pieChartTotal"] == "outgoing"
             ? false
             : true;
+    const double borderRadius = 15;
     return KeepAliveClientMixin(
       child: Padding(
         padding: const EdgeInsets.only(bottom: 13, left: 13, right: 13),
         child: Container(
           decoration: BoxDecoration(
             boxShadow: boxShadowCheck(boxShadowGeneral(context)),
+            borderRadius: BorderRadius.circular(borderRadius),
           ),
           child: Tappable(
-            borderRadius: 15,
+            borderRadius: borderRadius,
             onLongPress: () async {
               await openPieChartHomePageBottomSheetSettings(context);
               homePageStateKey.currentState?.refreshState();

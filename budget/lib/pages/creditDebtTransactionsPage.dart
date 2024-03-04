@@ -187,6 +187,13 @@ class CreditDebtTransactionsState extends State<CreditDebtTransactions>
               searchString: searchValue,
               selectedTab: _tabController.index,
             ),
+            totalWithCountStream2:
+                database.watchTotalWithCountOfCreditDebtLongTermLoansOffset(
+              allWallets: Provider.of<AllWallets>(context),
+              isCredit: isCredit,
+              searchString: searchValue,
+              selectedTab: _tabController.index,
+            ),
             showIncomeArrow: false,
             getInitialText: (totalAmount) {
               if (totalAmount < 0) {

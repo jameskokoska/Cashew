@@ -12,6 +12,7 @@ import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/openSnackbar.dart';
 import 'package:budget/widgets/transactionEntry/transactionEntry.dart';
+import 'package:budget/widgets/transactionEntry/transactionLabel.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:app_links/app_links.dart';
@@ -45,7 +46,8 @@ class _DeepLinksWebState extends State<DeepLinksWeb> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration(milliseconds: 500), () {
+    // This delay is required by the web app
+    Future.delayed(Duration(milliseconds: 0), () {
       executeAppLink(navigatorKey.currentContext, Uri.base);
     });
   }
@@ -83,7 +85,9 @@ class _DeepLinksState extends State<DeepLinks> {
   Future<void> initDeepLinks() async {
     final appLink = await _appLinks.getInitialAppLink();
     if (appLink != null) {
-      Future.delayed(Duration(milliseconds: 500), () {
+      // This delay may or may not be needed...
+      // we need to make sure Material navigator is accessible by the context though!
+      Future.delayed(Duration(milliseconds: 0), () {
         executeAppLink(navigatorKey.currentContext, appLink);
       });
     }
@@ -104,6 +108,9 @@ executeAppLink(BuildContext? context, Uri uri) async {
 
   String endPoint = getApiEndpoint(uri);
   Map<String, String> params = parseAppLink(uri);
+
+  // Note these URIs must be unique from the launch from widget URIs!
+
   switch (endPoint) {
     case "addTransaction":
       if (context != null) {
@@ -163,6 +170,13 @@ executeAppLink(BuildContext? context, Uri uri) async {
           final Transaction transactionJustAdded =
               await database.getTransactionFromRowId(rowId);
           flashTransaction(transactionJustAdded.transactionPk);
+          openSnackbar(SnackbarMessage(
+            title: "added-transaction".tr(),
+            description: await getTransactionLabel(transactionJustAdded),
+            icon: appStateSettings["outlinedIcons"]
+                ? Icons.post_add_outlined
+                : Icons.post_add_rounded,
+          ));
         }
       }
       break;

@@ -880,6 +880,19 @@ class WalletDetailsPageState extends State<WalletDetailsPage>
                               forcedDateTimeRange: selectedDateTimeRange,
                               selectedTab: null,
                             ),
+                            totalWithCountStream2: database
+                                .watchTotalWithCountOfCreditDebtLongTermLoansOffset(
+                              isCredit: true,
+                              allWallets: Provider.of<AllWallets>(context),
+                              followCustomPeriodCycle: widget.wallet == null,
+                              cycleSettingsExtension: null, //all time
+                              searchFilters: searchFilters?.copyWith(
+                                dateTimeRange: null,
+                                forceSetDateTimeRange: true,
+                              ),
+                              forcedDateTimeRange: selectedDateTimeRange,
+                              selectedTab: null,
+                            ),
                             onLongPress: () {
                               // Since always all time, disable long press custom period for these rows
                               //selectAllSpendingPeriod();
@@ -898,6 +911,19 @@ class WalletDetailsPageState extends State<WalletDetailsPage>
                             label: "borrowed".tr(),
                             totalWithCountStream:
                                 database.watchTotalWithCountOfCreditDebt(
+                              isCredit: false,
+                              allWallets: Provider.of<AllWallets>(context),
+                              followCustomPeriodCycle: widget.wallet == null,
+                              cycleSettingsExtension: null, //all time
+                              searchFilters: searchFilters?.copyWith(
+                                dateTimeRange: null,
+                                forceSetDateTimeRange: true,
+                              ),
+                              forcedDateTimeRange: selectedDateTimeRange,
+                              selectedTab: null,
+                            ),
+                            totalWithCountStream2: database
+                                .watchTotalWithCountOfCreditDebtLongTermLoansOffset(
                               isCredit: false,
                               allWallets: Provider.of<AllWallets>(context),
                               followCustomPeriodCycle: widget.wallet == null,
@@ -2778,6 +2804,7 @@ class AmountSpentEntryRow extends StatelessWidget {
     required this.textColor,
     required this.label,
     required this.totalWithCountStream,
+    this.totalWithCountStream2,
     required this.onLongPress,
     this.hide = false,
     this.forceShow = false,
@@ -2787,6 +2814,7 @@ class AmountSpentEntryRow extends StatelessWidget {
   final String label;
   final Widget openPage;
   final Stream<TotalWithCount?> totalWithCountStream;
+  final Stream<TotalWithCount?>? totalWithCountStream2;
   final VoidCallback onLongPress;
   final bool hide;
   final bool forceShow;
@@ -2794,8 +2822,9 @@ class AmountSpentEntryRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<TotalWithCount?>(
-      stream: totalWithCountStream,
+    return DoubleTotalWithCountStreamBuilder(
+      totalWithCountStream: totalWithCountStream,
+      totalWithCountStream2: totalWithCountStream2,
       builder: (context, snapshot) {
         double totalSpent = (snapshot.data?.total ?? 0).abs();
         int totalCount = snapshot.data?.count ?? 0;

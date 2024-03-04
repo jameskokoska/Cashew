@@ -37,7 +37,7 @@ class TransferWidgetProvider : HomeWidgetProvider() {
                   val pendingIntentWithData = HomeWidgetLaunchIntent.getActivity(
                           context,
                           MainActivity::class.java,
-                          Uri.parse("transferTransaction"))
+                          Uri.parse("transferTransactionWidget"))
                   setOnClickPendingIntent(R.id.widget_container, pendingIntentWithData)
                 }catch (e: Exception){}
 

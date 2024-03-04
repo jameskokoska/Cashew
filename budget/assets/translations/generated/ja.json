@@ -1044,7 +1044,7 @@
   "set-date-time": "セット",
   "add-record-using-plus-button": "[+]ボタンを使用してレコードを追加します。",
   "all-settled": "すべてが落ち着きました",
-  "difference-loan": "差額ローン",
+  "difference-loan": "差異ローン",
   "open-settings": "設定を開く",
   "decimal-precision": "10進精度",
   "decimal-precision-description": "トランザクション額の丸めの小数点",
@@ -1059,5 +1059,11 @@
   "failed-to-preview-image": "画像のプレビューに失敗しました",
   "open-link": "オープンリンク",
   "category-not-selected": "選択されていないカテゴリ",
-  "all-transactions-require-a-category": "すべてのトランザクションにはカテゴリが必要です"
+  "all-transactions-require-a-category": "すべてのトランザクションにはカテゴリが必要です",
+  "total-offset": "トータルオフセット",
+  "total-offset-description": "金額を入力することにより、ローンの合計を相殺します。ローンが利息またはその他の計算を累積した場合、合計を増加させた場合に役立ちます。",
+  "advanced-automation": "高度な自動化",
+  "deep-linking": "アプリリンク",
+  "deep-linking-description": "アプリURLを使用してトランザクションの挿入を自動化します。タップして詳細を確認し、ドキュメントを表示します。",
+  "added-transaction": "トランザクションを追加しました"
 }

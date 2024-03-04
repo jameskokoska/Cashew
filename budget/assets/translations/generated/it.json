@@ -1047,7 +1047,7 @@
   "difference-loan": "Prestito di differenza",
   "open-settings": "Impostazioni aperte",
   "decimal-precision": "Precisione decimali",
-  "decimal-precision-description": "Posti decimali per l'arrotondamento dell'importo delle transazioni",
+  "decimal-precision-description": "Posizioni decimali per l'arrotondamento dell'importo delle transazioni",
   "same-accounts": "Stessi account",
   "select-2-different-accounts": "Seleziona 2 account diversi",
   "include-amount": "Includere l'importo",
@@ -1059,5 +1059,11 @@
   "failed-to-preview-image": "Impossibile in anteprima immagine",
   "open-link": "Link aperto",
   "category-not-selected": "Categoria non selezionata",
-  "all-transactions-require-a-category": "Tutte le transazioni richiedono una categoria"
+  "all-transactions-require-a-category": "Tutte le transazioni richiedono una categoria",
+  "total-offset": "Offset totale",
+  "total-offset-description": "Offsettare il totale del prestito inserendo un importo. Utile se il prestito ha accumulato interessi o altri non contabilizzati per i costi in aumento del totale.",
+  "advanced-automation": "Automazione avanzata",
+  "deep-linking": "Collegamenti app",
+  "deep-linking-description": "Automatizzare l'inserimento delle transazioni utilizzando gli URL dell'app. Tocca per saperne di più e visualizza la documentazione.",
+  "added-transaction": "Transazione aggiunta"
 }

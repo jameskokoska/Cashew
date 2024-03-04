@@ -79,6 +79,7 @@ class _ImportCSVState extends State<ImportCSV> {
         throw "no-file-selected".tr();
       }
     }, onError: (e) {
+      print("Error opening CSV: " + e.toString());
       openPopup(
         context,
         title: "csv-error".tr(),

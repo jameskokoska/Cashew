@@ -2654,6 +2654,12 @@ class FinanceDatabase extends _$FinanceDatabase {
       companionToInsert =
           companionToInsert.copyWith(objectivePk: Value.absent());
 
+      // Objective loans should always have offset of 0 when inserted for the first time
+      if (objective.type == ObjectiveType.loan &&
+          getIsDifferenceOnlyLoan(objective) == false) {
+        companionToInsert = companionToInsert.copyWith(amount: Value(0));
+      }
+
       // If homepage section disabled and user added an objective, enable homepage section
       // if (appStateSettings[objective.type == ObjectiveType.goal
       //             ? "showObjectives"
@@ -4050,10 +4056,11 @@ class FinanceDatabase extends _$FinanceDatabase {
   }
 
   // getIsDifferenceOnlyLoan(objective)
+  // This defines what a difference only loan can be
   Expression<bool> getIsDifferenceOnlyLoanFromTable($ObjectivesTable o) {
     if (appStateSettings["longTermLoansDifferenceFeature"] == false)
       return Constant(false);
-    return o.amount.equals(0) & o.type.equals(ObjectiveType.loan.index);
+    return o.amount.equals(-1) & o.type.equals(ObjectiveType.loan.index);
   }
 
   Future<Objective?> getPersonsLongTermDifferenceLoanInstance(
@@ -6354,6 +6361,7 @@ class FinanceDatabase extends _$FinanceDatabase {
             count: (acc?.count ?? 0) + (val?.count ?? 0))));
   }
 
+  // Related query: watchTotalWithCountOfCreditDebtLongTermLoansOffset
   Stream<TotalWithCount?> watchTotalWithCountOfCreditDebt({
     required AllWallets allWallets,
     required bool? isCredit,
@@ -6397,18 +6405,25 @@ class FinanceDatabase extends _$FinanceDatabase {
                       forcedDateTimeRange: forcedDateTimeRange,
                     )) &
               transactions.paid.equals(true) &
+              (transactions.objectiveLoanFk.isNull() |
+                  objectives.archived.equals(false)) &
+              (selectedTab == 0 && searchString != null
+                  ? transactions.objectiveLoanFk.isNull()
+                  : selectedTab == 1 && searchString != null
+                      ? transactions.objectiveLoanFk.isNotNull()
+                      : Constant(true)) &
               (selectedTab == 0 ||
                       selectedTab == null ||
                       searchString == null ||
                       searchString == ""
-                  ? onlyShowTransactionBasedOnSearchQuery(
+                  ? (onlyShowTransactionBasedOnSearchQuery(
                       transactions, searchString,
                       withCategories: true,
-                      joinedWithSubcategoriesTable: subCategories)
+                      joinedWithSubcategoriesTable: subCategories))
                   // Only apply this tab specific total when searching
-                  : (objectives.name
+                  : ((objectives.name
                       .collate(Collate.noCase)
-                      .like("%" + (searchString ?? "") + "%"))) &
+                      .like("%" + (searchString ?? "") + "%")))) &
               transactions.walletFk.equals(wallet.walletPk) &
               (isCredit == null
                   ? transactions.type
@@ -6426,12 +6441,67 @@ class FinanceDatabase extends _$FinanceDatabase {
                           (transactions.objectiveLoanFk.isNotNull() &
                               objectives.income.equals(false))),
         );
-      mergedStreams.add(query
-          .map((row) => TotalWithCount(
-              total: (row.read(totalAmt) ?? 0) *
-                  (amountRatioToPrimaryCurrency(allWallets, wallet.currency)),
-              count: row.read(totalCount) ?? 0))
-          .watchSingle());
+      mergedStreams.add(query.map((row) {
+        // print(row.rawData.data);
+        return TotalWithCount(
+            total: (row.read(totalAmt) ?? 0) *
+                (amountRatioToPrimaryCurrency(allWallets, wallet.currency)),
+            count: row.read(totalCount) ?? 0);
+      }).watchSingle());
+    }
+    return totalTotalWithCountStream(mergedStreams);
+  }
+
+  // Related query: watchTotalWithCountOfCreditDebt
+  Stream<TotalWithCount?> watchTotalWithCountOfCreditDebtLongTermLoansOffset({
+    required AllWallets allWallets,
+    required bool? isCredit,
+    String? searchString,
+    bool followCustomPeriodCycle = false,
+    String? cycleSettingsExtension = "",
+    SearchFilters? searchFilters,
+    DateTimeRange? forcedDateTimeRange,
+    // selectedTab == 0 : one-time
+    // selectedTab == 1 : long-term
+    // Only apply selectedTab when searching
+    required int? selectedTab,
+  }) {
+    List<Stream<TotalWithCount?>> mergedStreams = [];
+    for (TransactionWallet wallet in allWallets.list) {
+      // Add the total offsets of objective amounts
+      Expression<double> totalAmtObjective = objectives.amount.sum();
+      Expression<bool> objectiveIncome = objectives.income;
+      final queryTotalObjectiveAmountOffset = selectOnly(objectives)
+        ..addColumns([totalAmtObjective, objectiveIncome])
+        ..where(objectives.archived.equals(false) &
+            objectives.type.equals(ObjectiveType.loan.index) &
+            objectives.walletFk.equals(wallet.walletPk) &
+            getIsDifferenceOnlyLoanFromTable(objectives).equals(false) &
+            (selectedTab == 0 && searchString != null
+                ? Constant(false)
+                : Constant(true)) &
+            (selectedTab == 0 ||
+                    selectedTab == null ||
+                    searchString == null ||
+                    searchString == ""
+                ? Constant(true)
+                // Only apply this tab specific total when searching
+                : (objectives.name
+                    .collate(Collate.noCase)
+                    .like("%" + (searchString ?? "") + "%"))) &
+            (isCredit == null
+                ? Constant(true)
+                : isCredit
+                    ? objectives.income.equals(true)
+                    : objectives.income.equals(false)));
+      mergedStreams.add(queryTotalObjectiveAmountOffset.map((row) {
+        // print(row.rawData.data);
+        return TotalWithCount(
+            total: (row.read(totalAmtObjective) ?? 0).abs() *
+                ((row.read(objectiveIncome) ?? true) ? -1 : 1) *
+                (amountRatioToPrimaryCurrency(allWallets, wallet.currency)),
+            count: 0);
+      }).watchSingle());
     }
     return totalTotalWithCountStream(mergedStreams);
   }

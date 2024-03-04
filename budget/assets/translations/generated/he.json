@@ -1059,5 +1059,11 @@
   "failed-to-preview-image": "תצוגה מקדימה של תמונה נכשלה",
   "open-link": "קישור פתוח",
   "category-not-selected": "קטגוריה לא נבחרה",
-  "all-transactions-require-a-category": "כל העסקאות דורשות קטגוריה"
+  "all-transactions-require-a-category": "כל העסקאות דורשות קטגוריה",
+  "total-offset": "קיזוז מוחלט",
+  "total-offset-description": "קיזוז סך ההלוואה על ידי כניסה לסכום. שימושי אם ההלוואה צברה ריבית או אחרים שלא הוסברו על עלויות הגדלת הסכום.",
+  "advanced-automation": "אוטומציה מתקדמת",
+  "deep-linking": "קישורי אפליקציה",
+  "deep-linking-description": "אוטומציה של החדרת עסקאות באמצעות כתובות כתובות אפליקציות. הקש כדי ללמוד עוד וצפה בתיעוד.",
+  "added-transaction": "הוסיפה עסקה"
 }

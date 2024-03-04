@@ -1059,5 +1059,11 @@
   "failed-to-preview-image": "চিত্রের পূর্বরূপ দেখতে ব্যর্থ",
   "open-link": "খোলা সংযুক্তি",
   "category-not-selected": "বিভাগ নির্বাচিত নয়",
-  "all-transactions-require-a-category": "সমস্ত লেনদেনের জন্য একটি বিভাগ প্রয়োজন"
+  "all-transactions-require-a-category": "সমস্ত লেনদেনের জন্য একটি বিভাগ প্রয়োজন",
+  "total-offset": "মোট অফসেট",
+  "total-offset-description": "একটি পরিমাণ প্রবেশ করে মোট loan ণের অফসেট করুন। যদি loan ণটি মোট বাড়ানোর জন্য ব্যয় বা অন্য কোনও অ্যাকাউন্টে জমা থাকে তবে তা কার্যকর।",
+  "advanced-automation": "উন্নত অটোমেশন",
+  "deep-linking": "অ্যাপ্লিকেশন লিঙ্ক",
+  "deep-linking-description": "অ্যাপ্লিকেশন ইউআরএল ব্যবহার করে লেনদেনের সন্নিবেশ স্বয়ংক্রিয় করুন। আরও জানতে এবং ডকুমেন্টেশন দেখতে আলতো চাপুন।",
+  "added-transaction": "যুক্ত লেনদেন"
 }

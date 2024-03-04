@@ -1059,5 +1059,11 @@
   "failed-to-preview-image": "이미지를 미리 보지 못했습니다",
   "open-link": "열기 링크",
   "category-not-selected": "범주가 선택되지 않았습니다",
-  "all-transactions-require-a-category": "모든 거래에는 범주가 필요합니다"
+  "all-transactions-require-a-category": "모든 거래에는 범주가 필요합니다",
+  "total-offset": "총 오프셋",
+  "total-offset-description": "금액을 입력하여 대출의 총계를 상쇄하십시오. 대출이이자를 축적했거나 총계가 증가하는 비용에 대한 기타 계산되지 않은 경우 유용합니다.",
+  "advanced-automation": "고급 자동화",
+  "deep-linking": "앱 링크",
+  "deep-linking-description": "앱 URL을 사용하여 트랜잭션 삽입을 자동화하십시오. 자세한 내용을 배우고 문서를 봅니다.",
+  "added-transaction": "트랜잭션이 추가되었습니다"
 }

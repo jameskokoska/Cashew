@@ -1059,5 +1059,11 @@
   "failed-to-preview-image": "Det gick inte att förhandsgranska bilden",
   "open-link": "Öppen länk",
   "category-not-selected": "Kategori är inte vald",
-  "all-transactions-require-a-category": "Alla transaktioner kräver en kategori"
+  "all-transactions-require-a-category": "Alla transaktioner kräver en kategori",
+  "total-offset": "Total offset",
+  "total-offset-description": "Kompensera summan av lånet genom att ange ett belopp. Användbart om lånet har samlat ränta eller andra som inte redovisas för kostnader som ökar summan.",
+  "advanced-automation": "Avancerad automatisering",
+  "deep-linking": "Applänkar",
+  "deep-linking-description": "Automatisera införandet av transaktioner med app -URL: er. Tryck för att lära dig mer och se dokumentationen.",
+  "added-transaction": "Tillagd transaktion"
 }

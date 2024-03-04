@@ -79,6 +79,8 @@ Future<bool> initializeSettings() async {
     appStateSettings["accentColor"] = await getAccentColorSystemString();
   }
 
+  await attemptToMigrateSetLongTermLoansAmountTo0();
+
   // Disable sync every change is not on web
   // It will still sync when user pulls down to refresh
   // if (!kIsWeb) {
@@ -209,7 +211,8 @@ Future<Map<String, dynamic>> getUserSettings() async {
     }
     print("Found user settings on file");
 
-    var userSettingsJSON = json.decode(userSettings);
+    Map<String, dynamic> userSettingsJSON = json.decode(userSettings);
+
     //Set to defaults if a new setting is added, but no entry saved
     userPreferencesDefault.forEach((key, value) {
       userSettingsJSON =
@@ -220,7 +223,7 @@ Future<Map<String, dynamic>> getUserSettings() async {
     });
     return userSettingsJSON;
   } catch (e) {
-    print("There was an error, settings corrupted");
+    print("There was an error, settings corrupted: " + e.toString());
     await sharedPreferences.setString(
         'userSettings', json.encode(userPreferencesDefault));
     return userPreferencesDefault;

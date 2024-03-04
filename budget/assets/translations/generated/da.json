@@ -1047,7 +1047,7 @@
   "difference-loan": "Forskellån",
   "open-settings": "Åbne indstillinger",
   "decimal-precision": "Decimal præcision",
-  "decimal-precision-description": "Decimalsteder for transaktionsbeløb afrunding",
+  "decimal-precision-description": "Decimalsteder til transaktionsbeløb afrunding",
   "same-accounts": "Samme konti",
   "select-2-different-accounts": "Vælg 2 forskellige konti",
   "include-amount": "Inkluderer beløb",
@@ -1059,5 +1059,11 @@
   "failed-to-preview-image": "Kunne ikke forhåndsvise billedet",
   "open-link": "Åben link",
   "category-not-selected": "Kategori ikke valgt",
-  "all-transactions-require-a-category": "Alle transaktioner kræver en kategori"
+  "all-transactions-require-a-category": "Alle transaktioner kræver en kategori",
+  "total-offset": "Total offset",
+  "total-offset-description": "Offset det samlede beløb ved at indtaste et beløb. Nyttigt, hvis lånet har akkumuleret renter eller andre ikke -anførte for omkostninger, der øger det samlede antal.",
+  "advanced-automation": "Avanceret automatisering",
+  "deep-linking": "App -links",
+  "deep-linking-description": "Automatiser indsættelsen af ​​transaktioner ved hjælp af app -URL'er. Tryk på for at lære mere og se dokumentationen.",
+  "added-transaction": "Tilføjet transaktion"
 }

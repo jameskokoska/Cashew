@@ -1059,5 +1059,11 @@
   "failed-to-preview-image": "無法預覽圖像",
   "open-link": "打開鏈接",
   "category-not-selected": "類別未選擇",
-  "all-transactions-require-a-category": "所有交易都需要類別"
+  "all-transactions-require-a-category": "所有交易都需要類別",
+  "total-offset": "總偏移",
+  "total-offset-description": "通過輸入金額來抵消貸款的總計。如果貸款累積了利息或其他未徵收的費用，則有用。",
+  "advanced-automation": "高級自動化",
+  "deep-linking": "應用鏈接",
+  "deep-linking-description": "使用應用程序URL自動插入交易。點擊以了解更多信息並查看文檔。",
+  "added-transaction": "增加了交易"
 }

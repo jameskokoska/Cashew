@@ -1059,5 +1059,11 @@
   "failed-to-preview-image": "Kuvan esikatselu epäonnistui",
   "open-link": "Avaa linkki",
   "category-not-selected": "Luokkaa ei ole valittu",
-  "all-transactions-require-a-category": "Kaikki tapahtumat vaativat luokkaa"
+  "all-transactions-require-a-category": "Kaikki tapahtumat vaativat luokkaa",
+  "total-offset": "Kokonaispuolinen",
+  "total-offset-description": "Korvaa lainan kokonaismäärä syöttämällä summa. Hyödyllinen, jos laina on kertynyt korkoon tai muuhun kirjaamattomaan kokonaiskustannusten kustannuksiin.",
+  "advanced-automation": "Edistynyt automaatio",
+  "deep-linking": "Sovelluslinkit",
+  "deep-linking-description": "Automatisoi tapahtumien asettaminen sovellus -URL -osoitteiden avulla. Napauta saadaksesi lisätietoja ja tarkastella asiakirjaa.",
+  "added-transaction": "Lisätty tapahtuma"
 }

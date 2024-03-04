@@ -1059,5 +1059,11 @@
   "failed-to-preview-image": "Failed to Preview Image",
   "open-link": "Open Link",
   "category-not-selected": "Category Not Selected",
-  "all-transactions-require-a-category": "All transactions require a category"
+  "all-transactions-require-a-category": "All transactions require a category",
+  "total-offset": "Total Offset",
+  "total-offset-description": "Offset the total of the loan by entering an amount. Useful if the loan has accumulated interest or other unaccounted for costs increasing the total.",
+  "advanced-automation": "Advanced Automation",
+  "deep-linking": "App Links",
+  "deep-linking-description": "Automate the insertion of transactions using app URLs. Tap to learn more and view the documentation.",
+  "added-transaction": "Added Transaction"
 }

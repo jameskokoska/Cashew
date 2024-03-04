@@ -1059,5 +1059,11 @@
   "failed-to-preview-image": "Không thể Xem trước Hình ảnh",
   "open-link": "Mở Liên kết",
   "category-not-selected": "Thể loại không được chọn",
-  "all-transactions-require-a-category": "Tất cả các giao dịch yêu cầu một danh mục"
+  "all-transactions-require-a-category": "Tất cả các giao dịch yêu cầu một danh mục",
+  "total-offset": "Tổng số bù",
+  "total-offset-description": "Bù đắp tổng số khoản vay bằng cách nhập một số tiền. Hữu ích nếu khoản vay đã tích lũy lãi hoặc không được tính cho chi phí tăng tổng số.",
+  "advanced-automation": "Tự động hóa nâng cao",
+  "deep-linking": "Liên kết ứng dụng",
+  "deep-linking-description": "Tự động hóa việc chèn các giao dịch bằng URL APP. Nhấn để tìm hiểu thêm và xem tài liệu.",
+  "added-transaction": "Đã thêm giao dịch"
 }

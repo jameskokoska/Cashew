@@ -1047,7 +1047,7 @@
   "difference-loan": "Rozdílná půjčka",
   "open-settings": "Otevřené nastavení",
   "decimal-precision": "Desetinná přesnost",
-  "decimal-precision-description": "Desetinná místa pro zaokrouhlování částky transakce",
+  "decimal-precision-description": "Desetinná místa pro zaokrouhlení částky transakce",
   "same-accounts": "Stejné účty",
   "select-2-different-accounts": "Vyberte 2 různé účty",
   "include-amount": "Zahrnout částku",
@@ -1059,5 +1059,11 @@
   "failed-to-preview-image": "Nepodařilo se k náhledu obrázku",
   "open-link": "Otevřít odkaz",
   "category-not-selected": "Kategorie není vybrána",
-  "all-transactions-require-a-category": "Všechny transakce vyžadují kategorii"
+  "all-transactions-require-a-category": "Všechny transakce vyžadují kategorii",
+  "total-offset": "Celkový posun",
+  "total-offset-description": "Kompenzovat celkový počet půjček zadáním částky. Užitečné, pokud půjčka nahromadila úrok nebo jiné nezúčtované za náklady na zvýšení celkového počtu.",
+  "advanced-automation": "Pokročilá automatizace",
+  "deep-linking": "Odkazy na aplikace",
+  "deep-linking-description": "Automatizujte vložení transakcí pomocí URL APP. Klepnutím se dozvíte více a zobrazíte dokumentaci.",
+  "added-transaction": "Přidaná transakce"
 }

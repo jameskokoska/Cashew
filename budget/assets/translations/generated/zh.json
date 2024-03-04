@@ -1059,5 +1059,11 @@
   "failed-to-preview-image": "无法预览图像",
   "open-link": "打开链接",
   "category-not-selected": "类别未选择",
-  "all-transactions-require-a-category": "所有交易都需要类别"
+  "all-transactions-require-a-category": "所有交易都需要类别",
+  "total-offset": "总偏移",
+  "total-offset-description": "通过输入金额来抵消贷款的总计。如果贷款累积了利息或其他未征收的费用，则有用。",
+  "advanced-automation": "高级自动化",
+  "deep-linking": "应用链接",
+  "deep-linking-description": "使用应用程序URL自动插入交易。点击以了解更多信息并查看文档。",
+  "added-transaction": "增加了交易"
 }

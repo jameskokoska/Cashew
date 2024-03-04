@@ -1059,5 +1059,11 @@
   "failed-to-preview-image": "Resmi önizlemedi",
   "open-link": "Linki aç",
   "category-not-selected": "Kategori seçilmedi",
-  "all-transactions-require-a-category": "Tüm işlemler bir kategori gerektirir"
+  "all-transactions-require-a-category": "Tüm işlemler bir kategori gerektirir",
+  "total-offset": "Toplam ofset",
+  "total-offset-description": "Bir tutar girerek kredinin toplamını dengeleyin. Kredi, toplamı artıran maliyetler için faiz birikmiş veya başka bir hesaplanmamışsa kullanışlıdır.",
+  "advanced-automation": "Gelişmiş Otomasyon",
+  "deep-linking": "Uygulama bağlantıları",
+  "deep-linking-description": "Uygulama URL'lerini kullanarak işlemlerin eklenmesini otomatikleştirin. Daha fazla bilgi edinmek ve belgeleri görüntülemek için dokunun.",
+  "added-transaction": "Eklenen İşlem"
 }
