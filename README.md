@@ -132,7 +132,7 @@ Only supported in the Android and Web App versions as of now. Deep links allow d
 ### Examples (for Android)
 Ensure Cashew is installed on the device you are launching these URLs from.
 
-#### Example 1: Create an expense transaction on the current time for 100 with the category Shopping at the current time
+#### Example 1: Create an expense transaction for 100 with the category Shopping at the current time
 https://cashewapp.web.app/addTransaction?amount=-100&title=All%20the%20shopping&category=Shopping&notes=Went%20shopping
 #### Example 2: Create an income transaction with a missing category at the current time
 https://cashewapp.web.app/addTransaction?amount=100&title=Income&notes=Got%20money
@@ -157,8 +157,8 @@ https://cashewapp.web.app/addTransactionRoute?amount=-50&title=All%20the%20shopp
 | `amount` | The amount of the transaction. If negative, it represents an expense; if positive, it represents income. | No | 0 |
 | `title` | The title of the transaction. If an associated title is found and the category is not set, the associated title's category will be used. | No | Empty string |
 | `notes` | The notes associated with the transaction. | No | Empty string |
-| `date` | The date of the transaction. Supported string formats can be found in the `getCommonDateFormats()` method [here](https://github.com/jameskokoska/Cashew/blob/main/budget/lib/widgets/importCSV.dart#L1243-L1295). | No | Current time |
-| `category` | The name of the category to add the transaction to. Executes a name search, takes the first entry, not case sensitive. | Yes | Prompt user |
+| `date` | The date of the transaction. Supported string formats can be found in the `getCommonDateFormats()` method [here](https://github.com/jameskokoska/Cashew/blob/5.2.3%2B328/budget/lib/struct/commonDateFormats.dart). | No | Current time |
+| `category` | The name of the category to add the transaction to. Executes a name search, takes the first entry, not case sensitive. | No | Prompt user |
 | `subcategory` | The name of the subcategory to add the transaction to. If provided, it overwrites the category if a subcategory is found under a main category. Executes a name search, takes the first entry, not case sensitive. | No | None |
 | `account` | The name of the account. Executes a name search, takes the first entry, not case sensitive. | No | Primary account |
 
