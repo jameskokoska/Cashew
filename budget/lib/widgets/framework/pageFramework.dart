@@ -497,7 +497,7 @@ class PageFrameworkState extends State<PageFramework>
       );
     }
 
-    Widget scrollToBottomButton = AnimatedBuilder(
+    Widget scrollToTopButton = AnimatedBuilder(
       animation: _scrollToTopAnimationController,
       builder: (_, child) {
         return IgnorePointer(
@@ -541,7 +541,7 @@ class PageFrameworkState extends State<PageFramework>
       builder: (_, child) {
         // Don't show scroll to bottom button if list is way too long!
         if (getDistanceToBottom() > scrollingLimit) {
-          return scrollToBottomButton;
+          return scrollToTopButton;
         }
         return IgnorePointer(
           ignoring: _scrollToTopAnimationController.value <= 0.1,
@@ -658,8 +658,8 @@ class PageFrameworkState extends State<PageFramework>
                   widget.scrollToBottomButton && widget.scrollToTopButton
                       ? scrollToTopBottomButton
                       : SizedBox.shrink(),
-                  widget.scrollToTopButton && !widget.scrollToTopButton
-                      ? scrollToBottomButton
+                  !widget.scrollToBottomButton && widget.scrollToTopButton
+                      ? scrollToTopButton
                       : SizedBox.shrink(),
                   widget.floatingActionButton ?? Container(),
                 ],
