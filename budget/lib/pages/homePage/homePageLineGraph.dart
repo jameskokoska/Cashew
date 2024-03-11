@@ -259,7 +259,7 @@ class PastSpendingGraph extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (allTimeUpToFirstTransaction) {
-      return StreamBuilder<EarliestLatestDateTme?>(
+      return StreamBuilder<EarliestLatestDateTime?>(
         stream: database.watchEarliestLatestTransactionDateTime(
             searchFilters: searchFilters),
         builder: (context, snapshot) {

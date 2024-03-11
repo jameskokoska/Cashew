@@ -36,6 +36,7 @@ String getChangelogString() {
     Scroll to bottom/top does not animate if list too long
     Excluded budget transactions still show up in the budget list as excluded
     Select all option when selecting transactions
+    Months list in transaction page cannot be scrolled past the earliest and latest transaction entered date
     Fix polarity of lent and borrowed home screen sections
     Fix decimal precision save changes button for account edits
     Fix clipping of goal tag progress

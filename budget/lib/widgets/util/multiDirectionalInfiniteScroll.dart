@@ -1,5 +1,8 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'dart:math' as math;
+
+import 'package:flutter/scheduler.dart';
 
 ValueNotifier<bool> cancelParentScroll = ValueNotifier<bool>(false);
 
@@ -15,16 +18,23 @@ class MultiDirectionalInfiniteScroll extends StatefulWidget {
     this.onTopLoaded,
     this.onBottomLoaded,
     this.onScroll,
+    required this.shouldAddTop,
+    required this.shouldAddBottom,
+    this.physics,
   }) : super(key: key);
   final int? initialItems;
   final int overBoundsDetection;
-  final Function(int index) itemBuilder;
+  final Function(int index, bool isFirst, bool isLast) itemBuilder;
   final double startingScrollPosition;
   final Duration duration;
   final double height;
   final Function? onTopLoaded;
   final Function? onBottomLoaded;
   final Function? onScroll;
+  final bool Function(int top) shouldAddTop;
+  final bool Function(int bottom) shouldAddBottom;
+  final ScrollPhysics? physics;
+
   @override
   State<MultiDirectionalInfiniteScroll> createState() =>
       MultiDirectionalInfiniteScrollState();
@@ -64,8 +74,32 @@ class MultiDirectionalInfiniteScrollState
   }
 
   scrollTo(duration, {double? position}) {
+    double positionToScroll =
+        position == null ? widget.startingScrollPosition : position;
+    double clampedPosition = positionToScroll.clamp(
+        _scrollController.position.minScrollExtent,
+        _scrollController.position.maxScrollExtent);
+
+    if (_scrollController.position.minScrollExtent == clampedPosition ||
+        _scrollController.position.maxScrollExtent == clampedPosition) {
+      // Update the scroll position for the possibility of a new item being added
+      _scrollController.notifyListeners();
+      Future.delayed(Duration(milliseconds: 1), () {
+        clampedPosition = positionToScroll.clamp(
+            _scrollController.position.minScrollExtent,
+            _scrollController.position.maxScrollExtent);
+        SchedulerBinding.instance.addPostFrameCallback((_) {
+          _scrollController.animateTo(
+            clampedPosition,
+            duration: duration,
+            curve: Curves.fastOutSlowIn,
+          );
+        });
+      });
+    }
+
     _scrollController.animateTo(
-      position == null ? widget.startingScrollPosition : position,
+      clampedPosition,
       duration: duration,
       curve: Curves.fastOutSlowIn,
     );
@@ -94,15 +128,19 @@ class MultiDirectionalInfiniteScrollState
   }
 
   _onEndReached() {
-    setState(() {
-      bottom.add(bottom.length);
-    });
+    int indexToAdd = bottom.length;
+    if (widget.shouldAddBottom(indexToAdd))
+      setState(() {
+        bottom.add(indexToAdd);
+      });
   }
 
   _onStartReached() {
-    setState(() {
-      top.add(-top.length - 1);
-    });
+    int indexToAdd = -top.length - 1;
+    if (widget.shouldAddTop(indexToAdd))
+      setState(() {
+        top.add(indexToAdd);
+      });
   }
 
   @override
@@ -129,6 +167,7 @@ class MultiDirectionalInfiniteScrollState
         child: Container(
           height: widget.height,
           child: CustomScrollView(
+            physics: widget.physics,
             scrollDirection: Axis.horizontal,
             controller: _scrollController,
             center: ValueKey('second-sliver-list'),
@@ -136,7 +175,8 @@ class MultiDirectionalInfiniteScrollState
               SliverList(
                 delegate: SliverChildBuilderDelegate(
                   (BuildContext context, int index) {
-                    return widget.itemBuilder(top[index]);
+                    return widget.itemBuilder(
+                        top[index], index == top.length - 1, false);
                   },
                   childCount: top.length,
                 ),
@@ -145,7 +185,8 @@ class MultiDirectionalInfiniteScrollState
                 key: ValueKey('second-sliver-list'),
                 delegate: SliverChildBuilderDelegate(
                   (BuildContext context, int index) {
-                    return widget.itemBuilder(bottom[index]);
+                    return widget.itemBuilder(
+                        bottom[index], false, index == bottom.length - 1);
                   },
                   childCount: bottom.length,
                 ),

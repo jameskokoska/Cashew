@@ -6756,12 +6756,13 @@ class FinanceDatabase extends _$FinanceDatabase {
     return totalDoubleStream(mergedStreams);
   }
 
-  Stream<EarliestLatestDateTme?> watchEarliestLatestTransactionDateTime({
+  Stream<EarliestLatestDateTime?> watchEarliestLatestTransactionDateTime({
     required SearchFilters? searchFilters,
+    bool? paid = true,
   }) {
     final query = select(transactions)
       ..where((t) =>
-          t.paid.equals(true) &
+          (paid == null ? Constant(true) : t.paid.equals(paid)) &
           onlyShowIfFollowsSearchFilters(t, searchFilters,
               joinedWithSubcategoriesTable: null,
               joinedWithCategories: false,
@@ -6771,7 +6772,7 @@ class FinanceDatabase extends _$FinanceDatabase {
 
     return query.watch().map((rows) {
       if (rows.isNotEmpty) {
-        return EarliestLatestDateTme(
+        return EarliestLatestDateTime(
             earliest: rows.first.dateCreated, latest: rows.last.dateCreated);
       } else {
         return null;
@@ -7070,11 +7071,11 @@ class TotalWithCount {
   TotalWithCount({required this.total, required this.count});
 }
 
-class EarliestLatestDateTme {
+class EarliestLatestDateTime {
   final DateTime earliest;
   final DateTime latest;
 
-  EarliestLatestDateTme({required this.earliest, required this.latest});
+  EarliestLatestDateTime({required this.earliest, required this.latest});
 }
 
 enum TitleType {
