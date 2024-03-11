@@ -257,22 +257,6 @@ class DebugPage extends StatelessWidget {
           },
         ),
         SettingsContainerSwitch(
-          title: "Native iOS Navigation",
-          description: "Enables native iOS like navigation",
-          onSwitched: (value) {
-            updateSettings("iOSNavigation", value,
-                pagesNeedingRefresh: [], updateGlobalState: true);
-            // if (value == true) {
-            //   updateSettings("removeZeroTransactionEntries", false,
-            //       pagesNeedingRefresh: [0], updateGlobalState: false);
-            // }
-          },
-          initialValue: appStateSettings["iOSNavigation"],
-          icon: appStateSettings["outlinedIcons"]
-              ? Icons.apple_outlined
-              : Icons.apple_rounded,
-        ),
-        SettingsContainerSwitch(
           onSwitched: (value) async {
             updateSettings("incognitoKeyboard", value,
                 updateGlobalState: false);

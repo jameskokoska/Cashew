@@ -167,7 +167,6 @@ Future<Map<String, dynamic>> getDefaultPreferences() async {
     "showAllSubcategories": true,
     // Should be of type Map<String, double>
     "customCurrencyAmounts": {},
-    "iOSNavigation": false,
     "iOSEmulate": false,
     "iOSAnimatedGoo": false,
     "expandedNavigationSidebar": true,

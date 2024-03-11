@@ -453,13 +453,13 @@ ThemeData? darkTheme;
 
 ThemeData getLightTheme() {
   return ThemeData(
-    pageTransitionsTheme: PageTransitionsTheme(builders: {
-      // the page route animation is set in pushRoute() - functions.dart
-      TargetPlatform.android: appStateSettings["iOSNavigation"]
-          ? CupertinoPageTransitionsBuilder()
-          : ZoomPageTransitionsBuilder(),
-      TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
-    }),
+    // pageTransitionsTheme: PageTransitionsTheme(builders: {
+    //   // the page route animation is set in pushRoute() - functions.dart
+    //   TargetPlatform.android: appStateSettings["iOSNavigation"]
+    //       ? CupertinoPageTransitionsBuilder()
+    //       : ZoomPageTransitionsBuilder(),
+    //   TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+    // }),
     fontFamily: appStateSettings["font"],
     fontFamilyFallback: ['Inter'],
     colorScheme: getColorScheme(Brightness.light),
@@ -489,13 +489,13 @@ ThemeData getLightTheme() {
 
 ThemeData getDarkTheme() {
   return ThemeData(
-    pageTransitionsTheme: PageTransitionsTheme(builders: {
-      // the page route animation is set in pushRoute() - functions.dart
-      TargetPlatform.android: appStateSettings["iOSNavigation"]
-          ? CupertinoPageTransitionsBuilder()
-          : ZoomPageTransitionsBuilder(),
-      TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
-    }),
+    // pageTransitionsTheme: PageTransitionsTheme(builders: {
+    //   // the page route animation is set in pushRoute() - functions.dart
+    //   TargetPlatform.android: appStateSettings["iOSNavigation"]
+    //       ? CupertinoPageTransitionsBuilder()
+    //       : ZoomPageTransitionsBuilder(),
+    //   TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+    // }),
     fontFamily: appStateSettings["font"],
     fontFamilyFallback: ['Inter'],
     colorScheme: getColorScheme(Brightness.dark),

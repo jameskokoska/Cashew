@@ -9,6 +9,7 @@ class NavBarIconData {
   NavBarIconData({
     required this.iconData,
     required this.label,
+    this.labelShort,
     required this.navigationIndexedStackIndex,
     this.labelLong = "",
     this.iconSize = 25,
@@ -17,6 +18,7 @@ class NavBarIconData {
 
   IconData iconData;
   String label;
+  String? labelShort;
   String labelLong;
   int navigationIndexedStackIndex;
   double iconSize;
@@ -90,6 +92,7 @@ Map<String, NavBarIconData> getNavBarIconsData() {
       // ? Icons.data_thresholding_outlined
       // : Icons.data_thresholding_rounded,
       label: "all-spending",
+      labelShort: "summary",
       labelLong: "all-spending-summary",
       navigationIndexedStackIndex: 7,
     ),

@@ -284,12 +284,14 @@ String formatOutputWithNewDelimiterAndDecimal(
 
 List<String> localizedMonthNames = [];
 initializeLocalizedMonthNames() {
+  localizedMonthNames = [];
   for (int i = 1; i <= 12; i++) {
     final DateTime date = DateTime(2022, i);
     final String? locale = navigatorKey.currentContext?.locale.toString();
     final String monthName = DateFormat.MMMM(locale).format(date).toLowerCase();
     localizedMonthNames.add(monthName);
   }
+  print("Initializing local months: " + localizedMonthNames.toString());
 }
 
 String getMonth(DateTime dateTime, {bool includeYear = false}) {
@@ -972,32 +974,32 @@ class CustomMaterialPageRoute extends MaterialPageRoute {
 Future<dynamic> pushRoute(BuildContext context, Widget page,
     {String? routeName}) async {
   minimizeKeyboard(context);
-  if (appStateSettings["iOSNavigation"]) {
-    return await Navigator.push(
-      context,
-      CustomMaterialPageRoute(builder: (context) => page),
-    );
-  } else {
-    return await Navigator.push(
-      context,
-      PageRouteBuilder(
-        opaque: false,
-        transitionDuration: Duration(milliseconds: 300),
-        reverseTransitionDuration: Duration(milliseconds: 125),
-        transitionsBuilder: (context, animation, secondaryAnimation, child) {
-          final tween = Tween(begin: Offset(0, 0.05), end: Offset.zero)
-              .chain(CurveTween(curve: Curves.easeOut));
-          return SlideTransition(
-            position: animation.drive(tween),
-            child: FadeTransition(opacity: animation, child: child),
-          );
-        },
-        pageBuilder: (context, animation, secondaryAnimation) {
-          return page;
-        },
-      ),
-    );
-  }
+  // if (appStateSettings["iOSNavigation"]) {
+  //   return await Navigator.push(
+  //     context,
+  //     CustomMaterialPageRoute(builder: (context) => page),
+  //   );
+  // }
+
+  return await Navigator.push(
+    context,
+    PageRouteBuilder(
+      opaque: false,
+      transitionDuration: Duration(milliseconds: 300),
+      reverseTransitionDuration: Duration(milliseconds: 125),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        final tween = Tween(begin: Offset(0, 0.05), end: Offset.zero)
+            .chain(CurveTween(curve: Curves.easeOut));
+        return SlideTransition(
+          position: animation.drive(tween),
+          child: FadeTransition(opacity: animation, child: child),
+        );
+      },
+      pageBuilder: (context, animation, secondaryAnimation) {
+        return page;
+      },
+    ),
+  );
 }
 
 Brightness determineBrightnessTheme(context) {

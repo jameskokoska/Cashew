@@ -274,6 +274,7 @@ void openLanguagePicker(BuildContext context) {
                 updateGlobalState: false,
               );
               await Future.delayed(Duration(milliseconds: 50));
+              initializeLocalizedMonthNames();
               Navigator.pop(context);
             },
           ),

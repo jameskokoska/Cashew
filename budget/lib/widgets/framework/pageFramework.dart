@@ -481,15 +481,6 @@ class PageFrameworkState extends State<PageFramework>
                   },
                 ),
                 widget.overlay ?? SizedBox.shrink(),
-                // Catch any horizontal drag starts, we catch these so the use cannot scroll while back swiping
-                appStateSettings["iOSNavigation"]
-                    ? SizedBox.shrink()
-                    : Container(
-                        width: leftBackSwipeDetectionWidth,
-                        child: GestureDetector(
-                          onHorizontalDragStart: (details) => {},
-                        ),
-                      ),
               ],
             ),
           ],

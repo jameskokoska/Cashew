@@ -214,7 +214,10 @@ class BottomNavBarState extends State<BottomNavBar> {
               navigationBarIconBuilder: (NavBarIconData iconData) {
                 return NavigationDestination(
                   icon: Icon(iconData.iconData, size: iconData.iconSize),
-                  label: iconData.label.tr(),
+                  label: iconData.label.tr().length > 15 &&
+                          iconData.labelShort != null
+                      ? (iconData.labelShort ?? "").tr()
+                      : iconData.label.tr(),
                   tooltip: "",
                 );
               },
@@ -227,7 +230,10 @@ class BottomNavBarState extends State<BottomNavBar> {
               navigationBarIconBuilder: (NavBarIconData iconData) {
                 return NavigationDestination(
                   icon: Icon(iconData.iconData, size: iconData.iconSize),
-                  label: iconData.label.tr(),
+                  label: iconData.label.tr().length > 15 &&
+                          iconData.labelShort != null
+                      ? (iconData.labelShort ?? "").tr()
+                      : iconData.label.tr(),
                   tooltip: "",
                 );
               },

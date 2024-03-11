@@ -28,7 +28,7 @@ class OpenContainerNavigation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (appStateSettings["batterySaver"] || appStateSettings["iOSNavigation"]) {
+    if (appStateSettings["batterySaver"]) {
       Widget child = button(() async {
         minimizeKeyboard(context);
         if (onOpen != null) onOpen!();
