@@ -146,7 +146,7 @@ Future<Map<String, dynamic>> getDefaultPreferences() async {
     "lineGraphReferenceBudgetPk": null,
     "lineGraphDisplayType": LineGraphDisplay.Default30Days.index,
     "lineGraphStartDate": DateTime.now().toString(),
-    "pieChartTotal": "all", // all, outgoing, incoming
+    "pieChartTotal": "outgoing", // all, outgoing, incoming
     "netWorthAllWallets": true,
     "walletsListCurrencyBreakdown": false,
     "allSpendingSummaryAllWallets": true,
@@ -191,7 +191,10 @@ Future<Map<String, dynamic>> getDefaultPreferences() async {
     "allSpendingSetFiltersString": null,
     "transactionsListPageSetFiltersString": null,
     "increaseTextContrast": false,
-    "numberFormatLocale": null,
+    "numberFormatLocale": null, //If this is en-US, it is a custom format
+    "numberFormatDelimiter": ",",
+    "numberFormatDecimal": ".",
+    "numberFormatCurrencyFirst": true,
     "netAllSpendingTotal": false,
     "netSpendingDayTotal": false,
     "extraZerosButton": null, //will be null, 00 or 000

@@ -1065,5 +1065,19 @@
   "advanced-automation": "Advanced na automation",
   "deep-linking": "Mga Link ng App",
   "deep-linking-description": "I -automate ang pagpasok ng mga transaksyon gamit ang mga URL ng APP. Tapikin upang malaman ang higit pa at tingnan ang dokumentasyon.",
-  "added-transaction": "Nagdagdag ng transaksyon"
+  "added-transaction": "Nagdagdag ng transaksyon",
+  "custom-format": "Pasadyang format",
+  "delimiter": "Delimiter",
+  "decimal": "Desimal",
+  "symbol": "Simbolo",
+  "before": "Dati",
+  "after": "Pagkatapos",
+  "delimiter-symbol": "Simbolo ng delimiter",
+  "decimal-symbol": "Simbolo ng desimal",
+  "set-delimiter": "Itakda ang Delimiter",
+  "set-decimal": "Itakda ang desimal",
+  "no-outgoing-within-period": "Walang mga papalabas na transaksyon sa loob ng napiling tagal ng oras",
+  "no-incoming-within-period": "Walang papasok na mga transaksyon sa loob ng napiling tagal ng oras",
+  "select-all": "Piliin lahat",
+  "excluded": "Hindi kasama"
 }

@@ -1065,5 +1065,19 @@
   "advanced-automation": "Gelişmiş Otomasyon",
   "deep-linking": "Uygulama bağlantıları",
   "deep-linking-description": "Uygulama URL'lerini kullanarak işlemlerin eklenmesini otomatikleştirin. Daha fazla bilgi edinmek ve belgeleri görüntülemek için dokunun.",
-  "added-transaction": "Eklenen İşlem"
+  "added-transaction": "Eklenen İşlem",
+  "custom-format": "Özel Biçim",
+  "delimiter": "Sınır",
+  "decimal": "Ondalık",
+  "symbol": "Sembol",
+  "before": "Önce",
+  "after": "Sonrasında",
+  "delimiter-symbol": "Sınırlayıcı sembolü",
+  "decimal-symbol": "Ondalık sembol",
+  "set-delimiter": "Sınırlayıcı ayarlayın",
+  "set-decimal": "Ondalık ayarlamak",
+  "no-outgoing-within-period": "Seçilen süre içinde giden işlem yok",
+  "no-incoming-within-period": "Seçilen süre içinde gelen işlem yok",
+  "select-all": "Hepsini seç",
+  "excluded": "Hariç tutuldu"
 }

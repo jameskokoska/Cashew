@@ -62,6 +62,7 @@ import 'package:flutter/material.dart';
 import 'package:budget/main.dart';
 import 'package:intl/number_symbols.dart';
 import 'package:intl/number_symbols_data.dart';
+import 'package:material_symbols_icons/material_symbols_icons.dart';
 import 'package:provider/provider.dart';
 import '../functions.dart';
 import 'package:budget/struct/settings.dart';
@@ -1101,6 +1102,10 @@ class _SetNumberFormatPopupState extends State<SetNumberFormatPopup> {
       // "ar", // puts the negative sign at the end, remove this option
       "de",
       "fr",
+      "en-US",
+      // en-US indicates a custom font,
+      // en-US has a consistent format that we can replace its decimal and delimiter
+      // symbols with custom ones set by the user "." and "," are consistent
     ];
     return PopupFramework(
       title: "number-format".tr(),
@@ -1110,22 +1115,38 @@ class _SetNumberFormatPopupState extends State<SetNumberFormatPopup> {
             items: items,
             initial: appStateSettings["numberFormatLocale"],
             displayFilter: (item) {
+              // en-US indicates a custom font
+              if (item == "en-US") return "custom".tr().capitalizeFirst + "...";
               if (item == null)
                 return "default".tr() +
                     " " +
                     "(" +
                     convertToMoney(
-                        Provider.of<AllWallets>(context, listen: true), 1000.23,
-                        customLocale: Platform.localeName) +
+                      Provider.of<AllWallets>(context, listen: true),
+                      1000.23,
+                      customLocale: Platform.localeName,
+                      forceNonCustomNumberFormat: true,
+                    ) +
                     ")";
               return convertToMoney(
-                  Provider.of<AllWallets>(context, listen: true), 1000.23,
-                  customLocale: item);
+                Provider.of<AllWallets>(context, listen: true),
+                1000.23,
+                customLocale: item,
+                forceNonCustomNumberFormat: true,
+              );
             },
-            onChanged: (value) {
-              updateSettings("numberFormatLocale", value,
-                  updateGlobalState: true);
-              Navigator.of(context).pop();
+            onChanged: (value) async {
+              // en-US indicates a custom font
+              if (value == "en-US") {
+                Navigator.of(context).pop();
+                await openBottomSheet(context, CustomNumberFormatPopup());
+                updateSettings("numberFormatLocale", value,
+                    updateGlobalState: true, forceGlobalStateUpdate: true);
+              } else {
+                updateSettings("numberFormatLocale", value,
+                    updateGlobalState: true);
+                Navigator.of(context).pop();
+              }
             },
           ),
           SizedBox(height: 5),
@@ -1138,6 +1159,158 @@ class _SetNumberFormatPopupState extends State<SetNumberFormatPopup> {
               textAlign: TextAlign.center,
               textColor: getColor(context, "textLight"),
             ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class CustomNumberFormatPopup extends StatefulWidget {
+  const CustomNumberFormatPopup({super.key});
+
+  @override
+  State<CustomNumberFormatPopup> createState() =>
+      _CustomNumberFormatPopupState();
+}
+
+class _CustomNumberFormatPopupState extends State<CustomNumberFormatPopup> {
+  String customDelimiter = appStateSettings["numberFormatDelimiter"];
+  String customDecimal = appStateSettings["numberFormatDecimal"];
+  bool numberFormatCurrencyFirst =
+      appStateSettings["numberFormatCurrencyFirst"];
+  @override
+  Widget build(BuildContext context) {
+    AllWallets allWallets = Provider.of<AllWallets>(context);
+    String formattedNumber = (numberFormatCurrencyFirst == true
+            ? getCurrencyString(allWallets)
+            : "") +
+        formatOutputWithNewDelimiterAndDecimal(
+            "1,000.23", customDelimiter, customDecimal) +
+        (numberFormatCurrencyFirst == false
+            ? "\u00A0" + getCurrencyString(allWallets)
+            : "");
+    return PopupFramework(
+      title: "custom-format".tr(),
+      child: Column(
+        children: [
+          SizedBox(height: 20),
+          AnimatedSizeSwitcher(
+            child: TextFont(
+              key: ValueKey(formattedNumber),
+              textAlign: TextAlign.center,
+              fontSize: 30,
+              fontWeight: FontWeight.bold,
+              text: formattedNumber,
+            ),
+          ),
+          SizedBox(height: 30),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: SettingsContainer(
+                  isOutlined: true,
+                  isOutlinedColumn: true,
+                  title: "delimiter".tr(),
+                  icon: appStateSettings["outlinedIcons"]
+                      ? Symbols.decimal_decrease_sharp
+                      : Symbols.decimal_decrease_rounded,
+                  onTap: () {
+                    openBottomSheet(
+                      context,
+                      PopupFramework(
+                        title: "set-delimiter".tr(),
+                        child: SelectText(
+                          maxLength: 5,
+                          buttonLabel: "set-delimiter".tr(),
+                          popContext: false,
+                          setSelectedText: (_) {},
+                          placeholder: "delimiter-symbol".tr(),
+                          selectedText: customDelimiter,
+                          nextWithInput: (text) async {
+                            setState(() {
+                              customDelimiter = text;
+                            });
+                            updateSettings("numberFormatDelimiter", text,
+                                updateGlobalState: false);
+                            Navigator.pop(context);
+                          },
+                        ),
+                      ),
+                    );
+                    // Fix over-scroll stretch when keyboard pops up quickly
+                    Future.delayed(Duration(milliseconds: 100), () {
+                      bottomSheetControllerGlobal.scrollTo(0,
+                          duration: Duration(milliseconds: 100));
+                    });
+                  },
+                ),
+              ),
+              SizedBox(width: 8),
+              Expanded(
+                child: SettingsContainer(
+                  isOutlined: true,
+                  isOutlinedColumn: true,
+                  title: "symbol".tr() +
+                      "\n" +
+                      (numberFormatCurrencyFirst
+                          ? "before".tr().capitalizeFirst
+                          : "after".tr().capitalizeFirst),
+                  icon: appStateSettings["outlinedIcons"]
+                      ? Icons.monetization_on_outlined
+                      : Icons.monetization_on_rounded,
+                  onTap: () {
+                    setState(() {
+                      numberFormatCurrencyFirst = !numberFormatCurrencyFirst;
+                    });
+                    updateSettings(
+                        "numberFormatCurrencyFirst", numberFormatCurrencyFirst,
+                        updateGlobalState: false);
+                  },
+                ),
+              ),
+              SizedBox(width: 8),
+              Expanded(
+                child: SettingsContainer(
+                  isOutlined: true,
+                  isOutlinedColumn: true,
+                  title: "decimal".tr(),
+                  icon: appStateSettings["outlinedIcons"]
+                      ? Symbols.decimal_increase_sharp
+                      : Symbols.decimal_increase_rounded,
+                  onTap: () {
+                    openBottomSheet(
+                      context,
+                      PopupFramework(
+                        title: "set-decimal".tr(),
+                        child: SelectText(
+                          maxLength: 5,
+                          buttonLabel: "set-decimal".tr(),
+                          popContext: false,
+                          setSelectedText: (_) {},
+                          placeholder: "decimal-symbol".tr(),
+                          selectedText: customDecimal,
+                          nextWithInput: (text) async {
+                            setState(() {
+                              customDecimal = text;
+                            });
+                            updateSettings("numberFormatDecimal", text,
+                                updateGlobalState: false);
+                            Navigator.pop(context);
+                          },
+                        ),
+                      ),
+                    );
+                    // Fix over-scroll stretch when keyboard pops up quickly
+                    Future.delayed(Duration(milliseconds: 100), () {
+                      bottomSheetControllerGlobal.scrollTo(0,
+                          duration: Duration(milliseconds: 100));
+                    });
+                  },
+                ),
+              )
+            ],
           ),
         ],
       ),

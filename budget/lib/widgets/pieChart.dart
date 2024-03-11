@@ -63,6 +63,7 @@ class PieChartWrapper extends StatelessWidget {
     required this.isPastBudget,
     required this.pieChartDisplayStateKey,
     this.middleColor,
+    this.disableLarge = false,
   }) : super(key: key);
   final List<CategoryWithTotal> data;
   final double totalSpent;
@@ -71,6 +72,7 @@ class PieChartWrapper extends StatelessWidget {
   final bool isPastBudget;
   final GlobalKey<PieChartDisplayState>? pieChartDisplayStateKey;
   final Color? middleColor;
+  final bool disableLarge;
 
   @override
   Widget build(BuildContext context) {
@@ -86,8 +88,8 @@ class PieChartWrapper extends StatelessWidget {
       }
     }
     return Container(
-      width: enableDoubleColumn(context) == false ? 200 : 300,
-      height: enableDoubleColumn(context) == false ? 200 : 300,
+      width: enableDoubleColumn(context) == false || disableLarge ? 200 : 300,
+      height: enableDoubleColumn(context) == false || disableLarge ? 200 : 300,
       child: Stack(
         alignment: Alignment.center,
         children: [
@@ -111,13 +113,18 @@ class PieChartWrapper extends StatelessWidget {
                     totalSpent: totalSpent,
                     setSelectedCategory: setSelectedCategory,
                     key: pieChartDisplayStateKey,
+                    disableLarge: disableLarge,
                   ),
           ),
           IgnorePointer(
             child: Center(
               child: Container(
-                width: enableDoubleColumn(context) == false ? 105 : 130,
-                height: enableDoubleColumn(context) == false ? 105 : 130,
+                width: enableDoubleColumn(context) == false || disableLarge
+                    ? 105
+                    : 130,
+                height: enableDoubleColumn(context) == false || disableLarge
+                    ? 105
+                    : 130,
                 decoration: BoxDecoration(
                   color: middleColor?.withOpacity(0.2) ??
                       getColor(context, "white").withOpacity(0.2),
@@ -129,8 +136,12 @@ class PieChartWrapper extends StatelessWidget {
           IgnorePointer(
             child: Center(
               child: Container(
-                width: enableDoubleColumn(context) == false ? 80 : 110,
-                height: enableDoubleColumn(context) == false ? 80 : 110,
+                width: enableDoubleColumn(context) == false || disableLarge
+                    ? 80
+                    : 110,
+                height: enableDoubleColumn(context) == false || disableLarge
+                    ? 80
+                    : 110,
                 decoration: BoxDecoration(
                     color: middleColor ?? Theme.of(context).canvasColor,
                     shape: BoxShape.circle),
@@ -151,12 +162,13 @@ class PieChartDisplay extends StatefulWidget {
     required this.data,
     required this.totalSpent,
     required this.setSelectedCategory,
+    this.disableLarge = false,
   }) : super(key: key);
   final List<CategoryWithTotal> data;
   final double totalSpent;
   final Function(String categoryPk, TransactionCategory? category)
       setSelectedCategory;
-
+  final bool disableLarge;
   @override
   State<StatefulWidget> createState() => PieChartDisplayState();
 }
@@ -267,13 +279,14 @@ class PieChartDisplayState extends State<PieChartDisplay> {
     double totalPercentAccumulated = 0;
     return List.generate(widget.data.length, (i) {
       final bool isTouched = i == touchedIndex;
-      final double radius = enableDoubleColumn(context) == false
-          ? isTouched
-              ? 106.0
-              : 100.0
-          : isTouched
-              ? 146.0
-              : 136.0;
+      final double radius =
+          enableDoubleColumn(context) == false || widget.disableLarge
+              ? isTouched
+                  ? 106.0
+                  : 100.0
+              : isTouched
+                  ? 146.0
+                  : 136.0;
       final double widgetScale = isTouched ? 1.3 : 1.0;
       bool isTouchingSameColorSection = false;
       if (nullIfIndexOutOfRange(widget.data, i - 1)?.category?.colour ==

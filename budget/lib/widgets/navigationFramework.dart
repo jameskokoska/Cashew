@@ -206,6 +206,7 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
       await initializeDefaultDatabase();
       runNotificationPayLoads(context);
       runQuickActionsPayLoads(context);
+      initializeLocalizedMonthNames();
       initializeStoreAndPurchases(
           context: context, popRouteWithPurchase: false);
 

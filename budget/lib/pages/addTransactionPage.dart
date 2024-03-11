@@ -2737,6 +2737,7 @@ class SelectText extends StatefulWidget {
     this.backgroundColor,
     this.widgetBeside,
     required this.buttonLabel,
+    this.maxLength,
   }) : super(key: key);
   final Function(String) setSelectedText;
   final String? selectedText;
@@ -2755,6 +2756,7 @@ class SelectText extends StatefulWidget {
   final Color? backgroundColor;
   final Widget? widgetBeside;
   final String? buttonLabel;
+  final int? maxLength;
 
   @override
   _SelectTextState createState() => _SelectTextState();
@@ -2796,6 +2798,7 @@ class _SelectTextState extends State<SelectText> {
           children: [
             Expanded(
               child: TextInput(
+                maxLength: widget.maxLength,
                 backgroundColor: widget.backgroundColor,
                 inputFormatters: widget.inputFormatters,
                 focusNode: _focusNode,

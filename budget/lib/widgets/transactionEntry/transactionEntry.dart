@@ -99,6 +99,7 @@ class TransactionEntry extends StatelessWidget {
     this.showObjectivePercentage = true,
     this.customPadding,
     this.allowOpenIntoObjectiveLoanPage = true,
+    this.showExcludedBudgetTag,
   }) : super(key: key);
 
   final Widget openPage;
@@ -119,6 +120,7 @@ class TransactionEntry extends StatelessWidget {
   final bool showObjectivePercentage;
   final EdgeInsets? customPadding;
   final bool allowOpenIntoObjectiveLoanPage;
+  final bool Function(Transaction transaction)? showExcludedBudgetTag;
 
   final double fabSize = 50;
 
@@ -480,6 +482,8 @@ class TransactionEntry extends StatelessWidget {
                                                     null) ||
                                                 (transaction.subCategoryFk !=
                                                     null) ||
+                                                (transaction.budgetFksExclude !=
+                                                    null) ||
                                                 (appStateSettings[
                                                         "showAccountLabelTagInTransactionEntry"] ==
                                                     true)
@@ -490,6 +494,8 @@ class TransactionEntry extends StatelessWidget {
                                                 subCategory: subCategory,
                                                 budget: budget,
                                                 objective: objective,
+                                                showExcludedBudgetTag:
+                                                    showExcludedBudgetTag,
                                               )
                                             : SizedBox.shrink(),
                                         transaction.sharedKey != null ||

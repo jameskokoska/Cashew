@@ -1065,5 +1065,19 @@
   "advanced-automation": "Otomatisasi Lanjutan",
   "deep-linking": "Tautan aplikasi",
   "deep-linking-description": "Otomatiskan penyisipan transaksi menggunakan URL aplikasi. Ketuk untuk mempelajari lebih lanjut dan melihat dokumentasi.",
-  "added-transaction": "Ditambahkan transaksi"
+  "added-transaction": "Ditambahkan transaksi",
+  "custom-format": "Format khusus",
+  "delimiter": "Pembatas",
+  "decimal": "Desimal",
+  "symbol": "Simbol",
+  "before": "Sebelum",
+  "after": "Setelah",
+  "delimiter-symbol": "Simbol pembatas",
+  "decimal-symbol": "Simbol desimal",
+  "set-delimiter": "Atur pembatas",
+  "set-decimal": "Atur desimal",
+  "no-outgoing-within-period": "Tidak ada transaksi keluar dalam periode waktu yang dipilih",
+  "no-incoming-within-period": "Tidak ada transaksi yang masuk dalam periode waktu yang dipilih",
+  "select-all": "Pilih Semua",
+  "excluded": "Pengecualian"
 }

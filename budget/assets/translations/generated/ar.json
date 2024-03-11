@@ -1065,5 +1065,19 @@
   "advanced-automation": "الأتمتة المتقدمة",
   "deep-linking": "روابط التطبيق",
   "deep-linking-description": "أتمتة إدراج المعاملات باستخدام عناوين URL APP. اضغط لمعرفة المزيد وعرض الوثائق.",
-  "added-transaction": "معاملة أضيفت"
+  "added-transaction": "معاملة أضيفت",
+  "custom-format": "تنسيق مخصص",
+  "delimiter": "محدد",
+  "decimal": "عدد عشري",
+  "symbol": "رمز",
+  "before": "قبل",
+  "after": "بعد",
+  "delimiter-symbol": "رمز محدد",
+  "decimal-symbol": "الرمز العشري",
+  "set-delimiter": "تعيين محدد",
+  "set-decimal": "تعيين عشري",
+  "no-outgoing-within-period": "لا توجد معاملات صادرة خلال فترة زمنية محددة",
+  "no-incoming-within-period": "لا توجد معاملات واردة خلال فترة زمنية محددة",
+  "select-all": "اختر الكل",
+  "excluded": "مستبعد"
 }

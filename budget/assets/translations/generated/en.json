@@ -1065,5 +1065,19 @@
   "advanced-automation": "Advanced Automation",
   "deep-linking": "App Links",
   "deep-linking-description": "Automate the insertion of transactions using app URLs. Tap to learn more and view the documentation.",
-  "added-transaction": "Added Transaction"
+  "added-transaction": "Added Transaction",
+  "custom-format": "Custom Format",
+  "delimiter": "Delimiter",
+  "decimal": "Decimal",
+  "symbol": "Symbol",
+  "before": "Before",
+  "after": "After",
+  "delimiter-symbol": "Delimiter symbol",
+  "decimal-symbol": "Decimal symbol",
+  "set-delimiter": "Set Delimiter",
+  "set-decimal": "Set Decimal",
+  "no-outgoing-within-period": "No outgoing transactions within selected time period",
+  "no-incoming-within-period": "No incoming transactions within selected time period",
+  "select-all": "Select All",
+  "excluded": "Excluded"
 }

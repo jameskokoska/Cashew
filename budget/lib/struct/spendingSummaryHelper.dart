@@ -44,18 +44,21 @@ class TotalSpentCategoriesSummary {
   }
 }
 
-TotalSpentCategoriesSummary watchTotalSpentInTimeRangeHelper({
-  required List<CategoryWithTotal> dataInput,
-  required bool showAllSubcategories,
-  required int multiplyTotalBy,
-}) {
+TotalSpentCategoriesSummary watchTotalSpentInTimeRangeHelper(
+    {required List<CategoryWithTotal> dataInput,
+    required bool showAllSubcategories,
+    required int multiplyTotalBy,
+    bool absoluteTotal = false}) {
   TotalSpentCategoriesSummary s = TotalSpentCategoriesSummary();
 
   dataInput.forEach(
     (CategoryWithTotal categoryWithTotal) {
       // Don't re-add the subcategory total, since the main category total includes this already
       if (categoryWithTotal.category.mainCategoryPk == null) {
-        s.totalSpent = s.totalSpent + categoryWithTotal.total;
+        s.totalSpent = s.totalSpent +
+            (absoluteTotal
+                ? categoryWithTotal.total.abs()
+                : categoryWithTotal.total);
       }
 
       if (categoryWithTotal.category.mainCategoryPk != null) {
@@ -163,7 +166,6 @@ class PieChartOptions extends StatelessWidget {
               children: [
                 AnimatedScaleOpacity(
                   animateIn: showClearButton,
-                  durationOpacity: Duration(milliseconds: 300),
                   child: Tooltip(
                     message: "clear-selection".tr(),
                     child: IconButton(

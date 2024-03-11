@@ -1065,5 +1065,19 @@
   "advanced-automation": "Automatizare avansată",
   "deep-linking": "Link -uri pentru aplicații",
   "deep-linking-description": "Automatizați inserarea tranzacțiilor folosind adresele URL ale aplicației. Atingeți pentru a afla mai multe și vizualizați documentația.",
-  "added-transaction": "Tranzacție adăugată"
+  "added-transaction": "Tranzacție adăugată",
+  "custom-format": "Format personalizat",
+  "delimiter": "Delimitator",
+  "decimal": "Zecimal",
+  "symbol": "Simbol",
+  "before": "Inainte de",
+  "after": "După",
+  "delimiter-symbol": "Simbol delimitator",
+  "decimal-symbol": "Simbolul zecimal",
+  "set-delimiter": "Set delimitator",
+  "set-decimal": "Setați zecimal",
+  "no-outgoing-within-period": "Nu există tranzacții de ieșire în perioada de timp selectată",
+  "no-incoming-within-period": "Fără tranzacții primite în perioada de timp selectată",
+  "select-all": "Selectează tot",
+  "excluded": "Exclus"
 }

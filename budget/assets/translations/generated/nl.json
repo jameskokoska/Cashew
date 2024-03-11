@@ -1065,5 +1065,19 @@
   "advanced-automation": "Geavanceerde automatisering",
   "deep-linking": "App -links",
   "deep-linking-description": "Automatiseer het invoegen van transacties met behulp van APP -URL's. Tik op voor meer informatie en bekijk de documentatie.",
-  "added-transaction": "Toegevoegde transactie"
+  "added-transaction": "Toegevoegde transactie",
+  "custom-format": "Aangepast formaat",
+  "delimiter": "Scheiding",
+  "decimal": "Decimale",
+  "symbol": "Symbool",
+  "before": "Voor",
+  "after": "Na",
+  "delimiter-symbol": "Schetssymbool",
+  "decimal-symbol": "Decimaal symbool",
+  "set-delimiter": "Scheiding instellen",
+  "set-decimal": "Decimaal instellen",
+  "no-outgoing-within-period": "Geen uitgaande transacties binnen de geselecteerde periode",
+  "no-incoming-within-period": "Geen inkomende transacties binnen de geselecteerde periode",
+  "select-all": "Selecteer alles",
+  "excluded": "Uitgesloten"
 }

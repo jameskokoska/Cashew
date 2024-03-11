@@ -1065,5 +1065,19 @@
   "advanced-automation": "Pokročilá automatizace",
   "deep-linking": "Odkazy na aplikace",
   "deep-linking-description": "Automatizujte vložení transakcí pomocí URL APP. Klepnutím se dozvíte více a zobrazíte dokumentaci.",
-  "added-transaction": "Přidaná transakce"
+  "added-transaction": "Přidaná transakce",
+  "custom-format": "Vlastní formát",
+  "delimiter": "Oddělovač",
+  "decimal": "Desetinný",
+  "symbol": "Symbol",
+  "before": "Před",
+  "after": "Po",
+  "delimiter-symbol": "Symbol oddělovače",
+  "decimal-symbol": "Decimální symbol",
+  "set-delimiter": "Nastavit oddělovač",
+  "set-decimal": "Nastavit desetinné",
+  "no-outgoing-within-period": "Žádné odchozí transakce ve vybraném časovém období",
+  "no-incoming-within-period": "Žádné příchozí transakce ve vybraném časovém období",
+  "select-all": "Vybrat vše",
+  "excluded": "Vyloučen"
 }

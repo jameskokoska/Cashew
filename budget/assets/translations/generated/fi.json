@@ -1065,5 +1065,19 @@
   "advanced-automation": "Edistynyt automaatio",
   "deep-linking": "Sovelluslinkit",
   "deep-linking-description": "Automatisoi tapahtumien asettaminen sovellus -URL -osoitteiden avulla. Napauta saadaksesi lisätietoja ja tarkastella asiakirjaa.",
-  "added-transaction": "Lisätty tapahtuma"
+  "added-transaction": "Lisätty tapahtuma",
+  "custom-format": "Räätälöity muoto",
+  "delimiter": "Rajaus",
+  "decimal": "Desimaali-",
+  "symbol": "Symboli",
+  "before": "Ennen",
+  "after": "Jälkeen",
+  "delimiter-symbol": "Rajamerkki",
+  "decimal-symbol": "Desimaalisymboli",
+  "set-delimiter": "Asettaa erotin",
+  "set-decimal": "Aseta desimaaliin",
+  "no-outgoing-within-period": "Ei lähteviä tapahtumia valitun ajanjakson aikana",
+  "no-incoming-within-period": "Ei tulevia tapahtumia valitun ajanjakson aikana",
+  "select-all": "Valitse kaikki",
+  "excluded": "Ulkopuolelle"
 }

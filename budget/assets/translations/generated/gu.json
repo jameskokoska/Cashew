@@ -1065,5 +1065,19 @@
   "advanced-automation": "અદ્યતન સ્વચાલિત",
   "deep-linking": "એપ્લિકેશન લિંક્સ",
   "deep-linking-description": "એપ્લિકેશન URL નો ઉપયોગ કરીને ટ્રાન્ઝેક્શનના નિવેશને સ્વચાલિત કરો. વધુ જાણવા અને દસ્તાવેજીકરણ જોવા માટે ટેપ કરો.",
-  "added-transaction": "ઉમેરાયેલ લેવડદેવડ"
+  "added-transaction": "ઉમેરાયેલ લેવડદેવડ",
+  "custom-format": "રિવાજ ફોર્મેટ",
+  "delimiter": "ડિલિમિટર",
+  "decimal": "દશાંશ",
+  "symbol": "પ્રતીક",
+  "before": "પહેલાં",
+  "after": "પછી",
+  "delimiter-symbol": "સરહદ પ્રતીક",
+  "decimal-symbol": "દશાંશ પ્રતીક",
+  "set-delimiter": "સીમિત",
+  "set-decimal": "દશાંશ નક્કી કરવું",
+  "no-outgoing-within-period": "પસંદ કરેલા સમયગાળાની અંદર કોઈ આઉટગોઇંગ ટ્રાન્ઝેક્શન નથી",
+  "no-incoming-within-period": "પસંદ કરેલા સમયગાળાની અંદર આવનારા વ્યવહારો નથી",
+  "select-all": "બધા પસંદ કરો",
+  "excluded": "બાકાત"
 }

@@ -3,6 +3,7 @@ import 'package:budget/database/generatePreviewData.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/main.dart';
 import 'package:budget/pages/addBudgetPage.dart';
+import 'package:budget/pages/homePage/homePagePieChart.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/languageMap.dart';
 import 'package:budget/struct/settings.dart';
@@ -25,6 +26,8 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import '../functions.dart';
 import 'package:budget/database/initializeDefaultDatabase.dart';
+
+import '../widgets/pageIndicator.dart';
 
 class OnBoardingPage extends StatelessWidget {
   const OnBoardingPage({
@@ -60,8 +63,6 @@ class OnBoardingPageBody extends StatefulWidget {
 }
 
 class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
-  int currentIndex = 0;
-
   final PageController controller = PageController();
 
   double? selectedAmount;
@@ -177,7 +178,7 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
       duration: Duration(milliseconds: 1100),
       curve: ElasticOutCurve(1.3),
     );
-    if (currentIndex + 1 == numPages) {
+    if ((controller.page?.round().toInt() ?? 0) + 1 == numPages) {
       nextNavigation();
     }
   }
@@ -561,12 +562,6 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
     return Stack(
       children: [
         PageView(
-          onPageChanged: (value) {
-            setState(() {
-              currentIndex = value;
-            });
-            // print(currentIndex);
-          },
           controller: controller,
           children: children,
         ),
@@ -604,92 +599,67 @@ class OnBoardingPageBodyState extends State<OnBoardingPageBody> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    AnimatedOpacity(
-                      opacity: currentIndex <= 0 ? 0 : 1,
-                      duration: Duration(milliseconds: 200),
-                      child: ButtonIcon(
-                        onTap: () {
-                          previousOnBoardPage();
-                        },
-                        icon: getPlatform() == PlatformOS.isIOS
-                            ? appStateSettings["outlinedIcons"]
-                                ? Icons.chevron_left_outlined
-                                : Icons.chevron_left_rounded
-                            : appStateSettings["outlinedIcons"]
-                                ? Icons.arrow_back_outlined
-                                : Icons.arrow_back_rounded,
-                        size: 50,
-                        padding: getIsFullScreen(context) == false
-                            ? EdgeInsets.all(3)
-                            : EdgeInsets.all(6),
-                      ),
+                    AnimatedBuilder(
+                      animation: controller,
+                      builder: (BuildContext context, Widget? child) {
+                        int currentIndex =
+                            controller.page?.round().toInt() ?? 0;
+                        return AnimatedOpacity(
+                          opacity: currentIndex <= 0 ? 0 : 1,
+                          duration: Duration(milliseconds: 200),
+                          child: ButtonIcon(
+                            onTap: () {
+                              previousOnBoardPage();
+                            },
+                            icon: getPlatform() == PlatformOS.isIOS
+                                ? appStateSettings["outlinedIcons"]
+                                    ? Icons.chevron_left_outlined
+                                    : Icons.chevron_left_rounded
+                                : appStateSettings["outlinedIcons"]
+                                    ? Icons.arrow_back_outlined
+                                    : Icons.arrow_back_rounded,
+                            size: 50,
+                            padding: getIsFullScreen(context) == false
+                                ? EdgeInsets.all(3)
+                                : EdgeInsets.all(6),
+                          ),
+                        );
+                      },
                     ),
-                    Row(
-                      children: [
-                        ...List<int>.generate(children.length, (i) => i + 1)
-                            .map(
-                              (
-                                index,
-                              ) =>
-                                  Builder(
-                                builder: (BuildContext context) =>
-                                    AnimatedScale(
-                                  duration: Duration(milliseconds: 900),
-                                  scale: index - 1 == currentIndex ? 1.3 : 1,
-                                  curve: ElasticOutCurve(0.2),
-                                  child: AnimatedSwitcher(
-                                    duration: Duration(milliseconds: 400),
-                                    child: Container(
-                                      key: ValueKey(index - 1 == currentIndex),
-                                      width: 6,
-                                      height: 6,
-                                      margin:
-                                          EdgeInsets.symmetric(horizontal: 3),
-                                      decoration: BoxDecoration(
-                                        color: index - 1 == currentIndex
-                                            ? Theme.of(context)
-                                                .colorScheme
-                                                .secondary
-                                                .withOpacity(0.7)
-                                            : Theme.of(context)
-                                                .colorScheme
-                                                .secondary
-                                                .withOpacity(0.2),
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            )
-                            .toList(),
-                      ],
-                    ),
-                    AnimatedOpacity(
-                      opacity: getPlatform() == PlatformOS.isIOS
-                          ? 1
-                          : currentIndex >= children.length - 1
-                              ? 0
-                              : 1,
-                      duration: Duration(milliseconds: 200),
-                      child: ButtonIcon(
-                        onTap: () {
-                          if (currentIndex < children.length - 1 ||
-                              getPlatform() == PlatformOS.isIOS)
-                            nextOnBoardPage(children.length);
-                        },
-                        icon: getPlatform() == PlatformOS.isIOS
-                            ? appStateSettings["outlinedIcons"]
-                                ? Icons.chevron_right_outlined
-                                : Icons.chevron_right_rounded
-                            : appStateSettings["outlinedIcons"]
-                                ? Icons.arrow_forward_outlined
-                                : Icons.arrow_forward_rounded,
-                        size: 50,
-                        padding: getIsFullScreen(context) == false
-                            ? EdgeInsets.all(3)
-                            : EdgeInsets.all(6),
-                      ),
+                    PageIndicator(
+                        controller: controller, itemCount: children.length),
+                    AnimatedBuilder(
+                      animation: controller,
+                      builder: (BuildContext context, Widget? child) {
+                        int currentIndex =
+                            controller.page?.round().toInt() ?? 0;
+                        return AnimatedOpacity(
+                          opacity: getPlatform() == PlatformOS.isIOS
+                              ? 1
+                              : currentIndex >= children.length - 1
+                                  ? 0
+                                  : 1,
+                          duration: Duration(milliseconds: 200),
+                          child: ButtonIcon(
+                            onTap: () {
+                              if (currentIndex < children.length - 1 ||
+                                  getPlatform() == PlatformOS.isIOS)
+                                nextOnBoardPage(children.length);
+                            },
+                            icon: getPlatform() == PlatformOS.isIOS
+                                ? appStateSettings["outlinedIcons"]
+                                    ? Icons.chevron_right_outlined
+                                    : Icons.chevron_right_rounded
+                                : appStateSettings["outlinedIcons"]
+                                    ? Icons.arrow_forward_outlined
+                                    : Icons.arrow_forward_rounded,
+                            size: 50,
+                            padding: getIsFullScreen(context) == false
+                                ? EdgeInsets.all(3)
+                                : EdgeInsets.all(6),
+                          ),
+                        );
+                      },
                     ),
                   ],
                 ),

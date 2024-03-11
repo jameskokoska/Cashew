@@ -23,6 +23,7 @@ class TransactionsAmountBox extends StatelessWidget {
     this.totalWithCountStream2,
     required this.textColor,
     this.absolute = true,
+    this.invertSign = false,
     this.getTextColor,
     this.currencyKey,
     super.key,
@@ -34,6 +35,7 @@ class TransactionsAmountBox extends StatelessWidget {
   final Stream<TotalWithCount?>? totalWithCountStream2;
   final Color textColor;
   final bool absolute;
+  final bool invertSign;
   final String? currencyKey;
   final Function(double)? getTextColor;
 
@@ -75,15 +77,16 @@ class TransactionsAmountBox extends StatelessWidget {
                       builder: (context, snapshot) {
                         double totalSpent = snapshot.data?.total ?? 0;
                         int totalCount = snapshot.data?.count ?? 0;
+                        double finalAmount = snapshot.hasData == false ||
+                                snapshot.data == null
+                            ? 0
+                            : absolute == true
+                                ? (totalSpent).abs()
+                                : totalSpent * (invertSign == true ? -1 : 1);
                         return Column(
                           children: [
                             CountNumber(
-                              count: snapshot.hasData == false ||
-                                      snapshot.data == null
-                                  ? 0
-                                  : absolute == true
-                                      ? (totalSpent).abs()
-                                      : (totalSpent),
+                              count: finalAmount,
                               duration: Duration(milliseconds: 1000),
                               initialCount: (0),
                               textBuilder: (number) {
@@ -92,12 +95,7 @@ class TransactionsAmountBox extends StatelessWidget {
                                       Provider.of<AllWallets>(context), number,
                                       currencyKey: currencyKey,
                                       addCurrencyName: currencyKey != null,
-                                      finalNumber: snapshot.hasData == false ||
-                                              snapshot.data == null
-                                          ? 0
-                                          : absolute == true
-                                              ? (totalSpent).abs()
-                                              : (totalSpent)),
+                                      finalNumber: finalAmount),
                                   textColor: getTextColor != null
                                       ? getTextColor!(totalSpent)
                                       : textColor,

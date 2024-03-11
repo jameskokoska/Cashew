@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:budget/functions.dart';
+import 'package:budget/main.dart';
 import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/homePage/homePageLineGraph.dart';
 import 'package:budget/pages/objectivesListPage.dart';
@@ -21,6 +22,7 @@ import 'package:drift/drift.dart';
 export 'platform/shared.dart';
 import 'dart:convert';
 import 'package:budget/struct/currencyFunctions.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'schema_versions.dart';
 import 'package:flutter/material.dart' show DateTimeRange;
 
@@ -1479,15 +1481,22 @@ class FinanceDatabase extends _$FinanceDatabase {
                 onlyShowBasedOnSubcategoryFks(transactions, categoryFks)) &
             onlyShowBasedOnWalletFks(transactions, walletFks) &
             onlyShowIfMember(transactions, member) &
-            onlyShowIfNotExcludedFromBudget(transactions, budget?.budgetPk) &
+            //onlyShowIfNotExcludedFromBudget(transactions, budget?.budgetPk) &
             onlyShowIfCertainBudget(
                 transactions, onlyShowTransactionsBelongingToBudgetPk),
       );
 
     return query.watch().map((rows) => rows.map((row) {
+          Transaction transaction = row.readTable(transactions);
+          if (budget?.budgetPk != null &&
+              transaction.budgetFksExclude != null &&
+              transaction.budgetFksExclude?.contains(budget?.budgetPk) ==
+                  true) {
+            transaction = transaction.copyWith(paid: false);
+          }
           return TransactionWithCategory(
               category: row.readTable(categories),
-              transaction: row.readTable(transactions),
+              transaction: transaction,
               budget: row.readTableOrNull(budgets),
               objective: row.readTableOrNull(objectives),
               subCategory: row.readTableOrNull(subCategories));
@@ -4319,9 +4328,19 @@ class FinanceDatabase extends _$FinanceDatabase {
   }
 
   Future<List<Objective>> getAllObjectives(
-      {required ObjectiveType objectiveType}) {
+      {required ObjectiveType objectiveType,
+      bool? showDifferenceLoans,
+      bool? isArchived}) {
     return (select(objectives)
-          ..where((t) => t.type.equals(objectiveType.index))
+          ..where((t) =>
+              t.type.equals(objectiveType.index) &
+              (isArchived == null
+                  ? Constant(true)
+                  : t.archived.equals(isArchived)) &
+              (showDifferenceLoans == null
+                  ? Constant(true)
+                  : getIsDifferenceOnlyLoanFromTable(objectives)
+                      .equals(showDifferenceLoans)))
           ..orderBy([(c) => OrderingTerm.asc(c.order)]))
         .get();
   }
@@ -5550,7 +5569,65 @@ class FinanceDatabase extends _$FinanceDatabase {
                     .like("%" + searchQuery + "%")
                 : Constant(false)) |
             tbl.name.collate(Collate.noCase).like("%" + searchQuery + "%") |
-            tbl.note.collate(Collate.noCase).like("%" + searchQuery + "%");
+            tbl.note.collate(Collate.noCase).like("%" + searchQuery + "%") |
+            onlyShowIfSearchQueryDateIsDate(searchQuery, tbl.dateCreated);
+  }
+
+  Expression<bool> onlyShowIfSearchQueryDateIsDate(
+      String searchQuery, GeneratedColumn<DateTime> dateTime) {
+    final List<String> words = searchQuery.toLowerCase().split(' ');
+
+    int? year;
+    int? day;
+    int? month;
+
+    for (final word in words) {
+      if (localizedMonthNames.contains(word)) {
+        month = localizedMonthNames.indexOf(word) + 1;
+      } else {
+        final intNumber = int.tryParse(word);
+        if (intNumber != null) {
+          if (intNumber >= 1 && intNumber <= 31) {
+            day = intNumber;
+          } else if (intNumber >= 1000 && intNumber <= 9999) {
+            year = intNumber;
+          }
+        }
+      }
+    }
+
+    Expression<bool>? yearExpression;
+    Expression<bool>? monthExpression;
+    Expression<bool>? dayExpression;
+
+    if (month != null) {
+      // Only parse the date if the user entered a month name
+      monthExpression = dateTime.month.equals(month);
+
+      if (year != null) {
+        yearExpression = dateTime.year.equals(year);
+      }
+      if (day != null) {
+        dayExpression = dateTime.day.equals(day);
+      }
+    }
+
+    Expression<bool>? resultExpression;
+    if (yearExpression != null) {
+      resultExpression = yearExpression;
+    }
+    if (monthExpression != null) {
+      resultExpression = resultExpression == null
+          ? monthExpression
+          : resultExpression & monthExpression;
+    }
+    if (dayExpression != null) {
+      resultExpression = resultExpression == null
+          ? dayExpression
+          : resultExpression & dayExpression;
+    }
+
+    return resultExpression ?? Constant(false);
   }
 
   Expression<bool> onlyShowIfFollowsFilters(

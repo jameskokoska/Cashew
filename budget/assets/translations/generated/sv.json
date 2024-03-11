@@ -1065,5 +1065,19 @@
   "advanced-automation": "Avancerad automatisering",
   "deep-linking": "Applänkar",
   "deep-linking-description": "Automatisera införandet av transaktioner med app -URL: er. Tryck för att lära dig mer och se dokumentationen.",
-  "added-transaction": "Tillagd transaktion"
+  "added-transaction": "Tillagd transaktion",
+  "custom-format": "Anpassningsformat",
+  "delimiter": "Avgränsare",
+  "decimal": "Decimal",
+  "symbol": "Symbol",
+  "before": "Innan",
+  "after": "Efter",
+  "delimiter-symbol": "Avgränsningssymbol",
+  "decimal-symbol": "Decimalsymbol",
+  "set-delimiter": "Ställa avgränsare",
+  "set-decimal": "Sedimal",
+  "no-outgoing-within-period": "Inga utgående transaktioner inom vald tidsperiod",
+  "no-incoming-within-period": "Inga inkommande transaktioner inom vald tidsperiod",
+  "select-all": "Välj alla",
+  "excluded": "Utesluten"
 }

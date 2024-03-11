@@ -26,6 +26,19 @@ import 'listItem.dart';
 
 String getChangelogString() {
   return """
+    < 5.2.5
+    Revamped homepage pie chart section
+    Custom number format support
+    Optimized onboarding page
+    Searching date in search bar shows transactions from that time period
+    Date range included when applying filters on transaction search page
+    In transaction search page, added ability to jump to the bottom of the list
+    Scroll to bottom/top does not animate if list too long
+    Excluded budget transactions still show up in the budget list as excluded
+    Fix polarity of lent and borrowed home screen sections
+    Fix decimal precision save changes button for account edits
+    Fix clipping of goal tag progress
+    Fix default long term loan type when adding via plus button
     < 5.2.4
     Improved UI layout when creating a goal/long term loan
     Long term loan offset (useful for adding interest to long term loan totals)

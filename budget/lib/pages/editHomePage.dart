@@ -612,34 +612,36 @@ Future openPieChartHomePageBottomSheetSettings(BuildContext context) async {
     PopupFramework(
       title: "pie-chart".tr(),
       subtitle: "applies-to-homepage".tr(),
-      child: Column(
-        children: [
-          RadioItems(
-            items: <String>[
-              "all",
-              "outgoing",
-              "incoming",
-            ],
-            displayFilter: (type) {
-              return type.toString().tr();
-            },
-            initial: appStateSettings["pieChartTotal"],
-            onChanged: (type) async {
-              updateSettings("pieChartTotal", type, updateGlobalState: false);
-              Navigator.of(context).pop();
-            },
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 5),
-            child: HorizontalBreakAbove(
-              enabled: true,
-              child: PeriodCyclePicker(
-                cycleSettingsExtension: "PieChart",
-              ),
-            ),
-          ),
-        ],
+      child: PeriodCyclePicker(
+        cycleSettingsExtension: "PieChart",
       ),
+      // Column(
+      //   children: [
+      //     RadioItems(
+      //       items: <String>[
+      //         "outgoing",
+      //         "incoming",
+      //       ],
+      //       displayFilter: (type) {
+      //         return type.toString().tr();
+      //       },
+      //       initial: appStateSettings["pieChartTotal"],
+      //       onChanged: (type) async {
+      //         updateSettings("pieChartTotal", type, updateGlobalState: false);
+      //         Navigator.of(context).pop();
+      //       },
+      //     ),
+      //     Padding(
+      //       padding: const EdgeInsets.only(top: 5),
+      //       child: HorizontalBreakAbove(
+      //         enabled: true,
+      //         child: PeriodCyclePicker(
+      //           cycleSettingsExtension: "PieChart",
+      //         ),
+      //       ),
+      //     ),
+      //   ],
+      // ),
     ),
   );
 }

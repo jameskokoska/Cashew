@@ -477,6 +477,17 @@ Future<List<SplitPerson>> getBillSplitterPersonList() async {
     billSplitterPersonList =
         jsonList.map((json) => SplitPerson.fromJson(json)).toList();
   }
+  if (appStateSettings["longTermLoansDifferenceFeature"] == true &&
+      billSplitterPersonList.length <= 0) {
+    List<Objective> differenceOnlyObjectives = await database.getAllObjectives(
+        objectiveType: ObjectiveType.loan,
+        showDifferenceLoans: true,
+        isArchived: false);
+    billSplitterPersonList =
+        differenceOnlyObjectives.map((e) => SplitPerson(e.name)).toList();
+    String jsonList = jsonEncode(billSplitterPersonList);
+    await sharedPreferences.setString("billSplitterPersonList", jsonList);
+  }
   return billSplitterPersonList;
 }
 

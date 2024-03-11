@@ -1065,5 +1065,19 @@
   "advanced-automation": "Automasi Lanjutan",
   "deep-linking": "Pautan aplikasi",
   "deep-linking-description": "Automatikkan penyisipan urus niaga menggunakan URL aplikasi. Ketik untuk mengetahui lebih lanjut dan lihat dokumentasi.",
-  "added-transaction": "Menambah transaksi"
+  "added-transaction": "Menambah transaksi",
+  "custom-format": "Format tersuai",
+  "delimiter": "Pembatas",
+  "decimal": "Perpuluhan",
+  "symbol": "Simbol",
+  "before": "Sebelumnya",
+  "after": "Selepas",
+  "delimiter-symbol": "Simbol pembatas",
+  "decimal-symbol": "Simbol perpuluhan",
+  "set-delimiter": "Tetapkan Delimiter",
+  "set-decimal": "Tetapkan perpuluhan",
+  "no-outgoing-within-period": "Tiada urus niaga keluar dalam tempoh masa terpilih",
+  "no-incoming-within-period": "Tiada urus niaga masuk dalam tempoh masa yang dipilih",
+  "select-all": "Pilih semua",
+  "excluded": "Dikecualikan"
 }

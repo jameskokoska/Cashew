@@ -31,6 +31,10 @@ import 'package:budget/struct/currencyFunctions.dart';
 import 'package:universal_io/io.dart';
 
 String getDecimalSeparator() {
+  // en-US indicates a custom font
+  if (appStateSettings["numberFormatLocale"] == "en-US") {
+    return appStateSettings["numberFormatDecimal"].toString();
+  }
   return numberFormatSymbols[
               (appStateSettings["numberFormatLocale"] ?? Platform.localeName)
                   .split("-")[0]]

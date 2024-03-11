@@ -96,6 +96,7 @@ class TextInput extends StatelessWidget {
   final List<TextInputFormatter>? inputFormatters;
   final TextAlign textAlign;
   final bool autocorrect;
+  final int? maxLength;
 
   const TextInput({
     Key? key,
@@ -131,6 +132,7 @@ class TextInput extends StatelessWidget {
     this.inputFormatters,
     this.textAlign = TextAlign.start,
     this.autocorrect = true,
+    this.maxLength,
   }) : super(key: key);
 
   @override
@@ -152,6 +154,7 @@ class TextInput extends StatelessWidget {
           ),
           child: Center(
             child: TextFormField(
+              maxLength: maxLength,
               inputFormatters: inputFormatters,
               textInputAction: textInputAction,
               textCapitalization:
@@ -194,6 +197,7 @@ class TextInput extends StatelessWidget {
                   context, HexColor(appStateSettings["accentColor"]),
                   amount: 0.1, inverse: true),
               decoration: new InputDecoration(
+                counterText: "",
                 hintStyle: TextStyle(color: getColor(context, "textLight")),
                 alignLabelWithHint: true,
                 prefix: prefix != null ? TextFont(text: prefix ?? "") : null,

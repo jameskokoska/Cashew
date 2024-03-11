@@ -198,6 +198,7 @@ class ObjectiveList extends StatelessWidget {
                                 routesToPopAfterDelete:
                                     RoutesToPopAfterDelete.PreventDelete,
                                 objectiveType: objectiveType,
+                                selectedIncome: isIncome,
                               ),
                               height: 150,
                             ),
@@ -247,6 +248,7 @@ class ObjectiveList extends StatelessWidget {
                                   routesToPopAfterDelete:
                                       RoutesToPopAfterDelete.PreventDelete,
                                   objectiveType: objectiveType,
+                                  selectedIncome: isIncome,
                                 ),
                               );
                       } else {

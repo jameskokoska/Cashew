@@ -1065,5 +1065,19 @@
   "advanced-automation": "উন্নত অটোমেশন",
   "deep-linking": "অ্যাপ্লিকেশন লিঙ্ক",
   "deep-linking-description": "অ্যাপ্লিকেশন ইউআরএল ব্যবহার করে লেনদেনের সন্নিবেশ স্বয়ংক্রিয় করুন। আরও জানতে এবং ডকুমেন্টেশন দেখতে আলতো চাপুন।",
-  "added-transaction": "যুক্ত লেনদেন"
+  "added-transaction": "যুক্ত লেনদেন",
+  "custom-format": "কাস্টম ফর্ম্যাট",
+  "delimiter": "ডিলিমিটার",
+  "decimal": "দশমিক",
+  "symbol": "প্রতীক",
+  "before": "আগে",
+  "after": "পরে",
+  "delimiter-symbol": "ডিলিমিটার প্রতীক",
+  "decimal-symbol": "দশমিক প্রতীক",
+  "set-delimiter": "ডিলিমিটার সেট করুন",
+  "set-decimal": "দশমিক সেট করুন",
+  "no-outgoing-within-period": "নির্বাচিত সময়কালের মধ্যে কোনও বহির্গামী লেনদেন নেই",
+  "no-incoming-within-period": "নির্বাচিত সময়কালের মধ্যে কোনও আগত লেনদেন নেই",
+  "select-all": "সমস্ত নির্বাচন করুন",
+  "excluded": "ছাঁটা"
 }

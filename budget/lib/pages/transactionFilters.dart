@@ -976,12 +976,14 @@ class AppliedFilterChips extends StatelessWidget {
     required this.searchFilters,
     required this.openFiltersSelection,
     required this.clearSearchFilters,
+    this.openSelectDate,
     this.padding = const EdgeInsets.only(bottom: 8.0),
     super.key,
   });
   final SearchFilters searchFilters;
   final Function openFiltersSelection;
   final Function clearSearchFilters;
+  final Function? openSelectDate;
   final EdgeInsets padding;
 
   Future<List<Widget>> getSearchFilterWidgets(BuildContext context) async {
@@ -1183,6 +1185,25 @@ class AppliedFilterChips extends StatelessWidget {
       out.add(AppliedFilterChip(
         label: "no-loan".tr(),
         openFiltersSelection: openFiltersSelection,
+      ));
+    }
+    // Date and time range
+    if (out.length > 0 &&
+        openSelectDate != null &&
+        searchFilters.dateTimeRange != null) {
+      out.add(AppliedFilterChip(
+        label: getWordedDateShortMore(
+              searchFilters.dateTimeRange!.start,
+              includeYear:
+                  searchFilters.dateTimeRange!.start != DateTime.now().year,
+            ) +
+            " – " +
+            getWordedDateShortMore(
+              searchFilters.dateTimeRange!.end,
+              includeYear:
+                  searchFilters.dateTimeRange!.end != DateTime.now().year,
+            ),
+        openFiltersSelection: () => {openSelectDate!()},
       ));
     }
 

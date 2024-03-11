@@ -406,13 +406,13 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                               if (widget.budget.income == true) {
                                 return categorySpent < 0 &&
                                         showIncomeExpenseIcons
-                                    ? "of-total".tr()
-                                    : "of-saving".tr();
+                                    ? "of-total".tr().toLowerCase()
+                                    : "of-saving".tr().toLowerCase();
                               } else {
                                 return categorySpent > 0 &&
                                         showIncomeExpenseIcons
-                                    ? "of-total".tr()
-                                    : "of-spending".tr();
+                                    ? "of-total".tr().toLowerCase()
+                                    : "of-spending".tr().toLowerCase();
                               }
                             },
                             selectedSubCategoryPk: selectedCategory?.categoryPk,
@@ -751,6 +751,10 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                       )
                     : SizedBox.shrink(),
                 showTotalCashFlow: true,
+                showExcludedBudgetTag: (Transaction transaction) =>
+                    transaction.budgetFksExclude
+                        ?.contains(widget.budget.budgetPk) ==
+                    true,
               ),
               SliverToBoxAdapter(
                 child: widget.budget.sharedDateUpdated == null

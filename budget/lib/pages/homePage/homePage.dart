@@ -124,8 +124,6 @@ class HomePageState extends State<HomePage>
     return countAfter == 0;
   }
 
-  GlobalKey<PieChartDisplayState> _pieChartDisplayStateKey = GlobalKey();
-
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -203,10 +201,7 @@ class HomePageState extends State<HomePage>
           ? HomePageLineGraph(selectedSlidingSelector: selectedSlidingSelector)
           : null,
       "pieChart": isHomeScreenSectionEnabled(context, "showPieChart")
-          ? HomePagePieChart(
-              pieChartDisplayStateKey: _pieChartDisplayStateKey,
-              selectedSlidingSelector: selectedSlidingSelector,
-            )
+          ? HomePagePieChart()
           : null,
       "heatMap": isHomeScreenSectionEnabled(context, "showHeatMap")
           ? HomePageHeatMap()

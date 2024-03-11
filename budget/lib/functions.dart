@@ -116,7 +116,7 @@ String convertToPercent(double amount,
     }
   }
 
-  return roundedAmount + "%";
+  return absoluteZeroString(roundedAmount) + "%";
 }
 
 String removeLastCharacter(String text) {
@@ -165,7 +165,9 @@ String convertToMoney(AllWallets allWallets, double amount,
     bool forceHideCurrencyName = false,
     bool forceAllDecimals = false,
     String? customLocale,
-    NumberFormat Function(int? decimalDigits, String? locale, String? symbol)?
+    bool forceNonCustomNumberFormat = false,
+    NumberFormat Function(int? decimalDigits, String? locale, String? symbol,
+            String? customPattern)?
         getCustomNumberFormat}) {
   int numberDecimals = decimals ??
       allWallets.indexedByPk[appStateSettings["selectedWalletPk"]]?.decimals ??
@@ -197,13 +199,29 @@ String convertToMoney(AllWallets allWallets, double amount,
       appStateSettings["numberFormatLocale"] ??
       Platform.localeName;
   String? symbol = getCurrencyString(allWallets, currencyKey: currencyKey);
+
+  String? customPattern;
+  if (forceNonCustomNumberFormat == false &&
+      appStateSettings["numberFormatLocale"] == "en-US") {
+    // en-US indicates a custom font
+    if (appStateSettings["numberFormatCurrencyFirst"] == true) {
+      customPattern = '\u00A4#,##0.00';
+    } else {
+      customPattern = '#,##0.00\u00A0\u00A4';
+    }
+  }
+
   NumberFormat currency = getCustomNumberFormat != null
-      ? getCustomNumberFormat(decimalDigits, locale, symbol)
+      ? getCustomNumberFormat(decimalDigits, locale, symbol, customPattern)
       : NumberFormat.currency(
           decimalDigits: decimalDigits,
           locale: locale,
           symbol: symbol,
+          customPattern: customPattern,
         );
+
+  // View the entire dictionary of locale formats, through NumberFormat.currency definition
+  // numberFormatSymbols[locale] as NumberSymbols
 
   // If there is no currency symbol, use the currency code
   if (forceHideCurrencyName == false &&
@@ -221,6 +239,16 @@ String convertToMoney(AllWallets allWallets, double amount,
                 "")
             .toUpperCase();
   }
+
+  if (forceNonCustomNumberFormat == false &&
+      appStateSettings["numberFormatLocale"] == "en-US") {
+    // en-US indicates a custom font
+    formatOutput = formatOutputWithNewDelimiterAndDecimal(
+        formatOutput,
+        appStateSettings["numberFormatDelimiter"],
+        appStateSettings["numberFormatDecimal"]);
+  }
+
   return formatOutput;
   // if (finalNumber != null &&
   //     !finalNumber
@@ -243,6 +271,25 @@ String convertToMoney(AllWallets allWallets, double amount,
   //       formatOutput.length - numberDecimals - 1, formatOutput.length, '');
   // }
   // return currency.format(amount);
+}
+
+String formatOutputWithNewDelimiterAndDecimal(
+    String input, String delimiter, String decimal) {
+  // Use a placeholder
+  input = input.replaceAll(".", "\uFFFD");
+  input = input.replaceAll(",", delimiter);
+  input = input.replaceAll("\uFFFD", decimal);
+  return input;
+}
+
+List<String> localizedMonthNames = [];
+initializeLocalizedMonthNames() {
+  for (int i = 1; i <= 12; i++) {
+    final DateTime date = DateTime(2022, i);
+    final String? locale = navigatorKey.currentContext?.locale.toString();
+    final String monthName = DateFormat.MMMM(locale).format(date).toLowerCase();
+    localizedMonthNames.add(monthName);
+  }
 }
 
 String getMonth(DateTime dateTime, {bool includeYear = false}) {
@@ -642,7 +689,8 @@ String getWordedNumber(
         value,
         forceHideCurrencyName: true,
         addCurrencyName: false,
-        getCustomNumberFormat: (decimalDigits, locale, currencySymbol) {
+        getCustomNumberFormat:
+            (decimalDigits, locale, currencySymbol, customPattern) {
           final NumberFormat formatter = NumberFormat.compact(locale: locale);
           formatter.maximumFractionDigits = value.abs() < 1000
               ? value.abs() < 10
@@ -1250,6 +1298,11 @@ double absoluteZero(double number) {
 double? absoluteZeroNull(double? number) {
   if (number == null) return null;
   if (number == -0) return number.abs();
+  return number;
+}
+
+String absoluteZeroString(String number) {
+  if (number == "-0") return "0";
   return number;
 }
 

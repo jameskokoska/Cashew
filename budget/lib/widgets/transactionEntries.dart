@@ -84,6 +84,7 @@ class TransactionEntries extends StatelessWidget {
     this.onLongPressSpendingSummary,
     this.allowOpenIntoObjectiveLoanPage = true,
     this.showNumberOfDaysUntilForFutureDates = false,
+    this.showExcludedBudgetTag,
     super.key,
   });
   final TransactionEntriesRenderType renderType;
@@ -124,6 +125,7 @@ class TransactionEntries extends StatelessWidget {
   final VoidCallback? onLongPressSpendingSummary;
   final bool allowOpenIntoObjectiveLoanPage;
   final bool showNumberOfDaysUntilForFutureDates;
+  final bool Function(Transaction transaction)? showExcludedBudgetTag;
 
   Widget createTransactionEntry(
       List<TransactionWithCategory> transactionListForDay,
@@ -154,6 +156,7 @@ class TransactionEntries extends StatelessWidget {
       allowSelect: allowSelect,
       showObjectivePercentage: showObjectivePercentage,
       allowOpenIntoObjectiveLoanPage: allowOpenIntoObjectiveLoanPage,
+      showExcludedBudgetTag: showExcludedBudgetTag,
     );
   }
 

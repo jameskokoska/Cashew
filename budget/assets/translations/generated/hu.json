@@ -1065,5 +1065,19 @@
   "advanced-automation": "Fejlett automatizálás",
   "deep-linking": "App linkek",
   "deep-linking-description": "Az APP URL -ek segítségével automatizálja a tranzakciók beillesztését. Érintse meg a további információkat, és tekintse meg a dokumentációt.",
-  "added-transaction": "Hozzáadott tranzakció"
+  "added-transaction": "Hozzáadott tranzakció",
+  "custom-format": "Egyedi formátum",
+  "delimiter": "Elhatároló",
+  "decimal": "Decimális",
+  "symbol": "Szimbólum",
+  "before": "Előtt",
+  "after": "Után",
+  "delimiter-symbol": "Elhatároló szimbólum",
+  "decimal-symbol": "Tizedes szimbólum",
+  "set-delimiter": "Állítsa be a Delimitert",
+  "set-decimal": "Beállított tizedes",
+  "no-outgoing-within-period": "Nincs kimenő tranzakció a kiválasztott időtartamon belül",
+  "no-incoming-within-period": "Nincs beérkező tranzakció a kiválasztott időtartamon belül",
+  "select-all": "Mindet kiválaszt",
+  "excluded": "Kizárott"
 }

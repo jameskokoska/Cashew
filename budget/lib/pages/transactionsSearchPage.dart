@@ -185,6 +185,7 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
             },
             child: PageFramework(
               scrollToTopButton: true,
+              scrollToBottomButton: true,
               listID: "TransactionsSearch",
               dragDownToDismiss: true,
               onScroll: _scrollListener,
@@ -297,6 +298,7 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
                         selectFilters(context);
                       },
                       clearSearchFilters: clearSearchFilters,
+                      openSelectDate: () => selectDateRange(context),
                     ),
                   ),
                 ),

@@ -227,8 +227,8 @@ class _AddWalletPageState extends State<AddWalletPage> {
     }
   }
 
-  void openDecimalPrecisionPopup() {
-    openBottomSheet(
+  void openDecimalPrecisionPopup() async {
+    await openBottomSheet(
       context,
       PopupFramework(
         title: "decimal-precision".tr(),
@@ -252,6 +252,7 @@ class _AddWalletPageState extends State<AddWalletPage> {
         ),
       ),
     );
+    determineBottomButton();
   }
 
   double initialBalance = 0;

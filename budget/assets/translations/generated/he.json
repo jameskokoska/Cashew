@@ -1065,5 +1065,19 @@
   "advanced-automation": "אוטומציה מתקדמת",
   "deep-linking": "קישורי אפליקציה",
   "deep-linking-description": "אוטומציה של החדרת עסקאות באמצעות כתובות כתובות אפליקציות. הקש כדי ללמוד עוד וצפה בתיעוד.",
-  "added-transaction": "הוסיפה עסקה"
+  "added-transaction": "הוסיפה עסקה",
+  "custom-format": "פורמט מותאם אישית",
+  "delimiter": "תוחם",
+  "decimal": "נקודה",
+  "symbol": "סֵמֶל",
+  "before": "לפני",
+  "after": "לאחר",
+  "delimiter-symbol": "סמל תוחם",
+  "decimal-symbol": "סמל עשרוני",
+  "set-delimiter": "הגדר תוחם",
+  "set-decimal": "הגדר עשרוני",
+  "no-outgoing-within-period": "אין עסקאות יוצאות בפרק זמן שנבחר",
+  "no-incoming-within-period": "אין עסקאות נכנסות בפרק זמן שנבחר",
+  "select-all": "בחר הכל",
+  "excluded": "לא נכלל"
 }

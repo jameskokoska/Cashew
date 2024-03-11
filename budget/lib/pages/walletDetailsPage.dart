@@ -1974,7 +1974,9 @@ class _WalletCategoryPieChartState extends State<WalletCategoryPieChart> {
                             selectedCategory?.mainCategoryPk,
                     subcategoriesWithTotalMap:
                         s.subCategorySpendingIndexedByMainCategoryPk,
-                    extraText: isIncome ? "of-income".tr() : "of-expense".tr(),
+                    extraText: isIncome
+                        ? "of-income".tr().toLowerCase()
+                        : "of-expense".tr().toLowerCase(),
                     budgetColorScheme: widget.walletColorScheme,
                     category: category.category,
                     totalSpent: s.totalSpent,
@@ -2017,8 +2019,8 @@ class _WalletCategoryPieChartState extends State<WalletCategoryPieChart> {
                     showIncomeExpenseIcons: true,
                     getPercentageAfterText: (double categorySpent) {
                       return categorySpent > 0
-                          ? "of-incoming".tr()
-                          : "of-outgoing".tr();
+                          ? "of-incoming".tr().toLowerCase()
+                          : "of-outgoing".tr().toLowerCase();
                     },
                   ),
                 );

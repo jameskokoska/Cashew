@@ -1065,5 +1065,19 @@
   "advanced-automation": "اعلی درجے کی آٹومیشن",
   "deep-linking": "ایپ لنکس",
   "deep-linking-description": "ایپ یو آر ایل کا استعمال کرتے ہوئے لین دین کے اندراج کو خود کار بنائیں۔ مزید جاننے کے لئے ٹیپ کریں اور دستاویزات کو دیکھیں۔",
-  "added-transaction": "شامل ٹرانزیکشن"
+  "added-transaction": "شامل ٹرانزیکشن",
+  "custom-format": "کسٹم فارمیٹ",
+  "delimiter": "حد بندی",
+  "decimal": "اعشاریہ",
+  "symbol": "علامت",
+  "before": "پہلے",
+  "after": "کے بعد",
+  "delimiter-symbol": "حد بندی کی علامت",
+  "decimal-symbol": "اعشاریہ علامت",
+  "set-delimiter": "ڈیمیٹر سیٹ کریں",
+  "set-decimal": "اعشاریہ طے کریں",
+  "no-outgoing-within-period": "منتخب کردہ وقت کے اندر باہر جانے والے لین دین نہیں",
+  "no-incoming-within-period": "منتخب کردہ وقت کی مدت میں آنے والے لین دین نہیں",
+  "select-all": "تمام منتخب کریں",
+  "excluded": "خارج"
 }

@@ -1256,7 +1256,7 @@ class _FadeOutAndLockFeatureState extends State<FadeOutAndLockFeature> {
                 SizedBox(height: 15),
                 LowKeyButton(
                   onTap: openPremiumPopup,
-                  text: "learn-more".tr(),
+                  text: "learn-more".tr().capitalizeFirstofEach,
                   color: dynamicPastel(
                     context,
                     Theme.of(context).colorScheme.secondaryContainer,

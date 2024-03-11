@@ -1065,5 +1065,19 @@
   "advanced-automation": "Otomatiki ya hali ya juu",
   "deep-linking": "Viungo vya programu",
   "deep-linking-description": "Ondoa uingizaji wa shughuli kwa kutumia URL za programu. Gonga ili ujifunze zaidi na uangalie nyaraka.",
-  "added-transaction": "Shughuli iliyoongezwa"
+  "added-transaction": "Shughuli iliyoongezwa",
+  "custom-format": "Fomati ya kawaida",
+  "delimiter": "Delimiter",
+  "decimal": "Nukta",
+  "symbol": "Ishara",
+  "before": "Kabla",
+  "after": "Baada ya",
+  "delimiter-symbol": "Alama ya Delimiter",
+  "decimal-symbol": "Ishara ya decimal",
+  "set-delimiter": "Weka Delimiter",
+  "set-decimal": "Weka decimal",
+  "no-outgoing-within-period": "Hakuna shughuli zinazomaliza muda wake katika kipindi cha wakati uliochaguliwa",
+  "no-incoming-within-period": "Hakuna shughuli zinazoingia katika kipindi cha wakati uliochaguliwa",
+  "select-all": "Chagua Zote",
+  "excluded": "Kutengwa"
 }

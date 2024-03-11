@@ -1065,5 +1065,19 @@
   "advanced-automation": "Automação avançada",
   "deep-linking": "Links de aplicativos",
   "deep-linking-description": "Automatize a inserção de transações usando URLs de aplicativos. Toque para saber mais e ver a documentação.",
-  "added-transaction": "Transação adicionada"
+  "added-transaction": "Transação adicionada",
+  "custom-format": "Formato personalizado",
+  "delimiter": "Delimitador",
+  "decimal": "Decimal",
+  "symbol": "Símbolo",
+  "before": "Antes",
+  "after": "Depois",
+  "delimiter-symbol": "Símbolo do delimitador",
+  "decimal-symbol": "Símbolo decimal",
+  "set-delimiter": "Defina delimitador",
+  "set-decimal": "Definir decimal",
+  "no-outgoing-within-period": "Sem transações de saída dentro do período selecionado",
+  "no-incoming-within-period": "Sem transações de entrada dentro do período selecionado",
+  "select-all": "Selecionar tudo",
+  "excluded": "Excluído"
 }

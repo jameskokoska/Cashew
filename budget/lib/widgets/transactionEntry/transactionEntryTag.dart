@@ -20,6 +20,7 @@ class TransactionEntryTag extends StatelessWidget {
     this.subCategory,
     this.budget,
     this.objective,
+    this.showExcludedBudgetTag,
     super.key,
   });
   final Transaction transaction;
@@ -27,6 +28,7 @@ class TransactionEntryTag extends StatelessWidget {
   final TransactionCategory? subCategory;
   final Budget? budget;
   final Objective? objective;
+  final bool Function(Transaction transaction)? showExcludedBudgetTag;
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +37,12 @@ class TransactionEntryTag extends StatelessWidget {
         transaction.subCategoryFk != null ||
         (objective != null && getIsDifferenceOnlyLoan(objective!)))
       showObjectivePercentageCheck = false;
+
+    bool showExcludedBudgetTagCheck = false;
+    if (transaction.budgetFksExclude != null && showExcludedBudgetTag != null) {
+      showExcludedBudgetTagCheck = showExcludedBudgetTag!(transaction);
+    }
+
     return Padding(
       padding: const EdgeInsets.only(top: 1.0),
       child: Row(
@@ -155,6 +163,12 @@ class TransactionEntryTag extends StatelessWidget {
                   },
                 );
               }),
+            ),
+          if (showExcludedBudgetTagCheck)
+            TransactionTag(
+              color: HexColor(budget?.colour,
+                  defaultColor: Theme.of(context).colorScheme.primary),
+              name: "excluded".tr(),
             ),
         ],
       ),
@@ -279,30 +293,33 @@ class TransactionTag extends StatelessWidget {
     if (progress != null)
       return Padding(
         padding: const EdgeInsets.only(left: 3),
-        child: Stack(
-          children: [
-            tagWidget,
-            Positioned(
-              top: 0,
-              bottom: 0,
-              left: 0,
-              right: 0,
-              child: Stack(
-                children: [
-                  FractionallySizedBox(
-                    widthFactor: progress?.clamp(0, 1),
-                    heightFactor: 1,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: color.withOpacity(0.2),
-                        borderRadius: BorderRadius.circular(6),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(6),
+          child: Stack(
+            children: [
+              tagWidget,
+              Positioned(
+                top: 0,
+                bottom: 0,
+                left: 0,
+                right: 0,
+                child: Stack(
+                  children: [
+                    FractionallySizedBox(
+                      widthFactor: progress?.clamp(0, 1),
+                      heightFactor: 1,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: color.withOpacity(0.2),
+                          borderRadius: BorderRadius.circular(6),
+                        ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-            )
-          ],
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
       );
     return Padding(padding: EdgeInsets.only(left: 3), child: tagWidget);

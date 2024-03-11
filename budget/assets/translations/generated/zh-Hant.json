@@ -1065,5 +1065,19 @@
   "advanced-automation": "高級自動化",
   "deep-linking": "應用鏈接",
   "deep-linking-description": "使用應用程序URL自動插入交易。點擊以了解更多信息並查看文檔。",
-  "added-transaction": "增加了交易"
+  "added-transaction": "增加了交易",
+  "custom-format": "自定義格式",
+  "delimiter": "定界符",
+  "decimal": "十進制",
+  "symbol": "象徵",
+  "before": "前",
+  "after": "後",
+  "delimiter-symbol": "定界線符號",
+  "decimal-symbol": "十進制符號",
+  "set-delimiter": "設置定界符",
+  "set-decimal": "設置小數",
+  "no-outgoing-within-period": "在選定的時間段內沒有傳出交易",
+  "no-incoming-within-period": "在選定的時間段內沒有傳入的交易",
+  "select-all": "全選",
+  "excluded": "排除"
 }

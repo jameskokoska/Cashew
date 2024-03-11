@@ -281,7 +281,7 @@ class CategoryEntry extends StatelessWidget {
                                       String text = percentString +
                                           " " +
                                           (isSubcategory
-                                              ? "of-subcategory".tr()
+                                              ? "of-category".tr().toLowerCase()
                                               : getPercentageAfterText == null
                                                   ? ""
                                                   : getPercentageAfterText!(

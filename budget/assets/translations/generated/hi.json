@@ -1065,5 +1065,19 @@
   "advanced-automation": "उन्नत स्वचालन",
   "deep-linking": "ऐप लिंक",
   "deep-linking-description": "APP URL का उपयोग करके लेनदेन के सम्मिलन को स्वचालित करें। अधिक जानने के लिए टैप करें और प्रलेखन देखें।",
-  "added-transaction": "जोड़ा गया लेनदेन"
+  "added-transaction": "जोड़ा गया लेनदेन",
+  "custom-format": "कस्टम प्रारूप",
+  "delimiter": "सीमान्तक",
+  "decimal": "दशमलव",
+  "symbol": "प्रतीक",
+  "before": "पहले",
+  "after": "बाद",
+  "delimiter-symbol": "सीमांकक प्रतीक",
+  "decimal-symbol": "दशमलव प्रतीक",
+  "set-delimiter": "सीमांकक सेट करें",
+  "set-decimal": "दशमलव सेट करें",
+  "no-outgoing-within-period": "चयनित समय अवधि के भीतर कोई निवर्तमान लेनदेन नहीं",
+  "no-incoming-within-period": "चयनित समय अवधि के भीतर कोई आने वाला लेनदेन नहीं",
+  "select-all": "सबका चयन करें",
+  "excluded": "छोड़ा गया"
 }

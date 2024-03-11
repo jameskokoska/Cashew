@@ -10,6 +10,7 @@ import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/scrollbarWrap.dart';
+import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntry/swipeToSelectTransactions.dart';
 import 'package:flutter/material.dart';
@@ -57,6 +58,7 @@ class PageFramework extends StatefulWidget {
     this.resizeToAvoidBottomInset = false,
     this.overlay,
     this.scrollToTopButton = false,
+    this.scrollToBottomButton = false,
     this.bottomPadding = true,
     this.enableHeader = true,
     this.scrollPhysics,
@@ -96,6 +98,7 @@ class PageFramework extends StatefulWidget {
   final bool resizeToAvoidBottomInset;
   final Widget? overlay;
   final bool scrollToTopButton;
+  final bool scrollToBottomButton;
   final bool bottomPadding;
   final bool enableHeader;
   final ScrollPhysics? scrollPhysics;
@@ -128,26 +131,52 @@ class PageFrameworkState extends State<PageFramework>
     duration: Duration(milliseconds: 500),
   );
 
+  final double scrollingLimit = 50000;
+
+  double getDistanceToBottom() {
+    final double currentScrollPosition = _scrollController.position.pixels;
+    final double maxScrollExtent = _scrollController.position.maxScrollExtent;
+    final double distanceToEnd = maxScrollExtent - currentScrollPosition;
+    return distanceToEnd;
+  }
+
+  double getDistanceToTop() {
+    final double currentScrollPosition = _scrollController.position.pixels;
+    return currentScrollPosition;
+  }
+
   void scrollToTop({int duration = 1200}) {
-    _scrollController.animateTo(0,
-        duration: Duration(
-            milliseconds:
-                (getPlatform() == PlatformOS.isIOS ? duration * 0.2 : duration)
-                    .round()),
-        curve: getPlatform() == PlatformOS.isIOS
-            ? Curves.easeInOut
-            : Curves.elasticOut);
+    if (getDistanceToTop() > scrollingLimit || duration == 0) {
+      _scrollController.jumpTo(0);
+      print("Scrolling via jump, list too long!");
+    } else {
+      _scrollController.animateTo(0,
+          duration: Duration(
+              milliseconds: (getPlatform() == PlatformOS.isIOS
+                      ? duration * 0.2
+                      : duration)
+                  .round()),
+          curve: getPlatform() == PlatformOS.isIOS
+              ? Curves.easeInOut
+              : Curves.elasticOut);
+    }
   }
 
   void scrollToBottom({int duration = 1200}) {
-    _scrollController.animateTo(_scrollController.position.maxScrollExtent,
-        duration: Duration(
-            milliseconds:
-                (getPlatform() == PlatformOS.isIOS ? duration * 0.2 : duration)
-                    .round()),
-        curve: getPlatform() == PlatformOS.isIOS
-            ? Curves.easeInOut
-            : Curves.elasticOut);
+    if (getDistanceToBottom() > scrollingLimit || duration == 0) {
+      _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+      print("Scrolling via jump, list too long!");
+    } else {
+      _scrollController.animateTo(_scrollController.position.maxScrollExtent,
+          duration: Duration(
+              milliseconds: (getPlatform() == PlatformOS.isIOS
+                      ? duration * 0.2
+                      : duration)
+                  .round()),
+          curve: getPlatform() == PlatformOS.isIOS
+              ? Curves.easeInOut
+              : Curves.elasticOut);
+    }
   }
 
   void scrollTo(double position, {int duration = 1200}) {
@@ -468,6 +497,147 @@ class PageFrameworkState extends State<PageFramework>
       );
     }
 
+    Widget scrollToBottomButton = AnimatedBuilder(
+      animation: _scrollToTopAnimationController,
+      builder: (_, child) {
+        return IgnorePointer(
+          ignoring: _scrollToTopAnimationController.value <= 0.1,
+          child: Transform.translate(
+            offset: Offset(
+              0,
+              10 *
+                  (1 -
+                      CurvedAnimation(
+                              parent: _scrollToTopAnimationController,
+                              curve: Curves.easeInOut)
+                          .value),
+            ),
+            child: child,
+          ),
+        );
+      },
+      child: FadeTransition(
+        opacity: CurvedAnimation(
+            parent: _scrollToTopAnimationController, curve: Curves.easeInOut),
+        child: Padding(
+          padding: const EdgeInsets.only(right: 7, bottom: 1),
+          child: Transform.rotate(
+            angle: pi / 2,
+            child: ButtonIcon(
+              icon: appStateSettings["outlinedIcons"]
+                  ? Icons.chevron_left_outlined
+                  : Icons.chevron_left_rounded,
+              onTap: () {
+                scrollToTop();
+              },
+            ),
+          ),
+        ),
+      ),
+    );
+
+    Widget scrollToTopBottomButton = AnimatedBuilder(
+      animation: _scrollToTopAnimationController,
+      builder: (_, child) {
+        // Don't show scroll to bottom button if list is way too long!
+        if (getDistanceToBottom() > scrollingLimit) {
+          return scrollToBottomButton;
+        }
+        return IgnorePointer(
+          ignoring: _scrollToTopAnimationController.value <= 0.1,
+          child: Transform.translate(
+            offset: Offset(
+              0,
+              10 *
+                  (1 -
+                      CurvedAnimation(
+                              parent: _scrollToTopAnimationController,
+                              curve: Curves.easeInOut)
+                          .value),
+            ),
+            child: child,
+          ),
+        );
+      },
+      child: FadeTransition(
+        opacity: CurvedAnimation(
+            parent: _scrollToTopAnimationController, curve: Curves.easeInOut),
+        child: Padding(
+          padding: const EdgeInsets.only(right: 7, bottom: 1),
+          child: Builder(builder: (context) {
+            double size = 44;
+            double iconPadding = 24;
+            double iconInset = 7;
+            // same as the FAB height
+            double height = getIsFullScreen(context) == false ? 60 : 70;
+            return Tappable(
+              child: Container(
+                height: height,
+                width: size,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SizedBox(
+                      width: size,
+                      height: height / 2,
+                      child: Tappable(
+                        color: Theme.of(context).colorScheme.secondaryContainer,
+                        borderRadius:
+                            getPlatform() == PlatformOS.isIOS ? 10 : 15,
+                        onTap: scrollToTop,
+                        child: Padding(
+                          padding: EdgeInsets.only(top: iconInset),
+                          child: Transform.rotate(
+                            angle: pi / 2,
+                            child: Icon(
+                              appStateSettings["outlinedIcons"]
+                                  ? Icons.chevron_left_outlined
+                                  : Icons.chevron_left_rounded,
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onSecondaryContainer,
+                              size: size - iconPadding,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: size,
+                      height: height / 2,
+                      child: Tappable(
+                        color: Theme.of(context).colorScheme.secondaryContainer,
+                        borderRadius:
+                            getPlatform() == PlatformOS.isIOS ? 10 : 15,
+                        onTap: scrollToBottom,
+                        child: Padding(
+                          padding: EdgeInsets.only(bottom: iconInset),
+                          child: Transform.rotate(
+                            angle: -pi / 2,
+                            child: Icon(
+                              appStateSettings["outlinedIcons"]
+                                  ? Icons.chevron_left_outlined
+                                  : Icons.chevron_left_rounded,
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onSecondaryContainer,
+                              size: size - iconPadding,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              color: Theme.of(context).colorScheme.secondaryContainer,
+              borderRadius: getPlatform() == PlatformOS.isIOS ? 10 : 15,
+            );
+          }),
+        ),
+      ),
+    );
+
     Widget child;
     if (widget.floatingActionButton != null) {
       child = Stack(
@@ -485,49 +655,11 @@ class PageFrameworkState extends State<PageFramework>
                 crossAxisAlignment: CrossAxisAlignment.end,
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  widget.scrollToTopButton
-                      ? AnimatedBuilder(
-                          animation: _scrollToTopAnimationController,
-                          builder: (_, child) {
-                            return IgnorePointer(
-                              ignoring:
-                                  _scrollToTopAnimationController.value <= 0.1,
-                              child: Transform.translate(
-                                offset: Offset(
-                                  0,
-                                  10 *
-                                      (1 -
-                                          CurvedAnimation(
-                                                  parent:
-                                                      _scrollToTopAnimationController,
-                                                  curve: Curves.easeInOut)
-                                              .value),
-                                ),
-                                child: child,
-                              ),
-                            );
-                          },
-                          child: FadeTransition(
-                            opacity: CurvedAnimation(
-                                parent: _scrollToTopAnimationController,
-                                curve: Curves.easeInOut),
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.only(right: 7, bottom: 1),
-                              child: Transform.rotate(
-                                angle: pi / 2,
-                                child: ButtonIcon(
-                                  icon: appStateSettings["outlinedIcons"]
-                                      ? Icons.chevron_left_outlined
-                                      : Icons.chevron_left_rounded,
-                                  onTap: () {
-                                    scrollToTop();
-                                  },
-                                ),
-                              ),
-                            ),
-                          ),
-                        )
+                  widget.scrollToBottomButton && widget.scrollToTopButton
+                      ? scrollToTopBottomButton
+                      : SizedBox.shrink(),
+                  widget.scrollToTopButton && !widget.scrollToTopButton
+                      ? scrollToBottomButton
                       : SizedBox.shrink(),
                   widget.floatingActionButton ?? Container(),
                 ],

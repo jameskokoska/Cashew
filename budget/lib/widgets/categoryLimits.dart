@@ -261,14 +261,14 @@ class CategoryLimitEntry extends StatelessWidget {
                                 ) +
                                 " " +
                                 (isSubCategory == true
-                                    ? "of-category".tr()
-                                    : "of-budget".tr())
+                                    ? "of-category".tr().toLowerCase()
+                                    : "of-budget".tr().toLowerCase())
                             : (convertToMoney(Provider.of<AllWallets>(context),
                                     budgetLimit * categoryLimitAmount / 100) +
                                 " " +
                                 (isSubCategory == true
-                                    ? "of-category".tr()
-                                    : "of-budget".tr())),
+                                    ? "of-category".tr().toLowerCase()
+                                    : "of-budget".tr().toLowerCase())),
                         fontSize: 14,
                         textColor: getColor(context, "textLight"),
                       ),
