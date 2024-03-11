@@ -28,6 +28,9 @@ import 'transactionEntryTag.dart';
 ValueNotifier<Map<String, List<String>>> globalSelectedID =
     ValueNotifier<Map<String, List<String>>>({});
 
+int maxSelectableTransactionsListedOnPage = 1000;
+Map<String, List<String>> globalTransactionsListedOnPageID = {};
+
 class RecentlyAddedTransactionInfo {
   RecentlyAddedTransactionInfo(
     this.transactionPk,

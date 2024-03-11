@@ -1079,5 +1079,7 @@
   "no-outgoing-within-period": "Sem transações de saída dentro do período selecionado",
   "no-incoming-within-period": "Sem transações de entrada dentro do período selecionado",
   "select-all": "Selecionar tudo",
-  "excluded": "Excluído"
+  "excluded": "Excluído",
+  "maximum-transactions": "Transações máximas",
+  "only-the-first": "Apenas o primeiro"
 }

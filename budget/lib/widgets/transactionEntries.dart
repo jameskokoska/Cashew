@@ -180,6 +180,10 @@ class TransactionEntries extends StatelessWidget {
       ),
       builder: (context, snapshot) {
         if (snapshot.data != null && snapshot.hasData) {
+          globalTransactionsListedOnPageID[listID ?? ""] = (snapshot.data ?? [])
+              .map((t) => t.transaction.transactionPk)
+              .take(maxSelectableTransactionsListedOnPage)
+              .toList();
           List<Section> sectionsOut = [];
           List<Widget> widgetsOut = [];
           Widget totalCashFlowWidget = SizedBox.shrink();

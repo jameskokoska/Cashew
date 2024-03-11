@@ -1079,5 +1079,7 @@
   "no-outgoing-within-period": "निवडलेल्या कालावधीत कोणतेही आउटगोइंग व्यवहार नाहीत",
   "no-incoming-within-period": "निवडलेल्या कालावधीत येण्याचे व्यवहार नाहीत",
   "select-all": "सर्व निवडा",
-  "excluded": "वगळले"
+  "excluded": "वगळले",
+  "maximum-transactions": "जास्तीत जास्त व्यवहार",
+  "only-the-first": "फक्त प्रथम"
 }

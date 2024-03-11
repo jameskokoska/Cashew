@@ -1079,5 +1079,7 @@
   "no-outgoing-within-period": "Nincs kimenő tranzakció a kiválasztott időtartamon belül",
   "no-incoming-within-period": "Nincs beérkező tranzakció a kiválasztott időtartamon belül",
   "select-all": "Mindet kiválaszt",
-  "excluded": "Kizárott"
+  "excluded": "Kizárott",
+  "maximum-transactions": "Maximális tranzakció",
+  "only-the-first": "Csak az első"
 }

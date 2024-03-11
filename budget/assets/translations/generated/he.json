@@ -1079,5 +1079,7 @@
   "no-outgoing-within-period": "אין עסקאות יוצאות בפרק זמן שנבחר",
   "no-incoming-within-period": "אין עסקאות נכנסות בפרק זמן שנבחר",
   "select-all": "בחר הכל",
-  "excluded": "לא נכלל"
+  "excluded": "לא נכלל",
+  "maximum-transactions": "עסקאות מרביות",
+  "only-the-first": "רק הראשון"
 }

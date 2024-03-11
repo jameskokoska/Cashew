@@ -1079,5 +1079,7 @@
   "no-outgoing-within-period": "Žádné odchozí transakce ve vybraném časovém období",
   "no-incoming-within-period": "Žádné příchozí transakce ve vybraném časovém období",
   "select-all": "Vybrat vše",
-  "excluded": "Vyloučen"
+  "excluded": "Vyloučen",
+  "maximum-transactions": "Maximální transakce",
+  "only-the-first": "Pouze první"
 }

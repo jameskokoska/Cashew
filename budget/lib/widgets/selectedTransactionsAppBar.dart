@@ -316,6 +316,37 @@ class SelectedTransactionsAppBarMenu extends StatelessWidget {
                           globalSelectedID.notifyListeners();
                         },
                       ),
+                    if (globalTransactionsListedOnPageID[pageID] != null)
+                      DropdownItemMenu(
+                        id: "select-all",
+                        label: "select-all".tr(),
+                        icon: appStateSettings["outlinedIcons"]
+                            ? Icons.select_all_outlined
+                            : Icons.select_all_rounded,
+                        action: () async {
+                          if ((globalTransactionsListedOnPageID[pageID] ?? [])
+                                  .length >=
+                              maxSelectableTransactionsListedOnPage) {
+                            openSnackbar(
+                              SnackbarMessage(
+                                icon: appStateSettings["outlinedIcons"]
+                                    ? Icons.rule_outlined
+                                    : Icons.rule_rounded,
+                                title: "maximum-transactions".tr(),
+                                description: "only-the-first".tr() +
+                                    " " +
+                                    maxSelectableTransactionsListedOnPage
+                                        .toString() +
+                                    " " +
+                                    "selected".tr().toLowerCase(),
+                              ),
+                            );
+                          }
+                          globalSelectedID.value[pageID] =
+                              globalTransactionsListedOnPageID[pageID] ?? [];
+                          globalSelectedID.notifyListeners();
+                        },
+                      ),
                     if (enableDuplicate)
                       DropdownItemMenu(
                         id: "create-copy",

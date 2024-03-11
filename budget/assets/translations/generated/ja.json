@@ -1079,5 +1079,7 @@
   "no-outgoing-within-period": "選択された期間内に発信トランザクションはありません",
   "no-incoming-within-period": "選択した期間内に着信トランザクションはありません",
   "select-all": "すべて選択",
-  "excluded": "除外"
+  "excluded": "除外",
+  "maximum-transactions": "最大トランザクション",
+  "only-the-first": "最初のみ"
 }

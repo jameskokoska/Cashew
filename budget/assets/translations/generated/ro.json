@@ -1079,5 +1079,7 @@
   "no-outgoing-within-period": "Nu există tranzacții de ieșire în perioada de timp selectată",
   "no-incoming-within-period": "Fără tranzacții primite în perioada de timp selectată",
   "select-all": "Selectează tot",
-  "excluded": "Exclus"
+  "excluded": "Exclus",
+  "maximum-transactions": "Tranzacții maxime",
+  "only-the-first": "Doar primul"
 }

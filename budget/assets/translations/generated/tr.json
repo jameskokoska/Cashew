@@ -1079,5 +1079,7 @@
   "no-outgoing-within-period": "Seçilen süre içinde giden işlem yok",
   "no-incoming-within-period": "Seçilen süre içinde gelen işlem yok",
   "select-all": "Hepsini seç",
-  "excluded": "Hariç tutuldu"
+  "excluded": "Hariç tutuldu",
+  "maximum-transactions": "Maksimum işlemler",
+  "only-the-first": "Sadece ilk"
 }

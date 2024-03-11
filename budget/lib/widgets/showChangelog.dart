@@ -35,6 +35,7 @@ String getChangelogString() {
     In transaction search page, added ability to jump to the bottom of the list
     Scroll to bottom/top does not animate if list too long
     Excluded budget transactions still show up in the budget list as excluded
+    Select all option when selecting transactions
     Fix polarity of lent and borrowed home screen sections
     Fix decimal precision save changes button for account edits
     Fix clipping of goal tag progress

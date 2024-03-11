@@ -1079,5 +1079,7 @@
   "no-outgoing-within-period": "Нема одлазних трансакција у изабраном временском периоду",
   "no-incoming-within-period": "Нема долазних трансакција у изабраном временском периоду",
   "select-all": "Изабери све",
-  "excluded": "Искључен"
+  "excluded": "Искључен",
+  "maximum-transactions": "Максималне трансакције",
+  "only-the-first": "Само први"
 }

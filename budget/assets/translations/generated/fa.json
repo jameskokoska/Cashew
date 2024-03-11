@@ -1079,5 +1079,7 @@
   "no-outgoing-within-period": "هیچ معاملات خروجی در دوره زمانی انتخاب شده وجود ندارد",
   "no-incoming-within-period": "هیچ معاملات ورودی در دوره زمانی انتخاب شده وجود ندارد",
   "select-all": "انتخاب همه",
-  "excluded": "مستثنی"
+  "excluded": "مستثنی",
+  "maximum-transactions": "حداکثر معاملات",
+  "only-the-first": "فقط اولین"
 }

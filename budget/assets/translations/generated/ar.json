@@ -1079,5 +1079,7 @@
   "no-outgoing-within-period": "لا توجد معاملات صادرة خلال فترة زمنية محددة",
   "no-incoming-within-period": "لا توجد معاملات واردة خلال فترة زمنية محددة",
   "select-all": "اختر الكل",
-  "excluded": "مستبعد"
+  "excluded": "مستبعد",
+  "maximum-transactions": "الحد الأقصى للمعاملات",
+  "only-the-first": "الأول فقط"
 }

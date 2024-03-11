@@ -1079,5 +1079,7 @@
   "no-outgoing-within-period": "પસંદ કરેલા સમયગાળાની અંદર કોઈ આઉટગોઇંગ ટ્રાન્ઝેક્શન નથી",
   "no-incoming-within-period": "પસંદ કરેલા સમયગાળાની અંદર આવનારા વ્યવહારો નથી",
   "select-all": "બધા પસંદ કરો",
-  "excluded": "બાકાત"
+  "excluded": "બાકાત",
+  "maximum-transactions": "મહત્તમ વ્યવહાર",
+  "only-the-first": "માત્ર પ્રથમ"
 }

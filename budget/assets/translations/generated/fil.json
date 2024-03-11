@@ -1079,5 +1079,7 @@
   "no-outgoing-within-period": "Walang mga papalabas na transaksyon sa loob ng napiling tagal ng oras",
   "no-incoming-within-period": "Walang papasok na mga transaksyon sa loob ng napiling tagal ng oras",
   "select-all": "Piliin lahat",
-  "excluded": "Hindi kasama"
+  "excluded": "Hindi kasama",
+  "maximum-transactions": "Maximum na mga transaksyon",
+  "only-the-first": "Ang una lamang"
 }

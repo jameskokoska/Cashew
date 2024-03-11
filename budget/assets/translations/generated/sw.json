@@ -1079,5 +1079,7 @@
   "no-outgoing-within-period": "Hakuna shughuli zinazomaliza muda wake katika kipindi cha wakati uliochaguliwa",
   "no-incoming-within-period": "Hakuna shughuli zinazoingia katika kipindi cha wakati uliochaguliwa",
   "select-all": "Chagua Zote",
-  "excluded": "Kutengwa"
+  "excluded": "Kutengwa",
+  "maximum-transactions": "Uuzaji wa kiwango cha juu",
+  "only-the-first": "Kwanza tu"
 }

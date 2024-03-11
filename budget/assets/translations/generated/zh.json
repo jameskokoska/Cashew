@@ -1079,5 +1079,7 @@
   "no-outgoing-within-period": "在选定的时间段内没有传出交易",
   "no-incoming-within-period": "在选定的时间段内没有传入的交易",
   "select-all": "全选",
-  "excluded": "排除"
+  "excluded": "排除",
+  "maximum-transactions": "最大交易",
+  "only-the-first": "只有第一个"
 }

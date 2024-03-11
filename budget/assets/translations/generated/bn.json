@@ -1079,5 +1079,7 @@
   "no-outgoing-within-period": "নির্বাচিত সময়কালের মধ্যে কোনও বহির্গামী লেনদেন নেই",
   "no-incoming-within-period": "নির্বাচিত সময়কালের মধ্যে কোনও আগত লেনদেন নেই",
   "select-all": "সমস্ত নির্বাচন করুন",
-  "excluded": "ছাঁটা"
+  "excluded": "ছাঁটা",
+  "maximum-transactions": "সর্বাধিক লেনদেন",
+  "only-the-first": "শুধুমাত্র প্রথম"
 }

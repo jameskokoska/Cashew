@@ -1079,5 +1079,7 @@
   "no-outgoing-within-period": "ไม่มีธุรกรรมขาออกภายในระยะเวลาที่เลือก",
   "no-incoming-within-period": "ไม่มีธุรกรรมที่เข้ามาภายในระยะเวลาที่เลือก",
   "select-all": "เลือกทั้งหมด",
-  "excluded": "ไม่รวม"
+  "excluded": "ไม่รวม",
+  "maximum-transactions": "ธุรกรรมสูงสุด",
+  "only-the-first": "คนแรกเท่านั้น"
 }

@@ -1079,5 +1079,7 @@
   "no-outgoing-within-period": "Tidak ada transaksi keluar dalam periode waktu yang dipilih",
   "no-incoming-within-period": "Tidak ada transaksi yang masuk dalam periode waktu yang dipilih",
   "select-all": "Pilih Semua",
-  "excluded": "Pengecualian"
+  "excluded": "Pengecualian",
+  "maximum-transactions": "Transaksi maksimum",
+  "only-the-first": "Hanya yang pertama"
 }

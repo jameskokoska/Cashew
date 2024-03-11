@@ -1079,5 +1079,7 @@
   "no-outgoing-within-period": "Ingen utgående transaksjoner innen valgt tidsperiode",
   "no-incoming-within-period": "Ingen innkommende transaksjoner innen valgt tidsperiode",
   "select-all": "Velg alle",
-  "excluded": "Ekskludert"
+  "excluded": "Ekskludert",
+  "maximum-transactions": "Maksimale transaksjoner",
+  "only-the-first": "Bare den første"
 }

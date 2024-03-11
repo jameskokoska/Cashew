@@ -1079,5 +1079,7 @@
   "no-outgoing-within-period": "Không có giao dịch chi tiêu trong giai đoạn đã chọn",
   "no-incoming-within-period": "Không có giao dịch thu nhập trong giai đoạn đã chọn",
   "select-all": "Chọn hết",
-  "excluded": "Loại trừ"
+  "excluded": "Đã loại trừ",
+  "maximum-transactions": "Giao dịch tối đa",
+  "only-the-first": "Chỉ đầu tiên"
 }

@@ -1079,5 +1079,7 @@
   "no-outgoing-within-period": "Ei lähteviä tapahtumia valitun ajanjakson aikana",
   "no-incoming-within-period": "Ei tulevia tapahtumia valitun ajanjakson aikana",
   "select-all": "Valitse kaikki",
-  "excluded": "Ulkopuolelle"
+  "excluded": "Ulkopuolelle",
+  "maximum-transactions": "Enimmäiskaupat",
+  "only-the-first": "Vain ensimmäinen"
 }

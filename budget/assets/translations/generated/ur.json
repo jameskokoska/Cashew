@@ -1079,5 +1079,7 @@
   "no-outgoing-within-period": "منتخب کردہ وقت کے اندر باہر جانے والے لین دین نہیں",
   "no-incoming-within-period": "منتخب کردہ وقت کی مدت میں آنے والے لین دین نہیں",
   "select-all": "تمام منتخب کریں",
-  "excluded": "خارج"
+  "excluded": "خارج",
+  "maximum-transactions": "زیادہ سے زیادہ لین دین",
+  "only-the-first": "صرف پہلا"
 }

@@ -1079,5 +1079,7 @@
   "no-outgoing-within-period": "선택된 기간 내에 나가는 거래가 없습니다",
   "no-incoming-within-period": "선택된 기간 내에 들어오는 거래가 없습니다",
   "select-all": "모두를 선택하십시오",
-  "excluded": "제외된"
+  "excluded": "제외된",
+  "maximum-transactions": "최대 거래",
+  "only-the-first": "첫 번째"
 }

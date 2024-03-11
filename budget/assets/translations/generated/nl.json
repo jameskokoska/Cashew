@@ -1079,5 +1079,7 @@
   "no-outgoing-within-period": "Geen uitgaande transacties binnen de geselecteerde periode",
   "no-incoming-within-period": "Geen inkomende transacties binnen de geselecteerde periode",
   "select-all": "Selecteer alles",
-  "excluded": "Uitgesloten"
+  "excluded": "Uitgesloten",
+  "maximum-transactions": "Maximale transacties",
+  "only-the-first": "Alleen de eerste"
 }

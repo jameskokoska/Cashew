@@ -1079,5 +1079,7 @@
   "no-outgoing-within-period": "चयनित समय अवधि के भीतर कोई निवर्तमान लेनदेन नहीं",
   "no-incoming-within-period": "चयनित समय अवधि के भीतर कोई आने वाला लेनदेन नहीं",
   "select-all": "सबका चयन करें",
-  "excluded": "छोड़ा गया"
+  "excluded": "छोड़ा गया",
+  "maximum-transactions": "अधिकतम लेनदेन",
+  "only-the-first": "केवल पहला"
 }
