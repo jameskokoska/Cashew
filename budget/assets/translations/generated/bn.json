@@ -493,7 +493,6 @@
   "total-remaining-example": "উদাহরণ: 75 100 এর বাকি",
   "importing-loading": "আমদানি ...",
   "successfully-imported": "সফলভাবে আমদানি করা",
-  "please-restart-the-application": "আবেদনটি পুনরায় চালু করুন",
   "biometrics-disabled": "বায়োমেট্রিক্স অক্ষম",
   "biometrics-disabled-description": "সেটিংস পৃষ্ঠায় বায়োমেট্রিক্স সক্ষম করুন এবং আবার চেষ্টা করুন",
   "biometrics-error": "বায়োমেট্রিক্স ত্রুটি",
@@ -1081,5 +1080,12 @@
   "select-all": "সমস্ত নির্বাচন করুন",
   "excluded": "ছাঁটা",
   "maximum-transactions": "সর্বাধিক লেনদেন",
-  "only-the-first": "শুধুমাত্র প্রথম"
+  "only-the-first": "শুধুমাত্র প্রথম",
+  "restart-required-to-load-backup": "ব্যাকআপ থেকে ডেটা লোড করতে একটি অ্যাপ্লিকেশন পুনরায় আরম্ভ করা প্রয়োজন",
+  "refresh-required-to-load-backup": "ব্যাকআপ থেকে ডেটা লোড করতে একটি অ্যাপ্লিকেশন রিফ্রেশ প্রয়োজন",
+  "please-restart-the-application": "আবেদনটি পুনরায় চালু করুন",
+  "please-refresh-the-application": "অ্যাপ্লিকেশনটি রিফ্রেশ করুন",
+  "only-expense-income": "ব্যয়/আয় কেবল",
+  "only-expense-income-description-1": "সমস্ত বহির্গামী/আগত অন্তর্ভুক্ত করবেন না",
+  "only-expense-income-description-2": "উদাহরণ: loans ণ অন্তর্ভুক্ত করবেন না"
 }

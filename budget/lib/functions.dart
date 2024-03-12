@@ -919,7 +919,8 @@ String pluralString(bool condition, String string) {
 // }
 
 bool lockAppWaitForRestart = false;
-void restartAppPopup(context) async {
+void restartAppPopup(context,
+    {String? subtitle, String? description, String? codeBlock}) async {
   // For now, enforce this until better solution found
   if (kIsWeb || true) {
     // Lock the side navigation
@@ -928,11 +929,22 @@ void restartAppPopup(context) async {
 
     openPopup(
       context,
-      title: "please-restart-the-application".tr(),
+      title: kIsWeb
+          ? "please-refresh-the-application".tr()
+          : "please-restart-the-application".tr(),
+      description: description,
+      subtitle: subtitle,
+      descriptionWidget: codeBlock == null
+          ? null
+          : Padding(
+              padding: const EdgeInsets.only(top: 8, bottom: 12),
+              child: CodeBlock(text: codeBlock),
+            ),
       icon: appStateSettings["outlinedIcons"]
           ? Icons.restart_alt_outlined
           : Icons.restart_alt_rounded,
       barrierDismissible: false,
+      // Show code widget with the name of the file monospace font
     );
   } else {
     // Pop all routes, select home tab

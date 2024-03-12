@@ -1,8 +1,10 @@
 import 'package:budget/colors.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/struct/settings.dart';
+import 'package:budget/widgets/settingsContainers.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class OutlinedButtonStacked extends StatelessWidget {
@@ -22,11 +24,12 @@ class OutlinedButtonStacked extends StatelessWidget {
     this.infoButton,
     this.iconScale = 1,
     this.borderRadius,
+    this.showToggleSwitch = false,
   });
   final String text;
   final double? fontSize;
   final void Function()? onTap;
-  final IconData iconData;
+  final IconData? iconData;
   final Widget? afterWidget;
   final bool alignLeft;
   final EdgeInsets? padding;
@@ -37,6 +40,7 @@ class OutlinedButtonStacked extends StatelessWidget {
   final Widget? infoButton;
   final double iconScale;
   final double? borderRadius;
+  final bool showToggleSwitch;
   @override
   Widget build(BuildContext context) {
     double borderRadiusValue =
@@ -68,17 +72,21 @@ class OutlinedButtonStacked extends StatelessWidget {
                                     ? CrossAxisAlignment.start
                                     : CrossAxisAlignment.center,
                                 children: [
-                                  Transform.scale(
-                                    scale: iconScale,
-                                    child: Icon(
-                                      iconData,
-                                      size: 35,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .secondary,
+                                  if (iconData != null)
+                                    Padding(
+                                      padding:
+                                          const EdgeInsets.only(bottom: 10),
+                                      child: Transform.scale(
+                                        scale: iconScale,
+                                        child: Icon(
+                                          iconData,
+                                          size: 35,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .secondary,
+                                        ),
+                                      ),
                                     ),
-                                  ),
-                                  SizedBox(height: 10),
                                   TextFont(
                                     text: text,
                                     fontSize: fontSize ?? 18,
@@ -94,6 +102,13 @@ class OutlinedButtonStacked extends StatelessWidget {
                                 text: text,
                                 infoButton: infoButton,
                                 fontSize: fontSize,
+                                extraWidget:
+                                    onTap != null && showToggleSwitch == true
+                                        ? PlatformSwitch(
+                                            value: filled,
+                                            onTap: onTap!,
+                                          )
+                                        : null,
                               ),
                         afterWidget == null
                             ? SizedBox.shrink()
@@ -157,12 +172,13 @@ class OutlinedContainer extends StatelessWidget {
 }
 
 class HeaderWithIconAndInfo extends StatelessWidget {
-  final IconData iconData;
+  final IconData? iconData;
   final double iconScale;
   final String text;
   final double? fontSize;
   final Widget? infoButton;
   final EdgeInsets padding;
+  final Widget? extraWidget;
 
   HeaderWithIconAndInfo({
     required this.iconData,
@@ -171,6 +187,7 @@ class HeaderWithIconAndInfo extends StatelessWidget {
     this.fontSize,
     this.infoButton,
     this.padding = EdgeInsets.zero,
+    this.extraWidget,
   });
 
   @override
@@ -179,15 +196,18 @@ class HeaderWithIconAndInfo extends StatelessWidget {
       padding: padding,
       child: Row(
         children: [
-          Transform.scale(
-            scale: iconScale,
-            child: Icon(
-              iconData,
-              size: 28,
-              color: Theme.of(context).colorScheme.secondary,
+          if (iconData != null)
+            Padding(
+              padding: const EdgeInsets.only(right: 10),
+              child: Transform.scale(
+                scale: iconScale,
+                child: Icon(
+                  iconData,
+                  size: 28,
+                  color: Theme.of(context).colorScheme.secondary,
+                ),
+              ),
             ),
-          ),
-          SizedBox(width: 10),
           Expanded(
             child: TextFont(
               text: text,
@@ -196,7 +216,8 @@ class HeaderWithIconAndInfo extends StatelessWidget {
               maxLines: 2,
             ),
           ),
-          infoButton ?? SizedBox.shrink(),
+          if (extraWidget != null) extraWidget!,
+          if (infoButton != null) infoButton!,
         ],
       ),
     );

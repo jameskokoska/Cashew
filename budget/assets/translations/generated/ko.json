@@ -493,7 +493,6 @@
   "total-remaining-example": "예 : 75 남은 100",
   "importing-loading": "수입 ...",
   "successfully-imported": "성공적으로 가져 왔습니다",
-  "please-restart-the-application": "신청서를 다시 시작하십시오",
   "biometrics-disabled": "생체 인식이 비활성화되었습니다",
   "biometrics-disabled-description": "설정 페이지에서 생체 인식을 활성화하고 다시 시도하십시오",
   "biometrics-error": "생체 인식 오류",
@@ -1081,5 +1080,12 @@
   "select-all": "모두를 선택하십시오",
   "excluded": "제외된",
   "maximum-transactions": "최대 거래",
-  "only-the-first": "첫 번째"
+  "only-the-first": "첫 번째",
+  "restart-required-to-load-backup": "백업에서 데이터를로드하려면 앱 재시작이 필요합니다.",
+  "refresh-required-to-load-backup": "백업에서 데이터를로드하려면 앱 새로 고침이 필요합니다.",
+  "please-restart-the-application": "신청서를 다시 시작하십시오",
+  "please-refresh-the-application": "신청서를 새로 고치십시오",
+  "only-expense-income": "비용/소득 만",
+  "only-expense-income-description-1": "모든 발신/들어오는 것을 포함하지 마십시오",
+  "only-expense-income-description-2": "예 : 대출을 포함하지 마십시오"
 }

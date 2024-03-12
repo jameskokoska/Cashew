@@ -493,7 +493,6 @@
   "total-remaining-example": "דוגמה: 75 שנותרו של 100",
   "importing-loading": "יבוא ...",
   "successfully-imported": "מיובא בהצלחה",
-  "please-restart-the-application": "אנא הפעל מחדש את הבקשה",
   "biometrics-disabled": "ביומטריה מושבתת",
   "biometrics-disabled-description": "הפעל ביומטריה בדף ההגדרות ונסה שוב",
   "biometrics-error": "שגיאת ביומטריה",
@@ -1081,5 +1080,12 @@
   "select-all": "בחר הכל",
   "excluded": "לא נכלל",
   "maximum-transactions": "עסקאות מרביות",
-  "only-the-first": "רק הראשון"
+  "only-the-first": "רק הראשון",
+  "restart-required-to-load-backup": "נדרש הפעלה מחדש של אפליקציה כדי לטעון נתונים מהגיבוי",
+  "refresh-required-to-load-backup": "נדרש רענון אפליקציה כדי לטעון נתונים מהגיבוי",
+  "please-restart-the-application": "אנא הפעל מחדש את הבקשה",
+  "please-refresh-the-application": "אנא רענן את היישום",
+  "only-expense-income": "הוצאה/הכנסה בלבד",
+  "only-expense-income-description-1": "אל תכלול את כל היוצאים/נכנסים",
+  "only-expense-income-description-2": "דוגמה: אל תכלול הלוואות"
 }

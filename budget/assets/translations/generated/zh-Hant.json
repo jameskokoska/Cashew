@@ -493,7 +493,6 @@
   "total-remaining-example": "示例：100 中剩餘 75",
   "importing-loading": "導入中…",
   "successfully-imported": "導入成功",
-  "please-restart-the-application": "請重新啟動程序",
   "biometrics-disabled": "已禁用生物資訊識別",
   "biometrics-disabled-description": "在設置頁面中啟用生物識別技術，然後重試",
   "biometrics-error": "生物識別錯誤",
@@ -1081,5 +1080,12 @@
   "select-all": "全選",
   "excluded": "排除",
   "maximum-transactions": "最大交易",
-  "only-the-first": "只有第一個"
+  "only-the-first": "只有第一個",
+  "restart-required-to-load-backup": "需要重新啟動以從備份加載數據",
+  "refresh-required-to-load-backup": "需要刷新以從備份加載數據",
+  "please-restart-the-application": "請重新啟動程序",
+  "please-refresh-the-application": "請刷新申請",
+  "only-expense-income": "僅費用/收入",
+  "only-expense-income-description-1": "不要包括所有外向/傳入",
+  "only-expense-income-description-2": "示例：不包括貸款"
 }

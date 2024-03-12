@@ -493,7 +493,6 @@
   "total-remaining-example": "مثال: 75 باقیمانده از 100",
   "importing-loading": "واردات ...",
   "successfully-imported": "با موفقیت وارداتی",
-  "please-restart-the-application": "لطفاً برنامه را مجدداً راه اندازی کنید",
   "biometrics-disabled": "بیومتریک غیرفعال",
   "biometrics-disabled-description": "بیومتریک را در صفحه تنظیمات فعال کنید و دوباره امتحان کنید",
   "biometrics-error": "خطای بیومتریک",
@@ -1044,7 +1043,7 @@
   "set-date-time": "تنظیم",
   "add-record-using-plus-button": "با استفاده از دکمه [+] یک رکورد اضافه کنید.",
   "all-settled": "همه حل و فصل شدند",
-  "difference-loan": "وام اختلاف",
+  "difference-loan": "وام تفاوت",
   "open-settings": "تنظیمات باز",
   "decimal-precision": "دقت اعشاری",
   "decimal-precision-description": "مکان های اعشاری برای گردآوری مبلغ معامله",
@@ -1081,5 +1080,12 @@
   "select-all": "انتخاب همه",
   "excluded": "مستثنی",
   "maximum-transactions": "حداکثر معاملات",
-  "only-the-first": "فقط اولین"
+  "only-the-first": "فقط اولین",
+  "restart-required-to-load-backup": "راه اندازی مجدد برنامه برای بارگیری داده ها از نسخه پشتیبان لازم است",
+  "refresh-required-to-load-backup": "برای بارگیری داده ها از نسخه پشتیبان تهیه شده است",
+  "please-restart-the-application": "لطفاً برنامه را مجدداً راه اندازی کنید",
+  "please-refresh-the-application": "لطفا برنامه را تازه کنید",
+  "only-expense-income": "فقط هزینه/درآمد",
+  "only-expense-income-description-1": "شامل همه خروجی/ورودی نشوید",
+  "only-expense-income-description-2": "مثال: وام را شامل نمی شود"
 }

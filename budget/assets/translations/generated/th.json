@@ -493,7 +493,6 @@
   "total-remaining-example": "ตัวอย่าง: 75 ที่เหลืออยู่ 100",
   "importing-loading": "นำเข้า ...",
   "successfully-imported": "นำเข้าสำเร็จ",
-  "please-restart-the-application": "โปรดรีสตาร์ทใบสมัคร",
   "biometrics-disabled": "Biometrics ปิดใช้งาน",
   "biometrics-disabled-description": "เปิดใช้งาน Biometrics ในหน้าการตั้งค่าและลองอีกครั้ง",
   "biometrics-error": "ข้อผิดพลาดทางชีวภาพ",
@@ -1047,7 +1046,7 @@
   "difference-loan": "เงินกู้ที่แตกต่างกัน",
   "open-settings": "เปิดการตั้งค่า",
   "decimal-precision": "ความแม่นยำของทศนิยม",
-  "decimal-precision-description": "ทศนิยมสถานที่สำหรับการทำธุรกรรมการปัดเศษ",
+  "decimal-precision-description": "ทศนิยมสถานที่สำหรับการปัดเศษจำนวนธุรกรรม",
   "same-accounts": "บัญชีเดียวกัน",
   "select-2-different-accounts": "เลือก 2 บัญชีที่แตกต่างกัน",
   "include-amount": "รวมจำนวนเงิน",
@@ -1081,5 +1080,12 @@
   "select-all": "เลือกทั้งหมด",
   "excluded": "ไม่รวม",
   "maximum-transactions": "ธุรกรรมสูงสุด",
-  "only-the-first": "คนแรกเท่านั้น"
+  "only-the-first": "คนแรกเท่านั้น",
+  "restart-required-to-load-backup": "จำเป็นต้องรีสตาร์ทแอปเพื่อโหลดข้อมูลจากการสำรองข้อมูล",
+  "refresh-required-to-load-backup": "จำเป็นต้องมีการรีเฟรชแอปเพื่อโหลดข้อมูลจากการสำรองข้อมูล",
+  "please-restart-the-application": "โปรดรีสตาร์ทใบสมัคร",
+  "please-refresh-the-application": "โปรดรีเฟรชใบสมัคร",
+  "only-expense-income": "ค่าใช้จ่าย/รายได้เท่านั้น",
+  "only-expense-income-description-1": "อย่ารวมขาออก/ขาเข้าทั้งหมด",
+  "only-expense-income-description-2": "ตัวอย่าง: อย่ารวมสินเชื่อ"
 }

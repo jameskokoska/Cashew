@@ -493,7 +493,6 @@
   "total-remaining-example": "Exemple : 75 restants sur 100",
   "importing-loading": "Importation ...",
   "successfully-imported": "Importé avec succès",
-  "please-restart-the-application": "Veuillez redémarrer la demande",
   "biometrics-disabled": "Biométrie désactivée",
   "biometrics-disabled-description": "Activer la biométrie dans la page des paramètres et réessayer",
   "biometrics-error": "Erreur de biométrie",
@@ -1081,5 +1080,12 @@
   "select-all": "Tout sélectionner",
   "excluded": "Exclu",
   "maximum-transactions": "Transactions maximales",
-  "only-the-first": "Seulement le premier"
+  "only-the-first": "Seulement le premier",
+  "restart-required-to-load-backup": "Un redémarrage de l'application est nécessaire pour charger les données de la sauvegarde",
+  "refresh-required-to-load-backup": "Une actualisation de l'application est nécessaire pour charger les données de la sauvegarde",
+  "please-restart-the-application": "Veuillez redémarrer la demande",
+  "please-refresh-the-application": "Veuillez actualiser la demande",
+  "only-expense-income": "Dépense / revenu uniquement",
+  "only-expense-income-description-1": "N'incluez pas tout sortant / entrant",
+  "only-expense-income-description-2": "Exemple: n'incluez pas les prêts"
 }

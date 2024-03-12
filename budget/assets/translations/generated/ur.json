@@ -493,7 +493,6 @@
   "total-remaining-example": "مثال: 75 باقی 100",
   "importing-loading": "درآمد ...",
   "successfully-imported": "کامیابی کے ساتھ درآمد",
-  "please-restart-the-application": "براہ کرم درخواست کو دوبارہ شروع کریں",
   "biometrics-disabled": "بایومیٹرکس غیر فعال",
   "biometrics-disabled-description": "ترتیبات کے صفحے میں بایومیٹرکس کو فعال کریں اور دوبارہ کوشش کریں",
   "biometrics-error": "بایومیٹرکس کی خرابی",
@@ -1081,5 +1080,12 @@
   "select-all": "تمام منتخب کریں",
   "excluded": "خارج",
   "maximum-transactions": "زیادہ سے زیادہ لین دین",
-  "only-the-first": "صرف پہلا"
+  "only-the-first": "صرف پہلا",
+  "restart-required-to-load-backup": "بیک اپ سے ڈیٹا لوڈ کرنے کے لئے ایک ایپ کو دوبارہ شروع کرنے کی ضرورت ہے",
+  "refresh-required-to-load-backup": "بیک اپ سے ڈیٹا لوڈ کرنے کے لئے ایک ایپ ریفریش کی ضرورت ہے",
+  "please-restart-the-application": "براہ کرم درخواست کو دوبارہ شروع کریں",
+  "please-refresh-the-application": "براہ کرم درخواست کو تازہ کریں",
+  "only-expense-income": "صرف اخراجات/آمدنی",
+  "only-expense-income-description-1": "سبکدوش ہونے والے/آنے والے تمام کو شامل نہ کریں",
+  "only-expense-income-description-2": "مثال: قرضوں کو شامل نہ کریں"
 }

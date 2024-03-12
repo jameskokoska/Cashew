@@ -493,7 +493,6 @@
   "total-remaining-example": "ഉദാഹരണം: 75 ശേഷിക്കുന്നു 100 ശേഷിക്കുന്നു",
   "importing-loading": "ഇറക്കുമതി ചെയ്യുന്നു ...",
   "successfully-imported": "വിജയകരമായി ഇറക്കുമതി ചെയ്തു",
-  "please-restart-the-application": "ആപ്ലിക്കേഷൻ പുനരാരംഭിക്കുക",
   "biometrics-disabled": "ബയോമെട്രിക്സ് പ്രവർത്തനരഹിതമാക്കി",
   "biometrics-disabled-description": "ക്രമീകരണ പേജിൽ ബയോമെട്രിക്സ് പ്രവർത്തനക്ഷമമാക്കി വീണ്ടും ശ്രമിക്കുക",
   "biometrics-error": "ബയോമെട്രിക്സ് പിശക്",
@@ -1081,5 +1080,12 @@
   "select-all": "എല്ലാം തിരഞ്ഞെടുക്കുക",
   "excluded": "ഒഴിവാക്കി",
   "maximum-transactions": "പരമാവധി ഇടപാടുകൾ",
-  "only-the-first": "ആദ്യത്തേത് മാത്രം"
+  "only-the-first": "ആദ്യത്തേത് മാത്രം",
+  "restart-required-to-load-backup": "ബാക്കപ്പിൽ നിന്ന് ഡാറ്റ ലോഡുചെയ്യുന്നതിന് ഒരു അപ്ലിക്കേഷൻ പുനരാരംഭിക്കൽ ആവശ്യമാണ്",
+  "refresh-required-to-load-backup": "ബാക്കപ്പിൽ നിന്ന് ഡാറ്റ ലോഡുചെയ്യുന്നതിന് ഒരു അപ്ലിക്കേഷൻ പുതുക്കൽ ആവശ്യമാണ്",
+  "please-restart-the-application": "ആപ്ലിക്കേഷൻ പുനരാരംഭിക്കുക",
+  "please-refresh-the-application": "ആപ്ലിക്കേഷൻ പുതുക്കുക",
+  "only-expense-income": "ചെലവ് / വരുമാനം മാത്രം",
+  "only-expense-income-description-1": "എല്ലാ going ട്ട്ഗോയിംഗ് / ഇൻകമിംഗ് ഉൾപ്പെടുത്തരുത്",
+  "only-expense-income-description-2": "ഉദാഹരണം: വായ്പകൾ ഉൾപ്പെടുത്തരുത്"
 }

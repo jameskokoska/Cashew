@@ -493,7 +493,6 @@
   "total-remaining-example": "उदाहरणः 100 चे 75 उर्वरित",
   "importing-loading": "आयात करीत आहे ...",
   "successfully-imported": "यशस्वीरित्या आयात केले",
-  "please-restart-the-application": "कृपया अर्ज पुन्हा सुरू करा",
   "biometrics-disabled": "बायोमेट्रिक्स अक्षम",
   "biometrics-disabled-description": "सेटिंग्ज पृष्ठामध्ये बायोमेट्रिक्स सक्षम करा आणि पुन्हा प्रयत्न करा",
   "biometrics-error": "बायोमेट्रिक्स त्रुटी",
@@ -1081,5 +1080,12 @@
   "select-all": "सर्व निवडा",
   "excluded": "वगळले",
   "maximum-transactions": "जास्तीत जास्त व्यवहार",
-  "only-the-first": "फक्त प्रथम"
+  "only-the-first": "फक्त प्रथम",
+  "restart-required-to-load-backup": "बॅकअपमधून डेटा लोड करण्यासाठी अॅप रीस्टार्ट आवश्यक आहे",
+  "refresh-required-to-load-backup": "बॅकअपमधून डेटा लोड करण्यासाठी अॅप रीफ्रेश आवश्यक आहे",
+  "please-restart-the-application": "कृपया अर्ज पुन्हा सुरू करा",
+  "please-refresh-the-application": "कृपया अनुप्रयोग रीफ्रेश करा",
+  "only-expense-income": "केवळ खर्च/उत्पन्न",
+  "only-expense-income-description-1": "सर्व आउटगोइंग/इनकमिंग समाविष्ट करू नका",
+  "only-expense-income-description-2": "उदाहरणः कर्ज समाविष्ट करू नका"
 }

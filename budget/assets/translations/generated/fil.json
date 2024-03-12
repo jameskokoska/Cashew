@@ -493,7 +493,6 @@
   "total-remaining-example": "Halimbawa: 75 na natitira sa 100",
   "importing-loading": "Pag -import ...",
   "successfully-imported": "Matagumpay na na -import",
-  "please-restart-the-application": "Mangyaring i -restart ang application",
   "biometrics-disabled": "Hindi pinagana ang Biometrics",
   "biometrics-disabled-description": "Paganahin ang biometrics sa pahina ng mga setting at subukang muli",
   "biometrics-error": "Error sa biometrics",
@@ -1081,5 +1080,12 @@
   "select-all": "Piliin lahat",
   "excluded": "Hindi kasama",
   "maximum-transactions": "Maximum na mga transaksyon",
-  "only-the-first": "Ang una lamang"
+  "only-the-first": "Ang una lamang",
+  "restart-required-to-load-backup": "Kinakailangan ang isang restart ng app upang mai -load ang data mula sa backup",
+  "refresh-required-to-load-backup": "Kinakailangan ang isang pag -refresh ng app upang mai -load ang data mula sa backup",
+  "please-restart-the-application": "Mangyaring i -restart ang application",
+  "please-refresh-the-application": "Mangyaring i -refresh ang application",
+  "only-expense-income": "Gastos/kita lamang",
+  "only-expense-income-description-1": "Huwag isama ang lahat ng papalabas/papasok",
+  "only-expense-income-description-2": "Halimbawa: Huwag isama ang mga pautang"
 }

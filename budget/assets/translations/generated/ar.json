@@ -493,7 +493,6 @@
   "total-remaining-example": "مثال: 75 المتبقية من 100",
   "importing-loading": "استيراد ...",
   "successfully-imported": "تم استيرادها بنجاح",
-  "please-restart-the-application": "الرجاء إعادة تشغيل التطبيق",
   "biometrics-disabled": "القياسات الحيوية معاق",
   "biometrics-disabled-description": "تمكين القياسات الحيوية في صفحة الإعدادات وحاول مرة أخرى",
   "biometrics-error": "خطأ القياسات الحيوية",
@@ -1081,5 +1080,12 @@
   "select-all": "اختر الكل",
   "excluded": "مستبعد",
   "maximum-transactions": "الحد الأقصى للمعاملات",
-  "only-the-first": "الأول فقط"
+  "only-the-first": "الأول فقط",
+  "restart-required-to-load-backup": "مطلوب إعادة تشغيل التطبيق لتحميل البيانات من النسخ الاحتياطي",
+  "refresh-required-to-load-backup": "مطلوب تحديث التطبيق لتحميل البيانات من النسخ الاحتياطي",
+  "please-restart-the-application": "الرجاء إعادة تشغيل التطبيق",
+  "please-refresh-the-application": "الرجاء تحديث التطبيق",
+  "only-expense-income": "المصاريف/الدخل فقط",
+  "only-expense-income-description-1": "لا تشمل كل الصادرة/الواردة",
+  "only-expense-income-description-2": "مثال: لا تتضمن القروض"
 }

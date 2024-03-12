@@ -493,7 +493,6 @@
   "total-remaining-example": "Beispiel: 75 verbleib von 100",
   "importing-loading": "Importieren ...",
   "successfully-imported": "Erfolgreich importiert",
-  "please-restart-the-application": "Bitte starten Sie die Bewerbung neu",
   "biometrics-disabled": "Biometrie deaktiviert",
   "biometrics-disabled-description": "Aktivieren Sie die Biometrie auf der Seite \"Einstellungen\" und versuchen Sie es erneut",
   "biometrics-error": "Biometriefehler",
@@ -1081,5 +1080,12 @@
   "select-all": "Alle auswählen",
   "excluded": "Ausgeschlossen",
   "maximum-transactions": "Maximale Transaktionen",
-  "only-the-first": "Nur der erste"
+  "only-the-first": "Nur der erste",
+  "restart-required-to-load-backup": "Ein Neustart von Apps ist erforderlich, um Daten aus der Sicherung zu laden",
+  "refresh-required-to-load-backup": "Eine App -Aktualisierung ist erforderlich, um Daten aus der Sicherung zu laden",
+  "please-restart-the-application": "Bitte starten Sie die Bewerbung neu",
+  "please-refresh-the-application": "Bitte aktualisieren Sie die Bewerbung",
+  "only-expense-income": "Nur Kosten/Einkommen",
+  "only-expense-income-description-1": "Fügen Sie nicht alle ausgehenden/eingehenden einzubeziehen",
+  "only-expense-income-description-2": "Beispiel: Kredite keine Kredite eingeben"
 }

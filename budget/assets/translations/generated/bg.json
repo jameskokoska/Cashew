@@ -493,7 +493,6 @@
   "total-remaining-example": "Пример: 75 останали от 100",
   "importing-loading": "Внос ...",
   "successfully-imported": "Успешно внесени",
-  "please-restart-the-application": "Моля, рестартирайте приложението",
   "biometrics-disabled": "Биометрия деактивирана",
   "biometrics-disabled-description": "Активирайте биометрията в страницата Настройки и опитайте отново",
   "biometrics-error": "Грешка в биометрията",
@@ -1081,5 +1080,12 @@
   "select-all": "Избери всички",
   "excluded": "Изключен",
   "maximum-transactions": "Максимални транзакции",
-  "only-the-first": "Само първия"
+  "only-the-first": "Само първия",
+  "restart-required-to-load-backup": "Необходим е рестартиране на приложения за зареждане на данни от архивирането",
+  "refresh-required-to-load-backup": "Необходимо е опресняване на приложението за зареждане на данни от архивирането",
+  "please-restart-the-application": "Моля, рестартирайте приложението",
+  "please-refresh-the-application": "Моля, опреснете приложението",
+  "only-expense-income": "Само за разходи/доходи",
+  "only-expense-income-description-1": "Не включвайте всички изходящи/входящи",
+  "only-expense-income-description-2": "Пример: Не включвайте заеми"
 }

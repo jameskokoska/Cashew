@@ -493,7 +493,6 @@
   "total-remaining-example": "ఉదాహరణ: 75 100 మిగిలి ఉంది",
   "importing-loading": "దిగుమతి ...",
   "successfully-imported": "విజయవంతంగా దిగుమతి చేయబడింది",
-  "please-restart-the-application": "దయచేసి దరఖాస్తును పున art ప్రారంభించండి",
   "biometrics-disabled": "బయోమెట్రిక్స్ నిలిపివేయబడింది",
   "biometrics-disabled-description": "సెట్టింగుల పేజీలో బయోమెట్రిక్‌లను ప్రారంభించండి మరియు మళ్లీ ప్రయత్నించండి",
   "biometrics-error": "బయోమెట్రిక్స్ లోపం",
@@ -1081,5 +1080,12 @@
   "select-all": "అన్ని ఎంచుకోండి",
   "excluded": "మినహాయించబడింది",
   "maximum-transactions": "గరిష్ట లావాదేవీలు",
-  "only-the-first": "మొదటిది మాత్రమే"
+  "only-the-first": "మొదటిది మాత్రమే",
+  "restart-required-to-load-backup": "బ్యాకప్ నుండి డేటాను లోడ్ చేయడానికి అనువర్తన పున art ప్రారంభం అవసరం",
+  "refresh-required-to-load-backup": "బ్యాకప్ నుండి డేటాను లోడ్ చేయడానికి అనువర్తనం రిఫ్రెష్ అవసరం",
+  "please-restart-the-application": "దయచేసి దరఖాస్తును పున art ప్రారంభించండి",
+  "please-refresh-the-application": "దయచేసి దరఖాస్తును రిఫ్రెష్ చేయండి",
+  "only-expense-income": "ఖర్చు/ఆదాయం మాత్రమే",
+  "only-expense-income-description-1": "అన్ని అవుట్గోయింగ్/ఇన్కమింగ్ చేర్చవద్దు",
+  "only-expense-income-description-2": "ఉదాహరణ: రుణాలు చేర్చవద్దు"
 }

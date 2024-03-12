@@ -493,7 +493,6 @@
   "total-remaining-example": "Esimerkki: 75 jäljellä 100",
   "importing-loading": "Tuo ...",
   "successfully-imported": "Tuonti menestyksekkäästi",
-  "please-restart-the-application": "Käynnistä sovellus uudelleen",
   "biometrics-disabled": "Biometriset tiedot poistettu käytöstä",
   "biometrics-disabled-description": "Ota biometriset tiedot asetussivulla ja yritä uudelleen",
   "biometrics-error": "Biometrinen virhe",
@@ -1081,5 +1080,12 @@
   "select-all": "Valitse kaikki",
   "excluded": "Ulkopuolelle",
   "maximum-transactions": "Enimmäiskaupat",
-  "only-the-first": "Vain ensimmäinen"
+  "only-the-first": "Vain ensimmäinen",
+  "restart-required-to-load-backup": "Tietojen lataaminen varmuuskopiosta tarvitaan sovelluksen uudelleenkäynnistys",
+  "refresh-required-to-load-backup": "Tietojen lataaminen varmuuskopiosta tarvitaan sovelluksen päivitys",
+  "please-restart-the-application": "Käynnistä sovellus uudelleen",
+  "please-refresh-the-application": "Päivitä sovellus",
+  "only-expense-income": "Vain kustannukset/tulot",
+  "only-expense-income-description-1": "Älä sisällä kaikkia lähteviä/saapuvia",
+  "only-expense-income-description-2": "Esimerkki: Älä sisällä lainoja"
 }

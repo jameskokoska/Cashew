@@ -17,11 +17,14 @@ import 'package:budget/modified/reorderable_list.dart';
 import 'package:budget/struct/navBarIconsData.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/editRowEntry.dart';
+import 'package:budget/widgets/iconButtonScaled.dart';
+import 'package:budget/widgets/listItem.dart';
 import 'package:budget/widgets/moreIcons.dart';
 import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
+import 'package:budget/widgets/outlinedButtonStacked.dart';
 import 'package:budget/widgets/periodCyclePicker.dart';
 import 'package:budget/widgets/radioItems.dart';
 import 'package:budget/widgets/selectAmount.dart';
@@ -612,8 +615,17 @@ Future openPieChartHomePageBottomSheetSettings(BuildContext context) async {
     PopupFramework(
       title: "pie-chart".tr(),
       subtitle: "applies-to-homepage".tr(),
-      child: PeriodCyclePicker(
-        cycleSettingsExtension: "PieChart",
+      child: Column(
+        children: [
+          PeriodCyclePicker(
+            cycleSettingsExtension: "PieChart",
+          ),
+          HorizontalBreakAbove(
+            padding: EdgeInsets.symmetric(vertical: 15),
+            child: IncomeAndExpenseOnlyPicker(),
+          ),
+          SizedBox(height: 10),
+        ],
       ),
       // Column(
       //   children: [
@@ -644,6 +656,66 @@ Future openPieChartHomePageBottomSheetSettings(BuildContext context) async {
       // ),
     ),
   );
+}
+
+class IncomeAndExpenseOnlyPicker extends StatefulWidget {
+  const IncomeAndExpenseOnlyPicker({super.key});
+
+  @override
+  State<IncomeAndExpenseOnlyPicker> createState() =>
+      _IncomeAndExpenseOnlyPickerState();
+}
+
+class _IncomeAndExpenseOnlyPickerState
+    extends State<IncomeAndExpenseOnlyPicker> {
+  bool pieChartIncomeAndExpenseOnly =
+      appStateSettings["pieChartIncomeAndExpenseOnly"] == true;
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+          child: AnimatedOpacity(
+            duration: Duration(milliseconds: 500),
+            opacity: pieChartIncomeAndExpenseOnly ? 1 : 0.5,
+            child: OutlinedButtonStacked(
+              filled: pieChartIncomeAndExpenseOnly,
+              alignLeft: true,
+              alignBeside: true,
+              afterWidget: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ListItem(
+                    "only-expense-income-description-1".tr(),
+                  ),
+                  ListItem(
+                    "only-expense-income-description-2".tr(),
+                  ),
+                ],
+              ),
+              text: "only-expense-income".tr(),
+              padding:
+                  EdgeInsets.only(left: 20, right: 15, top: 15, bottom: 15),
+              showToggleSwitch: true,
+              iconData: null,
+              // iconData: appStateSettings["outlinedIcons"]
+              //     ? Icons.swap_vert_outlined
+              //     : Icons.swap_vert_rounded,
+              onTap: () {
+                updateSettings("pieChartIncomeAndExpenseOnly",
+                    !pieChartIncomeAndExpenseOnly,
+                    updateGlobalState: false);
+                setState(() {
+                  pieChartIncomeAndExpenseOnly = !pieChartIncomeAndExpenseOnly;
+                });
+              },
+            ),
+          ),
+        ),
+      ],
+    );
+  }
 }
 
 class HomePageEditRowEntryUsername extends StatefulWidget {

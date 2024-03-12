@@ -493,7 +493,6 @@
   "total-remaining-example": "Mfano: 75 iliyobaki ya 100",
   "importing-loading": "Kuingiza ...",
   "successfully-imported": "Kufanikiwa kuingizwa",
-  "please-restart-the-application": "Tafadhali anzisha tena programu",
   "biometrics-disabled": "Biometri imelemazwa",
   "biometrics-disabled-description": "Washa biometri kwenye ukurasa wa mipangilio na ujaribu tena",
   "biometrics-error": "Kosa la biometri",
@@ -1081,5 +1080,12 @@
   "select-all": "Chagua Zote",
   "excluded": "Kutengwa",
   "maximum-transactions": "Uuzaji wa kiwango cha juu",
-  "only-the-first": "Kwanza tu"
+  "only-the-first": "Kwanza tu",
+  "restart-required-to-load-backup": "Kuanza tena programu inahitajika kupakia data kutoka kwa chelezo",
+  "refresh-required-to-load-backup": "Kuburudisha kwa programu inahitajika kupakia data kutoka kwa chelezo",
+  "please-restart-the-application": "Tafadhali anzisha tena programu",
+  "please-refresh-the-application": "Tafadhali furahisha programu",
+  "only-expense-income": "Gharama/mapato tu",
+  "only-expense-income-description-1": "Usijumuishe wote wanaotoka/wanaoingia",
+  "only-expense-income-description-2": "Mfano: Usijumuishe mikopo"
 }

@@ -34,7 +34,7 @@ import 'package:budget/struct/randomConstants.dart';
 import 'package:universal_html/html.dart' show AnchorElement;
 import 'package:path/path.dart' as p;
 
-Future<bool> importDBFileFromDevice(BuildContext context) async {
+Future<String?> importDBFileFromDevice(BuildContext context) async {
   // For some reason, iOS does not let us select SQL files if we limit
   FilePickerResult? result = getPlatform() == PlatformOS.isIOS
       ? await FilePicker.platform.pickFiles()
@@ -50,7 +50,7 @@ Future<bool> importDBFileFromDevice(BuildContext context) async {
           ? Icons.warning_outlined
           : Icons.warning_rounded,
     ));
-    return false;
+    return null;
   }
   if (kIsWeb) {
     Uint8List fileBytes = result.files.single.bytes!;
@@ -63,7 +63,7 @@ Future<bool> importDBFileFromDevice(BuildContext context) async {
   resetLanguageToSystem(context);
   await updateSettings("databaseJustImported", true,
       pagesNeedingRefresh: [], updateGlobalState: false);
-  return true;
+  return result.files.single.name;
 }
 
 Future importDB(BuildContext context, {ignoreOverwriteWarning = false}) async {
@@ -103,7 +103,14 @@ Future importDB(BuildContext context, {ignoreOverwriteWarning = false}) async {
         return await importDBFileFromDevice(context);
       },
       onSuccess: (result) {
-        if (result != false) restartAppPopup(context);
+        if (result != null)
+          restartAppPopup(
+            context,
+            description: kIsWeb
+                ? "refresh-required-to-load-backup".tr()
+                : "restart-required-to-load-backup".tr(),
+            codeBlock: result.toString(),
+          );
       },
     );
   }

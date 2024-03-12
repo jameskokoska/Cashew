@@ -588,7 +588,21 @@ Future<void> loadBackup(
                   : Icons.settings_backup_restore_rounded),
         );
         Navigator.pop(context);
-        restartAppPopup(context);
+        restartAppPopup(
+          context,
+          description: kIsWeb
+              ? "refresh-required-to-load-backup".tr()
+              : "restart-required-to-load-backup".tr(),
+          codeBlock: file.name.toString() +
+              (file.modifiedTime == null
+                  ? ""
+                  : ("\n" +
+                      getWordedDateShort(
+                        file.modifiedTime!,
+                        showTodayTomorrow: false,
+                        includeYear: true,
+                      ))),
+        );
       },
       onError: (error) {
         openSnackbar(

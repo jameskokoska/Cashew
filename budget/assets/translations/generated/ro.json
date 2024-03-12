@@ -493,7 +493,6 @@
   "total-remaining-example": "Exemplu: 75 rămase de 100",
   "importing-loading": "Import ...",
   "successfully-imported": "Importat cu succes",
-  "please-restart-the-application": "Vă rugăm să reporniți cererea",
   "biometrics-disabled": "Biometrie dezactivată",
   "biometrics-disabled-description": "Activați biometrie în pagina Setări și încercați din nou",
   "biometrics-error": "Eroare de biometrie",
@@ -1081,5 +1080,12 @@
   "select-all": "Selectează tot",
   "excluded": "Exclus",
   "maximum-transactions": "Tranzacții maxime",
-  "only-the-first": "Doar primul"
+  "only-the-first": "Doar primul",
+  "restart-required-to-load-backup": "O repornire a aplicației este necesară pentru a încărca datele din copie de rezervă",
+  "refresh-required-to-load-backup": "O actualizare a aplicației este necesară pentru a încărca datele din copie de rezervă",
+  "please-restart-the-application": "Vă rugăm să reporniți cererea",
+  "please-refresh-the-application": "Vă rugăm să reîmprospătați aplicația",
+  "only-expense-income": "Numai cheltuieli/venituri",
+  "only-expense-income-description-1": "Nu includeți toate ieșirile/primite",
+  "only-expense-income-description-2": "Exemplu: Nu includeți împrumuturi"
 }

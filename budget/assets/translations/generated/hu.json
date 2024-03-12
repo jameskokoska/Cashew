@@ -493,7 +493,6 @@
   "total-remaining-example": "Példa: 75 maradt 100 -ból",
   "importing-loading": "Importálás ...",
   "successfully-imported": "Sikeresen importált",
-  "please-restart-the-application": "Kérjük, indítsa újra az alkalmazást",
   "biometrics-disabled": "A biometria fogyatékkal élők",
   "biometrics-disabled-description": "Engedélyezze a biometrikus anyagokat a beállítások oldalon, és próbálja újra",
   "biometrics-error": "Biometrikus hiba",
@@ -1081,5 +1080,12 @@
   "select-all": "Mindet kiválaszt",
   "excluded": "Kizárott",
   "maximum-transactions": "Maximális tranzakció",
-  "only-the-first": "Csak az első"
+  "only-the-first": "Csak az első",
+  "restart-required-to-load-backup": "Az alkalmazás újraindításához szükséges az adatok betöltése a biztonsági mentésből",
+  "refresh-required-to-load-backup": "Az alkalmazás frissítésére van szükség az adatok betöltéséhez a biztonsági mentésből",
+  "please-restart-the-application": "Kérjük, indítsa újra az alkalmazást",
+  "please-refresh-the-application": "Kérjük, frissítse az alkalmazást",
+  "only-expense-income": "Csak költség/jövedelem",
+  "only-expense-income-description-1": "Ne tartalmazza az összes kimenő/bejövő",
+  "only-expense-income-description-2": "Példa: Ne tartalmazza a kölcsönöket"
 }

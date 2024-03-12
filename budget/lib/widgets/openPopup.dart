@@ -515,3 +515,34 @@ void discardChangesPopup(context,
     );
   }
 }
+
+class CodeBlock extends StatelessWidget {
+  const CodeBlock({required this.text, super.key});
+  final String text;
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.secondaryContainer,
+        borderRadius: BorderRadius.circular(5),
+      ),
+      padding: EdgeInsets.all(10),
+      child: TextFont(
+        text: "",
+        textAlign: TextAlign.center,
+        fontSize: 15,
+        richTextSpan: [
+          TextSpan(
+            text: text,
+            style: TextStyle(
+              fontSize: 15,
+              fontFamily: "monospace",
+              fontFamilyFallback: <String>["Courier"],
+            ),
+          ),
+        ],
+        maxLines: 100,
+      ),
+    );
+  }
+}

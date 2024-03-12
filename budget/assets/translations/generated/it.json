@@ -493,7 +493,6 @@
   "total-remaining-example": "Esempio: 75 rimanenti di 100",
   "importing-loading": "Importazione...",
   "successfully-imported": "Importato con successo",
-  "please-restart-the-application": "Si prega di riavviare l'applicazione",
   "biometrics-disabled": "Impronta digitale disabilitata",
   "biometrics-disabled-description": "Abilita la biometria nella pagina delle impostazioni e riprova",
   "biometrics-error": "Errore nell'impronta",
@@ -1081,5 +1080,12 @@
   "select-all": "Seleziona tutto",
   "excluded": "Escluso",
   "maximum-transactions": "Transazioni massime",
-  "only-the-first": "Solo il primo"
+  "only-the-first": "Solo il primo",
+  "restart-required-to-load-backup": "È necessario un riavvio dell'app per caricare i dati dal backup",
+  "refresh-required-to-load-backup": "È necessario un aggiornamento dell'app per caricare i dati dal backup",
+  "please-restart-the-application": "Si prega di riavviare l'applicazione",
+  "please-refresh-the-application": "Si prega di aggiornare l'applicazione",
+  "only-expense-income": "Solo spese/reddito",
+  "only-expense-income-description-1": "Non includere tutti in uscita/in arrivo",
+  "only-expense-income-description-2": "Esempio: non includere prestiti"
 }

@@ -493,7 +493,6 @@
   "total-remaining-example": "Örnek: 100'ün 75'i kaldı",
   "importing-loading": "İçe Aktarılıyor...",
   "successfully-imported": "Başarıyla içe aktarıldı",
-  "please-restart-the-application": "Lütfen uygulamayı yeniden başlatın",
   "biometrics-disabled": "Biyometri Devre Dışı",
   "biometrics-disabled-description": "Ayarlar sayfasında biyometri etkinleştirin ve tekrar deneyin",
   "biometrics-error": "Biyometri Hatası",
@@ -1081,5 +1080,12 @@
   "select-all": "Hepsini seç",
   "excluded": "Hariç tutuldu",
   "maximum-transactions": "Maksimum işlemler",
-  "only-the-first": "Sadece ilk"
+  "only-the-first": "Sadece ilk",
+  "restart-required-to-load-backup": "Yedeklemeden veri yüklemek için bir uygulamanın yeniden başlatılması gerekir",
+  "refresh-required-to-load-backup": "Yedeklemeden veri yüklemek için bir uygulama yenilemesi gerekir",
+  "please-restart-the-application": "Lütfen uygulamayı yeniden başlatın",
+  "please-refresh-the-application": "Lütfen uygulamayı yenileyin",
+  "only-expense-income": "Yalnızca Gider/Gelir",
+  "only-expense-income-description-1": "Tüm giden/gelenleri dahil etmeyin",
+  "only-expense-income-description-2": "Örnek: Krediler dahil etmeyin"
 }

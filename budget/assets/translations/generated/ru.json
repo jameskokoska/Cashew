@@ -493,7 +493,6 @@
   "total-remaining-example": "Пример: 75 оставшихся из 100",
   "importing-loading": "Импорт ...",
   "successfully-imported": "Успешно импортируется",
-  "please-restart-the-application": "Пожалуйста, перезапустите заявку",
   "biometrics-disabled": "Биометрия отключена",
   "biometrics-disabled-description": "Включить биометрику на странице настроек и попробуйте еще раз",
   "biometrics-error": "Ошибка биометрии",
@@ -1081,5 +1080,12 @@
   "select-all": "Выбрать все",
   "excluded": "Исключенный",
   "maximum-transactions": "Максимальные транзакции",
-  "only-the-first": "Только первый"
+  "only-the-first": "Только первый",
+  "restart-required-to-load-backup": "Перезапуск приложения требуется для загрузки данных из резервной копии",
+  "refresh-required-to-load-backup": "Обновление приложения требуется для загрузки данных из резервной копии",
+  "please-restart-the-application": "Пожалуйста, перезапустите заявку",
+  "please-refresh-the-application": "Пожалуйста, обновите приложение",
+  "only-expense-income": "Только расходы/доход",
+  "only-expense-income-description-1": "Не включайте все исходящие/входящие",
+  "only-expense-income-description-2": "Пример: не включать кредиты"
 }

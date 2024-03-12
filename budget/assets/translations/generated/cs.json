@@ -493,7 +493,6 @@
   "total-remaining-example": "Příklad: 75 zbývajících ze 100",
   "importing-loading": "Import ...",
   "successfully-imported": "Úspěšně importováno",
-  "please-restart-the-application": "Restartujte aplikaci",
   "biometrics-disabled": "Biometrie deaktivována",
   "biometrics-disabled-description": "Povolte biometriku na stránce Nastavení a zkuste to znovu",
   "biometrics-error": "Chyba biometrie",
@@ -1047,7 +1046,7 @@
   "difference-loan": "Rozdílná půjčka",
   "open-settings": "Otevřené nastavení",
   "decimal-precision": "Desetinná přesnost",
-  "decimal-precision-description": "Desetinná místa pro zaokrouhlení částky transakce",
+  "decimal-precision-description": "Desetinná místa pro zaokrouhlování částky transakce",
   "same-accounts": "Stejné účty",
   "select-2-different-accounts": "Vyberte 2 různé účty",
   "include-amount": "Zahrnout částku",
@@ -1081,5 +1080,12 @@
   "select-all": "Vybrat vše",
   "excluded": "Vyloučen",
   "maximum-transactions": "Maximální transakce",
-  "only-the-first": "Pouze první"
+  "only-the-first": "Pouze první",
+  "restart-required-to-load-backup": "Pro načtení dat ze zálohy je nutná restartování aplikace",
+  "refresh-required-to-load-backup": "Pro načtení dat ze zálohy je nutná aktualizace aplikace",
+  "please-restart-the-application": "Restartujte aplikaci",
+  "please-refresh-the-application": "Obnovte prosím aplikaci",
+  "only-expense-income": "Pouze výdaje/příjem",
+  "only-expense-income-description-1": "Nezahrnujte všechny odchozí/příchozí",
+  "only-expense-income-description-2": "Příklad: Nezahrnujte půjčky"
 }

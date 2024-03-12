@@ -493,7 +493,6 @@
   "total-remaining-example": "例：残り75の100",
   "importing-loading": "インポート...",
   "successfully-imported": "正常にインポートされました",
-  "please-restart-the-application": "アプリケーションを再起動してください",
   "biometrics-disabled": "生体認証が無効になっています",
   "biometrics-disabled-description": "[設定]ページで生体認証を有効にして、再試行してください",
   "biometrics-error": "生体認証エラー",
@@ -1081,5 +1080,12 @@
   "select-all": "すべて選択",
   "excluded": "除外",
   "maximum-transactions": "最大トランザクション",
-  "only-the-first": "最初のみ"
+  "only-the-first": "最初のみ",
+  "restart-required-to-load-backup": "バックアップからデータをロードするには、アプリ再起動が必要です",
+  "refresh-required-to-load-backup": "バックアップからデータをロードするには、アプリの更新が必要です",
+  "please-restart-the-application": "アプリケーションを再起動してください",
+  "please-refresh-the-application": "アプリケーションを更新してください",
+  "only-expense-income": "費用/収入のみ",
+  "only-expense-income-description-1": "すべての発信/着信を含めないでください",
+  "only-expense-income-description-2": "例：ローンを含めないでください"
 }

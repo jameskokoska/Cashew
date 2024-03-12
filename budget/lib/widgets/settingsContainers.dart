@@ -118,28 +118,45 @@ class _SettingsContainerSwitchState extends State<SettingsContainerSwitch> {
         description: description,
         afterWidget: Padding(
           padding: const EdgeInsets.only(left: 5),
-          child: getPlatform() == PlatformOS.isIOS
-              ? CupertinoSwitch(
-                  activeColor: Theme.of(context).colorScheme.primary,
-                  value: value,
-                  onChanged: (_) {
-                    toggleSwitch();
-                  },
-                )
-              : Switch(
-                  activeColor: Theme.of(context).colorScheme.primary,
-                  value: value,
-                  onChanged: (_) {
-                    toggleSwitch();
-                  },
-                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                ),
+          child: PlatformSwitch(
+            value: value,
+            onTap: toggleSwitch,
+          ),
         ),
         icon: widget.icon,
         verticalPadding: widget.verticalPadding,
         descriptionColor: widget.descriptionColor,
       ),
     );
+  }
+}
+
+class PlatformSwitch extends StatelessWidget {
+  final bool value;
+  final Function onTap;
+
+  PlatformSwitch({required this.value, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    if (getPlatform() == PlatformOS.isIOS) {
+      return CupertinoSwitch(
+        activeColor: Theme.of(context).colorScheme.primary,
+        value: value,
+        onChanged: (_) {
+          onTap();
+        },
+      );
+    } else {
+      return Switch(
+        activeColor: Theme.of(context).colorScheme.primary,
+        value: value,
+        onChanged: (_) {
+          onTap();
+        },
+        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+      );
+    }
   }
 }
 

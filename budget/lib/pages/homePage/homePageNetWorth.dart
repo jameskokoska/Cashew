@@ -125,7 +125,9 @@ class _WalletPickerPeriodCycleState extends State<WalletPickerPeriodCycle> {
                     filled: allWalletsSelected,
                     alignLeft: true,
                     alignBeside: true,
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                    padding: EdgeInsets.only(
+                        left: 20, right: 15, top: 15, bottom: 15),
+                    showToggleSwitch: true,
                     text: "all-accounts".tr(),
                     iconData: appStateSettings["outlinedIcons"]
                         ? Icons.account_balance_wallet_outlined

@@ -37,6 +37,8 @@ String getChangelogString() {
     Excluded budget transactions still show up in the budget list as excluded
     Select all option when selecting transactions
     Months list in transaction page cannot be scrolled past the earliest and latest transaction entered date
+    When loading backup, backup file name is displayed
+    Added all outgoing/incoming or just expense/income transactions setting for homepage pie chart
     Fix polarity of lent and borrowed home screen sections
     Fix decimal precision save changes button for account edits
     Fix clipping of goal tag progress

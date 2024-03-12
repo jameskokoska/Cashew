@@ -493,7 +493,6 @@
   "total-remaining-example": "Contoh: 75 tersisa dari 100",
   "importing-loading": "Pengimporan...",
   "successfully-imported": "Berhasil diimpor",
-  "please-restart-the-application": "Harap mulai ulang aplikasi",
   "biometrics-disabled": "Biometrik dinonaktifkan",
   "biometrics-disabled-description": "Aktifkan biometrik di halaman Pengaturan dan coba lagi",
   "biometrics-error": "Kesalahan biometrik",
@@ -1081,5 +1080,12 @@
   "select-all": "Pilih Semua",
   "excluded": "Pengecualian",
   "maximum-transactions": "Transaksi maksimum",
-  "only-the-first": "Hanya yang pertama"
+  "only-the-first": "Hanya yang pertama",
+  "restart-required-to-load-backup": "Diperlukan restart aplikasi untuk memuat data dari cadangan",
+  "refresh-required-to-load-backup": "Refresh aplikasi diperlukan untuk memuat data dari cadangan",
+  "please-restart-the-application": "Harap mulai ulang aplikasi",
+  "please-refresh-the-application": "Harap Segarkan Aplikasi",
+  "only-expense-income": "Hanya biaya/pendapatan",
+  "only-expense-income-description-1": "Jangan sertakan semua keluar/masuk",
+  "only-expense-income-description-2": "Contoh: Jangan sertakan pinjaman"
 }

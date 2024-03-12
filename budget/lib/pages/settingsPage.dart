@@ -678,30 +678,30 @@ class MoreOptionsPagePreferences extends StatelessWidget {
         PercentagePrecisionSetting(),
         Time24HourFormatSetting(),
         ExtraZerosButtonSetting(),
-        ShortFormAmountSetting(),
+        // ShortFormAmountSetting(),
       ],
     );
   }
 }
 
-class ShortFormAmountSetting extends StatelessWidget {
-  const ShortFormAmountSetting({super.key});
+// class ShortFormAmountSetting extends StatelessWidget {
+//   const ShortFormAmountSetting({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    return SettingsContainerSwitch(
-      title: "short-form-amounts".tr(),
-      description: "material-you-description".tr(),
-      onSwitched: (value) {
-        updateSettings("materialYou", value, updateGlobalState: true);
-      },
-      initialValue: appStateSettings["materialYou"],
-      icon: appStateSettings["outlinedIcons"]
-          ? Icons.brush_outlined
-          : Icons.brush_rounded,
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return SettingsContainerSwitch(
+//       title: "short-form-amounts".tr(),
+//       description: "material-you-description".tr(),
+//       onSwitched: (value) {
+//         updateSettings("materialYou", value, updateGlobalState: true);
+//       },
+//       initialValue: appStateSettings["materialYou"],
+//       icon: appStateSettings["outlinedIcons"]
+//           ? Icons.brush_outlined
+//           : Icons.brush_rounded,
+//     );
+//   }
+// }
 
 class WidgetSettings extends StatelessWidget {
   const WidgetSettings({super.key});

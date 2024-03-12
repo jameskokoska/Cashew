@@ -493,7 +493,6 @@
   "total-remaining-example": "Παράδειγμα: 75 υπόλοιπο των 100",
   "importing-loading": "Εισαγωγή ...",
   "successfully-imported": "Επιτυχώς εισαγάγει",
-  "please-restart-the-application": "Επανεκκινήστε την εφαρμογή",
   "biometrics-disabled": "Η βιομετρία απενεργοποιείται",
   "biometrics-disabled-description": "Ενεργοποιήστε τη βιομετρία στη σελίδα ρυθμίσεων και δοκιμάστε ξανά",
   "biometrics-error": "Σφάλμα βιομετρίας",
@@ -1081,5 +1080,12 @@
   "select-all": "Επιλογή όλων",
   "excluded": "Εξαιρούμενος",
   "maximum-transactions": "Μέγιστες συναλλαγές",
-  "only-the-first": "Μόνο το πρώτο"
+  "only-the-first": "Μόνο το πρώτο",
+  "restart-required-to-load-backup": "Απαιτείται επανεκκίνηση της εφαρμογής για τη φόρτωση δεδομένων από το αντίγραφο ασφαλείας",
+  "refresh-required-to-load-backup": "Απαιτείται ανανέωση εφαρμογής για τη φόρτωση δεδομένων από το αντίγραφο ασφαλείας",
+  "please-restart-the-application": "Επανεκκινήστε την εφαρμογή",
+  "please-refresh-the-application": "Ανανεώστε την εφαρμογή",
+  "only-expense-income": "Μόνο έξοδα/εισόδημα",
+  "only-expense-income-description-1": "Μην συμπεριλάβετε όλα τα εξερχόμενα/εισερχόμενα",
+  "only-expense-income-description-2": "Παράδειγμα: Μην συμπεριλάβετε δάνεια"
 }

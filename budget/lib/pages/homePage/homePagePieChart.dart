@@ -281,6 +281,12 @@ class _PieChartHomeAndCategorySummaryState
         cycleSettingsExtension: "PieChart",
         countUnassignedTransactions: true,
         includeAllSubCategories: true,
+        searchFilters: SearchFilters(expenseIncome: [
+          if (appStateSettings["pieChartIncomeAndExpenseOnly"] == true)
+            (widget.isIncome == true
+                ? ExpenseIncome.income
+                : ExpenseIncome.expense)
+        ]),
       ),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
@@ -351,6 +357,14 @@ class _PieChartHomeAndCategorySummaryState
                                     selectedCategory?.mainCategoryPk != null
                                 ? [selectedCategory!.categoryPk]
                                 : null,
+                            expenseIncome: [
+                              if (appStateSettings[
+                                      "pieChartIncomeAndExpenseOnly"] ==
+                                  true)
+                                (widget.isIncome == true
+                                    ? ExpenseIncome.income
+                                    : ExpenseIncome.expense)
+                            ],
                           ),
                         ),
                       );

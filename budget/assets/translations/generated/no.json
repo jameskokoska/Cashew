@@ -493,7 +493,6 @@
   "total-remaining-example": "Eksempel: 75 gjenværende av 100",
   "importing-loading": "Importere ...",
   "successfully-imported": "Vellykket importert",
-  "please-restart-the-application": "Vennligst start søknaden på nytt",
   "biometrics-disabled": "Biometri deaktivert",
   "biometrics-disabled-description": "Aktiver biometri på innstillingssiden og prøv på nytt",
   "biometrics-error": "Biometrifeil",
@@ -1034,7 +1033,7 @@
   "clock-format": "Klokkeformat",
   "24-hour": "24 timer",
   "12-hour": "12 timer",
-  "widget-theme": "Widget -tema",
+  "widget-theme": "Widget tema",
   "widget-background-opacity": "Bakgrunn opacitet",
   "currency-total": "Valuta totalt",
   "currency-total-description": "Liste opp alle kontovalutasotaler",
@@ -1081,5 +1080,12 @@
   "select-all": "Velg alle",
   "excluded": "Ekskludert",
   "maximum-transactions": "Maksimale transaksjoner",
-  "only-the-first": "Bare den første"
+  "only-the-first": "Bare den første",
+  "restart-required-to-load-backup": "Det kreves en app -omstart for å laste inn data fra sikkerhetskopien",
+  "refresh-required-to-load-backup": "Det kreves en appoppdatering for å laste inn data fra sikkerhetskopien",
+  "please-restart-the-application": "Vennligst start søknaden på nytt",
+  "please-refresh-the-application": "Vennligst oppdater søknaden",
+  "only-expense-income": "KUN KOSTNING/inntekt",
+  "only-expense-income-description-1": "Ikke ta med alle utgående/innkommende",
+  "only-expense-income-description-2": "Eksempel: Ikke inkluder lån"
 }

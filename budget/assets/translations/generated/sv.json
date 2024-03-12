@@ -493,7 +493,6 @@
   "total-remaining-example": "Exempel: 75 kvar på 100",
   "importing-loading": "Importerar ...",
   "successfully-imported": "Importeras framgångsrikt",
-  "please-restart-the-application": "Starta om applikationen",
   "biometrics-disabled": "Biometri funktionshindrade",
   "biometrics-disabled-description": "Aktivera biometri på inställningssidan och försök igen",
   "biometrics-error": "Biometrifel",
@@ -1081,5 +1080,12 @@
   "select-all": "Välj alla",
   "excluded": "Utesluten",
   "maximum-transactions": "Maximala transaktioner",
-  "only-the-first": "Endast den första"
+  "only-the-first": "Endast den första",
+  "restart-required-to-load-backup": "En appstart krävs för att ladda data från säkerhetskopian",
+  "refresh-required-to-load-backup": "En appuppdatering krävs för att ladda data från säkerhetskopian",
+  "please-restart-the-application": "Starta om applikationen",
+  "please-refresh-the-application": "Vänligen uppdatera applikationen",
+  "only-expense-income": "Endast kostnad/inkomst",
+  "only-expense-income-description-1": "Inkludera inte alla utgående/inkommande",
+  "only-expense-income-description-2": "Exempel: Inkludera inte lån"
 }

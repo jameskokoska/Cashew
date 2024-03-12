@@ -493,7 +493,6 @@
   "total-remaining-example": "Voorbeeld: 75 over van 100",
   "importing-loading": "Importeren ...",
   "successfully-imported": "Succesvol geïmporteerd",
-  "please-restart-the-application": "Start de applicatie opnieuw op",
   "biometrics-disabled": "Biometrie uitgeschakeld",
   "biometrics-disabled-description": "Schakel biometrie in op de pagina Instellingen en probeer het opnieuw",
   "biometrics-error": "Biometrische fout",
@@ -1081,5 +1080,12 @@
   "select-all": "Selecteer alles",
   "excluded": "Uitgesloten",
   "maximum-transactions": "Maximale transacties",
-  "only-the-first": "Alleen de eerste"
+  "only-the-first": "Alleen de eerste",
+  "restart-required-to-load-backup": "Een herstart van de app is vereist om gegevens van de back -up te laden",
+  "refresh-required-to-load-backup": "Een appvernieuwing is vereist om gegevens van de back -up te laden",
+  "please-restart-the-application": "Start de applicatie opnieuw op",
+  "please-refresh-the-application": "Vernieuw de toepassing",
+  "only-expense-income": "Alleen kosten/inkomsten",
+  "only-expense-income-description-1": "Neem niet alle uitgaande/inkomsten op",
+  "only-expense-income-description-2": "Voorbeeld: neem geen leningen op"
 }

@@ -493,7 +493,6 @@
   "total-remaining-example": "Пример: 75 преостало 100",
   "importing-loading": "Увоз ...",
   "successfully-imported": "Успешно увезени",
-  "please-restart-the-application": "Поново покрените апликацију",
   "biometrics-disabled": "Биометрика је онемогућена",
   "biometrics-disabled-description": "Омогућите биометрију на страници са подешавањима и покушајте поново",
   "biometrics-error": "Грешка биометрије",
@@ -1081,5 +1080,12 @@
   "select-all": "Изабери све",
   "excluded": "Искључен",
   "maximum-transactions": "Максималне трансакције",
-  "only-the-first": "Само први"
+  "only-the-first": "Само први",
+  "restart-required-to-load-backup": "Поново покретање апликације је потребан за учитавање података са резервне копије",
+  "refresh-required-to-load-backup": "Освежење апликације је дужно учитати податке са резервне копије",
+  "please-restart-the-application": "Поново покрените апликацију",
+  "please-refresh-the-application": "Освежите апликацију",
+  "only-expense-income": "Само расходи / приход",
+  "only-expense-income-description-1": "Не укључују све одлазне / долазне",
+  "only-expense-income-description-2": "Пример: Не укључује кредите"
 }
