@@ -357,6 +357,11 @@ class _PieChartHomeAndCategorySummaryState
                                     selectedCategory?.mainCategoryPk != null
                                 ? [selectedCategory!.categoryPk]
                                 : null,
+                            positiveCashFlow: appStateSettings[
+                                        "pieChartIncomeAndExpenseOnly"] ==
+                                    true
+                                ? null
+                                : widget.isIncome,
                             expenseIncome: [
                               if (appStateSettings[
                                       "pieChartIncomeAndExpenseOnly"] ==

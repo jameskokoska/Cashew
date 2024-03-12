@@ -39,6 +39,8 @@ String getChangelogString() {
     Months list in transaction page cannot be scrolled past the earliest and latest transaction entered date
     When loading backup, backup file name is displayed
     Added all outgoing/incoming or just expense/income transactions setting for homepage pie chart
+    Added color outlines to transaction filters
+    Fix cash flow filters when entering search page from positive/negative cashflow
     Fix polarity of lent and borrowed home screen sections
     Fix decimal precision save changes button for account edits
     Fix clipping of goal tag progress

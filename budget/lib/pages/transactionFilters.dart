@@ -509,6 +509,20 @@ class _TransactionFiltersSelectionState
                     ? "income".tr()
                     : "";
           },
+          getCustomBorderColor: (ExpenseIncome item) {
+            Color? customBorderColor;
+            if (item == ExpenseIncome.expense) {
+              customBorderColor = getColor(context, "expenseAmount");
+            } else if (item == ExpenseIncome.income) {
+              customBorderColor = getColor(context, "incomeAmount");
+            }
+            if (customBorderColor == null) return null;
+            return dynamicPastel(
+              context,
+              lightenPastel(customBorderColor, amount: 0.3),
+              amount: 0.4,
+            );
+          },
           onSelected: (ExpenseIncome item) {
             if (selectedFilters.expenseIncome.contains(item)) {
               selectedFilters.expenseIncome.remove(item);
@@ -529,6 +543,20 @@ class _TransactionFiltersSelectionState
                     .toLowerCase()
                     .tr() ??
                 "";
+          },
+          getCustomBorderColor: (TransactionSpecialType? item) {
+            Color? customBorderColor;
+            if (item == TransactionSpecialType.credit) {
+              customBorderColor = getColor(context, "unPaidUpcoming");
+            } else if (item == TransactionSpecialType.debt) {
+              customBorderColor = getColor(context, "unPaidOverdue");
+            }
+            if (customBorderColor == null) return null;
+            return dynamicPastel(
+              context,
+              lightenPastel(customBorderColor, amount: 0.3),
+              amount: 0.4,
+            );
           },
           onSelected: (TransactionSpecialType? item) {
             if (selectedFilters.transactionTypes.contains(item)) {
@@ -1053,24 +1081,47 @@ class AppliedFilterChips extends StatelessWidget {
     if (searchFilters.expenseIncome.contains(ExpenseIncome.expense)) {
       out.add(AppliedFilterChip(
         label: "expense".tr(),
+        customBorderColor: getColor(context, "expenseAmount"),
         openFiltersSelection: openFiltersSelection,
       ));
     }
     if (searchFilters.expenseIncome.contains(ExpenseIncome.income)) {
       out.add(AppliedFilterChip(
         label: "income".tr(),
+        customBorderColor: getColor(context, "incomeAmount"),
+        openFiltersSelection: openFiltersSelection,
+      ));
+    }
+    // Cash Flow
+    if (searchFilters.positiveCashFlow == false) {
+      out.add(AppliedFilterChip(
+        label: "outgoing".tr(),
+        customBorderColor: getColor(context, "expenseAmount"),
+        openFiltersSelection: openFiltersSelection,
+      ));
+    } else if (searchFilters.positiveCashFlow == true) {
+      out.add(AppliedFilterChip(
+        label: "incoming".tr(),
+        customBorderColor: getColor(context, "incomeAmount"),
         openFiltersSelection: openFiltersSelection,
       ));
     }
     // Transaction Types
     for (TransactionSpecialType? transactionType
         in searchFilters.transactionTypes) {
+      Color? customBorderColor;
+      if (transactionType == TransactionSpecialType.credit) {
+        customBorderColor = getColor(context, "unPaidUpcoming");
+      } else if (transactionType == TransactionSpecialType.debt) {
+        customBorderColor = getColor(context, "unPaidOverdue");
+      }
       out.add(AppliedFilterChip(
         label: transactionTypeDisplayToEnum[transactionType]
                 ?.toString()
                 .toLowerCase()
                 .tr() ??
             "default".tr(),
+        customBorderColor: customBorderColor,
         openFiltersSelection: openFiltersSelection,
       ));
     }

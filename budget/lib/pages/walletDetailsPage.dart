@@ -1838,6 +1838,8 @@ class _WalletDetailsCategorySelectionState
                               selectedCategory?.mainCategoryPk != null
                           ? [selectedCategory!.categoryPk]
                           : null,
+                      positiveCashFlow:
+                          selectedCategory == null ? null : isIncome,
                     ),
                   ),
                 );
