@@ -40,6 +40,7 @@ String getChangelogString() {
     When loading backup, backup file name is displayed
     Added all outgoing/incoming or just expense/income transactions setting for homepage pie chart
     Added color outlines to transaction filters
+    Tapping home page navigation icon or long pressing allows for edit home page
     Fix cash flow filters when entering search page from positive/negative cashflow
     Fix polarity of lent and borrowed home screen sections
     Fix decimal precision save changes button for account edits

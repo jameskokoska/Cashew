@@ -1,6 +1,7 @@
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/pages/editBudgetPage.dart';
+import 'package:budget/pages/editHomePage.dart';
 import 'package:budget/pages/editObjectivesPage.dart';
 import 'package:budget/pages/subscriptionsPage.dart';
 import 'package:budget/pages/transactionsListPage.dart';
@@ -109,11 +110,17 @@ class BottomNavBarState extends State<BottomNavBar> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      NavBarIcon(
-                        onItemTapped: onItemTapped,
-                        icon: navBarIconsData["home"]!.iconData,
-                        index: 0,
-                        currentIndex: selectedIndex,
+                      GestureDetector(
+                        onLongPress: () {
+                          HapticFeedback.heavyImpact();
+                          pushRoute(context, EditHomePage());
+                        },
+                        child: NavBarIcon(
+                          onItemTapped: onItemTapped,
+                          icon: navBarIconsData["home"]!.iconData,
+                          index: 0,
+                          currentIndex: selectedIndex,
+                        ),
                       ),
                       CustomizableNavigationBarIcon(
                         shortcutAppSettingKey: "customNavBarShortcut1",
@@ -201,10 +208,16 @@ class BottomNavBarState extends State<BottomNavBar> {
         child: NavigationBar(
           animationDuration: Duration(milliseconds: 1000),
           destinations: [
-            NavigationDestination(
-              icon: Icon(navBarIconsData["home"]!.iconData),
-              label: navBarIconsData["home"]!.label.tr(),
-              tooltip: "",
+            GestureDetector(
+              onLongPress: () {
+                HapticFeedback.heavyImpact();
+                pushRoute(context, EditHomePage());
+              },
+              child: NavigationDestination(
+                icon: Icon(navBarIconsData["home"]!.iconData),
+                label: navBarIconsData["home"]!.label.tr(),
+                tooltip: "",
+              ),
             ),
             CustomizableNavigationBarIcon(
               shortcutAppSettingKey: "customNavBarShortcut1",
