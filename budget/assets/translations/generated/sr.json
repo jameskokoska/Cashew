@@ -1077,6 +1077,8 @@
   "set-decimal": "Подесите децимално",
   "no-outgoing-within-period": "Нема одлазних трансакција у изабраном временском периоду",
   "no-incoming-within-period": "Нема долазних трансакција у изабраном временском периоду",
+  "no-expense-within-period": "Нема трансакција о трошковима у изабраном временском периоду",
+  "no-income-within-period": "Нема трансакција о приходима у изабраном временском периоду",
   "select-all": "Изабери све",
   "excluded": "Искључен",
   "maximum-transactions": "Максималне трансакције",
@@ -1087,5 +1089,11 @@
   "please-refresh-the-application": "Освежите апликацију",
   "only-expense-income": "Само расходи / приход",
   "only-expense-income-description-1": "Не укључују све одлазне / долазне",
-  "only-expense-income-description-2": "Пример: Не укључује кредите"
+  "only-expense-income-description-2": "Пример: Не укључује кредите",
+  "compact-number-format": "Формат компактног броја",
+  "positive-cash-flow": "Позитиван новчани ток",
+  "negative-cash-flow": "Негативан новчани ток",
+  "number-animation": "Број бројева",
+  "count-up": "Рачунати",
+  "disabled": "Инвалидски"
 }

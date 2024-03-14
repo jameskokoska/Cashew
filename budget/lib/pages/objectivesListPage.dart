@@ -1092,10 +1092,11 @@ class WatchTotalAndAmountOfObjective extends StatelessWidget {
                         .indexedByPk[appStateSettings["selectedWalletPk"]]
                         ?.decimals ??
                     2;
-                if ((absoluteZero(objectiveAmount)
-                            .toStringAsFixed(numberDecimals) ==
-                        absoluteZero(totalAmount)
-                            .toStringAsFixed(numberDecimals)) &&
+                if ((double.tryParse(getDifferenceOfLoan(
+                                objective, totalAmount, objectiveAmount)
+                            .abs()
+                            .toStringAsFixed(numberDecimals)) ==
+                        0) &&
                     snapshot.hasData &&
                     snapshotAmount.hasData)
                   percentageTowardsGoal = 1;

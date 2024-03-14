@@ -1077,6 +1077,8 @@
   "set-decimal": "દશાંશ નક્કી કરવું",
   "no-outgoing-within-period": "પસંદ કરેલા સમયગાળાની અંદર કોઈ આઉટગોઇંગ ટ્રાન્ઝેક્શન નથી",
   "no-incoming-within-period": "પસંદ કરેલા સમયગાળાની અંદર આવનારા વ્યવહારો નથી",
+  "no-expense-within-period": "પસંદ કરેલા સમયગાળાની અંદર કોઈ ખર્ચ વ્યવહાર નથી",
+  "no-income-within-period": "પસંદ કરેલા સમયગાળાની અંદર કોઈ આવક વ્યવહાર નથી",
   "select-all": "બધા પસંદ કરો",
   "excluded": "બાકાત",
   "maximum-transactions": "મહત્તમ વ્યવહાર",
@@ -1087,5 +1089,11 @@
   "please-refresh-the-application": "કૃપા કરીને એપ્લિકેશનને તાજું કરો",
   "only-expense-income": "ખર્ચ/આવક",
   "only-expense-income-description-1": "બધા આઉટગોઇંગ/ઇનકમિંગ શામેલ કરશો નહીં",
-  "only-expense-income-description-2": "ઉદાહરણ: લોન શામેલ કરશો નહીં"
+  "only-expense-income-description-2": "ઉદાહરણ: લોન શામેલ કરશો નહીં",
+  "compact-number-format": "કોમ્પેક્ટ નંબર ફોર્મેટ",
+  "positive-cash-flow": "સકારાત્મક રોકડ પ્રવાહ",
+  "negative-cash-flow": "નકારાત્મક રોકડ પ્રવાહ",
+  "number-animation": "સંખ્યા",
+  "count-up": "ગણતરી",
+  "disabled": "અયોગ્ય"
 }

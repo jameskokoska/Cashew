@@ -20,6 +20,7 @@ import 'package:budget/widgets/radioItems.dart';
 import 'package:budget/widgets/settingsContainers.dart';
 import 'package:budget/widgets/textInput.dart';
 import 'package:budget/widgets/textWidgets.dart';
+import 'package:budget/widgets/transactionEntry/transactionEntryTag.dart';
 import 'package:budget/widgets/walletEntry.dart';
 import 'package:drift/drift.dart' show Value;
 import 'package:easy_localization/easy_localization.dart';
@@ -246,17 +247,40 @@ class _EditWalletsPageState extends State<EditWalletsPage> {
                             ).toString(),
                             fontSize: 15,
                           ),
-                          TextFont(
-                            textAlign: TextAlign.left,
-                            text: walletWithDetails.numberTransactions
-                                    .toString() +
-                                " " +
-                                (walletWithDetails.numberTransactions == 1
-                                    ? "transaction".tr().toLowerCase()
-                                    : "transactions".tr().toLowerCase()),
-                            fontSize: 14,
-                            textColor:
-                                getColor(context, "black").withOpacity(0.65),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              AnimatedSizeSwitcher(
+                                child: appStateSettings["selectedWalletPk"] ==
+                                        wallet.walletPk
+                                    ? Padding(
+                                        padding: const EdgeInsets.only(
+                                            top: 1, right: 5),
+                                        child: TransactionTag(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 7, vertical: 1.1),
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary,
+                                          name: "default".tr(),
+                                          margin: EdgeInsets.zero,
+                                        ),
+                                      )
+                                    : Container(),
+                              ),
+                              TextFont(
+                                textAlign: TextAlign.left,
+                                text: walletWithDetails.numberTransactions
+                                        .toString() +
+                                    " " +
+                                    (walletWithDetails.numberTransactions == 1
+                                        ? "transaction".tr().toLowerCase()
+                                        : "transactions".tr().toLowerCase()),
+                                fontSize: 14,
+                                textColor: getColor(context, "black")
+                                    .withOpacity(0.65),
+                              ),
+                            ],
                           ),
                         ],
                       ),

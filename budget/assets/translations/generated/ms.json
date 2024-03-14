@@ -1077,6 +1077,8 @@
   "set-decimal": "Tetapkan perpuluhan",
   "no-outgoing-within-period": "Tiada urus niaga keluar dalam tempoh masa terpilih",
   "no-incoming-within-period": "Tiada urus niaga masuk dalam tempoh masa yang dipilih",
+  "no-expense-within-period": "Tiada urus niaga perbelanjaan dalam tempoh masa terpilih",
+  "no-income-within-period": "Tiada urus niaga pendapatan dalam tempoh masa terpilih",
   "select-all": "Pilih semua",
   "excluded": "Dikecualikan",
   "maximum-transactions": "Urus niaga maksimum",
@@ -1087,5 +1089,11 @@
   "please-refresh-the-application": "Sila muat semula permohonan",
   "only-expense-income": "Perbelanjaan/pendapatan sahaja",
   "only-expense-income-description-1": "Jangan sertakan semua keluar/masuk",
-  "only-expense-income-description-2": "Contoh: Jangan sertakan pinjaman"
+  "only-expense-income-description-2": "Contoh: Jangan sertakan pinjaman",
+  "compact-number-format": "Format nombor padat",
+  "positive-cash-flow": "Aliran tunai positif",
+  "negative-cash-flow": "Aliran tunai negatif",
+  "number-animation": "Animasi nombor",
+  "count-up": "Mengira",
+  "disabled": "Kurang upaya"
 }

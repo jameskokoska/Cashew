@@ -1077,6 +1077,8 @@
   "set-decimal": "Nastavit desetinné",
   "no-outgoing-within-period": "Žádné odchozí transakce ve vybraném časovém období",
   "no-incoming-within-period": "Žádné příchozí transakce ve vybraném časovém období",
+  "no-expense-within-period": "Žádné transakce výdajů ve vybraném časovém období",
+  "no-income-within-period": "Žádné transakce příjmů ve vybraném časovém období",
   "select-all": "Vybrat vše",
   "excluded": "Vyloučen",
   "maximum-transactions": "Maximální transakce",
@@ -1087,5 +1089,11 @@
   "please-refresh-the-application": "Obnovte prosím aplikaci",
   "only-expense-income": "Pouze výdaje/příjem",
   "only-expense-income-description-1": "Nezahrnujte všechny odchozí/příchozí",
-  "only-expense-income-description-2": "Příklad: Nezahrnujte půjčky"
+  "only-expense-income-description-2": "Příklad: Nezahrnujte půjčky",
+  "compact-number-format": "Formát kompaktního čísla",
+  "positive-cash-flow": "Pozitivní peněžní tok",
+  "negative-cash-flow": "Negativní peněžní tok",
+  "number-animation": "Animace čísel",
+  "count-up": "Přičítat",
+  "disabled": "Deaktivované"
 }

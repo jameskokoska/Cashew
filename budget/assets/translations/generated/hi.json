@@ -1077,6 +1077,8 @@
   "set-decimal": "दशमलव सेट करें",
   "no-outgoing-within-period": "चयनित समय अवधि के भीतर कोई निवर्तमान लेनदेन नहीं",
   "no-incoming-within-period": "चयनित समय अवधि के भीतर कोई आने वाला लेनदेन नहीं",
+  "no-expense-within-period": "चयनित समय अवधि के भीतर कोई व्यय लेनदेन नहीं",
+  "no-income-within-period": "चयनित समय अवधि के भीतर कोई आय लेनदेन नहीं",
   "select-all": "सबका चयन करें",
   "excluded": "छोड़ा गया",
   "maximum-transactions": "अधिकतम लेनदेन",
@@ -1087,5 +1089,11 @@
   "please-refresh-the-application": "कृपया आवेदन को ताज़ा करें",
   "only-expense-income": "केवल व्यय/आय",
   "only-expense-income-description-1": "सभी आउटगोइंग/इनकमिंग को शामिल न करें",
-  "only-expense-income-description-2": "उदाहरण: ऋण शामिल न करें"
+  "only-expense-income-description-2": "उदाहरण: ऋण शामिल न करें",
+  "compact-number-format": "कॉम्पैक्ट संख्या प्रारूप",
+  "positive-cash-flow": "सकारात्मक नकदी प्रवाह",
+  "negative-cash-flow": "ऋणात्मक नकदी प्रवाह",
+  "number-animation": "संख्या एनीमेशन",
+  "count-up": "गिनती",
+  "disabled": "अक्षम"
 }

@@ -1058,7 +1058,7 @@
   "failed-to-preview-image": "이미지를 미리 보지 못했습니다",
   "open-link": "열기 링크",
   "category-not-selected": "범주가 선택되지 않았습니다",
-  "all-transactions-require-a-category": "모든 트랜잭션에는 범주가 필요합니다",
+  "all-transactions-require-a-category": "모든 거래에는 범주가 필요합니다",
   "total-offset": "총 오프셋",
   "total-offset-description": "금액을 입력하여 대출의 총계를 상쇄하십시오. 대출이이자를 축적했거나 총계가 증가하는 비용에 대한 기타 계산되지 않은 경우 유용합니다.",
   "advanced-automation": "고급 자동화",
@@ -1077,6 +1077,8 @@
   "set-decimal": "소수점을 설정하십시오",
   "no-outgoing-within-period": "선택된 기간 내에 나가는 거래가 없습니다",
   "no-incoming-within-period": "선택된 기간 내에 들어오는 거래가 없습니다",
+  "no-expense-within-period": "선택된 기간 내에 비용 거래가 없습니다",
+  "no-income-within-period": "선택된 기간 내에 소득 거래가 없습니다",
   "select-all": "모두를 선택하십시오",
   "excluded": "제외된",
   "maximum-transactions": "최대 거래",
@@ -1087,5 +1089,11 @@
   "please-refresh-the-application": "신청서를 새로 고치십시오",
   "only-expense-income": "비용/소득 만",
   "only-expense-income-description-1": "모든 발신/들어오는 것을 포함하지 마십시오",
-  "only-expense-income-description-2": "예 : 대출을 포함하지 마십시오"
+  "only-expense-income-description-2": "예 : 대출을 포함하지 마십시오",
+  "compact-number-format": "소형 번호 형식",
+  "positive-cash-flow": "긍정적 인 현금 흐름",
+  "negative-cash-flow": "부정적인 현금 흐름",
+  "number-animation": "숫자 애니메이션",
+  "count-up": "계산하십시오",
+  "disabled": "장애가 있는"
 }

@@ -1077,6 +1077,8 @@
   "set-decimal": "Set Decimal",
   "no-outgoing-within-period": "No outgoing transactions within selected time period",
   "no-incoming-within-period": "No incoming transactions within selected time period",
+  "no-expense-within-period": "No expense transactions within selected time period",
+  "no-income-within-period": "No income transactions within selected time period",
   "select-all": "Select All",
   "excluded": "Excluded",
   "maximum-transactions": "Maximum Transactions",
@@ -1087,5 +1089,11 @@
   "please-refresh-the-application": "Please Refresh the Page",
   "only-expense-income": "Expense/Income Only",
   "only-expense-income-description-1": "Don't include all outgoing/incoming",
-  "only-expense-income-description-2": "Example: Do not include loans"
+  "only-expense-income-description-2": "Example: Do not include loans",
+  "compact-number-format": "Compact Number Format",
+  "positive-cash-flow": "Positive Cash Flow",
+  "negative-cash-flow": "Negative Cash Flow",
+  "number-animation": "Number Animation",
+  "count-up": "Count Up",
+  "disabled": "Disabled"
 }

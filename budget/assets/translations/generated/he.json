@@ -1077,6 +1077,8 @@
   "set-decimal": "הגדר עשרוני",
   "no-outgoing-within-period": "אין עסקאות יוצאות בפרק זמן שנבחר",
   "no-incoming-within-period": "אין עסקאות נכנסות בפרק זמן שנבחר",
+  "no-expense-within-period": "אין עסקאות הוצאות בפרק זמן שנבחר",
+  "no-income-within-period": "אין עסקאות הכנסה בפרק זמן שנבחר",
   "select-all": "בחר הכל",
   "excluded": "לא נכלל",
   "maximum-transactions": "עסקאות מרביות",
@@ -1087,5 +1089,11 @@
   "please-refresh-the-application": "אנא רענן את היישום",
   "only-expense-income": "הוצאה/הכנסה בלבד",
   "only-expense-income-description-1": "אל תכלול את כל היוצאים/נכנסים",
-  "only-expense-income-description-2": "דוגמה: אל תכלול הלוואות"
+  "only-expense-income-description-2": "דוגמה: אל תכלול הלוואות",
+  "compact-number-format": "פורמט מספר קומפקטי",
+  "positive-cash-flow": "תזרים מזומנים חיובי",
+  "negative-cash-flow": "תזרים מזומנים שלילי",
+  "number-animation": "אנימציה של מספר",
+  "count-up": "לספור עד",
+  "disabled": "נָכֶה"
 }

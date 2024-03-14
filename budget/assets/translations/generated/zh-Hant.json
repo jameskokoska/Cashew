@@ -1077,6 +1077,8 @@
   "set-decimal": "設置小數",
   "no-outgoing-within-period": "在選定的時間段內沒有傳出交易",
   "no-incoming-within-period": "在選定的時間段內沒有傳入的交易",
+  "no-expense-within-period": "選定時間段內沒有費用交易",
+  "no-income-within-period": "選定時間內沒有收入交易",
   "select-all": "全選",
   "excluded": "排除",
   "maximum-transactions": "最大交易",
@@ -1087,5 +1089,11 @@
   "please-refresh-the-application": "請刷新申請",
   "only-expense-income": "僅費用/收入",
   "only-expense-income-description-1": "不要包括所有外向/傳入",
-  "only-expense-income-description-2": "示例：不包括貸款"
+  "only-expense-income-description-2": "示例：不包括貸款",
+  "compact-number-format": "緊湊的數字格式",
+  "positive-cash-flow": "正現金流",
+  "negative-cash-flow": "負現金流量",
+  "number-animation": "數字動畫",
+  "count-up": "計數",
+  "disabled": "禁用"
 }

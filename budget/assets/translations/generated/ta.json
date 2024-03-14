@@ -1077,6 +1077,8 @@
   "set-decimal": "தசமத்தை அமைக்கவும்",
   "no-outgoing-within-period": "தேர்ந்தெடுக்கப்பட்ட காலத்திற்குள் வெளிச்செல்லும் பரிவர்த்தனைகள் இல்லை",
   "no-incoming-within-period": "தேர்ந்தெடுக்கப்பட்ட காலத்திற்குள் உள்வரும் பரிவர்த்தனைகள் இல்லை",
+  "no-expense-within-period": "தேர்ந்தெடுக்கப்பட்ட காலத்திற்குள் செலவு பரிவர்த்தனைகள் இல்லை",
+  "no-income-within-period": "தேர்ந்தெடுக்கப்பட்ட காலத்திற்குள் வருமான பரிவர்த்தனைகள் இல்லை",
   "select-all": "அனைத்தையும் தெரிவுசெய்",
   "excluded": "விலக்கப்பட்டது",
   "maximum-transactions": "அதிகபட்ச பரிவர்த்தனைகள்",
@@ -1087,5 +1089,11 @@
   "please-refresh-the-application": "விண்ணப்பத்தை புதுப்பிக்கவும்",
   "only-expense-income": "செலவு/வருமானம் மட்டுமே",
   "only-expense-income-description-1": "வெளிச்செல்லும்/உள்வரும் அனைத்தையும் சேர்க்க வேண்டாம்",
-  "only-expense-income-description-2": "எடுத்துக்காட்டு: கடன்களைச் சேர்க்க வேண்டாம்"
+  "only-expense-income-description-2": "எடுத்துக்காட்டு: கடன்களைச் சேர்க்க வேண்டாம்",
+  "compact-number-format": "சிறிய எண் வடிவம்",
+  "positive-cash-flow": "நேர்மறையான பணப்புழக்கம்",
+  "negative-cash-flow": "எதிர்மறை பணப்புழக்கம்",
+  "number-animation": "எண் அனிமேஷன்",
+  "count-up": "எண்ணுங்கள்",
+  "disabled": "முடக்கப்பட்டது"
 }

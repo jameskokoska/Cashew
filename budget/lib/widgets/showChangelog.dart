@@ -41,6 +41,9 @@ String getChangelogString() {
     Added all outgoing/incoming or just expense/income transactions setting for homepage pie chart
     Added color outlines to transaction filters
     Tapping home page navigation icon or long pressing allows for edit home page
+    Default account labelled in edit accounts page
+    Provided more details in popup when selecting backup to delete/restore
+    Number animation setting
     Fix cash flow filters when entering search page from positive/negative cashflow
     Fix polarity of lent and borrowed home screen sections
     Fix decimal precision save changes button for account edits

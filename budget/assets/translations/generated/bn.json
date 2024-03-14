@@ -1077,6 +1077,8 @@
   "set-decimal": "দশমিক সেট করুন",
   "no-outgoing-within-period": "নির্বাচিত সময়কালের মধ্যে কোনও বহির্গামী লেনদেন নেই",
   "no-incoming-within-period": "নির্বাচিত সময়কালের মধ্যে কোনও আগত লেনদেন নেই",
+  "no-expense-within-period": "নির্বাচিত সময়কালের মধ্যে কোনও ব্যয় লেনদেন নেই",
+  "no-income-within-period": "নির্বাচিত সময়কালের মধ্যে কোনও আয়ের লেনদেন নেই",
   "select-all": "সমস্ত নির্বাচন করুন",
   "excluded": "ছাঁটা",
   "maximum-transactions": "সর্বাধিক লেনদেন",
@@ -1087,5 +1089,11 @@
   "please-refresh-the-application": "অ্যাপ্লিকেশনটি রিফ্রেশ করুন",
   "only-expense-income": "ব্যয়/আয় কেবল",
   "only-expense-income-description-1": "সমস্ত বহির্গামী/আগত অন্তর্ভুক্ত করবেন না",
-  "only-expense-income-description-2": "উদাহরণ: loans ণ অন্তর্ভুক্ত করবেন না"
+  "only-expense-income-description-2": "উদাহরণ: loans ণ অন্তর্ভুক্ত করবেন না",
+  "compact-number-format": "কমপ্যাক্ট নম্বর ফর্ম্যাট",
+  "positive-cash-flow": "ইতিবাচক নগদ প্রবাহ",
+  "negative-cash-flow": "নেতিবাচক নগদ প্রবাহ",
+  "number-animation": "নম্বর অ্যানিমেশন",
+  "count-up": "গননা",
+  "disabled": "অক্ষম"
 }

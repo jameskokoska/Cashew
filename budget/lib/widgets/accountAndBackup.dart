@@ -593,15 +593,15 @@ Future<void> loadBackup(
           description: kIsWeb
               ? "refresh-required-to-load-backup".tr()
               : "restart-required-to-load-backup".tr(),
-          codeBlock: file.name.toString() +
-              (file.modifiedTime == null
-                  ? ""
-                  : ("\n" +
-                      getWordedDateShort(
-                        file.modifiedTime!,
-                        showTodayTomorrow: false,
-                        includeYear: true,
-                      ))),
+          // codeBlock: file.name.toString() +
+          //     (file.modifiedTime == null
+          //         ? ""
+          //         : ("\n" +
+          //             getWordedDateShort(
+          //               file.modifiedTime!,
+          //               showTodayTomorrow: false,
+          //               includeYear: true,
+          //             ))),
         );
       },
       onError: (error) {
@@ -1070,6 +1070,21 @@ class _BackupManagementState extends State<BackupManagement> {
                                 final result = await openPopup(
                                   context,
                                   title: "load-backup".tr(),
+                                  subtitle: getWordedDateShortMore(
+                                    (file.value.modifiedTime ?? DateTime.now())
+                                        .toLocal(),
+                                    includeTime: true,
+                                    includeYear: true,
+                                    showTodayTomorrow: false,
+                                  ),
+                                  beforeDescriptionWidget: Padding(
+                                    padding: const EdgeInsets.only(
+                                      top: 8,
+                                      bottom: 5,
+                                    ),
+                                    child: CodeBlock(
+                                        text: (file.value.name ?? "No name")),
+                                  ),
                                   description: "load-backup-warning".tr(),
                                   icon: appStateSettings["outlinedIcons"]
                                       ? Icons.warning_outlined
@@ -1252,29 +1267,41 @@ class _BackupManagementState extends State<BackupManagement> {
                                                         ? Icons.delete_outlined
                                                         : Icons.delete_rounded,
                                                     title: "delete-backup".tr(),
-                                                    subtitle: file.value.name ??
-                                                        "No name",
-                                                    description: (widget
-                                                                .isClientSync
-                                                            ? "delete-sync-backup-warning"
-                                                                    .tr() +
-                                                                "\n"
-                                                            : "") +
+                                                    subtitle:
                                                         getWordedDateShortMore(
-                                                            (file.value.modifiedTime ??
-                                                                    DateTime
-                                                                        .now())
-                                                                .toLocal(),
-                                                            includeTimeIfToday:
-                                                                true) +
-                                                        "\n" +
-                                                        convertBytesToMB(file
-                                                                    .value
-                                                                    .size ??
-                                                                "0")
-                                                            .toStringAsFixed(
-                                                                2) +
-                                                        " MB",
+                                                      (file.value.modifiedTime ??
+                                                              DateTime.now())
+                                                          .toLocal(),
+                                                      includeTime: true,
+                                                      includeYear: true,
+                                                      showTodayTomorrow: false,
+                                                    ),
+                                                    beforeDescriptionWidget:
+                                                        Padding(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                        top: 8,
+                                                        bottom: 5,
+                                                      ),
+                                                      child: CodeBlock(
+                                                        text: (file.value
+                                                                    .name ??
+                                                                "No name") +
+                                                            "\n" +
+                                                            convertBytesToMB(file
+                                                                        .value
+                                                                        .size ??
+                                                                    "0")
+                                                                .toStringAsFixed(
+                                                                    2) +
+                                                            " MB",
+                                                      ),
+                                                    ),
+                                                    description: (widget
+                                                            .isClientSync
+                                                        ? "delete-sync-backup-warning"
+                                                            .tr()
+                                                        : null),
                                                     onSubmit: () async {
                                                       Navigator.pop(context);
                                                       loadingIndeterminateKey

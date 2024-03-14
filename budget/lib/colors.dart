@@ -73,7 +73,7 @@ generateColors() {
       "canvasContainer": const Color(0xFFEBEBEB),
       "lightDarkAccentHeavy": Color(0xFFEBEBEB),
       "shadowColor": const Color(0x655A5A5A),
-      "shadowColorLight": const Color(0x2D5A5A5A), //
+      "shadowColorLight": const Color(0x2D5A5A5A),
       "unPaidUpcoming": Color(0xFF58A4C2),
       "unPaidOverdue": Color(0xFF6577E0),
       "incomeAmount": Color(0xFF59A849),

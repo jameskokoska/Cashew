@@ -1077,6 +1077,8 @@
   "set-decimal": "تعيين عشري",
   "no-outgoing-within-period": "لا توجد معاملات صادرة خلال فترة زمنية محددة",
   "no-incoming-within-period": "لا توجد معاملات واردة خلال فترة زمنية محددة",
+  "no-expense-within-period": "لا توجد معاملات نفقات خلال فترة زمنية محددة",
+  "no-income-within-period": "لا توجد معاملات دخل خلال فترة زمنية محددة",
   "select-all": "اختر الكل",
   "excluded": "مستبعد",
   "maximum-transactions": "الحد الأقصى للمعاملات",
@@ -1087,5 +1089,11 @@
   "please-refresh-the-application": "الرجاء تحديث التطبيق",
   "only-expense-income": "المصاريف/الدخل فقط",
   "only-expense-income-description-1": "لا تشمل كل الصادرة/الواردة",
-  "only-expense-income-description-2": "مثال: لا تتضمن القروض"
+  "only-expense-income-description-2": "مثال: لا تتضمن القروض",
+  "compact-number-format": "تنسيق رقم مدمج",
+  "positive-cash-flow": "التدفق النقدي الإيجابي",
+  "negative-cash-flow": "التدفق النقدي السلبي",
+  "number-animation": "عدد الرسوم المتحركة",
+  "count-up": "ابدأ العد",
+  "disabled": "عاجز"
 }

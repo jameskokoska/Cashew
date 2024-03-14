@@ -1077,6 +1077,8 @@
   "set-decimal": "Beállított tizedes",
   "no-outgoing-within-period": "Nincs kimenő tranzakció a kiválasztott időtartamon belül",
   "no-incoming-within-period": "Nincs beérkező tranzakció a kiválasztott időtartamon belül",
+  "no-expense-within-period": "Nincs költség -tranzakció a kiválasztott időtartamon belül",
+  "no-income-within-period": "Nincs jövedelemügylet a kiválasztott időszakon belül",
   "select-all": "Mindet kiválaszt",
   "excluded": "Kizárott",
   "maximum-transactions": "Maximális tranzakció",
@@ -1087,5 +1089,11 @@
   "please-refresh-the-application": "Kérjük, frissítse az alkalmazást",
   "only-expense-income": "Csak költség/jövedelem",
   "only-expense-income-description-1": "Ne tartalmazza az összes kimenő/bejövő",
-  "only-expense-income-description-2": "Példa: Ne tartalmazza a kölcsönöket"
+  "only-expense-income-description-2": "Példa: Ne tartalmazza a kölcsönöket",
+  "compact-number-format": "Kompakt számformátum",
+  "positive-cash-flow": "Pozitív cash flow",
+  "negative-cash-flow": "Negatív cash flow",
+  "number-animation": "Szám animáció",
+  "count-up": "Felszámol",
+  "disabled": "Tiltva"
 }

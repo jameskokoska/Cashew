@@ -1077,6 +1077,8 @@
   "set-decimal": "Régler une décimale",
   "no-outgoing-within-period": "Aucune transaction sortante dans le délai sélectionné",
   "no-incoming-within-period": "Aucune transaction entrante dans le délai sélectionné",
+  "no-expense-within-period": "Aucune transaction de dépense dans le délai sélectionné",
+  "no-income-within-period": "Aucune transaction de revenu dans le délai sélectionné",
   "select-all": "Tout sélectionner",
   "excluded": "Exclu",
   "maximum-transactions": "Transactions maximales",
@@ -1087,5 +1089,11 @@
   "please-refresh-the-application": "Veuillez actualiser la demande",
   "only-expense-income": "Dépense / revenu uniquement",
   "only-expense-income-description-1": "N'incluez pas tout sortant / entrant",
-  "only-expense-income-description-2": "Exemple: n'incluez pas les prêts"
+  "only-expense-income-description-2": "Exemple: n'incluez pas les prêts",
+  "compact-number-format": "Format de numéro compact",
+  "positive-cash-flow": "Flux de trésorerie positifs",
+  "negative-cash-flow": "Flux de trésorerie négatifs",
+  "number-animation": "Animation numérique",
+  "count-up": "Compter jusqu'à",
+  "disabled": "Désactivé"
 }

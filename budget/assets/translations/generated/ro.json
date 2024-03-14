@@ -1077,6 +1077,8 @@
   "set-decimal": "Setați zecimal",
   "no-outgoing-within-period": "Nu există tranzacții de ieșire în perioada de timp selectată",
   "no-incoming-within-period": "Fără tranzacții primite în perioada de timp selectată",
+  "no-expense-within-period": "Fără tranzacții de cheltuieli în perioada de timp selectată",
+  "no-income-within-period": "Fără tranzacții cu venituri în perioada de timp selectată",
   "select-all": "Selectează tot",
   "excluded": "Exclus",
   "maximum-transactions": "Tranzacții maxime",
@@ -1087,5 +1089,11 @@
   "please-refresh-the-application": "Vă rugăm să reîmprospătați aplicația",
   "only-expense-income": "Numai cheltuieli/venituri",
   "only-expense-income-description-1": "Nu includeți toate ieșirile/primite",
-  "only-expense-income-description-2": "Exemplu: Nu includeți împrumuturi"
+  "only-expense-income-description-2": "Exemplu: Nu includeți împrumuturi",
+  "compact-number-format": "Formatul numărului compact",
+  "positive-cash-flow": "Flux de numerar pozitiv",
+  "negative-cash-flow": "Flux de numerar negativ",
+  "number-animation": "Animație numerică",
+  "count-up": "Numara",
+  "disabled": "Dezactivat"
 }

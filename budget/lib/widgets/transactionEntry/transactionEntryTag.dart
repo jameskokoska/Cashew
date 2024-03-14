@@ -166,8 +166,7 @@ class TransactionEntryTag extends StatelessWidget {
             ),
           if (showExcludedBudgetTagCheck)
             TransactionTag(
-              color: HexColor(budget?.colour,
-                  defaultColor: Theme.of(context).colorScheme.primary),
+              color: Colors.grey,
               name: "excluded".tr(),
             ),
         ],
@@ -257,12 +256,16 @@ class ObjectivePercentTag extends StatelessWidget {
 class TransactionTag extends StatelessWidget {
   final Color color;
   final String name;
+  final EdgeInsets margin;
+  final EdgeInsets padding;
   final Widget? leading;
   final double? progress;
 
   TransactionTag({
     required this.color,
     required this.name,
+    this.margin = const EdgeInsets.only(left: 3),
+    this.padding = const EdgeInsets.symmetric(horizontal: 4.5, vertical: 1.05),
     this.leading,
     this.progress,
   });
@@ -274,7 +277,7 @@ class TransactionTag extends StatelessWidget {
         color: color.withOpacity(progress != null ? 0.15 : 0.25),
         borderRadius: BorderRadius.circular(6),
       ),
-      padding: EdgeInsets.symmetric(horizontal: 4.5, vertical: 1.05),
+      padding: padding,
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -322,7 +325,7 @@ class TransactionTag extends StatelessWidget {
           ),
         ),
       );
-    return Padding(padding: EdgeInsets.only(left: 3), child: tagWidget);
+    return Padding(padding: margin, child: tagWidget);
   }
 }
 

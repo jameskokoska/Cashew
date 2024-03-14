@@ -1077,6 +1077,8 @@
   "set-decimal": "ദശാംശ സജ്ജമാക്കുക",
   "no-outgoing-within-period": "തിരഞ്ഞെടുത്ത കാലയളവിനുള്ളിൽ going ട്ട്ഗോയിംഗ് ഇടപാടുകളൊന്നുമില്ല",
   "no-incoming-within-period": "തിരഞ്ഞെടുത്ത കാലയളവിനുള്ളിൽ ഇൻകമിംഗ് ഇടപാടുകളൊന്നുമില്ല",
+  "no-expense-within-period": "തിരഞ്ഞെടുത്ത കാലയളവിനുള്ളിൽ ചെലവ് ഇടപാടുകളൊന്നുമില്ല",
+  "no-income-within-period": "തിരഞ്ഞെടുത്ത സമയ കാലയളവിനുള്ളിൽ വരുമാന ഇടപാടുകളൊന്നുമില്ല",
   "select-all": "എല്ലാം തിരഞ്ഞെടുക്കുക",
   "excluded": "ഒഴിവാക്കി",
   "maximum-transactions": "പരമാവധി ഇടപാടുകൾ",
@@ -1087,5 +1089,11 @@
   "please-refresh-the-application": "ആപ്ലിക്കേഷൻ പുതുക്കുക",
   "only-expense-income": "ചെലവ് / വരുമാനം മാത്രം",
   "only-expense-income-description-1": "എല്ലാ going ട്ട്ഗോയിംഗ് / ഇൻകമിംഗ് ഉൾപ്പെടുത്തരുത്",
-  "only-expense-income-description-2": "ഉദാഹരണം: വായ്പകൾ ഉൾപ്പെടുത്തരുത്"
+  "only-expense-income-description-2": "ഉദാഹരണം: വായ്പകൾ ഉൾപ്പെടുത്തരുത്",
+  "compact-number-format": "കോംപാക്റ്റ് നമ്പർ ഫോർമാറ്റ്",
+  "positive-cash-flow": "പോസിറ്റീവ് പണമൊഴുക്ക്",
+  "negative-cash-flow": "നെഗറ്റീവ് ക്യാഷ് ഫ്ലോ",
+  "number-animation": "നമ്പർ ആനിമേഷൻ",
+  "count-up": "എണ്ണുക",
+  "disabled": "അശക്തനായ"
 }

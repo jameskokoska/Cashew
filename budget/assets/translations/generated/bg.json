@@ -1077,6 +1077,8 @@
   "set-decimal": "Задайте десетична",
   "no-outgoing-within-period": "Няма изходящи транзакции в избран период от време",
   "no-incoming-within-period": "Няма входящи транзакции в избран период от време",
+  "no-expense-within-period": "Без транзакции с разходи в избран период от време",
+  "no-income-within-period": "Няма транзакции с доходи в избран период от време",
   "select-all": "Избери всички",
   "excluded": "Изключен",
   "maximum-transactions": "Максимални транзакции",
@@ -1087,5 +1089,11 @@
   "please-refresh-the-application": "Моля, опреснете приложението",
   "only-expense-income": "Само за разходи/доходи",
   "only-expense-income-description-1": "Не включвайте всички изходящи/входящи",
-  "only-expense-income-description-2": "Пример: Не включвайте заеми"
+  "only-expense-income-description-2": "Пример: Не включвайте заеми",
+  "compact-number-format": "Формат на компактния номер",
+  "positive-cash-flow": "Положителен паричен поток",
+  "negative-cash-flow": "Отрицателен паричен поток",
+  "number-animation": "Анимация с номер",
+  "count-up": "Преброй",
+  "disabled": "хора с увреждания"
 }

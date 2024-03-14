@@ -109,7 +109,7 @@ Future importDB(BuildContext context, {ignoreOverwriteWarning = false}) async {
             description: kIsWeb
                 ? "refresh-required-to-load-backup".tr()
                 : "restart-required-to-load-backup".tr(),
-            codeBlock: result.toString(),
+            // codeBlock: result.toString(),
           );
       },
     );

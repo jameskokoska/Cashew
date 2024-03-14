@@ -1077,6 +1077,8 @@
   "set-decimal": "اعشاریہ طے کریں",
   "no-outgoing-within-period": "منتخب کردہ وقت کے اندر باہر جانے والے لین دین نہیں",
   "no-incoming-within-period": "منتخب کردہ وقت کی مدت میں آنے والے لین دین نہیں",
+  "no-expense-within-period": "منتخب کردہ وقت کے اندر کوئی اخراجات کا لین دین نہیں",
+  "no-income-within-period": "منتخب کردہ وقت کی مدت میں آمدنی کا کوئی لین دین نہیں ہے",
   "select-all": "تمام منتخب کریں",
   "excluded": "خارج",
   "maximum-transactions": "زیادہ سے زیادہ لین دین",
@@ -1087,5 +1089,11 @@
   "please-refresh-the-application": "براہ کرم درخواست کو تازہ کریں",
   "only-expense-income": "صرف اخراجات/آمدنی",
   "only-expense-income-description-1": "سبکدوش ہونے والے/آنے والے تمام کو شامل نہ کریں",
-  "only-expense-income-description-2": "مثال: قرضوں کو شامل نہ کریں"
+  "only-expense-income-description-2": "مثال: قرضوں کو شامل نہ کریں",
+  "compact-number-format": "کمپیکٹ نمبر فارمیٹ",
+  "positive-cash-flow": "مثبت نقد بہاؤ",
+  "negative-cash-flow": "منفی نقد بہاؤ",
+  "number-animation": "نمبر حرکت پذیری",
+  "count-up": "گنتی",
+  "disabled": "غیر فعال"
 }

@@ -25,6 +25,7 @@ Future<Map<String, dynamic>> getDefaultPreferences() async {
     "numBackups": 1,
     "theme": "system", //system, light, dark
     "use24HourFormat": "system", //system, 12-hour, 24-hour
+    "numberCountUpAnimation": true,
     "selectedWalletPk": "0",
     "selectedSubscriptionType": 0,
     "accentColor": toHexString(Color(0xFF1B447A)),

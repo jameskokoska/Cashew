@@ -1058,7 +1058,7 @@
   "failed-to-preview-image": "प्रतिमेचे पूर्वावलोकन करण्यात अयशस्वी",
   "open-link": "ओपन लिंक",
   "category-not-selected": "श्रेणी निवडलेली नाही",
-  "all-transactions-require-a-category": "सर्व व्यवहारांसाठी श्रेणी आवश्यक आहे",
+  "all-transactions-require-a-category": "सर्व व्यवहारांना श्रेणी आवश्यक आहे",
   "total-offset": "एकूण ऑफसेट",
   "total-offset-description": "रक्कम प्रविष्ट करून एकूण कर्जाची ऑफसेट करा. जर कर्जात एकूण वाढ होणार्‍या खर्चासाठी व्याज जमा झाले असेल किंवा इतर अनुरुप असेल तर उपयुक्त.",
   "advanced-automation": "प्रगत ऑटोमेशन",
@@ -1077,6 +1077,8 @@
   "set-decimal": "दशांश सेट करा",
   "no-outgoing-within-period": "निवडलेल्या कालावधीत कोणतेही आउटगोइंग व्यवहार नाहीत",
   "no-incoming-within-period": "निवडलेल्या कालावधीत येण्याचे व्यवहार नाहीत",
+  "no-expense-within-period": "निवडलेल्या कालावधीत कोणताही खर्च व्यवहार नाही",
+  "no-income-within-period": "निवडलेल्या कालावधीत उत्पन्नाचे कोणतेही व्यवहार नाहीत",
   "select-all": "सर्व निवडा",
   "excluded": "वगळले",
   "maximum-transactions": "जास्तीत जास्त व्यवहार",
@@ -1087,5 +1089,11 @@
   "please-refresh-the-application": "कृपया अनुप्रयोग रीफ्रेश करा",
   "only-expense-income": "केवळ खर्च/उत्पन्न",
   "only-expense-income-description-1": "सर्व आउटगोइंग/इनकमिंग समाविष्ट करू नका",
-  "only-expense-income-description-2": "उदाहरणः कर्ज समाविष्ट करू नका"
+  "only-expense-income-description-2": "उदाहरणः कर्ज समाविष्ट करू नका",
+  "compact-number-format": "कॉम्पॅक्ट नंबर स्वरूप",
+  "positive-cash-flow": "सकारात्मक रोख प्रवाह",
+  "negative-cash-flow": "नकारात्मक रोख प्रवाह",
+  "number-animation": "क्रमांक अ‍ॅनिमेशन",
+  "count-up": "मोजा",
+  "disabled": "अक्षम"
 }

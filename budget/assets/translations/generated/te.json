@@ -1077,6 +1077,8 @@
   "set-decimal": "దశాంశాన్ని సెట్ చేయండి",
   "no-outgoing-within-period": "ఎంచుకున్న వ్యవధిలో అవుట్గోయింగ్ లావాదేవీలు లేవు",
   "no-incoming-within-period": "ఎంచుకున్న కాల వ్యవధిలో ఇన్కమింగ్ లావాదేవీలు లేవు",
+  "no-expense-within-period": "ఎంచుకున్న కాల వ్యవధిలో ఖర్చు లావాదేవీలు లేవు",
+  "no-income-within-period": "ఎంచుకున్న వ్యవధిలో ఆదాయ లావాదేవీలు లేవు",
   "select-all": "అన్ని ఎంచుకోండి",
   "excluded": "మినహాయించబడింది",
   "maximum-transactions": "గరిష్ట లావాదేవీలు",
@@ -1087,5 +1089,11 @@
   "please-refresh-the-application": "దయచేసి దరఖాస్తును రిఫ్రెష్ చేయండి",
   "only-expense-income": "ఖర్చు/ఆదాయం మాత్రమే",
   "only-expense-income-description-1": "అన్ని అవుట్గోయింగ్/ఇన్కమింగ్ చేర్చవద్దు",
-  "only-expense-income-description-2": "ఉదాహరణ: రుణాలు చేర్చవద్దు"
+  "only-expense-income-description-2": "ఉదాహరణ: రుణాలు చేర్చవద్దు",
+  "compact-number-format": "కాంపాక్ట్ నంబర్ ఫార్మాట్",
+  "positive-cash-flow": "సానుకూల నగదు ప్రవాహం",
+  "negative-cash-flow": "ప్రతికూల నగదు ప్రవాహం",
+  "number-animation": "సంఖ్య యానిమేషన్",
+  "count-up": "లెక్కించండి",
+  "disabled": "నిలిపివేయబడింది"
 }

@@ -460,13 +460,23 @@ class _PieChartHomeAndCategorySummaryState
                                                         50),
                                             child: TextFont(
                                               text: widget.isIncome
-                                                  ? "no-incoming-within-period"
-                                                      .tr()
-                                                  : "no-outgoing-within-period"
-                                                      .tr(),
+                                                  ? appStateSettings[
+                                                              "pieChartIncomeAndExpenseOnly"] ==
+                                                          true
+                                                      ? "no-income-within-period"
+                                                          .tr()
+                                                      : "no-incoming-within-period"
+                                                          .tr()
+                                                  : appStateSettings[
+                                                              "pieChartIncomeAndExpenseOnly"] ==
+                                                          true
+                                                      ? "no-expense-within-period"
+                                                          .tr()
+                                                      : "no-outgoing-within-period"
+                                                          .tr(),
                                               textAlign: TextAlign.center,
-                                              maxLines: 200,
-                                              fontSize: 18,
+                                              maxLines: 20,
+                                              fontSize: 17,
                                             ),
                                           ),
                                           SizedBox(height: 15),

@@ -1043,7 +1043,7 @@
   "set-date-time": "Встановити",
   "add-record-using-plus-button": "Додайте запис за допомогою кнопки [+].",
   "all-settled": "Все врегульовано",
-  "difference-loan": "Різниця позики",
+  "difference-loan": "Різниця",
   "open-settings": "Відкриті налаштування",
   "decimal-precision": "Десяткова точність",
   "decimal-precision-description": "Десяткові місця для округлення суми транзакцій",
@@ -1077,6 +1077,8 @@
   "set-decimal": "Встановити десятковий",
   "no-outgoing-within-period": "Ніяких вихідних операцій протягом вибраного періоду часу",
   "no-incoming-within-period": "Ніяких вхідних операцій протягом вибраного періоду часу",
+  "no-expense-within-period": "Немає операцій з витратами протягом вибраного періоду часу",
+  "no-income-within-period": "Ніяких операцій з доходів протягом вибраного періоду часу",
   "select-all": "Вибрати все",
   "excluded": "Виключений",
   "maximum-transactions": "Максимальні транзакції",
@@ -1087,5 +1089,11 @@
   "please-refresh-the-application": "Будь ласка, оновіть заявку",
   "only-expense-income": "Тільки витрати/доходи",
   "only-expense-income-description-1": "Не включайте всі вихідні/вхідні",
-  "only-expense-income-description-2": "Приклад: Не включайте позики"
+  "only-expense-income-description-2": "Приклад: Не включайте позики",
+  "compact-number-format": "Формат компактного числа",
+  "positive-cash-flow": "Позитивний грошовий потік",
+  "negative-cash-flow": "Негативний грошовий потік",
+  "number-animation": "Анімація номерів",
+  "count-up": "Підраховувати",
+  "disabled": "Інвалід"
 }

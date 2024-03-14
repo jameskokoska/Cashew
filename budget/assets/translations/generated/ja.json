@@ -1077,6 +1077,8 @@
   "set-decimal": "デシマルを設定します",
   "no-outgoing-within-period": "選択された期間内に発信トランザクションはありません",
   "no-incoming-within-period": "選択した期間内に着信トランザクションはありません",
+  "no-expense-within-period": "選択された期間内に費用取引はありません",
+  "no-income-within-period": "選択された期間内に収入取引はありません",
   "select-all": "すべて選択",
   "excluded": "除外",
   "maximum-transactions": "最大トランザクション",
@@ -1087,5 +1089,11 @@
   "please-refresh-the-application": "アプリケーションを更新してください",
   "only-expense-income": "費用/収入のみ",
   "only-expense-income-description-1": "すべての発信/着信を含めないでください",
-  "only-expense-income-description-2": "例：ローンを含めないでください"
+  "only-expense-income-description-2": "例：ローンを含めないでください",
+  "compact-number-format": "コンパクト番号形式",
+  "positive-cash-flow": "ポジティブなキャッシュフロー",
+  "negative-cash-flow": "負のキャッシュフロー",
+  "number-animation": "番号アニメーション",
+  "count-up": "カウントアップ",
+  "disabled": "無効"
 }

@@ -1077,6 +1077,8 @@
   "set-decimal": "Ondalık ayarlamak",
   "no-outgoing-within-period": "Seçilen süre içinde giden işlem yok",
   "no-incoming-within-period": "Seçilen süre içinde gelen işlem yok",
+  "no-expense-within-period": "Seçilen süre içinde gider işlemi yok",
+  "no-income-within-period": "Seçilen süre içinde gelir işlemi yok",
   "select-all": "Hepsini seç",
   "excluded": "Hariç tutuldu",
   "maximum-transactions": "Maksimum işlemler",
@@ -1087,5 +1089,11 @@
   "please-refresh-the-application": "Lütfen uygulamayı yenileyin",
   "only-expense-income": "Yalnızca Gider/Gelir",
   "only-expense-income-description-1": "Tüm giden/gelenleri dahil etmeyin",
-  "only-expense-income-description-2": "Örnek: Krediler dahil etmeyin"
+  "only-expense-income-description-2": "Örnek: Krediler dahil etmeyin",
+  "compact-number-format": "Kompakt numara formatı",
+  "positive-cash-flow": "Pozitif nakit akışı",
+  "negative-cash-flow": "Negatif nakit akışı",
+  "number-animation": "Sayı animasyonu",
+  "count-up": "Saymak",
+  "disabled": "Engelli"
 }

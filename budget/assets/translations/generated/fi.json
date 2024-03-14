@@ -1077,6 +1077,8 @@
   "set-decimal": "Aseta desimaaliin",
   "no-outgoing-within-period": "Ei lähteviä tapahtumia valitun ajanjakson aikana",
   "no-incoming-within-period": "Ei tulevia tapahtumia valitun ajanjakson aikana",
+  "no-expense-within-period": "Ei kustannustransaktioita valitun ajanjakson aikana",
+  "no-income-within-period": "Ei tulotapahtumia valitun ajanjakson aikana",
   "select-all": "Valitse kaikki",
   "excluded": "Ulkopuolelle",
   "maximum-transactions": "Enimmäiskaupat",
@@ -1087,5 +1089,11 @@
   "please-refresh-the-application": "Päivitä sovellus",
   "only-expense-income": "Vain kustannukset/tulot",
   "only-expense-income-description-1": "Älä sisällä kaikkia lähteviä/saapuvia",
-  "only-expense-income-description-2": "Esimerkki: Älä sisällä lainoja"
+  "only-expense-income-description-2": "Esimerkki: Älä sisällä lainoja",
+  "compact-number-format": "Compact -numeromuoto",
+  "positive-cash-flow": "Positiivinen kassavirta",
+  "negative-cash-flow": "Negatiivinen kassavirta",
+  "number-animation": "Numero -animaatio",
+  "count-up": "Laskea",
+  "disabled": "Liikuntarajoitteinen"
 }

@@ -1046,7 +1046,7 @@
   "difference-loan": "เงินกู้ที่แตกต่างกัน",
   "open-settings": "เปิดการตั้งค่า",
   "decimal-precision": "ความแม่นยำของทศนิยม",
-  "decimal-precision-description": "ทศนิยมสถานที่สำหรับการปัดเศษจำนวนธุรกรรม",
+  "decimal-precision-description": "ทศนิยมสถานที่สำหรับการทำธุรกรรมการปัดเศษ",
   "same-accounts": "บัญชีเดียวกัน",
   "select-2-different-accounts": "เลือก 2 บัญชีที่แตกต่างกัน",
   "include-amount": "รวมจำนวนเงิน",
@@ -1077,6 +1077,8 @@
   "set-decimal": "ตั้งทศนิยม",
   "no-outgoing-within-period": "ไม่มีธุรกรรมขาออกภายในระยะเวลาที่เลือก",
   "no-incoming-within-period": "ไม่มีธุรกรรมที่เข้ามาภายในระยะเวลาที่เลือก",
+  "no-expense-within-period": "ไม่มีการทำธุรกรรมค่าใช้จ่ายภายในระยะเวลาที่เลือก",
+  "no-income-within-period": "ไม่มีธุรกรรมรายได้ภายในระยะเวลาที่เลือก",
   "select-all": "เลือกทั้งหมด",
   "excluded": "ไม่รวม",
   "maximum-transactions": "ธุรกรรมสูงสุด",
@@ -1087,5 +1089,11 @@
   "please-refresh-the-application": "โปรดรีเฟรชใบสมัคร",
   "only-expense-income": "ค่าใช้จ่าย/รายได้เท่านั้น",
   "only-expense-income-description-1": "อย่ารวมขาออก/ขาเข้าทั้งหมด",
-  "only-expense-income-description-2": "ตัวอย่าง: อย่ารวมสินเชื่อ"
+  "only-expense-income-description-2": "ตัวอย่าง: อย่ารวมสินเชื่อ",
+  "compact-number-format": "รูปแบบหมายเลขขนาดกะทัดรัด",
+  "positive-cash-flow": "กระแสเงินสดบวก",
+  "negative-cash-flow": "กระแสเงินสดติดลบ",
+  "number-animation": "หมายเลขแอนิเมชั่น",
+  "count-up": "นับ",
+  "disabled": "พิการ"
 }

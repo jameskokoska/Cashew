@@ -1077,6 +1077,8 @@
   "set-decimal": "Weka decimal",
   "no-outgoing-within-period": "Hakuna shughuli zinazomaliza muda wake katika kipindi cha wakati uliochaguliwa",
   "no-incoming-within-period": "Hakuna shughuli zinazoingia katika kipindi cha wakati uliochaguliwa",
+  "no-expense-within-period": "Hakuna shughuli za gharama ndani ya kipindi cha wakati kilichochaguliwa",
+  "no-income-within-period": "Hakuna shughuli za mapato ndani ya kipindi cha muda kilichochaguliwa",
   "select-all": "Chagua Zote",
   "excluded": "Kutengwa",
   "maximum-transactions": "Uuzaji wa kiwango cha juu",
@@ -1087,5 +1089,11 @@
   "please-refresh-the-application": "Tafadhali furahisha programu",
   "only-expense-income": "Gharama/mapato tu",
   "only-expense-income-description-1": "Usijumuishe wote wanaotoka/wanaoingia",
-  "only-expense-income-description-2": "Mfano: Usijumuishe mikopo"
+  "only-expense-income-description-2": "Mfano: Usijumuishe mikopo",
+  "compact-number-format": "Fomati ya nambari ya kompakt",
+  "positive-cash-flow": "Mtiririko mzuri wa pesa",
+  "negative-cash-flow": "Mtiririko mbaya wa pesa",
+  "number-animation": "Uhuishaji wa nambari",
+  "count-up": "Hesabu",
+  "disabled": "Walemavu"
 }

@@ -1043,7 +1043,7 @@
   "set-date-time": "تنظیم",
   "add-record-using-plus-button": "با استفاده از دکمه [+] یک رکورد اضافه کنید.",
   "all-settled": "همه حل و فصل شدند",
-  "difference-loan": "وام تفاوت",
+  "difference-loan": "وام اختلاف",
   "open-settings": "تنظیمات باز",
   "decimal-precision": "دقت اعشاری",
   "decimal-precision-description": "مکان های اعشاری برای گردآوری مبلغ معامله",
@@ -1077,6 +1077,8 @@
   "set-decimal": "اعشاری",
   "no-outgoing-within-period": "هیچ معاملات خروجی در دوره زمانی انتخاب شده وجود ندارد",
   "no-incoming-within-period": "هیچ معاملات ورودی در دوره زمانی انتخاب شده وجود ندارد",
+  "no-expense-within-period": "بدون معاملات هزینه در دوره زمانی انتخاب شده",
+  "no-income-within-period": "در دوره زمانی انتخاب شده هیچ معاملات درآمدی وجود ندارد",
   "select-all": "انتخاب همه",
   "excluded": "مستثنی",
   "maximum-transactions": "حداکثر معاملات",
@@ -1087,5 +1089,11 @@
   "please-refresh-the-application": "لطفا برنامه را تازه کنید",
   "only-expense-income": "فقط هزینه/درآمد",
   "only-expense-income-description-1": "شامل همه خروجی/ورودی نشوید",
-  "only-expense-income-description-2": "مثال: وام را شامل نمی شود"
+  "only-expense-income-description-2": "مثال: وام را شامل نمی شود",
+  "compact-number-format": "قالب شماره جمع و جور",
+  "positive-cash-flow": "جریان نقدی مثبت",
+  "negative-cash-flow": "جریان نقدی منفی",
+  "number-animation": "انیمیشن شماره",
+  "count-up": "حساب کردن",
+  "disabled": "معلول"
 }

@@ -1077,6 +1077,8 @@
   "set-decimal": "Atur desimal",
   "no-outgoing-within-period": "Tidak ada transaksi keluar dalam periode waktu yang dipilih",
   "no-incoming-within-period": "Tidak ada transaksi yang masuk dalam periode waktu yang dipilih",
+  "no-expense-within-period": "Tidak ada transaksi biaya dalam periode waktu yang dipilih",
+  "no-income-within-period": "Tidak ada transaksi pendapatan dalam periode waktu yang dipilih",
   "select-all": "Pilih Semua",
   "excluded": "Pengecualian",
   "maximum-transactions": "Transaksi maksimum",
@@ -1087,5 +1089,11 @@
   "please-refresh-the-application": "Harap Segarkan Aplikasi",
   "only-expense-income": "Hanya biaya/pendapatan",
   "only-expense-income-description-1": "Jangan sertakan semua keluar/masuk",
-  "only-expense-income-description-2": "Contoh: Jangan sertakan pinjaman"
+  "only-expense-income-description-2": "Contoh: Jangan sertakan pinjaman",
+  "compact-number-format": "Format angka kompak",
+  "positive-cash-flow": "Arus kas positif",
+  "negative-cash-flow": "Arus kas negatif",
+  "number-animation": "Animasi nomor",
+  "count-up": "Menghitung",
+  "disabled": "Dengan disabilitas"
 }

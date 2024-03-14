@@ -1077,6 +1077,8 @@
   "set-decimal": "Itakda ang desimal",
   "no-outgoing-within-period": "Walang mga papalabas na transaksyon sa loob ng napiling tagal ng oras",
   "no-incoming-within-period": "Walang papasok na mga transaksyon sa loob ng napiling tagal ng oras",
+  "no-expense-within-period": "Walang mga transaksyon sa gastos sa loob ng napiling tagal ng oras",
+  "no-income-within-period": "Walang mga transaksyon sa kita sa loob ng napiling tagal ng oras",
   "select-all": "Piliin lahat",
   "excluded": "Hindi kasama",
   "maximum-transactions": "Maximum na mga transaksyon",
@@ -1087,5 +1089,11 @@
   "please-refresh-the-application": "Mangyaring i -refresh ang application",
   "only-expense-income": "Gastos/kita lamang",
   "only-expense-income-description-1": "Huwag isama ang lahat ng papalabas/papasok",
-  "only-expense-income-description-2": "Halimbawa: Huwag isama ang mga pautang"
+  "only-expense-income-description-2": "Halimbawa: Huwag isama ang mga pautang",
+  "compact-number-format": "Compact number format",
+  "positive-cash-flow": "Positibong daloy ng cash",
+  "negative-cash-flow": "Negatibong daloy ng cash",
+  "number-animation": "Numero ng animation",
+  "count-up": "Bilangin",
+  "disabled": "Hindi pinagana"
 }

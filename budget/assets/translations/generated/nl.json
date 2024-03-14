@@ -1077,6 +1077,8 @@
   "set-decimal": "Decimaal instellen",
   "no-outgoing-within-period": "Geen uitgaande transacties binnen de geselecteerde periode",
   "no-incoming-within-period": "Geen inkomende transacties binnen de geselecteerde periode",
+  "no-expense-within-period": "Geen kostentransacties binnen de geselecteerde periode",
+  "no-income-within-period": "Geen inkomenstransacties binnen de geselecteerde periode",
   "select-all": "Selecteer alles",
   "excluded": "Uitgesloten",
   "maximum-transactions": "Maximale transacties",
@@ -1087,5 +1089,11 @@
   "please-refresh-the-application": "Vernieuw de toepassing",
   "only-expense-income": "Alleen kosten/inkomsten",
   "only-expense-income-description-1": "Neem niet alle uitgaande/inkomsten op",
-  "only-expense-income-description-2": "Voorbeeld: neem geen leningen op"
+  "only-expense-income-description-2": "Voorbeeld: neem geen leningen op",
+  "compact-number-format": "Compact nummerformaat",
+  "positive-cash-flow": "Positieve cashflow",
+  "negative-cash-flow": "Negatieve cashflow",
+  "number-animation": "Nummeranimatie",
+  "count-up": "Optellen",
+  "disabled": "Gehandicapt"
 }

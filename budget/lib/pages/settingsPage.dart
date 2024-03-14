@@ -647,6 +647,7 @@ class MoreOptionsPagePreferences extends StatelessWidget {
         HeaderHeightSetting(),
         OutlinedIconsSetting(),
         FontPickerSetting(),
+        CountingNumberAnimationSetting(),
         IncreaseTextContrastSetting(),
         SettingsHeader(title: "transactions".tr()),
         TransactionsSettings(),
@@ -943,6 +944,34 @@ class OutlinedIconsSetting extends StatelessWidget {
       icon: appStateSettings["outlinedIcons"]
           ? Icons.star_outline
           : Icons.star_rounded,
+    );
+  }
+}
+
+class CountingNumberAnimationSetting extends StatelessWidget {
+  const CountingNumberAnimationSetting({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return SettingsContainerDropdown(
+      title: "number-animation".tr(),
+      icon: appStateSettings["outlinedIcons"]
+          ? Icons.pin_outlined
+          : Icons.pin_rounded,
+      initial: appStateSettings["numberCountUpAnimation"] == true
+          ? "count-up"
+          : "disabled",
+      items: ["count-up", "disabled"],
+      onChanged: (value) async {
+        await updateSettings(
+          "numberCountUpAnimation",
+          value == "count-up" ? true : false,
+          updateGlobalState: false,
+        );
+      },
+      getLabel: (item) {
+        return item.tr();
+      },
     );
   }
 }

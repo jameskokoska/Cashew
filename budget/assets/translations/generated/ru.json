@@ -1077,6 +1077,8 @@
   "set-decimal": "Установить десятичное значение",
   "no-outgoing-within-period": "Нет исходящих транзакций в течение выбранного периода времени",
   "no-incoming-within-period": "Нет входящих транзакций в течение выбранного периода времени",
+  "no-expense-within-period": "Нет транзакций за расходы в течение выбранного периода времени",
+  "no-income-within-period": "Нет транзакций дохода в течение выбранного периода времени",
   "select-all": "Выбрать все",
   "excluded": "Исключенный",
   "maximum-transactions": "Максимальные транзакции",
@@ -1087,5 +1089,11 @@
   "please-refresh-the-application": "Пожалуйста, обновите приложение",
   "only-expense-income": "Только расходы/доход",
   "only-expense-income-description-1": "Не включайте все исходящие/входящие",
-  "only-expense-income-description-2": "Пример: не включать кредиты"
+  "only-expense-income-description-2": "Пример: не включать кредиты",
+  "compact-number-format": "Компактный номер формата",
+  "positive-cash-flow": "Положительный денежный поток",
+  "negative-cash-flow": "Отрицательный денежный поток",
+  "number-animation": "Номер анимации",
+  "count-up": "Посчитать",
+  "disabled": "Неполноценный"
 }

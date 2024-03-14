@@ -1077,6 +1077,8 @@
   "set-decimal": "Sedimal",
   "no-outgoing-within-period": "Inga utgående transaktioner inom vald tidsperiod",
   "no-incoming-within-period": "Inga inkommande transaktioner inom vald tidsperiod",
+  "no-expense-within-period": "Inga kostnadstransaktioner inom vald tidsperiod",
+  "no-income-within-period": "Inga inkomsttransaktioner inom vald tidsperiod",
   "select-all": "Välj alla",
   "excluded": "Utesluten",
   "maximum-transactions": "Maximala transaktioner",
@@ -1087,5 +1089,11 @@
   "please-refresh-the-application": "Vänligen uppdatera applikationen",
   "only-expense-income": "Endast kostnad/inkomst",
   "only-expense-income-description-1": "Inkludera inte alla utgående/inkommande",
-  "only-expense-income-description-2": "Exempel: Inkludera inte lån"
+  "only-expense-income-description-2": "Exempel: Inkludera inte lån",
+  "compact-number-format": "Kompakt nummerformat",
+  "positive-cash-flow": "Positivt kassaflöde",
+  "negative-cash-flow": "Negativt kassaflöde",
+  "number-animation": "Nummeranimation",
+  "count-up": "Räkna upp",
+  "disabled": "Inaktiverad"
 }

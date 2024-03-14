@@ -166,6 +166,7 @@ String convertToMoney(AllWallets allWallets, double amount,
     bool forceAllDecimals = false,
     String? customLocale,
     bool forceNonCustomNumberFormat = false,
+    String? customSymbol,
     NumberFormat Function(int? decimalDigits, String? locale, String? symbol,
             String? customPattern)?
         getCustomNumberFormat}) {
@@ -198,7 +199,8 @@ String convertToMoney(AllWallets allWallets, double amount,
   String? locale = customLocale ??
       appStateSettings["numberFormatLocale"] ??
       Platform.localeName;
-  String? symbol = getCurrencyString(allWallets, currencyKey: currencyKey);
+  String? symbol =
+      customSymbol ?? getCurrencyString(allWallets, currencyKey: currencyKey);
 
   String? customPattern;
   if (forceNonCustomNumberFormat == false &&
@@ -374,11 +376,16 @@ String getWordedDateShort(
 }
 
 // e.g. Today/Yesterday/Tomorrow/Tuesday/ March 15
-String getWordedDateShortMore(DateTime date,
-    {includeYear = false, includeTime = false, includeTimeIfToday = false}) {
+String getWordedDateShortMore(
+  DateTime date, {
+  includeYear = false,
+  includeTime = false,
+  includeTimeIfToday = false,
+  showTodayTomorrow = true,
+}) {
   final String? locale = navigatorKey.currentContext?.locale.toString();
 
-  if (checkYesterdayTodayTomorrow(date) != false) {
+  if (showTodayTomorrow && checkYesterdayTodayTomorrow(date) != false) {
     if (includeTimeIfToday) {
       return checkYesterdayTodayTomorrow(date) +
           " - " +

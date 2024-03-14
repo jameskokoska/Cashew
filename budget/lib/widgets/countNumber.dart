@@ -119,6 +119,12 @@ class _CountNumberState extends State<CountNumber> {
 
   @override
   Widget build(BuildContext context) {
+    if (appStateSettings["numberCountUpAnimation"] == false ||
+        appStateSettings["batterySaver"] == true) {
+      previousAmount = widget.count;
+      return widget.textBuilder(widget.count);
+    }
+
     int decimals = 0;
 
     if (isWholeNumber(double.parse(widget.count.toStringAsFixed(
@@ -143,10 +149,6 @@ class _CountNumberState extends State<CountNumber> {
       } else {
         decimals = (widget.decimals ?? currentSelectedDecimals);
       }
-    }
-
-    if (appStateSettings["batterySaver"]) {
-      return widget.textBuilder(widget.count);
     }
 
     if (lazyFirstRender && widget.initialCount == widget.count) {

@@ -21,6 +21,7 @@ Future<T?> openPopup<T extends Object?>(
   String? subtitle,
   String? description,
   Widget? descriptionWidget,
+  Widget? beforeDescriptionWidget,
   String? onSubmitLabel,
   String? onCancelLabel,
   String? onExtraLabel,
@@ -131,6 +132,8 @@ Future<T?> openPopup<T extends Object?>(
                                     .onTertiaryContainer,
                               ),
                             ),
+                          if (beforeDescriptionWidget != null)
+                            beforeDescriptionWidget,
                           if (description != null)
                             Padding(
                               padding: const EdgeInsets.symmetric(
@@ -531,6 +534,7 @@ class CodeBlock extends StatelessWidget {
         text: "",
         textAlign: TextAlign.center,
         fontSize: 15,
+        softWrap: true,
         richTextSpan: [
           TextSpan(
             text: text,

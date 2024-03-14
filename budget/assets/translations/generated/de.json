@@ -1077,6 +1077,8 @@
   "set-decimal": "Dezimal einstellen",
   "no-outgoing-within-period": "Keine ausgehenden Transaktionen innerhalb ausgewählter Zeitraum",
   "no-incoming-within-period": "Keine eingehenden Transaktionen innerhalb ausgewählter Zeitraum",
+  "no-expense-within-period": "Keine Kostentransaktionen innerhalb ausgewählter Zeitraum",
+  "no-income-within-period": "Keine Einkommenstransaktionen innerhalb ausgewählter Zeitraum",
   "select-all": "Alle auswählen",
   "excluded": "Ausgeschlossen",
   "maximum-transactions": "Maximale Transaktionen",
@@ -1087,5 +1089,11 @@
   "please-refresh-the-application": "Bitte aktualisieren Sie die Bewerbung",
   "only-expense-income": "Nur Kosten/Einkommen",
   "only-expense-income-description-1": "Fügen Sie nicht alle ausgehenden/eingehenden einzubeziehen",
-  "only-expense-income-description-2": "Beispiel: Kredite keine Kredite eingeben"
+  "only-expense-income-description-2": "Beispiel: Kredite keine Kredite eingeben",
+  "compact-number-format": "Kompaktnummernformat",
+  "positive-cash-flow": "Positiver Cashflow",
+  "negative-cash-flow": "Negativer Cashflow",
+  "number-animation": "Nummeranimation",
+  "count-up": "Zusammenzählen",
+  "disabled": "Deaktiviert"
 }

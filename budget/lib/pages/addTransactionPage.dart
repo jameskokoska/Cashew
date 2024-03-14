@@ -3227,11 +3227,16 @@ class _SelectExcludeBudgetState extends State<SelectExcludeBudget> {
         if (snapshot.hasData) {
           if (snapshot.data!.length <= 0)
             return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-              child: TextFont(
-                text: "no-budgets-found".tr(),
-                fontSize: 16,
-                textAlign: TextAlign.center,
+              padding: const EdgeInsets.only(
+                  left: 17, right: 17, top: 6, bottom: 15),
+              child: Row(
+                children: [
+                  TextFont(
+                    text: "no-budgets-found".tr(),
+                    fontSize: 15,
+                    textAlign: TextAlign.left,
+                  ),
+                ],
               ),
             );
           return Padding(
@@ -4706,7 +4711,7 @@ List<dynamic>
   List<dynamic> defaultList = [
     null,
     ...TransactionSpecialType.values,
-    "installments"
+    //"installments"
   ];
   if (isAddedToLoanObjective)
     return [

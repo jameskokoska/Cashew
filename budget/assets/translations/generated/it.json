@@ -1046,7 +1046,7 @@
   "difference-loan": "Prestito di differenza",
   "open-settings": "Impostazioni aperte",
   "decimal-precision": "Precisione decimali",
-  "decimal-precision-description": "Posizioni decimali per l'arrotondamento dell'importo delle transazioni",
+  "decimal-precision-description": "Posti decimali per l'arrotondamento dell'importo delle transazioni",
   "same-accounts": "Stessi account",
   "select-2-different-accounts": "Seleziona 2 account diversi",
   "include-amount": "Includere l'importo",
@@ -1077,6 +1077,8 @@
   "set-decimal": "Set decimale",
   "no-outgoing-within-period": "Nessuna transazione in uscita entro il periodo di tempo selezionato",
   "no-incoming-within-period": "Nessuna transazione in arrivo entro il periodo di tempo selezionato",
+  "no-expense-within-period": "Nessuna transazione a spese entro il periodo di tempo selezionato",
+  "no-income-within-period": "Nessuna transazione di reddito entro il periodo di tempo selezionato",
   "select-all": "Seleziona tutto",
   "excluded": "Escluso",
   "maximum-transactions": "Transazioni massime",
@@ -1087,5 +1089,11 @@
   "please-refresh-the-application": "Si prega di aggiornare l'applicazione",
   "only-expense-income": "Solo spese/reddito",
   "only-expense-income-description-1": "Non includere tutti in uscita/in arrivo",
-  "only-expense-income-description-2": "Esempio: non includere prestiti"
+  "only-expense-income-description-2": "Esempio: non includere prestiti",
+  "compact-number-format": "Formato numero compatto",
+  "positive-cash-flow": "Flusso di cassa positivo",
+  "negative-cash-flow": "Flusso di cassa negativo",
+  "number-animation": "Animazione numerica",
+  "count-up": "Contare",
+  "disabled": "Disabilitato"
 }
