@@ -1087,7 +1087,6 @@
   "refresh-required-to-load-backup": "Refresh aplikasi diperlukan untuk memuat data dari cadangan",
   "please-restart-the-application": "Harap mulai ulang aplikasi",
   "please-refresh-the-application": "Harap Segarkan Aplikasi",
-  "only-expense-income": "Hanya biaya/pendapatan",
   "only-expense-income-description-1": "Jangan sertakan semua keluar/masuk",
   "only-expense-income-description-2": "Contoh: Jangan sertakan pinjaman",
   "compact-number-format": "Format angka kompak",
@@ -1099,5 +1098,6 @@
   "set-period-length": "Atur panjang periode",
   "change-currency-description": "Mata uang aplikasi terkait dengan akun yang dipilih. Edit akun untuk mengubah mata uang.",
   "primary-default": "Bawaan",
-  "short-number-format": "Format angka pendek"
+  "short-number-format": "Format angka pendek",
+  "primary-currency": "Mata uang primer"
 }

@@ -1087,7 +1087,6 @@
   "refresh-required-to-load-backup": "Необходимо е опресняване на приложението за зареждане на данни от архивирането",
   "please-restart-the-application": "Моля, рестартирайте приложението",
   "please-refresh-the-application": "Моля, опреснете приложението",
-  "only-expense-income": "Само за разходи/доходи",
   "only-expense-income-description-1": "Не включвайте всички изходящи/входящи",
   "only-expense-income-description-2": "Пример: Не включвайте заеми",
   "compact-number-format": "Формат на компактния номер",
@@ -1099,5 +1098,6 @@
   "set-period-length": "Задайте дължина на периода",
   "change-currency-description": "Валутата на приложението е свързана с избраната сметка. Редактирайте акаунта, за да промените валутата.",
   "primary-default": "По подразбиране",
-  "short-number-format": "Формат на кратък номер"
+  "short-number-format": "Формат на кратък номер",
+  "primary-currency": "Първична валута"
 }

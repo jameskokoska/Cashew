@@ -675,7 +675,7 @@ String objectiveRemainingAmountText({
 }) {
   String result = '';
 
-  if (appStateSettings["showTotalSpentForObjective"]) {
+  if (appStateSettings["showTotalSpentForObjective"] == false) {
     if (totalAmount > objectiveAmount) {
       result = " " + "over".tr() + " ";
     } else {

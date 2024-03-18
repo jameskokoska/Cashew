@@ -1087,7 +1087,6 @@
   "refresh-required-to-load-backup": "Een appvernieuwing is vereist om gegevens van de back -up te laden",
   "please-restart-the-application": "Start de applicatie opnieuw op",
   "please-refresh-the-application": "Vernieuw de toepassing",
-  "only-expense-income": "Alleen kosten/inkomsten",
   "only-expense-income-description-1": "Neem niet alle uitgaande/inkomsten op",
   "only-expense-income-description-2": "Voorbeeld: neem geen leningen op",
   "compact-number-format": "Compact nummerformaat",
@@ -1099,5 +1098,6 @@
   "set-period-length": "Stel periodelengte in",
   "change-currency-description": "De app -valuta is gerelateerd aan het geselecteerde account. Bewerk het account om de valuta te wijzigen.",
   "primary-default": "Standaard",
-  "short-number-format": "Kort nummerformaat"
+  "short-number-format": "Kort nummerformaat",
+  "primary-currency": "Primaire valuta"
 }

@@ -1087,7 +1087,6 @@
   "refresh-required-to-load-backup": "बॅकअपमधून डेटा लोड करण्यासाठी अॅप रीफ्रेश आवश्यक आहे",
   "please-restart-the-application": "कृपया अर्ज पुन्हा सुरू करा",
   "please-refresh-the-application": "कृपया अनुप्रयोग रीफ्रेश करा",
-  "only-expense-income": "केवळ खर्च/उत्पन्न",
   "only-expense-income-description-1": "सर्व आउटगोइंग/इनकमिंग समाविष्ट करू नका",
   "only-expense-income-description-2": "उदाहरणः कर्ज समाविष्ट करू नका",
   "compact-number-format": "कॉम्पॅक्ट नंबर स्वरूप",
@@ -1099,5 +1098,6 @@
   "set-period-length": "कालावधी लांबी सेट करा",
   "change-currency-description": "अ‍ॅप चलन निवडलेल्या खात्याशी संबंधित आहे. चलन बदलण्यासाठी खाते संपादित करा.",
   "primary-default": "डीफॉल्ट",
-  "short-number-format": "लहान क्रमांक स्वरूप"
+  "short-number-format": "लहान क्रमांक स्वरूप",
+  "primary-currency": "प्राथमिक चलन"
 }

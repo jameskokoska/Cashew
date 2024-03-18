@@ -1087,7 +1087,6 @@
   "refresh-required-to-load-backup": "จำเป็นต้องมีการรีเฟรชแอปเพื่อโหลดข้อมูลจากการสำรองข้อมูล",
   "please-restart-the-application": "โปรดรีสตาร์ทใบสมัคร",
   "please-refresh-the-application": "โปรดรีเฟรชใบสมัคร",
-  "only-expense-income": "ค่าใช้จ่าย/รายได้เท่านั้น",
   "only-expense-income-description-1": "อย่ารวมขาออก/ขาเข้าทั้งหมด",
   "only-expense-income-description-2": "ตัวอย่าง: อย่ารวมสินเชื่อ",
   "compact-number-format": "รูปแบบหมายเลขขนาดกะทัดรัด",
@@ -1099,5 +1098,6 @@
   "set-period-length": "ตั้งค่าความยาวระยะเวลา",
   "change-currency-description": "สกุลเงินแอพเกี่ยวข้องกับบัญชีที่เลือก แก้ไขบัญชีเพื่อเปลี่ยนสกุลเงิน",
   "primary-default": "ค่าเริ่มต้น",
-  "short-number-format": "รูปแบบหมายเลขสั้น"
+  "short-number-format": "รูปแบบหมายเลขสั้น",
+  "primary-currency": "สกุลเงินหลัก"
 }

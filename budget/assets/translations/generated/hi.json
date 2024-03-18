@@ -1087,7 +1087,6 @@
   "refresh-required-to-load-backup": "बैकअप से डेटा लोड करने के लिए एक ऐप रिफ्रेश की आवश्यकता होती है",
   "please-restart-the-application": "कृपया आवेदन को पुनरारंभ करें",
   "please-refresh-the-application": "कृपया आवेदन को ताज़ा करें",
-  "only-expense-income": "केवल व्यय/आय",
   "only-expense-income-description-1": "सभी आउटगोइंग/इनकमिंग को शामिल न करें",
   "only-expense-income-description-2": "उदाहरण: ऋण शामिल न करें",
   "compact-number-format": "कॉम्पैक्ट संख्या प्रारूप",
@@ -1099,5 +1098,6 @@
   "set-period-length": "अवधि की लंबाई निर्धारित करें",
   "change-currency-description": "ऐप मुद्रा चयनित खाते से संबंधित है। मुद्रा को बदलने के लिए खाता संपादित करें।",
   "primary-default": "गलती करना",
-  "short-number-format": "अल्प संख्या प्रारूप"
+  "short-number-format": "अल्प संख्या प्रारूप",
+  "primary-currency": "प्राथमिक मुद्रा"
 }

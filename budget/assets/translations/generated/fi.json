@@ -1087,7 +1087,6 @@
   "refresh-required-to-load-backup": "Tietojen lataaminen varmuuskopiosta tarvitaan sovelluksen päivitys",
   "please-restart-the-application": "Käynnistä sovellus uudelleen",
   "please-refresh-the-application": "Päivitä sovellus",
-  "only-expense-income": "Vain kustannukset/tulot",
   "only-expense-income-description-1": "Älä sisällä kaikkia lähteviä/saapuvia",
   "only-expense-income-description-2": "Esimerkki: Älä sisällä lainoja",
   "compact-number-format": "Compact -numeromuoto",
@@ -1099,5 +1098,6 @@
   "set-period-length": "Aseta ajanjakson pituus",
   "change-currency-description": "Sovellusvaluutta liittyy valitulle tilille. Muokkaa tiliä muuttaaksesi valuuttaa.",
   "primary-default": "Laiminlyönti",
-  "short-number-format": "Lyhyt numeromuoto"
+  "short-number-format": "Lyhyt numeromuoto",
+  "primary-currency": "Ensisijainen valuutta"
 }

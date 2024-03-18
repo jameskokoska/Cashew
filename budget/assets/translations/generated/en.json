@@ -1087,7 +1087,6 @@
   "refresh-required-to-load-backup": "An webpage refresh is required to load data from the backup",
   "please-restart-the-application": "Please Restart the Application",
   "please-refresh-the-application": "Please Refresh the Page",
-  "only-expense-income": "Expense/Income Only",
   "only-expense-income-description-1": "Don't include all outgoing/incoming",
   "only-expense-income-description-2": "Example: Do not include loans",
   "compact-number-format": "Compact Number Format",
@@ -1099,5 +1098,6 @@
   "set-period-length": "Set Period Length",
   "change-currency-description": "The app currency is related to the selected account. Edit the account to change the currency.",
   "primary-default": "Primary",
-  "short-number-format": "Short Number Format"
+  "short-number-format": "Short Number Format",
+  "primary-currency": "Primary Currency"
 }

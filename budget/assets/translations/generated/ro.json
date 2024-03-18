@@ -1087,7 +1087,6 @@
   "refresh-required-to-load-backup": "O actualizare a aplicației este necesară pentru a încărca datele din copie de rezervă",
   "please-restart-the-application": "Vă rugăm să reporniți cererea",
   "please-refresh-the-application": "Vă rugăm să reîmprospătați aplicația",
-  "only-expense-income": "Numai cheltuieli/venituri",
   "only-expense-income-description-1": "Nu includeți toate ieșirile/primite",
   "only-expense-income-description-2": "Exemplu: Nu includeți împrumuturi",
   "compact-number-format": "Formatul numărului compact",
@@ -1099,5 +1098,6 @@
   "set-period-length": "Setați lungimea perioadei",
   "change-currency-description": "Moneda aplicației este legată de contul selectat. Editați contul pentru a schimba moneda.",
   "primary-default": "Mod implicit",
-  "short-number-format": "Format de număr scurt"
+  "short-number-format": "Format de număr scurt",
+  "primary-currency": "Moneda primară"
 }

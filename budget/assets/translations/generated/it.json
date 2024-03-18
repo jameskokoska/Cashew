@@ -1046,7 +1046,7 @@
   "difference-loan": "Prestito di differenza",
   "open-settings": "Impostazioni aperte",
   "decimal-precision": "Precisione decimali",
-  "decimal-precision-description": "Posti decimali per l'arrotondamento dell'importo delle transazioni",
+  "decimal-precision-description": "Posizioni decimali per l'arrotondamento dell'importo delle transazioni",
   "same-accounts": "Stessi account",
   "select-2-different-accounts": "Seleziona 2 account diversi",
   "include-amount": "Includere l'importo",
@@ -1087,7 +1087,6 @@
   "refresh-required-to-load-backup": "È necessario un aggiornamento dell'app per caricare i dati dal backup",
   "please-restart-the-application": "Si prega di riavviare l'applicazione",
   "please-refresh-the-application": "Si prega di aggiornare l'applicazione",
-  "only-expense-income": "Solo spese/reddito",
   "only-expense-income-description-1": "Non includere tutti in uscita/in arrivo",
   "only-expense-income-description-2": "Esempio: non includere prestiti",
   "compact-number-format": "Formato numero compatto",
@@ -1099,5 +1098,6 @@
   "set-period-length": "Impostare la lunghezza del periodo",
   "change-currency-description": "La valuta dell'app è correlata all'account selezionato. Modifica l'account per modificare la valuta.",
   "primary-default": "Predefinito",
-  "short-number-format": "Formato numero corto"
+  "short-number-format": "Formato numero corto",
+  "primary-currency": "Valuta primaria"
 }

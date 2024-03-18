@@ -1043,7 +1043,7 @@
   "set-date-time": "تنظیم",
   "add-record-using-plus-button": "با استفاده از دکمه [+] یک رکورد اضافه کنید.",
   "all-settled": "همه حل و فصل شدند",
-  "difference-loan": "وام تفاوت",
+  "difference-loan": "وام اختلاف",
   "open-settings": "تنظیمات باز",
   "decimal-precision": "دقت اعشاری",
   "decimal-precision-description": "مکان های اعشاری برای گردآوری مبلغ معامله",
@@ -1087,7 +1087,6 @@
   "refresh-required-to-load-backup": "برای بارگیری داده ها از نسخه پشتیبان تهیه شده است",
   "please-restart-the-application": "لطفاً برنامه را مجدداً راه اندازی کنید",
   "please-refresh-the-application": "لطفا برنامه را تازه کنید",
-  "only-expense-income": "فقط هزینه/درآمد",
   "only-expense-income-description-1": "شامل همه خروجی/ورودی نشوید",
   "only-expense-income-description-2": "مثال: وام را شامل نمی شود",
   "compact-number-format": "قالب شماره جمع و جور",
@@ -1099,5 +1098,6 @@
   "set-period-length": "طول دوره تعیین شده",
   "change-currency-description": "ارز برنامه مربوط به حساب انتخاب شده است. برای تغییر ارز ، حساب را ویرایش کنید.",
   "primary-default": "پیش فرض",
-  "short-number-format": "فرمت شماره کوتاه"
+  "short-number-format": "فرمت شماره کوتاه",
+  "primary-currency": "پول"
 }

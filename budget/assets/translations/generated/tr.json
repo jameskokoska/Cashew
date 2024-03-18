@@ -1087,7 +1087,6 @@
   "refresh-required-to-load-backup": "Yedeklemeden veri yüklemek için bir uygulama yenilemesi gerekir",
   "please-restart-the-application": "Lütfen uygulamayı yeniden başlatın",
   "please-refresh-the-application": "Lütfen uygulamayı yenileyin",
-  "only-expense-income": "Yalnızca Gider/Gelir",
   "only-expense-income-description-1": "Tüm giden/gelenleri dahil etmeyin",
   "only-expense-income-description-2": "Örnek: Krediler dahil etmeyin",
   "compact-number-format": "Kompakt numara formatı",
@@ -1099,5 +1098,6 @@
   "set-period-length": "Dönem uzunluğu",
   "change-currency-description": "Uygulama para birimi seçilen hesapla ilgilidir. Para birimini değiştirmek için hesabı düzenleyin.",
   "primary-default": "Varsayılan",
-  "short-number-format": "Kısa Sayı biçimi"
+  "short-number-format": "Kısa Sayı biçimi",
+  "primary-currency": "Birincil para birimi"
 }

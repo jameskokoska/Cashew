@@ -1005,15 +1005,6 @@ String getObjectiveStatus(BuildContext context, Objective objective,
   return content;
 }
 
-bool isShowingAmountRemaining({
-  required bool showTotalSpent,
-  required double objectiveAmount,
-  required double totalAmount,
-}) {
-  return showTotalSpent;
-  //return showTotalSpent == false && totalAmount < objectiveAmount;
-}
-
 String getObjectiveAmountSpentLabel({
   required BuildContext context,
   required Objective objective,
@@ -1021,16 +1012,12 @@ String getObjectiveAmountSpentLabel({
   required double objectiveAmount,
   required double totalAmount,
 }) {
-  bool showTotalRemaining = isShowingAmountRemaining(
-      showTotalSpent: showTotalSpent,
-      objectiveAmount: objectiveAmount,
-      totalAmount: totalAmount);
   double amountSpent =
-      showTotalRemaining ? objectiveAmount - totalAmount : totalAmount;
+      showTotalSpent ? totalAmount : (objectiveAmount - totalAmount);
   if (getIsDifferenceOnlyLoan(objective)) {
     amountSpent =
         getDifferenceOfLoan(objective, totalAmount, objectiveAmount).abs();
-  } else if (showTotalSpent && totalAmount > objectiveAmount) {
+  } else if (showTotalSpent == false && totalAmount > objectiveAmount) {
     amountSpent = amountSpent.abs();
   }
   String amountSpentLabel = convertToMoney(

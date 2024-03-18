@@ -65,19 +65,19 @@ class HomePageState extends State<HomePage>
   }
 
   void scrollToTop({int duration = 1200}) {
-    if (_scrollController.offset <= 0) {
-      pushRoute(context, EditHomePage());
-    } else {
-      _scrollController.animateTo(0,
-          duration: Duration(
-              milliseconds: (getPlatform() == PlatformOS.isIOS
-                      ? duration * 0.2
-                      : duration)
-                  .round()),
-          curve: getPlatform() == PlatformOS.isIOS
-              ? Curves.easeInOut
-              : Curves.elasticOut);
-    }
+    // if (_scrollController.offset <= 0) {
+    //   pushRoute(context, EditHomePage());
+    // } else {
+
+    // }
+    _scrollController.animateTo(0,
+        duration: Duration(
+            milliseconds:
+                (getPlatform() == PlatformOS.isIOS ? duration * 0.2 : duration)
+                    .round()),
+        curve: getPlatform() == PlatformOS.isIOS
+            ? Curves.easeInOut
+            : Curves.elasticOut);
   }
 
   @override

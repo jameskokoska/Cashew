@@ -1087,7 +1087,6 @@
   "refresh-required-to-load-backup": "Une actualisation de l'application est nécessaire pour charger les données de la sauvegarde",
   "please-restart-the-application": "Veuillez redémarrer la demande",
   "please-refresh-the-application": "Veuillez actualiser la demande",
-  "only-expense-income": "Dépense / revenu uniquement",
   "only-expense-income-description-1": "N'incluez pas tout sortant / entrant",
   "only-expense-income-description-2": "Exemple: n'incluez pas les prêts",
   "compact-number-format": "Format de numéro compact",
@@ -1099,5 +1098,6 @@
   "set-period-length": "Régler la durée de la période",
   "change-currency-description": "La monnaie de l'application est liée au compte sélectionné. Modifiez le compte pour modifier la devise.",
   "primary-default": "Défaut",
-  "short-number-format": "Format de numéro court"
+  "short-number-format": "Format de numéro court",
+  "primary-currency": "Densité primaire"
 }

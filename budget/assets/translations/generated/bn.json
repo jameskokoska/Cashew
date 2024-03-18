@@ -1087,7 +1087,6 @@
   "refresh-required-to-load-backup": "ব্যাকআপ থেকে ডেটা লোড করতে একটি অ্যাপ্লিকেশন রিফ্রেশ প্রয়োজন",
   "please-restart-the-application": "আবেদনটি পুনরায় চালু করুন",
   "please-refresh-the-application": "অ্যাপ্লিকেশনটি রিফ্রেশ করুন",
-  "only-expense-income": "ব্যয়/আয় কেবল",
   "only-expense-income-description-1": "সমস্ত বহির্গামী/আগত অন্তর্ভুক্ত করবেন না",
   "only-expense-income-description-2": "উদাহরণ: loans ণ অন্তর্ভুক্ত করবেন না",
   "compact-number-format": "কমপ্যাক্ট নম্বর ফর্ম্যাট",
@@ -1099,5 +1098,6 @@
   "set-period-length": "সময়কাল দৈর্ঘ্য সেট",
   "change-currency-description": "অ্যাপ্লিকেশন মুদ্রা নির্বাচিত অ্যাকাউন্টের সাথে সম্পর্কিত। মুদ্রা পরিবর্তন করতে অ্যাকাউন্টটি সম্পাদনা করুন।",
   "primary-default": "ডিফল্ট",
-  "short-number-format": "স্বল্প সংখ্যা ফর্ম্যাট"
+  "short-number-format": "স্বল্প সংখ্যা ফর্ম্যাট",
+  "primary-currency": "প্রাথমিক মুদ্রা"
 }

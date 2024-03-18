@@ -1087,7 +1087,6 @@
   "refresh-required-to-load-backup": "Для завантаження даних із резервної копії необхідне оновлення програми",
   "please-restart-the-application": "Будь ласка, перезапустіть додаток",
   "please-refresh-the-application": "Будь ласка, оновіть заявку",
-  "only-expense-income": "Тільки витрати/доходи",
   "only-expense-income-description-1": "Не включайте всі вихідні/вхідні",
   "only-expense-income-description-2": "Приклад: Не включайте позики",
   "compact-number-format": "Формат компактного числа",
@@ -1099,5 +1098,6 @@
   "set-period-length": "Встановлена ​​довжина періоду",
   "change-currency-description": "Валюта додатків пов'язана з обраним обліковим записом. Відредагуйте рахунок, щоб змінити валюту.",
   "primary-default": "За замовчуванням",
-  "short-number-format": "Формат короткого числа"
+  "short-number-format": "Формат короткого числа",
+  "primary-currency": "Первинна валюта"
 }

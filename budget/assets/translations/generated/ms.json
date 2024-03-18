@@ -1087,7 +1087,6 @@
   "refresh-required-to-load-backup": "Refresh aplikasi diperlukan untuk memuatkan data dari sandaran",
   "please-restart-the-application": "Sila mulakan semula permohonan",
   "please-refresh-the-application": "Sila muat semula permohonan",
-  "only-expense-income": "Perbelanjaan/pendapatan sahaja",
   "only-expense-income-description-1": "Jangan sertakan semua keluar/masuk",
   "only-expense-income-description-2": "Contoh: Jangan sertakan pinjaman",
   "compact-number-format": "Format nombor padat",
@@ -1099,5 +1098,6 @@
   "set-period-length": "Tetapkan tempoh tempoh",
   "change-currency-description": "Mata wang aplikasi berkaitan dengan akaun yang dipilih. Edit akaun untuk menukar mata wang.",
   "primary-default": "Lalai",
-  "short-number-format": "Format nombor pendek"
+  "short-number-format": "Format nombor pendek",
+  "primary-currency": "Mata wang utama"
 }

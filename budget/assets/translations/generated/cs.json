@@ -1087,7 +1087,6 @@
   "refresh-required-to-load-backup": "Pro načtení dat ze zálohy je nutná aktualizace aplikace",
   "please-restart-the-application": "Restartujte aplikaci",
   "please-refresh-the-application": "Obnovte prosím aplikaci",
-  "only-expense-income": "Pouze výdaje/příjem",
   "only-expense-income-description-1": "Nezahrnujte všechny odchozí/příchozí",
   "only-expense-income-description-2": "Příklad: Nezahrnujte půjčky",
   "compact-number-format": "Formát kompaktního čísla",
@@ -1099,5 +1098,6 @@
   "set-period-length": "Nastavit délku období",
   "change-currency-description": "Měna aplikace souvisí s vybraným účtem. Upravte účet a změňte měnu.",
   "primary-default": "Výchozí",
-  "short-number-format": "Formát krátkého čísla"
+  "short-number-format": "Formát krátkého čísla",
+  "primary-currency": "Primární měna"
 }

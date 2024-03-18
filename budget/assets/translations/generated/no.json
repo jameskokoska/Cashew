@@ -1087,7 +1087,6 @@
   "refresh-required-to-load-backup": "Det kreves en appoppdatering for å laste inn data fra sikkerhetskopien",
   "please-restart-the-application": "Vennligst start søknaden på nytt",
   "please-refresh-the-application": "Vennligst oppdater søknaden",
-  "only-expense-income": "KUN KOSTNING/inntekt",
   "only-expense-income-description-1": "Ikke ta med alle utgående/innkommende",
   "only-expense-income-description-2": "Eksempel: Ikke inkluder lån",
   "compact-number-format": "Kompakt nummerformat",
@@ -1099,5 +1098,6 @@
   "set-period-length": "Sett periode lengde",
   "change-currency-description": "Appvalutaen er relatert til den valgte kontoen. Rediger kontoen for å endre valutaen.",
   "primary-default": "Misligholde",
-  "short-number-format": "Kort tallformat"
+  "short-number-format": "Kort tallformat",
+  "primary-currency": "Primær valuta"
 }

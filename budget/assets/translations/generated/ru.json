@@ -1087,7 +1087,6 @@
   "refresh-required-to-load-backup": "Обновление приложения требуется для загрузки данных из резервной копии",
   "please-restart-the-application": "Пожалуйста, перезапустите заявку",
   "please-refresh-the-application": "Пожалуйста, обновите приложение",
-  "only-expense-income": "Только расходы/доход",
   "only-expense-income-description-1": "Не включайте все исходящие/входящие",
   "only-expense-income-description-2": "Пример: не включать кредиты",
   "compact-number-format": "Компактный номер формата",
@@ -1099,5 +1098,6 @@
   "set-period-length": "Установить длину периода",
   "change-currency-description": "Валюта приложения связана с выбранной учетной записью. Отредактируйте учетную запись, чтобы изменить валюту.",
   "primary-default": "По умолчанию",
-  "short-number-format": "Формат короткого числа"
+  "short-number-format": "Формат короткого числа",
+  "primary-currency": "Основная валюта"
 }

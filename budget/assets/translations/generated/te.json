@@ -1087,7 +1087,6 @@
   "refresh-required-to-load-backup": "బ్యాకప్ నుండి డేటాను లోడ్ చేయడానికి అనువర్తనం రిఫ్రెష్ అవసరం",
   "please-restart-the-application": "దయచేసి దరఖాస్తును పున art ప్రారంభించండి",
   "please-refresh-the-application": "దయచేసి దరఖాస్తును రిఫ్రెష్ చేయండి",
-  "only-expense-income": "ఖర్చు/ఆదాయం మాత్రమే",
   "only-expense-income-description-1": "అన్ని అవుట్గోయింగ్/ఇన్కమింగ్ చేర్చవద్దు",
   "only-expense-income-description-2": "ఉదాహరణ: రుణాలు చేర్చవద్దు",
   "compact-number-format": "కాంపాక్ట్ నంబర్ ఫార్మాట్",
@@ -1099,5 +1098,6 @@
   "set-period-length": "వ్యవధి పొడవును సెట్ చేయండి",
   "change-currency-description": "అనువర్తన కరెన్సీ ఎంచుకున్న ఖాతాకు సంబంధించినది. కరెన్సీని మార్చడానికి ఖాతాను సవరించండి.",
   "primary-default": "డిఫాల్ట్",
-  "short-number-format": "చిన్న సంఖ్య ఆకృతి"
+  "short-number-format": "చిన్న సంఖ్య ఆకృతి",
+  "primary-currency": "ప్రాథమిక కరెన్సీ"
 }

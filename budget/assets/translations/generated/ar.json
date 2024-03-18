@@ -1087,7 +1087,6 @@
   "refresh-required-to-load-backup": "مطلوب تحديث التطبيق لتحميل البيانات من النسخ الاحتياطي",
   "please-restart-the-application": "الرجاء إعادة تشغيل التطبيق",
   "please-refresh-the-application": "الرجاء تحديث التطبيق",
-  "only-expense-income": "المصاريف/الدخل فقط",
   "only-expense-income-description-1": "لا تشمل كل الصادرة/الواردة",
   "only-expense-income-description-2": "مثال: لا تتضمن القروض",
   "compact-number-format": "تنسيق رقم مدمج",
@@ -1099,5 +1098,6 @@
   "set-period-length": "بطول الفترة المحددة",
   "change-currency-description": "ترتبط عملة التطبيق بالحساب المحدد. تحرير الحساب لتغيير العملة.",
   "primary-default": "تقصير",
-  "short-number-format": "تنسيق رقم قصير"
+  "short-number-format": "تنسيق رقم قصير",
+  "primary-currency": "العملة الأولية"
 }

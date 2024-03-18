@@ -1087,7 +1087,6 @@
   "refresh-required-to-load-backup": "バックアップからデータをロードするには、アプリの更新が必要です",
   "please-restart-the-application": "アプリケーションを再起動してください",
   "please-refresh-the-application": "アプリケーションを更新してください",
-  "only-expense-income": "費用/収入のみ",
   "only-expense-income-description-1": "すべての発信/着信を含めないでください",
   "only-expense-income-description-2": "例：ローンを含めないでください",
   "compact-number-format": "コンパクト番号形式",
@@ -1099,5 +1098,6 @@
   "set-period-length": "期間の長さを設定します",
   "change-currency-description": "アプリ通貨は、選択したアカウントに関連しています。アカウントを編集して通貨を変更します。",
   "primary-default": "デフォルト",
-  "short-number-format": "短い数字形式"
+  "short-number-format": "短い数字形式",
+  "primary-currency": "一次通貨"
 }

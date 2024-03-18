@@ -1087,7 +1087,6 @@
   "refresh-required-to-load-backup": "Освежење апликације је дужно учитати податке са резервне копије",
   "please-restart-the-application": "Поново покрените апликацију",
   "please-refresh-the-application": "Освежите апликацију",
-  "only-expense-income": "Само расходи / приход",
   "only-expense-income-description-1": "Не укључују све одлазне / долазне",
   "only-expense-income-description-2": "Пример: Не укључује кредите",
   "compact-number-format": "Формат компактног броја",
@@ -1099,5 +1098,6 @@
   "set-period-length": "Подесите дужину периода",
   "change-currency-description": "Валута апликације је повезана са одабраним налогом. Уредите налог да бисте променили валуту.",
   "primary-default": "Уобичајено",
-  "short-number-format": "Формат кратких бројева"
+  "short-number-format": "Формат кратких бројева",
+  "primary-currency": "Основна валута"
 }

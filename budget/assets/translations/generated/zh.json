@@ -1087,7 +1087,6 @@
   "refresh-required-to-load-backup": "需要刷新以从备份加载数据",
   "please-restart-the-application": "请重启应用",
   "please-refresh-the-application": "请刷新申请",
-  "only-expense-income": "仅费用/收入",
   "only-expense-income-description-1": "不要包括所有外向/传入",
   "only-expense-income-description-2": "示例：不包括贷款",
   "compact-number-format": "紧凑的数字格式",
@@ -1099,5 +1098,6 @@
   "set-period-length": "设定的时间长度",
   "change-currency-description": "应用货币与所选帐户有关。编辑帐户以更改货币。",
   "primary-default": "默认",
-  "short-number-format": "短数字格式"
+  "short-number-format": "短数字格式",
+  "primary-currency": "原金"
 }

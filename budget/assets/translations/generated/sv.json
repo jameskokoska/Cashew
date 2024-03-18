@@ -1087,7 +1087,6 @@
   "refresh-required-to-load-backup": "En appuppdatering krävs för att ladda data från säkerhetskopian",
   "please-restart-the-application": "Starta om applikationen",
   "please-refresh-the-application": "Vänligen uppdatera applikationen",
-  "only-expense-income": "Endast kostnad/inkomst",
   "only-expense-income-description-1": "Inkludera inte alla utgående/inkommande",
   "only-expense-income-description-2": "Exempel: Inkludera inte lån",
   "compact-number-format": "Kompakt nummerformat",
@@ -1099,5 +1098,6 @@
   "set-period-length": "Ställ in periodens längd",
   "change-currency-description": "APP -valutan är relaterad till det valda kontot. Redigera kontot för att ändra valutan.",
   "primary-default": "Standard",
-  "short-number-format": "Kort antal format"
+  "short-number-format": "Kort antal format",
+  "primary-currency": "Primärvaluta"
 }

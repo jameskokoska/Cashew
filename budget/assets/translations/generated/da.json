@@ -1087,7 +1087,6 @@
   "refresh-required-to-load-backup": "Websiden skal opdateres for at indlæse data fra sikkerhedskopien.",
   "please-restart-the-application": "Genstart venligst applikationen",
   "please-refresh-the-application": "Opdatér venligst siden",
-  "only-expense-income": "Kun udgift/indkomst",
   "only-expense-income-description-1": "Inkludér ikke alle udgående/indgående",
   "only-expense-income-description-2": "Eksempel: inkludér ikke lån",
   "compact-number-format": "Kompakt talformat",
@@ -1099,5 +1098,6 @@
   "set-period-length": "Indstil periodelængde",
   "change-currency-description": "App valuta er relateret til den valgte konto. Rediger kontoen for at ændre valutaen.",
   "primary-default": "Standard",
-  "short-number-format": "Kort nummerformat"
+  "short-number-format": "Kort nummerformat",
+  "primary-currency": "Primær valuta"
 }

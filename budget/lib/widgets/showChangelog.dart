@@ -29,24 +29,23 @@ String getChangelogString() {
     < 5.2.5
     Revamped homepage pie chart section
     Custom number format support
-    Optimized onboarding page
     Searching date in search bar shows transactions from that time period
     Date range included when applying filters on transaction search page
     In transaction search page, added ability to jump to the bottom of the list
     Scroll to bottom/top does not animate if list too long
     Excluded budget transactions still show up in the budget list as excluded
     Select all option when selecting transactions
-    Months list in transaction page cannot be scrolled past the earliest and latest transaction entered date
-    When loading backup, backup file name is displayed
-    Added all outgoing/incoming or just expense/income transactions setting for homepage pie chart
-    Added color outlines to transaction filters
-    Tapping home page navigation icon or long pressing allows for edit home page
-    Default account labelled in edit accounts page
-    Provided more details in popup when selecting backup to delete/restore
+    Long pressing home page tab allows for edit home page
     Number animation setting
     Edit primary wallet currency setting for clarity, even though you can edit the account directly
-    Goals now show amount spent above total
+    Default account labelled in edit accounts page
+    Goals now show amount spent above total, if goal total type set to Total Amount
     Short number format setting
+    Months list in transaction page cannot be scrolled past the earliest and latest transaction entered date
+    Added all outgoing/incoming or just expense/income transactions setting for homepage pie chart
+    Added color outlines to transaction filters
+    Optimized onboarding page
+    When loading backup, backup file name is displayed
     Fix reset the paid state when changing transaction types
     Fix cash flow filters when entering search page from positive/negative cashflow
     Fix polarity of lent and borrowed home screen sections

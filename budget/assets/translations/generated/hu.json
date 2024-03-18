@@ -1087,7 +1087,6 @@
   "refresh-required-to-load-backup": "Az alkalmazás frissítésére van szükség az adatok betöltéséhez a biztonsági mentésből",
   "please-restart-the-application": "Kérjük, indítsa újra az alkalmazást",
   "please-refresh-the-application": "Kérjük, frissítse az alkalmazást",
-  "only-expense-income": "Csak költség/jövedelem",
   "only-expense-income-description-1": "Ne tartalmazza az összes kimenő/bejövő",
   "only-expense-income-description-2": "Példa: Ne tartalmazza a kölcsönöket",
   "compact-number-format": "Kompakt számformátum",
@@ -1099,5 +1098,6 @@
   "set-period-length": "Beállított periódus hossza",
   "change-currency-description": "Az APP -valuta a kiválasztott fiókhoz kapcsolódik. Szerkessze a fiókot a valuta megváltoztatásához.",
   "primary-default": "Mulasztás",
-  "short-number-format": "Rövid számú formátum"
+  "short-number-format": "Rövid számú formátum",
+  "primary-currency": "Elsődleges pénznem"
 }

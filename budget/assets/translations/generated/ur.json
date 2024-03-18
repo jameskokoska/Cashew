@@ -1087,7 +1087,6 @@
   "refresh-required-to-load-backup": "بیک اپ سے ڈیٹا لوڈ کرنے کے لئے ایک ایپ ریفریش کی ضرورت ہے",
   "please-restart-the-application": "براہ کرم درخواست کو دوبارہ شروع کریں",
   "please-refresh-the-application": "براہ کرم درخواست کو تازہ کریں",
-  "only-expense-income": "صرف اخراجات/آمدنی",
   "only-expense-income-description-1": "سبکدوش ہونے والے/آنے والے تمام کو شامل نہ کریں",
   "only-expense-income-description-2": "مثال: قرضوں کو شامل نہ کریں",
   "compact-number-format": "کمپیکٹ نمبر فارمیٹ",
@@ -1099,5 +1098,6 @@
   "set-period-length": "مدت کی لمبائی طے کریں",
   "change-currency-description": "ایپ کرنسی کا تعلق منتخب اکاؤنٹ سے ہے۔ کرنسی کو تبدیل کرنے کے لئے اکاؤنٹ میں ترمیم کریں۔",
   "primary-default": "پہلے سے طے شدہ",
-  "short-number-format": "مختصر نمبر کی شکل"
+  "short-number-format": "مختصر نمبر کی شکل",
+  "primary-currency": "بنیادی کرنسی"
 }
