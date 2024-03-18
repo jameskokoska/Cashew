@@ -1095,5 +1095,9 @@
   "negative-cash-flow": "Negatibong daloy ng cash",
   "number-animation": "Numero ng animation",
   "count-up": "Bilangin",
-  "disabled": "Hindi pinagana"
+  "disabled": "Hindi pinagana",
+  "set-period-length": "Itakda ang haba ng panahon",
+  "change-currency-description": "Ang pera ng app ay nauugnay sa napiling account. I -edit ang account upang baguhin ang pera.",
+  "primary-default": "Default",
+  "short-number-format": "Maikling format ng numero"
 }

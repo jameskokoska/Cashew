@@ -1095,5 +1095,9 @@
   "negative-cash-flow": "নেতিবাচক নগদ প্রবাহ",
   "number-animation": "নম্বর অ্যানিমেশন",
   "count-up": "গননা",
-  "disabled": "অক্ষম"
+  "disabled": "অক্ষম",
+  "set-period-length": "সময়কাল দৈর্ঘ্য সেট",
+  "change-currency-description": "অ্যাপ্লিকেশন মুদ্রা নির্বাচিত অ্যাকাউন্টের সাথে সম্পর্কিত। মুদ্রা পরিবর্তন করতে অ্যাকাউন্টটি সম্পাদনা করুন।",
+  "primary-default": "ডিফল্ট",
+  "short-number-format": "স্বল্প সংখ্যা ফর্ম্যাট"
 }

@@ -272,7 +272,7 @@ class _CyclePeriodSelectionState extends State<CyclePeriodSelection> {
           next: () async {
             Navigator.pop(context);
           },
-          nextLabel: "set-amount".tr(),
+          nextLabel: "set-period-length".tr(),
         ),
       ),
     );
@@ -684,7 +684,7 @@ class _PastDaysSelectionState extends State<PastDaysSelection> {
           next: () async {
             Navigator.pop(context);
           },
-          nextLabel: "set-amount".tr(),
+          nextLabel: "set-period-length".tr(),
         ),
       ),
     );

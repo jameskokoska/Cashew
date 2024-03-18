@@ -1095,5 +1095,9 @@
   "negative-cash-flow": "Негативан новчани ток",
   "number-animation": "Број бројева",
   "count-up": "Рачунати",
-  "disabled": "Инвалидски"
+  "disabled": "Инвалидски",
+  "set-period-length": "Подесите дужину периода",
+  "change-currency-description": "Валута апликације је повезана са одабраним налогом. Уредите налог да бисте променили валуту.",
+  "primary-default": "Уобичајено",
+  "short-number-format": "Формат кратких бројева"
 }

@@ -1058,7 +1058,7 @@
   "failed-to-preview-image": "이미지를 미리 보지 못했습니다",
   "open-link": "열기 링크",
   "category-not-selected": "범주가 선택되지 않았습니다",
-  "all-transactions-require-a-category": "모든 거래에는 범주가 필요합니다",
+  "all-transactions-require-a-category": "모든 트랜잭션에는 범주가 필요합니다",
   "total-offset": "총 오프셋",
   "total-offset-description": "금액을 입력하여 대출의 총계를 상쇄하십시오. 대출이이자를 축적했거나 총계가 증가하는 비용에 대한 기타 계산되지 않은 경우 유용합니다.",
   "advanced-automation": "고급 자동화",
@@ -1095,5 +1095,9 @@
   "negative-cash-flow": "부정적인 현금 흐름",
   "number-animation": "숫자 애니메이션",
   "count-up": "계산하십시오",
-  "disabled": "장애가 있는"
+  "disabled": "장애가 있는",
+  "set-period-length": "기간 길이를 설정합니다",
+  "change-currency-description": "앱 통화는 선택한 계정과 관련이 있습니다. 통화를 변경하려면 계정을 편집하십시오.",
+  "primary-default": "기본",
+  "short-number-format": "짧은 숫자 형식"
 }

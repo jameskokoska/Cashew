@@ -175,6 +175,7 @@ class SettingsContainerOpenPage extends StatelessWidget {
     this.isOutlinedColumn,
     this.isWideOutlined,
     this.descriptionColor,
+    this.afterWidget,
   }) : super(key: key);
 
   final Widget openPage;
@@ -189,6 +190,7 @@ class SettingsContainerOpenPage extends StatelessWidget {
   final bool? isOutlinedColumn;
   final bool? isWideOutlined;
   final Color? descriptionColor;
+  final Widget? afterWidget;
 
   @override
   Widget build(BuildContext context) {
@@ -236,12 +238,17 @@ class SettingsContainerOpenPage extends StatelessWidget {
             },
             afterWidget: isOutlined ?? false
                 ? SizedBox.shrink()
-                : Icon(
-                    appStateSettings["outlinedIcons"]
-                        ? Icons.chevron_right_outlined
-                        : Icons.chevron_right_rounded,
-                    size: isOutlined == true ? 20 : 30,
-                    color: colorScheme.secondary,
+                : Row(
+                    children: [
+                      if (afterWidget != null) afterWidget!,
+                      Icon(
+                        appStateSettings["outlinedIcons"]
+                            ? Icons.chevron_right_outlined
+                            : Icons.chevron_right_rounded,
+                        size: isOutlined == true ? 20 : 30,
+                        color: colorScheme.secondary,
+                      ),
+                    ],
                   ),
             isOutlined: isOutlined,
             isOutlinedColumn: isOutlinedColumn,

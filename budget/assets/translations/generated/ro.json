@@ -1095,5 +1095,9 @@
   "negative-cash-flow": "Flux de numerar negativ",
   "number-animation": "Animație numerică",
   "count-up": "Numara",
-  "disabled": "Dezactivat"
+  "disabled": "Dezactivat",
+  "set-period-length": "Setați lungimea perioadei",
+  "change-currency-description": "Moneda aplicației este legată de contul selectat. Editați contul pentru a schimba moneda.",
+  "primary-default": "Mod implicit",
+  "short-number-format": "Format de număr scurt"
 }

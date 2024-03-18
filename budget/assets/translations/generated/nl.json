@@ -1095,5 +1095,9 @@
   "negative-cash-flow": "Negatieve cashflow",
   "number-animation": "Nummeranimatie",
   "count-up": "Optellen",
-  "disabled": "Gehandicapt"
+  "disabled": "Gehandicapt",
+  "set-period-length": "Stel periodelengte in",
+  "change-currency-description": "De app -valuta is gerelateerd aan het geselecteerde account. Bewerk het account om de valuta te wijzigen.",
+  "primary-default": "Standaard",
+  "short-number-format": "Kort nummerformaat"
 }

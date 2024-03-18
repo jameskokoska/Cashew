@@ -1095,5 +1095,9 @@
   "negative-cash-flow": "नकारात्मक रोख प्रवाह",
   "number-animation": "क्रमांक अ‍ॅनिमेशन",
   "count-up": "मोजा",
-  "disabled": "अक्षम"
+  "disabled": "अक्षम",
+  "set-period-length": "कालावधी लांबी सेट करा",
+  "change-currency-description": "अ‍ॅप चलन निवडलेल्या खात्याशी संबंधित आहे. चलन बदलण्यासाठी खाते संपादित करा.",
+  "primary-default": "डीफॉल्ट",
+  "short-number-format": "लहान क्रमांक स्वरूप"
 }

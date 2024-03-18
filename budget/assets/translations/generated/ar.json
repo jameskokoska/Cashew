@@ -1095,5 +1095,9 @@
   "negative-cash-flow": "التدفق النقدي السلبي",
   "number-animation": "عدد الرسوم المتحركة",
   "count-up": "ابدأ العد",
-  "disabled": "عاجز"
+  "disabled": "عاجز",
+  "set-period-length": "بطول الفترة المحددة",
+  "change-currency-description": "ترتبط عملة التطبيق بالحساب المحدد. تحرير الحساب لتغيير العملة.",
+  "primary-default": "تقصير",
+  "short-number-format": "تنسيق رقم قصير"
 }

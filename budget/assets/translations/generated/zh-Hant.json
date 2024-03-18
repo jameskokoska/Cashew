@@ -1095,5 +1095,9 @@
   "negative-cash-flow": "負現金流量",
   "number-animation": "數字動畫",
   "count-up": "計數",
-  "disabled": "禁用"
+  "disabled": "禁用",
+  "set-period-length": "設定的時間長度",
+  "change-currency-description": "應用貨幣與所選帳戶有關。編輯帳戶以更改貨幣。",
+  "primary-default": "預設",
+  "short-number-format": "短數字格式"
 }

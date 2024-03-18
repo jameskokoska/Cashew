@@ -542,6 +542,7 @@ class CodeBlock extends StatelessWidget {
               fontSize: 15,
               fontFamily: "monospace",
               fontFamilyFallback: <String>["Courier"],
+              color: getColor(context, "black"),
             ),
           ),
         ],

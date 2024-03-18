@@ -610,29 +610,14 @@ class ObjectiveContainer extends StatelessWidget {
                                                   context, "incomeAmount")
                                               : getColor(context, "black"),
                                     ),
-                                    if (isShowingAmountRemaining(
-                                        showTotalSpent: appStateSettings[
-                                            "showTotalSpentForObjective"],
-                                        objectiveAmount: objectiveAmount,
-                                        totalAmount: totalAmount))
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(bottom: 2),
-                                        child: TextFont(
-                                          text: " " + "remaining".tr(),
-                                          fontSize: 15,
-                                          textColor: getColor(context, "black")
-                                              .withOpacity(0.3),
-                                        ),
-                                      ),
                                     Padding(
                                       padding: const EdgeInsets.only(bottom: 2),
                                       child: TextFont(
-                                        text: " / " +
-                                            convertToMoney(
-                                                Provider.of<AllWallets>(
-                                                    context),
-                                                objectiveAmount),
+                                        text: objectiveRemainingAmountText(
+                                          objectiveAmount: objectiveAmount,
+                                          totalAmount: totalAmount,
+                                          context: context,
+                                        ),
                                         fontSize: 15,
                                         textColor: getColor(context, "black")
                                             .withOpacity(0.3),
@@ -1025,7 +1010,8 @@ bool isShowingAmountRemaining({
   required double objectiveAmount,
   required double totalAmount,
 }) {
-  return showTotalSpent == false && totalAmount < objectiveAmount;
+  return showTotalSpent;
+  //return showTotalSpent == false && totalAmount < objectiveAmount;
 }
 
 String getObjectiveAmountSpentLabel({
@@ -1044,6 +1030,8 @@ String getObjectiveAmountSpentLabel({
   if (getIsDifferenceOnlyLoan(objective)) {
     amountSpent =
         getDifferenceOfLoan(objective, totalAmount, objectiveAmount).abs();
+  } else if (showTotalSpent && totalAmount > objectiveAmount) {
+    amountSpent = amountSpent.abs();
   }
   String amountSpentLabel = convertToMoney(
     Provider.of<AllWallets>(context),

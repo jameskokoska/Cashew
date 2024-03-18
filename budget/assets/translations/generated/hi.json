@@ -1095,5 +1095,9 @@
   "negative-cash-flow": "ऋणात्मक नकदी प्रवाह",
   "number-animation": "संख्या एनीमेशन",
   "count-up": "गिनती",
-  "disabled": "अक्षम"
+  "disabled": "अक्षम",
+  "set-period-length": "अवधि की लंबाई निर्धारित करें",
+  "change-currency-description": "ऐप मुद्रा चयनित खाते से संबंधित है। मुद्रा को बदलने के लिए खाता संपादित करें।",
+  "primary-default": "गलती करना",
+  "short-number-format": "अल्प संख्या प्रारूप"
 }

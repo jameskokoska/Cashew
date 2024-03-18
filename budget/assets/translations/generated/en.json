@@ -1095,5 +1095,9 @@
   "negative-cash-flow": "Negative Cash Flow",
   "number-animation": "Number Animation",
   "count-up": "Count Up",
-  "disabled": "Disabled"
+  "disabled": "Disabled",
+  "set-period-length": "Set Period Length",
+  "change-currency-description": "The app currency is related to the selected account. Edit the account to change the currency.",
+  "primary-default": "Primary",
+  "short-number-format": "Short Number Format"
 }

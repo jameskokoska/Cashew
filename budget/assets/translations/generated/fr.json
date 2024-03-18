@@ -1095,5 +1095,9 @@
   "negative-cash-flow": "Flux de trésorerie négatifs",
   "number-animation": "Animation numérique",
   "count-up": "Compter jusqu'à",
-  "disabled": "Désactivé"
+  "disabled": "Désactivé",
+  "set-period-length": "Régler la durée de la période",
+  "change-currency-description": "La monnaie de l'application est liée au compte sélectionné. Modifiez le compte pour modifier la devise.",
+  "primary-default": "Défaut",
+  "short-number-format": "Format de numéro court"
 }

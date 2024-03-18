@@ -18,6 +18,7 @@ import 'package:budget/widgets/openSnackbar.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/widgets/radioItems.dart';
 import 'package:budget/widgets/settingsContainers.dart';
+import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textInput.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntry/transactionEntryTag.dart';
@@ -32,9 +33,9 @@ import 'package:provider/provider.dart';
 import 'exchangeRatesPage.dart';
 
 class EditWalletsPage extends StatefulWidget {
-  EditWalletsPage({
-    Key? key,
-  }) : super(key: key);
+  EditWalletsPage({Key? key, this.runWhenOpen}) : super(key: key);
+
+  final VoidCallback? runWhenOpen;
 
   @override
   _EditWalletsPageState createState() => _EditWalletsPageState();
@@ -49,6 +50,9 @@ class _EditWalletsPageState extends State<EditWalletsPage> {
   @override
   void initState() {
     Future.delayed(Duration.zero, () {
+      if (widget.runWhenOpen != null) {
+        widget.runWhenOpen!();
+      }
       database.fixOrderWallets();
     });
     super.initState();
@@ -262,7 +266,7 @@ class _EditWalletsPageState extends State<EditWalletsPage> {
                                           color: Theme.of(context)
                                               .colorScheme
                                               .primary,
-                                          name: "default".tr(),
+                                          name: "primary-default".tr(),
                                           margin: EdgeInsets.zero,
                                         ),
                                       )
@@ -599,6 +603,80 @@ class ShowAccountLabelSettingToggle extends StatelessWidget {
       icon: appStateSettings["outlinedIcons"]
           ? Icons.label_outlined
           : Icons.label_rounded,
+    );
+  }
+}
+
+class ExchangeRateSettingPage extends StatelessWidget {
+  const ExchangeRateSettingPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return SettingsContainerOpenPage(
+      onOpen: () {
+        checkIfExchangeRateChangeBefore();
+      },
+      onClosed: () {
+        checkIfExchangeRateChangeAfter();
+      },
+      openPage: ExchangeRates(),
+      title: "exchange-rates".tr(),
+      icon: appStateSettings["outlinedIcons"]
+          ? Icons.account_balance_wallet_outlined
+          : Icons.account_balance_wallet_rounded,
+    );
+  }
+}
+
+class PrimaryCurrencySetting extends StatelessWidget {
+  const PrimaryCurrencySetting({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    VoidCallback changeCurrencyPopup = () => openPopup(
+          context,
+          title: "change-currency".tr(),
+          icon: appStateSettings["outlinedIcons"]
+              ? Icons.card_membership_outlined
+              : Icons.card_membership_rounded,
+          description: "change-currency-description".tr(),
+          onSubmit: () {
+            Navigator.pop(context);
+          },
+          onSubmitLabel: "ok".tr(),
+        );
+    return SettingsContainerOpenPage(
+      title: "primary-currency".tr().capitalizeFirst,
+      icon: appStateSettings["outlinedIcons"]
+          ? Icons.card_membership_outlined
+          : Icons.card_membership_rounded,
+      afterWidget: Tappable(
+        color: Theme.of(context).colorScheme.secondaryContainer,
+        borderRadius: 10,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+          child: Builder(builder: (context) {
+            return TextFont(
+              text: (Provider.of<AllWallets>(context)
+                      .indexedByPk[appStateSettings["selectedWalletPk"]]
+                      ?.currency
+                      ?.allCaps) ??
+                  "",
+              fontSize: 14,
+            );
+          }),
+        ),
+      ),
+      openPage: Provider.of<AllWallets>(context).indexedByPk.length > 1
+          ? EditWalletsPage(
+              runWhenOpen: changeCurrencyPopup,
+            )
+          : AddWalletPage(
+              runWhenOpen: changeCurrencyPopup,
+              routesToPopAfterDelete: RoutesToPopAfterDelete.PreventDelete,
+              wallet: Provider.of<AllWallets>(context)
+                  .indexedByPk[appStateSettings["selectedWalletPk"]],
+            ),
     );
   }
 }

@@ -59,13 +59,13 @@ class _HomePagePieChartState extends State<HomePagePieChart>
     return KeepAliveClientMixin(
       child: Padding(
         padding: const EdgeInsets.only(bottom: 13, left: 13, right: 13),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(borderRadius),
-          child: Container(
-            decoration: BoxDecoration(
-              boxShadow: boxShadowCheck(boxShadowGeneral(context)),
-              borderRadius: BorderRadius.circular(borderRadius),
-            ),
+        child: Container(
+          decoration: BoxDecoration(
+            boxShadow: boxShadowCheck(boxShadowGeneral(context)),
+            borderRadius: BorderRadius.circular(borderRadius),
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(borderRadius),
             child: Tappable(
               borderRadius: borderRadius,
               onLongPress: openPieChartSettings,

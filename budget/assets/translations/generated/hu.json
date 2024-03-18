@@ -1095,5 +1095,9 @@
   "negative-cash-flow": "Negatív cash flow",
   "number-animation": "Szám animáció",
   "count-up": "Felszámol",
-  "disabled": "Tiltva"
+  "disabled": "Tiltva",
+  "set-period-length": "Beállított periódus hossza",
+  "change-currency-description": "Az APP -valuta a kiválasztott fiókhoz kapcsolódik. Szerkessze a fiókot a valuta megváltoztatásához.",
+  "primary-default": "Mulasztás",
+  "short-number-format": "Rövid számú formátum"
 }

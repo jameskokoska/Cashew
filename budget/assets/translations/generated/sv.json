@@ -1095,5 +1095,9 @@
   "negative-cash-flow": "Negativt kassaflöde",
   "number-animation": "Nummeranimation",
   "count-up": "Räkna upp",
-  "disabled": "Inaktiverad"
+  "disabled": "Inaktiverad",
+  "set-period-length": "Ställ in periodens längd",
+  "change-currency-description": "APP -valutan är relaterad till det valda kontot. Redigera kontot för att ändra valutan.",
+  "primary-default": "Standard",
+  "short-number-format": "Kort antal format"
 }

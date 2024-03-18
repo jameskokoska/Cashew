@@ -1095,5 +1095,9 @@
   "negative-cash-flow": "תזרים מזומנים שלילי",
   "number-animation": "אנימציה של מספר",
   "count-up": "לספור עד",
-  "disabled": "נָכֶה"
+  "disabled": "נָכֶה",
+  "set-period-length": "אורך תקופה",
+  "change-currency-description": "מטבע האפליקציה קשור לחשבון שנבחר. ערוך את החשבון כדי לשנות את המטבע.",
+  "primary-default": "בְּרִירַת מֶחדָל",
+  "short-number-format": "פורמט מספר קצר"
 }

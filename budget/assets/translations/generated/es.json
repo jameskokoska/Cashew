@@ -1095,5 +1095,9 @@
   "negative-cash-flow": "Flujo de caja negativo",
   "number-animation": "Animación de números",
   "count-up": "Contar hasta",
-  "disabled": "Desactivado"
+  "disabled": "Desactivado",
+  "set-period-length": "Longitud del período establecido",
+  "change-currency-description": "La moneda de la aplicación está relacionada con la cuenta seleccionada. Edite la cuenta para cambiar la moneda.",
+  "primary-default": "Por defecto",
+  "short-number-format": "Formato de número corto"
 }

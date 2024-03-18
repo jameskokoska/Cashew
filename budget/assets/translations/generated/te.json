@@ -1095,5 +1095,9 @@
   "negative-cash-flow": "ప్రతికూల నగదు ప్రవాహం",
   "number-animation": "సంఖ్య యానిమేషన్",
   "count-up": "లెక్కించండి",
-  "disabled": "నిలిపివేయబడింది"
+  "disabled": "నిలిపివేయబడింది",
+  "set-period-length": "వ్యవధి పొడవును సెట్ చేయండి",
+  "change-currency-description": "అనువర్తన కరెన్సీ ఎంచుకున్న ఖాతాకు సంబంధించినది. కరెన్సీని మార్చడానికి ఖాతాను సవరించండి.",
+  "primary-default": "డిఫాల్ట్",
+  "short-number-format": "చిన్న సంఖ్య ఆకృతి"
 }

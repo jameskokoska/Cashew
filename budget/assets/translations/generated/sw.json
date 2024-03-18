@@ -1095,5 +1095,9 @@
   "negative-cash-flow": "Mtiririko mbaya wa pesa",
   "number-animation": "Uhuishaji wa nambari",
   "count-up": "Hesabu",
-  "disabled": "Walemavu"
+  "disabled": "Walemavu",
+  "set-period-length": "Weka urefu wa kipindi",
+  "change-currency-description": "Fedha ya programu inahusiana na akaunti iliyochaguliwa. Hariri akaunti ili kubadilisha sarafu.",
+  "primary-default": "Chaguo -msingi",
+  "short-number-format": "Muundo wa nambari fupi"
 }

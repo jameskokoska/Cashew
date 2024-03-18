@@ -1095,5 +1095,9 @@
   "negative-cash-flow": "Ujemne przepływy pieniężne",
   "number-animation": "Animacja liczbowa",
   "count-up": "Liczyć",
-  "disabled": "Wyłączony"
+  "disabled": "Wyłączony",
+  "set-period-length": "Ustaw długość okresu",
+  "change-currency-description": "Waluta aplikacji jest powiązana z wybranym kontem. Edytuj konto, aby zmienić walutę.",
+  "primary-default": "Domyślny",
+  "short-number-format": "Format krótkiego liczby"
 }

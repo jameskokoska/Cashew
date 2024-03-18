@@ -267,9 +267,19 @@ class _AddTransactionPageState extends State<AddTransactionPage>
         selectedPaid = false;
       }
 
-      if (selectedType == TransactionSpecialType.credit ||
-          selectedType == TransactionSpecialType.debt) {
+      if ((widget.transaction?.type != TransactionSpecialType.credit &&
+              selectedType == TransactionSpecialType.credit) ||
+          (widget.transaction?.type != TransactionSpecialType.debt &&
+              selectedType == TransactionSpecialType.debt)) {
         selectedPaid = true;
+      }
+      if ((widget.transaction?.type != TransactionSpecialType.subscription &&
+              selectedType == TransactionSpecialType.subscription) ||
+          (widget.transaction?.type != TransactionSpecialType.repetitive &&
+              selectedType == TransactionSpecialType.repetitive) ||
+          (widget.transaction?.type != TransactionSpecialType.upcoming &&
+              selectedType == TransactionSpecialType.upcoming)) {
+        selectedPaid = false;
       }
     });
     return;
@@ -4524,7 +4534,7 @@ Future<void> selectPeriodLength({
         next: () async {
           Navigator.pop(context);
         },
-        nextLabel: "set-amount".tr(),
+        nextLabel: "set-period-length".tr(),
       ),
     ),
   );

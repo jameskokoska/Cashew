@@ -1095,5 +1095,9 @@
   "negative-cash-flow": "નકારાત્મક રોકડ પ્રવાહ",
   "number-animation": "સંખ્યા",
   "count-up": "ગણતરી",
-  "disabled": "અયોગ્ય"
+  "disabled": "અયોગ્ય",
+  "set-period-length": "સમયગાળો લંબાઈ",
+  "change-currency-description": "એપ્લિકેશન ચલણ પસંદ કરેલા એકાઉન્ટથી સંબંધિત છે. ચલણ બદલવા માટે એકાઉન્ટને સંપાદિત કરો.",
+  "primary-default": "ચૂક",
+  "short-number-format": "ટૂંકા નંબરનું બંધારણ"
 }

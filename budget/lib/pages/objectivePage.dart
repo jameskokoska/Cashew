@@ -454,23 +454,14 @@ class _ObjectivePageContentState extends State<_ObjectivePageContent> {
                                                                 .only(
                                                                 bottom: 1),
                                                         child: TextFont(
-                                                          text: (isShowingAmountRemaining(
-                                                                      showTotalSpent:
-                                                                          showTotalSpent,
-                                                                      objectiveAmount:
-                                                                          objectiveAmount,
-                                                                      totalAmount:
-                                                                          totalAmount)
-                                                                  ? " " +
-                                                                      "remaining"
-                                                                          .tr()
-                                                                  : "") +
-                                                              " / " +
-                                                              convertToMoney(
-                                                                  Provider.of<
-                                                                          AllWallets>(
-                                                                      context),
-                                                                  objectiveAmount),
+                                                          text:
+                                                              objectiveRemainingAmountText(
+                                                            objectiveAmount:
+                                                                objectiveAmount,
+                                                            totalAmount:
+                                                                totalAmount,
+                                                            context: context,
+                                                          ),
                                                           fontSize: 13,
                                                           textColor: getColor(
                                                                   context,
@@ -675,4 +666,26 @@ class _ObjectivePageContentState extends State<_ObjectivePageContent> {
       ),
     );
   }
+}
+
+String objectiveRemainingAmountText({
+  required double objectiveAmount,
+  required double totalAmount,
+  required BuildContext context,
+}) {
+  String result = '';
+
+  if (appStateSettings["showTotalSpentForObjective"]) {
+    if (totalAmount > objectiveAmount) {
+      result = " " + "over".tr() + " ";
+    } else {
+      result = " " + "remaining".tr() + " / ";
+    }
+  } else {
+    result = " / ";
+  }
+
+  result += convertToMoney(Provider.of<AllWallets>(context), objectiveAmount);
+
+  return result;
 }

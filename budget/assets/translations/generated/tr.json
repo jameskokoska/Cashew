@@ -1095,5 +1095,9 @@
   "negative-cash-flow": "Negatif nakit akışı",
   "number-animation": "Sayı animasyonu",
   "count-up": "Saymak",
-  "disabled": "Engelli"
+  "disabled": "Engelli",
+  "set-period-length": "Dönem uzunluğu",
+  "change-currency-description": "Uygulama para birimi seçilen hesapla ilgilidir. Para birimini değiştirmek için hesabı düzenleyin.",
+  "primary-default": "Varsayılan",
+  "short-number-format": "Kısa Sayı biçimi"
 }

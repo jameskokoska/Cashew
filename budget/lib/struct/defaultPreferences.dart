@@ -192,10 +192,11 @@ Future<Map<String, dynamic>> getDefaultPreferences() async {
     "allSpendingSetFiltersString": null,
     "transactionsListPageSetFiltersString": null,
     "increaseTextContrast": false,
-    "numberFormatLocale": null, //If this is en-US, it is a custom format
+    "customNumberFormat": false,
     "numberFormatDelimiter": ",",
     "numberFormatDecimal": ".",
     "numberFormatCurrencyFirst": true,
+    "shortNumberFormat": null, //null, compact
     "netAllSpendingTotal": false,
     "netSpendingDayTotal": false,
     "extraZerosButton": null, //will be null, 00 or 000
@@ -321,6 +322,39 @@ Future attemptToMigrateSetLongTermLoansAmountTo0() async {
             amount: 0, dateTimeModified: Value(DateTime.now())));
       }
       await database.updateBatchObjectivesOnly(objectivesInserting);
+    }
+  } catch (e) {
+    print(
+        "Error migrating setting long term loans amounts to 0 " + e.toString());
+  }
+}
+
+attemptToMigrateCustomNumberFormattingSettings() {
+  try {
+    if (appStateSettings["numberFormatLocale"] != null) {
+      if (appStateSettings["numberFormatLocale"] == "en") {
+        appStateSettings["numberFormatDelimiter"] = ",";
+        appStateSettings["numberFormatDecimal"] = ".";
+        appStateSettings["numberFormatCurrencyFirst"] = true;
+      } else if (appStateSettings["numberFormatLocale"] == "tr") {
+        appStateSettings["numberFormatDelimiter"] = ".";
+        appStateSettings["numberFormatDecimal"] = ",";
+        appStateSettings["numberFormatCurrencyFirst"] = true;
+      } else if (appStateSettings["numberFormatLocale"] == "af") {
+        appStateSettings["numberFormatDelimiter"] = " ";
+        appStateSettings["numberFormatDecimal"] = ",";
+        appStateSettings["numberFormatCurrencyFirst"] = true;
+      } else if (appStateSettings["numberFormatLocale"] == "de") {
+        appStateSettings["numberFormatDelimiter"] = ".";
+        appStateSettings["numberFormatDecimal"] = ",";
+        appStateSettings["numberFormatCurrencyFirst"] = false;
+      } else if (appStateSettings["numberFormatLocale"] == "fr") {
+        appStateSettings["numberFormatDelimiter"] = " ";
+        appStateSettings["numberFormatDecimal"] = ",";
+        appStateSettings["numberFormatCurrencyFirst"] = false;
+      }
+      appStateSettings["customNumberFormat"] = true;
+      appStateSettings["numberFormatLocale"] = null;
     }
   } catch (e) {
     print(

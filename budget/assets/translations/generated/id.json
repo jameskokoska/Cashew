@@ -1095,5 +1095,9 @@
   "negative-cash-flow": "Arus kas negatif",
   "number-animation": "Animasi nomor",
   "count-up": "Menghitung",
-  "disabled": "Dengan disabilitas"
+  "disabled": "Dengan disabilitas",
+  "set-period-length": "Atur panjang periode",
+  "change-currency-description": "Mata uang aplikasi terkait dengan akun yang dipilih. Edit akun untuk mengubah mata uang.",
+  "primary-default": "Bawaan",
+  "short-number-format": "Format angka pendek"
 }

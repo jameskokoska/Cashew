@@ -1095,5 +1095,9 @@
   "negative-cash-flow": "Negativ kontantstrøm",
   "number-animation": "Antall animasjon",
   "count-up": "Telle opp",
-  "disabled": "Funksjonshemmet"
+  "disabled": "Funksjonshemmet",
+  "set-period-length": "Sett periode lengde",
+  "change-currency-description": "Appvalutaen er relatert til den valgte kontoen. Rediger kontoen for å endre valutaen.",
+  "primary-default": "Misligholde",
+  "short-number-format": "Kort tallformat"
 }

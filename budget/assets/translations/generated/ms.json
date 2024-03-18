@@ -1095,5 +1095,9 @@
   "negative-cash-flow": "Aliran tunai negatif",
   "number-animation": "Animasi nombor",
   "count-up": "Mengira",
-  "disabled": "Kurang upaya"
+  "disabled": "Kurang upaya",
+  "set-period-length": "Tetapkan tempoh tempoh",
+  "change-currency-description": "Mata wang aplikasi berkaitan dengan akaun yang dipilih. Edit akaun untuk menukar mata wang.",
+  "primary-default": "Lalai",
+  "short-number-format": "Format nombor pendek"
 }

@@ -1095,5 +1095,9 @@
   "negative-cash-flow": "Negatiivinen kassavirta",
   "number-animation": "Numero -animaatio",
   "count-up": "Laskea",
-  "disabled": "Liikuntarajoitteinen"
+  "disabled": "Liikuntarajoitteinen",
+  "set-period-length": "Aseta ajanjakson pituus",
+  "change-currency-description": "Sovellusvaluutta liittyy valitulle tilille. Muokkaa tiliä muuttaaksesi valuuttaa.",
+  "primary-default": "Laiminlyönti",
+  "short-number-format": "Lyhyt numeromuoto"
 }

@@ -1095,5 +1095,9 @@
   "negative-cash-flow": "Negativní peněžní tok",
   "number-animation": "Animace čísel",
   "count-up": "Přičítat",
-  "disabled": "Deaktivované"
+  "disabled": "Deaktivované",
+  "set-period-length": "Nastavit délku období",
+  "change-currency-description": "Měna aplikace souvisí s vybraným účtem. Upravte účet a změňte měnu.",
+  "primary-default": "Výchozí",
+  "short-number-format": "Formát krátkého čísla"
 }

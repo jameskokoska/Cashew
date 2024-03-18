@@ -51,11 +51,13 @@ class AddWalletPage extends StatefulWidget {
     Key? key,
     this.wallet,
     required this.routesToPopAfterDelete,
+    this.runWhenOpen,
   }) : super(key: key);
 
   //When a wallet is passed in, we are editing that wallet
   final TransactionWallet? wallet;
   final RoutesToPopAfterDelete routesToPopAfterDelete;
+  final VoidCallback? runWhenOpen;
 
   @override
   _AddWalletPageState createState() => _AddWalletPageState();
@@ -176,6 +178,7 @@ class _AddWalletPageState extends State<AddWalletPage> {
     }
     populateCurrencies();
     Future.delayed(Duration.zero, () async {
+      if (widget.runWhenOpen != null) widget.runWhenOpen!();
       walletInitial = await createTransactionWallet();
     });
   }

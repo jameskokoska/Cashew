@@ -16,6 +16,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_displaymode/flutter_displaymode.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import './colors.dart';
 import 'package:flutter/material.dart';
@@ -164,11 +165,13 @@ String convertToMoney(AllWallets allWallets, double amount,
     bool? addCurrencyName,
     bool forceHideCurrencyName = false,
     bool forceAllDecimals = false,
-    String? customLocale,
     bool forceNonCustomNumberFormat = false,
+    bool forceCustomNumberFormat = false,
     String? customSymbol,
-    NumberFormat Function(int? decimalDigits, String? locale, String? symbol,
-            String? customPattern)?
+    String Function(String)? editFormattedOutput,
+    bool forceCompactNumberFormatter = false,
+    bool forceDefaultNumberFormatter = false,
+    NumberFormat Function(int? decimalDigits, String? locale, String? symbol)?
         getCustomNumberFormat}) {
   int numberDecimals = decimals ??
       allWallets.indexedByPk[appStateSettings["selectedWalletPk"]]?.decimals ??
@@ -196,31 +199,36 @@ String convertToMoney(AllWallets allWallets, double amount,
               hasDecimalPoints(amount)
           ? numberDecimals
           : 0;
-  String? locale = customLocale ??
-      appStateSettings["numberFormatLocale"] ??
-      Platform.localeName;
+  String? locale = appStateSettings["customNumberFormat"] == true
+      ? "en-US"
+      : Platform.localeName;
   String? symbol =
       customSymbol ?? getCurrencyString(allWallets, currencyKey: currencyKey);
 
-  String? customPattern;
-  if (forceNonCustomNumberFormat == false &&
-      appStateSettings["numberFormatLocale"] == "en-US") {
-    // en-US indicates a custom font
-    if (appStateSettings["numberFormatCurrencyFirst"] == true) {
-      customPattern = '\u00A4#,##0.00';
-    } else {
-      customPattern = '#,##0.00\u00A0\u00A4';
-    }
-  }
+  bool useCustomNumberFormat = forceCustomNumberFormat ||
+      (forceNonCustomNumberFormat == false &&
+          appStateSettings["customNumberFormat"] == true);
 
-  NumberFormat currency = getCustomNumberFormat != null
-      ? getCustomNumberFormat(decimalDigits, locale, symbol, customPattern)
-      : NumberFormat.currency(
-          decimalDigits: decimalDigits,
-          locale: locale,
-          symbol: symbol,
-          customPattern: customPattern,
-        );
+  final NumberFormat formatter;
+  if (getCustomNumberFormat != null) {
+    formatter = getCustomNumberFormat(decimalDigits, locale, symbol);
+  } else if (forceDefaultNumberFormatter == false &&
+      (forceCompactNumberFormatter ||
+          appStateSettings["shortNumberFormat"] == "compact")) {
+    formatter = NumberFormat.compactCurrency(
+      locale: locale,
+      decimalDigits: decimalDigits,
+      symbol: useCustomNumberFormat ? "" : symbol,
+    );
+    formatter.significantDigitsInUse = false;
+    formatter.currencyName = symbol;
+  } else {
+    formatter = NumberFormat.currency(
+      decimalDigits: decimalDigits,
+      locale: locale,
+      symbol: useCustomNumberFormat ? "" : symbol,
+    );
+  }
 
   // View the entire dictionary of locale formats, through NumberFormat.currency definition
   // numberFormatSymbols[locale] as NumberSymbols
@@ -230,7 +238,7 @@ String convertToMoney(AllWallets allWallets, double amount,
       getCurrencyString(allWallets, currencyKey: currencyKey) == "") {
     addCurrencyName = true;
   }
-  String formatOutput = currency.format(amount).trim();
+  String formatOutput = formatter.format(amount).trim();
   if (addCurrencyName == true && currencyKey != null) {
     formatOutput = formatOutput + " " + currencyKey.toUpperCase();
   } else if (addCurrencyName == true) {
@@ -242,13 +250,17 @@ String convertToMoney(AllWallets allWallets, double amount,
             .toUpperCase();
   }
 
-  if (forceNonCustomNumberFormat == false &&
-      appStateSettings["numberFormatLocale"] == "en-US") {
-    // en-US indicates a custom font
+  if (useCustomNumberFormat) {
     formatOutput = formatOutputWithNewDelimiterAndDecimal(
-        formatOutput,
-        appStateSettings["numberFormatDelimiter"],
-        appStateSettings["numberFormatDecimal"]);
+      formatOutput,
+      appStateSettings["numberFormatDelimiter"],
+      appStateSettings["numberFormatDecimal"],
+      symbol,
+    );
+  }
+
+  if (editFormattedOutput != null) {
+    return editFormattedOutput(formatOutput);
   }
 
   return formatOutput;
@@ -276,12 +288,16 @@ String convertToMoney(AllWallets allWallets, double amount,
 }
 
 String formatOutputWithNewDelimiterAndDecimal(
-    String input, String delimiter, String decimal) {
+    String input, String delimiter, String decimal, String symbol) {
   // Use a placeholder
   input = input.replaceAll(".", "\uFFFD");
   input = input.replaceAll(",", delimiter);
   input = input.replaceAll("\uFFFD", decimal);
-  return input;
+  if (appStateSettings["numberFormatCurrencyFirst"] == false) {
+    return input + symbol;
+  } else {
+    return symbol + input;
+  }
 }
 
 List<String> localizedMonthNames = [];
@@ -692,27 +708,28 @@ String getWordedNumber(
   if (removeTrailingZeroes(value.toStringAsFixed(10)) == "0") {
     return getCurrencyString(allWallets) + "0";
   }
-  return getCurrencyString(allWallets) +
-      convertToMoney(
-        allWallets,
-        value,
-        forceHideCurrencyName: true,
-        addCurrencyName: false,
-        getCustomNumberFormat:
-            (decimalDigits, locale, currencySymbol, customPattern) {
-          final NumberFormat formatter = NumberFormat.compact(locale: locale);
-          formatter.maximumFractionDigits = value.abs() < 1000
-              ? value.abs() < 10
-                  ? (decimalDigits ?? 2)
-                  : 0
-              : 1;
-          formatter.minimumFractionDigits =
-              value.abs() < 10 ? (decimalDigits ?? 2) : 0;
-          formatter.significantDigitsInUse = false;
-          formatter.currencyName = currencySymbol;
-          return formatter;
-        },
-      );
+  return convertToMoney(
+    allWallets,
+    value,
+    forceHideCurrencyName: true,
+    addCurrencyName: false,
+    editFormattedOutput: (output) {
+      return getCurrencyString(Provider.of<AllWallets>(context)) + output;
+    },
+    getCustomNumberFormat: (decimalDigits, locale, currencySymbol) {
+      final NumberFormat formatter = NumberFormat.compact(locale: locale);
+      formatter.maximumFractionDigits = value.abs() < 1000
+          ? value.abs() < 10
+              ? (decimalDigits ?? 2)
+              : 0
+          : 1;
+      formatter.minimumFractionDigits =
+          value.abs() < 10 ? (decimalDigits ?? 2) : 0;
+      formatter.significantDigitsInUse = false;
+      formatter.currencyName = currencySymbol;
+      return formatter;
+    },
+  );
 }
 
 double getPercentBetweenDates(DateTimeRange timeRange, DateTime currentTime) {

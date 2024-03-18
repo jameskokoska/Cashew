@@ -1095,5 +1095,9 @@
   "negative-cash-flow": "负现金流量",
   "number-animation": "数字动画",
   "count-up": "计数",
-  "disabled": "禁用"
+  "disabled": "禁用",
+  "set-period-length": "设定的时间长度",
+  "change-currency-description": "应用货币与所选帐户有关。编辑帐户以更改货币。",
+  "primary-default": "默认",
+  "short-number-format": "短数字格式"
 }

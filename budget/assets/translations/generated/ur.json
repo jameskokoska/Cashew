@@ -1095,5 +1095,9 @@
   "negative-cash-flow": "منفی نقد بہاؤ",
   "number-animation": "نمبر حرکت پذیری",
   "count-up": "گنتی",
-  "disabled": "غیر فعال"
+  "disabled": "غیر فعال",
+  "set-period-length": "مدت کی لمبائی طے کریں",
+  "change-currency-description": "ایپ کرنسی کا تعلق منتخب اکاؤنٹ سے ہے۔ کرنسی کو تبدیل کرنے کے لئے اکاؤنٹ میں ترمیم کریں۔",
+  "primary-default": "پہلے سے طے شدہ",
+  "short-number-format": "مختصر نمبر کی شکل"
 }

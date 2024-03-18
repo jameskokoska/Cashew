@@ -80,6 +80,7 @@ Future<bool> initializeSettings() async {
   }
 
   await attemptToMigrateSetLongTermLoansAmountTo0();
+  attemptToMigrateCustomNumberFormattingSettings();
 
   // Disable sync every change is not on web
   // It will still sync when user pulls down to refresh

@@ -44,6 +44,10 @@ String getChangelogString() {
     Default account labelled in edit accounts page
     Provided more details in popup when selecting backup to delete/restore
     Number animation setting
+    Edit primary wallet currency setting for clarity, even though you can edit the account directly
+    Goals now show amount spent above total
+    Short number format setting
+    Fix reset the paid state when changing transaction types
     Fix cash flow filters when entering search page from positive/negative cashflow
     Fix polarity of lent and borrowed home screen sections
     Fix decimal precision save changes button for account edits

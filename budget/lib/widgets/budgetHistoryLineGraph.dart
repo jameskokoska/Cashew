@@ -378,7 +378,7 @@ class _BudgetHistoryLineGraphState extends State<_BudgetHistoryLineGraph> {
           preventCurveOverShooting: true,
           barWidth: 3,
           dotData: FlDotData(
-            show: true,
+            show: widget.spots.first.length < 30,
             getDotPainter: (spot, percent, barData, index) {
               return FlDotCirclePainter(
                 radius: 3,

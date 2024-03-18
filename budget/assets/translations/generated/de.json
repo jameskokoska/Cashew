@@ -1095,5 +1095,9 @@
   "negative-cash-flow": "Negativer Cashflow",
   "number-animation": "Nummeranimation",
   "count-up": "Zusammenzählen",
-  "disabled": "Deaktiviert"
+  "disabled": "Deaktiviert",
+  "set-period-length": "Setzen Sie die Periodenlänge",
+  "change-currency-description": "Die App -Währung bezieht sich auf das ausgewählte Konto. Bearbeiten Sie das Konto, um die Währung zu ändern.",
+  "primary-default": "Standard",
+  "short-number-format": "Kurznummernformat"
 }

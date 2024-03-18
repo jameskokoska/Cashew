@@ -1509,7 +1509,7 @@ class _BudgetDetailsState extends State<BudgetDetails> {
           next: () async {
             Navigator.pop(context);
           },
-          nextLabel: "set-amount".tr(),
+          nextLabel: "set-period-length".tr(),
         ),
       ),
     );

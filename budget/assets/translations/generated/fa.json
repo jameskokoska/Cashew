@@ -1043,7 +1043,7 @@
   "set-date-time": "تنظیم",
   "add-record-using-plus-button": "با استفاده از دکمه [+] یک رکورد اضافه کنید.",
   "all-settled": "همه حل و فصل شدند",
-  "difference-loan": "وام اختلاف",
+  "difference-loan": "وام تفاوت",
   "open-settings": "تنظیمات باز",
   "decimal-precision": "دقت اعشاری",
   "decimal-precision-description": "مکان های اعشاری برای گردآوری مبلغ معامله",
@@ -1095,5 +1095,9 @@
   "negative-cash-flow": "جریان نقدی منفی",
   "number-animation": "انیمیشن شماره",
   "count-up": "حساب کردن",
-  "disabled": "معلول"
+  "disabled": "معلول",
+  "set-period-length": "طول دوره تعیین شده",
+  "change-currency-description": "ارز برنامه مربوط به حساب انتخاب شده است. برای تغییر ارز ، حساب را ویرایش کنید.",
+  "primary-default": "پیش فرض",
+  "short-number-format": "فرمت شماره کوتاه"
 }
