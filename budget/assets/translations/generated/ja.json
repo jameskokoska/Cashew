@@ -1043,7 +1043,7 @@
   "set-date-time": "セット",
   "add-record-using-plus-button": "[+]ボタンを使用してレコードを追加します。",
   "all-settled": "すべてが落ち着きました",
-  "difference-loan": "差額ローン",
+  "difference-loan": "差異ローン",
   "open-settings": "設定を開く",
   "decimal-precision": "10進精度",
   "decimal-precision-description": "トランザクション額の丸めの小数点",

@@ -1057,7 +1057,7 @@
   "onwards": "framåt",
   "failed-to-preview-image": "Det gick inte att förhandsgranska bilden",
   "open-link": "Öppen länk",
-  "category-not-selected": "Kategori är inte vald",
+  "category-not-selected": "Kategori inte vald",
   "all-transactions-require-a-category": "Alla transaktioner kräver en kategori",
   "total-offset": "Total offset",
   "total-offset-description": "Kompensera summan av lånet genom att ange ett belopp. Användbart om lånet har samlat ränta eller andra som inte redovisas för kostnader som ökar summan.",

@@ -175,6 +175,7 @@ class _HomePageObjectivesState extends State<HomePageObjectives> {
                             )
                           : CarouselSlider(
                               options: CarouselOptions(
+                                height: height,
                                 enableInfiniteScroll: false,
                                 enlargeCenterPage: true,
                                 enlargeStrategy: CenterPageEnlargeStrategy.zoom,
