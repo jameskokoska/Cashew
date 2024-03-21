@@ -89,21 +89,16 @@ DateTimeRange? getDateTimeRangeForPassedSearchFilters(
   if (selectedDateTimeRange != null) return selectedDateTimeRange;
   if (getStartDateOfSelectedCustomPeriod(cycleSettingsExtension) == null)
     return null;
-  try {
-    return DateTimeRange(
-      start: getStartDateOfSelectedCustomPeriod(cycleSettingsExtension) ??
-          DateTime.now(),
-      end: getEndDateOfSelectedCustomPeriod(cycleSettingsExtension) ??
-          DateTime(
-            DateTime.now().year,
-            DateTime.now().month + 1,
-            DateTime.now().day,
-          ),
-    );
-  } catch (e) {
-    print("Date range error");
-  }
-  return null;
+  return createSafeDateTimeRange(
+    start: getStartDateOfSelectedCustomPeriod(cycleSettingsExtension) ??
+        DateTime.now(),
+    end: getEndDateOfSelectedCustomPeriod(cycleSettingsExtension) ??
+        DateTime(
+          DateTime.now().year,
+          DateTime.now().month + 1,
+          DateTime.now().day,
+        ),
+  );
 }
 
 class WatchedWalletDetailsPage extends StatelessWidget {
@@ -1199,8 +1194,7 @@ class WalletDetailsPageState extends State<WalletDetailsPage>
               cycleSettingsExtension: "",
               searchFilters: (searchFilters ?? SearchFilters())
                   .copyWith(walletPks: walletPks),
-              selectedDateTimeRange:
-                  (searchFilters ?? SearchFilters()).dateTimeRange,
+              selectedDateTimeRange: selectedDateTimeRange,
             ),
           ],
         ),
