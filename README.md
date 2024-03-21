@@ -42,7 +42,7 @@ Cashew is a full-fledged, feature-rich application designed to empower users in 
 
 ## Features
 
-<a href="https://youtu.be/NYZd7IKn1oY?t=536">
+<a href="https://www.youtube.com/watch?v=Oar9pkc7BSc&t=235s">
   <div align="center">
     <img width="80%" src="promotional/youtube-promo/thumbnail-oss.png" alt="Review Video">
   </div>
@@ -53,13 +53,13 @@ Cashew is a full-fledged, feature-rich application designed to empower users in 
 
 <br />
 
-<a href="https://youtu.be/NYZd7IKn1oY?t=536">
+<a href="https://www.youtube.com/watch?v=NYZd7IKn1oY&t=536s">
   <div align="center">
     <img width="80%" src="promotional/youtube-promo/thumbnail-year-best.png" alt="Review Video">
   </div>
 </a>
 <p align="center">
-  Cashew was featured on <a href="https://www.youtube.com/watch?v=2MwWmqcn--s&t=261s">YouTube</a> on 'The Best Apps of 2023!'
+  Cashew was featured on <a href="https://www.youtube.com/watch?v=NYZd7IKn1oY&t=536s">YouTube</a> on 'The Best Apps of 2023!'
 </p>
 
 <br>
