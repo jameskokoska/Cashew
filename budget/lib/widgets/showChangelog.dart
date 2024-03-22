@@ -34,6 +34,7 @@ String getChangelogString() {
     Fix date range filters for account graph
     Fix line graph double currency icon in label
     Fix currency exchange icons
+    Translation updates
     < 5.2.5
     Revamped homepage pie chart section
     Custom number format support

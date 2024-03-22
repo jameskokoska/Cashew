@@ -37,6 +37,7 @@ for lang in languages:
     print("Current Language - " + lang)
     current_lang_data = {}
     for row in rows[2:]:
+        if row[current_lang_index]=="": continue
         current_lang_data[row[0]] = row[current_lang_index]
 
     # Write the JSON file

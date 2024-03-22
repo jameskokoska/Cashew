@@ -12,6 +12,7 @@ Map<String, Locale> supportedLocales = {
   "hi": Locale("hi"),
   "ar": Locale("ar"),
   "pt": Locale("pt"),
+  "pt_PT": Locale.fromSubtags(languageCode: "pt", countryCode: "PT"),
   "ru": Locale("ru"),
   "ja": Locale("ja"),
   "de": Locale("de"),
@@ -46,6 +47,7 @@ Map<String, Locale> supportedLocales = {
   "sr": Locale("sr"),
   "sw": Locale("sw"),
   "bg": Locale("bg"),
+  "sk": Locale("sk"),
 };
 
 // Fix loading of zh_Hant and other special script languages
@@ -60,10 +62,12 @@ class RootBundleAssetLoaderCustomLocaleLoader extends RootBundleAssetLoader {
 
   @override
   String getLocalePath(String basePath, Locale locale) {
-    //print("Initial Locale: " + locale.toString());
+    print("Initial Locale: " + locale.toString());
 
     if (supportedLocales["zh_Hant"] == locale) {
       locale = supportedLocales["zh_Hant"] ?? Locale(locale.languageCode);
+    } else if (supportedLocales["pt_PT"] == locale) {
+      locale = supportedLocales["pt_PT"] ?? Locale(locale.languageCode);
     } else {
       // We only support the language code right now
       // This implements EasyLocalization( useOnlyLangCode: true ... )

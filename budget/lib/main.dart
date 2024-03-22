@@ -77,6 +77,7 @@ void main() async {
         assetLoader: RootBundleAssetLoaderCustomLocaleLoader(),
         supportedLocales: supportedLocales.values.toList(),
         path: 'assets/translations/generated',
+        useFallbackTranslations: true,
         fallbackLocale: supportedLocales.values.toList().first,
         child: RestartApp(
           child: InitializeApp(key: appStateKey),
