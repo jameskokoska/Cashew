@@ -93,6 +93,7 @@ class AddTransactionPage extends StatefulWidget {
     this.selectedType,
     this.selectedObjective,
     this.selectedIncome,
+    this.useCategorySelectedIncome = false,
     this.selectedAmount,
     this.selectedTitle,
     this.selectedCategory,
@@ -112,6 +113,7 @@ class AddTransactionPage extends StatefulWidget {
   final Objective? selectedObjective;
   final RoutesToPopAfterDelete routesToPopAfterDelete;
   final bool? selectedIncome;
+  final bool useCategorySelectedIncome;
   final double? selectedAmount;
   final String? selectedTitle;
   final TransactionCategory? selectedCategory;
@@ -814,6 +816,8 @@ class _AddTransactionPageState extends State<AddTransactionPage>
     }
     if (widget.selectedCategory != null) {
       selectedCategory = widget.selectedCategory;
+      if (widget.useCategorySelectedIncome)
+        selectedIncome = selectedCategory?.income ?? selectedIncome;
     }
     if (widget.selectedSubCategory != null) {
       selectedSubCategory = widget.selectedSubCategory;
@@ -2006,7 +2010,8 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                   )
                 : SizedBox.shrink()
           ],
-          overlay: Align(
+          overlay: MinimizeKeyboardFABOverlay(isEnabled: notesInputFocused),
+          staticOverlay: Align(
             alignment: Alignment.bottomCenter,
             child: Row(
               children: [
@@ -2087,35 +2092,6 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                       },
                                     );
                                   }
-                                },
-                              ),
-                            );
-                          },
-                        )
-                      : Container(
-                          key: ValueKey(2),
-                        ),
-                ),
-                AnimatedSizeSwitcher(
-                  child: notesInputFocused && getPlatform() == PlatformOS.isIOS
-                      ? WidgetSizeBuilder(
-                          widgetBuilder: (Size? size) {
-                            return Container(
-                              key: ValueKey(1),
-                              width: size?.width,
-                              child: SaveBottomButton(
-                                margin: EdgeInsets.only(left: 5),
-                                color: isTransactionActionDealtWith(
-                                        createTransaction())
-                                    ? Theme.of(context).colorScheme.primary
-                                    : null,
-                                labelColor: isTransactionActionDealtWith(
-                                        createTransaction())
-                                    ? Theme.of(context).colorScheme.onPrimary
-                                    : null,
-                                label: "done".tr(),
-                                onTap: () async {
-                                  FocusManager.instance.primaryFocus?.unfocus();
                                 },
                               ),
                             );
@@ -4282,12 +4258,14 @@ class _TransactionNotesTextInputState extends State<TransactionNotesTextInput> {
           ),
           HorizontalBreak(
             padding: EdgeInsets.zero,
-            color: dynamicPastel(
-              context,
-              Theme.of(context).colorScheme.secondaryContainer,
-              amount: 0.1,
-              inverse: true,
-            ),
+            color: appStateSettings["materialYou"]
+                ? dynamicPastel(
+                    context,
+                    Theme.of(context).colorScheme.secondaryContainer,
+                    amount: 0.1,
+                    inverse: true,
+                  )
+                : getColor(context, "lightDarkAccent"),
           ),
           LinkInNotes(
             color: (appStateSettings["materialYou"]

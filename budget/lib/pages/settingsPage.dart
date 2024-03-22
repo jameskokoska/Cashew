@@ -1173,10 +1173,14 @@ class _SetNumberFormatPopupState extends State<SetNumberFormatPopup> {
                         children: [
                           TextFont(
                             textAlign: TextAlign.center,
-                            fontSize: 30,
+                            fontSize: 28,
                             fontWeight: FontWeight.bold,
-                            text: convertToMoney(allWallets, 1234.56,
-                                forceNonCustomNumberFormat: true),
+                            text: convertToMoney(
+                              allWallets,
+                              -1234.56,
+                              forceNonCustomNumberFormat: true,
+                              addCurrencyName: true,
+                            ),
                           ),
                         ],
                       ),
@@ -1231,24 +1235,43 @@ class _SetNumberFormatPopupState extends State<SetNumberFormatPopup> {
               ],
             ),
           ),
-          HorizontalBreakAbove(
-            padding: EdgeInsets.only(top: 25, bottom: 10),
-            child: SettingsContainerSwitch(
-              title: "short-number-format".tr(),
-              onSwitched: (value) {
-                updateSettings(
-                  "shortNumberFormat",
-                  value ? "compact" : null,
-                  updateGlobalState: true,
-                );
-              },
-              initialValue: appStateSettings["shortNumberFormat"] == "compact",
-              enableBorderRadius: true,
-              icon: appStateSettings["outlinedIcons"]
-                  ? Icons.one_k_outlined
-                  : Icons.one_k_rounded,
+          SizedBox(height: 15),
+          HorizontalBreak(),
+          SettingsContainerSwitch(
+            title: "short-number-format".tr(),
+            onSwitched: (value) {
+              updateSettings(
+                "shortNumberFormat",
+                value ? "compact" : null,
+                updateGlobalState: true,
+              );
+            },
+            initialValue: appStateSettings["shortNumberFormat"] == "compact",
+            enableBorderRadius: true,
+            icon: appStateSettings["outlinedIcons"]
+                ? Icons.one_k_outlined
+                : Icons.one_k_rounded,
+          ),
+          SizedBox(height: 5),
+          Tappable(
+            borderRadius: 10,
+            color: Colors.transparent,
+            onTap: () {
+              Navigator.pop(context);
+              pushRoute(context, EditWalletsPage());
+            },
+            child: Padding(
+              padding:
+                  const EdgeInsets.only(left: 8, right: 8, top: 5, bottom: 5),
+              child: TextFont(
+                text: "decimal-precision-edit-account-info".tr(),
+                fontSize: 14,
+                maxLines: 10,
+                textColor: getColor(context, "textLight"),
+                textAlign: TextAlign.center,
+              ),
             ),
-          )
+          ),
         ],
       ),
     );
@@ -1274,8 +1297,12 @@ class _CustomNumberFormatPopupState extends State<CustomNumberFormatPopup> {
     AllWallets allWallets = Provider.of<AllWallets>(context);
     String formattedNumber = convertToMoney(
       allWallets,
-      1234.56,
+      -1234.56,
       forceCustomNumberFormat: true,
+      addCurrencyName: true,
+      customSymbol: getCurrencyString(allWallets) == ""
+          ? "⬚"
+          : getCurrencyString(allWallets),
     );
     return Column(
       children: [
@@ -1284,7 +1311,7 @@ class _CustomNumberFormatPopupState extends State<CustomNumberFormatPopup> {
           child: TextFont(
             key: ValueKey(formattedNumber),
             textAlign: TextAlign.center,
-            fontSize: 30,
+            fontSize: 28,
             fontWeight: FontWeight.bold,
             text: formattedNumber,
           ),

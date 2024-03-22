@@ -131,6 +131,7 @@ Future queueTransactionFromMessage(String messageString) async {
   pushRoute(
     navigatorKey.currentContext!,
     AddTransactionPage(
+      useCategorySelectedIncome: true,
       routesToPopAfterDelete: RoutesToPopAfterDelete.None,
       selectedAmount: amountDouble,
       selectedTitle: title,
@@ -520,7 +521,7 @@ Future<void> parseEmailsInBackground(context,
         Transaction transactionToAdd = Transaction(
           transactionPk: "-1",
           name: title,
-          amount: (amountDouble).abs() * -1,
+          amount: (amountDouble).abs() * (selectedCategory.income ? 1 : -1),
           note: "",
           categoryFk: selectedCategory.categoryPk,
           walletFk: appStateSettings["selectedWalletPk"],

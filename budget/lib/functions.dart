@@ -211,7 +211,8 @@ String convertToMoney(AllWallets allWallets, double amount,
 
   final NumberFormat formatter;
   if (getCustomNumberFormat != null) {
-    formatter = getCustomNumberFormat(decimalDigits, locale, symbol);
+    formatter = getCustomNumberFormat(
+        decimalDigits, locale, useCustomNumberFormat ? "" : symbol);
   } else if (forceDefaultNumberFormatter == false &&
       (forceCompactNumberFormatter ||
           appStateSettings["shortNumberFormat"] == "compact")) {
@@ -221,7 +222,6 @@ String convertToMoney(AllWallets allWallets, double amount,
       symbol: useCustomNumberFormat ? "" : symbol,
     );
     formatter.significantDigitsInUse = false;
-    formatter.currencyName = symbol;
   } else {
     formatter = NumberFormat.currency(
       decimalDigits: decimalDigits,
@@ -239,11 +239,11 @@ String convertToMoney(AllWallets allWallets, double amount,
     addCurrencyName = true;
   }
   String formatOutput = formatter.format(amount).trim();
+  String? currencyName;
   if (addCurrencyName == true && currencyKey != null) {
-    formatOutput = formatOutput + " " + currencyKey.toUpperCase();
+    currencyName = " " + currencyKey.toUpperCase();
   } else if (addCurrencyName == true) {
-    formatOutput = formatOutput +
-        " " +
+    currencyName = " " +
         (allWallets.indexedByPk[appStateSettings["selectedWalletPk"]]
                     ?.currency ??
                 "")
@@ -252,11 +252,15 @@ String convertToMoney(AllWallets allWallets, double amount,
 
   if (useCustomNumberFormat) {
     formatOutput = formatOutputWithNewDelimiterAndDecimal(
-      formatOutput,
-      appStateSettings["numberFormatDelimiter"],
-      appStateSettings["numberFormatDecimal"],
-      symbol,
+      amount: finalNumber ?? amount,
+      currencyName: currencyName,
+      input: formatOutput,
+      delimiter: appStateSettings["numberFormatDelimiter"],
+      decimal: appStateSettings["numberFormatDecimal"],
+      symbol: symbol,
     );
+  } else if (useCustomNumberFormat == false && currencyName != null) {
+    formatOutput = formatOutput + currencyName;
   }
 
   if (editFormattedOutput != null) {
@@ -287,16 +291,31 @@ String convertToMoney(AllWallets allWallets, double amount,
   // return currency.format(amount);
 }
 
-String formatOutputWithNewDelimiterAndDecimal(
-    String input, String delimiter, String decimal, String symbol) {
+String formatOutputWithNewDelimiterAndDecimal({
+  required double amount,
+  required String input,
+  required String delimiter,
+  required String decimal,
+  required String symbol,
+  required String? currencyName,
+}) {
   // Use a placeholder
   input = input.replaceAll(".", "\uFFFD");
   input = input.replaceAll(",", delimiter);
   input = input.replaceAll("\uFFFD", decimal);
+  String negativeSign = "";
+  if (amount < 0) {
+    input = input.replaceRange(0, 1, "");
+    negativeSign = "-";
+  }
   if (appStateSettings["numberFormatCurrencyFirst"] == false) {
-    return input + symbol;
+    return negativeSign +
+        input +
+        (symbol.length > 0 ? "  " : "") +
+        symbol +
+        (currencyName ?? "");
   } else {
-    return symbol + input;
+    return negativeSign + symbol + input + (currencyName ?? "");
   }
 }
 
@@ -713,11 +732,13 @@ String getWordedNumber(
     value,
     forceHideCurrencyName: true,
     addCurrencyName: false,
-    editFormattedOutput: (output) {
-      return getCurrencyString(Provider.of<AllWallets>(context)) + output;
-    },
     getCustomNumberFormat: (decimalDigits, locale, currencySymbol) {
-      final NumberFormat formatter = NumberFormat.compact(locale: locale);
+      final NumberFormat formatter = NumberFormat.compactCurrency(
+        locale: locale,
+        decimalDigits: decimalDigits,
+        symbol: currencySymbol,
+      );
+      formatter.significantDigitsInUse = false;
       formatter.maximumFractionDigits = value.abs() < 1000
           ? value.abs() < 10
               ? (decimalDigits ?? 2)
@@ -725,8 +746,6 @@ String getWordedNumber(
           : 1;
       formatter.minimumFractionDigits =
           value.abs() < 10 ? (decimalDigits ?? 2) : 0;
-      formatter.significantDigitsInUse = false;
-      formatter.currencyName = currencySymbol;
       return formatter;
     },
   );

@@ -377,7 +377,7 @@ class _AddCategoryPageState extends State<AddCategoryPage>
                   )
                 : SizedBox.shrink()
           ],
-          overlay: Align(
+          staticOverlay: Align(
             alignment: Alignment.bottomCenter,
             child: selectedTitle == "" || selectedTitle == null
                 ? SaveBottomButton(

@@ -296,7 +296,7 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                   routesToPopAfterDelete: RoutesToPopAfterDelete.One,
                 ),
                 color: budgetColorScheme.secondary,
-                colorPlus: budgetColorScheme.onSecondary,
+                colorIcon: budgetColorScheme.onSecondary,
               ),
             ),
             actions: [

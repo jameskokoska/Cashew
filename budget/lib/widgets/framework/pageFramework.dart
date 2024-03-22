@@ -57,6 +57,7 @@ class PageFramework extends StatefulWidget {
     this.backgroundColor,
     this.resizeToAvoidBottomInset = false,
     this.overlay,
+    this.staticOverlay,
     this.scrollToTopButton = false,
     this.scrollToBottomButton = false,
     this.bottomPadding = true,
@@ -97,6 +98,7 @@ class PageFramework extends StatefulWidget {
   final Color? backgroundColor;
   final bool resizeToAvoidBottomInset;
   final Widget? overlay;
+  final Widget? staticOverlay;
   final bool scrollToTopButton;
   final bool scrollToBottomButton;
   final bool bottomPadding;
@@ -480,7 +482,7 @@ class PageFrameworkState extends State<PageFramework>
                     );
                   },
                 ),
-                widget.overlay ?? SizedBox.shrink(),
+                widget.staticOverlay ?? SizedBox.shrink(),
               ],
             ),
           ],

@@ -648,7 +648,7 @@ class _AddBudgetPageState extends State<AddBudgetPage> {
               ],
             ),
           ],
-          overlay: Align(
+          staticOverlay: Align(
             alignment: Alignment.bottomCenter,
             child: selectedTitle == "" || selectedTitle == null
                 ? SaveBottomButton(

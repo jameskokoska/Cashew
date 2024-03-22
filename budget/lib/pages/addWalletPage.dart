@@ -437,7 +437,7 @@ class _AddWalletPageState extends State<AddWalletPage> {
               ],
             ),
           ],
-          overlay: Align(
+          staticOverlay: Align(
             alignment: Alignment.bottomCenter,
             child: selectedTitle == "" || selectedTitle == null
                 ? SaveBottomButton(

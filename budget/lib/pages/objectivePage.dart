@@ -221,7 +221,7 @@ class _ObjectivePageContentState extends State<_ObjectivePageContent> {
                   selectedIncome: widget.objective.income,
                 ),
                 color: objectiveColorScheme.secondary,
-                colorPlus: objectiveColorScheme.onSecondary,
+                colorIcon: objectiveColorScheme.onSecondary,
               ),
             ),
             expandedHeight: 56,

@@ -24,11 +24,10 @@ for currency in data1:
     for currencyInfo in data2:
         if (currencyInfo["Code"]).lower()==currency.lower():
             found = True
-            result[currency] = {
-                "Currency": currencyInfo["Currency"],
-                "Code": currencyInfo["Code"],
-                "Symbol": currencyInfo["Symbol"],
-            }
+            result[currency] = {}
+            for key in ["Currency", "Code", "Symbol"]:
+                if key in currencyInfo:
+                    result[currency][key] = currencyInfo[key]
             if("CountryName" in currencyInfo):
                 result[currency]["CountryName"] = currencyInfo["CountryName"]
                 for country in countries:

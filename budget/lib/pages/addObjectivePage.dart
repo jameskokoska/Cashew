@@ -478,7 +478,7 @@ class _AddObjectivePageState extends State<AddObjectivePage>
               ],
             ),
           ],
-          overlay: Align(
+          staticOverlay: Align(
             alignment: Alignment.bottomCenter,
             child: selectedTitle == "" || selectedTitle == null
                 ? SaveBottomButton(

@@ -1,5 +1,9 @@
+import 'package:budget/colors.dart';
 import 'package:budget/functions.dart';
+import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/button.dart';
+import 'package:budget/widgets/fab.dart';
+import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:flutter/material.dart';
 
@@ -56,9 +60,9 @@ class _SaveBottomButtonState extends State<SaveBottomButton>
       duration: Duration(milliseconds: 100),
       curve: Curves.easeInOutCubic,
       transform: Matrix4.translationValues(
-        0.0,
-        isKeyboardOpen && !(getPlatform() == PlatformOS.isIOS) ? 100 : 0.0,
-        0.0,
+        0,
+        isKeyboardOpen ? 100 : 0,
+        0,
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.end,
@@ -70,7 +74,7 @@ class _SaveBottomButtonState extends State<SaveBottomButton>
               foregroundDecoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: [
-                    Theme.of(context).canvasColor.withOpacity(0.0),
+                    Theme.of(context).canvasColor.withOpacity(0),
                     Theme.of(context).canvasColor,
                   ],
                   begin: Alignment.topCenter,
@@ -97,6 +101,70 @@ class _SaveBottomButtonState extends State<SaveBottomButton>
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class MinimizeKeyboardFABOverlay extends StatefulWidget {
+  const MinimizeKeyboardFABOverlay({required this.isEnabled, super.key});
+  final bool isEnabled;
+  @override
+  State<MinimizeKeyboardFABOverlay> createState() =>
+      _MinimizeKeyboardFABOverlayState();
+}
+
+class _MinimizeKeyboardFABOverlayState extends State<MinimizeKeyboardFABOverlay>
+    with WidgetsBindingObserver {
+  bool isKeyboardOpen = false;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void didChangeMetrics() {
+    bool status = getIsKeyboardOpen(context);
+    if (status != isKeyboardOpen)
+      setState(() {
+        isKeyboardOpen = status;
+      });
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Positioned(
+      right: 10,
+      bottom: 10,
+      child: AnimatedContainer(
+        duration: Duration(milliseconds: 100),
+        curve: Curves.easeInOutCubic,
+        transform: Matrix4.translationValues(
+          0,
+          isKeyboardOpen ? 0 : 100,
+          0,
+        ),
+        child: AnimateFABDelayed(
+          enabled: isKeyboardOpen && widget.isEnabled,
+          fab: FAB(
+            onTap: () {
+              FocusManager.instance.primaryFocus?.unfocus();
+            },
+            customBorderRadius: 15,
+            customFabSize: 50,
+            iconData: appStateSettings["outlinedIcons"]
+                ? Icons.check_outlined
+                : Icons.check_rounded,
+          ),
+        ),
       ),
     );
   }

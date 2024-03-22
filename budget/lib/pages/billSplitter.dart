@@ -1156,7 +1156,7 @@ class _AddBillItemPageState extends State<AddBillItemPage> {
               },
             ),
           ],
-          overlay: Align(
+          staticOverlay: Align(
             alignment: Alignment.bottomCenter,
             child: SaveBottomButton(
               label: widget.billSplitterItem == null
@@ -1365,7 +1365,7 @@ class SummaryPage extends StatelessWidget {
     return PageFramework(
       title: "summary".tr(),
       dragDownToDismiss: true,
-      overlay: Align(
+      staticOverlay: Align(
         alignment: Alignment.bottomCenter,
         child: SaveBottomButton(
           label: "generate-loan-transactions".tr(),

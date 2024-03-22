@@ -29,8 +29,11 @@ String getChangelogString() {
     < 5.2.6
     New account spending summary table
     Improved navigation to respective pages when filters/date ranges set in spending summary table
+    Improved custom number format
+    Added complete editing text action button in add transaction page
     Fix date range filters for account graph
-    Fix currency exchange icon
+    Fix line graph double currency icon in label
+    Fix currency exchange icons
     < 5.2.5
     Revamped homepage pie chart section
     Custom number format support

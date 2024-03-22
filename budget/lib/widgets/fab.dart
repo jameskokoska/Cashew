@@ -11,27 +11,35 @@ import 'package:flutter/material.dart';
 class FAB extends StatelessWidget {
   FAB({
     Key? key,
-    required this.openPage,
+    this.openPage,
     this.onTap,
     this.tooltip = "",
     this.color,
-    this.colorPlus,
+    this.colorIcon,
     this.onLongPressAddAllPopup = true,
+    this.iconData,
+    this.customFabSize,
+    this.customBorderRadius,
   }) : super(key: key);
 
-  final Widget openPage;
+  final Widget? openPage;
   final String tooltip;
   final Function()? onTap;
   final Color? color;
-  final Color? colorPlus;
+  final Color? colorIcon;
   final bool? onLongPressAddAllPopup;
+  final IconData? iconData;
+  final double? customFabSize;
+  final double? customBorderRadius;
 
   @override
   Widget build(BuildContext context) {
-    double fabSize = getIsFullScreen(context) == false ? 60 : 70;
+    double fabSize =
+        customFabSize ?? (getIsFullScreen(context) == false ? 60 : 70);
     return OpenContainerNavigation(
       closedElevation: 10,
-      borderRadius: getIsFullScreen(context) == false ? 18 : 22,
+      borderRadius:
+          customBorderRadius ?? (getIsFullScreen(context) == false ? 18 : 22),
       closedColor:
           color != null ? color : Theme.of(context).colorScheme.secondary,
       button: (openContainer) {
@@ -61,19 +69,18 @@ class FAB extends StatelessWidget {
               width: fabSize,
               child: Center(
                 child: Icon(
-                  appStateSettings["outlinedIcons"]
-                      ? Icons.add_outlined
-                      : Icons.add_rounded,
-                  color: colorPlus != null
-                      ? colorPlus
-                      : Theme.of(context).colorScheme.onSecondary,
+                  iconData ??
+                      (appStateSettings["outlinedIcons"]
+                          ? Icons.add_outlined
+                          : Icons.add_rounded),
+                  color: colorIcon ?? Theme.of(context).colorScheme.onSecondary,
                 ),
               ),
             ),
           ),
         );
       },
-      openPage: openPage,
+      openPage: openPage ?? Container(),
     );
   }
 }
