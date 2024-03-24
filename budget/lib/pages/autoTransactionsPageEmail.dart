@@ -2,11 +2,11 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
-import 'package:budget/pages/addCategoryPage.dart';
 import 'package:budget/pages/addEmailTemplate.dart';
 import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/editCategoriesPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
+import 'package:budget/struct/notification_listener.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/accountAndBackup.dart';
 import 'package:budget/widgets/button.dart';
@@ -28,41 +28,8 @@ import 'package:provider/provider.dart';
 import '../functions.dart';
 import 'package:googleapis/gmail/v1.dart' as gMail;
 import 'package:html/parser.dart';
-import 'package:notification_listener_service/notification_event.dart';
-import 'package:notification_listener_service/notification_listener_service.dart';
 
 import 'addButton.dart';
-
-StreamSubscription<ServiceNotificationEvent>? notificationListenerSubscription;
-List<String> recentCapturedNotifications = [];
-
-Future initNotificationScanning() async {
-  if (getPlatform(ignoreEmulation: true) != PlatformOS.isAndroid) return;
-  notificationListenerSubscription?.cancel();
-  if (appStateSettings["notificationScanning"] != true) return;
-
-  bool status = await requestReadNotificationPermission();
-
-  if (status == true) {
-    notificationListenerSubscription =
-        NotificationListenerService.notificationsStream.listen(onNotification);
-  }
-}
-
-Future<bool> requestReadNotificationPermission() async {
-  bool status = await NotificationListenerService.isPermissionGranted();
-  if (status != true) {
-    status = await NotificationListenerService.requestPermission();
-  }
-  return status;
-}
-
-onNotification(ServiceNotificationEvent event) async {
-  String messageString = getNotificationMessage(event);
-  recentCapturedNotifications.insert(0, messageString);
-  recentCapturedNotifications.take(50);
-  queueTransactionFromMessage(messageString);
-}
 
 class InitializeNotificationService extends StatefulWidget {
   const InitializeNotificationService({required this.child, super.key});
@@ -79,7 +46,7 @@ class _InitializeNotificationServiceState
   void initState() {
     super.initState();
     Future.delayed(Duration.zero, () async {
-      initNotificationScanning();
+      await startNotificationListener();
     });
   }
 
@@ -125,7 +92,7 @@ Future queueTransactionFromMessage(String messageString) async {
   category = foundTitle?.category;
   if (category == null) {
     category = await database
-        .getCategoryInstanceOrNull(templateFound.defaultCategoryFk ?? "");
+        .getCategoryInstanceOrNull(templateFound.defaultCategoryFk);
   }
 
   pushRoute(
@@ -139,17 +106,6 @@ Future queueTransactionFromMessage(String messageString) async {
       startInitialAddTransactionSequence: false,
     ),
   );
-}
-
-String getNotificationMessage(ServiceNotificationEvent event) {
-  String output = "";
-  output = output + "Package name: " + event.packageName.toString() + "\n";
-  output =
-      output + "Notification removed: " + event.hasRemoved.toString() + "\n";
-  output = output + "\n----\n\n";
-  output = output + "Notification Title: " + event.title.toString() + "\n\n";
-  output = output + "Notification Content: " + event.content.toString();
-  return output;
 }
 
 class AutoTransactionsPageNotifications extends StatefulWidget {
@@ -192,20 +148,22 @@ class _AutoTransactionsPageNotificationsState
           ),
         ),
         SettingsContainerSwitch(
-          onSwitched: (value) async {
-            await updateSettings("notificationScanning", value,
-                updateGlobalState: false);
-            if (value == true) {
-              bool status = await requestReadNotificationPermission();
-              if (status == false) {
-                await updateSettings("notificationScanning", false,
-                    updateGlobalState: false);
-              } else {
-                initNotificationScanning();
+          onSwitched: (isActive) async {
+            var hasPermission = false;
+            if (isActive) {
+              hasPermission = await requestNotificationListeningPermission();
+              if (!hasPermission) {
+                return false;
               }
+              await startNotificationListener();
             } else {
-              notificationListenerSubscription?.cancel();
+              await stopNotificationListener();
             }
+            await updateSettings(
+              "notificationScanning",
+              isActive,
+              updateGlobalState: false,
+            );
           },
           title: "Notification Transactions",
           description:
