@@ -1,4 +1,3 @@
-
 <h1 align="center" style="font-size:28px; line-height:1"><b>Cashew</b></h1>
 
 <a href="https://cashewapp.web.app/">
@@ -75,7 +74,6 @@ Cashew is a full-fledged, feature-rich application designed to empower users in 
 
 <br>
 
-
 <div align="center">
   <img width="80%" src="promotional/play-store-feature/play-store-feature.png" alt="Play Store Feature">
 </div>
@@ -95,8 +93,8 @@ Cashew is a full-fledged, feature-rich application designed to empower users in 
 </p>
 
 ## Release
-Check out the [official website](https://cashewapp.web.app/)!
 
+Check out the [official website](https://cashewapp.web.app/)!
 
 This application is available on the [App Store](https://apps.apple.com/us/app/cashew-expense-budget-tracker/id6463662930), [Google Play](https://play.google.com/store/apps/details?id=com.budget.tracker_app), [GitHub](https://github.com/jameskokoska/Cashew/releases/) and as a [Web App (PWA)](https://budget-track.web.app/).
 
@@ -107,6 +105,7 @@ Changes and progress about development is all heavily documented in GitHub [comm
 ## Key Features
 
 ### 💸 Budget Management
+
 - Custom Budgets and Time Periods: Set up personalized budgets with flexible time periods, such as monthly, weekly, daily, or any custom time period that suits your financial planning needs. A custom time period is useful if you plan on setting a one-time travel budget!
 - Added Budgets: Selectively add transactions to specific budgets, allowing you to focus on specific expense categories.
 - Category Spending Limits per Budget: Set limits for each category within a budget, ensuring responsible spending.
@@ -114,6 +113,7 @@ Changes and progress about development is all heavily documented in GitHub [comm
 - Goals: Create spending and saving goals and put transactions towards different purchases or savings. Track your progress towards achieving your financial goals.
 
 ### 💰 Transaction Management
+
 - Support for Different Transaction Types: Categorize transactions effectively based on types such as upcoming, subscription, repeating, debts (borrowed), and credit (lent). Each type behaves in certain ways in the interface. Pay your upcoming transactions when you're ready, or mark your lent out transactions as collected.
 - Custom Categories: Create personalized categories to organize transactions according to your unique spending habits. Search through multiple icons and select the default option as expenses or income when adding transactions.
 - Custom Titles: Automatically assign transactions with the same name to specific categories, saving time and ensuring consistency. These titles are stored in memory and popup when you add another transaction with a similar name.
@@ -121,14 +121,17 @@ Changes and progress about development is all heavily documented in GitHub [comm
 - Easy Editing: Long-press and swipe to select multiple budgets, edit accordingly as needed or delete multiple at once.
 
 ### 💱 Financial Flexibility
+
 - Multiple Currencies and Accounts: Manage finances across different currencies and accounts with up-to-date conversion rates for accurate calculations and effortless currency conversions. The interface shows the original amount added and the converted amount to the selected account.
 - Switch Accounts and Currencies with Ease: On the homepage, easily select a different account and currency and everything will be converted automatically in an instant.
 
 ### 🔒 Enhanced Security and Accessibility
+
 - Biometric Lock: Secure budget data using biometric authentication, adding an extra layer of privacy.
 - Google Login: Conveniently log in to the app using your Google account, ensuring a streamlined and hassle-free authentication process.
 
 ### 🎨 User Experience and Design
+
 - Material You Design: Enjoy a visually appealing and modern interface, following the principles of Material You design for a delightful user experience.
 - Custom Accent Color: Personalize the app by selecting a custom accent color that suits your style, or follow that of the system.
 - Light and Dark Mode: Seamlessly switch between light and dark themes to optimize visibility and reduce eye strain.
@@ -137,55 +140,67 @@ Changes and progress about development is all heavily documented in GitHub [comm
 - Beautiful Adaptive UI: A responsive user interface that adapts flawlessly to both web and mobile platforms, providing an immersive and consistent user experience across devices.
 
 ### ☁ Backup and Syncing
+
 - Cross-Device Sync: Keep budget data synchronized across all devices, ensuring access to financial information wherever you go.
 - Google Drive Backup: Safeguard budget data by utilizing Google Drive's backup functionality, allowing easy restoration of data if needed.
-- ~~Discontinued: Budget Sharing (Alpha): Collaborate with family members, friends, or colleagues by sharing budgets, enabling collective tracking and management of shared expenses.~~
 
 ### 💿 Smart Automation
+
 - Notifications: Stay informed about important financial events and receive timely reminders for budget goals, transactions, and upcoming due dates.
 - Import CSV Files: Seamlessly import financial data by uploading CSV files, facilitating a smooth transition from other applications or platforms.
 - Import Google Sheets: Seamlessly import Google Sheets tables, quickly importing many transactions from a spreadsheet.
-- ~~Unsupported: Auto Email Transaction Parsing (Beta): Automatically parse transaction details from email receipts, making expense tracking effortless and efficient.~~
-
+- App Links: Automatically create transactions with pre-filled data using app linking (documentation below)
 
 ## App Links
+
 Only supported in the Android and Web App versions as of now. Deep links allow direct navigation and automation of actions using application URLs. Some examples are below:
 
 ### Examples (for Android)
+
 Ensure Cashew is installed on the device you are launching these URLs from.
 
 #### Example 1: Create an expense transaction for 100 with the category Shopping at the current time
+
 https://cashewapp.web.app/addTransaction?amount=-100&title=All%20the%20shopping&category=Shopping&notes=Went%20shopping
+
 #### Example 2: Create an income transaction with a missing category at the current time
+
 https://cashewapp.web.app/addTransaction?amount=100&title=Income&notes=Got%20money
+
 #### Example 3: Open the add transaction page with a custom date with prefilled details
+
 https://cashewapp.web.app/addTransactionRoute?amount=-50&title=All%20the%20shopping&notes=Went%20shopping&date=2024-03-02
 
 ### Routes
-| Routes for Android | Routes for Web App
-|-----------------|-----------------|
-| `cashew://budget.app/[Endpoint here]` | `https://budget-track.web.app/[Endpoint here]` |
-| `https://cashewapp.web.app/[Endpoint here]` | |
+
+| Routes for Android                          | Routes for Web App                             |
+| ------------------------------------------- | ---------------------------------------------- |
+| `cashew://budget.app/[Endpoint here]`       | `https://budget-track.web.app/[Endpoint here]` |
+| `https://cashewapp.web.app/[Endpoint here]` |                                                |
 
 ### Endpoints
-| Endpoint        | Description                                          |
-|-----------------|------------------------------------------------------|
-| `/addTransaction` | Add a new transaction without a UI prompt (unless a category is missing). |
-| `/addTransactionRoute` | Open the add new transaction route with information filled in. |
+
+| Endpoint               | Description                                                               |
+| ---------------------- | ------------------------------------------------------------------------- |
+| `/addTransaction`      | Add a new transaction without a UI prompt (unless a category is missing). |
+| `/addTransactionRoute` | Open the add new transaction route with information filled in.            |
 
 ### Parameters
-| Parameter | Description | Required | Default |
-|---|---|---|---|
-| `amount` | The amount of the transaction. If negative, it represents an expense; if positive, it represents income. | No | 0 |
-| `title` | The title of the transaction. If an associated title is found and the category is not set, the associated title's category will be used. | No | Empty string |
-| `notes` | The notes associated with the transaction. | No | Empty string |
-| `date` | The date of the transaction. Supported string formats can be found in the `getCommonDateFormats()` method [here](https://github.com/jameskokoska/Cashew/blob/5.2.3%2B328/budget/lib/struct/commonDateFormats.dart). | No | Current time |
-| `category` | The name of the category to add the transaction to. Executes a name search, takes the first entry, not case sensitive. | No | Prompt user |
-| `subcategory` | The name of the subcategory to add the transaction to. If provided, it overwrites the category if a subcategory is found under a main category. Executes a name search, takes the first entry, not case sensitive. | No | None |
-| `account` | The name of the account. Executes a name search, takes the first entry, not case sensitive. | No | Primary account |
+
+| Parameter     | Description                                                                                                                                                                                                         | Required | Default         |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- | --------------- |
+| `amount`      | The amount of the transaction. If negative, it represents an expense; if positive, it represents income.                                                                                                            | No       | 0               |
+| `title`       | The title of the transaction. If an associated title is found and the category is not set, the associated title's category will be used.                                                                            | No       | Empty string    |
+| `notes`       | The notes associated with the transaction.                                                                                                                                                                          | No       | Empty string    |
+| `date`        | The date of the transaction. Supported string formats can be found in the `getCommonDateFormats()` method [here](https://github.com/jameskokoska/Cashew/blob/5.2.3%2B328/budget/lib/struct/commonDateFormats.dart). | No       | Current time    |
+| `category`    | The name of the category to add the transaction to. Executes a name search, takes the first entry, not case sensitive.                                                                                              | No       | Prompt user     |
+| `subcategory` | The name of the subcategory to add the transaction to. If provided, it overwrites the category if a subcategory is found under a main category. Executes a name search, takes the first entry, not case sensitive.  | No       | None            |
+| `account`     | The name of the account. Executes a name search, takes the first entry, not case sensitive.                                                                                                                         | No       | Primary account |
 
 ### Testing
+
 #### Using ADB
+
 You can use ADB to test app links. For example
 
 ```shell
@@ -193,94 +208,115 @@ adb shell am start -a android.intent.action.VIEW -d "https://cashewapp.web.app/a
 ```
 
 #### Using links
+
 You can click links and open them with Cashew. See the example section above to test.
 
 ## Bundled Packages
+
 This repository contains, bundled in, modified versions of the discontinued packages listed below. They can be found in the folder `/budget/packages`
-* https://pub.dev/packages/implicitly_animated_reorderable_list
-* https://pub.dev/packages/sliding_sheet
+
+- https://pub.dev/packages/implicitly_animated_reorderable_list
+- https://pub.dev/packages/sliding_sheet
 
 ## Translations
+
 The translations are available here: https://docs.google.com/spreadsheets/d/1QQqt28cmrby6JqxLm-oxUXCuM3alniLJ6IRhcPJDOtk/edit?usp=sharing. If you would like to help translate, please reach out on email: dapperappdeveloper@gmail.com
 
 ### To Update Translations
+
 1. Run `budget\assets\translations\generate-translations.py`
 2. Restart the application
 
 ## Developer Notes
 
 ### Pull Requests and Contributions
+
 Unfortunately, I am currently not accepting contributions due to licensing and credits. Since this application turns some profits, I want to avoid any muddy water when it comes to compensation for contributions. You are free to submit an [issue](https://github.com/jameskokoska/Cashew/issues) and I can consider it!
 
 ### Android Release
-* To build an app-bundle Android release, run `flutter build appbundle --release`
+
+- To build an app-bundle Android release, run `flutter build appbundle --release`
 
 Note: required Android SDK.
 
 ### iOS Release
-* To build an IPA iOS release, run `flutter build ipa`
+
+- To build an IPA iOS release, run `flutter build ipa`
 
 Note: requires MacOS.
 
 ### Firebase Deployment
-* To deploy to firebase, run `firebase deploy`
+
+- To deploy to firebase, run `firebase deploy`
 
 Note: required Firebase.
 
 ### GitHub release
-* Create a tag for the current version specified in `pubspec.yaml`
-* `git tag <version>`
-* Push the tag
-* `git push origin <version>`
-* Create the release and upload binaries
-* https://github.com/jameskokoska/Cashew/releases/new
+
+- Create a tag for the current version specified in `pubspec.yaml`
+- `git tag <version>`
+- Push the tag
+- `git push origin <version>`
+- Create the release and upload binaries
+- https://github.com/jameskokoska/Cashew/releases/new
 
 ### Scripts
+
 `deploy_and_build_windows.bat`
-* Deploy to Firebase and build the apk and appbundle
+
+- Deploy to Firebase and build the apk and appbundle
 
 `open_release_builds.bat`
-* Opens the location of the built apk and appbundle
+
+- Opens the location of the built apk and appbundle
 
 `update_translations.bat`
-* Downloads the latest version of Cashew translations. Runs `budget\assets\translations\generate-translations.py`
+
+- Downloads the latest version of Cashew translations. Runs `budget\assets\translations\generate-translations.py`
 
 ### Develop Wirelessly on Android
-* `adb tcpip 5555`
-* `adb connect <IP>`
-* Get the phone's IP by going to `About Phone` > `Status Information` > `IP Address`
+
+- `adb tcpip 5555`
+- `adb connect <IP>`
+- Get the phone's IP by going to `About Phone` > `Status Information` > `IP Address`
 
 ### Migrate Database
+
 1. Make any database changes to the schema and tables
 2. Bump the schema version
-    * Change `int schemaVersionGlobal = ...+1` in `tables.dart`
+   - Change `int schemaVersionGlobal = ...+1` in `tables.dart`
 3. Make sure you are in application root directory
-    * `cd .\budget\`
+   - `cd .\budget\`
 4. Generate database code
-    * Run `dart run build_runner build`
+   - Run `dart run build_runner build`
 5. Export the new schema
-    * Generate schema dump for the newly created schema
-    * Replace `[schemaVersion]` in the command below with the value of `schemaVersionGlobal`
-    * Run `dart run drift_dev schema dump lib\database\tables.dart drift_schemas//drift_schema_v[schemaVersion].json`
-    * Read more: https://drift.simonbinder.eu/docs/advanced-features/migrations/#exporting-the-schema
+   - Generate schema dump for the newly created schema
+   - Replace `[schemaVersion]` in the command below with the value of `schemaVersionGlobal`
+   - Run `dart run drift_dev schema dump lib\database\tables.dart drift_schemas//drift_schema_v[schemaVersion].json`
+   - Read more: https://drift.simonbinder.eu/docs/advanced-features/migrations/#exporting-the-schema
 6. Generate step-by-step migrations
-    * Run `dart run drift_dev schema steps drift_schemas/ lib\database\schema_versions.dart`
-7. Implement migration strategy 
-    * Edit `await stepByStep(...)` function in `tables.dart` and add the migration strategy for the new version migration
+   - Run `dart run drift_dev schema steps drift_schemas/ lib\database\schema_versions.dart`
+7. Implement migration strategy
+   - Edit `await stepByStep(...)` function in `tables.dart` and add the migration strategy for the new version migration
 
 ### Get Platform
-* Use `getPlatform()` from `functions.dart`
-* Since `Platform` is not supported on web, we must create a wrapper and always use this to determine the current platform 
+
+- Use `getPlatform()` from `functions.dart`
+- Since `Platform` is not supported on web, we must create a wrapper and always use this to determine the current platform
 
 ### Push Route
-* If we want to navigate to a new page, stick to `pushRoute(context, page)` function from `functions.dart`
-* It handles the platform routing and `PageRouteBuilder`
+
+- If we want to navigate to a new page, stick to `pushRoute(context, page)` function from `functions.dart`
+- It handles the platform routing and `PageRouteBuilder`
 
 ### Wallets vs. Accounts
-* `Wallets` have been been renamed to `Accounts` on the front-end but internally, the name `Wallet` is still used.
+
+- `Wallets` have been been renamed to `Accounts` on the front-end but internally, the name `Wallet` is still used.
 
 ### Objectives vs. Goals
-* `Objectives` have been been renamed to `Goals` on the front-end but internally, the name `Objectives` is still used.
+
+- `Objectives` have been been renamed to `Goals` on the front-end but internally, the name `Objectives` is still used.
 
 ### Long Term Loans
-* Long term loans create a goal. However, the goals total is not used. Instead the total of the goal is calculated by totalling the proper polarity of transactions of the opposite type. For example, if it was a loan of 100$ lent out, the initial transaction would be 100$ of negative polarity (expense) and that would be the total of the goal. When a payment is made, it is made in the opposite (positive) polarity (income) and added to the total 'paid back'. We can easily find how much is remaining by taking the difference (or the addition including polarities).
+
+- Long term loans create a goal. However, the goals total is not used. Instead the total of the goal is calculated by totalling the proper polarity of transactions of the opposite type. For example, if it was a loan of 100$ lent out, the initial transaction would be 100$ of negative polarity (expense) and that would be the total of the goal. When a payment is made, it is made in the opposite (positive) polarity (income) and added to the total 'paid back'. We can easily find how much is remaining by taking the difference (or the addition including polarities).
