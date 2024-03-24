@@ -824,7 +824,7 @@
   "goal-total-type": "Celkový typ cíle",
   "auto-mark-transactions": "Transakce s automatickou výplatou",
   "auto-mark-transactions-description": "Označte zpochybnění transakcí jako placené",
-  "more-options-description": "Styl, účty, rozpočty, cíle, tituly",
+  "more-options-description": "Styl, transakce, účty, formátování",
   "header-height": "Výška záhlaví",
   "tall": "Vysoký",
   "short": "Krátký",
@@ -1100,5 +1100,7 @@
   "primary-default": "Výchozí",
   "short-number-format": "Formát krátkého čísla",
   "primary-currency": "Primární měna",
-  "change-title": "Změnit název"
+  "change-title": "Změnit název",
+  "edit": "Upravit",
+  "edit-transactions": "Upravit transakce"
 }

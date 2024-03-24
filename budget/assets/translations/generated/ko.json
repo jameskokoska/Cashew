@@ -824,7 +824,7 @@
   "goal-total-type": "목표 총 유형",
   "auto-mark-transactions": "자동 급여 거래",
   "auto-mark-transactions-description": "기한이 지난 거래를 지불하십시오",
-  "more-options-description": "스타일, 계정, 예산, 목표, 제목",
+  "more-options-description": "스타일, 거래, 계정, 서식 지정",
   "header-height": "헤더 높이",
   "tall": "키가 큰",
   "short": "짧은",
@@ -1100,5 +1100,7 @@
   "primary-default": "기본",
   "short-number-format": "짧은 숫자 형식",
   "primary-currency": "기본 통화",
-  "change-title": "제목 변경"
+  "change-title": "제목 변경",
+  "edit": "편집하다",
+  "edit-transactions": "거래 편집"
 }

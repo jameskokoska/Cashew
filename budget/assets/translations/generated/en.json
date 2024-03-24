@@ -824,7 +824,7 @@
   "goal-total-type": "Goal Total Type",
   "auto-mark-transactions": "Auto Pay Transactions",
   "auto-mark-transactions-description": "Mark overdue transactions as paid",
-  "more-options-description": "Style, accounts, budgets, goals, titles",
+  "more-options-description": "Style, transactions, accounts, formatting",
   "header-height": "Header Height",
   "tall": "Tall",
   "short": "Short",
@@ -1100,5 +1100,7 @@
   "primary-default": "Primary",
   "short-number-format": "Short Number Format",
   "primary-currency": "Primary Currency",
-  "change-title": "Change Title"
+  "change-title": "Change Title",
+  "edit": "Edit",
+  "edit-transactions": "Edit Transactions"
 }

@@ -824,7 +824,7 @@
   "goal-total-type": "Tavoitetyyppi",
   "auto-mark-transactions": "Automaattiset palkkatapahtumat",
   "auto-mark-transactions-description": "Mark erääntyneitä tapahtumia maksettuina",
-  "more-options-description": "Tyyli, tilit, budjetit, tavoitteet, nimikkeet",
+  "more-options-description": "Tyyli, tapahtumat, tilit, muotoilu",
   "header-height": "Otsikon korkeus",
   "tall": "Pitkä",
   "short": "Lyhyt",
@@ -1100,5 +1100,7 @@
   "primary-default": "Laiminlyönti",
   "short-number-format": "Lyhyt numeromuoto",
   "primary-currency": "Ensisijainen valuutta",
-  "change-title": "Muuta otsikkoa"
+  "change-title": "Muuta otsikkoa",
+  "edit": "Muokata",
+  "edit-transactions": "Muokkaa tapahtumia"
 }

@@ -265,6 +265,7 @@ class _CyclePeriodSelectionState extends State<CyclePeriodSelection> {
       PopupFramework(
         title: "enter-period-length".tr(),
         child: SelectAmountValue(
+          enableDecimal: false,
           amountPassed: selectedPeriodLength.toString(),
           setSelectedAmount: (amount, _) {
             setSelectedPeriodLength(amount);
@@ -677,6 +678,7 @@ class _PastDaysSelectionState extends State<PastDaysSelection> {
       PopupFramework(
         title: "enter-period-length".tr(),
         child: SelectAmountValue(
+          enableDecimal: false,
           amountPassed: selectedPeriodLength.toString(),
           setSelectedAmount: (amount, _) {
             setSelectedPeriodLength(amount);

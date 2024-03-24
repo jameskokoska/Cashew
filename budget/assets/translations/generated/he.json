@@ -824,7 +824,7 @@
   "goal-total-type": "סוג מטרה כולל",
   "auto-mark-transactions": "עסקאות לשלם אוטומטי",
   "auto-mark-transactions-description": "סמן עסקאות איחור בתשלום",
-  "more-options-description": "סגנון, חשבונות, תקציבים, יעדים, כותרות",
+  "more-options-description": "סגנון, עסקאות, חשבונות, עיצוב",
   "header-height": "גובה הכותרת",
   "tall": "גובה",
   "short": "קצר",
@@ -1100,5 +1100,7 @@
   "primary-default": "בְּרִירַת מֶחדָל",
   "short-number-format": "פורמט מספר קצר",
   "primary-currency": "מטבע ראשוני",
-  "change-title": "שנה כותרת"
+  "change-title": "שנה כותרת",
+  "edit": "לַעֲרוֹך",
+  "edit-transactions": "ערוך עסקאות"
 }

@@ -1293,40 +1293,6 @@ class WalletDetailsPageState extends State<WalletDetailsPage>
                         );
                       },
                     ),
-                    DropdownItemMenu(
-                      id: "decimal-precision",
-                      label: "decimal-precision".tr(),
-                      icon: appStateSettings["outlinedIcons"]
-                          ? Icons.more_horiz_outlined
-                          : Icons.more_horiz_rounded,
-                      action: () {
-                        openBottomSheet(
-                          context,
-                          PopupFramework(
-                            title: "decimal-precision".tr(),
-                            child: SelectAmountValue(
-                              amountPassed: widget.wallet!.decimals.toString(),
-                              setSelectedAmount: (amount, _) async {
-                                int selectedDecimals = amount.toInt();
-                                if (amount > 10) {
-                                  selectedDecimals = 10;
-                                } else if (amount < 0) {
-                                  selectedDecimals = 0;
-                                }
-                                TransactionWallet wallet = await database
-                                    .getWalletInstance(widget.wallet!.walletPk);
-                                await database.createOrUpdateWallet(wallet
-                                    .copyWith(decimals: selectedDecimals));
-                              },
-                              next: () async {
-                                Navigator.pop(context);
-                              },
-                              nextLabel: "set-amount".tr(),
-                            ),
-                          ),
-                        );
-                      },
-                    ),
                   ],
                 ),
               if (widget.wallet == null)

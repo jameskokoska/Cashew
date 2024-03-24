@@ -406,5 +406,7 @@
   "preview-demo": "Zobraziť demo",
   "preview-demo-description": "Spravte si prehliadku rozhrania a funkcií aplikácie pomocou náhodne generovaných údajov. Prehliadku môžete kedykoľvek vypnúť. ",
   "activate": "Aktivovať",
-  "change-title": "Zmeniť názov"
+  "change-title": "Zmeniť názov",
+  "edit": "Upraviť",
+  "edit-transactions": "Upraviť transakcie"
 }

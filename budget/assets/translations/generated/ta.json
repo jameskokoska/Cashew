@@ -824,7 +824,7 @@
   "goal-total-type": "இலக்கு மொத்த வகை",
   "auto-mark-transactions": "ஆட்டோ ஊதிய பரிவர்த்தனைகள்",
   "auto-mark-transactions-description": "தாமதமான பரிவர்த்தனைகளை செலுத்தியபடி குறிக்கவும்",
-  "more-options-description": "நடை, கணக்குகள், வரவு செலவுத் திட்டங்கள், குறிக்கோள்கள், தலைப்புகள்",
+  "more-options-description": "நடை, பரிவர்த்தனைகள், கணக்குகள், வடிவமைத்தல்",
   "header-height": "தலைப்பு உயரம்",
   "tall": "உயரம்",
   "short": "குறுகிய",
@@ -1100,5 +1100,7 @@
   "primary-default": "இயல்புநிலை",
   "short-number-format": "குறுகிய எண் வடிவம்",
   "primary-currency": "முதன்மை நாணயம்",
-  "change-title": "தலைப்பை மாற்றவும்"
+  "change-title": "தலைப்பை மாற்றவும்",
+  "edit": "தொகு",
+  "edit-transactions": "பரிவர்த்தனைகளைத் திருத்தவும்"
 }

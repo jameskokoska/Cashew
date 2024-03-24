@@ -824,7 +824,7 @@
   "goal-total-type": "Загальний тип цілей",
   "auto-mark-transactions": "Автоматична оплата транзакцій",
   "auto-mark-transactions-description": "Позначення прострочених транзакцій як оплачені",
-  "more-options-description": "Стиль, рахунки, бюджети, цілі, заголовки",
+  "more-options-description": "Стиль, операції, рахунки, форматування",
   "header-height": "Висота шапки",
   "tall": "Велика",
   "short": "Маленька",
@@ -1100,5 +1100,7 @@
   "primary-default": "За замовчуванням",
   "short-number-format": "Формат короткого числа",
   "primary-currency": "Первинна валюта",
-  "change-title": "Змінити назву"
+  "change-title": "Змінити назву",
+  "edit": "Редагувати",
+  "edit-transactions": "Редагувати транзакції"
 }

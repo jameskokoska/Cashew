@@ -824,7 +824,7 @@
   "goal-total-type": "目標總類型",
   "auto-mark-transactions": "自動支付交易",
   "auto-mark-transactions-description": "標記過期交易作為付費",
-  "more-options-description": "樣式，帳戶，預算，目標，標題",
+  "more-options-description": "風格、交易、帳戶、格式",
   "header-height": "標題高度",
   "tall": "高",
   "short": "短",
@@ -1100,5 +1100,7 @@
   "primary-default": "預設",
   "short-number-format": "短數字格式",
   "primary-currency": "原金",
-  "change-title": "更改標題"
+  "change-title": "更改標題",
+  "edit": "編輯",
+  "edit-transactions": "編輯交易"
 }

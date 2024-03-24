@@ -824,7 +824,7 @@
   "goal-total-type": "ประเภทเป้าหมายทั้งหมด",
   "auto-mark-transactions": "ธุรกรรมการจ่ายเงินอัตโนมัติ",
   "auto-mark-transactions-description": "ทำเครื่องหมายธุรกรรมที่เกินกำหนดตามที่จ่ายไป",
-  "more-options-description": "สไตล์บัญชีงบประมาณเป้าหมายชื่อเรื่อง",
+  "more-options-description": "สไตล์ ธุรกรรม บัญชี การจัดรูปแบบ",
   "header-height": "ความสูงส่วนหัว",
   "tall": "สูง",
   "short": "สั้น",
@@ -1100,5 +1100,7 @@
   "primary-default": "ค่าเริ่มต้น",
   "short-number-format": "รูปแบบหมายเลขสั้น",
   "primary-currency": "สกุลเงินหลัก",
-  "change-title": "เปลี่ยนชื่อเรื่อง"
+  "change-title": "เปลี่ยนชื่อเรื่อง",
+  "edit": "แก้ไข",
+  "edit-transactions": "แก้ไขธุรกรรม"
 }

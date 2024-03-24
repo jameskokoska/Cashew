@@ -824,7 +824,7 @@
   "goal-total-type": "Gol toplam türü",
   "auto-mark-transactions": "Otomatik Ödeme İşlemleri",
   "auto-mark-transactions-description": "Mark gecikmiş işlemleri ödenen",
-  "more-options-description": "Stil, Hesaplar, Bütçeler, Hedefler, Başlıklar",
+  "more-options-description": "Stil, işlemler, hesaplar, biçimlendirme",
   "header-height": "Başlık yüksekliği",
   "tall": "Uzun",
   "short": "Kısa",
@@ -1100,5 +1100,7 @@
   "primary-default": "Varsayılan",
   "short-number-format": "Kısa Sayı biçimi",
   "primary-currency": "Birincil para birimi",
-  "change-title": "Başlığı değiştir"
+  "change-title": "Başlığı değiştir",
+  "edit": "Düzenlemek",
+  "edit-transactions": "İşlemleri Düzenle"
 }

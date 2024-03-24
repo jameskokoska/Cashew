@@ -824,7 +824,7 @@
   "goal-total-type": "ધ્યેય કુલ પ્રકાર",
   "auto-mark-transactions": "ઓટો પગાર વ્યવહાર",
   "auto-mark-transactions-description": "ચૂકવણી મુજબ ઓવરડ્યુ ટ્રાંઝેક્શનને ચિહ્નિત કરો",
-  "more-options-description": "શૈલી, એકાઉન્ટ્સ, બજેટ, લક્ષ્યો, શીર્ષક",
+  "more-options-description": "શૈલી, વ્યવહારો, એકાઉન્ટ્સ, ફોર્મેટિંગ",
   "header-height": "મથારીની height ંચાઇ",
   "tall": "Tallંચું",
   "short": "ટૂંકું",
@@ -1100,5 +1100,7 @@
   "primary-default": "ચૂક",
   "short-number-format": "ટૂંકા નંબરનું બંધારણ",
   "primary-currency": "પ્રાથમિક ચલણ",
-  "change-title": "શીર્ષક બદલો"
+  "change-title": "શીર્ષક બદલો",
+  "edit": "સંપાદિત કરો",
+  "edit-transactions": "વ્યવહારો સંપાદિત કરો"
 }

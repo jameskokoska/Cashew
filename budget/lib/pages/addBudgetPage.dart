@@ -1501,6 +1501,7 @@ class _BudgetDetailsState extends State<BudgetDetails> {
       PopupFramework(
         title: "enter-period-length".tr(),
         child: SelectAmountValue(
+          enableDecimal: false,
           amountPassed: selectedPeriodLength.toString(),
           setSelectedAmount: (amount, _) {
             widget.determineBottomButton();

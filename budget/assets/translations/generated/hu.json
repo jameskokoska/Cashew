@@ -824,7 +824,7 @@
   "goal-total-type": "Cél teljes típusa",
   "auto-mark-transactions": "Automatikus fizetés tranzakciók",
   "auto-mark-transactions-description": "Jelölje meg a lejárt tranzakciókat fizetettként",
-  "more-options-description": "Stílus, számlák, költségvetések, célok, címek",
+  "more-options-description": "Stílus, tranzakciók, számlák, formázás",
   "header-height": "Fejlécmagasság",
   "tall": "Magas",
   "short": "Rövid",
@@ -1100,5 +1100,7 @@
   "primary-default": "Mulasztás",
   "short-number-format": "Rövid számú formátum",
   "primary-currency": "Elsődleges pénznem",
-  "change-title": "Cím módosítása"
+  "change-title": "Cím módosítása",
+  "edit": "Szerkesztés",
+  "edit-transactions": "Tranzakciók szerkesztése"
 }

@@ -824,7 +824,7 @@
   "goal-total-type": "Tipo total de objetivos",
   "auto-mark-transactions": "Transacciones de pago automático",
   "auto-mark-transactions-description": "Mark Transacciones atrasadas como pagadas",
-  "more-options-description": "Estilo, cuentas, presupuestos, objetivos, títulos",
+  "more-options-description": "Estilo, transacciones, cuentas, formato.",
   "header-height": "Altura del encabezado",
   "tall": "Alto",
   "short": "Corto",
@@ -1100,5 +1100,7 @@
   "primary-default": "Por defecto",
   "short-number-format": "Formato de número corto",
   "primary-currency": "Moneda primaria",
-  "change-title": "Cambiar título"
+  "change-title": "Cambiar título",
+  "edit": "Editar",
+  "edit-transactions": "Editar transacciones"
 }

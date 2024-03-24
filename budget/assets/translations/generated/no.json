@@ -824,7 +824,7 @@
   "goal-total-type": "Mål Total type",
   "auto-mark-transactions": "Auto Pay -transaksjoner",
   "auto-mark-transactions-description": "Merk forfalte transaksjoner som betalt",
-  "more-options-description": "Stil, kontoer, budsjetter, mål, titler",
+  "more-options-description": "Stil, transaksjoner, kontoer, formatering",
   "header-height": "Hodehøyde",
   "tall": "Høy",
   "short": "Kort",
@@ -1100,5 +1100,7 @@
   "primary-default": "Misligholde",
   "short-number-format": "Kort tallformat",
   "primary-currency": "Primær valuta",
-  "change-title": "Endre tittel"
+  "change-title": "Endre tittel",
+  "edit": "Redigere",
+  "edit-transactions": "Rediger transaksjoner"
 }

@@ -824,7 +824,7 @@
   "goal-total-type": "লক্ষ্য মোট প্রকার",
   "auto-mark-transactions": "অটো পে লেনদেন",
   "auto-mark-transactions-description": "প্রদত্ত হিসাবে ওভারডু লেনদেন চিহ্নিত করুন",
-  "more-options-description": "স্টাইল, অ্যাকাউন্ট, বাজেট, লক্ষ্য, শিরোনাম",
+  "more-options-description": "স্টাইল, লেনদেন, অ্যাকাউন্ট, বিন্যাস",
   "header-height": "শিরোনাম উচ্চতা",
   "tall": "লম্বা",
   "short": "সংক্ষিপ্ত",
@@ -1100,5 +1100,7 @@
   "primary-default": "ডিফল্ট",
   "short-number-format": "স্বল্প সংখ্যা ফর্ম্যাট",
   "primary-currency": "প্রাথমিক মুদ্রা",
-  "change-title": "শিরোনাম পরিবর্তন করুন"
+  "change-title": "শিরোনাম পরিবর্তন করুন",
+  "edit": "সম্পাদনা করুন",
+  "edit-transactions": "লেনদেন সম্পাদনা করুন"
 }

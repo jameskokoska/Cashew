@@ -824,7 +824,7 @@
   "goal-total-type": "Type total d'objectif",
   "auto-mark-transactions": "Transactions de paiement automatique",
   "auto-mark-transactions-description": "Marquer les transactions en retard comme payées",
-  "more-options-description": "Style, comptes, budgets, objectifs, intitulés",
+  "more-options-description": "Style, transactions, comptes, formatage",
   "header-height": "Hauteur de l'en-tête",
   "tall": "Grand",
   "short": "Court",
@@ -1100,5 +1100,7 @@
   "primary-default": "Défaut",
   "short-number-format": "Format de numéro court",
   "primary-currency": "Densité primaire",
-  "change-title": "Changer le titre"
+  "change-title": "Changer le titre",
+  "edit": "Modifier",
+  "edit-transactions": "Modifier les transactions"
 }

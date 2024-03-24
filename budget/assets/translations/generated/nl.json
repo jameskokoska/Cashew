@@ -824,7 +824,7 @@
   "goal-total-type": "Doel totaal type",
   "auto-mark-transactions": "Auto -betalingstransacties",
   "auto-mark-transactions-description": "Markeer achterstallige transacties zoals betaald",
-  "more-options-description": "Stijl, accounts, budgetten, doelen, titels",
+  "more-options-description": "Stijl, transacties, accounts, opmaak",
   "header-height": "Koptekst",
   "tall": "Lang",
   "short": "Kort",
@@ -1100,5 +1100,7 @@
   "primary-default": "Standaard",
   "short-number-format": "Kort nummerformaat",
   "primary-currency": "Primaire valuta",
-  "change-title": "Titel wijzigen"
+  "change-title": "Titel wijzigen",
+  "edit": "Bewerking",
+  "edit-transactions": "Transacties bewerken"
 }

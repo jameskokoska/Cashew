@@ -1208,6 +1208,7 @@ class SelectAmountValue extends StatefulWidget {
     this.next,
     this.nextLabel,
     this.allowZero = false,
+    this.enableDecimal = true,
     this.suffix = "",
     this.showEnteredNumber = true,
     this.extraWidgetAboveNumbers,
@@ -1217,6 +1218,7 @@ class SelectAmountValue extends StatefulWidget {
   final VoidCallback? next;
   final String? nextLabel;
   final bool allowZero;
+  final bool enableDecimal;
   final String suffix;
   final bool showEnteredNumber;
   final Widget? extraWidgetAboveNumbers;
@@ -1332,6 +1334,7 @@ class _SelectAmountValueState extends State<SelectAmountValue> {
   }
 
   addToAmount(String input) {
+    if (input == "." && widget.enableDecimal == false) return;
     String amountClone = amount;
     if (input == "." && amount.contains(".")) {
     } else {
@@ -1477,6 +1480,7 @@ class _SelectAmountValueState extends State<SelectAmountValue> {
                   Row(
                     children: [
                       CalculatorButton(
+                        disabled: widget.enableDecimal == false,
                         label: getDecimalSeparator(),
                         editAmount: () {
                           addToAmount(".");

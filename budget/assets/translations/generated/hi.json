@@ -824,7 +824,7 @@
   "goal-total-type": "लक्ष्य कुल प्रकार",
   "auto-mark-transactions": "स्वत: वेतन लेनदेन",
   "auto-mark-transactions-description": "भुगतान के रूप में अतिदेय लेनदेन को चिह्नित करें",
-  "more-options-description": "शैली, खाते, बजट, लक्ष्य, शीर्षक",
+  "more-options-description": "शैली, लेनदेन, खाते, स्वरूपण",
   "header-height": "हेडर हाइट",
   "tall": "लंबा",
   "short": "छोटा",
@@ -1100,5 +1100,7 @@
   "primary-default": "गलती करना",
   "short-number-format": "अल्प संख्या प्रारूप",
   "primary-currency": "प्राथमिक मुद्रा",
-  "change-title": "शीर्षक बदलें"
+  "change-title": "शीर्षक बदलें",
+  "edit": "संपादन करना",
+  "edit-transactions": "लेन-देन संपादित करें"
 }

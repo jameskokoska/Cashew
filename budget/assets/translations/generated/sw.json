@@ -824,7 +824,7 @@
   "goal-total-type": "Aina ya jumla ya lengo",
   "auto-mark-transactions": "Shughuli za kulipia kiotomatiki",
   "auto-mark-transactions-description": "Weka alama ya shughuli kama kulipwa",
-  "more-options-description": "Mtindo, akaunti, bajeti, malengo, majina",
+  "more-options-description": "Mtindo, shughuli, akaunti, umbizo",
   "header-height": "Urefu wa kichwa",
   "tall": "Mrefu",
   "short": "Fupi",
@@ -1100,5 +1100,7 @@
   "primary-default": "Chaguo -msingi",
   "short-number-format": "Muundo wa nambari fupi",
   "primary-currency": "Sarafu ya msingi",
-  "change-title": "Badilisha Kichwa"
+  "change-title": "Badilisha Kichwa",
+  "edit": "Hariri",
+  "edit-transactions": "Badilisha Miamala"
 }

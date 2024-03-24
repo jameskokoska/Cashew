@@ -824,7 +824,7 @@
   "goal-total-type": "نوع کل هدف",
   "auto-mark-transactions": "معاملات پرداخت خودکار",
   "auto-mark-transactions-description": "معاملات را به صورت پرداخت شده به صورت پرداخت شده علامت گذاری کنید",
-  "more-options-description": "سبک ، حساب ، بودجه ، اهداف ، عناوین",
+  "more-options-description": "سبک، معاملات، حساب ها، قالب بندی",
   "header-height": "ارتفاع هدر",
   "tall": "بلند قد",
   "short": "کوتاه",
@@ -1100,5 +1100,7 @@
   "primary-default": "پیش فرض",
   "short-number-format": "فرمت شماره کوتاه",
   "primary-currency": "پول",
-  "change-title": "تغییر عنوان"
+  "change-title": "تغییر عنوان",
+  "edit": "ویرایش کنید",
+  "edit-transactions": "ویرایش تراکنش ها"
 }

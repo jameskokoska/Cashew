@@ -1149,6 +1149,7 @@ class _InstallmentObjectivePopupState extends State<InstallmentObjectivePopup> {
       PopupFramework(
         title: "enter-payment-period".tr(),
         child: SelectAmountValue(
+          enableDecimal: false,
           amountPassed: (numberOfInstallmentPayments ?? 0).toString(),
           setSelectedAmount: (amount, _) {
             setState(() {

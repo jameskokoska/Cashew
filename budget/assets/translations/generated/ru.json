@@ -823,7 +823,7 @@
   "goal-total-type": "Цель Общий тип",
   "auto-mark-transactions": "Автоплатёж",
   "auto-mark-transactions-description": "Отмечать просроченные транзакции как оплачиваемые",
-  "more-options-description": "Стиль, счета, бюджеты, цели, названия",
+  "more-options-description": "Стиль, транзакции, счета, форматирование",
   "header-height": "Высота заголовка",
   "tall": "Высокий",
   "short": "Короткий",
@@ -1099,5 +1099,7 @@
   "primary-default": "По умолчанию",
   "short-number-format": "Формат короткого числа",
   "primary-currency": "Основная валюта",
-  "change-title": "Изменить заголовок"
+  "change-title": "Изменить заголовок",
+  "edit": "Редактировать",
+  "edit-transactions": "Редактировать транзакции"
 }

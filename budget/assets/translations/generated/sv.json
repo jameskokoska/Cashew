@@ -824,7 +824,7 @@
   "goal-total-type": "Mål total typ",
   "auto-mark-transactions": "Bilbetalningstransaktioner",
   "auto-mark-transactions-description": "Markera förfallna transaktioner som betalt",
-  "more-options-description": "Stil, konton, budgetar, mål, titlar",
+  "more-options-description": "Stil, transaktioner, konton, formatering",
   "header-height": "Rubrikhöjd",
   "tall": "Lång",
   "short": "Kort",
@@ -1100,5 +1100,7 @@
   "primary-default": "Standard",
   "short-number-format": "Kort antal format",
   "primary-currency": "Primärvaluta",
-  "change-title": "Ändra titel"
+  "change-title": "Ändra titel",
+  "edit": "Redigera",
+  "edit-transactions": "Redigera transaktioner"
 }

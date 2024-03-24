@@ -824,7 +824,7 @@
   "goal-total-type": "లక్ష్యం మొత్తం రకం",
   "auto-mark-transactions": "ఆటో పే లావాదేవీలు",
   "auto-mark-transactions-description": "చెల్లించినట్లు మీరిన లావాదేవీలను గుర్తించండి",
-  "more-options-description": "శైలి, ఖాతాలు, బడ్జెట్లు, లక్ష్యాలు, శీర్షికలు",
+  "more-options-description": "శైలి, లావాదేవీలు, ఖాతాలు, ఫార్మాటింగ్",
   "header-height": "హెడర్ ఎత్తు",
   "tall": "పొడవైన",
   "short": "చిన్నది",
@@ -1100,5 +1100,7 @@
   "primary-default": "డిఫాల్ట్",
   "short-number-format": "చిన్న సంఖ్య ఆకృతి",
   "primary-currency": "ప్రాథమిక కరెన్సీ",
-  "change-title": "శీర్షిక మార్చండి"
+  "change-title": "శీర్షిక మార్చండి",
+  "edit": "సవరించు",
+  "edit-transactions": "లావాదేవీలను సవరించండి"
 }

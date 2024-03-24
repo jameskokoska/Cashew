@@ -824,7 +824,7 @@
   "goal-total-type": "Гоал Тотал Типе",
   "auto-mark-transactions": "Аутоматско плаће",
   "auto-mark-transactions-description": "Означите закашњеле трансакције као плаћене",
-  "more-options-description": "Стил, рачуни, буџети, циљеви, наслови",
+  "more-options-description": "Стил, трансакције, рачуни, форматирање",
   "header-height": "Висина заглавља",
   "tall": "Висок",
   "short": "Кратак",
@@ -1100,5 +1100,7 @@
   "primary-default": "Уобичајено",
   "short-number-format": "Формат кратких бројева",
   "primary-currency": "Основна валута",
-  "change-title": "Промените наслов"
+  "change-title": "Промените наслов",
+  "edit": "Уредити",
+  "edit-transactions": "Уреди трансакције"
 }

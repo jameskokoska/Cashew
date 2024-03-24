@@ -824,7 +824,7 @@
   "goal-total-type": "گول کل قسم",
   "auto-mark-transactions": "آٹو تنخواہ کے لین دین",
   "auto-mark-transactions-description": "ادائیگی کے مطابق واجب الادا لین دین کو نشان زد کریں",
-  "more-options-description": "انداز ، اکاؤنٹس ، بجٹ ، اہداف ، عنوانات",
+  "more-options-description": "انداز، لین دین، اکاؤنٹس، فارمیٹنگ",
   "header-height": "ہیڈر اونچائی",
   "tall": "لمبا",
   "short": "مختصر",
@@ -1100,5 +1100,7 @@
   "primary-default": "پہلے سے طے شدہ",
   "short-number-format": "مختصر نمبر کی شکل",
   "primary-currency": "بنیادی کرنسی",
-  "change-title": "عنوان تبدیل کریں۔"
+  "change-title": "عنوان تبدیل کریں۔",
+  "edit": "ترمیم",
+  "edit-transactions": "لین دین میں ترمیم کریں۔"
 }

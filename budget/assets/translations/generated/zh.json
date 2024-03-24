@@ -824,7 +824,7 @@
   "goal-total-type": "目标总类型",
   "auto-mark-transactions": "自动支付交易",
   "auto-mark-transactions-description": "自动将过期交易标记为已支付",
-  "more-options-description": "样式、账户、预算、目标、标题",
+  "more-options-description": "风格、交易、账户、格式",
   "header-height": "标题高度",
   "tall": "高",
   "short": "低",
@@ -1100,5 +1100,7 @@
   "primary-default": "默认",
   "short-number-format": "短数字格式",
   "primary-currency": "原金",
-  "change-title": "更改标题"
+  "change-title": "更改标题",
+  "edit": "编辑",
+  "edit-transactions": "编辑交易"
 }

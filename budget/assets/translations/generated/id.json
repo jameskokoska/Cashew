@@ -824,7 +824,7 @@
   "goal-total-type": "Jenis Total Tujuan",
   "auto-mark-transactions": "Transaksi Bayar Otomatis",
   "auto-mark-transactions-description": "Tandai transaksi yang lewat jatuh tempo sebagai telah dibayar",
-  "more-options-description": "Gaya, Akun, Anggaran, Tujuan, Judul",
+  "more-options-description": "Gaya, transaksi, akun, format",
   "header-height": "Tinggi header",
   "tall": "Tinggi",
   "short": "Pendek",
@@ -1100,5 +1100,7 @@
   "primary-default": "Bawaan",
   "short-number-format": "Format angka pendek",
   "primary-currency": "Mata uang primer",
-  "change-title": "Ganti Judul"
+  "change-title": "Ganti Judul",
+  "edit": "Sunting",
+  "edit-transactions": "Sunting Transaksi"
 }

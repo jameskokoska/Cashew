@@ -824,7 +824,7 @@
   "goal-total-type": "Jenis Jumlah Matlamat",
   "auto-mark-transactions": "Urus Niaga Auto",
   "auto-mark-transactions-description": "Tandakan transaksi tertunggak seperti yang dibayar",
-  "more-options-description": "Gaya, akaun, belanjawan, matlamat, tajuk",
+  "more-options-description": "Gaya, urus niaga, akaun, pemformatan",
   "header-height": "Ketinggian header",
   "tall": "Tinggi",
   "short": "Pendek",
@@ -1100,5 +1100,7 @@
   "primary-default": "Lalai",
   "short-number-format": "Format nombor pendek",
   "primary-currency": "Mata wang utama",
-  "change-title": "Tukar Tajuk"
+  "change-title": "Tukar Tajuk",
+  "edit": "Sunting",
+  "edit-transactions": "Edit Transaksi"
 }

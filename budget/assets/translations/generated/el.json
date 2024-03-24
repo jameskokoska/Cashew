@@ -824,7 +824,7 @@
   "goal-total-type": "Συνολικός τύπος στόχου",
   "auto-mark-transactions": "Συναλλαγές αυτόματης αμοιβής",
   "auto-mark-transactions-description": "Mark καθυστερημένες συναλλαγές ως πληρωμένες",
-  "more-options-description": "Στυλ, λογαριασμοί, προϋπολογισμοί, στόχοι, τίτλοι",
+  "more-options-description": "Στυλ, συναλλαγές, λογαριασμοί, μορφοποίηση",
   "header-height": "Ύψος κεφαλίδας",
   "tall": "Ψηλός",
   "short": "Μικρός",
@@ -1100,5 +1100,7 @@
   "primary-default": "Προκαθορισμένο",
   "short-number-format": "Μορφή σύντομου αριθμού",
   "primary-currency": "Κύριο νόμισμα",
-  "change-title": "Αλλαγή τίτλου"
+  "change-title": "Αλλαγή τίτλου",
+  "edit": "Επεξεργασία",
+  "edit-transactions": "Επεξεργασία συναλλαγών"
 }

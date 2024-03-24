@@ -824,7 +824,7 @@
   "goal-total-type": "目標合計タイプ",
   "auto-mark-transactions": "自動給与取引",
   "auto-mark-transactions-description": "支払われたとおりの期限切れの取引をマークします",
-  "more-options-description": "スタイル、アカウント、予算、目標、タイトル",
+  "more-options-description": "スタイル、トランザクション、アカウント、フォーマット",
   "header-height": "ヘッダーの高さ",
   "tall": "高い",
   "short": "短い",
@@ -1100,5 +1100,7 @@
   "primary-default": "デフォルト",
   "short-number-format": "短い数字形式",
   "primary-currency": "一次通貨",
-  "change-title": "タイトルの変更"
+  "change-title": "タイトルの変更",
+  "edit": "編集",
+  "edit-transactions": "トランザクションの編集"
 }

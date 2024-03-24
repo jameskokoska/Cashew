@@ -824,7 +824,7 @@
   "goal-total-type": "Ziel Gesamttyp",
   "auto-mark-transactions": "Auto -Pay -Transaktionen",
   "auto-mark-transactions-description": "Überfällige Transaktionen als bezahlt markieren",
-  "more-options-description": "Stil, Konten, Budgets, Ziele, Titel",
+  "more-options-description": "Stil, Transaktionen, Konten, Formatierung",
   "header-height": "Headerhöhe",
   "tall": "Groß",
   "short": "Kurz",
@@ -1100,5 +1100,7 @@
   "primary-default": "Standard",
   "short-number-format": "Kurznummernformat",
   "primary-currency": "Primärwährung",
-  "change-title": "Ändere den Titel"
+  "change-title": "Ändere den Titel",
+  "edit": "Bearbeiten",
+  "edit-transactions": "Transaktionen bearbeiten"
 }

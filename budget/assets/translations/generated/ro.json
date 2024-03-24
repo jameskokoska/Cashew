@@ -824,7 +824,7 @@
   "goal-total-type": "Obiectiv de tip total",
   "auto-mark-transactions": "Tranzacții cu plată automată",
   "auto-mark-transactions-description": "Marcați tranzacțiile întârziate ca plătite",
-  "more-options-description": "Stil, conturi, bugete, obiective, titluri",
+  "more-options-description": "Stil, tranzacții, conturi, formatare",
   "header-height": "Înălțimea antetului",
   "tall": "Înalt",
   "short": "Mic de statura",
@@ -1100,5 +1100,7 @@
   "primary-default": "Mod implicit",
   "short-number-format": "Format de număr scurt",
   "primary-currency": "Moneda primară",
-  "change-title": "Schimbați titlul"
+  "change-title": "Schimbați titlul",
+  "edit": "Editați | ×",
+  "edit-transactions": "Editați tranzacții"
 }

@@ -27,8 +27,10 @@ import 'listItem.dart';
 String getChangelogString() {
   return """
     < 5.2.7
+    New edit selected transactions popup
     Edit title for all selected transactions
     All time date range in search transaction page
+    Removed ability to enter decimal when setting certain values
     < 5.2.6
     New account spending summary table
     Improved navigation to respective pages when filters/date ranges set in spending summary table

@@ -824,7 +824,7 @@
   "goal-total-type": "الهدف الإجمالي نوع",
   "auto-mark-transactions": "معاملات دفع السيارات",
   "auto-mark-transactions-description": "مارك المتأخر المعاملات على النحو المدفوع",
-  "more-options-description": "الأسلوب والحسابات والميزانيات والأهداف والألقاب",
+  "more-options-description": "النمط والمعاملات والحسابات والتنسيق",
   "header-height": "ارتفاع رأس",
   "tall": "طويل",
   "short": "قصير",
@@ -1100,5 +1100,7 @@
   "primary-default": "تقصير",
   "short-number-format": "تنسيق رقم قصير",
   "primary-currency": "العملة الأولية",
-  "change-title": "غير العنوان"
+  "change-title": "غير العنوان",
+  "edit": "يحرر",
+  "edit-transactions": "تحرير المعاملات"
 }

@@ -824,7 +824,7 @@
   "goal-total-type": "Całkowity rodzaj celu",
   "auto-mark-transactions": "Transakcje Auto Pay",
   "auto-mark-transactions-description": "Znacz zaległe transakcje jako zapłacone",
-  "more-options-description": "Styl, konta, budżety, cele, tytuły",
+  "more-options-description": "Styl, transakcje, konta, formatowanie",
   "header-height": "Wysokość nagłówka",
   "tall": "Wysoki",
   "short": "Krótki",
@@ -1100,5 +1100,7 @@
   "primary-default": "Domyślny",
   "short-number-format": "Format krótkiego liczby",
   "primary-currency": "Podstawowa waluta",
-  "change-title": "Zmień tytuł"
+  "change-title": "Zmień tytuł",
+  "edit": "Edytować",
+  "edit-transactions": "Edytuj transakcje"
 }

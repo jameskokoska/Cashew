@@ -4505,6 +4505,7 @@ Future<void> selectPeriodLength({
     PopupFramework(
       title: "enter-period-length".tr(),
       child: SelectAmountValue(
+        enableDecimal: false,
         amountPassed: selectedPeriodLength.toString(),
         setSelectedAmount: (amount, _) {
           setSelectedPeriodLength(amount);

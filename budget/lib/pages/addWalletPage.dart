@@ -237,6 +237,7 @@ class _AddWalletPageState extends State<AddWalletPage> {
         title: "decimal-precision".tr(),
         subtitle: "decimal-precision-description".tr(),
         child: SelectAmountValue(
+          enableDecimal: false,
           amountPassed: selectedDecimals.toString(),
           setSelectedAmount: (amount, _) {
             selectedDecimals = amount.toInt();

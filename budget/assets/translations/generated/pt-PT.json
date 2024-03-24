@@ -824,7 +824,7 @@
   "goal-total-type": "Tipo total de meta",
   "auto-mark-transactions": "Transações de pagamento automático",
   "auto-mark-transactions-description": "Marque as transações vencidas conforme pago",
-  "more-options-description": "Estilo, contas, orçamentos, metas, títulos",
+  "more-options-description": "Estilo, transações, contas, formatação",
   "header-height": "Altura do cabeçalho",
   "tall": "Alto",
   "short": "Curto",
@@ -1100,5 +1100,7 @@
   "primary-default": "Padrão",
   "short-number-format": "Formato de número curto",
   "primary-currency": "Moeda primária",
-  "change-title": "Alterar título"
+  "change-title": "Alterar título",
+  "edit": "Editar",
+  "edit-transactions": "Editar transações"
 }

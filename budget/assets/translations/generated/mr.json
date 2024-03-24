@@ -824,7 +824,7 @@
   "goal-total-type": "ध्येय एकूण प्रकार",
   "auto-mark-transactions": "वाहन वेतन व्यवहार",
   "auto-mark-transactions-description": "देय म्हणून थकीत व्यवहार चिन्हांकित करा",
-  "more-options-description": "शैली, खाती, बजेट, ध्येय, शीर्षके",
+  "more-options-description": "शैली, व्यवहार, खाती, स्वरूपन",
   "header-height": "शीर्षलेख उंची",
   "tall": "उंच",
   "short": "लहान",
@@ -1100,5 +1100,7 @@
   "primary-default": "डीफॉल्ट",
   "short-number-format": "लहान क्रमांक स्वरूप",
   "primary-currency": "प्राथमिक चलन",
-  "change-title": "शीर्षक बदला"
+  "change-title": "शीर्षक बदला",
+  "edit": "सुधारणे",
+  "edit-transactions": "व्यवहार संपादित करा"
 }

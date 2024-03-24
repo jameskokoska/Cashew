@@ -824,7 +824,7 @@
   "goal-total-type": "Layunin kabuuang uri",
   "auto-mark-transactions": "Mga Transaksyon sa Pay Pay",
   "auto-mark-transactions-description": "Markahan ang mga transaksyon sa overdue bilang bayad",
-  "more-options-description": "Estilo, account, badyet, layunin, pamagat",
+  "more-options-description": "Estilo, mga transaksyon, mga account, pag-format",
   "header-height": "Taas ng header",
   "tall": "Matangkad",
   "short": "Maikli",
@@ -1100,5 +1100,7 @@
   "primary-default": "Default",
   "short-number-format": "Maikling format ng numero",
   "primary-currency": "Pangunahing pera",
-  "change-title": "Baguhin ang Pamagat"
+  "change-title": "Baguhin ang Pamagat",
+  "edit": "I-edit",
+  "edit-transactions": "I-edit ang mga Transaksyon"
 }
