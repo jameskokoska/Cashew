@@ -64,7 +64,7 @@ dependencies:
   lottie: ^1.4.3
   pausable_timer: ^1.0.0+6
   animated_fractionally_sized_box: ^2.0.1
-  flutter_local_notifications: ^14.0.0+1
+  flutter_local_notifications: ^17.0.0
   system_theme: ^2.3.1
   firebase_core: ^2.7.1
   firebase_auth: ^4.2.2
