@@ -158,8 +158,8 @@ class _MinimizeKeyboardFABOverlayState extends State<MinimizeKeyboardFABOverlay>
             onTap: () {
               FocusManager.instance.primaryFocus?.unfocus();
             },
-            customBorderRadius: 15,
-            customFabSize: 50,
+            borderRadius: 15,
+            fabSize: 50,
             iconData: appStateSettings["outlinedIcons"]
                 ? Icons.check_outlined
                 : Icons.check_rounded,

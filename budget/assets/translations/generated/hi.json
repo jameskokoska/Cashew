@@ -1099,5 +1099,6 @@
   "change-currency-description": "ऐप मुद्रा चयनित खाते से संबंधित है। मुद्रा को बदलने के लिए खाता संपादित करें।",
   "primary-default": "गलती करना",
   "short-number-format": "अल्प संख्या प्रारूप",
-  "primary-currency": "प्राथमिक मुद्रा"
+  "primary-currency": "प्राथमिक मुद्रा",
+  "change-title": "शीर्षक बदलें"
 }

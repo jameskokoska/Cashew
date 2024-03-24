@@ -1099,5 +1099,6 @@
   "change-currency-description": "De app -valuta is gerelateerd aan het geselecteerde account. Bewerk het account om de valuta te wijzigen.",
   "primary-default": "Standaard",
   "short-number-format": "Kort nummerformaat",
-  "primary-currency": "Primaire valuta"
+  "primary-currency": "Primaire valuta",
+  "change-title": "Titel wijzigen"
 }

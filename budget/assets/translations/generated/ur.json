@@ -1099,5 +1099,6 @@
   "change-currency-description": "ایپ کرنسی کا تعلق منتخب اکاؤنٹ سے ہے۔ کرنسی کو تبدیل کرنے کے لئے اکاؤنٹ میں ترمیم کریں۔",
   "primary-default": "پہلے سے طے شدہ",
   "short-number-format": "مختصر نمبر کی شکل",
-  "primary-currency": "بنیادی کرنسی"
+  "primary-currency": "بنیادی کرنسی",
+  "change-title": "عنوان تبدیل کریں۔"
 }

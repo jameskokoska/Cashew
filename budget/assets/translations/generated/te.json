@@ -1099,5 +1099,6 @@
   "change-currency-description": "అనువర్తన కరెన్సీ ఎంచుకున్న ఖాతాకు సంబంధించినది. కరెన్సీని మార్చడానికి ఖాతాను సవరించండి.",
   "primary-default": "డిఫాల్ట్",
   "short-number-format": "చిన్న సంఖ్య ఆకృతి",
-  "primary-currency": "ప్రాథమిక కరెన్సీ"
+  "primary-currency": "ప్రాథమిక కరెన్సీ",
+  "change-title": "శీర్షిక మార్చండి"
 }

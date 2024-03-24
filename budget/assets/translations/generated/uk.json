@@ -1099,5 +1099,6 @@
   "change-currency-description": "Валюта додатків пов'язана з обраним обліковим записом. Відредагуйте рахунок, щоб змінити валюту.",
   "primary-default": "За замовчуванням",
   "short-number-format": "Формат короткого числа",
-  "primary-currency": "Первинна валюта"
+  "primary-currency": "Первинна валюта",
+  "change-title": "Змінити назву"
 }

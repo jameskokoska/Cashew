@@ -1099,5 +1099,6 @@
   "change-currency-description": "Az APP -valuta a kiválasztott fiókhoz kapcsolódik. Szerkessze a fiókot a valuta megváltoztatásához.",
   "primary-default": "Mulasztás",
   "short-number-format": "Rövid számú formátum",
-  "primary-currency": "Elsődleges pénznem"
+  "primary-currency": "Elsődleges pénznem",
+  "change-title": "Cím módosítása"
 }

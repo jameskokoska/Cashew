@@ -1099,5 +1099,6 @@
   "change-currency-description": "מטבע האפליקציה קשור לחשבון שנבחר. ערוך את החשבון כדי לשנות את המטבע.",
   "primary-default": "בְּרִירַת מֶחדָל",
   "short-number-format": "פורמט מספר קצר",
-  "primary-currency": "מטבע ראשוני"
+  "primary-currency": "מטבע ראשוני",
+  "change-title": "שנה כותרת"
 }

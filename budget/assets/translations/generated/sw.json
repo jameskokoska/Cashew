@@ -1099,5 +1099,6 @@
   "change-currency-description": "Fedha ya programu inahusiana na akaunti iliyochaguliwa. Hariri akaunti ili kubadilisha sarafu.",
   "primary-default": "Chaguo -msingi",
   "short-number-format": "Muundo wa nambari fupi",
-  "primary-currency": "Sarafu ya msingi"
+  "primary-currency": "Sarafu ya msingi",
+  "change-title": "Badilisha Kichwa"
 }

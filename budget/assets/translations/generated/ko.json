@@ -1099,5 +1099,6 @@
   "change-currency-description": "앱 통화는 선택한 계정과 관련이 있습니다. 통화를 변경하려면 계정을 편집하십시오.",
   "primary-default": "기본",
   "short-number-format": "짧은 숫자 형식",
-  "primary-currency": "기본 통화"
+  "primary-currency": "기본 통화",
+  "change-title": "제목 변경"
 }

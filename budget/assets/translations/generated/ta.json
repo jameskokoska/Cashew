@@ -1099,5 +1099,6 @@
   "change-currency-description": "பயன்பாட்டு நாணயம் தேர்ந்தெடுக்கப்பட்ட கணக்குடன் தொடர்புடையது. நாணயத்தை மாற்ற கணக்கைத் திருத்தவும்.",
   "primary-default": "இயல்புநிலை",
   "short-number-format": "குறுகிய எண் வடிவம்",
-  "primary-currency": "முதன்மை நாணயம்"
+  "primary-currency": "முதன்மை நாணயம்",
+  "change-title": "தலைப்பை மாற்றவும்"
 }

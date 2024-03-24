@@ -1099,5 +1099,6 @@
   "change-currency-description": "Die App -Währung bezieht sich auf das ausgewählte Konto. Bearbeiten Sie das Konto, um die Währung zu ändern.",
   "primary-default": "Standard",
   "short-number-format": "Kurznummernformat",
-  "primary-currency": "Primärwährung"
+  "primary-currency": "Primärwährung",
+  "change-title": "Ändere den Titel"
 }

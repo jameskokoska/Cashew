@@ -66,10 +66,6 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
       currentFocus.unfocus();
       _searchFocusNode.requestFocus();
     });
-    DateTimeRange initialDateTimeRange = DateTimeRange(
-      start: DateTime(1900),
-      end: DateTime(roundToNearestNextFifthYear(DateTime.now().year)),
-    );
     searchFilters = widget.initialFilters != null
         ? widget.initialFilters!
         : SearchFilters();
@@ -79,19 +75,6 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
         skipDateTimeRange: false,
         skipSearchQuery: true,
       );
-      // Keep at least one year into the future loaded
-      if (searchFilters.dateTimeRange != null &&
-          searchFilters.dateTimeRange!.end
-              .isBefore(DateTime.now().add(Duration(days: 365)))) {
-        searchFilters.dateTimeRange = DateTimeRange(
-          start:
-              searchFilters.dateTimeRange?.start ?? initialDateTimeRange.start,
-          end: DateTime(roundToNearestNextFifthYear(DateTime.now().year)),
-        );
-      }
-    }
-    if (searchFilters.dateTimeRange == null) {
-      searchFilters.dateTimeRange = initialDateTimeRange;
     }
 
     _animationControllerSearch = AnimationController(vsync: this, value: 1);
@@ -147,14 +130,18 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
   }
 
   Future<void> selectDateRange(BuildContext context) async {
-    final DateTimeRange? picked = await showCustomDateRangePicker(
+    final DateTimeRangeOrAllTime? picked = await showCustomDateRangePicker(
       context,
-      searchFilters.dateTimeRange,
+      DateTimeRangeOrAllTime(
+        allTime: searchFilters.dateTimeRange == null,
+        dateTimeRange: searchFilters.dateTimeRange,
+      ),
       initialEntryMode: DatePickerEntryMode.input,
+      allTimeButton: true,
     );
     if (picked != null) {
       setState(() {
-        searchFilters.dateTimeRange = picked;
+        searchFilters.dateTimeRange = picked.dateTimeRange;
       });
       updateSettings(
         "searchTransactionsSetFiltersString",
@@ -191,7 +178,7 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
               onScroll: _scrollListener,
               title: "search".tr(),
               floatingActionButton: AnimateFABDelayed(
-                fab: FAB(
+                fab: AddFAB(
                   tooltip: "add-transaction".tr(),
                   openPage: AddTransactionPage(
                     routesToPopAfterDelete: RoutesToPopAfterDelete.None,
@@ -237,13 +224,30 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
                             ),
                           ),
                           SizedBox(width: 7),
-                          ButtonIcon(
-                            onTap: () {
-                              selectDateRange(context);
-                            },
-                            icon: appStateSettings["outlinedIcons"]
-                                ? Icons.calendar_month_outlined
-                                : Icons.calendar_month_rounded,
+                          AnimatedSwitcher(
+                            duration: Duration(milliseconds: 500),
+                            child: ButtonIcon(
+                              key: ValueKey(
+                                (searchFilters.dateTimeRange == null)
+                                    .toString(),
+                              ),
+                              color: searchFilters.dateTimeRange == null
+                                  ? null
+                                  : Theme.of(context)
+                                      .colorScheme
+                                      .tertiaryContainer,
+                              iconColor: searchFilters.dateTimeRange == null
+                                  ? null
+                                  : Theme.of(context)
+                                      .colorScheme
+                                      .onTertiaryContainer,
+                              onTap: () {
+                                selectDateRange(context);
+                              },
+                              icon: appStateSettings["outlinedIcons"]
+                                  ? Icons.calendar_month_outlined
+                                  : Icons.calendar_month_rounded,
+                            ),
                           ),
                           SizedBox(width: 7),
                           AnimatedSwitcher(
@@ -298,7 +302,7 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
                         selectFilters(context);
                       },
                       clearSearchFilters: clearSearchFilters,
-                      openSelectDate: () => selectDateRange(context),
+                      //openSelectDate: () => selectDateRange(context),
                     ),
                   ),
                 ),
@@ -317,15 +321,17 @@ class TransactionsSearchPageState extends State<TransactionsSearchPage>
                         bottom: 8,
                       ),
                       child: TextFont(
-                        text: getWordedDateShortMore(
-                                searchFilters.dateTimeRange?.start ??
-                                    DateTime.now(),
-                                includeYear: true) +
-                            " – " +
-                            getWordedDateShortMore(
-                                searchFilters.dateTimeRange?.end ??
-                                    DateTime.now(),
-                                includeYear: true),
+                        text: searchFilters.dateTimeRange == null
+                            ? "all-time".tr()
+                            : getWordedDateShortMore(
+                                    searchFilters.dateTimeRange?.start ??
+                                        DateTime.now(),
+                                    includeYear: true) +
+                                " – " +
+                                getWordedDateShortMore(
+                                    searchFilters.dateTimeRange?.end ??
+                                        DateTime.now(),
+                                    includeYear: true),
                         fontSize: 13,
                         textAlign: TextAlign.center,
                         textColor: getColor(context, "textLight"),

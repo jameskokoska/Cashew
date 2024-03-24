@@ -1099,5 +1099,6 @@
   "change-currency-description": "એપ્લિકેશન ચલણ પસંદ કરેલા એકાઉન્ટથી સંબંધિત છે. ચલણ બદલવા માટે એકાઉન્ટને સંપાદિત કરો.",
   "primary-default": "ચૂક",
   "short-number-format": "ટૂંકા નંબરનું બંધારણ",
-  "primary-currency": "પ્રાથમિક ચલણ"
+  "primary-currency": "પ્રાથમિક ચલણ",
+  "change-title": "શીર્ષક બદલો"
 }

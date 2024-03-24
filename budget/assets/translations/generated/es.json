@@ -1099,5 +1099,6 @@
   "change-currency-description": "La moneda de la aplicación está relacionada con la cuenta seleccionada. Edite la cuenta para cambiar la moneda.",
   "primary-default": "Por defecto",
   "short-number-format": "Formato de número corto",
-  "primary-currency": "Moneda primaria"
+  "primary-currency": "Moneda primaria",
+  "change-title": "Cambiar título"
 }

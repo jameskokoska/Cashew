@@ -2047,31 +2047,32 @@ class FinanceDatabase extends _$FinanceDatabase {
     //   limit = limit - list.length;
 
     // Search category names
-    list.addAll((await (select(categories)
-              ..where(
-                  (c) => c.name.collate(Collate.noCase).like("%" + title + "%"))
-              ..orderBy([
-                (c) => OrderingTerm.asc(c.mainCategoryPk),
-                (c) => OrderingTerm.asc(c.order),
-              ])
-              ..limit(limit, offset: offset ?? DEFAULT_OFFSET))
-            .get())
-        .map((TransactionCategory category) {
-      return TransactionAssociatedTitleWithCategory(
-        title: TransactionAssociatedTitle(
-          associatedTitlePk: "-1",
-          categoryFk: category.categoryPk,
-          title: category.name,
-          dateCreated: category.dateCreated,
-          order: -1,
-          isExactMatch: false,
-        ),
-        category: category,
-        type: category.mainCategoryPk == null
-            ? TitleType.CategoryName
-            : TitleType.SubCategoryName,
-      );
-    }).toList());
+    if (alsoSearchCategories)
+      list.addAll((await (select(categories)
+                ..where((c) =>
+                    c.name.collate(Collate.noCase).like("%" + title + "%"))
+                ..orderBy([
+                  (c) => OrderingTerm.asc(c.mainCategoryPk),
+                  (c) => OrderingTerm.asc(c.order),
+                ])
+                ..limit(limit, offset: offset ?? DEFAULT_OFFSET))
+              .get())
+          .map((TransactionCategory category) {
+        return TransactionAssociatedTitleWithCategory(
+          title: TransactionAssociatedTitle(
+            associatedTitlePk: "-1",
+            categoryFk: category.categoryPk,
+            title: category.name,
+            dateCreated: category.dateCreated,
+            order: -1,
+            isExactMatch: false,
+          ),
+          category: category,
+          type: category.mainCategoryPk == null
+              ? TitleType.CategoryName
+              : TitleType.SubCategoryName,
+        );
+      }).toList());
 
     return removeDuplicateTransactionAssociatedTitleWithCategory(list);
   }
@@ -4635,6 +4636,16 @@ class FinanceDatabase extends _$FinanceDatabase {
     for (Transaction transaction in transactionsWithSubCategory) {
       transactionsInserting.add(transaction.copyWith(
           subCategoryFk: Value(null), dateTimeModified: Value(DateTime.now())));
+    }
+    await updateBatchTransactionsOnly(transactionsInserting);
+  }
+
+  Future changeTransactionsTitle(
+      List<Transaction> transactionsToUpdate, String title) async {
+    List<Transaction> transactionsInserting = [];
+    for (Transaction transaction in transactionsToUpdate) {
+      transactionsInserting.add(transaction.copyWith(
+          name: title, dateTimeModified: Value(DateTime.now())));
     }
     await updateBatchTransactionsOnly(transactionsInserting);
   }

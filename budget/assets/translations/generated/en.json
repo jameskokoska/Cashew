@@ -1099,5 +1099,6 @@
   "change-currency-description": "The app currency is related to the selected account. Edit the account to change the currency.",
   "primary-default": "Primary",
   "short-number-format": "Short Number Format",
-  "primary-currency": "Primary Currency"
+  "primary-currency": "Primary Currency",
+  "change-title": "Change Title"
 }

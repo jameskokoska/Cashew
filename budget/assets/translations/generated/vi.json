@@ -1099,5 +1099,6 @@
   "change-currency-description": "Đơn vị tiền tệ của ứng dụng có liên quan đến tài khoản đã chọn. Chỉnh sửa tài khoản để thay đổi đơn vị tiền tệ.",
   "primary-default": "Mặc định",
   "short-number-format": "Định dạng số ngắn",
-  "primary-currency": "Tiền tệ chính"
+  "primary-currency": "Tiền tệ chính",
+  "change-title": "Thay đổi tiêu đề"
 }

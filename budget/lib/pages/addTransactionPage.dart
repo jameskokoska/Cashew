@@ -4733,27 +4733,55 @@ List<dynamic>
 class TitleInput extends StatefulWidget {
   const TitleInput({
     required this.setSelectedTitle,
-    required this.titleInputController,
+    this.titleInputController,
     required this.setSelectedCategory,
     required this.setSelectedSubCategory,
+    this.padding = const EdgeInsets.symmetric(horizontal: 22),
+    this.alsoSearchCategories = true,
+    this.onNewRecommendedTitle,
+    this.onRecommendedTitle,
+    this.unfocusWhenRecommendedTapped = true,
+    this.onSubmitted,
+    this.autoFocus,
+    this.showCategoryIconForRecommendedTitles = true,
     super.key,
   });
   final Function(String title) setSelectedTitle;
-  final TextEditingController titleInputController;
+  final TextEditingController? titleInputController;
   final Function(TransactionCategory category) setSelectedCategory;
   final Function(TransactionCategory category) setSelectedSubCategory;
+  final EdgeInsets padding;
+  final bool alsoSearchCategories;
+  final VoidCallback? onNewRecommendedTitle;
+  final VoidCallback? onRecommendedTitle;
+  final bool unfocusWhenRecommendedTapped;
+  final Function(String)? onSubmitted;
+  final bool? autoFocus;
+  final bool showCategoryIconForRecommendedTitles;
 
   @override
   State<TitleInput> createState() => _TitleInputState();
 }
 
 class _TitleInputState extends State<TitleInput> {
+  late TextEditingController _titleInputController;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.titleInputController == null) {
+      _titleInputController = new TextEditingController();
+    } else {
+      _titleInputController = widget.titleInputController!;
+    }
+  }
+
   List<TransactionAssociatedTitleWithCategory> foundAssociatedTitles = [];
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 22),
+      padding: widget.padding,
       child: ClipRRect(
         borderRadius:
             BorderRadius.circular(getPlatform() == PlatformOS.isIOS ? 8 : 15),
@@ -4773,17 +4801,27 @@ class _TitleInputState extends State<TitleInput> {
                 icon: appStateSettings["outlinedIcons"]
                     ? Icons.title_outlined
                     : Icons.title_rounded,
-                controller: widget.titleInputController,
+                controller: _titleInputController,
                 onChanged: (text) async {
                   widget.setSelectedTitle(text);
-                  foundAssociatedTitles =
+                  List<TransactionAssociatedTitleWithCategory>
+                      newFoundAssociatedTitles =
                       await database.getSimilarAssociatedTitles(
                     title: text,
                     limit: enableDoubleColumn(context) ? 5 : 3,
+                    alsoSearchCategories: widget.alsoSearchCategories,
                   );
+                  if (widget.onNewRecommendedTitle != null &&
+                      foundAssociatedTitles.toString() !=
+                          newFoundAssociatedTitles.toString()) {
+                    widget.onNewRecommendedTitle!();
+                  }
+                  foundAssociatedTitles = newFoundAssociatedTitles;
                   setState(() {});
                 },
-                autoFocus: kIsWeb && getIsFullScreen(context),
+                onSubmitted: widget.onSubmitted,
+                autoFocus:
+                    widget.autoFocus ?? kIsWeb && getIsFullScreen(context),
               ),
             ),
             AnimatedSizeSwitcher(
@@ -4839,42 +4877,53 @@ class _TitleInputState extends State<TitleInput> {
                                           TitleType.SubCategoryName) {
                                     widget.setSelectedTitle(
                                         foundAssociatedTitle.title.title);
-                                    setTextInput(widget.titleInputController,
+                                    setTextInput(_titleInputController,
                                         foundAssociatedTitle.title.title);
                                   } else {
                                     widget.setSelectedTitle("");
-                                    setTextInput(
-                                        widget.titleInputController, "");
+                                    setTextInput(_titleInputController, "");
                                   }
 
                                   setState(() {
                                     foundAssociatedTitles = [];
                                   });
-                                  FocusScope.of(context).unfocus();
+                                  if (widget.unfocusWhenRecommendedTapped)
+                                    FocusScope.of(context).unfocus();
+                                  if (widget.onRecommendedTitle != null)
+                                    widget.onRecommendedTitle!();
                                 },
                                 child: Row(
                                   children: [
-                                    IgnorePointer(
-                                      child: CategoryIcon(
-                                        categoryPk: foundAssociatedTitle
-                                            .title.categoryFk,
-                                        size: 23,
-                                        margin: EdgeInsets.zero,
-                                        sizePadding: 16,
-                                        borderRadius: 0,
+                                    if (widget
+                                        .showCategoryIconForRecommendedTitles)
+                                      IgnorePointer(
+                                        child: CategoryIcon(
+                                          categoryPk: foundAssociatedTitle
+                                              .title.categoryFk,
+                                          size: 23,
+                                          margin: EdgeInsets.zero,
+                                          sizePadding: 16,
+                                          borderRadius: 0,
+                                        ),
                                       ),
-                                    ),
                                     SizedBox(width: 13),
                                     Expanded(
-                                        child: TextFont(
-                                      text: "",
-                                      richTextSpan: generateSpans(
-                                        context: context,
-                                        fontSize: 16,
-                                        mainText:
-                                            foundAssociatedTitle.title.title,
-                                        boldedText: foundAssociatedTitle
-                                            .partialTitleString,
+                                        child: Padding(
+                                      padding: widget
+                                              .showCategoryIconForRecommendedTitles
+                                          ? EdgeInsets.zero
+                                          : const EdgeInsets.only(
+                                              bottom: 12, top: 11, left: 5),
+                                      child: TextFont(
+                                        text: "",
+                                        richTextSpan: generateSpans(
+                                          context: context,
+                                          fontSize: 16,
+                                          mainText:
+                                              foundAssociatedTitle.title.title,
+                                          boldedText: foundAssociatedTitle
+                                              .partialTitleString,
+                                        ),
                                       ),
                                     )),
                                     Opacity(

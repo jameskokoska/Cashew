@@ -1099,5 +1099,6 @@
   "change-currency-description": "สกุลเงินแอพเกี่ยวข้องกับบัญชีที่เลือก แก้ไขบัญชีเพื่อเปลี่ยนสกุลเงิน",
   "primary-default": "ค่าเริ่มต้น",
   "short-number-format": "รูปแบบหมายเลขสั้น",
-  "primary-currency": "สกุลเงินหลัก"
+  "primary-currency": "สกุลเงินหลัก",
+  "change-title": "เปลี่ยนชื่อเรื่อง"
 }

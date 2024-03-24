@@ -67,9 +67,8 @@ class _EditAssociatedTitlesPageState extends State<EditAssociatedTitlesPage> {
         title: "edit-titles".tr(),
         scrollToTopButton: true,
         floatingActionButton: AnimateFABDelayed(
-          fab: FAB(
+          fab: AddFAB(
             tooltip: "add-title".tr(),
-            openPage: SizedBox.shrink(),
             onTap: () {
               openBottomSheet(
                 context,

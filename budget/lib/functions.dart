@@ -1102,6 +1102,10 @@ double getKeyboardHeight(context) {
       .bottom;
 }
 
+double getKeyboardHeightForceBuild(context) {
+  return MediaQuery.of(context).viewInsets.bottom;
+}
+
 Future<String> getDeviceInfo() async {
   if (kIsWeb) {
     String webBrowserInfo = html.window.navigator.userAgent.toString();

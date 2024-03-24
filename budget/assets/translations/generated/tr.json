@@ -1099,5 +1099,6 @@
   "change-currency-description": "Uygulama para birimi seçilen hesapla ilgilidir. Para birimini değiştirmek için hesabı düzenleyin.",
   "primary-default": "Varsayılan",
   "short-number-format": "Kısa Sayı biçimi",
-  "primary-currency": "Birincil para birimi"
+  "primary-currency": "Birincil para birimi",
+  "change-title": "Başlığı değiştir"
 }

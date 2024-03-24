@@ -68,7 +68,7 @@ class SubscriptionsPageState extends State<SubscriptionsPage> {
             key: pageState,
             listID: "Subscriptions",
             floatingActionButton: AnimateFABDelayed(
-              fab: FAB(
+              fab: AddFAB(
                 tooltip: "add-subscription".tr(),
                 openPage: AddTransactionPage(
                   selectedType: TransactionSpecialType.subscription,

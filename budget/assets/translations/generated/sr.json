@@ -1099,5 +1099,6 @@
   "change-currency-description": "Валута апликације је повезана са одабраним налогом. Уредите налог да бисте променили валуту.",
   "primary-default": "Уобичајено",
   "short-number-format": "Формат кратких бројева",
-  "primary-currency": "Основна валута"
+  "primary-currency": "Основна валута",
+  "change-title": "Промените наслов"
 }

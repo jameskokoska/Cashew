@@ -1099,5 +1099,6 @@
   "change-currency-description": "Mata uang aplikasi terkait dengan akun yang dipilih. Edit akun untuk mengubah mata uang.",
   "primary-default": "Bawaan",
   "short-number-format": "Format angka pendek",
-  "primary-currency": "Mata uang primer"
+  "primary-currency": "Mata uang primer",
+  "change-title": "Ganti Judul"
 }

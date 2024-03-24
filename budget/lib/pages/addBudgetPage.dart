@@ -1574,25 +1574,29 @@ class _BudgetDetailsState extends State<BudgetDetails> {
   }
 
   Future<void> selectDateRange(BuildContext context) async {
-    final DateTimeRange? picked = await showCustomDateRangePicker(
+    final DateTimeRangeOrAllTime picked = await showCustomDateRangePicker(
       context,
-      DateTimeRange(
-        start: selectedStartDate,
-        end: selectedEndDate ??
-            DateTime(
-              selectedStartDate.year,
-              selectedStartDate.month,
-              selectedStartDate.day + 7,
-            ),
+      DateTimeRangeOrAllTime(
+        allTime: false,
+        dateTimeRange: DateTimeRange(
+          start: selectedStartDate,
+          end: selectedEndDate ??
+              DateTime(
+                selectedStartDate.year,
+                selectedStartDate.month,
+                selectedStartDate.day + 7,
+              ),
+        ),
       ),
+      allTimeButton: false,
     );
-    if (picked != null) {
+    if (picked.dateTimeRange != null) {
       setState(() {
-        selectedStartDate = picked.start;
-        selectedEndDate = picked.end;
+        selectedStartDate = picked.dateTimeRange!.start;
+        selectedEndDate = picked.dateTimeRange!.end;
       });
-      widget.setSelectedStartDate(picked.start);
-      widget.setSelectedEndDate(picked.end);
+      widget.setSelectedStartDate(picked.dateTimeRange!.start);
+      widget.setSelectedEndDate(picked.dateTimeRange!.end);
     }
     widget.determineBottomButton();
   }

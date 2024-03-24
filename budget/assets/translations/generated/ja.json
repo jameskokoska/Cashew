@@ -1099,5 +1099,6 @@
   "change-currency-description": "アプリ通貨は、選択したアカウントに関連しています。アカウントを編集して通貨を変更します。",
   "primary-default": "デフォルト",
   "short-number-format": "短い数字形式",
-  "primary-currency": "一次通貨"
+  "primary-currency": "一次通貨",
+  "change-title": "タイトルの変更"
 }

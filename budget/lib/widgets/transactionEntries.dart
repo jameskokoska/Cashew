@@ -430,7 +430,7 @@ class TransactionEntries extends StatelessWidget {
                       padding: const EdgeInsets.only(
                         left: 10,
                         right: 10,
-                        top: 10,
+                        top: 13,
                         bottom: 8,
                       ),
                       child: TextFont(

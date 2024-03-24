@@ -1099,5 +1099,6 @@
   "change-currency-description": "ترتبط عملة التطبيق بالحساب المحدد. تحرير الحساب لتغيير العملة.",
   "primary-default": "تقصير",
   "short-number-format": "تنسيق رقم قصير",
-  "primary-currency": "العملة الأولية"
+  "primary-currency": "العملة الأولية",
+  "change-title": "غير العنوان"
 }

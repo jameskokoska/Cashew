@@ -422,6 +422,109 @@ class SelectedTransactionsAppBarMenu extends StatelessWidget {
                       },
                     ),
                     DropdownItemMenu(
+                      id: "change-title",
+                      label: "change-title".tr(),
+                      icon: appStateSettings["outlinedIcons"]
+                          ? Icons.title_outlined
+                          : Icons.title_rounded,
+                      action: () async {
+                        // Fix over-scroll stretch when keyboard pops up quickly
+                        Future.delayed(Duration(milliseconds: 100), () {
+                          bottomSheetControllerGlobal.scrollTo(0,
+                              duration: Duration(milliseconds: 100));
+                        });
+                        String setText = "";
+
+                        dynamic result = await openBottomSheet(
+                          context,
+                          fullSnap: true,
+                          PopupFramework(
+                            title: "set-title".tr(),
+                            child: Column(
+                              children: [
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: TitleInput(
+                                        padding: EdgeInsets.zero,
+                                        setSelectedCategory: (_) {},
+                                        setSelectedSubCategory: (_) {},
+                                        alsoSearchCategories: false,
+                                        setSelectedTitle: (title) {
+                                          setText = title;
+                                        },
+                                        showCategoryIconForRecommendedTitles:
+                                            false,
+                                        unfocusWhenRecommendedTapped: false,
+                                        onNewRecommendedTitle: () {
+                                          Future.delayed(
+                                              Duration(milliseconds: 100), () {
+                                            bottomSheetControllerGlobal
+                                                .snapToExtent(0);
+                                          });
+                                        },
+                                        onRecommendedTitle: () {
+                                          Future.delayed(
+                                              Duration(milliseconds: 100), () {
+                                            bottomSheetControllerGlobal
+                                                .snapToExtent(0);
+                                          });
+                                          Future.delayed(
+                                              Duration(milliseconds: 300), () {
+                                            bottomSheetControllerGlobal
+                                                .snapToExtent(0);
+                                          });
+                                        },
+                                        onSubmitted: (_) {
+                                          Navigator.pop(context, true);
+                                        },
+                                        autoFocus: true,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 15,
+                                ),
+                                Button(
+                                  label: "set-title".tr(),
+                                  onTap: () {
+                                    Navigator.pop(context, true);
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+
+                        if (result != true || setText.trim() == "") return;
+
+                        List<Transaction> transactions = await database
+                            .getTransactionsFromPk(selectedTransactionPks);
+                        await database.changeTransactionsTitle(
+                            transactions, setText);
+
+                        openSnackbar(
+                          SnackbarMessage(
+                            icon: appStateSettings["outlinedIcons"]
+                                ? Icons.title_outlined
+                                : Icons.title_rounded,
+                            title: "changed-title".tr(),
+                            description: "for".tr().capitalizeFirst +
+                                " " +
+                                transactions.length.toString() +
+                                " " +
+                                (transactions.length == 1
+                                    ? "transaction".tr().toLowerCase()
+                                    : "transactions".tr().toLowerCase()),
+                          ),
+                        );
+
+                        globalSelectedID.value[pageID] = [];
+                        globalSelectedID.notifyListeners();
+                      },
+                    ),
+                    DropdownItemMenu(
                       id: "change-category",
                       label: "change-category".tr(),
                       icon: appStateSettings["outlinedIcons"]

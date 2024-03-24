@@ -74,7 +74,7 @@ class _EditCategoriesPageState extends State<EditCategoriesPage> {
         title: "edit-categories".tr(),
         scrollToTopButton: true,
         floatingActionButton: AnimateFABDelayed(
-          fab: FAB(
+          fab: AddFAB(
             tooltip: "add-category".tr(),
             openPage: AddCategoryPage(
               routesToPopAfterDelete: RoutesToPopAfterDelete.None,

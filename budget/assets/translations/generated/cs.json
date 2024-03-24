@@ -1099,5 +1099,6 @@
   "change-currency-description": "Měna aplikace souvisí s vybraným účtem. Upravte účet a změňte měnu.",
   "primary-default": "Výchozí",
   "short-number-format": "Formát krátkého čísla",
-  "primary-currency": "Primární měna"
+  "primary-currency": "Primární měna",
+  "change-title": "Změnit název"
 }

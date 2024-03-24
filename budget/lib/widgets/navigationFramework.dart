@@ -433,7 +433,7 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
                 // ),
                 AnimateFAB(
                   key: ValueKey(1),
-                  fab: FAB(
+                  fab: AddFAB(
                     tooltip: "add-transaction".tr(),
                     openPage: AddTransactionPage(
                       routesToPopAfterDelete: RoutesToPopAfterDelete.None,

@@ -103,7 +103,7 @@ class _EditBudgetPageState extends State<EditBudgetPage> {
         title: "edit-budgets".tr(),
         scrollToTopButton: true,
         floatingActionButton: AnimateFABDelayed(
-          fab: FAB(
+          fab: AddFAB(
             tooltip: "add-budget".tr(),
             openPage: AddBudgetPage(
               routesToPopAfterDelete: RoutesToPopAfterDelete.None,

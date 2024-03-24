@@ -1099,5 +1099,6 @@
   "change-currency-description": "Ang pera ng app ay nauugnay sa napiling account. I -edit ang account upang baguhin ang pera.",
   "primary-default": "Default",
   "short-number-format": "Maikling format ng numero",
-  "primary-currency": "Pangunahing pera"
+  "primary-currency": "Pangunahing pera",
+  "change-title": "Baguhin ang Pamagat"
 }

@@ -1099,5 +1099,6 @@
   "change-currency-description": "La valuta dell'app è correlata all'account selezionato. Modifica l'account per modificare la valuta.",
   "primary-default": "Predefinito",
   "short-number-format": "Formato numero corto",
-  "primary-currency": "Valuta primaria"
+  "primary-currency": "Valuta primaria",
+  "change-title": "Cambia titolo"
 }

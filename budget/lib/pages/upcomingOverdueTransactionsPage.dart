@@ -77,7 +77,7 @@ class UpcomingOverdueTransactionsState
             floatingActionButton: AnimateFABDelayed(
               enabled: overdueTransactions == null,
               fab: AnimateFABDelayed(
-                fab: FAB(
+                fab: AddFAB(
                   tooltip: "add-upcoming".tr(),
                   openPage: AddTransactionPage(
                     selectedType: TransactionSpecialType.upcoming,

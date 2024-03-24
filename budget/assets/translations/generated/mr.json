@@ -1099,5 +1099,6 @@
   "change-currency-description": "अ‍ॅप चलन निवडलेल्या खात्याशी संबंधित आहे. चलन बदलण्यासाठी खाते संपादित करा.",
   "primary-default": "डीफॉल्ट",
   "short-number-format": "लहान क्रमांक स्वरूप",
-  "primary-currency": "प्राथमिक चलन"
+  "primary-currency": "प्राथमिक चलन",
+  "change-title": "शीर्षक बदला"
 }

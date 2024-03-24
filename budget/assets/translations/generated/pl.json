@@ -1099,5 +1099,6 @@
   "change-currency-description": "Waluta aplikacji jest powiązana z wybranym kontem. Edytuj konto, aby zmienić walutę.",
   "primary-default": "Domyślny",
   "short-number-format": "Format krótkiego liczby",
-  "primary-currency": "Podstawowa waluta"
+  "primary-currency": "Podstawowa waluta",
+  "change-title": "Zmień tytuł"
 }

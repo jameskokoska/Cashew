@@ -250,8 +250,8 @@ class _BillSplitterState extends State<BillSplitter> {
       ],
       horizontalPadding: getHorizontalPaddingConstrained(context),
       floatingActionButton: AnimateFABDelayed(
-        fab: FAB(
-          onLongPressAddAllPopup: false,
+        fab: AddFAB(
+          enableLongPress: false,
           openPage: AddBillItemPage(
             splitPersons: splitPersons,
             addBillSplitterItem: addBillSplitterItem,
@@ -1280,9 +1280,8 @@ class _PeoplePageState extends State<PeoplePage> {
           ),
       ],
       floatingActionButton: AnimateFABDelayed(
-        fab: FAB(
-          onLongPressAddAllPopup: false,
-          openPage: SizedBox.shrink(),
+        fab: AddFAB(
+          enableLongPress: false,
           onTap: () {
             openAddPersonPopup(
               context: context,

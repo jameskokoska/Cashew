@@ -213,7 +213,7 @@ class _ObjectivePageContentState extends State<_ObjectivePageContent> {
             backgroundColor: pageBackgroundColor,
             listID: pageId,
             floatingActionButton: AnimateFABDelayed(
-              fab: FAB(
+              fab: AddFAB(
                 tooltip: "add-transaction".tr(),
                 openPage: AddTransactionPage(
                   selectedObjective: widget.objective,

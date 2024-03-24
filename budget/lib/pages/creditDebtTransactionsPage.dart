@@ -327,11 +327,10 @@ class CreditDebtTransactionsState extends State<CreditDebtTransactions>
             resizeToAvoidBottomInset: true,
             floatingActionButton: AnimateFABDelayed(
               enabled: true,
-              fab: FAB(
+              fab: AddFAB(
                 tooltip: isCredit == true || isCredit == null
                     ? "add-credit".tr()
                     : "add-debt".tr(),
-                openPage: SizedBox.shrink(),
                 onTap: () {
                   openBottomSheet(
                     context,

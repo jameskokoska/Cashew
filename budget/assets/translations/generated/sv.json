@@ -1099,5 +1099,6 @@
   "change-currency-description": "APP -valutan är relaterad till det valda kontot. Redigera kontot för att ändra valutan.",
   "primary-default": "Standard",
   "short-number-format": "Kort antal format",
-  "primary-currency": "Primärvaluta"
+  "primary-currency": "Primärvaluta",
+  "change-title": "Ändra titel"
 }

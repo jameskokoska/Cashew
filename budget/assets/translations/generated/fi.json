@@ -1099,5 +1099,6 @@
   "change-currency-description": "Sovellusvaluutta liittyy valitulle tilille. Muokkaa tiliä muuttaaksesi valuuttaa.",
   "primary-default": "Laiminlyönti",
   "short-number-format": "Lyhyt numeromuoto",
-  "primary-currency": "Ensisijainen valuutta"
+  "primary-currency": "Ensisijainen valuutta",
+  "change-title": "Muuta otsikkoa"
 }

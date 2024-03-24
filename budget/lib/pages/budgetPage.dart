@@ -286,7 +286,7 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
             backgroundColor: pageBackgroundColor,
             listID: pageId,
             floatingActionButton: AnimateFABDelayed(
-              fab: FAB(
+              fab: AddFAB(
                 tooltip: "add-transaction".tr(),
                 openPage: AddTransactionPage(
                   selectedBudget: widget.budget.sharedKey != null ||

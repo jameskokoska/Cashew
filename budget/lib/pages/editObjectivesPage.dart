@@ -82,7 +82,7 @@ class _EditObjectivesPageState extends State<EditObjectivesPage> {
             : "goals".tr(),
         scrollToTopButton: true,
         floatingActionButton: AnimateFABDelayed(
-          fab: FAB(
+          fab: AddFAB(
             tooltip: widget.objectiveType == ObjectiveType.loan
                 ? "add-loan".tr()
                 : "add-goal".tr(),
