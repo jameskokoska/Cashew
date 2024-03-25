@@ -1101,6 +1101,7 @@
   "short-number-format": "Формат на кратък номер",
   "primary-currency": "Първична валута",
   "change-title": "Промяна на заглавието",
+  "changed-title": "Променено заглавие",
   "edit": "редактиране",
   "edit-transactions": "Редактиране на транзакции"
 }

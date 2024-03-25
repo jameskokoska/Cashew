@@ -1101,6 +1101,7 @@
   "short-number-format": "Format de numéro court",
   "primary-currency": "Densité primaire",
   "change-title": "Changer le titre",
+  "changed-title": "Titre modifié",
   "edit": "Modifier",
   "edit-transactions": "Modifier les transactions"
 }

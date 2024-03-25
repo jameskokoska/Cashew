@@ -899,148 +899,133 @@ class _BackupManagementState extends State<BackupManagement> {
                 )
               : SizedBox.shrink(),
           widget.isManaging && widget.isClientSync == false
-              ? Padding(
-                  padding: const EdgeInsets.only(bottom: 0),
-                  child: SettingsContainerSwitch(
-                    enableBorderRadius: true,
-                    onSwitched: (value) {
-                      updateSettings("autoBackups", value,
-                          pagesNeedingRefresh: [], updateGlobalState: false);
-                      setState(() {
-                        autoBackups = value;
-                      });
-                    },
-                    initialValue: appStateSettings["autoBackups"],
-                    title: "auto-backups".tr(),
-                    description: "auto-backups-description".tr(),
-                    icon: appStateSettings["outlinedIcons"]
-                        ? Icons.cloud_done_outlined
-                        : Icons.cloud_done_rounded,
-                  ),
+              ? SettingsContainerSwitch(
+                  enableBorderRadius: true,
+                  onSwitched: (value) {
+                    updateSettings("autoBackups", value,
+                        pagesNeedingRefresh: [], updateGlobalState: false);
+                    setState(() {
+                      autoBackups = value;
+                    });
+                  },
+                  initialValue: appStateSettings["autoBackups"],
+                  title: "auto-backups".tr(),
+                  description: "auto-backups-description".tr(),
+                  icon: appStateSettings["outlinedIcons"]
+                      ? Icons.cloud_done_outlined
+                      : Icons.cloud_done_rounded,
                 )
               : SizedBox.shrink(),
           widget.isClientSync
-              ? Padding(
-                  padding: EdgeInsets.only(
-                      bottom: widget.isClientSync && kIsWeb ? 0 : 10),
-                  child: SettingsContainerSwitch(
-                    enableBorderRadius: true,
-                    onSwitched: (value) {
-                      // Only update global is the sidebar is shown
-                      updateSettings("backupSync", value,
-                          pagesNeedingRefresh: [],
-                          updateGlobalState: getIsFullScreen(context));
-                      setState(() {
-                        backupSync = value;
-                      });
-                      // Future.delayed(Duration(milliseconds: 100), () {
-                      //   bottomSheetControllerGlobal.snapToExtent(0);
-                      // });
-                    },
-                    initialValue: appStateSettings["backupSync"],
-                    title: "sync-data".tr(),
-                    description: "sync-data-description".tr(),
-                    icon: appStateSettings["outlinedIcons"]
-                        ? Icons.cloud_sync_outlined
-                        : Icons.cloud_sync_rounded,
-                  ),
+              ? SettingsContainerSwitch(
+                  enableBorderRadius: true,
+                  onSwitched: (value) {
+                    // Only update global is the sidebar is shown
+                    updateSettings("backupSync", value,
+                        pagesNeedingRefresh: [],
+                        updateGlobalState: getIsFullScreen(context));
+                    setState(() {
+                      backupSync = value;
+                    });
+                    // Future.delayed(Duration(milliseconds: 100), () {
+                    //   bottomSheetControllerGlobal.snapToExtent(0);
+                    // });
+                  },
+                  initialValue: appStateSettings["backupSync"],
+                  title: "sync-data".tr(),
+                  description: "sync-data-description".tr(),
+                  icon: appStateSettings["outlinedIcons"]
+                      ? Icons.cloud_sync_outlined
+                      : Icons.cloud_sync_rounded,
                 )
               : SizedBox.shrink(),
           // Only allow sync on every change for web
           // Only on web, disabled automatically in initializeSettings if not web
           widget.isClientSync && kIsWeb
-              ? Padding(
-                  padding: const EdgeInsets.only(bottom: 10),
-                  child: AnimatedExpanded(
-                    expand: backupSync,
-                    child: SettingsContainerSwitch(
-                      enableBorderRadius: true,
-                      onSwitched: (value) {
-                        updateSettings("syncEveryChange", value,
-                            pagesNeedingRefresh: [], updateGlobalState: false);
-                      },
-                      initialValue: appStateSettings["syncEveryChange"],
-                      title: "sync-every-change".tr(),
-                      descriptionWithValue: (value) {
-                        return value
-                            ? "sync-every-change-description1".tr()
-                            : "sync-every-change-description2".tr();
-                      },
-                      icon: appStateSettings["outlinedIcons"]
-                          ? Icons.all_inbox_outlined
-                          : Icons.all_inbox_rounded,
-                    ),
+              ? AnimatedExpanded(
+                  expand: backupSync,
+                  child: SettingsContainerSwitch(
+                    enableBorderRadius: true,
+                    onSwitched: (value) {
+                      updateSettings("syncEveryChange", value,
+                          pagesNeedingRefresh: [], updateGlobalState: false);
+                    },
+                    initialValue: appStateSettings["syncEveryChange"],
+                    title: "sync-every-change".tr(),
+                    descriptionWithValue: (value) {
+                      return value
+                          ? "sync-every-change-description1".tr()
+                          : "sync-every-change-description2".tr();
+                    },
+                    icon: appStateSettings["outlinedIcons"]
+                        ? Icons.all_inbox_outlined
+                        : Icons.all_inbox_rounded,
                   ),
                 )
               : SizedBox.shrink(),
           widget.isManaging && widget.isClientSync == false
               ? AnimatedExpanded(
                   expand: autoBackups,
-                  child: Padding(
-                    key: ValueKey(1),
-                    padding: const EdgeInsets.only(bottom: 8),
-                    child: SettingsContainerDropdown(
-                      enableBorderRadius: true,
-                      items: ["1", "2", "3", "7", "10", "14"],
-                      onChanged: (value) {
-                        updateSettings("autoBackupsFrequency", int.parse(value),
-                            pagesNeedingRefresh: [], updateGlobalState: false);
-                      },
-                      initial:
-                          appStateSettings["autoBackupsFrequency"].toString(),
-                      title: "backup-frequency".tr(),
-                      description: "number-of-days".tr(),
-                      icon: appStateSettings["outlinedIcons"]
-                          ? Icons.event_repeat_outlined
-                          : Icons.event_repeat_rounded,
-                    ),
+                  child: SettingsContainerDropdown(
+                    enableBorderRadius: true,
+                    items: ["1", "2", "3", "7", "10", "14"],
+                    onChanged: (value) {
+                      updateSettings("autoBackupsFrequency", int.parse(value),
+                          pagesNeedingRefresh: [], updateGlobalState: false);
+                    },
+                    initial:
+                        appStateSettings["autoBackupsFrequency"].toString(),
+                    title: "backup-frequency".tr(),
+                    description: "number-of-days".tr(),
+                    icon: appStateSettings["outlinedIcons"]
+                        ? Icons.event_repeat_outlined
+                        : Icons.event_repeat_rounded,
                   ),
                 )
               : SizedBox.shrink(),
           widget.isManaging &&
                   widget.isClientSync == false &&
                   appStateSettings["showBackupLimit"]
-              ? Padding(
-                  padding: const EdgeInsets.only(bottom: 15),
-                  child: SettingsContainerDropdown(
-                    enableBorderRadius: true,
-                    key: dropDownKey,
-                    verticalPadding: 5,
-                    title: "backup-limit".tr(),
-                    icon: Icons.format_list_numbered_rtl_outlined,
-                    initial: appStateSettings["backupLimit"].toString(),
-                    items: ["10", "15", "20", "30"],
-                    onChanged: (value) {
-                      if (int.parse(value) < appStateSettings["backupLimit"]) {
-                        openPopup(
-                          context,
-                          icon: appStateSettings["outlinedIcons"]
-                              ? Icons.delete_outlined
-                              : Icons.delete_rounded,
-                          title: "change-limit".tr(),
-                          description: "change-limit-warning".tr(),
-                          onSubmit: () async {
-                            updateSettings("backupLimit", int.parse(value),
-                                updateGlobalState: false);
-                            Navigator.pop(context);
-                          },
-                          onSubmitLabel: "change".tr(),
-                          onCancel: () {
-                            Navigator.pop(context);
-                            setState(() {
-                              dropDownKey = UniqueKey();
-                            });
-                          },
-                          onCancelLabel: "cancel".tr(),
-                        );
-                      } else {
-                        updateSettings("backupLimit", int.parse(value),
-                            updateGlobalState: false);
-                      }
-                    },
-                  ),
+              ? SettingsContainerDropdown(
+                  enableBorderRadius: true,
+                  key: dropDownKey,
+                  verticalPadding: 5,
+                  title: "backup-limit".tr(),
+                  icon: Icons.format_list_numbered_rtl_outlined,
+                  initial: appStateSettings["backupLimit"].toString(),
+                  items: ["10", "15", "20", "30"],
+                  onChanged: (value) {
+                    if (int.parse(value) < appStateSettings["backupLimit"]) {
+                      openPopup(
+                        context,
+                        icon: appStateSettings["outlinedIcons"]
+                            ? Icons.delete_outlined
+                            : Icons.delete_rounded,
+                        title: "change-limit".tr(),
+                        description: "change-limit-warning".tr(),
+                        onSubmit: () async {
+                          updateSettings("backupLimit", int.parse(value),
+                              updateGlobalState: false);
+                          Navigator.pop(context);
+                        },
+                        onSubmitLabel: "change".tr(),
+                        onCancel: () {
+                          Navigator.pop(context);
+                          setState(() {
+                            dropDownKey = UniqueKey();
+                          });
+                        },
+                        onCancelLabel: "cancel".tr(),
+                      );
+                    } else {
+                      updateSettings("backupLimit", int.parse(value),
+                          updateGlobalState: false);
+                    }
+                  },
                 )
               : SizedBox.shrink(),
+          if ((widget.isManaging == false && widget.isClientSync == false)==false)
+            SizedBox(height: 10),
           isLoading
               ? Column(
                   children: [

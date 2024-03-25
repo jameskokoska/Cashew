@@ -1101,6 +1101,7 @@
   "short-number-format": "تنسيق رقم قصير",
   "primary-currency": "العملة الأولية",
   "change-title": "غير العنوان",
+  "changed-title": "تم تغيير العنوان",
   "edit": "يحرر",
   "edit-transactions": "تحرير المعاملات"
 }

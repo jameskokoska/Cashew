@@ -1101,6 +1101,7 @@
   "short-number-format": "รูปแบบหมายเลขสั้น",
   "primary-currency": "สกุลเงินหลัก",
   "change-title": "เปลี่ยนชื่อเรื่อง",
+  "changed-title": "เปลี่ยนชื่อเรื่องแล้ว",
   "edit": "แก้ไข",
   "edit-transactions": "แก้ไขธุรกรรม"
 }

@@ -1101,6 +1101,7 @@
   "short-number-format": "짧은 숫자 형식",
   "primary-currency": "기본 통화",
   "change-title": "제목 변경",
+  "changed-title": "제목이 변경됨",
   "edit": "편집하다",
   "edit-transactions": "거래 편집"
 }

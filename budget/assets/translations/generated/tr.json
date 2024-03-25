@@ -1101,6 +1101,7 @@
   "short-number-format": "Kısa Sayı biçimi",
   "primary-currency": "Birincil para birimi",
   "change-title": "Başlığı değiştir",
+  "changed-title": "Başlık Değiştirildi",
   "edit": "Düzenlemek",
   "edit-transactions": "İşlemleri Düzenle"
 }

@@ -1101,6 +1101,7 @@
   "short-number-format": "Rövid számú formátum",
   "primary-currency": "Elsődleges pénznem",
   "change-title": "Cím módosítása",
+  "changed-title": "Cím megváltozott",
   "edit": "Szerkesztés",
   "edit-transactions": "Tranzakciók szerkesztése"
 }

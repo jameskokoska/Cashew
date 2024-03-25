@@ -1101,6 +1101,7 @@
   "short-number-format": "Формат кратких бројева",
   "primary-currency": "Основна валута",
   "change-title": "Промените наслов",
+  "changed-title": "Промењен наслов",
   "edit": "Уредити",
   "edit-transactions": "Уреди трансакције"
 }

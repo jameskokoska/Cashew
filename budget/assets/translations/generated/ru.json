@@ -1100,6 +1100,7 @@
   "short-number-format": "Формат короткого числа",
   "primary-currency": "Основная валюта",
   "change-title": "Изменить заголовок",
+  "changed-title": "Изменено название",
   "edit": "Редактировать",
   "edit-transactions": "Редактировать транзакции"
 }

@@ -1101,6 +1101,7 @@
   "short-number-format": "短い数字形式",
   "primary-currency": "一次通貨",
   "change-title": "タイトルの変更",
+  "changed-title": "タイトル変更",
   "edit": "編集",
   "edit-transactions": "トランザクションの編集"
 }

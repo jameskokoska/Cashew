@@ -1101,6 +1101,7 @@
   "short-number-format": "Формат короткого числа",
   "primary-currency": "Первинна валюта",
   "change-title": "Змінити назву",
+  "changed-title": "Змінений заголовок",
   "edit": "Редагувати",
   "edit-transactions": "Редагувати транзакції"
 }

@@ -1101,6 +1101,7 @@
   "short-number-format": "فرمت شماره کوتاه",
   "primary-currency": "پول",
   "change-title": "تغییر عنوان",
+  "changed-title": "عنوان تغییر کرد",
   "edit": "ویرایش کنید",
   "edit-transactions": "ویرایش تراکنش ها"
 }

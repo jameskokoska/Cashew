@@ -1101,6 +1101,7 @@
   "short-number-format": "Formato de número corto",
   "primary-currency": "Moneda primaria",
   "change-title": "Cambiar título",
+  "changed-title": "Título cambiado",
   "edit": "Editar",
   "edit-transactions": "Editar transacciones"
 }

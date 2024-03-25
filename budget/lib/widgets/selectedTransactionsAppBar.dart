@@ -743,54 +743,56 @@ class SelectedTransactionsAppBarMenu extends StatelessWidget {
                                 globalSelectedID.notifyListeners();
                               },
                             ),
-                          EditSelectedTransactionsContainer(
-                            iconData: getTransactionTypeIcon(
-                                TransactionSpecialType.credit),
-                            text: "add-to-loan".tr(),
-                            onTap: () async {
-                              dynamic objective = await selectObjectivePopup(
-                                  context,
-                                  objectiveType: ObjectiveType.loan);
-                              if (objective == null) return;
+                          if (enableObjectiveLoansSection)
+                            EditSelectedTransactionsContainer(
+                              iconData: getTransactionTypeIcon(
+                                  TransactionSpecialType.credit),
+                              text: "add-to-loan".tr(),
+                              onTap: () async {
+                                dynamic objective = await selectObjectivePopup(
+                                    context,
+                                    objectiveType: ObjectiveType.loan);
+                                if (objective == null) return;
 
-                              String? objectivePkToMoveTo;
-                              if (objective == "none") {
-                                objectivePkToMoveTo = null;
-                              } else {
-                                objectivePkToMoveTo = objective.objectivePk;
-                              }
-                              List<Transaction> transactions =
-                                  await database.getTransactionsFromPk(
-                                      selectedTransactionPks);
-                              int numberMoved =
-                                  await database.moveTransactionsToObjective(
-                                transactions,
-                                objectivePkToMoveTo,
-                                ObjectiveType.loan,
-                              );
+                                String? objectivePkToMoveTo;
+                                if (objective == "none") {
+                                  objectivePkToMoveTo = null;
+                                } else {
+                                  objectivePkToMoveTo = objective.objectivePk;
+                                }
+                                List<Transaction> transactions =
+                                    await database.getTransactionsFromPk(
+                                        selectedTransactionPks);
+                                int numberMoved =
+                                    await database.moveTransactionsToObjective(
+                                  transactions,
+                                  objectivePkToMoveTo,
+                                  ObjectiveType.loan,
+                                );
 
-                              openSnackbar(
-                                SnackbarMessage(
-                                  icon: appStateSettings["outlinedIcons"]
-                                      ? Icons.savings_outlined
-                                      : Icons.savings_rounded,
-                                  title: objective == "none"
-                                      ? "removed-from-loan".tr()
-                                      : "added-to-loan-action".tr(),
-                                  description: "for".tr().capitalizeFirst +
-                                      " " +
-                                      numberMoved.toString() +
-                                      " " +
-                                      (numberMoved == 1
-                                          ? "transaction".tr().toLowerCase()
-                                          : "transactions".tr().toLowerCase()),
-                                ),
-                              );
+                                openSnackbar(
+                                  SnackbarMessage(
+                                    icon: getTransactionTypeIcon(
+                                        TransactionSpecialType.credit),
+                                    title: objective == "none"
+                                        ? "removed-from-loan".tr()
+                                        : "added-to-loan-action".tr(),
+                                    description: "for".tr().capitalizeFirst +
+                                        " " +
+                                        numberMoved.toString() +
+                                        " " +
+                                        (numberMoved == 1
+                                            ? "transaction".tr().toLowerCase()
+                                            : "transactions"
+                                                .tr()
+                                                .toLowerCase()),
+                                  ),
+                                );
 
-                              globalSelectedID.value[pageID] = [];
-                              globalSelectedID.notifyListeners();
-                            },
-                          ),
+                                globalSelectedID.value[pageID] = [];
+                                globalSelectedID.notifyListeners();
+                              },
+                            ),
                         ];
                         openBottomSheet(
                           context,
