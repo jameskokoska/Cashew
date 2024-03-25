@@ -1,6 +1,5 @@
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:budget/struct/notification_controller/local_notification_controller.dart';
 
-FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-    FlutterLocalNotificationsPlugin();
+final notificationController = LocalNotificationController.instance;
 
-String? notificationPayload;
+final notificationPlugin = LocalNotificationController.plugin;

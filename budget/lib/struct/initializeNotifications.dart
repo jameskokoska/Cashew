@@ -8,41 +8,6 @@ import 'package:budget/widgets/notificationsSettings.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:universal_io/io.dart';
-
-Future<String?> initializeNotifications() async {
-  if (Platform.isIOS) {
-    return "";
-  }
-  const AndroidInitializationSettings initializationSettingsAndroid =
-      AndroidInitializationSettings('notification_icon_android2');
-  final DarwinInitializationSettings initializationSettingsDarwin =
-      DarwinInitializationSettings(
-          onDidReceiveLocalNotification: (_, __, ___, ____) {});
-
-  final InitializationSettings initializationSettings = InitializationSettings(
-    android: initializationSettingsAndroid,
-    iOS: initializationSettingsDarwin,
-  );
-  await flutterLocalNotificationsPlugin.initialize(
-    initializationSettings,
-    onDidReceiveBackgroundNotificationResponse: onSelectNotification,
-    onDidReceiveNotificationResponse: onSelectNotification,
-  );
-  final NotificationAppLaunchDetails? notificationAppLaunchDetails =
-      await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
-  NotificationResponse? payload =
-      notificationAppLaunchDetails?.notificationResponse;
-  String? response = await payload?.payload;
-  return response;
-}
-
-onSelectNotification(NotificationResponse notificationResponse) async {
-  String? payloadData = notificationResponse.payload;
-  notificationPayload = payloadData;
-  runNotificationPayLoadsNoContext(payloadData);
-}
 
 runNotificationPayLoadsNoContext(payloadData) {
   if (payloadData == "addTransaction") {
@@ -61,26 +26,26 @@ runNotificationPayLoadsNoContext(payloadData) {
       ),
     );
   }
-  notificationPayload = "";
 }
 
 void runNotificationPayLoads(context) {
+  final initialActionPayload =
+      notificationController.initialAction?.payload ?? '';
   if (kIsWeb) return;
-  if (notificationPayload == "addTransaction") {
+  if (initialActionPayload == "addTransaction") {
     pushRoute(
       context,
       AddTransactionPage(
         routesToPopAfterDelete: RoutesToPopAfterDelete.None,
       ),
     );
-  } else if (notificationPayload == "upcomingTransaction") {
+  } else if (initialActionPayload == "upcomingTransaction") {
     // When the notification comes in, the transaction is past due!
     pushRoute(
       context,
       UpcomingOverdueTransactions(overdueTransactions: true),
     );
   }
-  notificationPayload = "";
 }
 
 Future<void> setDailyNotifications(context) async {

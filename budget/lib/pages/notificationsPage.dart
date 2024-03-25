@@ -1,3 +1,4 @@
+import 'package:budget/struct/notificationsGlobal.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/animatedExpanded.dart';
 import 'package:budget/widgets/notificationsSettings.dart';
@@ -28,7 +29,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
   }
 
   _checkNotificationEnabled() async {
-    bool status = await checkNotificationsPermissionAll();
+    bool status = await notificationController.checkNotificationPermission();
     setState(() {
       notificationsEnabled = status;
     });
