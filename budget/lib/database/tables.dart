@@ -5518,12 +5518,18 @@ class FinanceDatabase extends _$FinanceDatabase {
       withObjectives: joinedWithObjectives,
     );
 
-    String? titleContains = searchFilters.titleContains;
-    Expression<bool> isInTitleContains = titleContains == null
-        ? Constant(true)
-        : tbl.name.collate(Collate.noCase).like("%" + titleContains + "%");
-    String? noteContains = searchFilters.noteContains;
+    Expression<bool> isInTitleContains =
+        searchFilters.titleContains == null || searchFilters.titleContains == ""
+            ? Constant(true)
+            : Constant(false);
 
+    for (String titleContain
+        in searchFilters.titleContains?.split(", ") ?? []) {
+      isInTitleContains |=
+          tbl.name.collate(Collate.noCase).like("%" + titleContain + "%");
+    }
+
+    String? noteContains = searchFilters.noteContains;
     Expression<bool> isInNoteContains = noteContains == null
         ? Constant(true)
         : tbl.note.collate(Collate.noCase).like("%" + noteContains + "%");

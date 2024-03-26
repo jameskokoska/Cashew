@@ -385,6 +385,51 @@ class SearchFilters {
   }
 }
 
+class HighlightStringInList extends TextEditingController {
+  final Pattern pattern;
+
+  HighlightStringInList({String? initialText})
+      : pattern = RegExp(r'\b[^,]+(?=|$)') {
+    this.text = initialText ?? '';
+  }
+
+  @override
+  TextSpan buildTextSpan({
+    required BuildContext context,
+    TextStyle? style,
+    required bool withComposing,
+  }) {
+    if (text.contains(", ") == false) return TextSpan(style: style, text: text);
+    List<InlineSpan> children = [];
+    text.splitMapJoin(
+      pattern,
+      onMatch: (Match match) {
+        children.add(
+          TextSpan(
+            text: match[0] ?? "",
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.onPrimary,
+              backgroundColor: dynamicPastel(
+                context,
+                Theme.of(context).colorScheme.primary.withOpacity(0.5),
+                inverse: true,
+                amountDark: 0.1,
+                amountLight: 0.25,
+              ),
+            ),
+          ),
+        );
+        return match[0] ?? "";
+      },
+      onNonMatch: (String text) {
+        children.add(TextSpan(text: text, style: style));
+        return text;
+      },
+    );
+    return TextSpan(style: style, children: children);
+  }
+}
+
 class TransactionFiltersSelection extends StatefulWidget {
   const TransactionFiltersSelection(
       {required this.searchFilters,
@@ -404,6 +449,9 @@ class TransactionFiltersSelection extends StatefulWidget {
 class _TransactionFiltersSelectionState
     extends State<TransactionFiltersSelection> {
   late SearchFilters selectedFilters = widget.searchFilters;
+  late TextEditingController titleContainsController = HighlightStringInList(
+    initialText: selectedFilters.titleContains,
+  );
 
   void setSearchFilters() {
     widget.setSearchFilters(selectedFilters);
@@ -940,7 +988,7 @@ class _TransactionFiltersSelectionState
                     selectedFilters.titleContains = value.trim();
                   }
                 },
-                initialValue: selectedFilters.titleContains,
+                controller: titleContainsController,
                 icon: appStateSettings["outlinedIcons"]
                     ? Icons.title_outlined
                     : Icons.title_rounded,

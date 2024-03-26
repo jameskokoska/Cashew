@@ -36,6 +36,7 @@ String getChangelogString() {
     Amount polarity for upcoming and overdue transaction totals
     Fix padding for spending graph and space for side labels
     Prevent save changes button hide when keyboard opened
+    Search multiple title names by separating 'title contains' filter input with a comma
     < 5.2.6
     New account spending summary table
     Improved navigation to respective pages when filters/date ranges set in spending summary table
