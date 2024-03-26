@@ -14,8 +14,8 @@ import 'package:timer_builder/timer_builder.dart';
 bool enableSwipeDownToRefresh(BuildContext context) {
   return runningCloudFunctions == false &&
       appStateSettings["hasSignedIn"] != false &&
-      appStateSettings["backupSync"] == true &&
-      getIsFullScreen(context) == false;
+      appStateSettings["backupSync"] == true;
+  // && getIsFullScreen(context) == false;
 }
 
 class PullDownToRefreshSync extends StatefulWidget {

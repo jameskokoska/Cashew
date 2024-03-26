@@ -898,6 +898,7 @@ class WalletDetailsPageState extends State<WalletDetailsPage>
                                 ),
                           textColor: getColor(context, "unPaidUpcoming"),
                           label: "upcoming".tr(),
+                          absolute: false,
                           totalWithCountStream:
                               database.watchTotalWithCountOfUpcomingOverdue(
                             isOverdueTransactions: false,
@@ -953,6 +954,7 @@ class WalletDetailsPageState extends State<WalletDetailsPage>
                                 ),
                           textColor: getColor(context, "unPaidOverdue"),
                           label: "overdue".tr(),
+                          absolute: false,
                           totalWithCountStream:
                               database.watchTotalWithCountOfUpcomingOverdue(
                             isOverdueTransactions: true,
@@ -2239,15 +2241,7 @@ class WalletDetailsLineGraph extends StatelessWidget {
               color: getColor(context, "lightDarkAccentHeavyLight"),
               boxShadow: boxShadowCheck(boxShadowGeneral(context)),
             ),
-            child: Stack(
-              children: [
-                Padding(
-                  padding:
-                      EdgeInsets.only(left: 7, right: 7, bottom: 12, top: 18),
-                  child: spendingGraph,
-                ),
-              ],
-            ),
+            child: spendingGraph,
           ),
         );
       },

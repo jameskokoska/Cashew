@@ -32,7 +32,6 @@ class HomePageLineGraph extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.only(bottom: 13),
         child: Container(
-          padding: EdgeInsets.only(left: 5, right: 7, bottom: 12, top: 18),
           margin: EdgeInsets.symmetric(horizontal: 13),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(15)),
@@ -83,20 +82,16 @@ class HomePageLineGraph extends StatelessWidget {
                                         Theme.of(context).colorScheme.primary),
                                 brightness: determineBrightnessTheme(context),
                               );
-                              return Column(
-                                children: [
-                                  BudgetLineGraph(
-                                    key: ValueKey(budget.budgetPk),
-                                    budget: budget,
-                                    budgetColorScheme: budgetColorScheme,
-                                    dateForRange: DateTime.now(),
-                                    budgetRange:
-                                        getBudgetDate(budget, DateTime.now()),
-                                    isPastBudget: false,
-                                    selectedCategory: null,
-                                    showPastSpending: false,
-                                  ),
-                                ],
+                              return BudgetLineGraph(
+                                key: ValueKey(budget.budgetPk),
+                                budget: budget,
+                                budgetColorScheme: budgetColorScheme,
+                                dateForRange: DateTime.now(),
+                                budgetRange:
+                                    getBudgetDate(budget, DateTime.now()),
+                                isPastBudget: false,
+                                selectedCategory: null,
+                                showPastSpending: false,
                               );
                             }
                             return SizedBox.shrink();

@@ -31,6 +31,11 @@ String getChangelogString() {
     Edit title for all selected transactions
     All time date range in search transaction page
     Removed ability to enter decimal when setting certain values
+    Refactor floating action button
+    Swipe down to sync on widescreen layout
+    Amount polarity for upcoming and overdue transaction totals
+    Fix padding for spending graph and space for side labels
+    Prevent save changes button hide when keyboard opened
     < 5.2.6
     New account spending summary table
     Improved navigation to respective pages when filters/date ranges set in spending summary table

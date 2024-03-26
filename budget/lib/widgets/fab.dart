@@ -113,31 +113,35 @@ class FAB extends StatelessWidget {
             child: OutlinedContainer(
               enabled: isOutlined,
               borderRadius: borderRadius,
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  SizedBox(
-                    height: fabSize,
-                    width: fabSize,
-                    child: Center(
-                      child: Icon(
-                        iconData,
-                        color: iconColor,
-                      ),
+              child: Builder(builder: (context) {
+                Widget fabIcon = SizedBox(
+                  height: fabSize,
+                  width: fabSize,
+                  child: Center(
+                    child: Icon(
+                      iconData,
+                      color: iconColor,
                     ),
                   ),
-                  if (label != null)
-                    Padding(
-                      padding:
-                          const EdgeInsets.only(top: 5, bottom: 5, right: 20),
-                      child: TextFont(
-                        text: label ?? "",
-                        fontSize: labelSize,
-                        textColor: iconColor,
+                );
+                if (label != null)
+                  return Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      fabIcon,
+                      Padding(
+                        padding:
+                            const EdgeInsets.only(top: 5, bottom: 5, right: 20),
+                        child: TextFont(
+                          text: label ?? "",
+                          fontSize: labelSize,
+                          textColor: iconColor,
+                        ),
                       ),
-                    ),
-                ],
-              ),
+                    ],
+                  );
+                return fabIcon;
+              }),
             ),
           ),
         );

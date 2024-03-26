@@ -3,6 +3,8 @@ import 'package:budget/widgets/navigationFramework.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 
+import 'package:flutter/services.dart';
+
 class FadeIn extends StatefulWidget {
   FadeIn({Key? key, required this.child, this.duration}) : super(key: key);
 
@@ -398,7 +400,7 @@ class ShakeAnimation extends StatefulWidget {
     this.curve = const ElasticInOutCurve(0.19),
     required this.child,
     this.animate = true,
-    this.delay,
+    required this.delay,
   }) : super(key: key);
 
   final Duration duration;
@@ -406,7 +408,7 @@ class ShakeAnimation extends StatefulWidget {
   final Widget child;
   final Curve curve;
   final bool animate;
-  final Duration? delay;
+  final Duration delay;
 
   @override
   State<ShakeAnimation> createState() => _ShakeAnimationState();
@@ -415,16 +417,29 @@ class ShakeAnimation extends StatefulWidget {
 class _ShakeAnimationState extends State<ShakeAnimation> {
   bool startAnimation = false;
   Future? _future;
+
   @override
   void initState() {
-    if (widget.delay != null) {
-      _future = Future.delayed(widget.delay!, () {
-        if (mounted)
-          setState(() {
-            startAnimation = true;
-          });
-      });
-    }
+    _future = Future.delayed(widget.delay, () {
+      if (mounted)
+        setState(() {
+          startAnimation = true;
+        });
+    });
+    // Future.delayed(
+    //     widget.delay + widget.duration - Duration(milliseconds: 1600),
+    //     () async {
+    //   if (mounted) HapticFeedback.mediumImpact();
+    //   await Future.delayed(Duration(milliseconds: 70), () {
+    //     if (mounted) HapticFeedback.mediumImpact();
+    //   });
+    //   await Future.delayed(Duration(milliseconds: 70), () {
+    //     if (mounted) HapticFeedback.mediumImpact();
+    //   });
+    //   await Future.delayed(Duration(milliseconds: 70), () {
+    //     if (mounted) HapticFeedback.mediumImpact();
+    //   });
+    // });
     super.initState();
   }
 

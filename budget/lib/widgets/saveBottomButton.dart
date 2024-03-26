@@ -7,13 +7,7 @@ import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:flutter/material.dart';
 
-class SaveBottomButton extends StatefulWidget {
-  final String label;
-  final Function() onTap;
-  final bool disabled;
-  final Color? color;
-  final Color? labelColor;
-  final EdgeInsets margin;
+class SaveBottomButton extends StatelessWidget {
   const SaveBottomButton({
     super.key,
     required this.label,
@@ -24,84 +18,52 @@ class SaveBottomButton extends StatefulWidget {
     this.margin = EdgeInsets.zero,
   });
 
-  @override
-  State<SaveBottomButton> createState() => _SaveBottomButtonState();
-}
-
-class _SaveBottomButtonState extends State<SaveBottomButton>
-    with WidgetsBindingObserver {
-  bool isKeyboardOpen = false;
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addObserver(this);
-  }
-
-  @override
-  void didChangeMetrics() {
-    bool status = getIsKeyboardOpen(context);
-    if (status != isKeyboardOpen)
-      setState(() {
-        isKeyboardOpen = status;
-      });
-  }
-
-  @override
-  void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
-    super.dispose();
-  }
+  final String label;
+  final Function() onTap;
+  final bool disabled;
+  final Color? color;
+  final Color? labelColor;
+  final EdgeInsets margin;
 
   @override
   Widget build(BuildContext context) {
     // print(getKeyboardHeight(context));
-    return AnimatedContainer(
-      duration: Duration(milliseconds: 100),
-      curve: Curves.easeInOutCubic,
-      transform: Matrix4.translationValues(
-        0,
-        isKeyboardOpen ? 100 : 0,
-        0,
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          Transform.translate(
-            offset: Offset(0, 1),
-            child: Container(
-              height: 12,
-              foregroundDecoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    Theme.of(context).canvasColor.withOpacity(0),
-                    Theme.of(context).canvasColor,
-                  ],
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  stops: [0.1, 1],
-                ),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        Transform.translate(
+          offset: Offset(0, 1),
+          child: Container(
+            height: 12,
+            foregroundDecoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  Theme.of(context).canvasColor.withOpacity(0),
+                  Theme.of(context).canvasColor,
+                ],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                stops: [0.1, 1],
               ),
             ),
           ),
-          Tappable(
-            onTap: widget.disabled ? () {} : widget.onTap,
-            child: Padding(
-              padding: widget.margin,
-              child: Button(
-                changeScale: !isKeyboardOpen,
-                label: widget.label,
-                disabled: widget.disabled,
-                onTap: widget.onTap,
-                hasBottomExtraSafeArea: true,
-                expandToFillBottomExtraSafeArea: false,
-                color: widget.color,
-                textColor: widget.labelColor,
-              ),
+        ),
+        Tappable(
+          onTap: disabled ? () {} : onTap,
+          child: Padding(
+            padding: margin,
+            child: Button(
+              label: label,
+              disabled: disabled,
+              onTap: onTap,
+              hasBottomExtraSafeArea: true,
+              expandToFillBottomExtraSafeArea: false,
+              color: color,
+              textColor: labelColor,
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

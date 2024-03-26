@@ -677,8 +677,6 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                       budgetRange: budgetRange,
                       budgetColorScheme: budgetColorScheme,
                       showIfNone: false,
-                      padding: EdgeInsets.only(
-                          left: 5, right: 7, bottom: 12, top: 18),
                     ),
                   ),
                 ),

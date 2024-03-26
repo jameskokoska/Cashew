@@ -37,6 +37,7 @@ class HomePageUpcomingTransactions extends StatelessWidget {
                   openPage:
                       UpcomingOverdueTransactions(overdueTransactions: false),
                   label: "upcoming".tr(),
+                  absolute: false,
                   totalWithCountStream:
                       database.watchTotalWithCountOfUpcomingOverdue(
                     allWallets: Provider.of<AllWallets>(context),
@@ -59,6 +60,7 @@ class HomePageUpcomingTransactions extends StatelessWidget {
                   openPage:
                       UpcomingOverdueTransactions(overdueTransactions: true),
                   label: "overdue".tr(),
+                  absolute: false,
                   totalWithCountStream:
                       database.watchTotalWithCountOfUpcomingOverdue(
                     allWallets: Provider.of<AllWallets>(context),

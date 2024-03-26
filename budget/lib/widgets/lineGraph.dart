@@ -262,7 +262,8 @@ class _LineChartState extends State<_LineChart> with WidgetsBindingObserver {
                 : ((widget.maxPair.y - widget.minPair.y) /
                         (getIsFullScreen(context) ? 7 : 4))
                     .abs(),
-            reservedSize: (widget.minPair.y <= -10000
+            reservedSize: 7 +
+                (widget.minPair.y <= -10000
                     ? 55
                     : widget.minPair.y <= -1000
                         ? 45
@@ -691,6 +692,8 @@ class LineChartWrapper extends StatelessWidget {
     }
     return ClipRect(
       child: Container(
+        // Left padding is omitted and added in the reserved size of the side titles
+        margin: EdgeInsets.only(bottom: 12, top: 18, right: 7),
         height: MediaQuery.sizeOf(context).width > 700 ? 300 : 175,
         child: _LineChart(
           spots: convertPoints(filterPointsList(points)),
