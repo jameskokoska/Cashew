@@ -351,22 +351,23 @@ Future<bool> scheduleDailyNotification(
       android: androidNotificationDetails,
       iOS: darwinNotificationDetails,
     );
-    await notificationPlugin.zonedSchedule(
-      i,
-      'notification-reminder-title'.tr(),
-      chosenMessage,
-      dateTime,
-      notificationDetails,
-      androidAllowWhileIdle: true,
-      payload: 'addTransaction',
-      uiLocalNotificationDateInterpretation:
-          UILocalNotificationDateInterpretation.absoluteTime,
-      matchDateTimeComponents: DateTimeComponents.dateAndTime,
+    // TODO: Implement schedule notification for daily reminders
+    // await notificationPlugin.zonedSchedule(
+    //   i,
+    //   'notification-reminder-title'.tr(),
+    //   chosenMessage,
+    //   dateTime,
+    //   notificationDetails,
+    //   androidAllowWhileIdle: true,
+    //   payload: 'addTransaction',
+    //   uiLocalNotificationDateInterpretation:
+    //       UILocalNotificationDateInterpretation.absoluteTime,
+    //   matchDateTimeComponents: DateTimeComponents.dateAndTime,
 
-      // If exact time was used, need USE_EXACT_ALARM and SCHEDULE_EXACT_ALARM permissions
-      // which are only meant for calendar/reminder based applications
-      androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
-    );
+    //   // If exact time was used, need USE_EXACT_ALARM and SCHEDULE_EXACT_ALARM permissions
+    //   // which are only meant for calendar/reminder based applications
+    //   androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
+    // );
     print("Notification " +
         chosenMessage +
         " scheduled for " +
@@ -441,21 +442,22 @@ Future<bool> scheduleUpcomingTransactionsNotification(context) async {
       iOS: darwinNotificationDetails,
     );
     if (upcomingTransaction.dateCreated.isAfter(DateTime.now())) {
-      await notificationPlugin.zonedSchedule(
-        idStart,
-        'notification-upcoming-transaction-title'.tr(),
-        chosenMessage,
-        dateTime,
-        notificationDetails,
-        androidAllowWhileIdle: true,
-        payload: 'upcomingTransaction',
-        uiLocalNotificationDateInterpretation:
-            UILocalNotificationDateInterpretation.absoluteTime,
+      // TODO: Implement schedule notification for daily reminders
+      // await notificationPlugin.zonedSchedule(
+      //   idStart,
+      //   'notification-upcoming-transaction-title'.tr(),
+      //   chosenMessage,
+      //   dateTime,
+      //   notificationDetails,
+      //   androidAllowWhileIdle: true,
+      //   payload: 'upcomingTransaction',
+      //   uiLocalNotificationDateInterpretation:
+      //       UILocalNotificationDateInterpretation.absoluteTime,
 
-        // If exact time was used, need USE_EXACT_ALARM and SCHEDULE_EXACT_ALARM permissions
-        // which are only meant for calendar/reminder based applications
-        androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
-      );
+      //   // If exact time was used, need USE_EXACT_ALARM and SCHEDULE_EXACT_ALARM permissions
+      //   // which are only meant for calendar/reminder based applications
+      //   androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
+      // );
     } else {
       print("Cannot set up notification before current time!");
     }

@@ -1,4 +1,4 @@
-import 'dart:ui';
+import 'package:budget/struct/notification_controller/controller_utils.dart';
 
 abstract class NotificationController<T, S, U> {
   Future<bool> initNotificationPlugin();
@@ -26,26 +26,4 @@ abstract class NotificationController<T, S, U> {
   Future<void> cancelNotification(int id);
 
   Future<void> cancelAllNotifications();
-}
-
-class NotificationContent {
-  final String title;
-  final String? body;
-  final Color? color;
-  final String? largeIcon;
-
-  NotificationContent({
-    required this.title,
-    this.body,
-    this.color,
-    this.largeIcon,
-  });
-}
-
-enum NotificationType {
-  alert,
-  reminder,
-  creditTransaction,
-  debitTransaction,
-  transfer
 }

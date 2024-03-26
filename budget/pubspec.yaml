@@ -100,6 +100,7 @@ dependencies:
   material_symbols_icons: ^4.2719.1
   app_links: ^3.5.0
   expandable_page_view: ^1.0.17
+  awesome_notifications: ^0.8.2
 
 # flutter pub run flutter_launcher_icons:main
 flutter_icons:
