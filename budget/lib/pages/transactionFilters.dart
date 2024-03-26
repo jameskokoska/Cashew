@@ -380,7 +380,7 @@ class SearchFilters {
     outString += "searchQuery:-:" + searchQuery.toString() + ":-:";
     outString += "titleContains:-:" + titleContains.toString() + ":-:";
     outString += "noteContains:-:" + noteContains.toString() + ":-:";
-    print(outString);
+    //print(outString);
     return outString;
   }
 }

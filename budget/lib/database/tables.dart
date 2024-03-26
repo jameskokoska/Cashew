@@ -5523,10 +5523,15 @@ class FinanceDatabase extends _$FinanceDatabase {
             ? Constant(true)
             : Constant(false);
 
-    for (String titleContain
-        in searchFilters.titleContains?.split(", ") ?? []) {
-      isInTitleContains |=
-          tbl.name.collate(Collate.noCase).like("%" + titleContain + "%");
+    if (searchFilters.titleContains != null) {
+      String stringToSplit = searchFilters.titleContains ?? "";
+      if (stringToSplit.endsWith(",")) {
+        stringToSplit = stringToSplit.substring(0, stringToSplit.length - 1);
+      }
+      for (String titleContain in stringToSplit.split(", ")) {
+        isInTitleContains |=
+            tbl.name.collate(Collate.noCase).like("%" + titleContain + "%");
+      }
     }
 
     String? noteContains = searchFilters.noteContains;
