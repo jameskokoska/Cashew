@@ -1103,5 +1103,12 @@
   "change-title": "Titel wijzigen",
   "changed-title": "Gewijzigde titel",
   "edit": "Bewerking",
-  "edit-transactions": "Transacties bewerken"
+  "edit-transactions": "Transacties bewerken",
+  "transaction-list": "Transactielijst",
+  "transaction-list-home-description": "Geeft een overzicht van de afgelopen 7 dagen met een transactie",
+  "and-any-transactions": "en eventuele transacties",
+  "days-ahead": "dagen in de toekomst",
+  "day-ahead": "dag in de toekomst",
+  "future-transaction-days": "Toekomstige transactiedagen",
+  "future-transaction-days-description": "Dagen vooruit om transacties weer te geven"
 }

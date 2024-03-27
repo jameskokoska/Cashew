@@ -1103,5 +1103,12 @@
   "change-title": "Змінити назву",
   "changed-title": "Змінений заголовок",
   "edit": "Редагувати",
-  "edit-transactions": "Редагувати транзакції"
+  "edit-transactions": "Редагувати транзакції",
+  "transaction-list": "Список транзакцій",
+  "transaction-list-home-description": "Перелічує останні 7 днів, що містять трансакцію",
+  "and-any-transactions": "і будь-які операції",
+  "days-ahead": "днів у майбутньому",
+  "day-ahead": "день у майбутньому",
+  "future-transaction-days": "Дні майбутніх операцій",
+  "future-transaction-days-description": "Дні вперед, щоб перерахувати транзакції"
 }

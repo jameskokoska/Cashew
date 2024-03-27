@@ -1103,5 +1103,12 @@
   "change-title": "عنوان تبدیل کریں۔",
   "changed-title": "تبدیل شدہ عنوان",
   "edit": "ترمیم",
-  "edit-transactions": "لین دین میں ترمیم کریں۔"
+  "edit-transactions": "لین دین میں ترمیم کریں۔",
+  "transaction-list": "لین دین کی فہرست",
+  "transaction-list-home-description": "لین دین پر مشتمل آخری 7 دنوں کی فہرست",
+  "and-any-transactions": "اور کوئی بھی لین دین",
+  "days-ahead": "مستقبل میں دن",
+  "day-ahead": "مستقبل میں دن",
+  "future-transaction-days": "مستقبل کے لین دین کے دن",
+  "future-transaction-days-description": "لین دین کی فہرست میں دن آگے ہیں۔"
 }

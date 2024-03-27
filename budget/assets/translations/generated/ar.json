@@ -1103,5 +1103,12 @@
   "change-title": "غير العنوان",
   "changed-title": "تم تغيير العنوان",
   "edit": "يحرر",
-  "edit-transactions": "تحرير المعاملات"
+  "edit-transactions": "تحرير المعاملات",
+  "transaction-list": "قائمة المعاملات",
+  "transaction-list-home-description": "يسرد آخر 7 أيام تحتوي على معاملة",
+  "and-any-transactions": "وأي معاملات",
+  "days-ahead": "أيام في المستقبل",
+  "day-ahead": "يوم في المستقبل",
+  "future-transaction-days": "أيام المعاملات المستقبلية",
+  "future-transaction-days-description": "الأيام المقبلة لإدراج المعاملات"
 }

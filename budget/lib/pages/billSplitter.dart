@@ -1434,103 +1434,148 @@ Future<bool> generateLoanTransactionsFromBillSummary(
     bottomSheetControllerGlobal.scrollTo(0,
         duration: Duration(milliseconds: 100));
   });
-  String billName = await openBottomSheet(
+  String billName = "";
+  DateTime? setDateTime;
+  dynamic billNameResult = await openBottomSheet(
     context,
     fullSnap: true,
-    PopupFramework(
-      title: "set-title".tr(),
-      child: SelectText(
-        buttonLabel: "set-title".tr(),
-        setSelectedText: (value) {},
-        labelText: "set-title".tr(),
-        placeholder: "title-placeholder".tr(),
-        nextWithInput: (text) async {
-          Navigator.pop(context, text);
-        },
-        popContext: false,
-      ),
+    SelectTitle(
+      disableAskForNote: true,
+      selectedTitle: "",
+      setSelectedNote: (_) {},
+      setSelectedTitle: (_) {},
+      setSelectedCategory: (_) {},
+      setSelectedSubCategory: (_) {},
+      next: () {},
+      noteInputController: TextEditingController(),
+      setSelectedDateTime: (DateTime date) {
+        setDateTime = date;
+      },
+      customTitleInputWidgetBuilder: (enterTitleFocus) {
+        return Column(
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: TitleInput(
+                    focusNode: enterTitleFocus,
+                    resizePopupWhenChanged: true,
+                    padding: EdgeInsets.zero,
+                    setSelectedCategory: (_) {},
+                    setSelectedSubCategory: (_) {},
+                    alsoSearchCategories: false,
+                    setSelectedTitle: (title) {
+                      billName = title;
+                    },
+                    showCategoryIconForRecommendedTitles: false,
+                    unfocusWhenRecommendedTapped: false,
+                    onSubmitted: (value) {
+                      Navigator.pop(context, true);
+                    },
+                    autoFocus: true,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 15,
+            ),
+            Button(
+              label: "set-title".tr(),
+              onTap: () {
+                Navigator.pop(context, true);
+              },
+            ),
+          ],
+        );
+      },
     ),
   );
-  TransactionCategory category = await openBottomSheet(
+  if (billNameResult == null) return false;
+  MainAndSubcategory mainAndSubcategory = await selectCategorySequence(
     context,
-    PopupFramework(
-      title: "select-category".tr(),
-      child: SelectCategory(
-        nextWithCategory: (TransactionCategory category) {
-          Navigator.pop(context, category);
-        },
-      ),
-    ),
+    selectedCategory: null,
+    setSelectedCategory: (_) {},
+    selectedSubCategory: null,
+    setSelectedSubCategory: (_) {},
+    selectedIncomeInitial: null,
+    allowReorder: false,
   );
+  if (mainAndSubcategory.main?.categoryPk == null) return false;
   int i = 0;
-  for (SplitPersonSummary summary in billSummary) {
-    String note = "";
-    double amountSpentTotal = 0;
-    for (BillSplitterItem billSplitterItem in summary.billSplitterItems) {
-      SplitPerson? splitPerson;
-      for (SplitPerson splitPersonCheck in billSplitterItem.userAmounts) {
-        if (splitPersonCheck.name == summary.splitPerson.name) {
-          splitPerson = splitPersonCheck;
-          break;
+  await openLoadingPopupTryCatch(() async {
+    for (SplitPersonSummary summary in billSummary) {
+      String note = "";
+      double amountSpentTotal = 0;
+      for (BillSplitterItem billSplitterItem in summary.billSplitterItems) {
+        SplitPerson? splitPerson;
+        for (SplitPerson splitPersonCheck in billSplitterItem.userAmounts) {
+          if (splitPersonCheck.name == summary.splitPerson.name) {
+            splitPerson = splitPersonCheck;
+            break;
+          }
         }
+        double amountSpent = 0;
+        if (splitPerson == null) continue;
+        double percentOfTotal = billSplitterItem.evenSplit
+            ? billSplitterItem.userAmounts.length == 0
+                ? 0
+                : 1 / billSplitterItem.userAmounts.length
+            : (splitPerson.percent ?? 0) / 100;
+        amountSpent = billSplitterItem.cost * multiplierAmount * percentOfTotal;
+        amountSpentTotal = amountSpentTotal + amountSpent;
+        if (amountSpent == 0) percentOfTotal = 0;
+        if (amountSpent == 0) continue;
+
+        note += billSplitterItem.name +
+            ": " +
+            convertToMoney(
+              Provider.of<AllWallets>(context, listen: false),
+              amountSpent,
+            ) +
+            (percentOfTotal < 1
+                ? (" / " +
+                    convertToMoney(
+                      Provider.of<AllWallets>(context, listen: false),
+                      billSplitterItem.cost * multiplierAmount,
+                    ))
+                : "");
+        note += "\n";
       }
-      double amountSpent = 0;
-      if (splitPerson == null) continue;
-      double percentOfTotal = billSplitterItem.evenSplit
-          ? billSplitterItem.userAmounts.length == 0
-              ? 0
-              : 1 / billSplitterItem.userAmounts.length
-          : (splitPerson.percent ?? 0) / 100;
-      amountSpent = billSplitterItem.cost * multiplierAmount * percentOfTotal;
-      amountSpentTotal = amountSpentTotal + amountSpent;
-      if (amountSpent == 0) percentOfTotal = 0;
-      if (amountSpent == 0) continue;
+      note = note.trim();
+      bool isThePayee = summary.splitPerson.name == payee;
 
-      note += billSplitterItem.name +
-          ": " +
-          convertToMoney(
-            Provider.of<AllWallets>(context, listen: false),
-            amountSpent,
-          ) +
-          (percentOfTotal < 1
-              ? (" / " +
-                  convertToMoney(
-                    Provider.of<AllWallets>(context, listen: false),
-                    billSplitterItem.cost * multiplierAmount,
-                  ))
-              : "");
-      note += "\n";
+      Objective? associatedPersonLoan;
+      if (appStateSettings["longTermLoansDifferenceFeature"] == true) {
+        associatedPersonLoan = await database
+            .getPersonsLongTermDifferenceLoanInstance(summary.splitPerson.name);
+      }
+
+      await database.createOrUpdateTransaction(
+        insert: true,
+        Transaction(
+          transactionPk: "-1",
+          name: isThePayee || associatedPersonLoan != null
+              ? billName.trim()
+              : (summary.splitPerson.name.trim() + " - " + billName.trim()),
+          amount: amountSpentTotal.abs() * -1,
+          note: note,
+          categoryFk: mainAndSubcategory.main?.categoryPk ?? "0",
+          subCategoryFk: mainAndSubcategory.sub?.categoryPk,
+          walletFk: appStateSettings["selectedWalletPk"],
+          dateCreated:
+              (setDateTime ?? DateTime.now()).add(Duration(seconds: i)),
+          income: false,
+          paid: true,
+          type: isThePayee ? null : TransactionSpecialType.credit,
+          skipPaid: false,
+          objectiveLoanFk: associatedPersonLoan?.objectivePk,
+        ),
+      );
+      i++;
     }
-    note = note.trim();
-    bool isThePayee = summary.splitPerson.name == payee;
+  });
 
-    Objective? associatedPersonLoan;
-    if (appStateSettings["longTermLoansDifferenceFeature"] == true) {
-      associatedPersonLoan = await database
-          .getPersonsLongTermDifferenceLoanInstance(summary.splitPerson.name);
-    }
-
-    await database.createOrUpdateTransaction(
-      insert: true,
-      Transaction(
-        transactionPk: "-1",
-        name: isThePayee || associatedPersonLoan != null
-            ? billName.trim()
-            : (summary.splitPerson.name.trim() + " - " + billName.trim()),
-        amount: amountSpentTotal.abs() * -1,
-        note: note,
-        categoryFk: category.categoryPk,
-        walletFk: appStateSettings["selectedWalletPk"],
-        dateCreated: DateTime.now().add(Duration(seconds: i)),
-        income: false,
-        paid: true,
-        type: isThePayee ? null : TransactionSpecialType.credit,
-        skipPaid: false,
-        objectiveLoanFk: associatedPersonLoan?.objectivePk,
-      ),
-    );
-    i++;
-  }
   openSnackbar(
     SnackbarMessage(
       icon: appStateSettings["outlinedIcons"]

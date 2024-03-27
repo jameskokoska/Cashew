@@ -1103,5 +1103,12 @@
   "change-title": "Ändere den Titel",
   "changed-title": "Titel geändert",
   "edit": "Bearbeiten",
-  "edit-transactions": "Transaktionen bearbeiten"
+  "edit-transactions": "Transaktionen bearbeiten",
+  "transaction-list": "Transaktionsliste",
+  "transaction-list-home-description": "Listet die letzten 7 Tage mit einer Transaktion auf",
+  "and-any-transactions": "und alle Transaktionen",
+  "days-ahead": "Tage in der Zukunft",
+  "day-ahead": "Tag in der Zukunft",
+  "future-transaction-days": "Zukünftige Transaktionstage",
+  "future-transaction-days-description": "Tage im Voraus, um Transaktionen aufzulisten"
 }

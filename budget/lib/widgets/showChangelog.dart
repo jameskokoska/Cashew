@@ -30,13 +30,18 @@ String getChangelogString() {
     New edit selected transactions popup
     Edit title for all selected transactions
     All time date range in search transaction page
+    Search multiple title names by separating 'title contains' filter input with a comma
+    Homepage transaction list setting - amount of days ahead to list transactions
+    When editing goals/loans list, the total amount is listed for each entry
     Removed ability to enter decimal when setting certain values
     Refactor floating action button
+    Auto-fill transaction titles in title inputs
     Swipe down to sync on widescreen layout
     Amount polarity for upcoming and overdue transaction totals
-    Fix padding for spending graph and space for side labels
+    Bill splitter generate loan transaction steps improved - custom date, title recommendations, select subcategory
     Prevent save changes button hide when keyboard opened
-    Search multiple title names by separating 'title contains' filter input with a comma
+    Fix padding for spending graph and space for side labels
+    Fix when back swiping, swipe to dismiss is properly cancelled
     < 5.2.6
     New account spending summary table
     Improved navigation to respective pages when filters/date ranges set in spending summary table

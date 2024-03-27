@@ -1103,5 +1103,12 @@
   "change-title": "തലക്കെട്ട് മാറ്റുക",
   "changed-title": "തലക്കെട്ട് മാറ്റി",
   "edit": "എഡിറ്റ് ചെയ്യുക",
-  "edit-transactions": "ഇടപാടുകൾ എഡിറ്റ് ചെയ്യുക"
+  "edit-transactions": "ഇടപാടുകൾ എഡിറ്റ് ചെയ്യുക",
+  "transaction-list": "ഇടപാട് ലിസ്റ്റ്",
+  "transaction-list-home-description": "ഒരു ഇടപാട് അടങ്ങുന്ന അവസാന 7 ദിവസത്തെ ലിസ്റ്റുകൾ",
+  "and-any-transactions": "കൂടാതെ ഏതെങ്കിലും ഇടപാടുകൾ",
+  "days-ahead": "ഭാവിയിലെ ദിവസങ്ങൾ",
+  "day-ahead": "ഭാവിയിലെ ദിവസം",
+  "future-transaction-days": "ഭാവി ഇടപാട് ദിനങ്ങൾ",
+  "future-transaction-days-description": "ഇടപാടുകൾ ലിസ്റ്റ് ചെയ്യാൻ ദിവസങ്ങൾ മുന്നിലാണ്"
 }

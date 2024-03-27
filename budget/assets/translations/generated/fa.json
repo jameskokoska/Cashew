@@ -1103,5 +1103,12 @@
   "change-title": "تغییر عنوان",
   "changed-title": "عنوان تغییر کرد",
   "edit": "ویرایش کنید",
-  "edit-transactions": "ویرایش تراکنش ها"
+  "edit-transactions": "ویرایش تراکنش ها",
+  "transaction-list": "لیست معاملات",
+  "transaction-list-home-description": "7 روز گذشته حاوی تراکنش را فهرست می کند",
+  "and-any-transactions": "و هرگونه معامله",
+  "days-ahead": "روزهای آینده",
+  "day-ahead": "روز در آینده",
+  "future-transaction-days": "روزهای معاملات آینده",
+  "future-transaction-days-description": "روزهای آینده برای فهرست کردن معاملات"
 }

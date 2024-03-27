@@ -1103,5 +1103,12 @@
   "change-title": "Schimbați titlul",
   "changed-title": "Titlul schimbat",
   "edit": "Editați | ×",
-  "edit-transactions": "Editați tranzacții"
+  "edit-transactions": "Editați tranzacții",
+  "transaction-list": "Lista de tranzacții",
+  "transaction-list-home-description": "Enumeră ultimele 7 zile care conțin o tranzacție",
+  "and-any-transactions": "și orice tranzacții",
+  "days-ahead": "zile în viitor",
+  "day-ahead": "zi în viitor",
+  "future-transaction-days": "Zilele viitoare ale tranzacțiilor",
+  "future-transaction-days-description": "Zile înainte pentru a enumera tranzacțiile"
 }

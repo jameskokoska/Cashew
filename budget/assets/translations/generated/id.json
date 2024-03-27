@@ -1103,5 +1103,12 @@
   "change-title": "Ganti Judul",
   "changed-title": "Judul Berubah",
   "edit": "Sunting",
-  "edit-transactions": "Sunting Transaksi"
+  "edit-transactions": "Sunting Transaksi",
+  "transaction-list": "Daftar Transaksi",
+  "transaction-list-home-description": "Mencantumkan 7 hari terakhir yang berisi transaksi",
+  "and-any-transactions": "dan transaksi apa pun",
+  "days-ahead": "hari di masa depan",
+  "day-ahead": "hari di masa depan",
+  "future-transaction-days": "Hari Transaksi Mendatang",
+  "future-transaction-days-description": "Beberapa hari ke depan untuk membuat daftar transaksi"
 }

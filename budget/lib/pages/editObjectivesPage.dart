@@ -7,6 +7,7 @@ import 'package:budget/functions.dart';
 import 'package:budget/pages/addCategoryPage.dart';
 import 'package:budget/pages/addObjectivePage.dart';
 import 'package:budget/pages/editBudgetPage.dart';
+import 'package:budget/pages/objectivePage.dart';
 import 'package:budget/pages/objectivesListPage.dart';
 import 'package:budget/struct/currencyFunctions.dart';
 import 'package:budget/struct/databaseGlobal.dart';
@@ -183,6 +184,7 @@ class _EditObjectivesPageState extends State<EditObjectivesPage> {
                   itemBuilder: (context, index) {
                     Objective objective = snapshot.data![index];
                     return EditRowEntry(
+                      key: ValueKey(objective.objectivePk),
                       extraIcon: objective.archived
                           ? appStateSettings["outlinedIcons"]
                               ? Icons.visibility_off_outlined
@@ -203,7 +205,6 @@ class _EditObjectivesPageState extends State<EditObjectivesPage> {
                           currentReorder != -1 && currentReorder != index,
                       padding:
                           EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                      key: ValueKey(objective.objectivePk),
                       content: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
@@ -225,7 +226,7 @@ class _EditObjectivesPageState extends State<EditObjectivesPage> {
                             borderRadius: 1000,
                             sizePadding: 23,
                           ),
-                          Container(width: 5),
+                          SizedBox(width: 5),
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -253,40 +254,91 @@ class _EditObjectivesPageState extends State<EditObjectivesPage> {
                                   textColor: getColor(context, "black")
                                       .withOpacity(0.65),
                                 ),
-                                StreamBuilder<int?>(
-                                  stream: database
-                                      .getTotalCountOfTransactionsInObjective(
-                                          objective.objectivePk)
-                                      .$1,
-                                  builder: (context, snapshot) {
-                                    if (snapshot.hasData &&
-                                        snapshot.data != null) {
-                                      return TextFont(
-                                        textAlign: TextAlign.left,
-                                        text: snapshot.data.toString() +
-                                            " " +
-                                            (snapshot.data == 1
-                                                ? "transaction"
-                                                    .tr()
-                                                    .toLowerCase()
-                                                : "transactions"
-                                                    .tr()
-                                                    .toLowerCase()),
-                                        fontSize: 14,
-                                        textColor: getColor(context, "black")
-                                            .withOpacity(0.65),
-                                      );
-                                    } else {
-                                      return TextFont(
-                                        textAlign: TextAlign.left,
-                                        text: "/ transactions",
-                                        fontSize: 14,
-                                        textColor: getColor(context, "black")
-                                            .withOpacity(0.65),
-                                      );
-                                    }
+                                WatchTotalAndAmountOfObjective(
+                                  objective: objective,
+                                  builder: (double objectiveAmount,
+                                      double totalAmount,
+                                      double percentageTowardsGoal) {
+                                    bool showTotalSpent = appStateSettings[
+                                        "showTotalSpentForObjective"];
+                                    String amountSpentLabel =
+                                        getObjectiveAmountSpentLabel(
+                                      objective: objective,
+                                      context: context,
+                                      showTotalSpent: showTotalSpent,
+                                      objectiveAmount: objectiveAmount,
+                                      totalAmount: totalAmount,
+                                    );
+                                    String amountRemainingLabel =
+                                        objectiveRemainingAmountText(
+                                      objectiveAmount: objectiveAmount,
+                                      totalAmount: totalAmount,
+                                      context: context,
+                                    );
+                                    String differenceOnlyLoanLabel =
+                                        getIsDifferenceOnlyLoan(objective)
+                                            ? (percentageTowardsGoal == 1
+                                                ? "all-settled".tr()
+                                                : (getDifferenceOfLoan(
+                                                            objective,
+                                                            totalAmount,
+                                                            objectiveAmount) >
+                                                        0)
+                                                    ? "to-pay".tr()
+                                                    : "to-collect".tr())
+                                            : "";
+                                    return TextFont(
+                                      textAlign: TextAlign.left,
+                                      text: getIsDifferenceOnlyLoan(objective)
+                                          ? (amountSpentLabel +
+                                              " " +
+                                              differenceOnlyLoanLabel
+                                                  .toLowerCase())
+                                          : (amountSpentLabel +
+                                              amountRemainingLabel),
+                                      fontSize: 14,
+                                      textColor: getColor(context, "black")
+                                          .withOpacity(0.65),
+                                      maxLines: 2,
+                                    );
                                   },
                                 ),
+                                // StreamBuilder<int?>(
+                                //   stream: database
+                                //       .getTotalCountOfTransactionsInObjective(
+                                //           objective.objectivePk)
+                                //       .$1,
+                                //   builder: (context, snapshot) {
+                                //     if (snapshot.hasData &&
+                                //         snapshot.data != null) {
+                                //       return TextFont(
+                                //         textAlign: TextAlign.left,
+                                //         text: snapshot.data.toString() +
+                                //             " " +
+                                //             (snapshot.data == 1
+                                //                 ? "transaction"
+                                //                     .tr()
+                                //                     .toLowerCase()
+                                //                 : "transactions"
+                                //                     .tr()
+                                //                     .toLowerCase()),
+                                //         fontSize: 14,
+                                //         textColor:
+                                //             getColor(context, "black")
+                                //                 .withOpacity(0.65),
+                                //       );
+                                //     } else {
+                                //       return TextFont(
+                                //         textAlign: TextAlign.left,
+                                //         text: "/ transactions",
+                                //         fontSize: 14,
+                                //         textColor:
+                                //             getColor(context, "black")
+                                //                 .withOpacity(0.65),
+                                //       );
+                                //     }
+                                //   },
+                                // ),
                               ],
                             ),
                           ),

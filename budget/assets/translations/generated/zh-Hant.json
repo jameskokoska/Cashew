@@ -1103,5 +1103,12 @@
   "change-title": "更改標題",
   "changed-title": "更改標題",
   "edit": "編輯",
-  "edit-transactions": "編輯交易"
+  "edit-transactions": "編輯交易",
+  "transaction-list": "交易清單",
+  "transaction-list-home-description": "列出最近 7 天包含的交易",
+  "and-any-transactions": "以及任何交易",
+  "days-ahead": "未來的日子",
+  "day-ahead": "未來的一天",
+  "future-transaction-days": "未來交易日",
+  "future-transaction-days-description": "提前幾天列出交易"
 }

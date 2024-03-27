@@ -1103,5 +1103,12 @@
   "change-title": "शीर्षक बदला",
   "changed-title": "शीर्षक बदलले",
   "edit": "सुधारणे",
-  "edit-transactions": "व्यवहार संपादित करा"
+  "edit-transactions": "व्यवहार संपादित करा",
+  "transaction-list": "व्यवहार यादी",
+  "transaction-list-home-description": "व्यवहार असलेले शेवटचे 7 दिवस सूचीबद्ध करते",
+  "and-any-transactions": "आणि कोणतेही व्यवहार",
+  "days-ahead": "भविष्यातील दिवस",
+  "day-ahead": "भविष्यातील दिवस",
+  "future-transaction-days": "भविष्यातील व्यवहार दिवस",
+  "future-transaction-days-description": "व्यवहारांची यादी करण्यासाठी काही दिवस पुढे आहेत"
 }

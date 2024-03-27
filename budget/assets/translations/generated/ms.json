@@ -1103,5 +1103,12 @@
   "change-title": "Tukar Tajuk",
   "changed-title": "Tajuk ditukar",
   "edit": "Sunting",
-  "edit-transactions": "Edit Transaksi"
+  "edit-transactions": "Edit Transaksi",
+  "transaction-list": "Senarai Urus Niaga",
+  "transaction-list-home-description": "Menyenaraikan 7 hari terakhir yang mengandungi transaksi",
+  "and-any-transactions": "dan sebarang transaksi",
+  "days-ahead": "hari pada masa hadapan",
+  "day-ahead": "hari pada masa hadapan",
+  "future-transaction-days": "Hari Transaksi Masa Depan",
+  "future-transaction-days-description": "Hari ke hadapan untuk menyenaraikan urus niaga"
 }

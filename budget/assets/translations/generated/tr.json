@@ -1103,5 +1103,12 @@
   "change-title": "Başlığı değiştir",
   "changed-title": "Başlık Değiştirildi",
   "edit": "Düzenlemek",
-  "edit-transactions": "İşlemleri Düzenle"
+  "edit-transactions": "İşlemleri Düzenle",
+  "transaction-list": "İşlem Listesi",
+  "transaction-list-home-description": "İşlem içeren son 7 günü listeler",
+  "and-any-transactions": "ve herhangi bir işlem",
+  "days-ahead": "gelecekteki günler",
+  "day-ahead": "gelecekteki gün",
+  "future-transaction-days": "Gelecek İşlem Günleri",
+  "future-transaction-days-description": "İşlemlerin listelenmesine günler kaldı"
 }

@@ -1103,5 +1103,12 @@
   "change-title": "제목 변경",
   "changed-title": "제목이 변경됨",
   "edit": "편집하다",
-  "edit-transactions": "거래 편집"
+  "edit-transactions": "거래 편집",
+  "transaction-list": "거래 목록",
+  "transaction-list-home-description": "거래가 포함된 지난 7일을 나열합니다.",
+  "and-any-transactions": "그리고 모든 거래",
+  "days-ahead": "앞으로 며칠",
+  "day-ahead": "미래의 하루",
+  "future-transaction-days": "향후 거래일",
+  "future-transaction-days-description": "거래 목록을 며칠 앞두고"
 }

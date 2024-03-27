@@ -33,6 +33,7 @@ Future<Map<String, dynamic>> getDefaultPreferences() async {
     "widgetOpacity": 1,
     "widgetTheme": "system", //system, light, dark
     // FullScreen is added if the section has its own preference when full screen (double column)
+    "futureTransactionDaysHomePage": 4,
     "showWalletSwitcher": true,
     "showWalletSwitcherFullScreen": true,
     "showWalletList": false,

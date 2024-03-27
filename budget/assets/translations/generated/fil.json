@@ -1103,5 +1103,12 @@
   "change-title": "Baguhin ang Pamagat",
   "changed-title": "Binago ang Pamagat",
   "edit": "I-edit",
-  "edit-transactions": "I-edit ang mga Transaksyon"
+  "edit-transactions": "I-edit ang mga Transaksyon",
+  "transaction-list": "Listahan ng Transaksyon",
+  "transaction-list-home-description": "Inililista ang huling 7 araw na naglalaman ng isang transaksyon",
+  "and-any-transactions": "at anumang transaksyon",
+  "days-ahead": "araw sa hinaharap",
+  "day-ahead": "araw sa hinaharap",
+  "future-transaction-days": "Mga Araw ng Transaksyon sa Hinaharap",
+  "future-transaction-days-description": "Mga susunod na araw para ilista ang mga transaksyon"
 }

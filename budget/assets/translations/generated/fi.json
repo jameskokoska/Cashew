@@ -1103,5 +1103,12 @@
   "change-title": "Muuta otsikkoa",
   "changed-title": "Otsikko vaihdettu",
   "edit": "Muokata",
-  "edit-transactions": "Muokkaa tapahtumia"
+  "edit-transactions": "Muokkaa tapahtumia",
+  "transaction-list": "Tapahtumaluettelo",
+  "transaction-list-home-description": "Luetteloi viimeiset 7 päivää, jotka sisältävät tapahtuman",
+  "and-any-transactions": "ja kaikki liiketoimet",
+  "days-ahead": "päivää tulevaisuudessa",
+  "day-ahead": "päivä tulevaisuudessa",
+  "future-transaction-days": "Tulevat tapahtumapäivät",
+  "future-transaction-days-description": "Päiviä eteenpäin listataksesi tapahtumat"
 }

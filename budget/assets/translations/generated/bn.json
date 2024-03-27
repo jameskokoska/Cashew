@@ -1103,5 +1103,12 @@
   "change-title": "শিরোনাম পরিবর্তন করুন",
   "changed-title": "পরিবর্তিত শিরোনাম",
   "edit": "সম্পাদনা করুন",
-  "edit-transactions": "লেনদেন সম্পাদনা করুন"
+  "edit-transactions": "লেনদেন সম্পাদনা করুন",
+  "transaction-list": "লেনদেনের তালিকা",
+  "transaction-list-home-description": "একটি লেনদেন সম্বলিত শেষ 7 দিনের তালিকা করে",
+  "and-any-transactions": "এবং কোনো লেনদেন",
+  "days-ahead": "ভবিষ্যতের দিন",
+  "day-ahead": "ভবিষ্যতের দিন",
+  "future-transaction-days": "ভবিষ্যতের লেনদেনের দিন",
+  "future-transaction-days-description": "লেনদেনের তালিকা করতে দিন এগিয়ে"
 }

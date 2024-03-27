@@ -1103,5 +1103,12 @@
   "change-title": "Đổi tiêu đề",
   "changed-title": "Đã đổi tiêu đề",
   "edit": "Chỉnh sửa",
-  "edit-transactions": "Chỉnh sửa các giao dịch"
+  "edit-transactions": "Chỉnh sửa các giao dịch",
+  "transaction-list": "Danh sách giao dịch",
+  "transaction-list-home-description": "Liệt kê 7 ngày qua có giao dịch",
+  "and-any-transactions": "và mọi giao dịch",
+  "days-ahead": "những ngày trong tương lai",
+  "day-ahead": "ngày trong tương lai",
+  "future-transaction-days": "Ngày giao dịch trong tương lai",
+  "future-transaction-days-description": "Những ngày sắp tới để liệt kê các giao dịch"
 }

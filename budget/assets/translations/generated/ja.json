@@ -1103,5 +1103,12 @@
   "change-title": "タイトルの変更",
   "changed-title": "タイトル変更",
   "edit": "編集",
-  "edit-transactions": "トランザクションの編集"
+  "edit-transactions": "トランザクションの編集",
+  "transaction-list": "取引リスト",
+  "transaction-list-home-description": "トランザクションを含む過去 7 日間のリストを表示します",
+  "and-any-transactions": "そしてあらゆる取引",
+  "days-ahead": "将来の日々",
+  "day-ahead": "将来の日",
+  "future-transaction-days": "今後の取引日",
+  "future-transaction-days-description": "トランザクションのリストまであと数日"
 }

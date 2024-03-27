@@ -1103,5 +1103,12 @@
   "change-title": "Skift Titel",
   "changed-title": "Titel ændret",
   "edit": "Redigér",
-  "edit-transactions": "Redigér Transaktioner"
+  "edit-transactions": "Redigér Transaktioner",
+  "transaction-list": "Transaktionsliste",
+  "transaction-list-home-description": "Viser de sidste 7 dage, der indeholder en transaktion",
+  "and-any-transactions": "og eventuelle transaktioner",
+  "days-ahead": "dage i fremtiden",
+  "day-ahead": "dag i fremtiden",
+  "future-transaction-days": "Fremtidige transaktionsdage",
+  "future-transaction-days-description": "Dage frem for at liste transaktioner"
 }

@@ -459,6 +459,12 @@ class _TransactionFiltersSelectionState
   }
 
   @override
+  void dispose() {
+    titleContainsController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Column(
       children: [
@@ -978,20 +984,52 @@ class _TransactionFiltersSelectionState
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Column(
             children: [
-              TextInput(
+              TitleInput(
+                titleInputController: titleContainsController,
                 padding: EdgeInsets.zero,
-                labelText: "title-contains".tr() + "...",
-                onChanged: (value) {
+                setSelectedCategory: (_) {},
+                setSelectedSubCategory: (_) {},
+                alsoSearchCategories: false,
+                onDeleteButton: () {
+                  Future.delayed(Duration(milliseconds: 50), () {
+                    bottomSheetControllerGlobal.snapToExtent(1);
+                  });
+                  Future.delayed(Duration(milliseconds: 250), () {
+                    bottomSheetControllerGlobal.snapToExtent(1);
+                  });
+                },
+                setSelectedTitle: (String value) {
                   if (value.trim() == "") {
                     selectedFilters.titleContains = null;
                   } else {
                     selectedFilters.titleContains = value.trim();
                   }
                 },
-                controller: titleContainsController,
-                icon: appStateSettings["outlinedIcons"]
-                    ? Icons.title_outlined
-                    : Icons.title_rounded,
+                showCategoryIconForRecommendedTitles: false,
+                unfocusWhenRecommendedTapped: false,
+                onNewRecommendedTitle: () {},
+                onRecommendedTitleTapped:
+                    (TransactionAssociatedTitleWithCategory title) {
+                  List<String> splitTitles =
+                      titleContainsController.text.split(", ");
+                  if (splitTitles.length <= 0) return;
+                  splitTitles.last = title.title.title;
+                  titleContainsController.text = splitTitles.join(", ") + ", ";
+
+                  if (titleContainsController.text == "") {
+                    selectedFilters.titleContains = null;
+                  } else {
+                    selectedFilters.titleContains =
+                        titleContainsController.text.trim();
+                  }
+                },
+                textToSearchFilter: (String text) {
+                  return text.split(", ").lastOrNull ?? "";
+                },
+                handleOnRecommendedTitleTapped: false,
+                onSubmitted: (_) {},
+                autoFocus: false,
+                labelText: "title-contains".tr() + "...",
               ),
               SizedBox(height: 7),
               TextInput(

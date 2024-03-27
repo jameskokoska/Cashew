@@ -183,14 +183,15 @@ String convertToMoney(AllWallets allWallets, double amount,
           : numberDecimals
       : numberDecimals;
 
-  amount = absoluteZero(amount);
-
   if (amount == double.infinity || amount == double.negativeInfinity) {
     return "Infinity";
   }
   amount = double.parse(amount.toStringAsFixed(numberDecimals));
-  if (finalNumber != null)
+  amount = absoluteZero(amount);
+  if (finalNumber != null) {
     finalNumber = double.parse(finalNumber.toStringAsFixed(numberDecimals));
+    finalNumber = absoluteZero(finalNumber);
+  }
 
   int? decimalDigits = forceAllDecimals
       ? decimals

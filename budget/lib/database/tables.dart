@@ -1957,6 +1957,7 @@ class FinanceDatabase extends _$FinanceDatabase {
     int? limit,
     int? offset,
     bool alsoSearchCategories = true,
+    bool tryToCompleteSearch = false,
   }) async {
     limit = limit ?? DEFAULT_LIMIT;
 
@@ -1968,7 +1969,11 @@ class FinanceDatabase extends _$FinanceDatabase {
                   ..where(associatedTitles.title
                       .collate(Collate.noCase)
                       .like("%" + title + "%"))
-                  ..orderBy([OrderingTerm.desc(associatedTitles.order)])
+                  ..groupBy([associatedTitles.title])
+                  // Remove duplicate title titles only if not searching categories
+                  ..orderBy(alsoSearchCategories
+                      ? []
+                      : [OrderingTerm.desc(associatedTitles.order)])
                   ..limit(limit, offset: offset ?? DEFAULT_OFFSET))
                 .get())
             .map((rows) {
@@ -1986,26 +1991,28 @@ class FinanceDatabase extends _$FinanceDatabase {
       limit = limit - list.length;
 
     // Search based on individual words
-    list.addAll((await (select(associatedTitles).join([
-      innerJoin(categories,
-          categories.categoryPk.equalsExp(associatedTitles.categoryFk)),
-    ])
-              ..where(associatedTitles.title
-                  .collate(Collate.noCase)
-                  .isIn(title.split(" ")))
-              ..orderBy([OrderingTerm.desc(associatedTitles.order)])
-              ..limit(limit, offset: offset ?? DEFAULT_OFFSET))
-            .get())
-        .map((rows) {
-      TransactionAssociatedTitle foundTitle = rows.readTable(associatedTitles);
-      return TransactionAssociatedTitleWithCategory(
-        title: foundTitle.copyWith(
-            title: completePartialTitle(title, foundTitle.title)),
-        category: rows.readTable(categories),
-        type: TitleType.PartialTitleExists,
-        partialTitleString: foundTitle.title,
-      );
-    }).toList());
+    if (tryToCompleteSearch)
+      list.addAll((await (select(associatedTitles).join([
+        innerJoin(categories,
+            categories.categoryPk.equalsExp(associatedTitles.categoryFk)),
+      ])
+                ..where(associatedTitles.title
+                    .collate(Collate.noCase)
+                    .isIn(title.split(" ")))
+                ..orderBy([OrderingTerm.desc(associatedTitles.order)])
+                ..limit(limit, offset: offset ?? DEFAULT_OFFSET))
+              .get())
+          .map((rows) {
+        TransactionAssociatedTitle foundTitle =
+            rows.readTable(associatedTitles);
+        return TransactionAssociatedTitleWithCategory(
+          title: foundTitle.copyWith(
+              title: completePartialTitle(title, foundTitle.title)),
+          category: rows.readTable(categories),
+          type: TitleType.PartialTitleExists,
+          partialTitleString: foundTitle.title,
+        );
+      }).toList());
 
     if (list.length > limit)
       return removeDuplicateTransactionAssociatedTitleWithCategory(list);

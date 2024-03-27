@@ -1103,5 +1103,12 @@
   "change-title": "שנה כותרת",
   "changed-title": "שונתה כותרת",
   "edit": "לַעֲרוֹך",
-  "edit-transactions": "ערוך עסקאות"
+  "edit-transactions": "ערוך עסקאות",
+  "transaction-list": "רשימת עסקאות",
+  "transaction-list-home-description": "מפרט את 7 הימים האחרונים המכילים עסקה",
+  "and-any-transactions": "וכל עסקאות",
+  "days-ahead": "ימים בעתיד",
+  "day-ahead": "יום בעתיד",
+  "future-transaction-days": "ימי עסקאות עתידיים",
+  "future-transaction-days-description": "ימים קדימה לרשימת עסקאות"
 }

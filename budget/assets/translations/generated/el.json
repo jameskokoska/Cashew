@@ -1103,5 +1103,12 @@
   "change-title": "Αλλαγή τίτλου",
   "changed-title": "Άλλαξε τίτλο",
   "edit": "Επεξεργασία",
-  "edit-transactions": "Επεξεργασία συναλλαγών"
+  "edit-transactions": "Επεξεργασία συναλλαγών",
+  "transaction-list": "Λίστα συναλλαγών",
+  "transaction-list-home-description": "Εμφανίζει τις τελευταίες 7 ημέρες που περιέχουν μια συναλλαγή",
+  "and-any-transactions": "και τυχόν συναλλαγές",
+  "days-ahead": "μέρες στο μέλλον",
+  "day-ahead": "ημέρα στο μέλλον",
+  "future-transaction-days": "Μελλοντικές Ημέρες Συναλλαγών",
+  "future-transaction-days-description": "Μέρες μπροστά για τη λίστα συναλλαγών"
 }

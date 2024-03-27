@@ -1103,5 +1103,12 @@
   "change-title": "Cím módosítása",
   "changed-title": "Cím megváltozott",
   "edit": "Szerkesztés",
-  "edit-transactions": "Tranzakciók szerkesztése"
+  "edit-transactions": "Tranzakciók szerkesztése",
+  "transaction-list": "Tranzakciók listája",
+  "transaction-list-home-description": "A tranzakciót tartalmazó utolsó 7 nap listája",
+  "and-any-transactions": "és bármilyen tranzakció",
+  "days-ahead": "napok a jövőben",
+  "day-ahead": "nap a jövőben",
+  "future-transaction-days": "Jövőbeli tranzakciós napok",
+  "future-transaction-days-description": "Napok előtt a tranzakciók listázása"
 }

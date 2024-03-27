@@ -426,18 +426,22 @@ class DismissibleEditRowEntry extends StatelessWidget {
       builder: (context, value, _) {
         Widget child = Dismissible(
           key: ValueKey(key),
-          background: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(borderRadius),
-              color: Colors.red[700],
-            ),
-            padding: EdgeInsets.symmetric(horizontal: 15),
-            alignment: AlignmentDirectional.centerStart,
-            child: Icon(
-              appStateSettings["outlinedIcons"]
-                  ? Icons.delete_outlined
-                  : Icons.delete_rounded,
-              color: Colors.white,
+          background: AnimatedOpacity(
+            duration: Duration(milliseconds: 250),
+            opacity: value ? 0 : 1,
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(borderRadius),
+                color: Colors.red[700],
+              ),
+              padding: EdgeInsets.symmetric(horizontal: 15),
+              alignment: AlignmentDirectional.centerStart,
+              child: Icon(
+                appStateSettings["outlinedIcons"]
+                    ? Icons.delete_outlined
+                    : Icons.delete_rounded,
+                color: Colors.white,
+              ),
             ),
           ),
           secondaryBackground: Container(

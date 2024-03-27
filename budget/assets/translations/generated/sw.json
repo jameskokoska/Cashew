@@ -1103,5 +1103,12 @@
   "change-title": "Badilisha Kichwa",
   "changed-title": "Kichwa Kilichobadilishwa",
   "edit": "Hariri",
-  "edit-transactions": "Badilisha Miamala"
+  "edit-transactions": "Badilisha Miamala",
+  "transaction-list": "Orodha ya Muamala",
+  "transaction-list-home-description": "Inaorodhesha siku 7 zilizopita zilizo na muamala",
+  "and-any-transactions": "na miamala yoyote",
+  "days-ahead": "siku zijazo",
+  "day-ahead": "siku katika siku zijazo",
+  "future-transaction-days": "Siku za Muamala Zijazo",
+  "future-transaction-days-description": "Siku mbele kuorodhesha shughuli"
 }

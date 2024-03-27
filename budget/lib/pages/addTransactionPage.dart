@@ -1045,6 +1045,8 @@ class _AddTransactionPageState extends State<AddTransactionPage>
             ? Container(height: 20)
             : Container(height: 10),
         TitleInput(
+          clearWhenUnfocused: true,
+          tryToCompleteSearch: true,
           setSelectedTitle: (title) {
             setSelectedTitle(title, setInput: false);
           },
@@ -2362,6 +2364,8 @@ class SelectTitle extends StatefulWidget {
     this.selectedDate,
     required this.noteInputController,
     this.next,
+    this.disableAskForNote = false,
+    this.customTitleInputWidgetBuilder,
   }) : super(key: key);
   final Function(String) setSelectedTitle;
   final Function(String) setSelectedNote;
@@ -2372,6 +2376,9 @@ class SelectTitle extends StatefulWidget {
   final DateTime? selectedDate;
   final TextEditingController noteInputController;
   final VoidCallback? next;
+  final bool disableAskForNote;
+  final Widget Function(FocusNode enterTitleFocus)?
+      customTitleInputWidgetBuilder;
 
   @override
   _SelectTitleState createState() => _SelectTitleState();
@@ -2386,6 +2393,14 @@ class _SelectTitleState extends State<SelectTitle> {
   bool get foundFromCategory {
     return selectedAssociatedTitle?.type == TitleType.CategoryName ||
         selectedAssociatedTitle?.type == TitleType.SubCategoryName;
+  }
+
+  FocusNode enterTitleFocus = FocusNode();
+
+  @override
+  void dispose() {
+    enterTitleFocus.dispose();
+    super.dispose();
   }
 
   @override
@@ -2464,6 +2479,7 @@ class _SelectTitleState extends State<SelectTitle> {
                 // Update the size of the bottom sheet
                 Future.delayed(Duration(milliseconds: 100), () {
                   bottomSheetControllerGlobal.snapToExtent(0);
+                  enterTitleFocus.requestFocus();
                 });
               },
             ),
@@ -2487,11 +2503,13 @@ class _SelectTitleState extends State<SelectTitle> {
                   setSelectedDate: (date) {
                     selectedDateTime = date;
                     widget.setSelectedDateTime(selectedDateTime);
+                    enterTitleFocus.requestFocus();
                   },
                   setSelectedTime: (time) {
                     selectedDateTime = selectedDateTime.copyWith(
                         hour: time.hour, minute: time.minute);
                     widget.setSelectedDateTime(selectedDateTime);
+                    enterTitleFocus.requestFocus();
                   },
                   timeBackgroundColor: (appStateSettings["materialYou"]
                       ? Theme.of(context).colorScheme.secondaryContainer
@@ -2500,165 +2518,173 @@ class _SelectTitleState extends State<SelectTitle> {
               ),
             ),
           ),
-          Container(
-            child: TextInput(
-              icon: appStateSettings["outlinedIcons"]
-                  ? Icons.title_outlined
-                  : Icons.title_rounded,
-              initialValue: widget.selectedTitle,
-              autoFocus: true,
-              onEditingComplete: selectTitle,
-              onChanged: (text) async {
-                selectedText = text;
-                widget.setSelectedTitle(text.trim());
+          ...(widget.customTitleInputWidgetBuilder != null
+              ? [widget.customTitleInputWidgetBuilder!(enterTitleFocus)]
+              : [
+                  TextInput(
+                    icon: appStateSettings["outlinedIcons"]
+                        ? Icons.title_outlined
+                        : Icons.title_rounded,
+                    initialValue: widget.selectedTitle,
+                    autoFocus: true,
+                    focusNode: enterTitleFocus,
+                    onEditingComplete: selectTitle,
+                    onChanged: (text) async {
+                      selectedText = text;
+                      widget.setSelectedTitle(text.trim());
 
-                if (text.trim() == "" || text.trim().length < 2) {
-                  resetTitleSearch();
-                  return;
-                }
+                      if (text.trim() == "" || text.trim().length < 2) {
+                        resetTitleSearch();
+                        return;
+                      }
 
-                TransactionAssociatedTitleWithCategory? selectedTitleLocal =
-                    (await database.getSimilarAssociatedTitles(
-                            title: text, limit: 1))
-                        .firstOrNull;
+                      TransactionAssociatedTitleWithCategory?
+                          selectedTitleLocal =
+                          (await database.getSimilarAssociatedTitles(
+                                  title: text, limit: 1))
+                              .firstOrNull;
 
-                if (selectedTitleLocal != null) {
-                  // Update the size of the bottom sheet
-                  Future.delayed(Duration(milliseconds: 100), () {
-                    bottomSheetControllerGlobal.snapToExtent(0);
-                  });
-                  setState(() {
-                    selectedAssociatedTitle = selectedTitleLocal;
-                  });
-                } else {
-                  resetTitleSearch();
-                }
-              },
-              labelText: "title-placeholder".tr(),
-              padding: EdgeInsets.zero,
-            ),
-          ),
-          AnimatedSizeSwitcher(
-            sizeDuration: Duration(milliseconds: 400),
-            sizeCurve: Curves.easeInOut,
-            child: selectedAssociatedTitle == null
-                ? Container(
-                    key: ValueKey(0),
-                  )
-                : Container(
-                    key: ValueKey(selectedAssociatedTitle?.category.categoryPk),
-                    padding: EdgeInsets.only(top: 13),
-                    child: Tappable(
-                      borderRadius: 15,
-                      color: Colors.transparent,
-                      onTap: () {
-                        selectTitle();
-                      },
-                      child: Row(
-                        children: [
-                          CategoryIcon(
-                            categoryPk: "-1",
-                            size: 40,
-                            category: selectedAssociatedTitle?.category,
-                            margin: EdgeInsets.zero,
-                            onTap: () {
-                              selectTitle();
-                            },
-                          ),
-                          SizedBox(width: 10),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                TextFont(
-                                  text:
-                                      selectedAssociatedTitle?.category.name ??
-                                          "",
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                                !foundFromCategory
-                                    ? TextFont(
-                                        text: "",
-                                        richTextSpan: generateSpans(
-                                          context: context,
-                                          fontSize: 16,
-                                          mainText: selectedAssociatedTitle
-                                                  ?.title.title ??
-                                              "",
-                                          boldedText: selectedAssociatedTitle
-                                              ?.partialTitleString,
-                                        ),
-                                      )
-                                    : Container(),
-                              ],
-                            ),
+                      if (selectedTitleLocal != null) {
+                        // Update the size of the bottom sheet
+                        Future.delayed(Duration(milliseconds: 100), () {
+                          bottomSheetControllerGlobal.snapToExtent(0);
+                        });
+                        setState(() {
+                          selectedAssociatedTitle = selectedTitleLocal;
+                        });
+                      } else {
+                        resetTitleSearch();
+                      }
+                    },
+                    labelText: "title-placeholder".tr(),
+                    padding: EdgeInsets.zero,
+                  ),
+                  AnimatedSizeSwitcher(
+                    sizeDuration: Duration(milliseconds: 400),
+                    sizeCurve: Curves.easeInOut,
+                    child: selectedAssociatedTitle == null
+                        ? Container(
+                            key: ValueKey(0),
                           )
-                        ],
+                        : Container(
+                            key: ValueKey(
+                                selectedAssociatedTitle?.category.categoryPk),
+                            padding: EdgeInsets.only(top: 13),
+                            child: Tappable(
+                              borderRadius: 15,
+                              color: Colors.transparent,
+                              onTap: () {
+                                selectTitle();
+                              },
+                              child: Row(
+                                children: [
+                                  CategoryIcon(
+                                    categoryPk: "-1",
+                                    size: 40,
+                                    category: selectedAssociatedTitle?.category,
+                                    margin: EdgeInsets.zero,
+                                    onTap: () {
+                                      selectTitle();
+                                    },
+                                  ),
+                                  SizedBox(width: 10),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        TextFont(
+                                          text: selectedAssociatedTitle
+                                                  ?.category.name ??
+                                              "",
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                        !foundFromCategory
+                                            ? TextFont(
+                                                text: "",
+                                                richTextSpan: generateSpans(
+                                                  context: context,
+                                                  fontSize: 16,
+                                                  mainText:
+                                                      selectedAssociatedTitle
+                                                              ?.title.title ??
+                                                          "",
+                                                  boldedText:
+                                                      selectedAssociatedTitle
+                                                          ?.partialTitleString,
+                                                ),
+                                              )
+                                            : Container(),
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
+                  ),
+                  if (widget.disableAskForNote == false &&
+                          getIsFullScreen(context) ||
+                      appStateSettings["askForTransactionNoteWithTitle"])
+                    Padding(
+                      padding: const EdgeInsets.only(top: 13),
+                      child: Container(
+                        child: TransactionNotesTextInput(
+                          noteInputController: widget.noteInputController,
+                          setNotesInputFocused: (isFocused) {},
+                          setSelectedNoteController: (note, {setInput = true}) {
+                            // Adding this line jumps cursor to the end when editing,
+                            // we don't need because the noteInputController is already passed in!
+                            // widget.setSelectedNote(note);
+
+                            // Update the size of the bottom sheet
+                            // Need to do it slowly because the link container size is animated slowly
+                            Future.delayed(Duration(milliseconds: 200), () {
+                              bottomSheetControllerGlobal.scrollTo(0);
+                            });
+                          },
+                        ),
                       ),
                     ),
-                  ),
-          ),
-          getIsFullScreen(context) ||
-                  appStateSettings["askForTransactionNoteWithTitle"]
-              ? Padding(
-                  padding: const EdgeInsets.only(top: 13),
-                  child: Container(
-                    child: TransactionNotesTextInput(
-                      noteInputController: widget.noteInputController,
-                      setNotesInputFocused: (isFocused) {},
-                      setSelectedNoteController: (note, {setInput = true}) {
-                        // Adding this line jumps cursor to the end when editing,
-                        // we don't need because the noteInputController is already passed in!
-                        // widget.setSelectedNote(note);
-
-                        // Update the size of the bottom sheet
-                        // Need to do it slowly because the link container size is animated slowly
-                        Future.delayed(Duration(milliseconds: 200), () {
-                          bottomSheetControllerGlobal.scrollTo(0);
-                        });
-                      },
-                    ),
-                  ),
-                )
-              : SizedBox.shrink(),
-          // AnimatedSwitcher(
-          //   duration: Duration(milliseconds: 300),
-          //   child: CategoryIcon(
-          //     key: ValueKey(selectedCategory?.categoryPk ?? ""),
-          //     margin: EdgeInsets.zero,
-          //     categoryPk: selectedCategory?.categoryPk ?? 0,
-          //     size: 55,
-          //     onTap: () {
-          //       openBottomSheet(
-          //         context,
-          //         PopupFramework(
-          //           title: "select-category".tr(),
-          //           child: SelectCategory(
-          //             setSelectedCategory: (TransactionCategory category) {
-          //               widget.setSelectedCategory(category);
-          //               setState(() {
-          //                 selectedCategory = category;
-          //               });
-          //             },
-          //           ),
-          //         ),
-          //       );
-          //     },
-          //   ),
-          // ),
-          SizedBox(height: 15),
-          widget.next != null
-              ? Button(
-                  label: "select-category".tr(),
-                  onTap: () {
-                    Navigator.pop(context);
-                    if (widget.next != null) {
-                      widget.next!();
-                    }
-                  },
-                )
-              : SizedBox.shrink(),
+                  // AnimatedSwitcher(
+                  //   duration: Duration(milliseconds: 300),
+                  //   child: CategoryIcon(
+                  //     key: ValueKey(selectedCategory?.categoryPk ?? ""),
+                  //     margin: EdgeInsets.zero,
+                  //     categoryPk: selectedCategory?.categoryPk ?? 0,
+                  //     size: 55,
+                  //     onTap: () {
+                  //       openBottomSheet(
+                  //         context,
+                  //         PopupFramework(
+                  //           title: "select-category".tr(),
+                  //           child: SelectCategory(
+                  //             setSelectedCategory: (TransactionCategory category) {
+                  //               widget.setSelectedCategory(category);
+                  //               setState(() {
+                  //                 selectedCategory = category;
+                  //               });
+                  //             },
+                  //           ),
+                  //         ),
+                  //       );
+                  //     },
+                  //   ),
+                  // ),
+                  SizedBox(height: 15),
+                  widget.next != null
+                      ? Button(
+                          label: "select-category".tr(),
+                          onTap: () {
+                            Navigator.pop(context);
+                            if (widget.next != null) {
+                              widget.next!();
+                            }
+                          },
+                        )
+                      : SizedBox.shrink(),
+                ])
         ],
       ),
     );
@@ -4740,11 +4766,19 @@ class TitleInput extends StatefulWidget {
     this.padding = const EdgeInsets.symmetric(horizontal: 22),
     this.alsoSearchCategories = true,
     this.onNewRecommendedTitle,
-    this.onRecommendedTitle,
+    this.onRecommendedTitleTapped,
+    this.handleOnRecommendedTitleTapped = true,
     this.unfocusWhenRecommendedTapped = true,
     this.onSubmitted,
     this.autoFocus,
     this.showCategoryIconForRecommendedTitles = true,
+    this.labelText,
+    this.textToSearchFilter,
+    this.onDeleteButton,
+    this.tryToCompleteSearch = false,
+    this.resizePopupWhenChanged = false,
+    this.focusNode,
+    this.clearWhenUnfocused = false,
     super.key,
   });
   final Function(String title) setSelectedTitle;
@@ -4754,11 +4788,20 @@ class TitleInput extends StatefulWidget {
   final EdgeInsets padding;
   final bool alsoSearchCategories;
   final VoidCallback? onNewRecommendedTitle;
-  final VoidCallback? onRecommendedTitle;
+  final Function(TransactionAssociatedTitleWithCategory)?
+      onRecommendedTitleTapped;
+  final bool handleOnRecommendedTitleTapped;
   final bool unfocusWhenRecommendedTapped;
   final Function(String)? onSubmitted;
   final bool? autoFocus;
   final bool showCategoryIconForRecommendedTitles;
+  final String? labelText;
+  final String Function(String)? textToSearchFilter;
+  final VoidCallback? onDeleteButton;
+  final bool tryToCompleteSearch;
+  final bool resizePopupWhenChanged;
+  final FocusNode? focusNode;
+  final bool clearWhenUnfocused;
 
   @override
   State<TitleInput> createState() => _TitleInputState();
@@ -4779,6 +4822,13 @@ class _TitleInputState extends State<TitleInput> {
 
   List<TransactionAssociatedTitleWithCategory> foundAssociatedTitles = [];
 
+  void fixResizingPopup() {
+    Future.delayed(Duration(milliseconds: 100), () {
+      bottomSheetControllerGlobal.snapToExtent(1,
+          duration: Duration(milliseconds: 625));
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -4790,15 +4840,16 @@ class _TitleInputState extends State<TitleInput> {
           children: [
             Focus(
               onFocusChange: (value) {
-                if (value == false)
+                if (value == false && widget.clearWhenUnfocused == true)
                   setState(() {
                     foundAssociatedTitles = [];
                   });
               },
               child: TextInput(
+                focusNode: widget.focusNode,
                 borderRadius: BorderRadius.zero,
                 padding: EdgeInsets.zero,
-                labelText: "title-placeholder".tr(),
+                labelText: widget.labelText ?? "title-placeholder".tr(),
                 icon: appStateSettings["outlinedIcons"]
                     ? Icons.title_outlined
                     : Icons.title_rounded,
@@ -4806,17 +4857,26 @@ class _TitleInputState extends State<TitleInput> {
                 onChanged: (text) async {
                   widget.setSelectedTitle(text);
                   List<TransactionAssociatedTitleWithCategory>
-                      newFoundAssociatedTitles =
-                      await database.getSimilarAssociatedTitles(
-                    title: text,
-                    limit: enableDoubleColumn(context) ? 5 : 3,
-                    alsoSearchCategories: widget.alsoSearchCategories,
-                  );
-                  if (widget.onNewRecommendedTitle != null &&
-                      foundAssociatedTitles.toString() !=
-                          newFoundAssociatedTitles.toString()) {
-                    widget.onNewRecommendedTitle!();
+                      newFoundAssociatedTitles = [];
+                  if (text.trim() != "") {
+                    newFoundAssociatedTitles =
+                        await database.getSimilarAssociatedTitles(
+                      title: widget.textToSearchFilter != null
+                          ? widget.textToSearchFilter!(text)
+                          : text,
+                      limit: enableDoubleColumn(context) ? 5 : 3,
+                      alsoSearchCategories: widget.alsoSearchCategories,
+                      tryToCompleteSearch: widget.tryToCompleteSearch,
+                    );
                   }
+
+                  if (foundAssociatedTitles.toString() !=
+                      newFoundAssociatedTitles.toString()) {
+                    if (widget.resizePopupWhenChanged) fixResizingPopup();
+                    if (widget.onNewRecommendedTitle != null)
+                      widget.onNewRecommendedTitle!();
+                  }
+
                   foundAssociatedTitles = newFoundAssociatedTitles;
                   setState(() {});
                 },
@@ -4858,40 +4918,47 @@ class _TitleInputState extends State<TitleInput> {
                                 borderRadius: 0,
                                 color: Colors.transparent,
                                 onTap: () async {
-                                  if (foundAssociatedTitle
-                                          .category.mainCategoryPk !=
-                                      null) {
-                                    widget.setSelectedCategory(
-                                        await database.getCategoryInstance(
-                                            foundAssociatedTitle
-                                                .category.mainCategoryPk!));
-                                    widget.setSelectedSubCategory(
-                                        foundAssociatedTitle.category);
-                                  } else {
-                                    widget.setSelectedCategory(
-                                        foundAssociatedTitle.category);
-                                  }
+                                  if (widget.handleOnRecommendedTitleTapped) {
+                                    if (foundAssociatedTitle
+                                            .category.mainCategoryPk !=
+                                        null) {
+                                      widget.setSelectedCategory(
+                                          await database.getCategoryInstance(
+                                              foundAssociatedTitle
+                                                  .category.mainCategoryPk!));
+                                      widget.setSelectedSubCategory(
+                                          foundAssociatedTitle.category);
+                                    } else {
+                                      widget.setSelectedCategory(
+                                          foundAssociatedTitle.category);
+                                    }
 
-                                  if (foundAssociatedTitle.type !=
-                                          TitleType.CategoryName &&
-                                      foundAssociatedTitle.type !=
-                                          TitleType.SubCategoryName) {
-                                    widget.setSelectedTitle(
-                                        foundAssociatedTitle.title.title);
-                                    setTextInput(_titleInputController,
-                                        foundAssociatedTitle.title.title);
-                                  } else {
-                                    widget.setSelectedTitle("");
-                                    setTextInput(_titleInputController, "");
+                                    if (foundAssociatedTitle.type !=
+                                            TitleType.CategoryName &&
+                                        foundAssociatedTitle.type !=
+                                            TitleType.SubCategoryName) {
+                                      widget.setSelectedTitle(
+                                          foundAssociatedTitle.title.title);
+                                      setTextInput(_titleInputController,
+                                          foundAssociatedTitle.title.title);
+                                    } else {
+                                      widget.setSelectedTitle("");
+                                      setTextInput(_titleInputController, "");
+                                    }
+
+                                    if (widget.unfocusWhenRecommendedTapped)
+                                      FocusScope.of(context).unfocus();
                                   }
 
                                   setState(() {
                                     foundAssociatedTitles = [];
                                   });
-                                  if (widget.unfocusWhenRecommendedTapped)
-                                    FocusScope.of(context).unfocus();
-                                  if (widget.onRecommendedTitle != null)
-                                    widget.onRecommendedTitle!();
+
+                                  if (widget.onRecommendedTitleTapped != null)
+                                    widget.onRecommendedTitleTapped!(
+                                        foundAssociatedTitle);
+                                  if (widget.resizePopupWhenChanged)
+                                    fixResizingPopup();
                                 },
                                 child: Row(
                                   children: [
@@ -4953,6 +5020,13 @@ class _TitleInputState extends State<TitleInput> {
                                               iconSize: 18,
                                               scale: 1.1,
                                               onTap: () async {
+                                                if (widget.onDeleteButton !=
+                                                    null)
+                                                  widget.onDeleteButton!();
+                                                if (widget
+                                                    .resizePopupWhenChanged)
+                                                  fixResizingPopup();
+
                                                 await deleteAssociatedTitlePopup(
                                                   context,
                                                   title: foundAssociatedTitle

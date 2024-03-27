@@ -1103,5 +1103,12 @@
   "change-title": "தலைப்பை மாற்றவும்",
   "changed-title": "தலைப்பு மாற்றப்பட்டது",
   "edit": "தொகு",
-  "edit-transactions": "பரிவர்த்தனைகளைத் திருத்தவும்"
+  "edit-transactions": "பரிவர்த்தனைகளைத் திருத்தவும்",
+  "transaction-list": "பரிவர்த்தனை பட்டியல்",
+  "transaction-list-home-description": "பரிவர்த்தனையைக் கொண்ட கடந்த 7 நாட்களைப் பட்டியலிடுகிறது",
+  "and-any-transactions": "மற்றும் ஏதேனும் பரிவர்த்தனைகள்",
+  "days-ahead": "எதிர்காலத்தில் நாட்கள்",
+  "day-ahead": "எதிர்காலத்தில் நாள்",
+  "future-transaction-days": "எதிர்கால பரிவர்த்தனை நாட்கள்",
+  "future-transaction-days-description": "பரிவர்த்தனைகளை பட்டியலிட இன்னும் நாட்கள் உள்ளன"
 }

@@ -292,6 +292,11 @@ class PageFrameworkState extends State<PageFramework>
       if (isBackSideSwiping) {
         totalDragX = totalDragX + ptr.delta.dx;
         calculatedYOffsetForX = totalDragX / 500;
+
+        if (totalDragX > 20) {
+          isSwipingToDismissPageDown.value = true;
+          isSwipingToDismissPageDown.notifyListeners();
+        }
       }
       if (swipeDownToDismiss) {
         totalDragY = totalDragY + ptr.delta.dy;

@@ -1103,5 +1103,12 @@
   "change-title": "Промяна на заглавието",
   "changed-title": "Променено заглавие",
   "edit": "редактиране",
-  "edit-transactions": "Редактиране на транзакции"
+  "edit-transactions": "Редактиране на транзакции",
+  "transaction-list": "Списък с транзакции",
+  "transaction-list-home-description": "Показва последните 7 дни, съдържащи транзакция",
+  "and-any-transactions": "и всякакви транзакции",
+  "days-ahead": "дни в бъдещето",
+  "day-ahead": "ден в бъдещето",
+  "future-transaction-days": "Дни на бъдещи транзакции",
+  "future-transaction-days-description": "Дни напред за списък на транзакциите"
 }

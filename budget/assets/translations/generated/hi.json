@@ -1103,5 +1103,12 @@
   "change-title": "शीर्षक बदलें",
   "changed-title": "बदला गया शीर्षक",
   "edit": "संपादन करना",
-  "edit-transactions": "लेन-देन संपादित करें"
+  "edit-transactions": "लेन-देन संपादित करें",
+  "transaction-list": "लेन-देन सूची",
+  "transaction-list-home-description": "लेन-देन वाले अंतिम 7 दिनों की सूची",
+  "and-any-transactions": "और कोई भी लेनदेन",
+  "days-ahead": "भविष्य में दिन",
+  "day-ahead": "भविष्य में दिन",
+  "future-transaction-days": "भविष्य के लेन-देन के दिन",
+  "future-transaction-days-description": "लेन-देन सूचीबद्ध करने के लिए आगे के दिन"
 }

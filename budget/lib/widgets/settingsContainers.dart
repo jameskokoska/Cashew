@@ -5,6 +5,7 @@ import 'package:budget/widgets/animatedExpanded.dart';
 import 'package:budget/widgets/dropdownSelect.dart';
 import 'package:budget/widgets/editRowEntry.dart';
 import 'package:budget/widgets/fadeIn.dart';
+import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openContainerNavigation.dart';
 import 'package:budget/widgets/tappable.dart';
@@ -568,7 +569,12 @@ class SettingsContainer extends StatelessWidget {
               onLongPress: onLongPress,
               child: Padding(
                 padding: EdgeInsets.symmetric(
-                  horizontal: horizontalPadding ?? 18,
+                  horizontal: horizontalPadding ??
+                      (enableBorderRadius &&
+                              getWidthNavigationSidebar(context) <= 0 &&
+                              icon != null
+                          ? 10
+                          : 18),
                   vertical: verticalPadding ?? 11,
                 ),
                 child: Row(

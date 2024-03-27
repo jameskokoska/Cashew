@@ -1103,5 +1103,12 @@
   "change-title": "શીર્ષક બદલો",
   "changed-title": "શીર્ષક બદલ્યું",
   "edit": "સંપાદિત કરો",
-  "edit-transactions": "વ્યવહારો સંપાદિત કરો"
+  "edit-transactions": "વ્યવહારો સંપાદિત કરો",
+  "transaction-list": "વ્યવહાર સૂચિ",
+  "transaction-list-home-description": "ટ્રાન્ઝેક્શન ધરાવતા છેલ્લા 7 દિવસની યાદી આપે છે",
+  "and-any-transactions": "અને કોઈપણ વ્યવહારો",
+  "days-ahead": "ભવિષ્યમાં દિવસો",
+  "day-ahead": "ભવિષ્યમાં દિવસ",
+  "future-transaction-days": "ભાવિ વ્યવહાર દિવસો",
+  "future-transaction-days-description": "વ્યવહારોની સૂચિ બનાવવાના દિવસો આગળ છે"
 }

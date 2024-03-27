@@ -456,6 +456,7 @@ class SelectedTransactionsAppBarMenu extends StatelessWidget {
                                         children: [
                                           Expanded(
                                             child: TitleInput(
+                                              resizePopupWhenChanged: true,
                                               padding: EdgeInsets.zero,
                                               setSelectedCategory: (_) {},
                                               setSelectedSubCategory: (_) {},
@@ -467,28 +468,6 @@ class SelectedTransactionsAppBarMenu extends StatelessWidget {
                                                   false,
                                               unfocusWhenRecommendedTapped:
                                                   false,
-                                              onNewRecommendedTitle: () {
-                                                Future.delayed(
-                                                    Duration(milliseconds: 100),
-                                                    () {
-                                                  bottomSheetControllerGlobal
-                                                      .snapToExtent(0);
-                                                });
-                                              },
-                                              onRecommendedTitle: () {
-                                                Future.delayed(
-                                                    Duration(milliseconds: 100),
-                                                    () {
-                                                  bottomSheetControllerGlobal
-                                                      .snapToExtent(0);
-                                                });
-                                                Future.delayed(
-                                                    Duration(milliseconds: 300),
-                                                    () {
-                                                  bottomSheetControllerGlobal
-                                                      .snapToExtent(0);
-                                                });
-                                              },
                                               onSubmitted: (_) {
                                                 Navigator.pop(context, true);
                                               },

@@ -1103,5 +1103,12 @@
   "change-title": "Změnit název",
   "changed-title": "Změněn název",
   "edit": "Upravit",
-  "edit-transactions": "Upravit transakce"
+  "edit-transactions": "Upravit transakce",
+  "transaction-list": "Seznam transakcí",
+  "transaction-list-home-description": "Uvádí posledních 7 dní obsahujících transakci",
+  "and-any-transactions": "a jakékoli transakce",
+  "days-ahead": "dny v budoucnosti",
+  "day-ahead": "den v budoucnosti",
+  "future-transaction-days": "Budoucí transakční dny",
+  "future-transaction-days-description": "Dny dopředu na seznam transakcí"
 }

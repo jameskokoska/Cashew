@@ -1103,5 +1103,12 @@
   "change-title": "Промените наслов",
   "changed-title": "Промењен наслов",
   "edit": "Уредити",
-  "edit-transactions": "Уреди трансакције"
+  "edit-transactions": "Уреди трансакције",
+  "transaction-list": "Листа трансакција",
+  "transaction-list-home-description": "Наводи последњих 7 дана који садрже трансакцију",
+  "and-any-transactions": "и било које трансакције",
+  "days-ahead": "дана у будућности",
+  "day-ahead": "дан у будућности",
+  "future-transaction-days": "Дани будућих трансакција",
+  "future-transaction-days-description": "Дани унапред за попис трансакција"
 }

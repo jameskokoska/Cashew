@@ -1103,5 +1103,12 @@
   "change-title": "เปลี่ยนชื่อเรื่อง",
   "changed-title": "เปลี่ยนชื่อเรื่องแล้ว",
   "edit": "แก้ไข",
-  "edit-transactions": "แก้ไขธุรกรรม"
+  "edit-transactions": "แก้ไขธุรกรรม",
+  "transaction-list": "รายการธุรกรรม",
+  "transaction-list-home-description": "แสดงรายการ 7 วันล่าสุดที่มีธุรกรรม",
+  "and-any-transactions": "และธุรกรรมใดๆ",
+  "days-ahead": "วันข้างหน้า",
+  "day-ahead": "วันข้างหน้า",
+  "future-transaction-days": "วันทำธุรกรรมในอนาคต",
+  "future-transaction-days-description": "วันข้างหน้าเพื่อแสดงรายการธุรกรรม"
 }

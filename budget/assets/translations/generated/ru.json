@@ -1102,5 +1102,12 @@
   "change-title": "Изменить заголовок",
   "changed-title": "Изменено название",
   "edit": "Редактировать",
-  "edit-transactions": "Редактировать транзакции"
+  "edit-transactions": "Редактировать транзакции",
+  "transaction-list": "Список транзакций",
+  "transaction-list-home-description": "Перечисляет последние 7 дней, в которых была транзакция.",
+  "and-any-transactions": "и любые транзакции",
+  "days-ahead": "дни в будущем",
+  "day-ahead": "день в будущем",
+  "future-transaction-days": "Будущие дни транзакций",
+  "future-transaction-days-description": "На несколько дней вперед, чтобы составить список транзакций"
 }

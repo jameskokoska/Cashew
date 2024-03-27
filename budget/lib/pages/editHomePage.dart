@@ -30,6 +30,7 @@ import 'package:budget/widgets/radioItems.dart';
 import 'package:budget/widgets/selectAmount.dart';
 import 'package:budget/widgets/selectItems.dart';
 import 'package:budget/pages/addBudgetPage.dart';
+import 'package:budget/widgets/settingsContainers.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/util/showDatePicker.dart';
@@ -40,6 +41,7 @@ import 'package:flutter/services.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/widgets/framework/popupFramework.dart';
 import 'package:budget/functions.dart';
+import 'package:material_symbols_icons/material_symbols_icons.dart';
 import 'package:provider/provider.dart';
 
 import '../widgets/tappableTextEntry.dart';
@@ -401,6 +403,9 @@ class _EditHomePageState extends State<EditHomePage> {
               switchHomeScreenSection(context, "showTransactionsList", value);
             },
             extraWidgetsBelow: [],
+            onTap: () {
+              openTransactionsListHomePageBottomSheetSettings(context);
+            },
           ),
         };
         keyOrder = List<String>.from(
@@ -605,6 +610,60 @@ class PanelSectionSeparator extends StatelessWidget {
             textAlign: TextAlign.right,
           ),
       ],
+    );
+  }
+}
+
+Future openTransactionsListHomePageBottomSheetSettings(
+    BuildContext context) async {
+  await openBottomSheet(
+    context,
+    TransactionsListHomePageBottomSheetSettings(),
+  );
+}
+
+class TransactionsListHomePageBottomSheetSettings extends StatefulWidget {
+  const TransactionsListHomePageBottomSheetSettings({super.key});
+
+  @override
+  State<TransactionsListHomePageBottomSheetSettings> createState() =>
+      _TransactionsListHomePageBottomSheetSettingsState();
+}
+
+class _TransactionsListHomePageBottomSheetSettingsState
+    extends State<TransactionsListHomePageBottomSheetSettings> {
+  int futureTransactionDaysHomePage =
+      appStateSettings["futureTransactionDaysHomePage"];
+  @override
+  Widget build(BuildContext context) {
+    return PopupFramework(
+      title: "transaction-list".tr(),
+      subtitle: "transaction-list-home-description".tr() +
+          " " +
+          "and-any-transactions".tr() +
+          " " +
+          futureTransactionDaysHomePage.toString() +
+          " " +
+          (futureTransactionDaysHomePage == 1
+              ? "day-ahead".tr()
+              : "days-ahead".tr()),
+      child: SettingsContainerDropdown(
+        enableBorderRadius: true,
+        items: ["0", "1", "4", "7", "14"],
+        onChanged: (value) {
+          updateSettings("futureTransactionDaysHomePage", int.parse(value),
+              pagesNeedingRefresh: [], updateGlobalState: false);
+          setState(() {
+            futureTransactionDaysHomePage = int.parse(value);
+          });
+        },
+        initial: appStateSettings["futureTransactionDaysHomePage"].toString(),
+        title: "future-transaction-days".tr(),
+        description: "future-transaction-days-description".tr(),
+        icon: appStateSettings["outlinedIcons"]
+            ? Symbols.event_upcoming_sharp
+            : Symbols.event_upcoming_rounded,
+      ),
     );
   }
 }

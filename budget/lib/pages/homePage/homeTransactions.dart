@@ -1,5 +1,6 @@
 import 'package:budget/database/tables.dart';
 import 'package:budget/pages/transactionFilters.dart';
+import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/animatedExpanded.dart';
 import 'package:budget/widgets/transactionEntries.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +13,7 @@ class HomeTransactions extends StatelessWidget {
   final int selectedSlidingSelector;
   @override
   Widget build(BuildContext context) {
+    int numberOfFutureDays = appStateSettings["futureTransactionDaysHomePage"];
     return TransactionEntries(
       showNumberOfDaysUntilForFutureDates: true,
       renderType: TransactionEntriesRenderType.nonSlivers,
@@ -24,7 +26,7 @@ class HomeTransactions extends StatelessWidget {
       DateTime(
         DateTime.now().year,
         DateTime.now().month,
-        DateTime.now().day + 4,
+        DateTime.now().day + numberOfFutureDays,
       ),
       dateDividerColor: Colors.transparent,
       useHorizontalPaddingConstrained: false,
