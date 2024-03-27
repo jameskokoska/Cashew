@@ -1954,6 +1954,7 @@ class FinanceDatabase extends _$FinanceDatabase {
   Future<List<TransactionAssociatedTitleWithCategory>>
       getSimilarAssociatedTitles({
     required String title,
+    List<String> excludeTitles = const [],
     int? limit,
     int? offset,
     bool alsoSearchCategories = true,
@@ -1967,8 +1968,9 @@ class FinanceDatabase extends _$FinanceDatabase {
           categories.categoryPk.equalsExp(associatedTitles.categoryFk)),
     ])
                   ..where(associatedTitles.title
-                      .collate(Collate.noCase)
-                      .like("%" + title + "%"))
+                          .collate(Collate.noCase)
+                          .like("%" + title + "%") &
+                      associatedTitles.title.isNotIn(excludeTitles))
                   ..groupBy([associatedTitles.title])
                   // Remove duplicate title titles only if not searching categories
                   ..orderBy(alsoSearchCategories

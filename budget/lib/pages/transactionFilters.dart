@@ -449,6 +449,7 @@ class TransactionFiltersSelection extends StatefulWidget {
 class _TransactionFiltersSelectionState
     extends State<TransactionFiltersSelection> {
   late SearchFilters selectedFilters = widget.searchFilters;
+  late ScrollController titleContainsScrollController = ScrollController();
   late TextEditingController titleContainsController = HighlightStringInList(
     initialText: selectedFilters.titleContains,
   );
@@ -461,6 +462,7 @@ class _TransactionFiltersSelectionState
   @override
   void dispose() {
     titleContainsController.dispose();
+    titleContainsScrollController.dispose();
     super.dispose();
   }
 
@@ -986,6 +988,7 @@ class _TransactionFiltersSelectionState
             children: [
               TitleInput(
                 titleInputController: titleContainsController,
+                titleInputScrollController: titleContainsScrollController,
                 padding: EdgeInsets.zero,
                 setSelectedCategory: (_) {},
                 setSelectedSubCategory: (_) {},
@@ -1009,9 +1012,11 @@ class _TransactionFiltersSelectionState
                 unfocusWhenRecommendedTapped: false,
                 onNewRecommendedTitle: () {},
                 onRecommendedTitleTapped:
-                    (TransactionAssociatedTitleWithCategory title) {
-                  List<String> splitTitles =
-                      titleContainsController.text.split(", ");
+                    (TransactionAssociatedTitleWithCategory title) async {
+                  List<String> splitTitles = titleContainsController.text
+                      .trim()
+                      .replaceAll(", ", ",")
+                      .split(",");
                   if (splitTitles.length <= 0) return;
                   splitTitles.last = title.title.title;
                   titleContainsController.text = splitTitles.join(", ") + ", ";
@@ -1022,9 +1027,27 @@ class _TransactionFiltersSelectionState
                     selectedFilters.titleContains =
                         titleContainsController.text.trim();
                   }
+
+                  // Scroll to the end of the text input
+                  titleContainsController.selection =
+                      TextSelection.fromPosition(
+                    TextPosition(offset: titleContainsController.text.length),
+                  );
+                  Future.delayed(Duration(milliseconds: 50), () {
+                    // delay cannot be zero
+                    titleContainsScrollController.animateTo(
+                      titleContainsScrollController.position.maxScrollExtent,
+                      curve: Curves.easeInOutCubicEmphasized,
+                      duration: Duration(milliseconds: 500),
+                    );
+                  });
                 },
                 textToSearchFilter: (String text) {
-                  return text.split(", ").lastOrNull ?? "";
+                  return (text.split(",").lastOrNull ?? "").trim();
+                },
+                getTextToExclude: (String text) {
+                  text = text.trim().replaceAll(", ", ",");
+                  return (text.split(","));
                 },
                 handleOnRecommendedTitleTapped: false,
                 onSubmitted: (_) {},

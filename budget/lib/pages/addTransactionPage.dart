@@ -4761,6 +4761,7 @@ class TitleInput extends StatefulWidget {
   const TitleInput({
     required this.setSelectedTitle,
     this.titleInputController,
+    this.titleInputScrollController,
     required this.setSelectedCategory,
     required this.setSelectedSubCategory,
     this.padding = const EdgeInsets.symmetric(horizontal: 22),
@@ -4774,6 +4775,7 @@ class TitleInput extends StatefulWidget {
     this.showCategoryIconForRecommendedTitles = true,
     this.labelText,
     this.textToSearchFilter,
+    this.getTextToExclude,
     this.onDeleteButton,
     this.tryToCompleteSearch = false,
     this.resizePopupWhenChanged = false,
@@ -4783,6 +4785,7 @@ class TitleInput extends StatefulWidget {
   });
   final Function(String title) setSelectedTitle;
   final TextEditingController? titleInputController;
+  final ScrollController? titleInputScrollController;
   final Function(TransactionCategory category) setSelectedCategory;
   final Function(TransactionCategory category) setSelectedSubCategory;
   final EdgeInsets padding;
@@ -4797,6 +4800,7 @@ class TitleInput extends StatefulWidget {
   final bool showCategoryIconForRecommendedTitles;
   final String? labelText;
   final String Function(String)? textToSearchFilter;
+  final List<String> Function(String)? getTextToExclude;
   final VoidCallback? onDeleteButton;
   final bool tryToCompleteSearch;
   final bool resizePopupWhenChanged;
@@ -4847,6 +4851,7 @@ class _TitleInputState extends State<TitleInput> {
               },
               child: TextInput(
                 focusNode: widget.focusNode,
+                scrollController: widget.titleInputScrollController,
                 borderRadius: BorderRadius.zero,
                 padding: EdgeInsets.zero,
                 labelText: widget.labelText ?? "title-placeholder".tr(),
@@ -4864,6 +4869,9 @@ class _TitleInputState extends State<TitleInput> {
                       title: widget.textToSearchFilter != null
                           ? widget.textToSearchFilter!(text)
                           : text,
+                      excludeTitles: widget.getTextToExclude != null
+                          ? widget.getTextToExclude!(text)
+                          : [],
                       limit: enableDoubleColumn(context) ? 5 : 3,
                       alsoSearchCategories: widget.alsoSearchCategories,
                       tryToCompleteSearch: widget.tryToCompleteSearch,

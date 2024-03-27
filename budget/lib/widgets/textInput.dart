@@ -84,6 +84,7 @@ class TextInput extends StatelessWidget {
   final String? suffix;
   final double paddingRight;
   final FocusNode? focusNode;
+  final ScrollController? scrollController;
   final bool? bubbly;
   final Color? backgroundColor;
   final TextInputType? keyboardType;
@@ -120,6 +121,7 @@ class TextInput extends StatelessWidget {
     this.suffix,
     this.paddingRight = 12,
     this.focusNode,
+    this.scrollController,
     this.bubbly = true,
     this.backgroundColor,
     this.keyboardType,
@@ -154,6 +156,7 @@ class TextInput extends StatelessWidget {
           ),
           child: Center(
             child: TextFormField(
+              scrollController: scrollController,
               maxLength: maxLength,
               inputFormatters: inputFormatters,
               textInputAction: textInputAction,
