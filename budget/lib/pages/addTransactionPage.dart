@@ -5027,7 +5027,8 @@ class _TitleInputState extends State<TitleInput> {
                                                     .resizePopupWhenChanged)
                                                   fixResizingPopup();
 
-                                                await deleteAssociatedTitlePopup(
+                                                DeletePopupAction? action =
+                                                    await deleteAssociatedTitlePopup(
                                                   context,
                                                   title: foundAssociatedTitle
                                                       .title,
@@ -5035,6 +5036,12 @@ class _TitleInputState extends State<TitleInput> {
                                                       RoutesToPopAfterDelete
                                                           .None,
                                                 );
+                                                if (action ==
+                                                    DeletePopupAction.Delete) {
+                                                  foundAssociatedTitles.remove(
+                                                      foundAssociatedTitle);
+                                                  setState(() {});
+                                                }
                                               },
                                             ),
                                     ),

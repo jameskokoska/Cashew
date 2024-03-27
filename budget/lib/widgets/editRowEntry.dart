@@ -444,18 +444,22 @@ class DismissibleEditRowEntry extends StatelessWidget {
               ),
             ),
           ),
-          secondaryBackground: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(borderRadius),
-              color: Colors.red[700],
-            ),
-            padding: EdgeInsets.symmetric(horizontal: 15),
-            alignment: AlignmentDirectional.centerEnd,
-            child: Icon(
-              appStateSettings["outlinedIcons"]
-                  ? Icons.delete_outlined
-                  : Icons.delete_rounded,
-              color: Colors.white,
+          secondaryBackground: AnimatedOpacity(
+            duration: Duration(milliseconds: 250),
+            opacity: value ? 0 : 1,
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(borderRadius),
+                color: Colors.red[700],
+              ),
+              padding: EdgeInsets.symmetric(horizontal: 15),
+              alignment: AlignmentDirectional.centerEnd,
+              child: Icon(
+                appStateSettings["outlinedIcons"]
+                    ? Icons.delete_outlined
+                    : Icons.delete_rounded,
+                color: Colors.white,
+              ),
             ),
           ),
           dismissThresholds: {
