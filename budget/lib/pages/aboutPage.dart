@@ -283,17 +283,20 @@ class AboutPage extends StatelessWidget {
             ),
           ),
         ),
-        SizedBox(height: 15),
-        Row(
-          children: [
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15),
-                child: Button(
+        SizedBox(height: 20),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15),
+          child: OutlinedContainer(
+            borderColor:
+                Theme.of(context).colorScheme.tertiary.withOpacity(0.6),
+            clip: true,
+            child: Column(
+              children: [
+                TappableOpacityButton(
+                  expandedLayout: true,
                   label: "view-licenses-and-legalese".tr(),
                   color: Theme.of(context).colorScheme.tertiary,
-                  textColor: Theme.of(context).colorScheme.onTertiary,
-                  expandedLayout: true,
+                  textColor: Theme.of(context).colorScheme.tertiary,
                   onTap: () {
                     showLicensePage(
                         context: context,
@@ -304,122 +307,120 @@ class AboutPage extends StatelessWidget {
                                 "exchange-rate-notice-description".tr());
                   },
                 ),
-              ),
-            )
-          ],
-        ),
-        SizedBox(height: 10),
-        Row(
-          children: [
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15),
-                child: Button(
+                TappableOpacityButtonBreak(
+                    color: Theme.of(context)
+                        .colorScheme
+                        .tertiary
+                        .withOpacity(0.6)),
+                TappableOpacityButton(
+                  expandedLayout: true,
                   label: "privacy-policy".tr(),
                   color: Theme.of(context).colorScheme.tertiary,
-                  textColor: Theme.of(context).colorScheme.onTertiary,
-                  expandedLayout: true,
+                  textColor: Theme.of(context).colorScheme.tertiary,
                   onTap: () {
                     openUrl("http://cashewapp.web.app/policy.html");
                   },
                 ),
-              ),
-            )
-          ],
-        ),
-        SizedBox(height: 10),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15),
-          child: Button(
-            label: "delete-all-data".tr(),
-            onTap: () {
-              openPopup(
-                context,
-                title: "erase-everything".tr(),
-                description: "erase-everything-description".tr(),
-                icon: appStateSettings["outlinedIcons"]
-                    ? Icons.warning_outlined
-                    : Icons.warning_rounded,
-                onExtraLabel2: "erase-synced-data-and-cloud-backups".tr(),
-                onExtra2: () {
-                  Navigator.pop(context);
-                  openBottomSheet(
-                    context,
-                    PopupFramework(
-                      title: "erase-cloud-data".tr(),
-                      child: Column(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(
-                              bottom: 18,
-                              left: 5,
-                              right: 5,
-                            ),
-                            child: TextFont(
-                              text: "erase-cloud-data-description".tr(),
-                              fontSize: 18,
-                              textAlign: TextAlign.center,
-                              maxLines: 10,
+                TappableOpacityButtonBreak(
+                    color: Theme.of(context)
+                        .colorScheme
+                        .tertiary
+                        .withOpacity(0.6)),
+                TappableOpacityButton(
+                  expandedLayout: true,
+                  label: "delete-all-data".tr(),
+                  color: Theme.of(context).colorScheme.error,
+                  textColor: Theme.of(context).colorScheme.error,
+                  onTap: () {
+                    openPopup(
+                      context,
+                      title: "erase-everything".tr(),
+                      description: "erase-everything-description".tr(),
+                      icon: appStateSettings["outlinedIcons"]
+                          ? Icons.warning_outlined
+                          : Icons.warning_rounded,
+                      onExtraLabel2: "erase-synced-data-and-cloud-backups".tr(),
+                      onExtra2: () {
+                        Navigator.pop(context);
+                        openBottomSheet(
+                          context,
+                          PopupFramework(
+                            title: "erase-cloud-data".tr(),
+                            child: Column(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                    bottom: 18,
+                                    left: 5,
+                                    right: 5,
+                                  ),
+                                  child: TextFont(
+                                    text: "erase-cloud-data-description".tr(),
+                                    fontSize: 18,
+                                    textAlign: TextAlign.center,
+                                    maxLines: 10,
+                                  ),
+                                ),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: SyncCloudBackupButton(
+                                        onTap: () async {
+                                          Navigator.pop(context);
+                                          pushRoute(context, AccountsPage());
+                                        },
+                                      ),
+                                    ),
+                                    SizedBox(width: 18),
+                                    Expanded(
+                                      child: BackupsCloudBackupButton(
+                                        onTap: () async {
+                                          Navigator.pop(context);
+                                          pushRoute(context, AccountsPage());
+                                        },
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
                             ),
                           ),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: SyncCloudBackupButton(
-                                  onTap: () async {
-                                    Navigator.pop(context);
-                                    pushRoute(context, AccountsPage());
-                                  },
-                                ),
-                              ),
-                              SizedBox(width: 18),
-                              Expanded(
-                                child: BackupsCloudBackupButton(
-                                  onTap: () async {
-                                    Navigator.pop(context);
-                                    pushRoute(context, AccountsPage());
-                                  },
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-                },
-                onSubmit: () async {
-                  Navigator.pop(context);
-                  openPopup(
-                    context,
-                    title: "erase-everything-warning".tr(),
-                    description: "erase-everything-warning-description".tr(),
-                    icon: appStateSettings["outlinedIcons"]
-                        ? Icons.warning_amber_outlined
-                        : Icons.warning_amber_rounded,
-                    onSubmit: () async {
-                      Navigator.pop(context);
-                      clearDatabase(context);
-                    },
-                    onSubmitLabel: "erase".tr(),
-                    onCancelLabel: "cancel".tr(),
-                    onCancel: () {
-                      Navigator.pop(context);
-                    },
-                  );
-                },
-                onSubmitLabel: "erase".tr(),
-                onCancelLabel: "cancel".tr(),
-                onCancel: () {
-                  Navigator.pop(context);
-                },
-              );
-            },
-            color: Theme.of(context).colorScheme.error,
-            textColor: Theme.of(context).colorScheme.onError,
+                        );
+                      },
+                      onSubmit: () async {
+                        Navigator.pop(context);
+                        openPopup(
+                          context,
+                          title: "erase-everything-warning".tr(),
+                          description:
+                              "erase-everything-warning-description".tr(),
+                          icon: appStateSettings["outlinedIcons"]
+                              ? Icons.warning_amber_outlined
+                              : Icons.warning_amber_rounded,
+                          onSubmit: () async {
+                            Navigator.pop(context);
+                            clearDatabase(context);
+                          },
+                          onSubmitLabel: "erase".tr(),
+                          onCancelLabel: "cancel".tr(),
+                          onCancel: () {
+                            Navigator.pop(context);
+                          },
+                        );
+                      },
+                      onSubmitLabel: "erase".tr(),
+                      onCancelLabel: "cancel".tr(),
+                      onCancel: () {
+                        Navigator.pop(context);
+                      },
+                    );
+                  },
+                ),
+              ],
+            ),
           ),
         ),
-        SizedBox(height: 10),
+        SizedBox(height: 15),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 7),
           child: Center(

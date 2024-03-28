@@ -33,7 +33,7 @@ class TableEntry extends StatelessWidget {
                   for (String header in headers)
                     Padding(
                       padding: const EdgeInsets.only(
-                          left: 11.0, right: 11, top: 5, bottom: 3),
+                          left: 11.0, right: 11, top: 6, bottom: 3),
                       child: Text(
                         header,
                         style: TextStyle(
@@ -55,7 +55,7 @@ class TableEntry extends StatelessWidget {
                   for (String entry in firstEntry)
                     Padding(
                       padding: const EdgeInsets.only(
-                          left: 11.0, right: 11, top: 5, bottom: 3),
+                          left: 11.0, right: 11, top: 6, bottom: 3),
                       child: Text(
                         entry,
                         style: TextStyle(

@@ -121,6 +121,12 @@ class _ImportCSVState extends State<ImportCSV> {
       fileContents = fileContents
           .map((row) => row + List.filled(maxColumns - row.length, ""))
           .toList();
+
+      // Remove blank rows
+      fileContents = fileContents
+          .where((list) => list.any((element) => element.trim().isNotEmpty))
+          .toList();
+
       int headersIndex =
           _findListIndexWithMultipleNonEmptyStrings(fileContents) ?? 0;
       List<String> headers = fileContents[headersIndex];
@@ -226,6 +232,9 @@ class _ImportCSVState extends State<ImportCSV> {
         context,
         PopupFramework(
           title: "assign-columns".tr(),
+          subtitle: (fileContents.length - 1).toString() +
+              " " +
+              "transactions-in-the-csv".tr(),
           child: Column(
             children: [
               TableEntry(firstEntry: firstEntry, headers: headers),
@@ -487,7 +496,7 @@ class _ImportCSVState extends State<ImportCSV> {
         dateFormat: dateFormat,
         assignedColumns: assignedColumns,
         fileContents: fileContents,
-        next: () {
+        next: (numberOfErrors) {
           Navigator.of(context).pop();
           openPopup(
             context,
@@ -495,13 +504,21 @@ class _ImportCSVState extends State<ImportCSV> {
                 ? Icons.check_circle_outline_outlined
                 : Icons.check_circle_outline_rounded,
             title: "done".tr() + "!",
-            description: "successfully-imported".tr() +
+            description: "successfully-imported".tr().capitalizeFirst +
                 " " +
                 // Subtract one, since we don't count the header of the CSV as an entry
-                (fileContents.length - firstEntryIndex).toString() +
+                (fileContents.length - firstEntryIndex - numberOfErrors)
+                    .toString() +
                 " " +
                 "transactions".tr().toLowerCase() +
-                ".",
+                "." +
+                (numberOfErrors > 0
+                    ? (" " +
+                        "errors".tr().capitalizeFirst +
+                        ": " +
+                        numberOfErrors.toString() +
+                        ".")
+                    : ""),
             onSubmitLabel: "ok".tr(),
             onSubmit: () {
               Navigator.pop(context);
@@ -742,7 +759,7 @@ class ImportingEntriesPopup extends StatefulWidget {
   final Map<String, Map<String, dynamic>> assignedColumns;
   final String dateFormat;
   final List<List<String>> fileContents;
-  final VoidCallback next;
+  final Function(int numberOfErrors) next;
 
   @override
   State<ImportingEntriesPopup> createState() => _ImportingEntriesPopupState();
@@ -1100,7 +1117,7 @@ class _ImportingEntriesPopupState extends State<ImportingEntriesPopup> {
         );
       }
 
-      widget.next();
+      widget.next(skippedError.length);
     } catch (e) {
       openPopup(
         context,
@@ -1172,6 +1189,7 @@ DateTime? tryDateFormatting(
     dateCreated = format.parse(stringToParse.trim());
     if (dateCreated.year < 1500) throw ("Invalid year, try another format");
   } catch (e) {
+    dateCreated = null;
     print("Failed to parse date and time!" + e.toString());
   }
   return dateCreated;

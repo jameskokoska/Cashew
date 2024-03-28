@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:budget/functions.dart';
+import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
@@ -167,6 +168,79 @@ class _ButtonState extends State<Button> with TickerProviderStateMixin {
         ),
       ),
     );
+  }
+}
+
+class TappableOpacityButtonBreak extends StatelessWidget {
+  const TappableOpacityButtonBreak({this.color, super.key});
+  final Color? color;
+
+  @override
+  Widget build(BuildContext context) {
+    return HorizontalBreak(
+      padding: EdgeInsets.zero,
+      color: color ??
+          (appStateSettings["materialYou"]
+              ? Theme.of(context).colorScheme.secondary.withOpacity(0.5)
+              : getColor(context, "lightDarkAccentHeavy")),
+    );
+  }
+}
+
+class TappableOpacityButton extends StatelessWidget {
+  const TappableOpacityButton({
+    required this.label,
+    this.width,
+    this.fontSize = 15,
+    required this.onTap,
+    this.color,
+    this.textColor,
+    required this.expandedLayout,
+    super.key,
+  });
+
+  final String label;
+  final double? width;
+  final double fontSize;
+  final VoidCallback onTap;
+  final Color? color;
+  final Color? textColor;
+  final bool expandedLayout;
+
+  @override
+  Widget build(BuildContext context) {
+    Widget child = Tappable(
+      color: color?.withOpacity(
+        Theme.of(context).colorScheme.brightness == Brightness.light
+            ? 0.2
+            : 0.3,
+      ),
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 17),
+        child: TextFont(
+          text: label,
+          fontSize: fontSize,
+          textColor: textColor ??
+              (appStateSettings["materialYou"]
+                  ? dynamicPastel(
+                      context, Theme.of(context).colorScheme.onPrimary,
+                      amount: 0.3)
+                  : Theme.of(context).colorScheme.onSecondaryContainer),
+          maxLines: 5,
+          textAlign: TextAlign.center,
+        ),
+      ),
+    );
+    if (expandedLayout)
+      return Row(
+        children: [
+          Expanded(
+            child: child,
+          ),
+        ],
+      );
+    return child;
   }
 }
 

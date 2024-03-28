@@ -140,12 +140,14 @@ class OutlinedContainer extends StatelessWidget {
       this.borderRadius,
       this.borderColor,
       this.enabled = true,
+      this.clip = false,
       super.key});
   final Widget child;
   final bool filled;
   final double? borderRadius;
   final Color? borderColor;
   final bool enabled;
+  final bool clip;
   @override
   Widget build(BuildContext context) {
     if (enabled == false) return child;
@@ -166,7 +168,12 @@ class OutlinedContainer extends StatelessWidget {
             : Colors.transparent,
         borderRadius: BorderRadius.circular(borderRadiusValue),
       ),
-      child: child,
+      child: clip
+          ? ClipRRect(
+              borderRadius: BorderRadius.circular(borderRadiusValue - 1),
+              child: child,
+            )
+          : child,
     );
   }
 }
