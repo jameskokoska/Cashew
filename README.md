@@ -161,22 +161,28 @@ Ensure Cashew is installed on the device you are launching these URLs from.
 
 #### Example 1: Create an expense transaction for 100 with the category Shopping at the current time
 
-https://cashewapp.web.app/addTransaction?amount=-100&title=All%20the%20shopping&category=Shopping&notes=Went%20shopping
+> https://cashewapp.web.app/addTransaction?amount=-100&title=All%20the%20shopping&category=Shopping&notes=Went%20shopping
 
 #### Example 2: Create an income transaction with a missing category at the current time
 
-https://cashewapp.web.app/addTransaction?amount=100&title=Income&notes=Got%20money
+> https://cashewapp.web.app/addTransaction?amount=100&title=Income&notes=Got%20money
 
 #### Example 3: Open the add transaction page with a custom date with prefilled details
 
-https://cashewapp.web.app/addTransactionRoute?amount=-50&title=All%20the%20shopping&notes=Went%20shopping&date=2024-03-02
+> https://cashewapp.web.app/addTransactionRoute?amount=-50&title=All%20the%20shopping&notes=Went%20shopping&date=2024-03-02
+
+#### Example 4: Create multiple transactions with one link using JSON
+
+> https://cashewapp.web.app/addTransaction?JSON=%7B%22transactions%22%3A%5B%7B%22amount%22%3A%22-100%22%2C%20%22notes%22%3A%22This%20is%20a%20note%22%2C%20%22category%22%3A%22Shopping%22%7D%2C%7B%22amount%22%3A%22-150%22%2C%20%22notes%22%3A%22This%20is%20a%20note%202%22%7D%5D%7D
+
+See `JSON List of Transactions` below to view how the link is formatted.
 
 ### Routes
 
 | Routes for Android                          | Routes for Web App                             |
 | ------------------------------------------- | ---------------------------------------------- |
-| `cashew://budget.app/[Endpoint here]`       | `https://budget-track.web.app/[Endpoint here]` |
-| `https://cashewapp.web.app/[Endpoint here]` |                                                |
+| `https://cashewapp.web.app/[Endpoint here]` | `https://budget-track.web.app/[Endpoint here]` |
+| `cashew://budget.app/[Endpoint here]`       |                                                |
 
 ### Endpoints
 
@@ -196,6 +202,41 @@ https://cashewapp.web.app/addTransactionRoute?amount=-50&title=All%20the%20shopp
 | `category`    | The name of the category to add the transaction to. Executes a name search, takes the first entry, not case sensitive.                                                                                              | No       | Prompt user     |
 | `subcategory` | The name of the subcategory to add the transaction to. If provided, it overwrites the category if a subcategory is found under a main category. Executes a name search, takes the first entry, not case sensitive.  | No       | None            |
 | `account`     | The name of the account. Executes a name search, takes the first entry, not case sensitive.                                                                                                                         | No       | Primary account |
+| `JSON`        | A list of JSON objects of transactions. If provided, Cashew will import a list/multiple transactions at once. Each JSON object in the list can use any of the aforementioned parameters. The JSON object should be keyed with `transactions` followed by the list of objects. See the example below. | No       | None            |
+
+### JSON List of Transactions
+The input JSON for `addTransaction` and `addTransactionRoute` should follow the following format:
+```JSON
+{
+  "transactions":[
+    { ... },
+    { ... },
+    { ... }
+  ]
+}
+```
+As an example:
+```JSON
+{
+  "transactions": [
+    {
+      "amount": "-100",
+      "notes": "This is a note",
+      "category": "Shopping"
+    },
+    {
+      "amount": "-150",
+      "notes": "This is a note 2"
+    }
+  ]
+}
+```
+
+Don't forget to encode the JSON in the URL as JSON uses invalid URI characters. Once encoded, the output link would look something like:
+
+> https://cashewapp.web.app/addTransaction?JSON=%7B%22transactions%22%3A%5B%7B%22amount%22%3A%22-100%22%2C%20%22notes%22%3A%22This%20is%20a%20note%22%2C%20%22category%22%3A%22Shopping%22%7D%2C%7B%22amount%22%3A%22-150%22%2C%20%22notes%22%3A%22This%20is%20a%20note%202%22%7D%5D%7D
+
+
 
 ### Testing
 
