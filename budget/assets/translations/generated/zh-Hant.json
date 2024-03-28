@@ -130,7 +130,7 @@
   "filters": "篩選",
   "reset": "重置",
   "apply": "申請",
-  "csv-erorr": "導入 CSV 時出錯",
+  "csv-error": "導入 CSV 時出錯",
   "no-file-selected": "未選擇文件",
   "ok": "好的",
   "info": "資訊",

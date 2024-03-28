@@ -210,11 +210,7 @@ class TappableOpacityButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Widget child = Tappable(
-      color: color?.withOpacity(
-        Theme.of(context).colorScheme.brightness == Brightness.light
-            ? 0.2
-            : 0.3,
-      ),
+      color: color,
       onTap: onTap,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 17),

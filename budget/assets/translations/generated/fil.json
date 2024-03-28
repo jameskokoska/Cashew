@@ -130,7 +130,7 @@
   "filters": "Mga filter",
   "reset": "I -reset",
   "apply": "Mag -apply",
-  "csv-erorr": "Error sa Pag-import ng CSV",
+  "csv-error": "Error sa Pag-import ng CSV",
   "no-file-selected": "Walang napiling file",
   "ok": "Ok",
   "info": "Impormasyon",

@@ -130,7 +130,7 @@
   "filters": "Filtreler",
   "reset": "Sıfırla",
   "apply": "Uygula",
-  "csv-erorr": "CSV'yi içe aktarırken hata oluştu",
+  "csv-error": "CSV'yi içe aktarırken hata oluştu",
   "no-file-selected": "Dosya seçilmedi",
   "ok": "OK",
   "info": "Bilgi",

@@ -130,7 +130,7 @@
   "filters": "Filtre",
   "reset": "Resetează",
   "apply": "aplica",
-  "csv-erorr": "Eroare la importarea CSV",
+  "csv-error": "Eroare la importarea CSV",
   "no-file-selected": "Niciun fisier selectat",
   "ok": "Bine",
   "info": "Informații",

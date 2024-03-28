@@ -49,6 +49,11 @@ class AboutPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Color containerColor = appStateSettings["materialYou"]
+        ? dynamicPastel(
+            context, Theme.of(context).colorScheme.secondaryContainer,
+            amountLight: 0.2, amountDark: 0.6)
+        : getColor(context, "lightDarkAccent");
     return PageFramework(
       dragDownToDismiss: true,
       title: "about".tr(),
@@ -120,11 +125,7 @@ class AboutPage extends StatelessWidget {
             onTap: () {
               openUrl("https://github.com/jameskokoska/Cashew");
             },
-            color: appStateSettings["materialYou"]
-                ? dynamicPastel(
-                    context, Theme.of(context).colorScheme.secondaryContainer,
-                    amountLight: 0.2, amountDark: 0.6)
-                : getColor(context, "lightDarkAccent"),
+            color: containerColor,
             borderRadius: getPlatform() == PlatformOS.isIOS ? 10 : 15,
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 15),
@@ -212,11 +213,7 @@ class AboutPage extends StatelessWidget {
             onLongPress: () {
               copyToClipboard("dapperappdeveloper@gmail.com");
             },
-            color: appStateSettings["materialYou"]
-                ? dynamicPastel(
-                    context, Theme.of(context).colorScheme.secondaryContainer,
-                    amountLight: 0.2, amountDark: 0.6)
-                : getColor(context, "lightDarkAccent"),
+            color: containerColor,
             borderRadius: getPlatform() == PlatformOS.isIOS ? 10 : 15,
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 15),
@@ -253,11 +250,7 @@ class AboutPage extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
           child: Tappable(
             onTap: () {},
-            color: appStateSettings["materialYou"]
-                ? dynamicPastel(
-                    context, Theme.of(context).colorScheme.secondaryContainer,
-                    amountLight: 0.2, amountDark: 0.6)
-                : getColor(context, "lightDarkAccent"),
+            color: containerColor,
             borderRadius: getPlatform() == PlatformOS.isIOS ? 10 : 15,
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 15),
@@ -295,7 +288,7 @@ class AboutPage extends StatelessWidget {
                 TappableOpacityButton(
                   expandedLayout: true,
                   label: "view-licenses-and-legalese".tr(),
-                  color: Theme.of(context).colorScheme.tertiary,
+                  color: containerColor,
                   textColor: Theme.of(context).colorScheme.tertiary,
                   onTap: () {
                     showLicensePage(
@@ -315,7 +308,7 @@ class AboutPage extends StatelessWidget {
                 TappableOpacityButton(
                   expandedLayout: true,
                   label: "privacy-policy".tr(),
-                  color: Theme.of(context).colorScheme.tertiary,
+                  color: containerColor,
                   textColor: Theme.of(context).colorScheme.tertiary,
                   onTap: () {
                     openUrl("http://cashewapp.web.app/policy.html");
@@ -329,7 +322,7 @@ class AboutPage extends StatelessWidget {
                 TappableOpacityButton(
                   expandedLayout: true,
                   label: "delete-all-data".tr(),
-                  color: Theme.of(context).colorScheme.error,
+                  color: Theme.of(context).colorScheme.error.withOpacity(0.3),
                   textColor: Theme.of(context).colorScheme.error,
                   onTap: () {
                     openPopup(
@@ -543,11 +536,7 @@ class AboutPage extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
           child: TranslationsHelp(
             showIcon: false,
-            backgroundColor: (appStateSettings["materialYou"]
-                ? dynamicPastel(
-                    context, Theme.of(context).colorScheme.secondaryContainer,
-                    amountLight: 0.2, amountDark: 0.6)
-                : getColor(context, "lightDarkAccent")),
+            backgroundColor: containerColor,
           ),
         ),
         AboutInfoBox(

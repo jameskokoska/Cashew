@@ -130,7 +130,7 @@
   "filters": "Filter",
   "reset": "Återställa",
   "apply": "Tillämpa",
-  "csv-erorr": "Fel vid import av CSV",
+  "csv-error": "Fel vid import av CSV",
   "no-file-selected": "Ingen fil vald",
   "ok": "OK",
   "info": "Info",

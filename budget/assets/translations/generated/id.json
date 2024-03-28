@@ -130,7 +130,7 @@
   "filters": "Filter",
   "reset": "Mengatur ulang",
   "apply": "Menerapkan",
-  "csv-erorr": "Terjadi Kesalahan Saat Mengimpor CSV",
+  "csv-error": "Terjadi Kesalahan Saat Mengimpor CSV",
   "no-file-selected": "Tidak ada file yang dipilih",
   "ok": "OK",
   "info": "Info",

@@ -130,7 +130,7 @@
   "filters": "Filtre",
   "reset": "Nulstil",
   "apply": "Anvend",
-  "csv-erorr": "Fejl ved import af CSV",
+  "csv-error": "Fejl ved import af CSV",
   "no-file-selected": "Ingen fil valgt",
   "ok": "OK",
   "info": "Info",

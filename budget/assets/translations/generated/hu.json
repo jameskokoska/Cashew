@@ -130,7 +130,7 @@
   "filters": "Szűrők",
   "reset": "Visszaállítás",
   "apply": "Alkalmaz",
-  "csv-erorr": "Hiba a CSV importálása közben",
+  "csv-error": "Hiba a CSV importálása közben",
   "no-file-selected": "Nincs fájl kiválasztva",
   "ok": "rendben",
   "info": "Információ",

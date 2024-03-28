@@ -130,7 +130,7 @@
   "filters": "Filtros",
   "reset": "Reiniciar",
   "apply": "Aplicar",
-  "csv-erorr": "Erro ao importar CSV",
+  "csv-error": "Erro ao importar CSV",
   "no-file-selected": "Nenhum arquivo selecionado",
   "ok": "Ok",
   "info": "Informações",

@@ -130,7 +130,7 @@
   "filters": "Suodattimet",
   "reset": "Nollata",
   "apply": "Käytä",
-  "csv-erorr": "Virhe CSV:n tuonnissa",
+  "csv-error": "Virhe CSV:n tuonnissa",
   "no-file-selected": "Ei tiedostoa valittuna",
   "ok": "Hyvä",
   "info": "Tiedot",

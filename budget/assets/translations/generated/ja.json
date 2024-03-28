@@ -130,7 +130,7 @@
   "filters": "フィルター",
   "reset": "リセット",
   "apply": "申し込み",
-  "csv-erorr": "CSVのインポート中にエラーが発生しました",
+  "csv-error": "CSVのインポート中にエラーが発生しました",
   "no-file-selected": "ファイルが選択されていません",
   "ok": "OK",
   "info": "情報",

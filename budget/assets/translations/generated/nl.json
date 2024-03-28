@@ -130,7 +130,7 @@
   "filters": "Filters",
   "reset": "Reset",
   "apply": "Toepassen",
-  "csv-erorr": "Fout bij importeren CSV",
+  "csv-error": "Fout bij importeren CSV",
   "no-file-selected": "Geen bestand geselecteerd",
   "ok": "OK",
   "info": "Info",

@@ -130,7 +130,7 @@
   "filters": "Bộ lọc",
   "reset": "Cài lại",
   "apply": "Áp dụng",
-  "csv-erorr": "Lỗi khi nhập CSV",
+  "csv-error": "Lỗi khi nhập CSV",
   "no-file-selected": "Chưa chọn tệp nào ",
   "ok": "OK",
   "info": "Thông tin",

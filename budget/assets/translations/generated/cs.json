@@ -130,7 +130,7 @@
   "filters": "Filtry",
   "reset": "Resetovat",
   "apply": "Aplikovat",
-  "csv-erorr": "Chyba při importu CSV",
+  "csv-error": "Chyba při importu CSV",
   "no-file-selected": "Žádný soubor nevybrán",
   "ok": "OK",
   "info": "Informace",

@@ -16,6 +16,7 @@ import 'package:budget/struct/settings.dart';
 import 'package:budget/struct/uploadAttachment.dart';
 import 'package:budget/widgets/accountAndBackup.dart';
 import 'package:budget/widgets/navigationFramework.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:googleapis/drive/v3.dart' as drive;
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/categoryIcon.dart';
@@ -380,7 +381,11 @@ class _AddTransactionPageState extends State<AddTransactionPage>
   Future<bool> addTransaction() async {
     if (lockAddTransaction) return false;
     lockAddTransaction = true;
+
     bool result = await addTransactionLocked();
+    //Wait for the UI frame to finish updating to allow smooth animation afterwards
+    await SchedulerBinding.instance.endOfFrame;
+
     lockAddTransaction = false;
     return result;
   }

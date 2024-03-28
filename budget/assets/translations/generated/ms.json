@@ -130,7 +130,7 @@
   "filters": "Penapis",
   "reset": "Tetapkan semula",
   "apply": "Memohon",
-  "csv-erorr": "Ralat Mengimport CSV",
+  "csv-error": "Ralat Mengimport CSV",
   "no-file-selected": "Tiada fail yang dipilih",
   "ok": "okey",
   "info": "Maklumat",
