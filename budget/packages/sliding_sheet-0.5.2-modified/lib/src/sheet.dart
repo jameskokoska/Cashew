@@ -817,11 +817,17 @@ class _SlidingSheetState extends State<SlidingSheet>
       );
 
       // Only update the currentExtent when its sitting at an extent that
-      // is depenent on a fixed height, such as SnapSpec.headerSnap or absolute
+      // is dependent on a fixed height, such as SnapSpec.headerSnap or absolute
       // snap values.
       if (isAroundFixedSnap) {
         currentExtent = changeAdjustedExtent as double;
       }
+
+      // Fix accidental auto dismiss when keyboard dismissed/height changes too fast
+      snapToExtent(math.max(minExtent, currentExtent),
+          velocity: 0, duration: const Duration(milliseconds: 100));
+      scrollTo(controller.offset,
+          duration: const Duration(milliseconds: 100), curve: Curves.ease);
     }
   }
 
