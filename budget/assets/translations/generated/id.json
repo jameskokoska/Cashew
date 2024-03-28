@@ -130,7 +130,7 @@
   "filters": "Filter",
   "reset": "Mengatur ulang",
   "apply": "Menerapkan",
-  "csv-error": "Ada kesalahan ketika mengimpor CSV",
+  "csv-erorr": "Terjadi Kesalahan Saat Mengimpor CSV",
   "no-file-selected": "Tidak ada file yang dipilih",
   "ok": "OK",
   "info": "Info",
@@ -1109,5 +1109,8 @@
   "days-ahead": "hari di masa depan",
   "day-ahead": "hari di masa depan",
   "future-transaction-days": "Hari Transaksi Mendatang",
-  "future-transaction-days-description": "Beberapa hari ke depan untuk membuat daftar transaksi"
+  "future-transaction-days-description": "Beberapa hari ke depan untuk membuat daftar transaksi",
+  "error-parsing-json": "Kesalahan saat menguraikan JSON",
+  "transactions-in-the-csv": "transaksi di CSV.",
+  "errors": "Kesalahan"
 }

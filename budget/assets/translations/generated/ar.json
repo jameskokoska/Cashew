@@ -130,7 +130,7 @@
   "filters": "المرشحات",
   "reset": "إعادة ضبط",
   "apply": "يتقدم",
-  "csv-error": "كان هناك خطأ في استيراد CSV",
+  "csv-erorr": "حدث خطأ أثناء استيراد ملف CSV",
   "no-file-selected": "لم يتم اختيار اي ملف",
   "ok": "OK",
   "info": "معلومات",
@@ -1109,5 +1109,8 @@
   "days-ahead": "أيام في المستقبل",
   "day-ahead": "يوم في المستقبل",
   "future-transaction-days": "أيام المعاملات المستقبلية",
-  "future-transaction-days-description": "الأيام المقبلة لإدراج المعاملات"
+  "future-transaction-days-description": "الأيام المقبلة لإدراج المعاملات",
+  "error-parsing-json": "خطأ في تحليل JSON",
+  "transactions-in-the-csv": "المعاملات في CSV.",
+  "errors": "أخطاء"
 }

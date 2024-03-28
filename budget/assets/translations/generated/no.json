@@ -130,7 +130,7 @@
   "filters": "Filtre",
   "reset": "Nullstille",
   "apply": "Søke om",
-  "csv-error": "Det var en feil som importerer CSV",
+  "csv-erorr": "Feil ved import av CSV",
   "no-file-selected": "Ingen fil valgt",
   "ok": "Ok",
   "info": "Info",
@@ -1109,5 +1109,8 @@
   "days-ahead": "dager i fremtiden",
   "day-ahead": "dag i fremtiden",
   "future-transaction-days": "Fremtidige transaksjonsdager",
-  "future-transaction-days-description": "Dager frem for å liste transaksjoner"
+  "future-transaction-days-description": "Dager frem for å liste transaksjoner",
+  "error-parsing-json": "Feil ved parsing av JSON",
+  "transactions-in-the-csv": "transaksjoner i CSV-en.",
+  "errors": "Feil"
 }

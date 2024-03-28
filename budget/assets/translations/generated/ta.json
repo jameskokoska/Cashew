@@ -130,7 +130,7 @@
   "filters": "வடிப்பான்கள்",
   "reset": "மீட்டமை",
   "apply": "விண்ணப்பிக்கவும்",
-  "csv-error": "CSV ஐ இறக்குமதி செய்வதில் பிழை ஏற்பட்டது",
+  "csv-erorr": "CSV ஐ இறக்குமதி செய்வதில் பிழை",
   "no-file-selected": "எந்த கோப்பும் தேர்வு செய்ய படவில்லை",
   "ok": "சரி",
   "info": "தகவல்",
@@ -1109,5 +1109,8 @@
   "days-ahead": "எதிர்காலத்தில் நாட்கள்",
   "day-ahead": "எதிர்காலத்தில் நாள்",
   "future-transaction-days": "எதிர்கால பரிவர்த்தனை நாட்கள்",
-  "future-transaction-days-description": "பரிவர்த்தனைகளை பட்டியலிட இன்னும் நாட்கள் உள்ளன"
+  "future-transaction-days-description": "பரிவர்த்தனைகளை பட்டியலிட இன்னும் நாட்கள் உள்ளன",
+  "error-parsing-json": "JSON ஐ பாகுபடுத்துவதில் பிழை",
+  "transactions-in-the-csv": "CSV இல் பரிவர்த்தனைகள்.",
+  "errors": "பிழைகள்"
 }

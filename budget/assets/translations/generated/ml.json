@@ -130,7 +130,7 @@
   "filters": "ഫിൽട്ടറുകൾ",
   "reset": "പുന .സജ്ജമാക്കുക",
   "apply": "അപേക്ഷിക്കുക",
-  "csv-error": "CSV ഇറക്കുമതി ചെയ്യുന്നതിൽ ഒരു പിശക് ഉണ്ടായിരുന്നു",
+  "csv-erorr": "CSV ഇറക്കുമതി ചെയ്യുന്നതിൽ പിശക്",
   "no-file-selected": "ഫയലുകളൊന്നും തിരഞ്ഞെടുത്തിട്ടില്ല",
   "ok": "ശരി",
   "info": "വിവരം",
@@ -1109,5 +1109,8 @@
   "days-ahead": "ഭാവിയിലെ ദിവസങ്ങൾ",
   "day-ahead": "ഭാവിയിലെ ദിവസം",
   "future-transaction-days": "ഭാവി ഇടപാട് ദിനങ്ങൾ",
-  "future-transaction-days-description": "ഇടപാടുകൾ ലിസ്റ്റ് ചെയ്യാൻ ദിവസങ്ങൾ മുന്നിലാണ്"
+  "future-transaction-days-description": "ഇടപാടുകൾ ലിസ്റ്റ് ചെയ്യാൻ ദിവസങ്ങൾ മുന്നിലാണ്",
+  "error-parsing-json": "JSON പാഴ്‌സ് ചെയ്യുന്നതിൽ പിശക്",
+  "transactions-in-the-csv": "CSV-യിലെ ഇടപാടുകൾ.",
+  "errors": "പിശകുകൾ"
 }

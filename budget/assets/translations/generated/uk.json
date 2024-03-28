@@ -130,7 +130,7 @@
   "filters": "Фільтри",
   "reset": "Скинути",
   "apply": "Застосовувати",
-  "csv-error": "Сталася помилка імпорту CSV",
+  "csv-erorr": "Помилка імпорту CSV",
   "no-file-selected": "Файл не вибрано",
   "ok": "ОК",
   "info": "Інфо",
@@ -1109,5 +1109,8 @@
   "days-ahead": "днів у майбутньому",
   "day-ahead": "день у майбутньому",
   "future-transaction-days": "Дні майбутніх операцій",
-  "future-transaction-days-description": "Дні вперед, щоб перерахувати транзакції"
+  "future-transaction-days-description": "Дні вперед, щоб перерахувати транзакції",
+  "error-parsing-json": "Помилка аналізу JSON",
+  "transactions-in-the-csv": "транзакції в CSV.",
+  "errors": "Помилки"
 }

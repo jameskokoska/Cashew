@@ -130,7 +130,7 @@
   "filters": "ગાળકો",
   "reset": "પુનર્જીવિત કરવું",
   "apply": "અરજી કરવી",
-  "csv-error": "સીએસવી આયાત કરવામાં ભૂલ આવી",
+  "csv-erorr": "CSV આયાત કરવામાં ભૂલ",
   "no-file-selected": "કોઈ ફાઇલ પસંદ કરેલી નથી",
   "ok": "બરાબર",
   "info": "માહિતી",
@@ -1109,5 +1109,8 @@
   "days-ahead": "ભવિષ્યમાં દિવસો",
   "day-ahead": "ભવિષ્યમાં દિવસ",
   "future-transaction-days": "ભાવિ વ્યવહાર દિવસો",
-  "future-transaction-days-description": "વ્યવહારોની સૂચિ બનાવવાના દિવસો આગળ છે"
+  "future-transaction-days-description": "વ્યવહારોની સૂચિ બનાવવાના દિવસો આગળ છે",
+  "error-parsing-json": "JSON પાર્સિંગમાં ભૂલ",
+  "transactions-in-the-csv": "CSV માં વ્યવહારો.",
+  "errors": "ભૂલો"
 }

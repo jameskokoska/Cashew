@@ -130,7 +130,7 @@
   "filters": "필터",
   "reset": "초기화",
   "apply": "적용하다",
-  "csv-error": "CSV를 가져 오는 오류가 발생했습니다",
+  "csv-erorr": "CSV를 가져오는 중 오류가 발생했습니다.",
   "no-file-selected": "파일이 선택되지 않았습니다",
   "ok": "OK",
   "info": "정보",
@@ -1109,5 +1109,8 @@
   "days-ahead": "앞으로 며칠",
   "day-ahead": "미래의 하루",
   "future-transaction-days": "향후 거래일",
-  "future-transaction-days-description": "거래 목록을 며칠 앞두고"
+  "future-transaction-days-description": "거래 목록을 며칠 앞두고",
+  "error-parsing-json": "JSON을 구문 분석하는 중 오류가 발생했습니다.",
+  "transactions-in-the-csv": "CSV의 거래.",
+  "errors": "오류"
 }

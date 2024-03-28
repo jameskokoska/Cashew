@@ -130,7 +130,7 @@
   "filters": "Filters",
   "reset": "Reset",
   "apply": "Toepassen",
-  "csv-error": "Er was een foutmelding die de CSV importeerde",
+  "csv-erorr": "Fout bij importeren CSV",
   "no-file-selected": "Geen bestand geselecteerd",
   "ok": "OK",
   "info": "Info",
@@ -1109,5 +1109,8 @@
   "days-ahead": "dagen in de toekomst",
   "day-ahead": "dag in de toekomst",
   "future-transaction-days": "Toekomstige transactiedagen",
-  "future-transaction-days-description": "Dagen vooruit om transacties weer te geven"
+  "future-transaction-days-description": "Dagen vooruit om transacties weer te geven",
+  "error-parsing-json": "Fout bij het parseren van JSON",
+  "transactions-in-the-csv": "transacties in het CSV.",
+  "errors": "Fouten"
 }

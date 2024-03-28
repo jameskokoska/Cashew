@@ -130,7 +130,7 @@
   "filters": "फिल्टर ",
   "reset": "रीसेट करें ",
   "apply": "लागू करें",
-  "csv-error": "CSV आयात करने में एक त्रुटि हुई",
+  "csv-erorr": "सीएसवी आयात करने में त्रुटि",
   "no-file-selected": "कोई फ़ाइल चयनित नहीं",
   "ok": "OK",
   "info": "जानकारी",
@@ -1109,5 +1109,8 @@
   "days-ahead": "भविष्य में दिन",
   "day-ahead": "भविष्य में दिन",
   "future-transaction-days": "भविष्य के लेन-देन के दिन",
-  "future-transaction-days-description": "लेन-देन सूचीबद्ध करने के लिए आगे के दिन"
+  "future-transaction-days-description": "लेन-देन सूचीबद्ध करने के लिए आगे के दिन",
+  "error-parsing-json": "JSON को पार्स करने में त्रुटि",
+  "transactions-in-the-csv": "सीएसवी में लेनदेन।",
+  "errors": "त्रुटियाँ"
 }

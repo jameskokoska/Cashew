@@ -130,7 +130,7 @@
   "filters": "فیلتر",
   "reset": "بازپا",
   "apply": "درخواست دادن",
-  "csv-error": "در واردات CSV خطایی رخ داد",
+  "csv-erorr": "خطا در وارد کردن CSV",
   "no-file-selected": "هیچ فایلی انتخاب نشده است",
   "ok": "خوب",
   "info": "اطلاعات",
@@ -1109,5 +1109,8 @@
   "days-ahead": "روزهای آینده",
   "day-ahead": "روز در آینده",
   "future-transaction-days": "روزهای معاملات آینده",
-  "future-transaction-days-description": "روزهای آینده برای فهرست کردن معاملات"
+  "future-transaction-days-description": "روزهای آینده برای فهرست کردن معاملات",
+  "error-parsing-json": "خطا در تجزیه JSON",
+  "transactions-in-the-csv": "تراکنش ها در CSV",
+  "errors": "خطاها"
 }

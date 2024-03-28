@@ -130,7 +130,7 @@
   "filters": "篩選",
   "reset": "重置",
   "apply": "申請",
-  "csv-error": "導入CSV存在錯誤",
+  "csv-erorr": "導入 CSV 時出錯",
   "no-file-selected": "未選擇文件",
   "ok": "好的",
   "info": "資訊",
@@ -1109,5 +1109,8 @@
   "days-ahead": "未來的日子",
   "day-ahead": "未來的一天",
   "future-transaction-days": "未來交易日",
-  "future-transaction-days-description": "提前幾天列出交易"
+  "future-transaction-days-description": "提前幾天列出交易",
+  "error-parsing-json": "解析 JSON 時出錯",
+  "transactions-in-the-csv": "CSV 中的交易。",
+  "errors": "錯誤"
 }

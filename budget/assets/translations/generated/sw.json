@@ -130,7 +130,7 @@
   "filters": "Vichungi",
   "reset": "Rudisha",
   "apply": "Tumia",
-  "csv-error": "Kulikuwa na kosa la kuingiza CSV",
+  "csv-erorr": "Hitilafu katika Kuleta CSV",
   "no-file-selected": "Hakuna faili iliyochaguliwa",
   "ok": "sawa",
   "info": "Maelezo",
@@ -1109,5 +1109,8 @@
   "days-ahead": "siku zijazo",
   "day-ahead": "siku katika siku zijazo",
   "future-transaction-days": "Siku za Muamala Zijazo",
-  "future-transaction-days-description": "Siku mbele kuorodhesha shughuli"
+  "future-transaction-days-description": "Siku mbele kuorodhesha shughuli",
+  "error-parsing-json": "Hitilafu katika kuchanganua JSON",
+  "transactions-in-the-csv": "shughuli katika CSV.",
+  "errors": "Makosa"
 }

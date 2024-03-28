@@ -130,7 +130,7 @@
   "filters": "Филтри",
   "reset": "Нулиране",
   "apply": "Приложи",
-  "csv-error": "Имаше грешка в импортирането на CSV",
+  "csv-erorr": "Грешка при импортиране на CSV",
   "no-file-selected": "Не е избран файл",
   "ok": "Добре",
   "info": "Информация",
@@ -1109,5 +1109,8 @@
   "days-ahead": "дни в бъдещето",
   "day-ahead": "ден в бъдещето",
   "future-transaction-days": "Дни на бъдещи транзакции",
-  "future-transaction-days-description": "Дни напред за списък на транзакциите"
+  "future-transaction-days-description": "Дни напред за списък на транзакциите",
+  "error-parsing-json": "Грешка при синтактичния анализ на JSON",
+  "transactions-in-the-csv": "транзакции в CSV.",
+  "errors": "Грешки"
 }

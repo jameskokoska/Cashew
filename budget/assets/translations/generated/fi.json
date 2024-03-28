@@ -130,7 +130,7 @@
   "filters": "Suodattimet",
   "reset": "Nollata",
   "apply": "Käytä",
-  "csv-error": "CSV: n tuonti oli virhe",
+  "csv-erorr": "Virhe CSV:n tuonnissa",
   "no-file-selected": "Ei tiedostoa valittuna",
   "ok": "Hyvä",
   "info": "Tiedot",
@@ -1109,5 +1109,8 @@
   "days-ahead": "päivää tulevaisuudessa",
   "day-ahead": "päivä tulevaisuudessa",
   "future-transaction-days": "Tulevat tapahtumapäivät",
-  "future-transaction-days-description": "Päiviä eteenpäin listataksesi tapahtumat"
+  "future-transaction-days-description": "Päiviä eteenpäin listataksesi tapahtumat",
+  "error-parsing-json": "Virhe jäsennettäessä JSON",
+  "transactions-in-the-csv": "tapahtumat CSV:ssä.",
+  "errors": "Virheet"
 }

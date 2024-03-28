@@ -130,7 +130,7 @@
   "filters": "فلٹرز",
   "reset": "ری سیٹ کریں",
   "apply": "درخواست دیں",
-  "csv-error": "سی ایس وی کو درآمد کرنے میں ایک غلطی تھی",
+  "csv-erorr": "CSV درآمد کرنے میں خرابی۔",
   "no-file-selected": "کوئی فائل منتخب نہیں کی گئی",
   "ok": "ٹھیک ہے",
   "info": "معلومات",
@@ -1109,5 +1109,8 @@
   "days-ahead": "مستقبل میں دن",
   "day-ahead": "مستقبل میں دن",
   "future-transaction-days": "مستقبل کے لین دین کے دن",
-  "future-transaction-days-description": "لین دین کی فہرست میں دن آگے ہیں۔"
+  "future-transaction-days-description": "لین دین کی فہرست میں دن آگے ہیں۔",
+  "error-parsing-json": "JSON کو پارس کرنے میں خرابی۔",
+  "transactions-in-the-csv": "CSV میں لین دین۔",
+  "errors": "غلطیاں"
 }

@@ -130,7 +130,7 @@
   "filters": "Bộ lọc",
   "reset": "Cài lại",
   "apply": "Áp dụng",
-  "csv-error": "Có một lỗi khi nhập CSV",
+  "csv-erorr": "Lỗi khi nhập CSV",
   "no-file-selected": "Chưa chọn tệp nào ",
   "ok": "OK",
   "info": "Thông tin",
@@ -1109,5 +1109,8 @@
   "days-ahead": "những ngày sắp tới",
   "day-ahead": "ngày sắp tới",
   "future-transaction-days": "Những ngày giao dịch trong tương lai",
-  "future-transaction-days-description": "Những ngày sắp tới để liệt kê các giao dịch"
+  "future-transaction-days-description": "Những ngày sắp tới để liệt kê các giao dịch",
+  "error-parsing-json": "Lỗi phân tích cú pháp JSON",
+  "transactions-in-the-csv": "giao dịch trong CSV.",
+  "errors": "Lỗi"
 }

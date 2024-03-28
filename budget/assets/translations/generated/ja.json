@@ -130,7 +130,7 @@
   "filters": "フィルター",
   "reset": "リセット",
   "apply": "申し込み",
-  "csv-error": "CSVをインポートするエラーがありました",
+  "csv-erorr": "CSVのインポート中にエラーが発生しました",
   "no-file-selected": "ファイルが選択されていません",
   "ok": "OK",
   "info": "情報",
@@ -1109,5 +1109,8 @@
   "days-ahead": "将来の日々",
   "day-ahead": "将来の日",
   "future-transaction-days": "今後の取引日",
-  "future-transaction-days-description": "トランザクションのリストまであと数日"
+  "future-transaction-days-description": "トランザクションのリストまであと数日",
+  "error-parsing-json": "JSON 解析エラー",
+  "transactions-in-the-csv": "CSV 内のトランザクション。",
+  "errors": "エラー"
 }

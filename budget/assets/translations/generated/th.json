@@ -130,7 +130,7 @@
   "filters": "ตัวกรอง",
   "reset": "รีเซ็ต",
   "apply": "นำมาใช้",
-  "csv-error": "มีข้อผิดพลาดในการนำเข้า CSV",
+  "csv-erorr": "เกิดข้อผิดพลาดในการนำเข้า CSV",
   "no-file-selected": "ไม่มีการเลือกไฟล์",
   "ok": "OK",
   "info": "ข้อมูล",
@@ -1109,5 +1109,8 @@
   "days-ahead": "วันข้างหน้า",
   "day-ahead": "วันข้างหน้า",
   "future-transaction-days": "วันทำธุรกรรมในอนาคต",
-  "future-transaction-days-description": "วันข้างหน้าเพื่อแสดงรายการธุรกรรม"
+  "future-transaction-days-description": "วันข้างหน้าเพื่อแสดงรายการธุรกรรม",
+  "error-parsing-json": "เกิดข้อผิดพลาดในการแยกวิเคราะห์ JSON",
+  "transactions-in-the-csv": "ธุรกรรมในรูปแบบ CSV",
+  "errors": "ข้อผิดพลาด"
 }

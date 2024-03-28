@@ -130,7 +130,7 @@
   "filters": "Szűrők",
   "reset": "Visszaállítás",
   "apply": "Alkalmaz",
-  "csv-error": "Hiba történt a CSV importálásában",
+  "csv-erorr": "Hiba a CSV importálása közben",
   "no-file-selected": "Nincs fájl kiválasztva",
   "ok": "rendben",
   "info": "Információ",
@@ -1109,5 +1109,8 @@
   "days-ahead": "napok a jövőben",
   "day-ahead": "nap a jövőben",
   "future-transaction-days": "Jövőbeli tranzakciós napok",
-  "future-transaction-days-description": "Napok előtt a tranzakciók listázása"
+  "future-transaction-days-description": "Napok előtt a tranzakciók listázása",
+  "error-parsing-json": "Hiba a JSON elemzése során",
+  "transactions-in-the-csv": "tranzakciókat a CSV-ben.",
+  "errors": "Hibák"
 }

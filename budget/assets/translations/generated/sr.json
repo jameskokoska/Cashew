@@ -130,7 +130,7 @@
   "filters": "Филтри",
   "reset": "Ресетовати",
   "apply": "Применити",
-  "csv-error": "Дошло је до грешке у увозу ЦСВ-а",
+  "csv-erorr": "Грешка при увозу ЦСВ-а",
   "no-file-selected": "Није изабрана датотека",
   "ok": "У реду",
   "info": "Информације",
@@ -1109,5 +1109,8 @@
   "days-ahead": "дана у будућности",
   "day-ahead": "дан у будућности",
   "future-transaction-days": "Дани будућих трансакција",
-  "future-transaction-days-description": "Дани унапред за попис трансакција"
+  "future-transaction-days-description": "Дани унапред за попис трансакција",
+  "error-parsing-json": "Грешка при рашчлањивању ЈСОН-а",
+  "transactions-in-the-csv": "трансакције у ЦСВ-у.",
+  "errors": "Грешке"
 }

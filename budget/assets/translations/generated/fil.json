@@ -130,7 +130,7 @@
   "filters": "Mga filter",
   "reset": "I -reset",
   "apply": "Mag -apply",
-  "csv-error": "Nagkaroon ng isang error na pag -import ng CSV",
+  "csv-erorr": "Error sa Pag-import ng CSV",
   "no-file-selected": "Walang napiling file",
   "ok": "Ok",
   "info": "Impormasyon",
@@ -1109,5 +1109,8 @@
   "days-ahead": "araw sa hinaharap",
   "day-ahead": "araw sa hinaharap",
   "future-transaction-days": "Mga Araw ng Transaksyon sa Hinaharap",
-  "future-transaction-days-description": "Mga susunod na araw para ilista ang mga transaksyon"
+  "future-transaction-days-description": "Mga susunod na araw para ilista ang mga transaksyon",
+  "error-parsing-json": "Error sa Pag-parse ng JSON",
+  "transactions-in-the-csv": "mga transaksyon sa CSV.",
+  "errors": "Mga pagkakamali"
 }

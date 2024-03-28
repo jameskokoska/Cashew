@@ -130,7 +130,7 @@
   "filters": "Penapis",
   "reset": "Tetapkan semula",
   "apply": "Memohon",
-  "csv-error": "Terdapat ralat yang mengimport CSV",
+  "csv-erorr": "Ralat Mengimport CSV",
   "no-file-selected": "Tiada fail yang dipilih",
   "ok": "okey",
   "info": "Maklumat",
@@ -1109,5 +1109,8 @@
   "days-ahead": "hari pada masa hadapan",
   "day-ahead": "hari pada masa hadapan",
   "future-transaction-days": "Hari Transaksi Masa Depan",
-  "future-transaction-days-description": "Hari ke hadapan untuk menyenaraikan urus niaga"
+  "future-transaction-days-description": "Hari ke hadapan untuk menyenaraikan urus niaga",
+  "error-parsing-json": "Ralat Menghuraikan JSON",
+  "transactions-in-the-csv": "transaksi dalam CSV.",
+  "errors": "Kesilapan"
 }

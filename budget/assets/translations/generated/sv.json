@@ -130,7 +130,7 @@
   "filters": "Filter",
   "reset": "Återställa",
   "apply": "Tillämpa",
-  "csv-error": "Det fanns ett fel som importerade CSV",
+  "csv-erorr": "Fel vid import av CSV",
   "no-file-selected": "Ingen fil vald",
   "ok": "OK",
   "info": "Info",
@@ -1109,5 +1109,8 @@
   "days-ahead": "dagar i framtiden",
   "day-ahead": "dag i framtiden",
   "future-transaction-days": "Framtida transaktionsdagar",
-  "future-transaction-days-description": "Dagar framåt för att lista transaktioner"
+  "future-transaction-days-description": "Dagar framåt för att lista transaktioner",
+  "error-parsing-json": "Fel vid analys av JSON",
+  "transactions-in-the-csv": "transaktioner i CSV.",
+  "errors": "Fel"
 }

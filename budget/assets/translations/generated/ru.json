@@ -130,7 +130,7 @@
   "filters": "Фильтры",
   "reset": "Перезагрузить",
   "apply": "Применить",
-  "csv-error": "Ошибка при экспорте CSV",
+  "csv-erorr": "Ошибка импорта CSV",
   "no-file-selected": "Файл не выбран",
   "ok": "Oк",
   "info": "Информация",
@@ -1108,5 +1108,8 @@
   "days-ahead": "дни в будущем",
   "day-ahead": "день в будущем",
   "future-transaction-days": "Будущие дни транзакций",
-  "future-transaction-days-description": "На несколько дней вперед, чтобы составить список транзакций"
+  "future-transaction-days-description": "На несколько дней вперед, чтобы составить список транзакций",
+  "error-parsing-json": "Ошибка анализа JSON",
+  "transactions-in-the-csv": "транзакции в CSV.",
+  "errors": "Ошибки"
 }

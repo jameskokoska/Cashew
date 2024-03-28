@@ -130,7 +130,7 @@
   "filters": "Filtreler",
   "reset": "Sıfırla",
   "apply": "Uygula",
-  "csv-error": "CSV'yi içe aktarırken bir hata oluştu",
+  "csv-erorr": "CSV'yi içe aktarırken hata oluştu",
   "no-file-selected": "Dosya seçilmedi",
   "ok": "OK",
   "info": "Bilgi",
@@ -1109,5 +1109,8 @@
   "days-ahead": "gelecekteki günler",
   "day-ahead": "gelecekteki gün",
   "future-transaction-days": "Gelecek İşlem Günleri",
-  "future-transaction-days-description": "İşlemlerin listelenmesine günler kaldı"
+  "future-transaction-days-description": "İşlemlerin listelenmesine günler kaldı",
+  "error-parsing-json": "JSON Ayrıştırma Hatası",
+  "transactions-in-the-csv": "CSV'deki işlemler.",
+  "errors": "Hatalar"
 }

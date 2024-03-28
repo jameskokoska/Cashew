@@ -130,7 +130,7 @@
   "filters": "ఫిల్టర్లు",
   "reset": "రీసెట్",
   "apply": "వర్తించండి",
-  "csv-error": "CSV ను దిగుమతి చేసే లోపం ఉంది",
+  "csv-erorr": "CSVని దిగుమతి చేయడంలో లోపం",
   "no-file-selected": "ఫైల్ ఎంచుకోబడలేదు",
   "ok": "అలాగే",
   "info": "సమాచారం",
@@ -1109,5 +1109,8 @@
   "days-ahead": "భవిష్యత్తులో రోజులు",
   "day-ahead": "భవిష్యత్తులో రోజు",
   "future-transaction-days": "భవిష్యత్ లావాదేవీ రోజులు",
-  "future-transaction-days-description": "లావాదేవీలను జాబితా చేయడానికి రోజుల ముందు"
+  "future-transaction-days-description": "లావాదేవీలను జాబితా చేయడానికి రోజుల ముందు",
+  "error-parsing-json": "JSONని అన్వయించడంలో లోపం",
+  "transactions-in-the-csv": "CSVలో లావాదేవీలు.",
+  "errors": "లోపాలు"
 }

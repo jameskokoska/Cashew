@@ -130,7 +130,7 @@
   "filters": "Filtres",
   "reset": "Réinitialiser",
   "apply": "Appliquer",
-  "csv-error": "Il y a eu une erreur d'importation du CSV",
+  "csv-erorr": "Erreur lors de l'importation d'un fichier CSV",
   "no-file-selected": "Aucun fichier sélectionné",
   "ok": "OK",
   "info": "Info",
@@ -1109,5 +1109,8 @@
   "days-ahead": "jours dans le futur",
   "day-ahead": "jour dans le futur",
   "future-transaction-days": "Jours de transactions futurs",
-  "future-transaction-days-description": "Quelques jours à l'avance pour lister les transactions"
+  "future-transaction-days-description": "Quelques jours à l'avance pour lister les transactions",
+  "error-parsing-json": "Erreur lors de l'analyse de JSON",
+  "transactions-in-the-csv": "transactions dans le CSV.",
+  "errors": "les erreurs"
 }

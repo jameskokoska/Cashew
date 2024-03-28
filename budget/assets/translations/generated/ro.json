@@ -130,7 +130,7 @@
   "filters": "Filtre",
   "reset": "Resetează",
   "apply": "aplica",
-  "csv-error": "A existat o eroare de importare a CSV",
+  "csv-erorr": "Eroare la importarea CSV",
   "no-file-selected": "Niciun fisier selectat",
   "ok": "Bine",
   "info": "Informații",
@@ -1109,5 +1109,8 @@
   "days-ahead": "zile în viitor",
   "day-ahead": "zi în viitor",
   "future-transaction-days": "Zilele viitoare ale tranzacțiilor",
-  "future-transaction-days-description": "Zile înainte pentru a enumera tranzacțiile"
+  "future-transaction-days-description": "Zile înainte pentru a enumera tranzacțiile",
+  "error-parsing-json": "Eroare la analizarea JSON",
+  "transactions-in-the-csv": "tranzacții în CSV.",
+  "errors": "Erori"
 }

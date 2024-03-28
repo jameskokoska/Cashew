@@ -130,7 +130,7 @@
   "filters": "फिल्टर",
   "reset": "रीसेट",
   "apply": "अर्ज करा",
-  "csv-error": "सीएसव्ही आयात करण्यात एक त्रुटी होती",
+  "csv-erorr": "CSV आयात करताना त्रुटी",
   "no-file-selected": "कोणतीही फाईल निवडली नाही",
   "ok": "ठीक आहे",
   "info": "माहिती",
@@ -1109,5 +1109,8 @@
   "days-ahead": "भविष्यातील दिवस",
   "day-ahead": "भविष्यातील दिवस",
   "future-transaction-days": "भविष्यातील व्यवहार दिवस",
-  "future-transaction-days-description": "व्यवहारांची यादी करण्यासाठी काही दिवस पुढे आहेत"
+  "future-transaction-days-description": "व्यवहारांची यादी करण्यासाठी काही दिवस पुढे आहेत",
+  "error-parsing-json": "JSON पार्स करताना त्रुटी",
+  "transactions-in-the-csv": "CSV मध्ये व्यवहार.",
+  "errors": "चुका"
 }

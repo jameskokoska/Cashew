@@ -130,7 +130,7 @@
   "filters": "ফিল্টার",
   "reset": "রিসেট",
   "apply": "প্রয়োগ করুন",
-  "csv-error": "সিএসভি আমদানি করার একটি ত্রুটি ছিল",
+  "csv-erorr": "CSV আমদানিতে ত্রুটি৷",
   "no-file-selected": "নির্বাচিত কোন ফাইল",
   "ok": "ঠিক আছে",
   "info": "তথ্য",
@@ -1109,5 +1109,8 @@
   "days-ahead": "ভবিষ্যতের দিন",
   "day-ahead": "ভবিষ্যতের দিন",
   "future-transaction-days": "ভবিষ্যতের লেনদেনের দিন",
-  "future-transaction-days-description": "লেনদেনের তালিকা করতে দিন এগিয়ে"
+  "future-transaction-days-description": "লেনদেনের তালিকা করতে দিন এগিয়ে",
+  "error-parsing-json": "JSON পার্সিং ত্রুটি৷",
+  "transactions-in-the-csv": "CSV-এ লেনদেন।",
+  "errors": "ত্রুটি"
 }

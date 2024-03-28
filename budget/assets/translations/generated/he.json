@@ -130,7 +130,7 @@
   "filters": "פילטרים",
   "reset": "אִתחוּל",
   "apply": "להגיש מועמדות",
-  "csv-error": "הייתה שגיאה בייבוא ​​ה- CSV",
+  "csv-erorr": "שגיאה בייבוא ​​CSV",
   "no-file-selected": "אף קובץ לא נבחר",
   "ok": "בסדר",
   "info": "מידע",
@@ -1109,5 +1109,8 @@
   "days-ahead": "ימים בעתיד",
   "day-ahead": "יום בעתיד",
   "future-transaction-days": "ימי עסקאות עתידיים",
-  "future-transaction-days-description": "ימים קדימה לרשימת עסקאות"
+  "future-transaction-days-description": "ימים קדימה לרשימת עסקאות",
+  "error-parsing-json": "שגיאה בניתוח JSON",
+  "transactions-in-the-csv": "עסקאות ב-CSV.",
+  "errors": "שגיאות"
 }
