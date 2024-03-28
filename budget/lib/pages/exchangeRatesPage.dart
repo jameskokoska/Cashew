@@ -174,6 +174,7 @@ class _ExchangeRatesState extends State<ExchangeRates> {
                   onTap: () {
                     openBottomSheet(
                       context,
+                      popupWithKeyboard: true,
                       PopupFramework(
                         title: "add-currency".tr(),
                         child: SelectText(
@@ -191,11 +192,6 @@ class _ExchangeRatesState extends State<ExchangeRates> {
                         ),
                       ),
                     );
-                    // Fix over-scroll stretch when keyboard pops up quickly
-                    Future.delayed(Duration(milliseconds: 100), () {
-                      bottomSheetControllerGlobal.scrollTo(0,
-                          duration: Duration(milliseconds: 100));
-                    });
                   },
                   icon: appStateSettings["outlinedIcons"]
                       ? Icons.add_outlined

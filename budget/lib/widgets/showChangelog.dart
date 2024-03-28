@@ -40,6 +40,7 @@ String getChangelogString() {
     Amount polarity for upcoming and overdue transaction totals
     Bill splitter generate loan transaction steps improved - custom date, title recommendations, select subcategory
     Prevent save changes button hide when keyboard opened
+    Deep linking API (A): Automatically add multiple transactions per link using JSON (view [About] page for information)
     Fix padding for spending graph and space for side labels
     Fix when back swiping, swipe to dismiss is properly cancelled
     < 5.2.6

@@ -10,6 +10,7 @@ import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/dropdownSelect.dart';
 import 'package:budget/widgets/exportCSV.dart';
 import 'package:budget/widgets/globalSnackbar.dart';
+import 'package:budget/widgets/tableEntry.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/openSnackbar.dart';
@@ -227,67 +228,7 @@ class _ImportCSVState extends State<ImportCSV> {
           title: "assign-columns".tr(),
           child: Column(
             children: [
-              SingleChildScrollView(
-                scrollDirection: Axis.vertical,
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
-                    child: Table(
-                      defaultColumnWidth: IntrinsicColumnWidth(),
-                      defaultVerticalAlignment:
-                          TableCellVerticalAlignment.middle,
-                      children: <TableRow>[
-                        TableRow(
-                          decoration: BoxDecoration(
-                            color:
-                                Theme.of(context).colorScheme.primaryContainer,
-                          ),
-                          children: <Widget>[
-                            for (dynamic header in headers)
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 11.0, vertical: 5),
-                                child: TextFont(
-                                  text: header.toString(),
-                                  fontWeight: FontWeight.bold,
-                                  textColor: Theme.of(context)
-                                      .colorScheme
-                                      .onPrimaryContainer,
-                                  fontSize: 16,
-                                ),
-                              )
-                          ],
-                        ),
-                        TableRow(
-                          decoration: BoxDecoration(
-                              color: appStateSettings["materialYou"]
-                                  ? Theme.of(context)
-                                      .colorScheme
-                                      .onPrimaryContainer
-                                  : getColor(context, "lightDarkAccentHeavy")),
-                          children: <Widget>[
-                            for (dynamic entry in firstEntry)
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 11.0, vertical: 5),
-                                child: TextFont(
-                                  text: entry.toString(),
-                                  fontSize: 15,
-                                  textColor: appStateSettings["materialYou"]
-                                      ? Theme.of(context)
-                                          .colorScheme
-                                          .primaryContainer
-                                      : getColor(context, "black"),
-                                ),
-                              )
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
+              TableEntry(firstEntry: firstEntry, headers: headers),
               Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 8, vertical: 15),
@@ -596,7 +537,7 @@ class _ImportCSVState extends State<ImportCSV> {
     // print(DateTime.now().toString());
     openBottomSheet(
       context,
-      fullSnap: true,
+      popupWithKeyboard: true,
       PopupFramework(
         title: "enter-google-sheet-url".tr(),
         subtitle: "enter-google-sheet-url-description".tr(),
@@ -641,11 +582,6 @@ class _ImportCSVState extends State<ImportCSV> {
         ),
       ),
     );
-    // Fix over-scroll stretch when keyboard pops up quickly
-    Future.delayed(Duration(milliseconds: 100), () {
-      bottomSheetControllerGlobal.scrollTo(0,
-          duration: Duration(milliseconds: 100));
-    });
   }
 
   String? convertGoogleSheetsUrlToCsvUrl(String googleSheetsUrl) {
@@ -1234,8 +1170,7 @@ DateTime? tryDateFormatting(
   DateTime? dateCreated;
   try {
     dateCreated = format.parse(stringToParse.trim());
-    dateCreated =
-        DateTime(dateCreated.year, dateCreated.month, dateCreated.day);
+    if (dateCreated.year < 1500) throw ("Invalid year, try another format");
   } catch (e) {
     print("Failed to parse date and time!" + e.toString());
   }

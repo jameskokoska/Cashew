@@ -768,7 +768,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
           openBottomSheet(
             context,
             // Only allow full snap when entering a title
-            fullSnap: true,
+            popupWithKeyboard: true,
             SelectTitle(
               selectedTitle: selectedTitle,
               setSelectedNote: setSelectedNoteController,
@@ -787,11 +787,6 @@ class _AddTransactionPageState extends State<AddTransactionPage>
               selectedDate: widget.selectedDate,
             ),
           );
-          // Fix over-scroll stretch when keyboard pops up quickly
-          Future.delayed(Duration(milliseconds: 100), () {
-            bottomSheetControllerGlobal.scrollTo(0,
-                duration: Duration(milliseconds: 100));
-          });
         } else {
           afterSetTitle();
         }
@@ -2891,6 +2886,7 @@ class _EnterTextButtonState extends State<EnterTextButton> {
         onTap: () {
           openBottomSheet(
             context,
+            popupWithKeyboard: true,
             PopupFramework(
               title: widget.title,
               child: SelectText(
@@ -2905,11 +2901,6 @@ class _EnterTextButtonState extends State<EnterTextButton> {
               ),
             ),
           );
-          // Fix over-scroll stretch when keyboard pops up quickly
-          Future.delayed(Duration(milliseconds: 100), () {
-            bottomSheetControllerGlobal.scrollTo(0,
-                duration: Duration(milliseconds: 100));
-          });
         },
         borderRadius: 15,
         child: IgnorePointer(
@@ -3766,6 +3757,7 @@ class MainAndSubcategory {
 Future<MainAndSubcategory> selectCategorySequence(
   BuildContext context, {
   Widget? extraWidgetAfter,
+  Widget? extraWidgetBefore,
   bool? skipIfSet,
   required TransactionCategory? selectedCategory,
   required Function(TransactionCategory)? setSelectedCategory,
@@ -3783,6 +3775,7 @@ Future<MainAndSubcategory> selectCategorySequence(
     SelectCategoryWithIncomeExpenseSelector(
       subtitle: subtitle,
       extraWidgetAfter: extraWidgetAfter,
+      extraWidgetBefore: extraWidgetBefore,
       skipIfSet: skipIfSet,
       selectedCategory: selectedCategory,
       setSelectedCategory: setSelectedCategory,
@@ -3872,6 +3865,7 @@ Future<MainAndSubcategory> selectCategorySequence(
 class SelectCategoryWithIncomeExpenseSelector extends StatefulWidget {
   const SelectCategoryWithIncomeExpenseSelector({
     required this.extraWidgetAfter,
+    required this.extraWidgetBefore,
     required this.skipIfSet,
     required this.selectedCategory,
     required this.setSelectedCategory,
@@ -3885,6 +3879,7 @@ class SelectCategoryWithIncomeExpenseSelector extends StatefulWidget {
   });
 
   final Widget? extraWidgetAfter;
+  final Widget? extraWidgetBefore;
   final bool? skipIfSet;
   final TransactionCategory? selectedCategory;
   final Function(TransactionCategory)? setSelectedCategory;
@@ -3971,6 +3966,7 @@ class _SelectCategoryWithIncomeExpenseSelectorState
             ),
       child: Column(
         children: [
+          if (widget.extraWidgetBefore != null) widget.extraWidgetBefore!,
           if (widget.setSelectedIncome != null)
             IncomeExpenseButtonSelector(setSelectedIncome: (value) {
               setSelectedIncome(value);

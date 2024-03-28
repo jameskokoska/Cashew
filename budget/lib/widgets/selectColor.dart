@@ -525,14 +525,9 @@ Future enterColorCodeBottomSheet(
   required Function(Color) setSelectedColor,
 }) async {
   Navigator.pop(context);
-  // Fix over-scroll stretch when keyboard pops up quickly
-  Future.delayed(Duration(milliseconds: 100), () {
-    bottomSheetControllerGlobal.scrollTo(0,
-        duration: Duration(milliseconds: 100));
-  });
   return await openBottomSheet(
     context,
-    fullSnap: true,
+    popupWithKeyboard: true,
     PopupFramework(
       title: "enter-color-code".tr(),
       child: HexColorPicker(

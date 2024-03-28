@@ -809,13 +809,9 @@ class _CorrectBalancePopupState extends State<CorrectBalancePopup> {
                     : Icons.edit_rounded,
               ),
               onPressed: () async {
-                // Fix over-scroll stretch when keyboard pops up quickly
-                Future.delayed(Duration(milliseconds: 100), () {
-                  bottomSheetControllerGlobal.scrollTo(0,
-                      duration: Duration(milliseconds: 100));
-                });
                 await openBottomSheet(
                   context,
+                  popupWithKeyboard: true,
                   PopupFramework(
                     child: editTransferDetails,
                     title: "transaction-details".tr(),
@@ -1238,13 +1234,9 @@ class _TransferBalancePopupState extends State<TransferBalancePopup> {
                     : Icons.edit_rounded,
               ),
               onPressed: () async {
-                // Fix over-scroll stretch when keyboard pops up quickly
-                Future.delayed(Duration(milliseconds: 100), () {
-                  bottomSheetControllerGlobal.scrollTo(0,
-                      duration: Duration(milliseconds: 100));
-                });
                 await openBottomSheet(
                   context,
+                  popupWithKeyboard: true,
                   PopupFramework(
                     child: editTransferDetails,
                     title: "transaction-details".tr(),

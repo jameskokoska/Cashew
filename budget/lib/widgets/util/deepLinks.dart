@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
@@ -18,6 +19,8 @@ import 'package:flutter/material.dart';
 import 'package:app_links/app_links.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:budget/struct/commonDateFormats.dart';
+import 'package:budget/widgets/tableEntry.dart';
+import 'package:provider/provider.dart';
 
 class InitializeDeepLinks extends StatelessWidget {
   const InitializeDeepLinks({required this.child, super.key});
@@ -103,6 +106,129 @@ class _DeepLinksState extends State<DeepLinks> {
   }
 }
 
+processAddTransactionFromParams(
+    BuildContext context, Map<String, String> params) async {
+  MainAndSubcategory mainAndSubCategory =
+      await getMainAndSubcategoryFromParams(params);
+  TransactionWallet? wallet = await getWalletFromParams(params);
+  String walletPk = wallet?.walletPk ?? appStateSettings["selectedWalletPk"];
+  DateTime? dateCreated = await getDateTimeFromParams(params, context);
+  double amount = getAmountFromParams(params);
+  String title = params["title"] ?? "";
+  String note = params["notes"] ?? "";
+
+  if (mainAndSubCategory.main == null) {
+    Future.delayed(Duration(milliseconds: 100), () {
+      bottomSheetControllerGlobal.snapToExtent(0);
+    });
+    mainAndSubCategory = await selectCategorySequence(
+      context,
+      selectedCategory: null,
+      setSelectedCategory: (_) {},
+      selectedSubCategory: null,
+      setSelectedSubCategory: (_) {},
+      selectedIncomeInitial: null,
+      allowReorder: false,
+      extraWidgetBefore: Padding(
+        padding: const EdgeInsets.only(left: 18, right: 18, bottom: 18),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Expanded(
+              child: TableEntry(
+                firstEntry: [
+                  convertToMoney(
+                      Provider.of<AllWallets>(context, listen: false), amount,
+                      currencyKey:
+                          Provider.of<AllWallets>(context, listen: false)
+                              .indexedByPk[walletPk]
+                              ?.currency),
+                  if (dateCreated != null) getWordedDate(dateCreated),
+                  if (title != "") title,
+                  if (note != "") note,
+                  if (wallet != null) wallet.name,
+                ],
+                headers: [
+                  "amount".tr(),
+                  if (dateCreated != null) "date".tr(),
+                  if (title != "") "title".tr(),
+                  if (note != "") "note".tr(),
+                  if (wallet != null) "account".tr(),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+  if (mainAndSubCategory.main?.categoryPk == null) {
+    openSnackbar(SnackbarMessage(
+      title: "category-not-selected".tr(),
+      description: "all-transactions-require-a-category".tr(),
+      icon: appStateSettings["outlinedIcons"]
+          ? Icons.warning_amber_outlined
+          : Icons.warning_amber_rounded,
+    ));
+    return;
+  }
+
+  final int? rowId = await database.createOrUpdateTransaction(
+    Transaction(
+      transactionPk: "-1",
+      name: title,
+      amount: amount,
+      note: note,
+      categoryFk: mainAndSubCategory.main?.categoryPk ?? "",
+      subCategoryFk: mainAndSubCategory.sub?.categoryPk,
+      walletFk: walletPk,
+      dateCreated: dateCreated ?? DateTime.now(),
+      income: amount > 0,
+      paid: true,
+      skipPaid: false,
+    ),
+    insert: true,
+  );
+  if (title != "" && mainAndSubCategory.main != null) {
+    await addAssociatedTitles(title, mainAndSubCategory.main!);
+  }
+
+  if (rowId != null) {
+    final Transaction transactionJustAdded =
+        await database.getTransactionFromRowId(rowId);
+    flashTransaction(transactionJustAdded.transactionPk);
+    openSnackbar(SnackbarMessage(
+      title: "added-transaction".tr(),
+      description: await getTransactionLabel(transactionJustAdded),
+      icon: appStateSettings["outlinedIcons"]
+          ? Icons.post_add_outlined
+          : Icons.post_add_rounded,
+    ));
+  }
+}
+
+Future processAddTransactionRouteFromParams(
+    BuildContext context, Map<String, String> params) async {
+  MainAndSubcategory mainAndSubCategory =
+      await getMainAndSubcategoryFromParams(params);
+  TransactionWallet? wallet = await getWalletFromParams(params);
+  DateTime? dateCreated = await getDateTimeFromParams(params, context);
+  double amount = getAmountFromParams(params);
+  await pushRoute(
+    context,
+    AddTransactionPage(
+      routesToPopAfterDelete: RoutesToPopAfterDelete.None,
+      selectedAmount: amount,
+      selectedCategory: mainAndSubCategory.main,
+      selectedSubCategory: mainAndSubCategory.sub,
+      selectedWallet: wallet,
+      selectedDate: dateCreated,
+      selectedTitle: params["title"],
+      selectedNotes: params["notes"],
+    ),
+  );
+}
+
 executeAppLink(BuildContext? context, Uri uri) async {
   if (appStateSettings["hasOnboarded"] != true) return;
 
@@ -110,96 +236,60 @@ executeAppLink(BuildContext? context, Uri uri) async {
   Map<String, String> params = parseAppLink(uri);
 
   // Note these URIs must be unique from the launch from widget URIs!
-
   switch (endPoint) {
     case "addTransaction":
       if (context != null) {
-        MainAndSubcategory mainAndSubCategory =
-            await getMainAndSubcategoryFromParams(params);
-        TransactionWallet? wallet = await getWalletFromParams(params);
-        DateTime? dateCreated = await getDateTimeFromParams(params, context);
-        double amount = getAmountFromParams(params);
-        if (mainAndSubCategory.main == null) {
-          Future.delayed(Duration(milliseconds: 100), () {
-            bottomSheetControllerGlobal.snapToExtent(0);
-          });
-          mainAndSubCategory = await selectCategorySequence(
-            context,
-            selectedCategory: null,
-            setSelectedCategory: (_) {},
-            selectedSubCategory: null,
-            setSelectedSubCategory: (_) {},
-            selectedIncomeInitial: null,
-            allowReorder: false,
-          );
-        }
-        if (mainAndSubCategory.main?.categoryPk == null) {
-          openSnackbar(SnackbarMessage(
-            title: "category-not-selected".tr(),
-            description: "all-transactions-require-a-category".tr(),
-            icon: appStateSettings["outlinedIcons"]
-                ? Icons.warning_amber_outlined
-                : Icons.warning_amber_rounded,
-          ));
-          return;
-        }
-
-        String title = params["title"] ?? "";
-
-        final int? rowId = await database.createOrUpdateTransaction(
-          Transaction(
-            transactionPk: "-1",
-            name: title,
-            amount: amount,
-            note: params["notes"] ?? "",
-            categoryFk: mainAndSubCategory.main?.categoryPk ?? "",
-            subCategoryFk: mainAndSubCategory.sub?.categoryPk,
-            walletFk: wallet?.walletPk ?? appStateSettings["selectedWalletPk"],
-            dateCreated: dateCreated ?? DateTime.now(),
-            income: amount > 0,
-            paid: true,
-            skipPaid: false,
-          ),
-          insert: true,
-        );
-        if (title != "" && mainAndSubCategory.main != null) {
-          await addAssociatedTitles(title, mainAndSubCategory.main!);
-        }
-
-        if (rowId != null) {
-          final Transaction transactionJustAdded =
-              await database.getTransactionFromRowId(rowId);
-          flashTransaction(transactionJustAdded.transactionPk);
-          openSnackbar(SnackbarMessage(
-            title: "added-transaction".tr(),
-            description: await getTransactionLabel(transactionJustAdded),
-            icon: appStateSettings["outlinedIcons"]
-                ? Icons.post_add_outlined
-                : Icons.post_add_rounded,
-          ));
+        if (params["JSON"] != null) {
+          try {
+            Map<String, dynamic> jsonData = json.decode(params["JSON"] ?? "");
+            for (dynamic transactionObject in jsonData["transactions"]) {
+              print(transactionObject);
+              Map<String, String> currentObject = {};
+              transactionObject.forEach((key, value) {
+                currentObject[key] = value.toString();
+              });
+              await processAddTransactionFromParams(context, currentObject);
+            }
+          } catch (e) {
+            openSnackbar(SnackbarMessage(
+              title: "error-parsing-json".tr(),
+              description: e.toString(),
+              icon: appStateSettings["outlinedIcons"]
+                  ? Icons.warning_outlined
+                  : Icons.warning_rounded,
+            ));
+          }
+        } else {
+          processAddTransactionFromParams(context, params);
         }
       }
       break;
     case "addTransactionRoute":
       if (context != null) {
-        MainAndSubcategory mainAndSubCategory =
-            await getMainAndSubcategoryFromParams(params);
-        TransactionWallet? wallet = await getWalletFromParams(params);
-        DateTime? dateCreated = await getDateTimeFromParams(params, context);
-        double amount = getAmountFromParams(params);
-        pushRoute(
-          context,
-          AddTransactionPage(
-            routesToPopAfterDelete: RoutesToPopAfterDelete.None,
-            selectedAmount: amount,
-            selectedCategory: mainAndSubCategory.main,
-            selectedSubCategory: mainAndSubCategory.sub,
-            selectedWallet: wallet,
-            selectedDate: dateCreated,
-            selectedTitle: params["title"],
-            selectedNotes: params["notes"],
-          ),
-        );
+        if (params["JSON"] != null) {
+          try {
+            Map<String, dynamic> jsonData = json.decode(params["JSON"] ?? "");
+            for (dynamic transactionObject in jsonData["transactions"]) {
+              print(transactionObject);
+              Map<String, String> currentObject = {};
+              transactionObject.forEach((key, value) {
+                currentObject[key] = value.toString();
+              });
+              await processAddTransactionRouteFromParams(
+                  context, currentObject);
+            }
+          } catch (e) {
+            openSnackbar(SnackbarMessage(
+              title: "error-parsing-json".tr(),
+              description: e.toString(),
+              icon: appStateSettings["outlinedIcons"]
+                  ? Icons.warning_outlined
+                  : Icons.warning_rounded,
+            ));
+          }
+        } else {
+          processAddTransactionRouteFromParams(context, params);
+        }
       }
 
       break;

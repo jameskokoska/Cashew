@@ -865,7 +865,7 @@ class _AddBillItemPageState extends State<AddBillItemPage> {
       Future.delayed(Duration.zero, () async {
         openBottomSheet(
           context,
-          fullSnap: true,
+          popupWithKeyboard: true,
           PopupFramework(
             title: "set-title".tr(),
             child: SelectText(
@@ -882,11 +882,6 @@ class _AddBillItemPageState extends State<AddBillItemPage> {
             ),
           ),
         );
-        // Fix over-scroll stretch when keyboard pops up quickly
-        Future.delayed(Duration(milliseconds: 100), () {
-          bottomSheetControllerGlobal.scrollTo(0,
-              duration: Duration(milliseconds: 100));
-        });
       });
     }
   }
@@ -1200,6 +1195,7 @@ void openAddPersonPopup({
 }) {
   openBottomSheet(
     context,
+    popupWithKeyboard: true,
     PopupFramework(
       title: "add-name".tr(),
       child: SelectText(
@@ -1217,11 +1213,6 @@ void openAddPersonPopup({
       ),
     ),
   );
-  // Fix over-scroll stretch when keyboard pops up quickly
-  Future.delayed(Duration(milliseconds: 100), () {
-    bottomSheetControllerGlobal.scrollTo(0,
-        duration: Duration(milliseconds: 100));
-  });
 }
 
 class PeoplePage extends StatefulWidget {
@@ -1414,6 +1405,7 @@ Future<bool> generateLoanTransactionsFromBillSummary(
     double multiplierAmount) async {
   String payee = await openBottomSheet(
     context,
+    popupWithKeyboard: true,
     PopupFramework(
       title: "who-are-you-question".tr(),
       subtitle: "who-are-you-description".tr(),
@@ -1429,11 +1421,6 @@ Future<bool> generateLoanTransactionsFromBillSummary(
       ),
     ),
   );
-  // Fix over-scroll stretch when keyboard pops up quickly
-  Future.delayed(Duration(milliseconds: 100), () {
-    bottomSheetControllerGlobal.scrollTo(0,
-        duration: Duration(milliseconds: 100));
-  });
   String billName = "";
   DateTime? setDateTime;
   dynamic billNameResult = await openBottomSheet(

@@ -66,7 +66,7 @@ class _SelectCategoryImageState extends State<SelectCategoryImage> {
   void openEmojiSelectorPopup() {
     openBottomSheet(
       context,
-      fullSnap: true,
+      popupWithKeyboard: true,
       PopupFramework(
         title: "enter-emoji".tr(),
         child: SelectText(
@@ -87,11 +87,6 @@ class _SelectCategoryImageState extends State<SelectCategoryImage> {
         ),
       ),
     );
-    // Fix over-scroll stretch when keyboard pops up quickly
-    Future.delayed(Duration(milliseconds: 100), () {
-      bottomSheetControllerGlobal.scrollTo(0,
-          duration: Duration(milliseconds: 100));
-    });
   }
 
   @override
@@ -277,14 +272,10 @@ class SuggestIcon extends StatelessWidget {
         openBottomSheet(
           context,
           SuggestIconPopup(),
+          popupWithKeyboard: true,
           reAssignBottomSheetControllerGlobal: false,
           useCustomController: true,
         );
-        // Fix over-scroll stretch when keyboard pops up quickly
-        Future.delayed(Duration(milliseconds: 100), () {
-          bottomSheetControllerGlobalCustomAssigned?.scrollTo(0,
-              duration: Duration(milliseconds: 100));
-        });
       },
       color: Theme.of(context).colorScheme.secondaryContainer.withOpacity(0.7),
       borderRadius: 15,

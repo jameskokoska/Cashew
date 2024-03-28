@@ -987,20 +987,13 @@ class _TransactionFiltersSelectionState
           child: Column(
             children: [
               TitleInput(
+                resizePopupWhenChanged: false,
                 titleInputController: titleContainsController,
                 titleInputScrollController: titleContainsScrollController,
                 padding: EdgeInsets.zero,
                 setSelectedCategory: (_) {},
                 setSelectedSubCategory: (_) {},
                 alsoSearchCategories: false,
-                onDeleteButton: () {
-                  Future.delayed(Duration(milliseconds: 50), () {
-                    bottomSheetControllerGlobal.snapToExtent(1);
-                  });
-                  Future.delayed(Duration(milliseconds: 250), () {
-                    bottomSheetControllerGlobal.snapToExtent(1);
-                  });
-                },
                 setSelectedTitle: (String value) {
                   if (value.trim() == "") {
                     selectedFilters.titleContains = null;

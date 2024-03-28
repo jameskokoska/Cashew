@@ -66,6 +66,8 @@ Future openBottomSheet(
   bool resizeForKeyboard = true,
   bool showScrollbar = false,
   bool fullSnap = false,
+  bool popupWithKeyboard =
+      false, // If the popup is shown and an on screen keyboard focus is immediately required
   bool isDismissable = true,
   bool useCustomController = false,
   bool reAssignBottomSheetControllerGlobal = true,
@@ -76,6 +78,17 @@ Future openBottomSheet(
     bottomSheetControllerGlobal = new SheetController();
   if (useCustomController == true)
     bottomSheetControllerGlobalCustomAssigned = new SheetController();
+
+  // Fix over-scroll stretch when keyboard pops up quickly
+  if (popupWithKeyboard) {
+    Future.delayed(Duration(milliseconds: 100), () {
+      (useCustomController
+              ? bottomSheetControllerGlobalCustomAssigned
+              : bottomSheetControllerGlobal)
+          ?.scrollTo(0, duration: Duration(milliseconds: 100));
+    });
+  }
+
   return await showSlidingBottomSheet(
     context,
     resizeToAvoidBottomInset: resizeForKeyboard,
@@ -129,7 +142,9 @@ Future openBottomSheet(
         // },
         snapSpec: SnapSpec(
           snap: snap,
-          snappings: fullSnap == false &&
+          // Max snapping when on-screen keyboard because the keyboard takes up screen space!
+          snappings: popupWithKeyboard == false &&
+                  fullSnap == false &&
                   getIsFullScreen(context) == false &&
                   deviceAspectRatio > 2
               ? [0.6, 1]

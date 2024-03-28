@@ -343,25 +343,15 @@ class EnterName extends StatelessWidget {
       icon: Icons.edit,
       onTap: () {
         enterNameBottomSheet(context);
-        // Fix over-scroll stretch when keyboard pops up quickly
-        Future.delayed(Duration(milliseconds: 100), () {
-          bottomSheetControllerGlobal.scrollTo(0,
-              duration: Duration(milliseconds: 100));
-        });
       },
     );
   }
 }
 
 Future enterNameBottomSheet(context) async {
-  Future.delayed(Duration(milliseconds: 100), () {
-    // Fix over-scroll stretch when keyboard pops up quickly
-    bottomSheetControllerGlobal.scrollTo(0,
-        duration: Duration(milliseconds: 100));
-  });
   return await openBottomSheet(
     context,
-    fullSnap: true,
+    popupWithKeyboard: true,
     PopupFramework(
       title: "enter-name".tr(),
       child: SelectText(
@@ -1333,6 +1323,7 @@ class _CustomNumberFormatPopupState extends State<CustomNumberFormatPopup> {
                     widget.onChangeAnyOption!();
                   openBottomSheet(
                     context,
+                    popupWithKeyboard: true,
                     PopupFramework(
                       title: "set-delimiter".tr(),
                       child: SelectText(
@@ -1353,11 +1344,6 @@ class _CustomNumberFormatPopupState extends State<CustomNumberFormatPopup> {
                       ),
                     ),
                   );
-                  // Fix over-scroll stretch when keyboard pops up quickly
-                  Future.delayed(Duration(milliseconds: 100), () {
-                    bottomSheetControllerGlobal.scrollTo(0,
-                        duration: Duration(milliseconds: 100));
-                  });
                 },
               ),
             ),
@@ -1400,6 +1386,7 @@ class _CustomNumberFormatPopupState extends State<CustomNumberFormatPopup> {
                     widget.onChangeAnyOption!();
                   openBottomSheet(
                     context,
+                    popupWithKeyboard: true,
                     PopupFramework(
                       title: "set-decimal".tr(),
                       child: SelectText(
@@ -1420,11 +1407,6 @@ class _CustomNumberFormatPopupState extends State<CustomNumberFormatPopup> {
                       ),
                     ),
                   );
-                  // Fix over-scroll stretch when keyboard pops up quickly
-                  Future.delayed(Duration(milliseconds: 100), () {
-                    bottomSheetControllerGlobal.scrollTo(0,
-                        duration: Duration(milliseconds: 100));
-                  });
                 },
               ),
             )

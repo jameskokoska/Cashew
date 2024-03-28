@@ -438,16 +438,11 @@ class SelectedTransactionsAppBarMenu extends StatelessWidget {
                                 : Icons.title_rounded,
                             text: "change-title".tr(),
                             onTap: () async {
-                              // Fix over-scroll stretch when keyboard pops up quickly
-                              Future.delayed(Duration(milliseconds: 100), () {
-                                bottomSheetControllerGlobal.scrollTo(0,
-                                    duration: Duration(milliseconds: 100));
-                              });
                               String setText = "";
 
                               dynamic result = await openBottomSheet(
                                 context,
-                                fullSnap: true,
+                                popupWithKeyboard: true,
                                 PopupFramework(
                                   title: "set-title".tr(),
                                   child: Column(
