@@ -1112,5 +1112,6 @@
   "future-transaction-days-description": "İşlemlerin listelenmesine günler kaldı",
   "error-parsing-json": "JSON Ayrıştırma Hatası",
   "transactions-in-the-csv": "CSV'deki işlemler.",
-  "errors": "Hatalar"
+  "errors": "Hatalar",
+  "black": "Siyah"
 }

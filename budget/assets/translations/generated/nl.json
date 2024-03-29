@@ -1112,5 +1112,6 @@
   "future-transaction-days-description": "Dagen vooruit om transacties weer te geven",
   "error-parsing-json": "Fout bij het parseren van JSON",
   "transactions-in-the-csv": "transacties in het CSV.",
-  "errors": "Fouten"
+  "errors": "Fouten",
+  "black": "Zwart"
 }

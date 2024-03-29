@@ -1112,5 +1112,6 @@
   "future-transaction-days-description": "トランザクションのリストまであと数日",
   "error-parsing-json": "JSON 解析エラー",
   "transactions-in-the-csv": "CSV 内のトランザクション。",
-  "errors": "エラー"
+  "errors": "エラー",
+  "black": "黒"
 }

@@ -1112,5 +1112,6 @@
   "future-transaction-days-description": "Tage im Voraus, um Transaktionen aufzulisten",
   "error-parsing-json": "Fehler beim Parsen von JSON",
   "transactions-in-the-csv": "Transaktionen in der CSV.",
-  "errors": "Fehler"
+  "errors": "Fehler",
+  "black": "Schwarz"
 }

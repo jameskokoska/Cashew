@@ -1112,5 +1112,6 @@
   "future-transaction-days-description": "लेन-देन सूचीबद्ध करने के लिए आगे के दिन",
   "error-parsing-json": "JSON को पार्स करने में त्रुटि",
   "transactions-in-the-csv": "सीएसवी में लेनदेन।",
-  "errors": "त्रुटियाँ"
+  "errors": "त्रुटियाँ",
+  "black": "काला"
 }

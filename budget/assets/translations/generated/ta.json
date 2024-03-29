@@ -1112,5 +1112,6 @@
   "future-transaction-days-description": "பரிவர்த்தனைகளை பட்டியலிட இன்னும் நாட்கள் உள்ளன",
   "error-parsing-json": "JSON ஐ பாகுபடுத்துவதில் பிழை",
   "transactions-in-the-csv": "CSV இல் பரிவர்த்தனைகள்.",
-  "errors": "பிழைகள்"
+  "errors": "பிழைகள்",
+  "black": "கருப்பு"
 }

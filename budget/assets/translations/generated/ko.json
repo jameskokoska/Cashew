@@ -1112,5 +1112,6 @@
   "future-transaction-days-description": "거래 목록을 며칠 앞두고",
   "error-parsing-json": "JSON을 구문 분석하는 중 오류가 발생했습니다.",
   "transactions-in-the-csv": "CSV의 거래.",
-  "errors": "오류"
+  "errors": "오류",
+  "black": "검은색"
 }

@@ -1112,5 +1112,6 @@
   "future-transaction-days-description": "లావాదేవీలను జాబితా చేయడానికి రోజుల ముందు",
   "error-parsing-json": "JSONని అన్వయించడంలో లోపం",
   "transactions-in-the-csv": "CSVలో లావాదేవీలు.",
-  "errors": "లోపాలు"
+  "errors": "లోపాలు",
+  "black": "నలుపు"
 }

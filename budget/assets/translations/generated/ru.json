@@ -1111,5 +1111,6 @@
   "future-transaction-days-description": "На несколько дней вперед, чтобы составить список транзакций",
   "error-parsing-json": "Ошибка анализа JSON",
   "transactions-in-the-csv": "транзакции в CSV.",
-  "errors": "Ошибки"
+  "errors": "Ошибки",
+  "black": "Черный"
 }

@@ -1112,5 +1112,6 @@
   "future-transaction-days-description": "Dager frem for å liste transaksjoner",
   "error-parsing-json": "Feil ved parsing av JSON",
   "transactions-in-the-csv": "transaksjoner i CSV-en.",
-  "errors": "Feil"
+  "errors": "Feil",
+  "black": "Svart"
 }

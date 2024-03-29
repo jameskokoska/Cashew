@@ -1112,5 +1112,6 @@
   "future-transaction-days-description": "Дани унапред за попис трансакција",
   "error-parsing-json": "Грешка при рашчлањивању ЈСОН-а",
   "transactions-in-the-csv": "трансакције у ЦСВ-у.",
-  "errors": "Грешке"
+  "errors": "Грешке",
+  "black": "Црн"
 }

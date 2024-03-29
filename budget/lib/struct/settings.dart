@@ -194,6 +194,7 @@ Map<String, dynamic> getSettingConstants(Map<String, dynamic> userSettings) {
     "system": ThemeMode.system,
     "light": ThemeMode.light,
     "dark": ThemeMode.dark,
+    "black": ThemeMode.dark,
   };
 
   Map<String, dynamic> userSettingsNew = {...userSettings};

@@ -1112,5 +1112,6 @@
   "future-transaction-days-description": "লেনদেনের তালিকা করতে দিন এগিয়ে",
   "error-parsing-json": "JSON পার্সিং ত্রুটি৷",
   "transactions-in-the-csv": "CSV-এ লেনদেন।",
-  "errors": "ত্রুটি"
+  "errors": "ত্রুটি",
+  "black": "কালো"
 }

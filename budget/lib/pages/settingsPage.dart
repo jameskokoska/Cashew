@@ -476,25 +476,7 @@ class SettingsPageContent extends StatelessWidget {
                     ? Icons.brush_outlined
                     : Icons.brush_rounded,
               ),
-        SettingsContainerDropdown(
-          title: "theme-mode".tr(),
-          icon: Theme.of(context).brightness == Brightness.light
-              ? appStateSettings["outlinedIcons"]
-                  ? Icons.lightbulb_outlined
-                  : Icons.lightbulb_rounded
-              : appStateSettings["outlinedIcons"]
-                  ? Icons.dark_mode_outlined
-                  : Icons.dark_mode_rounded,
-          initial: appStateSettings["theme"].toString(),
-          items: ["system", "light", "dark"],
-          onChanged: (value) async {
-            await updateSettings("theme", value, updateGlobalState: true);
-            updateWidgetColorsAndText(context);
-          },
-          getLabel: (item) {
-            return item.tr();
-          },
-        ),
+        ThemeSettingsDropdown(),
 
         // EnterName(),
         SettingsHeader(title: "preferences".tr()),
@@ -620,6 +602,60 @@ class SettingsPageContent extends StatelessWidget {
           forceButtonName: "google-drive".tr(),
         ),
       ],
+    );
+  }
+}
+
+class ThemeSettingsDropdown extends StatefulWidget {
+  const ThemeSettingsDropdown({super.key});
+
+  @override
+  State<ThemeSettingsDropdown> createState() => _ThemeSettingsDropdownState();
+}
+
+class _ThemeSettingsDropdownState extends State<ThemeSettingsDropdown> {
+  @override
+  Widget build(BuildContext context) {
+    return SettingsContainerDropdown(
+      key: ValueKey(appStateSettings["materialYou"].toString()),
+      title: "theme-mode".tr(),
+      icon: Theme.of(context).brightness == Brightness.light
+          ? appStateSettings["outlinedIcons"]
+              ? Icons.lightbulb_outlined
+              : Icons.lightbulb_rounded
+          : appStateSettings["outlinedIcons"]
+              ? Icons.dark_mode_outlined
+              : Icons.dark_mode_rounded,
+      initial: appStateSettings["theme"].toString() == "black" &&
+              appStateSettings["materialYou"] == false
+          ? "dark"
+          : appStateSettings["theme"].toString(),
+      items: [
+        "system",
+        "light",
+        "dark",
+        if (appStateSettings["materialYou"] == true) "black"
+      ],
+      faintValues: [
+        if (appStateSettings["materialYou"] == true &&
+            appStateSettings["theme"].toString() == "system")
+          appStateSettings["forceFullDarkBackground"] == true ? "dark" : "black"
+      ],
+      onChanged: (value) async {
+        if (value == "black") {
+          await updateSettings("forceFullDarkBackground", true,
+              updateGlobalState: false);
+        } else if (value == "dark") {
+          await updateSettings("forceFullDarkBackground", false,
+              updateGlobalState: false);
+        }
+        setState(() {});
+        await updateSettings("theme", value, updateGlobalState: true);
+        updateWidgetColorsAndText(context);
+      },
+      getLabel: (item) {
+        return item.tr();
+      },
     );
   }
 }

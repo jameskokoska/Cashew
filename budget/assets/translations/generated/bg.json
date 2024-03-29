@@ -1112,5 +1112,6 @@
   "future-transaction-days-description": "Дни напред за списък на транзакциите",
   "error-parsing-json": "Грешка при синтактичния анализ на JSON",
   "transactions-in-the-csv": "транзакции в CSV.",
-  "errors": "Грешки"
+  "errors": "Грешки",
+  "black": "Черно"
 }

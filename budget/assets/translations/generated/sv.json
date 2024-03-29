@@ -1112,5 +1112,6 @@
   "future-transaction-days-description": "Dagar framåt för att lista transaktioner",
   "error-parsing-json": "Fel vid analys av JSON",
   "transactions-in-the-csv": "transaktioner i CSV.",
-  "errors": "Fel"
+  "errors": "Fel",
+  "black": "Svart"
 }

@@ -1,12 +1,8 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:budget/functions.dart';
-import 'package:budget/pages/accountsPage.dart';
 import 'package:budget/pages/autoTransactionsPageEmail.dart';
-import 'package:budget/pages/settingsPage.dart';
 import 'package:budget/struct/iconObjects.dart';
 import 'package:budget/struct/keyboardIntents.dart';
-import 'package:budget/widgets/bottomNavBar.dart';
 import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/struct/languageMap.dart';
 import 'package:budget/struct/initializeBiometrics.dart';
@@ -27,11 +23,11 @@ import 'package:budget/widgets/globalSnackbar.dart';
 import 'package:budget/struct/initializeNotifications.dart';
 import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/restartApp.dart';
+import 'package:budget/struct/customDelayedCurve.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:budget/colors.dart';
-import 'package:flutter_displaymode/flutter_displaymode.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -142,7 +138,8 @@ class App extends StatelessWidget {
       // },
       shortcuts: shortcuts,
       actions: keyboardIntents,
-      themeAnimationDuration: Duration(milliseconds: 300),
+      themeAnimationDuration: Duration(milliseconds: 400),
+      themeAnimationCurve: CustomDelayedCurve(),
       key: ValueKey(1),
       title: 'Cashew',
       navigatorKey: navigatorKey,

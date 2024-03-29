@@ -1112,5 +1112,6 @@
   "future-transaction-days-description": "提前幾天列出交易",
   "error-parsing-json": "解析 JSON 時出錯",
   "transactions-in-the-csv": "CSV 中的交易。",
-  "errors": "錯誤"
+  "errors": "錯誤",
+  "black": "黑色的"
 }

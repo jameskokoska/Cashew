@@ -1112,5 +1112,6 @@
   "future-transaction-days-description": "Μέρες μπροστά για τη λίστα συναλλαγών",
   "error-parsing-json": "Σφάλμα ανάλυσης JSON",
   "transactions-in-the-csv": "συναλλαγές στο CSV.",
-  "errors": "Σφάλματα"
+  "errors": "Σφάλματα",
+  "black": "Μαύρος"
 }

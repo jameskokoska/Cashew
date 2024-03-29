@@ -1112,5 +1112,6 @@
   "future-transaction-days-description": "Siku mbele kuorodhesha shughuli",
   "error-parsing-json": "Hitilafu katika kuchanganua JSON",
   "transactions-in-the-csv": "shughuli katika CSV.",
-  "errors": "Makosa"
+  "errors": "Makosa",
+  "black": "Nyeusi"
 }

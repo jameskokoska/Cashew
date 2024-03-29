@@ -1112,5 +1112,6 @@
   "future-transaction-days-description": "ഇടപാടുകൾ ലിസ്റ്റ് ചെയ്യാൻ ദിവസങ്ങൾ മുന്നിലാണ്",
   "error-parsing-json": "JSON പാഴ്‌സ് ചെയ്യുന്നതിൽ പിശക്",
   "transactions-in-the-csv": "CSV-യിലെ ഇടപാടുകൾ.",
-  "errors": "പിശകുകൾ"
+  "errors": "പിശകുകൾ",
+  "black": "കറുപ്പ്"
 }

@@ -1112,5 +1112,6 @@
   "future-transaction-days-description": "الأيام المقبلة لإدراج المعاملات",
   "error-parsing-json": "خطأ في تحليل JSON",
   "transactions-in-the-csv": "المعاملات في CSV.",
-  "errors": "أخطاء"
+  "errors": "أخطاء",
+  "black": "أسود"
 }

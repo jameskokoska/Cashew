@@ -275,6 +275,7 @@ class SettingsContainerDropdown extends StatefulWidget {
     this.getLabel,
     this.verticalPadding,
     this.enableBorderRadius = false,
+    this.faintValues = const [],
   }) : super(key: key);
 
   final String title;
@@ -286,6 +287,7 @@ class SettingsContainerDropdown extends StatefulWidget {
   final Function(String)? getLabel;
   final double? verticalPadding;
   final bool enableBorderRadius;
+  final List<String> faintValues;
 
   @override
   State<SettingsContainerDropdown> createState() =>
@@ -318,6 +320,7 @@ class _SettingsContainerDropdownState extends State<SettingsContainerDropdown> {
           onChanged: widget.onChanged,
           backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
           getLabel: widget.getLabel,
+          faintValues: widget.faintValues,
         ),
       ),
     );

@@ -1112,5 +1112,6 @@
   "future-transaction-days-description": "لین دین کی فہرست میں دن آگے ہیں۔",
   "error-parsing-json": "JSON کو پارس کرنے میں خرابی۔",
   "transactions-in-the-csv": "CSV میں لین دین۔",
-  "errors": "غلطیاں"
+  "errors": "غلطیاں",
+  "black": "سیاہ"
 }

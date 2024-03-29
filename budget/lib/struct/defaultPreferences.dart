@@ -32,7 +32,9 @@ Future<Map<String, dynamic>> getDefaultPreferences() async {
     "accentSystemColor": await systemColorByDefault(),
     "widgetOpacity": 1,
     "widgetTheme": "system", //system, light, dark
-    "nonCompactTransactions": false, //still in testing
+    "nonCompactTransactions":
+        false, //still in testing, declares a new transaction layout to show more information in lists
+    "forceFullDarkBackground": false,
     // FullScreen is added if the section has its own preference when full screen (double column)
     "futureTransactionDaysHomePage": 4,
     "showWalletSwitcher": true,

@@ -1112,5 +1112,6 @@
   "future-transaction-days-description": "Hari ke hadapan untuk menyenaraikan urus niaga",
   "error-parsing-json": "Ralat Menghuraikan JSON",
   "transactions-in-the-csv": "transaksi dalam CSV.",
-  "errors": "Kesilapan"
+  "errors": "Kesilapan",
+  "black": "Hitam"
 }

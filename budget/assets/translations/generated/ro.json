@@ -1112,5 +1112,6 @@
   "future-transaction-days-description": "Zile înainte pentru a enumera tranzacțiile",
   "error-parsing-json": "Eroare la analizarea JSON",
   "transactions-in-the-csv": "tranzacții în CSV.",
-  "errors": "Erori"
+  "errors": "Erori",
+  "black": "Negru"
 }

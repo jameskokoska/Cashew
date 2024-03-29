@@ -1112,5 +1112,6 @@
   "future-transaction-days-description": "Dni dopredu na zoznam transakcií",
   "error-parsing-json": "Chyba pri analýze JSON",
   "transactions-in-the-csv": "transakcie v CSV.",
-  "errors": "Chyby"
+  "errors": "Chyby",
+  "black": "čierna"
 }

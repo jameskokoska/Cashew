@@ -1112,5 +1112,6 @@
   "future-transaction-days-description": "Napok előtt a tranzakciók listázása",
   "error-parsing-json": "Hiba a JSON elemzése során",
   "transactions-in-the-csv": "tranzakciókat a CSV-ben.",
-  "errors": "Hibák"
+  "errors": "Hibák",
+  "black": "Fekete"
 }

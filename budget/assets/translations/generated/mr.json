@@ -1112,5 +1112,6 @@
   "future-transaction-days-description": "व्यवहारांची यादी करण्यासाठी काही दिवस पुढे आहेत",
   "error-parsing-json": "JSON पार्स करताना त्रुटी",
   "transactions-in-the-csv": "CSV मध्ये व्यवहार.",
-  "errors": "चुका"
+  "errors": "चुका",
+  "black": "काळा"
 }

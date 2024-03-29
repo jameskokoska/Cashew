@@ -15,6 +15,7 @@ class DropdownSelect extends StatefulWidget {
   final bool
       checkInitialValue; //Check if the initial value not in list, default to using the first index
   final List<String> boldedValues;
+  final List<String> faintValues;
   final Function(String)? getLabel;
 
   const DropdownSelect({
@@ -26,6 +27,7 @@ class DropdownSelect extends StatefulWidget {
     this.compact = false,
     this.checkInitialValue = false,
     this.boldedValues = const [],
+    this.faintValues = const [],
     this.getLabel,
   }) : super(key: key);
 
@@ -114,6 +116,8 @@ class DropdownSelectState extends State<DropdownSelect> {
               fontWeight: widget.boldedValues.contains(value)
                   ? FontWeight.bold
                   : FontWeight.normal,
+              textColor: getColor(context, "black")
+                  .withOpacity(widget.faintValues.contains(value) ? 0.3 : 1),
             ),
             value: value,
           );

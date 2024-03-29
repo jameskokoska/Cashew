@@ -1112,5 +1112,6 @@
   "future-transaction-days-description": "วันข้างหน้าเพื่อแสดงรายการธุรกรรม",
   "error-parsing-json": "เกิดข้อผิดพลาดในการแยกวิเคราะห์ JSON",
   "transactions-in-the-csv": "ธุรกรรมในรูปแบบ CSV",
-  "errors": "ข้อผิดพลาด"
+  "errors": "ข้อผิดพลาด",
+  "black": "สีดำ"
 }

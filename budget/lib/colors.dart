@@ -47,7 +47,7 @@ Color getStandardContainerColor(BuildContext context,
           : getColor(context, "lightDarkAccentHeavyLight");
 }
 
-generateColors() {
+void generateColors() {
   appColorsLight = AppColors(
     colors: {
       "white": Colors.white,
@@ -375,10 +375,13 @@ getColorScheme(Brightness brightness) {
     return ColorScheme.fromSeed(
       seedColor: getSettingConstants(appStateSettings)["accentColor"],
       brightness: Brightness.dark,
-      background: appStateSettings["materialYou"]
-          ? darkenPastel(getSettingConstants(appStateSettings)["accentColor"],
-              amount: 0.92)
-          : Colors.black,
+      background: appStateSettings["forceFullDarkBackground"] == true
+          ? Colors.black
+          : appStateSettings["materialYou"]
+              ? darkenPastel(
+                  getSettingConstants(appStateSettings)["accentColor"],
+                  amount: 0.92)
+              : Colors.black,
     );
   }
 }
@@ -501,10 +504,12 @@ ThemeData getDarkTheme() {
     colorScheme: getColorScheme(Brightness.dark),
     useMaterial3: true,
     typography: Typography.material2014(),
-    canvasColor: appStateSettings["materialYou"]
-        ? darkenPastel(getSettingConstants(appStateSettings)["accentColor"],
-            amount: 0.92)
-        : Colors.black,
+    canvasColor: appStateSettings["forceFullDarkBackground"] == true
+        ? Colors.black
+        : appStateSettings["materialYou"]
+            ? darkenPastel(getSettingConstants(appStateSettings)["accentColor"],
+                amount: 0.92)
+            : Colors.black,
     appBarTheme: AppBarTheme(
       systemOverlayStyle: getSystemUiOverlayStyle(Brightness.dark),
     ),

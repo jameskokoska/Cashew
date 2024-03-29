@@ -1112,5 +1112,6 @@
   "future-transaction-days-description": "ימים קדימה לרשימת עסקאות",
   "error-parsing-json": "שגיאה בניתוח JSON",
   "transactions-in-the-csv": "עסקאות ב-CSV.",
-  "errors": "שגיאות"
+  "errors": "שגיאות",
+  "black": "שָׁחוֹר"
 }
