@@ -261,16 +261,20 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
           defaultColor: Theme.of(context).colorScheme.primary),
       brightness: determineBrightnessTheme(context),
     );
-    Color backgroundColor = appStateSettings["materialYou"]
-        ? dynamicPastel(context, budgetColorScheme.primary, amount: 0.92)
-        : Theme.of(context).canvasColor;
+    Color pageBackgroundColor = Theme.of(context).brightness ==
+                Brightness.dark &&
+            appStateSettings["forceFullDarkBackground"]
+        ? Colors.black
+        : appStateSettings["materialYou"]
+            ? dynamicPastel(context, budgetColorScheme.primary, amount: 0.92)
+            : Theme.of(context).canvasColor;
     double budgetAmount = budgetAmountToPrimaryCurrency(
         Provider.of<AllWallets>(context, listen: true), widget.budget);
 
     return PageFramework(
-      backgroundColor: backgroundColor,
+      backgroundColor: pageBackgroundColor,
       appBarBackgroundColor: budgetColorScheme.secondaryContainer,
-      appBarBackgroundColorStart: backgroundColor,
+      appBarBackgroundColorStart: pageBackgroundColor,
       key: budgetHistoryKey,
       title: "history".tr(),
       subtitle: TextFont(
@@ -347,7 +351,7 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
                     Container(
                       padding: const EdgeInsets.symmetric(
                           vertical: 7, horizontal: 0),
-                      color: backgroundColor,
+                      color: pageBackgroundColor,
                       child: Padding(
                         padding: const EdgeInsets.only(right: 5),
                         child: StreamBuilder<Map<String, TransactionCategory>>(
@@ -530,8 +534,8 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
                         foregroundDecoration: BoxDecoration(
                           gradient: LinearGradient(
                             colors: [
-                              backgroundColor,
-                              backgroundColor.withOpacity(0.0),
+                              pageBackgroundColor,
+                              pageBackgroundColor.withOpacity(0.0),
                             ],
                             begin: Alignment.topCenter,
                             end: Alignment.bottomCenter,
@@ -566,8 +570,8 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
                     foregroundDecoration: BoxDecoration(
                       gradient: LinearGradient(
                         colors: [
-                          backgroundColor,
-                          backgroundColor.withOpacity(0.0),
+                          pageBackgroundColor,
+                          pageBackgroundColor.withOpacity(0.0),
                         ],
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
@@ -716,7 +720,7 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
                     });
                   }
                 },
-                backgroundColor: backgroundColor,
+                backgroundColor: pageBackgroundColor,
               ),
             ],
           ),

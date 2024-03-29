@@ -132,6 +132,7 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
     required VoidCallback toggleAllSubCategories,
     required List<CategoryWithTotal> dataFilterUnassignedTransactions,
     required bool hasSubCategories,
+    required Color? pageBackgroundColor,
   }) {
     return Column(
       children: [
@@ -163,10 +164,7 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
               // }
             },
             isPastBudget: widget.isPastBudget ?? false,
-            middleColor: appStateSettings["materialYou"]
-                ? dynamicPastel(context, budgetColorScheme.primary,
-                    amount: 0.92)
-                : null,
+            middleColor: pageBackgroundColor,
           ),
         ),
         PieChartOptions(
@@ -211,9 +209,13 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
         widget.budget.name +
         budgetRange.end.millisecondsSinceEpoch.toString() +
         widget.budget.budgetPk;
-    Color? pageBackgroundColor = appStateSettings["materialYou"]
-        ? dynamicPastel(context, budgetColorScheme.primary, amount: 0.92)
-        : null;
+    Color? pageBackgroundColor = Theme.of(context).brightness ==
+                Brightness.dark &&
+            appStateSettings["forceFullDarkBackground"]
+        ? Colors.black
+        : appStateSettings["materialYou"]
+            ? dynamicPastel(context, budgetColorScheme.primary, amount: 0.92)
+            : null;
     bool showIncomeExpenseIcons = widget.budget.budgetTransactionFilters == null
         ? true
         : widget.budget.budgetTransactionFilters
@@ -624,6 +626,7 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                               dataFilterUnassignedTransactions:
                                   s.dataFilterUnassignedTransactions,
                               hasSubCategories: s.hasSubCategories,
+                              pageBackgroundColor: pageBackgroundColor,
                             ),
                           // if (snapshot.data!.length > 0)
                           //   SizedBox(height: 35),

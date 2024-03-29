@@ -191,9 +191,13 @@ class _ObjectivePageContentState extends State<_ObjectivePageContent> {
           defaultColor: Theme.of(context).colorScheme.primary),
       brightness: determineBrightnessTheme(context),
     );
-    Color? pageBackgroundColor = appStateSettings["materialYou"]
-        ? dynamicPastel(context, objectiveColorScheme.primary, amount: 0.92)
-        : null;
+    Color? pageBackgroundColor = Theme.of(context).brightness ==
+                Brightness.dark &&
+            appStateSettings["forceFullDarkBackground"]
+        ? Colors.black
+        : appStateSettings["materialYou"]
+            ? dynamicPastel(context, objectiveColorScheme.primary, amount: 0.92)
+            : null;
     String pageId = widget.objective.objectivePk;
     return WillPopScope(
       onWillPop: () async {
