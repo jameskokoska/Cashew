@@ -982,13 +982,21 @@ class _ImportingEntriesPopupState extends State<ImportingEntriesPopup> {
 
     bool income = amount > 0;
 
+    // if mainCategoryPk == null -> subcategory
+    String mainCategoryFk =
+        selectedCategory.mainCategoryPk ?? selectedCategory.categoryPk;
+    String? subCategoryFk = selectedCategory.mainCategoryPk == null
+        ? null
+        : selectedCategory.categoryPk;
+
     return ImportingTransactionAndTitle(
       Transaction(
         transactionPk: "-1",
         name: name,
         amount: amount,
         note: note,
-        categoryFk: categoryFk,
+        categoryFk: mainCategoryFk,
+        subCategoryFk: subCategoryFk,
         walletFk: walletFk,
         dateCreated: dateCreated,
         dateTimeModified: DateTime.now(),
@@ -1001,7 +1009,7 @@ class _ImportingEntriesPopupState extends State<ImportingEntriesPopup> {
           ? null
           : TransactionAssociatedTitle(
               associatedTitlePk: "-1",
-              categoryFk: selectedCategory.categoryPk,
+              categoryFk: mainCategoryFk,
               isExactMatch: false,
               title: name.trim(),
               dateCreated: dateCreated,

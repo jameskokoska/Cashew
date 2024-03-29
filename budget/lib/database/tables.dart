@@ -4093,19 +4093,17 @@ class FinanceDatabase extends _$FinanceDatabase {
   }
 
   // get category given name
+  // Returns either subcategory or category!
   Future<TransactionCategory> getCategoryInstanceGivenName(String name) async {
-    return (await (select(categories)
-              ..where(
-                  (c) => onlyShowMainCategoryListing(c) & c.name.equals(name)))
-            .get())
+    return (await (select(categories)..where((c) => c.name.equals(name))).get())
         .first;
   }
 
+  // Returns either subcategory or category!
   Future<TransactionCategory> getCategoryInstanceGivenNameTrim(
       String name) async {
     return (await (select(categories)
               ..where((c) =>
-                  onlyShowMainCategoryListing(c) &
                   c.name.lower().trim().equals(name.toLowerCase().trim())))
             .get())
         .first;
