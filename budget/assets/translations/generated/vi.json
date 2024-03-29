@@ -1111,6 +1111,6 @@
   "future-transaction-days": "Những ngày giao dịch trong tương lai",
   "future-transaction-days-description": "Những ngày sắp tới để liệt kê các giao dịch",
   "error-parsing-json": "Lỗi phân tích cú pháp JSON",
-  "transactions-in-the-csv": "giao dịch trong CSV.",
+  "transactions-in-the-csv": "các giao dịch trong CSV.",
   "errors": "Lỗi"
 }
