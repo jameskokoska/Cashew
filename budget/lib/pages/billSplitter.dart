@@ -1203,6 +1203,9 @@ void openAddPersonPopup({
         popContext: false,
         setSelectedText: (_) {},
         placeholder: "name-placeholder".tr(),
+        icon: appStateSettings["outlinedIcons"]
+            ? Icons.people_outlined
+            : Icons.people_rounded,
         nextWithInput: (text) async {
           bool result = addPerson(SplitPerson(text));
           if (result == true) {
@@ -1425,7 +1428,7 @@ Future<bool> generateLoanTransactionsFromBillSummary(
   DateTime? setDateTime;
   dynamic billNameResult = await openBottomSheet(
     context,
-    fullSnap: true,
+    popupWithKeyboard: true,
     SelectTitle(
       disableAskForNote: true,
       selectedTitle: "",

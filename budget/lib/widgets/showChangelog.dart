@@ -42,6 +42,7 @@ String getChangelogString() {
     Prevent save changes button hide when keyboard opened
     Deep linking API (A): Automatically add multiple transactions per link using JSON (view [About] page for information)
     When importing CSV, if subcategory exists with the CSV entry category name, subcategory will be used
+    Improved UI layouts and icons for clarity
     Fix padding for spending graph and space for side labels
     Fix when back swiping, swipe to dismiss is properly cancelled
     < 5.2.6

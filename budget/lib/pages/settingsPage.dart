@@ -1332,6 +1332,9 @@ class _CustomNumberFormatPopupState extends State<CustomNumberFormatPopup> {
                         popContext: false,
                         setSelectedText: (_) {},
                         placeholder: "delimiter-symbol".tr(),
+                        icon: appStateSettings["outlinedIcons"]
+                            ? Symbols.decimal_decrease_sharp
+                            : Symbols.decimal_decrease_rounded,
                         selectedText: customDelimiter,
                         nextWithInput: (text) async {
                           setState(() {
@@ -1395,6 +1398,9 @@ class _CustomNumberFormatPopupState extends State<CustomNumberFormatPopup> {
                         popContext: false,
                         setSelectedText: (_) {},
                         placeholder: "decimal-symbol".tr(),
+                        icon: appStateSettings["outlinedIcons"]
+                            ? Symbols.decimal_increase_sharp
+                            : Symbols.decimal_increase_rounded,
                         selectedText: customDecimal,
                         nextWithInput: (text) async {
                           setState(() {
