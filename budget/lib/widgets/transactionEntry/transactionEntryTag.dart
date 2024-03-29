@@ -164,10 +164,19 @@ class TransactionEntryTag extends StatelessWidget {
         ];
         // work in preogress...
         // if maxwidth > maxWidth/tagCount, wrap in flexible, otherwise dont
-        return Row(
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            for (int i = 0; i < tags.length; i++)
-              if (tagsToShow[i]) Flexible(child: tags[i])
+            Row(
+              children: [
+                for (int i = 0; i < tags.length; i++)
+                  if (tagsToShow[i]) Flexible(child: tags[i])
+              ],
+            ),
+            if (transaction.sharedKey != null ||
+                transaction.sharedStatus == SharedStatus.waiting)
+              SharedBudgetLabel(transaction: transaction),
           ],
         );
       }),

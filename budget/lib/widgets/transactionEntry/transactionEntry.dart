@@ -10,6 +10,7 @@ import 'package:budget/widgets/categoryIcon.dart';
 import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/widgets/openContainerNavigation.dart';
 import 'package:budget/widgets/tappable.dart';
+import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntry/transactionEntryTypeButton.dart';
 import 'package:budget/widgets/transactionEntry/transactionLabel.dart';
 import 'package:flutter/foundation.dart';
@@ -279,6 +280,229 @@ class TransactionEntry extends StatelessWidget {
             appStateSettings["customCurrencyAmounts"][transactionCurrency] ==
                 null);
 
+    Widget transactionContents(
+        {required VoidCallback openContainer,
+        required bool selected,
+        required bool? areTransactionsBeingSelected}) {
+      Widget transactionSelectionCheck = enableSelectionCheckmark
+          ? TransactionSelectionCheck(
+              areTransactionsBeingSelected: areTransactionsBeingSelected,
+              selected: selected,
+              transaction: transaction,
+              listID: listID,
+              selectTransaction: selectTransaction,
+            )
+          : SizedBox.shrink();
+      Widget categoryIcon = CategoryIcon(
+        cacheImage: true,
+        category: category,
+        categoryPk: transaction.categoryFk,
+        size: 27,
+        sizePadding: 20,
+        margin: EdgeInsets.zero,
+        borderRadius: 100,
+        onTap: openContainer,
+        tintColor: categoryTintColor,
+      );
+      Widget actionButton(EdgeInsets padding) {
+        Widget actionButton = TransactionEntryActionButton(
+          padding: padding,
+          transaction: transaction,
+          iconColor: iconColor,
+          containerColor: containerColor,
+          allowOpenIntoObjectiveLoanPage: allowOpenIntoObjectiveLoanPage,
+        );
+        if (highlightActionButton) {
+          actionButton = BreathingWidget(
+            duration: Duration(milliseconds: 600),
+            endScale: 1.2,
+            child: actionButton,
+          );
+        }
+        actionButton = AnimatedSwitcher(
+          duration: Duration(milliseconds: 800),
+          child: isTransactionActionDealtWith(transaction)
+              ? Container(child: actionButton)
+              : actionButton,
+        );
+        return actionButton;
+      }
+
+      double fontSize = getIsFullScreen(context) == false ? 15.5 : 16.5;
+      Widget transactionLabel = TransactionLabel(
+        fontSize: fontSize,
+        transaction: transaction,
+        category: category,
+      );
+      Widget transactionName = TextFont(
+        text: transaction.name.capitalizeFirst,
+        fontSize: fontSize,
+      );
+      Widget transactionCategoryName = TransactionCategoryNameLabel(
+        fontSize: fontSize - 2,
+        transaction: transaction,
+        category: category,
+      );
+      Widget tags = TransactionEntryTag(
+        transaction: transaction,
+        showObjectivePercentage: showObjectivePercentage,
+        subCategory: subCategory,
+        budget: budget,
+        objective: objective,
+        showExcludedBudgetTag: showExcludedBudgetTag,
+      );
+      Widget noteIcon = TransactionEntryNote(
+        transaction: transaction,
+        iconColor: iconColor,
+      );
+      bool showNote = transaction.note.toString().trim() != "";
+      Widget note = Row(
+        children: [
+          TransactionEntryNote(
+            transaction: transaction,
+            iconColor: iconColor,
+            padding: EdgeInsets.only(right: 5),
+          ),
+          Expanded(
+            child: TextFont(
+              text: transaction.note.replaceAll("\n", ", "),
+              fontSize: fontSize - 4,
+              maxLines: 2,
+              textColor: getColor(context, "textLight").withOpacity(0.7),
+            ),
+          ),
+        ],
+      );
+
+      Widget amount = TransactionEntryAmount(
+        transaction: transaction,
+        showOtherCurrency: showOtherCurrency,
+        unsetCustomCurrency: unsetCustomCurrency,
+      );
+      Widget transactionActionLabelButton = TransactionEntryTypeButton(
+        transaction: transaction,
+      );
+      return appStateSettings["nonCompactTransactions"] == true
+          ? Padding(
+              padding: enableSelectionCheckmark
+                  ? const EdgeInsets.only(right: 7)
+                  : EdgeInsets.zero,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  transactionSelectionCheck,
+                  categoryIcon,
+                  Expanded(
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(left: 5),
+                          child: Row(
+                            children: [
+                              actionButton(
+                                const EdgeInsets.only(
+                                  left: 3,
+                                  top: 5.5,
+                                  bottom: 5.5,
+                                  right: 0,
+                                ),
+                              ),
+                              SizedBox(width: 5),
+                              Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 3),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: transaction.name.trim() != ""
+                                        ? [
+                                            transactionName,
+                                            transactionCategoryName,
+                                          ]
+                                        : [transactionLabel],
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                width: 7,
+                              ),
+                              if (getIsFullScreen(context))
+                                transactionActionLabelButton,
+                              amount,
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 5 + 3),
+                          child: Column(
+                            children: [
+                              if (showNote)
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(
+                                            bottom: 4, top: 3),
+                                        child: note,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              SizedBox(height: 3),
+                              tags,
+                              SizedBox(height: 3),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            )
+          : Padding(
+              padding: enableSelectionCheckmark
+                  ? const EdgeInsets.only(right: 7)
+                  : EdgeInsets.zero,
+              child: Row(
+                children: [
+                  transactionSelectionCheck,
+                  categoryIcon,
+                  SizedBox(width: 5),
+                  actionButton(
+                    const EdgeInsets.only(
+                      left: 3,
+                      top: 5.5,
+                      bottom: 5.5,
+                      right: 0,
+                    ),
+                  ),
+                  SizedBox(width: 5),
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(left: 3),
+                          child: transactionLabel,
+                        ),
+                        tags,
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    width: 7,
+                  ),
+                  if (getIsFullScreen(context)) transactionActionLabelButton,
+                  noteIcon,
+                  amount,
+                ],
+              ),
+            );
+    }
+
     return Padding(
       padding: EdgeInsets.symmetric(
           horizontal: getHorizontalPaddingConstrained(context,
@@ -398,137 +622,11 @@ class TransactionEntry extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            child: Padding(
-                              padding: enableSelectionCheckmark
-                                  ? const EdgeInsets.only(right: 7)
-                                  : EdgeInsets.zero,
-                              child: Row(
-                                children: [
-                                  enableSelectionCheckmark
-                                      ? TransactionSelectionCheck(
-                                          areTransactionsBeingSelected:
-                                              areTransactionsBeingSelected,
-                                          selected: selected,
-                                          transaction: transaction,
-                                          listID: listID,
-                                          selectTransaction: selectTransaction,
-                                        )
-                                      : SizedBox.shrink(),
-                                  CategoryIcon(
-                                    cacheImage: true,
-                                    category: category,
-                                    categoryPk: transaction.categoryFk,
-                                    size: 27,
-                                    sizePadding: 20,
-                                    margin: EdgeInsets.zero,
-                                    borderRadius: 100,
-                                    onTap: () {
-                                      openContainer();
-                                    },
-                                    tintColor: categoryTintColor,
-                                  ),
-                                  Builder(builder: (context) {
-                                    Widget actionButton =
-                                        TransactionEntryActionButton(
-                                      transaction: transaction,
-                                      iconColor: iconColor,
-                                      containerColor: containerColor,
-                                      allowOpenIntoObjectiveLoanPage:
-                                          allowOpenIntoObjectiveLoanPage,
-                                    );
-                                    if (highlightActionButton) {
-                                      actionButton = BreathingWidget(
-                                        duration: Duration(milliseconds: 600),
-                                        endScale: 1.2,
-                                        child: actionButton,
-                                      );
-                                    }
-                                    return AnimatedSwitcher(
-                                      duration: Duration(milliseconds: 800),
-                                      child: isTransactionActionDealtWith(
-                                              transaction)
-                                          ? Container(child: actionButton)
-                                          : actionButton,
-                                    );
-                                  }),
-                                  Expanded(
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Builder(builder: (contextBuilder) {
-                                          double fontSize =
-                                              getIsFullScreen(context) == false
-                                                  ? 15.5
-                                                  : 16.5;
-                                          return Padding(
-                                            padding:
-                                                const EdgeInsets.only(left: 3),
-                                            child: TransactionLabel(
-                                              fontSize: fontSize,
-                                              transaction: transaction,
-                                              category: category,
-                                            ),
-                                          );
-                                        }),
-                                        (transaction.sharedReferenceBudgetPk !=
-                                                        null &&
-                                                    transaction.sharedKey ==
-                                                        null &&
-                                                    transaction.sharedStatus ==
-                                                        null) ||
-                                                (transaction.objectiveFk !=
-                                                    null) ||
-                                                (transaction.objectiveLoanFk !=
-                                                    null) ||
-                                                (transaction.subCategoryFk !=
-                                                    null) ||
-                                                (transaction.budgetFksExclude !=
-                                                    null) ||
-                                                (appStateSettings[
-                                                        "showAccountLabelTagInTransactionEntry"] ==
-                                                    true)
-                                            ? TransactionEntryTag(
-                                                transaction: transaction,
-                                                showObjectivePercentage:
-                                                    showObjectivePercentage,
-                                                subCategory: subCategory,
-                                                budget: budget,
-                                                objective: objective,
-                                                showExcludedBudgetTag:
-                                                    showExcludedBudgetTag,
-                                              )
-                                            : SizedBox.shrink(),
-                                        transaction.sharedKey != null ||
-                                                transaction.sharedStatus ==
-                                                    SharedStatus.waiting
-                                            ? SharedBudgetLabel(
-                                                transaction: transaction)
-                                            : SizedBox.shrink()
-                                      ],
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 7,
-                                  ),
-                                  getIsFullScreen(context)
-                                      ? TransactionEntryTypeButton(
-                                          transaction: transaction,
-                                        )
-                                      : SizedBox.shrink(),
-                                  TransactionEntryNote(
-                                    transaction: transaction,
-                                    iconColor: iconColor,
-                                  ),
-                                  TransactionEntryAmount(
-                                    transaction: transaction,
-                                    showOtherCurrency: showOtherCurrency,
-                                    unsetCustomCurrency: unsetCustomCurrency,
-                                  ),
-                                ],
-                              ),
+                            child: transactionContents(
+                              openContainer: openContainer,
+                              selected: selected,
+                              areTransactionsBeingSelected:
+                                  areTransactionsBeingSelected,
                             ),
                           ),
                         ),

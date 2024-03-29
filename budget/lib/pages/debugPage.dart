@@ -103,6 +103,19 @@ class DebugPage extends StatelessWidget {
               : Icons.blur_circular_rounded,
         ),
         SettingsContainerSwitch(
+          title: "Large transaction entry".tr(),
+          description: "Show more information in a transaction entry".tr(),
+          onSwitched: (value) {
+            updateSettings("nonCompactTransactions", value,
+                updateGlobalState: true, pagesNeedingRefresh: [0, 1, 2, 3]);
+          },
+          initialValue: appStateSettings["nonCompactTransactions"],
+          icon: appStateSettings["outlinedIcons"]
+              ? Icons.web_asset_outlined
+              : Icons.web_asset_rounded,
+        ),
+
+        SettingsContainerSwitch(
           title: "battery-saver".tr(),
           description: "battery-saver-description".tr(),
           onSwitched: (value) {

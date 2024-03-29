@@ -22,23 +22,41 @@ class TransactionLabel extends StatelessWidget {
             text: transaction.name.capitalizeFirst,
             fontSize: fontSize,
           )
-        : category == null
-            ? StreamBuilder<TransactionCategory>(
-                stream: database.getCategory(transaction.categoryFk).$1,
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    return TextFont(
-                      text: snapshot.data!.name,
-                      fontSize: fontSize,
-                    );
-                  }
-                  return Container();
-                },
-              )
-            : TextFont(
-                text: category!.name,
-                fontSize: fontSize,
-              );
+        : TransactionCategoryNameLabel(
+            transaction: transaction, fontSize: fontSize);
+  }
+}
+
+class TransactionCategoryNameLabel extends StatelessWidget {
+  const TransactionCategoryNameLabel({
+    required this.transaction,
+    this.category,
+    required this.fontSize,
+    super.key,
+  });
+  final Transaction transaction;
+  final TransactionCategory? category;
+  final double fontSize;
+
+  @override
+  Widget build(BuildContext context) {
+    return category == null
+        ? StreamBuilder<TransactionCategory>(
+            stream: database.getCategory(transaction.categoryFk).$1,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return TextFont(
+                  text: snapshot.data!.name,
+                  fontSize: fontSize,
+                );
+              }
+              return Container();
+            },
+          )
+        : TextFont(
+            text: category!.name,
+            fontSize: fontSize,
+          );
   }
 }
 

@@ -19,10 +19,14 @@ class TransactionEntryNote extends StatelessWidget {
   const TransactionEntryNote({
     required this.transaction,
     required this.iconColor,
+    this.padding =
+        const EdgeInsets.only(left: 5, right: 3, top: 10, bottom: 10),
     super.key,
   });
   final Transaction transaction;
   final Color iconColor;
+  final EdgeInsets padding;
+
   @override
   Widget build(BuildContext context) {
     return transaction.note.toString().trim() != ""
@@ -58,8 +62,7 @@ class TransactionEntryNote extends StatelessWidget {
                 : Duration(milliseconds: 100),
             message: cleanupNoteStringWithURLs(transaction.note),
             child: Padding(
-              padding:
-                  const EdgeInsets.only(left: 5, right: 3, top: 10, bottom: 10),
+              padding: padding,
               child: Icon(
                 appStateSettings["outlinedIcons"]
                     ? Icons.sticky_note_2_outlined

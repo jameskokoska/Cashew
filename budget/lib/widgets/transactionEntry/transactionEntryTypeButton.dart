@@ -28,12 +28,14 @@ class TransactionEntryActionButton extends StatelessWidget {
     required this.iconColor,
     required this.allowOpenIntoObjectiveLoanPage,
     this.containerColor,
+    required this.padding,
     super.key,
   });
   final Transaction transaction;
   final Color iconColor;
   final Color? containerColor;
   final bool allowOpenIntoObjectiveLoanPage;
+  final EdgeInsets padding;
 
   @override
   Widget build(BuildContext context) {
@@ -41,6 +43,7 @@ class TransactionEntryActionButton extends StatelessWidget {
       children: [
         if (transaction.type != null)
           ActionButton(
+            padding: padding,
             dealtWith: isTransactionActionDealtWith(transaction),
             message: getTransactionActionNameFromType(transaction),
             onTap: () => openTransactionActionFromType(context, transaction),
@@ -50,6 +53,7 @@ class TransactionEntryActionButton extends StatelessWidget {
           ),
         if (transaction.objectiveLoanFk != null)
           ActionButton(
+            padding: padding,
             dealtWith: false,
             message: "loan".tr(),
             onTap: allowOpenIntoObjectiveLoanPage
@@ -98,10 +102,6 @@ class TransactionEntryActionButton extends StatelessWidget {
                   : TransactionSpecialType.credit,
             ),
           ),
-        if (transaction.type == null && transaction.objectiveLoanFk == null)
-          SizedBox(width: 10),
-        if (transaction.type != null || transaction.objectiveLoanFk != null)
-          SizedBox(width: 6),
       ],
     );
   }
@@ -115,6 +115,7 @@ class ActionButton extends StatelessWidget {
     required this.containerColor,
     required this.iconColor,
     required this.iconData,
+    required this.padding,
     super.key,
   });
   final bool dealtWith;
@@ -123,6 +124,7 @@ class ActionButton extends StatelessWidget {
   final Color? containerColor;
   final Color iconColor;
   final IconData iconData;
+  final EdgeInsets padding;
 
   @override
   Widget build(BuildContext context) {
@@ -131,12 +133,7 @@ class ActionButton extends StatelessWidget {
       child: GestureDetector(
         onTap: onTap,
         child: Padding(
-          padding: const EdgeInsets.only(
-            left: 6,
-            top: 5.5,
-            bottom: 5.5,
-            right: 0,
-          ),
+          padding: padding,
           child: Transform.scale(
             scale: dealtWith ? 0.92 : 1,
             child: Tappable(

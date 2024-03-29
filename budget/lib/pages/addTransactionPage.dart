@@ -3645,6 +3645,7 @@ class SelectTransactionTypePopup extends StatelessWidget {
                         in TransactionSpecialType.values)
                       IgnorePointer(
                         child: TransactionEntryActionButton(
+                          padding: EdgeInsets.symmetric(horizontal: 6),
                           allowOpenIntoObjectiveLoanPage: false,
                           transaction: Transaction(
                             transactionPk: "-1",
