@@ -1,10 +1,17 @@
 import 'dart:isolate';
+import 'dart:math';
 import 'dart:ui';
 
 import 'package:awesome_notifications/awesome_notifications.dart';
-import 'package:budget/struct/notification_controller/controller_utils.dart'
-    as utils;
+import 'package:budget/database/tables.dart';
+import 'package:budget/struct/databaseGlobal.dart';
+import 'package:budget/struct/notification_controller/awesome_notifications/extensions.dart';
+import 'package:budget/struct/notification_controller/models.dart';
 import 'package:budget/struct/notification_controller/notification_controller.dart';
+import 'package:budget/struct/settings.dart';
+import 'package:budget/widgets/notificationsSettings.dart';
+import 'package:budget/widgets/transactionEntry/transactionLabel.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 class AwesomeNotificationController extends NotificationController<
@@ -31,7 +38,7 @@ class AwesomeNotificationController extends NotificationController<
   List<NotificationChannel> get channels {
     if (_channels.isEmpty) {
       final Set<String> channelSet = {};
-      for (var type in utils.NotificationType.values) {
+      for (var type in NotificationType.values) {
         final channel = type.channel;
         if (!channelSet.contains(channel.channelKey)) {
           channelSet.add(channel.channelKey!);
@@ -149,12 +156,13 @@ class AwesomeNotificationController extends NotificationController<
     await plugin.cancel(id);
   }
 
-  int _notificationCount = 1;
+  int _notificationCount = 1000;
 
   @override
   Future<int?> createNotification({
-    required utils.NotificationContent content,
-    utils.NotificationType type = utils.NotificationType.alert,
+    int? id,
+    required NotificationData content,
+    NotificationType type = NotificationType.alert,
     Map<String, String?>? payload,
   }) async {
     final hasPermission = await checkNotificationPermission();
@@ -163,9 +171,11 @@ class AwesomeNotificationController extends NotificationController<
       return null;
     }
 
+    final notificationId = id ?? _notificationCount;
+
     final isCreated = await plugin.createNotification(
       content: NotificationContent(
-        id: _notificationCount,
+        id: notificationId,
         channelKey: type.channel.channelKey ?? 'alerts',
         title: content.title,
         body: content.body,
@@ -187,13 +197,18 @@ class AwesomeNotificationController extends NotificationController<
           .toList(),
     );
 
-    return isCreated ? _notificationCount++ : null;
+    if (isCreated && notificationId == _notificationCount) {
+      _notificationCount++;
+    }
+
+    return isCreated ? notificationId : null;
   }
 
   @override
   Future<int?> scheduleNotification({
-    required utils.NotificationContent content,
-    utils.NotificationType type = utils.NotificationType.alert,
+    int? id,
+    required NotificationData content,
+    NotificationType type = NotificationType.alert,
     required NotificationCalendar schedule,
     Map<String, String?>? payload,
     bool recurring = false,
@@ -203,10 +218,11 @@ class AwesomeNotificationController extends NotificationController<
     if (!hasPermission) {
       return null;
     }
+    final notificationId = id ?? _notificationCount;
 
     final isCreated = await plugin.createNotification(
       content: NotificationContent(
-        id: _notificationCount,
+        id: notificationId,
         channelKey: type.channel.channelKey ?? 'alerts',
         title: content.title,
         body: content.body,
@@ -218,61 +234,141 @@ class AwesomeNotificationController extends NotificationController<
       schedule: schedule,
     );
 
-    return isCreated ? _notificationCount++ : null;
-  }
-}
-
-extension NotificationTypeExt on utils.NotificationType {
-  NotificationChannel get channel {
-    switch (this) {
-      case utils.NotificationType.creditTransaction:
-      case utils.NotificationType.debitTransaction:
-      case utils.NotificationType.transfer:
-        return NotificationChannel(
-          channelKey: 'silentNotifications',
-          channelName: 'Silent Notifications',
-          channelDescription: 'Silent Notification',
-          onlyAlertOnce: true,
-          enableVibration: false,
-          importance: NotificationImportance.Low,
-          defaultPrivacy: NotificationPrivacy.Private,
-          groupAlertBehavior: GroupAlertBehavior.Children,
-        );
-      case utils.NotificationType.alert:
-      case utils.NotificationType.reminder:
-      default:
-        return NotificationChannel(
-          channelKey: 'alerts',
-          channelName: 'Alerts',
-          channelDescription: 'Alert Notification',
-          onlyAlertOnce: true,
-          importance: NotificationImportance.High,
-          defaultPrivacy: NotificationPrivacy.Public,
-          groupAlertBehavior: GroupAlertBehavior.Children,
-        );
+    if (isCreated && notificationId == _notificationCount) {
+      _notificationCount++;
     }
+
+    return isCreated ? notificationId : null;
   }
 
-  List<NotificationActionButton> get actionButtons {
-    switch (this) {
-      case utils.NotificationType.creditTransaction:
-      case utils.NotificationType.debitTransaction:
-      case utils.NotificationType.transfer:
-        return [
-          NotificationActionButton(
-            key: 'EDIT',
-            label: 'Edit',
-          ),
-          NotificationActionButton(
-            key: 'DONE',
-            label: 'Done',
-            actionType: ActionType.DismissAction,
-          ),
-        ];
-      case utils.NotificationType.alert:
-      case utils.NotificationType.reminder:
-      default:
-        return [];
+  Future<bool> scheduleDailyNotification(
+      BuildContext context, TimeOfDay timeOfDay,
+      {bool scheduleNowDebug = false}) async {
+    // If the app was opened on the day the notification was scheduled it will be
+    // cancelled and set to the next day because of _nextInstanceOfSetTime
+    // If ReminderNotificationType.Everyday is not true
+    await cancelDailyNotification();
+
+    // schedule 2 weeks worth of notifications
+    for (int i = (ReminderNotificationType
+                    .values[appStateSettings["notificationsReminderType"]] ==
+                ReminderNotificationType.Everyday
+            ? 0
+            : 1);
+        i <= 14;
+        i++) {
+      String chosenMessage =
+          reminderStrings[Random().nextInt(reminderStrings.length)].tr();
+      final now = DateTime.now();
+      var dateTime = DateTime(
+        now.year,
+        now.month,
+        now.day + i,
+        timeOfDay.hour,
+        timeOfDay.minute,
+      );
+      if (scheduleNowDebug) dateTime = now.add(Duration(seconds: i * 5));
+
+      await scheduleNotification(
+        id: i,
+        content: NotificationData(
+          title: 'notification-reminder-title'.tr(),
+          body: chosenMessage,
+          color: Theme.of(context).colorScheme.primary,
+        ),
+        payload: {
+          'type': 'addTransaction',
+        },
+        schedule: NotificationCalendar(
+          day: dateTime.day,
+          hour: dateTime.hour,
+          minute: dateTime.minute,
+          allowWhileIdle: true,
+        ),
+      );
+      print("Notification " +
+          chosenMessage +
+          " scheduled for " +
+          dateTime.toString() +
+          " with id " +
+          i.toString());
     }
+
+    return true;
+  }
+
+  Future<bool> cancelDailyNotification() async {
+    // Need to cancel all, including the one at 0 - even if it does not exist
+    for (int i = 0; i <= 14; i++) {
+      await plugin.cancel(i);
+    }
+    print("Cancelled notifications for daily reminder");
+    return true;
+  }
+
+  Future<bool> scheduleUpcomingTransactionsNotification(context) async {
+    await cancelUpcomingTransactionsNotification();
+
+    int idStart = 100;
+    for (Transaction upcomingTransaction in await _upcomingTransactions) {
+      idStart++;
+      // Note: if upcomingTransactionNotification is NULL the loop will continue and schedule a notification
+      if (upcomingTransaction.upcomingTransactionNotification == false)
+        continue;
+      if (upcomingTransaction.dateCreated.isBefore(DateTime.now())) {
+        continue;
+      }
+      String chosenMessage = await getTransactionLabel(upcomingTransaction);
+
+      final dateTime = upcomingTransaction.dateCreated;
+      if (dateTime.isAfter(DateTime.now())) {
+        await scheduleNotification(
+          id: idStart,
+          content: NotificationData(
+            title: 'notification-upcoming-transaction-title'.tr(),
+            body: chosenMessage,
+            color: Theme.of(context).colorScheme.primary,
+          ),
+          payload: {
+            'type': 'upcomingTransaction',
+          },
+          schedule: NotificationCalendar(
+            year: dateTime.year,
+            month: dateTime.month,
+            day: dateTime.day,
+            hour: dateTime.hour,
+            minute: dateTime.minute,
+            allowWhileIdle: true,
+          ),
+        );
+      } else {
+        print("Cannot set up notification before current time!");
+      }
+
+      print("Notification " +
+          chosenMessage +
+          " scheduled for " +
+          dateTime.toString() +
+          " with id " +
+          upcomingTransaction.transactionPk.toString());
+    }
+
+    return true;
+  }
+
+  Future<List<Transaction>> get _upcomingTransactions async =>
+      await database.getAllUpcomingTransactions(
+        startDate: DateTime.now().subtract(Duration(days: 1)),
+        endDate: DateTime.now().add(Duration(days: 365)),
+      );
+
+  @override
+  Future<bool> cancelUpcomingTransactionsNotification() async {
+    int upcomingTransactionCount = (await _upcomingTransactions).length;
+    for (var i = 100; i <= upcomingTransactionCount; i++) {
+      await plugin.cancel(i);
+    }
+    print("Cancelled notifications for upcoming");
+    return true;
   }
 }

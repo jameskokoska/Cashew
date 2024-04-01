@@ -64,7 +64,8 @@ Future<void> setDailyNotifications(context) async {
             hour: appStateSettings["appOpenedHour"],
             minute: appStateSettings["appOpenedMinute"]);
       }
-      await scheduleDailyNotification(context, timeOfDay);
+      await notificationController.scheduleDailyNotification(
+          context, timeOfDay);
     } catch (e) {
       print(e.toString() +
           " Error setting up notifications for upcoming transactions");
@@ -78,7 +79,8 @@ Future<void> setUpcomingNotifications(context) async {
       appStateSettings["notificationsUpcomingTransactions"] == true;
   if (upcomingTransactionsNotificationsEnabled) {
     try {
-      await scheduleUpcomingTransactionsNotification(context);
+      await notificationController
+          .scheduleUpcomingTransactionsNotification(context);
     } catch (e) {
       print(e.toString() +
           " Error setting up notifications for upcoming transactions");

@@ -3,11 +3,10 @@ import 'dart:math';
 import 'package:budget/colors.dart';
 import 'package:budget/database/initializeDefaultDatabase.dart';
 import 'package:budget/database/tables.dart';
-import 'package:budget/main.dart';
 import 'package:budget/struct/databaseGlobal.dart';
+import 'package:budget/struct/notificationsGlobal.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/navigationFramework.dart';
-import 'package:budget/widgets/notificationsSettings.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
@@ -23,7 +22,7 @@ Future deletePreviewData({bool resetOnboard = false}) async {
 
   loadingIndeterminateKey.currentState?.setVisibility(true);
   try {
-    await cancelUpcomingTransactionsNotification();
+    await notificationController.cancelUpcomingTransactionsNotification();
   } catch (e) {
     print(e.toString());
   }

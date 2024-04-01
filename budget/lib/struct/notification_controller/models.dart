@@ -1,13 +1,13 @@
 import 'dart:ui';
 
-class NotificationContent {
+class NotificationData {
   final String title;
   final String? body;
   final String? summary;
   final Color? color;
   final String? largeIcon;
 
-  NotificationContent({
+  NotificationData({
     required this.title,
     this.body,
     this.summary,
@@ -21,5 +21,5 @@ enum NotificationType {
   reminder,
   creditTransaction,
   debitTransaction,
-  transfer
+  transfer;
 }

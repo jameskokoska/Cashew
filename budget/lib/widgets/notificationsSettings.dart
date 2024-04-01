@@ -1,6 +1,4 @@
 import 'dart:io';
-import 'dart:math';
-
 import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
@@ -22,8 +20,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/widgets/timeDigits.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:timezone/timezone.dart' as tz;
 
 bool notificationsGlobalEnabled = kIsWeb == false;
 
@@ -73,7 +69,7 @@ class _DailyNotificationsSettingsState
               await initializeNotificationsPlatform();
               await setDailyNotifications(context);
             } else {
-              await cancelDailyNotification();
+              await notificationController.cancelDailyNotification();
             }
             setState(() {
               notificationsEnabled = !notificationsEnabled;
@@ -199,9 +195,11 @@ class _UpcomingTransactionsNotificationsSettingsState
                 updateGlobalState: false);
             if (value == true) {
               await initializeNotificationsPlatform();
-              await scheduleUpcomingTransactionsNotification(context);
+              await notificationController
+                  .scheduleUpcomingTransactionsNotification(context);
             } else {
-              await cancelUpcomingTransactionsNotification();
+              await notificationController
+                  .cancelUpcomingTransactionsNotification();
             }
             setState(() {
               notificationsEnabled = !notificationsEnabled;
@@ -282,8 +280,9 @@ class _UpcomingTransactionsNotificationsSettingsState
                                               upcomingTransactionNotification:
                                                   Value(value)));
                                       await initializeNotificationsPlatform();
-                                      await scheduleUpcomingTransactionsNotification(
-                                          context);
+                                      await notificationController
+                                          .scheduleUpcomingTransactionsNotification(
+                                              context);
                                       return;
                                     },
                                     syncWithInitialValue: false,
@@ -308,201 +307,6 @@ class _UpcomingTransactionsNotificationsSettingsState
       ],
     );
   }
-}
-
-List<String> _reminderStrings = [
-  for (int i = 1; i <= 26; i++) "notification-reminder-" + i.toString()
-];
-
-Future<bool> scheduleDailyNotification(
-    BuildContext context, TimeOfDay timeOfDay,
-    {bool scheduleNowDebug = false}) async {
-  // If the app was opened on the day the notification was scheduled it will be
-  // cancelled and set to the next day because of _nextInstanceOfSetTime
-  // If ReminderNotificationType.Everyday is not true
-  await cancelDailyNotification();
-
-  AndroidNotificationDetails androidNotificationDetails =
-      AndroidNotificationDetails(
-    'transactionReminders',
-    'Transaction Reminders',
-    importance: Importance.max,
-    priority: Priority.high,
-    color: Theme.of(context).colorScheme.primary,
-  );
-
-  DarwinNotificationDetails darwinNotificationDetails =
-      DarwinNotificationDetails(threadIdentifier: 'transactionReminders');
-
-  // schedule 2 weeks worth of notifications
-  for (int i = (ReminderNotificationType
-                  .values[appStateSettings["notificationsReminderType"]] ==
-              ReminderNotificationType.Everyday
-          ? 0
-          : 1);
-      i <= 14;
-      i++) {
-    String chosenMessage =
-        _reminderStrings[Random().nextInt(_reminderStrings.length)].tr();
-    tz.TZDateTime dateTime = _nextInstanceOfSetTime(timeOfDay, dayOffset: i);
-    if (scheduleNowDebug)
-      dateTime = tz.TZDateTime.now(tz.local).add(Duration(seconds: i * 5));
-    NotificationDetails notificationDetails = NotificationDetails(
-      android: androidNotificationDetails,
-      iOS: darwinNotificationDetails,
-    );
-    // TODO: Implement schedule notification for daily reminders
-    // await notificationPlugin.zonedSchedule(
-    //   i,
-    //   'notification-reminder-title'.tr(),
-    //   chosenMessage,
-    //   dateTime,
-    //   notificationDetails,
-    //   androidAllowWhileIdle: true,
-    //   payload: 'addTransaction',
-    //   uiLocalNotificationDateInterpretation:
-    //       UILocalNotificationDateInterpretation.absoluteTime,
-    //   matchDateTimeComponents: DateTimeComponents.dateAndTime,
-
-    //   // If exact time was used, need USE_EXACT_ALARM and SCHEDULE_EXACT_ALARM permissions
-    //   // which are only meant for calendar/reminder based applications
-    //   androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
-    // );
-    print("Notification " +
-        chosenMessage +
-        " scheduled for " +
-        dateTime.toString() +
-        " with id " +
-        i.toString());
-  }
-
-  // final List<PendingNotificationRequest> pendingNotificationRequests =
-  //     await notificationPlugin.pendingNotificationRequests();
-
-  return true;
-}
-
-Future<bool> cancelDailyNotification() async {
-  // Need to cancel all, including the one at 0 - even if it does not exist
-  for (int i = 0; i <= 14; i++) {
-    await notificationPlugin.cancel(i);
-  }
-  print("Cancelled notifications for daily reminder");
-  return true;
-}
-
-Future<bool> scheduleUpcomingTransactionsNotification(context) async {
-  await cancelUpcomingTransactionsNotification();
-
-  AndroidNotificationDetails androidNotificationDetails =
-      AndroidNotificationDetails(
-    'upcomingTransactions',
-    'Upcoming Transactions',
-    importance: Importance.max,
-    priority: Priority.high,
-    color: Theme.of(context).colorScheme.primary,
-  );
-
-  DarwinNotificationDetails darwinNotificationDetails =
-      DarwinNotificationDetails(threadIdentifier: 'upcomingTransactions');
-
-  List<Transaction> upcomingTransactions =
-      await database.getAllUpcomingTransactions(
-    startDate: DateTime(
-        DateTime.now().year, DateTime.now().month, DateTime.now().day - 1),
-    endDate: DateTime(
-        DateTime.now().year, DateTime.now().month, DateTime.now().day + 365),
-  );
-  // print(upcomingTransactions);
-  int idStart = 100;
-  for (Transaction upcomingTransaction in upcomingTransactions) {
-    idStart++;
-    // Note: if upcomingTransactionNotification is NULL the loop will continue and schedule a notification
-    if (upcomingTransaction.upcomingTransactionNotification == false) continue;
-    if (upcomingTransaction.dateCreated.year == DateTime.now().year &&
-        upcomingTransaction.dateCreated.month == DateTime.now().month &&
-        upcomingTransaction.dateCreated.day == DateTime.now().day &&
-        (upcomingTransaction.dateCreated.hour < DateTime.now().hour ||
-            (upcomingTransaction.dateCreated.hour == DateTime.now().hour &&
-                upcomingTransaction.dateCreated.minute <=
-                    DateTime.now().minute))) {
-      continue;
-    }
-    String chosenMessage = await getTransactionLabel(upcomingTransaction);
-    tz.TZDateTime dateTime = tz.TZDateTime(
-      tz.local,
-      upcomingTransaction.dateCreated.year,
-      upcomingTransaction.dateCreated.month,
-      upcomingTransaction.dateCreated.day,
-      upcomingTransaction.dateCreated.hour,
-      upcomingTransaction.dateCreated.minute,
-    );
-    NotificationDetails notificationDetails = NotificationDetails(
-      android: androidNotificationDetails,
-      iOS: darwinNotificationDetails,
-    );
-    if (upcomingTransaction.dateCreated.isAfter(DateTime.now())) {
-      // TODO: Implement schedule notification for daily reminders
-      // await notificationPlugin.zonedSchedule(
-      //   idStart,
-      //   'notification-upcoming-transaction-title'.tr(),
-      //   chosenMessage,
-      //   dateTime,
-      //   notificationDetails,
-      //   androidAllowWhileIdle: true,
-      //   payload: 'upcomingTransaction',
-      //   uiLocalNotificationDateInterpretation:
-      //       UILocalNotificationDateInterpretation.absoluteTime,
-
-      //   // If exact time was used, need USE_EXACT_ALARM and SCHEDULE_EXACT_ALARM permissions
-      //   // which are only meant for calendar/reminder based applications
-      //   androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
-      // );
-    } else {
-      print("Cannot set up notification before current time!");
-    }
-
-    print("Notification " +
-        chosenMessage +
-        " scheduled for " +
-        dateTime.toString() +
-        " with id " +
-        upcomingTransaction.transactionPk.toString());
-  }
-
-  return true;
-}
-
-Future<bool> cancelUpcomingTransactionsNotification() async {
-  List<Transaction> upcomingTransactions =
-      await database.getAllUpcomingTransactions(
-    startDate: DateTime(
-        DateTime.now().year, DateTime.now().month, DateTime.now().day - 1),
-    endDate: DateTime(
-        DateTime.now().year, DateTime.now().month, DateTime.now().day + 30),
-  );
-  int idStart = 100;
-  for (Transaction upcomingTransaction in upcomingTransactions) {
-    idStart++;
-    await notificationPlugin.cancel(idStart);
-  }
-  print("Cancelled notifications for upcoming");
-  return true;
-}
-
-tz.TZDateTime _nextInstanceOfSetTime(TimeOfDay timeOfDay, {int dayOffset = 0}) {
-  final tz.TZDateTime now = tz.TZDateTime.now(tz.local);
-  // tz.TZDateTime scheduledDate = tz.TZDateTime(
-  //     tz.local, now.year, now.month, now.day, timeOfDay.hour, timeOfDay.minute);
-  // if (scheduledDate.isBefore(now)) {
-  //   scheduledDate = scheduledDate.add(const Duration(days: 1));
-  // }
-
-  // add one to current day (if app wasn't opened, it will notify)
-  tz.TZDateTime scheduledDate = tz.TZDateTime(tz.local, now.year, now.month,
-      now.day + dayOffset, timeOfDay.hour, timeOfDay.minute);
-
-  return scheduledDate;
 }
 
 Future<bool> initializeNotificationsPlatform() async {

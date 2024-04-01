@@ -1,4 +1,4 @@
-import 'package:budget/struct/notification_controller/awesome_notification_controller.dart';
+import 'package:budget/struct/notification_controller/awesome_notifications/awesome_notification_controller.dart';
 
 // INFO: uncomment to use LocalNotificationController
 // import 'package:budget/struct/notification_controller/local_notification_controller.dart';
