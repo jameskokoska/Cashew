@@ -1,13 +1,18 @@
 import 'package:budget/database/tables.dart';
+import 'package:budget/functions.dart';
+import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/autoTransactionsPageEmail.dart';
 import 'package:budget/struct/databaseGlobal.dart';
+import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/button.dart';
+import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/widgets/framework/popupFramework.dart';
 import 'package:budget/widgets/saveBottomButton.dart';
 import 'package:budget/widgets/selectCategory.dart';
+import 'package:budget/widgets/selectChips.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textInput.dart';
 import 'package:budget/widgets/textWidgets.dart';
@@ -16,7 +21,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:budget/colors.dart';
-import 'package:googleapis/gmail/v1.dart' as gMail;
+import 'package:provider/provider.dart';
 
 class AddEmailTemplate extends StatefulWidget {
   AddEmailTemplate({
@@ -47,6 +52,7 @@ class _AddEmailTemplateState extends State<AddEmailTemplate> {
   String? titleTransactionBefore;
   String? titleTransactionAfter;
   String? selectedTitle;
+  String selectedWalletPk = appStateSettings["selectedWalletPk"];
 
   @override
   void initState() {
@@ -58,6 +64,7 @@ class _AddEmailTemplateState extends State<AddEmailTemplate> {
       amountTransactionAfter = widget.scannerTemplate!.amountTransactionAfter;
       titleTransactionBefore = widget.scannerTemplate!.titleTransactionBefore;
       titleTransactionAfter = widget.scannerTemplate!.titleTransactionAfter;
+      selectedWalletPk = widget.scannerTemplate!.walletFk;
     }
     WidgetsBinding.instance.addPostFrameCallback((_) {
       updateInitial();
@@ -126,6 +133,14 @@ class _AddEmailTemplateState extends State<AddEmailTemplate> {
   void setSelectedCategory(TransactionCategory category) {
     setState(() {
       selectedCategory = category;
+    });
+    determineBottomButton();
+    return;
+  }
+
+  void setSelectedWalletPk(String walletPk) {
+    setState(() {
+      selectedWalletPk = walletPk;
     });
     determineBottomButton();
     return;
@@ -361,7 +376,7 @@ class _AddEmailTemplateState extends State<AddEmailTemplate> {
       templateName: selectedName ?? "",
       titleTransactionAfter: titleTransactionAfter ?? "",
       titleTransactionBefore: titleTransactionBefore ?? "",
-      walletFk: "0",
+      walletFk: selectedWalletPk,
       ignore: false,
     );
   }
@@ -436,6 +451,11 @@ class _AddEmailTemplateState extends State<AddEmailTemplate> {
                     ),
                   ),
                   Container(height: 10),
+                  SelectWallet(
+                    selectedWalletPk: selectedWalletPk,
+                    setSelectedWalletPk: setSelectedWalletPk,
+                  ),
+                  SizedBox(height: 3),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: TextFont(
@@ -649,6 +669,58 @@ class _AddEmailTemplateState extends State<AddEmailTemplate> {
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class SelectWallet extends StatelessWidget {
+  const SelectWallet({
+    super.key,
+    required this.selectedWalletPk,
+    required this.setSelectedWalletPk,
+  });
+  final String selectedWalletPk;
+  final Function(String) setSelectedWalletPk;
+
+  @override
+  Widget build(BuildContext context) {
+    return HorizontalBreakAbove(
+      enabled: enableDoubleColumn(context),
+      child: Padding(
+        padding: const EdgeInsets.only(top: 5),
+        child: SelectChips(
+          wrapped: enableDoubleColumn(context),
+          extraWidgetBeforeSticky: true,
+          allowMultipleSelected: false,
+          items: Provider.of<AllWallets>(context).list,
+          getSelected: (TransactionWallet wallet) {
+            return Provider.of<AllWallets>(context, listen: false)
+                    .indexedByPk[selectedWalletPk]
+                    ?.walletPk ==
+                wallet.walletPk;
+          },
+          onSelected: (TransactionWallet wallet) {
+            setSelectedWalletPk(wallet.walletPk);
+          },
+          getCustomBorderColor: (TransactionWallet item) {
+            return dynamicPastel(
+              context,
+              lightenPastel(
+                HexColor(
+                  item.colour,
+                  defaultColor: Theme.of(context).colorScheme.primary,
+                ),
+                amount: 0.3,
+              ),
+              amount: 0.4,
+            );
+          },
+          getLabel: (TransactionWallet wallet) {
+            return getWalletStringName(
+                Provider.of<AllWallets>(context), wallet);
+          },
         ),
       ),
     );

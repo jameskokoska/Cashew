@@ -4,12 +4,16 @@ import 'dart:ui';
 
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:budget/database/tables.dart';
+import 'package:budget/functions.dart';
+import 'package:budget/main.dart';
+import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/notification_controller/awesome_notifications/extensions.dart';
 import 'package:budget/struct/notification_controller/models.dart';
 import 'package:budget/struct/notification_controller/notification_controller.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/notificationsSettings.dart';
+import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/transactionEntry/transactionLabel.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -133,6 +137,23 @@ class AwesomeNotificationController extends NotificationController<
 
   static Future<void> handleNotificationAction(ReceivedAction action) async {
     print("handleNotificationAction: $action");
+
+    final payload = action.payload ?? {};
+
+    final isValidPayload =
+        payload.containsKey('type') && payload['type'] != null;
+
+    if (!isValidPayload) {
+      return;
+    }
+
+    // handle notification based on payload type
+    switch (payload['type']) {
+      case 'newTransaction':
+        return await handleNewTransactionAction(action);
+      default:
+        return;
+    }
   }
 
   @override
@@ -371,4 +392,64 @@ class AwesomeNotificationController extends NotificationController<
     print("Cancelled notifications for upcoming");
     return true;
   }
+
+  Future<int?> showTransactionNotification(
+    BuildContext context,
+    Transaction trx,
+  ) async {
+    final category = await trx.category;
+    final wallet = await trx.walletInstance;
+
+    final amount = NumberFormat.simpleCurrency(
+      locale: 'en_IN',
+      name: 'INR',
+    ).format(trx.amount.abs());
+    final type = trx.income ? 'credited' : 'spent';
+    final label = trx.name.isEmpty
+        ? 'in ${category.name}'
+        : '${trx.income ? 'from' : 'at'} ${trx.name}';
+
+    final title = '$amount $type $label';
+    final subtitle = '${trx.income ? 'From' : 'In'} account ${wallet.name}';
+
+    final color = category.getColor(context);
+
+    return await createNotification(
+      content: NotificationData(
+        title: '<b> $title </b>',
+        body: subtitle,
+        summary: wallet.name,
+        largeIcon: 'asset://assets/categories/${category.iconName}',
+        color: color,
+      ),
+      type: NotificationType.debitTransaction,
+      payload: {
+        'type': 'newTransaction',
+        'value': trx.transactionPk,
+      },
+    );
+  }
+}
+
+Future<void> handleNewTransactionAction(ReceivedAction action) async {
+  final navigatorState = navigatorKey.currentState;
+
+  final trxPk = action.payload?['value'];
+
+  if (navigatorState == null || trxPk == null) {
+    return;
+  }
+
+  final trx = await database.getTransactionFromPk(trxPk);
+  final edit = action.buttonKeyPressed == 'EDIT';
+
+  navigatorState.push(
+    MaterialPageRoute(
+      builder: (context) => AddTransactionPage(
+        transaction: trx,
+        quickEdit: edit,
+        routesToPopAfterDelete: RoutesToPopAfterDelete.None,
+      ),
+    ),
+  );
 }

@@ -10,30 +10,42 @@ import 'package:flutter_notification_listener/flutter_notification_listener.dart
 ReceivePort port = ReceivePort();
 List<String> recentCapturedNotifications = [];
 
-void initNotificationListener() {
-  NotificationsListener.initialize(callbackHandle: _callback);
+// TODO: make it user configurable from settings
+List<String> allowedPackages = ['com.google.android.apps.messaging'];
 
-  // this can fix restart<debug> can't handle error
-  IsolateNameServer.removePortNameMapping("_listener_");
-  IsolateNameServer.registerPortWithName(port.sendPort, "_listener_");
+Future<void> initNotificationListener() async {
+  try {
+    await NotificationsListener.initialize(callbackHandle: _callback);
 
-  port.listen((event) => onNotification(event as NotificationEvent));
-  // don't use the default receivePort
-  // NotificationsListener.receivePort.listen((evt) => onData(evt));
+    // this can fix restart<debug> can't handle error
+    IsolateNameServer.removePortNameMapping("_listener_");
+    IsolateNameServer.registerPortWithName(port.sendPort, "_listener_");
+
+    port.listen((event) => onNotification(event as NotificationEvent));
+    // don't use the default receivePort
+    // NotificationsListener.receivePort.listen((evt) => onData(evt));
+  } catch (e) {
+    print('Error initializing notification listener: $e');
+  }
 }
 
 onNotification(NotificationEvent event) async {
   final trxParams = await parseTransactionFromNotification(event);
   if (trxParams.isEmpty) return;
+
+  await addTransactionFromParams({
+    ...trxParams,
+    'notes': '[${event.title}] ${event.text}',
+  });
 }
 
 Future<Map<String, String>> parseTransactionFromNotification(
     NotificationEvent event) async {
   final notificationMessage = getNotificationMessage(event);
   recentCapturedNotifications.insert(0, notificationMessage);
-  recentCapturedNotifications.take(10);
+  recentCapturedNotifications = recentCapturedNotifications.take(10).toList();
 
-  return {};
+  return await parseTransactionFromMessage(notificationMessage);
 }
 
 String getNotificationMessage(NotificationEvent event) => '''
@@ -75,10 +87,10 @@ Future<void> stopNotificationListener() async {
 @pragma(
     'vm:entry-point') // prevent dart from stripping out this function on release build in Flutter 3.x
 void _callback(NotificationEvent evt) {
-  print("send evt to ui: $evt");
-  if ((evt.packageName ?? '') == 'com.budget.tracker_app') {
+  if (!allowedPackages.contains(evt.packageName)) {
     return;
   }
+  print("send evt to ui: $evt");
   final SendPort? send = IsolateNameServer.lookupPortByName("_listener_");
   if (send == null) print("can't find the sender");
   send?.send(evt);

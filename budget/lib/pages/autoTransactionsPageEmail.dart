@@ -56,6 +56,51 @@ class _InitializeNotificationServiceState
   }
 }
 
+Future<Map<String, String>> parseTransactionFromMessage(
+  String messageString,
+) async {
+  String? title;
+  double? amountDouble;
+  ScannerTemplate? templateFound;
+
+  List<ScannerTemplate> scannerTemplates =
+      await database.getAllScannerTemplates();
+
+  for (ScannerTemplate scannerTemplate in scannerTemplates) {
+    if (messageString.contains(scannerTemplate.contains)) {
+      templateFound = scannerTemplate;
+      title = getTransactionTitleFromEmail(
+          messageString,
+          scannerTemplate.titleTransactionBefore,
+          scannerTemplate.titleTransactionAfter);
+      amountDouble = getTransactionAmountFromEmail(
+          messageString,
+          scannerTemplate.amountTransactionBefore,
+          scannerTemplate.amountTransactionAfter);
+      break;
+    }
+  }
+
+  //if (amountDouble == null) amountDouble = getAmountFromString(title ?? "");
+  // We don't need this line, we can still queue up a transaction without these details,
+  // however maybe the user doesn't want to queue it up if its missing details?
+  if (templateFound == null || amountDouble == null || title == null) return {};
+
+  TransactionAssociatedTitleWithCategory? foundTitle =
+      (await database.getSimilarAssociatedTitles(title: title)).firstOrNull;
+  final category = foundTitle?.category ??
+      await database.getCategoryInstanceOrNull(templateFound.defaultCategoryFk);
+
+  final isDebit = messageString.contains('debited');
+
+  return {
+    'title': title,
+    'amount': '${isDebit ? '-' : ''}$amountDouble',
+    'walletPk': templateFound.walletFk,
+    if (category != null) 'category': category.name,
+  };
+}
+
 Future queueTransactionFromMessage(String messageString) async {
   String? title;
   double? amountDouble;

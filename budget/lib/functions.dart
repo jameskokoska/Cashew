@@ -27,6 +27,29 @@ import 'package:budget/struct/settings.dart';
 import 'package:budget/struct/currencyFunctions.dart';
 import 'package:budget/struct/randomConstants.dart';
 
+extension TransactionExt on Transaction {
+  Future<TransactionCategory> get category async =>
+      await database.getCategoryInstance(categoryFk);
+
+  Future<TransactionWallet> get walletInstance async =>
+      await database.getWalletInstance(walletFk);
+}
+
+extension TransactionCategoryExt on TransactionCategory {
+  Color getColor(BuildContext context) => dynamicPastel(
+        context,
+        HexColor(
+          colour,
+          defaultColor: dynamicPastel(
+            context,
+            Theme.of(context).colorScheme.primary,
+            amount: appStateSettings["materialYou"] ? 0.55 : 0.2,
+          ),
+        ),
+        amount: 0.2,
+      );
+}
+
 extension CapExtension on String {
   String get capitalizeFirst =>
       this.length > 0 ? '${this[0].toUpperCase()}${this.substring(1)}' : '';
