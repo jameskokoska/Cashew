@@ -44,6 +44,7 @@ String getChangelogString() {
     When importing CSV, if subcategory exists with the CSV entry category name, subcategory will be used
     Improved UI layouts and icons for clarity
     Added full black dark mode for Material You theme (A)
+    Increased contrast of selected subcategory chip in add transaction page
     Fix padding for spending graph and space for side labels
     Fix when back swiping, swipe to dismiss is properly cancelled
     < 5.2.6

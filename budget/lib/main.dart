@@ -140,7 +140,7 @@ class App extends StatelessWidget {
       actions: keyboardIntents,
       themeAnimationDuration: Duration(milliseconds: 400),
       themeAnimationCurve: CustomDelayedCurve(),
-      key: ValueKey(1),
+      key: ValueKey('CashewAppMain'),
       title: 'Cashew',
       navigatorKey: navigatorKey,
       theme: lightTheme,

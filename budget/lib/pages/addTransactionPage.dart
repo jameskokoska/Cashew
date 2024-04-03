@@ -4671,10 +4671,31 @@ class SelectSubcategoryChips extends StatelessWidget {
                               ),
                               amount: 0.3,
                             ),
-                            amount: 0.5,
-                          ).withOpacity(0.7);
+                            amountDark: 0.55,
+                            amountLight: 0.3,
+                          ).withOpacity(
+                            Theme.of(context).brightness == Brightness.light
+                                ? 0.8
+                                : 1,
+                          );
                         },
                         getCustomBorderColor: (TransactionCategory category) {
+                          if (selectedSubCategoryPk == category.categoryPk)
+                            return lightenPastel(
+                              HexColor(
+                                category.colour,
+                                defaultColor:
+                                    Theme.of(context).colorScheme.primary,
+                              ),
+                              amount: Theme.of(context).brightness ==
+                                      Brightness.light
+                                  ? 0.8
+                                  : 0.4,
+                            ).withOpacity(
+                              Theme.of(context).brightness == Brightness.light
+                                  ? 0.8
+                                  : 0.65,
+                            );
                           return dynamicPastel(
                             context,
                             lightenPastel(
@@ -4686,6 +4707,10 @@ class SelectSubcategoryChips extends StatelessWidget {
                               amount: 0.3,
                             ),
                             amount: 0.4,
+                          ).withOpacity(
+                            Theme.of(context).brightness == Brightness.light
+                                ? 0.5
+                                : 0.7,
                           );
                         },
                         getLabel: (TransactionCategory category) {
