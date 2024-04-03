@@ -1086,6 +1086,7 @@
   "refresh-required-to-load-backup": "Kinakailangan ang isang pag -refresh ng app upang mai -load ang data mula sa backup",
   "please-restart-the-application": "Mangyaring i -restart ang application",
   "please-refresh-the-application": "Mangyaring i -refresh ang application",
+  "only-expense-income": "Gastos at Kita lamang",
   "only-expense-income-description-1": "Huwag isama ang lahat ng papalabas/papasok",
   "only-expense-income-description-2": "Halimbawa: Huwag isama ang mga pautang",
   "compact-number-format": "Compact number format",

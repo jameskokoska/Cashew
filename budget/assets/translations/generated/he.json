@@ -1086,6 +1086,7 @@
   "refresh-required-to-load-backup": "נדרש רענון אפליקציה כדי לטעון נתונים מהגיבוי",
   "please-restart-the-application": "אנא הפעל מחדש את הבקשה",
   "please-refresh-the-application": "אנא רענן את היישום",
+  "only-expense-income": "רק הוצאות והכנסות",
   "only-expense-income-description-1": "אל תכלול את כל היוצאים/נכנסים",
   "only-expense-income-description-2": "דוגמה: אל תכלול הלוואות",
   "compact-number-format": "פורמט מספר קומפקטי",

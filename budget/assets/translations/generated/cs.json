@@ -1086,6 +1086,7 @@
   "refresh-required-to-load-backup": "Pro načtení dat ze zálohy je nutná aktualizace aplikace",
   "please-restart-the-application": "Restartujte aplikaci",
   "please-refresh-the-application": "Obnovte prosím aplikaci",
+  "only-expense-income": "Pouze náklady a příjmy",
   "only-expense-income-description-1": "Nezahrnujte všechny odchozí/příchozí",
   "only-expense-income-description-2": "Příklad: Nezahrnujte půjčky",
   "compact-number-format": "Formát kompaktního čísla",

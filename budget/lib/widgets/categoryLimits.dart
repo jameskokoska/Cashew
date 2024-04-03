@@ -225,6 +225,7 @@ class CategoryLimitEntry extends StatelessWidget {
             child: Row(
               children: [
                 CategoryIconPercent(
+                  percentageOffset: 0,
                   category: category,
                   percent: isAbsoluteSpendingLimit
                       ? (budgetLimit == 0

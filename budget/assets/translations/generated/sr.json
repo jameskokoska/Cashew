@@ -1086,6 +1086,7 @@
   "refresh-required-to-load-backup": "Освежење апликације је дужно учитати податке са резервне копије",
   "please-restart-the-application": "Поново покрените апликацију",
   "please-refresh-the-application": "Освежите апликацију",
+  "only-expense-income": "Само расходи и приходи",
   "only-expense-income-description-1": "Не укључују све одлазне / долазне",
   "only-expense-income-description-2": "Пример: Не укључује кредите",
   "compact-number-format": "Формат компактног броја",

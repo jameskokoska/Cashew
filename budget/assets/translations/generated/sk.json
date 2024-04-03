@@ -1086,6 +1086,7 @@
   "refresh-required-to-load-backup": "Pre obnovu údajov zo zálohy je potrebné reštartovať webovú aplikáciu",
   "please-restart-the-application": "Prosím reštartujte aplikáciu",
   "please-refresh-the-application": "Prosím obnovte webovú stránku",
+  "only-expense-income": "Iba náklady a príjmy",
   "only-expense-income-description-1": "Nezahŕňať všetky odchádzajúce/prichádzajúce",
   "only-expense-income-description-2": "Príklad: nezahŕňať pôžičky",
   "compact-number-format": "Kompaktný formát čísla",

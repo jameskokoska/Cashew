@@ -399,11 +399,12 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                       multiplyTotalBy: determineBudgetPolarity(widget.budget),
                     );
                     List<Widget> categoryEntries = [];
-
+                    double totalSpentPercent = 45 / 360;
                     snapshot.data!.asMap().forEach(
                       (index, category) {
                         categoryEntries.add(
                           CategoryEntry(
+                            percentageOffset: totalSpentPercent,
                             getPercentageAfterText: (double categorySpent) {
                               if (widget.budget.income == true) {
                                 return categorySpent < 0 &&
@@ -488,6 +489,9 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                             allSelected: selectedCategory == null,
                           ),
                         );
+                        if (s.totalSpent != 0)
+                          totalSpentPercent +=
+                              category.total.abs() / s.totalSpent;
                       },
                     );
                     // print(s.totalSpent);

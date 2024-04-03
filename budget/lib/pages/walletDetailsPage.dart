@@ -2081,9 +2081,11 @@ class _WalletCategoryPieChartState extends State<WalletCategoryPieChart> {
               );
               // print(s.totalSpent);
               List<Widget> categoryEntries = [];
+              double totalSpentPercent = 45 / 360;
               snapshot.data!.asMap().forEach((index, category) {
                 categoryEntries.add(
                   CategoryEntry(
+                    percentageOffset: totalSpentPercent,
                     useHorizontalPaddingConstrained:
                         enableDoubleColumn(context) == false ||
                             widget.isAllSpending == false,
@@ -2145,6 +2147,8 @@ class _WalletCategoryPieChartState extends State<WalletCategoryPieChart> {
                     },
                   ),
                 );
+                if (s.totalSpent != 0)
+                  totalSpentPercent += category.total.abs() / s.totalSpent;
               });
               return Column(
                 children: [

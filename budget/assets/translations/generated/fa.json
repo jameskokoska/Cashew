@@ -1086,6 +1086,7 @@
   "refresh-required-to-load-backup": "برای بارگیری داده ها از نسخه پشتیبان تهیه شده است",
   "please-restart-the-application": "لطفاً برنامه را مجدداً راه اندازی کنید",
   "please-refresh-the-application": "لطفا برنامه را تازه کنید",
+  "only-expense-income": "فقط هزینه و درآمد",
   "only-expense-income-description-1": "شامل همه خروجی/ورودی نشوید",
   "only-expense-income-description-2": "مثال: وام را شامل نمی شود",
   "compact-number-format": "قالب شماره جمع و جور",

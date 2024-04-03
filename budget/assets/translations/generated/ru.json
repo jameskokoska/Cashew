@@ -1085,6 +1085,7 @@
   "refresh-required-to-load-backup": "Обновление приложения требуется для загрузки данных из резервной копии",
   "please-restart-the-application": "Пожалуйста, перезапустите заявку",
   "please-refresh-the-application": "Пожалуйста, обновите приложение",
+  "only-expense-income": "Только расходы и доходы",
   "only-expense-income-description-1": "Не включайте все исходящие/входящие",
   "only-expense-income-description-2": "Пример: не включать кредиты",
   "compact-number-format": "Компактный номер формата",

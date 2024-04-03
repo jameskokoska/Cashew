@@ -1086,6 +1086,7 @@
   "refresh-required-to-load-backup": "Απαιτείται ανανέωση εφαρμογής για τη φόρτωση δεδομένων από το αντίγραφο ασφαλείας",
   "please-restart-the-application": "Επανεκκινήστε την εφαρμογή",
   "please-refresh-the-application": "Ανανεώστε την εφαρμογή",
+  "only-expense-income": "Μόνο Έξοδα & Έσοδα",
   "only-expense-income-description-1": "Μην συμπεριλάβετε όλα τα εξερχόμενα/εισερχόμενα",
   "only-expense-income-description-2": "Παράδειγμα: Μην συμπεριλάβετε δάνεια",
   "compact-number-format": "Συμπαγής μορφή αριθμού",

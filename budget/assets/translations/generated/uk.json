@@ -1086,6 +1086,7 @@
   "refresh-required-to-load-backup": "Для завантаження даних із резервної копії необхідне оновлення програми",
   "please-restart-the-application": "Будь ласка, перезапустіть додаток",
   "please-refresh-the-application": "Будь ласка, оновіть заявку",
+  "only-expense-income": "Тільки витрати та доходи",
   "only-expense-income-description-1": "Не включайте всі вихідні/вхідні",
   "only-expense-income-description-2": "Приклад: Не включайте позики",
   "compact-number-format": "Формат компактного числа",

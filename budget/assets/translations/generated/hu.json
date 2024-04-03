@@ -1086,6 +1086,7 @@
   "refresh-required-to-load-backup": "Az alkalmazás frissítésére van szükség az adatok betöltéséhez a biztonsági mentésből",
   "please-restart-the-application": "Kérjük, indítsa újra az alkalmazást",
   "please-refresh-the-application": "Kérjük, frissítse az alkalmazást",
+  "only-expense-income": "Csak költség és bevétel",
   "only-expense-income-description-1": "Ne tartalmazza az összes kimenő/bejövő",
   "only-expense-income-description-2": "Példa: Ne tartalmazza a kölcsönöket",
   "compact-number-format": "Kompakt számformátum",

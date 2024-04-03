@@ -1086,6 +1086,7 @@
   "refresh-required-to-load-backup": "Refresh aplikasi diperlukan untuk memuat data dari cadangan",
   "please-restart-the-application": "Harap mulai ulang aplikasi",
   "please-refresh-the-application": "Harap Segarkan Aplikasi",
+  "only-expense-income": "Hanya Biaya & Pendapatan",
   "only-expense-income-description-1": "Jangan sertakan semua keluar/masuk",
   "only-expense-income-description-2": "Contoh: Jangan sertakan pinjaman",
   "compact-number-format": "Format angka kompak",

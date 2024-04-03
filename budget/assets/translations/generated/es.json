@@ -1086,6 +1086,7 @@
   "refresh-required-to-load-backup": "Se requiere una actualización de una aplicación para cargar datos desde la copia de seguridad",
   "please-restart-the-application": "Por favor, reinicie la aplicación",
   "please-refresh-the-application": "Actualice la aplicación",
+  "only-expense-income": "Solo gastos e ingresos",
   "only-expense-income-description-1": "No incluya todos los salientes/entrantes",
   "only-expense-income-description-2": "Ejemplo: no incluya préstamos",
   "compact-number-format": "Formato de número compacto",

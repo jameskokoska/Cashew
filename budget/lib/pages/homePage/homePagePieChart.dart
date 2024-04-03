@@ -298,7 +298,7 @@ class _PieChartHomeAndCategorySummaryState
           );
 
           List<Widget> categoryEntries = [];
-
+          double totalSpentPercent = 45 / 360;
           snapshot.data!.asMap().forEach(
             (index, category) {
               if (selectedCategory?.categoryPk ==
@@ -307,6 +307,7 @@ class _PieChartHomeAndCategorySummaryState
                       category.category.categoryPk)
                 categoryEntries.add(
                   CategoryEntry(
+                    percentageOffset: totalSpentPercent,
                     getPercentageAfterText: (double categorySpent) {
                       return "of-total".tr().toLowerCase();
                     },
@@ -378,6 +379,8 @@ class _PieChartHomeAndCategorySummaryState
                     allSelected: true,
                   ),
                 );
+              if (s.totalSpent != 0)
+                totalSpentPercent += category.total.abs() / s.totalSpent;
             },
           );
 

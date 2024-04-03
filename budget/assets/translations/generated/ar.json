@@ -1086,6 +1086,7 @@
   "refresh-required-to-load-backup": "مطلوب تحديث التطبيق لتحميل البيانات من النسخ الاحتياطي",
   "please-restart-the-application": "الرجاء إعادة تشغيل التطبيق",
   "please-refresh-the-application": "الرجاء تحديث التطبيق",
+  "only-expense-income": "النفقات والدخل فقط",
   "only-expense-income-description-1": "لا تشمل كل الصادرة/الواردة",
   "only-expense-income-description-2": "مثال: لا تتضمن القروض",
   "compact-number-format": "تنسيق رقم مدمج",

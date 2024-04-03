@@ -1086,6 +1086,7 @@
   "refresh-required-to-load-backup": "ബാക്കപ്പിൽ നിന്ന് ഡാറ്റ ലോഡുചെയ്യുന്നതിന് ഒരു അപ്ലിക്കേഷൻ പുതുക്കൽ ആവശ്യമാണ്",
   "please-restart-the-application": "ആപ്ലിക്കേഷൻ പുനരാരംഭിക്കുക",
   "please-refresh-the-application": "ആപ്ലിക്കേഷൻ പുതുക്കുക",
+  "only-expense-income": "ചെലവും വരുമാനവും മാത്രം",
   "only-expense-income-description-1": "എല്ലാ going ട്ട്ഗോയിംഗ് / ഇൻകമിംഗ് ഉൾപ്പെടുത്തരുത്",
   "only-expense-income-description-2": "ഉദാഹരണം: വായ്പകൾ ഉൾപ്പെടുത്തരുത്",
   "compact-number-format": "കോംപാക്റ്റ് നമ്പർ ഫോർമാറ്റ്",

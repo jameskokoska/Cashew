@@ -1086,6 +1086,7 @@
   "refresh-required-to-load-backup": "बैकअप से डेटा लोड करने के लिए एक ऐप रिफ्रेश की आवश्यकता होती है",
   "please-restart-the-application": "कृपया आवेदन को पुनरारंभ करें",
   "please-refresh-the-application": "कृपया आवेदन को ताज़ा करें",
+  "only-expense-income": "केवल व्यय एवं आय",
   "only-expense-income-description-1": "सभी आउटगोइंग/इनकमिंग को शामिल न करें",
   "only-expense-income-description-2": "उदाहरण: ऋण शामिल न करें",
   "compact-number-format": "कॉम्पैक्ट संख्या प्रारूप",

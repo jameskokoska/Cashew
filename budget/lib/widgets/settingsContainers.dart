@@ -572,12 +572,12 @@ class SettingsContainer extends StatelessWidget {
               onLongPress: onLongPress,
               child: Padding(
                 padding: EdgeInsets.symmetric(
-                  horizontal: horizontalPadding ??
-                      (enableBorderRadius &&
-                              getWidthNavigationSidebar(context) <= 0 &&
-                              icon != null
-                          ? 10
-                          : 18),
+                  horizontal: horizontalPadding ?? 18,
+                  // (enableBorderRadius &&
+                  //         getWidthNavigationSidebar(context) <= 0 &&
+                  //         icon != null
+                  //     ? 10
+                  //     : 18),
                   vertical: verticalPadding ?? 11,
                 ),
                 child: Row(

@@ -1086,6 +1086,7 @@
   "refresh-required-to-load-backup": "Een appvernieuwing is vereist om gegevens van de back -up te laden",
   "please-restart-the-application": "Start de applicatie opnieuw op",
   "please-refresh-the-application": "Vernieuw de toepassing",
+  "only-expense-income": "Alleen uitgaven en inkomsten",
   "only-expense-income-description-1": "Neem niet alle uitgaande/inkomsten op",
   "only-expense-income-description-2": "Voorbeeld: neem geen leningen op",
   "compact-number-format": "Compact nummerformaat",

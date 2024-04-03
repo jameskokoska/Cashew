@@ -1086,6 +1086,7 @@
   "refresh-required-to-load-backup": "ব্যাকআপ থেকে ডেটা লোড করতে একটি অ্যাপ্লিকেশন রিফ্রেশ প্রয়োজন",
   "please-restart-the-application": "আবেদনটি পুনরায় চালু করুন",
   "please-refresh-the-application": "অ্যাপ্লিকেশনটি রিফ্রেশ করুন",
+  "only-expense-income": "শুধুমাত্র ব্যয় এবং আয়",
   "only-expense-income-description-1": "সমস্ত বহির্গামী/আগত অন্তর্ভুক্ত করবেন না",
   "only-expense-income-description-2": "উদাহরণ: loans ণ অন্তর্ভুক্ত করবেন না",
   "compact-number-format": "কমপ্যাক্ট নম্বর ফর্ম্যাট",

@@ -1086,6 +1086,7 @@
   "refresh-required-to-load-backup": "Det kreves en appoppdatering for å laste inn data fra sikkerhetskopien",
   "please-restart-the-application": "Vennligst start søknaden på nytt",
   "please-refresh-the-application": "Vennligst oppdater søknaden",
+  "only-expense-income": "Kun utgifter og inntekter",
   "only-expense-income-description-1": "Ikke ta med alle utgående/innkommende",
   "only-expense-income-description-2": "Eksempel: Ikke inkluder lån",
   "compact-number-format": "Kompakt nummerformat",

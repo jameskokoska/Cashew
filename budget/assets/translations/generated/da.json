@@ -1086,6 +1086,7 @@
   "refresh-required-to-load-backup": "Websiden skal opdateres for at indlæse data fra sikkerhedskopien",
   "please-restart-the-application": "Genstart venligst applikationen",
   "please-refresh-the-application": "Opdatér venligst siden",
+  "only-expense-income": "Kun Udgifter & Indtægter",
   "only-expense-income-description-1": "Inkludér ikke alle udgående/indgående",
   "only-expense-income-description-2": "Eksempel: Inkludér ikke lån",
   "compact-number-format": "Kompakt Talformat",

@@ -1086,6 +1086,7 @@
   "refresh-required-to-load-backup": "Tietojen lataaminen varmuuskopiosta tarvitaan sovelluksen päivitys",
   "please-restart-the-application": "Käynnistä sovellus uudelleen",
   "please-refresh-the-application": "Päivitä sovellus",
+  "only-expense-income": "Vain kulut ja tulot",
   "only-expense-income-description-1": "Älä sisällä kaikkia lähteviä/saapuvia",
   "only-expense-income-description-2": "Esimerkki: Älä sisällä lainoja",
   "compact-number-format": "Compact -numeromuoto",

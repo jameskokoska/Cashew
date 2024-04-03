@@ -1086,6 +1086,7 @@
   "refresh-required-to-load-backup": "백업에서 데이터를로드하려면 앱 새로 고침이 필요합니다.",
   "please-restart-the-application": "신청서를 다시 시작하십시오",
   "please-refresh-the-application": "신청서를 새로 고치십시오",
+  "only-expense-income": "비용 및 수입만",
   "only-expense-income-description-1": "모든 발신/들어오는 것을 포함하지 마십시오",
   "only-expense-income-description-2": "예 : 대출을 포함하지 마십시오",
   "compact-number-format": "소형 번호 형식",

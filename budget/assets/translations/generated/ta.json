@@ -1086,6 +1086,7 @@
   "refresh-required-to-load-backup": "காப்புப்பிரதியிலிருந்து தரவை ஏற்ற பயன்பாட்டு புதுப்பிப்பு தேவை",
   "please-restart-the-application": "விண்ணப்பத்தை மறுதொடக்கம் செய்யுங்கள்",
   "please-refresh-the-application": "விண்ணப்பத்தை புதுப்பிக்கவும்",
+  "only-expense-income": "செலவு மற்றும் வருமானம் மட்டுமே",
   "only-expense-income-description-1": "வெளிச்செல்லும்/உள்வரும் அனைத்தையும் சேர்க்க வேண்டாம்",
   "only-expense-income-description-2": "எடுத்துக்காட்டு: கடன்களைச் சேர்க்க வேண்டாம்",
   "compact-number-format": "சிறிய எண் வடிவம்",

@@ -1086,6 +1086,7 @@
   "refresh-required-to-load-backup": "Yêu cầu làm mới lại trang web để tải dữ liệu từ bản sao lưu",
   "please-restart-the-application": "Vui lòng khởi động lại ứng dụng",
   "please-refresh-the-application": "Vui lòng làm mới trang",
+  "only-expense-income": "Chỉ Chi phí & Thu nhập",
   "only-expense-income-description-1": "Không bao gồm mọi chi phí/thu nhập",
   "only-expense-income-description-2": "Ví dụ: Không bao gồm các khoản vay",
   "compact-number-format": "Định dạng số nhỏ gọn",

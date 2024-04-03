@@ -10,6 +10,7 @@ class AnimatedCircularProgress extends StatefulWidget {
   final Color? overageShadowColor;
   final double strokeWidth;
   final double valueStrokeWidth;
+  final double rotationOffsetPercent;
 
   AnimatedCircularProgress({
     Key? key,
@@ -20,6 +21,7 @@ class AnimatedCircularProgress extends StatefulWidget {
     this.overageShadowColor,
     this.strokeWidth = 3.5,
     this.valueStrokeWidth = 4,
+    this.rotationOffsetPercent = 0,
   }) : super(key: key);
 
   @override
@@ -74,22 +76,26 @@ class _AnimatedCircularProgressState extends State<AnimatedCircularProgress>
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: _animation,
-      builder: (context, child) {
-        return CustomPaint(
-          painter: _RoundedCircularProgressPainter(
-            value: _animation.value,
-            backgroundColor: widget.backgroundColor,
-            foregroundColor: widget.foregroundColor,
-            overageColor: widget.overageColor ?? Colors.transparent,
-            overageShadowColor: widget.overageShadowColor ?? Colors.transparent,
-            strokeWidth: widget.strokeWidth,
-            valueStrokeWidth: widget.valueStrokeWidth,
-            cornerRadius: widget.valueStrokeWidth,
-          ),
-        );
-      },
+    return Transform.rotate(
+      angle: 2 * pi * widget.rotationOffsetPercent,
+      child: AnimatedBuilder(
+        animation: _animation,
+        builder: (context, child) {
+          return CustomPaint(
+            painter: _RoundedCircularProgressPainter(
+              value: _animation.value,
+              backgroundColor: widget.backgroundColor,
+              foregroundColor: widget.foregroundColor,
+              overageColor: widget.overageColor ?? Colors.transparent,
+              overageShadowColor:
+                  widget.overageShadowColor ?? Colors.transparent,
+              strokeWidth: widget.strokeWidth,
+              valueStrokeWidth: widget.valueStrokeWidth,
+              cornerRadius: widget.valueStrokeWidth,
+            ),
+          );
+        },
+      ),
     );
   }
 }

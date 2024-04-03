@@ -46,6 +46,7 @@ class CategoryEntry extends StatelessWidget {
     this.mainCategorySpentIfSubcategory = 0,
     this.useHorizontalPaddingConstrained = true,
     this.getPercentageAfterText,
+    this.percentageOffset = 0,
   }) : super(key: key);
 
   final TransactionCategory category;
@@ -74,6 +75,7 @@ class CategoryEntry extends StatelessWidget {
   final double mainCategorySpentIfSubcategory;
   final bool useHorizontalPaddingConstrained;
   final String Function(double categorySpent)? getPercentageAfterText;
+  final double percentageOffset;
 
   @override
   Widget build(BuildContext context) {
@@ -140,6 +142,10 @@ class CategoryEntry extends StatelessWidget {
                 CategoryIconPercent(
                   category: category,
                   percent: percentSpentWithCategoryLimit * 100,
+                  percentageOffset:
+                      appStateSettings["circularProgressRotation"] == true
+                          ? percentageOffset
+                          : 0,
                   progressBackgroundColor: appStateSettings["materialYou"]
                       ? budgetColorScheme.secondaryContainer
                       : selected
@@ -336,11 +342,16 @@ class CategoryEntry extends StatelessWidget {
               colorScheme: budgetColorScheme,
               subCategoryEntries: Padding(
                 padding: const EdgeInsets.only(top: 5),
-                child: Column(
-                  children: [
-                    for (CategoryWithTotal subcategoryWithTotal
-                        in subCategoriesWithTotal)
+                child: Builder(builder: (context) {
+                  List<Widget> categoryEntries = [];
+                  double totalSpentPercent =
+                      percentageOffset + percentSpentWithCategoryLimit;
+                  subCategoriesWithTotal
+                      .asMap()
+                      .forEach((index, subcategoryWithTotal) {
+                    categoryEntries.add(
                       CategoryEntry(
+                        percentageOffset: totalSpentPercent,
                         onTap: onTap,
                         todayPercent: todayPercent,
                         overSpentColor: showIncomeExpenseIcons
@@ -372,8 +383,15 @@ class CategoryEntry extends StatelessWidget {
                         isSubcategory: true,
                         mainCategorySpentIfSubcategory: amountSpent,
                       ),
-                  ],
-                ),
+                    );
+                    if (amountSpent != 0)
+                      totalSpentPercent +=
+                          subcategoryWithTotal.total.abs() / amountSpent;
+                  });
+                  return Column(
+                    children: categoryEntries,
+                  );
+                }),
               ),
             ),
           );
@@ -447,6 +465,7 @@ class CategoryIconPercent extends StatelessWidget {
     required this.percent,
     this.insetPadding = 23,
     required this.progressBackgroundColor,
+    required this.percentageOffset,
   }) : super(key: key);
 
   final TransactionCategory category;
@@ -454,6 +473,7 @@ class CategoryIconPercent extends StatelessWidget {
   final double percent;
   final double insetPadding;
   final Color progressBackgroundColor;
+  final double percentageOffset;
 
   @override
   Widget build(BuildContext context) {
@@ -524,6 +544,7 @@ class CategoryIconPercent extends StatelessWidget {
           height: size + insetPadding,
           width: size + insetPadding,
           child: AnimatedCircularProgress(
+            rotationOffsetPercent: percentageOffset,
             percent: clampDouble(percent / 100, 0, 1),
             backgroundColor: progressBackgroundColor,
             foregroundColor: dynamicPastel(
