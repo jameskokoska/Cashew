@@ -485,12 +485,9 @@ class _EditHomePageState extends State<EditHomePage> {
               String key = keyOrder[index];
 
               if (["ORDER:LEFT", "ORDER:RIGHT"].contains(key)) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15),
+                return PanelSectionSeparator(
+                  orderKey: key,
                   key: ValueKey(key),
-                  child: PanelSectionSeparator(
-                    orderKey: key,
-                  ),
                 );
               }
 
@@ -580,36 +577,39 @@ class PanelSectionSeparator extends StatelessWidget {
   final String orderKey;
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        if (orderKey == "ORDER:LEFT")
-          TextFont(
-            text: "left-panel".tr(),
-            fontSize: 16,
-            textAlign: TextAlign.left,
-          ),
-        Expanded(
-            child: HorizontalBreak(
-          padding: const EdgeInsets.all(15),
-        )),
-        if (orderKey == "ORDER:CENTER")
-          TextFont(
-            text: "top-center".tr(),
-            fontSize: 16,
-            textAlign: TextAlign.right,
-          ),
-        if (orderKey == "ORDER:CENTER")
+    return Padding(
+      padding: const EdgeInsets.only(left: 15, right: 15, top: 20, bottom: 10),
+      child: Row(
+        children: [
+          if (orderKey == "ORDER:LEFT")
+            TextFont(
+              text: "left-panel".tr(),
+              fontSize: 16,
+              textAlign: TextAlign.left,
+            ),
           Expanded(
               child: HorizontalBreak(
             padding: const EdgeInsets.all(15),
           )),
-        if (orderKey == "ORDER:RIGHT")
-          TextFont(
-            text: "right-panel".tr(),
-            fontSize: 16,
-            textAlign: TextAlign.right,
-          ),
-      ],
+          if (orderKey == "ORDER:CENTER")
+            TextFont(
+              text: "top-center".tr(),
+              fontSize: 16,
+              textAlign: TextAlign.right,
+            ),
+          if (orderKey == "ORDER:CENTER")
+            Expanded(
+                child: HorizontalBreak(
+              padding: const EdgeInsets.all(15),
+            )),
+          if (orderKey == "ORDER:RIGHT")
+            TextFont(
+              text: "right-panel".tr(),
+              fontSize: 16,
+              textAlign: TextAlign.right,
+            ),
+        ],
+      ),
     );
   }
 }

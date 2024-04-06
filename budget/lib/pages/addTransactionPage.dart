@@ -4808,6 +4808,7 @@ class TitleInput extends StatefulWidget {
     this.resizePopupWhenChanged = false,
     this.focusNode,
     this.clearWhenUnfocused = false,
+    this.maxLines,
     super.key,
   });
   final Function(String title) setSelectedTitle;
@@ -4833,6 +4834,7 @@ class TitleInput extends StatefulWidget {
   final bool resizePopupWhenChanged;
   final FocusNode? focusNode;
   final bool clearWhenUnfocused;
+  final int? maxLines;
 
   @override
   State<TitleInput> createState() => _TitleInputState();
@@ -4877,6 +4879,7 @@ class _TitleInputState extends State<TitleInput> {
                   });
               },
               child: TextInput(
+                maxLines: widget.maxLines,
                 focusNode: widget.focusNode,
                 scrollController: widget.titleInputScrollController,
                 borderRadius: BorderRadius.zero,

@@ -1329,7 +1329,7 @@ class FinanceDatabase extends _$FinanceDatabase {
   Stream<double?> watchTotalNetBeforeStartDateTransactionCategoryWithDay({
     required AllWallets allWallets,
     DateTime? start,
-    required DateTime end,
+    required DateTime? end,
     String search = "",
     // Search will be ignored... if these params are passed in
     List<String>? categoryFks,
@@ -1369,9 +1369,12 @@ class FinanceDatabase extends _$FinanceDatabase {
             transactions.paid.equals(true) &
             // If we use a budget time period,
             // Only calculate the net spending within that period!
-            (budget == null
-                ? transactions.dateCreated.isSmallerOrEqualValue(end)
-                : onlyShowBasedOnTimeRange(transactions, start, end, budget)) &
+            (end == null
+                ? onlyShowBasedOnTimeRange(transactions, start, end, budget)
+                : budget == null
+                    ? transactions.dateCreated.isSmallerOrEqualValue(end)
+                    : onlyShowBasedOnTimeRange(
+                        transactions, start, end, budget)) &
             // Should match that of getTransactionCategoryWithDay
             onlyShowTransactionBasedOnSearchQuery(transactions, search,
                 withCategories: true,

@@ -560,20 +560,22 @@ class TransactionEntries extends StatelessWidget {
       // Ideally we refactor all the queries so they only rely on the search filters!
 
       stream: database.watchTotalNetBeforeStartDateTransactionCategoryWithDay(
-        end: DateTime(
-          endDay?.year ??
-              searchFilters?.dateTimeRange?.end.year ??
-              DateTime.now().year,
-          endDay?.month ??
-              searchFilters?.dateTimeRange?.end.month ??
-              DateTime.now().month,
-          (endDay?.day ??
-                  searchFilters?.dateTimeRange?.end.day ??
-                  DateTime.now().day) +
-              (budget == null ? 1 : 0),
-          //Add one because want the total from the start of the next day because we get everything BEFORE this date,
-          // Only add one if not a budget! because a different query is used if it is a budget
-        ),
+        end: endDay == null && searchFilters?.dateTimeRange?.end == null
+            ? null
+            : DateTime(
+                endDay?.year ??
+                    searchFilters?.dateTimeRange?.end.year ??
+                    DateTime.now().year,
+                endDay?.month ??
+                    searchFilters?.dateTimeRange?.end.month ??
+                    DateTime.now().month,
+                (endDay?.day ??
+                        searchFilters?.dateTimeRange?.end.day ??
+                        DateTime.now().day) +
+                    (budget == null ? 1 : 0),
+                //Add one because want the total from the start of the next day because we get everything BEFORE this date,
+                // Only add one if not a budget! because a different query is used if it is a budget
+              ),
         start: startDay,
         allWallets: Provider.of<AllWallets>(context),
         search: search,

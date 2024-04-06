@@ -1230,6 +1230,14 @@ class WalletDetailsPageState extends State<WalletDetailsPage>
       child: Stack(
         children: [
           PageFramework(
+            appBarBackgroundColor:
+                enableDoubleColumn(context) == true && widget.wallet == null
+                    ? Theme.of(context).colorScheme.secondaryContainer
+                    : null,
+            appBarBackgroundColorStart:
+                enableDoubleColumn(context) == true && widget.wallet == null
+                    ? Theme.of(context).colorScheme.secondaryContainer
+                    : null,
             scrollController: _scrollController,
             key: pageState,
             listID: listID,

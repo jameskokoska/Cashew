@@ -987,6 +987,7 @@ class _TransactionFiltersSelectionState
           child: Column(
             children: [
               TitleInput(
+                maxLines: 5,
                 resizePopupWhenChanged: false,
                 titleInputController: titleContainsController,
                 titleInputScrollController: titleContainsScrollController,
@@ -1049,6 +1050,7 @@ class _TransactionFiltersSelectionState
               ),
               SizedBox(height: 7),
               TextInput(
+                maxLines: 5,
                 padding: EdgeInsets.zero,
                 labelText: "notes-contain".tr() + "...",
                 onChanged: (value) {

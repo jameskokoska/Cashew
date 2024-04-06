@@ -53,7 +53,7 @@ class AddFAB extends StatelessWidget {
 }
 
 class FAB extends StatelessWidget {
-  FAB({
+  const FAB({
     Key? key,
     this.openPage,
     this.onTap,

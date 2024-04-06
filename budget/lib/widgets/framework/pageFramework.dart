@@ -521,13 +521,20 @@ class PageFrameworkState extends State<PageFramework>
           padding: const EdgeInsets.only(right: 7, bottom: 1),
           child: Transform.rotate(
             angle: pi / 2,
-            child: ButtonIcon(
-              icon: appStateSettings["outlinedIcons"]
-                  ? Icons.chevron_left_outlined
-                  : Icons.chevron_left_rounded,
-              onTap: () {
-                scrollToTop();
-              },
+            child: Material(
+              elevation: 10,
+              shadowColor:
+                  Theme.of(context).colorScheme.shadow.withOpacity(0.8),
+              borderRadius: BorderRadius.circular(
+                  getPlatform() == PlatformOS.isIOS ? 10 : 15),
+              child: ButtonIcon(
+                icon: appStateSettings["outlinedIcons"]
+                    ? Icons.chevron_left_outlined
+                    : Icons.chevron_left_rounded,
+                onTap: () {
+                  scrollToTop();
+                },
+              ),
             ),
           ),
         ),
@@ -561,75 +568,82 @@ class PageFrameworkState extends State<PageFramework>
         opacity: CurvedAnimation(
             parent: _scrollToTopAnimationController, curve: Curves.easeInOut),
         child: Padding(
-          padding: const EdgeInsets.only(right: 7, bottom: 1),
+          padding: const EdgeInsets.only(right: 7),
           child: Builder(builder: (context) {
             double size = 44;
             double iconPadding = 24;
             double iconInset = 7;
             // same as the FAB height
             double height = getIsFullScreen(context) == false ? 60 : 70;
-            return Tappable(
-              child: Container(
-                height: height,
-                width: size,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    SizedBox(
-                      width: size,
-                      height: height / 2,
-                      child: Tappable(
-                        color: Theme.of(context).colorScheme.secondaryContainer,
-                        borderRadius:
-                            getPlatform() == PlatformOS.isIOS ? 10 : 15,
-                        onTap: scrollToTop,
-                        child: Padding(
-                          padding: EdgeInsets.only(top: iconInset),
-                          child: Transform.rotate(
-                            angle: pi / 2,
-                            child: Icon(
-                              appStateSettings["outlinedIcons"]
-                                  ? Icons.chevron_left_outlined
-                                  : Icons.chevron_left_rounded,
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .onSecondaryContainer,
-                              size: size - iconPadding,
+            double borderRadius = getPlatform() == PlatformOS.isIOS ? 10 : 15;
+            return Material(
+              elevation: 10,
+              shadowColor:
+                  Theme.of(context).colorScheme.shadow.withOpacity(0.8),
+              borderRadius: BorderRadius.circular(borderRadius),
+              child: Tappable(
+                child: Container(
+                  height: height,
+                  width: size,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      SizedBox(
+                        width: size,
+                        height: height / 2,
+                        child: Tappable(
+                          color:
+                              Theme.of(context).colorScheme.secondaryContainer,
+                          borderRadius: borderRadius,
+                          onTap: scrollToTop,
+                          child: Padding(
+                            padding: EdgeInsets.only(top: iconInset),
+                            child: Transform.rotate(
+                              angle: pi / 2,
+                              child: Icon(
+                                appStateSettings["outlinedIcons"]
+                                    ? Icons.chevron_left_outlined
+                                    : Icons.chevron_left_rounded,
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onSecondaryContainer,
+                                size: size - iconPadding,
+                              ),
                             ),
                           ),
                         ),
                       ),
-                    ),
-                    SizedBox(
-                      width: size,
-                      height: height / 2,
-                      child: Tappable(
-                        color: Theme.of(context).colorScheme.secondaryContainer,
-                        borderRadius:
-                            getPlatform() == PlatformOS.isIOS ? 10 : 15,
-                        onTap: scrollToBottom,
-                        child: Padding(
-                          padding: EdgeInsets.only(bottom: iconInset),
-                          child: Transform.rotate(
-                            angle: -pi / 2,
-                            child: Icon(
-                              appStateSettings["outlinedIcons"]
-                                  ? Icons.chevron_left_outlined
-                                  : Icons.chevron_left_rounded,
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .onSecondaryContainer,
-                              size: size - iconPadding,
+                      SizedBox(
+                        width: size,
+                        height: height / 2,
+                        child: Tappable(
+                          color:
+                              Theme.of(context).colorScheme.secondaryContainer,
+                          borderRadius: borderRadius,
+                          onTap: scrollToBottom,
+                          child: Padding(
+                            padding: EdgeInsets.only(bottom: iconInset),
+                            child: Transform.rotate(
+                              angle: -pi / 2,
+                              child: Icon(
+                                appStateSettings["outlinedIcons"]
+                                    ? Icons.chevron_left_outlined
+                                    : Icons.chevron_left_rounded,
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onSecondaryContainer,
+                                size: size - iconPadding,
+                              ),
                             ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
+                color: Theme.of(context).colorScheme.secondaryContainer,
+                borderRadius: getPlatform() == PlatformOS.isIOS ? 10 : 15,
               ),
-              color: Theme.of(context).colorScheme.secondaryContainer,
-              borderRadius: getPlatform() == PlatformOS.isIOS ? 10 : 15,
             );
           }),
         ),
