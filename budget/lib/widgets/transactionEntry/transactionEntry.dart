@@ -1,10 +1,15 @@
+import 'dart:convert';
+
 import 'package:animations/animations.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
 import 'package:budget/pages/objectivePage.dart';
 import 'package:budget/struct/currencyFunctions.dart';
+import 'package:budget/struct/databaseGlobal.dart';
+import 'package:budget/struct/listenableSelector.dart';
 import 'package:budget/struct/settings.dart';
+import 'package:budget/widgets/animatedExpanded.dart';
 import 'package:budget/widgets/breathingAnimation.dart';
 import 'package:budget/widgets/categoryIcon.dart';
 import 'package:budget/widgets/fadeIn.dart';
@@ -28,6 +33,9 @@ import 'transactionEntryTag.dart';
 
 ValueNotifier<Map<String, List<String>>> globalSelectedID =
     ValueNotifier<Map<String, List<String>>>({});
+
+ValueNotifier<Map<String, bool>> globalCollapsedFutureID =
+    ValueNotifier<Map<String, bool>>({});
 
 int maxSelectableTransactionsListedOnPage = 1000;
 Map<String, List<String>> globalTransactionsListedOnPageID = {};
@@ -104,6 +112,7 @@ class TransactionEntry extends StatelessWidget {
     this.customPadding,
     this.allowOpenIntoObjectiveLoanPage = true,
     this.showExcludedBudgetTag,
+    this.enableFutureTransactionsDivider = false,
   }) : super(key: key);
 
   final Widget openPage;
@@ -125,6 +134,7 @@ class TransactionEntry extends StatelessWidget {
   final EdgeInsets? customPadding;
   final bool allowOpenIntoObjectiveLoanPage;
   final bool Function(Transaction transaction)? showExcludedBudgetTag;
+  final bool enableFutureTransactionsDivider;
 
   final double fabSize = 50;
 
@@ -509,158 +519,233 @@ class TransactionEntry extends StatelessWidget {
               enabled: useHorizontalPaddingConstrained)),
       child: TransactionEntryBox(
         transactionKey: transaction.transactionPk,
-        child: ValueListenableBuilder(
-          valueListenable: globalSelectedID,
-          builder: (context, _, __) {
-            bool? areTransactionsBeingSelected =
-                globalSelectedID.value[listID ?? "0"]?.isNotEmpty;
-            bool selected = globalSelectedID.value[listID ?? "0"]!
-                .contains(transaction.transactionPk);
-            bool isTransactionBeforeSelected = transactionBefore != null &&
-                globalSelectedID.value[listID ?? "0"]!
-                    .contains(transactionBefore?.transactionPk);
-            bool isTransactionAfterSelected = transactionAfter != null &&
-                globalSelectedID.value[listID ?? "0"]!
-                    .contains(transactionAfter?.transactionPk);
-            double borderRadius = getPlatform() == PlatformOS.isIOS ? 7 : 12;
-            return ValueListenableBuilder(
-              valueListenable: recentlyAddedTransactionInfo,
-              builder: (context, _, __) {
-                Color selectedColor = appStateSettings["materialYou"]
-                    ? categoryTintColor == null
-                        ? Theme.of(context)
-                            .colorScheme
-                            .secondaryContainer
-                            .withOpacity(0.8)
-                        : categoryTintColor!.withOpacity(0.2)
-                    : getColor(context, "black").withOpacity(0.1);
-                bool checkVisibilityForAnimation = recentlyAddedTransactionInfo
-                            .value.transactionPk ==
-                        transaction.transactionPk &&
-                    recentlyAddedTransactionInfo.value.shouldAnimate == true;
-                bool triggerAnimation =
-                    recentlyAddedTransactionInfo.value.transactionPk ==
-                            transaction.transactionPk &&
-                        recentlyAddedTransactionInfo.value.isRunningAnimation;
-                int loopCount = recentlyAddedTransactionInfo.value.loopCount;
-                Widget transactionEntryWidget = Padding(
-                  padding: customPadding ??
-                      (enableSelectionCheckmark
-                          ? const EdgeInsets.only(left: 5, right: 5)
-                          : const EdgeInsets.only(left: 13, right: 13)),
-                  child: OpenContainerNavigation(
-                    borderRadius: 0,
-                    customBorderRadius: BorderRadius.vertical(
-                      top: Radius.circular(
-                        isTransactionBeforeSelected ? 0 : borderRadius,
-                      ),
-                      bottom: Radius.circular(
-                        isTransactionAfterSelected ? 0 : borderRadius,
-                      ),
-                    ),
-                    closedColor: containerColor == null
-                        ? Theme.of(context).canvasColor
-                        : containerColor,
-                    button: (openContainer) {
-                      return FlashingContainer(
-                        loopCount: loopCount,
-                        isAnimating: triggerAnimation,
-                        flashDuration: Duration(milliseconds: 500),
-                        backgroundColor: selectedColor.withOpacity(
-                          appStateSettings["materialYou"]
-                              ? categoryTintColor == null
-                                  ? 0.4
-                                  : 0.1
-                              : Theme.of(context).brightness == Brightness.light
-                                  ? 0.1
-                                  : 0.2,
+        child: CollapseFutureTransactions(
+          alwaysExpanded: enableFutureTransactionsDivider == false,
+          dateToCompare: transaction.dateCreated,
+          listID: listID,
+          child: ValueListenableBuilder(
+            valueListenable: globalSelectedID.select(
+              (controller) =>
+                  (transactionBefore != null &&
+                          controller.value[listID ?? "0"]!
+                              .contains(transactionBefore?.transactionPk))
+                      .toString() +
+                  (controller.value[listID ?? "0"]!
+                          .contains(transaction.transactionPk))
+                      .toString() +
+                  (transactionAfter != null &&
+                          controller.value[listID ?? "0"]!
+                              .contains(transactionAfter?.transactionPk))
+                      .toString(),
+            ),
+            builder: (context, _, __) {
+              bool? areTransactionsBeingSelected =
+                  globalSelectedID.value[listID ?? "0"]?.isNotEmpty;
+              bool selected = globalSelectedID.value[listID ?? "0"]!
+                  .contains(transaction.transactionPk);
+              bool isTransactionBeforeSelected = transactionBefore != null &&
+                  globalSelectedID.value[listID ?? "0"]!
+                      .contains(transactionBefore?.transactionPk);
+              bool isTransactionAfterSelected = transactionAfter != null &&
+                  globalSelectedID.value[listID ?? "0"]!
+                      .contains(transactionAfter?.transactionPk);
+              double borderRadius = getPlatform() == PlatformOS.isIOS ? 7 : 12;
+              return ValueListenableBuilder(
+                valueListenable: recentlyAddedTransactionInfo,
+                builder: (context, _, __) {
+                  Color selectedColor = appStateSettings["materialYou"]
+                      ? categoryTintColor == null
+                          ? Theme.of(context)
+                              .colorScheme
+                              .secondaryContainer
+                              .withOpacity(0.8)
+                          : categoryTintColor!.withOpacity(0.2)
+                      : getColor(context, "black").withOpacity(0.1);
+                  bool checkVisibilityForAnimation =
+                      recentlyAddedTransactionInfo.value.transactionPk ==
+                              transaction.transactionPk &&
+                          recentlyAddedTransactionInfo.value.shouldAnimate ==
+                              true;
+                  bool triggerAnimation =
+                      recentlyAddedTransactionInfo.value.transactionPk ==
+                              transaction.transactionPk &&
+                          recentlyAddedTransactionInfo.value.isRunningAnimation;
+                  int loopCount = recentlyAddedTransactionInfo.value.loopCount;
+                  Widget transactionEntryWidget = Padding(
+                    padding: customPadding ??
+                        (enableSelectionCheckmark
+                            ? const EdgeInsets.only(left: 5, right: 5)
+                            : const EdgeInsets.only(left: 13, right: 13)),
+                    child: OpenContainerNavigation(
+                      borderRadius: 0,
+                      customBorderRadius: BorderRadius.vertical(
+                        top: Radius.circular(
+                          isTransactionBeforeSelected ? 0 : borderRadius,
                         ),
-                        child: Tappable(
-                          color: Colors.transparent,
-                          borderRadius:
-                              enableSelectionCheckmark ? 0 : borderRadius,
-                          onLongPress: () {
-                            selectTransaction(transaction, selected, true);
-                          },
-                          onTap: () async {
-                            openContainer();
-                          },
-                          child: AnimatedContainer(
-                            duration: const Duration(seconds: 1),
-                            curve: Curves.easeInOutCubicEmphasized,
-                            padding: EdgeInsets.only(
-                              left: enableSelectionCheckmark
-                                  ? 0
-                                  : selected
-                                      ? 12 - 2
-                                      : 10 - 2,
-                              right: !enableSelectionCheckmark && selected
-                                  ? 12
-                                  : 10,
-                              top: !enableSelectionCheckmark &&
-                                      selected &&
-                                      isTransactionBeforeSelected == false
-                                  ? 6
-                                  : 4,
-                              bottom: !enableSelectionCheckmark &&
-                                      selected &&
-                                      isTransactionAfterSelected == false
-                                  ? 6
-                                  : 4,
-                            ),
-                            decoration: BoxDecoration(
-                              color:
-                                  selected ? selectedColor : Colors.transparent,
-                              borderRadius: BorderRadius.vertical(
-                                top: Radius.circular(
-                                  isTransactionBeforeSelected
-                                      ? 0
-                                      : borderRadius,
-                                ),
-                                bottom: Radius.circular(
-                                  isTransactionAfterSelected ? 0 : borderRadius,
+                        bottom: Radius.circular(
+                          isTransactionAfterSelected ? 0 : borderRadius,
+                        ),
+                      ),
+                      closedColor: containerColor == null
+                          ? Theme.of(context).canvasColor
+                          : containerColor,
+                      button: (openContainer) {
+                        return FlashingContainer(
+                          loopCount: loopCount,
+                          isAnimating: triggerAnimation,
+                          flashDuration: Duration(milliseconds: 500),
+                          backgroundColor: selectedColor.withOpacity(
+                            appStateSettings["materialYou"]
+                                ? categoryTintColor == null
+                                    ? 0.4
+                                    : 0.1
+                                : Theme.of(context).brightness ==
+                                        Brightness.light
+                                    ? 0.1
+                                    : 0.2,
+                          ),
+                          child: Tappable(
+                            color: Colors.transparent,
+                            borderRadius:
+                                enableSelectionCheckmark ? 0 : borderRadius,
+                            onLongPress: () {
+                              selectTransaction(transaction, selected, true);
+                            },
+                            onTap: () async {
+                              openContainer();
+                            },
+                            child: AnimatedContainer(
+                              duration: const Duration(seconds: 1),
+                              curve: Curves.easeInOutCubicEmphasized,
+                              padding: EdgeInsets.only(
+                                left: enableSelectionCheckmark
+                                    ? 0
+                                    : selected
+                                        ? 12 - 2
+                                        : 10 - 2,
+                                right: !enableSelectionCheckmark && selected
+                                    ? 12
+                                    : 10,
+                                top: !enableSelectionCheckmark &&
+                                        selected &&
+                                        isTransactionBeforeSelected == false
+                                    ? 6
+                                    : 4,
+                                bottom: !enableSelectionCheckmark &&
+                                        selected &&
+                                        isTransactionAfterSelected == false
+                                    ? 6
+                                    : 4,
+                              ),
+                              decoration: BoxDecoration(
+                                color: selected
+                                    ? selectedColor
+                                    : Colors.transparent,
+                                borderRadius: BorderRadius.vertical(
+                                  top: Radius.circular(
+                                    isTransactionBeforeSelected
+                                        ? 0
+                                        : borderRadius,
+                                  ),
+                                  bottom: Radius.circular(
+                                    isTransactionAfterSelected
+                                        ? 0
+                                        : borderRadius,
+                                  ),
                                 ),
                               ),
-                            ),
-                            child: transactionContents(
-                              openContainer: openContainer,
-                              selected: selected,
-                              areTransactionsBeingSelected:
-                                  areTransactionsBeingSelected,
+                              child: transactionContents(
+                                openContainer: openContainer,
+                                selected: selected,
+                                areTransactionsBeingSelected:
+                                    areTransactionsBeingSelected,
+                              ),
                             ),
                           ),
-                        ),
-                      );
-                    },
-                    // Open the corresponding loan breakdown page if transaction tapped
-                    openPage: openPage,
-                  ),
-                );
-                // Only render the visibility detector when we know this transaction entry
-                // needs to be animated. VisibilityDetector is expensive!
-                // As soon as it's rendered and the animation is triggered
-                // VisibilityDetector is removed
-                if (checkVisibilityForAnimation) {
-                  return VisibilityDetector(
-                    key: ValueKey(transaction.transactionPk),
-                    child: transactionEntryWidget,
-                    onVisibilityChanged: (VisibilityInfo visibilityInfo) {
-                      final double visiblePercentage =
-                          visibilityInfo.visibleFraction * 100;
-                      if (visiblePercentage >= 90) {
-                        recentlyAddedTransactionInfo.value.triggerAnimation();
-                      }
-                    },
+                        );
+                      },
+                      // Open the corresponding loan breakdown page if transaction tapped
+                      openPage: openPage,
+                    ),
                   );
-                }
-                return transactionEntryWidget;
-              },
-            );
-          },
+                  // Only render the visibility detector when we know this transaction entry
+                  // needs to be animated. VisibilityDetector is expensive!
+                  // As soon as it's rendered and the animation is triggered
+                  // VisibilityDetector is removed
+                  if (checkVisibilityForAnimation) {
+                    return VisibilityDetector(
+                      key: ValueKey(transaction.transactionPk),
+                      child: transactionEntryWidget,
+                      onVisibilityChanged: (VisibilityInfo visibilityInfo) {
+                        final double visiblePercentage =
+                            visibilityInfo.visibleFraction * 100;
+                        if (visiblePercentage >= 90) {
+                          recentlyAddedTransactionInfo.value.triggerAnimation();
+                        }
+                      },
+                    );
+                  }
+                  return transactionEntryWidget;
+                },
+              );
+            },
+          ),
         ),
       ),
     );
   }
+}
+
+class CollapseFutureTransactions extends StatelessWidget {
+  const CollapseFutureTransactions({
+    super.key,
+    required this.dateToCompare,
+    required this.child,
+    required this.listID,
+    required this.alwaysExpanded,
+  });
+  final Widget child;
+  final DateTime dateToCompare;
+  final String? listID;
+  final bool alwaysExpanded;
+  @override
+  Widget build(BuildContext context) {
+    return ValueListenableBuilder(
+      valueListenable: globalCollapsedFutureID
+          .select((controller) => controller.value[listID ?? "0"]),
+      builder: (context, _, __) {
+        bool isTransactionsCollapsed =
+            (globalCollapsedFutureID.value[listID ?? "0"] ?? false) &&
+                isAfterCurrentDate(dateToCompare);
+        return AnimatedExpanded(
+          duration: const Duration(milliseconds: 425),
+          sizeCurve: Curves.fastOutSlowIn,
+          axis: Axis.vertical,
+          expand: alwaysExpanded || isTransactionsCollapsed == false,
+          child: child,
+        );
+      },
+    );
+  }
+}
+
+bool isAfterCurrentDate(DateTime dateToCompare) {
+  return DateTime(dateToCompare.year, dateToCompare.month, dateToCompare.day)
+      .isAfter(
+    DateTime(
+      DateTime.now().year,
+      DateTime.now().month,
+      DateTime.now().day,
+    ),
+  );
+}
+
+void toggleFutureTransactionsSection(String? listID) {
+  globalCollapsedFutureID.value[listID ?? "0"] =
+      !(globalCollapsedFutureID.value[listID ?? "0"] ?? false);
+  globalCollapsedFutureID.notifyListeners();
+  sharedPreferences.setString(
+      "globalCollapsedFutureID", jsonEncode(globalCollapsedFutureID.value));
 }
 
 void flashTransaction(String transactionPk, {int flashCount = 5}) {

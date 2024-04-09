@@ -1114,5 +1114,9 @@
   "error-parsing-json": "שגיאה בניתוח JSON",
   "transactions-in-the-csv": "עסקאות ב-CSV.",
   "errors": "שגיאות",
-  "black": "שָׁחוֹר"
+  "black": "שָׁחוֹר",
+  "future-transactions": "עסקאות עתידיות",
+  "hidden": "מוּסתָר",
+  "present-transactions": "הצג עסקאות",
+  "past-transactions": "עסקאות קודמות"
 }

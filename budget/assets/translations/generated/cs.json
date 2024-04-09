@@ -1114,5 +1114,9 @@
   "error-parsing-json": "Chyba při analýze JSON",
   "transactions-in-the-csv": "transakce v CSV.",
   "errors": "Chyby",
-  "black": "Černá"
+  "black": "Černá",
+  "future-transactions": "Budoucí transakce",
+  "hidden": "skrytý",
+  "present-transactions": "Současné transakce",
+  "past-transactions": "Minulé transakce"
 }

@@ -1114,5 +1114,9 @@
   "error-parsing-json": "Σφάλμα ανάλυσης JSON",
   "transactions-in-the-csv": "συναλλαγές στο CSV.",
   "errors": "Σφάλματα",
-  "black": "Μαύρος"
+  "black": "Μαύρος",
+  "future-transactions": "Μελλοντικές Συναλλαγές",
+  "hidden": "κρυμμένος",
+  "present-transactions": "Παρούσες Συναλλαγές",
+  "past-transactions": "Προηγούμενες συναλλαγές"
 }

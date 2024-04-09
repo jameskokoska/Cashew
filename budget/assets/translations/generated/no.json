@@ -1114,5 +1114,9 @@
   "error-parsing-json": "Feil ved parsing av JSON",
   "transactions-in-the-csv": "transaksjoner i CSV-en.",
   "errors": "Feil",
-  "black": "Svart"
+  "black": "Svart",
+  "future-transactions": "Fremtidige transaksjoner",
+  "hidden": "skjult",
+  "present-transactions": "Presentere transaksjoner",
+  "past-transactions": "Tidligere transaksjoner"
 }

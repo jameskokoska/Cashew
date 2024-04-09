@@ -7,6 +7,7 @@ import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
+import 'package:budget/widgets/transactionEntry/transactionEntry.dart';
 import 'package:budget/widgets/util/checkWidgetLaunch.dart';
 import 'package:drift/isolate.dart';
 import 'package:flutter/foundation.dart';
@@ -129,6 +130,18 @@ Future<bool> initializeSettings() async {
   // save settings
   await sharedPreferences.setString(
       'userSettings', json.encode(appStateSettings));
+
+  try {
+    globalCollapsedFutureID.value = (jsonDecode(
+                sharedPreferences.getString("globalCollapsedFutureID") ?? "{}")
+            as Map<String, dynamic>)
+        .map((key, value) {
+      return MapEntry(key, value is bool ? value : false);
+    });
+  } catch (e) {
+    print("There was an error restoring globalCollapsedFutureID preference: " +
+        e.toString());
+  }
 
   return true;
 }

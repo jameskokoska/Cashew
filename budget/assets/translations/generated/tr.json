@@ -1114,5 +1114,9 @@
   "error-parsing-json": "JSON Ayrıştırma Hatası",
   "transactions-in-the-csv": "CSV'deki işlemler.",
   "errors": "Hatalar",
-  "black": "Siyah"
+  "black": "Siyah",
+  "future-transactions": "Gelecekteki İşlemler",
+  "hidden": "gizlenmiş",
+  "present-transactions": "Mevcut İşlemler",
+  "past-transactions": "Geçmiş İşlemler"
 }

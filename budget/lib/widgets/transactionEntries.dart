@@ -6,11 +6,13 @@ import 'package:budget/pages/transactionFilters.dart';
 import 'package:budget/pages/transactionsListPage.dart';
 import 'package:budget/pages/transactionsSearchPage.dart';
 import 'package:budget/pages/walletDetailsPage.dart';
+import 'package:budget/struct/listenableSelector.dart';
 import 'package:budget/widgets/animatedExpanded.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/countNumber.dart';
 import 'package:budget/widgets/dateDivider.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
+import 'package:budget/widgets/iconButtonScaled.dart';
 import 'package:budget/widgets/openContainerNavigation.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/tappable.dart';
@@ -85,6 +87,7 @@ class TransactionEntries extends StatelessWidget {
     this.allowOpenIntoObjectiveLoanPage = true,
     this.showNumberOfDaysUntilForFutureDates = false,
     this.showExcludedBudgetTag,
+    this.enableFutureTransactionsCollapse = true,
     super.key,
   });
   final TransactionEntriesRenderType renderType;
@@ -126,11 +129,14 @@ class TransactionEntries extends StatelessWidget {
   final bool allowOpenIntoObjectiveLoanPage;
   final bool showNumberOfDaysUntilForFutureDates;
   final bool Function(Transaction transaction)? showExcludedBudgetTag;
+  final bool enableFutureTransactionsCollapse;
 
   Widget createTransactionEntry(
-      List<TransactionWithCategory> transactionListForDay,
-      TransactionWithCategory item,
-      int index) {
+    List<TransactionWithCategory> transactionListForDay,
+    TransactionWithCategory item,
+    int index,
+    bool enableFutureTransactionsDivider,
+  ) {
     return TransactionEntry(
       transactionBefore:
           nullIfIndexOutOfRange(transactionListForDay, index - 1)?.transaction,
@@ -157,6 +163,7 @@ class TransactionEntries extends StatelessWidget {
       showObjectivePercentage: showObjectivePercentage,
       allowOpenIntoObjectiveLoanPage: allowOpenIntoObjectiveLoanPage,
       showExcludedBudgetTag: showExcludedBudgetTag,
+      enableFutureTransactionsDivider: enableFutureTransactionsDivider,
     );
   }
 
@@ -192,6 +199,17 @@ class TransactionEntries extends StatelessWidget {
           double totalIncome = 0;
           double totalExpense = 0;
           int totalNumberTransactions = (snapshot.data ?? []).length;
+          int totalNumberOfFutureTransactions = snapshot.data
+                  ?.where((transactionWithCategory) => isAfterCurrentDate(
+                      transactionWithCategory.transaction.dateCreated))
+                  .takeWhile((_) => true)
+                  .length ??
+              0;
+
+          bool enableFutureTransactionsDivider =
+              enableFutureTransactionsCollapse &&
+                  totalNumberOfFutureTransactions >= 5;
+          bool notYetAddedPastTransactionsDivider = true;
 
           if ((snapshot.data ?? []).length <= 0 &&
               (showNoResults || noResultsExtraWidget != null)) {
@@ -314,34 +332,64 @@ class TransactionEntries extends StatelessWidget {
                         DateTime.now().month, DateTime.now().day)
                     .difference(currentTransactionDate)
                     .inDays;
+
+                Widget? pastTransactionsDivider =
+                    enableFutureTransactionsDivider &&
+                            notYetAddedPastTransactionsDivider &&
+                            isAfterCurrentDate(currentTransactionDate) == false
+                        ? PastTransactionsDivider(
+                            listID: listID,
+                            useHorizontalPaddingConstrained:
+                                useHorizontalPaddingConstrained,
+                            colorScheme: colorScheme,
+                          )
+                        : null;
+
+                if (pastTransactionsDivider != null)
+                  notYetAddedPastTransactionsDivider = false;
+
                 Widget dateDividerWidget = includeDateDivider == false
                     ? SizedBox.shrink()
-                    : DateDivider(
-                        useHorizontalPaddingConstrained:
-                            useHorizontalPaddingConstrained,
-                        color: dateDividerColor,
-                        date: currentTransactionDate,
-                        afterDate: daysDifference >= 0 ||
-                                showNumberOfDaysUntilForFutureDates == false
-                            ? ""
-                            : " • " +
-                                (daysDifference * -1).toString() +
-                                " " +
-                                (daysDifference * -1 == 1
-                                    ? "day".tr()
-                                    : "days".tr()),
-                        info: appStateSettings["netSpendingDayTotal"] == true
-                            ? convertToMoney(
-                                Provider.of<AllWallets>(context),
-                                netSpent,
-                              )
-                            : transactionListForDay.length > 1
-                                ? convertToMoney(
-                                    Provider.of<AllWallets>(context),
-                                    totalSpentForDay)
-                                : "");
+                    : CollapseFutureTransactions(
+                        alwaysExpanded:
+                            enableFutureTransactionsDivider == false,
+                        dateToCompare: currentTransactionDate,
+                        listID: listID,
+                        child: DateDivider(
+                            useHorizontalPaddingConstrained:
+                                useHorizontalPaddingConstrained,
+                            color: dateDividerColor,
+                            date: currentTransactionDate,
+                            afterDate: daysDifference >= 0 ||
+                                    showNumberOfDaysUntilForFutureDates == false
+                                ? ""
+                                : " • " +
+                                    (daysDifference * -1).toString() +
+                                    " " +
+                                    (daysDifference * -1 == 1
+                                        ? "day".tr()
+                                        : "days".tr()),
+                            info:
+                                appStateSettings["netSpendingDayTotal"] == true
+                                    ? convertToMoney(
+                                        Provider.of<AllWallets>(context),
+                                        netSpent,
+                                      )
+                                    : transactionListForDay.length > 1
+                                        ? convertToMoney(
+                                            Provider.of<AllWallets>(context),
+                                            totalSpentForDay)
+                                        : ""),
+                      );
 
                 if (renderType == TransactionEntriesRenderType.slivers) {
+                  if (pastTransactionsDivider != null)
+                    sectionsOut.add(
+                      Section()
+                        ..expanded = true
+                        ..header = SizedBox()
+                        ..items = [pastTransactionsDivider],
+                    );
                   sectionsOut.add(
                     Section()
                       ..expanded = true
@@ -353,8 +401,11 @@ class TransactionEntries extends StatelessWidget {
                         for (int index = 0;
                             index < transactionListForDay.length;
                             index++)
-                          createTransactionEntry(transactionListForDay,
-                              transactionListForDay[index], index),
+                          createTransactionEntry(
+                              transactionListForDay,
+                              transactionListForDay[index],
+                              index,
+                              enableFutureTransactionsDivider),
                       ],
                   );
                 } else if (renderType ==
@@ -362,6 +413,9 @@ class TransactionEntries extends StatelessWidget {
                   List<TransactionWithCategory> transactionListForDayCopy = [
                     ...transactionListForDay
                   ];
+                  if (pastTransactionsDivider != null)
+                    widgetsOut.add(
+                        SliverToBoxAdapter(child: pastTransactionsDivider));
                   widgetsOut.add(
                     SliverStickyHeader(
                       header: Transform.translate(
@@ -390,7 +444,10 @@ class TransactionEntries extends StatelessWidget {
                             curve: Curves.easeInOut,
                             animation: animation,
                             child: createTransactionEntry(
-                                transactionListForDayCopy, item, index),
+                                transactionListForDayCopy,
+                                item,
+                                index,
+                                enableFutureTransactionsDivider),
                           );
                         },
                       ),
@@ -401,11 +458,13 @@ class TransactionEntries extends StatelessWidget {
                     renderType ==
                         TransactionEntriesRenderType
                             .implicitlyAnimatedNonSlivers) {
+                  if (pastTransactionsDivider != null)
+                    widgetsOut.add(pastTransactionsDivider);
                   widgetsOut.add(dateDividerWidget);
                   for (int i = 0; i < transactionListForDay.length; i++) {
                     TransactionWithCategory item = transactionListForDay[i];
-                    widgetsOut.add(
-                        createTransactionEntry(transactionListForDay, item, i));
+                    widgetsOut.add(createTransactionEntry(transactionListForDay,
+                        item, i, enableFutureTransactionsDivider));
                   }
                 }
 
@@ -459,6 +518,27 @@ class TransactionEntries extends StatelessWidget {
               widgetsOut.add(totalCashFlowWidget);
           }
 
+          Widget futureTransactionsDivider = enableFutureTransactionsDivider
+              ? FutureTransactionsDivider(
+                  listID: listID,
+                  totalNumberOfFutureTransactions:
+                      totalNumberOfFutureTransactions,
+                  useHorizontalPaddingConstrained:
+                      useHorizontalPaddingConstrained,
+                  colorScheme: colorScheme,
+                )
+              : SizedBox.shrink();
+
+          widgetsOut.insert(
+            0,
+            Padding(
+              padding: enableSpendingSummary
+                  ? const EdgeInsets.only(top: 5)
+                  : EdgeInsets.zero,
+              child: futureTransactionsDivider,
+            ),
+          );
+
           if (enableSpendingSummary)
             widgetsOut.insert(
               0,
@@ -474,6 +554,7 @@ class TransactionEntries extends StatelessWidget {
           if (renderType == TransactionEntriesRenderType.slivers) {
             return MultiSliver(
               children: [
+                SliverToBoxAdapter(child: futureTransactionsDivider),
                 SliverExpandableList(
                   builder: SliverExpandableChildDelegate<Widget, Section>(
                     sectionList: sectionsOut,
@@ -603,6 +684,185 @@ class TransactionEntries extends StatelessWidget {
           return SizedBox.shrink();
         return transactionEntryListBuilder(snapshotNetTotal.data);
       },
+    );
+  }
+}
+
+class PastTransactionsDivider extends StatelessWidget {
+  const PastTransactionsDivider(
+      {required this.listID,
+      required this.useHorizontalPaddingConstrained,
+      required this.colorScheme,
+      super.key});
+  final String? listID;
+  final bool useHorizontalPaddingConstrained;
+  final ColorScheme? colorScheme;
+
+  @override
+  Widget build(BuildContext context) {
+    Color color = appStateSettings["materialYou"]
+        ? dynamicPastel(context,
+            (colorScheme ?? Theme.of(context).colorScheme).secondaryContainer,
+            amountDark: 0.5, amountLight: 0)
+        : getColor(context, "canvasContainer");
+    return ValueListenableBuilder(
+        valueListenable: globalCollapsedFutureID
+            .select((controller) => controller.value[listID ?? "0"]),
+        builder: (context, _, __) {
+          return AnimatedPadding(
+            duration: const Duration(milliseconds: 425),
+            curve: Curves.fastOutSlowIn,
+            padding: EdgeInsets.only(
+              top: globalCollapsedFutureID.value[listID ?? "0"] == true ? 0 : 8,
+            ),
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 3),
+              child: Tappable(
+                color: color,
+                child: Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: useHorizontalPaddingConstrained == false
+                        ? 0
+                        : getHorizontalPaddingConstrained(context),
+                  ),
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: TextFont(
+                            text: "past-transactions".tr(),
+                            maxLines: 1,
+                            textAlign: TextAlign.left,
+                            fontSize: 15,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          );
+        });
+  }
+}
+
+class FutureTransactionsDivider extends StatelessWidget {
+  const FutureTransactionsDivider(
+      {required this.listID,
+      required this.totalNumberOfFutureTransactions,
+      required this.useHorizontalPaddingConstrained,
+      required this.colorScheme,
+      super.key});
+  final String? listID;
+  final int totalNumberOfFutureTransactions;
+  final bool useHorizontalPaddingConstrained;
+  final ColorScheme? colorScheme;
+
+  @override
+  Widget build(BuildContext context) {
+    Color color = appStateSettings["materialYou"]
+        ? dynamicPastel(context,
+            (colorScheme ?? Theme.of(context).colorScheme).secondaryContainer,
+            amountDark: 0.5, amountLight: 0)
+        : getColor(context, "canvasContainer");
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 3),
+      child: Tappable(
+        onTap: () {
+          toggleFutureTransactionsSection(listID);
+        },
+        color: color,
+        child: Padding(
+          padding: EdgeInsets.symmetric(
+            horizontal: useHorizontalPaddingConstrained == false
+                ? 0
+                : getHorizontalPaddingConstrained(context),
+          ),
+          child: Padding(
+            padding: EdgeInsets.only(left: 16),
+            child: ValueListenableBuilder(
+                valueListenable: globalCollapsedFutureID
+                    .select((controller) => controller.value[listID ?? "0"]),
+                builder: (context, _, __) {
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: TextFont(
+                                text: "future-transactions".tr(),
+                                maxLines: 1,
+                                textAlign: TextAlign.left,
+                                fontSize: 15,
+                              ),
+                            ),
+                            AnimatedOpacity(
+                              duration: const Duration(milliseconds: 425),
+                              opacity: globalCollapsedFutureID
+                                          .value[listID ?? "0"] ==
+                                      true
+                                  ? 1
+                                  : 0,
+                              child: TextFont(
+                                text: addAmountToString(
+                                  "",
+                                  totalNumberOfFutureTransactions,
+                                  extraText: "hidden".tr(),
+                                  addCommaWithExtraText: false,
+                                ),
+                                maxLines: 1,
+                                textAlign: TextAlign.left,
+                                fontSize: 14,
+                                textColor: getColor(context, "textLight"),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            top: 2, bottom: 2, left: 8, right: 2),
+                        child: Tappable(
+                          onTap: () {
+                            toggleFutureTransactionsSection(listID);
+                          },
+                          color: (colorScheme ?? Theme.of(context).colorScheme)
+                              .secondary
+                              .withOpacity(Theme.of(context).brightness ==
+                                      Brightness.dark
+                                  ? 0.1
+                                  : 0.2),
+                          borderRadius: 5,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            child: AnimatedRotation(
+                              turns: globalCollapsedFutureID
+                                          .value[listID ?? "0"] ==
+                                      true
+                                  ? 0
+                                  : 0.5,
+                              duration: const Duration(milliseconds: 425),
+                              curve: Curves.fastOutSlowIn,
+                              child: Icon(
+                                appStateSettings["outlinedIcons"]
+                                    ? Icons.arrow_drop_down_outlined
+                                    : Icons.arrow_drop_down_rounded,
+                                size: 30,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  );
+                }),
+          ),
+        ),
+      ),
     );
   }
 }

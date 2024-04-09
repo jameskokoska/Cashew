@@ -1114,5 +1114,9 @@
   "error-parsing-json": "เกิดข้อผิดพลาดในการแยกวิเคราะห์ JSON",
   "transactions-in-the-csv": "ธุรกรรมในรูปแบบ CSV",
   "errors": "ข้อผิดพลาด",
-  "black": "สีดำ"
+  "black": "สีดำ",
+  "future-transactions": "การทำธุรกรรมในอนาคต",
+  "hidden": "ที่ซ่อนอยู่",
+  "present-transactions": "ธุรกรรมปัจจุบัน",
+  "past-transactions": "การทำธุรกรรมที่ผ่านมา"
 }

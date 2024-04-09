@@ -1114,5 +1114,9 @@
   "error-parsing-json": "Fout bij het parseren van JSON",
   "transactions-in-the-csv": "transacties in het CSV.",
   "errors": "Fouten",
-  "black": "Zwart"
+  "black": "Zwart",
+  "future-transactions": "Toekomstige transacties",
+  "hidden": "verborgen",
+  "present-transactions": "Huidige transacties",
+  "past-transactions": "Transacties uit het verleden"
 }

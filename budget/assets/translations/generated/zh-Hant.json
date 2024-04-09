@@ -1114,5 +1114,9 @@
   "error-parsing-json": "解析 JSON 時出錯",
   "transactions-in-the-csv": "CSV 中的交易。",
   "errors": "錯誤",
-  "black": "黑色的"
+  "black": "黑色的",
+  "future-transactions": "未來交易",
+  "hidden": "隱",
+  "present-transactions": "目前交易",
+  "past-transactions": "過去的交易"
 }

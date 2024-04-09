@@ -1114,5 +1114,9 @@
   "error-parsing-json": "Kesalahan saat menguraikan JSON",
   "transactions-in-the-csv": "transaksi di CSV.",
   "errors": "Kesalahan",
-  "black": "Hitam"
+  "black": "Hitam",
+  "future-transactions": "Transaksi Masa Depan",
+  "hidden": "tersembunyi",
+  "present-transactions": "Transaksi Saat Ini",
+  "past-transactions": "Transaksi Sebelumnya"
 }

@@ -1114,5 +1114,9 @@
   "error-parsing-json": "خطا در تجزیه JSON",
   "transactions-in-the-csv": "تراکنش ها در CSV",
   "errors": "خطاها",
-  "black": "مشکی"
+  "black": "مشکی",
+  "future-transactions": "معاملات آتی",
+  "hidden": "پنهان شده است",
+  "present-transactions": "معاملات حاضر",
+  "past-transactions": "معاملات گذشته"
 }

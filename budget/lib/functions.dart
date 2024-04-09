@@ -1379,3 +1379,15 @@ String getWalletStringName(AllWallets allWallets, TransactionWallet wallet) {
     return wallet.name + " (" + wallet.currency.toString().toUpperCase() + ")";
   }
 }
+
+String addAmountToString(String string, int amount,
+    {String? extraText, bool addCommaWithExtraText = true}) {
+  return string +
+      " " +
+      "( ×" +
+      amount.toString() +
+      (extraText == null
+          ? ""
+          : (addCommaWithExtraText ? ", " : " ") + (extraText)) +
+      " )";
+}

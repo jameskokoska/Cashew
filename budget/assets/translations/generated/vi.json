@@ -1114,5 +1114,9 @@
   "error-parsing-json": "Lỗi phân tích cú pháp JSON",
   "transactions-in-the-csv": "các giao dịch trong CSV.",
   "errors": "Lỗi",
-  "black": "Đen"
+  "black": "Đen",
+  "future-transactions": "Giao dịch tương lai",
+  "hidden": "ẩn giấu",
+  "present-transactions": "Giao dịch hiện tại",
+  "past-transactions": "Giao dịch trong quá khứ"
 }

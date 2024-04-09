@@ -1114,5 +1114,9 @@
   "error-parsing-json": "JSON को पार्स करने में त्रुटि",
   "transactions-in-the-csv": "सीएसवी में लेनदेन।",
   "errors": "त्रुटियाँ",
-  "black": "काला"
+  "black": "काला",
+  "future-transactions": "भविष्य के लेनदेन",
+  "hidden": "छिपा हुआ",
+  "present-transactions": "वर्तमान लेनदेन",
+  "past-transactions": "पिछले लेनदेन"
 }

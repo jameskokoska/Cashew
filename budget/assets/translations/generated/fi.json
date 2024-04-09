@@ -1114,5 +1114,9 @@
   "error-parsing-json": "Virhe jäsennettäessä JSON",
   "transactions-in-the-csv": "tapahtumat CSV:ssä.",
   "errors": "Virheet",
-  "black": "Musta"
+  "black": "Musta",
+  "future-transactions": "Tulevat tapahtumat",
+  "hidden": "piilotettu",
+  "present-transactions": "Nykyiset tapahtumat",
+  "past-transactions": "Aiemmat tapahtumat"
 }

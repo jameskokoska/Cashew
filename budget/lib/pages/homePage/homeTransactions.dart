@@ -39,6 +39,7 @@ class HomeTransactions extends StatelessWidget {
                   if (selectedSlidingSelector == 2) ExpenseIncome.expense,
                   if (selectedSlidingSelector == 3) ExpenseIncome.income,
                 ]),
+      enableFutureTransactionsCollapse: false,
     );
   }
 }

@@ -48,6 +48,7 @@ Map<String, Locale> supportedLocales = {
   "sw": Locale("sw"),
   "bg": Locale("bg"),
   "sk": Locale("sk"),
+  "mk": Locale("mk"),
 };
 
 // Fix loading of zh_Hant and other special script languages

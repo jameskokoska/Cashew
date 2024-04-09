@@ -1114,5 +1114,9 @@
   "error-parsing-json": "Eroare la analizarea JSON",
   "transactions-in-the-csv": "tranzacții în CSV.",
   "errors": "Erori",
-  "black": "Negru"
+  "black": "Negru",
+  "future-transactions": "Tranzacții viitoare",
+  "hidden": "ascuns",
+  "present-transactions": "Tranzacții prezente",
+  "past-transactions": "Tranzacții anterioare"
 }

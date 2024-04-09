@@ -26,6 +26,15 @@ import 'listItem.dart';
 
 String getChangelogString() {
   return """
+    < 5.2.9
+    Collapsible future transactions list section (if more than 5 transactions)
+    Max lines for filter title contains and note contains input
+    Fixed net total date banner initial net total when time period set to all time
+    Fix All spending page swipe to dismiss color when in full screen
+    Add extra spacing between edit home page alignment headers (when in full screen)
+    Translation updates
+    Add elevation shadow to scroll to top and bottom FAB
+    Optimized and improved performance of transaction list actions
     < 5.2.8
     New edit selected transactions popup
     Edit title for all selected transactions

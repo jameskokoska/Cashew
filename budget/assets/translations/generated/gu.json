@@ -1114,5 +1114,9 @@
   "error-parsing-json": "JSON પાર્સિંગમાં ભૂલ",
   "transactions-in-the-csv": "CSV માં વ્યવહારો.",
   "errors": "ભૂલો",
-  "black": "કાળો"
+  "black": "કાળો",
+  "future-transactions": "ભાવિ વ્યવહારો",
+  "hidden": "છુપાયેલ",
+  "present-transactions": "વર્તમાન વ્યવહારો",
+  "past-transactions": "ભૂતકાળના વ્યવહારો"
 }

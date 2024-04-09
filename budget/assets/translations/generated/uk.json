@@ -1114,5 +1114,9 @@
   "error-parsing-json": "Помилка аналізу JSON",
   "transactions-in-the-csv": "транзакції в CSV.",
   "errors": "Помилки",
-  "black": "чорний"
+  "black": "чорний",
+  "future-transactions": "Майбутні транзакції",
+  "hidden": "прихований",
+  "present-transactions": "Поточні операції",
+  "past-transactions": "Минулі транзакції"
 }

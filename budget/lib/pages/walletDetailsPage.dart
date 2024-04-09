@@ -1914,6 +1914,7 @@ class _WalletDetailsCategorySelectionState
       ),
       if (selectedCategory != null)
         TransactionEntries(
+          enableFutureTransactionsCollapse: false,
           // If the wallet is null, then we show use the spending time period
           widget.wallet == null
               ? getStartDateOfSelectedCustomPeriod("",
@@ -3017,13 +3018,9 @@ class AmountSpentEntryRow extends StatelessWidget {
                                           ),
                                         ),
                                         TextSpan(
-                                          text: "  " +
-                                              "( ×" +
-                                              totalCount.toString() +
-                                              (extraText == null
-                                                  ? ""
-                                                  : ", " + (extraText ?? "")) +
-                                              " )",
+                                          text: addAmountToString(
+                                              " ", totalCount,
+                                              extraText: extraText),
                                           style: TextStyle(
                                             fontSize: 15,
                                             color:

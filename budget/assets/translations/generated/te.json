@@ -1114,5 +1114,9 @@
   "error-parsing-json": "JSONని అన్వయించడంలో లోపం",
   "transactions-in-the-csv": "CSVలో లావాదేవీలు.",
   "errors": "లోపాలు",
-  "black": "నలుపు"
+  "black": "నలుపు",
+  "future-transactions": "భవిష్యత్ లావాదేవీలు",
+  "hidden": "దాచబడింది",
+  "present-transactions": "ప్రస్తుత లావాదేవీలు",
+  "past-transactions": "గత లావాదేవీలు"
 }

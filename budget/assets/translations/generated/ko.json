@@ -1114,5 +1114,9 @@
   "error-parsing-json": "JSON을 구문 분석하는 중 오류가 발생했습니다.",
   "transactions-in-the-csv": "CSV의 거래.",
   "errors": "오류",
-  "black": "검은색"
+  "black": "검은색",
+  "future-transactions": "향후 거래",
+  "hidden": "숨겨진",
+  "present-transactions": "현재 거래",
+  "past-transactions": "과거 거래"
 }

@@ -1114,5 +1114,9 @@
   "error-parsing-json": "Hiba a JSON elemzése során",
   "transactions-in-the-csv": "tranzakciókat a CSV-ben.",
   "errors": "Hibák",
-  "black": "Fekete"
+  "black": "Fekete",
+  "future-transactions": "Jövőbeli tranzakciók",
+  "hidden": "rejtett",
+  "present-transactions": "Jelen Tranzakciók",
+  "past-transactions": "Korábbi tranzakciók"
 }

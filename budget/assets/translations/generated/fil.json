@@ -1114,5 +1114,9 @@
   "error-parsing-json": "Error sa Pag-parse ng JSON",
   "transactions-in-the-csv": "mga transaksyon sa CSV.",
   "errors": "Mga pagkakamali",
-  "black": "Itim"
+  "black": "Itim",
+  "future-transactions": "Mga Transaksyon sa Hinaharap",
+  "hidden": "nakatago",
+  "present-transactions": "Mga Kasalukuyang Transaksyon",
+  "past-transactions": "Mga nakaraang Transaksyon"
 }

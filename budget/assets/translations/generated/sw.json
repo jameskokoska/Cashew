@@ -1114,5 +1114,9 @@
   "error-parsing-json": "Hitilafu katika kuchanganua JSON",
   "transactions-in-the-csv": "shughuli katika CSV.",
   "errors": "Makosa",
-  "black": "Nyeusi"
+  "black": "Nyeusi",
+  "future-transactions": "Shughuli za Baadaye",
+  "hidden": "siri",
+  "present-transactions": "Miamala ya Sasa",
+  "past-transactions": "Miamala ya Zamani"
 }

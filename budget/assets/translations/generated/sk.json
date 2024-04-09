@@ -90,7 +90,7 @@
   "language": "Jazyk",
   "username": "Meno uživateľa",
   "battery-saver": "Šetrič batérie",
-  "battery-saver-description": "Oprimalizujte užívateľské rozhranie pre lepšiu výdrž batérie",
+  "battery-saver-description": "Opimalizujte užívateľské rozhranie pre lepšiu výdrž batérie",
   "verify-identity": "Prosím overte svoju identitu.",
   "automation": "Automatizácia",
   "auto-email-transactions": "Automatické e-mailové transakcie",
@@ -1114,5 +1114,9 @@
   "error-parsing-json": "Chyba pri analýze JSON",
   "transactions-in-the-csv": "transakcie v CSV.",
   "errors": "Chyby",
-  "black": "čierna"
+  "black": "čierna",
+  "future-transactions": "Budúce transakcie",
+  "hidden": "skryté",
+  "present-transactions": "Prezentovať transakcie",
+  "past-transactions": "Minulé transakcie"
 }

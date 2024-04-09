@@ -1114,5 +1114,9 @@
   "error-parsing-json": "Грешка при рашчлањивању ЈСОН-а",
   "transactions-in-the-csv": "трансакције у ЦСВ-у.",
   "errors": "Грешке",
-  "black": "Црн"
+  "black": "Црн",
+  "future-transactions": "Будуће трансакције",
+  "hidden": "сакривен",
+  "present-transactions": "Садашње трансакције",
+  "past-transactions": "Претходне трансакције"
 }

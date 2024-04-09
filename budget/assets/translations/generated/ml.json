@@ -1114,5 +1114,9 @@
   "error-parsing-json": "JSON പാഴ്‌സ് ചെയ്യുന്നതിൽ പിശക്",
   "transactions-in-the-csv": "CSV-യിലെ ഇടപാടുകൾ.",
   "errors": "പിശകുകൾ",
-  "black": "കറുപ്പ്"
+  "black": "കറുപ്പ്",
+  "future-transactions": "ഭാവി ഇടപാടുകൾ",
+  "hidden": "മറഞ്ഞിരിക്കുന്നു",
+  "present-transactions": "നിലവിലെ ഇടപാടുകൾ",
+  "past-transactions": "കഴിഞ്ഞ ഇടപാടുകൾ"
 }

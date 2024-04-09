@@ -1114,5 +1114,9 @@
   "error-parsing-json": "خطأ في تحليل JSON",
   "transactions-in-the-csv": "المعاملات في CSV.",
   "errors": "أخطاء",
-  "black": "أسود"
+  "black": "أسود",
+  "future-transactions": "المعاملات المستقبلية",
+  "hidden": "مختفي",
+  "present-transactions": "المعاملات الحالية",
+  "past-transactions": "المعاملات الماضية"
 }

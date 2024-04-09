@@ -1114,5 +1114,9 @@
   "error-parsing-json": "Błąd podczas analizowania JSON",
   "transactions-in-the-csv": "transakcji w CSV.",
   "errors": "Błędy",
-  "black": "Czarny"
+  "black": "Czarny",
+  "future-transactions": "Przyszłe transakcje",
+  "hidden": "ukryty",
+  "present-transactions": "Obecne transakcje",
+  "past-transactions": "Poprzednie transakcje"
 }

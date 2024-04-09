@@ -1114,5 +1114,9 @@
   "error-parsing-json": "JSON کو پارس کرنے میں خرابی۔",
   "transactions-in-the-csv": "CSV میں لین دین۔",
   "errors": "غلطیاں",
-  "black": "سیاہ"
+  "black": "سیاہ",
+  "future-transactions": "مستقبل کے لین دین",
+  "hidden": "چھپا ہوا",
+  "present-transactions": "موجودہ لین دین",
+  "past-transactions": "ماضی کے لین دین"
 }
