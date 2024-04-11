@@ -174,7 +174,7 @@ class MorePages extends StatelessWidget {
               //     padding: EdgeInsets.symmetric(vertical: 5, horizontal: 4),
               //     child: SettingsContainer(
               //       onTap: () {
-              //         openUrl("https://github.com/jameskokoska/Cashew");
+              //         openUrl("https://github.com/jameskokoska/Bedou");
               //       },
               //       title: "open-source".tr(),
               //       icon: MoreIcons.github,

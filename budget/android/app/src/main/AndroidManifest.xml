@@ -34,7 +34,7 @@
   </queries>
     <application
         android:requestLegacyExternalStorage="true"
-        android:label="Cashew"
+        android:label="Bedou"
         android:icon="@mipmap/ic_launcher">
         <!-- Use the new rendering engine Impeller (experimental) -->
         <!-- <meta-data
