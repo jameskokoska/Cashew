@@ -1118,5 +1118,9 @@
   "future-transactions": "Zukünftige Transaktionen",
   "hidden": "versteckt",
   "present-transactions": "Aktuelle Transaktionen",
-  "past-transactions": "Vergangene Transaktionen"
+  "past-transactions": "Vergangene Transaktionen",
+  "all-outgoing-incoming": "Alle ausgehenden und eingehenden Daten",
+  "all-outgoing-incoming-description-1": "Berücksichtigen Sie alle negativen/positiven Cashflows",
+  "all-outgoing-incoming-description-2": "Beispiel: Kredittransaktionen einbeziehen",
+  "applies-when-switching-tabs-in-the-homepage-transactions-list": "Gilt beim Wechseln der Registerkarten in der Homepage-Transaktionsliste"
 }

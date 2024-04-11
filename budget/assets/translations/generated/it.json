@@ -1118,5 +1118,9 @@
   "future-transactions": "Transazioni future",
   "hidden": "nascosto",
   "present-transactions": "Transazioni presenti",
-  "past-transactions": "Transazioni passate"
+  "past-transactions": "Transazioni passate",
+  "all-outgoing-incoming": "Tutti in uscita e in entrata",
+  "all-outgoing-incoming-description-1": "Includere tutti i flussi di cassa negativi/positivi",
+  "all-outgoing-incoming-description-2": "Esempio: includere le transazioni di prestito",
+  "applies-when-switching-tabs-in-the-homepage-transactions-list": "Si applica quando si passa da una scheda all'altra nell'elenco delle transazioni della home page"
 }

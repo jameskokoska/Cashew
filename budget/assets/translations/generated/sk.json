@@ -1118,5 +1118,9 @@
   "future-transactions": "Budúce transakcie",
   "hidden": "skryté",
   "present-transactions": "Prezentovať transakcie",
-  "past-transactions": "Minulé transakcie"
+  "past-transactions": "Minulé transakcie",
+  "all-outgoing-incoming": "Všetky odchádzajúce a prichádzajúce",
+  "all-outgoing-incoming-description-1": "Zahrňte všetky negatívne/pozitívne peňažné toky",
+  "all-outgoing-incoming-description-2": "Príklad: Zahrňte úverové transakcie",
+  "applies-when-switching-tabs-in-the-homepage-transactions-list": "Platí pri prepínaní kariet v zozname transakcií na domovskej stránke"
 }

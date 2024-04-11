@@ -1118,5 +1118,9 @@
   "future-transactions": "Μελλοντικές Συναλλαγές",
   "hidden": "κρυμμένος",
   "present-transactions": "Παρούσες Συναλλαγές",
-  "past-transactions": "Προηγούμενες συναλλαγές"
+  "past-transactions": "Προηγούμενες συναλλαγές",
+  "all-outgoing-incoming": "Όλα τα εξερχόμενα & εισερχόμενα",
+  "all-outgoing-incoming-description-1": "Συμπεριλάβετε όλες τις αρνητικές/θετικές ταμειακές ροές",
+  "all-outgoing-incoming-description-2": "Παράδειγμα: Συμπεριλάβετε συναλλαγές δανείου",
+  "applies-when-switching-tabs-in-the-homepage-transactions-list": "Ισχύει κατά την εναλλαγή καρτελών στη λίστα συναλλαγών της αρχικής σελίδας"
 }

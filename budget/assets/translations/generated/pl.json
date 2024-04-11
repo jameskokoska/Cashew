@@ -1118,5 +1118,9 @@
   "future-transactions": "Przyszłe transakcje",
   "hidden": "ukryty",
   "present-transactions": "Obecne transakcje",
-  "past-transactions": "Poprzednie transakcje"
+  "past-transactions": "Poprzednie transakcje",
+  "all-outgoing-incoming": "Wszystkie wychodzące i przychodzące",
+  "all-outgoing-incoming-description-1": "Uwzględnij wszystkie ujemne/dodatnie przepływy pieniężne",
+  "all-outgoing-incoming-description-2": "Przykład: uwzględnij transakcje pożyczkowe",
+  "applies-when-switching-tabs-in-the-homepage-transactions-list": "Dotyczy przełączania zakładek na liście transakcji na stronie głównej"
 }

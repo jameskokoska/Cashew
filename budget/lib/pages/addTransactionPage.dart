@@ -369,11 +369,21 @@ class _AddTransactionPageState extends State<AddTransactionPage>
     });
   }
 
-  Transaction addDefaultMissingValues(Transaction transaction) {
+  Future<Transaction> addDefaultMissingValues(Transaction transaction) async {
+    bool getSelectedPaid = selectedPaid;
+    try {
+      if ((widget.transaction?.budgetFksExclude?.length ?? 0) > 0) {
+        getSelectedPaid = (await database
+                .getTransactionFromPk(widget.transaction!.transactionPk))
+            .paid;
+      }
+    } catch (e) {}
+
     return transaction.copyWith(
       reoccurrence:
           Value(transaction.reoccurrence ?? BudgetReoccurence.monthly),
       periodLength: Value(transaction.periodLength ?? 1),
+      paid: getSelectedPaid,
     );
   }
 
@@ -462,7 +472,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
         // set in the logic of updateCloselyRelatedBalanceTransfer
 
         // If these fields are touched they will not trigger the popup
-        if (addDefaultMissingValues(widget.transaction!).copyWith(
+        if ((await addDefaultMissingValues(widget.transaction!)).copyWith(
               dateTimeModified: Value(null),
               walletFk: "",
               name: "",
@@ -865,7 +875,18 @@ class _AddTransactionPageState extends State<AddTransactionPage>
             widget.transaction!.sharedReferenceBudgetPk ?? "-1");
       } catch (e) {}
 
+      // Fix the default value when a transaction is opened but excluded from a budget
+      bool getSelectedPaid = selectedPaid;
+      try {
+        if ((widget.transaction?.budgetFksExclude?.length ?? 0) > 0) {
+          getSelectedPaid = (await database
+                  .getTransactionFromPk(widget.transaction!.transactionPk))
+              .paid;
+        }
+      } catch (e) {}
+
       setState(() {
+        selectedPaid = getSelectedPaid;
         selectedCategory = getSelectedCategory;
         selectedSubCategory = getSelectedSubCategory;
         selectedBudget = getBudget;
@@ -1948,7 +1969,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
         if (widget.transaction != null) {
           discardChangesPopup(
             context,
-            previousObject: addDefaultMissingValues(widget.transaction!),
+            previousObject: await addDefaultMissingValues(widget.transaction!),
             currentObject: await createTransaction(),
           );
         } else {
@@ -1975,7 +1996,8 @@ class _AddTransactionPageState extends State<AddTransactionPage>
             if (widget.transaction != null) {
               discardChangesPopup(
                 context,
-                previousObject: addDefaultMissingValues(widget.transaction!),
+                previousObject:
+                    await addDefaultMissingValues(widget.transaction!),
                 currentObject: await createTransaction(),
               );
             } else {
@@ -1986,7 +2008,8 @@ class _AddTransactionPageState extends State<AddTransactionPage>
             if (widget.transaction != null) {
               discardChangesPopup(
                 context,
-                previousObject: addDefaultMissingValues(widget.transaction!),
+                previousObject:
+                    await addDefaultMissingValues(widget.transaction!),
                 currentObject: await createTransaction(),
               );
             } else {

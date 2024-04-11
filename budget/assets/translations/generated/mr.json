@@ -1118,5 +1118,9 @@
   "future-transactions": "भविष्यातील व्यवहार",
   "hidden": "लपलेले",
   "present-transactions": "सध्याचे व्यवहार",
-  "past-transactions": "मागील व्यवहार"
+  "past-transactions": "मागील व्यवहार",
+  "all-outgoing-incoming": "सर्व आउटगोइंग आणि इनकमिंग",
+  "all-outgoing-incoming-description-1": "सर्व नकारात्मक/सकारात्मक रोख प्रवाह समाविष्ट करा",
+  "all-outgoing-incoming-description-2": "उदाहरण: कर्ज व्यवहार समाविष्ट करा",
+  "applies-when-switching-tabs-in-the-homepage-transactions-list": "मुख्यपृष्ठ व्यवहार सूचीमधील टॅब स्विच करताना लागू होते"
 }

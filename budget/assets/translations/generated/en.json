@@ -1118,5 +1118,9 @@
   "future-transactions": "Future Transactions",
   "hidden": "hidden",
   "present-transactions": "Present Transactions",
-  "past-transactions": "Past Transactions"
+  "past-transactions": "Past Transactions",
+  "all-outgoing-incoming": "All Outgoing & Incoming",
+  "all-outgoing-incoming-description-1": "Include all negative/positive cash flow",
+  "all-outgoing-incoming-description-2": "Example: Include loan transactions",
+  "applies-when-switching-tabs-in-the-homepage-transactions-list": "Applies when switching tabs in the homepage transactions list"
 }

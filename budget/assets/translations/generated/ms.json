@@ -1118,5 +1118,9 @@
   "future-transactions": "Urus Niaga Masa Depan",
   "hidden": "tersembunyi",
   "present-transactions": "Transaksi Semasa",
-  "past-transactions": "Transaksi Lepas"
+  "past-transactions": "Transaksi Lepas",
+  "all-outgoing-incoming": "Semua Keluar & Masuk",
+  "all-outgoing-incoming-description-1": "Sertakan semua aliran tunai negatif/positif",
+  "all-outgoing-incoming-description-2": "Contoh: Sertakan transaksi pinjaman",
+  "applies-when-switching-tabs-in-the-homepage-transactions-list": "Digunakan apabila menukar tab dalam senarai transaksi halaman utama"
 }

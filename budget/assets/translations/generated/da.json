@@ -1118,5 +1118,9 @@
   "future-transactions": "Fremtidige transaktioner",
   "hidden": "skjult",
   "present-transactions": "Nuværende transaktioner",
-  "past-transactions": "Tidligere transaktioner"
+  "past-transactions": "Tidligere transaktioner",
+  "all-outgoing-incoming": "Alle udgående og indgående",
+  "all-outgoing-incoming-description-1": "Inkluder alle negative/positive pengestrømme",
+  "all-outgoing-incoming-description-2": "Eksempel: Inkluder lånetransaktioner",
+  "applies-when-switching-tabs-in-the-homepage-transactions-list": "Gælder ved skiftning af faneblad i startsidetransaktionslisten"
 }

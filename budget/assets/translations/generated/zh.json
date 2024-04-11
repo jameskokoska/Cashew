@@ -1118,5 +1118,9 @@
   "future-transactions": "未来交易",
   "hidden": "隐",
   "present-transactions": "当前交易",
-  "past-transactions": "过去的交易"
+  "past-transactions": "过去的交易",
+  "all-outgoing-incoming": "所有传出和传入",
+  "all-outgoing-incoming-description-1": "包括所有负/正现金流量",
+  "all-outgoing-incoming-description-2": "示例：包括贷款交易",
+  "applies-when-switching-tabs-in-the-homepage-transactions-list": "在主页交易列表中切换选项卡时适用"
 }

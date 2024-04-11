@@ -1118,5 +1118,9 @@
   "future-transactions": "今後の取引",
   "hidden": "隠れた",
   "present-transactions": "現在の取引",
-  "past-transactions": "過去の取引"
+  "past-transactions": "過去の取引",
+  "all-outgoing-incoming": "すべての発信と受信",
+  "all-outgoing-incoming-description-1": "すべてのマイナス/プラスのキャッシュ フローを含める",
+  "all-outgoing-incoming-description-2": "例: ローン取引を含める",
+  "applies-when-switching-tabs-in-the-homepage-transactions-list": "ホームページ取引リストのタブを切り替えるときに適用されます"
 }

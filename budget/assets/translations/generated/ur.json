@@ -1118,5 +1118,9 @@
   "future-transactions": "مستقبل کے لین دین",
   "hidden": "چھپا ہوا",
   "present-transactions": "موجودہ لین دین",
-  "past-transactions": "ماضی کے لین دین"
+  "past-transactions": "ماضی کے لین دین",
+  "all-outgoing-incoming": "تمام آؤٹ گوئنگ اور انکمنگ",
+  "all-outgoing-incoming-description-1": "تمام منفی/مثبت کیش فلو کو شامل کریں۔",
+  "all-outgoing-incoming-description-2": "مثال: قرض کے لین دین شامل کریں۔",
+  "applies-when-switching-tabs-in-the-homepage-transactions-list": "ہوم پیج لین دین کی فہرست میں ٹیبز کو تبدیل کرنے پر لاگو ہوتا ہے۔"
 }

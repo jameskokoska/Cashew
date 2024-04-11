@@ -35,6 +35,15 @@ String getChangelogString() {
     Translation updates
     Add elevation shadow to scroll to top and bottom FAB
     Optimized and improved performance of transaction list actions
+    Collapsed upcoming transaction list shows amount selected when collapsed
+    Fixed font setting always resetting (i)
+    Improved income/expense only selection in homepage pie chart
+    Added ability to change only income/expense in homepage transaction list
+    Long press transaction list tabs on homepage to edit settings for transactions list
+    Applied homepage transaction list tab income/expense filters are properly applied to the homepage graph
+    If all wallets selected when editing homepage section, list is collapsed
+    Fix exclude amount from budget default value for include amount overall would be incorrect
+    Fix (i) biometric lock bypass
     < 5.2.8
     New edit selected transactions popup
     Edit title for all selected transactions

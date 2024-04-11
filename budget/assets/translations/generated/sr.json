@@ -1118,5 +1118,9 @@
   "future-transactions": "Будуће трансакције",
   "hidden": "сакривен",
   "present-transactions": "Садашње трансакције",
-  "past-transactions": "Претходне трансакције"
+  "past-transactions": "Претходне трансакције",
+  "all-outgoing-incoming": "Сви одлазни и долазни",
+  "all-outgoing-incoming-description-1": "Укључите све негативне/позитивне токове готовине",
+  "all-outgoing-incoming-description-2": "Пример: Укључите трансакције зајма",
+  "applies-when-switching-tabs-in-the-homepage-transactions-list": "Примењује се када мењате картице на листи трансакција на почетној страници"
 }

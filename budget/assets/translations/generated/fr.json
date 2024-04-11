@@ -1118,5 +1118,9 @@
   "future-transactions": "Opérations futures",
   "hidden": "caché",
   "present-transactions": "Transactions actuelles",
-  "past-transactions": "Opérations passées"
+  "past-transactions": "Opérations passées",
+  "all-outgoing-incoming": "Tous sortants et entrants",
+  "all-outgoing-incoming-description-1": "Inclure tous les flux de trésorerie négatifs/positifs",
+  "all-outgoing-incoming-description-2": "Exemple : Inclure les transactions de prêt",
+  "applies-when-switching-tabs-in-the-homepage-transactions-list": "S'applique lors du changement d'onglet dans la liste des transactions de la page d'accueil"
 }

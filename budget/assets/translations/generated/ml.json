@@ -1118,5 +1118,9 @@
   "future-transactions": "ഭാവി ഇടപാടുകൾ",
   "hidden": "മറഞ്ഞിരിക്കുന്നു",
   "present-transactions": "നിലവിലെ ഇടപാടുകൾ",
-  "past-transactions": "കഴിഞ്ഞ ഇടപാടുകൾ"
+  "past-transactions": "കഴിഞ്ഞ ഇടപാടുകൾ",
+  "all-outgoing-incoming": "എല്ലാ ഔട്ട്‌ഗോയിംഗ് & ഇൻകമിംഗ്",
+  "all-outgoing-incoming-description-1": "എല്ലാ നെഗറ്റീവ്/പോസിറ്റീവ് പണമൊഴുക്കും ഉൾപ്പെടുത്തുക",
+  "all-outgoing-incoming-description-2": "ഉദാഹരണം: ലോൺ ഇടപാടുകൾ ഉൾപ്പെടുത്തുക",
+  "applies-when-switching-tabs-in-the-homepage-transactions-list": "ഹോംപേജ് ഇടപാടുകളുടെ പട്ടികയിൽ ടാബുകൾ മാറുമ്പോൾ ബാധകമാണ്"
 }

@@ -13,6 +13,25 @@ class HomeTransactions extends StatelessWidget {
   final int selectedSlidingSelector;
   @override
   Widget build(BuildContext context) {
+    SearchFilters searchFilters = SearchFilters(
+      expenseIncome:
+          appStateSettings["homePageTransactionsListIncomeAndExpenseOnly"] ==
+                  true
+              ? [
+                  if (selectedSlidingSelector == 2) ExpenseIncome.expense,
+                  if (selectedSlidingSelector == 3) ExpenseIncome.income
+                ]
+              : [],
+      positiveCashFlow:
+          appStateSettings["homePageTransactionsListIncomeAndExpenseOnly"] ==
+                  false
+              ? selectedSlidingSelector == 2
+                  ? false
+                  : selectedSlidingSelector == 3
+                      ? true
+                      : null
+              : null,
+    );
     int numberOfFutureDays = appStateSettings["futureTransactionDaysHomePage"];
     return TransactionEntries(
       showNumberOfDaysUntilForFutureDates: true,
@@ -32,13 +51,7 @@ class HomeTransactions extends StatelessWidget {
       useHorizontalPaddingConstrained: false,
       pastDaysLimitToShow: 7,
       limitPerDay: 50,
-      searchFilters: SearchFilters().copyWith(
-          expenseIncome: (selectedSlidingSelector == 1)
-              ? null
-              : [
-                  if (selectedSlidingSelector == 2) ExpenseIncome.expense,
-                  if (selectedSlidingSelector == 3) ExpenseIncome.income,
-                ]),
+      searchFilters: searchFilters,
       enableFutureTransactionsCollapse: false,
     );
   }

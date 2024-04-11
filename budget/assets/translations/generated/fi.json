@@ -1118,5 +1118,9 @@
   "future-transactions": "Tulevat tapahtumat",
   "hidden": "piilotettu",
   "present-transactions": "Nykyiset tapahtumat",
-  "past-transactions": "Aiemmat tapahtumat"
+  "past-transactions": "Aiemmat tapahtumat",
+  "all-outgoing-incoming": "Kaikki lähtevät ja saapuvat",
+  "all-outgoing-incoming-description-1": "Sisällytä kaikki negatiivinen/positiivinen kassavirta",
+  "all-outgoing-incoming-description-2": "Esimerkki: Sisällytä lainatapahtumat",
+  "applies-when-switching-tabs-in-the-homepage-transactions-list": "Koskee etusivun tapahtumaluettelon välilehtiä vaihdettaessa"
 }

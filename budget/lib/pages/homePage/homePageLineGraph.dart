@@ -28,6 +28,25 @@ class HomePageLineGraph extends StatelessWidget {
   final int selectedSlidingSelector;
   @override
   Widget build(BuildContext context) {
+    SearchFilters searchFilters = SearchFilters(
+      expenseIncome:
+          appStateSettings["homePageTransactionsListIncomeAndExpenseOnly"] ==
+                  true
+              ? [
+                  if (selectedSlidingSelector == 2) ExpenseIncome.expense,
+                  if (selectedSlidingSelector == 3) ExpenseIncome.income
+                ]
+              : [],
+      positiveCashFlow:
+          appStateSettings["homePageTransactionsListIncomeAndExpenseOnly"] ==
+                  false
+              ? selectedSlidingSelector == 2
+                  ? false
+                  : selectedSlidingSelector == 3
+                      ? true
+                      : null
+              : null,
+    );
     return KeepAliveClientMixin(
       child: Padding(
         padding: const EdgeInsets.only(bottom: 13),
@@ -41,30 +60,21 @@ class HomePageLineGraph extends StatelessWidget {
           child: appStateSettings["lineGraphDisplayType"] ==
                   LineGraphDisplay.Default30Days.index
               ? PastSpendingGraph(
-                  isIncome: selectedSlidingSelector == 2
-                      ? false
-                      : selectedSlidingSelector == 3
-                          ? true
-                          : null,
+                  isIncome: null,
+                  searchFilters: searchFilters,
                 )
               : appStateSettings["lineGraphDisplayType"] ==
                       LineGraphDisplay.AllTime.index
                   ? PastSpendingGraph(
-                      isIncome: selectedSlidingSelector == 2
-                          ? false
-                          : selectedSlidingSelector == 3
-                              ? true
-                              : null,
+                      isIncome: null,
+                      searchFilters: searchFilters,
                       allTimeUpToFirstTransaction: true,
                     )
                   : appStateSettings["lineGraphDisplayType"] ==
                           LineGraphDisplay.CustomStartDate.index
                       ? PastSpendingGraph(
-                          isIncome: selectedSlidingSelector == 2
-                              ? false
-                              : selectedSlidingSelector == 3
-                                  ? true
-                                  : null,
+                          isIncome: null,
+                          searchFilters: searchFilters,
                           customStartDate: DateTime.parse(
                               appStateSettings["lineGraphStartDate"]),
                         )

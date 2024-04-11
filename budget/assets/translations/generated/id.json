@@ -1118,5 +1118,9 @@
   "future-transactions": "Transaksi Masa Depan",
   "hidden": "tersembunyi",
   "present-transactions": "Transaksi Saat Ini",
-  "past-transactions": "Transaksi Sebelumnya"
+  "past-transactions": "Transaksi Sebelumnya",
+  "all-outgoing-incoming": "Semua Keluar & Masuk",
+  "all-outgoing-incoming-description-1": "Sertakan semua arus kas negatif/positif",
+  "all-outgoing-incoming-description-2": "Contoh: Sertakan transaksi pinjaman",
+  "applies-when-switching-tabs-in-the-homepage-transactions-list": "Berlaku saat berpindah tab di daftar transaksi beranda"
 }

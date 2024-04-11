@@ -39,6 +39,7 @@ Future<Map<String, dynamic>> getDefaultPreferences() async {
     "forceFullDarkBackground": false,
     // FullScreen is added if the section has its own preference when full screen (double column)
     "futureTransactionDaysHomePage": 4,
+    "homePageTransactionsListIncomeAndExpenseOnly": true,
     "showWalletSwitcher": true,
     "showWalletSwitcherFullScreen": true,
     "showWalletList": false,

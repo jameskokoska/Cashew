@@ -9,6 +9,7 @@ import 'package:budget/pages/transactionsSearchPage.dart';
 import 'package:budget/pages/walletDetailsPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
+import 'package:budget/widgets/animatedExpanded.dart';
 import 'package:budget/widgets/framework/popupFramework.dart';
 import 'package:budget/widgets/util/keepAliveClientMixin.dart';
 import 'package:budget/widgets/navigationFramework.dart';
@@ -187,19 +188,23 @@ class _WalletPickerPeriodCycleState extends State<WalletPickerPeriodCycle> {
         //   },
         // ),
         if (showAllWalletsSelection)
-          EditHomePagePinnedWalletsPopup(
-            includeFramework: false,
-            homePageWidgetDisplay: widget.homePageWidgetDisplay!,
-            highlightSelected: true,
-            useCheckMarks: true,
-            onAnySelected: () {
-              updateSettings(widget.allWalletsSettingKey!, false,
-                  updateGlobalState: false);
-              setState(() {
-                allWalletsSelected = false;
-              });
-            },
-            allSelected: allWalletsSelected,
+          AnimatedExpanded(
+            axis: Axis.vertical,
+            expand: allWalletsSelected == false,
+            child: EditHomePagePinnedWalletsPopup(
+              includeFramework: false,
+              homePageWidgetDisplay: widget.homePageWidgetDisplay!,
+              highlightSelected: true,
+              useCheckMarks: true,
+              onAnySelected: () {
+                updateSettings(widget.allWalletsSettingKey!, false,
+                    updateGlobalState: false);
+                setState(() {
+                  allWalletsSelected = false;
+                });
+              },
+              allSelected: allWalletsSelected,
+            ),
           ),
         Padding(
           padding: showAllWalletsSelection

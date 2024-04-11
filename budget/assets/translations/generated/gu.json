@@ -1118,5 +1118,9 @@
   "future-transactions": "ભાવિ વ્યવહારો",
   "hidden": "છુપાયેલ",
   "present-transactions": "વર્તમાન વ્યવહારો",
-  "past-transactions": "ભૂતકાળના વ્યવહારો"
+  "past-transactions": "ભૂતકાળના વ્યવહારો",
+  "all-outgoing-incoming": "બધા આઉટગોઇંગ અને ઇનકમિંગ",
+  "all-outgoing-incoming-description-1": "તમામ નકારાત્મક/સકારાત્મક રોકડ પ્રવાહનો સમાવેશ કરો",
+  "all-outgoing-incoming-description-2": "ઉદાહરણ: લોન વ્યવહારો શામેલ કરો",
+  "applies-when-switching-tabs-in-the-homepage-transactions-list": "હોમપેજ વ્યવહારોની સૂચિમાં ટૅબ્સ સ્વિચ કરતી વખતે લાગુ થાય છે"
 }

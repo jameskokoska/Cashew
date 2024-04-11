@@ -92,10 +92,10 @@ Future<bool> initializeSettings() async {
 
   // Load iOS font when iOS
   // Disable iOS font for now... Avenir looks better
-  if (getPlatform() == PlatformOS.isIOS) {
-    // appStateSettings["font"] = "SFProText";
-    appStateSettings["font"] = "Avenir";
-  }
+  // if (getPlatform() == PlatformOS.isIOS) {
+  //   // appStateSettings["font"] = "SFProText";
+  //   appStateSettings["font"] = "Avenir";
+  // }
 
   if (appStateSettings["hasOnboarded"] == true) {
     appStateSettings["numLogins"] = appStateSettings["numLogins"] + 1;

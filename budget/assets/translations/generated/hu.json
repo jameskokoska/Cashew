@@ -1118,5 +1118,9 @@
   "future-transactions": "Jövőbeli tranzakciók",
   "hidden": "rejtett",
   "present-transactions": "Jelen Tranzakciók",
-  "past-transactions": "Korábbi tranzakciók"
+  "past-transactions": "Korábbi tranzakciók",
+  "all-outgoing-incoming": "Minden kimenő és bejövő",
+  "all-outgoing-incoming-description-1": "Tartalmazza az összes negatív/pozitív cash flow-t",
+  "all-outgoing-incoming-description-2": "Példa: Tartalmazza a hiteltranzakciókat",
+  "applies-when-switching-tabs-in-the-homepage-transactions-list": "A kezdőlap-tranzakciók listájában a lapok váltásakor érvényes"
 }

@@ -1118,5 +1118,9 @@
   "future-transactions": "การทำธุรกรรมในอนาคต",
   "hidden": "ที่ซ่อนอยู่",
   "present-transactions": "ธุรกรรมปัจจุบัน",
-  "past-transactions": "การทำธุรกรรมที่ผ่านมา"
+  "past-transactions": "การทำธุรกรรมที่ผ่านมา",
+  "all-outgoing-incoming": "ขาออกและขาเข้าทั้งหมด",
+  "all-outgoing-incoming-description-1": "รวมกระแสเงินสดที่เป็นลบ/บวกทั้งหมด",
+  "all-outgoing-incoming-description-2": "ตัวอย่าง: รวมธุรกรรมสินเชื่อ",
+  "applies-when-switching-tabs-in-the-homepage-transactions-list": "ใช้เมื่อมีการสลับแท็บในรายการธุรกรรมในหน้าแรก"
 }

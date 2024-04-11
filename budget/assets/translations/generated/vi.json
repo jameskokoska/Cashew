@@ -1115,8 +1115,12 @@
   "transactions-in-the-csv": "các giao dịch trong CSV.",
   "errors": "Lỗi",
   "black": "Đen",
-  "future-transactions": "Giao dịch tương lai",
+  "future-transactions": "Các giao dịch tương lai",
   "hidden": "ẩn giấu",
-  "present-transactions": "Giao dịch hiện tại",
-  "past-transactions": "Giao dịch trong quá khứ"
+  "present-transactions": "Các giao dịch hiện tại",
+  "past-transactions": "Các giao dịch đã qua",
+  "all-outgoing-incoming": "Tất cả đi và đến",
+  "all-outgoing-incoming-description-1": "Bao gồm tất cả dòng tiền âm/dương",
+  "all-outgoing-incoming-description-2": "Ví dụ: Bao gồm các giao dịch cho vay",
+  "applies-when-switching-tabs-in-the-homepage-transactions-list": "Áp dụng khi chuyển tab trong danh sách giao dịch trang chủ"
 }

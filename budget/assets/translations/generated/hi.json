@@ -1118,5 +1118,9 @@
   "future-transactions": "भविष्य के लेनदेन",
   "hidden": "छिपा हुआ",
   "present-transactions": "वर्तमान लेनदेन",
-  "past-transactions": "पिछले लेनदेन"
+  "past-transactions": "पिछले लेनदेन",
+  "all-outgoing-incoming": "सभी आउटगोइंग और इनकमिंग",
+  "all-outgoing-incoming-description-1": "सभी नकारात्मक/सकारात्मक नकदी प्रवाह को शामिल करें",
+  "all-outgoing-incoming-description-2": "उदाहरण: ऋण लेनदेन शामिल करें",
+  "applies-when-switching-tabs-in-the-homepage-transactions-list": "मुखपृष्ठ लेनदेन सूची में टैब स्विच करते समय लागू होता है"
 }

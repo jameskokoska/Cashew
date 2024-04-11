@@ -1118,5 +1118,9 @@
   "future-transactions": "المعاملات المستقبلية",
   "hidden": "مختفي",
   "present-transactions": "المعاملات الحالية",
-  "past-transactions": "المعاملات الماضية"
+  "past-transactions": "المعاملات الماضية",
+  "all-outgoing-incoming": "جميع الصادرة والواردة",
+  "all-outgoing-incoming-description-1": "قم بتضمين جميع التدفقات النقدية السلبية/الإيجابية",
+  "all-outgoing-incoming-description-2": "مثال: تضمين معاملات القروض",
+  "applies-when-switching-tabs-in-the-homepage-transactions-list": "ينطبق عند تبديل علامات التبويب في قائمة معاملات الصفحة الرئيسية"
 }

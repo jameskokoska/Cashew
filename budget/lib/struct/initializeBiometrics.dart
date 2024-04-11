@@ -36,7 +36,10 @@ Future<bool?> checkBiometrics({
     }
   } catch (e) {
     print("Error with biometrics: " + e.toString());
-    if (requireAuth)
+    // on iOS don't allow bypass if biometric fails
+    if (getPlatform() == PlatformOS.isIOS && biometricsAvailable)
+      return false;
+    else if (requireAuth)
       return null;
     else
       return false;

@@ -647,22 +647,59 @@ class _TransactionsListHomePageBottomSheetSettingsState
           (futureTransactionDaysHomePage == 1
               ? "day-ahead".tr()
               : "days-ahead".tr()),
-      child: SettingsContainerDropdown(
-        enableBorderRadius: true,
-        items: ["0", "1", "4", "7", "14"],
-        onChanged: (value) {
-          updateSettings("futureTransactionDaysHomePage", int.parse(value),
-              pagesNeedingRefresh: [], updateGlobalState: false);
-          setState(() {
-            futureTransactionDaysHomePage = int.parse(value);
-          });
-        },
-        initial: appStateSettings["futureTransactionDaysHomePage"].toString(),
-        title: "future-transaction-days".tr(),
-        description: "future-transaction-days-description".tr(),
-        icon: appStateSettings["outlinedIcons"]
-            ? Symbols.event_upcoming_sharp
-            : Symbols.event_upcoming_rounded,
+      child: Column(
+        children: [
+          SettingsContainerDropdown(
+            enableBorderRadius: true,
+            items: ["0", "1", "4", "7", "14"],
+            onChanged: (value) {
+              updateSettings("futureTransactionDaysHomePage", int.parse(value),
+                  pagesNeedingRefresh: [], updateGlobalState: false);
+              setState(() {
+                futureTransactionDaysHomePage = int.parse(value);
+              });
+            },
+            initial:
+                appStateSettings["futureTransactionDaysHomePage"].toString(),
+            title: "future-transaction-days".tr(),
+            description: "future-transaction-days-description".tr(),
+            icon: appStateSettings["outlinedIcons"]
+                ? Symbols.event_upcoming_sharp
+                : Symbols.event_upcoming_rounded,
+          ),
+          HorizontalBreakAbove(
+            padding: EdgeInsets.symmetric(vertical: 15),
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 5),
+                  child: TextFont(
+                    text:
+                        "applies-when-switching-tabs-in-the-homepage-transactions-list"
+                            .tr(),
+                    maxLines: 10,
+                    fontSize: getPlatform() == PlatformOS.isIOS ? 14 : 16,
+                    textAlign: getPlatform() == PlatformOS.isIOS
+                        ? TextAlign.center
+                        : TextAlign.left,
+                  ),
+                ),
+                SizedBox(height: 15),
+                IncomeAndExpenseOnlyPicker(
+                  initialValue: appStateSettings[
+                          "homePageTransactionsListIncomeAndExpenseOnly"] ==
+                      true,
+                  onChanged: (value) {
+                    updateSettings(
+                        "homePageTransactionsListIncomeAndExpenseOnly", value,
+                        updateGlobalState: false);
+                  },
+                ),
+              ],
+            ),
+          ),
+          SizedBox(height: 10),
+        ],
       ),
     );
   }
@@ -681,7 +718,14 @@ Future openPieChartHomePageBottomSheetSettings(BuildContext context) async {
           ),
           HorizontalBreakAbove(
             padding: EdgeInsets.symmetric(vertical: 15),
-            child: IncomeAndExpenseOnlyPicker(),
+            child: IncomeAndExpenseOnlyPicker(
+              initialValue:
+                  appStateSettings["pieChartIncomeAndExpenseOnly"] == true,
+              onChanged: (value) {
+                updateSettings("pieChartIncomeAndExpenseOnly", value,
+                    updateGlobalState: false);
+              },
+            ),
           ),
           SizedBox(height: 10),
         ],
@@ -718,8 +762,10 @@ Future openPieChartHomePageBottomSheetSettings(BuildContext context) async {
 }
 
 class IncomeAndExpenseOnlyPicker extends StatefulWidget {
-  const IncomeAndExpenseOnlyPicker({super.key});
-
+  const IncomeAndExpenseOnlyPicker(
+      {required this.initialValue, required this.onChanged, super.key});
+  final bool initialValue;
+  final Function(bool) onChanged;
   @override
   State<IncomeAndExpenseOnlyPicker> createState() =>
       _IncomeAndExpenseOnlyPickerState();
@@ -727,51 +773,88 @@ class IncomeAndExpenseOnlyPicker extends StatefulWidget {
 
 class _IncomeAndExpenseOnlyPickerState
     extends State<IncomeAndExpenseOnlyPicker> {
-  bool pieChartIncomeAndExpenseOnly =
-      appStateSettings["pieChartIncomeAndExpenseOnly"] == true;
+  late bool pieChartIncomeAndExpenseOnly = widget.initialValue;
   @override
   Widget build(BuildContext context) {
-    return Row(
+    return Column(
       children: [
-        Expanded(
-          child: AnimatedOpacity(
-            duration: Duration(milliseconds: 500),
-            opacity: pieChartIncomeAndExpenseOnly ? 1 : 0.5,
-            child: OutlinedButtonStacked(
-              filled: pieChartIncomeAndExpenseOnly,
-              alignLeft: true,
-              alignBeside: true,
-              afterWidget: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  ListItem(
-                    "only-expense-income-description-1".tr(),
+        Row(
+          children: [
+            Expanded(
+              child: AnimatedOpacity(
+                duration: Duration(milliseconds: 500),
+                opacity: pieChartIncomeAndExpenseOnly ? 1 : 0.5,
+                child: OutlinedButtonStacked(
+                  filled: pieChartIncomeAndExpenseOnly,
+                  alignLeft: true,
+                  alignBeside: true,
+                  afterWidget: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      ListItem(
+                        "only-expense-income-description-1".tr(),
+                      ),
+                      ListItem(
+                        "only-expense-income-description-2".tr(),
+                      ),
+                    ],
                   ),
-                  ListItem(
-                    "only-expense-income-description-2".tr(),
-                  ),
-                ],
+                  text: "only-expense-income".tr(),
+                  padding:
+                      EdgeInsets.only(left: 20, right: 15, top: 15, bottom: 15),
+                  iconData: null,
+                  onTap: () {
+                    widget.onChanged(!pieChartIncomeAndExpenseOnly);
+                    setState(() {
+                      pieChartIncomeAndExpenseOnly =
+                          !pieChartIncomeAndExpenseOnly;
+                    });
+                  },
+                ),
               ),
-              text: "only-expense-income".tr(),
-              padding:
-                  EdgeInsets.only(left: 20, right: 15, top: 15, bottom: 15),
-              showToggleSwitch: true,
-              iconData: null,
-              // iconData: appStateSettings["outlinedIcons"]
-              //     ? Icons.swap_vert_outlined
-              //     : Icons.swap_vert_rounded,
-              onTap: () {
-                updateSettings("pieChartIncomeAndExpenseOnly",
-                    !pieChartIncomeAndExpenseOnly,
-                    updateGlobalState: false);
-                setState(() {
-                  pieChartIncomeAndExpenseOnly = !pieChartIncomeAndExpenseOnly;
-                });
-              },
             ),
-          ),
+          ],
         ),
+        SizedBox(height: 12),
+        Row(
+          children: [
+            Expanded(
+              child: AnimatedOpacity(
+                duration: Duration(milliseconds: 500),
+                opacity: !pieChartIncomeAndExpenseOnly ? 1 : 0.5,
+                child: OutlinedButtonStacked(
+                  filled: !pieChartIncomeAndExpenseOnly,
+                  alignLeft: true,
+                  alignBeside: true,
+                  afterWidget: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      ListItem(
+                        "all-outgoing-incoming-description-1".tr(),
+                      ),
+                      ListItem(
+                        "all-outgoing-incoming-description-2".tr(),
+                      ),
+                    ],
+                  ),
+                  text: "all-outgoing-incoming".tr(),
+                  padding:
+                      EdgeInsets.only(left: 20, right: 15, top: 15, bottom: 15),
+                  iconData: null,
+                  onTap: () {
+                    widget.onChanged(!pieChartIncomeAndExpenseOnly);
+                    setState(() {
+                      pieChartIncomeAndExpenseOnly =
+                          !pieChartIncomeAndExpenseOnly;
+                    });
+                  },
+                ),
+              ),
+            )
+          ],
+        )
       ],
     );
   }

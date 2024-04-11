@@ -199,16 +199,17 @@ class TransactionEntries extends StatelessWidget {
           double totalIncome = 0;
           double totalExpense = 0;
           int totalNumberTransactions = (snapshot.data ?? []).length;
-          int totalNumberOfFutureTransactions = snapshot.data
+          Set<String> futureTransactionPks = (snapshot.data
                   ?.where((transactionWithCategory) => isAfterCurrentDate(
                       transactionWithCategory.transaction.dateCreated))
-                  .takeWhile((_) => true)
-                  .length ??
-              0;
+                  .map((transactionWithCategory) =>
+                      transactionWithCategory.transaction.transactionPk)
+                  .toSet()) ??
+              Set<String>();
 
           bool enableFutureTransactionsDivider =
               enableFutureTransactionsCollapse &&
-                  totalNumberOfFutureTransactions >= 5;
+                  futureTransactionPks.length >= 5;
           bool notYetAddedPastTransactionsDivider = true;
 
           if ((snapshot.data ?? []).length <= 0 &&
@@ -521,8 +522,7 @@ class TransactionEntries extends StatelessWidget {
           Widget futureTransactionsDivider = enableFutureTransactionsDivider
               ? FutureTransactionsDivider(
                   listID: listID,
-                  totalNumberOfFutureTransactions:
-                      totalNumberOfFutureTransactions,
+                  futureTransactionPks: futureTransactionPks,
                   useHorizontalPaddingConstrained:
                       useHorizontalPaddingConstrained,
                   colorScheme: colorScheme,
@@ -751,12 +751,12 @@ class PastTransactionsDivider extends StatelessWidget {
 class FutureTransactionsDivider extends StatelessWidget {
   const FutureTransactionsDivider(
       {required this.listID,
-      required this.totalNumberOfFutureTransactions,
+      required this.futureTransactionPks,
       required this.useHorizontalPaddingConstrained,
       required this.colorScheme,
       super.key});
   final String? listID;
-  final int totalNumberOfFutureTransactions;
+  final Set<String> futureTransactionPks;
   final bool useHorizontalPaddingConstrained;
   final ColorScheme? colorScheme;
 
@@ -800,26 +800,58 @@ class FutureTransactionsDivider extends StatelessWidget {
                                 fontSize: 15,
                               ),
                             ),
-                            AnimatedOpacity(
-                              duration: const Duration(milliseconds: 425),
-                              opacity: globalCollapsedFutureID
-                                          .value[listID ?? "0"] ==
-                                      true
-                                  ? 1
-                                  : 0,
-                              child: TextFont(
-                                text: addAmountToString(
-                                  "",
-                                  totalNumberOfFutureTransactions,
-                                  extraText: "hidden".tr(),
-                                  addCommaWithExtraText: false,
-                                ),
-                                maxLines: 1,
-                                textAlign: TextAlign.left,
-                                fontSize: 14,
-                                textColor: getColor(context, "textLight"),
-                              ),
-                            ),
+                            ValueListenableBuilder(
+                                valueListenable: globalSelectedID.select(
+                                    (controller) =>
+                                        (controller.value[listID] ?? [])
+                                            .length),
+                                builder: (context, _, __) {
+                                  int count = (globalSelectedID.value[listID] ??
+                                          [])
+                                      .where((item) =>
+                                          futureTransactionPks.contains(item))
+                                      .length;
+
+                                  return AnimatedOpacity(
+                                    key: ValueKey("HiddenText"),
+                                    duration: const Duration(milliseconds: 425),
+                                    opacity: globalCollapsedFutureID
+                                                .value[listID ?? "0"] ==
+                                            true
+                                        ? 1
+                                        : 0,
+                                    child: AnimatedSizeSwitcher(
+                                      child: count > 0
+                                          ? TextFont(
+                                              key: ValueKey("SelectedText"),
+                                              text: addAmountToString(
+                                                "",
+                                                count,
+                                                extraText: "selected".tr(),
+                                                addCommaWithExtraText: false,
+                                              ),
+                                              maxLines: 1,
+                                              textAlign: TextAlign.left,
+                                              fontSize: 14,
+                                              textColor:
+                                                  getColor(context, "black"),
+                                            )
+                                          : TextFont(
+                                              text: addAmountToString(
+                                                "",
+                                                futureTransactionPks.length,
+                                                extraText: "hidden".tr(),
+                                                addCommaWithExtraText: false,
+                                              ),
+                                              maxLines: 1,
+                                              textAlign: TextAlign.left,
+                                              fontSize: 14,
+                                              textColor: getColor(
+                                                  context, "textLight"),
+                                            ),
+                                    ),
+                                  );
+                                }),
                           ],
                         ),
                       ),

@@ -8,6 +8,7 @@ import 'package:budget/pages/editCategoriesPage.dart';
 import 'package:budget/pages/editObjectivesPage.dart';
 import 'package:budget/pages/editWalletsPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
+import 'package:budget/struct/listenableSelector.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/categoryIcon.dart';
@@ -53,10 +54,12 @@ class SelectedTransactionsAppBar extends StatelessWidget {
   Widget build(BuildContext context) {
     ColorScheme colorScheme = this.colorScheme ?? Theme.of(context).colorScheme;
     return ValueListenableBuilder(
-      valueListenable: globalSelectedID,
-      builder: (context, Map<String, List<String>> value, widget) {
-        List<String> listOfIDs = value[pageID] ?? [];
-        bool animateIn = value[pageID] != null && listOfIDs.length > 0;
+      valueListenable: globalSelectedID
+          .select((controller) => (controller.value[pageID] ?? []).length),
+      builder: (context, _, __) {
+        List<String> listOfIDs = globalSelectedID.value[pageID] ?? [];
+        bool animateIn =
+            globalSelectedID.value[pageID] != null && listOfIDs.length > 0;
         return AnimatedPositioned(
           left: 0,
           right: 0,
@@ -198,7 +201,9 @@ class SelectedTransactionsAppBar extends StatelessWidget {
                             openPopupCustom(
                               context,
                               title: "Edit " +
-                                  (value)[pageID]!.length.toString() +
+                                  (globalSelectedID.value)[pageID]!
+                                      .length
+                                      .toString() +
                                   " Selected",
                               child: EditSelectedTransactions(
                                 transactionIDs: listOfIDs,

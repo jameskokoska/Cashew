@@ -26,6 +26,8 @@ import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/animatedExpanded.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
+import 'package:budget/widgets/framework/popupFramework.dart';
+import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/pieChart.dart';
@@ -44,6 +46,7 @@ import 'package:budget/widgets/slidingSelectorIncomeExpense.dart';
 import 'package:budget/widgets/linearGradientFadedEdges.dart';
 import 'package:budget/widgets/pullDownToRefreshSync.dart';
 import 'package:budget/widgets/util/rightSideClipper.dart';
+import 'package:flutter/services.dart';
 import 'package:home_widget/home_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:budget/pages/addWalletPage.dart';
@@ -134,13 +137,28 @@ class HomePageState extends State<HomePage>
   Widget build(BuildContext context) {
     super.build(context);
     bool showUsername = appStateSettings["username"] != "";
-    Widget slidingSelector = SlidingSelectorIncomeExpense(
-        useHorizontalPaddingConstrained: false,
-        onSelected: (index) {
-          setState(() {
-            selectedSlidingSelector = index;
-          });
-        });
+    Widget slidingSelector = GestureDetector(
+      onLongPress: () async {
+        HapticFeedback.heavyImpact();
+        await openBottomSheet(
+          context,
+          TransactionsListHomePageBottomSheetSettings(),
+        );
+        homePageStateKey.currentState?.refreshState();
+      },
+      child: SlidingSelectorIncomeExpense(
+          options: appStateSettings[
+                      "homePageTransactionsListIncomeAndExpenseOnly"] ==
+                  true
+              ? null
+              : ["all".tr(), "outgoing".tr(), "incoming".tr()],
+          useHorizontalPaddingConstrained: false,
+          onSelected: (index) {
+            setState(() {
+              selectedSlidingSelector = index;
+            });
+          }),
+    );
     Widget? homePageTransactionsList =
         isHomeScreenSectionEnabled(context, "showTransactionsList") == true
             ? Column(
