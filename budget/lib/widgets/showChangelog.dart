@@ -36,6 +36,7 @@ String getChangelogString() {
     Add elevation shadow to scroll to top and bottom FAB
     Optimized and improved performance of transaction list actions
     Collapsed upcoming transaction list shows amount selected when collapsed
+    Improved home screen widgets (A)
     Fixed font setting always resetting (i)
     Improved income/expense only selection in homepage pie chart
     Added ability to change only income/expense in homepage transaction list

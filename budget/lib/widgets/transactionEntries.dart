@@ -520,24 +520,21 @@ class TransactionEntries extends StatelessWidget {
           }
 
           Widget futureTransactionsDivider = enableFutureTransactionsDivider
-              ? FutureTransactionsDivider(
-                  listID: listID,
-                  futureTransactionPks: futureTransactionPks,
-                  useHorizontalPaddingConstrained:
-                      useHorizontalPaddingConstrained,
-                  colorScheme: colorScheme,
+              ? Padding(
+                  padding: enableSpendingSummary
+                      ? const EdgeInsets.only(top: 5)
+                      : EdgeInsets.zero,
+                  child: FutureTransactionsDivider(
+                    listID: listID,
+                    futureTransactionPks: futureTransactionPks,
+                    useHorizontalPaddingConstrained:
+                        useHorizontalPaddingConstrained,
+                    colorScheme: colorScheme,
+                  ),
                 )
               : SizedBox.shrink();
 
-          widgetsOut.insert(
-            0,
-            Padding(
-              padding: enableSpendingSummary
-                  ? const EdgeInsets.only(top: 5)
-                  : EdgeInsets.zero,
-              child: futureTransactionsDivider,
-            ),
-          );
+          widgetsOut.insert(0, futureTransactionsDivider);
 
           if (enableSpendingSummary)
             widgetsOut.insert(

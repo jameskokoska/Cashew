@@ -20,17 +20,11 @@
     android:orientation="vertical"
     android:gravity="center_vertical|center_horizontal"
     android:padding="8dp">
-		<TextView
-        android:id="@+id/plus_title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="+"
-        android:gravity="center_vertical|center_horizontal"
-        android:layout_centerInParent="true"
-        android:padding="2dp"
-        android:textSize="32sp"
-        android:textStyle="bold"
-        android:textColor="#000000"
+		<ImageView
+        android:id="@+id/plus_image"
+        android:layout_width="32sp"
+        android:layout_height="32sp"
+        android:src="@drawable/plus"
     />
 	</LinearLayout>
 </FrameLayout>
