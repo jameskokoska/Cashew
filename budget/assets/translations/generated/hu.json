@@ -1121,6 +1121,6 @@
   "past-transactions": "Korábbi tranzakciók",
   "all-outgoing-incoming": "Minden kimenő és bejövő",
   "all-outgoing-incoming-description-1": "Tartalmazza az összes negatív/pozitív cash flow-t",
-  "all-outgoing-incoming-description-2": "Példa: Tartalmazza a hiteltranzakciókat",
+  "all-outgoing-incoming-description-2": "Példa: Hiteltranzakciók szerepeltetése",
   "applies-when-switching-tabs-in-the-homepage-transactions-list": "A kezdőlap-tranzakciók listájában a lapok váltásakor érvényes"
 }

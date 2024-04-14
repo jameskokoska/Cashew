@@ -1,13 +1,17 @@
 import 'package:budget/database/tables.dart';
+import 'package:budget/functions.dart';
+import 'package:budget/pages/addWalletPage.dart';
 import 'package:budget/pages/autoTransactionsPageEmail.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/button.dart';
+import 'package:budget/widgets/navigationSidebar.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/widgets/framework/popupFramework.dart';
 import 'package:budget/widgets/saveBottomButton.dart';
 import 'package:budget/widgets/selectCategory.dart';
+import 'package:budget/widgets/selectChips.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textInput.dart';
 import 'package:budget/widgets/textWidgets.dart';
@@ -17,6 +21,7 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:budget/colors.dart';
 import 'package:googleapis/gmail/v1.dart' as gMail;
+import 'package:provider/provider.dart';
 
 class AddEmailTemplate extends StatefulWidget {
   AddEmailTemplate({
@@ -38,6 +43,7 @@ class _AddEmailTemplateState extends State<AddEmailTemplate> {
   bool? canAddTemplate;
 
   TransactionCategory? selectedCategory;
+  String? selectedWalletPk;
   String? selectedMessageString;
   String? selectedName;
   String? selectedSubject;
@@ -52,6 +58,9 @@ class _AddEmailTemplateState extends State<AddEmailTemplate> {
   void initState() {
     super.initState();
     if (widget.scannerTemplate != null) {
+      selectedWalletPk = widget.scannerTemplate!.walletFk == "-1"
+          ? null
+          : widget.scannerTemplate!.walletFk;
       selectedName = widget.scannerTemplate!.templateName;
       selectedSubject = widget.scannerTemplate!.contains;
       amountTransactionBefore = widget.scannerTemplate!.amountTransactionBefore;
@@ -126,6 +135,14 @@ class _AddEmailTemplateState extends State<AddEmailTemplate> {
   void setSelectedCategory(TransactionCategory category) {
     setState(() {
       selectedCategory = category;
+    });
+    determineBottomButton();
+    return;
+  }
+
+  void setSelectedWalletPk(String? walletPk) {
+    setState(() {
+      selectedWalletPk = walletPk;
     });
     determineBottomButton();
     return;
@@ -361,7 +378,7 @@ class _AddEmailTemplateState extends State<AddEmailTemplate> {
       templateName: selectedName ?? "",
       titleTransactionAfter: titleTransactionAfter ?? "",
       titleTransactionBefore: titleTransactionBefore ?? "",
-      walletFk: "0",
+      walletFk: selectedWalletPk ?? "-1",
       ignore: false,
     );
   }
@@ -435,7 +452,7 @@ class _AddEmailTemplateState extends State<AddEmailTemplate> {
                       topContentPadding: 20,
                     ),
                   ),
-                  Container(height: 10),
+                  SizedBox(height: 20),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: TextFont(
@@ -462,7 +479,56 @@ class _AddEmailTemplateState extends State<AddEmailTemplate> {
                     setSelectedCategory: setSelectedCategory,
                     popRoute: false,
                   ),
-                  SizedBox(height: 20),
+                  SizedBox(height: 15),
+                  SelectChips(
+                    wrapped: enableDoubleColumn(context),
+                    extraWidgetBeforeSticky: true,
+                    allowMultipleSelected: false,
+                    onLongPress: (TransactionWallet? wallet) {
+                      pushRoute(
+                        context,
+                        AddWalletPage(
+                          wallet: wallet,
+                          routesToPopAfterDelete:
+                              RoutesToPopAfterDelete.PreventDelete,
+                        ),
+                      );
+                    },
+                    items: <TransactionWallet?>[
+                      null,
+                      ...Provider.of<AllWallets>(context).list
+                    ],
+                    getSelected: (TransactionWallet? wallet) {
+                      return selectedWalletPk == wallet?.walletPk;
+                    },
+                    onSelected: (TransactionWallet? wallet) {
+                      setSelectedWalletPk(wallet?.walletPk);
+                    },
+                    getCustomBorderColor: (TransactionWallet? item) {
+                      return dynamicPastel(
+                        context,
+                        lightenPastel(
+                          HexColor(
+                            item?.colour,
+                            defaultColor: Theme.of(context).colorScheme.primary,
+                          ),
+                          amount: 0.3,
+                        ),
+                        amount: 0.4,
+                      );
+                    },
+                    getLabel: (TransactionWallet? wallet) {
+                      if (wallet == null) return "primary-default".tr();
+                      return getWalletStringName(
+                          Provider.of<AllWallets>(context), wallet);
+                    },
+                    extraWidgetAfter: SelectChipsAddButtonExtraWidget(
+                      openPage: AddWalletPage(
+                        routesToPopAfterDelete: RoutesToPopAfterDelete.None,
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 15),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25),
                     child: Button(
