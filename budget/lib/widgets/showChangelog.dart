@@ -45,6 +45,7 @@ String getChangelogString() {
     If all wallets selected when editing homepage section, list is collapsed
     Fix exclude amount from budget default value for include amount overall would be incorrect
     Fix (i) biometric lock bypass
+    Number pad format setting
     < 5.2.8
     New edit selected transactions popup
     Edit title for all selected transactions

@@ -26,7 +26,7 @@ class OutlinedButtonStacked extends StatelessWidget {
     this.borderRadius,
     this.showToggleSwitch = false,
   });
-  final String text;
+  final String? text;
   final double? fontSize;
   final void Function()? onTap;
   final IconData? iconData;
@@ -87,12 +87,13 @@ class OutlinedButtonStacked extends StatelessWidget {
                                         ),
                                       ),
                                     ),
-                                  TextFont(
-                                    text: text,
-                                    fontSize: fontSize ?? 18,
-                                    fontWeight: FontWeight.bold,
-                                    maxLines: 2,
-                                  ),
+                                  if (text != null)
+                                    TextFont(
+                                      text: text ?? "",
+                                      fontSize: fontSize ?? 18,
+                                      fontWeight: FontWeight.bold,
+                                      maxLines: 2,
+                                    ),
                                   infoButton ?? SizedBox.shrink()
                                 ],
                               )
@@ -181,7 +182,7 @@ class OutlinedContainer extends StatelessWidget {
 class HeaderWithIconAndInfo extends StatelessWidget {
   final IconData? iconData;
   final double iconScale;
-  final String text;
+  final String? text;
   final double? fontSize;
   final Widget? infoButton;
   final EdgeInsets padding;
@@ -215,14 +216,15 @@ class HeaderWithIconAndInfo extends StatelessWidget {
                 ),
               ),
             ),
-          Expanded(
-            child: TextFont(
-              text: text,
-              fontSize: fontSize ?? 22,
-              fontWeight: FontWeight.bold,
-              maxLines: 2,
+          if (text != null)
+            Expanded(
+              child: TextFont(
+                text: text ?? "",
+                fontSize: fontSize ?? 22,
+                fontWeight: FontWeight.bold,
+                maxLines: 2,
+              ),
             ),
-          ),
           if (extraWidget != null) extraWidget!,
           if (infoButton != null) infoButton!,
         ],

@@ -8,6 +8,7 @@ import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/notificationsSettings.dart';
 import 'package:budget/widgets/periodCyclePicker.dart';
+import 'package:budget/widgets/selectAmount.dart';
 import 'package:drift/drift.dart' show Value;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -207,6 +208,7 @@ Future<Map<String, dynamic>> getDefaultPreferences() async {
     "netAllSpendingTotal": false,
     "netSpendingDayTotal": false,
     "extraZerosButton": null, //will be null, 00 or 000
+    "numberPadFormat": NumberPadFormat.format123.index,
     "percentagePrecision": 0, //number of decimals to round percentages to
     "allSpendingLastPage": 0, //index of the last tab on the all spending page
     "loansLastPage": 0, //index of the last tab on the loans page
