@@ -1122,5 +1122,6 @@
   "all-outgoing-incoming": "Lahat ng Papalabas at Papasok",
   "all-outgoing-incoming-description-1": "Isama ang lahat ng negatibo/positibong cash flow",
   "all-outgoing-incoming-description-2": "Halimbawa: Isama ang mga transaksyon sa pautang",
-  "applies-when-switching-tabs-in-the-homepage-transactions-list": "Nalalapat kapag lumilipat ng mga tab sa listahan ng mga transaksyon sa homepage"
+  "applies-when-switching-tabs-in-the-homepage-transactions-list": "Nalalapat kapag lumilipat ng mga tab sa listahan ng mga transaksyon sa homepage",
+  "number-pad-format": "Format ng Number Pad"
 }

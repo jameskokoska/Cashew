@@ -1122,5 +1122,6 @@
   "all-outgoing-incoming": "Mọi chi phí & thu nhập",
   "all-outgoing-incoming-description-1": "Bao gồm tất cả dòng tiền âm/dương",
   "all-outgoing-incoming-description-2": "Ví dụ: Bao gồm các giao dịch cho vay",
-  "applies-when-switching-tabs-in-the-homepage-transactions-list": "Áp dụng khi chuyển tab trong danh sách giao dịch trang chủ"
+  "applies-when-switching-tabs-in-the-homepage-transactions-list": "Áp dụng khi chuyển tab trong danh sách giao dịch trang chủ",
+  "number-pad-format": "Định dạng bàn phím số"
 }

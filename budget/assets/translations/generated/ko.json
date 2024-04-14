@@ -1122,5 +1122,6 @@
   "all-outgoing-incoming": "모든 발신 및 수신",
   "all-outgoing-incoming-description-1": "모든 음수/양수 현금 흐름을 포함합니다.",
   "all-outgoing-incoming-description-2": "예: 대출 거래 포함",
-  "applies-when-switching-tabs-in-the-homepage-transactions-list": "홈페이지 거래목록 탭 전환 시 적용"
+  "applies-when-switching-tabs-in-the-homepage-transactions-list": "홈페이지 거래목록 탭 전환 시 적용",
+  "number-pad-format": "숫자 패드 형식"
 }

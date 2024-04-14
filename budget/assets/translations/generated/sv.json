@@ -1122,5 +1122,6 @@
   "all-outgoing-incoming": "Alla utgående och inkommande",
   "all-outgoing-incoming-description-1": "Inkludera alla negativa/positiva kassaflöden",
   "all-outgoing-incoming-description-2": "Exempel: Inkludera lånetransaktioner",
-  "applies-when-switching-tabs-in-the-homepage-transactions-list": "Gäller när du byter flik i transaktionslistan på hemsidan"
+  "applies-when-switching-tabs-in-the-homepage-transactions-list": "Gäller när du byter flik i transaktionslistan på hemsidan",
+  "number-pad-format": "Number Pad Format"
 }

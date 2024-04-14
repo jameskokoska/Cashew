@@ -1122,5 +1122,6 @@
   "all-outgoing-incoming": "Semua Keluar & Masuk",
   "all-outgoing-incoming-description-1": "Sertakan semua aliran tunai negatif/positif",
   "all-outgoing-incoming-description-2": "Contoh: Sertakan transaksi pinjaman",
-  "applies-when-switching-tabs-in-the-homepage-transactions-list": "Digunakan apabila menukar tab dalam senarai transaksi halaman utama"
+  "applies-when-switching-tabs-in-the-homepage-transactions-list": "Digunakan apabila menukar tab dalam senarai transaksi halaman utama",
+  "number-pad-format": "Format Pad Nombor"
 }

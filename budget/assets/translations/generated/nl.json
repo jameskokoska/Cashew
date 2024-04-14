@@ -1122,5 +1122,6 @@
   "all-outgoing-incoming": "Alle uitgaande en inkomende",
   "all-outgoing-incoming-description-1": "Neem alle negatieve/positieve cashflows op",
   "all-outgoing-incoming-description-2": "Voorbeeld: Neem leningtransacties op",
-  "applies-when-switching-tabs-in-the-homepage-transactions-list": "Van toepassing bij het schakelen tussen tabbladen in de transactielijst op de startpagina"
+  "applies-when-switching-tabs-in-the-homepage-transactions-list": "Van toepassing bij het schakelen tussen tabbladen in de transactielijst op de startpagina",
+  "number-pad-format": "Numeriek toetsenbordformaat"
 }

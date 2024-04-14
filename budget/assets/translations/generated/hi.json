@@ -1122,5 +1122,6 @@
   "all-outgoing-incoming": "सभी आउटगोइंग और इनकमिंग",
   "all-outgoing-incoming-description-1": "सभी नकारात्मक/सकारात्मक नकदी प्रवाह को शामिल करें",
   "all-outgoing-incoming-description-2": "उदाहरण: ऋण लेनदेन शामिल करें",
-  "applies-when-switching-tabs-in-the-homepage-transactions-list": "मुखपृष्ठ लेनदेन सूची में टैब स्विच करते समय लागू होता है"
+  "applies-when-switching-tabs-in-the-homepage-transactions-list": "मुखपृष्ठ लेनदेन सूची में टैब स्विच करते समय लागू होता है",
+  "number-pad-format": "नंबर पैड प्रारूप"
 }

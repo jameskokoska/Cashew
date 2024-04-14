@@ -171,5 +171,6 @@
   "all-outgoing-incoming": "Сите појдовни и дојдовни",
   "all-outgoing-incoming-description-1": "Вклучете ги сите негативни/позитивни парични текови",
   "all-outgoing-incoming-description-2": "Пример: Вклучете трансакции за заем",
-  "applies-when-switching-tabs-in-the-homepage-transactions-list": "Се применува при префрлување јазичиња во списокот со трансакции на почетната страница"
+  "applies-when-switching-tabs-in-the-homepage-transactions-list": "Се применува при префрлување јазичиња во списокот со трансакции на почетната страница",
+  "number-pad-format": "Формат на подлога за броеви"
 }

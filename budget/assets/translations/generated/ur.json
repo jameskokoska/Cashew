@@ -1122,5 +1122,6 @@
   "all-outgoing-incoming": "تمام آؤٹ گوئنگ اور انکمنگ",
   "all-outgoing-incoming-description-1": "تمام منفی/مثبت کیش فلو کو شامل کریں۔",
   "all-outgoing-incoming-description-2": "مثال: قرض کے لین دین شامل کریں۔",
-  "applies-when-switching-tabs-in-the-homepage-transactions-list": "ہوم پیج لین دین کی فہرست میں ٹیبز کو تبدیل کرنے پر لاگو ہوتا ہے۔"
+  "applies-when-switching-tabs-in-the-homepage-transactions-list": "ہوم پیج لین دین کی فہرست میں ٹیبز کو تبدیل کرنے پر لاگو ہوتا ہے۔",
+  "number-pad-format": "نمبر پیڈ فارمیٹ"
 }

@@ -1122,5 +1122,6 @@
   "all-outgoing-incoming": "Усі вихідні та вхідні",
   "all-outgoing-incoming-description-1": "Включіть усі негативні/позитивні грошові потоки",
   "all-outgoing-incoming-description-2": "Приклад: включити кредитні операції",
-  "applies-when-switching-tabs-in-the-homepage-transactions-list": "Застосовується під час перемикання вкладок у списку операцій домашньої сторінки"
+  "applies-when-switching-tabs-in-the-homepage-transactions-list": "Застосовується під час перемикання вкладок у списку операцій домашньої сторінки",
+  "number-pad-format": "Формат цифрової клавіатури"
 }

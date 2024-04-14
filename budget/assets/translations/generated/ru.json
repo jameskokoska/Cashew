@@ -1121,5 +1121,6 @@
   "all-outgoing-incoming": "Все исходящие и входящие",
   "all-outgoing-incoming-description-1": "Включите весь отрицательный/положительный денежный поток",
   "all-outgoing-incoming-description-2": "Пример: Включить кредитные операции",
-  "applies-when-switching-tabs-in-the-homepage-transactions-list": "Применяется при переключении вкладок в списке транзакций на главной странице."
+  "applies-when-switching-tabs-in-the-homepage-transactions-list": "Применяется при переключении вкладок в списке транзакций на главной странице.",
+  "number-pad-format": "Формат цифровой клавиатуры"
 }

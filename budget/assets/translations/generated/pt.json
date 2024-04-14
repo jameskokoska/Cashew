@@ -1122,5 +1122,6 @@
   "all-outgoing-incoming": "Todas as saídas e entradas",
   "all-outgoing-incoming-description-1": "Incluir todo o fluxo de caixa negativo/positivo",
   "all-outgoing-incoming-description-2": "Exemplo: Incluir transações de empréstimo",
-  "applies-when-switching-tabs-in-the-homepage-transactions-list": "Aplica-se ao alternar entre guias na lista de transações da página inicial"
+  "applies-when-switching-tabs-in-the-homepage-transactions-list": "Aplica-se ao alternar entre guias na lista de transações da página inicial",
+  "number-pad-format": "Formato do teclado numérico"
 }
