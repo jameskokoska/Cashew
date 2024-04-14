@@ -27,26 +27,26 @@ import 'listItem.dart';
 String getChangelogString() {
   return """
     < 5.2.9
-    Collapsible future transactions list section (if more than 5 transactions)
+    Collapsible future transactions list section (if more than 5 transactions in the future)
     Number pad format setting
     Account selection for homepage pie chart section
     Improved income/expense only selection in homepage pie chart
     Added ability to change only income/expense in homepage transaction list
     Long press transaction list tabs on homepage to edit settings for transactions list
     Applied homepage transaction list tab income/expense filters are properly applied to the homepage graph
-    If all wallets selected when editing homepage section, list is collapsed
+    Collapse wallet list selection if all wallets selected when editing homepage section
     Improved home screen widgets (A)
     Max lines for filter title contains and note contains input
-    Fixed net total date banner initial net total when time period set to all time
-    Fix All spending page swipe to dismiss color when in full screen
     Add extra spacing between edit home page alignment headers (when in full screen)
-    Translation updates
     Add elevation shadow to scroll to top and bottom FAB
     Optimized and improved performance of transaction list actions
-    Collapsed upcoming transaction list shows amount selected when collapsed
-    Fixed font setting always resetting (i)
+    Collapsed future transaction list shows amount selected when collapsed
+    Translation updates
+    Fix font setting always resetting (i)
     Fix exclude amount from budget default value for include amount overall would be incorrect
     Fix (i) biometric lock bypass
+    Fix net total date banner initial net total when time period set to all time
+    Fix All Spending page swipe to dismiss color when in full screen
     < 5.2.8
     New edit selected transactions popup
     Edit title for all selected transactions
