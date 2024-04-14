@@ -8,24 +8,10 @@ import 'package:budget/struct/notificationsGlobal.dart';
 import 'package:budget/widgets/util/deepLinks.dart';
 import 'package:flutter_notification_listener/flutter_notification_listener.dart';
 
-const sampleNotifications = [
-  'Dear UPI user A/C *8389 debited by 110.00 on date 24Mar24 trf to ADI PANJABI Refno 408406270394. If not u? call 1800111109',
-  '''Amt Sent Rs.40.00
-From HDFC Bank A/C *5890
-To HOTEL AND RESTAURANT
-On 31-03
-Ref 409157843802
-Not You? Call 18002586161/SMS BLOCK UPI to 7308080808''',
-  'HDFC Bank: Rs. 1000.00 credited to a/c XXXXXX5890 on 23-03-24 by a/c linked to VPA droy2ju@oksbi (UPI Ref No  408327542190).',
-];
-
 const _portName = "notification_listener_port";
 
 ReceivePort port = ReceivePort();
-List<String> recentCapturedNotifications = [
-  for (final notification in sampleNotifications)
-    getSanitizedMessage(notification)
-];
+List<String> recentCapturedNotifications = [];
 
 // TODO: make it user configurable from settings
 List<String> allowedPackages = ['com.google.android.apps.messaging'];
