@@ -713,8 +713,10 @@ Future openPieChartHomePageBottomSheetSettings(BuildContext context) async {
       subtitle: "applies-to-homepage".tr(),
       child: Column(
         children: [
-          PeriodCyclePicker(
+          WalletPickerPeriodCycle(
+            allWalletsSettingKey: "pieChartAllWallets",
             cycleSettingsExtension: "PieChart",
+            homePageWidgetDisplay: HomePageWidgetDisplay.PieChart,
           ),
           HorizontalBreakAbove(
             padding: EdgeInsets.symmetric(vertical: 15),

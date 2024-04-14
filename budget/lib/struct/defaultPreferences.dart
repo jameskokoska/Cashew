@@ -157,6 +157,7 @@ Future<Map<String, dynamic>> getDefaultPreferences() async {
     "lineGraphStartDate": DateTime.now().toString(),
     "pieChartTotal": "outgoing", // "outgoing", "incoming"
     "pieChartIncomeAndExpenseOnly": true,
+    "pieChartAllWallets": true,
     "netWorthAllWallets": true,
     "walletsListCurrencyBreakdown": false,
     "allSpendingSummaryAllWallets": true,
