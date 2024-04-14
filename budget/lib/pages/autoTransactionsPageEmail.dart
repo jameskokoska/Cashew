@@ -45,9 +45,11 @@ class _InitializeNotificationServiceState
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration.zero, () async {
-      await startNotificationListener();
-    });
+    if (appStateSettings["notificationScanningDebug"] == true &&
+        appStateSettings["notificationScanning"] == true)
+      Future.delayed(Duration.zero, () async {
+        await startNotificationListener();
+      });
   }
 
   @override
@@ -67,16 +69,23 @@ Future<Map<String, String>> parseTransactionFromMessage(
       await database.getAllScannerTemplates();
 
   for (ScannerTemplate scannerTemplate in scannerTemplates) {
-    if (messageString.contains(scannerTemplate.contains)) {
+    final regExp = RegExp(scannerTemplate.regex);
+    if (regExp.hasMatch(messageString)) {
       templateFound = scannerTemplate;
-      title = getTransactionTitleFromEmail(
-          messageString,
-          scannerTemplate.titleTransactionBefore,
-          scannerTemplate.titleTransactionAfter);
-      amountDouble = getTransactionAmountFromEmail(
-          messageString,
-          scannerTemplate.amountTransactionBefore,
-          scannerTemplate.amountTransactionAfter);
+      final match = regExp.firstMatch(messageString)!;
+
+      for (final group in match.groupNames) {
+        final val = match.namedGroup(group);
+        switch (group) {
+          case 'title':
+            title = val ?? '';
+            break;
+          case 'amount':
+            amountDouble = double.tryParse((val ?? '').replaceAll(',', ''));
+            break;
+          default:
+        }
+      }
       break;
     }
   }
@@ -91,12 +100,13 @@ Future<Map<String, String>> parseTransactionFromMessage(
   final category = foundTitle?.category ??
       await database.getCategoryInstanceOrNull(templateFound.defaultCategoryFk);
 
-  final isDebit = messageString.contains('debited');
+  final isDebit = !templateFound.income;
 
   return {
     'title': title,
     'amount': '${isDebit ? '-' : ''}$amountDouble',
     'walletPk': templateFound.walletFk,
+    'notes': messageString,
     if (category != null) 'category': category.name,
   };
 }
@@ -109,16 +119,23 @@ Future queueTransactionFromMessage(String messageString) async {
   ScannerTemplate? templateFound;
 
   for (ScannerTemplate scannerTemplate in scannerTemplates) {
-    if (messageString.contains(scannerTemplate.contains)) {
+    final regExp = RegExp(scannerTemplate.regex);
+    if (regExp.hasMatch(messageString)) {
       templateFound = scannerTemplate;
-      title = getTransactionTitleFromEmail(
-          messageString,
-          scannerTemplate.titleTransactionBefore,
-          scannerTemplate.titleTransactionAfter);
-      amountDouble = getTransactionAmountFromEmail(
-          messageString,
-          scannerTemplate.amountTransactionBefore,
-          scannerTemplate.amountTransactionAfter);
+      final match = regExp.firstMatch(messageString)!;
+
+      for (final group in match.groupNames) {
+        final val = match.namedGroup(group);
+        switch (group) {
+          case 'title':
+            title = val ?? '';
+            break;
+          case 'amount':
+            amountDouble = double.tryParse((val ?? '').replaceAll(',', ''));
+            break;
+          default:
+        }
+      }
       break;
     }
   }
@@ -195,20 +212,22 @@ class _AutoTransactionsPageNotificationsState
         SettingsContainerSwitch(
           onSwitched: (isActive) async {
             var hasPermission = false;
+            late final bool isRunning;
             if (isActive) {
               hasPermission = await requestNotificationListeningPermission();
               if (!hasPermission) {
                 return false;
               }
-              await startNotificationListener();
+              isRunning = await startNotificationListener();
             } else {
-              await stopNotificationListener();
+              isRunning = !await stopNotificationListener();
             }
             await updateSettings(
               "notificationScanning",
               isActive,
               updateGlobalState: false,
             );
+            return isActive == isRunning;
           },
           title: "Notification Transactions",
           description:
@@ -914,17 +933,25 @@ class EmailsList extends StatelessWidget {
             String? templateFound;
 
             for (ScannerTemplate scannerTemplate in scannerTemplates) {
-              if (messageString.contains(scannerTemplate.contains)) {
+              final regExp = RegExp(scannerTemplate.regex);
+              if (regExp.hasMatch(messageString)) {
                 doesEmailContain = true;
                 templateFound = scannerTemplate.templateName;
-                title = getTransactionTitleFromEmail(
-                    messageString,
-                    scannerTemplate.titleTransactionBefore,
-                    scannerTemplate.titleTransactionAfter);
-                amountDouble = getTransactionAmountFromEmail(
-                    messageString,
-                    scannerTemplate.amountTransactionBefore,
-                    scannerTemplate.amountTransactionAfter);
+                final match = regExp.firstMatch(messageString)!;
+
+                for (final group in match.groupNames) {
+                  final val = match.namedGroup(group);
+                  switch (group) {
+                    case 'title':
+                      title = val ?? '';
+                      break;
+                    case 'amount':
+                      amountDouble =
+                          double.tryParse((val ?? '').replaceAll(',', ''));
+                      break;
+                    default:
+                  }
+                }
                 break;
               }
             }

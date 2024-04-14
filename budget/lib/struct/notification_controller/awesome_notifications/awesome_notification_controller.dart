@@ -6,11 +6,14 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
+import 'package:budget/pages/addEmailTemplate.dart';
 import 'package:budget/pages/addTransactionPage.dart';
+import 'package:budget/pages/autoTransactionsPageEmail.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/notification_controller/awesome_notifications/extensions.dart';
 import 'package:budget/struct/notification_controller/models.dart';
 import 'package:budget/struct/notification_controller/notification_controller.dart';
+import 'package:budget/struct/notification_listener.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/notificationsSettings.dart';
 import 'package:budget/widgets/openPopup.dart';
@@ -151,6 +154,19 @@ class AwesomeNotificationController extends NotificationController<
     switch (payload['type']) {
       case 'newTransaction':
         return await handleNewTransactionAction(action);
+      case 'addScannerTemplate':
+        pushPageWithoutContext(
+          AutoTransactionsPageNotifications(),
+        );
+
+        return Future.delayed(
+          Duration.zero,
+          () => pushPageWithoutContext(
+            AddEmailTemplate(
+              messagesList: recentCapturedNotifications,
+            ),
+          ),
+        );
       default:
         return;
     }
@@ -431,25 +447,30 @@ class AwesomeNotificationController extends NotificationController<
   }
 }
 
-Future<void> handleNewTransactionAction(ReceivedAction action) async {
+Future<void> pushPageWithoutContext(Widget page) async {
   final navigatorState = navigatorKey.currentState;
+  if (navigatorState == null) {
+    return;
+  }
 
+  await navigatorState.push(MaterialPageRoute(builder: (context) => page));
+}
+
+Future<void> handleNewTransactionAction(ReceivedAction action) async {
   final trxPk = action.payload?['value'];
 
-  if (navigatorState == null || trxPk == null) {
+  if (trxPk == null) {
     return;
   }
 
   final trx = await database.getTransactionFromPk(trxPk);
   final edit = action.buttonKeyPressed == 'EDIT';
 
-  navigatorState.push(
-    MaterialPageRoute(
-      builder: (context) => AddTransactionPage(
-        transaction: trx,
-        quickEdit: edit,
-        routesToPopAfterDelete: RoutesToPopAfterDelete.None,
-      ),
+  pushPageWithoutContext(
+    AddTransactionPage(
+      transaction: trx,
+      quickEdit: edit,
+      routesToPopAfterDelete: RoutesToPopAfterDelete.None,
     ),
   );
 }

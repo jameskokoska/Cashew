@@ -19,17 +19,19 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:async';
 import 'package:async/async.dart';
 import 'package:drift/drift.dart';
+import 'package:drift_dev/api/migrations.dart';
 export 'platform/shared.dart';
 import 'dart:convert';
 import 'package:budget/struct/currencyFunctions.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/foundation.dart';
 import 'schema_versions.dart';
 import 'package:flutter/material.dart' show DateTimeRange;
 
 import 'package:flutter/material.dart' show RangeValues;
 part 'tables.g.dart';
 
-int schemaVersionGlobal = 46;
+int schemaVersionGlobal = 47;
 
 // To update and migrate the database, check the README
 
@@ -500,6 +502,9 @@ class ScannerTemplates extends Table {
   // TODO: if it contains certain keyword ignore these emails
   BoolColumn get ignore => boolean().withDefault(const Constant(false))();
 
+  TextColumn get regex => text().withLength(max: NAME_LIMIT)();
+  BoolColumn get income => boolean().withDefault(const Constant(false))();
+
   @override
   Set<Column> get primaryKey => {scannerTemplatePk};
 }
@@ -839,305 +844,295 @@ class FinanceDatabase extends _$FinanceDatabase {
         await migrator.runMigrationSteps(
           from: from,
           to: to,
-          steps: migrationSteps(
-            from33To34: (m, schema) async {
-              await m.addColumn(schema.wallets, schema.wallets.decimals);
-            },
-            from34To35: (m, schema) async {
+          steps: migrationSteps(from33To34: (m, schema) async {
+            await m.addColumn(schema.wallets, schema.wallets.decimals);
+          }, from34To35: (m, schema) async {
+            await m.addColumn(
+                schema.budgets, schema.budgets.isAbsoluteSpendingLimit);
+          }, from35To36: (m, schema) async {
+            await m.alterTable(TableMigration(schema.transactions));
+          }, from36To37: (m, schema) async {
+            await m.alterTable(
+              TableMigration(schema.deleteLogs, columnTransformer: {
+                schema.deleteLogs.deleteLogPk:
+                    schema.deleteLogs.deleteLogPk.cast<String>(),
+                schema.deleteLogs.entryPk:
+                    schema.deleteLogs.entryPk.cast<String>(),
+              }),
+            );
+            await m.alterTable(
+              TableMigration(schema.wallets, columnTransformer: {
+                schema.wallets.walletPk: schema.wallets.walletPk.cast<String>(),
+              }),
+            );
+            await m.alterTable(
+              TableMigration(schema.transactions, columnTransformer: {
+                schema.transactions.transactionPk:
+                    schema.transactions.transactionPk.cast<String>(),
+                schema.transactions.categoryFk:
+                    schema.transactions.categoryFk.cast<String>(),
+                schema.transactions.walletFk:
+                    schema.transactions.walletFk.cast<String>(),
+                schema.transactions.sharedReferenceBudgetPk:
+                    schema.transactions.sharedReferenceBudgetPk.cast<String>(),
+              }),
+            );
+            await m.alterTable(
+              TableMigration(schema.categories, columnTransformer: {
+                schema.categories.categoryPk:
+                    schema.categories.categoryPk.cast<String>(),
+              }),
+            );
+            await m.alterTable(
+              TableMigration(schema.categoryBudgetLimits, columnTransformer: {
+                schema.categoryBudgetLimits.categoryLimitPk:
+                    schema.categoryBudgetLimits.categoryLimitPk.cast<String>(),
+                schema.categoryBudgetLimits.categoryFk:
+                    schema.categoryBudgetLimits.categoryFk.cast<String>(),
+                schema.categoryBudgetLimits.budgetFk:
+                    schema.categoryBudgetLimits.budgetFk.cast<String>(),
+              }),
+            );
+            await m.alterTable(
+              TableMigration(schema.associatedTitles, columnTransformer: {
+                schema.associatedTitles.associatedTitlePk:
+                    schema.associatedTitles.associatedTitlePk.cast<String>(),
+                schema.associatedTitles.categoryFk:
+                    schema.associatedTitles.categoryFk.cast<String>(),
+              }),
+            );
+            await m.alterTable(
+              TableMigration(schema.budgets, columnTransformer: {
+                schema.budgets.budgetPk: schema.budgets.budgetPk.cast<String>(),
+                schema.budgets.walletFk: schema.budgets.walletFk.cast<String>(),
+              }),
+            );
+            await m.alterTable(
+              TableMigration(schema.scannerTemplates, columnTransformer: {
+                schema.scannerTemplates.scannerTemplatePk:
+                    schema.scannerTemplates.scannerTemplatePk.cast<String>(),
+                schema.scannerTemplates.defaultCategoryFk:
+                    schema.scannerTemplates.defaultCategoryFk.cast<String>(),
+                schema.scannerTemplates.walletFk:
+                    schema.scannerTemplates.walletFk.cast<String>(),
+              }),
+            );
+          }, from37To38: (m, schema) async {
+            print("37 to 38");
+            try {
               await m.addColumn(
-                  schema.budgets, schema.budgets.isAbsoluteSpendingLimit);
-            },
-            from35To36: (m, schema) async {
-              await m.alterTable(TableMigration(schema.transactions));
-            },
-            from36To37: (m, schema) async {
-              await m.alterTable(
-                TableMigration(schema.deleteLogs, columnTransformer: {
-                  schema.deleteLogs.deleteLogPk:
-                      schema.deleteLogs.deleteLogPk.cast<String>(),
-                  schema.deleteLogs.entryPk:
-                      schema.deleteLogs.entryPk.cast<String>(),
-                }),
-              );
-              await m.alterTable(
-                TableMigration(schema.wallets, columnTransformer: {
-                  schema.wallets.walletPk:
-                      schema.wallets.walletPk.cast<String>(),
-                }),
-              );
-              await m.alterTable(
-                TableMigration(schema.transactions, columnTransformer: {
-                  schema.transactions.transactionPk:
-                      schema.transactions.transactionPk.cast<String>(),
-                  schema.transactions.categoryFk:
-                      schema.transactions.categoryFk.cast<String>(),
-                  schema.transactions.walletFk:
-                      schema.transactions.walletFk.cast<String>(),
-                  schema.transactions.sharedReferenceBudgetPk: schema
-                      .transactions.sharedReferenceBudgetPk
-                      .cast<String>(),
-                }),
-              );
-              await m.alterTable(
-                TableMigration(schema.categories, columnTransformer: {
-                  schema.categories.categoryPk:
-                      schema.categories.categoryPk.cast<String>(),
-                }),
-              );
-              await m.alterTable(
-                TableMigration(schema.categoryBudgetLimits, columnTransformer: {
-                  schema.categoryBudgetLimits.categoryLimitPk: schema
-                      .categoryBudgetLimits.categoryLimitPk
-                      .cast<String>(),
-                  schema.categoryBudgetLimits.categoryFk:
-                      schema.categoryBudgetLimits.categoryFk.cast<String>(),
-                  schema.categoryBudgetLimits.budgetFk:
-                      schema.categoryBudgetLimits.budgetFk.cast<String>(),
-                }),
-              );
-              await m.alterTable(
-                TableMigration(schema.associatedTitles, columnTransformer: {
-                  schema.associatedTitles.associatedTitlePk:
-                      schema.associatedTitles.associatedTitlePk.cast<String>(),
-                  schema.associatedTitles.categoryFk:
-                      schema.associatedTitles.categoryFk.cast<String>(),
-                }),
-              );
-              await m.alterTable(
-                TableMigration(schema.budgets, columnTransformer: {
-                  schema.budgets.budgetPk:
-                      schema.budgets.budgetPk.cast<String>(),
-                  schema.budgets.walletFk:
-                      schema.budgets.walletFk.cast<String>(),
-                }),
-              );
-              await m.alterTable(
-                TableMigration(schema.scannerTemplates, columnTransformer: {
-                  schema.scannerTemplates.scannerTemplatePk:
-                      schema.scannerTemplates.scannerTemplatePk.cast<String>(),
-                  schema.scannerTemplates.defaultCategoryFk:
-                      schema.scannerTemplates.defaultCategoryFk.cast<String>(),
-                  schema.scannerTemplates.walletFk:
-                      schema.scannerTemplates.walletFk.cast<String>(),
-                }),
-              );
-            },
-            from37To38: (m, schema) async {
-              print("37 to 38");
-              try {
-                await m.addColumn(
-                    schema.transactions, schema.transactions.originalDateDue);
-              } catch (e) {
-                print(
-                    "Migration Error: Error creating column originalDateDue " +
-                        e.toString());
-              }
-            },
-            from38To39: (m, schema) async {
-              print("38 to 39");
-              // We should try and catch for upgrades - why?
-              // If a user imports a backup from a newer schema when they are on an older
-              // App version, it will import correctly. However, when they do update the app
-              // The migrator will run and it will error out!
-              try {
-                await m.addColumn(
-                    schema.categories, schema.categories.emojiIconName);
-              } catch (e) {
-                print("Migration Error: Error creating column emojiIconName " +
-                    e.toString());
-              }
-            },
-            from39To40: (m, schema) async {
-              print("39 to 40");
-              try {
-                await m.addColumn(
-                    schema.transactions, schema.transactions.objectiveFk);
-              } catch (e) {
-                print("Migration Error: Error creating column objectiveFk " +
-                    e.toString());
-              }
-              try {
-                await migrator.createTable($ObjectivesTable(database));
-              } catch (e) {
-                print("Migration Error: Error creating table ObjectivesTable " +
-                    e.toString());
-              }
-            },
-            from40To41: (m, schema) async {
-              print("40 to 41");
-              try {
-                await m.addColumn(
-                    schema.budgets, schema.budgets.categoryFksExclude);
-              } catch (e) {
-                print(
-                    "Migration Error: Error creating column categoryFksExclude " +
-                        e.toString());
-              }
-              try {
-                await m.alterTable(TableMigration(budgets));
-              } catch (e) {
-                print("Migration Error: Error deleting includeAllCategories " +
-                    e.toString());
-              }
-              try {
-                List<Budget> allBudgets = await getAllBudgets();
-                List<Budget> budgetsInserting = [];
-                for (Budget budget in allBudgets) {
-                  if (budget.budgetTransactionFilters == null &&
-                      budget.addedTransactionsOnly == false) {
-                    budgetsInserting.add(budget.copyWith(
-                        budgetTransactionFilters: Value([
-                      BudgetTransactionFilters.defaultBudgetTransactionFilters
-                    ])));
-                  }
+                  schema.transactions, schema.transactions.originalDateDue);
+            } catch (e) {
+              print("Migration Error: Error creating column originalDateDue " +
+                  e.toString());
+            }
+          }, from38To39: (m, schema) async {
+            print("38 to 39");
+            // We should try and catch for upgrades - why?
+            // If a user imports a backup from a newer schema when they are on an older
+            // App version, it will import correctly. However, when they do update the app
+            // The migrator will run and it will error out!
+            try {
+              await m.addColumn(
+                  schema.categories, schema.categories.emojiIconName);
+            } catch (e) {
+              print("Migration Error: Error creating column emojiIconName " +
+                  e.toString());
+            }
+          }, from39To40: (m, schema) async {
+            print("39 to 40");
+            try {
+              await m.addColumn(
+                  schema.transactions, schema.transactions.objectiveFk);
+            } catch (e) {
+              print("Migration Error: Error creating column objectiveFk " +
+                  e.toString());
+            }
+            try {
+              await migrator.createTable($ObjectivesTable(database));
+            } catch (e) {
+              print("Migration Error: Error creating table ObjectivesTable " +
+                  e.toString());
+            }
+          }, from40To41: (m, schema) async {
+            print("40 to 41");
+            try {
+              await m.addColumn(
+                  schema.budgets, schema.budgets.categoryFksExclude);
+            } catch (e) {
+              print(
+                  "Migration Error: Error creating column categoryFksExclude " +
+                      e.toString());
+            }
+            try {
+              await m.alterTable(TableMigration(budgets));
+            } catch (e) {
+              print("Migration Error: Error deleting includeAllCategories " +
+                  e.toString());
+            }
+            try {
+              List<Budget> allBudgets = await getAllBudgets();
+              List<Budget> budgetsInserting = [];
+              for (Budget budget in allBudgets) {
+                if (budget.budgetTransactionFilters == null &&
+                    budget.addedTransactionsOnly == false) {
+                  budgetsInserting.add(budget.copyWith(
+                      budgetTransactionFilters: Value([
+                    BudgetTransactionFilters.defaultBudgetTransactionFilters
+                  ])));
                 }
-                await updateBatchBudgetsOnly(budgetsInserting);
-              } catch (e) {
-                print(
-                    "Migration Error: Error upgrading transaction filters default for budgets " +
-                        e.toString());
               }
-            },
-            from41To42: (m, schema) async {
-              print("41 to 42");
-              try {
-                await m.addColumn(
-                    schema.categories, schema.categories.mainCategoryPk);
-              } catch (e) {
-                print("Migration Error: Error creating column mainCategoryPk " +
-                    e.toString());
-              }
-              try {
-                await m.addColumn(
-                    schema.wallets, schema.wallets.homePageWidgetDisplay);
-              } catch (e) {
-                print(
-                    "Migration Error: Error creating column homePageWidgetDisplay " +
-                        e.toString());
-              }
-              try {
-                await m.addColumn(
-                    schema.transactions, schema.transactions.subCategoryFk);
-              } catch (e) {
-                print("Migration Error: Error creating column subCategoryFk " +
-                    e.toString());
-              }
-              // Also see beforeOpen
-              // We modify the entries of homePageWidgetDisplay of wallet entries after this migration
-              // Since this code prevents the other migrations from running after, and it existed before,
-              // the budgetFksExclude in 42to43 may have not run properly...
-              // Therefore we also have code to check if this was properly created in beforeOpen
-            },
-            from42To43: (m, schema) async {
-              print("42 to 43");
-              try {
-                await m.addColumn(
-                    schema.transactions, schema.transactions.budgetFksExclude);
-              } catch (e) {
-                print(
-                    "Migration Error: Error creating column budgetFksExclude " +
-                        e.toString());
-              }
-            },
-            from43To44: (m, schema) async {
-              print("43 to 44");
-              try {
-                await m.addColumn(
-                    schema.transactions, schema.transactions.endDate);
-              } catch (e) {
-                print(
-                    "Migration Error: Error creating column transactions.endDate" +
-                        e.toString());
-              }
-              try {
-                await m.addColumn(schema.objectives, schema.objectives.endDate);
-              } catch (e) {
-                print(
-                    "Migration Error: Error creating column objectives.endDate " +
-                        e.toString());
-              }
-            },
-            from44To45: (m, schema) async {
-              print("44 to 45");
-              try {
-                await m.addColumn(schema.budgets, schema.budgets.walletFks);
-              } catch (e) {
-                print(
-                    "Migration Error: Error creating column budgets.walletFks" +
-                        e.toString());
-              }
-              try {
-                await m.addColumn(schema.budgets, schema.budgets.income);
-              } catch (e) {
-                print("Migration Error: Error creating column budgets.income " +
-                    e.toString());
-              }
-              try {
-                await m.addColumn(
-                    schema.objectives, schema.objectives.walletFk);
-              } catch (e) {
-                print(
-                    "Migration Error: Error creating column objectives.walletFk " +
-                        e.toString());
-              }
-              try {
-                await m.addColumn(schema.categoryBudgetLimits,
-                    schema.categoryBudgetLimits.walletFk);
-              } catch (e) {
-                print(
-                    "Migration Error: Error creating column categoryBudgetLimits.walletFk " +
-                        e.toString());
-              }
-            },
-            from45To46: (m, schema) async {
-              try {
-                await m.addColumn(schema.transactions,
-                    schema.transactions.pairedTransactionFk);
-              } catch (e) {
-                print(
-                    "Migration Error: Error creating column transactions.pairedTransactionFk " +
-                        e.toString());
-              }
-              try {
-                await m.addColumn(
-                    schema.transactions, schema.transactions.objectiveLoanFk);
-              } catch (e) {
-                print(
-                    "Migration Error: Error creating column transactions.objectiveLoanFk " +
-                        e.toString());
-              }
-              try {
-                await m.addColumn(
-                    schema.wallets, schema.wallets.currencyFormat);
-              } catch (e) {
-                print(
-                    "Migration Error: Error creating column wallets.currencyFormat " +
-                        e.toString());
-              }
-              try {
-                await m.addColumn(schema.budgets, schema.budgets.archived);
-              } catch (e) {
-                print(
-                    "Migration Error: Error creating column budgets.archived " +
-                        e.toString());
-              }
-              try {
-                await m.addColumn(
-                    schema.objectives, schema.objectives.archived);
-              } catch (e) {
-                print(
-                    "Migration Error: Error creating column objectives.archived " +
-                        e.toString());
-              }
-              try {
-                await m.addColumn(schema.objectives, schema.objectives.type);
-              } catch (e) {
-                print(
-                    "Migration Error: Error creating column objectives.type " +
-                        e.toString());
-              }
-            },
-          ),
+              await updateBatchBudgetsOnly(budgetsInserting);
+            } catch (e) {
+              print(
+                  "Migration Error: Error upgrading transaction filters default for budgets " +
+                      e.toString());
+            }
+          }, from41To42: (m, schema) async {
+            print("41 to 42");
+            try {
+              await m.addColumn(
+                  schema.categories, schema.categories.mainCategoryPk);
+            } catch (e) {
+              print("Migration Error: Error creating column mainCategoryPk " +
+                  e.toString());
+            }
+            try {
+              await m.addColumn(
+                  schema.wallets, schema.wallets.homePageWidgetDisplay);
+            } catch (e) {
+              print(
+                  "Migration Error: Error creating column homePageWidgetDisplay " +
+                      e.toString());
+            }
+            try {
+              await m.addColumn(
+                  schema.transactions, schema.transactions.subCategoryFk);
+            } catch (e) {
+              print("Migration Error: Error creating column subCategoryFk " +
+                  e.toString());
+            }
+            // Also see beforeOpen
+            // We modify the entries of homePageWidgetDisplay of wallet entries after this migration
+            // Since this code prevents the other migrations from running after, and it existed before,
+            // the budgetFksExclude in 42to43 may have not run properly...
+            // Therefore we also have code to check if this was properly created in beforeOpen
+          }, from42To43: (m, schema) async {
+            print("42 to 43");
+            try {
+              await m.addColumn(
+                  schema.transactions, schema.transactions.budgetFksExclude);
+            } catch (e) {
+              print("Migration Error: Error creating column budgetFksExclude " +
+                  e.toString());
+            }
+          }, from43To44: (m, schema) async {
+            print("43 to 44");
+            try {
+              await m.addColumn(
+                  schema.transactions, schema.transactions.endDate);
+            } catch (e) {
+              print(
+                  "Migration Error: Error creating column transactions.endDate" +
+                      e.toString());
+            }
+            try {
+              await m.addColumn(schema.objectives, schema.objectives.endDate);
+            } catch (e) {
+              print(
+                  "Migration Error: Error creating column objectives.endDate " +
+                      e.toString());
+            }
+          }, from44To45: (m, schema) async {
+            print("44 to 45");
+            try {
+              await m.addColumn(schema.budgets, schema.budgets.walletFks);
+            } catch (e) {
+              print("Migration Error: Error creating column budgets.walletFks" +
+                  e.toString());
+            }
+            try {
+              await m.addColumn(schema.budgets, schema.budgets.income);
+            } catch (e) {
+              print("Migration Error: Error creating column budgets.income " +
+                  e.toString());
+            }
+            try {
+              await m.addColumn(schema.objectives, schema.objectives.walletFk);
+            } catch (e) {
+              print(
+                  "Migration Error: Error creating column objectives.walletFk " +
+                      e.toString());
+            }
+            try {
+              await m.addColumn(schema.categoryBudgetLimits,
+                  schema.categoryBudgetLimits.walletFk);
+            } catch (e) {
+              print(
+                  "Migration Error: Error creating column categoryBudgetLimits.walletFk " +
+                      e.toString());
+            }
+          }, from45To46: (m, schema) async {
+            try {
+              await m.addColumn(
+                  schema.transactions, schema.transactions.pairedTransactionFk);
+            } catch (e) {
+              print(
+                  "Migration Error: Error creating column transactions.pairedTransactionFk " +
+                      e.toString());
+            }
+            try {
+              await m.addColumn(
+                  schema.transactions, schema.transactions.objectiveLoanFk);
+            } catch (e) {
+              print(
+                  "Migration Error: Error creating column transactions.objectiveLoanFk " +
+                      e.toString());
+            }
+            try {
+              await m.addColumn(schema.wallets, schema.wallets.currencyFormat);
+            } catch (e) {
+              print(
+                  "Migration Error: Error creating column wallets.currencyFormat " +
+                      e.toString());
+            }
+            try {
+              await m.addColumn(schema.budgets, schema.budgets.archived);
+            } catch (e) {
+              print("Migration Error: Error creating column budgets.archived " +
+                  e.toString());
+            }
+            try {
+              await m.addColumn(schema.objectives, schema.objectives.archived);
+            } catch (e) {
+              print(
+                  "Migration Error: Error creating column objectives.archived " +
+                      e.toString());
+            }
+            try {
+              await m.addColumn(schema.objectives, schema.objectives.type);
+            } catch (e) {
+              print("Migration Error: Error creating column objectives.type " +
+                  e.toString());
+            }
+          }, from46To47: (m, schema) async {
+            try {
+              await m.addColumn(
+                  schema.scannerTemplates, schema.scannerTemplates.regex);
+            } catch (e) {
+              print(
+                  "Migration Error: Error creating column scannerTemplates.regex " +
+                      e.toString());
+            }
+            try {
+              await m.addColumn(
+                  schema.scannerTemplates, schema.scannerTemplates.income);
+            } catch (e) {
+              print(
+                  "Migration Error: Error creating column scannerTemplates.income " +
+                      e.toString());
+            }
+          }),
         );
       },
       beforeOpen: (details) async {

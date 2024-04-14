@@ -5805,6 +5805,22 @@ class $ScannerTemplatesTable extends ScannerTemplates
       defaultConstraints:
           GeneratedColumn.constraintIsAlways('CHECK ("ignore" IN (0, 1))'),
       defaultValue: const Constant(false));
+  static const VerificationMeta _regexMeta = const VerificationMeta('regex');
+  @override
+  late final GeneratedColumn<String> regex = GeneratedColumn<String>(
+      'regex', aliasedName, false,
+      additionalChecks: GeneratedColumn.checkTextLength(),
+      type: DriftSqlType.string,
+      requiredDuringInsert: true);
+  static const VerificationMeta _incomeMeta = const VerificationMeta('income');
+  @override
+  late final GeneratedColumn<bool> income = GeneratedColumn<bool>(
+      'income', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("income" IN (0, 1))'),
+      defaultValue: const Constant(false));
   @override
   List<GeneratedColumn> get $columns => [
         scannerTemplatePk,
@@ -5818,7 +5834,9 @@ class $ScannerTemplatesTable extends ScannerTemplates
         amountTransactionAfter,
         defaultCategoryFk,
         walletFk,
-        ignore
+        ignore,
+        regex,
+        income
       ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -5911,6 +5929,16 @@ class $ScannerTemplatesTable extends ScannerTemplates
       context.handle(_ignoreMeta,
           ignore.isAcceptableOrUnknown(data['ignore']!, _ignoreMeta));
     }
+    if (data.containsKey('regex')) {
+      context.handle(
+          _regexMeta, regex.isAcceptableOrUnknown(data['regex']!, _regexMeta));
+    } else if (isInserting) {
+      context.missing(_regexMeta);
+    }
+    if (data.containsKey('income')) {
+      context.handle(_incomeMeta,
+          income.isAcceptableOrUnknown(data['income']!, _incomeMeta));
+    }
     return context;
   }
 
@@ -5948,6 +5976,10 @@ class $ScannerTemplatesTable extends ScannerTemplates
           .read(DriftSqlType.string, data['${effectivePrefix}wallet_fk'])!,
       ignore: attachedDatabase.typeMapping
           .read(DriftSqlType.bool, data['${effectivePrefix}ignore'])!,
+      regex: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}regex'])!,
+      income: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}income'])!,
     );
   }
 
@@ -5970,6 +6002,8 @@ class ScannerTemplate extends DataClass implements Insertable<ScannerTemplate> {
   final String defaultCategoryFk;
   final String walletFk;
   final bool ignore;
+  final String regex;
+  final bool income;
   const ScannerTemplate(
       {required this.scannerTemplatePk,
       required this.dateCreated,
@@ -5982,7 +6016,9 @@ class ScannerTemplate extends DataClass implements Insertable<ScannerTemplate> {
       required this.amountTransactionAfter,
       required this.defaultCategoryFk,
       required this.walletFk,
-      required this.ignore});
+      required this.ignore,
+      required this.regex,
+      required this.income});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -6001,6 +6037,8 @@ class ScannerTemplate extends DataClass implements Insertable<ScannerTemplate> {
     map['default_category_fk'] = Variable<String>(defaultCategoryFk);
     map['wallet_fk'] = Variable<String>(walletFk);
     map['ignore'] = Variable<bool>(ignore);
+    map['regex'] = Variable<String>(regex);
+    map['income'] = Variable<bool>(income);
     return map;
   }
 
@@ -6020,6 +6058,8 @@ class ScannerTemplate extends DataClass implements Insertable<ScannerTemplate> {
       defaultCategoryFk: Value(defaultCategoryFk),
       walletFk: Value(walletFk),
       ignore: Value(ignore),
+      regex: Value(regex),
+      income: Value(income),
     );
   }
 
@@ -6044,6 +6084,8 @@ class ScannerTemplate extends DataClass implements Insertable<ScannerTemplate> {
       defaultCategoryFk: serializer.fromJson<String>(json['defaultCategoryFk']),
       walletFk: serializer.fromJson<String>(json['walletFk']),
       ignore: serializer.fromJson<bool>(json['ignore']),
+      regex: serializer.fromJson<String>(json['regex']),
+      income: serializer.fromJson<bool>(json['income']),
     );
   }
   @override
@@ -6065,6 +6107,8 @@ class ScannerTemplate extends DataClass implements Insertable<ScannerTemplate> {
       'defaultCategoryFk': serializer.toJson<String>(defaultCategoryFk),
       'walletFk': serializer.toJson<String>(walletFk),
       'ignore': serializer.toJson<bool>(ignore),
+      'regex': serializer.toJson<String>(regex),
+      'income': serializer.toJson<bool>(income),
     };
   }
 
@@ -6080,7 +6124,9 @@ class ScannerTemplate extends DataClass implements Insertable<ScannerTemplate> {
           String? amountTransactionAfter,
           String? defaultCategoryFk,
           String? walletFk,
-          bool? ignore}) =>
+          bool? ignore,
+          String? regex,
+          bool? income}) =>
       ScannerTemplate(
         scannerTemplatePk: scannerTemplatePk ?? this.scannerTemplatePk,
         dateCreated: dateCreated ?? this.dateCreated,
@@ -6100,6 +6146,8 @@ class ScannerTemplate extends DataClass implements Insertable<ScannerTemplate> {
         defaultCategoryFk: defaultCategoryFk ?? this.defaultCategoryFk,
         walletFk: walletFk ?? this.walletFk,
         ignore: ignore ?? this.ignore,
+        regex: regex ?? this.regex,
+        income: income ?? this.income,
       );
   @override
   String toString() {
@@ -6115,7 +6163,9 @@ class ScannerTemplate extends DataClass implements Insertable<ScannerTemplate> {
           ..write('amountTransactionAfter: $amountTransactionAfter, ')
           ..write('defaultCategoryFk: $defaultCategoryFk, ')
           ..write('walletFk: $walletFk, ')
-          ..write('ignore: $ignore')
+          ..write('ignore: $ignore, ')
+          ..write('regex: $regex, ')
+          ..write('income: $income')
           ..write(')'))
         .toString();
   }
@@ -6133,7 +6183,9 @@ class ScannerTemplate extends DataClass implements Insertable<ScannerTemplate> {
       amountTransactionAfter,
       defaultCategoryFk,
       walletFk,
-      ignore);
+      ignore,
+      regex,
+      income);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -6149,7 +6201,9 @@ class ScannerTemplate extends DataClass implements Insertable<ScannerTemplate> {
           other.amountTransactionAfter == this.amountTransactionAfter &&
           other.defaultCategoryFk == this.defaultCategoryFk &&
           other.walletFk == this.walletFk &&
-          other.ignore == this.ignore);
+          other.ignore == this.ignore &&
+          other.regex == this.regex &&
+          other.income == this.income);
 }
 
 class ScannerTemplatesCompanion extends UpdateCompanion<ScannerTemplate> {
@@ -6165,6 +6219,8 @@ class ScannerTemplatesCompanion extends UpdateCompanion<ScannerTemplate> {
   final Value<String> defaultCategoryFk;
   final Value<String> walletFk;
   final Value<bool> ignore;
+  final Value<String> regex;
+  final Value<bool> income;
   final Value<int> rowid;
   const ScannerTemplatesCompanion({
     this.scannerTemplatePk = const Value.absent(),
@@ -6179,6 +6235,8 @@ class ScannerTemplatesCompanion extends UpdateCompanion<ScannerTemplate> {
     this.defaultCategoryFk = const Value.absent(),
     this.walletFk = const Value.absent(),
     this.ignore = const Value.absent(),
+    this.regex = const Value.absent(),
+    this.income = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   ScannerTemplatesCompanion.insert({
@@ -6194,6 +6252,8 @@ class ScannerTemplatesCompanion extends UpdateCompanion<ScannerTemplate> {
     required String defaultCategoryFk,
     this.walletFk = const Value.absent(),
     this.ignore = const Value.absent(),
+    required String regex,
+    this.income = const Value.absent(),
     this.rowid = const Value.absent(),
   })  : templateName = Value(templateName),
         contains = Value(contains),
@@ -6201,7 +6261,8 @@ class ScannerTemplatesCompanion extends UpdateCompanion<ScannerTemplate> {
         titleTransactionAfter = Value(titleTransactionAfter),
         amountTransactionBefore = Value(amountTransactionBefore),
         amountTransactionAfter = Value(amountTransactionAfter),
-        defaultCategoryFk = Value(defaultCategoryFk);
+        defaultCategoryFk = Value(defaultCategoryFk),
+        regex = Value(regex);
   static Insertable<ScannerTemplate> custom({
     Expression<String>? scannerTemplatePk,
     Expression<DateTime>? dateCreated,
@@ -6215,6 +6276,8 @@ class ScannerTemplatesCompanion extends UpdateCompanion<ScannerTemplate> {
     Expression<String>? defaultCategoryFk,
     Expression<String>? walletFk,
     Expression<bool>? ignore,
+    Expression<String>? regex,
+    Expression<bool>? income,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -6234,6 +6297,8 @@ class ScannerTemplatesCompanion extends UpdateCompanion<ScannerTemplate> {
       if (defaultCategoryFk != null) 'default_category_fk': defaultCategoryFk,
       if (walletFk != null) 'wallet_fk': walletFk,
       if (ignore != null) 'ignore': ignore,
+      if (regex != null) 'regex': regex,
+      if (income != null) 'income': income,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -6251,6 +6316,8 @@ class ScannerTemplatesCompanion extends UpdateCompanion<ScannerTemplate> {
       Value<String>? defaultCategoryFk,
       Value<String>? walletFk,
       Value<bool>? ignore,
+      Value<String>? regex,
+      Value<bool>? income,
       Value<int>? rowid}) {
     return ScannerTemplatesCompanion(
       scannerTemplatePk: scannerTemplatePk ?? this.scannerTemplatePk,
@@ -6269,6 +6336,8 @@ class ScannerTemplatesCompanion extends UpdateCompanion<ScannerTemplate> {
       defaultCategoryFk: defaultCategoryFk ?? this.defaultCategoryFk,
       walletFk: walletFk ?? this.walletFk,
       ignore: ignore ?? this.ignore,
+      regex: regex ?? this.regex,
+      income: income ?? this.income,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -6316,6 +6385,12 @@ class ScannerTemplatesCompanion extends UpdateCompanion<ScannerTemplate> {
     if (ignore.present) {
       map['ignore'] = Variable<bool>(ignore.value);
     }
+    if (regex.present) {
+      map['regex'] = Variable<String>(regex.value);
+    }
+    if (income.present) {
+      map['income'] = Variable<bool>(income.value);
+    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -6337,6 +6412,8 @@ class ScannerTemplatesCompanion extends UpdateCompanion<ScannerTemplate> {
           ..write('defaultCategoryFk: $defaultCategoryFk, ')
           ..write('walletFk: $walletFk, ')
           ..write('ignore: $ignore, ')
+          ..write('regex: $regex, ')
+          ..write('income: $income, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();

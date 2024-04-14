@@ -2960,7 +2960,8 @@ class _EnterTextButtonState extends State<EnterTextButton> {
 
 Future<bool> addAssociatedTitles(
     String selectedTitle, TransactionCategory selectedCategory) async {
-  if (appStateSettings["autoAddAssociatedTitles"]) {
+  if (appStateSettings["autoAddAssociatedTitles"] &&
+      selectedCategory.name.toLowerCase() != 'unknown') {
     try {
       TransactionAssociatedTitleWithCategory? foundTitle =
           (await database.getSimilarAssociatedTitles(
