@@ -33,7 +33,8 @@ class HomePageAllSpendingSummary extends StatelessWidget {
               appStateSettings["allSpendingSummaryAllWallets"] == true) {
             List<String>? walletPks =
                 (snapshot.data ?? []).map((item) => item.walletPk).toList();
-            if (appStateSettings["allSpendingSummaryAllWallets"] == true)
+            if (walletPks.length <= 0 ||
+                appStateSettings["allSpendingSummaryAllWallets"] == true)
               walletPks = null;
             return Padding(
               padding: const EdgeInsets.only(bottom: 13, left: 13, right: 13),

@@ -272,7 +272,8 @@ class _PieChartHomeAndCategorySummaryState
             appStateSettings["pieChartAllWallets"] == true) {
           List<String>? walletPks =
               (snapshot.data ?? []).map((item) => item.walletPk).toList();
-          if (appStateSettings["pieChartAllWallets"] == true) walletPks = null;
+          if (walletPks.length <= 0 ||
+              appStateSettings["pieChartAllWallets"] == true) walletPks = null;
           return StreamBuilder<List<CategoryWithTotal>>(
             stream:
                 database.watchTotalSpentInEachCategoryInTimeRangeFromCategories(
