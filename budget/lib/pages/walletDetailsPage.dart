@@ -737,8 +737,9 @@ class WalletDetailsPageState extends State<WalletDetailsPage>
                 padding: EdgeInsets.symmetric(
                     horizontal: getHorizontalPaddingConstrained(
                   context,
-                  enabled: enableDoubleColumn(context) == false &&
-                      widget.wallet == null,
+                  enabled: (enableDoubleColumn(context) == false &&
+                          widget.wallet == null) ||
+                      widget.wallet != null,
                 )),
                 child: Container(
                   decoration: BoxDecoration(
