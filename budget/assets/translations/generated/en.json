@@ -1122,5 +1122,9 @@
   "all-outgoing-incoming": "All Outgoing & Incoming",
   "all-outgoing-incoming-description-1": "Include all negative/positive cash flow",
   "all-outgoing-incoming-description-2": "Example: Include loan transactions",
-  "applies-when-switching-tabs-in-the-homepage-transactions-list": "Applies when switching tabs in the homepage transactions list"
+  "applies-when-switching-tabs-in-the-homepage-transactions-list": "Applies when switching tabs in the homepage transactions list",
+  "number-pad-format": "Number Pad Format",
+  "set-lower-range": "Set Lower Range",
+  "set-upper-range": "Set Upper Range",
+  "set-range": "Set Range"
 }

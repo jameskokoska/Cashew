@@ -83,19 +83,11 @@ class HomePageLineGraph extends StatelessWidget {
                               appStateSettings["lineGraphReferenceBudgetPk"]
                                   .toString()),
                           builder: (context, snapshot) {
-                            if (snapshot.hasData) {
+                            if (snapshot.hasData && snapshot.data != null) {
                               Budget budget = snapshot.data!;
-                              ColorScheme budgetColorScheme =
-                                  ColorScheme.fromSeed(
-                                seedColor: HexColor(budget.colour,
-                                    defaultColor:
-                                        Theme.of(context).colorScheme.primary),
-                                brightness: determineBrightnessTheme(context),
-                              );
                               return BudgetLineGraph(
                                 key: ValueKey(budget.budgetPk),
                                 budget: budget,
-                                budgetColorScheme: budgetColorScheme,
                                 dateForRange: DateTime.now(),
                                 budgetRange:
                                     getBudgetDate(budget, DateTime.now()),

@@ -46,8 +46,16 @@ class PastBudgetsPage extends StatelessWidget {
         stream: database.getBudget(budgetPk),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return _PastBudgetsPageContent(
-              budget: snapshot.data!,
+            ColorScheme budgetColorScheme = ColorScheme.fromSeed(
+              seedColor: HexColor(snapshot.data?.colour,
+                  defaultColor: Theme.of(context).colorScheme.primary),
+              brightness: determineBrightnessTheme(context),
+            );
+            return Theme(
+              data: Theme.of(context).copyWith(colorScheme: budgetColorScheme),
+              child: _PastBudgetsPageContent(
+                budget: snapshot.data!,
+              ),
             );
           }
           return SizedBox.shrink();
@@ -256,24 +264,20 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
   @override
   Widget build(BuildContext context) {
     DateTimeRange budgetRange = getBudgetDate(widget.budget, DateTime.now());
-    ColorScheme budgetColorScheme = ColorScheme.fromSeed(
-      seedColor: HexColor(widget.budget.colour,
-          defaultColor: Theme.of(context).colorScheme.primary),
-      brightness: determineBrightnessTheme(context),
-    );
-    Color pageBackgroundColor = Theme.of(context).brightness ==
-                Brightness.dark &&
-            appStateSettings["forceFullDarkBackground"]
-        ? Colors.black
-        : appStateSettings["materialYou"]
-            ? dynamicPastel(context, budgetColorScheme.primary, amount: 0.92)
-            : Theme.of(context).canvasColor;
+    Color pageBackgroundColor =
+        Theme.of(context).brightness == Brightness.dark &&
+                appStateSettings["forceFullDarkBackground"]
+            ? Colors.black
+            : appStateSettings["materialYou"]
+                ? dynamicPastel(context, Theme.of(context).colorScheme.primary,
+                    amount: 0.92)
+                : Theme.of(context).canvasColor;
     double budgetAmount = budgetAmountToPrimaryCurrency(
         Provider.of<AllWallets>(context, listen: true), widget.budget);
 
     return PageFramework(
       backgroundColor: pageBackgroundColor,
-      appBarBackgroundColor: budgetColorScheme.secondaryContainer,
+      appBarBackgroundColor: Theme.of(context).colorScheme.secondaryContainer,
       appBarBackgroundColorStart: pageBackgroundColor,
       key: budgetHistoryKey,
       title: "history".tr(),
@@ -300,7 +304,7 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
             duration: Duration(milliseconds: 500),
             decoration: BoxDecoration(
               color: selectedCategoryFks.length > 0
-                  ? budgetColorScheme.tertiary.withOpacity(0.1)
+                  ? Theme.of(context).colorScheme.tertiary.withOpacity(0.1)
                   : Colors.transparent,
               borderRadius: BorderRadius.circular(100),
             ),
@@ -310,8 +314,8 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
                   ? Icons.category_outlined
                   : Icons.category_rounded,
               color: selectedCategoryFks.length > 0
-                  ? budgetColorScheme.tertiary
-                  : budgetColorScheme.onSecondaryContainer,
+                  ? Theme.of(context).colorScheme.tertiary
+                  : Theme.of(context).colorScheme.onSecondaryContainer,
             ),
           ),
         ),
@@ -331,7 +335,7 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
             appStateSettings["outlinedIcons"]
                 ? Icons.edit_outlined
                 : Icons.edit_rounded,
-            color: budgetColorScheme.onSecondaryContainer,
+            color: Theme.of(context).colorScheme.onSecondaryContainer,
           ),
         ),
       ],
@@ -486,7 +490,9 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
                                             },
                                             color: dynamicPastel(
                                               context,
-                                              budgetColorScheme.primary,
+                                              Theme.of(context)
+                                                  .colorScheme
+                                                  .primary,
                                               amountLight: 0.4,
                                               amountDark: 0.2,
                                             ),
@@ -545,7 +551,6 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
                       ),
                     ),
                     LoadMorePeriodsButton(
-                      color: budgetColorScheme.primary,
                       onPressed: () {
                         if (amountLoadedPressedOnce == false) {
                           setState(() {
@@ -590,7 +595,6 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
                     ? BudgetSpenderSummary(
                         budget: widget.budget,
                         budgetRange: budgetRange,
-                        budgetColorScheme: budgetColorScheme,
                         setSelectedMember: (member) {},
                         disableMemberSelection: true,
                         allTime: true,
@@ -708,7 +712,6 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
                     });
                   }
                 },
-                budgetColorScheme: budgetColorScheme,
                 loadLines: (amountLoaded) {
                   if (amountLoadedPressedOnce == false) {
                     // This is set insetAmountLoaded
@@ -731,10 +734,8 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
 }
 
 class LoadMorePeriodsButton extends StatelessWidget {
-  const LoadMorePeriodsButton(
-      {required this.color, required this.onPressed, super.key});
+  const LoadMorePeriodsButton({required this.onPressed, super.key});
 
-  final Color color;
   final VoidCallback onPressed;
 
   @override
@@ -747,13 +748,13 @@ class LoadMorePeriodsButton extends StatelessWidget {
         child: Tooltip(
           message: "view-more".tr(),
           child: IconButton(
-            color: color,
+            color: Theme.of(context).colorScheme.primary,
             icon: Icon(
               appStateSettings["outlinedIcons"]
                   ? Icons.history_outlined
                   : Icons.history_rounded,
               size: 22,
-              color: color.withOpacity(0.8),
+              color: Theme.of(context).colorScheme.primary.withOpacity(0.8),
             ),
             onPressed: onPressed,
           ),
@@ -768,7 +769,6 @@ class PastBudgetContainerList extends StatefulWidget {
     required this.budget,
     required this.amountLoaded,
     required this.setAmountLoaded,
-    required this.budgetColorScheme,
     required this.loadLines,
     required this.backgroundColor,
     super.key,
@@ -777,7 +777,6 @@ class PastBudgetContainerList extends StatefulWidget {
   final Budget budget;
   final int amountLoaded;
   final Function(int) setAmountLoaded;
-  final ColorScheme budgetColorScheme;
   final Function(int amountLoaded) loadLines;
   final Color backgroundColor;
 
@@ -863,7 +862,6 @@ class _PastBudgetContainerListState extends State<PastBudgetContainerList> {
                               dateForRange: datePast,
                               isPastBudget: index == 0 ? false : true,
                               isPastBudgetButCurrentPeriod: index == 0,
-                              budgetColorScheme: widget.budgetColorScheme,
                               backgroundColor: widget.backgroundColor,
                             ),
                           ),
@@ -934,7 +932,6 @@ class _PastBudgetContainerListState extends State<PastBudgetContainerList> {
                                 dateForRange: datePast,
                                 isPastBudget: index == 0 ? false : true,
                                 isPastBudgetButCurrentPeriod: index == 0,
-                                budgetColorScheme: widget.budgetColorScheme,
                                 backgroundColor: widget.backgroundColor,
                               ),
                             ),
@@ -959,8 +956,8 @@ class _PastBudgetContainerListState extends State<PastBudgetContainerList> {
               child: Opacity(
                 opacity: 0.5,
                 child: LowKeyButton(
-                  color: widget.budgetColorScheme.secondaryContainer,
-                  textColor: widget.budgetColorScheme.onSecondaryContainer,
+                  color: Theme.of(context).colorScheme.secondaryContainer,
+                  textColor: Theme.of(context).colorScheme.onSecondaryContainer,
                   onTap: () {
                     int amountMoreToLoad =
                         getIsFullScreen(context) == false ? 3 : 5;
@@ -988,7 +985,6 @@ class PastBudgetContainer extends StatelessWidget {
     this.dateForRange,
     this.isPastBudget = false,
     this.isPastBudgetButCurrentPeriod = false,
-    required this.budgetColorScheme,
     required this.backgroundColor,
   }) : super(key: key);
 
@@ -998,11 +994,16 @@ class PastBudgetContainer extends StatelessWidget {
   final DateTime? dateForRange;
   final bool? isPastBudget;
   final bool? isPastBudgetButCurrentPeriod;
-  final ColorScheme budgetColorScheme;
   final Color backgroundColor;
 
   @override
   Widget build(BuildContext context) {
+    Color progressForegroundColor = dynamicPastel(
+        context, Theme.of(context).colorScheme.primary,
+        amountLight: 0.4, amountDark: 0.2);
+    Color progressBackgroundColor =
+        Theme.of(context).colorScheme.secondaryContainer;
+    Color progressOverageColor = Theme.of(context).colorScheme.tertiary;
     double budgetAmount = budgetAmountToPrimaryCurrency(
         Provider.of<AllWallets>(context, listen: true), budget);
     DateTime dateForRangeLocal =
@@ -1211,11 +1212,9 @@ class PastBudgetContainer extends StatelessWidget {
                       width: 60,
                       child: AnimatedCircularProgress(
                         percent: (totalSpent / budgetAmount).abs(),
-                        backgroundColor: budgetColorScheme.secondaryContainer,
-                        foregroundColor: dynamicPastel(
-                            context, budgetColorScheme.primary,
-                            amountLight: 0.4, amountDark: 0.2),
-                        overageColor: budgetColorScheme.tertiary,
+                        backgroundColor: progressBackgroundColor,
+                        foregroundColor: progressForegroundColor,
+                        overageColor: progressOverageColor,
                         overageShadowColor: getColor(context, "white"),
                       ),
                     ),
@@ -1237,7 +1236,7 @@ class PastBudgetContainer extends StatelessWidget {
             : appStateSettings["materialYou"]
                 ? dynamicPastel(
                     context,
-                    budgetColorScheme.secondaryContainer,
+                    Theme.of(context).colorScheme.secondaryContainer,
                     amount: 0.5,
                   )
                 : getColor(context, "lightDarkAccentHeavyLight"),
@@ -1262,7 +1261,7 @@ class PastBudgetContainer extends StatelessWidget {
                 : appStateSettings["materialYou"]
                     ? dynamicPastel(
                         context,
-                        budgetColorScheme.secondaryContainer,
+                        Theme.of(context).colorScheme.secondaryContainer,
                         amount: 0.3,
                       )
                     : getColor(context, "lightDarkAccentHeavyLight"),

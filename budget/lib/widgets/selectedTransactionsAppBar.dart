@@ -40,19 +40,14 @@ import 'tappableTextEntry.dart';
 
 class SelectedTransactionsAppBar extends StatelessWidget {
   const SelectedTransactionsAppBar(
-      {Key? key,
-      required this.pageID,
-      this.enableSettleAllButton = false,
-      this.colorScheme})
+      {Key? key, required this.pageID, this.enableSettleAllButton = false})
       : super(key: key);
 
   final String pageID;
-  final ColorScheme? colorScheme;
   final bool enableSettleAllButton;
 
   @override
   Widget build(BuildContext context) {
-    ColorScheme colorScheme = this.colorScheme ?? Theme.of(context).colorScheme;
     return ValueListenableBuilder(
       valueListenable: globalSelectedID
           .select((controller) => (controller.value[pageID] ?? []).length),
@@ -81,7 +76,7 @@ class SelectedTransactionsAppBar extends StatelessWidget {
                     //       getIsFullScreen(context) ? 20 : 10),
                     // ),
                     boxShadow: boxShadowCheck(boxShadowSharp(context)),
-                    color: colorScheme.secondaryContainer,
+                    color: Theme.of(context).colorScheme.secondaryContainer,
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -91,7 +86,7 @@ class SelectedTransactionsAppBar extends StatelessWidget {
                           children: [
                             IconButton(
                               padding: EdgeInsets.all(15),
-                              color: colorScheme.secondary,
+                              color: Theme.of(context).colorScheme.secondary,
                               icon: Icon(
                                 getPlatform() == PlatformOS.isIOS
                                     ? appStateSettings["outlinedIcons"]
@@ -100,7 +95,7 @@ class SelectedTransactionsAppBar extends StatelessWidget {
                                     : appStateSettings["outlinedIcons"]
                                         ? Icons.arrow_back_outlined
                                         : Icons.arrow_back_rounded,
-                                color: colorScheme.secondary,
+                                color: Theme.of(context).colorScheme.secondary,
                               ),
                               onPressed: () {
                                 globalSelectedID.value[pageID] = [];
@@ -192,10 +187,10 @@ class SelectedTransactionsAppBar extends StatelessWidget {
                           true)
                         IconButton(
                           padding: EdgeInsets.all(15),
-                          color: colorScheme.secondary,
+                          color: Theme.of(context).colorScheme.secondary,
                           icon: Icon(
                             Icons.edit,
-                            color: colorScheme.secondary,
+                            color: Theme.of(context).colorScheme.secondary,
                           ),
                           onPressed: () {
                             openPopupCustom(
@@ -214,7 +209,6 @@ class SelectedTransactionsAppBar extends StatelessWidget {
                       SelectedTransactionsAppBarMenu(
                         pageID: pageID,
                         selectedTransactionPks: listOfIDs,
-                        colorScheme: colorScheme,
                         enableSettleAllButton: enableSettleAllButton,
                       )
                     ],
@@ -234,12 +228,10 @@ class SelectedTransactionsAppBarMenu extends StatelessWidget {
       {Key? key,
       required this.pageID,
       required this.enableSettleAllButton,
-      required this.colorScheme,
       required this.selectedTransactionPks})
       : super(key: key);
 
   final String pageID;
-  final ColorScheme colorScheme;
   final bool enableSettleAllButton;
   final List<String> selectedTransactionPks;
 
@@ -269,7 +261,6 @@ class SelectedTransactionsAppBarMenu extends StatelessWidget {
                 bool enableDuplicate = selectedTransactionPks.length <= 10;
 
                 return CustomPopupMenuButton(
-                  colorScheme: colorScheme,
                   showButtons: enableDoubleColumn(context),
                   keepOutFirst: true,
                   // There is no header taking up space, we can always keep out the delete button

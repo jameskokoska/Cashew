@@ -42,6 +42,7 @@ import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/radioItems.dart';
 import 'package:budget/widgets/ratingPopup.dart';
 import 'package:budget/widgets/restartApp.dart';
+import 'package:budget/widgets/selectAmount.dart';
 import 'package:budget/widgets/selectColor.dart';
 import 'package:budget/widgets/settingsContainers.dart';
 import 'package:budget/pages/walletDetailsPage.dart';
@@ -694,31 +695,11 @@ class MoreOptionsPagePreferences extends StatelessWidget {
         NumberFormattingSetting(),
         PercentagePrecisionSetting(),
         Time24HourFormatSetting(),
-        ExtraZerosButtonSetting(),
-        // ShortFormAmountSetting(),
+        NumberPadFormatSetting(),
       ],
     );
   }
 }
-
-// class ShortFormAmountSetting extends StatelessWidget {
-//   const ShortFormAmountSetting({super.key});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return SettingsContainerSwitch(
-//       title: "short-form-amounts".tr(),
-//       description: "material-you-description".tr(),
-//       onSwitched: (value) {
-//         updateSettings("materialYou", value, updateGlobalState: true);
-//       },
-//       initialValue: appStateSettings["materialYou"],
-//       icon: appStateSettings["outlinedIcons"]
-//           ? Icons.brush_outlined
-//           : Icons.brush_rounded,
-//     );
-//   }
-// }
 
 class WidgetSettings extends StatelessWidget {
   const WidgetSettings({super.key});
@@ -1180,6 +1161,23 @@ class _SetNumberFormatPopupState extends State<SetNumberFormatPopup> {
       title: "number-format".tr(),
       child: Column(
         children: [
+          SettingsContainerSwitch(
+            title: "short-number-format".tr(),
+            onSwitched: (value) {
+              updateSettings(
+                "shortNumberFormat",
+                value ? "compact" : null,
+                updateGlobalState: true,
+              );
+            },
+            initialValue: appStateSettings["shortNumberFormat"] == "compact",
+            enableBorderRadius: true,
+            icon: appStateSettings["outlinedIcons"]
+                ? Icons.one_k_outlined
+                : Icons.one_k_rounded,
+          ),
+          HorizontalBreak(),
+          SizedBox(height: 10),
           AnimatedOpacity(
             duration: Duration(milliseconds: 500),
             opacity: customNumberFormat == false ? 1 : 0.5,
@@ -1260,23 +1258,6 @@ class _SetNumberFormatPopupState extends State<SetNumberFormatPopup> {
                 ),
               ],
             ),
-          ),
-          SizedBox(height: 15),
-          HorizontalBreak(),
-          SettingsContainerSwitch(
-            title: "short-number-format".tr(),
-            onSwitched: (value) {
-              updateSettings(
-                "shortNumberFormat",
-                value ? "compact" : null,
-                updateGlobalState: true,
-              );
-            },
-            initialValue: appStateSettings["shortNumberFormat"] == "compact",
-            enableBorderRadius: true,
-            icon: appStateSettings["outlinedIcons"]
-                ? Icons.one_k_outlined
-                : Icons.one_k_rounded,
           ),
           SizedBox(height: 5),
           Tappable(
@@ -1459,25 +1440,185 @@ class _CustomNumberFormatPopupState extends State<CustomNumberFormatPopup> {
   }
 }
 
+class NumberPadFormatSetting extends StatelessWidget {
+  const NumberPadFormatSetting({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return SettingsContainer(
+      title: "number-pad-format".tr(),
+      onTap: () {
+        openBottomSheet(
+          context,
+          NumberPadFormatSettingPopup(),
+        );
+      },
+      icon: appStateSettings["outlinedIcons"]
+          ? Icons.dialpad_sharp
+          : Icons.dialpad_rounded,
+    );
+  }
+}
+
+class NumberPadFormatSettingPopup extends StatefulWidget {
+  const NumberPadFormatSettingPopup({super.key});
+
+  @override
+  State<NumberPadFormatSettingPopup> createState() =>
+      _NumberPadFormatSettingPopupState();
+}
+
+class _NumberPadFormatSettingPopupState
+    extends State<NumberPadFormatSettingPopup> {
+  @override
+  Widget build(BuildContext context) {
+    return PopupFramework(
+      title: "number-pad-format".tr(),
+      child: Column(
+        children: [
+          ExtraZerosButtonSetting(
+            enableBorderRadius: true,
+            onChange: () {
+              setState(() {});
+            },
+          ),
+          HorizontalBreak(),
+          SizedBox(height: 10),
+          NumberPadFormatPicker(),
+        ],
+      ),
+    );
+  }
+}
+
+class NumberPadFormatPicker extends StatefulWidget {
+  const NumberPadFormatPicker({super.key});
+
+  @override
+  State<NumberPadFormatPicker> createState() => _NumberPadFormatPickerState();
+}
+
+class _NumberPadFormatPickerState extends State<NumberPadFormatPicker> {
+  NumberPadFormat selectedNumberPadFormat = getNumberPadFormat();
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Row(
+          children: [
+            Expanded(
+              child: AnimatedOpacity(
+                duration: Duration(milliseconds: 500),
+                opacity: selectedNumberPadFormat == NumberPadFormat.format123
+                    ? 1
+                    : 0.5,
+                child: OutlinedButtonStacked(
+                  filled: selectedNumberPadFormat == NumberPadFormat.format123,
+                  alignLeft: true,
+                  alignBeside: true,
+                  text: null,
+                  afterWidget: IgnorePointer(
+                    child: NumberPadAmount(
+                      extraWidgetAboveNumbers: null,
+                      addToAmount: (_) {},
+                      enableDecimal: true,
+                      removeToAmount: () {},
+                      removeAll: () {},
+                      canChange: () => true,
+                      enableCalculator: true,
+                      padding: EdgeInsets.zero,
+                      setState: () {},
+                      format: NumberPadFormat.format123,
+                    ),
+                  ),
+                  padding:
+                      EdgeInsets.only(left: 20, right: 15, top: 10, bottom: 15),
+                  iconData: null,
+                  onTap: () {
+                    setState(() {
+                      selectedNumberPadFormat = NumberPadFormat.format123;
+                    });
+                    updateSettings(
+                        "numberPadFormat", NumberPadFormat.format123.index,
+                        updateGlobalState: false);
+                  },
+                ),
+              ),
+            ),
+          ],
+        ),
+        SizedBox(height: 12),
+        Row(
+          children: [
+            Expanded(
+              child: AnimatedOpacity(
+                duration: Duration(milliseconds: 500),
+                opacity: selectedNumberPadFormat == NumberPadFormat.format789
+                    ? 1
+                    : 0.5,
+                child: OutlinedButtonStacked(
+                  filled: selectedNumberPadFormat == NumberPadFormat.format789,
+                  alignLeft: true,
+                  alignBeside: true,
+                  text: null,
+                  afterWidget: IgnorePointer(
+                    child: NumberPadAmount(
+                      extraWidgetAboveNumbers: null,
+                      addToAmount: (_) {},
+                      enableDecimal: true,
+                      removeToAmount: () {},
+                      removeAll: () {},
+                      canChange: () => true,
+                      enableCalculator: true,
+                      padding: EdgeInsets.zero,
+                      setState: () {},
+                      format: NumberPadFormat.format789,
+                    ),
+                  ),
+                  padding:
+                      EdgeInsets.only(left: 20, right: 15, top: 10, bottom: 15),
+                  iconData: null,
+                  onTap: () {
+                    setState(() {
+                      selectedNumberPadFormat = NumberPadFormat.format789;
+                    });
+                    updateSettings(
+                        "numberPadFormat", NumberPadFormat.format789.index,
+                        updateGlobalState: false);
+                  },
+                ),
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
 class ExtraZerosButtonSetting extends StatelessWidget {
-  const ExtraZerosButtonSetting({this.enableBorderRadius = false, super.key});
+  const ExtraZerosButtonSetting(
+      {this.onChange, this.enableBorderRadius = false, super.key});
   final bool enableBorderRadius;
+  final VoidCallback? onChange;
   @override
   Widget build(BuildContext context) {
     return SettingsContainerDropdown(
       enableBorderRadius: enableBorderRadius,
       title: "extra-zeros-button".tr(),
       icon: appStateSettings["outlinedIcons"]
-          ? Icons.check_box_outline_blank_outlined
-          : Icons.check_box_outline_blank_rounded,
+          ? Symbols.counter_0_sharp
+          : Symbols.counter_0_rounded,
       initial: appStateSettings["extraZerosButton"].toString(),
       items: ["", "00", "000"],
       onChanged: (value) async {
-        updateSettings(
+        await updateSettings(
           "extraZerosButton",
           value == "" ? null : value,
           updateGlobalState: false,
         );
+        if (onChange != null) onChange!();
       },
       getLabel: (item) {
         if (item == "") return "none".tr().capitalizeFirst;

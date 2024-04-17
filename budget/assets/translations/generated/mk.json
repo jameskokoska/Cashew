@@ -156,6 +156,14 @@
   "more-days": "повеќе денови",
   "more-day": "ден повеќе",
   "spending-tracking": "Можете да потрошите",
+  "of-spending": "Од трошоците",
+  "of-income": "Од приходот",
+  "of-expense": "Од потрошувачката",
+  "select-currency": "Избери валута",
+  "categories": "Категории",
+  "titles": "Наслови",
+  "edit-home": "Прилагоди почетна",
+  "overdue-and-upcoming": "Задоцнето и претстојно",
   "future-transactions": "Идни трансакции",
   "hidden": "скриени",
   "present-transactions": "Тековни трансакции",
@@ -163,5 +171,9 @@
   "all-outgoing-incoming": "Сите појдовни и дојдовни",
   "all-outgoing-incoming-description-1": "Вклучете ги сите негативни/позитивни парични текови",
   "all-outgoing-incoming-description-2": "Пример: Вклучете трансакции за заем",
-  "applies-when-switching-tabs-in-the-homepage-transactions-list": "Се применува при префрлување јазичиња во списокот со трансакции на почетната страница"
+  "applies-when-switching-tabs-in-the-homepage-transactions-list": "Се применува при префрлување јазичиња во списокот со трансакции на почетната страница",
+  "number-pad-format": "Формат на подлога за броеви",
+  "set-lower-range": "Долниот опсег",
+  "set-upper-range": "Горен опсег",
+  "set-range": "Поставете опсег"
 }

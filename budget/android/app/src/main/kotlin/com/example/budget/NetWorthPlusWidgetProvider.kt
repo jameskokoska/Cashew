@@ -10,6 +10,8 @@ import android.widget.RemoteViews
 import es.antonborri.home_widget.HomeWidgetBackgroundIntent
 import es.antonborri.home_widget.HomeWidgetLaunchIntent
 import es.antonborri.home_widget.HomeWidgetProvider
+import android.graphics.Color
+import android.graphics.drawable.GradientDrawable
 
 class NetWorthPlusWidgetProvider : HomeWidgetProvider() {
 
@@ -40,6 +42,11 @@ class NetWorthPlusWidgetProvider : HomeWidgetProvider() {
                   ?: "#FFFFFF"))
                   setInt(R.id.net_worth_transactions_number, "setTextColor",  android.graphics.Color.parseColor(widgetData.getString("widgetColorText", null)
                   ?: "#FFFFFF"))
+                }catch (e: Exception){}
+
+                try {
+                  setInt(R.id.plus_button, "setColorFilter",  android.graphics.Color.parseColor(widgetData.getString("widgetColorText", null)
+                  ?: "#FFFFFF"));
                 }catch (e: Exception){}
 
                 try {

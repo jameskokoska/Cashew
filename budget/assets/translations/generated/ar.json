@@ -1122,5 +1122,9 @@
   "all-outgoing-incoming": "جميع الصادرة والواردة",
   "all-outgoing-incoming-description-1": "قم بتضمين جميع التدفقات النقدية السلبية/الإيجابية",
   "all-outgoing-incoming-description-2": "مثال: تضمين معاملات القروض",
-  "applies-when-switching-tabs-in-the-homepage-transactions-list": "ينطبق عند تبديل علامات التبويب في قائمة معاملات الصفحة الرئيسية"
+  "applies-when-switching-tabs-in-the-homepage-transactions-list": "ينطبق عند تبديل علامات التبويب في قائمة معاملات الصفحة الرئيسية",
+  "number-pad-format": "تنسيق لوحة الأرقام",
+  "set-lower-range": "النطاق الأدنى",
+  "set-upper-range": "النطاق العلوي",
+  "set-range": "مجموعة مجموعة"
 }

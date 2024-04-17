@@ -237,7 +237,8 @@ class RenderHomePageWidgetsState extends State<RenderHomePageWidgets> {
       builder: (context, snapshot) {
         List<String>? walletPks =
             (snapshot.data ?? []).map((item) => item.walletPk).toList();
-        if (appStateSettings["netWorthAllWallets"] == true) walletPks = null;
+        if (walletPks.length <= 0 ||
+            appStateSettings["netWorthAllWallets"] == true) walletPks = null;
         return Container(
           child: StreamBuilder<TotalWithCount?>(
             stream: database.watchTotalWithCountOfWallet(

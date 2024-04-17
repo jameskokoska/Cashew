@@ -53,18 +53,15 @@
 		<FrameLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
-			<Button
-            android:id="@+id/plus_button"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
-            android:text="+"
-            android:textSize="28sp"
-            android:gravity="center"
-            android:textColor="#FFFFFF"
-            android:textStyle="bold"
-            android:padding="10dp"
-            android:background="@drawable/rounded_button"
-        />
+			<ImageButton
+          android:id="@+id/plus_button"
+          android:src="@drawable/plus_button"
+          android:layout_width="55dp"
+          android:layout_height="58dp"
+          android:gravity="center"
+          android:adjustViewBounds="true"
+          android:scaleType="fitCenter"
+          android:background="@android:color/transparent"/>
 		</FrameLayout>
 	</LinearLayout>
 </FrameLayout>

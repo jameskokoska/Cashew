@@ -1122,5 +1122,9 @@
   "all-outgoing-incoming": "Tüm Giden ve Gelen",
   "all-outgoing-incoming-description-1": "Tüm negatif/pozitif nakit akışını dahil edin",
   "all-outgoing-incoming-description-2": "Örnek: Kredi işlemlerini dahil edin",
-  "applies-when-switching-tabs-in-the-homepage-transactions-list": "Ana sayfadaki işlemler listesinde sekmeler arasında geçiş yapılırken uygulanır"
+  "applies-when-switching-tabs-in-the-homepage-transactions-list": "Ana sayfadaki işlemler listesinde sekmeler arasında geçiş yaparken geçerlidir",
+  "number-pad-format": "Sayı Tuş Takımı Formatı",
+  "set-lower-range": "Alt Aralık",
+  "set-upper-range": "Daha yüksek kademe",
+  "set-range": "Aralığı Ayarla"
 }

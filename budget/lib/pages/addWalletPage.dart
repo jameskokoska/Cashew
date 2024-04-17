@@ -862,7 +862,7 @@ class _CorrectBalancePopupState extends State<CorrectBalancePopup> {
                   AnimatedSizeSwitcher(
                     clipBehavior: Clip.none,
                     child: TextFont(
-                      key: ValueKey(enteredAmount),
+                      key: ValueKey(enteredAmount.toString()),
                       autoSizeText: true,
                       maxLines: 1,
                       minFontSize: 16,
@@ -871,6 +871,7 @@ class _CorrectBalancePopupState extends State<CorrectBalancePopup> {
                         enteredAmount,
                         currencyKey: widget.wallet.currency,
                         decimals: widget.wallet.decimals,
+                        forceAbsoluteZero: false,
                       ),
                       textAlign: TextAlign.center,
                       fontSize: 30,
@@ -938,6 +939,9 @@ class _CorrectBalancePopupState extends State<CorrectBalancePopup> {
                   initialValue: totalWalletAmount < 0,
                   syncWithInitialValue: false,
                   runOnSwitchedInitially: true,
+                  icon: appStateSettings["outlinedIcons"]
+                      ? Icons.exposure_outlined
+                      : Icons.exposure_rounded,
                 ),
                 showEnteredNumber: false,
                 amountPassed: "0",

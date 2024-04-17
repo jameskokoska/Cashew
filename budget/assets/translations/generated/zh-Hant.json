@@ -1122,5 +1122,9 @@
   "all-outgoing-incoming": "所有傳出和傳入",
   "all-outgoing-incoming-description-1": "包括所有負/正現金流量",
   "all-outgoing-incoming-description-2": "例如：包括貸款交易",
-  "applies-when-switching-tabs-in-the-homepage-transactions-list": "在主頁交易清單中切換選項卡時適用"
+  "applies-when-switching-tabs-in-the-homepage-transactions-list": "在主頁交易清單中切換選項卡時適用",
+  "number-pad-format": "數字鍵盤格式",
+  "set-lower-range": "較低範圍",
+  "set-upper-range": "上限",
+  "set-range": "設定範圍"
 }

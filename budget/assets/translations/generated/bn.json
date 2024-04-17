@@ -1122,5 +1122,9 @@
   "all-outgoing-incoming": "সব আউটগোয়িং এবং ইনকামিং",
   "all-outgoing-incoming-description-1": "সমস্ত নেতিবাচক/ইতিবাচক নগদ প্রবাহ অন্তর্ভুক্ত করুন",
   "all-outgoing-incoming-description-2": "উদাহরণ: ঋণ লেনদেন অন্তর্ভুক্ত করুন",
-  "applies-when-switching-tabs-in-the-homepage-transactions-list": "হোমপেজ লেনদেনের তালিকায় ট্যাব পরিবর্তন করার সময় প্রযোজ্য"
+  "applies-when-switching-tabs-in-the-homepage-transactions-list": "হোমপেজ লেনদেনের তালিকায় ট্যাব পরিবর্তন করার সময় প্রযোজ্য",
+  "number-pad-format": "নম্বর প্যাড বিন্যাস",
+  "set-lower-range": "নিম্ন পরিসর",
+  "set-upper-range": "আপার রেঞ্জ",
+  "set-range": "পরিসীমা সেট করুন"
 }

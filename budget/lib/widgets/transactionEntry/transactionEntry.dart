@@ -524,20 +524,23 @@ class TransactionEntry extends StatelessWidget {
           dateToCompare: transaction.dateCreated,
           listID: listID,
           child: ValueListenableBuilder(
-            valueListenable: globalSelectedID.select(
-              (controller) =>
-                  (transactionBefore != null &&
-                          controller.value[listID ?? "0"]!
-                              .contains(transactionBefore?.transactionPk))
-                      .toString() +
-                  (controller.value[listID ?? "0"]!
-                          .contains(transaction.transactionPk))
-                      .toString() +
-                  (transactionAfter != null &&
-                          controller.value[listID ?? "0"]!
-                              .contains(transactionAfter?.transactionPk))
-                      .toString(),
-            ),
+            valueListenable: enableSelectionCheckmark
+                ? globalSelectedID.select((controller) =>
+                    (controller.value[listID ?? "0"] ?? []).length)
+                : globalSelectedID.select(
+                    (controller) =>
+                        (transactionBefore != null &&
+                                controller.value[listID ?? "0"]!
+                                    .contains(transactionBefore?.transactionPk))
+                            .toString() +
+                        (controller.value[listID ?? "0"]!
+                                .contains(transaction.transactionPk))
+                            .toString() +
+                        (transactionAfter != null &&
+                                controller.value[listID ?? "0"]!
+                                    .contains(transactionAfter?.transactionPk))
+                            .toString(),
+                  ),
             builder: (context, _, __) {
               bool? areTransactionsBeingSelected =
                   globalSelectedID.value[listID ?? "0"]?.isNotEmpty;

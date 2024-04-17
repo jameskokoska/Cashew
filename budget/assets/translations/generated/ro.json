@@ -1122,5 +1122,9 @@
   "all-outgoing-incoming": "Toate cele de ieșire și de intrare",
   "all-outgoing-incoming-description-1": "Includeți toate fluxurile de numerar negative/pozitive",
   "all-outgoing-incoming-description-2": "Exemplu: Includeți tranzacțiile de împrumut",
-  "applies-when-switching-tabs-in-the-homepage-transactions-list": "Se aplică la schimbarea filelor din lista de tranzacții de pe pagina de pornire"
+  "applies-when-switching-tabs-in-the-homepage-transactions-list": "Se aplică la schimbarea filelor din lista de tranzacții de pe pagina de pornire",
+  "number-pad-format": "Format Pad numeric",
+  "set-lower-range": "Gama Inferioară",
+  "set-upper-range": "Gama superioară",
+  "set-range": "Setați intervalul"
 }

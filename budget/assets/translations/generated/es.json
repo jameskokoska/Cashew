@@ -1122,5 +1122,9 @@
   "all-outgoing-incoming": "Todo saliente y entrante",
   "all-outgoing-incoming-description-1": "Incluir todo el flujo de caja negativo/positivo",
   "all-outgoing-incoming-description-2": "Ejemplo: incluir transacciones de préstamos",
-  "applies-when-switching-tabs-in-the-homepage-transactions-list": "Se aplica al cambiar de pestaña en la lista de transacciones de la página de inicio"
+  "applies-when-switching-tabs-in-the-homepage-transactions-list": "Se aplica al cambiar de pestaña en la lista de transacciones de la página de inicio",
+  "number-pad-format": "Formato del teclado numérico",
+  "set-lower-range": "Rango inferior",
+  "set-upper-range": "Rango superior",
+  "set-range": "Establecer rango"
 }

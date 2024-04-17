@@ -128,6 +128,10 @@ Future queueTransactionFromMessage(String messageString) async {
         .getCategoryInstanceOrNull(templateFound.defaultCategoryFk ?? "");
   }
 
+  TransactionWallet? wallet = templateFound.walletFk == "-1"
+      ? null
+      : await database.getWalletInstance(templateFound.walletFk);
+
   pushRoute(
     navigatorKey.currentContext!,
     AddTransactionPage(
@@ -137,6 +141,7 @@ Future queueTransactionFromMessage(String messageString) async {
       selectedTitle: title,
       selectedCategory: category,
       startInitialAddTransactionSequence: false,
+      selectedWallet: wallet,
     ),
   );
 }

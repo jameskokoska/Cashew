@@ -1122,5 +1122,9 @@
   "all-outgoing-incoming": "Semua Keluar & Masuk",
   "all-outgoing-incoming-description-1": "Sertakan semua arus kas negatif/positif",
   "all-outgoing-incoming-description-2": "Contoh: Sertakan transaksi pinjaman",
-  "applies-when-switching-tabs-in-the-homepage-transactions-list": "Berlaku saat berpindah tab di daftar transaksi beranda"
+  "applies-when-switching-tabs-in-the-homepage-transactions-list": "Berlaku saat berpindah tab di daftar transaksi beranda",
+  "number-pad-format": "Format Papan Angka",
+  "set-lower-range": "Kisaran Bawah",
+  "set-upper-range": "Kisaran Atas",
+  "set-range": "Tetapkan Rentang"
 }

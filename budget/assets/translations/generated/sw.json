@@ -1122,5 +1122,9 @@
   "all-outgoing-incoming": "Zote Zinazotoka na Zinazoingia",
   "all-outgoing-incoming-description-1": "Jumuisha mtiririko wa pesa hasi/chanya",
   "all-outgoing-incoming-description-2": "Mfano: Jumuisha shughuli za mkopo",
-  "applies-when-switching-tabs-in-the-homepage-transactions-list": "Hutumika wakati wa kubadilisha vichupo katika orodha ya miamala ya ukurasa wa nyumbani"
+  "applies-when-switching-tabs-in-the-homepage-transactions-list": "Hutumika wakati wa kubadilisha vichupo katika orodha ya miamala ya ukurasa wa nyumbani",
+  "number-pad-format": "Muundo wa Pedi ya Nambari",
+  "set-lower-range": "Kiwango cha chini",
+  "set-upper-range": "Safu ya Juu",
+  "set-range": "Weka Masafa"
 }

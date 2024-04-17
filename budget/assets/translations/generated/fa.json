@@ -1122,5 +1122,9 @@
   "all-outgoing-incoming": "همه خروجی و ورودی",
   "all-outgoing-incoming-description-1": "شامل تمام جریان های نقدی منفی/مثبت",
   "all-outgoing-incoming-description-2": "مثال: شامل معاملات وام",
-  "applies-when-switching-tabs-in-the-homepage-transactions-list": "هنگام تعویض برگه ها در لیست تراکنش های صفحه اصلی اعمال می شود"
+  "applies-when-switching-tabs-in-the-homepage-transactions-list": "هنگام تعویض برگه ها در لیست تراکنش های صفحه اصلی اعمال می شود",
+  "number-pad-format": "فرمت صفحه شماره",
+  "set-lower-range": "محدوده پایین تر",
+  "set-upper-range": "محدوده بالایی",
+  "set-range": "محدوده را تنظیم کنید"
 }

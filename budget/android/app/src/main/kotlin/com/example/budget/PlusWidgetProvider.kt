@@ -29,8 +29,8 @@ class PlusWidgetProvider : HomeWidgetProvider() {
                 }catch (e: Exception){}
 
                 try {
-                  setInt(R.id.plus_title, "setTextColor",  android.graphics.Color.parseColor(widgetData.getString("widgetColorText", null)
-                  ?: "#FFFFFF"))
+                  setInt(R.id.plus_image, "setColorFilter",  android.graphics.Color.parseColor(widgetData.getString("widgetColorText", null)
+                  ?: "#FFFFFF"));
                 }catch (e: Exception){}
                 
                 try {

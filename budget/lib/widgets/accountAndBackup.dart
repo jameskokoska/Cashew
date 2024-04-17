@@ -1024,7 +1024,8 @@ class _BackupManagementState extends State<BackupManagement> {
                   },
                 )
               : SizedBox.shrink(),
-          if ((widget.isManaging == false && widget.isClientSync == false)==false)
+          if ((widget.isManaging == false && widget.isClientSync == false) ==
+              false)
             SizedBox(height: 10),
           isLoading
               ? Column(
@@ -1254,13 +1255,25 @@ class _BackupManagementState extends State<BackupManagement> {
                                                     title: "delete-backup".tr(),
                                                     subtitle:
                                                         getWordedDateShortMore(
-                                                      (file.value.modifiedTime ??
-                                                              DateTime.now())
-                                                          .toLocal(),
-                                                      includeTime: true,
-                                                      includeYear: true,
-                                                      showTodayTomorrow: false,
-                                                    ),
+                                                              (file.value.modifiedTime ??
+                                                                      DateTime
+                                                                          .now())
+                                                                  .toLocal(),
+                                                              includeTime: true,
+                                                              includeYear: true,
+                                                              showTodayTomorrow:
+                                                                  false,
+                                                            ) +
+                                                            "\n" +
+                                                            getWordedTime(
+                                                                navigatorKey
+                                                                    .currentContext
+                                                                    ?.locale
+                                                                    .toString(),
+                                                                (file.value.modifiedTime ??
+                                                                        DateTime
+                                                                            .now())
+                                                                    .toLocal()),
                                                     beforeDescriptionWidget:
                                                         Padding(
                                                       padding:

@@ -1122,5 +1122,9 @@
   "all-outgoing-incoming": "הכל יוצא ונכנס",
   "all-outgoing-incoming-description-1": "כלול את כל תזרים המזומנים השלילי/חיובי",
   "all-outgoing-incoming-description-2": "דוגמה: כלול עסקאות הלוואות",
-  "applies-when-switching-tabs-in-the-homepage-transactions-list": "חל בעת החלפת כרטיסיות ברשימת העסקאות בדף הבית"
+  "applies-when-switching-tabs-in-the-homepage-transactions-list": "חל בעת החלפת כרטיסיות ברשימת העסקאות בדף הבית",
+  "number-pad-format": "פורמט לוח מספרים",
+  "set-lower-range": "טווח תחתון",
+  "set-upper-range": "טווח עליון",
+  "set-range": "הגדר טווח"
 }

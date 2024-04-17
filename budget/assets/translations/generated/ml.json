@@ -1122,5 +1122,9 @@
   "all-outgoing-incoming": "എല്ലാ ഔട്ട്‌ഗോയിംഗ് & ഇൻകമിംഗ്",
   "all-outgoing-incoming-description-1": "എല്ലാ നെഗറ്റീവ്/പോസിറ്റീവ് പണമൊഴുക്കും ഉൾപ്പെടുത്തുക",
   "all-outgoing-incoming-description-2": "ഉദാഹരണം: ലോൺ ഇടപാടുകൾ ഉൾപ്പെടുത്തുക",
-  "applies-when-switching-tabs-in-the-homepage-transactions-list": "ഹോംപേജ് ഇടപാടുകളുടെ പട്ടികയിൽ ടാബുകൾ മാറുമ്പോൾ ബാധകമാണ്"
+  "applies-when-switching-tabs-in-the-homepage-transactions-list": "ഹോംപേജ് ഇടപാടുകളുടെ പട്ടികയിൽ ടാബുകൾ മാറുമ്പോൾ ബാധകമാണ്",
+  "number-pad-format": "നമ്പർ പാഡ് ഫോർമാറ്റ്",
+  "set-lower-range": "താഴ്ന്ന ശ്രേണി",
+  "set-upper-range": "അപ്പർ റേഞ്ച്",
+  "set-range": "ശ്രേണി സജ്ജമാക്കുക"
 }

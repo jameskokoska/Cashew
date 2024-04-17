@@ -132,7 +132,6 @@ class PieChartOptions extends StatelessWidget {
     required this.onClearSelection,
     required this.onEditSpendingGoals,
     required this.toggleAllSubCategories,
-    required this.colorScheme,
     required this.showAllSubcategories,
     this.useHorizontalPaddingConstrained = true,
     super.key,
@@ -143,7 +142,6 @@ class PieChartOptions extends StatelessWidget {
   final VoidCallback onClearSelection;
   final VoidCallback? onEditSpendingGoals;
   final VoidCallback toggleAllSubCategories;
-  final ColorScheme colorScheme;
   final bool showAllSubcategories;
   final bool useHorizontalPaddingConstrained;
 
@@ -175,7 +173,7 @@ class PieChartOptions extends StatelessWidget {
                         appStateSettings["outlinedIcons"]
                             ? Icons.clear_outlined
                             : Icons.clear_rounded,
-                        color: colorScheme.secondary,
+                        color: Theme.of(context).colorScheme.secondary,
                       ),
                     ),
                   ),
@@ -201,7 +199,7 @@ class PieChartOptions extends StatelessWidget {
                                     : (appStateSettings["outlinedIcons"]
                                         ? Icons.unfold_more_outlined
                                         : Icons.unfold_more_rounded),
-                                color: colorScheme.secondary,
+                                color: Theme.of(context).colorScheme.secondary,
                               ),
                             ),
                           ),
@@ -219,7 +217,7 @@ class PieChartOptions extends StatelessWidget {
                             appStateSettings["outlinedIcons"]
                                 ? Icons.fact_check_outlined
                                 : Icons.fact_check_rounded,
-                            color: colorScheme.secondary,
+                            color: Theme.of(context).colorScheme.secondary,
                           ),
                         ),
                       ),

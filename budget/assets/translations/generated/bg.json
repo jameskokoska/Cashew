@@ -1122,5 +1122,9 @@
   "all-outgoing-incoming": "Всички изходящи и входящи",
   "all-outgoing-incoming-description-1": "Включете всички отрицателни/положителни парични потоци",
   "all-outgoing-incoming-description-2": "Пример: Включете кредитни транзакции",
-  "applies-when-switching-tabs-in-the-homepage-transactions-list": "Прилага се при превключване на раздели в списъка с транзакции на началната страница"
+  "applies-when-switching-tabs-in-the-homepage-transactions-list": "Прилага се при превключване на раздели в списъка с транзакции на началната страница",
+  "number-pad-format": "Формат на цифровата клавиатура",
+  "set-lower-range": "Долен диапазон",
+  "set-upper-range": "Горен диапазон",
+  "set-range": "Задайте диапазон"
 }

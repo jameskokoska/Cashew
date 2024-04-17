@@ -1122,5 +1122,9 @@
   "all-outgoing-incoming": "すべての発信と受信",
   "all-outgoing-incoming-description-1": "すべてのマイナス/プラスのキャッシュ フローを含める",
   "all-outgoing-incoming-description-2": "例: ローン取引を含める",
-  "applies-when-switching-tabs-in-the-homepage-transactions-list": "ホームページ取引リストのタブを切り替えるときに適用されます"
+  "applies-when-switching-tabs-in-the-homepage-transactions-list": "ホームページ取引リストのタブを切り替えるときに適用されます",
+  "number-pad-format": "テンキーの形式",
+  "set-lower-range": "低域範囲",
+  "set-upper-range": "上限範囲",
+  "set-range": "設定範囲"
 }

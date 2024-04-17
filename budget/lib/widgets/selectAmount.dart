@@ -40,6 +40,23 @@ String getDecimalSeparator() {
   return numberFormatSymbols[(locale).split("-")[0]]?.DECIMAL_SEP ?? ".";
 }
 
+enum NumberPadFormat {
+  format123,
+  format789,
+}
+
+NumberPadFormat getNumberPadFormat() {
+  int? rawNumPadFormat = appStateSettings["numberPadFormat"] as int?;
+
+  if (rawNumPadFormat != null &&
+      rawNumPadFormat >= 0 &&
+      rawNumPadFormat < NumberPadFormat.values.length) {
+    return NumberPadFormat.values[rawNumPadFormat];
+  } else {
+    return NumberPadFormat.values[0];
+  }
+}
+
 class SelectAmount extends StatefulWidget {
   SelectAmount({
     Key? key,
@@ -316,6 +333,10 @@ class _SelectAmountState extends State<SelectAmount> {
       setState(() {
         amount = amount.substring(0, amount.length - 1) + input;
       });
+    } else if (amount.length <= 0 && input == "-") {
+      setState(() {
+        amount = "-";
+      });
     }
     widget.setSelectedAmount(
         (amount == ""
@@ -359,6 +380,7 @@ class _SelectAmountState extends State<SelectAmount> {
   }
 
   bool includesOperations(String input, bool includeDecimal) {
+    if (onlyOneOperationAndIsNegativeSign(amount)) return false;
     List<String> operations = [
       "÷",
       "×",
@@ -372,6 +394,28 @@ class _SelectAmountState extends State<SelectAmount> {
         return true;
       }
     }
+    return false;
+  }
+
+  bool onlyOneOperationAndIsNegativeSign(String amount) {
+    List<String> operations = [
+      "÷",
+      "×",
+      "-",
+      "+",
+    ];
+
+    if (amount.startsWith("-")) {
+      int operationCount = operations.fold<int>(
+        0,
+        (count, operation) => count + amount.split(operation).length - 1,
+      );
+
+      if (operationCount == 1 && amount.contains("-")) {
+        return true;
+      }
+    }
+
     return false;
   }
 
@@ -412,6 +456,9 @@ class _SelectAmountState extends State<SelectAmount> {
       result = exp.evaluate(EvaluationType.REAL, cm);
     } catch (e) {
       print("Error calculating result");
+    }
+    if (onlyOneOperationAndIsNegativeSign(amount) && result == 0) {
+      return -0;
     }
     return result;
   }
@@ -479,6 +526,7 @@ class _SelectAmountState extends State<SelectAmount> {
             .toString()
             .replaceAll(".", getDecimalSeparator())
         : convertToMoney(
+            forceAbsoluteZero: false,
             Provider.of<AllWallets>(context),
             calculateResult(amountConverted),
             currencyKey: widget.currencyKey ??
@@ -521,7 +569,10 @@ class _SelectAmountState extends State<SelectAmount> {
                             padding: const EdgeInsets.only(
                                 bottom: 3.0, left: 8, top: 5),
                             child: TextFont(
-                              text: (includesOperations(amount, false)
+                              text: (includesOperations(amount, false) &&
+                                      onlyOneOperationAndIsNegativeSign(
+                                              amount) ==
+                                          false
                                   ? operationsWithSpaces(amount)
                                   : ""),
                               textAlign: TextAlign.left,
@@ -825,273 +876,16 @@ class _SelectAmountState extends State<SelectAmount> {
                       ),
                     ),
               SizedBox(height: 5),
-              Padding(
+              NumberPadAmount(
+                extraWidgetAboveNumbers: widget.extraWidgetAboveNumbers,
+                addToAmount: addToAmount,
+                enableDecimal: true,
+                removeToAmount: removeToAmount,
+                removeAll: removeAll,
                 padding: widget.padding,
-                child: Center(
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(
-                        getPlatform() == PlatformOS.isIOS ? 10 : 20),
-                    child: Container(
-                      constraints: BoxConstraints(maxWidth: 400),
-                      child: Column(
-                        children: [
-                          if (widget.extraWidgetAboveNumbers != null)
-                            Container(
-                              color: appStateSettings["materialYou"]
-                                  ? Theme.of(context)
-                                      .colorScheme
-                                      .secondaryContainer
-                                  : Theme.of(context).brightness ==
-                                          Brightness.light
-                                      ? getColor(
-                                          context, "lightDarkAccentHeavy")
-                                      : getColor(
-                                          context, "lightDarkAccentHeavyLight"),
-                              child: widget.extraWidgetAboveNumbers!,
-                            ),
-                          Row(
-                            children: [
-                              Flexible(
-                                flex: 3,
-                                child: Column(
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.stretch,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        CalculatorButton(
-                                          disabled: !canChange(),
-                                          label: "1",
-                                          editAmount: () {
-                                            addToAmount("1");
-                                          },
-                                        ),
-                                        CalculatorButton(
-                                            disabled: !canChange(),
-                                            label: "2",
-                                            editAmount: () {
-                                              addToAmount("2");
-                                            }),
-                                        CalculatorButton(
-                                            disabled: !canChange(),
-                                            label: "3",
-                                            editAmount: () {
-                                              addToAmount("3");
-                                            }),
-                                      ],
-                                    ),
-                                    Row(
-                                      children: [
-                                        CalculatorButton(
-                                            disabled: !canChange(),
-                                            label: "4",
-                                            editAmount: () {
-                                              addToAmount("4");
-                                            }),
-                                        CalculatorButton(
-                                            disabled: !canChange(),
-                                            label: "5",
-                                            editAmount: () {
-                                              addToAmount("5");
-                                            }),
-                                        CalculatorButton(
-                                            disabled: !canChange(),
-                                            label: "6",
-                                            editAmount: () {
-                                              addToAmount("6");
-                                            }),
-                                      ],
-                                    ),
-                                    Row(
-                                      children: [
-                                        CalculatorButton(
-                                            disabled: !canChange(),
-                                            label: "7",
-                                            editAmount: () {
-                                              addToAmount("7");
-                                            }),
-                                        CalculatorButton(
-                                            disabled: !canChange(),
-                                            label: "8",
-                                            editAmount: () {
-                                              addToAmount("8");
-                                            }),
-                                        CalculatorButton(
-                                            disabled: !canChange(),
-                                            label: "9",
-                                            editAmount: () {
-                                              addToAmount("9");
-                                            }),
-                                      ],
-                                    ),
-                                    Row(
-                                      children: [
-                                        CalculatorButton(
-                                          disabled: !canChange(),
-                                          label: getDecimalSeparator(),
-                                          editAmount: () {
-                                            addToAmount(".");
-                                          },
-                                        ),
-                                        CalculatorButton(
-                                            disabled: !canChange(),
-                                            label: "0",
-                                            onLongPress: () async {
-                                              await openBottomSheet(
-                                                context,
-                                                PopupFramework(
-                                                  hasPadding: true,
-                                                  child: Column(
-                                                    children: [
-                                                      ExtraZerosButtonSetting(
-                                                        enableBorderRadius:
-                                                            true,
-                                                      )
-                                                    ],
-                                                  ),
-                                                ),
-                                              );
-                                              setState(() {});
-                                            },
-                                            editAmount: () {
-                                              addToAmount("0");
-                                            }),
-                                        if (appStateSettings[
-                                                "extraZerosButton"] !=
-                                            null)
-                                          CalculatorButton(
-                                              disabled: !canChange(),
-                                              label: appStateSettings[
-                                                  "extraZerosButton"],
-                                              onLongPress: () async {
-                                                await openBottomSheet(
-                                                  context,
-                                                  PopupFramework(
-                                                    hasPadding: true,
-                                                    child: Column(
-                                                      children: [
-                                                        ExtraZerosButtonSetting(
-                                                          enableBorderRadius:
-                                                              true,
-                                                        )
-                                                      ],
-                                                    ),
-                                                  ),
-                                                );
-                                                setState(() {});
-                                              },
-                                              editAmount: () {
-                                                addToAmount(appStateSettings[
-                                                    "extraZerosButton"]);
-                                              }),
-                                        if (appStateSettings[
-                                                "extraZerosButton"] ==
-                                            null)
-                                          CalculatorButton(
-                                            label: "<",
-                                            editAmount: () {
-                                              removeToAmount();
-                                            },
-                                            onLongPress: removeAll,
-                                          ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Flexible(
-                                flex: 1,
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.max,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        CalculatorButton(
-                                          height: appStateSettings[
-                                                      "extraZerosButton"] !=
-                                                  null
-                                              ? 60 * 4 / 5
-                                              : 60,
-                                          label: "÷",
-                                          editAmount: () {
-                                            addToAmount("÷");
-                                          },
-                                        ),
-                                      ],
-                                    ),
-                                    Row(
-                                      children: [
-                                        CalculatorButton(
-                                          height: appStateSettings[
-                                                      "extraZerosButton"] !=
-                                                  null
-                                              ? 60 * 4 / 5
-                                              : 60,
-                                          label: "×",
-                                          editAmount: () {
-                                            addToAmount("×");
-                                          },
-                                        ),
-                                      ],
-                                    ),
-                                    Row(
-                                      children: [
-                                        CalculatorButton(
-                                          height: appStateSettings[
-                                                      "extraZerosButton"] !=
-                                                  null
-                                              ? 60 * 4 / 5
-                                              : 60,
-                                          label: "-",
-                                          editAmount: () {
-                                            addToAmount("-");
-                                          },
-                                        ),
-                                      ],
-                                    ),
-                                    Row(
-                                      children: [
-                                        CalculatorButton(
-                                          height: appStateSettings[
-                                                      "extraZerosButton"] !=
-                                                  null
-                                              ? 60 * 4 / 5
-                                              : 60,
-                                          label: "+",
-                                          editAmount: () {
-                                            addToAmount("+");
-                                          },
-                                        ),
-                                      ],
-                                    ),
-                                    if (appStateSettings["extraZerosButton"] !=
-                                        null)
-                                      Row(
-                                        children: [
-                                          CalculatorButton(
-                                            height: appStateSettings[
-                                                        "extraZerosButton"] !=
-                                                    null
-                                                ? 60 * 4 / 5
-                                                : 60,
-                                            label: "<",
-                                            editAmount: () {
-                                              removeToAmount();
-                                            },
-                                            onLongPress: removeAll,
-                                          ),
-                                        ],
-                                      ),
-                                  ],
-                                ),
-                              )
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
+                canChange: canChange,
+                setState: () => setState(() {}),
+                enableCalculator: true,
               ),
               SizedBox(height: 15),
               if (widget.hideNextButton == false)
@@ -1135,6 +929,287 @@ class _SelectAmountState extends State<SelectAmount> {
           ),
         ),
       ],
+    );
+  }
+}
+
+class NumberPadAmount extends StatelessWidget {
+  const NumberPadAmount({
+    required this.extraWidgetAboveNumbers,
+    required this.addToAmount,
+    required this.enableDecimal,
+    required this.removeToAmount,
+    required this.removeAll,
+    required this.padding,
+    required this.canChange,
+    required this.setState,
+    required this.enableCalculator,
+    this.format,
+    super.key,
+  });
+  final Widget? extraWidgetAboveNumbers;
+  final Function(String input) addToAmount;
+  final bool enableDecimal;
+  final VoidCallback removeToAmount;
+  final VoidCallback removeAll;
+  final EdgeInsets padding;
+  final bool Function() canChange;
+  final VoidCallback setState;
+  final bool enableCalculator;
+  final NumberPadFormat? format;
+
+  @override
+  Widget build(BuildContext context) {
+    NumberPadFormat selectedFormat = format ?? getNumberPadFormat();
+    Widget row123 = Row(
+      children: [
+        CalculatorButton(
+          disabled: !canChange(),
+          label: "1",
+          editAmount: () {
+            addToAmount("1");
+          },
+        ),
+        CalculatorButton(
+            disabled: !canChange(),
+            label: "2",
+            editAmount: () {
+              addToAmount("2");
+            }),
+        CalculatorButton(
+            disabled: !canChange(),
+            label: "3",
+            editAmount: () {
+              addToAmount("3");
+            }),
+      ],
+    );
+    Widget row456 = Row(
+      children: [
+        CalculatorButton(
+            disabled: !canChange(),
+            label: "4",
+            editAmount: () {
+              addToAmount("4");
+            }),
+        CalculatorButton(
+            disabled: !canChange(),
+            label: "5",
+            editAmount: () {
+              addToAmount("5");
+            }),
+        CalculatorButton(
+            disabled: !canChange(),
+            label: "6",
+            editAmount: () {
+              addToAmount("6");
+            }),
+      ],
+    );
+    Widget row789 = Row(
+      children: [
+        CalculatorButton(
+            disabled: !canChange(),
+            label: "7",
+            editAmount: () {
+              addToAmount("7");
+            }),
+        CalculatorButton(
+            disabled: !canChange(),
+            label: "8",
+            editAmount: () {
+              addToAmount("8");
+            }),
+        CalculatorButton(
+            disabled: !canChange(),
+            label: "9",
+            editAmount: () {
+              addToAmount("9");
+            }),
+      ],
+    );
+    return Padding(
+      padding: padding,
+      child: Center(
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(
+              getPlatform() == PlatformOS.isIOS ? 10 : 20),
+          child: GestureDetector(
+            onLongPress: () async {
+              await openBottomSheet(
+                context,
+                NumberPadFormatSettingPopup(),
+              );
+              setState();
+            },
+            child: Container(
+              constraints: BoxConstraints(maxWidth: 400),
+              child: Column(
+                children: [
+                  if (extraWidgetAboveNumbers != null)
+                    Container(
+                      color: appStateSettings["materialYou"]
+                          ? Theme.of(context).colorScheme.secondaryContainer
+                          : Theme.of(context).brightness == Brightness.light
+                              ? getColor(context, "lightDarkAccentHeavy")
+                              : getColor(context, "lightDarkAccentHeavyLight"),
+                      child: extraWidgetAboveNumbers!,
+                    ),
+                  Row(
+                    children: [
+                      Flexible(
+                        flex: 3,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            if (selectedFormat == NumberPadFormat.format123)
+                              row123,
+                            if (selectedFormat == NumberPadFormat.format123)
+                              row456,
+                            if (selectedFormat == NumberPadFormat.format123)
+                              row789,
+                            if (selectedFormat == NumberPadFormat.format789)
+                              row789,
+                            if (selectedFormat == NumberPadFormat.format789)
+                              row456,
+                            if (selectedFormat == NumberPadFormat.format789)
+                              row123,
+                            Row(
+                              children: [
+                                CalculatorButton(
+                                  disabled:
+                                      enableDecimal == false || !canChange(),
+                                  label: getDecimalSeparator(),
+                                  editAmount: () {
+                                    addToAmount(".");
+                                  },
+                                ),
+                                CalculatorButton(
+                                    disabled: !canChange(),
+                                    label: "0",
+                                    editAmount: () {
+                                      addToAmount("0");
+                                    }),
+                                if (enableCalculator)
+                                  if (appStateSettings["extraZerosButton"] !=
+                                      null)
+                                    CalculatorButton(
+                                        disabled: !canChange(),
+                                        label: appStateSettings[
+                                            "extraZerosButton"],
+                                        editAmount: () {
+                                          addToAmount(appStateSettings[
+                                              "extraZerosButton"]);
+                                        }),
+                                if (appStateSettings["extraZerosButton"] ==
+                                        null ||
+                                    enableCalculator == false)
+                                  CalculatorButton(
+                                    label: "<",
+                                    editAmount: () {
+                                      removeToAmount();
+                                    },
+                                    onLongPress: removeAll,
+                                  ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                      if (enableCalculator)
+                        Flexible(
+                          flex: 1,
+                          child: Column(
+                            mainAxisSize: MainAxisSize.max,
+                            children: [
+                              Row(
+                                children: [
+                                  CalculatorButton(
+                                    height:
+                                        appStateSettings["extraZerosButton"] !=
+                                                null
+                                            ? 60 * 4 / 5
+                                            : 60,
+                                    label: "÷",
+                                    editAmount: () {
+                                      addToAmount("÷");
+                                    },
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  CalculatorButton(
+                                    height:
+                                        appStateSettings["extraZerosButton"] !=
+                                                null
+                                            ? 60 * 4 / 5
+                                            : 60,
+                                    label: "×",
+                                    editAmount: () {
+                                      addToAmount("×");
+                                    },
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  CalculatorButton(
+                                    height:
+                                        appStateSettings["extraZerosButton"] !=
+                                                null
+                                            ? 60 * 4 / 5
+                                            : 60,
+                                    label: "-",
+                                    editAmount: () {
+                                      addToAmount("-");
+                                    },
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  CalculatorButton(
+                                    height:
+                                        appStateSettings["extraZerosButton"] !=
+                                                null
+                                            ? 60 * 4 / 5
+                                            : 60,
+                                    label: "+",
+                                    editAmount: () {
+                                      addToAmount("+");
+                                    },
+                                  ),
+                                ],
+                              ),
+                              if (appStateSettings["extraZerosButton"] != null)
+                                Row(
+                                  children: [
+                                    CalculatorButton(
+                                      height: appStateSettings[
+                                                  "extraZerosButton"] !=
+                                              null
+                                          ? 60 * 4 / 5
+                                          : 60,
+                                      label: "<",
+                                      editAmount: () {
+                                        removeToAmount();
+                                      },
+                                      onLongPress: removeAll,
+                                    ),
+                                  ],
+                                ),
+                            ],
+                          ),
+                        )
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
@@ -1401,109 +1476,16 @@ class _SelectAmountValueState extends State<SelectAmountValue> {
             ),
           ),
         Container(height: 10),
-        Center(
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(
-                getPlatform() == PlatformOS.isIOS ? 10 : 20),
-            child: Container(
-              constraints: BoxConstraints(maxWidth: 400),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  if (widget.extraWidgetAboveNumbers != null)
-                    Container(
-                        color: appStateSettings["materialYou"]
-                            ? Theme.of(context).colorScheme.secondaryContainer
-                            : Theme.of(context).brightness == Brightness.light
-                                ? getColor(context, "lightDarkAccentHeavy")
-                                : getColor(
-                                    context, "lightDarkAccentHeavyLight"),
-                        child: widget.extraWidgetAboveNumbers!),
-                  Row(
-                    children: [
-                      CalculatorButton(
-                        label: "1",
-                        editAmount: () {
-                          addToAmount("1");
-                        },
-                      ),
-                      CalculatorButton(
-                          label: "2",
-                          editAmount: () {
-                            addToAmount("2");
-                          }),
-                      CalculatorButton(
-                          label: "3",
-                          editAmount: () {
-                            addToAmount("3");
-                          }),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      CalculatorButton(
-                          label: "4",
-                          editAmount: () {
-                            addToAmount("4");
-                          }),
-                      CalculatorButton(
-                          label: "5",
-                          editAmount: () {
-                            addToAmount("5");
-                          }),
-                      CalculatorButton(
-                          label: "6",
-                          editAmount: () {
-                            addToAmount("6");
-                          }),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      CalculatorButton(
-                          label: "7",
-                          editAmount: () {
-                            addToAmount("7");
-                          }),
-                      CalculatorButton(
-                          label: "8",
-                          editAmount: () {
-                            addToAmount("8");
-                          }),
-                      CalculatorButton(
-                          label: "9",
-                          editAmount: () {
-                            addToAmount("9");
-                          }),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      CalculatorButton(
-                        disabled: widget.enableDecimal == false,
-                        label: getDecimalSeparator(),
-                        editAmount: () {
-                          addToAmount(".");
-                        },
-                      ),
-                      CalculatorButton(
-                          label: "0",
-                          editAmount: () {
-                            addToAmount("0");
-                          }),
-                      CalculatorButton(
-                        label: "<",
-                        editAmount: () {
-                          removeToAmount();
-                        },
-                        onLongPress: removeAll,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
+        NumberPadAmount(
+          extraWidgetAboveNumbers: widget.extraWidgetAboveNumbers,
+          addToAmount: addToAmount,
+          enableDecimal: widget.enableDecimal,
+          removeToAmount: removeToAmount,
+          removeAll: removeAll,
+          canChange: () => true,
+          padding: EdgeInsets.zero,
+          setState: () => setState(() {}),
+          enableCalculator: false,
         ),
         Container(height: 15),
         AnimatedSwitcher(

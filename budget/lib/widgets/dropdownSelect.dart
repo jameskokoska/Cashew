@@ -150,7 +150,6 @@ class CustomPopupMenuButton extends StatelessWidget {
   final bool showButtons;
   final bool keepOutFirst;
   final bool forceKeepOutFirst;
-  final ColorScheme? colorScheme;
   final double buttonPadding;
 
   CustomPopupMenuButton({
@@ -158,7 +157,6 @@ class CustomPopupMenuButton extends StatelessWidget {
     this.showButtons = false,
     this.keepOutFirst = true,
     this.forceKeepOutFirst = false,
-    this.colorScheme,
     this.buttonPadding = 15,
   });
 
@@ -187,29 +185,24 @@ class CustomPopupMenuButton extends StatelessWidget {
             ),
           ),
           IconButton(
-            padding: EdgeInsets.all(buttonPadding),
-            onPressed: () {
-              menuItem.action();
-            },
-            icon: Transform.scale(
-              scale: items[0].iconScale ?? 1,
-              child: Icon(
-                menuItem.icon,
-                color: colorScheme == null
-                    ? null
-                    : dynamicPastel(
-                        context,
-                        colorScheme?.onSecondaryContainer ?? Colors.red,
-                      ),
-              ),
-            ),
-            color: colorScheme == null
-                ? null
-                : dynamicPastel(
+              padding: EdgeInsets.all(buttonPadding),
+              onPressed: () {
+                menuItem.action();
+              },
+              icon: Transform.scale(
+                scale: items[0].iconScale ?? 1,
+                child: Icon(
+                  menuItem.icon,
+                  color: dynamicPastel(
                     context,
-                    colorScheme?.onSecondaryContainer ?? Colors.red,
+                    Theme.of(context).colorScheme.onSecondaryContainer,
                   ),
-          ),
+                ),
+              ),
+              color: dynamicPastel(
+                context,
+                Theme.of(context).colorScheme.onSecondaryContainer,
+              )),
         ],
       ),
     );
@@ -261,70 +254,76 @@ class CustomPopupMenuButton extends StatelessWidget {
             child: menuIconButtonBuilder(context, items[1]),
           ),
         if (itemsFiltered.isNotEmpty)
-          Theme(
-            data: Theme.of(context).copyWith(colorScheme: colorScheme),
-            child: PopupMenuButton<String>(
-              padding: EdgeInsets.all(buttonPadding),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(
-                  Radius.circular(getPlatform() == PlatformOS.isIOS ? 5 : 10),
-                ),
+          PopupMenuButton<String>(
+            padding: EdgeInsets.all(buttonPadding),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(
+                Radius.circular(getPlatform() == PlatformOS.isIOS ? 5 : 10),
               ),
-              onSelected: (value) {
-                for (DropdownItemMenu item in items) {
-                  if (item.id == value) {
-                    item.action();
-                    break;
-                  }
+            ),
+            onSelected: (value) {
+              for (DropdownItemMenu item in items) {
+                if (item.id == value) {
+                  item.action();
+                  break;
                 }
-              },
-              itemBuilder: (BuildContext context) {
-                return itemsFiltered.map((item) {
-                  return PopupMenuItem<String>(
-                    value: item.id,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Stack(
-                          alignment: Alignment.center,
-                          children: [
-                            BreathingWidget(
-                              duration: Duration(milliseconds: 700),
-                              endScale: 1.2,
-                              child: Transform.scale(
-                                scale: 1.5,
-                                child: Container(
-                                  height: 20,
-                                  width: 20,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: item.selected
-                                        ? Theme.of(context)
-                                            .colorScheme
-                                            .secondaryContainer
-                                        : null,
-                                  ),
+              }
+            },
+            icon: Icon(
+              appStateSettings["outlinedIcons"]
+                  ? Icons.more_vert_outlined
+                  : Icons.more_vert_rounded,
+              color: dynamicPastel(
+                context,
+                Theme.of(context).colorScheme.onSecondaryContainer,
+              ),
+            ),
+            itemBuilder: (BuildContext context) {
+              return itemsFiltered.map((item) {
+                return PopupMenuItem<String>(
+                  value: item.id,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          BreathingWidget(
+                            duration: Duration(milliseconds: 700),
+                            endScale: 1.2,
+                            child: Transform.scale(
+                              scale: 1.5,
+                              child: Container(
+                                height: 20,
+                                width: 20,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: item.selected
+                                      ? Theme.of(context)
+                                          .colorScheme
+                                          .secondaryContainer
+                                      : null,
                                 ),
                               ),
                             ),
-                            Transform.scale(
-                              scale: item.iconScale ?? 1,
-                              child: Icon(item.icon),
-                            ),
-                          ],
-                        ),
-                        SizedBox(width: 9),
-                        TextFont(
-                          text: item.label,
-                          fontSize: 14.5,
-                        ),
-                      ],
-                    ),
-                  );
-                }).toList();
-              },
-            ),
+                          ),
+                          Transform.scale(
+                            scale: item.iconScale ?? 1,
+                            child: Icon(item.icon),
+                          ),
+                        ],
+                      ),
+                      SizedBox(width: 9),
+                      TextFont(
+                        text: item.label,
+                        fontSize: 14.5,
+                      ),
+                    ],
+                  ),
+                );
+              }).toList();
+            },
           ),
       ],
     );
