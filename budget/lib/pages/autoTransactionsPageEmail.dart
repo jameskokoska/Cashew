@@ -214,7 +214,7 @@ class _AutoTransactionsPageNotificationsState
           },
           title: "Notification Transactions",
           description:
-              "When a notification is dismissed and the app is open, attempt to add a transaction given its information. Create a template so Cashew understands the format of a notification.",
+              "When a notification is dismissed and the app is open, attempt to add a transaction given its information. Create a template so Bedou understands the format of a notification.",
           initialValue: appStateSettings["notificationScanning"],
         ),
         StreamBuilder<List<ScannerTemplate>>(

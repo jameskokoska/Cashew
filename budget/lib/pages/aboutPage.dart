@@ -123,7 +123,7 @@ class AboutPage extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
           child: Tappable(
             onTap: () {
-              openUrl("https://github.com/jameskokoska/Cashew");
+              openUrl("https://github.com/jameskokoska/Bedou");
             },
             color: containerColor,
             borderRadius: getPlatform() == PlatformOS.isIOS ? 10 : 15,
@@ -451,7 +451,7 @@ class AboutPage extends StatelessWidget {
                   title: "deep-linking".tr(),
                   showLink: false,
                   link:
-                      "https://github.com/jameskokoska/Cashew?tab=readme-ov-file#app-links",
+                      "https://github.com/jameskokoska/Bedou?tab=readme-ov-file#app-links",
                   list: [
                     "deep-linking-description".tr(),
                   ],
