@@ -1123,5 +1123,8 @@
   "all-outgoing-incoming-description-1": "Укључите све негативне/позитивне токове готовине",
   "all-outgoing-incoming-description-2": "Пример: Укључите трансакције зајма",
   "applies-when-switching-tabs-in-the-homepage-transactions-list": "Примењује се када мењате картице на листи трансакција на почетној страници",
-  "number-pad-format": "Формат нумеричке табле"
+  "number-pad-format": "Формат нумеричке табле",
+  "set-lower-range": "Ловер Ранге",
+  "set-upper-range": "Уппер Ранге",
+  "set-range": "Подесите опсег"
 }

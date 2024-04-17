@@ -110,7 +110,28 @@ class WatchedWalletDetailsPage extends StatelessWidget {
       stream: database.getWallet(walletPk),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          return WalletDetailsPage(wallet: snapshot.data);
+          ColorScheme walletColorScheme = ColorScheme.fromSeed(
+            seedColor: HexColor(snapshot.data?.colour,
+                defaultColor: Theme.of(context).colorScheme.primary),
+            brightness: determineBrightnessTheme(context),
+          );
+          Color? pageBackgroundColor =
+              Theme.of(context).brightness == Brightness.dark &&
+                      appStateSettings["forceFullDarkBackground"]
+                  ? Colors.black
+                  : appStateSettings["materialYou"]
+                      ? dynamicPastel(context, walletColorScheme.primary,
+                          amount: 0.92)
+                      : null;
+          return Theme(
+            data: Theme.of(context).copyWith(
+              colorScheme: walletColorScheme,
+              canvasColor: pageBackgroundColor,
+            ),
+            child: WalletDetailsPage(
+              wallet: snapshot.data,
+            ),
+          );
         }
         return SizedBox.shrink();
       },
@@ -1239,6 +1260,7 @@ class WalletDetailsPageState extends State<WalletDetailsPage>
                 enableDoubleColumn(context) == true && widget.wallet == null
                     ? Theme.of(context).colorScheme.secondaryContainer
                     : null,
+            backgroundColor: Theme.of(context).canvasColor,
             scrollController: _scrollController,
             key: pageState,
             listID: listID,
@@ -2110,7 +2132,6 @@ class _WalletCategoryPieChartState extends State<WalletCategoryPieChart> {
                     extraText: isIncome
                         ? "of-income".tr().toLowerCase()
                         : "of-expense".tr().toLowerCase(),
-                    budgetColorScheme: widget.walletColorScheme,
                     category: category.category,
                     totalSpent: s.totalSpent,
                     transactionCount: category.transactionCount,
@@ -2189,7 +2210,6 @@ class _WalletCategoryPieChartState extends State<WalletCategoryPieChart> {
                     },
                     onEditSpendingGoals: null,
                     toggleAllSubCategories: toggleAllSubcategories,
-                    colorScheme: Theme.of(context).colorScheme,
                     showAllSubcategories: showAllSubcategories,
                     useHorizontalPaddingConstrained:
                         enableDoubleColumn(context) == false &&
@@ -2704,8 +2724,6 @@ class _AllSpendingPastSpendingGraphState
                                       ),
                                     ),
                                     LoadMorePeriodsButton(
-                                      color:
-                                          Theme.of(context).colorScheme.primary,
                                       onPressed: () {
                                         if (amountLoadedPressedOnce == false) {
                                           setState(() {

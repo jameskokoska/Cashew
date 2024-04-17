@@ -1123,5 +1123,8 @@
   "all-outgoing-incoming-description-1": "అన్ని ప్రతికూల/పాజిటివ్ నగదు ప్రవాహాన్ని చేర్చండి",
   "all-outgoing-incoming-description-2": "ఉదాహరణ: రుణ లావాదేవీలను చేర్చండి",
   "applies-when-switching-tabs-in-the-homepage-transactions-list": "హోమ్‌పేజీ లావాదేవీల జాబితాలో ట్యాబ్‌లను మార్చేటప్పుడు వర్తిస్తుంది",
-  "number-pad-format": "నంబర్ ప్యాడ్ ఫార్మాట్"
+  "number-pad-format": "నంబర్ ప్యాడ్ ఫార్మాట్",
+  "set-lower-range": "దిగువ పరిధి",
+  "set-upper-range": "ఎగువ శ్రేణి",
+  "set-range": "పరిధిని సెట్ చేయండి"
 }

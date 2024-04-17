@@ -42,6 +42,12 @@ String getChangelogString() {
     Optimized and improved performance of transaction list actions
     Collapsed future transaction list shows amount selected when collapsed
     Translation updates
+    Account spending detail page follows account colorscheme
+    Can enter amount beginning with negative sign
+    Tap amount on range filter to specify exact upper and lower range
+    Improve colorscheme for budget and goal pages
+    Rearrange number format settings in popup for consistency
+    Add time to date info when deleting cloud backup
     Fix font setting always resetting (i)
     Fix exclude amount from budget default value for include amount overall would be incorrect
     Fix (i) biometric lock bypass

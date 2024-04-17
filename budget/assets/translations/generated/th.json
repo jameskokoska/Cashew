@@ -1123,5 +1123,8 @@
   "all-outgoing-incoming-description-1": "รวมกระแสเงินสดที่เป็นลบ/บวกทั้งหมด",
   "all-outgoing-incoming-description-2": "ตัวอย่าง: รวมธุรกรรมสินเชื่อ",
   "applies-when-switching-tabs-in-the-homepage-transactions-list": "ใช้เมื่อมีการสลับแท็บในรายการธุรกรรมในหน้าแรก",
-  "number-pad-format": "รูปแบบแป้นตัวเลข"
+  "number-pad-format": "รูปแบบแป้นตัวเลข",
+  "set-lower-range": "ช่วงล่าง",
+  "set-upper-range": "ช่วงบน",
+  "set-range": "ตั้งค่าช่วง"
 }

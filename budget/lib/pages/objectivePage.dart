@@ -63,8 +63,17 @@ class ObjectivePage extends StatelessWidget {
         stream: database.getObjective(objectivePk),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return _ObjectivePageContent(
-              objective: snapshot.data!,
+            ColorScheme objectiveColorScheme = ColorScheme.fromSeed(
+              seedColor: HexColor(snapshot.data?.colour,
+                  defaultColor: Theme.of(context).colorScheme.primary),
+              brightness: determineBrightnessTheme(context),
+            );
+            return Theme(
+              data:
+                  Theme.of(context).copyWith(colorScheme: objectiveColorScheme),
+              child: _ObjectivePageContent(
+                objective: snapshot.data!,
+              ),
             );
           }
           return SizedBox.shrink();
@@ -186,18 +195,14 @@ class _ObjectivePageContentState extends State<_ObjectivePageContent> {
         }
       },
     );
-    ColorScheme objectiveColorScheme = ColorScheme.fromSeed(
-      seedColor: HexColor(widget.objective.colour,
-          defaultColor: Theme.of(context).colorScheme.primary),
-      brightness: determineBrightnessTheme(context),
-    );
-    Color? pageBackgroundColor = Theme.of(context).brightness ==
-                Brightness.dark &&
-            appStateSettings["forceFullDarkBackground"]
-        ? Colors.black
-        : appStateSettings["materialYou"]
-            ? dynamicPastel(context, objectiveColorScheme.primary, amount: 0.92)
-            : null;
+    Color? pageBackgroundColor =
+        Theme.of(context).brightness == Brightness.dark &&
+                appStateSettings["forceFullDarkBackground"]
+            ? Colors.black
+            : appStateSettings["materialYou"]
+                ? dynamicPastel(context, Theme.of(context).colorScheme.primary,
+                    amount: 0.92)
+                : null;
     String pageId = widget.objective.objectivePk;
     return WillPopScope(
       onWillPop: () async {
@@ -224,8 +229,6 @@ class _ObjectivePageContentState extends State<_ObjectivePageContent> {
                   routesToPopAfterDelete: RoutesToPopAfterDelete.One,
                   selectedIncome: widget.objective.income,
                 ),
-                color: objectiveColorScheme.secondary,
-                colorIcon: objectiveColorScheme.onSecondary,
               ),
             ),
             expandedHeight: 56,
@@ -234,7 +237,6 @@ class _ObjectivePageContentState extends State<_ObjectivePageContent> {
                 showButtons: enableDoubleColumn(context),
                 keepOutFirst: true,
                 forceKeepOutFirst: true,
-                colorScheme: objectiveColorScheme,
                 items: [
                   DropdownItemMenu(
                     id: "edit-goals",
@@ -277,8 +279,10 @@ class _ObjectivePageContentState extends State<_ObjectivePageContent> {
               ),
             ],
             title: widget.objective.name,
-            appBarBackgroundColor: objectiveColorScheme.secondaryContainer,
-            appBarBackgroundColorStart: objectiveColorScheme.secondaryContainer,
+            appBarBackgroundColor:
+                Theme.of(context).colorScheme.secondaryContainer,
+            appBarBackgroundColorStart:
+                Theme.of(context).colorScheme.secondaryContainer,
             textColor: getColor(context, "black"),
             dragDownToDismiss: true,
             slivers: [
@@ -316,11 +320,14 @@ class _ObjectivePageContentState extends State<_ObjectivePageContent> {
                                         child: AnimatedCircularProgress(
                                           percent: clampDouble(
                                               percentageTowardsGoal, 0, 1),
-                                          backgroundColor: objectiveColorScheme
+                                          backgroundColor: Theme.of(context)
+                                              .colorScheme
                                               .secondaryContainer,
                                           foregroundColor: dynamicPastel(
                                             context,
-                                            objectiveColorScheme.primary,
+                                            Theme.of(context)
+                                                .colorScheme
+                                                .primary,
                                             amountLight: 0.4,
                                             amountDark: 0.2,
                                           ),
@@ -590,8 +597,7 @@ class _ObjectivePageContentState extends State<_ObjectivePageContent> {
                 listID: pageId,
                 dateDividerColor: pageBackgroundColor,
                 transactionBackgroundColor: pageBackgroundColor,
-                categoryTintColor: objectiveColorScheme.primary,
-                colorScheme: objectiveColorScheme,
+                categoryTintColor: Theme.of(context).colorScheme.primary,
                 searchFilters: widget.objective.type == ObjectiveType.loan
                     ? SearchFilters().copyWith(
                         objectiveLoanPks: [widget.objective.objectivePk])
@@ -618,7 +624,7 @@ class _ObjectivePageContentState extends State<_ObjectivePageContent> {
                             text: "setup-installment-payments".tr(),
                             color: dynamicPastel(
                               context,
-                              objectiveColorScheme.secondaryContainer,
+                              Theme.of(context).colorScheme.secondaryContainer,
                               amountLight:
                                   appStateSettings["materialYou"] ? 0.25 : 0.4,
                               amountDark:
@@ -649,7 +655,6 @@ class _ObjectivePageContentState extends State<_ObjectivePageContent> {
           ),
           SelectedTransactionsAppBar(
             pageID: pageId,
-            colorScheme: objectiveColorScheme,
           ),
           IgnorePointer(
             child: Align(

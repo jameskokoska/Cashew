@@ -333,6 +333,10 @@ class _SelectAmountState extends State<SelectAmount> {
       setState(() {
         amount = amount.substring(0, amount.length - 1) + input;
       });
+    } else if (amount.length <= 0 && input == "-") {
+      setState(() {
+        amount = "-";
+      });
     }
     widget.setSelectedAmount(
         (amount == ""
@@ -376,6 +380,7 @@ class _SelectAmountState extends State<SelectAmount> {
   }
 
   bool includesOperations(String input, bool includeDecimal) {
+    if (onlyOneOperationAndIsNegativeSign(amount)) return false;
     List<String> operations = [
       "÷",
       "×",
@@ -389,6 +394,28 @@ class _SelectAmountState extends State<SelectAmount> {
         return true;
       }
     }
+    return false;
+  }
+
+  bool onlyOneOperationAndIsNegativeSign(String amount) {
+    List<String> operations = [
+      "÷",
+      "×",
+      "-",
+      "+",
+    ];
+
+    if (amount.startsWith("-")) {
+      int operationCount = operations.fold<int>(
+        0,
+        (count, operation) => count + amount.split(operation).length - 1,
+      );
+
+      if (operationCount == 1 && amount.contains("-")) {
+        return true;
+      }
+    }
+
     return false;
   }
 
@@ -429,6 +456,9 @@ class _SelectAmountState extends State<SelectAmount> {
       result = exp.evaluate(EvaluationType.REAL, cm);
     } catch (e) {
       print("Error calculating result");
+    }
+    if (onlyOneOperationAndIsNegativeSign(amount) && result == 0) {
+      return -0;
     }
     return result;
   }
@@ -496,6 +526,7 @@ class _SelectAmountState extends State<SelectAmount> {
             .toString()
             .replaceAll(".", getDecimalSeparator())
         : convertToMoney(
+            forceAbsoluteZero: false,
             Provider.of<AllWallets>(context),
             calculateResult(amountConverted),
             currencyKey: widget.currencyKey ??
@@ -538,7 +569,10 @@ class _SelectAmountState extends State<SelectAmount> {
                             padding: const EdgeInsets.only(
                                 bottom: 3.0, left: 8, top: 5),
                             child: TextFont(
-                              text: (includesOperations(amount, false)
+                              text: (includesOperations(amount, false) &&
+                                      onlyOneOperationAndIsNegativeSign(
+                                              amount) ==
+                                          false
                                   ? operationsWithSpaces(amount)
                                   : ""),
                               textAlign: TextAlign.left,

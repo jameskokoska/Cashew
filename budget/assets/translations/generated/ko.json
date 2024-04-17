@@ -1123,5 +1123,8 @@
   "all-outgoing-incoming-description-1": "모든 음수/양수 현금 흐름을 포함합니다.",
   "all-outgoing-incoming-description-2": "예: 대출 거래 포함",
   "applies-when-switching-tabs-in-the-homepage-transactions-list": "홈페이지 거래목록 탭 전환 시 적용",
-  "number-pad-format": "숫자 패드 형식"
+  "number-pad-format": "숫자 패드 형식",
+  "set-lower-range": "낮은 범위",
+  "set-upper-range": "상위 범위",
+  "set-range": "설정 범위"
 }

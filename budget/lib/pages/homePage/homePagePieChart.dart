@@ -347,7 +347,6 @@ class _PieChartHomeAndCategorySummaryState
                             );
                           },
                           categoryBudgetLimit: category.categoryBudgetLimit,
-                          budgetColorScheme: Theme.of(context).colorScheme,
                           category: category.category,
                           totalSpent: s.totalSpent,
                           transactionCount: category.transactionCount,
@@ -532,7 +531,6 @@ class _PieChartHomeAndCategorySummaryState
                                 ? selectedCategory
                                 : null,
                             onClearSelection: clearCategorySelection,
-                            colorScheme: Theme.of(context).colorScheme,
                             onEditSpendingGoals: null,
                             showAllSubcategories: true,
                             toggleAllSubCategories: toggleAllSubcategories,

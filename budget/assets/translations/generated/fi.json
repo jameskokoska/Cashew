@@ -1123,5 +1123,8 @@
   "all-outgoing-incoming-description-1": "Sisällytä kaikki negatiivinen/positiivinen kassavirta",
   "all-outgoing-incoming-description-2": "Esimerkki: Sisällytä lainatapahtumat",
   "applies-when-switching-tabs-in-the-homepage-transactions-list": "Koskee etusivun tapahtumaluettelon välilehtiä vaihdettaessa",
-  "number-pad-format": "Numeronäppäimistön muoto"
+  "number-pad-format": "Numeronäppäimistön muoto",
+  "set-lower-range": "Alempi alue",
+  "set-upper-range": "Upper Range",
+  "set-range": "Aseta alue"
 }

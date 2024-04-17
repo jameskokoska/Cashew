@@ -1123,5 +1123,8 @@
   "all-outgoing-incoming-description-1": "Inclure tous les flux de trésorerie négatifs/positifs",
   "all-outgoing-incoming-description-2": "Exemple : Inclure les transactions de prêt",
   "applies-when-switching-tabs-in-the-homepage-transactions-list": "S'applique lors du changement d'onglet dans la liste des transactions de la page d'accueil",
-  "number-pad-format": "Format du pavé numérique"
+  "number-pad-format": "Format du pavé numérique",
+  "set-lower-range": "Gamme inférieure",
+  "set-upper-range": "Gamme supérieure",
+  "set-range": "Définir la plage"
 }

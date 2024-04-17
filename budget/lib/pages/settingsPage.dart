@@ -1161,6 +1161,23 @@ class _SetNumberFormatPopupState extends State<SetNumberFormatPopup> {
       title: "number-format".tr(),
       child: Column(
         children: [
+          SettingsContainerSwitch(
+            title: "short-number-format".tr(),
+            onSwitched: (value) {
+              updateSettings(
+                "shortNumberFormat",
+                value ? "compact" : null,
+                updateGlobalState: true,
+              );
+            },
+            initialValue: appStateSettings["shortNumberFormat"] == "compact",
+            enableBorderRadius: true,
+            icon: appStateSettings["outlinedIcons"]
+                ? Icons.one_k_outlined
+                : Icons.one_k_rounded,
+          ),
+          HorizontalBreak(),
+          SizedBox(height: 10),
           AnimatedOpacity(
             duration: Duration(milliseconds: 500),
             opacity: customNumberFormat == false ? 1 : 0.5,
@@ -1241,23 +1258,6 @@ class _SetNumberFormatPopupState extends State<SetNumberFormatPopup> {
                 ),
               ],
             ),
-          ),
-          SizedBox(height: 15),
-          HorizontalBreak(),
-          SettingsContainerSwitch(
-            title: "short-number-format".tr(),
-            onSwitched: (value) {
-              updateSettings(
-                "shortNumberFormat",
-                value ? "compact" : null,
-                updateGlobalState: true,
-              );
-            },
-            initialValue: appStateSettings["shortNumberFormat"] == "compact",
-            enableBorderRadius: true,
-            icon: appStateSettings["outlinedIcons"]
-                ? Icons.one_k_outlined
-                : Icons.one_k_rounded,
           ),
           SizedBox(height: 5),
           Tappable(
@@ -1482,10 +1482,9 @@ class _NumberPadFormatSettingPopupState
               setState(() {});
             },
           ),
-          HorizontalBreakAbove(
-            padding: EdgeInsets.symmetric(vertical: 15),
-            child: NumberPadFormatPicker(),
-          ),
+          HorizontalBreak(),
+          SizedBox(height: 10),
+          NumberPadFormatPicker(),
         ],
       ),
     );
@@ -1609,8 +1608,8 @@ class ExtraZerosButtonSetting extends StatelessWidget {
       enableBorderRadius: enableBorderRadius,
       title: "extra-zeros-button".tr(),
       icon: appStateSettings["outlinedIcons"]
-          ? Icons.check_box_outline_blank_outlined
-          : Icons.check_box_outline_blank_rounded,
+          ? Symbols.counter_0_sharp
+          : Symbols.counter_0_rounded,
       initial: appStateSettings["extraZerosButton"].toString(),
       items: ["", "00", "000"],
       onChanged: (value) async {

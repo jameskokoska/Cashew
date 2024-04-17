@@ -44,142 +44,149 @@ class TransactionEntryTag extends StatelessWidget {
       showExcludedBudgetTagCheck = showExcludedBudgetTag!(transaction);
     }
 
-    return Padding(
-      padding: const EdgeInsets.only(top: 1.0),
-      child: LayoutBuilder(builder: (context, constraints) {
-        double maxWidth = constraints.maxWidth;
-        List<bool> tagsToShow = [
-          appStateSettings["showAccountLabelTagInTransactionEntry"] == true,
-          transaction.subCategoryFk != null,
-          transaction.sharedReferenceBudgetPk != null,
-          transaction.objectiveLoanFk != null,
-          transaction.objectiveFk != null,
-          showExcludedBudgetTagCheck,
-        ];
-        int tagCount = tagsToShow.where((element) => element == true).length;
-        List<Widget> tags = [
-          TransactionTag(
-            color: HexColor(
-                Provider.of<AllWallets>(context)
-                    .indexedByPk[transaction.walletFk]
-                    ?.colour,
-                defaultColor: Theme.of(context).colorScheme.primary),
-            name: Provider.of<AllWallets>(context)
-                    .indexedByPk[transaction.walletFk]
-                    ?.name ??
-                "",
-          ),
-          Builder(builder: (context) {
-            if (subCategory != null) {
-              return SubCategoryTag(category: subCategory!);
-            } else {
-              return StreamBuilder<TransactionCategory?>(
-                stream: database.getCategory(transaction.subCategoryFk!).$1,
+    return Theme(
+      data: Theme.of(context)
+          .copyWith(colorScheme: getColorScheme(Theme.of(context).brightness)),
+      child: Padding(
+        padding: const EdgeInsets.only(top: 1.0),
+        child: LayoutBuilder(builder: (context, constraints) {
+          double maxWidth = constraints.maxWidth;
+          List<bool> tagsToShow = [
+            appStateSettings["showAccountLabelTagInTransactionEntry"] == true,
+            transaction.subCategoryFk != null,
+            transaction.sharedReferenceBudgetPk != null,
+            transaction.objectiveLoanFk != null,
+            transaction.objectiveFk != null,
+            showExcludedBudgetTagCheck,
+          ];
+          int tagCount = tagsToShow.where((element) => element == true).length;
+          List<Widget> tags = [
+            TransactionTag(
+              color: HexColor(
+                  Provider.of<AllWallets>(context)
+                      .indexedByPk[transaction.walletFk]
+                      ?.colour,
+                  defaultColor: Theme.of(context).colorScheme.primary),
+              name: Provider.of<AllWallets>(context)
+                      .indexedByPk[transaction.walletFk]
+                      ?.name ??
+                  "",
+            ),
+            Builder(builder: (context) {
+              if (subCategory != null) {
+                return SubCategoryTag(category: subCategory!);
+              } else {
+                return StreamBuilder<TransactionCategory?>(
+                  stream: database.getCategory(transaction.subCategoryFk!).$1,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      TransactionCategory? category = snapshot.data!;
+                      return SubCategoryTag(category: category);
+                    }
+                    return SizedBox.shrink();
+                  },
+                );
+              }
+            }),
+            Builder(builder: (context) {
+              if (budget != null) {
+                return TransactionTag(
+                  color: HexColor(budget?.colour,
+                      defaultColor: Theme.of(context).colorScheme.primary),
+                  name: budget?.name ?? "",
+                );
+              } else {
+                return StreamBuilder<Budget>(
+                  stream:
+                      database.getBudget(transaction.sharedReferenceBudgetPk!),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      Budget budget = snapshot.data!;
+                      return TransactionTag(
+                        color: HexColor(budget.colour,
+                            defaultColor:
+                                Theme.of(context).colorScheme.primary),
+                        name: budget.name,
+                      );
+                    }
+                    return Container();
+                  },
+                );
+              }
+            }),
+            Builder(builder: (context) {
+              if (objective != null) {
+                return ObjectivePercentTag(
+                  transaction: transaction,
+                  objective: objective!,
+                  showObjectivePercentageCheck: showObjectivePercentageCheck,
+                );
+              }
+              return StreamBuilder<Objective>(
+                stream: database.getObjective(transaction.objectiveLoanFk!),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
-                    TransactionCategory? category = snapshot.data!;
-                    return SubCategoryTag(category: category);
-                  }
-                  return SizedBox.shrink();
-                },
-              );
-            }
-          }),
-          Builder(builder: (context) {
-            if (budget != null) {
-              return TransactionTag(
-                color: HexColor(budget?.colour,
-                    defaultColor: Theme.of(context).colorScheme.primary),
-                name: budget?.name ?? "",
-              );
-            } else {
-              return StreamBuilder<Budget>(
-                stream:
-                    database.getBudget(transaction.sharedReferenceBudgetPk!),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    Budget budget = snapshot.data!;
-                    return TransactionTag(
-                      color: HexColor(budget.colour,
-                          defaultColor: Theme.of(context).colorScheme.primary),
-                      name: budget.name,
+                    if (snapshot.data == null) return Container();
+                    Objective objective = snapshot.data!;
+                    return ObjectivePercentTag(
+                      transaction: transaction,
+                      objective: objective,
+                      showObjectivePercentageCheck:
+                          showObjectivePercentageCheck,
                     );
                   }
                   return Container();
                 },
               );
-            }
-          }),
-          Builder(builder: (context) {
-            if (objective != null) {
-              return ObjectivePercentTag(
-                transaction: transaction,
-                objective: objective!,
-                showObjectivePercentageCheck: showObjectivePercentageCheck,
+            }),
+            Builder(builder: (context) {
+              if (objective != null) {
+                return ObjectivePercentTag(
+                  transaction: transaction,
+                  objective: objective!,
+                  showObjectivePercentageCheck: showObjectivePercentageCheck,
+                );
+              }
+              return StreamBuilder<Objective>(
+                stream: database.getObjective(transaction.objectiveFk!),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    Objective objective = snapshot.data!;
+                    return ObjectivePercentTag(
+                      transaction: transaction,
+                      objective: objective,
+                      showObjectivePercentageCheck:
+                          showObjectivePercentageCheck,
+                    );
+                  }
+                  return Container();
+                },
               );
-            }
-            return StreamBuilder<Objective>(
-              stream: database.getObjective(transaction.objectiveLoanFk!),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  if (snapshot.data == null) return Container();
-                  Objective objective = snapshot.data!;
-                  return ObjectivePercentTag(
-                    transaction: transaction,
-                    objective: objective,
-                    showObjectivePercentageCheck: showObjectivePercentageCheck,
-                  );
-                }
-                return Container();
-              },
-            );
-          }),
-          Builder(builder: (context) {
-            if (objective != null) {
-              return ObjectivePercentTag(
-                transaction: transaction,
-                objective: objective!,
-                showObjectivePercentageCheck: showObjectivePercentageCheck,
-              );
-            }
-            return StreamBuilder<Objective>(
-              stream: database.getObjective(transaction.objectiveFk!),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  Objective objective = snapshot.data!;
-                  return ObjectivePercentTag(
-                    transaction: transaction,
-                    objective: objective,
-                    showObjectivePercentageCheck: showObjectivePercentageCheck,
-                  );
-                }
-                return Container();
-              },
-            );
-          }),
-          TransactionTag(
-            color: Colors.grey,
-            name: "excluded".tr(),
-          ),
-        ];
-        // work in preogress...
-        // if maxwidth > maxWidth/tagCount, wrap in flexible, otherwise dont
-        return Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                for (int i = 0; i < tags.length; i++)
-                  if (tagsToShow[i]) Flexible(child: tags[i])
-              ],
+            }),
+            TransactionTag(
+              color: Colors.grey,
+              name: "excluded".tr(),
             ),
-            if (transaction.sharedKey != null ||
-                transaction.sharedStatus == SharedStatus.waiting)
-              SharedBudgetLabel(transaction: transaction),
-          ],
-        );
-      }),
+          ];
+          // work in preogress...
+          // if maxwidth > maxWidth/tagCount, wrap in flexible, otherwise dont
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  for (int i = 0; i < tags.length; i++)
+                    if (tagsToShow[i]) Flexible(child: tags[i])
+                ],
+              ),
+              if (transaction.sharedKey != null ||
+                  transaction.sharedStatus == SharedStatus.waiting)
+                SharedBudgetLabel(transaction: transaction),
+            ],
+          );
+        }),
+      ),
     );
   }
 }

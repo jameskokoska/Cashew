@@ -29,7 +29,6 @@ class CategoryEntry extends StatelessWidget {
     required this.onTap,
     required this.selected,
     required this.allSelected,
-    required this.budgetColorScheme,
     this.categoryBudgetLimit,
     this.onLongPress,
     this.extraText,
@@ -57,7 +56,6 @@ class CategoryEntry extends StatelessWidget {
       CategoryBudgetLimit? categoryBudgetLimit) onTap;
   final bool selected;
   final bool allSelected;
-  final ColorScheme budgetColorScheme;
   final CategoryBudgetLimit? categoryBudgetLimit;
   final Function(TransactionCategory category,
       CategoryBudgetLimit? categoryBudgetLimit)? onLongPress;
@@ -147,7 +145,7 @@ class CategoryEntry extends StatelessWidget {
                           ? percentageOffset
                           : 0,
                   progressBackgroundColor: appStateSettings["materialYou"]
-                      ? budgetColorScheme.secondaryContainer
+                      ? Theme.of(context).colorScheme.secondaryContainer
                       : selected
                           ? getColor(context, "white")
                           : getColor(context, "lightDarkAccentHeavy"),
@@ -255,7 +253,8 @@ class CategoryEntry extends StatelessWidget {
                                       child: ThinProgress(
                                         backgroundColor:
                                             appStateSettings["materialYou"]
-                                                ? budgetColorScheme
+                                                ? Theme.of(context)
+                                                    .colorScheme
                                                     .secondaryContainer
                                                 : selected
                                                     ? getColor(context, "white")
@@ -339,7 +338,6 @@ class CategoryEntry extends StatelessWidget {
                     left: 20, right: 25, top: 8, bottom: 8),
                 child: mainCategoryWidget,
               ),
-              colorScheme: budgetColorScheme,
               subCategoryEntries: Padding(
                 padding: const EdgeInsets.only(top: 5),
                 child: Builder(builder: (context) {
@@ -369,7 +367,6 @@ class CategoryEntry extends StatelessWidget {
                                 : categoryLimitAmount * budgetLimit / 100,
                         categoryBudgetLimit:
                             subcategoryWithTotal.categoryBudgetLimit,
-                        budgetColorScheme: budgetColorScheme,
                         category: subcategoryWithTotal.category,
                         totalSpent: totalSpent,
                         transactionCount: subcategoryWithTotal.transactionCount,
@@ -441,7 +438,8 @@ class CategoryEntry extends StatelessWidget {
             child: AnimatedContainer(
               decoration: BoxDecoration(
                 color: selected && hasSubCategories == false
-                    ? dynamicPastel(context, budgetColorScheme.primary,
+                    ? dynamicPastel(
+                            context, Theme.of(context).colorScheme.primary,
                             amount: 0.3)
                         .withAlpha(80)
                     : Colors.transparent,

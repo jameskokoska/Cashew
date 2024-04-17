@@ -67,7 +67,6 @@ class TransactionEntries extends StatelessWidget {
     this.categoryTintColor,
     this.useHorizontalPaddingConstrained = true,
     this.showNoResults = true,
-    this.colorScheme,
     this.noSearchResultsVariation = false,
     this.noResultsMessage,
     this.searchFilters,
@@ -110,7 +109,6 @@ class TransactionEntries extends StatelessWidget {
   final bool useHorizontalPaddingConstrained;
   final int? limit;
   final bool showNoResults;
-  final ColorScheme? colorScheme;
   final bool noSearchResultsVariation;
   final String? noResultsMessage;
   final SearchFilters? searchFilters;
@@ -231,9 +229,8 @@ class TransactionEntries extends StatelessWidget {
                                         endDay ?? DateTime.now()) +
                                     ")")
                                 : ""),
-                    tintColor: colorScheme != null
-                        ? colorScheme?.primary.withOpacity(0.6)
-                        : null,
+                    tintColor:
+                        Theme.of(context).colorScheme?.primary.withOpacity(0.6),
                     noSearchResultsVariation: noSearchResultsVariation,
                     padding: noResultsPadding,
                   ),
@@ -342,7 +339,6 @@ class TransactionEntries extends StatelessWidget {
                             listID: listID,
                             useHorizontalPaddingConstrained:
                                 useHorizontalPaddingConstrained,
-                            colorScheme: colorScheme,
                           )
                         : null;
 
@@ -529,7 +525,6 @@ class TransactionEntries extends StatelessWidget {
                     futureTransactionPks: futureTransactionPks,
                     useHorizontalPaddingConstrained:
                         useHorizontalPaddingConstrained,
-                    colorScheme: colorScheme,
                   ),
                 )
               : SizedBox.shrink();
@@ -689,17 +684,15 @@ class PastTransactionsDivider extends StatelessWidget {
   const PastTransactionsDivider(
       {required this.listID,
       required this.useHorizontalPaddingConstrained,
-      required this.colorScheme,
       super.key});
   final String? listID;
   final bool useHorizontalPaddingConstrained;
-  final ColorScheme? colorScheme;
 
   @override
   Widget build(BuildContext context) {
     Color color = appStateSettings["materialYou"]
-        ? dynamicPastel(context,
-            (colorScheme ?? Theme.of(context).colorScheme).secondaryContainer,
+        ? dynamicPastel(
+            context, Theme.of(context).colorScheme.secondaryContainer,
             amountDark: 0.5, amountLight: 0)
         : getColor(context, "canvasContainer");
     return ValueListenableBuilder(
@@ -750,18 +743,16 @@ class FutureTransactionsDivider extends StatelessWidget {
       {required this.listID,
       required this.futureTransactionPks,
       required this.useHorizontalPaddingConstrained,
-      required this.colorScheme,
       super.key});
   final String? listID;
   final Set<String> futureTransactionPks;
   final bool useHorizontalPaddingConstrained;
-  final ColorScheme? colorScheme;
 
   @override
   Widget build(BuildContext context) {
     Color color = appStateSettings["materialYou"]
-        ? dynamicPastel(context,
-            (colorScheme ?? Theme.of(context).colorScheme).secondaryContainer,
+        ? dynamicPastel(
+            context, Theme.of(context).colorScheme.secondaryContainer,
             amountDark: 0.5, amountLight: 0)
         : getColor(context, "canvasContainer");
     return Padding(
@@ -859,7 +850,8 @@ class FutureTransactionsDivider extends StatelessWidget {
                           onTap: () {
                             toggleFutureTransactionsSection(listID);
                           },
-                          color: (colorScheme ?? Theme.of(context).colorScheme)
+                          color: Theme.of(context)
+                              .colorScheme
                               .secondary
                               .withOpacity(Theme.of(context).brightness ==
                                       Brightness.dark

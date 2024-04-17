@@ -172,5 +172,8 @@
   "all-outgoing-incoming-description-1": "Вклучете ги сите негативни/позитивни парични текови",
   "all-outgoing-incoming-description-2": "Пример: Вклучете трансакции за заем",
   "applies-when-switching-tabs-in-the-homepage-transactions-list": "Се применува при префрлување јазичиња во списокот со трансакции на почетната страница",
-  "number-pad-format": "Формат на подлога за броеви"
+  "number-pad-format": "Формат на подлога за броеви",
+  "set-lower-range": "Долниот опсег",
+  "set-upper-range": "Горен опсег",
+  "set-range": "Поставете опсег"
 }

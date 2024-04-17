@@ -64,11 +64,19 @@ class BudgetPage extends StatelessWidget {
         stream: database.getBudget(budgetPk),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return _BudgetPageContent(
-              budget: snapshot.data!,
-              dateForRange: dateForRange,
-              isPastBudget: isPastBudget,
-              isPastBudgetButCurrentPeriod: isPastBudgetButCurrentPeriod,
+            ColorScheme budgetColorScheme = ColorScheme.fromSeed(
+              seedColor: HexColor(snapshot.data?.colour,
+                  defaultColor: Theme.of(context).colorScheme.primary),
+              brightness: determineBrightnessTheme(context),
+            );
+            return Theme(
+              data: Theme.of(context).copyWith(colorScheme: budgetColorScheme),
+              child: _BudgetPageContent(
+                budget: snapshot.data!,
+                dateForRange: dateForRange,
+                isPastBudget: isPastBudget,
+                isPastBudgetButCurrentPeriod: isPastBudgetButCurrentPeriod,
+              ),
             );
           }
           return SizedBox.shrink();
@@ -126,7 +134,6 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
 
   Widget pieChart({
     required double totalSpent,
-    required ColorScheme budgetColorScheme,
     required DateTimeRange budgetRange,
     required bool showAllSubcategories,
     required VoidCallback toggleAllSubCategories,
@@ -177,7 +184,6 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
             });
             _pieChartDisplayStateKey.currentState?.setTouchedIndex(-1);
           },
-          colorScheme: budgetColorScheme,
           onEditSpendingGoals: () {
             pushRoute(
               context,
@@ -200,22 +206,18 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
     DateTime dateForRange =
         widget.dateForRange == null ? DateTime.now() : widget.dateForRange!;
     DateTimeRange budgetRange = getBudgetDate(widget.budget, dateForRange);
-    ColorScheme budgetColorScheme = ColorScheme.fromSeed(
-      seedColor: HexColor(widget.budget.colour,
-          defaultColor: Theme.of(context).colorScheme.primary),
-      brightness: determineBrightnessTheme(context),
-    );
     String pageId = budgetRange.start.millisecondsSinceEpoch.toString() +
         widget.budget.name +
         budgetRange.end.millisecondsSinceEpoch.toString() +
         widget.budget.budgetPk;
-    Color? pageBackgroundColor = Theme.of(context).brightness ==
-                Brightness.dark &&
-            appStateSettings["forceFullDarkBackground"]
-        ? Colors.black
-        : appStateSettings["materialYou"]
-            ? dynamicPastel(context, budgetColorScheme.primary, amount: 0.92)
-            : null;
+    Color? pageBackgroundColor =
+        Theme.of(context).brightness == Brightness.dark &&
+                appStateSettings["forceFullDarkBackground"]
+            ? Colors.black
+            : appStateSettings["materialYou"]
+                ? dynamicPastel(context, Theme.of(context).colorScheme.primary,
+                    amount: 0.92)
+                : null;
     bool showIncomeExpenseIcons = widget.budget.budgetTransactionFilters == null
         ? true
         : widget.budget.budgetTransactionFilters
@@ -275,7 +277,6 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                 if (snapshot.hasData) {
                   return TotalSpent(
                     budget: widget.budget,
-                    budgetColorScheme: budgetColorScheme,
                     totalSpent: totalSpent,
                   );
                 } else {
@@ -297,13 +298,12 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                       : null,
                   routesToPopAfterDelete: RoutesToPopAfterDelete.One,
                 ),
-                color: budgetColorScheme.secondary,
-                colorIcon: budgetColorScheme.onSecondary,
+                color: Theme.of(context).colorScheme.secondary,
+                colorIcon: Theme.of(context).colorScheme.onSecondary,
               ),
             ),
             actions: [
               CustomPopupMenuButton(
-                colorScheme: budgetColorScheme,
                 showButtons: enableDoubleColumn(context),
                 keepOutFirst: true,
                 items: [
@@ -360,8 +360,10 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
               ),
             ],
             title: widget.budget.name,
-            appBarBackgroundColor: budgetColorScheme.secondaryContainer,
-            appBarBackgroundColorStart: budgetColorScheme.secondaryContainer,
+            appBarBackgroundColor:
+                Theme.of(context).colorScheme.secondaryContainer,
+            appBarBackgroundColorStart:
+                Theme.of(context).colorScheme.secondaryContainer,
             textColor: getColor(context, "black"),
             dragDownToDismiss: true,
             slivers: [
@@ -446,7 +448,6 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                                 widget.budget.isAbsoluteSpendingLimit,
                             budgetLimit: budgetAmount,
                             categoryBudgetLimit: category.categoryBudgetLimit,
-                            budgetColorScheme: budgetColorScheme,
                             category: category.category,
                             totalSpent: s.totalSpent,
                             transactionCount: category.transactionCount,
@@ -514,7 +515,9 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                                 decoration: BoxDecoration(
                                   // borderRadius: BorderRadius.vertical(
                                   //     bottom: Radius.circular(10)),
-                                  color: budgetColorScheme.secondaryContainer,
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .secondaryContainer,
                                 ),
                                 child: Column(
                                   children: [
@@ -524,7 +527,8 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                                       child: Container(
                                         height: 10,
                                         width: 100,
-                                        color: budgetColorScheme
+                                        color: Theme.of(context)
+                                            .colorScheme
                                             .secondaryContainer,
                                       ),
                                     ),
@@ -607,7 +611,6 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                               ? BudgetSpenderSummary(
                                   budget: widget.budget,
                                   budgetRange: budgetRange,
-                                  budgetColorScheme: budgetColorScheme,
                                   setSelectedMember: (member) {
                                     setState(() {
                                       selectedMember = member;
@@ -624,7 +627,6 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                             pieChart(
                               budgetRange: budgetRange,
                               totalSpent: s.totalSpent,
-                              budgetColorScheme: budgetColorScheme,
                               showAllSubcategories: showAllSubcategories,
                               toggleAllSubCategories: toggleAllSubcategories,
                               dataFilterUnassignedTransactions:
@@ -670,8 +672,8 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.all(Radius.circular(15)),
                       color: appStateSettings["materialYou"]
-                          ? dynamicPastel(
-                              context, budgetColorScheme.secondaryContainer,
+                          ? dynamicPastel(context,
+                              Theme.of(context).colorScheme.secondaryContainer,
                               amount: 0.5)
                           : getColor(context, "lightDarkAccentHeavyLight"),
                       boxShadow: boxShadowCheck(boxShadowGeneral(context)),
@@ -682,7 +684,6 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                       isPastBudget: widget.isPastBudget,
                       selectedCategory: selectedCategory,
                       budgetRange: budgetRange,
-                      budgetColorScheme: budgetColorScheme,
                       showIfNone: false,
                     ),
                   ),
@@ -712,8 +713,7 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                 budget: widget.budget,
                 dateDividerColor: pageBackgroundColor,
                 transactionBackgroundColor: pageBackgroundColor,
-                categoryTintColor: budgetColorScheme.primary,
-                colorScheme: budgetColorScheme,
+                categoryTintColor: Theme.of(context).colorScheme.primary,
                 noResultsExtraWidget: widget.budget.reoccurrence !=
                             BudgetReoccurence.custom &&
                         widget.isPastBudget == false &&
@@ -733,7 +733,7 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
                               : Icons.history_rounded,
                           color: dynamicPastel(
                             context,
-                            budgetColorScheme.secondaryContainer,
+                            Theme.of(context).colorScheme.secondaryContainer,
                             amountLight:
                                 appStateSettings["materialYou"] ? 0.25 : 0.4,
                             amountDark:
@@ -792,7 +792,6 @@ class _BudgetPageContentState extends State<_BudgetPageContent> {
           ),
           SelectedTransactionsAppBar(
             pageID: pageId,
-            colorScheme: budgetColorScheme,
           ),
         ],
       ),
@@ -849,7 +848,6 @@ class BudgetLineGraph extends StatefulWidget {
     required this.isPastBudget,
     required this.selectedCategory,
     required this.budgetRange,
-    required this.budgetColorScheme,
     this.showPastSpending = true,
     this.showIfNone = true,
     this.padding = EdgeInsets.zero,
@@ -861,7 +859,6 @@ class BudgetLineGraph extends StatefulWidget {
   final bool? isPastBudget;
   final TransactionCategory? selectedCategory;
   final DateTimeRange budgetRange;
-  final ColorScheme budgetColorScheme;
   final bool showPastSpending;
   final bool showIfNone;
   final EdgeInsets padding;
@@ -1011,7 +1008,7 @@ class _BudgetLineGraphState extends State<BudgetLineGraph> {
                   widget.selectedCategory != null
               ? HexColor(widget.selectedCategory!.colour,
                   defaultColor: Theme.of(context).colorScheme.primary)
-              : widget.budgetColorScheme.primary;
+              : Theme.of(context).colorScheme.primary;
           if (widget.showIfNone == false && allZeroes) return SizedBox.shrink();
           return Stack(
             children: [
@@ -1038,7 +1035,7 @@ class _BudgetLineGraphState extends State<BudgetLineGraph> {
                           : (widget.selectedCategory?.categoryPk != null &&
                                       widget.selectedCategory != null
                                   ? lineColor
-                                  : widget.budgetColorScheme.tertiary)
+                                  : Theme.of(context).colorScheme.tertiary)
                               .withOpacity((index) / snapshot.data!.length)
                   ],
                   horizontalLineAt: widget.isPastBudget == true ||
@@ -1071,7 +1068,7 @@ class _BudgetLineGraphState extends State<BudgetLineGraph> {
                           ? "view-all-days".tr()
                           : "view-to-today".tr(),
                       child: IconButton(
-                        color: widget.budgetColorScheme.primary,
+                        color: Theme.of(context).colorScheme.primary,
                         icon: Transform.rotate(
                           angle: pi / 2,
                           child: ScaledAnimatedSwitcher(
@@ -1086,7 +1083,9 @@ class _BudgetLineGraphState extends State<BudgetLineGraph> {
                                       ? Icons.compress_outlined
                                       : Icons.compress_rounded,
                               size: 22,
-                              color: widget.budgetColorScheme.primary
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .primary
                                   .withOpacity(0.8),
                             ),
                           ),
@@ -1115,12 +1114,10 @@ class _BudgetLineGraphState extends State<BudgetLineGraph> {
 class TotalSpent extends StatefulWidget {
   const TotalSpent({
     super.key,
-    required this.budgetColorScheme,
     required this.totalSpent,
     required this.budget,
   });
 
-  final ColorScheme budgetColorScheme;
   final double totalSpent;
   final Budget budget;
 
@@ -1177,8 +1174,9 @@ class _TotalSpentState extends State<TotalSpent> {
                             fontSize: 22,
                             textAlign: TextAlign.left,
                             fontWeight: FontWeight.bold,
-                            textColor:
-                                widget.budgetColorScheme.onSecondaryContainer,
+                            textColor: Theme.of(context)
+                                .colorScheme
+                                .onSecondaryContainer,
                           );
                         },
                       ),
@@ -1192,7 +1190,7 @@ class _TotalSpentState extends State<TotalSpent> {
                         fontSize: 15,
                         textAlign: TextAlign.left,
                         textColor:
-                            widget.budgetColorScheme.onSecondaryContainer,
+                            Theme.of(context).colorScheme.onSecondaryContainer,
                       ),
                     ),
                   ],
@@ -1218,8 +1216,9 @@ class _TotalSpentState extends State<TotalSpent> {
                             fontSize: 22,
                             textAlign: TextAlign.left,
                             fontWeight: FontWeight.bold,
-                            textColor:
-                                widget.budgetColorScheme.onSecondaryContainer,
+                            textColor: Theme.of(context)
+                                .colorScheme
+                                .onSecondaryContainer,
                           );
                         },
                       ),
@@ -1233,7 +1232,7 @@ class _TotalSpentState extends State<TotalSpent> {
                         fontSize: 15,
                         textAlign: TextAlign.left,
                         textColor:
-                            widget.budgetColorScheme.onSecondaryContainer,
+                            Theme.of(context).colorScheme.onSecondaryContainer,
                       ),
                     ),
                   ],

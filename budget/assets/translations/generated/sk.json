@@ -1123,5 +1123,8 @@
   "all-outgoing-incoming-description-1": "Zahrňte všetky negatívne/pozitívne peňažné toky",
   "all-outgoing-incoming-description-2": "Príklad: Zahrňte úverové transakcie",
   "applies-when-switching-tabs-in-the-homepage-transactions-list": "Platí pri prepínaní kariet v zozname transakcií na domovskej stránke",
-  "number-pad-format": "Formát číselnej klávesnice"
+  "number-pad-format": "Formát číselnej klávesnice",
+  "set-lower-range": "Dolný rozsah",
+  "set-upper-range": "Horný rozsah",
+  "set-range": "Nastaviť rozsah"
 }

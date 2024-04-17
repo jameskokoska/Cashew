@@ -1104,7 +1104,6 @@ class BudgetSpenderSummary extends StatefulWidget {
   const BudgetSpenderSummary({
     required this.budget,
     required this.budgetRange,
-    required this.budgetColorScheme,
     required this.setSelectedMember,
     this.allTime = false,
     this.disableMemberSelection = false,
@@ -1114,7 +1113,6 @@ class BudgetSpenderSummary extends StatefulWidget {
 
   final Budget budget;
   final DateTimeRange budgetRange;
-  final ColorScheme budgetColorScheme;
   final Function(String?) setSelectedMember;
   final bool allTime;
   final bool disableMemberSelection;
@@ -1227,7 +1225,7 @@ class _BudgetSpenderSummaryState extends State<BudgetSpenderSummary> {
                     duration: Duration(milliseconds: 500),
                     color: selectedMember == spender.member
                         ? dynamicPastel(
-                                context, widget.budgetColorScheme.primary,
+                                context, Theme.of(context).colorScheme.primary,
                                 amount: 0.3)
                             .withAlpha(80)
                         : Colors.transparent,
@@ -1255,7 +1253,7 @@ class _BudgetSpenderSummaryState extends State<BudgetSpenderSummary> {
                               selectedMember == spender.member
                                   ? getColor(context, "white")
                                   : getColor(context, "lightDarkAccentHeavy"),
-                          color: widget.budgetColorScheme.primary,
+                          color: Theme.of(context).colorScheme.primary,
                           size: widget.isLarge ? 28 : 28,
                           insetPadding: widget.isLarge ? 23 : 18,
                           isLarge: widget.isLarge,

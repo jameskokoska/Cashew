@@ -171,6 +171,7 @@ String convertToMoney(AllWallets allWallets, double amount,
     String Function(String)? editFormattedOutput,
     bool forceCompactNumberFormatter = false,
     bool forceDefaultNumberFormatter = false,
+    bool forceAbsoluteZero = true,
     NumberFormat Function(int? decimalDigits, String? locale, String? symbol)?
         getCustomNumberFormat}) {
   int numberDecimals = decimals ??
@@ -187,10 +188,10 @@ String convertToMoney(AllWallets allWallets, double amount,
     return "Infinity";
   }
   amount = double.parse(amount.toStringAsFixed(numberDecimals));
-  amount = absoluteZero(amount);
+  if (forceAbsoluteZero) amount = absoluteZero(amount);
   if (finalNumber != null) {
     finalNumber = double.parse(finalNumber.toStringAsFixed(numberDecimals));
-    finalNumber = absoluteZero(finalNumber);
+    if (forceAbsoluteZero) finalNumber = absoluteZero(finalNumber);
   }
 
   int? decimalDigits = forceAllDecimals

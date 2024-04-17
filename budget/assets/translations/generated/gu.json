@@ -1123,5 +1123,8 @@
   "all-outgoing-incoming-description-1": "તમામ નકારાત્મક/સકારાત્મક રોકડ પ્રવાહનો સમાવેશ કરો",
   "all-outgoing-incoming-description-2": "ઉદાહરણ: લોન વ્યવહારો શામેલ કરો",
   "applies-when-switching-tabs-in-the-homepage-transactions-list": "હોમપેજ વ્યવહારોની સૂચિમાં ટૅબ્સ સ્વિચ કરતી વખતે લાગુ થાય છે",
-  "number-pad-format": "નંબર પેડ ફોર્મેટ"
+  "number-pad-format": "નંબર પેડ ફોર્મેટ",
+  "set-lower-range": "લોઅર રેન્જ",
+  "set-upper-range": "અપર રેન્જ",
+  "set-range": "શ્રેણી સેટ કરો"
 }

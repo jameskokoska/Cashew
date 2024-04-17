@@ -1123,5 +1123,8 @@
   "all-outgoing-incoming-description-1": "Inkludér alle negative/positive pengestrømme",
   "all-outgoing-incoming-description-2": "Eksempel: Inkludér lånetransaktioner",
   "applies-when-switching-tabs-in-the-homepage-transactions-list": "Gælder, når der skiftes fane i hjemmesidens transaktionsliste",
-  "number-pad-format": "Nummerpladeformat"
+  "number-pad-format": "Nummerpladeformat",
+  "set-lower-range": "Nedre rækkevidde",
+  "set-upper-range": "Øvre rækkevidde",
+  "set-range": "Indstil rækkevidde"
 }

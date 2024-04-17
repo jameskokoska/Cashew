@@ -1123,5 +1123,8 @@
   "all-outgoing-incoming-description-1": "Συμπεριλάβετε όλες τις αρνητικές/θετικές ταμειακές ροές",
   "all-outgoing-incoming-description-2": "Παράδειγμα: Συμπεριλάβετε συναλλαγές δανείου",
   "applies-when-switching-tabs-in-the-homepage-transactions-list": "Ισχύει κατά την εναλλαγή καρτελών στη λίστα συναλλαγών της αρχικής σελίδας",
-  "number-pad-format": "Μορφή πληκτρολογίου αριθμών"
+  "number-pad-format": "Μορφή πληκτρολογίου αριθμών",
+  "set-lower-range": "Κάτω Εύρος",
+  "set-upper-range": "Άνω Εύρος",
+  "set-range": "Ρύθμιση εύρους"
 }

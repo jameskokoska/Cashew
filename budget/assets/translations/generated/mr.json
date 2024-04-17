@@ -1123,5 +1123,8 @@
   "all-outgoing-incoming-description-1": "सर्व नकारात्मक/सकारात्मक रोख प्रवाह समाविष्ट करा",
   "all-outgoing-incoming-description-2": "उदाहरण: कर्ज व्यवहार समाविष्ट करा",
   "applies-when-switching-tabs-in-the-homepage-transactions-list": "मुख्यपृष्ठ व्यवहार सूचीमधील टॅब स्विच करताना लागू होते",
-  "number-pad-format": "क्रमांक पॅड स्वरूप"
+  "number-pad-format": "क्रमांक पॅड स्वरूप",
+  "set-lower-range": "लोअर रेंज",
+  "set-upper-range": "वरची श्रेणी",
+  "set-range": "श्रेणी सेट करा"
 }

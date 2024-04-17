@@ -1123,5 +1123,8 @@
   "all-outgoing-incoming-description-1": "Uwzględnij wszystkie ujemne/dodatnie przepływy pieniężne",
   "all-outgoing-incoming-description-2": "Przykład: uwzględnij transakcje pożyczkowe",
   "applies-when-switching-tabs-in-the-homepage-transactions-list": "Dotyczy przełączania zakładek na liście transakcji na stronie głównej",
-  "number-pad-format": "Format klawiatury numerycznej"
+  "number-pad-format": "Format klawiatury numerycznej",
+  "set-lower-range": "Dolny zakres",
+  "set-upper-range": "Górny zakres",
+  "set-range": "Ustaw zakres"
 }

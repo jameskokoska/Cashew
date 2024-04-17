@@ -1123,5 +1123,8 @@
   "all-outgoing-incoming-description-1": "அனைத்து எதிர்மறை/நேர்மறை பணப்புழக்கத்தையும் சேர்க்கவும்",
   "all-outgoing-incoming-description-2": "உதாரணம்: கடன் பரிவர்த்தனைகள் அடங்கும்",
   "applies-when-switching-tabs-in-the-homepage-transactions-list": "முகப்புப் பரிவர்த்தனைகள் பட்டியலில் தாவல்களை மாற்றும்போது பொருந்தும்",
-  "number-pad-format": "எண் பேட் வடிவம்"
+  "number-pad-format": "எண் பேட் வடிவம்",
+  "set-lower-range": "கீழ் வரம்பு",
+  "set-upper-range": "மேல் வரம்பு",
+  "set-range": "வரம்பை அமைக்கவும்"
 }

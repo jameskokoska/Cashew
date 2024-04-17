@@ -442,7 +442,6 @@ class SubCategoriesContainer extends StatelessWidget {
     this.separatorBanner,
     required this.subCategoryEntries,
     this.extraButtonEnd,
-    this.colorScheme,
     this.onTap,
   });
 
@@ -450,7 +449,6 @@ class SubCategoriesContainer extends StatelessWidget {
   final Widget? separatorBanner;
   final Widget subCategoryEntries;
   final Widget? extraButtonEnd;
-  final ColorScheme? colorScheme;
   final VoidCallback? onTap;
 
   @override
@@ -459,7 +457,8 @@ class SubCategoriesContainer extends StatelessWidget {
       children: [
         Container(
           decoration: BoxDecoration(
-            color: (colorScheme ?? Theme.of(context).colorScheme)
+            color: Theme.of(context)
+                .colorScheme
                 .secondaryContainer
                 .withOpacity(getPlatform() == PlatformOS.isIOS ? 0.15 : 0.5),
             borderRadius: BorderRadius.vertical(
@@ -484,7 +483,8 @@ class SubCategoriesContainer extends StatelessWidget {
           HorizontalBreak(padding: EdgeInsets.zero),
           Container(
             child: content,
-            color: (colorScheme ?? Theme.of(context).colorScheme)
+            color: Theme.of(context)
+                .colorScheme
                 .secondaryContainer
                 .withOpacity(0.3),
           ),
@@ -503,9 +503,7 @@ class SubCategoriesContainer extends StatelessWidget {
             decoration: BoxDecoration(
               border: Border.all(
                 color: (appStateSettings["materialYou"]
-                    ? (colorScheme ?? Theme.of(context).colorScheme)
-                        .secondary
-                        .withOpacity(0.5)
+                    ? Theme.of(context).colorScheme.secondary.withOpacity(0.5)
                     : getColor(context, "lightDarkAccentHeavy")),
                 width: 2,
               ),
