@@ -1126,5 +1126,8 @@
   "number-pad-format": "Sayı Tuş Takımı Formatı",
   "set-lower-range": "Alt Aralık",
   "set-upper-range": "Daha yüksek kademe",
-  "set-range": "Aralığı Ayarla"
+  "set-range": "Aralığı Ayarla",
+  "amount-color": "Miktar Rengi",
+  "green-or-red": "Yeşil kırmızı",
+  "no-color": "Renk yok"
 }

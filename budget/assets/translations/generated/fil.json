@@ -1126,5 +1126,8 @@
   "number-pad-format": "Format ng Number Pad",
   "set-lower-range": "Mababang Saklaw",
   "set-upper-range": "Itaas na Saklaw",
-  "set-range": "Itakda ang Saklaw"
+  "set-range": "Itakda ang Saklaw",
+  "amount-color": "Kulay ng Dami",
+  "green-or-red": "Berde / Pula",
+  "no-color": "Walang Kulay"
 }

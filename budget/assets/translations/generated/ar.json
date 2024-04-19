@@ -1126,5 +1126,8 @@
   "number-pad-format": "تنسيق لوحة الأرقام",
   "set-lower-range": "النطاق الأدنى",
   "set-upper-range": "النطاق العلوي",
-  "set-range": "مجموعة مجموعة"
+  "set-range": "مجموعة مجموعة",
+  "amount-color": "لون الكمية",
+  "green-or-red": "أخضر أحمر",
+  "no-color": "لا يوجد لون"
 }

@@ -1126,5 +1126,8 @@
   "number-pad-format": "Number Pad Format",
   "set-lower-range": "Lägre intervall",
   "set-upper-range": "Övre Range",
-  "set-range": "Ställ in räckvidd"
+  "set-range": "Ställ in räckvidd",
+  "amount-color": "Mängd Färg",
+  "green-or-red": "Grön/röd",
+  "no-color": "Ingen färg"
 }

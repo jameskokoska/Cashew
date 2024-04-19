@@ -1126,5 +1126,8 @@
   "number-pad-format": "Формат нумеричке табле",
   "set-lower-range": "Ловер Ранге",
   "set-upper-range": "Уппер Ранге",
-  "set-range": "Подесите опсег"
+  "set-range": "Подесите опсег",
+  "amount-color": "Амоунт Цолор",
+  "green-or-red": "Зелено / црвено",
+  "no-color": "Нема боје"
 }

@@ -1126,5 +1126,8 @@
   "number-pad-format": "Формат на цифровата клавиатура",
   "set-lower-range": "Долен диапазон",
   "set-upper-range": "Горен диапазон",
-  "set-range": "Задайте диапазон"
+  "set-range": "Задайте диапазон",
+  "amount-color": "Сума Цвят",
+  "green-or-red": "Зелено / Червено",
+  "no-color": "Без цвят"
 }

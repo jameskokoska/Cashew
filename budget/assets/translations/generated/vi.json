@@ -1122,9 +1122,12 @@
   "all-outgoing-incoming": "Mọi chi phí & thu nhập",
   "all-outgoing-incoming-description-1": "Bao gồm tất cả dòng tiền âm/dương",
   "all-outgoing-incoming-description-2": "Ví dụ: Bao gồm các giao dịch cho vay",
-  "applies-when-switching-tabs-in-the-homepage-transactions-list": "Áp dụng khi chuyển tab trong danh sách giao dịch trang chủ",
+  "applies-when-switching-tabs-in-the-homepage-transactions-list": "Áp dụng khi chuyển thẻ trong danh sách giao dịch trang chủ",
   "number-pad-format": "Định dạng bàn phím số",
-  "set-lower-range": "Cấp thấp hơn",
-  "set-upper-range": "Dãy trên",
-  "set-range": "Đặt dải"
+  "set-lower-range": "Đặt phạm vi thấp hơn",
+  "set-upper-range": "Đặt phạm vi cao hơn",
+  "set-range": "Đặt phạm vi",
+  "amount-color": "Số lượng màu",
+  "green-or-red": "Xanh đỏ",
+  "no-color": "Không màu"
 }

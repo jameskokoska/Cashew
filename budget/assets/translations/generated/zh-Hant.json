@@ -1126,5 +1126,8 @@
   "number-pad-format": "數字鍵盤格式",
   "set-lower-range": "較低範圍",
   "set-upper-range": "上限",
-  "set-range": "設定範圍"
+  "set-range": "設定範圍",
+  "amount-color": "數量 顏色",
+  "green-or-red": "綠/紅",
+  "no-color": "無顏色"
 }

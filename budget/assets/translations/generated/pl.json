@@ -1126,5 +1126,8 @@
   "number-pad-format": "Format klawiatury numerycznej",
   "set-lower-range": "Dolny zakres",
   "set-upper-range": "Górny zakres",
-  "set-range": "Ustaw zakres"
+  "set-range": "Ustaw zakres",
+  "amount-color": "Ilość Kolor",
+  "green-or-red": "Zielono czerwony",
+  "no-color": "Brak koloru"
 }

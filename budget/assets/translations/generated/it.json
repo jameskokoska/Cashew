@@ -1126,5 +1126,8 @@
   "number-pad-format": "Formato tastierino numerico",
   "set-lower-range": "Gamma inferiore",
   "set-upper-range": "Gamma superiore",
-  "set-range": "Imposta intervallo"
+  "set-range": "Imposta intervallo",
+  "amount-color": "Colore importo",
+  "green-or-red": "Verde/Rosso",
+  "no-color": "Nessun colore"
 }

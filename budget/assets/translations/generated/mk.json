@@ -175,5 +175,8 @@
   "number-pad-format": "Формат на подлога за броеви",
   "set-lower-range": "Долниот опсег",
   "set-upper-range": "Горен опсег",
-  "set-range": "Поставете опсег"
+  "set-range": "Поставете опсег",
+  "amount-color": "Износ Боја",
+  "green-or-red": "Зелена / Црвена",
+  "no-color": "Без Боја"
 }

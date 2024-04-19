@@ -1126,5 +1126,8 @@
   "number-pad-format": "எண் பேட் வடிவம்",
   "set-lower-range": "கீழ் வரம்பு",
   "set-upper-range": "மேல் வரம்பு",
-  "set-range": "வரம்பை அமைக்கவும்"
+  "set-range": "வரம்பை அமைக்கவும்",
+  "amount-color": "அளவு நிறம்",
+  "green-or-red": "பச்சை / சிவப்பு",
+  "no-color": "நிறம் இல்லை"
 }

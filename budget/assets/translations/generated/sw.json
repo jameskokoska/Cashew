@@ -1126,5 +1126,8 @@
   "number-pad-format": "Muundo wa Pedi ya Nambari",
   "set-lower-range": "Kiwango cha chini",
   "set-upper-range": "Safu ya Juu",
-  "set-range": "Weka Masafa"
+  "set-range": "Weka Masafa",
+  "amount-color": "Rangi ya Kiasi",
+  "green-or-red": "Kijani / Nyekundu",
+  "no-color": "Hakuna Rangi"
 }

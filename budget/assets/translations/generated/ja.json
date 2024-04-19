@@ -1126,5 +1126,8 @@
   "number-pad-format": "テンキーの形式",
   "set-lower-range": "低域範囲",
   "set-upper-range": "上限範囲",
-  "set-range": "設定範囲"
+  "set-range": "設定範囲",
+  "amount-color": "金額の色",
+  "green-or-red": "緑/赤",
+  "no-color": "色なし"
 }

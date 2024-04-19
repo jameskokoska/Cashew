@@ -1126,5 +1126,8 @@
   "number-pad-format": "Format du pavé numérique",
   "set-lower-range": "Gamme inférieure",
   "set-upper-range": "Gamme supérieure",
-  "set-range": "Définir la plage"
+  "set-range": "Définir la plage",
+  "amount-color": "Quantité Couleur",
+  "green-or-red": "Vert/rouge",
+  "no-color": "Sans couleur"
 }

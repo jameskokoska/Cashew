@@ -1126,5 +1126,8 @@
   "number-pad-format": "নম্বর প্যাড বিন্যাস",
   "set-lower-range": "নিম্ন পরিসর",
   "set-upper-range": "আপার রেঞ্জ",
-  "set-range": "পরিসীমা সেট করুন"
+  "set-range": "পরিসীমা সেট করুন",
+  "amount-color": "পরিমাণ রঙ",
+  "green-or-red": "সবুজ/লাল",
+  "no-color": "কোন রঙ নেই"
 }

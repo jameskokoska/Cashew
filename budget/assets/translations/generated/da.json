@@ -1126,5 +1126,8 @@
   "number-pad-format": "Nummerpladeformat",
   "set-lower-range": "Nedre rækkevidde",
   "set-upper-range": "Øvre rækkevidde",
-  "set-range": "Indstil rækkevidde"
+  "set-range": "Indstil rækkevidde",
+  "amount-color": "Mængde Farve",
+  "green-or-red": "Grøn/rød",
+  "no-color": "Ingen farve"
 }

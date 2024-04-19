@@ -465,20 +465,12 @@ class CustomColorTheme extends StatelessWidget {
       seedColor: accentColor,
       brightness: determineBrightnessTheme(context),
     );
-    Color? pageBackgroundColor =
-        Theme.of(context).brightness == Brightness.dark &&
-                appStateSettings["forceFullDarkBackground"]
-            ? Colors.black
-            : appStateSettings["materialYou"]
-                ? dynamicPastel(context, colorScheme.primary, amount: 0.92)
-                : null;
     return Theme(
       data: generateThemeDataWithExtension(
         accentColor: accentColor,
         brightness: Theme.of(context).brightness,
         themeData: Theme.of(context).copyWith(
           colorScheme: colorScheme,
-          canvasColor: pageBackgroundColor,
         ),
       ),
       child: child,

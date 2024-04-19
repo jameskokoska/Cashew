@@ -1126,5 +1126,8 @@
   "number-pad-format": "รูปแบบแป้นตัวเลข",
   "set-lower-range": "ช่วงล่าง",
   "set-upper-range": "ช่วงบน",
-  "set-range": "ตั้งค่าช่วง"
+  "set-range": "ตั้งค่าช่วง",
+  "amount-color": "จำนวน สี",
+  "green-or-red": "เขียว / แดง",
+  "no-color": "ไม่มีสี"
 }

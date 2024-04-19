@@ -276,6 +276,7 @@ class SettingsContainerDropdown extends StatefulWidget {
     this.verticalPadding,
     this.enableBorderRadius = false,
     this.faintValues = const [],
+    this.backgroundColor,
   }) : super(key: key);
 
   final String title;
@@ -288,6 +289,7 @@ class SettingsContainerDropdown extends StatefulWidget {
   final double? verticalPadding;
   final bool enableBorderRadius;
   final List<String> faintValues;
+  final Color? backgroundColor;
 
   @override
   State<SettingsContainerDropdown> createState() =>
@@ -305,6 +307,7 @@ class _SettingsContainerDropdownState extends State<SettingsContainerDropdown> {
       title: widget.title,
       description: widget.description,
       icon: widget.icon,
+      backgroundColor: widget.backgroundColor,
       onTap: () {
         _dropdownKey!.currentState!.openDropdown();
       },
@@ -549,7 +552,7 @@ class SettingsContainer extends StatelessWidget {
           (enableBorderRadius || getIsFullScreen(context)) && isOutlined != true
               ? getPlatform() == PlatformOS.isIOS
                   ? 10
-                  : 20
+                  : 15
               : 0),
       child: isOutlined == true
           ? SettingsContainerOutlined(

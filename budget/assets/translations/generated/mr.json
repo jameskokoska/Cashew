@@ -1126,5 +1126,8 @@
   "number-pad-format": "क्रमांक पॅड स्वरूप",
   "set-lower-range": "लोअर रेंज",
   "set-upper-range": "वरची श्रेणी",
-  "set-range": "श्रेणी सेट करा"
+  "set-range": "श्रेणी सेट करा",
+  "amount-color": "रक्कम रंग",
+  "green-or-red": "हिरवा / लाल",
+  "no-color": "रंग नाही"
 }

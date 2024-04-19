@@ -1126,5 +1126,8 @@
   "number-pad-format": "数字键盘格式",
   "set-lower-range": "较低范围",
   "set-upper-range": "上限",
-  "set-range": "设定范围"
+  "set-range": "设定范围",
+  "amount-color": "数量 颜色",
+  "green-or-red": "绿/红",
+  "no-color": "无颜色"
 }

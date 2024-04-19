@@ -1126,5 +1126,8 @@
   "number-pad-format": "Numeriek toetsenbordformaat",
   "set-lower-range": "Lager bereik",
   "set-upper-range": "Bovenste bereik",
-  "set-range": "Bereik instellen"
+  "set-range": "Bereik instellen",
+  "amount-color": "Hoeveelheid Kleur",
+  "green-or-red": "Groen/rood",
+  "no-color": "Geen kleur"
 }

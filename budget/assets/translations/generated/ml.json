@@ -1126,5 +1126,8 @@
   "number-pad-format": "നമ്പർ പാഡ് ഫോർമാറ്റ്",
   "set-lower-range": "താഴ്ന്ന ശ്രേണി",
   "set-upper-range": "അപ്പർ റേഞ്ച്",
-  "set-range": "ശ്രേണി സജ്ജമാക്കുക"
+  "set-range": "ശ്രേണി സജ്ജമാക്കുക",
+  "amount-color": "തുകയുടെ നിറം",
+  "green-or-red": "പച്ച / ചുവപ്പ്",
+  "no-color": "നിറമില്ല"
 }

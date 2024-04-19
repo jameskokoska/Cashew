@@ -1126,5 +1126,8 @@
   "number-pad-format": "నంబర్ ప్యాడ్ ఫార్మాట్",
   "set-lower-range": "దిగువ పరిధి",
   "set-upper-range": "ఎగువ శ్రేణి",
-  "set-range": "పరిధిని సెట్ చేయండి"
+  "set-range": "పరిధిని సెట్ చేయండి",
+  "amount-color": "మొత్తం రంగు",
+  "green-or-red": "ఆకుపచ్చ / ఎరుపు",
+  "no-color": "రంగు లేదు"
 }

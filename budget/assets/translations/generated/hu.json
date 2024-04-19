@@ -1126,5 +1126,8 @@
   "number-pad-format": "Számbillentyűzet formátuma",
   "set-lower-range": "Alsó tartomány",
   "set-upper-range": "Felső tartomány",
-  "set-range": "Tartomány beállítása"
+  "set-range": "Tartomány beállítása",
+  "amount-color": "Összeg Szín",
+  "green-or-red": "Zöld / Piros",
+  "no-color": "Nincs szín"
 }

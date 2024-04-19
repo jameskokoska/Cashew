@@ -2188,7 +2188,8 @@ class SelectIncludeAmount extends StatelessWidget {
               : Icons.cancel_rounded,
       title: "include-amount".tr(),
       enableBorderRadius: true,
-      backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
+      backgroundColor:
+          Theme.of(context).colorScheme.secondaryContainer.withOpacity(0.7),
       initialValue: selectedPaid,
       onSwitched: onSwitched,
     );
@@ -3624,7 +3625,7 @@ class SelectTransactionTypePopup extends StatelessWidget {
             Theme.of(context).colorScheme.secondaryContainer,
             amount: 0.5,
           ),
-          borderRadius: 20,
+          borderRadius: getPlatform() == PlatformOS.isIOS ? 10 : 15,
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 15),
             child: Column(

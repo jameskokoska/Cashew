@@ -2,6 +2,7 @@ import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/struct/currencyFunctions.dart';
+import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/animatedExpanded.dart';
 import 'package:budget/widgets/countNumber.dart';
 import 'package:budget/widgets/textWidgets.dart';
@@ -130,8 +131,12 @@ Color getTransactionAmountColor(BuildContext context, Transaction transaction) {
                           // getColor(context, "unPaidOverdue")
                           : getColor(context, "textLight");
   if (transaction.categoryFk == "0") {
-    return dynamicPastel(context, color,
-        inverse: true, amountLight: 0.3, amountDark: 0.25);
+    if (appStateSettings["balanceTransferAmountColor"] == "no-color") {
+      return getColor(context, "black").withOpacity(0.95);
+    } else {
+      return dynamicPastel(context, color,
+          inverse: true, amountLight: 0.3, amountDark: 0.25);
+    }
   }
   return color;
 }

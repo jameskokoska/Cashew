@@ -1126,5 +1126,8 @@
   "number-pad-format": "Formát číselné klávesnice",
   "set-lower-range": "Dolní rozsah",
   "set-upper-range": "Horní rozsah",
-  "set-range": "Nastavit rozsah"
+  "set-range": "Nastavit rozsah",
+  "amount-color": "Množství Barva",
+  "green-or-red": "Zelená / červená",
+  "no-color": "Žádná barva"
 }

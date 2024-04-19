@@ -48,6 +48,8 @@ String getChangelogString() {
     Improve colorscheme for budget and goal pages
     Rearrange number format settings in popup for consistency
     Add time to date info when deleting cloud backup
+    Balance correction amount color category setting
+    Border radius UI and color consistencies
     Fix font setting always resetting (i)
     Fix exclude amount from budget default value for include amount overall would be incorrect
     Fix (i) biometric lock bypass

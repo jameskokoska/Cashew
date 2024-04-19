@@ -1126,5 +1126,8 @@
   "number-pad-format": "Formato del teclado numérico",
   "set-lower-range": "Rango inferior",
   "set-upper-range": "Rango superior",
-  "set-range": "Establecer rango"
+  "set-range": "Establecer rango",
+  "amount-color": "Cantidad Color",
+  "green-or-red": "Verde/rojo",
+  "no-color": "Sin color"
 }

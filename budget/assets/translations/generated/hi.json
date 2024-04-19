@@ -1126,5 +1126,8 @@
   "number-pad-format": "नंबर पैड प्रारूप",
   "set-lower-range": "निचली सीमा",
   "set-upper-range": "ऊपरी सीमा",
-  "set-range": "रेंज सेट करें"
+  "set-range": "रेंज सेट करें",
+  "amount-color": "राशि रंग",
+  "green-or-red": "हरी लाल",
+  "no-color": "रंग नहीं"
 }

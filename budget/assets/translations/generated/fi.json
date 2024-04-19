@@ -1126,5 +1126,8 @@
   "number-pad-format": "Numeronäppäimistön muoto",
   "set-lower-range": "Alempi alue",
   "set-upper-range": "Upper Range",
-  "set-range": "Aseta alue"
+  "set-range": "Aseta alue",
+  "amount-color": "Määrä Väri",
+  "green-or-red": "Vihreä / punainen",
+  "no-color": "Ei väriä"
 }

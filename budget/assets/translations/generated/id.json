@@ -1126,5 +1126,8 @@
   "number-pad-format": "Format Papan Angka",
   "set-lower-range": "Kisaran Bawah",
   "set-upper-range": "Kisaran Atas",
-  "set-range": "Tetapkan Rentang"
+  "set-range": "Tetapkan Rentang",
+  "amount-color": "Jumlah Warna",
+  "green-or-red": "Hijau merah",
+  "no-color": "Tanpa warna"
 }

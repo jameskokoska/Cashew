@@ -1126,5 +1126,8 @@
   "number-pad-format": "Formato do teclado numérico",
   "set-lower-range": "Faixa inferior",
   "set-upper-range": "Faixa superior",
-  "set-range": "Definir intervalo"
+  "set-range": "Definir intervalo",
+  "amount-color": "Quantidade Cor",
+  "green-or-red": "Verde / Vermelho",
+  "no-color": "Sem cor"
 }

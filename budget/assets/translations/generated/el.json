@@ -1126,5 +1126,8 @@
   "number-pad-format": "Μορφή πληκτρολογίου αριθμών",
   "set-lower-range": "Κάτω Εύρος",
   "set-upper-range": "Άνω Εύρος",
-  "set-range": "Ρύθμιση εύρους"
+  "set-range": "Ρύθμιση εύρους",
+  "amount-color": "Ποσό Χρώμα",
+  "green-or-red": "Πράσινο / Κόκκινο",
+  "no-color": "Χωρίς Χρώμα"
 }

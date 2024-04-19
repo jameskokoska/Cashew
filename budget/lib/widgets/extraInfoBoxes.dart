@@ -1,3 +1,4 @@
+import 'package:budget/functions.dart';
 import 'package:budget/pages/accountsPage.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/animatedExpanded.dart';
@@ -45,8 +46,8 @@ class _TipBoxState extends State<TipBox> {
           onTap: widget.onTap,
           color:
               Theme.of(context).colorScheme.secondaryContainer.withOpacity(0.7),
-          borderRadius:
-              widget.borderRadius ?? (getIsFullScreen(context) ? 15 : 10),
+          borderRadius: widget.borderRadius ??
+              (getPlatform() == PlatformOS.isIOS ? 10 : 15),
           child: Padding(
             padding: EdgeInsets.only(
                 left: 15,

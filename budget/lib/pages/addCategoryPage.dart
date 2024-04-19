@@ -30,6 +30,7 @@ import 'package:budget/widgets/settingsContainers.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textInput.dart';
 import 'package:budget/widgets/textWidgets.dart';
+import 'package:budget/widgets/transactionEntry/transactionEntry.dart';
 import 'package:drift/drift.dart' show Value;
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
@@ -289,6 +290,74 @@ class _AddCategoryPageState extends State<AddCategoryPage>
 
   @override
   Widget build(BuildContext context) {
+    Widget balanceCorrectionCategorySettings = Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 15),
+      child: Column(
+        children: [
+          SizedBox(height: 20),
+          TipBox(
+            onTap: () {},
+            text: "balance-correction-category-info".tr(),
+            settingsString: null,
+          ),
+          SizedBox(height: 10),
+          Container(
+            decoration: BoxDecoration(
+              color: Theme.of(context)
+                  .colorScheme
+                  .secondaryContainer
+                  .withOpacity(0.7),
+              borderRadius: BorderRadius.all(
+                  Radius.circular(getPlatform() == PlatformOS.isIOS ? 10 : 15)),
+            ),
+            child: Column(
+              children: [
+                SettingsContainerDropdown(
+                  icon: appStateSettings["outlinedIcons"]
+                      ? Icons.swap_vert_outlined
+                      : Icons.swap_vert_rounded,
+                  enableBorderRadius: true,
+                  title: "amount-color".tr(),
+                  initial: "green-or-red",
+                  items: ["green-or-red", "no-color"],
+                  getLabel: (item) {
+                    return item.tr();
+                  },
+                  onChanged: (item) {
+                    updateSettings("balanceTransferAmountColor", item,
+                        updateGlobalState: true);
+                  },
+                ),
+                IgnorePointer(
+                  child: TransactionEntry(
+                    useHorizontalPaddingConstrained: false,
+                    customPadding: EdgeInsets.symmetric(horizontal: 8),
+                    containerColor: Theme.of(context)
+                        .colorScheme
+                        .secondaryContainer
+                        .withOpacity(0.7),
+                    openPage: Container(),
+                    transaction: Transaction(
+                      transactionPk: "-1",
+                      name: "",
+                      amount: 100,
+                      note: "",
+                      categoryFk: "0",
+                      walletFk: appStateSettings["selectedWalletPk"],
+                      dateCreated: DateTime.now(),
+                      income: false,
+                      paid: true,
+                      skipPaid: false,
+                    ),
+                  ),
+                ),
+                SizedBox(height: 8),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
     return WillPopScope(
       onWillPop: () async {
         if (widget.category != null) {
@@ -564,16 +633,6 @@ class _AddCategoryPageState extends State<AddCategoryPage>
                       ),
                     ],
                   ),
-                  if (widget.category?.categoryPk == "0")
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          left: 15, right: 15, bottom: 15),
-                      child: TipBox(
-                        onTap: () {},
-                        text: "balance-correction-category-info".tr(),
-                        settingsString: null,
-                      ),
-                    ),
                   Container(
                     height: 65,
                     child: SelectColor(
@@ -582,6 +641,8 @@ class _AddCategoryPageState extends State<AddCategoryPage>
                       setSelectedColor: setSelectedColor,
                     ),
                   ),
+                  if (widget.category?.categoryPk == "0")
+                    balanceCorrectionCategorySettings,
                   widget.category?.categoryPk == "0" ||
                           widgetCategory == null ||
                           widget.routesToPopAfterDelete ==

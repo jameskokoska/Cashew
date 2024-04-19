@@ -1126,5 +1126,8 @@
   "number-pad-format": "Nummertastaturformat",
   "set-lower-range": "Nedre rekkevidde",
   "set-upper-range": "Øvre rekkevidde",
-  "set-range": "Angi rekkevidde"
+  "set-range": "Angi rekkevidde",
+  "amount-color": "Mengde Farge",
+  "green-or-red": "Grønn / rød",
+  "no-color": "Ingen farge"
 }

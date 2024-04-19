@@ -1126,5 +1126,8 @@
   "number-pad-format": "פורמט לוח מספרים",
   "set-lower-range": "טווח תחתון",
   "set-upper-range": "טווח עליון",
-  "set-range": "הגדר טווח"
+  "set-range": "הגדר טווח",
+  "amount-color": "כמות צבע",
+  "green-or-red": "ירוק אדום",
+  "no-color": "בלי צבע"
 }

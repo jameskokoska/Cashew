@@ -1126,5 +1126,8 @@
   "number-pad-format": "Format Pad Nombor",
   "set-lower-range": "Julat Rendah",
   "set-upper-range": "Julat Atas",
-  "set-range": "Tetapkan Julat"
+  "set-range": "Tetapkan Julat",
+  "amount-color": "Jumlah Warna",
+  "green-or-red": "Hijau / Merah",
+  "no-color": "Tiada Warna"
 }

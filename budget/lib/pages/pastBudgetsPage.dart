@@ -1227,7 +1227,7 @@ class PastBudgetContainer extends StatelessWidget {
     );
     return Container(
       child: OpenContainerNavigation(
-        borderRadius: getPlatform() == PlatformOS.isIOS ? 0 : 20,
+        borderRadius: getPlatform() == PlatformOS.isIOS ? 0 : 15,
         closedColor: getPlatform() == PlatformOS.isIOS
             ? backgroundColor
             : appStateSettings["materialYou"]
@@ -1251,7 +1251,7 @@ class PastBudgetContainer extends StatelessWidget {
                 ),
               );
             },
-            borderRadius: getPlatform() == PlatformOS.isIOS ? 0 : 20,
+            borderRadius: getPlatform() == PlatformOS.isIOS ? 0 : 15,
             child: widget,
             color: getPlatform() == PlatformOS.isIOS
                 ? backgroundColor

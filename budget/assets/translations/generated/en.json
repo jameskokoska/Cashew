@@ -1126,5 +1126,8 @@
   "number-pad-format": "Number Pad Format",
   "set-lower-range": "Set Lower Range",
   "set-upper-range": "Set Upper Range",
-  "set-range": "Set Range"
+  "set-range": "Set Range",
+  "amount-color": "Amount Color",
+  "green-or-red": "Green / Red",
+  "no-color": "No Color"
 }

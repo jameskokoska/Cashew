@@ -1126,5 +1126,8 @@
   "number-pad-format": "નંબર પેડ ફોર્મેટ",
   "set-lower-range": "લોઅર રેન્જ",
   "set-upper-range": "અપર રેન્જ",
-  "set-range": "શ્રેણી સેટ કરો"
+  "set-range": "શ્રેણી સેટ કરો",
+  "amount-color": "જથ્થો રંગ",
+  "green-or-red": "લીલો/લાલ",
+  "no-color": "કોઈ રંગ નથી"
 }
