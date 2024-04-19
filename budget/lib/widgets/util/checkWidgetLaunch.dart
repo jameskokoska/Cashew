@@ -168,17 +168,16 @@ class RenderHomePageWidgets extends StatefulWidget {
 
 Future updateWidgetColorsAndText(BuildContext context) async {
   if (getPlatform(ignoreEmulation: true) != PlatformOS.isAndroid) return;
-  await Future.delayed(Duration(milliseconds: 500), () async {
+  await Future.delayed(Duration(milliseconds: 1500), () async {
     double widgetBackgroundOpacity =
         (double.tryParse((appStateSettings["widgetOpacity"] ?? 1).toString()) ??
                 1)
             .clamp(0, 1);
-    ThemeData widgetTheme =
-        lightTheme != null && appStateSettings["widgetTheme"] == "light"
-            ? lightTheme!
-            : darkTheme != null && appStateSettings["widgetTheme"] == "dark"
-                ? darkTheme!
-                : Theme.of(context);
+    ThemeData widgetTheme = appStateSettings["widgetTheme"] == "light"
+        ? Theme.of(context).copyWith(brightness: Brightness.light)
+        : appStateSettings["widgetTheme"] == "dark"
+            ? Theme.of(context).copyWith(brightness: Brightness.dark)
+            : Theme.of(context);
 
     await HomeWidget.saveWidgetData<String>('netWorthTitle', "net-worth".tr());
     await HomeWidget.saveWidgetData<String>(

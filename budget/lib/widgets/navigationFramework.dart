@@ -188,8 +188,9 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
 
     // Functions to run after entire UI loaded
     Future.delayed(Duration.zero, () async {
-      SystemChrome.setSystemUIOverlayStyle(
-          getSystemUiOverlayStyle(Theme.of(context).brightness));
+      SystemChrome.setSystemUIOverlayStyle(getSystemUiOverlayStyle(
+          Theme.of(context).extension<AppColors>(),
+          Theme.of(context).brightness));
 
       bool isDatabaseCorruptedPopupShown = openDatabaseCorruptedPopup(context);
       if (isDatabaseCorruptedPopupShown) return;

@@ -72,6 +72,8 @@ Future openBottomSheet(
   bool useCustomController = false,
   bool reAssignBottomSheetControllerGlobal = true,
 }) async {
+  ThemeData themeData = Theme.of(context);
+
   //minimize keyboard when open
   minimizeKeyboard(context);
   if (reAssignBottomSheetControllerGlobal)
@@ -88,16 +90,15 @@ Future openBottomSheet(
           ?.scrollTo(0, duration: Duration(milliseconds: 100));
     });
   }
-
+  Color bottomPaddingColor = appStateSettings["materialYou"]
+      ? dynamicPastel(context, Theme.of(context).colorScheme.secondaryContainer,
+          amountDark: 0.3, amountLight: 0.6)
+      : getColor(context, "lightDarkAccent");
   return await showSlidingBottomSheet(
     context,
     resizeToAvoidBottomInset: resizeForKeyboard,
     // getOSInsideWeb() == "iOS" ? false : resizeForKeyboard,
-    bottomPaddingColor: appStateSettings["materialYou"]
-        ? dynamicPastel(
-            context, Theme.of(context).colorScheme.secondaryContainer,
-            amountDark: 0.3, amountLight: 0.6)
-        : getColor(context, "lightDarkAccent"),
+    bottomPaddingColor: bottomPaddingColor,
     builder: (context) {
       double deviceAspectRatio =
           MediaQuery.sizeOf(context).height / MediaQuery.sizeOf(context).width;
@@ -165,17 +166,16 @@ Future openBottomSheet(
             HapticFeedback.heavyImpact();
           }
         },
-        color: appStateSettings["materialYou"]
-            ? dynamicPastel(
-                context, Theme.of(context).colorScheme.secondaryContainer,
-                amountDark: 0.3, amountLight: 0.6)
-            : getColor(context, "lightDarkAccent"),
+        color: bottomPaddingColor,
         cornerRadius: getPlatform() == PlatformOS.isIOS ? 10 : 20,
         duration: Duration(milliseconds: 300),
         builder: (context, state) {
           return Material(
-            child: SingleChildScrollView(
-              child: child,
+            child: Theme(
+              data: themeData,
+              child: SingleChildScrollView(
+                child: child,
+              ),
             ),
           );
         },

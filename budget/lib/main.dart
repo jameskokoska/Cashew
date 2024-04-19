@@ -122,9 +122,6 @@ class App extends StatelessWidget {
     //   child:
     print("Rebuilt Material App");
 
-    lightTheme = getLightTheme();
-    darkTheme = getDarkTheme();
-
     return MaterialApp(
       showPerformanceOverlay: kProfileMode,
       localizationsDelegates: context.localizationDelegates,
@@ -143,8 +140,8 @@ class App extends StatelessWidget {
       key: ValueKey('CashewAppMain'),
       title: 'Cashew',
       navigatorKey: navigatorKey,
-      theme: lightTheme,
-      darkTheme: darkTheme,
+      theme: getLightTheme(),
+      darkTheme: getDarkTheme(),
       scrollBehavior: ScrollBehaviorOverride(),
       themeMode: getSettingConstants(appStateSettings)["theme"],
       home: AnimatedSwitcher(

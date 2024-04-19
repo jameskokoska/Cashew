@@ -446,7 +446,6 @@ class SettingsPageContent extends StatelessWidget {
                                 updateGlobalState: true);
                             updateSettings("accentSystemColor", false,
                                 updateGlobalState: true);
-                            generateColors();
                             updateWidgetColorsAndText(context);
                           },
                           useSystemColorPrompt: true,

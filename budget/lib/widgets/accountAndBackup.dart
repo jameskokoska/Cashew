@@ -1057,12 +1057,20 @@ class _BackupManagementState extends State<BackupManagement> {
                                   context,
                                   title: "load-backup".tr(),
                                   subtitle: getWordedDateShortMore(
-                                    (file.value.modifiedTime ?? DateTime.now())
-                                        .toLocal(),
-                                    includeTime: true,
-                                    includeYear: true,
-                                    showTodayTomorrow: false,
-                                  ),
+                                        (file.value.modifiedTime ??
+                                                DateTime.now())
+                                            .toLocal(),
+                                        includeTime: true,
+                                        includeYear: true,
+                                        showTodayTomorrow: false,
+                                      ) +
+                                      "\n" +
+                                      getWordedTime(
+                                          navigatorKey.currentContext?.locale
+                                              .toString(),
+                                          (file.value.modifiedTime ??
+                                                  DateTime.now())
+                                              .toLocal()),
                                   beforeDescriptionWidget: Padding(
                                     padding: const EdgeInsets.only(
                                       top: 8,

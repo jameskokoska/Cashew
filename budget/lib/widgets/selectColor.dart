@@ -189,7 +189,6 @@ class _SelectColorState extends State<SelectColor> {
                       await updateSettings(
                           "accentColor", await getAccentColorSystemString(),
                           updateGlobalState: true);
-                      generateColors();
                       updateWidgetColorsAndText(context);
                     } else {
                       widget.setSelectedColor!(selectedColor);

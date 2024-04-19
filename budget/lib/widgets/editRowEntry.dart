@@ -63,7 +63,7 @@ class EditRowEntry extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Color containerColor = getStandardContainerColor(context);
+    Color containerColor = getColor(context, "standardContainerColor");
     bool useDismissToDelete = canDelete && onDelete != null;
     double borderRadius = getPlatform() == PlatformOS.isIOS ? 0 : 18;
     List<BoxShadow> boxShadow = (getPlatform() == PlatformOS.isIOS
