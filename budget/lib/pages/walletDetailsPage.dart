@@ -2394,7 +2394,7 @@ class _AllSpendingPastSpendingGraphState
               ),
         child: ClipRRect(
           borderRadius:
-              BorderRadius.circular(getPlatform() == PlatformOS.isIOS ? 0 : 15),
+              BorderRadius.circular(getPlatform() == PlatformOS.isIOS ? 0 : 18),
           child: Stack(
             children: [
               Tappable(
