@@ -1360,8 +1360,8 @@ class CategoryAverageSpent extends StatelessWidget {
                                                   .abs()) +
                                       " " +
                                       (isSavingsBudget
-                                          ? "average-spent".tr().toLowerCase()
-                                          : "average-saved".tr().toLowerCase()),
+                                          ? "average-saved".tr().toLowerCase()
+                                          : "average-spent".tr().toLowerCase()),
                                   fontSize: 14,
                                   textColor: getColor(context, "textLight"),
                                 );
