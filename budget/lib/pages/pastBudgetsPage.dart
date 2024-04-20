@@ -672,6 +672,8 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
                                                   onTap: () {
                                                     openWatchCategoriesBottomSheet();
                                                   },
+                                                  isSavingsBudget:
+                                                      widget.budget.income,
                                                 ),
                                               );
                                             }
@@ -1281,12 +1283,14 @@ class CategoryAverageSpent extends StatelessWidget {
     required this.amountPeriods,
     required this.amountSpent,
     required this.onTap,
+    required this.isSavingsBudget,
     super.key,
   });
   final TransactionCategory category;
   final int amountPeriods;
   final double amountSpent;
   final VoidCallback onTap;
+  final bool isSavingsBudget;
 
   @override
   Widget build(BuildContext context) {
@@ -1355,7 +1359,9 @@ class CategoryAverageSpent extends StatelessWidget {
                                               : (amountSpent / amountPeriods)
                                                   .abs()) +
                                       " " +
-                                      "average-spent".tr().toLowerCase(),
+                                      (isSavingsBudget
+                                          ? "average-spent".tr().toLowerCase()
+                                          : "average-saved".tr().toLowerCase()),
                                   fontSize: 14,
                                   textColor: getColor(context, "textLight"),
                                 );

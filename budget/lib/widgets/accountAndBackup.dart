@@ -169,7 +169,7 @@ Future<bool> signInGoogle(
     }
     if (waitForCompletion == true && context != null)
       Navigator.of(context).pop();
-    next != null ? next() : 0;
+    if (next != null) next();
 
     if (appStateSettings["hasSignedIn"] == false) {
       updateSettings("hasSignedIn", true, updateGlobalState: false);
