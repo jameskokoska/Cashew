@@ -6420,9 +6420,7 @@ class FinanceDatabase extends _$FinanceDatabase {
   }) {
     List<Stream<TotalWithCount?>> mergedStreams = [];
     for (TransactionWallet wallet in allWallets.list) {
-      final totalAmt = transactions.amount.sum(
-          filter: transactions.paid.equals(false) &
-              transactions.skipPaid.equals(false));
+      final totalAmt = transactions.amount.sum();
       final totalCount = transactions.transactionPk.count();
       final $CategoriesTable subCategories = alias(categories, 'subCategories');
       final query = selectOnly(transactions)
@@ -6448,6 +6446,8 @@ class FinanceDatabase extends _$FinanceDatabase {
                 withCategories: true,
                 joinedWithSubcategoriesTable: subCategories) &
             // transactions.income.equals(false) &
+            transactions.paid.equals(false) &
+            transactions.skipPaid.equals(false) &
             transactions.walletFk.equals(wallet.walletPk) &
             (isOverdueTransactions == null
                 ? Constant(true)
