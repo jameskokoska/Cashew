@@ -655,12 +655,14 @@ class PageFrameworkState extends State<PageFramework>
         children: [
           dragDownToDismissScaffold ?? scaffold,
           Align(
-            alignment: Alignment.bottomRight,
+            alignment: directionalityReverse(context) == 1
+                ? Alignment.bottomRight
+                : Alignment.bottomLeft,
             child: Padding(
               padding: EdgeInsets.only(
-                bottom: getBottomInsetOfFAB(context),
-                right: 15,
-              ),
+                  bottom: getBottomInsetOfFAB(context),
+                  right: directionalityReverse(context) == 1 ? 15 : 0,
+                  left: directionalityReverse(context) == -1 ? 15 : 0),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.end,
@@ -844,7 +846,8 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
                           : 0)
                   //  Offset(0, -(1 - percent) * 40)
                   : Offset(
-                      backButtonEnabled ? 46 * percent : 10 * percent,
+                      (directionalityReverse(context)) *
+                          (backButtonEnabled ? 46 * percent : 10 * percent),
                       -(subtitleSize ?? 0) * (1 - percent) + -0.5 * percent,
                     ),
               child: Transform.scale(

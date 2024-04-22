@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'dart:ui' as ui;
 
 import 'package:budget/database/tables.dart';
 import 'package:budget/main.dart';
@@ -1391,4 +1392,8 @@ String addAmountToString(String string, int amount,
           ? ""
           : (addCommaWithExtraText ? ", " : " ") + (extraText)) +
       " )";
+}
+
+int directionalityReverse(BuildContext context) {
+  return (Directionality.of(context) == ui.TextDirection.rtl ? -1 : 1);
 }
