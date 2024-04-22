@@ -122,7 +122,13 @@ bool isFilterSelectedWithDefaults(
 
 enum ThemeSetting { dark, light }
 
-enum MethodAdded { email, shared, csv, preview }
+enum MethodAdded {
+  email,
+  shared,
+  csv,
+  preview,
+  appLink,
+}
 
 enum SharedStatus { waiting, shared, error }
 

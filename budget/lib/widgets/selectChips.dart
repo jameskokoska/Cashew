@@ -174,6 +174,7 @@ class _SelectChipsState<T> extends State<SelectChips<T>> {
                                   ? null
                                   : getColor(context, "lightDarkAccentHeavy")),
                       side: widget.getCustomBorderColor == null ||
+                              widget.getCustomBorderColor!(item) == null ||
                               widget.getCustomBorderColor!(item) == null
                           ? null
                           : BorderSide(

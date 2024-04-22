@@ -427,7 +427,7 @@ Future generatePreviewData() async {
       sharedReferenceBudgetPk: "10",
     ),
   );
-  int monthlySpendingDayStart = DateTime.now().day <= 10 ? 15 : 1;
+  int monthlySpendingDayStart = DateTime.now().day <= 10 ? 15 : 2;
   await database.createOrUpdateBudget(
     updateSharedEntry: false,
     Budget(

@@ -41,7 +41,7 @@ String getChangelogString() {
     Add elevation shadow to scroll to top and bottom FAB
     Optimized and improved performance of transaction list actions
     Collapsed future transaction list shows amount selected when collapsed
-    Translation updates
+    Importing CSV preview parsed custom date format
     Account spending detail page follows account colorscheme
     Can enter amount beginning with negative sign
     Tap amount on range filter to specify exact upper and lower range
@@ -50,6 +50,7 @@ String getChangelogString() {
     Add time to date info when deleting cloud backup
     Balance correction amount color category setting
     Border radius UI and color consistencies
+    Translation updates
     Fix font setting always resetting (i)
     Fix exclude amount from budget default value for include amount overall would be incorrect
     Fix (i) biometric lock bypass
