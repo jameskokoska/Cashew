@@ -33,22 +33,23 @@ String getChangelogString() {
     Improved income/expense only selection in homepage pie chart
     Added ability to change only income/expense in homepage transaction list
     Long press transaction list tabs on homepage to edit settings for transactions list
-    Applied homepage transaction list tab income/expense filters are properly applied to the homepage graph
+    Homepage transaction list tab income/expense filters are properly applied to the homepage graph
     Collapse wallet list selection if all wallets selected when editing homepage section
     Improved home screen widgets (A)
     Max lines for filter title contains and note contains input
-    Add extra spacing between edit home page alignment headers (when in full screen)
-    Add elevation shadow to scroll to top and bottom FAB
     Optimized and improved performance of transaction list actions
     Collapsed future transaction list shows amount selected when collapsed
     Importing CSV preview parsed custom date format
-    Account spending detail page follows account colorscheme
-    Can enter amount beginning with negative sign
+    Enter amount beginning with negative sign
     Tap amount on range filter to specify exact upper and lower range
-    Improve colorscheme for budget and goal pages
+    Add extra spacing between edit home page alignment headers (when in full screen)
+    Add elevation shadow to scroll to top and bottom FAB
     Rearrange number format settings in popup for consistency
     Add time to date info when deleting cloud backup
+    Number of transactions includes unpaid transactions
     Balance correction amount color category setting
+    Account spending detail page follows account colorscheme
+    Improve colorscheme for budget and goal pages
     Border radius UI and color consistencies
     Translation updates
     Fix font setting always resetting (i)
