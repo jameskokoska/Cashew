@@ -6497,8 +6497,7 @@ class FinanceDatabase extends _$FinanceDatabase {
   }) {
     List<Stream<TotalWithCount?>> mergedStreams = [];
     for (TransactionWallet wallet in allWallets.list) {
-      final totalAmt =
-          transactions.amount.sum(filter: transactions.paid.equals(true));
+      final totalAmt = transactions.amount.sum();
       final totalCount = transactions.transactionPk.count();
       final $CategoriesTable subCategories = alias(categories, 'subCategories');
       final query = selectOnly(transactions)
@@ -6544,6 +6543,7 @@ class FinanceDatabase extends _$FinanceDatabase {
                   : ((objectives.name
                       .collate(Collate.noCase)
                       .like("%" + (searchString ?? "") + "%")))) &
+              transactions.paid.equals(true) &
               transactions.walletFk.equals(wallet.walletPk) &
               (isCredit == null
                   ? transactions.type
