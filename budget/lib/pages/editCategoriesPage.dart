@@ -405,6 +405,7 @@ class RefreshButton extends StatefulWidget {
   final bool? flipIcon;
   final bool? halfAnimation;
   final bool iconOnly;
+  final Duration timeout;
 
   RefreshButton({
     required this.onTap,
@@ -414,6 +415,7 @@ class RefreshButton extends StatefulWidget {
     this.flipIcon,
     this.halfAnimation,
     this.iconOnly = false,
+    this.timeout = const Duration(seconds: 5),
     Key? key,
   }) : super(key: key);
 
@@ -460,7 +462,7 @@ class RefreshButtonState extends State<RefreshButton>
         _isEnabled = false;
       });
       await widget.onTap();
-      Timer(Duration(seconds: 5), () {
+      Timer(widget.timeout, () {
         if (mounted)
           setState(() {
             _isEnabled = true;

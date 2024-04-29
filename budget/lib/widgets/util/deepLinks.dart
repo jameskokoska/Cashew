@@ -4,7 +4,9 @@ import 'dart:convert';
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
+import 'package:budget/pages/addEmailTemplate.dart';
 import 'package:budget/pages/addTransactionPage.dart';
+import 'package:budget/pages/autoTransactionsPageEmail.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/globalSnackbar.dart';
@@ -106,8 +108,18 @@ class _DeepLinksState extends State<DeepLinks> {
   }
 }
 
-processAddTransactionFromParams(
-    BuildContext context, Map<String, String> params) async {
+// Supported params in order of parsing - some take precedence over others
+//
+// messageToParse (standalone, however supports date and dateCreated)
+//
+// JSON (standalone)
+//
+// categoryPk, category (name), subcategoryPk, subcategory (name),
+// walletPk, account (name), wallet (name),
+// date, dateCreated, amount, title, notes, note
+
+Future<Transaction?> processAddTransactionFromParams(
+    BuildContext context, Map<String, String?> params) async {
   MainAndSubcategory mainAndSubCategory =
       await getMainAndSubcategoryFromParams(params);
   TransactionWallet? wallet = await getWalletFromParams(params);
@@ -115,7 +127,7 @@ processAddTransactionFromParams(
   DateTime? dateCreated = await getDateTimeFromParams(params, context);
   double amount = getAmountFromParams(params);
   String title = params["title"] ?? "";
-  String note = params["notes"] ?? "";
+  String note = params["note"] ?? params["notes"] ?? "";
 
   if (mainAndSubCategory.main == null) {
     Future.delayed(Duration(milliseconds: 100), () {
@@ -171,7 +183,7 @@ processAddTransactionFromParams(
           ? Icons.warning_amber_outlined
           : Icons.warning_amber_rounded,
     ));
-    return;
+    return null;
   }
 
   final int? rowId = await database.createOrUpdateTransaction(
@@ -206,11 +218,13 @@ processAddTransactionFromParams(
           ? Icons.post_add_outlined
           : Icons.post_add_rounded,
     ));
+    return transactionJustAdded;
   }
+  return null;
 }
 
 Future processAddTransactionRouteFromParams(
-    BuildContext context, Map<String, String> params) async {
+    BuildContext context, Map<String, String?> params) async {
   MainAndSubcategory mainAndSubCategory =
       await getMainAndSubcategoryFromParams(params);
   TransactionWallet? wallet = await getWalletFromParams(params);
@@ -231,7 +245,28 @@ Future processAddTransactionRouteFromParams(
   );
 }
 
-executeAppLink(BuildContext? context, Uri uri) async {
+Future processMessageToParse(
+    BuildContext context, Map<String, String?> params) async {
+  String messageString = params["messageToParse"].toString();
+  recentCapturedNotifications.insert(0, messageString);
+  recentCapturedNotifications.take(50);
+  dynamic result = await queueTransactionFromMessage(
+    messageString,
+    willPushRoute: true,
+    dateTime: await getDateTimeFromParams(params, context),
+  );
+  if (result == false) {
+    if (navigatorKey.currentContext != null)
+      pushRoute(
+        navigatorKey.currentContext!,
+        AddEmailTemplate(
+          messagesList: recentCapturedNotifications,
+        ),
+      );
+  }
+}
+
+Future executeAppLink(BuildContext? context, Uri uri) async {
   if (appStateSettings["hasOnboarded"] != true) return;
 
   String endPoint = getApiEndpoint(uri);
@@ -241,11 +276,13 @@ executeAppLink(BuildContext? context, Uri uri) async {
   switch (endPoint) {
     case "addTransaction":
       if (context != null) {
-        if (params["JSON"] != null) {
+        if (params["messageToParse"] != null &&
+            appStateSettings["notificationScanningDebug"] == true) {
+          processMessageToParse(context, params);
+        } else if (params["JSON"] != null) {
           try {
             Map<String, dynamic> jsonData = json.decode(params["JSON"] ?? "");
             for (dynamic transactionObject in jsonData["transactions"]) {
-              print(transactionObject);
               Map<String, String> currentObject = {};
               transactionObject.forEach((key, value) {
                 currentObject[key] = value.toString();
@@ -268,11 +305,13 @@ executeAppLink(BuildContext? context, Uri uri) async {
       break;
     case "addTransactionRoute":
       if (context != null) {
-        if (params["JSON"] != null) {
+        if (params["messageToParse"] != null &&
+            appStateSettings["notificationScanningDebug"] == true) {
+          processMessageToParse(context, params);
+        } else if (params["JSON"] != null) {
           try {
             Map<String, dynamic> jsonData = json.decode(params["JSON"] ?? "");
             for (dynamic transactionObject in jsonData["transactions"]) {
-              print(transactionObject);
               Map<String, String> currentObject = {};
               transactionObject.forEach((key, value) {
                 currentObject[key] = value.toString();
@@ -298,16 +337,17 @@ executeAppLink(BuildContext? context, Uri uri) async {
   }
 }
 
-double getAmountFromParams(Map<String, String> params) {
+double getAmountFromParams(Map<String, String?> params) {
   return double.tryParse(params["amount"] ?? "0") ?? 0;
 }
 
 DateTime? getDateTimeFromParams(
-    Map<String, String> params, BuildContext context) {
+    Map<String, String?> params, BuildContext context) {
   DateTime? dateCreated;
-  if (params.containsKey("date")) {
+  String? dateToParse = params["date"] ?? params["dateCreated"];
+  if (dateToParse != null) {
     try {
-      dateCreated = DateTime.parse(params["date"] ?? "");
+      dateCreated = DateTime.parse(dateToParse);
       dateCreated = DateTime(
         dateCreated.year,
         dateCreated.month,
@@ -319,7 +359,7 @@ DateTime? getDateTimeFromParams(
     } catch (e) {
       DateTime? result;
       for (String commonFormat in getCommonDateFormats()) {
-        result = tryDateFormatting(context, commonFormat, params["date"] ?? "");
+        result = tryDateFormatting(context, commonFormat, dateToParse);
         if (result != null) break;
       }
       dateCreated = result;
@@ -330,28 +370,37 @@ DateTime? getDateTimeFromParams(
 }
 
 Future<MainAndSubcategory> getMainAndSubcategoryFromParams(
-    Map<String, String> params) async {
+    Map<String, String?> params) async {
   MainAndSubcategory mainAndSubcategory = MainAndSubcategory();
 
   // Subcategory takes precedence
-  if (params.containsKey("subcategory")) {
-    TransactionCategory? subCategory = await database.getRelatingCategory(
-        params["subcategory"] ?? "",
-        onlySubCategories: true,
-        limit: 1);
-    if (subCategory?.mainCategoryPk != null) {
-      mainAndSubcategory.main =
-          await database.getCategory(subCategory!.mainCategoryPk!).$2;
-      mainAndSubcategory.sub = subCategory;
-      return mainAndSubcategory;
-    }
+  TransactionCategory? subCategory;
+  if (params.containsKey("subcategoryPk")) {
+    subCategory = await database
+        .getCategoryInstanceOrNull(params["subcategoryPk"].toString());
+  } else if (params.containsKey("subcategory")) {
+    subCategory = await database.getRelatingCategory(
+      params["subcategory"] ?? "",
+      onlySubCategories: true,
+      limit: 1,
+    );
+  }
+  if (subCategory?.mainCategoryPk != null) {
+    mainAndSubcategory.main =
+        await database.getCategory(subCategory!.mainCategoryPk!).$2;
+    mainAndSubcategory.sub = subCategory;
+    return mainAndSubcategory;
   }
 
-  if (params.containsKey("category")) {
+  if (params.containsKey("categoryPk")) {
+    mainAndSubcategory.main = await database
+        .getCategoryInstanceOrNull(params["categoryPk"].toString());
+  } else if (params.containsKey("category")) {
     mainAndSubcategory.main = await database.getRelatingCategory(
-        params["category"] ?? "",
-        onlySubCategories: false,
-        limit: 1);
+      params["category"] ?? "",
+      onlySubCategories: false,
+      limit: 1,
+    );
   }
   if (mainAndSubcategory.main == null && params["title"] != null) {
     TransactionAssociatedTitleWithCategory? foundTitle = (await database
@@ -363,9 +412,14 @@ Future<MainAndSubcategory> getMainAndSubcategoryFromParams(
 }
 
 Future<TransactionWallet?> getWalletFromParams(
-    Map<String, String> params) async {
-  if (params.containsKey("account")) {
+    Map<String, String?> params) async {
+  if (params.containsKey("walletPk")) {
+    return await database
+        .getWalletInstanceOrNull(params["walletPk"].toString());
+  } else if (params.containsKey("account")) {
     return await database.getRelatingWallet(params["account"] ?? "", limit: 1);
+  } else if (params.containsKey("wallet")) {
+    return await database.getRelatingWallet(params["wallet"] ?? "", limit: 1);
   } else {
     return null;
   }

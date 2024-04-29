@@ -4521,6 +4521,11 @@ class FinanceDatabase extends _$FinanceDatabase {
         .getSingle();
   }
 
+  Future<TransactionWallet?> getWalletInstanceOrNull(String walletPk) {
+    return (select(wallets)..where((w) => w.walletPk.equals(walletPk)))
+        .getSingleOrNull();
+  }
+
   Future<ScannerTemplate> getScannerTemplateInstance(String scannerTemplatePk) {
     return (select(scannerTemplates)
           ..where((s) => s.scannerTemplatePk.equals(scannerTemplatePk)))
