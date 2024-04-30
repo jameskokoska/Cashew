@@ -204,6 +204,39 @@ See `JSON List of Transactions` below to view how the link is formatted.
 | `account`     | The name of the account. Executes a name search, takes the first entry, not case sensitive.                                                                                                                         | No       | Primary account |
 | `JSON`        | A list of JSON objects of transactions. If provided, Cashew will import a list/multiple transactions at once. Each JSON object in the list can use any of the aforementioned parameters. The JSON object should be keyed with `transactions` followed by the list of objects. See the example below. | No       | None            |
 
+<details> 
+  <summary>Detailed Parameters</summary>
+
+The following is a list of all and additional (not fully supported) parameters that can be passed in. They are ordered in terms of precedence, the parameters at the top will be parsed before the ones below. Therefore, overlapping fields will be proceeded by the first parameter.
+
+**Class:** related parameters will have the same class.
+
+**Standalone parameters:** only this parameter will be used, all other parameters will be ignored.
+
+Deep link parsing can be found [here](https://github.com/jameskokoska/Cashew/blob/main/budget/lib/widgets/util/deepLinks.dart).
+
+| Class         | Parameter     | Description                                                                                                                                                                                                         | Required | Default         | Standalone      |
+| ------------- | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- | --------------- | --------------- |
+| a             | `messageToParse` | Uses a scanner template to parse the passed in message. Only `date` or `dateCreated` can be passed along with this standalone parameter. All other fields will be constructed by the scanner template. Scanner templates are not enabled in Cashew by default. To enable this feature, enable `Notification Transactions` debug feature.   | None       | None               | Yes              |
+| b             | `JSON`        | Description in the above table.                                                                                                                                                                                     | No       | None            | Yes              |
+| c             | `subcategoryPk` | The primary key of the subcategory entry within the database.                                                                                                                                                     | No       | None            |
+| c             | `subcategory` | Description in the above table.                                                                                                                                                                                     | No       | None            |
+| c             | `categoryPk`  | The primary key of the category entry within the database.                                                                                                                                                          | No       | Prompt user     |
+| c             | `category`    | Description in the above table.                                                                                                                                                                                     | No       | Prompt user     |
+| d             | `walletPk`    | The primary key of the wallet entry within the database.                                                                                                                                                            | No       | Primary account |
+| d             | `account`     | Description in the above table.                                                                                                                                                                                     | No       | Primary account |
+| d             | `wallet`      | Same as `account`.                                                                                                                                                                                                  | No       | Primary account |
+| e             | `date`        | Description in the above table.                                                                                                                                                                                     | No       | Current time    |
+| e             | `dateCreated` | Same as `date`.                                                                                                                                                                                                     | No       | Current time    |
+| d             | `amount`      | Description in the above table.                                                                                                                                                                                     | No       | 0               |
+| f             | `title`       | Description in the above table.                                                                                                                                                                                     | No       | Empty string    |
+| f             | `name`        | Same as `title`.                                                                                                                                                                                                    | No       | Empty string    |
+| g             | `notes`       | Description in the above table.                                                                                                                                                                                     | No       | Empty string    |
+| g             | `note`        | Same as `notes`.                                                                                                                                                                                                    | No       | Empty string    |
+
+</details>
+
+
 ### JSON List of Transactions
 The input JSON for `addTransaction` and `addTransactionRoute` should follow the following format:
 ```JSON
