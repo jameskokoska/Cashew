@@ -545,7 +545,7 @@ class AboutPage extends StatelessWidget {
         ),
         AboutInfoBox(
           title: "Polish",
-          list: ["Michał S."],
+          list: ["Michał S.", "Michał P."],
         ),
         AboutInfoBox(
           title: "Serbian",

@@ -527,8 +527,10 @@ Future<bool> markSubscriptionsAsPaid(BuildContext context,
     bool hasUpdatedASubscription = false;
     for (Transaction transaction in subscriptions) {
       // Only mark it as paid if it was not marked as unpaid at any point (createdAnotherFutureTransaction == false)
+      // Add one minute so that if a notification is tapped right away, it will automatically be marked as paid since it will be overdue
       if (transaction.createdAnotherFutureTransaction != true &&
-          transaction.dateCreated.isBefore(DateTime.now())) {
+          transaction.dateCreated
+              .isBefore(DateTime.now().add(Duration(minutes: 1)))) {
         hasUpdatedASubscription = true;
         Transaction transactionNew = transaction.copyWith(
           paid: true,
@@ -554,8 +556,10 @@ Future<bool> markUpcomingAsPaid() async {
         await database.getAllOverdueUpcomingTransactions().$2;
     for (Transaction transaction in upcoming) {
       // Only mark it as paid if it was not marked as unpaid at any point (createdAnotherFutureTransaction == false)
+      // Add one minute so that if a notification is tapped right away, it will automatically be marked as paid since it will be overdue
       if (transaction.createdAnotherFutureTransaction != true &&
-          transaction.dateCreated.isBefore(DateTime.now())) {
+          transaction.dateCreated
+              .isBefore(DateTime.now().add(Duration(minutes: 1)))) {
         Transaction transactionNew = transaction.copyWith(
           paid: true,
           dateCreated: transaction.dateCreated,

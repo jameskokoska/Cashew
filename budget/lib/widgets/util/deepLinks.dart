@@ -114,9 +114,14 @@ class _DeepLinksState extends State<DeepLinks> {
 //
 // JSON (standalone)
 //
-// categoryPk, category (name), subcategoryPk, subcategory (name),
+// subcategoryPk, subcategory (name), categoryPk, category (name),
 // walletPk, account (name), wallet (name),
-// date, dateCreated, amount, title, notes, note
+// date, dateCreated
+// amount
+// title, name
+// notes, note
+//
+// Don't forget to update the README if this changed
 
 Future<Transaction?> processAddTransactionFromParams(
     BuildContext context, Map<String, String?> params) async {
@@ -126,7 +131,7 @@ Future<Transaction?> processAddTransactionFromParams(
   String walletPk = wallet?.walletPk ?? appStateSettings["selectedWalletPk"];
   DateTime? dateCreated = await getDateTimeFromParams(params, context);
   double amount = getAmountFromParams(params);
-  String title = params["title"] ?? "";
+  String title = params["title"] ?? params["name"] ?? "";
   String note = params["note"] ?? params["notes"] ?? "";
 
   if (mainAndSubCategory.main == null) {
@@ -378,7 +383,8 @@ Future<MainAndSubcategory> getMainAndSubcategoryFromParams(
   if (params.containsKey("subcategoryPk")) {
     subCategory = await database
         .getCategoryInstanceOrNull(params["subcategoryPk"].toString());
-  } else if (params.containsKey("subcategory")) {
+  }
+  if (subCategory == null && params.containsKey("subcategory")) {
     subCategory = await database.getRelatingCategory(
       params["subcategory"] ?? "",
       onlySubCategories: true,
@@ -395,7 +401,8 @@ Future<MainAndSubcategory> getMainAndSubcategoryFromParams(
   if (params.containsKey("categoryPk")) {
     mainAndSubcategory.main = await database
         .getCategoryInstanceOrNull(params["categoryPk"].toString());
-  } else if (params.containsKey("category")) {
+  }
+  if (mainAndSubcategory.main == null && params.containsKey("category")) {
     mainAndSubcategory.main = await database.getRelatingCategory(
       params["category"] ?? "",
       onlySubCategories: false,
@@ -413,16 +420,18 @@ Future<MainAndSubcategory> getMainAndSubcategoryFromParams(
 
 Future<TransactionWallet?> getWalletFromParams(
     Map<String, String?> params) async {
+  TransactionWallet? result;
   if (params.containsKey("walletPk")) {
-    return await database
-        .getWalletInstanceOrNull(params["walletPk"].toString());
-  } else if (params.containsKey("account")) {
-    return await database.getRelatingWallet(params["account"] ?? "", limit: 1);
-  } else if (params.containsKey("wallet")) {
-    return await database.getRelatingWallet(params["wallet"] ?? "", limit: 1);
-  } else {
-    return null;
+    result =
+        await database.getWalletInstanceOrNull(params["walletPk"].toString());
   }
+  if (result == null && params.containsKey("account")) {
+    return await database.getRelatingWallet(params["account"] ?? "", limit: 1);
+  }
+  if (result == null && params.containsKey("wallet")) {
+    return await database.getRelatingWallet(params["wallet"] ?? "", limit: 1);
+  }
+  return result;
 }
 
 String getApiEndpoint(Uri uri) {
