@@ -16,8 +16,10 @@ import 'package:budget/widgets/navigationFramework.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/widgets/outlinedButtonStacked.dart';
+import 'package:budget/widgets/framework/navigation_bar/navigation_bar.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'
+    hide NavigationDestination, NavigationBar;
 import 'package:budget/colors.dart';
 import 'package:flutter/services.dart';
 
