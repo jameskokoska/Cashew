@@ -2494,12 +2494,13 @@ class _SelectTitleState extends State<SelectTitle> {
               onPressed: () async {
                 DateTime? dateTimeSelected =
                     await selectDateAndTimeSequence(context, selectedDateTime);
-                if (dateTimeSelected == null) return;
-                setState(() {
-                  customDateTimeSelected = true;
-                  selectedDateTime = dateTimeSelected;
-                });
-                widget.setSelectedDateTime(selectedDateTime);
+                if (dateTimeSelected != null) {
+                  setState(() {
+                    customDateTimeSelected = true;
+                    selectedDateTime = dateTimeSelected;
+                  });
+                  widget.setSelectedDateTime(selectedDateTime);
+                }
                 // Update the size of the bottom sheet
                 Future.delayed(Duration(milliseconds: 100), () {
                   bottomSheetControllerGlobal.snapToExtent(0);
