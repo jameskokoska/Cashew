@@ -1130,5 +1130,6 @@
   "set-range": "设定范围",
   "amount-color": "数量 颜色",
   "green-or-red": "绿/红",
-  "no-color": "无颜色"
+  "no-color": "无颜色",
+  "please-check-your-system-settings": "请检查您的系统设置"
 }

@@ -5,6 +5,7 @@ import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/breathingAnimation.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/tappable.dart';
+import 'package:budget/widgets/textWidgets.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -13,36 +14,33 @@ import 'package:local_auth/local_auth.dart';
 Future<bool?> checkBiometrics({
   bool checkAlways = false,
 }) async {
-  final bool requireAuth =
-      checkAlways || appStateSettings["requireAuth"] == true;
   try {
-    if (kIsWeb) return true;
     final LocalAuthentication auth = LocalAuthentication();
     biometricsAvailable = kIsWeb == false && await auth.canCheckBiometrics ||
         await auth.isDeviceSupported();
+
+    if (kIsWeb) return true;
+
+    final bool requireAuth =
+        checkAlways || appStateSettings["requireAuth"] == true;
+    if (requireAuth == false) return true;
+
+    await auth.stopAuthentication();
+
     if (biometricsAvailable == false) {
-      if (requireAuth)
-        return null;
-      else
-        return false;
-    } else if (requireAuth == true && biometricsAvailable == true) {
-      await auth.stopAuthentication();
+      return await auth.authenticate(
+        localizedReason: "verify-identity".tr(),
+        options: const AuthenticationOptions(biometricOnly: false),
+      );
+    } else if (biometricsAvailable == true) {
       return await auth.authenticate(
         localizedReason: "verify-identity".tr(),
         options: const AuthenticationOptions(biometricOnly: true),
       );
-    } else {
-      return true;
     }
+    return null;
   } catch (e) {
-    print("Error with biometrics: " + e.toString());
-    // on iOS don't allow bypass if biometric fails
-    if (getPlatform() == PlatformOS.isIOS && biometricsAvailable)
-      return false;
-    else if (requireAuth)
-      return null;
-    else
-      return false;
+    return null;
   }
 }
 
@@ -56,21 +54,33 @@ class InitializeBiometrics extends StatefulWidget {
 
 class _InitializeBiometricsState extends State<InitializeBiometrics> {
   bool? authenticated;
+  bool hasErrored = false;
   @override
   void initState() {
     super.initState();
     Future.delayed(Duration.zero, () async {
-      final bool? result = await checkBiometrics();
-      setState(() {
-        authenticated = result;
-      });
-      if (result == null) {
+      _biometricCheck();
+    });
+  }
+
+  _biometricCheck() async {
+    bool? result = await checkBiometrics();
+    setState(() {
+      authenticated = result;
+    });
+    if (result == null) {
+      // Only allow bypass if importing database backup
+      if (isDatabaseImportedOnThisSession) {
         _biometricErrorPopup();
         setState(() {
           authenticated = true;
         });
+      } else {
+        setState(() {
+          hasErrored = true;
+        });
       }
-    });
+    }
   }
 
   _biometricErrorPopup() {
@@ -108,16 +118,7 @@ class _InitializeBiometricsState extends State<InitializeBiometrics> {
           setState(() {
             authenticated = null;
           });
-          bool? result = await checkBiometrics();
-          setState(() {
-            authenticated = result;
-          });
-          if (result == null) {
-            _biometricErrorPopup();
-            setState(() {
-              authenticated = true;
-            });
-          }
+          _biometricCheck();
         },
         child: Column(
           key: ValueKey(0),
@@ -135,7 +136,7 @@ class _InitializeBiometricsState extends State<InitializeBiometrics> {
                     return FadeScaleTransition(
                         animation: animation, child: child);
                   },
-                  child: authenticated == false
+                  child: authenticated == false || hasErrored
                       ? Icon(
                           Icons.lock,
                           size: 50,
@@ -144,7 +145,20 @@ class _InitializeBiometricsState extends State<InitializeBiometrics> {
                       : SizedBox.shrink(),
                 ),
               ),
-            )
+            ),
+            if (hasErrored)
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 18, vertical: 20),
+                child: TextFont(
+                  text: "biometrics-error-description".tr() +
+                      "\n" +
+                      "please-check-your-system-settings".tr(),
+                  textAlign: TextAlign.center,
+                  maxLines: 5,
+                  fontSize: 16,
+                ),
+              ),
           ],
         ),
       ),

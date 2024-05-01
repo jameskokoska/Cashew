@@ -1130,5 +1130,6 @@
   "set-range": "Ρύθμιση εύρους",
   "amount-color": "Ποσό Χρώμα",
   "green-or-red": "Πράσινο / Κόκκινο",
-  "no-color": "Χωρίς Χρώμα"
+  "no-color": "Χωρίς Χρώμα",
+  "please-check-your-system-settings": "Ελέγξτε τις ρυθμίσεις του συστήματός σας"
 }

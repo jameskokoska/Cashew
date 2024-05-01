@@ -1130,5 +1130,6 @@
   "set-range": "Bereik instellen",
   "amount-color": "Hoeveelheid Kleur",
   "green-or-red": "Groen/rood",
-  "no-color": "Geen kleur"
+  "no-color": "Geen kleur",
+  "please-check-your-system-settings": "Controleer uw systeeminstellingen"
 }

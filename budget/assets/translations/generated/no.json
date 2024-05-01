@@ -1130,5 +1130,6 @@
   "set-range": "Angi rekkevidde",
   "amount-color": "Mengde Farge",
   "green-or-red": "Grønn / rød",
-  "no-color": "Ingen farge"
+  "no-color": "Ingen farge",
+  "please-check-your-system-settings": "Vennligst sjekk systeminnstillingene dine"
 }

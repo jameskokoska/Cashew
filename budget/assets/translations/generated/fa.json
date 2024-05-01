@@ -1130,5 +1130,6 @@
   "set-range": "محدوده را تنظیم کنید",
   "amount-color": "مقدار رنگ",
   "green-or-red": "قرمز سبز",
-  "no-color": "بدون رنگ"
+  "no-color": "بدون رنگ",
+  "please-check-your-system-settings": "لطفا تنظیمات سیستم خود را بررسی کنید"
 }

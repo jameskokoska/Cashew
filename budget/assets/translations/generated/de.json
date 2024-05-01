@@ -1130,5 +1130,6 @@
   "set-range": "Bereich festlegen",
   "amount-color": "Menge Farbe",
   "green-or-red": "Grün/Rot",
-  "no-color": "Keine Farbe"
+  "no-color": "Keine Farbe",
+  "please-check-your-system-settings": "Bitte überprüfen Sie Ihre Systemeinstellungen"
 }

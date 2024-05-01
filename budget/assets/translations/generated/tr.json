@@ -1130,5 +1130,6 @@
   "set-range": "Aralığı Ayarla",
   "amount-color": "Miktar Rengi",
   "green-or-red": "Yeşil kırmızı",
-  "no-color": "Renk yok"
+  "no-color": "Renk yok",
+  "please-check-your-system-settings": "Lütfen sistem ayarlarınızı kontrol edin"
 }

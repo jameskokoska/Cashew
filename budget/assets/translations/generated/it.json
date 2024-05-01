@@ -1130,5 +1130,6 @@
   "set-range": "Imposta intervallo",
   "amount-color": "Colore importo",
   "green-or-red": "Verde/Rosso",
-  "no-color": "Nessun colore"
+  "no-color": "Nessun colore",
+  "please-check-your-system-settings": "Controlla le impostazioni del tuo sistema"
 }

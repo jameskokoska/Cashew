@@ -1130,5 +1130,6 @@
   "set-range": "Подесите опсег",
   "amount-color": "Амоунт Цолор",
   "green-or-red": "Зелено / црвено",
-  "no-color": "Нема боје"
+  "no-color": "Нема боје",
+  "please-check-your-system-settings": "Проверите подешавања система"
 }

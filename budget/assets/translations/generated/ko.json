@@ -1130,5 +1130,6 @@
   "set-range": "설정 범위",
   "amount-color": "금액 색상",
   "green-or-red": "녹색 / 빨간색",
-  "no-color": "색상 없음"
+  "no-color": "색상 없음",
+  "please-check-your-system-settings": "시스템 설정을 확인하세요."
 }

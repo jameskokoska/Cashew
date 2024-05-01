@@ -1130,5 +1130,6 @@
   "set-range": "Встановити діапазон",
   "amount-color": "Колір суми",
   "green-or-red": "Зелений / Червоний",
-  "no-color": "Без кольору"
+  "no-color": "Без кольору",
+  "please-check-your-system-settings": "Перевірте налаштування системи"
 }

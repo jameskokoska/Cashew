@@ -1130,5 +1130,6 @@
   "set-range": "مجموعة مجموعة",
   "amount-color": "لون الكمية",
   "green-or-red": "أخضر أحمر",
-  "no-color": "لا يوجد لون"
+  "no-color": "لا يوجد لون",
+  "please-check-your-system-settings": "يرجى التحقق من إعدادات النظام الخاص بك"
 }

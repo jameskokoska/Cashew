@@ -1130,5 +1130,6 @@
   "set-range": "Définir la plage",
   "amount-color": "Quantité Couleur",
   "green-or-red": "Vert/rouge",
-  "no-color": "Sans couleur"
+  "no-color": "Sans couleur",
+  "please-check-your-system-settings": "Veuillez vérifier les paramètres de votre système"
 }

@@ -810,7 +810,7 @@ class _BiometricsSettingToggleState extends State<BiometricsSettingToggle> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        biometricsAvailable
+        biometricsAvailable || isLocked
             ? SettingsContainerSwitch(
                 title: "biometric-lock".tr(),
                 description: "biometric-lock-description".tr(),

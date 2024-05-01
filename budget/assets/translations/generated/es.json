@@ -1130,5 +1130,6 @@
   "set-range": "Establecer rango",
   "amount-color": "Cantidad Color",
   "green-or-red": "Verde/rojo",
-  "no-color": "Sin color"
+  "no-color": "Sin color",
+  "please-check-your-system-settings": "Por favor verifique la configuración de su sistema"
 }

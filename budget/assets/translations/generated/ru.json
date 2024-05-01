@@ -1129,5 +1129,6 @@
   "set-range": "Установить диапазон",
   "amount-color": "Сумма Цвет",
   "green-or-red": "Зеленый / Красный",
-  "no-color": "Нет цвета"
+  "no-color": "Нет цвета",
+  "please-check-your-system-settings": "Пожалуйста, проверьте настройки вашей системы"
 }

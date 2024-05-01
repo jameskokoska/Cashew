@@ -1130,5 +1130,6 @@
   "set-range": "Set Range",
   "amount-color": "Amount Color",
   "green-or-red": "Green / Red",
-  "no-color": "No Color"
+  "no-color": "No Color",
+  "please-check-your-system-settings": "Please check your system settings"
 }

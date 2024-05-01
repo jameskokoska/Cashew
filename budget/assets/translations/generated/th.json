@@ -1130,5 +1130,6 @@
   "set-range": "ตั้งค่าช่วง",
   "amount-color": "จำนวน สี",
   "green-or-red": "เขียว / แดง",
-  "no-color": "ไม่มีสี"
+  "no-color": "ไม่มีสี",
+  "please-check-your-system-settings": "กรุณาตรวจสอบการตั้งค่าระบบของคุณ"
 }

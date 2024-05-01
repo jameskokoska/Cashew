@@ -1130,5 +1130,6 @@
   "set-range": "Indstil Grænse",
   "amount-color": "Beløbsfarve",
   "green-or-red": "Grøn / Rød",
-  "no-color": "Ingen Farve"
+  "no-color": "Ingen Farve",
+  "please-check-your-system-settings": "Tjek venligst dine systemindstillinger"
 }

@@ -1130,5 +1130,6 @@
   "set-range": "পরিসীমা সেট করুন",
   "amount-color": "পরিমাণ রঙ",
   "green-or-red": "সবুজ/লাল",
-  "no-color": "কোন রঙ নেই"
+  "no-color": "কোন রঙ নেই",
+  "please-check-your-system-settings": "আপনার সিস্টেম সেটিংস চেক করুন"
 }

@@ -1130,5 +1130,6 @@
   "set-range": "Definir intervalo",
   "amount-color": "Quantidade Cor",
   "green-or-red": "Verde / Vermelho",
-  "no-color": "Sem cor"
+  "no-color": "Sem cor",
+  "please-check-your-system-settings": "Por favor, verifique as configurações do seu sistema"
 }

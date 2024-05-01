@@ -1130,5 +1130,6 @@
   "set-range": "設定範圍",
   "amount-color": "數量 顏色",
   "green-or-red": "綠/紅",
-  "no-color": "無顏色"
+  "no-color": "無顏色",
+  "please-check-your-system-settings": "請檢查您的系統設定"
 }

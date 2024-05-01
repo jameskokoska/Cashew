@@ -1130,5 +1130,6 @@
   "set-range": "Ställ in räckvidd",
   "amount-color": "Mängd Färg",
   "green-or-red": "Grön/röd",
-  "no-color": "Ingen färg"
+  "no-color": "Ingen färg",
+  "please-check-your-system-settings": "Kontrollera dina systeminställningar"
 }

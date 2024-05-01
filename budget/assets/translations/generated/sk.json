@@ -1130,5 +1130,6 @@
   "set-range": "Nastaviť rozsah",
   "amount-color": "Množstvo Farba",
   "green-or-red": "Zelená / červená",
-  "no-color": "Žiadna farba"
+  "no-color": "Žiadna farba",
+  "please-check-your-system-settings": "Skontrolujte nastavenia systému"
 }

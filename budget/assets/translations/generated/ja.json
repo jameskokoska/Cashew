@@ -1130,5 +1130,6 @@
   "set-range": "設定範囲",
   "amount-color": "金額の色",
   "green-or-red": "緑/赤",
-  "no-color": "色なし"
+  "no-color": "色なし",
+  "please-check-your-system-settings": "システム設定を確認してください"
 }
