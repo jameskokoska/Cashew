@@ -1228,14 +1228,14 @@ String getDevicesDefaultCurrencyCode() {
   return popularCurrencies[0];
 }
 
-void copyToClipboard(String text, {bool showSnackbar = true}) async {
+void copyToClipboard(String text, {bool showSnackbar = true, String? customSnackbarDescription}) async {
   HapticFeedback.mediumImpact();
   await Clipboard.setData(ClipboardData(text: text));
   if (showSnackbar)
     openSnackbar(
       SnackbarMessage(
         title: "copied-to-clipboard".tr(),
-        description: text,
+        description: customSnackbarDescription ?? text,
         icon: appStateSettings["outlinedIcons"]
             ? Icons.copy_outlined
             : Icons.copy_rounded,

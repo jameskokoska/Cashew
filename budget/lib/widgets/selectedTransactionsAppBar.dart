@@ -7,6 +7,7 @@ import 'package:budget/pages/editBudgetPage.dart';
 import 'package:budget/pages/editCategoriesPage.dart';
 import 'package:budget/pages/editObjectivesPage.dart';
 import 'package:budget/pages/editWalletsPage.dart';
+import 'package:budget/struct/currencyFunctions.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/listenableSelector.dart';
 import 'package:budget/struct/settings.dart';
@@ -25,23 +26,63 @@ import 'package:budget/widgets/selectCategory.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntry/transactionEntry.dart';
+import 'package:budget/widgets/transactionEntry/transactionLabel.dart';
 import 'package:budget/widgets/util/showDatePicker.dart';
 import 'package:budget/widgets/util/showTimePicker.dart';
 import 'package:drift/drift.dart' hide Column;
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:budget/widgets/countNumber.dart';
 import 'package:budget/widgets/framework/popupFramework.dart';
-
+import 'package:share_plus/share_plus.dart';
 import 'tappableTextEntry.dart';
-
 import 'tappableTextEntry.dart';
 
 class SelectedTransactionsAppBar extends StatelessWidget {
   const SelectedTransactionsAppBar(
       {Key? key, required this.pageID, this.enableSettleAllButton = false})
       : super(key: key);
+
+  Future shareSelectedTransactions(
+      {required BuildContext context,
+      required List<String> selectedTransactionPks,
+      required double totalAmount,
+      bool shareInsteadOfCopy = false}) async {
+    AllWallets allWallets = Provider.of<AllWallets>(context, listen: false);
+    List<Transaction> transactions =
+        await database.getTransactionsFromPk(selectedTransactionPks);
+    List<String> transactionOutput = [];
+    for (Transaction transaction in transactions) {
+      String name = await getTransactionLabel(transaction);
+      String amount = convertToMoney(
+          allWallets,
+          amountRatioToPrimaryCurrency(allWallets,
+                  allWallets.indexedByPk[transaction.walletFk]?.currency) *
+              (transaction.amount.abs() * (transaction.income ? 1 : -1)));
+      transactionOutput.add(name + "  •  " + amount);
+    }
+    String outString = "";
+    outString += "**" +
+        "total".tr() +
+        "**  •  " +
+        convertToMoney(allWallets, totalAmount);
+    outString += "\n" + transactionOutput.join("\n");
+
+    if (shareInsteadOfCopy == false || kIsWeb) {
+      copyToClipboard(
+        outString,
+        customSnackbarDescription: "transaction-details".tr(),
+      );
+    } else {
+      final box = context.findRenderObject() as RenderBox?;
+      await Share.share(
+        outString,
+        sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size,
+      );
+    }
+  }
 
   final String pageID;
   final bool enableSettleAllButton;
@@ -81,106 +122,119 @@ class SelectedTransactionsAppBar extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Flexible(
-                        child: Row(
-                          children: [
-                            IconButton(
-                              padding: EdgeInsets.all(15),
-                              color: Theme.of(context).colorScheme.secondary,
-                              icon: Icon(
-                                getPlatform() == PlatformOS.isIOS
-                                    ? appStateSettings["outlinedIcons"]
-                                        ? Icons.chevron_left_outlined
-                                        : Icons.chevron_left_rounded
-                                    : appStateSettings["outlinedIcons"]
-                                        ? Icons.arrow_back_outlined
-                                        : Icons.arrow_back_rounded,
-                                color: Theme.of(context).colorScheme.secondary,
-                              ),
-                              onPressed: () {
-                                globalSelectedID.value[pageID] = [];
-                                globalSelectedID.notifyListeners();
-                              },
-                            ),
-                            Expanded(
-                              child: StreamBuilder<double?>(
-                                stream: database.watchTotalSpentGivenList(
-                                  Provider.of<AllWallets>(context),
-                                  listOfIDs,
-                                ),
-                                builder: (context, snapshot) {
-                                  return CountNumber(
-                                    count:
-                                        snapshot.hasData ? snapshot.data! : 0,
-                                    duration: Duration(milliseconds: 250),
-                                    initialCount: (0),
-                                    textBuilder: (number) {
-                                      return Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Flexible(
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      vertical: 10),
-                                              child: TextFont(
-                                                text: listOfIDs.length
-                                                        .toString() +
-                                                    " " +
-                                                    "selected".tr(),
-                                                fontSize: 17.5,
-                                                textAlign: TextAlign.left,
-                                                maxLines: 1,
-                                              ),
+                      IconButton(
+                        padding: EdgeInsets.all(15),
+                        color: Theme.of(context).colorScheme.secondary,
+                        icon: Icon(
+                          getPlatform() == PlatformOS.isIOS
+                              ? appStateSettings["outlinedIcons"]
+                                  ? Icons.chevron_left_outlined
+                                  : Icons.chevron_left_rounded
+                              : appStateSettings["outlinedIcons"]
+                                  ? Icons.arrow_back_outlined
+                                  : Icons.arrow_back_rounded,
+                          color: Theme.of(context).colorScheme.secondary,
+                        ),
+                        onPressed: () {
+                          globalSelectedID.value[pageID] = [];
+                          globalSelectedID.notifyListeners();
+                        },
+                      ),
+                      Expanded(
+                        child: StreamBuilder<double?>(
+                          stream: database.watchTotalSpentGivenList(
+                            Provider.of<AllWallets>(context),
+                            listOfIDs,
+                          ),
+                          builder: (context, snapshot) {
+                            return Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Flexible(
+                                  child: Builder(
+                                    builder: (context) {
+                                      return Transform.translate(
+                                        offset: Offset(-10, 0),
+                                        child: Tappable(
+                                          color: Colors.transparent,
+                                          borderRadius: 15,
+                                          onTap: () =>
+                                              shareSelectedTransactions(
+                                            context: context,
+                                            selectedTransactionPks: listOfIDs,
+                                            totalAmount: snapshot.data ?? 0,
+                                            shareInsteadOfCopy: true,
+                                          ),
+                                          onLongPress: () =>
+                                              shareSelectedTransactions(
+                                            context: context,
+                                            selectedTransactionPks: listOfIDs,
+                                            totalAmount: snapshot.data ?? 0,
+                                            shareInsteadOfCopy: false,
+                                          ),
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(10),
+                                            child: TextFont(
+                                              text:
+                                                  listOfIDs.length.toString() +
+                                                      " " +
+                                                      "selected".tr(),
+                                              fontSize: 17.5,
+                                              textAlign: TextAlign.left,
+                                              maxLines: 1,
+                                              overflow: TextOverflow.fade,
+                                              softWrap: false,
                                             ),
                                           ),
-                                          Transform.translate(
-                                            offset: Offset(10, 0),
-                                            child: Tappable(
-                                              color: Colors.transparent,
-                                              borderRadius: 15,
-                                              onLongPress: () {
-                                                copyToClipboard(
-                                                  convertToMoney(
-                                                    Provider.of<AllWallets>(
-                                                        context,
-                                                        listen: false),
-                                                    number,
-                                                    finalNumber:
-                                                        snapshot.hasData
-                                                            ? snapshot.data!
-                                                            : 0,
-                                                  ),
-                                                );
-                                              },
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.all(10),
-                                                child: TextFont(
-                                                  text: convertToMoney(
-                                                      Provider.of<AllWallets>(
-                                                          context),
-                                                      number,
-                                                      finalNumber:
-                                                          snapshot.hasData
-                                                              ? snapshot.data!
-                                                              : 0),
-                                                  fontSize: 17.5,
-                                                  textAlign: TextAlign.left,
-                                                  maxLines: 1,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
+                                        ),
                                       );
                                     },
-                                  );
-                                },
-                              ),
-                            ),
-                          ],
+                                  ),
+                                ),
+                                CountNumber(
+                                  count: snapshot.hasData ? snapshot.data! : 0,
+                                  duration: Duration(milliseconds: 250),
+                                  initialCount: (0),
+                                  textBuilder: (number) {
+                                    return Transform.translate(
+                                      offset: Offset(10, 0),
+                                      child: Tappable(
+                                        color: Colors.transparent,
+                                        borderRadius: 15,
+                                        onLongPress: () {
+                                          copyToClipboard(
+                                            convertToMoney(
+                                              Provider.of<AllWallets>(context,
+                                                  listen: false),
+                                              number,
+                                              finalNumber: snapshot.hasData
+                                                  ? snapshot.data!
+                                                  : 0,
+                                            ),
+                                          );
+                                        },
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(10),
+                                          child: TextFont(
+                                            text: convertToMoney(
+                                                Provider.of<AllWallets>(
+                                                    context),
+                                                number,
+                                                finalNumber: snapshot.hasData
+                                                    ? snapshot.data!
+                                                    : 0),
+                                            fontSize: 17.5,
+                                            textAlign: TextAlign.left,
+                                            maxLines: 1,
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ],
+                            );
+                          },
                         ),
                       ),
                       if (appStateSettings["massEditSelectedTransactions"] ==
