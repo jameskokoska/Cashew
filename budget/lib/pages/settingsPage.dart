@@ -810,13 +810,14 @@ class _BiometricsSettingToggleState extends State<BiometricsSettingToggle> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        biometricsAvailable || isLocked
+        authAvailable || isLocked
             ? SettingsContainerSwitch(
                 title: "biometric-lock".tr(),
                 description: "biometric-lock-description".tr(),
                 onSwitched: (value) async {
-                  bool? result = await checkBiometrics(checkAlways: true);
-                  if (result == null) {
+                  AuthResult authResult =
+                      await checkBiometrics(checkAlways: true);
+                  if (authResult == AuthResult.error) {
                     openPopup(
                       context,
                       icon: appStateSettings["outlinedIcons"]
@@ -837,6 +838,11 @@ class _BiometricsSettingToggleState extends State<BiometricsSettingToggle> {
                           ? "open-settings".tr()
                           : "ok".tr(),
                       onSubmit: () {
+                        updateSettings("requireAuth", false,
+                            updateGlobalState: false);
+                        setState(() {
+                          isLocked = false;
+                        });
                         Navigator.pop(context);
                         // On iOS the notification app settings page also has
                         // the permission for biometrics
@@ -845,16 +851,16 @@ class _BiometricsSettingToggleState extends State<BiometricsSettingToggle> {
                         }
                       },
                     );
-                  } else if (result) {
+                  } else if (authResult == AuthResult.authenticated) {
                     updateSettings("requireAuth", value,
                         updateGlobalState: false);
                     setState(() {
                       isLocked = value;
                     });
                   }
-                  return result;
+                  return authResult == AuthResult.authenticated;
                 },
-                initialValue: appStateSettings["requireAuth"],
+                initialValue: isLocked,
                 icon: isLocked
                     ? appStateSettings["outlinedIcons"]
                         ? Icons.lock_outlined

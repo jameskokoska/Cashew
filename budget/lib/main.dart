@@ -85,7 +85,7 @@ void main() async {
 
 late Map<String, dynamic> currenciesJSON;
 late Map<String, dynamic> languageNamesJSON;
-bool biometricsAvailable = false;
+bool authAvailable = false;
 late bool entireAppLoaded;
 late PackageInfo packageInfoGlobal;
 
