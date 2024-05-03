@@ -15,11 +15,15 @@ Future<bool?> checkBiometrics({
   bool checkAlways = false,
 }) async {
   try {
-    final LocalAuthentication auth = LocalAuthentication();
-    biometricsAvailable = kIsWeb == false && await auth.canCheckBiometrics ||
-        await auth.isDeviceSupported();
+    if (kIsWeb) {
+      biometricsAvailable = false;
+      await updateSettings("requireAuth", false, updateGlobalState: false);
+      return true;
+    }
 
-    if (kIsWeb) return true;
+    final LocalAuthentication auth = LocalAuthentication();
+    biometricsAvailable =
+        await auth.canCheckBiometrics || await auth.isDeviceSupported();
 
     final bool requireAuth =
         checkAlways || appStateSettings["requireAuth"] == true;
