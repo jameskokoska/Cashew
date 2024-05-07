@@ -207,7 +207,7 @@ class TransactionEntries extends StatelessWidget {
 
           bool enableFutureTransactionsDivider =
               enableFutureTransactionsCollapse &&
-                  futureTransactionPks.length >= 5;
+                  futureTransactionPks.length >= 3;
           bool notYetAddedPastTransactionsDivider = true;
 
           if ((snapshot.data ?? []).length <= 0 &&

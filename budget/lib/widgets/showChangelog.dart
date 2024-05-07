@@ -27,7 +27,7 @@ import 'listItem.dart';
 String getChangelogString() {
   return """
     < 5.2.9
-    Collapsible future transactions list section (if more than 5 transactions in the future)
+    Collapsible future transactions list section (if more than 3 transactions in the future)
     Number pad format setting
     Account selection for homepage pie chart section
     Improved income/expense only selection in homepage pie chart
