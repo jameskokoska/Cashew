@@ -64,13 +64,10 @@ class BudgetPage extends StatelessWidget {
         stream: database.getBudget(budgetPk),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            ColorScheme budgetColorScheme = ColorScheme.fromSeed(
-              seedColor: HexColor(snapshot.data?.colour,
-                  defaultColor: Theme.of(context).colorScheme.primary),
-              brightness: determineBrightnessTheme(context),
-            );
-            return Theme(
-              data: Theme.of(context).copyWith(colorScheme: budgetColorScheme),
+            Color accentColor = HexColor(snapshot.data?.colour,
+                defaultColor: Theme.of(context).colorScheme.primary);
+            return CustomColorTheme(
+              accentColor: accentColor,
               child: _BudgetPageContent(
                 budget: snapshot.data!,
                 dateForRange: dateForRange,

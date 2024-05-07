@@ -353,6 +353,7 @@
   "translations-help": "如果你想帮助翻译，请发送电子邮件",
   "no-transactions-for": "没有交易",
   "average-spent": "平均支出",
+  "average-saved": "平均节省",
   "select-icon": "选择图标",
   "1-day-ago": "1 天前",
   "1-hour-ago": "1 小时前",
@@ -1126,5 +1127,9 @@
   "number-pad-format": "数字键盘格式",
   "set-lower-range": "较低范围",
   "set-upper-range": "上限",
-  "set-range": "设定范围"
+  "set-range": "设定范围",
+  "amount-color": "数量 颜色",
+  "green-or-red": "绿/红",
+  "no-color": "无颜色",
+  "please-check-your-system-settings": "请检查您的系统设置"
 }

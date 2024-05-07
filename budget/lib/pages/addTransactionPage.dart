@@ -2188,7 +2188,8 @@ class SelectIncludeAmount extends StatelessWidget {
               : Icons.cancel_rounded,
       title: "include-amount".tr(),
       enableBorderRadius: true,
-      backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
+      backgroundColor:
+          Theme.of(context).colorScheme.secondaryContainer.withOpacity(0.7),
       initialValue: selectedPaid,
       onSwitched: onSwitched,
     );
@@ -2493,12 +2494,13 @@ class _SelectTitleState extends State<SelectTitle> {
               onPressed: () async {
                 DateTime? dateTimeSelected =
                     await selectDateAndTimeSequence(context, selectedDateTime);
-                if (dateTimeSelected == null) return;
-                setState(() {
-                  customDateTimeSelected = true;
-                  selectedDateTime = dateTimeSelected;
-                });
-                widget.setSelectedDateTime(selectedDateTime);
+                if (dateTimeSelected != null) {
+                  setState(() {
+                    customDateTimeSelected = true;
+                    selectedDateTime = dateTimeSelected;
+                  });
+                  widget.setSelectedDateTime(selectedDateTime);
+                }
                 // Update the size of the bottom sheet
                 Future.delayed(Duration(milliseconds: 100), () {
                   bottomSheetControllerGlobal.snapToExtent(0);
@@ -3624,7 +3626,7 @@ class SelectTransactionTypePopup extends StatelessWidget {
             Theme.of(context).colorScheme.secondaryContainer,
             amount: 0.5,
           ),
-          borderRadius: 20,
+          borderRadius: getPlatform() == PlatformOS.isIOS ? 10 : 15,
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 15),
             child: Column(

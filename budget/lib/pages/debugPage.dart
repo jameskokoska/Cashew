@@ -256,7 +256,6 @@ class DebugPage extends StatelessWidget {
             }
             updateSettings("iOSEmulate", value,
                 pagesNeedingRefresh: [], updateGlobalState: true);
-            generateColors();
           },
           initialValue: appStateSettings["iOSEmulate"] == true,
           icon: appStateSettings["outlinedIcons"]

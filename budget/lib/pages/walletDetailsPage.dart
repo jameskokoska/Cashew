@@ -110,24 +110,10 @@ class WatchedWalletDetailsPage extends StatelessWidget {
       stream: database.getWallet(walletPk),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          ColorScheme walletColorScheme = ColorScheme.fromSeed(
-            seedColor: HexColor(snapshot.data?.colour,
-                defaultColor: Theme.of(context).colorScheme.primary),
-            brightness: determineBrightnessTheme(context),
-          );
-          Color? pageBackgroundColor =
-              Theme.of(context).brightness == Brightness.dark &&
-                      appStateSettings["forceFullDarkBackground"]
-                  ? Colors.black
-                  : appStateSettings["materialYou"]
-                      ? dynamicPastel(context, walletColorScheme.primary,
-                          amount: 0.92)
-                      : null;
-          return Theme(
-            data: Theme.of(context).copyWith(
-              colorScheme: walletColorScheme,
-              canvasColor: pageBackgroundColor,
-            ),
+          Color accentColor = HexColor(snapshot.data?.colour,
+              defaultColor: Theme.of(context).colorScheme.primary);
+          return CustomColorTheme(
+            accentColor: accentColor,
             child: WalletDetailsPage(
               wallet: snapshot.data,
             ),
@@ -2408,7 +2394,7 @@ class _AllSpendingPastSpendingGraphState
               ),
         child: ClipRRect(
           borderRadius:
-              BorderRadius.circular(getPlatform() == PlatformOS.isIOS ? 0 : 20),
+              BorderRadius.circular(getPlatform() == PlatformOS.isIOS ? 0 : 18),
           child: Stack(
             children: [
               Tappable(
@@ -2817,16 +2803,17 @@ class _AllSpendingPastSpendingGraphState
                                   DateTimeRange budgetRange =
                                       getCycleDateTimeRange("",
                                           currentDate: datePast);
-                                  Color containerColor =
-                                      getPlatform() == PlatformOS.isIOS
-                                          ? widget.selectedDateTimeRange ==
-                                                  budgetRange
-                                              ? Theme.of(context)
-                                                  .colorScheme
-                                                  .secondaryContainer
-                                                  .withOpacity(0.3)
-                                              : Colors.transparent
-                                          : getStandardContainerColor(context);
+                                  Color containerColor = getPlatform() ==
+                                          PlatformOS.isIOS
+                                      ? widget.selectedDateTimeRange ==
+                                              budgetRange
+                                          ? Theme.of(context)
+                                              .colorScheme
+                                              .secondaryContainer
+                                              .withOpacity(0.3)
+                                          : Colors.transparent
+                                      : getColor(
+                                          context, "standardContainerColor");
 
                                   return buildSpendingHistorySummaryContainer(
                                     index: index,

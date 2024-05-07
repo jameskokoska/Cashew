@@ -66,7 +66,7 @@ class _RadioItemsState<T> extends State<RadioItems<T>> {
             onLongPress: widget.onLongPress != null
                 ? () => widget.onLongPress!(item)
                 : null,
-            borderRadius: getPlatform() == PlatformOS.isIOS ? 10 : 20,
+            borderRadius: getPlatform() == PlatformOS.isIOS ? 10 : 15,
             color: selected
                 ? Theme.of(context).colorScheme.secondaryContainer
                 : Colors.transparent,
@@ -246,7 +246,7 @@ class _CheckItemsState<T> extends State<CheckItems<T>> {
   @override
   Widget build(BuildContext context) {
     List<Widget> children = [];
-    double borderRadius = getPlatform() == PlatformOS.isIOS ? 10 : 20;
+    double borderRadius = getPlatform() == PlatformOS.isIOS ? 10 : 15;
     for (int itemIndex = 0; itemIndex < widget.items.length; itemIndex++) {
       T item = widget.items[itemIndex];
       bool selected = false;

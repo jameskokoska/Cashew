@@ -89,7 +89,12 @@ class _AddEmailTemplateState extends State<AddEmailTemplate> {
   }
 
   determineBottomButton() {
-    if (double.tryParse(selectedAmount ?? "") == null &&
+    if (getTransactionAmountFromEmail(
+              selectedMessageString ?? "",
+              amountTransactionBefore ?? "",
+              amountTransactionAfter ?? "",
+            ) ==
+            null &&
         selectedMessageString != null) {
       setState(() {
         canAddTemplate = false;
@@ -155,7 +160,7 @@ class _AddEmailTemplateState extends State<AddEmailTemplate> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           TextFont(
-            text: "Only these emails that contain this text will be scanned.",
+            text: "Only these messages that contain this text will be scanned.",
             fontSize: 14,
             maxLines: 10,
             textAlign: TextAlign.left,
@@ -602,7 +607,7 @@ class _AddEmailTemplateState extends State<AddEmailTemplate> {
                           selectedText: selectedSubject ?? "",
                           label: "Subject: ",
                           secondaryLabel:
-                              "All emails containing this text will be checked.",
+                              "All messages containing this text will be checked.",
                         ),
                         SizedBox(height: 10),
                         TemplateInfoBox(
@@ -618,9 +623,14 @@ class _AddEmailTemplateState extends State<AddEmailTemplate> {
                           selectedText: selectedAmount ?? "",
                           label: "Amount: ",
                           secondaryLabel:
-                              "The selected amount from this email. Surrounding text will be used to find this amount in new emails.",
+                              "The selected amount from this message. Surrounding text will be used to find this amount in new messages.",
                           extraCheck: (input) {
-                            return double.tryParse(input) != null;
+                            return getTransactionAmountFromEmail(
+                                  selectedMessageString ?? "",
+                                  amountTransactionBefore ?? "",
+                                  amountTransactionAfter ?? "",
+                                ) !=
+                                null;
                           },
                           extraCheckMessage: "Please select a valid number!",
                         ),
@@ -638,7 +648,7 @@ class _AddEmailTemplateState extends State<AddEmailTemplate> {
                           selectedText: selectedTitle ?? "",
                           label: "Title: ",
                           secondaryLabel:
-                              "The selected title from this email. Surrounding text will be used to find this title in new emails.",
+                              "The selected title from this message. Surrounding text will be used to find this title in new messages.",
                         ),
                       ],
                     ),

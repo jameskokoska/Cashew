@@ -581,68 +581,67 @@ class PageFrameworkState extends State<PageFramework>
               shadowColor:
                   Theme.of(context).colorScheme.shadow.withOpacity(0.8),
               borderRadius: BorderRadius.circular(borderRadius),
-              child: Tappable(
-                child: Container(
-                  height: height,
-                  width: size,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      SizedBox(
-                        width: size,
-                        height: height / 2,
-                        child: Tappable(
-                          color:
-                              Theme.of(context).colorScheme.secondaryContainer,
-                          borderRadius: borderRadius,
-                          onTap: scrollToTop,
-                          child: Padding(
-                            padding: EdgeInsets.only(top: iconInset),
-                            child: Transform.rotate(
-                              angle: pi / 2,
-                              child: Icon(
-                                appStateSettings["outlinedIcons"]
-                                    ? Icons.chevron_left_outlined
-                                    : Icons.chevron_left_rounded,
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .onSecondaryContainer,
-                                size: size - iconPadding,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        width: size,
-                        height: height / 2,
-                        child: Tappable(
-                          color:
-                              Theme.of(context).colorScheme.secondaryContainer,
-                          borderRadius: borderRadius,
-                          onTap: scrollToBottom,
-                          child: Padding(
-                            padding: EdgeInsets.only(bottom: iconInset),
-                            child: Transform.rotate(
-                              angle: -pi / 2,
-                              child: Icon(
-                                appStateSettings["outlinedIcons"]
-                                    ? Icons.chevron_left_outlined
-                                    : Icons.chevron_left_rounded,
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .onSecondaryContainer,
-                                size: size - iconPadding,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+              child: Container(
+                height: height,
+                width: size,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(
+                      getPlatform() == PlatformOS.isIOS ? 10 : 15),
+                  color: Theme.of(context).colorScheme.secondaryContainer,
                 ),
-                color: Theme.of(context).colorScheme.secondaryContainer,
-                borderRadius: getPlatform() == PlatformOS.isIOS ? 10 : 15,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SizedBox(
+                      width: size,
+                      height: height / 2,
+                      child: Tappable(
+                        color: Theme.of(context).colorScheme.secondaryContainer,
+                        borderRadius: borderRadius,
+                        onTap: scrollToTop,
+                        child: Padding(
+                          padding: EdgeInsets.only(top: iconInset),
+                          child: Transform.rotate(
+                            angle: pi / 2,
+                            child: Icon(
+                              appStateSettings["outlinedIcons"]
+                                  ? Icons.chevron_left_outlined
+                                  : Icons.chevron_left_rounded,
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onSecondaryContainer,
+                              size: size - iconPadding,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: size,
+                      height: height / 2,
+                      child: Tappable(
+                        color: Theme.of(context).colorScheme.secondaryContainer,
+                        borderRadius: borderRadius,
+                        onTap: scrollToBottom,
+                        child: Padding(
+                          padding: EdgeInsets.only(bottom: iconInset),
+                          child: Transform.rotate(
+                            angle: -pi / 2,
+                            child: Icon(
+                              appStateSettings["outlinedIcons"]
+                                  ? Icons.chevron_left_outlined
+                                  : Icons.chevron_left_rounded,
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onSecondaryContainer,
+                              size: size - iconPadding,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             );
           }),
@@ -656,12 +655,14 @@ class PageFrameworkState extends State<PageFramework>
         children: [
           dragDownToDismissScaffold ?? scaffold,
           Align(
-            alignment: Alignment.bottomRight,
+            alignment: directionalityReverse(context) == 1
+                ? Alignment.bottomRight
+                : Alignment.bottomLeft,
             child: Padding(
               padding: EdgeInsets.only(
-                bottom: getBottomInsetOfFAB(context),
-                right: 15,
-              ),
+                  bottom: getBottomInsetOfFAB(context),
+                  right: directionalityReverse(context) == 1 ? 15 : 0,
+                  left: directionalityReverse(context) == -1 ? 15 : 0),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.end,
@@ -845,7 +846,8 @@ class PageFrameworkSliverAppBar extends StatelessWidget {
                           : 0)
                   //  Offset(0, -(1 - percent) * 40)
                   : Offset(
-                      backButtonEnabled ? 46 * percent : 10 * percent,
+                      (directionalityReverse(context)) *
+                          (backButtonEnabled ? 46 * percent : 10 * percent),
                       -(subtitleSize ?? 0) * (1 - percent) + -0.5 * percent,
                     ),
               child: Transform.scale(

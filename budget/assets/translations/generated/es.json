@@ -352,7 +352,8 @@
   "notification-upcoming-transaction-title": "Próxima transacción adeudada",
   "translations-help": "Si desea ayudar con las traducciones, envíe un correo electrónico",
   "no-transactions-for": "No hay transacciones para",
-  "average-spent": "Hasto promedio",
+  "average-spent": "hasto promedio",
+  "average-saved": "promedio ahorrado",
   "select-icon": "Seleccione icono",
   "1-day-ago": "Hace 1 día",
   "1-hour-ago": "Hace 1 hora",
@@ -600,7 +601,7 @@
   "goals": "Objetivos",
   "edit-goals": "Editar objetivos",
   "savings-goal": "Meta de ahorro",
-  "expense-goal": "Objerivo de gasto",
+  "expense-goal": "Objetivo de gasto",
   "goal": "Objetivo",
   "edit-goal": "Editar objetivo",
   "delete-goal": "Eliminar objetivo",
@@ -1126,5 +1127,9 @@
   "number-pad-format": "Formato del teclado numérico",
   "set-lower-range": "Rango inferior",
   "set-upper-range": "Rango superior",
-  "set-range": "Establecer rango"
+  "set-range": "Establecer rango",
+  "amount-color": "Cantidad Color",
+  "green-or-red": "Verde/rojo",
+  "no-color": "Sin color",
+  "please-check-your-system-settings": "Por favor verifique la configuración de su sistema"
 }

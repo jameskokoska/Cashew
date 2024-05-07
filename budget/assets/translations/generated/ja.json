@@ -353,6 +353,7 @@
   "translations-help": "翻訳を手伝いたい場合は、メールでお問い合わせください",
   "no-transactions-for": "取引はありません",
   "average-spent": "平均費用",
+  "average-saved": "平均節約額",
   "select-icon": "アイコンを選択します",
   "1-day-ago": "1日前",
   "1-hour-ago": "1時間前",
@@ -1126,5 +1127,9 @@
   "number-pad-format": "テンキーの形式",
   "set-lower-range": "低域範囲",
   "set-upper-range": "上限範囲",
-  "set-range": "設定範囲"
+  "set-range": "設定範囲",
+  "amount-color": "金額の色",
+  "green-or-red": "緑/赤",
+  "no-color": "色なし",
+  "please-check-your-system-settings": "システム設定を確認してください"
 }

@@ -1,18 +1,22 @@
+import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
 import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/upcomingOverdueTransactionsPage.dart';
+import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/notificationsGlobal.dart';
 import 'package:budget/struct/settings.dart';
+import 'package:budget/struct/upcomingTransactionsFunctions.dart';
 import 'package:budget/widgets/notificationsSettings.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:universal_io/io.dart';
 
 Future<String?> initializeNotifications() async {
-  if (Platform.isIOS) {
+  // Since iOS cannot send scheduled notifications when the app is open
+  // There is no need to listen to incoming notification payloads
+  if (getPlatform(ignoreEmulation: true) == PlatformOS.isIOS) {
     return "";
   }
   const AndroidInitializationSettings initializationSettingsAndroid =
@@ -41,31 +45,26 @@ Future<String?> initializeNotifications() async {
 onSelectNotification(NotificationResponse notificationResponse) async {
   String? payloadData = notificationResponse.payload;
   notificationPayload = payloadData;
-  runNotificationPayLoadsNoContext(payloadData);
+  runNotificationPayLoadsNoContext();
 }
 
-runNotificationPayLoadsNoContext(payloadData) {
-  if (payloadData == "addTransaction") {
-    navigatorKey.currentState!.push(
-      MaterialPageRoute(
-        builder: (context) => AddTransactionPage(
-          routesToPopAfterDelete: RoutesToPopAfterDelete.None,
-        ),
-      ),
-    );
-  } else if (payloadData == "upcomingTransaction") {
-    navigatorKey.currentState!.push(
-      MaterialPageRoute(
-        builder: (context) =>
-            UpcomingOverdueTransactions(overdueTransactions: true),
-      ),
-    );
+runNotificationPayLoadsNoContext() {
+  if (navigatorKey.currentContext == null) return;
+  // If the upcoming transaction notification tapped when app opened, auto pay overdue transaction
+  if (notificationPayload == "upcomingTransaction") {
+    Future.delayed(Duration.zero, () async {
+      await markSubscriptionsAsPaid(navigatorKey.currentContext!);
+      await markUpcomingAsPaid();
+      await setUpcomingNotifications(navigatorKey.currentContext);
+    });
   }
-  notificationPayload = "";
+  runNotificationPayLoads(navigatorKey.currentContext);
 }
 
-void runNotificationPayLoads(context) {
-  if (kIsWeb) return;
+Future<bool> runNotificationPayLoads(context) async {
+  print("Notification payload: " + notificationPayload.toString());
+  if (kIsWeb) return false;
+  if (notificationPayload == null) return false;
   if (notificationPayload == "addTransaction") {
     pushRoute(
       context,
@@ -73,14 +72,33 @@ void runNotificationPayLoads(context) {
         routesToPopAfterDelete: RoutesToPopAfterDelete.None,
       ),
     );
+    return true;
   } else if (notificationPayload == "upcomingTransaction") {
     // When the notification comes in, the transaction is past due!
     pushRoute(
       context,
-      UpcomingOverdueTransactions(overdueTransactions: true),
+      UpcomingOverdueTransactions(overdueTransactions: null),
     );
+    return true;
+  } else if (notificationPayload?.split("?")[0] == "openTransaction") {
+    Uri notificationPayloadUri = Uri.parse(notificationPayload ?? "");
+    if (notificationPayloadUri.queryParameters["transactionPk"] == null)
+      return false;
+    String transactionPk =
+        notificationPayloadUri.queryParameters["transactionPk"] ?? "";
+    Transaction? transaction =
+        await database.getTransactionFromPk(transactionPk);
+    pushRoute(
+      context,
+      AddTransactionPage(
+        transaction: transaction,
+        routesToPopAfterDelete: RoutesToPopAfterDelete.One,
+      ),
+    );
+    return true;
   }
   notificationPayload = "";
+  return false;
 }
 
 Future<void> setDailyNotifications(context) async {

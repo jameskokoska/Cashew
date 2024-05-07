@@ -46,13 +46,10 @@ class PastBudgetsPage extends StatelessWidget {
         stream: database.getBudget(budgetPk),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            ColorScheme budgetColorScheme = ColorScheme.fromSeed(
-              seedColor: HexColor(snapshot.data?.colour,
-                  defaultColor: Theme.of(context).colorScheme.primary),
-              brightness: determineBrightnessTheme(context),
-            );
-            return Theme(
-              data: Theme.of(context).copyWith(colorScheme: budgetColorScheme),
+            Color accentColor = HexColor(snapshot.data?.colour,
+                defaultColor: Theme.of(context).colorScheme.primary);
+            return CustomColorTheme(
+              accentColor: accentColor,
               child: _PastBudgetsPageContent(
                 budget: snapshot.data!,
               ),
@@ -675,6 +672,8 @@ class __PastBudgetsPageContentState extends State<_PastBudgetsPageContent> {
                                                   onTap: () {
                                                     openWatchCategoriesBottomSheet();
                                                   },
+                                                  isSavingsBudget:
+                                                      widget.budget.income,
                                                 ),
                                               );
                                             }
@@ -1230,7 +1229,7 @@ class PastBudgetContainer extends StatelessWidget {
     );
     return Container(
       child: OpenContainerNavigation(
-        borderRadius: getPlatform() == PlatformOS.isIOS ? 0 : 20,
+        borderRadius: getPlatform() == PlatformOS.isIOS ? 0 : 18,
         closedColor: getPlatform() == PlatformOS.isIOS
             ? backgroundColor
             : appStateSettings["materialYou"]
@@ -1254,7 +1253,7 @@ class PastBudgetContainer extends StatelessWidget {
                 ),
               );
             },
-            borderRadius: getPlatform() == PlatformOS.isIOS ? 0 : 20,
+            borderRadius: getPlatform() == PlatformOS.isIOS ? 0 : 15,
             child: widget,
             color: getPlatform() == PlatformOS.isIOS
                 ? backgroundColor
@@ -1284,12 +1283,14 @@ class CategoryAverageSpent extends StatelessWidget {
     required this.amountPeriods,
     required this.amountSpent,
     required this.onTap,
+    required this.isSavingsBudget,
     super.key,
   });
   final TransactionCategory category;
   final int amountPeriods;
   final double amountSpent;
   final VoidCallback onTap;
+  final bool isSavingsBudget;
 
   @override
   Widget build(BuildContext context) {
@@ -1358,7 +1359,9 @@ class CategoryAverageSpent extends StatelessWidget {
                                               : (amountSpent / amountPeriods)
                                                   .abs()) +
                                       " " +
-                                      "average-spent".tr().toLowerCase(),
+                                      (isSavingsBudget
+                                          ? "average-saved".tr().toLowerCase()
+                                          : "average-spent".tr().toLowerCase()),
                                   fontSize: 14,
                                   textColor: getColor(context, "textLight"),
                                 );

@@ -11,113 +11,115 @@ import 'package:system_theme/system_theme.dart';
 //import 'package:budget/colors.dart';
 //getColor(context, "lightDarkAccent")
 
-late AppColors appColorsLight;
-
-late AppColors appColorsDark;
-
 Color getColor(BuildContext context, String colorName) {
-  // Custom lightDarkAccentHeavyLight when material you given context if system color
-  // Makes the system color more vibrant in the UI
-  if (appStateSettings["accentSystemColor"] == true &&
-      colorName == "lightDarkAccentHeavyLight" &&
-      appStateSettings["materialYou"] &&
-      appStateSettings["batterySaver"] == false) {
-    return dynamicPastel(
-      context,
-      Theme.of(context).colorScheme.primary,
-      amountDark: 0.85,
-      amountLight: 0.96,
-    );
-  }
   return Theme.of(context).extension<AppColors>()?.colors[colorName] ??
       Colors.red;
 }
 
-Color getStandardContainerColor(BuildContext context,
-    {bool forceNonIOS = false}) {
-  return getPlatform() == PlatformOS.isIOS && forceNonIOS == false
-      ? Theme.of(context).canvasColor
-      : appStateSettings["materialYou"]
-          ? dynamicPastel(
-              context,
-              Theme.of(context).colorScheme.secondaryContainer,
-              amountLight: 0.3,
-              amountDark: 0.6,
+AppColors getAppColors(
+    {required Brightness brightness,
+    required ThemeData themeData,
+    required Color accentColor}) {
+  Color lightDarkAccentHeavyLight = brightness == Brightness.light
+      ? appStateSettings["accentSystemColor"] == true &&
+              appStateSettings["materialYou"] &&
+              appStateSettings["batterySaver"] == false
+          ? lightenPastel(
+              themeData.colorScheme.primary,
+              amount: 0.96,
             )
-          : getColor(context, "lightDarkAccentHeavyLight");
-}
-
-void generateColors() {
-  appColorsLight = AppColors(
-    colors: {
-      "white": Colors.white,
-      "black": Colors.black,
-      "textLight": appStateSettings["increaseTextContrast"]
-          ? Colors.black.withOpacity(0.7)
           : appStateSettings["materialYou"]
-              ? Colors.black.withOpacity(0.4)
-              : Color(0xFF888888),
-      "lightDarkAccent": appStateSettings["materialYou"]
-          ? lightenPastel(HexColor(appStateSettings["accentColor"]),
-              amount: 0.6)
-          : Color(0xFFF7F7F7),
-      "lightDarkAccentHeavyLight": appStateSettings["materialYou"]
-          ? (appStateSettings["batterySaver"]
-              ? lightenPastel(HexColor(appStateSettings["accentColor"]),
-                  amount: 0.8)
-              : lightenPastel(HexColor(appStateSettings["accentColor"]),
-                  amount: 0.92))
-          : (appStateSettings["batterySaver"]
-              ? Color(0xFFF3F3F3)
-              : Color(0xFFFFFFFF)),
-      "canvasContainer": const Color(0xFFEBEBEB),
-      "lightDarkAccentHeavy": Color(0xFFEBEBEB),
-      "shadowColor": const Color(0x655A5A5A),
-      "shadowColorLight": const Color(0x2D5A5A5A),
-      "unPaidUpcoming": Color(0xFF58A4C2),
-      "unPaidOverdue": Color(0xFF6577E0),
-      "incomeAmount": Color(0xFF59A849),
-      "expenseAmount": Color(0xFFCA5A5A),
-      "warningOrange": Color(0xFFCA995A),
-      "starYellow": Color(0xFFFFD723),
-      "dividerColor": appStateSettings["materialYou"]
-          ? Color(0x0F000000)
-          : Color(0xFFF0F0F0),
-    },
-  );
-  appColorsDark = AppColors(
-    colors: {
-      "white": Colors.black,
-      "black": Colors.white,
-      "textLight": appStateSettings["increaseTextContrast"]
-          ? Colors.white.withOpacity(0.65)
+              ? (appStateSettings["batterySaver"]
+                  ? lightenPastel(accentColor, amount: 0.8)
+                  : lightenPastel(accentColor, amount: 0.92))
+              : (appStateSettings["batterySaver"]
+                  ? Color(0xFFF3F3F3)
+                  : Color(0xFFFFFFFF))
+      : appStateSettings["accentSystemColor"] == true &&
+              appStateSettings["materialYou"] &&
+              appStateSettings["batterySaver"] == false
+          ? darkenPastel(
+              themeData.colorScheme.primary,
+              amount: 0.85,
+            )
           : appStateSettings["materialYou"]
-              ? Colors.white.withOpacity(0.25)
-              : Color(0xFF494949),
-      "lightDarkAccent": appStateSettings["materialYou"]
-          ? darkenPastel(HexColor(appStateSettings["accentColor"]),
-              amount: 0.83)
-          : Color(0xFF161616),
-      "lightDarkAccentHeavyLight": appStateSettings["materialYou"]
-          ? darkenPastel(HexColor(appStateSettings["accentColor"]), amount: 0.8)
-          : Color(0xFF242424),
-      "canvasContainer": const Color(0xFF242424),
-      "lightDarkAccentHeavy": const Color(0xFF444444),
-      "shadowColor": const Color(0x69BDBDBD),
-      "shadowColorLight": appStateSettings["materialYou"]
-          ? Colors.transparent
-          : Color(0x28747474),
-      "unPaidUpcoming": Color(0xFF7DB6CC),
-      "unPaidOverdue": Color(0xFF8395FF),
-      "incomeAmount": Color(0xFF62CA77),
-      "expenseAmount": Color(0xFFDA7272),
-      "warningOrange": Color(0xFFDA9C72),
-      "starYellow": Colors.yellow,
-      "dividerColor": appStateSettings["materialYou"]
-          ? Color(0x13FFFFFF)
-          : Color(0xFF161616),
-    },
-  );
+              ? darkenPastel(accentColor, amount: 0.8)
+              : Color(0xFF242424);
+  return brightness == Brightness.light
+      ? AppColors(
+          colors: {
+            "white": Colors.white,
+            "black": Colors.black,
+            "textLight": appStateSettings["increaseTextContrast"]
+                ? Colors.black.withOpacity(0.7)
+                : appStateSettings["materialYou"]
+                    ? Colors.black.withOpacity(0.4)
+                    : Color(0xFF888888),
+            "lightDarkAccent": appStateSettings["materialYou"]
+                ? lightenPastel(accentColor, amount: 0.6)
+                : Color(0xFFF7F7F7),
+            "lightDarkAccentHeavyLight": lightDarkAccentHeavyLight,
+            "canvasContainer": const Color(0xFFEBEBEB),
+            "lightDarkAccentHeavy": Color(0xFFEBEBEB),
+            "shadowColor": const Color(0x655A5A5A),
+            "shadowColorLight": const Color(0x2D5A5A5A),
+            "unPaidUpcoming": Color(0xFF58A4C2),
+            "unPaidOverdue": Color(0xFF6577E0),
+            "incomeAmount": Color(0xFF59A849),
+            "expenseAmount": Color(0xFFCA5A5A),
+            "warningOrange": Color(0xFFCA995A),
+            "starYellow": Color(0xFFFFD723),
+            "dividerColor": appStateSettings["materialYou"]
+                ? Color(0x0F000000)
+                : Color(0xFFF0F0F0),
+            "standardContainerColor": getPlatform() == PlatformOS.isIOS
+                ? themeData.canvasColor
+                : appStateSettings["materialYou"]
+                    ? lightenPastel(
+                        themeData.colorScheme.secondaryContainer,
+                        amount: 0.3,
+                      )
+                    : lightDarkAccentHeavyLight,
+          },
+        )
+      : AppColors(
+          colors: {
+            "white": Colors.black,
+            "black": Colors.white,
+            "textLight": appStateSettings["increaseTextContrast"]
+                ? Colors.white.withOpacity(0.65)
+                : appStateSettings["materialYou"]
+                    ? Colors.white.withOpacity(0.25)
+                    : Color(0xFF494949),
+            "lightDarkAccent": appStateSettings["materialYou"]
+                ? darkenPastel(accentColor, amount: 0.83)
+                : Color(0xFF161616),
+            "lightDarkAccentHeavyLight": lightDarkAccentHeavyLight,
+            "canvasContainer": const Color(0xFF242424),
+            "lightDarkAccentHeavy": const Color(0xFF444444),
+            "shadowColor": const Color(0x69BDBDBD),
+            "shadowColorLight": appStateSettings["materialYou"]
+                ? Colors.transparent
+                : Color(0x28747474),
+            "unPaidUpcoming": Color(0xFF7DB6CC),
+            "unPaidOverdue": Color(0xFF8395FF),
+            "incomeAmount": Color(0xFF62CA77),
+            "expenseAmount": Color(0xFFDA7272),
+            "warningOrange": Color(0xFFDA9C72),
+            "starYellow": Colors.yellow,
+            "dividerColor": appStateSettings["materialYou"]
+                ? Color(0x13FFFFFF)
+                : Color(0xFF161616),
+            "standardContainerColor": getPlatform() == PlatformOS.isIOS
+                ? themeData.canvasColor
+                : appStateSettings["materialYou"]
+                    ? darkenPastel(
+                        themeData.colorScheme.secondaryContainer,
+                        amount: 0.6,
+                      )
+                    : lightDarkAccentHeavyLight,
+          },
+        );
 }
 
 // Ensure you specify a shade, otherwise type will be of MaterialColor which can't be compared
@@ -361,7 +363,7 @@ bool supportsSystemColor() {
       getPlatform() != PlatformOS.isIOS;
 }
 
-getColorScheme(Brightness brightness) {
+ColorScheme getColorScheme(Brightness brightness) {
   if (brightness == Brightness.light) {
     return ColorScheme.fromSeed(
       seedColor: getSettingConstants(appStateSettings)["accentColor"],
@@ -386,7 +388,8 @@ getColorScheme(Brightness brightness) {
   }
 }
 
-SystemUiOverlayStyle getSystemUiOverlayStyle(Brightness brightness) {
+SystemUiOverlayStyle getSystemUiOverlayStyle(
+    AppColors? colors, Brightness brightness) {
   if (brightness == Brightness.light) {
     return SystemUiOverlayStyle(
       statusBarBrightness: Brightness.light,
@@ -397,7 +400,7 @@ SystemUiOverlayStyle getSystemUiOverlayStyle(Brightness brightness) {
       systemNavigationBarColor: getBottomNavbarBackgroundColor(
         colorScheme: getColorScheme(brightness),
         brightness: Brightness.light,
-        lightDarkAccent: appColorsLight.colors["lightDarkAccent"] ?? Colors.red,
+        lightDarkAccent: colors?.colors["lightDarkAccent"] ?? Colors.white,
       ),
     );
   } else {
@@ -410,7 +413,7 @@ SystemUiOverlayStyle getSystemUiOverlayStyle(Brightness brightness) {
       systemNavigationBarColor: getBottomNavbarBackgroundColor(
         colorScheme: getColorScheme(brightness),
         brightness: Brightness.dark,
-        lightDarkAccent: appColorsDark.colors["lightDarkAccent"] ?? Colors.red,
+        lightDarkAccent: colors?.colors["lightDarkAccent"] ?? Colors.black,
       ),
     );
   }
@@ -451,11 +454,51 @@ String colorToHex(Color color) {
   return "#" + hexString.substring(2);
 }
 
-ThemeData? lightTheme;
-ThemeData? darkTheme;
+class CustomColorTheme extends StatelessWidget {
+  const CustomColorTheme(
+      {required this.child, required this.accentColor, super.key});
+  final Widget child;
+  final Color accentColor;
+  @override
+  Widget build(BuildContext context) {
+    ColorScheme colorScheme = ColorScheme.fromSeed(
+      seedColor: accentColor,
+      brightness: determineBrightnessTheme(context),
+    );
+    return Theme(
+      data: generateThemeDataWithExtension(
+        accentColor: accentColor,
+        brightness: Theme.of(context).brightness,
+        themeData: Theme.of(context).copyWith(
+          colorScheme: colorScheme,
+        ),
+      ),
+      child: child,
+    );
+  }
+}
+
+ThemeData generateThemeDataWithExtension(
+    {required ThemeData themeData,
+    required Brightness brightness,
+    required Color accentColor}) {
+  AppColors colors = getAppColors(
+    accentColor: accentColor,
+    brightness: brightness,
+    themeData: themeData,
+  );
+
+  return themeData.copyWith(
+    extensions: <ThemeExtension<dynamic>>[colors],
+    appBarTheme: AppBarTheme(
+      systemOverlayStyle: getSystemUiOverlayStyle(colors, brightness),
+    ),
+  );
+}
 
 ThemeData getLightTheme() {
-  return ThemeData(
+  Brightness brightness = Brightness.light;
+  ThemeData themeData = ThemeData(
     // pageTransitionsTheme: PageTransitionsTheme(builders: {
     //   // the page route animation is set in pushRoute() - functions.dart
     //   TargetPlatform.android: appStateSettings["iOSNavigation"]
@@ -465,7 +508,7 @@ ThemeData getLightTheme() {
     // }),
     fontFamily: appStateSettings["font"],
     fontFamilyFallback: ['Inter'],
-    colorScheme: getColorScheme(Brightness.light),
+    colorScheme: getColorScheme(brightness),
     useMaterial3: true,
     applyElevationOverlayColor: false,
     typography: Typography.material2014(),
@@ -473,9 +516,6 @@ ThemeData getLightTheme() {
         ? lightenPastel(getSettingConstants(appStateSettings)["accentColor"],
             amount: 0.91)
         : Colors.white,
-    appBarTheme: AppBarTheme(
-      systemOverlayStyle: getSystemUiOverlayStyle(Brightness.light),
-    ),
     splashColor: getPlatform() == PlatformOS.isIOS
         ? Colors.transparent
         : appStateSettings["materialYou"]
@@ -486,12 +526,17 @@ ThemeData getLightTheme() {
                     amount: 0.2)
                 .withOpacity(0.5)
             : null,
-    extensions: <ThemeExtension<dynamic>>[appColorsLight],
+  );
+  return generateThemeDataWithExtension(
+    themeData: themeData,
+    brightness: brightness,
+    accentColor: getSettingConstants(appStateSettings)["accentColor"],
   );
 }
 
 ThemeData getDarkTheme() {
-  return ThemeData(
+  Brightness brightness = Brightness.dark;
+  ThemeData themeData = ThemeData(
     // pageTransitionsTheme: PageTransitionsTheme(builders: {
     //   // the page route animation is set in pushRoute() - functions.dart
     //   TargetPlatform.android: appStateSettings["iOSNavigation"]
@@ -501,7 +546,7 @@ ThemeData getDarkTheme() {
     // }),
     fontFamily: appStateSettings["font"],
     fontFamilyFallback: ['Inter'],
-    colorScheme: getColorScheme(Brightness.dark),
+    colorScheme: getColorScheme(brightness),
     useMaterial3: true,
     typography: Typography.material2014(),
     canvasColor: appStateSettings["forceFullDarkBackground"] == true
@@ -510,9 +555,6 @@ ThemeData getDarkTheme() {
             ? darkenPastel(getSettingConstants(appStateSettings)["accentColor"],
                 amount: 0.92)
             : Colors.black,
-    appBarTheme: AppBarTheme(
-      systemOverlayStyle: getSystemUiOverlayStyle(Brightness.dark),
-    ),
     splashColor: getPlatform() == PlatformOS.isIOS
         ? Colors.transparent
         : appStateSettings["materialYou"]
@@ -523,6 +565,10 @@ ThemeData getDarkTheme() {
                     amount: 0.1)
                 .withOpacity(0.2)
             : null,
-    extensions: <ThemeExtension<dynamic>>[appColorsDark],
+  );
+  return generateThemeDataWithExtension(
+    themeData: themeData,
+    brightness: brightness,
+    accentColor: getSettingConstants(appStateSettings)["accentColor"],
   );
 }

@@ -120,8 +120,6 @@ Future<bool> initializeSettings() async {
 
   timeDilation = double.parse(appStateSettings["animationSpeed"].toString());
 
-  generateColors();
-
   Map<String, dynamic> defaultPreferences = await getDefaultPreferences();
 
   fixHomePageOrder(defaultPreferences, "homePageOrder");
@@ -191,12 +189,6 @@ Future<bool> updateSettings(
         purchasesStateKey.currentState?.refreshState();
       }
     }
-  }
-
-  if (setting == "batterySaver" ||
-      setting == "materialYou" ||
-      setting == "increaseTextContrast") {
-    generateColors();
   }
 
   return true;

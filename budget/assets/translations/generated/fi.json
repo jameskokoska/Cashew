@@ -353,6 +353,7 @@
   "translations-help": "Jos haluat auttaa käännöksissä, lähetä sähköpostia",
   "no-transactions-for": "Ei tapahtumia",
   "average-spent": "keskimääräinen käytetty",
+  "average-saved": "keskimäärin säästetty",
   "select-icon": "Valitse kuvake",
   "1-day-ago": "1 päivä sitten",
   "1-hour-ago": "1 tunti sitten",
@@ -1126,5 +1127,9 @@
   "number-pad-format": "Numeronäppäimistön muoto",
   "set-lower-range": "Alempi alue",
   "set-upper-range": "Upper Range",
-  "set-range": "Aseta alue"
+  "set-range": "Aseta alue",
+  "amount-color": "Määrä Väri",
+  "green-or-red": "Vihreä / punainen",
+  "no-color": "Ei väriä",
+  "please-check-your-system-settings": "Tarkista järjestelmäasetukset"
 }

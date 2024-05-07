@@ -353,6 +353,7 @@
   "translations-help": "Ако искате да помогнете с преводи, моля, изпратете имейл",
   "no-transactions-for": "Няма транзакции за",
   "average-spent": "Средно изразходван",
+  "average-saved": "средно спестени",
   "select-icon": "Изберете икона",
   "1-day-ago": "Преди 1 ден",
   "1-hour-ago": "преди 1 час",
@@ -1126,5 +1127,9 @@
   "number-pad-format": "Формат на цифровата клавиатура",
   "set-lower-range": "Долен диапазон",
   "set-upper-range": "Горен диапазон",
-  "set-range": "Задайте диапазон"
+  "set-range": "Задайте диапазон",
+  "amount-color": "Сума Цвят",
+  "green-or-red": "Зелено / Червено",
+  "no-color": "Без цвят",
+  "please-check-your-system-settings": "Моля, проверете системните си настройки"
 }

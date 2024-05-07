@@ -6,10 +6,12 @@ import 'package:budget/functions.dart';
 import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/settings.dart';
+import 'package:budget/widgets/animatedExpanded.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/dropdownSelect.dart';
 import 'package:budget/widgets/exportCSV.dart';
 import 'package:budget/widgets/globalSnackbar.dart';
+import 'package:budget/widgets/outlinedButtonStacked.dart';
 import 'package:budget/widgets/tableEntry.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openPopup.dart';
@@ -228,19 +230,33 @@ class _ImportCSVState extends State<ImportCSV> {
         }
       }
 
+      GlobalKey<_CustomDateFormatInputState> customDateFormatKey = GlobalKey();
+      Color containerColor = appStateSettings["materialYou"]
+          ? dynamicPastel(
+              context,
+              Theme.of(context).colorScheme.secondaryContainer,
+              amountDark: 0.2,
+              amountLight: 0.35,
+            )
+          : getColor(context, "lightDarkAccentHeavyLight").withOpacity(0.6);
       openBottomSheet(
         context,
         PopupFramework(
+          hasPadding: false,
           title: "assign-columns".tr(),
           subtitle: (fileContents.length - 1).toString() +
               " " +
               "transactions-in-the-csv".tr(),
           child: Column(
             children: [
-              TableEntry(firstEntry: firstEntry, headers: headers),
+              TableEntry(
+                firstEntry: firstEntry,
+                headers: headers,
+                padding: const EdgeInsets.symmetric(horizontal: 18),
+              ),
               Padding(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 8, vertical: 15),
+                    const EdgeInsets.symmetric(horizontal: 18, vertical: 15),
                 child: Column(
                   children: [
                     Padding(
@@ -249,72 +265,18 @@ class _ImportCSVState extends State<ImportCSV> {
                         padding:
                             EdgeInsets.symmetric(vertical: 10, horizontal: 15),
                         decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: appStateSettings["materialYou"]
-                                ? dynamicPastel(
-                                    context,
-                                    Theme.of(context)
-                                        .colorScheme
-                                        .secondaryContainer,
-                                    amount: 0.2,
-                                  )
-                                : getColor(
-                                    context, "lightDarkAccentHeavyLight")),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: Wrap(
-                                alignment: WrapAlignment.spaceBetween,
-                                runAlignment: WrapAlignment.spaceBetween,
-                                crossAxisAlignment: WrapCrossAlignment.center,
-                                children: [
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      TextFont(
-                                        text: "date-format".tr(),
-                                        fontSize: 15,
-                                      ),
-                                      TextFont(
-                                        text: "example".tr() +
-                                            " " +
-                                            "dd/MM/yyyy HH:mm",
-                                        fontSize: 12,
-                                        maxLines: 5,
-                                      ),
-                                      TextFont(
-                                        text: "date-format-note".tr(),
-                                        maxLines: 5,
-                                        fontSize: 12,
-                                      ),
-                                      SizedBox(height: 10),
-                                    ],
-                                  ),
-                                  Container(
-                                    child: TextInput(
-                                      labelText: "dd/MM/yyyy HH:mm",
-                                      padding: EdgeInsets.zero,
-                                      onChanged: (value) {
-                                        dateFormat = value;
-                                      },
-                                      backgroundColor:
-                                          appStateSettings["materialYou"]
-                                              ? null
-                                              : dynamicPastel(
-                                                  context,
-                                                  Theme.of(context)
-                                                      .colorScheme
-                                                      .secondaryContainer,
-                                                  amount: 0.2,
-                                                ).withOpacity(0.4),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                          ],
+                          borderRadius: BorderRadius.circular(10),
+                          color: containerColor,
+                        ),
+                        child: CustomDateFormatInput(
+                          key: customDateFormatKey,
+                          setDateFormat: (value) {
+                            dateFormat = value;
+                          },
+                          firstDateString: firstEntry[assignedColumns["date"]
+                                  ?["setHeaderIndex"]]
+                              .toString()
+                              .trim(),
                         ),
                       ),
                     ),
@@ -326,16 +288,7 @@ class _ImportCSVState extends State<ImportCSV> {
                               vertical: 10, horizontal: 15),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
-                            color: appStateSettings["materialYou"]
-                                ? dynamicPastel(
-                                    context,
-                                    Theme.of(context)
-                                        .colorScheme
-                                        .secondaryContainer,
-                                    amount: 0.2,
-                                  )
-                                : getColor(
-                                    context, "lightDarkAccentHeavyLight"),
+                            color: containerColor,
                           ),
                           child: Row(
                             children: [
@@ -393,9 +346,19 @@ class _ImportCSVState extends State<ImportCSV> {
                                                 "setHeaderIndex"] =
                                             _getHeaderIndex(
                                                 headers, setHeaderValue);
+                                        if (key == "date") {
+                                          customDateFormatKey.currentState
+                                              ?.updateFirstDateString(
+                                                  firstEntry[assignedColumns[
+                                                              "date"]
+                                                          ?["setHeaderIndex"]]
+                                                      .toString()
+                                                      .trim());
+                                        }
                                       },
-                                      backgroundColor:
-                                          Theme.of(context).canvasColor,
+                                      backgroundColor: Theme.of(context)
+                                          .colorScheme
+                                          .secondaryContainer,
                                       checkInitialValue: true,
                                     ),
                                   ],
@@ -408,35 +371,39 @@ class _ImportCSVState extends State<ImportCSV> {
                   ],
                 ),
               ),
-              Button(
-                label: "import".tr(),
-                onTap: () async {
-                  try {
-                    await _importEntries(
-                        assignedColumns, dateFormat, fileContents);
-                  } catch (e) {
-                    openPopup(
-                      context,
-                      icon: appStateSettings["outlinedIcons"]
-                          ? Icons.warning_outlined
-                          : Icons.warning_rounded,
-                      title: "csv-error".tr(),
-                      description:
-                          "consider-csv-template".tr() + "\n" + e.toString(),
-                      onSubmit: () {
-                        Navigator.pop(context);
-                      },
-                      onSubmitLabel: "ok".tr(),
-                      onCancelWithBoxContext: (BuildContext boxContext) async {
-                        await importFromSheets
-                            ? getGoogleSheetTemplate(context)
-                            : saveSampleCSV(boxContext: boxContext);
-                        Navigator.pop(context);
-                      },
-                      onCancelLabel: "get-template".tr(),
-                    );
-                  }
-                },
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 18),
+                child: Button(
+                  label: "import".tr(),
+                  onTap: () async {
+                    try {
+                      await _importEntries(
+                          assignedColumns, dateFormat, fileContents);
+                    } catch (e) {
+                      openPopup(
+                        context,
+                        icon: appStateSettings["outlinedIcons"]
+                            ? Icons.warning_outlined
+                            : Icons.warning_rounded,
+                        title: "csv-error".tr(),
+                        description:
+                            "consider-csv-template".tr() + "\n" + e.toString(),
+                        onSubmit: () {
+                          Navigator.pop(context);
+                        },
+                        onSubmitLabel: "ok".tr(),
+                        onCancelWithBoxContext:
+                            (BuildContext boxContext) async {
+                          await importFromSheets
+                              ? getGoogleSheetTemplate(context)
+                              : saveSampleCSV(boxContext: boxContext);
+                          Navigator.pop(context);
+                        },
+                        onCancelLabel: "get-template".tr(),
+                      );
+                    }
+                  },
+                ),
               ),
             ],
           ),
@@ -684,6 +651,129 @@ class _ImportCSVState extends State<ImportCSV> {
             text: "template".tr(),
           ),
         ),
+      ],
+    );
+  }
+}
+
+class CustomDateFormatInput extends StatefulWidget {
+  const CustomDateFormatInput(
+      {required this.firstDateString, required this.setDateFormat, super.key});
+  final String firstDateString;
+  final Function(String dateFormat) setDateFormat;
+
+  @override
+  State<CustomDateFormatInput> createState() => _CustomDateFormatInputState();
+}
+
+class _CustomDateFormatInputState extends State<CustomDateFormatInput> {
+  String setDateFormat = "";
+  late String firstDateString = widget.firstDateString;
+
+  updateFirstDateString(String firstDateString) {
+    setState(() {
+      this.firstDateString = firstDateString;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    DateTime? dateTimeParsed;
+    try {
+      dateTimeParsed =
+          tryToParseCustomDateFormat(context, setDateFormat, firstDateString);
+    } catch (e) {
+      dateTimeParsed = null;
+    }
+    String parsedDateText = dateTimeParsed == null
+        ? "???"
+        : getWordedDateShort(dateTimeParsed,
+                includeYear: true, showTodayTomorrow: false) +
+            " " +
+            getWordedTime(context.locale.toString(), dateTimeParsed);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        TextFont(
+          text: "date-format".tr(),
+          fontSize: 15,
+        ),
+        TextFont(
+          text: "example".tr() + " " + "dd/MM/yyyy HH:mm",
+          fontSize: 12,
+          maxLines: 5,
+        ),
+        TextFont(
+          text: "date-format-note".tr(),
+          maxLines: 5,
+          fontSize: 12,
+        ),
+        SizedBox(height: 10),
+        TextInput(
+          labelText: "date-format".tr(),
+          padding: EdgeInsets.zero,
+          onChanged: (value) {
+            setState(() {
+              setDateFormat = value;
+              widget.setDateFormat(value);
+            });
+          },
+        ),
+        AnimatedExpanded(
+          expand: setDateFormat != "",
+          child: Padding(
+            padding: const EdgeInsets.only(top: 10, bottom: 5),
+            child: Align(
+              alignment: Alignment.center,
+              child: Wrap(
+                alignment: WrapAlignment.center,
+                crossAxisAlignment: WrapCrossAlignment.center,
+                runAlignment: WrapAlignment.center,
+                direction: Axis.horizontal,
+                runSpacing: 5,
+                children: [
+                  OutlinedContainer(
+                    borderRadius: 10,
+                    filled: true,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: AnimatedSizeSwitcher(
+                        child: TextFont(
+                          key: ValueKey(firstDateString),
+                          text: firstDateString,
+                          fontSize: 15,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Icon(
+                      appStateSettings["outlinedIcons"]
+                          ? Icons.arrow_forward_outlined
+                          : Icons.arrow_forward_rounded,
+                    ),
+                  ),
+                  OutlinedContainer(
+                    borderRadius: 10,
+                    filled: true,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: AnimatedSizeSwitcher(
+                        child: TextFont(
+                          key: ValueKey(parsedDateText),
+                          text: parsedDateText,
+                          fontSize: 15,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        )
       ],
     );
   }
@@ -944,11 +1034,13 @@ class _ImportingEntriesPopupState extends State<ImportingEntriesPopup> {
         dateCreated.second,
       );
     } catch (e) {
-      String stringToParse =
-          row[assignedColumns["date"]!["setHeaderIndex"]].toString().trim();
+      String stringToParse = row[assignedColumns["date"]!["setHeaderIndex"]]
+          .toString()
+          .replaceAll("  ", " ")
+          .trim();
       DateTime? result;
       if (dateFormat == "") {
-        // Try a few common date formats
+        // Try common date formats
         for (String commonFormat in getCommonDateFormats()) {
           result = tryDateFormatting(context, commonFormat, stringToParse);
           if (result != null) break;
@@ -962,20 +1054,14 @@ class _ImportingEntriesPopupState extends State<ImportingEntriesPopup> {
           dateCreated = result;
         }
       } else {
-        DateFormat format =
-            DateFormat(dateFormat.toString(), context.locale.toString());
         try {
-          dateCreated = format.parse(stringToParse);
-          dateCreated = DateTime(
-            dateCreated.year,
-            dateCreated.month,
-            dateCreated.day,
-            dateCreated.hour,
-            dateCreated.minute,
+          dateCreated = tryToParseCustomDateFormat(
+            context,
+            dateFormat,
+            stringToParse,
           );
         } catch (e) {
-          throw "Failed to parse date and time! Please use the custom 'Date Format' that matches your data. \n\n  Details: " +
-              e.toString();
+          throw e.toString();
         }
       }
     }
@@ -1200,5 +1286,30 @@ DateTime? tryDateFormatting(
     dateCreated = null;
     print("Failed to parse date and time!" + e.toString());
   }
+  return dateCreated;
+}
+
+DateTime tryToParseCustomDateFormat(
+    BuildContext context, String dateFormat, String stringToParse) {
+  DateFormat format =
+      DateFormat(dateFormat.toString(), context.locale.toString());
+  DateTime dateCreated;
+  try {
+    dateCreated = format.parse(stringToParse);
+  } catch (e) {
+    try {
+      dateCreated = format.parse(stringToParse.replaceAll("  ", " ").trim());
+    } catch (e) {
+      throw "Failed to parse date and time! Please use the custom 'Date Format' that matches your data. \n\n  Details: " +
+          e.toString();
+    }
+  }
+  dateCreated = DateTime(
+    dateCreated.year,
+    dateCreated.month,
+    dateCreated.day,
+    dateCreated.hour,
+    dateCreated.minute,
+  );
   return dateCreated;
 }

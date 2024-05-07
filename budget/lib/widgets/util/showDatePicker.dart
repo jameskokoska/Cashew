@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'dart:ui';
 
 import 'package:budget/colors.dart';
@@ -11,6 +12,7 @@ import 'package:budget/widgets/util/showTimePicker.dart';
 import 'package:budget/widgets/util/widgetSize.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:budget/widgets/openBottomSheet.dart';
 
 Future<DateTime?> showCustomDatePicker(
   BuildContext context,
@@ -123,7 +125,9 @@ Future<DateTimeRangeOrAllTime> showCustomDateRangePicker(
                 child: Transform.translate(
                   offset: Offset(0, -10),
                   child: Padding(
-                    padding: const EdgeInsets.only(right: 30),
+                    padding: EdgeInsets.only(
+                        right: max(
+                            (MediaQuery.sizeOf(context).width / 2 - 300), 30)),
                     child: Opacity(
                       opacity: allTime ? 1 : 0.7,
                       child: FAB(

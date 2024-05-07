@@ -194,6 +194,7 @@ Future<Map<String, dynamic>> getDefaultPreferences() async {
     "showAccountLabelTagInTransactionEntry": false,
     "showTransactionsMonthlySpendingSummary": true,
     "showTransactionsBalanceTransferTab": true,
+    "balanceTransferAmountColor": "green-or-red", // "green-or-red", "no-color"
     //Show all categories or only income/expense
     "showAllCategoriesWhenSelecting": true,
     // Search filters strings

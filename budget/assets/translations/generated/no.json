@@ -353,6 +353,7 @@
   "translations-help": "Hvis du vil hjelpe deg med oversettelser, kan du sende en e -post",
   "no-transactions-for": "Ingen transaksjoner for",
   "average-spent": "gjennomsnittlig brukt",
+  "average-saved": "gjennomsnittlig spart",
   "select-icon": "Velg ikon",
   "1-day-ago": "1 dag siden",
   "1-hour-ago": "1 time siden",
@@ -1126,5 +1127,9 @@
   "number-pad-format": "Nummertastaturformat",
   "set-lower-range": "Nedre rekkevidde",
   "set-upper-range": "Øvre rekkevidde",
-  "set-range": "Angi rekkevidde"
+  "set-range": "Angi rekkevidde",
+  "amount-color": "Mengde Farge",
+  "green-or-red": "Grønn / rød",
+  "no-color": "Ingen farge",
+  "please-check-your-system-settings": "Vennligst sjekk systeminnstillingene dine"
 }

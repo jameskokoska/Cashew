@@ -2,47 +2,61 @@ import 'package:animations/animations.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
 import 'package:budget/struct/settings.dart';
+import 'package:budget/widgets/animatedExpanded.dart';
 import 'package:budget/widgets/breathingAnimation.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/tappable.dart';
+import 'package:budget/widgets/textWidgets.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:local_auth/local_auth.dart';
 
-Future<bool?> checkBiometrics({
+enum AuthResult {
+  waiting,
+  authenticated,
+  unauthenticated,
+  error,
+  errorBackupRestoreLaunch,
+}
+
+Future<AuthResult> checkBiometrics({
   bool checkAlways = false,
 }) async {
-  final bool requireAuth =
-      checkAlways || appStateSettings["requireAuth"] == true;
   try {
-    if (kIsWeb) return true;
-    final LocalAuthentication auth = LocalAuthentication();
-    biometricsAvailable = kIsWeb == false && await auth.canCheckBiometrics ||
-        await auth.isDeviceSupported();
-    if (biometricsAvailable == false) {
-      if (requireAuth)
-        return null;
-      else
-        return false;
-    } else if (requireAuth == true && biometricsAvailable == true) {
-      await auth.stopAuthentication();
-      return await auth.authenticate(
-        localizedReason: "verify-identity".tr(),
-        options: const AuthenticationOptions(biometricOnly: true),
-      );
-    } else {
-      return true;
+    if (kIsWeb) {
+      authAvailable = false;
+      await updateSettings("requireAuth", false, updateGlobalState: false);
+      return AuthResult.authenticated;
     }
+
+    final LocalAuthentication auth = LocalAuthentication();
+    authAvailable =
+        await auth.canCheckBiometrics || await auth.isDeviceSupported();
+
+    final bool requireAuth =
+        checkAlways || appStateSettings["requireAuth"] == true;
+    if (requireAuth == false) return AuthResult.authenticated;
+
+    await auth.stopAuthentication();
+
+    if (authAvailable) {
+      bool biometricsOnly = (await auth.canCheckBiometrics);
+      return (await auth.authenticate(
+        localizedReason: "verify-identity".tr(),
+        options: AuthenticationOptions(biometricOnly: biometricsOnly),
+      ))
+          ? AuthResult.authenticated
+          : AuthResult.unauthenticated;
+    }
+
+    return isDatabaseImportedOnThisSession
+        ? AuthResult.errorBackupRestoreLaunch
+        : AuthResult.error;
   } catch (e) {
-    print("Error with biometrics: " + e.toString());
-    // on iOS don't allow bypass if biometric fails
-    if (getPlatform() == PlatformOS.isIOS && biometricsAvailable)
-      return false;
-    else if (requireAuth)
-      return null;
-    else
-      return false;
+    return isDatabaseImportedOnThisSession
+        ? AuthResult.errorBackupRestoreLaunch
+        : AuthResult.error;
   }
 }
 
@@ -55,22 +69,27 @@ class InitializeBiometrics extends StatefulWidget {
 }
 
 class _InitializeBiometricsState extends State<InitializeBiometrics> {
-  bool? authenticated;
+  AuthResult authResult = AuthResult.waiting;
   @override
   void initState() {
     super.initState();
     Future.delayed(Duration.zero, () async {
-      final bool? result = await checkBiometrics();
-      setState(() {
-        authenticated = result;
-      });
-      if (result == null) {
-        _biometricErrorPopup();
-        setState(() {
-          authenticated = true;
-        });
-      }
+      _biometricCheck();
     });
+  }
+
+  _biometricCheck() async {
+    AuthResult result = await checkBiometrics();
+    setState(() {
+      authResult = result;
+    });
+    if (authResult == AuthResult.errorBackupRestoreLaunch) {
+      // Allow bypass on initial backup restore launch
+      _biometricErrorPopup();
+      setState(() {
+        authResult = AuthResult.authenticated;
+      });
+    }
   }
 
   _biometricErrorPopup() {
@@ -106,18 +125,9 @@ class _InitializeBiometricsState extends State<InitializeBiometrics> {
       body: Tappable(
         onTap: () async {
           setState(() {
-            authenticated = null;
+            authResult = AuthResult.waiting;
           });
-          bool? result = await checkBiometrics();
-          setState(() {
-            authenticated = result;
-          });
-          if (result == null) {
-            _biometricErrorPopup();
-            setState(() {
-              authenticated = true;
-            });
-          }
+          _biometricCheck();
         },
         child: Column(
           key: ValueKey(0),
@@ -135,7 +145,7 @@ class _InitializeBiometricsState extends State<InitializeBiometrics> {
                     return FadeScaleTransition(
                         animation: animation, child: child);
                   },
-                  child: authenticated == false
+                  child: authResult != AuthResult.waiting
                       ? Icon(
                           Icons.lock,
                           size: 50,
@@ -144,12 +154,28 @@ class _InitializeBiometricsState extends State<InitializeBiometrics> {
                       : SizedBox.shrink(),
                 ),
               ),
-            )
+            ),
+            AnimatedExpanded(
+              expand: authResult == AuthResult.error ||
+                  authResult == AuthResult.errorBackupRestoreLaunch,
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 18, vertical: 20),
+                child: TextFont(
+                  text: "biometrics-error-description".tr() +
+                      "\n" +
+                      "please-check-your-system-settings".tr(),
+                  textAlign: TextAlign.center,
+                  maxLines: 5,
+                  fontSize: 16,
+                ),
+              ),
+            ),
           ],
         ),
       ),
     );
-    if (authenticated == true) {
+    if (authResult == AuthResult.authenticated) {
       child = SizedBox(key: ValueKey(1), child: widget.child);
     }
     return AnimatedSwitcher(

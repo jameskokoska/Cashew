@@ -63,14 +63,10 @@ class ObjectivePage extends StatelessWidget {
         stream: database.getObjective(objectivePk),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            ColorScheme objectiveColorScheme = ColorScheme.fromSeed(
-              seedColor: HexColor(snapshot.data?.colour,
-                  defaultColor: Theme.of(context).colorScheme.primary),
-              brightness: determineBrightnessTheme(context),
-            );
-            return Theme(
-              data:
-                  Theme.of(context).copyWith(colorScheme: objectiveColorScheme),
+            Color accentColor = HexColor(snapshot.data?.colour,
+                defaultColor: Theme.of(context).colorScheme.primary);
+            return CustomColorTheme(
+              accentColor: accentColor,
               child: _ObjectivePageContent(
                 objective: snapshot.data!,
               ),

@@ -21,6 +21,7 @@ import 'package:budget/widgets/settingsContainers.dart';
 import 'package:budget/widgets/statusBox.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
+import 'package:budget/widgets/util/deepLinks.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/main.dart';
@@ -89,7 +90,8 @@ class _InitializeNotificationServiceState
   }
 }
 
-Future queueTransactionFromMessage(String messageString) async {
+Future queueTransactionFromMessage(String messageString,
+    {bool willPushRoute = true, DateTime? dateTime}) async {
   String? title;
   double? amountDouble;
   List<ScannerTemplate> scannerTemplates =
@@ -125,25 +127,38 @@ Future queueTransactionFromMessage(String messageString) async {
   category = foundTitle?.category;
   if (category == null) {
     category = await database
-        .getCategoryInstanceOrNull(templateFound.defaultCategoryFk ?? "");
+        .getCategoryInstanceOrNull(templateFound.defaultCategoryFk);
   }
 
   TransactionWallet? wallet = templateFound.walletFk == "-1"
       ? null
-      : await database.getWalletInstance(templateFound.walletFk);
+      : await database.getWalletInstanceOrNull(templateFound.walletFk);
 
-  pushRoute(
-    navigatorKey.currentContext!,
-    AddTransactionPage(
-      useCategorySelectedIncome: true,
-      routesToPopAfterDelete: RoutesToPopAfterDelete.None,
-      selectedAmount: amountDouble,
-      selectedTitle: title,
-      selectedCategory: category,
-      startInitialAddTransactionSequence: false,
-      selectedWallet: wallet,
-    ),
-  );
+  if (navigatorKey.currentContext != null) {
+    if (willPushRoute) {
+      pushRoute(
+        navigatorKey.currentContext!,
+        AddTransactionPage(
+          useCategorySelectedIncome: true,
+          routesToPopAfterDelete: RoutesToPopAfterDelete.None,
+          selectedAmount: amountDouble,
+          selectedTitle: title,
+          selectedCategory: category,
+          startInitialAddTransactionSequence: false,
+          selectedWallet: wallet,
+          selectedDate: dateTime,
+        ),
+      );
+    } else {
+      processAddTransactionFromParams(navigatorKey.currentContext!, {
+        "title": title,
+        "categoryPk": category?.categoryPk,
+        "walletPk": wallet?.walletPk,
+        "amount": amountDouble.toString(),
+        "date": dateTime.toString(),
+      });
+    }
+  }
 }
 
 String getNotificationMessage(ServiceNotificationEvent event) {
@@ -180,11 +195,14 @@ class _AutoTransactionsPageNotificationsState
       dragDownToDismiss: true,
       title: "Auto Transactions",
       actions: [
-        RefreshButton(onTap: () async {
-          loadingIndeterminateKey.currentState?.setVisibility(true);
-          setState(() {});
-          loadingIndeterminateKey.currentState?.setVisibility(false);
-        }),
+        RefreshButton(
+          timeout: Duration.zero,
+          onTap: () async {
+            loadingIndeterminateKey.currentState?.setVisibility(true);
+            setState(() {});
+            loadingIndeterminateKey.currentState?.setVisibility(false);
+          },
+        ),
       ],
       listWidgets: [
         Padding(
@@ -969,7 +987,7 @@ class EmailsList extends StatelessWidget {
                                   ? Padding(
                                       padding: const EdgeInsets.only(bottom: 5),
                                       child: TextFont(
-                                        text: "Email parsing failed.",
+                                        text: "Parsing failed.",
                                         fontWeight: FontWeight.bold,
                                         fontSize: 17,
                                       ),

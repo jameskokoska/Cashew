@@ -353,6 +353,7 @@
   "translations-help": "Εάν θέλετε να βοηθήσετε με μεταφράσεις, στείλτε email",
   "no-transactions-for": "Χωρίς συναλλαγές για",
   "average-spent": "μέσος δαπάνη",
+  "average-saved": "κατά μέσο όρο αποθηκευμένο",
   "select-icon": "Επιλέξτε εικονίδιο",
   "1-day-ago": "Πριν από 1 ημέρα",
   "1-hour-ago": "Πριν από 1 ώρα",
@@ -1126,5 +1127,9 @@
   "number-pad-format": "Μορφή πληκτρολογίου αριθμών",
   "set-lower-range": "Κάτω Εύρος",
   "set-upper-range": "Άνω Εύρος",
-  "set-range": "Ρύθμιση εύρους"
+  "set-range": "Ρύθμιση εύρους",
+  "amount-color": "Ποσό Χρώμα",
+  "green-or-red": "Πράσινο / Κόκκινο",
+  "no-color": "Χωρίς Χρώμα",
+  "please-check-your-system-settings": "Ελέγξτε τις ρυθμίσεις του συστήματός σας"
 }

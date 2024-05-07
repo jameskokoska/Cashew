@@ -353,6 +353,7 @@
   "translations-help": "اگر مایل به کمک به ترجمه ها هستید ، لطفا ایمیل کنید",
   "no-transactions-for": "بدون معامله برای",
   "average-spent": "متوسط ​​خرج کردن",
+  "average-saved": "میانگین ذخیره شده",
   "select-icon": "نماد را انتخاب کنید",
   "1-day-ago": "1 روز پیش",
   "1-hour-ago": "1 ساعت پیش",
@@ -1126,5 +1127,9 @@
   "number-pad-format": "فرمت صفحه شماره",
   "set-lower-range": "محدوده پایین تر",
   "set-upper-range": "محدوده بالایی",
-  "set-range": "محدوده را تنظیم کنید"
+  "set-range": "محدوده را تنظیم کنید",
+  "amount-color": "مقدار رنگ",
+  "green-or-red": "قرمز سبز",
+  "no-color": "بدون رنگ",
+  "please-check-your-system-settings": "لطفا تنظیمات سیستم خود را بررسی کنید"
 }

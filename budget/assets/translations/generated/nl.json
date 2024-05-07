@@ -353,6 +353,7 @@
   "translations-help": "Als u wilt helpen met vertalingen, stuur dan een e -mail",
   "no-transactions-for": "Geen transacties voor",
   "average-spent": "Gemiddeld besteed",
+  "average-saved": "gemiddeld bespaard",
   "select-icon": "Selecteer Pictogram",
   "1-day-ago": "1 dag geleden",
   "1-hour-ago": "1 uur geleden",
@@ -1126,5 +1127,9 @@
   "number-pad-format": "Numeriek toetsenbordformaat",
   "set-lower-range": "Lager bereik",
   "set-upper-range": "Bovenste bereik",
-  "set-range": "Bereik instellen"
+  "set-range": "Bereik instellen",
+  "amount-color": "Hoeveelheid Kleur",
+  "green-or-red": "Groen/rood",
+  "no-color": "Geen kleur",
+  "please-check-your-system-settings": "Controleer uw systeeminstellingen"
 }

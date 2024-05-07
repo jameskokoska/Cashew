@@ -58,7 +58,7 @@ class _SelectItemsState extends State<SelectItems> {
 
   @override
   Widget build(BuildContext context) {
-    double borderRadius = getPlatform() == PlatformOS.isIOS ? 10 : 20;
+    double borderRadius = getPlatform() == PlatformOS.isIOS ? 10 : 15;
     return Column(
       children: <Widget>[
         for (int i = 0; i < widget.items.length; i++)

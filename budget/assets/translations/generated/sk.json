@@ -353,6 +353,7 @@
   "translations-help": "Ak chcete pomôcť s prekladom, napíšte email",
   "no-transactions-for": "Žiadne transakcie za",
   "average-spent": "Priemerne utratené",
+  "average-saved": "priemerne ušetrené",
   "select-icon": "Vybrať ikonu",
   "1-day-ago": "pred 1 dňom",
   "1-hour-ago": "pred 1 hodinou",
@@ -1126,5 +1127,9 @@
   "number-pad-format": "Formát číselnej klávesnice",
   "set-lower-range": "Dolný rozsah",
   "set-upper-range": "Horný rozsah",
-  "set-range": "Nastaviť rozsah"
+  "set-range": "Nastaviť rozsah",
+  "amount-color": "Množstvo Farba",
+  "green-or-red": "Zelená / červená",
+  "no-color": "Žiadna farba",
+  "please-check-your-system-settings": "Skontrolujte nastavenia systému"
 }

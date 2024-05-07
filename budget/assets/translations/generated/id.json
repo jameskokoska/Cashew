@@ -353,6 +353,7 @@
   "translations-help": "Jika Anda ingin membantu menerjemahkan, silakan kirim email",
   "no-transactions-for": "Tidak ada transaksi untuk",
   "average-spent": "rata-rata dihabiskan",
+  "average-saved": "rata-rata disimpan",
   "select-icon": "Pilih ikon",
   "1-day-ago": "1 hari yang lalu",
   "1-hour-ago": "1 jam yang lalu",
@@ -1126,5 +1127,9 @@
   "number-pad-format": "Format Papan Angka",
   "set-lower-range": "Kisaran Bawah",
   "set-upper-range": "Kisaran Atas",
-  "set-range": "Tetapkan Rentang"
+  "set-range": "Tetapkan Rentang",
+  "amount-color": "Jumlah Warna",
+  "green-or-red": "Hijau merah",
+  "no-color": "Tanpa warna",
+  "please-check-your-system-settings": "Silakan periksa pengaturan sistem Anda"
 }

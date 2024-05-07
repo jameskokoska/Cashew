@@ -85,7 +85,7 @@ void main() async {
 
 late Map<String, dynamic> currenciesJSON;
 late Map<String, dynamic> languageNamesJSON;
-bool biometricsAvailable = false;
+bool authAvailable = false;
 late bool entireAppLoaded;
 late PackageInfo packageInfoGlobal;
 
@@ -122,9 +122,6 @@ class App extends StatelessWidget {
     //   child:
     print("Rebuilt Material App");
 
-    lightTheme = getLightTheme();
-    darkTheme = getDarkTheme();
-
     return MaterialApp(
       showPerformanceOverlay: kProfileMode,
       localizationsDelegates: context.localizationDelegates,
@@ -143,8 +140,8 @@ class App extends StatelessWidget {
       key: ValueKey('BedouAppMain'),
       title: 'Bedou',
       navigatorKey: navigatorKey,
-      theme: lightTheme,
-      darkTheme: darkTheme,
+      theme: getLightTheme(),
+      darkTheme: getDarkTheme(),
       scrollBehavior: ScrollBehaviorOverride(),
       themeMode: getSettingConstants(appStateSettings)["theme"],
       home: AnimatedSwitcher(

@@ -197,8 +197,8 @@ class TextInput extends StatelessWidget {
                 fontFamilyFallback: ['Inter'],
               ),
               cursorColor: dynamicPastel(
-                  context, HexColor(appStateSettings["accentColor"]),
-                  amount: 0.1, inverse: true),
+                  context, Theme.of(context).colorScheme.primary,
+                  amount: 0.2, inverse: false),
               decoration: new InputDecoration(
                 counterText: "",
                 hintStyle: TextStyle(color: getColor(context, "textLight")),

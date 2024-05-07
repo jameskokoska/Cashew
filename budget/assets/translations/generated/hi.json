@@ -353,6 +353,7 @@
   "translations-help": "यदि आप अनुवादों के साथ मदद करना चाहते हैं, तो कृपया ईमेल करें",
   "no-transactions-for": "के लिए कोई लेनदेन नहीं",
   "average-spent": "औसत खर्च",
+  "average-saved": "औसत बचाया गया",
   "select-icon": "आइकन का चयन करें",
   "1-day-ago": "1 दिन पहले",
   "1-hour-ago": "1 घंटे पहले",
@@ -1126,5 +1127,9 @@
   "number-pad-format": "नंबर पैड प्रारूप",
   "set-lower-range": "निचली सीमा",
   "set-upper-range": "ऊपरी सीमा",
-  "set-range": "रेंज सेट करें"
+  "set-range": "रेंज सेट करें",
+  "amount-color": "राशि रंग",
+  "green-or-red": "हरी लाल",
+  "no-color": "रंग नहीं",
+  "please-check-your-system-settings": "कृपया अपनी सिस्टम सेटिंग जांचें"
 }
