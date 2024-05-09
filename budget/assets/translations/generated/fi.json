@@ -1131,5 +1131,7 @@
   "amount-color": "Määrä Väri",
   "green-or-red": "Vihreä / punainen",
   "no-color": "Ei väriä",
-  "please-check-your-system-settings": "Tarkista järjestelmäasetukset"
+  "please-check-your-system-settings": "Tarkista järjestelmäasetukset",
+  "maximum-precision": "Suurin tarkkuus",
+  "maximum-precision-description": "12 desimaalin tarkkuutta tuetaan"
 }

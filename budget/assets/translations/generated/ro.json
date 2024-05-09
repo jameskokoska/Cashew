@@ -1131,5 +1131,7 @@
   "amount-color": "Cantitate Culoare",
   "green-or-red": "Verde/Roșu",
   "no-color": "Fără culoare",
-  "please-check-your-system-settings": "Vă rugăm să verificați setările sistemului dvs"
+  "please-check-your-system-settings": "Vă rugăm să verificați setările sistemului dvs",
+  "maximum-precision": "Precizie maximă",
+  "maximum-precision-description": "Sunt acceptate 12 zecimale"
 }

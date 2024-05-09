@@ -1131,5 +1131,7 @@
   "amount-color": "Màu số tiền",
   "green-or-red": "Xanh / Đỏ",
   "no-color": "Không màu",
-  "please-check-your-system-settings": "Vui lòng kiểm tra cài đặt hệ thống của bạn"
+  "please-check-your-system-settings": "Vui lòng kiểm tra cài đặt hệ thống của bạn",
+  "maximum-precision": "Độ chính xác tối đa",
+  "maximum-precision-description": "12 chữ số thập phân được hỗ trợ"
 }

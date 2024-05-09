@@ -1131,5 +1131,7 @@
   "amount-color": "Ποσό Χρώμα",
   "green-or-red": "Πράσινο / Κόκκινο",
   "no-color": "Χωρίς Χρώμα",
-  "please-check-your-system-settings": "Ελέγξτε τις ρυθμίσεις του συστήματός σας"
+  "please-check-your-system-settings": "Ελέγξτε τις ρυθμίσεις του συστήματός σας",
+  "maximum-precision": "Μέγιστη Ακρίβεια",
+  "maximum-precision-description": "Υποστηρίζονται 12 δεκαδικά ψηφία"
 }

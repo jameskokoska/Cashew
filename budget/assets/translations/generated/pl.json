@@ -1131,5 +1131,7 @@
   "amount-color": "Ilość Kolor",
   "green-or-red": "Zielony / czerwony",
   "no-color": "Brak koloru",
-  "please-check-your-system-settings": "Sprawdź ustawienia systemu"
+  "please-check-your-system-settings": "Sprawdź ustawienia systemu",
+  "maximum-precision": "Maksymalna precyzja",
+  "maximum-precision-description": "Obsługiwanych jest 12 miejsc po przecinku"
 }

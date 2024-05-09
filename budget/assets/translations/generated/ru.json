@@ -1130,5 +1130,7 @@
   "amount-color": "Сумма Цвет",
   "green-or-red": "Зеленый / Красный",
   "no-color": "Нет цвета",
-  "please-check-your-system-settings": "Пожалуйста, проверьте настройки вашей системы"
+  "please-check-your-system-settings": "Пожалуйста, проверьте настройки вашей системы",
+  "maximum-precision": "Максимальная точность",
+  "maximum-precision-description": "Поддерживается 12 десятичных знаков."
 }

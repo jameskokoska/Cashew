@@ -1131,5 +1131,7 @@
   "amount-color": "Сума Цвят",
   "green-or-red": "Зелено / Червено",
   "no-color": "Без цвят",
-  "please-check-your-system-settings": "Моля, проверете системните си настройки"
+  "please-check-your-system-settings": "Моля, проверете системните си настройки",
+  "maximum-precision": "Максимална прецизност",
+  "maximum-precision-description": "Поддържат се 12 знака след десетичната запетая"
 }

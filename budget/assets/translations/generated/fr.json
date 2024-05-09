@@ -1131,5 +1131,7 @@
   "amount-color": "Quantité Couleur",
   "green-or-red": "Vert/rouge",
   "no-color": "Sans couleur",
-  "please-check-your-system-settings": "Veuillez vérifier les paramètres de votre système"
+  "please-check-your-system-settings": "Veuillez vérifier les paramètres de votre système",
+  "maximum-precision": "Précision maximale",
+  "maximum-precision-description": "12 décimales sont prises en charge"
 }

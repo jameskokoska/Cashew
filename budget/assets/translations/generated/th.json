@@ -1131,5 +1131,7 @@
   "amount-color": "จำนวน สี",
   "green-or-red": "เขียว / แดง",
   "no-color": "ไม่มีสี",
-  "please-check-your-system-settings": "กรุณาตรวจสอบการตั้งค่าระบบของคุณ"
+  "please-check-your-system-settings": "กรุณาตรวจสอบการตั้งค่าระบบของคุณ",
+  "maximum-precision": "ความแม่นยำสูงสุด",
+  "maximum-precision-description": "รองรับทศนิยม 12 ตำแหน่ง"
 }

@@ -1131,5 +1131,7 @@
   "amount-color": "Rangi ya Kiasi",
   "green-or-red": "Kijani / Nyekundu",
   "no-color": "Hakuna Rangi",
-  "please-check-your-system-settings": "Tafadhali angalia mipangilio ya mfumo wako"
+  "please-check-your-system-settings": "Tafadhali angalia mipangilio ya mfumo wako",
+  "maximum-precision": "Usahihi wa Juu",
+  "maximum-precision-description": "Nafasi 12 za desimali zinatumika"
 }

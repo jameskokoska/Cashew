@@ -1131,5 +1131,7 @@
   "amount-color": "அளவு நிறம்",
   "green-or-red": "பச்சை / சிவப்பு",
   "no-color": "நிறம் இல்லை",
-  "please-check-your-system-settings": "உங்கள் கணினி அமைப்புகளைச் சரிபார்க்கவும்"
+  "please-check-your-system-settings": "உங்கள் கணினி அமைப்புகளைச் சரிபார்க்கவும்",
+  "maximum-precision": "அதிகபட்ச துல்லியம்",
+  "maximum-precision-description": "12 தசம இடங்கள் ஆதரிக்கப்படுகின்றன"
 }

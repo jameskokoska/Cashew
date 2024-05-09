@@ -1131,5 +1131,7 @@
   "amount-color": "數量 顏色",
   "green-or-red": "綠/紅",
   "no-color": "無顏色",
-  "please-check-your-system-settings": "請檢查您的系統設定"
+  "please-check-your-system-settings": "請檢查您的系統設定",
+  "maximum-precision": "最大精度",
+  "maximum-precision-description": "支援 12 位小數"
 }

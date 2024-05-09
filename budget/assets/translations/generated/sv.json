@@ -1131,5 +1131,7 @@
   "amount-color": "Mängd Färg",
   "green-or-red": "Grön/röd",
   "no-color": "Ingen färg",
-  "please-check-your-system-settings": "Kontrollera dina systeminställningar"
+  "please-check-your-system-settings": "Kontrollera dina systeminställningar",
+  "maximum-precision": "Maximal precision",
+  "maximum-precision-description": "12 decimaler stöds"
 }

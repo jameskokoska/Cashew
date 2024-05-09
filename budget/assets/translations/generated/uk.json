@@ -1131,5 +1131,7 @@
   "amount-color": "Колір суми",
   "green-or-red": "Зелений / Червоний",
   "no-color": "Без кольору",
-  "please-check-your-system-settings": "Перевірте налаштування системи"
+  "please-check-your-system-settings": "Перевірте налаштування системи",
+  "maximum-precision": "Максимальна точність",
+  "maximum-precision-description": "Підтримується 12 знаків після коми"
 }

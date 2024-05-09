@@ -1131,5 +1131,7 @@
   "amount-color": "Összeg Szín",
   "green-or-red": "Zöld / Piros",
   "no-color": "Nincs szín",
-  "please-check-your-system-settings": "Kérjük, ellenőrizze a rendszerbeállításokat"
+  "please-check-your-system-settings": "Kérjük, ellenőrizze a rendszerbeállításokat",
+  "maximum-precision": "Maximális pontosság",
+  "maximum-precision-description": "12 tizedesjegy támogatott"
 }

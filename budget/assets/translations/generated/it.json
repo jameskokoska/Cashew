@@ -1131,5 +1131,7 @@
   "amount-color": "Colore importo",
   "green-or-red": "Verde/Rosso",
   "no-color": "Nessun colore",
-  "please-check-your-system-settings": "Controlla le impostazioni del tuo sistema"
+  "please-check-your-system-settings": "Controlla le impostazioni del tuo sistema",
+  "maximum-precision": "Massima precisione",
+  "maximum-precision-description": "Sono supportate 12 cifre decimali"
 }

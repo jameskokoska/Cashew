@@ -1131,5 +1131,7 @@
   "amount-color": "Quantidade Cor",
   "green-or-red": "Verde / Vermelho",
   "no-color": "Sem cor",
-  "please-check-your-system-settings": "Por favor, verifique as configurações do seu sistema"
+  "please-check-your-system-settings": "Por favor, verifique as configurações do seu sistema",
+  "maximum-precision": "Precisão Máxima",
+  "maximum-precision-description": "12 casas decimais são suportadas"
 }

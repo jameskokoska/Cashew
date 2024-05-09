@@ -1131,5 +1131,7 @@
   "amount-color": "જથ્થો રંગ",
   "green-or-red": "લીલો/લાલ",
   "no-color": "કોઈ રંગ નથી",
-  "please-check-your-system-settings": "કૃપા કરીને તમારી સિસ્ટમ સેટિંગ્સ તપાસો"
+  "please-check-your-system-settings": "કૃપા કરીને તમારી સિસ્ટમ સેટિંગ્સ તપાસો",
+  "maximum-precision": "મહત્તમ ચોકસાઇ",
+  "maximum-precision-description": "12 દશાંશ સ્થાનો સપોર્ટેડ છે"
 }

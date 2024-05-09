@@ -1131,5 +1131,7 @@
   "amount-color": "金額の色",
   "green-or-red": "緑/赤",
   "no-color": "色なし",
-  "please-check-your-system-settings": "システム設定を確認してください"
+  "please-check-your-system-settings": "システム設定を確認してください",
+  "maximum-precision": "最高の精度",
+  "maximum-precision-description": "小数点以下 12 桁がサポートされています"
 }

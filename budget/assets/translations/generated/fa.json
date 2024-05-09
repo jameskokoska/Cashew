@@ -1131,5 +1131,7 @@
   "amount-color": "مقدار رنگ",
   "green-or-red": "قرمز سبز",
   "no-color": "بدون رنگ",
-  "please-check-your-system-settings": "لطفا تنظیمات سیستم خود را بررسی کنید"
+  "please-check-your-system-settings": "لطفا تنظیمات سیستم خود را بررسی کنید",
+  "maximum-precision": "حداکثر دقت",
+  "maximum-precision-description": "12 رقم اعشار پشتیبانی می شود"
 }

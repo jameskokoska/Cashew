@@ -1131,5 +1131,7 @@
   "amount-color": "Hoeveelheid Kleur",
   "green-or-red": "Groen/rood",
   "no-color": "Geen kleur",
-  "please-check-your-system-settings": "Controleer uw systeeminstellingen"
+  "please-check-your-system-settings": "Controleer uw systeeminstellingen",
+  "maximum-precision": "Maximale precisie",
+  "maximum-precision-description": "Er worden 12 decimalen ondersteund"
 }

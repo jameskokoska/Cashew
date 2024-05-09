@@ -1131,5 +1131,7 @@
   "amount-color": "మొత్తం రంగు",
   "green-or-red": "ఆకుపచ్చ / ఎరుపు",
   "no-color": "రంగు లేదు",
-  "please-check-your-system-settings": "దయచేసి మీ సిస్టమ్ సెట్టింగ్‌లను తనిఖీ చేయండి"
+  "please-check-your-system-settings": "దయచేసి మీ సిస్టమ్ సెట్టింగ్‌లను తనిఖీ చేయండి",
+  "maximum-precision": "గరిష్ట ఖచ్చితత్వం",
+  "maximum-precision-description": "12 దశాంశ స్థానాలకు మద్దతు ఉంది"
 }

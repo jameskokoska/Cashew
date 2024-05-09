@@ -1131,5 +1131,7 @@
   "amount-color": "राशि रंग",
   "green-or-red": "हरी लाल",
   "no-color": "रंग नहीं",
-  "please-check-your-system-settings": "कृपया अपनी सिस्टम सेटिंग जांचें"
+  "please-check-your-system-settings": "कृपया अपनी सिस्टम सेटिंग जांचें",
+  "maximum-precision": "अधिकतम परिशुद्धता",
+  "maximum-precision-description": "12 दशमलव स्थान समर्थित हैं"
 }

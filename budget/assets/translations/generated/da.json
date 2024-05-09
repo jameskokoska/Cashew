@@ -1131,5 +1131,7 @@
   "amount-color": "Beløbsfarve",
   "green-or-red": "Grøn / Rød",
   "no-color": "Ingen Farve",
-  "please-check-your-system-settings": "Tjek venligst dine systemindstillinger"
+  "please-check-your-system-settings": "Tjek venligst dine systemindstillinger",
+  "maximum-precision": "Maksimal præcision",
+  "maximum-precision-description": "12 decimaler understøttes"
 }

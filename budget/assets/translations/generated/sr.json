@@ -1131,5 +1131,7 @@
   "amount-color": "Амоунт Цолор",
   "green-or-red": "Зелено / црвено",
   "no-color": "Нема боје",
-  "please-check-your-system-settings": "Проверите подешавања система"
+  "please-check-your-system-settings": "Проверите подешавања система",
+  "maximum-precision": "Максимална прецизност",
+  "maximum-precision-description": "Подржано је 12 децималних места"
 }

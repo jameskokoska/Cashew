@@ -231,6 +231,7 @@ class _AddWalletPageState extends State<AddWalletPage> {
   }
 
   void openDecimalPrecisionPopup() async {
+    bool limitReached = false;
     await openBottomSheet(
       context,
       PopupFramework(
@@ -239,23 +240,34 @@ class _AddWalletPageState extends State<AddWalletPage> {
         child: SelectAmountValue(
           enableDecimal: false,
           amountPassed: selectedDecimals.toString(),
-          setSelectedAmount: (amount, _) {
+          setSelectedAmount: (amount, amountString) {
+            if (amountString == "") amount = 2;
             selectedDecimals = amount.toInt();
-            if (amount > 10) {
-              selectedDecimals = 10;
+            if (amount > 12) {
+              selectedDecimals = 12;
+              limitReached = true;
             } else if (amount < 0) {
               selectedDecimals = 0;
             }
             setState(() {});
           },
           next: () async {
-            determineBottomButton();
             Navigator.pop(context);
           },
           nextLabel: "set-amount".tr(),
         ),
       ),
     );
+    if (limitReached)
+      openSnackbar(
+        SnackbarMessage(
+          title: "maximum-precision".tr(),
+          description: "maximum-precision-description".tr(),
+          icon: appStateSettings["outlinedIcons"]
+              ? Symbols.decimal_increase_sharp
+              : Symbols.decimal_increase_rounded,
+        ),
+      );
     determineBottomButton();
   }
 

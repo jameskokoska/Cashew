@@ -1131,5 +1131,7 @@
   "amount-color": "পরিমাণ রঙ",
   "green-or-red": "সবুজ/লাল",
   "no-color": "কোন রঙ নেই",
-  "please-check-your-system-settings": "আপনার সিস্টেম সেটিংস চেক করুন"
+  "please-check-your-system-settings": "আপনার সিস্টেম সেটিংস চেক করুন",
+  "maximum-precision": "সর্বোচ্চ নির্ভুলতা",
+  "maximum-precision-description": "12 দশমিক স্থান সমর্থিত"
 }

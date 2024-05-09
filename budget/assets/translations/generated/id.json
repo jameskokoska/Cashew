@@ -1131,5 +1131,7 @@
   "amount-color": "Jumlah Warna",
   "green-or-red": "Hijau merah",
   "no-color": "Tanpa warna",
-  "please-check-your-system-settings": "Silakan periksa pengaturan sistem Anda"
+  "please-check-your-system-settings": "Silakan periksa pengaturan sistem Anda",
+  "maximum-precision": "Presisi Maksimum",
+  "maximum-precision-description": "12 tempat desimal didukung"
 }

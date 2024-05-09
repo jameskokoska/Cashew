@@ -1131,5 +1131,7 @@
   "amount-color": "Jumlah Warna",
   "green-or-red": "Hijau / Merah",
   "no-color": "Tiada Warna",
-  "please-check-your-system-settings": "Sila semak tetapan sistem anda"
+  "please-check-your-system-settings": "Sila semak tetapan sistem anda",
+  "maximum-precision": "Ketepatan Maksimum",
+  "maximum-precision-description": "12 tempat perpuluhan disokong"
 }

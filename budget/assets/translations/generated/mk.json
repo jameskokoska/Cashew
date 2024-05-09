@@ -180,5 +180,7 @@
   "amount-color": "Износ Боја",
   "green-or-red": "Зелена / Црвена",
   "no-color": "Без Боја",
-  "please-check-your-system-settings": "Ве молиме проверете ги поставките на вашиот систем"
+  "please-check-your-system-settings": "Ве молиме проверете ги поставките на вашиот систем",
+  "maximum-precision": "Максимална прецизност",
+  "maximum-precision-description": "Поддржани се 12 децимални места"
 }

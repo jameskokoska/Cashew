@@ -1131,5 +1131,7 @@
   "amount-color": "Menge Farbe",
   "green-or-red": "Grün/Rot",
   "no-color": "Keine Farbe",
-  "please-check-your-system-settings": "Bitte überprüfen Sie Ihre Systemeinstellungen"
+  "please-check-your-system-settings": "Bitte überprüfen Sie Ihre Systemeinstellungen",
+  "maximum-precision": "Maximale Präzision",
+  "maximum-precision-description": "Es werden 12 Dezimalstellen unterstützt"
 }

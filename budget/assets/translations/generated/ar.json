@@ -1131,5 +1131,7 @@
   "amount-color": "لون الكمية",
   "green-or-red": "أخضر أحمر",
   "no-color": "لا يوجد لون",
-  "please-check-your-system-settings": "يرجى التحقق من إعدادات النظام الخاص بك"
+  "please-check-your-system-settings": "يرجى التحقق من إعدادات النظام الخاص بك",
+  "maximum-precision": "الدقة القصوى",
+  "maximum-precision-description": "يتم دعم 12 منزلة عشرية"
 }

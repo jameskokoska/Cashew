@@ -1131,5 +1131,7 @@
   "amount-color": "رقم کا رنگ",
   "green-or-red": "سبز/سرخ",
   "no-color": "کوئی رنگ نہیں۔",
-  "please-check-your-system-settings": "براہ کرم اپنے سسٹم کی ترتیبات چیک کریں۔"
+  "please-check-your-system-settings": "براہ کرم اپنے سسٹم کی ترتیبات چیک کریں۔",
+  "maximum-precision": "زیادہ سے زیادہ درستگی",
+  "maximum-precision-description": "12 اعشاریہ مقامات کی حمایت کی جاتی ہے۔"
 }

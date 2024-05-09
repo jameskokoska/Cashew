@@ -1131,5 +1131,7 @@
   "amount-color": "Množstvo Farba",
   "green-or-red": "Zelená / červená",
   "no-color": "Žiadna farba",
-  "please-check-your-system-settings": "Skontrolujte nastavenia systému"
+  "please-check-your-system-settings": "Skontrolujte nastavenia systému",
+  "maximum-precision": "Maximálna presnosť",
+  "maximum-precision-description": "Podporovaných je 12 desatinných miest"
 }

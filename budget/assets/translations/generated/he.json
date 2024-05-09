@@ -1131,5 +1131,7 @@
   "amount-color": "כמות צבע",
   "green-or-red": "ירוק אדום",
   "no-color": "בלי צבע",
-  "please-check-your-system-settings": "אנא בדוק את הגדרות המערכת שלך"
+  "please-check-your-system-settings": "אנא בדוק את הגדרות המערכת שלך",
+  "maximum-precision": "דיוק מירבי",
+  "maximum-precision-description": "12 מקומות עשרוניים נתמכים"
 }
