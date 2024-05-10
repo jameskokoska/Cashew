@@ -641,6 +641,7 @@
   "subscription-transaction-type-description-2": "जब तक 'भुगतान' या 'जमा' को चिह्नित नहीं किया जाता है, तब तक आपके कुल की ओर नहीं गिना जाता है",
   "repetitive-transaction-type-description-1": "पुनर्जन्म लेन -देन",
   "repetitive-transaction-type-description-2": "जब तक 'भुगतान' या 'जमा' को चिह्नित नहीं किया जाता है, तब तक आपके कुल की ओर नहीं गिना जाता है",
+  "repetitive-transaction-type-description-3": "अगला लेनदेन तब उत्पन्न होता है जब वर्तमान में 'भुगतान किया गया' या 'जमा' चिह्नित किया जाता है",
   "lent-transaction-type-description-1": "लेनदेन जो आप उधार देते हैं",
   "lent-transaction-type-description-2": "नकारात्मक नकदी प्रवाह तक चिह्नित 'एकत्र'",
   "borrowed-transaction-type-description-1": "किसी से उधार लिया गया लेनदेन",

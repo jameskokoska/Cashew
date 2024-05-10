@@ -641,6 +641,7 @@
   "subscription-transaction-type-description-2": "Räknar inte med din summa såvida det inte är märkt \"betalat\" eller \"deponerat\"",
   "repetitive-transaction-type-description-1": "Återuppträdanden",
   "repetitive-transaction-type-description-2": "Räknar inte med din summa såvida det inte är märkt \"betalat\" eller \"deponerat\"",
+  "repetitive-transaction-type-description-3": "Nästa transaktion genereras när den aktuella är markerad som \"Betalad\" eller \"Insatt\"",
   "lent-transaction-type-description-1": "Transaktion som du lånade ut",
   "lent-transaction-type-description-2": "Negativt kassaflöde tills det är markerat \"samlat\"",
   "borrowed-transaction-type-description-1": "Transaktion lånad från någon",

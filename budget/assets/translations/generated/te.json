@@ -641,6 +641,7 @@
   "subscription-transaction-type-description-2": "'చెల్లించిన' లేదా 'డిపాజిట్' అని గుర్తించకపోతే మీ మొత్తాన్ని లెక్కించదు",
   "repetitive-transaction-type-description-1": "లావాదేవీని తిరిగి పొందడం",
   "repetitive-transaction-type-description-2": "'చెల్లించిన' లేదా 'డిపాజిట్' అని గుర్తించకపోతే మీ మొత్తాన్ని లెక్కించదు",
+  "repetitive-transaction-type-description-3": "ప్రస్తుతం 'చెల్లించబడింది' లేదా 'డిపాజిట్ చేయబడింది' అని మార్క్ చేసినప్పుడు తదుపరి లావాదేవీ రూపొందించబడింది",
   "lent-transaction-type-description-1": "మీరు అప్పు ఇచ్చిన లావాదేవీ",
   "lent-transaction-type-description-2": "'సేకరించిన' అని గుర్తించే వరకు ప్రతికూల నగదు ప్రవాహం",
   "borrowed-transaction-type-description-1": "లావాదేవీ ఒకరి నుండి అరువు తెచ్చుకుంది",

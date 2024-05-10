@@ -641,6 +641,7 @@
   "subscription-transaction-type-description-2": "'প্রদত্ত' বা 'জমা' চিহ্নিত না হলে আপনার মোটের দিকে গণনা করা হয় না",
   "repetitive-transaction-type-description-1": "পুনরায় লেনদেন",
   "repetitive-transaction-type-description-2": "'প্রদত্ত' বা 'জমা' চিহ্নিত না হলে আপনার মোটের দিকে গণনা করা হয় না",
+  "repetitive-transaction-type-description-3": "বর্তমান 'প্রদেয়' বা 'আমানত' হিসাবে চিহ্নিত হলে পরবর্তী লেনদেন তৈরি হয়",
   "lent-transaction-type-description-1": "লেনদেন যা আপনি ধার দিয়েছেন",
   "lent-transaction-type-description-2": "'সংগ্রহ করা' চিহ্নিত না হওয়া পর্যন্ত নেতিবাচক নগদ প্রবাহ",
   "borrowed-transaction-type-description-1": "লেনদেন কারও কাছ থেকে ধার করা",

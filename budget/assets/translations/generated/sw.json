@@ -641,6 +641,7 @@
   "subscription-transaction-type-description-2": "Haihesabu jumla yako isipokuwa alama 'iliyolipwa' au 'iliyohifadhiwa'",
   "repetitive-transaction-type-description-1": "Kufanya tena shughuli",
   "repetitive-transaction-type-description-2": "Haihesabu jumla yako isipokuwa alama 'iliyolipwa' au 'iliyohifadhiwa'",
+  "repetitive-transaction-type-description-3": "Muamala unaofuata utatolewa wakati wa sasa umewekwa alama ya 'Imelipwa' au 'Imewekwa'",
   "lent-transaction-type-description-1": "Shughuli ambayo umekopa",
   "lent-transaction-type-description-2": "Mtiririko mbaya wa pesa hadi uweke alama 'kukusanywa'",
   "borrowed-transaction-type-description-1": "Shughuli iliyokopwa kutoka kwa mtu",

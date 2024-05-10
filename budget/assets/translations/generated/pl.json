@@ -641,6 +641,7 @@
   "subscription-transaction-type-description-2": "Nie liczy się w stosunku do twojej suma, chyba że oznaczono „zapłacone” lub „zdeponowane”",
   "repetitive-transaction-type-description-1": "Transakcja ponowna skurcz",
   "repetitive-transaction-type-description-2": "Nie liczy się w stosunku do twojej suma, chyba że oznaczono „zapłacone” lub „zdeponowane”",
+  "repetitive-transaction-type-description-3": "Następna transakcja wygenerowana, gdy aktualna jest oznaczona jako „Zapłacona” lub „Zdeponowana”",
   "lent-transaction-type-description-1": "Transakcja, którą pożyczyłeś",
   "lent-transaction-type-description-2": "Ujemne przepływy pieniężne, aż oznaczone „zebrane”",
   "borrowed-transaction-type-description-1": "Transakcja pożyczona od kogoś",

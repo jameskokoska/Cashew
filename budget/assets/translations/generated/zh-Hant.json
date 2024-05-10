@@ -641,6 +641,7 @@
   "subscription-transaction-type-description-2": "除非標記為“已支付”或“已存入”，否則不計入你的統計結算當中。",
   "repetitive-transaction-type-description-1": "週期交易",
   "repetitive-transaction-type-description-2": "除非標記為“已支付”或“已存入”，否則不計入你的統計結算當中。",
+  "repetitive-transaction-type-description-3": "當目前標記為「已付款」或「已存款」時產生下一筆交易",
   "lent-transaction-type-description-1": "你借出的交易",
   "lent-transaction-type-description-2": "負現金流量為直到標記為“收集”",
   "borrowed-transaction-type-description-1": "從某人借入的交易",

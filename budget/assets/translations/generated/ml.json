@@ -641,6 +641,7 @@
   "subscription-transaction-type-description-2": "'പണമടച്ച' അല്ലെങ്കിൽ 'നിക്ഷേപിച്ച' എന്ന് അടയാളപ്പെടുത്തിയിട്ടില്ലെങ്കിൽ നിങ്ങളുടെ ടോട്ടലിലേക്ക് കണക്കാക്കില്ല",
   "repetitive-transaction-type-description-1": "ഇടപാട് വീണ്ടും",
   "repetitive-transaction-type-description-2": "'പണമടച്ച' അല്ലെങ്കിൽ 'നിക്ഷേപിച്ച' എന്ന് അടയാളപ്പെടുത്തിയിട്ടില്ലെങ്കിൽ നിങ്ങളുടെ ടോട്ടലിലേക്ക് കണക്കാക്കില്ല",
+  "repetitive-transaction-type-description-3": "കറൻ്റ് 'പണമടച്ചത്' അല്ലെങ്കിൽ 'നിക്ഷേപിച്ചു' എന്ന് അടയാളപ്പെടുത്തുമ്പോൾ അടുത്ത ഇടപാട് സൃഷ്ടിക്കപ്പെടും",
   "lent-transaction-type-description-1": "നിങ്ങൾ കടം കൊടുത്ത ഇടപാട്",
   "lent-transaction-type-description-2": "'ശേഖരിച്ചത്' എന്ന് അടയാളപ്പെടുത്തിയതുവരെ നെഗറ്റീവ് ക്യാഷ് ഫ്ലോ",
   "borrowed-transaction-type-description-1": "ഇടപാട് ആരോടെങ്കിലും കടമെടുത്തു",

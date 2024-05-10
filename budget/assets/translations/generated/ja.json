@@ -641,6 +641,7 @@
   "subscription-transaction-type-description-2": "「支払」または「預け入れ」とマークされていない限り、合計にカウントされません",
   "repetitive-transaction-type-description-1": "トランザクションの再発",
   "repetitive-transaction-type-description-2": "「支払」または「預け入れ」とマークされていない限り、合計にカウントされません",
+  "repetitive-transaction-type-description-3": "現在「支払済み」または「入金済み」とマークされている場合に生成される次のトランザクション",
   "lent-transaction-type-description-1": "あなたが貸し出した取引",
   "lent-transaction-type-description-2": "「収集」とマークされるまで、負のキャッシュフロー",
   "borrowed-transaction-type-description-1": "誰かから借りた取引",

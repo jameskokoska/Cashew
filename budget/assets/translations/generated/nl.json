@@ -641,6 +641,7 @@
   "subscription-transaction-type-description-2": "Telt niet mee voor uw totaal, tenzij gemarkeerd 'betaald' of 'gedeponeerd'",
   "repetitive-transaction-type-description-1": "Reicuring Transaction",
   "repetitive-transaction-type-description-2": "Telt niet mee voor uw totaal, tenzij gemarkeerd 'betaald' of 'gedeponeerd'",
+  "repetitive-transaction-type-description-3": "Volgende transactie gegenereerd wanneer de huidige gemarkeerd is als 'Betaald' of 'Gestort'",
   "lent-transaction-type-description-1": "Transactie die u hebt uitgelegd",
   "lent-transaction-type-description-2": "Negatieve kasstroom tot gemarkeerd 'verzameld'",
   "borrowed-transaction-type-description-1": "Transactie geleend van iemand",

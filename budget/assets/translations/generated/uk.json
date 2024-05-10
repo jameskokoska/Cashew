@@ -641,6 +641,7 @@
   "subscription-transaction-type-description-2": "Не враховується в загальній сумі, поки не буде позначено як \"Сплачено\" або \" Внесено\".",
   "repetitive-transaction-type-description-1": "Повторювана транзакцію",
   "repetitive-transaction-type-description-2": "Не враховується в загальній сумі, поки не буде позначено як \"Сплачено\" або \" Внесено\".",
+  "repetitive-transaction-type-description-3": "Наступна трансакція, створена, коли поточна позначена як \"Оплачено\" або \"Депоновано\"",
   "lent-transaction-type-description-1": "транзакція, де ви дали в борг",
   "lent-transaction-type-description-2": "Негативний грошовий потік до моменту позначення як \"Борг повернуто\"",
   "borrowed-transaction-type-description-1": "транзакція, де ви взяли в борг",

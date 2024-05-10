@@ -641,6 +641,7 @@
   "subscription-transaction-type-description-2": "Nezapočítava sa do celkového súčtu, kým nie je označená ako \"Zaplatená\" alebo \"Vložená\"",
   "repetitive-transaction-type-description-1": "Opakujúca sa platba",
   "repetitive-transaction-type-description-2": "Nezapočítava sa do celkového súčtu, kým nie je označená ako \"Zaplatená\" alebo \"Vložená\"",
+  "repetitive-transaction-type-description-3": "Ďalšia transakcia vygenerovaná, keď je aktuálna označená ako „Zaplatená“ alebo „Vložená“",
   "lent-transaction-type-description-1": "Transakcia, ktorú ste požičali",
   "lent-transaction-type-description-2": "Negatívny cash-flow do ozančenia \"Zaplatené\"",
   "borrowed-transaction-type-description-1": "Transakcia požičaná od niekoho",

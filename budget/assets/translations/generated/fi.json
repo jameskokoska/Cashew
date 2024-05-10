@@ -641,6 +641,7 @@
   "subscription-transaction-type-description-2": "Ei lasketa kokonaismääräsi, ellei merkitty 'maksettu' tai 'talletettu'",
   "repetitive-transaction-type-description-1": "Tapahtuma",
   "repetitive-transaction-type-description-2": "Ei lasketa kokonaismääräsi, ellei merkitty 'maksettu' tai 'talletettu'",
+  "repetitive-transaction-type-description-3": "Seuraava tapahtuma luodaan, kun nykyinen on merkitty \"Maksettu\" tai \"Talletettu\"",
   "lent-transaction-type-description-1": "Tapahtuma, jonka lainat",
   "lent-transaction-type-description-2": "Negatiivinen kassavirta, kunnes \"kerätään\"",
   "borrowed-transaction-type-description-1": "Kauppa lainaten joltakin",

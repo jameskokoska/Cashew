@@ -641,6 +641,7 @@
   "subscription-transaction-type-description-2": "Teller ikke mot totalen din med mindre merket 'betalt' eller 'deponert'",
   "repetitive-transaction-type-description-1": "Gjenopptatt transaksjon",
   "repetitive-transaction-type-description-2": "Teller ikke mot totalen din med mindre merket 'betalt' eller 'deponert'",
+  "repetitive-transaction-type-description-3": "Neste transaksjon generert når gjeldende er merket \"Betalt\" eller \"Innsatt\"",
   "lent-transaction-type-description-1": "Transaksjon som du lånte ut",
   "lent-transaction-type-description-2": "Negativ kontantstrøm til de er merket 'samlet'",
   "borrowed-transaction-type-description-1": "Transaksjon lånt fra noen",

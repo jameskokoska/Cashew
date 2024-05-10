@@ -641,6 +641,7 @@
   "subscription-transaction-type-description-2": "لا تحسب تجاه إجماليك ما لم يتم وضع علامة \"مدفوعة\" أو \"مودعة\"",
   "repetitive-transaction-type-description-1": "إعادة تهيج المعاملة",
   "repetitive-transaction-type-description-2": "لا تحسب تجاه إجماليك ما لم يتم وضع علامة \"مدفوعة\" أو \"مودعة\"",
+  "repetitive-transaction-type-description-3": "يتم إنشاء المعاملة التالية عندما يتم وضع علامة \"مدفوعة\" أو \"مودعة\" على المعاملة الحالية",
   "lent-transaction-type-description-1": "المعاملة التي قدمتها",
   "lent-transaction-type-description-2": "التدفق النقدي السلبي حتى يتم وضع علامة \"تم جمعه\"",
   "borrowed-transaction-type-description-1": "استعارت المعاملة من شخص ما",

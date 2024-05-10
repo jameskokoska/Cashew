@@ -641,6 +641,7 @@
   "subscription-transaction-type-description-2": "Не рачуна се према вашем укупном ако није означено \"плаћено\" или \"депоновано\"",
   "repetitive-transaction-type-description-1": "Поновна трансакција",
   "repetitive-transaction-type-description-2": "Не рачуна се према вашем укупном ако није означено \"плаћено\" или \"депоновано\"",
+  "repetitive-transaction-type-description-3": "Следећа трансакција је генерисана када је тренутна означена са 'Плаћено' или 'Депоновано'",
   "lent-transaction-type-description-1": "Трансакција коју сте позајмили",
   "lent-transaction-type-description-2": "Негативан ток новца док се не обележи \"прикупљено\"",
   "borrowed-transaction-type-description-1": "Трансакција позајмљена од некога",

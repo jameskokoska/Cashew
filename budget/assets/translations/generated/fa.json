@@ -641,6 +641,7 @@
   "subscription-transaction-type-description-2": "به کل شما حساب نمی شود مگر اینکه \"پرداخت شده\" یا \"واریز شده\" مشخص شود",
   "repetitive-transaction-type-description-1": "تکرار مجدد معامله",
   "repetitive-transaction-type-description-2": "به کل شما حساب نمی شود مگر اینکه \"پرداخت شده\" یا \"واریز شده\" مشخص شود",
+  "repetitive-transaction-type-description-3": "تراکنش بعدی با علامت گذاری فعلی \"پرداخت\" یا \"سپرده\" ایجاد می شود",
   "lent-transaction-type-description-1": "معامله ای که وام داده اید",
   "lent-transaction-type-description-2": "جریان نقدی منفی تا زمانی که \"جمع آوری\" مشخص شود",
   "borrowed-transaction-type-description-1": "معامله از کسی وام گرفته شده است",

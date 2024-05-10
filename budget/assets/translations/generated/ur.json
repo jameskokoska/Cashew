@@ -641,6 +641,7 @@
   "subscription-transaction-type-description-2": "جب تک 'ادائیگی' یا 'جمع' کو نشان زد نہیں کیا جاتا ہے تب تک آپ کے کل کی گنتی نہیں ہوتی ہے",
   "repetitive-transaction-type-description-1": "ٹرانزیکشن کو دوبارہ حاصل کرنا",
   "repetitive-transaction-type-description-2": "جب تک 'ادائیگی' یا 'جمع' کو نشان زد نہیں کیا جاتا ہے تب تک آپ کے کل کی گنتی نہیں ہوتی ہے",
+  "repetitive-transaction-type-description-3": "اگلا لین دین اس وقت پیدا ہوتا ہے جب موجودہ کو 'ادائیگی' یا 'جمع شدہ' نشان زد کیا گیا ہو",
   "lent-transaction-type-description-1": "لین دین جو آپ نے دیا تھا",
   "lent-transaction-type-description-2": "منفی نقد بہاؤ جب تک 'جمع' کو نشان زد نہیں کیا جاتا ہے",
   "borrowed-transaction-type-description-1": "کسی سے لین دین کا قرض لیا گیا",

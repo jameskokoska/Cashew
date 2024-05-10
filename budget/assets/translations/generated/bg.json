@@ -641,6 +641,7 @@
   "subscription-transaction-type-description-2": "Не се брои към общия ви език, освен ако не е отбелязано „платено“ или „депозирано“",
   "repetitive-transaction-type-description-1": "Повторно настъпи транзакция",
   "repetitive-transaction-type-description-2": "Не се брои към общия ви език, освен ако не е отбелязано „платено“ или „депозирано“",
+  "repetitive-transaction-type-description-3": "Следваща транзакция, генерирана, когато текущата е означена като „Платена“ или „Депозирана“",
   "lent-transaction-type-description-1": "Транзакция, която сте отпуснали",
   "lent-transaction-type-description-2": "Отрицателен паричен поток до маркиране „Събрано“",
   "borrowed-transaction-type-description-1": "Транзакция, заимствана от някого",

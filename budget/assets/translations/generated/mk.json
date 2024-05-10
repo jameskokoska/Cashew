@@ -165,6 +165,7 @@
   "edit-home": "Прилагоди почетна",
   "overdue-and-upcoming": "Задоцнето и претстојно",
   "average-saved": "просечно зачувано",
+  "repetitive-transaction-type-description-3": "Следната трансакција е генерирана кога тековната е означена како „Платена“ или „Депонирана“",
   "future-transactions": "Идни трансакции",
   "hidden": "скриени",
   "present-transactions": "Тековни трансакции",

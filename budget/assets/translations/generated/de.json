@@ -641,6 +641,7 @@
   "subscription-transaction-type-description-2": "Zählt nicht zur Gesamtsumme, es sei denn, \"bezahlt\" oder \"deponiert\" ist ausgewählt",
   "repetitive-transaction-type-description-1": "Wiederholte Transaktionen",
   "repetitive-transaction-type-description-2": "Zählt nicht zu Ihrer Gesamtsumme, es sei denn, sie markiert \"bezahlt\" oder \"deponiert\"",
+  "repetitive-transaction-type-description-3": "Nächste Transaktion wird generiert, wenn die aktuelle Transaktion als „Bezahlt“ oder „Eingezahlt“ markiert ist.",
   "lent-transaction-type-description-1": "Ausgeliehene Transaktion",
   "lent-transaction-type-description-2": "Negativer Cashflow bis zum „gesammelten“ markiert",
   "borrowed-transaction-type-description-1": "Transaktion von jemandem ausgeliehen",

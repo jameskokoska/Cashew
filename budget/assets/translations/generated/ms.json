@@ -641,6 +641,7 @@
   "subscription-transaction-type-description-2": "Tidak dikira ke arah jumlah anda melainkan ditandakan 'dibayar' atau 'disimpan'",
   "repetitive-transaction-type-description-1": "Menggalakkan transaksi",
   "repetitive-transaction-type-description-2": "Tidak dikira ke arah jumlah anda melainkan ditandakan 'dibayar' atau 'disimpan'",
+  "repetitive-transaction-type-description-3": "Transaksi seterusnya dijana apabila semasa ditanda 'Dibayar' atau 'Didepositkan'",
   "lent-transaction-type-description-1": "Urus niaga yang anda pinjamkan",
   "lent-transaction-type-description-2": "Aliran tunai negatif sehingga ditandakan 'dikumpulkan'",
   "borrowed-transaction-type-description-1": "Transaksi yang dipinjam dari seseorang",

@@ -641,6 +641,7 @@
   "subscription-transaction-type-description-2": "ไม่นับรวมกับยอดรวมของคุณเว้นแต่จะทำเครื่องหมายว่า 'จ่าย' หรือ 'ฝาก'",
   "repetitive-transaction-type-description-1": "การทำธุรกรรมใหม่",
   "repetitive-transaction-type-description-2": "ไม่นับรวมกับยอดรวมของคุณเว้นแต่จะทำเครื่องหมายว่า 'จ่าย' หรือ 'ฝาก'",
+  "repetitive-transaction-type-description-3": "ธุรกรรมถัดไปที่เกิดขึ้นเมื่อปัจจุบันทำเครื่องหมายว่า 'ชำระแล้ว' หรือ 'ฝากแล้ว'",
   "lent-transaction-type-description-1": "ธุรกรรมที่คุณให้ยืม",
   "lent-transaction-type-description-2": "กระแสเงินสดติดลบจนกระทั่งทำเครื่องหมาย 'รวบรวม'",
   "borrowed-transaction-type-description-1": "ธุรกรรมที่ยืมมาจากใครบางคน",

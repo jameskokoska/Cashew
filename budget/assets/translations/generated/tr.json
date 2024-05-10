@@ -641,6 +641,7 @@
   "subscription-transaction-type-description-2": "Ücretli' veya 'taksitlendirilmiş' olarak işaretlenmedikçe toplamınıza eklenmez",
   "repetitive-transaction-type-description-1": "Tekrarlanan işlem",
   "repetitive-transaction-type-description-2": "'Ücretli' veya 'yatırılmış' olarak işaretlenmiş olmadıkça toplamınıza sayılmaz",
+  "repetitive-transaction-type-description-3": "Mevcut işlem \"Ödendi\" veya \"Yatırıldı\" olarak işaretlendiğinde oluşturulan sonraki işlem",
   "lent-transaction-type-description-1": "Borç verme işlemi",
   "lent-transaction-type-description-2": "Geri alındı' olarak işaretlenene kadar nakit akışı negatif ",
   "borrowed-transaction-type-description-1": "Borç alma işlemi",

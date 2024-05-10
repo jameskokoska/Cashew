@@ -641,6 +641,7 @@
   "subscription-transaction-type-description-2": "לא נחשב לסך הכל שלך אלא אם כן מסומן 'בתשלום' או 'מופקדים'",
   "repetitive-transaction-type-description-1": "עסקה מחודשת",
   "repetitive-transaction-type-description-2": "לא נחשב לסך הכל שלך אלא אם כן מסומן 'בתשלום' או 'מופקדים'",
+  "repetitive-transaction-type-description-3": "העסקה הבאה שנוצרה כשהיא מסומנת כ'בתשלום' או 'מופקדת'",
   "lent-transaction-type-description-1": "עסקה שהשאלת",
   "lent-transaction-type-description-2": "תזרים מזומנים שלילי עד לסמן 'נאסף'",
   "borrowed-transaction-type-description-1": "עסקה הושאלה ממישהו",

@@ -641,6 +641,7 @@
   "subscription-transaction-type-description-2": "'유료'또는 '예금'으로 표시되지 않는 한 총계에 포함되지 않습니다.",
   "repetitive-transaction-type-description-1": "거래 재발",
   "repetitive-transaction-type-description-2": "'유료'또는 '예금'으로 표시되지 않는 한 총계에 포함되지 않습니다.",
+  "repetitive-transaction-type-description-3": "현재 '지불' 또는 '입금'으로 표시된 경우 다음 거래가 생성됩니다.",
   "lent-transaction-type-description-1": "당신이 빌린 거래",
   "lent-transaction-type-description-2": "'수집'으로 표시 될 때까지 부정적인 현금 흐름",
   "borrowed-transaction-type-description-1": "거래가 누군가로부터 차용되었습니다",

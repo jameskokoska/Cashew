@@ -641,6 +641,7 @@
   "subscription-transaction-type-description-2": "જ્યાં સુધી 'પેઇડ' અથવા 'જમા કરાયેલ' ચિહ્નિત ન થાય ત્યાં સુધી તમારા કુલ તરફ ગણાય નહીં",
   "repetitive-transaction-type-description-1": "પુન reપ્રધાન -સોજન",
   "repetitive-transaction-type-description-2": "જ્યાં સુધી 'પેઇડ' અથવા 'જમા કરાયેલ' ચિહ્નિત ન થાય ત્યાં સુધી તમારા કુલ તરફ ગણાય નહીં",
+  "repetitive-transaction-type-description-3": "જ્યારે વર્તમાનને 'પેઇડ' અથવા 'ડિપોઝિટ' તરીકે ચિહ્નિત કરવામાં આવે ત્યારે આગલો વ્યવહાર જનરેટ થાય છે",
   "lent-transaction-type-description-1": "ટ્રાન્ઝેક્શન કે જે તમે આપ્યું છે",
   "lent-transaction-type-description-2": "ચિહ્નિત ન થાય ત્યાં સુધી નકારાત્મક રોકડ પ્રવાહ",
   "borrowed-transaction-type-description-1": "વ્યવહાર કોઈની પાસેથી ઉધાર લીધો",

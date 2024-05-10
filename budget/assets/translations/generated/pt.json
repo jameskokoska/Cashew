@@ -641,6 +641,7 @@
   "subscription-transaction-type-description-2": "Não conta para o seu total, a menos que seja 'pago' ou 'depositado'",
   "repetitive-transaction-type-description-1": "Transação recorrente",
   "repetitive-transaction-type-description-2": "Não conta para o seu total, a menos que seja 'pago' ou 'depositado'",
+  "repetitive-transaction-type-description-3": "Próxima transação gerada quando a corrente estiver marcada como 'Paga' ou 'Depositada'",
   "lent-transaction-type-description-1": "Transação que você emprestou",
   "lent-transaction-type-description-2": "Fluxo de caixa negativo até marcar 'coletado'",
   "borrowed-transaction-type-description-1": "Transação emprestada de alguém",

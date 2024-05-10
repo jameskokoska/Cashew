@@ -641,6 +641,7 @@
   "subscription-transaction-type-description-2": "'पेड' किंवा 'जमा' चिन्हांकित केल्याशिवाय आपल्या एकूणकडे मोजले जात नाही",
   "repetitive-transaction-type-description-1": "पुन्हा व्यवहार करणे",
   "repetitive-transaction-type-description-2": "'पेड' किंवा 'जमा' चिन्हांकित केल्याशिवाय आपल्या एकूणकडे मोजले जात नाही",
+  "repetitive-transaction-type-description-3": "वर्तमान 'पेड' किंवा 'जमा केलेले' असे चिन्हांकित केल्यावर पुढील व्यवहार व्युत्पन्न होतो",
   "lent-transaction-type-description-1": "आपण कर्ज दिले आहे",
   "lent-transaction-type-description-2": "'संग्रहित' होईपर्यंत नकारात्मक रोख प्रवाह",
   "borrowed-transaction-type-description-1": "व्यवहार एखाद्याकडून कर्ज घेतले",

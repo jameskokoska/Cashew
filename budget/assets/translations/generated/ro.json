@@ -641,6 +641,7 @@
   "subscription-transaction-type-description-2": "Nu contează spre totalul dvs. decât dacă este marcat „plătit” sau „depus”",
   "repetitive-transaction-type-description-1": "Reocuparea tranzacției",
   "repetitive-transaction-type-description-2": "Nu contează spre totalul dvs. decât dacă este marcat „plătit” sau „depus”",
+  "repetitive-transaction-type-description-3": "Următoarea tranzacție generată când este marcată în prezent „Plătit” sau „Depus”",
   "lent-transaction-type-description-1": "Tranzacție pe care ai împrumutat -o",
   "lent-transaction-type-description-2": "Flux de numerar negativ până când este marcat „colectat”",
   "borrowed-transaction-type-description-1": "Tranzacția împrumutată de la cineva",

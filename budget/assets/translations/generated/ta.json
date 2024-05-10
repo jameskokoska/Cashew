@@ -641,6 +641,7 @@
   "subscription-transaction-type-description-2": "'செலுத்தப்பட்ட' அல்லது 'டெபாசிட்' குறிக்கப்படாவிட்டால் உங்கள் மொத்தத்தை எண்ணாது",
   "repetitive-transaction-type-description-1": "பரிவர்த்தனையை மீண்டும் சந்தித்தல்",
   "repetitive-transaction-type-description-2": "'செலுத்தப்பட்ட' அல்லது 'டெபாசிட்' குறிக்கப்படாவிட்டால் உங்கள் மொத்தத்தை எண்ணாது",
+  "repetitive-transaction-type-description-3": "தற்போதைய 'பணம் செலுத்தப்பட்டது' அல்லது 'டெபாசிட் செய்யப்பட்டது' எனக் குறிக்கப்படும் போது அடுத்த பரிவர்த்தனை உருவாக்கப்படும்",
   "lent-transaction-type-description-1": "நீங்கள் கடித்த பரிவர்த்தனை",
   "lent-transaction-type-description-2": "'சேகரிக்கப்பட்ட' குறிக்கப்பட்ட வரை எதிர்மறை பணப்புழக்கம்",
   "borrowed-transaction-type-description-1": "ஒருவரிடமிருந்து கடன் வாங்கிய பரிவர்த்தனை",

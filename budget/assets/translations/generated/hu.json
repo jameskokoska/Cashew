@@ -641,6 +641,7 @@
   "subscription-transaction-type-description-2": "Csak akkor számít be a teljesbe, ha a „fizetett” vagy a „letétbe helyezett” megjelöléssel rendelkezik",
   "repetitive-transaction-type-description-1": "Tranzakció újbóli elhelyezése",
   "repetitive-transaction-type-description-2": "Csak akkor számít be a teljesbe, ha a „fizetett” vagy a „letétbe helyezett” megjelöléssel rendelkezik",
+  "repetitive-transaction-type-description-3": "Következő tranzakció akkor jön létre, ha az aktuális „Fizetett” vagy „Befizetett” jelöléssel rendelkezik",
   "lent-transaction-type-description-1": "Tranzakció, amelyet kölcsönadott",
   "lent-transaction-type-description-2": "Negatív cash flow, amíg a „összegyűjtött” meg nem jelzik",
   "borrowed-transaction-type-description-1": "Valakitól kölcsönzött tranzakció",
