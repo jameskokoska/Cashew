@@ -641,6 +641,7 @@
   "subscription-transaction-type-description-2": "Tidak dihitung terhadap total Anda kecuali ditandai 'dibayar' atau 'disimpan'",
   "repetitive-transaction-type-description-1": "Transaksi teraktifasi ulang",
   "repetitive-transaction-type-description-2": "Tidak dihitung terhadap total Anda kecuali ditandai 'dibayar' atau 'disimpan'",
+  "repetitive-transaction-type-description-3": "Transaksi berikutnya dihasilkan ketika saat ini ditandai 'Dibayar' atau 'Disetor'",
   "lent-transaction-type-description-1": "Transaksi yang Anda pinjamkan",
   "lent-transaction-type-description-2": "Arus kas negatif hingga ditandai 'Dikumpulkan'",
   "borrowed-transaction-type-description-1": "Transaksi dipinjam dari seseorang",
@@ -1131,5 +1132,7 @@
   "amount-color": "Jumlah Warna",
   "green-or-red": "Hijau merah",
   "no-color": "Tanpa warna",
-  "please-check-your-system-settings": "Silakan periksa pengaturan sistem Anda"
+  "please-check-your-system-settings": "Silakan periksa pengaturan sistem Anda",
+  "maximum-precision": "Presisi Maksimum",
+  "maximum-precision-description": "12 tempat desimal didukung"
 }

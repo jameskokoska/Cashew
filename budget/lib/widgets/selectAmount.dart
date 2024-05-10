@@ -1288,7 +1288,10 @@ class SelectAmountValue extends StatefulWidget {
     this.showEnteredNumber = true,
     this.extraWidgetAboveNumbers,
   }) : super(key: key);
-  final Function(double, String) setSelectedAmount;
+  final Function(
+    double amount,
+    String stringAmount,
+  ) setSelectedAmount;
   final String amountPassed;
   final VoidCallback? next;
   final String? nextLabel;

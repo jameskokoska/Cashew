@@ -3568,6 +3568,10 @@ class SelectTransactionTypePopup extends StatelessWidget {
             ListItem(
               "subscription-transaction-type-description-2".tr(),
             ),
+            ListItem(
+              // Indicating the next one will be auto created when current marked as paid
+              "repetitive-transaction-type-description-3".tr(),
+            ),
           ],
           onlyShowOneTransactionType: onlyShowOneTransactionType,
         ),
@@ -3582,7 +3586,11 @@ class SelectTransactionTypePopup extends StatelessWidget {
               "repetitive-transaction-type-description-1".tr(),
             ),
             ListItem(
+              // Indicating the next one will be auto created when current marked as paid
               "repetitive-transaction-type-description-2".tr(),
+            ),
+            ListItem(
+              "repetitive-transaction-type-description-3".tr(),
             ),
           ],
           onlyShowOneTransactionType: onlyShowOneTransactionType,

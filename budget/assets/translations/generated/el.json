@@ -641,6 +641,7 @@
   "subscription-transaction-type-description-2": "Δεν μετράει προς το συνολικό σας, εκτός αν έχει επισημανθεί «πληρωμένη» ή «κατατεθειμένη»",
   "repetitive-transaction-type-description-1": "Επανεμφάνιση συναλλαγής",
   "repetitive-transaction-type-description-2": "Δεν μετράει προς το συνολικό σας, εκτός αν έχει επισημανθεί «πληρωμένη» ή «κατατεθειμένη»",
+  "repetitive-transaction-type-description-3": "Η επόμενη συναλλαγή δημιουργήθηκε όταν η τρέχουσα επισήμανση \"Πληρώθηκε\" ή \"Κατατέθηκε\"",
   "lent-transaction-type-description-1": "Συναλλαγή που δανείσατε",
   "lent-transaction-type-description-2": "Αρνητική ταμειακή ροή μέχρι να σημειωθεί «συλλεχθεί»",
   "borrowed-transaction-type-description-1": "Συναλλαγή δανείστηκε από κάποιον",
@@ -1131,5 +1132,7 @@
   "amount-color": "Ποσό Χρώμα",
   "green-or-red": "Πράσινο / Κόκκινο",
   "no-color": "Χωρίς Χρώμα",
-  "please-check-your-system-settings": "Ελέγξτε τις ρυθμίσεις του συστήματός σας"
+  "please-check-your-system-settings": "Ελέγξτε τις ρυθμίσεις του συστήματός σας",
+  "maximum-precision": "Μέγιστη Ακρίβεια",
+  "maximum-precision-description": "Υποστηρίζονται 12 δεκαδικά ψηφία"
 }

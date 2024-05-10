@@ -641,6 +641,7 @@
   "subscription-transaction-type-description-2": "Tæller ikke med til dit samlede, medmindre det er markeret som 'Betalt' eller 'Indbetalt'",
   "repetitive-transaction-type-description-1": "Gentagende transaktion",
   "repetitive-transaction-type-description-2": "Tæller ikke med til dit samlede, medmindre det er markeret som 'Betalt' eller 'Indbetalt'",
+  "repetitive-transaction-type-description-3": "Næste transaktion genereret, når den aktuelle er markeret som 'Betalt' eller 'Indbetalt'",
   "lent-transaction-type-description-1": "Transaktion, som du udlånte",
   "lent-transaction-type-description-2": "Negativ pengestrøm, indtil det er markeret som 'Opkrævet'",
   "borrowed-transaction-type-description-1": "Transaktion lånt fra nogen",
@@ -1131,5 +1132,7 @@
   "amount-color": "Beløbsfarve",
   "green-or-red": "Grøn / Rød",
   "no-color": "Ingen Farve",
-  "please-check-your-system-settings": "Tjek venligst dine systemindstillinger"
+  "please-check-your-system-settings": "Tjek venligst dine systemindstillinger",
+  "maximum-precision": "Maksimal præcision",
+  "maximum-precision-description": "12 decimaler understøttes"
 }

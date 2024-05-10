@@ -641,6 +641,7 @@
   "subscription-transaction-type-description-2": "No cuenta para su total a menos que sea marcado como 'Pagado' o 'Depositado'",
   "repetitive-transaction-type-description-1": "Transacción recurrente",
   "repetitive-transaction-type-description-2": "No cuenta para su total a menos que sea marcado como 'Pagado' o 'Depositado'",
+  "repetitive-transaction-type-description-3": "Próxima transacción generada cuando la actual está marcada como \"Pagada\" o \"Depositada\"",
   "lent-transaction-type-description-1": "Transacción que prestaste",
   "lent-transaction-type-description-2": "Flujo de caja negativo hasta que se marque como 'Recolectado'",
   "borrowed-transaction-type-description-1": "Transacción prestada de alguien",
@@ -1131,5 +1132,7 @@
   "amount-color": "Cantidad Color",
   "green-or-red": "Verde/rojo",
   "no-color": "Sin color",
-  "please-check-your-system-settings": "Por favor verifique la configuración de su sistema"
+  "please-check-your-system-settings": "Por favor verifique la configuración de su sistema",
+  "maximum-precision": "Máxima Precisión",
+  "maximum-precision-description": "Se admiten 12 decimales"
 }
