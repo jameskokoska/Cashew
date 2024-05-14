@@ -20,6 +20,7 @@ import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/widgets/settingsContainers.dart';
 import 'package:budget/widgets/textWidgets.dart';
+import 'package:budget/widgets/transactionEntry/incomeAmountArrow.dart';
 import 'package:budget/widgets/transactionEntry/transactionEntry.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -104,172 +105,22 @@ class SubscriptionsPageState extends State<SubscriptionsPage> {
             ],
             slivers: [
               SliverToBoxAdapter(
-                child: Padding(
-                  padding:
-                      const EdgeInsets.only(top: 30, left: 20.0, right: 20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      StreamBuilder<List<Transaction>>(
-                        stream: database.getAllSubscriptions().$1,
-                        builder: (context, snapshot) {
-                          double total = getTotalSubscriptions(
-                              Provider.of<AllWallets>(context),
-                              selectedType,
-                              snapshot.data);
-                          return CountNumber(
-                            count: total.abs(),
-                            duration: Duration(milliseconds: 700),
-                            initialCount: (0),
-                            textBuilder: (number) {
-                              return TextFont(
-                                textAlign: TextAlign.center,
-                                text: convertToMoney(
-                                  Provider.of<AllWallets>(context),
-                                  number,
-                                  finalNumber: total.abs(),
-                                ),
-                                fontSize: 30,
-                                fontWeight: FontWeight.bold,
-                              );
-                            },
-                          );
-                        },
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(top: 5),
-                        child: AnimatedSizeSwitcher(
-                          child: TextFont(
-                            key: ValueKey(selectedType.toString()),
-                            text:
-                                selectedType == SelectedSubscriptionsType.yearly
-                                    ? "yearly-subscriptions".tr()
-                                    : selectedType ==
-                                            SelectedSubscriptionsType.monthly
-                                        ? "monthly-subscriptions".tr()
-                                        : "total-subscriptions".tr(),
-                            fontSize: 16,
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 18.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            AnimatedSwitcher(
-                              duration: Duration(milliseconds: 250),
-                              child: Button(
-                                key: ValueKey(selectedType !=
-                                    SelectedSubscriptionsType.monthly),
-                                color: selectedType !=
-                                        SelectedSubscriptionsType.monthly
-                                    ? dynamicPastel(
-                                        context,
-                                        Theme.of(context)
-                                            .colorScheme
-                                            .secondaryContainer,
-                                        amount: appStateSettings["materialYou"]
-                                            ? 0.2
-                                            : 0.7)
-                                    : null,
-                                textColor: selectedType !=
-                                        SelectedSubscriptionsType.monthly
-                                    ? getColor(context, "black")
-                                        .withOpacity(0.5)
-                                    : getColor(context, "black"),
-                                label: "monthly".tr(),
-                                onTap: () => setState(() {
-                                  selectedType =
-                                      SelectedSubscriptionsType.monthly;
-                                  updateSettings("selectedSubscriptionType", 0,
-                                      pagesNeedingRefresh: [],
-                                      updateGlobalState: false);
-                                }),
-                                fontSize: 12,
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 16, vertical: 13),
-                              ),
-                            ),
-                            SizedBox(width: 7),
-                            AnimatedSwitcher(
-                              duration: Duration(milliseconds: 250),
-                              child: Button(
-                                key: ValueKey(selectedType !=
-                                    SelectedSubscriptionsType.yearly),
-                                color: selectedType !=
-                                        SelectedSubscriptionsType.yearly
-                                    ? dynamicPastel(
-                                        context,
-                                        Theme.of(context)
-                                            .colorScheme
-                                            .secondaryContainer,
-                                        amount: appStateSettings["materialYou"]
-                                            ? 0.2
-                                            : 0.7)
-                                    : null,
-                                textColor: selectedType !=
-                                        SelectedSubscriptionsType.yearly
-                                    ? getColor(context, "black")
-                                        .withOpacity(0.5)
-                                    : getColor(context, "black"),
-                                label: "yearly".tr(),
-                                onTap: () => setState(() {
-                                  selectedType =
-                                      SelectedSubscriptionsType.yearly;
-                                  updateSettings("selectedSubscriptionType", 1,
-                                      pagesNeedingRefresh: [],
-                                      updateGlobalState: false);
-                                }),
-                                fontSize: 12,
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 16, vertical: 13),
-                              ),
-                            ),
-                            SizedBox(width: 7),
-                            AnimatedSwitcher(
-                              duration: Duration(milliseconds: 250),
-                              child: Button(
-                                key: ValueKey(selectedType !=
-                                    SelectedSubscriptionsType.total),
-                                color: selectedType !=
-                                        SelectedSubscriptionsType.total
-                                    ? dynamicPastel(
-                                        context,
-                                        Theme.of(context)
-                                            .colorScheme
-                                            .secondaryContainer,
-                                        amount: appStateSettings["materialYou"]
-                                            ? 0.2
-                                            : 0.7)
-                                    : null,
-                                textColor: selectedType !=
-                                        SelectedSubscriptionsType.total
-                                    ? getColor(context, "black")
-                                        .withOpacity(0.5)
-                                    : getColor(context, "black"),
-                                label: "total".tr(),
-                                onTap: () => setState(() {
-                                  selectedType =
-                                      SelectedSubscriptionsType.total;
-                                  updateSettings("selectedSubscriptionType", 2,
-                                      pagesNeedingRefresh: [],
-                                      updateGlobalState: false);
-                                }),
-                                fontSize: 12,
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 16, vertical: 13),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
+                child: TotalUpcomingHeaderPeriodSwitcher(
+                  transactionListStream: database.getAllSubscriptions().$1,
+                  selectedType: selectedType,
+                  setSelectedType: (chosenType) {
+                    setState(() {
+                      selectedType = chosenType;
+                    });
+                  },
+                  selectedSubtitleTranslation: (selectedType) {
+                    return selectedType == SelectedSubscriptionsType.yearly
+                        ? "yearly-subscriptions".tr()
+                        : selectedType == SelectedSubscriptionsType.monthly
+                            ? "monthly-subscriptions".tr()
+                            : "total-subscriptions".tr();
+                  },
                 ),
-              ),
-              SliverToBoxAdapter(
-                child: SizedBox(height: 45),
               ),
               StreamBuilder<List<Transaction>>(
                 stream: database.getAllSubscriptions().$1,
@@ -292,10 +143,13 @@ class SubscriptionsPageState extends State<SubscriptionsPage> {
                           return Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              UpcomingTransactionDateHeader(
-                                transaction: transaction,
-                              ),
+                              HorizontalBreak(
+                                  padding: EdgeInsets.only(top: 4, bottom: 6)),
                               TransactionEntry(
+                                aboveWidget: UpcomingTransactionDateHeader(
+                                  selectedType: selectedType,
+                                  transaction: transaction,
+                                ),
                                 openPage: AddTransactionPage(
                                   transaction: transaction,
                                   routesToPopAfterDelete:
@@ -304,7 +158,6 @@ class SubscriptionsPageState extends State<SubscriptionsPage> {
                                 transaction: transaction,
                                 listID: "Subscriptions",
                               ),
-                              SizedBox(height: 12),
                             ],
                           );
                         },
@@ -329,13 +182,15 @@ class SubscriptionsPageState extends State<SubscriptionsPage> {
 }
 
 class UpcomingTransactionDateHeader extends StatelessWidget {
-  const UpcomingTransactionDateHeader(
-      {Key? key,
-      required this.transaction,
-      this.useHorizontalPaddingConstrained = true})
-      : super(key: key);
+  const UpcomingTransactionDateHeader({
+    Key? key,
+    required this.transaction,
+    required this.selectedType,
+    this.useHorizontalPaddingConstrained = true,
+  }) : super(key: key);
 
   final Transaction transaction;
+  final SelectedSubscriptionsType? selectedType;
   final bool useHorizontalPaddingConstrained;
 
   @override
@@ -344,49 +199,51 @@ class UpcomingTransactionDateHeader extends StatelessWidget {
         DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day)
             .difference(transaction.dateCreated)
             .inDays;
-    return Padding(
-      padding: EdgeInsets.symmetric(
-        horizontal: useHorizontalPaddingConstrained
-            ? getHorizontalPaddingConstrained(context)
-            : 0,
-      ),
-      child: Padding(
-        padding: EdgeInsets.only(left: 19, bottom: 3, right: 19),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Flexible(
-              child: Row(
-                children: [
-                  TextFont(
-                    text: getWordedDateShortMore(transaction.dateCreated),
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18,
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Flexible(
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: 3, right: 5),
+            child: Row(
+              children: [
+                TextFont(
+                  text: getWordedDateShortMore(
+                    transaction.dateCreated,
                   ),
-                  Flexible(
-                    child: daysDifference != 0
-                        ? TextFont(
-                            fontSize: 16,
-                            textColor: getColor(context, "textLight"),
-                            text: " • " +
-                                daysDifference.abs().toString() +
-                                " " +
-                                (daysDifference.abs() == 1
-                                    ? "day".tr()
-                                    : "days".tr()) +
-                                (daysDifference > 0
-                                    ? " " + "overdue".tr().toLowerCase()
-                                    : ""),
-                            fontWeight: FontWeight.bold,
-                          )
-                        : SizedBox(),
-                  ),
-                ],
-              ),
+                  fontWeight: FontWeight.bold,
+                  fontSize: 17,
+                ),
+                daysDifference != 0
+                    ? Flexible(
+                        child: TextFont(
+                          fontSize: 17,
+                          textColor: daysDifference > 0
+                              ? getColor(context, "unPaidOverdue")
+                              : getColor(context, "textLight"),
+                          text: " • " +
+                              daysDifference.abs().toString() +
+                              " " +
+                              (daysDifference.abs() == 1
+                                  ? "day".tr()
+                                  : "days".tr()) +
+                              (daysDifference > 0
+                                  ? " " + "overdue".tr().toLowerCase()
+                                  : ""),
+                          fontWeight: FontWeight.bold,
+                        ),
+                      )
+                    : SizedBox(),
+              ],
             ),
-            transaction.type == TransactionSpecialType.repetitive ||
-                    transaction.type == TransactionSpecialType.subscription
-                ? Row(
+          ),
+        ),
+        transaction.type == TransactionSpecialType.repetitive ||
+                transaction.type == TransactionSpecialType.subscription
+            ? Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Row(
                     children: [
                       Icon(
                         appStateSettings["outlinedIcons"]
@@ -395,7 +252,7 @@ class UpcomingTransactionDateHeader extends StatelessWidget {
                         color: dynamicPastel(
                             context, Theme.of(context).colorScheme.primary,
                             amount: 0.4),
-                        size: 16,
+                        size: 14,
                       ),
                       SizedBox(width: 3),
                       TextFont(
@@ -412,18 +269,49 @@ class UpcomingTransactionDateHeader extends StatelessWidget {
                                     .toLowerCase()
                                     .tr()
                                     .toLowerCase()),
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
+                        fontSize: 14,
                         textColor: dynamicPastel(
                             context, Theme.of(context).colorScheme.primary,
                             amount: 0.4),
                       ),
                     ],
-                  )
-                : SizedBox(),
-          ],
-        ),
-      ),
+                  ),
+                  if (selectedType != null)
+                    AnimatedSizeSwitcher(
+                      child: selectedType == SelectedSubscriptionsType.total
+                          ? Container(
+                              key: ValueKey(selectedType.toString()),
+                            )
+                          : TextFont(
+                              key: ValueKey(selectedType.toString()),
+                              text: convertToMoney(
+                                    Provider.of<AllWallets>(context),
+                                    getTotalSubscriptions(
+                                        Provider.of<AllWallets>(context),
+                                        selectedType ??
+                                            SelectedSubscriptionsType.monthly,
+                                        [transaction]),
+                                  ) +
+                                  " / " +
+                                  (selectedType ==
+                                              SelectedSubscriptionsType.monthly
+                                          ? "month".tr()
+                                          : selectedType ==
+                                                  SelectedSubscriptionsType
+                                                      .yearly
+                                              ? "year".tr()
+                                              : "")
+                                      .toLowerCase(),
+                              fontSize: 14,
+                              textColor: dynamicPastel(context,
+                                  Theme.of(context).colorScheme.primary,
+                                  amount: 0.4),
+                            ),
+                    ),
+                ],
+              )
+            : SizedBox(),
+      ],
     );
   }
 }
@@ -459,6 +347,169 @@ class AutoPaySubscriptionsSetting extends StatelessWidget {
       },
       initialValue: appStateSettings["automaticallyPaySubscriptions"],
       icon: getTransactionTypeIcon(TransactionSpecialType.subscription),
+    );
+  }
+}
+
+class TotalUpcomingHeaderPeriodSwitcher extends StatelessWidget {
+  const TotalUpcomingHeaderPeriodSwitcher({
+    required this.selectedType,
+    required this.setSelectedType,
+    required this.transactionListStream,
+    required this.selectedSubtitleTranslation,
+    super.key,
+  });
+  final SelectedSubscriptionsType selectedType;
+  final Function(SelectedSubscriptionsType) setSelectedType;
+  final Stream<List<Transaction>>? transactionListStream;
+  final String Function(SelectedSubscriptionsType) selectedSubtitleTranslation;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 30, left: 20, right: 20, bottom: 35),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          StreamBuilder<List<Transaction>>(
+            stream: transactionListStream,
+            builder: (context, snapshot) {
+              double total = getTotalSubscriptions(
+                  Provider.of<AllWallets>(context),
+                  selectedType,
+                  snapshot.data);
+              return Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  AnimatedSizeSwitcher(
+                    child: total == 0
+                        ? Container(
+                            key: ValueKey(1),
+                          )
+                        : IncomeOutcomeArrow(
+                            key: ValueKey(2),
+                            color: getColor(context, "black"),
+                            isIncome: total > 0,
+                            iconSize: 30,
+                            width: 20,
+                          ),
+                  ),
+                  CountNumber(
+                    count: total.abs(),
+                    duration: Duration(milliseconds: 700),
+                    initialCount: (0),
+                    textBuilder: (number) {
+                      return TextFont(
+                        textAlign: TextAlign.center,
+                        text: convertToMoney(
+                          Provider.of<AllWallets>(context),
+                          number,
+                          finalNumber: total.abs(),
+                        ),
+                        fontSize: 30,
+                        fontWeight: FontWeight.bold,
+                      );
+                    },
+                  ),
+                ],
+              );
+            },
+          ),
+          Padding(
+            padding: EdgeInsets.only(top: 5),
+            child: AnimatedSizeSwitcher(
+              child: TextFont(
+                key: ValueKey(selectedType.toString()),
+                text: selectedSubtitleTranslation(selectedType),
+                fontSize: 16,
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 18.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                AnimatedSwitcher(
+                  duration: Duration(milliseconds: 250),
+                  child: Button(
+                    key: ValueKey(
+                        selectedType != SelectedSubscriptionsType.monthly),
+                    color: selectedType != SelectedSubscriptionsType.monthly
+                        ? dynamicPastel(context,
+                            Theme.of(context).colorScheme.secondaryContainer,
+                            amount: appStateSettings["materialYou"] ? 0.2 : 0.7)
+                        : null,
+                    textColor: selectedType != SelectedSubscriptionsType.monthly
+                        ? getColor(context, "black").withOpacity(0.5)
+                        : getColor(context, "black"),
+                    label: "monthly".tr(),
+                    onTap: () {
+                      setSelectedType(SelectedSubscriptionsType.monthly);
+                      updateSettings("selectedSubscriptionType",
+                          SelectedSubscriptionsType.monthly.index,
+                          pagesNeedingRefresh: [], updateGlobalState: false);
+                    },
+                    fontSize: 12,
+                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 13),
+                  ),
+                ),
+                SizedBox(width: 7),
+                AnimatedSwitcher(
+                  duration: Duration(milliseconds: 250),
+                  child: Button(
+                    key: ValueKey(
+                        selectedType != SelectedSubscriptionsType.yearly),
+                    color: selectedType != SelectedSubscriptionsType.yearly
+                        ? dynamicPastel(context,
+                            Theme.of(context).colorScheme.secondaryContainer,
+                            amount: appStateSettings["materialYou"] ? 0.2 : 0.7)
+                        : null,
+                    textColor: selectedType != SelectedSubscriptionsType.yearly
+                        ? getColor(context, "black").withOpacity(0.5)
+                        : getColor(context, "black"),
+                    label: "yearly".tr(),
+                    onTap: () {
+                      setSelectedType(SelectedSubscriptionsType.yearly);
+                      updateSettings("selectedSubscriptionType",
+                          SelectedSubscriptionsType.yearly.index,
+                          pagesNeedingRefresh: [], updateGlobalState: false);
+                    },
+                    fontSize: 12,
+                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 13),
+                  ),
+                ),
+                SizedBox(width: 7),
+                AnimatedSwitcher(
+                  duration: Duration(milliseconds: 250),
+                  child: Button(
+                    key: ValueKey(
+                        selectedType != SelectedSubscriptionsType.total),
+                    color: selectedType != SelectedSubscriptionsType.total
+                        ? dynamicPastel(context,
+                            Theme.of(context).colorScheme.secondaryContainer,
+                            amount: appStateSettings["materialYou"] ? 0.2 : 0.7)
+                        : null,
+                    textColor: selectedType != SelectedSubscriptionsType.total
+                        ? getColor(context, "black").withOpacity(0.5)
+                        : getColor(context, "black"),
+                    label: "total".tr(),
+                    onTap: () {
+                      setSelectedType(SelectedSubscriptionsType.total);
+                      updateSettings("selectedSubscriptionType",
+                          SelectedSubscriptionsType.total.index,
+                          pagesNeedingRefresh: [], updateGlobalState: false);
+                    },
+                    fontSize: 12,
+                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 13),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

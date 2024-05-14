@@ -50,6 +50,8 @@ class UpcomingOverdueTransactionsState
   late bool? overdueTransactions = widget.overdueTransactions;
   String? searchValue;
   FocusNode _searchFocusNode = FocusNode();
+  SelectedSubscriptionsType selectedType = SelectedSubscriptionsType
+      .values[appStateSettings["selectedSubscriptionType"]];
   GlobalKey<PageFrameworkState> pageState = GlobalKey();
 
   void scrollToTop() {
@@ -114,18 +116,42 @@ class UpcomingOverdueTransactionsState
             ],
             slivers: [
               SliverToBoxAdapter(
-                  child: CenteredAmountAndNumTransactions(
-                totalWithCountStream:
-                    database.watchTotalWithCountOfUpcomingOverdue(
-                  allWallets: Provider.of<AllWallets>(context),
-                  isOverdueTransactions: overdueTransactions,
-                  searchString: searchValue,
-                ),
-                textColor: overdueTransactions == null
-                    ? getColor(context, "black")
-                    : overdueTransactions == true
-                        ? getColor(context, "unPaidOverdue")
-                        : getColor(context, "unPaidUpcoming"),
+                  child: AnimatedSizeSwitcher(
+                child: overdueTransactions == null
+                    ? TotalUpcomingHeaderPeriodSwitcher(
+                        transactionListStream:
+                            database.watchAllOverdueUpcomingTransactions(
+                                overdueTransactions,
+                                searchString: searchValue),
+                        selectedType: selectedType,
+                        setSelectedType: (chosenType) {
+                          setState(() {
+                            selectedType = chosenType;
+                          });
+                        },
+                        selectedSubtitleTranslation: (selectedType) {
+                          return selectedType ==
+                                  SelectedSubscriptionsType.yearly
+                              ? "yearly-upcoming".tr()
+                              : selectedType ==
+                                      SelectedSubscriptionsType.monthly
+                                  ? "monthly-upcoming".tr()
+                                  : "total-upcoming".tr();
+                        },
+                      )
+                    : CenteredAmountAndNumTransactions(
+                        totalWithCountStream:
+                            database.watchTotalWithCountOfUpcomingOverdue(
+                          allWallets: Provider.of<AllWallets>(context),
+                          isOverdueTransactions: overdueTransactions,
+                          searchString: searchValue,
+                        ),
+                        textColor: overdueTransactions == null
+                            ? getColor(context, "black")
+                            : overdueTransactions == true
+                                ? getColor(context, "unPaidOverdue")
+                                : getColor(context, "unPaidUpcoming"),
+                      ),
               )),
               SliverToBoxAdapter(
                 child: Padding(
@@ -250,8 +276,13 @@ class UpcomingOverdueTransactionsState
                             key: ValueKey(item.transactionPk),
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              UpcomingTransactionDateHeader(transaction: item),
+                              HorizontalBreak(
+                                  padding: EdgeInsets.only(top: 4, bottom: 6)),
                               TransactionEntry(
+                                aboveWidget: UpcomingTransactionDateHeader(
+                                  selectedType: selectedType,
+                                  transaction: item,
+                                ),
                                 openPage: AddTransactionPage(
                                   transaction: item,
                                   routesToPopAfterDelete:
@@ -260,7 +291,6 @@ class UpcomingOverdueTransactionsState
                                 transaction: item,
                                 listID: pageId,
                               ),
-                              SizedBox(height: 12),
                             ],
                           ),
                         );
@@ -394,21 +424,20 @@ class CenteredAmountAndNumTransactions extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        showIncomeArrow
-                            ? AnimatedSizeSwitcher(
-                                child: totalSpent == 0
-                                    ? Container(
-                                        key: ValueKey(1),
-                                      )
-                                    : IncomeOutcomeArrow(
-                                        key: ValueKey(2),
-                                        color: textColor,
-                                        isIncome: totalSpent > 0,
-                                        iconSize: 30,
-                                        width: 20,
-                                      ),
-                              )
-                            : SizedBox.shrink(),
+                        if (showIncomeArrow)
+                          AnimatedSizeSwitcher(
+                            child: totalSpent == 0
+                                ? Container(
+                                    key: ValueKey(1),
+                                  )
+                                : IncomeOutcomeArrow(
+                                    key: ValueKey(2),
+                                    color: textColor,
+                                    isIncome: totalSpent > 0,
+                                    iconSize: 30,
+                                    width: 20,
+                                  ),
+                          ),
                         CountNumber(
                           count: totalSpent.abs(),
                           duration: Duration(milliseconds: 450),

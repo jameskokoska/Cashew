@@ -852,10 +852,11 @@ getTotalSubscriptions(AllWallets allWallets, SelectedSubscriptionsType type,
               (amountRatioToPrimaryCurrencyGivenPk(
                       allWallets, subscription.walletFk) ??
                   0));
-      if (subscription.periodLength == 0) {
+      if (subscription.type == TransactionSpecialType.upcoming) {
+        total += subscription.amount;
+      } else if (subscription.periodLength == 0) {
         continue;
-      }
-      if (type == SelectedSubscriptionsType.monthly) {
+      } else if (type == SelectedSubscriptionsType.monthly) {
         int numDays = DateTime(today.year, today.month + 1, 0).day;
         double numWeeks = numDays / 7;
         if (subscription.reoccurrence == BudgetReoccurence.daily) {
@@ -869,8 +870,7 @@ getTotalSubscriptions(AllWallets allWallets, SelectedSubscriptionsType type,
         } else if (subscription.reoccurrence == BudgetReoccurence.yearly) {
           total += subscription.amount / 12 / (subscription.periodLength ?? 1);
         }
-      }
-      if (type == SelectedSubscriptionsType.yearly) {
+      } else if (type == SelectedSubscriptionsType.yearly) {
         DateTime firstDay = DateTime(today.year, 1, 1);
         DateTime lastDay = DateTime(today.year + 1, 1, 1);
         int numDays = lastDay.difference(firstDay).inDays;
@@ -886,8 +886,7 @@ getTotalSubscriptions(AllWallets allWallets, SelectedSubscriptionsType type,
         } else if (subscription.reoccurrence == BudgetReoccurence.yearly) {
           total += subscription.amount / (subscription.periodLength ?? 1);
         }
-      }
-      if (type == SelectedSubscriptionsType.total) {
+      } else if (type == SelectedSubscriptionsType.total) {
         if (subscription.reoccurrence == BudgetReoccurence.daily) {
           total += subscription.amount;
         } else if (subscription.reoccurrence == BudgetReoccurence.weekly) {
@@ -1228,7 +1227,8 @@ String getDevicesDefaultCurrencyCode() {
   return popularCurrencies[0];
 }
 
-void copyToClipboard(String text, {bool showSnackbar = true, String? customSnackbarDescription}) async {
+void copyToClipboard(String text,
+    {bool showSnackbar = true, String? customSnackbarDescription}) async {
   HapticFeedback.mediumImpact();
   await Clipboard.setData(ClipboardData(text: text));
   if (showSnackbar)
