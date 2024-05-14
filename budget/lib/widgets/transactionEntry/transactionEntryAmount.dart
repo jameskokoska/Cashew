@@ -130,7 +130,7 @@ Color getTransactionAmountColor(BuildContext context, Transaction transaction) {
                           ? getColor(context, "textLight")
                           // getColor(context, "unPaidOverdue")
                           : getColor(context, "textLight");
-  if (transaction.categoryFk == "0") {
+  if (transaction.paid == true && transaction.categoryFk == "0") {
     if (appStateSettings["balanceTransferAmountColor"] == "no-color") {
       return getColor(context, "black").withOpacity(0.95);
     } else {
