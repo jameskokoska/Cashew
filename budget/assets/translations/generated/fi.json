@@ -1134,5 +1134,8 @@
   "no-color": "Ei väriä",
   "please-check-your-system-settings": "Tarkista järjestelmäasetukset",
   "maximum-precision": "Suurin tarkkuus",
-  "maximum-precision-description": "12 desimaalin tarkkuutta tuetaan"
+  "maximum-precision-description": "12 desimaalin tarkkuutta tuetaan",
+  "monthly-upcoming": "Keskimääräinen kuukausittainen tuleva",
+  "yearly-upcoming": "Keskimääräinen vuosittainen tuleva",
+  "total-upcoming": "Yhteensä tulossa"
 }

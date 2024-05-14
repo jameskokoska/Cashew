@@ -1134,5 +1134,8 @@
   "no-color": "بدون رنگ",
   "please-check-your-system-settings": "لطفا تنظیمات سیستم خود را بررسی کنید",
   "maximum-precision": "حداکثر دقت",
-  "maximum-precision-description": "12 رقم اعشار پشتیبانی می شود"
+  "maximum-precision-description": "12 رقم اعشار پشتیبانی می شود",
+  "monthly-upcoming": "میانگین ماهانه آینده",
+  "yearly-upcoming": "میانگین سالانه آینده",
+  "total-upcoming": "مجموع آینده"
 }

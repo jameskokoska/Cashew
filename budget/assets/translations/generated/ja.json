@@ -1134,5 +1134,8 @@
   "no-color": "色なし",
   "please-check-your-system-settings": "システム設定を確認してください",
   "maximum-precision": "最高の精度",
-  "maximum-precision-description": "小数点以下 12 桁がサポートされています"
+  "maximum-precision-description": "小数点以下 12 桁がサポートされています",
+  "monthly-upcoming": "今後の月次平均",
+  "yearly-upcoming": "今後の年間平均",
+  "total-upcoming": "今後の合計"
 }

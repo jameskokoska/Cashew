@@ -1134,5 +1134,8 @@
   "no-color": "Renk yok",
   "please-check-your-system-settings": "Lütfen sistem ayarlarınızı kontrol edin",
   "maximum-precision": "Maksimum Hassasiyet",
-  "maximum-precision-description": "12 ondalık basamak desteklenir"
+  "maximum-precision-description": "12 ondalık basamak desteklenir",
+  "monthly-upcoming": "Ortalama aylık yaklaşan",
+  "yearly-upcoming": "Ortalama yıllık yaklaşan",
+  "total-upcoming": "Toplam yaklaşan"
 }

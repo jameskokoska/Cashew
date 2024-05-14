@@ -1134,5 +1134,8 @@
   "no-color": "Nincs szín",
   "please-check-your-system-settings": "Kérjük, ellenőrizze a rendszerbeállításokat",
   "maximum-precision": "Maximális pontosság",
-  "maximum-precision-description": "12 tizedesjegy támogatott"
+  "maximum-precision-description": "12 tizedesjegy támogatott",
+  "monthly-upcoming": "Átlagos havi közelgő",
+  "yearly-upcoming": "Átlagos éves közelgő",
+  "total-upcoming": "Teljes közelgő"
 }

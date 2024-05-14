@@ -1134,5 +1134,8 @@
   "no-color": "Brak koloru",
   "please-check-your-system-settings": "Sprawdź ustawienia systemu",
   "maximum-precision": "Maksymalna precyzja",
-  "maximum-precision-description": "Obsługiwanych jest 12 miejsc po przecinku"
+  "maximum-precision-description": "Obsługiwanych jest 12 miejsc po przecinku",
+  "monthly-upcoming": "Nadchodzące średniomiesięczne",
+  "yearly-upcoming": "Średnio nadchodzące roczne",
+  "total-upcoming": "Razem nadchodzące"
 }

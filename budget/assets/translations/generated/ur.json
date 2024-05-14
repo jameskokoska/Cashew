@@ -1134,5 +1134,8 @@
   "no-color": "کوئی رنگ نہیں۔",
   "please-check-your-system-settings": "براہ کرم اپنے سسٹم کی ترتیبات چیک کریں۔",
   "maximum-precision": "زیادہ سے زیادہ درستگی",
-  "maximum-precision-description": "12 اعشاریہ مقامات کی حمایت کی جاتی ہے۔"
+  "maximum-precision-description": "12 اعشاریہ مقامات کی حمایت کی جاتی ہے۔",
+  "monthly-upcoming": "آنے والی ماہانہ اوسط",
+  "yearly-upcoming": "آنے والا سالانہ اوسط",
+  "total-upcoming": "کل آنے والا"
 }

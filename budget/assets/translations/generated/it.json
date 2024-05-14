@@ -1134,5 +1134,8 @@
   "no-color": "Nessun colore",
   "please-check-your-system-settings": "Controlla le impostazioni del tuo sistema",
   "maximum-precision": "Massima precisione",
-  "maximum-precision-description": "Sono supportate 12 cifre decimali"
+  "maximum-precision-description": "Sono supportate 12 cifre decimali",
+  "monthly-upcoming": "Prossimamente mensile medio",
+  "yearly-upcoming": "Prossimamente annuale medio",
+  "total-upcoming": "Totale in arrivo"
 }

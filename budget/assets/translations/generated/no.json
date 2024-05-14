@@ -1134,5 +1134,8 @@
   "no-color": "Ingen farge",
   "please-check-your-system-settings": "Vennligst sjekk systeminnstillingene dine",
   "maximum-precision": "Maksimal presisjon",
-  "maximum-precision-description": "12 desimaler støttes"
+  "maximum-precision-description": "12 desimaler støttes",
+  "monthly-upcoming": "Gjennomsnittlig månedlig kommende",
+  "yearly-upcoming": "Gjennomsnittlig årlig kommende",
+  "total-upcoming": "Totalt kommende"
 }

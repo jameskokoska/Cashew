@@ -641,7 +641,7 @@
   "subscription-transaction-type-description-2": "Không tính vào tổng số của bạn trừ khi được đánh dấu ‘Đã thanh toán’ hoặc ‘Đã ký gửi’",
   "repetitive-transaction-type-description-1": "Giao dịch định kỳ",
   "repetitive-transaction-type-description-2": "Không tính vào tổng số của bạn trừ khi được đánh dấu ‘Đã thanh toán’ hoặc ‘Đã ký gửi’",
-  "repetitive-transaction-type-description-3": "Giao dịch tiếp theo được tạo khi hiện tại được đánh dấu là 'Đã thanh toán' hoặc 'Đã gửi'",
+  "repetitive-transaction-type-description-3": "Giao dịch tiếp theo được tạo khi hiện tại được đánh dấu là 'Đã thanh toán' hoặc 'Đã ký gửi'",
   "lent-transaction-type-description-1": "Giao dịch mà bạn đã cho mượn",
   "lent-transaction-type-description-2": "Dòng tiền âm cho đến khi được đánh dấu ‘Đã thu thập’",
   "borrowed-transaction-type-description-1": "Giao dịch đã mượn từ ai đó",
@@ -1134,5 +1134,8 @@
   "no-color": "Không màu",
   "please-check-your-system-settings": "Vui lòng kiểm tra cài đặt hệ thống của bạn",
   "maximum-precision": "Độ chính xác tối đa",
-  "maximum-precision-description": "12 chữ số thập phân được hỗ trợ"
+  "maximum-precision-description": "12 chữ số thập phân được hỗ trợ",
+  "monthly-upcoming": "Trung bình hàng tháng sắp tới",
+  "yearly-upcoming": "Trung bình hàng năm sắp tới",
+  "total-upcoming": "Tổng số sắp tới"
 }

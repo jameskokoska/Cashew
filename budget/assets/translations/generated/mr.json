@@ -1134,5 +1134,8 @@
   "no-color": "रंग नाही",
   "please-check-your-system-settings": "कृपया तुमची सिस्टम सेटिंग्ज तपासा",
   "maximum-precision": "कमाल अचूकता",
-  "maximum-precision-description": "12 दशांश स्थाने समर्थित आहेत"
+  "maximum-precision-description": "12 दशांश स्थाने समर्थित आहेत",
+  "monthly-upcoming": "सरासरी मासिक आगामी",
+  "yearly-upcoming": "आगामी वार्षिक सरासरी",
+  "total-upcoming": "एकूण आगामी"
 }

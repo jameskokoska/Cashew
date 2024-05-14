@@ -1134,5 +1134,8 @@
   "no-color": "Tanpa warna",
   "please-check-your-system-settings": "Silakan periksa pengaturan sistem Anda",
   "maximum-precision": "Presisi Maksimum",
-  "maximum-precision-description": "12 tempat desimal didukung"
+  "maximum-precision-description": "12 tempat desimal didukung",
+  "monthly-upcoming": "Rata-rata bulanan yang akan datang",
+  "yearly-upcoming": "Rata-rata tahunan yang akan datang",
+  "total-upcoming": "Jumlah yang akan datang"
 }

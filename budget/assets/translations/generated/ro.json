@@ -1134,5 +1134,8 @@
   "no-color": "Fără culoare",
   "please-check-your-system-settings": "Vă rugăm să verificați setările sistemului dvs",
   "maximum-precision": "Precizie maximă",
-  "maximum-precision-description": "Sunt acceptate 12 zecimale"
+  "maximum-precision-description": "Sunt acceptate 12 zecimale",
+  "monthly-upcoming": "Media lunară viitoare",
+  "yearly-upcoming": "Media anuală viitoare",
+  "total-upcoming": "Total viitoare"
 }

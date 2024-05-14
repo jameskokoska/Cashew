@@ -1134,5 +1134,8 @@
   "no-color": "색상 없음",
   "please-check-your-system-settings": "시스템 설정을 확인하세요.",
   "maximum-precision": "최대 정밀도",
-  "maximum-precision-description": "소수점 이하 12자리가 지원됩니다."
+  "maximum-precision-description": "소수점 이하 12자리가 지원됩니다.",
+  "monthly-upcoming": "평균 월별 예정",
+  "yearly-upcoming": "매년 평균 예정",
+  "total-upcoming": "총 예정"
 }

@@ -1134,5 +1134,8 @@
   "no-color": "無顏色",
   "please-check-your-system-settings": "請檢查您的系統設定",
   "maximum-precision": "最大精度",
-  "maximum-precision-description": "支援 12 位小數"
+  "maximum-precision-description": "支援 12 位小數",
+  "monthly-upcoming": "平均每月即將到來",
+  "yearly-upcoming": "平均每年即將到來",
+  "total-upcoming": "總計即將到來"
 }

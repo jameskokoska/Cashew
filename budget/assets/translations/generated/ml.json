@@ -1134,5 +1134,8 @@
   "no-color": "നിറമില്ല",
   "please-check-your-system-settings": "നിങ്ങളുടെ സിസ്റ്റം ക്രമീകരണങ്ങൾ പരിശോധിക്കുക",
   "maximum-precision": "പരമാവധി കൃത്യത",
-  "maximum-precision-description": "12 ദശാംശ സ്ഥാനങ്ങൾ പിന്തുണയ്ക്കുന്നു"
+  "maximum-precision-description": "12 ദശാംശ സ്ഥാനങ്ങൾ പിന്തുണയ്ക്കുന്നു",
+  "monthly-upcoming": "പ്രതിമാസ വരാനിരിക്കുന്ന ശരാശരി",
+  "yearly-upcoming": "ശരാശരി വാർഷിക വരാനിരിക്കുന്ന",
+  "total-upcoming": "വരാനിരിക്കുന്ന ആകെ"
 }

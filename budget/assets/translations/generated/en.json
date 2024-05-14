@@ -1134,5 +1134,8 @@
   "no-color": "No Color",
   "please-check-your-system-settings": "Please check your system settings",
   "maximum-precision": "Maximum Precision",
-  "maximum-precision-description": "12 decimal places are supported"
+  "maximum-precision-description": "12 decimal places are supported",
+  "monthly-upcoming": "Averaged monthly upcoming",
+  "yearly-upcoming": "Averaged yearly upcoming",
+  "total-upcoming": "Total upcoming"
 }

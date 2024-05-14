@@ -1134,5 +1134,8 @@
   "no-color": "Keine Farbe",
   "please-check-your-system-settings": "Bitte überprüfen Sie Ihre Systemeinstellungen",
   "maximum-precision": "Maximale Präzision",
-  "maximum-precision-description": "Es werden 12 Dezimalstellen unterstützt"
+  "maximum-precision-description": "Es werden 12 Dezimalstellen unterstützt",
+  "monthly-upcoming": "Durchschnittliche monatliche bevorstehende",
+  "yearly-upcoming": "Durchschnittliches jährliches kommendes Jahr",
+  "total-upcoming": "Total bevorstehend"
 }

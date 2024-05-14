@@ -1134,5 +1134,8 @@
   "no-color": "કોઈ રંગ નથી",
   "please-check-your-system-settings": "કૃપા કરીને તમારી સિસ્ટમ સેટિંગ્સ તપાસો",
   "maximum-precision": "મહત્તમ ચોકસાઇ",
-  "maximum-precision-description": "12 દશાંશ સ્થાનો સપોર્ટેડ છે"
+  "maximum-precision-description": "12 દશાંશ સ્થાનો સપોર્ટેડ છે",
+  "monthly-upcoming": "સરેરાશ માસિક આગામી",
+  "yearly-upcoming": "સરેરાશ વાર્ષિક આગામી",
+  "total-upcoming": "કુલ આગામી"
 }

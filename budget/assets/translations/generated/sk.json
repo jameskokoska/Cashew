@@ -1134,5 +1134,8 @@
   "no-color": "Žiadna farba",
   "please-check-your-system-settings": "Skontrolujte nastavenia systému",
   "maximum-precision": "Maximálna presnosť",
-  "maximum-precision-description": "Podporovaných je 12 desatinných miest"
+  "maximum-precision-description": "Podporovaných je 12 desatinných miest",
+  "monthly-upcoming": "Priemerný nadchádzajúci mesiac",
+  "yearly-upcoming": "Priemerný ročný nadchádzajúci",
+  "total-upcoming": "Celkom nadchádzajúce"
 }

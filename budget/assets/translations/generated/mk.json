@@ -183,5 +183,8 @@
   "no-color": "Без Боја",
   "please-check-your-system-settings": "Ве молиме проверете ги поставките на вашиот систем",
   "maximum-precision": "Максимална прецизност",
-  "maximum-precision-description": "Поддржани се 12 децимални места"
+  "maximum-precision-description": "Поддржани се 12 децимални места",
+  "monthly-upcoming": "Просечен месечен претстоен",
+  "yearly-upcoming": "Просечно годишно претстојно",
+  "total-upcoming": "Вкупно претстојни"
 }

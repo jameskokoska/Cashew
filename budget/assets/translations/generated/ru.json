@@ -1133,5 +1133,8 @@
   "no-color": "Нет цвета",
   "please-check-your-system-settings": "Пожалуйста, проверьте настройки вашей системы",
   "maximum-precision": "Максимальная точность",
-  "maximum-precision-description": "Поддерживается 12 десятичных знаков."
+  "maximum-precision-description": "Поддерживается 12 десятичных знаков.",
+  "monthly-upcoming": "В среднем за месяц предстоящий",
+  "yearly-upcoming": "В среднем за год предстоящий",
+  "total-upcoming": "Всего предстоящих"
 }

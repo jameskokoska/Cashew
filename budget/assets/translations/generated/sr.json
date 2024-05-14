@@ -1134,5 +1134,8 @@
   "no-color": "Нема боје",
   "please-check-your-system-settings": "Проверите подешавања система",
   "maximum-precision": "Максимална прецизност",
-  "maximum-precision-description": "Подржано је 12 децималних места"
+  "maximum-precision-description": "Подржано је 12 децималних места",
+  "monthly-upcoming": "Просечан месечни предстојећи",
+  "yearly-upcoming": "Просечан годишњи предстојећи",
+  "total-upcoming": "Тотал упцоминг"
 }

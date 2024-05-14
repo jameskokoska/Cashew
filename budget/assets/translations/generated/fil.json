@@ -1134,5 +1134,8 @@
   "no-color": "Walang Kulay",
   "please-check-your-system-settings": "Pakisuri ang iyong mga setting ng system",
   "maximum-precision": "Pinakamataas na Katumpakan",
-  "maximum-precision-description": "12 decimal na lugar ay suportado"
+  "maximum-precision-description": "12 decimal na lugar ay suportado",
+  "monthly-upcoming": "Average na buwanang paparating",
+  "yearly-upcoming": "Average na taunang paparating",
+  "total-upcoming": "Kabuuang paparating"
 }

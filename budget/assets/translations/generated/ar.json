@@ -1134,5 +1134,8 @@
   "no-color": "لا يوجد لون",
   "please-check-your-system-settings": "يرجى التحقق من إعدادات النظام الخاص بك",
   "maximum-precision": "الدقة القصوى",
-  "maximum-precision-description": "يتم دعم 12 منزلة عشرية"
+  "maximum-precision-description": "يتم دعم 12 منزلة عشرية",
+  "monthly-upcoming": "المتوسط ​​الشهري القادم",
+  "yearly-upcoming": "المتوسط ​​السنوي القادم",
+  "total-upcoming": "إجمالي القادمة"
 }

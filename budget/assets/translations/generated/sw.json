@@ -1134,5 +1134,8 @@
   "no-color": "Hakuna Rangi",
   "please-check-your-system-settings": "Tafadhali angalia mipangilio ya mfumo wako",
   "maximum-precision": "Usahihi wa Juu",
-  "maximum-precision-description": "Nafasi 12 za desimali zinatumika"
+  "maximum-precision-description": "Nafasi 12 za desimali zinatumika",
+  "monthly-upcoming": "Ujazo wa wastani wa kila mwezi",
+  "yearly-upcoming": "Wastani wa kila mwaka ujao",
+  "total-upcoming": "Jumla ya ujao"
 }

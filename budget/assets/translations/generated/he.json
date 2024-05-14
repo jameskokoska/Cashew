@@ -1134,5 +1134,8 @@
   "no-color": "בלי צבע",
   "please-check-your-system-settings": "אנא בדוק את הגדרות המערכת שלך",
   "maximum-precision": "דיוק מירבי",
-  "maximum-precision-description": "12 מקומות עשרוניים נתמכים"
+  "maximum-precision-description": "12 מקומות עשרוניים נתמכים",
+  "monthly-upcoming": "ממוצע חודשי בקרוב",
+  "yearly-upcoming": "ממוצע שנתי בקרוב",
+  "total-upcoming": "סה\"כ בקרוב"
 }

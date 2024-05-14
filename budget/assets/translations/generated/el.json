@@ -1134,5 +1134,8 @@
   "no-color": "Χωρίς Χρώμα",
   "please-check-your-system-settings": "Ελέγξτε τις ρυθμίσεις του συστήματός σας",
   "maximum-precision": "Μέγιστη Ακρίβεια",
-  "maximum-precision-description": "Υποστηρίζονται 12 δεκαδικά ψηφία"
+  "maximum-precision-description": "Υποστηρίζονται 12 δεκαδικά ψηφία",
+  "monthly-upcoming": "Μέσος μηνιαίος προσεχής",
+  "yearly-upcoming": "Μέσος όρος ετήσιας προσεχούς",
+  "total-upcoming": "Σύνολο προσεχής"
 }

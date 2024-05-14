@@ -1134,5 +1134,8 @@
   "no-color": "Sem cor",
   "please-check-your-system-settings": "Por favor, verifique as configurações do seu sistema",
   "maximum-precision": "Precisão Máxima",
-  "maximum-precision-description": "12 casas decimais são suportadas"
+  "maximum-precision-description": "12 casas decimais são suportadas",
+  "monthly-upcoming": "Média mensal futura",
+  "yearly-upcoming": "Média anual futura",
+  "total-upcoming": "Total próximo"
 }

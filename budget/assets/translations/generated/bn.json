@@ -1134,5 +1134,8 @@
   "no-color": "কোন রঙ নেই",
   "please-check-your-system-settings": "আপনার সিস্টেম সেটিংস চেক করুন",
   "maximum-precision": "সর্বোচ্চ নির্ভুলতা",
-  "maximum-precision-description": "12 দশমিক স্থান সমর্থিত"
+  "maximum-precision-description": "12 দশমিক স্থান সমর্থিত",
+  "monthly-upcoming": "গড় মাসিক আসন্ন",
+  "yearly-upcoming": "আসন্ন বার্ষিক গড়",
+  "total-upcoming": "মোট আসন্ন"
 }

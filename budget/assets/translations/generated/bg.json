@@ -1134,5 +1134,8 @@
   "no-color": "Без цвят",
   "please-check-your-system-settings": "Моля, проверете системните си настройки",
   "maximum-precision": "Максимална прецизност",
-  "maximum-precision-description": "Поддържат се 12 знака след десетичната запетая"
+  "maximum-precision-description": "Поддържат се 12 знака след десетичната запетая",
+  "monthly-upcoming": "Средно месечно предстоящо",
+  "yearly-upcoming": "Средно годишно предстоящо",
+  "total-upcoming": "Общо предстоящо"
 }

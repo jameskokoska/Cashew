@@ -1134,5 +1134,8 @@
   "no-color": "Sans couleur",
   "please-check-your-system-settings": "Veuillez vérifier les paramètres de votre système",
   "maximum-precision": "Précision maximale",
-  "maximum-precision-description": "12 décimales sont prises en charge"
+  "maximum-precision-description": "12 décimales sont prises en charge",
+  "monthly-upcoming": "Moyenne mensuelle à venir",
+  "yearly-upcoming": "Moyenne annuelle à venir",
+  "total-upcoming": "Total à venir"
 }

@@ -1134,5 +1134,8 @@
   "no-color": "ไม่มีสี",
   "please-check-your-system-settings": "กรุณาตรวจสอบการตั้งค่าระบบของคุณ",
   "maximum-precision": "ความแม่นยำสูงสุด",
-  "maximum-precision-description": "รองรับทศนิยม 12 ตำแหน่ง"
+  "maximum-precision-description": "รองรับทศนิยม 12 ตำแหน่ง",
+  "monthly-upcoming": "ค่าเฉลี่ยรายเดือนที่กำลังจะมาถึง",
+  "yearly-upcoming": "เฉลี่ยรายปีที่กำลังจะมาถึง",
+  "total-upcoming": "รวมที่กำลังจะเกิดขึ้น"
 }

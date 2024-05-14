@@ -1134,5 +1134,8 @@
   "no-color": "நிறம் இல்லை",
   "please-check-your-system-settings": "உங்கள் கணினி அமைப்புகளைச் சரிபார்க்கவும்",
   "maximum-precision": "அதிகபட்ச துல்லியம்",
-  "maximum-precision-description": "12 தசம இடங்கள் ஆதரிக்கப்படுகின்றன"
+  "maximum-precision-description": "12 தசம இடங்கள் ஆதரிக்கப்படுகின்றன",
+  "monthly-upcoming": "வரவிருக்கும் மாதாந்திர சராசரி",
+  "yearly-upcoming": "சராசரி ஆண்டு வரவிருக்கும்",
+  "total-upcoming": "மொத்தம் வரவிருக்கிறது"
 }
