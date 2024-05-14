@@ -423,6 +423,8 @@ class TotalUpcomingHeaderPeriodSwitcher extends StatelessWidget {
                 key: ValueKey(selectedType.toString()),
                 text: selectedSubtitleTranslation(selectedType),
                 fontSize: 16,
+                maxLines: 2,
+                textAlign: TextAlign.center,
               ),
             ),
           ),

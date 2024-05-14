@@ -71,7 +71,7 @@ String convertToPercent(double amount,
   amount = absoluteZero(amount);
   finalNumber = absoluteZeroNull(finalNumber);
 
-  if (amount == 0 || finalNumber == 0) return "0%";
+  if (amount.isNaN || amount == 0 || finalNumber == 0) return "0%";
 
   int numberDecimalsGet = numberDecimals != null
       ? numberDecimals
