@@ -794,6 +794,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                 afterSetTitle();
               },
               noteInputController: _noteInputController,
+              setSelectedNoteController: setSelectedNoteController,
               setSelectedDateTime: (DateTime date) {
                 setState(() {
                   selectedDate = date;
@@ -2387,6 +2388,7 @@ class SelectTitle extends StatefulWidget {
     this.selectedTitle,
     this.selectedDate,
     required this.noteInputController,
+    required this.setSelectedNoteController,
     this.next,
     this.disableAskForNote = false,
     this.customTitleInputWidgetBuilder,
@@ -2399,6 +2401,7 @@ class SelectTitle extends StatefulWidget {
   final String? selectedTitle;
   final DateTime? selectedDate;
   final TextEditingController noteInputController;
+  final dynamic Function(String, {bool setInput}) setSelectedNoteController;
   final VoidCallback? next;
   final bool disableAskForNote;
   final Widget Function(FocusNode enterTitleFocus)?
@@ -2658,16 +2661,10 @@ class _SelectTitleState extends State<SelectTitle> {
                         child: TransactionNotesTextInput(
                           noteInputController: widget.noteInputController,
                           setNotesInputFocused: (isFocused) {},
-                          setSelectedNoteController: (note, {setInput = true}) {
-                            // Adding this line jumps cursor to the end when editing,
-                            // we don't need because the noteInputController is already passed in!
-                            // widget.setSelectedNote(note);
-
-                            // Update the size of the bottom sheet
-                            // Need to do it slowly because the link container size is animated slowly
-                            Future.delayed(Duration(milliseconds: 200), () {
-                              bottomSheetControllerGlobal.scrollTo(0);
-                            });
+                          setSelectedNoteController: (note,
+                              {bool setInput = true}) {
+                            widget.setSelectedNoteController(note,
+                                setInput: setInput);
                           },
                         ),
                       ),

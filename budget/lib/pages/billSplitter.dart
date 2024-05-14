@@ -1430,14 +1430,18 @@ Future<bool> generateLoanTransactionsFromBillSummary(
     context,
     popupWithKeyboard: true,
     SelectTitle(
-      disableAskForNote: true,
       selectedTitle: "",
       setSelectedNote: (_) {},
       setSelectedTitle: (_) {},
       setSelectedCategory: (_) {},
       setSelectedSubCategory: (_) {},
       next: () {},
+      // --- Note is disabled ---
+      // This stuff don't matter
+      disableAskForNote: true,
       noteInputController: TextEditingController(),
+      setSelectedNoteController: (String note, {bool setInput = true}) {},
+      // ------------------------
       setSelectedDateTime: (DateTime date) {
         setDateTime = date;
       },
