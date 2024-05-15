@@ -183,6 +183,20 @@ class DebugPage extends StatelessWidget {
               ? Icons.category_outlined
               : Icons.category_rounded,
         ),
+        SettingsContainerSwitch(
+          onSwitched: (value) async {
+            updateSettings("accountColorfulAmountsWithArrows", value,
+                updateGlobalState: true);
+          },
+          title: "Colorful Arrow Account Totals",
+          description:
+              "Use an arrow and color to indicate the polarity of account totals on home",
+          initialValue:
+              appStateSettings["accountColorfulAmountsWithArrows"] == true,
+          icon: appStateSettings["outlinedIcons"]
+              ? Icons.swap_vert_outlined
+              : Icons.swap_vert_rounded,
+        ),
         DangerousDebugFlag(
           child: SettingsContainerSwitch(
             onSwitched: (value) async {

@@ -122,7 +122,7 @@ Future<Map<String, dynamic>> getDefaultPreferences() async {
     "AutoTransactions-canReadEmails": false,
     "notificationScanningDebug": false,
     "notificationScanning": false,
-    "currencyIcon": "\$",
+    "accountColorfulAmountsWithArrows": false,
     "EmailAutoTransactions-amountOfEmails": 10,
     "autoBackups": true,
     "autoBackupsFrequency": 3, //in days

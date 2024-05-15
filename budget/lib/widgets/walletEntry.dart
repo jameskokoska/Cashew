@@ -14,6 +14,7 @@ import 'package:budget/widgets/openContainerNavigation.dart';
 import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
+import 'package:budget/widgets/transactionEntry/incomeAmountArrow.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/pages/walletDetailsPage.dart';
@@ -90,29 +91,10 @@ class WalletEntry extends StatelessWidget {
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          CountNumber(
-                            lazyFirstRender: false,
-                            count: (walletWithDetails.totalSpent ?? 0 * -1),
-                            duration: Duration(milliseconds: 1000),
-                            decimals: walletWithDetails.wallet.decimals,
-                            initialCount: 0,
-                            textBuilder: (number) {
-                              return TextFont(
-                                textAlign: TextAlign.left,
-                                text: convertToMoney(
-                                  Provider.of<AllWallets>(context),
-                                  number,
-                                  finalNumber:
-                                      walletWithDetails.totalSpent ?? 0 * -1,
-                                  currencyKey:
-                                      walletWithDetails.wallet.currency,
-                                  decimals: walletWithDetails.wallet.decimals,
-                                  addCurrencyName: true,
-                                ),
-                                fontSize: 17,
-                                fontWeight: FontWeight.bold,
-                              );
-                            },
+                          AmountAccount(
+                            walletWithDetails: walletWithDetails,
+                            textAlign: TextAlign.left,
+                            fontSize: 17,
                           ),
                           TextFont(
                             textAlign: TextAlign.left,
@@ -285,28 +267,11 @@ class WalletEntryRow extends StatelessWidget {
                       ],
                     ),
                   ),
-                  CountNumber(
-                    lazyFirstRender: false,
-                    count: (walletWithDetails.totalSpent ?? 0 * -1),
-                    duration: Duration(milliseconds: 1000),
-                    decimals: walletWithDetails.wallet.decimals,
-                    initialCount: 0,
-                    textBuilder: (number) {
-                      return TextFont(
-                        textAlign: TextAlign.right,
-                        text: convertToMoney(
-                          Provider.of<AllWallets>(context),
-                          number,
-                          finalNumber: walletWithDetails.totalSpent ?? 0 * -1,
-                          currencyKey: walletWithDetails.wallet.currency,
-                          decimals: walletWithDetails.wallet.decimals,
-                          addCurrencyName: true,
-                        ),
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      );
-                    },
-                  ),
+                  AmountAccount(
+                    walletWithDetails: walletWithDetails,
+                    textAlign: TextAlign.right,
+                    fontSize: 18,
+                  )
                 ],
               ),
             ),
@@ -350,4 +315,75 @@ Future<bool> setPrimaryWallet(String walletPk) async {
   await updateSettings("selectedWalletPk", walletPk, updateGlobalState: true);
   homePageStateKey.currentState?.refreshState();
   return true;
+}
+
+class AmountAccount extends StatelessWidget {
+  const AmountAccount({
+    required this.walletWithDetails,
+    required this.textAlign,
+    required this.fontSize,
+    super.key,
+  });
+
+  final WalletWithDetails walletWithDetails;
+  final TextAlign textAlign;
+  final double fontSize;
+
+  @override
+  Widget build(BuildContext context) {
+    Color textColor =
+        appStateSettings["accountColorfulAmountsWithArrows"] == true
+            ? ((walletWithDetails.totalSpent ?? 0) == 0
+                ? getColor(context, "black")
+                : (walletWithDetails.totalSpent ?? 0) > 0
+                    ? getColor(context, "incomeAmount")
+                    : getColor(context, "expenseAmount"))
+            : getColor(context, "black");
+    double finalTotal =
+        appStateSettings["accountColorfulAmountsWithArrows"] == true
+            ? (walletWithDetails.totalSpent ?? 0).abs()
+            : (absoluteZero(walletWithDetails.totalSpent ?? 0));
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        if (appStateSettings["accountColorfulAmountsWithArrows"] == true)
+          AnimatedSizeSwitcher(
+            child: (walletWithDetails.totalSpent ?? 0) == 0
+                ? Container(
+                    key: ValueKey(1),
+                  )
+                : IncomeOutcomeArrow(
+                    key: ValueKey(2),
+                    isIncome: (walletWithDetails.totalSpent ?? 0) > 0,
+                    iconSize: 24,
+                    width: 14,
+                    height: 10,
+                  ),
+          ),
+        CountNumber(
+          lazyFirstRender: false,
+          count: finalTotal,
+          duration: Duration(milliseconds: 1000),
+          decimals: walletWithDetails.wallet.decimals,
+          initialCount: 0,
+          textBuilder: (number) {
+            return TextFont(
+              textAlign: textAlign,
+              text: convertToMoney(
+                Provider.of<AllWallets>(context),
+                number,
+                finalNumber: finalTotal,
+                currencyKey: walletWithDetails.wallet.currency,
+                decimals: walletWithDetails.wallet.decimals,
+                addCurrencyName: true,
+              ),
+              textColor: textColor,
+              fontSize: fontSize,
+              fontWeight: FontWeight.bold,
+            );
+          },
+        ),
+      ],
+    );
+  }
 }
