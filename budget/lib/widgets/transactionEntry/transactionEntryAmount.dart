@@ -54,6 +54,7 @@ class TransactionEntryAmount extends StatelessWidget {
                                     transaction,
                                   ),
                                   width: 15,
+                                  iconSize: 24,
                                 ),
                     ),
                     TextFont(

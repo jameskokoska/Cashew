@@ -401,45 +401,19 @@ Future<dynamic> openTransactionsOnDayBottomSheet(
         ),
         builder: (context, snapshot) {
           if (snapshot.hasData && snapshot.data != null) {
-            Color textColor = snapshot.data == 0
-                ? getColor(context, "black")
-                : snapshot.data! > 0
-                    ? getColor(context, "incomeAmount")
-                    : getColor(context, "expenseAmount");
             return Padding(
               padding: EdgeInsets.only(
                   top: getPlatform() == PlatformOS.isIOS ? 4 : 1),
-              child: Row(
+              child: AmountWithColorAndArrow(
+                showIncomeArrow: true,
+                totalSpent: snapshot.data ?? 0,
+                fontSize: 19,
+                iconSize: 24,
+                iconWidth: 15,
                 mainAxisAlignment: getPlatform() == PlatformOS.isIOS
                     ? MainAxisAlignment.center
                     : MainAxisAlignment.start,
-                children: [
-                  AnimatedSizeSwitcher(
-                    child: snapshot.data == 0
-                        ? Container(
-                            key: ValueKey(1),
-                          )
-                        : IncomeOutcomeArrow(
-                            key: ValueKey(2),
-                            color: textColor,
-                            isIncome: snapshot.data! > 0,
-                            width: 15,
-                          ),
-                  ),
-                  TextFont(
-                    text: convertToMoney(
-                      Provider.of<AllWallets>(context),
-                      snapshot.data!.abs(),
-                      finalNumber: snapshot.data!.abs(),
-                    ),
-                    fontSize: 19,
-                    fontWeight: FontWeight.bold,
-                    textAlign: getPlatform() == PlatformOS.isIOS
-                        ? TextAlign.center
-                        : TextAlign.left,
-                    textColor: textColor,
-                  ),
-                ],
+                countNumber: false,
               ),
             );
           } else {

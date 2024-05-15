@@ -378,41 +378,13 @@ class TotalUpcomingHeaderPeriodSwitcher extends StatelessWidget {
                   Provider.of<AllWallets>(context),
                   selectedType,
                   snapshot.data);
-              return Row(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  AnimatedSizeSwitcher(
-                    child: total == 0
-                        ? Container(
-                            key: ValueKey(1),
-                          )
-                        : IncomeOutcomeArrow(
-                            key: ValueKey(2),
-                            color: getColor(context, "black"),
-                            isIncome: total > 0,
-                            iconSize: 30,
-                            width: 20,
-                          ),
-                  ),
-                  CountNumber(
-                    count: total.abs(),
-                    duration: Duration(milliseconds: 700),
-                    initialCount: (0),
-                    textBuilder: (number) {
-                      return TextFont(
-                        textAlign: TextAlign.center,
-                        text: convertToMoney(
-                          Provider.of<AllWallets>(context),
-                          number,
-                          finalNumber: total.abs(),
-                        ),
-                        fontSize: 30,
-                        fontWeight: FontWeight.bold,
-                      );
-                    },
-                  ),
-                ],
+              return AmountWithColorAndArrow(
+                showIncomeArrow: true,
+                totalSpent: total,
+                fontSize: 30,
+                iconSize: 30,
+                iconWidth: 20,
+                textColor: getColor(context, "black"),
               );
             },
           ),

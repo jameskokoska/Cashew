@@ -420,42 +420,15 @@ class CenteredAmountAndNumTransactions extends StatelessWidget {
                   },
                   child: Padding(
                     padding: const EdgeInsets.all(10),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        if (showIncomeArrow)
-                          AnimatedSizeSwitcher(
-                            child: totalSpent == 0
-                                ? Container(
-                                    key: ValueKey(1),
-                                  )
-                                : IncomeOutcomeArrow(
-                                    key: ValueKey(2),
-                                    color: textColor,
-                                    isIncome: totalSpent > 0,
-                                    iconSize: 30,
-                                    width: 20,
-                                  ),
-                          ),
-                        CountNumber(
-                          count: totalSpent.abs(),
-                          duration: Duration(milliseconds: 450),
-                          initialCount: (0),
-                          textBuilder: (number) {
-                            return TextFont(
-                              text: convertToMoney(
-                                  Provider.of<AllWallets>(context), number,
-                                  finalNumber: totalSpent.abs()),
-                              fontSize: 30,
-                              textColor: getTextColor != null
-                                  ? (getTextColor!(totalSpent) ?? textColor)
-                                  : textColor,
-                              fontWeight: FontWeight.bold,
-                            );
-                          },
-                        ),
-                      ],
+                    child: AmountWithColorAndArrow(
+                      showIncomeArrow: showIncomeArrow,
+                      totalSpent: totalSpent,
+                      absoluteValueWhenNoArrow: true,
+                      fontSize: 30,
+                      iconSize: 30,
+                      iconWidth: 20,
+                      getTextColor: getTextColor,
+                      textColor: textColor,
                     ),
                   ),
                 ),

@@ -2462,50 +2462,30 @@ class _AllSpendingPastSpendingGraphState
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
-                          Row(
-                            mainAxisSize: MainAxisSize.min,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              IncomeOutcomeArrow(
-                                color: getColor(context, "incomeAmount"),
-                                isIncome: true,
-                                iconSize: 20,
-                                width: 17,
-                              ),
-                              Flexible(
-                                child: TextFont(
-                                  text: convertToMoney(
-                                      Provider.of<AllWallets>(context),
-                                      incomeSpending.abs()),
-                                  fontSize: 16,
-                                  textColor: getColor(context, "incomeAmount"),
-                                  maxLines: 1,
-                                ),
-                              ),
-                            ],
+                          AmountWithColorAndArrow(
+                            showIncomeArrow: true,
+                            alwaysShowArrow: true,
+                            totalSpent: incomeSpending.abs(),
+                            isIncome: true,
+                            fontSize: 16,
+                            iconSize: 20,
+                            iconWidth: 17,
+                            textColor: getColor(context, "incomeAmount"),
+                            bold: false,
+                            countNumber: false,
                           ),
                           SizedBox(height: 3),
-                          Row(
-                            mainAxisSize: MainAxisSize.min,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              IncomeOutcomeArrow(
-                                color: getColor(context, "expenseAmount"),
-                                isIncome: false,
-                                iconSize: 20,
-                                width: 17,
-                              ),
-                              Flexible(
-                                child: TextFont(
-                                  text: convertToMoney(
-                                      Provider.of<AllWallets>(context),
-                                      expenseSpending.abs()),
-                                  fontSize: 16,
-                                  textColor: getColor(context, "expenseAmount"),
-                                  maxLines: 1,
-                                ),
-                              ),
-                            ],
+                          AmountWithColorAndArrow(
+                            showIncomeArrow: true,
+                            alwaysShowArrow: true,
+                            totalSpent: expenseSpending.abs(),
+                            isIncome: false,
+                            fontSize: 16,
+                            iconSize: 20,
+                            iconWidth: 17,
+                            textColor: getColor(context, "expenseAmount"),
+                            bold: false,
+                            countNumber: false,
                           ),
                         ],
                       ),
