@@ -2047,25 +2047,20 @@ class _WalletCategoryPieChartState extends State<WalletCategoryPieChart> {
           )),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 13),
-            child: Container(
-              decoration: BoxDecoration(
-                boxShadow: boxShadowCheck(boxShadowGeneral(context)),
-              ),
-              child: IncomeExpenseTabSelector(
-                hasBorderRadius: true,
-                onTabChanged: (income) {
-                  setState(() {
-                    isIncome = income;
-                    selectedCategory = null;
-                  });
-                  _pieChartDisplayStateKey.currentState?.setTouchedIndex(-1);
-                  widget.onSelectedIncome(income);
-                  widget.onSelectedCategory(selectedCategory);
-                },
-                initialTabIsIncome: false,
-                incomeLabel: "incoming".tr(),
-                expenseLabel: "outgoing".tr(),
-              ),
+            child: IncomeExpenseTabSelector(
+              hasBorderRadius: true,
+              onTabChanged: (income) {
+                setState(() {
+                  isIncome = income;
+                  selectedCategory = null;
+                });
+                _pieChartDisplayStateKey.currentState?.setTouchedIndex(-1);
+                widget.onSelectedIncome(income);
+                widget.onSelectedCategory(selectedCategory);
+              },
+              initialTabIsIncome: false,
+              incomeLabel: "incoming".tr(),
+              expenseLabel: "outgoing".tr(),
             ),
           ),
         ),

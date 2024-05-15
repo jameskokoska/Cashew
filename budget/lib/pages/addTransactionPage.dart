@@ -412,7 +412,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
             children: [
               SelectTransactionTypePopup(
                 setTransactionType: (type) {},
-                selectedTransactionType: selectedType,
+                selectedTransactionType: null,
                 onlyShowOneTransactionType: selectedType,
               ),
               Padding(
@@ -3628,11 +3628,13 @@ class SelectTransactionTypePopup extends StatelessWidget {
         ),
         SizedBox(height: 13),
         Tappable(
-          color: dynamicPastel(
-            context,
-            Theme.of(context).colorScheme.secondaryContainer,
-            amount: 0.5,
-          ),
+          color: appStateSettings["materialYou"] == true
+              ? dynamicPastel(
+                  context,
+                  Theme.of(context).colorScheme.secondaryContainer,
+                  amount: 0.5,
+                )
+              : getColor(context, "canvasContainer"),
           borderRadius: getPlatform() == PlatformOS.isIOS ? 10 : 15,
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 15),
@@ -3654,6 +3656,8 @@ class SelectTransactionTypePopup extends StatelessWidget {
                     highlightActionButton: true,
                     useHorizontalPaddingConstrained: false,
                     openPage: Container(),
+                    containerColor:
+                        Theme.of(context).canvasColor.withOpacity(0.5),
                     transaction: Transaction(
                       transactionPk: "-1",
                       name: "",
