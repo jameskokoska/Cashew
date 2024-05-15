@@ -40,6 +40,7 @@ String getChangelogString() {
     Fix unpaid balance correction when 'no color' had incorrect representation
     Fix adding attachment in initial add transaction steps
     Fix biometric bypass on error - now only bypass if app first launched from restored backup
+    Improvements to colors and contrast
     Updated translations
     < 5.2.9
     Collapsible future transactions list section (if more than 3 transactions in the future)
