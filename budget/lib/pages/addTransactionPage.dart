@@ -1218,6 +1218,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 TappableTextEntry(
+                                  addTappableBackground: true,
                                   title: selectedPeriodLength.toString(),
                                   placeholder: "0",
                                   showPlaceHolderWhenTextEquals: "0",
@@ -1244,11 +1245,12 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                   fontSize: 23,
                                   fontWeight: FontWeight.bold,
                                   internalPadding: EdgeInsets.symmetric(
-                                      vertical: 4, horizontal: 4),
+                                      vertical: 4, horizontal: 6),
                                   padding: EdgeInsets.symmetric(
-                                      vertical: 0, horizontal: 3),
+                                      vertical: 0, horizontal: 4),
                                 ),
                                 TappableTextEntry(
+                                  addTappableBackground: true,
                                   title: selectedRecurrenceDisplay
                                       .toString()
                                       .toLowerCase()
@@ -1277,7 +1279,7 @@ class _AddTransactionPageState extends State<AddTransactionPage>
                                   fontSize: 23,
                                   fontWeight: FontWeight.bold,
                                   internalPadding: EdgeInsets.symmetric(
-                                      vertical: 4, horizontal: 4),
+                                      vertical: 4, horizontal: 6),
                                   padding: EdgeInsets.symmetric(
                                       vertical: 0, horizontal: 3),
                                 ),
