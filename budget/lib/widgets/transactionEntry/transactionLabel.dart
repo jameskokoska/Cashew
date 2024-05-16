@@ -1,6 +1,7 @@
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/struct/databaseGlobal.dart';
+import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:flutter/material.dart';
 
@@ -18,12 +19,33 @@ class TransactionLabel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return transaction.name != ""
-        ? TextFont(
-            text: transaction.name.capitalizeFirst,
-            fontSize: fontSize,
-          )
+        ? TransactionTitleNameLabel(
+            transaction: transaction, fontSize: fontSize)
         : TransactionCategoryNameLabel(
             transaction: transaction, fontSize: fontSize);
+  }
+}
+
+class TransactionTitleNameLabel extends StatelessWidget {
+  const TransactionTitleNameLabel(
+      {required this.transaction, required this.fontSize, super.key});
+  final Transaction transaction;
+  final double fontSize;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextFont(
+      text: transaction.name.capitalizeFirst,
+      fontSize: fontSize,
+      maxLines:
+          appStateSettings["fadeTransactionNameOverflows"] == false ? null : 1,
+      overflow: appStateSettings["fadeTransactionNameOverflows"] == false
+          ? null
+          : TextOverflow.fade,
+      softWrap: appStateSettings["fadeTransactionNameOverflows"] == false
+          ? null
+          : false,
+    );
   }
 }
 
@@ -48,14 +70,35 @@ class TransactionCategoryNameLabel extends StatelessWidget {
                 return TextFont(
                   text: snapshot.data!.name,
                   fontSize: fontSize,
+                  maxLines:
+                      appStateSettings["fadeTransactionNameOverflows"] == false
+                          ? null
+                          : 1,
+                  overflow:
+                      appStateSettings["fadeTransactionNameOverflows"] == false
+                          ? null
+                          : TextOverflow.fade,
+                  softWrap:
+                      appStateSettings["fadeTransactionNameOverflows"] == false
+                          ? null
+                          : false,
                 );
               }
-              return Container();
+              return SizedBox.shrink();
             },
           )
         : TextFont(
             text: category!.name,
             fontSize: fontSize,
+            maxLines: appStateSettings["fadeTransactionNameOverflows"] == false
+                ? null
+                : 1,
+            overflow: appStateSettings["fadeTransactionNameOverflows"] == false
+                ? null
+                : TextOverflow.fade,
+            softWrap: appStateSettings["fadeTransactionNameOverflows"] == false
+                ? null
+                : false,
           );
   }
 }

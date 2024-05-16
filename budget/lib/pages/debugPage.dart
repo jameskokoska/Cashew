@@ -37,15 +37,17 @@ class DebugPage extends StatelessWidget {
     return PageFramework(
       dragDownToDismiss: true,
       title: "Debug Flags",
-      subtitle: TextFont(text: "Use at your own risk"),
+      subtitle: TextFont(
+        text: "Use at your own risk",
+        textColor: getColor(context, "expenseAmount"),
+        fontWeight: FontWeight.bold,
+        fontSize: 20,
+        maxLines: 5,
+        textAlign: TextAlign.center,
+      ),
       subtitleAlignment: Alignment.bottomLeft,
       subtitleSize: 10,
       listWidgets: [
-        // Global context below,
-        Container(
-          height: 5,
-          color: Theme.of(navigatorKey.currentContext!).primaryColor,
-        ),
         SettingsContainerSwitch(
           title: "Use Cumulative Spending",
           description: "For spending line graphs",
@@ -77,7 +79,7 @@ class DebugPage extends StatelessWidget {
               : Icons.money_off_rounded,
         ),
         SettingsContainerSwitch(
-          title: "Start spending at 0",
+          title: "Start Spending At 0",
           description: "For spending line graphs",
           onSwitched: (value) {
             updateSettings("ignorePastAmountSpent", value,
@@ -93,7 +95,7 @@ class DebugPage extends StatelessWidget {
               : Icons.add_chart_rounded,
         ),
         SettingsContainerSwitch(
-          title: "Show past spending trajectory",
+          title: "Show Past Spending Trajectory",
           onSwitched: (value) {
             updateSettings("showPastSpendingTrajectory", value,
                 pagesNeedingRefresh: [0], updateGlobalState: false);
@@ -104,7 +106,7 @@ class DebugPage extends StatelessWidget {
               : Icons.blur_circular_rounded,
         ),
         SettingsContainerSwitch(
-          title: "Circular progress rotation offset for categories",
+          title: "Circular Progress Rotation Category Offset",
           description:
               "Try and align with what is displayed in the pie graph. Odd rotations with subcategories.",
           onSwitched: (value) {
@@ -121,7 +123,7 @@ class DebugPage extends StatelessWidget {
               : Icons.rotate_90_degrees_cw_rounded,
         ),
         SettingsContainerSwitch(
-          title: "Large transaction entry".tr(),
+          title: "Large Transaction Entry".tr(),
           description: "Show more information in a transaction entry".tr(),
           onSwitched: (value) {
             updateSettings("nonCompactTransactions", value,
@@ -132,7 +134,21 @@ class DebugPage extends StatelessWidget {
               ? Icons.web_asset_outlined
               : Icons.web_asset_rounded,
         ),
-
+        SettingsContainerSwitch(
+          title: "Fade Transaction Title Overflow".tr(),
+          description:
+              "Fade overflow text instead of adding '...' for transactions"
+                  .tr(),
+          onSwitched: (value) {
+            updateSettings("fadeTransactionNameOverflows", value,
+                updateGlobalState: true);
+          },
+          initialValue:
+              appStateSettings["fadeTransactionNameOverflows"] == true,
+          icon: appStateSettings["outlinedIcons"]
+              ? Icons.more_outlined
+              : Icons.more_rounded,
+        ),
         SettingsContainerSwitch(
           title: "battery-saver".tr(),
           description: "battery-saver-description".tr(),
@@ -316,7 +332,7 @@ class DebugPage extends StatelessWidget {
               : Icons.keyboard_rounded,
         ),
         SettingsContainerSwitch(
-          title: "Disable shadows",
+          title: "Disable Shadows",
           onSwitched: (value) {
             updateSettings("disableShadows", value, updateGlobalState: true);
             // if (value == true) {
@@ -328,7 +344,7 @@ class DebugPage extends StatelessWidget {
           icon: Icons.dark_mode,
         ),
         SettingsContainerSwitch(
-          title: "Show transaction ID",
+          title: "Show Transaction ID",
           description: "On transactions page",
           onSwitched: (value) {
             updateSettings("showTransactionPk", value, updateGlobalState: true);
@@ -337,8 +353,9 @@ class DebugPage extends StatelessWidget {
           icon: Icons.password,
         ),
         SettingsContainerSwitch(
-          title: "Long term loan difference feature",
-          description: "Instead of a common goal",
+          title: "Long Term Loan Difference Feature",
+          description:
+              "Instead of a common goal. When adding a new long term goal, a new option appears.",
           onSwitched: (value) {
             updateSettings("longTermLoansDifferenceFeature", value,
                 updateGlobalState: true);

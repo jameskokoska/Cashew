@@ -99,18 +99,24 @@ class CategoryEntry extends StatelessWidget {
     double percentSpentWithCategoryLimit = isSubcategory
         ? (categorySpent / mainCategorySpentIfSubcategory).abs()
         : (categorySpent / totalSpent).abs();
-    double percentSpent = categoryBudgetLimit == null
-        ? percentSpentWithCategoryLimit
-        : isAbsoluteSpendingLimit
-            ? ((categorySpent / categoryLimitAmount).abs() > 1
-                ? 1
-                : (categorySpent / categoryLimitAmount).abs())
-            : ((categorySpent / (categoryLimitAmount / 100 * budgetLimit))
-                        .abs() >
-                    1
-                ? 1
-                : (categorySpent / (categoryLimitAmount / 100 * budgetLimit))
-                    .abs());
+    percentSpentWithCategoryLimit =
+        removeNaNAndInfinity(percentSpentWithCategoryLimit);
+
+    double percentSpent;
+    if (categoryBudgetLimit == null) {
+      percentSpent = percentSpentWithCategoryLimit;
+    } else {
+      double ratio;
+      if (isAbsoluteSpendingLimit) {
+        ratio = (categorySpent / categoryLimitAmount).abs();
+      } else {
+        double adjustedCategoryLimit = categoryLimitAmount / 100 * budgetLimit;
+        ratio = (categorySpent / adjustedCategoryLimit).abs();
+      }
+      percentSpent = clampDouble(ratio, 0, 1);
+    }
+    percentSpent = removeNaNAndInfinity(percentSpent);
+
     double amountSpent = categorySpent.abs();
     double spendingLimit = categoryBudgetLimit == null
         ? 0

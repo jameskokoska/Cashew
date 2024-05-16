@@ -1365,6 +1365,11 @@ double? absoluteZeroNull(double? number) {
   return number;
 }
 
+double removeNaNAndInfinity(double number) {
+  if (number.isFinite == false) return 0;
+  return number;
+}
+
 String absoluteZeroString(String number) {
   if (number == "-0") return "0";
   return number;

@@ -18,6 +18,7 @@ import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntry/transactionEntryTypeButton.dart';
 import 'package:budget/widgets/transactionEntry/transactionLabel.dart';
+import 'package:budget/widgets/util/widgetSize.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -305,16 +306,18 @@ class TransactionEntry extends StatelessWidget {
               selectTransaction: selectTransaction,
             )
           : SizedBox.shrink();
-      Widget categoryIcon = CategoryIcon(
-        cacheImage: true,
-        category: category,
-        categoryPk: transaction.categoryFk,
-        size: 27,
-        sizePadding: 20,
-        margin: EdgeInsets.zero,
-        borderRadius: 100,
-        onTap: openContainer,
-        tintColor: categoryTintColor,
+      Widget categoryIcon = Container(
+        child: CategoryIcon(
+          cacheImage: true,
+          category: category,
+          categoryPk: transaction.categoryFk,
+          size: 27,
+          sizePadding: 20,
+          margin: EdgeInsets.zero,
+          borderRadius: 100,
+          onTap: openContainer,
+          tintColor: categoryTintColor,
+        ),
       );
       Widget actionButton(EdgeInsets padding) {
         Widget actionButton = TransactionEntryActionButton(
@@ -346,8 +349,8 @@ class TransactionEntry extends StatelessWidget {
         transaction: transaction,
         category: category,
       );
-      Widget transactionName = TextFont(
-        text: transaction.name.capitalizeFirst,
+      Widget transactionName = TransactionTitleNameLabel(
+        transaction: transaction,
         fontSize: fontSize,
       );
       Widget transactionCategoryName = TransactionCategoryNameLabel(
@@ -398,7 +401,7 @@ class TransactionEntry extends StatelessWidget {
           appStateSettings["nonCompactTransactions"] == true
               ? Padding(
                   padding: enableSelectionCheckmark
-                      ? const EdgeInsets.only(right: 7)
+                      ? const EdgeInsets.only(right: 5)
                       : EdgeInsets.zero,
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -406,70 +409,76 @@ class TransactionEntry extends StatelessWidget {
                       transactionSelectionCheck,
                       categoryIcon,
                       Expanded(
-                        child: Column(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(left: 5),
-                              child: Row(
-                                children: [
-                                  actionButton(
-                                    const EdgeInsets.only(
-                                      left: 3,
-                                      top: 5.5,
-                                      bottom: 5.5,
-                                      right: 0,
-                                    ),
-                                  ),
-                                  SizedBox(width: 5),
-                                  Expanded(
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(left: 3),
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: transaction.name.trim() != ""
-                                            ? [
-                                                transactionName,
-                                                transactionCategoryName,
-                                              ]
-                                            : [transactionLabel],
+                        child: ConstrainedBox(
+                          constraints: BoxConstraints(minHeight: 45),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(left: 5),
+                                child: Row(
+                                  children: [
+                                    actionButton(
+                                      const EdgeInsets.only(
+                                        left: 3,
+                                        top: 5,
+                                        bottom: 5,
+                                        right: 0,
                                       ),
                                     ),
-                                  ),
-                                  SizedBox(
-                                    width: 7,
-                                  ),
-                                  if (getIsFullScreen(context))
-                                    transactionActionLabelButton,
-                                  amount,
-                                ],
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 5 + 3),
-                              child: Column(
-                                children: [
-                                  if (showNote)
-                                    Row(
-                                      children: [
-                                        Expanded(
-                                          child: Padding(
-                                            padding: const EdgeInsets.only(
-                                                bottom: 4, top: 3),
-                                            child: note,
+                                    SizedBox(width: 5),
+                                    Expanded(
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 3, bottom: 2, top: 2),
+                                        child: Container(
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children:
+                                                transaction.name.trim() != ""
+                                                    ? [
+                                                        transactionName,
+                                                        transactionCategoryName,
+                                                      ]
+                                                    : [transactionLabel],
                                           ),
                                         ),
-                                      ],
+                                      ),
                                     ),
-                                  SizedBox(height: 3),
-                                  tags,
-                                  SizedBox(height: 3),
-                                ],
+                                    SizedBox(
+                                      width: 7,
+                                    ),
+                                    if (getIsFullScreen(context))
+                                      transactionActionLabelButton,
+                                    amount,
+                                  ],
+                                ),
                               ),
-                            )
-                          ],
+                              Padding(
+                                padding: const EdgeInsets.only(left: 5 + 3),
+                                child: Column(
+                                  children: [
+                                    if (showNote)
+                                      Row(
+                                        children: [
+                                          Expanded(
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(
+                                                  bottom: 4, top: 3),
+                                              child: note,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    tags,
+                                  ],
+                                ),
+                              )
+                            ],
+                          ),
                         ),
                       )
                     ],

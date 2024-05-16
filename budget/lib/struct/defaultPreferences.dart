@@ -35,6 +35,8 @@ Future<Map<String, dynamic>> getDefaultPreferences() async {
     "widgetTheme": "system", //system, light, dark
     "nonCompactTransactions":
         false, //still in testing, declares a new transaction layout to show more information in lists
+    "fadeTransactionNameOverflows":
+        false, //still in testing, overflow transaction titles use fade instead of "..."
     "circularProgressRotation":
         false, // still in testing, offsets the circular progress to align with pie chart sections
     "forceFullDarkBackground": false,

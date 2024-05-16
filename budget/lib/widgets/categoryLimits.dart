@@ -82,7 +82,7 @@ class _CategoryLimitsState extends State<CategoryLimits> {
                       return TextFont(
                         fontSize: 15,
                         textColor: isOver
-                            ? getColor(context, "expenseRed")
+                            ? getColor(context, "expenseAmount")
                             : getColor(context, "textLight"),
                         text: widget.isAbsoluteSpendingLimit
                             ? (convertToMoney(
@@ -365,7 +365,7 @@ class CategoryLimitEntry extends StatelessWidget {
                           return TextFont(
                             fontSize: 15,
                             textColor: isOver
-                                ? getColor(context, "expenseRed")
+                                ? getColor(context, "expenseAmount")
                                 : getColor(context, "textLight"),
                             text: isAbsoluteSpendingLimit
                                 ? (convertToMoney(
