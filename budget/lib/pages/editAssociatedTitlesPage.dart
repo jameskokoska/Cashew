@@ -41,8 +41,9 @@ class _EditAssociatedTitlesPageState extends State<EditAssociatedTitlesPage> {
 
   @override
   void initState() {
-    Future.delayed(Duration.zero, () {
-      database.fixOrderAssociatedTitles();
+    Future.delayed(Duration.zero, () async {
+      await database.fixDuplicateAssociatedTitles();
+      await database.fixOrderAssociatedTitles();
     });
     super.initState();
   }

@@ -229,8 +229,9 @@ class PageNavigationFrameworkState extends State<PageNavigationFramework> {
       // The upcoming transactions may have been modified after a sync
       await setUpcomingNotifications(context);
 
-      database.deleteWanderingTransactions();
-      database.deleteWanderingTitles();
+      await database.deleteWanderingTransactions();
+      await database.deleteWanderingTitles();
+      await database.fixDuplicateAssociatedTitles();
 
       entireAppLoaded = true;
 

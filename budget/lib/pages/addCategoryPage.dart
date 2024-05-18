@@ -962,10 +962,10 @@ class _AddCategoryPageState extends State<AddCategoryPage>
                             ),
                           ],
                         ),
-                  widgetCategory == null
+                  widgetCategory == null || isSubCategory
                       ? SizedBox.shrink()
                       : SizedBox(height: 20),
-                  widget.category == null || isSubCategory
+                  widget.category == null
                       ? SizedBox.shrink()
                       : Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -975,10 +975,10 @@ class _AddCategoryPageState extends State<AddCategoryPage>
                             fontSize: 16,
                           ),
                         ),
-                  widget.category == null || isSubCategory
+                  widget.category == null
                       ? SizedBox.shrink()
                       : SizedBox(height: 5),
-                  widget.category == null || isSubCategory
+                  widget.category == null
                       ? SizedBox.shrink()
                       : Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -989,10 +989,10 @@ class _AddCategoryPageState extends State<AddCategoryPage>
                             maxLines: 10,
                           ),
                         ),
-                  widget.category == null || isSubCategory
+                  widget.category == null
                       ? SizedBox.shrink()
                       : SizedBox(height: 10),
-                  widget.category == null || isSubCategory
+                  widget.category == null
                       ? SizedBox.shrink()
                       : Row(
                           children: [

@@ -1,4 +1,5 @@
 import 'package:budget/database/tables.dart';
+import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/button.dart';
 import 'package:budget/widgets/categoryIcon.dart';
@@ -123,6 +124,25 @@ class _AddAssociatedTitlePageState extends State<AddAssociatedTitlePage> {
     }
   }
 
+  selectCategory() async {
+    MainAndSubcategory mainAndSubcategory = await selectCategorySequence(
+      context,
+      selectedCategory: selectedCategory,
+      setSelectedCategory: (_) {},
+      selectedSubCategory: selectedCategory,
+      setSelectedSubCategory: (_) {},
+      selectedIncomeInitial: null,
+      allowReorder: false,
+    );
+
+    if (mainAndSubcategory.sub != null) {
+      setSelectedCategory(mainAndSubcategory.sub!);
+    } else if (mainAndSubcategory.main != null) {
+      setSelectedCategory(mainAndSubcategory.main!);
+    }
+    _focusNode.requestFocus();
+  }
+
   @override
   Widget build(BuildContext context) {
     return PopupFramework(
@@ -135,34 +155,14 @@ class _AddAssociatedTitlePageState extends State<AddAssociatedTitlePage> {
               Tappable(
                 borderRadius: 15,
                 onTap: () {
-                  openBottomSheet(
-                    context,
-                    PopupFramework(
-                      title: "select-category".tr(),
-                      child: SelectCategory(
-                        selectedCategory: selectedCategory,
-                        setSelectedCategory: setSelectedCategory,
-                        next: () => _focusNode.requestFocus(),
-                      ),
-                    ),
-                  );
+                  selectCategory();
                 },
                 color: Colors.transparent,
                 child: CategoryIcon(
                   category: selectedCategory,
                   size: getIsFullScreen(context) ? 40 : 30,
                   onTap: () {
-                    openBottomSheet(
-                      context,
-                      PopupFramework(
-                        title: "select-category".tr(),
-                        child: SelectCategory(
-                          selectedCategory: selectedCategory,
-                          setSelectedCategory: setSelectedCategory,
-                          next: () => _focusNode.requestFocus(),
-                        ),
-                      ),
-                    );
+                    selectCategory();
                   },
                 ),
               ),

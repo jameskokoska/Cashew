@@ -1983,9 +1983,7 @@ class FinanceDatabase extends _$FinanceDatabase {
                       associatedTitles.title.isNotIn(excludeTitles))
                   ..groupBy([associatedTitles.title])
                   // Remove duplicate title titles only if not searching categories
-                  ..orderBy(alsoSearchCategories
-                      ? []
-                      : [OrderingTerm.desc(associatedTitles.order)])
+                  ..orderBy([OrderingTerm.desc(associatedTitles.order)])
                   ..limit(limit, offset: offset ?? DEFAULT_OFFSET))
                 .get())
             .map((rows) {
@@ -3120,6 +3118,41 @@ class FinanceDatabase extends _$FinanceDatabase {
         batch.insertAll(wallets, walletsList, mode: InsertMode.replace);
       });
     }
+    return true;
+  }
+
+  Future<bool> fixDuplicateAssociatedTitles() async {
+    List<Map<String, String>> duplicatedTitles = (await customSelect(
+      'SELECT associated_titles.* FROM (SELECT title, category_fk FROM associated_titles GROUP BY title, category_fk HAVING COUNT(*) >= 2) T1 JOIN associated_titles ON T1.title = associated_titles.title AND T1.category_fk = associated_titles.category_fk ORDER BY associated_titles.title, associated_titles."order" DESC',
+      readsFrom: {associatedTitles},
+    ).get())
+        .map((row) {
+      return {
+        "associated_title_pk": row.read<String>('associated_title_pk'),
+        "title": row.read<String>('title')
+      };
+    }).toList();
+
+    Set<String> seenTitles = {};
+    Set<String> titlesToDelete = {};
+
+    for (Map<String, String> entry in duplicatedTitles) {
+      String title = entry['title']!;
+      if (seenTitles.contains(title)) {
+        titlesToDelete.add(entry['associated_title_pk'] ?? "");
+      } else {
+        seenTitles.add(title);
+      }
+    }
+
+    if (duplicatedTitles.length > 0) {
+      await batch((batch) {
+        batch.deleteWhere(
+            associatedTitles, (t) => t.associatedTitlePk.isIn(titlesToDelete));
+      });
+      print("Removed " + duplicatedTitles.length.toString() + " titles");
+    }
+
     return true;
   }
 
@@ -6938,18 +6971,24 @@ class FinanceDatabase extends _$FinanceDatabase {
 
   // titles not belonging to a category should be deleted
   Future<bool> deleteWanderingTitles() async {
-    List<TransactionCategory> allCategories = await getAllCategories();
+    List<TransactionCategory> allCategories =
+        await getAllCategories(includeSubCategories: true);
     List<String> categoryPks =
         allCategories.map((category) => category.categoryPk).toList();
-    List<TransactionAssociatedTitle> wanderingTitles =
-        await (select(associatedTitles)
+
+    Set<String> wanderingTitles = (await (select(associatedTitles)
               ..where((t) => t.categoryFk.isNotIn(categoryPks)))
-            .get();
-    for (TransactionAssociatedTitle title in wanderingTitles) {
-      await deleteAssociatedTitle(title.associatedTitlePk, title.order);
-    }
+            .get())
+        .map((e) => e.associatedTitlePk)
+        .toSet();
+
     if (wanderingTitles.isNotEmpty) {
-      print("Deleted wandering titles (titles without an existing category)");
+      await batch((batch) {
+        batch.deleteWhere(
+            associatedTitles, (t) => t.associatedTitlePk.isIn(wanderingTitles));
+      });
+      print("Deleted wandering titles (titles without an existing category) " +
+          wanderingTitles.length.toString());
       await fixOrderAssociatedTitles();
     }
     return true;
