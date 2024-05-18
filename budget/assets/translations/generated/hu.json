@@ -1137,5 +1137,6 @@
   "maximum-precision-description": "12 tizedesjegy támogatott",
   "monthly-upcoming": "Átlagos havi közelgő",
   "yearly-upcoming": "Átlagos éves közelgő",
-  "total-upcoming": "Teljes közelgő"
+  "total-upcoming": "Teljes közelgő",
+  "no-subscription-transactions": "Nincsenek előfizetési tranzakciók."
 }

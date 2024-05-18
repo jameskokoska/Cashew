@@ -1137,5 +1137,6 @@
   "maximum-precision-description": "12 casas decimais são suportadas",
   "monthly-upcoming": "Média mensal futura",
   "yearly-upcoming": "Média anual futura",
-  "total-upcoming": "Total próximo"
+  "total-upcoming": "Total próximo",
+  "no-subscription-transactions": "Nenhuma transação de assinatura."
 }

@@ -1137,5 +1137,6 @@
   "maximum-precision-description": "12 tempat perpuluhan disokong",
   "monthly-upcoming": "Purata bulanan akan datang",
   "yearly-upcoming": "Purata tahunan akan datang",
-  "total-upcoming": "Jumlah akan datang"
+  "total-upcoming": "Jumlah akan datang",
+  "no-subscription-transactions": "Tiada transaksi langganan."
 }

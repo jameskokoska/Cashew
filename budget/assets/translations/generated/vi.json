@@ -1137,5 +1137,6 @@
   "maximum-precision-description": "12 chữ số thập phân được hỗ trợ",
   "monthly-upcoming": "Trung bình hàng tháng sắp tới",
   "yearly-upcoming": "Trung bình hàng năm sắp tới",
-  "total-upcoming": "Tổng số sắp tới"
+  "total-upcoming": "Tổng số sắp tới",
+  "no-subscription-transactions": "Không có giao dịch đăng ký."
 }

@@ -1137,5 +1137,6 @@
   "maximum-precision-description": "12 दशमलव स्थान समर्थित हैं",
   "monthly-upcoming": "औसत मासिक आगामी",
   "yearly-upcoming": "औसत वार्षिक आगामी",
-  "total-upcoming": "कुल आगामी"
+  "total-upcoming": "कुल आगामी",
+  "no-subscription-transactions": "कोई सदस्यता लेनदेन नहीं."
 }

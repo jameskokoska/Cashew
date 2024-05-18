@@ -1137,5 +1137,6 @@
   "maximum-precision-description": "支持 12 位小数",
   "monthly-upcoming": "平均每月即将到来",
   "yearly-upcoming": "平均每年即将到来",
-  "total-upcoming": "总计即将到来"
+  "total-upcoming": "总计即将到来",
+  "no-subscription-transactions": "没有订阅交易。"
 }

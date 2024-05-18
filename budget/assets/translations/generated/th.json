@@ -1137,5 +1137,6 @@
   "maximum-precision-description": "รองรับทศนิยม 12 ตำแหน่ง",
   "monthly-upcoming": "ค่าเฉลี่ยรายเดือนที่กำลังจะมาถึง",
   "yearly-upcoming": "เฉลี่ยรายปีที่กำลังจะมาถึง",
-  "total-upcoming": "รวมที่กำลังจะเกิดขึ้น"
+  "total-upcoming": "รวมที่กำลังจะเกิดขึ้น",
+  "no-subscription-transactions": "ไม่มีธุรกรรมการสมัครสมาชิก"
 }

@@ -1137,5 +1137,6 @@
   "maximum-precision-description": "Підтримується 12 знаків після коми",
   "monthly-upcoming": "Усереднений місячний майбутній",
   "yearly-upcoming": "Усереднений річний майбутній",
-  "total-upcoming": "Всього в майбутньому"
+  "total-upcoming": "Всього в майбутньому",
+  "no-subscription-transactions": "Немає транзакцій підписки."
 }

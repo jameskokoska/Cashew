@@ -1137,5 +1137,6 @@
   "maximum-precision-description": "12 tempat desimal didukung",
   "monthly-upcoming": "Rata-rata bulanan yang akan datang",
   "yearly-upcoming": "Rata-rata tahunan yang akan datang",
-  "total-upcoming": "Jumlah yang akan datang"
+  "total-upcoming": "Jumlah yang akan datang",
+  "no-subscription-transactions": "Tidak ada transaksi berlangganan."
 }

@@ -1137,5 +1137,6 @@
   "maximum-precision-description": "Подржано је 12 децималних места",
   "monthly-upcoming": "Просечан месечни предстојећи",
   "yearly-upcoming": "Просечан годишњи предстојећи",
-  "total-upcoming": "Тотал упцоминг"
+  "total-upcoming": "Тотал упцоминг",
+  "no-subscription-transactions": "Нема трансакција претплате."
 }

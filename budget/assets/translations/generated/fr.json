@@ -1137,5 +1137,6 @@
   "maximum-precision-description": "12 décimales sont prises en charge",
   "monthly-upcoming": "Moyenne mensuelle à venir",
   "yearly-upcoming": "Moyenne annuelle à venir",
-  "total-upcoming": "Total à venir"
+  "total-upcoming": "Total à venir",
+  "no-subscription-transactions": "Aucune opération de souscription."
 }

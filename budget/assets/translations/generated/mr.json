@@ -1137,5 +1137,6 @@
   "maximum-precision-description": "12 दशांश स्थाने समर्थित आहेत",
   "monthly-upcoming": "सरासरी मासिक आगामी",
   "yearly-upcoming": "आगामी वार्षिक सरासरी",
-  "total-upcoming": "एकूण आगामी"
+  "total-upcoming": "एकूण आगामी",
+  "no-subscription-transactions": "कोणतेही सबस्क्रिप्शन व्यवहार नाहीत."
 }

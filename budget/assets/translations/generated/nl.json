@@ -1137,5 +1137,6 @@
   "maximum-precision-description": "Er worden 12 decimalen ondersteund",
   "monthly-upcoming": "Gemiddeld maandelijks aankomend",
   "yearly-upcoming": "Gemiddeld jaarlijks aankomend",
-  "total-upcoming": "Totaal aanstaande"
+  "total-upcoming": "Totaal aanstaande",
+  "no-subscription-transactions": "Geen abonnementstransacties."
 }

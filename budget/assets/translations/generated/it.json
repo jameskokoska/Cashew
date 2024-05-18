@@ -1137,5 +1137,6 @@
   "maximum-precision-description": "Sono supportate 12 cifre decimali",
   "monthly-upcoming": "Prossimamente mensile medio",
   "yearly-upcoming": "Prossimamente annuale medio",
-  "total-upcoming": "Totale in arrivo"
+  "total-upcoming": "Totale in arrivo",
+  "no-subscription-transactions": "Nessuna transazione di abbonamento."
 }

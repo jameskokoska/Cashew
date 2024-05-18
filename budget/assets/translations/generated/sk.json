@@ -1137,5 +1137,6 @@
   "maximum-precision-description": "Podporovaných je 12 desatinných miest",
   "monthly-upcoming": "Priemerný nadchádzajúci mesiac",
   "yearly-upcoming": "Priemerný ročný nadchádzajúci",
-  "total-upcoming": "Celkom nadchádzajúce"
+  "total-upcoming": "Celkom nadchádzajúce",
+  "no-subscription-transactions": "Žiadne predplatné transakcie."
 }

@@ -1137,5 +1137,6 @@
   "maximum-precision-description": "12 দশমিক স্থান সমর্থিত",
   "monthly-upcoming": "গড় মাসিক আসন্ন",
   "yearly-upcoming": "আসন্ন বার্ষিক গড়",
-  "total-upcoming": "মোট আসন্ন"
+  "total-upcoming": "মোট আসন্ন",
+  "no-subscription-transactions": "কোন সাবস্ক্রিপশন লেনদেন."
 }

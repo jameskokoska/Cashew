@@ -1137,5 +1137,6 @@
   "maximum-precision-description": "12 מקומות עשרוניים נתמכים",
   "monthly-upcoming": "ממוצע חודשי בקרוב",
   "yearly-upcoming": "ממוצע שנתי בקרוב",
-  "total-upcoming": "סה\"כ בקרוב"
+  "total-upcoming": "סה\"כ בקרוב",
+  "no-subscription-transactions": "אין עסקאות מנוי."
 }

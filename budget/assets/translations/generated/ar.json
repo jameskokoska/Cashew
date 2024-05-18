@@ -1137,5 +1137,6 @@
   "maximum-precision-description": "يتم دعم 12 منزلة عشرية",
   "monthly-upcoming": "المتوسط ​​الشهري القادم",
   "yearly-upcoming": "المتوسط ​​السنوي القادم",
-  "total-upcoming": "إجمالي القادمة"
+  "total-upcoming": "إجمالي القادمة",
+  "no-subscription-transactions": "لا توجد معاملات الاشتراك."
 }

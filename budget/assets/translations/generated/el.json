@@ -1137,5 +1137,6 @@
   "maximum-precision-description": "Υποστηρίζονται 12 δεκαδικά ψηφία",
   "monthly-upcoming": "Μέσος μηνιαίος προσεχής",
   "yearly-upcoming": "Μέσος όρος ετήσιας προσεχούς",
-  "total-upcoming": "Σύνολο προσεχής"
+  "total-upcoming": "Σύνολο προσεχής",
+  "no-subscription-transactions": "Καμία συναλλαγή συνδρομής."
 }

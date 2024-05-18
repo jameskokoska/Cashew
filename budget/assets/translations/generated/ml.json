@@ -1137,5 +1137,6 @@
   "maximum-precision-description": "12 ദശാംശ സ്ഥാനങ്ങൾ പിന്തുണയ്ക്കുന്നു",
   "monthly-upcoming": "പ്രതിമാസ വരാനിരിക്കുന്ന ശരാശരി",
   "yearly-upcoming": "ശരാശരി വാർഷിക വരാനിരിക്കുന്ന",
-  "total-upcoming": "വരാനിരിക്കുന്ന ആകെ"
+  "total-upcoming": "വരാനിരിക്കുന്ന ആകെ",
+  "no-subscription-transactions": "സബ്‌സ്‌ക്രിപ്‌ഷൻ ഇടപാടുകളൊന്നുമില്ല."
 }

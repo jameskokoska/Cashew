@@ -1137,5 +1137,6 @@
   "maximum-precision-description": "12 ondalık basamak desteklenir",
   "monthly-upcoming": "Ortalama aylık yaklaşan",
   "yearly-upcoming": "Ortalama yıllık yaklaşan",
-  "total-upcoming": "Toplam yaklaşan"
+  "total-upcoming": "Toplam yaklaşan",
+  "no-subscription-transactions": "Abonelik işlemi yok."
 }

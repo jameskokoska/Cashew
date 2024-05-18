@@ -1137,5 +1137,6 @@
   "maximum-precision-description": "소수점 이하 12자리가 지원됩니다.",
   "monthly-upcoming": "평균 월별 예정",
   "yearly-upcoming": "매년 평균 예정",
-  "total-upcoming": "총 예정"
+  "total-upcoming": "총 예정",
+  "no-subscription-transactions": "구독 거래가 없습니다."
 }

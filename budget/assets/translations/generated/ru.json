@@ -1136,5 +1136,6 @@
   "maximum-precision-description": "Поддерживается 12 десятичных знаков.",
   "monthly-upcoming": "В среднем за месяц предстоящий",
   "yearly-upcoming": "В среднем за год предстоящий",
-  "total-upcoming": "Всего предстоящих"
+  "total-upcoming": "Всего предстоящих",
+  "no-subscription-transactions": "Никаких транзакций по подписке."
 }

@@ -1137,5 +1137,6 @@
   "maximum-precision-description": "12 દશાંશ સ્થાનો સપોર્ટેડ છે",
   "monthly-upcoming": "સરેરાશ માસિક આગામી",
   "yearly-upcoming": "સરેરાશ વાર્ષિક આગામી",
-  "total-upcoming": "કુલ આગામી"
+  "total-upcoming": "કુલ આગામી",
+  "no-subscription-transactions": "કોઈ સબ્સ્ક્રિપ્શન વ્યવહારો નથી."
 }

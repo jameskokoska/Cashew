@@ -1137,5 +1137,6 @@
   "maximum-precision-description": "12 decimal places are supported",
   "monthly-upcoming": "Averaged monthly upcoming",
   "yearly-upcoming": "Averaged yearly upcoming",
-  "total-upcoming": "Total upcoming"
+  "total-upcoming": "Total upcoming",
+  "no-subscription-transactions": "No subscription transactions."
 }

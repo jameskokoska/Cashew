@@ -1137,5 +1137,6 @@
   "maximum-precision-description": "12 desimaalin tarkkuutta tuetaan",
   "monthly-upcoming": "Keskimääräinen kuukausittainen tuleva",
   "yearly-upcoming": "Keskimääräinen vuosittainen tuleva",
-  "total-upcoming": "Yhteensä tulossa"
+  "total-upcoming": "Yhteensä tulossa",
+  "no-subscription-transactions": "Ei tilaustapahtumia."
 }

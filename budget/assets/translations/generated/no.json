@@ -1137,5 +1137,6 @@
   "maximum-precision-description": "12 desimaler støttes",
   "monthly-upcoming": "Gjennomsnittlig månedlig kommende",
   "yearly-upcoming": "Gjennomsnittlig årlig kommende",
-  "total-upcoming": "Totalt kommende"
+  "total-upcoming": "Totalt kommende",
+  "no-subscription-transactions": "Ingen abonnementstransaksjoner."
 }

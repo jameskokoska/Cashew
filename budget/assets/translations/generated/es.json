@@ -1137,5 +1137,6 @@
   "maximum-precision-description": "Se admiten 12 decimales",
   "monthly-upcoming": "Promedio mensual próximo",
   "yearly-upcoming": "Promedio anual próximo",
-  "total-upcoming": "Próximos totales"
+  "total-upcoming": "Próximos totales",
+  "no-subscription-transactions": "Sin transacciones de suscripción."
 }

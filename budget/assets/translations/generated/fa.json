@@ -1137,5 +1137,6 @@
   "maximum-precision-description": "12 رقم اعشار پشتیبانی می شود",
   "monthly-upcoming": "میانگین ماهانه آینده",
   "yearly-upcoming": "میانگین سالانه آینده",
-  "total-upcoming": "مجموع آینده"
+  "total-upcoming": "مجموع آینده",
+  "no-subscription-transactions": "بدون تراکنش اشتراک"
 }

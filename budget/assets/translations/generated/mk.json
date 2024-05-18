@@ -186,5 +186,6 @@
   "maximum-precision-description": "Поддржани се 12 децимални места",
   "monthly-upcoming": "Просечен месечен претстоен",
   "yearly-upcoming": "Просечно годишно претстојно",
-  "total-upcoming": "Вкупно претстојни"
+  "total-upcoming": "Вкупно претстојни",
+  "no-subscription-transactions": "Нема трансакции со претплата."
 }

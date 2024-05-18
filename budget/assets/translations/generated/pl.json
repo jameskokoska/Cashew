@@ -1137,5 +1137,6 @@
   "maximum-precision-description": "Obsługiwanych jest 12 miejsc po przecinku",
   "monthly-upcoming": "Nadchodzące średniomiesięczne",
   "yearly-upcoming": "Średnio nadchodzące roczne",
-  "total-upcoming": "Razem nadchodzące"
+  "total-upcoming": "Razem nadchodzące",
+  "no-subscription-transactions": "Brak transakcji subskrypcyjnych."
 }

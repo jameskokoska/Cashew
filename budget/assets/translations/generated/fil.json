@@ -1137,5 +1137,6 @@
   "maximum-precision-description": "12 decimal na lugar ay suportado",
   "monthly-upcoming": "Average na buwanang paparating",
   "yearly-upcoming": "Average na taunang paparating",
-  "total-upcoming": "Kabuuang paparating"
+  "total-upcoming": "Kabuuang paparating",
+  "no-subscription-transactions": "Walang mga transaksyon sa subscription."
 }

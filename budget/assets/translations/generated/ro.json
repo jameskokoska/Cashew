@@ -1137,5 +1137,6 @@
   "maximum-precision-description": "Sunt acceptate 12 zecimale",
   "monthly-upcoming": "Media lunară viitoare",
   "yearly-upcoming": "Media anuală viitoare",
-  "total-upcoming": "Total viitoare"
+  "total-upcoming": "Total viitoare",
+  "no-subscription-transactions": "Fără tranzacții cu abonament."
 }

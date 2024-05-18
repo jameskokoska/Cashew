@@ -1137,5 +1137,6 @@
   "maximum-precision-description": "Es werden 12 Dezimalstellen unterstützt",
   "monthly-upcoming": "Durchschnittliche monatliche bevorstehende",
   "yearly-upcoming": "Durchschnittliches jährliches kommendes Jahr",
-  "total-upcoming": "Total bevorstehend"
+  "total-upcoming": "Total bevorstehend",
+  "no-subscription-transactions": "Keine Abonnementtransaktionen."
 }

@@ -134,7 +134,7 @@ class SubscriptionsPageState extends State<SubscriptionsPage> {
                                 right: 30,
                                 left: 30,
                               ),
-                              message: "No subscription transactions."));
+                              message: "no-subscription-transactions".tr()));
                     }
                     return SliverList(
                       delegate: SliverChildBuilderDelegate(

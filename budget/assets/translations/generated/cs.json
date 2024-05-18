@@ -1137,5 +1137,6 @@
   "maximum-precision-description": "Je podporováno 12 desetinných míst",
   "monthly-upcoming": "Průměrný nadcházející měsíc",
   "yearly-upcoming": "Průměrný roční nadcházející",
-  "total-upcoming": "Celkem nadcházející"
+  "total-upcoming": "Celkem nadcházející",
+  "no-subscription-transactions": "Žádné transakce předplatného."
 }
