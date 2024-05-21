@@ -21,6 +21,7 @@ class DateDivider extends StatelessWidget {
     this.color,
     this.useHorizontalPaddingConstrained = true,
     this.afterDate = "",
+    this.maxLines,
   }) : super(key: key);
 
   final DateTime date;
@@ -28,6 +29,7 @@ class DateDivider extends StatelessWidget {
   final Color? color;
   final bool useHorizontalPaddingConstrained;
   final String afterDate;
+  final int? maxLines;
 
   @override
   Widget build(BuildContext context) {
@@ -44,6 +46,7 @@ class DateDivider extends StatelessWidget {
         extraInfo: info,
         color: color,
         fontSize: 14,
+        maxLines: maxLines,
       ),
     );
   }

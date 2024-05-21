@@ -1138,5 +1138,11 @@
   "monthly-upcoming": "آنے والی ماہانہ اوسط",
   "yearly-upcoming": "آنے والا سالانہ اوسط",
   "total-upcoming": "کل آنے والا",
-  "no-subscription-transactions": "کوئی سبسکرپشن لین دین نہیں۔"
+  "no-subscription-transactions": "کوئی سبسکرپشن لین دین نہیں۔",
+  "tools-and-extras": "ٹولز اور ایکسٹرا",
+  "transaction-activity-log": "لین دین کی سرگرمی لاگ",
+  "activty-log": "سرگرمی لاگ",
+  "modified": "ترمیم شدہ",
+  "restore-transaction": "لین دین بحال کریں؟",
+  "created": "بنایا"
 }

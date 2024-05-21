@@ -1138,5 +1138,11 @@
   "monthly-upcoming": "Priemerný nadchádzajúci mesiac",
   "yearly-upcoming": "Priemerný ročný nadchádzajúci",
   "total-upcoming": "Celkom nadchádzajúce",
-  "no-subscription-transactions": "Žiadne predplatné transakcie."
+  "no-subscription-transactions": "Žiadne predplatné transakcie.",
+  "tools-and-extras": "Nástroje a doplnky",
+  "transaction-activity-log": "Denník aktivity transakcie",
+  "activty-log": "Denník aktivít",
+  "modified": "Upravené",
+  "restore-transaction": "Obnoviť transakciu?",
+  "created": "Vytvorené"
 }

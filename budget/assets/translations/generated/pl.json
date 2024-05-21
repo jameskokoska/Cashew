@@ -1138,5 +1138,11 @@
   "monthly-upcoming": "Nadchodzące średniomiesięczne",
   "yearly-upcoming": "Średnio nadchodzące roczne",
   "total-upcoming": "Razem nadchodzące",
-  "no-subscription-transactions": "Brak transakcji subskrypcyjnych."
+  "no-subscription-transactions": "Brak transakcji subskrypcyjnych.",
+  "tools-and-extras": "Narzędzia i dodatki",
+  "transaction-activity-log": "Dziennik aktywności transakcji",
+  "activty-log": "Dziennik aktywności",
+  "modified": "Zmodyfikowany",
+  "restore-transaction": "Przywrócić transakcję?",
+  "created": "Utworzony"
 }

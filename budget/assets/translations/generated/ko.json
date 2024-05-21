@@ -1138,5 +1138,11 @@
   "monthly-upcoming": "평균 월별 예정",
   "yearly-upcoming": "매년 평균 예정",
   "total-upcoming": "총 예정",
-  "no-subscription-transactions": "구독 거래가 없습니다."
+  "no-subscription-transactions": "구독 거래가 없습니다.",
+  "tools-and-extras": "도구 및 추가 기능",
+  "transaction-activity-log": "거래 활동 로그",
+  "activty-log": "활동 로그",
+  "modified": "수정됨",
+  "restore-transaction": "거래를 복원하시겠습니까?",
+  "created": "만들어진"
 }

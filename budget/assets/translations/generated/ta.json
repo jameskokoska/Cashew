@@ -1138,5 +1138,11 @@
   "monthly-upcoming": "வரவிருக்கும் மாதாந்திர சராசரி",
   "yearly-upcoming": "சராசரி ஆண்டு வரவிருக்கும்",
   "total-upcoming": "மொத்தம் வரவிருக்கிறது",
-  "no-subscription-transactions": "சந்தா பரிவர்த்தனைகள் இல்லை."
+  "no-subscription-transactions": "சந்தா பரிவர்த்தனைகள் இல்லை.",
+  "tools-and-extras": "கருவிகள் & கூடுதல்",
+  "transaction-activity-log": "பரிவர்த்தனை நடவடிக்கை பதிவு",
+  "activty-log": "நடவடிக்கை பதிவு",
+  "modified": "மாற்றியமைக்கப்பட்டது",
+  "restore-transaction": "பரிவர்த்தனையை மீட்டெடுக்கவா?",
+  "created": "உருவாக்கப்பட்டது"
 }

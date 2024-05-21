@@ -1137,5 +1137,11 @@
   "monthly-upcoming": "В среднем за месяц предстоящий",
   "yearly-upcoming": "В среднем за год предстоящий",
   "total-upcoming": "Всего предстоящих",
-  "no-subscription-transactions": "Никаких транзакций по подписке."
+  "no-subscription-transactions": "Никаких транзакций по подписке.",
+  "tools-and-extras": "Инструменты и дополнительные возможности",
+  "transaction-activity-log": "Журнал активности транзакций",
+  "activty-log": "Журнал активности",
+  "modified": "Модифицированный",
+  "restore-transaction": "Восстановить транзакцию?",
+  "created": "Созданный"
 }

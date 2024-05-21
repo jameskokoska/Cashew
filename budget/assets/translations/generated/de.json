@@ -1138,5 +1138,11 @@
   "monthly-upcoming": "Durchschnittliche monatliche bevorstehende",
   "yearly-upcoming": "Durchschnittliches jährliches kommendes Jahr",
   "total-upcoming": "Total bevorstehend",
-  "no-subscription-transactions": "Keine Abonnementtransaktionen."
+  "no-subscription-transactions": "Keine Abonnementtransaktionen.",
+  "tools-and-extras": "Werkzeuge und Extras",
+  "transaction-activity-log": "Transaktionsaktivitätsprotokoll",
+  "activty-log": "Aktivitätsprotokoll",
+  "modified": "Geändert",
+  "restore-transaction": "Transaktion wiederherstellen?",
+  "created": "Erstellt"
 }

@@ -1138,5 +1138,11 @@
   "monthly-upcoming": "Genomsnittligt kommande månad",
   "yearly-upcoming": "Genomsnittligt årlig kommande",
   "total-upcoming": "Totalt kommande",
-  "no-subscription-transactions": "Inga abonnemangstransaktioner."
+  "no-subscription-transactions": "Inga abonnemangstransaktioner.",
+  "tools-and-extras": "Verktyg & Extra",
+  "transaction-activity-log": "Transaktionsaktivitetslogg",
+  "activty-log": "Aktivitets logg",
+  "modified": "Ändrad",
+  "restore-transaction": "Återställa transaktionen?",
+  "created": "Skapad"
 }

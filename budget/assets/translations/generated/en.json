@@ -1138,5 +1138,11 @@
   "monthly-upcoming": "Averaged monthly upcoming",
   "yearly-upcoming": "Averaged yearly upcoming",
   "total-upcoming": "Total upcoming",
-  "no-subscription-transactions": "No subscription transactions."
+  "no-subscription-transactions": "No subscription transactions.",
+  "tools-and-extras": "Tools & Extras",
+  "transaction-activity-log": "Transaction Activity Log",
+  "activty-log": "Activity Log",
+  "modified": "Modified",
+  "restore-transaction": "Restore Transaction?",
+  "created": "Created"
 }

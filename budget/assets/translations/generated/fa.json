@@ -1138,5 +1138,11 @@
   "monthly-upcoming": "میانگین ماهانه آینده",
   "yearly-upcoming": "میانگین سالانه آینده",
   "total-upcoming": "مجموع آینده",
-  "no-subscription-transactions": "بدون تراکنش اشتراک"
+  "no-subscription-transactions": "بدون تراکنش اشتراک",
+  "tools-and-extras": "ابزار و امکانات اضافی",
+  "transaction-activity-log": "گزارش فعالیت تراکنش",
+  "activty-log": "گزارش فعالیت",
+  "modified": "اصلاح شده",
+  "restore-transaction": "بازیابی تراکنش؟",
+  "created": "ایجاد شده"
 }

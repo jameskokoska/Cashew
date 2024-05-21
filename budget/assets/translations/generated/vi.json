@@ -1138,5 +1138,11 @@
   "monthly-upcoming": "Trung bình hàng tháng sắp tới",
   "yearly-upcoming": "Trung bình hàng năm sắp tới",
   "total-upcoming": "Tổng số sắp tới",
-  "no-subscription-transactions": "Không có giao dịch đăng ký."
+  "no-subscription-transactions": "Không có giao dịch đăng ký.",
+  "tools-and-extras": "Công cụ & Tiện ích bổ sung",
+  "transaction-activity-log": "Nhật ký hoạt động giao dịch",
+  "activty-log": "Hoạt động đăng nhập",
+  "modified": "Đã sửa đổi",
+  "restore-transaction": "Khôi phục giao dịch?",
+  "created": "Tạo"
 }

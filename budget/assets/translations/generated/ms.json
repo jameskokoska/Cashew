@@ -1138,5 +1138,11 @@
   "monthly-upcoming": "Purata bulanan akan datang",
   "yearly-upcoming": "Purata tahunan akan datang",
   "total-upcoming": "Jumlah akan datang",
-  "no-subscription-transactions": "Tiada transaksi langganan."
+  "no-subscription-transactions": "Tiada transaksi langganan.",
+  "tools-and-extras": "Alat & Tambahan",
+  "transaction-activity-log": "Log Aktiviti Transaksi",
+  "activty-log": "Log aktiviti",
+  "modified": "Diubah suai",
+  "restore-transaction": "Pulihkan Transaksi?",
+  "created": "Dicipta"
 }

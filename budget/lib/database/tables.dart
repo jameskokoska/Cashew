@@ -5,6 +5,7 @@ import 'package:budget/main.dart';
 import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/homePage/homePageLineGraph.dart';
 import 'package:budget/pages/objectivesListPage.dart';
+import 'package:budget/pages/settingsPage.dart';
 import 'package:budget/pages/transactionFilters.dart';
 import 'package:budget/pages/transactionsSearchPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
@@ -2610,7 +2611,14 @@ class FinanceDatabase extends _$FinanceDatabase {
     return select(deleteLogs).get();
   }
 
-  Future<bool> createDeleteLog(DeleteLogType type, String deletedPk) async {
+  Future<bool> createDeleteLog(DeleteLogType type, String deletedPk,
+      {Transaction? transaction}) async {
+    if (type == DeleteLogType.Transaction) {
+      Transaction? transactionToDelete =
+          await database.tryGetTransactionFromPk(deletedPk);
+      if (transactionToDelete != null)
+        recentlyDeletedTransactions[deletedPk] = transactionToDelete;
+    }
     await into(deleteLogs).insert(
       DeleteLogsCompanion.insert(
         type: type,
@@ -4179,6 +4187,67 @@ class FinanceDatabase extends _$FinanceDatabase {
           ])
           ..limit(limit ?? DEFAULT_LIMIT, offset: offset ?? DEFAULT_OFFSET))
         .watch();
+  }
+
+  Stream<List<TransactionWithCategory>> watchAllTransactionActivityLog() {
+    final $CategoriesTable subCategories = alias(categories, 'subCategories');
+
+    final query = select(transactions).join([
+      innerJoin(
+          categories, categories.categoryPk.equalsExp(transactions.categoryFk)),
+      leftOuterJoin(
+        budgets,
+        budgets.budgetPk.equalsExp(transactions.sharedReferenceBudgetPk),
+      ),
+      leftOuterJoin(
+        objectives,
+        objectives.objectivePk.equalsExp(transactions.objectiveFk),
+      ),
+      leftOuterJoin(subCategories,
+          subCategories.categoryPk.equalsExp(transactions.subCategoryFk)),
+    ])
+      ..orderBy([OrderingTerm.desc(transactions.dateTimeModified)]);
+
+    return query.watch().map((rows) => rows.map((row) {
+          return TransactionWithCategory(
+              category: row.readTable(categories),
+              transaction: row.readTable(transactions),
+              budget: row.readTableOrNull(budgets),
+              objective: row.readTableOrNull(objectives),
+              subCategory: row.readTableOrNull(subCategories));
+        }).toList());
+  }
+
+  Stream<List<TransactionWithCategory>> watchAllTransactionDeleteActivityLog() {
+    final query = select(deleteLogs)
+      ..orderBy([(t) => OrderingTerm.desc(deleteLogs.dateTimeModified)]);
+
+    return query.watch().map(
+          (rows) => rows
+              .map((DeleteLog row) {
+                Transaction? transaction =
+                    recentlyDeletedTransactions[row.entryPk];
+                if (transaction == null) return null;
+                return TransactionWithCategory(
+                  category: TransactionCategory(
+                    categoryPk: "-1",
+                    name: "",
+                    dateCreated: DateTime.now(),
+                    dateTimeModified: null,
+                    order: 0,
+                    income: false,
+                    iconName: "",
+                    colour: "",
+                    emojiIconName: "",
+                  ),
+                  transaction: transaction,
+                );
+              })
+              .where(
+                  (transactionWithCategory) => transactionWithCategory != null)
+              .cast<TransactionWithCategory>()
+              .toList(),
+        );
   }
 
   Stream<List<CategoryWithDetails>> watchAllMainCategoriesWithDetails({
@@ -6927,6 +6996,12 @@ class FinanceDatabase extends _$FinanceDatabase {
     return (select(transactions)
           ..where((t) => t.transactionPk.equals(transactionPk)))
         .getSingle();
+  }
+
+  Future<Transaction?> tryGetTransactionFromPk(String transactionPk) {
+    return (select(transactions)
+          ..where((t) => t.transactionPk.equals(transactionPk)))
+        .getSingleOrNull();
   }
 
   Future<List<Transaction>> getTransactionsFromPk(List<String> transactionPks) {

@@ -1138,5 +1138,11 @@
   "monthly-upcoming": "Rata-rata bulanan yang akan datang",
   "yearly-upcoming": "Rata-rata tahunan yang akan datang",
   "total-upcoming": "Jumlah yang akan datang",
-  "no-subscription-transactions": "Tidak ada transaksi berlangganan."
+  "no-subscription-transactions": "Tidak ada transaksi berlangganan.",
+  "tools-and-extras": "Alat & Ekstra",
+  "transaction-activity-log": "Log Aktivitas Transaksi",
+  "activty-log": "Log aktivitas",
+  "modified": "Diubah",
+  "restore-transaction": "Pulihkan Transaksi?",
+  "created": "Dibuat"
 }

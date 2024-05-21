@@ -1138,5 +1138,11 @@
   "monthly-upcoming": "Gemiddeld maandelijks aankomend",
   "yearly-upcoming": "Gemiddeld jaarlijks aankomend",
   "total-upcoming": "Totaal aanstaande",
-  "no-subscription-transactions": "Geen abonnementstransacties."
+  "no-subscription-transactions": "Geen abonnementstransacties.",
+  "tools-and-extras": "Gereedschap & Extra's",
+  "transaction-activity-log": "Transactieactiviteitenlogboek",
+  "activty-log": "Activiteiten logboek",
+  "modified": "Gewijzigd",
+  "restore-transaction": "Transactie herstellen?",
+  "created": "Gemaakt"
 }

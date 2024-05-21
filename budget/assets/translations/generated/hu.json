@@ -1138,5 +1138,11 @@
   "monthly-upcoming": "Átlagos havi közelgő",
   "yearly-upcoming": "Átlagos éves közelgő",
   "total-upcoming": "Teljes közelgő",
-  "no-subscription-transactions": "Nincsenek előfizetési tranzakciók."
+  "no-subscription-transactions": "Nincsenek előfizetési tranzakciók.",
+  "tools-and-extras": "Eszközök és extrák",
+  "transaction-activity-log": "Tranzakciós tevékenység naplója",
+  "activty-log": "Naplót",
+  "modified": "Módosított",
+  "restore-transaction": "Visszaállítja a tranzakciót?",
+  "created": "Létrehozva"
 }

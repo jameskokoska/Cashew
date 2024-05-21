@@ -1138,5 +1138,11 @@
   "monthly-upcoming": "Prossimamente mensile medio",
   "yearly-upcoming": "Prossimamente annuale medio",
   "total-upcoming": "Totale in arrivo",
-  "no-subscription-transactions": "Nessuna transazione di abbonamento."
+  "no-subscription-transactions": "Nessuna transazione di abbonamento.",
+  "tools-and-extras": "Strumenti ed extra",
+  "transaction-activity-log": "Registro delle attività di transazione",
+  "activty-log": "Registro delle attività",
+  "modified": "Modificata",
+  "restore-transaction": "Ripristinare la transazione?",
+  "created": "Creato"
 }

@@ -1138,5 +1138,11 @@
   "monthly-upcoming": "सरासरी मासिक आगामी",
   "yearly-upcoming": "आगामी वार्षिक सरासरी",
   "total-upcoming": "एकूण आगामी",
-  "no-subscription-transactions": "कोणतेही सबस्क्रिप्शन व्यवहार नाहीत."
+  "no-subscription-transactions": "कोणतेही सबस्क्रिप्शन व्यवहार नाहीत.",
+  "tools-and-extras": "साधने आणि अतिरिक्त",
+  "transaction-activity-log": "व्यवहार क्रियाकलाप लॉग",
+  "activty-log": "क्रियाकलाप लॉग",
+  "modified": "सुधारित",
+  "restore-transaction": "व्यवहार पुनर्संचयित करायचा?",
+  "created": "तयार केले"
 }

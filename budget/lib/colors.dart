@@ -244,19 +244,23 @@ Color dynamicPastel(
 
 class HexColor extends Color {
   static int _getColorFromHex(String? hexColor, Color? defaultColor, context) {
-    if (hexColor == null) {
-      if (defaultColor == null) {
-        return Colors.blue.value;
-      } else {
-        return defaultColor.value;
+    try {
+      if (hexColor == null) {
+        if (defaultColor == null) {
+          return Colors.grey.value;
+        } else {
+          return defaultColor.value;
+        }
       }
+      hexColor = hexColor.replaceAll("#", "");
+      hexColor = hexColor.replaceAll("0x", "");
+      if (hexColor.length == 6) {
+        hexColor = "FF" + hexColor;
+      }
+      return int.parse(hexColor, radix: 16);
+    } catch (e) {
+      return Colors.grey.value;
     }
-    hexColor = hexColor.replaceAll("#", "");
-    hexColor = hexColor.replaceAll("0x", "");
-    if (hexColor.length == 6) {
-      hexColor = "FF" + hexColor;
-    }
-    return int.parse(hexColor, radix: 16);
   }
 
   HexColor(final String? hexColor, {final Color? defaultColor})

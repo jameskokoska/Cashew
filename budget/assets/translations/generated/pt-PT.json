@@ -1138,5 +1138,11 @@
   "monthly-upcoming": "Média mensal futura",
   "yearly-upcoming": "Média anual futura",
   "total-upcoming": "Total próximo",
-  "no-subscription-transactions": "Nenhuma transação de assinatura."
+  "no-subscription-transactions": "Nenhuma transação de assinatura.",
+  "tools-and-extras": "Ferramentas e extras",
+  "transaction-activity-log": "Log de atividades de transação",
+  "activty-log": "Registro de atividade",
+  "modified": "Modificado",
+  "restore-transaction": "Restaurar transação?",
+  "created": "Criada"
 }

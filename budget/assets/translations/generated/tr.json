@@ -1138,5 +1138,11 @@
   "monthly-upcoming": "Ortalama aylık yaklaşan",
   "yearly-upcoming": "Ortalama yıllık yaklaşan",
   "total-upcoming": "Toplam yaklaşan",
-  "no-subscription-transactions": "Abonelik işlemi yok."
+  "no-subscription-transactions": "Abonelik işlemi yok.",
+  "tools-and-extras": "Araçlar ve Ekstralar",
+  "transaction-activity-log": "İşlem Etkinliği Günlüğü",
+  "activty-log": "Etkinlik Günlüğü",
+  "modified": "Değiştirilmiş",
+  "restore-transaction": "İşlem Geri Yüklensin mi?",
+  "created": "Oluşturuldu"
 }

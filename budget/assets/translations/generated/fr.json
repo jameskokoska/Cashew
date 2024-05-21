@@ -1138,5 +1138,11 @@
   "monthly-upcoming": "Moyenne mensuelle à venir",
   "yearly-upcoming": "Moyenne annuelle à venir",
   "total-upcoming": "Total à venir",
-  "no-subscription-transactions": "Aucune opération de souscription."
+  "no-subscription-transactions": "Aucune opération de souscription.",
+  "tools-and-extras": "Outils et extras",
+  "transaction-activity-log": "Journal d'activité des transactions",
+  "activty-log": "Journal d'activité",
+  "modified": "Modifié",
+  "restore-transaction": "Restaurer la transaction ?",
+  "created": "Créé"
 }

@@ -1138,5 +1138,11 @@
   "monthly-upcoming": "સરેરાશ માસિક આગામી",
   "yearly-upcoming": "સરેરાશ વાર્ષિક આગામી",
   "total-upcoming": "કુલ આગામી",
-  "no-subscription-transactions": "કોઈ સબ્સ્ક્રિપ્શન વ્યવહારો નથી."
+  "no-subscription-transactions": "કોઈ સબ્સ્ક્રિપ્શન વ્યવહારો નથી.",
+  "tools-and-extras": "સાધનો અને વધારાઓ",
+  "transaction-activity-log": "વ્યવહાર પ્રવૃત્તિ લોગ",
+  "activty-log": "પ્રવૃત્તિ લોગ",
+  "modified": "સંશોધિત",
+  "restore-transaction": "વ્યવહાર પુનઃસ્થાપિત કરીએ?",
+  "created": "બનાવ્યું"
 }

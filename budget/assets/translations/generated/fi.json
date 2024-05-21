@@ -1138,5 +1138,11 @@
   "monthly-upcoming": "Keskimääräinen kuukausittainen tuleva",
   "yearly-upcoming": "Keskimääräinen vuosittainen tuleva",
   "total-upcoming": "Yhteensä tulossa",
-  "no-subscription-transactions": "Ei tilaustapahtumia."
+  "no-subscription-transactions": "Ei tilaustapahtumia.",
+  "tools-and-extras": "Työkalut & Ekstrat",
+  "transaction-activity-log": "Tapahtumatoimintaloki",
+  "activty-log": "Aktiviteettiloki",
+  "modified": "Muokattu",
+  "restore-transaction": "Palautetaanko tapahtuma?",
+  "created": "Luotu"
 }

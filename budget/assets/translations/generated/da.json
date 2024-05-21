@@ -1138,5 +1138,11 @@
   "monthly-upcoming": "Gennemsnitlig månedlig kommende",
   "yearly-upcoming": "Gennemsnitligt kommende år",
   "total-upcoming": "Samlet kommende",
-  "no-subscription-transactions": "Ingen abonnementstransaktioner."
+  "no-subscription-transactions": "Ingen abonnementstransaktioner.",
+  "tools-and-extras": "Værktøj og ekstraudstyr",
+  "transaction-activity-log": "Transaktionsaktivitetslog",
+  "activty-log": "Aktivitetslog",
+  "modified": "Ændret",
+  "restore-transaction": "Vil du gendanne transaktionen?",
+  "created": "Oprettet"
 }

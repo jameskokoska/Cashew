@@ -1138,5 +1138,11 @@
   "monthly-upcoming": "రాబోయే సగటు నెలవారీ",
   "yearly-upcoming": "సగటు వార్షిక రాబోయే",
   "total-upcoming": "మొత్తం రాబోయేది",
-  "no-subscription-transactions": "చందా లావాదేవీలు లేవు."
+  "no-subscription-transactions": "చందా లావాదేవీలు లేవు.",
+  "tools-and-extras": "ఉపకరణాలు & అదనపువి",
+  "transaction-activity-log": "లావాదేవీ కార్యాచరణ లాగ్",
+  "activty-log": "కార్యాచరణ లాగ్",
+  "modified": "సవరించబడింది",
+  "restore-transaction": "లావాదేవీని పునరుద్ధరించాలా?",
+  "created": "సృష్టించబడింది"
 }

@@ -1138,5 +1138,11 @@
   "monthly-upcoming": "Average na buwanang paparating",
   "yearly-upcoming": "Average na taunang paparating",
   "total-upcoming": "Kabuuang paparating",
-  "no-subscription-transactions": "Walang mga transaksyon sa subscription."
+  "no-subscription-transactions": "Walang mga transaksyon sa subscription.",
+  "tools-and-extras": "Mga Tool at Extra",
+  "transaction-activity-log": "Log ng Aktibidad ng Transaksyon",
+  "activty-log": "Log ng Aktibidad",
+  "modified": "Binago",
+  "restore-transaction": "Ibalik ang Transaksyon?",
+  "created": "Nilikha"
 }

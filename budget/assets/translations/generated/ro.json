@@ -1138,5 +1138,11 @@
   "monthly-upcoming": "Media lunară viitoare",
   "yearly-upcoming": "Media anuală viitoare",
   "total-upcoming": "Total viitoare",
-  "no-subscription-transactions": "Fără tranzacții cu abonament."
+  "no-subscription-transactions": "Fără tranzacții cu abonament.",
+  "tools-and-extras": "Instrumente și accesorii suplimentare",
+  "transaction-activity-log": "Jurnalul activității tranzacției",
+  "activty-log": "Jurnalul de activitate",
+  "modified": "Modificat",
+  "restore-transaction": "Restabiliți tranzacția?",
+  "created": "Creată"
 }

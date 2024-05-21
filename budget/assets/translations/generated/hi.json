@@ -1138,5 +1138,11 @@
   "monthly-upcoming": "औसत मासिक आगामी",
   "yearly-upcoming": "औसत वार्षिक आगामी",
   "total-upcoming": "कुल आगामी",
-  "no-subscription-transactions": "कोई सदस्यता लेनदेन नहीं."
+  "no-subscription-transactions": "कोई सदस्यता लेनदेन नहीं.",
+  "tools-and-extras": "उपकरण एवं अतिरिक्त सुविधाएं",
+  "transaction-activity-log": "लेन-देन गतिविधि लॉग",
+  "activty-log": "गतिविधि लॉग",
+  "modified": "संशोधित",
+  "restore-transaction": "लेन-देन पुनर्स्थापित करें?",
+  "created": "बनाया था"
 }

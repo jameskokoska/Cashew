@@ -1138,5 +1138,11 @@
   "monthly-upcoming": "Усереднений місячний майбутній",
   "yearly-upcoming": "Усереднений річний майбутній",
   "total-upcoming": "Всього в майбутньому",
-  "no-subscription-transactions": "Немає транзакцій підписки."
+  "no-subscription-transactions": "Немає транзакцій підписки.",
+  "tools-and-extras": "Інструменти та додаткові засоби",
+  "transaction-activity-log": "Журнал транзакцій",
+  "activty-log": "Журнал активності",
+  "modified": "Змінено",
+  "restore-transaction": "Відновити транзакцію?",
+  "created": "Створено"
 }

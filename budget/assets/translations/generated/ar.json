@@ -1138,5 +1138,11 @@
   "monthly-upcoming": "المتوسط ​​الشهري القادم",
   "yearly-upcoming": "المتوسط ​​السنوي القادم",
   "total-upcoming": "إجمالي القادمة",
-  "no-subscription-transactions": "لا توجد معاملات الاشتراك."
+  "no-subscription-transactions": "لا توجد معاملات الاشتراك.",
+  "tools-and-extras": "الأدوات والإضافات",
+  "transaction-activity-log": "سجل نشاط المعاملة",
+  "activty-log": "سجل النشاطات",
+  "modified": "معدل",
+  "restore-transaction": "استعادة المعاملة؟",
+  "created": "مخلوق"
 }

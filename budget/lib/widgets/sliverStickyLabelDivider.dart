@@ -58,6 +58,7 @@ class StickyLabelDivider extends StatelessWidget {
     this.extraInfoWidget,
     this.color,
     this.fontSize = 15,
+    this.maxLines,
   });
 
   final String info;
@@ -65,6 +66,7 @@ class StickyLabelDivider extends StatelessWidget {
   final Widget? extraInfoWidget;
   final Color? color;
   final double fontSize;
+  final int? maxLines;
 
   @override
   Widget build(BuildContext context) {
@@ -79,6 +81,7 @@ class StickyLabelDivider extends StatelessWidget {
             text: info,
             fontSize: fontSize,
             textColor: getColor(context, "textLight"),
+            maxLines: maxLines,
           ),
           if (extraInfo != null)
             Expanded(

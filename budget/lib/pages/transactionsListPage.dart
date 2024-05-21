@@ -426,11 +426,36 @@ class TransactionsSettings extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
+        AutoPayTransactionsSetting(),
         MarkAsPaidOnDaySetting(),
         NetSpendingDayTotalSetting(),
         ShowTransactionsMonthlySpendingSummarySettingToggle(),
         ShowTransactionsBalanceTransferTabSettingToggle(),
       ],
+    );
+  }
+}
+
+class AutoPayTransactionsSetting extends StatelessWidget {
+  const AutoPayTransactionsSetting({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return SettingsContainer(
+      title: "auto-mark-transactions".tr(),
+      description: "auto-mark-transactions-description".tr(),
+      icon: appStateSettings["outlinedIcons"]
+          ? Icons.check_circle_outlined
+          : Icons.check_circle_rounded,
+      onTap: () {
+        openBottomSheet(
+          context,
+          PopupFramework(
+            hasPadding: false,
+            child: UpcomingOverdueSettings(),
+          ),
+        );
+      },
     );
   }
 }

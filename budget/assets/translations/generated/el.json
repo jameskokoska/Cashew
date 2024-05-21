@@ -1138,5 +1138,11 @@
   "monthly-upcoming": "Μέσος μηνιαίος προσεχής",
   "yearly-upcoming": "Μέσος όρος ετήσιας προσεχούς",
   "total-upcoming": "Σύνολο προσεχής",
-  "no-subscription-transactions": "Καμία συναλλαγή συνδρομής."
+  "no-subscription-transactions": "Δεν υπάρχουν συνδρομητικές συναλλαγές.",
+  "tools-and-extras": "Εργαλεία & Έξτρα",
+  "transaction-activity-log": "Αρχείο καταγραφής δραστηριότητας συναλλαγών",
+  "activty-log": "Αρχείο καταγραφής δραστηριότητας",
+  "modified": "Τροποποιήθηκε",
+  "restore-transaction": "Επαναφορά συναλλαγής;",
+  "created": "Δημιουργήθηκε"
 }

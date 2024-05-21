@@ -187,5 +187,11 @@
   "monthly-upcoming": "Просечен месечен претстоен",
   "yearly-upcoming": "Просечно годишно претстојно",
   "total-upcoming": "Вкупно претстојни",
-  "no-subscription-transactions": "Нема трансакции со претплата."
+  "no-subscription-transactions": "Нема трансакции со претплата.",
+  "tools-and-extras": "Алатки и додатоци",
+  "transaction-activity-log": "Дневник на трансакциска активност",
+  "activty-log": "Дневник на активности",
+  "modified": "Изменето",
+  "restore-transaction": "Да се ​​врати трансакцијата?",
+  "created": "Создаден"
 }

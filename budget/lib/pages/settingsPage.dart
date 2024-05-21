@@ -15,13 +15,17 @@ import 'package:budget/pages/premiumPage.dart';
 import 'package:budget/pages/transactionsListPage.dart';
 import 'package:budget/pages/upcomingOverdueTransactionsPage.dart';
 import 'package:budget/struct/currencyFunctions.dart';
+import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/languageMap.dart';
 import 'package:budget/struct/navBarIconsData.dart';
 import 'package:budget/widgets/amountRangeSlider.dart';
 import 'package:budget/widgets/animatedExpanded.dart';
 import 'package:budget/widgets/bottomNavBar.dart';
+import 'package:budget/widgets/dateDivider.dart';
 import 'package:budget/widgets/dropdownSelect.dart';
 import 'package:budget/widgets/exportDB.dart';
+import 'package:budget/widgets/fab.dart';
+import 'package:budget/widgets/fadeIn.dart';
 import 'package:budget/widgets/importCSV.dart';
 import 'package:budget/widgets/exportCSV.dart';
 import 'package:budget/pages/autoTransactionsPageEmail.dart';
@@ -44,6 +48,7 @@ import 'package:budget/widgets/ratingPopup.dart';
 import 'package:budget/widgets/restartApp.dart';
 import 'package:budget/widgets/selectAmount.dart';
 import 'package:budget/widgets/selectColor.dart';
+import 'package:budget/widgets/selectedTransactionsAppBar.dart';
 import 'package:budget/widgets/settingsContainers.dart';
 import 'package:budget/pages/walletDetailsPage.dart';
 import 'package:budget/struct/initializeBiometrics.dart';
@@ -54,6 +59,8 @@ import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/tappableTextEntry.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/timeDigits.dart';
+import 'package:budget/widgets/transactionEntries.dart';
+import 'package:budget/widgets/transactionEntry/transactionEntry.dart';
 import 'package:budget/widgets/util/checkWidgetLaunch.dart';
 import 'package:budget/widgets/util/showTimePicker.dart';
 import 'package:budget/widgets/viewAllTransactionsButton.dart';
@@ -61,6 +68,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:budget/main.dart';
+import 'package:implicitly_animated_reorderable_list/implicitly_animated_reorderable_list.dart';
+import 'package:implicitly_animated_reorderable_list/transitions.dart';
 import 'package:intl/number_symbols.dart';
 import 'package:intl/number_symbols_data.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
@@ -71,6 +80,7 @@ import 'package:budget/widgets/framework/popupFramework.dart';
 import 'package:app_settings/app_settings.dart';
 import 'package:universal_io/io.dart';
 import '../widgets/outlinedButtonStacked.dart';
+import 'package:async/async.dart' show StreamZip;
 
 //To get SHA1 Key run
 // ./gradlew signingReport
@@ -532,29 +542,12 @@ class SettingsPageContent extends StatelessWidget {
               : Icons.app_registration_rounded,
         ),
 
-        SettingsHeader(title: "automation".tr()),
+        SettingsHeader(title: "tools-and-extras".tr()),
         // SettingsContainerOpenPage(
         //   openPage: AutoTransactionsPage(),
         //   title: "Auto Transactions",
         //   icon: appStateSettings["outlinedIcons"] ? Icons.auto_fix_high_outlined : Icons.auto_fix_high_rounded,
         // ),
-
-        SettingsContainer(
-          title: "auto-mark-transactions".tr(),
-          description: "auto-mark-transactions-description".tr(),
-          icon: appStateSettings["outlinedIcons"]
-              ? Icons.check_circle_outlined
-              : Icons.check_circle_rounded,
-          onTap: () {
-            openBottomSheet(
-              context,
-              PopupFramework(
-                hasPadding: false,
-                child: UpcomingOverdueSettings(),
-              ),
-            );
-          },
-        ),
 
         appStateSettings["emailScanning"]
             ? SettingsContainerOpenPage(
@@ -585,6 +578,14 @@ class SettingsPageContent extends StatelessWidget {
               : Icons.summarize_rounded,
         ),
 
+        SettingsContainerOpenPage(
+          openPage: ActivityPage(),
+          title: "transaction-activity-log".tr(),
+          icon: appStateSettings["outlinedIcons"]
+              ? Icons.ballot_outlined
+              : Icons.ballot_rounded,
+        ),
+
         SettingsHeader(title: "import-and-export".tr()),
 
         ExportCSV(),
@@ -602,6 +603,158 @@ class SettingsPageContent extends StatelessWidget {
           forceButtonName: "google-drive".tr(),
         ),
       ],
+    );
+  }
+}
+
+Map<String, Transaction> recentlyDeletedTransactions = {};
+
+class ActivityPage extends StatelessWidget {
+  const ActivityPage({super.key});
+
+  Stream<List<TransactionWithCategory>> zipStreams(
+      List<Stream<List<TransactionWithCategory>>> streams) {
+    return StreamZip(streams).map((listOfLists) {
+      return listOfLists.expand((x) => x).toList()
+        ..sort((a, b) => (b.transaction.dateTimeModified ?? DateTime.now())
+            .compareTo(a.transaction.dateTimeModified ?? DateTime.now()));
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return WillPopScope(
+      onWillPop: () async {
+        if ((globalSelectedID.value["ActivityLog"] ?? []).length > 0) {
+          globalSelectedID.value["ActivityLog"] = [];
+          globalSelectedID.notifyListeners();
+          return false;
+        } else {
+          return true;
+        }
+      },
+      child: Stack(
+        children: [
+          PageFramework(
+            dragDownToDismiss: true,
+            title: "activity-log".tr(),
+            listID: "ActivityLog",
+            floatingActionButton: AnimateFABDelayed(
+              fab: AddFAB(
+                tooltip: "add-transaction".tr(),
+                openPage: AddTransactionPage(
+                  routesToPopAfterDelete: RoutesToPopAfterDelete.None,
+                ),
+              ),
+            ),
+            slivers: [
+              StreamBuilder<List<TransactionWithCategory>>(
+                stream: zipStreams([
+                  database.watchAllTransactionActivityLog(),
+                  database.watchAllTransactionDeleteActivityLog(),
+                ]),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData == false) {
+                    return SliverToBoxAdapter();
+                  }
+                  return SliverImplicitlyAnimatedList<TransactionWithCategory>(
+                    items: snapshot.data!,
+                    areItemsTheSame: (a, b) =>
+                        a.transaction.transactionPk + a.category.categoryPk ==
+                        b.transaction.transactionPk + b.category.categoryPk,
+                    insertDuration: Duration(milliseconds: 500),
+                    removeDuration: Duration(milliseconds: 500),
+                    updateDuration: Duration(milliseconds: 500),
+                    itemBuilder: (BuildContext context,
+                        Animation<double> animation,
+                        TransactionWithCategory item,
+                        int index) {
+                      bool wasADeletedTransaction =
+                          item.category.categoryPk == "-1";
+                      Transaction transaction = item.transaction;
+                      TransactionCategory? category =
+                          wasADeletedTransaction ? null : item.category;
+                      TransactionCategory? subCategory = item.subCategory;
+                      Budget? budget = item.budget;
+                      Objective? objective = item.objective;
+                      return SizeFadeTransition(
+                        sizeFraction: 0.7,
+                        curve: Curves.easeInOut,
+                        animation: animation,
+                        child: Column(
+                          key: ValueKey(transaction.transactionPk),
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            DateDivider(
+                              date: transaction.dateCreated,
+                              maxLines: 2,
+                              afterDate: " • " +
+                                  (wasADeletedTransaction
+                                          ? "deleted"
+                                          : "modified")
+                                      .tr()
+                                      .capitalizeFirst +
+                                  " " +
+                                  getTimeAgo(
+                                    transaction.dateTimeModified ??
+                                        DateTime.now(),
+                                  ),
+                            ),
+                            Tappable(
+                              color: Colors.transparent,
+                              onTap: wasADeletedTransaction
+                                  ? () {
+                                      openPopup(
+                                        context,
+                                        title: "restore-transaction".tr(),
+                                        onCancelLabel: "cancel".tr(),
+                                        onCancel: () => Navigator.pop(context),
+                                        onSubmitLabel: "",
+                                        onSubmit: () async {
+                                          await database
+                                              .createOrUpdateTransaction(
+                                            transaction,
+                                            insert: true,
+                                          );
+                                          Navigator.pop(context);
+                                        },
+                                      );
+                                    }
+                                  : null,
+                              child: IgnorePointer(
+                                ignoring: wasADeletedTransaction,
+                                child: TransactionEntry(
+                                  containerColor: wasADeletedTransaction
+                                      ? Colors.transparent
+                                      : null,
+                                  openPage: AddTransactionPage(
+                                    transaction: transaction,
+                                    routesToPopAfterDelete:
+                                        RoutesToPopAfterDelete.One,
+                                  ),
+                                  transaction: transaction,
+                                  category: category,
+                                  subCategory: subCategory,
+                                  budget: budget,
+                                  objective: objective,
+                                  listID: "ActivityLog",
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
+            ],
+          ),
+          SelectedTransactionsAppBar(
+            pageID: "ActivityLog",
+          ),
+        ],
+      ),
     );
   }
 }

@@ -1138,5 +1138,11 @@
   "monthly-upcoming": "গড় মাসিক আসন্ন",
   "yearly-upcoming": "আসন্ন বার্ষিক গড়",
   "total-upcoming": "মোট আসন্ন",
-  "no-subscription-transactions": "কোন সাবস্ক্রিপশন লেনদেন."
+  "no-subscription-transactions": "কোন সাবস্ক্রিপশন লেনদেন.",
+  "tools-and-extras": "সরঞ্জাম এবং অতিরিক্ত",
+  "transaction-activity-log": "লেনদেন কার্যকলাপ লগ",
+  "activty-log": "কার্য বিবরণ",
+  "modified": "পরিবর্তিত",
+  "restore-transaction": "লেনদেন পুনরুদ্ধার করবেন?",
+  "created": "তৈরি হয়েছে"
 }

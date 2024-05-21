@@ -1138,5 +1138,11 @@
   "monthly-upcoming": "Средно месечно предстоящо",
   "yearly-upcoming": "Средно годишно предстоящо",
   "total-upcoming": "Общо предстоящо",
-  "no-subscription-transactions": "Без абонаментни транзакции."
+  "no-subscription-transactions": "Без абонаментни транзакции.",
+  "tools-and-extras": "Инструменти и екстри",
+  "transaction-activity-log": "Дневник на транзакционната активност",
+  "activty-log": "Дневник дейност",
+  "modified": "Променен",
+  "restore-transaction": "Възстановяване на транзакцията?",
+  "created": "Създаден"
 }

@@ -1138,5 +1138,11 @@
   "monthly-upcoming": "Ujazo wa wastani wa kila mwezi",
   "yearly-upcoming": "Wastani wa kila mwaka ujao",
   "total-upcoming": "Jumla ya ujao",
-  "no-subscription-transactions": "Hakuna shughuli za usajili."
+  "no-subscription-transactions": "Hakuna shughuli za usajili.",
+  "tools-and-extras": "Zana na Ziada",
+  "transaction-activity-log": "Kumbukumbu ya Shughuli ya Muamala",
+  "activty-log": "Kumbukumbu ya Shughuli",
+  "modified": "Imebadilishwa",
+  "restore-transaction": "Ungependa kurejesha Muamala?",
+  "created": "Imeundwa"
 }

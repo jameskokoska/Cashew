@@ -1138,5 +1138,11 @@
   "monthly-upcoming": "പ്രതിമാസ വരാനിരിക്കുന്ന ശരാശരി",
   "yearly-upcoming": "ശരാശരി വാർഷിക വരാനിരിക്കുന്ന",
   "total-upcoming": "വരാനിരിക്കുന്ന ആകെ",
-  "no-subscription-transactions": "സബ്‌സ്‌ക്രിപ്‌ഷൻ ഇടപാടുകളൊന്നുമില്ല."
+  "no-subscription-transactions": "സബ്‌സ്‌ക്രിപ്‌ഷൻ ഇടപാടുകളൊന്നുമില്ല.",
+  "tools-and-extras": "ടൂളുകളും എക്സ്ട്രാകളും",
+  "transaction-activity-log": "ഇടപാട് പ്രവർത്തന ലോഗ്",
+  "activty-log": "പ്രവര്ത്തി കുറിപ്പ്",
+  "modified": "തിരുത്തപ്പെട്ടത്",
+  "restore-transaction": "ഇടപാട് പുനഃസ്ഥാപിക്കണോ?",
+  "created": "സൃഷ്ടിച്ചത്"
 }

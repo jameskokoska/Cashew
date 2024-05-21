@@ -1138,5 +1138,11 @@
   "monthly-upcoming": "平均每月即將到來",
   "yearly-upcoming": "平均每年即將到來",
   "total-upcoming": "總計即將到來",
-  "no-subscription-transactions": "沒有訂閱交易。"
+  "no-subscription-transactions": "沒有訂閱交易。",
+  "tools-and-extras": "工具和附加功能",
+  "transaction-activity-log": "交易活動日誌",
+  "activty-log": "活動日誌",
+  "modified": "修改的",
+  "restore-transaction": "恢復交易？",
+  "created": "已創建"
 }

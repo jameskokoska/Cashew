@@ -1138,5 +1138,11 @@
   "monthly-upcoming": "今後の月次平均",
   "yearly-upcoming": "今後の年間平均",
   "total-upcoming": "今後の合計",
-  "no-subscription-transactions": "サブスクリプション取引はありません。"
+  "no-subscription-transactions": "サブスクリプション取引はありません。",
+  "tools-and-extras": "ツールと付属品",
+  "transaction-activity-log": "トランザクションアクティビティログ",
+  "activty-log": "活動記録",
+  "modified": "修正済み",
+  "restore-transaction": "トランザクションを復元しますか?",
+  "created": "作成した"
 }
