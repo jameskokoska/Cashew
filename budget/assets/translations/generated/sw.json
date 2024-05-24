@@ -1141,8 +1141,10 @@
   "no-subscription-transactions": "Hakuna shughuli za usajili.",
   "tools-and-extras": "Zana na Ziada",
   "transaction-activity-log": "Kumbukumbu ya Shughuli ya Muamala",
-  "activty-log": "Kumbukumbu ya Shughuli",
+  "activity-log": "Kumbukumbu ya Shughuli",
   "modified": "Imebadilishwa",
   "restore-transaction": "Ungependa kurejesha Muamala?",
-  "created": "Imeundwa"
+  "created": "Imeundwa",
+  "tap-each-section-to-customize": "Gusa kila sehemu ili kubinafsisha",
+  "transaction-no-longer-available": "Muamala haupatikani tena"
 }

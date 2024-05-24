@@ -1141,8 +1141,10 @@
   "no-subscription-transactions": "Немає транзакцій підписки.",
   "tools-and-extras": "Інструменти та додаткові засоби",
   "transaction-activity-log": "Журнал транзакцій",
-  "activty-log": "Журнал активності",
+  "activity-log": "Журнал активності",
   "modified": "Змінено",
   "restore-transaction": "Відновити транзакцію?",
-  "created": "Створено"
+  "created": "Створено",
+  "tap-each-section-to-customize": "Торкніться кожного розділу, щоб налаштувати",
+  "transaction-no-longer-available": "Трансакція більше не доступна"
 }

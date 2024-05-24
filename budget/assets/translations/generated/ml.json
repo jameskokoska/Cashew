@@ -1141,8 +1141,10 @@
   "no-subscription-transactions": "സബ്‌സ്‌ക്രിപ്‌ഷൻ ഇടപാടുകളൊന്നുമില്ല.",
   "tools-and-extras": "ടൂളുകളും എക്സ്ട്രാകളും",
   "transaction-activity-log": "ഇടപാട് പ്രവർത്തന ലോഗ്",
-  "activty-log": "പ്രവര്ത്തി കുറിപ്പ്",
+  "activity-log": "പ്രവര്ത്തി കുറിപ്പ്",
   "modified": "തിരുത്തപ്പെട്ടത്",
   "restore-transaction": "ഇടപാട് പുനഃസ്ഥാപിക്കണോ?",
-  "created": "സൃഷ്ടിച്ചത്"
+  "created": "സൃഷ്ടിച്ചത്",
+  "tap-each-section-to-customize": "ഇഷ്‌ടാനുസൃതമാക്കാൻ ഓരോ വിഭാഗത്തിലും ടാപ്പുചെയ്യുക",
+  "transaction-no-longer-available": "ഇടപാട് ഇനി ലഭ്യമല്ല"
 }

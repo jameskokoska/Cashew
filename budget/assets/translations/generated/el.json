@@ -1141,8 +1141,10 @@
   "no-subscription-transactions": "Δεν υπάρχουν συνδρομητικές συναλλαγές.",
   "tools-and-extras": "Εργαλεία & Έξτρα",
   "transaction-activity-log": "Αρχείο καταγραφής δραστηριότητας συναλλαγών",
-  "activty-log": "Αρχείο καταγραφής δραστηριότητας",
+  "activity-log": "Αρχείο καταγραφής δραστηριότητας",
   "modified": "Τροποποιήθηκε",
   "restore-transaction": "Επαναφορά συναλλαγής;",
-  "created": "Δημιουργήθηκε"
+  "created": "Δημιουργήθηκε",
+  "tap-each-section-to-customize": "Πατήστε κάθε ενότητα για προσαρμογή",
+  "transaction-no-longer-available": "Η συναλλαγή δεν είναι πλέον διαθέσιμη"
 }

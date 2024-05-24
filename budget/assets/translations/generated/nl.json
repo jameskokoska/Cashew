@@ -1141,8 +1141,10 @@
   "no-subscription-transactions": "Geen abonnementstransacties.",
   "tools-and-extras": "Gereedschap & Extra's",
   "transaction-activity-log": "Transactieactiviteitenlogboek",
-  "activty-log": "Activiteiten logboek",
+  "activity-log": "Activiteiten logboek",
   "modified": "Gewijzigd",
   "restore-transaction": "Transactie herstellen?",
-  "created": "Gemaakt"
+  "created": "Gemaakt",
+  "tap-each-section-to-customize": "Tik op elke sectie om aan te passen",
+  "transaction-no-longer-available": "Transactie niet langer beschikbaar"
 }

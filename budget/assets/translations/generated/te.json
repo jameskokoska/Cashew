@@ -1141,8 +1141,10 @@
   "no-subscription-transactions": "చందా లావాదేవీలు లేవు.",
   "tools-and-extras": "ఉపకరణాలు & అదనపువి",
   "transaction-activity-log": "లావాదేవీ కార్యాచరణ లాగ్",
-  "activty-log": "కార్యాచరణ లాగ్",
+  "activity-log": "కార్యాచరణ లాగ్",
   "modified": "సవరించబడింది",
   "restore-transaction": "లావాదేవీని పునరుద్ధరించాలా?",
-  "created": "సృష్టించబడింది"
+  "created": "సృష్టించబడింది",
+  "tap-each-section-to-customize": "అనుకూలీకరించడానికి ప్రతి విభాగాన్ని నొక్కండి",
+  "transaction-no-longer-available": "లావాదేవీ ఇకపై అందుబాటులో లేదు"
 }

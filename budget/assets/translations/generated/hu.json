@@ -1141,8 +1141,10 @@
   "no-subscription-transactions": "Nincsenek előfizetési tranzakciók.",
   "tools-and-extras": "Eszközök és extrák",
   "transaction-activity-log": "Tranzakciós tevékenység naplója",
-  "activty-log": "Naplót",
+  "activity-log": "Naplót",
   "modified": "Módosított",
   "restore-transaction": "Visszaállítja a tranzakciót?",
-  "created": "Létrehozva"
+  "created": "Létrehozva",
+  "tap-each-section-to-customize": "Érintse meg az egyes szakaszokat a testreszabáshoz",
+  "transaction-no-longer-available": "A tranzakció már nem elérhető"
 }

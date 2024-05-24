@@ -1141,8 +1141,10 @@
   "no-subscription-transactions": "कोणतेही सबस्क्रिप्शन व्यवहार नाहीत.",
   "tools-and-extras": "साधने आणि अतिरिक्त",
   "transaction-activity-log": "व्यवहार क्रियाकलाप लॉग",
-  "activty-log": "क्रियाकलाप लॉग",
+  "activity-log": "क्रियाकलाप लॉग",
   "modified": "सुधारित",
   "restore-transaction": "व्यवहार पुनर्संचयित करायचा?",
-  "created": "तयार केले"
+  "created": "तयार केले",
+  "tap-each-section-to-customize": "सानुकूलित करण्यासाठी प्रत्येक विभागावर टॅप करा",
+  "transaction-no-longer-available": "व्यवहार यापुढे उपलब्ध नाही"
 }

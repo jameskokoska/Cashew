@@ -1141,8 +1141,10 @@
   "no-subscription-transactions": "Sin transacciones de suscripción.",
   "tools-and-extras": "Herramientas y extras",
   "transaction-activity-log": "Registro de actividad de transacciones",
-  "activty-log": "Registro de actividades",
+  "activity-log": "Registro de actividades",
   "modified": "Modificado",
   "restore-transaction": "¿Restaurar transacción?",
-  "created": "Creado"
+  "created": "Creado",
+  "tap-each-section-to-customize": "Toca cada sección para personalizarla",
+  "transaction-no-longer-available": "La transacción ya no está disponible"
 }

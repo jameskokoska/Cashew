@@ -1141,8 +1141,10 @@
   "no-subscription-transactions": "કોઈ સબ્સ્ક્રિપ્શન વ્યવહારો નથી.",
   "tools-and-extras": "સાધનો અને વધારાઓ",
   "transaction-activity-log": "વ્યવહાર પ્રવૃત્તિ લોગ",
-  "activty-log": "પ્રવૃત્તિ લોગ",
+  "activity-log": "પ્રવૃત્તિ લોગ",
   "modified": "સંશોધિત",
   "restore-transaction": "વ્યવહાર પુનઃસ્થાપિત કરીએ?",
-  "created": "બનાવ્યું"
+  "created": "બનાવ્યું",
+  "tap-each-section-to-customize": "કસ્ટમાઇઝ કરવા માટે દરેક વિભાગને ટેપ કરો",
+  "transaction-no-longer-available": "વ્યવહાર હવે ઉપલબ્ધ નથી"
 }

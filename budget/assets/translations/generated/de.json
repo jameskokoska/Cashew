@@ -1141,8 +1141,10 @@
   "no-subscription-transactions": "Keine Abonnementtransaktionen.",
   "tools-and-extras": "Werkzeuge und Extras",
   "transaction-activity-log": "Transaktionsaktivitätsprotokoll",
-  "activty-log": "Aktivitätsprotokoll",
+  "activity-log": "Aktivitätsprotokoll",
   "modified": "Geändert",
   "restore-transaction": "Transaktion wiederherstellen?",
-  "created": "Erstellt"
+  "created": "Erstellt",
+  "tap-each-section-to-customize": "Tippen Sie auf jeden Abschnitt, um ihn anzupassen",
+  "transaction-no-longer-available": "Transaktion nicht mehr verfügbar"
 }

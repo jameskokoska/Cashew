@@ -1141,8 +1141,10 @@
   "no-subscription-transactions": "Žádné transakce předplatného.",
   "tools-and-extras": "Nástroje a doplňky",
   "transaction-activity-log": "Protokol aktivity transakce",
-  "activty-log": "Protokol činnosti",
+  "activity-log": "Protokol činnosti",
   "modified": "Upraveno",
   "restore-transaction": "Obnovit transakci?",
-  "created": "Vytvořeno"
+  "created": "Vytvořeno",
+  "tap-each-section-to-customize": "Klepnutím na jednotlivé sekce přizpůsobíte",
+  "transaction-no-longer-available": "Transakce již není dostupná"
 }

@@ -1141,8 +1141,10 @@
   "no-subscription-transactions": "Aucune opération de souscription.",
   "tools-and-extras": "Outils et extras",
   "transaction-activity-log": "Journal d'activité des transactions",
-  "activty-log": "Journal d'activité",
+  "activity-log": "Journal d'activité",
   "modified": "Modifié",
   "restore-transaction": "Restaurer la transaction ?",
-  "created": "Créé"
+  "created": "Créé",
+  "tap-each-section-to-customize": "Appuyez sur chaque section pour personnaliser",
+  "transaction-no-longer-available": "La transaction n'est plus disponible"
 }

@@ -1141,8 +1141,10 @@
   "no-subscription-transactions": "Ingen abonnementstransaksjoner.",
   "tools-and-extras": "Verktøy og tillegg",
   "transaction-activity-log": "Transaksjonsaktivitetslogg",
-  "activty-log": "Aktivitetsloggen",
+  "activity-log": "Aktivitetsloggen",
   "modified": "Modifisert",
   "restore-transaction": "Gjenopprette transaksjonen?",
-  "created": "Opprettet"
+  "created": "Opprettet",
+  "tap-each-section-to-customize": "Trykk på hver seksjon for å tilpasse",
+  "transaction-no-longer-available": "Transaksjonen er ikke lenger tilgjengelig"
 }

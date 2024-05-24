@@ -1141,8 +1141,10 @@
   "no-subscription-transactions": "Tidak ada transaksi berlangganan.",
   "tools-and-extras": "Alat & Ekstra",
   "transaction-activity-log": "Log Aktivitas Transaksi",
-  "activty-log": "Log aktivitas",
+  "activity-log": "Log aktivitas",
   "modified": "Diubah",
   "restore-transaction": "Pulihkan Transaksi?",
-  "created": "Dibuat"
+  "created": "Dibuat",
+  "tap-each-section-to-customize": "Ketuk setiap bagian untuk menyesuaikan",
+  "transaction-no-longer-available": "Transaksi tidak lagi tersedia"
 }

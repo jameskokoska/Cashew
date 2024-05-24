@@ -1141,8 +1141,10 @@
   "no-subscription-transactions": "Tiada transaksi langganan.",
   "tools-and-extras": "Alat & Tambahan",
   "transaction-activity-log": "Log Aktiviti Transaksi",
-  "activty-log": "Log aktiviti",
+  "activity-log": "Log aktiviti",
   "modified": "Diubah suai",
   "restore-transaction": "Pulihkan Transaksi?",
-  "created": "Dicipta"
+  "created": "Dicipta",
+  "tap-each-section-to-customize": "Ketik setiap bahagian untuk menyesuaikan",
+  "transaction-no-longer-available": "Urus niaga tidak tersedia lagi"
 }

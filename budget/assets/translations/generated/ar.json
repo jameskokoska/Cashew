@@ -1141,8 +1141,10 @@
   "no-subscription-transactions": "لا توجد معاملات الاشتراك.",
   "tools-and-extras": "الأدوات والإضافات",
   "transaction-activity-log": "سجل نشاط المعاملة",
-  "activty-log": "سجل النشاطات",
+  "activity-log": "سجل النشاطات",
   "modified": "معدل",
   "restore-transaction": "استعادة المعاملة؟",
-  "created": "مخلوق"
+  "created": "مخلوق",
+  "tap-each-section-to-customize": "اضغط على كل قسم لتخصيصه",
+  "transaction-no-longer-available": "المعاملة لم تعد متاحة"
 }

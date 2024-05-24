@@ -1141,8 +1141,10 @@
   "no-subscription-transactions": "구독 거래가 없습니다.",
   "tools-and-extras": "도구 및 추가 기능",
   "transaction-activity-log": "거래 활동 로그",
-  "activty-log": "활동 로그",
+  "activity-log": "활동 로그",
   "modified": "수정됨",
   "restore-transaction": "거래를 복원하시겠습니까?",
-  "created": "만들어진"
+  "created": "만들어진",
+  "tap-each-section-to-customize": "각 섹션을 탭하여 맞춤설정하세요.",
+  "transaction-no-longer-available": "더 이상 거래가 불가능합니다."
 }

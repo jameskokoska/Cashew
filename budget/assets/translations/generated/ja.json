@@ -1141,8 +1141,10 @@
   "no-subscription-transactions": "サブスクリプション取引はありません。",
   "tools-and-extras": "ツールと付属品",
   "transaction-activity-log": "トランザクションアクティビティログ",
-  "activty-log": "活動記録",
+  "activity-log": "活動記録",
   "modified": "修正済み",
   "restore-transaction": "トランザクションを復元しますか?",
-  "created": "作成した"
+  "created": "作成した",
+  "tap-each-section-to-customize": "各セクションをタップしてカスタマイズします",
+  "transaction-no-longer-available": "取引は利用できなくなりました"
 }

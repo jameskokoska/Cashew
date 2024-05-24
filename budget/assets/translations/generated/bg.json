@@ -1141,8 +1141,10 @@
   "no-subscription-transactions": "Без абонаментни транзакции.",
   "tools-and-extras": "Инструменти и екстри",
   "transaction-activity-log": "Дневник на транзакционната активност",
-  "activty-log": "Дневник дейност",
+  "activity-log": "Дневник дейност",
   "modified": "Променен",
   "restore-transaction": "Възстановяване на транзакцията?",
-  "created": "Създаден"
+  "created": "Създаден",
+  "tap-each-section-to-customize": "Докоснете всяка секция, за да персонализирате",
+  "transaction-no-longer-available": "Транзакцията вече не е налична"
 }

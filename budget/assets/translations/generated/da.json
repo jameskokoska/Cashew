@@ -1141,8 +1141,10 @@
   "no-subscription-transactions": "Ingen abonnementstransaktioner.",
   "tools-and-extras": "Værktøj og ekstraudstyr",
   "transaction-activity-log": "Transaktionsaktivitetslog",
-  "activty-log": "Aktivitetslog",
+  "activity-log": "Aktivitetslog",
   "modified": "Ændret",
   "restore-transaction": "Vil du gendanne transaktionen?",
-  "created": "Oprettet"
+  "created": "Oprettet",
+  "tap-each-section-to-customize": "Tryk på hver sektion for at tilpasse",
+  "transaction-no-longer-available": "Transaktionen er ikke længere tilgængelig"
 }

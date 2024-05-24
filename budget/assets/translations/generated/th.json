@@ -1141,8 +1141,10 @@
   "no-subscription-transactions": "ไม่มีธุรกรรมการสมัครสมาชิก",
   "tools-and-extras": "เครื่องมือและอุปกรณ์เสริม",
   "transaction-activity-log": "บันทึกกิจกรรมการทำธุรกรรม",
-  "activty-log": "บันทึกกิจกรรม",
+  "activity-log": "บันทึกกิจกรรม",
   "modified": "ดัดแปลง",
   "restore-transaction": "กู้คืนธุรกรรม?",
-  "created": "สร้าง"
+  "created": "สร้าง",
+  "tap-each-section-to-customize": "แตะแต่ละส่วนเพื่อปรับแต่ง",
+  "transaction-no-longer-available": "การทำธุรกรรมไม่สามารถใช้ได้อีกต่อไป"
 }

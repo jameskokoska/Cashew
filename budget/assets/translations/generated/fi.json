@@ -1141,8 +1141,10 @@
   "no-subscription-transactions": "Ei tilaustapahtumia.",
   "tools-and-extras": "Työkalut & Ekstrat",
   "transaction-activity-log": "Tapahtumatoimintaloki",
-  "activty-log": "Aktiviteettiloki",
+  "activity-log": "Aktiviteettiloki",
   "modified": "Muokattu",
   "restore-transaction": "Palautetaanko tapahtuma?",
-  "created": "Luotu"
+  "created": "Luotu",
+  "tap-each-section-to-customize": "Mukauta kutakin osiota napauttamalla",
+  "transaction-no-longer-available": "Tapahtuma ei ole enää saatavilla"
 }

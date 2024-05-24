@@ -268,7 +268,7 @@
   "no-currencies-found": "Walang nahanap na pera.",
   "no-transactions-found": "Walang nahanap na mga transaksyon.",
   "showing-transactions-from": "Nagpapakita ng mga transaksyon mula sa",
-  "days": "araw",
+  "days": "mga araw",
   "day": "araw",
   "category-to-transfer-all-transactions-to": "Kategorya upang ilipat ang lahat ng mga transaksyon sa",
   "merge-category": "Pagsamahin ang kategorya",
@@ -1141,8 +1141,10 @@
   "no-subscription-transactions": "Walang mga transaksyon sa subscription.",
   "tools-and-extras": "Mga Tool at Extra",
   "transaction-activity-log": "Log ng Aktibidad ng Transaksyon",
-  "activty-log": "Log ng Aktibidad",
+  "activity-log": "Log ng Aktibidad",
   "modified": "Binago",
   "restore-transaction": "Ibalik ang Transaksyon?",
-  "created": "Nilikha"
+  "created": "Nilikha",
+  "tap-each-section-to-customize": "I-tap ang bawat seksyon para i-customize",
+  "transaction-no-longer-available": "Hindi na available ang transaksyon"
 }

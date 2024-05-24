@@ -1141,8 +1141,10 @@
   "no-subscription-transactions": "کوئی سبسکرپشن لین دین نہیں۔",
   "tools-and-extras": "ٹولز اور ایکسٹرا",
   "transaction-activity-log": "لین دین کی سرگرمی لاگ",
-  "activty-log": "سرگرمی لاگ",
+  "activity-log": "سرگرمی لاگ",
   "modified": "ترمیم شدہ",
   "restore-transaction": "لین دین بحال کریں؟",
-  "created": "بنایا"
+  "created": "بنایا",
+  "tap-each-section-to-customize": "حسب ضرورت بنانے کے لیے ہر سیکشن کو تھپتھپائیں۔",
+  "transaction-no-longer-available": "لین دین اب دستیاب نہیں ہے۔"
 }

@@ -1141,8 +1141,10 @@
   "no-subscription-transactions": "بدون تراکنش اشتراک",
   "tools-and-extras": "ابزار و امکانات اضافی",
   "transaction-activity-log": "گزارش فعالیت تراکنش",
-  "activty-log": "گزارش فعالیت",
+  "activity-log": "گزارش فعالیت",
   "modified": "اصلاح شده",
   "restore-transaction": "بازیابی تراکنش؟",
-  "created": "ایجاد شده"
+  "created": "ایجاد شده",
+  "tap-each-section-to-customize": "برای سفارشی کردن، روی هر بخش ضربه بزنید",
+  "transaction-no-longer-available": "تراکنش دیگر در دسترس نیست"
 }

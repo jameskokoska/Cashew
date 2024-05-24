@@ -1141,8 +1141,10 @@
   "no-subscription-transactions": "Žiadne predplatné transakcie.",
   "tools-and-extras": "Nástroje a doplnky",
   "transaction-activity-log": "Denník aktivity transakcie",
-  "activty-log": "Denník aktivít",
+  "activity-log": "Denník aktivít",
   "modified": "Upravené",
   "restore-transaction": "Obnoviť transakciu?",
-  "created": "Vytvorené"
+  "created": "Vytvorené",
+  "tap-each-section-to-customize": "Klepnutím na jednotlivé sekcie prispôsobíte",
+  "transaction-no-longer-available": "Transakcia už nie je k dispozícii"
 }

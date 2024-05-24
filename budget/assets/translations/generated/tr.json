@@ -1141,8 +1141,10 @@
   "no-subscription-transactions": "Abonelik işlemi yok.",
   "tools-and-extras": "Araçlar ve Ekstralar",
   "transaction-activity-log": "İşlem Etkinliği Günlüğü",
-  "activty-log": "Etkinlik Günlüğü",
+  "activity-log": "Etkinlik Günlüğü",
   "modified": "Değiştirilmiş",
   "restore-transaction": "İşlem Geri Yüklensin mi?",
-  "created": "Oluşturuldu"
+  "created": "Oluşturuldu",
+  "tap-each-section-to-customize": "Özelleştirmek için her bölüme dokunun",
+  "transaction-no-longer-available": "İşlem artık kullanılamıyor"
 }

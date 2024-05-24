@@ -1141,8 +1141,10 @@
   "no-subscription-transactions": "没有订阅交易。",
   "tools-and-extras": "工具和附加功能",
   "transaction-activity-log": "交易活动日志",
-  "activty-log": "活动日志",
+  "activity-log": "活动日志",
   "modified": "修改的",
   "restore-transaction": "恢复交易？",
-  "created": "已创建"
+  "created": "已创建",
+  "tap-each-section-to-customize": "点击每个部分进行自定义",
+  "transaction-no-longer-available": "交易不再可用"
 }

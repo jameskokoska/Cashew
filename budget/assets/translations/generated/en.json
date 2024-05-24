@@ -1141,8 +1141,10 @@
   "no-subscription-transactions": "No subscription transactions.",
   "tools-and-extras": "Tools & Extras",
   "transaction-activity-log": "Transaction Activity Log",
-  "activty-log": "Activity Log",
+  "activity-log": "Activity Log",
   "modified": "Modified",
   "restore-transaction": "Restore Transaction?",
-  "created": "Created"
+  "created": "Created",
+  "tap-each-section-to-customize": "Tap each section to customize",
+  "transaction-no-longer-available": "Transaction no longer available"
 }

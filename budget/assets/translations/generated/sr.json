@@ -1141,8 +1141,10 @@
   "no-subscription-transactions": "Нема трансакција претплате.",
   "tools-and-extras": "Алати и додаци",
   "transaction-activity-log": "Дневник активности трансакције",
-  "activty-log": "Активности",
+  "activity-log": "Активности",
   "modified": "Модификовано",
   "restore-transaction": "Вратити трансакцију?",
-  "created": "Цреатед"
+  "created": "Цреатед",
+  "tap-each-section-to-customize": "Додирните сваки одељак да бисте га прилагодили",
+  "transaction-no-longer-available": "Трансакција више није доступна"
 }

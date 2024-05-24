@@ -1141,8 +1141,10 @@
   "no-subscription-transactions": "Brak transakcji subskrypcyjnych.",
   "tools-and-extras": "Narzędzia i dodatki",
   "transaction-activity-log": "Dziennik aktywności transakcji",
-  "activty-log": "Dziennik aktywności",
+  "activity-log": "Dziennik aktywności",
   "modified": "Zmodyfikowany",
   "restore-transaction": "Przywrócić transakcję?",
-  "created": "Utworzony"
+  "created": "Utworzony",
+  "tap-each-section-to-customize": "Kliknij każdą sekcję, aby ją dostosować",
+  "transaction-no-longer-available": "Transakcja nie jest już dostępna"
 }

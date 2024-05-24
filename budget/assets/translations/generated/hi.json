@@ -1141,8 +1141,10 @@
   "no-subscription-transactions": "कोई सदस्यता लेनदेन नहीं.",
   "tools-and-extras": "उपकरण एवं अतिरिक्त सुविधाएं",
   "transaction-activity-log": "लेन-देन गतिविधि लॉग",
-  "activty-log": "गतिविधि लॉग",
+  "activity-log": "गतिविधि लॉग",
   "modified": "संशोधित",
   "restore-transaction": "लेन-देन पुनर्स्थापित करें?",
-  "created": "बनाया था"
+  "created": "बनाया था",
+  "tap-each-section-to-customize": "अनुकूलित करने के लिए प्रत्येक अनुभाग को टैप करें",
+  "transaction-no-longer-available": "लेन-देन अब उपलब्ध नहीं है"
 }

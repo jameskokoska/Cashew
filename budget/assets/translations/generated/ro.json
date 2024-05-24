@@ -1141,8 +1141,10 @@
   "no-subscription-transactions": "Fără tranzacții cu abonament.",
   "tools-and-extras": "Instrumente și accesorii suplimentare",
   "transaction-activity-log": "Jurnalul activității tranzacției",
-  "activty-log": "Jurnalul de activitate",
+  "activity-log": "Jurnalul de activitate",
   "modified": "Modificat",
   "restore-transaction": "Restabiliți tranzacția?",
-  "created": "Creată"
+  "created": "Creată",
+  "tap-each-section-to-customize": "Atingeți fiecare secțiune pentru a personaliza",
+  "transaction-no-longer-available": "Tranzacția nu mai este disponibilă"
 }
