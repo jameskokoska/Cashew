@@ -1,13 +1,8 @@
-import 'dart:developer';
-
 import 'package:budget/functions.dart';
-import 'package:budget/main.dart';
 import 'package:budget/pages/addBudgetPage.dart';
 import 'package:budget/pages/homePage/homePageLineGraph.dart';
 import 'package:budget/pages/objectivesListPage.dart';
-import 'package:budget/pages/settingsPage.dart';
 import 'package:budget/pages/transactionFilters.dart';
-import 'package:budget/pages/transactionsSearchPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/firebaseAuthGlobal.dart';
 import 'package:budget/struct/settings.dart';
@@ -23,9 +18,9 @@ import 'package:drift/drift.dart';
 export 'platform/shared.dart';
 import 'dart:convert';
 import 'package:budget/struct/currencyFunctions.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'schema_versions.dart';
 import 'package:flutter/material.dart' show DateTimeRange;
+import 'package:budget/pages/activityPage.dart';
 
 import 'package:flutter/material.dart' show RangeValues;
 part 'tables.g.dart';
@@ -554,6 +549,20 @@ class TransactionWithCategory {
     this.budget,
     this.objective,
     this.subCategory,
+  });
+}
+
+class TransactionActivityLog {
+  final DateTime dateTime;
+  final Transaction? transaction;
+  final TransactionWithCategory? transactionWithCategory;
+  final DeleteLog? deleteLog;
+
+  TransactionActivityLog({
+    required this.dateTime,
+    required this.transaction,
+    this.transactionWithCategory,
+    this.deleteLog,
   });
 }
 
@@ -2617,7 +2626,7 @@ class FinanceDatabase extends _$FinanceDatabase {
       Transaction? transactionToDelete =
           await database.tryGetTransactionFromPk(deletedPk);
       if (transactionToDelete != null)
-        recentlyDeletedTransactions[deletedPk] = transactionToDelete;
+        addTransactionToRecentlyDeleted(transactionToDelete, save: true);
     }
     await into(deleteLogs).insert(
       DeleteLogsCompanion.insert(
@@ -2633,7 +2642,9 @@ class FinanceDatabase extends _$FinanceDatabase {
   Future<bool> createDeleteLogs(
       DeleteLogType type, List<String> deletedPks) async {
     List<DeleteLogsCompanion> deleteLogsToInsert = [];
-    for (String deletePk in deletedPks) {
+    Map<String, Transaction?> fetchedTransactions = {};
+
+    await Future.wait(deletedPks.map((deletePk) async {
       deleteLogsToInsert.add(
         DeleteLogsCompanion.insert(
           type: type,
@@ -2641,10 +2652,23 @@ class FinanceDatabase extends _$FinanceDatabase {
           dateTimeModified: Value(DateTime.now()),
         ),
       );
-    }
-    await batch((batch) {
+      if (type == DeleteLogType.Transaction) {
+        Transaction? transactionToDelete =
+            await database.tryGetTransactionFromPk(deletePk);
+        fetchedTransactions[deletePk] = transactionToDelete;
+      }
+    }));
+
+    fetchedTransactions.forEach((deletePk, transactionToDelete) {
+      if (transactionToDelete != null)
+        addTransactionToRecentlyDeleted(transactionToDelete, save: false);
+    });
+    saveRecentlyDeletedTransactions();
+
+    await database.batch((batch) {
       batch.insertAll(deleteLogs, deleteLogsToInsert, mode: InsertMode.replace);
     });
+
     return true;
   }
 
@@ -4189,7 +4213,8 @@ class FinanceDatabase extends _$FinanceDatabase {
         .watch();
   }
 
-  Stream<List<TransactionWithCategory>> watchAllTransactionActivityLog() {
+  Stream<List<TransactionActivityLog>> watchAllTransactionActivityLog(
+      {int? limit}) {
     final $CategoriesTable subCategories = alias(categories, 'subCategories');
 
     final query = select(transactions).join([
@@ -4206,48 +4231,45 @@ class FinanceDatabase extends _$FinanceDatabase {
       leftOuterJoin(subCategories,
           subCategories.categoryPk.equalsExp(transactions.subCategoryFk)),
     ])
+      ..limit(limit ?? DEFAULT_LIMIT)
       ..orderBy([OrderingTerm.desc(transactions.dateTimeModified)]);
 
     return query.watch().map((rows) => rows.map((row) {
-          return TransactionWithCategory(
+          return TransactionActivityLog(
+            dateTime:
+                row.readTable(transactions).dateTimeModified ?? DateTime.now(),
+            transaction: row.readTable(transactions),
+            transactionWithCategory: TransactionWithCategory(
               category: row.readTable(categories),
               transaction: row.readTable(transactions),
               budget: row.readTableOrNull(budgets),
               objective: row.readTableOrNull(objectives),
-              subCategory: row.readTableOrNull(subCategories));
+              subCategory: row.readTableOrNull(subCategories),
+            ),
+          );
         }).toList());
   }
 
-  Stream<List<TransactionWithCategory>> watchAllTransactionDeleteActivityLog() {
+  Stream<List<TransactionActivityLog>> watchAllTransactionDeleteActivityLog(
+      {int? limit}) {
     final query = select(deleteLogs)
+      ..limit(limit ?? DEFAULT_LIMIT)
       ..orderBy([(t) => OrderingTerm.desc(deleteLogs.dateTimeModified)]);
 
-    return query.watch().map(
-          (rows) => rows
-              .map((DeleteLog row) {
-                Transaction? transaction =
-                    recentlyDeletedTransactions[row.entryPk];
-                if (transaction == null) return null;
-                return TransactionWithCategory(
-                  category: TransactionCategory(
-                    categoryPk: "-1",
-                    name: "",
-                    dateCreated: DateTime.now(),
-                    dateTimeModified: null,
-                    order: 0,
-                    income: false,
-                    iconName: "",
-                    colour: "",
-                    emojiIconName: "",
-                  ),
-                  transaction: transaction,
-                );
-              })
-              .where(
-                  (transactionWithCategory) => transactionWithCategory != null)
-              .cast<TransactionWithCategory>()
-              .toList(),
-        );
+    return query.watch().map((rows) => rows.map((DeleteLog row) {
+          Transaction? transaction =
+              getTransactionFromRecentlyDeleted(row.entryPk);
+          return TransactionActivityLog(
+            dateTime: row.dateTimeModified,
+            deleteLog: row,
+            transaction: transaction,
+          );
+        }).toList());
+  }
+
+  Future deleteDeleteLog(String deleteLogPk) async {
+    return (delete(deleteLogs)..where((t) => t.deleteLogPk.equals(deleteLogPk)))
+        .go();
   }
 
   Stream<List<CategoryWithDetails>> watchAllMainCategoriesWithDetails({

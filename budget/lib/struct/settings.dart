@@ -1,16 +1,12 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
 import 'package:budget/pages/editHomePage.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
-import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntry/transactionEntry.dart';
-import 'package:budget/widgets/util/checkWidgetLaunch.dart';
 import 'package:drift/isolate.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/struct/defaultPreferences.dart';
@@ -24,6 +20,7 @@ import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/radioItems.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:budget/widgets/framework/popupFramework.dart';
+import 'package:budget/pages/activityPage.dart';
 
 Map<String, dynamic> appStateSettings = {};
 bool isDatabaseCorrupted = false;
@@ -112,7 +109,7 @@ Future<bool> initializeSettings() async {
             .replaceAll("-", "_") +
         "-" +
         DateTime.now().millisecondsSinceEpoch.toString();
-    await sharedPreferences.setString('clientID', newClientID);
+    await sharedPreferences.setString("clientID", newClientID);
     clientID = newClientID;
   } else {
     clientID = retrievedClientID;
@@ -127,7 +124,7 @@ Future<bool> initializeSettings() async {
 
   // save settings
   await sharedPreferences.setString(
-      'userSettings', json.encode(appStateSettings));
+      "userSettings", json.encode(appStateSettings));
 
   try {
     globalCollapsedFutureID.value = (jsonDecode(
@@ -138,6 +135,13 @@ Future<bool> initializeSettings() async {
     });
   } catch (e) {
     print("There was an error restoring globalCollapsedFutureID preference: " +
+        e.toString());
+  }
+
+  try {
+    loadRecentlyDeletedTransactions();
+  } catch (e) {
+    print("There was an error loading recently deleted transactions map: " +
         e.toString());
   }
 

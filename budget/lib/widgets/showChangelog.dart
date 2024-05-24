@@ -28,6 +28,7 @@ String getChangelogString() {
   return """
     < 5.3.0
     Revamped scheduled transactions page: see an extrapolated total average per month or year
+    Transaction activity log page: see recently deleted/modified transactions
     Copy transaction details to clipboard by tapping/long pressing transaction count in selected transactions app bar
     Centered bottom navigation bar labels
     Improve biometric lock workflow and biometric unlock error
