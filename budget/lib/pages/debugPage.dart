@@ -43,7 +43,6 @@ class DebugPage extends StatelessWidget {
         fontWeight: FontWeight.bold,
         fontSize: 20,
         maxLines: 5,
-        textAlign: TextAlign.center,
       ),
       subtitleAlignment: Alignment.bottomLeft,
       subtitleSize: 10,

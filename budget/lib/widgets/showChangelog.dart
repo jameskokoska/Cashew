@@ -37,6 +37,7 @@ String getChangelogString() {
     Added info point about next repetitive transaction will be generated after current marked as paid 
     Titles with the same category and name are automatically deleted
     Manual adding/editing of associated title can be configured to subcategory
+    Add hint text about editing homepage sections
     Fix associated titles order priority when recommending title
     Fix upcoming transactions not marked as paid when notification activated
     Fix if decimal precision limit empty when entering amount, default to 2 instead of 0
