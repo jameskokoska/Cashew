@@ -439,6 +439,13 @@ class _EditHomePageState extends State<EditHomePage> {
         dragDownToDismiss: true,
         dragDownToDismissEnabled: dragDownToDismissEnabled,
         title: "edit-home".tr(),
+        subtitle: TextFont(
+          text: "tap-each-section-to-customize".tr(),
+          fontSize: 18,
+          maxLines: 2,
+        ),
+        subtitleAlignment: Alignment.bottomLeft,
+        subtitleSize: 10,
         slivers: [
           if (enableDoubleColumn(context))
             SliverToBoxAdapter(
