@@ -4,13 +4,16 @@ import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart' hide AppSettings;
 import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/struct/databaseGlobal.dart';
+import 'package:budget/struct/settings.dart';
 import 'package:budget/widgets/dateDivider.dart';
 import 'package:budget/widgets/fab.dart';
 import 'package:budget/widgets/fadeIn.dart';
+import 'package:budget/widgets/globalSnackbar.dart';
 import 'package:budget/widgets/noResults.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/widgets/openPopup.dart';
+import 'package:budget/widgets/openSnackbar.dart';
 import 'package:budget/widgets/selectedTransactionsAppBar.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
@@ -71,6 +74,41 @@ Future<void> loadRecentlyDeletedTransactions() async {
   }
 }
 
+void restoreTransaction(
+    BuildContext context, DeleteLog deleteLog, Transaction transaction) async {
+  if (await database.getCategoryInstanceOrNull(transaction.categoryFk) ==
+      null) {
+    openPopup(
+      context,
+      title: "category-not-available".tr(),
+      description: "the-original-category-has-been-deleted".tr(),
+      onSubmitLabel: "ok".tr(),
+      onSubmit: () async {
+        Navigator.pop(context);
+      },
+      icon: appStateSettings["outlinedIcons"]
+          ? Icons.search_off_outlined
+          : Icons.search_off_rounded,
+    );
+  } else {
+    openPopup(
+      context,
+      title: "restore-transaction".tr(),
+      onCancelLabel: "cancel".tr(),
+      onCancel: () => Navigator.pop(context),
+      onSubmitLabel: "restore".tr(),
+      icon: appStateSettings["outlinedIcons"]
+          ? Icons.restore_page_outlined
+          : Icons.restore_page_rounded,
+      onSubmit: () async {
+        await database.createOrUpdateTransaction(transaction);
+        await database.deleteDeleteLog(deleteLog.deleteLogPk);
+        Navigator.pop(context);
+      },
+    );
+  }
+}
+
 class ActivityPage extends StatelessWidget {
   const ActivityPage({super.key});
 
@@ -110,8 +148,8 @@ class ActivityPage extends StatelessWidget {
                       stream: database.watchAllTransactionDeleteActivityLog(
                           limit: 30),
                       builder: (context, snapshot2) {
-                        print(snapshot1.data);
-                        print(snapshot2.data);
+                        // print(snapshot1.data);
+                        // print(snapshot2.data);
                         if (snapshot1.hasData == false &&
                             snapshot2.hasData == false) {
                           return SliverToBoxAdapter();
@@ -183,30 +221,14 @@ class ActivityPage extends StatelessWidget {
                                       color: Colors.transparent,
                                       onTap: wasADeletedTransaction
                                           ? () {
-                                              openPopup(
-                                                context,
-                                                title:
-                                                    "restore-transaction".tr(),
-                                                onCancelLabel: "cancel".tr(),
-                                                onCancel: () =>
-                                                    Navigator.pop(context),
-                                                onSubmitLabel: "restore".tr(),
-                                                onSubmit: () async {
-                                                  if (wasADeletedTransaction &&
-                                                      item.deleteLog != null) {
-                                                    await database
-                                                        .createOrUpdateTransaction(
-                                                      transaction,
-                                                    );
-                                                    await database
-                                                        .deleteDeleteLog(
-                                                      item.deleteLog!
-                                                          .deleteLogPk,
-                                                    );
-                                                  }
-                                                  Navigator.pop(context);
-                                                },
-                                              );
+                                              if (wasADeletedTransaction &&
+                                                  item.deleteLog != null &&
+                                                  item.transaction != null)
+                                                restoreTransaction(
+                                                  context,
+                                                  item.deleteLog!,
+                                                  item.transaction!,
+                                                );
                                             }
                                           : null,
                                       child: Opacity(
