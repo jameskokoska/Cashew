@@ -160,18 +160,6 @@ class DebugPage extends StatelessWidget {
               ? Icons.battery_charging_full_outlined
               : Icons.battery_charging_full_rounded,
         ),
-        DangerousDebugFlag(
-          child: SettingsContainerSwitch(
-            title: "Mass edit selected transactions",
-            onSwitched: (value) {
-              updateSettings("massEditSelectedTransactions", value,
-                  pagesNeedingRefresh: [0], updateGlobalState: false);
-            },
-            initialValue:
-                appStateSettings["massEditSelectedTransactions"] == true,
-            icon: Icons.edit,
-          ),
-        ),
         if (getPlatform(ignoreEmulation: true) == PlatformOS.isAndroid)
           SettingsContainerSwitch(
             onSwitched: (value) async {
