@@ -7,6 +7,7 @@ import 'package:budget/struct/databaseGlobal.dart';
 import 'package:budget/widgets/dateDivider.dart';
 import 'package:budget/widgets/fab.dart';
 import 'package:budget/widgets/fadeIn.dart';
+import 'package:budget/widgets/noResults.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/widgets/openPopup.dart';
@@ -109,7 +110,9 @@ class ActivityPage extends StatelessWidget {
                       stream: database.watchAllTransactionDeleteActivityLog(
                           limit: 30),
                       builder: (context, snapshot2) {
-                        if (snapshot1.hasData == false ||
+                        print(snapshot1.data);
+                        print(snapshot2.data);
+                        if (snapshot1.hasData == false &&
                             snapshot2.hasData == false) {
                           return SliverToBoxAdapter();
                         }
@@ -117,6 +120,14 @@ class ActivityPage extends StatelessWidget {
                           ...(snapshot1.data ?? []),
                           ...(snapshot2.data ?? [])
                         ]..sort((a, b) => b.dateTime.compareTo(a.dateTime));
+                        if (activityLogList.length <= 0) {
+                          return SliverToBoxAdapter(
+                            child: Center(
+                              child: NoResults(
+                                  message: "no-transactions-found".tr()),
+                            ),
+                          );
+                        }
                         return SliverList(
                           delegate: SliverChildBuilderDelegate(
                             childCount: activityLogList.length,
