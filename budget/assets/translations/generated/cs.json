@@ -1,7 +1,6 @@
 {
   "default-account-name": "banka",
   "default-budget-name": "Rozpočet",
-  "current-budget-period": "Současné období",
   "budget-history": "Historie rozpočtu",
   "home": "Domov",
   "transactions": "Transakce",
@@ -1146,5 +1145,7 @@
   "restore-transaction": "Obnovit transakci?",
   "created": "Vytvořeno",
   "tap-each-section-to-customize": "Klepnutím na jednotlivé sekce přizpůsobíte",
-  "transaction-no-longer-available": "Transakce již není dostupná"
+  "transaction-no-longer-available": "Transakce byla smazána a již ji nelze obnovit",
+  "category-not-available": "Kategorie není k dispozici",
+  "the-original-category-has-been-deleted": "Původní kategorie byla smazána a transakci nelze obnovit."
 }

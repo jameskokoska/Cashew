@@ -1,7 +1,6 @@
 {
   "default-account-name": "Банк",
   "default-budget-name": "Бюджет",
-  "current-budget-period": "Поточний період",
   "budget-history": "Історія бюджету",
   "home": "Головна",
   "transactions": "транзакції",
@@ -1146,5 +1145,7 @@
   "restore-transaction": "Відновити транзакцію?",
   "created": "Створено",
   "tap-each-section-to-customize": "Торкніться кожного розділу, щоб налаштувати",
-  "transaction-no-longer-available": "Трансакція більше не доступна"
+  "transaction-no-longer-available": "Транзакцію було видалено, і її більше неможливо відновити",
+  "category-not-available": "Категорія недоступна",
+  "the-original-category-has-been-deleted": "Початкову категорію видалено, і транзакцію неможливо відновити."
 }

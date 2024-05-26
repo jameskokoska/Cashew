@@ -1,7 +1,6 @@
 {
   "default-account-name": "Банка",
   "default-budget-name": "Буџет",
-  "current-budget-period": "Тренутни период",
   "budget-history": "Историја буџета",
   "home": "Кућа",
   "transactions": "Трансакције",
@@ -1146,5 +1145,7 @@
   "restore-transaction": "Вратити трансакцију?",
   "created": "Цреатед",
   "tap-each-section-to-customize": "Додирните сваки одељак да бисте га прилагодили",
-  "transaction-no-longer-available": "Трансакција више није доступна"
+  "transaction-no-longer-available": "Трансакција је избрисана и више није доступна за опоравак",
+  "category-not-available": "Категорија није доступна",
+  "the-original-category-has-been-deleted": "Оригинална категорија је избрисана и трансакција се не може повратити."
 }

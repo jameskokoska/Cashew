@@ -1,7 +1,6 @@
 {
   "default-account-name": "Банка",
   "default-budget-name": "Бюджет",
-  "current-budget-period": "Настоящ период",
   "budget-history": "История на бюджета",
   "home": "Начална страница",
   "transactions": "Трансакции",
@@ -723,7 +722,7 @@
   "database-corrupted-description": "Вашата база данни е повредена. Може да сте импортирали грешен файл.",
   "import-backup": "Импортиране на резервно копие",
   "view-previous-budget-periods": "Вижте предишни бюджетни периоди",
-  "current-period": "Текущ период",
+  "current-period": "Настоящ период",
   "set-spending-goals": "Задайте целите на разходите за категория",
   "set-currency": "Зададена валута",
   "accounts-list": "Списък на акаунти",
@@ -1146,5 +1145,7 @@
   "restore-transaction": "Възстановяване на транзакцията?",
   "created": "Създаден",
   "tap-each-section-to-customize": "Докоснете всяка секция, за да персонализирате",
-  "transaction-no-longer-available": "Транзакцията вече не е налична"
+  "transaction-no-longer-available": "Транзакцията беше изтрита и вече не е достъпна за възстановяване",
+  "category-not-available": "Категорията не е налична",
+  "the-original-category-has-been-deleted": "Оригиналната категория е изтрита и транзакцията не може да бъде възстановена."
 }

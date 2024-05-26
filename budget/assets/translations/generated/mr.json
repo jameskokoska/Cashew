@@ -1,7 +1,6 @@
 {
   "default-account-name": "बँक",
   "default-budget-name": "अर्थसंकल्प",
-  "current-budget-period": "चालू कालावधी",
   "budget-history": "बजेट इतिहास",
   "home": "मुख्यपृष्ठ",
   "transactions": "व्यवहार",
@@ -1146,5 +1145,7 @@
   "restore-transaction": "व्यवहार पुनर्संचयित करायचा?",
   "created": "तयार केले",
   "tap-each-section-to-customize": "सानुकूलित करण्यासाठी प्रत्येक विभागावर टॅप करा",
-  "transaction-no-longer-available": "व्यवहार यापुढे उपलब्ध नाही"
+  "transaction-no-longer-available": "व्यवहार हटवला गेला आणि यापुढे पुनर्प्राप्त करण्यासाठी उपलब्ध नाही",
+  "category-not-available": "श्रेणी उपलब्ध नाही",
+  "the-original-category-has-been-deleted": "मूळ श्रेणी हटविली गेली आहे आणि व्यवहार पुनर्प्राप्त केला जाऊ शकत नाही."
 }

@@ -1,7 +1,6 @@
 {
   "default-account-name": "المصرف",
   "default-budget-name": "الميزانية",
-  "current-budget-period": "الفترة الحالية",
   "budget-history": "سجل الميزانية",
   "home": "المنزل",
   "transactions": "المعاملات",
@@ -1146,5 +1145,7 @@
   "restore-transaction": "استعادة المعاملة؟",
   "created": "مخلوق",
   "tap-each-section-to-customize": "اضغط على كل قسم لتخصيصه",
-  "transaction-no-longer-available": "المعاملة لم تعد متاحة"
+  "transaction-no-longer-available": "تم حذف المعاملة ولم تعد متاحة للاسترداد",
+  "category-not-available": "الفئة غير متوفرة",
+  "the-original-category-has-been-deleted": "تم حذف الفئة الأصلية ولا يمكن استرداد المعاملة."
 }

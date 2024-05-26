@@ -1,7 +1,6 @@
 {
   "default-account-name": "bangko",
   "default-budget-name": "Badyet",
-  "current-budget-period": "Kasalukuyang Panahon",
   "budget-history": "Kasaysayan ng Budget",
   "home": "Home",
   "transactions": "Mga Transaksyon",
@@ -1146,5 +1145,7 @@
   "restore-transaction": "Ibalik ang Transaksyon?",
   "created": "Nilikha",
   "tap-each-section-to-customize": "I-tap ang bawat seksyon para i-customize",
-  "transaction-no-longer-available": "Hindi na available ang transaksyon"
+  "transaction-no-longer-available": "Ang transaksyon ay tinanggal at hindi na magagamit upang mabawi",
+  "category-not-available": "Hindi Magagamit ang Kategorya",
+  "the-original-category-has-been-deleted": "Ang orihinal na kategorya ay tinanggal at ang transaksyon ay hindi na mababawi."
 }

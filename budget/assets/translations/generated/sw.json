@@ -1,7 +1,6 @@
 {
   "default-account-name": "Benki",
   "default-budget-name": "Bajeti",
-  "current-budget-period": "Kipindi cha sasa",
   "budget-history": "Historia ya Bajeti",
   "home": "Nyumbani",
   "transactions": "Miamala",
@@ -1146,5 +1145,7 @@
   "restore-transaction": "Ungependa kurejesha Muamala?",
   "created": "Imeundwa",
   "tap-each-section-to-customize": "Gusa kila sehemu ili kubinafsisha",
-  "transaction-no-longer-available": "Muamala haupatikani tena"
+  "transaction-no-longer-available": "Muamala ulifutwa na haupatikani tena kurejesha",
+  "category-not-available": "Aina Haipatikani",
+  "the-original-category-has-been-deleted": "Kategoria asili imefutwa na muamala hauwezi kurejeshwa."
 }

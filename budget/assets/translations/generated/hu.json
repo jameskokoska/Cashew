@@ -1,7 +1,6 @@
 {
   "default-account-name": "Bank",
   "default-budget-name": "Költségvetés",
-  "current-budget-period": "Jelenlegi időszak",
   "budget-history": "Költségvetési előzmények",
   "home": "itthon",
   "transactions": "Tranzakciók",
@@ -1146,5 +1145,7 @@
   "restore-transaction": "Visszaállítja a tranzakciót?",
   "created": "Létrehozva",
   "tap-each-section-to-customize": "Érintse meg az egyes szakaszokat a testreszabáshoz",
-  "transaction-no-longer-available": "A tranzakció már nem elérhető"
+  "transaction-no-longer-available": "A tranzakciót törölték, és már nem lehet visszaállítani",
+  "category-not-available": "A kategória nem elérhető",
+  "the-original-category-has-been-deleted": "Az eredeti kategória törölve lett, és a tranzakció nem állítható vissza."
 }

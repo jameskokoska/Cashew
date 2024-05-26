@@ -1,7 +1,6 @@
 {
   "default-account-name": "Pankki",
   "default-budget-name": "Budjetti",
-  "current-budget-period": "Nykyinen jakso",
   "budget-history": "Budjettihistoria",
   "home": "Koti",
   "transactions": "Tapahtumat",
@@ -1146,5 +1145,7 @@
   "restore-transaction": "Palautetaanko tapahtuma?",
   "created": "Luotu",
   "tap-each-section-to-customize": "Mukauta kutakin osiota napauttamalla",
-  "transaction-no-longer-available": "Tapahtuma ei ole enää saatavilla"
+  "transaction-no-longer-available": "Tapahtuma poistettiin, eikä sitä voi enää palauttaa",
+  "category-not-available": "Luokka ei saatavilla",
+  "the-original-category-has-been-deleted": "Alkuperäinen luokka on poistettu, eikä tapahtumaa voi palauttaa."
 }

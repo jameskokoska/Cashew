@@ -1,7 +1,6 @@
 {
   "default-account-name": "银行",
   "default-budget-name": "预算",
-  "current-budget-period": "当前周期",
   "budget-history": "预算历史",
   "home": "主页",
   "transactions": "交易",
@@ -1146,5 +1145,7 @@
   "restore-transaction": "恢复交易？",
   "created": "已创建",
   "tap-each-section-to-customize": "点击每个部分进行自定义",
-  "transaction-no-longer-available": "交易不再可用"
+  "transaction-no-longer-available": "交易已被删除且无法再恢复",
+  "category-not-available": "类别不可用",
+  "the-original-category-has-been-deleted": "原分类已被删除，交易无法恢复。"
 }

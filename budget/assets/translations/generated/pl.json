@@ -1,7 +1,6 @@
 {
   "default-account-name": "Bank",
   "default-budget-name": "Budżet",
-  "current-budget-period": "Obecny okres",
   "budget-history": "Historia budżetu",
   "home": "Strona startowa",
   "transactions": "Transakcje",
@@ -1146,5 +1145,7 @@
   "restore-transaction": "Przywrócić transakcję?",
   "created": "Utworzony",
   "tap-each-section-to-customize": "Kliknij każdą sekcję, aby ją dostosować",
-  "transaction-no-longer-available": "Transakcja nie jest już dostępna"
+  "transaction-no-longer-available": "Transakcja została usunięta i nie można jej już odzyskać",
+  "category-not-available": "Kategoria niedostępna",
+  "the-original-category-has-been-deleted": "Oryginalna kategoria została usunięta i transakcji nie można odzyskać."
 }

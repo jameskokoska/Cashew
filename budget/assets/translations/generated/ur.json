@@ -1,7 +1,6 @@
 {
   "default-account-name": "بینک",
   "default-budget-name": "بجٹ",
-  "current-budget-period": "موجودہ دور",
   "budget-history": "بجٹ کی تاریخ",
   "home": "گھر",
   "transactions": "لین دین",
@@ -1146,5 +1145,7 @@
   "restore-transaction": "لین دین بحال کریں؟",
   "created": "بنایا",
   "tap-each-section-to-customize": "حسب ضرورت بنانے کے لیے ہر سیکشن کو تھپتھپائیں۔",
-  "transaction-no-longer-available": "لین دین اب دستیاب نہیں ہے۔"
+  "transaction-no-longer-available": "لین دین کو حذف کر دیا گیا تھا اور اب بازیافت کے لیے دستیاب نہیں ہے۔",
+  "category-not-available": "زمرہ دستیاب نہیں ہے۔",
+  "the-original-category-has-been-deleted": "اصل زمرہ حذف کر دیا گیا ہے اور لین دین کو بازیافت نہیں کیا جا سکتا۔"
 }

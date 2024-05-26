@@ -1,7 +1,6 @@
 {
   "default-account-name": "Banka",
   "default-budget-name": "Bütçe",
-  "current-budget-period": "Mevcut Dönem",
   "budget-history": "Bütçe geçmişi",
   "home": "Ana Sayfa",
   "transactions": "İşlemler",
@@ -723,7 +722,7 @@
   "database-corrupted-description": "Veritabanınız bozuk. Yanlış dosyayı içe aktarmış olabilirsiniz.",
   "import-backup": "Yedekleme İçe Aktarma",
   "view-previous-budget-periods": "Önceki bütçe dönemlerini görüntüleyin",
-  "current-period": "Mevcut dönem",
+  "current-period": "Mevcut Dönem",
   "set-spending-goals": "Kategori harcama hedefleri belirleyin",
   "set-currency": "Para Birimi",
   "accounts-list": "Hesaplar Listesi",
@@ -1146,5 +1145,7 @@
   "restore-transaction": "İşlem Geri Yüklensin mi?",
   "created": "Oluşturuldu",
   "tap-each-section-to-customize": "Özelleştirmek için her bölüme dokunun",
-  "transaction-no-longer-available": "İşlem artık kullanılamıyor"
+  "transaction-no-longer-available": "İşlem silindi ve artık kurtarılamaz",
+  "category-not-available": "Kategori Mevcut Değil",
+  "the-original-category-has-been-deleted": "Orijinal kategori silindi ve işlem kurtarılamaz."
 }

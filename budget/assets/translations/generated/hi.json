@@ -1,7 +1,6 @@
 {
   "default-account-name": "बैंक",
   "default-budget-name": "बजट",
-  "current-budget-period": "वर्तमान अवधि",
   "budget-history": "बजट इतिहास",
   "home": "मुख पृष्ठ ",
   "transactions": "लेन-देन",
@@ -1146,5 +1145,7 @@
   "restore-transaction": "लेन-देन पुनर्स्थापित करें?",
   "created": "बनाया था",
   "tap-each-section-to-customize": "अनुकूलित करने के लिए प्रत्येक अनुभाग को टैप करें",
-  "transaction-no-longer-available": "लेन-देन अब उपलब्ध नहीं है"
+  "transaction-no-longer-available": "लेन-देन हटा दिया गया था और अब पुनर्प्राप्त करने के लिए उपलब्ध नहीं है",
+  "category-not-available": "श्रेणी उपलब्ध नहीं है",
+  "the-original-category-has-been-deleted": "मूल श्रेणी हटा दी गई है और लेनदेन पुनर्प्राप्त नहीं किया जा सकता है।"
 }

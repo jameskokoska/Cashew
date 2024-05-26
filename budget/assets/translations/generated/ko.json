@@ -1,7 +1,6 @@
 {
   "default-account-name": "은행",
   "default-budget-name": "예산",
-  "current-budget-period": "현재 기간",
   "budget-history": "예산 기록",
   "home": "집",
   "transactions": "업무",
@@ -1146,5 +1145,7 @@
   "restore-transaction": "거래를 복원하시겠습니까?",
   "created": "만들어진",
   "tap-each-section-to-customize": "각 섹션을 탭하여 맞춤설정하세요.",
-  "transaction-no-longer-available": "더 이상 거래가 불가능합니다."
+  "transaction-no-longer-available": "거래가 삭제되어 더 이상 복구할 수 없습니다.",
+  "category-not-available": "카테고리를 사용할 수 없음",
+  "the-original-category-has-been-deleted": "원래 카테고리가 삭제되었으며 거래를 복구할 수 없습니다."
 }

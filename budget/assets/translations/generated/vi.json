@@ -1,7 +1,6 @@
 {
   "default-account-name": "Ngân hàng",
   "default-budget-name": "Ngân sách",
-  "current-budget-period": "Giai đoạn hiện tại",
   "budget-history": "Lịch sử ngân sách",
   "home": "Trang chủ",
   "transactions": "Giao dịch",
@@ -1146,5 +1145,7 @@
   "restore-transaction": "Khôi phục giao dịch?",
   "created": "Tạo",
   "tap-each-section-to-customize": "Nhấn vào từng phần để tùy chỉnh",
-  "transaction-no-longer-available": "Giao dịch không còn khả dụng"
+  "transaction-no-longer-available": "Giao dịch đã bị xóa và không thể khôi phục được nữa",
+  "category-not-available": "Danh mục không có sẵn",
+  "the-original-category-has-been-deleted": "Danh mục ban đầu đã bị xóa và giao dịch không thể phục hồi được."
 }

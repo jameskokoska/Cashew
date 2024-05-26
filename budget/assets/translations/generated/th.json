@@ -1,7 +1,6 @@
 {
   "default-account-name": "ธนาคาร",
   "default-budget-name": "งบประมาณ",
-  "current-budget-period": "งวดปัจจุบัน",
   "budget-history": "ประวัติงบประมาณ",
   "home": "บ้าน",
   "transactions": "การทำธุรกรรม",
@@ -1146,5 +1145,7 @@
   "restore-transaction": "กู้คืนธุรกรรม?",
   "created": "สร้าง",
   "tap-each-section-to-customize": "แตะแต่ละส่วนเพื่อปรับแต่ง",
-  "transaction-no-longer-available": "การทำธุรกรรมไม่สามารถใช้ได้อีกต่อไป"
+  "transaction-no-longer-available": "ธุรกรรมถูกลบแล้วและไม่สามารถกู้คืนได้อีกต่อไป",
+  "category-not-available": "หมวดหมู่ไม่พร้อมใช้งาน",
+  "the-original-category-has-been-deleted": "หมวดหมู่เดิมถูกลบแล้ว และไม่สามารถกู้คืนธุรกรรมได้"
 }

@@ -1,7 +1,6 @@
 {
   "default-account-name": "銀行",
   "default-budget-name": "預算",
-  "current-budget-period": "現時階段",
   "budget-history": "預算歷史",
   "home": "主頁",
   "transactions": "交易",
@@ -723,7 +722,7 @@
   "database-corrupted-description": "你的資料庫已損壞。 你或許導入了錯誤的文件。",
   "import-backup": "匯入備份",
   "view-previous-budget-periods": "查看過去的預算週期",
-  "current-period": "當前週期",
+  "current-period": "現時階段",
   "set-spending-goals": "設定類別支出目標",
   "set-currency": "設定貨幣",
   "accounts-list": "帳戶列表",
@@ -1146,5 +1145,7 @@
   "restore-transaction": "恢復交易？",
   "created": "已創建",
   "tap-each-section-to-customize": "點擊每個部分進行自訂",
-  "transaction-no-longer-available": "交易不再可用"
+  "transaction-no-longer-available": "交易已刪除且無法再恢復",
+  "category-not-available": "類別不可用",
+  "the-original-category-has-been-deleted": "原分類已被刪除，交易無法恢復。"
 }

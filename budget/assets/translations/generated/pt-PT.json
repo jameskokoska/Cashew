@@ -1,7 +1,6 @@
 {
   "default-account-name": "Banco",
   "default-budget-name": "Orçamento",
-  "current-budget-period": "Período atual",
   "budget-history": "Orçamento - Histórico",
   "home": "Início",
   "transactions": "Transações",
@@ -1146,5 +1145,7 @@
   "restore-transaction": "Restaurar transação?",
   "created": "Criada",
   "tap-each-section-to-customize": "Toque em cada seção para personalizar",
-  "transaction-no-longer-available": "A transação não está mais disponível"
+  "transaction-no-longer-available": "A transação foi excluída e não está mais disponível para recuperação",
+  "category-not-available": "Categoria não disponível",
+  "the-original-category-has-been-deleted": "A categoria original foi excluída e a transação não pode ser recuperada."
 }

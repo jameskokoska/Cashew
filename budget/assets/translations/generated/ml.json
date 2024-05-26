@@ -1,7 +1,6 @@
 {
   "default-account-name": "ബാങ്ക്",
   "default-budget-name": "വരവ്ചെലവ് മതിപ്പ്",
-  "current-budget-period": "നിലവിലെ കാലയളവ്",
   "budget-history": "ബജറ്റ് ചരിത്രം",
   "home": "വീട്",
   "transactions": "ഇടപാടുകൾ",
@@ -1146,5 +1145,7 @@
   "restore-transaction": "ഇടപാട് പുനഃസ്ഥാപിക്കണോ?",
   "created": "സൃഷ്ടിച്ചത്",
   "tap-each-section-to-customize": "ഇഷ്‌ടാനുസൃതമാക്കാൻ ഓരോ വിഭാഗത്തിലും ടാപ്പുചെയ്യുക",
-  "transaction-no-longer-available": "ഇടപാട് ഇനി ലഭ്യമല്ല"
+  "transaction-no-longer-available": "ഇടപാട് ഇല്ലാതാക്കി, വീണ്ടെടുക്കാൻ ഇനി ലഭ്യമല്ല",
+  "category-not-available": "വിഭാഗം ലഭ്യമല്ല",
+  "the-original-category-has-been-deleted": "യഥാർത്ഥ വിഭാഗം ഇല്ലാതാക്കി, ഇടപാട് വീണ്ടെടുക്കാൻ കഴിയില്ല."
 }

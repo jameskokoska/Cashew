@@ -1,7 +1,6 @@
 {
   "default-account-name": "בַּנק",
   "default-budget-name": "תַקצִיב",
-  "current-budget-period": "התקופה הנוכחית",
   "budget-history": "היסטוריה של תקציב",
   "home": "בית",
   "transactions": "עסקאות",
@@ -1146,5 +1145,7 @@
   "restore-transaction": "לשחזר את העסקה?",
   "created": "נוצר",
   "tap-each-section-to-customize": "הקש על כל חלק כדי להתאים אישית",
-  "transaction-no-longer-available": "העסקה כבר לא זמינה"
+  "transaction-no-longer-available": "העסקה נמחקה ואינה זמינה עוד לשחזור",
+  "category-not-available": "קטגוריה לא זמינה",
+  "the-original-category-has-been-deleted": "הקטגוריה המקורית נמחקה ולא ניתן לשחזר את העסקה."
 }

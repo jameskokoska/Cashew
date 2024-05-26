@@ -1,7 +1,6 @@
 {
   "default-account-name": "வங்கி",
   "default-budget-name": "பட்ஜெட்",
-  "current-budget-period": "நடப்பு காலம்",
   "budget-history": "பட்ஜெட் வரலாறு",
   "home": "வீடு",
   "transactions": "பரிவர்த்தனைகள்",
@@ -1146,5 +1145,7 @@
   "restore-transaction": "பரிவர்த்தனையை மீட்டெடுக்கவா?",
   "created": "உருவாக்கப்பட்டது",
   "tap-each-section-to-customize": "தனிப்பயனாக்க ஒவ்வொரு பகுதியையும் தட்டவும்",
-  "transaction-no-longer-available": "பரிவர்த்தனை இனி கிடைக்காது"
+  "transaction-no-longer-available": "பரிவர்த்தனை நீக்கப்பட்டது, இனி மீட்க முடியாது",
+  "category-not-available": "வகை கிடைக்கவில்லை",
+  "the-original-category-has-been-deleted": "அசல் வகை நீக்கப்பட்டது மற்றும் பரிவர்த்தனையை மீட்டெடுக்க முடியாது."
 }

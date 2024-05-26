@@ -1,7 +1,6 @@
 {
   "default-account-name": "بانک",
   "default-budget-name": "بودجه",
-  "current-budget-period": "دوره جاری",
   "budget-history": "تاریخچه بودجه",
   "home": "خانه",
   "transactions": "معاملات",
@@ -1146,5 +1145,7 @@
   "restore-transaction": "بازیابی تراکنش؟",
   "created": "ایجاد شده",
   "tap-each-section-to-customize": "برای سفارشی کردن، روی هر بخش ضربه بزنید",
-  "transaction-no-longer-available": "تراکنش دیگر در دسترس نیست"
+  "transaction-no-longer-available": "تراکنش حذف شد و دیگر برای بازیابی در دسترس نیست",
+  "category-not-available": "دسته بندی موجود نیست",
+  "the-original-category-has-been-deleted": "دسته اصلی حذف شده است و تراکنش قابل بازیابی نیست."
 }

@@ -1,7 +1,6 @@
 {
   "default-account-name": "Bank",
   "default-budget-name": "Anggaran",
-  "current-budget-period": "Periode saat ini",
   "budget-history": "Riwayat Anggaran",
   "home": "Beranda",
   "transactions": "Transaksi",
@@ -1146,5 +1145,7 @@
   "restore-transaction": "Pulihkan Transaksi?",
   "created": "Dibuat",
   "tap-each-section-to-customize": "Ketuk setiap bagian untuk menyesuaikan",
-  "transaction-no-longer-available": "Transaksi tidak lagi tersedia"
+  "transaction-no-longer-available": "Transaksi telah dihapus dan tidak dapat dipulihkan lagi",
+  "category-not-available": "Kategori Tidak Tersedia",
+  "the-original-category-has-been-deleted": "Kategori asli telah dihapus dan transaksi tidak dapat dipulihkan."
 }

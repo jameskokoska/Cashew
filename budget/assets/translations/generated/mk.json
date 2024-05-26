@@ -1,7 +1,6 @@
 {
   "default-account-name": "Банка",
   "default-budget-name": "Буџет",
-  "current-budget-period": "Сегашен период",
   "budget-history": "Историја на буџетот",
   "home": "Почетна",
   "transactions": "Трансакции",
@@ -166,6 +165,7 @@
   "overdue-and-upcoming": "Задоцнето и претстојно",
   "average-saved": "просечно зачувано",
   "repetitive-transaction-type-description-3": "Следната трансакција е генерирана кога тековната е означена како „Платена“ или „Депонирана“",
+  "current-period": "Сегашен период",
   "future-transactions": "Идни трансакции",
   "hidden": "скриени",
   "present-transactions": "Тековни трансакции",
@@ -195,5 +195,7 @@
   "restore-transaction": "Да се ​​врати трансакцијата?",
   "created": "Создаден",
   "tap-each-section-to-customize": "Допрете го секој дел за да го приспособите",
-  "transaction-no-longer-available": "Трансакцијата веќе не е достапна"
+  "transaction-no-longer-available": "Трансакцијата е избришана и повеќе не е достапна за враќање",
+  "category-not-available": "Категоријата не е достапна",
+  "the-original-category-has-been-deleted": "Оригиналната категорија е избришана и трансакцијата не може да се врати."
 }

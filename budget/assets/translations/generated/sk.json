@@ -1,7 +1,6 @@
 {
   "default-account-name": "Banka",
   "default-budget-name": "Rozpočet",
-  "current-budget-period": "Aktuálne obdobie",
   "budget-history": "História rozpočtov",
   "home": "Domov",
   "transactions": "Pohyby",
@@ -1146,5 +1145,7 @@
   "restore-transaction": "Obnoviť transakciu?",
   "created": "Vytvorené",
   "tap-each-section-to-customize": "Klepnutím na jednotlivé sekcie prispôsobíte",
-  "transaction-no-longer-available": "Transakcia už nie je k dispozícii"
+  "transaction-no-longer-available": "Transakcia bola odstránená a už nie je k dispozícii na obnovenie",
+  "category-not-available": "Kategória nie je k dispozícii",
+  "the-original-category-has-been-deleted": "Pôvodná kategória bola odstránená a transakciu nie je možné obnoviť."
 }

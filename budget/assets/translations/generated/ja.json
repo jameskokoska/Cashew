@@ -1,7 +1,6 @@
 {
   "default-account-name": "銀行",
   "default-budget-name": "バジェット",
-  "current-budget-period": "当期",
   "budget-history": "予算履歴",
   "home": "家",
   "transactions": "トランザクション",
@@ -1146,5 +1145,7 @@
   "restore-transaction": "トランザクションを復元しますか?",
   "created": "作成した",
   "tap-each-section-to-customize": "各セクションをタップしてカスタマイズします",
-  "transaction-no-longer-available": "取引は利用できなくなりました"
+  "transaction-no-longer-available": "トランザクションは削除されたため、回復できなくなりました",
+  "category-not-available": "カテゴリがありません",
+  "the-original-category-has-been-deleted": "元のカテゴリは削除されているため、トランザクションを回復できません。"
 }

@@ -1,7 +1,6 @@
 {
   "default-account-name": "Bank",
   "default-budget-name": "Budget",
-  "current-budget-period": "Nuværende Periode",
   "budget-history": "Budgethistorik",
   "home": "Hjem",
   "transactions": "Transaktioner",
@@ -1146,5 +1145,7 @@
   "restore-transaction": "Vil du gendanne transaktionen?",
   "created": "Oprettet",
   "tap-each-section-to-customize": "Tryk på hver sektion for at tilpasse",
-  "transaction-no-longer-available": "Transaktionen er ikke længere tilgængelig"
+  "transaction-no-longer-available": "Transaktionen blev slettet og er ikke længere tilgængelig for gendannelse",
+  "category-not-available": "Kategori ikke tilgængelig",
+  "the-original-category-has-been-deleted": "Den oprindelige kategori er blevet slettet, og transaktionen kan ikke gendannes."
 }

@@ -1,7 +1,6 @@
 {
   "default-account-name": "Bank",
   "default-budget-name": "Budget",
-  "current-budget-period": "Nuvarande period",
   "budget-history": "Budgethistorik",
   "home": "Hem",
   "transactions": "Transaktioner",
@@ -1146,5 +1145,7 @@
   "restore-transaction": "Återställa transaktionen?",
   "created": "Skapad",
   "tap-each-section-to-customize": "Tryck på varje avsnitt för att anpassa",
-  "transaction-no-longer-available": "Transaktionen är inte längre tillgänglig"
+  "transaction-no-longer-available": "Transaktionen raderades och är inte längre tillgänglig att återställa",
+  "category-not-available": "Kategori ej tillgänglig",
+  "the-original-category-has-been-deleted": "Den ursprungliga kategorin har tagits bort och transaktionen kan inte återställas."
 }
