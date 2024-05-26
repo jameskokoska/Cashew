@@ -663,6 +663,17 @@ class WalletDetailsPageState extends State<WalletDetailsPage>
           },
           label:
               widget.wallet != null ? "account-total".tr() : "net-total".tr(),
+          getTextColor: appStateSettings["netTotalsColorful"] != true
+              ? null
+              : (double amount) {
+                  return appStateSettings["netTotalsColorful"] == true
+                      ? (amount == 0
+                          ? getColor(context, "black")
+                          : amount > 0
+                              ? getColor(context, "incomeAmount")
+                              : getColor(context, "expenseAmount"))
+                      : getColor(context, "black");
+                },
           absolute: false,
           currencyKey: Provider.of<AllWallets>(context)
               .indexedByPk[appStateSettings["selectedWalletPk"]]
@@ -2424,7 +2435,7 @@ class _AllSpendingPastSpendingGraphState
                                     text: getPercentBetweenDates(
                                                 budgetRange, DateTime.now()) <=
                                             100
-                                        ? "current-budget-period".tr()
+                                        ? "current-period".tr()
                                         : getWordedDateShortMore(
                                             budgetRange.start),
                                     fontSize: 20,
@@ -2455,6 +2466,15 @@ class _AllSpendingPastSpendingGraphState
                               fontSize: 16,
                               textAlign: TextAlign.left,
                               fontWeight: FontWeight.bold,
+                              textColor: appStateSettings[
+                                          "netTotalsColorful"] ==
+                                      true
+                                  ? (netSpending == 0
+                                      ? getColor(context, "black")
+                                      : netSpending > 0
+                                          ? getColor(context, "incomeAmount")
+                                          : getColor(context, "expenseAmount"))
+                                  : getColor(context, "black"),
                             ),
                           ],
                         ),

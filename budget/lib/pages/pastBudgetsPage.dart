@@ -1053,7 +1053,7 @@ class PastBudgetContainer extends StatelessWidget {
                                 text: getPercentBetweenDates(
                                             budgetRange, DateTime.now()) <=
                                         100
-                                    ? "current-budget-period".tr()
+                                    ? "current-period".tr()
                                     : getWordedDateShortMore(budgetRange.start),
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,

@@ -212,6 +212,18 @@ class DebugPage extends StatelessWidget {
               ? Icons.swap_vert_outlined
               : Icons.swap_vert_rounded,
         ),
+        SettingsContainerSwitch(
+          title: "Colorful Net Totals".tr(),
+          description:
+              "Negative totals indicated with red, positive with green",
+          onSwitched: (value) {
+            updateSettings("netTotalsColorful", value, updateGlobalState: true);
+          },
+          initialValue: appStateSettings["netTotalsColorful"] == true,
+          icon: appStateSettings["outlinedIcons"]
+              ? Icons.format_color_text_outlined
+              : Icons.format_color_text_rounded,
+        ),
         DangerousDebugFlag(
           child: SettingsContainerSwitch(
             onSwitched: (value) async {

@@ -53,6 +53,20 @@ class HomePageNetWorth extends StatelessWidget {
                           homePageStateKey.currentState?.refreshState();
                         },
                         label: "net-worth".tr(),
+                        getTextColor: appStateSettings["netTotalsColorful"] !=
+                                true
+                            ? null
+                            : (double amount) {
+                                return appStateSettings["netTotalsColorful"] ==
+                                        true
+                                    ? (amount == 0
+                                        ? getColor(context, "black")
+                                        : amount > 0
+                                            ? getColor(context, "incomeAmount")
+                                            : getColor(
+                                                context, "expenseAmount"))
+                                    : getColor(context, "black");
+                              },
                         absolute: false,
                         currencyKey: Provider.of<AllWallets>(context)
                             .indexedByPk[appStateSettings["selectedWalletPk"]]
