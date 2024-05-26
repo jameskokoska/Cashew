@@ -106,7 +106,7 @@ class _PullDownToRefreshSyncState extends State<PullDownToRefreshSync>
   _onPointerUp(PointerUpEvent event) {
     if ((totalDragY - swipeDownThreshold) > dragAmountForRefresh &&
         swipeDownToRefresh) {
-      _refreshBudgets();
+      _refreshSync();
       HapticFeedback.heavyImpact();
     } else {
       _animationController.reverse();
@@ -124,9 +124,11 @@ class _PullDownToRefreshSyncState extends State<PullDownToRefreshSync>
     }
   }
 
-  _refreshBudgets() async {
+  _refreshSync() async {
     _animationController.reverse();
-    if (runningCloudFunctions == false) await runAllCloudFunctions(context);
+    if (runningCloudFunctions == false) {
+      await runAllCloudFunctions(context);
+    }
   }
 
   @override
@@ -193,7 +195,7 @@ class _PullDownToRefreshSyncState extends State<PullDownToRefreshSync>
                             textColor: getColor(context, "textLight"),
                             fontSize: 13,
                             maxLines: 3,
-                            text: "synced".tr() +
+                            text: "synced".tr().capitalizeFirst +
                                 " " +
                                 (dateTimeLastSynced == null
                                     ? "never".tr()

@@ -83,6 +83,7 @@ class GlobalLoadingIndeterminateState
   final _debouncer = Debouncer(milliseconds: 5000);
 
   void setVisibility(bool visible, {double? opacity}) {
+    print("Visibility set to: " + visible.toString());
     setState(() {
       this.visible = visible;
       this.opacity = visible == false ? 1 : opacity ?? 1;

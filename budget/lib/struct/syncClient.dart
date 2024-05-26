@@ -183,8 +183,7 @@ bool canSyncData = true;
 
 bool requestSyncDataCancel = false;
 
-final CancelableCompleter<bool> syncDataCompleter =
-    CancelableCompleter(onCancel: () {
+CancelableCompleter<bool> syncDataCompleter = CancelableCompleter(onCancel: () {
   requestSyncDataCancel = true;
 });
 
@@ -194,6 +193,13 @@ Future<dynamic> cancelAndPreventSyncOperation() async {
 }
 
 Future<bool> syncData(BuildContext context) async {
+  // Create a new instance of the completer
+  if (syncDataCompleter.isCompleted) {
+    syncDataCompleter = CancelableCompleter(onCancel: () {
+      requestSyncDataCancel = true;
+    });
+  }
+
   syncDataCompleter.complete(Future.value(_syncData(context)));
   return syncDataCompleter.operation.value;
 }
