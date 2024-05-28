@@ -1147,5 +1147,5 @@
   "tap-each-section-to-customize": "點擊每個部分進行自訂",
   "transaction-no-longer-available": "交易已刪除且無法再恢復",
   "category-not-available": "類別不可用",
-  "the-original-category-has-been-deleted": "原分類已被刪除，交易無法恢復。"
+  "the-original-category-has-been-deleted": "原分類已刪除，交易無法恢復。"
 }
