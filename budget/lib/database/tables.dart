@@ -2900,6 +2900,29 @@ class FinanceDatabase extends _$FinanceDatabase {
         .watch();
   }
 
+  Stream<List<CategoryWithTotal>> watchAllCategoryLimitsInBudgetWithCategory(
+      String budgetPk) {
+    final query = (select(categories));
+    return (query.join([
+      leftOuterJoin(
+          categoryBudgetLimits,
+          categoryBudgetLimits.categoryFk.equalsExp(categories.categoryPk) &
+              categoryBudgetLimits.budgetFk.equals(budgetPk))
+    ])
+          ..groupBy([categories.categoryPk]))
+        .map((row) {
+      final TransactionCategory category = row.readTable(categories);
+      CategoryBudgetLimit? categoryBudgetLimit =
+          row.readTableOrNull(categoryBudgetLimits);
+      return CategoryWithTotal(
+        category: category,
+        categoryBudgetLimit: categoryBudgetLimit,
+        total: 0,
+        transactionCount: -1, // This indicates that it does not have this data
+      );
+    }).watch();
+  }
+
   Future<bool> toggleAbsolutePercentSpendingCategoryBudgetLimits(
     AllWallets allWallets,
     String budgetPk,

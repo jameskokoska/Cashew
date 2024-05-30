@@ -30,6 +30,7 @@ String getChangelogString() {
     Revamped scheduled transactions page: see an extrapolated total average per month or year
     Transaction activity log page: see recently deleted/modified transactions
     Copy transaction details to clipboard by tapping/long pressing transaction count in selected transactions app bar
+    Ability to expand category spending goals in a budget even if there is no spending on that category
     Centered bottom navigation bar labels
     Improve biometric lock workflow and biometric unlock error
     Collapsible section for upcoming transactions will appear when 3 or more instead of 5

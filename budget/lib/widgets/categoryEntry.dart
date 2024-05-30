@@ -41,6 +41,7 @@ class CategoryEntry extends StatelessWidget {
     this.expandSubcategories = true,
     this.selectedSubCategoryPk,
     this.alwaysShow = false,
+    this.alwaysHide = false,
     this.isSubcategory = false,
     this.mainCategorySpentIfSubcategory = 0,
     this.useHorizontalPaddingConstrained = true,
@@ -69,6 +70,7 @@ class CategoryEntry extends StatelessWidget {
   final bool expandSubcategories;
   final String? selectedSubCategoryPk;
   final bool alwaysShow;
+  final bool alwaysHide;
   final bool isSubcategory;
   final double mainCategorySpentIfSubcategory;
   final bool useHorizontalPaddingConstrained;
@@ -309,7 +311,7 @@ class CategoryEntry extends StatelessWidget {
                                     }),
                             ),
                             TextFont(
-                              text: transactionCount.toString() +
+                              text: max(transactionCount, 0).toString() +
                                   " " +
                                   (transactionCount == 1
                                       ? "transaction".tr().toLowerCase()
@@ -383,6 +385,7 @@ class CategoryEntry extends StatelessWidget {
                             subcategoryWithTotal.category.categoryPk,
                         allSelected: allSelected,
                         alwaysShow: selected,
+                        alwaysHide: alwaysHide,
                         isSubcategory: true,
                         mainCategorySpentIfSubcategory: amountSpent,
                       ),
@@ -416,7 +419,8 @@ class CategoryEntry extends StatelessWidget {
         return true;
       },
       child: AnimatedExpanded(
-        expand: !(!selected && !allSelected) || alwaysShow,
+        expand:
+            alwaysHide == false && (!(!selected && !allSelected) || alwaysShow),
         duration: Duration(milliseconds: 650),
         sizeCurve: Curves.easeInOutCubic,
         child: Tappable(
