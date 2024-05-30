@@ -6,6 +6,7 @@ import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/widgets/globalSnackbar.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
 import 'package:budget/widgets/openSnackbar.dart';
+import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textInput.dart';
 import 'package:drift/drift.dart' hide Column;
 import 'package:easy_localization/easy_localization.dart';
@@ -524,29 +525,30 @@ class CodeBlock extends StatelessWidget {
   final String text;
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.secondaryContainer,
-        borderRadius: BorderRadius.circular(5),
-      ),
-      padding: EdgeInsets.all(10),
-      child: TextFont(
-        text: "",
-        textAlign: TextAlign.center,
-        fontSize: 15,
-        softWrap: true,
-        richTextSpan: [
-          TextSpan(
-            text: text,
-            style: TextStyle(
-              fontSize: 15,
-              fontFamily: "monospace",
-              fontFamilyFallback: <String>["Courier"],
-              color: getColor(context, "black"),
+    return Tappable(
+      borderRadius: 5,
+      color: Theme.of(context).colorScheme.secondaryContainer,
+      onLongPress: () => copyToClipboard(text),
+      child: Padding(
+        padding: EdgeInsets.all(10),
+        child: TextFont(
+          text: "",
+          textAlign: TextAlign.center,
+          fontSize: 15,
+          softWrap: true,
+          richTextSpan: [
+            TextSpan(
+              text: text,
+              style: TextStyle(
+                fontSize: 15,
+                fontFamily: "monospace",
+                fontFamilyFallback: <String>["Courier"],
+                color: getColor(context, "black"),
+              ),
             ),
-          ),
-        ],
-        maxLines: 100,
+          ],
+          maxLines: 100,
+        ),
       ),
     );
   }

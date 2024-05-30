@@ -271,7 +271,8 @@ Future processMessageToParse(
   }
 }
 
-Future executeAppLink(BuildContext? context, Uri uri) async {
+Future executeAppLink(BuildContext? context, Uri uri,
+    {Function(dynamic)? onDebug}) async {
   if (appStateSettings["hasOnboarded"] != true) return;
 
   String endPoint = getApiEndpoint(uri);
@@ -292,7 +293,9 @@ Future executeAppLink(BuildContext? context, Uri uri) async {
               transactionObject.forEach((key, value) {
                 currentObject[key] = value.toString();
               });
-              await processAddTransactionFromParams(context, currentObject);
+              dynamic res =
+                  await processAddTransactionFromParams(context, currentObject);
+              if (onDebug != null) onDebug(res);
             }
           } catch (e) {
             openSnackbar(SnackbarMessage(
@@ -304,7 +307,8 @@ Future executeAppLink(BuildContext? context, Uri uri) async {
             ));
           }
         } else {
-          processAddTransactionFromParams(context, params);
+          dynamic res = await processAddTransactionFromParams(context, params);
+          if (onDebug != null) onDebug(res);
         }
       }
       break;
@@ -321,8 +325,9 @@ Future executeAppLink(BuildContext? context, Uri uri) async {
               transactionObject.forEach((key, value) {
                 currentObject[key] = value.toString();
               });
-              await processAddTransactionRouteFromParams(
+              dynamic res = await processAddTransactionRouteFromParams(
                   context, currentObject);
+              if (onDebug != null) onDebug(res);
             }
           } catch (e) {
             openSnackbar(SnackbarMessage(
@@ -334,7 +339,9 @@ Future executeAppLink(BuildContext? context, Uri uri) async {
             ));
           }
         } else {
-          processAddTransactionRouteFromParams(context, params);
+          dynamic res =
+              await processAddTransactionRouteFromParams(context, params);
+          if (onDebug != null) onDebug(res);
         }
       }
 
@@ -388,7 +395,6 @@ Future<MainAndSubcategory> getMainAndSubcategoryFromParams(
     subCategory = await database.getRelatingCategory(
       params["subcategory"] ?? "",
       onlySubCategories: true,
-      limit: 1,
     );
   }
   if (subCategory?.mainCategoryPk != null) {
@@ -406,7 +412,6 @@ Future<MainAndSubcategory> getMainAndSubcategoryFromParams(
     mainAndSubcategory.main = await database.getRelatingCategory(
       params["category"] ?? "",
       onlySubCategories: false,
-      limit: 1,
     );
   }
   if (mainAndSubcategory.main == null && params["title"] != null) {
@@ -426,10 +431,10 @@ Future<TransactionWallet?> getWalletFromParams(
         await database.getWalletInstanceOrNull(params["walletPk"].toString());
   }
   if (result == null && params.containsKey("account")) {
-    return await database.getRelatingWallet(params["account"] ?? "", limit: 1);
+    return await database.getRelatingWallet(params["account"] ?? "");
   }
   if (result == null && params.containsKey("wallet")) {
-    return await database.getRelatingWallet(params["wallet"] ?? "", limit: 1);
+    return await database.getRelatingWallet(params["wallet"] ?? "");
   }
   return result;
 }

@@ -18,6 +18,7 @@ import 'package:budget/widgets/selectedTransactionsAppBar.dart';
 import 'package:budget/widgets/tappable.dart';
 import 'package:budget/widgets/textWidgets.dart';
 import 'package:budget/widgets/transactionEntry/transactionEntry.dart';
+import 'package:budget/widgets/transactionEntry/transactionLabel.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import '../functions.dart';
@@ -91,9 +92,11 @@ void restoreTransaction(
           : Icons.search_off_rounded,
     );
   } else {
+    String transactionLabel = await getTransactionLabel(transaction);
     openPopup(
       context,
       title: "restore-transaction".tr(),
+      subtitle: transactionLabel,
       onCancelLabel: "cancel".tr(),
       onCancel: () => Navigator.pop(context),
       onSubmitLabel: "restore".tr(),
@@ -101,8 +104,30 @@ void restoreTransaction(
           ? Icons.restore_page_outlined
           : Icons.restore_page_rounded,
       onSubmit: () async {
-        await database.createOrUpdateTransaction(transaction);
-        await database.deleteDeleteLog(deleteLog.deleteLogPk);
+        try {
+          await database.createOrUpdateTransaction(transaction);
+          await database.deleteDeleteLog(deleteLog.deleteLogPk);
+          openSnackbar(
+            SnackbarMessage(
+              title: "transaction-restored".tr(),
+              description: transactionLabel,
+              icon: appStateSettings["outlinedIcons"]
+                  ? Icons.restore_page_outlined
+                  : Icons.restore_page_rounded,
+            ),
+          );
+        } catch (e) {
+          openSnackbar(
+            SnackbarMessage(
+              title: "error-restoring".tr(),
+              description: e.toString(),
+              icon: appStateSettings["outlinedIcons"]
+                  ? Icons.warning_outlined
+                  : Icons.warning_rounded,
+            ),
+          );
+        }
+
         Navigator.pop(context);
       },
     );

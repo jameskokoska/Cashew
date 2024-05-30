@@ -2823,27 +2823,53 @@ class FinanceDatabase extends _$FinanceDatabase {
         .get();
   }
 
-  Future<TransactionCategory?> getRelatingCategory(String searchFor,
-      {int? limit, int? offset, bool onlySubCategories = false}) async {
-    return (await (select(categories)
-              ..where((c) =>
-                  (onlySubCategories
-                      ? onlyShowMainCategoryListing(c).not()
-                      : onlyShowMainCategoryListing(c)) &
-                  c.name.collate(Collate.noCase).like("%" + searchFor + "%"))
-              ..limit(limit ?? DEFAULT_LIMIT, offset: offset ?? DEFAULT_OFFSET))
-            .get())
-        .firstOrNull;
+  Future<TransactionCategory?> getRelatingCategory(
+    String searchFor, {
+    bool onlySubCategories = false,
+  }) async {
+    Future<TransactionCategory?> getCategory(
+            Expression<bool> nameMatching) async =>
+        (await (select(categories)
+                  ..where((c) =>
+                      (onlySubCategories
+                          ? onlyShowMainCategoryListing(c).not()
+                          : onlyShowMainCategoryListing(c)) &
+                      nameMatching)
+                  ..limit(1))
+                .get())
+            .firstOrNull;
+
+    TransactionCategory? category;
+    category = await getCategory(categories.name.equals(searchFor));
+    if (category == null)
+      category = await getCategory(categories.name
+          .lower()
+          .trim()
+          .equals(searchFor.toLowerCase().trim()));
+    if (category == null)
+      category = await getCategory(
+          categories.name.collate(Collate.noCase).like("%" + searchFor + "%"));
+    return category;
   }
 
-  Future<TransactionWallet?> getRelatingWallet(String searchFor,
-      {int? limit}) async {
-    return (await (select(wallets)
-              ..where((c) =>
-                  c.name.collate(Collate.noCase).like("%" + searchFor + "%"))
-              ..limit(limit ?? DEFAULT_LIMIT))
-            .get())
-        .firstOrNull;
+  Future<TransactionWallet?> getRelatingWallet(String searchFor) async {
+    Future<TransactionWallet?> getCategory(
+            Expression<bool> nameMatching) async =>
+        (await (select(wallets)
+                  ..where((c) => nameMatching)
+                  ..limit(1))
+                .get())
+            .firstOrNull;
+
+    TransactionWallet? wallet;
+    wallet = await getCategory(wallets.name.equals(searchFor));
+    if (wallet == null)
+      wallet = await getCategory(
+          wallets.name.lower().trim().equals(searchFor.toLowerCase().trim()));
+    if (wallet == null)
+      wallet = await getCategory(
+          wallets.name.collate(Collate.noCase).like("%" + searchFor + "%"));
+    return wallet;
   }
 
   Stream<List<TransactionAssociatedTitle>> watchAllAssociatedTitlesInCategory(

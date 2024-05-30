@@ -447,15 +447,7 @@ class AboutPage extends StatelessWidget {
                     ),
                   ),
                 ),
-                AboutInfoBox(
-                  title: "deep-linking".tr(),
-                  showLink: false,
-                  link:
-                      "https://github.com/jameskokoska/Cashew?tab=readme-ov-file#app-links",
-                  list: [
-                    "deep-linking-description".tr(),
-                  ],
-                ),
+                AboutDeepLinking(),
               ],
             )),
           ),
@@ -539,119 +531,136 @@ class AboutPage extends StatelessWidget {
             backgroundColor: containerColor,
           ),
         ),
-        AboutInfoBox(
+        TranslationInfoBox(
           title: "Italian",
           list: ["Thomas B.", "Mattia A."],
         ),
-        AboutInfoBox(
+        TranslationInfoBox(
           title: "Polish",
           list: ["Michał S.", "Michał P."],
         ),
-        AboutInfoBox(
+        TranslationInfoBox(
           title: "Serbian",
           list: ["Jovan P."],
         ),
-        AboutInfoBox(
+        TranslationInfoBox(
           title: "Swahili",
           list: ["Anthony K."],
         ),
-        AboutInfoBox(
+        TranslationInfoBox(
           title: "German",
           list: ["Fabian S.", "Christian R.", "Samuel R."],
         ),
-        AboutInfoBox(
+        TranslationInfoBox(
           title: "Arabic",
           list: ["Dorra Y."],
         ),
-        AboutInfoBox(
+        TranslationInfoBox(
           title: "Portuguese",
           list: ["Alexander G.", "Jean J.", "João P.", "Junior M.", "Leandro"],
         ),
-        AboutInfoBox(
+        TranslationInfoBox(
           title: "Bulgarian",
           list: ["Денислав C."],
         ),
-        AboutInfoBox(
+        TranslationInfoBox(
           title: "Chinese (Simplified)",
           list: ["Clyde"],
         ),
-        AboutInfoBox(
+        TranslationInfoBox(
           title: "Chinese (Traditional)",
           list: ["qazlll456"],
         ),
-        AboutInfoBox(
+        TranslationInfoBox(
           title: "Hindi",
           list: ["Dikshant S.", "Nikunj K."],
         ),
-        AboutInfoBox(
+        TranslationInfoBox(
           title: "Vietnamese",
           list: ["Ng. Anh"],
         ),
-        AboutInfoBox(
+        TranslationInfoBox(
           title: "French",
           list: ["Antoine C.", "Fabien H."],
         ),
-        AboutInfoBox(
+        TranslationInfoBox(
           title: "Indonesian",
           list: ["Gusairi P."],
         ),
-        AboutInfoBox(
+        TranslationInfoBox(
           title: "Ukrainian",
           list: ["Chris M.", "Yurii S."],
         ),
-        AboutInfoBox(
+        TranslationInfoBox(
           title: "Russian",
           list: ["Ilya A.", "Konstantin B.", "Dennis Q"],
         ),
-        AboutInfoBox(
+        TranslationInfoBox(
           title: "Romanian",
           list: ["Valentin G."],
         ),
-        AboutInfoBox(
+        TranslationInfoBox(
           title: "Spanish",
           list: ["Pablo S.", "Gonzalo R.", "Ramon M."],
         ),
-        AboutInfoBox(
+        TranslationInfoBox(
           title: "Swedish",
           list: ["Anna M."],
         ),
-        AboutInfoBox(
+        TranslationInfoBox(
           title: "Danish",
           list: ["Mittheo"],
         ),
-        AboutInfoBox(
+        TranslationInfoBox(
           title: "Turkish",
           list: ["Serdar A."],
         ),
-        AboutInfoBox(
+        TranslationInfoBox(
           title: "Slovak",
           list: ["Igor V."],
         ),
-        AboutInfoBox(
+        TranslationInfoBox(
           title: "Macedonian",
           list: ["Andrej A."],
         ),
-        AboutInfoBox(
+        TranslationInfoBox(
           title: "Arabic",
           list: ["Ammar N."],
         ),
-        AboutInfoBox(
+        TranslationInfoBox(
           title: "Czech",
           list: ["Kamil T."],
         ),
-        AboutInfoBox(
+        TranslationInfoBox(
           title: "Hebrew",
           list: ["Happy Bear"],
         ),
-        AboutInfoBox(
+        TranslationInfoBox(
           title: "Afrikaans",
           list: ["Andrè B."],
         ),
-        AboutInfoBox(
+        TranslationInfoBox(
           title: "Filipino",
           list: ["Waren G."],
         ),
         SizedBox(height: 20),
+      ],
+    );
+  }
+}
+
+class AboutDeepLinking extends StatelessWidget {
+  const AboutDeepLinking({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return AboutInfoBox(
+      title: "deep-linking".tr(),
+      showLink: false,
+      link:
+          "https://github.com/jameskokoska/Cashew?tab=readme-ov-file#app-links",
+      list: [
+        "deep-linking-description".tr(),
       ],
     );
   }
@@ -666,6 +675,26 @@ Future clearDatabase(BuildContext context) async {
   restartAppPopup(context);
 }
 
+class TranslationInfoBox extends StatelessWidget {
+  const TranslationInfoBox({
+    Key? key,
+    required this.title,
+    this.list,
+  }) : super(key: key);
+
+  final String title;
+  final List<String>? list;
+
+  @override
+  Widget build(BuildContext context) {
+    return AboutInfoBox(
+      title: title,
+      list: list,
+      listTextColor: getColor(context, "black").withOpacity(0.5),
+    );
+  }
+}
+
 class AboutInfoBox extends StatelessWidget {
   const AboutInfoBox({
     Key? key,
@@ -673,6 +702,7 @@ class AboutInfoBox extends StatelessWidget {
     this.link,
     this.list,
     this.color,
+    this.listTextColor,
     this.padding,
     this.showLink = true,
   }) : super(key: key);
@@ -681,6 +711,7 @@ class AboutInfoBox extends StatelessWidget {
   final String? link;
   final List<String>? list;
   final Color? color;
+  final Color? listTextColor;
   final EdgeInsets? padding;
   final bool showLink;
 
@@ -728,7 +759,7 @@ class AboutInfoBox extends StatelessWidget {
                   text: item,
                   fontSize: 14,
                   textAlign: TextAlign.center,
-                  textColor: getColor(context, "textLight"),
+                  textColor: listTextColor ?? getColor(context, "textLight"),
                   maxLines: 10,
                 ),
             ],

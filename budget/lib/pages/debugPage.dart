@@ -2,6 +2,8 @@ import 'package:budget/colors.dart';
 import 'package:budget/database/tables.dart';
 import 'package:budget/functions.dart';
 import 'package:budget/main.dart';
+import 'package:budget/pages/aboutPage.dart';
+import 'package:budget/pages/addTransactionPage.dart';
 import 'package:budget/pages/autoTransactionsPageEmail.dart';
 import 'package:budget/pages/homePage/homePage.dart';
 import 'package:budget/pages/settingsPage.dart';
@@ -12,6 +14,7 @@ import 'package:budget/widgets/framework/popupFramework.dart';
 import 'package:budget/widgets/globalSnackbar.dart';
 import 'package:budget/widgets/notificationsSettings.dart';
 import 'package:budget/widgets/openBottomSheet.dart';
+import 'package:budget/widgets/openPopup.dart';
 import 'package:budget/widgets/openSnackbar.dart';
 import 'package:budget/widgets/framework/pageFramework.dart';
 import 'package:budget/database/generatePreviewData.dart';
@@ -20,6 +23,7 @@ import 'package:budget/widgets/ratingPopup.dart';
 import 'package:budget/widgets/settingsContainers.dart';
 import 'package:budget/widgets/textInput.dart';
 import 'package:budget/widgets/textWidgets.dart';
+import 'package:budget/widgets/util/deepLinks.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -557,6 +561,11 @@ class DebugPage extends StatelessWidget {
                 ),
               );
             }),
+        SizedBox(height: 10),
+        HorizontalBreak(),
+        AppLinkTesting(),
+        HorizontalBreak(),
+        SizedBox(height: 10),
         TextFont(
             maxLines: 10,
             text: kIsWeb
@@ -628,6 +637,62 @@ class DebugPage extends StatelessWidget {
         ColorBox(
             color: Theme.of(context).colorScheme.onErrorContainer,
             name: "onErrorContainer"),
+      ],
+    );
+  }
+}
+
+class AppLinkTesting extends StatefulWidget {
+  const AppLinkTesting({super.key});
+
+  @override
+  State<AppLinkTesting> createState() => _AppLinkTestingState();
+}
+
+class _AppLinkTestingState extends State<AppLinkTesting> {
+  @override
+  Widget build(BuildContext context) {
+    String appLinkString = "";
+    return Column(
+      children: [
+        TextInput(
+          labelText: "Test App Link",
+          keyboardType: TextInputType.multiline,
+          maxLines: null,
+          minLines: 3,
+          onChanged: (value) {
+            appLinkString = value;
+          },
+        ),
+        SizedBox(height: 10),
+        Button(
+            label: "Execute App Link",
+            onTap: () async {
+              Uri uri;
+              try {
+                uri = Uri.parse(appLinkString);
+                List<String> resultOutput = [];
+                await executeAppLink(
+                  context,
+                  uri,
+                  onDebug: (dynamic outResult) {
+                    resultOutput.add(outResult.toString());
+                  },
+                );
+                openPopup(
+                  context,
+                  title: "Result",
+                  descriptionWidget: CodeBlock(
+                    text: resultOutput.toString(),
+                  ),
+                );
+              } catch (e) {
+                openSnackbar(SnackbarMessage(
+                    title: "Error Parsing", description: e.toString()));
+              }
+            }),
+        SizedBox(height: 10),
+        AboutDeepLinking(),
       ],
     );
   }
